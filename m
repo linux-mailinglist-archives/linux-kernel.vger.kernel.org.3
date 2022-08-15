@@ -2,141 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB22A592EE9
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 14:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3259B592EEB
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 14:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242511AbiHOMax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 08:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
+        id S241894AbiHOMbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 08:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242442AbiHOMas (ORCPT
+        with ESMTP id S242525AbiHOMa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 08:30:48 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B1B6400;
-        Mon, 15 Aug 2022 05:30:45 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id i14so13251767ejg.6;
-        Mon, 15 Aug 2022 05:30:45 -0700 (PDT)
+        Mon, 15 Aug 2022 08:30:56 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8651F6544;
+        Mon, 15 Aug 2022 05:30:54 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id k14so6539119pfh.0;
+        Mon, 15 Aug 2022 05:30:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=AZAXOi6uFyMoBC8VUTD1zgcVsenCR+DQMIXTIoFpT/0=;
-        b=nWc09iP/xVHrJlRgxfqL+6ks4L79jBKv9Qn7z3VwR1O4lCk7VgRn9ivwliirXO3Fa7
-         FeXwtoccQfvz6jxIYJH63frD9/ywBMF5T9nRMuvA37bJeqrSopOC2XRcCXzMojb4Hd0i
-         vvHc/13tjp5uURE/3dGg2Uda5fEiZm9FzH/hkc+CpQ8o5b/f2xbfxillFL1w+9OpJIqo
-         43Wl90OGa4t9KmyeOTLBVIOlrAGoUFhW4lgrW1LbjoNMc2rFnVyEpM9NPWPB2/sndRzz
-         +IG5gETAGKnQyaz/p8vPX6MNes6nVO44Dbmfv9H254iLjrt4twudHSiXRzZyjj/r5z7o
-         1G+g==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=8N0tZJ261i5HWc8SMb6PjhSY6p7VWzYFeTIP4nzrRk8=;
+        b=b1VEzYtVLOWAkOAKzwtxHu0/dhDervAoBVp+iDeFrqBqqYvQgea5BC9AleuQ7U6n83
+         pFbAzPEp4GiLFrrCVvV4qFxOhbUlQ4WMDyCuzCqOOwxwljV/c9auB3Tkj8eoW8aOTyys
+         vIE6Th4LpTQMdHdli/19h0T4vFhtYAoSmEskq/n/QZh7rhaRwxKe0nRbciC21MvB8S/2
+         HWlWBwS1b3GYCeQ6fw1ptUyJcXq1BYZVi2plVVIZbN95g/4usQEerhG3FCsEr8EgAbTV
+         eWYKn2umZVbwM3L+EvzsLxrUXsrwfyznDHa75rdFrMXWVHrtc3uD5VaYEZFoU60hl99w
+         LpeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=AZAXOi6uFyMoBC8VUTD1zgcVsenCR+DQMIXTIoFpT/0=;
-        b=2P37HX4wojNRfB2kRJzcsJLgY2h/uQe8oFXosIodtGGWKjS6VJW8X7Sd6pxVQvTJ9i
-         cqZwWnPJfzSgQsDcg1PAM2C26wvevbfE6Ss+OzwIs6ZcfNiLiU6Y0E+Bd/V8281GGrD8
-         6oGT+XHs2qP75cWRxeMbqLiYnwT9bSa1iLLptfWYx3Q4p+xs0aZohFxDF7KAsbcSUhrR
-         sFoAHFXDbdKzQnwF7VVJauDHOjHFu6QE3ezKncCUt8GY1/eI30EbCL6wixm5hGLmNLfb
-         PTKRGGSIIegYPMm6zNNkHonL8wCxcFXucAgWVf3xou2g4C72LB28xOJi5fUfqSyaaJg/
-         IujA==
-X-Gm-Message-State: ACgBeo1Bo8KhmVY8aSru562vBQJ1S7aUQiYaRREMUsfDyln6koZS75WW
-        O4mHwkWopMUTsMlFA9NJ2dDNc/1OOf4IefykT4k=
-X-Google-Smtp-Source: AA6agR7PIvFlJNfGn9D7qE7su+BcGmJ/wlAOyVqZ3+O2tLJStsK2sq0CJqxwrKqgO2fudkTXTfYUmWcIEcGD9heZAoI=
-X-Received: by 2002:a17:907:272a:b0:731:4699:b375 with SMTP id
- d10-20020a170907272a00b007314699b375mr10373781ejl.633.1660566644129; Mon, 15
- Aug 2022 05:30:44 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=8N0tZJ261i5HWc8SMb6PjhSY6p7VWzYFeTIP4nzrRk8=;
+        b=gFhfDY7M70X55w3udF3eiKx1ta5n9QFjGxvn4ACYNqRdHX/76UVa0V6GdDMjJ/kGmD
+         2w8alHkQGNtG/lC5Etm8nMLJxTYqVJA+7h/089R8MVBLWya+hMULQVssHLsiwtqQFNZp
+         h5i1ObfwMJJV23eikDQzVSdQ4miaRon9J3nknrza9rRNUdACkiq3zu1nX4k4eQ7+IeCt
+         b816f/v4PIvcph5YYHaBq6D9etp0ay4y2eaSMmMfjWt5ktzEWD8C3twyhT/S3zzCzF8X
+         hQZ7zGfgZp9kzgjorgTPwd4RkHqisEKM9MCL29gQTSmlzdti62/DPAjXI5LPavzC+iYo
+         sAEw==
+X-Gm-Message-State: ACgBeo3pMq2EauqeGIn2wy5GHR4+4QUrAuQFtkkmA2uY7vKXfAGRKuA0
+        KOrDPBRUU5OhMqF6sRv5sGA=
+X-Google-Smtp-Source: AA6agR6n+V5MTGdGpk2hwvi18leQKPRw9rMleuhjBbyrOaibWzPzTsNiVU8zXcFHe6aFt9r5FDsqRQ==
+X-Received: by 2002:a05:6a00:c96:b0:52e:979c:dd63 with SMTP id a22-20020a056a000c9600b0052e979cdd63mr16400289pfv.50.1660566653967;
+        Mon, 15 Aug 2022 05:30:53 -0700 (PDT)
+Received: from [192.168.0.110] ([103.159.189.152])
+        by smtp.gmail.com with ESMTPSA id z25-20020a656659000000b00419b66846fcsm5726173pgv.91.2022.08.15.05.30.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Aug 2022 05:30:53 -0700 (PDT)
+Message-ID: <9b993aa6-f432-89f6-9195-05b584398df2@gmail.com>
+Date:   Mon, 15 Aug 2022 18:30:44 +0600
 MIME-Version: 1.0
-References: <20220722122548.2db543ca@gandalf.local.home> <YtsRD1Po3qJy3w3t@krava>
- <20220722174120.688768a3@gandalf.local.home> <YtxqjxJVbw3RD4jt@krava>
- <YvbDlwJCTDWQ9uJj@krava> <20220813150252.5aa63650@rorschach.local.home>
- <YvkTLziHX4BINnla@krava> <77477710-c383-73b1-4f78-fe65a81c09b7@huawei.com>
- <Yvn+En35XDqKWptm@krava> <CAJ+HfNjLbsDuE4EB_1jwSOnyaUdjejMZJP6U=zcKvZd=iwhhDQ@mail.gmail.com>
- <YvouGQzlOhb88SM/@krava> <CAJ+HfNhir0HcNYi5PediR=O39nAKUCptbxLDsNsQd-nUQNt=aQ@mail.gmail.com>
-In-Reply-To: <CAJ+HfNhir0HcNYi5PediR=O39nAKUCptbxLDsNsQd-nUQNt=aQ@mail.gmail.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Mon, 15 Aug 2022 14:30:32 +0200
-Message-ID: <CAJ+HfNisAHpe9YghyG3kXZAZ-b5toKjfDaN-021NPN2UY1Pn3A@mail.gmail.com>
-Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Chen Zhongjin <chenzhongjin@huawei.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [RFC PATCH] Soundwire: Initialize multi_link with fwnode props
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Len Brown <lenb@kernel.org>
+References: <20220814080416.7531-1-khalid.masum.92@gmail.com>
+ <YvjEIjXg7KxtTT/0@kroah.com> <cc6560c3-98c2-bdb5-cfc3-b39d3675382e@gmail.com>
+ <YvnpuK8phVyF7053@kroah.com>
+From:   Khalid Masum <khalid.masum.92@gmail.com>
+In-Reply-To: <YvnpuK8phVyF7053@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 Aug 2022 at 14:19, Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wrot=
-e:
->
-> On Mon, 15 Aug 2022 at 13:29, Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Mon, Aug 15, 2022 at 01:01:06PM +0200, Bj=C3=B6rn T=C3=B6pel wrote:
-> > > On Mon, 15 Aug 2022 at 10:04, Jiri Olsa <olsajiri@gmail.com> wrote:
-> > > [...]
-> > > > > > >
-> > > > > > > Today, objtool has also got involved, and added an "--mcount"=
- option
-> > > > > > > that will create the section too.
-> > > > > > I overlooked that objtool is involved as well,
-> > > > > > will check on that
-> > > > >
-> > > > > objtool --mcount option only involves mcount_loc generation (see
-> > > > > annotate_call_site) and other validation check call destination d=
-irectly
-> > > > > (see is_fentry_call).
-> > > > >
-> > > > > Some simply removing --mcount option dose work for this.
-> > > > >
-> > > > >
-> > > > > Another question, it seems we can export and use DEFINE_BPF_DISPA=
-TCHER out
-> > > > > of kernel, does that means we should add NO_MCOUNT_FILES for thes=
-e single
-> > > > > uages as well?
-> > > >
-> > > > yes, cc-ing Bj=C3=B6rn to make sure it's valid use case for dispatc=
-her
-> > > >
-> > >
-> > > Hmm, could you expand a bit on how this would work?
-> >
-> > the goal here is to remove bpf_dispatcher_<FUNC>_func functions from
-> > ftrace, because it's updated by dispatcher code with bpf_arch_text_poke=
-,
-> > but it's also visible and attachable to ftrace.. and will cause problem=
-s
-> > when these 2 updates will race
-> >
-> > question was if DEFINE_BPF_DISPATCHER can be used in kernel module,
-> > which would bring another realm of problems ;-)
-> >
->
-> Oh, now I follow. AFAIK there is only one flavor of BPF dispatcher in
-> use, and that's the XDP dispatcher, which does not reside in module
-> code, but is typically *called* by module code.
->
+On 8/15/22 12:37, Greg KH wrote:
+> On Mon, Aug 15, 2022 at 10:08:07AM +0600, Khalid Masum wrote:
+>> On 8/14/22 15:45, Greg KH wrote:
+>>> On Sun, Aug 14, 2022 at 02:04:15PM +0600, Khalid Masum wrote:
+>>>> According to the TODO, In sw_bus_master_add, bus->multi_link is to be
+>>>> populated with properties from FW node props. Make this happen by
+>>>> creating a new fwnode_handle flag FWNODE_FLAG_MULTI_LINKED and use
+>>>> the flag to store the multi_link value from intel_link_startup. Use
+>>>> this flag to initialize bus->multi_link.
+>>>>
+>>>> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+>>>> ---
+>>>> I do not think adding a new flag for fwnode_handle is a good idea.
+>>>> So, what would be the best way to initialize bus->multilink with
+>>>> fwnode props?
+>>>>
+>>>>     -- Khalid Masum
+>>>>
+>>>>    drivers/soundwire/bus.c   | 4 ++--
+>>>>    drivers/soundwire/intel.c | 1 +
+>>>>    include/linux/fwnode.h    | 1 +
+>>>>    3 files changed, 4 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
+>>>> index a2bfb0434a67..80df1672c60b 100644
+>>>> --- a/drivers/soundwire/bus.c
+>>>> +++ b/drivers/soundwire/bus.c
+>>>> @@ -74,9 +74,9 @@ int sdw_bus_master_add(struct sdw_bus *bus, struct device *parent,
+>>>>    	/*
+>>>>    	 * Initialize multi_link flag
+>>>> -	 * TODO: populate this flag by reading property from FW node
+>>>>    	 */
+>>>> -	bus->multi_link = false;
+>>>> +	bus->multi_link = (fwnode->flags & FWNODE_FLAG_MULTI_LINKED)
+>>>> +		== FWNODE_FLAG_MULTI_LINKED;
+> 
+> I missed that this was an if statement here, please write this to be
+> more obvious and readable.
+> 
+>>>>    	if (bus->ops->read_prop) {
+>>>>    		ret = bus->ops->read_prop(bus);
+>>>>    		if (ret < 0) {
+>>>> diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
+>>>> index 505c5ef061e3..034d1c523ddf 100644
+>>>> --- a/drivers/soundwire/intel.c
+>>>> +++ b/drivers/soundwire/intel.c
+>>>> @@ -1347,6 +1347,7 @@ int intel_link_startup(struct auxiliary_device *auxdev)
+>>>>    		 */
+>>>>    		bus->multi_link = true;
+>>>>    		bus->hw_sync_min_links = 1;
+>>>> +		dev->fwnode->flags |= FWNODE_FLAG_MULTI_LINKED;
+>>>>    	}
+>>>>    	/* Initialize shim, controller */
+>>>> diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
+>>>> index 9a81c4410b9f..446a52744953 100644
+>>>> --- a/include/linux/fwnode.h
+>>>> +++ b/include/linux/fwnode.h
+>>>> @@ -32,6 +32,7 @@ struct device;
+>>>>    #define FWNODE_FLAG_NOT_DEVICE			BIT(1)
+>>>>    #define FWNODE_FLAG_INITIALIZED			BIT(2)
+>>>>    #define FWNODE_FLAG_NEEDS_CHILD_BOUND_ON_ADD	BIT(3)
+>>>> +#define FWNODE_FLAG_MULTI_LINKED		BIT(4)
+>>>
+>>> What does this commit actually change?
+>>
+>> The new flag will lets us save if the device has multilink in fwnode_handle
+>> whenever needed.
+>> Then for soundwire/intel, save the multi_link flag into fwnode during
+>> startup.
+>> Later at master_add, as written in todo, initialize the multilink flag with
+>> fwnode's flag property.
+> 
+> And what does that allow to happen?  What changes with all of this?
 
-Some history why the EXPORT is required:
-https://lore.kernel.org/bpf/CAADnVQ+eD-=3DFZrg8L+YcdCyAS+E30W=3DZ-ShtEXAXVF=
-jmxV4usg@mail.gmail.com/
+As suggested by Pierre-Louis Bossart these changes are not necessary and 
+the TODO is to be removed. Earlier my intention was to create a new flag 
+that lets us know whether multi_link is to be read from 
+sdw_bus_master_add just as instructed in TODO.
+
+I shall send another patch, that removes the TODO, as suggested by 
+Pierre-Louis Bossart.
+> 
+> thanks,
+> 
+> greg k-h
+
+thanks,
+   -- Khalid Masum
+

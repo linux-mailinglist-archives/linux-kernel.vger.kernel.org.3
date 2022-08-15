@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB11F594C6E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28800594994
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347990AbiHPAv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 20:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
+        id S1347943AbiHOXVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349214AbiHPAqc (ORCPT
+        with ESMTP id S1343725AbiHOXO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 20:46:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3112D87DA;
-        Mon, 15 Aug 2022 13:45:00 -0700 (PDT)
+        Mon, 15 Aug 2022 19:14:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8591895FD;
+        Mon, 15 Aug 2022 13:01:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 729306125E;
-        Mon, 15 Aug 2022 20:45:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73E00C433D6;
-        Mon, 15 Aug 2022 20:44:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9BA47B80EAD;
+        Mon, 15 Aug 2022 20:01:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1393C433D7;
+        Mon, 15 Aug 2022 20:01:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660596299;
-        bh=H4/hsVFJqPIVHOEuLSJ+W+AOG4ouYb+3A7WRi0QKwP4=;
+        s=korg; t=1660593704;
+        bh=8JZ/Ppu8+/LJWNS3QNboIv0bypIL+9qabo0OOgziros=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PdD9eBVJgKKVQ5wyK8kc3zJjItddAm3KxwjoY4GTXAzIlazGnuGiPCStFcv3tNG9e
-         Bl/SwbAjD4YrO1RLcbfckXAkqh+Di/PJmIbFtUN8UvS5ZdIxL2QAFp8BfbYSNlDyAb
-         9TcX7s/oQnMWiCH38GIZwgYwcooLuqZWk8DYHTpc=
+        b=uj+pWQZkhcqtVSxZiltBW9ExxMXH/3CRmisrtcfQs+k4FDhM54WVfHEO0MLeVeIWb
+         bOBm3D3ML7cZWe1UKXA3x7ggwOGcESuh1GxKAow3sG57sYlSoaoj57RCy+7TpthHB2
+         ZohQJzBXJpVeqcOSgFDDN8O7XthXSfvZl3ylM/Ko=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Quinn Tran <qutran@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.19 1035/1157] scsi: qla2xxx: Fix imbalance vha->vref_count
-Date:   Mon, 15 Aug 2022 20:06:31 +0200
-Message-Id: <20220815180521.374960798@linuxfoundation.org>
+        stable@vger.kernel.org, Lev Kujawski <lkujaw@member.fsf.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 0993/1095] KVM: set_msr_mce: Permit guests to ignore single-bit ECC errors
+Date:   Mon, 15 Aug 2022 20:06:32 +0200
+Message-Id: <20220815180510.188201325@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
-References: <20220815180439.416659447@linuxfoundation.org>
+In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
+References: <20220815180429.240518113@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,56 +55,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
+From: Lev Kujawski <lkujaw@member.fsf.org>
 
-commit 63fa7f2644b4b48e1913af33092c044bf48e9321 upstream.
+[ Upstream commit 0471a7bd1bca2a47a5f378f2222c5cf39ce94152 ]
 
-vref_count took an extra decrement in the task management path.  Add an
-extra ref count to compensate the imbalance.
+Certain guest operating systems (e.g., UNIXWARE) clear bit 0 of
+MC1_CTL to ignore single-bit ECC data errors.  Single-bit ECC data
+errors are always correctable and thus are safe to ignore because they
+are informational in nature rather than signaling a loss of data
+integrity.
 
-Link: https://lore.kernel.org/r/20220713052045.10683-7-njavali@marvell.com
-Cc: stable@vger.kernel.org
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Quinn Tran <qutran@marvell.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Prior to this patch, these guests would crash upon writing MC1_CTL,
+with resultant error messages like the following:
+
+error: kvm run failed Operation not permitted
+EAX=fffffffe EBX=fffffffe ECX=00000404 EDX=ffffffff
+ESI=ffffffff EDI=00000001 EBP=fffdaba4 ESP=fffdab20
+EIP=c01333a5 EFL=00000246 [---Z-P-] CPL=0 II=0 A20=1 SMM=0 HLT=0
+ES =0108 00000000 ffffffff 00c09300 DPL=0 DS   [-WA]
+CS =0100 00000000 ffffffff 00c09b00 DPL=0 CS32 [-RA]
+SS =0108 00000000 ffffffff 00c09300 DPL=0 DS   [-WA]
+DS =0108 00000000 ffffffff 00c09300 DPL=0 DS   [-WA]
+FS =0000 00000000 ffffffff 00c00000
+GS =0000 00000000 ffffffff 00c00000
+LDT=0118 c1026390 00000047 00008200 DPL=0 LDT
+TR =0110 ffff5af0 00000067 00008b00 DPL=0 TSS32-busy
+GDT=     ffff5020 000002cf
+IDT=     ffff52f0 000007ff
+CR0=8001003b CR2=00000000 CR3=0100a000 CR4=00000230
+DR0=00000000 DR1=00000000 DR2=00000000 DR3=00000000
+DR6=ffff0ff0 DR7=00000400
+EFER=0000000000000000
+Code=08 89 01 89 51 04 c3 8b 4c 24 08 8b 01 8b 51 04 8b 4c 24 04 <0f>
+30 c3 f7 05 a4 6d ff ff 10 00 00 00 74 03 0f 31 c3 33 c0 33 d2 c3 8d
+74 26 00 0f 31 c3
+
+Signed-off-by: Lev Kujawski <lkujaw@member.fsf.org>
+Message-Id: <20220521081511.187388-1-lkujaw@member.fsf.org>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/qla2xxx/qla_init.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ arch/x86/kvm/x86.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -161,6 +161,7 @@ int qla24xx_async_abort_cmd(srb_t *cmd_s
- 	struct srb_iocb *abt_iocb;
- 	srb_t *sp;
- 	int rval = QLA_FUNCTION_FAILED;
-+	uint8_t bail;
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 767a61e29f51..2316c978b598 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -3226,10 +3226,13 @@ static int set_msr_mce(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 			/* only 0 or all 1s can be written to IA32_MCi_CTL
+ 			 * some Linux kernels though clear bit 10 in bank 4 to
+ 			 * workaround a BIOS/GART TBL issue on AMD K8s, ignore
+-			 * this to avoid an uncatched #GP in the guest
++			 * this to avoid an uncatched #GP in the guest.
++			 *
++			 * UNIXWARE clears bit 0 of MC1_CTL to ignore
++			 * correctable, single-bit ECC data errors.
+ 			 */
+ 			if ((offset & 0x3) == 0 &&
+-			    data != 0 && (data | (1 << 10)) != ~(u64)0)
++			    data != 0 && (data | (1 << 10) | 1) != ~(u64)0)
+ 				return -1;
  
- 	/* ref: INIT for ABTS command */
- 	sp = qla2xxx_get_qpair_sp(cmd_sp->vha, cmd_sp->qpair, cmd_sp->fcport,
-@@ -168,6 +169,7 @@ int qla24xx_async_abort_cmd(srb_t *cmd_s
- 	if (!sp)
- 		return QLA_MEMORY_ALLOC_FAILED;
- 
-+	QLA_VHA_MARK_BUSY(vha, bail);
- 	abt_iocb = &sp->u.iocb_cmd;
- 	sp->type = SRB_ABT_CMD;
- 	sp->name = "abort";
-@@ -2007,12 +2009,14 @@ qla2x00_async_tm_cmd(fc_port_t *fcport,
- 	struct srb_iocb *tm_iocb;
- 	srb_t *sp;
- 	int rval = QLA_FUNCTION_FAILED;
-+	uint8_t bail;
- 
- 	/* ref: INIT */
- 	sp = qla2x00_get_sp(vha, fcport, GFP_KERNEL);
- 	if (!sp)
- 		goto done;
- 
-+	QLA_VHA_MARK_BUSY(vha, bail);
- 	sp->type = SRB_TM_CMD;
- 	sp->name = "tmf";
- 	qla2x00_init_async_sp(sp, qla2x00_get_async_timeout(vha),
+ 			/* MCi_STATUS */
+-- 
+2.35.1
+
 
 

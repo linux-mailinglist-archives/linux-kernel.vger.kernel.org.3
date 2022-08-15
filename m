@@ -2,74 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D71165951F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 07:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75FB9595211
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 07:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232166AbiHPF0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 01:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47618 "EHLO
+        id S231862AbiHPFbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 01:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231923AbiHPF0b (ORCPT
+        with ESMTP id S231547AbiHPFa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 01:26:31 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9682113DEF
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 15:03:26 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id w18so1771055qki.8
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 15:03:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=ikVyv3Nj/OCfAyLRBroKSzO1rCNd6fD5hCL0P0dEi4w=;
-        b=WElxrXXwMY01hED9C3n34QZdS5lGbKgu51+mv/JViPAV4w25oBAWNZlUzKpz4douBe
-         PbtZuEhrb6DD5u3PFC5O4lJQlaX6Q2+zIDljN8gn2gcvSovaRtO+cKmntlpJ56HgcRRL
-         5lKSKd2bHBAY+P7wNJ9ySX+NECdgq/15WDADQJL6JLxhOdBx4AEjpdSAsc75rstZ+2AT
-         clwbswHEaakCW1hYYNWdZGenxOqQJdr8kB7IG3Dtuqsst6pcfeFX+mQJI/FaagEKbN1i
-         cJP6LiSW40aVSKcaG8lAUWD+srJtBO8dZcPeHTVlkCk3T9g4gY9YzHqaOaAwZc0aPkay
-         uKqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=ikVyv3Nj/OCfAyLRBroKSzO1rCNd6fD5hCL0P0dEi4w=;
-        b=2geyE0njvReyv5YolhaeaARsyEFf/RShAPU0+1Eh477pszIUcRF3+F44yWJ9rQoVwZ
-         TljG40AgwLrAxP4oiD1SNEzpLMluoJQacEu2ZZ4lLbQ4wTVX9xlKzpIgdKoOcD5Ni3AM
-         d/su8dAc0SyixnkAYiRCxmYfJ7W+qU6cOWKxNuYZ5JmNmQEL8qRLnM3otuvNVha2rm2B
-         0pqh+B/GM3jd/qWkBrS3wkLmLG7NTz39PYg5ujNoz5HTsRVbgOk7zswQC2XTT2AgR9OU
-         k+kcOnqgi5QxvbXlST7wmvENBLw78wsSPWFGts9JL3yIoLBSewrIyZb6z0HTsOUwhbB4
-         XAxg==
-X-Gm-Message-State: ACgBeo1joy69yBncnCKG0snfKhqWqxEqxSDe8aV9oDrPqkf+CcFSiGyI
-        EnK+6I/sNz/llx+jgDB00yJaMA==
-X-Google-Smtp-Source: AA6agR7aFgUUiNSzVKx3EPZYfHModod2MDuo96s8nq0O3+F5wM8X0UjbCfH2Rd0mBkPoimTBsicvSg==
-X-Received: by 2002:a05:620a:4384:b0:6bb:268c:1c3c with SMTP id a4-20020a05620a438400b006bb268c1c3cmr5318691qkp.16.1660601005346;
-        Mon, 15 Aug 2022 15:03:25 -0700 (PDT)
-Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id gd24-20020a05622a5c1800b003445bb107basm3667300qtb.75.2022.08.15.15.03.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 15:03:24 -0700 (PDT)
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     linux-iio@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Patrick Havelange <patrick.havelange@essensium.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Kamel Bouhara <kamel.bouhara@bootlin.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        David Lechner <david@lechnology.com>
-Subject: [PATCH] counter: Move symbols into COUNTER namespace
-Date:   Mon, 15 Aug 2022 18:03:21 -0400
-Message-Id: <20220815220321.74161-1-william.gray@linaro.org>
-X-Mailer: git-send-email 2.37.2
+        Tue, 16 Aug 2022 01:30:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106141E0F45;
+        Mon, 15 Aug 2022 15:07:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5837B811C1;
+        Mon, 15 Aug 2022 22:07:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2DE2C433B5;
+        Mon, 15 Aug 2022 22:07:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660601266;
+        bh=7yW4D4Jr+GwP+dL8bSYKzTZ6Vx8kkiE7EcnoGyP8Vh8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uGSvNd4EV/iKCG9xuv/NuL0wUEPyTOXe4dGEfb36EKNtmW7Yrk4D28+3A2W6rz7np
+         vnJ5Bz6il26/cO+xSbchp7Unh3LfVSjGWZIyAOjHJmfKdIu/zIQuUHlOoLaRXNrpLU
+         EvZQ45i6fdrm9fR5izg3RpHaVzHZUhSzHCOijXiwAs3KOuFh0+boQ4TildPz2mAXId
+         MzSfYwK9QO5cWQIuI+W7EcKFgMWzy/7x7xOXSniSYIXaj9fPlSpASJbfwQIpl7oZMl
+         j1tNrmiH89nPEZ2chBnnA78u2OXQEjvr0Wbkb8feNgx0F11Jq7oz6P5tfZaczr5TuE
+         H+1q+hp23/fjg==
+Date:   Mon, 15 Aug 2022 23:07:35 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        dri-devel@lists.freedesktop.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        linux-amlogic@lists.infradead.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-doc@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Michael Turq uette <mturquette@baylibre.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        linux-hwmon@vger.kernel.org, linux-clk@vger.kernel.org,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        David Airlie <airlied@linux.ie>, linux-iio@vger.kernel.org
+Subject: Re: (subset) [PATCH v2 0/7] Devm helpers for regulator get and enable
+Message-ID: <YvrDp32/TknqV05t@sirena.org.uk>
+References: <cover.1660292316.git.mazziesaccount@gmail.com>
+ <166057828406.697572.228317501909350108.b4-ty@kernel.org>
+ <YvpsRbguMXn74GhR@pendragon.ideasonboard.com>
+ <Yvp1Qkuh7xfeb/B2@sirena.org.uk>
+ <YvqV9Mq6I3gXQaf2@pendragon.ideasonboard.com>
+ <20220815205857.308B1C433D6@smtp.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="VUoPU3p+8USLMiyu"
+Content-Disposition: inline
+In-Reply-To: <20220815205857.308B1C433D6@smtp.kernel.org>
+X-Cookie: We have ears, earther...FOUR OF THEM!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,182 +93,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Counter subsystem symbols are only relevant to counter drivers. A
-COUNTER namespace is created to control the availability of these
-symbols to modules that import this namespace explicitly.
 
-Cc: Patrick Havelange <patrick.havelange@essensium.com>
-Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc: Oleksij Rempel <linux@rempel-privat.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Kamel Bouhara <kamel.bouhara@bootlin.com>
-Cc: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: David Lechner <david@lechnology.com>
-Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
----
- drivers/counter/104-quad-8.c            |  1 +
- drivers/counter/counter-chrdev.c        |  2 +-
- drivers/counter/counter-core.c          | 14 +++++++-------
- drivers/counter/ftm-quaddec.c           |  1 +
- drivers/counter/intel-qep.c             |  1 +
- drivers/counter/interrupt-cnt.c         |  1 +
- drivers/counter/microchip-tcb-capture.c |  1 +
- drivers/counter/stm32-lptimer-cnt.c     |  1 +
- drivers/counter/stm32-timer-cnt.c       |  1 +
- drivers/counter/ti-eqep.c               |  1 +
- 10 files changed, 16 insertions(+), 8 deletions(-)
+--VUoPU3p+8USLMiyu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/counter/104-quad-8.c b/drivers/counter/104-quad-8.c
-index 62c2b7ac4339..1323edfbe40c 100644
---- a/drivers/counter/104-quad-8.c
-+++ b/drivers/counter/104-quad-8.c
-@@ -1241,3 +1241,4 @@ module_isa_driver(quad8_driver, num_quad8);
- MODULE_AUTHOR("William Breathitt Gray <vilhelm.gray@gmail.com>");
- MODULE_DESCRIPTION("ACCES 104-QUAD-8 driver");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS(COUNTER);
-diff --git a/drivers/counter/counter-chrdev.c b/drivers/counter/counter-chrdev.c
-index 69d340be9c93..4e71a19d7e6a 100644
---- a/drivers/counter/counter-chrdev.c
-+++ b/drivers/counter/counter-chrdev.c
-@@ -574,4 +574,4 @@ void counter_push_event(struct counter_device *const counter, const u8 event,
- 	if (copied)
- 		wake_up_poll(&counter->events_wait, EPOLLIN);
- }
--EXPORT_SYMBOL_GPL(counter_push_event);
-+EXPORT_SYMBOL_NS_GPL(counter_push_event, COUNTER);
-diff --git a/drivers/counter/counter-core.c b/drivers/counter/counter-core.c
-index 938651f9e9e0..09c77afb33ca 100644
---- a/drivers/counter/counter-core.c
-+++ b/drivers/counter/counter-core.c
-@@ -73,7 +73,7 @@ void *counter_priv(const struct counter_device *const counter)
- 
- 	return &ch->privdata;
- }
--EXPORT_SYMBOL_GPL(counter_priv);
-+EXPORT_SYMBOL_NS_GPL(counter_priv, COUNTER);
- 
- /**
-  * counter_alloc - allocate a counter_device
-@@ -133,13 +133,13 @@ struct counter_device *counter_alloc(size_t sizeof_priv)
- 
- 	return NULL;
- }
--EXPORT_SYMBOL_GPL(counter_alloc);
-+EXPORT_SYMBOL_NS_GPL(counter_alloc, COUNTER);
- 
- void counter_put(struct counter_device *counter)
- {
- 	put_device(&counter->dev);
- }
--EXPORT_SYMBOL_GPL(counter_put);
-+EXPORT_SYMBOL_NS_GPL(counter_put, COUNTER);
- 
- /**
-  * counter_add - complete registration of a counter
-@@ -166,7 +166,7 @@ int counter_add(struct counter_device *counter)
- 	/* implies device_add(dev) */
- 	return cdev_device_add(&counter->chrdev, dev);
- }
--EXPORT_SYMBOL_GPL(counter_add);
-+EXPORT_SYMBOL_NS_GPL(counter_add, COUNTER);
- 
- /**
-  * counter_unregister - unregister Counter from the system
-@@ -188,7 +188,7 @@ void counter_unregister(struct counter_device *const counter)
- 
- 	mutex_unlock(&counter->ops_exist_lock);
- }
--EXPORT_SYMBOL_GPL(counter_unregister);
-+EXPORT_SYMBOL_NS_GPL(counter_unregister, COUNTER);
- 
- static void devm_counter_release(void *counter)
- {
-@@ -223,7 +223,7 @@ struct counter_device *devm_counter_alloc(struct device *dev, size_t sizeof_priv
- 
- 	return counter;
- }
--EXPORT_SYMBOL_GPL(devm_counter_alloc);
-+EXPORT_SYMBOL_NS_GPL(devm_counter_alloc, COUNTER);
- 
- /**
-  * devm_counter_add - complete registration of a counter
-@@ -244,7 +244,7 @@ int devm_counter_add(struct device *dev,
- 
- 	return devm_add_action_or_reset(dev, devm_counter_release, counter);
- }
--EXPORT_SYMBOL_GPL(devm_counter_add);
-+EXPORT_SYMBOL_NS_GPL(devm_counter_add, COUNTER);
- 
- #define COUNTER_DEV_MAX 256
- 
-diff --git a/drivers/counter/ftm-quaddec.c b/drivers/counter/ftm-quaddec.c
-index 2a58582a9df4..aea6622a9b13 100644
---- a/drivers/counter/ftm-quaddec.c
-+++ b/drivers/counter/ftm-quaddec.c
-@@ -325,3 +325,4 @@ module_platform_driver(ftm_quaddec_driver);
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Kjeld Flarup <kfa@deif.com>");
- MODULE_AUTHOR("Patrick Havelange <patrick.havelange@essensium.com>");
-+MODULE_IMPORT_NS(COUNTER);
-diff --git a/drivers/counter/intel-qep.c b/drivers/counter/intel-qep.c
-index 47a6a9dfc9e8..af5942e66f7d 100644
---- a/drivers/counter/intel-qep.c
-+++ b/drivers/counter/intel-qep.c
-@@ -523,3 +523,4 @@ MODULE_AUTHOR("Jarkko Nikula <jarkko.nikula@linux.intel.com>");
- MODULE_AUTHOR("Raymond Tan <raymond.tan@intel.com>");
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("Intel Quadrature Encoder Peripheral driver");
-+MODULE_IMPORT_NS(COUNTER);
-diff --git a/drivers/counter/interrupt-cnt.c b/drivers/counter/interrupt-cnt.c
-index 3b13f56bbb11..5a11b65fc0e5 100644
---- a/drivers/counter/interrupt-cnt.c
-+++ b/drivers/counter/interrupt-cnt.c
-@@ -242,3 +242,4 @@ MODULE_ALIAS("platform:interrupt-counter");
- MODULE_AUTHOR("Oleksij Rempel <o.rempel@pengutronix.de>");
- MODULE_DESCRIPTION("Interrupt counter driver");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS(COUNTER);
-diff --git a/drivers/counter/microchip-tcb-capture.c b/drivers/counter/microchip-tcb-capture.c
-index 00844445143b..f9dee15d9777 100644
---- a/drivers/counter/microchip-tcb-capture.c
-+++ b/drivers/counter/microchip-tcb-capture.c
-@@ -394,3 +394,4 @@ module_platform_driver(mchp_tc_driver);
- MODULE_AUTHOR("Kamel Bouhara <kamel.bouhara@bootlin.com>");
- MODULE_DESCRIPTION("Microchip TCB Capture driver");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS(COUNTER);
-diff --git a/drivers/counter/stm32-lptimer-cnt.c b/drivers/counter/stm32-lptimer-cnt.c
-index 68031d93ce89..d6b80b6dfc28 100644
---- a/drivers/counter/stm32-lptimer-cnt.c
-+++ b/drivers/counter/stm32-lptimer-cnt.c
-@@ -520,3 +520,4 @@ MODULE_AUTHOR("Fabrice Gasnier <fabrice.gasnier@st.com>");
- MODULE_ALIAS("platform:stm32-lptimer-counter");
- MODULE_DESCRIPTION("STMicroelectronics STM32 LPTIM counter driver");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS(COUNTER);
-diff --git a/drivers/counter/stm32-timer-cnt.c b/drivers/counter/stm32-timer-cnt.c
-index 5779ae7c73cf..9bf20a5d6bda 100644
---- a/drivers/counter/stm32-timer-cnt.c
-+++ b/drivers/counter/stm32-timer-cnt.c
-@@ -417,3 +417,4 @@ MODULE_AUTHOR("Benjamin Gaignard <benjamin.gaignard@st.com>");
- MODULE_ALIAS("platform:stm32-timer-counter");
- MODULE_DESCRIPTION("STMicroelectronics STM32 TIMER counter driver");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS(COUNTER);
-diff --git a/drivers/counter/ti-eqep.c b/drivers/counter/ti-eqep.c
-index 0489d26eb47c..b0f24cf3e891 100644
---- a/drivers/counter/ti-eqep.c
-+++ b/drivers/counter/ti-eqep.c
-@@ -456,3 +456,4 @@ module_platform_driver(ti_eqep_driver);
- MODULE_AUTHOR("David Lechner <david@lechnology.com>");
- MODULE_DESCRIPTION("TI eQEP counter driver");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS(COUNTER);
+On Mon, Aug 15, 2022 at 01:58:55PM -0700, Stephen Boyd wrote:
+> Quoting Laurent Pinchart (2022-08-15 11:52:36)
+> > On Mon, Aug 15, 2022 at 05:33:06PM +0100, Mark Brown wrote:
+> > > On Mon, Aug 15, 2022 at 06:54:45PM +0300, Laurent Pinchart wrote:
 
-base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
--- 
-2.37.2
+> > > > - With devres, you don't have full control over the order in which
+> > > >   resources will be released, which means that you can't control the
+> > > >   power off sequence, in particular if it needs to be sequenced with
+> > > >   GPIOs and clocks. That's not a concern for all drivers, but this API
+> > > >   will creep in in places where it shouldn't be used, driver authours
+> > > >   should really pay attention to power management and not live with the
+> > > >   false impression that everything will be handled automatically for
+> > > >   them. In the worst cases, an incorrect power off sequence could lead
+> > > >   to hardware damage.
 
+> I think the main issue is that platform drivers are being asked to do
+> too much. We've put the burden on platform driver authors to intimately
+> understand how their devices are integrated, and as we all know they're
+
+This is for the regulator API, it's mainly for off SoC devices so it's
+not a question of understanding the integration of a device into a piece
+of silicon, it's a question of understanding the integration of a chip
+into a board which seems reasonably in scope for a chip driver and is
+certainly the sort of thing that you'd be talking to your customers
+about as a silicon vendor.
+
+> The basic idea is that drivers should be focused on what they're
+> driving, not navigating the (sometimes) complex integration that's
+> taking place around them. When a device driver probe function is called
+> the device should already be powered on. When the driver is
+> removed/unbound, the power should be removed after the driver's remove
+> function is called. We're only going to be able to solve the power
+> sequencing and ordering problem by taking away power control and
+> sequencing from drivers.
+
+That is a sensible approach for most on SoC things but for something
+shipped as a separate driver there's little point in separating the
+power and clocking domain driver from the device since there's typically
+a 1:1 mapping.  Usually either it's extremely simple (eg, turn
+everything on and remove reset) but some devices really need to manage
+things.  There's obviously some edge cases in SoC integration as well
+(eg, the need to manage card supplies for SD controllers, or knowing
+exact clock rates for things like audio controllers) so you need some
+flex.
+
+--VUoPU3p+8USLMiyu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL6w6YACgkQJNaLcl1U
+h9Dj/Qf+Irhly4mQ6388aBof87f+fRZyTpfRbk1B1J89HNrKzDUxTc8jId0ibmOh
+XP6CnxFT1ppn79ZTYaYepg5Gj95WFKW5W+ZJHwuG8LXfkbUu4hBYRufm+/CxYoxG
+x4ZwtE3q1fA3zcCiTUsAYldU2zuNucCo+p/GRSHc3khhEEDepTmKF8Ifvt7EjMvx
+YzoIDe3t68bxJ0qO+nlndzie3mI8drGHfU5pr/BZroJY6WMlhG8InmyNpaYb5Wj+
+TzNpM7qWZFvYzEXTe6Dd3lBBcBiWaW3P2KcFKdysY2Kcc0+HTiQVxjgn5pjLQa9R
+3+8IJudr63VwjCEgMbDPRxVG7Ht+9Q==
+=CRju
+-----END PGP SIGNATURE-----
+
+--VUoPU3p+8USLMiyu--

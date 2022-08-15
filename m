@@ -2,51 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEDE593A50
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6D5593474
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 20:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244437AbiHOTfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 15:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
+        id S231659AbiHOSDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 14:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344011AbiHOT0U (ORCPT
+        with ESMTP id S230280AbiHOSDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 15:26:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2E32FD;
-        Mon, 15 Aug 2022 11:42:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50DA1B81081;
-        Mon, 15 Aug 2022 18:42:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94693C433D6;
-        Mon, 15 Aug 2022 18:42:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660588921;
-        bh=K2mymVMllnaeMhMciQeht38cTlLrhvodPRgy0FCmX+I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aV7DWe4ssCI3e9qMGdeF6uJRl8TqshKU5p/Qyc6dfPTlblLSH7hobK1Err5HmDGfF
-         cryqTbtPU2HQSPGxxiXFbFassZ8GcLeNTfjNYHhl6HEQmDZ3cDWwe782+4ZWCswaLR
-         +5/jxCGfQzBiscxMMTkn37PAqtvQrM4mWa4av+ts=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 555/779] block: ensure iov_iter advances for added pages
-Date:   Mon, 15 Aug 2022 20:03:19 +0200
-Message-Id: <20220815180401.056459983@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180337.130757997@linuxfoundation.org>
-References: <20220815180337.130757997@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Mon, 15 Aug 2022 14:03:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A50928E3F
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:03:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660586614;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wQjr+DSYGxM4TpUxnXhcHX0DX24mB5hjVi7pYJ9v++8=;
+        b=bSvX9OEdXg+ptQ9Vn42y5FdUy5IxdUvJ1tvFNVVvCRAVbOGkvGSz6Q530UK3kBmlRzvUO6
+        xn9awTUJpmNAyFDuIP+s7LL8b9eXUlgLrnS4Yk+5+ZWXgPEVdLZPGABAC1kPUHqtaXDY77
+        LgmMTBiqJZRybYYLk7cbLwIC/8H7YYQ=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-596-pKIDAYNsPuG_SCh8WLWIUg-1; Mon, 15 Aug 2022 14:03:32 -0400
+X-MC-Unique: pKIDAYNsPuG_SCh8WLWIUg-1
+Received: by mail-ed1-f70.google.com with SMTP id z3-20020a056402274300b0043d4da3b4b5so5122581edd.12
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:03:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=wQjr+DSYGxM4TpUxnXhcHX0DX24mB5hjVi7pYJ9v++8=;
+        b=ZgU4Saixz4UUk0uHo9f2q9a1QgFrY0fdpWxw2tDwwjyZUpRChaBBxyh3ckE6L8GL0A
+         84eAyA2PcIWDxo0qk2SdvNIY8VywDk/VVL3ZOr3JKCHIwz/Q4RYjyw6DP71rmGSjZivd
+         EdVkBu3mks9F9OYCORvsP5zQVzl05JyWYoqwgdQvhKX1bcFqmTaLwQqO9UqrLJTZ8N7B
+         VmeWX63XuzxvVFMgTxQ7JPJqPXn9qrbhWggRlPlIDYeM5B9BK0QeyUhSkxoZ5TpyhgO/
+         Uc/aXULvLWVv72geV8MVx+XS0lDymzqDsyIvI9Sdgc1eVRIXolneuYdpjfLPFJtg7aE7
+         YlQw==
+X-Gm-Message-State: ACgBeo3ltZUrmF8nl1Mwej4FAEzrMIpTbUn7Exp69KFdyNZR7E9hl3Cp
+        n2SDNoWqmKipnv72+oS4dDkNvNG3XmIjFSAkbF2ZO49EgoDdELr4k4SN3+yyuTCWj8h+KdQBqHt
+        IBuYxA/6XYoGg1g/ZwXNePAML29LsUZ0VPj3LQc/K
+X-Received: by 2002:aa7:dd50:0:b0:440:3e9d:784 with SMTP id o16-20020aa7dd50000000b004403e9d0784mr15656371edw.195.1660586611551;
+        Mon, 15 Aug 2022 11:03:31 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4ilBYpI5+hg3LT1yB5sTqM3lMYh4WgRyvUWsiZVy9Nzjcy/+DGyyGBhpo0ZF6gQUL7QOy3v+qFA8joRXmATdM=
+X-Received: by 2002:aa7:dd50:0:b0:440:3e9d:784 with SMTP id
+ o16-20020aa7dd50000000b004403e9d0784mr15656358edw.195.1660586611281; Mon, 15
+ Aug 2022 11:03:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220811103435.188481-1-david@redhat.com> <20220811103435.188481-3-david@redhat.com>
+ <YvVRfSYsPOraTo6o@monkey> <20220815153549.0288a9c6@thinkpad>
+ <CADFyXm7-0zXDG+ZHjft95aAAiSZh_RyAqgJw1nGsALwEL1XKiw@mail.gmail.com> <20220815175929.303774fd@thinkpad>
+In-Reply-To: <20220815175929.303774fd@thinkpad>
+From:   David Hildenbrand <david@redhat.com>
+Date:   Mon, 15 Aug 2022 20:03:20 +0200
+Message-ID: <CADFyXm40iiz-xFpLK4qGgHGh5Qp+98G9qxnqC20c8qtRiKt9_A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] mm/hugetlb: support write-faults in shared mappings
+To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>, stable <stable@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,64 +78,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Keith Busch <kbusch@kernel.org>
+On Mon, Aug 15, 2022 at 5:59 PM Gerald Schaefer
+<gerald.schaefer@linux.ibm.com> wrote:
+>
+> On Mon, 15 Aug 2022 17:07:32 +0200
+> David Hildenbrand <david@redhat.com> wrote:
+>
+> > On Mon, Aug 15, 2022 at 3:36 PM Gerald Schaefer
+> > <gerald.schaefer@linux.ibm.com> wrote:
+> > >
+> > > On Thu, 11 Aug 2022 11:59:09 -0700
+> > > Mike Kravetz <mike.kravetz@oracle.com> wrote:
+> > >
+> > > > On 08/11/22 12:34, David Hildenbrand wrote:
+> > > > > If we ever get a write-fault on a write-protected page in a share=
+d mapping,
+> > > > > we'd be in trouble (again). Instead, we can simply map the page w=
+ritable.
+> > > > >
+> > > > <snip>
+> > > > >
+> > > > > Reason is that uffd-wp doesn't clear the uffd-wp PTE bit when
+> > > > > unregistering and consequently keeps the PTE writeprotected. Reas=
+on for
+> > > > > this is to avoid the additional overhead when unregistering. Note
+> > > > > that this is the case also for !hugetlb and that we will end up w=
+ith
+> > > > > writable PTEs that still have the uffd-wp PTE bit set once we ret=
+urn
+> > > > > from hugetlb_wp(). I'm not touching the uffd-wp PTE bit for now, =
+because it
+> > > > > seems to be a generic thing -- wp_page_reuse() also doesn't clear=
+ it.
+> > > > >
+> > > > > VM_MAYSHARE handling in hugetlb_fault() for FAULT_FLAG_WRITE
+> > > > > indicates that MAP_SHARED handling was at least envisioned, but c=
+ould never
+> > > > > have worked as expected.
+> > > > >
+> > > > > While at it, make sure that we never end up in hugetlb_wp() on wr=
+ite
+> > > > > faults without VM_WRITE, because we don't support maybe_mkwrite()
+> > > > > semantics as commonly used in the !hugetlb case -- for example, i=
+n
+> > > > > wp_page_reuse().
+> > > >
+> > > > Nit,
+> > > > to me 'make sure that we never end up in hugetlb_wp()' implies that
+> > > > we would check for condition in callers as opposed to first thing i=
+n
+> > > > hugetlb_wp().  However, I am OK with description as it.
+> > >
+> >
+> > Hi Gerald,
+> >
+> > > Is that new WARN_ON_ONCE() in hugetlb_wp() meant to indicate a real b=
+ug?
+> >
+> > Most probably, unless I am missing something important.
+> >
+> > Something triggers FAULT_FLAG_WRITE on a VMA without VM_WRITE and
+> > hugetlb_wp() would map the pte writable.
+> > Consequently, we'd have a writable pte inside a VMA that does not have
+> > write permissions, which is dubious. My check prevents that and bails
+> > out.
+> >
+> > Ordinary (!hugetlb) faults have maybe_mkwrite() (e.g., for FOLL_FORCE
+> > or breaking COW) semantics such that we won't be mapping PTEs writable
+> > if the VMA does not have write permissions.
+> >
+> > I suspect that either
+> >
+> > a) Some write fault misses a protection check and ends up triggering a
+> > FAULT_FLAG_WRITE where we should actually fail early.
+> >
+> > b) The write fault is valid and some VMA misses proper flags (VM_WRITE)=
+.
+> >
+> > c) The write fault is valid (e.g., for breaking COW or FOLL_FORCE) and
+> > we'd actually want maybe_mkwrite semantics.
+> >
+> > > It is triggered by libhugetlbfs testcase "HUGETLB_ELFMAP=3DR linkhuge=
+_rw"
+> > > (at least on s390), and crashes our CI, because it runs with panic_on=
+_warn
+> > > enabled.
+> > >
+> > > Not sure if this means that we have bug elsewhere, allowing us to
+> > > get to the WARN in hugetlb_wp().
+> >
+> > That's what I suspect. Do you have a backtrace?
+>
+> Sure, forgot to send it with initial reply...
+>
+> [   82.574749] ------------[ cut here ]------------
+> [   82.574751] WARNING: CPU: 9 PID: 1674 at mm/hugetlb.c:5264 hugetlb_wp+=
+0x3be/0x818
+> [   82.574759] Modules linked in: nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 =
+nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft=
+_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip_set nf_tabl=
+es nfnetlink sunrpc uvdevice s390_trng vfio_ccw mdev vfio_iommu_type1 eadm_=
+sch vfio zcrypt_cex4 sch_fq_codel configfs ghash_s390 prng chacha_s390 libc=
+hacha aes_s390 des_s390 libdes sha3_512_s390 sha3_256_s390 sha512_s390 sha2=
+56_s390 sha1_s390 sha_common pkey zcrypt rng_core autofs4
+> [   82.574785] CPU: 9 PID: 1674 Comm: linkhuge_rw Kdump: loaded Not taint=
+ed 5.19.0-next-20220815 #36
+> [   82.574787] Hardware name: IBM 3931 A01 704 (LPAR)
+> [   82.574788] Krnl PSW : 0704c00180000000 00000006c9d4bc6a (hugetlb_wp+0=
+x3c2/0x818)
+> [   82.574791]            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:0 P=
+M:0 RI:0 EA:3
+> [   82.574794] Krnl GPRS: 000000000227c000 0000000008640071 0000000000000=
+000 0000000001200000
+> [   82.574796]            0000000001200000 00000000b5a98090 0000000000000=
+255 00000000adb2c898
+> [   82.574797]            0000000000000000 00000000adb2c898 0000000001200=
+000 00000000b5a98090
+> [   82.574799]            000000008c408000 0000000092fd7300 000003800339b=
+c10 000003800339baf8
+> [   82.574803] Krnl Code: 00000006c9d4bc5c: f160000407fe        mvo     4=
+(7,%r0),2046(1,%r0)
+>            00000006c9d4bc62: 47000700           bc      0,1792
+>           #00000006c9d4bc66: af000000           mc      0,0
+>           >00000006c9d4bc6a: a7a80040           lhi     %r10,64
+>            00000006c9d4bc6e: b916002a           llgfr   %r2,%r10
+>            00000006c9d4bc72: eb6ff1600004       lmg     %r6,%r15,352(%r15=
+)
+>            00000006c9d4bc78: 07fe               bcr     15,%r14
+>            00000006c9d4bc7a: 47000700           bc      0,1792
+> [   82.574814] Call Trace:
+> [   82.574842]  [<00000006c9d4bc6a>] hugetlb_wp+0x3c2/0x818
+> [   82.574846]  [<00000006c9d4c62e>] hugetlb_no_page+0x56e/0x5a8
+> [   82.574848]  [<00000006c9d4cac2>] hugetlb_fault+0x45a/0x590
+> [   82.574850]  [<00000006c9d06d4a>] handle_mm_fault+0x182/0x220
+> [   82.574855]  [<00000006c9a9d70e>] do_exception+0x19e/0x470
+> [   82.574858]  [<00000006c9a9dff2>] do_dat_exception+0x2a/0x50
+> [   82.574861]  [<00000006ca668a18>] __do_pgm_check+0xf0/0x1b0
+> [   82.574866]  [<00000006ca677b3c>] pgm_check_handler+0x11c/0x170
+> [   82.574870] Last Breaking-Event-Address:
+> [   82.574871]  [<00000006c9d4b926>] hugetlb_wp+0x7e/0x818
+> [   82.574873] Kernel panic - not syncing: panic_on_warn set ...
+> [   82.574875] CPU: 9 PID: 1674 Comm: linkhuge_rw Kdump: loaded Not taint=
+ed 5.19.0-next-20220815 #36
+> [   82.574877] Hardware name: IBM 3931 A01 704 (LPAR)
+> [   82.574878] Call Trace:
+> [   82.574879]  [<00000006ca664f22>] dump_stack_lvl+0x62/0x80
+> [   82.574881]  [<00000006ca657af8>] panic+0x118/0x300
+> [   82.574884]  [<00000006c9ac3da6>] __warn+0xb6/0x160
+> [   82.574887]  [<00000006ca29b1ea>] report_bug+0xba/0x140
+> [   82.574890]  [<00000006c9a75194>] monitor_event_exception+0x44/0x80
+> [   82.574892]  [<00000006ca668a18>] __do_pgm_check+0xf0/0x1b0
+> [   82.574894]  [<00000006ca677b3c>] pgm_check_handler+0x11c/0x170
+> [   82.574897]  [<00000006c9d4bc6a>] hugetlb_wp+0x3c2/0x818
+> [   82.574899]  [<00000006c9d4c62e>] hugetlb_no_page+0x56e/0x5a8
+> [   82.574901]  [<00000006c9d4cac2>] hugetlb_fault+0x45a/0x590
+> [   82.574903]  [<00000006c9d06d4a>] handle_mm_fault+0x182/0x220
+> [   82.574906]  [<00000006c9a9d70e>] do_exception+0x19e/0x470
+> [   82.574907]  [<00000006c9a9dff2>] do_dat_exception+0x2a/0x50
+> [   82.574909]  [<00000006ca668a18>] __do_pgm_check+0xf0/0x1b0
+> [   82.574912]  [<00000006ca677b3c>] pgm_check_handler+0x11c/0x170
 
-[ Upstream commit 325347d965e7ccf5424a05398807a6d801846612 ]
 
-There are cases where a bio may not accept additional pages, and the iov
-needs to advance to the last data length that was accepted. The zone
-append used to handle this correctly, but was inadvertently broken when
-the setup was made common with the normal r/w case.
+do_dat_exception() sets
+  access =3D VM_ACCESS_FLAGS;
 
-Fixes: 576ed9135489c ("block: use bio_add_page in bio_iov_iter_get_pages")
-Fixes: c58c0074c54c2 ("block/bio: remove duplicate append pages code")
-Signed-off-by: Keith Busch <kbusch@kernel.org>
-Link: https://lore.kernel.org/r/20220712153256.2202024-1-kbusch@fb.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- block/bio.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+do_exception() sets
+  is_write =3D (trans_exc_code & store_indication) =3D=3D 0x400;
 
-diff --git a/block/bio.c b/block/bio.c
-index 0dd7aa1797f6..ba9120d4fe49 100644
---- a/block/bio.c
-+++ b/block/bio.c
-@@ -1123,6 +1123,7 @@ static int __bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter)
- 	ssize_t size, left;
- 	unsigned len, i;
- 	size_t offset;
-+	int ret = 0;
- 
- 	/*
- 	 * Move page array up in the allocated memory for the bio vecs as far as
-@@ -1138,7 +1139,6 @@ static int __bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter)
- 
- 	for (left = size, i = 0; left > 0; left -= len, i++) {
- 		struct page *page = pages[i];
--		int ret;
- 
- 		len = min_t(size_t, PAGE_SIZE - offset, left);
- 		if (bio_op(bio) == REQ_OP_ZONE_APPEND)
-@@ -1149,13 +1149,13 @@ static int __bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter)
- 
- 		if (ret) {
- 			bio_put_pages(pages + i, left, offset);
--			return ret;
-+			break;
- 		}
- 		offset = 0;
- 	}
- 
--	iov_iter_advance(iter, size);
--	return 0;
-+	iov_iter_advance(iter, size - left);
-+	return ret;
- }
- 
- /**
--- 
-2.35.1
+and FAULT_FLAG_WRITE
+   if (access =3D=3D VM_WRITE || is_write)
+          flags |=3D FAULT_FLAG_WRITE;
 
+however, for VMA permission checks it only checks
+  if (unlikely(!(vma->vm_flags & access)))
+          goto out_up;
 
+as VM_ACCESS_FLAGS includes VM_WRITE | VM_READ ...
+
+We end up triggering a write fault (FAULT_FLAG_WRITE), even though the
+VMA does not allow for writes.
+
+I assume that's what happens and that it's a bug in s390x code.
 

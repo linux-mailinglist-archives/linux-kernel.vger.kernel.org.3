@@ -2,130 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 111AB594C58
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8147594DE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:35:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347297AbiHPA1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 20:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33036 "EHLO
+        id S1351333AbiHPA21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 20:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351819AbiHPAYm (ORCPT
+        with ESMTP id S1355808AbiHPA0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 20:24:42 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB460D2922
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 13:34:18 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id k26so15433675ejx.5
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 13:34:18 -0700 (PDT)
+        Mon, 15 Aug 2022 20:26:52 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A35A924F;
+        Mon, 15 Aug 2022 13:34:33 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id a9so12088606lfm.12;
+        Mon, 15 Aug 2022 13:34:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=C2DX2ca7bHN7SVtPDmCU8rhrYCWb6kGjMw+dl7PYH3A=;
-        b=hBACRnEVlwPILbpIJWVmIwveirPxlpdBfR/nHLiPxMxIUdcRR6EAYvzRjiNsZSTIqe
-         EKMBej1tT9tMClvM85IaoFsx4zKzd5QKDbLhmZJXXY5xrvbyRivn1sayE0tizFQxR+iw
-         5VDLZyWU7aU/qOlYcaULn4JLb7Du1vYQXcro+/hd19NcbkrIyZiJ6QWhqHgaaqxWpu6e
-         R6Axd7mtl++ln5Q7wRB8kPuvPpsHbr1YpajycZ5kXhJf4FI02Ma2vhU2CKUYHSi4Cji7
-         s+V9aRuhG+EZUmlLiShYVMrvERqw9/5i4tCKAM1kvK6Mzk3XwiKFBiTMWSdR2oGGPjH5
-         kFiQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=edBKqiVnU84WIOC5Qmj5Rk7CwLqtESwhF2nX0tSKFBo=;
+        b=qDe9CTkaYOZ8QfGGEZWgKVaU6v0Be3OJaGRxWiA/Gip12e6+QSOm7BQy8NHS99Vl8J
+         kXXaVp08xA725DVH0WEKUkl78emxsl++Z3MJcrsXhCwFqS2RXGm/EtgApd0XVgzPAMoS
+         oRI1c9StJ748f73evLhknd1xfoYVYNwDof8RD9eIwRyQLGtbT+aBz7JkFmqzuIF9yMTf
+         IXBNbxmV7HGZ/v4REGo8UHR2FSjhqZM69UdtlwAXn3Gs0HEuFUvPZDs40ldPpnGMKard
+         fqb4EQtz2g8ELtQt/xXaTs74RDZaMeOiBS88ZkTW3crVT6mod5gWWU7dXKcuK8KV+NSC
+         Hghw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=C2DX2ca7bHN7SVtPDmCU8rhrYCWb6kGjMw+dl7PYH3A=;
-        b=Y+FyKmixXfjmDlQl8DGtnrUC1rgfdVm9x9HBkN0mv7RYtHs5yhhCjN2dVAXdnLpGyI
-         jKXz3rIJf/7FmenghpAYh+AeAa307gxbV2/6PL5AZy/blTSJkyei5yK53V/ik/LwBGh+
-         ABpdwxICF1n61DMf9KOn1FTU+5eAHz21dQyqlu5oa0jrZrxK6CAtqibXPTu3VNMvquDy
-         lAtPPEpqDbiHC8Z2nT/A7g0eRhsBlHkO7oAI/tP/8J8fUmSQfNTOEUC64DxIYKrLuCqp
-         PVVWC0Fd+mCBSpjs81DhrdhEwjM003KfkjkWA+o+bXAtxBG43fjJktyqBJ4JQt6lB4D9
-         +aFw==
-X-Gm-Message-State: ACgBeo1n+5EF9g/Jz0L4wx7RNECrnySvC2HzX4A/Ulyanr0WJ1CyHfOS
-        VeBoUzUNr2RDSgS6e2YmmZGF3Q==
-X-Google-Smtp-Source: AA6agR7GNkEDMG/2BojsZC5Ae1/tzQEup1Sm4EksXxmcjFQ+R52Il66N9sHCn7PsuWSJ9BB50VVezQ==
-X-Received: by 2002:a17:907:2c47:b0:730:8bbb:69a8 with SMTP id hf7-20020a1709072c4700b007308bbb69a8mr11810673ejc.38.1660595649083;
-        Mon, 15 Aug 2022 13:34:09 -0700 (PDT)
-Received: from [192.168.0.12] (cpc76482-cwma10-2-0-cust629.7-3.cable.virginm.net. [86.14.22.118])
-        by smtp.gmail.com with ESMTPSA id u19-20020a05640207d300b0043bb8023caesm7129729edy.62.2022.08.15.13.34.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 13:34:08 -0700 (PDT)
-Message-ID: <e6821eef-4fcb-97b1-24be-e2bb62b99039@linaro.org>
-Date:   Mon, 15 Aug 2022 21:34:07 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=edBKqiVnU84WIOC5Qmj5Rk7CwLqtESwhF2nX0tSKFBo=;
+        b=llMdcaq1lQJ2uO9FU88lRPWunx0elrFuC79juaOTVKDNFr1UC4X3zU7/epQ5rZIe+z
+         a2FoRiyeMX+HaT9m2RU1tN3AlSiQXshEqHEyXT7MFvco2IDEbcCDNh59n7LD2yxBf0IT
+         3lZLg9muyehdIxSJa2F6yf5dPm8RBmPWj2AVyYxAH2ts3im1zWnGCSMKNf7BcwJR/ckM
+         EN7P415pbKzgYlzny1e04oPaUmtikBhj3Gt7+HGC7mNpqhFEcmRcA0/yZlw9puCY9HO8
+         SDOVat4l+Lha/xenwZQOxAmDR78oT57T3f/doTnx3csUVKbfDHR+1HGVQeq5LhMMkdJq
+         ESXg==
+X-Gm-Message-State: ACgBeo2flfr1YucvyKzE4KYn3HsHN6C/Y07NWEYZ5ZC2aJZ4f/LhhYZo
+        E0xT0K9QOTNq+UdSpyraVF5UsIFQQkRtkpUHnJU=
+X-Google-Smtp-Source: AA6agR5vM+UNSRwhLs/v9HbarggElOPYzJ7rZD9sUdiNhmBn1UguMr3CWEt1kQ40IUwrV94Dd/Kuy0+PDwLsh239dcA=
+X-Received: by 2002:a05:6512:308a:b0:48b:4dd:5362 with SMTP id
+ z10-20020a056512308a00b0048b04dd5362mr6146081lfd.575.1660595670001; Mon, 15
+ Aug 2022 13:34:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 3/4] arm64: dts: qcom: sdm845: Add the RPMh stats node
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Maulik Shah <quic_mkshah@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220812101240.1869605-1-abel.vesa@linaro.org>
- <T2Uz7zs4Ht58lYc5zWg1VBY0ju6bVaSKa9y3RhBQWDDHmPXBHbAxI2J34jSeY0BFQy2y4JtFn3nQS0Lz4xI5jw==@protonmail.internalid>
- <20220812101240.1869605-3-abel.vesa@linaro.org>
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <20220812101240.1869605-3-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220815175114.23576-1-konishi.ryusuke@gmail.com> <YvqP/f2P2YgIIO9U@ZenIV>
+In-Reply-To: <YvqP/f2P2YgIIO9U@ZenIV>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Tue, 16 Aug 2022 05:34:12 +0900
+Message-ID: <CAKFNMomyjXpsz-=BtG+G3q1J7CFUBMEfP13FfxwhWB==9qb++w@mail.gmail.com>
+Subject: Re: [PATCH] nilfs2: fix use-after-free bug in nilfs_mdt_destroy()
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-nilfs <linux-nilfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jiacheng Xu <stitch@zju.edu.cn>,
+        Mudong Liang <mudongliangabcd@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Aug 16, 2022 at 3:27 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> On Tue, Aug 16, 2022 at 02:51:14AM +0900, Ryusuke Konishi wrote:
+> > In alloc_inode(), inode_init_always() could return -ENOMEM if
+> > security_inode_alloc() fails.  If this happens for nilfs2,
+> > nilfs_free_inode() is called without initializing inode->i_private and
+> > nilfs_free_inode() wrongly calls nilfs_mdt_destroy(), which frees
+> > uninitialized inode->i_private and can trigger a crash.
+> >
+> > Fix this bug by initializing inode->i_private in nilfs_alloc_inode().
+> >
+> > Link: https://lkml.kernel.org/r/CAFcO6XOcf1Jj2SeGt=jJV59wmhESeSKpfR0omdFRq+J9nD1vfQ@mail.gmail.com
+> > Link: https://lkml.kernel.org/r/20211011030956.2459172-1-mudongliangabcd@gmail.com
+> > Reported-by: butt3rflyh4ck <butterflyhuangxx@gmail.com>
+> > Reported-by: Hao Sun <sunhao.th@gmail.com>
+> > Reported-by: Jiacheng Xu <stitch@zju.edu.cn>
+> > Reported-by: Mudong Liang <mudongliangabcd@gmail.com>
+> > Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+> > Cc: Al Viro <viro@zeniv.linux.org.uk>
+> > ---
+> >  fs/nilfs2/super.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/fs/nilfs2/super.c b/fs/nilfs2/super.c
+> > index ba108f915391..aca5614f1b44 100644
+> > --- a/fs/nilfs2/super.c
+> > +++ b/fs/nilfs2/super.c
+> > @@ -159,6 +159,7 @@ struct inode *nilfs_alloc_inode(struct super_block *sb)
+> >       ii->i_cno = 0;
+> >       ii->i_assoc_inode = NULL;
+> >       ii->i_bmap = &ii->i_bmap_data;
+> > +     ii->vfs_inode.i_private = NULL;
+> >       return &ii->vfs_inode;
+> >  }
+>
+> FWIW, I think it's better to deal with that in inode_init_always(), but
+> not just moving ->i_private initialization up - we ought to move
+> security_inode_alloc() to the very end.  No sense playing whack-a-mole
+> with further possible bugs of that sort...
 
+Yes, I agree it's better if security_inode_alloc() is moved to the end as
+possible in the sense of avoiding similar issues.
+But, would that vfs change be safe to backport to stable trees?
 
-On 12/08/2022 11:12, Abel Vesa wrote:
-> SDM845 is a special case compared to the other platforms that use RPMh
-> stats, since it only has 2 stats (aosd and cxsd), while the others have
-> a 3rd one (ddr).
-> 
-> So lets add the node but with a SDM845 dedicated compatible to make
-> the driver aware of the different stats config.
-Hi,
+It looks like the error handling for security_inode_alloc()  is in the
+middle of inode_init_always() for a very long time..
 
-I gave this a go on the OnePlus 6, I noticed the driver is also meant to read 
-the stats for remote procs via smem, however this seems to fail for me - it 
-can't find any of the SMEM items even if I probe the driver manually after 
-ensuring remoteprocs have booted. Is this an unsupported feature on SDM845?
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-> 
-> Changed qcom,rpmh-stats-sdm845 to qcom,sdm845-rpmh-stats, as suggested
-> by Krzysztof.
-> 
->   arch/arm64/boot/dts/qcom/sdm845.dtsi | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index 5bea96a9ce06..67fe08b837be 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -4851,6 +4851,11 @@ ebi_cdev: ebi {
->   			};
->   		};
-> 
-> +		sram@c3f0000 {
-> +			compatible = "qcom,sdm845-rpmh-stats";
-> +			reg = <0 0x0c3f0000 0 0x400>;
-> +		};
-> +
->   		spmi_bus: spmi@c440000 {
->   			compatible = "qcom,spmi-pmic-arb";
->   			reg = <0 0x0c440000 0 0x1100>,
-> --
-> 2.34.1
-> 
+If you want to see the impact of the vfs change, I think it's one way
+to apply this one in advance.  Or if you want to fix it in one step,
+I think it's good too.  How do you feel about this ?
 
--- 
-Kind Regards,
-Caleb (they/he)
+Thanks,
+Ryusuke Konishi

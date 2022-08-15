@@ -2,106 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B565927AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 04:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6AEB5927AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 04:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbiHOCDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 22:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
+        id S230248AbiHOCGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 22:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiHOCDn (ORCPT
+        with ESMTP id S230158AbiHOCGt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 22:03:43 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01olkn2101.outbound.protection.outlook.com [40.92.52.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7320212AB3
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 19:03:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CYvQBYRViUkRQkOOo71RhpCGR33wgKG4Bzg5brkkxXrH5YgJoxtzMTo1tuhbEzR7pywTvfH+97CEpNj1HwHfRS9ko0nbMJtfMcrfckzi/PLlP5HTZ/t+XxRFUBjt88Kf/UCNCoUSAGDkFYVEQ1/rrfL/ZN4IQoYKOAe5lY7zJqyNOozDJom/zLKnbJPyai0W44rU7Cxk33KBZ+Bg1+BKTfWd63EmB5FMplWMiQCsSp1IJJXwYCDLzdVDVqC6fOjhhmKLZrx2rQyhKHH66Ut2IhBFTV35eAe+Sg9+lV5qLjHgEUhOjEaXJrfwWoQdYgE43+s8MWH4R3OUor5weBvDEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iJ5B/rTOIsu77FS2C4psNMGg7yi0Deh1sxSdSxtQiIk=;
- b=lQSbPv9SD+2jfrhdh++jhTUZFai4PDw6p92GIDZSKfS3hArRnjgzqH+MINzfwT6wR0tvJxz53vD8OgtltKK9UBdVs34xUxfOziy0vkSPS2iXt4TasWkhsh+B5QLk2S5zn54PJ+sTaE+CkGsD9QZQo4aIFTcuF7TZYDJczBPWco/KxkUhV6Ikpx4rcQdm++V33IL7oytpJ/uTnv5T4UBV6NGMbSAbYnr8KvCnf2qRyP+vbAAwwfA7d1awRcDOi9yK48HICL7uDdgnKI7IgU7ZXOqYmP+Bfyee3FSP9NsBmBt3nE9NcHrSyFPlrVYpSHYCdSpjImwJsOAtywiyZ+GXBQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iJ5B/rTOIsu77FS2C4psNMGg7yi0Deh1sxSdSxtQiIk=;
- b=DkErKjS1qsoeuU6fdYDWMp4QWsxGThpmP3N8mYbpwJeUn6HBzr/GblO3/gHUpaQG+3n9MEiXq/U9TvzKp2DyQeEio1dV/EMKYodM30FgWnvsLyGYbSFWtvi/lyj75Ik3wu1DA1sFf/eglJfyLUpIQm7lnxnfU3XEw+V0icxdBGa/kL0d2jABfGDBZHRNoWOOeI7Nd/dp2Bn4etFAj5T71i4Ka59G6wB/8NZZG2byFBa4/sVzJ+uy1QJiWdKG5LxnxmlBt66a5ml0zE+UxB/56Gc4nIVkRGFyWOorLGac4jZfKkg5iGYDmQEqYyqLqrb135rBOAKXoE5PXL0tPxB/2Q==
-Received: from HK0PR01MB1972.apcprd01.prod.exchangelabs.com
- (2603:1096:203:1c::15) by PUZPR01MB4732.apcprd01.prod.exchangelabs.com
- (2603:1096:301:100::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Mon, 15 Aug
- 2022 02:03:40 +0000
-Received: from HK0PR01MB1972.apcprd01.prod.exchangelabs.com
- ([fe80::d5a1:d973:3d43:3811]) by HK0PR01MB1972.apcprd01.prod.exchangelabs.com
- ([fe80::d5a1:d973:3d43:3811%7]) with mapi id 15.20.5504.025; Mon, 15 Aug 2022
- 02:03:39 +0000
-Date:   Mon, 15 Aug 2022 10:03:32 +0800
-From:   "Robin01.Guo" <Robin01.Guo@outlook.com>
-To:     linux-kernel@vger.kernel.org
-Subject: test
-Message-ID: <HK0PR01MB1972E7BBE4129D5626927DA9F6689@HK0PR01MB1972.apcprd01.prod.exchangelabs.com>
-X-Mailer: Sylpheed 3.7.0beta1 (GTK+ 2.24.30; i686-pc-mingw32)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TMN:  [IRL3t4S5nSc4ng6euX5+N4IXDASwY8yB]
-X-ClientProxiedBy: SG2PR06CA0224.apcprd06.prod.outlook.com
- (2603:1096:4:68::32) To HK0PR01MB1972.apcprd01.prod.exchangelabs.com
- (2603:1096:203:1c::15)
-X-Microsoft-Original-Message-ID: <20220815100332.934d8cacc858f6e29fe13de8@outlook.com>
+        Sun, 14 Aug 2022 22:06:49 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF00412AAF
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 19:06:47 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d20so5628576pfq.5
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 19:06:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=RGx/Qp3Gi5F06shkDIHb1fnw3ffr/xXLSbmYylTjeeA=;
+        b=bDsmXmdfczHc+NbW7ruAgdcczOb/4l8mmhDGampzTGcpRHHjJ1twbK+RQQXZEpO5BH
+         kSCpjVDPFFzEO5kwa01XpURyT8Lt2UZnmvUhizde96Qxuji8dtgp2AcZGrXU4sxqlk4w
+         a63qDx4rW37z+3Jhe6ZiSpBXT/fve8KKjdbXc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=RGx/Qp3Gi5F06shkDIHb1fnw3ffr/xXLSbmYylTjeeA=;
+        b=lrbSP6RWtmu9k8oGIStRU/st7Alkw3/3H37H/CG6u+nhQi+YitY2n+zacbZBXgtklo
+         QuZs6qMN35HdUMqhYksmOYCQdbqGvZYDhOzD3g5Dx2TJuH0zCPv4lbFpB4luYr1YEoNr
+         e3ljwCuVNcpC4K0jMp3jRU00Qtl+/FCwjDaBwdB9FH4Tw8ExzxjMeZpE61Oi9NFbuy5f
+         eauTasF5nBw+YUCqHEKNLYionTCoICpebkEIx34pPDgRqggauvy2EVwboX1qrwRj6cmN
+         F7KF2tjpPHxiBbDokIuWLUtaR7FuoSONupeqcylq9rHYmemz60rEyiUyPZi7zCwJJVmO
+         ThEg==
+X-Gm-Message-State: ACgBeo2FlOGFXv5Zv759sqeL3w8g1l8GN1pZvcIJ6rSof9qo+Rfr3Ra/
+        HSOe1k0siufotlrGzM/j5rNhEQ==
+X-Google-Smtp-Source: AA6agR5YN9YetwZ39QriWr6eUGMiuxJCX6xwv/jOIwrsCt7wxyH3k1QxxlsBGDmrV0fkUVzWNKDs1w==
+X-Received: by 2002:aa7:95a8:0:b0:52d:4185:198d with SMTP id a8-20020aa795a8000000b0052d4185198dmr14565441pfk.65.1660529207408;
+        Sun, 14 Aug 2022 19:06:47 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:110b:946c:84b2:7c95])
+        by smtp.gmail.com with ESMTPSA id d7-20020a170903230700b0016efc27ca98sm6025252plh.169.2022.08.14.19.06.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Aug 2022 19:06:46 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 11:06:39 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Wang Yating <yating.wang@intel.com>,
+        Christoph Jechlitschek <christoph.jechlitschek@intel.com>,
+        Hao Yao <hao.yao@intel.com>, Andy Yeh <andy.yeh@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        linux-media@vger.kernel.org, Mark Pearson <markpearson@lenovo.com>,
+        Dell.Client.Kernel@dell.com, linux-kernel@vger.kernel.org,
+        Guenter Roeck <groeck@google.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Christian Schaller <cschalle@redhat.com>,
+        Wouter Bolsterlee <wouter@bolsterl.ee>,
+        Miguel Palhas <mpalhas@gmail.com>, it+linux-media@molgen.mpg.de
+Subject: Re: Missing MIPI IPU6 camera driver for Intel Alder Lake laptops
+Message-ID: <YvmqL6Wz7o77ukF5@google.com>
+References: <52c87d91-422d-fca0-4dd5-bbaa559c81b6@molgen.mpg.de>
+ <YvUKLbv/pOfbbeL+@pendragon.ideasonboard.com>
+ <YvUaEDMbZD70x+hD@kroah.com>
+ <YvUbhx4HSxAAwIvv@pendragon.ideasonboard.com>
+ <YvUghWZbXIUofg5A@kroah.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b8e9caf8-295c-4628-199a-08da7e625ece
-X-MS-TrafficTypeDiagnostic: PUZPR01MB4732:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Zw2ERxVrB7JGTLHMXP/PoC4BTauHSqjp78oe4H4KZHhghtbznrPYDUEtxvEVLZ6TcPeWkQJNg58wFrj80LrptOk0ZJ0gEWHpSSRVMgEUhoykBYUmyc9qAI6uz+Uj71Glii+qtmDX+2ctF9CrRUMumL90BvPCzFNcJYJIROH4xvUy/Mjzpl+su1siHdqehYuAClQZncQVYlzKrGPrpCotlpasMM+ZiaZ1rz51JCwb2FHDi543TgFPT4BJBtxmflU9Fb1k0EhcnZ7e6fe8a7+QDKUBAsrqzL6TcHUXbrHi9WJTizvVPwRwNjo055QT9tB5T7Qrf0PbKNuZbkVnhpD1lWsJtuWx7Yi6wNbB2FQYHL+Z7j2C/HNCNapv2EvDFiNXe1qWZH2IOwm0WYqZ6GU5LC2mITcEO42jwn44YZhbGjCvYLkY3kcz8i5o+Z5rDF7yioquOISvAWTFIbVeccVZF2GYVXobRxZf76qZcB0inPq/P3eNUC3qVC5aHv1xd/WG35ytm+7+wyQWF9IX/Z96eYbwictaq17Y0FL9+DhFswpIVKQYMSOCFxkpGPTERikwTQ0jTiOG7xzx5pupzG1RUvy44S84N7TbVUNnEGhxb0IkkIrFJWlKWar2iw6WN/3JWdbhNHzZGwlruK7Un11rEQ==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5Hhj68t7tSSyaLNooGa9Mh7Q8Lwnn6fnvgfjjGNLMMet0EcWeWtZvdcvU4XB?=
- =?us-ascii?Q?0nQ44aNqJujdUBeFXRCs/IyUU9QavHs3Vys//WOioNtBBRncNgJjokwOxYcO?=
- =?us-ascii?Q?Oh2Xow2GuQeDPjigZ5eAnUzx3tFByNtGI6UHtXcGHUBV3OSqt2ZHkpxHhqVF?=
- =?us-ascii?Q?vEV/EpLfxGs5Io0Ijy6KmREXSDjU8oxOGetnor0qcTB0ilCFV9rjf9KbGsIF?=
- =?us-ascii?Q?yk/7mkGAzr1ePftb/oBOua9bMocx7W5uVgJqpW35kCPalYmI6zME6690316Y?=
- =?us-ascii?Q?KdYHNavGieTBcJXeLHifCx2/hIfUvYQgUTZECBNNU8KZvFYOkjoOVrPlZHG+?=
- =?us-ascii?Q?AMeW/zcO2JOFVIiJHwfZYpjQdihGf2GDaxTeu6lE+MGIvVd1rNNDZA9UoSLa?=
- =?us-ascii?Q?CSVS669L8r4ikuFc2NU4ZWJYqMOAEsUNaudBbJ0+AjDXhPSiqFjx1v/GjBz7?=
- =?us-ascii?Q?LNTBMxxyNoLVTD81s0aMUNQo6YTtebuPb0FJZSOEybP6y3StUo/Sgrm7qHTw?=
- =?us-ascii?Q?0yHZKTswoD5I9kK8djwhHBQBdgLYk8u8DlwONT6+vM5foQY7O3JjemaOdyuA?=
- =?us-ascii?Q?M+Fh4eDHY8/BZu2kIhdJco9fbK0vv51F2p3wqixtto+oii2VItSNtSt2mBud?=
- =?us-ascii?Q?UWJb+6MipAP78nvl+70YRFB6K/scbYwEtm+pPXsznQT/LuTRwU0N7RLm32cG?=
- =?us-ascii?Q?oFetQFsa7jXNctajxEHHca0uT7/CLLRRUDG833JTl8kRFbZr9ciJbsrKoUnq?=
- =?us-ascii?Q?VVpxeG80xj9JHrzsVyJvW4LIhxrG5567hnlVzbALmWKr2s4au90A3QUqG7QG?=
- =?us-ascii?Q?4ymOO9thQHJd8ZgzEYicjOYSDENuJ0dYlladFkKTV2QkBIz9qpfJ6eLI3xzf?=
- =?us-ascii?Q?d7NcXwCYK98YPZUrrcg88qly43ATaTuqXr5i9IWi1U/1G41afX13JWhZNQ7Y?=
- =?us-ascii?Q?b4FJIyZQYyvFzKUqYy8lCReFFMbPrLrb0u+sImWlKZOdSyQDOBasvrKXQwKn?=
- =?us-ascii?Q?Ha2lT31G+6Kc2LCQZynXoKpl1LfBm0ZbcPb1kZ5k9AYy0l/R9o+z/MU5XfNm?=
- =?us-ascii?Q?40EAJHJqJx1nw2Fmx8z7mxSwtiHNewz+Vsllf685CizCD4iQsgmGzfmaucz5?=
- =?us-ascii?Q?0Fxi3rl+w/1q9jKOh572kP7u75h93RDHiKWtKD+dA8RJ3mJe9LeX3fPTXYMw?=
- =?us-ascii?Q?tYLgrOl+tjSSPXgoJw5BglEIrHyibY2lBLmtHN22lMUTJAfKeTEjhzc4t83S?=
- =?us-ascii?Q?C3a6HU3+SYuAB2zlplWxLORc598FVp/sVjBTc/sR4w=3D=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b8e9caf8-295c-4628-199a-08da7e625ece
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR01MB1972.apcprd01.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2022 02:03:39.8962
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR01MB4732
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvUghWZbXIUofg5A@kroah.com>
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On (22/08/11 17:30), Greg KH wrote:
+> On Thu, Aug 11, 2022 at 06:08:55PM +0300, Laurent Pinchart wrote:
+> > On Thu, Aug 11, 2022 at 05:02:40PM +0200, Greg KH wrote:
+> > > On Thu, Aug 11, 2022 at 04:54:53PM +0300, Laurent Pinchart wrote:
+> > > > For the time being, I agree with your recommendation to not buy these
+> > > > devices if you care about camera support.
+> > > 
+> > > I second this, don't buy these devices if the vendor is not willing to
+> > > get their drivers upstreamed properly.
+> > 
+> > "Not willing" may be a bit too harsh here. I wouldn't just blame Intel
+> > for not upstreaming a driver if it turns out that the V4L2 API isn't a
+> > good match and we have no proposal to provide an alternative.
+> 
+> Did they propose an alternative?  From what I saw here they didn't even
+> attempt it, or did I miss that?
 
-
--- 
-Robin01.Guo <Robin01.Guo@outlook.com>
+The plan here is to land CAM kernel API first and then switch IPU
+(driver and user-space) to it so that upstreaming for Intel will
+be easier.

@@ -2,142 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 734CF5943E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 00:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 612C1594444
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 00:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343730AbiHOWWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 18:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60126 "EHLO
+        id S1347531AbiHOWYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 18:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350365AbiHOWRr (ORCPT
+        with ESMTP id S1350788AbiHOWSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 18:17:47 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065E8108964;
-        Mon, 15 Aug 2022 12:40:59 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-32868f43dd6so98317207b3.8;
-        Mon, 15 Aug 2022 12:40:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=kQ/IhR019ljA3X63/yMrUHDq4kWcLp+Cdb8xnxJdIe8=;
-        b=JmDiztWPbZq81Psi3DSOmbF4xFuYHM/kwMW4YslCcRI7hsgm2Wu1dLgQfGdUe73420
-         DrKRbbc7yoFQUhjiGBB3iKgOrMXp3DYGfdpfWnYmtQOYWru3ni92DgQWwNGtQQoFxkbx
-         YXHwjctCq9bAaVbgcy+JMwLfms1rxJbT2ok2IdPBoZl5zlrNoypIv5IoIuuzLzhEUhXR
-         LCYt8K9fCi/uyBtdi+kjQxmTzXHL80QtcAkg6pU9wYA7QL8Xq8dmV1MbVT1qLbQrgINb
-         CQEuZxTSkgRyMiSKr+FVr0AEG2AD7JPkrmXIMOkaN48EO0xv5Evw0UHp46ZhZtWBRoqG
-         HfNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=kQ/IhR019ljA3X63/yMrUHDq4kWcLp+Cdb8xnxJdIe8=;
-        b=EnrzwZNSvtMg/KDmQGjrXEgVk+OMC2DeWO4Qg1JkFrr7awwXfswpDLMVUpDOKxhW92
-         5ERHxuh+A27cpNiWIHEIlq93uBqEvcP66YYlmTg1+yXJ2+F9zRhDiywAI7uyvu3gsz+T
-         3H0++ng6jgzkb2LN+zbHZoHw7tjm3Ky2kyz1VFMiu2L26LVYMard/5CKGlPBe1t1f+Ks
-         UCanEy0s1jVCknDkKw287Fg8/1RmvRk2J7aDlAYq5CEzsL1mlWtoGyw95zkF6PmKsgcF
-         ljU2k1rFVZ1cZfnZdaWV0Esl0GNXP2XN8LdqGm5iDW6OZbeXAFYnAVpJDfUXNt/htoTN
-         ocsA==
-X-Gm-Message-State: ACgBeo0jW5U/8679lYeqt3Os25P+MJxT12PcNRENclkLBCMdlOrINjpS
-        XrHLlZ4zqim8TWDBcIns/xgKoIfoW2fzM3KkFSsPk8HWA/0=
-X-Google-Smtp-Source: AA6agR4uS+P3maNGKYHw+fLkUXC5gJLnyocxV5/qKNpiP36yndjwPPhByTnKKGwIMes2mnwF9ZlvObWDTZg1BbkpLd4=
-X-Received: by 2002:a0d:d60f:0:b0:325:1853:2b with SMTP id y15-20020a0dd60f000000b003251853002bmr14178469ywd.24.1660592457358;
- Mon, 15 Aug 2022 12:40:57 -0700 (PDT)
+        Mon, 15 Aug 2022 18:18:33 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32CB40BE1;
+        Mon, 15 Aug 2022 12:41:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660592504; x=1692128504;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=t539oKwDhI262eAFaZTn1ud3XYVbT+XoZk3kFbmmWGE=;
+  b=lFGkagEEUQYlQBD25Fe2tm7GogEJIS30WiuPMm07Zf5mTy+Ns7AeA8Le
+   8uRhruWOLp6ZyVtcDn4djiB191oa5MlKbAfE+4MdardStavGIfoGKSrPx
+   zM99Q7lekMNvbaO/1EHInaCDlZqy4ZNUXNoblTifkGL6fFucvXfwyL0i/
+   +ydTIEtYKJ0e5LCF3axuHFfKtHZzFG/oAtULEof9tX2eF3u7GUhZpMKz8
+   SXkzBgACdBDGU8kw7tZuPJOq42aDn9CxG8kNlyR5NEtgTXDfpmxWE/69U
+   gAwfM//Mzw1SY2XyKXKavQHy474gKHjtMOsssqUdY4YRtHkp6+M58MfuY
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="318033810"
+X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
+   d="scan'208";a="318033810"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 12:41:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
+   d="scan'208";a="749043084"
+Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Aug 2022 12:41:39 -0700
+Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oNfxy-0001CK-2e;
+        Mon, 15 Aug 2022 19:41:38 +0000
+Date:   Tue, 16 Aug 2022 03:41:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, linux@armlinux.org.uk, arnd@arndb.de,
+        linus.walleij@linaro.org, ardb@kernel.org,
+        rmk+kernel@armlinux.org.uk, rostedt@goodmis.org,
+        nick.hawkins@hpe.com, john@phrozen.org, mhiramat@kernel.org,
+        chenzhongjin@huawei.com
+Subject: Re: [PATCH] x86/unwind/orc: Add 'unwind_debug' cmdline option
+Message-ID: <202208160326.pFZMVgFP-lkp@intel.com>
+References: <20220815105808.17385-2-chenzhongjin@huawei.com>
 MIME-Version: 1.0
-References: <20220815151451.23293-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220815151451.23293-4-prabhakar.mahadev-lad.rj@bp.renesas.com> <57e17d1e-e809-065e-831f-cdd3a8602e0a@microchip.com>
-In-Reply-To: <57e17d1e-e809-065e-831f-cdd3a8602e0a@microchip.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 15 Aug 2022 20:40:30 +0100
-Message-ID: <CA+V-a8vDP8k9c8VM++68uKjQLGURC=pe571+QrmPb+tBo0j7Jw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/8] dt-bindings: soc: renesas: renesas.yaml: Document
- Renesas RZ/Five SoC
-To:     Conor.Dooley@microchip.com
-Cc:     "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Anup Patel <anup@brainfault.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220815105808.17385-2-chenzhongjin@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+Hi Chen,
 
-Thank you for the review.
+I love your patch! Perhaps something to improve:
 
-On Mon, Aug 15, 2022 at 8:14 PM <Conor.Dooley@microchip.com> wrote:
->
-> On 15/08/2022 16:14, Lad Prabhakar wrote:
-> > dt-bindings: soc: renesas: renesas.yaml: Document Renesas RZ/Five SoC
->
-> Hey Lad,
->
-> Maybe I am missing something on the arm side, but "soc"?
-> Was the intent to move this to Documentation/devicetree/bindings/soc
-> but you moved it back to arm by accident?
->
-Ouch I sent out the older version of my patch for this. I did actually
-send out a patch which moves arm renesas.yaml to the soc folder.
+[auto build test WARNING on tip/x86/core]
+[also build test WARNING on soc/for-next clk/clk-next linus/master v6.0-rc1 next-20220815]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Cheers,
-Prabhakar
+url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Zhongjin/x86-unwind-orc-Add-unwind_debug-cmdline-option/20220815-190328
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git a1a5482a2c6e38a3ebed32e571625c56a8cc41a6
+config: x86_64-randconfig-a003-20220815 (https://download.01.org/0day-ci/archive/20220816/202208160326.pFZMVgFP-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/3295e738f5b51f1f1f223bf52a8ecee2ab93fbca
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Chen-Zhongjin/x86-unwind-orc-Add-unwind_debug-cmdline-option/20220815-190328
+        git checkout 3295e738f5b51f1f1f223bf52a8ecee2ab93fbca
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
 
-> Thanks,
-> Conor.
->
->
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >
-> > Document Renesas RZ/Five (R9A07G043) SoC.
-> >
-> > More info about RZ/Five SoC:
-> > https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-mpus/rzfive-risc-v-general-purpose-microprocessors-risc-v-cpu-core-andes-ax45mp-single-10-ghz-2ch-gigabit-ethernet
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> > v1->v2
-> > * New patch
-> > ---
-> >  Documentation/devicetree/bindings/arm/renesas.yaml | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/arm/renesas.yaml b/Documentation/devicetree/bindings/arm/renesas.yaml
-> > index ff80152f092f..233847eb23fd 100644
-> > --- a/Documentation/devicetree/bindings/arm/renesas.yaml
-> > +++ b/Documentation/devicetree/bindings/arm/renesas.yaml
-> > @@ -415,11 +415,12 @@ properties:
-> >                - renesas,rzn1d400-db # RZN1D-DB (RZ/N1D Demo Board for the RZ/N1D 400 pins package)
-> >            - const: renesas,r9a06g032
-> >
-> > -      - description: RZ/G2UL (R9A07G043)
-> > +      - description: RZ/Five and RZ/G2UL (R9A07G043)
-> >          items:
-> >            - enum:
-> >                - renesas,smarc-evk # SMARC EVK
-> >            - enum:
-> > +              - renesas,r9a07g043f01 # RZ/Five (RISC-V core)
-> >                - renesas,r9a07g043u11 # RZ/G2UL Type-1
-> >                - renesas,r9a07g043u12 # RZ/G2UL Type-2
-> >            - const: renesas,r9a07g043
-> > --
-> > 2.25.1
-> >
->
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   arch/x86/kernel/unwind_orc.c:17:9: error: expected identifier or '(' before 'if'
+      17 |         if (state->task == current && !state->error)                    \
+         |         ^~
+   In file included from include/asm-generic/bug.h:7,
+                    from arch/x86/include/asm/bug.h:87,
+                    from include/linux/bug.h:5,
+                    from include/linux/jump_label.h:257,
+                    from include/linux/static_key.h:1,
+                    from arch/x86/include/asm/nospec-branch.h:6,
+                    from arch/x86/include/asm/paravirt_types.h:40,
+                    from arch/x86/include/asm/ptrace.h:97,
+                    from arch/x86/include/asm/math_emu.h:5,
+                    from arch/x86/include/asm/processor.h:13,
+                    from arch/x86/include/asm/timex.h:5,
+                    from include/linux/timex.h:67,
+                    from include/linux/time32.h:13,
+                    from include/linux/time.h:60,
+                    from include/linux/stat.h:19,
+                    from include/linux/module.h:13,
+                    from arch/x86/kernel/unwind_orc.c:3:
+   include/linux/once_lite.h:34:10: error: expected identifier or '(' before ')' token
+      34 |         })
+         |          ^
+   include/linux/once_lite.h:11:9: note: in expansion of macro 'DO_ONCE_LITE_IF'
+      11 |         DO_ONCE_LITE_IF(true, func, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~
+   include/linux/printk.h:605:9: note: in expansion of macro 'DO_ONCE_LITE'
+     605 |         DO_ONCE_LITE(printk_deferred, fmt, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~
+   arch/x86/kernel/unwind_orc.c:12:9: note: in expansion of macro 'printk_deferred_once'
+      12 |         printk_deferred_once(KERN_WARNING "WARNING: " fmt, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~~
+   arch/x86/kernel/unwind_orc.c:18:17: note: in expansion of macro 'orc_warn'
+      18 |                 orc_warn(args);                                         \
+         |                 ^~~~~~~~
+   arch/x86/kernel/unwind_orc.c:19:17: error: expected identifier or '(' before 'if'
+      19 |                 if (unwind_debug && !dumped_before)                     \
+         |                 ^~
+>> arch/x86/kernel/unwind_orc.c:21:17: warning: data definition has no type or storage class
+      21 |                 dumped_before = true;                                   \
+         |                 ^~~~~~~~~~~~~
+   arch/x86/kernel/unwind_orc.c:21:17: error: type defaults to 'int' in declaration of 'dumped_before' [-Werror=implicit-int]
+   arch/x86/kernel/unwind_orc.c:22:9: error: expected identifier or '(' before '}' token
+      22 |         }                                                               \
+         |         ^
+   arch/x86/kernel/unwind_orc.c:23:1: error: expected identifier or '(' before '}' token
+      23 | })
+         | ^
+   arch/x86/kernel/unwind_orc.c:23:2: error: expected identifier or '(' before ')' token
+      23 | })
+         |  ^
+   arch/x86/kernel/unwind_orc.c: In function 'orc_find':
+   arch/x86/kernel/unwind_orc.c:219:35: error: '__start_orc_unwind_ip' undeclared (first use in this function); did you mean '__start_orc_unwind'?
+     219 |                 return __orc_find(__start_orc_unwind_ip + start,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~
+         |                                   __start_orc_unwind
+   arch/x86/kernel/unwind_orc.c:219:35: note: each undeclared identifier is reported only once for each function it appears in
+   arch/x86/kernel/unwind_orc.c: At top level:
+   arch/x86/kernel/unwind_orc.c:239:32: error: '__start_orc_unwind_ip' undeclared here (not in a function); did you mean '__start_orc_unwind'?
+     239 | static int *cur_orc_ip_table = __start_orc_unwind_ip;
+         |                                ^~~~~~~~~~~~~~~~~~~~~
+         |                                __start_orc_unwind
+   arch/x86/kernel/unwind_orc.c: In function 'unwind_next_frame':
+   arch/x86/kernel/unwind_orc.c:534:18: error: expected ')' before 'break'
+     534 |                 }
+         |                  ^
+         |                  )
+     535 |                 break;
+         |                 ~~~~~
+>> arch/x86/kernel/unwind_orc.c:16:21: warning: unused variable 'dumped_before' [-Wunused-variable]
+      16 |         static bool dumped_before;
+         |                     ^~~~~~~~~~~~~
+   arch/x86/kernel/unwind_orc.c:531:25: note: in expansion of macro 'orc_warn_current'
+     531 |                         orc_warn_current("missing R10 value at %pB\n",
+         |                         ^~~~~~~~~~~~~~~~
+   arch/x86/kernel/unwind_orc.c:767:1: error: expected declaration or statement at end of input
+     767 | EXPORT_SYMBOL_GPL(__unwind_start);
+         | ^~~~~~~~~~~~~~~~~
+   arch/x86/kernel/unwind_orc.c:767:1: error: expected declaration or statement at end of input
+   arch/x86/kernel/unwind_orc.c:767:1: error: expected declaration or statement at end of input
+   arch/x86/kernel/unwind_orc.c:533:25: error: label 'err' used but not defined
+     533 |                         goto err;
+         |                         ^~~~
+   arch/x86/kernel/unwind_orc.c:506:17: error: label 'the_end' used but not defined
+     506 |                 goto the_end;
+         |                 ^~~~
+>> arch/x86/kernel/unwind_orc.c:468:14: warning: variable 'indirect' set but not used [-Wunused-but-set-variable]
+     468 |         bool indirect = false;
+         |              ^~~~~~~~
+>> arch/x86/kernel/unwind_orc.c:466:25: warning: unused variable 'prev_type' [-Wunused-variable]
+     466 |         enum stack_type prev_type = state->stack_info.type;
+         |                         ^~~~~~~~~
+>> arch/x86/kernel/unwind_orc.c:465:59: warning: unused variable 'prev_sp' [-Wunused-variable]
+     465 |         unsigned long ip_p, sp, tmp, orig_ip = state->ip, prev_sp = state->sp;
+         |                                                           ^~~~~~~
+>> arch/x86/kernel/unwind_orc.c:465:38: warning: unused variable 'orig_ip' [-Wunused-variable]
+     465 |         unsigned long ip_p, sp, tmp, orig_ip = state->ip, prev_sp = state->sp;
+         |                                      ^~~~~~~
+>> arch/x86/kernel/unwind_orc.c:465:33: warning: unused variable 'tmp' [-Wunused-variable]
+     465 |         unsigned long ip_p, sp, tmp, orig_ip = state->ip, prev_sp = state->sp;
+         |                                 ^~~
+>> arch/x86/kernel/unwind_orc.c:465:23: warning: unused variable 'ip_p' [-Wunused-variable]
+     465 |         unsigned long ip_p, sp, tmp, orig_ip = state->ip, prev_sp = state->sp;
+         |                       ^~~~
+   arch/x86/kernel/unwind_orc.c:768: error: control reaches end of non-void function [-Werror=return-type]
+   At top level:
+>> arch/x86/kernel/unwind_orc.c:16:21: warning: 'dumped_before' defined but not used [-Wunused-variable]
+      16 |         static bool dumped_before;
+         |                     ^~~~~~~~~~~~~
+   arch/x86/kernel/unwind_orc.c:531:25: note: in expansion of macro 'orc_warn_current'
+     531 |                         orc_warn_current("missing R10 value at %pB\n",
+         |                         ^~~~~~~~~~~~~~~~
+   arch/x86/kernel/unwind_orc.c:421:13: warning: 'deref_stack_iret_regs' defined but not used [-Wunused-function]
+     421 | static bool deref_stack_iret_regs(struct unwind_state *state, unsigned long addr,
+         |             ^~~~~~~~~~~~~~~~~~~~~
+   arch/x86/kernel/unwind_orc.c:405:13: warning: 'deref_stack_regs' defined but not used [-Wunused-function]
+     405 | static bool deref_stack_regs(struct unwind_state *state, unsigned long addr,
+         |             ^~~~~~~~~~~~~~~~
+   arch/x86/kernel/unwind_orc.c:395:13: warning: 'deref_stack_reg' defined but not used [-Wunused-function]
+     395 | static bool deref_stack_reg(struct unwind_state *state, unsigned long addr,
+         |             ^~~~~~~~~~~~~~~
+   arch/x86/kernel/unwind_orc.c:42:13: warning: 'unwind_dump' defined but not used [-Wunused-function]
+      42 | static void unwind_dump(struct unwind_state *state)
+         |             ^~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +21 arch/x86/kernel/unwind_orc.c
+
+    10	
+    11	#define orc_warn(fmt, ...) \
+    12		printk_deferred_once(KERN_WARNING "WARNING: " fmt, ##__VA_ARGS__)
+    13	
+    14	#define orc_warn_current(args...)					\
+    15	({									\
+  > 16		static bool dumped_before;
+    17		if (state->task == current && !state->error)			\
+    18			orc_warn(args);						\
+    19			if (unwind_debug && !dumped_before)			\
+    20				unwind_dump(state);				\
+  > 21			dumped_before = true;					\
+    22		}								\
+    23	})
+    24	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

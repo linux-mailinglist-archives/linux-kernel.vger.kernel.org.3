@@ -2,158 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBFD959321D
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E34593225
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbiHOPkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
+        id S232446AbiHOPlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbiHOPkD (ORCPT
+        with ESMTP id S232227AbiHOPlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:40:03 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9A913F69
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:40:01 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id z16so9472936wrh.12
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:40:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=VP31WSY65QEYHmGKkheHdJtit2IxlAC3C/GTNPT6J3M=;
-        b=KDR20vjhDq0om+BbSpgVjbjIEfKyM9hzqellnZMBbjPYhKfqx8ikJsySttFwFlY2Hw
-         oiDxEt4RpXxN6hUaJW8OuaENfYZOafXkSDkX1vb9dg7V/aG4QsRJ6TYY0F9WUlTLn6Vf
-         NHF+LgUaJFpui1g9qC+Rv3LypInoC1lE1hsrJ8BiNxbEAPP6tn3XdJyY/w0KbBw7PpJD
-         oH77RjEzfa5ost8upGE9k1u6DJriI0mcBtWbmFcq9KC94GZZe4EqzVQ4aUBaXW6zABOk
-         ZIGRqcpIb5HIHOLH2gv1bH3WqUBDiCE5BvLQ/x7yySs3uf1w5ktkzspTtUNcCnzYJQEj
-         8w1w==
+        Mon, 15 Aug 2022 11:41:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 44117654C
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:41:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660578068;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UpOQ0S8xTyMJHmMY1t7J4us9+LjsWwhrGGsgao9tXgo=;
+        b=G4MBLOMk8R9vNqqr+pwIRgrCwrglo0twW0J57jyjUpGZ3nHa9sh5qXIJeSkzo12bMBddb9
+        +T+svhcI/xvn8Dg/cxpKg7h3lsEZV2Ab9UzhvFiGrkLhUv3EYyZOBTCAP/qM7/VeaZJBHw
+        FboBBveih6+/W89RjB7x+4H7+GPvXJc=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-517-R6wWYIVbNoaQYHBhs7q_mQ-1; Mon, 15 Aug 2022 11:41:07 -0400
+X-MC-Unique: R6wWYIVbNoaQYHBhs7q_mQ-1
+Received: by mail-ed1-f69.google.com with SMTP id v19-20020a056402349300b0043d42b7ddefso4897231edc.13
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:41:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=VP31WSY65QEYHmGKkheHdJtit2IxlAC3C/GTNPT6J3M=;
-        b=6isdgIKUuKsOeLnCIGsrd6/K9yV0XfCjLttb5D0wz10AzjeaFBDHjLdLV3IHcgLNAe
-         gKt2SyW5EF2N655TeBOM9TCec0zncqSCARTXGlRkDzIHjakKmKfYKri+PqlB78La0hFC
-         OAPnZutweJ5D0vP/w1RonuwcNidXeGEDpTh4zUgXARsc6WW6DDEY2wJIabFLjWvXyPSU
-         FCGBHMEJgWZVmeVyPjrSAPEWmwlCSQq/4IzwMAmErLz5RDXcZpR/W+3Rj1pPV1gAoNDA
-         dtLt9LEK2t8R3GR6BiqnxKBofFssuuoe2SmNbFP+PvpFpXrqd2WhCPKgDPyAEfLGvQVq
-         vTZg==
-X-Gm-Message-State: ACgBeo1Regz/5552ZNNpDkl9JLFj3n965c/5+7/kDFqTlC0gWVUv+j1k
-        wI5Ny5OkW48J7bVsS8z52mI8BBNfxT6CdtCGptjyQA==
-X-Google-Smtp-Source: AA6agR7zuuSgDdcz2wd92uz0ytguGNdoZjdF2d8ZPVqoybSSwNN8/GwgwCl+M3WDqdInbEa6zFZJ4DJNkrQDuxI0MHA=
-X-Received: by 2002:a5d:5a82:0:b0:224:f744:1799 with SMTP id
- bp2-20020a5d5a82000000b00224f7441799mr1748341wrb.582.1660577999491; Mon, 15
- Aug 2022 08:39:59 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc;
+        bh=UpOQ0S8xTyMJHmMY1t7J4us9+LjsWwhrGGsgao9tXgo=;
+        b=K0nVV+ZBgTNuK20taKwE2EgWbB2ocIOw+bXCKd3/IIH6filNET4Trrwm9UfOl6HG+E
+         Y5SvAzIxpbLjIjdIHVonjFWIb3Zr/xmW1iEhESIZlj7/iPFp3lykIV2rdsXsIU8puklW
+         ZjtFmGkwAhu20ICHd2ZiRwfSx654oMHJZWLGStxsxI24okMPFbySMd5ta0dQzmnClnNm
+         jqy2bP4cCZ7GRy0tbM5cZmczX7qX5FvUva9aSbYvmPN2cmoe/5cZhFdQwDs/nNp/H0n2
+         dSOtNgacRyWkb0/U8EOoi2sFRQ7Q+9fc+pjyX2c1V+KlKu2eGytQWnQe34bTdRLYEUTO
+         EJ/g==
+X-Gm-Message-State: ACgBeo2icW7757RpbMsr6vGFWfBcmWrAbkNmRDwIPVhqZvpcwtZjO3Bp
+        ILsu5Qgr+HO+v81M83KSHNjW2+5RO02yg2+kjP2REsfCWpZJ6msQ4OjUcIHU20SPParX/nHDI61
+        dQ1EV9TCwCQNMtkRf3X2eerF4
+X-Received: by 2002:a05:6402:254b:b0:43e:7c6a:f431 with SMTP id l11-20020a056402254b00b0043e7c6af431mr15419042edb.305.1660578066087;
+        Mon, 15 Aug 2022 08:41:06 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4PVgA9J2ZpHf31hYsuilIOkpf6wHT/MluCqOW9wn/BsA1BgRyyci7rxYWXC1uVkVknxAuBDQ==
+X-Received: by 2002:a05:6402:254b:b0:43e:7c6a:f431 with SMTP id l11-20020a056402254b00b0043e7c6af431mr15419032edb.305.1660578065916;
+        Mon, 15 Aug 2022 08:41:05 -0700 (PDT)
+Received: from redhat.com ([2.54.169.49])
+        by smtp.gmail.com with ESMTPSA id kd1-20020a17090798c100b007262a1c8d20sm4248334ejc.19.2022.08.15.08.41.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 08:41:05 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 11:40:59 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andres Freund <andres@anarazel.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        c@redhat.com
+Subject: Re: upstream kernel crashes
+Message-ID: <20220815113729-mutt-send-email-mst@kernel.org>
+References: <20220814223743.26ebsbnrvrjien4f@awork3.anarazel.de>
+ <CAHk-=wi6raoJE-1cyRU0YxJ+9ReO1eXmOAq0FwKAyZS7nhvk9w@mail.gmail.com>
+ <1c057afa-92df-ee3c-5978-3731d3db9345@kernel.dk>
+ <20220815013651.mrm7qgklk6sgpkbb@awork3.anarazel.de>
+ <CAHk-=wikzU4402P-FpJRK_QwfVOS+t-3p1Wx5awGHTvr-s_0Ew@mail.gmail.com>
+ <20220815071143.n2t5xsmifnigttq2@awork3.anarazel.de>
+ <20220815034532-mutt-send-email-mst@kernel.org>
+ <20220815081527.soikyi365azh5qpu@awork3.anarazel.de>
+ <20220815042623-mutt-send-email-mst@kernel.org>
+ <FCDC5DDE-3CDD-4B8A-916F-CA7D87B547CE@anarazel.de>
 MIME-Version: 1.0
-References: <20220628220938.3657876-1-yosryahmed@google.com>
- <20220628220938.3657876-2-yosryahmed@google.com> <YsdJPeVOqlj4cf2a@google.com>
- <CAJD7tkYE+pZdk=-psEP_Rq_1CmDjY7Go+s1LXm-ctryWvUdgLA@mail.gmail.com>
- <Ys3+UTTC4Qgbm7pQ@google.com> <CAJD7tkY91oiDWTj5FY2Upc5vabsjLk+CBMNzAepXLUdF_GS11w@mail.gmail.com>
- <CAJD7tkbc+E7f+ENRazf0SO7C3gR2bHiN4B0F1oPn8Pa6juAVfg@mail.gmail.com> <Yvpir0nWuTsXz322@cmpxchg.org>
-In-Reply-To: <Yvpir0nWuTsXz322@cmpxchg.org>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Mon, 15 Aug 2022 08:39:23 -0700
-Message-ID: <CAJD7tkYJcsSvCUCkNgcWvi2Xoa3GDZk81p5GUptZzkOkrhrTWQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/4] mm: add NR_SECONDARY_PAGETABLE to count secondary
- page table uses.
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Sean Christopherson <seanjc@google.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Oliver Upton <oupton@google.com>, Huang@google.com,
-        Shaoqin <shaoqin.huang@intel.com>,
-        Cgroups <cgroups@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <FCDC5DDE-3CDD-4B8A-916F-CA7D87B547CE@anarazel.de>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 8:13 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
->
-> On Mon, Aug 08, 2022 at 01:06:15PM -0700, Yosry Ahmed wrote:
-> > On Mon, Jul 18, 2022 at 11:26 AM Yosry Ahmed <yosryahmed@google.com> wrote:
-> > >
-> > > On Tue, Jul 12, 2022 at 4:06 PM Sean Christopherson <seanjc@google.com> wrote:
-> > > >
-> > > > On Tue, Jul 12, 2022, Yosry Ahmed wrote:
-> > > > > Thanks for taking another look at this!
-> > > > >
-> > > > > On Thu, Jul 7, 2022 at 1:59 PM Sean Christopherson <seanjc@google.com> wrote:
-> > > > > >
-> > > > > > On Tue, Jun 28, 2022, Yosry Ahmed wrote:
-> > > > > > > diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> > > > > > > index aab70355d64f3..13190d298c986 100644
-> > > > > > > --- a/include/linux/mmzone.h
-> > > > > > > +++ b/include/linux/mmzone.h
-> > > > > > > @@ -216,6 +216,7 @@ enum node_stat_item {
-> > > > > > >       NR_KERNEL_SCS_KB,       /* measured in KiB */
-> > > > > > >  #endif
-> > > > > > >       NR_PAGETABLE,           /* used for pagetables */
-> > > > > > > +     NR_SECONDARY_PAGETABLE, /* secondary pagetables, e.g. kvm shadow pagetables */
-> > > > > >
-> > > > > > Nit, s/kvm/KVM, and drop the "shadow", which might be misinterpreted as saying KVM
-> > > > > > pagetables are only accounted when KVM is using shadow paging.  KVM's usage of "shadow"
-> > > > > > is messy, so I totally understand why you included it, but in this case it's unnecessary
-> > > > > > and potentially confusing.
-> > > > > >
-> > > > > > And finally, something that's not a nit.  Should this be wrapped with CONFIG_KVM
-> > > > > > (using IS_ENABLED() because KVM can be built as a module)?  That could be removed
-> > > > > > if another non-KVM secondary MMU user comes along, but until then, #ifdeffery for
-> > > > > > stats the depend on a single feature seems to be the status quo for this code.
-> > > > > >
-> > > > >
-> > > > > I will #ifdef the stat, but I will emphasize in the docs that is
-> > > > > currently *only* used for KVM so that it makes sense if users without
-> > > > > KVM don't see the stat at all. I will also remove the stat from
-> > > > > show_free_areas() in mm/page_alloc.c as it seems like none of the
-> > > > > #ifdefed stats show up there.
-> > > >
-> > > > It's might be worth getting someone from mm/ to weigh in before going through the
-> > > > trouble, my suggestion/question is based purely on the existing code.
-> > >
-> > > Any mm folks with an opinion about this?
-> > >
-> > > Any preference on whether we should wrap NR_SECONDARY_PAGETABLE stats
-> > > with #ifdef CONFIG_KVM for now as it is currently the only source for
-> > > this stat?
+On Mon, Aug 15, 2022 at 01:34:41AM -0700, Andres Freund wrote:
+> Hi, 
+> 
+> On August 15, 2022 1:28:29 AM PDT, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> >On Mon, Aug 15, 2022 at 01:15:27AM -0700, Andres Freund wrote:
+> >> Hi,
+> >> 
+> >> On 2022-08-15 03:51:34 -0400, Michael S. Tsirkin wrote:
+> >> > It is possible that GCP gets confused if ring size is smaller than the
+> >> > device maximum simply because no one did it in the past.
+> >> > 
+> >> > So I pushed just the revert of 762faee5a267 to the test branch.
+> >> > Could you give it a spin?
+> >> 
+> >> Seems to fix the issue, at least to the extent I can determine at 1am... :)
+> >> 
+> >> Greetings,
+> >> 
+> >> Andres Freund
 > >
-> > Any input here?
+> >So you tested this:
 > >
-> > Johannes, you have been involved in discussions in earlier versions of
-> > this series, any thoughts here?
->
-> No super strong feelings here. Most major distros have CONFIG_KVM=y/n,
-> so it'll be a common fixture anyway, and the ifdef is proooobably not
-> worth it for hiding it from people. OTOH, the ifdef is useful for
-> documenting the code.
->
-> If you've already ifdeffed it now, I'd say go ahead with
-> it. Otherwise, don't :) My 2c.
+> >commit 13df5a7eaeb22561d39354b576bc98a7e2c389f9 (HEAD, kernel.org/test)
+> >Author: Michael S. Tsirkin <mst@redhat.com>
+> >Date:   Mon Aug 15 03:44:38 2022 -0400
+> >
+> >    Revert "virtio_net: set the default max ring size by find_vqs()"
+> >    
+> >    This reverts commit 762faee5a2678559d3dc09d95f8f2c54cd0466a7.
+> >    
+> >    Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> >
+> >and it fixes both issues right? No crashes no networking issue?
+> 
+> Correct. I only did limited testing, but it's survived far longer / more reboots than anything since the commit.
+> 
+> Andres
+> -- 
+> Sent from my Android device with K-9 Mail. Please excuse my brevity.
 
-Thanks a lot, Johannes! I haven't ifdeffed it yet so I'll send a v7
-with a few nits and collect ACKs. Andrew, would you prefer me to
-rebase on top of mm-unstable? Or will this go in through the kvm tree?
-(currently it's based on an old-ish kvm/queue).
+
+OK so this gives us a quick revert as a solution for now.
+Next, I would appreciate it if you just try this simple hack.
+If it crashes we either have a long standing problem in virtio
+code or more likely a gcp bug where it can't handle smaller
+rings than what device requestes.
+Thanks!
+
+diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
+index f7965c5dd36b..bdd5f481570b 100644
+--- a/drivers/virtio/virtio_pci_modern.c
++++ b/drivers/virtio/virtio_pci_modern.c
+@@ -314,6 +314,9 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
+ 	if (!size || size > num)
+ 		size = num;
+ 
++	if (size > 1024)
++		size = 1024;
++
+ 	if (size & (size - 1)) {
+ 		dev_warn(&vp_dev->pci_dev->dev, "bad queue size %u", size);
+ 		return ERR_PTR(-EINVAL);
+
+
+-- 
+MST
+

@@ -2,50 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E365593279
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8987A59325E
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbiHOPpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:45:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32990 "EHLO
+        id S233097AbiHOPpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:45:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbiHOPpN (ORCPT
+        with ESMTP id S233081AbiHOPpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 15 Aug 2022 11:45:13 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E81818363;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE37167F7;
         Mon, 15 Aug 2022 08:45:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 633D0CE112D;
-        Mon, 15 Aug 2022 15:45:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A385C433B5;
-        Mon, 15 Aug 2022 15:45:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 70FE86111B;
+        Mon, 15 Aug 2022 15:45:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47547C433D7;
+        Mon, 15 Aug 2022 15:45:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660578306;
-        bh=Dt7UFo2hvk7w801In8MZ1AepU8mKiD3cZKwIGWvPBEk=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=VaShcqkZ3uBeBiArMYvK8aBgmTU/EliuOj3Wj3/q/yK3G/ZEhjdcip69t5dXv4FmB
-         foUpscijB5fKc5R6b/ehGr7tPvFvJ6nYf2ID+PNovjLf5+f78B2CsN8oO1eY3xHa1w
-         S/tk0FTIaxrAhv5DXn1aUf9PpnDx6lfVMNRZdgmz+kX7Qw+60X8I9Gbp37rgnvWHpf
-         kUwveCtyxg9XRYmySC+ZJ5GtMzW5Z2dqXkdOxP9dB5MioeVKL9RTeY+UzUp99a9FwM
-         143XYRmuUmXIPEfakwWQ+1HsCRqf/CfGDRvFSXASkhOK28k9VEg41bZOE8E0BNnT1I
-         x8F+GTsH/nUYw==
+        s=k20201202; t=1660578308;
+        bh=kHq6yMy6gK9MQCNPVme+VzjQOm4ty0ndfUWa4Uog7s8=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=LkKFN1OCoKVjRoYpbWqnGar9UrZh+cY1rFi4MVyVhL7X29cZNaU4A+8wAB4b8Cet5
+         +FqB1BP0zhgD7v0tmuIwFn324PItCDP9MFUJhDAHeJK2MSgqASN1Bba4HygH4UZJUm
+         2egYexUIxdNeG5w7B55ZJl90DAXVIjyY2tGpvqCN3J2KcwabVIkj2j+pdmRxd/sxq7
+         yd8JfVGtiH1K2kAcrBjUhR7Wpbl/BEw42bia41NQPeQ+i/wPf/wsf2NQVlXq4YcML1
+         c/u+7ba13K7bQj5pRs8ReFDdmlp7nniFr5vAGZ+E2NR/yOj0FWf5FWn8gxauqr003n
+         pTGQ5UPGSXVFA==
 From:   Mark Brown <broonie@kernel.org>
 To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org
-In-Reply-To: <20220810131236.428529-1-krzysztof.kozlowski@linaro.org>
-References: <20220810131236.428529-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] spi: dt-bindings: nvidia,tegra210-quad-peripheral-props: correct additional properties
-Message-Id: <166057830399.697678.9931194157523714173.b4-ty@kernel.org>
-Date:   Mon, 15 Aug 2022 16:45:03 +0100
+        krzysztof.kozlowski+dt@linaro.org, linux-spi@vger.kernel.org,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org
+Cc:     Peng Fan <peng.fan@nxp.com>, xiaoning.wang@nxp.com
+In-Reply-To: <20220812073452.45763-1-peng.fan@oss.nxp.com>
+References: <20220812073452.45763-1-peng.fan@oss.nxp.com>
+Subject: Re: [PATCH 1/2] dt-bindings: lpspi: add dmas property
+Message-Id: <166057830692.697678.5825676350299676949.b4-ty@kernel.org>
+Date:   Mon, 15 Aug 2022 16:45:06 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,9 +56,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 10 Aug 2022 16:12:36 +0300, Krzysztof Kozlowski wrote:
-> Re-usable schemas should use additionalProperties:true, so the schema
-> using it will check for evaluated properties.
+On Fri, 12 Aug 2022 15:34:51 +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> The LPSPI has dma capability, so add dma property.
 > 
 > 
 
@@ -72,8 +69,10 @@ Applied to
 
 Thanks!
 
-[1/1] spi: dt-bindings: nvidia,tegra210-quad-peripheral-props: correct additional properties
-      commit: 63e2df2d9e46e7f9bbbe4a2b94426bfaedb32807
+[1/2] dt-bindings: lpspi: add dmas property
+      commit: fba933c2d975463d6a19898cbe30f7399de9f32e
+[2/2] dt-bindings: lpspi: add i.MX93 compatible
+      commit: d9c6a706f37c32480ab287aafcc781192996d584
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

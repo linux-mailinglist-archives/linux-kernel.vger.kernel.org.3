@@ -2,204 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20015594DE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA70594C50
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346621AbiHPA2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 20:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
+        id S1348161AbiHPAeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 20:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355192AbiHPA0f (ORCPT
+        with ESMTP id S1353373AbiHPAbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 20:26:35 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DCF4D838;
-        Mon, 15 Aug 2022 13:34:30 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id q7-20020a17090a7a8700b001f300db8677so7742972pjf.5;
-        Mon, 15 Aug 2022 13:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=4KBjvCyqweA/YX6s5FrlHJFUw4QF4lCn5nqOQumUNOw=;
-        b=n7wjnkSjZc1R11i26aCHTFhm74vZ8nzR9cXmhqbIckThGcJwEbsNfn0yV54qtZY/aA
-         3754Wn+6H4TQ/KYOC6p+fWd1hFCRjZgh8a+5hypTteu8iZiY9VzQymDfIdktlyVPjyIG
-         bFXqUv97O4zemEtV1538vosbA6PIRXK2HIb2m5JGaEJV01domLWcDGkxsCjCOlTZF9uy
-         /URJnyuvJfrpvx6obJoe42NfPRQxaMogFFImYSbep1347D3/i7RRT0EgcIkcMQ/XUAJn
-         m5qnorABzZVhiWEK4fk3BjC3N0xItDOHL+utn71Os/nV1ahcNywlz9dYRl4cxp59HSqQ
-         iVzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=4KBjvCyqweA/YX6s5FrlHJFUw4QF4lCn5nqOQumUNOw=;
-        b=e2vGH6tKNrxfTdYahFDNvpEn6qcOLaBGK39KK5uHegBdviT4pMp8hm/QoemobnS8dZ
-         aIpGPCvTNpkbyB64Dm8G58DQ0zDZysu4zHod9qHQtl3TycPSAwlCvaZFZuFxCLgZZkHQ
-         eQLb8+DShCSqN8k4j4LuG9LpmF+yrT2ygRthKtRSNmVBhfcRiie8uGRHsRH4ilw+L0Zs
-         foM3qStKHx9xuHAKpMPDLoan8uXCIeWDNq2DJbRRxbDnlTylh8+y1nK9I8Ca+L7M/vx2
-         Qd+goctm62yWpk8wj/M2kSaFNnirN15tcvdMEeH6fO7CPBWOhY9Cc2S4KxDAgzl3CXjH
-         qhRg==
-X-Gm-Message-State: ACgBeo0kIWQwf7PTks69i1codmDuFFCD3Dovvfm+pqM6rk52L2UV2l5p
-        QTIp9b+4h1IbxMzrobzkDXI=
-X-Google-Smtp-Source: AA6agR56UkQzLgBD2aEpa9hh8Hb8XpBeAwQQqChCNJu6bckZm5Rn+ApILdQPknCukpG3U0gTJGgNkA==
-X-Received: by 2002:a17:90a:a416:b0:1f7:3b5f:1cd1 with SMTP id y22-20020a17090aa41600b001f73b5f1cd1mr20111586pjp.216.1660595669422;
-        Mon, 15 Aug 2022 13:34:29 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 128-20020a620586000000b0052baa22575asm6934652pff.134.2022.08.15.13.34.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 13:34:28 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 15 Aug 2022 13:34:26 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andres Freund <andres@anarazel.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>, c@redhat.com
-Subject: Re: [PATCH] virtio_net: Revert "virtio_net: set the default max ring
- size by find_vqs()"
-Message-ID: <20220815203426.GA509309@roeck-us.net>
-References: <20220815090521.127607-1-mst@redhat.com>
+        Mon, 15 Aug 2022 20:31:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D4B185995;
+        Mon, 15 Aug 2022 13:36:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 80BEFB80EA8;
+        Mon, 15 Aug 2022 20:35:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3557C433D6;
+        Mon, 15 Aug 2022 20:35:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660595747;
+        bh=qf1uXQYDzbCjJhqp5PrXmCPOXnbpAKK9chCCYP5tWtQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=mo2MIfNF13xv6ntikuuQImFWHu1+thv5ivjIepIpCv0iYKXdmyrHjTCbOU+2XIS64
+         f6WCphkw7c+m0SbEE7D3r+DF+z9qjO0Z1nvGWl9PdvGqEm1i0N2oQK1ofz4DBye0c6
+         kj6LvC/Ml16VQRk1bWYc4eaz9vsohJtgqt+IC/MN5i82KcPba7lv5mwuk5dQ97Cz9j
+         pnUDHukh7zG3YKYptmuge4JNm6/ZCGUHaRe6eHL8pU4irn2Lv+zXOCALjx8MWlMbkY
+         rMzbII0WZ1fiQ8fNRhs1/1SFJF6mnieJxsQEaxZ75cCIu7tJvfsuhdhhelo2Dm5Thn
+         e7w/Qj1M67ScA==
+Date:   Mon, 15 Aug 2022 15:35:45 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     quic_jhugo@quicinc.com, wei.liu@kernel.org, kys@microsoft.com,
+        haiyangz@microsoft.com, sthemmin@microsoft.com,
+        lpieralisi@kernel.org, bhelgaas@google.com,
+        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mikelley@microsoft.com,
+        robh@kernel.org, kw@linux.com, alex.williamson@redhat.com,
+        boqun.feng@gmail.com, Boqun.Feng@microsoft.com,
+        Carl Vanderlip <quic_carlv@quicinc.com>
+Subject: Re: [PATCH] PCI: hv: Fix the definiton of vector in
+ hv_compose_msi_msg()
+Message-ID: <20220815203545.GA1971949@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220815090521.127607-1-mst@redhat.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220815185505.7626-1-decui@microsoft.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 05:16:50AM -0400, Michael S. Tsirkin wrote:
-> This reverts commit 762faee5a2678559d3dc09d95f8f2c54cd0466a7.
+s/definiton/definition/ in subject
+(only if you have other occasion to repost this)
+
+On Mon, Aug 15, 2022 at 11:55:05AM -0700, Dexuan Cui wrote:
+> The local variable 'vector' must be u32 rather than u8: see the
+> struct hv_msi_desc3.
 > 
-> This has been reported to trip up guests on GCP (Google Cloud).  Why is
-> not yet clear - to be debugged, but the patch itself has several other
-> issues:
+> 'vector_count' should be u16 rather than u8: see struct hv_msi_desc,
+> hv_msi_desc2 and hv_msi_desc3.
 > 
-> - It treats unknown speed as < 10G
-> - It leaves userspace no way to find out the ring size set by hypervisor
-> - It tests speed when link is down
-> - It ignores the virtio spec advice:
->         Both \field{speed} and \field{duplex} can change, thus the driver
->         is expected to re-read these values after receiving a
->         configuration change notification.
-> - It is not clear the performance impact has been tested properly
+> Fixes: a2bad844a67b ("PCI: hv: Fix interrupt mapping for multi-MSI")
+> Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> Cc: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> Cc: Carl Vanderlip <quic_carlv@quicinc.com>
+
+Looks like Wei has been applying most changes to pci-hyperv.c, so I
+assume the same will happen here.
+
+> ---
 > 
-> Revert the patch for now.
+> The patch should be appplied after the earlier patch:
+>     [PATCH] PCI: hv: Only reuse existing IRTE allocation for Multi-MSI
+>     https://lwn.net/ml/linux-kernel/20220804025104.15673-1-decui%40microsoft.com/
 > 
-> Link: https://lore.kernel.org/r/20220814212610.GA3690074%40roeck-us.net
-> Link: https://lore.kernel.org/r/20220815070203.plwjx7b3cyugpdt7%40awork3.anarazel.de
-> Link: https://lore.kernel.org/r/3df6bb82-1951-455d-a768-e9e1513eb667%40www.fastmail.com
-> Link: https://lore.kernel.org/r/FCDC5DDE-3CDD-4B8A-916F-CA7D87B547CE%40anarazel.de
-> Fixes: 762faee5a267 ("virtio_net: set the default max ring size by find_vqs()")
-> Cc: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> Cc: Jason Wang <jasowang@redhat.com>
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> Tested-by: Andres Freund <andres@anarazel.de>
-
-I ran this patch through a total of 14 syskaller tests, 2 test runs each on
-7 different crashes reported by syzkaller (as reported to the linux-kernel
-mailing list). No problems were reported. I also ran a single cross-check
-with one of the syzkaller runs on top of v6.0-rc1, without this patch.
-That test run failed.
-
-Overall, I think we can call this fixed.
-
-Guenter
-
----
-syskaller reports:
-
-Reported-and-tested-by: syzbot+2984d1b7aef6b51353f0@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         568035b0 Linux 6.0-rc1
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git v6.0-rc1
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3b9175e0879a7749
-dashboard link: https://syzkaller.appspot.com/bug?extid=2984d1b7aef6b51353f0
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=11949fc3080000
-
-Reported-and-tested-by: syzbot+2c35c4d66094ddfe198e@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         568035b0 Linux 6.0-rc1
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git v6.0-rc1
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
-dashboard link: https://syzkaller.appspot.com/bug?extid=2c35c4d66094ddfe198e
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=163e20f3080000
-
-Reported-and-tested-by: syzbot+97f830ad641de86d08c0@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         568035b0 Linux 6.0-rc1
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git v6.0-rc1
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f267ed4fb258122a
-dashboard link: https://syzkaller.appspot.com/bug?extid=97f830ad641de86d08c0
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=146c8e5b080000
-
-Reported-and-tested-by: syzbot+005efde5e97744047fe4@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         568035b0 Linux 6.0-rc1
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git v6.0-rc1
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
-dashboard link: https://syzkaller.appspot.com/bug?extid=005efde5e97744047fe4
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=106c8e5b080000
-
-Reported-and-tested-by: syzbot+9ada839c852179f13999@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         568035b0 Linux 6.0-rc1
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git v6.0-rc1
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3b9175e0879a7749
-dashboard link: https://syzkaller.appspot.com/bug?extid=9ada839c852179f13999
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=118756f3080000
-
-Reported-and-tested-by: syzbot+382af021ce115a936b1f@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         568035b0 Linux 6.0-rc1
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git v6.0-rc1
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e656d8727a25e83b
-dashboard link: https://syzkaller.appspot.com/bug?extid=382af021ce115a936b1f
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=135f650d080000
-
-Reported-and-tested-by: syzbot+24df94a8d05d5a3e68f0@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         568035b0 Linux 6.0-rc1
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git v6.0-rc1
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3b9175e0879a7749
-dashboard link: https://syzkaller.appspot.com/bug?extid=24df94a8d05d5a3e68f0
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=12758a47080000
+>  drivers/pci/controller/pci-hyperv.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+> index 65d0dab25deb..53580899c859 100644
+> --- a/drivers/pci/controller/pci-hyperv.c
+> +++ b/drivers/pci/controller/pci-hyperv.c
+> @@ -1614,7 +1614,7 @@ static void hv_pci_compose_compl(void *context, struct pci_response *resp,
+>  
+>  static u32 hv_compose_msi_req_v1(
+>  	struct pci_create_interrupt *int_pkt, struct cpumask *affinity,
+> -	u32 slot, u8 vector, u8 vector_count)
+> +	u32 slot, u8 vector, u16 vector_count)
+>  {
+>  	int_pkt->message_type.type = PCI_CREATE_INTERRUPT_MESSAGE;
+>  	int_pkt->wslot.slot = slot;
+> @@ -1642,7 +1642,7 @@ static int hv_compose_msi_req_get_cpu(struct cpumask *affinity)
+>  
+>  static u32 hv_compose_msi_req_v2(
+>  	struct pci_create_interrupt2 *int_pkt, struct cpumask *affinity,
+> -	u32 slot, u8 vector, u8 vector_count)
+> +	u32 slot, u8 vector, u16 vector_count)
+>  {
+>  	int cpu;
+>  
+> @@ -1661,7 +1661,7 @@ static u32 hv_compose_msi_req_v2(
+>  
+>  static u32 hv_compose_msi_req_v3(
+>  	struct pci_create_interrupt3 *int_pkt, struct cpumask *affinity,
+> -	u32 slot, u32 vector, u8 vector_count)
+> +	u32 slot, u32 vector, u16 vector_count)
+>  {
+>  	int cpu;
+>  
+> @@ -1702,7 +1702,8 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+>  	struct tran_int_desc *int_desc;
+>  	struct msi_desc *msi_desc;
+>  	bool multi_msi;
+> -	u8 vector, vector_count;
+> +	u32 vector; /* Must be u32: see the struct hv_msi_desc3 */
+> +	u16 vector_count;
+>  	struct {
+>  		struct pci_packet pci_pkt;
+>  		union {
+> -- 
+> 2.25.1
+> 

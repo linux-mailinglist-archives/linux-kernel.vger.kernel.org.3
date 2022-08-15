@@ -2,181 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F8F592D1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C37592D76
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242266AbiHOKAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 06:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
+        id S242270AbiHOKA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 06:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231807AbiHOJ77 (ORCPT
+        with ESMTP id S231228AbiHOKAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 05:59:59 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295301C925;
-        Mon, 15 Aug 2022 02:59:55 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 09:59:51 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1660557593;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=YcBUGkPx3cH/NvA+TkTcMHErs+1CHPFnwBGurxjWnkQ=;
-        b=VckFzlKpSOZ+j9cB3OAd2hM96/iNnqhp5ExClXPWWtVI/C6DgN/ChOiT7VtuQ2UsowDa5Z
-        asbRAsyWSk/JMw7kTa/XhS88OZtNTiO0/7TtcsqLWmxbrglZuLTQjUqDx+Ky7VRnMgGEw3
-        MJIv9fTAcSdeXXbyiNpmJMdGOUgvzzUJaKzS1pMKolK9Fs9e6cvCTy7Oqm15zkatOqurUr
-        lXEIbODS8O3pidSMuKZ3da3VQGzkiH4m5T8L5LUdg3nY91/pPO9/oMSufQzN8zjRNCNdsW
-        L/znuB3Dth4vYlIX2ljrY1tCqJjSDDL1ao1ZG92KJTSX1xES+kHcda8IkUiGOQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1660557593;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=YcBUGkPx3cH/NvA+TkTcMHErs+1CHPFnwBGurxjWnkQ=;
-        b=0yIHA3rfzf9uA64BNBCI85zgB68F7Clwhk/nZlOxnhzPTnEGYmCuUm91kBIXuzgtxMRcF+
-        ORcy5L3imQQEcsBQ==
-From:   "tip-bot2 for Kristen Carlson Accardi" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sgx] x86/sgx: Improve comments for sgx_encl_lookup/alloc_backing()
-Cc:     Kristen Carlson Accardi <kristen.c.accardi@intel.com>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Mon, 15 Aug 2022 06:00:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6115596;
+        Mon, 15 Aug 2022 03:00:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27F6E60D3A;
+        Mon, 15 Aug 2022 10:00:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08702C433C1;
+        Mon, 15 Aug 2022 10:00:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660557651;
+        bh=9ZRWMUIwm/t3sHqvInJijL0j9kWxqZeofrlGARqlGOI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B6dKWE0dIWxc13kXUMjjXH3tmnScnyXC1ZUz6+8T2d8reqh+qAY3pY7InfREVAUlW
+         JbgsjKSEgRaDi88LjlUeMJbC97GtFcOtTU5JG1ldDARvMRS9DHVGmgLDCybG/7+YpA
+         Ey15Ot5/+E6Ec7RGLMfGevl3sK+Ph3MQSexZ2RDLRHU5iYyN1tYqeyWL++lz+AloLd
+         K+ab9n6Lqf0oNFEL73GvPCRqrKnIr5M5ua37QpIysvP4wutD3cKMgTitQ/n3FB0zRI
+         TXkeRVqYn84ZKjFoPceVbOAnxPSiS5JULMYdGpLgdAQ+2BTd6YfZxbjr/86NYTFPTG
+         u2TXeFxBk75ow==
+Date:   Mon, 15 Aug 2022 12:00:44 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Stefan Roesch <shr@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Jan Kara <jack@suse.cz>
+Cc:     Stefan Roesch <shr@fb.com>, Jens Axboe <axboe@kernel.dk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, lkp@lists.01.org, lkp@intel.com,
+        ying.huang@intel.com, feng.tang@intel.com,
+        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com,
+        kernel test robot <oliver.sang@intel.com>
+Subject: Re: [fs]  faf99b5635:  will-it-scale.per_thread_ops -9.0% regression
+Message-ID: <20220815100044.7j2u2yjlkanhkrfg@wittgenstein>
+References: <YvnMWbRDhM0fH4E/@xsang-OptiPlex-9020>
 MIME-Version: 1.0
-Message-ID: <166055759122.401.9256958583708582242.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YvnMWbRDhM0fH4E/@xsang-OptiPlex-9020>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/sgx branch of tip:
+On Mon, Aug 15, 2022 at 12:32:25PM +0800, kernel test robot wrote:
+> 
+> 
+> Greeting,
+> 
+> FYI, we noticed a -9.0% regression of will-it-scale.per_thread_ops due to commit:
+> 
+> 
+> commit: faf99b563558f74188b7ca34faae1c1da49a7261 ("fs: add __remove_file_privs() with flags parameter")
+> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
 
-Commit-ID:     ee56a283988d739c25d2d00ffb22707cb487ab47
-Gitweb:        https://git.kernel.org/tip/ee56a283988d739c25d2d00ffb22707cb487ab47
-Author:        Kristen Carlson Accardi <kristen.c.accardi@intel.com>
-AuthorDate:    Fri, 12 Aug 2022 11:18:03 -07:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Mon, 15 Aug 2022 11:51:49 +02:00
+This seems overall pretty odd tbh at least it's not immediately obvious
+how that specific commit would've caused this. But fwiw, I think there's
+one issue in this change which we originally overlooked which might
+explain this.
 
-x86/sgx: Improve comments for sgx_encl_lookup/alloc_backing()
+Before faf99b563558 ("fs: add __remove_file_privs() with flags
+parameter") inode_has_no_xattr() was called when
+dentry_needs_remove_privs() returned 0.
 
-Modify the comments for sgx_encl_lookup_backing() and for
-sgx_encl_alloc_backing() to indicate that they take a reference
-which must be dropped with a call to sgx_encl_put_backing().
-Make sgx_encl_lookup_backing() static for now, and change the
-name of sgx_encl_get_backing() to __sgx_encl_get_backing() to
-make it more clear that sgx_encl_get_backing() is an internal
-function.
+	int error = 0
+	[...]
+	kill = dentry_needs_remove_privs(dentry);
+	if (kill < 0)
+		return kill;
+	if (kill)
+		error = __remove_privs(file_mnt_user_ns(file), dentry, kill);
+	if (!error)
+		inode_has_no_xattr(inode);
 
-Signed-off-by: Kristen Carlson Accardi <kristen.c.accardi@intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/all/YtUs3MKLzFg+rqEV@zn.tnic/
----
- arch/x86/kernel/cpu/sgx/encl.c | 21 ++++++++++++++-------
- arch/x86/kernel/cpu/sgx/encl.h |  2 --
- 2 files changed, 14 insertions(+), 9 deletions(-)
+but now we do:
 
-diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-index 24c1bb8..f40d642 100644
---- a/arch/x86/kernel/cpu/sgx/encl.c
-+++ b/arch/x86/kernel/cpu/sgx/encl.c
-@@ -12,6 +12,9 @@
- #include "encls.h"
- #include "sgx.h"
- 
-+static int sgx_encl_lookup_backing(struct sgx_encl *encl, unsigned long page_index,
-+			    struct sgx_backing *backing);
-+
- #define PCMDS_PER_PAGE (PAGE_SIZE / sizeof(struct sgx_pcmd))
- /*
-  * 32 PCMD entries share a PCMD page. PCMD_FIRST_MASK is used to
-@@ -914,7 +917,7 @@ static struct page *sgx_encl_get_backing_page(struct sgx_encl *encl,
- }
- 
- /**
-- * sgx_encl_get_backing() - Pin the backing storage
-+ * __sgx_encl_get_backing() - Pin the backing storage
-  * @encl:	an enclave pointer
-  * @page_index:	enclave page index
-  * @backing:	data for accessing backing storage for the page
-@@ -926,7 +929,7 @@ static struct page *sgx_encl_get_backing_page(struct sgx_encl *encl,
-  *   0 on success,
-  *   -errno otherwise.
-  */
--static int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
-+static int __sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
- 			 struct sgx_backing *backing)
- {
- 	pgoff_t page_pcmd_off = sgx_encl_get_backing_page_pcmd_offset(encl, page_index);
-@@ -1001,7 +1004,7 @@ static struct mem_cgroup *sgx_encl_get_mem_cgroup(struct sgx_encl *encl)
- }
- 
- /**
-- * sgx_encl_alloc_backing() - allocate a new backing storage page
-+ * sgx_encl_alloc_backing() - create a new backing storage page
-  * @encl:	an enclave pointer
-  * @page_index:	enclave page index
-  * @backing:	data for accessing backing storage for the page
-@@ -1009,7 +1012,9 @@ static struct mem_cgroup *sgx_encl_get_mem_cgroup(struct sgx_encl *encl)
-  * When called from ksgxd, sets the active memcg from one of the
-  * mms in the enclave's mm_list prior to any backing page allocation,
-  * in order to ensure that shmem page allocations are charged to the
-- * enclave.
-+ * enclave.  Create a backing page for loading data back into an EPC page with
-+ * ELDU.  This function takes a reference on a new backing page which
-+ * must be dropped with a corresponding call to sgx_encl_put_backing().
-  *
-  * Return:
-  *   0 on success,
-@@ -1022,7 +1027,7 @@ int sgx_encl_alloc_backing(struct sgx_encl *encl, unsigned long page_index,
- 	struct mem_cgroup *memcg = set_active_memcg(encl_memcg);
- 	int ret;
- 
--	ret = sgx_encl_get_backing(encl, page_index, backing);
-+	ret = __sgx_encl_get_backing(encl, page_index, backing);
- 
- 	set_active_memcg(memcg);
- 	mem_cgroup_put(encl_memcg);
-@@ -1040,15 +1045,17 @@ int sgx_encl_alloc_backing(struct sgx_encl *encl, unsigned long page_index,
-  * It is the caller's responsibility to ensure that it is appropriate to use
-  * sgx_encl_lookup_backing() rather than sgx_encl_alloc_backing(). If lookup is
-  * not used correctly, this will cause an allocation which is not accounted for.
-+ * This function takes a reference on an existing backing page which must be
-+ * dropped with a corresponding call to sgx_encl_put_backing().
-  *
-  * Return:
-  *   0 on success,
-  *   -errno otherwise.
-  */
--int sgx_encl_lookup_backing(struct sgx_encl *encl, unsigned long page_index,
-+static int sgx_encl_lookup_backing(struct sgx_encl *encl, unsigned long page_index,
- 			   struct sgx_backing *backing)
- {
--	return sgx_encl_get_backing(encl, page_index, backing);
-+	return __sgx_encl_get_backing(encl, page_index, backing);
- }
- 
- /**
-diff --git a/arch/x86/kernel/cpu/sgx/encl.h b/arch/x86/kernel/cpu/sgx/encl.h
-index a65a952..f94ff14 100644
---- a/arch/x86/kernel/cpu/sgx/encl.h
-+++ b/arch/x86/kernel/cpu/sgx/encl.h
-@@ -107,8 +107,6 @@ bool current_is_ksgxd(void);
- void sgx_encl_release(struct kref *ref);
- int sgx_encl_mm_add(struct sgx_encl *encl, struct mm_struct *mm);
- const cpumask_t *sgx_encl_cpumask(struct sgx_encl *encl);
--int sgx_encl_lookup_backing(struct sgx_encl *encl, unsigned long page_index,
--			    struct sgx_backing *backing);
- int sgx_encl_alloc_backing(struct sgx_encl *encl, unsigned long page_index,
- 			   struct sgx_backing *backing);
- void sgx_encl_put_backing(struct sgx_backing *backing);
+	kill = dentry_needs_remove_privs(dentry);
+	if (kill <= 0)
+		return kill;
+
+which means we don't call inode_has_no_xattr(). I don't think that we
+did this intentionally. inode_has_no_xattr() just sets S_NOSEC which
+means next time we call into __file_remove_privs() we can return earlier
+instead of hitting dentry_needs_remove_privs() again:
+
+if (IS_NOSEC(inode) || !S_ISREG(inode->i_mode))
+	return 0;
+
+So I think that needs to be fixed?
+
+Christian

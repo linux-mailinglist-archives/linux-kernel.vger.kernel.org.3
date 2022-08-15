@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B5E59498F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E06594A0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355201AbiHOXvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40776 "EHLO
+        id S1355233AbiHOXvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:51:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355070AbiHOXrC (ORCPT
+        with ESMTP id S1355123AbiHOXrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:47:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0422C2FFDE;
-        Mon, 15 Aug 2022 13:15:18 -0700 (PDT)
+        Mon, 15 Aug 2022 19:47:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FCC88C020;
+        Mon, 15 Aug 2022 13:15:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 641E6B810C5;
-        Mon, 15 Aug 2022 20:15:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8D03C433C1;
-        Mon, 15 Aug 2022 20:15:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EEF06069F;
+        Mon, 15 Aug 2022 20:15:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BB52C433C1;
+        Mon, 15 Aug 2022 20:15:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594516;
-        bh=ooOqqcVnm36iUHmdeC5rE0ouxQCEtgqtCwdpaPp9IBM=;
+        s=korg; t=1660594519;
+        bh=kdc5HuFAFYp4Arr4949hQSaFEZ+/ws9O0bBEGlivX/o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=suiLlOi0gmv93+XDu+zrdovpQFsk0KHam3Jazbrj+Z4KMp+mVIdVkBZlig16tsfcr
-         Xs841C6HczhWBYw2GivDJCZnqtvgxkeNZqJrf1Wz3w2Cy6qPJcP8fYE1CAOCjRexzO
-         yY8M2yiXMDiNL66SP/aGBGYD2O18y1rUxVSiWJ14=
+        b=QgCpAtYcW6oEwt8usTKRTRjzCwWIICeAeJGt2HrGLFTY5JnWnst9jBKoqvyXB1suH
+         0eJveydUBoWW+ymVfw5dgAdIVLDjlFByYw0BLXS96UmTYHK7blZuvsj/Pwlx0q9bpI
+         9kNeT6SxHs+UeXwG60euEoai4hf5K7R05uqqMBQc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, YN Chen <yn.chen@mediatek.com>,
+        stable@vger.kernel.org, Sean Wang <sean.wang@mediatek.com>,
         Deren Wu <deren.wu@mediatek.com>, Felix Fietkau <nbd@nbd.name>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0471/1157] mt76: mt7921s: fix firmware download random fail
-Date:   Mon, 15 Aug 2022 19:57:07 +0200
-Message-Id: <20220815180458.446270706@linuxfoundation.org>
+Subject: [PATCH 5.19 0472/1157] mt76: mt7921: not support beacon offload disable command
+Date:   Mon, 15 Aug 2022 19:57:08 +0200
+Message-Id: <20220815180458.487674833@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -55,55 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: YN Chen <yn.chen@mediatek.com>
+From: Deren Wu <deren.wu@mediatek.com>
 
-[ Upstream commit a55a0c701c129f8e448f0ec1eb811dba728ace64 ]
+[ Upstream commit c149d3a9058616ff942a6e44b6e968e18a84dd5a ]
 
-To avoid racing problems in chip, mt7921s should reacquire drv-own after
-firmware semaphore is released.
+Beacon disable flow would be handled in bss stop handler automatically.
+Force return -EOPNOTSUPP in disable case.
 
-Fixes: 78b217580c509 ("mt76: mt7921s: fix bus hang with wrong privilege")
-Signed-off-by: YN Chen <yn.chen@mediatek.com>
+Fixes: 116c69603b01 ("mt76: mt7921: Add AP mode support")
+Reviewed-by: Sean Wang <sean.wang@mediatek.com>
 Signed-off-by: Deren Wu <deren.wu@mediatek.com>
 Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7921/mcu.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ drivers/net/wireless/mediatek/mt76/mt7921/mcu.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7921/mcu.c
-index 12bab18c4171..71cbb9073485 100644
+index 71cbb9073485..3765b345b741 100644
 --- a/drivers/net/wireless/mediatek/mt76/mt7921/mcu.c
 +++ b/drivers/net/wireless/mediatek/mt76/mt7921/mcu.c
-@@ -582,13 +582,6 @@ static int mt7921_load_patch(struct mt7921_dev *dev)
- 	if (ret)
- 		dev_err(dev->mt76.dev, "Failed to start patch\n");
+@@ -1256,8 +1256,11 @@ mt7921_mcu_uni_add_beacon_offload(struct mt7921_dev *dev,
+ 	};
+ 	struct sk_buff *skb;
  
--	if (mt76_is_sdio(&dev->mt76)) {
--		/* activate again */
--		ret = __mt7921_mcu_fw_pmctrl(dev);
--		if (!ret)
--			ret = __mt7921_mcu_drv_pmctrl(dev);
--	}
--
- out:
- 	sem = mt76_connac_mcu_patch_sem_ctrl(&dev->mt76, false);
- 	switch (sem) {
-@@ -599,6 +592,14 @@ static int mt7921_load_patch(struct mt7921_dev *dev)
- 		dev_err(dev->mt76.dev, "Failed to release patch semaphore\n");
- 		break;
++	/* support enable/update process only
++	 * disable flow would be handled in bss stop handler automatically
++	 */
+ 	if (!enable)
+-		goto out;
++		return -EOPNOTSUPP;
+ 
+ 	skb = ieee80211_beacon_get_template(mt76_hw(dev), vif, &offs);
+ 	if (!skb)
+@@ -1283,7 +1286,6 @@ mt7921_mcu_uni_add_beacon_offload(struct mt7921_dev *dev,
  	}
-+
-+	if (!ret && mt76_is_sdio(&dev->mt76)) {
-+		/* activate again */
-+		ret = __mt7921_mcu_fw_pmctrl(dev);
-+		if (!ret)
-+			ret = __mt7921_mcu_drv_pmctrl(dev);
-+	}
-+
- 	release_firmware(fw);
+ 	dev_kfree_skb(skb);
  
- 	return ret;
+-out:
+ 	return mt76_mcu_send_msg(&dev->mt76, MCU_UNI_CMD(BSS_INFO_UPDATE),
+ 				 &req, sizeof(req), true);
+ }
 -- 
 2.35.1
 

@@ -2,113 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C39593006
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CD48592FF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241756AbiHONen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 09:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
+        id S242513AbiHONcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 09:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiHONel (ORCPT
+        with ESMTP id S229752AbiHONca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 09:34:41 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B114920F58;
-        Mon, 15 Aug 2022 06:34:40 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FDEIQ1027150;
-        Mon, 15 Aug 2022 13:32:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=uZ/gxg4vwNI6HXYTM5WtTwqBD5xiz145jUdLuTNzlO8=;
- b=K+vfDuUO+MnNMVtKMlY95pl7vMYTvxjNayVwBZPhe91x8k0IjdiCAxhUEmY4eyymlahh
- xUx/DwupRRNVtajezziJOYoHrmOL69zoivO8lPv2crRN4is4pFOphY/wRRiPiOwzMwqi
- 6rWDwM/B1BaFWUgBTggMmY88b6EhW3tDO89JB0pF03An5VOmXtbd6EgWDsCFbPzFQM6Q
- uZvGzoqtSAIk+sQZkzQz290aHr2cCMFGKfCUdQiw1i4M46leqJKQs36E3RicJtSRgvIw
- DlaQNyowDfmowsIkE2nBg/HlYfdFukxsVyLa2IyngNjOp0ecwHknE8Hflk/pe6BDkU7R jw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3hyny39s47-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Aug 2022 13:32:22 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27FDTcdW019263;
-        Mon, 15 Aug 2022 13:32:21 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3hyny39s3v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Aug 2022 13:32:21 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27FDM3Qr006945;
-        Mon, 15 Aug 2022 13:32:20 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma01dal.us.ibm.com with ESMTP id 3hx3ka76kc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Aug 2022 13:32:20 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27FDWJVB35913988
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 15 Aug 2022 13:32:19 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A55ECB2068;
-        Mon, 15 Aug 2022 13:32:19 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7EE68B2064;
-        Mon, 15 Aug 2022 13:32:19 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon, 15 Aug 2022 13:32:19 +0000 (GMT)
-Message-ID: <94d1ba97-3fcf-bb75-ce3e-d6a8ca712ece@linux.ibm.com>
-Date:   Mon, 15 Aug 2022 09:32:19 -0400
+        Mon, 15 Aug 2022 09:32:30 -0400
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE5D15718
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 06:32:29 -0700 (PDT)
+Received: by mail-pg1-f179.google.com with SMTP id v4so2163316pgi.10
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 06:32:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=6+NKr8x81snqBPCrj5grt+MbWltUZu5PmZe6P/3T6aM=;
+        b=Eul1FE/WL+1pSC4oKQfwt0TaAzuyWzUDhfnkAN+OA90ZE/aJ2hEj1YpVFWr8Tq5qY2
+         hJLegOObGkmNUJ58dBxBfyqa8+kJY1nuTAbLSRwecjajL/W3XAb02jzbnEoNHlZ9FcFQ
+         2k5bnhaQsmuAjOVmjPz1QHj8Nd5xZVq1zW8SIuddsvYmKGKAbfun7wxJIFZ5Q2EE0CMO
+         9mbsuf/Se0atpkQMB2OCOO2nEfhMjL7NF6dP59uZXDzSfGtf3fWL/kkoukUQiUH1mbH1
+         qoV/T1gsskmIisHJCE/CKz4Opi6xwthdFa+zVfdlugWjMjap44hitMoF2yesNmmlnW76
+         zCLQ==
+X-Gm-Message-State: ACgBeo2caYNjgVopazMY8Kvr6UO7xuyJJSmGJFq7lK7tkSUoIe7V/dsE
+        N/h1IL6lLos04USNPK0SRoM=
+X-Google-Smtp-Source: AA6agR6oSpgHxc+dt63vqfcdjwfag3ms5XkVohiacbxfketzvYVSYHIwNqzSsvU+tSB9zeLx0MXvcQ==
+X-Received: by 2002:aa7:85da:0:b0:52f:c5bc:cb41 with SMTP id z26-20020aa785da000000b0052fc5bccb41mr16401699pfn.31.1660570348933;
+        Mon, 15 Aug 2022 06:32:28 -0700 (PDT)
+Received: from [192.168.3.217] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id q5-20020a170902eb8500b0016dbe5f5308sm6916750plg.79.2022.08.15.06.32.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Aug 2022 06:32:27 -0700 (PDT)
+Message-ID: <ab15191c-d79f-b5de-7568-d15b8f8a8aa8@acm.org>
+Date:   Mon, 15 Aug 2022 06:32:24 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v7 0/6] tpm: Preserve TPM measurement log across kexec
- (ppc64)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: lockdep splat due to klist iteration from atomic context in Intel
+ IOMMU driver
 Content-Language: en-US
-To:     Coiby Xu <coxu@redhat.com>
-Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
-        nasastry@in.ibm.com, mpe@ellerman.id.au
-References: <20220812164305.2056641-1-stefanb@linux.ibm.com>
- <20220815064813.77g6icbkygrbmapa@Rk>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220815064813.77g6icbkygrbmapa@Rk>
+To:     Lennert Buytenhek <buytenh@wantstofly.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Joerg Roedel <joro@8bytes.org>, iommu@lists.linux.dev
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Scarlett Gourley <scarlett@arista.com>,
+        James Sewart <jamessewart@arista.com>,
+        Jack O'Sullivan <jack@arista.com>
+References: <Yvo2dfpEh/WC+Wrr@wantstofly.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <Yvo2dfpEh/WC+Wrr@wantstofly.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4ptO3BKkSCoh7-5bQX2n7qnM51LmKpyR
-X-Proofpoint-ORIG-GUID: SjJwR0iv4r6SJJUKhXKap-xyAeb2ZD_C
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- lowpriorityscore=0 clxscore=1015 mlxscore=0 spamscore=0 mlxlogscore=999
- phishscore=0 priorityscore=1501 suspectscore=0 malwarescore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208150051
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/15/22 02:48, Coiby Xu wrote:
-> I can confirm this patch set fixes an issue that guest kdump kernel
-> crashes on POWER9 host by applying it to 5.19.1 (there is a conflict
-> when applying this patch set to latest kernel i.e. 6.0.0-rc1)
-
-I rebased it. 2 of the borrowed patches disappeared now since they are 
-upstream already and the rest applied without conflict...
-
+On 8/15/22 05:05, Lennert Buytenhek wrote:
+> On a build of 7ebfc85e2cd7 ("Merge tag 'net-6.0-rc1' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net"), with
+> CONFIG_INTEL_IOMMU_DEBUGFS enabled, I am seeing the lockdep splat
+> below when an I/O page fault occurs on a machine with an Intel
+> IOMMU in it.
 > 
-> Tested-by: Coiby Xu <coxu@redhat.com>
+> The issue seems to be the klist iterator functions using
+> spin_*lock_irq*() but the klist insertion functions using
+> spin_*lock(), combined with the Intel DMAR IOMMU driver iterating
+> over klists from atomic (hardirq) context as of commit 8ac0b64b9735
+> ("iommu/vt-d: Use pci_get_domain_bus_and_slot() in pgtable_walk()")
+> when CONFIG_INTEL_IOMMU_DEBUGFS is enabled, where
+> pci_get_domain_bus_and_slot() calls into bus_find_device() which
+> iterates over klists.
+> 
+> I found this commit from 2018:
+> 
+> 	commit 624fa7790f80575a4ec28fbdb2034097dc18d051
+> 	Author: Bart Van Assche <bvanassche@acm.org>
+> 	Date:   Fri Jun 22 14:54:49 2018 -0700
+> 
+> 	    scsi: klist: Make it safe to use klists in atomic context
+> 
+> This commit switched lib/klist.c:klist_{prev,next} from
+> spin_{,un}lock() to spin_{lock_irqsave,unlock_irqrestore}(), but left
+> the spin_{,un}lock() calls in add_{head,tail}() untouched.
+> 
+> The simplest fix for this would be to switch lib/klist.c:add_{head,tail}()
+> over to use the IRQ-safe spinlock variants as well?
 
-Thanks.
+Another possibility would be to evaluate whether it is safe to revert 
+commit 624fa7790f80 ("scsi: klist: Make it safe to use klists in atomic 
+context"). That commit is no longer needed by the SRP transport driver 
+since the legacy block layer has been removed from the kernel.
+
+Thanks,
+
+Bart.
+
+

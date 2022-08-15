@@ -2,80 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7549F594596
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990FC5945C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350688AbiHOWkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 18:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54716 "EHLO
+        id S1351234AbiHOWlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 18:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349951AbiHOWek (ORCPT
+        with ESMTP id S1350817AbiHOWhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 18:34:40 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B7272B4D
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 12:49:38 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id tl27so15276419ejc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 12:49:38 -0700 (PDT)
+        Mon, 15 Aug 2022 18:37:11 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5681306AC;
+        Mon, 15 Aug 2022 12:50:33 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id p18so7235408plr.8;
+        Mon, 15 Aug 2022 12:50:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=m67EJff98GODNT9Ex0/hz32xjPCkaX4RTb2W/H22b6A=;
-        b=vZ3KSlgu2w4W+/oYxGdQqXPiH0C9jBErZhMcjLi3pYC6RObHOgwGPcH8C5rXhea5um
-         84FUWrgGpfHAyKuOe3nLaTV+qpTY1Nlf1dPHwwMJE2JrGO5fyHqTUbUHqS+OdOSIbFOZ
-         T+QhOu2Rj0jYqwo2Mbbj0P3dhwRWETQPJFftMThrpLpAcadF96T2VJFNevi1MpjkZYtl
-         acKXd5wT89G49ASaXEzs33kqxSkURPyGT0wUi48M8vcERJqlOb5hoJ9eoJWMsSmMTxnE
-         9M0Vrq688IdVfZs0gsn/6VBgK+gH9PgqPT5cliJQw2bRZcZhFeclSV3oBdjOaM0zICoS
-         vkYA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=Di1CBe/l3lFU1XEMEHMD/NMLKrrpGfsfoqHbgdL41rY=;
+        b=JuMvrFxcpiKSsluaG1sm5UeOdp2pC3giGOS2OG59Y//fuQbFRfELDeH/pCcBIswiDf
+         lZAf9nK/Y2R/Slxxx4YUgrO+F12ef80ywTcQLYTu8qeuofUcBPT7wsZnHVA+pr4+0/Cj
+         2tUC4IQVIStZaEDFenvFjtb8mmfyzTXMYIyz/i28Sb2IcML8EkxfwWRAP/3mhdWUdJG5
+         VVHotdeDOBc2ap2gYTcc16AbrAOrCJwUGwpW0kqck33YQQZ/msYuYMqPoV3dfpYUAbdG
+         l7XZwTBXqp8itTZ6ESNEpnA/05+OnSneaC/vjjcsmmudVYim9hPHM6KvxdLxnmzlWVOM
+         Qjxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=m67EJff98GODNT9Ex0/hz32xjPCkaX4RTb2W/H22b6A=;
-        b=2zxWWgHrUJIHr8drt3+JaKwg1kol/hDONczvNeFPHNdGhV6vVJmRPBShOjMLLSZOGe
-         aLesYv8tEDuRZJKd3tdqSdEWJzzDe14/qzlfyEBsZkKsXPfaEu7L6K8ukBJqvQtlFiO+
-         toD5zRdIh9nN8EmDzZ49pN8h3DKAZ72ggYrbZkNXBKFKm4+bCBgL/9razKeS5mfFAuPy
-         K5vsj7qUPngVNgzxCN/n3oc0TQst9glRXvkKZCiMEarhaxBJSnPm8q5t/ZSG1KjdkBvE
-         AgToOuIoPnaUshoXyc4NK8sse4rkMslJOjTiXMnhs+57N7v/Wmk691ZOj/gWSrnkH7iC
-         CLBw==
-X-Gm-Message-State: ACgBeo0JeNYUF9evIG2KOZG7p3lq4HY3m0kImrZAbx76EJ1LXBptgY6s
-        e7vZZvKToquFQ3OWhMHlpmKsTEPRO5SOaP7bxiLEiA==
-X-Google-Smtp-Source: AA6agR6q5mjwo1Y+kcRShH4sdgxadLS7IVIeRxqgxtvrwGWYPB0p9HIKRFxe3O4/pRVTR8kR2RLCstZitIhQR8D+UYA=
-X-Received: by 2002:a17:906:5d0b:b0:731:3310:4188 with SMTP id
- g11-20020a1709065d0b00b0073133104188mr11564211ejt.208.1660592965944; Mon, 15
- Aug 2022 12:49:25 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=Di1CBe/l3lFU1XEMEHMD/NMLKrrpGfsfoqHbgdL41rY=;
+        b=1SfrJUrADimY6sR5KcE/VuHa6d+C7K3gPr+r+TpiByTeV268iEsn0bk/q4/Mh8YhD1
+         jBEE0+ZaRwhZotL9vEDR+W9F+m+zf6sjhkgjeqZG1ROb3pJZ62lcrDXtO3rLGv97vD8k
+         K2uT8RsIM5MDkf3dRf9Q1k7lTi66xYb8zPzt38tOVyChsDcQsghw8LBpAjFz7fVlonWj
+         Hdg4AaQAWQTjWKSlSIg/7CUTDY689NnodX0fZijDipTEWSiy2oNV0Dq3AkP8ubNoSJl1
+         b9JM0i8XVSDLBVOu6MH6bVGFQHzGc5hs0xdBDy8l5n8xBU4aP8q+6doLa76nrRl2gMDA
+         zlvg==
+X-Gm-Message-State: ACgBeo3twqA0ZIOefX3L9duv83XT54z8qr2i0Gm31Cj52JXAK2smUQ6X
+        0dzwEkGp7D2UYAe101pxxaE=
+X-Google-Smtp-Source: AA6agR4R1QdI6pW/aafCRuGM/0QFfLfWgDKOb+nYbwM1XcyQTAJaJsWfdgHpO+kUWsnlfWUBKtOq6A==
+X-Received: by 2002:a17:902:8f8a:b0:170:8df4:eebd with SMTP id z10-20020a1709028f8a00b001708df4eebdmr18681986plo.116.1660593032457;
+        Mon, 15 Aug 2022 12:50:32 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:3a69])
+        by smtp.gmail.com with ESMTPSA id b14-20020a170902650e00b0016c06a10861sm7351319plk.74.2022.08.15.12.50.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 12:50:31 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 15 Aug 2022 09:50:30 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>, corbet@lwn.net,
+        surenb@google.com, mingo@redhat.com, peterz@infradead.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        songmuchun@bytedance.com
+Subject: Re: [PATCH v2 09/10] sched/psi: per-cgroup PSI stats
+ disable/re-enable interface
+Message-ID: <YvqjhqJQi2J8RG3X@slm.duckdns.org>
+References: <20220808110341.15799-1-zhouchengming@bytedance.com>
+ <20220808110341.15799-10-zhouchengming@bytedance.com>
+ <YvprI6ZL8dVWGyBO@cmpxchg.org>
 MIME-Version: 1.0
-References: <20220810111037.280959-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220810111037.280959-1-krzysztof.kozlowski@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 15 Aug 2022 21:49:14 +0200
-Message-ID: <CACRpkda9_BSV+ZR0nnfv=6hFOacrE5UAtM-V-g_2Y5bWDTSvSQ@mail.gmail.com>
-Subject: Re: [PATCH] ARM: dts: ste: ux500: align SPI node name with dtschema
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvprI6ZL8dVWGyBO@cmpxchg.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 1:10 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+Hello,
 
-> The node names should be generic and DT schema expects certain pattern.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Mon, Aug 15, 2022 at 11:49:55AM -0400, Johannes Weiner wrote:
+> I think it should also add/remove the pressure files when enabling and
+> disabling the aggregation, since their contents would be stale and
+> misleading.
+> 
+> Take a look at cgroup_add_dfl_cftypes() and cgroup_rm_cftypes()
 
-Patch applied!
+The problem with adding cftypes dynamically is that it can fail, which isn't
+the end of the world here but still kinda sucks. I think what we actually
+wanna do is hiding and unhiding while keeping all the data structures in
+place which is needed somewhere else anyway.
 
-Yours,
-Linus Walleij
+Thanks.
+
+-- 
+tejun

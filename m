@@ -2,72 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 544F1594E82
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 04:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3539594E85
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 04:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233481AbiHPCJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 22:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
+        id S233671AbiHPCM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 22:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241176AbiHPCJ3 (ORCPT
+        with ESMTP id S233525AbiHPCMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 22:09:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2CF5822F1EA
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 15:04:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660601095;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=lyQQM+55ZldD7H6umrPU2pn/Ul/3O7z+T5LMRSIVXr0=;
-        b=SxpFIraaZIZckWZ9w7a9QR/f9X6As3Bo3ElBmSJDQfz5IOrnOCrpSXPIjEpRAWBQJEXvRd
-        ZYBfufRh5WSH/1Aayx+GG7FbTRVDd3gME1NuknSS6R+4sEk1q6GotjVoaZ+xYwyIo4ZoZS
-        BGsZRM6O72ep02Mu/OoyKOV1jeKrug0=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-237-XZicoZ8eNgSUZlnl1zfhMA-1; Mon, 15 Aug 2022 18:04:53 -0400
-X-MC-Unique: XZicoZ8eNgSUZlnl1zfhMA-1
-Received: by mail-wm1-f70.google.com with SMTP id 133-20020a1c028b000000b003a5f307844bso1311481wmc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 15:04:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=lyQQM+55ZldD7H6umrPU2pn/Ul/3O7z+T5LMRSIVXr0=;
-        b=rLmzTC0xsAH0Tst4dVCz61qTjCpqnGVVAX8dzaP1/bxlwP1sxRY/FrJkPbEzqK8NNh
-         ArQbfhU9czZKZgVyB8jz1Sw/o52tYgPoB4IWYbHHwlfuMp/VweiWFzl5iVbTiZDZ8osB
-         qOg96KkMXqk++u+VISXPo+K9GlRbN2NMTFPPWiR8sTIJiO5EjBZ5T9DXoxtpJnk6WR9f
-         cV46+1WJNtI4XzQzw7eV9ubtnqMAiN075808mHLHMSAhsFvnsynEC21I78ZDN3ImHI36
-         TF5FH3E3fn5iEcyV37lnV2FE5rFNQwlWVWmhqzb4WUQyHdKq+lMaVbzeKBrz3AW+fBRr
-         KlWg==
-X-Gm-Message-State: ACgBeo0MfbUI34eYm5WE46AU2h8ip34CSJr53mxUmZ7wIVDo3x/Ha6Im
-        WlRGT5jBy2y1AjJ4aDo/S3lJ+SbnEwfrCXF9FJTI6y/O19h6Hsc7PmUhnHdm3L5a8c+jhPrKnWy
-        NcoJHa7jgY96wq0ItNjJfj2XJV72hXA/0xc4Fke5KT5KpPwSeUAkQ4N+8oEHtVq20fOtCTg==
-X-Received: by 2002:a05:600c:5107:b0:3a6:72a:e63a with SMTP id o7-20020a05600c510700b003a6072ae63amr194374wms.204.1660601092548;
-        Mon, 15 Aug 2022 15:04:52 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6PUhV7WZdq3IgqAnAv21g/kOlOq56EKtk/N9dRgjydoQVgIDJVhN0tVySUIn3OBVrOOkFoZg==
-X-Received: by 2002:a05:600c:5107:b0:3a6:72a:e63a with SMTP id o7-20020a05600c510700b003a6072ae63amr194361wms.204.1660601092225;
-        Mon, 15 Aug 2022 15:04:52 -0700 (PDT)
-Received: from redhat.com ([2.55.43.215])
-        by smtp.gmail.com with ESMTPSA id y5-20020adff6c5000000b0021b970a68f9sm8189495wrp.26.2022.08.15.15.04.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 15:04:51 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 18:04:49 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH] virtio: drop vp_legacy_set_queue_size
-Message-ID: <20220815220447.155860-1-mst@redhat.com>
+        Mon, 15 Aug 2022 22:12:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46542118C8D
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 15:08:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E84BB811BF
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:08:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1721FC433C1;
+        Mon, 15 Aug 2022 22:08:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660601329;
+        bh=DLDMIxJIJu0DBH9pCLM/6Am+PbmnnTYYn9x5d4S0a2E=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=RcabeOCb09dImPV6nUd8KymWvsNNtNdVrDZ3vUt163RG9C9Uw6L/l7vSOaR1rx2gr
+         TLqdVI/fxiPVET9TTohx1dOFByRv0R6Bwn1nVmEOL8BNViJnbuG20Tl/miq+l4UkUO
+         qI4GaxCgm7lCARysRZDV2mrw009iiDnUHbwsZq+VnuRh6qW9cunF1u5IL+Zs3+iFHM
+         N4/tSQ+SlF3AqH/F4hAtIHEM1guC4ZNxjTzSqZhwbJsuAvxDdEK2amTy+teSzcklyN
+         Q95ILn4U0LMTORF1P7lXwbBYO5uZjkcXefT65wN/kDPOjXVKLpeSEVUbMJyYZoeQ7x
+         sggoJ0Z14oFIg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc:     alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220815113346.3805075-1-rf@opensource.cirrus.com>
+References: <20220815113346.3805075-1-rf@opensource.cirrus.com>
+Subject: Re: [PATCH] ASoC: soc-utils: Improve kerneldoc for snd_soc_tdm_params_to_bclk()
+Message-Id: <166060132881.914979.11863568776659530881.b4-ty@kernel.org>
+Date:   Mon, 15 Aug 2022 23:08:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
-X-Mutt-Fcc: =sent
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fe10a
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,26 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's actually no way to set queue size on legacy virtio pci.
+On Mon, 15 Aug 2022 12:33:46 +0100, Richard Fitzgerald wrote:
+> The statement that snd_soc_tdm_params_to_bclk() is equivalent to
+> snd_soc_params_to_bclk() if tdm_width==tdm_slots==0 is not accurate,
+> it is only true is slot_multiple is also <2.
+> 
+> However, the description of special-case behaviour in terms of pairs of
+> tdm_width and tdm_slot values is not particularly helpful so we might as
+> well take the opportunity to rework the description to say the same thing
+> in a simpler way. The behaviour of a pair of values is obvious from a
+> description of each argument. At the same time make a few edits to clarify
+> the rest of the description.
+> 
+> [...]
 
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
----
- include/linux/virtio_pci_legacy.h | 2 --
- 1 file changed, 2 deletions(-)
+Applied to
 
-diff --git a/include/linux/virtio_pci_legacy.h b/include/linux/virtio_pci_legacy.h
-index e5d665faf00e..a8dc757d0367 100644
---- a/include/linux/virtio_pci_legacy.h
-+++ b/include/linux/virtio_pci_legacy.h
-@@ -32,8 +32,6 @@ void vp_legacy_set_queue_address(struct virtio_pci_legacy_device *ldev,
- 			     u16 index, u32 queue_pfn);
- bool vp_legacy_get_queue_enable(struct virtio_pci_legacy_device *ldev,
- 				u16 idx);
--void vp_legacy_set_queue_size(struct virtio_pci_legacy_device *ldev,
--			      u16 idx, u16 size);
- u16 vp_legacy_get_queue_size(struct virtio_pci_legacy_device *ldev,
- 			     u16 idx);
- int vp_legacy_probe(struct virtio_pci_legacy_device *ldev);
--- 
-MST
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
+Thanks!
+
+[1/1] ASoC: soc-utils: Improve kerneldoc for snd_soc_tdm_params_to_bclk()
+      commit: efe30e2cb6ff87467389cece8ce604f6601059f9
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

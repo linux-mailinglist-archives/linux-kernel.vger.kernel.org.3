@@ -2,136 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D4F5931B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A55CA5931BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbiHOPX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39608 "EHLO
+        id S230375AbiHOP1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiHOPX1 (ORCPT
+        with ESMTP id S229981AbiHOP1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:23:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1923127156
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:23:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660577006;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KTWFb/xozwZ/9TO1t27BpD9rjZxXL2g2toO6qXFlfc4=;
-        b=I8m1tZpKFzzFrjeCoW2mMZIoNquvyNrsOYS7j97ZkayidiUksD2mZQTkPo7MGP7dgLjufw
-        YDNWKubfGvG5qWTFexb5NhhzA0csBbQWp2S9tC2y/IovkYix4wbOhkF9fWFkuXK7BO9hjC
-        6ozawpOYRDAi+Q83dMdXcH8oMwjTZn8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-517-nn_4UGYaOCWUHZH4POrdEg-1; Mon, 15 Aug 2022 11:23:23 -0400
-X-MC-Unique: nn_4UGYaOCWUHZH4POrdEg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2B4E73C01E16;
-        Mon, 15 Aug 2022 15:23:22 +0000 (UTC)
-Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8F9FF2166B26;
-        Mon, 15 Aug 2022 15:23:21 +0000 (UTC)
-Message-ID: <64276639-c6bc-f2ab-8e3b-0c2a36fbe0ad@redhat.com>
-Date:   Mon, 15 Aug 2022 11:23:21 -0400
+        Mon, 15 Aug 2022 11:27:01 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8001261A
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:26:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OgmVgkZQ4f9j8kJY1JYsGRyh8hUz7pYvx+5nxAbDqPw=; b=d6RBhnrKAtZIAE2UNvwWOW320t
+        9WqbrT8nU2ZOLrj3UtbYrXC5Ir9wv3WItoyYZTj8yNquxvxEhGzaHzXz4aREJJXQk166X7EzzcedI
+        l0/olwqn69GsH2OqYJy7bpuu7QuVMd8DkyCfSuQsmWt64vXEn48gCUDSp17+fqHGhhFD7epJJtCjm
+        dN04Q0wWU29eCyhDTIrpuZ4HjE3M2LAm/cBNo9NpjWD9TGI5QY0ZdiEGNcTTre0mOVI/DCKIPd84/
+        H7p9kBC4HcQccJ+ktCHTlNb88T/tE7IQJVzJ2phFt6A+KhsbHuQ3dIrw2USKz6958+Hzf7u0qI8HL
+        wOmSMtcg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oNbzK-005pDP-3A; Mon, 15 Aug 2022 15:26:46 +0000
+Date:   Mon, 15 Aug 2022 16:26:46 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Charan Teja Kalla <quic_charante@quicinc.com>,
+        akpm@linux-foundation.org, david@redhat.com,
+        pasha.tatashin@soleen.com, sieberf@amazon.com, shakeelb@google.com,
+        sjpark@amazon.de, dhowells@redhat.com, quic_pkondeti@quicinc.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH V3] mm: fix use-after free of page_ext after race with
+ memory-offline
+Message-ID: <YvplthTjM8Ez5DIq@casper.infradead.org>
+References: <1660056403-20894-1-git-send-email-quic_charante@quicinc.com>
+ <Yvpg6odyDsXrjw5i@dhcp22.suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 1/3] sched: Use user_cpus_ptr for saving user provided
- cpumask in sched_setaffinity()
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20220812203929.364341-1-longman@redhat.com>
- <20220812203929.364341-2-longman@redhat.com>
- <YvoKa3tbOaszsp1y@worktop.programming.kicks-ass.net>
- <401bae73-3063-e0ab-c288-2c6e3be75fc5@redhat.com>
- <YvpXbofPloXkHWdq@worktop.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YvpXbofPloXkHWdq@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yvpg6odyDsXrjw5i@dhcp22.suse.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/15/22 10:25, Peter Zijlstra wrote:
-> On Mon, Aug 15, 2022 at 09:52:27AM -0400, Waiman Long wrote:
->> On 8/15/22 04:57, Peter Zijlstra wrote:
->>> On Fri, Aug 12, 2022 at 04:39:27PM -0400, Waiman Long wrote:
->>>> The user_cpus_ptr field is added by commit b90ca8badbd1 ("sched:
->>>> Introduce task_struct::user_cpus_ptr to track requested affinity"). It
->>>> is currently used only by arm64 arch due to possible asymmetric cpu
->>>> setup. This patch extends its usage to save user provided cpumask when
->>>> sched_setaffinity() is called for all arches.
->>>>
->>>> To preserve the existing arm64 use case, a new cpus_affinity_set flag is
->>>> added to differentiate if user_cpus_ptr is set up by sched_setaffinity()
->>>> or by force_compatible_cpus_allowed_ptr(). user_cpus_ptr
->>>> set by sched_setaffinity() has priority and won't be
->>>> overwritten by force_compatible_cpus_allowed_ptr() or
->>>> relax_compatible_cpus_allowed_ptr().
->>> What why ?! The only possible case where
->>> restrict_cpus_allowed_ptr() will now need that weird new state is when
->>> the affinity has never been set before, in that case cpus_ptr should be
->>> possible_mask.
->> Since I don't have a full history for this particular patch series that add
->> user_cpus_ptr, I am hesitant to change the current behavior for arm64
->> systems. However, given the statement that user_cpus_ptr is for tracking
->> "requested affinity" which I assume is when user applications call
->> sched_setaffinity(). It does make sense we may not really need this if
->> sched_setaffinity() is never called.
-> So it comes from the asymmetric arm stuff, where only little cores can
-> still run arm32 code. This means that on those machines, 32bit code
-> needs to be contrained so a subset of CPUs.
->
-> A direct consequence of that was that if you have any 32bit program in
-> your process hierarchy, you loose the big cores from you affinity mask.
->
-> For some reason that wasn't popular..  Hence the save/restore of cpumasks.
+On Mon, Aug 15, 2022 at 05:06:18PM +0200, Michal Hocko wrote:
+> > + * This function gives proper page_ext of a memory section
+> > + * during race with the offline operation on a memory block
+> > + * this section falls into. Not using this function to get
+> > + * page_ext of a page, in code paths where extra refcount
+> > + * is not taken on that page eg: pfn walking, can lead to
+> > + * use-after-free access of page_ext.
+> 
+> I do not think this is really useful comment, it goes into way too much
+> detail about memory hotplug yet not enough to actually understand the
+> interaction because there are no references to the actual
+> synchronization scheme. I would go with something like:
+> 
+> /*
+>  * Get a page_ext associated with the given page. Returns NULL if
+>  * no such page_ext exists otherwise ensures that the page_ext will
+>  * stay alive until page_ext_put is called.
+>  * This implies a non-sleeping context.
+>  */
 
-I am aware of that part of the patch series.
+I'd go further and turn this into kernel-doc:
 
-
->>> Please just make a single consistent rule and don't make weird corner
->>> cases like this.
->> I will take a closer look to try to simplify the rule here.
-> I think something like:
->
-> 	mask = p->user_cpus_ptr;
-> 	if (!mask)
-> 		mask = &init_task.cpus_mask;
->
-> 	// impose cpuset masks
->
-> should 'just-work'.
-
-I think that should work in relax_compatible_cpus_allowed_ptr().
-
-Thanks,
-Longman
+/**
+ * page_ext_get() - Get the extended information for a page.
+ * @page: The page we're interested in.
+ *
+ * Ensures that the page_ext will remain valid until page_ext_put()
+ * is called.
+ * 
+ * Return: NULL if no page_ext exists for this page.
+ * Context: Any context.  Caller may not sleep until they have called
+ * page_ext_put().
+ */
 

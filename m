@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A410593999
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2C5593647
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244092AbiHOSw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 14:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
+        id S244176AbiHOSww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 14:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244280AbiHOSq7 (ORCPT
+        with ESMTP id S243815AbiHOSrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 14:46:59 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D71941D32
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:28:27 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-11ba6e79dd1so3907139fac.12
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:28:27 -0700 (PDT)
+        Mon, 15 Aug 2022 14:47:19 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCEB422D3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:28:32 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id u14so9434865oie.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:28:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=4BgACqig1Mi45Cs+/G7h/s0hfyaq7pp4CtuWT3zQedA=;
-        b=RKQZbu7SpMqvE8sqFweu7O4+/cwvBEkat1Mvb1JDv3PnHaFXHHobLfNADPKkin/oGl
-         SeFRrar+0CyylgfIi9LXMDw0frFLWjYho/RvsG1YH2ISLAA8LXzdwgo0hCz0RBecugT2
-         FRTA4p46zLsDXbAidh5VLet1ValWBamov2Fspc64VAsPg19y7kU0wagtr55h4A6Fjf15
-         w0jAO1bjk0FqBLRvfFe92UyF+vNz6LwN2Vl9fyCINCs1c5N824PSsKYAoklpzHXP+unf
-         NZmWonsJBGtRRGdx35unuA0yp8sZggsxJHUi6CYi7+n2vorTpy81zQkUUoLGXE5tORQg
-         vehw==
+        bh=0+JtMsU2Pn0zu2wwFZknm1ETM7jmS8MJnZsirTHcweU=;
+        b=nRs9HJAXTO9lHEjOI+iq0RH9RlnXkpWR+GsFpey5SuNfCsZOfa5afRBNWWYYH+ZCJn
+         cqvw9AFg4owIoV6E+y4L0fTd0z5deLeCJN88M9Actjm0tlkMSWYZoYKrlgK6NAWyvAa5
+         CJ/PX0MgIjoRVIoZovsy8dh9PjLmq4U8R0QRnFoXpk0rXY563pu6rYBPeVSg5Akg8mcl
+         Y8xilbc/awP0bGBWZXLy7RZJGuWq0zrZgOYpM4FLkyiR6rEkw+tTkF6ZCxjbQotVtLBs
+         yevDp5JETYO3ZzTZsnrtsi8W0mJO+3kJNmjxmwJP0YlrKOIeptxKZnXZzxIFTI6bCQGc
+         MxEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=4BgACqig1Mi45Cs+/G7h/s0hfyaq7pp4CtuWT3zQedA=;
-        b=BZFTrvj2HGNgUq6iq24tLUWBvCPpuhqIOBgajnnYmf0vqfQVBKEqGnUIMRbPAUeCQI
-         xXFb0VCts885/ZmxA/ueWz12eo0ZhxShMi0aR6LtykNKXAWTEfBerrNJ3oq5BoXk/SYp
-         5d2iUWbxP4pWXgIDf2em5MhzsEmfG5x94TDu9YNuku6F+SXyMQyvL7s3WdX/75QWtNTk
-         /BsyprQQEx81RRsWv9Jh9S99fmcRG4YlzSOMtItX2qoQT7v87g08fVC4LqN5LzhOwawY
-         mNliE00hUsgYSH1i6lggXRZlzG6CXBnm+uTs5+8V12ZtwCEzz7lkbsUXpcxfm47+2fzL
-         f99A==
-X-Gm-Message-State: ACgBeo34sr/lonoMZD5nY3mC8HDtuXp1y4uFKTKWEXPmnYfNC9cT3tNl
-        w7B+JBsOoa19aLh56XCfkZcqV5NvEmohwT+X6s9akg==
-X-Google-Smtp-Source: AA6agR4TTqNoTeU03JIaC+2g5dNCzX/cvpfy1peGRPwAdfwv5xTLb4TGuLv7e+tDPquOFps3OgV/7nglTpV8rmFJvRo=
-X-Received: by 2002:a05:6870:65a7:b0:10e:d8ab:dd79 with SMTP id
- fp39-20020a05687065a700b0010ed8abdd79mr7576211oab.53.1660588106133; Mon, 15
- Aug 2022 11:28:26 -0700 (PDT)
+        bh=0+JtMsU2Pn0zu2wwFZknm1ETM7jmS8MJnZsirTHcweU=;
+        b=MzAm3ryHxiHz4tn+EZvfob6+pXXKP3mwvAcTFIJqO9m3c4vVaYgBokv8vubyTMTlyP
+         ndFnHtbMAtJz5njnQOTUwgO55Jun660k4vW7PY0Hoz2dYzrf45HMgzdqoEWl5FFvpK73
+         AZkGOIc44zZuIC+zgamDZR50ifTzfg1X435J3cu9LOi7WP7ly8EW4i6BBrN5CW7KAqJk
+         /eWOKNJTZWgF/GUA9pNdJsqypNLmP1fYS0SQbN5mnXCb/UgS1R/kZfHDIrwQOZgfseKx
+         Ir1I4Wod20lBlu0FoYi8qGq4LeDTfv4QsDhCzmDyL8HKoMhGFNkpHLMbUJRG2cJsmba0
+         HkFw==
+X-Gm-Message-State: ACgBeo2LaaFvulSdWwBYc1Qm/nDNkO//eHvEeKqDxD+2b7eNX5/qG9Wo
+        KWRMnbAQ41XthBYoh0dWsIyHjbyOvLu1nVpNwW+dD72rqps=
+X-Google-Smtp-Source: AA6agR7626L/pa4dy2T0F2o05pWhrOkIvj3kHjOlc+z1xZzsmVzmd761YvyMaN1OAaQ7b/kRZm7xbmB9h6cdTERnlXQ=
+X-Received: by 2002:aca:5e89:0:b0:344:80ab:1351 with SMTP id
+ s131-20020aca5e89000000b0034480ab1351mr4589823oib.105.1660588111543; Mon, 15
+ Aug 2022 11:28:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <6d75855ad4e2470e9ed99e0df21bc30f0c925a29.1658862932.git.christophe.jaillet@wanadoo.fr>
- <07a2dcebf8ede69b484103de8f9df043f158cffd.1658862932.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <07a2dcebf8ede69b484103de8f9df043f158cffd.1658862932.git.christophe.jaillet@wanadoo.fr>
+References: <20220729100524.387-1-chevron.li@bayhubtech.com>
+In-Reply-To: <20220729100524.387-1-chevron.li@bayhubtech.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 15 Aug 2022 20:27:50 +0200
-Message-ID: <CAPDyKFr8i1bbxoYpF7tFDMjbJzmL4ZS3v0=gVtc4enZs6S9fjw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] mmc: pxamci: Fix another error handling path in pxamci_probe()
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-mmc@vger.kernel.org
+Date:   Mon, 15 Aug 2022 20:27:54 +0200
+Message-ID: <CAPDyKFqGhgiAwzsia7aXO8Rb+1xYwfQDtLRj0ArncX=Qt8Tg1A@mail.gmail.com>
+Subject: Re: [PATCH V2 1/1] mmc: sdhci-pci-o2micro: fix some SD cards
+ compatibility issue at DDR50 mode
+To:     Chevron Li <chevron.li@bayhubtech.com>
+Cc:     adrian.hunter@intel.com, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shaper.liu@bayhubtech.com,
+        shirley.her@bayhubtech.com, xiaoguang.yu@bayhubtech.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,40 +68,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Jul 2022 at 21:15, Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
+On Fri, 29 Jul 2022 at 12:05, Chevron Li <chevron.li@bayhubtech.com> wrote:
 >
-> The commit in Fixes: has introduced an new error handling without branching
-> to the existing error handling path.
+> Bayhub chips have better compatibility support for SDR50 than DDR50
+> and both mode have the same R/W performance when clock frequency >= 100MHz.
+> Disable DDR50 mode and use SDR50 instead.
 >
-> Update it now and release some resources if pxamci_init_ocr() fails.
->
-> Fixes: 61951fd6cb49 ("mmc: pxamci: let mmc core handle regulators")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Signed-off-by: Chevron Li <chevron.li@bayhubtech.com>
 
-Applied for fixes and by adding stable tag, thanks!
+Applied for next, thanks!
 
 Kind regards
 Uffe
 
 
+
 > ---
->  drivers/mmc/host/pxamci.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Changes on V1:
+> 1.Set quirks2 flag SDHCI_QUIRK2_BROKEN_DDR50 for bayhub chips.
+> 2.Use bayhub hardware input tuning for SDR50 mode instead of standard tuning flow.
 >
-> diff --git a/drivers/mmc/host/pxamci.c b/drivers/mmc/host/pxamci.c
-> index 37bf362a0ed5..e4003f6058eb 100644
-> --- a/drivers/mmc/host/pxamci.c
-> +++ b/drivers/mmc/host/pxamci.c
-> @@ -672,7 +672,7 @@ static int pxamci_probe(struct platform_device *pdev)
+> Changes on V2:
+> Update commit format and information.
+> ---
+>  drivers/mmc/host/sdhci-pci-o2micro.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 >
->         ret = pxamci_init_ocr(host);
->         if (ret < 0)
-> -               return ret;
-> +               goto out;
+> diff --git a/drivers/mmc/host/sdhci-pci-o2micro.c b/drivers/mmc/host/sdhci-pci-o2micro.c
+> index 0d4d343dbb77..ad457cd9cbaa 100644
+> --- a/drivers/mmc/host/sdhci-pci-o2micro.c
+> +++ b/drivers/mmc/host/sdhci-pci-o2micro.c
+> @@ -317,11 +317,12 @@ static int sdhci_o2_execute_tuning(struct mmc_host *mmc, u32 opcode)
+>         u32 reg_val;
 >
->         mmc->caps = 0;
->         host->cmdat = 0;
+>         /*
+> -        * This handler only implements the eMMC tuning that is specific to
+> +        * This handler implements the hardware tuning that is specific to
+>          * this controller.  Fall back to the standard method for other TIMING.
+>          */
+>         if ((host->timing != MMC_TIMING_MMC_HS200) &&
+> -               (host->timing != MMC_TIMING_UHS_SDR104))
+> +               (host->timing != MMC_TIMING_UHS_SDR104) &&
+> +               (host->timing != MMC_TIMING_UHS_SDR50))
+>                 return sdhci_execute_tuning(mmc, opcode);
+>
+>         if (WARN_ON((opcode != MMC_SEND_TUNING_BLOCK_HS200) &&
+> @@ -631,6 +632,8 @@ static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
+>                 if (reg & 0x1)
+>                         host->quirks |= SDHCI_QUIRK_MULTIBLOCK_READ_ACMD12;
+>
+> +               host->quirks2 |= SDHCI_QUIRK2_BROKEN_DDR50;
+> +
+>                 sdhci_pci_o2_enable_msi(chip, host);
+>
+>                 if (chip->pdev->device == PCI_DEVICE_ID_O2_SEABIRD0) {
+>
+> base-commit: 68e77ffbfd06ae3ef8f2abf1c3b971383c866983
 > --
-> 2.34.1
+> 2.32.0
 >

@@ -2,79 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0874C5949A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 451FB594A5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355636AbiHOX52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53268 "EHLO
+        id S234016AbiHPAAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 20:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355356AbiHOXv5 (ORCPT
+        with ESMTP id S1355731AbiHOXwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:51:57 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC64C915C8;
-        Mon, 15 Aug 2022 13:16:39 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b988d329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:988d:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BB2E01EC02AD;
-        Mon, 15 Aug 2022 22:16:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660594593;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=KMD5ZZW0UGq2Obs996tfjGpJxzdAX0qHGDYWDHvQl+Q=;
-        b=L0QhKbmGsK+x7YnEkJO3Efs8BnoHyjMhN6fVG8HyEAb+v6OPMY5NRRmwfr1N+wTC4qwX+M
-        KR558BiStQ1xGsTbFHpB+zRz0BtpTb3YSrsxi+cGm36DHMlDsnCXuM26DderQLFaZ3r760
-        aF1onIFyJBQlok+JIWgrfndBo46rZbQ=
-Date:   Mon, 15 Aug 2022 22:16:29 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Johannes Erdfelt <johannes@erdfelt.com>,
-        Ingo Molnar <mingo@redhat.com>, live-patching@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: ftrace regression with CONFIG_UNWINDER_FRAME_POINTER
-Message-ID: <YvqpnfM9ZdRO6oXa@zn.tnic>
-References: <20220815195828.GE3948@sventech.com>
- <20220815160646.0dca7227@gandalf.local.home>
+        Mon, 15 Aug 2022 19:52:54 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721791593D5;
+        Mon, 15 Aug 2022 13:17:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=HkdesMUoZ61tMBtJNUxc0TT34BYc4cdbeRZcIwePCUI=; b=Gc1ER7H2A6KFPOBzMzB0DAXCiO
+        gtDR0SURShm2pT7GJzeB0PGkGb1o//myUl91rYDicg47L+TIsiPpH2h9Ck5ZrwQnZ7DD7nXLk4y9c
+        BfCINCjdWhJxWz9Sg8GU1zl2PGcWJRInRXMCwQhumyreUkbq5sdcJD7CY0GPIaJGDGyUhpDzFeyuJ
+        nijbOOwH0IS+r5G9YFs4U1WTjmoJpdXWiHoEe1n0UpiweIwhkXxDbWfEY4TOFh6SYNkjgSKrllX6f
+        IlKBf7bIjHRcYArc9DwNosV1TRtvhlGsGnNvpzDFXOZn958KvyKiyLnUYKCTvoja5mNx5iJkqwhY4
+        Adt9aplw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oNgWZ-0063or-EA; Mon, 15 Aug 2022 20:17:23 +0000
+Date:   Mon, 15 Aug 2022 21:17:23 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/7] Convert to filemap_get_folios_contig()
+Message-ID: <Yvqp05w5HOVQ9qLj@casper.infradead.org>
+References: <20220815185452.37447-1-vishal.moola@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220815160646.0dca7227@gandalf.local.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220815185452.37447-1-vishal.moola@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 04:06:46PM -0400, Steven Rostedt wrote:
-> On Mon, 15 Aug 2022 12:58:28 -0700
-> Johannes Erdfelt <johannes@erdfelt.com> wrote:
-> 
-> > I recently ran across an oops with ftrace when using the frame pointer
-> > unwinder. It does not affect Linus' tree (tested 6.0-rc1), but it does
-> > affect 5.15.60 and 5.10.136 (at least, have not tested other kernels).
-> > 
-> > It appears to be related to the recently merged retbleed mitigations,
-> 
-> If you believe this, then Cc those that are involved with those
-> mitigations, which I did.
+On Mon, Aug 15, 2022 at 11:54:45AM -0700, Vishal Moola (Oracle) wrote:
+> This patch series replaces find_get_pages_contig() with
+> filemap_get_folios_contig(). I've run xfstests on btrfs. I've also
+> tested the ramfs changes. I ran some xfstests on nilfs2, and its
+> seemingly fine although more testing may be beneficial.
 
-Sounds like this one:
-
-https://lore.kernel.org/all/Yu2H%2FRdg%2FU4bHWaY@quatroqueijos/
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+These all look good to me.  I'd like to see R-b tags from the various
+fs maintainers, but I intend to add this series to the folio tree for
+merging in 6.1.

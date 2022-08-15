@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C3D59348C
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 20:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13350593648
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:24:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbiHOSLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 14:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
+        id S1343700AbiHOTKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 15:10:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233157AbiHOSBG (ORCPT
+        with ESMTP id S1343583AbiHOTGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 14:01:06 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22DEB24F15;
-        Mon, 15 Aug 2022 11:01:02 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oNeOJ-0003w4-L3; Mon, 15 Aug 2022 20:00:44 +0200
-Message-ID: <a7d10605-87e3-c4bd-4a76-f07a04f5751c@leemhuis.info>
+        Mon, 15 Aug 2022 15:06:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0752F1;
+        Mon, 15 Aug 2022 11:35:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F6ED6111E;
+        Mon, 15 Aug 2022 18:35:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 288DFC433D6;
+        Mon, 15 Aug 2022 18:35:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660588516;
+        bh=OXU6gWN+TFhf/Eb7663ju9r2gZoBdA9HTNpedrm1o+g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bEpay/RxhWowvAPJRy/tK830BTo5dntv2aS0jfZ8nLfOX9eZI9/KF4bpnpBxn7Bde
+         tgaLfYX5TOVou8iHWluEd9KPfgYxVu169vvyWJ0jMP5wUeIR7BRN17D7WYbit1Jua3
+         WT9pT/Roc2VmURvJtwN56zc7lJ3WqSbxV/2ZuQaQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Quinn Tran <qutran@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 398/779] scsi: qla2xxx: edif: Synchronize NPIV deletion with authentication application
 Date:   Mon, 15 Aug 2022 20:00:42 +0200
+Message-Id: <20220815180354.283823621@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220815180337.130757997@linuxfoundation.org>
+References: <20220815180337.130757997@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
-To:     Chuck Zmudzinski <brchuckz@netscape.net>
-Cc:     jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        regressions@lists.linux.dev, xen-devel@lists.xenproject.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Juergen Gross <jgross@suse.com>
-References: <20220715142549.25223-1-jgross@suse.com>
- <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
- <a0ce2f59-b653-fa8b-a016-1335f05c86ae@netscape.net>
- <32ed59c9-c894-c426-dd27-3602625cf3b1@netscape.net>
- <c88ea08c-a9d5-ef6a-333a-db9e00c6da6f@suse.com>
- <bd66b5bc-4d07-d968-f46c-40cf624499a7@netscape.net>
- <a29a66e0-2075-8084-84ad-8bd3e8a9fd4a@netscape.net>
-Content-Language: en-US
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <a29a66e0-2075-8084-84ad-8bd3e8a9fd4a@netscape.net>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1660586462;6091e165;
-X-HE-SMSGID: 1oNeOJ-0003w4-L3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,38 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chuck!
+From: Quinn Tran <qutran@marvell.com>
 
-On 15.08.22 18:56, Chuck Zmudzinski wrote:
-> 
-> I am forwarding this to you to help you cut through the noise.
+[ Upstream commit cf79716e6636400ae38c37bc8a652b1e522abbba ]
 
-Sorry for not replying earlier, I ignored this thread and all other
-non-urgent mail in the past two weeks: I was on vacation until a few
-days ago and when I came home I had to deal with some other stuff first.
+Notify authentication application of a NPIV deletion event is about to
+occur. This allows app to perform cleanup.
 
-> I do not apologize for trying to get
-> the fix for this regression rolling again.
+Link: https://lore.kernel.org/r/20220607044627.19563-7-njavali@marvell.com
+Fixes: 9efea843a906 ("scsi: qla2xxx: edif: Add detection of secure device")
+Signed-off-by: Quinn Tran <qutran@marvell.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/qla2xxx/qla_edif_bsg.h | 2 ++
+ drivers/scsi/qla2xxx/qla_mid.c      | 6 +++++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-Yeah, it's important to ensure regressions don't simply fall though the
-cracks, but my advice in this case: let things rest for a few days now,
-the right people have the issue on their radar again; give them time to
-breath and work out a solution: it's not something that can be fixed
-easily within a few minutes by one person alone, as previous discussions
-have shown (also keep in mind that the merge window was open until
-yesterday, which keeps many maintainers quite busy).
+diff --git a/drivers/scsi/qla2xxx/qla_edif_bsg.h b/drivers/scsi/qla2xxx/qla_edif_bsg.h
+index 53026d82ebff..af9f1ffb1e4a 100644
+--- a/drivers/scsi/qla2xxx/qla_edif_bsg.h
++++ b/drivers/scsi/qla2xxx/qla_edif_bsg.h
+@@ -217,4 +217,6 @@ struct auth_complete_cmd {
+ 
+ #define RX_DELAY_DELETE_TIMEOUT 20
+ 
++#define FCH_EVT_VENDOR_UNIQUE_VPORT_DOWN  1
++
+ #endif	/* QLA_EDIF_BSG_H */
+diff --git a/drivers/scsi/qla2xxx/qla_mid.c b/drivers/scsi/qla2xxx/qla_mid.c
+index e6b5c4ccce97..eb43a5f1b399 100644
+--- a/drivers/scsi/qla2xxx/qla_mid.c
++++ b/drivers/scsi/qla2xxx/qla_mid.c
+@@ -166,9 +166,13 @@ qla24xx_disable_vp(scsi_qla_host_t *vha)
+ 	int ret = QLA_SUCCESS;
+ 	fc_port_t *fcport;
+ 
+-	if (vha->hw->flags.edif_enabled)
++	if (vha->hw->flags.edif_enabled) {
++		if (DBELL_ACTIVE(vha))
++			qla2x00_post_aen_work(vha, FCH_EVT_VENDOR_UNIQUE,
++			    FCH_EVT_VENDOR_UNIQUE_VPORT_DOWN);
+ 		/* delete sessions and flush sa_indexes */
+ 		qla2x00_wait_for_sess_deletion(vha);
++	}
+ 
+ 	if (vha->hw->flags.fw_started)
+ 		ret = qla24xx_control_vp(vha, VCE_COMMAND_DISABLE_VPS_LOGO_ALL);
+-- 
+2.35.1
 
-And FWIW: I've seen indicators that a solution to resolve this is
-hopefully pretty close now.
 
->  After all, it has been over three months
-> since the regression was first reported.
 
-Yes, things take/took to long, as a few things were far from ideal how
-this regression was dealt with. But that happens sometimes, we're all
-just humans and make errors. I did a few as well and learned a thing or
-two from then. Due to that I'll do a few things slightly different in
-the future to hopefully get similar situations resolved a lot quicker in
-the future.
-
-Ciao, Thorsten

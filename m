@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 930225928FD
+	by mail.lfdr.de (Postfix) with ESMTP id 00F5F5928FB
 	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 07:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240437AbiHOFJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 01:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50780 "EHLO
+        id S240475AbiHOFJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 01:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240377AbiHOFJD (ORCPT
+        with ESMTP id S240453AbiHOFJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 01:09:03 -0400
+        Mon, 15 Aug 2022 01:09:04 -0400
 Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED6515A35;
-        Sun, 14 Aug 2022 22:08:46 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id AAA5832004AE;
-        Mon, 15 Aug 2022 01:08:44 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6076D15FD7;
+        Sun, 14 Aug 2022 22:08:49 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 75A8732007CF;
+        Mon, 15 Aug 2022 01:08:47 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 15 Aug 2022 01:08:45 -0400
+  by compute5.internal (MEProxy); Mon, 15 Aug 2022 01:08:48 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1660540124; x=1660626524; bh=Xg
-        67cpVoKilHiV6W9sCyOWTKHbC+N6ZsdgHn/O7Wskg=; b=D89ga/moFrPMej9AGC
-        pD8F2k45vtUqUXuICHINrAJlkZAqAEZY+3/GRHCG0gGmlXRAFOXYDAfXhcUrg0Kw
-        5ebxBEnDTi65focBN2C380jvod+5WPVqZ6ZEOkR6z3EhxEmo0fylqWM3cJY/3bkC
-        aS5hPiP2YXcMLqJRSfluHkOgFZOlZvE5/qLzZ/PYj4cYllAIyuXeoyZAV8Xb+IO1
-        hP13wDQwjMG0lKRxtE/CqVhYkRHoA2sPwpr4ezN+eKY3WtuLrOlQ2qNJMDaBvVMx
-        MdOiMyBYBWi+86Mdt/5FYgqrA007Nwa6+qtZIWZfeqMgLNvlAAS3OFvmw3+l/hPZ
-        1R/g==
+        :subject:subject:to:to; s=fm2; t=1660540126; x=1660626526; bh=Mp
+        2QT1wJDeGU551ZuBsU28NUPyZSf6ZYCWPSZNp282o=; b=uEcpch5MyKTknvh30/
+        yO3rchgzbTdkSZiRT8QOvfHYiBHqUJSiD0i85VwTJYoC7/2Od3MO1GcIgpzCbCmc
+        +aLnoBcnKB4BmmG6GCFGfgoy0ZrGU///nIh/i0xDKddcAgSNqtZd4toVPY8rGAYu
+        Zq2ehLjdkoFQuK6OfxxcFpF+BBJsK/GEiNXQdEygRhOtbw2/M1G3lbYexk4y5FWP
+        EP8t/eSDV2sDfSguVkxks6WpRIXz0Ci5OPW3IW6SAQC3SxzzJ2ZSzthj8cqnsuC0
+        nw/CD2t+ivznlohFK/D2w32DWOKTKhCnjPkR7QSpXl1kUBEAeA8GPOpRiULyY+cV
+        BCqg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1660540124; x=1660626524; bh=Xg67cpVoKilHi
-        V6W9sCyOWTKHbC+N6ZsdgHn/O7Wskg=; b=ifIQL5okeajhNQ+a3b5osSpXdoxJe
-        PGb2qdjW3WSMVD98q607suhXOBSTI5yFcuqzWRG+Ie+GE2eUegt4TITjwhuZsWQF
-        ARs5FcDAMboaZGAHk/0z0bgd1Cw/PzkdIr161hjTp7G3Zdqji7JCanIdJ2wtVbI+
-        Zr+pZcY+EJeKqnnBuuJocEkh5ekwgC/aW+eOYuiH/Ks7Z0L2T5+whEOBkZNtgJ1E
-        BKToj6y1slatpEQWCcfZ8KINCethySfaELTZKCPCRCu0l9EbFlZyZ2+ahAQ8eIFc
-        /q0k4YFHq2F7Gfrp2MJFQRYN+g1+YSoq/c328wXOPuWbW4oU7visAY9Iw==
-X-ME-Sender: <xms:3NT5Yp-bztfOLiNQ785lhtPmrDcpqzizxShBGhj4Y09SdeuC2dhbXg>
-    <xme:3NT5Yts4UyNGT0XEPUWBwWfWMN7x11UA18XzzAtM_Wdvl8sWBKNdXgRumN5C8lwa7
-    N1AiY0bzLCrIEk5UA>
-X-ME-Received: <xmr:3NT5YnBPyBpBq3Qsvl7_r23YHmE6hjCU5ZGlhAxd0v_jZBfoVEcvtoBi1Z1hCF4JOmItJoNzrmWCuIGYwRV4-v2eXCyib__7YoH8g1I_3Ye1lbYlpnrExxXI3TmRX8pyQqHAbA>
+        :x-sasl-enc; s=fm1; t=1660540126; x=1660626526; bh=Mp2QT1wJDeGU5
+        51ZuBsU28NUPyZSf6ZYCWPSZNp282o=; b=B84LOjpT9frYbqDLt+ScHv8PASpWZ
+        ecChgDtNOKGpL3G0cloJSgUxkIcVPW89IPlrBcJAHFUwE6llDyZOlQQIYYAMAA1t
+        QYp7BkZN7oIrwGAeCTlcoGVFbNlhrUmY/gSbZdZOxoZ1w0WuMqi8Xcxs2cvcbA5Y
+        qN+FFMdI4zfQZMT5xSk5IkxWEztPbwppCGhSmpT6HVEN53ODuhGTzIRJoltctmNB
+        jpRe5aPnxYgN8OzEgdReJL5oFOf2IoZjzXP5h6BhD6J5MesZkgaCEooESQ2PxttX
+        +70XYOg1jIVaspS96TPxydFjPYsKNyZ0aIhOiAY3mDYkwqy5Jk71QPzZQ==
+X-ME-Sender: <xms:3tT5Yg0zE2Hd2KrDzDWlTdaVuJqKQvupp5DZ3i4d0XVhmxVbl__cnw>
+    <xme:3tT5YrGG_DIiDdXd1M57VkVwqa79AiVbcvF-TDndjyhw3xUzZymR93pw6n7C9tJow
+    8vwGn5KQyzgMlhOiQ>
+X-ME-Received: <xmr:3tT5Yo63FDcS_YGKXARPErMZbUjYdinJQ5ahwMfMCTj-Wl9HKgD-b1P6JuCjwIEZp2qu2WM1MxZVItrdFDsci_7aAX0ebRlJHA1IalwaoBfMhfp_9cCj9wQUAaaOj7M575MXIQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehuddgleehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
     vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
     ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
-    udefiedtveetnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrh
+    udefiedtveetnecuvehluhhsthgvrhfuihiivgepgeenucfrrghrrghmpehmrghilhhfrh
     homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:3NT5Ytfey_5LNiD51dPnMJ2b4PcrYmZ8QId53two-FXE-iUwBB84Aw>
-    <xmx:3NT5YuPPesPnvzGVljQub_6c4GwxnAHoFatTdppk5Oo7t_4MOOaQfQ>
-    <xmx:3NT5YvkRO5LoTgtNM6AduJGFyK18mrbsuQC07mwbBOfEQZ8I3SbYOw>
-    <xmx:3NT5YvEgEXsx5ONQkzZYQtmut_PGDQSTSFaTD5WPRRydtxEHDjMqfw>
+X-ME-Proxy: <xmx:3tT5Yp0nh7CWJNcLhV7XXxN6lflZ8Gw9SKkV_1OnfhViQgMUDzcALQ>
+    <xmx:3tT5YjGwIn4gFcytlwbYwUd_8iocDvIKMSJeS4F28-jLSYnP6fziKA>
+    <xmx:3tT5Yi-nI0uzNh819ORYbKJA8r8y1d1ZqVRuO5LyT4-3m8TYHIrp8Q>
+    <xmx:3tT5Yr-wyRJRNiYgldXvZoN9OpvtLZgDe4lJfm3RpwGwwy5t7xSawQ>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 Aug 2022 01:08:43 -0400 (EDT)
+ 15 Aug 2022 01:08:46 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -73,9 +73,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Samuel Holland <samuel@sholland.org>
-Subject: [PATCH 09/12] riscv: dts: allwinner: Add MangoPi MQ Pro devicetree
-Date:   Mon, 15 Aug 2022 00:08:12 -0500
-Message-Id: <20220815050815.22340-10-samuel@sholland.org>
+Subject: [PATCH 10/12] riscv: dts: allwinner: Add Dongshan Nezha STU devicetree
+Date:   Mon, 15 Aug 2022 00:08:13 -0500
+Message-Id: <20220815050815.22340-11-samuel@sholland.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220815050815.22340-1-samuel@sholland.org>
 References: <20220815050815.22340-1-samuel@sholland.org>
@@ -91,54 +91,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MangoPi MQ Pro is a tiny SBC with a layout compatible to the
-Raspberry Pi Zero. It includes the Allwinner D1 SoC, 512M or 1G of DDR3,
-and an RTL8723DS-based WiFi/Bluetooth module.
+The 100ask Dongshan Nezha STU is a system-on-module that can be used
+standalone or with a carrier board. The SoM provides gigabit Ethernet,
+HDMI, a USB peripheral port, and WiFi/Bluetooth via an RTL8723DS chip.
 
-The board also exposes GPIO Port E via a connector on the end of the
-board, which can support either a camera or an RMII Ethernet PHY. The
-additional regulators supply that connector.
+The "DIY" carrier board exposes almost every pin from the D1 SoC to 0.1"
+headers, but contains no digital circuitry, so it does not have its own
+devicetree.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
  arch/riscv/boot/dts/allwinner/Makefile        |   1 +
- .../allwinner/sun20i-d1-mangopi-mq-pro.dts    | 128 ++++++++++++++++++
- 2 files changed, 129 insertions(+)
- create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-mangopi-mq-pro.dts
+ .../sun20i-d1-dongshan-nezha-stu.dts          | 114 ++++++++++++++++++
+ 2 files changed, 115 insertions(+)
+ create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-dongshan-nezha-stu.dts
 
 diff --git a/arch/riscv/boot/dts/allwinner/Makefile b/arch/riscv/boot/dts/allwinner/Makefile
-index 300ada20c735..bcc304175753 100644
+index bcc304175753..530ef8adb8b0 100644
 --- a/arch/riscv/boot/dts/allwinner/Makefile
 +++ b/arch/riscv/boot/dts/allwinner/Makefile
-@@ -3,4 +3,5 @@ dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1-lichee-rv-86-panel-480p.dtb
+@@ -1,4 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
++dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1-dongshan-nezha-stu.dtb
+ dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1-lichee-rv-86-panel-480p.dtb
  dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1-lichee-rv-86-panel-720p.dtb
  dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1-lichee-rv-dock.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1-lichee-rv.dtb
-+dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1-mangopi-mq-pro.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1-nezha.dtb
-diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1-mangopi-mq-pro.dts b/arch/riscv/boot/dts/allwinner/sun20i-d1-mangopi-mq-pro.dts
+diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1-dongshan-nezha-stu.dts b/arch/riscv/boot/dts/allwinner/sun20i-d1-dongshan-nezha-stu.dts
 new file mode 100644
-index 000000000000..61a26d3db521
+index 000000000000..c3d06dfaa7c3
 --- /dev/null
-+++ b/arch/riscv/boot/dts/allwinner/sun20i-d1-mangopi-mq-pro.dts
-@@ -0,0 +1,128 @@
++++ b/arch/riscv/boot/dts/allwinner/sun20i-d1-dongshan-nezha-stu.dts
+@@ -0,0 +1,114 @@
 +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
 +// Copyright (C) 2022 Samuel Holland <samuel@sholland.org>
 +
 +/dts-v1/;
 +
 +#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/leds/common.h>
 +
 +#include "sun20i-d1.dtsi"
 +#include "sun20i-d1-common-regulators.dtsi"
 +
 +/ {
-+	model = "MangoPi MQ Pro";
-+	compatible = "widora,mangopi-mq-pro", "allwinner,sun20i-d1";
++	model = "Dongshan Nezha STU";
++	compatible = "100ask,dongshan-nezha-stu", "allwinner,sun20i-d1";
 +
 +	aliases {
-+		ethernet0 = &rtl8723ds;
++		ethernet0 = &emac;
 +		mmc0 = &mmc0;
 +		serial0 = &uart0;
 +	};
@@ -147,22 +148,30 @@ index 000000000000..61a26d3db521
 +		stdout-path = "serial0:115200n8";
 +	};
 +
-+	reg_avdd2v8: avdd2v8 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "avdd2v8";
-+		regulator-min-microvolt = <2800000>;
-+		regulator-max-microvolt = <2800000>;
-+		vin-supply = <&reg_vcc_3v3>;
++	leds {
++		compatible = "gpio-leds";
++
++		led-0 {
++			color = <LED_COLOR_ID_GREEN>;
++			function = LED_FUNCTION_STATUS;
++			gpios = <&pio 2 1 GPIO_ACTIVE_HIGH>; /* PC1 */
++		};
 +	};
 +
-+	reg_dvdd: dvdd {
++	reg_usbvbus: usbvbus {
 +		compatible = "regulator-fixed";
-+		regulator-name = "dvdd";
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1200000>;
-+		vin-supply = <&reg_vcc_3v3>;
++		regulator-name = "usbvbus";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		gpio = <&pio 3 19 GPIO_ACTIVE_HIGH>; /* PD19 */
++		enable-active-high;
++		vin-supply = <&reg_vcc>;
 +	};
 +
++	/*
++	 * This regulator is PWM-controlled, but the PWM controller is not
++	 * yet supported, so fix the regulator to its default voltage.
++	 */
 +	reg_vdd_cpu: vdd-cpu {
 +		compatible = "regulator-fixed";
 +		regulator-name = "vdd-cpu";
@@ -170,24 +179,35 @@ index 000000000000..61a26d3db521
 +		regulator-max-microvolt = <1100000>;
 +		vin-supply = <&reg_vcc>;
 +	};
-+
-+	wifi_pwrseq: wifi-pwrseq {
-+		compatible = "mmc-pwrseq-simple";
-+		reset-gpios = <&pio 6 17 GPIO_ACTIVE_LOW>; /* PG17 */
-+	};
 +};
 +
 +&cpu0 {
 +	cpu-supply = <&reg_vdd_cpu>;
 +};
 +
-+&ehci1 {
++&ehci0 {
 +	status = "okay";
 +};
 +
++&emac {
++	pinctrl-0 = <&rgmii_pe_pins>;
++	pinctrl-names = "default";
++	phy-handle = <&ext_rgmii_phy>;
++	phy-mode = "rgmii-id";
++	phy-supply = <&reg_vcc_3v3>;
++	status = "okay";
++};
++
++&mdio {
++	ext_rgmii_phy: ethernet-phy@1 {
++		compatible = "ethernet-phy-ieee802.3-c22";
++		reg = <1>;
++	};
++};
++
 +&mmc0 {
++	broken-cd;
 +	bus-width = <4>;
-+	cd-gpios = <&pio 5 6 GPIO_ACTIVE_HIGH>; /* PF6 */
 +	disable-wp;
 +	vmmc-supply = <&reg_vcc_3v3>;
 +	vqmmc-supply = <&reg_vcc_3v3>;
@@ -196,30 +216,8 @@ index 000000000000..61a26d3db521
 +	status = "okay";
 +};
 +
-+&mmc1 {
-+	bus-width = <4>;
-+	mmc-pwrseq = <&wifi_pwrseq>;
-+	non-removable;
-+	vmmc-supply = <&reg_vcc_3v3>;
-+	vqmmc-supply = <&reg_vcc_3v3>;
-+	pinctrl-0 = <&mmc1_pins>;
-+	pinctrl-names = "default";
++&ohci0 {
 +	status = "okay";
-+
-+	rtl8723ds: wifi@1 {
-+		reg = <1>;
-+		interrupt-parent = <&pio>;
-+		interrupts = <6 10 IRQ_TYPE_LEVEL_LOW>; /* PG10 */
-+		interrupt-names = "host-wake";
-+	};
-+};
-+
-+&ohci1 {
-+	status = "okay";
-+};
-+
-+&pio {
-+	vcc-pe-supply = <&reg_avdd2v8>;
 +};
 +
 +&uart0 {
@@ -228,27 +226,15 @@ index 000000000000..61a26d3db521
 +	status = "okay";
 +};
 +
-+&uart1 {
-+	uart-has-rtscts;
-+	pinctrl-0 = <&uart1_pg6_pins>, <&uart1_pg8_rts_cts_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+
-+	bluetooth {
-+		compatible = "realtek,rtl8723ds-bt";
-+		device-wake-gpios = <&pio 6 18 GPIO_ACTIVE_HIGH>; /* PG18 */
-+		enable-gpios = <&pio 6 15 GPIO_ACTIVE_HIGH>; /* PG15 */
-+		host-wake-gpios = <&pio 6 14 GPIO_ACTIVE_HIGH>; /* PG14 */
-+	};
-+};
-+
 +&usb_otg {
-+	dr_mode = "peripheral";
++	dr_mode = "otg";
 +	status = "okay";
 +};
 +
 +&usbphy {
-+	usb0_vbus-supply = <&reg_vcc>;
++	usb0_id_det-gpios = <&pio 3 21 GPIO_ACTIVE_HIGH>; /* PD21 */
++	usb0_vbus_det-gpios = <&pio 3 20 GPIO_ACTIVE_HIGH>; /* PD20 */
++	usb0_vbus-supply = <&reg_usbvbus>;
 +	status = "okay";
 +};
 -- 

@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD74A594D15
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ADCC594CD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244953AbiHPB0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 21:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
+        id S244992AbiHPB0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 21:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244731AbiHPB03 (ORCPT
+        with ESMTP id S244967AbiHPB0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 21:26:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 002621CDE60
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:16:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660598161;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SjOJ2ej9e5ff+yIWDnHyj8tdGUgmaChLo0SiD6yuEcY=;
-        b=PmdNmV1WU2chuatIzKMvCAc0b7SnSmH+CNv9pFdoVgeV4uIVdUH2Ynu8By5Hayas6vJCHm
-        2fV+OFOkTz/Y3FRwWLZbYaIyMC4Uz5OUSPYdiArjzNfjl3I3/UzSjd9UGwZyJlK97K+vHv
-        jkn3Q2ULrYukiXLaP+Q5zg6jJaP8DyQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-187-v-_WRz6XP0eM7eFaWMY6qg-1; Mon, 15 Aug 2022 17:15:56 -0400
-X-MC-Unique: v-_WRz6XP0eM7eFaWMY6qg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0180C101A54E;
-        Mon, 15 Aug 2022 21:15:56 +0000 (UTC)
-Received: from x2.localnet (unknown [10.22.34.141])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 61F4E492C3B;
-        Mon, 15 Aug 2022 21:15:55 +0000 (UTC)
-From:   Steve Grubb <sgrubb@redhat.com>
-To:     Richard Guy Briggs <rgb@redhat.com>
-Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@parisplace.org>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v4 4/4] fanotify,audit: deliver fan_info as a hex-encoded string
-Date:   Mon, 15 Aug 2022 17:15:54 -0400
-Message-ID: <4748539.GXAFRqVoOG@x2>
-Organization: Red Hat
-In-Reply-To: <YvRoNSL0snBY87/b@madcap2.tricolour.ca>
-References: <cover.1659996830.git.rgb@redhat.com> <5623945.DvuYhMxLoT@x2> <YvRoNSL0snBY87/b@madcap2.tricolour.ca>
+        Mon, 15 Aug 2022 21:26:31 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738ECDB7D4
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:16:03 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 73so7530041pgb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:16:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=8nOgaBzIlmfxFPStsMQfSkb4tmWBu2Jj/lkhaO8hCeU=;
+        b=mG28n59cEJ00FlMAyPe/A0+FvrzRw+iCQIb7KFfdKwCzoXJQgggYLI5cnnmepguMp+
+         aj/+jck3LQ6quN+0+gQM72IhFZWCT3XWLszCtcVoSFZrNHLOF2l3kQni7TqF03rHtpHt
+         XMc7mh3U3XbgGJTHBYXwvyo884+hDXJpspd4p1FNrV7ApoOMWIvjZhHMR2CwChNa0EIl
+         FuDg+xF2jD9cT9LmHlqebnXJIrum/ARn3liUXwTz/fe+ZZP2BCEHVzQwPuj/wNP4fy3t
+         DGJ4Ophm7/fqguXaGuyrqaODGr0I/9ZbetMzB7/yVy+YNbqa5OLzPh9TkRQ3XivEPTqP
+         0v+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=8nOgaBzIlmfxFPStsMQfSkb4tmWBu2Jj/lkhaO8hCeU=;
+        b=Ul7DT7IvLs4S8ST2DeTZqcu+XHsb7yIxd2czIuq0olf8gtU4jPw86JmCnU/HPF7EY/
+         aeLwaAPWOzql+Rf4srLDJeyNOfpgBKbBL3IR2LP4Mc9Pp/CJD5UgHpA3nb4pW8EYniKG
+         wqqTWkQKcawPBhtYvGiZ6qJoyitu4o+olrkgntIXN8cJjomTQTCK6DUfRwLm2D1HP0w4
+         xZwD53VAkMVGBoQbzZq7VDCsALwo6TvZYkBySWFhCmqAtWQKOsIXHl82ocWZyWPJJnDs
+         mpJyQCOjnfIptWRiL9zn5/TBd4FcCpUXxIJVwucdSV1z468FTKSxP9gjaxu0oZf3X0/F
+         pMgg==
+X-Gm-Message-State: ACgBeo3rHjaNXimikLLcngzfYDdhuZcz+AmHGB4U/7ambTGfurJgqQzf
+        y/Cr0e/rr6WInA13bW09pNuqTuCg1GQ=
+X-Google-Smtp-Source: AA6agR4tEusymmK37Mhm2Fxz6VsDZfjtY4S9tImlj6E5k+H/O1Z6vkwW+ku52NiS6br5bv1Opecbqg==
+X-Received: by 2002:a63:6384:0:b0:41d:3511:7fda with SMTP id x126-20020a636384000000b0041d35117fdamr15518112pgb.291.1660598162896;
+        Mon, 15 Aug 2022 14:16:02 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:3a69])
+        by smtp.gmail.com with ESMTPSA id t66-20020a625f45000000b0051be585ab1dsm6933910pfb.200.2022.08.15.14.16.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 14:16:02 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 15 Aug 2022 11:16:00 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Johannes Berg <johannes.berg@intel.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Hillf Danton <hdanton@sina.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] workqueue: don't skip lockdep work dependency in
+ cancel_work_sync()
+Message-ID: <Yvq3kH9b4IEyodRK@slm.duckdns.org>
+References: <21b9c1ac-64b7-7f4b-1e62-bf2f021fffcd@I-love.SAKURA.ne.jp>
+ <YuK78Jiy12BJG/Tp@slm.duckdns.org>
+ <0ad532b2-df5f-331a-ae7f-21460fc62fe2@I-love.SAKURA.ne.jp>
+ <97cbf8a9-d5e1-376f-6a49-3474871ea6b4@I-love.SAKURA.ne.jp>
+ <afa1ac2c-a023-a91e-e596-60931b38247e@I-love.SAKURA.ne.jp>
+ <7d034f7b-af42-4dbc-0887-60f4bdb3dcca@I-love.SAKURA.ne.jp>
+ <0a85696a-b0b9-0f4a-7c00-cd89edc9304c@I-love.SAKURA.ne.jp>
+ <77d47eed-6a22-7e81-59de-4d45852ca4de@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <77d47eed-6a22-7e81-59de-4d45852ca4de@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Richard,
-
-On Wednesday, August 10, 2022 10:23:49 PM EDT Richard Guy Briggs wrote:
-> > I compiled a new kernel and run old user space on this. The above event
-> > is
-> > exactly what I see in my audit logs. Why the fan_info=3F? I really would
-> > have expected 0. What if the actual rule number was 63? I think this
-> > will work better to leave everything 0 with old user space.
+On Fri, Jul 29, 2022 at 01:30:23PM +0900, Tetsuo Handa wrote:
+> Like Hillf Danton mentioned
 > 
-> Well, if it is to be consistently hex encoded, that corresponds to "?"
-
-I suppose this OK.
-
-> if it is to be interpreted as a string.  Since the fan_type is 0,
-> fan_info would be invalid, so a value of 0 would be entirely reasonable,
-> hex encoded to fan_info=00.  It could also be hex encoded to the string
-> "(none)".  If you wanted "0" for fan_type=FAN_RESPONSE_INFO_AUDIT_RULE,
-> that would be fan_info=30 if it were interpreted as a string, or
-> arguably 3F for an integer of rule (decimal) 63.  Ultimately, fan_type
-> should determine how fan_info's hex encoded value should be interpreted.
+>   syzbot should have been able to catch cancel_work_sync() in work context
+>   by checking lockdep_map in __flush_work() for both flush and cancel.
 > 
-> But ultimately, the point of this patch is to hex encode the fan_info
-> field value.
+> in [1], being unable to report an obvious deadlock scenario shown below is
+> broken. From locking dependency perspective, sync version of cancel request
+> should behave as if flush request, for it waits for completion of work if
+> that work has already started execution.
 
-Just one last update, I have been able to test the patches with the user 
-space application and it appears to be working from the PoV of what is sent 
-is what's in the audit logs. I'm not sure how picky old kernels are wrt the 
-size of what's sent. But an unpatched 5.19 kernel seems to accept the larger 
-size response and do the right thing.
+Applied to cgroup/for-6.0-fixes.
 
--Steve
+Thanks.
 
-
+-- 
+tejun

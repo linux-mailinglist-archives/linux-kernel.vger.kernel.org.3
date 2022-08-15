@@ -2,109 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB42592DAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7268A592DB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbiHOLB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 07:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
+        id S242554AbiHOLCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 07:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241757AbiHOLBX (ORCPT
+        with ESMTP id S242006AbiHOLCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 07:01:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C169237ED;
-        Mon, 15 Aug 2022 04:01:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EDB03B80E1B;
-        Mon, 15 Aug 2022 11:01:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBFF9C43141;
-        Mon, 15 Aug 2022 11:01:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660561279;
-        bh=cJxtEjsOPdD+28GEo/pZSc8mfFhYYMFZySPDzKfTUaw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=T+/ShaanW8wZOBJ/SIcn5ow+zcCc4WSMhAAdhraztsvUEzTfBrw/wcpqxFD51Jdn+
-         7bhidBpzI8hvyK5ab1oUvOtDcjuV0vC5ApPHUObPTCdgSYcUSIIpttCefWvqXCjMUQ
-         OLuBid0zG2UWb2ZSDz/LA/OOtW4qsN3KEpR/uL0bFBXe2Uyd0Ry85VgXRgZ53Md2Rc
-         MoOvQdy6euZsHrj+SWkH/9HuNq9rATwlDWn//nrkyVNKcSzypdgAUZ3IplfS8iyKdl
-         GFmLCUdyb+LUGMOdy8fJgPf3gd5DWkP8khK82E0kB1o/4DRtg3hLSHtitVSeB9N3xS
-         rpmQM0JThwRcw==
-Received: by mail-ej1-f46.google.com with SMTP id kb8so12943101ejc.4;
-        Mon, 15 Aug 2022 04:01:19 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1T69CkhNJL62Hj1G+DkO448ecLw3sO1zZntuKkpTPQ8wsPPmUR
-        KhBvIb0V/AlXmJKaPWKy4Inm2UZAOHrqNi7j6HA=
-X-Google-Smtp-Source: AA6agR6TXzByijRnQWrhX/xMZDPr0y7EqMxYTzHa5iTd0WrjHBxMUttMH/b1n+vQ8+rWBMd1wvlgn58BPbChUscUnR4=
-X-Received: by 2002:a17:907:1c26:b0:730:960f:118 with SMTP id
- nc38-20020a1709071c2600b00730960f0118mr9975626ejc.650.1660561277990; Mon, 15
- Aug 2022 04:01:17 -0700 (PDT)
+        Mon, 15 Aug 2022 07:02:34 -0400
+Received: from mail.fris.de (mail.fris.de [IPv6:2a01:4f8:c2c:390b::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2698224095;
+        Mon, 15 Aug 2022 04:02:30 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B8926BFC15;
+        Mon, 15 Aug 2022 13:02:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
+        t=1660561347; h=from:subject:date:message-id:to:cc:mime-version:
+         content-transfer-encoding; bh=di9qAzMMt0Uch8kPIvSmTcNkx/O6Br+B8hRhRF4lYGs=;
+        b=krvljssHeJ6ZlYsMS9O9emhoDvEBaxp0Pugx2H+g7k3oMNwALh8w3y+bwJ7C1rKPSbNl4m
+        +pJOuJwF+2LJ1FGq0/Ke1iuDLy0SpYnOExZD01nfhYM0Z8wfj1BGs/9Lamt2jtWnUuJljV
+        pVozdiXnlFSxcJlUQ3HpmNFXNdgP9lx37NhtZ+Sl/6IADT/9nkLa13Gl0Q4PlOgPIz4qo5
+        +k89kX7ekkge0zBDegRb2rPx2dDUVfXM1XQbaeFccdWoOKNVkXkMaBpmFaZ5OQNyWEVub1
+        4bRl1TvcDkYETHiou+xZ5rC5FcSsDtxdKXPyuojPNPvP3RbiGn6HSZIo9Cyduw==
+From:   Frieder Schrempf <frieder@fris.de>
+To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>
+Cc:     Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH v3 0/8] arm64: dts: imx8mm-kontron: Improvements and OSM board support
+Date:   Mon, 15 Aug 2022 13:01:23 +0200
+Message-Id: <20220815110134.49683-1-frieder@fris.de>
 MIME-Version: 1.0
-References: <CAADnVQ+hLnyztCi9aqpptjQk-P+ByAkyj2pjbdD45dsXwpZ0bw@mail.gmail.com>
- <20220722120854.3cc6ec4b@gandalf.local.home> <20220722122548.2db543ca@gandalf.local.home>
- <YtsRD1Po3qJy3w3t@krava> <20220722174120.688768a3@gandalf.local.home>
- <YtxqjxJVbw3RD4jt@krava> <YvbDlwJCTDWQ9uJj@krava> <20220813150252.5aa63650@rorschach.local.home>
- <YvkTLziHX4BINnla@krava> <77477710-c383-73b1-4f78-fe65a81c09b7@huawei.com> <Yvn+En35XDqKWptm@krava>
-In-Reply-To: <Yvn+En35XDqKWptm@krava>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Date:   Mon, 15 Aug 2022 13:01:06 +0200
-X-Gmail-Original-Message-ID: <CAJ+HfNjLbsDuE4EB_1jwSOnyaUdjejMZJP6U=zcKvZd=iwhhDQ@mail.gmail.com>
-Message-ID: <CAJ+HfNjLbsDuE4EB_1jwSOnyaUdjejMZJP6U=zcKvZd=iwhhDQ@mail.gmail.com>
-Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Chen Zhongjin <chenzhongjin@huawei.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 Aug 2022 at 10:04, Jiri Olsa <olsajiri@gmail.com> wrote:
-[...]
-> > > >
-> > > > Today, objtool has also got involved, and added an "--mcount" optio=
-n
-> > > > that will create the section too.
-> > > I overlooked that objtool is involved as well,
-> > > will check on that
-> >
-> > objtool --mcount option only involves mcount_loc generation (see
-> > annotate_call_site) and other validation check call destination directl=
-y
-> > (see is_fentry_call).
-> >
-> > Some simply removing --mcount option dose work for this.
-> >
-> >
-> > Another question, it seems we can export and use DEFINE_BPF_DISPATCHER =
-out
-> > of kernel, does that means we should add NO_MCOUNT_FILES for these sing=
-le
-> > uages as well?
->
-> yes, cc-ing Bj=C3=B6rn to make sure it's valid use case for dispatcher
->
+From: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-Hmm, could you expand a bit on how this would work?
+This set contains a few improvements for the imx8mm-kontron devicetrees
+(patch 3-7) and support for a new SoM (patch 8, including baseboard) that
+complies to the Open Standard Module (OSM) 1.0 hardware specification, size S
+(https://sget.org/standards/osm).
+
+It also includes binding changes in patch 1 and 2.
+
+Changes in v3:
+* drop patch for 2 which was applied separately
+* rebase on v6.0-rc1
+* rename compatibles and file names
+
+Changes in v2:
+* move binding changes to beginning of patchset
+* Allow arbitrary regulator names in PCA9450 bindings
+* Use voltage rail names from schematic for PMIC regulator-names
+* Add SPI NOR partition layout to devicetree
+* Remove unneeded header include
+* Add tags
+
+Frieder Schrempf (8):
+  dt-bindings: arm: fsl: Rename compatibles for Kontron i.MX8MM
+    SoM/board
+  dt-bindings: arm: fsl: Add Kontron BL i.MX8MM OSM-S board
+  arm64: dts: imx8mm-kontron: Adjust compatibles, file names and model
+    strings
+  arm64: dts: imx8mm-kontron: Use the VSELECT signal to switch SD card
+    IO voltage
+  arm64: dts: imx8mm-kontron: Remove low DDRC operating point
+  arm64: dts: imx8mm-kontron: Use voltage rail names from schematic for
+    PMIC regulator-names
+  arm64: dts: imx8mm-kontron: Add SPI NOR partition layout
+  arm64: dts: Add support for Kontron SL/BL i.MX8MM OSM-S
+
+ .../devicetree/bindings/arm/fsl.yaml          |  13 +-
+ arch/arm64/boot/dts/freescale/Makefile        |   3 +-
+ .../dts/freescale/imx8mm-kontron-bl-osm-s.dts | 376 ++++++++++++++++++
+ ...tron-n801x-s.dts => imx8mm-kontron-bl.dts} |   7 +-
+ .../dts/freescale/imx8mm-kontron-osm-s.dtsi   | 330 +++++++++++++++
+ ...-n801x-som.dtsi => imx8mm-kontron-sl.dtsi} |  53 ++-
+ 6 files changed, 757 insertions(+), 25 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-kontron-bl-osm-s.dts
+ rename arch/arm64/boot/dts/freescale/{imx8mm-kontron-n801x-s.dts => imx8mm-kontron-bl.dts} (96%)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
+ rename arch/arm64/boot/dts/freescale/{imx8mm-kontron-n801x-som.dtsi => imx8mm-kontron-sl.dtsi} (87%)
+
+-- 
+2.37.1
+

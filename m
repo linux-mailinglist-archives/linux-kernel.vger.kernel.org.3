@@ -2,66 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB24593190
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4434E593198
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243171AbiHOPQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59102 "EHLO
+        id S243286AbiHOPRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242990AbiHOPQS (ORCPT
+        with ESMTP id S242993AbiHOPRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:16:18 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FE0240B2;
-        Mon, 15 Aug 2022 08:16:17 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d20so6855137pfq.5;
-        Mon, 15 Aug 2022 08:16:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=3ZKThVe84WRyb15COD1liCnaOHlKv40e1Vz93ePbJ88=;
-        b=DUlP7ypHH/2UZOVrviR/78RpqjcWeW2uX6hlsAW4uJ0+cEBsCV0Hv3qhU9W4JHs6ex
-         dmAZ2lDmfu1TKSuPgzlDVl4UwFPYfq72td4xzy03tVPFqEgpFGr7tE2zctBxTffRo0Cf
-         0Uv5vlka6zew6UVCS7VtZEBYgr+u3u4H7iZTETfABsYPboewo/oWpBlJjF5cNH/U27TA
-         N0zvTPorVAH5DWrk3nciL/46w/lxvLPs7b6cwzegpQnehrNKNcM6qL8sAQjkitWVBJmj
-         qdM8/XFbOlB6ICNm6n1qbK6MEylKl580NQNI9oLVpHq86VIC09tSnrhnJ9UWGrU9Fo0i
-         H0Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=3ZKThVe84WRyb15COD1liCnaOHlKv40e1Vz93ePbJ88=;
-        b=Z5Z9QixfP10Gw7WnI2U/S6CCWi5GP8Vwqq9qfCQyOvhC2aLmU7Hph3S0r761k+0ukq
-         KcazXtSZGXEIsQ0qMY+Ms6DMD1GeJCyqv2iAIdTdL/1aEn2JcIbaZvQG3T7sOYgYydWJ
-         J9vbYsKPurM4v38GgJJwVJp0Q/eiV5TzwOlg1/R1L0xu0u7D53lRoBOtjc0jHV51EEy8
-         h4NJw3jXIrLgD9yA+9g6lJwsjl6xDAT3D80LNhebNH5lqJvEUkZrMOUii4PycboIDfUn
-         OGaTe2Y0Of4M2ZC+3TAVTkVG0Q1ZLoh8YUcktBKcZTPNa3hd4EzDMOak70bXk+wR8zks
-         gDlQ==
-X-Gm-Message-State: ACgBeo39A4roDVtowQboa2M7CxKo53/co4qomb9vGva0vgaLbHdGU4SN
-        mVdxCZSxauwsXKLVZNbYdNTglZcr4dhNeg==
-X-Google-Smtp-Source: AA6agR4A3V4wAgNelNe4hjuW1BEQB4BZ8TVkLfe5hRKj5f2Nfy9XtwqBu3doGzBrCCGLx/n7p1TzNA==
-X-Received: by 2002:a63:4b49:0:b0:427:e7f2:c04 with SMTP id k9-20020a634b49000000b00427e7f20c04mr6967008pgl.262.1660576576358;
-        Mon, 15 Aug 2022 08:16:16 -0700 (PDT)
-Received: from localhost ([166.111.139.139])
-        by smtp.gmail.com with ESMTPSA id t4-20020a170902e84400b0016dbe37cebdsm7121060plg.246.2022.08.15.08.16.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 08:16:16 -0700 (PDT)
-From:   Zixuan Fu <r33s3n6@gmail.com>
-To:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com
-Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        baijiaju1990@gmail.com, Zixuan Fu <r33s3n6@gmail.com>,
-        TOTE Robot <oslab@tsinghua.edu.cn>
-Subject: [PATCH] fs: btrfs: fix possible memory leaks in btrfs_get_dev_args_from_path()
-Date:   Mon, 15 Aug 2022 23:16:06 +0800
-Message-Id: <20220815151606.3479183-1-r33s3n6@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 15 Aug 2022 11:17:18 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EECD27B28;
+        Mon, 15 Aug 2022 08:16:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 559C0CE10F8;
+        Mon, 15 Aug 2022 15:16:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20CE9C433D6;
+        Mon, 15 Aug 2022 15:16:52 +0000 (UTC)
+Date:   Mon, 15 Aug 2022 11:16:58 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        Network Development <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        bpf <bpf@vger.kernel.org>,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Edward Cree <ecree@solarflare.com>,
+        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdl?= =?UTF-8?B?bnNlbg==?= 
+        <thoiland@redhat.com>, Jesper Dangaard Brouer <brouer@redhat.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH bpf-next v4 2/6] bpf: introduce BPF dispatcher
+Message-ID: <20220815111658.58d75672@gandalf.local.home>
+In-Reply-To: <CAADnVQLhHm-gxJXTbWxJN0fFGW_dyVV+5D-JahVA1Wrj2cGu7g@mail.gmail.com>
+References: <20191211123017.13212-1-bjorn.topel@gmail.com>
+        <20191211123017.13212-3-bjorn.topel@gmail.com>
+        <20220815101303.79ace3f8@gandalf.local.home>
+        <CAADnVQLhHm-gxJXTbWxJN0fFGW_dyVV+5D-JahVA1Wrj2cGu7g@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,38 +65,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In btrfs_get_dev_args_from_path(), btrfs_get_bdev_and_sb() can fail if the
-path is invalid. In this case, btrfs_get_dev_args_from_path() returns
-directly without freeing args->uuid and args->fsid allocated before, which
-causes memory leaks.
+On Mon, 15 Aug 2022 07:31:23 -0700
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> >
+> > When I heard that ftrace was broken by BPF I thought it was something
+> > unique they were doing, but unfortunately, I didn't investigate what they
+> > were doing at the time.  
+> 
+> ftrace is still broken and refusing to accept the fact doesn't make it
+> non-broken.
 
-To fix these possible leaks, when btrfs_get_bdev_and_sb() fails, 
-btrfs_put_dev_args_from_path() is called to clean up the memory.
+I extended Jiri's patch to make it work again.
 
-Fixes: faa775c41d655 ("btrfs: add a btrfs_get_dev_args_from_path helper")
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
----
- fs/btrfs/volumes.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> > Then they started sending me patches to hide fentry locations from ftrace.
+> > And even telling me that fentry != ftrace  
+> 
+> It sounds that you've invented nop5 and kernel's ability
+> to replace nop5 with a jump or call.
 
-diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
-index 272901514b0c..064ab2a79c80 100644
---- a/fs/btrfs/volumes.c
-+++ b/fs/btrfs/volumes.c
-@@ -2345,8 +2345,11 @@ int btrfs_get_dev_args_from_path(struct btrfs_fs_info *fs_info,
- 
- 	ret = btrfs_get_bdev_and_sb(path, FMODE_READ, fs_info->bdev_holder, 0,
- 				    &bdev, &disk_super);
--	if (ret)
-+	if (ret) {
-+		btrfs_put_dev_args_from_path(args);
- 		return ret;
-+	}
-+
- 	args->devid = btrfs_stack_device_id(&disk_super->dev_item);
- 	memcpy(args->uuid, disk_super->dev_item.uuid, BTRFS_UUID_SIZE);
- 	if (btrfs_fs_incompat(fs_info, METADATA_UUID))
--- 
-2.25.1
+Actually I did invent it.
 
+   https://lore.kernel.org/lkml/20080210072109.GR4100@elte.hu/
+
+
+I'm the one that introduced the code to convert mcount into the 5 byte nop,
+and did the research and development to make it work at run time. I had one
+hiccup along the way that caused the e1000e network card breakage.
+
+The "daemon" approach was horrible, and then I created the recordmcount.pl
+perl script to accomplish the same thing at compile time.
+
+> ftrace should really stop trying to own all of the kernel text rewrites.
+> It's in the way. Like this case.
+
+It's not trying to own all modifications (static_calls is not ftrace). But
+the code at the start of functions with fentry does belong to it.
+
+> 
+> >    https://lore.kernel.org/all/CAADnVQJTT7h3MniVqdBEU=eLwvJhEKNLSjbUAK4sOrhN=zggCQ@mail.gmail.com/
+> >
+> > Even though fentry was created for ftrace
+> >
+> >    https://lore.kernel.org/lkml/1258720459.22249.1018.camel@gandalf.stny.rr.com/
+> >
+> > and all the work with fentry was for the ftrace infrastructure. Ftrace
+> > takes a lot of care for security and use cases for other users (like
+> > live kernel patching). But BPF has the NIH syndrome, and likes to own
+> > everything and recreate the wheel so that they have full control.
+> >  
+> > > of the trampoline. One dispatcher instance currently supports up to 64
+> > > dispatch points. A user creates a dispatcher with its corresponding
+> > > trampoline with the DEFINE_BPF_DISPATCHER macro.  
+> >
+> > Anyway, this patch just looks like a re-implementation of static_calls:  
+> 
+> It was implemented long before static_calls made it to the kernel
+> and it's different. Please do your home work.
+
+Long before? This code made it into the kernel in Dec 2019. Yes static calls
+finally made it into the kernel in 2020, but it was first introduced in
+October 2018:
+
+  https://lore.kernel.org/all/20181006015110.653946300@goodmis.org/
+
+If you had Cc'd us on this patch, we could have collaborated and come up
+with something that would have worked for you.
+
+It took time to get in because we don't just push our features in, we make
+sure that they are generic and work for others, and is secure and robust.
+
+I sent a proof of concept, Josh took over, Linus had issues, and finally
+Peter pushed it through the gate. It's a long process, but we don't break
+others code while doing it!
+
+-- Steve

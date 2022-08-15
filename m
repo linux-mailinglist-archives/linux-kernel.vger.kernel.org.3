@@ -2,224 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 643B1593278
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB9F593281
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbiHOPuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40044 "EHLO
+        id S231465AbiHOPxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232011AbiHOPui (ORCPT
+        with ESMTP id S229515AbiHOPxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:50:38 -0400
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2B85F67;
-        Mon, 15 Aug 2022 08:50:35 -0700 (PDT)
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id 7CE2A760; Mon, 15 Aug 2022 10:50:34 -0500 (CDT)
-Date:   Mon, 15 Aug 2022 10:50:34 -0500
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Vegard Nossum <vegard.nossum@oracle.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org, John Haxby <john.haxby@oracle.com>
-Subject: Re: [PATCH v2] capabilities: new kernel.ns_modules_allowed sysctl
-Message-ID: <20220815155034.GB20944@mail.hallyn.com>
-References: <20220815082753.6088-1-vegard.nossum@oracle.com>
+        Mon, 15 Aug 2022 11:53:19 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9134417593;
+        Mon, 15 Aug 2022 08:53:18 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id f22so10085026edc.7;
+        Mon, 15 Aug 2022 08:53:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=NuCd4TB1hMQ+t6weyPyWMKD9kURNOerl6EJQJBh4dcw=;
+        b=mi+JUVCcD8IzdfApRzWmEbzfa2LDlDc4X2teLk6SNYfpW3qmnmO12eMQ9YHiabe3ys
+         IdbrlnXoZeE5yV7KBpL2HD5pLHyNuaOaX7/Jlpx36P9YHEbACB7Zev5wdsitTyy6l3fx
+         ucQGixYTpYnJrtu6/t8NqvFKMVqvIBoGKj3HTZuBJm7429IVyGsOtgYoKHAFfSNWmj79
+         Y6vogxvMXR7sIsm5jwBsPFeXxMp6n7Ezk8KuCcS3ozU0OSJy7xtN5ZZOmcS4Yp9GFDz1
+         zdPFLgLCSLLonH0hEuLthmWcbqgtZp5G3RTWFSixuHuo9QAOpBS2AbX/H8ok8TVI8MzF
+         Ep7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=NuCd4TB1hMQ+t6weyPyWMKD9kURNOerl6EJQJBh4dcw=;
+        b=QGLzNFpczbxll0xOisazpCw3bq6NgyODyvadpxxtslyAA8YDxyolx/bosN4VaZhNQt
+         s/6OiZQCIKH2mlMOzcZQeR+sCSBYDXD5JZukBJzqmbPTEQSl3sFh+i1F5z15pI9tFaUy
+         nZjHMHpsTWhpehq/2lHJZba7qaSpj7vdjrzGX4fItw69mIHFbgktd7/cfI2NlfIw2mAl
+         /RGOGjLxtdJTRq5PEegXUyHK6YHugMTcfWzUQuX6/f683lCBuf4db4ljYHzjzqThCHY0
+         OU/SOMdwBNOOZ2/ebHwddEHgJaZAEhcCp3gUjjkmtltYchh6vHr9p94R8XGM2QkQJajK
+         qcJw==
+X-Gm-Message-State: ACgBeo0tw+FxSSm5z0gJouQ4lc6/O9UbKg0Y5+LuUJ/6pKSbgDa1EUZl
+        qJ+QPwUNuTdHk22NtmobTG2Gmqp68P32vtVCRHY=
+X-Google-Smtp-Source: AA6agR6hBzk3ZG+Q0IHJJ2AQTXTqLOBLLy293K/qytljlcU5Q+rpEHRzlDK9F3mruP/ap3qhKwBxCqx5/lDAO9hJDKg=
+X-Received: by 2002:a05:6402:3697:b0:443:1c6:acc3 with SMTP id
+ ej23-20020a056402369700b0044301c6acc3mr15377241edb.421.1660578797154; Mon, 15
+ Aug 2022 08:53:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815082753.6088-1-vegard.nossum@oracle.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <YvbDlwJCTDWQ9uJj@krava> <20220813150252.5aa63650@rorschach.local.home>
+ <Yvn9xR7qhXW7FnFL@worktop.programming.kicks-ass.net> <YvoVgMzMuQbAEayk@krava>
+ <Yvo+EpO9dN30G0XE@worktop.programming.kicks-ass.net> <CAADnVQJfvn2RYydqgO-nS_K+C8WJL7BdCnR44MiMF4rnAwWM5A@mail.gmail.com>
+ <YvpZJQGQdVaa2Oh4@worktop.programming.kicks-ass.net> <CAADnVQKyfrFTZOM9F77i0NbaXLZZ7KbvKBvu7p6kgdnRgG+2=Q@mail.gmail.com>
+ <Yvpf67eCerqaDmlE@worktop.programming.kicks-ass.net> <CAADnVQKX5xJz5N_mVyf7wg4BT8Q2cNh8ze-SxTRfk6KtcFQ0=Q@mail.gmail.com>
+ <YvpmAnFldR0iwAFC@worktop.programming.kicks-ass.net> <CAADnVQJuDS22o7fi9wPZx9siAWgu1grQXXB02KfasxZ-RPdRSw@mail.gmail.com>
+ <20220815114453.08625089@gandalf.local.home>
+In-Reply-To: <20220815114453.08625089@gandalf.local.home>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 15 Aug 2022 08:53:05 -0700
+Message-ID: <CAADnVQK9v8nW4rSwqB3rOkL5POogMQxyTJVUSAOyT=sS6Rv4QA@mail.gmail.com>
+Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Jiri Olsa <olsajiri@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 10:27:53AM +0200, Vegard Nossum wrote:
-> Creating a new user namespace grants you the ability to reach a lot of code
-> (including loading certain kernel modules) that would otherwise be out of
-> reach of an attacker. We can reduce the attack surface and block exploits
-> by ensuring that user namespaces cannot trigger module (auto-)loading.
-> 
-> A cursory search of exploits found online yields the following extremely
-> non-exhaustive list of vulnerabilities, and shows that the technique is
-> both old and still in use:
-> 
-> - CVE-2016-8655
-> - CVE-2017-1000112
-> - CVE-2021-32606
-> - CVE-2022-2588
-> - CVE-2022-27666
-> - CVE-2022-34918
-> 
-> This patch adds a new sysctl, kernel.ns_modules_allowed, which when set to
-> 0 will block requests to load modules when the request originates in a
-> process running in a user namespace.
-> 
-> For backwards compatibility, the default value of the sysctl is set to
-> CONFIG_NS_MODULES_ALLOWED_DEFAULT_ON, which in turn defaults to 1, meaning
-> there should be absolutely no change in behaviour unless you opt in either
-> at compile time or at runtime.
-> 
-> This mitigation obviously offers no protection if the vulnerable module is
-> already loaded, but for many of these exploits the vast majority of users
-> will never actually load or use these modules on purpose; in other words,
-> for the vast majority of users, this would block exploits for the above
-> list of vulnerabilities.
-> 
-> Testing: Running the reproducer for CVE-2022-2588 fails and results in the
-> following message in the kernel log:
-> 
->     [  130.208030] request_module: pid 4107 (a.out) requested kernel module rtnl-link-dummy; denied due to kernel.ns_modules_allowed sysctl
-> 
-> v2:
-> - fix build failure due to missing CONFIG_SYSCTL guard around register_sysctl_init()
-> - use .maxlen = sizeof(int) for proc_dobool()
-> - don't warn when sysctl_ns_modules_allowed == 1
-> 
-> Cc: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-> Cc: Serge Hallyn <serge@hallyn.com>
-> Cc: Eric Biederman <ebiederm@xmission.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: linux-hardening@vger.kernel.org
-> Cc: John Haxby <john.haxby@oracle.com>
-> Signed-off-by: Vegard Nossum <vegard.nossum@oracle.com>
-> ---
->  Documentation/admin-guide/sysctl/kernel.rst | 11 ++++++
->  init/Kconfig                                | 17 +++++++++
->  kernel/kmod.c                               | 39 +++++++++++++++++++++
->  3 files changed, 67 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-> index ee6572b1edada..1e13f7f1a9550 100644
-> --- a/Documentation/admin-guide/sysctl/kernel.rst
-> +++ b/Documentation/admin-guide/sysctl/kernel.rst
-> @@ -604,6 +604,17 @@ A value of 0 means no change. The default value is 200 meaning the NMI
->  watchdog is set to 30s (based on ``watchdog_thresh`` equal to 10).
->  
->  
-> +ns_modules_allowed
-> +==================
-> +
-> +Control whether processes may trigger module loading inside a user namespace.
-> +
-> += =================================
-> +0 Deny module loading requests.
-> +1 Accept module loading requests.
-> += =================================
-> +
-> +
->  numa_balancing
->  ==============
->  
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 80fe60fa77fba..0b99268da5081 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -1245,6 +1245,23 @@ config USER_NS
->  
->  	  If unsure, say N.
->  
-> +config NS_MODULES_ALLOWED_DEFAULT_ON
-> +	bool "Allow user namespaces to auto-load kernel modules by default"
-> +	depends on MODULES
-> +	depends on USER_NS
-> +	default y
-> +	help
-> +	  This option makes it so that processes running inside user
-> +	  namespaces may auto-load kernel modules.
-> +
-> +	  Say N to mitigate some exploits that rely on being able to
-> +	  auto-load kernel modules; however, this may also cause some
-> +	  legitimate programs to fail unless kernel modules are loaded by
-> +	  hand.
-> +
-> +	  You can write 0 or 1 to /proc/sys/kernel/ns_modules_allowed to
-> +	  change behaviour at run-time.
-> +
->  config PID_NS
->  	bool "PID Namespaces"
->  	default y
-> diff --git a/kernel/kmod.c b/kernel/kmod.c
-> index b717134ebe170..46f8c0ad6c921 100644
-> --- a/kernel/kmod.c
-> +++ b/kernel/kmod.c
-> @@ -25,6 +25,7 @@
->  #include <linux/ptrace.h>
->  #include <linux/async.h>
->  #include <linux/uaccess.h>
-> +#include <linux/sysctl.h>
->  
->  #include <trace/events/module.h>
->  
-> @@ -105,6 +106,12 @@ static int call_modprobe(char *module_name, int wait)
->  	return -ENOMEM;
->  }
->  
-> +/*
-> + * Allow processes running inside namespaces to trigger module loading?
-> + */
-> +static bool sysctl_ns_modules_allowed __read_mostly =
-> +	IS_BUILTIN(CONFIG_NS_MODULES_ALLOWED_DEFAULT_ON);
-> +
->  /**
->   * __request_module - try to load a kernel module
->   * @wait: wait (or not) for the operation to complete
-> @@ -148,6 +155,18 @@ int __request_module(bool wait, const char *fmt, ...)
->  	if (ret)
->  		return ret;
->  
-> +	/*
-> +	 * Disallow if we're in a user namespace and we don't have
-> +	 * CAP_SYS_MODULE in the init namespace.
-> +	 */
-> +	if (current_user_ns() != &init_user_ns &&
-> +	    !capable(CAP_SYS_MODULE) &&
+On Mon, Aug 15, 2022 at 8:44 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Mon, 15 Aug 2022 08:35:53 -0700
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+>
+> > > Then make it a notrace function with a nop5 in it. That isn't hard.
+> >
+> > That's exactly what we're trying to do.
+> > Jiri's patch is one way to achieve that.
+> > What is your suggestion?
+> > Move it from C to asm ?
+> > Make it naked function with explicit inline asm?
+> > What else?
+>
+> The dispatcher is already in the kernel so it's too late to complain about
+> it. Jiri's patch (with my extensions) will hopefully fix the breakage BPF
+> did to ftrace.
+>
+> My ask now is to be more inclusive when doing anything that deals with
+> modification of text, or other infrastructures. This "go it alone" approach
+> really needs to stop. Linux is an open source project and collaboration is
+> key. I know you don't care about others use cases (as you told me in that
+> BPF meeting last year), but any maintainer in the Linux kernel must care
+> about the use case of others or this will all fail.
 
-It's monday, so maybe I'm thinking wrongly - but I don't believe that you can
-possible pass capable(CAP_SYS_MODULE) if current_user_ns() != &init_user_ns.
-So I think you can drop the second check.
-
-> +	    !sysctl_ns_modules_allowed) {
-> +		pr_warn_ratelimited("request_module: pid %d (%s) in user namespace requested kernel module %s; denied due to kernel.ns_modules_allowed sysctl\n",
-> +			task_pid_nr(current), current->comm, module_name);
-> +		return -EPERM;
-> +	}
-> +
->  	if (atomic_dec_if_positive(&kmod_concurrent_max) < 0) {
->  		pr_warn_ratelimited("request_module: kmod_concurrent_max (%u) close to 0 (max_modprobes: %u), for module %s, throttling...",
->  				    atomic_read(&kmod_concurrent_max),
-> @@ -175,3 +194,23 @@ int __request_module(bool wait, const char *fmt, ...)
->  	return ret;
->  }
->  EXPORT_SYMBOL(__request_module);
-> +
-> +#ifdef CONFIG_SYSCTL
-> +static struct ctl_table kmod_sysctl_table[] = {
-> +	{
-> +		.procname       = "ns_modules_allowed",
-> +		.data           = &sysctl_ns_modules_allowed,
-> +		.maxlen         = sizeof(int),
-> +		.mode           = 0644,
-> +		.proc_handler   = proc_dobool,
-> +	},
-> +	{ }
-> +};
-> +
-> +static int __init kmod_sysctl_init(void)
-> +{
-> +	register_sysctl_init("kernel", kmod_sysctl_table);
-> +	return 0;
-> +}
-> +late_initcall(kmod_sysctl_init);
-> +#endif
-> -- 
-> 2.35.1.46.g38062e73e0
+Please don't misrepresent. Not cool.

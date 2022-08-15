@@ -2,111 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF895951E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 07:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B405951E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 07:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233283AbiHPFTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 01:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36082 "EHLO
+        id S229579AbiHPFWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 01:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231522AbiHPFSa (ORCPT
+        with ESMTP id S232613AbiHPFVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 01:18:30 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB345C345
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:42:32 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id w14so7471389plp.9
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=8LW1Z2eHtfRzkh/DgEsbiz4wPXvg86VGj0tcalow2gc=;
-        b=aUIKmdx49jY2qpswU91D8urED0N6BFbxXQi/EbnSwbikNL/hePNE1obTW9O8LEYSIW
-         IHI8Q5mAsHRrvEas1zNypoTBA+TZJlVseJQDg64SvfXMVShTvq+A/AZ0WKi8PiW1JzGH
-         sZ/WWE7MoQoz/DZHFisZ2JIJ/fSkaTqeMXdZV7qxk2YcyDjlehEukw5lJTSY54hjBg0B
-         81qhQsRES3XSGUVyOEZZnDrRs7weG6zPS5mm2Int4cmKUMKYCP8Rc1diBHlrJ9sFYFOG
-         G+0rA+MMxjS1kZ0LCg1JBq6AUZWcb6zgZXAGmBBIdSJfKYvQQvPlf2hi3LmT5kEB00FE
-         ZhGA==
+        Tue, 16 Aug 2022 01:21:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D01DD2AC6F
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:47:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660600069;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pwXJio4p0RALiK5hRjEtrlFD6Yn2dwN8viKDJN8w4cg=;
+        b=D6EdbU4GqWThU1qVnLGVmsQQLvium1hS2ERuZeZVD7Orx/lqTZUvSdnTZIcA4ZdKueS2bA
+        Jw2k59aJAAkGYpi2TGrQbLRlhjWqTGOavk4txqcV7y1NQtUf0RwJNe00BozfiwWNojNgLj
+        5YsoJQ7oMsYcNgtiaj+kdIrAVemBzlk=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-342-kZI_hcnxM2u83EJdm_D_ew-1; Mon, 15 Aug 2022 17:47:48 -0400
+X-MC-Unique: kZI_hcnxM2u83EJdm_D_ew-1
+Received: by mail-wm1-f71.google.com with SMTP id b4-20020a05600c4e0400b003a5a96f1756so9260022wmq.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:47:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=8LW1Z2eHtfRzkh/DgEsbiz4wPXvg86VGj0tcalow2gc=;
-        b=X2mVhoM2Gc5+5Zb/vz/x9h8qoOiTCde35csE3kXshweXNZddBbeaGeVOUFjU+Aa/xO
-         ad6CeUMx+qo2untpPvn2DuvE5zgTlZ++i/rZT4F7S3yZtuLDvLfFX1+FQu1n7aoMkEVK
-         pg6FB8mVefo35rDNSqQPVOdSGbMDkeSztkBzpaLaO8rI9RP8Gld9R90z1iWJc1REDPJm
-         VQmumU3jYZz+auCAlZoiXUI3enX6Pf3HYmXhkd/u2OcmEJX8655f4hcssua/2e6x8mIa
-         LCz9UVNH3BiV6jfeCMIMhVCNiZJ2VBnjhGlXtEdTz7O2C/W7YRh7W5yMeaLheufg26Dx
-         oIXQ==
-X-Gm-Message-State: ACgBeo1FtWa7kE+eXwe4xKLdap5+oRkYkR9Xp5yQ1IzjLjGInHk/z/5q
-        0f4y/PTNLntv0WR6+4b1ZPlEp0H/6ATX+A==
-X-Google-Smtp-Source: AA6agR73ib93qkb4fwGAobfuvJZGyS/QKaScq6gxXlAO16qAVl0y6157lhvwxcdRKKcvrkCAnkAkNA==
-X-Received: by 2002:a17:902:ce83:b0:16d:d667:d4df with SMTP id f3-20020a170902ce8300b0016dd667d4dfmr18614380plg.159.1660599751433;
-        Mon, 15 Aug 2022 14:42:31 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id s14-20020a170902b18e00b0016d231e366fsm7456080plr.59.2022.08.15.14.42.30
+        bh=pwXJio4p0RALiK5hRjEtrlFD6Yn2dwN8viKDJN8w4cg=;
+        b=SnRhzoh/szWqo7EI7Mzi9WqZ3WTGISdEfNzGOWEsA1g0cPfoJONhN3yCF7R91R1+J8
+         m2dswRxtj/uLZSHGIF2EQNsykwoqA90ubbBD7mVqjbdC42yBSVWOMiY4Bz6q7YI7lL2t
+         FvOMuVR3J5qU9goVlOaEqtH1NoCp0kAHUjXWqU2bg6eDcu8qO1CnfQCIQmjBI5uqOZL3
+         6bb5VwjKRANuUuSaiiRm0y5l10z4iOS91+wH6kmdfFDklsSu36Mgg2+Ub00tau5A/zSn
+         a6NM8tA6U7GtKFwOxeUmq5HVvOQjDdfze2WYY2gQWeZD0l7DaeRNt3rgQtAqGXthCstq
+         1j3g==
+X-Gm-Message-State: ACgBeo3WsK5koXjd4BnQpLDUm1zVQybS4GNeeNc0a08p0Un2dtiizNwn
+        Y6PcFKShd6dz5/CU60EI4Xv/3Us1sza7UcUxPWKTOzmrOpmxOtZF7oBcmk7aVFFPD3Cexsezwea
+        XHiGtIfLdKZIpwjkErNq8YIbl
+X-Received: by 2002:a05:600c:20a:b0:3a5:a700:17d with SMTP id 10-20020a05600c020a00b003a5a700017dmr11264425wmi.148.1660600067260;
+        Mon, 15 Aug 2022 14:47:47 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6HEO33wTMDod+4BRmHsyVipe5ttcq3PUtK52S+GrjNTcVgMog3ddScg1I78q3Vl9wVp4kBQw==
+X-Received: by 2002:a05:600c:20a:b0:3a5:a700:17d with SMTP id 10-20020a05600c020a00b003a5a700017dmr11264408wmi.148.1660600067077;
+        Mon, 15 Aug 2022 14:47:47 -0700 (PDT)
+Received: from redhat.com ([2.55.43.215])
+        by smtp.gmail.com with ESMTPSA id t9-20020a05600c198900b003a4f08495b7sm11295641wmq.34.2022.08.15.14.47.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 14:42:31 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 21:42:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     Gavin Shan <gshan@redhat.com>, Paolo Bonzini <pbonzini@redhat.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Andrew Jones <andrew.jones@linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        lkp@lists.01.org, lkp@intel.com, xudong.hao@intel.com,
-        regressions@lists.linux.dev
-Subject: Re: [KVM]  e923b0537d: kernel-selftests.kvm.rseq_test.fail
-Message-ID: <Yvq9wzXNF4ZnlCdk@google.com>
-References: <Yvn60W/JpPO8URLY@xsang-OptiPlex-9020>
+        Mon, 15 Aug 2022 14:47:46 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 17:47:42 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Andres Freund <andres@anarazel.de>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>, c@redhat.com
+Subject: Re: [PATCH] virtio_net: Revert "virtio_net: set the default max ring
+ size by find_vqs()"
+Message-ID: <20220815174655-mutt-send-email-mst@kernel.org>
+References: <20220815090521.127607-1-mst@redhat.com>
+ <20220815203426.GA509309@roeck-us.net>
+ <20220815164013-mutt-send-email-mst@kernel.org>
+ <20220815205053.GD509309@roeck-us.net>
+ <20220815165608-mutt-send-email-mst@kernel.org>
+ <20220815212839.aop6wwx4fkngihbf@awork3.anarazel.de>
+ <20220815173256-mutt-send-email-mst@kernel.org>
+ <20220815214604.x7g342h3oadruxx2@awork3.anarazel.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yvn60W/JpPO8URLY@xsang-OptiPlex-9020>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220815214604.x7g342h3oadruxx2@awork3.anarazel.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022, kernel test robot wrote:
-> commit: e923b0537d28e15c9d31ce8b38f810b325816903 ("KVM: selftests: Fix target thread to be migrated in rseq_test")
-> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+On Mon, Aug 15, 2022 at 02:46:04PM -0700, Andres Freund wrote:
+> Hi,
+> 
+> On 2022-08-15 17:39:08 -0400, Michael S. Tsirkin wrote:
+> > On Mon, Aug 15, 2022 at 02:28:39PM -0700, Andres Freund wrote:
+> > > On 2022-08-15 17:04:10 -0400, Michael S. Tsirkin wrote:
+> > > > So virtio has a queue_size register. When read, it will give you
+> > > > originally the maximum queue size. Normally we just read it and
+> > > > use it as queue size.
+> > > > 
+> > > > However, when queue memory allocation fails, and unconditionally with a
+> > > > network device with the problematic patch, driver is asking the
+> > > > hypervisor to make the ring smaller by writing a smaller value into this
+> > > > register.
+> > > > 
+> > > > I suspect that what happens is hypervisor still uses the original value
+> > > > somewhere.
+> > > 
+> > > It looks more like the host is never told about the changed size for legacy
+> > > devices...
+> > > 
+> > > Indeed, adding a vp_legacy_set_queue_size() & call to it to setup_vq(), makes
+> > > 5.19 + restricting queue sizes to 1024 boot again.
+> > 
+> > Interesting, the register is RO in the legacy interface.
+> > And to be frank I can't find where is vp_legacy_set_queue_size
+> > even implemented. It's midnight here too ...
+> 
+> Yea, I meant that added both vp_legacy_set_queue_size() and a call to it. I
+> was just quickly experimenting around.
 
-...
+interesting that it's writeable on GCP. It's RO on QEMU.
 
-> # selftests: kvm: rseq_test
-> # ==== Test Assertion Failure ====
-> #   rseq_test.c:278: i > (NR_TASK_MIGRATIONS / 2)
-> #   pid=49599 tid=49599 errno=4 - Interrupted system call
-> #      1	0x000000000040265d: main at rseq_test.c:278
-> #      2	0x00007fe44eed07fc: ?? ??:0
-> #      3	0x00000000004026d9: _start at ??:?
-> #   Only performed 23174 KVM_RUNs, task stalled too much?
-> # 
-> not ok 56 selftests: kvm: rseq_test # exit=254
+> 
+> > Yes I figured this out too. And I was able to reproduce on qemu now.
+> 
+> Cool.
+> 
+> 
+> > I'm posting a new patchset reverting all the handing of resize
+> > restrictions, I think we should rethink it for the next release.
+> 
+> Makes sense.
+> 
+> Greetings,
+> 
+> Andres Freund
 
-...
-
-> # Automatically generated file; DO NOT EDIT.
-> # Linux/x86_64 5.19.0-rc6 Kernel Configuration
-> #
-> CONFIG_CC_VERSION_TEXT="gcc-11 (Debian 11.3.0-3) 11.3.0"
-> CONFIG_CC_IS_GCC=y
-> CONFIG_GCC_VERSION=110300
-> CONFIG_CLANG_VERSION=0
-> CONFIG_AS_IS_GNU=y
-> CONFIG_AS_VERSION=23800
-> CONFIG_LD_IS_BFD=y
-> CONFIG_LD_VERSION=23800
-> CONFIG_LLD_VERSION=0
-
-Assuming 23800 == 2.38, this is a known issue.
-
-https://lore.kernel.org/all/20220810104114.6838-1-gshan@redhat.com

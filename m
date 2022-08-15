@@ -2,91 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3995933F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 19:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 143C75933F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 19:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbiHORRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 13:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
+        id S231270AbiHORTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 13:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiHORRp (ORCPT
+        with ESMTP id S229582AbiHORTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 13:17:45 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE8027CF6
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 10:17:43 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id n133so9256809oib.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 10:17:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
-        bh=iTqSFcKdBFWRcG51JwvSqUqajl7nbOchSE6cjtY60jg=;
-        b=VPokcfO/Zn58P+uPyP+d80HrKyQ7jUIFzXVlgLDYNHAOD4WqTbEoWTM7oNaHLHqrNL
-         bLm3dEEy1peXTF6kAfI6V3KmWLM9V4DvpaE2OkRW9sHzeoLypopzAPfNKgNKX8uLTnnk
-         uZ/1fsZDVNaeiD/OTShmrfLX5AX/OZXgcY4Sw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc;
-        bh=iTqSFcKdBFWRcG51JwvSqUqajl7nbOchSE6cjtY60jg=;
-        b=AuR+cC1oR+xFRCxYo7Ft5q48l11jhMmx4CkWsA5jnKRtafjg64UqVBgFHzeOZSPlCx
-         p+8ZxGUWJWyKecK0WTAVj7cvjpTqNiiku8BzQ76Cws2fB1L1HsB1DEvh+56VB6kb9I90
-         b68ZKr4g1b/DORXjGzu9UwRTBfwydS/PJ7Vll1UjM5FVS2Y4MmLuNk3Ge8j7WTSFP8qp
-         zfBTzLX4SA4Bu9ETAijibSSXiFGZuxx9ZWoIMSXyfrJqV+eCGl+D7GQYR2xqYhZhIU1V
-         OOh7e8nu8IDYgxIihaKBVpyLYXqk99bqAzceNbFx0H/9Q2RYch3RCcsycRIjl677Pnty
-         ULsA==
-X-Gm-Message-State: ACgBeo1VhQCKLsvKWJ29kCQc3D3x2iyh6V4bAMzCWSBN83L1wXomf1y6
-        +Y66Z4CxLRZ4UhmtE3rSKnoMsw==
-X-Google-Smtp-Source: AA6agR5/eLFCnzSFObcfd6XyGoNsQ1b8dU8kb/ubZnHu5G5/wVMPb72Jx+yfPnA5mf5nhKDFxj2gJA==
-X-Received: by 2002:a05:6808:1ab4:b0:33a:1081:2498 with SMTP id bm52-20020a0568081ab400b0033a10812498mr10170733oib.103.1660583863188;
-        Mon, 15 Aug 2022 10:17:43 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id d63-20020aca3642000000b00339c8aab320sm1914684oia.3.2022.08.15.10.17.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 10:17:42 -0700 (PDT)
-Subject: Re: [PATCH] selftests/landlock: fix broken include of
- linux/landlock.h
-To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Anders Roxell <anders.roxell@linaro.org>, Tim.Bird@sony.com,
-        kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <a459363217b1847c0f206a5dbdf181cb21cf3d0c.1659557290.git.guillaume.tucker@collabora.com>
- <f1fc4e6e-e2a6-3ec7-2d3b-215111a4b9ae@digikod.net>
- <76a2ac43-6e3d-0b62-7c8c-eec5f247f8f8@collabora.com>
- <3de9a64e-6f27-8f76-9626-6ee082d382ea@digikod.net>
- <c0c65ade-1d2a-5466-2c12-8e016904817f@digikod.net>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <32f7befd-19be-19aa-6db6-7b1fd670166e@linuxfoundation.org>
-Date:   Mon, 15 Aug 2022 11:17:39 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Mon, 15 Aug 2022 13:19:01 -0400
+Received: from zeeaster.vergenet.net (zeeaster.vergenet.net [206.189.110.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A21627CF6
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 10:18:59 -0700 (PDT)
+Received: from madeliefje.horms.nl (2a02-a44a-2918-403-201-8eff-fe22-8fea.fixed6.kpn.net [IPv6:2a02:a44a:2918:403:201:8eff:fe22:8fea])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by zeeaster.vergenet.net (Postfix) with ESMTPSA id 9DBEE20101;
+        Mon, 15 Aug 2022 17:18:57 +0000 (UTC)
+Received: by madeliefje.horms.nl (Postfix, from userid 7100)
+        id 6E5E6D3C; Mon, 15 Aug 2022 18:18:57 +0100 (BST)
+Date:   Mon, 15 Aug 2022 18:18:57 +0100
+From:   Simon Horman <horms@verge.net.au>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Liu Song <liusong@linux.alibaba.com>, bhelgaas@google.com,
+        pablo@netfilter.org, davem@davemloft.net, nathan@kernel.org,
+        apw@canonical.com, joe@perches.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Kconfig: eliminate abnormal characters displayed under
+ menuconfig
+Message-ID: <YvqAATtWg1xLzyRs@vergenet.net>
+References: <1659435153-119538-1-git-send-email-liusong@linux.alibaba.com>
+ <20220809025147.GA1264335@bhelgaas>
 MIME-Version: 1.0
-In-Reply-To: <c0c65ade-1d2a-5466-2c12-8e016904817f@digikod.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220809025147.GA1264335@bhelgaas>
+Organisation: Horms Solutions BV
+X-Virus-Scanned: clamav-milter 0.103.6 at zeeaster
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/12/22 9:29 AM, Mickaël Salaün wrote:
-> Shuah, do you plan to send a pull request before merge window closes?
+On Mon, Aug 08, 2022 at 09:51:47PM -0500, Bjorn Helgaas wrote:
+> On Tue, Aug 02, 2022 at 06:12:33PM +0800, Liu Song wrote:
+> > From: Liu Song <liusong@linux.alibaba.com>
+> > 
+> > Use "find ./linux/* | grep Kconfig | xargs file | grep UTF", can find
+> > files with utf-8 encoded characters, these files will display garbled
+> > characters in menuconfig, except for characters with special meanings
+> > that cannot be modified, modify the characters with obvious errors to
+> > eliminate the wrong display under meunconfig.
+> > 
+> > Signed-off-by: Liu Song <liusong@linux.alibaba.com>
+> > Suggested-by: Bjorn Helgaas <helgaas@kernel.org>
 > 
+> I did suggest fixing everything at once.  But I think there are
+> actually two problems here.  The first is that some are just wrong,
+> e.g., drivers/pci/Kconfig using CYRILLIC SMALL LETTER DZE instead of
+> "s", or net/netfilter/ipvs/Kconfig using NO-BREAK SPACE for no good
+> reason.
+> 
+> arch/Kconfig looks like it's using RIGHT SINGLE QUOTATION MARK instead
+> of the basic APOSTROPHE.  That one is debatable; I think it's fair to
+> argue that RIGHT SINGLE QUOTATION MARK would be preferred if rendered
+> correctly.
+> 
+> The second problem is that I think menuconfig doesn't handle UTF-8
+> correctly.  For example, in a gnome terminal with the default
+> LC_ALL=en_US.UTF-8, these look fine:
+> 
+>   $ grep -A10 MTD_SPI_NOR_USE_4K_SECTORS drivers/mtd/spi-nor/Kconfig
+>   ...
+>   64 KiB block instead of 16 × 4 KiB sectors.
+> 
+>   $ grep -A1 MTD_NAND_CAFE drivers/mtd/nand/raw/Kconfig
+>   config MTD_NAND_CAFE
+> 	tristate "OLPC CAFÉ NAND controller"
+> 
+> But when menuconfig in the same terminal displays that same text, it
+> looks like "16  ~W 4 KiB sectors" and "OLPC CAF ~I NAND".
+> 
+> On the other hand, gconfig and xconfig do render these correctly.  So
+> I think there's something wrong with UTF-8 in menuconfig, and we
+> should fix that as well.
+> 
+> Anyway, I'm fine with this patch as far as it goes:
+> 
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 
-I was hoping to do so and missed the window. Looks like more discussion
-happening on this change. I will get this in for the next rc
+IPVS portion:
 
-thanks,
--- Shuah
+Acked-by: Simon Horman <horms@verge.net.au>
+

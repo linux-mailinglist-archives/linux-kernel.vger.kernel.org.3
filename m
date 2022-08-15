@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6B0594876
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B716594866
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354234AbiHOXoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
+        id S1354018AbiHOXoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354141AbiHOXl1 (ORCPT
+        with ESMTP id S1354172AbiHOXle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:41:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D66128EE4;
-        Mon, 15 Aug 2022 13:10:46 -0700 (PDT)
+        Mon, 15 Aug 2022 19:41:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EB7155CAC;
+        Mon, 15 Aug 2022 13:10:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96026B80EAD;
-        Mon, 15 Aug 2022 20:10:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6DD2C433D6;
-        Mon, 15 Aug 2022 20:10:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A91560F0C;
+        Mon, 15 Aug 2022 20:10:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 640E7C433D6;
+        Mon, 15 Aug 2022 20:10:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594244;
-        bh=2OjajXMonsA43H6MGn0Yk7kn041C0Uia5PRSs490OSo=;
+        s=korg; t=1660594256;
+        bh=uw//HsiRMHBa899GZSRbrnUZcOQGxjsDm5ULzHnOqJM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T8aT9XYN4ViCtPQZc+KFB6qZS+K9zYtAZ3BoHkI4p648wbvfKl7yKQJ7UchxNm/nh
-         ntVehBpoF8cd0uOjMVYEgMDp2HeeaYbxCLFqIcWrk34e5DwyddNBQDkUme6n5cR4gP
-         QPZYQJlPzyLm9Musas8okk/65gUnKpwlSgE8iUVs=
+        b=OQwqYYEWiRNsEofHxse2jRC0GEN1EYRgEox+7NPYTY/mULlThaZlA5Vdyg5itsIgY
+         xTBzFdiCIIY06H5CgDjk+5ies0QrnY9tjvJR557tIK5pvCeqV317n3/jdNCL8U0Dnr
+         vLoOLUstNXGIF9G9soJrbI6CNJYVXktrPBkqCHag=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0400/1157] media: sta2x11: remove VIRT_TO_BUS dependency
-Date:   Mon, 15 Aug 2022 19:55:56 +0200
-Message-Id: <20220815180455.676500630@linuxfoundation.org>
+Subject: [PATCH 5.19 0402/1157] media: mediatek: vcodec: Skip SOURCE_CHANGE & EOS events for stateless
+Date:   Mon, 15 Aug 2022 19:55:58 +0200
+Message-Id: <20220815180455.755899657@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -56,45 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Chen-Yu Tsai <wenst@chromium.org>
 
-[ Upstream commit a157802359f7451ed8046b2b6dbaca187797e062 ]
+[ Upstream commit e13ca460e20ed42fe57a3845b0bb9a82f81f05cd ]
 
-This driver does not use the virt_to_bus() function, though it
-depends on x86 specific fixups in the swiotlb code, which was
-last rewritten in commit e380a0394c36 ("x86/PCI: sta2x11: use
-default DMA address translation").
+The stateless decoder API does not specify the usage of SOURCE_CHANGE
+and EOF events. These events are used by stateful decoders to signal
+changes in the bitstream. They do not make sense for stateless decoders.
 
-It is possible that the driver still fails to build on some
-architectures that are missing CONFIG_VIRT_TO_BUS, but it is
-always set on x86 machines with the STA2X11 platform enabled.
+Do not handle subscription for these two types of events for stateless
+decoder instances. This fixes the last v4l2-compliance error:
 
-More likely though is that it was never meant to depend on
-CONFIG_VIRT_TO_BUS, and the Kconfig dependency was kept from
-an out-of-tree version when the driver was originally merged.
+Control ioctls:
+		fail: v4l2-test-controls.cpp(946): have_source_change || have_eos
+	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: FAIL
 
-Fixes: efeb98b4e2b2 ("[media] STA2X11 VIP: new V4L2 driver")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: 8cdc3794b2e3 ("media: mtk-vcodec: vdec: support stateless API")
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/sta2x11/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/media/pci/sta2x11/Kconfig b/drivers/media/pci/sta2x11/Kconfig
-index a96e170ab04e..118b922c08c3 100644
---- a/drivers/media/pci/sta2x11/Kconfig
-+++ b/drivers/media/pci/sta2x11/Kconfig
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config STA2X11_VIP
- 	tristate "STA2X11 VIP Video For Linux"
--	depends on PCI && VIDEO_DEV && VIRT_TO_BUS && I2C
-+	depends on PCI && VIDEO_DEV && I2C
- 	depends on STA2X11 || COMPILE_TEST
- 	select GPIOLIB if MEDIA_SUBDRV_AUTOSELECT
- 	select VIDEO_ADV7180 if MEDIA_SUBDRV_AUTOSELECT
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+index 50cfb18f85ae..01836a1c7d3f 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+@@ -196,6 +196,11 @@ static int vidioc_vdec_querycap(struct file *file, void *priv,
+ static int vidioc_vdec_subscribe_evt(struct v4l2_fh *fh,
+ 				     const struct v4l2_event_subscription *sub)
+ {
++	struct mtk_vcodec_ctx *ctx = fh_to_ctx(fh);
++
++	if (ctx->dev->vdec_pdata->uses_stateless_api)
++		return v4l2_ctrl_subscribe_event(fh, sub);
++
+ 	switch (sub->type) {
+ 	case V4L2_EVENT_EOS:
+ 		return v4l2_event_subscribe(fh, sub, 2, NULL);
 -- 
 2.35.1
 

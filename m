@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B89D5932DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 18:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2005B5932EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 18:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbiHOQUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 12:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39034 "EHLO
+        id S232308AbiHOQUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 12:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbiHOQU1 (ORCPT
+        with ESMTP id S230506AbiHOQU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 12:20:27 -0400
+        Mon, 15 Aug 2022 12:20:29 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83FFADF01
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 09:20:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 34314BF72
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 09:20:28 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2194B1480;
-        Mon, 15 Aug 2022 09:20:27 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C871F106F;
+        Mon, 15 Aug 2022 09:20:28 -0700 (PDT)
 Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D406A3F70D;
-        Mon, 15 Aug 2022 09:20:24 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 847D83F70D;
+        Mon, 15 Aug 2022 09:20:26 -0700 (PDT)
 From:   Robin Murphy <robin.murphy@arm.com>
 To:     joro@8bytes.org
 Cc:     will@kernel.org, iommu@lists.linux.dev,
@@ -28,9 +28,9 @@ Cc:     will@kernel.org, iommu@lists.linux.dev,
         kevin.tian@intel.com, suravee.suthikulpanit@amd.com,
         vasant.hegde@amd.com, mjrosato@linux.ibm.com,
         schnelle@linux.ibm.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 02/16] iommu/amd: Handle race between registration and device probe
-Date:   Mon, 15 Aug 2022 17:20:03 +0100
-Message-Id: <a8d8ebe12b411d28972f1ab928c6db92e8913cf5.1660572783.git.robin.murphy@arm.com>
+Subject: [PATCH v4 03/16] iommu/s390: Fail probe for non-PCI devices
+Date:   Mon, 15 Aug 2022 17:20:04 +0100
+Message-Id: <8cb71ea1b24bd2622c1937bd9cfffe73b126eb56.1660572783.git.robin.murphy@arm.com>
 X-Mailer: git-send-email 2.36.1.dirty
 In-Reply-To: <cover.1660572783.git.robin.murphy@arm.com>
 References: <cover.1660572783.git.robin.murphy@arm.com>
@@ -45,33 +45,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As for the Intel driver, make sure the AMD driver can cope with seeing
-.probe_device calls without having to wait for all known instances to
-register first.
+From: Matthew Rosato <mjrosato@linux.ibm.com>
 
+s390-iommu only supports pci_bus_type today.
+
+Tested-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
 Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 ---
 
-v4: No change
+v4: New
 
- drivers/iommu/amd/iommu.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/iommu/s390-iommu.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-index 65b8e4fd8217..5ed9fd40d2a7 100644
---- a/drivers/iommu/amd/iommu.c
-+++ b/drivers/iommu/amd/iommu.c
-@@ -1851,6 +1851,10 @@ static struct iommu_device *amd_iommu_probe_device(struct device *dev)
- 	if (!iommu)
- 		return ERR_PTR(-ENODEV);
+diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
+index c898bcbbce11..8158a4ed0c60 100644
+--- a/drivers/iommu/s390-iommu.c
++++ b/drivers/iommu/s390-iommu.c
+@@ -185,7 +185,12 @@ static void s390_iommu_detach_device(struct iommu_domain *domain,
  
-+	/* Not registered yet? */
-+	if (!iommu->iommu.ops)
+ static struct iommu_device *s390_iommu_probe_device(struct device *dev)
+ {
+-	struct zpci_dev *zdev = to_zpci_dev(dev);
++	struct zpci_dev *zdev;
++
++	if (!dev_is_pci(dev))
 +		return ERR_PTR(-ENODEV);
 +
- 	if (dev_iommu_priv_get(dev))
- 		return &iommu->iommu;
++	zdev = to_zpci_dev(dev);
  
+ 	return &zdev->iommu_dev;
+ }
 -- 
 2.36.1.dirty
 

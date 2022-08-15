@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5915359496F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E944594DFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353617AbiHOXjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58756 "EHLO
+        id S233136AbiHPBDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 21:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353690AbiHOXf5 (ORCPT
+        with ESMTP id S1347961AbiHPA52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:35:57 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A7815176D;
-        Mon, 15 Aug 2022 13:09:15 -0700 (PDT)
+        Mon, 15 Aug 2022 20:57:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0F7DAED6;
+        Mon, 15 Aug 2022 13:48:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 67EB0CE1262;
-        Mon, 15 Aug 2022 20:09:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53E2EC433C1;
-        Mon, 15 Aug 2022 20:09:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CF703B811AB;
+        Mon, 15 Aug 2022 20:48:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14836C433C1;
+        Mon, 15 Aug 2022 20:48:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594151;
-        bh=Ohh3paW8dP4iCobD3rCYKby9TRKkA45xwCV8Vho5sgU=;
+        s=korg; t=1660596528;
+        bh=aPB0rUdcfekjqm3H0m8FGPbGicTahUmBH0WeHRYV5hs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VGtIFwRZh5BOUO7rnukeY/16OOfNmT89JqoNjCHqKJMzv/RPoz4CxCd/G5ddzYbi8
-         4m6c2X5h4X+WAanO0Lld3wv/brHCxV0Kr6ULuQzjEWDdfuKC5Q0iLDLeHHF0hPHbUB
-         vNBMukOmAmy4CZxp3aYjH0Exyq1gmNSOnKH7zrVE=
+        b=Kglx+VVoS2FZ89V7eCegIMSavA0V+0ab6lPMszVkFPT/+y+l+xNTLSqQob1Jt5aSG
+         xLxW/XmOPxJJ12KK116FEYEfO3GMiGl/KTetIMAGyGPikmat8+Hfjz424RnErkMw4y
+         L3RD28ojm6/p1eCvlkO9sHU1ASn9Tl56RLbDNWhA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shuqi Zhang <zhangshuqi3@huawei.com>,
-        Ritesh Harjani <ritesh.list@gmail.com>,
-        Theodore Tso <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 1064/1095] ext4: use kmemdup() to replace kmalloc + memcpy
-Date:   Mon, 15 Aug 2022 20:07:43 +0200
-Message-Id: <20220815180513.053676857@linuxfoundation.org>
+        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 1108/1157] KVM: nVMX: Attempt to load PERF_GLOBAL_CTRL on nVMX xfer iff it exists
+Date:   Mon, 15 Aug 2022 20:07:44 +0200
+Message-Id: <20220815180524.609692721@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
-References: <20220815180429.240518113@linuxfoundation.org>
+In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
+References: <20220815180439.416659447@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +55,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shuqi Zhang <zhangshuqi3@huawei.com>
+From: Sean Christopherson <seanjc@google.com>
 
-[ Upstream commit 4efd9f0d120c55b08852ee5605dbb02a77089a5d ]
+[ Upstream commit 4496a6f9b45e8cd83343ad86a3984d614e22cf54 ]
 
-Replace kmalloc + memcpy with kmemdup()
+Attempt to load PERF_GLOBAL_CTRL during nested VM-Enter/VM-Exit if and
+only if the MSR exists (according to the guest vCPU model).  KVM has very
+misguided handling of VM_{ENTRY,EXIT}_LOAD_IA32_PERF_GLOBAL_CTRL and
+attempts to force the nVMX MSR settings to match the vPMU model, i.e. to
+hide/expose the control based on whether or not the MSR exists from the
+guest's perspective.
 
-Signed-off-by: Shuqi Zhang <zhangshuqi3@huawei.com>
-Reviewed-by: Ritesh Harjani <ritesh.list@gmail.com>
-Link: https://lore.kernel.org/r/20220525030120.803330-1-zhangshuqi3@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+KVM's modifications fail to handle the scenario where the vPMU is hidden
+from the guest _after_ being exposed to the guest, e.g. by userspace
+doing multiple KVM_SET_CPUID2 calls, which is allowed if done before any
+KVM_RUN.  nested_vmx_pmu_refresh() is called if and only if there's a
+recognized vPMU, i.e. KVM will leave the bits in the allow state and then
+ultimately reject the MSR load and WARN.
+
+KVM should not force the VMX MSRs in the first place.  KVM taking control
+of the MSRs was a misguided attempt at mimicking what commit 5f76f6f5ff96
+("KVM: nVMX: Do not expose MPX VMX controls when guest MPX disabled",
+2018-10-01) did for MPX.  However, the MPX commit was a workaround for
+another KVM bug and not something that should be imitated (and it should
+never been done in the first place).
+
+In other words, KVM's ABI _should_ be that userspace has full control
+over the MSRs, at which point triggering the WARN that loading the MSR
+must not fail is trivial.
+
+The intent of the WARN is still valid; KVM has consistency checks to
+ensure that vmcs12->{guest,host}_ia32_perf_global_ctrl is valid.  The
+problem is that '0' must be considered a valid value at all times, and so
+the simple/obvious solution is to just not actually load the MSR when it
+does not exist.  It is userspace's responsibility to provide a sane vCPU
+model, i.e. KVM is well within its ABI and Intel's VMX architecture to
+skip the loads if the MSR does not exist.
+
+Fixes: 03a8871add95 ("KVM: nVMX: Expose load IA32_PERF_GLOBAL_CTRL VM-{Entry,Exit} control")
+Cc: stable@vger.kernel.org
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20220722224409.1336532-5-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/xattr.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/x86/kvm/vmx/nested.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
-index b57fd07fbdba..d92d50de5a01 100644
---- a/fs/ext4/xattr.c
-+++ b/fs/ext4/xattr.c
-@@ -1887,11 +1887,10 @@ ext4_xattr_block_set(handle_t *handle, struct inode *inode,
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index 66735fbb791d..ef21c5fe172e 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -2617,6 +2617,7 @@ static int prepare_vmcs02(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
+ 	}
  
- 			unlock_buffer(bs->bh);
- 			ea_bdebug(bs->bh, "cloning");
--			s->base = kmalloc(bs->bh->b_size, GFP_NOFS);
-+			s->base = kmemdup(BHDR(bs->bh), bs->bh->b_size, GFP_NOFS);
- 			error = -ENOMEM;
- 			if (s->base == NULL)
- 				goto cleanup;
--			memcpy(s->base, BHDR(bs->bh), bs->bh->b_size);
- 			s->first = ENTRY(header(s->base)+1);
- 			header(s->base)->h_refcount = cpu_to_le32(1);
- 			s->here = ENTRY(s->base + offset);
+ 	if ((vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL) &&
++	    intel_pmu_has_perf_global_ctrl(vcpu_to_pmu(vcpu)) &&
+ 	    WARN_ON_ONCE(kvm_set_msr(vcpu, MSR_CORE_PERF_GLOBAL_CTRL,
+ 				     vmcs12->guest_ia32_perf_global_ctrl))) {
+ 		*entry_failure_code = ENTRY_FAIL_DEFAULT;
+@@ -4342,7 +4343,8 @@ static void load_vmcs12_host_state(struct kvm_vcpu *vcpu,
+ 		vmcs_write64(GUEST_IA32_PAT, vmcs12->host_ia32_pat);
+ 		vcpu->arch.pat = vmcs12->host_ia32_pat;
+ 	}
+-	if (vmcs12->vm_exit_controls & VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL)
++	if ((vmcs12->vm_exit_controls & VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL) &&
++	    intel_pmu_has_perf_global_ctrl(vcpu_to_pmu(vcpu)))
+ 		WARN_ON_ONCE(kvm_set_msr(vcpu, MSR_CORE_PERF_GLOBAL_CTRL,
+ 					 vmcs12->host_ia32_perf_global_ctrl));
+ 
 -- 
 2.35.1
 

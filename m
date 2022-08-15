@@ -2,228 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32283592A9B
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 10:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E3B8592A88
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 10:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231316AbiHOH35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 03:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
+        id S233322AbiHOHcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 03:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiHOH3y (ORCPT
+        with ESMTP id S229775AbiHOHcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 03:29:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 205A618375
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:29:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660548592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=byIPChTKZm6TPPDl5DVa0fUbEJ1aaHC3/c+lPPYM3F0=;
-        b=UA4idQdghvmNwkJY44s2g9f8E9DMlPbY3A5czAkuK/qxM0JbU0piNp0QIeQa92lsCOYCgN
-        Z7dxcOpXuh1akSZsOHdikM1q4+Cy7CvgUglnoMaQWS8OgcrL64s22fFekrOGPCrR+mSoIo
-        bxOxsp4oT5qzryvqwdnjeUsdSbQSRis=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-115-4S_UN_CbPdaAVB4PMhyXig-1; Mon, 15 Aug 2022 03:29:50 -0400
-X-MC-Unique: 4S_UN_CbPdaAVB4PMhyXig-1
-Received: by mail-ed1-f72.google.com with SMTP id s21-20020a056402521500b00440e91f30easo4237482edd.7
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:29:50 -0700 (PDT)
+        Mon, 15 Aug 2022 03:32:18 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D334618B0A
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:32:16 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id tl27so12198634ejc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:32:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=WJLEPHsAZp8U37aoOrddvhy4zTgTsBLms1gLLOoidx8=;
+        b=Apiwg8lXWfx0PuHphZbC+0CSw/jecCBMO4b4h6hmcINbjWREv2rl1SeXAn7r5NEZN6
+         BCxZfoOq0tp+FSVLcgR3MYKwJIEi/l9BfvdCuAib3La4b5VBblthG2Lj2q3O8wMlbvBI
+         oJANIx421UuLYpOSwIMHsynvxi9Cm2EJNUDIIG5JnvF1HjGUJ9keBoofJgEeNWmS1SDy
+         VZxC3zCdqrMwgVM/U4J1vf8M3KFgNGdrJCVK94XY/tdLJcrBE+rkLhdn1PY8XSJ31ukI
+         vw4pcSW7DYwX7PNmhDvQvlMUSrscDHBTibnECxoWwdk7RbsserN0v8OXSXVX2UmcEkjm
+         Bt0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=byIPChTKZm6TPPDl5DVa0fUbEJ1aaHC3/c+lPPYM3F0=;
-        b=e5URDoRSn0CWiAf3AfcepkPdusIP8jtYDzaDrgD5t8SO0Zq5EPpyIQXCxKZGqKSAbY
-         n5blCOuIr7QAVyvEa1/MTyE2MsZmBbHGRd7MTp/94EnwYVccuM9yzCef5L/0TUsHYVuH
-         gcgAW6Whfy88oUjq9Hgh2vzOdEIOIFaI/5vvPdN4YUrfB9NesLUatExb30fH9H6GqtBk
-         SvSmpa8J2f4yvsbLVgvh6rc51Ew9TO3VUg50MF+F0CahZV8e/T9BEMYJStjhpwYCCewA
-         WzkX+Bpiho0ZK61FPqv0RnZe6axH35MeGo42vvPwWjwdDDbkUtiiGhixspcwnXCKf/BJ
-         A9Sw==
-X-Gm-Message-State: ACgBeo2Y/QVyAh8fo0+mH0DC0LqKGgKdrSxw5h1zW0MEdLgIsLPCKHnl
-        x0v+vuGUxeXktD0L8vJ6lnV0zf83MTC37K4Xtq9OUV62K/A5j5fIrmuxYgKsjE/ypUuMer7OHN7
-        x7wEgYs0qgdzN5iD+dg9qs4UL
-X-Received: by 2002:a17:907:1b1f:b0:72f:56db:cce9 with SMTP id mp31-20020a1709071b1f00b0072f56dbcce9mr9488343ejc.605.1660548589232;
-        Mon, 15 Aug 2022 00:29:49 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6tJQ/wZnUulXq42AcSaqEj2YyozhPsc+eoLREYFCtELx3j50akTpxZzIu1i8foc5y9TaYsww==
-X-Received: by 2002:a17:907:1b1f:b0:72f:56db:cce9 with SMTP id mp31-20020a1709071b1f00b0072f56dbcce9mr9488331ejc.605.1660548588928;
-        Mon, 15 Aug 2022 00:29:48 -0700 (PDT)
-Received: from redhat.com ([2.54.169.49])
-        by smtp.gmail.com with ESMTPSA id 21-20020a170906301500b0071cef6c53aesm3764848ejz.0.2022.08.15.00.29.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 00:29:48 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 03:29:43 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Andres Freund <andres@anarazel.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: upstream kernel crashes
-Message-ID: <20220815031549-mutt-send-email-mst@kernel.org>
-References: <20220814212610.GA3690074@roeck-us.net>
- <CAHk-=wgf2EfLHui6A5NbWoaVBB2f8t-XBUiOMkyjN2NU41t6eA@mail.gmail.com>
- <20220814223743.26ebsbnrvrjien4f@awork3.anarazel.de>
- <CAHk-=wi6raoJE-1cyRU0YxJ+9ReO1eXmOAq0FwKAyZS7nhvk9w@mail.gmail.com>
- <1c057afa-92df-ee3c-5978-3731d3db9345@kernel.dk>
- <20220815013651.mrm7qgklk6sgpkbb@awork3.anarazel.de>
- <CAHk-=wikzU4402P-FpJRK_QwfVOS+t-3p1Wx5awGHTvr-s_0Ew@mail.gmail.com>
- <20220815071143.n2t5xsmifnigttq2@awork3.anarazel.de>
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=WJLEPHsAZp8U37aoOrddvhy4zTgTsBLms1gLLOoidx8=;
+        b=cI8sEPnZrhELl7wxiPg/L0N3xQO8IImT6yiGYzzPMgIdj1PfwU9u4dxIoK5RwXXHGF
+         CEqWK9viIk3PyF5LiWDXqtfWkeu690UtOaXkrV9HUyhrbrc66DCbMe7dvjuPEdo8Mmdi
+         ohIgU0tfGEJJW1K5G0xIkV5NqBLD3gAKbw0qnyMbfq9D20qypvsVKWRgVuVh0YydOlW3
+         GT2jJT2Xpr0iB+wZBHrGjBFL8dEtHyzYmb8w3xmfa6Mb98+sq1ZqjZf/rgGxYwrLaxBI
+         PHbfRohJR908nx8VSy6oxdQIpM2zMNPmZFGkL3noH1Q5XHuDrJAtodbJC8sHkWPDBeFs
+         oY7Q==
+X-Gm-Message-State: ACgBeo03fkpxRg9jxY34W5E3cKCcBDl9lHsGEhlmZmR3cbi2Ig43hkpd
+        Njg9YECjhcysaqqyrpQDwpx6Nw==
+X-Google-Smtp-Source: AA6agR5aKYPCzgLDNmCoxSU0zm6D7mFfVrKEn7+YQ7XB5w7ebixaOlegmzsNAq3fiAoaNyIoRR2CNA==
+X-Received: by 2002:a17:907:1ca8:b0:730:871e:498c with SMTP id nb40-20020a1709071ca800b00730871e498cmr9570990ejc.651.1660548735151;
+        Mon, 15 Aug 2022 00:32:15 -0700 (PDT)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id bt2-20020a0564020a4200b0043d1eff72b3sm6206029edb.74.2022.08.15.00.32.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Aug 2022 00:32:14 -0700 (PDT)
+Message-ID: <94ab0304-a674-3504-c1bd-3492e2ded0b1@blackwall.org>
+Date:   Mon, 15 Aug 2022 10:32:13 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815071143.n2t5xsmifnigttq2@awork3.anarazel.de>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH net-next] net: rtnetlink: fix module reference count leak
+ issue in rtnetlink_rcv_msg
+Content-Language: en-US
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+To:     Zhengchao Shao <shaozhengchao@huawei.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     idosch@nvidia.com, petrm@nvidia.com, florent.fourcot@wifirst.fr,
+        weiyongjun1@huawei.com, yuehaibing@huawei.com
+References: <20220815024629.240367-1-shaozhengchao@huawei.com>
+ <feff23c6-529c-3421-c48c-463846e59630@blackwall.org>
+In-Reply-To: <feff23c6-529c-3421-c48c-463846e59630@blackwall.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 12:11:43AM -0700, Andres Freund wrote:
-> Hi,
+On 15/08/2022 08:44, Nikolay Aleksandrov wrote:
+> On 15/08/2022 05:46, Zhengchao Shao wrote:
+>> When bulk delete command is received in the rtnetlink_rcv_msg function,
+>> if bulk delete is not supported, module_put is not called to release
+>> the reference counting. As a result, module reference count is leaked.
+>>
+>> Fixes: a6cec0bcd342("net: rtnetlink: add bulk delete support flag")
+>> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+>> ---
+>>  net/core/rtnetlink.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
+>> index ac45328607f7..4b5b15c684ed 100644
+>> --- a/net/core/rtnetlink.c
+>> +++ b/net/core/rtnetlink.c
+>> @@ -6070,6 +6070,7 @@ static int rtnetlink_rcv_msg(struct sk_buff *skb, struct nlmsghdr *nlh,
+>>  	if (kind == RTNL_KIND_DEL && (nlh->nlmsg_flags & NLM_F_BULK) &&
+>>  	    !(flags & RTNL_FLAG_BULK_DEL_SUPPORTED)) {
+>>  		NL_SET_ERR_MSG(extack, "Bulk delete is not supported");
+>> +		module_put(owner);
+>>  		goto err_unlock;
+>>  	}
+>>  
 > 
-> On 2022-08-14 20:18:44 -0700, Linus Torvalds wrote:
-> > On Sun, Aug 14, 2022 at 6:36 PM Andres Freund <andres@anarazel.de> wrote:
-> > >
-> > > Some of the symptoms could be related to the issue in this thread, hence
-> > > listing them here
-> > 
-> > Smells like slab corruption to me, and the problems may end up being
-> > then largely random just depending on who ends up using the allocation
-> > that gets trampled on.
-> > 
-> > I wouldn't be surprised if it's all the same thing - including your
-> > network issue.
-> 
-> Yea. As I just wrote in
-> https://postgr.es/m/20220815070203.plwjx7b3cyugpdt7%40awork3.anarazel.de I
-> bisected it down to one commit (762faee5a267). With that commit I only see the
-> networking issue across a few reboots, but with ebcce4926365 some boots oops
-> badly and other times it' "just" network not working.
-> 
-> 
-> [    2.447668] general protection fault, probably for non-canonical address 0xffff000000000800: 0000 [#1] PREEMPT SMP PTI
-> [    2.449168] CPU: 1 PID: 109 Comm: systemd-udevd Not tainted 5.19.0-bisect8-00051-gebcce4926365 #8
-> [    2.450397] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
-> [    2.451670] RIP: 0010:kmem_cache_alloc_node+0x2b4/0x430
-> [    2.452399] Code: 01 00 0f 84 e7 fe ff ff 48 8b 50 48 48 8d 7a ff 83 e2 01 48 0f 45 c7 49 89 c7 e9 d0 fe ff ff 8b 45 28 48 8b 7d 00 48 8d 4a 40 <49> 8b 1c 04 4c 89 e0 65 48 0f c7 0f 0f 94 c0 84 c0 0f 84 cd fd ff
-> [    2.455454] RSP: 0018:ffffa2b40040bd60 EFLAGS: 00010246
-> [    2.456181] RAX: 0000000000000800 RBX: 0000000000000cc0 RCX: 0000000000001741
-> [    2.457195] RDX: 0000000000001701 RSI: 0000000000000cc0 RDI: 000000000002f820
-> [    2.458211] RBP: ffff8da7800ed500 R08: 0000000000000000 R09: 0000000000000011
-> [    2.459183] R10: 00007fd02b8b8b90 R11: 0000000000000000 R12: ffff000000000000
-> [    2.460268] R13: 0000000000000000 R14: 0000000000000cc0 R15: ffffffff934bde4b
-> [    2.461368] FS:  00007fd02b8b88c0(0000) GS:ffff8da8b7d00000(0000) knlGS:0000000000000000
-> [    2.462605] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    2.463436] CR2: 000055a42d2ee250 CR3: 0000000100328001 CR4: 00000000003706e0
-> [    2.464527] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [    2.465520] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [    2.466509] Call Trace:
-> [    2.466882]  <TASK>
-> [    2.467218]  copy_process+0x1eb/0x1a00
-> [    2.467827]  ? _raw_spin_unlock_irqrestore+0x16/0x30
-> [    2.468578]  kernel_clone+0xba/0x400
-> [    2.470455]  __do_sys_clone+0x78/0xa0
-> [    2.471006]  do_syscall_64+0x37/0x90
-> [    2.471526]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> [    2.472267] RIP: 0033:0x7fd02bf98cb3
-> [    2.472889] Code: 1f 84 00 00 00 00 00 64 48 8b 04 25 10 00 00 00 45 31 c0 31 d2 31 f6 bf 11 00 20 01 4c 8d 90 d0 02 00 00 b8 38 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 41 89 c0 85 c0 75 2a 64 48 8b 04 25 10 00
-> [    2.475504] RSP: 002b:00007ffc6a3abf08 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
-> [    2.476565] RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fd02bf98cb3
-> [    2.477554] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
-> [    2.478574] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-> [    2.479608] R10: 00007fd02b8b8b90 R11: 0000000000000246 R12: 0000000000000001
-> [    2.480675] R13: 00007ffc6a3ac0c0 R14: 0000000000000000 R15: 0000000000000001
-> [    2.481686]  </TASK>
-> [    2.482119] Modules linked in:
-> [    2.482704] ---[ end trace 0000000000000000 ]---
-> [    2.483456] RIP: 0010:kmem_cache_alloc_node+0x2b4/0x430
-> [    2.484282] Code: 01 00 0f 84 e7 fe ff ff 48 8b 50 48 48 8d 7a ff 83 e2 01 48 0f 45 c7 49 89 c7 e9 d0 fe ff ff 8b 45 28 48 8b 7d 00 48 8d 4a 40 <49> 8b 1c 04 4c 89 e0 65 48 0f c7 0f 0f 94 c0 84 c0 0f 84 cd fd ff
-> [    2.487024] RSP: 0018:ffffa2b40040bd60 EFLAGS: 00010246
-> [    2.487817] RAX: 0000000000000800 RBX: 0000000000000cc0 RCX: 0000000000001741
-> [    2.488805] RDX: 0000000000001701 RSI: 0000000000000cc0 RDI: 000000000002f820
-> [    2.489869] RBP: ffff8da7800ed500 R08: 0000000000000000 R09: 0000000000000011
-> [    2.490842] R10: 00007fd02b8b8b90 R11: 0000000000000000 R12: ffff000000000000
-> [    2.491905] R13: 0000000000000000 R14: 0000000000000cc0 R15: ffffffff934bde4b
-> [    2.492975] FS:  00007fd02b8b88c0(0000) GS:ffff8da8b7d00000(0000) knlGS:0000000000000000
-> [    2.494140] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    2.495082] CR2: 000055a42d2ee250 CR3: 0000000100328001 CR4: 00000000003706e0
-> [    2.496080] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [    2.497084] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [    2.498524] systemd-udevd (109) used greatest stack depth: 13688 bytes left
-> [    2.503905] general protection fault, probably for non-canonical address 0xffff000000000000: 0000 [#2] PREEMPT SMP PTI
-> [    2.505504] CPU: 0 PID: 13 Comm: ksoftirqd/0 Tainted: G      D           5.19.0-bisect8-00051-gebcce4926365 #8
-> [    2.507037] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
-> [    2.508313] RIP: 0010:rcu_core+0x280/0x920
-> [    2.508968] Code: 3f 00 00 48 89 c2 48 85 c0 0f 84 2b 03 00 00 49 89 dd 48 83 c3 01 0f 1f 44 00 00 48 8b 42 08 48 89 d7 48 c7 42 08 00 00 00 00 <ff> d0 0f 1f 00 65 8b 05 64 f5 ad 6c f6 c4 01 75 97 be 00 02 00 00
-> [    2.511684] RSP: 0000:ffffa2b40007fe20 EFLAGS: 00010202
-> [    2.512410] RAX: ffff000000000000 RBX: 0000000000000002 RCX: 0000000080170011
-> [    2.513497] RDX: ffff8da783372a20 RSI: 0000000080170011 RDI: ffff8da783372a20
-> [    2.514604] RBP: ffff8da8b7c2b940 R08: 0000000000000001 R09: ffffffff9353b752
-> [    2.515667] R10: ffffffff94a060c0 R11: 000000000009b776 R12: ffff8da78020c000
-> [    2.516650] R13: 0000000000000001 R14: ffff8da8b7c2b9b8 R15: 0000000000000000
-> [    2.517628] FS:  0000000000000000(0000) GS:ffff8da8b7c00000(0000) knlGS:0000000000000000
-> [    2.518840] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    2.519645] CR2: 0000557194db70f8 CR3: 0000000100364006 CR4: 00000000003706f0
-> [    2.520641] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [    2.521629] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [    2.522592] Call Trace:
-> [    2.522963]  <TASK>
-> [    2.523299]  __do_softirq+0xe1/0x2ec
-> [    2.523883]  ? sort_range+0x20/0x20
-> [    2.524404]  run_ksoftirqd+0x25/0x30
-> [    2.524944]  smpboot_thread_fn+0x180/0x220
-> [    2.525519]  kthread+0xe1/0x110
-> [    2.526001]  ? kthread_complete_and_exit+0x20/0x20
-> [    2.526673]  ret_from_fork+0x1f/0x30
-> [    2.527182]  </TASK>
-> [    2.527518] Modules linked in:
-> [    2.528005] ---[ end trace 0000000000000000 ]---
-> [    2.528662] RIP: 0010:kmem_cache_alloc_node+0x2b4/0x430
-> [    2.529524] Code: 01 00 0f 84 e7 fe ff ff 48 8b 50 48 48 8d 7a ff 83 e2 01 48 0f 45 c7 49 89 c7 e9 d0 fe ff ff 8b 45 28 48 8b 7d 00 48 8d 4a 40 <49> 8b 1c 04 4c 89 e0 65 48 0f c7 0f 0f 94 c0 84 c0 0f 84 cd fd ff
-> [    2.532396] RSP: 0018:ffffa2b40040bd60 EFLAGS: 00010246
-> [    2.533201] RAX: 0000000000000800 RBX: 0000000000000cc0 RCX: 0000000000001741
-> [    2.534376] RDX: 0000000000001701 RSI: 0000000000000cc0 RDI: 000000000002f820
-> [    2.535398] RBP: ffff8da7800ed500 R08: 0000000000000000 R09: 0000000000000011
-> Begin: Loading e[    2.536401] R10: 00007fd02b8b8b90 R11: 0000000000000000 R12: ffff000000000000
-> [    2.537641] R13: 0000000000000000 R14: 0000000000000cc0 R15: ffffffff934bde4b
-> ssential drivers[    2.538737] FS:  0000000000000000(0000) GS:ffff8da8b7c00000(0000) knlGS:0000000000000000
-> [    2.540028] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->  ... done.[    2.540843] CR2: 0000557194db70f8 CR3: 000000015080c002 CR4: 00000000003706f0
-> [    2.541953] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> 
-> [    2.542924] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [    2.543902] Kernel panic - not syncing: Fatal exception in interrupt
-> [    2.544967] Kernel Offset: 0x12400000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
-> [    2.546637] ---[ end Kernel panic - not syncing: Fatal exception in interrupt ]---
-> 
-> 
-> If somebody knowledgeable staring at 762faee5a267 doesn't surface somebody I
-> can create a kernel with some more debugging stuff enabled, if somebody tells
-> me what'd work best here.
-> 
-> 
-> Greetings,
-> 
-> Andres Freund
+> Oops, thanks.
+> Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
 
-Thanks a lot for the work!
-Just a small clarification:
-
-So IIUC you see several issues, right?
-
-With 762faee5a2678559d3dc09d95f8f2c54cd0466a7 you see networking issues.
-
-With ebcce492636506443e4361db6587e6acd1a624f9 you see crashes.
-
--- 
-MST
-
+By the way I think this should be targeted at -net,
+I didn't notice the net-next tag earlier.

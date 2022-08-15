@@ -2,137 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50B0592D31
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD28592D7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232055AbiHOJbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 05:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54294 "EHLO
+        id S242054AbiHOJj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 05:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbiHOJbV (ORCPT
+        with ESMTP id S230153AbiHOJj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 05:31:21 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985BBE011;
-        Mon, 15 Aug 2022 02:31:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=lsCtyoJst0y6igAhNKtZzd9Wf3Mi9HXJ47UnqiGz/dY=; b=Es8b23DGOno0sq+qAcTDpP28cE
-        eICM+0KvmeHXtIXGFX7EnCbk5lY1jxvAZhsD5Evze7Asya4tbcAc1OZL+AdF87g69P1xjQh12gE+/
-        c224yJOKia0znaba31tJ6pbPlkSuZ2w3qjgg7ISWuoAWYoVWbZJrDCdb9vJxN2muMW34nPE0iHCdd
-        FTOu5rJf+vcsGRk3TFuYMHZokvPWBU7FFvBBsf/3mbdMdLvlW6WfRxad91rLbenDMQMFNetifOSnw
-        cBFYjvVwyBGuzj2mPedq6tTe9RgE45nnYkV0vr/W0MqcOxP9fcRyHfUmTlZIEYNxilCqURo7YLnwU
-        fKcMM+QA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oNWRF-002dQM-HZ; Mon, 15 Aug 2022 09:31:13 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F0CF3980153; Mon, 15 Aug 2022 11:31:11 +0200 (CEST)
-Date:   Mon, 15 Aug 2022 11:31:11 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Like Xu <like.xu.linux@gmail.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>
-Subject: Re: [PATCH v2 1/7] perf/x86/core: Update x86_pmu.pebs_capable for
- ICELAKE_{X,D}
-Message-ID: <YvoSXyy7ojZ9ird/@worktop.programming.kicks-ass.net>
-References: <20220721103549.49543-1-likexu@tencent.com>
- <20220721103549.49543-2-likexu@tencent.com>
- <959fedce-aada-50e4-ce8d-a842d18439fa@redhat.com>
+        Mon, 15 Aug 2022 05:39:56 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0531F2C3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 02:39:55 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id s206so6103726pgs.3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 02:39:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=7MIhZhyQf1iiQaCJxYZieUdU7Z/6XeeU6tWciUhQM70=;
+        b=fzPUmgMpRnKlkWNT2SrLzEDGj/tEkFn6IsZGf4kObHoFSetYoZZ+gve2wb+vqt6Yne
+         OHdEFNN01Xvdem3BkWhN+IbLrgtd42m93B15vSfNaEHSOb5+RNhSk5fLRm1Oj2ymoVT4
+         kPNrFYfG6JFMOe07OcKituyuGM7hP5eMWDij4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=7MIhZhyQf1iiQaCJxYZieUdU7Z/6XeeU6tWciUhQM70=;
+        b=V1IEIQGYht9yqaqCtdXKqsVUNi59JPl4jyOyaoOn0G6BkgyocYlgtvptkqO1GecCGN
+         3m5AAKv7IIal5idQpWhJjXaL9ZwJPY8T6mXh+PuYL91AGzrDIvoRy7B9noF7sVH2u2et
+         Mz8JE/nEqpIPdODodkOmzC5OMNCL0DzJgb8TTZcgZcH1uFmhd7/CQUc3LGib8yUXE61y
+         OwFVMbzPE0HP77brxI7KCPZi7XcvpczyZNCE6fjUEEn6S+nFDZR94pPfGumcpmwZ8CUq
+         ffYZH7xTqaWYI3WtGYNFTTFcJOwJ98Yu3mpChe8KmOr7MXFiWQ+FF2axFKLRtZmGwj/9
+         wYmA==
+X-Gm-Message-State: ACgBeo0H/XK8Lva9Oa/EKVKiAqeLPsnyAwHGWW6PID3UhlhZ/DaTDfBf
+        RzPOVssf/Hm8N/ow9aGikUDBqkRUDPj+hyf5
+X-Google-Smtp-Source: AA6agR6NRtKS2CTIYBNCSm6wJ4Gn5jaSJ/CXvUpJQtzt+CO8e0li+ALCHXyFxo3riiphyjuuuXWzQg==
+X-Received: by 2002:a65:6c10:0:b0:41b:ab8f:ff71 with SMTP id y16-20020a656c10000000b0041bab8fff71mr12969588pgu.308.1660556383875;
+        Mon, 15 Aug 2022 02:39:43 -0700 (PDT)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:6fc6:4170:be4b:587])
+        by smtp.gmail.com with ESMTPSA id b13-20020a170903228d00b001714fa07b74sm6680020plh.108.2022.08.15.02.39.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 02:39:43 -0700 (PDT)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        rock.chiu@paradetech.corp-partner.google.com
+Subject: [PATCH] drm/bridge: ps8640: Add double reset T4 and T5 to power-on sequence
+Date:   Mon, 15 Aug 2022 17:39:07 +0800
+Message-Id: <20220815093905.134164-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <959fedce-aada-50e4-ce8d-a842d18439fa@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 09:52:13AM +0200, Paolo Bonzini wrote:
-> On 7/21/22 12:35, Like Xu wrote:
-> > From: Like Xu <likexu@tencent.com>
-> > 
-> > Ice Lake microarchitecture with EPT-Friendly PEBS capability also support
-> > the Extended feature, which means that all counters (both fixed function
-> > and general purpose counters) can be used for PEBS events.
-> > 
-> > Update x86_pmu.pebs_capable like SPR to apply PEBS_ALL semantics.
-> > 
-> > Cc: Kan Liang <kan.liang@linux.intel.com>
-> > Fixes: fb358e0b811e ("perf/x86/intel: Add EPT-Friendly PEBS for Ice Lake Server")
-> > Signed-off-by: Like Xu <likexu@tencent.com>
-> > ---
-> >   arch/x86/events/intel/core.c | 1 +
-> >   1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-> > index 4e9b7af9cc45..e46fd496187b 100644
-> > --- a/arch/x86/events/intel/core.c
-> > +++ b/arch/x86/events/intel/core.c
-> > @@ -6239,6 +6239,7 @@ __init int intel_pmu_init(void)
-> >   	case INTEL_FAM6_ICELAKE_X:
-> >   	case INTEL_FAM6_ICELAKE_D:
-> >   		x86_pmu.pebs_ept = 1;
-> > +		x86_pmu.pebs_capable = ~0ULL;
-> >   		pmem = true;
-> >   		fallthrough;
-> >   	case INTEL_FAM6_ICELAKE_L:
-> 
-> Peter, can you please ack this (you were not CCed on this KVM series but
-> this patch is really perf core)?
+The double reset power-on sequence is a workaround for the hardware
+flaw in some chip that SPI Clock output glitch and cause internal MPU
+unable to read firmware correctly. The sequence is suggested in ps8640
+application note.
 
-I would much rather see something like this; except I don't know if it
-is fully correct. I can never find what models support what... Kan do
-you know?
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+---
+ drivers/gpu/drm/bridge/parade-ps8640.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
+diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
+index 49107a6cdac18..d7483c13c569b 100644
+--- a/drivers/gpu/drm/bridge/parade-ps8640.c
++++ b/drivers/gpu/drm/bridge/parade-ps8640.c
+@@ -375,6 +375,11 @@ static int __maybe_unused ps8640_resume(struct device *dev)
+ 	gpiod_set_value(ps_bridge->gpio_reset, 1);
+ 	usleep_range(2000, 2500);
+ 	gpiod_set_value(ps_bridge->gpio_reset, 0);
++	/* Double reset for T4 and T5 */
++	msleep(50);
++	gpiod_set_value(ps_bridge->gpio_reset, 1);
++	msleep(50);
++	gpiod_set_value(ps_bridge->gpio_reset, 0);
+ 
+ 	/*
+ 	 * Mystery 200 ms delay for the "MCU to be ready". It's unclear if
+-- 
+2.37.1.595.g718a3a8f04-goog
 
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index 2db93498ff71..b42c1beb9924 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -5933,7 +5933,6 @@ __init int intel_pmu_init(void)
- 		x86_pmu.pebs_aliases = NULL;
- 		x86_pmu.pebs_prec_dist = true;
- 		x86_pmu.lbr_pt_coexist = true;
--		x86_pmu.pebs_capable = ~0ULL;
- 		x86_pmu.flags |= PMU_FL_HAS_RSP_1;
- 		x86_pmu.flags |= PMU_FL_PEBS_ALL;
- 		x86_pmu.get_event_constraints = glp_get_event_constraints;
-@@ -6291,7 +6290,6 @@ __init int intel_pmu_init(void)
- 		x86_pmu.pebs_aliases = NULL;
- 		x86_pmu.pebs_prec_dist = true;
- 		x86_pmu.pebs_block = true;
--		x86_pmu.pebs_capable = ~0ULL;
- 		x86_pmu.flags |= PMU_FL_HAS_RSP_1;
- 		x86_pmu.flags |= PMU_FL_NO_HT_SHARING;
- 		x86_pmu.flags |= PMU_FL_PEBS_ALL;
-@@ -6337,7 +6335,6 @@ __init int intel_pmu_init(void)
- 		x86_pmu.pebs_aliases = NULL;
- 		x86_pmu.pebs_prec_dist = true;
- 		x86_pmu.pebs_block = true;
--		x86_pmu.pebs_capable = ~0ULL;
- 		x86_pmu.flags |= PMU_FL_HAS_RSP_1;
- 		x86_pmu.flags |= PMU_FL_NO_HT_SHARING;
- 		x86_pmu.flags |= PMU_FL_PEBS_ALL;
-diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
-index ba60427caa6d..e2da643632b9 100644
---- a/arch/x86/events/intel/ds.c
-+++ b/arch/x86/events/intel/ds.c
-@@ -2258,6 +2258,7 @@ void __init intel_ds_init(void)
- 			x86_pmu.drain_pebs = intel_pmu_drain_pebs_icl;
- 			x86_pmu.pebs_record_size = sizeof(struct pebs_basic);
- 			if (x86_pmu.intel_cap.pebs_baseline) {
-+				x86_pmu.pebs_capable = ~0ULL;
- 				x86_pmu.large_pebs_flags |=
- 					PERF_SAMPLE_BRANCH_STACK |
- 					PERF_SAMPLE_TIME;

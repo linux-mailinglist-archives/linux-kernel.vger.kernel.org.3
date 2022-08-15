@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 378755938E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D1159345E
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 20:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244684AbiHOSzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 14:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
+        id S229624AbiHOR76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 13:59:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244786AbiHOSv5 (ORCPT
+        with ESMTP id S231854AbiHOR70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 14:51:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B51E47B8F;
-        Mon, 15 Aug 2022 11:29:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C67061043;
-        Mon, 15 Aug 2022 18:29:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25006C43142;
-        Mon, 15 Aug 2022 18:29:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660588185;
-        bh=qthlUxLyneTrQoXxQBbYo31Gy/R5BpXEYmeBs7zGNCU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vzmaZtt5B23gWGESEJQEwvJEO6LCTck2mzOgN4ii8WcCUi/oQPC0JFRffHUX6WqxH
-         UGcTlNDRlj7ftN4IrMUG6VOHzw8ayXIhteWNA/GboyRrUJ7KFSpVz5vgu/RFeyUemh
-         zpwgI3k6/MomQy142l5CAkeioCTi0XL09u/H398A=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 320/779] drm/msm/mdp5: Fix global state lock backoff
-Date:   Mon, 15 Aug 2022 19:59:24 +0200
-Message-Id: <20220815180350.955357281@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180337.130757997@linuxfoundation.org>
-References: <20220815180337.130757997@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Mon, 15 Aug 2022 13:59:26 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E18C28E2C
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 10:59:24 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id j8-20020a6b7948000000b0067c2923d1b8so4505204iop.6
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 10:59:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=hWOOJX8NuM+oPIFYN51dx1eD//PoLJa22GbFPJ3c01w=;
+        b=LSZafZVeB/bl6AlYTVDTVHCfEJW77pDk6wfBgQPKlS+dkim9MgHF0D0pptHHengpu5
+         2WhDH2CHlIuC339i+ozKgsO0lxPEkO4yKGHWuD22cVNmZBI3iy4FGIYF6Gdi1IzsS6w2
+         r+bhHjBiz1V1PDS0jnROrq9dJFQDgsK4P0IkBg622MLw6ZTycck4J81KPkAiSK64FuR+
+         Um954TxSQghu/ZpVetMU8v0pwf25LR3t0h4KX3+zw0KNj6zE129OmfJGUThsgCDebb7n
+         HBRrug8r5B/QRhyaK4PLEZesPJW8c2TXtbQnpAUEJPTPFfUKIl82t8b5/JbbeC1uf7Yf
+         013Q==
+X-Gm-Message-State: ACgBeo10deQt37DRJ/HEweIK6GCulZxZXAY8tbewb+1v7JJajl35jcDz
+        uXOc/SxqGlAdr0lgzaUUfEtfUQhT0WzqWoSzdrZFic1P9VOx
+X-Google-Smtp-Source: AA6agR7O1GWq6dDpyGR/ua+eY6Qvu/0jJUV5+uS50D+L4CPtkHI+uQrFFRwdA53mRA9LX3HkRKDRRavZHFUiX8KkqWMGCi1wBKAI
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a6b:2a05:0:b0:688:d09:1e45 with SMTP id
+ q5-20020a6b2a05000000b006880d091e45mr3334659ioq.128.1660586364091; Mon, 15
+ Aug 2022 10:59:24 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 10:59:24 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000059c5b005e64b64ef@google.com>
+Subject: [syzbot] upstream boot error: general protection fault in mm_alloc
+From:   syzbot <syzbot+97f830ad641de86d08c0@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, bigeasy@linutronix.de,
+        bpf@vger.kernel.org, brauner@kernel.org, david@redhat.com,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
+        luto@kernel.org, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,85 +57,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+Hello,
 
-[ Upstream commit 92ef86ab513593c6329d04146e61f9a670e72fc5 ]
+syzbot found the following issue on:
 
-We need to grab the lock after the early return for !hwpipe case.
-Otherwise, we could have hit contention yet still returned 0.
+HEAD commit:    5d6a0f4da927 Merge tag 'for-linus-6.0-rc1b-tag' of git://g..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1668343d080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f83c035536d7b2e3
+dashboard link: https://syzkaller.appspot.com/bug?extid=97f830ad641de86d08c0
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Fixes an issue that the new CONFIG_DRM_DEBUG_MODESET_LOCK stuff flagged
-in CI:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+97f830ad641de86d08c0@syzkaller.appspotmail.com
 
-   WARNING: CPU: 0 PID: 282 at drivers/gpu/drm/drm_modeset_lock.c:296 drm_modeset_lock+0xf8/0x154
-   Modules linked in:
-   CPU: 0 PID: 282 Comm: kms_cursor_lega Tainted: G        W         5.19.0-rc2-15930-g875cc8bc536a #1
-   Hardware name: Qualcomm Technologies, Inc. DB820c (DT)
-   pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-   pc : drm_modeset_lock+0xf8/0x154
-   lr : drm_atomic_get_private_obj_state+0x84/0x170
-   sp : ffff80000cfab6a0
-   x29: ffff80000cfab6a0 x28: 0000000000000000 x27: ffff000083bc4d00
-   x26: 0000000000000038 x25: 0000000000000000 x24: ffff80000957ca58
-   x23: 0000000000000000 x22: ffff000081ace080 x21: 0000000000000001
-   x20: ffff000081acec18 x19: ffff80000cfabb80 x18: 0000000000000038
-   x17: 0000000000000000 x16: 0000000000000000 x15: fffffffffffea0d0
-   x14: 0000000000000000 x13: 284e4f5f4e524157 x12: 5f534b434f4c5f47
-   x11: ffff80000a386aa8 x10: 0000000000000029 x9 : ffff80000cfab610
-   x8 : 0000000000000029 x7 : 0000000000000014 x6 : 0000000000000000
-   x5 : 0000000000000001 x4 : ffff8000081ad904 x3 : 0000000000000029
-   x2 : ffff0000801db4c0 x1 : ffff80000cfabb80 x0 : ffff000081aceb58
-   Call trace:
-    drm_modeset_lock+0xf8/0x154
-    drm_atomic_get_private_obj_state+0x84/0x170
-    mdp5_get_global_state+0x54/0x6c
-    mdp5_pipe_release+0x2c/0xd4
-    mdp5_plane_atomic_check+0x2ec/0x414
-    drm_atomic_helper_check_planes+0xd8/0x210
-    drm_atomic_helper_check+0x54/0xb0
-    ...
-   ---[ end trace 0000000000000000 ]---
-   drm_modeset_lock attempting to lock a contended lock without backoff:
-      drm_modeset_lock+0x148/0x154
-      mdp5_get_global_state+0x30/0x6c
-      mdp5_pipe_release+0x2c/0xd4
-      mdp5_plane_atomic_check+0x290/0x414
-      drm_atomic_helper_check_planes+0xd8/0x210
-      drm_atomic_helper_check+0x54/0xb0
-      drm_atomic_check_only+0x4b0/0x8f4
-      drm_atomic_commit+0x68/0xe0
+general protection fault, probably for non-canonical address 0xffff00d300000338: 0000 [#1] PREEMPT SMP KASAN
+KASAN: maybe wild-memory-access in range [0xfff82698000019c0-0xfff82698000019c7]
+CPU: 1 PID: 1155 Comm: kworker/u4:4 Not tainted 5.19.0-syzkaller-14374-g5d6a0f4da927 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
+RIP: 0010:__kmem_cache_alloc_lru mm/slub.c:3258 [inline]
+RIP: 0010:kmem_cache_alloc+0x12d/0x310 mm/slub.c:3268
+Code: 84 1c 01 00 00 48 83 78 10 00 0f 84 11 01 00 00 49 8b 3f 40 f6 c7 0f 0f 85 e3 01 00 00 45 84 c0 0f 84 dc 01 00 00 41 8b 47 28 <49> 8b 5c 05 00 48 8d 4a 08 4c 89 e8 65 48 0f c7 0f 0f 94 c0 a8 01
+RSP: 0000:ffffc90004bcfda8 EFLAGS: 00010202
+RAX: 0000000000000338 RBX: 0000000000000cc0 RCX: 0000000000000000
+RDX: 0000000000000b89 RSI: 0000000000000cc0 RDI: 0000000000040aa0
+RBP: ffffffff8150835f R08: dffffc0000000001 R09: fffffbfff1c4ade6
+R10: fffffbfff1c4ade6 R11: 1ffffffff1c4ade5 R12: ffffffff8d38ce40
+R13: ffff00d300000000 R14: ffffffff8150835f R15: ffff8881400068c0
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 000000000ca8e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ mm_alloc+0x1f/0xb0 kernel/fork.c:1171
+ bprm_mm_init fs/exec.c:369 [inline]
+ alloc_bprm+0x1ef/0x3b0 fs/exec.c:1534
+ kernel_execve+0x97/0xa00 fs/exec.c:1974
+ call_usermodehelper_exec_async+0x262/0x3b0 kernel/umh.c:112
+ ret_from_fork+0x1f/0x30
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
+RIP: 0010:__kmem_cache_alloc_lru mm/slub.c:3258 [inline]
+RIP: 0010:kmem_cache_alloc+0x12d/0x310 mm/slub.c:3268
+Code: 84 1c 01 00 00 48 83 78 10 00 0f 84 11 01 00 00 49 8b 3f 40 f6 c7 0f 0f 85 e3 01 00 00 45 84 c0 0f 84 dc 01 00 00 41 8b 47 28 <49> 8b 5c 05 00 48 8d 4a 08 4c 89 e8 65 48 0f c7 0f 0f 94 c0 a8 01
+RSP: 0000:ffffc90004bcfda8 EFLAGS: 00010202
+RAX: 0000000000000338 RBX: 0000000000000cc0 RCX: 0000000000000000
+RDX: 0000000000000b89 RSI: 0000000000000cc0 RDI: 0000000000040aa0
+RBP: ffffffff8150835f R08: dffffc0000000001 R09: fffffbfff1c4ade6
+R10: fffffbfff1c4ade6 R11: 1ffffffff1c4ade5 R12: ffffffff8d38ce40
+R13: ffff00d300000000 R14: ffffffff8150835f R15: ffff8881400068c0
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 000000000ca8e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	84 1c 01             	test   %bl,(%rcx,%rax,1)
+   3:	00 00                	add    %al,(%rax)
+   5:	48 83 78 10 00       	cmpq   $0x0,0x10(%rax)
+   a:	0f 84 11 01 00 00    	je     0x121
+  10:	49 8b 3f             	mov    (%r15),%rdi
+  13:	40 f6 c7 0f          	test   $0xf,%dil
+  17:	0f 85 e3 01 00 00    	jne    0x200
+  1d:	45 84 c0             	test   %r8b,%r8b
+  20:	0f 84 dc 01 00 00    	je     0x202
+  26:	41 8b 47 28          	mov    0x28(%r15),%eax
+* 2a:	49 8b 5c 05 00       	mov    0x0(%r13,%rax,1),%rbx <-- trapping instruction
+  2f:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
+  33:	4c 89 e8             	mov    %r13,%rax
+  36:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
+  3b:	0f 94 c0             	sete   %al
+  3e:	a8 01                	test   $0x1,%al
 
-Fixes: d59be579fa93 ("drm/msm/mdp5: Return error code in mdp5_pipe_release when deadlock is detected")
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Patchwork: https://patchwork.freedesktop.org/patch/492701/
-Link: https://lore.kernel.org/r/20220707162040.1594855-1-robdclark@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+
 ---
- drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.c
-index a4f5cb90f3e8..e4b8a789835a 100644
---- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.c
-+++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.c
-@@ -123,12 +123,13 @@ int mdp5_pipe_release(struct drm_atomic_state *s, struct mdp5_hw_pipe *hwpipe)
- {
- 	struct msm_drm_private *priv = s->dev->dev_private;
- 	struct mdp5_kms *mdp5_kms = to_mdp5_kms(to_mdp_kms(priv->kms));
--	struct mdp5_global_state *state = mdp5_get_global_state(s);
-+	struct mdp5_global_state *state;
- 	struct mdp5_hw_pipe_state *new_state;
- 
- 	if (!hwpipe)
- 		return 0;
- 
-+	state = mdp5_get_global_state(s);
- 	if (IS_ERR(state))
- 		return PTR_ERR(state);
- 
--- 
-2.35.1
-
-
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

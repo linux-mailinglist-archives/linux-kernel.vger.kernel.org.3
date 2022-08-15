@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C615948EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 111F9594821
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347238AbiHOXFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
+        id S1344614AbiHOXMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352556AbiHOXDP (ORCPT
+        with ESMTP id S1353225AbiHOXLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:03:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B99E86079;
-        Mon, 15 Aug 2022 12:58:23 -0700 (PDT)
+        Mon, 15 Aug 2022 19:11:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10C0144E01;
+        Mon, 15 Aug 2022 13:00:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E82061299;
-        Mon, 15 Aug 2022 19:58:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91773C433D6;
-        Mon, 15 Aug 2022 19:58:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 164F3B8113E;
+        Mon, 15 Aug 2022 20:00:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7042DC433D6;
+        Mon, 15 Aug 2022 20:00:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593502;
-        bh=T8AMqL1bI2nByzhLxcyPhAwx+e3draOCLCZ86QLTzuk=;
+        s=korg; t=1660593604;
+        bh=jmJ/cWdoNqwuJspvQKVz+/rZ/g7Jr+XVmirj3oU5Jls=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YgIXnLy7FYoeYMmQiQKwo1HPEf0+qazu5SguwX/ar3mm6zFYbYQpDDYdfdAI9Dvj9
-         f2FRw29D3t2Aq3jlOknQhdQ36gJSRSYtOQoeeZu9UwMWsmA6P29yMO9KfqagChqUXK
-         QK//K8tVlJEOl9y7Cip+Hq7OmzlhJgfKC21ErpoE=
+        b=xnuj4KLJZNYzRl24ADCByeIpe0iesxVkLQzEbZP9gCYVdnbOovIoHsBHhQkIvMfyh
+         XkwuQg6D79wD9WNASSHEDNyD6fXWccBzxU7Wiqy3Ub4CEv+/yYwFWpVTSvMW4bkWY3
+         RupgOkPhDrL3B2uS15pdb5QPM9Rv5/hjXhZYB/lI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org, Yu Kuai <yukuai1@huaweicloud.com>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0242/1157] soc: qcom: aoss: Fix refcount leak in qmp_cooling_devices_register
-Date:   Mon, 15 Aug 2022 19:53:18 +0200
-Message-Id: <20220815180449.244074137@linuxfoundation.org>
+Subject: [PATCH 5.19 0277/1157] dm writecache: count number of blocks read, not number of read bios
+Date:   Mon, 15 Aug 2022 19:53:53 +0200
+Message-Id: <20220815180450.690452582@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -55,41 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Mikulas Patocka <mpatocka@redhat.com>
 
-[ Upstream commit e6e0951414a314e7db3e9e24fd924b3e15515288 ]
+[ Upstream commit 2c6e755b49d273243431f5f1184654e71221fc78 ]
 
-Every iteration of for_each_available_child_of_node() decrements
-the reference count of the previous node.
-When breaking early from a for_each_available_child_of_node() loop,
-we need to explicitly call of_node_put() on the child node.
-Add missing of_node_put() to avoid refcount leak.
+Change dm-writecache, so that it counts the number of blocks read
+instead of the number of read bios. Bios can be split and requeued
+using the dm_accept_partial_bio function, so counting bios caused
+inaccurate results.
 
-Fixes: 05589b30b21a ("soc: qcom: Extend AOSS QMP driver to support resources that are used to wake up the SoC.")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220606064252.42595-1-linmq006@gmail.com
+Fixes: e3a35d03407c ("dm writecache: add event counters")
+Reported-by: Yu Kuai <yukuai1@huaweicloud.com>
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Signed-off-by: Mike Snitzer <snitzer@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/qcom/qcom_aoss.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ Documentation/admin-guide/device-mapper/writecache.rst | 4 ++--
+ drivers/md/dm-writecache.c                             | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/soc/qcom/qcom_aoss.c b/drivers/soc/qcom/qcom_aoss.c
-index a59bb34e5eba..18c856056475 100644
---- a/drivers/soc/qcom/qcom_aoss.c
-+++ b/drivers/soc/qcom/qcom_aoss.c
-@@ -399,8 +399,10 @@ static int qmp_cooling_devices_register(struct qmp *qmp)
- 			continue;
- 		ret = qmp_cooling_device_add(qmp, &qmp->cooling_devs[count++],
- 					     child);
--		if (ret)
-+		if (ret) {
-+			of_node_put(child);
- 			goto unroll;
-+		}
+diff --git a/Documentation/admin-guide/device-mapper/writecache.rst b/Documentation/admin-guide/device-mapper/writecache.rst
+index 10429779a91a..7bead3b52690 100644
+--- a/Documentation/admin-guide/device-mapper/writecache.rst
++++ b/Documentation/admin-guide/device-mapper/writecache.rst
+@@ -78,8 +78,8 @@ Status:
+ 2. the number of blocks
+ 3. the number of free blocks
+ 4. the number of blocks under writeback
+-5. the number of read requests
+-6. the number of read requests that hit the cache
++5. the number of read blocks
++6. the number of read blocks that hit the cache
+ 7. the number of write requests
+ 8. the number of write requests that hit uncommitted block
+ 9. the number of write requests that hit committed block
+diff --git a/drivers/md/dm-writecache.c b/drivers/md/dm-writecache.c
+index e4753e8c46d3..b71efe08d809 100644
+--- a/drivers/md/dm-writecache.c
++++ b/drivers/md/dm-writecache.c
+@@ -1365,6 +1365,7 @@ static enum wc_map_op writecache_map_read(struct dm_writecache *wc, struct bio *
+ 		}
+ 	} else {
+ 		writecache_map_remap_origin(wc, bio, e);
++		wc->stats.reads += (bio->bi_iter.bi_size - wc->block_size) >> wc->block_size_bits;
+ 		map_op = WC_MAP_REMAP_ORIGIN;
  	}
  
- 	if (!count)
 -- 
 2.35.1
 

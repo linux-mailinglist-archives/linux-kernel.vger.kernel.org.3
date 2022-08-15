@@ -2,105 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC125594EEC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 05:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E220594EF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 05:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232706AbiHPDC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 23:02:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
+        id S232878AbiHPDKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 23:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232356AbiHPDB0 (ORCPT
+        with ESMTP id S231707AbiHPDJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 23:01:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 046AE2DF6B5
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 16:35:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660606516;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5zb/VZQAOIgiltymKi0EU4LqXYPn7kX2Sef7eElYFw8=;
-        b=Ss82UcWPcDLgGGFhCg3gKeFJJieHjvHtBFX3G8/n8ZFc7HrYzElwOZ9t9Gtd8UohB0BK5Y
-        xvt4jtFxm6nFGB+FhyEPi7scZEZzAKIGQjtXpjf+dVc/JUGceezwol6rBxLZrvCZLw11OF
-        govagc2II2AkzINnD4dHAiCklE/goMI=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-290-FhGpO4XyPNWnV-UWQoeZiw-1; Mon, 15 Aug 2022 19:35:14 -0400
-X-MC-Unique: FhGpO4XyPNWnV-UWQoeZiw-1
-Received: by mail-wm1-f69.google.com with SMTP id c17-20020a7bc011000000b003a2bfaf8d3dso4180611wmb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 16:35:14 -0700 (PDT)
+        Mon, 15 Aug 2022 23:09:27 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4528E2EB18D;
+        Mon, 15 Aug 2022 16:39:56 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id e27so5990765wra.11;
+        Mon, 15 Aug 2022 16:39:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=fNZ/gu4y7lfnFdkzN59SrFsjLrasJHIFSJmdJSlw+Vg=;
+        b=Wi7h8LTYLPTSh3B5af4Y32gM2Hz99rqlKJV3ZCftNwtNAT/ECYv/kQSWZnzEnYojwK
+         b9QMuGsS0E5OV1NBLuVFVozNAMa6693lC13WRCl60Aa8hTRa+O5FYwQM1xLue5stgWcN
+         sCJxTOW6D2x3VGTn5eI5Lo4yYP0QvCsBHfqkD0YCgREqFP/n5xMi184wwxmqnvfuCNL/
+         InQs/7Srm8qpchb+sH0H8193B78OKT64MDSGcdazcGE/qXg4JSNl+jQfx3WrmsLHWTBV
+         YBJgtTYb7TCl+aE2u0xPECWZjCisRsnWKTdliM7/pObogqKBwVcouaUHWsKDlqdvv0az
+         r3Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=5zb/VZQAOIgiltymKi0EU4LqXYPn7kX2Sef7eElYFw8=;
-        b=XMe1+B/MlAxoVYTBJDTvPrvMNUK2npmiFN+Yaji1jZLbzLCQUp1ivsFUOlomb+S5cA
-         mW/hk/wkflBrzfTBq0Qi23IBHGCxTmFOUKVC7FjcQxJQlqRLThlWXWo34lv3yme9vWcP
-         wMhOVzHoQgDzc5KHVYAG5O35gHug9o4IfFz193L/vYCpudEn+tYOjEDrCUhIS6IgX/Vy
-         sAbUhFeR3bQ6mNrejLM6jIgBe6RGH2ANw4YAjL/E452W2XC4SoN/DykMuF1kM51FhdnM
-         s+N8ioVL7tDYl0BlbCz8V05pz4SIho3GGDl3Y5XgRmpZiwSfLZ8YL8R076ZD6ZOG35A7
-         6TWg==
-X-Gm-Message-State: ACgBeo0PewV7Xon7HNsOgC4z9CEUywMKiIOl1NX00ABMe3H+qZLwcDgq
-        AdI1Mze9i5nR1/RaZ27UuefLbaKrlD/nF9GLIvGF1AFl7ifsQXxx5HhRyMwiY9AzcKcoEpC6hJv
-        05tf1kh/RMDTwi7+tiulD7XM8
-X-Received: by 2002:adf:e68c:0:b0:223:a74e:7e63 with SMTP id r12-20020adfe68c000000b00223a74e7e63mr9161860wrm.603.1660606513923;
-        Mon, 15 Aug 2022 16:35:13 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7edmzM0cGxVsTi8/QYJs2FLXSn76zA+W0PpmBcUpfrSpvST9v2wXq+kEHGhFwDZ7zGXJdYvw==
-X-Received: by 2002:adf:e68c:0:b0:223:a74e:7e63 with SMTP id r12-20020adfe68c000000b00223a74e7e63mr9161853wrm.603.1660606513724;
-        Mon, 15 Aug 2022 16:35:13 -0700 (PDT)
-Received: from redhat.com ([2.55.43.215])
-        by smtp.gmail.com with ESMTPSA id n18-20020a05600c501200b003a545fe9db4sm11056782wmr.23.2022.08.15.16.35.09
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=fNZ/gu4y7lfnFdkzN59SrFsjLrasJHIFSJmdJSlw+Vg=;
+        b=R30pL2oXlzrVwV2u1yPBpBdYPqs3D3sIWY+5fdrlJCmpMwfBhHPH4oYWsrtBaXbeLo
+         /y/pykEkttlUIHR0EecxQ1/RfQfzLTp1kTIdfaMb55eJjSkY9DN7fTGush9FB7NPANRx
+         8akB9keY7S+H7E41awjGAeNsR2xugDeYaxEheVjjattH058pgxYOLMIXO87UcR5DwkEq
+         PgkQDbchJZfCK6sjj/9s6Ztq/4QFS/VEMD8W3901rx2/jT0zA6O5IDmnF2PdiVaWQn25
+         QXVZXFc/OMwgzolfB1i8tMjw2ZMYNqNklBzNlEOno2zXc8/LJc93AjV1katK13+X1gAq
+         feow==
+X-Gm-Message-State: ACgBeo1sM8nL0OSd8bin+8pBItLrtn9voHhqgDOuZdR3qGDdL1lwe6H8
+        A+PzGpTOXmROY919dLQ8d8MHfF+2qFo=
+X-Google-Smtp-Source: AA6agR6mCwlJu7tApOQkto2S84JFh2mY8NPl3dwKAYlBSYbO7MwVT8vcMJU/LKsS4wdnmwNp+0X8mA==
+X-Received: by 2002:adf:d1c4:0:b0:220:7a85:ad7c with SMTP id b4-20020adfd1c4000000b002207a85ad7cmr9426609wrd.128.1660606793976;
+        Mon, 15 Aug 2022 16:39:53 -0700 (PDT)
+Received: from localhost.localdomain (188.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.188])
+        by smtp.gmail.com with ESMTPSA id bh13-20020a05600c3d0d00b003a550be861bsm11197144wmb.27.2022.08.15.16.39.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 16:35:12 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 19:35:07 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v3 0/5] virtio: drop sizing vqs during init
-Message-ID: <20220815193438-mutt-send-email-mst@kernel.org>
-References: <20220815215938.154999-1-mst@redhat.com>
- <CAHk-=wj=Ju_jhbww7WmpgmHHebMSdd1U5WBjh925yLB_F1j9Ng@mail.gmail.com>
+        Mon, 15 Aug 2022 16:39:53 -0700 (PDT)
+From:   Angel Iglesias <ang.iglesiasg@gmail.com>
+To:     linux-iio <linux-iio@vger.kernel.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] iio: pressure: bmp280: fix datasheet links
+Date:   Tue, 16 Aug 2022 01:38:54 +0200
+Message-Id: <6e908cc827c70b95dae683717592aff0b003e7c9.1660606478.git.ang.iglesiasg@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wj=Ju_jhbww7WmpgmHHebMSdd1U5WBjh925yLB_F1j9Ng@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 03:24:28PM -0700, Linus Torvalds wrote:
-> On Mon, Aug 15, 2022 at 3:00 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > But the benefit is unclear in any case, so let's revert for now.
-> 
-> Should I take this patch series directly, or will you be sending a
-> pull request (preferred)?
-> 
->              Linus
+Updated links for BMP280 and BME280 datasheets on Bosch website.
+Datasheet of BMP180 is no longer available on the manufacturer's website,
+changed the link to a copy hosted by a third party.
 
-I'll be sending a pull request, just not today - I try not to do
-this at strange hours of night.
+Reported-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
+---
+ drivers/iio/pressure/bmp280-core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
+index fe7aa81e7cc9..e98b024d510b 100644
+--- a/drivers/iio/pressure/bmp280-core.c
++++ b/drivers/iio/pressure/bmp280-core.c
+@@ -9,9 +9,9 @@
+  * Driver for Bosch Sensortec BMP180 and BMP280 digital pressure sensor.
+  *
+  * Datasheet:
+- * https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BMP180-DS000-121.pdf
+- * https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BMP280-DS001-12.pdf
+- * https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BME280_DS001-11.pdf
++ * https://cdn-shop.adafruit.com/datasheets/BST-BMP180-DS000-09.pdf
++ * https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp280-ds001.pdf
++ * https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf
+  */
+ 
+ #define pr_fmt(fmt) "bmp280: " fmt
+
+base-commit: b82217e73b5aa6db8453ad91b929ca2366e47184
 -- 
-MST
+2.37.2
 

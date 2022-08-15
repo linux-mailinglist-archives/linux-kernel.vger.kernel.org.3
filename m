@@ -2,192 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D4C592C5D
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7B8592D25
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242367AbiHOKPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 06:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34046 "EHLO
+        id S231376AbiHOKSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 06:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242379AbiHOKOh (ORCPT
+        with ESMTP id S231548AbiHOKSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 06:14:37 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2042.outbound.protection.outlook.com [40.107.102.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CFE24962;
-        Mon, 15 Aug 2022 03:14:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VsjBvl848kme8gj8jduA+PFxtnlEJwf2Hd9CsUvooR/LCAMIf3kpG0ithAl55JUVUnofEUdkdlhPQ2fcq/g3TmIjqJdVGaJ1jV8uPIt03lLpvIQnyPzyC1d37rpDkJepaIemCqSzzV7lI8MLIjlqBSSoSaVq0BnRC+L2sbBfS1uUMynn1qCgsfTFkjATnZE2vMt6J0O+WDsFVcXqDAvjhaP/oqc6teN6wjyWr3nwi4oTbb6h/l1gEO8S7nhBwrXk0pxQiWrgviST8hcJrUanXwnhtlCr9utd+xE/rEvdfJsDj9uQ9u82xvGzuqm7abxWbA10B64mdbgCIM5sN0egsg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Sg19G/aAdqHb1FlMKsip2ZDky1akZ7nl+m2qPdzVSm8=;
- b=OYCrIxc5piyXzM4c3oNCNo5d65lb1yYpRLfv3CbldarpE2lXhq2w6qbLnZO1AYxj+K22SwA90RRCPpHR3A/Bh1RrQy9dhYze8ljailYDb0gMgBi4TuogFRNZ2xju4SJOoblf+OhBIEW0HUHFYwLymq0RFNX7bYJRJCJwfVM9Xg0Ihoa6XP9Xpf97p+fBxDMdzDSDgpWuaeXp7wm5LLRBBnStQOAIRtgU2eBdZ0c9pOZB4L9q1zK37e9Iu6K9ucwEoQlsSbuhJXnjPV5sA+0ERryE1zzGblGOtpUloqSMyL2ou2Hx7IFfXO56dM7nJ1KDZxguuPANGnglcKL6F8fcag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Sg19G/aAdqHb1FlMKsip2ZDky1akZ7nl+m2qPdzVSm8=;
- b=BO6sYth7Swn6HyS8otGBuIsqN1TM823Cnf782QgyoI8NFTnN61kDsubMeO7wyAeOndaihZfExKu3SflXBHLalFc2xBSh5rMiRDoMTZ+X317zJL4vfl+CWiU2n+RsbTUVeHWLAxjLfa7MfzO1GQBKp5FrXqmzlnP0h6Q+uqX8WNM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by DM6PR12MB4251.namprd12.prod.outlook.com (2603:10b6:5:21e::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Mon, 15 Aug
- 2022 10:14:06 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39%2]) with mapi id 15.20.5504.020; Mon, 15 Aug 2022
- 10:14:06 +0000
-Message-ID: <4fcc4739-2da9-1b89-209c-876129604d7d@amd.com>
-Date:   Mon, 15 Aug 2022 12:14:00 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1] drm/ttm: Refcount allocated tail pages
-Content-Language: en-US
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>, Huang Rui <ray.huang@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Trigger Huang <Trigger.Huang@gmail.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Antonio Caggiano <antonio.caggiano@collabora.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>, kvm@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-References: <20220815095423.11131-1-dmitry.osipenko@collabora.com>
- <8230a356-be38-f228-4a8e-95124e8e8db6@amd.com>
- <134bce02-58d6-8553-bb73-42dfda18a595@collabora.com>
- <8caf3008-dcf3-985a-631e-e019b277c6f0@amd.com>
-In-Reply-To: <8caf3008-dcf3-985a-631e-e019b277c6f0@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AS8PR04CA0024.eurprd04.prod.outlook.com
- (2603:10a6:20b:310::29) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Mon, 15 Aug 2022 06:18:15 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8CD27E
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 03:18:13 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id j8so12747762ejx.9
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 03:18:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Z/Q6CR/SPVatWHvELppezc+4y+wJNMFxgASHSY0j6L8=;
+        b=LZYgfKev6RocfwUGd1BJiz6YldfHaiiTV/6nFJ/11T+sRz/1rNAF5gd/sF6sOnc078
+         77vT0vBbNJMI9ggsauNYhnfqhG2A8MYGjZfKJpPTTMaxvIZbZXYIdRz7EUcEJWcwwnq5
+         sZyDGZLTdGHRdGkxVkyoAh2IXctUnV0sAfdZbriRSOoCyqjw6kjdBwMcd3Y8zPqTlakO
+         3DKDlmKvBJ08QofUVtjf5kRHqx9Q9YQWgEGv3qrXO7FGY1WvewahlebrCfrFdZK/eVWQ
+         dBrhTsTCixSYkkRbZhpTBKZPKabgaGOvy+4irPPLDMzsUPB5ho5+yg6RTz+oupM8W2sL
+         ZuRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Z/Q6CR/SPVatWHvELppezc+4y+wJNMFxgASHSY0j6L8=;
+        b=8SKtqtP0sBm+MGtJp/7iRsHO+m88R3SPZ9CMr9KVX+Vgj8plAIf+BLibZ9oS4kBDkk
+         bXC5h5HzLRJ3AsPZQaRCTB9G5LQfsL3bgk1B8KCSy1rD+CsBy1q0CXVFJYHX7OTy5Noc
+         eToLAu4K0XP4Mn41eVrlOSkoJkI3Ud+78PtUkVlRgz4jvZOQxZ0bfcSQ8YJ+wazPolFq
+         sMWgoVh77WhWR4LaXx2at0/zKn/oeMZSzMM/mJ2c0V+snlXbyTKgjFjxO+vRks9JkpRN
+         V0O3tlpana8KU7sWRZ/yd2EBeZGaDh45WXcCIXh9qQBecgyKNEf95m7VGVivRAnd6nZS
+         8jqw==
+X-Gm-Message-State: ACgBeo3Wyr5vcw6ZSk1/SPzQq1S2xxeQK1ZhJYL6h9IVSt7kQgBRh1XD
+        oFQZKN7ndcEJlL/JvbxodJEJVaT25/GR9T0EwKubGA==
+X-Google-Smtp-Source: AA6agR79URV926F8kY2eT9PNM8ZDigqw2rjbQGExeYIT68Gp4fZdnPbdF/t1q5U1y/6qHYnCKzkJczS6ilwv6NFzXKE=
+X-Received: by 2002:a17:907:2721:b0:731:2aeb:7940 with SMTP id
+ d1-20020a170907272100b007312aeb7940mr10409876ejl.448.1660558691411; Mon, 15
+ Aug 2022 03:18:11 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: dec1f74c-2fea-40cb-efdd-08da7ea6e322
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4251:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ntT5Nm+DVq21Iht7tUEmozUIUba3bhwDl2F/TGzuVGaaMIUf6xynoOGYvaa/W3XNm0JoNE+mTv/OrP8at2bGOVdngHNzoGk9gCVd7pVKT7c3ooOsSnhmDMhxW9GGqVrIXO6DXuSunwZf6bIklXjisg0/hcurFvhwvbq8hV0HemVIsTezEUUmpgkEDirGmTY8wyA3HdTH7P/S3INt0VjwBX5I5l3aFc0IywCgbNCI8M5uaZ14o23HqpGFwRhkFA9AhFVxGsXdRUoW2z3gU5QhZIwpsX1of+EOWpSi8Xua8QxTOvG75p+sLZuKRyLf4jIp08kmSTED0ORXQiRTHJRdWsYcZRb6xxQ9rPxwndIIqJp7uwcu42J6/WzV0S4t/oMHaQXQAarH+aq+nOzfIjJxxDwwhsoQe++Ya/JPia43IF8xFbnh2tFlmvWe9f7MDQBzlZ2IIoel8NrRCZI6cO0wqBLW1R+uTXd91G6rYHJt65HThp9mCC11yoAINmLqLauxQM0W1ffGHdHkIGlepNxviBaVwWeWmlis6XBeLL5zZ+i+KfLBXInnNLmdBR4KkAkhadyMNKPXyv0c5+yJ7aFEiCkX7EE8WJqnCjmQhUyMQs1GpB+0ISCPUnczRPO1QyhwWIp8r8Pt7WIHJXD1UFHlG4ctqf7/SUhU4wtvTTgbv9nFvKCaorfz/md0uwwgt1mHGZzkjlhOn4NuU/k0SacidqaVIl52e0QZ8RVxNmV9hYgR95bbOD9XO7g8Zs9Eil7SLXYFsXQ99l9/oNZtcx6xS2ebHmM+pOG8OzvNFDrqp4z3tf3lwT9ODlr/r66YA2YBYUO7pPq9ufw6XPfhXXyBdg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(136003)(366004)(39860400002)(376002)(7416002)(8936002)(5660300002)(31696002)(2906002)(86362001)(41300700001)(66476007)(66574015)(186003)(6666004)(2616005)(6506007)(6512007)(83380400001)(478600001)(53546011)(38100700002)(66556008)(4326008)(8676002)(316002)(110136005)(6486002)(36756003)(66946007)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cFFjMnRYVll1ZkRJWHBLYkNhSjE4LzYzYkZlT1hMYnR4eVpoQXB2SUcwUzR6?=
- =?utf-8?B?VEFDL1ExeVhsLyszZTRkaEUyMTB1YkFYZ2ZHWXhrbXZaWkFUKzNLSnhoa3F5?=
- =?utf-8?B?eFljcUxlSUtPclFTbmgwUTlwWWNTZGx1dFZRSlQ1NnhmMk9HOUM1VGtJU1Uz?=
- =?utf-8?B?endvUldLTWQ0SktpVG54anI0ZGtSb0ZUMkkvRXpZTmhjM1JraWdaRnNhZDlG?=
- =?utf-8?B?eHAvaWxTSUZqcGxlVGpkdXZhSFg1SzNtTzMyaVdYRVV2L0pvUm45VTVNUmQ0?=
- =?utf-8?B?aENlTjB3bnNSRWFKUGNjdlg5TnN6VENDMlNDOE1OMFEzVk1YZ0VLazRlL05y?=
- =?utf-8?B?MHBiOU1LRHViZWVid2t4Um1zSHpBdEtZOGYwRTZ5d0JBK0xFay9GZGFFbHpP?=
- =?utf-8?B?VGYxQi9DNm1aN3FjN1g4TE8wZ1NEeXpsOWNDMzZ6dGJNajZWTGhBNmJTMEUv?=
- =?utf-8?B?RzdOVWo4b2NTdFVqb1FqdFNjcVpZWmg3MEpvMWZRWk9qeU5neGNzcFFYcDd2?=
- =?utf-8?B?Zzh1SFRpMHB3a0NkcW5peStFR2F1UG1BMTgyM2lQZnh3ZWtDb3BvdkN2RlV1?=
- =?utf-8?B?ZlNybnlwRlI3cWEwSFVHdHlzWDZoTkRGVDBEbmExbWVJQ09OSEhVTVlMWG5Q?=
- =?utf-8?B?d3JaN21zcndyQXJGdWpRYWZScmEvSGhxSnRqaG1rVTc3NDlXM0lsdHRrblR5?=
- =?utf-8?B?ZUc3dVFBSDJDVXk4c3hNUVZVQlRBWEdZejYzNFY0blQvR0UvOWZPbHNoOHdl?=
- =?utf-8?B?eHREWVNLWGJBajRVeDE4ZnVuaG5COE5NOUFhaVBLVDl2RFRpMHJ4M1FYMVoz?=
- =?utf-8?B?ZERSbnJ6UGJab2VFNlRyZFg4eEhRZTFid29CeXRZZUE5N0U2cVBjRDdDQTEr?=
- =?utf-8?B?TDhBRWNBUUZzd3dWS0RGaDk5Wm5PbHdQNDhoc3RpamJVTkdXVEZWRVJyb3kz?=
- =?utf-8?B?d3VmV0pZZkNBdERsV0IvK3haNnp3amw1VUJuZVd5MVBleGs0OVhvSHRrc0pM?=
- =?utf-8?B?bG44RVFodHozcTNhZm15elZaMVIzMlNMcDVXRmVvN0s4MTRrZU9ieEphOG5P?=
- =?utf-8?B?aFpIZUsreXNMeW1UUkhTYzY3Y3pLc3BjTHFBVy9CRmtNQjZWanpiWEp5OE9i?=
- =?utf-8?B?MVlVd0oycWZnbUFsN1hWK2cyM1NpMkI5RGRMR2dvRFRVNVEwMm44TjRuNzZs?=
- =?utf-8?B?d08wcG1iZ3BBdCtTK3hCWk5BNWZHVEMyTGE2VXNCYjRJVFFxUmIrTWh5N1ll?=
- =?utf-8?B?a3c0WmxDeFp5R3ZhZ2UvR1laK2plZktZYlovOFBQY3RGd2twZS9RS2ZReWpo?=
- =?utf-8?B?ZUlMYWhjNFFMbmh3a1dxQ0krOEIrVDNPcHJyek1HZU42Ynk5RjV1bHcrbEhm?=
- =?utf-8?B?Ny9ZaVkySnpyTXZyWXZxVVIxNy9tL255NXpSN0FwK241STJBNDNwZ2Y2cHZF?=
- =?utf-8?B?WEg1QkdqaENTMHJsUkdZV3pzSjVldkdDUXYrRWdwbzI4MVlWaWp5emFyVTc4?=
- =?utf-8?B?eGhCeXAvOW12b3B5YVRXWWZNSjI0K0IrU2k5NGh2UmFLWXY0TDA5cXd6b1NC?=
- =?utf-8?B?cStRMzMzRGx1ZGpOWTdiekllOUpnOEdoYXZuV3dNN1hKaklSd2swcmJ1UnZM?=
- =?utf-8?B?TnNhYTFqTVlqWDlNWEtpcUU1Wk05THpNbnRFbEM0dEI2dWVVUkxxUE5aa2d6?=
- =?utf-8?B?WXpJQ1ZtNVhVQWxDRUtTNVVabTRMMjNnaUNreWZqUkFPcFVyMlgxaGFkaWdY?=
- =?utf-8?B?c2FpcmJwQ2hPcjlQdWdUYXJYZjlQR1hjWG81RkMzMWlPaC9KcVRpeHBiZUJr?=
- =?utf-8?B?ZEFmbk1HbTk5UGNLZlptaDE1M1c4VkZYRjBMVjQrRnIwYndpN2pETVVUS092?=
- =?utf-8?B?YW5pOTVLM2psS3hBQUZ1S216NlM5bVZ2SU1yTGI1TVQxcCsxeTI3cUFuNE0v?=
- =?utf-8?B?MUZQVzVZZnFkNTZXaUJZajRXbVZ3UDUyWFl1dE5Td1k4azFreVoyN2ZlaVA0?=
- =?utf-8?B?RDh1Mk1uMDFsMmt6cVRJVFd0RkNrbE42Rzd2cDI4R3dWWjM3M093NTRMVlN0?=
- =?utf-8?B?dy9TeGtrS1NNaTNNUWpDN1pWMWFNb1RiMnk1SVN0NmQvYnN0ZGNJOC9wZjJ6?=
- =?utf-8?B?VTFaZ0lvZXBxVHI5VU52empBTVZLWEhUbmpZRzZUR1ArYjBLMGszcitkSGJX?=
- =?utf-8?Q?kXSt3iVvHDCTf5x96uNRYJL8N57zmwhCe6rAN0Gjmp1a?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dec1f74c-2fea-40cb-efdd-08da7ea6e322
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2022 10:14:06.8297
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xoNbRTWAH1dqOCNGdTtNe36eb9I9jxOtK1VoX/9t7kCVBBEr2GbRqme58ln/tFGY
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4251
+References: <20220810060040.321697-1-saravanak@google.com> <CAGETcx_nVXbHzZ3+_aR4SZtSnSBU=Rfp8Qm2jOs7zGZRaH_88A@mail.gmail.com>
+In-Reply-To: <CAGETcx_nVXbHzZ3+_aR4SZtSnSBU=Rfp8Qm2jOs7zGZRaH_88A@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 15 Aug 2022 15:47:59 +0530
+Message-ID: <CA+G9fYuUbEiGNpVsSsVcSmB3azaYKs8WrSCP1z1wx6dJKhB5Jw@mail.gmail.com>
+Subject: Re: [PATCH v1 0/9] fw_devlink improvements
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        John Stultz <jstultz@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 15.08.22 um 12:11 schrieb Christian König:
-> Am 15.08.22 um 12:09 schrieb Dmitry Osipenko:
->> On 8/15/22 13:05, Christian König wrote:
->>> Am 15.08.22 um 11:54 schrieb Dmitry Osipenko:
->>>> Higher order pages allocated using alloc_pages() aren't refcounted and
->>>> they
->>>> need to be refcounted, otherwise it's impossible to map them by 
->>>> KVM. This
->>>> patch sets the refcount of the tail pages and fixes the KVM memory
->>>> mapping
->>>> faults.
->>>>
->>>> Without this change guest virgl driver can't map host buffers into 
->>>> guest
->>>> and can't provide OpenGL 4.5 profile support to the guest. The host
->>>> mappings are also needed for enabling the Venus driver using host GPU
->>>> drivers that are utilizing TTM.
->>>>
->>>> Based on a patch proposed by Trigger Huang.
->>> Well I can't count how often I have repeated this: This is an 
->>> absolutely
->>> clear NAK!
->>>
->>> TTM pages are not reference counted in the first place and because of
->>> this giving them to virgl is illegal.
->> A? The first page is refcounted when allocated, the tail pages are not.
+On Sun, 14 Aug 2022 at 11:29, Saravana Kannan <saravanak@google.com> wrote:
 >
-> No they aren't. The first page is just by coincident initialized with 
-> a refcount of 1. This refcount is completely ignored and not used at all.
+> +Naresh Kamboju
 >
-> Incrementing the reference count and by this mapping the page into 
-> some other address space is illegal and corrupts the internal state 
-> tracking of TTM.
-
-See this comment in the source code as well:
-
-         /* Don't set the __GFP_COMP flag for higher order allocations.
-          * Mapping pages directly into an userspace process and calling
-          * put_page() on a TTM allocated page is illegal.
-          */
-
-I have absolutely no idea how somebody had the idea he could do this.
-
-Regards,
-Christian.
-
+> On Tue, Aug 9, 2022 at 11:00 PM Saravana Kannan <saravanak@google.com> wrote:
+> >
+> > This patch series improves fw_devlink in the following ways:
+> >
+> > 1. It no longer cares about a fwnode having a "compatible" property. It
+> >    figures this our more dynamically. The only expectation is that
+> >    fwnode that are converted to devices actually get probed by a driver
+> >    for the dependencies to be enforced correctly.
+> >
+> > 2. Finer grained dependency tracking. fw_devlink will now create device
+> >    links from the consumer to the actual resource's device (if it has one,
+> >    Eg: gpio_device) instead of the parent supplier device. This improves
+> >    things like async suspend/resume ordering, potentially remove the need
+> >    for frameworks to create device links, more parallelized async probing,
+> >    and better sync_state() tracking.
+> >
+> > 3. Handle hardware/software quirks where a child firmware node gets
+> >    populated as a device before its parent firmware node AND actually
+> >    supplies a non-optional resource to the parent firmware node's
+> >    device.
+> >
+> > 4. Way more robust at cycle handling (see patch for the insane cases).
+> >
+> > 5. Stops depending on OF_POPULATED to figure out some corner cases.
+> >
+> > 6. Simplifies the work that needs to be done by the firmware specific
+> >    code.
+> >
+> > This took way too long to get done due to typo bugs I had in my rewrite or
+> > corner cases I had to find and handle. But it's fairly well tested at this
+> > point and I expect this to work properly.
+> >
+> > Abel & Doug,
+> >
+> > This should fix your cyclic dependency issues with your display. Can you
+> > give it a shot please?
+> >
+> > Alexander,
+> >
+> > This should fix your issue where the power domain device not having a
+> > compatible property. Can you give it a shot please?
+> >
+> > Tony,
+> >
+> > This should handle the odd case of the child being the supplier of the
+> > parent. Can you please give this a shot? I want to make sure the cycle
+> > detection code handles this properly and treats it like it's NOT a cycle.
+> >
+> > Geert,
+> >
+> > Can you test the renesas stuff I changed please? They should continue
+> > working like before. Any other sanity test on other hardware would be
+> > great too.
+> >
+> > Sudeep,
+> >
+> > I don't think there are any unfixed issues you had reported in my other
+> > patches that this series might fix, but it'll be nice if you could give
+> > this a sanity test.
+> >
+> > Guenter,
+> >
+> > I don't think this will fix the issue you reported in the amba patch, but
+> > it's worth a shot because it improves a bunch of corner case handling. So
+> > it might be better at handling whatever corner cases you might have in the
+> > qemu platforms.
 >
->>> Please immediately stop this completely broken approach. We have
->>> discussed this multiple times now.
->> Could you please give me a link to these discussions?
+> Hi Naresh,
 >
-> Not of hand, please search the dri-devel list for similar patches. 
-> This was brought up multiple times now.
->
-> Regards,
-> Christian.
+> Thanks for testing these patches in the other thread. Mind giving your
+> tested-by here? I know you tested these patches in X15, but were there
+> also other boards these patches were tested on as part of the run?
 
+I have tested your patches and boot is successful on x15 device and Juno-r2.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+
+> > Cc: Abel Vesa <abel.vesa@linaro.org>
+> > Cc: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > Cc: Tony Lindgren <tony@atomide.com>
+> > Cc: Sudeep Holla <sudeep.holla@arm.com>
+> > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> > Cc: John Stultz <jstultz@google.com>
+> > Cc: Doug Anderson <dianders@chromium.org>
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> >
+> > Saravana Kannan (9):
+> >   driver core: fw_devlink: Don't purge child fwnode's consumer links
+> >   driver core: fw_devlink: Improve check for fwnode with no
+> >     device/driver
+> >   soc: renesas: Move away from using OF_POPULATED for fw_devlink
+> >   gpiolib: Clear the gpio_device's fwnode initialized flag before adding
+> >   driver core: fw_devlink: Add DL_FLAG_CYCLE support to device links
+> >   driver core: fw_devlink: Allow marking a fwnode link as being part of
+> >     a cycle
+> >   driver core: fw_devlink: Consolidate device link flag computation
+> >   driver core: fw_devlink: Make cycle detection more robust
+> >   of: property: Simplify of_link_to_phandle()
+> >
+> >  drivers/base/core.c             | 437 +++++++++++++++++++++-----------
+> >  drivers/gpio/gpiolib.c          |   6 +
+> >  drivers/of/property.c           |  84 +-----
+> >  drivers/soc/renesas/rcar-sysc.c |   2 +-
+> >  include/linux/device.h          |   1 +
+> >  include/linux/fwnode.h          |  12 +-
+> >  6 files changed, 323 insertions(+), 219 deletions(-)
+> >
+> > --
+> > 2.37.1.559.g78731f0fdb-goog
+
+- Naresh

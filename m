@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB17059472E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE17594759
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348074AbiHOXtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40398 "EHLO
+        id S1354747AbiHOXqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353897AbiHOXmx (ORCPT
+        with ESMTP id S1354312AbiHOXlv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:42:53 -0400
+        Mon, 15 Aug 2022 19:41:51 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724A885A95;
-        Mon, 15 Aug 2022 13:13:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E68C2C131;
+        Mon, 15 Aug 2022 13:12:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD4E860B9B;
-        Mon, 15 Aug 2022 20:13:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBFE7C433C1;
-        Mon, 15 Aug 2022 20:13:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFED060DEC;
+        Mon, 15 Aug 2022 20:12:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB8DDC433C1;
+        Mon, 15 Aug 2022 20:12:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594428;
-        bh=gm9GfrC0J6whizYs8N/CPAxYEFys+ekiI6l13kMrfHY=;
+        s=korg; t=1660594331;
+        bh=t54s0hHQluGrCw2gsuxF8dDSEbB5JUWzI7KIGh7s/Os=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xf6q2te4PfRAc8WaWJQ4MwA1DSu1iPdnuaeEBgunW8KuHiTeY+RYOrs2KMZvtbpPz
-         8zEnDoDmHTsysqCpJb05NytazlNK36siEI1Pukng6KKMd3S1/bKUJvPFYqIo2jj8sB
-         gKrtpR9ENLGvfU7e8K3G3R+SXkJ26oFbRdFRcEu4=
+        b=KtyIxJSScVefsb/fkzo6BKnb35uQbPDlA7oG8ZijdHTrd6ESfXECX4WwEF6cioxR7
+         6T5/B3oERCA3LZAOHt64AL7PUhkpsIsCrHdQCdc0ipZpmhMGdTT2k2uVdfc3tlwGoh
+         fosu5Euqvax60pXfRd4VO+yKYsduqhhd6HPmWCo8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Maxime Ripard <maxime@cerno.tech>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0408/1157] drm/vc4: plane: Fix margin calculations for the right/bottom edges
-Date:   Mon, 15 Aug 2022 19:56:04 +0200
-Message-Id: <20220815180455.975639104@linuxfoundation.org>
+Subject: [PATCH 5.19 0415/1157] drm/vc4: hdmi: Add all the vc5 HDMI registers into the debugfs dumps
+Date:   Mon, 15 Aug 2022 19:56:11 +0200
+Message-Id: <20220815180456.257344354@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -58,47 +58,105 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-[ Upstream commit b7c3d6821627861f4ea3e1f2b595d0ed9e80aac8 ]
+[ Upstream commit 25eb441d55d479581a65bcc9de88bc1d86bf76c1 ]
 
-The current plane margin calculation code clips the right and bottom
-edges of the range based using the left and top margins.
+The vc5 HDMI registers hadn't been added into the debugfs
+register sets, therefore weren't dumped on request.
+Add them in.
 
-This is obviously wrong, so let's fix it.
-
-Fixes: 666e73587f90 ("drm/vc4: Take margin setup into account when updating planes")
+Fixes: 8323989140f3 ("drm/vc4: hdmi: Support the BCM2711 HDMI controllers")
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Link: https://lore.kernel.org/r/20220613144800.326124-6-maxime@cerno.tech
+Link: https://lore.kernel.org/r/20220613144800.326124-19-maxime@cerno.tech
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/vc4/vc4_plane.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/vc4/vc4_hdmi.c | 39 ++++++++++++++++++++++++++++++++++
+ drivers/gpu/drm/vc4/vc4_hdmi.h |  8 +++++++
+ 2 files changed, 47 insertions(+)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_plane.c b/drivers/gpu/drm/vc4/vc4_plane.c
-index 67402da89213..568371aa89c5 100644
---- a/drivers/gpu/drm/vc4/vc4_plane.c
-+++ b/drivers/gpu/drm/vc4/vc4_plane.c
-@@ -310,16 +310,16 @@ static int vc4_plane_margins_adj(struct drm_plane_state *pstate)
- 					       adjhdisplay,
- 					       crtc_state->mode.hdisplay);
- 	vc4_pstate->crtc_x += left;
--	if (vc4_pstate->crtc_x > crtc_state->mode.hdisplay - left)
--		vc4_pstate->crtc_x = crtc_state->mode.hdisplay - left;
-+	if (vc4_pstate->crtc_x > crtc_state->mode.hdisplay - right)
-+		vc4_pstate->crtc_x = crtc_state->mode.hdisplay - right;
+diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
+index 6b4f42332d95..e314e0a4c4c3 100644
+--- a/drivers/gpu/drm/vc4/vc4_hdmi.c
++++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+@@ -145,6 +145,12 @@ static int vc4_hdmi_debugfs_regs(struct seq_file *m, void *unused)
  
- 	adjvdisplay = crtc_state->mode.vdisplay - (top + bottom);
- 	vc4_pstate->crtc_y = DIV_ROUND_CLOSEST(vc4_pstate->crtc_y *
- 					       adjvdisplay,
- 					       crtc_state->mode.vdisplay);
- 	vc4_pstate->crtc_y += top;
--	if (vc4_pstate->crtc_y > crtc_state->mode.vdisplay - top)
--		vc4_pstate->crtc_y = crtc_state->mode.vdisplay - top;
-+	if (vc4_pstate->crtc_y > crtc_state->mode.vdisplay - bottom)
-+		vc4_pstate->crtc_y = crtc_state->mode.vdisplay - bottom;
+ 	drm_print_regset32(&p, &vc4_hdmi->hdmi_regset);
+ 	drm_print_regset32(&p, &vc4_hdmi->hd_regset);
++	drm_print_regset32(&p, &vc4_hdmi->cec_regset);
++	drm_print_regset32(&p, &vc4_hdmi->csc_regset);
++	drm_print_regset32(&p, &vc4_hdmi->dvp_regset);
++	drm_print_regset32(&p, &vc4_hdmi->phy_regset);
++	drm_print_regset32(&p, &vc4_hdmi->ram_regset);
++	drm_print_regset32(&p, &vc4_hdmi->rm_regset);
  
- 	vc4_pstate->crtc_w = DIV_ROUND_CLOSEST(vc4_pstate->crtc_w *
- 					       adjhdisplay,
+ 	return 0;
+ }
+@@ -2704,6 +2710,7 @@ static int vc5_hdmi_init_resources(struct vc4_hdmi *vc4_hdmi)
+ 	struct platform_device *pdev = vc4_hdmi->pdev;
+ 	struct device *dev = &pdev->dev;
+ 	struct resource *res;
++	int ret;
+ 
+ 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "hdmi");
+ 	if (!res)
+@@ -2800,6 +2807,38 @@ static int vc5_hdmi_init_resources(struct vc4_hdmi *vc4_hdmi)
+ 		return PTR_ERR(vc4_hdmi->reset);
+ 	}
+ 
++	ret = vc4_hdmi_build_regset(vc4_hdmi, &vc4_hdmi->hdmi_regset, VC4_HDMI);
++	if (ret)
++		return ret;
++
++	ret = vc4_hdmi_build_regset(vc4_hdmi, &vc4_hdmi->hd_regset, VC4_HD);
++	if (ret)
++		return ret;
++
++	ret = vc4_hdmi_build_regset(vc4_hdmi, &vc4_hdmi->cec_regset, VC5_CEC);
++	if (ret)
++		return ret;
++
++	ret = vc4_hdmi_build_regset(vc4_hdmi, &vc4_hdmi->csc_regset, VC5_CSC);
++	if (ret)
++		return ret;
++
++	ret = vc4_hdmi_build_regset(vc4_hdmi, &vc4_hdmi->dvp_regset, VC5_DVP);
++	if (ret)
++		return ret;
++
++	ret = vc4_hdmi_build_regset(vc4_hdmi, &vc4_hdmi->phy_regset, VC5_PHY);
++	if (ret)
++		return ret;
++
++	ret = vc4_hdmi_build_regset(vc4_hdmi, &vc4_hdmi->ram_regset, VC5_RAM);
++	if (ret)
++		return ret;
++
++	ret = vc4_hdmi_build_regset(vc4_hdmi, &vc4_hdmi->rm_regset, VC5_RM);
++	if (ret)
++		return ret;
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.h b/drivers/gpu/drm/vc4/vc4_hdmi.h
+index 51b27dcdcd9b..1520387b317f 100644
+--- a/drivers/gpu/drm/vc4/vc4_hdmi.h
++++ b/drivers/gpu/drm/vc4/vc4_hdmi.h
+@@ -179,6 +179,14 @@ struct vc4_hdmi {
+ 	struct debugfs_regset32 hdmi_regset;
+ 	struct debugfs_regset32 hd_regset;
+ 
++	/* VC5 only */
++	struct debugfs_regset32 cec_regset;
++	struct debugfs_regset32 csc_regset;
++	struct debugfs_regset32 dvp_regset;
++	struct debugfs_regset32 phy_regset;
++	struct debugfs_regset32 ram_regset;
++	struct debugfs_regset32 rm_regset;
++
+ 	/**
+ 	 * @hw_lock: Spinlock protecting device register access.
+ 	 */
 -- 
 2.35.1
 

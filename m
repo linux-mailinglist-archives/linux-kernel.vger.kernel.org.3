@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1164594C72
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E59594941
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243215AbiHPAzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 20:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
+        id S243165AbiHOXLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243787AbiHPAr2 (ORCPT
+        with ESMTP id S1352822AbiHOXI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 20:47:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7305BD8E0F;
-        Mon, 15 Aug 2022 13:45:37 -0700 (PDT)
+        Mon, 15 Aug 2022 19:08:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9CDC8708C;
+        Mon, 15 Aug 2022 12:59:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D0CE56125F;
-        Mon, 15 Aug 2022 20:45:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBA73C433D6;
-        Mon, 15 Aug 2022 20:45:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 92DBEB80EAD;
+        Mon, 15 Aug 2022 19:59:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D92BBC433D7;
+        Mon, 15 Aug 2022 19:59:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660596336;
-        bh=6rswtPHCBmofH9wCL2FhhYPwRwY21gb1uDolVJabZu8=;
+        s=korg; t=1660593589;
+        bh=pA8ISevhUsGe/p5+9L1xkYfUhHfjRk8HP8uS3OlHxrU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l0kZzUKovgTjiPV33wEqHNRupVFxfFugZoeRp49t7Y3zsyr0Q1sVsirtJK+F7+EiW
-         4Yrb7sZrLPj1w/22LliZ6yWWECFNVd98s/Q+E/5eiywptaK58+QEZ3v5LeF/xrU9J/
-         DNre+W2P3BhEGHJlHM/19BOYTBi3OLQlE4GdEC58=
+        b=vhDjpzW/7I5qgbLnHapEpnN/MO1OgVH7qUwQeoexwGg8zIT52puU0iqm36WpxYVO9
+         +RVYpIztISdBAzL/9oHjCi/42JRDYF0GOUe64kqMWkbiQhJWU5GIaY68499SJ1O7Tg
+         irvb6VI7bwoaWyKCvVeundAHmeu/jp7Mw8AehS68=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen Zhongjin <chenzhongjin@huawei.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 1014/1157] kprobes: Forbid probing on trampoline and BPF code areas
-Date:   Mon, 15 Aug 2022 20:06:10 +0200
-Message-Id: <20220815180520.430074264@linuxfoundation.org>
+        stable@vger.kernel.org, "x86@kernel.org" <x86@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 5.18 0972/1095] ftrace/x86: Add back ftrace_expected assignment
+Date:   Mon, 15 Aug 2022 20:06:11 +0200
+Message-Id: <20220815180509.279790937@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
-References: <20220815180439.416659447@linuxfoundation.org>
+In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
+References: <20220815180429.240518113@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,52 +59,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen Zhongjin <chenzhongjin@huawei.com>
+From: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-[ Upstream commit 28f6c37a2910f565b4f5960df52b2eccae28c891 ]
+commit ac6c1b2ca77e722a1e5d651f12f437f2f237e658 upstream.
 
-kernel_text_address() treats ftrace_trampoline, kprobe_insn_slot
-and bpf_text_address as valid kprobe addresses - which is not ideal.
+When a ftrace_bug happens (where ftrace fails to modify a location) it is
+helpful to have what was at that location as well as what was expected to
+be there.
 
-These text areas are removable and changeable without any notification
-to kprobes, and probing on them can trigger unexpected behavior:
+But with the conversion to text_poke() the variable that assigns the
+expected for debugging was dropped. Unfortunately, I noticed this when I
+needed it. Add it back.
 
-  https://lkml.org/lkml/2022/7/26/1148
+Link: https://lkml.kernel.org/r/20220726101851.069d2e70@gandalf.local.home
 
-Considering that jump_label and static_call text are already
-forbiden to probe, kernel_text_address() should be replaced with
-core_kernel_text() and is_module_text_address() to check other text
-areas which are unsafe to kprobe.
-
-[ mingo: Rewrote the changelog. ]
-
-Fixes: 5b485629ba0d ("kprobes, extable: Identify kprobes trampolines as kernel text area")
-Fixes: 74451e66d516 ("bpf: make jited programs visible in traces")
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Link: https://lore.kernel.org/r/20220801033719.228248-1-chenzhongjin@huawei.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: "x86@kernel.org" <x86@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: stable@vger.kernel.org
+Fixes: 768ae4406a5c ("x86/ftrace: Use text_poke()")
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/kprobes.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/x86/kernel/ftrace.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index f214f8c088ed..80697e5e03e4 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1560,7 +1560,8 @@ static int check_kprobe_address_safe(struct kprobe *p,
- 	preempt_disable();
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -93,6 +93,7 @@ static int ftrace_verify_code(unsigned l
  
- 	/* Ensure it is not in reserved area nor out of text */
--	if (!kernel_text_address((unsigned long) p->addr) ||
-+	if (!(core_kernel_text((unsigned long) p->addr) ||
-+	    is_module_text_address((unsigned long) p->addr)) ||
- 	    within_kprobe_blacklist((unsigned long) p->addr) ||
- 	    jump_label_text_reserved(p->addr, p->addr) ||
- 	    static_call_text_reserved(p->addr, p->addr) ||
--- 
-2.35.1
-
+ 	/* Make sure it is what we expect it to be */
+ 	if (memcmp(cur_code, old_code, MCOUNT_INSN_SIZE) != 0) {
++		ftrace_expected = old_code;
+ 		WARN_ON(1);
+ 		return -EINVAL;
+ 	}
 
 

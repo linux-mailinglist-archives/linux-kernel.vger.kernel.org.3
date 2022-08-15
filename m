@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A54A593DBF
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 22:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD3B593AB3
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 22:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233505AbiHOUG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 16:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
+        id S1344041AbiHOTiY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 15 Aug 2022 15:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346165AbiHOUBs (ORCPT
+        with ESMTP id S245365AbiHOTdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 16:01:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70325FC;
-        Mon, 15 Aug 2022 11:53:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE754B81057;
-        Mon, 15 Aug 2022 18:53:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E3F8C433D6;
-        Mon, 15 Aug 2022 18:53:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660589629;
-        bh=831V3Yq52zNLvCLhnmdB7nVvxEFk2hDomNDpBbMwZIo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DG2va3syTcOWbNXosh7UlnmIXtSIqfA/AxR0WeW1BjND/B0R4LsquAkdel1Wd/jkX
-         4h7e5sAFlw4WcG3Bax+YIJhHS85LHk3/hKj6cFhR+uffy/xJVwoH/PqLXgX9ZeIkWt
-         0qc7ZYHeLalA44CTLlKLB9Gx9bK+XZ3ii/+YR52Y=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Justin Tee <justin.tee@broadcom.com>,
-        James Smart <jsmart2021@gmail.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.15 779/779] scsi: lpfc: Resolve some cleanup issues following SLI path refactoring
-Date:   Mon, 15 Aug 2022 20:07:03 +0200
-Message-Id: <20220815180410.658725498@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180337.130757997@linuxfoundation.org>
-References: <20220815180337.130757997@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Mon, 15 Aug 2022 15:33:42 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0200D61D89
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:45:13 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id f17-20020a6bdd11000000b00684f4e874b5so4611674ioc.13
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:45:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:from:subject:message-id:in-reply-to
+         :date:mime-version:x-gm-message-state:from:to:cc;
+        bh=9oPYzoxTUmPE70g6i2LYiBhNZyppzQqx183QoEcMCCQ=;
+        b=crgTs2+XhbCDaUtHSyNYyCr9LJ2fl+74LamgxxtvbaWf/GPx7wAU9yoABvbiYgEhxF
+         Uv5io0moxEayHV8kcxMi9WX4/lBe4Xq2yIeT7OO8oHTpln8fpGky6u2BEGQUX3/L83bW
+         EtMPUc1m7wM8aelXtWlUb84k8j1qtbSSN5E1vHQJ/QUOT9SpUYUKKGmewVg/fYn3FISd
+         +amE7oQZrrB08IG5UOMTUs+Rj+FMvZ69swjO4ht/Lwnn3fr1USlt0xHxPHMX6CEv64Ka
+         ur6mSsNZ5Hw2NyrR2TVc4SXEWix+1Ax9GkIb5PPyx9tNw84mhqZUXGcfIcQKpVPltK9h
+         y+mA==
+X-Gm-Message-State: ACgBeo0G1NruzpM86N0FxyiAodeGU3UOTT4udVsMuoPu25vmI010mOw3
+        qPrnBQr08/Got4wxQ+NL0c2MMrZMg18TWGR3tWyatIQch04b
+X-Google-Smtp-Source: AA6agR5uwUM2YxE7qsFO9F/OS51SEy8+o9l2L7bCdL4FpylSAXW8bydIQo9YuxPxxdy1gsoTioStxxnoCsHry141DPvHOhuwHMbl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6e02:1bce:b0:2e4:745b:d902 with SMTP id
+ x14-20020a056e021bce00b002e4745bd902mr6367592ilv.265.1660589112295; Mon, 15
+ Aug 2022 11:45:12 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 11:45:12 -0700
+In-Reply-To: <20220815180715.GA3106610@roeck-us.net>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000028084805e64c0839@google.com>
+Subject: Re: [syzbot] upstream boot error: BUG: corrupted list in new_inode
+From:   syzbot <syzbot+24df94a8d05d5a3e68f0@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@roeck-us.net, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,147 +57,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+Hello,
 
-commit e27f05147bff21408c1b8410ad8e90cd286e7952 upstream.
+syzbot tried to test the proposed patch but the build/boot failed:
 
-Following refactoring and consolidation in SLI processing, fix up some
-minor issues related to SLI path:
+failed to create VM pool: failed to create GCE image: create image operation failed: &{Code:PERMISSIONS_ERROR Location: Message:Required 'read' permission for 'disks/ci-upstream-kasan-gce-root-test-job-test-job-image.tar.gz' ForceSendFields:[] NullFields:[]}.
 
- - Correct the setting of LPFC_EXCHANGE_BUSY flag in response IOCB.
+syzkaller build log:
+go env (err=<nil>)
+GO111MODULE="auto"
+GOARCH="amd64"
+GOBIN=""
+GOCACHE="/syzkaller/.cache/go-build"
+GOENV="/syzkaller/.config/go/env"
+GOEXE=""
+GOEXPERIMENT=""
+GOFLAGS=""
+GOHOSTARCH="amd64"
+GOHOSTOS="linux"
+GOINSECURE=""
+GOMODCACHE="/syzkaller/jobs/linux/gopath/pkg/mod"
+GONOPROXY=""
+GONOSUMDB=""
+GOOS="linux"
+GOPATH="/syzkaller/jobs/linux/gopath"
+GOPRIVATE=""
+GOPROXY="https://proxy.golang.org,direct"
+GOROOT="/usr/local/go"
+GOSUMDB="sum.golang.org"
+GOTMPDIR=""
+GOTOOLDIR="/usr/local/go/pkg/tool/linux_amd64"
+GOVCS=""
+GOVERSION="go1.17"
+GCCGO="gccgo"
+AR="ar"
+CC="gcc"
+CXX="g++"
+CGO_ENABLED="1"
+GOMOD="/syzkaller/jobs/linux/gopath/src/github.com/google/syzkaller/go.mod"
+CGO_CFLAGS="-g -O2"
+CGO_CPPFLAGS=""
+CGO_CXXFLAGS="-g -O2"
+CGO_FFLAGS="-g -O2"
+CGO_LDFLAGS="-g -O2"
+PKG_CONFIG="pkg-config"
+GOGCCFLAGS="-fPIC -m64 -pthread -fmessage-length=0 -fdebug-prefix-map=/tmp/go-build2326737377=/tmp/go-build -gno-record-gcc-switches"
 
- - Fix some typographical errors.
-
- - Fix duplicate log messages.
-
-Link: https://lore.kernel.org/r/20220603174329.63777-4-jsmart2021@gmail.com
-Fixes: 1b64aa9eae28 ("scsi: lpfc: SLI path split: Refactor fast and slow paths to native SLI4")
-Cc: <stable@vger.kernel.org> # v5.18
-Co-developed-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/scsi/lpfc/lpfc_init.c |    2 +-
- drivers/scsi/lpfc/lpfc_sli.c  |   25 ++++++++++++-------------
- 2 files changed, 13 insertions(+), 14 deletions(-)
-
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -11964,7 +11964,7 @@ lpfc_sli_enable_msi(struct lpfc_hba *phb
- 	rc = pci_enable_msi(phba->pcidev);
- 	if (!rc)
- 		lpfc_printf_log(phba, KERN_INFO, LOG_INIT,
--				"0462 PCI enable MSI mode success.\n");
-+				"0012 PCI enable MSI mode success.\n");
- 	else {
- 		lpfc_printf_log(phba, KERN_INFO, LOG_INIT,
- 				"0471 PCI enable MSI mode failed (%d)\n", rc);
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -1939,7 +1939,7 @@ lpfc_issue_cmf_sync_wqe(struct lpfc_hba
- 	sync_buf = __lpfc_sli_get_iocbq(phba);
- 	if (!sync_buf) {
- 		lpfc_printf_log(phba, KERN_ERR, LOG_CGN_MGMT,
--				"6213 No available WQEs for CMF_SYNC_WQE\n");
-+				"6244 No available WQEs for CMF_SYNC_WQE\n");
- 		ret_val = ENOMEM;
- 		goto out_unlock;
- 	}
-@@ -3737,7 +3737,7 @@ lpfc_sli_process_sol_iocb(struct lpfc_hb
- 						set_job_ulpword4(cmdiocbp,
- 								 IOERR_ABORT_REQUESTED);
- 						/*
--						 * For SLI4, irsiocb contains
-+						 * For SLI4, irspiocb contains
- 						 * NO_XRI in sli_xritag, it
- 						 * shall not affect releasing
- 						 * sgl (xri) process.
-@@ -3755,7 +3755,7 @@ lpfc_sli_process_sol_iocb(struct lpfc_hb
- 					}
- 				}
- 			}
--			(cmdiocbp->cmd_cmpl) (phba, cmdiocbp, saveq);
-+			cmdiocbp->cmd_cmpl(phba, cmdiocbp, saveq);
- 		} else
- 			lpfc_sli_release_iocbq(phba, cmdiocbp);
- 	} else {
-@@ -3995,8 +3995,7 @@ lpfc_sli_handle_fast_ring_event(struct l
- 				cmdiocbq->cmd_flag &= ~LPFC_DRIVER_ABORTED;
- 			if (cmdiocbq->cmd_cmpl) {
- 				spin_unlock_irqrestore(&phba->hbalock, iflag);
--				(cmdiocbq->cmd_cmpl)(phba, cmdiocbq,
--						      &rspiocbq);
-+				cmdiocbq->cmd_cmpl(phba, cmdiocbq, &rspiocbq);
- 				spin_lock_irqsave(&phba->hbalock, iflag);
- 			}
- 			break;
-@@ -10936,7 +10935,7 @@ lpfc_sli4_iocb2wqe(struct lpfc_hba *phba
-  * @flag: Flag indicating if this command can be put into txq.
-  *
-  * __lpfc_sli_issue_fcp_io_s3 is wrapper function to invoke lockless func to
-- * send  an iocb command to an HBA with SLI-4 interface spec.
-+ * send  an iocb command to an HBA with SLI-3 interface spec.
-  *
-  * This function takes the hbalock before invoking the lockless version.
-  * The function will return success after it successfully submit the wqe to
-@@ -12989,7 +12988,7 @@ lpfc_sli_wake_iocb_wait(struct lpfc_hba
- 		cmdiocbq->cmd_cmpl = cmdiocbq->wait_cmd_cmpl;
- 		cmdiocbq->wait_cmd_cmpl = NULL;
- 		if (cmdiocbq->cmd_cmpl)
--			(cmdiocbq->cmd_cmpl)(phba, cmdiocbq, NULL);
-+			cmdiocbq->cmd_cmpl(phba, cmdiocbq, NULL);
- 		else
- 			lpfc_sli_release_iocbq(phba, cmdiocbq);
- 		return;
-@@ -13003,9 +13002,9 @@ lpfc_sli_wake_iocb_wait(struct lpfc_hba
- 
- 	/* Set the exchange busy flag for task management commands */
- 	if ((cmdiocbq->cmd_flag & LPFC_IO_FCP) &&
--		!(cmdiocbq->cmd_flag & LPFC_IO_LIBDFC)) {
-+	    !(cmdiocbq->cmd_flag & LPFC_IO_LIBDFC)) {
- 		lpfc_cmd = container_of(cmdiocbq, struct lpfc_io_buf,
--			cur_iocbq);
-+					cur_iocbq);
- 		if (rspiocbq && (rspiocbq->cmd_flag & LPFC_EXCHANGE_BUSY))
- 			lpfc_cmd->flags |= LPFC_SBUF_XBUSY;
- 		else
-@@ -14143,7 +14142,7 @@ void lpfc_sli4_els_xri_abort_event_proc(
-  * @irspiocbq: Pointer to work-queue completion queue entry.
-  *
-  * This routine handles an ELS work-queue completion event and construct
-- * a pseudo response ELS IODBQ from the SLI4 ELS WCQE for the common
-+ * a pseudo response ELS IOCBQ from the SLI4 ELS WCQE for the common
-  * discovery engine to handle.
-  *
-  * Return: Pointer to the receive IOCBQ, NULL otherwise.
-@@ -14187,7 +14186,7 @@ lpfc_sli4_els_preprocess_rspiocbq(struct
- 
- 	if (bf_get(lpfc_wcqe_c_xb, wcqe)) {
- 		spin_lock_irqsave(&phba->hbalock, iflags);
--		cmdiocbq->cmd_flag |= LPFC_EXCHANGE_BUSY;
-+		irspiocbq->cmd_flag |= LPFC_EXCHANGE_BUSY;
- 		spin_unlock_irqrestore(&phba->hbalock, iflags);
- 	}
- 
-@@ -15046,7 +15045,7 @@ lpfc_sli4_fp_handle_fcp_wcqe(struct lpfc
- 		/* Pass the cmd_iocb and the wcqe to the upper layer */
- 		memcpy(&cmdiocbq->wcqe_cmpl, wcqe,
- 		       sizeof(struct lpfc_wcqe_complete));
--		(cmdiocbq->cmd_cmpl)(phba, cmdiocbq, cmdiocbq);
-+		cmdiocbq->cmd_cmpl(phba, cmdiocbq, cmdiocbq);
- 	} else {
- 		lpfc_printf_log(phba, KERN_WARNING, LOG_SLI,
- 				"0375 FCP cmdiocb not callback function "
-@@ -19210,7 +19209,7 @@ lpfc_sli4_send_seq_to_ulp(struct lpfc_vp
- 
- 	/* Free iocb created in lpfc_prep_seq */
- 	list_for_each_entry_safe(curr_iocb, next_iocb,
--		&iocbq->list, list) {
-+				 &iocbq->list, list) {
- 		list_del_init(&curr_iocb->list);
- 		lpfc_sli_release_iocbq(phba, curr_iocb);
- 	}
+git status (err=<nil>)
+HEAD detached at 8dfcaa3d2
+nothing to commit, working tree clean
 
 
+go list -f '{{.Stale}}' ./sys/syz-sysgen | grep -q false || go install ./sys/syz-sysgen
+make .descriptions
+bin/syz-sysgen
+touch .descriptions
+GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=8dfcaa3d2828a113ae780da01f5f73ad64710e31 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20220812-115356'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-fuzzer github.com/google/syzkaller/syz-fuzzer
+GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=8dfcaa3d2828a113ae780da01f5f73ad64710e31 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20220812-115356'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-execprog github.com/google/syzkaller/tools/syz-execprog
+GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=8dfcaa3d2828a113ae780da01f5f73ad64710e31 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20220812-115356'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-stress github.com/google/syzkaller/tools/syz-stress
+mkdir -p ./bin/linux_amd64
+gcc -o ./bin/linux_amd64/syz-executor executor/executor.cc \
+	-m64 -O2 -pthread -Wall -Werror -Wparentheses -Wunused-const-variable -Wframe-larger-than=16384 -Wno-stringop-overflow -Wno-array-bounds -Wno-format-overflow -static-pie -fpermissive -w -DGOOS_linux=1 -DGOARCH_amd64=1 \
+	-DHOSTGOOS_linux=1 -DGIT_REVISION=\"8dfcaa3d2828a113ae780da01f5f73ad64710e31\"
+
+
+
+Tested on:
+
+commit:         fc4d146e virtio_net: Revert "virtio_net: set the defau..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3b9175e0879a7749
+dashboard link: https://syzkaller.appspot.com/bug?extid=24df94a8d05d5a3e68f0
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Note: no patches were applied.

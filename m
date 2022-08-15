@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39BF9594DBD
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08DFB594859
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346771AbiHPAvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 20:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
+        id S1343566AbiHOXPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348453AbiHPAqU (ORCPT
+        with ESMTP id S244510AbiHOXOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 20:46:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02393194E64;
-        Mon, 15 Aug 2022 13:44:36 -0700 (PDT)
+        Mon, 15 Aug 2022 19:14:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4815C7B1E4;
+        Mon, 15 Aug 2022 13:01:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 929ED611E2;
-        Mon, 15 Aug 2022 20:44:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81263C433D6;
-        Mon, 15 Aug 2022 20:44:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1D6FB80EAD;
+        Mon, 15 Aug 2022 20:01:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13D6EC433D6;
+        Mon, 15 Aug 2022 20:01:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660596275;
-        bh=HSYtq/8VlNbrxLv2/e0LpVYwwGCzQZuFENn4nztUwSE=;
+        s=korg; t=1660593675;
+        bh=RFuo3WxZHd0czDWPWQq5UQkkkavjlJKyFlZDppA2rJU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DVxcFtC14MbZHlhDPdfVa0BiLB8i83KqIYwelvbZ45wPtTyJcufdoSYvWRhCNhQ4F
-         9NYKd6UyjRNsPQ8sgxu5NiGVzenpipFgCwLWXeR+uTadBgjSSe/NWGCwUHjc4YFewq
-         TYC5HMw3ENwhtrnqXyVxVYIEvG309psrVTMSeYbI=
+        b=ye9a+lfIbFO4FCFcltTrjeGwHIaGb0aIYlYpzT+Zob/RDvck4G/yNvK9ZYwqdH/Sg
+         rKDhKBmxEQ9BmPUjXQToNftxIaBqvdzpQs1clGyjKtaQcML0R0u4zBSsgfErbRJ6mX
+         2mluBBiv8Paz5VDJovcfH0ZP1urCCSlN6VHnF80o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mel Gorman <mgorman@techsingularity.net>,
-        Ingo Molnar <mingo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 1027/1157] sched/core: Do not requeue task on CPU excluded from cpus_mask
-Date:   Mon, 15 Aug 2022 20:06:23 +0200
-Message-Id: <20220815180521.025791014@linuxfoundation.org>
+        stable@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Ferry Toth <fntoth@gmail.com>
+Subject: [PATCH 5.18 0985/1095] usbnet: smsc95xx: Dont clear read-only PHY interrupt
+Date:   Mon, 15 Aug 2022 20:06:24 +0200
+Message-Id: <20220815180509.873447422@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
-References: <20220815180439.416659447@linuxfoundation.org>
+In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
+References: <20220815180429.240518113@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,83 +58,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mel Gorman <mgorman@techsingularity.net>
+From: Lukas Wunner <lukas@wunner.de>
 
-[ Upstream commit 751d4cbc43879229dbc124afefe240b70fd29a85 ]
+[ Upstream commit 3108871f19221372b251f7da1ac38736928b5b3a ]
 
-The following warning was triggered on a large machine early in boot on
-a distribution kernel but the same problem should also affect mainline.
+Upon receiving data from the Interrupt Endpoint, the SMSC LAN95xx driver
+attempts to clear the signaled interrupts by writing "all ones" to the
+Interrupt Status Register.
 
-   WARNING: CPU: 439 PID: 10 at ../kernel/workqueue.c:2231 process_one_work+0x4d/0x440
-   Call Trace:
-    <TASK>
-    rescuer_thread+0x1f6/0x360
-    kthread+0x156/0x180
-    ret_from_fork+0x22/0x30
-    </TASK>
+However the driver only ever enables a single type of interrupt, namely
+the PHY Interrupt.  And according to page 119 of the LAN950x datasheet,
+its bit in the Interrupt Status Register is read-only.  There's no other
+way to clear it than in a separate PHY register:
 
-Commit c6e7bd7afaeb ("sched/core: Optimize ttwu() spinning on p->on_cpu")
-optimises ttwu by queueing a task that is descheduling on the wakelist,
-but does not check if the task descheduling is still allowed to run on that CPU.
+https://www.microchip.com/content/dam/mchp/documents/UNG/ProductDocuments/DataSheets/LAN950x-Data-Sheet-DS00001875D.pdf
 
-In this warning, the problematic task is a workqueue rescue thread which
-checks if the rescue is for a per-cpu workqueue and running on the wrong CPU.
-While this is early in boot and it should be possible to create workers,
-the rescue thread may still used if the MAYDAY_INITIAL_TIMEOUT is reached
-or MAYDAY_INTERVAL and on a sufficiently large machine, the rescue
-thread is being used frequently.
+Consequently, writing "all ones" to the Interrupt Status Register is
+pointless and can be dropped.
 
-Tracing confirmed that the task should have migrated properly using the
-stopper thread to handle the migration. However, a parallel wakeup from udev
-running on another CPU that does not share CPU cache observes p->on_cpu and
-uses task_cpu(p), queues the task on the old CPU and triggers the warning.
-
-Check that the wakee task that is descheduling is still allowed to run
-on its current CPU and if not, wait for the descheduling to complete
-and select an allowed CPU.
-
-Fixes: c6e7bd7afaeb ("sched/core: Optimize ttwu() spinning on p->on_cpu")
-Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20220804092119.20137-1-mgorman@techsingularity.net
+Tested-by: Oleksij Rempel <o.rempel@pengutronix.de> # LAN9514/9512/9500
+Tested-by: Ferry Toth <fntoth@gmail.com> # LAN9514
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/sched/core.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/net/usb/smsc95xx.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 0066b9d66e25..d4af56927a4d 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3808,7 +3808,7 @@ bool cpus_share_cache(int this_cpu, int that_cpu)
- 	return per_cpu(sd_llc_id, this_cpu) == per_cpu(sd_llc_id, that_cpu);
- }
+diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
+index edf0492ad489..2cb44d65bbc3 100644
+--- a/drivers/net/usb/smsc95xx.c
++++ b/drivers/net/usb/smsc95xx.c
+@@ -572,10 +572,6 @@ static int smsc95xx_link_reset(struct usbnet *dev)
+ 	unsigned long flags;
+ 	int ret;
  
--static inline bool ttwu_queue_cond(int cpu)
-+static inline bool ttwu_queue_cond(struct task_struct *p, int cpu)
- {
- 	/*
- 	 * Do not complicate things with the async wake_list while the CPU is
-@@ -3817,6 +3817,10 @@ static inline bool ttwu_queue_cond(int cpu)
- 	if (!cpu_active(cpu))
- 		return false;
- 
-+	/* Ensure the task will still be allowed to run on the CPU. */
-+	if (!cpumask_test_cpu(cpu, p->cpus_ptr))
-+		return false;
-+
- 	/*
- 	 * If the CPU does not share cache, then queue the task on the
- 	 * remote rqs wakelist to avoid accessing remote data.
-@@ -3846,7 +3850,7 @@ static inline bool ttwu_queue_cond(int cpu)
- 
- static bool ttwu_queue_wakelist(struct task_struct *p, int cpu, int wake_flags)
- {
--	if (sched_feat(TTWU_QUEUE) && ttwu_queue_cond(cpu)) {
-+	if (sched_feat(TTWU_QUEUE) && ttwu_queue_cond(p, cpu)) {
- 		sched_clock_cpu(cpu); /* Sync clocks across CPUs */
- 		__ttwu_queue_wakelist(p, cpu, wake_flags);
- 		return true;
+-	ret = smsc95xx_write_reg(dev, INT_STS, INT_STS_CLEAR_ALL_);
+-	if (ret < 0)
+-		return ret;
+-
+ 	spin_lock_irqsave(&pdata->mac_cr_lock, flags);
+ 	if (pdata->phydev->duplex != DUPLEX_FULL) {
+ 		pdata->mac_cr &= ~MAC_CR_FDPX_;
 -- 
 2.35.1
 

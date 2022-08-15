@@ -2,62 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE97A59346F
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 20:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F154D593787
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbiHOSCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 14:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
+        id S244816AbiHOTXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 15:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233187AbiHOSCT (ORCPT
+        with ESMTP id S1344221AbiHOTUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 14:02:19 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4709E25C43;
-        Mon, 15 Aug 2022 11:02:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GcrNBmy4B7oYPvzC1iQ3x9irNnquUnomstD6AlIWDjo=; b=mbnFdPKHRrDIndSjpd0B0OjzRe
-        GQl31o3UikiEGn6BQe9miqqX9F802O9C06p1/OSyBKP51WOUacxGnUx7z4T6ckelwcCtMvcfR8mrK
-        5hlTPVvydm+RDOa9tDO1fR4GyEKa0taddTbbOtN5/DLk48AvbH65vleCk4EEsitm3rRsQJ7GinDca
-        +MVUzc6eoN087h/COD/d3Eq28QKnb/gPmfW6dDXn2WMm++zYS6VfFmA4IuYw7kJRXaJvVMKKgpTB6
-        hl+hfewNBspeJQSXz/fNRpARhUvZzAJWJM8RAbwMeI7f2gU4yfGTRikkZem3Jys2K6TVQXNv/BNYI
-        +TUm5M8A==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oNePm-004k5t-Qd;
-        Mon, 15 Aug 2022 18:02:14 +0000
-Date:   Mon, 15 Aug 2022 19:02:14 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Jiacheng Xu <578001344xu@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        konishi.ryusuke@gmail.com, linux-nilfs@vger.kernel.org,
-        security@kernel.org
-Subject: Re: KASAN: use-after-free in nilfs_mdt_destroy
-Message-ID: <YvqKJppIL4lVCn9+@ZenIV>
-References: <CAO4S-mficMz1mQW06EuCF+o11+mRDiCpufqVfoHkcRbQbs8kVw@mail.gmail.com>
+        Mon, 15 Aug 2022 15:20:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D051759264;
+        Mon, 15 Aug 2022 11:40:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF3E9B81085;
+        Mon, 15 Aug 2022 18:40:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EAEAC433C1;
+        Mon, 15 Aug 2022 18:39:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660588800;
+        bh=O4SfQ5D1AyxFTpjpSClFOyGOYUOzakR3Z6tmmpcgcDA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=L5nHUFxIGKThQNMn4Fdn1twwlH0yeNhOFoeMqQ6pqf3GVxgEjYSFQvFnEJy7uXhbB
+         jJRgTmO0DLd8rRRh6ntxxE9XwzIJtukaDFppT5gKjwtrbylWmZLcCJVmBiEFyEzr9O
+         KsTYTflxyrdOTjK/Axq29ctq8xNH/i96ciOE+x+8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 491/779] usb: aspeed-vhub: Fix refcount leak bug in ast_vhub_init_desc()
+Date:   Mon, 15 Aug 2022 20:02:15 +0200
+Message-Id: <20220815180358.252561345@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220815180337.130757997@linuxfoundation.org>
+References: <20220815180337.130757997@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAO4S-mficMz1mQW06EuCF+o11+mRDiCpufqVfoHkcRbQbs8kVw@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 10:03:21PM +0800, Jiacheng Xu wrote:
+From: Liang He <windhl@126.com>
 
-> Patch:
-> Fix this bug by moving the assignment of inode->i_private before
-> security_inode_alloc.
-> An ad-hoc patch is proposed:
-> https://patchwork.kernel.org/project/linux-fsdevel/patch/20211011030956.2459172-1-mudongliangabcd@gmail.com/
+[ Upstream commit 220fafb4ed04187e9c17be4152da5a7f2ffbdd8c ]
 
-... and that looks like utter bollocks.  Why does security_inode_alloc()
-look at ->i_private?  Which LSM is involved?
+We should call of_node_put() for the reference returned by
+of_get_child_by_name() which has increased the refcount.
+
+Fixes: 30d2617fd7ed ("usb: gadget: aspeed: allow to set usb strings in device tree")
+Signed-off-by: Liang He <windhl@126.com>
+Link: https://lore.kernel.org/r/20220713120528.368168-1-windhl@126.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/gadget/udc/aspeed-vhub/hub.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/udc/aspeed-vhub/hub.c b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+index b9960fdd8a51..16a12d2d492e 100644
+--- a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
++++ b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+@@ -1028,8 +1028,10 @@ static int ast_vhub_init_desc(struct ast_vhub *vhub)
+ 	/* Initialize vhub String Descriptors. */
+ 	INIT_LIST_HEAD(&vhub->vhub_str_desc);
+ 	desc_np = of_get_child_by_name(vhub_np, "vhub-strings");
+-	if (desc_np)
++	if (desc_np) {
+ 		ret = ast_vhub_of_parse_str_desc(vhub, desc_np);
++		of_node_put(desc_np);
++	}
+ 	else
+ 		ret = ast_vhub_str_alloc_add(vhub, &ast_vhub_strings);
+ 
+-- 
+2.35.1
+
+
+

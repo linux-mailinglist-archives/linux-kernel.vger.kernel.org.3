@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84439594723
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F112594773
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345958AbiHOXM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
+        id S1344449AbiHOX0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232933AbiHOXLg (ORCPT
+        with ESMTP id S1347057AbiHOXVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:11:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8542238B3;
-        Mon, 15 Aug 2022 13:00:17 -0700 (PDT)
+        Mon, 15 Aug 2022 19:21:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAAF7E31F;
+        Mon, 15 Aug 2022 13:04:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 99AEB612B8;
-        Mon, 15 Aug 2022 20:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E38AC433C1;
-        Mon, 15 Aug 2022 20:00:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71DD7B810C5;
+        Mon, 15 Aug 2022 20:04:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FE2AC433D6;
+        Mon, 15 Aug 2022 20:04:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593616;
-        bh=HH4qPGidm0OUya6QXERfAKhEFrdc6+v3zuCV1SJ7ZWo=;
+        s=korg; t=1660593880;
+        bh=Ay0IweHselRBK0obV5DxogBP40yGNMeQhj7FwCdegvc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DvLgj34xtBjS79KJcY+X2oBoudgW4Gb+klj5T23u+xCtTyF0dAylqFXJbFO/9x9+g
-         Wvwbbt5fDP5j4Gnw2FD6TNwygRfxb6JyalasyPYBMku91+ii0Kge/U8b257Rsac159
-         srLLmxvR8NtWNIVbvuLWl0R+jVzz9fgMC970ahpY=
+        b=xEsqcAz/tFjPycl1LSlv7AHNIKUtmOLsRxmiD7ZepWwbudiqDZ5eGO64ifQpszWo0
+         2nWTb6Kz1lLj4TdKWn9xL8wXwrGUp6Resok65831a3y046HnVRQQCTnGP1Tg/r9TyB
+         djJraody+t7PwGPJqd1KB3NZATIr/U7sdjB702Ck=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 5.18 0976/1095] posix-cpu-timers: Cleanup CPU timers before freeing them during exec
-Date:   Mon, 15 Aug 2022 20:06:15 +0200
-Message-Id: <20220815180509.486593618@linuxfoundation.org>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        stable <stable@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 0992/1095] intel_th: pci: Add Raptor Lake-S CPU support
+Date:   Mon, 15 Aug 2022 20:06:31 +0200
+Message-Id: <20220815180510.151055064@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
 References: <20220815180429.240518113@linuxfoundation.org>
@@ -55,47 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+From: Alexander Shishkin <alexander.shishkin@linux.intel.com>
 
-commit e362359ace6f87c201531872486ff295df306d13 upstream.
+[ Upstream commit ff46a601afc5a66a81c3945b83d0a2caeb88e8bc ]
 
-Commit 55e8c8eb2c7b ("posix-cpu-timers: Store a reference to a pid not a
-task") started looking up tasks by PID when deleting a CPU timer.
+Add support for the Trace Hub in Raptor Lake-S CPU.
 
-When a non-leader thread calls execve, it will switch PIDs with the leader
-process. Then, as it calls exit_itimers, posix_cpu_timer_del cannot find
-the task because the timer still points out to the old PID.
-
-That means that armed timers won't be disarmed, that is, they won't be
-removed from the timerqueue_list. exit_itimers will still release their
-memory, and when that list is later processed, it leads to a
-use-after-free.
-
-Clean up the timers from the de-threaded task before freeing them. This
-prevents a reported use-after-free.
-
-Fixes: 55e8c8eb2c7b ("posix-cpu-timers: Store a reference to a pid not a task")
-Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220809170751.164716-1-cascardo@canonical.com
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: stable <stable@kernel.org>
+Signed-off-by: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Link: https://lore.kernel.org/r/20220705082637.59979-7-alexander.shishkin@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/exec.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/hwtracing/intel_th/pci.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1297,6 +1297,9 @@ int begin_new_exec(struct linux_binprm *
- 	bprm->mm = NULL;
- 
- #ifdef CONFIG_POSIX_TIMERS
-+	spin_lock_irq(&me->sighand->siglock);
-+	posix_cpu_timers_exit(me);
-+	spin_unlock_irq(&me->sighand->siglock);
- 	exit_itimers(me);
- 	flush_itimer_signals();
- #endif
+diff --git a/drivers/hwtracing/intel_th/pci.c b/drivers/hwtracing/intel_th/pci.c
+index 5b6da26f1b63..147d338c191e 100644
+--- a/drivers/hwtracing/intel_th/pci.c
++++ b/drivers/hwtracing/intel_th/pci.c
+@@ -294,6 +294,11 @@ static const struct pci_device_id intel_th_pci_id_table[] = {
+ 		PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x7a26),
+ 		.driver_data = (kernel_ulong_t)&intel_th_2x,
+ 	},
++	{
++		/* Raptor Lake-S CPU */
++		PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0xa76f),
++		.driver_data = (kernel_ulong_t)&intel_th_2x,
++	},
+ 	{
+ 		/* Alder Lake CPU */
+ 		PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x466f),
+-- 
+2.35.1
+
 
 

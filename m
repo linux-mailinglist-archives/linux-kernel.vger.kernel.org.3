@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B8465947E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D537E5947B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241780AbiHOX2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58198 "EHLO
+        id S245450AbiHOX3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353418AbiHOXWH (ORCPT
+        with ESMTP id S239853AbiHOXWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:22:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220FC5F8F;
-        Mon, 15 Aug 2022 13:05:18 -0700 (PDT)
+        Mon, 15 Aug 2022 19:22:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC50148E83;
+        Mon, 15 Aug 2022 13:05:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B379560693;
-        Mon, 15 Aug 2022 20:05:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEF61C433C1;
-        Mon, 15 Aug 2022 20:05:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B0CEB810C5;
+        Mon, 15 Aug 2022 20:05:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1CF9C433C1;
+        Mon, 15 Aug 2022 20:05:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593917;
-        bh=YcHOJyY6Ze1wflj+HVPwk8FDdUytNxdCp0psuhP8bfI=;
+        s=korg; t=1660593926;
+        bh=8wmv2mpi8sUIIu/K8J/rRbiyFnvYWdh1DOEZEe1g1cw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P+ERtCSGpTP9Jjx2YpPDp+xNPCmbIhKHp00r9MKuUoPdFAHSWsDjeTIYaXbyca665
-         RWd5eSU7vqGp6JdgDFcoZLG0x3i5nDmJGzJCC0Oi7M1hA+s/w0GBDAKt5cg9Sh0hJX
-         L8yuTnPzj5R13IZ4rj9wS/L8kauBSLSjS7BlZIQo=
+        b=LVkWcV6pdTSl+Mxe0eL1ihUuJ4ZCVXN9uXuvXhIgsaIk9Slb4MYnY3Q4Fcd7DOwEU
+         gdj4ERtTOdoocw6fkASQC6RH3S5uesIHdlZF52HITA1zSaS+SnfiHHlDYcasc4M7JR
+         A3DrPirDVMiTWZb6LKuRoWkAxxq6Aj43qIAthTNI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Chia-I Wu <olvaffe@gmail.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
         Gerd Hoffmann <kraxel@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0348/1157] virtio-gpu: fix a missing check to avoid NULL dereference
-Date:   Mon, 15 Aug 2022 19:55:04 +0200
-Message-Id: <20220815180453.638153634@linuxfoundation.org>
+Subject: [PATCH 5.19 0349/1157] drm/virtio: Fix NULL vs IS_ERR checking in virtio_gpu_object_shmem_init
+Date:   Mon, 15 Aug 2022 19:55:05 +0200
+Message-Id: <20220815180453.676436520@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -56,44 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit bd63f11f4c3c46afec07d821f74736161ff6e526 ]
+[ Upstream commit c24968734abfed81c8f93dc5f44a7b7a9aecadfa ]
 
-'cache_ent' could be set NULL inside virtio_gpu_cmd_get_capset()
-and it will lead to a NULL dereference by a lately use of it
-(i.e., ptr = cache_ent->caps_cache). Fix it with a NULL check.
+Since drm_prime_pages_to_sg() function return error pointers.
+The drm_gem_shmem_get_sg_table() function returns error pointers too.
+Using IS_ERR() to check the return value to fix this.
 
-Fixes: 62fb7a5e10962 ("virtio-gpu: add 3d/virgl support")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Reviewed-by: Chia-I Wu <olvaffe@gmail.com>
-Link: http://patchwork.freedesktop.org/patch/msgid/20220327050945.1614-1-xiam0nd.tong@gmail.com
-
-[ kraxel: minor codestyle fixup ]
-
+Fixes: 2f2aa13724d5 ("drm/virtio: move virtio_gpu_mem_entry initialization to new function")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: http://patchwork.freedesktop.org/patch/msgid/20220602104223.54527-1-linmq006@gmail.com
 Signed-off-by: Gerd Hoffmann <kraxel@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/virtio/virtgpu_ioctl.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/virtio/virtgpu_object.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/virtio/virtgpu_ioctl.c b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
-index f8d83358d2a0..9b2702116f93 100644
---- a/drivers/gpu/drm/virtio/virtgpu_ioctl.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
-@@ -580,8 +580,10 @@ static int virtio_gpu_get_caps_ioctl(struct drm_device *dev,
- 	spin_unlock(&vgdev->display_info_lock);
+diff --git a/drivers/gpu/drm/virtio/virtgpu_object.c b/drivers/gpu/drm/virtio/virtgpu_object.c
+index f293e6ad52da..1cc8f3fc8e4b 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_object.c
++++ b/drivers/gpu/drm/virtio/virtgpu_object.c
+@@ -168,9 +168,9 @@ static int virtio_gpu_object_shmem_init(struct virtio_gpu_device *vgdev,
+ 	 * since virtio_gpu doesn't support dma-buf import from other devices.
+ 	 */
+ 	shmem->pages = drm_gem_shmem_get_sg_table(&bo->base);
+-	if (!shmem->pages) {
++	if (IS_ERR(shmem->pages)) {
+ 		drm_gem_shmem_unpin(&bo->base);
+-		return -EINVAL;
++		return PTR_ERR(shmem->pages);
+ 	}
  
- 	/* not in cache - need to talk to hw */
--	virtio_gpu_cmd_get_capset(vgdev, found_valid, args->cap_set_ver,
--				  &cache_ent);
-+	ret = virtio_gpu_cmd_get_capset(vgdev, found_valid, args->cap_set_ver,
-+					&cache_ent);
-+	if (ret)
-+		return ret;
- 	virtio_gpu_notify(vgdev);
- 
- copy_exit:
+ 	if (use_dma_api) {
 -- 
 2.35.1
 

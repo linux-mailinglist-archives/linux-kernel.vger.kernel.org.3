@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E784592884
+	by mail.lfdr.de (Postfix) with ESMTP id A7F71592885
 	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 06:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240663AbiHOEP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 00:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43604 "EHLO
+        id S240670AbiHOEP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 00:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240454AbiHOEPL (ORCPT
+        with ESMTP id S240455AbiHOEPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 00:15:11 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA05013E3D
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 21:15:10 -0700 (PDT)
+        Mon, 15 Aug 2022 00:15:12 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529781403E
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 21:15:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660536910; x=1692072910;
+  t=1660536911; x=1692072911;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=KTcDC6oRvgqapGCb7AxZ9WYL7Fb8j5UPhWrve0lM//Y=;
-  b=Re3XlVrhM+eQ5cYmulmbSvBKpNQoeXXkTjwLTQsAcWIESLqmsildA5or
-   8RscjUbq0wE3wABa3kUWfLWod45Z4bgoeefpb9K9eou7bzpKPII3Ukxya
-   PmgYZoumOZOQnKi+HoEtVexhecjfGIKWs3MUxNZm2bHVWZ00SJfEEwaJh
-   rGue+Be8URu6RRSWfcR7cNq+3tJlDSxLTdy7GfuaLoCYxC/c0Xq5pJuAk
-   DkYgRz384QizS5YY5kBYpwJuoS3DdKbbq5aAfXJCiRMRtKylEzTCB/0dE
-   42CqJ/+J53DaxswofAcUzxLQHrtXHFh91A3IBETkVPbwWGceeFzjOM4Dc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="271658915"
+  bh=rGmRjWLsZd0MykLtxfW7HGQQOCTU/72uM1KezIjGuQ4=;
+  b=Tfk+yOKG+GXvspXq7RqwDYpGwLiTVgt1/tfZmEpGRw21mljPopbsDfLB
+   HfhKfGHfBsR8Um+Je/FAPW2h8ybGLKuuff0KhhJEMRqiblWnEQWAPllC9
+   K7o2KouZPYX5T1PsKQeHIJZdY53BqQjB78gf4qKNOvnXV2FMtRa9Nd53M
+   7amkx/rLor0094FuU0fYz1BlIhxsHjFfcEiJ22Xens00FL0AOtTzFS/Bi
+   hGrpxIlKChOtzfrwDRiCb+15Avb6wNlOHg8n5yWrqRDrAPVS6Uju5Lg0a
+   yynIlvTqA/aaclG3G+5yn/MFP8kNohj2w7qN1jmxo4EQIqMnDQMj8JEqS
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="378175188"
 X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
-   d="scan'208";a="271658915"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 21:15:10 -0700
+   d="scan'208";a="378175188"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 21:15:10 -0700
 X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
-   d="scan'208";a="934354104"
+   d="scan'208";a="582747731"
 Received: from dmalka-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.42.26])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 21:15:07 -0700
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 21:15:07 -0700
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 5DE3B104A6A; Mon, 15 Aug 2022 07:18:04 +0300 (+03)
+        id 67CDA104A6B; Mon, 15 Aug 2022 07:18:04 +0300 (+03)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -54,16 +54,16 @@ Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv6 05/11] x86/uaccess: Provide untagged_addr() and remove tags before address check
-Date:   Mon, 15 Aug 2022 07:17:57 +0300
-Message-Id: <20220815041803.17954-6-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv6 06/11] x86/mm: Provide arch_prctl() interface for LAM
+Date:   Mon, 15 Aug 2022 07:17:58 +0300
+Message-Id: <20220815041803.17954-7-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220815041803.17954-1-kirill.shutemov@linux.intel.com>
 References: <20220815041803.17954-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,181 +72,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-untagged_addr() is a helper used by the core-mm to strip tag bits and
-get the address to the canonical shape. In only handles userspace
-addresses. The untagging mask is stored in mmu_context and will be set
-on enabling LAM for the process.
+Add a couple of arch_prctl() handles:
 
-The tags must not be included into check whether it's okay to access the
-userspace address.
+ - ARCH_ENABLE_TAGGED_ADDR enabled LAM. The argument is required number
+   of tag bits. It is rounded up to the nearest LAM mode that can
+   provide it. For now only LAM_U57 is supported, with 6 tag bits.
 
-Strip tags in access_ok().
+ - ARCH_GET_UNTAG_MASK returns untag mask. It can indicates where tag
+   bits located in the address.
 
-get_user() and put_user() don't use access_ok(), but check access
-against TASK_SIZE directly in assembly. Strip tags, before calling into
-the assembly helper.
+ - ARCH_GET_MAX_TAG_BITS returns the maximum tag bits user can request.
+   Zero if LAM is not supported.
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Tested-by: Alexander Potapenko <glider@google.com>
 ---
- arch/x86/include/asm/mmu.h         |  3 +++
- arch/x86/include/asm/mmu_context.h | 11 ++++++++
- arch/x86/include/asm/uaccess.h     | 42 +++++++++++++++++++++++++++---
- arch/x86/kernel/process.c          |  3 +++
- 4 files changed, 56 insertions(+), 3 deletions(-)
+ arch/x86/include/uapi/asm/prctl.h |  4 ++
+ arch/x86/kernel/process_64.c      | 65 ++++++++++++++++++++++++++++++-
+ 2 files changed, 68 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
-index 002889ca8978..2fdb390040b5 100644
---- a/arch/x86/include/asm/mmu.h
-+++ b/arch/x86/include/asm/mmu.h
-@@ -43,6 +43,9 @@ typedef struct {
+diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
+index 500b96e71f18..a31e27b95b19 100644
+--- a/arch/x86/include/uapi/asm/prctl.h
++++ b/arch/x86/include/uapi/asm/prctl.h
+@@ -20,4 +20,8 @@
+ #define ARCH_MAP_VDSO_32		0x2002
+ #define ARCH_MAP_VDSO_64		0x2003
  
- 	/* Active LAM mode:  X86_CR3_LAM_U48 or X86_CR3_LAM_U57 or 0 (disabled) */
- 	unsigned long lam_cr3_mask;
++#define ARCH_GET_UNTAG_MASK		0x4001
++#define ARCH_ENABLE_TAGGED_ADDR		0x4002
++#define ARCH_GET_MAX_TAG_BITS		0x4003
 +
-+	/* Significant bits of the virtual address. Excludes tag bits. */
-+	u64 untag_mask;
+ #endif /* _ASM_X86_PRCTL_H */
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index 1962008fe743..4f9f0f8ccd26 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -742,6 +742,60 @@ static long prctl_map_vdso(const struct vdso_image *image, unsigned long addr)
+ }
  #endif
  
- 	struct mutex lock;
-diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
-index 69c943b2ae90..5bd3d46685dc 100644
---- a/arch/x86/include/asm/mmu_context.h
-+++ b/arch/x86/include/asm/mmu_context.h
-@@ -100,6 +100,12 @@ static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
- static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
- {
- 	mm->context.lam_cr3_mask = oldmm->context.lam_cr3_mask;
-+	mm->context.untag_mask = oldmm->context.untag_mask;
++static void enable_lam_func(void *mm)
++{
++	struct mm_struct *loaded_mm = this_cpu_read(cpu_tlbstate.loaded_mm);
++	unsigned long lam_mask;
++	unsigned long cr3;
++
++	if (loaded_mm != mm)
++		return;
++
++	lam_mask = READ_ONCE(loaded_mm->context.lam_cr3_mask);
++
++	/* Update CR3 to get LAM active on the CPU */
++	cr3 = __read_cr3();
++	cr3 &= ~(X86_CR3_LAM_U48 | X86_CR3_LAM_U57);
++	cr3 |= lam_mask;
++	write_cr3(cr3);
++	set_tlbstate_cr3_lam_mask(lam_mask);
 +}
 +
-+static inline void mm_reset_untag_mask(struct mm_struct *mm)
++static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
 +{
-+	mm->context.untag_mask = -1UL;
- }
- 
- #else
-@@ -112,6 +118,10 @@ static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
- static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
- {
- }
++	int ret = 0;
 +
-+static inline void mm_reset_untag_mask(struct mm_struct *mm)
-+{
++	if (!cpu_feature_enabled(X86_FEATURE_LAM))
++		return -ENODEV;
++
++	mutex_lock(&mm->context.lock);
++
++	/* Already enabled? */
++	if (mm->context.lam_cr3_mask) {
++		ret = -EBUSY;
++		goto out;
++	}
++
++	if (!nr_bits) {
++		ret = -EINVAL;
++		goto out;
++	} else if (nr_bits <= 6) {
++		mm->context.lam_cr3_mask = X86_CR3_LAM_U57;
++		mm->context.untag_mask =  ~GENMASK(62, 57);
++	} else {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	/* Make lam_cr3_mask and untag_mask visible on other CPUs */
++	smp_mb();
++
++	on_each_cpu_mask(mm_cpumask(mm), enable_lam_func, mm, true);
++out:
++	mutex_unlock(&mm->context.lock);
++	return ret;
 +}
- #endif
- 
- #define enter_lazy_tlb enter_lazy_tlb
-@@ -138,6 +148,7 @@ static inline int init_new_context(struct task_struct *tsk,
- 		mm->context.execute_only_pkey = -1;
- 	}
- #endif
-+	mm_reset_untag_mask(mm);
- 	init_new_context_ldt(mm);
- 	return 0;
- }
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index 913e593a3b45..803241dfc473 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -6,6 +6,7 @@
-  */
- #include <linux/compiler.h>
- #include <linux/kasan-checks.h>
-+#include <linux/mm_types.h>
- #include <linux/string.h>
- #include <asm/asm.h>
- #include <asm/page.h>
-@@ -20,6 +21,30 @@ static inline bool pagefault_disabled(void);
- # define WARN_ON_IN_IRQ()
- #endif
- 
-+#ifdef CONFIG_X86_64
-+/*
-+ * Mask out tag bits from the address.
-+ *
-+ * Magic with the 'sign' allows to untag userspace pointer without any branches
-+ * while leaving kernel addresses intact.
-+ */
-+#define untagged_addr(mm, addr)	({					\
-+	u64 __addr = (__force u64)(addr);				\
-+	s64 sign = (s64)__addr >> 63;					\
-+	__addr &= (mm)->context.untag_mask | sign;			\
-+	(__force __typeof__(addr))__addr;				\
-+})
 +
-+#define untagged_ptr(mm, ptr)	({					\
-+	u64 __ptrval = (__force u64)(ptr);				\
-+	__ptrval = untagged_addr(mm, __ptrval);				\
-+	(__force __typeof__(*(ptr)) *)__ptrval;				\
-+})
-+#else
-+#define untagged_addr(mm, addr)	(addr)
-+#define untagged_ptr(mm, ptr)	(ptr)
-+#endif
-+
- /**
-  * access_ok - Checks if a user space pointer is valid
-  * @addr: User space pointer to start of block to check
-@@ -40,7 +65,7 @@ static inline bool pagefault_disabled(void);
- #define access_ok(addr, size)					\
- ({									\
- 	WARN_ON_IN_IRQ();						\
--	likely(__access_ok(addr, size));				\
-+	likely(__access_ok(untagged_addr(current->mm, addr), size));	\
- })
- 
- #include <asm-generic/access_ok.h>
-@@ -125,7 +150,13 @@ extern int __get_user_bad(void);
-  * Return: zero on success, or -EFAULT on error.
-  * On error, the variable @x is set to zero.
-  */
--#define get_user(x,ptr) ({ might_fault(); do_get_user_call(get_user,x,ptr); })
-+#define get_user(x,ptr)							\
-+({									\
-+	__typeof__(*(ptr)) __user *__ptr_clean;				\
-+	__ptr_clean = untagged_ptr(current->mm, ptr);			\
-+	might_fault();							\
-+	do_get_user_call(get_user,x,__ptr_clean);			\
-+})
- 
- /**
-  * __get_user - Get a simple variable from user space, with less checking.
-@@ -222,7 +253,12 @@ extern void __put_user_nocheck_8(void);
-  *
-  * Return: zero on success, or -EFAULT on error.
-  */
--#define put_user(x, ptr) ({ might_fault(); do_put_user_call(put_user,x,ptr); })
-+#define put_user(x, ptr) ({						\
-+	__typeof__(*(ptr)) __user *__ptr_clean;				\
-+	__ptr_clean = untagged_ptr(current->mm, ptr);			\
-+	might_fault();							\
-+	do_put_user_call(put_user,x,__ptr_clean);			\
-+})
- 
- /**
-  * __put_user - Write a simple value into user space, with less checking.
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index 58a6ea472db9..b0e86fb11ffa 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -47,6 +47,7 @@
- #include <asm/frame.h>
- #include <asm/unwind.h>
- #include <asm/tdx.h>
-+#include <asm/mmu_context.h>
- 
- #include "process.h"
- 
-@@ -367,6 +368,8 @@ void arch_setup_new_exec(void)
- 		task_clear_spec_ssb_noexec(current);
- 		speculation_ctrl_update(read_thread_flags());
- 	}
-+
-+	mm_reset_untag_mask(current->mm);
- }
- 
- #ifdef CONFIG_X86_IOPL_IOPERM
+ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
+ {
+ 	int ret = 0;
+@@ -829,7 +883,16 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
+ 	case ARCH_MAP_VDSO_64:
+ 		return prctl_map_vdso(&vdso_image_64, arg2);
+ #endif
+-
++	case ARCH_GET_UNTAG_MASK:
++		return put_user(task->mm->context.untag_mask,
++				(unsigned long __user *)arg2);
++	case ARCH_ENABLE_TAGGED_ADDR:
++		return prctl_enable_tagged_addr(task->mm, arg2);
++	case ARCH_GET_MAX_TAG_BITS:
++		if (!cpu_feature_enabled(X86_FEATURE_LAM))
++			return put_user(0, (unsigned long __user *)arg2);
++		else
++			return put_user(6, (unsigned long __user *)arg2);
+ 	default:
+ 		ret = -EINVAL;
+ 		break;
 -- 
 2.35.1
 

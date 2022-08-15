@@ -2,103 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89028593421
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 19:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99473593423
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 19:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229441AbiHORm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 13:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55566 "EHLO
+        id S231620AbiHORnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 13:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiHORmv (ORCPT
+        with ESMTP id S229475AbiHORnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 13:42:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B9027FDA
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 10:42:50 -0700 (PDT)
+        Mon, 15 Aug 2022 13:43:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2AEA167D6
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 10:43:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E446261234
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 17:42:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3B8FC43470;
-        Mon, 15 Aug 2022 17:42:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660585369;
-        bh=2r85ODvUsNTQAUIN97OiV/A9DsKU2cJVhh2WGEalit4=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Y+PKS9MK8VHC1m0TeflFtfO+1rMmERVTkTYkp8ks3AuwhF5k2EPivELOxjdzQ7aDR
-         tswc26h3uGFaTYzm76ZQEdOaZGbMlmStSmixlwJKspPKnd2+gA7zr7E69FeCvAotr/
-         LXW/CHwRNqSKcZ64Yrp2l8DvJyHOZi5+9JHopiBpaxHuOb3h8K9cTKptO2NO23Ri6s
-         CK1JAYaEowrKVo+0VU2J9dxS6Lnmd8Z8Qo58kdKHJ4ngsfuvf8sm3KXyKyaFujoxmL
-         sOu1MS9ZqJBeQJ+P8s+/mzuC6nh8ZJjLQPm91rLJW4fzEWfcMspCINFyH2ypXDIGK5
-         HNztmdk3ud8Kg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     William Breathitt Gray <william.gray@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-In-Reply-To: <20220808203401.35153-1-andriy.shevchenko@linux.intel.com>
-References: <20220808203401.35153-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v2 0/4] regmap: mmio: Extending to support IO ports
-Message-Id: <166058536764.839346.5393585450268456676.b4-ty@kernel.org>
-Date:   Mon, 15 Aug 2022 18:42:47 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 593E46122A
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 17:43:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B478C433C1;
+        Mon, 15 Aug 2022 17:43:08 +0000 (UTC)
+Date:   Mon, 15 Aug 2022 13:43:14 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: Re: [PATCH 07/11] tracing: trace_events_synth: Convert to printbuf
+Message-ID: <20220815134314.32f3d3fc@gandalf.local.home>
+In-Reply-To: <20220815172613.621627-8-kent.overstreet@linux.dev>
+References: <20220815172613.621627-1-kent.overstreet@linux.dev>
+        <20220815172613.621627-8-kent.overstreet@linux.dev>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fe10a
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 8 Aug 2022 23:33:56 +0300, Andy Shevchenko wrote:
-> Currently regmap MMIO doesn't support IO ports, while being inconsistent
-> in used IO accessors. Fix the latter and extend framework with the
-> former.
+On Mon, 15 Aug 2022 13:26:09 -0400
+Kent Overstreet <kent.overstreet@linux.dev> wrote:
+
+> From: Kent Overstreet <kent.overstreet@gmail.com>
 > 
-> Changelog v2:
-> - dropped the first two patches (Mark)
-> - split the last patch to two (Mark)
+> This converts from seq_buf to printbuf.
 > 
-> [...]
+> This code was using seq_buf for building up dynamically allocated
+> strings; the conversion uses printbuf's heap allocation functionality to
+> simplify things (no longer need to calculate size of the output string).
 
-Applied to
+As I stated before. I'll look into converting the seq_bufs to printbuf for
+tracing at a later date. That includes this file.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
+Please remove this patch from the series.
 
-Thanks!
+> 
+> Also, alphabetize the #includes.
+> 
 
-[1/4] regmap: mmio: Remove mmio_relaxed member from context
-      commit: ada79bca380009a85d1e643e5a4da0c079f28225
-[2/4] regmap: mmio: Get rid of broken 64-bit IO
-      commit: 159dfabd207628c983e0c3c5ef607f496ff5e6a5
-[3/4] regmap: mmio: Introduce IO accessors that can talk to IO port
-      commit: 93ce557679e1cf7742ad327d40a1499e7d8535b7
-[4/4] regmap: mmio: Fix MMIO accessors to avoid talking to IO port
-      commit: 7e7ba58c94127efa97c249e38cc2d1c0ed78b58f
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+And although the #includes are not in the order the tracing directory
+prefers, that order is upside-down x-mas tree, not alphabetical.
 
 Thanks,
-Mark
+
+-- Steve
+
+
+> Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> ---
+>  kernel/trace/trace_events_synth.c | 51 ++++++++++---------------------
+>  1 file changed, 16 insertions(+), 35 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
+> index 5e8c07aef0..720c75429c 100644
+> --- a/kernel/trace/trace_events_synth.c
+> +++ b/kernel/trace/trace_events_synth.c
+> @@ -5,13 +5,14 @@
+>   * Copyright (C) 2015, 2020 Tom Zanussi <tom.zanussi@linux.intel.com>
+>   */
+>  
+> -#include <linux/module.h>
+>  #include <linux/kallsyms.h>
+> -#include <linux/security.h>
+> +#include <linux/module.h>
+>  #include <linux/mutex.h>
+> +#include <linux/printbuf.h>
+> +#include <linux/rculist.h>
+> +#include <linux/security.h>
+>  #include <linux/slab.h>
+>  #include <linux/stacktrace.h>
+> -#include <linux/rculist.h>
+>  #include <linux/tracefs.h>
+>  
+>  /* for gfp flag names */
+> @@ -611,7 +612,7 @@ static struct synth_field *parse_synth_field(int argc, char **argv,
+>  	const char *prefix = NULL, *field_type = argv[0], *field_name, *array;
+>  	struct synth_field *field;
+>  	int len, ret = -ENOMEM;
+> -	struct seq_buf s;
+> +	struct printbuf buf;
+>  	ssize_t size;
+>  
+>  	if (!strcmp(field_type, "unsigned")) {
+> @@ -654,28 +655,16 @@ static struct synth_field *parse_synth_field(int argc, char **argv,
+>  		goto free;
+>  	}
+>  
+> -	len = strlen(field_type) + 1;
+> -
+> -	if (array)
+> -		len += strlen(array);
+> -
+> -	if (prefix)
+> -		len += strlen(prefix);
+> -
+> -	field->type = kzalloc(len, GFP_KERNEL);
+> -	if (!field->type)
+> -		goto free;
+> -
+> -	seq_buf_init(&s, field->type, len);
+> +	buf = PRINTBUF;
+>  	if (prefix)
+> -		seq_buf_puts(&s, prefix);
+> -	seq_buf_puts(&s, field_type);
+> +		prt_str(&buf, prefix);
+> +	prt_str(&buf, field_type);
+>  	if (array)
+> -		seq_buf_puts(&s, array);
+> -	if (WARN_ON_ONCE(!seq_buf_buffer_left(&s)))
+> +		prt_str(&buf, array);
+> +	if (buf.allocation_failure)
+>  		goto free;
+>  
+> -	s.buffer[s.len] = '\0';
+> +	field->type = buf.buf;
+>  
+>  	size = synth_field_size(field->type);
+>  	if (size < 0) {
+> @@ -687,23 +676,15 @@ static struct synth_field *parse_synth_field(int argc, char **argv,
+>  		goto free;
+>  	} else if (size == 0) {
+>  		if (synth_field_is_string(field->type)) {
+> -			char *type;
+> -
+> -			len = sizeof("__data_loc ") + strlen(field->type) + 1;
+> -			type = kzalloc(len, GFP_KERNEL);
+> -			if (!type)
+> -				goto free;
+> -
+> -			seq_buf_init(&s, type, len);
+> -			seq_buf_puts(&s, "__data_loc ");
+> -			seq_buf_puts(&s, field->type);
+> +			buf = PRINTBUF;
+> +			prt_str(&buf, "__data_loc ");
+> +			prt_str(&buf, field->type);
+>  
+> -			if (WARN_ON_ONCE(!seq_buf_buffer_left(&s)))
+> +			if (buf.allocation_failure)
+>  				goto free;
+> -			s.buffer[s.len] = '\0';
+>  
+>  			kfree(field->type);
+> -			field->type = type;
+> +			field->type = buf.buf;
+>  
+>  			field->is_dynamic = true;
+>  			size = sizeof(u64);
+

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 610295948D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F846594880
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231462AbiHOXTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45276 "EHLO
+        id S233224AbiHOXXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352987AbiHOXPr (ORCPT
+        with ESMTP id S243187AbiHOXS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:15:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3184D9D664;
-        Mon, 15 Aug 2022 13:02:46 -0700 (PDT)
+        Mon, 15 Aug 2022 19:18:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4852C149A13;
+        Mon, 15 Aug 2022 13:03:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6228B80EAD;
-        Mon, 15 Aug 2022 20:02:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45FD6C433B5;
-        Mon, 15 Aug 2022 20:02:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5029C61089;
+        Mon, 15 Aug 2022 20:03:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58577C433C1;
+        Mon, 15 Aug 2022 20:03:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593763;
-        bh=PYKDtfJN7xItE80ybdVMebvz/REKeuxmoiaYOjlu43Q=;
+        s=korg; t=1660593828;
+        bh=ideHvfhDE9wq+JxMMdoFAQuD3viIDQ424rCtYQY44JA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jH3K+9Y5tY64sZ41xt+VGK0yf8Pvgql6/5LlTEw22CoLEAqgqkGgpEvE/jqiLeFD/
-         6Dwb/a9uPb6PqpdNiTtmcsY5lhT4R4v4iFyUoJk1/qOVnOxrio0A2ZoAaB0/B09G4g
-         MgRGHn82RcwJuZ6Un5iGItUns9dB4FLpDn20soSA=
+        b=dzptm9vIqJVsnS/M10s6MsU9i4++YBWGEumq3Ci8SMvz+i3TlJqUFYMHiWkJcvH4+
+         R4OhK4vph0N27YJRV59YCnm/DRiZT54EZ7FhIbEY+qW/nuQBX0DzgVv3RHeNJVC0FP
+         2YL8DRyaY50toeDhMg7NYGuca4IRFlfDZ9w00GgE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, huhai <huhai@kylinos.cn>,
-        Jackie Liu <liuyun01@kylinos.cn>,
-        Sudeep Holla <sudeep.holla@arm.com>,
+        stable@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        stable <stable@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 0989/1095] firmware: arm_scpi: Ensure scpi_info is not assigned if the probe fails
-Date:   Mon, 15 Aug 2022 20:06:28 +0200
-Message-Id: <20220815180510.022504747@linuxfoundation.org>
+Subject: [PATCH 5.18 0990/1095] intel_th: pci: Add Meteor Lake-P support
+Date:   Mon, 15 Aug 2022 20:06:29 +0200
+Message-Id: <20220815180510.065201774@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
 References: <20220815180429.240518113@linuxfoundation.org>
@@ -56,153 +57,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sudeep Holla <sudeep.holla@arm.com>
+From: Alexander Shishkin <alexander.shishkin@linux.intel.com>
 
-[ Upstream commit 689640efc0a2c4e07e6f88affe6d42cd40cc3f85 ]
+[ Upstream commit 802a9a0b1d91274ef10d9fe429b4cc1e8c200aef ]
 
-When scpi probe fails, at any point, we need to ensure that the scpi_info
-is not set and will remain NULL until the probe succeeds. If it is not
-taken care, then it could result use-after-free as the value is exported
-via get_scpi_ops() and could refer to a memory allocated via devm_kzalloc()
-but freed when the probe fails.
+Add support for the Trace Hub in Meteor Lake-P.
 
-Link: https://lore.kernel.org/r/20220701160310.148344-1-sudeep.holla@arm.com
-Cc: stable@vger.kernel.org # 4.19+
-Reported-by: huhai <huhai@kylinos.cn>
-Reviewed-by: Jackie Liu <liuyun01@kylinos.cn>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: stable <stable@kernel.org>
+Signed-off-by: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Link: https://lore.kernel.org/r/20220705082637.59979-5-alexander.shishkin@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/arm_scpi.c | 61 +++++++++++++++++++++----------------
- 1 file changed, 35 insertions(+), 26 deletions(-)
+ drivers/hwtracing/intel_th/pci.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/firmware/arm_scpi.c b/drivers/firmware/arm_scpi.c
-index ddf0b9ff9e15..435d0e2658a4 100644
---- a/drivers/firmware/arm_scpi.c
-+++ b/drivers/firmware/arm_scpi.c
-@@ -815,7 +815,7 @@ static int scpi_init_versions(struct scpi_drvinfo *info)
- 		info->firmware_version = le32_to_cpu(caps.platform_version);
- 	}
- 	/* Ignore error if not implemented */
--	if (scpi_info->is_legacy && ret == -EOPNOTSUPP)
-+	if (info->is_legacy && ret == -EOPNOTSUPP)
- 		return 0;
- 
- 	return ret;
-@@ -913,13 +913,14 @@ static int scpi_probe(struct platform_device *pdev)
- 	struct resource res;
- 	struct device *dev = &pdev->dev;
- 	struct device_node *np = dev->of_node;
-+	struct scpi_drvinfo *scpi_drvinfo;
- 
--	scpi_info = devm_kzalloc(dev, sizeof(*scpi_info), GFP_KERNEL);
--	if (!scpi_info)
-+	scpi_drvinfo = devm_kzalloc(dev, sizeof(*scpi_drvinfo), GFP_KERNEL);
-+	if (!scpi_drvinfo)
- 		return -ENOMEM;
- 
- 	if (of_match_device(legacy_scpi_of_match, &pdev->dev))
--		scpi_info->is_legacy = true;
-+		scpi_drvinfo->is_legacy = true;
- 
- 	count = of_count_phandle_with_args(np, "mboxes", "#mbox-cells");
- 	if (count < 0) {
-@@ -927,19 +928,19 @@ static int scpi_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
--	scpi_info->channels = devm_kcalloc(dev, count, sizeof(struct scpi_chan),
--					   GFP_KERNEL);
--	if (!scpi_info->channels)
-+	scpi_drvinfo->channels =
-+		devm_kcalloc(dev, count, sizeof(struct scpi_chan), GFP_KERNEL);
-+	if (!scpi_drvinfo->channels)
- 		return -ENOMEM;
- 
--	ret = devm_add_action(dev, scpi_free_channels, scpi_info);
-+	ret = devm_add_action(dev, scpi_free_channels, scpi_drvinfo);
- 	if (ret)
- 		return ret;
- 
--	for (; scpi_info->num_chans < count; scpi_info->num_chans++) {
-+	for (; scpi_drvinfo->num_chans < count; scpi_drvinfo->num_chans++) {
- 		resource_size_t size;
--		int idx = scpi_info->num_chans;
--		struct scpi_chan *pchan = scpi_info->channels + idx;
-+		int idx = scpi_drvinfo->num_chans;
-+		struct scpi_chan *pchan = scpi_drvinfo->channels + idx;
- 		struct mbox_client *cl = &pchan->cl;
- 		struct device_node *shmem = of_parse_phandle(np, "shmem", idx);
- 
-@@ -986,45 +987,53 @@ static int scpi_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	scpi_info->commands = scpi_std_commands;
-+	scpi_drvinfo->commands = scpi_std_commands;
- 
--	platform_set_drvdata(pdev, scpi_info);
-+	platform_set_drvdata(pdev, scpi_drvinfo);
- 
--	if (scpi_info->is_legacy) {
-+	if (scpi_drvinfo->is_legacy) {
- 		/* Replace with legacy variants */
- 		scpi_ops.clk_set_val = legacy_scpi_clk_set_val;
--		scpi_info->commands = scpi_legacy_commands;
-+		scpi_drvinfo->commands = scpi_legacy_commands;
- 
- 		/* Fill priority bitmap */
- 		for (idx = 0; idx < ARRAY_SIZE(legacy_hpriority_cmds); idx++)
- 			set_bit(legacy_hpriority_cmds[idx],
--				scpi_info->cmd_priority);
-+				scpi_drvinfo->cmd_priority);
- 	}
- 
--	ret = scpi_init_versions(scpi_info);
-+	scpi_info = scpi_drvinfo;
-+
-+	ret = scpi_init_versions(scpi_drvinfo);
- 	if (ret) {
- 		dev_err(dev, "incorrect or no SCP firmware found\n");
-+		scpi_info = NULL;
- 		return ret;
- 	}
- 
--	if (scpi_info->is_legacy && !scpi_info->protocol_version &&
--	    !scpi_info->firmware_version)
-+	if (scpi_drvinfo->is_legacy && !scpi_drvinfo->protocol_version &&
-+	    !scpi_drvinfo->firmware_version)
- 		dev_info(dev, "SCP Protocol legacy pre-1.0 firmware\n");
- 	else
- 		dev_info(dev, "SCP Protocol %lu.%lu Firmware %lu.%lu.%lu version\n",
- 			 FIELD_GET(PROTO_REV_MAJOR_MASK,
--				   scpi_info->protocol_version),
-+				   scpi_drvinfo->protocol_version),
- 			 FIELD_GET(PROTO_REV_MINOR_MASK,
--				   scpi_info->protocol_version),
-+				   scpi_drvinfo->protocol_version),
- 			 FIELD_GET(FW_REV_MAJOR_MASK,
--				   scpi_info->firmware_version),
-+				   scpi_drvinfo->firmware_version),
- 			 FIELD_GET(FW_REV_MINOR_MASK,
--				   scpi_info->firmware_version),
-+				   scpi_drvinfo->firmware_version),
- 			 FIELD_GET(FW_REV_PATCH_MASK,
--				   scpi_info->firmware_version));
--	scpi_info->scpi_ops = &scpi_ops;
-+				   scpi_drvinfo->firmware_version));
-+
-+	scpi_drvinfo->scpi_ops = &scpi_ops;
- 
--	return devm_of_platform_populate(dev);
-+	ret = devm_of_platform_populate(dev);
-+	if (ret)
-+		scpi_info = NULL;
-+
-+	return ret;
- }
- 
- static const struct of_device_id scpi_of_match[] = {
+diff --git a/drivers/hwtracing/intel_th/pci.c b/drivers/hwtracing/intel_th/pci.c
+index fcd0aca75007..41a31c7f505f 100644
+--- a/drivers/hwtracing/intel_th/pci.c
++++ b/drivers/hwtracing/intel_th/pci.c
+@@ -284,6 +284,11 @@ static const struct pci_device_id intel_th_pci_id_table[] = {
+ 		PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x54a6),
+ 		.driver_data = (kernel_ulong_t)&intel_th_2x,
+ 	},
++	{
++		/* Meteor Lake-P */
++		PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x7e24),
++		.driver_data = (kernel_ulong_t)&intel_th_2x,
++	},
+ 	{
+ 		/* Alder Lake CPU */
+ 		PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x466f),
 -- 
 2.35.1
 

@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E3F5592F92
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36801592F8E
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242863AbiHONOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 09:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
+        id S242866AbiHONOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 09:14:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242807AbiHONOI (ORCPT
+        with ESMTP id S242826AbiHONOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 09:14:08 -0400
+        Mon, 15 Aug 2022 09:14:12 -0400
 Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B48A1AF06;
-        Mon, 15 Aug 2022 06:13:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DFFF61CB16;
+        Mon, 15 Aug 2022 06:13:43 -0700 (PDT)
 Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id EB9C880FB;
-        Mon, 15 Aug 2022 13:06:47 +0000 (UTC)
+        by muru.com (Postfix) with ESMTP id 84FA78225;
+        Mon, 15 Aug 2022 13:06:50 +0000 (UTC)
 From:   Tony Lindgren <tony@atomide.com>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>
@@ -30,9 +30,9 @@ Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 8/9] clocksource/drivers/timer-ti-dm: Add flag to detect omap1
-Date:   Mon, 15 Aug 2022 16:12:49 +0300
-Message-Id: <20220815131250.34603-9-tony@atomide.com>
+Subject: [PATCH 9/9] clocksource/drivers/timer-ti-dm: Get clock in probe with devm_clk_get()
+Date:   Mon, 15 Aug 2022 16:12:50 +0300
+Message-Id: <20220815131250.34603-10-tony@atomide.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220815131250.34603-1-tony@atomide.com>
 References: <20220815131250.34603-1-tony@atomide.com>
@@ -47,57 +47,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's make it clear that some features need to be tested currently on
-omap1. Only omap1 still uses platform_data.
+We can simplify the code a bit by getting the clock in probe, and using
+devm_clk_get(). This will also make further changes easier as the clock
+is available in probe instead of prepare.
 
 Signed-off-by: Tony Lindgren <tony@atomide.com>
 ---
- drivers/clocksource/timer-ti-dm.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/clocksource/timer-ti-dm.c | 24 +++++++++---------------
+ 1 file changed, 9 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/clocksource/timer-ti-dm.c b/drivers/clocksource/timer-ti-dm.c
 --- a/drivers/clocksource/timer-ti-dm.c
 +++ b/drivers/clocksource/timer-ti-dm.c
-@@ -133,6 +133,7 @@ struct dmtimer {
- 	unsigned long rate;
- 	unsigned reserved:1;
- 	unsigned posted:1;
-+	unsigned omap1:1;
- 	struct timer_regs context;
- 	int revision;
- 	u32 capability;
-@@ -423,7 +424,7 @@ static int omap_dm_timer_set_source(struct omap_dm_timer *cookie, int source)
- 	 * use the clock framework to set the parent clock. To be removed
- 	 * once OMAP1 migrated to using clock framework for dmtimers
- 	 */
--	if (pdata && pdata->set_timer_src)
-+	if (timer->omap1 && pdata && pdata->set_timer_src)
- 		return pdata->set_timer_src(timer->pdev, source);
+@@ -473,18 +473,6 @@ static int omap_dm_timer_prepare(struct dmtimer *timer)
+ 	struct device *dev = &timer->pdev->dev;
+ 	int rc;
  
- #if defined(CONFIG_COMMON_CLK)
-@@ -476,7 +477,7 @@ static int omap_dm_timer_prepare(struct dmtimer *timer)
- 	 * FIXME: OMAP1 devices do not use the clock framework for dmtimers so
- 	 * do not call clk_get() for these devices.
- 	 */
--	if (!(timer->capability & OMAP_TIMER_NEEDS_RESET)) {
+-	/*
+-	 * FIXME: OMAP1 devices do not use the clock framework for dmtimers so
+-	 * do not call clk_get() for these devices.
+-	 */
+-	if (!timer->omap1) {
+-		timer->fclk = clk_get(&timer->pdev->dev, "fck");
+-		if (WARN_ON_ONCE(IS_ERR(timer->fclk))) {
+-			dev_err(&timer->pdev->dev, ": No fclk handle.\n");
+-			return -EINVAL;
+-		}
+-	}
+-
+ 	rc = pm_runtime_resume_and_get(dev);
+ 	if (rc)
+ 		return rc;
+@@ -650,8 +638,6 @@ static int omap_dm_timer_free(struct omap_dm_timer *cookie)
+ 	if (unlikely(!timer))
+ 		return -EINVAL;
+ 
+-	clk_put(timer->fclk);
+-
+ 	WARN_ON(!timer->reserved);
+ 	timer->reserved = 0;
+ 	return 0;
+@@ -1098,7 +1084,6 @@ static int omap_dm_timer_probe(struct platform_device *pdev)
+ 	if (timer->irq < 0)
+ 		return timer->irq;
+ 
+-	timer->fclk = ERR_PTR(-ENODEV);
+ 	timer->io_base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(timer->io_base))
+ 		return PTR_ERR(timer->io_base);
+@@ -1122,6 +1107,15 @@ static int omap_dm_timer_probe(struct platform_device *pdev)
+ 
+ 	timer->omap1 = timer->capability & OMAP_TIMER_NEEDS_RESET;
+ 
++	/* OMAP1 devices do not yet use the clock framework for dmtimers */
 +	if (!timer->omap1) {
- 		timer->fclk = clk_get(&timer->pdev->dev, "fck");
- 		if (WARN_ON_ONCE(IS_ERR(timer->fclk))) {
- 			dev_err(&timer->pdev->dev, ": No fclk handle.\n");
-@@ -763,7 +764,7 @@ static int omap_dm_timer_stop(struct omap_dm_timer *cookie)
- 
- 	dev = &timer->pdev->dev;
- 
--	if (!(timer->capability & OMAP_TIMER_NEEDS_RESET))
-+	if (!timer->omap1)
- 		rate = clk_get_rate(timer->fclk);
- 
- 	__omap_dm_timer_stop(timer, rate);
-@@ -1119,6 +1120,8 @@ static int omap_dm_timer_probe(struct platform_device *pdev)
- 		timer->reserved = omap_dm_timer_reserved_systimer(timer->id);
- 	}
- 
-+	timer->omap1 = timer->capability & OMAP_TIMER_NEEDS_RESET;
++		timer->fclk = devm_clk_get(dev, "fck");
++		if (IS_ERR(timer->fclk))
++			return PTR_ERR(timer->fclk);
++	} else {
++		timer->fclk = ERR_PTR(-ENODEV);
++	}
 +
  	if (!(timer->capability & OMAP_TIMER_ALWON)) {
  		timer->nb.notifier_call = omap_timer_context_notifier;

@@ -2,208 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8D159375D
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B908B593449
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 20:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbiHOS3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 14:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55484 "EHLO
+        id S232084AbiHOR4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 13:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242346AbiHOS2g (ORCPT
+        with ESMTP id S231974AbiHOR4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 14:28:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F8431345;
-        Mon, 15 Aug 2022 11:20:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1AC1CB81072;
-        Mon, 15 Aug 2022 18:20:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F2ABC433C1;
-        Mon, 15 Aug 2022 18:20:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660587611;
-        bh=tlYfuCCunAyT5uz5g0QWhNMt3m8wdPVPvDnImF6KnSk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SltsdwsejnaVtzJKf55Dk30/+nVC7RoMsVI3vhJ+X6c+wfU8OwuWW5FXNYnef5zs9
-         JnFhPdcK1WCCpYF1OIlIwUiJquBbZAe1mixagD9ueDVk4bOUH/3K3qDZmt0S80tXKF
-         uVMZC30lelfGpjtdH75z822KrfGxFphpRfYT0YDc=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Keeping <john@metanate.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 121/779] sched/core: Always flush pending blk_plug
-Date:   Mon, 15 Aug 2022 19:56:05 +0200
-Message-Id: <20220815180342.483177069@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180337.130757997@linuxfoundation.org>
-References: <20220815180337.130757997@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Mon, 15 Aug 2022 13:56:38 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E682928739;
+        Mon, 15 Aug 2022 10:56:37 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id v4so2759247pgi.10;
+        Mon, 15 Aug 2022 10:56:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc;
+        bh=ZlaiYwQmPOVoDuRV3NsPQqCjaBRVIY66ahwXf+LQSm8=;
+        b=qX55hIBVbqBR0cZjAsEPn7sgPjIfKowbxBQYk3CrGCVeEG8h20RcAm8pP3RfiMqhTp
+         4qQYFuJx43GZpeYhkVkKvpXTUIgy46PgYwoeLr2z5Jxd3GCDpfDBcKxq+UfJgvdk7ANL
+         Ct5w6QtEE9SN1FY9puokVo3RQKpQesk9JbM2fRzZ75C9UuYzJzNG+dow1Cnox/cgcRwb
+         shIxcXa69QoZqV+X+tXtL2EIBqopqS4Gqqvw2nuNTkAMXUVycGlY4LtciV3T2m2t+8/8
+         Y7o9dZemlo/FOcbUznf4y/NJkFL2GpD6jfW9rp/DweDsWggEyVJG1I5Iwx6Q1qFthkA8
+         MESw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc;
+        bh=ZlaiYwQmPOVoDuRV3NsPQqCjaBRVIY66ahwXf+LQSm8=;
+        b=2sKIh6eQfM4CL9wzuNsvP1czkKNTUx7ZvGLkja5dHbJn05cr8I6L81V4cVaPlgshsY
+         o2fk3u/tcNTQZrtXWw18T8dXt51371a4SHQlr3TwPrhXz00vtsk0OyBuaM4WeaHkmRc3
+         froovYT1g//YWFoLsLCW9+ByahGGqT0v4d1TcQ9EKfGSSvl+BSbEijnlQpblp6xuvdZl
+         Kr3UmrYhlTs6iAFSJeIFfLzFrpX50i7e3pgw6nb/dYOEGkspPrwHc7k/n/8PE+vKIkMK
+         fLp/P+OHuFSCXKBMgMvIQEcKeRgFdajaqmfG7Lau3SXDCmysf0upv0QzEFcehR603ECm
+         wfoA==
+X-Gm-Message-State: ACgBeo3vaA2ScG3OFxhkUUdua2fUCy+GgD3sMpz9/x8ZdpUgBvKpxviE
+        rb2TQDF5XLJk9JfYWOr+XX0=
+X-Google-Smtp-Source: AA6agR7CPHwtNojFP6EFwNoAyZ00k+Ph/v48Aw674UaRQE4Mcyd4EZtT5pYGLysjaqzXCQid2p8PFw==
+X-Received: by 2002:a05:6a00:1aca:b0:52f:55f8:c3ec with SMTP id f10-20020a056a001aca00b0052f55f8c3ecmr17343043pfv.25.1660586197377;
+        Mon, 15 Aug 2022 10:56:37 -0700 (PDT)
+Received: from C02G8BMUMD6R.bytedance.net (c-73-164-155-12.hsd1.wa.comcast.net. [73.164.155.12])
+        by smtp.gmail.com with ESMTPSA id o5-20020a170902d4c500b0016d6963cb12sm7299935plg.304.2022.08.15.10.56.36
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 15 Aug 2022 10:56:36 -0700 (PDT)
+Sender: Bobby Eshleman <bobbyeshleman@gmail.com>
+From:   Bobby Eshleman <bobby.eshleman@gmail.com>
+X-Google-Original-From: Bobby Eshleman <bobby.eshleman@bytedance.com>
+Cc:     Bobby Eshleman <bobbyeshleman@gmail.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org
+Subject: [PATCH 2/6] vsock: return errors other than -ENOMEM to socket
+Date:   Mon, 15 Aug 2022 10:56:05 -0700
+Message-Id: <d81818b868216c774613dd03641fcfe63cc55a45.1660362668.git.bobby.eshleman@bytedance.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <cover.1660362668.git.bobby.eshleman@bytedance.com>
+References: <cover.1660362668.git.bobby.eshleman@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Keeping <john@metanate.com>
+This commit allows vsock implementations to return errors
+to the socket layer other than -ENOMEM. One immediate effect
+of this is that upon the sk_sndbuf threshold being reached -EAGAIN
+will be returned and userspace may throttle appropriately.
 
-[ Upstream commit 401e4963bf45c800e3e9ea0d3a0289d738005fd4 ]
+Resultingly, a known issue with uperf is resolved[1].
 
-With CONFIG_PREEMPT_RT, it is possible to hit a deadlock between two
-normal priority tasks (SCHED_OTHER, nice level zero):
+Additionally, to preserve legacy behavior for non-virtio
+implementations, hyperv/vmci force errors to be -ENOMEM so that behavior
+is unchanged.
 
-	INFO: task kworker/u8:0:8 blocked for more than 491 seconds.
-	      Not tainted 5.15.49-rt46 #1
-	"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-	task:kworker/u8:0    state:D stack:    0 pid:    8 ppid:     2 flags:0x00000000
-	Workqueue: writeback wb_workfn (flush-7:0)
-	[<c08a3a10>] (__schedule) from [<c08a3d84>] (schedule+0xdc/0x134)
-	[<c08a3d84>] (schedule) from [<c08a65a0>] (rt_mutex_slowlock_block.constprop.0+0xb8/0x174)
-	[<c08a65a0>] (rt_mutex_slowlock_block.constprop.0) from [<c08a6708>]
-	+(rt_mutex_slowlock.constprop.0+0xac/0x174)
-	[<c08a6708>] (rt_mutex_slowlock.constprop.0) from [<c0374d60>] (fat_write_inode+0x34/0x54)
-	[<c0374d60>] (fat_write_inode) from [<c0297304>] (__writeback_single_inode+0x354/0x3ec)
-	[<c0297304>] (__writeback_single_inode) from [<c0297998>] (writeback_sb_inodes+0x250/0x45c)
-	[<c0297998>] (writeback_sb_inodes) from [<c0297c20>] (__writeback_inodes_wb+0x7c/0xb8)
-	[<c0297c20>] (__writeback_inodes_wb) from [<c0297f24>] (wb_writeback+0x2c8/0x2e4)
-	[<c0297f24>] (wb_writeback) from [<c0298c40>] (wb_workfn+0x1a4/0x3e4)
-	[<c0298c40>] (wb_workfn) from [<c0138ab8>] (process_one_work+0x1fc/0x32c)
-	[<c0138ab8>] (process_one_work) from [<c0139120>] (worker_thread+0x22c/0x2d8)
-	[<c0139120>] (worker_thread) from [<c013e6e0>] (kthread+0x16c/0x178)
-	[<c013e6e0>] (kthread) from [<c01000fc>] (ret_from_fork+0x14/0x38)
-	Exception stack(0xc10e3fb0 to 0xc10e3ff8)
-	3fa0:                                     00000000 00000000 00000000 00000000
-	3fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-	3fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+[1]: https://gitlab.com/vsock/vsock/-/issues/1
 
-	INFO: task tar:2083 blocked for more than 491 seconds.
-	      Not tainted 5.15.49-rt46 #1
-	"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-	task:tar             state:D stack:    0 pid: 2083 ppid:  2082 flags:0x00000000
-	[<c08a3a10>] (__schedule) from [<c08a3d84>] (schedule+0xdc/0x134)
-	[<c08a3d84>] (schedule) from [<c08a41b0>] (io_schedule+0x14/0x24)
-	[<c08a41b0>] (io_schedule) from [<c08a455c>] (bit_wait_io+0xc/0x30)
-	[<c08a455c>] (bit_wait_io) from [<c08a441c>] (__wait_on_bit_lock+0x54/0xa8)
-	[<c08a441c>] (__wait_on_bit_lock) from [<c08a44f4>] (out_of_line_wait_on_bit_lock+0x84/0xb0)
-	[<c08a44f4>] (out_of_line_wait_on_bit_lock) from [<c0371fb0>] (fat_mirror_bhs+0xa0/0x144)
-	[<c0371fb0>] (fat_mirror_bhs) from [<c0372a68>] (fat_alloc_clusters+0x138/0x2a4)
-	[<c0372a68>] (fat_alloc_clusters) from [<c0370b14>] (fat_alloc_new_dir+0x34/0x250)
-	[<c0370b14>] (fat_alloc_new_dir) from [<c03787c0>] (vfat_mkdir+0x58/0x148)
-	[<c03787c0>] (vfat_mkdir) from [<c0277b60>] (vfs_mkdir+0x68/0x98)
-	[<c0277b60>] (vfs_mkdir) from [<c027b484>] (do_mkdirat+0xb0/0xec)
-	[<c027b484>] (do_mkdirat) from [<c0100060>] (ret_fast_syscall+0x0/0x1c)
-	Exception stack(0xc2e1bfa8 to 0xc2e1bff0)
-	bfa0:                   01ee42f0 01ee4208 01ee42f0 000041ed 00000000 00004000
-	bfc0: 01ee42f0 01ee4208 00000000 00000027 01ee4302 00000004 000dcb00 01ee4190
-	bfe0: 000dc368 bed11924 0006d4b0 b6ebddfc
-
-Here the kworker is waiting on msdos_sb_info::s_lock which is held by
-tar which is in turn waiting for a buffer which is locked waiting to be
-flushed, but this operation is plugged in the kworker.
-
-The lock is a normal struct mutex, so tsk_is_pi_blocked() will always
-return false on !RT and thus the behaviour changes for RT.
-
-It seems that the intent here is to skip blk_flush_plug() in the case
-where a non-preemptible lock (such as a spinlock) has been converted to
-a rtmutex on RT, which is the case covered by the SM_RTLOCK_WAIT
-schedule flag.  But sched_submit_work() is only called from schedule()
-which is never called in this scenario, so the check can simply be
-deleted.
-
-Looking at the history of the -rt patchset, in fact this change was
-present from v5.9.1-rt20 until being dropped in v5.13-rt1 as it was part
-of a larger patch [1] most of which was replaced by commit b4bfa3fcfe3b
-("sched/core: Rework the __schedule() preempt argument").
-
-As described in [1]:
-
-   The schedule process must distinguish between blocking on a regular
-   sleeping lock (rwsem and mutex) and a RT-only sleeping lock (spinlock
-   and rwlock):
-   - rwsem and mutex must flush block requests (blk_schedule_flush_plug())
-     even if blocked on a lock. This can not deadlock because this also
-     happens for non-RT.
-     There should be a warning if the scheduling point is within a RCU read
-     section.
-
-   - spinlock and rwlock must not flush block requests. This will deadlock
-     if the callback attempts to acquire a lock which is already acquired.
-     Similarly to being preempted, there should be no warning if the
-     scheduling point is within a RCU read section.
-
-and with the tsk_is_pi_blocked() in the scheduler path, we hit the first
-issue.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/tree/patches/0022-locking-rtmutex-Use-custom-scheduling-function-for-s.patch?h=linux-5.10.y-rt-patches
-
-Signed-off-by: John Keeping <john@metanate.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Link: https://lkml.kernel.org/r/20220708162702.1758865-1-john@metanate.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
 ---
- include/linux/sched/rt.h | 8 --------
- kernel/sched/core.c      | 8 ++++++--
- 2 files changed, 6 insertions(+), 10 deletions(-)
+ include/linux/virtio_vsock.h            | 3 +++
+ net/vmw_vsock/af_vsock.c                | 3 ++-
+ net/vmw_vsock/hyperv_transport.c        | 2 +-
+ net/vmw_vsock/virtio_transport_common.c | 3 ---
+ net/vmw_vsock/vmci_transport.c          | 9 ++++++++-
+ 5 files changed, 14 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/sched/rt.h b/include/linux/sched/rt.h
-index e5af028c08b4..994c25640e15 100644
---- a/include/linux/sched/rt.h
-+++ b/include/linux/sched/rt.h
-@@ -39,20 +39,12 @@ static inline struct task_struct *rt_mutex_get_top_task(struct task_struct *p)
+diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
+index 17ed01466875..9a37eddbb87a 100644
+--- a/include/linux/virtio_vsock.h
++++ b/include/linux/virtio_vsock.h
+@@ -8,6 +8,9 @@
+ #include <net/sock.h>
+ #include <net/af_vsock.h>
+ 
++/* Threshold for detecting small packets to copy */
++#define GOOD_COPY_LEN  128
++
+ enum virtio_vsock_metadata_flags {
+ 	VIRTIO_VSOCK_METADATA_FLAGS_REPLY		= BIT(0),
+ 	VIRTIO_VSOCK_METADATA_FLAGS_TAP_DELIVERED	= BIT(1),
+diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+index e348b2d09eac..1893f8aafa48 100644
+--- a/net/vmw_vsock/af_vsock.c
++++ b/net/vmw_vsock/af_vsock.c
+@@ -1844,8 +1844,9 @@ static int vsock_connectible_sendmsg(struct socket *sock, struct msghdr *msg,
+ 			written = transport->stream_enqueue(vsk,
+ 					msg, len - total_written);
+ 		}
++
+ 		if (written < 0) {
+-			err = -ENOMEM;
++			err = written;
+ 			goto out_err;
+ 		}
+ 
+diff --git a/net/vmw_vsock/hyperv_transport.c b/net/vmw_vsock/hyperv_transport.c
+index fd98229e3db3..e99aea571f6f 100644
+--- a/net/vmw_vsock/hyperv_transport.c
++++ b/net/vmw_vsock/hyperv_transport.c
+@@ -687,7 +687,7 @@ static ssize_t hvs_stream_enqueue(struct vsock_sock *vsk, struct msghdr *msg,
+ 	if (bytes_written)
+ 		ret = bytes_written;
+ 	kfree(send_buf);
+-	return ret;
++	return ret < 0 ? -ENOMEM : ret;
  }
- extern void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task);
- extern void rt_mutex_adjust_pi(struct task_struct *p);
--static inline bool tsk_is_pi_blocked(struct task_struct *tsk)
--{
--	return tsk->pi_blocked_on != NULL;
--}
- #else
- static inline struct task_struct *rt_mutex_get_top_task(struct task_struct *task)
+ 
+ static s64 hvs_stream_has_data(struct vsock_sock *vsk)
+diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+index 920578597bb9..d5780599fe93 100644
+--- a/net/vmw_vsock/virtio_transport_common.c
++++ b/net/vmw_vsock/virtio_transport_common.c
+@@ -23,9 +23,6 @@
+ /* How long to wait for graceful shutdown of a connection */
+ #define VSOCK_CLOSE_TIMEOUT (8 * HZ)
+ 
+-/* Threshold for detecting small packets to copy */
+-#define GOOD_COPY_LEN  128
+-
+ static const struct virtio_transport *
+ virtio_transport_get_ops(struct vsock_sock *vsk)
  {
- 	return NULL;
+diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
+index b14f0ed7427b..c927a90dc859 100644
+--- a/net/vmw_vsock/vmci_transport.c
++++ b/net/vmw_vsock/vmci_transport.c
+@@ -1838,7 +1838,14 @@ static ssize_t vmci_transport_stream_enqueue(
+ 	struct msghdr *msg,
+ 	size_t len)
+ {
+-	return vmci_qpair_enquev(vmci_trans(vsk)->qpair, msg, len, 0);
++	int err;
++
++	err = vmci_qpair_enquev(vmci_trans(vsk)->qpair, msg, len, 0);
++
++	if (err < 0)
++		err = -ENOMEM;
++
++	return err;
  }
- # define rt_mutex_adjust_pi(p)		do { } while (0)
--static inline bool tsk_is_pi_blocked(struct task_struct *tsk)
--{
--	return false;
--}
- #endif
  
- extern void normalize_rt_tasks(void);
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index b89ca5c83143..012c037da58a 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -6379,8 +6379,12 @@ static inline void sched_submit_work(struct task_struct *tsk)
- 		preempt_enable_no_resched();
- 	}
- 
--	if (tsk_is_pi_blocked(tsk))
--		return;
-+	/*
-+	 * spinlock and rwlock must not flush block requests.  This will
-+	 * deadlock if the callback attempts to acquire a lock which is
-+	 * already acquired.
-+	 */
-+	SCHED_WARN_ON(current->__state & TASK_RTLOCK_WAIT);
- 
- 	/*
- 	 * If we are going to sleep and we have plugged IO queued,
+ static s64 vmci_transport_stream_has_data(struct vsock_sock *vsk)
 -- 
 2.35.1
-
-
 

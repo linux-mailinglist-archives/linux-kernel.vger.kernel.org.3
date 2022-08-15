@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB69B594CC4
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA1A594813
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233048AbiHPA7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 20:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38294 "EHLO
+        id S1353299AbiHOXbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347674AbiHPAvw (ORCPT
+        with ESMTP id S245630AbiHOXZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 20:51:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96009DA3F3;
-        Mon, 15 Aug 2022 13:47:21 -0700 (PDT)
+        Mon, 15 Aug 2022 19:25:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5332804BF;
+        Mon, 15 Aug 2022 13:06:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B734B60F60;
-        Mon, 15 Aug 2022 20:47:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4976C433D6;
-        Mon, 15 Aug 2022 20:47:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67A60B80EA9;
+        Mon, 15 Aug 2022 20:06:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32AF3C433D6;
+        Mon, 15 Aug 2022 20:06:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660596440;
-        bh=AXxqXUKNIERoCew8Y87JYI1nbz3dGpMZarK68vSCs0A=;
+        s=korg; t=1660593971;
+        bh=7tARl1TSUtB1EY1AcMUAeuoi5nZ03zGTLEJW5dprqRM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PsbZyJuPzwufhfY81tRvCHpBt+0oSgNFsdH69FOkSgkOfs2YGzdRJuqShLhUSaZnq
-         w7QfTwJsfgHGrbq7FqZufBPyoyeK/0dWv440xFWHs3XSA6gsgjQFwGFs7G5JiEjfDo
-         mID/WDhjlutGlaDf3viTcroZ4NiDE7TwjCXhgK8M=
+        b=HAZ++Ns56R8X5/BFl89RKywzrcHgEWOAn1cWiPZIe6WiPFAhg2vSQVt0tttjss7/j
+         3n1bYFnxmKdv56EBthkFuoLm2IAQgtvp2FN0R694lhNmqkkeUoKSJ9N7Vkl/Rz2Anb
+         MkdQr4GAnSA3ZjQM/rEJLyQBH+mfguKMymTwk3Mk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
+        stable@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 1079/1157] btrfs: tree-log: make the return value for log syncing consistent
+Subject: [PATCH 5.18 1036/1095] s390/unwind: fix fgraph return address recovery
 Date:   Mon, 15 Aug 2022 20:07:15 +0200
-Message-Id: <20220815180523.311733735@linuxfoundation.org>
+Message-Id: <20220815180511.945321111@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
-References: <20220815180439.416659447@linuxfoundation.org>
+In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
+References: <20220815180429.240518113@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,140 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josef Bacik <josef@toxicpanda.com>
+From: Sumanth Korikkar <sumanthk@linux.ibm.com>
 
-[ Upstream commit f31f09f6be1c6c1a673e0566e258281a7bbaaa51 ]
+[ Upstream commit ded466e1806686794b403ebf031133bbaca76bb2 ]
 
-Currently we will return 1 or -EAGAIN if we decide we need to commit
-the transaction rather than sync the log.  In practice this doesn't
-really matter, we interpret any !0 and !BTRFS_NO_LOG_SYNC as needing to
-commit the transaction.  However this makes it hard to figure out what
-the correct thing to do is.
+When HAVE_FUNCTION_GRAPH_RET_ADDR_PTR is defined, the return
+address to the fgraph caller is recovered by tagging it along with the
+stack pointer of ftrace stack. This makes the stack unwinding more
+reliable.
 
-Fix this up by defining BTRFS_LOG_FORCE_COMMIT and using this in all the
-places where we want to force the transaction to be committed.
+When the fgraph return address is modified to return_to_handler,
+ftrace_graph_ret_addr tries to restore it to the original
+value using tagged stack pointer.
 
-CC: stable@vger.kernel.org # 5.15+
-Reviewed-by: Filipe Manana <fdmanana@suse.com>
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Fix this by passing tagged sp to ftrace_graph_ret_addr.
+
+Fixes: d81675b60d09 ("s390/unwind: recover kretprobe modified return address in stacktrace")
+Cc: <stable@vger.kernel.org> # 5.18
+Reviewed-by: Vasily Gorbik <gor@linux.ibm.com>
+Signed-off-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
+Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/file.c     |  2 +-
- fs/btrfs/tree-log.c | 18 +++++++++---------
- fs/btrfs/tree-log.h |  3 +++
- 3 files changed, 13 insertions(+), 10 deletions(-)
+ arch/s390/include/asm/unwind.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/btrfs/file.c b/fs/btrfs/file.c
-index 9dfde1af8a64..89c6d7ff1987 100644
---- a/fs/btrfs/file.c
-+++ b/fs/btrfs/file.c
-@@ -2308,7 +2308,7 @@ int btrfs_sync_file(struct file *file, loff_t start, loff_t end, int datasync)
- 	btrfs_release_log_ctx_extents(&ctx);
- 	if (ret < 0) {
- 		/* Fallthrough and commit/free transaction. */
--		ret = 1;
-+		ret = BTRFS_LOG_FORCE_COMMIT;
- 	}
- 
- 	/* we've logged all the items and now have a consistent
-diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
-index 370388fadf96..c94713c811bb 100644
---- a/fs/btrfs/tree-log.c
-+++ b/fs/btrfs/tree-log.c
-@@ -171,7 +171,7 @@ static int start_log_trans(struct btrfs_trans_handle *trans,
- 		int index = (root->log_transid + 1) % 2;
- 
- 		if (btrfs_need_log_full_commit(trans)) {
--			ret = -EAGAIN;
-+			ret = BTRFS_LOG_FORCE_COMMIT;
- 			goto out;
- 		}
- 
-@@ -194,7 +194,7 @@ static int start_log_trans(struct btrfs_trans_handle *trans,
- 		 * writing.
- 		 */
- 		if (zoned && !created) {
--			ret = -EAGAIN;
-+			ret = BTRFS_LOG_FORCE_COMMIT;
- 			goto out;
- 		}
- 
-@@ -3121,7 +3121,7 @@ int btrfs_sync_log(struct btrfs_trans_handle *trans,
- 
- 	/* bail out if we need to do a full commit */
- 	if (btrfs_need_log_full_commit(trans)) {
--		ret = -EAGAIN;
-+		ret = BTRFS_LOG_FORCE_COMMIT;
- 		mutex_unlock(&root->log_mutex);
- 		goto out;
- 	}
-@@ -3222,7 +3222,7 @@ int btrfs_sync_log(struct btrfs_trans_handle *trans,
- 		}
- 		btrfs_wait_tree_log_extents(log, mark);
- 		mutex_unlock(&log_root_tree->log_mutex);
--		ret = -EAGAIN;
-+		ret = BTRFS_LOG_FORCE_COMMIT;
- 		goto out;
- 	}
- 
-@@ -3261,7 +3261,7 @@ int btrfs_sync_log(struct btrfs_trans_handle *trans,
- 		blk_finish_plug(&plug);
- 		btrfs_wait_tree_log_extents(log, mark);
- 		mutex_unlock(&log_root_tree->log_mutex);
--		ret = -EAGAIN;
-+		ret = BTRFS_LOG_FORCE_COMMIT;
- 		goto out_wake_log_root;
- 	}
- 
-@@ -5848,7 +5848,7 @@ static int btrfs_log_inode(struct btrfs_trans_handle *trans,
- 	    inode_only == LOG_INODE_ALL &&
- 	    inode->last_unlink_trans >= trans->transid) {
- 		btrfs_set_log_full_commit(trans);
--		ret = 1;
-+		ret = BTRFS_LOG_FORCE_COMMIT;
- 		goto out_unlock;
- 	}
- 
-@@ -6562,12 +6562,12 @@ static int btrfs_log_inode_parent(struct btrfs_trans_handle *trans,
- 	bool log_dentries = false;
- 
- 	if (btrfs_test_opt(fs_info, NOTREELOG)) {
--		ret = 1;
-+		ret = BTRFS_LOG_FORCE_COMMIT;
- 		goto end_no_trans;
- 	}
- 
- 	if (btrfs_root_refs(&root->root_item) == 0) {
--		ret = 1;
-+		ret = BTRFS_LOG_FORCE_COMMIT;
- 		goto end_no_trans;
- 	}
- 
-@@ -6665,7 +6665,7 @@ static int btrfs_log_inode_parent(struct btrfs_trans_handle *trans,
- end_trans:
- 	if (ret < 0) {
- 		btrfs_set_log_full_commit(trans);
--		ret = 1;
-+		ret = BTRFS_LOG_FORCE_COMMIT;
- 	}
- 
- 	if (ret)
-diff --git a/fs/btrfs/tree-log.h b/fs/btrfs/tree-log.h
-index 1620f8170629..57ab5f3b8dc7 100644
---- a/fs/btrfs/tree-log.h
-+++ b/fs/btrfs/tree-log.h
-@@ -12,6 +12,9 @@
- /* return value for btrfs_log_dentry_safe that means we don't need to log it at all */
- #define BTRFS_NO_LOG_SYNC 256
- 
-+/* We can't use the tree log for whatever reason, force a transaction commit */
-+#define BTRFS_LOG_FORCE_COMMIT				(1)
-+
- struct btrfs_log_ctx {
- 	int log_ret;
- 	int log_transid;
+diff --git a/arch/s390/include/asm/unwind.h b/arch/s390/include/asm/unwind.h
+index 0bf06f1682d8..02462e7100c1 100644
+--- a/arch/s390/include/asm/unwind.h
++++ b/arch/s390/include/asm/unwind.h
+@@ -47,7 +47,7 @@ struct unwind_state {
+ static inline unsigned long unwind_recover_ret_addr(struct unwind_state *state,
+ 						    unsigned long ip)
+ {
+-	ip = ftrace_graph_ret_addr(state->task, &state->graph_idx, ip, NULL);
++	ip = ftrace_graph_ret_addr(state->task, &state->graph_idx, ip, (void *)state->sp);
+ 	if (is_kretprobe_trampoline(ip))
+ 		ip = kretprobe_find_ret_addr(state->task, (void *)state->sp, &state->kr_cur);
+ 	return ip;
 -- 
 2.35.1
 

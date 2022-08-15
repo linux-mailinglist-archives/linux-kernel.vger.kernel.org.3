@@ -2,176 +2,341 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B64559378D
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:29:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A8D5937D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343998AbiHOTOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 15:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
+        id S1344600AbiHOTVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 15:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343782AbiHOTK7 (ORCPT
+        with ESMTP id S1344429AbiHOTQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 15:10:59 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2081.outbound.protection.outlook.com [40.107.94.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEC13AE73;
-        Mon, 15 Aug 2022 11:36:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H3P36QUw8g9j+o0YLa6kinPTNnMnInyppRkWsGKTrOSsta+5uV6RGENBd8L9yCS4FMKHgmYdSsW1Qs6F1ryxOfNXs9wVdFZg9s1DlVQSSau9A6PLFoAWRFWfp17ZZn5NBUdFjd2JwzDPOCRK2jJAKM6a2pyEUjAgk99zjodiyezh1BgyrqnUe0yPKI/BaOLjmgq3CbKDQE8TDlCWvOT78A7lHeyn2Md9jPE6Y3NFILsrsMmV8FRazZuSuh3xXs6782O0eLH2SMZalGOZJn0cfcnEq4mUgCPPup96X6ua/AQ/yQHMPTN1Qo3UZxu33KjZPi2W0qSTMKw1sypcow7f1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M+klT85JV0ufdI+TDZDDQj5J5oeRM4796AWJb8oWhRM=;
- b=T9TzywD/0PJW+Z0OY9suZfFZkbfeq1uDvCpAkt1cnQCKU6oduZR2yRZ68MIO1uKHp8tMCmpkEbneAj/yh1t2Lm5fXPk3jkf6YiK8WF97CfLsqZCUHIOWj2YtpNDB8uYQ6Ndduf1eI/YE7jhhypNUUWBLOONSk+NO1yvSzgoPjgY4Ewqob0CKgUXXVmLtz+dMGdRYKv5onste88/Wh5aayqh4+uPB3QZPsbjdoqZ1MyOnotMO+tfSTTKaQ/ORmqnM4fFha8hArFrZbXDMSIv5VmUIHuWDA4fcvT6Dz/V1JpIH4s2VMARiHmq7/qKASyF+SMqky5ZRFywyXTcJvk19Lg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M+klT85JV0ufdI+TDZDDQj5J5oeRM4796AWJb8oWhRM=;
- b=rxkwUUp5VA7UTUBkkLt0LT3pnQZkIs9TZra1zaAVsH46a/+HdQ+cXaCTmGe2/Yz1Fyw1ZfDuReoDJig0ffYT22I//RzKT5aPJa9VxGZrVCssC3aBxPGyCvlShUQQ/l/Bg1RDbS9333PepkfpG8rMFF/WK124sKw/u+t0Qne+PeU=
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by LV2PR12MB5989.namprd12.prod.outlook.com (2603:10b6:408:171::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.27; Mon, 15 Aug
- 2022 18:36:39 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::4489:9a98:ef82:6c67]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::4489:9a98:ef82:6c67%3]) with mapi id 15.20.5504.027; Mon, 15 Aug 2022
- 18:36:39 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
-To:     Akihiko Odaki <akihiko.odaki@gmail.com>,
-        "Natikar, Basavaraj" <Basavaraj.Natikar@amd.com>
-CC:     "Natikar, Basavaraj" <Basavaraj.Natikar@amd.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] AMD_SFH: Add a DMI quirk entry for Chromebooks
-Thread-Topic: [PATCH v2] AMD_SFH: Add a DMI quirk entry for Chromebooks
-Thread-Index: AQHYl0PsuD/YzkpEuEOrNeNjLt/lv61+26eAgAABToCAMZ+r4A==
-Date:   Mon, 15 Aug 2022 18:36:39 +0000
-Message-ID: <MN0PR12MB6101E98363A22A66662B3D69E2689@MN0PR12MB6101.namprd12.prod.outlook.com>
-References: <20220714053752.5124-1-akihiko.odaki@gmail.com>
- <87d96692-7dbf-f846-f644-5a81f92efcb9@amd.com>
- <2b73e71c-a927-076d-bf44-6dc4431eb3be@gmail.com>
-In-Reply-To: <2b73e71c-a927-076d-bf44-6dc4431eb3be@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-08-15T18:33:59Z;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=6fb88f3d-1fc4-4dba-9274-56190f429c12;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-08-15T18:36:37Z
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 28c4c5e0-0182-4dbb-9707-5728f35c4ce8
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ed0be86a-5764-4d28-12fa-08da7eed17c2
-x-ms-traffictypediagnostic: LV2PR12MB5989:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: coum0JxRITtbkM0fx8JH6SXXhgm/Gbh41Sj+EExW5g2dVlwb08oXtDX4MDeLWIHL0NRskJO0LI/3EKeV3eWBG2ohV9mOFFYYwxeWX3x+ZzJ03pvG/Qy5nEC8turuVk/2J4qqUBW4qdtm+LUgxNU5bD7Zvck/el8VsBSlj9uA2DwVC5xgVjHU8KGWgXyZNKu8hiuk6DoV+BjCN/T9fLOBmrIyfJsQ7HUfPERN6KciEdZsb10WgTO17SmNKVlvJFQHbrdpaDw7ty7Ps2A1hY/4/7IVJlh/M40dXaHcgwc8gy8VZ2nyIYG3jegqQPcbQ+op3EmVTajAUpCUHSmQrnoBoXOMQWs5809sU2S5qPr9dWQZJQvVnaNTWN60ybxqA6MxglTARehmXDZbAk6EzE0hrBUpKfpL5P1R2ezxBmeRcbOaxZ5ZhWzgwBq12xTxlRlU4cnHDu60FJQvZWrN8pIRm0pzBaw1t8Xqw0rpZETyGU1K1OfQot1AVnWWPPMs36GbFmjzqsfxOIZMHo0lMLI8gZPOKB3xNcsK4by6hLwrS008VfEhOAKw/ujytdx6zWtggkOB+D820oT57YTVmbZfdY3waBBrR/b+79RgTaVy/GnT3BNmyjzuNNGyRv5YCbhY7YQqDVdxIuBccFpZcpsWZv2WbG0JvnE1f3JSt1aa6Fu3wnn7tjOQbtWmxWuPoKDgAtmWy914OnlNG2Uj/GZ5wl0HQPhkYFzF2hpMQJOsY7niwgAryYp/D/UkgnLRPrmnRwplJquRJfuf0cIC90noYu510fxB1LWogFrA52OQgr45lvVprNmSIiypes1IKhdw
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(366004)(396003)(39860400002)(346002)(76116006)(8676002)(52536014)(8936002)(66946007)(5660300002)(4326008)(64756008)(66446008)(2906002)(66556008)(66476007)(33656002)(55016003)(6636002)(54906003)(71200400001)(110136005)(316002)(41300700001)(6506007)(186003)(26005)(9686003)(38070700005)(83380400001)(53546011)(478600001)(7696005)(122000001)(86362001)(38100700002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UU5lY0xVdFFla0RmUWZMOElDODlnczBkK0JueEdpZGxFZGdCdFpYSjVCWkRs?=
- =?utf-8?B?UXFhOTYwZlZIOVVHalNVT3VqMUwzNVEzV1lodXZzRFEzY0dLSFBHRklYcTlM?=
- =?utf-8?B?R0VjaHBPTGlBVGgwZ0QvazQ3MDZqTkdud243YzhFMEwrR0tPa1QzRmY5K0h1?=
- =?utf-8?B?LytLNStRVGNrVmxQVFdBOWxYOEJKMHppL1AvUWcrU1ZLNC9WOHhXSDV2aDlD?=
- =?utf-8?B?WEk5L0dyWEpKelZZRk5yb1hrYUprQ0VHNHUwdk5pcEFoU09KQ2NrMDE5RDlI?=
- =?utf-8?B?Wmh3MFMzLzdVT1k2OE1PRzN5bGNRTXRIU1lTSVd3MElreEkxbUkydEw4UEsw?=
- =?utf-8?B?VFFBN29CQ3JTM1QrNmVkTVpiaml6eWRTMWtsYjgrOXdCaTUwY2dxZm9aUzhH?=
- =?utf-8?B?MWkwaHFRdmpKUDZKd2Y1cEZVdE80T1orZCtoM2JFN1VMY0lCQUdqU3pGTTVi?=
- =?utf-8?B?RkFYUjlRNm4zREtVRDU2V1JtMk9uM3N0YmQ5TTJNOGU3dmFhaU5KQ1Rsb2di?=
- =?utf-8?B?cTJNSkRJcTNpSVFzRlhrMmJuQTRpL2ZmcTlHMWdhbHY3YzFOd3NIWWRkMTJl?=
- =?utf-8?B?aGkrTWpKSkxSS21jSjZuck5uNzB3ZCtCTy9OMUgrSHZIaUo2RlBmandoS09U?=
- =?utf-8?B?amRrZ2RydXBYSUhNUkZCeDVUeXVCcmVrcmdKcFRpNDJxMlVZcHpsMnhFV05E?=
- =?utf-8?B?ZmJoN3BaZ1pvUmRKb0h2NVNDWHdGdklnSEdoeE1KbTF4STNDblp5Y1Jod0tu?=
- =?utf-8?B?ajJjNTdtVkdvV1pNRmJZbW5sNlNxU2lQNVVsdG9HckV5QTZTUXBveUxXckhI?=
- =?utf-8?B?NHBmWjRqQXdVQ3hsQVEwMFAxNkFVdHg4ZDV4MGw2RmhzTThNZTd1L0NWQ0hG?=
- =?utf-8?B?aHg3MmgvZlFsMkdna1lhRzdhK2EwY1FIcnpVNHhUOHRQNlExdDQ1UEhhM3B3?=
- =?utf-8?B?Z0o4M2diWVpZYUZqNm5xcnI0MDg3R3UzSEhuSDdzd1dVZzZYUkR1UEZtTG5O?=
- =?utf-8?B?cm1uQ1dCbnUyYzJ2STRTTmJTNHVMQS9CYW9PdS9zRlhvdVU2ZitCVW1xUEtG?=
- =?utf-8?B?Y3pmTVhwWnpBSTZueUs2Z3h4czFMNk9IaXliOUdVUjhHcDcybHVNR0tSZzVI?=
- =?utf-8?B?NVFGenhHcDBLV1B0RUZ6SkZrT2l6SDhBU2cycVQyQWNySVFSQ3hBMys5Nk9Q?=
- =?utf-8?B?OWxFOFdLc2RSVDBhekR3aW93NDJYRUdsNVltaHgybExRSXFnQVZXNVRSdFhF?=
- =?utf-8?B?eUd2Y0hhckhUVS9HOFJXSXM0VXQyb3dLTzhKSDR1cU9DT0x2STBpcVNOaFZw?=
- =?utf-8?B?c25RVElIUVBWSGdDMjhISVdxNnJvSkJOaVBsTjU5VmthQjRiVTlSRmtTeHRs?=
- =?utf-8?B?Vnhnak5ZMWd2MmVjdDc2YTl3OHBTTVdoRk41bHdJOU5tTVpZZDJaVmQ5eTMz?=
- =?utf-8?B?REhJc0orQzRQaVZWdzM5ck5QeFBZV2xXaU55Wll0SnBhOHN0UWdkK1ZpZUNK?=
- =?utf-8?B?UDFrWlliNVlLdHVOcitSUHdsVlZUZHNTRmJtR2ZjaktwWXlUUE5NSEY2c0Vj?=
- =?utf-8?B?NWliOE51VVI2aXVMOTBNZzRKSmp4bmZpT2xKckxuQm9WV0JVeklKaytmTlYw?=
- =?utf-8?B?L3JiQzFabm1vNmw4dyt2VUU0Y3BkVDJhYUNiUnpCMU9Ia1ZGazh4MW5oQVk3?=
- =?utf-8?B?S3dxZDJsRDlsTmtYbjdkeEljM3JiVVVJM2p3djcyUW1Kb0ROU2lUczRIT2tr?=
- =?utf-8?B?bmg2YU9BTTNVek55K2FJNDhXR3FobytGMXZYMjJFSGU5SVNZNGtpR2I0aURU?=
- =?utf-8?B?ZFdLMS9RdzVaam0rcFYvZWhOb2ZNTlN5UDVxNnVCNS8zUXZHeTlNWE02aEl2?=
- =?utf-8?B?bmcrdkE5T0hUeU9qMkk3Njc0cTU4ZDNLVTdNTHB6RWRXZjdQR2FPb09LQnZh?=
- =?utf-8?B?RVZ6dm1hLzFhMUtwNEZkOUNnRzE2QnZUL09xaXIzcnNRNUtLR1cyMU1IYVZI?=
- =?utf-8?B?TlZFQnBQK1d1TWJ6N0M1QnhvTTdUakQ5aXVqSEQ0RnJUV3hGZ1R1blJiYXRo?=
- =?utf-8?B?MldzZ050N0pnS1NCeld6RzdLdDdUTml3TmozMVNTY1g1SE5IUUIrbHg3SHBI?=
- =?utf-8?Q?Gjxg=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 15 Aug 2022 15:16:42 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEF352FD9
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:38:07 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 27FIbvIV008803
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:38:04 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=9dFynMf7CCU9gLS+bI91K7F1XyRUDeI2AxG3iT8WJa4=;
+ b=O9hNtnKEf2MoY7HbKZwziFN1WlsvLcLc7himUvQvZaKmyx1XXXZ3O3HVUElFbeQGnlBp
+ Cdk+ZuxfTthCuK3pl5wo7POY+1kHXuL4djS3P/kvYqAtUaR/cSc6b+tkuzAUIlyD5nnI
+ SGi7OcKXXWUemjycVF+jJd7ZOVpx+ED7PkI= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3hysv2gufx-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:38:03 -0700
+Received: from twshared6447.05.prn5.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 15 Aug 2022 11:37:20 -0700
+Received: by devvm301.eag0.facebook.com (Postfix, from userid 352741)
+        id 22D3830D9F7C; Mon, 15 Aug 2022 11:37:08 -0700 (PDT)
+From:   <alexlzhu@fb.com>
+To:     <corbet@lwn.net>, <bobwxc@email.cn>, <rppt@kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <Kernel-team@fb.com>
+CC:     Alexander Zhu <alexlzhu@fb.com>
+Subject: [PATCH] docs: admin-guide/mm:
+Date:   Mon, 15 Aug 2022 11:37:06 -0700
+Message-ID: <20220815183706.2508116-1-alexlzhu@fb.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ed0be86a-5764-4d28-12fa-08da7eed17c2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Aug 2022 18:36:39.7134
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bKB9Jjcjc7gp3FwGOh6+KTL4ZDb5unTbmtyIQ2ASytfK4OvKX6FoOeesm8Jq7xAQSXCDzfoy4QBMaa6TPo1dBw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5989
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: BR6rO_rZcH3I_eE4Hc8_t0bSMdem4ZWU
+X-Proofpoint-ORIG-GUID: BR6rO_rZcH3I_eE4Hc8_t0bSMdem4ZWU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W1B1YmxpY10NCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBBa2loaWtv
-IE9kYWtpIDxha2loaWtvLm9kYWtpQGdtYWlsLmNvbT4NCj4gU2VudDogVGh1cnNkYXksIEp1bHkg
-MTQsIDIwMjIgMjM6NDYNCj4gVG86IE5hdGlrYXIsIEJhc2F2YXJhaiA8QmFzYXZhcmFqLk5hdGlr
-YXJAYW1kLmNvbT4NCj4gQ2M6IE5hdGlrYXIsIEJhc2F2YXJhaiA8QmFzYXZhcmFqLk5hdGlrYXJA
-YW1kLmNvbT47IEppcmkgS29zaW5hDQo+IDxqaWtvc0BrZXJuZWwub3JnPjsgQmVuamFtaW4gVGlz
-c29pcmVzIDxiZW5qYW1pbi50aXNzb2lyZXNAcmVkaGF0LmNvbT47DQo+IGxpbnV4LWlucHV0QHZn
-ZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgTGltb25jaWVsbG8s
-DQo+IE1hcmlvIDxNYXJpby5MaW1vbmNpZWxsb0BhbWQuY29tPg0KPiBTdWJqZWN0OiBSZTogW1BB
-VENIIHYyXSBBTURfU0ZIOiBBZGQgYSBETUkgcXVpcmsgZW50cnkgZm9yIENocm9tZWJvb2tzDQo+
-IA0KPiBPbiAyMDIyLzA3LzE1IDEzOjQxLCBCYXNhdmFyYWogTmF0aWthciB3cm90ZToNCj4gPg0K
-PiA+DQo+ID4gT24gNy8xNC8yMDIyIDExOjA3IEFNLCBBa2loaWtvIE9kYWtpIHdyb3RlOg0KPiA+
-PiBHb29nbGUgQ2hyb21lYm9va3MgdXNlIENocm9tZSBPUyBFbWJlZGRlZCBDb250cm9sbGVyIFNl
-bnNvciBIdWINCj4gaW5zdGVhZA0KPiA+PiBvZiBTZW5zb3IgSHViIEZ1c2lvbiBhbmQgbGVhdmVz
-IE1QMiB1bmluaXRpYWxpemVkLCB3aGljaCBkaXNhYmxlcyBhbGwNCj4gPj4gZnVuY3Rpb25hbGl0
-aWVzLCBldmVuIGluY2x1ZGluZyB0aGUgcmVnaXN0ZXJzIG5lY2Vzc2FyeSBmb3IgZmVhdHVyZQ0K
-PiA+PiBkZXRlY3Rpb25zLg0KPiA+Pg0KPiA+PiBUaGUgYmVoYXZpb3Igd2FzIG9ic2VydmVkIHdp
-dGggTGVub3ZvIFRoaW5rUGFkIEMxMyBZb2dhLg0KPiA+Pg0KPiA+Pg0KPiA+IFRoaXMgZHJpdmVy
-IHNob3VsZCBub3QgZ2V0IGxvYWRlZCBpbiBjaHJvbWUgT1MgYnkgZGVmYXVsdC4NCj4gPiBDb3Vs
-ZCB5b3UgcGxlYXNlIHByb3ZpZGUgZGV0YWlscyBvZiBDaHJvbWUgT1MgVmVyc2lvbiBhbmQgS2Vy
-bmVsIHZlcnNpb24NCj4gdG8gY29uZmlybSB0aGUgYmVoYXZpb3IuDQo+ID4NCj4gPiBBcmUgeW91
-IGVuYWJsaW5nIG1hbnVhbGx5IENPTkZJR19BTURfU0ZIX0hJRCBjb25maWc/DQo+ID4NCj4gPiBU
-aGFua3MsDQo+ID4gQmFzYXZhcmFqDQo+ID4NCj4gDQo+IEkgdXNlIEZlZG9yYSAzNiwgbm90IENo
-cm9tZSBPUy4gVGhlIGNvbmZpZyBpcyBlbmFibGVkIG9uIEZlZG9yYSdzDQo+IGdlbmVyaWMga2Vy
-bmVsLiBUaGUga2VybmVsIGlzIGJ1aWx0IGZyb20gY29tbWl0DQo+IDc4Y2E1NTg4OWE1NDlhOWEx
-OTRjNmVjNjY2ODM2MzI5Yjc3NGFiNmQgZnJvbSB0aGUgdXBzdHJlYW0uDQo+IA0KPiBSZWdhcmRz
-LA0KPiBBa2loaWtvIE9kYWtpDQoNCkFraWhpa28sDQoNCkZXSVcgLSBJIHRoaW5rIHlvdXIgcGF0
-Y2ggaXMgdGhlIGNvcnJlY3QgZGlyZWN0aW9uIGZvciB5b3VyIHNpdHVhdGlvbiAodHJ5aW5nIHRv
-IGxvYWQNCkZlZG9yYSBvbnRvIGEgc3lzdGVtIHRoYXQgcHJldmlvdXNseSBzaGlwcGVkIHdpdGgg
-Q2hyb21lT1MpLg0KDQpJIHRoaW5rIHlvdSBqdXN0IG5lZWQgdG8gY2hlY2sgdGhlIHF1ZXN0aW9u
-IHRoYXQgSSBoYWQgYWJvdXQgZGlzY292ZXJ5IHJlZ2lzdGVycyBhbmQNCmlmIHRoYXQgcHJvYmlu
-ZyBpcyBzdGlsbCBhIHByb2JsZW0gb3Igbm90Lg0KDQpUaGFua3MsDQo=
+From: Alexander Zhu <alexlzhu@fb.com>
+
+This commit fixes typos and grammar errors in
+Documentation/admin-guide/mm/concepts.rst.
+
+Signed-off-by: Alexander Zhu <alexlzhu@fb.com>
+---
+ Documentation/admin-guide/mm/concepts.rst | 138 +++++++++++-----------
+ 1 file changed, 68 insertions(+), 70 deletions(-)
+
+diff --git a/Documentation/admin-guide/mm/concepts.rst b/Documentation/ad=
+min-guide/mm/concepts.rst
+index c79f1e336222..c471f80b7a38 100644
+--- a/Documentation/admin-guide/mm/concepts.rst
++++ b/Documentation/admin-guide/mm/concepts.rst
+@@ -4,14 +4,13 @@
+ Concepts overview
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+-The memory management in Linux is a complex system that evolved over the
+-years and included more and more functionality to support a variety of
+-systems from MMU-less microcontrollers to supercomputers. The memory
+-management for systems without an MMU is called ``nommu`` and it
+-definitely deserves a dedicated document, which hopefully will be
+-eventually written. Yet, although some of the concepts are the same,
+-here we assume that an MMU is available and a CPU can translate a virtua=
+l
+-address to a physical address.
++The memory management subsystem is a complex codebase that evolved over =
+the
++years to support a variety of systems from MMU-less microcontrollers to
++supercomputers. The memory management subsystem for systems without an
++MMU is called ``nommu`` and it deserves a dedicated document, which
++hopefully will be written at some point. Although some of the concepts
++are the same, here we assume that an MMU is available and a CPU can
++translate a virtual address to a physical address.
+=20
+ .. contents:: :local:
+=20
+@@ -29,8 +28,8 @@ of how these address ranges are defined.
+ All this makes dealing directly with physical memory quite complex and
+ to avoid this complexity a concept of virtual memory was developed.
+=20
+-The virtual memory abstracts the details of physical memory from the
+-application software, allows to keep only needed information in the
++Virtual memory abstracts the details of physical memory from the
++application software, allows for keeping only needed information in
+ physical memory (demand paging) and provides a mechanism for the
+ protection and controlled sharing of data between processes.
+=20
+@@ -42,76 +41,75 @@ memory controller can understand.
+=20
+ The physical system memory is divided into page frames, or pages. The
+ size of each page is architecture specific. Some architectures allow
+-selection of the page size from several supported values; this
+-selection is performed at the kernel build time by setting an
++selection of page size from several supported values; this
++selection is performed at kernel build time by setting an
+ appropriate kernel configuration option.
+=20
+-Each physical memory page can be mapped as one or more virtual
++Each page in physical memory can be mapped as one or more virtual
+ pages. These mappings are described by page tables that allow
+ translation from a virtual address used by programs to the physical
+-memory address. The page tables are organized hierarchically.
++address. The page tables are organized hierarchically.
+=20
+ The tables at the lowest level of the hierarchy contain physical
+ addresses of actual pages used by the software. The tables at higher
+-levels contain physical addresses of the pages belonging to the lower
++levels contain physical addresses of pages belonging to lower
+ levels. The pointer to the top level page table resides in a
+-register. When the CPU performs the address translation, it uses this
++register. When the CPU performs address translation, it uses this
+ register to access the top level page table. The high bits of the
+ virtual address are used to index an entry in the top level page
+ table. That entry is then used to access the next level in the
+-hierarchy with the next bits of the virtual address as the index to
+-that level page table. The lowest bits in the virtual address define
++hierarchy with the next bits of the virtual address as the index into
++the page table at that level. The lowest bits in the virtual address def=
+ine
+ the offset inside the actual page.
+=20
+ Huge Pages
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+-The address translation requires several memory accesses and memory
+-accesses are slow relatively to CPU speed. To avoid spending precious
+-processor cycles on the address translation, CPUs maintain a cache of
+-such translations called Translation Lookaside Buffer (or
+-TLB). Usually TLB is pretty scarce resource and applications with
+-large memory working set will experience performance hit because of
+-TLB misses.
++Address translation requires several memory accesses and memory
++accesses are slow relative to CPU speed. To avoid spending precious
++processor cycles on address translation, CPUs maintain a cache of
++such translations called the Translation Lookaside Buffer (or
++TLB). Usually TLB is a scarce resource and applications with a
++large in-memory working set will experience performance hit due to
++TLB miss.
+=20
+ Many modern CPU architectures allow mapping of the memory pages
+ directly by the higher levels in the page table. For instance, on x86,
+ it is possible to map 2M and even 1G pages using entries in the second
+ and the third level page tables. In Linux such pages are called
+-`huge`. Usage of huge pages significantly reduces pressure on TLB,
++`huge`. Usage of huge pages significantly reduces pressure on the TLB,
+ improves TLB hit-rate and thus improves overall system performance.
+=20
+-There are two mechanisms in Linux that enable mapping of the physical
+-memory with the huge pages. The first one is `HugeTLB filesystem`, or
++There are two mechanisms in Linux that enable mapping of physical
++memory with huge pages. The first one is `HugeTLB filesystem`, or
+ hugetlbfs. It is a pseudo filesystem that uses RAM as its backing
+-store. For the files created in this filesystem the data resides in
+-the memory and mapped using huge pages. The hugetlbfs is described at
++store. For files created in this filesystem the data resides in
++memory and is mapped with huge pages. hugetlbfs is described at
+ :ref:`Documentation/admin-guide/mm/hugetlbpage.rst <hugetlbpage>`.
+=20
+-Another, more recent, mechanism that enables use of the huge pages is
+-called `Transparent HugePages`, or THP. Unlike the hugetlbfs that
+-requires users and/or system administrators to configure what parts of
+-the system memory should and can be mapped by the huge pages, THP
+-manages such mappings transparently to the user and hence the
+-name. See
++Another mechanism that enables use of huge pages is called
++`Transparent HugePages`, or THP. Unlike hugetlbfs that requires
++users and/or system administrators to configure what parts of
++system memory can and should be mapped by huge pages, THP
++manages such mappings transparently to the user, hence the name. See
+ :ref:`Documentation/admin-guide/mm/transhuge.rst <admin_guide_transhuge>=
+`
+-for more details about THP.
++for more details on THP.
+=20
+ Zones
+ =3D=3D=3D=3D=3D
+=20
+ Often hardware poses restrictions on how different physical memory
+ ranges can be accessed. In some cases, devices cannot perform DMA to
+-all the addressable memory. In other cases, the size of the physical
++all the addressable memory. In other cases, the size of physical
+ memory exceeds the maximal addressable size of virtual memory and
+-special actions are required to access portions of the memory. Linux
++special actions are required to access portions of memory. Linux
+ groups memory pages into `zones` according to their possible
+ usage. For example, ZONE_DMA will contain memory that can be used by
+ devices for DMA, ZONE_HIGHMEM will contain memory that is not
+ permanently mapped into kernel's address space and ZONE_NORMAL will
+ contain normally addressed pages.
+=20
+-The actual layout of the memory zones is hardware dependent as not all
++The actual layout of memory zones is hardware dependent as not all
+ architectures define all zones, and requirements for DMA are different
+ for different platforms.
+=20
+@@ -131,10 +129,10 @@ counters. You can find more details about NUMA in
+ Page cache
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+-The physical memory is volatile and the common case for getting data
+-into the memory is to read it from files. Whenever a file is read, the
++Physical memory is volatile and the common case for getting data
++into memory is to read it from files. Whenever a file is read, the
+ data is put into the `page cache` to avoid expensive disk access on
+-the subsequent reads. Similarly, when one writes to a file, the data
++subsequent reads. Similarly, when one writes to a file, the data
+ is placed in the page cache and eventually gets into the backing
+ storage device. The written pages are marked as `dirty` and when Linux
+ decides to reuse them for other purposes, it makes sure to synchronize
+@@ -145,10 +143,10 @@ Anonymous Memory
+=20
+ The `anonymous memory` or `anonymous mappings` represent memory that
+ is not backed by a filesystem. Such mappings are implicitly created
+-for program's stack and heap or by explicit calls to mmap(2) system
+-call. Usually, the anonymous mappings only define virtual memory areas
++for the program's stack and heap or by explicit calls to the mmap(2) sys=
+tem
++call. Usually, anonymous mappings only define virtual memory areas
+ that the program is allowed to access. The read accesses will result
+-in creation of a page table entry that references a special physical
++in the creation of a page table entry that references a special physical
+ page filled with zeroes. When the program performs a write, a regular
+ physical page will be allocated to hold the written data. The page
+ will be marked dirty and if the kernel decides to repurpose it,
+@@ -159,46 +157,46 @@ Reclaim
+=20
+ Throughout the system lifetime, a physical page can be used for storing
+ different types of data. It can be kernel internal data structures,
+-DMA'able buffers for device drivers use, data read from a filesystem,
++DMA'able buffers for device drivers to use, data read from a filesystem,
+ memory allocated by user space processes etc.
+=20
+-Depending on the page usage it is treated differently by the Linux
+-memory management. The pages that can be freed at any time, either
+-because they cache the data available elsewhere, for instance, on a
+-hard disk, or because they can be swapped out, again, to the hard
++Depending on page usage it is treated differently by the Linux
++memory management subsystem. Pages that can be freed at any time,
++either because they cache the data available elsewhere
++(ie on a hard disk) or because they can be swapped out to the hard
+ disk, are called `reclaimable`. The most notable categories of the
+ reclaimable pages are page cache and anonymous memory.
+=20
+ In most cases, the pages holding internal kernel data and used as DMA
+ buffers cannot be repurposed, and they remain pinned until freed by
+ their user. Such pages are called `unreclaimable`. However, in certain
+-circumstances, even pages occupied with kernel data structures can be
++circumstances, even pages occupied by kernel data structures can be
+ reclaimed. For instance, in-memory caches of filesystem metadata can
+-be re-read from the storage device and therefore it is possible to
+-discard them from the main memory when system is under memory
++be re-read from the storage device and thus it is possible to
++discard them from main memory when the system is under memory
+ pressure.
+=20
+-The process of freeing the reclaimable physical memory pages and
+-repurposing them is called (surprise!) `reclaim`. Linux can reclaim
+-pages either asynchronously or synchronously, depending on the state
+-of the system. When the system is not loaded, most of the memory is free
++The process of freeing and repurposing reclaimable physical pages
++is called (surprise!) `reclaim`. Linux can reclaim pages either
++synchronously or asynchronously, depending on the state of the
++system. When system load is light, most of the memory is free
+ and allocation requests will be satisfied immediately from the free
+-pages supply. As the load increases, the amount of the free pages goes
++page supply. As the load increases, the number of the free pages goes
+ down and when it reaches a certain threshold (low watermark), an
+ allocation request will awaken the ``kswapd`` daemon. It will
+-asynchronously scan memory pages and either just free them if the data
+-they contain is available elsewhere, or evict to the backing storage
+-device (remember those dirty pages?). As memory usage increases even
+-more and reaches another threshold - min watermark - an allocation
+-will trigger `direct reclaim`. In this case allocation is stalled
+-until enough memory pages are reclaimed to satisfy the request.
++asynchronously scan memory pages and either free them if the data
++they contain is available elsewhere, or evict them to the backing
++storage device (remember those dirty pages?). As memory usage
++increases even more and reaches another threshold - min watermark - an
++allocation will trigger `direct reclaim`. In this case allocation is
++stalled until enough memory pages are reclaimed to satisfy the request.
+=20
+ Compaction
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+-As the system runs, tasks allocate and free the memory and it becomes
++As the system runs, tasks will allocate and free memory. Memory thus bec=
+omes
+ fragmented. Although with virtual memory it is possible to present
+-scattered physical pages as virtually contiguous range, sometimes it is
++scattered physical pages as a virtually contiguous range, sometimes it i=
+s
+ necessary to allocate large physically contiguous memory areas. Such
+ need may arise, for instance, when a device driver requires a large
+ buffer for DMA, or when THP allocates a huge page. Memory `compaction`
+@@ -214,10 +212,10 @@ daemon or synchronously as a result of a memory all=
+ocation request.
+ OOM killer
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+-It is possible that on a loaded machine memory will be exhausted and the
++It is possible that under heavy load memory will be exhausted and the
+ kernel will be unable to reclaim enough memory to continue to operate. I=
+n
+ order to save the rest of the system, it invokes the `OOM killer`.
+=20
+-The `OOM killer` selects a task to sacrifice for the sake of the overall
+-system health. The selected task is killed in a hope that after it exits
++The `OOM killer` selects a task to sacrifice for the sake of overall
++system health. The selected task is killed in the hope that after it exi=
+ts
+ enough memory will be freed to continue normal operation.
+--=20
+2.30.2
+

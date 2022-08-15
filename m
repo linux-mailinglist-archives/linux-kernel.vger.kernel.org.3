@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF133594897
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6CE59494E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345730AbiHOXMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39820 "EHLO
+        id S243606AbiHOXMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353162AbiHOXK6 (ORCPT
+        with ESMTP id S231438AbiHOXLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:10:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10670144E0D;
-        Mon, 15 Aug 2022 13:00:08 -0700 (PDT)
+        Mon, 15 Aug 2022 19:11:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B8C3FA33;
+        Mon, 15 Aug 2022 13:00:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 363F261226;
-        Mon, 15 Aug 2022 20:00:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BFD3C433C1;
-        Mon, 15 Aug 2022 20:00:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35D6FB80EA8;
+        Mon, 15 Aug 2022 20:00:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88E6CC433C1;
+        Mon, 15 Aug 2022 20:00:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593607;
-        bh=q7HeBn6uyB5qIMUcOE0UZOInjM7NHBYSfG82jh+373g=;
+        s=korg; t=1660593618;
+        bh=2KW1HM963k7v+bwEDDz4Yh4oQrYctMijf1hKLtDHh9Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ENYNfEJYtewKl52hFCWiIAUHLe+tqFha4siR75V2csSFGVv00gyDdZifjMg+N6UDv
-         ROXcrqI3BotwkR24BMPnSMhAv9GebGS5yCt5rt/ZPGnZLoPS+e9VJ8+3hyNbNr/ut5
-         snoaF+1t8GnwVXb8/D26EriBv/DLSLi6na7f/G48=
+        b=E7JtWaZWU8qFPCoSP7VvySJT052Slygkr5KssrSvKPOB5JNzDEhzJJH0wpC6pcsug
+         QjpJDnxh4hYAR02NzhzNtvDTYK7ySkmTtUJ9vPVj6Kj/uZtL+BlxvnQXfvtZfPN6Hw
+         6Rdx5BJ4VO0uhGAKgcD5n69tuRg/4/fJTX71jCWM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0295/1157] io_uring: Dont require reinitable percpu_ref
-Date:   Mon, 15 Aug 2022 19:54:11 +0200
-Message-Id: <20220815180451.432936539@linuxfoundation.org>
+        stable@vger.kernel.org, Markus Mayer <mmayer@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        =?UTF-8?q?Alejandro=20Gonz=C3=A1lez?= 
+        <alejandro.gonzalez.correo@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 0297/1157] thermal/tools/tmon: Include pthread and time headers in tmon.h
+Date:   Mon, 15 Aug 2022 19:54:13 +0200
+Message-Id: <20220815180451.525116184@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -56,41 +59,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michal Koutný <mkoutny@suse.com>
+From: Markus Mayer <mmayer@broadcom.com>
 
-[ Upstream commit 48904229928d941ce1db181b991948387ab463cd ]
+[ Upstream commit 0cf51bfe999524377fbb71becb583b4ca6d07cfc ]
 
-The commit 8bb649ee1da3 ("io_uring: remove ring quiesce for
-io_uring_register") removed the worklow relying on reinit/resurrection
-of the percpu_ref, hence, initialization with that requested is a relic.
+Include sys/time.h and pthread.h in tmon.h, so that types
+"pthread_mutex_t" and "struct timeval tv" are known when tmon.h
+references them.
 
-This is based on code review, this causes no real bug (and theoretically
-can't). Technically it's a revert of commit 214828962dea ("io_uring:
-initialize percpu refcounters using PERCU_REF_ALLOW_REINIT") but since
-the flag omission is now justified, I'm not making this a revert.
+Without these headers, compiling tmon against musl-libc will fail with
+these errors:
 
-Fixes: 8bb649ee1da3 ("io_uring: remove ring quiesce for io_uring_register")
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+In file included from sysfs.c:31:0:
+tmon.h:47:8: error: unknown type name 'pthread_mutex_t'
+ extern pthread_mutex_t input_lock;
+        ^~~~~~~~~~~~~~~
+make[3]: *** [<builtin>: sysfs.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+In file included from tui.c:31:0:
+tmon.h:54:17: error: field 'tv' has incomplete type
+  struct timeval tv;
+                 ^~
+make[3]: *** [<builtin>: tui.o] Error 1
+make[2]: *** [Makefile:83: tmon] Error 2
+
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+Acked-by: Alejandro González <alejandro.gonzalez.correo@gmail.com>
+Tested-by: Alejandro González <alejandro.gonzalez.correo@gmail.com>
+Fixes: 94f69966faf8 ("tools/thermal: Introduce tmon, a tool for thermal  subsystem")
+Link: https://lore.kernel.org/r/20220718031040.44714-1-f.fainelli@gmail.com
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- io_uring/io_uring.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/thermal/tmon/tmon.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index f429b68d1fc2..27ce532c6c8d 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -1701,7 +1701,7 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
- 	ctx->dummy_ubuf->ubuf = -1UL;
+diff --git a/tools/thermal/tmon/tmon.h b/tools/thermal/tmon/tmon.h
+index c9066ec104dd..44d16d778f04 100644
+--- a/tools/thermal/tmon/tmon.h
++++ b/tools/thermal/tmon/tmon.h
+@@ -27,6 +27,9 @@
+ #define NR_LINES_TZDATA 1
+ #define TMON_LOG_FILE "/var/tmp/tmon.log"
  
- 	if (percpu_ref_init(&ctx->refs, io_ring_ctx_ref_free,
--			    PERCPU_REF_ALLOW_REINIT, GFP_KERNEL))
-+			    0, GFP_KERNEL))
- 		goto err;
- 
- 	ctx->flags = p->flags;
++#include <sys/time.h>
++#include <pthread.h>
++
+ extern unsigned long ticktime;
+ extern double time_elapsed;
+ extern unsigned long target_temp_user;
 -- 
 2.35.1
 

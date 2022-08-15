@@ -2,182 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C98593F6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 23:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8DC593F62
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 23:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245020AbiHOVUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 17:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
+        id S1345698AbiHOVV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 17:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344833AbiHOVLv (ORCPT
+        with ESMTP id S245363AbiHOVQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 17:11:51 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01470D9E81
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 12:19:27 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FJ4QcN029344;
-        Mon, 15 Aug 2022 19:19:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=9kw6DW4dbnyP4x+0xjrfE76jfPl7u7VgYSipMLdtUKE=;
- b=0R7k32Bfq2bfbLFR0kOIH7LFwuFqWZDnpWHyKhP4UXMagRx38Wn1KSWrR/mxj0S+e0gT
- azZ7drzuNCpsbX6hnJxxw3c+UP8FRDlwTC9mEPSunoqc3s0/VufZm1F71j68sqgIwhRD
- zs6rpjGGeAAK9NhvutfKo9HHbFQNxMu+G9A/hOdy+aXP9AJ8ym1oo8kMk4A2bGEf2wjY
- U4UA+L/yUw3jUaEcUAmCEq8O3Kc0+/AhiS3lnBUowlTkwWxDRh7szdrsjP+AImEt35xW
- iY5gEWN6+MVeVRu4xpo556WEEKnGd9X3v1IWAeV4imMR68/mqFgj7UdCMlqZwdO4kQEv ZQ== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hx2j0kuty-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 15 Aug 2022 19:19:08 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27FIj4Oo035023;
-        Mon, 15 Aug 2022 19:19:07 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2175.outbound.protection.outlook.com [104.47.57.175])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3hx2d7p6y1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 15 Aug 2022 19:19:07 +0000
+        Mon, 15 Aug 2022 17:16:54 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2059.outbound.protection.outlook.com [40.107.100.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FC0C39;
+        Mon, 15 Aug 2022 12:20:17 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DPQgrOLksi88jVxA2bHkGlWR3xiWY77jtB+kVGla3n4CiNk9pBEGQanHGXcDMNHDR9wi7V9AxGVDWCxsQ+OJIfUfnDnipO7z2imrSDegiG5n8gsC2ahxK8MUpZs4YDG0c4sn8hvToVfo5RB/ctqJSsFByOEMhSoiH/k6b60PouBzixT3UyoEbK+Qn9zfFjCAsOe6qFwOUg5ikKTAYhnpaIWgc7h1pdELqUcdh81nl2iN+fsxXv5Wt8GPVgGDWMK3QxiuJwCdJX+8b7jVgJsXWTHw1xbfC88dohJ+SJcYbf9IjdwafeJ+D55yQ0LWm/RlzPPIPjWpN9Ikuz0WxeqZtw==
+ b=hPjQUb6Wcj4m/qZ0Cufs7b2mhGrxBefoulurHH+Tgn6pmx/1olJN2RbRAvjE5ua4uGvRsm1MeFqt7wxZzcnkXSQIXqFrvI3tsoZ8YJBOxjxtcTR5fjVbbzYz3CDUTJcFBezzHHpec6Rzq3q4GwvJCfIh8HP0l7Vm+2u5PqRZt5IMlPR4X+QaXzOx7DZ8oVRUnkt67f8IuU3thfj+SBy9Fc6+IcG213oyELnIsFBEFvr6HpZW+o5pGYU7BpkKYayeYzs8bb+4kG41QeRoThDbsSUhirep1poPynNDBl4ViyW6PwhXWDE1Vj6IQAl5IgnJZgh0X+7qAg1j5R3SkSikew==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9kw6DW4dbnyP4x+0xjrfE76jfPl7u7VgYSipMLdtUKE=;
- b=SSfvnZuXf9KgGPLLVwEe5w+EYikDNwkGyhe30lOksuLy5NhzFObJq4WLOCIX2A3Rc/x9v8/moxff0JXuMzxlrYlDO36xEiu4ounAdvELcdJE4w+ymVOTpGKhIQwbA8SqlLC5kGPVPwTEMQQDD3j5jtu7WGd3wRHMT6xivKM9/8LJDG0Jno/iU5V0SKzUUDI4JuuxX0kr0ZDTMRb9pH872qEA8JBEjuKqDZzjeFPgdhcDmJSywLWMZRPuSuXffGka7Kc45Q1UG04SEbDr3JX+ucx1e2HH2IkBp0Ntm0EjUgPpmsfExtTkJxxP/YYfPksbv50131rvLpEY9DbsOTOYDg==
+ bh=5h2YnwujvVy8kzuQCOkWSEcAYpPib+52ebMhj/wSErg=;
+ b=N3V5HrlYtHRFT2qq6HbsmXSbU72eulNp8YHlRxFJuZAqyHHN3LNYamBWP5M7gGlMl32MmhbISuWVH5tSwluM0Z+7sDe521doOF27CPmXWowrL9Ca1Svsf0xhJIMH6Bn4q4vd3klUqsDHYOBh9KQ1h17W7Q/Ie8mZKNcEh6lL71uUIUpb/1sQ7aJIIo+twzJg/30xrqrqYSvP2ZXwIql7UceoKQrMT5oDBGbGtO60wAPvKo66mtf5hlVtwmJM+9RvrSJn/Y5FXEIyTdw/1xVKfwSF2RIhOdfqhZUaoSJCVQ2eJiyutS26CpFrfrPmPJ43HI3EatR4nRKuW+wi9TdeAQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9kw6DW4dbnyP4x+0xjrfE76jfPl7u7VgYSipMLdtUKE=;
- b=O+KaUylLAV845sxPlTSCfeLq7ZCTyHymQ8Bt0k+tY2XvjMrOfI6pe/LO31tnVsYXoqYBN/2Ki/p2ON8f/uIEVRnzorKxc3O6xbsqJehpzqVss549asP8yv+y1FqawQPrZfmlTgsOwymDmYJGR+FW4XRow99otxBZRkFx8Oa/pa4=
-Received: from SJ0PR10MB4576.namprd10.prod.outlook.com (2603:10b6:a03:2ae::5)
- by PH7PR10MB6177.namprd10.prod.outlook.com (2603:10b6:510:1f3::20) with
+ bh=5h2YnwujvVy8kzuQCOkWSEcAYpPib+52ebMhj/wSErg=;
+ b=4tNwT4LOqiSlD6cngpGYCqxvvx25Rs/KHJAUCBHKdu2YmQVoyaIMnBXlvnMQRod2hjLT3ymYLLH4w67FaeJjBEnZtMBJwjnPivhUdtlK0ko71CqhjzkXx0XDmm09yqxk8DxpTCw7A97w2Psi0usfEEnbG67oXBVa/pGkmHVFURo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by DM4PR12MB5865.namprd12.prod.outlook.com (2603:10b6:8:64::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.28; Mon, 15 Aug
- 2022 19:19:05 +0000
-Received: from SJ0PR10MB4576.namprd10.prod.outlook.com
- ([fe80::ec9c:8101:99b8:9d57]) by SJ0PR10MB4576.namprd10.prod.outlook.com
- ([fe80::ec9c:8101:99b8:9d57%6]) with mapi id 15.20.5525.010; Mon, 15 Aug 2022
- 19:19:05 +0000
-Message-ID: <aac4a43d-4999-1da5-a617-b512ae0b3982@oracle.com>
-Date:   Mon, 15 Aug 2022 12:19:01 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ 2022 19:20:13 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::4489:9a98:ef82:6c67]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::4489:9a98:ef82:6c67%3]) with mapi id 15.20.5504.027; Mon, 15 Aug 2022
+ 19:20:13 +0000
+Message-ID: <97b2a9a6-f08e-0212-fb93-a7158e188497@amd.com>
+Date:   Mon, 15 Aug 2022 14:20:10 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH 1/1] sched/fair: Fix inaccurate tally of ttwu_move_affine
+Subject: Re: [PATCH] thunderbolt: thunderbolt: add vendor's NVM formats
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, vincent.guittot@linaro.org,
-        juri.lelli@redhat.com, dietmar.eggemann@arm.com, mgorman@suse.de,
-        linux-kernel@vger.kernel.org,
-        Daniel Jordan <daniel.m.jordan@oracle.com>
-References: <20220810223313.386614-1-libo.chen@oracle.com>
- <YvonlUOgMbla6dSh@worktop.programming.kicks-ass.net>
-From:   Libo Chen <libo.chen@oracle.com>
-In-Reply-To: <YvonlUOgMbla6dSh@worktop.programming.kicks-ass.net>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+To:     Szuying Chen <chensiying21@gmail.com>, gregkh@linuxfoundation.org,
+        mika.westerberg@linux.intel.com, andreas.noever@gmail.com,
+        michael.jamet@intel.com, YehezkelShB@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Yd_Tseng@asmedia.com.tw, Chloe_Chen@asmedia.com.tw,
+        Richard_Hsu@asmedia.com.tw, Richard Hughes <rhughes@redhat.com>
+References: <20220815041145.35629-1-chensiying21@gmail.com>
+ <e49679b9-7b5a-5d97-c63f-a6004af0aaaa@amd.com>
+In-Reply-To: <e49679b9-7b5a-5d97-c63f-a6004af0aaaa@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN7PR04CA0176.namprd04.prod.outlook.com
- (2603:10b6:806:125::31) To SJ0PR10MB4576.namprd10.prod.outlook.com
- (2603:10b6:a03:2ae::5)
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH2PR20CA0019.namprd20.prod.outlook.com
+ (2603:10b6:610:58::29) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 60117c0b-1c85-4c2c-b38a-08da7ef304d1
-X-MS-TrafficTypeDiagnostic: PH7PR10MB6177:EE_
+X-MS-Office365-Filtering-Correlation-Id: d4b3f634-b35e-4a05-fd62-08da7ef32d79
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5865:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yEQtLM13ja3tzOl/AnzPMLVMSfxOs9Ifytomldn+ufjnflzsdd3KyGfvz7Zm3P4Rd6R/vRP14BDRPd2bRRmOCNFyzbWGqaAdz7eeu3af+TK6epCR89hJOKlO4Yw0du+U7bHezbvc227dyq9mk2WXH4CccXlRXplGm3fNSwCrnAsgyno2+8ZqOMYhrMSz6V9cAicb6WrjNA/kf/z9lcVH3442XHSfTQ01XrMMWgtx+qm4BTTaB4diUF0Sr6s7Jniy98aUFp6mEOl6E/5b9AerRTy0/Wr/L8eIgUhTGIMbwpBRvLAOOITrWCpJ26NdOogpY7bkyz83GZzEHJj0+ZT3HaoOBFshOGP3GroeYVN/R82Aspg+ZNhYrvOfjYRBon4HIp6zbKbW/PbVaBq3PatThlC6dDpjL2d1R+sCHYq27dWJdLDa3Com8pr04jF6l4fVyy3AMBGGGcU7psI8ciMkOPuqROg21TAKR+iiLAuRoDJi3nji3Ft9SjNKLwzb21l4Y7PCfsnU/fOy/NjrPUfRfuAmIdziKkzLj965nPU97T8/Mj10oaZBl9/Bc6zpM5r1GThA7EzTyzNTk831yLEXa3VhBLrBmqwLSTvbxMQtaLE5EZxdu+fTLJqfxMupbhb03e2wzxlrYnGdE68w0IcAf9Zx6YV0pQympgn0bY+Lr1Mx6e1p1FQq3fs+ZQU9enswIrYG51AF7Lbr5ZDVxCWd+vfxD/zSRit4QyknMmWB4W7+MHIVG143laTsgZcZsZ/hd3CpbvM91JealiJLFMCdC8LkH98WCwDFL3viaXg0Yql6u3b0z1Ey7o/LBq7cQmkRhES5rEszylK+jWw0OLyqEQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB4576.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(366004)(39860400002)(346002)(396003)(136003)(66946007)(66556008)(38100700002)(5660300002)(4326008)(8676002)(66476007)(186003)(107886003)(2616005)(478600001)(52116002)(53546011)(41300700001)(44832011)(6512007)(6486002)(6506007)(6916009)(6666004)(83380400001)(316002)(36756003)(8936002)(86362001)(2906002)(31696002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: U9gJS2e2iZo3NS+os+gAUESlgoRSaA2PlQZZUGepfcMy0Bzi9EGrkiniUCCTi+R/LIgEeON0d+MRlZTMrfEk9bv2CxwztNgA0SDA6sdDOCbHeDlvv1BrDq9EotyUnrbzp9F7AmtPd209BniKZYfl9RZV4VvFo/8aGqwyUP4Wp66cm5lYPlsQY1eLxS69ul93qgXo+aJ/BMhp2IXIu4GgpjZRQgX2dg1/VjtgaV0JaBc6M5A/duUg3OZhfuBnmcWuKgMt41OBB7BtOSY4BnjmIRra3h0yzYJViO0k9BAQY1AcmHK8sBBaEgTpvY982lzlmsMl0JUmBsl0Qs+W27kUeWBLl96JTrDM3kzbRgdh9iHBIu6EH/S19ahAogvZZWrLfSApg58R7WHtwCSWLE5pZJny7YLhyAvjSY4cG6RhfKjcCKDvoesF7YuJ/o9DTjUvLXnAMfJEvQQDFTimTalzkXrPDP5WokrBfRi3jLHhbwo9fY5guKkDSEw9mbIMLnrWVcA2I8Ub6xzQC0TZlBNoFHf4t5O7Tist/hjn/Nwy6VNDzC6WOAtI4BvrA7cNljcw90FGF1B+w4eppA0mjEVKsB4U3dtgiyWwRKCSWT0TCNiSpcTZ5KT0jab2jCKALskbjaCLgALRi9ZV67K23rz5eXxoqa4xiepxgX+Rfc+uYNmCt7rpD9HNaHIPEVZjud2omgOm2Dxq5oKVExZVUjLlHPNNwuFtq7BXcJ63s9SPK2NuzZC0Ot/g08pwy7jXParV2En4y+c0ezQuro4oTb4a4H15SRryIRpmhdF85CLIEgS5lcHIq2D4x03OkGihswKzYZYKh5BWrepYJxte8ds9GQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(136003)(396003)(346002)(39860400002)(376002)(5660300002)(7416002)(30864003)(36756003)(31686004)(66476007)(66946007)(66556008)(316002)(41300700001)(86362001)(31696002)(83380400001)(8676002)(4326008)(6512007)(53546011)(38100700002)(6486002)(478600001)(26005)(2906002)(8936002)(6506007)(2616005)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VDlXTDY1b0V1QVRQYWhLZVo3N0ROeU9YOHRjYml1UXRsRmdWb08wL2IzQncx?=
- =?utf-8?B?cllZVS9UL0Z0SXF6dlJ4VkxuVThrVDRVUFVrbk0rNWRLdlBDTnFLYVU5S2Jo?=
- =?utf-8?B?cXpCQ1dBWWJzZHRPeDlML1Y1RVFlTDczYy91dThQMERBQi9pYlV1MXZUWWM5?=
- =?utf-8?B?eXpPRmxIbi92a3V3WHFoUDVycGFnYzJjTkJ6dTBVdTZDY3RHTWIzYVduT2lG?=
- =?utf-8?B?YVM0VDZhWkkzV3UrM2RKbGE2ZGpaallPcmRMS1hkMjgydW9XVFJhYWhRVTRx?=
- =?utf-8?B?eHROU0t1WHJqZnprblBDTitld2srdDg5bFB2RlE1cUsvMHRQb01XdVhyMjRP?=
- =?utf-8?B?M0JrZzFKUGZHdEV2MkRGdWlXM3U1aFFXa2dYWFBWS3hLS1JLcVBYbHdSRDBQ?=
- =?utf-8?B?dENoL25MaDJ1Q05LL1A0N2krVGFjcXdmY1Zhb0psaXhKMmxtcXB3R2s5RFg1?=
- =?utf-8?B?Mm1DbnExYW94bnpHTmtycmU3SWJkdlJVQWkwd2pQU0FNMEcyU2JGb1RPYWwx?=
- =?utf-8?B?eVh4Z25zQS9EQ3BzcnRYbE4zdCthUTNQWWxMeEdVbnpvQkFteUE0aWFtMGhJ?=
- =?utf-8?B?Q1gyQVJUVjVvMVdNNnZBT2tMOUlZb3ZsSnVJSC9JSDArd3U1L0pLN2NNZ3Vo?=
- =?utf-8?B?Wk9PTG42SjRESGVQQmxTVzdvbVlOSG9ScTZzRjY2eVVORk52RlFteGR4bEVZ?=
- =?utf-8?B?djJmS20zUlk4elNYdHZzTkJUc2xuNndvT1IrWmJHblNNQ1NPMkFuRzJ4Vkp0?=
- =?utf-8?B?ZmJSUnRsTzY3Ky81UVMweHhVVW9vTjU2b245d1pvcXNSYVN4TXNoZkJ4TG9y?=
- =?utf-8?B?MFJSc250NWFaV0pXTXVha3g1cXJMWTNTeUdrN1dGcmhTMHVCVlBGd1NUTlI3?=
- =?utf-8?B?dFdGZFRjeGI2eXd1b0VoREg3ZjBrNzFla1lmdU1mTEdIaWZaQWlLeTh2Uyts?=
- =?utf-8?B?UmcrUXZTUDc0bHVPUU8wZGdjbG1pMW1qUndtZTNIcEdVSmdIUTR4Vnh5KzBr?=
- =?utf-8?B?M3A4bW5URWQ2ZUFaUlB6c3YzalZsRklWN21GRWJucVlnaDN4cFJCcEJmTXNr?=
- =?utf-8?B?emVnTkp3UThyK1QrQzhLMXFFYkVNTTJNQnd0UFhGalEzZlVkM3JBbmM4R2wy?=
- =?utf-8?B?N3I3cGxaeHB0aFIwbnk3TUZxeG5uYVdBOGdBbVRwMDZ5cnRpS29mbmhRUU1u?=
- =?utf-8?B?Wkx4UTNyUVNPbzRBVTZOYUo3Sm1kS1gvR2c5blE2NS80UXVIakQzZjFKQUJN?=
- =?utf-8?B?V3hCSm9wRTI1b296NmNHaXdwQjd5OHo3K0NnQTJVOXhJNnJIa0tsbWx0dytT?=
- =?utf-8?B?NUhiYUVtWVZURkVrZ1BpVjZhdUNncGtWQnVvTGNtSmxKTDl2eFdzWnd1WXZK?=
- =?utf-8?B?cnJ4Z1NwNnloZkZEaWRwcEV2SjIwbDRUaExYR0NraGZvWEp4RExxNTdESzcv?=
- =?utf-8?B?T2hJb2JsV3kvcWNmL0llZUlWcHcyRlA5NlR1WUNLOEs3R0ZHb3h3VTQ3YkFZ?=
- =?utf-8?B?RHg3UzFKQWoxanVCbU14Sk5NS3VVU0VFSFV6UEpzaHRtVm9OeGxaWTlDN0xY?=
- =?utf-8?B?aTRRcDZFeWgxcnVXUk9semZ6MU44VXRQbUFRaVNuM0JQNE1jSW1ya2pQUDNv?=
- =?utf-8?B?VGxacVFLSmp4Nkx3WnhsUVFNbXp5aEl4MEN6K3lLcUdJL1hJdFJVTkFWbXhM?=
- =?utf-8?B?MjZIQitBd0xPWUpPd2Y4MDF3K2tJb1ErYUp3cjVMR2RzZ01lY1c4eG1IZG1x?=
- =?utf-8?B?VGJ6eUd3OExPUVBaUEllV0RTRmNvaGtBTk9ob2xKbm12a0NwM2c3SmcrWUpZ?=
- =?utf-8?B?RW1jNlEwSHV5K05HNVQ0YWNsM0xSNVdma1llaDVYMk5HRjhQOG1RWTBDdy83?=
- =?utf-8?B?ZlhBNGRxZjg1L09ocldNa0F5TWJmSGZKUHRVamhSNll0cGo4anFhdTI1Q1Qw?=
- =?utf-8?B?bUNnbUp6SnJ1M3pkQldQVHlYbzNFQW5ya0t3Nkx5NWtvUlQ2SDVzZURPdHAz?=
- =?utf-8?B?elc4amt1RkN2NjZDNXVISkRvbGEvUDZkUS9TcElwZ3ZDK29rc3ZoSUNpZkNh?=
- =?utf-8?B?QjJZZjdSa0hlMnRsQmZSZnB1VnpaM0RGWHdmaG1Nb0VBYkxPYU1wMkU3NndL?=
- =?utf-8?B?MG9jQU43MWFGSmE1YjBVVFFicWZEdjhlc2F4YzN4WmovYTBxYzJDWnp0UXNO?=
- =?utf-8?Q?buH8ga6AZqgVmyfUO2746ZI=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?L0tNVGNFM0xDOXY1MU8vTGkxeitQZVpDK1JmMHhxRkpiejROSWgydlhoYXhC?=
- =?utf-8?B?OC84eC9DaDNiSU95eXcrNmtZcjZBN1VsR1B6bG1zSW9qdlNrV2NZRGwrODY0?=
- =?utf-8?B?M3NwbkVlUkpVSmxydlVnZzRQQTU3UCtuSUVidnJZN3MrdnJ4b2ZvaE80YlFQ?=
- =?utf-8?B?N2tqKzJTbUhvTERGbG1DNWxIYU42MUZSWFhZNVNjckY3K09NU3N4VzJUaHBX?=
- =?utf-8?B?SHhFZnJDOXYvRWpmZzFBbE1vOUQ3NTBkWDM0YWliUk9lY2NJRTJKOHpjU3pU?=
- =?utf-8?B?dDJGaE1nSXJ0RVVHWnNMY0dTODBXOWx6TmhHTDVXZmpXU3daT2JmTnYzR3dW?=
- =?utf-8?B?OVVUdllxQURqeUp5bnFacGJYaFNwUldPcVdnZWxNYUdUcEtJK3NFUklucktU?=
- =?utf-8?B?Y3lZaW1sa3BGd1dkNC9PNTRzeDJUUXBPUjVENUN5YXlmSFdOZDU0dmNxMW5C?=
- =?utf-8?B?d1N5K0gvQ0pJRTh1UGhvRVFNWklpL2tVbVQvNXFrZlZST09UT05JaFFSbEsz?=
- =?utf-8?B?NktZMTQzNEtheTlDeUxsNkFtdEZmYllBZHg1Z21OV0ZVVm1PbjNYSTBVdDdy?=
- =?utf-8?B?ZVE3OHE4ZUVzMkY5ZW1hQnN0aDFLK1NrQzRWU3U2dWZ2MUQveHJJbWYwU1pD?=
- =?utf-8?B?UTE5bTNzS1YvOUpSR2pNVERFemlhNmEzc0tFUHJXRjFLR2JrNnFCTjdOS0xj?=
- =?utf-8?B?WTRpdGErSXZHWEs3MERRbndEeVJieUhmS2dNTk5YWThvQ3NkdUtkS0FpZklz?=
- =?utf-8?B?dXFTc0dqSGVFNzdMT2d0Q2NMMGdocW82MWtac2NIcDdidytrd012U0p4ZXJF?=
- =?utf-8?B?TDJjOWRVVTJIUnM2WEtKNGpkYU94cW92WWRNYm5NZWt6UElKaVIzRkVVc0Zx?=
- =?utf-8?B?SnFrKzBxa2drTHBRZ3dHSzVLWFZUbjdaUlpmUEhHNElOZHo5NEJVNXlpUUxR?=
- =?utf-8?B?S3lpVFgrZUkvU2RleENUelRaUytpbnFOQnFqbFpoME92TVd4M0NRM1JIY29S?=
- =?utf-8?B?MS9BOWxiQUQwRVVrQXdMSFR3SUVDUlMrNGZ5MmlYaUlRSnlXMDdYVk11MnN1?=
- =?utf-8?B?aXB2MWZ4cW5tQlU5UzMzVGUzT1NaU0pUSkhUUXdMMDU0clJibmdrUi9oQ1lY?=
- =?utf-8?B?VzBsSGRURi8xQW1NSUVUcmI2OWc5aUJHSEtST3BKU0FDU1g2UDROKzh3dGxz?=
- =?utf-8?B?M3hVZnJWOVNSZDE2aFc1K0xVaVdTSzQ5aU5GaFRBYk9JSFhab2hudWI1aVNt?=
- =?utf-8?B?cnV4bThGMDM0dERLZ0VXK1kva1Q3aDF4KzVTU0NpT0QvbC82UDlHS09XNFp3?=
- =?utf-8?B?M2pHMnptWjFVMXdhcU4vR1hwQ2NaeUYxWlB0WS9PVHZPWStYSVJEYWY0SGVx?=
- =?utf-8?B?Ym1kUkZNL0VJWGhhZzZWMm94Z3pyY081bjAwYUYrYzVmejZ4cVlFQWF2V0Zn?=
- =?utf-8?Q?EHC1zM29?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 60117c0b-1c85-4c2c-b38a-08da7ef304d1
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB4576.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZVlxVU9tUVV0MjN2Wm9BcnpYdjdLZmlnMG1sQjlqSVkyQWxFN1lKMG9GeXdI?=
+ =?utf-8?B?MmdYTHZ1VUphTW1VdjdFU3dlNVhQa2EvT3ErQWRDR25vTzkwYmMrT04vV3Ry?=
+ =?utf-8?B?c21pK00zT0xEdHhKQS9mSE1HUjRGYW16bjR3MWpadjhoelFFRjBVaGxnSXc2?=
+ =?utf-8?B?bmpBclkzUE9ROUIwNnE1M3pVVmtURFh3bC96YXU1eGJ2SE85QWhHUG9MOVFP?=
+ =?utf-8?B?OFk2eUhxNE0vbVlWSXRhdjdSWnhyQ0ZXZ0FXdmhRWWs3Q2czWisvU3ZMcmtV?=
+ =?utf-8?B?a3VqcElKL3p6Sjh0WEJnRjAwRFZQekFLSEZTSFhVV1BvUVV6NUlqZGwwT3RN?=
+ =?utf-8?B?OGlLS0lxNkZXRjk4cjFOME5FSytJR3lob3FUcFh2dnhuNURkRXhibmgwTHdr?=
+ =?utf-8?B?SnZFQ1hlendESTJHa0ttRjNtdzc4Q3lmNXJpQW12Mjd2STB5d2dTdVBoVDlq?=
+ =?utf-8?B?UWFTT05reHpwTjhVOC9MU0YwR3hzTW4wZDVSMjRvUUpNVFAzaitJbHhMWUxz?=
+ =?utf-8?B?a3Baa2t2UVBTdGdCejg1OVJWL0FsNGVESTg3VzJGT1dESXZ6djZNalNwU0c5?=
+ =?utf-8?B?QjNTaDY4SlRsa2VERDdVenZYejN4QXRiVE53S2JwVmZKdzlObUNmN1YwNVFy?=
+ =?utf-8?B?MmZFOGs5d1ZlanJTRTZqMnA5OTFFRzN0Z0M0NEhrQVVST0hGS0lVN1NTL2Fq?=
+ =?utf-8?B?SWE1ZENzdHFnSmpyR0Vyc0ZJc2NtSDBuUHBHekFZUkdoL1cyYkhmTVFBTENK?=
+ =?utf-8?B?RFByS0Z0d0VFRzZJT0YrcEJISWhJbWJVRzdXVWZqMkdwcXlYaFpLUWY1YXp0?=
+ =?utf-8?B?SmhOVjQzRm1Gem5mWklmU1JtUnJnMk1uWUVBYjZYMWp0YTgvbUNFblZJZ0lB?=
+ =?utf-8?B?dXFIZFJDeTVjbWFmSlE0RUhIcGJqeHNaQkY1NWthbDJ1SlA3ZGNYK1hlYTBq?=
+ =?utf-8?B?bzd0Q21OSG1CUFhtWUE2KzM0WFpvSmVSZ2syaHgzWHVCcmdYL3BHeUJPQ3lU?=
+ =?utf-8?B?NUhkcFl1RTJIVFhPN3N5VGloaWorNGZQeUpwUXlHTllUTDZ1dVdYMzZjcTJH?=
+ =?utf-8?B?VDN5K0ptNHJWVEVqMTg0TWRKdzg5SHNLWW1PcitUOGpzcExzUmRqNU0zYWxw?=
+ =?utf-8?B?NWNtb0hKd0J0dmtBM2VRWk93cjBlaTk1YlpJVHB0UnQxMFlHdXMrSkRaODRI?=
+ =?utf-8?B?Um10ZUdjUkNIcG9EWUlIQ0trTjVzUlJZMm82V01ZY1JoZGxWa1BtbTF2UXhM?=
+ =?utf-8?B?dkdkbHRrRnpHSTF3ek9kanBLUkRkRVNrQnpmRGFtYnFwTEZrSVIyWk9NcGZl?=
+ =?utf-8?B?ampKUk1BTU45SlJnTjl0dUc4TGZ4L1ZlMW5ZRjdOR0N3eTRUMElnMy94RnMw?=
+ =?utf-8?B?L21ybkE3b0R6RXlMZ21EaElrYkVBNkdyeExsT3kzVnJxaDhWdDlhTjdqdzNJ?=
+ =?utf-8?B?ZkNWWHczdEd3Ui95L1RNQ0Q4ckNLdVZUMkdYb1REVnNMdUxjRHBOR3Izc2k5?=
+ =?utf-8?B?YlREV0Vhc2RSNllpMHcxRTRlaFNUL0NiTUQya252ZjRya3VrUWdheWtBNTZE?=
+ =?utf-8?B?UFVwUk5Xdk1QKy9rTTBLZVR2NVlwdCs4alNjZHVCSVk1NGNDL1NiV3NldjBk?=
+ =?utf-8?B?Yzh0ZVNWYlNuMGs4S29CeitSN2NsRjhyUlR6K1oyY1FybURQWUc1QXRZcExh?=
+ =?utf-8?B?alU3VXVRTjcrdk8wYUp5SG9FQmNCYjlqTU11M3lOWEFuZWlhdkZQNk1abmkv?=
+ =?utf-8?B?QjZsUjluVnBxQUZLTlE3ZFBIb0IrRTVaZlVGZ0dCV1Ryc2RGcEFTcmtoQWc0?=
+ =?utf-8?B?aE5PeVdIaHlmZUw2Sk5oR1VDUVE2Z3FMRkpPQzJqWmZxRlpham84N3dLMWcw?=
+ =?utf-8?B?S3BZLy9qMVhqdEpqbHozMXNBT3Y0MGhiVFAwSmk4eU42akU0ZXM2eW45ZEdM?=
+ =?utf-8?B?dTNUOHlPeVBCM1NrbEt0VEMxZVkrWnZCbFV2VW03c0ZhVWw5MHlLMVFlMExP?=
+ =?utf-8?B?TkhjMmVqelI5QmRGMVVuSE5HODBXejVucXpoaXR1WklWMnV2MFp1L21ZSkty?=
+ =?utf-8?B?NUljMWVBcHY2bWdSaGxQSUEvUVFqM210WnNVNlN5bFhveG5EOCszSHA2R2tY?=
+ =?utf-8?Q?x9C/38ov07fgyI4mDvgtTjuG9?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d4b3f634-b35e-4a05-fd62-08da7ef32d79
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2022 19:19:05.1069
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2022 19:20:13.2718
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DJJWEJokAwvFezssPJuCClLDMP7ntUSgIH8YYOsuoS2KFMj87jG8L5XPWthbu1Jg0uqTK1IGmJg137hH5dk8qA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6177
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 suspectscore=0
- malwarescore=0 phishscore=0 bulkscore=0 spamscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208150073
-X-Proofpoint-ORIG-GUID: -mRl_wcgF48clhsVPr6oaVdEC-goWKu2
-X-Proofpoint-GUID: -mRl_wcgF48clhsVPr6oaVdEC-goWKu2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-MS-Exchange-CrossTenant-UserPrincipalName: QlNZ+RQauXF+W3MvqBUewj0sPq6REbrhvfSaWvjYW43QHY0EUzk+o2jUWrEMCoaTC28U7CvokqhSWGdqKfH73g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5865
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -185,44 +128,395 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/15/22 04:01, Peter Zijlstra wrote:
-> On Wed, Aug 10, 2022 at 03:33:13PM -0700, Libo Chen wrote:
->> There are scenarios where non-affine wakeups are incorrectly counted as
->> affine wakeups by schedstats.
+On 8/15/2022 12:28, Limonciello, Mario wrote:
+> +hughsie for additional comments
+> 
+> Various inline comments below.
+> 
+> On 8/14/2022 23:11, Szuying Chen wrote:
+>> From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
 >>
->> When wake_affine_idle() returns prev_cpu which doesn't equal to
->> nr_cpumask_bits, it will slip through the check: target == nr_cpumask_bits
->> in wake_affine() and be counted as if target == this_cpu in schedstats.
+>> The patch add tb_nvm_validate() contain an array that has functions
+>> pointers to asmedia_nvm_validate().
+>> And asmedia_nvm_validate() that recognize supported vendor works in one
+>> of the following cases:
+>> Case nvm_upgrade: enable nvm's attribute by setting no_nvm_upgrade
+>> flag to create nvm_authenticate file node.
+>> Case nvm_add:add active/non-active NVM devices.
+>> Case nvm_write:update firmware to non-ative NVM device.
 >>
->> Replace target == nr_cpumask_bits with target != this_cpu to make sure
->> affine wakeups are accurately tallied.
+>> Our patches were through checkpatch.pl. But the file(switch.c.)
+>> have existed 13 warning before we patch it.
+> 
+> Please feel free to add other patches to the series to clean up 
+> warnings.  Just because you didn't introduce them doesn't mean you can't 
+> fix them =)
+> 
 >>
->> Fixes: 806486c377e33 (sched/fair: Do not migrate if the prev_cpu is idle)
->> Suggested-by: Daniel Jordan <daniel.m.jordan@oracle.com>
->> Signed-off-by: Libo Chen <libo.chen@oracle.com>
+>> Signed-off-by: Szuying Chen <Chloe_Chen@asmedia.com.tw>
 >> ---
->>   kernel/sched/fair.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>   drivers/thunderbolt/nvm.c    | 147 +++++++++++++++++++++++++++++++++++
+>>   drivers/thunderbolt/switch.c |  17 ++++
+>>   drivers/thunderbolt/tb.h     |  18 +++++
+>>   3 files changed, 182 insertions(+)
+
+When you submit patches to the mailing list, you'll want to do two 
+things I haven't noticed you doing:
+
+1) When you create the patch with git format-patch use the 
+"--subject-prefix" option to set your subject prefix.  I see that your 
+patch has been submitted at least 3 times but Lore groups all 3 
+submissions together.
+
+The first should have been [PATCH], next should have been [PATCH v2], 
+next [PATCH v3].
+
+So I think technically your next submission SHOULD be [PATCH v4]
+
+2) You should add below the --- comments about what changed from last 
+submission.  This helps people have reviewed it in the past be able to 
+better focus on what they should look most closely at.
+It should be something like this:
+
+```
+.
+.
+.
+Signed-off-by: User Name <user@name.com>
+---
+
+changes from v3->v4:
+- Foo the bar
+
+Note: The three previous submissions accidentally used the same subject 
+prefix.  This changelog is relative to the most recent submission at $URL.
+
+    drivers/thunderbolt/nvm.c    | 147
+.
+.
+.
+
+```
+
 >>
->> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->> index da388657d5ac..b179da4f8105 100644
->> --- a/kernel/sched/fair.c
->> +++ b/kernel/sched/fair.c
->> @@ -6114,7 +6114,7 @@ static int wake_affine(struct sched_domain *sd, struct task_struct *p,
->>   		target = wake_affine_weight(sd, p, this_cpu, prev_cpu, sync);
->>   
->>   	schedstat_inc(p->stats.nr_wakeups_affine_attempts);
->> -	if (target == nr_cpumask_bits)
->> +	if (target != this_cpu)
->>   		return prev_cpu;
->>   
->>   	schedstat_inc(sd->ttwu_move_affine);
-> This not only changes the accounting but also the placement, no?
-No, it should only change the accounting. wake_affine() still returns 
-prev_cpu if target equals to prev_cpu or nr_cpumask_bits, the same 
-behavior as before.
+>> diff --git a/drivers/thunderbolt/nvm.c b/drivers/thunderbolt/nvm.c
+>> index b3f310389378..6db2034ec8e5 100644
+>> --- a/drivers/thunderbolt/nvm.c
+>> +++ b/drivers/thunderbolt/nvm.c
+>> @@ -9,11 +9,158 @@
+>>   #include <linux/idr.h>
+>>   #include <linux/slab.h>
+>>   #include <linux/vmalloc.h>
+>> +#include <linux/pm_runtime.h>
+>>
+>>   #include "tb.h"
+>>
+>>   static DEFINE_IDA(nvm_ida);
+>>
+>> +static int tb_switch_nvm_read(void *priv, unsigned int offset, void 
+>> *val,
+>> +                  size_t bytes)
+>> +{
+>> +    struct tb_nvm *nvm = priv;
+>> +    struct tb_switch *sw = tb_to_switch(nvm->dev);
+>> +    int ret;
+>> +
+>> +    pm_runtime_get_sync(&sw->dev);
+>> +    if (!mutex_trylock(&sw->tb->lock)) {
+>> +        ret = restart_syscall();
+>> +        goto out;
+>> +    }
+>> +    ret = usb4_switch_nvm_read(sw, offset, val, bytes);
+>> +    mutex_unlock(&sw->tb->lock);
+>> +
+>> +out:
+>> +    pm_runtime_mark_last_busy(&sw->dev);
+>> +    pm_runtime_put_autosuspend(&sw->dev);
+>> +
+>> +    return ret;
+>> +}
+>> +
+>> +static int tb_switch_nvm_write(void *priv, unsigned int offset, void 
+>> *val,
+>> +                   size_t bytes)
+>> +{
+>> +    struct tb_nvm *nvm = priv;
+>> +    struct tb_switch *sw = tb_to_switch(nvm->dev);
+>> +    int ret;
+>> +
+>> +    if (!mutex_trylock(&sw->tb->lock))
+>> +        return restart_syscall();
+>> +
+>> +    /*
+>> +     * Since writing the NVM image might require some special steps,
+>> +     * for example when CSS headers are written, we cache the image
+>> +     * locally here and handle the special cases when the user asks
+>> +     * us to authenticate the image.
+>> +     */
+>> +    ret = tb_nvm_write_buf(nvm, offset, val, bytes);
+>> +    mutex_unlock(&sw->tb->lock);
+>> +
+>> +    return ret;
+>> +}
+>> +
+>> +static int asmedia_nvm_validate(struct tb_switch *sw, unsigned int mode)
+>> +{
+>> +    struct tb_nvm *nvm;
+>> +    u32 val;
+>> +    u32 nvm_size;
+>> +    int ret = 0;
+>> +    unsigned int image_size;
+>> +    const u8 *buf = sw->nvm->buf;
+>> +
+>> +    switch (mode) {
+>> +    case nvm_upgrade:
+>> +        if (sw->no_nvm_upgrade)
+>> +            sw->no_nvm_upgrade = false;
+>> +
+>> +        break;
+>> +
+>> +    case nvm_add:
+>> +        nvm = tb_nvm_alloc(&sw->dev);
+>> +        if (IS_ERR(nvm)) {
+>> +            ret = PTR_ERR(nvm);
+>> +            break;
+>> +        }
+>> +
+>> +        ret = usb4_switch_nvm_read(sw, NVM_Date, &val, sizeof(val));
+>> +        if (ret)
+>> +            break;
+>> +
+>> +        nvm->nvm_asm.date = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) 
+>> << 0x8 | (u8)(val >> 0x10));
+>> +        ret = usb4_switch_nvm_read(sw, NVM_CUSTOMER_ID, &val, 
+>> sizeof(val));
+>> +        if (ret)
+>> +            break;
+>> +
+>> +        nvm->nvm_asm.customerID = (((u8)val) << 0x8 | ((u8)(val >> 
+>> 0x8)));
+>> +        nvm->nvm_asm.version = (u8)(val >> 0x10);
+>> +        nvm_size = SZ_512K;
+>> +        ret = tb_nvm_add_active(nvm, nvm_size, tb_switch_nvm_read);
+>> +        if (ret)
+>> +            break;
+>> +
+>> +        ret = tb_nvm_add_non_active(nvm, NVM_MAX_SIZE, 
+>> tb_switch_nvm_write);
+>> +        if (ret)
+>> +            break;
+>> +
+>> +        sw->nvm = nvm;
+>> +        break;
+>> +
+>> +    case nvm_write:
+>> +        if (!buf) {
+>> +            ret = -EINVAL;
+>> +            break;
+>> +        }
+>> +        image_size = sw->nvm->buf_data_size;
+>> +        if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE) {
+>> +            ret = -EINVAL;
+>> +            break;
+>> +        }
+>> +        ret = usb4_switch_nvm_write(sw, 0, buf, image_size);
+>> +        if (!ret)
+>> +            sw->nvm->flushed = true;
+>> +
+>> +        break;
+>> +
+>> +    default:
+>> +        break;
+>> +    }
+>> +
+>> +    if ((mode == nvm_add) && (ret != 0))
+>> +        tb_nvm_free(sw->nvm);
+>> +
+>> +    return ret;
+>> +}
+>> +
+>> +struct tb_nvm_id {
+>> +    u16 hw_vendor_id;
+>> +    int (*validate)(struct tb_switch *sw, unsigned int handle);
+>> +};
+>> +
+>> +static const struct tb_nvm_id tb_nvm_vendors[] = {
+>> +    /* ASMedia software CM firmware upgrade */
+>> +    { 0x174c, asmedia_nvm_validate },
+>> +};
+>> +
+>> +/**
+>> + * tb_nvm_vendor_handle() - support vendor's NVM format
+>> + * @sw: Thunderbolt switch
+>> + * @handle: 0:NvmUpgradeSuppport, 1:NvmAdd, 2:NvmWrite
+>> + */
+>> +int tb_nvm_validate(struct tb_switch *sw, unsigned int mode)
+>> +{
+>> +    int res, i;
+>> +
+>> +    for (i = 0; i < ARRAY_SIZE(tb_nvm_vendors); i++) {
+>> +        const struct tb_nvm_id *id = &tb_nvm_vendors[i];
+>> +
+>> +        if (id->hw_vendor_id && id->hw_vendor_id != 
+>> sw->config.vendor_id)
+>> +            continue;
+>> +
+>> +         res = id->validate(sw, mode);
+>> +    }
+>> +    return res;
+>> +}
+>> +
+>>   /**
+>>    * tb_nvm_alloc() - Allocate new NVM structure
+>>    * @dev: Device owning the NVM
+>> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+>> index 244f8cd38b25..352e64f3dc92 100644
+>> --- a/drivers/thunderbolt/switch.c
+>> +++ b/drivers/thunderbolt/switch.c
+>> @@ -114,6 +114,14 @@ static int nvm_validate_and_write(struct 
+>> tb_switch *sw)
+>>       if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE)
+>>           return -EINVAL;
+>>
+>> +    /*
+>> +     * Vendor's nvm write. If the image has been flushed to the
+>> +     * storage are, nvm write is complete.
+>> +     */
+>> +    ret = tb_nvm_validate(sw, nvm_write);
+>> +    if (sw->nvm->flushed)
+>> +        return ret;
+>> +
+>>       /*
+>>        * FARB pointer must point inside the image and must at least
+>>        * contain parts of the digital section we will be reading here.
+>> @@ -390,6 +398,11 @@ static int tb_switch_nvm_add(struct tb_switch *sw)
+>>       if (!nvm_readable(sw))
+>>           return 0;
+>>
+>> +    /* Vendor's NVM formats add */
+>> +    ret = tb_nvm_validate(sw, nvm_add);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>>       /*
+>>        * The NVM format of non-Intel hardware is not known so
+>>        * currently restrict NVM upgrade for Intel hardware. We may
+> 
+> This comment should be adjusted as after your patch lands both Intel and 
+> ASMedia formats are known and included.
+> 
+>> @@ -1953,6 +1966,9 @@ static ssize_t nvm_version_show(struct device *dev,
+>>           ret = -ENODATA;
+>>       else if (!sw->nvm)
+>>           ret = -EAGAIN;
+>> +    /*ASMedia NVM version show format xxxxxx_xxxx_xx */
+>> +    else if (sw->config.vendor_id == 0x174C)
+>> +        ret = sprintf(buf, "%06x_%04x_%02x\n", sw->nvm->nvm_asm.date, 
+>> sw->nvm->nvm_asm.customerID, sw->nvm->nvm_asm.version);
+> 
+> Are you hard-pressed to use this specific format for the string?  I feel 
+> like it's overloading the definition of a version string quite a bit.
+> 
+> I also worry that userspace has come to expect "major.minor" for this 
+> and making your string use 2 decimals may mean more deviations for 
+> userspace too.
+> 
+> Perhaps should you just export it instead as:
+> 
+> "%02x.%06x", sw->nvm->nvm_asm.version, sw->nvm->nvm_asm.date
+> 
+> And move the customer ID into another sysfs file?  I would think this 
+> fits pretty well with the existing "vendor" or "device" sysfs file 
+> depending upon it's meaning.
+> 
+> If you do end up having a strong reason for deviating the version string 
+> format, then I think you should document both what the Intel format is 
+> (major.minor) and your format explicitly in 
+> Documentation/admin-guide/thunderbolt.rst.
+> 
+>>       else
+>>           ret = sprintf(buf, "%x.%x\n", sw->nvm->major, sw->nvm->minor);
+>>
+>> @@ -2860,6 +2876,7 @@ int tb_switch_add(struct tb_switch *sw)
+>>           tb_sw_dbg(sw, "uid: %#llx\n", sw->uid);
+>>
+>>           tb_check_quirks(sw);
+>> +        tb_nvm_validate(sw, nvm_upgrade);
+>>
+>>           ret = tb_switch_set_uuid(sw);
+>>           if (ret) {
+>> diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+>> index 5db76de40cc1..7f20f10352d9 100644
+>> --- a/drivers/thunderbolt/tb.h
+>> +++ b/drivers/thunderbolt/tb.h
+>> @@ -28,6 +28,22 @@
+>>   #define NVM_VERSION        0x08
+>>   #define NVM_FLASH_SIZE        0x45
+>>
+>> +/* ASMedia specific NVM offsets */
+>> +#define NVM_Date    0x1c
+>> +#define NVM_CUSTOMER_ID    0x28
+>> +
+>> +/* ASMedia specific validation mode */
+>> +#define nvm_upgrade 0
+>> +#define nvm_add 1
+>> +#define nvm_write 2
+> 
+> As all of these values are ASMedia specific, I think the #defines should 
+> have ASMEDIA in the name.  I know Greg mentioned to roll into an enum, 
+> and I think you still can but make it something like:
+> 
+> #define ASMEDIA_NVM_DATE    0x1c
+> #define ASMEDIA_NVM_CUSTOMER_ID    0x28
+> enum asmeda_nvm_ops {
+>      ASMEDIA_NVM_UPGRADE = 0,
+>      ASMEDIA_NVM_ADD = 1,
+>      ASMEDIA_NVM_WRITE = 2,
+> };
+> 
+>> +
+>> +struct nvm_asmedia {
+>> +    u32 date;
+>> +    u32 customerID:16;
+>> +    u32 version:8;
+>> +    u32 reserved:8;
+>> +};
+>> +
+>>   /**
+>>    * struct tb_nvm - Structure holding NVM information
+>>    * @dev: Owner of the NVM
+>> @@ -57,6 +73,7 @@ struct tb_nvm {
+>>       size_t buf_data_size;
+>>       bool authenticating;
+>>       bool flushed;
+>> +    struct nvm_asmedia nvm_asm;
+> 
+> Furthermore if you follow my suggestion on how to encode the version you 
+> can re-use the 'major' and 'minor' members from this struct and don't 
+> need to deviate in any way from it for your data.
+> 
+> * Major would map to your "version".
+> * Minor would map to "date".
+> 
+> You could instead then store the customer ID into the switches vendor ID 
+> or device ID member (whichever makes more sense).
+> 
+>>   };
+>>
+>>   enum tb_nvm_write_ops {
+>> @@ -736,6 +753,7 @@ static inline void tb_domain_put(struct tb *tb)
+>>       put_device(&tb->dev);
+>>   }
+>>
+>> +int tb_nvm_validate(struct tb_switch *sw, unsigned int mode);
+>>   struct tb_nvm *tb_nvm_alloc(struct device *dev);
+>>   int tb_nvm_add_active(struct tb_nvm *nvm, size_t size, 
+>> nvmem_reg_read_t reg_read);
+>>   int tb_nvm_write_buf(struct tb_nvm *nvm, unsigned int offset, void 
+>> *val,
+>> -- 
+>> 2.34.1
+>>
+>>
+> 
 
-
-Libo

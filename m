@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E638594794
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B5659474D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355036AbiHOXq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
+        id S1353888AbiHOXrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354323AbiHOXlx (ORCPT
+        with ESMTP id S1354355AbiHOXl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:41:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E112C65F;
-        Mon, 15 Aug 2022 13:12:28 -0700 (PDT)
+        Mon, 15 Aug 2022 19:41:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D171326D4;
+        Mon, 15 Aug 2022 13:13:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 079D660B6E;
-        Mon, 15 Aug 2022 20:12:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1692AC433C1;
-        Mon, 15 Aug 2022 20:12:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A40F260F0C;
+        Mon, 15 Aug 2022 20:13:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2793C433C1;
+        Mon, 15 Aug 2022 20:13:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594347;
-        bh=zLs5C5VeTJGHRumhpgEyZ1g0f6bHAEljyUD6RJPTQcQ=;
+        s=korg; t=1660594394;
+        bh=qEpQ0ORfio4GJ377cmHUYJ9BxN5FNFj0Pwgm6gFsi3w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HQSoAHpy8RD7S48vph438t389RzpKNCFOlDwfFhBe/MfcKdLMIA9ToErNJCPmU9/n
-         0EHet0YcxdUErpwx31/++x9+HwJSkdeldFfVEF28UK7sTvSf2XhPIhdSJZ/f+S8pxn
-         XhuDLoeDV9qtp35QpYGLpolMwkIyv4lHIUnY9O6Q=
+        b=gGCVphEezcamr4mUz1Ye2rBvO4lozTMQq9+vs8C/p2RgiFuwJfoJiEk0aEC2R6Oeo
+         tqLg4mO6X9nyzFEu64MA51jT/OWG3FmXSSCnmMwVKlnh9a3X9P03EUD2tlpMKQ5Ytm
+         Y1XKqn6t2XyJuSCOSTCD4S0jCKkGxCyZeb2eO4HU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Maxime Ripard <maxime@cerno.tech>,
+        Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0418/1157] drm/vc4: hdmi: Reset HDMI MISC_CONTROL register
-Date:   Mon, 15 Aug 2022 19:56:14 +0200
-Message-Id: <20220815180456.382956153@linuxfoundation.org>
+Subject: [PATCH 5.19 0431/1157] selftests: net: fib_rule_tests: fix support for running individual tests
+Date:   Mon, 15 Aug 2022 19:56:27 +0200
+Message-Id: <20220815180456.899438908@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -56,82 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+From: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
 
-[ Upstream commit 35dc00c12a72700a9c4592afee7d136ecb280cbd ]
+[ Upstream commit 9c154ab47f5e5ff632d2b7af6342c027d7e04b92 ]
 
-The HDMI block can repeat pixels for double clocked modes,
-and the firmware is now configuring the block to do this as
-the PV is doing it incorrectly when at 2pixels/clock.
-If the kernel doesn't reset it then we end up with strange
-modes.
+parsing and usage of -t got missed in the previous patch.
+this patch fixes it
 
-Reset MISC_CONTROL.
-
-Fixes: 8323989140f3 ("drm/vc4: hdmi: Support the BCM2711 HDMI controllers")
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Link: https://lore.kernel.org/r/20220613144800.326124-22-maxime@cerno.tech
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Fixes: 816cda9ae531 ("selftests: net: fib_rule_tests: add support to select a test to run")
+Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/vc4/vc4_hdmi.c      | 8 ++++++++
- drivers/gpu/drm/vc4/vc4_hdmi_regs.h | 3 +++
- 2 files changed, 11 insertions(+)
+ tools/testing/selftests/net/fib_rule_tests.sh | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
-index d0921f832f19..b73f64f0ba09 100644
---- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-+++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-@@ -79,6 +79,9 @@
- #define VC5_HDMI_VERTB_VSPO_SHIFT		16
- #define VC5_HDMI_VERTB_VSPO_MASK		VC4_MASK(29, 16)
- 
-+#define VC5_HDMI_MISC_CONTROL_PIXEL_REP_SHIFT	0
-+#define VC5_HDMI_MISC_CONTROL_PIXEL_REP_MASK	VC4_MASK(3, 0)
+diff --git a/tools/testing/selftests/net/fib_rule_tests.sh b/tools/testing/selftests/net/fib_rule_tests.sh
+index bbe3b379927a..c245476fa29d 100755
+--- a/tools/testing/selftests/net/fib_rule_tests.sh
++++ b/tools/testing/selftests/net/fib_rule_tests.sh
+@@ -303,6 +303,29 @@ run_fibrule_tests()
+ 	log_section "IPv6 fib rule"
+ 	fib_rule6_test
+ }
++################################################################################
++# usage
 +
- #define VC5_HDMI_SCRAMBLER_CTL_ENABLE		BIT(0)
- 
- #define VC5_HDMI_DEEP_COLOR_CONFIG_1_INIT_PACK_PHASE_SHIFT	8
-@@ -1117,6 +1120,11 @@ static void vc5_hdmi_set_timings(struct vc4_hdmi *vc4_hdmi,
- 	reg |= gcp_en ? VC5_HDMI_GCP_CONFIG_GCP_ENABLE : 0;
- 	HDMI_WRITE(HDMI_GCP_CONFIG, reg);
- 
-+	reg = HDMI_READ(HDMI_MISC_CONTROL);
-+	reg &= ~VC5_HDMI_MISC_CONTROL_PIXEL_REP_MASK;
-+	reg |= VC4_SET_FIELD(0, VC5_HDMI_MISC_CONTROL_PIXEL_REP);
-+	HDMI_WRITE(HDMI_MISC_CONTROL, reg);
++usage()
++{
++	cat <<EOF
++usage: ${0##*/} OPTS
 +
- 	HDMI_WRITE(HDMI_CLOCK_STOP, 0);
++        -t <test>   Test(s) to run (default: all)
++                    (options: $TESTS)
++EOF
++}
++
++################################################################################
++# main
++
++while getopts ":t:h" opt; do
++	case $opt in
++		t) TESTS=$OPTARG;;
++		h) usage; exit 0;;
++		*) usage; exit 1;;
++	esac
++done
  
- 	spin_unlock_irqrestore(&vc4_hdmi->hw_lock, flags);
-diff --git a/drivers/gpu/drm/vc4/vc4_hdmi_regs.h b/drivers/gpu/drm/vc4/vc4_hdmi_regs.h
-index a040356b6bdc..549cc63dab39 100644
---- a/drivers/gpu/drm/vc4/vc4_hdmi_regs.h
-+++ b/drivers/gpu/drm/vc4/vc4_hdmi_regs.h
-@@ -127,6 +127,7 @@ enum vc4_hdmi_field {
- 	HDMI_VERTB0,
- 	HDMI_VERTB1,
- 	HDMI_VID_CTL,
-+	HDMI_MISC_CONTROL,
- };
- 
- struct vc4_hdmi_register {
-@@ -237,6 +238,7 @@ static const struct vc4_hdmi_register __maybe_unused vc5_hdmi_hdmi0_fields[] = {
- 	VC4_HDMI_REG(HDMI_VERTB0, 0x0f0),
- 	VC4_HDMI_REG(HDMI_VERTA1, 0x0f4),
- 	VC4_HDMI_REG(HDMI_VERTB1, 0x0f8),
-+	VC4_HDMI_REG(HDMI_MISC_CONTROL, 0x100),
- 	VC4_HDMI_REG(HDMI_MAI_CHANNEL_MAP, 0x09c),
- 	VC4_HDMI_REG(HDMI_MAI_CONFIG, 0x0a0),
- 	VC4_HDMI_REG(HDMI_DEEP_COLOR_CONFIG_1, 0x170),
-@@ -319,6 +321,7 @@ static const struct vc4_hdmi_register __maybe_unused vc5_hdmi_hdmi1_fields[] = {
- 	VC4_HDMI_REG(HDMI_VERTB0, 0x0f0),
- 	VC4_HDMI_REG(HDMI_VERTA1, 0x0f4),
- 	VC4_HDMI_REG(HDMI_VERTB1, 0x0f8),
-+	VC4_HDMI_REG(HDMI_MISC_CONTROL, 0x100),
- 	VC4_HDMI_REG(HDMI_MAI_CHANNEL_MAP, 0x09c),
- 	VC4_HDMI_REG(HDMI_MAI_CONFIG, 0x0a0),
- 	VC4_HDMI_REG(HDMI_DEEP_COLOR_CONFIG_1, 0x170),
+ if [ "$(id -u)" -ne 0 ];then
+ 	echo "SKIP: Need root privileges"
 -- 
 2.35.1
 

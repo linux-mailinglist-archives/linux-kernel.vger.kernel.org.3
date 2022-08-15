@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E26F59488F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904B9594894
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354318AbiHOXtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32888 "EHLO
+        id S1354111AbiHOXp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:45:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354575AbiHOXm1 (ORCPT
+        with ESMTP id S1354272AbiHOXlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:42:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DC784EE1;
-        Mon, 15 Aug 2022 13:13:44 -0700 (PDT)
+        Mon, 15 Aug 2022 19:41:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFACCAE77;
+        Mon, 15 Aug 2022 13:11:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4A97B81154;
-        Mon, 15 Aug 2022 20:13:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D960FC433D6;
-        Mon, 15 Aug 2022 20:13:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C81860B9B;
+        Mon, 15 Aug 2022 20:11:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8985AC433C1;
+        Mon, 15 Aug 2022 20:11:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594422;
-        bh=q/vtXgCvP4kqJH3z+Pe0H0J1KXmU662wJ1hTjqV4UOM=;
+        s=korg; t=1660594290;
+        bh=glN6sxhxG13vQizBKcYdIeAELf9tcp4qdEOf3tEnxBA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WwrEhpJyE7oMBRUoD0FF1YIrhi6q62cTf9JYu8SByrcGopy1s2vWrRWskMMQ1an/3
-         ycazEHi9+Ia4XdDL0yMd1OVZfMrBgx7NmLUAiAvK9CDtH+djar0ZGPbKRlATHwmRzr
-         zKkXD5CJJBwWkyQiJSGIGIc4T7e9tS5BC7bYVlOQ=
+        b=VlqfFczx5bN+1Kqpl1ZsN+xKM7HL8LN2MW/aJsovfmMoWsenlGRI9xBdvuLlk823m
+         blU4UyeuPihnC7JnN/Fpbu6WuG68Im63Koe+zXO0p+Sv8gt9ZJIeZwL83WeA35Pk+8
+         mrUZS+9FkZyAeGYuUwKyV1TodaCpAmtQV1JnYJSs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dom Cobley <popcornmix@gmail.com>,
+        stable@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Maxime Ripard <maxime@cerno.tech>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0407/1157] drm/vc4: plane: Remove subpixel positioning check
-Date:   Mon, 15 Aug 2022 19:56:03 +0200
-Message-Id: <20220815180455.943738096@linuxfoundation.org>
+Subject: [PATCH 5.19 0409/1157] drm/vc4: dsi: Release workaround buffer and DMA
+Date:   Mon, 15 Aug 2022 19:56:05 +0200
+Message-Id: <20220815180456.017347408@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -55,74 +56,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dom Cobley <popcornmix@gmail.com>
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-[ Upstream commit 517db1ab1566dba3093dbdb8de4263ba4aa66416 ]
+[ Upstream commit 89c4bbe2a01ea401c2b0fabc104720809084b77f ]
 
-There is little harm in ignoring fractional coordinates
-(they just get truncated).
+On Pi0-3 the driver allocates a buffer and requests a DMA channel
+because the ARM can't write to DSI1's registers directly.
 
-Without this:
-modetest -M vc4 -F tiles,gradient -s 32:1920x1080-60 -P89@74:1920x1080*.1.1@XR24
+However, we never release that buffer or channel. Let's add a
+device-managed action to release each.
 
-is rejected. We have the same issue in Kodi when trying to
-use zoom options on video.
-
-Note: even if all coordinates are fully integer. e.g.
-src:[0,0,1920,1080] dest:[-10,-10,1940,1100]
-
-it will still get rejected as drm_atomic_helper_check_plane_state
-uses drm_rect_clip_scaled which transforms this to fractional src coords
-
-Fixes: 21af94cf1a4c ("drm/vc4: Add support for scaling of display planes.")
-Signed-off-by: Dom Cobley <popcornmix@gmail.com>
-Link: https://lore.kernel.org/r/20220613144800.326124-5-maxime@cerno.tech
+Fixes: 4078f5757144 ("drm/vc4: Add DSI driver")
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Link: https://lore.kernel.org/r/20220613144800.326124-12-maxime@cerno.tech
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/vc4/vc4_plane.c | 22 +++++++++-------------
- 1 file changed, 9 insertions(+), 13 deletions(-)
+ drivers/gpu/drm/vc4/vc4_dsi.c | 29 ++++++++++++++++++++++++++++-
+ 1 file changed, 28 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_plane.c b/drivers/gpu/drm/vc4/vc4_plane.c
-index 1e866dc00ac3..67402da89213 100644
---- a/drivers/gpu/drm/vc4/vc4_plane.c
-+++ b/drivers/gpu/drm/vc4/vc4_plane.c
-@@ -339,7 +339,6 @@ static int vc4_plane_setup_clipping_and_scaling(struct drm_plane_state *state)
- 	struct vc4_plane_state *vc4_state = to_vc4_plane_state(state);
- 	struct drm_framebuffer *fb = state->fb;
- 	struct drm_gem_cma_object *bo = drm_fb_cma_get_gem_obj(fb, 0);
--	u32 subpixel_src_mask = (1 << 16) - 1;
- 	int num_planes = fb->format->num_planes;
- 	struct drm_crtc_state *crtc_state;
- 	u32 h_subsample = fb->format->hsub;
-@@ -361,18 +360,15 @@ static int vc4_plane_setup_clipping_and_scaling(struct drm_plane_state *state)
- 	for (i = 0; i < num_planes; i++)
- 		vc4_state->offsets[i] = bo->paddr + fb->offsets[i];
+diff --git a/drivers/gpu/drm/vc4/vc4_dsi.c b/drivers/gpu/drm/vc4/vc4_dsi.c
+index 98308a17e4ed..e82ee94cafc7 100644
+--- a/drivers/gpu/drm/vc4/vc4_dsi.c
++++ b/drivers/gpu/drm/vc4/vc4_dsi.c
+@@ -1487,13 +1487,29 @@ vc4_dsi_init_phy_clocks(struct vc4_dsi *dsi)
+ 				      dsi->clk_onecell);
+ }
  
--	/* We don't support subpixel source positioning for scaling. */
--	if ((state->src.x1 & subpixel_src_mask) ||
--	    (state->src.x2 & subpixel_src_mask) ||
--	    (state->src.y1 & subpixel_src_mask) ||
--	    (state->src.y2 & subpixel_src_mask)) {
--		return -EINVAL;
--	}
--
--	vc4_state->src_x = state->src.x1 >> 16;
--	vc4_state->src_y = state->src.y1 >> 16;
--	vc4_state->src_w[0] = (state->src.x2 - state->src.x1) >> 16;
--	vc4_state->src_h[0] = (state->src.y2 - state->src.y1) >> 16;
-+	/*
-+	 * We don't support subpixel source positioning for scaling,
-+	 * but fractional coordinates can be generated by clipping
-+	 * so just round for now
-+	 */
-+	vc4_state->src_x = DIV_ROUND_CLOSEST(state->src.x1, 1 << 16);
-+	vc4_state->src_y = DIV_ROUND_CLOSEST(state->src.y1, 1 << 16);
-+	vc4_state->src_w[0] = DIV_ROUND_CLOSEST(state->src.x2, 1 << 16) - vc4_state->src_x;
-+	vc4_state->src_h[0] = DIV_ROUND_CLOSEST(state->src.y2, 1 << 16) - vc4_state->src_y;
++static void vc4_dsi_dma_mem_release(void *ptr)
++{
++	struct vc4_dsi *dsi = ptr;
++	struct device *dev = &dsi->pdev->dev;
++
++	dma_free_coherent(dev, 4, dsi->reg_dma_mem, dsi->reg_dma_paddr);
++	dsi->reg_dma_mem = NULL;
++}
++
++static void vc4_dsi_dma_chan_release(void *ptr)
++{
++	struct vc4_dsi *dsi = ptr;
++
++	dma_release_channel(dsi->reg_dma_chan);
++	dsi->reg_dma_chan = NULL;
++}
++
+ static int vc4_dsi_bind(struct device *dev, struct device *master, void *data)
+ {
+ 	struct platform_device *pdev = to_platform_device(dev);
+ 	struct drm_device *drm = dev_get_drvdata(master);
+ 	struct vc4_dsi *dsi = dev_get_drvdata(dev);
+ 	struct vc4_dsi_encoder *vc4_dsi_encoder;
+-	dma_cap_mask_t dma_mask;
+ 	int ret;
  
- 	vc4_state->crtc_x = state->dst.x1;
- 	vc4_state->crtc_y = state->dst.y1;
+ 	dsi->variant = of_device_get_match_data(dev);
+@@ -1527,6 +1543,8 @@ static int vc4_dsi_bind(struct device *dev, struct device *master, void *data)
+ 	 * so set up a channel for talking to it.
+ 	 */
+ 	if (dsi->variant->broken_axi_workaround) {
++		dma_cap_mask_t dma_mask;
++
+ 		dsi->reg_dma_mem = dma_alloc_coherent(dev, 4,
+ 						      &dsi->reg_dma_paddr,
+ 						      GFP_KERNEL);
+@@ -1535,8 +1553,13 @@ static int vc4_dsi_bind(struct device *dev, struct device *master, void *data)
+ 			return -ENOMEM;
+ 		}
+ 
++		ret = devm_add_action_or_reset(dev, vc4_dsi_dma_mem_release, dsi);
++		if (ret)
++			return ret;
++
+ 		dma_cap_zero(dma_mask);
+ 		dma_cap_set(DMA_MEMCPY, dma_mask);
++
+ 		dsi->reg_dma_chan = dma_request_chan_by_mask(&dma_mask);
+ 		if (IS_ERR(dsi->reg_dma_chan)) {
+ 			ret = PTR_ERR(dsi->reg_dma_chan);
+@@ -1546,6 +1569,10 @@ static int vc4_dsi_bind(struct device *dev, struct device *master, void *data)
+ 			return ret;
+ 		}
+ 
++		ret = devm_add_action_or_reset(dev, vc4_dsi_dma_chan_release, dsi);
++		if (ret)
++			return ret;
++
+ 		/* Get the physical address of the device's registers.  The
+ 		 * struct resource for the regs gives us the bus address
+ 		 * instead.
 -- 
 2.35.1
 

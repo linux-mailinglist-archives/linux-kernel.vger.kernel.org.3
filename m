@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E9F59477A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CADC1594717
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347991AbiHOXJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
+        id S1346515AbiHOXKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353169AbiHOXHU (ORCPT
+        with ESMTP id S244999AbiHOXIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:07:20 -0400
+        Mon, 15 Aug 2022 19:08:10 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08846792C9;
-        Mon, 15 Aug 2022 12:59:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DD278BCB;
+        Mon, 15 Aug 2022 12:59:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6144AB80EAD;
-        Mon, 15 Aug 2022 19:59:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4142C433D6;
-        Mon, 15 Aug 2022 19:59:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87A31B80EB1;
+        Mon, 15 Aug 2022 19:59:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF05EC433C1;
+        Mon, 15 Aug 2022 19:59:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593562;
-        bh=ckpDEeEgJ/UECDM9viJTkM7Sj1003rU4VIiNM4CXKbA=;
+        s=korg; t=1660593582;
+        bh=IKiFqsVBpkSCn9+EeYNF1YPmUb0OiOAXXHU+8G+n66w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m51cPvfh2mK9aAyYJkd4qTCFujqWmfgdzBrPzHBKRV/NwCqnXCdBG//Qm3PZoPfVl
-         ZptxR5aWBXvRhOG37SnBBqRU8XQgR/8Ovm02XKmNUQ02XWe+KrVCFO2C9ywWKbt35Q
-         Wa4o7tdDKr2J6WeqYkAiWiz3DqC8FgllB6nffbmg=
+        b=omZMT/fnLrno4CqjH8qzCr5u7gxcUaVHKkzCDZ0pXk5M4GM7bzRK37cazlVm6bTu8
+         1HI5zaBwbGzfH+hmgV5nc/eZygWRl2AU14EKSfEhaHnKvKv0UwImntpgkd5s7IVaWw
+         wKFuKCR1ujXw0EXGbLtDWvFSa3iNpygCo3JigLcg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Arun Easi <aeasi@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.18 0968/1095] scsi: qla2xxx: Fix losing FCP-2 targets on long port disable with I/Os
-Date:   Mon, 15 Aug 2022 20:06:07 +0200
-Message-Id: <20220815180509.109325954@linuxfoundation.org>
+        stable@vger.kernel.org, Kim Phillips <kim.phillips@amd.com>,
+        Borislav Petkov <bp@suse.de>
+Subject: [PATCH 5.18 0971/1095] x86/bugs: Enable STIBP for IBPB mitigated RETBleed
+Date:   Mon, 15 Aug 2022 20:06:10 +0200
+Message-Id: <20220815180509.232916030@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
 References: <20220815180429.240518113@linuxfoundation.org>
@@ -55,66 +54,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arun Easi <aeasi@marvell.com>
+From: Kim Phillips <kim.phillips@amd.com>
 
-commit 2416ccd3815ba1613e10a6da0a24ef21acfe5633 upstream.
+commit e6cfcdda8cbe81eaf821c897369a65fec987b404 upstream.
 
-FCP-2 devices were not coming back online once they were lost, login
-retries exhausted, and then came back up.  Fix this by accepting RSCN when
-the device is not online.
+AMD's "Technical Guidance for Mitigating Branch Type Confusion,
+Rev. 1.0 2022-07-12" whitepaper, under section 6.1.2 "IBPB On
+Privileged Mode Entry / SMT Safety" says:
 
-Link: https://lore.kernel.org/r/20220616053508.27186-10-njavali@marvell.com
-Fixes: 44c57f205876 ("scsi: qla2xxx: Changes to support FCP2 Target")
-Cc: stable@vger.kernel.org
-Signed-off-by: Arun Easi <aeasi@marvell.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+  Similar to the Jmp2Ret mitigation, if the code on the sibling thread
+  cannot be trusted, software should set STIBP to 1 or disable SMT to
+  ensure SMT safety when using this mitigation.
+
+So, like already being done for retbleed=unret, and now also for
+retbleed=ibpb, force STIBP on machines that have it, and report its SMT
+vulnerability status accordingly.
+
+ [ bp: Remove the "we" and remove "[AMD]" applicability parameter which
+   doesn't work here. ]
+
+Fixes: 3ebc17006888 ("x86/bugs: Add retbleed=ibpb")
+Signed-off-by: Kim Phillips <kim.phillips@amd.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: stable@vger.kernel.org # 5.10, 5.15, 5.19
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=206537
+Link: https://lore.kernel.org/r/20220804192201.439596-1-kim.phillips@amd.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_init.c |   12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ Documentation/admin-guide/kernel-parameters.txt |   29 +++++++++++++++++-------
+ arch/x86/kernel/cpu/bugs.c                      |   10 ++++----
+ 2 files changed, 27 insertions(+), 12 deletions(-)
 
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -1834,7 +1834,8 @@ void qla2x00_handle_rscn(scsi_qla_host_t
- 	case RSCN_PORT_ADDR:
- 		fcport = qla2x00_find_fcport_by_nportid(vha, &ea->id, 1);
- 		if (fcport) {
--			if (fcport->flags & FCF_FCP2_DEVICE) {
-+			if (fcport->flags & FCF_FCP2_DEVICE &&
-+			    atomic_read(&fcport->state) == FCS_ONLINE) {
- 				ql_dbg(ql_dbg_disc, vha, 0x2115,
- 				       "Delaying session delete for FCP2 portid=%06x %8phC ",
- 					fcport->d_id.b24, fcport->port_name);
-@@ -1866,7 +1867,8 @@ void qla2x00_handle_rscn(scsi_qla_host_t
- 		break;
- 	case RSCN_AREA_ADDR:
- 		list_for_each_entry(fcport, &vha->vp_fcports, list) {
--			if (fcport->flags & FCF_FCP2_DEVICE)
-+			if (fcport->flags & FCF_FCP2_DEVICE &&
-+			    atomic_read(&fcport->state) == FCS_ONLINE)
- 				continue;
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -5130,20 +5130,33 @@
+ 			Speculative Code Execution with Return Instructions)
+ 			vulnerability.
  
- 			if ((ea->id.b24 & 0xffff00) == (fcport->d_id.b24 & 0xffff00)) {
-@@ -1877,7 +1879,8 @@ void qla2x00_handle_rscn(scsi_qla_host_t
- 		break;
- 	case RSCN_DOM_ADDR:
- 		list_for_each_entry(fcport, &vha->vp_fcports, list) {
--			if (fcport->flags & FCF_FCP2_DEVICE)
-+			if (fcport->flags & FCF_FCP2_DEVICE &&
-+			    atomic_read(&fcport->state) == FCS_ONLINE)
- 				continue;
++			AMD-based UNRET and IBPB mitigations alone do not stop
++			sibling threads from influencing the predictions of other
++			sibling threads. For that reason, STIBP is used on pro-
++			cessors that support it, and mitigate SMT on processors
++			that don't.
++
+ 			off          - no mitigation
+ 			auto         - automatically select a migitation
+ 			auto,nosmt   - automatically select a mitigation,
+ 				       disabling SMT if necessary for
+ 				       the full mitigation (only on Zen1
+ 				       and older without STIBP).
+-			ibpb	     - mitigate short speculation windows on
+-				       basic block boundaries too. Safe, highest
+-				       perf impact.
+-			unret        - force enable untrained return thunks,
+-				       only effective on AMD f15h-f17h
+-				       based systems.
+-			unret,nosmt  - like unret, will disable SMT when STIBP
+-			               is not available.
++			ibpb         - On AMD, mitigate short speculation
++				       windows on basic block boundaries too.
++				       Safe, highest perf impact. It also
++				       enables STIBP if present. Not suitable
++				       on Intel.
++			ibpb,nosmt   - Like "ibpb" above but will disable SMT
++				       when STIBP is not available. This is
++				       the alternative for systems which do not
++				       have STIBP.
++			unret        - Force enable untrained return thunks,
++				       only effective on AMD f15h-f17h based
++				       systems.
++			unret,nosmt  - Like unret, but will disable SMT when STIBP
++				       is not available. This is the alternative for
++				       systems which do not have STIBP.
  
- 			if ((ea->id.b24 & 0xff0000) == (fcport->d_id.b24 & 0xff0000)) {
-@@ -1889,7 +1892,8 @@ void qla2x00_handle_rscn(scsi_qla_host_t
- 	case RSCN_FAB_ADDR:
- 	default:
- 		list_for_each_entry(fcport, &vha->vp_fcports, list) {
--			if (fcport->flags & FCF_FCP2_DEVICE)
-+			if (fcport->flags & FCF_FCP2_DEVICE &&
-+			    atomic_read(&fcport->state) == FCS_ONLINE)
- 				continue;
+ 			Selecting 'auto' will choose a mitigation method at run
+ 			time according to the CPU.
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -152,7 +152,7 @@ void __init check_bugs(void)
+ 	/*
+ 	 * spectre_v2_user_select_mitigation() relies on the state set by
+ 	 * retbleed_select_mitigation(); specifically the STIBP selection is
+-	 * forced for UNRET.
++	 * forced for UNRET or IBPB.
+ 	 */
+ 	spectre_v2_user_select_mitigation();
+ 	ssb_select_mitigation();
+@@ -1172,7 +1172,8 @@ spectre_v2_user_select_mitigation(void)
+ 	    boot_cpu_has(X86_FEATURE_AMD_STIBP_ALWAYS_ON))
+ 		mode = SPECTRE_V2_USER_STRICT_PREFERRED;
  
- 			fcport->scan_needed = 1;
+-	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET) {
++	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET ||
++	    retbleed_mitigation == RETBLEED_MITIGATION_IBPB) {
+ 		if (mode != SPECTRE_V2_USER_STRICT &&
+ 		    mode != SPECTRE_V2_USER_STRICT_PREFERRED)
+ 			pr_info("Selecting STIBP always-on mode to complement retbleed mitigation\n");
+@@ -2353,10 +2354,11 @@ static ssize_t srbds_show_state(char *bu
+ 
+ static ssize_t retbleed_show_state(char *buf)
+ {
+-	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET) {
++	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET ||
++	    retbleed_mitigation == RETBLEED_MITIGATION_IBPB) {
+ 	    if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
+ 		boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
+-		    return sprintf(buf, "Vulnerable: untrained return thunk on non-Zen uarch\n");
++		    return sprintf(buf, "Vulnerable: untrained return thunk / IBPB on non-AMD based uarch\n");
+ 
+ 	    return sprintf(buf, "%s; SMT %s\n",
+ 			   retbleed_strings[retbleed_mitigation],
 
 

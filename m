@@ -2,287 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF5D1592D91
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E94592DA9
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbiHOK4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 06:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
+        id S240828AbiHOLBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 07:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiHOK4N (ORCPT
+        with ESMTP id S234621AbiHOLBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 06:56:13 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA5E1759A
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 03:56:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=LrP4jZdmsTb97GoKgNSVptxjvQRZMVwcGyPsTI6NqiM=; b=apQyE1MuyI6HMghYR/wHHNL39u
-        wecUUqTM1Tzu8AQm1l5TC+qsj8KNjuyUlVDKA/KheQsI0Y5PO8ZUhUO5GwwWvfyzbmInoOybsUhZM
-        QWSNWZjioSXwr/vS9QjclhqD8HSOzdcm8kVxipFtNOb9xIVxfCpqnLD9SAUUhf21amgXAS6cfCCrN
-        jGZUdWZ90gk99col+b3ql14KpW9MFvjLhHMW3qjRU3k6t73lF9D6PeOvMB3qyUVoCzhiaLNRiyEcq
-        S3WnCJuFquG70LRhbeU7YtY9wFLoh2J84ThWx6d1FhmZgqd6TItZcNxjGWYmCTjR7enx4oAPzJzFW
-        xbI2rG4g==;
-Received: from [165.90.126.25] (helo=mail.igalia.com)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oNXlL-009OQu-E7; Mon, 15 Aug 2022 12:56:03 +0200
-Date:   Mon, 15 Aug 2022 09:55:42 -0100
-From:   Melissa Wen <mwen@igalia.com>
-To:     =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>
-Cc:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Christian =?utf-8?B?S8O2bmln?= <ckoenig.leichtzumerken@gmail.com>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG][5.20] refcount_t: underflow; use-after-free
-Message-ID: <20220815105542.meuiebxipc35bwug@mail.igalia.com>
-References: <CABXGCsM58-8fxVKAVkwsshg+33B_1_t_WesG160AtVBe1ZvKiw@mail.gmail.com>
- <be6f1ce4-46b1-7a80-230c-b99f203ce8ad@riseup.net>
+        Mon, 15 Aug 2022 07:01:18 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509CB18E34;
+        Mon, 15 Aug 2022 04:01:15 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M5rnp5SvnzXdSx;
+        Mon, 15 Aug 2022 18:57:02 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 15 Aug 2022 19:01:12 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 15 Aug 2022 19:01:12 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>
+CC:     <linux@armlinux.org.uk>, <arnd@arndb.de>,
+        <linus.walleij@linaro.org>, <ardb@kernel.org>,
+        <rmk+kernel@armlinux.org.uk>, <rostedt@goodmis.org>,
+        <nick.hawkins@hpe.com>, <john@phrozen.org>, <mhiramat@kernel.org>,
+        <chenzhongjin@huawei.com>
+Subject: [RESEND PATCH] ARM: Recover kretprobes return address for EABI stack unwinder
+Date:   Mon, 15 Aug 2022 18:58:07 +0800
+Message-ID: <20220815105808.17385-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="o4zd5pbplcropbu6"
-Content-Disposition: inline
-In-Reply-To: <be6f1ce4-46b1-7a80-230c-b99f203ce8ad@riseup.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+'fed240d9c974 ("ARM: Recover kretprobe modified return address in stacktrace")'
+has implemented kretprobes return address recovery for FP
+unwinder, this patch makes it works for EABI unwinder.
 
---o4zd5pbplcropbu6
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It saves __kretprobe_trampoline address in LR on stack to identify
+and recover the correct return address in EABI unwinder.
 
-On 08/14, Ma=EDra Canal wrote:
-> Hi Mikhail
->=20
-> Looks like this use-after-free problem was introduced on
-> 90af0ca047f3049c4b46e902f432ad6ef1e2ded6. Checking this patch it seems
-> like: if amdgpu_cs_vm_handling return r !=3D 0, then it will unlock
-> bo_list_mutex inside the function amdgpu_cs_vm_handling and again on
-> amdgpu_cs_parser_fini.
->=20
-> Maybe the following patch will help:
->=20
-> ---
-> From 71d718c0f53a334bb59bcd5dabd29bbe92c724af Mon Sep 17 00:00:00 2001
-> From: =3D?UTF-8?q?Ma=3DC3=3DADra=3D20Canal?=3D <mairacanal@riseup.net>
-> Date: Sun, 14 Aug 2022 21:12:24 -0300
-> Subject: [PATCH] drm/amdgpu: Fix use-after-free on amdgpu_bo_list mutex
-> MIME-Version: 1.0
-> Content-Type: text/plain; charset=3DUTF-8
-> Content-Transfer-Encoding: 8bit
->=20
-> Fixes: 90af0ca047f3 ("drm/amdgpu: Protect the amdgpu_bo_list list with a
-> mutex v2")
-> Reported-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-> Signed-off-by: Ma=EDra Canal <mairacanal@riseup.net>
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-> b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-> index d8f1335bc68f..a7fce7b14321 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-> @@ -837,17 +837,14 @@ static int amdgpu_cs_vm_handling(struct
-> amdgpu_cs_parser *p)
->  			continue;
->=20
->  		r =3D amdgpu_vm_bo_update(adev, bo_va, false);
-> -		if (r) {
-> -			mutex_unlock(&p->bo_list->bo_list_mutex);
-> +		if (r)
->  			return r;
-> -		}
->=20
->  		r =3D amdgpu_sync_fence(&p->job->sync, bo_va->last_pt_update);
-> -		if (r) {
-> -			mutex_unlock(&p->bo_list->bo_list_mutex);
-> +		if (r)
->  			return r;
-> -		}
->  	}
-> +	mutex_unlock(&p->bo_list->bo_list_mutex);
+Since EABI doesn't use r11 as frame pointer, we need to use SP to
+identify different kretprobes addresses. Here the value of SP has fixed
+distance to conventional FP position so it's fine to use it.
 
-I think we don't need to unlock the bo_list_mutex here. If return !=3D 0
-amdgpu_cs_parser_fini() will unlock it; otherwise, amdgpu_cs_submit()
-unlocks it in the end.
+Passed kunit kprobes_test on QEMU.
 
-BR,
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+---
+ arch/arm/Kconfig               |  2 +-
+ arch/arm/kernel/unwind.c       | 12 ++++++++++++
+ arch/arm/probes/kprobes/core.c | 20 +++++++++++++++++---
+ 3 files changed, 30 insertions(+), 4 deletions(-)
 
-Melissa
->=20
->  	r =3D amdgpu_vm_handle_moved(adev, vm);
->  	if (r)
-> --=20
-> 2.37.1
-> ---
-> Best Regards,
-> - Ma=EDra Canal
->=20
-> On 8/14/22 18:11, Mikhail Gavrilov wrote:
-> > Hi folks.
-> > Joined testing 5.20 today (7ebfc85e2cd7).
-> > I encountered a frequently GPU freeze, after which a message appears
-> > in the kernel logs:
-> > [ 220.280990] ------------[ cut here ]------------
-> > [ 220.281000] refcount_t: underflow; use-after-free.
-> > [ 220.281019] WARNING: CPU: 1 PID: 3746 at lib/refcount.c:28
-> > refcount_warn_saturate+0xba/0x110
-> > [ 220.281029] Modules linked in: uinput rfcomm snd_seq_dummy
-> > snd_hrtimer nft_objref nf_conntrack_netbios_ns nf_conntrack_broadcast
-> > nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet
-> > nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat
-> > nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip_set nf_tables nfnetlink
-> > qrtr bnep sunrpc snd_seq_midi snd_seq_midi_event vfat intel_rapl_msr
-> > fat intel_rapl_common snd_hda_codec_realtek mt76x2u
-> > snd_hda_codec_generic snd_hda_codec_hdmi mt76x2_common iwlmvm
-> > mt76x02_usb edac_mce_amd mt76_usb snd_hda_intel snd_intel_dspcfg
-> > mt76x02_lib snd_intel_sdw_acpi snd_usb_audio snd_hda_codec mt76
-> > kvm_amd uvcvideo mac80211 snd_hda_core btusb eeepc_wmi snd_usbmidi_lib
-> > videobuf2_vmalloc videobuf2_memops kvm btrtl snd_rawmidi asus_wmi
-> > snd_hwdep videobuf2_v4l2 btbcm iwlwifi ledtrig_audio libarc4 btintel
-> > snd_seq videobuf2_common sparse_keymap btmtk irqbypass videodev
-> > snd_seq_device joydev xpad iwlmei platform_profile bluetooth
-> > ff_memless snd_pcm mc rapl
-> > [ 220.281185] video snd_timer cfg80211 wmi_bmof snd pcspkr soundcore
-> > k10temp i2c_piix4 rfkill mei asus_ec_sensors acpi_cpufreq zram
-> > hid_logitech_hidpp amdgpu igb dca drm_ttm_helper ttm crct10dif_pclmul
-> > iommu_v2 crc32_pclmul gpu_sched crc32c_intel ucsi_ccg drm_buddy nvme
-> > typec_ucsi ghash_clmulni_intel drm_display_helper ccp nvme_core typec
-> > sp5100_tco cec wmi ip6_tables ip_tables fuse
-> > [ 220.281258] Unloaded tainted modules: amd64_edac():1 amd64_edac():1
-> > amd64_edac():1 amd64_edac():1 amd64_edac():1 amd64_edac():1
-> > amd64_edac():1 amd64_edac():1 amd64_edac():1 pcc_cpufreq():1
-> > amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1 amd64_edac():1
-> > pcc_cpufreq():1 amd64_edac():1 amd64_edac():1 pcc_cpufreq():1
-> > amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1 amd64_edac():1
-> > pcc_cpufreq():1 pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1
-> > pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1 amd64_edac():1
-> > pcc_cpufreq():1 pcc_cpufreq():1 amd64_edac():1 amd64_edac():1
-> > pcc_cpufreq():1 pcc_cpufreq():1 amd64_edac():1 amd64_edac():1
-> > pcc_cpufreq():1 pcc_cpufreq():1 amd64_edac():1 amd64_edac():1
-> > pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1
-> > amd64_edac():1 pcc_cpufreq():1 amd64_edac():1 amd64_edac():1
-> > pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1 amd64_edac():1
-> > pcc_cpufreq():1 pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1
-> > amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1 pcc_cpufreq():1
-> > [ 220.281388] pcc_cpufreq():1 fjes():1 pcc_cpufreq():1 fjes():1
-> > fjes():1 fjes():1 fjes():1 fjes():1 fjes():1 fjes():1
-> > [ 220.281415] CPU: 1 PID: 3746 Comm: chrome:cs0 Tainted: G W L -------
-> > --- 5.20.0-0.rc0.20220812git7ebfc85e2cd7.10.fc38.x86_64 #1
-> > [ 220.281421] Hardware name: System manufacturer System Product
-> > Name/ROG STRIX X570-I GAMING, BIOS 4403 04/27/2022
-> > [ 220.281426] RIP: 0010:refcount_warn_saturate+0xba/0x110
-> > [ 220.281431] Code: 01 01 e8 79 4a 6f 00 0f 0b e9 42 47 a5 00 80 3d de
-> > 7e be 01 00 75 85 48 c7 c7 f8 98 8e 98 c6 05 ce 7e be 01 01 e8 56 4a
-> > 6f 00 <0f> 0b e9 1f 47 a5 00 80 3d b9 7e be 01 00 0f 85 5e ff ff ff 48
-> > c7
-> > [ 220.281437] RSP: 0018:ffffb4b0d18d7a80 EFLAGS: 00010282
-> > [ 220.281443] RAX: 0000000000000026 RBX: 0000000000000003 RCX: 00000000=
-00000000
-> > [ 220.281448] RDX: 0000000000000001 RSI: ffffffff988d06dc RDI: 00000000=
-ffffffff
-> > [ 220.281452] RBP: 00000000ffffffff R08: 0000000000000000 R09: ffffb4b0=
-d18d7930
-> > [ 220.281457] R10: 0000000000000003 R11: ffffa0672e2fffe8 R12: ffffa058=
-ca360400
-> > [ 220.281461] R13: ffffa05846c50a18 R14: 00000000fffffe00 R15: 00000000=
-00000003
-> > [ 220.281465] FS: 00007f82683e06c0(0000) GS:ffffa066e2e00000(0000)
-> > knlGS:0000000000000000
-> > [ 220.281470] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [ 220.281475] CR2: 00003590005cc000 CR3: 00000001fca46000 CR4: 00000000=
-00350ee0
-> > [ 220.281480] Call Trace:
-> > [ 220.281485] <TASK>
-> > [ 220.281490] amdgpu_cs_ioctl+0x4e2/0x2070 [amdgpu]
-> > [ 220.281806] ? amdgpu_cs_find_mapping+0xe0/0xe0 [amdgpu]
-> > [ 220.282028] drm_ioctl_kernel+0xa4/0x150
-> > [ 220.282043] drm_ioctl+0x21f/0x420
-> > [ 220.282053] ? amdgpu_cs_find_mapping+0xe0/0xe0 [amdgpu]
-> > [ 220.282275] ? lock_release+0x14f/0x460
-> > [ 220.282282] ? _raw_spin_unlock_irqrestore+0x30/0x60
-> > [ 220.282290] ? _raw_spin_unlock_irqrestore+0x30/0x60
-> > [ 220.282297] ? lockdep_hardirqs_on+0x7d/0x100
-> > [ 220.282305] ? _raw_spin_unlock_irqrestore+0x40/0x60
-> > [ 220.282317] amdgpu_drm_ioctl+0x4a/0x80 [amdgpu]
-> > [ 220.282534] __x64_sys_ioctl+0x90/0xd0
-> > [ 220.282545] do_syscall_64+0x5b/0x80
-> > [ 220.282551] ? futex_wake+0x6c/0x150
-> > [ 220.282568] ? lock_is_held_type+0xe8/0x140
-> > [ 220.282580] ? do_syscall_64+0x67/0x80
-> > [ 220.282585] ? lockdep_hardirqs_on+0x7d/0x100
-> > [ 220.282592] ? do_syscall_64+0x67/0x80
-> > [ 220.282597] ? do_syscall_64+0x67/0x80
-> > [ 220.282602] ? lockdep_hardirqs_on+0x7d/0x100
-> > [ 220.282609] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > [ 220.282616] RIP: 0033:0x7f8282a4f8bf
-> > [ 220.282639] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10
-> > 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00
-> > 0f 05 <89> c2 3d 00 f0 ff ff 77 18 48 8b 44 24 18 64 48 2b 04 25 28 00
-> > 00
-> > [ 220.282644] RSP: 002b:00007f82683df410 EFLAGS: 00000246 ORIG_RAX:
-> > 0000000000000010
-> > [ 220.282651] RAX: ffffffffffffffda RBX: 00007f82683df588 RCX: 00007f82=
-82a4f8bf
-> > [ 220.282655] RDX: 00007f82683df4d0 RSI: 00000000c0186444 RDI: 00000000=
-00000018
-> > [ 220.282659] RBP: 00007f82683df4d0 R08: 00007f82683df5e0 R09: 00007f82=
-683df4b0
-> > [ 220.282663] R10: 00001d04000a0600 R11: 0000000000000246 R12: 00000000=
-c0186444
-> > [ 220.282667] R13: 0000000000000018 R14: 00007f82683df588 R15: 00000000=
-00000003
-> > [ 220.282689] </TASK>
-> > [ 220.282693] irq event stamp: 6232311
-> > [ 220.282697] hardirqs last enabled at (6232319): [<ffffffff9718cd7e>]
-> > __up_console_sem+0x5e/0x70
-> > [ 220.282704] hardirqs last disabled at (6232326):
-> > [<ffffffff9718cd63>] __up_console_sem+0x43/0x70
-> > [ 220.282709] softirqs last enabled at (6232072): [<ffffffff970ff669>]
-> > __irq_exit_rcu+0xf9/0x170
-> > [ 220.282716] softirqs last disabled at (6232061):
-> > [<ffffffff970ff669>] __irq_exit_rcu+0xf9/0x170
-> > [ 220.282722] ---[ end trace 0000000000000000 ]---
-> >=20
-> >=20
-> > Full kernel log is here:
-> > https://pastebin.com/gn01DVxE
-> >=20
-> > My GPU hardware is AMD Radeon 6900XT.
-> >=20
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 87badeae3181..7165e314c0de 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -3,7 +3,7 @@ config ARM
+ 	bool
+ 	default y
+ 	select ARCH_32BIT_OFF_T
+-	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE if HAVE_KRETPROBES && FRAME_POINTER && !ARM_UNWIND
++	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE if HAVE_KRETPROBES
+ 	select ARCH_HAS_BINFMT_FLAT
+ 	select ARCH_HAS_CURRENT_STACK_POINTER
+ 	select ARCH_HAS_DEBUG_VIRTUAL if MMU
+diff --git a/arch/arm/kernel/unwind.c b/arch/arm/kernel/unwind.c
+index a37ea6c772cd..51e34fa4a4b3 100644
+--- a/arch/arm/kernel/unwind.c
++++ b/arch/arm/kernel/unwind.c
+@@ -28,6 +28,7 @@
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
+ #include <linux/list.h>
++#include <linux/kprobes.h>
+ 
+ #include <asm/stacktrace.h>
+ #include <asm/traps.h>
+@@ -482,6 +483,12 @@ int unwind_frame(struct stackframe *frame)
+ 	frame->pc = ctrl.vrs[PC];
+ 	frame->lr_addr = ctrl.lr_addr;
+ 
++#ifdef CONFIG_KRETPROBES
++	if (is_kretprobe_trampoline(frame->pc))
++		frame->pc = kretprobe_find_ret_addr(frame->tsk,
++					(void *)frame->sp, &frame->kr_cur);
++#endif
++
+ 	return URC_OK;
+ }
+ 
+@@ -522,6 +529,11 @@ void unwind_backtrace(struct pt_regs *regs, struct task_struct *tsk,
+ 		frame.pc = thread_saved_pc(tsk);
+ 	}
+ 
++#ifdef CONFIG_KRETPROBES
++	frame.kr_cur = NULL;
++	frame.tsk = tsk;
++#endif
++
+ 	while (1) {
+ 		int urc;
+ 		unsigned long where = frame.pc;
+diff --git a/arch/arm/probes/kprobes/core.c b/arch/arm/probes/kprobes/core.c
+index 9090c3a74dcc..1435b508aa36 100644
+--- a/arch/arm/probes/kprobes/core.c
++++ b/arch/arm/probes/kprobes/core.c
+@@ -41,6 +41,16 @@
+ 			   (unsigned long)(addr) +	\
+ 			   (size))
+ 
++/*
++ * Since EABI unwinder doesn't use ARM_fp as conventional fp
++ * use ARM_sp as hint register for kretprobes.
++ */
++#ifdef CONFIG_ARM_UNWIND
++#define TRAMP_FP ARM_sp
++#else /* CONFIG_FRAME_POINTER */
++#define TRAMP_FP ARM_fp
++#endif
++
+ DEFINE_PER_CPU(struct kprobe *, current_kprobe) = NULL;
+ DEFINE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
+ 
+@@ -376,8 +386,8 @@ int __kprobes kprobe_exceptions_notify(struct notifier_block *self,
+ void __naked __kprobes __kretprobe_trampoline(void)
+ {
+ 	__asm__ __volatile__ (
+-#ifdef CONFIG_FRAME_POINTER
+ 		"ldr	lr, =__kretprobe_trampoline	\n\t"
++#ifdef CONFIG_FRAME_POINTER
+ 	/* __kretprobe_trampoline makes a framepointer on pt_regs. */
+ #ifdef CONFIG_CC_IS_CLANG
+ 		"stmdb	sp, {sp, lr, pc}	\n\t"
+@@ -395,8 +405,12 @@ void __naked __kprobes __kretprobe_trampoline(void)
+ 		"add	fp, sp, #60		\n\t"
+ #endif /* CONFIG_CC_IS_CLANG */
+ #else /* !CONFIG_FRAME_POINTER */
++		/* store SP, LR on stack and add EABI unwind hint */
++		"stmdb  sp, {sp, lr, pc}	\n\t"
++		".save	{sp, lr, pc}	\n\t"
+ 		"sub	sp, sp, #16		\n\t"
+ 		"stmdb	sp!, {r0 - r11}		\n\t"
++		".pad	#52				\n\t"
+ #endif /* CONFIG_FRAME_POINTER */
+ 		"mov	r0, sp			\n\t"
+ 		"bl	trampoline_handler	\n\t"
+@@ -414,14 +428,14 @@ void __naked __kprobes __kretprobe_trampoline(void)
+ /* Called from __kretprobe_trampoline */
+ static __used __kprobes void *trampoline_handler(struct pt_regs *regs)
+ {
+-	return (void *)kretprobe_trampoline_handler(regs, (void *)regs->ARM_fp);
++	return (void *)kretprobe_trampoline_handler(regs, (void *)regs->TRAMP_FP);
+ }
+ 
+ void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
+ 				      struct pt_regs *regs)
+ {
+ 	ri->ret_addr = (kprobe_opcode_t *)regs->ARM_lr;
+-	ri->fp = (void *)regs->ARM_fp;
++	ri->fp = (void *)regs->TRAMP_FP;
+ 
+ 	/* Replace the return addr with trampoline addr. */
+ 	regs->ARM_lr = (unsigned long)&__kretprobe_trampoline;
+-- 
+2.17.1
 
---o4zd5pbplcropbu6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmL6JiEACgkQwqF3j0dL
-ehwq9w//b69lAXI0xYUzfnBdRcjUey7Yi/e1eZO3DlQSRYtYRYNfxmZXOHEIy+Bu
-g/EOszZbbQCy2MreuAxk7rCurgRRq6jUYXWd+F40VSQsuw1q11BkeMcwD6+rDkEn
-qt/+0SIebwcOtV+ZYnR+nzf6Tq5mgfdho4PCYXYSW1pETvxme/5+sPdr3tHHL/Sl
-+hN/HOdmLaI+/Nn2kcRTbuKVPEn0hAbR2cNi+KRTF3I81kIBNgM2AKvPcWaJEkn/
-E3O51jMo+uYJBDZhcsgJt0vj9feKchEuvGaZ2yjZoipRnUQw2rnqL4nUaw9jLMMO
-2YEwr+24TwuCCdOaZK+ADhI9RW0F08PdTyXrs7DyU+/YWdfKllCy1cd+ErCHW2Bn
-TIEzM+0J7mmS/kMBr+mT0NT8ZGjX/d/D1BJHG1SJqHxwKpOvDz/y+jCurGJSefpv
-UJ4U+3OaPhwRjiSDyvjsDUslC98meEdtLk8OPTEHUJP+aXMkI6Ujbt0PSxYCVB6L
-yKBdfvDXPwGGn4WlBcynDCExogVmNuFAdktkBowST2a5T7OLf8nV42F/UXJJvLdx
-UiM52Ws2icCxOBNHe2QXuPrO6FGs+Xl0jc9olLko8/kz8oE2RqK53z7u83f5nXyn
-oVUmc0mRsnxon/GR1THi68TCKjZ+WXxbfwhUdg9JlEPeAjXuKa8=
-=jyzg
------END PGP SIGNATURE-----
-
---o4zd5pbplcropbu6--

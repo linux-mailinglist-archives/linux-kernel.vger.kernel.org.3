@@ -2,81 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E999C5933B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 18:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED03A5933C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 19:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232671AbiHOQ7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 12:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48076 "EHLO
+        id S233071AbiHORAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 13:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232342AbiHOQ6v (ORCPT
+        with ESMTP id S236130AbiHORAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 12:58:51 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678E125E9D;
-        Mon, 15 Aug 2022 09:58:50 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id a15so5527918qko.4;
-        Mon, 15 Aug 2022 09:58:50 -0700 (PDT)
+        Mon, 15 Aug 2022 13:00:50 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6621711C18;
+        Mon, 15 Aug 2022 10:00:49 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id bx38so8174546ljb.10;
+        Mon, 15 Aug 2022 10:00:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=rzM3JqvnxsoWPVIXaDiU4d/LUQsOkqzo4ABIVVFOAJw=;
-        b=PQdA6Z3lfdxlktddD5yp8zviHlvFY2VEPX2pdwYY4jPtop+mP8GwfdH0uIZEBhuG4l
-         0dwrCKAheoDHuxWunvNF11/ge+G1iiA6PaYkJqHn6FlSEo/XkFXG2dOqoPnTQ7aRsfK2
-         JI2wEd+3r2kTyXdQjlGGCeRu45awh3Ws+g+KCddX9jSnLN0y5MYIcJ0o2IObz1VUj4PF
-         VIl/1cYoLIe9j6LsDj6ieBaX0IyIszz0Q3SJExJWFEI9xtJIs4xNeqrQNMDxEN2g/mvF
-         RnrusReCloThAcUnjwu8eef3R8leJxmKgs0sn63IRsGuShL4bWh+RKSR72aRA6jxMkjN
-         EVxw==
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc;
+        bh=SqgMO61HKo9LO3ZR8aj5lCUUOKdlsT1EAnLa0+nEyII=;
+        b=HqrGB3waUaPwt3dbHwnXeNuvp64MFi2z7gFBM7uC6E00IFaxdSjoXBRAtAL7Fhbu7P
+         UbKCSTmwXwkIbmZTMFveEwrS17UJKFAmQo5/AfMFKYrZCyAdzToW80FF/jo+i+MeHDYn
+         jM8CQfzsQYHhOtb7DXpIoDdcWhom0YeoImgwSZH5sy8uhBMve8jZKlifYYVsM2lPqrGm
+         IbrZGxkc4LAuNs2Cm1zv/A6GS8RR5qP7uo3U3jHbkgLqRTK4s9dWR7JT8z7tzsV27IQ+
+         Htt7Puz1TMhnK+HtW/2/78vLOb2ZIXGYlmov72TBueMTVn5JVhVu8pDbLbxhQsZ89VIH
+         jKuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=rzM3JqvnxsoWPVIXaDiU4d/LUQsOkqzo4ABIVVFOAJw=;
-        b=64nn/46XgnOL08PN+FDaXXYsrhqvM1Pxg8UvMrf8ce08ZmLZa96iVlfe59sYTaYnuy
-         /n8rsWemwrFqFrwuoA/6sio0pHmeLXyQFH+ly5JEJNNH56JDLMdsb1P2ZsmiA0GuPw08
-         tlS9iKW0/Yf9S3zdNOzCqBQEkmfkSSKYkwMnHe1Ip062IwxyJkGOr/83jmQzVcJONPM6
-         b+Wu+iUZFwAH7ZVHMsj0HUs94Yl3hQtvmksmfpKW+Ex5TUiKR3QiJm+YqlaRxbZiXAxA
-         QvU7YEIF5pcwGH7drMY0+QR/+KwYrcYLaxNvIRN6OP9u8HgX0eMFtdCOMtyrbJ6zkOO+
-         rCWA==
-X-Gm-Message-State: ACgBeo37958JCqUF3xF5G1VQNVuoUkj/0qNRT/PeI2MLhInier3KjCgm
-        6rf2Xu918FaEdf38sqjHmwA=
-X-Google-Smtp-Source: AA6agR6frgGoCP/h6DZqk5vMGKv36dBjLyTimu6548/3eAa9rxI+WbnfflmA5GDylppFjnlB1wCCMA==
-X-Received: by 2002:a05:620a:a42:b0:6bb:2168:7517 with SMTP id j2-20020a05620a0a4200b006bb21687517mr4638436qka.562.1660582729494;
-        Mon, 15 Aug 2022 09:58:49 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id j18-20020a05620a411200b006b9ab3364ffsm10003709qko.11.2022.08.15.09.58.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 09:58:48 -0700 (PDT)
-Message-ID: <e97bf849-ce6e-0f61-8122-0389bc285b06@gmail.com>
-Date:   Mon, 15 Aug 2022 09:58:38 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 1/9] dt-bindings: arm64: bcmbca: Merge BCM4908 into
- BCMBCA
-Content-Language: en-US
-To:     William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
-        f.fainelli@gmail.com, krzysztof.kozlowski@linaro.org,
-        rafal@milecki.pl, Rob Herring <robh@kernel.org>,
-        Anand Gore <anand.gore@broadcom.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc;
+        bh=SqgMO61HKo9LO3ZR8aj5lCUUOKdlsT1EAnLa0+nEyII=;
+        b=6ln48VwZ3L7HuOclzIoy7YbDBGN3esQWI2hb/3B7bZ2Vgi2eeF+dyWGXKdqzBpbRoX
+         RNP/bBuYtdijytsNLW4fhtx4qgUV+UQZcMclDWPmSp+X88Ike81ApFsL4dYCgPVUVUub
+         izp1KUuMTMd4ylZfhiW4zCzrrPdxghPmehjVVlnEhMAZ/xCGgbbXEfkUR5kJSK6Me/Hh
+         h+ADC4XCRqCWmZF0cISKZLmyAosJsBoRrVEayWY5xlm6KhWcnDjJ/44Q9X43SD2Z3/1p
+         set9ThdhTmJIRw4mW9LcMxYhmvbDw/UjBQNb4UoW0lAWqjQ4xs0Oj1xTe6vC6Qp7s7OR
+         9Cyg==
+X-Gm-Message-State: ACgBeo17OAJzIY9TKp+W+rBLz+xN3BAUfTIc6VOSonfcCiqMZ3hut040
+        8BQkLKjEIqXM7HeAi84nfb1T0FI+Lbo=
+X-Google-Smtp-Source: AA6agR5+vnjUDUMm4sYZlKOzZknd6MiC7wdFA2gl0BVCnOf04hu87bgTEZ6uSrZ1YngMeA5ZVd+tzQ==
+X-Received: by 2002:a2e:878b:0:b0:25e:c46f:12a3 with SMTP id n11-20020a2e878b000000b0025ec46f12a3mr4966094lji.466.1660582847612;
+        Mon, 15 Aug 2022 10:00:47 -0700 (PDT)
+Received: from razdolb (95-31-189-152.broadband.corbina.ru. [95.31.189.152])
+        by smtp.gmail.com with ESMTPSA id x8-20020a19e008000000b0048afb8b8e53sm1148441lfg.80.2022.08.15.10.00.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 10:00:46 -0700 (PDT)
+References: <20220712141925.678595-1-mike.rudenko@gmail.com>
+User-agent: mu4e 1.7.27; emacs 28.1
+From:   Mikhail Rudenko <mike.rudenko@gmail.com>
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220803175455.47638-1-william.zhang@broadcom.com>
- <20220803175455.47638-2-william.zhang@broadcom.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220803175455.47638-2-william.zhang@broadcom.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Cc:     Mikhail Rudenko <mike.rudenko@gmail.com>
+Subject: Re: [PATCH 0/2] Add Omnivision OV4689 image sensor driver
+Date:   Mon, 15 Aug 2022 19:59:14 +0300
+In-reply-to: <20220712141925.678595-1-mike.rudenko@gmail.com>
+Message-ID: <87zgg530ht.fsf@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,19 +70,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/3/22 10:54, William Zhang wrote:
-> BCM4908 is one of the Broadcom Broadband origin WLAN Router/Access
-> Pointer SoCs. It was originally added by Rafał before Broadcom
-> started to upstream the support for broadband SoCs. Now that Broadcom
-> Broadband SoC is supported under arch ARCH_BCMBCA, this patch moves
-> BCM4908 SoC device tree descriptions into BCMBCA binding.
-> 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> Acked-by: Rafał Miłecki <rafal@milecki.pl>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> 
-> ---
+Gentle ping. Still waiting for any [2/2] review. Should I resend?
 
-Applied to https://github.com/Broadcom/stblinux/devicetree/next, thanks!
--- 
-Florian
+
+On 2022-07-12 at 17:19 +03, Mikhail Rudenko <mike.rudenko@gmail.com> wrote:
+> Hello,
+>
+> this series implements support for Omnivision OV4689 image
+> sensor. The Omnivision OV4689 is a high performance, 1/3-inch, 4
+> megapixel image sensor. Ihis chip supports high frame rate speeds up
+> to 90 fps at 2688x1520 resolution. It is programmable through an I2C
+> interface, and sensor output is sent via 1/2/4 lane MIPI CSI-2
+> connection.
+>
+> The driver is based on Rockchip BSP kernel [1]. It implements 4-lane CSI-2
+> and single 2688x1520 @ 30 fps mode. The driver was tested on Rockchip
+> 3399-based FriendlyElec NanoPi M4 board with MCAM400 camera module.
+>
+> While porting the driver, I stumbled upon two issues:
+>
+> (1) In the original driver, horizontal total size (HTS) was set to a
+> value (2584) lower then the frame width (2688), resulting in negative
+> hblank. In this driver, I increased HTS to 2688, but fps dropped from
+> 29.88 to 28.73. What is the preferred way to handle this?
+>
+> (2) The original driver exposes analog gain range 0x0 - 0x7ff, but the
+> gain is not linear across that range. Instead, it is piecewise linear
+> (and discontinuous). 0x0-0xff register values result in 0x-2x gain,
+> 0x100-0x1ff to 0x-4x, 0x300-0x3ff to 0x-8x, and 0x700-0x7ff to 0x-16x,
+> with more linear segments in between. Rockchip's camera engine code
+> chooses one of the above segments depenging on the desired gain
+> value. The question is, how should we proceed keeping in mind
+> libcamera use case? Should the whole 0x0-0x7ff be exposed as-is and
+> libcamera will do the mapping, or the driver will do the mapping
+> itself and expose some logical gain units not tied to the actual gain
+> register value? Meanwhile, this driver conservatively exposes only
+> 0x0-0xf8 gain register range.
+>
+> [1] https://github.com/rockchip-linux/kernel/blob/develop-4.19/drivers/media/i2c/ov4689.c
+>
+> Mikhail Rudenko (2):
+>   media: dt-bindings: media: i2c: document OV4689 DT bindings
+>   media: i2c: add support for ov4689
+>
+>  .../bindings/media/i2c/ovti,ov4689.yaml       | 122 +++
+>  MAINTAINERS                                   |   8 +
+>  drivers/media/i2c/Kconfig                     |  14 +
+>  drivers/media/i2c/Makefile                    |   1 +
+>  drivers/media/i2c/ov4689.c                    | 899 ++++++++++++++++++
+>  5 files changed, 1044 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
+>  create mode 100644 drivers/media/i2c/ov4689.c
+
+
+--
+Best regards,
+Mikhail Rudenko

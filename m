@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F932593032
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA9F593035
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231833AbiHONrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 09:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59568 "EHLO
+        id S232316AbiHONtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 09:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiHONrU (ORCPT
+        with ESMTP id S231574AbiHONtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 09:47:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1453F1A383
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 06:47:19 -0700 (PDT)
+        Mon, 15 Aug 2022 09:49:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFB422B2C
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 06:49:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A66B860EE9
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 13:47:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9E1DC433D6;
-        Mon, 15 Aug 2022 13:47:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 19466B80EBF
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 13:49:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3D0EC433D6
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 13:49:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660571238;
-        bh=0o95ZoWpRqBW2rSC17dLLryvgMyYfOTNout4mhOWKdE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Otm+t0Tp6UPqtTkEaf9l2DWnUuoDo1YSKilLO92pD1KUcxl+XJ7q5kBj4N1R6CFWp
-         sK2e4GZgbRIZ++IGBv6Wtb+GYs87/8lVzh+acUl+kUHkVaiRusjHZCQt3bOjgDHZlV
-         UouxQjBKUXrXTHxZDrcEPwObk1yLiWhKjY8ZO/zLXBGemNB2x8G/RA0SZ9DCwRKSKP
-         cKTb377kLXSha7xpTyy77s4RTaAg1UQGVw7Tgh/ejesKCdi+fgtjmcIB7SnOfCuY1T
-         C82r8hy01iwJTKimLlZShhOtOvJcpvsTbtiXakYSOM0TwxaYtReb58/sBH4ZAG8oQ0
-         +eIkCdrnw+CxA==
-Date:   Mon, 15 Aug 2022 14:47:11 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Greg KH <gregkh@linuxfoundation.org>, jirislaby@kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Asahi Linux <asahi@lists.linux.dev>,
-        Oliver Neukum <oneukum@suse.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: Debugging a TTY race condition on M1 (memory ordering dragons)
-Message-ID: <20220815134711.GA10374@willie-the-truck>
-References: <6c089268-4f2c-9fdf-7bcb-107b611fbc21@marcan.st>
+        s=k20201202; t=1660571340;
+        bh=RXoSi/7YbiC+CPYE1PW8WmeBQ/QNMuQCpJzyi8cEeYs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=aiDVGgQwkR6FJOd4Lewb0NwL0nyT2R+rJA8z3RZm7rtgXkZTTLjT0vpyMi/ocQJ3W
+         3hETtLv6HcmMrI8SjvI5GtTrZdUmpz2O/UXlKwDbp3bKDkwsNeh2rikwJywZ38/xHB
+         7CKsJe3JHYdBeVpAMdKRyi99rctxhNt/DNjWcnsBph0el6rww+S/IKSVHluPuxPqh3
+         CjgJy5Zm4KTz274/Mam2R0YKxe2oeqd2Qna61W+PliAiqnJz6/L72ml7ZGBTj+9Wsv
+         qFgr5dGMdILfD2pxiZZTn4Capw0ENVHsB2eCJh45JbHf1qXpInfhH5P9T1Zx7qcDYd
+         aGOQbnBfO7tkA==
+Received: by mail-ed1-f51.google.com with SMTP id t5so9626959edc.11
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 06:49:00 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3WlxOZ/90jZ3n8SDx9q/VxMnM8ZuUUAeJuVumCEbrEERWYNQLr
+        svsO080rHFiSPDR3pcG+xgONSSTv6mLr+bDj07I=
+X-Google-Smtp-Source: AA6agR4dsQl443RF5VdPLcs7MwGq1b8CumhzXbapAVOlOuTPKUmEhmJHhP3Jui6aOXI8XLwMvXNqQskSysZjSiFJKv8=
+X-Received: by 2002:a05:6402:3495:b0:43d:d76e:e9ff with SMTP id
+ v21-20020a056402349500b0043dd76ee9ffmr15010151edc.227.1660571339043; Mon, 15
+ Aug 2022 06:48:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6c089268-4f2c-9fdf-7bcb-107b611fbc21@marcan.st>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <202208140835.W6F1j6Da-lkp@intel.com> <Yvo8KUKJBlMtoNgI@casper.infradead.org>
+ <CAK8P3a3Gx39P90k9ZUMdzHiNpjNn1tdvkTktQyzUqqfG+an4BA@mail.gmail.com> <YvpEkYMatTeNvNZa@casper.infradead.org>
+In-Reply-To: <YvpEkYMatTeNvNZa@casper.infradead.org>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Mon, 15 Aug 2022 15:48:43 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3=XC4ez-zeGptQb_9NtX5rVfr8Qq80eGaEckzUzjAxzg@mail.gmail.com>
+Message-ID: <CAK8P3a3=XC4ez-zeGptQb_9NtX5rVfr8Qq80eGaEckzUzjAxzg@mail.gmail.com>
+Subject: Re: fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds
+ limit (1024) in 'ntfs_read_folio'
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,223 +64,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hector,
-
-On Mon, Aug 15, 2022 at 08:16:56PM +0900, Hector Martin wrote:
-> I'm trying to debug a TTY layer race on Apple M1 machines, and I'm deep
-> enough into the rabbit hole that I could use some suggestions/help
-> figuring out how to continue approaching this.
-
-I'm really not familiar with the TTY layer, but here's hoping I can help
-a bit on the memory ordering side of things...
-
-> With the test case, two packets end up getting pushed to the TTY: 1024
-> bytes and 186 bytes (total 1210). What I observe is that sometimes,
-> after commit is set to 1210, queue_work() returns false (indicating that
-> work is already queued and hasn't begun executing yet), yet the last
-> work function execution only sees commit==1024. When this happens,
-> flush_to_ldisc and queue_work were both executing within a microsecond
-> or two of each other:
-> 
-> [    5.408251] queue_work() ret false (commit=1210)
-> [    5.410367] flush_to_ldisc() commit=1210
-> 644
-> [    5.410984] flush_to_ldisc() commit=1024
-> [    5.411570] flush_to_ldisc() commit=1210
-> 645
-> [    5.412202] flush_to_ldisc() commit=1024
-> [    5.412785] flush_to_ldisc() commit=1210
-> 646
-> [    5.413630] flush_to_ldisc() commit=1024
-> [    5.413631] queue_work() ret false (commit=1210)
-> <hang because userspace never gets the data>
-> 
-> The queue_work() documentation says:
-> 
-> > Memory-ordering properties: If it returns true, guarantees that all
-> > stores preceding the call to queue_work() in the program order will
-> > be visible from the CPU which will execute work by the time such work
-> > executes
-> 
-> That would seem to imply that if it returns false, there are no memory
-> ordering guarantees. If that were the case, the TTY layer's usage of
-> queue_work() would be buggy. However, that would also make the memory
-> ordering guarantees essentially useless, since you *need* to know that
-> if the work is already queued and hasn't started running yet, it will
-> see all writes you've made until the call (otherwise you'd have to add
-> manual barriers before queue_work(), which defeats the purpose of
-> ordering guarantees in the normal case). So, I posit that the
-> documentation is incomplete and queue_work() does indeed provide such
-> guarantees.
-> 
-> Behind the scenes, the work pending flag is atomically set with
-> test_and_set_bit() by queue_work_on(). That compiles down to my old
-> friend LDSETAL, which I already showed [2] does not provide the
-> guarantees test_and_set_bit() claims to have (== full memory barrier).
-> However, I can't get that litmus test to fail on real hardware, so that
-> may be a red herring as far as this bug goes.
-
-As I mentioned in the thread you linked to, the architecture was undergoing
-review in this area. I should've followed back up, but in the end it was
-tightened retrospectively to provide the behaviour you wanted. This was
-achieved by augmenting the barrier-ordered-before relation with:
-
-  * RW1 is a memory write effect W1 and is generated by an atomic instruction
-    with both Acquire and Release semantics.
-
-You can see this in the latest Arm ARM.
-
-However, test_and_set_bit() is unordered on failure (i.e. when the bit is
-unchanged) and uses READ_ONCE() as a quick check before the RmW. See the
-"ORDERING" section of Documentation/atomic_bitops.txt.
-
-> On the other end of things, we have this lovely comment:
-> 
-> static void set_work_pool_and_clear_pending(struct work_struct *work,
->                                             int pool_id)
+On Mon, Aug 15, 2022 at 3:05 PM Matthew Wilcox <willy@infradead.org> wrote:
+> On Mon, Aug 15, 2022 at 02:56:11PM +0200, Arnd Bergmann wrote:
+> > On Mon, Aug 15, 2022 at 2:29 PM Matthew Wilcox <willy@infradead.org> wrote:
+> > >
+> > > On Sun, Aug 14, 2022 at 08:21:36AM +0800, kernel test robot wrote:
+> > > > Hi Matthew,
+> > > >
+> > > > FYI, the error/warning still remains.
+> > >
+> > > FYI, this is still not interesting.
+> > > This is a hexagon 256kB PAGE_SIZE config, and so the amount of stack
+> > > space is correspondingly larger.  The frame size warning should be
+> > > increased to allow for this.
+> > >
+> > > > >> fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds limit (1024) in 'ntfs_read_folio' [-Wframe-larger-than]
+> >
+> > I don't think we should change the frame size warning for this, there is not
+> > generally any correlation between page size and stack usage, so that would
+> > just hide bugs elsewhere.
+>
+> In this specific case, there is.  It's a stack allocation of an array
+> that depends on the number of 512-byte blocks per page.  With 4k pages,
+> that's only 8.  With 256k pages, that's 512.  With an 8-byte pointer,
+> that's a 4kB allocation, and even with a 4-byte pointer, that's a 2kB
+> stack allocation, which is still going to blow the prescribed stack
+> limit.
+>
+> This is not unique to NTFS!  An NTFS-specific "fix" is inappropriate.
+> It's just that nobody's paying attention to the warnings coming from
+> fs/buffer.c:
+>
+> include/linux/buffer_head.h:#define MAX_BUF_PER_PAGE (PAGE_SIZE / 512)
+>
+> int block_read_full_folio(struct folio *folio, get_block_t *get_block)
 > {
->     /*
->      * The following wmb is paired with the implied mb in
->      * test_and_set_bit(PENDING) and ensures all updates to @work made
->      * here are visible to and precede any updates by the next PENDING
->      * owner.
->      */
->     smp_wmb();
->     /* note: this is an atomic_long_set */
->     set_work_data(work, (unsigned long)pool_id << WORK_OFFQ_POOL_SHIFT, 0);
->     /*
->      * The following mb guarantees that previous clear of a PENDING bit
->      * will not be reordered with any speculative LOADS or STORES from
->      * work->current_func, which is executed afterwards.  This possible
->      * reordering can lead to a missed execution on attempt to queue
->      * the same @work.  E.g. consider this case:
->      *
->      *   CPU#0                         CPU#1
->      *   ----------------------------  --------------------------------
->      *
->      * 1  STORE event_indicated
->      * 2  queue_work_on() {
->      * 3    test_and_set_bit(PENDING)
->      * 4 }                             set_..._and_clear_pending() {
->      * 5                                 set_work_data() # clear bit
->      * 6                                 smp_mb()
->      * 7                               work->current_func() {
->      * 8                      LOAD event_indicated
->      *                   }
->      *
->      * Without an explicit full barrier speculative LOAD on line 8 can
->      * be executed before CPU#0 does STORE on line 1.  If that happens,
->      * CPU#0 observes the PENDING bit is still set and new execution of
->      * a @work is not queued in a hope, that CPU#1 will eventually
->      * finish the queued @work.  Meanwhile CPU#1 does not see
->      * event_indicated is set, because speculative LOAD was executed
->      * before actual STORE.
->      */
->     smp_mb();
-> }
-> 
-> That would indeed agree with the idea that queue_work() does offer
-> guarantees in the ret==false case. And yet, it doesn't work.
-> 
-> Effectively we have the sequence:
-> 
-> CPU#1:
->   STLR A
->   LDSETAL B
+> ...
+>         struct buffer_head *bh, *head, *arr[MAX_BUF_PER_PAGE];
+>
+> I don't know why I'm not getting a nastygram about that one, but it's
+> all bufferhead based filesystems.
 
-I think you're missing the "shortcut" in test_and_set_bit():
+I can confirm I see this warning with 256KB pages, in block_read_full_folio()
+and others:
 
-        if (READ_ONCE(*p) & mask)
-                return 1;
+fs/mpage.c:131:20: error: stack frame size (4200) exceeds limit (1024)
+in 'do_mpage_readpage' [-Werror,-Wframe-larger-than]
+fs/mpage.c:447:12: error: stack frame size (4336) exceeds limit (1024)
+in '__mpage_writepage' [-Werror,-Wframe-larger-than]
+fs/buffer.c:2254:5: error: stack frame size (2152) exceeds limit
+(1024) in 'block_read_full_folio' [-Werror,-Wframe-larger-than]
+fs/fat/dir.c:1133:5: error: stack frame size (2104) exceeds limit
+(1024) in 'fat_alloc_new_dir' [-Werror,-Wframe-larger-than]
+fs/fat/fatent.c:466:5: error: stack frame size (2216) exceeds limit
+(1024) in 'fat_alloc_clusters' [-Werror,-Wframe-larger-than]
+fs/fat/fatent.c:554:5: error: stack frame size (2168) exceeds limit
+(1024) in 'fat_free_clusters' [-Werror,-Wframe-larger-than]
+fs/fat/dir.c:1281:5: error: stack frame size (2232) exceeds limit
+(1024) in 'fat_add_entries' [-Werror,-Wframe-larger-than]
+fs/ntfs3/fsntfs.c:738:5: error: stack frame size (2112) exceeds limit
+(1024) in 'ntfs_clear_mft_tail' [-Werror,-Wframe-larger-than]
+fs/ext4/move_extent.c:252:1: error: stack frame size (2272) exceeds
+limit (1024) in 'move_extent_per_page' [-Werror,-Wframe-larger-than]
+fs/ext4/readpage.c:223:5: error: stack frame size (4280) exceeds limit
+(1024) in 'ext4_mpage_readpages' [-Werror,-Wframe-larger-than]
 
-        old = arch_atomic_long_fetch_or(mask, (atomic_long_t *)p);
+I still think that raising the warning limit here is not appropriate, having
+a 512 element array of pointers on the stack is just not appropriate anywhere
+IMHO.
 
-so if the bit is already set (which I think is the 'ret == false' case)
-then you've only got a control dependency here and we elide writing to
-B.
+> > NTFS has had problems with stack usage on 64K+ pages before, the last
+> > time we addressed this using 4eec7faf6775 ("fs: ntfs: Limit NTFS_RW to
+> > page sizes smaller than 64k"), but it looks like this time it affects both
+> > write and read support.
+>
+> The reasoning there is faulty.  If you have a 64k (or 256k) page size,
+> your stack is correspondingly huge and can handle these kinds of
+> allocations.
 
-> 
-> CPU#2:
->   DMB ISHST
->   STR B
+I think that is only the case for VMAP stacks, which require full pages,
+but configurations without that use the "thread_stack" kmem_cache
+for allocating stacks when THREAD_SIZE is smaller than PAGE_SIZE.
 
-Missing DMB ISH here from the smp_mb()?
+The THREAD_SIZE on Hexagon is 4KB, so do_mpage_readpage()
+with 4200 bytes would immediately overflow that. Obviously 4KB stacks
+are problematic already and only supported as options on sh and m68k
+otherwise, but raising it to the usual 8KB would likely still cause the same
+problem.
 
->   LDAR A
-> 
-> I tried writing a litmus test for this, but I wasn't able to make it
-> fail on neither herd7 nor real hardware. And yet I can trivially
-> reproduce the problem in vivo with the TTY layer. Perhaps there are
-> other preconditions to this particular sequence failing on real hardware
-> (related to caches, speculation, etc)...
+I have no problems with a patch removing support for 256KB pages if that
+helps, as Hexagon is the only architecture to support this and there are close
+to zero Linux users anway. This would leave only three warnings for 64KB
+pages in allmodconfig:
 
-Hmm, without the full DMB on CPU2, the store to B and the load-acquire from
-A are not ordered so it really should fail.
+fs/mpage.c:131:20: error: stack frame size (1128) exceeds limit (1024)
+in 'do_mpage_readpage' [-Werror,-Wframe-larger-than]
+fs/mpage.c:447:12: error: stack frame size (1264) exceeds limit (1024)
+in '__mpage_writepage' [-Werror,-Wframe-larger-than]
+fs/ext4/readpage.c:223:5: error: stack frame size (1208) exceeds limit
+(1024) in 'ext4_mpage_readpages' [-Werror,-Wframe-larger-than]
 
-> I did stumble upon something a bit odd with the LSE atomic/STR pairing.
-> I also couldn't get a litmus to fail this in neither sim nor hardware,
-> so I probably just missed something about the memory model, but:
-> according to the ARM, the load/store halves of an atomic op are
-> Atomic-ordered-before among themselves, and the write is
-> Atomic-ordered-before a subsequent read with acquire semantics. However,
-> there is no mention of non-atomic writes. So, by my reading, this is
-> possible:
-> 
-> (flag is 1)
-> LDSETAL LOAD 1
-> STR 0
-> LDSETAL STORE 1
-> 
-> Which would leave you with LDSETAL claiming the old/new values are both
-> 1, while the store completed and vanished. This seems pretty insane, and
-> would mean atomic_long_set() isn't actually atomic wrt other atomic ops,
-> but I couldn't figure out what forbids it, at least in the textual
-> description of the memory model. If this is indeed not forbidden, then
-> this could happen:
-> 
-> LDSETAL Read-Acquire (1)
->   STR pending=0
->   LDAR commit=old
-> STLR commit=new // can move below read-acquire
-> LDSETAL Write-Release (1)
-> (Returned 1, so work is not requeued)
-> 
-> But as I said, I couldn't prove that this is possible with herd7 or litmus7.
-
-If that non-atomic store is hitting the same variable, then it cannot land
-in the middle of the atomic RmW. The architecture says:
-
- | The atomic instructions perform atomic read and write operations on a memory
- | location such that the architecture guarantees that no modification of that
- | memory location by another observer can occur between the read and the write
- | defined by that instruction.
-
-and the .cat file used by herd has a separate constraint for this (see the
-"empty rmw & (fre; coe) as atomic" line).
-
-> On the "trying random things" front, this fixes the bug:
-> 
-> 	tty_flip_buffer_commit(buf->tail);
-> 	smp_mb();
-> 	queue_work(system_unbound_wq, &buf->work);
-> 
-> But this does not:
-> 
-> 	tty_flip_buffer_commit(buf->tail);
-> 	smp_wmb();
-> 	queue_work(system_unbound_wq, &buf->work);
-> 
-> Which does kind of point towards the "load side moving up" theory.
-> 
-> Any ideas? Am I onto something with the STR/LDSETAL thing? Memory model
-> confusion? CPU bug? Did I miss an obvious bug? :)
-
-There's never anything obvious when you're working with this sort of stuff,
-but my suggestion is that we work towards a litmus tests that we both agree
-represents the code and then take it from there. At the moment there's an
-awful lof of information, but you can see from my comments that I'm not
-up to speed with you yet!
-
-Cheers,
-
-Will
+        Arnd

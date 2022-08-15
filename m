@@ -2,100 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ADCC594CD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2A1594E20
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244992AbiHPB0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 21:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56004 "EHLO
+        id S233378AbiHPBgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 21:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244967AbiHPB0b (ORCPT
+        with ESMTP id S233219AbiHPBgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 21:26:31 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738ECDB7D4
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:16:03 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 73so7530041pgb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:16:03 -0700 (PDT)
+        Mon, 15 Aug 2022 21:36:08 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFB3E831C
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:26:42 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id w14so7437505plp.9
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:26:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=8nOgaBzIlmfxFPStsMQfSkb4tmWBu2Jj/lkhaO8hCeU=;
-        b=mG28n59cEJ00FlMAyPe/A0+FvrzRw+iCQIb7KFfdKwCzoXJQgggYLI5cnnmepguMp+
-         aj/+jck3LQ6quN+0+gQM72IhFZWCT3XWLszCtcVoSFZrNHLOF2l3kQni7TqF03rHtpHt
-         XMc7mh3U3XbgGJTHBYXwvyo884+hDXJpspd4p1FNrV7ApoOMWIvjZhHMR2CwChNa0EIl
-         FuDg+xF2jD9cT9LmHlqebnXJIrum/ARn3liUXwTz/fe+ZZP2BCEHVzQwPuj/wNP4fy3t
-         DGJ4Ophm7/fqguXaGuyrqaODGr0I/9ZbetMzB7/yVy+YNbqa5OLzPh9TkRQ3XivEPTqP
-         0v+w==
+         :subject:cc:to:from:date:from:to:cc;
+        bh=s6C7xjGZFgkJFr5KfYkyBRVqHeZGBiLrMu8lM2DAdGc=;
+        b=AG3J8t9JIoa5aHNcIfU8Afi648JK1hym91JEPUZ0dSFr5Vu5y1F0zIWj3okus4yq7j
+         8SrjoNQWRS//nsxmvCMkWk5+ZtML4OympnohBF9ZypJ8vl3UZvWN6IWIIFXPyNQCw1PI
+         ucQrEA19LX2XEiWOCgX4GP+56VU6Fg+OsQ8WCf2ae6sSq2c0PCH0rSS7aYW8rMg6949Y
+         46jOZtF9nXRcO3kDvuQpcCjcdnmbi6fI43+d2V1+EJk6zApr7+iOgtfTnxXurQoQ5YSI
+         iZJ4cd/1gtdUwzdgm7U6lWdHkdrKAPobffvwMvfHC7Fh5oAzxw+sZQqSq2Mjlarza+pI
+         0NxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=8nOgaBzIlmfxFPStsMQfSkb4tmWBu2Jj/lkhaO8hCeU=;
-        b=Ul7DT7IvLs4S8ST2DeTZqcu+XHsb7yIxd2czIuq0olf8gtU4jPw86JmCnU/HPF7EY/
-         aeLwaAPWOzql+Rf4srLDJeyNOfpgBKbBL3IR2LP4Mc9Pp/CJD5UgHpA3nb4pW8EYniKG
-         wqqTWkQKcawPBhtYvGiZ6qJoyitu4o+olrkgntIXN8cJjomTQTCK6DUfRwLm2D1HP0w4
-         xZwD53VAkMVGBoQbzZq7VDCsALwo6TvZYkBySWFhCmqAtWQKOsIXHl82ocWZyWPJJnDs
-         mpJyQCOjnfIptWRiL9zn5/TBd4FcCpUXxIJVwucdSV1z468FTKSxP9gjaxu0oZf3X0/F
-         pMgg==
-X-Gm-Message-State: ACgBeo3rHjaNXimikLLcngzfYDdhuZcz+AmHGB4U/7ambTGfurJgqQzf
-        y/Cr0e/rr6WInA13bW09pNuqTuCg1GQ=
-X-Google-Smtp-Source: AA6agR4tEusymmK37Mhm2Fxz6VsDZfjtY4S9tImlj6E5k+H/O1Z6vkwW+ku52NiS6br5bv1Opecbqg==
-X-Received: by 2002:a63:6384:0:b0:41d:3511:7fda with SMTP id x126-20020a636384000000b0041d35117fdamr15518112pgb.291.1660598162896;
-        Mon, 15 Aug 2022 14:16:02 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:3a69])
-        by smtp.gmail.com with ESMTPSA id t66-20020a625f45000000b0051be585ab1dsm6933910pfb.200.2022.08.15.14.16.02
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=s6C7xjGZFgkJFr5KfYkyBRVqHeZGBiLrMu8lM2DAdGc=;
+        b=ZKSFgE9bVWttO9AUT/5k6NuH2KLkc+GY4LYRS16c5/HR9SQTcnLsGFoJoPmkJqdWt5
+         N0avCALRa0OxFR+zSyn9UA1fRjYrczpnuys+QyXn/cPAqnStffOL006o8xhhp1az4viV
+         ofIHtq4apv1Q8mNOPmbKUzVh3EjOTU/eNjzGiws/FSLKmLhdhqjkF5XsSWauvSaBLd6a
+         0YcCLFeQ1t2kTr2fxErf1Hb3s0nAW7YJUY+5q5bycO9DKS16RfBkk+OoKqXUGjgPQQLY
+         MDfNFLCRQQUtEl4AUNVlBN6/G4mxAoLCsYIjuTi0wVKZ4SDQT4CHn8Kx9G0ndCbPbF5x
+         WHuQ==
+X-Gm-Message-State: ACgBeo39RFd42BJ0UCsqx9oE3pgbFqFBJFhAItWBh9d0dBmXjnWWo/RB
+        sG0joaqJamfhFbaTfN/59CsvPQ==
+X-Google-Smtp-Source: AA6agR5M/rTTm9t+DDlIhUOT49cx0BFsQgd8Bv4U1FkQ3NT1pVtZbfkGUWydTZW3Wa2xY49yXK93gQ==
+X-Received: by 2002:a17:90b:164b:b0:1f5:15ae:3206 with SMTP id il11-20020a17090b164b00b001f515ae3206mr19855063pjb.140.1660598802001;
+        Mon, 15 Aug 2022 14:26:42 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id w12-20020a170902e88c00b0016a6caacaefsm7476713plg.103.2022.08.15.14.26.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 14:16:02 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 15 Aug 2022 11:16:00 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Johannes Berg <johannes.berg@intel.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Hillf Danton <hdanton@sina.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] workqueue: don't skip lockdep work dependency in
- cancel_work_sync()
-Message-ID: <Yvq3kH9b4IEyodRK@slm.duckdns.org>
-References: <21b9c1ac-64b7-7f4b-1e62-bf2f021fffcd@I-love.SAKURA.ne.jp>
- <YuK78Jiy12BJG/Tp@slm.duckdns.org>
- <0ad532b2-df5f-331a-ae7f-21460fc62fe2@I-love.SAKURA.ne.jp>
- <97cbf8a9-d5e1-376f-6a49-3474871ea6b4@I-love.SAKURA.ne.jp>
- <afa1ac2c-a023-a91e-e596-60931b38247e@I-love.SAKURA.ne.jp>
- <7d034f7b-af42-4dbc-0887-60f4bdb3dcca@I-love.SAKURA.ne.jp>
- <0a85696a-b0b9-0f4a-7c00-cd89edc9304c@I-love.SAKURA.ne.jp>
- <77d47eed-6a22-7e81-59de-4d45852ca4de@I-love.SAKURA.ne.jp>
+        Mon, 15 Aug 2022 14:26:41 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 21:26:37 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: Re: [PATCH v2 3/3] kvm/x86: Allow to respond to generic signals
+ during slow page faults
+Message-ID: <Yvq6DSu4wmPfXO5/@google.com>
+References: <20220721000318.93522-1-peterx@redhat.com>
+ <20220721000318.93522-4-peterx@redhat.com>
+ <YvVitqmmj7Y0eggY@google.com>
+ <YvVtX+rosTLxFPe3@xz-m1.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <77d47eed-6a22-7e81-59de-4d45852ca4de@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YvVtX+rosTLxFPe3@xz-m1.local>
+X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 01:30:23PM +0900, Tetsuo Handa wrote:
-> Like Hillf Danton mentioned
+On Thu, Aug 11, 2022, Peter Xu wrote:
+> On Thu, Aug 11, 2022 at 08:12:38PM +0000, Sean Christopherson wrote:
+> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > index 17252f39bd7c..aeafe0e9cfbf 100644
+> > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > @@ -3012,6 +3012,13 @@ static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
+> > >  static int handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+> > >  			       unsigned int access)
+> > >  {
+> > > +	/* NOTE: not all error pfn is fatal; handle sigpending pfn first */
+> > > +	if (unlikely(is_sigpending_pfn(fault->pfn))) {
+> > 
+> > Move this into kvm_handle_bad_page(), then there's no need for a comment to call
+> > out that this needs to come before the is_error_pfn() check.  This _is_ a "bad"
+> > PFN, it just so happens that userspace might be able to resolve the "bad" PFN.
 > 
->   syzbot should have been able to catch cancel_work_sync() in work context
->   by checking lockdep_map in __flush_work() for both flush and cancel.
-> 
-> in [1], being unable to report an obvious deadlock scenario shown below is
-> broken. From locking dependency perspective, sync version of cancel request
-> should behave as if flush request, for it waits for completion of work if
-> that work has already started execution.
+> It's a pity it needs to be in "bad pfn" category since that's the only
+> thing we can easily use, but true it is now.
 
-Applied to cgroup/for-6.0-fixes.
-
-Thanks.
-
--- 
-tejun
+Would renaming that to kvm_handle_error_pfn() help?  I agree that "bad" is poor
+terminology now that it handles a variety of errors, hence the quotes.

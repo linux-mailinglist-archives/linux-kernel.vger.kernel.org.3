@@ -2,152 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6260592EA2
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 14:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17761592EA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 14:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbiHOMDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 08:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45516 "EHLO
+        id S241538AbiHOMDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 08:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiHOMC6 (ORCPT
+        with ESMTP id S232927AbiHOMDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 08:02:58 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367B822B3F;
-        Mon, 15 Aug 2022 05:02:57 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id o2so10363165lfb.1;
-        Mon, 15 Aug 2022 05:02:57 -0700 (PDT)
+        Mon, 15 Aug 2022 08:03:16 -0400
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B08722B3F
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 05:03:16 -0700 (PDT)
+Received: by mail-oo1-xc32.google.com with SMTP id x10-20020a4a410a000000b004456a27110fso1298877ooa.7
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 05:03:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc;
-        bh=/XsHCAAUo/oLtA4l5n4XUmocauuvUzyU7VbH9wcjXcQ=;
-        b=ErUX/iJM60mg/GIhgD9m2o8Zsimzt51AWru/dx19gtiQS8+UJAccBHKTCddaet4TL/
-         rEMwij3r1MnT4WMxRr+n8tI+hgQvFYSU4A+na+zrazwGfgyPwI2qpZ6NcVpZgYBQU1vw
-         YnYlPGp8CSlmgHsuOypQ+2k2G75mzmpUIAyAQblYZWsbHoZ3D7uBunM2iAEjxonZUruq
-         XmQvyKmgrdxBuqrUSY5a5XnpN/CCCP/7/hdlyeD+ChsNjOc1+g5KERM6GSB1gIbDR8ZM
-         elh7UJtmD8U4ToCIwcM8PvG0qMTtWsCzvISExiM7RTPenDiFEYWS5gDjaJp7M3FiYxci
-         wuDw==
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc;
+        bh=+mcTZ2eqc3eLQRfLqaTPyOtzxWrRbXuCUvN2Q5tWSyo=;
+        b=hctLBxZVyyvwJoIpeXoXZn1NAvAkLSb+eLgOB8nCAXo+MlMA0IhkxNmfS3x+ybhmCc
+         tHVzcXrqCqhjjz0BJv/TtjSAAqe/J3FRLqJ7UJ3LsGtzba4J5e1Zq4dr72NNbZ5nvn6B
+         SBuPrXVb/JR4X40TDn8BVmcCjfKlJ2GPjWb0I4dkmwQHooKH6nDvUkcAWx6acOmGJQEF
+         bTk9dwoFxdSpb4sDv2C6OctiBafyfj/OZpLMEhX1sRzzw6E0X5UlZ/CjPuRni+pd8RKR
+         WH1eSdX5LZYOc4Pa+z2RfGdhpjpELcWgIpYaO6uyMQlbPrvCpmTVnV9StRdRdpdgRMA7
+         I59A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=/XsHCAAUo/oLtA4l5n4XUmocauuvUzyU7VbH9wcjXcQ=;
-        b=LFFj5s08rSZp3sXCny7WCK5034M0l/8oHJlWATkNeff2f3qBL2FfBMcwXOUbhnOcXt
-         SsZVzMV+GR6l1EKroSvENxU+oN3jEW9V9G+9VO1HFwgAh75VbCrJUjv5+6XEyUyTVhiS
-         LihtREIiNkBr4onWiGCNCPD4hI7gBYXcYlAuK5B/m1JZPl56P4ObRuo6osqchmy5qq6n
-         bRk3KLWdN5WdzjFLSlqZgXiWIvfOKqBZc+cN/ZXE8TZUi22acMyZCCk5NPmQa++BPo3l
-         1EnV2FvqPbJPAdZf0hFND/Q5CW94pfGo2d5EU6ZzYodM9s4Bmk5cnhmckK1PAiOkBdN1
-         bKHw==
-X-Gm-Message-State: ACgBeo3YVFrvkJpPG9f9a+tUMxAJ4+VByHBiw6XgyDqxfCA3kj7bXfK2
-        YZLaNBDQojTm5UZoFT3LzBw=
-X-Google-Smtp-Source: AA6agR5bn+jCdjoc5L3WS7gsgG/DC+Ia6If8+ihGn5S9bGfb+XvBKScyMfO5upO4+SQ2quD69RF6Lg==
-X-Received: by 2002:a05:6512:1581:b0:492:8c61:5bef with SMTP id bp1-20020a056512158100b004928c615befmr1251567lfb.518.1660564975422;
-        Mon, 15 Aug 2022 05:02:55 -0700 (PDT)
-Received: from [172.16.192.210] ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id f26-20020a2e381a000000b0025e2e70b41fsm1384223lja.71.2022.08.15.05.02.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 05:02:54 -0700 (PDT)
-Message-ID: <5a1a5a80-526c-2f76-0086-15cc76e88a06@gmail.com>
-Date:   Mon, 15 Aug 2022 15:02:53 +0300
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=+mcTZ2eqc3eLQRfLqaTPyOtzxWrRbXuCUvN2Q5tWSyo=;
+        b=cuutxyPWGTRDwJoblvURunBZ9xE+lFpiLgEdOBnIR6EZEyUsBOo2dspnnVP76khTQM
+         yTbvjWOGkz48ABWHSI9sRxBnyJ4im19dxTN34FWLMokskLVEojUUnQJAWJOoIzBFRmRK
+         fwp7Ko1PrgN5TJlAk26g/TR9F0GxrMQ8Nr28HRZpHWaxw6CBQnlwFGHG4pwKowA0PmSa
+         LGpPvW03x/hWXr1YJBuiA8eoDKFAxeO/zV33uOekQ3aZnvXeKxa0vtrqKgd7C1QRssSv
+         /8DRDtcHZ0biIINT7t23y8X5u+K8LUAftMQgXVr4Te8terdXAExZVfCHUfZEWCqh4OQT
+         QGXg==
+X-Gm-Message-State: ACgBeo1uJaxCQzAyzf+zI249DvAUNaEc0obc3v+idMnqtxrE1XodsOrV
+        JpmUTxgPYcbKpc9g8Q0V7egGGmYNz3HoqxCswt8=
+X-Google-Smtp-Source: AA6agR7ynAHEr8f5gNu+C3telG+SncFvxjQtkKrhOIeFYI/9kwGrD57FIhyq+qo4bEOPkc9MqRWlobrQ64IqUenCFzM=
+X-Received: by 2002:a4a:894e:0:b0:440:b743:c7d with SMTP id
+ g14-20020a4a894e000000b00440b7430c7dmr4777977ooi.86.1660564995142; Mon, 15
+ Aug 2022 05:03:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee@kernel.org,
-        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        linux@roeck-us.net, heikki.krogerus@linux.intel.com, deller@gmx.de,
-        broonie@kernel.org, lgirdwood@gmail.com,
-        andriy.shevchenko@linux.intel.com
-Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
-        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com
-References: <20220815090125.27705-1-peterwu.pub@gmail.com>
- <20220815090125.27705-7-peterwu.pub@gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [RESEND PATCH v8 06/12] lib: add linear range index macro
-In-Reply-To: <20220815090125.27705-7-peterwu.pub@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6358:5398:b0:b2:b875:1ec8 with HTTP; Mon, 15 Aug 2022
+ 05:03:14 -0700 (PDT)
+Reply-To: michellegoodman035@gmail.com
+From:   Michelle Goodman <michellegoodman323@gmail.com>
+Date:   Mon, 15 Aug 2022 12:03:14 +0000
+Message-ID: <CAEJQfw=L-Y3MjMMPpYP+TKXFexFT8EV0aamx+xHO87sO7uDkBA@mail.gmail.com>
+Subject: Helo
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:c32 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4999]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [michellegoodman035[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [michellegoodman323[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [michellegoodman323[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi ChiaEn,
-
-On 8/15/22 12:01, ChiaEn Wu wrote:
-> From: ChiaEn Wu <chiaen_wu@richtek.com>
-> 
-> Add linear_range_idx macro for declaring the linear_range struct simply.
-> 
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> ---
->   include/linux/linear_range.h | 8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> diff --git a/include/linux/linear_range.h b/include/linux/linear_range.h
-> index fd3d0b358f22..fb53ea13c593 100644
-> --- a/include/linux/linear_range.h
-> +++ b/include/linux/linear_range.h
-> @@ -26,6 +26,14 @@ struct linear_range {
->   	unsigned int step;
->   };
->   
-> +#define LINEAR_RANGE_IDX(_min, _min_sel, _max_sel, _step)	\
-> +	{							\
-> +		.min = _min,					\
-> +		.min_sel = _min_sel,				\
-> +		.max_sel = _max_sel,				\
-> +		.step = _step,					\
-> +	}
-> +
-
-I think this somewhat differs from what you had originally scetched. Eg, 
-if I didn't misread the patch earlier - you had:
-
-#define MT6370_CHG_LINEAR_RANGE(_rfd, _min, _min_sel, _max_sel, _step) \
-[_rfd] = {                                                             \
-	...
-
-instead of the
- > +#define LINEAR_RANGE_IDX(_min, _min_sel, _max_sel, _step)	\
- > +	{							\
-
-I think the latter (without the []-index) is more generic, and very 
-welcome. However, the IDX-suffix does no longer make much sense, right? 
-I suggested name LINEAR_RANGE_IDX for macro taking the array index as it 
-would also be useful when dealing with arrays.
-
-Do you think you could still drop the IDX from macro name or keep the 
-array index as the original did?
-
-Maybe ideally introduce both macros (unless Mark has objections), one 
-with the [_rfd] and suffix IDX, and the other w/o the suffix and w/o the 
-[_rfd]?
-
-Thanks for the improvements and the patience! ;)
-
-Yours
-   -- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+TWVyaGFiYSB1bWFyxLFtIG1lc2FqxLFtxLEgYWxtxLHFn3PEsW7EsXpkxLFyLg0KaMSxemzEsSB0
+ZXBraWxlcmUgaWh0aXlhY8SxbSB2YXINCg0KVGXFn2Vra8O8cmxlci4NCk1pY2hlbGxlDQo=

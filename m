@@ -2,229 +2,365 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2889592C66
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A11A592D73
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232881AbiHOItL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 04:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
+        id S231431AbiHOIvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 04:51:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiHOItI (ORCPT
+        with ESMTP id S230283AbiHOIvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 04:49:08 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83707205CE;
-        Mon, 15 Aug 2022 01:49:07 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 08:49:04 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1660553346;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z8I9Ib2HD91ZLaQDYmOiASkWK12fL+yNfPzlPFzIKBk=;
-        b=pr8soAWvnDImRgNgAEnVzeOYfvI1tMHuC9ufw1Kfj7NvQEyhhCraY9IpcC82v3ZcZJ5Pva
-        ao+TM2xOdkX2Tk6K9GQjVyKMJsTTAxd1QN2AHT9JYKi8rcTEjZHK7QETB3TC0DnGek3Oz/
-        J/lp266vKSRjsFOlwCOpaNg3YzJUfwNDEG2J9BKRqTebmG8LRNGcmhAR+1/OXxff7ybSyD
-        lP+wPEcj+FdTciOkyEN1rPVjxnPMnGupW5/elXQ0q3vwkR3T1a0xuAktcdKOotLiyeZs7i
-        YJvON7Qe1myI3lWriJxe97zzM7KY+u6AR9GPuIjVgVs/SN4Y/3/4BN3Rd2JLTg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1660553346;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z8I9Ib2HD91ZLaQDYmOiASkWK12fL+yNfPzlPFzIKBk=;
-        b=4gpovY5rdbFznpnJi6+bT2LCabeo0a91EOTAYW0CeOAzb0676oVbz421SWmhT7xH2+X12B
-        ur2yZl2QnpNq5ECg==
-From:   tip-bot2 for Mateusz =?utf-8?q?Jo=C5=84czyk?= 
-        <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/timers] x86/rtc: Rewrite & simplify mach_get_cmos_time() by
- deleting duplicated functionality
-Cc:     mat.jonczyk@o2.pl, Ingo Molnar <mingo@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220813131034.768527-1-mat.jonczyk@o2.pl>
-References: <20220813131034.768527-1-mat.jonczyk@o2.pl>
+        Mon, 15 Aug 2022 04:51:05 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2977A13F98
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 01:51:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660553464; x=1692089464;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=JYlVxFC8DAiB8p0Tul6dK8A2+B1KQpkIi49ECaOTgNE=;
+  b=C7JFcr/BjY1+IAXaFGj5+qTQpHaqD53rIkXm4DTC67D/MQardw5IES+2
+   B691qoo0MfPvjPcjjUNtXj2BnUFMyzikS5W2hxM816+2lBvu+EIBn+Mad
+   icHIMJ78TUnNEQZARPwnngg3RmBDpu4GLi4jdpoQCFBTDDjQZHFrjofRF
+   vDkcR2HNrnVOBe6CSAxXvcln6KBFQZETAQFUr3vIrt9/VlXSYdKiFU/Rg
+   GfKyUlYRc39nay9YkOvHk97BdNtmDSTi+BKVftmPKV9tUVVxCJxL5vE+m
+   l2jaM8T8Ogo0k44azjh6mLFNXF+ODXG+0DwLlYXEmSJitMu9Q+EY9K32b
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="293191487"
+X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
+   d="scan'208";a="293191487"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 01:51:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
+   d="scan'208";a="639583630"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga001.jf.intel.com with ESMTP; 15 Aug 2022 01:51:03 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Mon, 15 Aug 2022 01:51:02 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Mon, 15 Aug 2022 01:51:02 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28 via Frontend Transport; Mon, 15 Aug 2022 01:51:02 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.28; Mon, 15 Aug 2022 01:51:02 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g2nVyTv3L7ZSx7dXmgOPpiAzrP//44ZZKfLJ55UBVUATQtJUx+Y3Hx28dO7bopyp3D0q54CKJ5xFZ7jGaNMBeM08Jw9cQDJLhvmaRdmRWqaDbRORyz7GPDyMdBFLC/mVoVgJ4Csp3fbSycA+6ergWpsnlCLyzfQYQgLpy3KFff/fhcp3MKBLlzRSblwhDbgorCwGpBgNWGAd8ZchjOw7BZPAv38c2FvlsURPiU/WRRNc7o4bxkq6jdLA8RLGOgt4o1AF+ZvXkpB3TUAP1yNOJEzHpwffihZi4lOSElaLRC4SjiXowLNB8NEaayKkMmKguMbD1tT8qBoKp8zWjZuvTA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+U6dcqajYIdDEQBf1zl9jVvW8GLyri3q6Ga4G/0DR0k=;
+ b=hqSnhnU98XnvKnPG4fc/lKJJDpZ72IDtEsTmVybyY8Tc3x+hrmQxHIKcqLiBjy8xUlYPaK944LHTZN3P5mgm+pQ5+lHFspWFzQT60pKWbubVe8LndXkPoOIcYdQ6C1jzBcZuJ7qOE7M9RzkMfMsPjaJe6a42J97IsOVRW6v7CV6pLZNkaA2A/F4uZVwxDr0uUwVRsewJxF3f5QQ9vMfmZlQe8iiYDTaCvbw0z9GEda5M5+cIdK0UPc5z0ELc9609k2KL1CA2IeDCXoLDeuM4UOanevmQeoYVZg1ijbo1wufgA8Lcj0vwxJlfqTZbHBM7j16UICZSoK/YFn6wDLYyjw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN2PR11MB3870.namprd11.prod.outlook.com (2603:10b6:208:152::11)
+ by BL3PR11MB5713.namprd11.prod.outlook.com (2603:10b6:208:350::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Mon, 15 Aug
+ 2022 08:51:01 +0000
+Received: from MN2PR11MB3870.namprd11.prod.outlook.com
+ ([fe80::5189:5e48:228f:ae9e]) by MN2PR11MB3870.namprd11.prod.outlook.com
+ ([fe80::5189:5e48:228f:ae9e%3]) with mapi id 15.20.5504.027; Mon, 15 Aug 2022
+ 08:51:00 +0000
+Message-ID: <5dde66a7-2236-a890-aaeb-a45876057bec@intel.com>
+Date:   Mon, 15 Aug 2022 16:50:51 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.12.0
+Subject: Re: [PATCH 1/8] memblock tests: update tests to check if
+ memblock_alloc zeroed memory
+Content-Language: en-US
+To:     Rebecca Mckeever <remckee0@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     David Hildenbrand <david@redhat.com>
+References: <cover.1660454730.git.remckee0@gmail.com>
+ <02d514d86f212c79e52792b8ecd919156d7a9c20.1660454730.git.remckee0@gmail.com>
+From:   "Huang, Shaoqin" <shaoqin.huang@intel.com>
+In-Reply-To: <02d514d86f212c79e52792b8ecd919156d7a9c20.1660454730.git.remckee0@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2P153CA0018.APCP153.PROD.OUTLOOK.COM (2603:1096::28) To
+ MN2PR11MB3870.namprd11.prod.outlook.com (2603:10b6:208:152::11)
 MIME-Version: 1.0
-Message-ID: <166055334489.401.11112157644462774552.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b246dc20-47cd-4ed5-de96-08da7e9b46f3
+X-MS-TrafficTypeDiagnostic: BL3PR11MB5713:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SglUJizWXx+L1rCv1GPHJbeu4Y3VGkyh6q+iATeV/AklaXwXCocnjhFfNneBex2x8fFo43CfPkf+d62UtWrRb7BYzLY0LkrWL7zRaOG7rxVRbNcmKx6KpajVJzjsv1ad6ZosBt4QmnkBChOBPy0a+iV/UbgglJqdLaWupJkTcySde/fgCljOippAxQJ7FNP30A/TIKcBQNFpa0WvkquUewMRFg06mCnM56V3Vphz3eaSpmUz8HLU88LfwqoXM8650o0lbgjdb+EH47gcx0iMUYnkjv70WtnEVjc4h4bcjFFo+pHUrTQMGg/uzACSXAsrHibYTaq0gZjrY7rXJV1+oWvpVOMPdlK+HqYamM9siaSa5dPK/ZmAIxsiNhdRjaYCPMspitVmlETd3G9AgFNuCn+cuubP/8UtGMQub2AAznFE59LL4T0Ne7u+SAyDpJWDA/Z87xtd059+TjHDYqB0aDtko4jkBlBavyYQqAPfsMEBLp4H874M/u5aadFLedDclxKJ21o0YDJvFqoRU811LKrnaFDLAxDdb3PAwmzduwrARZKFeTAI1k/YaanytXCNFiSrQ4fMAS1CJH3zE1AOaoZ3kav/DDwU66WCFaAgYQTZeR/uNKVlCUdeO9RhhipPfi0uLfI9bDLxrf1zavFhB+AmDN6y7PfYFEppfFcPaDw07ohhGJqEo3FoMeMNGS7Uk7cA1Pp1OT7g1u8jOt7n7z1x/zxBxquMmHJ/lMyZ6+m9Enk0Mv8fCcnwlPl6YiImXDAoW58YT5sDy/9APy+QBX+N6MPgYAI6lHDzo/vPn5t+3Nu46QkZMd7A7fzSEEJh7wegKVihIiPJz3h4bwTMLw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR11MB3870.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(376002)(396003)(366004)(136003)(39860400002)(83380400001)(82960400001)(38100700002)(5660300002)(4326008)(316002)(66946007)(8676002)(186003)(66476007)(66556008)(31696002)(6512007)(15650500001)(2616005)(26005)(2906002)(41300700001)(31686004)(6486002)(478600001)(36756003)(86362001)(53546011)(110136005)(6666004)(8936002)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dU1kVnJRQ05qSFNmK1dxOWFyVUVIbUs1YmlYWndnNEdwUlorTUVTQTZJMFRD?=
+ =?utf-8?B?Q05WUXVFRUxmNWJwRUExVDJJOWVmM25BRHNyakxVV1lhZTdlT21NNThyalVy?=
+ =?utf-8?B?OFRtM3lydjRpeWtWT3hGKzBTeGZWWVJJNVBLZUZIemlOUzB6RFZ6NkFxdm5M?=
+ =?utf-8?B?RlRNajFQK0Vxeld5RlBXNWN6dXFHNEJPUWMyQS9oZjdCcHptQmJMV0VJdXlQ?=
+ =?utf-8?B?UlZvOVlsZXFhSU9LSi9hamZNRFg3cElEVXllUkdXSm5HWHo1UlE3eENsWi9B?=
+ =?utf-8?B?UzRZN0tJbzZEM0hTVmUxTHJoVVIrWnAvRHZnMFpPMkRJRHY1U2VlVkRFbUwr?=
+ =?utf-8?B?WkttakZnd01VeEFEMGdpd01lRnBzd3JWUlhnc05rY0Z1bUY4U2FyYWdkVHVi?=
+ =?utf-8?B?M0VaNStDVnZXWjQybWJoV2owUStWUlloRUVtNUlGdUVRODJwdXdxaFFPOFRK?=
+ =?utf-8?B?QVdJR0NWenU2SittcGU2VzFxcVo3eFJiQmt6RDF3WkdyamtJOC9vSE4wUGVC?=
+ =?utf-8?B?RGJzVWNOaTdoL09jT3M5b3pNTXJXMHZqUDhOZ3ZXSzVvbUUxUnNSbHAybTBa?=
+ =?utf-8?B?WWtBaXpad2l3MW0wUFVYSWtCZSs1SnVrUm9ySmRLcjRtM3BCMGxuSlkvdXIy?=
+ =?utf-8?B?UVFBQkVlZkFscVZqQkpPZ2llbG1jZEZON253QjZCS1RaNldDYVVZN0J1Qytt?=
+ =?utf-8?B?VVFtanB1QWlOK21lS3B0YUFLQ05GMXd1Y3RWazNENmQrMWI0ZjlVWVJuK1JS?=
+ =?utf-8?B?MVRFRHJrQWp5cFE3aEZ5L1RtL0w4UmMxUG1xaWFIb1JxNEp4eTlOOTRjTGZp?=
+ =?utf-8?B?R01zVWpicGg1Szg3Qmt2MEJMZjVNb0NSV3Znc3A0dWozV25hZEdwa2QxQVpO?=
+ =?utf-8?B?dlJLK2dUN0lKb1NrQ3VxWUJ5Y3RyV2Y0NlhZWlUzNVF1M3N4ZWs0K29MYWYy?=
+ =?utf-8?B?MjlmZTJndUVtVzl2NmVVQkZrbWw0WFB1UFRYWVE2WGlsRjNIT2QrZnIyMVNO?=
+ =?utf-8?B?MW5GQUpOSnAvWWJseE1DS2Exbm5BdldqdTdkakdmN3pSSjUyNVpQci9LTjZD?=
+ =?utf-8?B?aHJHYmM2b3RaUVBGNTkrWno0cHFQclBLaU0rR3lQaWZYc21WKy81RXhIME1C?=
+ =?utf-8?B?aUNzV1FuNnhQVVRXZzczbzFoa2hhN29wcWh5dWYwei9rSy93b2RrS2YvajBi?=
+ =?utf-8?B?RDlCM2RscXdmck5CZEhWa21tdnYzRk5TMWlOa1JGdktDRVJRa05nVmRvTHhT?=
+ =?utf-8?B?Q0NrU3pvM2tNd0I2YUVwUWNpV0tKWjk1dFRxbE1qcE5QV3pudGJ4YWxVbk05?=
+ =?utf-8?B?NG8vSzh4cTZtb3gxcTNRTTVFNFlMd0hwbE9mSmlpcnhXYm9MN1dOcTdIVkZw?=
+ =?utf-8?B?aWtib3lPbnBrSFYrc01nRHB2cDZVSVBmbWhBL1FsQ1ZlOHovbm9XcDJ2WUpt?=
+ =?utf-8?B?dFN1RHFPTUFjbTdDbFdFNUNydGhzcGhSVDVoYlluTGFVb0V3NHJWUG44TnJh?=
+ =?utf-8?B?UG5FU1pFbEdvcHBUaG50a3hiZUZOdzhzTFFRUjNLS0JRZGpaMXVQTEMzY1Fp?=
+ =?utf-8?B?K3BlQmlvdVVCU29BWCtZODUwVWNzQlFXWHdUNmc3U2paZm5hbVVXZithays1?=
+ =?utf-8?B?dmVVRyt3OGFJRWlleC8xOTN0L0ViRVMzbmw2VTdlL1A3UlhMSkF3UjU1VnFO?=
+ =?utf-8?B?d29NYmhFbWlVb0lFWStkMXRYYmVnNEF5eEFWQkRaN3RnYlhtM1c2ZWZ6a3JF?=
+ =?utf-8?B?WHh3ZW9yK2NvdGlOZ0pTL3Y2VHZFeGlibFgxTWxmQ2JVdUxLZlpjVktjcktW?=
+ =?utf-8?B?eXRlZE1rYk5mTjQ1L0ZlbDh0b2tlRGIrN0s1TkZxNUh1eGg2bmdVbU5ydjBw?=
+ =?utf-8?B?SUJBcGE1UHQvNlpQT0ttMGtyc3RaRi9DTjVPYlY5L29UKzRXYjFzVnJRRXM3?=
+ =?utf-8?B?dXVqN3JQb2ZmNTdZcWdhcE9RNXlzNU9xYmJBcW95UlhWTjFWQjRiMVlOWURl?=
+ =?utf-8?B?RlU4NVE5emFXOG93bUNqMEdHZXRSUUpaSTBTMjBVcTJSbzFqT1VtTE5xOHlu?=
+ =?utf-8?B?YnJBS01DTDQzNEY2dExxc1BUSElMTjQxV2UxTE9xUDlMaDNPTThIOTZJMmlI?=
+ =?utf-8?B?VzRaSU5WVUk0SDlGNS9YTTRtbDEva0J2MnRXSVA3dndQemowTXBpZXhJL1d4?=
+ =?utf-8?B?dXc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b246dc20-47cd-4ed5-de96-08da7e9b46f3
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR11MB3870.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2022 08:51:00.5358
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Cy3/SyHQauiawVn604QKK3Hr26rzVWpbAnsb78GChshfRcZrr8qVD1MUa6SRaL1Xy3txpDxSnEdx8G74D3eJKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR11MB5713
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/timers branch of tip:
+Hi, Rebecca.
 
-Commit-ID:     fc04b2ccf0edc49e53d2e1251d122e40285233e6
-Gitweb:        https://git.kernel.org/tip/fc04b2ccf0edc49e53d2e1251d122e40285=
-233e6
-Author:        Mateusz Jo=C5=84czyk <mat.jonczyk@o2.pl>
-AuthorDate:    Sat, 13 Aug 2022 15:10:33 +02:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Sun, 14 Aug 2022 11:24:08 +02:00
+On 8/14/2022 1:53 PM, Rebecca Mckeever wrote:
+> Add an assert in memblock_alloc() tests where allocation is expected to
+> occur. The assert checks whether the entire chunk of allocated memory is
+> cleared.
+> 
+> The current memblock_alloc() tests do not check whether the allocated
+> memory was zeroed. memblock_alloc() should zero the allocated memory since
+> it is a wrapper for memblock_alloc_try_nid().
+> 
+> Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
+> ---
+>   tools/testing/memblock/tests/alloc_api.c | 24 ++++++++++++++++++++++++
+>   tools/testing/memblock/tests/common.c    |  7 +++++++
+>   tools/testing/memblock/tests/common.h    | 13 +++++++++++++
+>   3 files changed, 44 insertions(+)
+> 
+> diff --git a/tools/testing/memblock/tests/alloc_api.c b/tools/testing/memblock/tests/alloc_api.c
+> index a14f38eb8a89..71c89cb9b2a8 100644
+> --- a/tools/testing/memblock/tests/alloc_api.c
+> +++ b/tools/testing/memblock/tests/alloc_api.c
+> @@ -22,6 +22,8 @@ static int alloc_top_down_simple_check(void)
+>   	allocated_ptr = memblock_alloc(size, SMP_CACHE_BYTES);
+>   
+>   	ASSERT_NE(allocated_ptr, NULL);
+> +	ASSERT_MEM_EQ((char *)allocated_ptr, 0, size);
+> +
+>   	ASSERT_EQ(rgn->size, size);
+>   	ASSERT_EQ(rgn->base, expected_start);
+>   
+> @@ -80,6 +82,8 @@ static int alloc_top_down_disjoint_check(void)
+>   	allocated_ptr = memblock_alloc(r2_size, alignment);
+>   
+>   	ASSERT_NE(allocated_ptr, NULL);
+> +	ASSERT_MEM_EQ((char *)allocated_ptr, 0, r2_size);
+> +
+>   	ASSERT_EQ(rgn1->size, r1.size);
+>   	ASSERT_EQ(rgn1->base, r1.base);
+>   
+> @@ -125,6 +129,8 @@ static int alloc_top_down_before_check(void)
+>   	allocated_ptr = memblock_alloc(r2_size, SMP_CACHE_BYTES);
+>   
+>   	ASSERT_NE(allocated_ptr, NULL);
+> +	ASSERT_MEM_EQ((char *)allocated_ptr, 0, r2_size);
+> +
+>   	ASSERT_EQ(rgn->size, total_size);
+>   	ASSERT_EQ(rgn->base, memblock_end_of_DRAM() - total_size);
+>   
+> @@ -173,6 +179,8 @@ static int alloc_top_down_after_check(void)
+>   	allocated_ptr = memblock_alloc(r2_size, SMP_CACHE_BYTES);
+>   
+>   	ASSERT_NE(allocated_ptr, NULL);
+> +	ASSERT_MEM_EQ((char *)allocated_ptr, 0, r2_size);
+> +
+>   	ASSERT_EQ(rgn->size, total_size);
+>   	ASSERT_EQ(rgn->base, r1.base - r2_size);
+>   
+> @@ -223,6 +231,8 @@ static int alloc_top_down_second_fit_check(void)
+>   	allocated_ptr = memblock_alloc(r3_size, SMP_CACHE_BYTES);
+>   
+>   	ASSERT_NE(allocated_ptr, NULL);
+> +	ASSERT_MEM_EQ((char *)allocated_ptr, 0, r3_size);
+> +
+>   	ASSERT_EQ(rgn->size, r2.size + r3_size);
+>   	ASSERT_EQ(rgn->base, r2.base - r3_size);
+>   
+> @@ -277,6 +287,8 @@ static int alloc_in_between_generic_check(void)
+>   	allocated_ptr = memblock_alloc(r3_size, SMP_CACHE_BYTES);
+>   
+>   	ASSERT_NE(allocated_ptr, NULL);
+> +	ASSERT_MEM_EQ((char *)allocated_ptr, 0, r3_size);
+> +
+>   	ASSERT_EQ(rgn->size, total_size);
+>   	ASSERT_EQ(rgn->base, r1.base - r2.size - r3_size);
+>   
+> @@ -418,6 +430,8 @@ static int alloc_limited_space_generic_check(void)
+>   	allocated_ptr = memblock_alloc(available_size, SMP_CACHE_BYTES);
+>   
+>   	ASSERT_NE(allocated_ptr, NULL);
+> +	ASSERT_MEM_EQ((char *)allocated_ptr, 0, available_size);
+> +
+>   	ASSERT_EQ(rgn->size, MEM_SIZE);
+>   	ASSERT_EQ(rgn->base, memblock_start_of_DRAM());
+>   
+> @@ -442,6 +456,7 @@ static int alloc_no_memory_generic_check(void)
+>   	PREFIX_PUSH();
+>   
+>   	reset_memblock_regions();
+> +	fill_memblock();
 
-x86/rtc: Rewrite & simplify mach_get_cmos_time() by deleting duplicated funct=
-ionality
+Maybe we don't need this line, it has no effect at here. Anyway, Others 
+Looks Good to me.
 
-There are functions in drivers/rtc/rtc-mc146818-lib.c that handle
-reading from / writing to the CMOS RTC clock. mach_get_cmos_time() in
-arch/x86/kernel/rtc.c did not use them and was mostly a duplicate of
-mc146818_get_time(). Modify mach_get_cmos_time() to use
-mc146818_get_time() and remove the duplicated functionality.
+Reviewed-by: Shaoqin Huang <shaoqin.huang@intel.com>
 
-mach_get_cmos_time() used a different algorithm than
-mc146818_get_time(), but these functions are equivalent. The major
-differences are:
-
-- mc146818_get_time() is better refined and handles various edge
-  conditions,
-
-- when the UIP ("Update in progress") bit of the RTC is set,
-  mach_get_cmos_time() was busy waiting with cpu_relax() while
-  mc146818_get_time() is using mdelay(1) in every loop iteration.
-  (However, there is my commit merged for Linux 5.20 / 6.0 to decrease
-  this period to 100us:
-    commit d2a632a8a117 ("rtc: mc146818-lib: reduce RTC_UIP polling period")
-  ),
-
-- mach_get_cmos_time() assumed that the RTC year is >=3D 2000, which
-  may not be true on some old boxes with a dead battery,
-
-- mach_get_cmos_time() was holding the rtc_lock for a long time
-  and could hang if the RTC is broken or not present.
-
-The RTC writing counterpart, mach_set_rtc_mmss() is already using
-mc146818_get_time() from drivers/rtc. This was done in
-        commit 3195ef59cb42 ("x86: Do full rtc synchronization with ntp")
-It appears that mach_get_cmos_time() was simply forgotten.
-
-mach_get_cmos_time() is really used only in read_persistent_clock64(),
-which is called only in a few places in kernel/time/timekeeping.c .
-
-[ mingo: These changes are not supposed to change behavior, but they are
-         not identity transformations either, as mc146818_get_time() is a
-	 better but different implementation of the same logic - so
-	 regressions are possible in principle. ]
-
-Signed-off-by: Mateusz Jo=C5=84czyk <mat.jonczyk@o2.pl>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/20220813131034.768527-1-mat.jonczyk@o2.pl
----
- arch/x86/kernel/rtc.c | 59 ++++--------------------------------------
- 1 file changed, 7 insertions(+), 52 deletions(-)
-
-diff --git a/arch/x86/kernel/rtc.c b/arch/x86/kernel/rtc.c
-index 586f718..1cadc8a 100644
---- a/arch/x86/kernel/rtc.c
-+++ b/arch/x86/kernel/rtc.c
-@@ -4,11 +4,8 @@
-  */
- #include <linux/platform_device.h>
- #include <linux/mc146818rtc.h>
--#include <linux/acpi.h>
--#include <linux/bcd.h>
- #include <linux/export.h>
- #include <linux/pnp.h>
--#include <linux/of.h>
-=20
- #include <asm/vsyscall.h>
- #include <asm/x86_init.h>
-@@ -20,15 +17,12 @@
- /*
-  * This is a special lock that is owned by the CPU and holds the index
-  * register we are working with.  It is required for NMI access to the
-- * CMOS/RTC registers.  See include/asm-i386/mc146818rtc.h for details.
-+ * CMOS/RTC registers.  See arch/x86/include/asm/mc146818rtc.h for details.
-  */
- volatile unsigned long cmos_lock;
- EXPORT_SYMBOL(cmos_lock);
- #endif /* CONFIG_X86_32 */
-=20
--/* For two digit years assume time is always after that */
--#define CMOS_YEARS_OFFS 2000
--
- DEFINE_SPINLOCK(rtc_lock);
- EXPORT_SYMBOL(rtc_lock);
-=20
-@@ -62,8 +56,7 @@ int mach_set_rtc_mmss(const struct timespec64 *now)
-=20
- void mach_get_cmos_time(struct timespec64 *now)
- {
--	unsigned int status, year, mon, day, hour, min, sec, century =3D 0;
--	unsigned long flags;
-+	struct rtc_time tm;
-=20
- 	/*
- 	 * If pm_trace abused the RTC as storage, set the timespec to 0,
-@@ -74,51 +67,13 @@ void mach_get_cmos_time(struct timespec64 *now)
- 		return;
- 	}
-=20
--	spin_lock_irqsave(&rtc_lock, flags);
--
--	/*
--	 * If UIP is clear, then we have >=3D 244 microseconds before
--	 * RTC registers will be updated.  Spec sheet says that this
--	 * is the reliable way to read RTC - registers. If UIP is set
--	 * then the register access might be invalid.
--	 */
--	while ((CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP))
--		cpu_relax();
--
--	sec =3D CMOS_READ(RTC_SECONDS);
--	min =3D CMOS_READ(RTC_MINUTES);
--	hour =3D CMOS_READ(RTC_HOURS);
--	day =3D CMOS_READ(RTC_DAY_OF_MONTH);
--	mon =3D CMOS_READ(RTC_MONTH);
--	year =3D CMOS_READ(RTC_YEAR);
--
--#ifdef CONFIG_ACPI
--	if (acpi_gbl_FADT.header.revision >=3D FADT2_REVISION_ID &&
--	    acpi_gbl_FADT.century)
--		century =3D CMOS_READ(acpi_gbl_FADT.century);
--#endif
--
--	status =3D CMOS_READ(RTC_CONTROL);
--	WARN_ON_ONCE(RTC_ALWAYS_BCD && (status & RTC_DM_BINARY));
--
--	spin_unlock_irqrestore(&rtc_lock, flags);
--
--	if (RTC_ALWAYS_BCD || !(status & RTC_DM_BINARY)) {
--		sec =3D bcd2bin(sec);
--		min =3D bcd2bin(min);
--		hour =3D bcd2bin(hour);
--		day =3D bcd2bin(day);
--		mon =3D bcd2bin(mon);
--		year =3D bcd2bin(year);
-+	if (mc146818_get_time(&tm)) {
-+		pr_err("Unable to read current time from RTC\n");
-+		now->tv_sec =3D now->tv_nsec =3D 0;
-+		return;
- 	}
-=20
--	if (century) {
--		century =3D bcd2bin(century);
--		year +=3D century * 100;
--	} else
--		year +=3D CMOS_YEARS_OFFS;
--
--	now->tv_sec =3D mktime64(year, mon, day, hour, min, sec);
-+	now->tv_sec =3D rtc_tm_to_time64(&tm);
- 	now->tv_nsec =3D 0;
- }
-=20
+>   
+>   	allocated_ptr = memblock_alloc(SZ_1K, SMP_CACHE_BYTES);
+>   
+> @@ -472,6 +487,8 @@ static int alloc_bottom_up_simple_check(void)
+>   	allocated_ptr = memblock_alloc(SZ_2, SMP_CACHE_BYTES);
+>   
+>   	ASSERT_NE(allocated_ptr, NULL);
+> +	ASSERT_MEM_EQ((char *)allocated_ptr, 0, SZ_2);
+> +
+>   	ASSERT_EQ(rgn->size, SZ_2);
+>   	ASSERT_EQ(rgn->base, memblock_start_of_DRAM());
+>   
+> @@ -528,6 +545,7 @@ static int alloc_bottom_up_disjoint_check(void)
+>   	allocated_ptr = memblock_alloc(r2_size, alignment);
+>   
+>   	ASSERT_NE(allocated_ptr, NULL);
+> +	ASSERT_MEM_EQ((char *)allocated_ptr, 0, r2_size);
+>   
+>   	ASSERT_EQ(rgn1->size, r1.size);
+>   	ASSERT_EQ(rgn1->base, r1.base);
+> @@ -571,6 +589,8 @@ static int alloc_bottom_up_before_check(void)
+>   	allocated_ptr = memblock_alloc(r1_size, SMP_CACHE_BYTES);
+>   
+>   	ASSERT_NE(allocated_ptr, NULL);
+> +	ASSERT_MEM_EQ((char *)allocated_ptr, 0, r1_size);
+> +
+>   	ASSERT_EQ(rgn->size, total_size);
+>   	ASSERT_EQ(rgn->base, memblock_start_of_DRAM());
+>   
+> @@ -618,6 +638,8 @@ static int alloc_bottom_up_after_check(void)
+>   	allocated_ptr = memblock_alloc(r2_size, SMP_CACHE_BYTES);
+>   
+>   	ASSERT_NE(allocated_ptr, NULL);
+> +	ASSERT_MEM_EQ((char *)allocated_ptr, 0, r2_size);
+> +
+>   	ASSERT_EQ(rgn->size, total_size);
+>   	ASSERT_EQ(rgn->base, r1.base);
+>   
+> @@ -669,6 +691,8 @@ static int alloc_bottom_up_second_fit_check(void)
+>   	allocated_ptr = memblock_alloc(r3_size, SMP_CACHE_BYTES);
+>   
+>   	ASSERT_NE(allocated_ptr, NULL);
+> +	ASSERT_MEM_EQ((char *)allocated_ptr, 0, r3_size);
+> +
+>   	ASSERT_EQ(rgn->size, r2.size + r3_size);
+>   	ASSERT_EQ(rgn->base, r2.base);
+>   
+> diff --git a/tools/testing/memblock/tests/common.c b/tools/testing/memblock/tests/common.c
+> index 76a8ad818f3a..0ca26fe12c38 100644
+> --- a/tools/testing/memblock/tests/common.c
+> +++ b/tools/testing/memblock/tests/common.c
+> @@ -60,16 +60,23 @@ void reset_memblock_attributes(void)
+>   	memblock.current_limit	= MEMBLOCK_ALLOC_ANYWHERE;
+>   }
+>   
+> +void fill_memblock(void)
+> +{
+> +	memset(memory_block.base, 1, MEM_SIZE);
+> +}
+> +
+>   void setup_memblock(void)
+>   {
+>   	reset_memblock_regions();
+>   	memblock_add((phys_addr_t)memory_block.base, MEM_SIZE);
+> +	fill_memblock();
+>   }
+>   
+>   void dummy_physical_memory_init(void)
+>   {
+>   	memory_block.base = malloc(MEM_SIZE);
+>   	assert(memory_block.base);
+> +	fill_memblock();
+>   }
+>   
+>   void dummy_physical_memory_cleanup(void)
+> diff --git a/tools/testing/memblock/tests/common.h b/tools/testing/memblock/tests/common.h
+> index d396e5423a8e..7a16a7dc8f2c 100644
+> --- a/tools/testing/memblock/tests/common.h
+> +++ b/tools/testing/memblock/tests/common.h
+> @@ -51,6 +51,18 @@
+>   	assert((_expected) < (_seen)); \
+>   } while (0)
+>   
+> +/**
+> + * ASSERT_MEM_EQ():
+> + * Check that the first @_size bytes of @_seen are all equal to @_expected.
+> + * If false, print failed test message (if running with --verbose) and then
+> + * assert.
+> + */
+> +#define ASSERT_MEM_EQ(_seen, _expected, _size) do { \
+> +	for (int _i = 0; _i < (_size); _i++) { \
+> +		ASSERT_EQ((_seen)[_i], (_expected)); \
+> +	} \
+> +} while (0)
+> +
+>   #define PREFIX_PUSH() prefix_push(__func__)
+>   
+>   /*
+> @@ -70,6 +82,7 @@ struct region {
+>   
+>   void reset_memblock_regions(void);
+>   void reset_memblock_attributes(void);
+> +void fill_memblock(void);
+>   void setup_memblock(void);
+>   void dummy_physical_memory_init(void);
+>   void dummy_physical_memory_cleanup(void);

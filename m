@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 963D7594926
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1164594C72
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243854AbiHOXKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
+        id S243215AbiHPAzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 20:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353264AbiHOXHf (ORCPT
+        with ESMTP id S243787AbiHPAr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:07:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6781436CE;
-        Mon, 15 Aug 2022 12:59:39 -0700 (PDT)
+        Mon, 15 Aug 2022 20:47:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7305BD8E0F;
+        Mon, 15 Aug 2022 13:45:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB8BDB81154;
-        Mon, 15 Aug 2022 19:59:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE0BC43142;
-        Mon, 15 Aug 2022 19:59:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0CE56125F;
+        Mon, 15 Aug 2022 20:45:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBA73C433D6;
+        Mon, 15 Aug 2022 20:45:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593576;
-        bh=XSZt3y04SiP8tLE10pIGsc79AdnnvDgeIIf2BR6p02M=;
+        s=korg; t=1660596336;
+        bh=6rswtPHCBmofH9wCL2FhhYPwRwY21gb1uDolVJabZu8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2KOAbyXOz00bCj/jmzbcrXNIn3CcSTcCu+uE1NzTN/zUuC/i/tibGcXG30bl8KYYu
-         NpjBC6prEU272hToAMq9MAarmdzM35ydUUiKbE6l1XCam8DT2/wGN0ttMQQDPL31IG
-         3UCgwnSLxeoZgemVK99hDIN3vNXdczuz9RuCoftM=
+        b=l0kZzUKovgTjiPV33wEqHNRupVFxfFugZoeRp49t7Y3zsyr0Q1sVsirtJK+F7+EiW
+         4Yrb7sZrLPj1w/22LliZ6yWWECFNVd98s/Q+E/5eiywptaK58+QEZ3v5LeF/xrU9J/
+         DNre+W2P3BhEGHJlHM/19BOYTBi3OLQlE4GdEC58=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Arun Easi <aeasi@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.18 0970/1095] scsi: qla2xxx: Fix losing FCP-2 targets during port perturbation tests
-Date:   Mon, 15 Aug 2022 20:06:09 +0200
-Message-Id: <20220815180509.193243814@linuxfoundation.org>
+        stable@vger.kernel.org, Chen Zhongjin <chenzhongjin@huawei.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 1014/1157] kprobes: Forbid probing on trampoline and BPF code areas
+Date:   Mon, 15 Aug 2022 20:06:10 +0200
+Message-Id: <20220815180520.430074264@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
-References: <20220815180429.240518113@linuxfoundation.org>
+In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
+References: <20220815180439.416659447@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arun Easi <aeasi@marvell.com>
+From: Chen Zhongjin <chenzhongjin@huawei.com>
 
-commit 58d1c124cd79ea686b512043c5bd515590b2ed95 upstream.
+[ Upstream commit 28f6c37a2910f565b4f5960df52b2eccae28c891 ]
 
-When a mix of FCP-2 (tape) and non-FCP-2 targets are present, FCP-2 target
-state was incorrectly transitioned when both of the targets were gone. Fix
-this by ignoring state transition for FCP-2 targets.
+kernel_text_address() treats ftrace_trampoline, kprobe_insn_slot
+and bpf_text_address as valid kprobe addresses - which is not ideal.
 
-Link: https://lore.kernel.org/r/20220616053508.27186-7-njavali@marvell.com
-Fixes: 44c57f205876 ("scsi: qla2xxx: Changes to support FCP2 Target")
-Cc: stable@vger.kernel.org
-Signed-off-by: Arun Easi <aeasi@marvell.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+These text areas are removable and changeable without any notification
+to kprobes, and probing on them can trigger unexpected behavior:
+
+  https://lkml.org/lkml/2022/7/26/1148
+
+Considering that jump_label and static_call text are already
+forbiden to probe, kernel_text_address() should be replaced with
+core_kernel_text() and is_module_text_address() to check other text
+areas which are unsafe to kprobe.
+
+[ mingo: Rewrote the changelog. ]
+
+Fixes: 5b485629ba0d ("kprobes, extable: Identify kprobes trampolines as kernel text area")
+Fixes: 74451e66d516 ("bpf: make jited programs visible in traces")
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Link: https://lore.kernel.org/r/20220801033719.228248-1-chenzhongjin@huawei.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/qla2xxx/qla_gs.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/kprobes.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/scsi/qla2xxx/qla_gs.c
-+++ b/drivers/scsi/qla2xxx/qla_gs.c
-@@ -3629,7 +3629,7 @@ login_logout:
- 				do_delete) {
- 				if (fcport->loop_id != FC_NO_LOOP_ID) {
- 					if (fcport->flags & FCF_FCP2_DEVICE)
--						fcport->logout_on_delete = 0;
-+						continue;
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index f214f8c088ed..80697e5e03e4 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -1560,7 +1560,8 @@ static int check_kprobe_address_safe(struct kprobe *p,
+ 	preempt_disable();
  
- 					ql_log(ql_log_warn, vha, 0x20f0,
- 					       "%s %d %8phC post del sess\n",
+ 	/* Ensure it is not in reserved area nor out of text */
+-	if (!kernel_text_address((unsigned long) p->addr) ||
++	if (!(core_kernel_text((unsigned long) p->addr) ||
++	    is_module_text_address((unsigned long) p->addr)) ||
+ 	    within_kprobe_blacklist((unsigned long) p->addr) ||
+ 	    jump_label_text_reserved(p->addr, p->addr) ||
+ 	    static_call_text_reserved(p->addr, p->addr) ||
+-- 
+2.35.1
+
 
 

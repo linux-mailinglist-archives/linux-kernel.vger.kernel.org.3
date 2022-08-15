@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD3C594730
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5820A5945A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355654AbiHOX5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
+        id S1346078AbiHOWA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 18:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355395AbiHOXwC (ORCPT
+        with ESMTP id S1347213AbiHOV73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:52:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5EA2CCB2;
-        Mon, 15 Aug 2022 13:16:51 -0700 (PDT)
+        Mon, 15 Aug 2022 17:59:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A5910DCE9;
+        Mon, 15 Aug 2022 12:35:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C45DB80EB1;
-        Mon, 15 Aug 2022 20:16:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 642FFC433C1;
-        Mon, 15 Aug 2022 20:16:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29B1561184;
+        Mon, 15 Aug 2022 19:34:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C7FCC433C1;
+        Mon, 15 Aug 2022 19:34:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594608;
-        bh=X9e1ULn5u8dN/vWtVUa60/Uy8EpTPSSad7gGvaqhSkQ=;
+        s=korg; t=1660592081;
+        bh=bOmIgRM4vNz3Df9Jf/OuuxejBYT6qZkU/b0bYL8I7/w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J2jq8s3y63RKPKZXCOuc41vW0KgVLKNAQzSOm459RUD79eaSssTkTDI1ntvlOCqRk
-         dRdCPayOKQmFhAkN0UTTNLDkTlSB2YoWP92ip3V99ykXQK9u3hT+lc81o5oUmBwHYS
-         aI6LT8ORL7I/IfYlb+t5trHO4F+Um4Z7vkj0LYVU=
+        b=tmJ/Hn0Y7VPD1ZxOrbMhfJDQjYmWXa5IoMSUPbZmoOi/ZmjSVRVzyNhvQ+J3dwQAj
+         5oOXTHPMoZVADEZLI4KIlo9f5QnR7Cxo/Dkie/Ir4JBdhZ8Z5Vgq3My7CWsUVbv/Tm
+         Kfjh70JGEUCbYmCKvU1OU/cU5c8P3NJ4uyIpyJ3E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0502/1157] fs: check FMODE_LSEEK to control internal pipe splicing
-Date:   Mon, 15 Aug 2022 19:57:38 +0200
-Message-Id: <20220815180459.771925815@linuxfoundation.org>
+Subject: [PATCH 5.18 0692/1095] mtd: dataflash: Add SPI ID table
+Date:   Mon, 15 Aug 2022 20:01:31 +0200
+Message-Id: <20220815180458.001073972@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
-References: <20220815180439.416659447@linuxfoundation.org>
+In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
+References: <20220815180429.240518113@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,56 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Mark Brown <broonie@kernel.org>
 
-[ Upstream commit 97ef77c52b789ec1411d360ed99dca1efe4b2c81 ]
+[ Upstream commit ac4f83482afbfd927d0fe118151b747cf175e724 ]
 
-The original direct splicing mechanism from Jens required the input to
-be a regular file because it was avoiding the special socket case. It
-also recognized blkdevs as being close enough to a regular file. But it
-forgot about chardevs, which behave the same way and work fine here.
+Currently autoloading for SPI devices does not use the DT ID table, it uses
+SPI modalises. Supporting OF modalises is going to be difficult if not
+impractical, an attempt was made but has been reverted, so ensure that
+module autoloading works for this driver by adding an id_table listing the
+SPI IDs for everything.
 
-This is an okayish heuristic, but it doesn't totally work. For example,
-a few chardevs should be spliceable here. And a few regular files
-shouldn't. This patch fixes this by instead checking whether FMODE_LSEEK
-is set, which represents decently enough what we need rewinding for when
-splicing to internal pipes.
-
-Fixes: b92ce5589374 ("[PATCH] splice: add direct fd <-> fd splicing support")
-Cc: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Fixes: 96c8395e2166 ("spi: Revert modalias changes")
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220620152313.708768-1-broonie@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/splice.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/mtd/devices/mtd_dataflash.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/fs/splice.c b/fs/splice.c
-index 047b79db8eb5..93a2c9bf6249 100644
---- a/fs/splice.c
-+++ b/fs/splice.c
-@@ -814,17 +814,15 @@ ssize_t splice_direct_to_actor(struct file *in, struct splice_desc *sd,
- {
- 	struct pipe_inode_info *pipe;
- 	long ret, bytes;
--	umode_t i_mode;
- 	size_t len;
- 	int i, flags, more;
+diff --git a/drivers/mtd/devices/mtd_dataflash.c b/drivers/mtd/devices/mtd_dataflash.c
+index 134e27328597..25bad4318305 100644
+--- a/drivers/mtd/devices/mtd_dataflash.c
++++ b/drivers/mtd/devices/mtd_dataflash.c
+@@ -112,6 +112,13 @@ static const struct of_device_id dataflash_dt_ids[] = {
+ MODULE_DEVICE_TABLE(of, dataflash_dt_ids);
+ #endif
  
- 	/*
--	 * We require the input being a regular file, as we don't want to
--	 * randomly drop data for eg socket -> socket splicing. Use the
--	 * piped splicing for that!
-+	 * We require the input to be seekable, as we don't want to randomly
-+	 * drop data for eg socket -> socket splicing. Use the piped splicing
-+	 * for that!
- 	 */
--	i_mode = file_inode(in)->i_mode;
--	if (unlikely(!S_ISREG(i_mode) && !S_ISBLK(i_mode)))
-+	if (unlikely(!(in->f_mode & FMODE_LSEEK)))
- 		return -EINVAL;
++static const struct spi_device_id dataflash_spi_ids[] = {
++	{ .name = "at45", },
++	{ .name = "dataflash", },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(spi, dataflash_spi_ids);
++
+ /* ......................................................................... */
  
- 	/*
+ /*
+@@ -936,6 +943,7 @@ static struct spi_driver dataflash_driver = {
+ 
+ 	.probe		= dataflash_probe,
+ 	.remove		= dataflash_remove,
++	.id_table	= dataflash_spi_ids,
+ 
+ 	/* FIXME:  investigate suspend and resume... */
+ };
 -- 
 2.35.1
 

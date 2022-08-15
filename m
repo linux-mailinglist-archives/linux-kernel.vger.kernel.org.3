@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D9B59490B
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF105948FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245123AbiHOXYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
+        id S243474AbiHOXZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344767AbiHOXUz (ORCPT
+        with ESMTP id S1345663AbiHOXVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:20:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891F57E033;
-        Mon, 15 Aug 2022 13:04:18 -0700 (PDT)
+        Mon, 15 Aug 2022 19:21:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA657E310;
+        Mon, 15 Aug 2022 13:04:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44F5FB80EA8;
-        Mon, 15 Aug 2022 20:04:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE59DC433C1;
-        Mon, 15 Aug 2022 20:04:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 825D0B80EAD;
+        Mon, 15 Aug 2022 20:04:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3C81C433D6;
+        Mon, 15 Aug 2022 20:04:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593856;
-        bh=sFF/GLrtKkldifMSHkZh0cLIrumrBiRtQIFmzUP1GiI=;
+        s=korg; t=1660593865;
+        bh=6gCWjmv5tYGelzrU5oWEcn0Doq9gcjuvzlCs1uhKIrU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s7e2BMbtwsQqqUjS+6uTffCoR7lw/uiiXWzS/lOjMIvTtaZT/NK8sjVnpQuN/BwN3
-         a20Y/zGBOFqsDpTicQwhFBe+Mb9nyUsi3HvzsGy6Cuqmc7zEVLEd+63MLzq2SfyTcU
-         5DrsIef+a2rCvEObxLtG08RH9D+ja7lzhjqZffvc=
+        b=E3siX/0DB7P1ba5duXs+jkWDnryQ4BdmZJ0bkSwFPxJfqgZnTHEF4D0B+XyuoKXqV
+         G1eIh/i/uP5t5u3bmHFg5mPeP/QgcQqU9Dlk8ONpynbtni2QkKJ5WRZG+gLsjY63DT
+         Ero2KUnNYgbhnBeQchX62EOZVT6FWKnV7viCQ2xs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexey Kodanev <aleksei.kodanev@bell-sw.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org, Jitao Shi <jitao.shi@mediatek.com>,
+        Xinlei Lee <xinlei.lee@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0336/1157] drm/radeon: fix potential buffer overflow in ni_set_mc_special_registers()
-Date:   Mon, 15 Aug 2022 19:54:52 +0200
-Message-Id: <20220815180453.110296283@linuxfoundation.org>
+Subject: [PATCH 5.19 0337/1157] drm/mediatek: Modify dsi funcs to atomic operations
+Date:   Mon, 15 Aug 2022 19:54:53 +0200
+Message-Id: <20220815180453.151425943@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -56,58 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexey Kodanev <aleksei.kodanev@bell-sw.com>
+From: Xinlei Lee <xinlei.lee@mediatek.com>
 
-[ Upstream commit 136f614931a2bb73616b292cf542da3a18daefd5 ]
+[ Upstream commit 7f6335c6a258edf4d5ff1b904bc033188dc7b48b ]
 
-The last case label can write two buffers 'mc_reg_address[j]' and
-'mc_data[j]' with 'j' offset equal to SMC_NISLANDS_MC_REGISTER_ARRAY_SIZE
-since there are no checks for this value in both case labels after the
-last 'j++'.
+Because .enable & .disable are deprecated.
+Use .atomic_enable & .atomic_disable instead.
 
-Instead of changing '>' to '>=' there, add the bounds check at the start
-of the second 'case' (the first one already has it).
-
-Also, remove redundant last checks for 'j' index bigger than array size.
-The expression is always false. Moreover, before or after the patch
-'table->last' can be equal to SMC_NISLANDS_MC_REGISTER_ARRAY_SIZE and it
-seems it can be a valid value.
-
-Detected using the static analysis tool - Svace.
-Fixes: 69e0b57a91ad ("drm/radeon/kms: add dpm support for cayman (v5)")
-Signed-off-by: Alexey Kodanev <aleksei.kodanev@bell-sw.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Link: https://patchwork.kernel.org/project/linux-mediatek/patch/1653012007-11854-2-git-send-email-xinlei.lee@mediatek.com/
+Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/radeon/ni_dpm.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/mediatek/mtk_dsi.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/radeon/ni_dpm.c b/drivers/gpu/drm/radeon/ni_dpm.c
-index 769f666335ac..672d2239293e 100644
---- a/drivers/gpu/drm/radeon/ni_dpm.c
-+++ b/drivers/gpu/drm/radeon/ni_dpm.c
-@@ -2741,10 +2741,10 @@ static int ni_set_mc_special_registers(struct radeon_device *rdev,
- 					table->mc_reg_table_entry[k].mc_data[j] |= 0x100;
- 			}
- 			j++;
--			if (j > SMC_NISLANDS_MC_REGISTER_ARRAY_SIZE)
--				return -EINVAL;
- 			break;
- 		case MC_SEQ_RESERVE_M >> 2:
-+			if (j >= SMC_NISLANDS_MC_REGISTER_ARRAY_SIZE)
-+				return -EINVAL;
- 			temp_reg = RREG32(MC_PMG_CMD_MRS1);
- 			table->mc_reg_address[j].s1 = MC_PMG_CMD_MRS1 >> 2;
- 			table->mc_reg_address[j].s0 = MC_SEQ_PMG_CMD_MRS1_LP >> 2;
-@@ -2753,8 +2753,6 @@ static int ni_set_mc_special_registers(struct radeon_device *rdev,
- 					(temp_reg & 0xffff0000) |
- 					(table->mc_reg_table_entry[k].mc_data[i] & 0x0000ffff);
- 			j++;
--			if (j > SMC_NISLANDS_MC_REGISTER_ARRAY_SIZE)
--				return -EINVAL;
- 			break;
- 		default:
- 			break;
+diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+index d9f10a33e6fa..6e7793f935da 100644
+--- a/drivers/gpu/drm/mediatek/mtk_dsi.c
++++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+@@ -763,14 +763,16 @@ static void mtk_dsi_bridge_mode_set(struct drm_bridge *bridge,
+ 	drm_display_mode_to_videomode(adjusted, &dsi->vm);
+ }
+ 
+-static void mtk_dsi_bridge_disable(struct drm_bridge *bridge)
++static void mtk_dsi_bridge_atomic_disable(struct drm_bridge *bridge,
++					  struct drm_bridge_state *old_bridge_state)
+ {
+ 	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
+ 
+ 	mtk_output_dsi_disable(dsi);
+ }
+ 
+-static void mtk_dsi_bridge_enable(struct drm_bridge *bridge)
++static void mtk_dsi_bridge_atomic_enable(struct drm_bridge *bridge,
++					 struct drm_bridge_state *old_bridge_state)
+ {
+ 	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
+ 
+@@ -779,8 +781,8 @@ static void mtk_dsi_bridge_enable(struct drm_bridge *bridge)
+ 
+ static const struct drm_bridge_funcs mtk_dsi_bridge_funcs = {
+ 	.attach = mtk_dsi_bridge_attach,
+-	.disable = mtk_dsi_bridge_disable,
+-	.enable = mtk_dsi_bridge_enable,
++	.atomic_disable = mtk_dsi_bridge_atomic_disable,
++	.atomic_enable = mtk_dsi_bridge_atomic_enable,
+ 	.mode_set = mtk_dsi_bridge_mode_set,
+ };
+ 
 -- 
 2.35.1
 

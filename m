@@ -2,87 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26EEB592AB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 10:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE9A592ACC
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 10:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231743AbiHOHyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 03:54:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52148 "EHLO
+        id S239913AbiHOHzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 03:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiHOHx7 (ORCPT
+        with ESMTP id S229508AbiHOHze (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 03:53:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E03D1DA42
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:53:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660550037;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yercUWOsUdeD9CXQVJd5iJAar+BoiuWj19yIWOzMs8U=;
-        b=XSuduodzPh2vQ0jqmU05Xpem9Au5T8DVAaDBakEscN9QUyjqiwFKPw7rTfQdwS+Dmk+DbG
-        bolvQ776dt+jOlFFURC00ZaVHg3x2H9xWR52+Jf679rbL66/QfTM7C5ImXibEOsmI8GBgq
-        +3jWvNty5+eg/KS27X5a8Sn5xsB/pqU=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-635-9oWl7teYNJGf2Sn7uHnlnA-1; Mon, 15 Aug 2022 03:53:56 -0400
-X-MC-Unique: 9oWl7teYNJGf2Sn7uHnlnA-1
-Received: by mail-ej1-f70.google.com with SMTP id gb41-20020a170907962900b00730961131a7so930064ejc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:53:55 -0700 (PDT)
+        Mon, 15 Aug 2022 03:55:34 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000B195AA
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:55:31 -0700 (PDT)
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5B3B83F13D
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 07:55:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1660550130;
+        bh=ule+HDSKgvtTqS232O7dmuPtdYvAd/9M7yxVUXUSf3w=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=t/lskzEqkXLYu4o06EAh7EeDmP41keThMuMOCqpJVQSKZ+Kjfpb0l5T1w34DzhAYy
+         GbCJw718sfRVGF/caJ0iPSQ2m8HjN8aa3N2ZkeyppRCKsw1/zsB+v6lPAQ7/Xq8/uC
+         g2bDZEa/x2Vy8RIs5ngOCzIwGoWdT+iPOvvQ5a7SpN/SyHWEjJ4rW/c2Xa9ImlW/5F
+         Mfij5rf7FQ6xByFCK4leQ71WyLr5I+pH7NFSMR9pC5v2mM3V+vEj2o79rKjYHId9ed
+         DZcLBULM4o6OtnY9atjiy/NcsYUf3bjtEYyutsfYCjImZXlEjUmJCXtAlBHsjKpTvh
+         yc4VPAXVV7V+w==
+Received: by mail-ot1-f72.google.com with SMTP id f40-20020a9d03ab000000b00636a9fee9d3so3336649otf.10
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:55:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=yercUWOsUdeD9CXQVJd5iJAar+BoiuWj19yIWOzMs8U=;
-        b=aJlGbEyq5mwcZPfgfa2y4u+8KMXQpvGQfXZZO8pj1pmIQZOAIfzlY/dO8+cWx7W7Gy
-         KJx37XZYYIkE5DGq84KG7XrPhJELTonmt19P4ha+S1lSMLMSTuucSvXoae4iOlqfV59U
-         GDwCbo5KGp8lf7K+zmZ2zRc4sWHSU5kUyz0x/RkqN22i5/vfdk07A4xJyGU3EX0gKmZS
-         xM0qSdTMWninY0JbnUghPXJ+F2XnoKJJ1vjfAZHSmRsxWwPAYAblGneGV+zdk4xoHeTr
-         TakJT+irB0wpgTrTw6aRcZ94hCmMp5uyKqPERUUS5w+lf3PLfvbqMHlF18nBKxxM1lR1
-         GmQA==
-X-Gm-Message-State: ACgBeo02MozjzoGfeMOGUNqj1X8unAQkKelbWyvgqbZxjapGYu/sWrWf
-        U9VEC8mAigwzb0Lnr01VeUeGkv/tw2Wi53cepHqUL2TgK1Sw0Ad0rkwr86jEHIMSbcE8QigwJgc
-        BI2mv+uebgehhjid4ursXTHSZ
-X-Received: by 2002:a05:6402:50cb:b0:440:8bac:1e02 with SMTP id h11-20020a05640250cb00b004408bac1e02mr14093269edb.336.1660550035026;
-        Mon, 15 Aug 2022 00:53:55 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4AC2S98HLc61afU+gd5vXz1YaX8Kl0i9pStYW3q+4r+4mdvvoUmTiTWdtOOQFKhCnVCdoqSA==
-X-Received: by 2002:a05:6402:50cb:b0:440:8bac:1e02 with SMTP id h11-20020a05640250cb00b004408bac1e02mr14093251edb.336.1660550034841;
-        Mon, 15 Aug 2022 00:53:54 -0700 (PDT)
-Received: from redhat.com ([2.54.169.49])
-        by smtp.gmail.com with ESMTPSA id k4-20020a056402048400b004404e290e7esm6153510edv.77.2022.08.15.00.53.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 00:53:54 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 03:53:49 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Andres Freund <andres@anarazel.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: upstream kernel crashes
-Message-ID: <20220815035207-mutt-send-email-mst@kernel.org>
-References: <20220814212610.GA3690074@roeck-us.net>
- <CAHk-=wgf2EfLHui6A5NbWoaVBB2f8t-XBUiOMkyjN2NU41t6eA@mail.gmail.com>
- <20220814223743.26ebsbnrvrjien4f@awork3.anarazel.de>
- <CAHk-=wi6raoJE-1cyRU0YxJ+9ReO1eXmOAq0FwKAyZS7nhvk9w@mail.gmail.com>
- <1c057afa-92df-ee3c-5978-3731d3db9345@kernel.dk>
- <20220815013651.mrm7qgklk6sgpkbb@awork3.anarazel.de>
- <CAHk-=wikzU4402P-FpJRK_QwfVOS+t-3p1Wx5awGHTvr-s_0Ew@mail.gmail.com>
- <20220815071143.n2t5xsmifnigttq2@awork3.anarazel.de>
- <20220815031549-mutt-send-email-mst@kernel.org>
- <3df6bb82-1951-455d-a768-e9e1513eb667@www.fastmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ule+HDSKgvtTqS232O7dmuPtdYvAd/9M7yxVUXUSf3w=;
+        b=dVPqqzavO3f2A346Sq/2ahPizx+U8/8+lZm+Ft/8YHpOQthgROpCqM3Q7MC+WgTmhn
+         3dCJWyGTz+59e93W+IFTbOizHYHLt3GCvdo+NYCVYBBDqOnPRs0SoRDZBf0gN0f7dIzC
+         gU+o290sXksyRxsZqVuO+t/xqyF7MMt2eLHI1GYG9HhJlrF6sA+YglJzIGlCfxkwPyug
+         w3a+wU+r0dLzXf5zR5u1m5VuVzXy3z9gQkwHZhIjRsg9p5xg4235oM5XwJDtrKi1R2Fw
+         +b0FmChampbqCmhdSPvPPtY/ejimUF38eYBmFlwG7uTxJq4MBbQqpG07hyf5Yp4rhJ5b
+         DUCg==
+X-Gm-Message-State: ACgBeo1EMw7jJ9ZRy46W7ZAapuiJHj5MKip8AA8BpRK0Z4A/9O2V2JS+
+        9+QAj5jLgJjPIlGLxVSieW0hbvz6wEGMBing0elev3qxQUGkv76oG15Ig8bkK6LRSKzubP4t/wp
+        QyBVZ1KlXmZJ1RYkg29bXnKEETQCpY0RMHd9J0SHXaRMWD2LLv8bsidmSpg==
+X-Received: by 2002:a05:6871:28c:b0:10e:a56a:1c47 with SMTP id i12-20020a056871028c00b0010ea56a1c47mr10209691oae.176.1660550129148;
+        Mon, 15 Aug 2022 00:55:29 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4TVTe8GJVrtR00Jw4z959FyKcd/IqG6uzD4AiPZSXT/nQQVih8xFWt5R0sEtNsHG+38tGvgQkfhf0KgSfPz9c=
+X-Received: by 2002:a05:6871:28c:b0:10e:a56a:1c47 with SMTP id
+ i12-20020a056871028c00b0010ea56a1c47mr10209684oae.176.1660550128857; Mon, 15
+ Aug 2022 00:55:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3df6bb82-1951-455d-a768-e9e1513eb667@www.fastmail.com>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220719144753.252231-1-kai.heng.feng@canonical.com>
+ <bd59b06a-de49-2a1a-d2a2-351957fec6d0@perex.cz> <CAAd53p6ru7CJ=pJ2knCL5pgU_Y+nA=yTPscKk225zTD-fv4qQg@mail.gmail.com>
+ <34bddb2f-dc57-c08c-358e-26cf7824c203@perex.cz> <514f0fda-9475-e163-fd64-0bc675dd3447@linux.intel.com>
+In-Reply-To: <514f0fda-9475-e163-fd64-0bc675dd3447@linux.intel.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Mon, 15 Aug 2022 15:55:16 +0800
+Message-ID: <CAAd53p5xkjKkpvZu2nNu5EaJC9d060g5GAhV_gRD2ouGjKY9AQ@mail.gmail.com>
+Subject: Re: [PATCH] ALSA: hda: Skip creating captures in SOF context
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, tiwai@suse.com,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,65 +78,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 12:46:36AM -0700, Andres Freund wrote:
-> Hi,
-> 
-> On Mon, Aug 15, 2022, at 00:29, Michael S. Tsirkin wrote:
-> > On Mon, Aug 15, 2022 at 12:11:43AM -0700, Andres Freund wrote:
-> >> Hi,
-> >> 
-> >> On 2022-08-14 20:18:44 -0700, Linus Torvalds wrote:
-> >> > On Sun, Aug 14, 2022 at 6:36 PM Andres Freund <andres@anarazel.de> wrote:
-> >> > >
-> >> > > Some of the symptoms could be related to the issue in this thread, hence
-> >> > > listing them here
-> >> > 
-> >> > Smells like slab corruption to me, and the problems may end up being
-> >> > then largely random just depending on who ends up using the allocation
-> >> > that gets trampled on.
-> >> > 
-> >> > I wouldn't be surprised if it's all the same thing - including your
-> >> > network issue.
-> >> 
-> >> Yea. As I just wrote in
-> >> https://postgr.es/m/20220815070203.plwjx7b3cyugpdt7%40awork3.anarazel.de I
-> >> bisected it down to one commit (762faee5a267). With that commit I only see the
-> >> networking issue across a few reboots, but with ebcce4926365 some boots oops
-> >> badly and other times it' "just" network not working.
-> >> 
-> >> 
-> >> [oopses]
-> 
-> >> If somebody knowledgeable staring at 762faee5a267 doesn't surface somebody I
-> >> can create a kernel with some more debugging stuff enabled, if somebody tells
-> >> me what'd work best here.
-> >> 
-> >> 
-> >> Greetings,
-> >> 
-> >> Andres Freund
+On Wed, Jul 20, 2022 at 9:31 PM Pierre-Louis Bossart
+<pierre-louis.bossart@linux.intel.com> wrote:
+>
+>
+>
+> On 7/20/22 02:52, Jaroslav Kysela wrote:
+> > Dne 20. 07. 22 v 3:45 Kai-Heng Feng napsal(a):
+> >> On Tue, Jul 19, 2022 at 11:41 PM Jaroslav Kysela <perex@perex.cz> wrote:
+> >>>
+> >>> Dne 19. 07. 22 v 16:47 Kai-Heng Feng napsal(a):
+> >>>> On HP laptops that use SOF driver for DMIC, the micmute LED doesn't
+> >>>> light up when mic is muted after commit 9b014266ef8a ("ASoC: SOF:
+> >>>> topology: use new sound control LED layer").
+> >>>>
+> >>>> The micmute LED itself is still working via sysfs, but it doesn't follow
+> >>>> mute anymore. That's because unlike vendors like Dell and Lenovo, HP
+> >>>> laptops use HDA codec to control mute LEDs instead of ACPI. So on HP
+> >>>> laptops, both SOF and HDA create captures with
+> >>>> SNDRV_CTL_ELEM_ACCESS_MIC_LED access, snd_ctl_led_set_state() considers
+> >>>> there are two different kcontrols and one of them is not muted.
+> >>>
+> >>> It does not mean that it's a wrong behavior. When both controls are muted, the
+> >>> LED should be turned on. It just requires that all inputs are off (and it may
+> >>> be the default - probably we can set in UCM or so). If you turn the "Capture
+> >>> Switch" off in amixer / alsamixer, do things work as expected ?
+> >>
+> >> Yes. When all captures are muted the micmute LED is on.
+> >>
+> >>>
+> >>>> So skip creating captures for HDA when it's called from SOF, the
+> >>>> captures are already handled by SOF.
+> >>>
+> >>> The capture controls are for other inputs like external analog microphone. If
+> >>> it is required to suppress the MIC LED for some hardware, just skip the
+> >>> "spec->mic_mute_led = 1" assignment in hda_generic.c . Also, the check
+> >>> "codec->core.type != HDA_DEV_ASOC" is not sufficient, because you don't know,
+> >>> if the topology really sets the MIC LED flag.
+> >>
+> >> AFAIK the external analog microphone on DMIC laptop is driven by SOF driver too.
+> >> If those capture controls are indeed needed for external analog mics,
+> >> use UCM to mute them by default won't work either.
 > >
-> > Thanks a lot for the work!
-> > Just a small clarification:
-> >
-> > So IIUC you see several issues, right?
-> 
-> Yes, although they might be related, as theorized by Linus upthread.
-> 
-> > With 762faee5a2678559d3dc09d95f8f2c54cd0466a7 you see networking issues.
-> 
-> Yes.
-> 
-> 
-> > With ebcce492636506443e4361db6587e6acd1a624f9 you see crashes.
-> 
-> Changed between rebooting. Sometimes the network issue, sometimes the crashes in the email you're replying to.
-> 
+> > Could you describe this ? I though that only DMIC is handled by SOF when HDA
+> > codec is in the system. There is a separate analog codec for external analog
+> > microphone or the HDA codec is somehow connected to SOF/DSP ? If so, how ?
+>
+> The HDA codec is connected in the same way in all cases, there's no
+> hardware/electrical/routing difference.
+>
+> When used, the SOF driver will handle ALL links, be they DMIC or
+> HDAudio. The difference for HDaudio is that instead of a single DMA
+> transfer (DDR->FIFO), we have a first 'Host' DMA into the DSP SRAM, some
+> processing and a second 'Link' DMA from DSP SRAM to the HDaudio FIFO
+> (reversed flow for capture).
 
-OK I think we can safely drop the others on the Cc, and I will add
-a bunch of people and relevant lists instead.
-I want to fix this quickly so testing can proceed.
+So is this approach sufficient for this issue? Or should I explore
+other possibilities?
 
+Kai-Heng
 
-> > MST
-
+>

@@ -2,105 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 082BB593060
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 926F359305D
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242311AbiHON7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 09:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43390 "EHLO
+        id S242066AbiHON7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 09:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231909AbiHON70 (ORCPT
+        with ESMTP id S232339AbiHON7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 09:59:26 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D60521279;
-        Mon, 15 Aug 2022 06:59:16 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 4020C3200951;
-        Mon, 15 Aug 2022 09:59:13 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Mon, 15 Aug 2022 09:59:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1660571952; x=1660658352; bh=avieeFTqme
-        6FMbKv6uuCDr9epn/YVsXKNuu4CsdX0I0=; b=WUUOOC3ERVb3rDC/N4vhPVAOFQ
-        JoBgdT+mVU5oLxnWLgugeXoQR3bngQAuPs1c4aeHulGZQ2944ZzAZnvqPuwTT7oj
-        ifhKWzbCPQCNFHm0j8fnm4vhYiDg1oiT04wptulI2KEpU9ZqXSD740BSNI7KoEAG
-        curhDqI+U2fyeN+TDEq4WDH7LFO8Q8oH8WXMI7R9+DT2GZqVpXrdMgcpdyqErXkX
-        3QBfVQeflZsB2cx/ZylB5j7U9oH/DMhm6T1yf6wu9hMFiTvEpeN2F2DMrvUZwiRb
-        imxb8jsKzIkSJpxCddQliIOGojwp8kqHG3t9w6CMq5gCQl2AqW9UELXPmgzA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660571952; x=1660658352; bh=avieeFTqme6FMbKv6uuCDr9epn/Y
-        VsXKNuu4CsdX0I0=; b=nUHumxp3CSzchlE6Swleeer1J8MgsY28S7IlNrSSA8uI
-        HMRh4dCPu5qXCwFd4YsBhaofiWDqJ+yfGmxofYyAd4dDrjiXjyCwvLWLhXFM9THq
-        r4waN3gR/QHT/CyNezTiYLzGlZXqSQQ/J2t0PPz8AW4SpHGp3zSU8mcQBx6QB/nw
-        QHMIZ+vT8NRpeRGcJD6oOGw4yFKtwgGJcZM7sNmbFApXt4b7fo0BvcSEDHi7si6d
-        jW+l9bdMXSa87dEoUawMxSgVmC93zKfWRQvMmcIoKLy3icDo3BHhuCZ8uYKlyCRd
-        0y+9CSYlU3CNslyAIMop1E+RkC+PzLRvw5nr1/A19g==
-X-ME-Sender: <xms:L1H6YpOM2fUq-Ziok4oI4Xhh9gxYeH4nYDPyW6lL4jpy9n8GzJPTrg>
-    <xme:L1H6Yr8IZ3t2vU_F5Y1PKkMEQQ35VMosDTa9Kxc8Qs1jI_F3lK0CcYjdGDOXcsw6M
-    megntRXUOdQESk8ork>
-X-ME-Received: <xmr:L1H6YoSrLsbbV9Vgh2bx7lGAYjpJKg7N3XQW6Tfo79-StWeH2rF4DVDS56fXrA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehvddgjeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfihtghh
-    ohcutehnuggvrhhsvghnuceothihtghhohesthihtghhohdrphhiiiiirgeqnecuggftrf
-    grthhtvghrnhepueettdetgfejfeffheffffekjeeuveeifeduleegjedutdefffetkeel
-    hfelleetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epthihtghhohesthihtghhohdrphhiiiiirg
-X-ME-Proxy: <xmx:L1H6YlsLiyoEN-vGW9ECOAZjK0nWE4tchFaF1a_ejqAzSVnMnA0L-w>
-    <xmx:L1H6Yhdcj6eSQNLNqTEQw1llYSnIdao-JDtiPG8xGhEPTEJPllVb0w>
-    <xmx:L1H6Yh184Xxw897AACpnERHgb6kNtBGm_psUlTQGTURWpzq-RAixpw>
-    <xmx:MFH6YqGNVnt3ArbsyZ-f7MrbiziWk5z5IzDUYdYPc_kecMG_C7gUaQ>
-Feedback-ID: i21f147d5:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 Aug 2022 09:59:10 -0400 (EDT)
-Date:   Mon, 15 Aug 2022 07:59:08 -0600
-From:   Tycho Andersen <tycho@tycho.pizza>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Oleg Nesterov <oleg@redhat.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC][PATCH v2] fuse: In fuse_flush only wait if someone wants
- the return code
-Message-ID: <YvpRLJ79GRWYjLdf@tycho.pizza>
-References: <20220728091220.GA11207@redhat.com>
- <YuL9uc8WfiYlb2Hw@tycho.pizza>
- <87pmhofr1q.fsf@email.froward.int.ebiederm.org>
- <YuPlqp0jSvVu4WBK@tycho.pizza>
- <87v8rfevz3.fsf@email.froward.int.ebiederm.org>
- <YuQPc51yXhnBHjIx@tycho.pizza>
- <87h72zes14.fsf_-_@email.froward.int.ebiederm.org>
- <20220729204730.GA3625@redhat.com>
- <YuR4MRL8WxA88il+@ZenIV>
- <875yjfdw3a.fsf_-_@email.froward.int.ebiederm.org>
+        Mon, 15 Aug 2022 09:59:47 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B11122B16
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 06:59:46 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id jm11so4180377plb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 06:59:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=gYLMwJl3NqL1MH7BfhUrQSE5Y3rEltoe6FStUMqBxDI=;
+        b=W2TsMdlSfECTGIJ58CoX+zpPXKllKXkKofGMaE0tAk68/ssCPnfEZRpUUxqagEO8IM
+         g3OQuiRCNdjWxzODBmQJShRlJWcy2ZkOq0NePdgQDJDvDDDbJuoOE14/dg/gfa4FfJ2M
+         MKCIpAFywB84XKT8r1n0xOzXjC2bOzMsO6TSm+G+P607uNWtZrlgZG3JwJU4AKQ/lDz6
+         /iNZ5qR1tHqGOKpt5BdHRRzMBjO6Fo21W+6Aavlzxp8XKW/vZ2z6jFMlghiEUt6qvyCn
+         5sYF3iqiMX0pl9F4vYkaxW9wsKMsN0JbXQCnixaNAvQT2lhf1jWiVnmZNryLGhli9Ant
+         oEjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=gYLMwJl3NqL1MH7BfhUrQSE5Y3rEltoe6FStUMqBxDI=;
+        b=19q8147WxKXA0dqpoGbMxkh8/VGHeytVpeiaKicTNecJjjiN4IkEFEh7CTy1pEBD6i
+         Sa2ACUsh9hBA9sOXCKhf5N6/BcL3hURCZjLThCHii/UM7BUFE/B+MOaqQhi+SaWaTKOE
+         xi18r/2RRTq6agxdm1+s4eK1hoyPubiFjZOoWlAiL6JBA7ttiLmjCTDT4l591KVvCXlE
+         pHO4F8TK37lWTb1w3hU6CI+m2PnMvrK00Gol9QFwvrdUA4Dr1KJSNdSAhZvaZ9F1dcTI
+         tJGOrgtJ3ak8v8kgobJbfZrHrbBfXfcMNCL+qjxFQVTprVDvM7cBxggTM/yfgSoXG1cr
+         Fi7w==
+X-Gm-Message-State: ACgBeo0XBbgJ5ox37CjTapybw7APpNZm3wSgGmhHALOMpqyVWaaVBP9L
+        WsL09dedU0QPT2sSUfBl6zVrwg==
+X-Google-Smtp-Source: AA6agR4hciO1La3ySB4NpnxnAka7c32UzQNn3TlPYUUC+HmN5100km4viSKL/BvKGHlhQ5bqS4PdyA==
+X-Received: by 2002:a17:90b:388e:b0:1f5:40d4:828d with SMTP id mu14-20020a17090b388e00b001f540d4828dmr18972421pjb.31.1660571986101;
+        Mon, 15 Aug 2022 06:59:46 -0700 (PDT)
+Received: from [10.94.58.189] ([139.177.225.254])
+        by smtp.gmail.com with ESMTPSA id k4-20020a170902c40400b0016d21697ed9sm7053629plk.48.2022.08.15.06.59.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Aug 2022 06:59:45 -0700 (PDT)
+Message-ID: <e834147d-ff5a-9212-5458-3ba91475c21d@bytedance.com>
+Date:   Mon, 15 Aug 2022 21:59:40 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <875yjfdw3a.fsf_-_@email.froward.int.ebiederm.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH v4 0/7] sched/fair: improve scan efficiency of SIS
+Content-Language: en-US
+To:     K Prateek Nayak <kprateek.nayak@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        linux-kernel@vger.kernel.org
+References: <20220619120451.95251-1-wuyun.abel@bytedance.com>
+ <dfcfae9c-caae-1d94-3f7d-de3d644de9e0@amd.com>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <dfcfae9c-caae-1d94-3f7d-de3d644de9e0@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi K Prateek, thanks for your test and sorry for the late reply..
 
-On Sat, Jul 30, 2022 at 12:10:33AM -0500, Eric W. Biederman wrote:
-> Al, vfs folks? (igrab/iput sorted so as not to be distractions).
+On 7/18/22 7:00 PM, K Prateek Nayak Wrote:
+> Hello Abel,
+> 
+> We've tested the patch on a dual socket Zen3 System (2 x 64C/128T).
+> 
+> tl;dr
+> 
+> - There is a noticeable regression for Hackbench with the system
+>    configured in NPS4 mode. This regression is more noticeable
+>    with SIS_UTIL enabled and not as severe with SIS_PROP.
+>    This regression is surprising given the patch should have
+>    improved SIS Efficiency in case of fully loaded system and is
+>    consistently reproducible across multiple runs and reboots.
 
-Any movement on this? Can you resend (or I can) the patch with the
-fixes for fuse at the very least?
+The regression seems unexpected, I will try to reproduce with my
+Intel server. While staring at the code, I found something may be
+relative to the issue:
 
-Thanks,
+  - The cpumask_and() in select_idle_cpu() is before SIS_UTIL which
+    could bail out early. So when SIS filter is enabled, lots of
+    useless efforts could be made if nr_idle_scan==0 (e.g. 16groups).
+    While the SIS_PROP case is different, the efforts done by the
+    filter won't be all in vain, that's probably the reason why the
+    regression under SIS_UTIL is more noticeable. I am working on a
+    patch to optimize this.
+
+  - If nr_idle_scan == 0 then select_idle_cpu() will bail out early,
+    so it's pointless to update SIS filter which may further burden
+    the overhead together with the above issue. This will be fixed
+    in next version.
+
+I will rework the whole patchset to fit the new SIS_UTIL feature.
+
+> 
+> - Apart from the above anomaly, the results look positive overall
+>    with the patched kernel behaving as well as, or better than the tip.
+
+Cheers!
+
+> 
+> [..snip..]
+> 
+> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> Hackbench - 15 runs statistics
+> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> o NPS 4 - 16 groups (SIS_UTIL)
+> 
+> - tip
+> 
+> Min           : 7.35
+> Max           : 12.66
+> Median        : 10.60
+> AMean         : 10.00
+> GMean         : 9.82
+> HMean         : 9.64
+> AMean Stddev  : 1.88
+> AMean CoefVar : 18.85 pct
+> 
+> - SIS_Eff
+> 
+> Min           : 12.32
+> Max           : 18.92
+> Median        : 13.82
+> AMean         : 14.96	(-49.60 pct)
+> GMean         : 14.80
+> HMean         : 14.66
+> AMean Stddev  : 2.25
+> AMean CoefVar : 15.01 pct
+> 
+> o NPS 4 - 16 groups (SIS_PROP)
+> 
+> - tip
+> 
+> Min           : 7.04
+> Max           : 8.22
+> Median        : 7.49
+> AMean         : 7.52
+> GMean         : 7.52
+> HMean         : 7.51
+> AMean Stddev  : 0.29
+> AMean CoefVar : 3.88 pct
+> 
+> - SIS_Eff
+> 
+> Min           : 7.04
+> Max           : 9.78
+> Median        : 8.16
+> AMean         : 8.42	(-11.06 pct)
+> GMean         : 8.39
+> HMean         : 8.36
+> AMean Stddev  : 0.78
+> AMean CoefVar : 9.23 pct
+> 
+> The Hackbench regression is much more noticeable with SIS_UTIL
+> enabled but only when the test machine is running in NPS4 mode.
+> It is not obvious why this is happening given the patch series
+> aims at improving SIS Efficiency.
+
+The result seems to get some kind of connection with the LLC size.
+I need some time to figure it out.
+
+> 
+> It would be great if you can test the series with SIS_UTIL
+> enabled and SIS_PROP disabled to see if it effects any benchmark
+> behavior given SIS_UTIL is the default SIS logic currently on
+> the tip.
+
+Yes, I will.
+
+Thanks & Best Regards,
+Abel

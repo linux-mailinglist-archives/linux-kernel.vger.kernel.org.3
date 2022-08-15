@@ -2,65 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F90259376D
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E03593837
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244351AbiHOSxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 14:53:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
+        id S244456AbiHOSxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 14:53:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243344AbiHOStV (ORCPT
+        with ESMTP id S244408AbiHOSvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 14:49:21 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE15042AC0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:28:44 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id u14so9435441oie.2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:28:44 -0700 (PDT)
+        Mon, 15 Aug 2022 14:51:06 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8D345982
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:29:04 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id q39-20020a056830442700b0063889adc0ddso5085372otv.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:29:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=PAbaE2BPi2JfE0JMSsYw58hC/bDcDdFIaU6lrhJq/5I=;
-        b=V0SfwLj2Yb74etrx6rZia7hwxnv4XkfBI0cZtG1ukS6nLDzSjJMyA1TvyG1buUgVla
-         Jejov9nTjZs+kZUP5vQin6bWDO+v86jb6AaxTKWn9Jw1m2KXFY28/noXzobNQVfR3ms+
-         1ZoWxmc7QQCiJbTs1VWn7hbPJYEqvN4rMMIAbkjM/xRtsltDcLhuBpD30bljR3kgQb6/
-         7LmETzDf4cPdg8jUN2h4bpZL+/MtVjP4Qs2K3sM9gL8QCklk69cQN5/izcXp88d0LkOR
-         9udl1jzq251uFJMR7lB/TUdfxUs9yKIglh/0wXZzqwbvy67Fuu76Q1Y4qEuqP8jFXwaf
-         e4Zg==
+        bh=+2lJJE7hfrkayt0qzi/fmG2izz2GLSD8nOH7tC1AeLo=;
+        b=Lc4mNTi56/32O+lgEowursl3S1QdLAWj1FpOC5XA+F8Rx3hlrgkYOxG1d54XP1PQRd
+         mRXvLbXoAcxba3284ULxJIFBNCvTT393HISNfqbcZuOLFtg+LqNpWh6FTFFT1Kn55/rk
+         zAZXdzx4ceCx8rckPOQCS1eQ62LLF9XQdJtL4mfhlygbh3m8UIe1cBmEMwyCyVggoqQ5
+         0AQrM/A7lyijOyzdtN6eZC5x/J5rIMS+uFtUFMAl/SWgdp5wlh8OC3/0n6nNp5sceRpk
+         UgecbFyp9AiB0Vs0GSuanHfZWxpaVLDqfOE02iJGWyO2aUyx6mnP3+zKwWw4DwnIGAqg
+         KVsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=PAbaE2BPi2JfE0JMSsYw58hC/bDcDdFIaU6lrhJq/5I=;
-        b=0rkGsSqL9QyEJUx8OWisk7Jf3NhSJsTvT5QnfqUopFQm0u/v1BB/Tqhq5uqT+1P/c8
-         ohNgBjbKZVUls/3VgWR4bxdH9kwz0BK/d80NaSovQj9ZM/KRz8o7UeFyKCFnq4OHQcJu
-         41wMeYCUwufXb1vPKLKD9D3GEMmMJ4rCL6UOa3kwiiCHcylViY+LESHVy3w6Z75KZ+BC
-         1EGROVwoqRuHRh1N9hwYxlwBWvlc3DbLh7hZpDRsBTKjY3OeQsPqNUaNae2qe1tHuwTx
-         r2xfdL7E7Sg8zeRM9L5ClNjArr8LZm9F1icpgvAC9oD08isfSfe8syRfgHRSvu4244fK
-         3QAg==
-X-Gm-Message-State: ACgBeo2uNmIQ//TtehpyCL1FwhzdZ83+pf1JZPHlTgEUChtA1AR58RyG
-        dBB+0exmRWsH0RoDxL8wCv4mL5GMt0JWM12guryNIw==
-X-Google-Smtp-Source: AA6agR4APC8y0ObSdmVA8gIwBkVKlXdAxjrtt2Pcnsr06+bzyb2N1m7fW/tLBegFGxvYUCkF3SP49wRmVOtKuUNB12U=
-X-Received: by 2002:aca:5e89:0:b0:344:80ab:1351 with SMTP id
- s131-20020aca5e89000000b0034480ab1351mr4590109oib.105.1660588124265; Mon, 15
- Aug 2022 11:28:44 -0700 (PDT)
+        bh=+2lJJE7hfrkayt0qzi/fmG2izz2GLSD8nOH7tC1AeLo=;
+        b=v7W/iSFh0iNkpWyH5Geuv0PSErMwjOk25Af96G+wKMbvLOoXjd0xctX7fDT5IHIH0K
+         D8Pp7uFH12wOC2jVUE1wY7uIwNssY2pH4Ziebr1z2y9aH9/+XBk5iyszUbGcdfFuTVX4
+         5R4mNQwKzJ0vyWx5mWEfHH1DUpTWNmypwYJ+8d+GZu0DzZWPqTdHl06Az2xP3WsYpwlM
+         GJuqNhHHZTr8o9kolb37j3vNBGYsFBrNjxmV+vQ3hjnpJpSYyNz0hSwvZwK5I3yPqLUZ
+         erDg04f+rJdtD1siWLDhh9Mu2B+CblSCX14/ukNb1xEElPd06oh5PHTfiKO9kPJZ8cFQ
+         B8jw==
+X-Gm-Message-State: ACgBeo2AyKLRl8CTepK9/4ih7svn2yVQrJovwFL9ov7gl7bez+hT0jQq
+        bzeABtXDdmXCt5jGnT0BLuP68Q2mNMiHE/DIRKhIhQ==
+X-Google-Smtp-Source: AA6agR76AJA44USeULweUjdFYUfN/+GbzCosXIK/UxZ4AEkVDK/VEN27cHeW+w+gAM3CyEeE2422VPU3VsRAqluGTjk=
+X-Received: by 2002:a9d:490:0:b0:636:825e:3b6 with SMTP id 16-20020a9d0490000000b00636825e03b6mr6661546otm.91.1660588143705;
+ Mon, 15 Aug 2022 11:29:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220728080048.21336-1-wenbin.mei@mediatek.com>
-In-Reply-To: <20220728080048.21336-1-wenbin.mei@mediatek.com>
+References: <20220729104441.39177-1-angelogioacchino.delregno@collabora.com> <20220729104441.39177-3-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220729104441.39177-3-angelogioacchino.delregno@collabora.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 15 Aug 2022 20:28:04 +0200
-Message-ID: <CAPDyKFqg7gDXMKyDXa_oczfkjqEAcsyL-9YJWHE9wA2sY0BGfg@mail.gmail.com>
-Subject: Re: [PATCH] mmc: mtk-sd: Clear interrupts when cqe off/disable
-To:     Wenbin Mei <wenbin.mei@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
+Date:   Mon, 15 Aug 2022 20:28:07 +0200
+Message-ID: <CAPDyKFqqb=FC85PAMPtrfp=vn5HWB2tXqUCY4Yjd_twxL8sY=w@mail.gmail.com>
+Subject: Re: [PATCH 2/8] dt-bindings: mmc: Add compatible for MT6795 Helio X10 SoC
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        vkoul@kernel.org, chaotian.jing@mediatek.com,
+        matthias.bgg@gmail.com, hsinyi@chromium.org,
+        nfraprado@collabora.com, allen-kh.cheng@mediatek.com,
+        fparent@baylibre.com, sam.shih@mediatek.com,
+        sean.wang@mediatek.com, long.cheng@mediatek.com,
+        wenbin.mei@mediatek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
         linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+        linux-mediatek@lists.infradead.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,61 +75,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Jul 2022 at 10:01, Wenbin Mei <wenbin.mei@mediatek.com> wrote:
+On Fri, 29 Jul 2022 at 12:44, AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> Currently we don't clear MSDC interrupts when cqe off/disable, which led
-> to the data complete interrupt will be reserved for the next command.
-> If the next command with data transfer after cqe off/disable, we process
-> the CMD ready interrupt and trigger DMA start for data, but the data
-> complete interrupt is already exists, then SW assume that the data transfer
-> is complete, SW will trigger DMA stop, but the data may not be transmitted
-> yet or is transmitting, so we may encounter the following error:
-> mtk-msdc 11230000.mmc: CMD bus busy detected.
+> Add a compatible string for the MT6795 SoC's mtk-sd mmc controllers.
 >
-> Signed-off-by: Wenbin Mei <wenbin.mei@mediatek.com>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Applied for fixes and by adding the below tags, thanks!
-
-Fixes: 88bd652b3c74 ("mmc: mediatek: command queue support")
-Cc: stable@vger.kernel.org
+Applied for next, thanks!
 
 Kind regards
 Uffe
 
 
 > ---
->  drivers/mmc/host/mtk-sd.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  Documentation/devicetree/bindings/mmc/mtk-sd.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-> index 4ff73d1883de..69d78604d1fc 100644
-> --- a/drivers/mmc/host/mtk-sd.c
-> +++ b/drivers/mmc/host/mtk-sd.c
-> @@ -2446,6 +2446,9 @@ static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
->         /* disable busy check */
->         sdr_clr_bits(host->base + MSDC_PATCH_BIT1, MSDC_PB1_BUSY_CHECK_SEL);
->
-> +       val = readl(host->base + MSDC_INT);
-> +       writel(val, host->base + MSDC_INT);
-> +
->         if (recovery) {
->                 sdr_set_field(host->base + MSDC_DMA_CTRL,
->                               MSDC_DMA_CTRL_STOP, 1);
-> @@ -2932,11 +2935,14 @@ static int __maybe_unused msdc_suspend(struct device *dev)
->         struct mmc_host *mmc = dev_get_drvdata(dev);
->         struct msdc_host *host = mmc_priv(mmc);
->         int ret;
-> +       u32 val;
->
->         if (mmc->caps2 & MMC_CAP2_CQE) {
->                 ret = cqhci_suspend(mmc);
->                 if (ret)
->                         return ret;
-> +               val = readl(host->base + MSDC_INT);
-> +               writel(val, host->base + MSDC_INT);
->         }
->
->         /*
+> diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> index be366cefffc2..e1ceefe0ae48 100644
+> --- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> @@ -20,6 +20,7 @@ properties:
+>            - mediatek,mt2701-mmc
+>            - mediatek,mt2712-mmc
+>            - mediatek,mt6779-mmc
+> +          - mediatek,mt6795-mmc
+>            - mediatek,mt7620-mmc
+>            - mediatek,mt7622-mmc
+>            - mediatek,mt8135-mmc
 > --
-> 2.25.1
+> 2.35.1
 >

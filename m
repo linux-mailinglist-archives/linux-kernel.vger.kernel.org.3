@@ -2,231 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F05592845
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 05:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22100592814
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 05:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiHODpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 23:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49086 "EHLO
+        id S230167AbiHODYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 23:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiHODo7 (ORCPT
+        with ESMTP id S229648AbiHODYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 23:44:59 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2079.outbound.protection.outlook.com [40.107.102.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3844411451
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 20:44:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hGfGbTVeXy1kbMIVSOEX4CgrCgwae+9Qo2irMeZqXKAtgk/hCBxSX6Uay/W7LsoYotPwAlWo8IqVeSYaSTq33X8YTzgsV3mW4JtRAd2aIgWX0vS1fbyUUxB4QRzS0tmQxeo0lix5QHIQ/5VMAyGit8BQZmVzrWjjkNj2gZOjtxT3CoHNVAt+KNV8jMbxbD3xvywzo1v5JcccvldIi/wbu+BGmZyoEBARxrdUUK3ZFX28WSz1bTHxDF1LuAkE5IVEOwfxVbaDq0PFAQif9lYOpf+zPJTT3e2cr2Lh/n/nqUj1qtvgs7ajx6UtmU4RUtESyTX7ZJ3aKCiw4S1VS1Oh2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CZFrh2vshhSEfOF1ysRcQ3ru2F38Oy1PQdhfxM9eWmM=;
- b=EhkHuvv8i5r1e3g+DiQwcENZ9CtyBBNbn4PNfZZkYoHcD2yVUbEP1dqQfcgo95BQXhLIglack18Pxqw15SJlIVrrizyuN2zOo17do/o7anVDqIjhc3XOoZ2AzU53DgSR23Q+eOqSd5tM4lCeN8aN8EVh+BxvJIzpHLwmG7m2mJTpAE/lJTri/4OcvyD/5Raevc3P1GYweP1aFIjTSfgh3C+fOATjngHzrCq5On9SMQz5dXOtfvfU00YK9G72lgoKg6x/F2ROcujiPwGnifccL2e3zYzJHlPSD+AFmi3aR61Js1kXmGJDO26pDiMM/VcY0PLtBgozHlbcILgFRlPsDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CZFrh2vshhSEfOF1ysRcQ3ru2F38Oy1PQdhfxM9eWmM=;
- b=jwgDi5Ga6De2Fiw+a7DTOElS1scmsihstXu3VeFRGp8aPVcQLje4LtOHC5wqbZMsWLa2ulRdYvnjESSQPLOwFgbYy0VeIbbFlqqRT+7BFcChBIgXfimvWO+lpEskGphXCQdbHcLKzOA9vh6GCYOuGF3f3g1MlbrJbj/U8z0B7EnHsyGA4SWDZcC/YanSboea6kyZqo9OKcoamworcvJQSt+4zTdXRa9AcS7875Fz7ZzQtP1JyTXTi7DLUGL10SudEI+ki0l2sn9cZ3ZvHHN1z3wQLEuOh4A0rSCOG+nbqYX8qtjHxAReivFge7+f6GaXbtyi2JBQL4581MO7+AGWQw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by BY5PR12MB5510.namprd12.prod.outlook.com (2603:10b6:a03:1d2::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Mon, 15 Aug
- 2022 03:44:56 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::eca6:a4a7:e2b2:27e7]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::eca6:a4a7:e2b2:27e7%5]) with mapi id 15.20.5504.027; Mon, 15 Aug 2022
- 03:44:56 +0000
-References: <a9daea363991c023d0364be22a762405b6c6f5c4.1660281458.git-series.apopple@nvidia.com>
- <8f19b172d32be2e889b837f88b1ba070bf2c97ee.1660281458.git-series.apopple@nvidia.com>
- <1ec090fa-f93b-c197-e5b3-ff2b0d5862ef@redhat.com>
- <87lerqw72n.fsf@nvdebian.thelocal>
- <58be2b37-0c3a-06d8-35f5-50bf4b765fb2@redhat.com>
-User-agent: mu4e 1.6.9; emacs 27.1
-From:   Alistair Popple <apopple@nvidia.com>
-To:     Mika =?utf-8?Q?Penttil=C3=A4?= <mpenttil@redhat.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>, linuxram@us.ibm.com,
-        paulus@ozlabs.org
-Subject: Re: [PATCH 2/2] selftests/hmm-tests: Add test for dirty bits
-Date:   Mon, 15 Aug 2022 13:21:56 +1000
-In-reply-to: <58be2b37-0c3a-06d8-35f5-50bf4b765fb2@redhat.com>
-Message-ID: <87h72ew4p6.fsf@nvdebian.thelocal>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: BYAPR01CA0027.prod.exchangelabs.com (2603:10b6:a02:80::40)
- To BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+        Sun, 14 Aug 2022 23:24:02 -0400
+Received: from sonic316-55.consmr.mail.gq1.yahoo.com (sonic316-55.consmr.mail.gq1.yahoo.com [98.137.69.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEBD13EB4
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 20:24:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1660533840; bh=+0Y8TZWBkL5dpqoymOPHRQQ+QSIXXcJpMyTnWZbMEXw=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=byd1REw8QJQMKvKlEszRnmGkClyZVFYagterdZZK8nmk6U6Urj9NYh7QD5zrjDr9z5V0Igm5sNDzD+XBjhUjsrsnWFVEz1BrLgH3r7DilZ8h91l0Rd3g0st4ouxhQVlIaylBoAlJyU6bn8v/poawiPunfDhppxTfAEaSg4sW0NrvUNMYJY/DWgAoROhXO+RPlPdgHiIzaqcBnretvqnQEfVfVrJXxz0W2wZ7SDfCI83cK7hmKevCKFARzzibdWUOfP1UzkoM7AaIFSL871DVuHusGhbfldQZlVvOX8VKLN6HvVoYgpLSXq1Z7/L51Zq0fBrey+9gPRKgWGQtDWhE/Q==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660533840; bh=+5C/iZByjZ/2wOomGaedHuNgyLtTBTw9B8hQED050Ut=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=N24f7Q5MQAAKc5jok1EyqjEa92lQTh8QccnkJ+BCYxP1ngOAa45fpKO2Cv7OqSie+j+7RvHpIvgepCSC5XaOhI1cGZErIP4B0twUcH0ly4Aa2n/aCbF38103nCkUnOqVMSsAxJHUVnVs8Pss/3ikYL8XiQq7tthcYVQ2YYrSX3NNDQ4oPMjyDn5MC/xKS6XXD7By2xofoFYfc/jp1yHIDUNrgm6pDuvUspldffHQCXWEKhKRVHl/TQgG83tEp0lNUWqqebJnR9robpHR0IqoUqHDG/sheDcXfxALONTogbRzZw18GdBUEah2kdMEd+K1MNjS54LPFDyts+4tb4m/ew==
+X-YMail-OSG: iT6a2IgVM1mPgHS3fy_sk.HMG6a8c5mvjAIdmeD6gGBgp9R_KECMUlYAlE1TxvX
+ qCwjbM0ShpWjQzg_H9sy5VaAL4uhNJRfqWkysT4B4qdzlrP9mDi5kMHEV3Mt6SDhg190TDdZt5ka
+ jXOpmkZ5wk80j0PjK9yCn.F8bdWmAB5Wdn4hZ0dwAoFmx1oNLGPuvJMdry1WhGOqOS9mkiBkpqY8
+ bOuikzcXrsZKcA06YRVzfYEiKQ4jjpQBoNLbLIEeUa32lSFvjdeyv2Y.bEGhUdfqXV0z4wQF8UPs
+ OVrtnLB1bYLb6GrK6yYAaAqH9jyUz89Ty8GVOwNIBwYIsbZUaSlE.rLlZDU13g_gvnfElFxjVwG1
+ XHVFW5VbbGyJi8qMPf8lOSn3gG_GEpliuiGc8PZ0j43hbJNqx_vlhIVZicCF99at5oHinM3VbKU8
+ Xm81oE.wiTB2UAUB0UTmOaXdrV.j9H4YRmvBlRF5CUZRER4FeHdBSpVYw56YrCq9P5UNIuOeX9I6
+ t3.C2qce.Joqqrw803vzK7430uo5KT4o0dpzrtK8uGkFb5N9Ueq2yX4_F0N0SYvbrkX4iGpJs8VZ
+ zljyPVMxw3USwETCTGFuTnUdswbWq5x2oA6aNdFcmlwJwz2ZzxUj7Iu0Ilzdc2jiOkvYoNP6lebp
+ f7Y4oOh03HQ1FLY4jPzLViaWdtF3jcWyPNCjOTBJZLXyuIZrWk4XY_88YkkCeSuqQz0gTUVCOw4F
+ tMynGzuMnLUQmwLSSdyj5UOGZTGoKXHONaYwY0MfDnKzMSf88x8Va.RNlhm6sI4aVJ7likFtQRLA
+ zo4feaNCZCAL2L0Yz6JWjuPEzoIEj7gG2xv7SW1hICte1hGPQReg0ghnXIxbmn1gz8DHvNj1.sDG
+ VIXhr_f4FzndPal681VGVnRHcaKz4a0UBRz.10vvPBzojzQMEKJ.TcFpshgyMrlweLdNcyAoMwXm
+ mqR0nvD_LAmXDeYe3kBiEHnzaVDbc3jztRP_gzvi4i.9fymWsZbSayhqpMUV6GQspa7Bd6w77GaP
+ sVwxAaDVmQU8QcbO5mouFLiPIa_zAcLp0X.FUnOQp2YlKMnGiDnjNGbOBLRppkytLVUP9yRzJxyj
+ 3iSC9k0lDv35aXtvSfo_5LDKiphOxT_bhnpCx.aCYgaCybpXW5vHqFB8f_qtFartBQEBZj0kyjMO
+ OKs5fSd6C4LtxZ6LH146NfDCGnV0jx3E9k_B6_SoGbtOZWDaV5f6lTqx7vmaMpgDdWe5NeFbHyiH
+ 0B2jWGuIZNwaGYKWA3TK1FhbE2YXG5W2hAW9_CrtuaXNAEHjRq4E5GV0g.HZUVn8U6EqGasVy9zb
+ 1mudNVyNXi9PIYBAVx2gQCVvosydSOz1VduFxXMFkWHzlJPE.c5rm2_6IZDbTIxwqGl4dfyMKm2i
+ 5iZu7lcVLQ7faOOjLqDUAy80rivNxl7CP49L4Fuj6TXkvQ823V3byatbeBQksDjZ4LTo6IcqkURQ
+ 286Dtkiyu6vFUW_yv5D7mh_EadNnHBmsjkwN930gAnZ_.0XXUdeGdc8J0u6vKDBzQfo4eMOMRvET
+ X9PBA3TmL3J0zH9aLQIXb351be3zPjGPeDVDDGoUdsz2Ue0Xfdinae2I.Xv74cIrRt3eMw1LBaKP
+ s8BXCYgAJ7Woz7SWLkhOVwlEIOPnl3mgelGRDA7A9VHS55kgJbdANKUexLRpLtacKV.qs2Wup61i
+ MfZt9ObeL22GYbeUlhXe0IQCsBqRtRMjuW3dtjebQtnkxEh7p93VCIYePnTww74XwKJwPfpil8cl
+ x_1sCt2GApwH9hXLAtYbV5uXdTikFl0Ys7iAgWG2sKngiX4C9RHvcu8CLJUWBAKxJ8CJIUMW5ZZV
+ Y2dmXkkWMceuv_ZBHFu2hJZtL8U8CShmBZZal9.40Y7uXtNzNi4.UFDdVxAYWVjk2utP3L2lqU4A
+ QrgdEBOoGUoMwGvTNT0iFlpOHVkPzQ__WsS5TgOC5.UhoAR4DqMwtOyjVduR_VbeQCIkg4yJImSr
+ wOOuB1cleb7M1teGcnihcazqJ9Ynq_5Umnzcv.czUJIEX5a0.ShYfvUUQnorLKyuVa.Yr.IcNnTR
+ qy5PooGuwwWCxwdEOcXU7d9sBXGcbTCnNWpii7asE5fYT8fUjsC5mSoLCXHhEkFp244Bt7zauiEc
+ 3ne8WuY9z2Keh.UmGsa7fTk1aw6d4to0_9eX5mpBJiU1nh39kn3_dY8606hSAnDAtoBOLpQxQoWr
+ b2oGRJ.LxklbKx8V7gq_fxUpFishnpvidiu7q8fNckTDRfS0IvmxYoB7xR9.hc4AzX0ZH7w--
+X-Sonic-MF: <brchuckz@aim.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.gq1.yahoo.com with HTTP; Mon, 15 Aug 2022 03:24:00 +0000
+Received: by hermes--production-ne1-6649c47445-tp7sw (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID d48e2d8ae8618fd24b295ec04d4556d5;
+          Mon, 15 Aug 2022 03:23:54 +0000 (UTC)
+Message-ID: <bd66b5bc-4d07-d968-f46c-40cf624499a7@netscape.net>
+Date:   Sun, 14 Aug 2022 23:23:52 -0400
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 00f99bdb-8fba-4469-3c63-08da7e70852e
-X-MS-TrafficTypeDiagnostic: BY5PR12MB5510:EE_
-X-LD-Processed: 43083d15-7273-40c1-b7db-39efd9ccc17a,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: p2B2XYLzq4cWq3ZKOXpW72XOmCeW9aK7EnhTw6O4g29AudL4We16yH8jJiM91TLB3bHZOf1GqHRuNYQBzHjMCf/vM73L0Tom5dK3IVxkN5DjK5wNeQSwGxu1kYtGSmAQwDfsBJLZ3/oR0K8bTj9FrVJ0oCQ5fPkZ7rL7wbmqYOHrkctNSbWB9BDxTvrvzrv/yyQ/hNqeR5IYz6oPyKiDpJTJ1WCMrQhezAz/SyZtBMcQvkuvHDSxNqsNWSTphmf4lviG8nLkX+lfky2caAPJ/F/qclQ0jkcNh1qwh6/6of7yM+sgxFmXfkA+PVsa3gCUJxM5/S4Q3Mn+ZU+dbBxK4tytoqV3HlOt6f5+3MXMbH2K2HO/k1pdhJId1B7nm/8iNldl2YSaXrgdmBwDxFOMnZR7m8dmpIvh+0b3ZS7c/QmNSS1BVn4DI4ej+iDFx6dt6ZySVFHNwR+D9AFar2ZFK6F0HGdTdYmftwf8aWnGQPqQ2pxXKoVwFbNTpQZyEooEsU+0cpnZ0bnCSooDO4wxn1N+DpMJMJvkPgu/qNhalViFxf6LQwl0YjM6PDXdjh16tnfVtto978nhEfX80rnnfrBdzYcRnHudnOI8DJA+dAzEwx8xmgLsZ9gbW3OtRARUzXycakpz0yS7jkPGSrTPr/Ag28JXi7MONrXP2ZZzi18J/0qf7Jbejez23w7jMatvTacIHTH8XVo7iEvwk0xObB2PV4FjmMM1kVCKIZCmWHQiLBoSOHhHrYIVsC1+2DmUqIQmt/9SmwVYOOiHxtketvISyst5eFvuBqmKKvx1ED0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(376002)(136003)(346002)(39860400002)(396003)(5660300002)(66946007)(4326008)(66476007)(8676002)(66556008)(7416002)(2906002)(8936002)(41300700001)(316002)(6916009)(54906003)(6486002)(38100700002)(478600001)(9686003)(6512007)(26005)(6506007)(83380400001)(86362001)(186003)(14143004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dERmbS92RUwxZDA1R0QrMDRhZ2wyR1ZYcXZVNVduRDRBdldqSFZtc1ZlYXBJ?=
- =?utf-8?B?YVdacjgyOXlOYnNvMFNLWlh5Wlg1UndYMXRNVnZOcTQ5MjBXbUhJNjFPVXF5?=
- =?utf-8?B?L0REV1pNV3NTZFdHaWd5YkdvRmNLMFMzUUN1aUkveWJtZVJsSlN3UDFLR2Vy?=
- =?utf-8?B?MFN1M2FpSk41bnJVK0pRYW5za1ZGcitleEg4NmgzWFpOMTl5MWdmZ2wxK2lK?=
- =?utf-8?B?NEZFWGttNjB0NFpFd09WMGN2d0hjeFFGNTRkRXhvTWFpdHY5Sis3ZnQ5Q3hj?=
- =?utf-8?B?WlBXM25kNGlTQ3hHVXZlanEyWEd4ZTNQTVBPeTkzeUdqN2t2VUhXMWhvY0RM?=
- =?utf-8?B?MzVIVHhPVEFYa2s3RWtUanlhY1VrZGF2MCthZGJNNmdTaTEwZUZabHlTUjdk?=
- =?utf-8?B?d0FNajFTR1p6ZTBRWUs4K1F2SDVwRCtYRXg5UEtPS3RwWkRGTjNVSzVhcmJl?=
- =?utf-8?B?VE9vaFJtR3BYTHdGRG4wV2VtUjNub1NKR0hycVVkdjQ5SkRocmlKMU5tbnl3?=
- =?utf-8?B?NnU3MjBTdEVEVEkyUGQxZkpZR1psbFhXc3k3ZGVvL1ZOVHM1NitidEM1T295?=
- =?utf-8?B?TURuWGpacHlMcDFvcElPYU5zOWhIandLdnlsdUI1RENHeTlTMnRPQUhpOTJm?=
- =?utf-8?B?NFAyMzZBL24wOE43czlGbmN2cUM4ZnZGLzN4WHU0a3R2OGFKbjBWT3dkMmlq?=
- =?utf-8?B?ODFoSWpidkZxN25NNzlCcDQ4Z2hXaW5KNGN3eTdQL1c0ZHVkbWIvNXg4aTli?=
- =?utf-8?B?Q3Y0dnRyWkNyYjRXUERqL2FBUHI4NFhMWUdidmRRQk5pZlB0M2JrNlVlSVBV?=
- =?utf-8?B?R3lNV3k1TlNCcE9ndXBSeWdsc1JtSFg2cFg1and1WU85YjNJSk1ZQ2h2bGxm?=
- =?utf-8?B?L1RodVpSRElibllwTEVJZm9zTzBRamVRVmVEd3BzWWxTcEh5Sy8wdm9YTVVU?=
- =?utf-8?B?UVYxbzFSM2JGQkQrcnY5ZWpGdTd6WCtzWVZJcHd6VmkrRlVXb20rNURWcnZr?=
- =?utf-8?B?YnZJRUJrdE95RGtkK2s3UjF6bTRCeWpFMVl1T2JiaEJuSktBRmRncWFkNU9V?=
- =?utf-8?B?eURkVUtYQ0YwWXltR3NwZ3YyZmFyS1lBbDZTN1ZVejk2M29MbFZVODg5TDQ3?=
- =?utf-8?B?MWUvNGJ2OFlPK3VFaWFFY015RGRGT0FVdVM1ZW9XUnJqZmMzaDNSQVRJVVlY?=
- =?utf-8?B?Kzd3UXJzZVVZMkM4cm1sWEcwY3Bod0xSRHlwb2c2TGlFWGJ1VTg0R3docWJi?=
- =?utf-8?B?dFJOYWFyNWN1dHBQZVdnbVJjQTh5M3dka2IrbTNOL1RMRERDSDVuenAxcnQ0?=
- =?utf-8?B?d0ZEUytqZi9KK3ZRM3JNc3BzTnNib1R1NHMwd1JybEhYbUM3Yk9zU2tYaFRB?=
- =?utf-8?B?YWt4aVIzV0VHSmlWZXhMU3UwRVdUMkJ3RlhldzF3K2Z1OFNIcFB5M0UyTDQw?=
- =?utf-8?B?amxGYkZNamQ4WGtQb2VSMWVKdXdxRnVFNmFHcjZxVC9hVzZBZ2dRYUpDWTFK?=
- =?utf-8?B?ais0QTZIU0JaS0drbVFEaVFKWGl4ZWxaazNBQWtJVFRrbnFiUkhwOFg4WU5v?=
- =?utf-8?B?Vm5rTU9aV1NRRlVlUllZdDBSVmpYQnhqVVYzd2UwdWhtQ0ZYV2xzZzFCWnpR?=
- =?utf-8?B?MFB0bmMwSWNtNnoyeGgxTXNjcnZCZmRrcitTZ1FZWVU2R1pYcmVudmRCNTF4?=
- =?utf-8?B?U1VuRE51dGpFUVNaZFJBWjczWHhaNkpqcUxYUHpHcGhJdUJPeHBqK29OZ3pV?=
- =?utf-8?B?WlAveDIyWUJ6aDgxY1ZMRFNERWVNSGpSLzdmYzZCdzZJR01jUUc1eEl5NEw2?=
- =?utf-8?B?N3dNY0JnSVh1ZG1ST1hIU3c2WmJrRmwwNmphR3lZdEYzcnF1ejg1bloycW1O?=
- =?utf-8?B?MXdnZ0JlK0xkZHdseU01am9vTG1sVkw2Y1doVzdKeFVDd2pueWUrSW9NaDRV?=
- =?utf-8?B?eG9aN1lPU05jdS81SFZac1hoVkhVYzl4TlZsTjNGQVFrVGNGclhZejVGL2pM?=
- =?utf-8?B?aUVUR3N0L3hRMFV1WUxsNXRJaVFmV29aYTQwZnRwQnR0ZVBraFo4ckFjTHVK?=
- =?utf-8?B?S2FoWVJ0UWo1dmp0cnZyS3VJdXpCQTIxMWNkU3lDRmhQeXI0WE51SWJ6NGl4?=
- =?utf-8?Q?JA6yP9Jl4YmmwhslwS3IuID5p?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00f99bdb-8fba-4469-3c63-08da7e70852e
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2022 03:44:56.4370
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xpuZqtbdHQoa9vGij/RfyNuxhLwI4uz9T6EHJHKjWULIe9flwrWV886cGK3BnaZ5i1yhIBz87huBOu1XAA+P5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB5510
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
+To:     Juergen Gross <jgross@suse.com>
+Cc:     jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        regressions@lists.linux.dev, xen-devel@lists.xenproject.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+References: <20220715142549.25223-1-jgross@suse.com>
+ <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
+ <a0ce2f59-b653-fa8b-a016-1335f05c86ae@netscape.net>
+ <32ed59c9-c894-c426-dd27-3602625cf3b1@netscape.net>
+ <c88ea08c-a9d5-ef6a-333a-db9e00c6da6f@suse.com>
+Content-Language: en-US
+From:   Chuck Zmudzinski <brchuckz@netscape.net>
+In-Reply-To: <c88ea08c-a9d5-ef6a-333a-db9e00c6da6f@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20531 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Mika Penttil=C3=A4 <mpenttil@redhat.com> writes:
-
-> On 15.8.2022 5.35, Alistair Popple wrote:
->> Mika Penttil=C3=A4 <mpenttil@redhat.com> writes:
->>
->>> Hi Alistair!
->>>
->>> On 12.8.2022 8.22, Alistair Popple wrote:
->> [...]
->>
->>>> +	buffer->ptr =3D mmap(NULL, size,
->>>> +			   PROT_READ | PROT_WRITE,
->>>> +			   MAP_PRIVATE | MAP_ANONYMOUS,
->>>> +			   buffer->fd, 0);
->>>> +	ASSERT_NE(buffer->ptr, MAP_FAILED);
->>>> +
->>>> +	/* Initialize buffer in system memory. */
->>>> +	for (i =3D 0, ptr =3D buffer->ptr; i < size / sizeof(*ptr); ++i)
->>>> +		ptr[i] =3D 0;
->>>> +
->>>> +	ASSERT_FALSE(write_cgroup_param(cgroup, "memory.reclaim", 1UL<<30));
->>>> +
->>>> +	/* Fault pages back in from swap as clean pages */
->>>> +	for (i =3D 0, ptr =3D buffer->ptr; i < size / sizeof(*ptr); ++i)
->>>> +		tmp +=3D ptr[i];
->>>> +
->>>> +	/* Dirty the pte */
->>>> +	for (i =3D 0, ptr =3D buffer->ptr; i < size / sizeof(*ptr); ++i)
->>>> +		ptr[i] =3D i;
->>>> +
->>>
->>> The anon pages are quite likely in memory at this point, and dirty in p=
-te.
->> Why would the pte be dirty? I just confirmed using some modified pagemap
->> code that on my system at least this isn't the case.
->>
->>>> +	/*
->>>> +	 * Attempt to migrate memory to device, which should fail because
->>>> +	 * hopefully some pages are backed by swap storage.
->>>> +	 */
->>>> +	ASSERT_TRUE(hmm_migrate_sys_to_dev(self->fd, buffer, npages));
->>>
->>> And pages marked dirty also now. But could you elaborate how and where =
-the above
->>> fails in more detail, couldn't immediately see it...
->> Not if you don't have patch 1 of this series applied. If the
->> trylock_page() in migrate_vma_collect_pmd() succeeds (which it almost
->> always does) it will have cleared the pte without setting PageDirty.
->>
+On 8/14/22 4:08 AM, Juergen Gross wrote:
+> > On 8/13/2022 12:56 PM, Chuck Zmudzinski wrote:
+> > 
+> > This is a fairly long message but I think what I need to say
+> > here is important for the future success of Linux and open
+> > source software, so here goes....
+> > 
+> > Update: I accept Boris Petkov's response to me yesterday as reasonable
+> > and acceptable if within two weeks he at least explains on the public
+> > mailing lists how he and Juergen have privately agreed to fix this regression
+> > "soon" if he does not actually fix the regression by then with a commit,
+> > patch set, or merge. The two-week time frame is from here:
+> > 
+> > https://www.kernel.org/doc/html/latest/process/handling-regressions.html
+> > 
+> > where developers and maintainers are exhorted as follows: "Try to fix
+> > regressions quickly once the culprit has been identified; fixes for most
+> > regressions should be merged within two weeks, but some need to be
+> > resolved within two or three days."
 >
-> Ah yes but I meant with the patch 1 applied, the comment "Attempt to migr=
-ate
-> memory to device, which should fail because hopefully some pages are back=
-ed by
-> swap storage" indicates that hmm_migrate_sys_to_dev() would fail..and the=
-re's
-> that ASSERT_TRUE which means fail here.
+> And some more citations from the same document:
 >
-> So I understand the data loss but where is the hmm_migrate_sys_to_dev() f=
-ailing,
-> with or wihtout patch 1 applied?
+> "Prioritize work on handling regression reports and fixing regression over all
+> other Linux kernel work, unless the latter concerns acute security issues or
+> bugs causing data loss or damage."
+>
+> First thing to note here: "over all Linux kernel work". I' not only working
+> on the kernel, but I have other responsibilities e.g. in the Xen community,
+> where I was sending patches for fixing a regression and where I'm quite busy
+> doing security related work. Apart from that I'm of course responsible to
+> handle SUSE customers' bug reports at a rather high priority. So please stop
+> accusing me to ignore the responses to these patches. This is just not really
+> motivating me to continue interacting with you.
 
-Oh right. hmm_migrate_sys_to_dev() will fail because the page is in the
-swap cache, and migrate_vma_*() doesn't currently support migrating
-pages with a mapping.
+You are busy, and that is always true for someone with your responsibilities.
+That is an acceptable reason to delay your responses for a time.
 
->> So now we have a dirty page without PageDirty set and without a dirty
->> pte. If this page gets swapped back to disk and is still in the swap
->> cache data will be lost because reclaim will see a clean page and won't
->> write it out again.
->> At least that's my understanding - please let me know if you see
->> something that doesn't make sense.
->>
->>>> +
->>>> +	ASSERT_FALSE(write_cgroup_param(cgroup, "memory.reclaim", 1UL<<30));
->>>> +
->>>> +	/* Check we still see the updated data after restoring from swap. */
->>>> +	for (i =3D 0, ptr =3D buffer->ptr; i < size / sizeof(*ptr); ++i)
->>>> +		ASSERT_EQ(ptr[i], i);
->>>> +
->>>> +	hmm_buffer_free(buffer);
->>>> +	destroy_cgroup();
->>>> +}
->>>> +
->>>>    /*
->>>>     * Read anonymous memory multiple times.
->>>>     */
->>>
->>>
->>> --Mika
->>
+>
+> "Always consider reverting the culprit commits and reapplying them later
+> together with necessary fixes, as this might be the least dangerous and quickest
+> way to fix a regression."
+>
+> I didn't introduce the regression, nor was it introduced in my area of
+> maintainership. It just happened to hit Xen. So I stepped up after Jan's patches
+> were not deemed to be the way to go, and I wrote the patches in spite of me
+> having other urgent work to do. In case you are feeling so strong about the fix
+> of the regression, why don't you ask for the patch introducing it to be reverted
+> instead? 
+
+I have asked for this on more than one occasion, but I was either
+ignored or shot down every time. The fact is, among the persons
+who have the power to actually commit a fix, only you and Boris
+are currently indicating any willingness to actually fix the regression.
+I will say the greater responsibility for this falls on Boris because
+he is an x86 maintainer, and you have every right to walk away
+and say "I will not work on a fix," and I would not blame you or accuse
+you of doing anything wrong if you did that. You are under no obligation
+to fix this. Boris is the one who must fix it, or the Intel developers,
+by reverting the commit that was originally identified as the bad
+commit.
+
+If it is any consolation to you, Juergen, I think the greatest problem
+is the silence of the drm/i915 maintainers, and Thorsten also expressed
+some dissatisfaction because of that, but since there is also some
+consensus that the fix should be done in x86 or x86/pat instead of
+in drm/i915, another problem is the lack of initiative by the x86
+developers to fix it. If they do not know how to fix it and need to
+rely on someone with Xen expertise, they should be giving you
+more assistance and feedback than they currently are. So far, only
+Boris shows any interest, and now my only critique of your behavior
+is that in your message, you chose to engage in an ad hominum attack
+against me instead of taking the same amount of time to at least
+briefly answer the questions Boris raised about your patch set over
+three weeks ago. Your decision to attack me instead of working on
+the fix was, IMHO, not helpful and constructive.
+> Accusing me and Boris is not acceptable at all!
+
+OK, I understand, now we are even. I have said it is unacceptable to
+not give greater priority to the regression fix or at least keep interested
+persons informed if there is a reason to continue to delay a fix, which
+ordinarily should only take two weeks, but now we are at more than
+three months. Now, you are saying it is unacceptable for me to accuse
+you and Boris. OK, so we are even. We each think the other is acting
+in an unacceptable way. I still think it is unacceptable to not work on
+the fix and instead engage in ad hominum attacks. Maybe I am wrong.
+Maybe maintainers are supposed to attack persons who are not
+maintainers when such outsiders try to help and encourage better
+cooperation and end the hostile silence by the maintainers who are
+responsible to fix this. But that does not make sense to me. It makes
+sense to hold accountable those persons who are responsible for fixing
+this (and you, Juergen, are not the one that needs to be held accountable).
+AFAICT, that is not being done and instead I am being attacked for trying
+to get work towards a fix rolling again.
+
+>
+> > I also think there is a private agreement between Juergen and Boris to
+> > fix this regression because AFAICT there is no evidence in the public
+> > mailing lists that such an agreement has been reached, yet Boris yesterday
+> > told me on the public mailing lists in this thread to be "patient" and that
+> > "we will fix this soon." Unless I am missing something, and I hope I am,
+> > the only way that a fix could be coming "soon" would be to presume
+> > that Juergen and Boris have agreed to a fix for the regression in private.
+> > 
+> > However, AFAICT, keeping their solution private would be a violation of
+> > netiquette as described here:
+> > 
+> > https://people.kernel.org/tglx/notes-about-netiquette
+> > 
+> > where a whole section is devoted to the importance of keeping the
+> > discussion of changes to the kernel in public, with private discussions
+> > being a violation of the netiquette that governs the discussions that
+> > take place between persons interested in the Linux kernel project and
+> > other open source projects.
+>
+> Another uncalled for attack.
+
+I am just asking for some transparency and an indication that
+a fix is really and truly in sight. It would only take you a few
+minutes to fulfill what I am asking you to do now. The fact is,
+Boris commented on your patches over three weeks ago and
+asked you if you accepted the approach he outlined and you
+have remained silent. That does not indicate you and Boris
+are close to coming to a fix even though Boris stated that a fix
+is coming soon. Based on what has been said on the mailing
+lists, I just don't see the fix coming soon. That's all I can say
+about it now.
+
+>
+> After sending the patches I just told Boris via IRC that I wouldn't react
+> to any responses soon, as I was about to start my vacation.
+
+That is certainly a valid reason to delay work on this - you were on
+vacation. I hope you enjoyed yourself and had a good time. But I
+had no way of knowing this because I was not part of the IRC
+communication, so I cannot be blamed for not knowing this.
+
+> I will continue with the patches as soon as I find time to do so.
+
+I am willing to wait patiently for you to get back to these patches,
+and I hope you can agree that you should find a few minutes
+to confirm or deny Boris' statement that a fix is coming "soon"
+by posting a public message to this thread within the next two
+weeks, given that this regression has not been fixed for over three
+months. I will not be upset if you say something like: "it looks like
+it might take a while for Boris and I to work out the details of a fix,
+it might take until the end of the year," and briefly explain why there
+will be a delay. Boris might not like that because it would contradict
+his statement that a fix is coming "soon" but I would rather be told
+the truth - that the fix is going to be delayed, than be told a lie - that
+a fix is coming soon.
+
+Thanks for all the work you do.
+
+Best regards,
+
+Chuck

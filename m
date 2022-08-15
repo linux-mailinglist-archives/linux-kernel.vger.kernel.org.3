@@ -2,129 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B7D592BD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF3E592D7E
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241553AbiHOI2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 04:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
+        id S241588AbiHOIaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 04:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233066AbiHOI2n (ORCPT
+        with ESMTP id S230153AbiHOIaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 04:28:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F9B11F639
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 01:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660552117;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lEHWMXFZ2uct4Ktk4KY1ISQiitnDvCq9CZGYvT11o94=;
-        b=ToM+WyNED1xHXruOEy9GT37AeCQV7Yme3ZiIbz7dDJ5xgMUQvA7+UkFM1zvDe4Nz8teDGJ
-        3YVG5o+R+5boNVTpiNwp/fCQA0ujaPQ+iREOE5dK/mOVISKMYUq58NU9A8K2sRmHXfXFRn
-        csAjQLqmpyIZEN2nJIo8TvuuIwtU8MQ=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-619-zfq21Dw_P-6oy3bysp51dw-1; Mon, 15 Aug 2022 04:28:35 -0400
-X-MC-Unique: zfq21Dw_P-6oy3bysp51dw-1
-Received: by mail-ej1-f71.google.com with SMTP id ga16-20020a1709070c1000b007331af32d3aso940766ejc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 01:28:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=lEHWMXFZ2uct4Ktk4KY1ISQiitnDvCq9CZGYvT11o94=;
-        b=SrohP0WFJ7IlQmxaaKYyDhbj1yswBklZjG5etCOZ9Df9NJctaR/hi1GCKrkLgmqrea
-         4qbnTyAJqr6TJyTGrmC7xNN97N0TWa14r3T6xttthhyWmCqS05Qwj/hDUA1HO5kqBuld
-         QGDUHGHsRtaKZ7SSqX8Mf/HStGm/8YS/Zm9SGgmOBL7HN3ueYXf8knqTVuAgzV1bLAU+
-         z5BkAu9oOh3blheOZ6Hn6N5cxUHRbvERbEWOUAwcMf8axdFp1hFtcOGDVb+ttE184mIJ
-         /+dTm+5gmnmxlrW2hGuiGeIo2dT3VMBavKZzK8+ifZ5VrjGwGSLl3atNdKJvjaOiCqcj
-         c3sw==
-X-Gm-Message-State: ACgBeo0XsibVPtQDPBGjFrre03GDZyJMNnR/aBw2fOfXPyxEZhGs3mZF
-        cDLktAQiJ876KApPlRaf+V/XMS5rdr71PnkCLfGUh+pRh4YPPFy1NBm2mx4cyBC+bW6nN7AmSyj
-        r34Vd4KttcC9BvhEE8ajl5wuS
-X-Received: by 2002:a17:906:5a4f:b0:730:825a:d860 with SMTP id my15-20020a1709065a4f00b00730825ad860mr9738655ejc.143.1660552114219;
-        Mon, 15 Aug 2022 01:28:34 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4tAIkoXvkWgmRems/JupsfZUMzrxVWgjeYGv5FVIVL7IdG83ARhP2VC6LbArZAKXBv+CG2fg==
-X-Received: by 2002:a17:906:5a4f:b0:730:825a:d860 with SMTP id my15-20020a1709065a4f00b00730825ad860mr9738642ejc.143.1660552114023;
-        Mon, 15 Aug 2022 01:28:34 -0700 (PDT)
-Received: from redhat.com ([2.54.169.49])
-        by smtp.gmail.com with ESMTPSA id n18-20020aa7c452000000b0043ba437fe04sm6236573edr.78.2022.08.15.01.28.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 01:28:33 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 04:28:29 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Andres Freund <andres@anarazel.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: upstream kernel crashes
-Message-ID: <20220815042623-mutt-send-email-mst@kernel.org>
-References: <20220814212610.GA3690074@roeck-us.net>
- <CAHk-=wgf2EfLHui6A5NbWoaVBB2f8t-XBUiOMkyjN2NU41t6eA@mail.gmail.com>
- <20220814223743.26ebsbnrvrjien4f@awork3.anarazel.de>
- <CAHk-=wi6raoJE-1cyRU0YxJ+9ReO1eXmOAq0FwKAyZS7nhvk9w@mail.gmail.com>
- <1c057afa-92df-ee3c-5978-3731d3db9345@kernel.dk>
- <20220815013651.mrm7qgklk6sgpkbb@awork3.anarazel.de>
- <CAHk-=wikzU4402P-FpJRK_QwfVOS+t-3p1Wx5awGHTvr-s_0Ew@mail.gmail.com>
- <20220815071143.n2t5xsmifnigttq2@awork3.anarazel.de>
- <20220815034532-mutt-send-email-mst@kernel.org>
- <20220815081527.soikyi365azh5qpu@awork3.anarazel.de>
+        Mon, 15 Aug 2022 04:30:09 -0400
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291CD1F62F
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 01:30:08 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 1B9C65805B4;
+        Mon, 15 Aug 2022 04:30:08 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Mon, 15 Aug 2022 04:30:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1660552208; x=1660559408; bh=RA5kw03+WB
+        AXnGH4vH/n/ZMFMILVebJisUqvkOeE43M=; b=DVbua1mRF33kH9w/O355c52UXa
+        R37aIM29S8U5nFIswhVh3S1KzVMaRHFkrJumjiSzfEe73pmgrGHP/XOjRVW66/VG
+        N3QH0I79a0TpfsaafoT+GBGAsdAMd709ZCpWajcuJcua0fdBc3Fh4CKPbxxxlx7Q
+        bGJx3hBtpz6GbTxeYzMMBryViTChP6YkrFqUBYWh9q1GR7GfIQE00sCk7/6+dDtd
+        uo+rLaPyhbNm3xCH7fMU5m1+kDzjr8KwAPtDFe82uzEB5ll7gz0Cox5zEsJJ86DX
+        SQo9O2h+yeN75pP7cjUtxqiK5ysUpoB7ggRUyEme9XxK0bL0OgZsGU7CgbMQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660552208; x=1660559408; bh=RA5kw03+WBAXnGH4vH/n/ZMFMILV
+        ebJisUqvkOeE43M=; b=HbD9vCTkb+dEYIAuIpXto4lTqguTRzigb2zedkkpl+jb
+        PpCVKrmzgqmuM+1QY8AAC/TQpZ95qCcPjzE4UUmWv2IGC3NDUZ3BthaQ7IZ0XqUg
+        CBNMUFaHlxu6n9rBf9niKZZmge8ufbeIy5vIwQQWvmNeKHqyiGeWeccr+1ztKJ2P
+        iWFC75XpK7dJtgUEVnvz6wUY6NIlM5Nr1B8ksLnfjAqHyG8L3f1bYQQID5WN0tA7
+        2/ubEhQPaF9cBUKrOdmDnG/6mItBQZMoXBDXvpH7GjxpMXeP2qHWSuOu3GsrJuAI
+        pBbfqno1ILKYUVnMvx1e1ef665zwVkXul3gzG/EuIg==
+X-ME-Sender: <xms:DwT6YmlaqgoGj3rd9g0xA6dBUendmwC8SSq4tGWYLy74f5EF7GyU6g>
+    <xme:DwT6Yt3whEYBF1OOu3egQKQH0A9bfd8aa6efrO2z1coh4wN8UmwTmeoOFU2GxJ3h7
+    kMbi_EnY24KgQpC3Jw>
+X-ME-Received: <xmr:DwT6Ykp0HSBN6R43g7b18UEAaCRQm9PdNPw8U0zdlzlnleGsshrNQUUad559>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehvddgtdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
+    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:DwT6YqlrIMgmSHXbJ3aObSDrjee1DNKa14wvckdoAdtxiYR1NCKWMQ>
+    <xmx:DwT6Yk1xl2CqThy3NwvDQqGh4iN1oq31OiTqxQb3eIb4BUqZSp_tZA>
+    <xmx:DwT6YhsIKerepeTFgj4K20JDC3LnTnF8pdUimfYelf5idBY9Lm3Kwg>
+    <xmx:EAT6YindEcgZw6YGtsCD2CIZmh4o-alqMqIAtZEQAlNjcMnlu8sSDg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 15 Aug 2022 04:30:06 -0400 (EDT)
+Date:   Mon, 15 Aug 2022 10:30:04 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Mateusz Kwiatkowski <kfyatek@gmail.com>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        Dom Cobley <dom@raspberrypi.com>
+Subject: Re: [PATCH v1 14/35] drm/atomic-helper: Add an analog TV
+ atomic_check implementation
+Message-ID: <20220815083004.4zei3raab7uqehqf@houat>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v1-14-3d53ae722097@cerno.tech>
+ <10a2f71c-d943-4965-1f15-d84145769ccf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3blbnbsxxj3gnoe3"
 Content-Disposition: inline
-In-Reply-To: <20220815081527.soikyi365azh5qpu@awork3.anarazel.de>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <10a2f71c-d943-4965-1f15-d84145769ccf@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 01:15:27AM -0700, Andres Freund wrote:
-> Hi,
-> 
-> On 2022-08-15 03:51:34 -0400, Michael S. Tsirkin wrote:
-> > It is possible that GCP gets confused if ring size is smaller than the
-> > device maximum simply because no one did it in the past.
-> > 
-> > So I pushed just the revert of 762faee5a267 to the test branch.
-> > Could you give it a spin?
-> 
-> Seems to fix the issue, at least to the extent I can determine at 1am... :)
-> 
-> Greetings,
-> 
-> Andres Freund
 
-So you tested this:
+--3blbnbsxxj3gnoe3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-commit 13df5a7eaeb22561d39354b576bc98a7e2c389f9 (HEAD, kernel.org/test)
-Author: Michael S. Tsirkin <mst@redhat.com>
-Date:   Mon Aug 15 03:44:38 2022 -0400
+Hi,
 
-    Revert "virtio_net: set the default max ring size by find_vqs()"
-    
-    This reverts commit 762faee5a2678559d3dc09d95f8f2c54cd0466a7.
-    
-    Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+On Fri, Jul 29, 2022 at 07:16:31PM +0200, Mateusz Kwiatkowski wrote:
+> I'm pretty sure that PAL-60 and SECAM-60 should be tied to the 480i mode.
+> Those are non-standard "norms" that use 60 Hz sync (which is largely
+> synonymous with 480i in the analog TV world) with PAL/SECAM color encoding.
 
-and it fixes both issues right? No crashes no networking issue?
+Understood, I've changed it.
 
-Just making sure before I send this upstream as a stop-gap.
+Maxime
 
-We need to figure out what is going on since I think there's a GCP
-hypervisor bug that we need to find a way to detect and work around but
-that can wait.
+--3blbnbsxxj3gnoe3
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-MST
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYvoEDAAKCRDj7w1vZxhR
+xSaoAP917KRrvUvrHF4D7EakrA32d9JtkzDYQ4YvSsQNyQebUwEA4QYkvJjSsUY2
+HL6BrTQmByiQ2K+kmlv7ynXMH5TMxwM=
+=29xc
+-----END PGP SIGNATURE-----
+
+--3blbnbsxxj3gnoe3--

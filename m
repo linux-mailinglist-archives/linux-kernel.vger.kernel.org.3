@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59FF5593A2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A6F593A3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245011AbiHOTdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 15:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
+        id S245254AbiHOTdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 15:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344892AbiHOT1Z (ORCPT
+        with ESMTP id S1344928AbiHOT13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 15:27:25 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54715B07F;
-        Mon, 15 Aug 2022 11:43:15 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FFPdqp024877;
-        Mon, 15 Aug 2022 18:43:09 GMT
+        Mon, 15 Aug 2022 15:27:29 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B59E5B78F;
+        Mon, 15 Aug 2022 11:43:19 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FI55v3026647;
+        Mon, 15 Aug 2022 18:43:11 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=+CBHgz4opehVPDC+7miUFQAXIE2TJEdaD+kt/oubVxc=;
- b=nFeDmSWXA6WU9N35THzh+bYO6LNQTYVAeZrB6Lc1qga41oQdFbwCQAfVcqeuriYDWS3o
- ArDPR7NaVY/gYLPc/Xq7YaAfWLwZXMNJr9yRhSyKy5CQr7VIm8iVWQ4mmgviXAu0mI3w
- oHaenRyA1isHHXuemnkeHg+hgLczrOL3NZeAWc8st1YGR4eXXJO6Nz8H7XxA41ke++qe
- 6UwOTMfr9Yu5b4Qj8+6nLCknqN7a/uXiVn2R+beMvPUaAoVdaazJTY7wtKg40WAj7hPX
- aPHdA/l+ACk9xPlx5P2jwQ/jpevKUIVZjw98zrLrSJqvEwo4KZAkbtYnxX6mkJIgIy1p MA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hx467e5c0-1
+ bh=3QYVAqVw8SxZs5e2sW8RYQ/entVpPqjtUdvzI4O67Sg=;
+ b=JfnsY0FIVgyLpxrJnqZF3nsV8aDV6lQEu3S47AbL6EK71FZDaTsA0FPT/cLfqmN7+aAt
+ /nxoUCyWysDd2/RGKbnwjyq0dvUQWfKT6zp43/FD/sXTgmiv9JO7KmsVuc2oCbkO414i
+ uzpZVFmwHqBBZwTdCtVF1EdEPXOC4GHit+YRBcyxRihplLiKba++34RP8luIzU59FDad
+ fHXu5lwKUdrb5MTEVx32GPe3/N3VMhSkOQ6pLJQLJZeeIHpe26d+5ayqoovYg47sTAvp
+ c1ZwGjN5uh71eohtAnIh+45bzFQw+ahyh5je/J6nY6vu4kkRp/q9OzQlf2tLhFHrY+x2 Ig== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hx420p408-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Aug 2022 18:43:09 +0000
+        Mon, 15 Aug 2022 18:43:10 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27FIh8h8002524
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27FIh90c031946
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Aug 2022 18:43:08 GMT
+        Mon, 15 Aug 2022 18:43:09 GMT
 Received: from jhugo-lnx.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 15 Aug 2022 11:43:07 -0700
+ 15.2.986.22; Mon, 15 Aug 2022 11:43:08 -0700
 From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
 To:     <airlied@linux.ie>, <daniel@ffwll.ch>,
         <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
@@ -47,9 +47,9 @@ CC:     <quic_carlv@quicinc.com>, <quic_ajitpals@quicinc.com>,
         <quic_pkanojiy@quicinc.com>, <dri-devel@lists.freedesktop.org>,
         <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Jeffrey Hugo <quic_jhugo@quicinc.com>
-Subject: [RFC PATCH 03/14] drm/qaic: Add qaic.h internal header
-Date:   Mon, 15 Aug 2022 12:42:25 -0600
-Message-ID: <1660588956-24027-4-git-send-email-quic_jhugo@quicinc.com>
+Subject: [RFC PATCH 04/14] drm/qaic: Add MHI controller
+Date:   Mon, 15 Aug 2022 12:42:26 -0600
+Message-ID: <1660588956-24027-5-git-send-email-quic_jhugo@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1660588956-24027-1-git-send-email-quic_jhugo@quicinc.com>
 References: <1660588956-24027-1-git-send-email-quic_jhugo@quicinc.com>
@@ -61,438 +61,644 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: abqtz3WO2FKHzj7_DV9IDeW8tqjoYaI9
-X-Proofpoint-GUID: abqtz3WO2FKHzj7_DV9IDeW8tqjoYaI9
+X-Proofpoint-GUID: ARpUWzlXLSxCd8ZW-dQlpFW97L52h5ey
+X-Proofpoint-ORIG-GUID: ARpUWzlXLSxCd8ZW-dQlpFW97L52h5ey
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
- phishscore=0 clxscore=1015 lowpriorityscore=0 bulkscore=0 impostorscore=0
- priorityscore=1501 mlxscore=0 suspectscore=0 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208150070
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ clxscore=1015 lowpriorityscore=0 mlxlogscore=999 impostorscore=0
+ adultscore=0 mlxscore=0 spamscore=0 priorityscore=1501 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208150070
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-qaic.h contains all of the structs and defines that get passed around
-to the various components of the driver.
+A QAIC device contains a MHI interface with a number of different channels
+for controlling different aspects of the device.  The MHI controller works
+with the MHI bus to enable and drive that interface.
 
-Change-Id: I8349ac831a55daad3ac67ab763c2e815bb051be0
+Change-Id: I77363193b1a2dece7abab287a6acef3cac1b4e1b
 Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
 ---
- drivers/gpu/drm/qaic/qaic.h | 396 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 396 insertions(+)
- create mode 100644 drivers/gpu/drm/qaic/qaic.h
+ drivers/gpu/drm/qaic/mhi_controller.c | 575 ++++++++++++++++++++++++++++++++++
+ drivers/gpu/drm/qaic/mhi_controller.h |  18 ++
+ 2 files changed, 593 insertions(+)
+ create mode 100644 drivers/gpu/drm/qaic/mhi_controller.c
+ create mode 100644 drivers/gpu/drm/qaic/mhi_controller.h
 
-diff --git a/drivers/gpu/drm/qaic/qaic.h b/drivers/gpu/drm/qaic/qaic.h
+diff --git a/drivers/gpu/drm/qaic/mhi_controller.c b/drivers/gpu/drm/qaic/mhi_controller.c
 new file mode 100644
-index 0000000..07c25c1
+index 0000000..e88e0fe
 --- /dev/null
-+++ b/drivers/gpu/drm/qaic/qaic.h
-@@ -0,0 +1,396 @@
++++ b/drivers/gpu/drm/qaic/mhi_controller.c
+@@ -0,0 +1,575 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++/* Copyright (c) 2019-2021, The Linux Foundation. All rights reserved. */
++/* Copyright (c) 2021-2022 Qualcomm Innovation Center, Inc. All rights reserved. */
++
++#include <linux/delay.h>
++#include <linux/err.h>
++#include <linux/memblock.h>
++#include <linux/mhi.h>
++#include <linux/moduleparam.h>
++#include <linux/pci.h>
++#include <linux/sizes.h>
++
++#include "mhi_controller.h"
++#include "qaic.h"
++
++#define MAX_RESET_TIME_SEC 25
++
++static unsigned int mhi_timeout = 2000; /* 2 sec default */
++module_param(mhi_timeout, uint, 0600);
++
++static struct mhi_channel_config aic100_channels[] = {
++	{
++		.name = "QAIC_LOOPBACK",
++		.num = 0,
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_TO_DEVICE,
++		.ee_mask = MHI_CH_EE_AMSS,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_LOOPBACK",
++		.num = 1,
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_FROM_DEVICE,
++		.ee_mask = MHI_CH_EE_AMSS,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_SAHARA",
++		.num = 2,
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_TO_DEVICE,
++		.ee_mask = MHI_CH_EE_SBL,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_SAHARA",
++		.num = 3,
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_FROM_DEVICE,
++		.ee_mask = MHI_CH_EE_SBL,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_DIAG",
++		.num = 4,
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_TO_DEVICE,
++		.ee_mask = MHI_CH_EE_AMSS,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_DIAG",
++		.num = 5,
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_FROM_DEVICE,
++		.ee_mask = MHI_CH_EE_AMSS,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_SSR",
++		.num = 6,
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_TO_DEVICE,
++		.ee_mask = MHI_CH_EE_AMSS,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_SSR",
++		.num = 7,
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_FROM_DEVICE,
++		.ee_mask = MHI_CH_EE_AMSS,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_QDSS",
++		.num = 8,
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_TO_DEVICE,
++		.ee_mask = MHI_CH_EE_AMSS,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_QDSS",
++		.num = 9,
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_FROM_DEVICE,
++		.ee_mask = MHI_CH_EE_AMSS,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_CONTROL",
++		.num = 10,
++		.num_elements = 128,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_TO_DEVICE,
++		.ee_mask = MHI_CH_EE_AMSS,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_CONTROL",
++		.num = 11,
++		.num_elements = 128,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_FROM_DEVICE,
++		.ee_mask = MHI_CH_EE_AMSS,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_LOGGING",
++		.num = 12,
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_TO_DEVICE,
++		.ee_mask = MHI_CH_EE_SBL,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_LOGGING",
++		.num = 13,
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_FROM_DEVICE,
++		.ee_mask = MHI_CH_EE_SBL,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_STATUS",
++		.num = 14,
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_TO_DEVICE,
++		.ee_mask = MHI_CH_EE_AMSS,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_STATUS",
++		.num = 15,
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_FROM_DEVICE,
++		.ee_mask = MHI_CH_EE_AMSS,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_TELEMETRY",
++		.num = 16,
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_TO_DEVICE,
++		.ee_mask = MHI_CH_EE_AMSS,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_TELEMETRY",
++		.num = 17,
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_FROM_DEVICE,
++		.ee_mask = MHI_CH_EE_AMSS,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_DEBUG",
++		.num = 18,
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_TO_DEVICE,
++		.ee_mask = MHI_CH_EE_AMSS,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_DEBUG",
++		.num = 19,
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_FROM_DEVICE,
++		.ee_mask = MHI_CH_EE_AMSS,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.name = "QAIC_TIMESYNC",
++		.num = 20,
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_TO_DEVICE,
++		.ee_mask = MHI_CH_EE_SBL | MHI_CH_EE_AMSS,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++	{
++		.num = 21,
++		.name = "QAIC_TIMESYNC",
++		.num_elements = 32,
++		.local_elements = 0,
++		.event_ring = 0,
++		.dir = DMA_FROM_DEVICE,
++		.ee_mask = MHI_CH_EE_SBL | MHI_CH_EE_AMSS,
++		.pollcfg = 0,
++		.doorbell = MHI_DB_BRST_DISABLE,
++		.lpm_notify = false,
++		.offload_channel = false,
++		.doorbell_mode_switch = false,
++		.auto_queue = false,
++		.wake_capable = false,
++	},
++};
++
++static struct mhi_event_config aic100_events[] = {
++	{
++		.num_elements = 32,
++		.irq_moderation_ms = 0,
++		.irq = 0,
++		.channel = U32_MAX,
++		.priority = 1,
++		.mode = MHI_DB_BRST_DISABLE,
++		.data_type = MHI_ER_CTRL,
++		.hardware_event = false,
++		.client_managed = false,
++		.offload_channel = false,
++	},
++};
++
++static struct mhi_controller_config aic100_config = {
++	.max_channels = 128,
++	.timeout_ms = 0, /* controlled by mhi_timeout */
++	.buf_len = 0,
++	.num_channels = ARRAY_SIZE(aic100_channels),
++	.ch_cfg = aic100_channels,
++	.num_events = ARRAY_SIZE(aic100_events),
++	.event_cfg = aic100_events,
++	.use_bounce_buf = false,
++	.m2_no_db = false,
++};
++
++static int mhi_read_reg(struct mhi_controller *mhi_cntl, void __iomem *addr, u32 *out)
++{
++	u32 tmp = readl_relaxed(addr);
++
++	if (tmp == U32_MAX)
++		return -EIO;
++
++	*out = tmp;
++
++	return 0;
++}
++
++static void mhi_write_reg(struct mhi_controller *mhi_cntl, void __iomem *addr,
++			  u32 val)
++{
++	writel_relaxed(val, addr);
++}
++
++static int mhi_runtime_get(struct mhi_controller *mhi_cntl)
++{
++	return 0;
++}
++
++static void mhi_runtime_put(struct mhi_controller *mhi_cntl)
++{
++}
++
++static void mhi_status_cb(struct mhi_controller *mhi_cntl, enum mhi_callback reason)
++{
++	struct qaic_device *qdev = pci_get_drvdata(to_pci_dev(mhi_cntl->cntrl_dev));
++
++	/* this event occurs in atomic context */
++	if (reason == MHI_CB_FATAL_ERROR)
++		pci_err(qdev->pdev, "Fatal error received from device.  Attempting to recover\n");
++	/* this event occurs in non-atomic context */
++	if (reason == MHI_CB_SYS_ERROR && !qdev->in_reset)
++		qaic_dev_reset_clean_local_state(qdev, true);
++}
++
++static int mhi_reset_and_async_power_up(struct mhi_controller *mhi_cntl)
++{
++	char time_sec = 1;
++	int current_ee;
++	int ret;
++
++	/* Reset the device to bring the device in PBL EE */
++	mhi_soc_reset(mhi_cntl);
++
++	/*
++	 * Keep checking the execution environment(EE) after every 1 second
++	 * interval.
++	 */
++	do {
++		msleep(1000);
++		current_ee = mhi_get_exec_env(mhi_cntl);
++	} while (current_ee != MHI_EE_PBL && time_sec++ <= MAX_RESET_TIME_SEC);
++
++	/* If the device is in PBL EE retry power up */
++	if (current_ee == MHI_EE_PBL)
++		ret = mhi_async_power_up(mhi_cntl);
++	else
++		ret = -EIO;
++
++	return ret;
++}
++
++struct mhi_controller *qaic_mhi_register_controller(struct pci_dev *pci_dev,
++						    void __iomem *mhi_bar,
++						    int mhi_irq)
++{
++	struct mhi_controller *mhi_cntl;
++	int ret;
++
++	mhi_cntl = kzalloc(sizeof(*mhi_cntl), GFP_KERNEL);
++	if (!mhi_cntl)
++		return ERR_PTR(-ENOMEM);
++
++	mhi_cntl->cntrl_dev = &pci_dev->dev;
++
++	/*
++	 * Covers the entire possible physical ram region.  Remote side is
++	 * going to calculate a size of this range, so subtract 1 to prevent
++	 * rollover.
++	 */
++	mhi_cntl->iova_start = 0;
++	mhi_cntl->iova_stop = PHYS_ADDR_MAX - 1;
++
++	mhi_cntl->status_cb = mhi_status_cb;
++	mhi_cntl->runtime_get = mhi_runtime_get;
++	mhi_cntl->runtime_put = mhi_runtime_put;
++	mhi_cntl->read_reg = mhi_read_reg;
++	mhi_cntl->write_reg = mhi_write_reg;
++	mhi_cntl->regs = mhi_bar;
++	mhi_cntl->reg_len = SZ_4K;
++	mhi_cntl->nr_irqs = 1;
++	mhi_cntl->irq = kmalloc(sizeof(*mhi_cntl->irq), GFP_KERNEL);
++
++	if (!mhi_cntl->irq) {
++		kfree(mhi_cntl);
++		return ERR_PTR(-ENOMEM);
++	}
++
++	mhi_cntl->irq[0] = mhi_irq;
++
++	mhi_cntl->fw_image = "qcom/aic100/sbl.bin";
++
++	/* use latest configured timeout */
++	aic100_config.timeout_ms = mhi_timeout;
++	ret = mhi_register_controller(mhi_cntl, &aic100_config);
++	if (ret) {
++		pci_err(pci_dev, "mhi_register_controller failed %d\n", ret);
++		kfree(mhi_cntl->irq);
++		kfree(mhi_cntl);
++		return ERR_PTR(ret);
++	}
++
++	ret = mhi_prepare_for_power_up(mhi_cntl);
++	if (ret) {
++		pci_err(pci_dev, "mhi_prepare_for_power_up failed %d\n", ret);
++		mhi_unregister_controller(mhi_cntl);
++		kfree(mhi_cntl->irq);
++		kfree(mhi_cntl);
++		return ERR_PTR(ret);
++	}
++
++	ret = mhi_async_power_up(mhi_cntl);
++	/*
++	 * If EIO is returned it is possible that device is in SBL EE, which is
++	 * undesired. SOC reset the device and try to power up again.
++	 */
++	if (ret == -EIO && MHI_EE_SBL == mhi_get_exec_env(mhi_cntl)) {
++		pci_err(pci_dev, "Device is not expected to be SBL EE. SOC resetting the device to put it in PBL EE and again trying mhi async power up. Error %d\n",
++			ret);
++		ret = mhi_reset_and_async_power_up(mhi_cntl);
++	}
++
++	if (ret) {
++		pci_err(pci_dev, "mhi_async_power_up failed %d\n", ret);
++		mhi_unprepare_after_power_down(mhi_cntl);
++		mhi_unregister_controller(mhi_cntl);
++		kfree(mhi_cntl->irq);
++		kfree(mhi_cntl);
++		return ERR_PTR(ret);
++	}
++
++	return mhi_cntl;
++}
++
++void qaic_mhi_free_controller(struct mhi_controller *mhi_cntl, bool link_up)
++{
++	mhi_power_down(mhi_cntl, link_up);
++	mhi_unprepare_after_power_down(mhi_cntl);
++	mhi_unregister_controller(mhi_cntl);
++	kfree(mhi_cntl->irq);
++	kfree(mhi_cntl);
++}
++
++void qaic_mhi_start_reset(struct mhi_controller *mhi_cntl)
++{
++	mhi_power_down(mhi_cntl, true);
++}
++
++void qaic_mhi_reset_done(struct mhi_controller *mhi_cntl)
++{
++	struct pci_dev *pci_dev = container_of(mhi_cntl->cntrl_dev,
++					       struct pci_dev, dev);
++	int ret;
++
++	ret = mhi_async_power_up(mhi_cntl);
++	if (ret)
++		pci_err(pci_dev, "mhi_async_power_up failed after reset %d\n", ret);
++}
+diff --git a/drivers/gpu/drm/qaic/mhi_controller.h b/drivers/gpu/drm/qaic/mhi_controller.h
+new file mode 100644
+index 0000000..5a739bb
+--- /dev/null
++++ b/drivers/gpu/drm/qaic/mhi_controller.h
+@@ -0,0 +1,18 @@
 +/* SPDX-License-Identifier: GPL-2.0-only
 + *
-+ * Copyright (c) 2019-2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2021-2022 Qualcomm Innovation Center, Inc. All rights reserved.
++ * Copyright (c) 2019-2020, The Linux Foundation. All rights reserved.
 + */
 +
-+#ifndef QAICINTERNAL_H_
-+#define QAICINTERNAL_H_
++#ifndef MHICONTROLLERQAIC_H_
++#define MHICONTROLLERQAIC_H_
 +
-+#include <linux/idr.h>
-+#include <linux/interrupt.h>
-+#include <linux/kref.h>
-+#include <linux/mhi.h>
-+#include <linux/mutex.h>
-+#include <linux/pci.h>
-+#include <linux/spinlock.h>
-+#include <linux/srcu.h>
-+#include <linux/wait.h>
-+#include <linux/workqueue.h>
-+#include <drm/drm_device.h>
-+#include <drm/drm_gem.h>
++struct mhi_controller *qaic_mhi_register_controller(struct pci_dev *pci_dev,
++						    void __iomem *mhi_bar,
++						    int mhi_irq);
 +
-+#define QAIC_DBC_BASE		0x20000
-+#define QAIC_DBC_SIZE		0x1000
++void qaic_mhi_free_controller(struct mhi_controller *mhi_cntl, bool link_up);
 +
-+#define QAIC_NO_PARTITION	-1
++void qaic_mhi_start_reset(struct mhi_controller *mhi_cntl);
++void qaic_mhi_reset_done(struct mhi_controller *mhi_cntl);
 +
-+#define QAIC_DBC_OFF(i)		((i) * QAIC_DBC_SIZE + QAIC_DBC_BASE)
-+
-+#define to_qaic_bo(obj) container_of(obj, struct qaic_bo, base)
-+
-+extern bool poll_datapath;
-+
-+enum dbc_states {
-+	DBC_STATE_IDLE			= 0,
-+	DBC_STATE_ASSIGNED		= 1,
-+	DBC_STATE_BEFORE_SHUTDOWN	= 2,
-+	DBC_STATE_AFTER_SHUTDOWN	= 3,
-+	DBC_STATE_BEFORE_POWER_UP	= 4,
-+	DBC_STATE_AFTER_POWER_UP	= 5,
-+	DBC_STATE_MAX			= 6,
-+};
-+
-+struct qaic_user {
-+	/* PID of the process that opened this drm device */
-+	pid_t			handle;
-+	struct kref		ref_count;
-+	/* Char device opened by this user */
-+	struct qaic_drm_device	*qddev;
-+	/* Node in list of users that opened this drm device */
-+	struct list_head	node;
-+	/* SRCU used to synchronize this user during cleanup */
-+	struct srcu_struct	qddev_lock;
-+	atomic_t		chunk_id;
-+};
-+
-+struct dma_bridge_chan {
-+	/* Pointer to device strcut maintained by driver */
-+	struct qaic_device	*qdev;
-+	/* ID of this DMA bridge channel(DBC) */
-+	unsigned int		id;
-+	/* Synchronizes access to xfer_list */
-+	spinlock_t		xfer_lock;
-+	/* Base address of request queue */
-+	void			*req_q_base;
-+	/* Base address of response queue */
-+	void			*rsp_q_base;
-+	/*
-+	 * Base bus address of request queue. Response queue bus address can be
-+	 * calculated by adding request queue size to this variable
-+	 */
-+	dma_addr_t		dma_addr;
-+	/* Total size of request and response queue in byte */
-+	u32			total_size;
-+	/* Capacity of request/response queue */
-+	u32			nelem;
-+	/* Synchronizes access to idr buf_handles */
-+	struct mutex		handle_lock;
-+	/* Hold memory handles for this DBC */
-+	struct idr		buf_handles;
-+	/* The user that opened this DBC */
-+	struct qaic_user	*usr;
-+	/*
-+	 * Request ID of next memory handle that goes in request queue. One
-+	 * memory handle can enqueue more than one request elements, all
-+	 * this requests that belong to same memory handle have same request ID
-+	 */
-+	u16			next_req_id;
-+	/* TRUE: DBC is in use; FALSE: DBC not in use */
-+	bool			in_use;
-+	/* TRUE: This DBC is under sub system reset(SSR) */
-+	bool			in_ssr;
-+	/* Represents various states of this DBC from enum dbc_states */
-+	unsigned int		state;
-+	/*
-+	 * Base address of device registers. Used to read/write request and
-+	 * response queue's head and tail pointer of this DBC.
-+	 */
-+	void __iomem		*dbc_base;
-+	/* Head of list where each node is a memory handle queued in request queue */
-+	struct list_head	xfer_list;
-+	/* Synchronizes DBC readers during cleanup */
-+	struct srcu_struct	ch_lock;
-+	/* Debugfs root directory for this DBC */
-+	struct dentry		*debugfs_root;
-+	/*
-+	 * When this DBC is released, any thread waiting on this wait queue is
-+	 * woken up
-+	 */
-+	wait_queue_head_t	dbc_release;
-+	/*
-+	 * Points to a book keeping struct maintained by MHI SSR device while
-+	 * downloading a SSR crashdump. It is NULL when there no crashdump
-+	 * downloading in progress.
-+	 */
-+	void			*dump_info;
-+	/* Head of list where each node is a bo associated with this DBC */
-+	struct list_head	bo_lists;
-+	/* The irq line for this DBC.  Used for polling */
-+	unsigned int		irq;
-+	/* Polling work item to simulate interrupts */
-+	struct work_struct	poll_work;
-+};
-+
-+struct qaic_device {
-+	/* Pointer to base PCI device struct of our physical device */
-+	struct pci_dev		*pdev;
-+	/* Mask of all bars of this device */
-+	int			bars;
-+	/* Req. ID of request that will be queued next in MHI control device */
-+	u32			next_seq_num;
-+	/* Base address of bar 0 */
-+	void __iomem		*bar_0;
-+	/* Base address of bar 2 */
-+	void __iomem		*bar_2;
-+	/* Controller structure for MHI devices */
-+	struct mhi_controller	*mhi_cntl;
-+	/* MHI control channel device */
-+	struct mhi_device	*cntl_ch;
-+	/* List of requests queued in MHI control device */
-+	struct list_head	cntl_xfer_list;
-+	/* Synchronizes MHI control device transactions and its xfer list */
-+	struct mutex		cntl_mutex;
-+	/* Base actual physical representation of drm device */
-+	struct qaic_drm_device	*base_dev;
-+	/* Array of DBC struct of this device */
-+	struct dma_bridge_chan	*dbc;
-+	/* Work queue for tasks related to MHI control device */
-+	struct workqueue_struct	*cntl_wq;
-+	/* Synchronizes all the users of device during cleanup */
-+	struct srcu_struct	dev_lock;
-+	/* Debugfs root directory for the device */
-+	struct dentry		*debugfs_root;
-+	/* HW monitoring device for this device */
-+	struct device		*hwmon;
-+	/* MHI telemetry channel device */
-+	struct mhi_device	*tele_ch;
-+	/* Head in list of requests queued in MHI telemetry device */
-+	struct list_head	tele_xfer_list;
-+	/* Req. ID of request that will be queued next in MHI telemetry device */
-+	u32			tele_next_seq_num;
-+	/*
-+	 * TRUE: A tx MHI tansaction has failed and a rx buffer is still queued
-+	 * in telemetry device. Such a buffer is considered lost rx buffer
-+	 * FALSE: No rx buffer is lost in telemetry device
-+	 */
-+	bool			tele_lost_buf;
-+	/* TRUE: Device under reset; FALSE: Device not under reset */
-+	bool			in_reset;
-+	/*
-+	 * TRUE: A tx MHI tansaction has failed and a rx buffer is still queued
-+	 * in control device. Such a buffer is considered lost rx buffer
-+	 * FALSE: No rx buffer is lost in control device
-+	 */
-+	bool			cntl_lost_buf;
-+	/* Synchronizes MHI telemetry device transactions and its xfer list */
-+	struct mutex		tele_mutex;
-+	/* Work queue for tasks related to MHI telemetry device */
-+	struct workqueue_struct	*tele_wq;
-+	/* MHI RAS channel device */
-+	struct mhi_device	*ras_ch;
-+	unsigned int		ce_count;
-+	unsigned int		ue_count;
-+	unsigned int		ue_nf_count;
-+	/* Maximum number of DBC supported by this device */
-+	u32			num_dbc;
-+	/* Head of list of page allocated by MHI bootlog device */
-+	struct list_head	bootlog;
-+	/* MHI bootlog channel device */
-+	struct mhi_device	*bootlog_ch;
-+	/* Work queue for tasks related to MHI bootlog device */
-+	struct workqueue_struct	*bootlog_wq;
-+	/* Synchronizes access of pages in MHI bootlog device */
-+	struct mutex		bootlog_mutex;
-+	/* Head in list of drm device created on top of this device */
-+	struct list_head	qaic_drm_devices;
-+	/* Synchronizes access of qaic_drm_devices list */
-+	struct mutex		qaic_drm_devices_mutex;
-+	/* MHI SSR channel device */
-+	struct mhi_device	*ssr_ch;
-+	/* Work queue for tasks related to MHI SSR device */
-+	struct workqueue_struct	*ssr_wq;
-+	/* Generate the CRC of a control message */
-+	u32 (*gen_crc)(void *msg);
-+	/* Validate the CRC of a control message */
-+	bool (*valid_crc)(void *msg);
-+};
-+
-+struct qaic_drm_device {
-+	/* Pointer to the root device struct driven by this driver */
-+	struct qaic_device	*qdev;
-+	/* Node in list of drm devices maintained by root device */
-+	struct list_head	node;
-+	/*
-+	 * The physical device can be partition in number of logical devices.
-+	 * And each logical device is given a partition id. This member stores
-+	 * that id. QAIC_NO_PARTITION is a sentinel used to mark that this drm
-+	 * device is the actual physical device
-+	 */
-+	s32			partition_id;
-+	/*
-+	 * It points to the user that created this drm device. It is NULL
-+	 * when this drm device represents the physical device i.e.
-+	 * partition_id is QAIC_NO_PARTITION
-+	 */
-+	struct qaic_user	*owner;
-+	/* Pointer to the drm device struct of this drm device */
-+	struct drm_device	*ddev;
-+	/* Head in list of users who have opened this drm device */
-+	struct list_head	users;
-+	/* Synchronizes access to users list */
-+	struct mutex		users_mutex;
-+	/* Pointer to array of DBC sysfs attributes */
-+	void			*sysfs_attrs;
-+};
-+
-+struct qaic_bo {
-+	struct drm_gem_object	base;
-+	/* Scatter/gather table for allocate/imported BO */
-+	struct sg_table		*sgt;
-+	/* BO size requested by user. GEM object might be bigger in size. */
-+	u64			size;
-+	/* Head in list of slices of this BO */
-+	struct list_head	slices;
-+	/* Total nents, for all slices of this BO */
-+	int			total_slice_nents;
-+	/*
-+	 * Direction of transfer. It can assume only two value DMA_TO_DEVICE and
-+	 * DMA_FROM_DEVICE.
-+	 */
-+	int			dir;
-+	/* The pointer of the DBC which operates on this BO */
-+	struct dma_bridge_chan	*dbc;
-+	/* Number of slice that belongs to this buffer */
-+	u32			nr_slice;
-+	/* Number of slice that have been transferred by DMA engine */
-+	u32			nr_slice_xfer_done;
-+	/* TRUE = BO is queued for execution, FALSE = BO is not queued */
-+	bool			queued;
-+	/**
-+	 * If TRUE then user has attached slicing information to this BO by
-+	 * calling DRM_IOCTL_QAIC_ATTACH_SLICE_BO ioctl.
-+	 */
-+	bool			sliced;
-+	/* Request ID of this BO if it is queued for execution */
-+	u16			req_id;
-+	/* Handle assigned to this BO */
-+	u32			handle;
-+	/* Wait on this for completion of DMA transfer of this BO */
-+	struct completion	xfer_done;
-+	/*
-+	 * Node in linked list where head is dbc->xfer_list.
-+	 * This link list contain bo's that are queued for DMA transfer.
-+	 */
-+	struct list_head	xfer_list;
-+	/*
-+	 * Node in linked list where head is dbc->bo_lists.
-+	 * This link list contain bo's that are associated with the DBC it is
-+	 * linked to.
-+	 */
-+	struct list_head	bo_list;
-+	struct {
-+		/**
-+		 * Latest timestamp(ns) at which kernel received a request to
-+		 * execute this BO
-+		 */
-+		u64		req_received_ts;
-+		/**
-+		 * Latest timestamp(ns) at which kernel enqueued requests of
-+		 * this BO for execution in DMA queue
-+		 */
-+		u64		req_submit_ts;
-+		/**
-+		 * Latest timestamp(ns) at which kernel received a completion
-+		 * interrupt for requests of this BO
-+		 */
-+		u64		req_processed_ts;
-+		/**
-+		 * Number of elements already enqueued in DMA queue before
-+		 * enqueuing requests of this BO
-+		 */
-+		u32		queue_level_before;
-+	} perf_stats;
-+
-+};
-+
-+struct bo_slice {
-+	/* Mapped pages */
-+	struct sg_table		*sgt;
-+	/* Number of requests required to queue in DMA queue */
-+	int			nents;
-+	/* See enum dma_data_direction */
-+	int			dir;
-+	/* Actual requests that will be copied in DMA queue */
-+	struct dbc_req		*reqs;
-+	struct kref		ref_count;
-+	/* TRUE: No DMA transfer required */
-+	bool			no_xfer;
-+	/* Pointer to the parent bo handle */
-+	struct qaic_bo		*bo;
-+	/* Node in list of slices maintained by parent BO */
-+	struct list_head	slice;
-+	/* Size of this slice in byte */
-+	u64			size;
-+	/* Offset of this slice in buffer */
-+	u64			offset;
-+};
-+
-+int get_dbc_req_elem_size(void);
-+int get_dbc_rsp_elem_size(void);
-+int get_cntl_version(struct qaic_device *qdev, struct qaic_user *usr,
-+		     u16 *major, u16 *minor);
-+int qaic_manage_ioctl(struct drm_device *dev, void *data,
-+		      struct drm_file *file_priv);
-+int qaic_execute_ioctl(struct qaic_device *qdev, struct qaic_user *usr,
-+		       unsigned long arg, bool is_partial);
-+int qaic_wait_exec_ioctl(struct qaic_device *qdev, struct qaic_user *usr,
-+			 unsigned long arg);
-+int qaic_query_ioctl(struct qaic_device *qdev, struct qaic_user *usr,
-+		     unsigned long arg);
-+int qaic_data_mmap(struct qaic_device *qdev, struct qaic_user *usr,
-+		   struct vm_area_struct *vma);
-+void qaic_data_get_fifo_info(struct dma_bridge_chan *dbc, u32 *head,
-+			     u32 *tail);
-+int qaic_data_get_reservation(struct qaic_device *qdev, struct qaic_user *usr,
-+			      void *data, u32 *partition_id,
-+			      u16 *remove);
-+void qaic_mhi_ul_xfer_cb(struct mhi_device *mhi_dev,
-+			 struct mhi_result *mhi_result);
-+
-+void qaic_mhi_dl_xfer_cb(struct mhi_device *mhi_dev,
-+			 struct mhi_result *mhi_result);
-+
-+int qaic_control_open(struct qaic_device *qdev);
-+void qaic_control_close(struct qaic_device *qdev);
-+void qaic_release_usr(struct qaic_device *qdev, struct qaic_user *usr);
-+
-+irqreturn_t dbc_irq_threaded_fn(int irq, void *data);
-+irqreturn_t dbc_irq_handler(int irq, void *data);
-+int disable_dbc(struct qaic_device *qdev, u32 dbc_id, struct qaic_user *usr);
-+void enable_dbc(struct qaic_device *qdev, u32 dbc_id, struct qaic_user *usr);
-+void wakeup_dbc(struct qaic_device *qdev, u32 dbc_id);
-+void release_dbc(struct qaic_device *qdev, u32 dbc_id, bool set_state);
-+
-+void wake_all_cntl(struct qaic_device *qdev);
-+void qaic_dev_reset_clean_local_state(struct qaic_device *qdev, bool exit_reset);
-+
-+int qaic_sysfs_init(struct qaic_drm_device *qdev);
-+void qaic_sysfs_remove(struct qaic_drm_device *qdev);
-+void set_dbc_state(struct qaic_device *qdev, u32 dbc_id, unsigned int state);
-+
-+void dbc_enter_ssr(struct qaic_device *qdev, u32 dbc_id);
-+void dbc_exit_ssr(struct qaic_device *qdev, u32 dbc_id);
-+
-+struct drm_gem_object *qaic_gem_prime_import(struct drm_device *dev,
-+					     struct dma_buf *dma_buf);
-+
-+int qaic_create_bo_ioctl(struct drm_device *dev, void *data,
-+			 struct drm_file *file_priv);
-+int qaic_mmap_bo_ioctl(struct drm_device *dev, void *data,
-+		       struct drm_file *file_priv);
-+int qaic_attach_slice_bo_ioctl(struct drm_device *dev, void *data,
-+			       struct drm_file *file_priv);
-+int qaic_execute_bo_ioctl(struct drm_device *dev, void *data,
-+			  struct drm_file *file_priv);
-+int qaic_partial_execute_bo_ioctl(struct drm_device *dev, void *data,
-+				  struct drm_file *file_priv);
-+int qaic_wait_bo_ioctl(struct drm_device *dev, void *data,
-+		       struct drm_file *file_priv);
-+int qaic_test_print_bo_ioctl(struct drm_device *dev, void *data,
-+			     struct drm_file *file_priv);
-+int qaic_perf_stats_bo_ioctl(struct drm_device *dev, void *data,
-+			     struct drm_file *file_priv);
-+void irq_polling_work(struct work_struct *work);
-+
-+#endif /* QAICINTERNAL_H_ */
++#endif /* MHICONTROLLERQAIC_H_ */
 -- 
 2.7.4
 

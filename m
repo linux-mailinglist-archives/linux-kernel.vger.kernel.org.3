@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB407593A5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68AEA593A60
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344035AbiHOTgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 15:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
+        id S1344076AbiHOTgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 15:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244747AbiHOT2v (ORCPT
+        with ESMTP id S244202AbiHOT32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 15:28:51 -0400
+        Mon, 15 Aug 2022 15:29:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030195D0D3;
-        Mon, 15 Aug 2022 11:43:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A355E32A;
+        Mon, 15 Aug 2022 11:44:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93EF8611C1;
-        Mon, 15 Aug 2022 18:43:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80E25C433D6;
-        Mon, 15 Aug 2022 18:43:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB07B611DD;
+        Mon, 15 Aug 2022 18:44:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C21D3C433D6;
+        Mon, 15 Aug 2022 18:44:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660589037;
-        bh=JKSsVhydSCnFVOkIw5jQLYVlmg82JtFskndc5/+TtqM=;
+        s=korg; t=1660589043;
+        bh=yhuN0DL0yv2xRFCMow4wX3R8JWRCMkUfnbUAKDjrUfk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0auD9sJoisOKhm7AWXY2oP+LdD6yiAaX667e+AC/3MDntNYNoV4jgp/+smzGHITfY
-         Fe6u1++i+5OlkAMKHbPJ6aXCyQvmf0JkHUJGfCmQDgkF2iN7uixenqpbTajqP2J0BB
-         mw1FWw2Km626e8RRQm3t6SYs+b00kT5o16y51VeM=
+        b=fkfOykeIpBV7596KxMb/efFs6T1mJtJNkiF1chrmu2gZZ5rM1+44FIqN189xhNE2T
+         Tfm2Cxl6tN6VtXjleUXEgiJ4YjKGw4DhYahU5FkvT+Zh/KuMFkM7MXsZHXJDT5p61D
+         qaSYyohjZB8ETGnF1yVjfiVAm2xj9DKxNHibhnU4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Guenter Roeck <groeck@chromium.org>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Fabio Estevam <festevam@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 561/779] ASoC: cros_ec_codec: Fix refcount leak in cros_ec_codec_platform_probe
-Date:   Mon, 15 Aug 2022 20:03:25 +0200
-Message-Id: <20220815180401.315845366@linuxfoundation.org>
+Subject: [PATCH 5.15 563/779] ASoC: imx-audmux: Silence a clang warning
+Date:   Mon, 15 Aug 2022 20:03:27 +0200
+Message-Id: <20220815180401.386328352@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180337.130757997@linuxfoundation.org>
 References: <20220815180337.130757997@linuxfoundation.org>
@@ -57,37 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
 
-[ Upstream commit 0a034d93ee929a9ea89f3fa5f1d8492435b9ee6e ]
+[ Upstream commit 2f4a8171da06609bb6a063630ed546ee3d93dad7 ]
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+Change the of_device_get_match_data() cast to (uintptr_t)
+to silence the following clang warning:
 
-Fixes: b6bc07d4360d ("ASoC: cros_ec_codec: support WoV")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
-Link: https://lore.kernel.org/r/20220603131043.38907-1-linmq006@gmail.com
+sound/soc/fsl/imx-audmux.c:301:16: warning: cast to smaller integer type 'enum imx_audmux_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 6a8b8b582db1 ("ASoC: imx-audmux: Remove unused .id_table")
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Link: https://lore.kernel.org/r/20220526010543.1164793-1-festevam@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/cros_ec_codec.c | 1 +
- 1 file changed, 1 insertion(+)
+ sound/soc/fsl/imx-audmux.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/cros_ec_codec.c b/sound/soc/codecs/cros_ec_codec.c
-index a201d652aca2..8823edc35113 100644
---- a/sound/soc/codecs/cros_ec_codec.c
-+++ b/sound/soc/codecs/cros_ec_codec.c
-@@ -994,6 +994,7 @@ static int cros_ec_codec_platform_probe(struct platform_device *pdev)
- 			dev_dbg(dev, "ap_shm_phys_addr=%#llx len=%#x\n",
- 				priv->ap_shm_phys_addr, priv->ap_shm_len);
- 		}
-+		of_node_put(node);
+diff --git a/sound/soc/fsl/imx-audmux.c b/sound/soc/fsl/imx-audmux.c
+index dfa05d40b276..a8e5e0f57faf 100644
+--- a/sound/soc/fsl/imx-audmux.c
++++ b/sound/soc/fsl/imx-audmux.c
+@@ -298,7 +298,7 @@ static int imx_audmux_probe(struct platform_device *pdev)
+ 		audmux_clk = NULL;
  	}
- #endif
  
+-	audmux_type = (enum imx_audmux_type)of_device_get_match_data(&pdev->dev);
++	audmux_type = (uintptr_t)of_device_get_match_data(&pdev->dev);
+ 
+ 	switch (audmux_type) {
+ 	case IMX31_AUDMUX:
 -- 
 2.35.1
 

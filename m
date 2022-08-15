@@ -2,183 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C075951A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 07:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9645A5951A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 07:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232533AbiHPFFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 01:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
+        id S231760AbiHPFG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 01:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233148AbiHPFEZ (ORCPT
+        with ESMTP id S233682AbiHPFFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 01:04:25 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789F218DC04
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:03:05 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id ch17-20020a17090af41100b001fa74771f61so178839pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:03:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc;
-        bh=je9mkTd7hK9getobpinLs+IwDRRu6tp5EWDUYT/znxA=;
-        b=S4kstyT5ya1G60oqBCS4kOWjOPbd/1oj1NF42PQ/N+lgI6ykau/pCdSRLa+keQoBaS
-         ImmmkcX3Zfp11vHkCcPMHm2jmJNLihnMe0bReHPfh8JbAAzZkDUn/J/2QWt3VVJjWpCr
-         PTmUrGryJggALRRwrbIj8LQQgsn29MgBMRQMHPOY4DzHJ1E+7bF3t4oiH9vAoEEVAkow
-         nw6AJR2BwnlV/HcHjStl5eVON5+EBs5gDgPEREtG5mMTqxjOTvwNgok0uAPsACFqcl56
-         Lawtkygv+S6s1iVWyn5x3EHnt41c7L5Q6jWqCO4I9EP8pc/oG2rhfw/CkFPZ/mUSIY4D
-         8cOA==
+        Tue, 16 Aug 2022 01:05:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C86DD345A
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:04:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660597457;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WXAjcjO7a1Xec1M0FgrBvJ/DZYv1/GC3KzW8DO8JMZQ=;
+        b=icn7rHQMA3BITS07SDAs22l4THmeLup1KxR7BIcoHwhKm33zObXK6O7NxEfJ2tkR1+pDfg
+        gaeRVpGgfB2CWDho1dRZjWGEwrjsEiY4ZuavXpxylKLdkrVQ7ca3VFmXuV4TOCnoB3wGLS
+        0/pG035vWPZv/pTOg+g87oqkdpSNKL8=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-159-t8yYd9rDNGu8Ku6scnnluA-1; Mon, 15 Aug 2022 17:04:16 -0400
+X-MC-Unique: t8yYd9rDNGu8Ku6scnnluA-1
+Received: by mail-wm1-f70.google.com with SMTP id v64-20020a1cac43000000b003a4bea31b4dso9186970wme.3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:04:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc;
-        bh=je9mkTd7hK9getobpinLs+IwDRRu6tp5EWDUYT/znxA=;
-        b=5VJYfp++4WYu8438RLK4FaYMf8SNnJdcdT/uAxQYasnvfJhmaPLXII3q/ezq3JJAMi
-         gFNBxcWYcjlrKhN0I9+6JYIquYVEmtFqGX97rKyMGrqvNDKJJ2VSHfjjdLbV2ynFRCRo
-         XFGsFf32lLd1qamhsGCsw5CAwIvU93Qx37qbYA7/TD3VR4Tioa8StNPGreMYcuW5yVVS
-         Z/pHe5K1RnecjcIDRYuU5w7UodVjBriGZgndn1Q/aj+vp84wWCSm86cTeOG6viCvcKXk
-         sljtRhgOV8AMbS442v8dJ5x54J/2xOKKBOdZ1IigAYNX8B4agdQTduxRh6pR1TukKs99
-         MTyA==
-X-Gm-Message-State: ACgBeo2ztN3nHxmGAVnq6Ni8hJPg41Chlqz1H2eubhG9WBxwkWRClPcq
-        av1o2YOs53hitiHre++S2M6n1jjF9h5CFg==
-X-Google-Smtp-Source: AA6agR44+ifgWCDgmkrzaLC4LcN0Pzmv1dnZPiz9dx0VkCSF+V99u1IA17b1bjC3rh7w1WfFZsIzuQ==
-X-Received: by 2002:a17:90b:390f:b0:1f4:e394:8c18 with SMTP id ob15-20020a17090b390f00b001f4e3948c18mr19648896pjb.141.1660597384068;
-        Mon, 15 Aug 2022 14:03:04 -0700 (PDT)
-Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
-        by smtp.gmail.com with ESMTPSA id y13-20020a17090322cd00b0016dbb878f8asm7420251plg.82.2022.08.15.14.03.02
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 15 Aug 2022 14:03:03 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v3 5/7] mm: Remember young/dirty bit for page migrations
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <5B21352C-2BE6-4070-BB6B-C1B7A5D4D225@gmail.com>
-Date:   Mon, 15 Aug 2022 14:03:01 -0700
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Minchan Kim <minchan@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andi Kleen <andi.kleen@intel.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <E37036E0-566E-40C7-AD15-720CDB003227@gmail.com>
-References: <20220809220100.20033-1-peterx@redhat.com>
- <20220809220100.20033-6-peterx@redhat.com> <YvUeB0jc6clz59z5@xz-m1.local>
- <87pmh6dwdr.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <YvqcGq44oonHNyCO@xz-m1.local>
- <5B21352C-2BE6-4070-BB6B-C1B7A5D4D225@gmail.com>
-To:     Peter Xu <peterx@redhat.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=WXAjcjO7a1Xec1M0FgrBvJ/DZYv1/GC3KzW8DO8JMZQ=;
+        b=7b9MHjJITc2sEN7lIHPuZl6fx9+7p3cV8/ICLwW4DCiLcGdEG1lxCO5vxmbbIwZIez
+         u/VMwVxOPC6C7RwsB6Jq3X8bcw5TApOZpXPIE14TYTd9jiv4MuMgu5ccci1ZwFYj8P2c
+         6N08/+DQBZYxROf9RmS/Y0WFr5g2FUoBfMXpUENMnrI7VCssnLjT8Q30KtieNr9x5vI2
+         N3iDB21DZB/NAEnbYOLrgyRFohcZD4ix50g+Vh+LGT/XLOSqxue7V9p5SdBGk5AQrtSn
+         J7+c71PGZ2vpAcpAG8Et4ctTXiGPSLjwZ/NOgxW73aKlWIx3hrhbTxpfs/TKNB7kcTHn
+         NMTg==
+X-Gm-Message-State: ACgBeo2isaFqtLwLCFR9X9zEuNgV4nWah5IbM3zvNTMDZ48VC0BjLNxe
+        bgJ1YnyGXz3m2hcfiIIoB/OrIbqDOR4OVTHhRNAy4zWV1dQmjzrKfp2MckNRY+r1sc29XWxL5p4
+        eRZEcF4Xn7xXLoIIw6B5fqHDt
+X-Received: by 2002:a5d:6b12:0:b0:21f:1568:c7e1 with SMTP id v18-20020a5d6b12000000b0021f1568c7e1mr9679667wrw.532.1660597455258;
+        Mon, 15 Aug 2022 14:04:15 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7Gmr8llRM16MIbIkEtv0F723o5Cn9itzZIe2uXIUI1CVZP1QlRvrTBQuLdNU9JyUxOsISU1g==
+X-Received: by 2002:a5d:6b12:0:b0:21f:1568:c7e1 with SMTP id v18-20020a5d6b12000000b0021f1568c7e1mr9679646wrw.532.1660597455016;
+        Mon, 15 Aug 2022 14:04:15 -0700 (PDT)
+Received: from redhat.com ([2.55.43.215])
+        by smtp.gmail.com with ESMTPSA id t18-20020a5d42d2000000b0021f15514e7fsm10719060wrr.0.2022.08.15.14.04.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 14:04:14 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 17:04:10 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andres Freund <andres@anarazel.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>, c@redhat.com
+Subject: Re: [PATCH] virtio_net: Revert "virtio_net: set the default max ring
+ size by find_vqs()"
+Message-ID: <20220815165608-mutt-send-email-mst@kernel.org>
+References: <20220815090521.127607-1-mst@redhat.com>
+ <20220815203426.GA509309@roeck-us.net>
+ <20220815164013-mutt-send-email-mst@kernel.org>
+ <20220815205053.GD509309@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220815205053.GD509309@roeck-us.net>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Aug 15, 2022, at 1:52 PM, Nadav Amit <nadav.amit@gmail.com> wrote:
+On Mon, Aug 15, 2022 at 01:50:53PM -0700, Guenter Roeck wrote:
+> On Mon, Aug 15, 2022 at 04:42:51PM -0400, Michael S. Tsirkin wrote:
+> > On Mon, Aug 15, 2022 at 01:34:26PM -0700, Guenter Roeck wrote:
+> > > On Mon, Aug 15, 2022 at 05:16:50AM -0400, Michael S. Tsirkin wrote:
+> > > > This reverts commit 762faee5a2678559d3dc09d95f8f2c54cd0466a7.
+> > > > 
+> > > > This has been reported to trip up guests on GCP (Google Cloud).  Why is
+> > > > not yet clear - to be debugged, but the patch itself has several other
+> > > > issues:
+> > > > 
+> > > > - It treats unknown speed as < 10G
+> > > > - It leaves userspace no way to find out the ring size set by hypervisor
+> > > > - It tests speed when link is down
+> > > > - It ignores the virtio spec advice:
+> > > >         Both \field{speed} and \field{duplex} can change, thus the driver
+> > > >         is expected to re-read these values after receiving a
+> > > >         configuration change notification.
+> > > > - It is not clear the performance impact has been tested properly
+> > > > 
+> > > > Revert the patch for now.
+> > > > 
+> > > > Link: https://lore.kernel.org/r/20220814212610.GA3690074%40roeck-us.net
+> > > > Link: https://lore.kernel.org/r/20220815070203.plwjx7b3cyugpdt7%40awork3.anarazel.de
+> > > > Link: https://lore.kernel.org/r/3df6bb82-1951-455d-a768-e9e1513eb667%40www.fastmail.com
+> > > > Link: https://lore.kernel.org/r/FCDC5DDE-3CDD-4B8A-916F-CA7D87B547CE%40anarazel.de
+> > > > Fixes: 762faee5a267 ("virtio_net: set the default max ring size by find_vqs()")
+> > > > Cc: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> > > > Cc: Jason Wang <jasowang@redhat.com>
+> > > > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> > > > Tested-by: Andres Freund <andres@anarazel.de>
+> > > 
+> > > I ran this patch through a total of 14 syskaller tests, 2 test runs each on
+> > > 7 different crashes reported by syzkaller (as reported to the linux-kernel
+> > > mailing list). No problems were reported. I also ran a single cross-check
+> > > with one of the syzkaller runs on top of v6.0-rc1, without this patch.
+> > > That test run failed.
+> > > 
+> > > Overall, I think we can call this fixed.
+> > > 
+> > > Guenter
+> > 
+> > It's more of a work around though since we don't yet have the root
+> > cause for this. I suspect a GCP hypervisor bug at the moment.
+> > This is excercising a path we previously only took on GFP_KERNEL
+> > allocation failures during probe, I don't think that happens a lot.
+> >
+> 
+> Even a hypervisor bug should not trigger crashes like this one,
+> though, or at least I think so. Any idea what to look for on the
+> hypervisor side, and/or what it might be doing wrong ?
+> 
+> Thanks,
+> Guenter
 
-> On Aug 15, 2022, at 12:18 PM, Peter Xu <peterx@redhat.com> wrote:
->=20
->> On Fri, Aug 12, 2022 at 10:32:48AM +0800, Huang, Ying wrote:
->>> Peter Xu <peterx@redhat.com> writes:
->>>=20
->>>> On Tue, Aug 09, 2022 at 06:00:58PM -0400, Peter Xu wrote:
->>>>> diff --git a/mm/migrate_device.c b/mm/migrate_device.c
->>>>> index 27fb37d65476..699f821b8443 100644
->>>>> --- a/mm/migrate_device.c
->>>>> +++ b/mm/migrate_device.c
->>>>> @@ -221,6 +221,10 @@ static int migrate_vma_collect_pmd(pmd_t =
-*pmdp,
->>>>> 			else
->>>>> 				entry =3D make_readable_migration_entry(
->>>>> 							=
-page_to_pfn(page));
->>>>> +			if (pte_young(pte))
->>>>> +				entry =3D =
-make_migration_entry_young(entry);
->>>>> +			if (pte_dirty(pte))
->>>>> +				entry =3D =
-make_migration_entry_dirty(entry);
->>>>> 			swp_pte =3D swp_entry_to_pte(entry);
->>>>> 			if (pte_present(pte)) {
->>>>> 				if (pte_soft_dirty(pte))
->>>>=20
->>>> This change needs to be wrapped with pte_present() at least..
->>>>=20
->>>> I also just noticed that this change probably won't help anyway =
-because:
->>>>=20
->>>> (1) When ram->device, the pte will finally be replaced with a =
-device
->>>>     private entry, and device private entry does not yet support =
-A/D, it
->>>>     means A/D will be dropped again,
->>>>=20
->>>> (2) When device->ram, we are missing information on either A/D =
-bits, or
->>>>     even if device private entries start to suport A/D, it's still =
-not
->>>>     clear whether we should take device read/write into =
-considerations
->>>>     too on the page A/D bits to be accurate.
->>>>=20
->>>> I think I'll probably keep the code there for completeness, but I =
-think it
->>>> won't really help much until more things are done.
->>>=20
->>> It appears that there are more issues.  Between "pte =3D *ptep" and =
-pte
->>> clear, CPU may set A/D bit in PTE, so we may need to update pte when
->>> clearing PTE.
->>=20
->> Agreed, I didn't see it a huge problem with current code, but it =
-should be
->> better in that way.
->>=20
->>> And I don't find the TLB is flushed in some cases after PTE is =
-cleared.
->>=20
->> I think it's okay to not flush tlb if pte not present.  But maybe =
-you're
->> talking about something else?
->=20
-> I think Huang refers to situation in which the PTE is cleared, still =
-not
-> flushed, and then A/D is being set by the hardware.
->=20
-> At least on x86, the hardware is not supposed to do so. The only case =
-I
-> remember (and sometimes misremembers) is with KNL erratum, which =
-perhaps
-> needs to be considered:
->=20
-> =
-https://lore.kernel.org/all/20160708001911.9A3FD2B6@viggo.jf.intel.com/
+Sure!
+So virtio has a queue_size register. When read, it will give you
+originally the maximum queue size. Normally we just read it and
+use it as queue size.
 
-I keep not remembering this erratum correctly. IIRC, the erratum says =
-that
-the access/dirty might be set, but it does not mean that a write is =
-possible
-after the PTE is cleared (i.e., the dirty/access might be set on the
-non-present PTE, but the access itself would fail). So it is not an =
-issue in
-this case - losing A/D would not impact correctness since the access =
-should
-fail.
+However, when queue memory allocation fails, and unconditionally with a
+network device with the problematic patch, driver is asking the
+hypervisor to make the ring smaller by writing a smaller value into this
+register.
 
-Dave Hansen hates when I get confused with this one, but I cc him if he
-wants to confirm.
+I suspect that what happens is hypervisor still uses the original value
+somewhere. Then it things the ring is bigger than what driver allocated.
+If we get lucky and nothing important landed in the several pages
+covered by the larger ting, then the only effect is that driver does not
+see the data hypervisor writes in the ring, and this is the network
+failures observed - most likely DHCP responses get lost and
+guest never gets an IP. OTOH if something important lands there then when
+hypervisor overwrites that memory it gets corrupted and we get crashes.
 
-[ Having said all of that, in general the lack of regard to
-  mm->tlb_flush_pending is always concerning in such functions. ]=
+
+-- 
+MST
+

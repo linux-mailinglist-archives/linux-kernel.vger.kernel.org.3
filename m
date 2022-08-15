@@ -2,221 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C78525930E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA305930E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242222AbiHOOl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 10:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52584 "EHLO
+        id S232943AbiHOOm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 10:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232690AbiHOOl5 (ORCPT
+        with ESMTP id S230418AbiHOOmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 10:41:57 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A091573C;
-        Mon, 15 Aug 2022 07:41:55 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id B776537515;
-        Mon, 15 Aug 2022 14:41:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1660574513; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UfV7UrK+irne6GAgk+wBFpB/DtHiJX9EFsLGUAqb2oc=;
-        b=EhnMpH5BKOHqbs8xeGCnOVw6+0G5OZe6Rpr/ISxuKHe1aC4L+Cuo8/AmPJBLlCB+gTo4t/
-        9I2Pmg67OxeHq8NM939vc6VCUizI76SkVeYA3xQM7cXRPPkvS/pI+3x8wzfoEyUD+oWN2K
-        8j2xxcpxiph5iXhtzwsFVEkQWGZiV5A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1660574513;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UfV7UrK+irne6GAgk+wBFpB/DtHiJX9EFsLGUAqb2oc=;
-        b=mDogXZxBHBrBcAEs5GLQP00EbvzxXZDg3S8XmtsksFVNs1rShDdZsCGASwooYRz3qtgJ1E
-        3oI+E49ly/rwTVAA==
-Received: from suse.de (unknown [10.163.43.106])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 2476F2C1C6;
-        Mon, 15 Aug 2022 14:41:51 +0000 (UTC)
-Date:   Mon, 15 Aug 2022 15:41:43 +0100
-From:   Mel Gorman <mgorman@suse.de>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH v2] sched/all: Change all BUG_ON() instances in the
- scheduler to WARN_ON_ONCE()
-Message-ID: <20220815144143.zjsiamw5y22bvgki@suse.de>
-References: <20220808073232.8808-1-david@redhat.com>
- <CAHk-=wiEAH+ojSpAgx_Ep=NKPWHU8AdO3V56BXcCsU97oYJ1EA@mail.gmail.com>
- <1a48d71d-41ee-bf39-80d2-0102f4fe9ccb@redhat.com>
- <CAHk-=wg40EAZofO16Eviaj7mfqDhZ2gVEbvfsMf6gYzspRjYvw@mail.gmail.com>
- <YvSsKcAXISmshtHo@gmail.com>
- <CAHk-=wgqW6zQcAW4i-ARJ8KNZZjw6tP3nn0QimyTWO=j+ZKsLA@mail.gmail.com>
- <YvYdbn2GtTlCaand@gmail.com>
+        Mon, 15 Aug 2022 10:42:24 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79B71572D
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 07:42:23 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id t5so9826005edc.11
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 07:42:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=jof2N1iEfYV37LDrPYxrY/5EEQHPjeHoyCRHq5VfC5Y=;
+        b=mpFtgAILA8kt5KRom+uJfi10GVXDXshLvnbM927dyX9LZx2Fx6wyB+t4jaxV5GaF9l
+         0hOb9Jza9cqMXO7fjZAZVLg3iCclMkphv+sC1afIiD7ev2kgDkuaHPOQHR8NV1n+TIBz
+         s3Ond8NPtbCP3gHnfwGDCwj2lTL1txPQzvZ9004RkOGqo2vA5IZKT+SBqwgX17rRKwT1
+         NEMAAjSHJq/bV5GySyPsKC1E5h1W7kD99dd7URzsUhZteYRhrl2xUlezQXh0vgTJ4/yf
+         gMJqyfOda9AmujvEyNztK3JKUfbdK3UgA0LegYEEHtaNsHgaD2/KSR4FNFTBB8sHUUBh
+         pGFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=jof2N1iEfYV37LDrPYxrY/5EEQHPjeHoyCRHq5VfC5Y=;
+        b=isxF4iZZVHxld22pFecoVKfSlOHjmiB7Ybmc+Y1Uv8nH6ck6F5djK2CFs83e0u/S1F
+         3ocXkVvtPl5j4aDts4qNJl0bt5810XFmY+4nl63fHV7Pzpd2keHFnfX3BdyCngoJ23HS
+         +gVVMS+mSq6MVdRmvvgvA5qASryVxSv50pokPScnuZMEQfgPQBPjdwKFUCKvKRgKUu/q
+         GypgLhO+N1E/ZQyYLE546EEmeTi/rbz1gPxaRsVPDFRD30CnIdpCavGh7DQjJJcto8e5
+         RWdozKPmpNRIj68jn/sLePbSNPgIZXd5VMf9D9Cm3nhnkvBmOIrD1H80+nCCEBMCjTdx
+         HYsw==
+X-Gm-Message-State: ACgBeo12Pz/zvMfzKLoS3rSR8zlQvHNht0C1gIjQBtZxdG9/VkoZkWzV
+        E0vQBvx248Ksw07ytHmqOjY=
+X-Google-Smtp-Source: AA6agR7bd/zGLA4ALKllKHzRtAchu874EwVSeNFi/lTGp5/Hqq/FSE+pkXIVmaHF4BvAFSS+xkPgNw==
+X-Received: by 2002:a05:6402:50cb:b0:440:87d4:3ad2 with SMTP id h11-20020a05640250cb00b0044087d43ad2mr14875248edb.219.1660574542520;
+        Mon, 15 Aug 2022 07:42:22 -0700 (PDT)
+Received: from opensuse.localnet (host-95-250-231-56.retail.telecomitalia.it. [95.250.231.56])
+        by smtp.gmail.com with ESMTPSA id d20-20020aa7d5d4000000b0043c92c44c53sm6651235eds.93.2022.08.15.07.42.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 07:42:21 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     dhowells@redhat.com, marc.dionne@auristor.com,
+        zhaoxiao <zhaoxiao@uniontech.com>
+Cc:     linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
+        zhaoxiao <zhaoxiao@uniontech.com>, ira.weiny@intel.com
+Subject: Re: [PATCH] afs: convert kmap() to kmap_local_page() in mntpt.c
+Date:   Mon, 15 Aug 2022 16:42:19 +0200
+Message-ID: <1752846.TLkxdtWsSY@opensuse>
+In-Reply-To: <20220812080432.14909-1-zhaoxiao@uniontech.com>
+References: <20220812080432.14909-1-zhaoxiao@uniontech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <YvYdbn2GtTlCaand@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 11:29:18AM +0200, Ingo Molnar wrote:
-> From: Ingo Molnar <mingo@kernel.org>
-> Date: Thu, 11 Aug 2022 08:54:52 +0200
-> Subject: [PATCH] sched/all: Change all BUG_ON() instances in the scheduler to WARN_ON_ONCE()
-> 
-> There's no good reason to crash a user's system with a BUG_ON(),
-> chances are high that they'll never even see the crash message on
-> Xorg, and it won't make it into the syslog either.
-> 
-> By using a WARN_ON_ONCE() we at least give the user a chance to report
-> any bugs triggered here - instead of getting silent hangs.
-> 
-> None of these WARN_ON_ONCE()s are supposed to trigger, ever - so we ignore
-> cases where a NULL check is done via a BUG_ON() and we let a NULL
-> pointer through after a WARN_ON_ONCE().
-> 
-> There's one exception: WARN_ON_ONCE() arguments with side-effects,
-> such as locking - in this case we use the return value of the
-> WARN_ON_ONCE(), such as in:
-> 
->  -       BUG_ON(!lock_task_sighand(p, &flags));
->  +       if (WARN_ON_ONCE(!lock_task_sighand(p, &flags)))
->  +               return;
-> 
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Ingo Molnar <mingo@kernel.org>
-> Link: https://lore.kernel.org/r/YvSsKcAXISmshtHo@gmail.com
+On venerd=C3=AC 12 agosto 2022 10:04:32 CEST zhaoxiao wrote:
+> kmap() is being deprecated in favor of kmap_local_page().
+>=20
+> There are two main problems with kmap(): (1) It comes with an overhead as
+> mapping space is restricted and protected by a global lock for
+> synchronization and (2) it also requires global TLB invalidation when the
+> kmap's pool wraps and it might block when the mapping space is fully
+> utilized until a slot becomes available.
+>=20
+> With kmap_local_page() the mappings are per thread, CPU local, can take
+> page faults, and can be called from any context (including interrupts).
+> It is faster than kmap() in kernels with HIGHMEM enabled.  Furthermore,
+> the tasks can be preempted and, when they are scheduled to run again, the
+> kernel virtual addresses are restored and are still valid.
+>=20
+> Since its use in mntpt.c is safe everywhere, it should be preferred.
+>=20
+> Therefore, replace kmap() with kmap_local_page() in mntpt.c.
+>=20
+> Tested in a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel with
+> HIGHMEM64GB enabled.
+>=20
+> Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
 > ---
->  kernel/sched/autogroup.c |  3 ++-
->  kernel/sched/core.c      |  2 +-
->  kernel/sched/cpupri.c    |  2 +-
->  kernel/sched/deadline.c  | 26 +++++++++++++-------------
->  kernel/sched/fair.c      | 10 +++++-----
->  kernel/sched/rt.c        |  2 +-
->  kernel/sched/sched.h     |  6 +++---
->  7 files changed, 26 insertions(+), 25 deletions(-)
-> 
-> diff --git a/kernel/sched/cpupri.c b/kernel/sched/cpupri.c
-> index fa9ce9d83683..a286e726eb4b 100644
-> --- a/kernel/sched/cpupri.c
-> +++ b/kernel/sched/cpupri.c
-> @@ -147,7 +147,7 @@ int cpupri_find_fitness(struct cpupri *cp, struct task_struct *p,
->  	int task_pri = convert_prio(p->prio);
->  	int idx, cpu;
->  
-> -	BUG_ON(task_pri >= CPUPRI_NR_PRIORITIES);
-> +	WARN_ON_ONCE(task_pri >= CPUPRI_NR_PRIORITIES);
->  
->  	for (idx = 0; idx < task_pri; idx++) {
->  
+>  fs/afs/mntpt.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/fs/afs/mntpt.c b/fs/afs/mntpt.c
+> index 97f50e9fd9eb..7e3cacb11780 100644
+> --- a/fs/afs/mntpt.c
+> +++ b/fs/afs/mntpt.c
+> @@ -132,11 +132,11 @@ static int afs_mntpt_set_params(struct fs_context *=
+fc,
+> struct dentry *mntpt) if (IS_ERR(page))
+>  			return PTR_ERR(page);
+>=20
+> -		buf =3D kmap(page);
+> +		buf =3D kmap_local_page(page);
+>  		ret =3D -EINVAL;
+>  		if (buf[size - 1] =3D=3D '.')
+>  			ret =3D vfs_parse_fs_string(fc, "source", buf,=20
+size - 1);
+> -		kunmap(page);
+> +		kunmap_local(buf);
+>  		put_page(page);
+>  		if (ret < 0)
+>  			return ret;
+> --
+> 2.20.1
 
-Should the return value be used here to clamp task_pri to
-CPUPRI_NR_PRIORITIES? task_pri is used for index which in __cpupri_find
-then accesses beyond the end of an array and the future behaviour will be
-very unpredictable.
+I doubt that zhaoxiao is your legal name.
+If I'm not wrong, can you please submit a v2 with the name that you use to=
+=20
+sign documents with legal value? Otherwise, please discard this warning.
 
-> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-> index 0ab79d819a0d..962b169b05cf 100644
-> --- a/kernel/sched/deadline.c
-> +++ b/kernel/sched/deadline.c
-> @@ -2017,7 +2017,7 @@ static struct task_struct *pick_task_dl(struct rq *rq)
->  		return NULL;
->  
->  	dl_se = pick_next_dl_entity(dl_rq);
-> -	BUG_ON(!dl_se);
-> +	WARN_ON_ONCE(!dl_se);
->  	p = dl_task_of(dl_se);
->  
->  	return p;
+Aside from the above, this conversion looks good to me, so feel free to=20
+forward my tag to next version...
 
-It's a somewhat redundant check, it'll NULL pointer dereference shortly
-afterwards but it'll be a bit more obvious.
+Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 914096c5b1ae..28f10dccd194 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -2600,7 +2600,7 @@ static void task_numa_group(struct task_struct *p, int cpupid, int flags,
->  	if (!join)
->  		return;
->  
-> -	BUG_ON(irqs_disabled());
-> +	WARN_ON_ONCE(irqs_disabled());
->  	double_lock_irq(&my_grp->lock, &grp->lock);
->  
->  	for (i = 0; i < NR_NUMA_HINT_FAULT_STATS * nr_node_ids; i++) {
+Thanks,
 
-Recoverable with a goto no_join. It'll be a terrible recovery because
-there is no way IRQs should be disabled here. Something else incredibly
-bad happened before this would fire.
+=46abio
 
-> @@ -7279,7 +7279,7 @@ static void check_preempt_wakeup(struct rq *rq, struct task_struct *p, int wake_
->  		return;
->  
->  	find_matching_se(&se, &pse);
-> -	BUG_ON(!pse);
-> +	WARN_ON_ONCE(!pse);
->  
->  	cse_is_idle = se_is_idle(se);
->  	pse_is_idle = se_is_idle(pse);
+P.S.: I'm adding Ira to the list of recipients. Ira and I have been
+working through converting kmap() calls to kmap_local_page(). Please let Ir=
+a=20
+or me know if you plan on tacking more conversions so we can mark it
+off the list and avoid duplicate works.
 
-Similar to pick_task_dl.
 
-> @@ -10134,7 +10134,7 @@ static int load_balance(int this_cpu, struct rq *this_rq,
->  		goto out_balanced;
->  	}
->  
-> -	BUG_ON(busiest == env.dst_rq);
-> +	WARN_ON_ONCE(busiest == env.dst_rq);
->  
->  	schedstat_add(sd->lb_imbalance[idle], env.imbalance);
->  
-
-goto out if it triggers? It'll just continue to be unbalanced.
-
-> @@ -10430,7 +10430,7 @@ static int active_load_balance_cpu_stop(void *data)
->  	 * we need to fix it. Originally reported by
->  	 * Bjorn Helgaas on a 128-CPU setup.
->  	 */
-> -	BUG_ON(busiest_rq == target_rq);
-> +	WARN_ON_ONCE(busiest_rq == target_rq);
->  
->  	/* Search for an sd spanning us and the target CPU. */
->  	rcu_read_lock();
-
-goto out_unlock if it fires?
-
-For the rest, I didn't see obvious recovery paths that would allow the
-system to run predictably. Any of them firing will have unpredictable
-consequences (e.g. move_queued_task firing would be fun if it was a per-cpu
-kthread). Depending on which warning triggers, the remaining life of the
-system may be very short but maybe long enough to be logged even if system
-locks up shortly afterwards.
-
--- 
-Mel Gorman
-SUSE Labs

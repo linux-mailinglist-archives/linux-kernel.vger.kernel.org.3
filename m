@@ -2,94 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 055245931C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A0D5931CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbiHOP3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
+        id S231249AbiHOPb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiHOP3i (ORCPT
+        with ESMTP id S230510AbiHOPbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:29:38 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50ED1658C
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:29:37 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FBN0T3023234;
-        Mon, 15 Aug 2022 10:28:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=PFUH9P7TYQY6V5hI/Q7v0wHt4DryK2p1UkfQTaLLTa0=;
- b=Z935sQFymRb6MU2n+6Wp0RgjqZNbmmEW+PoQbNYHPicFpGgYrEnmG1EOLlI01HGCl8/I
- mbPQIvbB6neI+WZhxDObkZ3sUHYdyWA98ZiEu3oF2mD+TDxCFmVdhUQw/9D1mgc1TGRt
- ZF+zN7hZw1VXFlyxEw0dkhm2NmnOsFbU8aJo6DYsWeN7LaPAUEi/avTGJa/yDa7q4aCh
- N0i9ijXHAarm9/zQ3LJ1AfTBgLdaBhmes/tU5i2g84DONHK5ImbIV5RPxedI7dDsU5GD
- +qzioml3pY9NgFmH3ZbbZ5/oRYRhaHwndVGdNZXfQu748FUAcpJnVOQiqCmaTdYhKkFl 0w== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3hx9c1tcm8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Aug 2022 10:28:53 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Mon, 15 Aug
- 2022 10:28:51 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.9 via Frontend
- Transport; Mon, 15 Aug 2022 10:28:51 -0500
-Received: from sbinding-cirrus-dsktp2.ad.cirrus.com (unknown [198.90.202.160])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 2E567B06;
-        Mon, 15 Aug 2022 15:28:51 +0000 (UTC)
-From:   Stefan Binding <sbinding@opensource.cirrus.com>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Stefan Binding <sbinding@opensource.cirrus.com>
-Subject: [PATCH v1] ALSA: hda: cs35l41: Clarify support for CSC3551 without _DSD Properties
-Date:   Mon, 15 Aug 2022 16:28:44 +0100
-Message-ID: <20220815152844.462229-1-sbinding@opensource.cirrus.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 15 Aug 2022 11:31:24 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D212FDF85
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:31:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 88CC3375E5;
+        Mon, 15 Aug 2022 15:31:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1660577482; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qQIOXmfE/L8EhIOJ9ReiZ9YnlR5Vz7KbQm21zp/yjg0=;
+        b=clwT/hpMZi+m26eag1S3oGAGpDMumThrxYmxxSDuyqgQgoCTJJTI3Lm4vBxUlPXE8CQ79z
+        aONVfEkSt0FinytEeCT1IdToULSYS+MwT7hv0Kyc02DijN4kiB9Dfjy+hHLPqS4Gu9LD84
+        1I5XUaBlachjXXF40UzxodSXftB8P7M=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 66AFB13A93;
+        Mon, 15 Aug 2022 15:31:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bnc+Fspm+mK/ewAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 15 Aug 2022 15:31:22 +0000
+Date:   Mon, 15 Aug 2022 17:31:21 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Charan Teja Kalla <quic_charante@quicinc.com>,
+        akpm@linux-foundation.org, david@redhat.com,
+        pasha.tatashin@soleen.com, sieberf@amazon.com, shakeelb@google.com,
+        sjpark@amazon.de, dhowells@redhat.com, quic_pkondeti@quicinc.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH V3] mm: fix use-after free of page_ext after race with
+ memory-offline
+Message-ID: <Yvpmyf44SN0p5ab/@dhcp22.suse.cz>
+References: <1660056403-20894-1-git-send-email-quic_charante@quicinc.com>
+ <Yvpg6odyDsXrjw5i@dhcp22.suse.cz>
+ <YvplthTjM8Ez5DIq@casper.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: tJG7ppFwiCmZOZ_8CJJrMW_PTNs0s499
-X-Proofpoint-GUID: tJG7ppFwiCmZOZ_8CJJrMW_PTNs0s499
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvplthTjM8Ez5DIq@casper.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For devices which use HID CSC3551, correct ACPI _DSD properties are
-required to be able support those systems.
-Add error message to clarify this.
+On Mon 15-08-22 16:26:46, Matthew Wilcox wrote:
+> On Mon, Aug 15, 2022 at 05:06:18PM +0200, Michal Hocko wrote:
+> > > + * This function gives proper page_ext of a memory section
+> > > + * during race with the offline operation on a memory block
+> > > + * this section falls into. Not using this function to get
+> > > + * page_ext of a page, in code paths where extra refcount
+> > > + * is not taken on that page eg: pfn walking, can lead to
+> > > + * use-after-free access of page_ext.
+> > 
+> > I do not think this is really useful comment, it goes into way too much
+> > detail about memory hotplug yet not enough to actually understand the
+> > interaction because there are no references to the actual
+> > synchronization scheme. I would go with something like:
+> > 
+> > /*
+> >  * Get a page_ext associated with the given page. Returns NULL if
+> >  * no such page_ext exists otherwise ensures that the page_ext will
+> >  * stay alive until page_ext_put is called.
+> >  * This implies a non-sleeping context.
+> >  */
+> 
+> I'd go further and turn this into kernel-doc:
+> 
+> /**
+>  * page_ext_get() - Get the extended information for a page.
+>  * @page: The page we're interested in.
+>  *
+>  * Ensures that the page_ext will remain valid until page_ext_put()
+>  * is called.
+>  * 
+>  * Return: NULL if no page_ext exists for this page.
+>  * Context: Any context.  Caller may not sleep until they have called
+>  * page_ext_put().
+>  */
 
-Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
----
- sound/pci/hda/cs35l41_hda.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Yes, thanks!
 
-diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
-index 129bffb431c2..b9d94f3a5b99 100644
---- a/sound/pci/hda/cs35l41_hda.c
-+++ b/sound/pci/hda/cs35l41_hda.c
-@@ -1163,6 +1163,11 @@ static int cs35l41_no_acpi_dsd(struct cs35l41_hda *cs35l41, struct device *physd
- 		hw_cfg->gpio1.func = CS35l41_VSPK_SWITCH;
- 		hw_cfg->gpio1.valid = true;
- 	} else {
-+		/*
-+		 * Note: CLSA010(0/1) are special cases which use a slightly different design.
-+		 * All other HIDs e.g. CSC3551 require valid ACPI _DSD properties to be supported.
-+		 */
-+		dev_err(cs35l41->dev, "Error: ACPI _DSD Properties are missing for HID %s.", hid);
- 		hw_cfg->valid = false;
- 		hw_cfg->gpio1.valid = false;
- 		hw_cfg->gpio2.valid = false;
 -- 
-2.34.1
-
+Michal Hocko
+SUSE Labs

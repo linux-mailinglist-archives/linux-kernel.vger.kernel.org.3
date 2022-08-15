@@ -2,153 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AFA2592C43
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B22592BB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231660AbiHOJTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 05:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43796 "EHLO
+        id S233127AbiHOJUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 05:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbiHOJTA (ORCPT
+        with ESMTP id S230404AbiHOJTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 05:19:00 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4CC22505
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 02:18:59 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id l22so8378075wrz.7
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 02:18:59 -0700 (PDT)
+        Mon, 15 Aug 2022 05:19:34 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9923722513
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 02:19:33 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id b4so5267901wrn.4
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 02:19:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=OOL4Y5kIDK4GpzcnTvXTZTdG7FAR6zzCfj7Cij1BefI=;
-        b=CT2aSa6BZY94dkNNot3yaqnr3j9O7orSKuwxILRsqvRnd8WvEpXenBNae1eQ3He/Vr
-         3AhSFAuhYY2hqrnn0IDDF0KHetLNrj4QcIGdxSVAjSYmODvxB/brvk0Zl7qi20uhok1U
-         L8Vaasnomd+kIjC2rkJJhN7AU6emb3HjWMmp7U1Vlx8usn0ap0gN9exTvoztmuHkK+uZ
-         bbG7qHXipz8305jwg9NNwjHODD3YuBTXoLQlVrnf796/Ss23Cy7QGESwKPeZDSbvamLV
-         pmcUj/wRO29vXhL6WEKTuroMzefWNmVuDRvkPNn4jz3RLjyIYBjxzVAIO2YyineAt7Js
-         iEhA==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=wrEhczNEpmqqq7VK32HILro+LXPMg7V+9Mu8TEubq68=;
+        b=X9dKLxsx5J6Y0Q5apGeawGDjpRu57kpRQUxeUJqf1KVbC6afNd9EmZrdIqucXBRsUv
+         6rsghCS7XYEqtlGxQXrxTtWqw/uz2JEoaWqT1ECMV5HYCkAlnAKFzjALqdPVhC0KY1/z
+         Q+xGiKLrDToOb61FRXLx3tHl0enxF7pyPr7IiRLVAbCXfa6AxP2s7vm9402+zmYmb+5X
+         qcUSsENWS41qJ3fg5J36gjQ4K9MPh6rneR5fMPlx0gOZn8s3PimkZHDGrPL42fPg8YEf
+         rfshze6qCi0rofBpzqi4qXFnrOQ1CwpjdZhEhdUgszLZE5uAsIu/n9Wh5nbOS3uhJLbh
+         4wCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=OOL4Y5kIDK4GpzcnTvXTZTdG7FAR6zzCfj7Cij1BefI=;
-        b=L/z3kX5uQRDSRKVxNGNR9XHo+Xfxrk2D1qtZMjPiX1N4Sx9NmLDFtshtU8Hm14gGbw
-         reEi6ofx9pg/HI/ckSYocqyLJQzNZ2A2WJFVJLNWJ5jGJ9YhppNI5xebM4VyHgcPKj43
-         yq3L3Fot12LFEyCMGOG6VuPbqYrQFNX4PV0DOGoGI/VL4/pk60kCsJe9iEVGAG537Pfk
-         mSSC1UasLUs26PvnlYnsKqG2R0asFjSkfQ65Ocgj6VxXsEX3+x3ceA4HqTiYe9whb+Zg
-         G/r0Jl3iMI/RJBkQm917braHN2LyHn5x+rLrlzYUVVd9j672Hv2ThX5/7KP0OiPrR9E5
-         +4/Q==
-X-Gm-Message-State: ACgBeo1h0ptivWsrvG865Q2/mC5DKk3cGr1wVzFQmYlMFfcQxLf5RXa3
-        h4D+pbCNDOlBo5J7zpLd6hOX/zb1Ihl02WS4+Bv+Dw==
-X-Google-Smtp-Source: AA6agR4QK9DrJvHonI1zBR+KQRhkzI0CIqlFVXf7sQNjUkmnKeVQNB5PPIgTmo8PY85gS3TgTEj3HFWKmVMVmO9RYPA=
-X-Received: by 2002:a5d:5a82:0:b0:224:f744:1799 with SMTP id
- bp2-20020a5d5a82000000b00224f7441799mr854866wrb.582.1660555137638; Mon, 15
- Aug 2022 02:18:57 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=wrEhczNEpmqqq7VK32HILro+LXPMg7V+9Mu8TEubq68=;
+        b=LpxNliOAMSM3Cyz/1jVLGxMCVVYdjoVKS9erAx/pFNcMu5DZp04S7fTzLs8B165iQQ
+         URKG+x+LEzW5K1o/KpUvSxb78THWZ6as6DZjDhHhDawJuC4H3LIx0uChw4OHYDNvmRqf
+         E5KuglHtIy7QBQ4LcQjONw6J612ctsOs1vyyTb0D0I+3JAUuT0HMHLXZT88rIo/pVFYN
+         HBVPTmuKaRtx+PqD0engK8e+JUnf28cbmiH+HFfGKCbcw7jWY3kYBF2YRe6DQlw2/Bid
+         WFXs/tcF7GiSuiJMDi/vqf2Z691qk7QTtQEGn5jLDYImtTXhttvQNpIclaVjSn1d+w68
+         OgKA==
+X-Gm-Message-State: ACgBeo3v38EbAZNjn7fMqpW7GCFMw++Gg3aV4gc2qNVJfK4KUYxRG7qQ
+        P2Uio/5fvktnXpATG4nsuLK/5Q==
+X-Google-Smtp-Source: AA6agR7mMp/FaJHOcP3eNvxI6ohHw4X0eBa3uH6SugbJpC/+2RKXvZeOZjLBw9iy1OST3Aa3uGqvfw==
+X-Received: by 2002:a05:6000:120a:b0:21f:dfb:ff12 with SMTP id e10-20020a056000120a00b0021f0dfbff12mr7985664wrx.215.1660555172222;
+        Mon, 15 Aug 2022 02:19:32 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:84c4:662a:9629:cac6])
+        by smtp.gmail.com with ESMTPSA id p17-20020a5d48d1000000b0022159d92004sm6716993wrs.82.2022.08.15.02.19.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 02:19:31 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Hulk Robot <hulkci@huawei.com>, Yuan Can <yuancan@huawei.com>
+Subject: [PATCH] gpio: pxa: use devres for the clock struct
+Date:   Mon, 15 Aug 2022 11:19:29 +0200
+Message-Id: <20220815091929.130547-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220628220938.3657876-1-yosryahmed@google.com>
- <20220628220938.3657876-2-yosryahmed@google.com> <YsdJPeVOqlj4cf2a@google.com>
- <CAJD7tkYE+pZdk=-psEP_Rq_1CmDjY7Go+s1LXm-ctryWvUdgLA@mail.gmail.com>
- <Ys3+UTTC4Qgbm7pQ@google.com> <CAJD7tkY91oiDWTj5FY2Upc5vabsjLk+CBMNzAepXLUdF_GS11w@mail.gmail.com>
- <CAJD7tkbc+E7f+ENRazf0SO7C3gR2bHiN4B0F1oPn8Pa6juAVfg@mail.gmail.com>
-In-Reply-To: <CAJD7tkbc+E7f+ENRazf0SO7C3gR2bHiN4B0F1oPn8Pa6juAVfg@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Mon, 15 Aug 2022 02:18:20 -0700
-Message-ID: <CAJD7tkY5SfdhC7-4B7QuJGUVj_Ts+xwCP5FUZ-Lvg=fd1p_xAQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/4] mm: add NR_SECONDARY_PAGETABLE to count secondary
- page table uses.
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Sean Christopherson <seanjc@google.com>, Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Shaoqin <shaoqin.huang@intel.com>,
-        Cgroups <cgroups@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 1:06 PM Yosry Ahmed <yosryahmed@google.com> wrote:
->
-> On Mon, Jul 18, 2022 at 11:26 AM Yosry Ahmed <yosryahmed@google.com> wrote:
-> >
-> > On Tue, Jul 12, 2022 at 4:06 PM Sean Christopherson <seanjc@google.com> wrote:
-> > >
-> > > On Tue, Jul 12, 2022, Yosry Ahmed wrote:
-> > > > Thanks for taking another look at this!
-> > > >
-> > > > On Thu, Jul 7, 2022 at 1:59 PM Sean Christopherson <seanjc@google.com> wrote:
-> > > > >
-> > > > > On Tue, Jun 28, 2022, Yosry Ahmed wrote:
-> > > > > > diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> > > > > > index aab70355d64f3..13190d298c986 100644
-> > > > > > --- a/include/linux/mmzone.h
-> > > > > > +++ b/include/linux/mmzone.h
-> > > > > > @@ -216,6 +216,7 @@ enum node_stat_item {
-> > > > > >       NR_KERNEL_SCS_KB,       /* measured in KiB */
-> > > > > >  #endif
-> > > > > >       NR_PAGETABLE,           /* used for pagetables */
-> > > > > > +     NR_SECONDARY_PAGETABLE, /* secondary pagetables, e.g. kvm shadow pagetables */
-> > > > >
-> > > > > Nit, s/kvm/KVM, and drop the "shadow", which might be misinterpreted as saying KVM
-> > > > > pagetables are only accounted when KVM is using shadow paging.  KVM's usage of "shadow"
-> > > > > is messy, so I totally understand why you included it, but in this case it's unnecessary
-> > > > > and potentially confusing.
-> > > > >
-> > > > > And finally, something that's not a nit.  Should this be wrapped with CONFIG_KVM
-> > > > > (using IS_ENABLED() because KVM can be built as a module)?  That could be removed
-> > > > > if another non-KVM secondary MMU user comes along, but until then, #ifdeffery for
-> > > > > stats the depend on a single feature seems to be the status quo for this code.
-> > > > >
-> > > >
-> > > > I will #ifdef the stat, but I will emphasize in the docs that is
-> > > > currently *only* used for KVM so that it makes sense if users without
-> > > > KVM don't see the stat at all. I will also remove the stat from
-> > > > show_free_areas() in mm/page_alloc.c as it seems like none of the
-> > > > #ifdefed stats show up there.
-> > >
-> > > It's might be worth getting someone from mm/ to weigh in before going through the
-> > > trouble, my suggestion/question is based purely on the existing code.
-> >
-> > Any mm folks with an opinion about this?
-> >
-> > Any preference on whether we should wrap NR_SECONDARY_PAGETABLE stats
-> > with #ifdef CONFIG_KVM for now as it is currently the only source for
-> > this stat?
->
-> Any input here?
->
-> Johannes, you have been involved in discussions in earlier versions of
-> this series, any thoughts here?
+The clock is never released after probe(). Use devres to not leak
+resources.
 
-Andrew, do you have an opinion on this? If not, I will send a v7 with
-the nits discussed with Sean. I think otherwise this series has
-sufficient ACKs.
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Reported-by: Yuan Can <yuancan@huawei.com>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+---
+ drivers/gpio/gpio-pxa.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-Would this be merged through the mm tree or kvm tree? This was based
-on the kvm/queue branch but I think I can rebase it on top of
-mm-unstable, I think all dependencies that this would have added in
-kvm/queue would have been fanned to mm by now.
+diff --git a/drivers/gpio/gpio-pxa.c b/drivers/gpio/gpio-pxa.c
+index c7fbfa3ae43b..1198ab0305d0 100644
+--- a/drivers/gpio/gpio-pxa.c
++++ b/drivers/gpio/gpio-pxa.c
+@@ -661,24 +661,17 @@ static int pxa_gpio_probe(struct platform_device *pdev)
+ 	if (IS_ERR(gpio_reg_base))
+ 		return PTR_ERR(gpio_reg_base);
+ 
+-	clk = clk_get(&pdev->dev, NULL);
++	clk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	if (IS_ERR(clk)) {
+ 		dev_err(&pdev->dev, "Error %ld to get gpio clock\n",
+ 			PTR_ERR(clk));
+ 		return PTR_ERR(clk);
+ 	}
+-	ret = clk_prepare_enable(clk);
+-	if (ret) {
+-		clk_put(clk);
+-		return ret;
+-	}
+ 
+ 	/* Initialize GPIO chips */
+ 	ret = pxa_init_gpio_chip(pchip, pxa_last_gpio + 1, gpio_reg_base);
+-	if (ret) {
+-		clk_put(clk);
++	if (ret)
+ 		return ret;
+-	}
+ 
+ 	/* clear all GPIO edge detects */
+ 	for_each_gpio_bank(gpio, c, pchip) {
+-- 
+2.34.1
+

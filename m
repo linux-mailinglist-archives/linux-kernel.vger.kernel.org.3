@@ -2,118 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706FC592E82
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BF9E592E85
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241296AbiHOLv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 07:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36724 "EHLO
+        id S241391AbiHOLwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 07:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbiHOLv1 (ORCPT
+        with ESMTP id S229448AbiHOLwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 07:51:27 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87D11C929;
-        Mon, 15 Aug 2022 04:51:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=AY90FDGrlLVOwMMh0B+hcvwJokTU8oLwiaqpshHftBY=; b=DQK7Jm1/Ib1C91LitVokWcZo/V
-        oVPJd4DRpps/JOvj4reIP9SRWHc7vH8/kt6bfBIhA2CziikfwhLmFWrfGd9LjCPElMgA0wfl/ZAto
-        VqTlGrMwjzePCr2Ms4a8PkMR2/YRkF8y7XVaBG6q48OYZ/YafcokcZnr6q7fCdO5qz4pNczQVLaqj
-        Lme7L5sS0Cp+Nx4LN5e/uGAsXle2H+FAj9yQDqaDc3e7dFWLDsSVaDH5m+VkRRYPjzsm1VknVHbKi
-        qEnHfMjvVwrQJJPRrWqGhm3hQjq2ZAO665aPMfTpfJdu41NH96sDIdn5tEGgw9dh1G17JOmZBVyiA
-        6h126/SA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oNYcp-002f5R-LX; Mon, 15 Aug 2022 11:51:20 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E39CF980153; Mon, 15 Aug 2022 13:51:17 +0200 (CEST)
-Date:   Mon, 15 Aug 2022 13:51:17 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>
-Subject: Re: [PATCH v2 1/7] perf/x86/core: Update x86_pmu.pebs_capable for
- ICELAKE_{X,D}
-Message-ID: <YvozNSvcxet0gX6b@worktop.programming.kicks-ass.net>
-References: <20220721103549.49543-1-likexu@tencent.com>
- <20220721103549.49543-2-likexu@tencent.com>
- <959fedce-aada-50e4-ce8d-a842d18439fa@redhat.com>
- <YvoSXyy7ojZ9ird/@worktop.programming.kicks-ass.net>
- <94e6c414-38e1-ebd7-0161-34548f0b5aae@gmail.com>
+        Mon, 15 Aug 2022 07:52:43 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7801E24BEC;
+        Mon, 15 Aug 2022 04:52:42 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id i18so2525820ila.12;
+        Mon, 15 Aug 2022 04:52:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=5wq7PQ6M+vhyyib3njVgrwWkMdUfwkF1QQEhwXfZT00=;
+        b=Ra+Ym/imL/DPa0pkiIpuVUd8Pfvf5Pd9ywEOQfZEK2F4mmkVjOzsFrqMN9ESnj7Q83
+         0nXW40MF5WSjON7dA8mPJJQ0bJLi9aq6tDRsJoPcBOzxXmtftxIYN4l0BCexQ/T/UhKM
+         BlNXzSB0ibisXp/9Ci+3j6wtfSD6IK1GiXLhE9x3/fTa4yuAHYKIEziKuZpvn/4cBfBm
+         me3aQXvwmKp5gd69qf/Ms1Kelv7HQ2tPxpMaVXQ2oIo/Ta+nFH9AG3XS18TuOctBMRP8
+         psrnZU73QKBjNylii6nCeGmfXCg3k/puT+mA+G+sQybs12Al5pHknYCQH9PVBvE9K4K+
+         cF2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=5wq7PQ6M+vhyyib3njVgrwWkMdUfwkF1QQEhwXfZT00=;
+        b=RO1+MzndPg5gFce+ooYJynxX7acL2Wpp90CIGU0pTad57GrSZLCQv1JCreH6TsgOBZ
+         ZgIvjLD87waCNHb3t0rOY4qHzX5pSFQqx6wryp3k1lCXFXFgT5OKePUXlPUPp6I2FZt1
+         NIIjXYCAnusbeLFdFxY200arZQygE9HGZSsNEJUVgRc+LZam31qsic7JOCn6umXg9IKr
+         yC3lVx2geTE/PjSOHrtdNiuhJeF5Dp9pOBLIGymMAB7WrrOCOOpLx9CtMnlUeJITO2ho
+         EP9syUKm8zbkN+RiRmuttDRnMx2gK3SQhkBWzc1vkT6N1QJxkODtbwGPTZo/kivUWuNF
+         B+ng==
+X-Gm-Message-State: ACgBeo30THEM29xETSyqOq5UPMI4lakP56ZZDDkF8qZenheSbl3hf+WG
+        mmSkkkA2VCvRHEFOEvcEO9gG+dwbzsYo5xurCNS8EWH/u8U=
+X-Google-Smtp-Source: AA6agR4nlMzDSLUQHYtB8jVRbKjNzm1n116y+R5UmhhV5RfGc2b8SgRHE2lYDG5pcg3wvoXSnEksRXpnhP/C4b1d65M=
+X-Received: by 2002:a05:6e02:1c26:b0:2e0:d8eb:22d6 with SMTP id
+ m6-20020a056e021c2600b002e0d8eb22d6mr7085965ilh.151.1660564361951; Mon, 15
+ Aug 2022 04:52:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <94e6c414-38e1-ebd7-0161-34548f0b5aae@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220815062727.1203589-1-imagedong@tencent.com>
+In-Reply-To: <20220815062727.1203589-1-imagedong@tencent.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 15 Aug 2022 13:52:30 +0200
+Message-ID: <CANiq72=01dzC5zs6-7Y4qrKYoFE1JpKes0ykN+x=FgGSmt9PCg@mail.gmail.com>
+Subject: Re: [PATCH net-next v3] net: skb: prevent the split of
+ kfree_skb_reason() by gcc
+To:     menglong8.dong@gmail.com
+Cc:     kuba@kernel.org, ojeda@kernel.org, ndesaulniers@google.com,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        asml.silence@gmail.com, imagedong@tencent.com,
+        luiz.von.dentz@intel.com, vasily.averin@linux.dev,
+        jk@codeconstruct.com.au, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 05:43:34PM +0800, Like Xu wrote:
+On Mon, Aug 15, 2022 at 8:27 AM <menglong8.dong@gmail.com> wrote:
+>
+>  include/linux/compiler-gcc.h   | 12 ++++++++++++
+>  include/linux/compiler_types.h |  4 ++++
 
-> > diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-> > index 2db93498ff71..b42c1beb9924 100644
-> > --- a/arch/x86/events/intel/core.c
-> > +++ b/arch/x86/events/intel/core.c
-> > @@ -5933,7 +5933,6 @@ __init int intel_pmu_init(void)
-> >   		x86_pmu.pebs_aliases = NULL;
-> >   		x86_pmu.pebs_prec_dist = true;
-> >   		x86_pmu.lbr_pt_coexist = true;
-> > -		x86_pmu.pebs_capable = ~0ULL;
-> >   		x86_pmu.flags |= PMU_FL_HAS_RSP_1;
-> >   		x86_pmu.flags |= PMU_FL_PEBS_ALL;
-> >   		x86_pmu.get_event_constraints = glp_get_event_constraints;
-> > @@ -6291,7 +6290,6 @@ __init int intel_pmu_init(void)
-> >   		x86_pmu.pebs_aliases = NULL;
-> >   		x86_pmu.pebs_prec_dist = true;
-> >   		x86_pmu.pebs_block = true;
-> > -		x86_pmu.pebs_capable = ~0ULL;
-> >   		x86_pmu.flags |= PMU_FL_HAS_RSP_1;
-> >   		x86_pmu.flags |= PMU_FL_NO_HT_SHARING;
-> >   		x86_pmu.flags |= PMU_FL_PEBS_ALL;
-> > @@ -6337,7 +6335,6 @@ __init int intel_pmu_init(void)
-> >   		x86_pmu.pebs_aliases = NULL;
-> >   		x86_pmu.pebs_prec_dist = true;
-> >   		x86_pmu.pebs_block = true;
-> > -		x86_pmu.pebs_capable = ~0ULL;
-> >   		x86_pmu.flags |= PMU_FL_HAS_RSP_1;
-> >   		x86_pmu.flags |= PMU_FL_NO_HT_SHARING;
-> >   		x86_pmu.flags |= PMU_FL_PEBS_ALL;
-> > diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
-> > index ba60427caa6d..e2da643632b9 100644
-> > --- a/arch/x86/events/intel/ds.c
-> > +++ b/arch/x86/events/intel/ds.c
-> > @@ -2258,6 +2258,7 @@ void __init intel_ds_init(void)
-> >   			x86_pmu.drain_pebs = intel_pmu_drain_pebs_icl;
-> >   			x86_pmu.pebs_record_size = sizeof(struct pebs_basic);
-> >   			if (x86_pmu.intel_cap.pebs_baseline) {
-> > +				x86_pmu.pebs_capable = ~0ULL;
-> 
-> The two features of "Extended PEBS (about pebs_capable)" and "Adaptive PEBS
-> (about pebs_baseline)"
-> are orthogonal, although the two are often supported together.
+No, this should be in `compiler_attributes.h` like you had it before.
 
-The SDM explicitly states that PEBS Baseline implies Extended PEBS. See
-3-19.8 (April 22 edition).
+To be clear, what you did here would be fine, but it is the "old way"
+(we added `compiler_attributes.h` to reduce the complexity of
+`compiler-*` and `compiler_types.h` and make it a bit more
+normalized).
 
-The question is if there is hardware that has Extended PEBS but doesn't
-have Baseline; and I simply don't know and was hoping Kan could find
-out.
+Please take a moment and read how other attributes do it in
+`compiler_attributes.h` with `__has_attribute`. Check, for instance,
+`__copy`, which is very similar to your case (not supported by Clang
+and ICC, except in your case GCC always supports at least since 5.1).
 
-That said; the above patch can be further improved by also removing the
-PMU_FL_PEBS_ALL lines, which is already set by intel_ds_init().
-
-In general though; the point is, we shouldn't be doing the FMS table
-thing for discoverable features. Having pebs_capable = ~0 and
-PMU_FL_PEBS_ALL on something with BASELINE set is just wrong.
+Cheers,
+Miguel

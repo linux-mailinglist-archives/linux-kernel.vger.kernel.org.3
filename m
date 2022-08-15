@@ -2,96 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED685593B4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 22:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F32593DCF
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 22:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346483AbiHOU3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 16:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
+        id S1347955AbiHOUbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 16:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347304AbiHOUWO (ORCPT
+        with ESMTP id S1347505AbiHOUZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 16:22:14 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94EDE33A2D
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 12:02:17 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id z12so10072798wrs.9
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 12:02:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=mu6VIMQHZgu7hW6pnoLsBEY5Z10dgE369agK010Rc84=;
-        b=YdFKfQNGHVM61QkiB3IPZDX0xemD9MegWIARaiXMcyMrJUIRQQ34gClP1mCfoYeOqr
-         IhjSyQkSZmScv6UvwboH2nUBjj0NW0MEeHwszC4o3K6B1PgApa3tD8cmPntGMzY5/zCJ
-         wWBwQ/gpYf2AhwA0ZbOPJ4c0uk1ziO0r/vkMCNIZslb+ChTJQBKjHYzgABsK00Hb5IcO
-         50nuuN9gqMSIIcFTledr7Gbw9+NDDdPiVmpMQs6ePBMXBxlK+lw3v3pnNTcsXXL1dTvq
-         +nhSQ8YrSzhxfi0qQ2lV9PMYbUx2Y6sequrRQmTd++xzIU23CmYNuDAySzrWnpxUjxmj
-         TGgA==
+        Mon, 15 Aug 2022 16:25:53 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F0B9C514
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 12:03:22 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id f17-20020a6bdd11000000b00684f4e874b5so4638231ioc.13
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 12:03:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc;
-        bh=mu6VIMQHZgu7hW6pnoLsBEY5Z10dgE369agK010Rc84=;
-        b=eKTb9f6HOnVeimhTVq0PKz7FO919ENmEywCXwExqXY0ATi5H8mRhbbbi1RGLvYBBm6
-         62C7DwpH2qegCIp2fH3tRNkW1kF79rDd+GP17+rpWTdjYtSIYsaNU/8ZJa9UCSbNLx4t
-         DgUF6M33NqRoD584sJ2Dm3Yf1uKse6/92XbOvYYqDzne+ZL5FUq/yWB8BxpAJSNEMCCh
-         Q/k8KC91qtH78FqJ/dHWsCsX3DZ+92Oc7wFS7GH5Rf7knSKSYUVAoHwgvpJSmAHtCTeT
-         iY+Nv7esLavTWKeBEQEA6uD6LPANZr2fFzvwWxp1A0svUhcX6z4WuPjWuupGz+ZllSUd
-         bFtA==
-X-Gm-Message-State: ACgBeo1Vs0woyDYNuIkg+Ph/VrRS0frd9XnE4ba/VwRdR3aTOL2609iq
-        b/BULEELJKD8gx3hew0f10J5n8ahtJUsCQ==
-X-Google-Smtp-Source: AA6agR4oN0w6cTpWbsmWpZL8bo4Si3qBVlLe6HqOhimCRoyeTxAPSdKHiWRpfMnic7xMqQTrI8coeg==
-X-Received: by 2002:a5d:5965:0:b0:224:f75e:2646 with SMTP id e37-20020a5d5965000000b00224f75e2646mr5769089wri.173.1660590136081;
-        Mon, 15 Aug 2022 12:02:16 -0700 (PDT)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id z7-20020a05600c0a0700b003a5c2abc412sm11580846wmp.44.2022.08.15.12.02.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 12:02:15 -0700 (PDT)
-Message-ID: <2ab74b1a-7087-cbfc-3f05-92e0eef30ca9@linaro.org>
-Date:   Mon, 15 Aug 2022 21:02:05 +0200
+        bh=SMyJSBc//ldugq2wK4ymFhOfMcuivZanqF/HXPMVlz0=;
+        b=zsvCxYPJGu/PtwKfBZWqdp8wwczGcVMVTqUvH9Gdtk+EVvfrIacVH1NfaXLQdDeD9I
+         8/5f7s2u18oiqoqSdjb0fQwY+gqt2jEXB8CG9zqcwgVaFIe2YyzruaiNMTQOc3vIXdcn
+         lZufgYVw6yHVc8itTqW1L7hA5yUHJ63gPDihieqZ0+acsfC39qAp3bnYypJKbkTk3rPw
+         Y5Ua+72jEvH2TzzI4iY2yfbItc9VbM9G5cELyQIEd30R2LMOrsBG+E/ts5AyBFnoAEb2
+         q+aTShamWA2pC2co9VPV0N5aPLTjqyiW1ZTlUllmbJln4oIRacT7MP8wHSC3Yo3Uvrwb
+         IVdw==
+X-Gm-Message-State: ACgBeo1pk9BeRphFb1xRoBxOAIhWYUjOPc7m4ORqexIkvEAJpg6nQPK4
+        azoKebymK/b4bkEwbeBma1D4/snJsIyO7VdMtFWcLAoZhbhN
+X-Google-Smtp-Source: AA6agR6O9hjLRRcGo7EYtsJrIz0tiwEQGCaRsZcH6nx4qdnDZdwYNquDrQuT/O6a0R40I4P0w7uCC2Qjgu/wjdWTBTn4fX4vYNmt
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 00/32] New thermal OF code
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linexp.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        damien.lemoal@opensource.wdc.com, Heiko Stuebner <heiko@sntech.de>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        mhiramat@kernel.org, Talel Shenhar <talel@amazon.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jon Hunter <jonathanh@nvidia.com>, anarsoul@gmail.com,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        glaroque@baylibre.com, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Keerthy <j-keerthy@ti.com>
-References: <20220727210253.3794069-1-daniel.lezcano@linexp.org>
- <35457e1c-fe6b-2212-9624-70369f04ef0d@linaro.org>
- <CAJZ5v0g5gtQGyLM2C+D5-Y-T_7+GHp4=Ptt7Reh6xgL-D77asQ@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0g5gtQGyLM2C+D5-Y-T_7+GHp4=Ptt7Reh6xgL-D77asQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a02:aa92:0:b0:343:6007:1e12 with SMTP id
+ u18-20020a02aa92000000b0034360071e12mr7190295jai.62.1660590188637; Mon, 15
+ Aug 2022 12:03:08 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 12:03:08 -0700
+In-Reply-To: <20220815180801.GA3126580@roeck-us.net>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004fb42805e64c48eb@google.com>
+Subject: Re: [syzbot] usb-testing boot error: general protection fault in __tty_alloc_driver
+From:   syzbot <syzbot+2c35c4d66094ddfe198e@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux@roeck-us.net, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,51 +56,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-Hi Rafael,
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-On 28/07/2022 16:37, Rafael J. Wysocki wrote:
-> Hi Daniel,
-> 
-> On Wed, Jul 27, 2022 at 11:46 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->>
->> Hi Rafael,
->>
->> we are close to release v5.19.
->>
->> I want to send a PR this week but it would be nice if this series could
->> be part of it, so the trip point rework we discussed earlier (it is a
->> long series) could be merged more easily for v5.21-rc1 as it will depend
->> on these changes.
->>
->> This series was tested on different platforms, rk3399, broadcom and
->> rcar. The external drivers as ata, touchscreen, regulator, hwmon were
->> acked/reviewed and some other thermal drivers reviewed also. Some others
->> remain without feedback because the maintainer is unresponsive or the
->> driver is orphaned, falling under the thermal framework maintenance
->> umbrella. All the drivers changes are the same.
->>
->> I do believe it does a nice cleanup and consolidation of the OF thermal
->> code and realign it with the core thermal framework.
->>
->> Is it ok to merge the series?
-> 
-> I would prefer to put it into linux-next for a few days.
-> 
-> Why don't you send 2 pull requests, one with all of the other material
-> you have for 5.20 and another one with this series (it may be on top
-> of the first one)?
-> 
-> I will be able to defer pushing the second one till the second half of
-> the merge window.
+Reported-and-tested-by: syzbot+2c35c4d66094ddfe198e@syzkaller.appspotmail.com
 
-I setup a branch with the patches and the fixes.
+Tested on:
 
-https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/v6.0-rc1-2
+commit:         fc4d146e virtio_net: Revert "virtio_net: set the defau..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
+dashboard link: https://syzkaller.appspot.com/bug?extid=2c35c4d66094ddfe198e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Is there still time for a PR ?
-
-
-
+Note: no patches were applied.
+Note: testing is done by a robot and is best-effort only.

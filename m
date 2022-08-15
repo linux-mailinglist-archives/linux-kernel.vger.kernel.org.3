@@ -2,218 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F7E5929C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 08:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C5165929C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 08:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240824AbiHOGnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 02:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
+        id S240853AbiHOGoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 02:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239893AbiHOGnH (ORCPT
+        with ESMTP id S240689AbiHOGn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 02:43:07 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCDE1AF3F;
-        Sun, 14 Aug 2022 23:43:04 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id E4D2C5C00B9;
-        Mon, 15 Aug 2022 02:43:01 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 15 Aug 2022 02:43:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1660545781; x=1660632181; bh=8v1UNNv97h
-        9J2L3WvxkH00sK+2Af+0MdgE0J1dhPpWA=; b=QBYvXoFE2expmhkMkPUa5b9q5J
-        PJJ2hvuYdIuDuAStEHtfVpFxuE0rm9pi0n2MqT8brNudqMCmcIs9iMMb7udhtyQu
-        Jku39EGmJVm1Ssj6AamPCjWZzdFFfLjumzy9QPcewvh8JfdmkDJ72G42IUMCw4FS
-        dY4zC1H7DdhPpwZMMXrYLllHVJNk4cfil++OCi6mg3uIMKgtfIqhLTYzAI3s4CSZ
-        bhjbP6E7sPa4hdayqvNaqYbabL06vdMam6fahFpUOQRojr4F8QBCosgYl9Dyx/NM
-        Mo1XAE48Hm8nDCGZRWoClZnluZ4o7XD1+Ek+uFF8npJE7bCs2PTFxRE4RBag==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660545781; x=1660632181; bh=8v1UNNv97h9J2L3WvxkH00sK+2Af
-        +0MdgE0J1dhPpWA=; b=mYi0k5szCs5yZozk29RRx8q5qgOTdLBRsL8hGMEWLfnH
-        ez8RFhJdZEdDQOdWsSA/wMS270RyUrecpyaq7QjdnNyttVRBu1quc4+SD867LYro
-        41Gr25rR0YctXAS0odKzpWTU8nY+23p+681+AmJwC5EW23NI1YaKhH9BkP5EwiAs
-        0lqhSPE6Id/EJ7TOOqf397/CPpWxA/txw8bCu09H7Md8jvNWABv2oFXgqqRbwt1b
-        Mn6kBMDGLy67+47x6LXSwTvxDMjCFZjkv70itsEjcM6uXHs4U15dzrMoRhBuy+TC
-        AAaaxtH845XqkVGyhhIR/lgsXSh8uZxVy4yNVFXiiw==
-X-ME-Sender: <xms:9er5YmbPDT0JdOfn9FMUEzoXns9jT0o6gk3Kvl416ecLoTlZ5CQInA>
-    <xme:9er5YpYONVVk6v9MGzUWveEA27hHAy-pGy9Ne_p5GQOBxk6cm6Bwg5-7BD6Pe3tBD
-    s2BIFHWwue-w9C64s4>
-X-ME-Received: <xmr:9er5Yg9SWnCsZZjs9aeDVnuGso9ndQG1WSNZa8u-tEayhh4HVu2M7MdLyN3O>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehuddgudduhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheeh
-    fffhvedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:9er5YorW5eieMVy2cljIB4lVcVYjdRVQptdswd1VCSBAU2maX4hE1A>
-    <xmx:9er5YhoZGFiNdqZxuHq_5t9vxVZD_3NCg6kRG6RtG-Bqh1mVVIXouA>
-    <xmx:9er5YmSorlkhw-ItEgf4iwovSGC9316WpxYvm4b-_XmfNz4T_bbe7Q>
-    <xmx:9er5YiScjy43Usltq-fQC9u7FMsF0LG3ru--gDdz_rjhDCxwBLnKvg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 Aug 2022 02:43:00 -0400 (EDT)
-Date:   Mon, 15 Aug 2022 08:42:48 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 3/4] drm/sun4i: dsi: Add a variant structure
-Message-ID: <20220815064248.4ujitfpvtw6y3k4k@houat>
-References: <20220812074257.58254-1-samuel@sholland.org>
- <20220812074257.58254-4-samuel@sholland.org>
+        Mon, 15 Aug 2022 02:43:58 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7181ADBF
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 23:43:57 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id m2so5663640pls.4
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 23:43:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=blOwFtIlb0epux0KE7iDtki8GIqZ3py6TisC3Pc7SsQ=;
+        b=KF9pNrtqYb/STvSOhpmkV4gKrvwiRQ1il32mzFZqFx2UInzL9gwqCTFXS57w3Gknd9
+         YW3KI1fv7aXliDnShFTNhC4eZOIwax8BFKHC31zrUx6NGmuLzkzADU8sARdffj+F6edv
+         dJ6ItGnABs/3GqoNb01fJKXyMINytW0rZW8+c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=blOwFtIlb0epux0KE7iDtki8GIqZ3py6TisC3Pc7SsQ=;
+        b=W8YvBMbLlzbnMxCak1U6ZZYIsVx2fg+1pjPiv17DyYwoRntntkgh9DL30R/FmVV8dZ
+         b/Y5nreEWBIZ7OJSRWqSwPBE9Tp2tQauNmeOQRd2pLKkYtsCjj3uMrqWVfDggpyNLzJ3
+         RtnliM6WVA8VIGeYlVpw1glytGVOXllNj+km0A1mbTi61YcQtQYowvQot8BvpRlAjxAe
+         VQGcuUJZf0Fw76Rf5mju8A2cE9UI1JjNFj+rtFkwBp240tOin5cHbZcPUDPnDUvhYRcc
+         EzDobx1M7M+dz9F781gaXlXJ96arG8U1Uc2KbL9cGwEeP1S9+Vs7XBfI3DTFkIvCi/Li
+         R0nA==
+X-Gm-Message-State: ACgBeo3IFVmPeml5WXb0Qqh0c60SmieASGFxywsPNl3EmTYbjfuyjXJn
+        swfKDWWuSHx7cKlyDeKtFKmisw==
+X-Google-Smtp-Source: AA6agR7CS4fp8rbo2pGtzXt41p1v7FRGQNytkb7NO7kfnScMDxaDCBmsAgzU11jZ2yw3KPG2bhmN1Q==
+X-Received: by 2002:a17:903:210b:b0:16f:d62:1384 with SMTP id o11-20020a170903210b00b0016f0d621384mr15510159ple.133.1660545836748;
+        Sun, 14 Aug 2022 23:43:56 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:110b:946c:84b2:7c95])
+        by smtp.gmail.com with ESMTPSA id u14-20020a17090a410e00b001f6c86e6ff0sm3918589pjf.36.2022.08.14.23.43.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Aug 2022 23:43:56 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 15:43:48 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Wang Yating <yating.wang@intel.com>,
+        Christoph Jechlitschek <christoph.jechlitschek@intel.com>,
+        Hao Yao <hao.yao@intel.com>, Andy Yeh <andy.yeh@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        linux-media@vger.kernel.org, Mark Pearson <markpearson@lenovo.com>,
+        Dell.Client.Kernel@dell.com, linux-kernel@vger.kernel.org,
+        Guenter Roeck <groeck@google.com>,
+        Andy Whitcroft <apw@canonical.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Christian Schaller <cschalle@redhat.com>,
+        Wouter Bolsterlee <wouter@bolsterl.ee>,
+        Miguel Palhas <mpalhas@gmail.com>, it+linux-media@molgen.mpg.de
+Subject: Re: Missing MIPI IPU6 camera driver for Intel Alder Lake laptops
+Message-ID: <YvnrJBI8599+E43T@google.com>
+References: <52c87d91-422d-fca0-4dd5-bbaa559c81b6@molgen.mpg.de>
+ <YvUKLbv/pOfbbeL+@pendragon.ideasonboard.com>
+ <YvUaEDMbZD70x+hD@kroah.com>
+ <YvUbhx4HSxAAwIvv@pendragon.ideasonboard.com>
+ <YvUghWZbXIUofg5A@kroah.com>
+ <YvmqL6Wz7o77ukF5@google.com>
+ <YvnpVmnROTsWWw0o@kroah.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fe5pr2l7i2tpjvdm"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220812074257.58254-4-samuel@sholland.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YvnpVmnROTsWWw0o@kroah.com>
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On (22/08/15 08:36), Greg KH wrote:
+> On Mon, Aug 15, 2022 at 11:06:39AM +0900, Sergey Senozhatsky wrote:
+> > On (22/08/11 17:30), Greg KH wrote:
+> > > On Thu, Aug 11, 2022 at 06:08:55PM +0300, Laurent Pinchart wrote:
+> > > > On Thu, Aug 11, 2022 at 05:02:40PM +0200, Greg KH wrote:
+> > > > > On Thu, Aug 11, 2022 at 04:54:53PM +0300, Laurent Pinchart wrote:
+> > > > > > For the time being, I agree with your recommendation to not buy these
+> > > > > > devices if you care about camera support.
+> > > > > 
+> > > > > I second this, don't buy these devices if the vendor is not willing to
+> > > > > get their drivers upstreamed properly.
+> > > > 
+> > > > "Not willing" may be a bit too harsh here. I wouldn't just blame Intel
+> > > > for not upstreaming a driver if it turns out that the V4L2 API isn't a
+> > > > good match and we have no proposal to provide an alternative.
+> > > 
+> > > Did they propose an alternative?  From what I saw here they didn't even
+> > > attempt it, or did I miss that?
+> > 
+> > The plan here is to land CAM kernel API first and then switch IPU
+> > (driver and user-space) to it so that upstreaming for Intel will
+> > be easier.
+> 
+> And what is the timeframe on the plan?  Where will these changes be sent
+> to for review?  I'm guessing they are already in a shipping device so
+> what's the delay?
 
---fe5pr2l7i2tpjvdm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+We haven't sent out KCAM for upstream review yet. It's open sourced,
+as of this moment [1], but we still need some time and wanted to convert
+one of the previous generations of IPU drivers (IPU3) to KCAM first to
+see if everything is working as we wanted it to.
 
-Hi Samuel,
-
-On Fri, Aug 12, 2022 at 02:42:55AM -0500, Samuel Holland wrote:
-> Replace the ad-hoc calls to of_device_is_compatible() with a structure
-> describing the differences between variants. This is in preparation for
-> adding more variants to the driver.
->=20
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
->=20
->  drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c | 50 +++++++++++++++++---------
->  drivers/gpu/drm/sun4i/sun6i_mipi_dsi.h |  7 ++++
->  2 files changed, 40 insertions(+), 17 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c b/drivers/gpu/drm/sun=
-4i/sun6i_mipi_dsi.c
-> index b4dfa166eccd..6479ade416b9 100644
-> --- a/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
-> +++ b/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
-> @@ -1101,12 +1101,16 @@ static const struct component_ops sun6i_dsi_ops =
-=3D {
-> =20
->  static int sun6i_dsi_probe(struct platform_device *pdev)
->  {
-> +	const struct sun6i_dsi_variant *variant;
->  	struct device *dev =3D &pdev->dev;
-> -	const char *bus_clk_name =3D NULL;
->  	struct sun6i_dsi *dsi;
->  	void __iomem *base;
->  	int ret;
-> =20
-> +	variant =3D device_get_match_data(dev);
-> +	if (!variant)
-> +		return -EINVAL;
-> +
->  	dsi =3D devm_kzalloc(dev, sizeof(*dsi), GFP_KERNEL);
->  	if (!dsi)
->  		return -ENOMEM;
-> @@ -1114,10 +1118,7 @@ static int sun6i_dsi_probe(struct platform_device =
-*pdev)
->  	dsi->dev =3D dev;
->  	dsi->host.ops =3D &sun6i_dsi_host_ops;
->  	dsi->host.dev =3D dev;
-> -
-> -	if (of_device_is_compatible(dev->of_node,
-> -				    "allwinner,sun6i-a31-mipi-dsi"))
-> -		bus_clk_name =3D "bus";
-> +	dsi->variant =3D variant;
-> =20
->  	base =3D devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(base)) {
-> @@ -1142,7 +1143,7 @@ static int sun6i_dsi_probe(struct platform_device *=
-pdev)
->  		return PTR_ERR(dsi->regs);
->  	}
-> =20
-> -	dsi->bus_clk =3D devm_clk_get(dev, bus_clk_name);
-> +	dsi->bus_clk =3D devm_clk_get(dev, variant->has_mod_clk ? "bus" : NULL);
->  	if (IS_ERR(dsi->bus_clk))
->  		return dev_err_probe(dev, PTR_ERR(dsi->bus_clk),
->  				     "Couldn't get the DSI bus clock\n");
-> @@ -1151,21 +1152,21 @@ static int sun6i_dsi_probe(struct platform_device=
- *pdev)
->  	if (ret)
->  		return ret;
-> =20
-> -	if (of_device_is_compatible(dev->of_node,
-> -				    "allwinner,sun6i-a31-mipi-dsi")) {
-> +	if (variant->has_mod_clk) {
->  		dsi->mod_clk =3D devm_clk_get(dev, "mod");
->  		if (IS_ERR(dsi->mod_clk)) {
->  			dev_err(dev, "Couldn't get the DSI mod clock\n");
->  			ret =3D PTR_ERR(dsi->mod_clk);
->  			goto err_attach_clk;
->  		}
-> -	}
-> =20
-> -	/*
-> -	 * In order to operate properly, that clock seems to be always
-> -	 * set to 297MHz.
-> -	 */
-> -	clk_set_rate_exclusive(dsi->mod_clk, 297000000);
-> +		/*
-> +		 * In order to operate properly, the module clock on the
-> +		 * A31 variant always seems to be set to 297MHz.
-> +		 */
-> +		if (variant->set_mod_clk)
-> +			clk_set_rate_exclusive(dsi->mod_clk, 297000000);
-> +	}
->
->
->  	dsi->dphy =3D devm_phy_get(dev, "dphy");
->  	if (IS_ERR(dsi->dphy)) {
-> @@ -1205,16 +1206,31 @@ static int sun6i_dsi_remove(struct platform_devic=
-e *pdev)
-> =20
->  	component_del(&pdev->dev, &sun6i_dsi_ops);
->  	mipi_dsi_host_unregister(&dsi->host);
-> -	clk_rate_exclusive_put(dsi->mod_clk);
-> +	if (dsi->variant->has_mod_clk && dsi->variant->set_mod_clk)
-> +		clk_rate_exclusive_put(dsi->mod_clk);
-
-There's also a clk_rate_exclusive_put call in the bind error path
-
-Maxime
-
---fe5pr2l7i2tpjvdm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYvnq6AAKCRDj7w1vZxhR
-xRUgAQC+Q6FefSqQzlCuirg8gH0Zff7RElCM+/kmmzZdz/QEiwEA1K0JgOyS8Xbv
-pApMRj4LRfKxndHBOk/R4DCvHbcNxwk=
-=pvGf
------END PGP SIGNATURE-----
-
---fe5pr2l7i2tpjvdm--
+[1] For everyone who is curious, our first public KCAM version can
+be found here:
+https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/3668500/

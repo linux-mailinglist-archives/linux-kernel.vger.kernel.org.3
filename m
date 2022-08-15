@@ -2,118 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 527B3594E1B
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B54D1594E2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233930AbiHPBju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 21:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
+        id S241863AbiHPBoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 21:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236100AbiHPBip (ORCPT
+        with ESMTP id S240447AbiHPBni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 21:38:45 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E584EEF14;
-        Mon, 15 Aug 2022 14:31:59 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FLStK8009727;
-        Mon, 15 Aug 2022 21:31:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=PZAj10NRwfPL26L1kAV5CZMi/CjAKw0BNb2i1v94acc=;
- b=UYlw9+S1hRJJEsOhF+U5sBjoDPdNPf6U8mfShbEgy6GmIqobybp+OPi0VIM55zKM9cq7
- Xs4z69N7gv6GvR+pgwvXa0VKFnyEazmjzORYdguQqffFcbtNNXrm8a9T09hIo3DzVyqh
- K8YTaH9GIgvKSATuLVYJvLvg5SFujiYJEfW3JCnfEyBMUZGejkLGIWNF1Wvk1MHRaLrl
- E5UhHAkcGcBKNUqvgouqqguYiOVXfJ2s4fgYWRpZWKUJIAQXNhIPKFZAMUhuRRbx5PDD
- ckjno64Nz6pEtr2K2zjmKZ039oJXKr+b4JszQfuoCBxBGbK1KJSbxpVdbohsGeIS086M EQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hx4qpxg9x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Aug 2022 21:31:55 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27FLVtnP021073
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Aug 2022 21:31:55 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 15 Aug 2022 14:31:54 -0700
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <quic_jackp@quicinc.com>, <Thinh.Nguyen@synopsys.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH v3 8/8] usb: dwc3: gadget: Submit endxfer command if delayed during disconnect
-Date:   Mon, 15 Aug 2022 14:31:34 -0700
-Message-ID: <20220815213134.23783-9-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220815213134.23783-1-quic_wcheng@quicinc.com>
-References: <20220815213134.23783-1-quic_wcheng@quicinc.com>
+        Mon, 15 Aug 2022 21:43:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE581F84F6;
+        Mon, 15 Aug 2022 14:35:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C159B611D5;
+        Mon, 15 Aug 2022 21:35:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAB31C433C1;
+        Mon, 15 Aug 2022 21:35:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660599326;
+        bh=WJpJzeWfA2lvPyxEHsoYw4ISY9kus0KMPLf49JB424Y=;
+        h=Date:From:To:Cc:Subject:From;
+        b=clL2MlL/2HrVYwVTdD9BXwzNkWLmzssDTHI9xZO5YD6OlmAKFDJvlQ7brTnbrczwg
+         lgUqfI23njTS8GinsiwxDH1QIirKTNxfZAVLHtmbh2j8APsJRqNdoZhE4IphaOtG8z
+         ds9sCwP8Dxi4DRPpQOszm/E+KC3uX8kCmLpu6vvrMHpoYDUOQ8NR5nr2tSB8SS200r
+         59SNHNoECeA7oqOB/3/8Ow2Bnea5fjnbjYpAX+arKiCMh3PH8OtfLNpSUT0PMwaJve
+         kXqx9qvhC724/KMzW8BIw7tSRq6wddTKjQEmgPaGPDQhn1zdjWDA4meR7W+iHbrizB
+         /1SEHGh646elg==
+Date:   Mon, 15 Aug 2022 16:35:19 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v3 0/6] Replace one-element arrays with flexible-array members
+Message-ID: <cover.1660592640.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: gF3o3sktxT0IxfEGNz6GVshDNukNfJiG
-X-Proofpoint-GUID: gF3o3sktxT0IxfEGNz6GVshDNukNfJiG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 suspectscore=0 clxscore=1015 mlxscore=0 phishscore=0
- mlxlogscore=789 priorityscore=1501 malwarescore=0 impostorscore=0
- adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208150082
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During a cable disconnect sequence, if ep0state is not in the SETUP phase,
-then nothing will trigger any pending end transfer commands.  Force
-stopping of any pending SETUP transaction, and move back to the SETUP
-phase.
+Hi!
 
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- drivers/usb/dwc3/gadget.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+This series aims to replace one-element arrays with flexible-array
+members in drivers/scsi/megaraid/
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 5e8d3f02f99c..757ecb04b55a 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -3776,13 +3776,24 @@ static void dwc3_gadget_disconnect_interrupt(struct dwc3 *dwc)
- 	reg &= ~DWC3_DCTL_INITU2ENA;
- 	dwc3_gadget_dctl_write_safe(dwc, reg);
- 
-+	dwc->connected = false;
-+
- 	dwc3_disconnect_gadget(dwc);
- 
- 	dwc->gadget->speed = USB_SPEED_UNKNOWN;
- 	dwc->setup_packet_pending = false;
- 	usb_gadget_set_state(dwc->gadget, USB_STATE_NOTATTACHED);
- 
--	dwc->connected = false;
-+	if (dwc->ep0state != EP0_SETUP_PHASE) {
-+		unsigned int    dir;
-+
-+		dir = !!dwc->ep0_expect_in;
-+		if (dwc->ep0state == EP0_DATA_PHASE)
-+			dwc3_ep0_end_control_data(dwc, dwc->eps[dir]);
-+		else
-+			dwc3_ep0_end_control_data(dwc, dwc->eps[!dir]);
-+		dwc3_ep0_stall_and_restart(dwc);
-+	}
- }
- 
- static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
+I followed the below steps in order to verify the changes don't
+significally impact the code (.text) section generated by the compiler,
+for each object file involved:
+
+1. Prepare the build with the following settings and configurations:
+
+        linux$ KBF="KBUILD_BUILD_TIMESTAMP=1970-01-01 KBUILD_BUILD_USER=user
+               KBUILD_BUILD_HOST=host KBUILD_BUILD_VERSION=1"
+        linux$ make $KBF allyesconfig
+        linux$ ./scripts/config -d GCOV_KERNEL -d KCOV -d GCC_PLUGINS \
+                         -d IKHEADERS -d KASAN -d UBSAN \
+                         -d DEBUG_INFO_NONE \
+                         -e DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+        linux$ make $KBF olddefconfig
+
+2. Build drivers/scsi/megaraid/ with the same settings and configurations
+   as in Step 1, and copy the generated object files in directory before/
+
+        linux$ make -j128 $KBF drivers/scsi/megaraid/
+        linux$ mkdir -p before
+        linux$ cp drivers/scsi/megaraid/*.o before/
+
+3. Implement all the needed changes and create the patch series. In this
+   case, six patches.
+
+        linux$ vi code.c
+               ...do the magic :)
+        linux$ git format-patch ...all the rest
+
+4. Apply a patch at a time (of the previously created series) and, after
+   applying EACH patch, build (as in Step 2) drivers/scsi/megaraid/ and
+   copy the generated object files in directory after/
+
+5. Compare the code section (.text) of each before/file.o and
+   after/file.o. I use the following bash script:
+
+   compare.sh:
+        ARGS="--disassemble --demangle --reloc --no-show-raw-insn --section=.text"
+        for i in $(cd before && echo *.o); do
+                echo $i
+                diff -u <(objdump $ARGS before/$i | sed "0,/^Disassembly/d") \
+                        <(objdump $ARGS after/$i  | sed "0,/^Disassembly/d")
+        done
+
+   linux$ ./compare.sh > code_comparison.diff
+
+6. Open the code_comparison.diff file from the example above, look for
+   any differences that might show up and analyze them in order to
+   determine their impact, and what (if something) should be changed
+   or study further.
+
+The above process (code section comparison of object files) is based on
+this[0] blog post by Kees Cook. The compiler used to build the code was
+GCC-12.
+
+In this series I only found the following sorts of differences in files
+megaraid_sas.o and megaraid_sas_base.o:
+
+...
+...@@ -7094,24 +7094,24 @@
+     6302:      movq   $0x0,0x1e20(%rbx)
+     630d:      test   %r15,%r15
+     6310:      je     6316 <megasas_aen_polling+0x56>
+-                       6312: R_X86_64_PC32     .text.unlikely+0x3ae3
++                       6312: R_X86_64_PC32     .text.unlikely+0x3ae0
+     6316:      mov    0x0(%rip),%eax        # 631c <megasas_aen_polling+0x5c>
+                        6318: R_X86_64_PC32     event_log_level-0x4
+     631c:      mov    0xc(%r15),%r14d
+     6320:      lea    0x2(%rax),%edx
+     6323:      cmp    $0x6,%edx
+     6326:      ja     632c <megasas_aen_polling+0x6c>
+-                       6328: R_X86_64_PC32     .text.unlikely+0x3ac3
++                       6328: R_X86_64_PC32     .text.unlikely+0x3ac0
+     632c:      mov    %r14d,%edx
+     632f:      sar    $0x18,%edx
+     6332:      mov    %edx,%ecx
+     6334:      cmp    %eax,%edx
+     6336:      jge    633c <megasas_aen_polling+0x7c>
+-                       6338: R_X86_64_PC32     .text.unlikely+0x399c
++                       6338: R_X86_64_PC32     .text.unlikely+0x3999
+...
+
+All of them have to do with the relocation of symbols in the
+.text.unlikely subsection and they don't seem to be of any actual
+relevance. So, we can safely ignore them.
+
+Also, notice there is an open issue in bugzilla.kernel.org [1] that's
+seems could be fixed by this series. :)
+
+This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+routines on memcpy() and help us make progress towards globally
+enabling -fstrict-flex-arrays [2].
+
+Link: https://en.wikipedia.org/wiki/Flexible_array_member
+Link: https://www.kernel.org/doc/html/v5.10/process/deprecated.html#zero-length-and-one-element-arrays
+Link: https://github.com/KSPP/linux/issues/79
+Link: https://github.com/KSPP/linux/issues/109
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215943 [1]
+Link: https://reviews.llvm.org/D126864 [2]
+
+Thanks
+
+[0] https://outflux.net/blog/archives/2022/06/24/finding-binary-differences/
+
+Changes in v3:
+ - Split the struct_size() changes into a couple of separate patches.
+ - Use objdump to compare the code (.text) sections of the object
+   files before and after the changes.
+ - Modify MR_FW_RAID_MAP_ALL and MR_DRV_RAID_MAP_ALL structures. Change
+   suggested by Kees Cook.
+
+Changes in v2:
+ - Revert changes in struct MR_FW_RAID_MAP_ALL.
+
+Gustavo A. R. Silva (6):
+  scsi: megaraid_sas: Replace one-element array with flexible-array
+    member in MR_FW_RAID_MAP
+  scsi: megaraid_sas: Replace one-element array with flexible-array
+    member in MR_FW_RAID_MAP_DYNAMIC
+  scsi: megaraid_sas: Replace one-element array with flexible-array
+    member in MR_DRV_RAID_MAP
+  scsi: megaraid_sas: Replace one-element array with flexible-array
+    member in MR_PD_CFG_SEQ_NUM_SYNC
+  scsi: megaraid_sas: Use struct_size() in code related to struct
+    MR_FW_RAID_MAP
+  scsi: megaraid_sas: Use struct_size() in code related to struct
+    MR_PD_CFG_SEQ_NUM_SYNC
+
+ drivers/scsi/megaraid/megaraid_sas_base.c   | 20 ++++++++++----------
+ drivers/scsi/megaraid/megaraid_sas_fp.c     |  6 +++---
+ drivers/scsi/megaraid/megaraid_sas_fusion.c |  2 +-
+ drivers/scsi/megaraid/megaraid_sas_fusion.h | 12 ++++++------
+ 4 files changed, 20 insertions(+), 20 deletions(-)
+
+-- 
+2.34.1
+

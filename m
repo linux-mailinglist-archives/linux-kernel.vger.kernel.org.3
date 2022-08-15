@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F111F594763
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B12FB594777
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354129AbiHOXnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59104 "EHLO
+        id S1353798AbiHOXgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354075AbiHOXlI (ORCPT
+        with ESMTP id S1353509AbiHOXbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:41:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792E798CA4;
-        Mon, 15 Aug 2022 13:10:28 -0700 (PDT)
+        Mon, 15 Aug 2022 19:31:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4A7150147;
+        Mon, 15 Aug 2022 13:08:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28718B80EA8;
-        Mon, 15 Aug 2022 20:10:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 945C4C433D6;
-        Mon, 15 Aug 2022 20:10:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D7DF360DE3;
+        Mon, 15 Aug 2022 20:08:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF442C433C1;
+        Mon, 15 Aug 2022 20:08:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594225;
-        bh=HvlymAI/0v47dl1gQMbakE7KNs6h3AoSjWfLIO/fnk0=;
+        s=korg; t=1660594096;
+        bh=j8eHhZUi006HU7xk2wsUSTgcfGXp+vV0fSTggQvgcAM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gZXlovj8z8PoC1/eONEo0CSPISDQvWw/Hi0tGZ6Wc9vXCJTvTMjPCjZ4JVoQwvtT+
-         RGUHnm5hPyUX9myxbeu58o+8q8OgTgaytZS1VxVEAdZUJpNyL0zJNv/cyhiomnt1gz
-         wzfX8mqCUfBAwO+u/JdZ58hYEvA4qP9ea9It37rg=
+        b=dUgvPXeiFpcqAliaRoILQYuO2oYQ67P/HAet+lQH5l/qEXEE6p1qSM9VlvxNkJLdm
+         G++me1WgPJ+2h+bGByq8jDVrS4FcijqdoO3kIAqnGCjCOHtXMVLCVRjQP7/vi/6b1t
+         cB+mEEgrJaYSuvomzqQEjUCyyADnL1s1F812gQpk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        stable@vger.kernel.org, Ming Qian <ming.qian@nxp.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0375/1157] media: Hantro: Correct G2 init qp field
-Date:   Mon, 15 Aug 2022 19:55:31 +0200
-Message-Id: <20220815180454.727301911@linuxfoundation.org>
+Subject: [PATCH 5.19 0378/1157] media: imx-jpeg: Align upwards buffer size
+Date:   Mon, 15 Aug 2022 19:55:34 +0200
+Message-Id: <20220815180454.846940656@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -58,40 +56,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+From: Ming Qian <ming.qian@nxp.com>
 
-[ Upstream commit 300065f966d30baa59a13849753305aac8c320c3 ]
+[ Upstream commit 9e7aa76cdb02923ee23a0ddd48f38bdc3512f92b ]
 
-Documentation said that g2 init_qp field use bits 24 to 30 of
-the 8th register.
-Change the field mask to be able to set 7 bits and not only 6 of them.
+The hardware can support any image size WxH,
+with arbitrary W (image width) and H (image height) dimensions.
 
-Conformance test INITQP_B_Main10_Sony_1 decoding is OK with this
-patch.
+Align upwards buffer size for both encoder and decoder.
+and leave the picture resolution unchanged.
 
-Fixes: cb5dd5a0fa518 ("media: hantro: Introduce G2/HEVC decoder")
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+For decoder, the risk of memory out of bounds can be avoided.
+For both encoder and decoder, the driver will lift the limitation of
+resolution alignment.
+
+For example, the decoder can support jpeg whose resolution is 227x149
+the encoder can support nv12 1080P, won't change it to 1920x1072.
+
+Fixes: 2db16c6ed72ce ("media: imx-jpeg: Add V4L2 driver for i.MX8 JPEG Encoder/Decoder")
+Signed-off-by: Ming Qian <ming.qian@nxp.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/hantro/hantro_g2_regs.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../media/platform/nxp/imx-jpeg/mxc-jpeg.c    | 88 ++++++++-----------
+ 1 file changed, 37 insertions(+), 51 deletions(-)
 
-diff --git a/drivers/staging/media/hantro/hantro_g2_regs.h b/drivers/staging/media/hantro/hantro_g2_regs.h
-index 877d663a8181..82606783591a 100644
---- a/drivers/staging/media/hantro/hantro_g2_regs.h
-+++ b/drivers/staging/media/hantro/hantro_g2_regs.h
-@@ -107,7 +107,7 @@
+diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+index dd264b82d0dd..9b8451b56657 100644
+--- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
++++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+@@ -894,8 +894,8 @@ static void mxc_jpeg_config_enc_desc(struct vb2_buffer *out_buf,
+ 	jpeg->slot_data[slot].cfg_stream_size =
+ 			mxc_jpeg_setup_cfg_stream(cfg_stream_vaddr,
+ 						  q_data->fmt->fourcc,
+-						  q_data->w_adjusted,
+-						  q_data->h_adjusted);
++						  q_data->w,
++						  q_data->h);
  
- #define g2_start_code_e		G2_DEC_REG(10, 31, 0x1)
- #define g2_init_qp_old		G2_DEC_REG(10, 25, 0x3f)
--#define g2_init_qp		G2_DEC_REG(10, 24, 0x3f)
-+#define g2_init_qp		G2_DEC_REG(10, 24, 0x7f)
- #define g2_num_tile_cols_old	G2_DEC_REG(10, 20, 0x1f)
- #define g2_num_tile_cols	G2_DEC_REG(10, 19, 0x1f)
- #define g2_num_tile_rows_old	G2_DEC_REG(10, 15, 0x1f)
+ 	/* chain the config descriptor with the encoding descriptor */
+ 	cfg_desc->next_descpt_ptr = desc_handle | MXC_NXT_DESCPT_EN;
+@@ -977,7 +977,7 @@ static bool mxc_jpeg_source_change(struct mxc_jpeg_ctx *ctx,
+ 				      &q_data_cap->h_adjusted,
+ 				      q_data_cap->h_adjusted, /* adjust up */
+ 				      MXC_JPEG_MAX_HEIGHT,
+-				      q_data_cap->fmt->v_align,
++				      0,
+ 				      0);
+ 
+ 		/* setup bytesperline/sizeimage for capture queue */
+@@ -1161,18 +1161,30 @@ static int mxc_jpeg_queue_setup(struct vb2_queue *q,
+ {
+ 	struct mxc_jpeg_ctx *ctx = vb2_get_drv_priv(q);
+ 	struct mxc_jpeg_q_data *q_data = NULL;
++	struct mxc_jpeg_q_data tmp_q;
+ 	int i;
+ 
+ 	q_data = mxc_jpeg_get_q_data(ctx, q->type);
+ 	if (!q_data)
+ 		return -EINVAL;
+ 
++	tmp_q.fmt = q_data->fmt;
++	tmp_q.w = q_data->w_adjusted;
++	tmp_q.h = q_data->h_adjusted;
++	for (i = 0; i < MXC_JPEG_MAX_PLANES; i++) {
++		tmp_q.bytesperline[i] = q_data->bytesperline[i];
++		tmp_q.sizeimage[i] = q_data->sizeimage[i];
++	}
++	mxc_jpeg_sizeimage(&tmp_q);
++	for (i = 0; i < MXC_JPEG_MAX_PLANES; i++)
++		tmp_q.sizeimage[i] = max(tmp_q.sizeimage[i], q_data->sizeimage[i]);
++
+ 	/* Handle CREATE_BUFS situation - *nplanes != 0 */
+ 	if (*nplanes) {
+ 		if (*nplanes != q_data->fmt->colplanes)
+ 			return -EINVAL;
+ 		for (i = 0; i < *nplanes; i++) {
+-			if (sizes[i] < q_data->sizeimage[i])
++			if (sizes[i] < tmp_q.sizeimage[i])
+ 				return -EINVAL;
+ 		}
+ 		return 0;
+@@ -1181,7 +1193,7 @@ static int mxc_jpeg_queue_setup(struct vb2_queue *q,
+ 	/* Handle REQBUFS situation */
+ 	*nplanes = q_data->fmt->colplanes;
+ 	for (i = 0; i < *nplanes; i++)
+-		sizes[i] = q_data->sizeimage[i];
++		sizes[i] = tmp_q.sizeimage[i];
+ 
+ 	return 0;
+ }
+@@ -1381,11 +1393,6 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx, struct vb2_buffer *vb)
+ 	}
+ 	q_data_out->w = header.frame.width;
+ 	q_data_out->h = header.frame.height;
+-	if (header.frame.width % 8 != 0 || header.frame.height % 8 != 0) {
+-		dev_err(dev, "JPEG width or height not multiple of 8: %dx%d\n",
+-			header.frame.width, header.frame.height);
+-		return -EINVAL;
+-	}
+ 	if (header.frame.width > MXC_JPEG_MAX_WIDTH ||
+ 	    header.frame.height > MXC_JPEG_MAX_HEIGHT) {
+ 		dev_err(dev, "JPEG width or height should be <= 8192: %dx%d\n",
+@@ -1691,22 +1698,17 @@ static int mxc_jpeg_try_fmt(struct v4l2_format *f, const struct mxc_jpeg_fmt *fm
+ 	pix_mp->num_planes = fmt->colplanes;
+ 	pix_mp->pixelformat = fmt->fourcc;
+ 
+-	/*
+-	 * use MXC_JPEG_H_ALIGN instead of fmt->v_align, for vertical
+-	 * alignment, to loosen up the alignment to multiple of 8,
+-	 * otherwise NV12-1080p fails as 1080 is not a multiple of 16
+-	 */
++	pix_mp->width = w;
++	pix_mp->height = h;
+ 	v4l_bound_align_image(&w,
+-			      MXC_JPEG_MIN_WIDTH,
+-			      w, /* adjust downwards*/
++			      w, /* adjust upwards*/
++			      MXC_JPEG_MAX_WIDTH,
+ 			      fmt->h_align,
+ 			      &h,
+-			      MXC_JPEG_MIN_HEIGHT,
+-			      h, /* adjust downwards*/
+-			      MXC_JPEG_H_ALIGN,
++			      h, /* adjust upwards*/
++			      MXC_JPEG_MAX_HEIGHT,
++			      0,
+ 			      0);
+-	pix_mp->width = w; /* negotiate the width */
+-	pix_mp->height = h; /* negotiate the height */
+ 
+ 	/* get user input into the tmp_q */
+ 	tmp_q.w = w;
+@@ -1832,35 +1834,19 @@ static int mxc_jpeg_s_fmt(struct mxc_jpeg_ctx *ctx,
+ 
+ 	q_data->w_adjusted = q_data->w;
+ 	q_data->h_adjusted = q_data->h;
+-	if (jpeg->mode == MXC_JPEG_DECODE) {
+-		/*
+-		 * align up the resolution for CAST IP,
+-		 * but leave the buffer resolution unchanged
+-		 */
+-		v4l_bound_align_image(&q_data->w_adjusted,
+-				      q_data->w_adjusted,  /* adjust upwards */
+-				      MXC_JPEG_MAX_WIDTH,
+-				      q_data->fmt->h_align,
+-				      &q_data->h_adjusted,
+-				      q_data->h_adjusted, /* adjust upwards */
+-				      MXC_JPEG_MAX_HEIGHT,
+-				      q_data->fmt->v_align,
+-				      0);
+-	} else {
+-		/*
+-		 * align down the resolution for CAST IP,
+-		 * but leave the buffer resolution unchanged
+-		 */
+-		v4l_bound_align_image(&q_data->w_adjusted,
+-				      MXC_JPEG_MIN_WIDTH,
+-				      q_data->w_adjusted, /* adjust downwards*/
+-				      q_data->fmt->h_align,
+-				      &q_data->h_adjusted,
+-				      MXC_JPEG_MIN_HEIGHT,
+-				      q_data->h_adjusted, /* adjust downwards*/
+-				      q_data->fmt->v_align,
+-				      0);
+-	}
++	/*
++	 * align up the resolution for CAST IP,
++	 * but leave the buffer resolution unchanged
++	 */
++	v4l_bound_align_image(&q_data->w_adjusted,
++			      q_data->w_adjusted,  /* adjust upwards */
++			      MXC_JPEG_MAX_WIDTH,
++			      q_data->fmt->h_align,
++			      &q_data->h_adjusted,
++			      q_data->h_adjusted, /* adjust upwards */
++			      MXC_JPEG_MAX_HEIGHT,
++			      q_data->fmt->v_align,
++			      0);
+ 
+ 	for (i = 0; i < pix_mp->num_planes; i++) {
+ 		q_data->bytesperline[i] = pix_mp->plane_fmt[i].bytesperline;
 -- 
 2.35.1
 

@@ -2,72 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 364E0593275
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 643B1593278
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbiHOPuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38774 "EHLO
+        id S231289AbiHOPuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbiHOPt7 (ORCPT
+        with ESMTP id S232011AbiHOPui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:49:59 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FBF13F79
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:49:57 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id i24so5778158qkg.13
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:49:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=1Uwpvs6/NyNM8qU91zfSlGe+Ud6fzUb0NOatTEgolZk=;
-        b=T/xlXFA4JKiGztHsekPw8KTMm4XUMP+HOrfT13Yh6ODYX53NkbQmoFGB5CqjDeYTkM
-         VwOCewIxcBV+lygIzSykbKBc8rbGKJoP5ngplrdtixBz1Zb78YNUmyWm6XburHngBVpC
-         vuB7s5tGtR3wMiVWGnpomZ907mC4X6feY6vjvbKZVUvN6o6BtVCZhNTkbKwNqfafrfqh
-         ImbX4RLPBJdCo7Pbbu8bvNMEmlY554iv2NTT107xzqha75H8rk9jQMwElmGv1lgZ2Hjs
-         Tr0WhaLtkUV9pIaWJrVC0uC5HKxCe0WDHDkXPMg0QgBzJlqZ9k7BEiI1oBXcu++4TSxI
-         KfgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=1Uwpvs6/NyNM8qU91zfSlGe+Ud6fzUb0NOatTEgolZk=;
-        b=D2mENnGIR56YeABSGWPZqxYtlPWEGdD4lkbSJf2f8DtOOELyiC6aBmrYqz0IQTqpF+
-         B1S5HzilalYsNgfmBIt+p4V1s5oZI7E5+aGuS3RJ7qPLffNuSkaHZKy+tD9Xr73DGHsN
-         Jdba2+h0ZbolVr/O1tn507biTk07pNV8j/l36ie7AXMZbRmLI1gp3VIKkMIUlh8U9NEf
-         3rLB9HrqkOkSsStzwOEh9V4CpC7Lhw3CXVqkzWhYWujLW312OUXjrSUoRAS8z9KxC7pE
-         J7X3k1/f+OX3pkll6JFtCCgVyrn+8EtWjYy7fGk/Hm9kmc02Yh2EPiJQthrIuqFd55Sx
-         POjQ==
-X-Gm-Message-State: ACgBeo3H2Om8TZwrDlDsblzV9eQRZDAqX53Ze4PIRMFqU5oEmh3UYZEi
-        e/ujAJASebmedVHDJSfsca4NgnoEZkxgNA==
-X-Google-Smtp-Source: AA6agR5LpKZnKK2PbxJBaBbTWm/cp+lNTG1clGHIJ4i1J8PthJyaRwJzJXDfBaE//CJWNXZxyoEUGw==
-X-Received: by 2002:ae9:e402:0:b0:6a7:86a3:752e with SMTP id q2-20020ae9e402000000b006a786a3752emr11668527qkc.300.1660578597066;
-        Mon, 15 Aug 2022 08:49:57 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::a23e])
-        by smtp.gmail.com with ESMTPSA id i4-20020ac85c04000000b0034301298d30sm8775961qti.38.2022.08.15.08.49.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 08:49:56 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 11:49:55 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     tj@kernel.org, corbet@lwn.net, surenb@google.com, mingo@redhat.com,
-        peterz@infradead.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, songmuchun@bytedance.com
-Subject: Re: [PATCH v2 09/10] sched/psi: per-cgroup PSI stats
- disable/re-enable interface
-Message-ID: <YvprI6ZL8dVWGyBO@cmpxchg.org>
-References: <20220808110341.15799-1-zhouchengming@bytedance.com>
- <20220808110341.15799-10-zhouchengming@bytedance.com>
+        Mon, 15 Aug 2022 11:50:38 -0400
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2B85F67;
+        Mon, 15 Aug 2022 08:50:35 -0700 (PDT)
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 7CE2A760; Mon, 15 Aug 2022 10:50:34 -0500 (CDT)
+Date:   Mon, 15 Aug 2022 10:50:34 -0500
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Vegard Nossum <vegard.nossum@oracle.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-hardening@vger.kernel.org, John Haxby <john.haxby@oracle.com>
+Subject: Re: [PATCH v2] capabilities: new kernel.ns_modules_allowed sysctl
+Message-ID: <20220815155034.GB20944@mail.hallyn.com>
+References: <20220815082753.6088-1-vegard.nossum@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220808110341.15799-10-zhouchengming@bytedance.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+In-Reply-To: <20220815082753.6088-1-vegard.nossum@oracle.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,113 +43,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 08, 2022 at 07:03:40PM +0800, Chengming Zhou wrote:
-> +static ssize_t cgroup_psi_write(struct kernfs_open_file *of,
-> +				char *buf, size_t nbytes, loff_t off)
-> +{
-> +	ssize_t ret;
-> +	int enable;
-> +	struct cgroup *cgrp;
-> +	struct psi_group *psi;
+On Mon, Aug 15, 2022 at 10:27:53AM +0200, Vegard Nossum wrote:
+> Creating a new user namespace grants you the ability to reach a lot of code
+> (including loading certain kernel modules) that would otherwise be out of
+> reach of an attacker. We can reduce the attack surface and block exploits
+> by ensuring that user namespaces cannot trigger module (auto-)loading.
+> 
+> A cursory search of exploits found online yields the following extremely
+> non-exhaustive list of vulnerabilities, and shows that the technique is
+> both old and still in use:
+> 
+> - CVE-2016-8655
+> - CVE-2017-1000112
+> - CVE-2021-32606
+> - CVE-2022-2588
+> - CVE-2022-27666
+> - CVE-2022-34918
+> 
+> This patch adds a new sysctl, kernel.ns_modules_allowed, which when set to
+> 0 will block requests to load modules when the request originates in a
+> process running in a user namespace.
+> 
+> For backwards compatibility, the default value of the sysctl is set to
+> CONFIG_NS_MODULES_ALLOWED_DEFAULT_ON, which in turn defaults to 1, meaning
+> there should be absolutely no change in behaviour unless you opt in either
+> at compile time or at runtime.
+> 
+> This mitigation obviously offers no protection if the vulnerable module is
+> already loaded, but for many of these exploits the vast majority of users
+> will never actually load or use these modules on purpose; in other words,
+> for the vast majority of users, this would block exploits for the above
+> list of vulnerabilities.
+> 
+> Testing: Running the reproducer for CVE-2022-2588 fails and results in the
+> following message in the kernel log:
+> 
+>     [  130.208030] request_module: pid 4107 (a.out) requested kernel module rtnl-link-dummy; denied due to kernel.ns_modules_allowed sysctl
+> 
+> v2:
+> - fix build failure due to missing CONFIG_SYSCTL guard around register_sysctl_init()
+> - use .maxlen = sizeof(int) for proc_dobool()
+> - don't warn when sysctl_ns_modules_allowed == 1
+> 
+> Cc: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+> Cc: Serge Hallyn <serge@hallyn.com>
+> Cc: Eric Biederman <ebiederm@xmission.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: linux-hardening@vger.kernel.org
+> Cc: John Haxby <john.haxby@oracle.com>
+> Signed-off-by: Vegard Nossum <vegard.nossum@oracle.com>
+> ---
+>  Documentation/admin-guide/sysctl/kernel.rst | 11 ++++++
+>  init/Kconfig                                | 17 +++++++++
+>  kernel/kmod.c                               | 39 +++++++++++++++++++++
+>  3 files changed, 67 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+> index ee6572b1edada..1e13f7f1a9550 100644
+> --- a/Documentation/admin-guide/sysctl/kernel.rst
+> +++ b/Documentation/admin-guide/sysctl/kernel.rst
+> @@ -604,6 +604,17 @@ A value of 0 means no change. The default value is 200 meaning the NMI
+>  watchdog is set to 30s (based on ``watchdog_thresh`` equal to 10).
+>  
+>  
+> +ns_modules_allowed
+> +==================
 > +
-> +	ret = kstrtoint(strstrip(buf), 0, &enable);
-> +	if (ret)
-> +		return ret;
+> +Control whether processes may trigger module loading inside a user namespace.
 > +
-> +	if (enable < 0 || enable > 1)
-> +		return -ERANGE;
+> += =================================
+> +0 Deny module loading requests.
+> +1 Accept module loading requests.
+> += =================================
 > +
-> +	cgrp = cgroup_kn_lock_live(of->kn, false);
-> +	if (!cgrp)
-> +		return -ENOENT;
 > +
-> +	psi = cgroup_ino(cgrp) == 1 ? &psi_system : &cgrp->psi;
-> +	psi_cgroup_enable(psi, enable);
-
-I think it should also add/remove the pressure files when enabling and
-disabling the aggregation, since their contents would be stale and
-misleading.
-
-Take a look at cgroup_add_dfl_cftypes() and cgroup_rm_cftypes()
-
-> @@ -5115,6 +5152,12 @@ static struct cftype cgroup_base_files[] = {
->  		.release = cgroup_pressure_release,
->  	},
->  #endif
-> +	{
-> +		.name = "cgroup.psi",
-> +		.flags = CFTYPE_PRESSURE,
-> +		.seq_show = cgroup_psi_show,
-> +		.write = cgroup_psi_write,
-> +	},
->  #endif /* CONFIG_PSI */
->  	{ }	/* terminate */
->  };
-> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> index 58f8092c938f..9df1686ee02d 100644
-> --- a/kernel/sched/psi.c
-> +++ b/kernel/sched/psi.c
-> @@ -181,6 +181,7 @@ static void group_init(struct psi_group *group)
->  {
->  	int cpu;
+>  numa_balancing
+>  ==============
 >  
-> +	group->enabled = true;
->  	for_each_possible_cpu(cpu)
->  		seqcount_init(&per_cpu_ptr(group->pcpu, cpu)->seq);
->  	group->avg_last_update = sched_clock();
-> @@ -700,17 +701,16 @@ static void psi_group_change(struct psi_group *group, int cpu,
->  	groupc = per_cpu_ptr(group->pcpu, cpu);
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 80fe60fa77fba..0b99268da5081 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -1245,6 +1245,23 @@ config USER_NS
 >  
->  	/*
-> -	 * First we assess the aggregate resource states this CPU's
-> -	 * tasks have been in since the last change, and account any
-> -	 * SOME and FULL time these may have resulted in.
-> -	 *
-> -	 * Then we update the task counts according to the state
-> +	 * First we update the task counts according to the state
->  	 * change requested through the @clear and @set bits.
-> +	 *
-> +	 * Then if the cgroup PSI stats accounting enabled, we
-> +	 * assess the aggregate resource states this CPU's tasks
-> +	 * have been in since the last change, and account any
-> +	 * SOME and FULL time these may have resulted in.
->  	 */
->  	write_seqcount_begin(&groupc->seq);
+>  	  If unsure, say N.
 >  
-> -	record_times(groupc, now);
-> -
->  	/*
->  	 * Start with TSK_ONCPU, which doesn't have a corresponding
->  	 * task count - it's just a boolean flag directly encoded in
-> @@ -750,6 +750,14 @@ static void psi_group_change(struct psi_group *group, int cpu,
->  		if (set & (1 << t))
->  			groupc->tasks[t]++;
+> +config NS_MODULES_ALLOWED_DEFAULT_ON
+> +	bool "Allow user namespaces to auto-load kernel modules by default"
+> +	depends on MODULES
+> +	depends on USER_NS
+> +	default y
+> +	help
+> +	  This option makes it so that processes running inside user
+> +	  namespaces may auto-load kernel modules.
+> +
+> +	  Say N to mitigate some exploits that rely on being able to
+> +	  auto-load kernel modules; however, this may also cause some
+> +	  legitimate programs to fail unless kernel modules are loaded by
+> +	  hand.
+> +
+> +	  You can write 0 or 1 to /proc/sys/kernel/ns_modules_allowed to
+> +	  change behaviour at run-time.
+> +
+>  config PID_NS
+>  	bool "PID Namespaces"
+>  	default y
+> diff --git a/kernel/kmod.c b/kernel/kmod.c
+> index b717134ebe170..46f8c0ad6c921 100644
+> --- a/kernel/kmod.c
+> +++ b/kernel/kmod.c
+> @@ -25,6 +25,7 @@
+>  #include <linux/ptrace.h>
+>  #include <linux/async.h>
+>  #include <linux/uaccess.h>
+> +#include <linux/sysctl.h>
 >  
-> +	if (!group->enabled) {
-> +		if (groupc->state_mask & (1 << PSI_NONIDLE))
-> +			record_times(groupc, now);
-
-Why record the nonidle time? It's only used for aggregation, which is
-stopped as well.
-
-> @@ -1088,6 +1097,23 @@ void cgroup_move_task(struct task_struct *task, struct css_set *to)
+>  #include <trace/events/module.h>
 >  
->  	task_rq_unlock(rq, task, &rf);
+> @@ -105,6 +106,12 @@ static int call_modprobe(char *module_name, int wait)
+>  	return -ENOMEM;
 >  }
+>  
+> +/*
+> + * Allow processes running inside namespaces to trigger module loading?
+> + */
+> +static bool sysctl_ns_modules_allowed __read_mostly =
+> +	IS_BUILTIN(CONFIG_NS_MODULES_ALLOWED_DEFAULT_ON);
 > +
-> +void psi_cgroup_enable(struct psi_group *group, bool enable)
-> +{
-> +	struct psi_group_cpu *groupc;
-> +	int cpu;
-> +	u64 now;
-> +
-> +	if (group->enabled == enable)
-> +		return;
-> +	group->enabled = enable;
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		groupc = per_cpu_ptr(group->pcpu, cpu);
-> +		now = cpu_clock(cpu);
-> +		psi_group_change(group, cpu, 0, 0, now, true);
+>  /**
+>   * __request_module - try to load a kernel module
+>   * @wait: wait (or not) for the operation to complete
+> @@ -148,6 +155,18 @@ int __request_module(bool wait, const char *fmt, ...)
+>  	if (ret)
+>  		return ret;
+>  
+> +	/*
+> +	 * Disallow if we're in a user namespace and we don't have
+> +	 * CAP_SYS_MODULE in the init namespace.
+> +	 */
+> +	if (current_user_ns() != &init_user_ns &&
+> +	    !capable(CAP_SYS_MODULE) &&
 
-This loop deserves a comment, IMO.
+It's monday, so maybe I'm thinking wrongly - but I don't believe that you can
+possible pass capable(CAP_SYS_MODULE) if current_user_ns() != &init_user_ns.
+So I think you can drop the second check.
+
+> +	    !sysctl_ns_modules_allowed) {
+> +		pr_warn_ratelimited("request_module: pid %d (%s) in user namespace requested kernel module %s; denied due to kernel.ns_modules_allowed sysctl\n",
+> +			task_pid_nr(current), current->comm, module_name);
+> +		return -EPERM;
+> +	}
+> +
+>  	if (atomic_dec_if_positive(&kmod_concurrent_max) < 0) {
+>  		pr_warn_ratelimited("request_module: kmod_concurrent_max (%u) close to 0 (max_modprobes: %u), for module %s, throttling...",
+>  				    atomic_read(&kmod_concurrent_max),
+> @@ -175,3 +194,23 @@ int __request_module(bool wait, const char *fmt, ...)
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL(__request_module);
+> +
+> +#ifdef CONFIG_SYSCTL
+> +static struct ctl_table kmod_sysctl_table[] = {
+> +	{
+> +		.procname       = "ns_modules_allowed",
+> +		.data           = &sysctl_ns_modules_allowed,
+> +		.maxlen         = sizeof(int),
+> +		.mode           = 0644,
+> +		.proc_handler   = proc_dobool,
+> +	},
+> +	{ }
+> +};
+> +
+> +static int __init kmod_sysctl_init(void)
+> +{
+> +	register_sysctl_init("kernel", kmod_sysctl_table);
+> +	return 0;
+> +}
+> +late_initcall(kmod_sysctl_init);
+> +#endif
+> -- 
+> 2.35.1.46.g38062e73e0

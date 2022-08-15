@@ -2,178 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9EE7593425
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 19:44:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A6F593428
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 19:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbiHORoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 13:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
+        id S230453AbiHORqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 13:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiHORoE (ORCPT
+        with ESMTP id S229446AbiHORqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 13:44:04 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C733527FE8;
-        Mon, 15 Aug 2022 10:44:03 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id a15so5625863qko.4;
-        Mon, 15 Aug 2022 10:44:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=ot6aA0JLE7mQSLlUAhIRMLAI2J9tpo0G0V3a4tkd6yQ=;
-        b=QEHsxSEks8nskCPi3QT8dXwVeYw+NXJtGneY2gB1dFE78L/sYrCbhkVKvAOP+02USY
-         n5rpbFdIk40U0FqQknIK76WfiLkdoBAfHs782859v0kcP+Xjkzw7ValsKzXY2i4bY12Q
-         u2PcnDTZO8hoW/HN0c7cCDfhdlxVeOKuNeXFo4MRBSrnXjhQEFXZ7tAOojQNEUkyZBft
-         KTB0Z52qgtnKmnu7U+lKxia0mt3hwZw1ART96pQRhIGfj1T23LC82cE1e2LXArlqPIDw
-         vKzc1JhkmQOJYTpHxDWwVUOYwEucO6RA93R/Ru6a9zaYCPUSDvgBbb/YLZ6RZBwMzRKE
-         6YUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=ot6aA0JLE7mQSLlUAhIRMLAI2J9tpo0G0V3a4tkd6yQ=;
-        b=SzirA1oix7DDCmvveiwNtH5sMgv+7JrzFzrflnunLLnr6nwKGBIW0iCY4IXkkuUmtQ
-         EiqhR51F7BwyZETQI2JLPCy3HyvMQsrOGceioytvvn0MEUsQOjkRrfMsOJWXR6mtjSLr
-         2VawjYi5/j6n4rmlxsnf/P6u6WBUs+VL/l0bQS8fA97WhZ+8vdC78aRC0k3P5tnwnrVP
-         LUpDsWLcU/0VwWbOom8tvdYdmqje/GkJgOHRyrF8Ebmm2onVjxcaU8/yJoczY7LhcO47
-         wEgG6ThhV3Mlej7hknF3JiiweoORBmeIqvurvR2+t/tp2J7CoDWhPObz3zVuBm44gnHw
-         nTuA==
-X-Gm-Message-State: ACgBeo1Pt6vb1oowSbiFMemVJDBEtKrbWWavHkpnBN5s6Oq8zvJHxwuS
-        HNPrTMJ6EqkxkBvuy9OGVMl0EkEIwp0=
-X-Google-Smtp-Source: AA6agR7pPLILrI55qLDydNnToKZ7T6NxfGh/2ZhZps1vHGaQ92U0dAZ8sNbckFPlygGM7ehpgYxd8A==
-X-Received: by 2002:a05:620a:1513:b0:6ba:e66b:726d with SMTP id i19-20020a05620a151300b006bae66b726dmr9393061qkk.692.1660585442217;
-        Mon, 15 Aug 2022 10:44:02 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id y6-20020ae9f406000000b006b8cff25187sm9497465qkl.42.2022.08.15.10.44.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 10:44:01 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
+        Mon, 15 Aug 2022 13:46:23 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD35627FF1;
+        Mon, 15 Aug 2022 10:46:22 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 91FF25C0138;
+        Mon, 15 Aug 2022 13:46:19 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 15 Aug 2022 13:46:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1660585579; x=1660671979; bh=8OMR3TElBe
+        6FtukCUYXb52i6A/aUd+KCr1sfP2Mcrq4=; b=WWh1N78Lr62Hl69WT1r86CNWh+
+        roxkNiICEOZ7YJGTtdJZ49uTb0HJG+JMAdmUbCy8eWMufL0xmC7HkDRtwZLXNKPz
+        gzSrEDzp63kP/pleU6F076KJt2zCcamtdnuytaIKqPaTo/6+n0rd6mVBYRagD+vB
+        etZs+OsABrz5kX+2kzllpigxikUAKxEo68L3HqIEw2DR9P8hH6DuBE7JYqltbhXS
+        Lwbvc9EQiPa1jEEUHwStQswg38TH1WaKdEnoO5GGkCPn4bk/NFw95wwCaolItbfs
+        BtyCYp4Rl027xTBsqjUExhbcQRYmYGc1eygzn2x8Q5xWgtOyql9mYbWe2GaQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660585579; x=1660671979; bh=8OMR3TElBe6FtukCUYXb52i6A/aU
+        d+KCr1sfP2Mcrq4=; b=tEMDvu+R2Aspw36NwuK6kFqZRns/mDPUG4fIwlwUQ/ID
+        wCquAEfl8s9ofbcABUZAS88RihgDaBKF+aIiqXSMkXtEdaDfu42fTV2/97XquZ3b
+        65Fgk7idAukoCMbQxZkN7SDn+1FdBerVJVOT/SCIgCuENHDpV+aDoiE+d9ex7zAX
+        vfcs79dq2yNOBIkfSksvTzrnTuA138zyh66Rd8HmSL+/YWJSvmPMQPG1PQ2WCo+c
+        DFPUMQQ9alpFTkT1DvLXQBFeRVcIhFNbFnz4MYn95zSrfwpidNRE5UZUsz9I4mN5
+        rcOxRTb3FCsbdJDgafCSUanZSa+nr3K2vqkSeTu4Kg==
+X-ME-Sender: <xms:aob6YpskErKBujTdU7Vc4c52RPVJf-cGl8cJZJn9kuID1oJ9SPr49w>
+    <xme:aob6Yif0do-Se1xnCVnIIaSvxSacIY-waWnv6SA4iIGu3km_kNfPN-t43GfAUB0GV
+    M10u8gWOYTpFLEORQ>
+X-ME-Received: <xmr:aob6YsxWVdKGF816krV-BQcBHo34Mr4pIH1QtbygoH7bRbZowpMet14COJ7jN-KOnRtzoeZ8xjEXypZdOu-exrL-ei9OCW855XJVm9MeUYII6e0lQrzYdSSGIKOl>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehvddguddujecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetnhgu
+    rhgvshcuhfhrvghunhguuceorghnughrvghssegrnhgrrhgriigvlhdruggvqeenucggtf
+    frrghtthgvrhhnpedvffefvefhteevffegieetfefhtddvffejvefhueetgeeludehteev
+    udeitedtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrnhgurhgvshesrghnrghrrgiivghlrdguvg
+X-ME-Proxy: <xmx:aob6YgOpRGuCxc1zyn0zJCY9VT87O6ZLHZij6K0tXCXuzSGzP5pNHA>
+    <xmx:aob6Yp9sHAGQCb3cobWp_X3g3w75bAFpOrpKZuTEN1VH1jeTpRlzsw>
+    <xmx:aob6YgW2K4jSFqDTSemEWEDsZRT8j6LTsNwfDyf0lh-AFC05Dte6cg>
+    <xmx:a4b6YodjWSEiH8FOhOICfT5pTGNvV6Wgc7S2VQao-RTHOqsF84jGSg>
+Feedback-ID: id4a34324:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 15 Aug 2022 13:46:18 -0400 (EDT)
+Date:   Mon, 15 Aug 2022 10:46:17 -0700
+From:   Andres Freund <andres@anarazel.de>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Jason Wang <jasowang@redhat.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net-next] net: phy: broadcom: Implement suspend/resume for AC131 and BCM5241
-Date:   Mon, 15 Aug 2022 10:43:56 -0700
-Message-Id: <20220815174356.2681127-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        c@redhat.com
+Subject: Re: upstream kernel crashes
+Message-ID: <20220815174617.z4chnftzcbv6frqr@awork3.anarazel.de>
+References: <20220815013651.mrm7qgklk6sgpkbb@awork3.anarazel.de>
+ <CAHk-=wikzU4402P-FpJRK_QwfVOS+t-3p1Wx5awGHTvr-s_0Ew@mail.gmail.com>
+ <20220815071143.n2t5xsmifnigttq2@awork3.anarazel.de>
+ <20220815034532-mutt-send-email-mst@kernel.org>
+ <20220815081527.soikyi365azh5qpu@awork3.anarazel.de>
+ <20220815042623-mutt-send-email-mst@kernel.org>
+ <FCDC5DDE-3CDD-4B8A-916F-CA7D87B547CE@anarazel.de>
+ <20220815113729-mutt-send-email-mst@kernel.org>
+ <20220815164503.jsoezxcm6q4u2b6j@awork3.anarazel.de>
+ <20220815124748-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220815124748-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement the suspend/resume procedure for the Broadcom AC131 and BCM5241 type
-of PHYs (10/100 only) by entering the standard power down followed by the
-proprietary standby mode in the auxiliary mode 4 shadow register. On resume,
-the PHY software reset is enough to make it come out of standby mode so we can
-utilize brcm_fet_config_init() as the resume hook.
+Hi,
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/net/phy/broadcom.c | 48 ++++++++++++++++++++++++++++++++++++++
- include/linux/brcmphy.h    |  1 +
- 2 files changed, 49 insertions(+)
+On 2022-08-15 12:50:52 -0400, Michael S. Tsirkin wrote:
+> On Mon, Aug 15, 2022 at 09:45:03AM -0700, Andres Freund wrote:
+> > Hi,
+> > 
+> > On 2022-08-15 11:40:59 -0400, Michael S. Tsirkin wrote:
+> > > OK so this gives us a quick revert as a solution for now.
+> > > Next, I would appreciate it if you just try this simple hack.
+> > > If it crashes we either have a long standing problem in virtio
+> > > code or more likely a gcp bug where it can't handle smaller
+> > > rings than what device requestes.
+> > > Thanks!
+> > 
+> > I applied the below and the problem persists.
+> > 
+> > [...]
+>
+> Okay!
 
-diff --git a/drivers/net/phy/broadcom.c b/drivers/net/phy/broadcom.c
-index 31fbcdddc9ad..739348b3f135 100644
---- a/drivers/net/phy/broadcom.c
-+++ b/drivers/net/phy/broadcom.c
-@@ -766,6 +766,50 @@ static irqreturn_t brcm_fet_handle_interrupt(struct phy_device *phydev)
- 	return IRQ_HANDLED;
- }
- 
-+static int brcm_fet_suspend(struct phy_device *phydev)
-+{
-+	int reg, err, err2, brcmtest;
-+
-+	/* We cannot use a read/modify/write here otherwise the PHY continues
-+	 * to drive LEDs which defeats the purpose of low power mode.
-+	 */
-+	err = phy_write(phydev, MII_BMCR, BMCR_PDOWN);
-+	if (err < 0)
-+		return err;
-+
-+	/* Enable shadow register access */
-+	brcmtest = phy_read(phydev, MII_BRCM_FET_BRCMTEST);
-+	if (brcmtest < 0)
-+		return brcmtest;
-+
-+	reg = brcmtest | MII_BRCM_FET_BT_SRE;
-+
-+	err = phy_write(phydev, MII_BRCM_FET_BRCMTEST, reg);
-+	if (err < 0)
-+		return err;
-+
-+	/* Set standby mode */
-+	reg = phy_read(phydev, MII_BRCM_FET_SHDW_AUXMODE4);
-+	if (reg < 0) {
-+		err = reg;
-+		goto done;
-+	}
-+
-+	reg |= MII_BRCM_FET_SHDW_AM4_STANDBY;
-+
-+	err = phy_write(phydev, MII_BRCM_FET_SHDW_AUXMODE4, reg);
-+	if (err < 0)
-+		goto done;
-+
-+done:
-+	/* Disable shadow register access */
-+	err2 = phy_write(phydev, MII_BRCM_FET_BRCMTEST, brcmtest);
-+	if (!err)
-+		err = err2;
-+
-+	return err;
-+}
-+
- static int bcm54xx_phy_probe(struct phy_device *phydev)
- {
- 	struct bcm54xx_phy_priv *priv;
-@@ -1033,6 +1077,8 @@ static struct phy_driver broadcom_drivers[] = {
- 	.config_init	= brcm_fet_config_init,
- 	.config_intr	= brcm_fet_config_intr,
- 	.handle_interrupt = brcm_fet_handle_interrupt,
-+	.suspend	= brcm_fet_suspend,
-+	.resume		= brcm_fet_config_init,
- }, {
- 	.phy_id		= PHY_ID_BCM5241,
- 	.phy_id_mask	= 0xfffffff0,
-@@ -1041,6 +1087,8 @@ static struct phy_driver broadcom_drivers[] = {
- 	.config_init	= brcm_fet_config_init,
- 	.config_intr	= brcm_fet_config_intr,
- 	.handle_interrupt = brcm_fet_handle_interrupt,
-+	.suspend	= brcm_fet_suspend,
-+	.resume		= brcm_fet_config_init,
- }, {
- 	.phy_id		= PHY_ID_BCM5395,
- 	.phy_id_mask	= 0xfffffff0,
-diff --git a/include/linux/brcmphy.h b/include/linux/brcmphy.h
-index 6ff567ece34a..9e77165f3ef6 100644
---- a/include/linux/brcmphy.h
-+++ b/include/linux/brcmphy.h
-@@ -293,6 +293,7 @@
- #define MII_BRCM_FET_SHDW_MC_FAME	0x4000	/* Force Auto MDIX enable */
- 
- #define MII_BRCM_FET_SHDW_AUXMODE4	0x1a	/* Auxiliary mode 4 */
-+#define MII_BRCM_FET_SHDW_AM4_STANDBY	0x0008	/* Standby enable */
- #define MII_BRCM_FET_SHDW_AM4_LED_MASK	0x0003
- #define MII_BRCM_FET_SHDW_AM4_LED_MODE1 0x0001
- 
--- 
-2.25.1
+Just checking - I applied and tested this atop 6.0-rc1, correct? Or did you
+want me to test it with the 762faee5a267 reverted? I guess what you're trying
+to test if a smaller queue than what's requested you'd want to do so without
+the problematic patch applied...
 
+
+> And just to be 100% sure, can you try the following on top of 5.19:
+
+> diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
+> index 623906b4996c..6f4e54a618bc 100644
+> --- a/drivers/virtio/virtio_pci_modern.c
+> +++ b/drivers/virtio/virtio_pci_modern.c
+> @@ -208,6 +208,9 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
+>  		return ERR_PTR(-EINVAL);
+>  	}
+>  
+> +	if (num > 1024)
+> +		num = 1024;
+> +
+>  	info->msix_vector = msix_vec;
+>  
+>  	/* create the vring */
+> 
+> -- 
+
+Either way, I did this, and there are no issues that I could observe. No
+oopses, no broken networking. But:
+
+To make sure it does something I added a debugging printk - which doesn't show
+up. I assume this is at a point at least earlyprintk should work (which I see
+getting enabled via serial)?
+
+Greetings,
+
+Andres Freund

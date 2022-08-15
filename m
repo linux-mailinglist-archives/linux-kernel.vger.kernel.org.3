@@ -2,92 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 661FB593A58
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B86593475
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 20:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343622AbiHOTf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 15:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
+        id S229989AbiHOSDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 14:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345107AbiHOT1s (ORCPT
+        with ESMTP id S231182AbiHOSDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 15:27:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE215C96D;
-        Mon, 15 Aug 2022 11:43:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83B3661120;
-        Mon, 15 Aug 2022 18:43:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D75C433C1;
-        Mon, 15 Aug 2022 18:43:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660589017;
-        bh=c6POu7CxEZAtsyfak6/OCQvCWxH0FLYJlmluklao9ew=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XsS5sARaZncgAuT4TBFj5/7LjkMoUXFutZly3zWHrlXFvx0NMOvsPCRCdTmKoCLyq
-         5L3Jf7s1czWizHICL9vkGQvp9vRLgiA9epmju6AqLhIMuGOeE6jaiGoRifUpxbkIvA
-         19nl1jtcNlUt/x3Ft+el41ARBeDTyo3IyEX2MBvQ=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tang Bin <tangbin@cmss.chinamobile.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 560/779] opp: Fix error check in dev_pm_opp_attach_genpd()
-Date:   Mon, 15 Aug 2022 20:03:24 +0200
-Message-Id: <20220815180401.279999844@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180337.130757997@linuxfoundation.org>
-References: <20220815180337.130757997@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Mon, 15 Aug 2022 14:03:37 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE3B29804;
+        Mon, 15 Aug 2022 11:03:36 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id o3so7004181ple.5;
+        Mon, 15 Aug 2022 11:03:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc;
+        bh=7c11secDca8hYRncZr7mvoiP7YoTNElY7uwyGtCilUA=;
+        b=Xyd52RwL5moHRgbvzambbDrIaXF6jFM/nZoYd7QyvEPLPhmFkpKxw1G+wPsIHQhFJy
+         /q4UYfUytBLF3VER8dVq1lUF5zRuEcGulAilbHYttldWK/wRg2OUUNcmkB+tORv5+DFZ
+         XACSLu0W3ojHwt8NCKCRAYIXEPfiToJZlSHNyZR/BmfdSSOGwp55SP5qK1uz5sVex0d1
+         a1i9OZm5FYSJ8GtX39PHWdF4zjPCsoPKIs2o1TSpIiSJF3Zgrwn4yXcG9bHn80x/hunE
+         y+iAE4hcZYz6JUX7mbHeA8Lj6OrhgoRJwdZgAZTMAd/2Jzk5Bj8Z0+YysSaVpKmn7WAR
+         kybg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc;
+        bh=7c11secDca8hYRncZr7mvoiP7YoTNElY7uwyGtCilUA=;
+        b=Kex1jvNLJgS4CPQlIBEv+stT/GrgnV3ru225Q6UgmPnUqbbQotKup2tsyARjV7i2rP
+         S7jyoWRE44najrfkUcg8Ad4v1/KTZq5ZzouI1y25SrZ+Nix81Ef2q6NfMuKhuukgTSQW
+         FZKqMeJbNWU0eAD+EhFy+EqzQ+Ma9Fz+atPvI/GEt46Ge991LNx5Kt7TOJ5ySAjPGwre
+         Tj37SlcOy9rLWQD7Ezb6o5YE9gCiNWLRayRcs8penw0NeJx2gRfe8fnkmf2oSoQLXc6E
+         w8iSZNrA/mxx9/Nve4a0wB5bQ7KkOqui0XSKkJGAAmw/DPrmN2aKkRtYFiVBXV4fxgyK
+         2LSw==
+X-Gm-Message-State: ACgBeo0MnqyY6Uebi09vPn3KfPPSrjMBf/AatSkdna4B++cbB1U2ZCjq
+        uPW5lhJITEc/VrJ+guWZ9/w=
+X-Google-Smtp-Source: AA6agR52QKi7glztSs9tcqptyUKsggWZ7o2/yP8VLzLNBLFuH/eZqmIqb+I5gpEATOpLi/webZPmhg==
+X-Received: by 2002:a17:90b:380f:b0:1f5:55ef:a53a with SMTP id mq15-20020a17090b380f00b001f555efa53amr19240236pjb.14.1660586616202;
+        Mon, 15 Aug 2022 11:03:36 -0700 (PDT)
+Received: from localhost.localdomain ([216.52.21.4])
+        by smtp.gmail.com with ESMTPSA id p8-20020a17090a0e4800b001f216a9d021sm4755718pja.40.2022.08.15.11.03.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 11:03:35 -0700 (PDT)
+From:   Praveen Chaudhary <pclicoder@gmail.com>
+X-Google-Original-From: Praveen Chaudhary <pchaudhary@linkedin.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Praveen Chaudhary <praveen5582@gmail.com>,
+        Zhenggen Xu <zxu@linkedin.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: RE: [PATCH] net: fix potential refcount leak in ndisc_router_discovery()
+Date:   Mon, 15 Aug 2022 11:03:24 -0700
+Message-Id: <20220815180324.3048-1-pchaudhary@linkedin.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20220813124907.3396-1-xiongx18@fudan.edu.cn>
+References: <20220813124907.3396-1-xiongx18@fudan.edu.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tang Bin <tangbin@cmss.chinamobile.com>
+Hi Xin
 
-[ Upstream commit 4ea9496cbc959eb5c78f3e379199aca9ef4e386b ]
+Any reason why you are not adding this code under the
+if (rt && (lifetime == 0 || rt->fib6_metric != defrtr_usr_metric))  block ?
 
-dev_pm_domain_attach_by_name() may return NULL in some cases,
-so IS_ERR() doesn't meet the requirements. Thus fix it.
-
-Fixes: 6319aee10e53 ("opp: Attach genpds to devices from within OPP core")
-Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
-[ Viresh: Replace ENODATA with ENODEV ]
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/opp/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 04b4691a8aac..b2da497dd378 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -2388,8 +2388,8 @@ struct opp_table *dev_pm_opp_attach_genpd(struct device *dev,
- 		}
- 
- 		virt_dev = dev_pm_domain_attach_by_name(dev, *name);
--		if (IS_ERR(virt_dev)) {
--			ret = PTR_ERR(virt_dev);
-+		if (IS_ERR_OR_NULL(virt_dev)) {
-+			ret = PTR_ERR(virt_dev) ? : -ENODEV;
- 			dev_err(dev, "Couldn't attach to pm_domain: %d\n", ret);
- 			goto err;
- 		}
--- 
-2.35.1
-
-
-
+i.e. while route deletion.

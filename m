@@ -2,62 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 472FB592DB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41800592DE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:06:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231781AbiHOLCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 07:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48546 "EHLO
+        id S242157AbiHOLGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 07:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242389AbiHOLCd (ORCPT
+        with ESMTP id S241716AbiHOLG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 07:02:33 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8A2524BDC;
-        Mon, 15 Aug 2022 04:02:24 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 74E9480FB;
-        Mon, 15 Aug 2022 10:55:33 +0000 (UTC)
-Date:   Mon, 15 Aug 2022 14:02:22 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, naresh.kamboju@linaro.org,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] Revert "net: mdio: Delete usage of
- driver_deferred_probe_check_state()"
-Message-ID: <YvonvrjWsntpWic3@atomide.com>
-References: <20220727185012.3255200-1-saravanak@google.com>
- <20220727185012.3255200-3-saravanak@google.com>
+        Mon, 15 Aug 2022 07:06:29 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4761425291;
+        Mon, 15 Aug 2022 04:05:50 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M5rwQ6lyszlVn7;
+        Mon, 15 Aug 2022 19:02:46 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 15 Aug 2022 19:05:47 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 15 Aug 2022 19:05:47 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>
+CC:     <linux@armlinux.org.uk>, <arnd@arndb.de>,
+        <linus.walleij@linaro.org>, <ardb@kernel.org>,
+        <rmk+kernel@armlinux.org.uk>, <rostedt@goodmis.org>,
+        <nick.hawkins@hpe.com>, <john@phrozen.org>, <mhiramat@kernel.org>,
+        <chenzhongjin@huawei.com>
+Subject: [RESEND PATCH] ARM: Recover kretprobes return address for EABI stack unwinder
+Date:   Mon, 15 Aug 2022 19:02:40 +0800
+Message-ID: <20220815110240.18293-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220727185012.3255200-3-saravanak@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Saravana Kannan <saravanak@google.com> [700101 02:00]:
-> This reverts commit f8217275b57aa48d98cc42051c2aac34152718d6.
-> 
-> There are a few more issues to fix that have been reported in the thread
-> for the original series [1]. We'll need to fix those before this will
-> work. So, revert it for now.
+'fed240d9c974 ("ARM: Recover kretprobe modified return address in stacktrace")'
+has implemented kretprobes return address recovery for FP
+unwinder, this patch makes it works for EABI unwinder.
 
-Reviewed-by: Tony Lindgren <tony@atomide.com>
+It saves __kretprobe_trampoline address in LR on stack to identify
+and recover the correct return address in EABI unwinder.
+
+Since EABI doesn't use r11 as frame pointer, we need to use SP to
+identify different kretprobes addresses. Here the value of SP has fixed
+distance to conventional FP position so it's fine to use it.
+
+Passed kunit kprobes_test on QEMU.
+
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+---
+ arch/arm/Kconfig               |  2 +-
+ arch/arm/kernel/unwind.c       | 12 ++++++++++++
+ arch/arm/probes/kprobes/core.c | 20 +++++++++++++++++---
+ 3 files changed, 30 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 87badeae3181..7165e314c0de 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -3,7 +3,7 @@ config ARM
+ 	bool
+ 	default y
+ 	select ARCH_32BIT_OFF_T
+-	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE if HAVE_KRETPROBES && FRAME_POINTER && !ARM_UNWIND
++	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE if HAVE_KRETPROBES
+ 	select ARCH_HAS_BINFMT_FLAT
+ 	select ARCH_HAS_CURRENT_STACK_POINTER
+ 	select ARCH_HAS_DEBUG_VIRTUAL if MMU
+diff --git a/arch/arm/kernel/unwind.c b/arch/arm/kernel/unwind.c
+index a37ea6c772cd..51e34fa4a4b3 100644
+--- a/arch/arm/kernel/unwind.c
++++ b/arch/arm/kernel/unwind.c
+@@ -28,6 +28,7 @@
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
+ #include <linux/list.h>
++#include <linux/kprobes.h>
+ 
+ #include <asm/stacktrace.h>
+ #include <asm/traps.h>
+@@ -482,6 +483,12 @@ int unwind_frame(struct stackframe *frame)
+ 	frame->pc = ctrl.vrs[PC];
+ 	frame->lr_addr = ctrl.lr_addr;
+ 
++#ifdef CONFIG_KRETPROBES
++	if (is_kretprobe_trampoline(frame->pc))
++		frame->pc = kretprobe_find_ret_addr(frame->tsk,
++					(void *)frame->sp, &frame->kr_cur);
++#endif
++
+ 	return URC_OK;
+ }
+ 
+@@ -522,6 +529,11 @@ void unwind_backtrace(struct pt_regs *regs, struct task_struct *tsk,
+ 		frame.pc = thread_saved_pc(tsk);
+ 	}
+ 
++#ifdef CONFIG_KRETPROBES
++	frame.kr_cur = NULL;
++	frame.tsk = tsk;
++#endif
++
+ 	while (1) {
+ 		int urc;
+ 		unsigned long where = frame.pc;
+diff --git a/arch/arm/probes/kprobes/core.c b/arch/arm/probes/kprobes/core.c
+index 9090c3a74dcc..1435b508aa36 100644
+--- a/arch/arm/probes/kprobes/core.c
++++ b/arch/arm/probes/kprobes/core.c
+@@ -41,6 +41,16 @@
+ 			   (unsigned long)(addr) +	\
+ 			   (size))
+ 
++/*
++ * Since EABI unwinder doesn't use ARM_fp as conventional fp
++ * use ARM_sp as hint register for kretprobes.
++ */
++#ifdef CONFIG_ARM_UNWIND
++#define TRAMP_FP ARM_sp
++#else /* CONFIG_FRAME_POINTER */
++#define TRAMP_FP ARM_fp
++#endif
++
+ DEFINE_PER_CPU(struct kprobe *, current_kprobe) = NULL;
+ DEFINE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
+ 
+@@ -376,8 +386,8 @@ int __kprobes kprobe_exceptions_notify(struct notifier_block *self,
+ void __naked __kprobes __kretprobe_trampoline(void)
+ {
+ 	__asm__ __volatile__ (
+-#ifdef CONFIG_FRAME_POINTER
+ 		"ldr	lr, =__kretprobe_trampoline	\n\t"
++#ifdef CONFIG_FRAME_POINTER
+ 	/* __kretprobe_trampoline makes a framepointer on pt_regs. */
+ #ifdef CONFIG_CC_IS_CLANG
+ 		"stmdb	sp, {sp, lr, pc}	\n\t"
+@@ -395,8 +405,12 @@ void __naked __kprobes __kretprobe_trampoline(void)
+ 		"add	fp, sp, #60		\n\t"
+ #endif /* CONFIG_CC_IS_CLANG */
+ #else /* !CONFIG_FRAME_POINTER */
++		/* store SP, LR on stack and add EABI unwind hint */
++		"stmdb  sp, {sp, lr, pc}	\n\t"
++		".save	{sp, lr, pc}	\n\t"
+ 		"sub	sp, sp, #16		\n\t"
+ 		"stmdb	sp!, {r0 - r11}		\n\t"
++		".pad	#52				\n\t"
+ #endif /* CONFIG_FRAME_POINTER */
+ 		"mov	r0, sp			\n\t"
+ 		"bl	trampoline_handler	\n\t"
+@@ -414,14 +428,14 @@ void __naked __kprobes __kretprobe_trampoline(void)
+ /* Called from __kretprobe_trampoline */
+ static __used __kprobes void *trampoline_handler(struct pt_regs *regs)
+ {
+-	return (void *)kretprobe_trampoline_handler(regs, (void *)regs->ARM_fp);
++	return (void *)kretprobe_trampoline_handler(regs, (void *)regs->TRAMP_FP);
+ }
+ 
+ void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
+ 				      struct pt_regs *regs)
+ {
+ 	ri->ret_addr = (kprobe_opcode_t *)regs->ARM_lr;
+-	ri->fp = (void *)regs->ARM_fp;
++	ri->fp = (void *)regs->TRAMP_FP;
+ 
+ 	/* Replace the return addr with trampoline addr. */
+ 	regs->ARM_lr = (unsigned long)&__kretprobe_trampoline;
+-- 
+2.17.1
+

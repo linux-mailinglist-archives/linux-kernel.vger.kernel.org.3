@@ -2,68 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08687594C92
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC14594CAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243668AbiHPBXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 21:23:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53690 "EHLO
+        id S239502AbiHPBVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 21:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241812AbiHPBWy (ORCPT
+        with ESMTP id S233373AbiHPBU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 21:22:54 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09651C6ACF
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:13:27 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id j6so6544815qkl.10
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:13:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=i1YnZDU4kGkUqvV68QP5vWBRPLjGwIcMu76nuGXlI1w=;
-        b=i9KT+nlIeo4sOmKbkuU5XWL5+h8V3JdrhAle4xxsyCRvLbFhGDB7sd4z19BwiNcfaE
-         4EuGTaG3d7cpnzjaB4g7LUVMlrmZnq/REudt4tOlnQ75HLaAHtI2trxUKf2mMLisTboI
-         pVukSq5zi8A+93NLG9Ap70JSEVpKq4zTdmIilCVRWTG+SW2oDqlIDXvcW1n/6zB+Sl26
-         EBGy2zwla+bX6tB4cJ1jT5fMYh8Q1YUIi18LfdnHXP7jKChD7WaUMdSehjflR9yiZJeS
-         /LyJZNHx/L9681CppzBG+eBfI8aRp6JatjQhBY3b6qw3PT77qMJg2oTXwGcA/DbD35zK
-         HqUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=i1YnZDU4kGkUqvV68QP5vWBRPLjGwIcMu76nuGXlI1w=;
-        b=lNLFgUpcNufLnsC7m98pPzczKGetuYZH4XrGNbwDyp6Fxy1ddH+2yEkscIhEzQKmpR
-         eFiLgu9ImtJZ7cFX8xIJtJXj4BjdBfB/IbUnDFBAk9HsbIMpguvr7/4R5E++Nao6xfnw
-         nPgwAXR/EIqLshGx4pzwk6lupOeHm4g6cowDseD3Gz056wGL/xikabOuQqsVud346/iJ
-         F1veMJjRlMPcETUinScAFa2hY3QnYWoiGtoYK2i0NqMxXOHCwon1tdr1Zfv0JYxF/lCx
-         +UmnJqv6nNSs+mkQvLvvj4PcKmbIkewx9m/a6Sh/XRIGMMAccrUQIiIam5a9VDuGxgqi
-         fEqw==
-X-Gm-Message-State: ACgBeo143wCTSXVXOh4AkV4IIXUSjjmHHXYbqcA8ZKzRwvECZkGBmKXv
-        kVh/g6p97I/oCQXARPRDiUO6aArgzH+7MPmfXrXdyw==
-X-Google-Smtp-Source: AA6agR5pzAAJiuU9oX7Kdy38RRItPdNJmP3D71vCHcN9IBFjaFJ7BYZAyyUaT85g2vLwlvmgqg2PHrRSMbAXXhk1Sng=
-X-Received: by 2002:a05:620a:459e:b0:6ba:c5a7:485c with SMTP id
- bp30-20020a05620a459e00b006bac5a7485cmr12410926qkb.267.1660598004119; Mon, 15
- Aug 2022 14:13:24 -0700 (PDT)
+        Mon, 15 Aug 2022 21:20:27 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643021C1865;
+        Mon, 15 Aug 2022 14:12:09 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 4480232004AE;
+        Mon, 15 Aug 2022 17:12:07 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Mon, 15 Aug 2022 17:12:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bur.io; h=cc:cc
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1660597926; x=1660684326; bh=duedlCLDEu
+        9t8HnT+Y8HmDQ++Q7DMuHbP3sR5+RPBD8=; b=ncmQW4mdway+eYunr02KKcLLnB
+        qeoRtm4heWV5bPDmXKCULOeCVxp5QfxYU0zRWVG25Bt9CTRduQaQyi2jQg/bSI9x
+        6UqH8JzoV47QuYxZvE7ccJCgudeCUjejz5HXfPudr0jVaK9qJcQr+D0vdMpao+Hr
+        sWpK4DZS8L5SL5IYs1laqKojYbOeQGfKRVmp5iUdwZCT3MXriwqeLY0w6QOdVhKQ
+        mhFZ98ngEMEkpfeyeD9DtuiR46txJtj0iwYxltZw4bdc8MGqvbsvuiiVGuXN5+1p
+        rOcHElfAIAFp37RVpVYJddz/PiO5NOz3PWOA4Vxsl0JGklAhBQyKpciOy4wQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660597926; x=1660684326; bh=duedlCLDEu9t8HnT+Y8HmDQ++Q7D
+        MuHbP3sR5+RPBD8=; b=UhY1MFd0BSHNck9qz+wHrdZjIu0VqjwBtM6eCdIM3+Pb
+        cTl1rqreTSh/XuQXip5V06QM6eD40t5yHnh//biLvoXoZE694dUn35EpbgrFUX54
+        In5lSMBtiNAaLY8LqDF9+EMet/6Um9Ok5MPNoOBbI7CVnRhCWRbbL4q7TH3LvCwM
+        c+vZ+aPBeWHIXooGtXegKlI9ymLZB5toK7H+gEjXxNsGrhJXkjL+fKkDuFGNbAwR
+        BY+RUJYoEWLcgi1+wjFdQ0jKANvcbc9t4H/Etp8YT7GKkgOWaSmHsY92Zu3kyNx8
+        EIY7RmcSjBupFEC//bQ7x1aw2IiArIRR7s1uJk/guw==
+X-ME-Sender: <xms:pbb6YqYdHobCAelZ7xNWnF5o0CwhRvUzh8W3KlRqsKaQ9lp8Sp2kZg>
+    <xme:pbb6Ytbfc7qcHL2O2PJyxXwqJujRiPRZuKNxYiamCFFaHOudoMGjRerj8i9_XG20i
+    HRyaBqyXZhQEQaM8Fw>
+X-ME-Received: <xmr:pbb6Yk_qGGPBERhlmIMHWnFnaL7j5w7XNX69dNUzxe9B9TefWhv9K79eT4oLzKqIOLl7E17Uk9UgeIlirpAFiRol0EuOcA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehvddgudeitdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuffkfhggtggujgesth
+    dtredttddtvdenucfhrhhomhepuehorhhishcuuehurhhkohhvuceosghorhhishessghu
+    rhdrihhoqeenucggtffrrghtthgvrhhnpeekvdekffejleelhfevhedvjeduhfejtdfhvd
+    evieeiiedugfeugfdtjefgfeeljeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgr
+    mhepmhgrihhlfhhrohhmpegsohhrihhssegsuhhrrdhioh
+X-ME-Proxy: <xmx:pbb6Ysop1lsXOOFMHT1RA1DY5xfzrzTKFdekNZBcpZuS4MOm4FtzBw>
+    <xmx:pbb6YloLN3K-WvhF3UbI_yxBChNdwVW2Tv6JVCYVA1pGrnDqYCSurQ>
+    <xmx:pbb6YqRNgRn4GduhrhdTsxeWUA-h48zui3BBOKN7I70BIxQ9WaqGkQ>
+    <xmx:prb6Ymc4hqTqn1QZ7_5AC3aIOhL8qDEhmX0AifcitlFY_9TYjI5WWQ>
+Feedback-ID: i083147f8:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 15 Aug 2022 17:12:05 -0400 (EDT)
+Date:   Mon, 15 Aug 2022 14:13:28 -0700
+From:   Boris Burkov <boris@bur.io>
+To:     Zixuan Fu <r33s3n6@gmail.com>
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        baijiaju1990@gmail.com, TOTE Robot <oslab@tsinghua.edu.cn>
+Subject: Re: [PATCH] fs: btrfs: fix possible memory leaks in
+ btrfs_get_dev_args_from_path()
+Message-ID: <Yvq2+EWVBc5L1LZH@zen>
+References: <20220815151606.3479183-1-r33s3n6@gmail.com>
 MIME-Version: 1.0
-References: <20220808155248.2475981-1-void@manifault.com> <CA+khW7iuENZHvbyWUkq1T1ieV9Yz+MJyRs=7Kd6N59kPTjz7Rg@mail.gmail.com>
- <20220810011510.c3chrli27e6ebftt@maniforge>
-In-Reply-To: <20220810011510.c3chrli27e6ebftt@maniforge>
-From:   Hao Luo <haoluo@google.com>
-Date:   Mon, 15 Aug 2022 14:13:13 -0700
-Message-ID: <CA+khW7iBeAW9tzuZqVaafcAFQZhNwjdEBwE8C-zAaq8gkyujFQ@mail.gmail.com>
-Subject: Re: [PATCH 0/5] bpf: Add user-space-publisher ringbuffer map type
-To:     David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        jolsa@kernel.org, tj@kernel.org, joannelkoong@gmail.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220815151606.3479183-1-r33s3n6@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,52 +84,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 6:15 PM David Vernet <void@manifault.com> wrote:
->
-> Hi Hao,
->
-> On Mon, Aug 08, 2022 at 11:57:53AM -0700, Hao Luo wrote:
-> > > Note that one thing that is not included in this patch-set is the ability
-> > > to kick the kernel from user-space to have it drain messages. The selftests
-> > > included in this patch-set currently just use progs with syscall hooks to
-> > > "kick" the kernel and have it drain samples from a user-producer
-> > > ringbuffer, but being able to kick the kernel using some other mechanism
-> > > that doesn't rely on such hooks would be very useful as well. I'm planning
-> > > on adding this in a future patch-set.
-> > >
-> >
-> > This could be done using iters. Basically, you can perform draining in
-> > bpf_iter programs and export iter links as bpffs files. Then to kick
-> > the kernel, you simply just read() the file.
->
-> Thanks for pointing this out. I agree that iters could be used this way to
-> kick the kernel, and perhaps that would be a sufficient solution. My
-> thinking, however, was that it would be useful to provide some APIs that
-> are a bit more ergonomic, and specifically meant to enable kicking
-> arbitrary "pre-attached" callbacks in a BPF prog, possibly along with some
-> payload from userspace.
-
-David, very sorry about the late reply. Thank you for sharing your
-thoughts. I am looking at your v2 and understand you need a way to
-trigger the kernel to consume samples in the ringbuf, which seems a
-reasonable motivation to me.
-
->
-> Iters allow userspace to kick the kernel, but IMO they're meant to enable
-> data extraction from the kernel, and dumping kernel data into user-space.
-
-Not necessarily extracting data and dumping data. It could be used to
-do operations on a set of objects, the operation could be
-notification. Iterating and notifying are orthogonal IMHO.
-
-> What I'm proposing is a more generalizable way of driving logic in the
-> kernel from user-space.
-> Does that make sense? Looking forward to hearing your thoughts.
-
-Yes, sort of. I see the difference between iter and the proposed
-interface. But I am not clear about the motivation of a new APis for
-kicking callbacks from userspace. I guess maybe it will become clear,
-when you publish a concerte RFC of that interface and integrates with
-your userspace publisher.
-
-Hao
+On Mon, Aug 15, 2022 at 11:16:06PM +0800, Zixuan Fu wrote:
+> In btrfs_get_dev_args_from_path(), btrfs_get_bdev_and_sb() can fail if the
+> path is invalid. In this case, btrfs_get_dev_args_from_path() returns
+> directly without freeing args->uuid and args->fsid allocated before, which
+> causes memory leaks.
+> 
+> To fix these possible leaks, when btrfs_get_bdev_and_sb() fails, 
+> btrfs_put_dev_args_from_path() is called to clean up the memory.
+> 
+> Fixes: faa775c41d655 ("btrfs: add a btrfs_get_dev_args_from_path helper")
+> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+> Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
+Reviewed-by: Boris Burkov <boris@bur.io>
+> ---
+>  fs/btrfs/volumes.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
+> index 272901514b0c..064ab2a79c80 100644
+> --- a/fs/btrfs/volumes.c
+> +++ b/fs/btrfs/volumes.c
+> @@ -2345,8 +2345,11 @@ int btrfs_get_dev_args_from_path(struct btrfs_fs_info *fs_info,
+>  
+>  	ret = btrfs_get_bdev_and_sb(path, FMODE_READ, fs_info->bdev_holder, 0,
+>  				    &bdev, &disk_super);
+> -	if (ret)
+> +	if (ret) {
+> +		btrfs_put_dev_args_from_path(args);
+>  		return ret;
+> +	}
+> +
+>  	args->devid = btrfs_stack_device_id(&disk_super->dev_item);
+>  	memcpy(args->uuid, disk_super->dev_item.uuid, BTRFS_UUID_SIZE);
+>  	if (btrfs_fs_incompat(fs_info, METADATA_UUID))
+> -- 
+> 2.25.1
+> 

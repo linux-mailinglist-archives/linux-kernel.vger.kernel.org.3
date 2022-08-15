@@ -2,123 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8147594DE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20015594DE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351333AbiHPA21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 20:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
+        id S1346621AbiHPA2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 20:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355808AbiHPA0w (ORCPT
+        with ESMTP id S1355192AbiHPA0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 20:26:52 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A35A924F;
-        Mon, 15 Aug 2022 13:34:33 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id a9so12088606lfm.12;
-        Mon, 15 Aug 2022 13:34:33 -0700 (PDT)
+        Mon, 15 Aug 2022 20:26:35 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DCF4D838;
+        Mon, 15 Aug 2022 13:34:30 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id q7-20020a17090a7a8700b001f300db8677so7742972pjf.5;
+        Mon, 15 Aug 2022 13:34:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=edBKqiVnU84WIOC5Qmj5Rk7CwLqtESwhF2nX0tSKFBo=;
-        b=qDe9CTkaYOZ8QfGGEZWgKVaU6v0Be3OJaGRxWiA/Gip12e6+QSOm7BQy8NHS99Vl8J
-         kXXaVp08xA725DVH0WEKUkl78emxsl++Z3MJcrsXhCwFqS2RXGm/EtgApd0XVgzPAMoS
-         oRI1c9StJ748f73evLhknd1xfoYVYNwDof8RD9eIwRyQLGtbT+aBz7JkFmqzuIF9yMTf
-         IXBNbxmV7HGZ/v4REGo8UHR2FSjhqZM69UdtlwAXn3Gs0HEuFUvPZDs40ldPpnGMKard
-         fqb4EQtz2g8ELtQt/xXaTs74RDZaMeOiBS88ZkTW3crVT6mod5gWWU7dXKcuK8KV+NSC
-         Hghw==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=4KBjvCyqweA/YX6s5FrlHJFUw4QF4lCn5nqOQumUNOw=;
+        b=n7wjnkSjZc1R11i26aCHTFhm74vZ8nzR9cXmhqbIckThGcJwEbsNfn0yV54qtZY/aA
+         3754Wn+6H4TQ/KYOC6p+fWd1hFCRjZgh8a+5hypTteu8iZiY9VzQymDfIdktlyVPjyIG
+         bFXqUv97O4zemEtV1538vosbA6PIRXK2HIb2m5JGaEJV01domLWcDGkxsCjCOlTZF9uy
+         /URJnyuvJfrpvx6obJoe42NfPRQxaMogFFImYSbep1347D3/i7RRT0EgcIkcMQ/XUAJn
+         m5qnorABzZVhiWEK4fk3BjC3N0xItDOHL+utn71Os/nV1ahcNywlz9dYRl4cxp59HSqQ
+         iVzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=edBKqiVnU84WIOC5Qmj5Rk7CwLqtESwhF2nX0tSKFBo=;
-        b=llMdcaq1lQJ2uO9FU88lRPWunx0elrFuC79juaOTVKDNFr1UC4X3zU7/epQ5rZIe+z
-         a2FoRiyeMX+HaT9m2RU1tN3AlSiQXshEqHEyXT7MFvco2IDEbcCDNh59n7LD2yxBf0IT
-         3lZLg9muyehdIxSJa2F6yf5dPm8RBmPWj2AVyYxAH2ts3im1zWnGCSMKNf7BcwJR/ckM
-         EN7P415pbKzgYlzny1e04oPaUmtikBhj3Gt7+HGC7mNpqhFEcmRcA0/yZlw9puCY9HO8
-         SDOVat4l+Lha/xenwZQOxAmDR78oT57T3f/doTnx3csUVKbfDHR+1HGVQeq5LhMMkdJq
-         ESXg==
-X-Gm-Message-State: ACgBeo2flfr1YucvyKzE4KYn3HsHN6C/Y07NWEYZ5ZC2aJZ4f/LhhYZo
-        E0xT0K9QOTNq+UdSpyraVF5UsIFQQkRtkpUHnJU=
-X-Google-Smtp-Source: AA6agR5vM+UNSRwhLs/v9HbarggElOPYzJ7rZD9sUdiNhmBn1UguMr3CWEt1kQ40IUwrV94Dd/Kuy0+PDwLsh239dcA=
-X-Received: by 2002:a05:6512:308a:b0:48b:4dd:5362 with SMTP id
- z10-20020a056512308a00b0048b04dd5362mr6146081lfd.575.1660595670001; Mon, 15
- Aug 2022 13:34:30 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=4KBjvCyqweA/YX6s5FrlHJFUw4QF4lCn5nqOQumUNOw=;
+        b=e2vGH6tKNrxfTdYahFDNvpEn6qcOLaBGK39KK5uHegBdviT4pMp8hm/QoemobnS8dZ
+         aIpGPCvTNpkbyB64Dm8G58DQ0zDZysu4zHod9qHQtl3TycPSAwlCvaZFZuFxCLgZZkHQ
+         eQLb8+DShCSqN8k4j4LuG9LpmF+yrT2ygRthKtRSNmVBhfcRiie8uGRHsRH4ilw+L0Zs
+         foM3qStKHx9xuHAKpMPDLoan8uXCIeWDNq2DJbRRxbDnlTylh8+y1nK9I8Ca+L7M/vx2
+         Qd+goctm62yWpk8wj/M2kSaFNnirN15tcvdMEeH6fO7CPBWOhY9Cc2S4KxDAgzl3CXjH
+         qhRg==
+X-Gm-Message-State: ACgBeo0kIWQwf7PTks69i1codmDuFFCD3Dovvfm+pqM6rk52L2UV2l5p
+        QTIp9b+4h1IbxMzrobzkDXI=
+X-Google-Smtp-Source: AA6agR56UkQzLgBD2aEpa9hh8Hb8XpBeAwQQqChCNJu6bckZm5Rn+ApILdQPknCukpG3U0gTJGgNkA==
+X-Received: by 2002:a17:90a:a416:b0:1f7:3b5f:1cd1 with SMTP id y22-20020a17090aa41600b001f73b5f1cd1mr20111586pjp.216.1660595669422;
+        Mon, 15 Aug 2022 13:34:29 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 128-20020a620586000000b0052baa22575asm6934652pff.134.2022.08.15.13.34.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 13:34:28 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 15 Aug 2022 13:34:26 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andres Freund <andres@anarazel.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>, c@redhat.com
+Subject: Re: [PATCH] virtio_net: Revert "virtio_net: set the default max ring
+ size by find_vqs()"
+Message-ID: <20220815203426.GA509309@roeck-us.net>
+References: <20220815090521.127607-1-mst@redhat.com>
 MIME-Version: 1.0
-References: <20220815175114.23576-1-konishi.ryusuke@gmail.com> <YvqP/f2P2YgIIO9U@ZenIV>
-In-Reply-To: <YvqP/f2P2YgIIO9U@ZenIV>
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Date:   Tue, 16 Aug 2022 05:34:12 +0900
-Message-ID: <CAKFNMomyjXpsz-=BtG+G3q1J7CFUBMEfP13FfxwhWB==9qb++w@mail.gmail.com>
-Subject: Re: [PATCH] nilfs2: fix use-after-free bug in nilfs_mdt_destroy()
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-nilfs <linux-nilfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jiacheng Xu <stitch@zju.edu.cn>,
-        Mudong Liang <mudongliangabcd@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220815090521.127607-1-mst@redhat.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 3:27 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> On Tue, Aug 16, 2022 at 02:51:14AM +0900, Ryusuke Konishi wrote:
-> > In alloc_inode(), inode_init_always() could return -ENOMEM if
-> > security_inode_alloc() fails.  If this happens for nilfs2,
-> > nilfs_free_inode() is called without initializing inode->i_private and
-> > nilfs_free_inode() wrongly calls nilfs_mdt_destroy(), which frees
-> > uninitialized inode->i_private and can trigger a crash.
-> >
-> > Fix this bug by initializing inode->i_private in nilfs_alloc_inode().
-> >
-> > Link: https://lkml.kernel.org/r/CAFcO6XOcf1Jj2SeGt=jJV59wmhESeSKpfR0omdFRq+J9nD1vfQ@mail.gmail.com
-> > Link: https://lkml.kernel.org/r/20211011030956.2459172-1-mudongliangabcd@gmail.com
-> > Reported-by: butt3rflyh4ck <butterflyhuangxx@gmail.com>
-> > Reported-by: Hao Sun <sunhao.th@gmail.com>
-> > Reported-by: Jiacheng Xu <stitch@zju.edu.cn>
-> > Reported-by: Mudong Liang <mudongliangabcd@gmail.com>
-> > Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-> > Cc: Al Viro <viro@zeniv.linux.org.uk>
-> > ---
-> >  fs/nilfs2/super.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/fs/nilfs2/super.c b/fs/nilfs2/super.c
-> > index ba108f915391..aca5614f1b44 100644
-> > --- a/fs/nilfs2/super.c
-> > +++ b/fs/nilfs2/super.c
-> > @@ -159,6 +159,7 @@ struct inode *nilfs_alloc_inode(struct super_block *sb)
-> >       ii->i_cno = 0;
-> >       ii->i_assoc_inode = NULL;
-> >       ii->i_bmap = &ii->i_bmap_data;
-> > +     ii->vfs_inode.i_private = NULL;
-> >       return &ii->vfs_inode;
-> >  }
->
-> FWIW, I think it's better to deal with that in inode_init_always(), but
-> not just moving ->i_private initialization up - we ought to move
-> security_inode_alloc() to the very end.  No sense playing whack-a-mole
-> with further possible bugs of that sort...
+On Mon, Aug 15, 2022 at 05:16:50AM -0400, Michael S. Tsirkin wrote:
+> This reverts commit 762faee5a2678559d3dc09d95f8f2c54cd0466a7.
+> 
+> This has been reported to trip up guests on GCP (Google Cloud).  Why is
+> not yet clear - to be debugged, but the patch itself has several other
+> issues:
+> 
+> - It treats unknown speed as < 10G
+> - It leaves userspace no way to find out the ring size set by hypervisor
+> - It tests speed when link is down
+> - It ignores the virtio spec advice:
+>         Both \field{speed} and \field{duplex} can change, thus the driver
+>         is expected to re-read these values after receiving a
+>         configuration change notification.
+> - It is not clear the performance impact has been tested properly
+> 
+> Revert the patch for now.
+> 
+> Link: https://lore.kernel.org/r/20220814212610.GA3690074%40roeck-us.net
+> Link: https://lore.kernel.org/r/20220815070203.plwjx7b3cyugpdt7%40awork3.anarazel.de
+> Link: https://lore.kernel.org/r/3df6bb82-1951-455d-a768-e9e1513eb667%40www.fastmail.com
+> Link: https://lore.kernel.org/r/FCDC5DDE-3CDD-4B8A-916F-CA7D87B547CE%40anarazel.de
+> Fixes: 762faee5a267 ("virtio_net: set the default max ring size by find_vqs()")
+> Cc: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> Cc: Jason Wang <jasowang@redhat.com>
+> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> Tested-by: Andres Freund <andres@anarazel.de>
 
-Yes, I agree it's better if security_inode_alloc() is moved to the end as
-possible in the sense of avoiding similar issues.
-But, would that vfs change be safe to backport to stable trees?
+I ran this patch through a total of 14 syskaller tests, 2 test runs each on
+7 different crashes reported by syzkaller (as reported to the linux-kernel
+mailing list). No problems were reported. I also ran a single cross-check
+with one of the syzkaller runs on top of v6.0-rc1, without this patch.
+That test run failed.
 
-It looks like the error handling for security_inode_alloc()  is in the
-middle of inode_init_always() for a very long time..
+Overall, I think we can call this fixed.
 
-If you want to see the impact of the vfs change, I think it's one way
-to apply this one in advance.  Or if you want to fix it in one step,
-I think it's good too.  How do you feel about this ?
+Guenter
 
-Thanks,
-Ryusuke Konishi
+---
+syskaller reports:
+
+Reported-and-tested-by: syzbot+2984d1b7aef6b51353f0@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         568035b0 Linux 6.0-rc1
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git v6.0-rc1
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3b9175e0879a7749
+dashboard link: https://syzkaller.appspot.com/bug?extid=2984d1b7aef6b51353f0
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=11949fc3080000
+
+Reported-and-tested-by: syzbot+2c35c4d66094ddfe198e@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         568035b0 Linux 6.0-rc1
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git v6.0-rc1
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
+dashboard link: https://syzkaller.appspot.com/bug?extid=2c35c4d66094ddfe198e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=163e20f3080000
+
+Reported-and-tested-by: syzbot+97f830ad641de86d08c0@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         568035b0 Linux 6.0-rc1
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git v6.0-rc1
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f267ed4fb258122a
+dashboard link: https://syzkaller.appspot.com/bug?extid=97f830ad641de86d08c0
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=146c8e5b080000
+
+Reported-and-tested-by: syzbot+005efde5e97744047fe4@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         568035b0 Linux 6.0-rc1
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git v6.0-rc1
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
+dashboard link: https://syzkaller.appspot.com/bug?extid=005efde5e97744047fe4
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=106c8e5b080000
+
+Reported-and-tested-by: syzbot+9ada839c852179f13999@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         568035b0 Linux 6.0-rc1
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git v6.0-rc1
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3b9175e0879a7749
+dashboard link: https://syzkaller.appspot.com/bug?extid=9ada839c852179f13999
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=118756f3080000
+
+Reported-and-tested-by: syzbot+382af021ce115a936b1f@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         568035b0 Linux 6.0-rc1
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git v6.0-rc1
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e656d8727a25e83b
+dashboard link: https://syzkaller.appspot.com/bug?extid=382af021ce115a936b1f
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=135f650d080000
+
+Reported-and-tested-by: syzbot+24df94a8d05d5a3e68f0@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         568035b0 Linux 6.0-rc1
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git v6.0-rc1
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3b9175e0879a7749
+dashboard link: https://syzkaller.appspot.com/bug?extid=24df94a8d05d5a3e68f0
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=12758a47080000

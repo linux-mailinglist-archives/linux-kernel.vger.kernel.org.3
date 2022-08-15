@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7855948BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1FD2594980
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344823AbiHOXOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
+        id S243440AbiHOXPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346544AbiHOXNW (ORCPT
+        with ESMTP id S245556AbiHOXNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:13:22 -0400
+        Mon, 15 Aug 2022 19:13:41 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0881F79A71;
-        Mon, 15 Aug 2022 13:01:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3359779EF8;
+        Mon, 15 Aug 2022 13:01:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BFCCDB81142;
-        Mon, 15 Aug 2022 20:01:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29B42C433D6;
-        Mon, 15 Aug 2022 20:00:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC9B3B80EB1;
+        Mon, 15 Aug 2022 20:01:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34A66C433D6;
+        Mon, 15 Aug 2022 20:01:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593659;
-        bh=QG7YcB/YnSrWQNHGMYY9Gqyv7zylhFoS0ArZmhPGD6A=;
+        s=korg; t=1660593665;
+        bh=DpIsB85cAaX72M1feI13jcsxfwUbFB17TZwzeEvMRtA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CqTo+7wsEFfUnmlcq542/ipd9T1DdUNxlN+Oz3V04Q5hVwtsycFI56AxfZXQK+9Za
-         mY4xu+O7YlD7cVuZYHcXy/P7EWRhRe2UywbcaEl0kPqPzxyi5LzJ/xGojt2oaJtEYO
-         xRXea34x7CrnBAdi3+AcBRgYf/IFbYcU8RoozwWk=
+        b=LmSoWZPbP6Fp7TN4Y5OfdZieLZhiPhqdS0h/CMZhOOk5BAO9i3PR8lst4fC09rK1S
+         nVO9hRHLht3eb5Xv7MiyPuffwf9zYIWiajJIXvAKqi5ICufMszUlUN4vV3t5tSmzhR
+         fEr+t4upj+RllfagoA7dG51kcL46DYIgqABr+hQo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lyude Paul <lyude@redhat.com>,
-        Imre Deak <imre.deak@intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
+        stable@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Maxime Ripard <maxime@cerno.tech>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 0983/1095] drm/dp/mst: Read the extended DPCD capabilities during system resume
-Date:   Mon, 15 Aug 2022 20:06:22 +0200
-Message-Id: <20220815180509.790596022@linuxfoundation.org>
+Subject: [PATCH 5.18 0984/1095] drm/vc4: drv: Adopt the dma configuration from the HVS or V3D component
+Date:   Mon, 15 Aug 2022 20:06:23 +0200
+Message-Id: <20220815180509.832340319@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
 References: <20220815180429.240518113@linuxfoundation.org>
@@ -56,55 +56,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Imre Deak <imre.deak@intel.com>
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-[ Upstream commit 7a710a8bc909313951eb9252d8419924c771d7c2 ]
+[ Upstream commit da8e393e23efb60eba8959856c7df88f9859f6eb ]
 
-The WD22TB4 Thunderbolt dock at least will revert its DP_MAX_LINK_RATE
-from HBR3 to HBR2 after system suspend/resume if the DP_DP13_DPCD_REV
-registers are not read subsequently also as required.
+vc4_drv isn't necessarily under the /soc node in DT as it is a
+virtual device, but it is the one that does the allocations.
+The DMA addresses are consumed by primarily the HVS or V3D, and
+those require VideoCore cache alias address mapping, and so will be
+under /soc.
 
-Fix this by reading DP_DP13_DPCD_REV registers as well, matching what is
-done during connector detection. While at it also fix up the same call
-in drm_dp_mst_dump_topology().
+During probe find the a suitable device node for HVS or V3D,
+and adopt the DMA configuration of that node.
 
-Cc: Lyude Paul <lyude@redhat.com>
-Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/5292
-Signed-off-by: Imre Deak <imre.deak@intel.com>
-Reviewed-by: Jani Nikula <jani.nikula@intel.com>
-Cc: <stable@vger.kernel.org> # v5.14+
-Reviewed-by: Lyude Paul <lyude@redhat.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220614094537.885472-1-imre.deak@intel.com
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Link: https://lore.kernel.org/r/20220613144800.326124-2-maxime@cerno.tech
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/dp/drm_dp_mst_topology.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/vc4/vc4_drv.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/drivers/gpu/drm/dp/drm_dp_mst_topology.c b/drivers/gpu/drm/dp/drm_dp_mst_topology.c
-index 7a7cc44686f9..96869875390f 100644
---- a/drivers/gpu/drm/dp/drm_dp_mst_topology.c
-+++ b/drivers/gpu/drm/dp/drm_dp_mst_topology.c
-@@ -3861,9 +3861,7 @@ int drm_dp_mst_topology_mgr_resume(struct drm_dp_mst_topology_mgr *mgr,
- 	if (!mgr->mst_primary)
- 		goto out_fail;
- 
--	ret = drm_dp_dpcd_read(mgr->aux, DP_DPCD_REV, mgr->dpcd,
--			       DP_RECEIVER_CAP_SIZE);
--	if (ret != DP_RECEIVER_CAP_SIZE) {
-+	if (drm_dp_read_dpcd_caps(mgr->aux, mgr->dpcd) < 0) {
- 		drm_dbg_kms(mgr->dev, "dpcd read failed - undocked during suspend?\n");
- 		goto out_fail;
+diff --git a/drivers/gpu/drm/vc4/vc4_drv.c b/drivers/gpu/drm/vc4/vc4_drv.c
+index 162bc18e7497..14a7d529144d 100644
+--- a/drivers/gpu/drm/vc4/vc4_drv.c
++++ b/drivers/gpu/drm/vc4/vc4_drv.c
+@@ -209,6 +209,15 @@ static void vc4_match_add_drivers(struct device *dev,
  	}
-@@ -4912,8 +4910,7 @@ void drm_dp_mst_dump_topology(struct seq_file *m,
- 		u8 buf[DP_PAYLOAD_TABLE_SIZE];
- 		int ret;
+ }
  
--		ret = drm_dp_dpcd_read(mgr->aux, DP_DPCD_REV, buf, DP_RECEIVER_CAP_SIZE);
--		if (ret) {
-+		if (drm_dp_read_dpcd_caps(mgr->aux, buf) < 0) {
- 			seq_printf(m, "dpcd read failed\n");
- 			goto out;
- 		}
++const struct of_device_id vc4_dma_range_matches[] = {
++	{ .compatible = "brcm,bcm2711-hvs" },
++	{ .compatible = "brcm,bcm2835-hvs" },
++	{ .compatible = "brcm,bcm2835-v3d" },
++	{ .compatible = "brcm,cygnus-v3d" },
++	{ .compatible = "brcm,vc4-v3d" },
++	{}
++};
++
+ static int vc4_drm_bind(struct device *dev)
+ {
+ 	struct platform_device *pdev = to_platform_device(dev);
+@@ -227,6 +236,16 @@ static int vc4_drm_bind(struct device *dev)
+ 		vc4_drm_driver.driver_features &= ~DRIVER_RENDER;
+ 	of_node_put(node);
+ 
++	node = of_find_matching_node_and_match(NULL, vc4_dma_range_matches,
++					       NULL);
++	if (node) {
++		ret = of_dma_configure(dev, node, true);
++		of_node_put(node);
++
++		if (ret)
++			return ret;
++	}
++
+ 	vc4 = devm_drm_dev_alloc(dev, &vc4_drm_driver, struct vc4_dev, base);
+ 	if (IS_ERR(vc4))
+ 		return PTR_ERR(vc4);
 -- 
 2.35.1
 

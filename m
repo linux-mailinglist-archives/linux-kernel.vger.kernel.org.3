@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F8665932FC
+	by mail.lfdr.de (Postfix) with ESMTP id DA9EB5932FD
 	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 18:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232644AbiHOQUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 12:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
+        id S232575AbiHOQUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 12:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbiHOQUb (ORCPT
+        with ESMTP id S231683AbiHOQUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 12:20:31 -0400
+        Mon, 15 Aug 2022 12:20:34 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CFAED11153
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 09:20:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF91313CFC
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 09:20:31 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E3F81D31;
-        Mon, 15 Aug 2022 09:20:30 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 15E54113E;
+        Mon, 15 Aug 2022 09:20:32 -0700 (PDT)
 Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 359793F70D;
-        Mon, 15 Aug 2022 09:20:28 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D13C83F70D;
+        Mon, 15 Aug 2022 09:20:29 -0700 (PDT)
 From:   Robin Murphy <robin.murphy@arm.com>
 To:     joro@8bytes.org
 Cc:     will@kernel.org, iommu@lists.linux.dev,
@@ -28,9 +28,9 @@ Cc:     will@kernel.org, iommu@lists.linux.dev,
         kevin.tian@intel.com, suravee.suthikulpanit@amd.com,
         vasant.hegde@amd.com, mjrosato@linux.ibm.com,
         schnelle@linux.ibm.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 04/16] iommu: Always register bus notifiers
-Date:   Mon, 15 Aug 2022 17:20:05 +0100
-Message-Id: <7462347bf938bd6eedb629a3a318434f6516e712.1660572783.git.robin.murphy@arm.com>
+Subject: [PATCH v4 05/16] iommu: Move bus setup to IOMMU device registration
+Date:   Mon, 15 Aug 2022 17:20:06 +0100
+Message-Id: <d342b6f27efb5ef3e93aacaa3012d25386d74866.1660572783.git.robin.murphy@arm.com>
 X-Mailer: git-send-email 2.36.1.dirty
 In-Reply-To: <cover.1660572783.git.robin.murphy@arm.com>
 References: <cover.1660572783.git.robin.murphy@arm.com>
@@ -45,164 +45,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The number of bus types that the IOMMU subsystem deals with is small and
-manageable, so pull that list into core code as a first step towards
-cleaning up all the boilerplate bus-awareness from drivers. Calling
-iommu_probe_device() before bus->iommu_ops is set will simply return
--ENODEV and not break the notifier call chain, so there should be no
-harm in proactively registering all our bus notifiers at init time.
+Move the bus setup to iommu_device_register(). This should allow
+bus_iommu_probe() to be correctly replayed for multiple IOMMU instances,
+and leaves bus_set_iommu() as a glorified no-op to be cleaned up next.
+
+At this point we can also handle cleanup better than just rolling back
+the most-recently-touched bus upon failure - which may release devices
+owned by other already-registered instances, and still leave devices on
+other buses with dangling pointers to the failed instance. Now it's easy
+to clean up the exact footprint of a given instance, no more, no less.
 
 Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Reviewed-By: Krishna Reddy <vdumpa@nvidia.com>
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
 Tested-by: Matthew Rosato <mjrosato@linux.ibm.com> # s390
 Tested-by: Niklas Schnelle <schnelle@linux.ibm.com> # s390
 Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 ---
 
-v4: Squash iommu_bus_init() entirely, for maximum simplicity. Ignoring
-    the return from bus_register_notifier() is common, so hopefully it's
-    all pretty self-explanatory now.
+v4: Factor out the ops check in iommu_device_register() to keep the loop
+even simpler, and comment the nominal change in behaviour
 
- drivers/iommu/iommu.c | 72 ++++++++++++++++++++++---------------------
- 1 file changed, 37 insertions(+), 35 deletions(-)
+ drivers/iommu/iommu.c | 55 +++++++++++++++++++++++--------------------
+ 1 file changed, 30 insertions(+), 25 deletions(-)
 
 diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index 780fb7071577..a8d14f2a1035 100644
+index a8d14f2a1035..4db0874a5ed6 100644
 --- a/drivers/iommu/iommu.c
 +++ b/drivers/iommu/iommu.c
-@@ -6,6 +6,7 @@
- 
- #define pr_fmt(fmt)    "iommu: " fmt
- 
-+#include <linux/amba/bus.h>
- #include <linux/device.h>
- #include <linux/dma-iommu.h>
- #include <linux/kernel.h>
-@@ -16,11 +17,13 @@
- #include <linux/export.h>
- #include <linux/slab.h>
- #include <linux/errno.h>
-+#include <linux/host1x_context_bus.h>
- #include <linux/iommu.h>
- #include <linux/idr.h>
- #include <linux/err.h>
- #include <linux/pci.h>
- #include <linux/bitops.h>
-+#include <linux/platform_device.h>
- #include <linux/property.h>
- #include <linux/fsl/mc.h>
- #include <linux/module.h>
-@@ -75,6 +78,8 @@ static const char * const iommu_group_resv_type_string[] = {
- #define IOMMU_CMD_LINE_DMA_API		BIT(0)
- #define IOMMU_CMD_LINE_STRICT		BIT(1)
- 
-+static int iommu_bus_notifier(struct notifier_block *nb,
-+			      unsigned long action, void *data);
- static int iommu_alloc_default_domain(struct iommu_group *group,
- 				      struct device *dev);
- static struct iommu_domain *__iommu_domain_alloc(struct bus_type *bus,
-@@ -103,6 +108,22 @@ struct iommu_group_attribute iommu_group_attr_##_name =		\
- static LIST_HEAD(iommu_device_list);
- static DEFINE_SPINLOCK(iommu_device_lock);
- 
-+static struct bus_type * const iommu_buses[] = {
-+	&platform_bus_type,
-+#ifdef CONFIG_PCI
-+	&pci_bus_type,
-+#endif
-+#ifdef CONFIG_ARM_AMBA
-+	&amba_bustype,
-+#endif
-+#ifdef CONFIG_FSL_MC_BUS
-+	&fsl_mc_bus_type,
-+#endif
-+#ifdef CONFIG_TEGRA_HOST1X_CONTEXT_BUS
-+	&host1x_context_device_bus_type,
-+#endif
-+};
-+
- /*
-  * Use a function instead of an array here because the domain-type is a
-  * bit-field, so an array would waste memory.
-@@ -126,6 +147,8 @@ static const char *iommu_domain_type_str(unsigned int t)
- 
- static int __init iommu_subsys_init(void)
- {
-+	struct notifier_block *nb;
-+
- 	if (!(iommu_cmd_line & IOMMU_CMD_LINE_DMA_API)) {
- 		if (IS_ENABLED(CONFIG_IOMMU_DEFAULT_PASSTHROUGH))
- 			iommu_set_default_passthrough(false);
-@@ -152,6 +175,15 @@ static int __init iommu_subsys_init(void)
- 			(iommu_cmd_line & IOMMU_CMD_LINE_STRICT) ?
- 				"(set via kernel command line)" : "");
- 
-+	nb = kcalloc(ARRAY_SIZE(iommu_buses), sizeof(*nb), GFP_KERNEL);
-+	if (!nb)
-+		return -ENOMEM;
-+
-+	for (int i = 0; i < ARRAY_SIZE(iommu_buses); i++) {
-+		nb[i].notifier_call = iommu_bus_notifier;
-+		bus_register_notifier(iommu_buses[i], &nb[i]);
-+	}
-+
- 	return 0;
+@@ -188,6 +188,14 @@ static int __init iommu_subsys_init(void)
  }
  subsys_initcall(iommu_subsys_init);
-@@ -1775,39 +1807,6 @@ int bus_iommu_probe(struct bus_type *bus)
+ 
++static int remove_iommu_group(struct device *dev, void *data)
++{
++	if (dev->iommu && dev->iommu->iommu_dev == data)
++		iommu_release_device(dev);
++
++	return 0;
++}
++
+ /**
+  * iommu_device_register() - Register an IOMMU hardware instance
+  * @iommu: IOMMU handle for the instance
+@@ -199,9 +207,18 @@ subsys_initcall(iommu_subsys_init);
+ int iommu_device_register(struct iommu_device *iommu,
+ 			  const struct iommu_ops *ops, struct device *hwdev)
+ {
++	int err = 0;
++
+ 	/* We need to be able to take module references appropriately */
+ 	if (WARN_ON(is_module_address((unsigned long)ops) && !ops->owner))
+ 		return -EINVAL;
++	/*
++	 * Temporarily enforce global restriction to a single driver. This was
++	 * already the de-facto behaviour, since any possible combination of
++	 * existing drivers would compete for at least the PCI or platform bus.
++	 */
++	if (iommu_buses[0]->iommu_ops && iommu_buses[0]->iommu_ops != ops)
++		return -EBUSY;
+ 
+ 	iommu->ops = ops;
+ 	if (hwdev)
+@@ -210,12 +227,22 @@ int iommu_device_register(struct iommu_device *iommu,
+ 	spin_lock(&iommu_device_lock);
+ 	list_add_tail(&iommu->list, &iommu_device_list);
+ 	spin_unlock(&iommu_device_lock);
+-	return 0;
++
++	for (int i = 0; i < ARRAY_SIZE(iommu_buses) && !err; i++) {
++		iommu_buses[i]->iommu_ops = ops;
++		err = bus_iommu_probe(iommu_buses[i]);
++	}
++	if (err)
++		iommu_device_unregister(iommu);
++	return err;
+ }
+ EXPORT_SYMBOL_GPL(iommu_device_register);
+ 
+ void iommu_device_unregister(struct iommu_device *iommu)
+ {
++	for (int i = 0; i < ARRAY_SIZE(iommu_buses); i++)
++		bus_for_each_dev(iommu_buses[i], NULL, iommu, remove_iommu_group);
++
+ 	spin_lock(&iommu_device_lock);
+ 	list_del(&iommu->list);
+ 	spin_unlock(&iommu_device_lock);
+@@ -1644,13 +1671,6 @@ static int probe_iommu_group(struct device *dev, void *data)
  	return ret;
  }
  
--static int iommu_bus_init(struct bus_type *bus, const struct iommu_ops *ops)
+-static int remove_iommu_group(struct device *dev, void *data)
 -{
--	struct notifier_block *nb;
--	int err;
--
--	nb = kzalloc(sizeof(struct notifier_block), GFP_KERNEL);
--	if (!nb)
--		return -ENOMEM;
--
--	nb->notifier_call = iommu_bus_notifier;
--
--	err = bus_register_notifier(bus, nb);
--	if (err)
--		goto out_free;
--
--	err = bus_iommu_probe(bus);
--	if (err)
--		goto out_err;
--
+-	iommu_release_device(dev);
 -
 -	return 0;
--
--out_err:
--	/* Clean up */
--	bus_for_each_dev(bus, NULL, NULL, remove_iommu_group);
--	bus_unregister_notifier(bus, nb);
--
--out_free:
--	kfree(nb);
--
--	return err;
 -}
 -
- /**
-  * bus_set_iommu - set iommu-callbacks for the bus
-  * @bus: bus.
-@@ -1836,9 +1835,12 @@ int bus_set_iommu(struct bus_type *bus, const struct iommu_ops *ops)
+ static int iommu_bus_notifier(struct notifier_block *nb,
+ 			      unsigned long action, void *data)
+ {
+@@ -1822,27 +1842,12 @@ int bus_iommu_probe(struct bus_type *bus)
+  */
+ int bus_set_iommu(struct bus_type *bus, const struct iommu_ops *ops)
+ {
+-	int err;
+-
+-	if (ops == NULL) {
+-		bus->iommu_ops = NULL;
+-		return 0;
+-	}
+-
+-	if (bus->iommu_ops != NULL)
++	if (bus->iommu_ops && ops && bus->iommu_ops != ops)
+ 		return -EBUSY;
+ 
  	bus->iommu_ops = ops;
  
- 	/* Do IOMMU specific setup for this bus-type */
--	err = iommu_bus_init(bus, ops);
--	if (err)
-+	err = bus_iommu_probe(bus);
-+	if (err) {
-+		/* Clean up */
-+		bus_for_each_dev(bus, NULL, NULL, remove_iommu_group);
- 		bus->iommu_ops = NULL;
-+	}
- 
- 	return err;
+-	/* Do IOMMU specific setup for this bus-type */
+-	err = bus_iommu_probe(bus);
+-	if (err) {
+-		/* Clean up */
+-		bus_for_each_dev(bus, NULL, NULL, remove_iommu_group);
+-		bus->iommu_ops = NULL;
+-	}
+-
+-	return err;
++	return 0;
  }
+ EXPORT_SYMBOL_GPL(bus_set_iommu);
+ 
 -- 
 2.36.1.dirty
 

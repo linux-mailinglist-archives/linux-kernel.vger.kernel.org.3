@@ -2,79 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE70D592F45
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C60E3592F4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242654AbiHONAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 09:00:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39024 "EHLO
+        id S232149AbiHONBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 09:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242650AbiHONAB (ORCPT
+        with ESMTP id S242680AbiHONAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 09:00:01 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB68B120A2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 06:00:00 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 15 Aug 2022 09:00:44 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE1CFE7;
+        Mon, 15 Aug 2022 06:00:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 513EF20AA9;
-        Mon, 15 Aug 2022 12:59:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1660568399; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PmjHXEGWukk1QpHwgkzRniVDwmGGZ1kBPl/lBbGNIuI=;
-        b=a2g25pzBylbpfiz81kB+cXLICQk0MYQCVM7PeTNnxmV8izWTGfVJg8jZxXgoTOcnQSNV8t
-        zL7W8eR3GU12HwCStp2qEiD5NphqNaDKB9rV3lu1WkvG1I503wh84j3UKdmyJPMngItYLv
-        zGdMvLOUuP5b6WZ2RqJzv8fwEw+E+Hk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1660568399;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PmjHXEGWukk1QpHwgkzRniVDwmGGZ1kBPl/lBbGNIuI=;
-        b=w30LhAOoGagCMWNQR5Up0sx/268MMtS4UCU5tm3Chpr3CMwjk+Nun7iYt4yK7VfVr2hHI+
-        4SsnNExv8HP1a7Cg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8BEB413A99;
-        Mon, 15 Aug 2022 12:59:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id cRALH05D+mJ/OQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 15 Aug 2022 12:59:58 +0000
-Message-ID: <06315f39-e246-7427-b342-5c0a16d871af@suse.cz>
-Date:   Mon, 15 Aug 2022 14:59:55 +0200
+        by sin.source.kernel.org (Postfix) with ESMTPS id 02314CE102B;
+        Mon, 15 Aug 2022 13:00:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0854FC433D6;
+        Mon, 15 Aug 2022 13:00:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660568439;
+        bh=p1nYEeDHz9Tdc8s0zIpf7Z77OotsoiiTDh68tCsieDk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LM38E2nbT3q9Irbd4UgVADLlzM26e+8WSvWJJGHmwnj49hshxlji/DEIWYlmtRWw6
+         /E0jqCv+Ipkh3DKcVEDbbWLzGCyDFxoJ0Es+ygVKZ8aCqjVjHPO/V+8X+UI09fYhCa
+         a0nq5H3zlDtT40YbM7XQVYjayR/tBlo8fWp/b92GjAhtF6cMNxJUJKVYJPNtVRg/oW
+         ITrxxXx22ffQabx1oCgTl+FwkfCmOPGspXNyZldPS+egyeG4E3sRespUpaVFRddmtw
+         BtVKOJcy7l/TCURVQH4BKaAwvycK/o103mdAUT/2pNObqHRHJwW+82/VWScG6xrclD
+         /AtB9fygWsQ0Q==
+Date:   Mon, 15 Aug 2022 14:00:34 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        corbet@lwn.net, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] docs/arm64: elf_hwcaps: Unify HWCAP lists as description
+ lists
+Message-ID: <YvpDcuEKEXyFxOKV@sirena.org.uk>
+References: <49253b17-738d-795e-f539-55857fdaee64@suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 00/15] common kmalloc v3
-Content-Language: en-US
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Joe Perches <joe@perches.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        Matthew WilCox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <20220712133946.307181-1-42.hyeyoo@gmail.com>
- <e77f9820-c818-d7af-185b-b8814313048b@suse.cz> <YvjJKeiwMAg+7/Q5@hyeyoo>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <YvjJKeiwMAg+7/Q5@hyeyoo>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="o2zm79aWRd7cLWC7"
+Content-Disposition: inline
+In-Reply-To: <49253b17-738d-795e-f539-55857fdaee64@suse.cz>
+X-Cookie: We have ears, earther...FOUR OF THEM!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,74 +57,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/14/22 12:06, Hyeonggon Yoo wrote:
-> On Fri, Jul 29, 2022 at 05:08:31PM +0200, Vlastimil Babka wrote:
->> On 7/12/22 15:39, Hyeonggon Yoo wrote:
->>> This is v3 of common kmalloc series.
->>>
->>> This series generalize most of kmalloc functions and move its
->>> implementation into mm/slab_common.c.
->>>
->>> I believe this series give better maintainability of code for SLAB and SLUB.
->>> Please consider applying.
->>>
->>> This series is based on slab/for-next and also available at
->>> https://github.com/hygoni/linux/tree/slab-common-v3r0
->>>
->>> Any feedbacks/reviews will be appreciated.
->>
->> Hi, thanks for all your efforts. It's shaping up nicely so I think the next
->> version will be ready to be added to -next after the 5.20 merge window.
->> As I've finished the individual reviews, I'm looking at the result and see a
->> bit more potential for cleanups, which could be perhaps incorporated to
->> existing patches, or additionally:
-> 
-> Thank you for reviews and I too would like to add it to -next soon!
-> 
->>
->> - kmalloc_large_node_notrace() has only one caller, can be removed and the
->> caller can call __kmalloc_large_node_notrace() directly, especially if it's
->> not __always_inline as I've IIRC suggested.
-> 
-> Will adjust in next version.
-> 
->> - kmem_cache_alloc_trace() and kmem_cache_alloc_node_trace() are weird ones,
->> they are in fact for kmalloc despite the name.
-> 
-> Yeah, I'm the one that would like to rename it to kmalloc_trace() and
-> kmalloc_node_trace().
-> 
->> They depend on
->> CONFIG_TRACING, yet if you look carefully, the !CONFIG_TRACING variant also
->> goes through a trace_* function. The actual difference seems that
->> slab_alloc() thus kasan_alloc() and kfence_alloc() don't get the orig_size
->> that way, which is dubious. It might be worth trying to unify this as well?
->> E.g.
->>   - use only the CONFIG_TRACING variant, discard the other
-> 
-> Sounds okay.
-> 
->>   - declare it in mm/slab.h, this is not for general usage
-> 
-> We can't completely remove it because its needed in include/linux/slab.h
-> for inlined kmalloc.
 
-Ah, ok.
+--o2zm79aWRd7cLWC7
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->>   - single implementation in mm/slab_common.c that calls
->>     __kmem_cache_alloc_node() from SLAB/SLUB and does the trace
-> 
-> While I love the idea of single implementation in mm/slab_common.c,
-> making use of __kmem_cache_alloc_node() and __kmem_cache_free() adds
-> a bit of overhead:
-> 	it adds overhead of function call and can't benefit from inlining
-> 	(including removing unnnecessary part of function code) 
+On Mon, Aug 15, 2022 at 11:19:40AM +0200, Martin Li=C5=A1ka wrote:
+> Extends what was changed in 94bdaa7d9a9d778d893c670d494c06d8e007c1cd.
 
-Hm, right.
+For those playing at home that's "docs/arm64: elf_hwcaps: Unify HWCAP
+lists as description lists".
 
-> So... what about including slab_common.c in sl?b.c,
-> so that compiler can treat sl?b.c and slab_common.c as a single translation unit?
-> (or split kmalloc implementation into kmalloc.c and do similar thing?)
+Please include human readable descriptions of things like commits and
+issues being discussed in e-mail in your mails, this makes them much
+easier for humans to read.
 
-I don't know if that has a good precedent in the kernel. Maybe we can
-postpone these more radical attempts to a later series.
+> Add a series of blank lines to this document to get consistend rendering =
+as
+> an RST description list.
+
+The commit message says that this is adding blank lines but...
+
+>      by Documentation/arm64/memory-tagging-extension.rst.
+> =20
+>  HWCAP2_SME
+> -
+>      Functionality implied by ID_AA64PFR1_EL1.SME =3D=3D 0b0001, as descr=
+ibed
+>      by Documentation/arm64/sme.rst.
+
+=2E..the actual patch is deleting them?
+
+--o2zm79aWRd7cLWC7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL6Q3EACgkQJNaLcl1U
+h9AkswgAgc8tN8uHAAD7VsV9pJ3CbHeuAdt0tvcBpTSjP4VYAK6HZ6D2uo9kNlQf
+HEKlej6b2oVlyDveywkjqaOE4vqOj6p37kxLad/Qsb2xVP+ZybkJHCSlzbAqU3US
+ZxfaE2y8Z7nkxcnSwmbQ0MFEniKOWT+tmfl6Ck0wnnpH/fTAxU22wAviUNzWo1x5
+HotxIEpK1eobssB7gtQtOeCOEYiIrdIOq+QSGr263o4QRws0T/PFgqH8Kto/lxB3
+epZ7gx26w4X0jB7wZVIi3rhmCfb2CT/Zo/GaKBVfSAxcItzVcmRjIWSw5UjIaRN0
+kT0K3WtW2r2nNArkUQ+9t0lcYmI+ow==
+=jMH6
+-----END PGP SIGNATURE-----
+
+--o2zm79aWRd7cLWC7--

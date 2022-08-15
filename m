@@ -2,126 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 124CF59289A
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 06:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5405928C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 06:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbiHOESQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 00:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49248 "EHLO
+        id S240605AbiHOE2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 00:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiHOESO (ORCPT
+        with ESMTP id S230237AbiHOE2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 00:18:14 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0146260C2
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 21:18:13 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id o3so5478281ple.5
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 21:18:12 -0700 (PDT)
+        Mon, 15 Aug 2022 00:28:15 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8335512772;
+        Sun, 14 Aug 2022 21:28:14 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id gj1so6048364pjb.0;
+        Sun, 14 Aug 2022 21:28:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=E+SbdWKle26nrNTvjrwjORRMK5B3fUHqQoLgOh5gagc=;
-        b=YCiOrOI4t57JroaK+DvgxUd40PqFb566csy0KZpoHxIAjL/vPPk6J1m/YLVAQJgafF
-         MBc/BEm1UbTvtrczItUPUi4//hLIjk/GfM4ooAEfFoZVAo14khCxzIa/7Xg2+FZDNVLe
-         Wc5wsr2o66GeVKuXZe7WjOqecyDFXKE0pAno4=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=AxntZ5boEdqFqlgnkvj7nx9yV31SjrqxErxj02VUkgI=;
+        b=EiZ46NWgWvaPrWGZpEefUGH8iyYRrNyxPcZFIYYXH1N8zjQloB6tCImzZpIVPLxywV
+         vvyyCkK9dDeDt7iSwYZs5PMf3Bp037GUBrBFN01bWAJ72NpP06EtdZlV1FKXm653cwX1
+         wo8o5GLfryMyJ+1ZnsFNTEeTf+sdzRGnYhiiFAJbNzKyCg7cKOTj46KZPv9lhejF+hys
+         +f0JYi+/ciwR5SdnaOiW3IGj7nqdcuHuml0Nonjl2N2YXx4U61l5YaMx4ic3xRYZWWQO
+         0F+OC0HTjyGxpiJOuxcqqEGO1U3lt/938nOLcJ09iB5MjBqOQuLp7rZmVVIdZOKk/eEe
+         m0Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=E+SbdWKle26nrNTvjrwjORRMK5B3fUHqQoLgOh5gagc=;
-        b=XF4busZF12fJkh6rZFE+LUUdMLn50SKBC6MI64EFIVWnk0iIXDzA9A8wGFuo13h9rM
-         3hZYbjbOnY/3k7w8TRxIXos7yjS7EqtlKm6B0ig2oYcRleesmFg1HCtDscKc+0T1hBJF
-         BeW8XdbSR4vMYCwYskr3X6Jvoi3hoTs4ZCTTQb8YchdjIUt2cugDSyrpb6J4ST/M4eru
-         3AxOyL93LFRcBoO5TETtTBorybA4P+XHrgldAAK8jjeANWwD78xijnRIV60dhRFZZWA4
-         wRR4iyIQfGkwdRlH6vlCQgfj2ImX+pphQsLtuHF1L9/ifF3I7iQS/hEyXYjf/+G6yHK4
-         bwkA==
-X-Gm-Message-State: ACgBeo3gQyaGV/MdXNXinUn1AG2Rp23cszXKP2cjx3F1j9MXPbAPEoDV
-        +dcKZLOyu2mtDafC/CYWIe+wtw==
-X-Google-Smtp-Source: AA6agR6GXAxP7HE9fOcv7/Zk0pGt69h2rxMcVW4JHZ34d0rGzZis2n5ZicCc9p418kS+2Tm2EbU2Cw==
-X-Received: by 2002:a17:90b:3807:b0:1f4:ecf7:5987 with SMTP id mq7-20020a17090b380700b001f4ecf75987mr15932324pjb.13.1660537092524;
-        Sun, 14 Aug 2022 21:18:12 -0700 (PDT)
-Received: from judyhsiao0523.c.googlers.com.com (21.160.199.104.bc.googleusercontent.com. [104.199.160.21])
-        by smtp.gmail.com with ESMTPSA id 6-20020a170902c20600b0016d2d0ce376sm6114433pll.215.2022.08.14.21.18.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Aug 2022 21:18:11 -0700 (PDT)
-From:   Judy Hsiao <judyhsiao@chromium.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-        dianders@chromium.org, mka@chromium.org, cychiang@google.com,
-        judyhsiao@google.com, swboyd@chromium.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Judy Hsiao <judyhsiao@chromium.org>,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH v1] arm64: dts: qcom: sc7280: Use "PP1800_L2C" as the DMIC power source.
-Date:   Mon, 15 Aug 2022 04:18:04 +0000
-Message-Id: <20220815041804.583181-1-judyhsiao@chromium.org>
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=AxntZ5boEdqFqlgnkvj7nx9yV31SjrqxErxj02VUkgI=;
+        b=g/fcRF4hGHBbIe2wP0x+Am+GHCkgqdtghjvSdJk4/pKMfitHXsUfrZM9TII2DEIvhd
+         L/k8V5sNGaxKSUx3uXImTgR+Yw4EqCUWgtqUSBho/k0FhO9lI5tRsI+zCUR6/rk6Uyml
+         3rcuARDEUIfmrbuxX2yxTnY/D/9gVxoujKIJJZMCUMiJQHQY1gborxoAzoMEfLf/phO7
+         ggeNaPUKylWqKbpYekODw310vLB9Bcr3qiA9KANb0VUw0d07XcwqqwfAJ/0Sm+ZIAAvN
+         NEgCNxbBhcwp5Q4q2/O5yqJfPT2T1SXJb27MyiMeqNHcTxVNndwOsvfOs4ZjY0F19fEe
+         pJRQ==
+X-Gm-Message-State: ACgBeo1A2zgoAHipwCKRf3x+qpUvHhsPGDLfuySZ3OknxqU2kaXWLVNN
+        dszM3bWKDj3H60S8jNPidBg=
+X-Google-Smtp-Source: AA6agR6MAp7+b/8FUDKU99TCqhom1gNdLqL4D9vAA6/sxWFPfnKjoyXgKgGz0y5SYQ1WL0Q+KddeKA==
+X-Received: by 2002:a17:90b:4b91:b0:1f4:e116:8f1 with SMTP id lr17-20020a17090b4b9100b001f4e11608f1mr16664416pjb.121.1660537693908;
+        Sun, 14 Aug 2022 21:28:13 -0700 (PDT)
+Received: from [192.168.0.110] ([103.159.189.148])
+        by smtp.gmail.com with ESMTPSA id e6-20020a170902d38600b001709b9d292esm6118545pld.268.2022.08.14.21.28.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 14 Aug 2022 21:28:13 -0700 (PDT)
+Message-ID: <54dd86bd-416b-3048-9bd0-368afa3aaf2f@gmail.com>
+Date:   Mon, 15 Aug 2022 10:28:05 +0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [RFC PATCH] Soundwire: Initialize multi_link with fwnode props
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+References: <20220814080416.7531-1-khalid.masum.92@gmail.com>
+ <CAHp75Ve4UaLsUknGKm14_-f5=qsq1s_Ws+j6h0kAY5_XMkSmQw@mail.gmail.com>
+From:   Khalid Masum <khalid.masum.92@gmail.com>
+In-Reply-To: <CAHp75Ve4UaLsUknGKm14_-f5=qsq1s_Ws+j6h0kAY5_XMkSmQw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use "PP1800_L2C" as the DMIC power source.
+On 8/15/22 00:46, Andy Shevchenko wrote:
+> On Sun, Aug 14, 2022 at 11:31 AM Khalid Masum <khalid.masum.92@gmail.com> wrote:
+>>
+>> According to the TODO, In sw_bus_master_add, bus->multi_link is to be
+>> populated with properties from FW node props. Make this happen by
+>> creating a new fwnode_handle flag FWNODE_FLAG_MULTI_LINKED and use
+>> the flag to store the multi_link value from intel_link_startup. Use
+>> this flag to initialize bus->multi_link.
+> 
+> ...
+> 
+>>          /*
+>>           * Initialize multi_link flag
+>> -        * TODO: populate this flag by reading property from FW node
+>>           */
+>> -       bus->multi_link = false;
+>> +       bus->multi_link = (fwnode->flags & FWNODE_FLAG_MULTI_LINKED)
+>> +               == FWNODE_FLAG_MULTI_LINKED;
+> 
+> NAK (as far as I understood the context of the comment and the change itself).
+> 
+> These flags are for devlink, we do not mix FW properties with those
+> internal flags anyhow. The comment suggests that this should be az
+> property. Also commit message doesn't explain the relation to devlink.
+> 
+That is a good information to know. Thanks.
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
----
-This patch depends on:
-arm64: dts: qcom: sc7280: Add herobrine-villager-r1. [1]
+I shall try to find out if I can somehow get multi_link's value from 
+fwnode in any other way and look into devlink in the process.
 
-[1]
-https://patchwork.kernel.org/patch/12926099/
+If you have any suggestions regarding this TODO, please let me know.
 
-
- .../dts/qcom/sc7280-herobrine-villager-r1.dts | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
-index c03b3ae4de50..983defa7c76d 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
-@@ -12,3 +12,31 @@ / {
- 	model = "Google Villager (rev1+)";
- 	compatible = "google,villager", "qcom,sc7280";
- };
-+
-+&lpass_va_macro {
-+	vdd-micb-supply = <&pp1800_l2c>;
-+};
-+
-+&sound {
-+	audio-routing =
-+			"IN1_HPHL", "HPHL_OUT",
-+			"IN2_HPHR", "HPHR_OUT",
-+			"AMIC1", "MIC BIAS1",
-+			"AMIC2", "MIC BIAS2",
-+			"VA DMIC0", "vdd-micb",
-+			"VA DMIC1", "vdd-micb",
-+			"VA DMIC2", "vdd-micb",
-+			"VA DMIC3", "vdd-micb",
-+			"TX SWR_ADC0", "ADC1_OUTPUT",
-+			"TX SWR_ADC1", "ADC2_OUTPUT",
-+			"TX SWR_ADC2", "ADC3_OUTPUT",
-+			"TX SWR_DMIC0", "DMIC1_OUTPUT",
-+			"TX SWR_DMIC1", "DMIC2_OUTPUT",
-+			"TX SWR_DMIC2", "DMIC3_OUTPUT",
-+			"TX SWR_DMIC3", "DMIC4_OUTPUT",
-+			"TX SWR_DMIC4", "DMIC5_OUTPUT",
-+			"TX SWR_DMIC5", "DMIC6_OUTPUT",
-+			"TX SWR_DMIC6", "DMIC7_OUTPUT",
-+			"TX SWR_DMIC7", "DMIC8_OUTPUT";
-+
-+};
--- 
-2.31.0
-
+Thanks,
+   -- Khalid Masum

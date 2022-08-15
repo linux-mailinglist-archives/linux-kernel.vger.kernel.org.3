@@ -2,147 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5501E592FF5
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C39593006
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241620AbiHONcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 09:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
+        id S241756AbiHONen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 09:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232651AbiHONcN (ORCPT
+        with ESMTP id S229752AbiHONel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 09:32:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D38815718
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 06:32:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660570332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zp+SY9WJSpph5Cd4FsOVThBt8VK08HhqVJA59O9rE/U=;
-        b=cAuk20xcZ4vMcHMS94Y+BvuKl8Kh1/z4+2UMR8E79HV/2QhqO/hcyc8Qfi1o1XRNcdoizi
-        3l1rRMe93tNxo77pUCsPPP9RipxfShFekgfm0fpvvdpjN6JUHf+h1NonUnzeyHoynjl4Be
-        qRrfvKYwS4qTUNylWHAmubia3evuPxw=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-225-0NEuVpXqNLyKiD8H_Z6cyw-1; Mon, 15 Aug 2022 09:32:03 -0400
-X-MC-Unique: 0NEuVpXqNLyKiD8H_Z6cyw-1
-Received: by mail-qk1-f197.google.com with SMTP id f16-20020a05620a409000b006bacc0fcf23so6971214qko.13
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 06:32:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc;
-        bh=Zp+SY9WJSpph5Cd4FsOVThBt8VK08HhqVJA59O9rE/U=;
-        b=VHkBs+DCQ1L92GqZYwfSA6HKIy7Rm8rWa3SfavzkGSvqX3r8zJp5xVvtRjSJptgGUI
-         lhEpqW1ZyW/ufEUAyRno2bHM5ctl0NvkWliaUORMk+kdw1U1/v6UzleKYSWn9zPtgiOV
-         fhdTfg1+ZBwgWQlYt/KWf1Bmwsm0XHu/jLt/Hw7lNUOYRWNhX46IeQl7/AUWx7Ubk/+b
-         nrPcZvBiyA9l4ZZjQSUrm2yIWqCwnPhP7KjcSYMry3G0Lgs7m/FHBHZxQxK/Cccm+dAS
-         k7ziHPxLa+K1QVS5/NctgU0KVNX/A8uvAgGFkPpd/ss8DiiCcLbSEDPCrIKO8ZY8aYKJ
-         ihnQ==
-X-Gm-Message-State: ACgBeo1id3IbLcrKq22N+5DrJakdb1KO10nxVGDGEd1+tWm17iILRzew
-        llIxAn6nu6DxWJuPMlphJQpeRo6C7zcQripawY0g0iIEH7i238S03SdgZp+hqhCWL0pE3noNntx
-        oIe0znt9KMmpuTQILN56JRu+N
-X-Received: by 2002:a05:622a:12:b0:343:7535:6981 with SMTP id x18-20020a05622a001200b0034375356981mr12072904qtw.287.1660570323014;
-        Mon, 15 Aug 2022 06:32:03 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5ERgk9oEFxgGZLC7l5SFCv5qxqDmF6WvY1zcIdfJHQmpGSUEcYJAkqW+ftA9+FRSQYLWqtdQ==
-X-Received: by 2002:a05:622a:12:b0:343:7535:6981 with SMTP id x18-20020a05622a001200b0034375356981mr12072887qtw.287.1660570322774;
-        Mon, 15 Aug 2022 06:32:02 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id h4-20020ac81384000000b00342fb07944fsm8001736qtj.82.2022.08.15.06.32.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 06:32:02 -0700 (PDT)
-Message-ID: <26f6e26110b99e0a8cace173a221694d4e94cc1c.camel@redhat.com>
-Subject: Re: [PATCH v2 1/9] KVM: x86: check validity of argument to
- KVM_SET_MP_STATE
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, vkuznets@redhat.com
-Date:   Mon, 15 Aug 2022 16:31:58 +0300
-In-Reply-To: <20220811210605.402337-2-pbonzini@redhat.com>
-References: <20220811210605.402337-1-pbonzini@redhat.com>
-         <20220811210605.402337-2-pbonzini@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        Mon, 15 Aug 2022 09:34:41 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B114920F58;
+        Mon, 15 Aug 2022 06:34:40 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FDEIQ1027150;
+        Mon, 15 Aug 2022 13:32:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=uZ/gxg4vwNI6HXYTM5WtTwqBD5xiz145jUdLuTNzlO8=;
+ b=K+vfDuUO+MnNMVtKMlY95pl7vMYTvxjNayVwBZPhe91x8k0IjdiCAxhUEmY4eyymlahh
+ xUx/DwupRRNVtajezziJOYoHrmOL69zoivO8lPv2crRN4is4pFOphY/wRRiPiOwzMwqi
+ 6rWDwM/B1BaFWUgBTggMmY88b6EhW3tDO89JB0pF03An5VOmXtbd6EgWDsCFbPzFQM6Q
+ uZvGzoqtSAIk+sQZkzQz290aHr2cCMFGKfCUdQiw1i4M46leqJKQs36E3RicJtSRgvIw
+ DlaQNyowDfmowsIkE2nBg/HlYfdFukxsVyLa2IyngNjOp0ecwHknE8Hflk/pe6BDkU7R jw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3hyny39s47-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 Aug 2022 13:32:22 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27FDTcdW019263;
+        Mon, 15 Aug 2022 13:32:21 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3hyny39s3v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 Aug 2022 13:32:21 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27FDM3Qr006945;
+        Mon, 15 Aug 2022 13:32:20 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma01dal.us.ibm.com with ESMTP id 3hx3ka76kc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 Aug 2022 13:32:20 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27FDWJVB35913988
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 15 Aug 2022 13:32:19 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A55ECB2068;
+        Mon, 15 Aug 2022 13:32:19 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7EE68B2064;
+        Mon, 15 Aug 2022 13:32:19 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon, 15 Aug 2022 13:32:19 +0000 (GMT)
+Message-ID: <94d1ba97-3fcf-bb75-ce3e-d6a8ca712ece@linux.ibm.com>
+Date:   Mon, 15 Aug 2022 09:32:19 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v7 0/6] tpm: Preserve TPM measurement log across kexec
+ (ppc64)
+Content-Language: en-US
+To:     Coiby Xu <coxu@redhat.com>
+Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
+        nasastry@in.ibm.com, mpe@ellerman.id.au
+References: <20220812164305.2056641-1-stefanb@linux.ibm.com>
+ <20220815064813.77g6icbkygrbmapa@Rk>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220815064813.77g6icbkygrbmapa@Rk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 4ptO3BKkSCoh7-5bQX2n7qnM51LmKpyR
+X-Proofpoint-ORIG-GUID: SjJwR0iv4r6SJJUKhXKap-xyAeb2ZD_C
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ lowpriorityscore=0 clxscore=1015 mlxscore=0 spamscore=0 mlxlogscore=999
+ phishscore=0 priorityscore=1501 suspectscore=0 malwarescore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2208150051
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-08-11 at 17:05 -0400, Paolo Bonzini wrote:
-> An invalid argument to KVM_SET_MP_STATE has no effect other than making the
-> vCPU fail to run at the next KVM_RUN.  Since it is extremely unlikely that
-> any userspace is relying on it, fail with -EINVAL just like for other
-> architectures.
+
+
+On 8/15/22 02:48, Coiby Xu wrote:
+> I can confirm this patch set fixes an issue that guest kdump kernel
+> crashes on POWER9 host by applying it to 5.19.1 (there is a conflict
+> when applying this patch set to latest kernel i.e. 6.0.0-rc1)
+
+I rebased it. 2 of the borrowed patches disappeared now since they are 
+upstream already and the rest applied without conflict...
+
 > 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/kvm/x86.c | 20 +++++++++++++++++---
->  1 file changed, 17 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 132d662d9713..c44348bb6ef2 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -10653,7 +10653,8 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
->         case KVM_MP_STATE_INIT_RECEIVED:
->                 break;
->         default:
-> -               return -EINTR;
-> +               WARN_ON(1);
+> Tested-by: Coiby Xu <coxu@redhat.com>
 
-Very small nitpick: Maybe WARN_ON_ONCE after all? 
-(but I don't see any way after this patch to have invalid mp_state)
-
-> +               break;
-
-
-
->         }
->         return 1;
->  }
-> @@ -11094,9 +11095,22 @@ int kvm_arch_vcpu_ioctl_set_mpstate(struct kvm_vcpu *vcpu,
->  
->         vcpu_load(vcpu);
->  
-> -       if (!lapic_in_kernel(vcpu) &&
-> -           mp_state->mp_state != KVM_MP_STATE_RUNNABLE)
-> +       switch (mp_state->mp_state) {
-> +       case KVM_MP_STATE_UNINITIALIZED:
-> +       case KVM_MP_STATE_HALTED:
-> +       case KVM_MP_STATE_AP_RESET_HOLD:
-> +       case KVM_MP_STATE_INIT_RECEIVED:
-> +       case KVM_MP_STATE_SIPI_RECEIVED:
-> +               if (!lapic_in_kernel(vcpu))
-> +                       goto out;
-> +               break;
-> +
-> +       case KVM_MP_STATE_RUNNABLE:
-> +               break;
-> +
-> +       default:
->                 goto out;
-> +       }
->  
->         /*
->          * KVM_MP_STATE_INIT_RECEIVED means the processor is in
-
-
-
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-Best regards,
-	Maxim Levitsky
-
+Thanks.

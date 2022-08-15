@@ -2,91 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BFB859522B
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 07:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DEC595244
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 07:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbiHPFoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 01:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
+        id S229805AbiHPF6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 01:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbiHPFnz (ORCPT
+        with ESMTP id S229670AbiHPF6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 01:43:55 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5644254A68;
-        Mon, 15 Aug 2022 15:33:00 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M68Dl4Xdzz4xcR;
-        Tue, 16 Aug 2022 08:32:55 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1660602775;
-        bh=Y1hgtDii/vNed4mKC6W7wNfhq2enxkj3lR421N7PvlI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=n6zenz19snzObCw+b25c3+TEbmd/ixqiPNDSRElRnSiAwX/H9NxoF2f6wg3QZF2bu
-         AooAl+Sa0g2Cwm46guPu5OZipVPzblv1+HypLTT+hUw3Q2MkEMUh8GtwWMPAcleX2/
-         mt/huH43Bb2FdjcwdTh+XEthsl9kSOt3sIJ54+zoX5IPHiBwGf3EYjphOFVnD7a93B
-         /fmSWoZdtsjTRPBT16WllT33EehWFSxz2o/Oqn2WiltZi6KXsMMBnpgT9OalHwRHeu
-         F2ox7ixSfnW7spi4nicsMaKWIANUCJ2AsvaRPO4WgeRpBvzahxxduM/DPy4/yBZhSY
-         0Z8H3XDUJXAxQ==
-Date:   Tue, 16 Aug 2022 08:32:38 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Hao Jia <jiahao.os@bytedance.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the cgroup tree
-Message-ID: <20220816083238.0aa28080@canb.auug.org.au>
+        Tue, 16 Aug 2022 01:58:00 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D85F9D666
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 16:16:33 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id c20so7009594qtw.8
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 16:16:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=2NHSu+WR71bWEHouMtYEYWTZ2k/kphqS/Xaa0m4gsqo=;
+        b=RdxioX6rfZpldJqhwhtPJeZPySZfy2kj3BdriChWQwfUY6NXW7Q1VLICRE9Zqweb+r
+         gwrzBdCRX9ofe59/sA+Er7wcZ8SfrC0yQr0qZB22kyXtTztAb7qfOQwR0BTKByvh2Xrk
+         joGRbfm86wLLmTtUU7TYwtAh69+AuDDC0o0eBUeR6TMH8wLqlg1V+dx3+aoGzIgRzlM3
+         4vd6VJyB8xZYordFoEIVcdJqW/Kx15ZctZTc3e9XPPcF4WE29vwD5iiFCcDa4M2e8ZRw
+         6+zq8dzDFJ3sjxrvzA3MdARDyvfTOgJk+l9X0HGfcVt/BOEO685/Yfth3PuOYL0AbJbb
+         Ebiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=2NHSu+WR71bWEHouMtYEYWTZ2k/kphqS/Xaa0m4gsqo=;
+        b=bHiVWJ/I/yGuv1nuZmWnbPTpnRJ11bMv+KRsQa3r4UI0Rc6U1vhte85AqFMMiKGub4
+         PWbrw8pfh6Ec4YEjuyQgixV3owPHahj7HUKoiq6hEYw6rzRDIfZ5mDEZIYx27yV8ly8A
+         iyM8me25Fb1VMEfZbanixxnGDTs6p9KfFxKhDugnk73lp5XUWhA+xTqsTDn0sU5QiW7s
+         sfHpN9eDqItTb+9yMXasbs3+uBmeuvwjYYrDJGV8hBVqmZ9AK4CkpMqRdC30TPP+nkjR
+         NDDtlwKweBIHBI/+6RUpfgtM09Nq9OVLvkLAxow9eXse+AIGQ6Z7TZBca0gTGAlhxJEb
+         4CPQ==
+X-Gm-Message-State: ACgBeo3enMQWuUvgSKVjWcG9u4HYm09AE7EJpjHPZSIz5mewiRUUsdMt
+        U+fy5qwKmybUPVe/ds/u7bxLSVR6iqXqwD3z
+X-Google-Smtp-Source: AA6agR5IQPzo2LnMl+iKR8S7dBMSEVPE5W7Xd5TxJPOPIUXUs6m6Q/yoaSd/tKdtwwHfQLCUx6+Wtw==
+X-Received: by 2002:ac8:7fc5:0:b0:343:681d:c3fb with SMTP id b5-20020ac87fc5000000b00343681dc3fbmr16179373qtk.157.1660605392431;
+        Mon, 15 Aug 2022 16:16:32 -0700 (PDT)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id u11-20020a05620a430b00b006b99b78751csm10441188qko.112.2022.08.15.16.16.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 16:16:31 -0700 (PDT)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     linux@rempel-privat.de, kernel@pengutronix.de
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>
+Subject: [PATCH] counter: interrupt-cnt: Implement watch_validate callback
+Date:   Mon, 15 Aug 2022 18:50:58 -0400
+Message-Id: <20220815225058.144203-1-william.gray@linaro.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YSKHpO==7.b2z.qN0AXBYwg";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/YSKHpO==7.b2z.qN0AXBYwg
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The interrupt-cnt counter driver only pushes one type of event on only
+one channel: COUNTER_EVENT_CHANGE_OF_STATE on channel 0. The
+interrupt_cnt_watch_validate() watch_valid callback is implemented to
+ensure watch configurations are valid for this driver.
 
-Hi all,
+Cc: Oleksij Rempel <linux@rempel-privat.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+---
+ drivers/counter/interrupt-cnt.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-In commit
+diff --git a/drivers/counter/interrupt-cnt.c b/drivers/counter/interrupt-cnt.c
+index 3b13f56bbb11..05a5d3e2d2b0 100644
+--- a/drivers/counter/interrupt-cnt.c
++++ b/drivers/counter/interrupt-cnt.c
+@@ -139,12 +139,23 @@ static int interrupt_cnt_signal_read(struct counter_device *counter,
+ 	return 0;
+ }
+ 
++static int interrupt_cnt_watch_validate(struct counter_device *counter,
++					const struct counter_watch *watch)
++{
++	if (watch->channel != 0 ||
++	    watch->event != COUNTER_EVENT_CHANGE_OF_STATE)
++		return -EINVAL;
++
++	return 0;
++}
++
+ static const struct counter_ops interrupt_cnt_ops = {
+ 	.action_read = interrupt_cnt_action_read,
+ 	.count_read = interrupt_cnt_read,
+ 	.count_write = interrupt_cnt_write,
+ 	.function_read = interrupt_cnt_function_read,
+ 	.signal_read  = interrupt_cnt_signal_read,
++	.watch_validate  = interrupt_cnt_watch_validate,
+ };
+ 
+ static int interrupt_cnt_probe(struct platform_device *pdev)
 
-  6d73ba7928c0 ("sched/psi: Zero the memory of struct psi_group")
+base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+-- 
+2.37.2
 
-Fixes tag
-
-  Fixes: commit 5f69a6577bc3 ("psi: dont alloc memory for psi by default")
-
-has these problem(s):
-
-  - leading word 'commit' unexpected.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/YSKHpO==7.b2z.qN0AXBYwg
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL6yYcACgkQAVBC80lX
-0GzR4gf9EWeEspws2yRCpYNBEMiSi5JdZRl6ESTbcQMV/Yfu8mx3MERI52HBWRu3
-fpqOlIsMTzaaHhVOmZ6uOggQsBjHK2zHFuGmqFvLV1y/bAriIuk4HiBKPzTiy0us
-IgMQcVnVy5/UMi5jxiEE/exsx/V+Cm4D1Xwl4RUR+PV/FeBWPTLJs2vsOL+jB5Mn
-5coKieEtTXQzOaYLxUSsGbQoXB3N9ZdPenWq9mk0KxPhhPNFAXreOJpLFTeOTyZo
-j9ubanjc2sQDRR63ZeVqXp1imsU3Jqan4CDxlPQ66dUBuwSq/q9ZrLVr0R4/ixQB
-yBgipwjOYale/ufSwaxCJvEqM8m6sw==
-=3w1i
------END PGP SIGNATURE-----
-
---Sig_/YSKHpO==7.b2z.qN0AXBYwg--

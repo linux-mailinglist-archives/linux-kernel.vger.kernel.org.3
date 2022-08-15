@@ -2,107 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E220594EF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 05:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19EE3594EF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 05:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232878AbiHPDKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 23:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52140 "EHLO
+        id S232956AbiHPDIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 23:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbiHPDJ1 (ORCPT
+        with ESMTP id S231434AbiHPDIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 23:09:27 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4528E2EB18D;
-        Mon, 15 Aug 2022 16:39:56 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id e27so5990765wra.11;
-        Mon, 15 Aug 2022 16:39:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=fNZ/gu4y7lfnFdkzN59SrFsjLrasJHIFSJmdJSlw+Vg=;
-        b=Wi7h8LTYLPTSh3B5af4Y32gM2Hz99rqlKJV3ZCftNwtNAT/ECYv/kQSWZnzEnYojwK
-         b9QMuGsS0E5OV1NBLuVFVozNAMa6693lC13WRCl60Aa8hTRa+O5FYwQM1xLue5stgWcN
-         sCJxTOW6D2x3VGTn5eI5Lo4yYP0QvCsBHfqkD0YCgREqFP/n5xMi184wwxmqnvfuCNL/
-         InQs/7Srm8qpchb+sH0H8193B78OKT64MDSGcdazcGE/qXg4JSNl+jQfx3WrmsLHWTBV
-         YBJgtTYb7TCl+aE2u0xPECWZjCisRsnWKTdliM7/pObogqKBwVcouaUHWsKDlqdvv0az
-         r3Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=fNZ/gu4y7lfnFdkzN59SrFsjLrasJHIFSJmdJSlw+Vg=;
-        b=R30pL2oXlzrVwV2u1yPBpBdYPqs3D3sIWY+5fdrlJCmpMwfBhHPH4oYWsrtBaXbeLo
-         /y/pykEkttlUIHR0EecxQ1/RfQfzLTp1kTIdfaMb55eJjSkY9DN7fTGush9FB7NPANRx
-         8akB9keY7S+H7E41awjGAeNsR2xugDeYaxEheVjjattH058pgxYOLMIXO87UcR5DwkEq
-         PgkQDbchJZfCK6sjj/9s6Ztq/4QFS/VEMD8W3901rx2/jT0zA6O5IDmnF2PdiVaWQn25
-         QXVZXFc/OMwgzolfB1i8tMjw2ZMYNqNklBzNlEOno2zXc8/LJc93AjV1katK13+X1gAq
-         feow==
-X-Gm-Message-State: ACgBeo1sM8nL0OSd8bin+8pBItLrtn9voHhqgDOuZdR3qGDdL1lwe6H8
-        A+PzGpTOXmROY919dLQ8d8MHfF+2qFo=
-X-Google-Smtp-Source: AA6agR6mCwlJu7tApOQkto2S84JFh2mY8NPl3dwKAYlBSYbO7MwVT8vcMJU/LKsS4wdnmwNp+0X8mA==
-X-Received: by 2002:adf:d1c4:0:b0:220:7a85:ad7c with SMTP id b4-20020adfd1c4000000b002207a85ad7cmr9426609wrd.128.1660606793976;
-        Mon, 15 Aug 2022 16:39:53 -0700 (PDT)
-Received: from localhost.localdomain (188.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.188])
-        by smtp.gmail.com with ESMTPSA id bh13-20020a05600c3d0d00b003a550be861bsm11197144wmb.27.2022.08.15.16.39.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 16:39:53 -0700 (PDT)
-From:   Angel Iglesias <ang.iglesiasg@gmail.com>
-To:     linux-iio <linux-iio@vger.kernel.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] iio: pressure: bmp280: fix datasheet links
-Date:   Tue, 16 Aug 2022 01:38:54 +0200
-Message-Id: <6e908cc827c70b95dae683717592aff0b003e7c9.1660606478.git.ang.iglesiasg@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        Mon, 15 Aug 2022 23:08:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8002E8C94;
+        Mon, 15 Aug 2022 16:39:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 297D8B8124F;
+        Mon, 15 Aug 2022 23:39:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5854CC433D7;
+        Mon, 15 Aug 2022 23:39:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660606745;
+        bh=qmjZ4VfoErl0HUaV16z74Z18RW6WrpKKhPI4toHPMiY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Pd7EVekyiPNtM88omvFi3jbVRbWlsDJceMzUgfD8cUujsjGv73srxyTCXRA6djrIM
+         FtVwpy6t+SOUZmR6p1yio1BTGiNQEZkpXQsJB5wdEQrII8kEzhr8avKUGAye3sFa9x
+         Y11MKVyGq1i9TQPkTAqkALkSmPoGkMBBSFGMWS91u/O2pkYg+C8ugT+wSAHDpolIGN
+         VLbFoRTJ/U/bSOBxfE1FsJfF5itngziAukRG2dheOTtXThOVQ2WgjKaOIcVeSRzH8j
+         ylyRhizcH+XoRDMMNmujGSU7QaCDAYe7XkKjRh4MSysfdjyU+CIB6bRd5QY1zEJ7CP
+         kkOJx71oyW6Og==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-sgx@vger.kernel.org
+Cc:     Haitao Huang <haitao.huang@linux.intel.com>,
+        Vijay Dhanraj <vijay.dhanraj@intel.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
+        64-BIT))
+Subject: [PATCH 1/2] x86/sgx: Handle VA page allocation failure for EAUG on PF.
+Date:   Tue, 16 Aug 2022 02:38:59 +0300
+Message-Id: <20220815233900.11225-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Updated links for BMP280 and BME280 datasheets on Bosch website.
-Datasheet of BMP180 is no longer available on the manufacturer's website,
-changed the link to a copy hosted by a third party.
+From: Haitao Huang <haitao.huang@linux.intel.com>
 
-Reported-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
+VM_FAULT_NOPAGE is expected behaviour for -EBUSY failure path, when
+augmenting a page, as this means that the reclaimer thread has been
+triggered, and the intention is just to round-trip in ring-3, and
+retry with a new page fault.
+
+Fixes: 5a90d2c3f5ef ("x86/sgx: Support adding of pages to an initialized enclave")
+Signed-off-by: Haitao Huang <haitao.huang@linux.intel.com>
+Tested-by: Vijay Dhanraj <vijay.dhanraj@intel.com>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
- drivers/iio/pressure/bmp280-core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+I rewrote the commit message because it was not explanatory enough,
+added the missing fixes tag, and all cumulated tags.
+ arch/x86/kernel/cpu/sgx/encl.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
-index fe7aa81e7cc9..e98b024d510b 100644
---- a/drivers/iio/pressure/bmp280-core.c
-+++ b/drivers/iio/pressure/bmp280-core.c
-@@ -9,9 +9,9 @@
-  * Driver for Bosch Sensortec BMP180 and BMP280 digital pressure sensor.
-  *
-  * Datasheet:
-- * https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BMP180-DS000-121.pdf
-- * https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BMP280-DS001-12.pdf
-- * https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BME280_DS001-11.pdf
-+ * https://cdn-shop.adafruit.com/datasheets/BST-BMP180-DS000-09.pdf
-+ * https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp280-ds001.pdf
-+ * https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf
-  */
+diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
+index 24c1bb8eb196..de92c1c8b79d 100644
+--- a/arch/x86/kernel/cpu/sgx/encl.c
++++ b/arch/x86/kernel/cpu/sgx/encl.c
+@@ -344,8 +344,11 @@ static vm_fault_t sgx_encl_eaug_page(struct vm_area_struct *vma,
+ 	}
  
- #define pr_fmt(fmt) "bmp280: " fmt
-
-base-commit: b82217e73b5aa6db8453ad91b929ca2366e47184
+ 	va_page = sgx_encl_grow(encl, false);
+-	if (IS_ERR(va_page))
++	if (IS_ERR(va_page)) {
++		if (PTR_ERR(va_page) == -EBUSY)
++			vmret =  VM_FAULT_NOPAGE;
+ 		goto err_out_epc;
++	}
+ 
+ 	if (va_page)
+ 		list_add(&va_page->list, &encl->va_pages);
 -- 
-2.37.2
+2.37.1
 

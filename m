@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0076F5947D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2BE59493F
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354400AbiHOXsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60356 "EHLO
+        id S1354592AbiHOXss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354416AbiHOXmI (ORCPT
+        with ESMTP id S1354520AbiHOXmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:42:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32BA32D81;
-        Mon, 15 Aug 2022 13:13:25 -0700 (PDT)
+        Mon, 15 Aug 2022 19:42:21 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C5249B55;
+        Mon, 15 Aug 2022 13:13:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74B27B81154;
-        Mon, 15 Aug 2022 20:13:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D63F6C433C1;
-        Mon, 15 Aug 2022 20:13:22 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5277ACE12C5;
+        Mon, 15 Aug 2022 20:13:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26897C433C1;
+        Mon, 15 Aug 2022 20:13:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594403;
-        bh=NDaqN0HN4Lw9xKA+GYcUn8lKUCBj57SDn6sS5RzJY98=;
+        s=korg; t=1660594412;
+        bh=9cNYoEL/pFRwrFe386RPcdfHQW1f0WHWMaVyWU8qZYk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ixlHPoFMHxpuRkyfz0g/spNvYQQ6pLdZUoxpHweVbEpXg4rhXdhsg2GGPLcV9+J+X
-         rbBM4HAaOMC2RfxppnHmuPqrsgPRnDXge1BYBKdIoAgbGl3UqdQex9uJPslzBibOzu
-         y6j5SDG61DdIJLOFCcEZk6UZNzW9tS1JmubowKqk=
+        b=Smw2AueF3hjAekMX05Zxo4wQXjugvp/01Z8W3uVbwZYNsGRsPHB4wxCmJgdzpXgWK
+         7j4gxNN9HGgRz236G820vTtmnhfRu+boKn9+FIsClxBkG+ikfxFeKhxMETvcDtdP9S
+         SIa+XPQGoDYAQZay+wyrcXlUWKp7Hlm/vNS0whzE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bo-Chen Chen <rex-bc.chen@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        stable@vger.kernel.org, Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0434/1157] drm/mediatek: dpi: Remove output format of YUV
-Date:   Mon, 15 Aug 2022 19:56:30 +0200
-Message-Id: <20220815180457.012405557@linuxfoundation.org>
+Subject: [PATCH 5.19 0437/1157] drm/msm/dpu: fix maxlinewidth for writeback block
+Date:   Mon, 15 Aug 2022 19:56:33 +0200
+Message-Id: <20220815180457.118455673@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -55,71 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+From: Abhinav Kumar <quic_abhinavk@quicinc.com>
 
-[ Upstream commit c9ed0713b3c35fc45677707ba47f432cad95da56 ]
+[ Upstream commit a370cc392e075de5a4b7f3fb27cdeec0d70b5893 ]
 
-DPI is not support output format as YUV, but there is the setting of
-configuring output YUV. Therefore, remove them in this patch.
+Writeback block for sm8250 was using the default maxlinewidth
+of 2048. But this is not right as it supports upto 4096.
 
-Fixes: 9e629c17aa8d ("drm/mediatek: Add DPI sub driver")
-Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Link: https://patchwork.kernel.org/project/linux-mediatek/patch/20220701035845.16458-5-rex-bc.chen@mediatek.com/
-Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+This should have no effect on most resolutions as we are
+still limiting upto maxlinewidth of SSPP for adding the modes.
+
+Fix the maxlinewidth for writeback block on sm8250.
+
+changes in v3:
+	- correct the Fixes tag
+
+Fixes: 53324b99bd7b ("drm/msm/dpu: add writeback blocks to the sm8250 DPU catalog")
+Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Patchwork: https://patchwork.freedesktop.org/patch/489887/
+Link: https://lore.kernel.org/r/1655406084-17407-2-git-send-email-quic_abhinavk@quicinc.com
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/mediatek/mtk_dpi.c | 31 ++++++------------------------
- 1 file changed, 6 insertions(+), 25 deletions(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-index e61cd67b978f..675e2e4072df 100644
---- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-@@ -54,13 +54,7 @@ enum mtk_dpi_out_channel_swap {
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+index 400ebceb56bb..dd7537e32f88 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+@@ -1285,7 +1285,7 @@ static const struct dpu_intf_cfg qcm2290_intf[] = {
+  * Writeback blocks config
+  *************************************************************/
+ #define WB_BLK(_name, _id, _base, _features, _clk_ctrl, \
+-		__xin_id, vbif_id, _reg, _wb_done_bit) \
++		__xin_id, vbif_id, _reg, _max_linewidth, _wb_done_bit) \
+ 	{ \
+ 	.name = _name, .id = _id, \
+ 	.base = _base, .len = 0x2c8, \
+@@ -1295,13 +1295,13 @@ static const struct dpu_intf_cfg qcm2290_intf[] = {
+ 	.clk_ctrl = _clk_ctrl, \
+ 	.xin_id = __xin_id, \
+ 	.vbif_idx = vbif_id, \
+-	.maxlinewidth = DEFAULT_DPU_LINE_WIDTH, \
++	.maxlinewidth = _max_linewidth, \
+ 	.intr_wb_done = DPU_IRQ_IDX(_reg, _wb_done_bit) \
+ 	}
+ 
+ static const struct dpu_wb_cfg sm8250_wb[] = {
+ 	WB_BLK("wb_2", WB_2, 0x65000, WB_SM8250_MASK, DPU_CLK_CTRL_WB2, 6,
+-			VBIF_RT, MDP_SSPP_TOP0_INTR, 4),
++			VBIF_RT, MDP_SSPP_TOP0_INTR, 4096, 4),
  };
  
- enum mtk_dpi_out_color_format {
--	MTK_DPI_COLOR_FORMAT_RGB,
--	MTK_DPI_COLOR_FORMAT_RGB_FULL,
--	MTK_DPI_COLOR_FORMAT_YCBCR_444,
--	MTK_DPI_COLOR_FORMAT_YCBCR_422,
--	MTK_DPI_COLOR_FORMAT_XV_YCC,
--	MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL,
--	MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL
-+	MTK_DPI_COLOR_FORMAT_RGB
- };
- 
- struct mtk_dpi {
-@@ -364,24 +358,11 @@ static void mtk_dpi_config_disable_edge(struct mtk_dpi *dpi)
- static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
- 					enum mtk_dpi_out_color_format format)
- {
--	if ((format == MTK_DPI_COLOR_FORMAT_YCBCR_444) ||
--	    (format == MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL)) {
--		mtk_dpi_config_yuv422_enable(dpi, false);
--		mtk_dpi_config_csc_enable(dpi, true);
--		mtk_dpi_config_swap_input(dpi, false);
--		mtk_dpi_config_channel_swap(dpi, MTK_DPI_OUT_CHANNEL_SWAP_BGR);
--	} else if ((format == MTK_DPI_COLOR_FORMAT_YCBCR_422) ||
--		   (format == MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL)) {
--		mtk_dpi_config_yuv422_enable(dpi, true);
--		mtk_dpi_config_csc_enable(dpi, true);
--		mtk_dpi_config_swap_input(dpi, true);
--		mtk_dpi_config_channel_swap(dpi, MTK_DPI_OUT_CHANNEL_SWAP_RGB);
--	} else {
--		mtk_dpi_config_yuv422_enable(dpi, false);
--		mtk_dpi_config_csc_enable(dpi, false);
--		mtk_dpi_config_swap_input(dpi, false);
--		mtk_dpi_config_channel_swap(dpi, MTK_DPI_OUT_CHANNEL_SWAP_RGB);
--	}
-+	/* only support RGB888 */
-+	mtk_dpi_config_yuv422_enable(dpi, false);
-+	mtk_dpi_config_csc_enable(dpi, false);
-+	mtk_dpi_config_swap_input(dpi, false);
-+	mtk_dpi_config_channel_swap(dpi, MTK_DPI_OUT_CHANNEL_SWAP_RGB);
- }
- 
- static void mtk_dpi_dual_edge(struct mtk_dpi *dpi)
+ /*************************************************************
 -- 
 2.35.1
 

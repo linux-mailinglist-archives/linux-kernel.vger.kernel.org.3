@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F03594C3E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FAB059482F
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349371AbiHPBGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 21:06:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56294 "EHLO
+        id S1354647AbiHOXqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346211AbiHPBBN (ORCPT
+        with ESMTP id S1354302AbiHOXlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 21:01:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C185DC0A5;
-        Mon, 15 Aug 2022 13:50:11 -0700 (PDT)
+        Mon, 15 Aug 2022 19:41:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2132AC7A;
+        Mon, 15 Aug 2022 13:11:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97F7060FC4;
-        Mon, 15 Aug 2022 20:50:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D753C433D6;
-        Mon, 15 Aug 2022 20:50:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D9DDB80EAB;
+        Mon, 15 Aug 2022 20:11:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD6A2C433D6;
+        Mon, 15 Aug 2022 20:11:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660596604;
-        bh=5j2KuWonkoHSeWK7y5ufQE4sFwnUv1xlQ/jR811XzXI=;
+        s=korg; t=1660594313;
+        bh=p/O0LDyyq9AqZBejxAuS6ttpxfyeEiB6lwRwgZJz5hM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZRPQtKx4HU7liKdDiKkZACt5es8773YIWNKInHYo/2yz+WRqAbZkPq/N8xUgwowTr
-         BLI0AqYhj0qt0mo7qNnV1F4fY7PMrPdMI0Jq8gOafFd1Xm6oOEoiWV0rH77wGh3Z74
-         B6+qTl//bU7pYP41w/Tl+9N6aQrnyQSMwUZL/zL8=
+        b=x5+GHC+a0jsSEkFXEHZX8jtx1vh64/+WQk00eQmZnksDQ9dkgo75KsWa6aEOZkedS
+         2WkDj25XkK1KvvuIKLUICdCQhGKOrK5zJLLTM7XcE8NY56qd9VcC6H15cIiaQFflAi
+         zRFa0psc5F235VWRXB5Yo+dSh/YT9PTZG++kAtvo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maximilian Heyne <mheyne@amazon.de>,
-        SeongJae Park <sj@kernel.org>, Juergen Gross <jgross@suse.com>
-Subject: [PATCH 5.19 1133/1157] xen-blkback: fix persistent grants negotiation
-Date:   Mon, 15 Aug 2022 20:08:09 +0200
-Message-Id: <20220815180525.738619555@linuxfoundation.org>
+        stable@vger.kernel.org, Daeho Jeong <daehojeong@google.com>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 5.18 1091/1095] f2fs: revive F2FS_IOC_ABORT_VOLATILE_WRITE
+Date:   Mon, 15 Aug 2022 20:08:10 +0200
+Message-Id: <20220815180514.151114549@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
-References: <20220815180439.416659447@linuxfoundation.org>
+In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
+References: <20220815180429.240518113@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,90 +54,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: SeongJae Park <sj@kernel.org>
+From: Daeho Jeong <daehojeong@google.com>
 
-commit fc9be616bb8f3ed9cf560308f86904f5c06be205 upstream.
+commit 23339e5752d01a4b5e122759b002cf896d26f6c1 upstream.
 
-Persistent grants feature can be used only when both backend and the
-frontend supports the feature.  The feature was always supported by
-'blkback', but commit aac8a70db24b ("xen-blkback: add a parameter for
-disabling of persistent grants") has introduced a parameter for
-disabling it runtime.
+F2FS_IOC_ABORT_VOLATILE_WRITE was used to abort a atomic write before.
+However it was removed accidentally. So revive it by changing the name,
+since volatile write had gone.
 
-To avoid the parameter be updated while being used by 'blkback', the
-commit caches the parameter into 'vbd->feature_gnt_persistent' in
-'xen_vbd_create()', and then check if the guest also supports the
-feature and finally updates the field in 'connect_ring()'.
-
-However, 'connect_ring()' could be called before 'xen_vbd_create()', so
-later execution of 'xen_vbd_create()' can wrongly overwrite 'true' to
-'vbd->feature_gnt_persistent'.  As a result, 'blkback' could try to use
-'persistent grants' feature even if the guest doesn't support the
-feature.
-
-This commit fixes the issue by moving the parameter value caching to
-'xen_blkif_alloc()', which allocates the 'blkif'.  Because the struct
-embeds 'vbd' object, which will be used by 'connect_ring()' later, this
-should be called before 'connect_ring()' and therefore this should be
-the right and safe place to do the caching.
-
-Fixes: aac8a70db24b ("xen-blkback: add a parameter for disabling of persistent grants")
-Cc: <stable@vger.kernel.org> # 5.10.x
-Signed-off-by: Maximilian Heyne <mheyne@amazon.de>
-Signed-off-by: SeongJae Park <sj@kernel.org>
-Reviewed-by: Maximilian Heyne <mheyne@amazon.de>
-Reviewed-by: Juergen Gross <jgross@suse.com>
-Link: https://lore.kernel.org/r/20220715225108.193398-2-sj@kernel.org
-Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Daeho Jeong <daehojeong@google.com>
+Fiexes: 7bc155fec5b3("f2fs: kill volatile write support")
+Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/block/xen-blkback/xenbus.c |   15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ fs/f2fs/file.c            |   30 ++++++++++++++++++++++++++++--
+ include/uapi/linux/f2fs.h |    2 +-
+ 2 files changed, 29 insertions(+), 3 deletions(-)
 
---- a/drivers/block/xen-blkback/xenbus.c
-+++ b/drivers/block/xen-blkback/xenbus.c
-@@ -157,6 +157,11 @@ static int xen_blkif_alloc_rings(struct
- 	return 0;
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -2102,6 +2102,31 @@ unlock_out:
+ 	return ret;
  }
  
-+/* Enable the persistent grants feature. */
-+static bool feature_persistent = true;
-+module_param(feature_persistent, bool, 0644);
-+MODULE_PARM_DESC(feature_persistent, "Enables the persistent grants feature");
++static int f2fs_ioc_abort_atomic_write(struct file *filp)
++{
++	struct inode *inode = file_inode(filp);
++	struct user_namespace *mnt_userns = file_mnt_user_ns(filp);
++	int ret;
 +
- static struct xen_blkif *xen_blkif_alloc(domid_t domid)
++	if (!inode_owner_or_capable(mnt_userns, inode))
++		return -EACCES;
++
++	ret = mnt_want_write_file(filp);
++	if (ret)
++		return ret;
++
++	inode_lock(inode);
++
++	if (f2fs_is_atomic_file(inode))
++		f2fs_abort_atomic_write(inode, true);
++
++	inode_unlock(inode);
++
++	mnt_drop_write_file(filp);
++	f2fs_update_time(F2FS_I_SB(inode), REQ_TIME);
++	return ret;
++}
++
+ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
  {
- 	struct xen_blkif *blkif;
-@@ -181,6 +186,8 @@ static struct xen_blkif *xen_blkif_alloc
- 	__module_get(THIS_MODULE);
- 	INIT_WORK(&blkif->free_work, xen_blkif_deferred_free);
- 
-+	blkif->vbd.feature_gnt_persistent = feature_persistent;
-+
- 	return blkif;
- }
- 
-@@ -472,12 +479,6 @@ static void xen_vbd_free(struct xen_vbd
- 	vbd->bdev = NULL;
- }
- 
--/* Enable the persistent grants feature. */
--static bool feature_persistent = true;
--module_param(feature_persistent, bool, 0644);
--MODULE_PARM_DESC(feature_persistent,
--		"Enables the persistent grants feature");
--
- static int xen_vbd_create(struct xen_blkif *blkif, blkif_vdev_t handle,
- 			  unsigned major, unsigned minor, int readonly,
- 			  int cdrom)
-@@ -520,8 +521,6 @@ static int xen_vbd_create(struct xen_blk
- 	if (bdev_max_secure_erase_sectors(bdev))
- 		vbd->discard_secure = true;
- 
--	vbd->feature_gnt_persistent = feature_persistent;
--
- 	pr_debug("Successful creation of handle=%04x (dom=%u)\n",
- 		handle, blkif->domid);
- 	return 0;
+ 	struct inode *inode = file_inode(filp);
+@@ -4039,9 +4064,10 @@ static long __f2fs_ioctl(struct file *fi
+ 		return f2fs_ioc_start_atomic_write(filp);
+ 	case F2FS_IOC_COMMIT_ATOMIC_WRITE:
+ 		return f2fs_ioc_commit_atomic_write(filp);
++	case F2FS_IOC_ABORT_ATOMIC_WRITE:
++		return f2fs_ioc_abort_atomic_write(filp);
+ 	case F2FS_IOC_START_VOLATILE_WRITE:
+ 	case F2FS_IOC_RELEASE_VOLATILE_WRITE:
+-	case F2FS_IOC_ABORT_VOLATILE_WRITE:
+ 		return -EOPNOTSUPP;
+ 	case F2FS_IOC_SHUTDOWN:
+ 		return f2fs_ioc_shutdown(filp, arg);
+@@ -4666,7 +4692,7 @@ long f2fs_compat_ioctl(struct file *file
+ 	case F2FS_IOC_COMMIT_ATOMIC_WRITE:
+ 	case F2FS_IOC_START_VOLATILE_WRITE:
+ 	case F2FS_IOC_RELEASE_VOLATILE_WRITE:
+-	case F2FS_IOC_ABORT_VOLATILE_WRITE:
++	case F2FS_IOC_ABORT_ATOMIC_WRITE:
+ 	case F2FS_IOC_SHUTDOWN:
+ 	case FITRIM:
+ 	case FS_IOC_SET_ENCRYPTION_POLICY:
+--- a/include/uapi/linux/f2fs.h
++++ b/include/uapi/linux/f2fs.h
+@@ -13,7 +13,7 @@
+ #define F2FS_IOC_COMMIT_ATOMIC_WRITE	_IO(F2FS_IOCTL_MAGIC, 2)
+ #define F2FS_IOC_START_VOLATILE_WRITE	_IO(F2FS_IOCTL_MAGIC, 3)
+ #define F2FS_IOC_RELEASE_VOLATILE_WRITE	_IO(F2FS_IOCTL_MAGIC, 4)
+-#define F2FS_IOC_ABORT_VOLATILE_WRITE	_IO(F2FS_IOCTL_MAGIC, 5)
++#define F2FS_IOC_ABORT_ATOMIC_WRITE	_IO(F2FS_IOCTL_MAGIC, 5)
+ #define F2FS_IOC_GARBAGE_COLLECT	_IOW(F2FS_IOCTL_MAGIC, 6, __u32)
+ #define F2FS_IOC_WRITE_CHECKPOINT	_IO(F2FS_IOCTL_MAGIC, 7)
+ #define F2FS_IOC_DEFRAGMENT		_IOWR(F2FS_IOCTL_MAGIC, 8,	\
 
 

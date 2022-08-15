@@ -2,104 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2A1594E20
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B03594E38
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233378AbiHPBgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 21:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
+        id S233713AbiHPBjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 21:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233219AbiHPBgI (ORCPT
+        with ESMTP id S230378AbiHPBil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 21:36:08 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFB3E831C
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:26:42 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id w14so7437505plp.9
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:26:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=s6C7xjGZFgkJFr5KfYkyBRVqHeZGBiLrMu8lM2DAdGc=;
-        b=AG3J8t9JIoa5aHNcIfU8Afi648JK1hym91JEPUZ0dSFr5Vu5y1F0zIWj3okus4yq7j
-         8SrjoNQWRS//nsxmvCMkWk5+ZtML4OympnohBF9ZypJ8vl3UZvWN6IWIIFXPyNQCw1PI
-         ucQrEA19LX2XEiWOCgX4GP+56VU6Fg+OsQ8WCf2ae6sSq2c0PCH0rSS7aYW8rMg6949Y
-         46jOZtF9nXRcO3kDvuQpcCjcdnmbi6fI43+d2V1+EJk6zApr7+iOgtfTnxXurQoQ5YSI
-         iZJ4cd/1gtdUwzdgm7U6lWdHkdrKAPobffvwMvfHC7Fh5oAzxw+sZQqSq2Mjlarza+pI
-         0NxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=s6C7xjGZFgkJFr5KfYkyBRVqHeZGBiLrMu8lM2DAdGc=;
-        b=ZKSFgE9bVWttO9AUT/5k6NuH2KLkc+GY4LYRS16c5/HR9SQTcnLsGFoJoPmkJqdWt5
-         N0avCALRa0OxFR+zSyn9UA1fRjYrczpnuys+QyXn/cPAqnStffOL006o8xhhp1az4viV
-         ofIHtq4apv1Q8mNOPmbKUzVh3EjOTU/eNjzGiws/FSLKmLhdhqjkF5XsSWauvSaBLd6a
-         0YcCLFeQ1t2kTr2fxErf1Hb3s0nAW7YJUY+5q5bycO9DKS16RfBkk+OoKqXUGjgPQQLY
-         MDfNFLCRQQUtEl4AUNVlBN6/G4mxAoLCsYIjuTi0wVKZ4SDQT4CHn8Kx9G0ndCbPbF5x
-         WHuQ==
-X-Gm-Message-State: ACgBeo39RFd42BJ0UCsqx9oE3pgbFqFBJFhAItWBh9d0dBmXjnWWo/RB
-        sG0joaqJamfhFbaTfN/59CsvPQ==
-X-Google-Smtp-Source: AA6agR5M/rTTm9t+DDlIhUOT49cx0BFsQgd8Bv4U1FkQ3NT1pVtZbfkGUWydTZW3Wa2xY49yXK93gQ==
-X-Received: by 2002:a17:90b:164b:b0:1f5:15ae:3206 with SMTP id il11-20020a17090b164b00b001f515ae3206mr19855063pjb.140.1660598802001;
-        Mon, 15 Aug 2022 14:26:42 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id w12-20020a170902e88c00b0016a6caacaefsm7476713plg.103.2022.08.15.14.26.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 14:26:41 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 21:26:37 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Linux MM Mailing List <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Subject: Re: [PATCH v2 3/3] kvm/x86: Allow to respond to generic signals
- during slow page faults
-Message-ID: <Yvq6DSu4wmPfXO5/@google.com>
-References: <20220721000318.93522-1-peterx@redhat.com>
- <20220721000318.93522-4-peterx@redhat.com>
- <YvVitqmmj7Y0eggY@google.com>
- <YvVtX+rosTLxFPe3@xz-m1.local>
+        Mon, 15 Aug 2022 21:38:41 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FBAEE4BB;
+        Mon, 15 Aug 2022 14:31:57 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FKICe8018959;
+        Mon, 15 Aug 2022 21:31:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=Uy2k3ckyXgUmymPO/N1a9F/NhIcpSmtIiPPQA6JgDPk=;
+ b=NHhm0lGxdyPx63LhJ8DSqhZT8lcVyuFgOx4YaIertAfSdgooduRefJKdy0a517DnHr9G
+ SJuf7Vx8OjCr7opB0zZTve48weBZsW3DQ0iM4UjQJZGcbg/O0pkCebM3BZ5ttwHMknfh
+ TGTcCAKT89aiD6nx+rl/E84cSD3pIqfU6VdfeeLGRMv8+7RPuB0uY/ARVkynsNfkXnxB
+ t2dGA9qUKCtSJYwV2YNTMAWwf8q4UVT3XmAvclk5Bq/faXWH9ZngEMH+MQM3mHo3vHm1
+ QLN3Sr7Bb50UZorq6xUi5cB7K8Ihtnw6un8Rmnrt981QhO51XcrbZrJgkAfWdhm/y4TN hg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hx54sxey7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 Aug 2022 21:31:53 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27FLVqUw021061
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 Aug 2022 21:31:52 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 15 Aug 2022 14:31:52 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, <Thinh.Nguyen@synopsys.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH v3 0/8] Fix controller halt and endxfer timeout issues
+Date:   Mon, 15 Aug 2022 14:31:26 -0700
+Message-ID: <20220815213134.23783-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvVtX+rosTLxFPe3@xz-m1.local>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: lmKR0JvjRRvelcPW94kT13FHENcVF8gM
+X-Proofpoint-ORIG-GUID: lmKR0JvjRRvelcPW94kT13FHENcVF8gM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 impostorscore=0 mlxlogscore=598 spamscore=0 mlxscore=0
+ clxscore=1015 suspectscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208150082
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022, Peter Xu wrote:
-> On Thu, Aug 11, 2022 at 08:12:38PM +0000, Sean Christopherson wrote:
-> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > > index 17252f39bd7c..aeafe0e9cfbf 100644
-> > > --- a/arch/x86/kvm/mmu/mmu.c
-> > > +++ b/arch/x86/kvm/mmu/mmu.c
-> > > @@ -3012,6 +3012,13 @@ static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
-> > >  static int handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
-> > >  			       unsigned int access)
-> > >  {
-> > > +	/* NOTE: not all error pfn is fatal; handle sigpending pfn first */
-> > > +	if (unlikely(is_sigpending_pfn(fault->pfn))) {
-> > 
-> > Move this into kvm_handle_bad_page(), then there's no need for a comment to call
-> > out that this needs to come before the is_error_pfn() check.  This _is_ a "bad"
-> > PFN, it just so happens that userspace might be able to resolve the "bad" PFN.
-> 
-> It's a pity it needs to be in "bad pfn" category since that's the only
-> thing we can easily use, but true it is now.
+Changes in v3:
+- Modified the msleep() duration to ~2s versus ~10s due to the minimum
+mdelay() value.
+- Removed patch to modify DEP flags during dwc3_stop_active_transfer().
+This was not required after fixing the logic to allow EP xfercomplete
+events to be handled on EP0.
+- Added some changes to account for a cable disconnect scenario, where
+dwc3_gadget_pullup() would not be executed to stop active transfers.
+Needed to add some logic to the disconnect interrupt to ensure that we
+cleanup/restart any pending SETUP transaction, so that we can clear the
+EP0 delayed stop status. (if pending)
+- Added patch to ensure that we don't proceed with umapping buffers
+until the endxfer was actually sent.
 
-Would renaming that to kvm_handle_error_pfn() help?  I agree that "bad" is poor
-terminology now that it handles a variety of errors, hence the quotes.
+Changes in v2:
+- Moved msleep() to before reading status register for halted state
+- Fixed kernel bot errors
+- Clearing DEP flags in __dwc3_stop_active_transfers()
+- Added Suggested-by tags and link references to previous discussions
+
+This patch series addresses some issues seen while testing with the latest
+soft disconnect implementation where EP events are allowed to process while
+the controller halt is occurring.
+
+#1
+Since routines can now interweave, we can see that the soft disconnect can
+occur while conndone is being serviced.  This leads to a controller halt
+timeout, as the soft disconnect clears the DEP flags, for which conndone
+interrupt handler will issue a __dwc3_ep_enable(ep0), that leads to
+re-issuing the set ep config command for every endpoint.
+
+#2
+Function drivers can ask for a delayed_status phase, while it processes the
+received SETUP packet.  This can lead to large delays when handling the
+soft disconnect routine.  To improve the timing, forcefully send the status
+phase, as we are going to disconnect from the host.
+
+#3
+Ensure that local interrupts are left enabled, so that EP0 events can be
+processed while the soft disconnect/dequeue is happening.
+
+#4
+Since EP0 events can occur during controller halt, it may increase the time
+needed for the controller to fully stop.
+
+#5
+Account for cable disconnect scenarios where nothing may cause the endxfer
+retry if DWC3_EP_DELAY_STOP is set.
+
+#6
+Avoid unmapping pending USB requests that were never stopped.  This would
+lead to a potential SMMU fault.
+
+Wesley Cheng (8):
+  usb: dwc3: Do not service EP0 and conndone events if soft disconnected
+  usb: dwc3: gadget: Force sending delayed status during soft disconnect
+  usb: dwc3: gadget: Synchronize IRQ between soft connect/disconnect
+  usb: dwc3: gadget: Continue handling EP0 xfercomplete events
+  usb: dwc3: Avoid unmapping USB requests if endxfer is not complete
+  usb: dwc3: Increase DWC3 controller halt timeout
+  usb: dwc3: gadget: Skip waiting for CMDACT cleared during endxfer
+  usb: dwc3: gadget: Submit endxfer command if delayed during disconnect
+
+ drivers/usb/dwc3/core.c   |  4 ----
+ drivers/usb/dwc3/core.h   |  3 +++
+ drivers/usb/dwc3/ep0.c    | 11 ++++++---
+ drivers/usb/dwc3/gadget.c | 48 +++++++++++++++++++++++++++++++++------
+ 4 files changed, 52 insertions(+), 14 deletions(-)
+

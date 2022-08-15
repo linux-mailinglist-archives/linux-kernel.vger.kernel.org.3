@@ -2,55 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C54E592DDD
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF380592DE3
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbiHOLGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 07:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
+        id S242389AbiHOLHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 07:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242389AbiHOLFf (ORCPT
+        with ESMTP id S242637AbiHOLHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 07:05:35 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BCE25EAD;
-        Mon, 15 Aug 2022 04:04:59 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4M5rv70xxRz1M8wb;
-        Mon, 15 Aug 2022 19:01:39 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 15 Aug 2022 19:04:57 +0800
-Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 15 Aug
- 2022 19:04:57 +0800
-Message-ID: <1b8cfda9-8a33-91af-dee1-a0586a11adf1@huawei.com>
-Date:   Mon, 15 Aug 2022 19:04:52 +0800
+        Mon, 15 Aug 2022 07:07:02 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9F01A381;
+        Mon, 15 Aug 2022 04:06:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1660561599; x=1692097599;
+  h=subject:from:to:cc:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=lR4e/Yj+v+orzNhR6UdlTiIXidtC5q1zi9QQkSuY8HY=;
+  b=brFxTKdozU4ZwKl1vkU4CM8f3SwsAK2meVcSc40IslPqn/RgUo95sOSD
+   ZAH4P/x6qtE+bpqA5D1BgRU74B2E/EcgqY74IjcVC8pqBLHdcVZif4kvE
+   ZJ0HjAL1uMRTgnnk+LtYEkWuYvGn9zOTWTlvit/F3hT0plHszP3PmWcEA
+   2tmTHRZ71M2IUQqI+9obUQEgohI39LQ9O08VhObuyKqIbs1AOHpL1ziXx
+   X1QWujnv7fdPWrLAPzK8urHzI/yfuYqxPDL/BF0F7+cWC4AMp8+M2Kcel
+   VgOqytKSstXSQaxkfDhabdK1ffccJmpCu8tJfHsodsxOU8KDM5GYQC5uv
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,238,1654552800"; 
+   d="scan'208";a="25604415"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 15 Aug 2022 13:06:37 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 15 Aug 2022 13:06:37 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 15 Aug 2022 13:06:37 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1660561597; x=1692097597;
+  h=from:to:cc:date:message-id:in-reply-to:references:
+   mime-version:content-transfer-encoding:subject;
+  bh=lR4e/Yj+v+orzNhR6UdlTiIXidtC5q1zi9QQkSuY8HY=;
+  b=MpSfJWTq+0O7BL6IclojsVsPcaVvdT8LKCxMtCZFiKalaZw73OABEqz7
+   y3X2zOfCcdBOyrszIwAaw7k4JzmC2ezmyFPx2LAYd1EQKqcDRpl5n2APq
+   r9bUMs7uv6ASXhc/NAmd17xRz+48qe82wSaKiRqdgPIZQrySWM5LB5QnF
+   Ng3azSVcRKQoMaRxZLmIlO3LcWQVRSJhYxbL5JkRxeZCXGhUEM6+YRLNr
+   2ykm8EkQM0/PB+0zkekfJTpwaf/2zjuSaH5Xhq7lQYs6iB2tbzHaoQL83
+   UijQKC8oPjF/DvO3yKk8yILgYNtvhdFVYChSomUWy0cmPUPWSGhOTpR92
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,238,1654552800"; 
+   d="scan'208";a="25604414"
+Subject: Re: [PATCH] spi: lpspi: Simplify some error message
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 15 Aug 2022 13:06:37 +0200
+Received: from steina-w.localnet (unknown [10.123.49.11])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 2501D280056;
+        Mon, 15 Aug 2022 13:06:37 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-spi@vger.kernel.org
+Date:   Mon, 15 Aug 2022 13:06:34 +0200
+Message-ID: <2796602.mvXUDI8C0e@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <253543c462b765eca40ba54c66f4e3fdf4acdeb7.1659735546.git.christophe.jaillet@wanadoo.fr>
+References: <253543c462b765eca40ba54c66f4e3fdf4acdeb7.1659735546.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH] x86/unwind/orc: Add 'unwind_debug' cmdline option
-To:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>
-CC:     <linux@armlinux.org.uk>, <arnd@arndb.de>,
-        <linus.walleij@linaro.org>, <ardb@kernel.org>,
-        <rmk+kernel@armlinux.org.uk>, <rostedt@goodmis.org>,
-        <nick.hawkins@hpe.com>, <john@phrozen.org>, <mhiramat@kernel.org>
-References: <20220815105808.17385-1-chenzhongjin@huawei.com>
- <20220815105808.17385-2-chenzhongjin@huawei.com>
-Content-Language: en-US
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <20220815105808.17385-2-chenzhongjin@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,112 +83,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I accidentally attached this with my patch.
-
-Please ignore this one.
-
-
-Thanks,
-
-Chen
-
-On 2022/8/15 18:58, Chen Zhongjin wrote:
-> From: Josh Poimboeuf <jpoimboe@redhat.com>
->
-> Sometimes the one-line ORC unwinder warnings aren't very helpful.  Add a
-> new 'unwind_debug' cmdline option which will dump the full stack
-> contents of the current task when an error condition is encountered.
->
-> Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> Reviewed-by: Miroslav Benes <mbenes@suse.cz>
+Am Freitag, 5. August 2022, 23:39:19 CEST schrieb Christophe JAILLET:
+> dev_err_probe() already prints the error code in a human readable way, so
+> there is no need to duplicate it as a numerical value at the end of the
+> message.
+> 
+> Fixes: 12f62a857c83 ("spi: lpspi: Silence error message upon deferred
+> probe") Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
->   .../admin-guide/kernel-parameters.txt         |  6 +++
->   arch/x86/kernel/unwind_orc.c                  | 46 +++++++++++++++++++
->   2 files changed, 52 insertions(+)
->
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index cc3ea8febc62..85d48f6052fd 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -6317,6 +6317,12 @@
->   	unknown_nmi_panic
->   			[X86] Cause panic on unknown NMI.
->   
-> +	unwind_debug	[X86-64]
-> +			Enable unwinder debug output.  This can be
-> +			useful for debugging certain unwinder error
-> +			conditions, including corrupt stacks and
-> +			bad/missing unwinder metadata.
-> +
->   	usbcore.authorized_default=
->   			[USB] Default USB device authorization:
->   			(default -1 = authorized except for wireless USB,
-> diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
-> index 38185aedf7d1..c539ca39e9f4 100644
-> --- a/arch/x86/kernel/unwind_orc.c
-> +++ b/arch/x86/kernel/unwind_orc.c
-> @@ -13,8 +13,13 @@
->   
->   #define orc_warn_current(args...)					\
->   ({									\
-> +	static bool dumped_before;
->   	if (state->task == current && !state->error)			\
->   		orc_warn(args);						\
-> +		if (unwind_debug && !dumped_before)			\
-> +			unwind_dump(state);				\
-> +		dumped_before = true;					\
-> +	}								\
->   })
->   
->   extern int __start_orc_unwind_ip[];
-> @@ -23,8 +28,49 @@ extern struct orc_entry __start_orc_unwind[];
->   extern struct orc_entry __stop_orc_unwind[];
->   
->   static bool orc_init __ro_after_init;
-> +static bool unwind_debug __ro_after_init;
->   static unsigned int lookup_num_blocks __ro_after_init;
->   
-> +static int __init unwind_debug_cmdline(char *str)
-> +{
-> +	unwind_debug = true;
-> +
-> +	return 0;
-> +}
-> +early_param("unwind_debug", unwind_debug_cmdline);
-> +
-> +static void unwind_dump(struct unwind_state *state)
-> +{
-> +	static bool dumped_before;
-> +	unsigned long word, *sp;
-> +	struct stack_info stack_info = {0};
-> +	unsigned long visit_mask = 0;
-> +
-> +	if (dumped_before)
-> +		return;
-> +
-> +	dumped_before = true;
-> +
-> +	printk_deferred("unwind stack type:%d next_sp:%p mask:0x%lx graph_idx:%d\n",
-> +			state->stack_info.type, state->stack_info.next_sp,
-> +			state->stack_mask, state->graph_idx);
-> +
-> +	for (sp = __builtin_frame_address(0); sp;
-> +	     sp = PTR_ALIGN(stack_info.next_sp, sizeof(long))) {
-> +		if (get_stack_info(sp, state->task, &stack_info, &visit_mask))
-> +			break;
-> +
-> +		for (; sp < stack_info.end; sp++) {
-> +
-> +			word = READ_ONCE_NOCHECK(*sp);
-> +
-> +			printk_deferred("%0*lx: %0*lx (%pB)\n", BITS_PER_LONG/4,
-> +					(unsigned long)sp, BITS_PER_LONG/4,
-> +					word, (void *)word);
-> +		}
-> +	}
-> +}
-> +
->   static inline unsigned long orc_ip(const int *ip)
->   {
->   	return (unsigned long)ip + *ip;
+>  drivers/spi/spi-fsl-lpspi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
+> index 19b1f3d881b0..cbbe8bbef90a 100644
+> --- a/drivers/spi/spi-fsl-lpspi.c
+> +++ b/drivers/spi/spi-fsl-lpspi.c
+> @@ -912,7 +912,7 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
+> 
+>  	ret = devm_spi_register_controller(&pdev->dev, controller);
+>  	if (ret < 0) {
+> -		dev_err_probe(&pdev->dev, ret, "spi_register_controller 
+error: %i\n",
+> ret); +		dev_err_probe(&pdev->dev, ret, "spi_register_controller 
+error\n");
+> goto free_dma;
+>  	}
+
+Acked-By: Alexander Stein <alexander.stein@ew.tq-group.com>
+
 

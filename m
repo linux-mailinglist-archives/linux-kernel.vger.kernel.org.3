@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4655928EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 07:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 084E15928F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 07:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbiHOFIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 01:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
+        id S232588AbiHOFIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 01:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiHOFI3 (ORCPT
+        with ESMTP id S230214AbiHOFIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 01:08:29 -0400
+        Mon, 15 Aug 2022 01:08:32 -0400
 Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFD5140FA;
-        Sun, 14 Aug 2022 22:08:28 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id E802632000F9;
-        Mon, 15 Aug 2022 01:08:26 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A4E15724;
+        Sun, 14 Aug 2022 22:08:31 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id B248A320077A;
+        Mon, 15 Aug 2022 01:08:29 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 15 Aug 2022 01:08:28 -0400
+  by compute4.internal (MEProxy); Mon, 15 Aug 2022 01:08:30 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1660540106; x=1660626506; bh=1b
-        8wvlOIqq08dzssrbjKws+JgmGzBWVPDh4Dm1RTFCU=; b=jWF0lvKSrnMxYNz01X
-        1WCXUHnk3Xx7veBUORmXijOreUbQeBMioHxw1iCFYTS9Dpj9XCnCghsIOmQYKE4c
-        7qKDJCtrE2M4Da0XxiGjL/cDVV5/f7vNCbTkUT6xLIY9ZA30wrLXMWLf81sJb6+q
-        LJkn5xhph/bdZmkC2lbgN8/OuXAwfaqZbxGnprsIuQmrKT4EfzIstjiXg1PBLXYJ
-        ZBd5jG4ZIBJmp9WLEG4a+buj4295tsOc3nLQHRtTT9+SXCl8vbkOwttSmuGyO5wE
-        1xuTQYEnJVZZs/ixtDkqPOEvz8xVOkUAU4DRXWLFjSQhYI+qqvtUR/adqav5pLNi
-        5qzQ==
+        :subject:subject:to:to; s=fm2; t=1660540109; x=1660626509; bh=VC
+        iO+1/7gvQvfqsvEh3J7OZy4FYDY6eHNsrcKm6S1VI=; b=NVQX3Q3w3uHTAPcC7W
+        NPtExPv1e1twycdJUHl7SiOQfBvifOvS8dSv9N9D2VYa3xyeikcPnFmzwHW0r6Ep
+        ueZOmNkizyiRg7sXLb9hj7ENf50oX6MCq7GXErvM3s5n5CEv9HlJtylC9uCa8vL0
+        +gZThwQM448diXT9HufTtvkzYmdzUf8GTR4ABxBEy4PNGZl0ky+ID4nljjKBNQzn
+        w2H0k5GPcldUTLnBp5SkD90RCdLvxgRDYVgn0T4sOgvKEfx9T0ju5OLc3ensTtUT
+        AIEUQI6k98LtsWJFa9JJ/lg9sZ9mB/9ng78+ux3q0qipJNRPDLWtbrBDxhI/rD2+
+        oeCQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1660540106; x=1660626506; bh=1b8wvlOIqq08d
-        zssrbjKws+JgmGzBWVPDh4Dm1RTFCU=; b=DhBNH1UDadbs/vc2awR003MB7DSL3
-        j7PgSENLFy+gg4XtsE9Tk1uxiFtjhYTpnwsBmhOht5i0HRu97L0qbC7o76RH83c0
-        Eaa3Zg8JoS0hXxAbtLcbUzuW35oNccb3BRymKKZwp4hgzErSdTCmuCgqFT6+q3Vg
-        qOVeB7K/wPkEyLL76gYA+931QMuOp+PV29rroAjojGposxO/SwqRBdnlO9enLyKG
-        IEayl1qUMcUwVPm5Le36RAuQY3ZbefiRnau5uFfnm+IX75lu14AsygJKGF1vF80V
-        ziHDC2okA2Tpk21pKcRdESc7atcutvfOuKIhfw2+h3DoGzp7IP1YVnNpw==
-X-ME-Sender: <xms:ytT5YgNuDI3W1pB6y9oem49C1zc3Ya5kyU6FKrT56XoNy5qJ6VoA2w>
-    <xme:ytT5Ym-l24WuXrLdwU-FwGJpU1AISmXIlOso2Q5JnWihq3vEPW6BRiqFPFG7CCRv4
-    GyXtW_w3uBZ9SB7Pw>
-X-ME-Received: <xmr:ytT5YnSC2xC0Mifh65yzfVHUVA0Kefg7EOeNfTPvIfCM993xCeayRoSEV9G64fpVsVPfzThb7U1tAUQf8auqSpvaDka3elPn8XaupzdRWjdRZ46c6FL6TiAvZHMS-ZZ6ZmGwDA>
+        :x-sasl-enc; s=fm1; t=1660540109; x=1660626509; bh=VCiO+1/7gvQvf
+        qsvEh3J7OZy4FYDY6eHNsrcKm6S1VI=; b=OFR9ujqQn+kqfkjG9hhYbNG3hnjeI
+        gfrEqTzTjDoBYPWAJsCmXY00l5DniVL/l7xOeQSNSqTz7J1lsP4s5nmjJg4uweVe
+        u0hveejBPAC+NqLz37k8uO2LOPZKhGTsbfsG/120O4bPJg7iVQ+1ZyLVDO/bZ7Cs
+        vm+UhEfnidPSLaq4WeKNHV1ngApWCGZgI8ZkIFcdCdhJDGgxao7HRtlNho8aDfmG
+        NhDwnI7USFgh6vS9tPt6Ce77H9/uD0hWZtQ+4+3lsgj8vn42babyXn/Mb1cJTqds
+        6hR7ro878HfrRp8Gh+RRLLpWJQY4FoCnn5SUM5enOues7lyl3vkVZ+6kA==
+X-ME-Sender: <xms:zdT5YszwzViJoQOl-nlsxS1Xl_kQ2mj6sMxepWFiJyt9wcUP7gbVKg>
+    <xme:zdT5YgTrDALU6sQN4n30-Bj8c8gXqHV1HfYFy1IDCjSp57zcRIwowhCE5gjeOeZiP
+    rNgl1pvgyC7Q4AiHw>
+X-ME-Received: <xmr:zdT5YuUAtpGjzu2kKsrZfBM_IHNP6tymsNPQ542fWgRIwD8SuwqQgoVRHbtUofuVktzAd9f7jt0HghFpE18ECLTq5bBs6aLXQz7BunEmCW1_WPREmkUhjz1mChAQvLBtP_8W-w>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehuddgleehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdluddtmdenogevohgrshhtrghlqdfhgeduvddqtddvucdludehtddm
-    necujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmh
-    huvghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecu
-    ggftrfgrthhtvghrnhepleevtddvvdevieekieffjefggfeuieetieelveelhfeukeejvd
-    dvgfeiveekleefnecuffhomhgrihhnpegtlhhotghkfihorhhkphhirdgtohhmpdhmrghn
-    ghhophhirdgttgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:ytT5YosvfoRm0rG_2DYgvoFqi386Mvcpb3HjO3Uf3EfZlib0UNdnDQ>
-    <xmx:ytT5Yofk2GLlMebkzICcryKPSXgVmAxM3Ne86KT9PNrSTGmrOUDmbA>
-    <xmx:ytT5Ys0zBTM7IgU5King9sZzfzTPHoawLu96qaLV7tcKFanc3RtniA>
-    <xmx:ytT5YpWmbYjQkkx0sChh1uYUvLtQF4k27wMrtuTtSPkIICyz9HUuTQ>
+    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepgffhvefhgfehjeehgfekheeuffegheffjeegheeuudeufeffhffh
+    ueeihfeufffhnecuffhomhgrihhnpeguvghvihgtvghtrhgvvgdrohhrghenucevlhhush
+    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhh
+    ohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:zdT5YqiLSz0XwDT6fr-JMq5iahfd36iZv5wB0rJbcvZ3X7MjSPaulw>
+    <xmx:zdT5YuAqx6PJG8cZVcshWoJ3rCI0nFU9TPgy29j8hCwERm1pjUtdhw>
+    <xmx:zdT5YrIdufOLU0_vT0QD7VQE29-AxjxwjD6Cbmr-VP9O2MZgwiv8gQ>
+    <xmx:zdT5Yi41ziFzlslbWUUpNcgfptO0cvvSuPk9oFBAkwylcffBo8Zmmw>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 Aug 2022 01:08:25 -0400 (EDT)
+ 15 Aug 2022 01:08:28 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -75,9 +74,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Samuel Holland <samuel@sholland.org>
-Subject: [PATCH 03/12] dt-bindings: vendor-prefixes: Add Allwinner D1 board vendors
-Date:   Mon, 15 Aug 2022 00:08:06 -0500
-Message-Id: <20220815050815.22340-4-samuel@sholland.org>
+Subject: [PATCH 04/12] dt-bindings: riscv: Add Allwinner D1 board compatibles
+Date:   Mon, 15 Aug 2022 00:08:07 -0500
+Message-Id: <20220815050815.22340-5-samuel@sholland.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220815050815.22340-1-samuel@sholland.org>
 References: <20220815050815.22340-1-samuel@sholland.org>
@@ -93,43 +92,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some boards using the Allwinner D1 SoC are made by vendors not
-previously documented.
-
-Clockwork Tech LLC (https://www.clockworkpi.com/) manufactures the
-ClockworkPi and DevTerm boards.
-
-Beijing Widora Technology Co., Ltd. (https://mangopi.cc/) manufactures
-the MangoPi family of boards.
+Several SoMs and boards are available that feature the Allwinner D1 SoC.
+Document their compatible strings.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../devicetree/bindings/riscv/sunxi.yaml      | 64 +++++++++++++++++++
+ 1 file changed, 64 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/riscv/sunxi.yaml
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 2f0151e9f6be..52d076ab6c48 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -258,6 +258,8 @@ patternProperties:
-     description: Cirrus Logic, Inc.
-   "^cisco,.*":
-     description: Cisco Systems, Inc.
-+  "^clockwork,.*":
-+    description: Clockwork Tech LLC
-   "^cloudengines,.*":
-     description: Cloud Engines, Inc.
-   "^cnm,.*":
-@@ -1412,6 +1414,8 @@ patternProperties:
-     description: Shenzhen whwave Electronics, Inc.
-   "^wi2wi,.*":
-     description: Wi2Wi, Inc.
-+  "^widora,.*":
-+    description: Beijing Widora Technology Co., Ltd.
-   "^wiligear,.*":
-     description: Wiligear, Ltd.
-   "^willsemi,.*":
+diff --git a/Documentation/devicetree/bindings/riscv/sunxi.yaml b/Documentation/devicetree/bindings/riscv/sunxi.yaml
+new file mode 100644
+index 000000000000..564a89499894
+--- /dev/null
++++ b/Documentation/devicetree/bindings/riscv/sunxi.yaml
+@@ -0,0 +1,64 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/riscv/sunxi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Allwinner RISC-V SoC-based boards
++
++maintainers:
++  - Chen-Yu Tsai <wens@csie.org>
++  - Jernej Skrabec <jernej.skrabec@gmail.com>
++  - Samuel Holland <samuel@sholland.org>
++
++description:
++  Allwinner RISC-V SoC-based boards
++
++properties:
++  $nodename:
++    const: '/'
++  compatible:
++    oneOf:
++      - description: Dongshan Nezha STU SoM
++        items:
++          - const: 100ask,dongshan-nezha-stu
++          - const: allwinner,sun20i-d1
++
++      - description: D1 Nezha board
++        items:
++          - const: allwinner,d1-nezha
++          - const: allwinner,sun20i-d1
++
++      - description: ClockworkPi R-01 SoM and v3.14 board
++        items:
++          - const: clockwork,r-01-clockworkpi-v3.14
++          - const: allwinner,sun20i-d1
++
++      - description: ClockworkPi R-01 SoM, v3.14 board, and DevTerm expansion
++        items:
++          - const: clockwork,r-01-devterm-v3.14
++          - const: clockwork,r-01-clockworkpi-v3.14
++          - const: allwinner,sun20i-d1
++
++      - description: Lichee RV SoM
++        items:
++          - const: sipeed,lichee-rv
++          - const: allwinner,sun20i-d1
++
++      - description: Carrier boards for the Lichee RV SoM
++        items:
++          - enum:
++              - sipeed,lichee-rv-86-panel-480p
++              - sipeed,lichee-rv-86-panel-720p
++              - sipeed,lichee-rv-dock
++          - const: sipeed,lichee-rv
++          - const: allwinner,sun20i-d1
++
++      - description: MangoPi MQ Pro board
++        items:
++          - const: widora,mangopi-mq-pro
++          - const: allwinner,sun20i-d1
++
++additionalProperties: true
++
++...
 -- 
 2.35.1
 

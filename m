@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CE85942A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 23:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A380594298
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 23:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350364AbiHOVwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 17:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60942 "EHLO
+        id S1350103AbiHOVwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 17:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350320AbiHOVrj (ORCPT
+        with ESMTP id S1350257AbiHOVrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 17:47:39 -0400
+        Mon, 15 Aug 2022 17:47:32 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C571A60535;
-        Mon, 15 Aug 2022 12:31:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB875FAD0;
+        Mon, 15 Aug 2022 12:31:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42D96B81128;
-        Mon, 15 Aug 2022 19:31:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74D9FC4315A;
-        Mon, 15 Aug 2022 19:31:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6DB68B81125;
+        Mon, 15 Aug 2022 19:31:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98BC0C433C1;
+        Mon, 15 Aug 2022 19:31:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660591913;
-        bh=ISFO6hjI4XqtpbbowUxey809oGw5ggq0GNaeJcnkqKU=;
+        s=korg; t=1660591886;
+        bh=8xVoADYwIv4LNKJ9F7p8sP2HeEkSfNtj+oTvGTxCvuo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JpennA+rVC23dmt3KSf0eBxhsieabMVmp+ZbjZ4OjF4MNxU6DFvwmxmXhXHcT5iT+
-         3TeZ1ToJu6+JtNamSsr/j6syAukVT0/O9B5kspD/0A/jdutxHn78yelf+n1d9ZI+AQ
-         8CXwOD9bTyosbxfj5Bwm5qEF8VMDRXmidBYXiubM=
+        b=Kv6aiWSxGJ9RKEg0+EpWhF7HNZNZXcTNkQYH9pdX8scKioL3qCXyLhWmCeaFEPi/4
+         vN78iUEE6uI32yrralX6PNAUrR21jaX+F5BYo+0QbdofvnbK9Yi+X1cGIItx48cq1m
+         300yNkG/c53ouISPSnaHCGWxZjq8QX45haY1NaN8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Neal Liu <neal_liu@aspeedtech.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 0694/1095] misc: rtsx: Fix an error handling path in rtsx_pci_probe()
-Date:   Mon, 15 Aug 2022 20:01:33 +0200
-Message-Id: <20220815180458.085909188@linuxfoundation.org>
+Subject: [PATCH 5.18 0699/1095] usb: gadget: f_mass_storage: Make CD-ROM emulation works with Windows OS
+Date:   Mon, 15 Aug 2022 20:01:38 +0200
+Message-Id: <20220815180458.306057483@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
 References: <20220815180429.240518113@linuxfoundation.org>
@@ -55,49 +55,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Neal Liu <neal_liu@aspeedtech.com>
 
-[ Upstream commit 44fd1917314e9d4f53dd95dd65df1c152f503d3a ]
+[ Upstream commit 3b91edd624ab1ab694deef513a45eb9e9d49d75f ]
 
-If an error occurs after a successful idr_alloc() call, the corresponding
-resource must be released with idr_remove() as already done in the .remove
-function.
+Add read TOC with format 1 to support CD-ROM emulation with
+Windows OS.
+This patch is tested on Windows OS Server 2019.
 
-Update the error handling path to add the missing idr_remove() call.
-
-Fixes: ada8a8a13b13 ("mfd: Add realtek pcie card reader driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/r/e8dc41716cbf52fb37a12e70d8972848e69df6d6.1655271216.git.christophe.jaillet@wanadoo.fr
+Fixes: 89ada0fe669a ("usb: gadget: f_mass_storage: Make CD-ROM emulation work with Mac OS-X")
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+Link: https://lore.kernel.org/r/20220628021436.3252262-1-neal_liu@aspeedtech.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/cardreader/rtsx_pcr.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/usb/gadget/function/f_mass_storage.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/misc/cardreader/rtsx_pcr.c b/drivers/misc/cardreader/rtsx_pcr.c
-index 2a2619e3c72c..f001d99bf366 100644
---- a/drivers/misc/cardreader/rtsx_pcr.c
-+++ b/drivers/misc/cardreader/rtsx_pcr.c
-@@ -1507,7 +1507,7 @@ static int rtsx_pci_probe(struct pci_dev *pcidev,
- 	pcr->remap_addr = ioremap(base, len);
- 	if (!pcr->remap_addr) {
- 		ret = -ENOMEM;
--		goto free_handle;
-+		goto free_idr;
+diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+index 3a77bca0ebe1..e884f295504f 100644
+--- a/drivers/usb/gadget/function/f_mass_storage.c
++++ b/drivers/usb/gadget/function/f_mass_storage.c
+@@ -1192,13 +1192,14 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
+ 	u8		format;
+ 	int		i, len;
+ 
++	format = common->cmnd[2] & 0xf;
++
+ 	if ((common->cmnd[1] & ~0x02) != 0 ||	/* Mask away MSF */
+-			start_track > 1) {
++			(start_track > 1 && format != 0x1)) {
+ 		curlun->sense_data = SS_INVALID_FIELD_IN_CDB;
+ 		return -EINVAL;
  	}
  
- 	pcr->rtsx_resv_buf = dma_alloc_coherent(&(pcidev->dev),
-@@ -1570,6 +1570,10 @@ static int rtsx_pci_probe(struct pci_dev *pcidev,
- 			pcr->rtsx_resv_buf, pcr->rtsx_resv_buf_addr);
- unmap:
- 	iounmap(pcr->remap_addr);
-+free_idr:
-+	spin_lock(&rtsx_pci_lock);
-+	idr_remove(&rtsx_pci_idr, pcr->id);
-+	spin_unlock(&rtsx_pci_lock);
- free_handle:
- 	kfree(handle);
- free_pcr:
+-	format = common->cmnd[2] & 0xf;
+ 	/*
+ 	 * Check if CDB is old style SFF-8020i
+ 	 * i.e. format is in 2 MSBs of byte 9
+@@ -1208,8 +1209,8 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
+ 		format = (common->cmnd[9] >> 6) & 0x3;
+ 
+ 	switch (format) {
+-	case 0:
+-		/* Formatted TOC */
++	case 0:	/* Formatted TOC */
++	case 1:	/* Multi-session info */
+ 		len = 4 + 2*8;		/* 4 byte header + 2 descriptors */
+ 		memset(buf, 0, len);
+ 		buf[1] = len - 2;	/* TOC Length excludes length field */
+@@ -1250,7 +1251,7 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
+ 		return len;
+ 
+ 	default:
+-		/* Multi-session, PMA, ATIP, CD-TEXT not supported/required */
++		/* PMA, ATIP, CD-TEXT not supported/required */
+ 		curlun->sense_data = SS_INVALID_FIELD_IN_CDB;
+ 		return -EINVAL;
+ 	}
 -- 
 2.35.1
 

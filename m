@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BA15949CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F78594986
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243170AbiHOXW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53432 "EHLO
+        id S243569AbiHOXX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:23:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353572AbiHOXQ5 (ORCPT
+        with ESMTP id S241347AbiHOXRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:16:57 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB91AF4B1;
-        Mon, 15 Aug 2022 13:03:34 -0700 (PDT)
+        Mon, 15 Aug 2022 19:17:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C077CB58;
+        Mon, 15 Aug 2022 13:03:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 97AFDCE12C5;
-        Mon, 15 Aug 2022 20:03:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0438C433D7;
-        Mon, 15 Aug 2022 20:03:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23E1DB810C5;
+        Mon, 15 Aug 2022 20:03:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DFEEC433D6;
+        Mon, 15 Aug 2022 20:03:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593811;
-        bh=qq7+pJe4rKRzRhSQf0Bsb/dnSgaget5NFQmiFOvGCz0=;
+        s=korg; t=1660593816;
+        bh=u+YTZMnI+mHY8ePME3H/NiQfW4K6V1KRiwc+uCFjTLg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=McAmvE1AyJhsmWOs2SuRuhKkkow2imlf3CAwaUq8YuQ4S+I3PZAGA+ulSiIXF7/CK
-         67FOrH2cW6miWckvM1o8CPs9jf5OLq5Ex304S9lzAeIMGFuOylNJAtYmmbWXuu/6NW
-         Q8JQHMGgRG64Id1aPzLPAlQm/NeI4zNsXyy4gksw=
+        b=r2h0W4twkyg0RcPuzV6b7UGIyznxmqBq9PVOw54aDTeRQwJTZa8ZEgTKrF2mHa55j
+         762DJTGyL34B/c5grCZ62p48qPTa7b9KzlS2FOWnJPC/upSZrIttqded+mfcBvggNj
+         k/Liu3TvvqGrK74gE2CxwAUENeC5kYVtQ5UTivQQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yuntao Wang <ytcoode@gmail.com>,
+        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0329/1157] selftests/bpf: Fix test_run logic in fexit_stress.c
-Date:   Mon, 15 Aug 2022 19:54:45 +0200
-Message-Id: <20220815180452.817772660@linuxfoundation.org>
+Subject: [PATCH 5.19 0330/1157] sample: bpf: xdp_router_ipv4: Allow the kernel to send arp requests
+Date:   Mon, 15 Aug 2022 19:54:46 +0200
+Message-Id: <20220815180452.870580758@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -55,91 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yuntao Wang <ytcoode@gmail.com>
+From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-[ Upstream commit eb7b36ce47f830a01ad9405e673b563cc3638d5d ]
+[ Upstream commit 200a89e3e88786b52bc1dd5f26a310c097f4c6a7 ]
 
-In the commit da00d2f117a0 ("bpf: Add test ops for BPF_PROG_TYPE_TRACING"),
-the bpf_fentry_test1 function was moved into bpf_prog_test_run_tracing(),
-which is the test_run function of the tracing BPF programs.
+Forward the packet to the kernel if the gw router mac address is missing
+in to trigger ARP discovery.
 
-Thus calling 'bpf_prog_test_run_opts(filter_fd, &topts)' will not trigger
-bpf_fentry_test1 function as filter_fd is a sk_filter BPF program.
-
-Fix it by replacing filter_fd with fexit_fd in the bpf_prog_test_run_opts()
-function.
-
-Fixes: da00d2f117a0 ("bpf: Add test ops for BPF_PROG_TYPE_TRACING")
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+Fixes: 85bf1f51691c ("samples: bpf: Convert xdp_router_ipv4 to XDP samples helper")
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20220521151329.648013-1-ytcoode@gmail.com
+Link: https://lore.kernel.org/bpf/60bde5496d108089080504f58199bcf1143ea938.1653471558.git.lorenzo@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../selftests/bpf/prog_tests/fexit_stress.c   | 32 +++----------------
- 1 file changed, 4 insertions(+), 28 deletions(-)
+ samples/bpf/xdp_router_ipv4.bpf.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_stress.c b/tools/testing/selftests/bpf/prog_tests/fexit_stress.c
-index a7e74297f15f..5a7e6011f6bf 100644
---- a/tools/testing/selftests/bpf/prog_tests/fexit_stress.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fexit_stress.c
-@@ -7,11 +7,9 @@
+diff --git a/samples/bpf/xdp_router_ipv4.bpf.c b/samples/bpf/xdp_router_ipv4.bpf.c
+index 248119ca7938..0643330d1d2e 100644
+--- a/samples/bpf/xdp_router_ipv4.bpf.c
++++ b/samples/bpf/xdp_router_ipv4.bpf.c
+@@ -150,6 +150,15 @@ int xdp_router_ipv4_prog(struct xdp_md *ctx)
  
- void serial_test_fexit_stress(void)
- {
--	char test_skb[128] = {};
- 	int fexit_fd[CNT] = {};
- 	int link_fd[CNT] = {};
--	char error[4096];
--	int err, i, filter_fd;
-+	int err, i;
+ 				dest_mac = bpf_map_lookup_elem(&arp_table,
+ 							       &prefix_value->gw);
++				if (!dest_mac) {
++					/* Forward the packet to the kernel in
++					 * order to trigger ARP discovery for
++					 * the default gw.
++					 */
++					if (rec)
++						NO_TEAR_INC(rec->xdp_pass);
++					return XDP_PASS;
++				}
+ 			}
+ 		}
  
- 	const struct bpf_insn trace_program[] = {
- 		BPF_MOV64_IMM(BPF_REG_0, 0),
-@@ -20,25 +18,9 @@ void serial_test_fexit_stress(void)
- 
- 	LIBBPF_OPTS(bpf_prog_load_opts, trace_opts,
- 		.expected_attach_type = BPF_TRACE_FEXIT,
--		.log_buf = error,
--		.log_size = sizeof(error),
- 	);
- 
--	const struct bpf_insn skb_program[] = {
--		BPF_MOV64_IMM(BPF_REG_0, 0),
--		BPF_EXIT_INSN(),
--	};
--
--	LIBBPF_OPTS(bpf_prog_load_opts, skb_opts,
--		.log_buf = error,
--		.log_size = sizeof(error),
--	);
--
--	LIBBPF_OPTS(bpf_test_run_opts, topts,
--		.data_in = test_skb,
--		.data_size_in = sizeof(test_skb),
--		.repeat = 1,
--	);
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
- 
- 	err = libbpf_find_vmlinux_btf_id("bpf_fentry_test1",
- 					 trace_opts.expected_attach_type);
-@@ -58,15 +40,9 @@ void serial_test_fexit_stress(void)
- 			goto out;
- 	}
- 
--	filter_fd = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL",
--				  skb_program, sizeof(skb_program) / sizeof(struct bpf_insn),
--				  &skb_opts);
--	if (!ASSERT_GE(filter_fd, 0, "test_program_loaded"))
--		goto out;
-+	err = bpf_prog_test_run_opts(fexit_fd[0], &topts);
-+	ASSERT_OK(err, "bpf_prog_test_run_opts");
- 
--	err = bpf_prog_test_run_opts(filter_fd, &topts);
--	close(filter_fd);
--	CHECK_FAIL(err);
- out:
- 	for (i = 0; i < CNT; i++) {
- 		if (link_fd[i])
 -- 
 2.35.1
 

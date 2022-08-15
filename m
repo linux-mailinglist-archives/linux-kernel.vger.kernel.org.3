@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C445927F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 05:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC5A5927FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 05:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232106AbiHODF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 23:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51552 "EHLO
+        id S232260AbiHODLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 23:11:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiHODF5 (ORCPT
+        with ESMTP id S229528AbiHODLF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 23:05:57 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C44EE07;
-        Sun, 14 Aug 2022 20:05:55 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4M5fG71fP1z1M8xs;
-        Mon, 15 Aug 2022 11:02:23 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 15 Aug
- 2022 11:05:40 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>
-CC:     <bigeasy@linutronix.de>, <a.darwish@linutronix.de>,
-        <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
-        <shaozhengchao@huawei.com>
-Subject: [PATCH net-next] net: sched: fix misuse of qcpu->backlog in gnet_stats_add_queue_cpu
-Date:   Mon, 15 Aug 2022 11:08:48 +0800
-Message-ID: <20220815030848.276746-1-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Sun, 14 Aug 2022 23:11:05 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FE76464
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 20:11:04 -0700 (PDT)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M5fMJ6pcyzXdcy;
+        Mon, 15 Aug 2022 11:06:52 +0800 (CST)
+Received: from use12-sp2.huawei.com (10.67.189.174) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 15 Aug 2022 11:11:02 +0800
+From:   Xiaoming Ni <nixiaoming@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <phillip@squashfs.org.uk>
+CC:     <nixiaoming@huawei.com>, <wangle6@huawei.com>,
+        <yi.zhang@huawei.com>, <wangbing6@huawei.com>,
+        <zhongjubin@huawei.com>, <chenjianguo3@huawei.com>
+Subject: [PATCH 0/2] squashfs: Add the mount parameter "threads="
+Date:   Mon, 15 Aug 2022 11:10:58 +0800
+Message-ID: <20220815031100.75243-1-nixiaoming@huawei.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500026.china.huawei.com (7.185.36.106)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.189.174]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500006.china.huawei.com (7.192.105.130)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -48,28 +47,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the gnet_stats_add_queue_cpu function, the qstats->qlen statistics
-are incorrectly set to qcpu->backlog.
+Currently, Squashfs supports multiple decompressor parallel modes. However, this
+mode can be configured only during kernel building and does not support flexible
+selection during runtime.
 
-Fixes: 448e163f8b9b("gen_stats: Add gnet_stats_add_queue()")
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
----
- net/core/gen_stats.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+In the current patch set, the mount parameter "threads=" is added to allow users
+to select the parallel decompressor mode and configure the number of decompressors
+when mounting a file system.
 
-diff --git a/net/core/gen_stats.c b/net/core/gen_stats.c
-index a10335b4ba2d..c8d137ef5980 100644
---- a/net/core/gen_stats.c
-+++ b/net/core/gen_stats.c
-@@ -345,7 +345,7 @@ static void gnet_stats_add_queue_cpu(struct gnet_stats_queue *qstats,
- 	for_each_possible_cpu(i) {
- 		const struct gnet_stats_queue *qcpu = per_cpu_ptr(q, i);
- 
--		qstats->qlen += qcpu->backlog;
-+		qstats->qlen += qcpu->qlen;
- 		qstats->backlog += qcpu->backlog;
- 		qstats->drops += qcpu->drops;
- 		qstats->requeues += qcpu->requeues;
+Xiaoming Ni (2):
+  squashfs: add the mount parameter theads=<single|multi|percpu>
+  squashfs: Allows users to configure the number of decompression
+    threads.
+
+ fs/squashfs/Kconfig                     | 24 ++++++++--
+ fs/squashfs/decompressor_multi.c        | 32 ++++++++------
+ fs/squashfs/decompressor_multi_percpu.c | 37 ++++++++++------
+ fs/squashfs/decompressor_single.c       | 23 ++++++----
+ fs/squashfs/squashfs.h                  | 39 ++++++++++++++---
+ fs/squashfs/squashfs_fs_sb.h            |  4 +-
+ fs/squashfs/super.c                     | 77 ++++++++++++++++++++++++++++++++-
+ 7 files changed, 191 insertions(+), 45 deletions(-)
+
 -- 
-2.17.1
+2.12.3
 

@@ -2,146 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF70594E4C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E90594E4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231953AbiHPBzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 21:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
+        id S233087AbiHPBzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 21:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234305AbiHPByj (ORCPT
+        with ESMTP id S232617AbiHPByl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 21:54:39 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95868210870;
-        Mon, 15 Aug 2022 14:46:09 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 330E732007D7;
-        Mon, 15 Aug 2022 17:46:07 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 15 Aug 2022 17:46:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1660599966; x=1660686366; bh=5/0EPvXdhP
-        ro0zKMiqEkonkJvXb/I1AzuGUyP3JQyBI=; b=wJ/HZdYgs0p31ThNXOV8mrGlLT
-        Vk46kz9Qn76RQBJzxbUmYaB3E3ZuFVum/Aqm5qZUlDxu34pekRNIs9XqDYRYsXl5
-        FWnt+zCgIAOJIGM8yhRqajjLNRIZs68RJDKBBmavTEHypZ3LrHm/6hynZ9xTMP6L
-        TNOl8VuBLUW7QfBjmxLY1bUeD4sj+Otzjiy2j2UtN0gWx7yCaXWRj1Q9ea/suKRr
-        i45PrJFOYLwtEO70Hxp0PkBU+n110TSBesNUmW6Q+GcZD0+NGBfPM1Lkwv1lUcrF
-        UJTcw4dNWgNDgitrR6KZeHIqLOYqT9dLGK/PFOlm4d5r2luvcVzy/O4gTqmw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660599966; x=1660686366; bh=5/0EPvXdhPro0zKMiqEkonkJvXb/
-        I1AzuGUyP3JQyBI=; b=2ZXCvA9cimntn1UjjHMB0r0MlvpOfOOtHRF5pcIaI81T
-        mdTJA6vLOYPQM6eL69Kq7ZrFUhQmM8qPZ2ldvDMpyOwzUP+2vCOikQDugdVuRb/K
-        pPBPc5U2su3eZoqmIEjJoM2btRPfAeIy864LeQ1D9rhxgWem0JvESurBZN/D3eD+
-        IlT1IvcztrdJDrhSkHY8OlPVXV02IwYwk2AiBKpMXflEiwhQ22s1SxW2gB++os7B
-        Icohgq8CUp3Ypigl5Omf0Se3QD24c5B4DZ0MvLzvm5zRZbCuY1bRKYZt/kIuNEH/
-        sSkIoFePwmLMd0HOnlArTvKFJlHCfNbvyGXSNY2rdA==
-X-ME-Sender: <xms:nb76Yv0Ej_z_uM_wN3B_P_R3ltOfeO2C8sGBtIuh29Zc_4lFpEvSDw>
-    <xme:nb76YuGJkk7QBkz5kLgrEN5S4OJ8ssQK3Ly2IV2RLuJyqfrclNP7vLJyHnLQmnuSN
-    sFj2Dtf4BWj03uncA>
-X-ME-Received: <xmr:nb76Yv4yEU20_iu9UQ3pOzsS8VZdfTPLdbpzNJK1NfMSFmLq2SchkjeCfKMsQ0R5QFLwBsENaGicY9hIZPI77-KYqmmsE03A2ds4LP_mNbh27kyAwhUSYlokYwB0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehfedgtdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehnughr
-    vghsucfhrhgvuhhnugcuoegrnhgurhgvshesrghnrghrrgiivghlrdguvgeqnecuggftrf
-    grthhtvghrnhepvdfffeevhfetveffgeeiteefhfdtvdffjeevhfeuteegleduheetvedu
-    ieettddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghnughrvghssegrnhgrrhgriigvlhdruggv
-X-ME-Proxy: <xmx:nb76Yk1WLs_gY1IYxKa9HCfxP1WZQGDwJuW8-uJfX6mcviCw_oXBTQ>
-    <xmx:nb76YiGxg2k9yNZr3I-NuiFVrR-7qWSkqLVqj3TFJwEPTe17kdgAnA>
-    <xmx:nb76Yl-tiKe5RZYevmY2_0IdTNT3c5Rx2X5TGOj8Tou6sOHIO93XsQ>
-    <xmx:nr76YgHpauIZlhEd-lIjWIXnPExykmUPz133PNZHrrtpg7Di_j3q_g>
-Feedback-ID: id4a34324:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 Aug 2022 17:46:05 -0400 (EDT)
-Date:   Mon, 15 Aug 2022 14:46:04 -0700
-From:   Andres Freund <andres@anarazel.de>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Mon, 15 Aug 2022 21:54:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1641C21146F;
+        Mon, 15 Aug 2022 14:46:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95823B811FE;
+        Mon, 15 Aug 2022 21:46:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D58E7C433D6;
+        Mon, 15 Aug 2022 21:46:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660599980;
+        bh=9P1wiCHMqEfEMRjp5RWcePkGLroiFvT2II+AyFuabVQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pN/UAeEWR9Cl72HCG6eavcTQAflelQE+1zXehSk9ZT47IZIlHVgTjYoi04Up2QF/g
+         Q4VTLIjzsH7OR05f3XRTB6psxqkFDSccQgH3gPRAGePI3eXmMT4ScH5lu/+TT32oW6
+         9AsxpEFF9s+rehxFo+mJTLNtXomhXoinL6+OfE15YhQtbzhrcMaAsQALOiF1xlvDxZ
+         2i7CnO3wiIKmfI6nsGTjtChMBUo7UqfqbmqTRLqH0l8dSpcfVxcPPVHotXtQwLd/je
+         iOrE6ljiNHJqe1TE3qkYgzwPTG0ku4RN3+Ey+vk60EkemJUynjYa+gjrcKIStJq9HB
+         XeRnjA1BlqQeQ==
+Date:   Mon, 15 Aug 2022 16:46:13 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>, c@redhat.com
-Subject: Re: [PATCH] virtio_net: Revert "virtio_net: set the default max ring
- size by find_vqs()"
-Message-ID: <20220815214604.x7g342h3oadruxx2@awork3.anarazel.de>
-References: <20220815090521.127607-1-mst@redhat.com>
- <20220815203426.GA509309@roeck-us.net>
- <20220815164013-mutt-send-email-mst@kernel.org>
- <20220815205053.GD509309@roeck-us.net>
- <20220815165608-mutt-send-email-mst@kernel.org>
- <20220815212839.aop6wwx4fkngihbf@awork3.anarazel.de>
- <20220815173256-mutt-send-email-mst@kernel.org>
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v3 3/6] scsi: megaraid_sas: Replace one-element array with
+ flexible-array member in MR_DRV_RAID_MAP
+Message-ID: <1448f387821833726b99f0ce13069ada89164eb5.1660592640.git.gustavoars@kernel.org>
+References: <cover.1660592640.git.gustavoars@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220815173256-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1660592640.git.gustavoars@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+One-element arrays are deprecated, and we are replacing them with
+flexible array members, instead. So, replace one-element array with
+flexible-array member in struct MR_DRV_RAID_MAP and refactor the
+code accordingly.
 
-On 2022-08-15 17:39:08 -0400, Michael S. Tsirkin wrote:
-> On Mon, Aug 15, 2022 at 02:28:39PM -0700, Andres Freund wrote:
-> > On 2022-08-15 17:04:10 -0400, Michael S. Tsirkin wrote:
-> > > So virtio has a queue_size register. When read, it will give you
-> > > originally the maximum queue size. Normally we just read it and
-> > > use it as queue size.
-> > > 
-> > > However, when queue memory allocation fails, and unconditionally with a
-> > > network device with the problematic patch, driver is asking the
-> > > hypervisor to make the ring smaller by writing a smaller value into this
-> > > register.
-> > > 
-> > > I suspect that what happens is hypervisor still uses the original value
-> > > somewhere.
-> > 
-> > It looks more like the host is never told about the changed size for legacy
-> > devices...
-> > 
-> > Indeed, adding a vp_legacy_set_queue_size() & call to it to setup_vq(), makes
-> > 5.19 + restricting queue sizes to 1024 boot again.
-> 
-> Interesting, the register is RO in the legacy interface.
-> And to be frank I can't find where is vp_legacy_set_queue_size
-> even implemented. It's midnight here too ...
+This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+routines on memcpy().
 
-Yea, I meant that added both vp_legacy_set_queue_size() and a call to it. I
-was just quickly experimenting around.
+Link: https://github.com/KSPP/linux/issues/79
+Link: https://github.com/KSPP/linux/issues/109
+Enhanced-by: Kees Cook <keescook@chromium.org> # Change in struct MR_DRV_RAID_MAP_ALL
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+Changes in v3:
+ - Revert use of flex_array_size() helper.
+ - Modify MR_DRV_RAID_MAP_ALL structure.
 
+Changes in v2:
+ - None.
 
-> Yes I figured this out too. And I was able to reproduce on qemu now.
+ drivers/scsi/megaraid/megaraid_sas_fusion.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Cool.
+diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.h b/drivers/scsi/megaraid/megaraid_sas_fusion.h
+index 66e13b74fcdc..df92d4369e04 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_fusion.h
++++ b/drivers/scsi/megaraid/megaraid_sas_fusion.h
+@@ -1182,7 +1182,7 @@ struct MR_DRV_RAID_MAP {
+ 		devHndlInfo[MAX_RAIDMAP_PHYSICAL_DEVICES_DYN];
+ 	u16 ldTgtIdToLd[MAX_LOGICAL_DRIVES_DYN];
+ 	struct MR_ARRAY_INFO arMapInfo[MAX_API_ARRAYS_DYN];
+-	struct MR_LD_SPAN_MAP      ldSpanMap[1];
++	struct MR_LD_SPAN_MAP      ldSpanMap[];
+ 
+ };
+ 
+@@ -1193,7 +1193,7 @@ struct MR_DRV_RAID_MAP {
+ struct MR_DRV_RAID_MAP_ALL {
+ 
+ 	struct MR_DRV_RAID_MAP raidMap;
+-	struct MR_LD_SPAN_MAP ldSpanMap[MAX_LOGICAL_DRIVES_DYN - 1];
++	struct MR_LD_SPAN_MAP ldSpanMap[MAX_LOGICAL_DRIVES_DYN];
+ } __packed;
+ 
+ 
+-- 
+2.34.1
 
-
-> I'm posting a new patchset reverting all the handing of resize
-> restrictions, I think we should rethink it for the next release.
-
-Makes sense.
-
-Greetings,
-
-Andres Freund

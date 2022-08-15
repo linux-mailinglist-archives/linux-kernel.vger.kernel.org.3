@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD12B5947AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77893594913
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354915AbiHOXzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
+        id S1354337AbiHOXtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354695AbiHOXtc (ORCPT
+        with ESMTP id S1354287AbiHOXoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:49:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514A68FD70;
-        Mon, 15 Aug 2022 13:15:47 -0700 (PDT)
+        Mon, 15 Aug 2022 19:44:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1547586C00;
+        Mon, 15 Aug 2022 13:14:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CF9E60F0E;
-        Mon, 15 Aug 2022 20:15:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D1B6C433D6;
-        Mon, 15 Aug 2022 20:15:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37824B80EA9;
+        Mon, 15 Aug 2022 20:14:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80A53C433D6;
+        Mon, 15 Aug 2022 20:14:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594545;
-        bh=2uyKtmGglGH0iXko6R1xrbjLGUfoGmJ7bj7j9NKT1Cw=;
+        s=korg; t=1660594441;
+        bh=FiWPRepBVlrOCz8sETsw5mhm5qijt3xISAdoOf8lMx8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AguIDfoD77bQYkLrUCG6fywHAdkWA54+pxnwBQX8iT3134dx7DPk2OEcElT6vopbd
-         wcYwujjs1TEGDutawyOCKMupwcWaxdDvJ5EFftYDodZAGoa+uApiPmw58SVmxvF/5j
-         iN8IV3sb+a3meEsD5VO90pyYz4V6b1kbqAeNoDMs=
+        b=qoCaXMUxiL2QDD0u6ambXfpv2ppLFGduAE3RYKe/XZy7ZgUvQeztF1/Ym/XQvzYre
+         lUcLbgj09Vf7F77JhL3vPFqPMXYK6R2C9pty4Ag3HaQWf9BGUYGGsLHG8aLRicXDj0
+         xJxqn4Um+UkBqYg/iwmZC1AyB+Ior/+r8mZgJ2TQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        Xin Ji <xji@analogixsemi.com>,
-        Robert Foss <robert.foss@linaro.org>,
+        stable@vger.kernel.org, Yixun Lan <dlan@gentoo.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Amjad OULED-AMEUR <ouledameur.amjad@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0447/1157] drm/bridge: anx7625: Fix NULL pointer crash when using edp-panel
-Date:   Mon, 15 Aug 2022 19:56:43 +0200
-Message-Id: <20220815180457.473914286@linuxfoundation.org>
+Subject: [PATCH 5.19 0449/1157] libbpf, riscv: Use a0 for RC register
+Date:   Mon, 15 Aug 2022 19:56:45 +0200
+Message-Id: <20220815180457.555616682@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -56,62 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hsin-Yi Wang <hsinyi@chromium.org>
+From: Yixun Lan <dlan@gentoo.org>
 
-[ Upstream commit dfb02eb6bdf84697dbadd69a7df12db612ce4ed0 ]
+[ Upstream commit 935dc35c75318fa213d26808ad8bb130fb0b486e ]
 
-Move devm_of_dp_aux_populate_ep_devices() after pm runtime and i2c setup
-to avoid NULL pointer crash.
+According to the RISC-V calling convention register usage here [0], a0
+is used as return value register, so rename it to make it consistent
+with the spec.
 
-edp-panel probe (generic_edp_panel_probe) calls pm_runtime_get_sync() to
-read EDID. At this time, bridge should have pm runtime enabled and i2c
-clients ready.
+  [0] section 18.2, table 18.2
+      https://riscv.org/wp-content/uploads/2015/01/riscv-calling.pdf
 
-Fixes: adca62ec370c ("drm/bridge: anx7625: Support reading edid through aux channel")
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Reviewed-by: Xin Ji <xji@analogixsemi.com>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220706125254.2474095-4-hsinyi@chromium.org
+Fixes: 589fed479ba1 ("riscv, libbpf: Add RISC-V (RV64) support to bpf_tracing.h")
+Signed-off-by: Yixun Lan <dlan@gentoo.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Björn Töpel <bjorn@kernel.org>
+Acked-by: Amjad OULED-AMEUR <ouledameur.amjad@gmail.com>
+Link: https://lore.kernel.org/bpf/20220706140204.47926-1-dlan@gentoo.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/bridge/analogix/anx7625.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ tools/lib/bpf/bpf_tracing.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-index 0117fd8c62ae..183bd065c494 100644
---- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-+++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-@@ -2656,14 +2656,6 @@ static int anx7625_i2c_probe(struct i2c_client *client,
- 	platform->aux.dev = dev;
- 	platform->aux.transfer = anx7625_aux_transfer;
- 	drm_dp_aux_init(&platform->aux);
--	devm_of_dp_aux_populate_ep_devices(&platform->aux);
--
--	ret = anx7625_parse_dt(dev, pdata);
--	if (ret) {
--		if (ret != -EPROBE_DEFER)
--			DRM_DEV_ERROR(dev, "fail to parse DT : %d\n", ret);
--		goto free_wq;
--	}
- 
- 	if (anx7625_register_i2c_dummy_clients(platform, client) != 0) {
- 		ret = -ENOMEM;
-@@ -2679,6 +2671,15 @@ static int anx7625_i2c_probe(struct i2c_client *client,
- 	if (ret)
- 		goto free_wq;
- 
-+	devm_of_dp_aux_populate_ep_devices(&platform->aux);
-+
-+	ret = anx7625_parse_dt(dev, pdata);
-+	if (ret) {
-+		if (ret != -EPROBE_DEFER)
-+			DRM_DEV_ERROR(dev, "fail to parse DT : %d\n", ret);
-+		goto free_wq;
-+	}
-+
- 	if (!platform->pdata.low_power_mode) {
- 		anx7625_disable_pd_protocol(platform);
- 		pm_runtime_get_sync(dev);
+diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+index 01ce121c302d..11f9096407fc 100644
+--- a/tools/lib/bpf/bpf_tracing.h
++++ b/tools/lib/bpf/bpf_tracing.h
+@@ -233,7 +233,7 @@ struct pt_regs___arm64 {
+ #define __PT_PARM5_REG a4
+ #define __PT_RET_REG ra
+ #define __PT_FP_REG s0
+-#define __PT_RC_REG a5
++#define __PT_RC_REG a0
+ #define __PT_SP_REG sp
+ #define __PT_IP_REG pc
+ /* riscv does not select ARCH_HAS_SYSCALL_WRAPPER. */
 -- 
 2.35.1
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D26594C89
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1423E594814
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233800AbiHPAsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 20:48:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56658 "EHLO
+        id S1347421AbiHOXEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:04:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345757AbiHPApm (ORCPT
+        with ESMTP id S1347613AbiHOXCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 20:45:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60384193564;
-        Mon, 15 Aug 2022 13:41:29 -0700 (PDT)
+        Mon, 15 Aug 2022 19:02:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DEE86060;
+        Mon, 15 Aug 2022 12:58:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DBBED61233;
-        Mon, 15 Aug 2022 20:41:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9A11C433D6;
-        Mon, 15 Aug 2022 20:41:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56D2BB80EAD;
+        Mon, 15 Aug 2022 19:58:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC1DCC433C1;
+        Mon, 15 Aug 2022 19:58:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660596088;
-        bh=0uKQ4XlDoVmec3sjjPuLPu/Rai684n2yPKBqpnW4JQ0=;
+        s=korg; t=1660593496;
+        bh=LYJU9PjhnyJ0TJ5XqVYXIt0a/jVRtvtlLt94h9j8mpY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xjcJ9CeAzU3auZTeip9qPMck9oh5mvzRkO6MJ1HE2fstcHijO3YDmtI7yerYCX1Wv
-         gHlC6hL5OcGW1KBOkxr3gW+wxCY4WzP6T7Yd4DT53sCzgX+p87GyZ5NJU50LXuEhwE
-         UH6gB3BJujNHkHhuws/Uow4jEgWC6/acKdnxEg8Y=
+        b=Lhgv5HsUgEtORzQ/406q4IoEH7jbgfdy+M8G+56i/Du7VXXULsbXiHdHckEMI7+0A
+         JydvFGO2b52SO5akA43yjsVYFEXDC71XNRQm0AdRz3KCW10Wehw9AVkJOzZtwEqN8y
+         zKoKO7Fy9JdFyF4WSsppL1H5qjj54o66qt8ufj0A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org, Hyeong-Jun Kim <hj514.kim@samsung.com>,
+        Chao Yu <chao.yu@oppo.com>, Jaegeuk Kim <jaegeuk@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0968/1157] remoteproc: sysmon: Wait for SSCTL service to come up
-Date:   Mon, 15 Aug 2022 20:05:24 +0200
-Message-Id: <20220815180518.404555643@linuxfoundation.org>
+Subject: [PATCH 5.18 0926/1095] f2fs: fix to invalidate META_MAPPING before DIO write
+Date:   Mon, 15 Aug 2022 20:05:25 +0200
+Message-Id: <20220815180507.554706160@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
-References: <20220815180439.416659447@linuxfoundation.org>
+In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
+References: <20220815180429.240518113@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,76 +55,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sibi Sankar <quic_sibis@quicinc.com>
+From: Chao Yu <chao@kernel.org>
 
-[ Upstream commit 47c04e00eff86a81cd357c3feed04c86089bcb85 ]
+[ Upstream commit 67ca06872eb02944b4c6f92cffa9242e92c63109 ]
 
-The SSCTL service comes up after a finite time when the remote Q6 comes
-out of reset. Any graceful shutdowns requested during this period will
-be a NOP and abrupt tearing down of the glink channel might lead to pending
-transactions on the remote Q6 side and will ultimately lead to a fatal
-error. Fix this by waiting for the SSCTL service when a graceful shutdown
-is requested.
+Quoted from commit e3b49ea36802 ("f2fs: invalidate META_MAPPING before
+IPU/DIO write")
 
-Fixes: 1fb82ee806d1 ("remoteproc: qcom: Introduce sysmon")
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/1657022900-2049-7-git-send-email-quic_sibis@quicinc.com
+"
+Encrypted pages during GC are read and cached in META_MAPPING.
+However, due to cached pages in META_MAPPING, there is an issue where
+newly written pages are lost by IPU or DIO writes.
+
+Thread A - f2fs_gc()            Thread B
+/* phase 3 */
+down_write(i_gc_rwsem)
+ra_data_block()       ---- (a)
+up_write(i_gc_rwsem)
+                                f2fs_direct_IO() :
+                                 - down_read(i_gc_rwsem)
+                                 - __blockdev_direct_io()
+                                 - get_data_block_dio_write()
+                                 - f2fs_dio_submit_bio()  ---- (b)
+                                 - up_read(i_gc_rwsem)
+/* phase 4 */
+down_write(i_gc_rwsem)
+move_data_block()     ---- (c)
+up_write(i_gc_rwsem)
+
+(a) In phase 3 of f2fs_gc(), up-to-date page is read from storage and
+    cached in META_MAPPING.
+(b) In thread B, writing new data by IPU or DIO write on same blkaddr as
+    read in (a). cached page in META_MAPPING become out-dated.
+(c) In phase 4 of f2fs_gc(), out-dated page in META_MAPPING is copied to
+    new blkaddr. In conclusion, the newly written data in (b) is lost.
+
+To address this issue, invalidating pages in META_MAPPING before IPU or
+DIO write.
+"
+
+In previous commit, we missed to cover extent cache hit case, and passed
+wrong value for parameter @end of invalidate_mapping_pages(), fix both
+issues.
+
+Fixes: 6aa58d8ad20a ("f2fs: readahead encrypted block during GC")
+Fixes: e3b49ea36802 ("f2fs: invalidate META_MAPPING before IPU/DIO write")
+Cc: Hyeong-Jun Kim <hj514.kim@samsung.com>
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/remoteproc/qcom_sysmon.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ fs/f2fs/data.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/remoteproc/qcom_sysmon.c b/drivers/remoteproc/qcom_sysmon.c
-index 9fca81492863..a9f04dd83ab6 100644
---- a/drivers/remoteproc/qcom_sysmon.c
-+++ b/drivers/remoteproc/qcom_sysmon.c
-@@ -41,6 +41,7 @@ struct qcom_sysmon {
- 	struct completion comp;
- 	struct completion ind_comp;
- 	struct completion shutdown_comp;
-+	struct completion ssctl_comp;
- 	struct mutex lock;
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 9a1a526f2092..1862b03a9982 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -1436,9 +1436,12 @@ int f2fs_map_blocks(struct inode *inode, struct f2fs_map_blocks *map,
+ 			*map->m_next_extent = pgofs + map->m_len;
  
- 	bool ssr_ack;
-@@ -445,6 +446,8 @@ static int ssctl_new_server(struct qmi_handle *qmi, struct qmi_service *svc)
+ 		/* for hardware encryption, but to avoid potential issue in future */
+-		if (flag == F2FS_GET_BLOCK_DIO)
++		if (flag == F2FS_GET_BLOCK_DIO) {
+ 			f2fs_wait_on_block_writeback_range(inode,
+ 						map->m_pblk, map->m_len);
++			invalidate_mapping_pages(META_MAPPING(sbi),
++				map->m_pblk, map->m_pblk + map->m_len - 1);
++		}
  
- 	svc->priv = sysmon;
+ 		if (map->m_multidev_dio) {
+ 			block_t blk_addr = map->m_pblk;
+@@ -1655,7 +1658,7 @@ int f2fs_map_blocks(struct inode *inode, struct f2fs_map_blocks *map,
+ 		f2fs_wait_on_block_writeback_range(inode,
+ 						map->m_pblk, map->m_len);
+ 		invalidate_mapping_pages(META_MAPPING(sbi),
+-						map->m_pblk, map->m_pblk);
++				map->m_pblk, map->m_pblk + map->m_len - 1);
  
-+	complete(&sysmon->ssctl_comp);
-+
- 	return 0;
- }
- 
-@@ -501,6 +504,7 @@ static int sysmon_start(struct rproc_subdev *subdev)
- 		.ssr_event = SSCTL_SSR_EVENT_AFTER_POWERUP
- 	};
- 
-+	reinit_completion(&sysmon->ssctl_comp);
- 	mutex_lock(&sysmon->state_lock);
- 	sysmon->state = SSCTL_SSR_EVENT_AFTER_POWERUP;
- 	blocking_notifier_call_chain(&sysmon_notifiers, 0, (void *)&event);
-@@ -545,6 +549,11 @@ static void sysmon_stop(struct rproc_subdev *subdev, bool crashed)
- 	if (crashed)
- 		return;
- 
-+	if (sysmon->ssctl_instance) {
-+		if (!wait_for_completion_timeout(&sysmon->ssctl_comp, HZ / 2))
-+			dev_err(sysmon->dev, "timeout waiting for ssctl service\n");
-+	}
-+
- 	if (sysmon->ssctl_version)
- 		sysmon->shutdown_acked = ssctl_request_shutdown(sysmon);
- 	else if (sysmon->ept)
-@@ -631,6 +640,7 @@ struct qcom_sysmon *qcom_add_sysmon_subdev(struct rproc *rproc,
- 	init_completion(&sysmon->comp);
- 	init_completion(&sysmon->ind_comp);
- 	init_completion(&sysmon->shutdown_comp);
-+	init_completion(&sysmon->ssctl_comp);
- 	mutex_init(&sysmon->lock);
- 	mutex_init(&sysmon->state_lock);
- 
+ 		if (map->m_multidev_dio) {
+ 			block_t blk_addr = map->m_pblk;
 -- 
 2.35.1
 

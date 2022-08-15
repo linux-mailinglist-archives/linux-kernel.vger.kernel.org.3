@@ -2,122 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8935928DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 06:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA1565928D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 06:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240942AbiHOEfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 00:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
+        id S241013AbiHOEfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 00:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240794AbiHOEey (ORCPT
+        with ESMTP id S240892AbiHOEfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 00:34:54 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D748815727;
-        Sun, 14 Aug 2022 21:34:50 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 59B03320083A;
-        Mon, 15 Aug 2022 00:34:49 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 15 Aug 2022 00:34:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1660538088; x=1660624488; bh=Ak
-        h2a1fDujqMH4YEeTbbnnaQ35ZklucjT/210qkRNQ0=; b=y08lZUOZXfu52ot0+9
-        K7tGy3zkFw3TNgirtVvY5Dcp5OAXOwDKQ90qXRWIFBM2AxCOWPf+ZiIZvVfjgdRa
-        NFkmH3uCHzSn8l+6Vbxm5UH90LN+JEpKGjhBhCp+DJtLvzpfaGNgBhkm0QbiTSVW
-        b04eiJ0ViON9ys9OfXtfYueAqfot8SUuPisPzEtOikf34L98Gry2+uhJ86c5Mz+x
-        qXfQi6YUYjaQQ/K/79DtLo10q2reQZCIQWbtt3La7XG/JX3moTTXW/MJhKoQz06X
-        p+csGj2IHFK5260wQON5z5nHgl5ycN+np7Mp31UzhaUnm1h1yggdQkTrCJqiOe43
-        /u0g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1660538088; x=1660624488; bh=Akh2a1fDujqMH
-        4YEeTbbnnaQ35ZklucjT/210qkRNQ0=; b=0hCjihZFNeu/gXSOO9Ke7iNzTCZ1C
-        ngo7qYhA2xyEGZr94gxOwtrkk7hvQ9nkmK+S46ifhA/3492+Z6x0gJpAXipezXI7
-        GNaTLov+1hlhAG5oW3NU9puzdExdGBe1sSlVspxqtLtamp2dB7yUa4hIcbgSPfHZ
-        YuQfSFUzl+9/Q6A4RA1itThXkx/pZhtORZroTeGJJsgcWt3UGVsutLihIVWIIEJP
-        6vz1u3Ctc6dzOI00Oekmn50gKAq+DYYljqszJ2SKwxo4aOqGXDGmxc8P785JpV0h
-        +l9LVW2yO2P/AhOZmJyFsWVBUHwzaVHMVFRjAemfLn/Y+Ik3QNCyEpdKw==
-X-ME-Sender: <xms:6Mz5YiMr6rXhg7d7B09bpIyuzBKqJvIDpZCwwEMDTpfsOk45dM0fHg>
-    <xme:6Mz5Yg_srz2OWV7_qWqaALuNdGJnRrhApMMxQbcwTd3OWgfufuK3ByR9Iv7160gjy
-    3Qc2wc_-iZdfonbDw>
-X-ME-Received: <xmr:6Mz5YpRUMekRIWr50m4JsWxCyvhMHvZNIiKUvNNT47RMou3EbbtfJKgdHxZLq2EYQeBS2oLtyTvH1YV_GMqRusJYpQZuD4njxWcoQRGTlqdkajPsmq_tEVeXJaPWcmPRxkmyzA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehuddgkeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
-    udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:6Mz5YitnUTGgmoRPq9BfS9LX0BEbLUlqXjzy7KULB-2He-52XWd-Cw>
-    <xmx:6Mz5YqdTQcSW2J0HaTGZTw3W-CJSD2PgokiS3MNUtDOm8bpMz3ZtVg>
-    <xmx:6Mz5Ym1E07H2O8tcp4AgRFHL88nvZbVVuDp9o_KTdpz8pv3EPP_Zfw>
-    <xmx:6Mz5YrUdUG9ChzqHCktpXIOm6dtW2hWXmQoVg70D_5bi2QovLkCE_g>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 Aug 2022 00:34:48 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH v3 4/4] soc: sunxi: sram: Only iterate over SRAM children
-Date:   Sun, 14 Aug 2022 23:34:35 -0500
-Message-Id: <20220815043436.20170-5-samuel@sholland.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220815043436.20170-1-samuel@sholland.org>
-References: <20220815043436.20170-1-samuel@sholland.org>
+        Mon, 15 Aug 2022 00:35:00 -0400
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D6B15718;
+        Sun, 14 Aug 2022 21:34:55 -0700 (PDT)
+Received: by mail-lf1-f45.google.com with SMTP id c28so5135531lfh.3;
+        Sun, 14 Aug 2022 21:34:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=koRe361yf+ju3e2grtdRsIwtJPcKdw6GpoFa2OUU6YY=;
+        b=afsAZELNeFWlzNYGj83UNLIQVgpGVhl4CjDXTewbDb2RaoNSX64KcWZjD75JqFaAzr
+         iJwogjuQ2fI4Zoo/BsXvM5AwWDnL96L1I1UprCDREI+RDlLm1gFYXvL/MW5ZMW1Febh6
+         6xz5sTGWI1dP5dejLmSPXLzPSxO4RhByjMiCMLG4hXca6axDTq8VwDLwTscXKqTEOEf7
+         ayi9lG4XzHSiFSxOyYU2eMQbLbKHea7G0Wk6IKC/PlEhW1qlWPY8oFCNc4Z3Gr57/8eY
+         v3KXnhaaijNzdYdA1x5ADZVvjLKvdKk6+SRq8Ua9pXP25WFXmpydpMChNJVtaufG/z8B
+         iaWQ==
+X-Gm-Message-State: ACgBeo3uQchoZPdxShtbv4LDHZMiUeOMg2Xe8WSpLfWu4zCqRAmURmtw
+        m4i74AYnb3SJqhH0zK76sCs=
+X-Google-Smtp-Source: AA6agR71B6BYC08TKQGaEQgjRLHE/P0rIJDvZLclVliQAyFVRPtTPVbYzi2sb6AgzdFgaR1Wnw1LvA==
+X-Received: by 2002:a05:6512:3f97:b0:48a:8549:2329 with SMTP id x23-20020a0565123f9700b0048a85492329mr4556426lfa.62.1660538093551;
+        Sun, 14 Aug 2022 21:34:53 -0700 (PDT)
+Received: from dc73szyyyyyyyyyyyyyft-3.rev.dnainternet.fi (dc73szyyyyyyyyyyyyyft-3.rev.dnainternet.fi. [2001:14ba:16ee:fa00::9])
+        by smtp.gmail.com with ESMTPSA id j5-20020ac24545000000b0048b28acab8csm979169lfm.64.2022.08.14.21.34.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Aug 2022 21:34:52 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 07:34:36 +0300
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 7/7] iio: Simplify drivers using
+ devm_regulator_*get_enable()
+Message-ID: <YvnM3LvwRiUaLLAg@dc73szyyyyyyyyyyyyyft-3.rev.dnainternet.fi>
+References: <cover.1660292316.git.mazziesaccount@gmail.com>
+ <13bb483e1f3ee003ca3a6949e27eee7f505e047d.1660292316.git.mazziesaccount@gmail.com>
+ <CAHp75Vcz_ufnLCE8TYBjM0b8BiS4W1AgXq8euNrUFo3WZy3=fA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="41Y4qJgjVrNBiXfo"
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vcz_ufnLCE8TYBjM0b8BiS4W1AgXq8euNrUFo3WZy3=fA@mail.gmail.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that a "regulators" child is accepted by the controller binding, the
-debugfs show routine must be explicitly limited to "sram" children.
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+--41Y4qJgjVrNBiXfo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-(no changes since v2)
+Morning Andy,
 
-Changes in v2:
- - New patch for v2
+On Fri, Aug 12, 2022 at 09:05:52PM +0200, Andy Shevchenko wrote:
+> On Friday, August 12, 2022, Matti Vaittinen <mazziesaccount@gmail.com>
+> wrote:
+>=20
+> > adc/ad7192:
+> > Use devm_regulator_get_enable() instead of open coded get, enable,
+> > add-action-to-disable-at-detach - pattern. Also drop the seemingly unus=
+ed
+> > struct member 'dvdd'.
+>=20
+> In IIO we expect to have one patch per driver. Please split.
 
- drivers/soc/sunxi/sunxi_sram.c | 3 +++
- 1 file changed, 3 insertions(+)
+Fine with me. I didn't go through too many drivers anyways. I'll split
+for the v3. I'll just wait for a while for other feedback.
 
-diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
-index 92f9186c1c42..6acaaeb65652 100644
---- a/drivers/soc/sunxi/sunxi_sram.c
-+++ b/drivers/soc/sunxi/sunxi_sram.c
-@@ -120,6 +120,9 @@ static int sunxi_sram_show(struct seq_file *s, void *data)
- 	seq_puts(s, "--------------------\n\n");
- 
- 	for_each_child_of_node(sram_dev->of_node, sram_node) {
-+		if (!of_node_name_eq(sram_node, "sram"))
-+			continue;
-+
- 		sram_addr_p = of_get_address(sram_node, 0, NULL, NULL);
- 
- 		seq_printf(s, "sram@%08x\n",
--- 
-2.35.1
+Best Regards
+  Matti
 
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--41Y4qJgjVrNBiXfo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmL5zNgACgkQeFA3/03a
+ocV5EggAoPQpVk1csTJRDsQpNBj7nDvr8lCkwwJPlXJMMuTgB5+jz8TOInP16VXh
+KrKRjzLJqycV/Xz1u0OPIWryRQdQvHoKAHQjEbmiDVSNWNNvOMeSfHqRHT2XIPc2
+Owxsbaxj5e7+0NFK4wtGQ3juWkt561CvMPi1DfAjNXStPE/rxbkCDXZlA571RrWB
+eCn/DHJk9aNWeLNKNT8IZYVqjePmX3MDxbsP7oxMcs1hbddSrtowRnw6Ux+KZpRt
+1XsTIZ6S8kJuujMvhbjHZlYunIaTXvkyc4LqvXc7x8vR0NZpkh3z9v3Wy62VlHGL
+eRSwU4Vo5B451BagBtSxlp7+SYtL6g==
+=zIfe
+-----END PGP SIGNATURE-----
+
+--41Y4qJgjVrNBiXfo--

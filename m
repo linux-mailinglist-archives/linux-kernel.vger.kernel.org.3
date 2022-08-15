@@ -2,180 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5398593132
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5234E593136
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242929AbiHOPAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39158 "EHLO
+        id S242981AbiHOPA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243030AbiHOO7o (ORCPT
+        with ESMTP id S242946AbiHOPAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 10:59:44 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2111.outbound.protection.outlook.com [40.107.223.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C5825EA5;
-        Mon, 15 Aug 2022 07:59:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IWMpiH97Xr6vseL14A9HTBuXBcSNzkO9eX0CnRMO3qtshbhWrpA13iN+gCIV9G7ucV59b4rGLOBMUshrC+HANiGA1hfrRYgcmQofDZR66xyz5vSZpCiwxS92TJKBMZ0HYUDkxh9N72t2kud+cRVfbx8RBV+o2okv4eSuuf9PYFaMbiIKspANu5QWH0WbJRdhjzApnkBPgrV1btm9zFvdu+sXDVwWZWZ5TEInf7dtjHqmLqmU48emRo25UG8XbaUXw78IX2w2AmUTFMhRwbpXjo/TwxyPpSZ/eUUux7ydteQ8IQh4ueNsMe+Kj2+qRcBe2WixZ5uXdvrRUgZZvlbzwg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VUvtZWAv/Iu7kb6pImaALLcYMweiwYIoY8KX4iuJ1lc=;
- b=LddbNXn5qxhHoIr83SUMQ7Bu3BHic50hTpjZmk2N86eZJ5SYYsIP767FaNYYfc9oRmaWOIEV9IjcJNJWhbzMpUaHkS3lkbKQV8xfQ40nk5X2h5DahZ1+dHpnc1GbBUTSWe8fZwhZ6HyxrLxQunwcno4OsjWVr/8UQFIUX58anZqSseAccPlavdl305e2qPPDP3SrBbTEhz9BaIIHF2QR3BLW25nKmekBdFTQjKl89PXNjiVn4NiMAK9+R2nEd+5d12RDePJXFbNBJ4oELNh6jFd6rFklmC8yiX5cHYnxnR1NcHanJX6rI2hl/ZsJjSsF55EuqTPgkhHxQ8BQm/+xwg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VUvtZWAv/Iu7kb6pImaALLcYMweiwYIoY8KX4iuJ1lc=;
- b=SoHRmrLe1wTR/ktrd8vqMWiSZ7pA/Aziumgf+d/wbx1HjRI+Dl9z7M948ialcq1IDEEgY+kmZyao48x3E/rj5l8baemLks0hyU9uhOYmEPDi4QcR3VJH+13A4+5xaTfbQ4YFeJcmZvc5Zs1rsCLgs+P3KEKEaviYG/Th4wQPLaQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by DM6PR10MB4267.namprd10.prod.outlook.com
- (2603:10b6:5:214::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.15; Mon, 15 Aug
- 2022 14:59:17 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::b869:6c52:7a8d:ddee]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::b869:6c52:7a8d:ddee%4]) with mapi id 15.20.5504.027; Mon, 15 Aug 2022
- 14:59:17 +0000
-Date:   Mon, 15 Aug 2022 07:59:12 -0700
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Ido Schimmel <idosch@idosch.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Terry Bowman <terry.bowman@amd.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        UNGLinuxDriver@microchip.com,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mon, 15 Aug 2022 11:00:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 963CADDB
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:00:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660575619;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gkp6W0UnvJNbc+E/frEsC8/SAoG8aGkv8tG/23+JfF4=;
+        b=fGgRzCLgMlHBTFPP/ECfWhT91fL+hkyHsqcyvgRYPqs2IGb3XpJvGdU6zBByFIGmLM1TVF
+        fDU9S1/9ufMPzzkVrsla+1coWvrtBZmc/+70eD9sQWsLzfyOAkClAMFsrbDHPS/MPVnMDx
+        3J3dK0L1fx3JoDM+XPLpWBGkenPfVic=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-153-PNgsjx8gPISyjhuccCf9fw-1; Mon, 15 Aug 2022 11:00:18 -0400
+X-MC-Unique: PNgsjx8gPISyjhuccCf9fw-1
+Received: by mail-qv1-f70.google.com with SMTP id nm18-20020a0562143b1200b0047b33c1e57eso2662239qvb.10
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:00:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=gkp6W0UnvJNbc+E/frEsC8/SAoG8aGkv8tG/23+JfF4=;
+        b=K7SqyMTsQQLdTJkxel40EnpvSyxwFPC9CCL26GDixeInTTo92lRHivYtO+8fPArexc
+         Tib9CozWRdb0zdgJZ2F8uDb9Kx3C5XE+CminpNIe9ygXTdV9obu330DJ/YuAxFTXLJLO
+         mrheBQhSq7/aUWHfK1Fy26Eg3ur/HcUkDbwOV1GBsNkP2PuTADrQrXUSMzDGauYuHyeh
+         1mVe+F7Dmh+skQwYAU2f/ak9Ci75ctRMmg78vTO7gUu/WGOaRMvXkYhEh/y06dVAArlw
+         eLkTefrcpdi6RlsEM0hq8GjUqrxbJYylozKbzN6+U1yHGead4KNyqD5LTxtPPiQxTdYr
+         DAhw==
+X-Gm-Message-State: ACgBeo3Y/xTuTeqEQVKvREhRY7hr8fe4oA9qHpAlA40q/FjxW5caDAsi
+        v8CIwzo5LMMVJoZ/p8FhbvcivDjNz+mZILTUuwB6Eh8YHYpTRFjlDBe1v4HFIkFitQZnD2xQMXJ
+        CfKyXefkYX2eitz947oJ+6fr7
+X-Received: by 2002:a05:620a:459e:b0:6ba:c5a7:485c with SMTP id bp30-20020a05620a459e00b006bac5a7485cmr11298138qkb.267.1660575617712;
+        Mon, 15 Aug 2022 08:00:17 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5vLK2IsSc5T3esQZcOlGhUNLYtZ2weQin9eem0kTWU742yhnPNdz0yjaOkJuyqisTE/LZdfA==
+X-Received: by 2002:a05:620a:459e:b0:6ba:c5a7:485c with SMTP id bp30-20020a05620a459e00b006bac5a7485cmr11298120qkb.267.1660575617465;
+        Mon, 15 Aug 2022 08:00:17 -0700 (PDT)
+Received: from xps13 (c-98-239-145-235.hsd1.wv.comcast.net. [98.239.145.235])
+        by smtp.gmail.com with ESMTPSA id fb6-20020a05622a480600b00342fcdc2d46sm8312778qtb.56.2022.08.15.08.00.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 08:00:17 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 11:00:16 -0400
+From:   Brian Masney <bmasney@redhat.com>
+To:     Parikshit Pareek <quic_ppareek@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        katie.morris@in-advantage.com,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Lee Jones <lee@kernel.org>
-Subject: Re: [PATCH v16 mfd 8/8] mfd: ocelot: add support for the vsc7512
- chip via spi
-Message-ID: <YvpfQCM0kJg4k5Zd@euler>
-References: <20220815005553.1450359-1-colin.foster@in-advantage.com>
- <20220815005553.1450359-9-colin.foster@in-advantage.com>
- <YvpV4cvwE0IQOax7@euler>
- <YvpZoIN+5htY9Z1o@shredder>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>
+Subject: Re: [PATCH v3 2/3] arm64: dts: qcom: sa8295p: move common nodes to
+ dtsi
+Message-ID: <YvpfgGh7T7jZTn2R@xps13>
+References: <20220812165453.11608-1-quic_ppareek@quicinc.com>
+ <20220812165453.11608-3-quic_ppareek@quicinc.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YvpZoIN+5htY9Z1o@shredder>
-X-ClientProxiedBy: BYAPR11CA0097.namprd11.prod.outlook.com
- (2603:10b6:a03:f4::38) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f8a6a6d7-8e5d-4683-f050-08da7eceb9dc
-X-MS-TrafficTypeDiagnostic: DM6PR10MB4267:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zVeDod8nXMNF0JKqNwc2Y8q3EDGb/Xy/fFaONxCIdH90z07X985MMtmnJm86AukHiAPhlUjkVT9u4FaO6lYHv3BCJT+IpoTfzlTeIUf1Kn8K1xgEPYWhrfQcf7z/oBvjCOsbRMmY0ie/1FgO2R9fc1Mcyp90O++MPr80UJX3rvN/ReHtNoQLUFkxmIlSQ1GahGbXuzx7WBb2KRD6XIrICseUFcaJkdcWPwBP/PTZTOwsgvcf/ia7MgEU721dVIXeoeVAoHWQNMnkBlt0S8GDL8+Ys8/fk5rtFURRXrIx6Y1Ok44aMOGjYfs494aInl05dpsGrg6az30MCtEhXtRVFYWHs2zvVo2NH5OAxxUcRa6XksW7OCzQqBnkR5HOrWt9VhMparLzdxFUTkYXaJRc+zhY1p5HlMyMdM5qQ3gXRzLsvvR9IHeu/sbf1ihh+wUW6Zsbef2JRHDtDzP8ZWOEPi0KyE+kTBtO38Ys5/A+dQoQe8MZQ0BE3crqGsntqS9rMd0XIlwF//I7RVnCWDOPZ+xSNTh12N9ljaFq8bjzihsroDiczeG9r0mDwKYlHiW/9OFxb+rU9b/AA8OU9SI/nWbgrd1ZrBiB3fjofDYWVLEbbbuCvfu+P9h3DZxHuQXDQy1KnbuKYZKk5yiXF5ILIKg6ce5WupMPZ6f4MTc1dBjUmVuNw3lf/y99af9TZScGKXlpVoVArgSBrDXRB/7jpm2SlbLRczoyO0wlEfDggfwszg+ZvG1gI253hwEs8Djs8ow8j+c6K5DjpBnlvQraTQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(346002)(39840400004)(376002)(136003)(396003)(366004)(44832011)(2906002)(6506007)(33716001)(38100700002)(6666004)(5660300002)(41300700001)(7416002)(66946007)(478600001)(6486002)(966005)(66476007)(4326008)(8676002)(86362001)(66556008)(6916009)(54906003)(316002)(8936002)(186003)(83380400001)(9686003)(6512007)(26005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?z7pcBthLj6Ay17tIXEpcUO+fr7uHdeui9QDqtofgiaNbukwHoBEYS3+5kYoH?=
- =?us-ascii?Q?TWXOJR2gCiqFix9PMOhnznWzSWizMo8Ud7LlYusHm/amkO2Yep7Qtrv7ZIJ4?=
- =?us-ascii?Q?x9zF0osOzYU7flgb4mU2LB4jVUXnltuvnVwlD9IuFB3ZFYC1dWhdKA/1+TRO?=
- =?us-ascii?Q?1zgaJf+Pki4PtKs1HVUuMBDt3FPWCT1OcTHX6VVklLwDBfmMnIlrPRcmSR/I?=
- =?us-ascii?Q?eUGxLw/1h0OdVb6lo+ofJfPEPnpdj87tqQKPGvwP+GZzyioM+DhmzuxUE9kK?=
- =?us-ascii?Q?/zyXb0155uKgQe+0BINuSW0S1d42eobQPq65f6cRf2gJMzj7Cvk2pM8Mhm4t?=
- =?us-ascii?Q?eEd2SM1qIMxYXffSJiVv5F9Wberx0cTUzfRV6bPlkcNRa20c/OBBjTtv2tk7?=
- =?us-ascii?Q?5QYAA1Eg+Wj3xDuPFl2YR3V3IQfI9Amd2gahFRNhQhO0yqWEGZh+Qa+c+sjX?=
- =?us-ascii?Q?pvof9bP3R45vrCj2/r6//D4tabbjPmFB/2E6KydH8RiW+jYkUftBTxcE3MH0?=
- =?us-ascii?Q?g1yKR6BFlhF5sbUQKqWi9hydQHr7otj+Km3gxdZRdQu5xq6tFBYdXEp6Zi2w?=
- =?us-ascii?Q?vo4R8yhBc6J9j5wN1+2qG5pe99pBSgg1cbuA7P5Q0/Ww2lTotdvirp8F929F?=
- =?us-ascii?Q?CoVsd0c31z58+K3GWIQQiTi2Lskf377l25SGfu9hQ5PMC/hc2YDOtKKnTFdn?=
- =?us-ascii?Q?aMwxNWs0C2HnsAup2kevFRdBKDpWIfgLg/9mUvmKNcYJtTPLhEHX7wL1mqLD?=
- =?us-ascii?Q?tfPv6wqGfG0m0mXx+pFh1dtdbnP2h7F4gVeM8ODntOp9JdTCSDbtdR7phDVh?=
- =?us-ascii?Q?Sx0o8/FqZE+1tonbqczJOKVCq6rN4a66xS71PcrsaRjtGvSblR51tCQCTy4+?=
- =?us-ascii?Q?wuGSt7OI5EOUTxeRA+YHeWFbJKc1FaZ1fKvHO+c3mMac3QPfNiwNKoOebJjH?=
- =?us-ascii?Q?rIMlxWChahiEP3WJi+nMljxOSG6A1mjumCaBDl+xN4ZY6I+7cLoAaNj+yF1H?=
- =?us-ascii?Q?cYZWUB3wvBzJOanAI4fgIVCV327mVZMS+WEX4KA6yxC1WrDIgENOhSI8S8pS?=
- =?us-ascii?Q?Xy1iSko724aYgySWwdXOWrBRgj1FNdUtbXELNtk5p6y3Ekc6yHmF3BDrvAN+?=
- =?us-ascii?Q?pjJfaevsp8oQEhAktgeUD4HtN9jNdwiXslnBdVYzzPiiyWONVsRfcvT3Pqka?=
- =?us-ascii?Q?t3Lmzgp7BDYgfA6yue7m/6na4VTx5MsDSeA6n4OAuiwOWt1LhYBILA8wKzk6?=
- =?us-ascii?Q?XNd0fpRabyq6abPO/vD1eWsp6BXHE1NoYmHzNKN24x8VaaQf7BDB3RQv2x1+?=
- =?us-ascii?Q?JYx8VYqxxh79PLD/oP7JvP1yZ3vTWfjdnccOvFsxH/hSfKhxZGAM9rQnxTqX?=
- =?us-ascii?Q?960V4Kni1IMp/smrvkyCo6r15sMFb0vqae4PewP1wq9txO0S+ecB7GzWelf+?=
- =?us-ascii?Q?BbPLGyBVQN2SciuF/Tpsx7OW9dPVakIzzRwyoJB4osVJiuhhbmczpItOS/xD?=
- =?us-ascii?Q?Wq/ZIvJGhkGEjNER0tNww4D9e9yFqlRFTP1OHk8Q4Sm+EP/DSzOxfSHXOZYb?=
- =?us-ascii?Q?Hh7GPniLrlHH5JN0/sbjF+S+Xd/qx7jwmhQNu9m5eRkNMdVb6FEyU8lUzaJj?=
- =?us-ascii?Q?I7K6OJ915t66uGzDjIMAJAw=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f8a6a6d7-8e5d-4683-f050-08da7eceb9dc
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2022 14:59:17.5629
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nLmYF6ROGjCzqME+0WOmntwDdEfh5kaqCpw9Q7y5ks0GX4wehCL/jlyZMMfPwAYHM1ss0o3xx+vis9xUNP9IrG6q3GmrHHMyjNfyIJ2s0R0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4267
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220812165453.11608-3-quic_ppareek@quicinc.com>
+User-Agent: Mutt/2.2.6 (2022-06-05)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 05:35:12PM +0300, Ido Schimmel wrote:
-> On Mon, Aug 15, 2022 at 07:19:13AM -0700, Colin Foster wrote:
-> > Something is going on that I don't fully understand with <asm/byteorder.h>.
-> > I don't quite see how ocelot-core is throwing all sorts of errors in x86
-> > builds now:
-> > 
-> > https://patchwork.hopto.org/static/nipa/667471/12942993/build_allmodconfig_warn/stderr
-> > 
-> > Snippet from there:
-> > 
-> > /home/nipa/nipa/tests/patch/build_32bit/build_32bit.sh: line 21: ccache gcc: command not found
-> > ../drivers/mfd/ocelot-spi.c: note: in included file (through ../include/linux/bitops.h, ../include/linux/kernel.h, ../arch/x86/include/asm/percpu.h, ../arch/x86/include/asm/current.h, ../include/linux/sched.h, ...):
-> > ../arch/x86/include/asm/bitops.h:66:1: warning: unreplaced symbol 'return'
-> > ../drivers/mfd/ocelot-spi.c: note: in included file (through ../include/linux/bitops.h, ../include/linux/kernel.h, ../arch/x86/include/asm/percpu.h, ../arch/x86/include/asm/current.h, ../include/linux/sched.h, ...):
-> > ../include/asm-generic/bitops/generic-non-atomic.h:29:9: warning: unreplaced symbol 'mask'
-> > ../include/asm-generic/bitops/generic-non-atomic.h:30:9: warning: unreplaced symbol 'p'
-> > ../include/asm-generic/bitops/generic-non-atomic.h:32:10: warning: unreplaced symbol 'p'
-> > ../include/asm-generic/bitops/generic-non-atomic.h:32:16: warning: unreplaced symbol 'mask'
-> > ../include/asm-generic/bitops/generic-non-atomic.h:27:1: warning: unreplaced symbol 'return'
-> > ../drivers/mfd/ocelot-spi.c: note: in included file (through ../arch/x86/include/asm/bitops.h, ../include/linux/bitops.h, ../include/linux/kernel.h, ../arch/x86/include/asm/percpu.h, ../arch/x86/include/asm/current.h, ...):
-> > ../include/asm-generic/bitops/instrumented-non-atomic.h:26:1: warning: unreplaced symbol 'return'
-> > 
-> > 
-> > <asm/byteorder.h> was included in both drivers/mfd/ocelot-spi.c and
-> > drivers/mfd/ocelot.h previously, though Andy pointed out there didn't
-> > seem to be any users... and I didn't either. I'm sure there's something
-> > I must be missing.
+On Fri, Aug 12, 2022 at 10:24:52PM +0530, Parikshit Pareek wrote:
+> There are many ADP boards with lot of common features. Move common
+> nodes to sa8540p-adp.dtsi file. This will be base for many ADP boards
+> to be introduced in near future.
 > 
-> I got similar errors in our internal CI yesterday. Fixed by compiling
-> sparse from git:
-> https://git.kernel.org/pub/scm/devel/sparse/sparse.git/commit/?id=0e1aae55e49cad7ea43848af5b58ff0f57e7af99
-> 
-> The update is also available in the "testing" repo in case you are
-> running Fedora 35 / 36:
-> https://bodhi.fedoraproject.org/updates/FEDORA-2022-c58b53730f
-> https://bodhi.fedoraproject.org/updates/FEDORA-2022-2bc333ccac
+> Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sa8295p-adp.dts  | 377 +--------------------
+>  arch/arm64/boot/dts/qcom/sa8540p-adp.dtsi | 384 ++++++++++++++++++++++
+>  2 files changed, 385 insertions(+), 376 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/qcom/sa8540p-adp.dtsi
 
-Thanks for the info! I haven't been able to fully recreate the issue
-locally, those are from kernel test robot. I'll give this a shot if I
-run into it locally though.
+My understanding of the sa8295p auto board is that it has a single SoC.
+The sa8540p auto board has dual SoCs (same SoC variant as the sa8295p)
+with a PCIe interconnect between the two SoCs. I hate to bike shed on
+the name but perhaps the name sa8295p would be more fitting like you
+had it in v2, but ultimately leave it up to the maintainers on which
+name to use here.
+
+How will the dual SoCs in the sa8540p be represented in device tree?
+I assume just document the PCI endpoint to the other SoC? Then run
+the two SoCs independently and let them see the other SoC through
+PCIe?
+
+Brian
+

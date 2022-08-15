@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E944594DFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21165594934
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233136AbiHPBDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 21:03:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54572 "EHLO
+        id S1353355AbiHOXjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347961AbiHPA52 (ORCPT
+        with ESMTP id S1353854AbiHOXgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 20:57:28 -0400
+        Mon, 15 Aug 2022 19:36:45 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0F7DAED6;
-        Mon, 15 Aug 2022 13:48:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8037BCCF1;
+        Mon, 15 Aug 2022 13:09:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF703B811AB;
-        Mon, 15 Aug 2022 20:48:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14836C433C1;
-        Mon, 15 Aug 2022 20:48:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 02386B80EA8;
+        Mon, 15 Aug 2022 20:09:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56FE1C433D7;
+        Mon, 15 Aug 2022 20:09:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660596528;
-        bh=aPB0rUdcfekjqm3H0m8FGPbGicTahUmBH0WeHRYV5hs=;
+        s=korg; t=1660594160;
+        bh=FMs/sWj9WFMQUIEfGyLx6NRo6/tJlhfm8nDKhrM5/EY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kglx+VVoS2FZ89V7eCegIMSavA0V+0ab6lPMszVkFPT/+y+l+xNTLSqQob1Jt5aSG
-         xLxW/XmOPxJJ12KK116FEYEfO3GMiGl/KTetIMAGyGPikmat8+Hfjz424RnErkMw4y
-         L3RD28ojm6/p1eCvlkO9sHU1ASn9Tl56RLbDNWhA=
+        b=0p1NqNdUJdaQ0+wdlTySLPCOAz/knS3tpvh9lQ6294w95ngOHTKZHRAmAn1p53UzR
+         aEPG4BO3NfDEuvGPZw7dDqEFmx8nsulCox+hv73OjWl/butlm/xhicaYsLOpieuUDq
+         xOkcqBSWlEqtJcHdX6fO5Y5CyCxt6su2f4cQsTGA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 1108/1157] KVM: nVMX: Attempt to load PERF_GLOBAL_CTRL on nVMX xfer iff it exists
+        stable@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        Theodore Tso <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 1065/1095] ext4: unindent codeblock in ext4_xattr_block_set()
 Date:   Mon, 15 Aug 2022 20:07:44 +0200
-Message-Id: <20220815180524.609692721@linuxfoundation.org>
+Message-Id: <20220815180513.102937573@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
-References: <20220815180439.416659447@linuxfoundation.org>
+In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
+References: <20220815180429.240518113@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,75 +54,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Jan Kara <jack@suse.cz>
 
-[ Upstream commit 4496a6f9b45e8cd83343ad86a3984d614e22cf54 ]
+[ Upstream commit fd48e9acdf26d0cbd80051de07d4a735d05d29b2 ]
 
-Attempt to load PERF_GLOBAL_CTRL during nested VM-Enter/VM-Exit if and
-only if the MSR exists (according to the guest vCPU model).  KVM has very
-misguided handling of VM_{ENTRY,EXIT}_LOAD_IA32_PERF_GLOBAL_CTRL and
-attempts to force the nVMX MSR settings to match the vPMU model, i.e. to
-hide/expose the control based on whether or not the MSR exists from the
-guest's perspective.
+Remove unnecessary else (and thus indentation level) from a code block
+in ext4_xattr_block_set(). It will also make following code changes
+easier. No functional changes.
 
-KVM's modifications fail to handle the scenario where the vPMU is hidden
-from the guest _after_ being exposed to the guest, e.g. by userspace
-doing multiple KVM_SET_CPUID2 calls, which is allowed if done before any
-KVM_RUN.  nested_vmx_pmu_refresh() is called if and only if there's a
-recognized vPMU, i.e. KVM will leave the bits in the allow state and then
-ultimately reject the MSR load and WARN.
-
-KVM should not force the VMX MSRs in the first place.  KVM taking control
-of the MSRs was a misguided attempt at mimicking what commit 5f76f6f5ff96
-("KVM: nVMX: Do not expose MPX VMX controls when guest MPX disabled",
-2018-10-01) did for MPX.  However, the MPX commit was a workaround for
-another KVM bug and not something that should be imitated (and it should
-never been done in the first place).
-
-In other words, KVM's ABI _should_ be that userspace has full control
-over the MSRs, at which point triggering the WARN that loading the MSR
-must not fail is trivial.
-
-The intent of the WARN is still valid; KVM has consistency checks to
-ensure that vmcs12->{guest,host}_ia32_perf_global_ctrl is valid.  The
-problem is that '0' must be considered a valid value at all times, and so
-the simple/obvious solution is to just not actually load the MSR when it
-does not exist.  It is userspace's responsibility to provide a sane vCPU
-model, i.e. KVM is well within its ABI and Intel's VMX architecture to
-skip the loads if the MSR does not exist.
-
-Fixes: 03a8871add95 ("KVM: nVMX: Expose load IA32_PERF_GLOBAL_CTRL VM-{Entry,Exit} control")
-Cc: stable@vger.kernel.org
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20220722224409.1336532-5-seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+CC: stable@vger.kernel.org
+Fixes: 82939d7999df ("ext4: convert to mbcache2")
+Signed-off-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220712105436.32204-4-jack@suse.cz
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/vmx/nested.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ fs/ext4/xattr.c | 77 ++++++++++++++++++++++++-------------------------
+ 1 file changed, 38 insertions(+), 39 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 66735fbb791d..ef21c5fe172e 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -2617,6 +2617,7 @@ static int prepare_vmcs02(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
- 	}
+diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
+index d92d50de5a01..a25942a74929 100644
+--- a/fs/ext4/xattr.c
++++ b/fs/ext4/xattr.c
+@@ -1850,6 +1850,8 @@ ext4_xattr_block_set(handle_t *handle, struct inode *inode,
+ #define header(x) ((struct ext4_xattr_header *)(x))
  
- 	if ((vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL) &&
-+	    intel_pmu_has_perf_global_ctrl(vcpu_to_pmu(vcpu)) &&
- 	    WARN_ON_ONCE(kvm_set_msr(vcpu, MSR_CORE_PERF_GLOBAL_CTRL,
- 				     vmcs12->guest_ia32_perf_global_ctrl))) {
- 		*entry_failure_code = ENTRY_FAIL_DEFAULT;
-@@ -4342,7 +4343,8 @@ static void load_vmcs12_host_state(struct kvm_vcpu *vcpu,
- 		vmcs_write64(GUEST_IA32_PAT, vmcs12->host_ia32_pat);
- 		vcpu->arch.pat = vmcs12->host_ia32_pat;
- 	}
--	if (vmcs12->vm_exit_controls & VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL)
-+	if ((vmcs12->vm_exit_controls & VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL) &&
-+	    intel_pmu_has_perf_global_ctrl(vcpu_to_pmu(vcpu)))
- 		WARN_ON_ONCE(kvm_set_msr(vcpu, MSR_CORE_PERF_GLOBAL_CTRL,
- 					 vmcs12->host_ia32_perf_global_ctrl));
+ 	if (s->base) {
++		int offset = (char *)s->here - bs->bh->b_data;
++
+ 		BUFFER_TRACE(bs->bh, "get_write_access");
+ 		error = ext4_journal_get_write_access(handle, sb, bs->bh,
+ 						      EXT4_JTR_NONE);
+@@ -1882,49 +1884,46 @@ ext4_xattr_block_set(handle_t *handle, struct inode *inode,
+ 			if (error)
+ 				goto cleanup;
+ 			goto inserted;
+-		} else {
+-			int offset = (char *)s->here - bs->bh->b_data;
++		}
++		unlock_buffer(bs->bh);
++		ea_bdebug(bs->bh, "cloning");
++		s->base = kmemdup(BHDR(bs->bh), bs->bh->b_size, GFP_NOFS);
++		error = -ENOMEM;
++		if (s->base == NULL)
++			goto cleanup;
++		s->first = ENTRY(header(s->base)+1);
++		header(s->base)->h_refcount = cpu_to_le32(1);
++		s->here = ENTRY(s->base + offset);
++		s->end = s->base + bs->bh->b_size;
  
+-			unlock_buffer(bs->bh);
+-			ea_bdebug(bs->bh, "cloning");
+-			s->base = kmemdup(BHDR(bs->bh), bs->bh->b_size, GFP_NOFS);
+-			error = -ENOMEM;
+-			if (s->base == NULL)
++		/*
++		 * If existing entry points to an xattr inode, we need
++		 * to prevent ext4_xattr_set_entry() from decrementing
++		 * ref count on it because the reference belongs to the
++		 * original block. In this case, make the entry look
++		 * like it has an empty value.
++		 */
++		if (!s->not_found && s->here->e_value_inum) {
++			ea_ino = le32_to_cpu(s->here->e_value_inum);
++			error = ext4_xattr_inode_iget(inode, ea_ino,
++				      le32_to_cpu(s->here->e_hash),
++				      &tmp_inode);
++			if (error)
+ 				goto cleanup;
+-			s->first = ENTRY(header(s->base)+1);
+-			header(s->base)->h_refcount = cpu_to_le32(1);
+-			s->here = ENTRY(s->base + offset);
+-			s->end = s->base + bs->bh->b_size;
+ 
+-			/*
+-			 * If existing entry points to an xattr inode, we need
+-			 * to prevent ext4_xattr_set_entry() from decrementing
+-			 * ref count on it because the reference belongs to the
+-			 * original block. In this case, make the entry look
+-			 * like it has an empty value.
+-			 */
+-			if (!s->not_found && s->here->e_value_inum) {
+-				ea_ino = le32_to_cpu(s->here->e_value_inum);
+-				error = ext4_xattr_inode_iget(inode, ea_ino,
+-					      le32_to_cpu(s->here->e_hash),
+-					      &tmp_inode);
+-				if (error)
+-					goto cleanup;
+-
+-				if (!ext4_test_inode_state(tmp_inode,
+-						EXT4_STATE_LUSTRE_EA_INODE)) {
+-					/*
+-					 * Defer quota free call for previous
+-					 * inode until success is guaranteed.
+-					 */
+-					old_ea_inode_quota = le32_to_cpu(
+-							s->here->e_value_size);
+-				}
+-				iput(tmp_inode);
+-
+-				s->here->e_value_inum = 0;
+-				s->here->e_value_size = 0;
++			if (!ext4_test_inode_state(tmp_inode,
++					EXT4_STATE_LUSTRE_EA_INODE)) {
++				/*
++				 * Defer quota free call for previous
++				 * inode until success is guaranteed.
++				 */
++				old_ea_inode_quota = le32_to_cpu(
++						s->here->e_value_size);
+ 			}
++			iput(tmp_inode);
++
++			s->here->e_value_inum = 0;
++			s->here->e_value_size = 0;
+ 		}
+ 	} else {
+ 		/* Allocate a buffer where we construct the new block. */
 -- 
 2.35.1
 

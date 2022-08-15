@@ -2,163 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD081592E44
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF12592E4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231997AbiHOLkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 07:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
+        id S232892AbiHOLkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 07:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbiHOLj5 (ORCPT
+        with ESMTP id S241568AbiHOLkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 07:39:57 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89EA2494D
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 04:39:56 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4M5slJ0jsYzDqK1;
-        Mon, 15 Aug 2022 11:39:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1660563596; bh=Ivqcw69hFHNcDctihAUBvHj1D0kLXqB98wgJ/RA5tWE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hKrothk0wjrhN77qvM5nwlFVUnPyBG6Gbz9tj2cPbPNlwTbeLgpbDKHll+fKJYuz2
-         UruRzIjQdpkqLe+YoFeGrrqecsiNljTaXfjbnAJ43yAadII+ppcHhoNaNOYz410+Qt
-         NJxrcGf7fQjCE75hcS7puQXfHehhuzau4/9Hxyog=
-X-Riseup-User-ID: 5C95B1E76654EB79FDDDDCF7BCA1D906FA5A58BFC84BF5DDBD905CEDE6B5A695
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4M5slD0M1kz5vXT;
-        Mon, 15 Aug 2022 11:39:51 +0000 (UTC)
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-To:     Alex Deucher <alexander.deucher@amd.com>, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     mwen@igalia.com, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
-        Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Subject: [PATCH] drm/amdgpu: Fix use-after-free on amdgpu_bo_list mutex
-Date:   Mon, 15 Aug 2022 08:39:31 -0300
-Message-Id: <20220815113931.53226-1-mairacanal@riseup.net>
+        Mon, 15 Aug 2022 07:40:39 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED6110FC1;
+        Mon, 15 Aug 2022 04:40:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660563636; x=1692099636;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=E+o2e7xDZrWkCt8WFcYoOrHP5fqayr1RiDjBJDwgBxM=;
+  b=dPPkjTo4q7Lj4o+/hcMXR7SOve+hFEu+eKt5ta83C4OFj/lkhuVTKryW
+   nU5tCMBiVssv/UVpHGejdnVJughCadiFtDxFmprgP7bomptOAIG46QzMs
+   VLT3mV1NzQNVM1/e842JjCVN3avbqfJydGTUVnoLf5n53rjGQvgNCuoHE
+   kfF4dsiq/PlLFjs3WYgdqKwIKh6dG9/NlDRUbYTGPNkaIF/xHj9GKaE2T
+   rzIWfKZMFmAbDJUw5GxrrKDCXlISmXRKfrDkFjHW8zWKYvpeFI8ApprpF
+   oJGcsD/VaRbf6gJ4XlHeEoOqF6JLDfXlRHObVLNbKSJKl7kvFvu+8YZYd
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="290694125"
+X-IronPort-AV: E=Sophos;i="5.93,238,1654585200"; 
+   d="scan'208";a="290694125"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 04:40:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,238,1654585200"; 
+   d="scan'208";a="582850048"
+Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 15 Aug 2022 04:40:33 -0700
+Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oNYSO-0000yb-1o;
+        Mon, 15 Aug 2022 11:40:32 +0000
+Date:   Mon, 15 Aug 2022 19:39:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     lewis.hanly@microchip.com, linux-gpio@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linus.walleij@linaro.org,
+        brgl@bgdev.pl, linux-kernel@vger.kernel.org, palmer@dabbelt.com,
+        maz@kernel.org
+Cc:     kbuild-all@lists.01.org, conor.dooley@microchip.com,
+        daire.mcnamara@microchip.com, lewis.hanly@microchip.com
+Subject: Re: [PATCH v5 1/1] gpio: mpfs: add polarfire soc gpio support
+Message-ID: <202208151906.8v7FxH3X-lkp@intel.com>
+References: <20220815070606.1298421-2-lewis.hanly@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220815070606.1298421-2-lewis.hanly@microchip.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If amdgpu_cs_vm_handling returns r != 0, then it will unlock the
-bo_list_mutex inside the function amdgpu_cs_vm_handling and again on
-amdgpu_cs_parser_fini. This problem results in the following
-use-after-free problem:
+Hi,
 
-[ 220.280990] ------------[ cut here ]------------
-[ 220.281000] refcount_t: underflow; use-after-free.
-[ 220.281019] WARNING: CPU: 1 PID: 3746 at lib/refcount.c:28 refcount_warn_saturate+0xba/0x110
-[ 220.281029] ------------[ cut here ]------------
-[ 220.281415] CPU: 1 PID: 3746 Comm: chrome:cs0 Tainted: G W L ------- --- 5.20.0-0.rc0.20220812git7ebfc85e2cd7.10.fc38.x86_64 #1
-[ 220.281421] Hardware name: System manufacturer System Product Name/ROG STRIX X570-I GAMING, BIOS 4403 04/27/2022
-[ 220.281426] RIP: 0010:refcount_warn_saturate+0xba/0x110
-[ 220.281431] Code: 01 01 e8 79 4a 6f 00 0f 0b e9 42 47 a5 00 80 3d de
-7e be 01 00 75 85 48 c7 c7 f8 98 8e 98 c6 05 ce 7e be 01 01 e8 56 4a
-6f 00 <0f> 0b e9 1f 47 a5 00 80 3d b9 7e be 01 00 0f 85 5e ff ff ff 48
-c7
-[ 220.281437] RSP: 0018:ffffb4b0d18d7a80 EFLAGS: 00010282
-[ 220.281443] RAX: 0000000000000026 RBX: 0000000000000003 RCX: 0000000000000000
-[ 220.281448] RDX: 0000000000000001 RSI: ffffffff988d06dc RDI: 00000000ffffffff
-[ 220.281452] RBP: 00000000ffffffff R08: 0000000000000000 R09: ffffb4b0d18d7930
-[ 220.281457] R10: 0000000000000003 R11: ffffa0672e2fffe8 R12: ffffa058ca360400
-[ 220.281461] R13: ffffa05846c50a18 R14: 00000000fffffe00 R15: 0000000000000003
-[ 220.281465] FS: 00007f82683e06c0(0000) GS:ffffa066e2e00000(0000) knlGS:0000000000000000
-[ 220.281470] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 220.281475] CR2: 00003590005cc000 CR3: 00000001fca46000 CR4: 0000000000350ee0
-[ 220.281480] Call Trace:
-[ 220.281485] <TASK>
-[ 220.281490] amdgpu_cs_ioctl+0x4e2/0x2070 [amdgpu]
-[ 220.281806] ? amdgpu_cs_find_mapping+0xe0/0xe0 [amdgpu]
-[ 220.282028] drm_ioctl_kernel+0xa4/0x150
-[ 220.282043] drm_ioctl+0x21f/0x420
-[ 220.282053] ? amdgpu_cs_find_mapping+0xe0/0xe0 [amdgpu]
-[ 220.282275] ? lock_release+0x14f/0x460
-[ 220.282282] ? _raw_spin_unlock_irqrestore+0x30/0x60
-[ 220.282290] ? _raw_spin_unlock_irqrestore+0x30/0x60
-[ 220.282297] ? lockdep_hardirqs_on+0x7d/0x100
-[ 220.282305] ? _raw_spin_unlock_irqrestore+0x40/0x60
-[ 220.282317] amdgpu_drm_ioctl+0x4a/0x80 [amdgpu]
-[ 220.282534] __x64_sys_ioctl+0x90/0xd0
-[ 220.282545] do_syscall_64+0x5b/0x80
-[ 220.282551] ? futex_wake+0x6c/0x150
-[ 220.282568] ? lock_is_held_type+0xe8/0x140
-[ 220.282580] ? do_syscall_64+0x67/0x80
-[ 220.282585] ? lockdep_hardirqs_on+0x7d/0x100
-[ 220.282592] ? do_syscall_64+0x67/0x80
-[ 220.282597] ? do_syscall_64+0x67/0x80
-[ 220.282602] ? lockdep_hardirqs_on+0x7d/0x100
-[ 220.282609] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[ 220.282616] RIP: 0033:0x7f8282a4f8bf
-[ 220.282639] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10
-00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00
-0f 05 <89> c2 3d 00 f0 ff ff 77 18 48 8b 44 24 18 64 48 2b 04 25 28 00
-00
-[ 220.282644] RSP: 002b:00007f82683df410 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-[ 220.282651] RAX: ffffffffffffffda RBX: 00007f82683df588 RCX: 00007f8282a4f8bf
-[ 220.282655] RDX: 00007f82683df4d0 RSI: 00000000c0186444 RDI: 0000000000000018
-[ 220.282659] RBP: 00007f82683df4d0 R08: 00007f82683df5e0 R09: 00007f82683df4b0
-[ 220.282663] R10: 00001d04000a0600 R11: 0000000000000246 R12: 00000000c0186444
-[ 220.282667] R13: 0000000000000018 R14: 00007f82683df588 R15: 0000000000000003
-[ 220.282689] </TASK>
-[ 220.282693] irq event stamp: 6232311
-[ 220.282697] hardirqs last enabled at (6232319): [<ffffffff9718cd7e>] __up_console_sem+0x5e/0x70
-[ 220.282704] hardirqs last disabled at (6232326): [<ffffffff9718cd63>] __up_console_sem+0x43/0x70
-[ 220.282709] softirqs last enabled at (6232072): [<ffffffff970ff669>] __irq_exit_rcu+0xf9/0x170
-[ 220.282716] softirqs last disabled at (6232061): [<ffffffff970ff669>] __irq_exit_rcu+0xf9/0x170
-[ 220.282722] ---[ end trace 0000000000000000 ]---
+Thank you for the patch! Perhaps something to improve:
 
-Therefore, remove the mutex_unlock from the amdgpu_cs_vm_handling
-function, so that amdgpu_cs_submit and amdgpu_cs_parser_fini can handle
-the unlock.
+[auto build test WARNING on brgl/gpio/for-next]
+[also build test WARNING on linus/master v6.0-rc1 next-20220815]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Fixes: 90af0ca047f3 ("drm/amdgpu: Protect the amdgpu_bo_list list with a mutex v2")
-Reported-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Signed-off-by: Maíra Canal <mairacanal@riseup.net>
----
-Thanks Melissa and Christian for the feedback on mutex_unlock.
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/lewis-hanly-microchip-com/Add-Polarfire-SoC-GPIO-support/20220815-150808
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220815/202208151906.8v7FxH3X-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0458963d9f39d68b20ed88e71d20ca69d835e7fe
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review lewis-hanly-microchip-com/Add-Polarfire-SoC-GPIO-support/20220815-150808
+        git checkout 0458963d9f39d68b20ed88e71d20ca69d835e7fe
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/gpio/
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-index d8f1335bc68f..b7bae833c804 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-@@ -837,16 +837,12 @@ static int amdgpu_cs_vm_handling(struct amdgpu_cs_parser *p)
- 			continue;
- 
- 		r = amdgpu_vm_bo_update(adev, bo_va, false);
--		if (r) {
--			mutex_unlock(&p->bo_list->bo_list_mutex);
-+		if (r)
- 			return r;
--		}
- 
- 		r = amdgpu_sync_fence(&p->job->sync, bo_va->last_pt_update);
--		if (r) {
--			mutex_unlock(&p->bo_list->bo_list_mutex);
-+		if (r)
- 			return r;
--		}
- 	}
- 
- 	r = amdgpu_vm_handle_moved(adev, vm);
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/gpio/gpio-mpfs.c: In function 'mpfs_gpio_irq_handler':
+   drivers/gpio/gpio-mpfs.c:203:9: error: 'unisgned' undeclared (first use in this function)
+     203 |         unisgned long status;
+         |         ^~~~~~~~
+   drivers/gpio/gpio-mpfs.c:203:9: note: each undeclared identifier is reported only once for each function it appears in
+   drivers/gpio/gpio-mpfs.c:203:17: error: expected ';' before 'long'
+     203 |         unisgned long status;
+         |                 ^~~~~
+         |                 ;
+>> drivers/gpio/gpio-mpfs.c:204:9: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
+     204 |         int offset;
+         |         ^~~
+   drivers/gpio/gpio-mpfs.c:208:9: error: 'status' undeclared (first use in this function); did you mean 'kstatfs'?
+     208 |         status = readl(mpfs_gpio->base + MPFS_IRQ_REG);
+         |         ^~~~~~
+         |         kstatfs
+   drivers/gpio/gpio-mpfs.c: In function 'mpfs_gpio_probe':
+   drivers/gpio/gpio-mpfs.c:268:19: error: 'struct irq_chip' has no member named 'parent_device'
+     268 |         girq->chip->parent_device = dev;
+         |                   ^~
+
+
+vim +204 drivers/gpio/gpio-mpfs.c
+
+   197	
+   198	static void mpfs_gpio_irq_handler(struct irq_desc *desc)
+   199	{
+   200		struct irq_chip *irqchip = irq_desc_get_chip(desc);
+   201		struct mpfs_gpio_chip *mpfs_gpio =
+   202			gpiochip_get_data(irq_desc_get_handler_data(desc));
+ > 203		unisgned long status;
+ > 204		int offset;
+   205	
+   206		chained_irq_enter(irqchip, desc);
+   207	
+   208		status = readl(mpfs_gpio->base + MPFS_IRQ_REG);
+   209		for_each_set_bit(offset, &status, mpfs_gpio->gc.ngpio) {
+   210			mpfs_gpio_assign_bit(mpfs_gpio->base + MPFS_IRQ_REG, offset, 1);
+   211			generic_handle_irq(irq_find_mapping(mpfs_gpio->gc.irq.domain, offset));
+   212		}
+   213	
+   214		chained_irq_exit(irqchip, desc);
+   215	}
+   216	
+
 -- 
-2.37.2
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

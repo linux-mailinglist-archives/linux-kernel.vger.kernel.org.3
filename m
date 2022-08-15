@@ -2,75 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E3B8592A88
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 10:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E67592A90
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 10:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233322AbiHOHcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 03:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
+        id S241007AbiHOHeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 03:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiHOHcS (ORCPT
+        with ESMTP id S229775AbiHOHeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 03:32:18 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D334618B0A
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:32:16 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id tl27so12198634ejc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:32:16 -0700 (PDT)
+        Mon, 15 Aug 2022 03:34:21 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC67183AD;
+        Mon, 15 Aug 2022 00:34:21 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id gp7so6284727pjb.4;
+        Mon, 15 Aug 2022 00:34:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=WJLEPHsAZp8U37aoOrddvhy4zTgTsBLms1gLLOoidx8=;
-        b=Apiwg8lXWfx0PuHphZbC+0CSw/jecCBMO4b4h6hmcINbjWREv2rl1SeXAn7r5NEZN6
-         BCxZfoOq0tp+FSVLcgR3MYKwJIEi/l9BfvdCuAib3La4b5VBblthG2Lj2q3O8wMlbvBI
-         oJANIx421UuLYpOSwIMHsynvxi9Cm2EJNUDIIG5JnvF1HjGUJ9keBoofJgEeNWmS1SDy
-         VZxC3zCdqrMwgVM/U4J1vf8M3KFgNGdrJCVK94XY/tdLJcrBE+rkLhdn1PY8XSJ31ukI
-         vw4pcSW7DYwX7PNmhDvQvlMUSrscDHBTibnECxoWwdk7RbsserN0v8OXSXVX2UmcEkjm
-         Bt0w==
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc;
+        bh=9yIm0nBgVpzjTv34ZosyZE5XsOe3I7JmQR6D+9Qx4C0=;
+        b=iECKaMdN0/TpIxLum+UJ9eNKkFX2YACEwfN1QPRQHucK8u4iwinfoJ0RwG3X3JoZvO
+         gn1/FLe162aqFK7LLwPxLmwEYTfpErLsfsa5xEPMCtbBBC3aFjOjVYHcr6bhhX9aQx0D
+         gXEOVWA3mXoNSrOPDKu9C11MhmryNB9TAE1VC4v6/75+Z9vZSu6GOF/Loo6kgF5fahBP
+         4Hv6qkusTInNNtYLPM/3wnmxIhoYDGMTfqgv37g0uKhcnMf4xdjngzb4n2qsSQSQ+HHL
+         f2GXK/QutquFexpcPN7dP8aBodVM0pQKL8LYT6GGhVB47ZKbyYq4k1Y8glGrxGFL9Dv4
+         TS2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=WJLEPHsAZp8U37aoOrddvhy4zTgTsBLms1gLLOoidx8=;
-        b=cI8sEPnZrhELl7wxiPg/L0N3xQO8IImT6yiGYzzPMgIdj1PfwU9u4dxIoK5RwXXHGF
-         CEqWK9viIk3PyF5LiWDXqtfWkeu690UtOaXkrV9HUyhrbrc66DCbMe7dvjuPEdo8Mmdi
-         ohIgU0tfGEJJW1K5G0xIkV5NqBLD3gAKbw0qnyMbfq9D20qypvsVKWRgVuVh0YydOlW3
-         GT2jJT2Xpr0iB+wZBHrGjBFL8dEtHyzYmb8w3xmfa6Mb98+sq1ZqjZf/rgGxYwrLaxBI
-         PHbfRohJR908nx8VSy6oxdQIpM2zMNPmZFGkL3noH1Q5XHuDrJAtodbJC8sHkWPDBeFs
-         oY7Q==
-X-Gm-Message-State: ACgBeo03fkpxRg9jxY34W5E3cKCcBDl9lHsGEhlmZmR3cbi2Ig43hkpd
-        Njg9YECjhcysaqqyrpQDwpx6Nw==
-X-Google-Smtp-Source: AA6agR5aKYPCzgLDNmCoxSU0zm6D7mFfVrKEn7+YQ7XB5w7ebixaOlegmzsNAq3fiAoaNyIoRR2CNA==
-X-Received: by 2002:a17:907:1ca8:b0:730:871e:498c with SMTP id nb40-20020a1709071ca800b00730871e498cmr9570990ejc.651.1660548735151;
-        Mon, 15 Aug 2022 00:32:15 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id bt2-20020a0564020a4200b0043d1eff72b3sm6206029edb.74.2022.08.15.00.32.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 00:32:14 -0700 (PDT)
-Message-ID: <94ab0304-a674-3504-c1bd-3492e2ded0b1@blackwall.org>
-Date:   Mon, 15 Aug 2022 10:32:13 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH net-next] net: rtnetlink: fix module reference count leak
- issue in rtnetlink_rcv_msg
-Content-Language: en-US
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-To:     Zhengchao Shao <shaozhengchao@huawei.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     idosch@nvidia.com, petrm@nvidia.com, florent.fourcot@wifirst.fr,
-        weiyongjun1@huawei.com, yuehaibing@huawei.com
-References: <20220815024629.240367-1-shaozhengchao@huawei.com>
- <feff23c6-529c-3421-c48c-463846e59630@blackwall.org>
-In-Reply-To: <feff23c6-529c-3421-c48c-463846e59630@blackwall.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=9yIm0nBgVpzjTv34ZosyZE5XsOe3I7JmQR6D+9Qx4C0=;
+        b=jjRU9kSyctalZGbXtzZ4vggPWBzarAWCvGdvoKIziIly8IBVjqEvsCeKLw8/jwDM5d
+         kOfuSC4tySBpWBhUFUXRwQRlYOux7A/V/Wv2F65Lj1/Io7Xn0SNg0HlQ3UfhQeekCQ8P
+         Cq0kr2sFzNebtQeE41sNy2vGT5SFZHQcr51x+fDkdejBG8Gyh0Nem9DKpiaLu1+z9/Na
+         EXngdvfdXQyNXIg5kV5me1XNIK93leZQ56RILhmPJZI8ZNY2taMmLZ71GZ6LQne9Crz0
+         NO+ogvABiqw9jk581VLcisV5lxlanpbndo7OrTjNMrE0t2tZfDSDBtv6X1Z3aHu5gpfn
+         03tg==
+X-Gm-Message-State: ACgBeo10gv3NJigrfLnSndX2T7g6xPItTBRZud3scd8vQMgfCM1AQnLj
+        kHDLyOedt1ajiNBI+Ht1EZYLPA9pkoA=
+X-Google-Smtp-Source: AA6agR5D9nFjb5+cpxa4Ujkt35A8LfEIslCAzbpI0NeQD2r4p+Vu7XAMLYzuuTfFTRhusLkIez0iiQ==
+X-Received: by 2002:a17:90b:149:b0:1f7:59cd:9847 with SMTP id em9-20020a17090b014900b001f759cd9847mr27150998pjb.78.1660548860375;
+        Mon, 15 Aug 2022 00:34:20 -0700 (PDT)
+Received: from localhost.localdomain ([2402:7500:46b:2a3e:f57e:22d4:1ae1:ffd3])
+        by smtp.gmail.com with ESMTPSA id r1-20020aa79ec1000000b0053249b67215sm6088503pfq.131.2022.08.15.00.34.16
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 15 Aug 2022 00:34:19 -0700 (PDT)
+From:   cy_huang <u0084500@gmail.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        sre@kernel.org
+Cc:     alina_yu@richtek.com, cy_huang@richtek.com, alinayu829@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] Add Richtek RT9471 3A battery charger support
+Date:   Mon, 15 Aug 2022 15:34:10 +0800
+Message-Id: <1660548852-6222-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,33 +66,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/08/2022 08:44, Nikolay Aleksandrov wrote:
-> On 15/08/2022 05:46, Zhengchao Shao wrote:
->> When bulk delete command is received in the rtnetlink_rcv_msg function,
->> if bulk delete is not supported, module_put is not called to release
->> the reference counting. As a result, module reference count is leaked.
->>
->> Fixes: a6cec0bcd342("net: rtnetlink: add bulk delete support flag")
->> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
->> ---
->>  net/core/rtnetlink.c | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
->> index ac45328607f7..4b5b15c684ed 100644
->> --- a/net/core/rtnetlink.c
->> +++ b/net/core/rtnetlink.c
->> @@ -6070,6 +6070,7 @@ static int rtnetlink_rcv_msg(struct sk_buff *skb, struct nlmsghdr *nlh,
->>  	if (kind == RTNL_KIND_DEL && (nlh->nlmsg_flags & NLM_F_BULK) &&
->>  	    !(flags & RTNL_FLAG_BULK_DEL_SUPPORTED)) {
->>  		NL_SET_ERR_MSG(extack, "Bulk delete is not supported");
->> +		module_put(owner);
->>  		goto err_unlock;
->>  	}
->>  
-> 
-> Oops, thanks.
-> Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-By the way I think this should be targeted at -net,
-I didn't notice the net-next tag earlier.
+This patch set is to add Richtek RT9471 charger support.
+
+The RT9471/D is a highly-integrated 3A switch mode battery charge management
+and system power path management device for single cell Li-Ion and Li-polymer
+battery. The low impedance power path optimizes switch-mode operation
+efficiency, reduces battery charging time and extends battery life during
+discharging phase.
+
+Since v2:
+- Remove the properties for interrupt controller things in the binding documentation.
+- Fix dtc error for typo, it's 'regulator-name', not 'regulator-compatible'.
+- Add regulator min/max microamp to allow otg vbus current adjustable in example.
+- Specify the active-level for charge-enable-gpios in binding example.
+- Fix checkpatch error about 'foo * bar' to 'foo *bar' in psy_device_to_chip function.
+- Specify the member name directly for the use of linear range.
+
+ChiYuan Huang (2):
+  dt-bindings: power: supply: Add Richtek RT9471 battery charger
+  power: supply: rt9471: Add Richtek RT9471 charger driver
+
+ .../bindings/power/supply/richtek,rt9471.yaml      |  73 ++
+ drivers/power/supply/Kconfig                       |  16 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/rt9471.c                      | 953 +++++++++++++++++++++
+ drivers/power/supply/rt9471.h                      |  76 ++
+ 5 files changed, 1119 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9471.yaml
+ create mode 100644 drivers/power/supply/rt9471.c
+ create mode 100644 drivers/power/supply/rt9471.h
+
+-- 
+2.7.4
+

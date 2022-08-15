@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E92DC59490A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2D35947D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347439AbiHOXNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41748 "EHLO
+        id S241006AbiHOXNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345415AbiHOXMD (ORCPT
+        with ESMTP id S245715AbiHOXMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:12:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CC87667;
-        Mon, 15 Aug 2022 13:00:23 -0700 (PDT)
+        Mon, 15 Aug 2022 19:12:25 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7BF4DB0C;
+        Mon, 15 Aug 2022 13:00:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 935F160FD8;
-        Mon, 15 Aug 2022 20:00:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 829FEC433C1;
-        Mon, 15 Aug 2022 20:00:21 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 99C04CE12C3;
+        Mon, 15 Aug 2022 20:00:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A8AAC433D7;
+        Mon, 15 Aug 2022 20:00:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593622;
-        bh=cdnhM6keGBCbekNFSqz0/UM3k8voCBSTZYS+WXXc1WE=;
+        s=korg; t=1660593627;
+        bh=NeiVTxAhI6nx6NjJa+fD0XlyRj4AyPMiZ3D5AsiipeA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=unsyrNhhB0r7ctUVGJGgPxb1QvAEZoWqriUcd+FsSvc4g0MY0hI+Y6ot/j0lclWCh
-         Y3RpMNs6eyx93QLaWMB1+n5ECV2OCNSRzsKHeF2vcDfnN93TkLPeXUC4U9l/64m7rB
-         7iQw1st3OvzR+hNaX8pMWoiWhtB4jGn6sVW3lJE8=
+        b=ooYuRksgowJjXg19BevQrInGcSXbAji9JEpeKpnYMvAjnWsq54sNyYWU2tj505D6v
+         SAAM9lhawbyX9JjfnmsCtzbu3phumxiqOC1q9kL0ZvEu5tE/Xv8bdUzBergTT6Wsg7
+         WIGuOtEDj0A++qmoFAw9HzCtufhK9QPNgWI8pvZI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hacash Robot <hacashRobot@santino.com>,
-        Xie Shaowen <studentxswpy@163.com>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 5.18 0977/1095] Input: gscps2 - check return value of ioremap() in gscps2_probe()
-Date:   Mon, 15 Aug 2022 20:06:16 +0200
-Message-Id: <20220815180509.534782564@linuxfoundation.org>
+        stable@vger.kernel.org, stable@kernel.org,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: [PATCH 5.18 0978/1095] __follow_mount_rcu(): verify that mount_lock remains unchanged
+Date:   Mon, 15 Aug 2022 20:06:17 +0200
+Message-Id: <20220815180509.584528994@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
 References: <20220815180429.240518113@linuxfoundation.org>
@@ -55,35 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xie Shaowen <studentxswpy@163.com>
+From: Al Viro <viro@zeniv.linux.org.uk>
 
-commit e61b3125a4f036b3c6b87ffd656fc1ab00440ae9 upstream.
+commit 20aac6c60981f5bfacd66661d090d907bf1482f0 upstream.
 
-The function ioremap() in gscps2_probe() can fail, so
-its return value should be checked.
+Validate mount_lock seqcount as soon as we cross into mount in RCU
+mode.  Sure, ->mnt_root is pinned and will remain so until we
+do rcu_read_unlock() anyway, and we will eventually fail to unlazy if
+the mount_lock had been touched, but we might run into a hard error
+(e.g. -ENOENT) before trying to unlazy.  And it's possible to end
+up with RCU pathwalk racing with rename() and umount() in a way
+that would fail with -ENOENT while non-RCU pathwalk would've
+succeeded with any timings.
 
-Fixes: 4bdc0d676a643 ("remove ioremap_nocache and devm_ioremap_nocache")
-Cc: <stable@vger.kernel.org> # v5.6+
-Reported-by: Hacash Robot <hacashRobot@santino.com>
-Signed-off-by: Xie Shaowen <studentxswpy@163.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Once upon a time we hadn't needed that, but analysis had been subtle,
+brittle and went out of window as soon as RENAME_EXCHANGE had been
+added.
+
+It's narrow, hard to hit and won't get you anything other than
+stray -ENOENT that could be arranged in much easier way with the
+same priveleges, but it's a bug all the same.
+
+Cc: stable@kernel.org
+X-sky-is-falling: unlikely
+Fixes: da1ce0670c14 "vfs: add cross-rename"
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/input/serio/gscps2.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ fs/namei.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/input/serio/gscps2.c
-+++ b/drivers/input/serio/gscps2.c
-@@ -350,6 +350,10 @@ static int __init gscps2_probe(struct pa
- 	ps2port->port = serio;
- 	ps2port->padev = dev;
- 	ps2port->addr = ioremap(hpa, GSC_STATUS + 4);
-+	if (!ps2port->addr) {
-+		ret = -ENOMEM;
-+		goto fail_nomem;
-+	}
- 	spin_lock_init(&ps2port->lock);
- 
- 	gscps2_reset(ps2port);
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -1511,6 +1511,8 @@ static bool __follow_mount_rcu(struct na
+ 				 * becoming unpinned.
+ 				 */
+ 				flags = dentry->d_flags;
++				if (read_seqretry(&mount_lock, nd->m_seq))
++					return false;
+ 				continue;
+ 			}
+ 			if (read_seqretry(&mount_lock, nd->m_seq))
 
 

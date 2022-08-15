@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F065592879
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 06:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA99759287E
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 06:14:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240517AbiHOENa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 00:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40524 "EHLO
+        id S240623AbiHOENg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 00:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232833AbiHOENV (ORCPT
+        with ESMTP id S240445AbiHOENW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 00:13:21 -0400
+        Mon, 15 Aug 2022 00:13:22 -0400
 Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95031408E;
-        Sun, 14 Aug 2022 21:13:13 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id E758832004AE;
-        Mon, 15 Aug 2022 00:13:11 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A2A140BD;
+        Sun, 14 Aug 2022 21:13:17 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 4BC1032004E7;
+        Mon, 15 Aug 2022 00:13:15 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 15 Aug 2022 00:13:13 -0400
+  by compute5.internal (MEProxy); Mon, 15 Aug 2022 00:13:16 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1660536791; x=1660623191; bh=qt
-        OroOKPyiVLPusAb844jwRTjcP+oe0WxCpZbVu2Sb4=; b=mDOkrWDevbnKQAQnNb
-        7FCIj33VQ8OtnacsGpCo3Fs5NMXWZMKlabCkmCnSBg/SKp2tzQvlzghhWj8EREnT
-        d6e6L71sKgqFa1BRi4FrLJnve3Njbuf65jMd+zh2VaLS9B1ly5QKthX8gefPlkh5
-        WWROdMrra++7ebDGD/ijXcotLk+wPGtuHE7BH5LPxM9VmMfsdiw0dEE4EdPATUB1
-        ratBzIPgi5LIc54YJaJjXe/Rcl+y/e45kirpSJ3v5TpaRLo7wX/ckTy2uJ+BAGGO
-        kxbHRID1du3rD/ilwwnVkePpi1yUDHoCY++58lchPR12gorYFY3NDjTaact9mIin
-        9csg==
+        :subject:subject:to:to; s=fm2; t=1660536794; x=1660623194; bh=0n
+        lG6ZDiBzbAdn9rMY9Wvc4mEHKC/xeUwBEc8zJn16s=; b=yEWx64jF6G5/dLN6NA
+        jPioeG+W1SSLewCp15W4PUN/F//rEfm+tw6KVILyGaORUNuSKZ4FYwEfNzNnIS0J
+        GCC0KOKS6QwW66vYejfeVsqoN5F2tyigXSC/H1xKISLNFi03dyvEBtN1D0NEORdv
+        W9DbGaQxP7zEXO7oAFaOeN8Q8JDDB5ikxviXVgb2pAzIeUrbeGUyY4P9eOT6CJyW
+        JTGQJqUdLwNQLBJJwXKP49vjVQa8YmOHspl0Nyv3+PF8aNekX4lait9oln+zaeDi
+        1kUqfMlVmLh6VYnGaLTHv5cqJRjf1P1UuIkoxDYHTZnKslZupinpDa60heXqmWva
+        zewQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1660536791; x=1660623191; bh=qtOroOKPyiVLP
-        usAb844jwRTjcP+oe0WxCpZbVu2Sb4=; b=RQTbTen2IJMqnvVjqRFoUhyGN+pV6
-        DMxjKnbO1qtW5eUWgI64Or21/x7etVFqB1j8tOvshujEILuiUh76RsB4QGLRpYyN
-        B4In1mCEMs4u1GpZxPASR7ae7bG0aIu6QyWauz5BuAFxOU9UpLJNzmeYTcvQu3n+
-        8BtYjcGYDsQr3ftvcUf7SsBWGPwm3j9HrsFNObwtYPDdcm2gvkcKwbOxa4rs2IKL
-        9DpgIyfJjGmrAOepdLr9d3eztgcGRGzT4N5SDR8lIrV44bu91TaK3PKCnzCBKE4G
-        be7inzrgY+4L/Lpmb6juOOEC3Hvk9JAJyAvp9T4Y3JfWXaZFIQ6MrcaTQ==
-X-ME-Sender: <xms:18f5YsCLmdLHpdg0DsR3fgaSLmk4aYx_cJWxl7lGyw9-4BGKiXEsXQ>
-    <xme:18f5Yugc5TtJFQfcVytuSr1EQZl4rMD4IbvOfAmThtXClPo4wEhLfdIxluEAfI8xz
-    PHl1Ng1AGROkNSmbQ>
-X-ME-Received: <xmr:18f5YvkWxiWLOlxusNOOnsFrf1buJ-uD7Pfve4fP0sDkFPt-F6NBzTKlwlEcJ_0AriNKmvedztimooLCYT-ThqVVXYnicjqqAUQoKkDucz4fDIbRHcB3qBIj9-BELpF45GGFWg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehuddgkeegucetufdoteggodetrfdotf
+        :x-sasl-enc; s=fm1; t=1660536794; x=1660623194; bh=0nlG6ZDiBzbAd
+        n9rMY9Wvc4mEHKC/xeUwBEc8zJn16s=; b=wjC8+hS7bps6cUT22i2PtCsj49FeS
+        uuKzq+2l1LjAMQ6X4RQXpV4wdTAS/gSl9kJJ/nDzavn14cHkvLpXvc1myg/SXnyn
+        nk3Z3zZBwEtXk+8IsEOdlUOuZakExUomWo1V0x0H0b0SAuASsFq5tIU6pRtuPFVS
+        X2euSKBqvWLMnSo+CAt6a/Iv9X5nZCvNtSlgPnJQyQ7N0XZSeSrZyCmQajaz6d2x
+        CUBo4bo/7AgirS0rwOjnhVBPgUnMx7ITJ5RSYgu3ydTua98htC+Ae1jd2cJlxfbD
+        BqZk7rR+4ARdNXZKWEjl7kF7WNsHrgZNX1+UtBeAQzm4h0cxKbpT/0LMA==
+X-ME-Sender: <xms:2sf5Yk3tDjR-wxW4LsZDe41g8b97kbWwm_LarZNH0oTrXmCw8NAAeQ>
+    <xme:2sf5YvFTgGQR1o2o6b_ZxfITOw3DgH4qsHh-m_IQbipjnKeTgS45L3ZLvKPY_-j4H
+    bQqJ34oTCPYoNtFig>
+X-ME-Received: <xmr:2sf5Ys6bmm13qyOq2_sxVg_JVyhYlYSztfGjN1IkBm97fjE2fdP96O5SPr94E8LHIosSgdm6NucLTbmkFEKiYgsN8S9aejMJX1W4uyum8cuaBo52e0aiUyeFRb-whiUdD9XIqA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehuddgkeehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
     vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
     ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
-    udefiedtveetnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrh
+    udefiedtveetnecuvehluhhsthgvrhfuihiivgepfeenucfrrghrrghmpehmrghilhhfrh
     homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:18f5Yizqam7pJ2BJq2hPmmW4jpn3FF9QXnbJxfM1DxsuNZTzSDnCbA>
-    <xmx:18f5YhQBvVY9uh5Q_4_S2Uby0weRT9lB64mbhSgj-yFJsslJ-Zqr2w>
-    <xmx:18f5YtYJyJQ4gqKqKKWAISLefrjYYDtXf-YKnsKzRjP3fChjM7bm9g>
-    <xmx:18f5YhY-bEovkuhcCp2hscLwe9K6BS5rQCeAwmFQmWWqrANgCZlyXw>
+X-ME-Proxy: <xmx:2sf5Yt3Wmh1my8avFRv5CpsuNmXJDgKqtBRICG58GoZqx_JUVFk_Pw>
+    <xmx:2sf5YnHO961yvq7Bo-9HR4_qFrinpzSXMN-k0JoYzch1XR6Ok_bNTg>
+    <xmx:2sf5Ym8ID4X4tDap1rM-jNcX2Kk4_p5bdxxmTofAsZmkWP6W0RuNFQ>
+    <xmx:2sf5Yu8UxJc9sj-ZJZSWsVQtiyLt34R5UTmXfWQ5Pqgpyp5dzjWulw>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 Aug 2022 00:13:10 -0400 (EDT)
+ 15 Aug 2022 00:13:14 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>
@@ -74,9 +74,9 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-sunxi@lists.linux.dev
-Subject: [PATCH v2 06/10] soc: sunxi: sram: Fix debugfs info for A64 SRAM C
-Date:   Sun, 14 Aug 2022 23:12:43 -0500
-Message-Id: <20220815041248.53268-7-samuel@sholland.org>
+Subject: [PATCH v2 07/10] soc: sunxi: sram: Return void from the release function
+Date:   Sun, 14 Aug 2022 23:12:44 -0500
+Message-Id: <20220815041248.53268-8-samuel@sholland.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220815041248.53268-1-samuel@sholland.org>
 References: <20220815041248.53268-1-samuel@sholland.org>
@@ -92,34 +92,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The labels were backward with respect to the register values. The SRAM
-is mapped to the CPU when the register value is 1.
+There is no point in returning an error here, as the caller can do
+nothing about it. In fact, all callers already ignore the return value.
 
-Fixes: 5e4fb6429761 ("drivers: soc: sunxi: add support for A64 and its SRAM C")
 Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
 (no changes since v1)
 
- drivers/soc/sunxi/sunxi_sram.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/soc/sunxi/sunxi_sram.c       | 8 +++-----
+ include/linux/soc/sunxi/sunxi_sram.h | 2 +-
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
-index 52d07bed7664..09754cd1d57d 100644
+index 09754cd1d57d..9622fd45f5e5 100644
 --- a/drivers/soc/sunxi/sunxi_sram.c
 +++ b/drivers/soc/sunxi/sunxi_sram.c
-@@ -78,8 +78,8 @@ static struct sunxi_sram_desc sun4i_a10_sram_d = {
+@@ -261,25 +261,23 @@ int sunxi_sram_claim(struct device *dev)
+ }
+ EXPORT_SYMBOL(sunxi_sram_claim);
  
- static struct sunxi_sram_desc sun50i_a64_sram_c = {
- 	.data	= SUNXI_SRAM_DATA("C", 0x4, 24, 1,
--				  SUNXI_SRAM_MAP(0, 1, "cpu"),
--				  SUNXI_SRAM_MAP(1, 0, "de2")),
-+				  SUNXI_SRAM_MAP(1, 0, "cpu"),
-+				  SUNXI_SRAM_MAP(0, 1, "de2")),
- };
+-int sunxi_sram_release(struct device *dev)
++void sunxi_sram_release(struct device *dev)
+ {
+ 	const struct sunxi_sram_data *sram_data;
+ 	struct sunxi_sram_desc *sram_desc;
  
- static const struct of_device_id sunxi_sram_dt_ids[] = {
+ 	if (!dev || !dev->of_node)
+-		return -EINVAL;
++		return;
+ 
+ 	sram_data = sunxi_sram_of_parse(dev->of_node, NULL);
+ 	if (IS_ERR(sram_data))
+-		return -EINVAL;
++		return;
+ 
+ 	sram_desc = to_sram_desc(sram_data);
+ 
+ 	spin_lock(&sram_lock);
+ 	sram_desc->claimed = false;
+ 	spin_unlock(&sram_lock);
+-
+-	return 0;
+ }
+ EXPORT_SYMBOL(sunxi_sram_release);
+ 
+diff --git a/include/linux/soc/sunxi/sunxi_sram.h b/include/linux/soc/sunxi/sunxi_sram.h
+index c5f663bba9c2..60e274d1b821 100644
+--- a/include/linux/soc/sunxi/sunxi_sram.h
++++ b/include/linux/soc/sunxi/sunxi_sram.h
+@@ -14,6 +14,6 @@
+ #define _SUNXI_SRAM_H_
+ 
+ int sunxi_sram_claim(struct device *dev);
+-int sunxi_sram_release(struct device *dev);
++void sunxi_sram_release(struct device *dev);
+ 
+ #endif /* _SUNXI_SRAM_H_ */
 -- 
 2.35.1
 

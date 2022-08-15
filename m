@@ -2,40 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8BF5933BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 18:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3EF5933BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 19:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiHOQ7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 12:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
+        id S232342AbiHORA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 13:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232342AbiHOQ7e (ORCPT
+        with ESMTP id S230244AbiHORAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 12:59:34 -0400
-Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6D9275EF
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 09:59:32 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id NdQyoIwLGsfCINdQzoj4ur; Mon, 15 Aug 2022 18:59:25 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 15 Aug 2022 18:59:25 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-rtc@vger.kernel.org
-Subject: [PATCH] rtc: mxc: Use devm_clk_get_enabled() helper
-Date:   Mon, 15 Aug 2022 18:59:23 +0200
-Message-Id: <1b5ad1877304b01ddbba73ca615274a52f781aa2.1660582728.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Mon, 15 Aug 2022 13:00:23 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCC8D55;
+        Mon, 15 Aug 2022 10:00:19 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oNdRh-00054d-Ba; Mon, 15 Aug 2022 19:00:09 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH v3 2/4] regulator: sun20i: Add support for Allwinner D1 LDOs
+Date:   Mon, 15 Aug 2022 19:00:08 +0200
+Message-ID: <37742446.J2Yia2DhmK@diego>
+In-Reply-To: <20220815043436.20170-3-samuel@sholland.org>
+References: <20220815043436.20170-1-samuel@sholland.org> <20220815043436.20170-3-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,82 +48,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The devm_clk_get_enabled() helper:
-   - calls devm_clk_get()
-   - calls clk_prepare_enable() and registers what is needed in order to
-     call clk_disable_unprepare() when needed, as a managed resource.
+Am Montag, 15. August 2022, 06:34:33 CEST schrieb Samuel Holland:
+> D1 contains two pairs of LDOs. Since they have similar bindings, and
+> they always exist together, put them in a single driver.
+> 
+> The analog LDOs are relatively boring, with a single linear range. Their
+> one quirk is that a bandgap reference must be calibrated for them to
+> produce the correct voltage.
+> 
+> The system LDOs have the complication that their voltage step is not an
+> integer, so a custom .list_voltage is needed to get the rounding right.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+> 
+> Changes in v3:
+>  - Adjust control flow in sun20i_regulator_get_regmap() for clarity
+> 
+> Changes in v2:
+>  - Use decimal numbers for .n_voltages instead of field widths
+>  - Get the regmap from the parent device instead of a property/phandle
+> 
+>  drivers/regulator/Kconfig            |   8 +
+>  drivers/regulator/Makefile           |   1 +
+>  drivers/regulator/sun20i-regulator.c | 232 +++++++++++++++++++++++++++
+>  3 files changed, 241 insertions(+)
+>  create mode 100644 drivers/regulator/sun20i-regulator.c
+> 
+> diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+> index 23e3e4a35cc9..0c5727173fa0 100644
+> --- a/drivers/regulator/Kconfig
+> +++ b/drivers/regulator/Kconfig
+> @@ -1262,6 +1262,14 @@ config REGULATOR_STW481X_VMMC
+>  	  This driver supports the internal VMMC regulator in the STw481x
+>  	  PMIC chips.
+>  
+> +config REGULATOR_SUN20I
+> +	tristate "Allwinner D1 internal LDOs"
+> +	depends on ARCH_SUNXI || COMPILE_TEST
+> +	depends on MFD_SYSCON && NVMEM
+> +	default ARCH_SUNXI
+> +	help
+> +	  This driver supports the internal LDOs in the Allwinner D1 SoC.
+> +
+>  config REGULATOR_SY7636A
+>  	tristate "Silergy SY7636A voltage regulator"
+>  	help
+> diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
+> index fa49bb6cc544..5dff112eb015 100644
+> --- a/drivers/regulator/Makefile
+> +++ b/drivers/regulator/Makefile
+> @@ -148,6 +148,7 @@ obj-$(CONFIG_REGULATOR_STM32_VREFBUF) += stm32-vrefbuf.o
+>  obj-$(CONFIG_REGULATOR_STM32_PWR) += stm32-pwr.o
+>  obj-$(CONFIG_REGULATOR_STPMIC1) += stpmic1_regulator.o
+>  obj-$(CONFIG_REGULATOR_STW481X_VMMC) += stw481x-vmmc.o
+> +obj-$(CONFIG_REGULATOR_SUN20I) += sun20i-regulator.o
+>  obj-$(CONFIG_REGULATOR_SY7636A) += sy7636a-regulator.o
+>  obj-$(CONFIG_REGULATOR_SY8106A) += sy8106a-regulator.o
+>  obj-$(CONFIG_REGULATOR_SY8824X) += sy8824x.o
+> diff --git a/drivers/regulator/sun20i-regulator.c b/drivers/regulator/sun20i-regulator.c
+> new file mode 100644
+> index 000000000000..46f3927d7d10
+> --- /dev/null
+> +++ b/drivers/regulator/sun20i-regulator.c
+> @@ -0,0 +1,232 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +//
+> +// Copyright (c) 2021-2022 Samuel Holland <samuel@sholland.org>
+> +//
 
-This simplifies the code, the error handling paths and avoid the need of
-a dedicated function used with devm_add_action_or_reset().
+nit: shouldn't the comment look like
+/*
+ * Copyright (c) 2021-2022 Samuel Holland <samuel@sholland.org>
+ */
 
-Based on my test with allyesconfig, this reduces the .o size from:
-   text	   data	    bss	    dec	    hex	filename
-   6705	   1968	      0	   8673	   21e1	drivers/rtc/rtc-mxc.o
-down to:
-   6212	   1968	      0	   8180	   1ff4	drivers/rtc/rtc-mxc.o
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-devm_clk_get_enabled() is new and is part of 6.0-rc1
----
- drivers/rtc/rtc-mxc.c | 27 ++-------------------------
- 1 file changed, 2 insertions(+), 25 deletions(-)
+otherwise looks great
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Tested-by: Heiko Stuebner <heiko@sntech.de>
 
-diff --git a/drivers/rtc/rtc-mxc.c b/drivers/rtc/rtc-mxc.c
-index 53d4e253e81f..762cf03345f1 100644
---- a/drivers/rtc/rtc-mxc.c
-+++ b/drivers/rtc/rtc-mxc.c
-@@ -291,14 +291,6 @@ static const struct rtc_class_ops mxc_rtc_ops = {
- 	.alarm_irq_enable	= mxc_rtc_alarm_irq_enable,
- };
- 
--static void mxc_rtc_action(void *p)
--{
--	struct rtc_plat_data *pdata = p;
--
--	clk_disable_unprepare(pdata->clk_ref);
--	clk_disable_unprepare(pdata->clk_ipg);
--}
--
- static int mxc_rtc_probe(struct platform_device *pdev)
- {
- 	struct rtc_device *rtc;
-@@ -341,33 +333,18 @@ static int mxc_rtc_probe(struct platform_device *pdev)
- 		rtc->range_max = (1 << 16) * 86400ULL - 1;
- 	}
- 
--	pdata->clk_ipg = devm_clk_get(&pdev->dev, "ipg");
-+	pdata->clk_ipg = devm_clk_get_enabled(&pdev->dev, "ipg");
- 	if (IS_ERR(pdata->clk_ipg)) {
- 		dev_err(&pdev->dev, "unable to get ipg clock!\n");
- 		return PTR_ERR(pdata->clk_ipg);
- 	}
- 
--	ret = clk_prepare_enable(pdata->clk_ipg);
--	if (ret)
--		return ret;
--
--	pdata->clk_ref = devm_clk_get(&pdev->dev, "ref");
-+	pdata->clk_ref = devm_clk_get_enabled(&pdev->dev, "ref");
- 	if (IS_ERR(pdata->clk_ref)) {
--		clk_disable_unprepare(pdata->clk_ipg);
- 		dev_err(&pdev->dev, "unable to get ref clock!\n");
- 		return PTR_ERR(pdata->clk_ref);
- 	}
- 
--	ret = clk_prepare_enable(pdata->clk_ref);
--	if (ret) {
--		clk_disable_unprepare(pdata->clk_ipg);
--		return ret;
--	}
--
--	ret = devm_add_action_or_reset(&pdev->dev, mxc_rtc_action, pdata);
--	if (ret)
--		return ret;
--
- 	rate = clk_get_rate(pdata->clk_ref);
- 
- 	if (rate == 32768)
--- 
-2.34.1
 

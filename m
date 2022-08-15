@@ -2,145 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36CB75932C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 18:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D0F5932CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 18:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231940AbiHOQKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 12:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59390 "EHLO
+        id S230292AbiHOQMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 12:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiHOQKm (ORCPT
+        with ESMTP id S229480AbiHOQML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 12:10:42 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6D52AFC;
-        Mon, 15 Aug 2022 09:10:41 -0700 (PDT)
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oNcfR-000Fjv-ND; Mon, 15 Aug 2022 18:10:17 +0200
-Received: from [85.1.206.226] (helo=linux-4.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oNcfR-00074J-23; Mon, 15 Aug 2022 18:10:17 +0200
-Subject: Re: [PATCH v11 0/9] bpf: Add kfuncs for PKCS#7 signature verification
-To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        mykolal@fb.com, corbet@lwn.net, dhowells@redhat.com,
-        jarkko@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220812101902.2846182-1-roberto.sassu@huawei.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <14032690-e7a9-9d14-1ec1-14dd3503037c@iogearbox.net>
-Date:   Mon, 15 Aug 2022 18:10:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Mon, 15 Aug 2022 12:12:11 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924C2D110
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 09:12:10 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id BF8895C00ED;
+        Mon, 15 Aug 2022 12:12:09 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 15 Aug 2022 12:12:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1660579929; x=1660666329; bh=rLRqhVPz0h
+        hQSREG0KQPS/nirdZJabRaj8W098mmp6M=; b=0FTKcOkFtzuOjeemBBTaEzhrya
+        RIAg0nko8kLNdqeiI0aMLMDbahNLctu/aMg65P1+ARi5z609hMokBOunDc9YTiKl
+        C6gXoSGsXKY5YJAssH96skJ/VAPMnGdi70JXN2P9A9bYnJhSKl6Mfm5QcgqvZvmy
+        yC1+OMu3Ke/AClIvjXWN079RHefo8eLCeA4XxhBdTHtKmpjasHijh7uaogV3Cx/M
+        ixwxo6s39pCUU9V+ORyOzh5Hpy4pUHjXKES/ID4DIb8uGghEBOCDtNaGTTDeB2Sd
+        6mPd5Ui8GKTDGDCpd3EN8JXUDBOfBOIL8l9wvZSw9Cl7LVVHQzJrcMz78AYQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660579929; x=1660666329; bh=rLRqhVPz0hhQSREG0KQPS/nirdZJ
+        abRaj8W098mmp6M=; b=Hf40hsSlIzpjbwJfoFz7iCWzy0PmguLzmLOeuoEetc3l
+        fvV8qHnybM9fqQTTKFys3VCQx0EpCdpK8MYu9eo7TIYuO3Zga3nV9MBFCXdSEDX7
+        CEytZxtG0DIMlnXmXpWJzrBFAqXUcC1gwbVwg1LRdUN8WNXNcThoyc+5l8TwPife
+        9/BI2YdgSCgQh7BgH6RXsyDNOB1w2o0Z1pll/BCcYiaYz5LKSrGQBG3zhqSNgxNe
+        NYRIB0s+VEhdarleLfmnEEpT4mYUbmjvKz/TA6vhfVOOuW1smVhYsNEw0Sm/V8Uj
+        7LXIn2iM6JpPiLOcOmQAqDFN04a5wgriU0tVQGMjQw==
+X-ME-Sender: <xms:WXD6YuFS5jDCNC9OKynEUERYHvPsXtTslB8li59GGdtycy8WWHIkAQ>
+    <xme:WXD6YvWL6Y2iBuWDfbDhnt1L8t018rw9Z5XugYO_fkg1Ggb6i0PTf9XDjEvD0ctgg
+    mrK6DLC-xEwvw>
+X-ME-Received: <xmr:WXD6YoINa7P_fm0eYrplAKSSG_yg6IWBRu6_WUgtj9aVkB23y84ih32mcMQux-KCxIyqCteXJyWkLNh9AWaVCQA6YpnrHPIp>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehvddgleelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:WXD6YoH4cgfXOnEy0Q-zHA_qvakWexNQf7HWeOHtwZvnZ-vyOa4ArQ>
+    <xmx:WXD6YkV5Z6iufp6rwF51P3Pu-Vph4utlVtlnOe_99u1kMCXUCx1vIA>
+    <xmx:WXD6YrM8hc13iZXKRaSwnj18whtLw21ivWvJwWnSB2o4EYrmpsSpBw>
+    <xmx:WXD6YmhHNMCNUuZOTkm95SNKMNVQ5vRgze0uaOTfIKZ_HBNg41GTAQ>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 15 Aug 2022 12:12:08 -0400 (EDT)
+Date:   Mon, 15 Aug 2022 18:12:06 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Khalid Masum <khalid.masum.92@gmail.com>
+Cc:     "Dong, Ruijing" <Ruijing.Dong@amd.com>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kernel-mentees@lists.linuxfoundation.org" 
+        <linux-kernel-mentees@lists.linuxfoundation.org>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        "Jiang, Sonny" <Sonny.Jiang@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Zhu, James" <James.Zhu@amd.com>, "Liu, Leo" <Leo.Liu@amd.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>
+Subject: Re: [PATCH linux-next] drm/amdgpu/vcn: Remove unused assignment in
+ vcn_v4_0_stop
+Message-ID: <YvpwVh359EMGa5kO@kroah.com>
+References: <20220815070056.10816-1-khalid.masum.92@gmail.com>
+ <SJ1PR12MB61944B1D53330D5E9531158695689@SJ1PR12MB6194.namprd12.prod.outlook.com>
+ <86088c17-585c-4a53-312d-ef339b824538@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220812101902.2846182-1-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26628/Mon Aug 15 09:51:41 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86088c17-585c-4a53-312d-ef339b824538@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/12/22 12:18 PM, Roberto Sassu wrote:
-> One of the desirable features in security is the ability to restrict import
-> of data to a given system based on data authenticity. If data import can be
-> restricted, it would be possible to enforce a system-wide policy based on
-> the signing keys the system owner trusts.
+On Mon, Aug 15, 2022 at 09:11:18PM +0600, Khalid Masum wrote:
+> On 8/15/22 20:15, Dong, Ruijing wrote:
+> > [AMD Official Use Only - General]
+> > 
+> > Sorry, which "r" value was overwritten?  I didn't see the point of making this change.
+> > 
+> > Thanks
+> > Ruijing
+> > 
+> > -----Original Message-----
+> > From: Khalid Masum <khalid.masum.92@gmail.com>
+> > Sent: Monday, August 15, 2022 3:01 AM
+> > To: amd-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux-kernel@vger.kernel.org; linux-kernel-mentees@lists.linuxfoundation.org
+> > Cc: Deucher, Alexander <Alexander.Deucher@amd.com>; Koenig, Christian <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; David Airlie <airlied@linux.ie>; Daniel Vetter <daniel@ffwll.ch>; Zhu, James <James.Zhu@amd.com>; Jiang, Sonny <Sonny.Jiang@amd.com>; Dong, Ruijing <Ruijing.Dong@amd.com>; Wan Jiabing <wanjiabing@vivo.com>; Liu, Leo <Leo.Liu@amd.com>; Khalid Masum <khalid.masum.92@gmail.com>
+> > Subject: [PATCH linux-next] drm/amdgpu/vcn: Remove unused assignment in vcn_v4_0_stop
+> > 
+> > The value assigned from vcn_v4_0_stop_dbg_mode to r is overwritten before it can be used. Remove this assignment.
+> > 
+> > Addresses-Coverity: 1504988 ("Unused value")
+> > Fixes: 8da1170a16e4 ("drm/amdgpu: add VCN4 ip block support")
+> > Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+> > ---
+> >   drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c b/drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c
+> > index ca14c3ef742e..80b8a2c66b36 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c
+> > @@ -1154,7 +1154,7 @@ static int vcn_v4_0_stop(struct amdgpu_device *adev)
+> >                  fw_shared->sq.queue_mode |= FW_QUEUE_DPG_HOLD_OFF;
+> > 
+> >                  if (adev->pg_flags & AMD_PG_SUPPORT_VCN_DPG) {
+> > -                       r = vcn_v4_0_stop_dpg_mode(adev, i);
+> > +                       vcn_v4_0_stop_dpg_mode(adev, i);
+> >                          continue;
+> >                  }
+> > 
+> > --
+> > 2.37.1
+> > 
 > 
-[...]
-> Changelog
+> After value is overwritten soon right after the diff.
 > 
-> v10:
->   - Introduce key_lookup_flags_check() and system_keyring_id_check() inline
->     functions to check parameters (suggested by KP)
->   - Fix descriptions and comment of key-related kfuncs (suggested by KP)
->   - Register kfunc set only once (suggested by Alexei)
->   - Move needed kernel options to the architecture-independent configuration
->     for testing
+> See:
+> drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c
+> 
+> static int vcn_v4_0_stop(struct amdgpu_device *adev)
+> {
+>         volatile struct amdgpu_vcn4_fw_shared *fw_shared;
+> ...
+> 
+>         for (i = 0; i < adev->vcn.num_vcn_inst; ++i) {
+>                 fw_shared = adev->vcn.inst[i].fw_shared.cpu_addr;
+>                 fw_shared->sq.queue_mode |= FW_QUEUE_DPG_HOLD_OFF;
+> 
+>                 if (adev->pg_flags & AMD_PG_SUPPORT_VCN_DPG) {
+>                         r = vcn_v4_0_stop_dpg_mode(adev, i);
+>                         continue;
+>                 }
+> 
+>                 /* wait for vcn idle */
+>                 r = SOC15_WAIT_ON_RREG(VCN, i, regUVD_STATUS,
+> UVD_STATUS__IDLE, 0x7);
+> 
+> Here, any value assigned to r is overwritten before it could
+> be used. So the assignment in the true branch of the if statement
+> here can be removed.
 
-Looks like from BPF CI side, the selftest throws a WARN in test_progs / test_progs-no_alu32
-and subsequently fails with error, ptal:
+Why not fix vcn_v4_0_stop_dpg_mode() to not return anything, as it does
+not, and then remove this assignment as well, which would fix up
+everything at once to be more obvious what is happening and why.
 
-   https://github.com/kernel-patches/bpf/runs/7804422038?check_suite_focus=true
+thanks,
 
-   [...]
-   #235     verif_scale_xdp_loop:OK
-   #236     verif_stats:OK
-   #237     verif_twfw:OK
-   [  760.448652] ------------[ cut here ]------------
-   [  760.449506] WARNING: CPU: 3 PID: 930 at crypto/rsa-pkcs1pad.c:544 pkcs1pad_verify+0x184/0x190
-   [  760.450806] Modules linked in: bpf_testmod(OE) [last unloaded: bpf_testmod]
-   [  760.452340] CPU: 3 PID: 930 Comm: keyctl Tainted: G           OE      5.19.0-g9f0260338e31-dirty #1
-   [  760.453626] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-   [  760.454801] RIP: 0010:pkcs1pad_verify+0x184/0x190
-   [  760.455380] Code: 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc 48 89 df 89 c6 5b 41 5c 41 5d 41 5e 41 5f 5d e9 a5 04 00 00 0f 0b b8 ea ff ff ff eb d4 <0f> 0b b8 ea ff ff ff eb cb 0f 0b 90 0f 1f 44 00 00 53 48 89 fb c7
-   [  760.456866] RSP: 0018:ffffad55478dbb58 EFLAGS: 00000246
-   [  760.457684] RAX: ffff9b3c43c42458 RBX: ffff9b3c48975b00 RCX: 0000000000000000
-   [  760.458672] RDX: ffffffffa7277438 RSI: ffffffffa5275510 RDI: 0000000000000000
-   [  760.459670] RBP: ffffad55478dbcf8 R08: 0000000000000002 R09: 0000000000000000
-   [  760.460688] R10: ffffad55478dbc20 R11: ffffffffa44dde10 R12: ffff9b3c43de2e80
-   [  760.461695] R13: ffff9b3c58459ea0 R14: ffff9b3c44d59600 R15: ffffad55478dbc20
-   [  760.462270] FS:  00007ff1ee0eb740(0000) GS:ffff9b3cf9cc0000(0000) knlGS:0000000000000000
-   [  760.462722] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-   [  760.463026] CR2: 000055b9a4c17588 CR3: 0000000107bb2000 CR4: 00000000000006e0
-   [  760.464039] Call Trace:
-   [  760.464465]  <TASK>
-   [  760.464749]  public_key_verify_signature+0x4a2/0x570
-   [  760.465623]  x509_check_for_self_signed+0x4e/0xd0
-   [  760.465937]  x509_cert_parse+0x193/0x220
-   [  760.466656]  x509_key_preparse+0x20/0x1f0
-   [  760.466975]  asymmetric_key_preparse+0x43/0x80
-   [  760.467552]  key_create_or_update+0x24e/0x510
-   [  760.468366]  __x64_sys_add_key+0x19b/0x220
-   [  760.468704]  ? syscall_enter_from_user_mode+0x24/0x1f0
-   [  760.469056]  do_syscall_64+0x43/0x90
-   [  760.469657]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-   [  760.470413] RIP: 0033:0x7ff1edf0ba9d
-   [  760.470832] Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d cb e2 0e 00 f7 d8 64 89 01 48
-   [  760.472742] RSP: 002b:00007ffe635e7a18 EFLAGS: 00000246 ORIG_RAX: 00000000000000f8
-   [  760.473355] RAX: ffffffffffffffda RBX: 00007ffe635e7be0 RCX: 00007ff1edf0ba9d
-   [  760.474523] RDX: 000055982fed80c0 RSI: 00007ffe635e7f17 RDI: 00007ffe635e7f0c
-   [  760.475500] RBP: 00007ffe635e7a38 R08: 00000000fffffffd R09: 0000000000000000
-   [  760.475913] R10: 0000000000000355 R11: 0000000000000246 R12: 0000000000000000
-   [  760.476594] R13: 00007ffe635e7bd8 R14: 000055982fed48ae R15: 000055982fed76e8
-   [  760.477579]  </TASK>
-   [  760.477769] irq event stamp: 4727
-   [  760.477963] hardirqs last  enabled at (4735): [<ffffffffa4101df5>] __up_console_sem+0x75/0xa0
-   [  760.479036] hardirqs last disabled at (4744): [<ffffffffa4a31cca>] sysvec_apic_timer_interrupt+0xa/0xb0
-   [  760.480403] softirqs last  enabled at (4762): [<ffffffffa4085172>] __irq_exit_rcu+0xb2/0x140
-   [  760.480869] softirqs last disabled at (4755): [<ffffffffa4085172>] __irq_exit_rcu+0xb2/0x140
-   [  760.481706] ---[ end trace 0000000000000000 ]---
-   Generating a RSA private key
-   .+++++
-   ..................................................+++++
-   writing new private key to '/tmp/verify_sigXdOL5V/signing_key.pem'
-   -----
-   add_key: Invalid argument
-   test_verify_pkcs7_sig:PASS:mkdtemp 0 nsec
-   test_verify_pkcs7_sig:FAIL:_run_setup_process unexpected error: 1 (errno 126)
-   #238     verify_pkcs7_sig:FAIL
-   #239     vmlinux:OK
-   #240     xdp:OK
-   #241/1   xdp_adjust_frags/xdp_adjust_frags:OK
-   #241     xdp_adjust_frags:OK
-   #242/1   xdp_adjust_tail/xdp_adjust_tail_shrink:OK
-   #242/2   xdp_adjust_tail/xdp_adjust_tail_grow:OK
-   [...]
+greg k-h

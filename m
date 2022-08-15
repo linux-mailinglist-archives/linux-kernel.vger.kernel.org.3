@@ -2,338 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0B45929AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 08:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 441AA5929AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 08:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbiHOGhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 02:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
+        id S231307AbiHOGhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 02:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbiHOGhP (ORCPT
+        with ESMTP id S230455AbiHOGhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 02:37:15 -0400
-Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E48C1ADBC
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 23:37:11 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id NTilozE1IUoLVNTilo20hb; Mon, 15 Aug 2022 08:37:08 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 15 Aug 2022 08:37:08 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <6d551cf9-94b4-653b-122a-938ee5504150@wanadoo.fr>
-Date:   Mon, 15 Aug 2022 08:37:06 +0200
+        Mon, 15 Aug 2022 02:37:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3389019C2E;
+        Sun, 14 Aug 2022 23:37:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E228CB80C87;
+        Mon, 15 Aug 2022 06:37:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 743EAC433D7;
+        Mon, 15 Aug 2022 06:37:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660545468;
+        bh=i3Lhu29DAuR1+5toOtx6WUN5Q9/XjYipUqxecRURQhc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dOLsO0eWL1louTh1erlzYfiyxe3e1GCuC6rITTMB6BAFW0KYj4VI2sod/q921wwgf
+         qgeNPTQAt9VclhBL3OLkn0QO3EDriXGrjbiBwZf5gf4gjsOO8njLu3nhbLUBuuPqQE
+         mSU/BTQYvSJzrPgD6m1fVkeJrGXt3Yx+Tzq0GG6U=
+Date:   Mon, 15 Aug 2022 08:37:44 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Khalid Masum <khalid.masum.92@gmail.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Len Brown <lenb@kernel.org>
+Subject: Re: [RFC PATCH] Soundwire: Initialize multi_link with fwnode props
+Message-ID: <YvnpuK8phVyF7053@kroah.com>
+References: <20220814080416.7531-1-khalid.masum.92@gmail.com>
+ <YvjEIjXg7KxtTT/0@kroah.com>
+ <cc6560c3-98c2-bdb5-cfc3-b39d3675382e@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 6/7] remoteproc: qcom: Add support for memory sandbox
-Content-Language: en-US
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-References: <1660308466-410-1-git-send-email-quic_srivasam@quicinc.com>
- <1660308466-410-7-git-send-email-quic_srivasam@quicinc.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     agross@kernel.org, bgoswami@quicinc.com,
-        bjorn.andersson@linaro.org, broonie@kernel.org,
-        devicetree@vger.kernel.org, judyhsiao@chromium.org,
-        lgirdwood@gmail.com, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        perex@perex.cz, quic_plai@quicinc.com, quic_rohkumar@quicinc.com,
-        robh+dt@kernel.org, srinivas.kandagatla@linaro.org,
-        swboyd@chromium.org, tiwai@suse.com
-In-Reply-To: <1660308466-410-7-git-send-email-quic_srivasam@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cc6560c3-98c2-bdb5-cfc3-b39d3675382e@gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 12/08/2022 à 14:47, Srinivasa Rao Mandadapu a écrit :
-> Update pil driver with SMMU mapping for allowing authorised
-> memory access to ADSP firmware, by reading required memory
-> regions either from device tree file or from resource table
-> embedded in ADSP binary header.
+On Mon, Aug 15, 2022 at 10:08:07AM +0600, Khalid Masum wrote:
+> On 8/14/22 15:45, Greg KH wrote:
+> > On Sun, Aug 14, 2022 at 02:04:15PM +0600, Khalid Masum wrote:
+> > > According to the TODO, In sw_bus_master_add, bus->multi_link is to be
+> > > populated with properties from FW node props. Make this happen by
+> > > creating a new fwnode_handle flag FWNODE_FLAG_MULTI_LINKED and use
+> > > the flag to store the multi_link value from intel_link_startup. Use
+> > > this flag to initialize bus->multi_link.
+> > > 
+> > > Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+> > > ---
+> > > I do not think adding a new flag for fwnode_handle is a good idea.
+> > > So, what would be the best way to initialize bus->multilink with
+> > > fwnode props?
+> > > 
+> > >    -- Khalid Masum
+> > > 
+> > >   drivers/soundwire/bus.c   | 4 ++--
+> > >   drivers/soundwire/intel.c | 1 +
+> > >   include/linux/fwnode.h    | 1 +
+> > >   3 files changed, 4 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
+> > > index a2bfb0434a67..80df1672c60b 100644
+> > > --- a/drivers/soundwire/bus.c
+> > > +++ b/drivers/soundwire/bus.c
+> > > @@ -74,9 +74,9 @@ int sdw_bus_master_add(struct sdw_bus *bus, struct device *parent,
+> > >   	/*
+> > >   	 * Initialize multi_link flag
+> > > -	 * TODO: populate this flag by reading property from FW node
+> > >   	 */
+> > > -	bus->multi_link = false;
+> > > +	bus->multi_link = (fwnode->flags & FWNODE_FLAG_MULTI_LINKED)
+> > > +		== FWNODE_FLAG_MULTI_LINKED;
+
+I missed that this was an if statement here, please write this to be
+more obvious and readable.
+
+> > >   	if (bus->ops->read_prop) {
+> > >   		ret = bus->ops->read_prop(bus);
+> > >   		if (ret < 0) {
+> > > diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
+> > > index 505c5ef061e3..034d1c523ddf 100644
+> > > --- a/drivers/soundwire/intel.c
+> > > +++ b/drivers/soundwire/intel.c
+> > > @@ -1347,6 +1347,7 @@ int intel_link_startup(struct auxiliary_device *auxdev)
+> > >   		 */
+> > >   		bus->multi_link = true;
+> > >   		bus->hw_sync_min_links = 1;
+> > > +		dev->fwnode->flags |= FWNODE_FLAG_MULTI_LINKED;
+> > >   	}
+> > >   	/* Initialize shim, controller */
+> > > diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
+> > > index 9a81c4410b9f..446a52744953 100644
+> > > --- a/include/linux/fwnode.h
+> > > +++ b/include/linux/fwnode.h
+> > > @@ -32,6 +32,7 @@ struct device;
+> > >   #define FWNODE_FLAG_NOT_DEVICE			BIT(1)
+> > >   #define FWNODE_FLAG_INITIALIZED			BIT(2)
+> > >   #define FWNODE_FLAG_NEEDS_CHILD_BOUND_ON_ADD	BIT(3)
+> > > +#define FWNODE_FLAG_MULTI_LINKED		BIT(4)
+> > 
+> > What does this commit actually change?
 > 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam-jfJNa2p1gH1BDgjK7y7TUQ@public.gmane.org>
-> ---
-> Changes since V3:
-> 	-- Rename is_adsp_sb_needed to adsp_sandbox_needed.
-> 	-- Add smmu unmapping in error case and in adsp stop.
-> Changes since V2:
-> 	-- Replace platform_bus_type with adsp->dev->bus.
-> 	-- Use API of_parse_phandle_with_args() instead of of_parse_phandle_with_fixed_args().
-> 	-- Replace adsp->is_wpss with adsp->is_adsp.
-> 	-- Update error handling in adsp_start().
-> 
->   drivers/remoteproc/qcom_q6v5_adsp.c | 172 +++++++++++++++++++++++++++++++++++-
->   1 file changed, 170 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_q6v5_adsp.c
-> index b0a63a0..ca45d2c 100644
-> --- a/drivers/remoteproc/qcom_q6v5_adsp.c
-> +++ b/drivers/remoteproc/qcom_q6v5_adsp.c
-> @@ -9,6 +9,7 @@
->   #include <linux/firmware.h>
->   #include <linux/interrupt.h>
->   #include <linux/io.h>
-> +#include <linux/iommu.h>
->   #include <linux/iopoll.h>
->   #include <linux/kernel.h>
->   #include <linux/mfd/syscon.h>
-> @@ -48,6 +49,8 @@
->   #define LPASS_PWR_ON_REG		0x10
->   #define LPASS_HALTREQ_REG		0x0
->   
-> +#define SID_MASK_DEFAULT        0xF
-> +
->   #define QDSP6SS_XO_CBCR		0x38
->   #define QDSP6SS_CORE_CBCR	0x20
->   #define QDSP6SS_SLEEP_CBCR	0x3c
-> @@ -78,7 +81,7 @@ struct adsp_pil_data {
->   struct qcom_adsp {
->   	struct device *dev;
->   	struct rproc *rproc;
-> -
-> +	struct iommu_domain *iommu_dom;
->   	struct qcom_q6v5 q6v5;
->   
->   	struct clk *xo;
-> @@ -333,6 +336,155 @@ static int adsp_load(struct rproc *rproc, const struct firmware *fw)
->   	return 0;
->   }
->   
-> +static void adsp_of_unmap_smmu(struct iommu_domain *iommu_dom, const __be32 *prop, int len)
-> +{
-> +	unsigned long mem_phys;
-> +	unsigned long iova;
-> +	unsigned int mem_size;
-> +	int access_level;
-> +	int i;
-> +
-> +	for (i = 0; i < len; i++) {
-> +		iova = be32_to_cpu(prop[i++]);
-> +		mem_phys = be32_to_cpu(prop[i++]);
-> +		mem_size = be32_to_cpu(prop[i++]);
-> +		access_level = be32_to_cpu(prop[i]);
-> +		iommu_unmap(iommu_dom, iova, mem_size);
-> +	}
-> +}
-> +
-> +static void adsp_rproc_unmap_smmu(struct rproc *rproc, int len)
-> +{
-> +	struct fw_rsc_devmem *rsc_fw;
-> +	struct fw_rsc_hdr *hdr;
-> +	int offset;
-> +	int i;
-> +
-> +	for (i = 0; i < len; i++) {
-> +		offset = rproc->table_ptr->offset[i];
-> +		hdr = (void *)rproc->table_ptr + offset;
-> +		rsc_fw = (struct fw_rsc_devmem *)hdr + sizeof(*hdr);
-> +
-> +		iommu_unmap(rproc->domain, rsc_fw->da, rsc_fw->len);
-> +	}
-> +}
-> +
-> +static void adsp_unmap_smmu(struct rproc *rproc)
-> +{
+> The new flag will lets us save if the device has multilink in fwnode_handle
+> whenever needed.
+> Then for soundwire/intel, save the multi_link flag into fwnode during
+> startup.
+> Later at master_add, as written in todo, initialize the multilink flag with
+> fwnode's flag property.
 
-When I proposed a adsp_unmap_smmu() function, the idea was to undo 
-everything that is donne by adsp_map_smmu().
-iommu_domain_alloc() and iommu_map(adsp->iommu_dom, ..) are not undone here.
+And what does that allow to happen?  What changes with all of this?
 
-If this make sense, it would improve the semantic, simplify the 
-'adsp_smmu_unmap' label in adsp_start() and avoid what looks like a leak 
-to me in adsp_stop().
+thanks,
 
-
-> +	struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
-> +	const __be32 *prop;
-> +	unsigned int len;
-> +
-> +	prop = of_get_property(adsp->dev->of_node, "qcom,adsp-memory-regions", &len);
-> +	if (prop) {
-
-In the allocation path, you have a "len /= sizeof(__be32);" which is not 
-here. Is it needed?
-
-You call adsp_unmap_smmu() from the error handling path of 
-adsp_map_smmu(). If needed, maybe it should be part of adsp_of_unmap_smmu()?
-
-> +		adsp_of_unmap_smmu(adsp->iommu_dom, prop, len);
-> +	} else {
-> +		if (rproc->table_ptr)
-> +			adsp_rproc_unmap_smmu(rproc, rproc->table_ptr->num);
-> +	}
-> +}
-> +
-> +static int adsp_map_smmu(struct qcom_adsp *adsp, struct rproc *rproc)
-> +{
-> +	struct of_phandle_args args;
-> +	struct fw_rsc_devmem *rsc_fw;
-> +	struct fw_rsc_hdr *hdr;
-> +	const __be32 *prop;
-> +	long long sid;
-> +	unsigned long mem_phys;
-> +	unsigned long iova;
-> +	unsigned int mem_size;
-> +	unsigned int flag;
-> +	unsigned int len;
-> +	int access_level;
-> +	int offset;
-> +	int ret;
-> +	int rc;
-
-Are ret and rc both needed?
-
-> +	int i;
-> +
-> +	rc = of_parse_phandle_with_args(adsp->dev->of_node, "iommus", "#iommu-cells", 0, &args);
-> +	if (rc < 0)
-> +		sid = -1;
-> +	else
-> +		sid = args.args[0] & SID_MASK_DEFAULT;
-> +
-> +	adsp->iommu_dom = iommu_domain_alloc(adsp->dev->bus);
-> +	if (!adsp->iommu_dom) {
-> +		dev_err(adsp->dev, "failed to allocate iommu domain\n");
-> +		ret = -ENOMEM;
-> +		goto domain_free;
-> +	}
-> +
-> +	ret = iommu_attach_device(adsp->iommu_dom, adsp->dev);
-> +	if (ret) {
-> +		dev_err(adsp->dev, "could not attach device ret = %d\n", ret);
-> +		ret = -EBUSY;
-> +		goto detach_device;
-> +	}
-> +
-> +	/* Add SID configuration for ADSP Firmware to SMMU */
-> +	adsp->mem_phys =  adsp->mem_phys | (sid << 32);
-> +
-> +	ret = iommu_map(adsp->iommu_dom, adsp->mem_phys, adsp->mem_phys,
-> +			adsp->mem_size,	IOMMU_READ | IOMMU_WRITE);
-> +	if (ret) {
-> +		dev_err(adsp->dev, "Unable to map ADSP Physical Memory\n");
-> +		goto sid_unmap;
-> +	}
-> +
-> +	prop = of_get_property(adsp->dev->of_node, "qcom,adsp-memory-regions", &len);
-> +	if (prop) {
-> +		len /= sizeof(__be32);
-> +		for (i = 0; i < len; i++) {
-> +			iova = be32_to_cpu(prop[i++]);
-> +			mem_phys = be32_to_cpu(prop[i++]);
-> +			mem_size = be32_to_cpu(prop[i++]);
-> +			access_level = be32_to_cpu(prop[i]);
-> +
-> +			if (access_level)
-> +				flag = IOMMU_READ | IOMMU_WRITE;
-> +			else
-> +				flag = IOMMU_READ;
-> +
-> +			ret = iommu_map(adsp->iommu_dom, iova, mem_phys, mem_size, flag);
-> +			if (ret) {
-> +				dev_err(adsp->dev, "failed to map addr = %p mem_size = %x\n",
-> +						&(mem_phys), mem_size);
-> +				goto smmu_unmap;
-> +			}
-> +		}
-> +	} else {
-> +		if (!rproc->table_ptr)
-> +			goto sid_unmap;
-> +
-> +		for (i = 0; i < rproc->table_ptr->num; i++) {
-> +			offset = rproc->table_ptr->offset[i];
-> +			hdr = (void *)rproc->table_ptr + offset;
-> +			rsc_fw = (struct fw_rsc_devmem *)hdr + sizeof(*hdr);
-> +
-> +			ret = iommu_map(rproc->domain, rsc_fw->da, rsc_fw->pa,
-> +						rsc_fw->len, rsc_fw->flags);
-> +			if (ret) {
-> +				pr_err("%s; unable to map adsp memory address\n", __func__);
-> +				goto rproc_smmu_unmap;
-> +			}
-> +		}
-> +	}
-
-If you introduce a adsp_of_unmap_smmu() and adsp_rproc_unmap_smmu(), 
-would it make things more readable to have the same kind of functions 
-when allocating the resources?
-
-Symmetry often helps.
-
-> +	return 0;
-
-Add an empty new line here?
-
-> +rproc_smmu_unmap:
-> +	adsp_rproc_unmap_smmu(rproc, i);
-> +	goto sid_unmap;
-> +smmu_unmap:
-> +	adsp_of_unmap_smmu(adsp->iommu_dom, prop, i);
-> +sid_unmap:
-> +	iommu_unmap(adsp->iommu_dom, adsp->mem_phys, adsp->mem_size);
-> +detach_device:
-> +	iommu_domain_free(adsp->iommu_dom);
-> +domain_free:
-> +	return ret;
-> +}
-> +
-> +
->   static int adsp_start(struct rproc *rproc)
->   {
->   	struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
-> @@ -343,9 +495,16 @@ static int adsp_start(struct rproc *rproc)
->   	if (ret)
->   		return ret;
->   
-> +	if (adsp->adsp_sandbox_needed) {
-> +		ret = adsp_map_smmu(adsp, rproc);
-> +		if (ret) {
-> +			dev_err(adsp->dev, "ADSP smmu mapping failed\n");
-> +			goto disable_irqs;
-> +		}
-> +	}
->   	ret = clk_prepare_enable(adsp->xo);
->   	if (ret)
-> -		goto disable_irqs;
-> +		goto adsp_smmu_unmap;
->   
->   	ret = qcom_rproc_pds_enable(adsp, adsp->proxy_pds,
->   				    adsp->proxy_pd_count);
-> @@ -401,6 +560,12 @@ static int adsp_start(struct rproc *rproc)
->   	qcom_rproc_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
->   disable_xo_clk:
->   	clk_disable_unprepare(adsp->xo);
-> +adsp_smmu_unmap:
-> +	if (adsp->adsp_sandbox_needed) {
-> +		iommu_unmap(adsp->iommu_dom, adsp->mem_phys, adsp->mem_size);
-> +		adsp_unmap_smmu(rproc);
-> +		iommu_domain_free(adsp->iommu_dom);
-> +	}
->   disable_irqs:
->   	qcom_q6v5_unprepare(&adsp->q6v5);
->   
-> @@ -429,6 +594,9 @@ static int adsp_stop(struct rproc *rproc)
->   	if (ret)
->   		dev_err(adsp->dev, "failed to shutdown: %d\n", ret);
->   
-> +	if (adsp->adsp_sandbox_needed)
-> +		adsp_unmap_smmu(rproc);
-
-No need to call iommu_unmap() and iommu_domain_free() here?
-(this is the same comment as the one in adsp_rproc_unmap_smmu(). This is 
-just a blind guess based on symmetry of the code.)
-
-> +
->   	handover = qcom_q6v5_unprepare(&adsp->q6v5);
->   	if (handover)
->   		qcom_adsp_pil_handover(&adsp->q6v5);
-
+greg k-h

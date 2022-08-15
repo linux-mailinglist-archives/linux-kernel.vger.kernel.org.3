@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D71C5949D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 084E059483C
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347240AbiHOXIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56988 "EHLO
+        id S244959AbiHOXIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352892AbiHOXGi (ORCPT
+        with ESMTP id S1353036AbiHOXG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:06:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81781415DE;
-        Mon, 15 Aug 2022 12:58:57 -0700 (PDT)
+        Mon, 15 Aug 2022 19:06:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFBA86715;
+        Mon, 15 Aug 2022 12:59:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74949B8106C;
-        Mon, 15 Aug 2022 19:58:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBD0BC433D6;
-        Mon, 15 Aug 2022 19:58:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 293C961295;
+        Mon, 15 Aug 2022 19:59:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B284C433C1;
+        Mon, 15 Aug 2022 19:59:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593535;
-        bh=rBDcUaW6y7qrMZnKzZg6t/2s8g0030ERifBQbxVCGxs=;
+        s=korg; t=1660593544;
+        bh=9xf/wJIL8Fjz7AVda5uQ/KOzGGQUM6Oll1SGbX8WFT0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OwEt1Xizz9iXLrVdSidGlHqNbza59LgpGuKoF7aoJ2bKZ/2+9bkUGcEvCiFDCV36K
-         +/bH9UEuUH7YlSHkulcgeUfE6udt5y5AyjOy9JS6uhVaLDM+rnxYQh1dhPW3+cx+MI
-         mUwc2Nmvoi99S8obZFOzHU7kRjzxu6emjUKR1Qp0=
+        b=K/tXCsvAzMVV/d8NkfeHdRnBkVIG8EnnE56qffzsSAaoaIQS8kd8yZu+4YXScsfzX
+         uxLHZmy4uwVuH5eEmw7o2D7g2dJJ+uQWgmTcBzWISrShdB15qT4VDAKrw8HgQaP+ug
+         5aR08jrJ0St4WWvuuKRSwnR/vg6DJkzYl4hcjd5E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Arun Easi <aeasi@marvell.com>,
         Nilesh Javali <njavali@marvell.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.18 0964/1095] scsi: qla2xxx: Fix crash due to stale SRB access around I/O timeouts
-Date:   Mon, 15 Aug 2022 20:06:03 +0200
-Message-Id: <20220815180508.951928519@linuxfoundation.org>
+Subject: [PATCH 5.18 0965/1095] scsi: qla2xxx: Fix excessive I/O error messages by default
+Date:   Mon, 15 Aug 2022 20:06:04 +0200
+Message-Id: <20220815180508.991562714@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
 References: <20220815180429.240518113@linuxfoundation.org>
@@ -57,118 +57,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arun Easi <aeasi@marvell.com>
 
-commit c39587bc0abaf16593f7abcdf8aeec3c038c7d52 upstream.
+commit bff4873c709085e09d0ffae0c25b8e65256e3205 upstream.
 
-Ensure SRB is returned during I/O timeout error escalation. If that is not
-possible fail the escalation path.
+Disable printing I/O error messages by default.  The messages will be
+printed only when logging was enabled.
 
-Following crash stack was seen:
-
-BUG: unable to handle kernel paging request at 0000002f56aa90f8
-IP: qla_chk_edif_rx_sa_delete_pending+0x14/0x30 [qla2xxx]
-Call Trace:
- ? qla2x00_status_entry+0x19f/0x1c50 [qla2xxx]
- ? qla2x00_start_sp+0x116/0x1170 [qla2xxx]
- ? dma_pool_alloc+0x1d6/0x210
- ? mempool_alloc+0x54/0x130
- ? qla24xx_process_response_queue+0x548/0x12b0 [qla2xxx]
- ? qla_do_work+0x2d/0x40 [qla2xxx]
- ? process_one_work+0x14c/0x390
-
-Link: https://lore.kernel.org/r/20220616053508.27186-6-njavali@marvell.com
-Fixes: d74595278f4a ("scsi: qla2xxx: Add multiple queue pair functionality.")
+Link: https://lore.kernel.org/r/20220616053508.27186-2-njavali@marvell.com
+Fixes: 8e2d81c6b5be ("scsi: qla2xxx: Fix excessive messages during device logout")
 Cc: stable@vger.kernel.org
 Signed-off-by: Arun Easi <aeasi@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_os.c |   43 ++++++++++++++++++++++++++++++------------
- 1 file changed, 31 insertions(+), 12 deletions(-)
+ drivers/scsi/qla2xxx/qla_isr.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -1337,21 +1337,20 @@ qla2xxx_eh_abort(struct scsi_cmnd *cmd)
- /*
-  * Returns: QLA_SUCCESS or QLA_FUNCTION_FAILED.
-  */
--int
--qla2x00_eh_wait_for_pending_commands(scsi_qla_host_t *vha, unsigned int t,
--	uint64_t l, enum nexus_wait_type type)
-+static int
-+__qla2x00_eh_wait_for_pending_commands(struct qla_qpair *qpair, unsigned int t,
-+				       uint64_t l, enum nexus_wait_type type)
- {
- 	int cnt, match, status;
- 	unsigned long flags;
--	struct qla_hw_data *ha = vha->hw;
--	struct req_que *req;
-+	scsi_qla_host_t *vha = qpair->vha;
-+	struct req_que *req = qpair->req;
- 	srb_t *sp;
- 	struct scsi_cmnd *cmd;
- 
- 	status = QLA_SUCCESS;
- 
--	spin_lock_irqsave(&ha->hardware_lock, flags);
--	req = vha->req;
-+	spin_lock_irqsave(qpair->qp_lock_ptr, flags);
- 	for (cnt = 1; status == QLA_SUCCESS &&
- 		cnt < req->num_outstanding_cmds; cnt++) {
- 		sp = req->outstanding_cmds[cnt];
-@@ -1378,12 +1377,32 @@ qla2x00_eh_wait_for_pending_commands(scs
- 		if (!match)
- 			continue;
- 
--		spin_unlock_irqrestore(&ha->hardware_lock, flags);
-+		spin_unlock_irqrestore(qpair->qp_lock_ptr, flags);
- 		status = qla2x00_eh_wait_on_command(cmd);
--		spin_lock_irqsave(&ha->hardware_lock, flags);
-+		spin_lock_irqsave(qpair->qp_lock_ptr, flags);
+--- a/drivers/scsi/qla2xxx/qla_isr.c
++++ b/drivers/scsi/qla2xxx/qla_isr.c
+@@ -2637,7 +2637,7 @@ static void qla24xx_nvme_iocb_entry(scsi
  	}
--	spin_unlock_irqrestore(&ha->hardware_lock, flags);
-+	spin_unlock_irqrestore(qpair->qp_lock_ptr, flags);
-+
-+	return status;
-+}
-+
-+int
-+qla2x00_eh_wait_for_pending_commands(scsi_qla_host_t *vha, unsigned int t,
-+				     uint64_t l, enum nexus_wait_type type)
-+{
-+	struct qla_qpair *qpair;
-+	struct qla_hw_data *ha = vha->hw;
-+	int i, status = QLA_SUCCESS;
  
-+	status = __qla2x00_eh_wait_for_pending_commands(ha->base_qpair, t, l,
-+							type);
-+	for (i = 0; status == QLA_SUCCESS && i < ha->max_qpairs; i++) {
-+		qpair = ha->queue_pair_map[i];
-+		if (!qpair)
-+			continue;
-+		status = __qla2x00_eh_wait_for_pending_commands(qpair, t, l,
-+								type);
-+	}
- 	return status;
- }
+ 	if (unlikely(logit))
+-		ql_log(ql_dbg_io, fcport->vha, 0x5060,
++		ql_dbg(ql_dbg_io, fcport->vha, 0x5060,
+ 		   "NVME-%s ERR Handling - hdl=%x status(%x) tr_len:%x resid=%x  ox_id=%x\n",
+ 		   sp->name, sp->handle, comp_status,
+ 		   fd->transferred_length, le32_to_cpu(sts->residual_len),
+@@ -3495,7 +3495,7 @@ check_scsi_status:
  
-@@ -1420,7 +1439,7 @@ qla2xxx_eh_device_reset(struct scsi_cmnd
- 		return err;
- 
- 	if (fcport->deleted)
--		return SUCCESS;
-+		return FAILED;
- 
- 	ql_log(ql_log_info, vha, 0x8009,
- 	    "DEVICE RESET ISSUED nexus=%ld:%d:%llu cmd=%p.\n", vha->host_no,
-@@ -1488,7 +1507,7 @@ qla2xxx_eh_target_reset(struct scsi_cmnd
- 		return err;
- 
- 	if (fcport->deleted)
--		return SUCCESS;
-+		return FAILED;
- 
- 	ql_log(ql_log_info, vha, 0x8009,
- 	    "TARGET RESET ISSUED nexus=%ld:%d cmd=%p.\n", vha->host_no,
+ out:
+ 	if (logit)
+-		ql_log(ql_dbg_io, fcport->vha, 0x3022,
++		ql_dbg(ql_dbg_io, fcport->vha, 0x3022,
+ 		       "FCP command status: 0x%x-0x%x (0x%x) nexus=%ld:%d:%llu portid=%02x%02x%02x oxid=0x%x cdb=%10phN len=0x%x rsp_info=0x%x resid=0x%x fw_resid=0x%x sp=%p cp=%p.\n",
+ 		       comp_status, scsi_status, res, vha->host_no,
+ 		       cp->device->id, cp->device->lun, fcport->d_id.b.domain,
 
 

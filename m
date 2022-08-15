@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73F44594927
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:11:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7A0594896
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344003AbiHOXti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43648 "EHLO
+        id S1355005AbiHOXq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354152AbiHOXnk (ORCPT
+        with ESMTP id S1354326AbiHOXlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:43:40 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8EA8688C;
-        Mon, 15 Aug 2022 13:13:58 -0700 (PDT)
+        Mon, 15 Aug 2022 19:41:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73572C665;
+        Mon, 15 Aug 2022 13:12:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1EAC0CE12C5;
-        Mon, 15 Aug 2022 20:13:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE059C433D6;
-        Mon, 15 Aug 2022 20:13:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53C116077B;
+        Mon, 15 Aug 2022 20:12:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 541F9C433C1;
+        Mon, 15 Aug 2022 20:12:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594434;
-        bh=HPQ3uqaqAfVf4S6PuzQ/p3Xy42uW6oBrQE6d2Cc8B6s=;
+        s=korg; t=1660594356;
+        bh=Y7dWTjLqANNjbJKqLAbtLdNNLRyhsxmBAvgy0geNrzM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A+A6i+uW4cNheT+2uiJ4SP4aJjYwdGX2IO/0viOOcwWnE2mfGRulsy8Nmxk595nb6
-         poRvT3fF+FH+C+JYUqaQwFKEwZcBaOfFGWn89ST6oK1Amc968MCARCggsJPQYKBlFo
-         qlaG2ySYGs6i/gwSfm22NSFTdJmIFFkOJ13LFWDo=
+        b=TTv6G4IfScpWIDNA/Vnmb1rtgz2GFc9biFIAP7ZR2rjEBl9PAIjq169ih7PhWV4yd
+         ItbccRauNFSoJHo9ZVq+bvwlFB2s/6e/IPcIh44SZAY5sNwq2RBlH7IfW00TVf9SVY
+         SDldB4yVGLtVrKFU6Ocy5cbb84HF/tqmwoEwCfgo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.18 1082/1095] mptcp: refine memory scheduling
-Date:   Mon, 15 Aug 2022 20:08:01 +0200
-Message-Id: <20220815180513.787011365@linuxfoundation.org>
+        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.18 1084/1095] net: dsa: felix: fix min gate len calculation for tc when its first gate is closed
+Date:   Mon, 15 Aug 2022 20:08:03 +0200
+Message-Id: <20220815180513.883761274@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
 References: <20220815180429.240518113@linuxfoundation.org>
@@ -55,35 +54,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-commit 69d93daec026cdda98e29e8edb12534bfa5b1a9b upstream.
+commit 7e4babffa6f340a74c820d44d44d16511e666424 upstream.
 
-Similar to commit 7c80b038d23e ("net: fix sk_wmem_schedule() and
-sk_rmem_schedule() errors"), let the MPTCP receive path schedule
-exactly the required amount of memory.
+min_gate_len[tc] is supposed to track the shortest interval of
+continuously open gates for a traffic class. For example, in the
+following case:
 
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+TC 76543210
+
+t0 00000001b 200000 ns
+t1 00000010b 200000 ns
+
+min_gate_len[0] and min_gate_len[1] should be 200000, while
+min_gate_len[2-7] should be 0.
+
+However what happens is that min_gate_len[0] is 200000, but
+min_gate_len[1] ends up being 0 (despite gate_len[1] being 200000 at the
+point where the logic detects the gate close event for TC 1).
+
+The problem is that the code considers a "gate close" event whenever it
+sees that there is a 0 for that TC (essentially it's level rather than
+edge triggered). By doing that, any time a gate is seen as closed
+without having been open prior, gate_len, which is 0, will be written
+into min_gate_len. Once min_gate_len becomes 0, it's impossible for it
+to track anything higher than that (the length of actually open
+intervals).
+
+To fix this, we make the writing to min_gate_len[tc] be edge-triggered,
+which avoids writes for gates that are closed in consecutive intervals.
+However what this does is it makes us need to special-case the
+permanently closed gates at the end.
+
+Fixes: 55a515b1f5a9 ("net: dsa: felix: drop oversized frames with tc-taprio instead of hanging the port")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Link: https://lore.kernel.org/r/20220804202817.1677572-1-vladimir.oltean@nxp.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/mptcp/protocol.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/dsa/ocelot/felix_vsc9959.c |   15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
---- a/net/mptcp/protocol.c
-+++ b/net/mptcp/protocol.c
-@@ -323,9 +323,10 @@ static bool mptcp_rmem_schedule(struct s
- 	struct mptcp_sock *msk = mptcp_sk(sk);
- 	int amt, amount;
+--- a/drivers/net/dsa/ocelot/felix_vsc9959.c
++++ b/drivers/net/dsa/ocelot/felix_vsc9959.c
+@@ -1133,6 +1133,7 @@ static void vsc9959_tas_min_gate_lengths
+ {
+ 	struct tc_taprio_sched_entry *entry;
+ 	u64 gate_len[OCELOT_NUM_TC];
++	u8 gates_ever_opened = 0;
+ 	int tc, i, n;
  
--	if (size < msk->rmem_fwd_alloc)
-+	if (size <= msk->rmem_fwd_alloc)
- 		return true;
+ 	/* Initialize arrays */
+@@ -1160,16 +1161,28 @@ static void vsc9959_tas_min_gate_lengths
+ 		for (tc = 0; tc < OCELOT_NUM_TC; tc++) {
+ 			if (entry->gate_mask & BIT(tc)) {
+ 				gate_len[tc] += entry->interval;
++				gates_ever_opened |= BIT(tc);
+ 			} else {
+ 				/* Gate closes now, record a potential new
+ 				 * minimum and reinitialize length
+ 				 */
+-				if (min_gate_len[tc] > gate_len[tc])
++				if (min_gate_len[tc] > gate_len[tc] &&
++				    gate_len[tc])
+ 					min_gate_len[tc] = gate_len[tc];
+ 				gate_len[tc] = 0;
+ 			}
+ 		}
+ 	}
++
++	/* min_gate_len[tc] actually tracks minimum *open* gate time, so for
++	 * permanently closed gates, min_gate_len[tc] will still be U64_MAX.
++	 * Therefore they are currently indistinguishable from permanently
++	 * open gates. Overwrite the gate len with 0 when we know they're
++	 * actually permanently closed, i.e. after the loop above.
++	 */
++	for (tc = 0; tc < OCELOT_NUM_TC; tc++)
++		if (!(gates_ever_opened & BIT(tc)))
++			min_gate_len[tc] = 0;
+ }
  
-+	size -= msk->rmem_fwd_alloc;
- 	amt = sk_mem_pages(size);
- 	amount = amt << SK_MEM_QUANTUM_SHIFT;
- 	msk->rmem_fwd_alloc += amount;
+ /* Update QSYS_PORT_MAX_SDU to make sure the static guard bands added by the
 
 

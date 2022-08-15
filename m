@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369B75949C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE57D5947C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345539AbiHOXVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
+        id S1345990AbiHOXVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353474AbiHOXQh (ORCPT
+        with ESMTP id S1353515AbiHOXQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:16:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A391484E5;
-        Mon, 15 Aug 2022 13:03:21 -0700 (PDT)
+        Mon, 15 Aug 2022 19:16:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CE8AF484;
+        Mon, 15 Aug 2022 13:03:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62B38B81142;
-        Mon, 15 Aug 2022 20:03:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A51EDC433C1;
-        Mon, 15 Aug 2022 20:03:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 314FAB80EA8;
+        Mon, 15 Aug 2022 20:03:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9191DC433D6;
+        Mon, 15 Aug 2022 20:03:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593799;
-        bh=VBA4o0Mb7y8Az4iYRvFH18ZYSc8JyfxdBkwdZbQ+Q28=;
+        s=korg; t=1660593805;
+        bh=pQKLs5HCEFvdf9V0RQd4XUTM1KsvjMxn9EJ5z3G4Ec4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fHQr2UIIzKmFK6xp8m92rXfJQn8Eg8mgajLq2iPdk6Qo1dNM+sImHdgs8lU09fLVJ
-         kb1EA9LnptXG89CsJ4LlvrLNxKkq55Mx+jjQXGhmgVhL7Kn4e6X5T702D5JPrT6IWh
-         aATqMwjex6tVJEskTLOlgNOaDzIGDGPg7QdE89uk=
+        b=GXiyYYI2kypqTSCY+G5ypnYWemnp/Q4u9sxY6q2UmuWFuuNWZQr8+obgKAgUt/ZnH
+         F3dfvI6ILi/baBl0GCSNQkhmiCyUCezYKzFiok+H36e2pJyMnAbb11A0jCDIRYVDYr
+         AZ8AynbbS+7TCnmk8qyr/7eCoUviqAWiqRCH2r0g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yunhao Tian <t123yh.xyz@gmail.com>,
-        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0327/1157] drm/mipi-dbi: align max_chunk to 2 in spi_transfer
-Date:   Mon, 15 Aug 2022 19:54:43 +0200
-Message-Id: <20220815180452.735746838@linuxfoundation.org>
+Subject: [PATCH 5.19 0328/1157] drm/ssd130x: Only define a SPI device ID table when built as a module
+Date:   Mon, 15 Aug 2022 19:54:44 +0200
+Message-Id: <20220815180452.777804739@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -55,46 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yunhao Tian <t123yh.xyz@gmail.com>
+From: Javier Martinez Canillas <javierm@redhat.com>
 
-[ Upstream commit 435c249008cba04ed6a7975e9411f3b934620204 ]
+[ Upstream commit 01ece65132e2980ece4eca91105dfc9eed504881 ]
 
-In __spi_validate, there's a validation that no partial transfers
-are accepted (xfer->len % w_size must be zero). When
-max_chunk is not a multiple of bpw (e.g. max_chunk = 65535,
-bpw = 16), the transfer will be rejected.
+The kernel test robot reports a compile warning due the ssd130x_spi_table
+variable being defined but not used. This happen when ssd130x-spi driver
+is built-in instead of being built as a module, i.e:
 
-This patch aligns max_chunk to 2 bytes (the maximum value of bpw is 16),
-so that no partial transfer will occur.
+  CC      drivers/gpu/drm/solomon/ssd130x-spi.o
+  AR      drivers/base/firmware_loader/built-in.a
+  AR      drivers/base/built-in.a
+  CC      kernel/trace/trace.o
+drivers/gpu/drm/solomon/ssd130x-spi.c:155:35: warning: ‘ssd130x_spi_table’ defined but not used [-Wunused-const-variable=]
+  155 | static const struct spi_device_id ssd130x_spi_table[] = {
+      |                                   ^~~~~~~~~~~~~~~~~
 
-Fixes: d23d4d4dac01 ("drm/tinydrm: Move tinydrm_spi_transfer()")
+The driver shouldn't need a SPI device ID table and only have an OF device
+ID table, but the former is needed to workaround an issue in the SPI core.
+This always reports a MODALIAS of the form "spi:<device>" even for devices
+registered through Device Trees.
 
-Signed-off-by: Yunhao Tian <t123yh.xyz@gmail.com>
-Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220510030219.2486687-1-t123yh.xyz@gmail.com
+But the table is only needed when the driver built as a module to populate
+the .ko alias info. It's not needed when the driver is built-in the kernel.
+
+Fixes: 74373977d2ca ("drm/solomon: Add SSD130x OLED displays SPI support")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220530140246.742469-1-javierm@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/drm_mipi_dbi.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/gpu/drm/solomon/ssd130x-spi.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/drm_mipi_dbi.c b/drivers/gpu/drm/drm_mipi_dbi.c
-index 9314f2ead79f..09e4edb5a992 100644
---- a/drivers/gpu/drm/drm_mipi_dbi.c
-+++ b/drivers/gpu/drm/drm_mipi_dbi.c
-@@ -1199,6 +1199,13 @@ int mipi_dbi_spi_transfer(struct spi_device *spi, u32 speed_hz,
- 	size_t chunk;
- 	int ret;
+diff --git a/drivers/gpu/drm/solomon/ssd130x-spi.c b/drivers/gpu/drm/solomon/ssd130x-spi.c
+index 43722adab1f8..07802907e39a 100644
+--- a/drivers/gpu/drm/solomon/ssd130x-spi.c
++++ b/drivers/gpu/drm/solomon/ssd130x-spi.c
+@@ -143,6 +143,7 @@ static const struct of_device_id ssd130x_of_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, ssd130x_of_match);
  
-+	/* In __spi_validate, there's a validation that no partial transfers
-+	 * are accepted (xfer->len % w_size must be zero).
-+	 * Here we align max_chunk to multiple of 2 (16bits),
-+	 * to prevent transfers from being rejected.
-+	 */
-+	max_chunk = ALIGN_DOWN(max_chunk, 2);
-+
- 	spi_message_init_with_transfers(&m, &tr, 1);
++#if IS_MODULE(CONFIG_DRM_SSD130X_SPI)
+ /*
+  * The SPI core always reports a MODALIAS uevent of the form "spi:<dev>", even
+  * if the device was registered via OF. This means that the module will not be
+@@ -160,6 +161,7 @@ static const struct spi_device_id ssd130x_spi_table[] = {
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(spi, ssd130x_spi_table);
++#endif
  
- 	while (len) {
+ static struct spi_driver ssd130x_spi_driver = {
+ 	.driver = {
 -- 
 2.35.1
 

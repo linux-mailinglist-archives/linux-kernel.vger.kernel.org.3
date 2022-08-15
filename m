@@ -2,101 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C49A592AC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 10:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32283592A9B
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 10:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbiHOH3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 03:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
+        id S231316AbiHOH35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 03:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiHOH3l (ORCPT
+        with ESMTP id S229647AbiHOH3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 03:29:41 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8C51834D;
-        Mon, 15 Aug 2022 00:29:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=WLetqZztJRGpEs+QGrVdxJPRivEZitIYqQS4z+3w0us=; b=Z1LAkm9Z/Jk1kEPqfMnOx2pfGs
-        AnaD2SHDCwOs0LXfFbNIFQrNP2QO02HSNSWUIqBeUevxDPjX0ygn/rbmIi86BZWpaYoq5jLyLRt7m
-        Nm6vombiB3LD1gMSc+w+AWOtOKWAIljTD2uDfOXWakmdC5EpWeDRa6TFjtLUsVvRaul5x8X+gqsUP
-        V8yvn0ln24bpfiHr2fRGGkl6JkvDjlaK4eyr14cB1EHHpMg+Xg/HvrMpRK7svhXehIRiLVmkPXgCL
-        ZjQdKAHVoe+b1HJflXz0EL4Px9xAnn0zlhe2kFk9JG/l8NEBGC1jszeB9hs4hnTbBKkCL1b8adgql
-        LgYQqHDw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oNUXK-005WG8-Jj; Mon, 15 Aug 2022 07:29:22 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D4BC4980264; Mon, 15 Aug 2022 09:29:20 +0200 (CEST)
-Date:   Mon, 15 Aug 2022 09:29:20 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Nadav Amit <namit@vmware.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH] x86/kprobes: fix JNG/JNLE emulation
-Message-ID: <Yvn10AjTCHM+ua9E@worktop.programming.kicks-ass.net>
-References: <20220813225943.143767-1-namit@vmware.com>
+        Mon, 15 Aug 2022 03:29:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 205A618375
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:29:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660548592;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=byIPChTKZm6TPPDl5DVa0fUbEJ1aaHC3/c+lPPYM3F0=;
+        b=UA4idQdghvmNwkJY44s2g9f8E9DMlPbY3A5czAkuK/qxM0JbU0piNp0QIeQa92lsCOYCgN
+        Z7dxcOpXuh1akSZsOHdikM1q4+Cy7CvgUglnoMaQWS8OgcrL64s22fFekrOGPCrR+mSoIo
+        bxOxsp4oT5qzryvqwdnjeUsdSbQSRis=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-115-4S_UN_CbPdaAVB4PMhyXig-1; Mon, 15 Aug 2022 03:29:50 -0400
+X-MC-Unique: 4S_UN_CbPdaAVB4PMhyXig-1
+Received: by mail-ed1-f72.google.com with SMTP id s21-20020a056402521500b00440e91f30easo4237482edd.7
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:29:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=byIPChTKZm6TPPDl5DVa0fUbEJ1aaHC3/c+lPPYM3F0=;
+        b=e5URDoRSn0CWiAf3AfcepkPdusIP8jtYDzaDrgD5t8SO0Zq5EPpyIQXCxKZGqKSAbY
+         n5blCOuIr7QAVyvEa1/MTyE2MsZmBbHGRd7MTp/94EnwYVccuM9yzCef5L/0TUsHYVuH
+         gcgAW6Whfy88oUjq9Hgh2vzOdEIOIFaI/5vvPdN4YUrfB9NesLUatExb30fH9H6GqtBk
+         SvSmpa8J2f4yvsbLVgvh6rc51Ew9TO3VUg50MF+F0CahZV8e/T9BEMYJStjhpwYCCewA
+         WzkX+Bpiho0ZK61FPqv0RnZe6axH35MeGo42vvPwWjwdDDbkUtiiGhixspcwnXCKf/BJ
+         A9Sw==
+X-Gm-Message-State: ACgBeo2Y/QVyAh8fo0+mH0DC0LqKGgKdrSxw5h1zW0MEdLgIsLPCKHnl
+        x0v+vuGUxeXktD0L8vJ6lnV0zf83MTC37K4Xtq9OUV62K/A5j5fIrmuxYgKsjE/ypUuMer7OHN7
+        x7wEgYs0qgdzN5iD+dg9qs4UL
+X-Received: by 2002:a17:907:1b1f:b0:72f:56db:cce9 with SMTP id mp31-20020a1709071b1f00b0072f56dbcce9mr9488343ejc.605.1660548589232;
+        Mon, 15 Aug 2022 00:29:49 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6tJQ/wZnUulXq42AcSaqEj2YyozhPsc+eoLREYFCtELx3j50akTpxZzIu1i8foc5y9TaYsww==
+X-Received: by 2002:a17:907:1b1f:b0:72f:56db:cce9 with SMTP id mp31-20020a1709071b1f00b0072f56dbcce9mr9488331ejc.605.1660548588928;
+        Mon, 15 Aug 2022 00:29:48 -0700 (PDT)
+Received: from redhat.com ([2.54.169.49])
+        by smtp.gmail.com with ESMTPSA id 21-20020a170906301500b0071cef6c53aesm3764848ejz.0.2022.08.15.00.29.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 00:29:48 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 03:29:43 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Andres Freund <andres@anarazel.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: upstream kernel crashes
+Message-ID: <20220815031549-mutt-send-email-mst@kernel.org>
+References: <20220814212610.GA3690074@roeck-us.net>
+ <CAHk-=wgf2EfLHui6A5NbWoaVBB2f8t-XBUiOMkyjN2NU41t6eA@mail.gmail.com>
+ <20220814223743.26ebsbnrvrjien4f@awork3.anarazel.de>
+ <CAHk-=wi6raoJE-1cyRU0YxJ+9ReO1eXmOAq0FwKAyZS7nhvk9w@mail.gmail.com>
+ <1c057afa-92df-ee3c-5978-3731d3db9345@kernel.dk>
+ <20220815013651.mrm7qgklk6sgpkbb@awork3.anarazel.de>
+ <CAHk-=wikzU4402P-FpJRK_QwfVOS+t-3p1Wx5awGHTvr-s_0Ew@mail.gmail.com>
+ <20220815071143.n2t5xsmifnigttq2@awork3.anarazel.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220813225943.143767-1-namit@vmware.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220815071143.n2t5xsmifnigttq2@awork3.anarazel.de>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 13, 2022 at 03:59:43PM -0700, Nadav Amit wrote:
-> From: Nadav Amit <namit@vmware.com>
+On Mon, Aug 15, 2022 at 12:11:43AM -0700, Andres Freund wrote:
+> Hi,
 > 
-> When kprobes emulates JNG/JNLE instructions on x86 it uses the wrong
-> condition. For JNG (opcode: 0F 8E), according to Intel SDM, the jump is
-> performed if (ZF == 1 or SF != OF). However the kernel emulation
-> currently uses 'and' instead of 'or'.
+> On 2022-08-14 20:18:44 -0700, Linus Torvalds wrote:
+> > On Sun, Aug 14, 2022 at 6:36 PM Andres Freund <andres@anarazel.de> wrote:
+> > >
+> > > Some of the symptoms could be related to the issue in this thread, hence
+> > > listing them here
+> > 
+> > Smells like slab corruption to me, and the problems may end up being
+> > then largely random just depending on who ends up using the allocation
+> > that gets trampled on.
+> > 
+> > I wouldn't be surprised if it's all the same thing - including your
+> > network issue.
 > 
-> As a result, setting a kprobe on JNG/JNLE might cause the kernel to
-> behave incorrectly whenever the kprobe is hit.
+> Yea. As I just wrote in
+> https://postgr.es/m/20220815070203.plwjx7b3cyugpdt7%40awork3.anarazel.de I
+> bisected it down to one commit (762faee5a267). With that commit I only see the
+> networking issue across a few reboots, but with ebcce4926365 some boots oops
+> badly and other times it' "just" network not working.
 > 
-> Fix by changing the 'and' to 'or'.
 > 
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: stable@vger.kernel.org
-> Fixes: 6256e668b7af ("x86/kprobes: Use int3 instead of debug trap for single-step")
-> Signed-off-by: Nadav Amit <namit@vmware.com>
+> [    2.447668] general protection fault, probably for non-canonical address 0xffff000000000800: 0000 [#1] PREEMPT SMP PTI
+> [    2.449168] CPU: 1 PID: 109 Comm: systemd-udevd Not tainted 5.19.0-bisect8-00051-gebcce4926365 #8
+> [    2.450397] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+> [    2.451670] RIP: 0010:kmem_cache_alloc_node+0x2b4/0x430
+> [    2.452399] Code: 01 00 0f 84 e7 fe ff ff 48 8b 50 48 48 8d 7a ff 83 e2 01 48 0f 45 c7 49 89 c7 e9 d0 fe ff ff 8b 45 28 48 8b 7d 00 48 8d 4a 40 <49> 8b 1c 04 4c 89 e0 65 48 0f c7 0f 0f 94 c0 84 c0 0f 84 cd fd ff
+> [    2.455454] RSP: 0018:ffffa2b40040bd60 EFLAGS: 00010246
+> [    2.456181] RAX: 0000000000000800 RBX: 0000000000000cc0 RCX: 0000000000001741
+> [    2.457195] RDX: 0000000000001701 RSI: 0000000000000cc0 RDI: 000000000002f820
+> [    2.458211] RBP: ffff8da7800ed500 R08: 0000000000000000 R09: 0000000000000011
+> [    2.459183] R10: 00007fd02b8b8b90 R11: 0000000000000000 R12: ffff000000000000
+> [    2.460268] R13: 0000000000000000 R14: 0000000000000cc0 R15: ffffffff934bde4b
+> [    2.461368] FS:  00007fd02b8b88c0(0000) GS:ffff8da8b7d00000(0000) knlGS:0000000000000000
+> [    2.462605] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    2.463436] CR2: 000055a42d2ee250 CR3: 0000000100328001 CR4: 00000000003706e0
+> [    2.464527] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [    2.465520] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [    2.466509] Call Trace:
+> [    2.466882]  <TASK>
+> [    2.467218]  copy_process+0x1eb/0x1a00
+> [    2.467827]  ? _raw_spin_unlock_irqrestore+0x16/0x30
+> [    2.468578]  kernel_clone+0xba/0x400
+> [    2.470455]  __do_sys_clone+0x78/0xa0
+> [    2.471006]  do_syscall_64+0x37/0x90
+> [    2.471526]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> [    2.472267] RIP: 0033:0x7fd02bf98cb3
+> [    2.472889] Code: 1f 84 00 00 00 00 00 64 48 8b 04 25 10 00 00 00 45 31 c0 31 d2 31 f6 bf 11 00 20 01 4c 8d 90 d0 02 00 00 b8 38 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 41 89 c0 85 c0 75 2a 64 48 8b 04 25 10 00
+> [    2.475504] RSP: 002b:00007ffc6a3abf08 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
+> [    2.476565] RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fd02bf98cb3
+> [    2.477554] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
+> [    2.478574] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+> [    2.479608] R10: 00007fd02b8b8b90 R11: 0000000000000246 R12: 0000000000000001
+> [    2.480675] R13: 00007ffc6a3ac0c0 R14: 0000000000000000 R15: 0000000000000001
+> [    2.481686]  </TASK>
+> [    2.482119] Modules linked in:
+> [    2.482704] ---[ end trace 0000000000000000 ]---
+> [    2.483456] RIP: 0010:kmem_cache_alloc_node+0x2b4/0x430
+> [    2.484282] Code: 01 00 0f 84 e7 fe ff ff 48 8b 50 48 48 8d 7a ff 83 e2 01 48 0f 45 c7 49 89 c7 e9 d0 fe ff ff 8b 45 28 48 8b 7d 00 48 8d 4a 40 <49> 8b 1c 04 4c 89 e0 65 48 0f c7 0f 0f 94 c0 84 c0 0f 84 cd fd ff
+> [    2.487024] RSP: 0018:ffffa2b40040bd60 EFLAGS: 00010246
+> [    2.487817] RAX: 0000000000000800 RBX: 0000000000000cc0 RCX: 0000000000001741
+> [    2.488805] RDX: 0000000000001701 RSI: 0000000000000cc0 RDI: 000000000002f820
+> [    2.489869] RBP: ffff8da7800ed500 R08: 0000000000000000 R09: 0000000000000011
+> [    2.490842] R10: 00007fd02b8b8b90 R11: 0000000000000000 R12: ffff000000000000
+> [    2.491905] R13: 0000000000000000 R14: 0000000000000cc0 R15: ffffffff934bde4b
+> [    2.492975] FS:  00007fd02b8b88c0(0000) GS:ffff8da8b7d00000(0000) knlGS:0000000000000000
+> [    2.494140] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    2.495082] CR2: 000055a42d2ee250 CR3: 0000000100328001 CR4: 00000000003706e0
+> [    2.496080] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [    2.497084] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [    2.498524] systemd-udevd (109) used greatest stack depth: 13688 bytes left
+> [    2.503905] general protection fault, probably for non-canonical address 0xffff000000000000: 0000 [#2] PREEMPT SMP PTI
+> [    2.505504] CPU: 0 PID: 13 Comm: ksoftirqd/0 Tainted: G      D           5.19.0-bisect8-00051-gebcce4926365 #8
+> [    2.507037] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+> [    2.508313] RIP: 0010:rcu_core+0x280/0x920
+> [    2.508968] Code: 3f 00 00 48 89 c2 48 85 c0 0f 84 2b 03 00 00 49 89 dd 48 83 c3 01 0f 1f 44 00 00 48 8b 42 08 48 89 d7 48 c7 42 08 00 00 00 00 <ff> d0 0f 1f 00 65 8b 05 64 f5 ad 6c f6 c4 01 75 97 be 00 02 00 00
+> [    2.511684] RSP: 0000:ffffa2b40007fe20 EFLAGS: 00010202
+> [    2.512410] RAX: ffff000000000000 RBX: 0000000000000002 RCX: 0000000080170011
+> [    2.513497] RDX: ffff8da783372a20 RSI: 0000000080170011 RDI: ffff8da783372a20
+> [    2.514604] RBP: ffff8da8b7c2b940 R08: 0000000000000001 R09: ffffffff9353b752
+> [    2.515667] R10: ffffffff94a060c0 R11: 000000000009b776 R12: ffff8da78020c000
+> [    2.516650] R13: 0000000000000001 R14: ffff8da8b7c2b9b8 R15: 0000000000000000
+> [    2.517628] FS:  0000000000000000(0000) GS:ffff8da8b7c00000(0000) knlGS:0000000000000000
+> [    2.518840] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    2.519645] CR2: 0000557194db70f8 CR3: 0000000100364006 CR4: 00000000003706f0
+> [    2.520641] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [    2.521629] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [    2.522592] Call Trace:
+> [    2.522963]  <TASK>
+> [    2.523299]  __do_softirq+0xe1/0x2ec
+> [    2.523883]  ? sort_range+0x20/0x20
+> [    2.524404]  run_ksoftirqd+0x25/0x30
+> [    2.524944]  smpboot_thread_fn+0x180/0x220
+> [    2.525519]  kthread+0xe1/0x110
+> [    2.526001]  ? kthread_complete_and_exit+0x20/0x20
+> [    2.526673]  ret_from_fork+0x1f/0x30
+> [    2.527182]  </TASK>
+> [    2.527518] Modules linked in:
+> [    2.528005] ---[ end trace 0000000000000000 ]---
+> [    2.528662] RIP: 0010:kmem_cache_alloc_node+0x2b4/0x430
+> [    2.529524] Code: 01 00 0f 84 e7 fe ff ff 48 8b 50 48 48 8d 7a ff 83 e2 01 48 0f 45 c7 49 89 c7 e9 d0 fe ff ff 8b 45 28 48 8b 7d 00 48 8d 4a 40 <49> 8b 1c 04 4c 89 e0 65 48 0f c7 0f 0f 94 c0 84 c0 0f 84 cd fd ff
+> [    2.532396] RSP: 0018:ffffa2b40040bd60 EFLAGS: 00010246
+> [    2.533201] RAX: 0000000000000800 RBX: 0000000000000cc0 RCX: 0000000000001741
+> [    2.534376] RDX: 0000000000001701 RSI: 0000000000000cc0 RDI: 000000000002f820
+> [    2.535398] RBP: ffff8da7800ed500 R08: 0000000000000000 R09: 0000000000000011
+> Begin: Loading e[    2.536401] R10: 00007fd02b8b8b90 R11: 0000000000000000 R12: ffff000000000000
+> [    2.537641] R13: 0000000000000000 R14: 0000000000000cc0 R15: ffffffff934bde4b
+> ssential drivers[    2.538737] FS:  0000000000000000(0000) GS:ffff8da8b7c00000(0000) knlGS:0000000000000000
+> [    2.540028] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>  ... done.[    2.540843] CR2: 0000557194db70f8 CR3: 000000015080c002 CR4: 00000000003706f0
+> [    2.541953] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> 
+> [    2.542924] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [    2.543902] Kernel panic - not syncing: Fatal exception in interrupt
+> [    2.544967] Kernel Offset: 0x12400000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+> [    2.546637] ---[ end Kernel panic - not syncing: Fatal exception in interrupt ]---
+> 
+> 
+> If somebody knowledgeable staring at 762faee5a267 doesn't surface somebody I
+> can create a kernel with some more debugging stuff enabled, if somebody tells
+> me what'd work best here.
+> 
+> 
+> Greetings,
+> 
+> Andres Freund
 
-Urgghh..
+Thanks a lot for the work!
+Just a small clarification:
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+So IIUC you see several issues, right?
 
-> ---
->  arch/x86/kernel/kprobes/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-> index 74167dc5f55e..4c3c27b6aea3 100644
-> --- a/arch/x86/kernel/kprobes/core.c
-> +++ b/arch/x86/kernel/kprobes/core.c
-> @@ -505,7 +505,7 @@ static void kprobe_emulate_jcc(struct kprobe *p, struct pt_regs *regs)
->  		match = ((regs->flags & X86_EFLAGS_SF) >> X86_EFLAGS_SF_BIT) ^
->  			((regs->flags & X86_EFLAGS_OF) >> X86_EFLAGS_OF_BIT);
->  		if (p->ainsn.jcc.type >= 0xe)
-> -			match = match && (regs->flags & X86_EFLAGS_ZF);
-> +			match = match || (regs->flags & X86_EFLAGS_ZF);
->  	}
->  	__kprobe_emulate_jmp(p, regs, (match && !invert) || (!match && invert));
->  }
-> -- 
-> 2.25.1
-> 
+With 762faee5a2678559d3dc09d95f8f2c54cd0466a7 you see networking issues.
+
+With ebcce492636506443e4361db6587e6acd1a624f9 you see crashes.
+
+-- 
+MST
+

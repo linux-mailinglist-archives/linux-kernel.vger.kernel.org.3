@@ -2,114 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 979DC594C79
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB052594C4B
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344327AbiHPBJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 21:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
+        id S1343778AbiHPBJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 21:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349862AbiHPBGl (ORCPT
+        with ESMTP id S1348086AbiHPBFH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 21:06:41 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D841A7C39
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 13:53:41 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id x64so6784755iof.1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 13:53:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=uc9DV/Vm8k3ggZyBJiM4DPc4itKMLkWtsIueLCMUQls=;
-        b=bIzLQ1mCS/G20XnsaN4dTFCvt9i+9+LgfE1kqI80Xn2j8xy9S68G+j7zgUI9n+e9V0
-         iF7lz37EqbKz/yHauroPHA4IE9esnp+eSGtXZPje2+P/Nh67Xs6Jt3JA+kJ0paGNnVvF
-         d0uwcC2SiIxnEiE2t3Pf+nzvl8Av3XrytT21Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=uc9DV/Vm8k3ggZyBJiM4DPc4itKMLkWtsIueLCMUQls=;
-        b=RNAURY4D12eXP/3eTzYGtBLBJcvj/5V54hE2WPeZl8E3P9nJq/DUmmN/MYilyW9cep
-         ue6/cKZ52nOe7qoNVrJCbjOPTxgJ1LDh8n0XgMXjkVm5od/QHJcUWC9OEyxEZGQE7HlN
-         qnh5RUQyDblXcXLuwBQnDP0AIFc5HuQkzrj/ldc7PA5nsUmEuJoe8CYhnEMH7mdIKOu3
-         pFvZPla3+lgvM6/AVg3p7GSDi9u/5tHJwR4pB1wgFuKj1k49YXQ7hky4M6mMBtI52Knx
-         uMlVvWYHDiRQCcU8FpCNe+SMLRp4J2tIi9MVsx+6u2os33+dDncPVQgzzDohIGhFmBBs
-         DSUQ==
-X-Gm-Message-State: ACgBeo3WRlTKM4CO8isGjyNLpT2TEtUnPw+FjhAigGWDh2a09YTvzDwR
-        A8RgiVgO3qeyvEP+Y3ZtK7gwJw==
-X-Google-Smtp-Source: AA6agR7ifnwUc81UjL6LH46tcLGYwLeVFtSQbHh/vtVpAp80K3Z9Mi4n+8FSzJE+HKr4UpM61ae/PQ==
-X-Received: by 2002:a05:6638:16d3:b0:346:a4c6:fcc6 with SMTP id g19-20020a05663816d300b00346a4c6fcc6mr612791jat.147.1660596820565;
-        Mon, 15 Aug 2022 13:53:40 -0700 (PDT)
-Received: from chromium.org ([100.107.108.157])
-        by smtp.gmail.com with ESMTPSA id d70-20020a0285cc000000b003415b95c097sm3804296jai.42.2022.08.15.13.53.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 13:53:40 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 14:53:07 -0600
-From:   Jack Rosenthal <jrosenth@chromium.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Julius Werner <jwerner@chromium.org>
-Subject: Re: [PATCH v8] firmware: google: Implement cbmem in sysfs driver
-Message-ID: <YvqyM3n48Q/0i9XZ@chromium.org>
-References: <20220806204857.3276448-1-jrosenth@chromium.org>
- <CAE-0n53gc=1vwZbhGUaF2EyXotMPjqoQixUMJDidcs7vLmNORQ@mail.gmail.com>
+        Mon, 15 Aug 2022 21:05:07 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5772A1A7C16;
+        Mon, 15 Aug 2022 13:53:35 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 2A2A6320005D;
+        Mon, 15 Aug 2022 16:53:33 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 15 Aug 2022 16:53:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1660596812; x=1660683212; bh=HPFMScc5rh
+        1n/KUQUKK3sj0YWkmSXqa3merVTxllExE=; b=GrND2lXe7MGK4VptRdZgr8SmV2
+        UHsbE+tvYBCAgUWGaTCGwBDbHtn05YfYLitzF4HYhSrDD3VOlh6BjcLdeswQr0a3
+        0c1BD1I5KNMqAuCqDUQojm5DVGKlDz1YMhoRtnVrO5NhX3Iao7mrSsJOaTyxwSN1
+        GGrwFUbkGZ8sEPQACUt3ys1wBu3p70IYFsRDPkMVxi/2/Tam2EYL6R1e57+eKjlJ
+        v7XtUV4Swdia9uQ2zo7MdqxClGR220tS0CJVMFkBunq65nuTASnMdWbJgiXPZ6/g
+        40lKbXFRsXHR/ygaTBwzHP6bRimZmNf5UbNbJPDw+muf0ktEZjQfZb6OrkOQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660596812; x=1660683212; bh=HPFMScc5rh1n/KUQUKK3sj0YWkmS
+        Xqa3merVTxllExE=; b=jJZqRm7ree9prKdUYWegxgRMEgZItep/jM86M1SQt9+J
+        b7ghCdihuulSBOVnXdcRl6boF0IK9h5o+X6kxYqM9Ub3J+Mq2TM20FOYGU7DAd+L
+        0cFYDC7YlSnPrQC7I7ymf2kRm4xALmg11KYziprI0UvHwffBZpvkFTjuK9VvFw5R
+        cpJmmw+pkcuQZ1lZQ129K1ngIR3wpjt1fo/w4mCGvcPZY2ZfK2000ha2u1wAY9F7
+        KDR+HshGHzz2B23S8BnH05rQyo1HvbK8Z0AZOx344rcTFrmYyw3tPTVhx2xHrbcQ
+        Wxw3Oq8iopJwOvkSvrqnIqJGCxqVe300o5A3tGEa1A==
+X-ME-Sender: <xms:S7L6Ykjf56ArH60Ke5dBi9Vcg8xi1f5acU892ZSUIE5gc9K8ukSqpA>
+    <xme:S7L6YtDdqmOW-sM7szpv1IzigqqSJdSRZeoHpQItIuHyVO8yGUipgMlWV1ER50TnP
+    kE4Y5sXxQA4ei_wog>
+X-ME-Received: <xmr:S7L6YsGpKcazbvPWp2o3gwfsD7M5XYRSKth6O6SojFsrmMslbySNLdw_rhGoJ6d8hyDJuieIGdkqEgKPx_pNJP9OfG7lfHC0jvHchkAzNXwGqhRRG72O7VObUvCj>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehvddgudehjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetnhgu
+    rhgvshcuhfhrvghunhguuceorghnughrvghssegrnhgrrhgriigvlhdruggvqeenucggtf
+    frrghtthgvrhhnpedvffefvefhteevffegieetfefhtddvffejvefhueetgeeludehteev
+    udeitedtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrnhgurhgvshesrghnrghrrgiivghlrdguvg
+X-ME-Proxy: <xmx:S7L6YlQZEO9CSpN512tovSiJNM7oZ34W_NhYim79y7bYqroSU14Bqg>
+    <xmx:S7L6YhwFUK50LTIf5jTvxSD_rtN63jWH_br1Z_QuHBWrWHFICy0uEg>
+    <xmx:S7L6Yj7xX5to0FCcJpfmaCL87adpuJaaoScEuLiWr7_NX0gka3M9yQ>
+    <xmx:TLL6YpB9XIEnAcPxX0o0cl_tCoxr_1v19RkbpATjGVqfcDmkW7zssg>
+Feedback-ID: id4a34324:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 15 Aug 2022 16:53:31 -0400 (EDT)
+Date:   Mon, 15 Aug 2022 13:53:30 -0700
+From:   Andres Freund <andres@anarazel.de>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        c@redhat.com
+Subject: Re: upstream kernel crashes
+Message-ID: <20220815205330.m54g7vcs77r6owd6@awork3.anarazel.de>
+References: <20220815071143.n2t5xsmifnigttq2@awork3.anarazel.de>
+ <20220815034532-mutt-send-email-mst@kernel.org>
+ <20220815081527.soikyi365azh5qpu@awork3.anarazel.de>
+ <20220815042623-mutt-send-email-mst@kernel.org>
+ <FCDC5DDE-3CDD-4B8A-916F-CA7D87B547CE@anarazel.de>
+ <20220815113729-mutt-send-email-mst@kernel.org>
+ <20220815164503.jsoezxcm6q4u2b6j@awork3.anarazel.de>
+ <20220815124748-mutt-send-email-mst@kernel.org>
+ <20220815174617.z4chnftzcbv6frqr@awork3.anarazel.de>
+ <20220815161423-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAE-0n53gc=1vwZbhGUaF2EyXotMPjqoQixUMJDidcs7vLmNORQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220815161423-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the detailed review!
+Hi,
 
-On 2022-08-09 at 20:49 -0500, Stephen Boyd wrote:
-> /sys/firmware/coreboot/cbmem?
+On 2022-08-15 16:21:51 -0400, Michael S. Tsirkin wrote:
+> On Mon, Aug 15, 2022 at 10:46:17AM -0700, Andres Freund wrote:
+> > Hi,
+> >
+> > On 2022-08-15 12:50:52 -0400, Michael S. Tsirkin wrote:
+> > > On Mon, Aug 15, 2022 at 09:45:03AM -0700, Andres Freund wrote:
+> > > > Hi,
+> > > >
+> > > > On 2022-08-15 11:40:59 -0400, Michael S. Tsirkin wrote:
+> > > > > OK so this gives us a quick revert as a solution for now.
+> > > > > Next, I would appreciate it if you just try this simple hack.
+> > > > > If it crashes we either have a long standing problem in virtio
+> > > > > code or more likely a gcp bug where it can't handle smaller
+> > > > > rings than what device requestes.
+> > > > > Thanks!
+> > > >
+> > > > I applied the below and the problem persists.
+> > > >
+> > > > [...]
+> > >
+> > > Okay!
+> >
+> > Just checking - I applied and tested this atop 6.0-rc1, correct? Or did you
+> > want me to test it with the 762faee5a267 reverted? I guess what you're trying
+> > to test if a smaller queue than what's requested you'd want to do so without
+> > the problematic patch applied...
+> >
+> >
+> > Either way, I did this, and there are no issues that I could observe. No
+> > oopses, no broken networking. But:
+> >
+> > To make sure it does something I added a debugging printk - which doesn't show
+> > up. I assume this is at a point at least earlyprintk should work (which I see
+> > getting enabled via serial)?
+> >
 
-Fixed in v9.
+> Sorry if I was unclear.  I wanted to know whether the change somehow
+> exposes a driver bug or a GCP bug. So what I wanted to do is to test
+> this patch on top of *5.19*, not on top of the revert.
 
-> > +#include <linux/ctype.h>
-> 
-> What is used from this header?
+Right, the 5.19 part was clear, just the earlier test:
 
-Not used, fixed in v9.
+> > > > On 2022-08-15 11:40:59 -0400, Michael S. Tsirkin wrote:
+> > > > > OK so this gives us a quick revert as a solution for now.
+> > > > > Next, I would appreciate it if you just try this simple hack.
+> > > > > If it crashes we either have a long standing problem in virtio
+> > > > > code or more likely a gcp bug where it can't handle smaller
+> > > > > Thanks!
 
-> Are all entries supposed to be writeable? Are there entries that are
-> read-only?
+I wasn't sure about.
 
-The idea here was that we could use crossystem to update the cbmem entry
-when it makes changes, however, I do see this as an odd usage of the
-ABI, and in v9, I removed writing entirely and all entries are now
-read-only.
+After I didn't see any effect on 5.19 + your patch, I grew a bit suspicious
+and added the printks.
 
-If tools like crossystem need to maintain changes to this buffer, they
-should either maintain that copy themselves in /run or something, or
-daemonize and keep it in their process' memory.
 
-> > +       return cbmem_entry_setup(entry);
-> 
-> Is there a reason this isn't inlined here?
+> Yes I think printk should work here.
 
-cbmem_entry_setup was already a little long, so I just did this for
-reading clarity.  If you think it would be clearer just inlined here, I
-can change it (let me know).
+The reason the debug patch didn't change anything, and that my debug printk
+didn't show, is that gcp uses the legacy paths...
 
-> Need to set .owner = THIS_MODULE unless you use
-> module_coreboot_driver().
+If there were a bug in the legacy path, it'd explain why the problem only
+shows on gcp, and not in other situations.
 
-Done.
+I'll queue testing the legacy path with the equivalent change.
 
-> > +       if (!coreboot_kobj)
-> 
-> cbmem_kobj?
+- Andres
 
-Done.
+
+Greetings,
+
+Andres Freund

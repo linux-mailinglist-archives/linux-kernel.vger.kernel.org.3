@@ -2,90 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255345932D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 18:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 846EA5932D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 18:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232165AbiHOQRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 12:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35900 "EHLO
+        id S232039AbiHOQRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 12:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbiHOQQE (ORCPT
+        with ESMTP id S229981AbiHOQQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 12:16:04 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AD94EE00
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 09:16:03 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C3B691063;
-        Mon, 15 Aug 2022 09:16:03 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 19D003F70D;
-        Mon, 15 Aug 2022 09:16:01 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     will@kernel.org
-Cc:     joro@8bytes.org, iommu@lists.linux.dev, subkhankulov@ispras.ru,
-        khoroshilov@ispras.ru, linux-kernel@vger.kernel.org
-Subject: [PATCH] iommu/io-pgtable-arm: Remove iommu_dev==NULL special case
-Date:   Mon, 15 Aug 2022 17:15:55 +0100
-Message-Id: <e2095eeda305071cb56c2cb8ac8a82dc3bd4dcab.1660580155.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.36.1.dirty
+        Mon, 15 Aug 2022 12:16:57 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08E211166
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 09:16:52 -0700 (PDT)
+Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M5znG2mPTz67XGx;
+        Tue, 16 Aug 2022 00:12:02 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 15 Aug 2022 18:16:50 +0200
+Received: from [10.48.150.107] (10.48.150.107) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 15 Aug 2022 17:16:49 +0100
+Message-ID: <b83244b2-8881-bd74-a7e1-33006b42a636@huawei.com>
+Date:   Mon, 15 Aug 2022 17:16:48 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2 1/4] bus: hisi_lpc: Don't dereference fwnode handle
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "xuwei (O)" <xuwei5@huawei.com>
+References: <20220708210859.6774-1-andriy.shevchenko@linux.intel.com>
+ <f1d58027-099c-0486-0433-f97ec64ecfb7@huawei.com>
+ <CAHp75Vf1JmkJ06np18+iTb+U7RZtbFQTRg-COyc+-V6URSsfZA@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <CAHp75Vf1JmkJ06np18+iTb+U7RZtbFQTRg-COyc+-V6URSsfZA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.48.150.107]
+X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The special case to allow iommu_dev==NULL in __arm_lpae_alloc_pages() is
-confusing to static checkers (and possibly readers in general), since
-it's not obvious that that is only intended for the selftests. However
-it only serves to get around the dev_to_node() call, and we can easily
-fake up enough to make that work anyway, so let's simply remove this
-consideration from the normal flow and punt the responsibility over to
-the test harness itself.
+On 11/07/2022 09:59, Andy Shevchenko wrote:
+> On Mon, Jul 11, 2022 at 10:17 AM John Garry <john.garry@huawei.com> wrote:
+>>
+>> Andy, Thanks for this work. I am not sure if you are hoping that Rafael
+>> picks up this series also. JFYI, I would normally route any changes to
+>> this driver through the arm soc tree via xuwei5@huawei.com, but if we
+>> want to try that it may take an extra cycle now.
+> 
+> The series has been inspired by the recent work Rafael has done
+> regarding some ACPI API changes. It's not critical per se and can be
+> routed as the best for all maintainers.
+> 
+> 
 
-Reported-by: Rustam Subkhankulov <subkhankulov@ispras.ru>
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
- drivers/iommu/io-pgtable-arm.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Hi Andy,
 
-diff --git a/drivers/iommu/io-pgtable-arm.c b/drivers/iommu/io-pgtable-arm.c
-index 94ff319ae8ac..873a92bbd80c 100644
---- a/drivers/iommu/io-pgtable-arm.c
-+++ b/drivers/iommu/io-pgtable-arm.c
-@@ -200,8 +200,7 @@ static void *__arm_lpae_alloc_pages(size_t size, gfp_t gfp,
- 	void *pages;
- 
- 	VM_BUG_ON((gfp & __GFP_HIGHMEM));
--	p = alloc_pages_node(dev ? dev_to_node(dev) : NUMA_NO_NODE,
--			     gfp | __GFP_ZERO, order);
-+	p = alloc_pages_node(dev_to_node(dev), gfp | __GFP_ZERO, order);
- 	if (!p)
- 		return NULL;
- 
-@@ -1343,12 +1342,17 @@ static int __init arm_lpae_do_selftests(void)
- 	};
- 
- 	int i, j, pass = 0, fail = 0;
-+	struct device dev;
- 	struct io_pgtable_cfg cfg = {
- 		.tlb = &dummy_tlb_ops,
- 		.oas = 48,
- 		.coherent_walk = true,
-+		.iommu_dev = &dev,
- 	};
- 
-+	/* __arm_lpae_alloc_pages() merely needs dev_to_node() to work */
-+	set_dev_node(&dev, NUMA_NO_NODE);
-+
- 	for (i = 0; i < ARRAY_SIZE(pgsize); ++i) {
- 		for (j = 0; j < ARRAY_SIZE(ias); ++j) {
- 			cfg.pgsize_bitmap = pgsize[i];
--- 
-2.36.1.dirty
+I'll pick these up to be sent upstream by xu wei through the arm-soc 
+tree. I will also do 2x things:
+a. Send separate PoC series factor out the ACPI platform code, which I 
+assume you and Rafael will agree is not worth pursuing
+b. Add a patch to convert this driver to use 
+platform_device_register_full(). This obviously conflicts with a.
 
+Thanks,
+John
+
+BTW, A copy letter helps in scenarios like this....

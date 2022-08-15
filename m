@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6EC6594DF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C81594C52
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346011AbiHPAvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 20:51:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35504 "EHLO
+        id S1345162AbiHPAuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 20:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348298AbiHPAqQ (ORCPT
+        with ESMTP id S1347949AbiHPAqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 20:46:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BD5195801;
-        Mon, 15 Aug 2022 13:44:42 -0700 (PDT)
+        Mon, 15 Aug 2022 20:46:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C62195814;
+        Mon, 15 Aug 2022 13:44:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C84C61234;
-        Mon, 15 Aug 2022 20:44:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3BD7C433D7;
-        Mon, 15 Aug 2022 20:44:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 730F2B8114A;
+        Mon, 15 Aug 2022 20:44:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5D61C433C1;
+        Mon, 15 Aug 2022 20:44:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660596281;
-        bh=Ef3xeZgzahB89Xng1bgwTCNC5rqHxTuILhQ5Jh5It2M=;
+        s=korg; t=1660596284;
+        bh=ZkfPhjN2avtPFEMPzc3hA7bzstrynbp1NHZb4XLt1sc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RqwCtg2Wg369OxiG7MbDAgli7P2eAzMIHjDUTQvAzDqdS405NTktSNPVY8ddy4J+t
-         g8/pJhyyxaPaVE4kXsrSV57Quu6bha5aWo8lnX399K+wChn4mcgRnvBta1e4NQS8OZ
-         rzyyPwPBC9qt9Vh3K/fsjUbyNTCricH2utp4OkRs=
+        b=pNpgDJLKr51uXHOsUXfOCHq1wSUEhL7d62AFKBSCynqwtjQcx8+AuhQMKPNam43Nt
+         T7HMO1dLuVFPR+sKzH4OnASwtY47mAdkDwXFfj6ArMHGqWOBuHLm6Vw6OTWQvw6HPt
+         bkeFm7/PMoOT+++3TPg21KHGx5xLQ0P2KJ4Rb074=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Junbeom Yeom <junbeom.yeom@samsung.com>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Youngjin Gil <youngjin.gil@samsung.com>,
-        Jaewook Kim <jw5454.kim@samsung.com>,
-        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 1029/1157] f2fs: do not allow to decompress files have FI_COMPRESS_RELEASED
-Date:   Mon, 15 Aug 2022 20:06:25 +0200
-Message-Id: <20220815180521.104958541@linuxfoundation.org>
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 1030/1157] video: fbdev: vt8623fb: Check the size of screen before memset_io()
+Date:   Mon, 15 Aug 2022 20:06:26 +0200
+Message-Id: <20220815180521.157105252@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -58,73 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jaewook Kim <jw5454.kim@samsung.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit 90be48bd9d29ece3965e5e8b21499b6db166e57b ]
+[ Upstream commit ec0754c60217248fa77cc9005d66b2b55200ac06 ]
 
-If a file has FI_COMPRESS_RELEASED, all writes for it should not be
-allowed. However, as of now, in case of compress_mode=user, writes
-triggered by IOCTLs like F2FS_IOC_DE/COMPRESS_FILE are allowed unexpectly,
-which could crash that file.
-To fix it, let's do not allow F2FS_IOC_DE/COMPRESS_IOCTL if a file already
-has FI_COMPRESS_RELEASED flag.
+In the function vt8623fb_set_par(), the value of 'screen_size' is
+calculated by the user input. If the user provides the improper value,
+the value of 'screen_size' may larger than 'info->screen_size', which
+may cause the following bug:
 
-This is the reproduction process:
-1.  $ touch ./file
-2.  $ chattr +c ./file
-3.  $ dd if=/dev/random of=./file bs=4096 count=30 conv=notrunc
-4.  $ dd if=/dev/zero of=./file bs=4096 count=34 seek=30 conv=notrunc
-5.  $ sync
-6.  $ do_compress ./file      ; call F2FS_IOC_COMPRESS_FILE
-7.  $ get_compr_blocks ./file ; call F2FS_IOC_GET_COMPRESS_BLOCKS
-8.  $ release ./file          ; call F2FS_IOC_RELEASE_COMPRESS_BLOCKS
-9.  $ do_compress ./file      ; call F2FS_IOC_COMPRESS_FILE again
-10. $ get_compr_blocks ./file ; call F2FS_IOC_GET_COMPRESS_BLOCKS again
+[  583.339036] BUG: unable to handle page fault for address: ffffc90005000000
+[  583.339049] #PF: supervisor write access in kernel mode
+[  583.339052] #PF: error_code(0x0002) - not-present page
+[  583.339074] RIP: 0010:memset_orig+0x33/0xb0
+[  583.339110] Call Trace:
+[  583.339118]  vt8623fb_set_par+0x11cd/0x21e0
+[  583.339146]  fb_set_var+0x604/0xeb0
+[  583.339181]  do_fb_ioctl+0x234/0x670
+[  583.339209]  fb_ioctl+0xdd/0x130
 
-This reproduction process is tested in 128kb cluster size.
-You can find compr_blocks has a negative value.
+Fix the this by checking the value of 'screen_size' before memset_io().
 
-Fixes: 5fdb322ff2c2b ("f2fs: add F2FS_IOC_DECOMPRESS_FILE and F2FS_IOC_COMPRESS_FILE")
-
-Signed-off-by: Junbeom Yeom <junbeom.yeom@samsung.com>
-Signed-off-by: Sungjong Seo <sj1557.seo@samsung.com>
-Signed-off-by: Youngjin Gil <youngjin.gil@samsung.com>
-Signed-off-by: Jaewook Kim <jw5454.kim@samsung.com>
-Reviewed-by: Chao Yu <chao@kernel.org>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Fixes: 558b7bd86c32 ("vt8623fb: new framebuffer driver for VIA VT8623")
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/file.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/video/fbdev/vt8623fb.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index 110c459c78b6..fc0f30738b21 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -3938,6 +3938,11 @@ static int f2fs_ioc_decompress_file(struct file *filp, unsigned long arg)
- 		goto out;
- 	}
+diff --git a/drivers/video/fbdev/vt8623fb.c b/drivers/video/fbdev/vt8623fb.c
+index a92a8c670cf0..4274c6efb249 100644
+--- a/drivers/video/fbdev/vt8623fb.c
++++ b/drivers/video/fbdev/vt8623fb.c
+@@ -507,6 +507,8 @@ static int vt8623fb_set_par(struct fb_info *info)
+ 			 (info->var.vmode & FB_VMODE_DOUBLE) ? 2 : 1, 1,
+ 			 1, info->node);
  
-+	if (is_inode_flag_set(inode, FI_COMPRESS_RELEASED)) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
- 	ret = filemap_write_and_wait_range(inode->i_mapping, 0, LLONG_MAX);
- 	if (ret)
- 		goto out;
-@@ -4005,6 +4010,11 @@ static int f2fs_ioc_compress_file(struct file *filp, unsigned long arg)
- 		goto out;
- 	}
++	if (screen_size > info->screen_size)
++		screen_size = info->screen_size;
+ 	memset_io(info->screen_base, 0x00, screen_size);
  
-+	if (is_inode_flag_set(inode, FI_COMPRESS_RELEASED)) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
- 	ret = filemap_write_and_wait_range(inode->i_mapping, 0, LLONG_MAX);
- 	if (ret)
- 		goto out;
+ 	/* Device and screen back on */
 -- 
 2.35.1
 

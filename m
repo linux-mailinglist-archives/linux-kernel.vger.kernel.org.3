@@ -2,42 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF114592E2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B035B592E2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbiHOLZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 07:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44114 "EHLO
+        id S231297AbiHOL1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 07:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbiHOLZ4 (ORCPT
+        with ESMTP id S229554AbiHOL1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 07:25:56 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC41023BEE;
-        Mon, 15 Aug 2022 04:25:54 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oNYEC-0003gE-T4; Mon, 15 Aug 2022 13:25:52 +0200
-Message-ID: <2004c259-6ec7-76d9-cad6-7c381dbfcf0c@leemhuis.info>
-Date:   Mon, 15 Aug 2022 13:25:52 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: stalling IO regression in linux 5.12
-Content-Language: en-US
-To:     Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
-        Linux-RAID <linux-raid@vger.kernel.org>,
-        linux-block@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <e38aa76d-6034-4dde-8624-df1745bb17fc@www.fastmail.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <e38aa76d-6034-4dde-8624-df1745bb17fc@www.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1660562754;e5363ca9;
-X-HE-SMSGID: 1oNYEC-0003gE-T4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        Mon, 15 Aug 2022 07:27:31 -0400
+Received: from n169-112.mail.139.com (n169-112.mail.139.com [120.232.169.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C9923BF0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 04:27:27 -0700 (PDT)
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM:                                                                                        
+X-RM-SPAM-FLAG: 00000000
+Received: from localhost.localdomain (unknown[61.152.154.78])
+        by rmsmtp-lg-appmail-21-12024 (RichMail) with SMTP id 2ef862fa2d9769e-ef021;
+        Mon, 15 Aug 2022 19:27:23 +0800 (CST)
+X-RM-TRANSID: 2ef862fa2d9769e-ef021
+From:   Kevin Lu <luminlong@139.com>
+To:     broonie@kernel.org
+Cc:     linux-kernel@vger.kernel.org, shenghao-ding@ti.com,
+        kevin-lu@ti.com, Kevin Lu <luminlong@139.com>
+Subject: [PATCH v1 1/1] sound: Add a new kcontrol
+Date:   Mon, 15 Aug 2022 19:27:15 +0800
+Message-Id: <20220815112715.21617-1-luminlong@139.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,101 +39,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: I'm adding this regression report to the list of tracked
-regressions; all text from me you find below is based on a few templates
-paragraphs you might have encountered already already in similar form.]
+Add a new kcontrol for phase calib
 
-Hi, this is your Linux kernel regression tracker.
+Signed-off-by: Kevin Lu <luminlong@139.com>
+---
+ sound/soc/codecs/tlv320adcx140.c | 59 ++++++++++++++++++++++++++++++++
+ sound/soc/codecs/tlv320adcx140.h |  1 +
+ 2 files changed, 60 insertions(+)
 
-On 10.08.22 18:35, Chris Murphy wrote:
-> CPU: Intel E5-2680 v3
-> RAM: 128 G
-> 02:00.0 RAID bus controller [0104]: Broadcom / LSI MegaRAID SAS-3 3108 [Invader] [1000:005d] (rev 02), using megaraid_sas driver
-> 8 Disks: TOSHIBA AL13SEB600
-> 
-> 
-> The problem exhibits as increasing load, increasing IO pressure (PSI), and actual IO goes to zero. It never happens on kernel 5.11 series, and always happens after 5.12-rc1 and persists through 5.18.0. There's a new mix of behaviors with 5.19, I suspect the mm improvements in this series might be masking the problem.
-> 
-> The workload involves openqa, which spins up 30 qemu-kvm instances, and does a bunch of tests, generating quite a lot of writes: qcow2 files, and video in the form of many screenshots, and various log files, for each VM. These VMs are each in their own cgroup. As the problem begins, I see increasing IO pressure, and decreasing IO, for each qemu instance's cgroup, and the cgroups for httpd, journald, auditd, and postgresql. IO pressure goes to nearly ~99% and IO is literally 0.
-> 
-> The problem left unattended to progress will eventually result in a completely unresponsive system, with no kernel messages. It reproduces in the following configurations, the first two I provide links to full dmesg with sysrq+w:
-> 
-> btrfs raid10 (native) on plain partitions [1]
-> btrfs single/dup on dmcrypt on mdadm raid 10 and parity raid [2]
-> XFS on dmcrypt on mdadm raid10 or parity raid
-> 
-> I've started a bisect, but for some reason I haven't figured out I've started getting compiled kernels that don't boot the hardware. The failure is very early on such that the UUID for the root file system isn't found, but not much to go on as to why.[3] I have tested the first and last skipped commits in the bisect log below, they successfully boot a VM but not the hardware.
-> 
-> Anyway, I'm kinda stuck at this point trying to narrow it down further. Any suggestions? Thanks.
-> 
-> [1] btrfs raid10, plain partitions
-> https://drive.google.com/file/d/1-oT3MX-hHYtQqI0F3SpgPjCIDXXTysLU/view?usp=sharing
-> 
-> [2] btrfs single/dup, dmcrypt, mdadm raid10
-> https://drive.google.com/file/d/1m_T3YYaEjBKUROz6dHt5_h92ZVRji9FM/view?usp=sharing
-> 
-> [3] 
-> $ git bisect log
-> git bisect start
-> # status: waiting for both good and bad commits
-> # bad: [c03c21ba6f4e95e406a1a7b4c34ef334b977c194] Merge tag 'keys-misc-20210126' of git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs
-> git bisect bad c03c21ba6f4e95e406a1a7b4c34ef334b977c194
-> # status: waiting for good commit(s), bad commit known
-> # good: [f40ddce88593482919761f74910f42f4b84c004b] Linux 5.11
-> git bisect good f40ddce88593482919761f74910f42f4b84c004b
-> # bad: [df24212a493afda0d4de42176bea10d45825e9a0] Merge tag 's390-5.12-1' of git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux
-> git bisect bad df24212a493afda0d4de42176bea10d45825e9a0
-> # good: [82851fce6107d5a3e66d95aee2ae68860a732703] Merge tag 'arm-dt-v5.12' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
-> git bisect good 82851fce6107d5a3e66d95aee2ae68860a732703
-> # good: [99f1a5872b706094ece117368170a92c66b2e242] Merge tag 'nfsd-5.12' of git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-> git bisect good 99f1a5872b706094ece117368170a92c66b2e242
-> # bad: [9eef02334505411667a7b51a8f349f8c6c4f3b66] Merge tag 'locking-core-2021-02-17' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
-> git bisect bad 9eef02334505411667a7b51a8f349f8c6c4f3b66
-> # bad: [9820b4dca0f9c6b7ab8b4307286cdace171b724d] Merge tag 'for-5.12/drivers-2021-02-17' of git://git.kernel.dk/linux-block
-> git bisect bad 9820b4dca0f9c6b7ab8b4307286cdace171b724d
-> # good: [bd018bbaa58640da786d4289563e71c5ef3938c7] Merge tag 'for-5.12/libata-2021-02-17' of git://git.kernel.dk/linux-block
-> git bisect good bd018bbaa58640da786d4289563e71c5ef3938c7
-> # skip: [203c018079e13510f913fd0fd426370f4de0fd05] Merge branch 'md-next' of https://git.kernel.org/pub/scm/linux/kernel/git/song/md into for-5.12/drivers
-> git bisect skip 203c018079e13510f913fd0fd426370f4de0fd05
-> # skip: [49d1ec8573f74ff1e23df1d5092211de46baa236] block: manage bio slab cache by xarray
-> git bisect skip 49d1ec8573f74ff1e23df1d5092211de46baa236
-> # bad: [73d90386b559d6f4c3c5db5e6bb1b68aae8fd3e7] nvme: cleanup zone information initialization
-> git bisect bad 73d90386b559d6f4c3c5db5e6bb1b68aae8fd3e7
-> # skip: [71217df39dc67a0aeed83352b0d712b7892036a2] block, bfq: make waker-queue detection more robust
-> git bisect skip 71217df39dc67a0aeed83352b0d712b7892036a2
-> # bad: [8358c28a5d44bf0223a55a2334086c3707bb4185] block: fix memory leak of bvec
-> git bisect bad 8358c28a5d44bf0223a55a2334086c3707bb4185
-> # skip: [3a905c37c3510ea6d7cfcdfd0f272ba731286560] block: skip bio_check_eod for partition-remapped bios
-> git bisect skip 3a905c37c3510ea6d7cfcdfd0f272ba731286560
-> # skip: [3c337690d2ebb7a01fa13bfa59ce4911f358df42] block, bfq: avoid spurious switches to soft_rt of interactive queues
-> git bisect skip 3c337690d2ebb7a01fa13bfa59ce4911f358df42
-> # skip: [3e1a88ec96259282b9a8b45c3f1fda7a3ff4f6ea] bio: add a helper calculating nr segments to alloc
-> git bisect skip 3e1a88ec96259282b9a8b45c3f1fda7a3ff4f6ea
-> # skip: [4eb1d689045552eb966ebf25efbc3ce648797d96] blk-crypto: use bio_kmalloc in blk_crypto_clone_bio
-> git bisect skip 4eb1d689045552eb966ebf25efbc3ce648797d96
+diff --git a/sound/soc/codecs/tlv320adcx140.c b/sound/soc/codecs/tlv320adcx140.c
+index 0b72965..802c8e4 100644
+--- a/sound/soc/codecs/tlv320adcx140.c
++++ b/sound/soc/codecs/tlv320adcx140.c
+@@ -31,6 +31,7 @@ struct adcx140_priv {
+ 	struct device *dev;
+ 
+ 	bool micbias_vg;
++	bool phase_calib_on;
+ 
+ 	unsigned int dai_fmt;
+ 	unsigned int slot_width;
+@@ -592,6 +593,52 @@ static const struct snd_soc_dapm_route adcx140_audio_map[] = {
+ 	{"MIC4M Input Mux", "Digital", "MIC4M"},
+ };
+ 
++#define ADCX140_PHASE_CALIB_SWITCH(xname) {\
++	.iface = SNDRV_CTL_ELEM_IFACE_MIXER, .name = (xname), \
++	.access = SNDRV_CTL_ELEM_ACCESS_READWRITE,\
++	.info = adcx140_phase_calib_info, \
++	.get = adcx140_phase_calib_get, \
++	.put = adcx140_phase_calib_put}
++
++static int adcx140_phase_calib_info(struct snd_kcontrol *kcontrol,
++	struct snd_ctl_elem_info *uinfo)
++{
++	uinfo->type = SNDRV_CTL_ELEM_TYPE_BOOLEAN;
++	uinfo->count = 1;
++	uinfo->value.integer.min = 0;
++	uinfo->value.integer.max = 1;
++	return 0;
++}
++
++static int adcx140_phase_calib_get(struct snd_kcontrol *kcontrol,
++	struct snd_ctl_elem_value *value)
++{
++	struct snd_soc_component *codec =
++		snd_soc_kcontrol_component(kcontrol);
++	struct adcx140_priv *adcx140 = snd_soc_component_get_drvdata(codec);
++
++	value->value.integer.value[0] = adcx140->phase_calib_on ? 1 : 0;
++
++
++	return 0;
++}
++
++static int adcx140_phase_calib_put(struct snd_kcontrol *kcontrol,
++	struct snd_ctl_elem_value *value)
++{
++	struct snd_soc_component *codec
++		= snd_soc_kcontrol_component(kcontrol);
++	struct adcx140_priv *adcx140 = snd_soc_component_get_drvdata(codec);
++
++	bool v = value->value.integer.value[0] ? true : false;
++
++	if (adcx140->phase_calib_on != v) {
++		adcx140->phase_calib_on = v;
++		return 1;
++	}
++	return 0;
++}
++
+ static const struct snd_kcontrol_new adcx140_snd_controls[] = {
+ 	SOC_SINGLE_TLV("Analog CH1 Mic Gain Volume", ADCX140_CH1_CFG1, 2, 42, 0,
+ 			adc_tlv),
+@@ -628,6 +675,7 @@ static const struct snd_kcontrol_new adcx140_snd_controls[] = {
+ 			0, 0xff, 0, dig_vol_tlv),
+ 	SOC_SINGLE_TLV("Digital CH8 Out Volume", ADCX140_CH8_CFG2,
+ 			0, 0xff, 0, dig_vol_tlv),
++	ADCX140_PHASE_CALIB_SWITCH("Adcx140 Phase Calib Switch"),
+ };
+ 
+ static int adcx140_reset(struct adcx140_priv *adcx140)
+@@ -653,6 +701,8 @@ static int adcx140_reset(struct adcx140_priv *adcx140)
+ static void adcx140_pwr_ctrl(struct adcx140_priv *adcx140, bool power_state)
+ {
+ 	int pwr_ctrl = 0;
++	int ret = 0;
++	struct snd_soc_component *component = adcx140->component;
+ 
+ 	if (power_state)
+ 		pwr_ctrl = ADCX140_PWR_CFG_ADC_PDZ | ADCX140_PWR_CFG_PLL_PDZ;
+@@ -660,6 +710,14 @@ static void adcx140_pwr_ctrl(struct adcx140_priv *adcx140, bool power_state)
+ 	if (adcx140->micbias_vg && power_state)
+ 		pwr_ctrl |= ADCX140_PWR_CFG_BIAS_PDZ;
+ 
++	if (pwr_ctrl) {
++		ret = regmap_write(adcx140->regmap, ADCX140_PHASE_CALIB,
++			adcx140->phase_calib_on ? 0x00 : 0x40);
++		if (ret)
++			dev_err(component->dev, "%s: register write error %d\n",
++				__func__, ret);
++	}
++
+ 	regmap_update_bits(adcx140->regmap, ADCX140_PWR_CFG,
+ 			   ADCX140_PWR_CTRL_MSK, pwr_ctrl);
+ }
+@@ -1098,6 +1156,7 @@ static int adcx140_i2c_probe(struct i2c_client *i2c)
+ 	if (!adcx140)
+ 		return -ENOMEM;
+ 
++	adcx140->phase_calib_on = false;
+ 	adcx140->dev = &i2c->dev;
+ 
+ 	adcx140->gpio_reset = devm_gpiod_get_optional(adcx140->dev,
+diff --git a/sound/soc/codecs/tlv320adcx140.h b/sound/soc/codecs/tlv320adcx140.h
+index d7d4e3a..827f373 100644
+--- a/sound/soc/codecs/tlv320adcx140.h
++++ b/sound/soc/codecs/tlv320adcx140.h
+@@ -90,6 +90,7 @@
+ #define ADCX140_PWR_CFG		0x75
+ #define ADCX140_DEV_STS0	0x76
+ #define ADCX140_DEV_STS1	0x77
++#define ADCX140_PHASE_CALIB		0X7b
+ 
+ #define ADCX140_RESET	BIT(0)
+ 
+-- 
+2.17.1
 
-Thanks for the report. To be sure below issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
-tracking bot:
 
-#regzbot ^introduced v5.11..v5.12-rc1
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply -- ideally with also
-telling regzbot about it, as explained here:
-https://linux-regtracking.leemhuis.info/tracked-regression/
-
-Reminder for developers: When fixing the issue, add 'Link:' tags
-pointing to the report (the mail this one replies to), as explained for
-in the Linux kernel's documentation; above webpage explains why this is
-important for tracked regressions.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.

@@ -2,90 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E6C59303B
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D91F593040
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241766AbiHONuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 09:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33502 "EHLO
+        id S232717AbiHONwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 09:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241070AbiHONuR (ORCPT
+        with ESMTP id S229994AbiHONwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 09:50:17 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE551CD;
-        Mon, 15 Aug 2022 06:50:15 -0700 (PDT)
-Received: from mail-ej1-f46.google.com ([209.85.218.46]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N5FQJ-1nPSt90nTR-011BOp; Mon, 15 Aug 2022 15:50:14 +0200
-Received: by mail-ej1-f46.google.com with SMTP id w19so13631553ejc.7;
-        Mon, 15 Aug 2022 06:50:14 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1filHEkzjcOLr533Lo0IZNQNKLeAaoBmDs8G/QoH0dhOQp1ZkP
-        tX5J8ZeFiVlkB+5AFg2iCzd+K6YLy6oXAOGq5pM=
-X-Google-Smtp-Source: AA6agR4ddlWu40vTUv/Ln9AUKIE3uheuuPTA89Jfa8ZPdbeeYmoqRoIcNERXQHiVgSCeCa+oqoK4aQ5z0iofk+G18YM=
-X-Received: by 2002:a17:907:7609:b0:730:d70a:1efc with SMTP id
- jx9-20020a170907760900b00730d70a1efcmr10568938ejc.766.1660571413808; Mon, 15
- Aug 2022 06:50:13 -0700 (PDT)
+        Mon, 15 Aug 2022 09:52:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46BD9CE32
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 06:52:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660571553;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=A0Oy07t9HeUyM/chaHP6TWWJCl778sh8kflz1rnE6aw=;
+        b=eDnA3d+heaobCI949ZPWjhndOz0O/Zl8eOVMDAXSAtrjy/EoNPOAiSbGKMmnRrjAs6suSb
+        0KQjM+7Xe46x09zLDxYxV/7ywTdqNpWqzSAGT/m2XOe5LKW9SOwsnRPQHbNcgUbO6r3oHh
+        dKo1P/9I9rMxTsG3nzfuw1MDDIImuh8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-327-PUbTJFO-OteY8AhLfq8DEw-1; Mon, 15 Aug 2022 09:52:29 -0400
+X-MC-Unique: PUbTJFO-OteY8AhLfq8DEw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C74CB101A592;
+        Mon, 15 Aug 2022 13:52:28 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DB5002166B29;
+        Mon, 15 Aug 2022 13:52:27 +0000 (UTC)
+Message-ID: <401bae73-3063-e0ab-c288-2c6e3be75fc5@redhat.com>
+Date:   Mon, 15 Aug 2022 09:52:27 -0400
 MIME-Version: 1.0
-References: <20220815131642.35116-1-tony@atomide.com>
-In-Reply-To: <20220815131642.35116-1-tony@atomide.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 15 Aug 2022 15:49:58 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a39YQNHjhNXAqEg7i3httWx+Ofx8v-xNY-7NQKxnr7OHg@mail.gmail.com>
-Message-ID: <CAK8P3a39YQNHjhNXAqEg7i3httWx+Ofx8v-xNY-7NQKxnr7OHg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] clocksource/drivers/timer-ti-dm: Fix compile test warning
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        kernel test robot <lkp@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:P3jcTYmcnM0yOwlbagpqCTDdTPMrBkEmp4UlughW0gYvL+Mxk6n
- B2hcOByPZgew/HDEJABCfcIpXp9gxGwXyza8f4btL1AdFkOun5DTiT6m8FBmERZSvqX3zKl
- /4rrCTUuLg3+M4wDC4V6AYNcaEMqSdeZWOdgzMLVY03XioSQ4qtyFNwf+UXfLFeabxFjsa9
- mYAcNQtnMlGViL6Q4wGjA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:tPvhK98+KLA=:f0pzGamikhSLTDBgxIdk6b
- +3ySwS5Fv9C2n/m9XQ+m+41XADZ4XLfsSgsBfEcFPanDa3yNCW/rl6ssgLvT1PS8DygCne+mi
- 89MJ2eZNlKghUwQjpT32Sy9/N3tsdMtUxwtJJdPYiXZO32sN/O5u3/ni1uFjlPn1U8+NmvF7V
- rCfOYB1cVmdj+RVTSj9SpgzYIqKulqXfPUnn/8Af4tfKU4Jg2P3INinr4ciLUA9FKpzewZnjK
- aVA5pNvC3tLuYWwbzG6tEzyzqNoTCmrcsUqjpcPn8PESQ8Kx4hzU8DJ9YtK3m9fvBx7pLPih/
- rF+2DSCVJK3Z8bY2R+toBAshsXDjvDZjYMMZ8hfbc6lKzzGj8xpWWNUowHE777hiogoAZWhi7
- 9ugzzGLTIkcDZu3RwopKjMyGOpcZ8dYVdFVE6GLxO/0DLBqQpiJhtidTiCy+XOPh5csErAtSV
- ++Ez3Kmw1s57Nt7nBmnsSYMpSXC9lbv/Gjs5oACP4YP6BKOuvdO8G5TQxzLWstq5KXvGhElB8
- UfwzClfqHuTmWw7wnNrwtb7kTy4+oQqQYy2W6i5rNRPEM7ayNzCfuB31L1RSOHBnDd1AVK8Xu
- 6+ob/vkW2SvARqedAXnqHFF7/T4UHHXFNio/msXpdTRqxsPtbU/AHEVE1/pa7TcVpfvkHKV9O
- r7TWj9zhZxqjst/owd58bdTblfW/3eOIE9hDmyjvjt+5K2GAdfYjhZnRrGGH9JndmYaiS5k1v
- R5eIAHVDPcSk4Bh+5ZpqIcC9Aq6FjVADNce1U0qUYmHohKsX0sOHQaxRMrrgsTdSVvqb2x+co
- v5LfpSJfzArLhDsoU8S6pcRz+2x6cnhT+Rxwzq4/LZ37n/esSwMfthBK5QHX0BsYt/NLApgbS
- +76VL2gGoFAYtrvanOFA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 1/3] sched: Use user_cpus_ptr for saving user provided
+ cpumask in sched_setaffinity()
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Will Deacon <will@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20220812203929.364341-1-longman@redhat.com>
+ <20220812203929.364341-2-longman@redhat.com>
+ <YvoKa3tbOaszsp1y@worktop.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YvoKa3tbOaszsp1y@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 3:16 PM Tony Lindgren <tony@atomide.com> wrote:
->
-> We can get a warning with COMPILE_TEST enabled for omap_timer_match
-> for 'omap_timer_match' defined but not used.
->
-> Fixes: ab0bbef3ae0f ("clocksource/drivers/timer-ti-dm: Make timer selectable for ARCH_K3")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Tony Lindgren <tony@atomide.com>
->
-> ---
->
-> Changes since v1:
->
-> - Remove of_match_ptr() instead of adding __maybe_unused as suggested by Arnd
->
 
-Looks good to me,
+On 8/15/22 04:57, Peter Zijlstra wrote:
+> On Fri, Aug 12, 2022 at 04:39:27PM -0400, Waiman Long wrote:
+>> The user_cpus_ptr field is added by commit b90ca8badbd1 ("sched:
+>> Introduce task_struct::user_cpus_ptr to track requested affinity"). It
+>> is currently used only by arm64 arch due to possible asymmetric cpu
+>> setup. This patch extends its usage to save user provided cpumask when
+>> sched_setaffinity() is called for all arches.
+>>
+>> To preserve the existing arm64 use case, a new cpus_affinity_set flag is
+>> added to differentiate if user_cpus_ptr is set up by sched_setaffinity()
+>> or by force_compatible_cpus_allowed_ptr(). user_cpus_ptr
+>> set by sched_setaffinity() has priority and won't be
+>> overwritten by force_compatible_cpus_allowed_ptr() or
+>> relax_compatible_cpus_allowed_ptr().
+> What why ?! The only possible case where
+> restrict_cpus_allowed_ptr() will now need that weird new state is when
+> the affinity has never been set before, in that case cpus_ptr should be
+> possible_mask.
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Since I don't have a full history for this particular patch series that 
+add user_cpus_ptr, I am hesitant to change the current behavior for 
+arm64 systems. However, given the statement that user_cpus_ptr is for 
+tracking "requested affinity" which I assume is when user applications 
+call sched_setaffinity(). It does make sense we may not really need this 
+if sched_setaffinity() is never called.
+
+
+> Please just make a single consistent rule and don't make weird corner
+> cases like this.
+
+I will take a closer look to try to simplify the rule here.
+
+Cheers,
+Longman
+

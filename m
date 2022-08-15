@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A221594512
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 00:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2F65944CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 00:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345568AbiHOV7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 17:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
+        id S245474AbiHOVxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 17:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347295AbiHOV5n (ORCPT
+        with ESMTP id S1350406AbiHOVvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 17:57:43 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89E761D6E;
-        Mon, 15 Aug 2022 12:34:43 -0700 (PDT)
+        Mon, 15 Aug 2022 17:51:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4927E105206;
+        Mon, 15 Aug 2022 12:32:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 970DCCE1262;
-        Mon, 15 Aug 2022 19:34:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76869C433D6;
-        Mon, 15 Aug 2022 19:34:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22AA86111E;
+        Mon, 15 Aug 2022 19:32:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10542C433C1;
+        Mon, 15 Aug 2022 19:32:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660592074;
-        bh=MuUvQMQtUS6FdxlLbNBEqXsEkyLbc/1N/PGO89GjuTc=;
+        s=korg; t=1660591951;
+        bh=mySok1vOxZ8AobUEstS65nGK91a8yPiksYjee/UxkvA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ProOOPoe0ONWG0lbgcw3vnKzgMglyw2S7q/WjxVVivt+EGTkExuyB9anIgIJ8ukDK
-         D4+DIe+xGIcIp/1rQML7cJfu2jb0OI69bYDELoVPGq3ilZz7ecoUqZ9y+WKks95719
-         3TAOZCn6zXl4xDbNr4yHctE8Zi+Wqydu+6kuf0t8=
+        b=WuMKpeeWDUilIaNGALrxiDSYuOmmLK1vR6N9Y7U0Xa4gcghG/lmvRTXu43JqNy40j
+         F6SfgCfn4QkEy6ZrhaAWhj684DqRLT6WG2KJSGfzMWZXseW9bz//6IjXbf7A6u3YYC
+         sN5vUz9zhEF9owkdTdqdubvTYd3hybxdBHM7bIM8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        stable@vger.kernel.org, Eric Li <ercli@ucdavis.edu>,
+        Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.19 0024/1157] KVM: nVMX: Snapshot pre-VM-Enter DEBUGCTL for !nested_run_pending case
-Date:   Mon, 15 Aug 2022 19:49:40 +0200
-Message-Id: <20220815180440.389253034@linuxfoundation.org>
+Subject: [PATCH 5.19 0035/1157] KVM: nVMX: Inject #UD if VMXON is attempted with incompatible CR0/CR4
+Date:   Mon, 15 Aug 2022 19:49:51 +0200
+Message-Id: <20220815180440.842609098@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -56,51 +57,73 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sean Christopherson <seanjc@google.com>
 
-commit 764643a6be07445308e492a528197044c801b3ba upstream.
+commit c7d855c2aff2d511fd60ee2e356134c4fb394799 upstream.
 
-If a nested run isn't pending, snapshot vmcs01.GUEST_IA32_DEBUGCTL
-irrespective of whether or not VM_ENTRY_LOAD_DEBUG_CONTROLS is set in
-vmcs12.  When restoring nested state, e.g. after migration, without a
-nested run pending, prepare_vmcs02() will propagate
-nested.vmcs01_debugctl to vmcs02, i.e. will load garbage/zeros into
-vmcs02.GUEST_IA32_DEBUGCTL.
+Inject a #UD if L1 attempts VMXON with a CR0 or CR4 that is disallowed
+per the associated nested VMX MSRs' fixed0/1 settings.  KVM cannot rely
+on hardware to perform the checks, even for the few checks that have
+higher priority than VM-Exit, as (a) KVM may have forced CR0/CR4 bits in
+hardware while running the guest, (b) there may incompatible CR0/CR4 bits
+that have lower priority than VM-Exit, e.g. CR0.NE, and (c) userspace may
+have further restricted the allowed CR0/CR4 values by manipulating the
+guest's nested VMX MSRs.
 
-If userspace restores nested state before MSRs, then loading garbage is a
-non-issue as loading DEBUGCTL will also update vmcs02.  But if usersepace
-restores MSRs first, then KVM is responsible for propagating L2's value,
-which is actually thrown into vmcs01, into vmcs02.
+Note, despite a very strong desire to throw shade at Jim, commit
+70f3aac964ae ("kvm: nVMX: Remove superfluous VMX instruction fault checks")
+is not to blame for the buggy behavior (though the comment...).  That
+commit only removed the CR0.PE, EFLAGS.VM, and COMPATIBILITY mode checks
+(though it did erroneously drop the CPL check, but that has already been
+remedied).  KVM may force CR0.PE=1, but will do so only when also
+forcing EFLAGS.VM=1 to emulate Real Mode, i.e. hardware will still #UD.
 
-Restoring L2 MSRs into vmcs01, i.e. loading all MSRs before nested state
-is all kinds of bizarre and ideally would not be supported.  Sadly, some
-VMMs do exactly that and rely on KVM to make things work.
-
-Note, there's still a lurking SMM bug, as propagating vmcs01's DEBUGCTL
-to vmcs02 across RSM may corrupt L2's DEBUGCTL.  But KVM's entire VMX+SMM
-emulation is flawed as SMI+RSM should not toouch _any_ VMCS when use the
-"default treatment of SMIs", i.e. when not using an SMI Transfer Monitor.
-
-Link: https://lore.kernel.org/all/Yobt1XwOfb5M6Dfa@google.com
-Fixes: 8fcc4b5923af ("kvm: nVMX: Introduce KVM_CAP_NESTED_STATE")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216033
+Fixes: ec378aeef9df ("KVM: nVMX: Implement VMXON and VMXOFF")
+Reported-by: Eric Li <ercli@ucdavis.edu>
 Cc: stable@vger.kernel.org
 Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20220614215831.3762138-3-seanjc@google.com>
+Message-Id: <20220607213604.3346000-4-seanjc@google.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/vmx/nested.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/x86/kvm/vmx/nested.c |   23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
 
 --- a/arch/x86/kvm/vmx/nested.c
 +++ b/arch/x86/kvm/vmx/nested.c
-@@ -3373,7 +3373,8 @@ enum nvmx_vmentry_status nested_vmx_ente
- 	if (likely(!evaluate_pending_interrupts) && kvm_vcpu_apicv_active(vcpu))
- 		evaluate_pending_interrupts |= vmx_has_apicv_interrupt(vcpu);
+@@ -4968,20 +4968,25 @@ static int handle_vmon(struct kvm_vcpu *
+ 		| FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX;
  
--	if (!(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_DEBUG_CONTROLS))
-+	if (!vmx->nested.nested_run_pending ||
-+	    !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_DEBUG_CONTROLS))
- 		vmx->nested.vmcs01_debugctl = vmcs_read64(GUEST_IA32_DEBUGCTL);
- 	if (kvm_mpx_supported() &&
- 	    (!vmx->nested.nested_run_pending ||
+ 	/*
+-	 * The Intel VMX Instruction Reference lists a bunch of bits that are
+-	 * prerequisite to running VMXON, most notably cr4.VMXE must be set to
+-	 * 1 (see vmx_is_valid_cr4() for when we allow the guest to set this).
+-	 * Otherwise, we should fail with #UD.  But most faulting conditions
+-	 * have already been checked by hardware, prior to the VM-exit for
+-	 * VMXON.  We do test guest cr4.VMXE because processor CR4 always has
+-	 * that bit set to 1 in non-root mode.
++	 * Note, KVM cannot rely on hardware to perform the CR0/CR4 #UD checks
++	 * that have higher priority than VM-Exit (see Intel SDM's pseudocode
++	 * for VMXON), as KVM must load valid CR0/CR4 values into hardware while
++	 * running the guest, i.e. KVM needs to check the _guest_ values.
++	 *
++	 * Rely on hardware for the other two pre-VM-Exit checks, !VM86 and
++	 * !COMPATIBILITY modes.  KVM may run the guest in VM86 to emulate Real
++	 * Mode, but KVM will never take the guest out of those modes.
+ 	 */
+-	if (!kvm_read_cr4_bits(vcpu, X86_CR4_VMXE)) {
++	if (!nested_host_cr0_valid(vcpu, kvm_read_cr0(vcpu)) ||
++	    !nested_host_cr4_valid(vcpu, kvm_read_cr4(vcpu))) {
+ 		kvm_queue_exception(vcpu, UD_VECTOR);
+ 		return 1;
+ 	}
+ 
+-	/* CPL=0 must be checked manually. */
++	/*
++	 * CPL=0 and all other checks that are lower priority than VM-Exit must
++	 * be checked manually.
++	 */
+ 	if (vmx_get_cpl(vcpu)) {
+ 		kvm_inject_gp(vcpu, 0);
+ 		return 1;
 
 

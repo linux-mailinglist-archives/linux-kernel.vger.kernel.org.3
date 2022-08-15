@@ -2,129 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA6C593287
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A6B59328A
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:54:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbiHOPxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42654 "EHLO
+        id S231975AbiHOPyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiHOPxl (ORCPT
+        with ESMTP id S229515AbiHOPyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:53:41 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8C7167F0;
-        Mon, 15 Aug 2022 08:53:40 -0700 (PDT)
-Received: from mail-ej1-f52.google.com ([209.85.218.52]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MoNy4-1nZ8Nm252u-00olLR; Mon, 15 Aug 2022 17:53:38 +0200
-Received: by mail-ej1-f52.google.com with SMTP id dc19so14207471ejb.12;
-        Mon, 15 Aug 2022 08:53:38 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2NTseA6Pvmml7k4+2NCcIgxy34kaHbmUZgLkzlMwlchjndPuYm
-        K/BtvcXzQxpTDaS7ImyVyofw/x+u9VAnj1WesUY=
-X-Google-Smtp-Source: AA6agR4kQH9OPkAoSzw4z/FBPTVCt5TcLJ18r0latd6JdISl5KaD+R3rrNlWHfqDqar+qTRK7WgfYWLgQGqiKgJkzhc=
-X-Received: by 2002:a17:907:7609:b0:730:d70a:1efc with SMTP id
- jx9-20020a170907760900b00730d70a1efcmr10863122ejc.766.1660578818066; Mon, 15
- Aug 2022 08:53:38 -0700 (PDT)
+        Mon, 15 Aug 2022 11:54:06 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DAF17077
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:54:06 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id s5-20020a17090a13c500b001f4da9ffe5fso14801805pjf.5
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:54:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=rsucpEsc5D3CWajO1pTl308RBgWxNbG9t1oS7UmiC60=;
+        b=c9IES/GUi/YRTnq8ntFq9iy84T/2qbs+aIfYv0AyQOVaTtypUcAHdLJICt2zAB4X/B
+         4dYwLy7OnU1nSzGDcBqno4X26p9T2Rg3umFQoxDVNUxYdxj86i442PX0qvGtXBZBJT5O
+         3sQ5JTHhnGZBS32J/RkD8vUQ6rKmI+qWTjOgzPlT90vKfz4HJTgGYUiLH6LhUxHnPRWg
+         M503lWMUUWF75jkVCwy+h4wAHiI/g8EqkepRunM5afsGvgMLb76BvDnja1k0sJtz48N1
+         KfPpIcLxyCXHahCV+A1E+VmS4mGWbTJ5B6r4dj8WQC7yHITiP6iEfPkTD4I+ua+M2mn4
+         ob2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=rsucpEsc5D3CWajO1pTl308RBgWxNbG9t1oS7UmiC60=;
+        b=EdraPRyQeFCan2wO2loIlFbitEvrg1XsqR94gFo7xR0mCYw05PMASWA2g6QIIgYJlY
+         396Wx2ukRB33xBdIVlEVlyM/+npDpH+63M8J0ydi8TTbEX1UhFSmnKir8FsC5SNpVXwZ
+         42csZKNOqpZSeQSzTyb6/gV0M37UA4/4lLLdSAfoyMQMlgVITUWdI7MZ+MMni7pcFMNN
+         /pvDpQKE2iH06f1mNAPQikoanZTGQDmW9vw8XxnQtRV1p0/+lD/9EznBtc/LejAas7nR
+         YH+DLsjX1kijtxw7xJb+14FWeb25XLnPwWVcochFGYisfr6KW4/Tx1VljYkErgb2Qrdw
+         hcxw==
+X-Gm-Message-State: ACgBeo10xvJf746KRBqz0AaXTYw/v/n/kh9Q2ztW4HihAHcp19+NnrRK
+        16kAv2LZ7NaubeuYstfpQpY=
+X-Google-Smtp-Source: AA6agR7rXwMmQoFFhV9guzX50xC2Hx5lxc/ntTUb9/whlW1Pw7vwVN3TsUywF9bJ3hq6crg1K1/dIA==
+X-Received: by 2002:a17:90a:c38f:b0:1f3:2f26:e7c4 with SMTP id h15-20020a17090ac38f00b001f32f26e7c4mr28048030pjt.124.1660578845751;
+        Mon, 15 Aug 2022 08:54:05 -0700 (PDT)
+Received: from [192.168.141.45] ([103.230.106.6])
+        by smtp.gmail.com with ESMTPSA id p67-20020a62d046000000b0052ddaffbcc1sm6719244pfg.30.2022.08.15.08.53.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Aug 2022 08:54:05 -0700 (PDT)
+Message-ID: <f8734af1-6e31-75c9-9556-9519709284f1@gmail.com>
+Date:   Mon, 15 Aug 2022 21:53:54 +0600
 MIME-Version: 1.0
-References: <20220815143959.1511278-1-zi.yan@sent.com>
-In-Reply-To: <20220815143959.1511278-1-zi.yan@sent.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 15 Aug 2022 17:53:22 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0TcnXHVsxBkpqLi63XC62Jkg3HChtK4RgB6-giYb+hnw@mail.gmail.com>
-Message-ID: <CAK8P3a0TcnXHVsxBkpqLi63XC62Jkg3HChtK4RgB6-giYb+hnw@mail.gmail.com>
-Subject: Re: [PATCH] arch: mm: rename FORCE_MAX_ZONEORDER to ARCH_FORCE_MAX_ORDER
-To:     Zi Yan <ziy@nvidia.com>
-Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        David Rientjes <rientjes@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Qin Jian <qinjian@cqplus1.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Guo Ren <guoren@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>, Arnd Bergmann <arnd@arndb.de>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:3bjhYaUEWRlYdBweOdn0b/r+O4N0rvYexq07UftB14ZHOZPuXV3
- lf+VE+qVUESCIDx6KaEUMMG9THzdxte70BFMMIzWObilU0QYz2yYfixDwrOATWDyZzFfm41
- EKOxtpxlmj1HyFW6mnhXFC004OOg6wbraTMVq2dUiiTDTpeiTmPIMs4SE2+57BOzNDFzKTB
- Mf6oS5ka0yNIz0ytZ5pJw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pGq+X3QRPxc=:WcCirK0x6sdExTy6/oiMGR
- d1jcWbA/eojZLQTurF3uPgfDqYzfS6ZJ1tqOMsqtYOu55Ks3yQMFUrLmxpxs9nvCbz66J2NDq
- fxzuUVz6uP6APSR7YJ7dNCnKyglNQfEhQ4YQ59w4XtsPw2Se29LW0WZWAAp4fAPAmbUHBRMYc
- Gio3uHfDrldBzrmci+ilPaPYx+5KeaCn2QViuMCADLPH2KEoxEsWDFJVRNK2+Yes5whbfH6fF
- 3IvPZliBPUY3GMMwyUTFodJi7d5QekFW9OsnJJXfT4Et9LAv2a0G7nytufJlmMTuZNMpzIMn8
- TLpAmVlD4N1wgL4Q7WCX55nEWJ6jfyICIoxiW3xVtVUQbYZ3JGOyzHuePZEutdGipL8bi2L77
- MsJ/yVPvaNg/X7gqfuG+7LyBEEcFGi/6FDGuMOVoZrG30coFBLnAJFvITlbKvo3iypsjw0qhN
- W2r3vIkKrp3/q2C/7SlGj6ereOURTh9KssFsMkidFs9dNWyOxkKCwiKM+rIArz0O1zeoRPqUD
- Uprn+LAc+DA0N32ZmODos/UA2h6tCl0boAyPCHXrE48+kp/lqSoUX3QJb/VJWb4dy7rWJmyYD
- aVPxkpx9/478/XvN0C/bAuvvamWyBdjkLubzy480Ue7IAM+d+Mr7Ql31AGxj9TiRgb+H2NX+v
- +nyh/uaWNLYjZiFlsOMbXD5aXBFMPhSaybdfW5bwDjYtQOnzwbU80VAwtePswoiQKpPZywT1s
- pLDUSPx5lHpT79JeuxHV8ioN5wq0+XpMpKGBospdR0He7HBK0iHw7I62Q69VMEUuQORLey08r
- FL0O65PYJ0M+H/x1oQn2ixTL4qdINn+9JWyNFv7fqFZ31VwHT+pz+m9faLoglis0cP5TEXbuS
- 8XjJZrS94wtWc86ne2jA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH linux-next] drm/amdgpu/vcn: Remove unused assignment in
+ vcn_v4_0_stop
+Content-Language: en-US
+To:     "Dong, Ruijing" <Ruijing.Dong@amd.com>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kernel-mentees@lists.linuxfoundation.org" 
+        <linux-kernel-mentees@lists.linuxfoundation.org>
+Cc:     "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Zhu, James" <James.Zhu@amd.com>,
+        "Jiang, Sonny" <Sonny.Jiang@amd.com>,
+        Wan Jiabing <wanjiabing@vivo.com>, "Liu, Leo" <Leo.Liu@amd.com>
+References: <20220815070056.10816-1-khalid.masum.92@gmail.com>
+ <SJ1PR12MB61944B1D53330D5E9531158695689@SJ1PR12MB6194.namprd12.prod.outlook.com>
+ <86088c17-585c-4a53-312d-ef339b824538@gmail.com>
+ <SJ1PR12MB6194C83D51101ACD97B55F0295689@SJ1PR12MB6194.namprd12.prod.outlook.com>
+From:   Khalid Masum <khalid.masum.92@gmail.com>
+In-Reply-To: <SJ1PR12MB6194C83D51101ACD97B55F0295689@SJ1PR12MB6194.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 4:39 PM Zi Yan <zi.yan@sent.com> wrote:
->
-> ---
->  arch/arc/Kconfig                             | 2 +-
->  arch/arm/Kconfig                             | 2 +-
->  arch/arm/configs/imx_v6_v7_defconfig         | 2 +-
->  arch/arm/configs/milbeaut_m10v_defconfig     | 2 +-
->  arch/arm/configs/oxnas_v6_defconfig          | 2 +-
->  arch/arm/configs/pxa_defconfig               | 2 +-
->  arch/arm/configs/sama7_defconfig             | 2 +-
->  arch/arm/configs/sp7021_defconfig            | 2 +-
->  arch/arm64/Kconfig                           | 2 +-
->  arch/csky/Kconfig                            | 2 +-
->  arch/ia64/Kconfig                            | 2 +-
->  arch/ia64/include/asm/sparsemem.h            | 6 +++---
->  arch/loongarch/Kconfig                       | 2 +-
->  arch/m68k/Kconfig.cpu                        | 2 +-
->  arch/mips/Kconfig                            | 2 +-
->  arch/nios2/Kconfig                           | 2 +-
->  arch/powerpc/Kconfig                         | 2 +-
->  arch/powerpc/configs/85xx/ge_imp3a_defconfig | 2 +-
->  arch/powerpc/configs/fsl-emb-nonhw.config    | 2 +-
->  arch/sh/configs/ecovec24_defconfig           | 2 +-
->  arch/sh/mm/Kconfig                           | 2 +-
->  arch/sparc/Kconfig                           | 2 +-
->  arch/xtensa/Kconfig                          | 2 +-
->  include/linux/mmzone.h                       | 4 ++--
+On 8/15/22 21:17, Dong, Ruijing wrote:
+> [AMD Official Use Only - General]
+> 
+> If the condition was met and it came to execute vcn_4_0_stop_dpg_mode, then it would never have a chance to go for /*wait for vcn idle*/, isn't it?
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Hypothetically, some other thread might set adev->pg_flags NULL and in 
+that case it will get the chance to go for /* wait for vcn idle */.
+
+
+> I still didn't see obvious purpose of this change.
+> 
+>                  if (adev->pg_flags & AMD_PG_SUPPORT_VCN_DPG) {
+>       ==>              r = vcn_v4_0_stop_dpg_mode(adev, i);
+
+Regardless of that, this assignment to r is unnecessary. Because this 
+value of r is never used. This patch simply removes this unnecessary
+assignment.
+
+>                           continue;
+>                   }
+> 
+>                   /* wait for vcn idle */
+>                   r = SOC15_WAIT_ON_RREG(VCN, i, regUVD_STATUS, UVD_STATUS__IDLE, 0x7);
+> 
+> Thanks
+> Ruijing
+> 
+
+Thanks,
+   -- Khalid Masum

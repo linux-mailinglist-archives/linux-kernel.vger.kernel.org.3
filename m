@@ -2,69 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F23D5933E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 19:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C09E5933E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 19:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbiHORLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 13:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
+        id S230034AbiHORLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 13:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiHORLQ (ORCPT
+        with ESMTP id S229883AbiHORL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 13:11:16 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCAF1B7AC
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 10:11:15 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id y10-20020a9d634a000000b006167f7ce0c5so5878478otk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 10:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc;
-        bh=fYHATjMloKIHDZRJFW62hZu0N9hKCcy6QlPPx8j2Wsw=;
-        b=QpOrqpXkiohYH9sRsFq4JuVLY6o2HbkfIIjXY0wIMTaR7v1EI3uKidRzI4UcnoMKsB
-         hqL5XJzeyPYwN9+ToEm9rTDfyuJ4oFaiSM6au2gHhAnG3jng7TE5xRp0U4VTaZhF/G3G
-         0HTs8uCKnY9MVaBSPpuAhxk3f/Cic7bvdZAzE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc;
-        bh=fYHATjMloKIHDZRJFW62hZu0N9hKCcy6QlPPx8j2Wsw=;
-        b=MT6JvTAmuCgtHYt+cnSZzzCeJtpu/k/hA4qJHJxHrwVIhhgGenDJ7Bz5UHdIZMCYUA
-         rTAr+8n7MyqhbaCibdvK8QFt8VQ4gCiJn/77eRXss4NlbRGOe3SaKo8wWoBbsl9PXiFu
-         rk1E8C1/bEgwRXLIrOFiOAKCvHPDmeJVuAiJe/TxQU8pqkkzls4jrP/CV0tcMyxV9ja4
-         3Osj/LuM1YwBZv9s0FUcrjTWYEo2n6mAp2qlznUesripcg9x3CyNZvJ9ZHg5n5EC3Jgx
-         +zZIIWLmZ1QXJGik+8FBcO0gvL6wh0zcV314ROHxcbHjLUWXm14vYLAZR/VmTXakKswH
-         h9cQ==
-X-Gm-Message-State: ACgBeo0sxs5eWb8KZl+gsPhsIaDSGbDvjNfpZtWlAu443/XI95xg3R14
-        GfS3zHcbxChXC2NF2vnOtjL1oXxgTaA9I5E1P4fTYg==
-X-Google-Smtp-Source: AA6agR5x05CXrLqAbvUNICaEmR9ND1oRovJs4sWatPKcE/0sJGZyA2A8wHJQoct/2ED/eNkQUa0l1ok3po+Ds1xEZPU=
-X-Received: by 2002:a9d:738c:0:b0:638:9962:8cb6 with SMTP id
- j12-20020a9d738c000000b0063899628cb6mr2921869otk.73.1660583474974; Mon, 15
- Aug 2022 10:11:14 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 15 Aug 2022 12:11:14 -0500
+        Mon, 15 Aug 2022 13:11:29 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231AF25E8A
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 10:11:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 60DF7CE115E
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 17:11:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 782C0C433D6;
+        Mon, 15 Aug 2022 17:11:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660583484;
+        bh=bRUgZYlvzDD/pptSlNy1eAs06Vr+nJrjAzYkrLulvyM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BAuaf25b2NdNXWi04fOoG9yv+2Kq5CV/qoRpBT49uScalWi+dIEbl6WXuReYzV9n3
+         I2zuTIakQEwypk+02Z+9ewswCdIanzslKzS+RlTbE4thPI1pcdi/eJQt4g6xixQJSe
+         NWuXxPju+/fXuqAw6Z51IPXM7Lu1+h+C5eDVmLb8uLzo+yFfy7jKdPr0UVKyQBvfl1
+         VqAYrEh95SXG0ROs2UoysTGN2C5EyeK3x1PpIDMarFH0jhah4W4dNZkbUm6iy/spCN
+         f8X/L2YRd8sv7W27x3jIlWChIcOKL3cfL7fTBNix9K561L8R4jG+CjuSvwqv0MTQ4/
+         xfPvqWy1MCkYg==
+Date:   Mon, 15 Aug 2022 10:11:22 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds
+ limit (1024) in 'ntfs_read_folio'
+Message-ID: <Yvp+OnhAAQI5Zvj9@dev-arch.thelio-3990X>
+References: <202208140835.W6F1j6Da-lkp@intel.com>
+ <Yvo8KUKJBlMtoNgI@casper.infradead.org>
+ <CAK8P3a3Gx39P90k9ZUMdzHiNpjNn1tdvkTktQyzUqqfG+an4BA@mail.gmail.com>
+ <YvpEkYMatTeNvNZa@casper.infradead.org>
+ <CAK8P3a3=XC4ez-zeGptQb_9NtX5rVfr8Qq80eGaEckzUzjAxzg@mail.gmail.com>
+ <CAK8P3a0TPYs2cbcx+0QGk=y8xjFrspdwnTHDxQCtsSwJmfvF6Q@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220815041804.583181-1-judyhsiao@chromium.org>
-References: <20220815041804.583181-1-judyhsiao@chromium.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 15 Aug 2022 12:11:14 -0500
-Message-ID: <CAE-0n52NxrXkdck+cFtK4FC_F_D_xEbSuw-=LUKOKoqXi1gQFw@mail.gmail.com>
-Subject: Re: [PATCH v1] arm64: dts: qcom: sc7280: Use "PP1800_L2C" as the DMIC
- power source.
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Judy Hsiao <judyhsiao@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-        dianders@chromium.org, mka@chromium.org, cychiang@google.com,
-        judyhsiao@google.com, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a0TPYs2cbcx+0QGk=y8xjFrspdwnTHDxQCtsSwJmfvF6Q@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,65 +61,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Judy Hsiao (2022-08-14 21:18:04)
-> Use "PP1800_L2C" as the DMIC power source.
+On Mon, Aug 15, 2022 at 04:37:09PM +0200, Arnd Bergmann wrote:
+> On Mon, Aug 15, 2022 at 3:48 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> 
+> > I have no problems with a patch removing support for 256KB pages if that
+> > helps, as Hexagon is the only architecture to support this and there are close
+> > to zero Linux users anway. This would leave only three warnings for 64KB
 
-Why? Is it fixing sound on villager? Or supporting sound on villager?
-Was the power source wrong before?
+Right, I had brought up at least adjusting the dependencies of 256KB
+pages so that it could not be selected with CONFIG_COMPILE_TEST to
+reduce the number of warnings that would appear in randconfigs.
 
->
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+https://lore.kernel.org/YoAlvnyjEbYV4T1L@dev-arch.thelio-3990X/
 
-Is Srinivasa the author? There should either be a From up above or a
-Co-developed-by tag here.
+I suspect removing it outright would be fine too.
 
-> Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
-> ---
-> This patch depends on:
-> arm64: dts: qcom: sc7280: Add herobrine-villager-r1. [1]
->
-> [1]
-> https://patchwork.kernel.org/patch/12926099/
->
->
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
-> index c03b3ae4de50..983defa7c76d 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
-> @@ -12,3 +12,31 @@ / {
->         model = "Google Villager (rev1+)";
->         compatible = "google,villager", "qcom,sc7280";
->  };
-> +
-> +&lpass_va_macro {
-> +       vdd-micb-supply = <&pp1800_l2c>;
-> +};
+> > pages in allmodconfig:
+> >
+> > fs/mpage.c:131:20: error: stack frame size (1128) exceeds limit (1024)
+> > in 'do_mpage_readpage' [-Werror,-Wframe-larger-than]
+> > fs/mpage.c:447:12: error: stack frame size (1264) exceeds limit (1024)
+> > in '__mpage_writepage' [-Werror,-Wframe-larger-than]
+> > fs/ext4/readpage.c:223:5: error: stack frame size (1208) exceeds limit
+> > (1024) in 'ext4_mpage_readpages' [-Werror,-Wframe-larger-than]
+> 
+> I looked into these a bit more and found that these are arrays of sector_t,
+> which could be either 32-bit or 64-bit wide before 72deb455b5ec
+> ("block: remove CONFIG_LBDAF"), but is now always 64-bit, so having
+> an array of 128 of these (65536/512) adds a 1KB to the stack and will
+> cause a warning. It's only slightly over the limit, and there are very few
+> 32-bit systems that allow 64KB pages to trigger that warning.
+> 
+> I see now that ppc440 also supports 256KB pages and has the same
+> problem as hexagon, but also has been broken since the start of the
+> git history in this regard:
+> 
+> fs/mpage.c:638:1: error: the frame size of 4280 bytes is larger than
+> 2048 bytes [-Werror=frame-larger-than=]
+> 
+> I don't know if anyone strongly cares about 256KB pages on
+> ppc44x any more, but given this, I'm fairly sure that they are
+> not using block based file systems. So we could just make
+> CONFIG_BLOCK depend on PAGE_SIZE_LESS_THAN_256KB
+> globally instead of dropping 256KB pages everywhere.
 
-This is the subject of the patch.
+That doesn't sound like an unreasonable solution.
 
-> +
-> +&sound {
-> +       audio-routing =
-> +                       "IN1_HPHL", "HPHL_OUT",
-> +                       "IN2_HPHR", "HPHR_OUT",
-> +                       "AMIC1", "MIC BIAS1",
-> +                       "AMIC2", "MIC BIAS2",
-> +                       "VA DMIC0", "vdd-micb",
-> +                       "VA DMIC1", "vdd-micb",
-> +                       "VA DMIC2", "vdd-micb",
-> +                       "VA DMIC3", "vdd-micb",
-> +                       "TX SWR_ADC0", "ADC1_OUTPUT",
-> +                       "TX SWR_ADC1", "ADC2_OUTPUT",
-> +                       "TX SWR_ADC2", "ADC3_OUTPUT",
-> +                       "TX SWR_DMIC0", "DMIC1_OUTPUT",
-> +                       "TX SWR_DMIC1", "DMIC2_OUTPUT",
-> +                       "TX SWR_DMIC2", "DMIC3_OUTPUT",
-> +                       "TX SWR_DMIC3", "DMIC4_OUTPUT",
-> +                       "TX SWR_DMIC4", "DMIC5_OUTPUT",
-> +                       "TX SWR_DMIC5", "DMIC6_OUTPUT",
-> +                       "TX SWR_DMIC6", "DMIC7_OUTPUT",
-> +                       "TX SWR_DMIC7", "DMIC8_OUTPUT";
-> +
-> +};
-
-This part is not described.
+Cheers,
+Nathan

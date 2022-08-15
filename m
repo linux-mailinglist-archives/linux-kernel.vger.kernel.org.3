@@ -2,125 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05E4A59313C
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11AA459313F
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232383AbiHOPC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
+        id S232492AbiHOPEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232344AbiHOPCw (ORCPT
+        with ESMTP id S232380AbiHOPEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:02:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C664220E0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:02:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660575770;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=g2yECLw+fKeeM6y1cLjr8I9qnE48sejea9S2eLZ2jxw=;
-        b=DYaoWqEcjzM68l7IO2qNMbDpqKSxfS0uAUDB+oW8JIw/QtcvhSXrtrGY2/106pIbLvfcEU
-        f4JyIBz+AfdZdnEwAFZ5SiBzohgpK2BcQC261iU09JOdP+a2aYHGKDTX5EmwKeKQ7hojSd
-        Bsxkx4JU7mCFEpQOKFtswu/N9yqG8Fg=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-631-jhoMWkRiPgiHlX2CTshwPw-1; Mon, 15 Aug 2022 11:02:48 -0400
-X-MC-Unique: jhoMWkRiPgiHlX2CTshwPw-1
-Received: by mail-ej1-f71.google.com with SMTP id qw34-20020a1709066a2200b00730ca5a94bfso1129033ejc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:02:48 -0700 (PDT)
+        Mon, 15 Aug 2022 11:04:43 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8B81EAF3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:04:41 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id z12so9372240wrs.9
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:04:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:from:to:cc;
+        bh=11iOYJYT2e13K8s6XgKD9aJwBI/D1n9/1GA9l3T5EdU=;
+        b=0l0n8J8oLHQpw4KO8ZATjxzBbGtlxSKPh+Zx6UM+b2l1FA0FDzTM/QPWNO1fZBfrUR
+         VBA8H+qC06qDCkiYQ/bmbJ+W8jBscgSQIpgwYr5wQwH6C6ZYLJbz2IsQp/jk7onr+aRZ
+         yYwEywQrDeJ4Z1dxbojsOpUyLhuFjYsPNMEBtRO6dYB4TyMjzlsCOQjHxpBmTkhfrWAo
+         d/KgW8BaVQjCp/ZclzPwng3lKX0/JTrUO3TxG4MuBaqttdIFwHb4sqyqN4NJohD/tnrh
+         VxDH/uetuwZhNWinL+gZYHxHEmeSaTHz8tVsrVdtldSfLZUz8hpGB8V+01//OLrR1i0g
+         YntA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=g2yECLw+fKeeM6y1cLjr8I9qnE48sejea9S2eLZ2jxw=;
-        b=tPnLxplptYlZuC/b3giefCJ5IImHEqmnDMfOtSRs/CO9NEsjOotdONhzOj87NFHHsr
-         GFalyryuwjz5Mc2Sny7uRfkuXd0o0pVMTQitr7+ULy+x3Y426B7CFDBL78IoWBDLhnrk
-         wY5B1tmzDuZgap7AFH1aE9Tw68ttwannqmYmLr6H3wz5T4lNdRd0ZOgtr2NPimaYxAyK
-         grr+xM+286HSHuD4wwUaZ7T5jy4vda00WYr5aIik3DnnaVLbRwPUXum85ENByuAbgint
-         sAzx5vmFDtsPodFtZE6lL0p4t77NCdLL69XUBPpZ6qzTtUPWMCUQiCTP2tA3oorufnHq
-         PnHg==
-X-Gm-Message-State: ACgBeo1+Qto2nUsL3Fkm4G5Mw2g8Qjag6eYogNPwy9fERfXbRS/oK1cr
-        G49LuTW40Ra6vMWC4nMFw85xav1EGHc2m/dKgk86ATgEZ0edlT7YIsZt6P8ptsf29MsAkyY8BXP
-        GpZ+FmUcCgx6QF2zmd7/Vo5VO
-X-Received: by 2002:a17:906:8c7:b0:730:c1a9:e187 with SMTP id o7-20020a17090608c700b00730c1a9e187mr10882194eje.55.1660575767820;
-        Mon, 15 Aug 2022 08:02:47 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5LD4zKo/+auF625gRYdARIrc/DRdPkN9y4NN8HFq9hC5uXTUuugQODOjmSg32Pk51BGX3O7g==
-X-Received: by 2002:a17:906:8c7:b0:730:c1a9:e187 with SMTP id o7-20020a17090608c700b00730c1a9e187mr10882181eje.55.1660575767672;
-        Mon, 15 Aug 2022 08:02:47 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id jz18-20020a170906bb1200b00718e4e64b7bsm4208038ejb.79.2022.08.15.08.02.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 08:02:47 -0700 (PDT)
-Message-ID: <089e9d73-07c2-fcb4-fc76-b6e829e491cc@redhat.com>
-Date:   Mon, 15 Aug 2022 17:02:46 +0200
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=11iOYJYT2e13K8s6XgKD9aJwBI/D1n9/1GA9l3T5EdU=;
+        b=LqLuMCoEvmyVRyN9iGqM8acp8rZKUsHqsmrZJGG0GJSKBpfBI68Rthx9Pb2kMNdxYX
+         uO3kRN0G/CvusAAshB7XsHtzBVllI5XRYGdvBlXbTYjPXkJeQV0mZRnv+NdObrb/61mB
+         pT58Ez934rVi0eTz2OfACdxxrj91CjbEzyAQm9obSwRX4M8/RA0oKFcMa85Buw16HP37
+         rm7MEoS8r5KiC9YdkmwZ0lcC4q29AHaGJ7n9AyDiRNLU6bRlcV+XPXXz7vSL5pGIYfGG
+         r329+6EBwHJ0b1zL1EMUbn//ytWGPQ6JB93BVrDyxft9gH6VR1u61VXMK9Jl+ilQ/StQ
+         fNZg==
+X-Gm-Message-State: ACgBeo2v9HWZXKi5p1xbNv0c4V95fQApOE1dxBHxZEeKN7m43d7LVpOe
+        NtHlU1fEo9BU3KPWOCufQ27oag==
+X-Google-Smtp-Source: AA6agR4Cn9TM3OgrdvUAtLqY0NQqp052poL59AH0CMXJaR9rpGCZtSY4D321sbwI25TV4/TqJsBf4A==
+X-Received: by 2002:adf:fe4d:0:b0:223:9815:b1e5 with SMTP id m13-20020adffe4d000000b002239815b1e5mr8572076wrs.709.1660575880388;
+        Mon, 15 Aug 2022 08:04:40 -0700 (PDT)
+Received: from localhost ([109.180.234.208])
+        by smtp.gmail.com with ESMTPSA id v17-20020a5d43d1000000b0021eed2414c9sm7364535wrr.40.2022.08.15.08.04.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 08:04:39 -0700 (PDT)
+From:   Punit Agrawal <punit.agrawal@bytedance.com>
+To:     Perry Yuan <Perry.Yuan@amd.com>
+Cc:     <rafael.j.wysocki@intel.com>, <ray.huang@amd.com>,
+        <viresh.kumar@linaro.org>, <Deepak.Sharma@amd.com>,
+        <Mario.Limonciello@amd.com>, <Nathan.Fontenot@amd.com>,
+        <Alexander.Deucher@amd.com>, <Jinzhou.Su@amd.com>,
+        <Shimmer.Huang@amd.com>, <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 1/7] cpufreq: amd-pstate: cleanup the unused and
+ duplicated headers declaration
+References: <20220814163548.326686-1-Perry.Yuan@amd.com>
+        <20220814163548.326686-2-Perry.Yuan@amd.com>
+Date:   Mon, 15 Aug 2022 16:04:38 +0100
+In-Reply-To: <20220814163548.326686-2-Perry.Yuan@amd.com> (Perry Yuan's
+        message of "Mon, 15 Aug 2022 00:35:42 +0800")
+Message-ID: <87fshxim49.fsf@stealth>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 0/6] asus-wmi: cleanup dgpu_disable, egpu_enable, panel_od
-Content-Language: en-US
-To:     "Luke D. Jones" <luke@ljones.dev>
-Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220812222509.292692-1-luke@ljones.dev>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220812222509.292692-1-luke@ljones.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Perry,
 
-On 8/13/22 00:25, Luke D. Jones wrote:
-> This patch series does two things for previously added features:
-> - dgpu_disable
-> - egpu_enable
-> - panel_od
-> 
-> The fixes add missing documentation, and the refactors vastly clean up how
-> the features work, including reading the values from WMI methods on *_show()
-> and checking the result correctly (these methods return 1 on success).
+Perry Yuan <Perry.Yuan@amd.com> writes:
 
-Thank you for your patch-series, I've applied the series to my
-review-hans branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+> Cleanup the headers declaration which are not used
+> actually and some duplicated declaration which is declarated in some
+> other headers already, it will help to simplify the header part.
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
+We usually don't get rid of indirectly included headers as long as
+definitions from header are used in the code. This avoids problems if
+for some reason the included header gets dropped - it'll leave the code
+in an uncompilable state.
 
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
+More below.
 
-Regards,
+>
+> Reviewed-by: Huang Rui <ray.huang@amd.com>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> ---
+>  drivers/cpufreq/amd-pstate.c | 5 -----
+>  1 file changed, 5 deletions(-)
+>
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 9ac75c1cde9c..19a078e232dd 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -31,19 +31,14 @@
+>  #include <linux/compiler.h>
+>  #include <linux/dmi.h>
+>  #include <linux/slab.h>
+> -#include <linux/acpi.h>
+>  #include <linux/io.h>
+>  #include <linux/delay.h>
+>  #include <linux/uaccess.h>
+>  #include <linux/static_call.h>
+>  
+> -#include <acpi/processor.h>
+>  #include <acpi/cppc_acpi.h>
+>  
+>  #include <asm/msr.h>
+> -#include <asm/processor.h>
 
-Hans
+On a quick scan, I noticed that "boot_cpu_data" and "boot_cpu_has()" in
+the module init function are defined in "asm/processor.h" that is being
+removed here. It may compile for now but makes the code more fragile as
+explained above.
 
+Please ensure that only the header files that have no definitions used
+in this file (amd-pstate.c) are dropped.
 
-> 
-> Luke D. Jones (6):
->   Fixes 98829e84dc67 ("asus-wmi: Add dgpu disable method")
->   Fixes: 382b91db8044 ("asus-wmi: Add egpu enable method")
->   Fixes: ca91ea34778f ("asus-wmi: Add panel overdrive functionality")
->   asus-wmi: Refactor disable_gpu attribute
->   asus-wmi: Refactor egpu_enable attribute
->   asus-wmi: Refactor panel_od attribute
-> 
->  .../ABI/testing/sysfs-platform-asus-wmi       |  28 +++
->  drivers/platform/x86/asus-wmi.c               | 231 ++++++------------
->  2 files changed, 103 insertions(+), 156 deletions(-)
-> 
-
+> -#include <asm/cpufeature.h>
+> -#include <asm/cpu_device_id.h>
+>  #include "amd-pstate-trace.h"
+>  
+>  #define AMD_PSTATE_TRANSITION_LATENCY	0x20000

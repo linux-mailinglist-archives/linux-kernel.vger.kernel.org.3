@@ -2,204 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C1B593477
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 20:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9010E593476
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 20:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbiHOSEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 14:04:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
+        id S229729AbiHOSEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 14:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbiHOSEx (ORCPT
+        with ESMTP id S229508AbiHOSEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 14:04:53 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4862529C86
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:04:52 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id a4so6025728qto.10
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:04:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc;
-        bh=VzJF6qSAyWf9rymdlhaI5LfjxX1moEAaRt9gerX2rGI=;
-        b=FLpeWmbebS7Adq4skhC73mAaHdjLhUXLgMLr54oCGmgio9UJ2thpMFjVWlHX0LGeiF
-         rO0KM3p/uo7nkXhyIbjbnd1xgZPGarAoM91eRSf7Eb1P8urtI0Txi1JbOjRT09Up2Jcz
-         83iTaYLJe4AXu+0vqetKz4T0pjYix/saY9sGUTugz2n/bxdTh8eABFAhat93DybFyeEU
-         0VSNeFK23yU7qM0kP9w6MZLI/UWdrkfTlgdnAwwlamDMHPmQy8QDDwf+GNsrOvr4dXdW
-         MclPFn3GqafkVvQPyffoCyYoKI8JJ02zXz8JiXZ0rLW3z5RPTO4YJMTA4WY7SWhl39lE
-         Ci1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc;
-        bh=VzJF6qSAyWf9rymdlhaI5LfjxX1moEAaRt9gerX2rGI=;
-        b=tohmhe+T0I8bfUp4tDeo4BNEgtBCjWSs2186Jxc3BQh6Pddyd9JsRhgPiUjAfcBPPe
-         2964iKYdssz3ADkialeFFCLc7xt11INaZ/DgCgKMhgkZUzaHCVpICL9t7CTLmLedLUWx
-         MSclGrLPsdyu8wLeCdMAefWW/gbkYE2hkwxK1eWFGgRITAIYfQjeoqXHzKQ9rRG2VSDj
-         sCMsf5D0VzVHagGxTTu/61UU78wSFsr3JO2ReB6bAKbnVzEok5Eeie1/uW7APXIgq//P
-         xmaiw7BbKPS/j9q532/vFeYlc7w3hPYpXaqsIMrE21rc1un15iHZxqRca7KNHT2Ev6wK
-         ocLQ==
-X-Gm-Message-State: ACgBeo03lSu+5RTBDtyk2QUWwgpuM9IdVNf5YC15s0s/rQW8LuYBAmSW
-        hfnyKrD3VU3Eqx7qpv3IbwM=
-X-Google-Smtp-Source: AA6agR6YmuPGdL9sLsrMaudL6leZ3roDFKm1tFhqvUvraFuNqvnWMz7PkL1JKMDcn6LSLrsIb9fgjQ==
-X-Received: by 2002:a05:622a:1aa2:b0:344:5ffd:3190 with SMTP id s34-20020a05622a1aa200b003445ffd3190mr4920867qtc.80.1660586691384;
-        Mon, 15 Aug 2022 11:04:51 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id h5-20020ac846c5000000b003434f45b935sm8655482qto.84.2022.08.15.11.04.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 11:04:50 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 81F6227C0054;
-        Mon, 15 Aug 2022 14:04:50 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 15 Aug 2022 14:04:50 -0400
-X-ME-Sender: <xms:wYr6YgQKxQ0-UQ9056f6iTrbQAd0pQf1Xyz44qelDA8laYS0ZXBJsw>
-    <xme:wYr6Ytz3it8y4uaHkqYYlP2xFSXE-4QiTsAkronR2u3zZQZ9ixZf10h_ula2YzKmm
-    ghGE075KZGQQUoLjQ>
-X-ME-Received: <xmr:wYr6Yt2IC0diKRocU_LR9aJ-WVfEZ1WH2YDASECamHgxioRQJLaHWzZcaru3yA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehvddguddvudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:wYr6YkBAf7Pm_oTSsRwVV2e6Q4xP0L1d-pckKYOt2_Grree8hu6xcA>
-    <xmx:wYr6YpifK7hUMR7Ugh4anIVLDAlhgImWBlN92jZ9Quf2CQDYySkWsw>
-    <xmx:wYr6Ygog_Awhaln9h9n3nAqDUocOqECtNvRnyIqYeag5Js-8gCS9pA>
-    <xmx:wor6YkpJYsdTMMP82hYDtyApZqJACVgswg23mf1Qlh2XF-XDTxDPDg>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 Aug 2022 14:04:49 -0400 (EDT)
-Date:   Mon, 15 Aug 2022 11:04:36 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Will Deacon <will@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Greg KH <gregkh@linuxfoundation.org>, jirislaby@kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Asahi Linux <asahi@lists.linux.dev>,
-        Oliver Neukum <oneukum@suse.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: Debugging a TTY race condition on M1 (memory ordering dragons)
-Message-ID: <YvqKtJn5eBsDJXBI@boqun-archlinux>
-References: <6c089268-4f2c-9fdf-7bcb-107b611fbc21@marcan.st>
- <20220815134711.GA10374@willie-the-truck>
- <63cd54a8-3c48-d1b9-406a-c521bd02ee4a@marcan.st>
+        Mon, 15 Aug 2022 14:04:44 -0400
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59F529812
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:04:41 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by baptiste.telenet-ops.be with bizsmtp
+        id 7u4e2800X4C55Sk01u4eRu; Mon, 15 Aug 2022 20:04:39 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oNeS6-001DDz-HI
+        for linux-kernel@vger.kernel.org; Mon, 15 Aug 2022 20:04:38 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oNeS6-00C44k-4f
+        for linux-kernel@vger.kernel.org; Mon, 15 Aug 2022 20:04:38 +0200
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     linux-kernel@vger.kernel.org
+Subject: Build regressions/improvements in v6.0-rc1
+Date:   Mon, 15 Aug 2022 20:04:38 +0200
+Message-Id: <20220815180438.2875559-1-geert@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAHk-=wgRFjPHV-Y_eKP9wQMLFDgG+dEUHiv5wC17OQHsG5z7BA@mail.gmail.com>
+References: <CAHk-=wgRFjPHV-Y_eKP9wQMLFDgG+dEUHiv5wC17OQHsG5z7BA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <63cd54a8-3c48-d1b9-406a-c521bd02ee4a@marcan.st>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 01:01:17AM +0900, Hector Martin wrote:
-> (Resend, because I still can't use mail clients properly it seems...)
-> 
-> On 15/08/2022 22.47, Will Deacon wrote:
-> > As I mentioned in the thread you linked to, the architecture was undergoing
-> > review in this area. I should've followed back up, but in the end it was
-> > tightened retrospectively to provide the behaviour you wanted. This was
-> > achieved by augmenting the barrier-ordered-before relation with:
-> > 
-> >   * RW1 is a memory write effect W1 and is generated by an atomic instruction
-> >     with both Acquire and Release semantics.
-> > 
-> > You can see this in the latest Arm ARM.
-> > 
-> > However, test_and_set_bit() is unordered on failure (i.e. when the bit is
-> > unchanged) and uses READ_ONCE() as a quick check before the RmW. See the
-> > "ORDERING" section of Documentation/atomic_bitops.txt.
-> 
-> Argh, I'd completely missed that early exit (and had stumbled on an
-> unofficial doc that said it was always ordered, which confused me).
-> Indeed, getting rid of the early exit it fixes the problem.
-> 
-> > I think you're missing the "shortcut" in test_and_set_bit():
-> > 
-> >         if (READ_ONCE(*p) & mask)
-> >                 return 1;
-> > 
-> >         old = arch_atomic_long_fetch_or(mask, (atomic_long_t *)p);
-> > 
-> > so if the bit is already set (which I think is the 'ret == false' case)
-> > then you've only got a control dependency here and we elide writing to
-> > B.
-> 
-> Completely missed it. Ouch.
-> 
-> > 
-> >>
-> >> CPU#2:
-> >>   DMB ISHST
-> >>   STR B
-> > 
-> > Missing DMB ISH here from the smp_mb()?
-> 
-> Yup, my apologies, that was a brain fart while writing the email. I did
-> have it in the litmus tests (and they indeed completely fail without it).
-> 
-> > If that non-atomic store is hitting the same variable, then it cannot land
-> > in the middle of the atomic RmW. The architecture says:
-> > 
-> >  | The atomic instructions perform atomic read and write operations on a memory
-> >  | location such that the architecture guarantees that no modification of that
-> >  | memory location by another observer can occur between the read and the write
-> >  | defined by that instruction.
-> > 
-> > and the .cat file used by herd has a separate constraint for this (see the
-> > "empty rmw & (fre; coe) as atomic" line).
-> 
-> Ha, I was using G.a from Jan 2021 (back when I started working on this
-> M1 stuff), and it looks like that wording was added as an issue after
-> that (D17572) :-)
-> 
-> > There's never anything obvious when you're working with this sort of stuff,
-> > but my suggestion is that we work towards a litmus tests that we both agree
-> > represents the code and then take it from there. At the moment there's an
-> > awful lof of information, but you can see from my comments that I'm not
-> > up to speed with you yet!
-> 
-> I think you nailed it with the early exit, I'd completely missed that. I
-> think I can fairly confidently say that's the issue now. As for the
-> litmus test, indeed with the revised definitions of the memory model /
-> ARM my concerns no longer apply, hence why I couldn't reproduce them
-> (and the hardware, thankfully, seems to agree here).
-> 
-> Workqueues are broken. Yay! I'll send a patch.
-> 
+Below is the list of build error/warning regressions/improvements in
+v6.0-rc1[1] compared to v5.19[2].
 
-Hmm.. but doesn't your (and Will's) finding actually show why
-queue_work() only guarantee ordering if queuing succeeds? In other
-words, if you want extra ordering, use smp_mb() before queue_work()
-like:
+Summarized:
+  - build errors: +26/-15
+  - build warnings: +8/-28
 
-	smp_mb();	// pairs with smp_mb() in set_work_pool_and_clear_pending()
-	queue_work();	// if queue_work() return false, it means the work
-			// is pending, and someone will eventually clear
-		      	// the pending bit, with the smp_mb() above it's
-			// guaranteed that work function will see the
-			// memory accesses above.
+Happy fixing! ;-)
 
-Of course, I shall defer this to workqueue folks. Just saying that it
-may not be broken. We have a few similar guarantees, for example,
-wake_up_process() only provides ordering if it really wakes up a
-process.
+Thanks to the linux-next team for providing the build service.
 
-Regards,
-Boqun
+[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/568035b01cfb107af8d2e4bd2fb9aea22cf5b868/ (all 135 configs)
+[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/3d7cb6b04c3f3115719235cc6866b10326de34cd/ (all 135 configs)
 
-> - Hector
+
+*** ERRORS ***
+
+26 error regressions:
+  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: .cfi_endproc without corresponding .cfi_startproc:  => 32
+  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: bad or irreducible absolute expression:  => 16
+  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: junk at end of line, first unrecognized character is `:':  => 16
+  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `be 0x100(%sr2,%r0)':  => 29
+  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `ldi 0,%r20':  => 30
+  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `ldw 0(%sp),%r31':  => 26
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ble 0x100(%sr2,%r0)':  => 51, 46
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 0,%r25':  => 44
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 1,%r25':  => 49
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 173,%r20':  => 50, 45
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.callinfo':  => 40
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.entry':  => 41
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.exit':  => 54
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.proc':  => 39
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.procend':  => 55
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.stringz':  => 76
+  + /kisskb/src/arch/sh/include/asm/io.h: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]:  => 239:34
+  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_mode_vba_30.c: error: the frame size of 2096 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 6806:1
+  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c: error: the frame size of 2160 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 3778:1
+  + /kisskb/src/include/linux/bitfield.h: error: call to '__field_overflow' declared with attribute error: value doesn't fit into mask:  => 151:3
+  + /kisskb/src/include/linux/compiler_types.h: error: call to '__compiletime_assert_603' declared with attribute error: FIELD_GET: mask is not constant:  => 354:38
+  + /kisskb/src/include/linux/random.h: error: 'latent_entropy' undeclared (first use in this function):  => 25:39
+  + /kisskb/src/include/linux/random.h: error: 'latent_entropy' undeclared (first use in this function); did you mean 'add_latent_entropy'?:  => 25:46
+  + {standard input}: Error: displacement to undefined symbol .L377 overflows 12-bit field:  => 2286
+  + {standard input}: Error: displacement to undefined symbol .L378 overflows 8-bit field :  => 2302
+  + {standard input}: Error: displacement to undefined symbol .L382 overflows 8-bit field :  => 2213
+
+15 error improvements:
+  - /kisskb/src/arch/um/include/asm/processor-generic.h: error: called object is not a function or function pointer: 103:18 => 
+  - /kisskb/src/crypto/blake2b_generic.c: error: the frame size of 2288 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]: 109:1 => 
+  - /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: error: control reaches end of non-void function [-Werror=return-type]: 1614:1 => 
+  - /kisskb/src/drivers/gpu/drm/r128/r128_cce.c: error: case label does not reduce to an integer constant: 417:2, 418:2 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function): 149:37 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor': 149:22 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]: 150:1 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size': 88:22 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]: 89:1 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]: 100:2 => 
+  - {standard input}: Error: displacement to undefined symbol .L271 overflows 12-bit field: 1625 => 
+  - {standard input}: Error: displacement to undefined symbol .L271 overflows 8-bit field : 1634 => 
+  - {standard input}: Error: displacement to undefined symbol .L318 overflows 8-bit field : 1711, 1681, 1665, 1693 => 
+  - {standard input}: Error: pcrel too far: 1667, 1609, 1698, 1660, 1629, 1670, 1684, 1702, 1635, 1632, 1705, 1657, 1656, 1644, 1695, 1673, 1676, 1686, 1649, 1655, 1700, 1618, 1685, 1672 => 2249, 2206, 2231, 2261, 2293, 2248, 2215, 2262, 2247, 2232, 2216, 2217, 2209, 2204, 2274, 2221, 2229, 2259
+  - {standard input}: Error: unknown opcode: 1713 => 
+
+
+*** WARNINGS ***
+
+8 warning regressions:
+  + /kisskb/src/fs/ext4/readpage.c: warning: the frame size of 1132 bytes is larger than 1024 bytes [-Wframe-larger-than=]:  => 407:1
+  + /kisskb/src/fs/mpage.c: warning: the frame size of 1092 bytes is larger than 1024 bytes [-Wframe-larger-than=]:  => 308:1
+  + /kisskb/src/fs/mpage.c: warning: the frame size of 1144 bytes is larger than 1024 bytes [-Wframe-larger-than=]:  => 634:1
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_ext_maps (section: .data) -> qed_mfw_legacy_bb_100g (section: .init.rodata):  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_legacy_maps (section: .data) -> qed_mfw_legacy_bb_100g (section: .init.rodata):  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o: section mismatch in reference: qede_forced_speed_maps (section: .data) -> qede_forced_speed_100000 (section: .init.rodata):  => N/A
+  + modpost: WARNING: modpost: vmlinux.o: section mismatch in reference: __trace_event_discard_commit (section: .text.unlikely) -> initcall_level_names (section: .init.data):  => N/A
+  + {standard input}: Warning: overflow in branch to .L3; converted into longer instruction sequence:  => 2308
+
+28 warning improvements:
+  - /kisskb/src/fs/ext4/readpage.c: warning: the frame size of 1136 bytes is larger than 1024 bytes [-Wframe-larger-than=]: 407:1 => 
+  - /kisskb/src/fs/mpage.c: warning: the frame size of 1088 bytes is larger than 1024 bytes [-Wframe-larger-than=]: 303:1 => 
+  - /kisskb/src/fs/mpage.c: warning: the frame size of 1148 bytes is larger than 1024 bytes [-Wframe-larger-than=]: 638:1 => 
+  - arch/m68k/configs/multi_defconfig: warning: symbol value 'm' invalid for ZPOOL: 61 => 
+  - arch/m68k/configs/sun3_defconfig: warning: symbol value 'm' invalid for ZPOOL: 37 => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14410): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14428): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14440): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14458): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14470): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14488): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x144a0): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x144f0): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14508): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14520): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14538): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14550): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14568): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14580): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14598): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47b0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47c8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47e0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47f8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4810): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4828): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4840): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: vmlinux.o(.text.unlikely+0x52bc): Section mismatch in reference from the function __trace_event_discard_commit() to the variable .init.data:initcall_level_names: N/A => 
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds

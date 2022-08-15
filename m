@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5945930BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AEAE5930CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243099AbiHOOaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 10:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40526 "EHLO
+        id S243107AbiHOOaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 10:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243069AbiHOOaH (ORCPT
+        with ESMTP id S232004AbiHOOaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 15 Aug 2022 10:30:07 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8A724092;
-        Mon, 15 Aug 2022 07:30:05 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id e27so4566001wra.11;
-        Mon, 15 Aug 2022 07:30:05 -0700 (PDT)
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A63D23BE9;
+        Mon, 15 Aug 2022 07:30:06 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id j26so1689219wms.0;
+        Mon, 15 Aug 2022 07:30:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=hXEApsgmJM0YpgsYBqtez7wZ8rBpB7fQbxI7//Qi7zM=;
-        b=ipmvXLXs+gv35tXJ4yKTdE2Z2xOhShZghngxXyTsHmM+8q5/m6LviejTioEurJGPv1
-         gbfv5c1CozHLnSr2RxI5BXxotwbwac4CgspDPSTfltuqKzkZT1U3PmoHpYL0ifWJUaYN
-         MMJyvWta1YF57Pw1D4fyyMTMFgL8cvaCqW4zu44dbtbeLnuhjcp/mJo34Xvzp8Yn8vX7
-         cq+0RpLUEyYDUSWzQWUw5kY1siDJRRdxH67JHOad/IPv0dW0vlCZZWmyOmJcs+TrQoXZ
-         2cUa9dmyRkJJvj+2z3+DG5bWWMEiEquv3rqNPF1EIp2JL6Iav0jbFteuIwPKhPeKVura
-         yivg==
+        bh=KPkgY9vFkRCjtu+ihxWghFOjoX4mBhfV2FhH1CEdjXA=;
+        b=PgCUunonQLGdTJkX9HMZANJxhtKfp5V7Vzog/cC6EIOyHt1GIHCb9wMSLyv96OyJOO
+         06PXwX95tkR5I27G5eLRQ/DaC1gu5yRe/et2cqx49/SqDnzcyKHk5l6s/nerLif/n4Op
+         YiG3Ho2y1qR6sfppiiS2wOTaNkMnIKyVlWA6NlJ251Ci6hwtHU9IKHxEJMZf5hJzYJGt
+         TodFjqFx3nq2rJFaeVG2LYUnqER8QyAf3Goj3B3G3x+xnbB9AF9npaRWhZpm4AyyislE
+         z2kh2vZ+qlK13hcyyi39oFZknvqP0COrWoBnAU1oqUMq49IT+DayDL8FIksBXiVhpdv5
+         3Kcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=hXEApsgmJM0YpgsYBqtez7wZ8rBpB7fQbxI7//Qi7zM=;
-        b=dqVtVeb3W37H9dRUPMc3AZ/AB01EdG6FOzgaLMtLeHSAzdXriqA273joCBFVCiENwk
-         THazB9OKm0fMJ9p/hVeK39r+R8GDS952D/OAKmeXn5fS1/E3+hSDi/Wa47WM6Uq9hlHh
-         8Gsebew9pstr/kDvVH0dvuwyLsIt4Ng4ZAz7PrLaVRv1bOf6BWOnj9gfZ8Z59ju0Nddn
-         rOS60d+0LEG6VrytKs5ZBLBMSqswtKhX8XnQIdwDWSbCiChgIXHhtAfFcWDiAVjO0ogf
-         65tR/kQX27suJcz5Zxnlkqv9YoBB1+jnmtyRSCgNs3qF6AbJ45nX6yAETl00hLI6PU4a
-         qdmw==
-X-Gm-Message-State: ACgBeo2rFAUPWFuTADLRB2lPF5G13dDjzyVXK3asqLCvHC7JxYozROZ1
-        EW8C5vELAGQVngpO/yduZ1Bljt2zDvGV7A==
-X-Google-Smtp-Source: AA6agR7gG1EVzjFVMD8itiN0eb7Q87uXr5BvAgTHg1FxPoH/NghPsOaKxX4UORJ6Xau+cVJ/oFAWaQ==
-X-Received: by 2002:a05:6000:1b92:b0:220:7d86:2e30 with SMTP id r18-20020a0560001b9200b002207d862e30mr9195405wru.530.1660573803913;
-        Mon, 15 Aug 2022 07:30:03 -0700 (PDT)
+        bh=KPkgY9vFkRCjtu+ihxWghFOjoX4mBhfV2FhH1CEdjXA=;
+        b=5DVOHjU7pD1fdfA37z9h928/+mosgUb0PD1cJEq2WllmdSvj+0eH/Ncho3nIb9XLHG
+         wim6zOEZR1kUtOS2qb3fdmMew5NfsKUJAAd8ygNSsol0wt/nrU+Wy8MPfl7hKRQrMBE3
+         iDgqUYb2VBtLfCQjbrQRVCJ+MLSL5bGqj+el99f/DxE7YkBnO3H06aGbWGTPOcJMo+6H
+         fYPc0/QSMFP1qsLgH47MCyXSVLSy7zJYaB23imHscy9NBOmz4qLu2/YdK8WMuLZpxheO
+         oHPHQcx7CpQum6qtrKtLBx6+K+GBM4DINjWF7c0Kb9UBa8bMLqeQLJSjvNM829X6zs7i
+         izqA==
+X-Gm-Message-State: ACgBeo19qhGbtjrk7bQ5vKPZy7/V53OsQnudxF7lA6wgrQTmYjXDCwUK
+        DzIKAxmMx3dmnfUUUBReuW8=
+X-Google-Smtp-Source: AA6agR7LhfJzHCleZ91HdpEzwkGRxrx2p2Aa6cx8p783CZyeGVsc9HPiPsodS/HIcZckDJg739reuw==
+X-Received: by 2002:a05:600c:4e12:b0:3a5:dac2:5cec with SMTP id b18-20020a05600c4e1200b003a5dac25cecmr7527914wmq.183.1660573804840;
+        Mon, 15 Aug 2022 07:30:04 -0700 (PDT)
 Received: from localhost.localdomain ([94.73.32.249])
-        by smtp.gmail.com with ESMTPSA id m7-20020a056000008700b00224f895d620sm5456894wrx.48.2022.08.15.07.30.02
+        by smtp.gmail.com with ESMTPSA id m7-20020a056000008700b00224f895d620sm5456894wrx.48.2022.08.15.07.30.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 07:30:03 -0700 (PDT)
+        Mon, 15 Aug 2022 07:30:04 -0700 (PDT)
 From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
 To:     jikos@kernel.org
 Cc:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
         j.witteveen@gmail.com, nathan@kernel.org,
         linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
         kunit-dev@googlegroups.com,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        Daniel Latypov <dlatypov@google.com>
-Subject: [PATCH v4 1/8] HID: uclogic: KUnit best practices and naming conventions
-Date:   Mon, 15 Aug 2022 16:29:49 +0200
-Message-Id: <20220815142956.19180-2-jose.exposito89@gmail.com>
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH v4 2/8] HID: uclogic: Refactor UGEE v2 string descriptor parsing
+Date:   Mon, 15 Aug 2022 16:29:50 +0200
+Message-Id: <20220815142956.19180-3-jose.exposito89@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220815142956.19180-1-jose.exposito89@gmail.com>
 References: <20220815142956.19180-1-jose.exposito89@gmail.com>
@@ -75,155 +74,313 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The KUnit documentation [1] suggests allowing build tests as a module.
+The UGEE v2 tablets expose a string descriptor with their capabilities.
 
-In addition, it is recommended [2] to use snake case names for
-kunit_suite and test cases.
+Move the code used to parse the descriptors and generate a parameter
+list from it to its own function and add KUnit tests to validate the
+parser.
 
-Change the Kconfig entry from bool to tristate and stick to the naming
-conventions to avoid style issues with future tests.
-
-Link: https://docs.kernel.org/dev-tools/kunit/style.html#test-kconfig-entries  [1]
-Link: https://www.kernel.org/doc/html/latest/dev-tools/kunit/style.html  [2]
-Acked-by: Daniel Latypov <dlatypov@google.com>
+Tested-by: Jouke Witteveen <j.witteveen@gmail.com>
 Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 ---
- drivers/hid/Kconfig                  |  2 +-
- drivers/hid/Makefile                 |  3 ++-
- drivers/hid/hid-uclogic-rdesc-test.c | 22 +++++++++++-----------
- 3 files changed, 14 insertions(+), 13 deletions(-)
+ drivers/hid/Makefile                  |   1 +
+ drivers/hid/hid-uclogic-params-test.c | 159 ++++++++++++++++++++++++++
+ drivers/hid/hid-uclogic-params.c      |  86 ++++++++++----
+ 3 files changed, 226 insertions(+), 20 deletions(-)
+ create mode 100644 drivers/hid/hid-uclogic-params-test.c
 
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index 6ce92830b5d1..36a17958493f 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -1307,7 +1307,7 @@ config HID_MCP2221
- 	will be called hid-mcp2221.ko.
- 
- config HID_KUNIT_TEST
--	bool "KUnit tests for HID" if !KUNIT_ALL_TESTS
-+	tristate "KUnit tests for HID" if !KUNIT_ALL_TESTS
- 	depends on KUNIT=y
- 	depends on HID_UCLOGIC
- 	default KUNIT_ALL_TESTS
 diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-index b0bef8098139..82d8fd97d96c 100644
+index 82d8fd97d96c..fe69dece2a46 100644
 --- a/drivers/hid/Makefile
 +++ b/drivers/hid/Makefile
-@@ -144,8 +144,9 @@ obj-$(CONFIG_HID_WIIMOTE)	+= hid-wiimote.o
- obj-$(CONFIG_HID_SENSOR_HUB)	+= hid-sensor-hub.o
+@@ -145,6 +145,7 @@ obj-$(CONFIG_HID_SENSOR_HUB)	+= hid-sensor-hub.o
  obj-$(CONFIG_HID_SENSOR_CUSTOM_SENSOR)	+= hid-sensor-custom.o
  
--obj-$(CONFIG_HID_KUNIT_TEST)	+= hid-uclogic-rdesc.o \
-+hid-uclogic-test-objs		:= hid-uclogic-rdesc.o \
+ hid-uclogic-test-objs		:= hid-uclogic-rdesc.o \
++				   hid-uclogic-params.o \
  				   hid-uclogic-rdesc-test.o
-+obj-$(CONFIG_HID_KUNIT_TEST)	+= hid-uclogic-test.o
+ obj-$(CONFIG_HID_KUNIT_TEST)	+= hid-uclogic-test.o
  
- obj-$(CONFIG_USB_HID)		+= usbhid/
- obj-$(CONFIG_USB_MOUSE)		+= usbhid/
-diff --git a/drivers/hid/hid-uclogic-rdesc-test.c b/drivers/hid/hid-uclogic-rdesc-test.c
-index ebebffef5f8a..3971a0854c3e 100644
---- a/drivers/hid/hid-uclogic-rdesc-test.c
-+++ b/drivers/hid/hid-uclogic-rdesc-test.c
-@@ -97,7 +97,7 @@ static const __u8 template_params_none[] = {
+diff --git a/drivers/hid/hid-uclogic-params-test.c b/drivers/hid/hid-uclogic-params-test.c
+new file mode 100644
+index 000000000000..9f043f2ab387
+--- /dev/null
++++ b/drivers/hid/hid-uclogic-params-test.c
+@@ -0,0 +1,159 @@
++// SPDX-License-Identifier: GPL-2.0+
++
++/*
++ *  HID driver for UC-Logic devices not fully compliant with HID standard
++ *
++ *  Copyright (c) 2022 José Expósito <jose.exposito89@gmail.com>
++ */
++
++#include <kunit/test.h>
++#include "./hid-uclogic-rdesc.h"
++
++#define MAX_STR_DESC_SIZE 14
++
++struct uclogic_parse_ugee_v2_desc_case {
++	const char *name;
++	int res;
++	const __u8 str_desc[MAX_STR_DESC_SIZE];
++	size_t str_desc_size;
++	const s32 desc_params[UCLOGIC_RDESC_PH_ID_NUM];
++};
++
++static struct uclogic_parse_ugee_v2_desc_case uclogic_parse_ugee_v2_desc_cases[] = {
++	{
++		.name = "invalid_str_desc",
++		.res = -EINVAL,
++		.str_desc = {},
++		.str_desc_size = 0,
++		.desc_params = {},
++	},
++	{
++		.name = "resolution_with_value_0",
++		.res = 0,
++		.str_desc = {
++			0x0E, 0x03,
++			0x70, 0xB2,
++			0x10, 0x77,
++			0x08,
++			0x00,
++			0xFF, 0x1F,
++			0x00, 0x00,
++		},
++		.str_desc_size = 12,
++		.desc_params = {
++			[UCLOGIC_RDESC_PEN_PH_ID_X_LM] = 0xB270,
++			[UCLOGIC_RDESC_PEN_PH_ID_X_PM] = 0,
++			[UCLOGIC_RDESC_PEN_PH_ID_Y_LM] = 0x7710,
++			[UCLOGIC_RDESC_PEN_PH_ID_Y_PM] = 0,
++			[UCLOGIC_RDESC_PEN_PH_ID_PRESSURE_LM] = 0x1FFF,
++			[UCLOGIC_RDESC_FRAME_PH_ID_UM] = 0x08,
++		},
++	},
++	/* XP-PEN Deco L str_desc: Frame with 8 buttons */
++	{
++		.name = "frame_type_buttons",
++		.res = 0,
++		.str_desc = {
++			0x0E, 0x03,
++			0x70, 0xB2,
++			0x10, 0x77,
++			0x08,
++			0x00,
++			0xFF, 0x1F,
++			0xD8, 0x13,
++		},
++		.str_desc_size = 12,
++		.desc_params = {
++			[UCLOGIC_RDESC_PEN_PH_ID_X_LM] = 0xB270,
++			[UCLOGIC_RDESC_PEN_PH_ID_X_PM] = 0x2320,
++			[UCLOGIC_RDESC_PEN_PH_ID_Y_LM] = 0x7710,
++			[UCLOGIC_RDESC_PEN_PH_ID_Y_PM] = 0x1770,
++			[UCLOGIC_RDESC_PEN_PH_ID_PRESSURE_LM] = 0x1FFF,
++			[UCLOGIC_RDESC_FRAME_PH_ID_UM] = 0x08,
++		},
++	},
++	/* PARBLO A610 PRO str_desc: Frame with 9 buttons and dial */
++	{
++		.name = "frame_type_dial",
++		.res = 0,
++		.str_desc = {
++			0x0E, 0x03,
++			0x96, 0xC7,
++			0xF9, 0x7C,
++			0x09,
++			0x01,
++			0xFF, 0x1F,
++			0xD8, 0x13,
++		},
++		.str_desc_size = 12,
++		.desc_params = {
++			[UCLOGIC_RDESC_PEN_PH_ID_X_LM] = 0xC796,
++			[UCLOGIC_RDESC_PEN_PH_ID_X_PM] = 0x2749,
++			[UCLOGIC_RDESC_PEN_PH_ID_Y_LM] = 0x7CF9,
++			[UCLOGIC_RDESC_PEN_PH_ID_Y_PM] = 0x1899,
++			[UCLOGIC_RDESC_PEN_PH_ID_PRESSURE_LM] = 0x1FFF,
++			[UCLOGIC_RDESC_FRAME_PH_ID_UM] = 0x09,
++		},
++	},
++};
++
++static void uclogic_parse_ugee_v2_desc_case_desc(struct uclogic_parse_ugee_v2_desc_case *t,
++						 char *desc)
++{
++	strscpy(desc, t->name, KUNIT_PARAM_DESC_SIZE);
++}
++
++KUNIT_ARRAY_PARAM(uclogic_parse_ugee_v2_desc, uclogic_parse_ugee_v2_desc_cases,
++		  uclogic_parse_ugee_v2_desc_case_desc);
++
++static void uclogic_parse_ugee_v2_desc_test(struct kunit *test)
++{
++	int res;
++	s32 desc_params[UCLOGIC_RDESC_PH_ID_NUM];
++	const struct uclogic_parse_ugee_v2_desc_case *params = test->param_value;
++
++	res = uclogic_params_parse_ugee_v2_desc(params->str_desc,
++						params->str_desc_size,
++						desc_params,
++						ARRAY_SIZE(desc_params));
++	KUNIT_ASSERT_EQ(test, res, params->res);
++
++	if (res)
++		return;
++
++	KUNIT_EXPECT_EQ(test,
++			params->desc_params[UCLOGIC_RDESC_PEN_PH_ID_X_LM],
++			desc_params[UCLOGIC_RDESC_PEN_PH_ID_X_LM]);
++	KUNIT_EXPECT_EQ(test,
++			params->desc_params[UCLOGIC_RDESC_PEN_PH_ID_X_PM],
++			desc_params[UCLOGIC_RDESC_PEN_PH_ID_X_PM]);
++	KUNIT_EXPECT_EQ(test,
++			params->desc_params[UCLOGIC_RDESC_PEN_PH_ID_Y_LM],
++			desc_params[UCLOGIC_RDESC_PEN_PH_ID_Y_LM]);
++	KUNIT_EXPECT_EQ(test,
++			params->desc_params[UCLOGIC_RDESC_PEN_PH_ID_Y_PM],
++			desc_params[UCLOGIC_RDESC_PEN_PH_ID_Y_PM]);
++	KUNIT_EXPECT_EQ(test,
++			params->desc_params[UCLOGIC_RDESC_PEN_PH_ID_PRESSURE_LM],
++			desc_params[UCLOGIC_RDESC_PEN_PH_ID_PRESSURE_LM]);
++	KUNIT_EXPECT_EQ(test,
++			params->desc_params[UCLOGIC_RDESC_FRAME_PH_ID_UM],
++			desc_params[UCLOGIC_RDESC_FRAME_PH_ID_UM]);
++}
++
++static struct kunit_case hid_uclogic_params_test_cases[] = {
++	KUNIT_CASE_PARAM(uclogic_parse_ugee_v2_desc_test,
++			 uclogic_parse_ugee_v2_desc_gen_params),
++	{}
++};
++
++static struct kunit_suite hid_uclogic_params_test_suite = {
++	.name = "hid_uclogic_params_test",
++	.test_cases = hid_uclogic_params_test_cases,
++};
++
++kunit_test_suite(hid_uclogic_params_test_suite);
++
++MODULE_DESCRIPTION("KUnit tests for the UC-Logic driver");
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("José Expósito <jose.exposito89@gmail.com>");
+diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
+index c11fa239e6a2..07c5a21112ce 100644
+--- a/drivers/hid/hid-uclogic-params.c
++++ b/drivers/hid/hid-uclogic-params.c
+@@ -1056,6 +1056,62 @@ static int uclogic_probe_interface(struct hid_device *hdev, u8 *magic_arr,
+ 	return rc;
+ }
  
- static struct uclogic_template_case uclogic_template_cases[] = {
- 	{
--		.name = "Empty template",
-+		.name = "empty_template",
- 		.template = template_empty,
- 		.template_size = sizeof(template_empty),
- 		.param_list = params_pen_all,
-@@ -105,7 +105,7 @@ static struct uclogic_template_case uclogic_template_cases[] = {
- 		.expected = template_empty,
- 	},
- 	{
--		.name = "Template smaller than the placeholder",
-+		.name = "template_smaller_than_the_placeholder",
- 		.template = template_small,
- 		.template_size = sizeof(template_small),
- 		.param_list = params_pen_all,
-@@ -113,7 +113,7 @@ static struct uclogic_template_case uclogic_template_cases[] = {
- 		.expected = template_small,
- 	},
- 	{
--		.name = "No placeholder",
-+		.name = "no_placeholder",
- 		.template = template_no_ph,
- 		.template_size = sizeof(template_no_ph),
- 		.param_list = params_pen_all,
-@@ -121,7 +121,7 @@ static struct uclogic_template_case uclogic_template_cases[] = {
- 		.expected = template_no_ph,
- 	},
- 	{
--		.name = "Pen placeholder at the end, without ID",
-+		.name = "pen_placeholder_at_the_end_without_id",
- 		.template = template_pen_ph_end,
- 		.template_size = sizeof(template_pen_ph_end),
- 		.param_list = params_pen_all,
-@@ -129,7 +129,7 @@ static struct uclogic_template_case uclogic_template_cases[] = {
- 		.expected = template_pen_ph_end,
- 	},
- 	{
--		.name = "Frame button placeholder at the end, without ID",
-+		.name = "frame_button_placeholder_at_the_end_without_id",
- 		.template = template_btn_ph_end,
- 		.template_size = sizeof(template_btn_ph_end),
- 		.param_list = params_frame_all,
-@@ -137,7 +137,7 @@ static struct uclogic_template_case uclogic_template_cases[] = {
- 		.expected = template_btn_ph_end,
- 	},
- 	{
--		.name = "All params present in the pen template",
-+		.name = "all_params_present_in_the_pen_template",
- 		.template = template_pen_all_params,
- 		.template_size = sizeof(template_pen_all_params),
- 		.param_list = params_pen_all,
-@@ -145,7 +145,7 @@ static struct uclogic_template_case uclogic_template_cases[] = {
- 		.expected = expected_pen_all_params,
- 	},
- 	{
--		.name = "All params present in the frame template",
-+		.name = "all_params_present_in_the_frame_template",
- 		.template = template_frame_all_params,
- 		.template_size = sizeof(template_frame_all_params),
- 		.param_list = params_frame_all,
-@@ -153,7 +153,7 @@ static struct uclogic_template_case uclogic_template_cases[] = {
- 		.expected = expected_frame_all_params,
- 	},
- 	{
--		.name = "Some params present in the pen template (complete param list)",
-+		.name = "some_params_present_in_the_pen_template_with_complete_param_list",
- 		.template = template_pen_some_params,
- 		.template_size = sizeof(template_pen_some_params),
- 		.param_list = params_pen_all,
-@@ -161,7 +161,7 @@ static struct uclogic_template_case uclogic_template_cases[] = {
- 		.expected = expected_pen_some_params,
- 	},
- 	{
--		.name = "Some params present in the pen template (incomplete param list)",
-+		.name = "some_params_present_in_the_pen_template_with_incomplete_param_list",
- 		.template = template_pen_some_params,
- 		.template_size = sizeof(template_pen_some_params),
- 		.param_list = params_pen_some,
-@@ -169,7 +169,7 @@ static struct uclogic_template_case uclogic_template_cases[] = {
- 		.expected = expected_pen_some_params,
- 	},
- 	{
--		.name = "No params present in the template",
-+		.name = "no_params_present_in_the_template",
- 		.template = template_params_none,
- 		.template_size = sizeof(template_params_none),
- 		.param_list = params_pen_some,
-@@ -208,7 +208,7 @@ static struct kunit_case hid_uclogic_rdesc_test_cases[] = {
- };
++/**
++ * uclogic_params_parse_ugee_v2_desc - parse the string descriptor containing
++ * pen and frame parameters returned by UGEE v2 devices.
++ *
++ * @str_desc:		String descriptor, cannot be NULL.
++ * @str_desc_size:	Size of the string descriptor.
++ * @desc_params:	Output description params list.
++ * @desc_params_size:	Size of the output description params list.
++ *
++ * Returns:
++ *	Zero, if successful. A negative errno code on error.
++ */
++static int uclogic_params_parse_ugee_v2_desc(const __u8 *str_desc,
++					     size_t str_desc_size,
++					     s32 *desc_params,
++					     size_t desc_params_size)
++{
++	s32 pen_x_lm, pen_y_lm;
++	s32 pen_x_pm, pen_y_pm;
++	s32 pen_pressure_lm;
++	s32 frame_num_buttons;
++	s32 resolution;
++
++	/* Minimum descriptor length required, maximum seen so far is 14 */
++	const int min_str_desc_size = 12;
++
++	if (!str_desc || str_desc_size < min_str_desc_size)
++		return -EINVAL;
++
++	if (desc_params_size != UCLOGIC_RDESC_PH_ID_NUM)
++		return -EINVAL;
++
++	pen_x_lm = get_unaligned_le16(str_desc + 2);
++	pen_y_lm = get_unaligned_le16(str_desc + 4);
++	frame_num_buttons = str_desc[6];
++	pen_pressure_lm = get_unaligned_le16(str_desc + 8);
++
++	resolution = get_unaligned_le16(str_desc + 10);
++	if (resolution == 0) {
++		pen_x_pm = 0;
++		pen_y_pm = 0;
++	} else {
++		pen_x_pm = pen_x_lm * 1000 / resolution;
++		pen_y_pm = pen_y_lm * 1000 / resolution;
++	}
++
++	desc_params[UCLOGIC_RDESC_PEN_PH_ID_X_LM] = pen_x_lm;
++	desc_params[UCLOGIC_RDESC_PEN_PH_ID_X_PM] = pen_x_pm;
++	desc_params[UCLOGIC_RDESC_PEN_PH_ID_Y_LM] = pen_y_lm;
++	desc_params[UCLOGIC_RDESC_PEN_PH_ID_Y_PM] = pen_y_pm;
++	desc_params[UCLOGIC_RDESC_PEN_PH_ID_PRESSURE_LM] = pen_pressure_lm;
++	desc_params[UCLOGIC_RDESC_FRAME_PH_ID_UM] = frame_num_buttons;
++
++	return 0;
++}
++
+ /**
+  * uclogic_params_ugee_v2_init() - initialize a UGEE graphics tablets by
+  * discovering their parameters.
+@@ -1086,7 +1142,6 @@ static int uclogic_params_ugee_v2_init(struct uclogic_params *params,
+ 	__u8 *rdesc_pen = NULL;
+ 	__u8 *rdesc_frame = NULL;
+ 	s32 desc_params[UCLOGIC_RDESC_PH_ID_NUM];
+-	s32 resolution;
+ 	__u8 magic_arr[] = {
+ 		0x02, 0xb0, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+ 	};
+@@ -1128,25 +1183,12 @@ static int uclogic_params_ugee_v2_init(struct uclogic_params *params,
+ 		goto output;
+ 	}
  
- static struct kunit_suite hid_uclogic_rdesc_test_suite = {
--	.name = "hid-uclogic-rdesc-test",
-+	.name = "hid_uclogic_rdesc_test",
- 	.test_cases = hid_uclogic_rdesc_test_cases,
- };
+-	desc_params[UCLOGIC_RDESC_PEN_PH_ID_X_LM] =
+-		get_unaligned_le16(str_desc + 2);
+-	desc_params[UCLOGIC_RDESC_PEN_PH_ID_Y_LM] =
+-		get_unaligned_le16(str_desc + 4);
+-	desc_params[UCLOGIC_RDESC_FRAME_PH_ID_UM] = str_desc[6];
+-	desc_params[UCLOGIC_RDESC_PEN_PH_ID_PRESSURE_LM] =
+-		get_unaligned_le16(str_desc + 8);
+-	resolution = get_unaligned_le16(str_desc + 10);
+-	if (resolution == 0) {
+-		desc_params[UCLOGIC_RDESC_PEN_PH_ID_X_PM] = 0;
+-		desc_params[UCLOGIC_RDESC_PEN_PH_ID_Y_PM] = 0;
+-	} else {
+-		desc_params[UCLOGIC_RDESC_PEN_PH_ID_X_PM] =
+-			desc_params[UCLOGIC_RDESC_PEN_PH_ID_X_LM] * 1000 /
+-			resolution;
+-		desc_params[UCLOGIC_RDESC_PEN_PH_ID_Y_PM] =
+-			desc_params[UCLOGIC_RDESC_PEN_PH_ID_Y_LM] * 1000 /
+-			resolution;
+-	}
++	rc = uclogic_params_parse_ugee_v2_desc(str_desc, str_desc_len,
++					       desc_params,
++					       ARRAY_SIZE(desc_params));
++	if (rc)
++		goto cleanup;
++
+ 	kfree(str_desc);
+ 	str_desc = NULL;
  
+@@ -1517,3 +1559,7 @@ int uclogic_params_init(struct uclogic_params *params,
+ 	uclogic_params_cleanup(&p);
+ 	return rc;
+ }
++
++#ifdef CONFIG_HID_KUNIT_TEST
++#include "hid-uclogic-params-test.c"
++#endif
 -- 
 2.25.1
 

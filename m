@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 767E0594754
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84439594723
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344361AbiHOXLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
+        id S1345958AbiHOXM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345864AbiHOXKJ (ORCPT
+        with ESMTP id S232933AbiHOXLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:10:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F74870AE;
-        Mon, 15 Aug 2022 12:59:56 -0700 (PDT)
+        Mon, 15 Aug 2022 19:11:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8542238B3;
+        Mon, 15 Aug 2022 13:00:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF93061299;
-        Mon, 15 Aug 2022 19:59:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00E9EC433D7;
-        Mon, 15 Aug 2022 19:59:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99AEB612B8;
+        Mon, 15 Aug 2022 20:00:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E38AC433C1;
+        Mon, 15 Aug 2022 20:00:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593595;
-        bh=ufwO8vqLDDu71bVtWRi8o3m8JUyw8NsgBLtUn+/druI=;
+        s=korg; t=1660593616;
+        bh=HH4qPGidm0OUya6QXERfAKhEFrdc6+v3zuCV1SJ7ZWo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hUpRlrWAHORJJNauTBMIcUWzRhARgnSNnLWSXgveEaBzH6FyffpcI2WS4BE/c7qRL
-         NiuuqN0H9Z1MJOFeUjgw2Re73ktcMt3fhbp/dfg3JnKBV3Z8t+eModbidrXMJ/5zeF
-         8MpPT+WSLu3SAslPmWziQdQkH6K2JdhrvB6S/K8E=
+        b=DvLgj34xtBjS79KJcY+X2oBoudgW4Gb+klj5T23u+xCtTyF0dAylqFXJbFO/9x9+g
+         Wvwbbt5fDP5j4Gnw2FD6TNwygRfxb6JyalasyPYBMku91+ii0Kge/U8b257Rsac159
+         srLLmxvR8NtWNIVbvuLWl0R+jVzz9fgMC970ahpY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Daniel=20M=C3=BCller?= <deso@posteo.net>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>
-Subject: [PATCH 5.18 0973/1095] x86/kprobes: Update kcb status flag after singlestepping
-Date:   Mon, 15 Aug 2022 20:06:12 +0200
-Message-Id: <20220815180509.331090424@linuxfoundation.org>
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH 5.18 0976/1095] posix-cpu-timers: Cleanup CPU timers before freeing them during exec
+Date:   Mon, 15 Aug 2022 20:06:15 +0200
+Message-Id: <20220815180509.486593618@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
 References: <20220815180429.240518113@linuxfoundation.org>
@@ -56,59 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
-commit dec8784c9088b131a1523f582c2194cfc8107dc0 upstream.
+commit e362359ace6f87c201531872486ff295df306d13 upstream.
 
-Fix kprobes to update kcb (kprobes control block) status flag to
-KPROBE_HIT_SSDONE even if the kp->post_handler is not set.
+Commit 55e8c8eb2c7b ("posix-cpu-timers: Store a reference to a pid not a
+task") started looking up tasks by PID when deleting a CPU timer.
 
-This bug may cause a kernel panic if another INT3 user runs right
-after kprobes because kprobe_int3_handler() misunderstands the
-INT3 is kprobe's single stepping INT3.
+When a non-leader thread calls execve, it will switch PIDs with the leader
+process. Then, as it calls exit_itimers, posix_cpu_timer_del cannot find
+the task because the timer still points out to the old PID.
 
-Fixes: 6256e668b7af ("x86/kprobes: Use int3 instead of debug trap for single-step")
-Reported-by: Daniel Müller <deso@posteo.net>
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Tested-by: Daniel Müller <deso@posteo.net>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/all/20220727210136.jjgc3lpqeq42yr3m@muellerd-fedora-PC2BDTX9
-Link: https://lore.kernel.org/r/165942025658.342061.12452378391879093249.stgit@devnote2
+That means that armed timers won't be disarmed, that is, they won't be
+removed from the timerqueue_list. exit_itimers will still release their
+memory, and when that list is later processed, it leads to a
+use-after-free.
+
+Clean up the timers from the de-threaded task before freeing them. This
+prevents a reported use-after-free.
+
+Fixes: 55e8c8eb2c7b ("posix-cpu-timers: Store a reference to a pid not a task")
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220809170751.164716-1-cascardo@canonical.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/kprobes/core.c |   18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
+ fs/exec.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -814,16 +814,20 @@ set_current_kprobe(struct kprobe *p, str
- static void kprobe_post_process(struct kprobe *cur, struct pt_regs *regs,
- 			       struct kprobe_ctlblk *kcb)
- {
--	if ((kcb->kprobe_status != KPROBE_REENTER) && cur->post_handler) {
--		kcb->kprobe_status = KPROBE_HIT_SSDONE;
--		cur->post_handler(cur, regs, 0);
--	}
--
- 	/* Restore back the original saved kprobes variables and continue. */
--	if (kcb->kprobe_status == KPROBE_REENTER)
-+	if (kcb->kprobe_status == KPROBE_REENTER) {
-+		/* This will restore both kcb and current_kprobe */
- 		restore_previous_kprobe(kcb);
--	else
-+	} else {
-+		/*
-+		 * Always update the kcb status because
-+		 * reset_curent_kprobe() doesn't update kcb.
-+		 */
-+		kcb->kprobe_status = KPROBE_HIT_SSDONE;
-+		if (cur->post_handler)
-+			cur->post_handler(cur, regs, 0);
- 		reset_current_kprobe();
-+	}
- }
- NOKPROBE_SYMBOL(kprobe_post_process);
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1297,6 +1297,9 @@ int begin_new_exec(struct linux_binprm *
+ 	bprm->mm = NULL;
  
+ #ifdef CONFIG_POSIX_TIMERS
++	spin_lock_irq(&me->sighand->siglock);
++	posix_cpu_timers_exit(me);
++	spin_unlock_irq(&me->sighand->siglock);
+ 	exit_itimers(me);
+ 	flush_itimer_signals();
+ #endif
 
 

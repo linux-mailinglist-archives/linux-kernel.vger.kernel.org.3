@@ -2,62 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB60592757
+	by mail.lfdr.de (Postfix) with ESMTP id 59CC9592758
 	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 03:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbiHOBDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 21:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
+        id S231913AbiHOBE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 21:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiHOBDn (ORCPT
+        with ESMTP id S229473AbiHOBE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 21:03:43 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E35EDFEC
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 18:03:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660525422; x=1692061422;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=g1Gz490N3X+xinSJ0Yj8+3Bx6+nLZMmSv2ioQICZ2Ro=;
-  b=HEhY/es2e8AsHgiR/+L7+YZYBOMSTrGlhUd93ZFjb704oVAzKfVuWf9x
-   zhaDjppVwCNIcnCvrCySovqwJhBgSvLyzIY3sKYpSANgbuw/xSLULWwB/
-   iAuCLB9BLYwE9ChHscicbSU4fq7KSQcTiIxHFztWk7u/uPF02lU0Tvg+r
-   nKLHl5XHR7Bz25A9KVvhdp6JAuEkmsMoIDxPAVJz9Ktf8rkUTnJX6ZrcL
-   zNDMa+O9SMXy6thJKK+R7d6jE3sR2K3ez/IpHwwLYRHWzsra8+aUA8+D/
-   2YT4cVsL6ldCFUQh5Muqdz+g6yj+ibQyNnxdK0+hjEOC6FuTMEp4F8NmC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="355872165"
-X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
-   d="scan'208";a="355872165"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 18:03:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
-   d="scan'208";a="695823591"
-Received: from sse-cse-haiyue-nuc.sh.intel.com ([10.239.241.114])
-  by FMSMGA003.fm.intel.com with ESMTP; 14 Aug 2022 18:03:39 -0700
-From:   Haiyue Wang <haiyue.wang@intel.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     akpm@linux-foundation.org, david@redhat.com, linmiaohe@huawei.com,
-        ying.huang@intel.com, songmuchun@bytedance.com,
-        naoya.horiguchi@linux.dev, alex.sierra@amd.com,
-        Haiyue Wang <haiyue.wang@intel.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alistair Popple <apopple@nvidia.com>
-Subject: [PATCH v3 2/2] mm: fix the handling Non-LRU pages returned by follow_page
-Date:   Mon, 15 Aug 2022 09:03:49 +0800
-Message-Id: <20220815010349.432313-3-haiyue.wang@intel.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815010349.432313-1-haiyue.wang@intel.com>
-References: <20220812084921.409142-1-haiyue.wang@intel.com>
- <20220815010349.432313-1-haiyue.wang@intel.com>
+        Sun, 14 Aug 2022 21:04:26 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37546DFE1
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 18:04:25 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id a8so5725393pjg.5
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 18:04:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=fG3uklqi9M+RAdE2cQmiR2AOv3P9kHtvMDCz33a0pts=;
+        b=Hho2blZNzpafx4xGlukj5NhskZg5OjU0+/iS2MFX1IboO3/GCdQeTwkww6tYOu71GE
+         6Ctmn9R5pcXym8826eOckhhum7ZopnaSWTF3IN6qqI5YO1v5UHkPU9VflvM99vKT5wzo
+         YF7FxoFfARX03uD+vc7EkFR890u+BUl2Xf4HhftMkfdmlzPD11ENFtmMgZWPjNuCLXkz
+         YIMDagzRJkGh5hFDN3GK7iy8q5AQGHXSSJOXB1yXwynSeyruk+bpg+KeG6VBF8DQ0oPD
+         ir96qkFeKvpyU2aBGzeHZAMv0glwb4Gz29wuQCqR5k4N9bS6wDf0+mkGMdijVDoUFylz
+         3skA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=fG3uklqi9M+RAdE2cQmiR2AOv3P9kHtvMDCz33a0pts=;
+        b=ZsY5vRJ4AUo0rG21RFVjWt8CwXEfYZ6j+TVxsEPXllGLBjPfzA61ckUb8bVqH3afc7
+         dq0p82o8zgXzbK46ULwAdBIh9OyUrIasCtuaWWVj6loTPQK3rlAD3f6zahVa/CDD6lF1
+         Tz2NVaJxRVM4zPCWr/KXv4ur+VSMWA4sOA0b5u4b4nc+gTYdTolkDsA2Wbw4zQr6pGsa
+         LfQGwMxvgJOerwGlKADEx/p8BVlLuRvPIxL+UyYaSPvujA5eulME2XE3Wa4V/6oGGzm7
+         V9FYFJdEp1zTF7Udsf2ub7SBE2+i0TPnNx1RLrBBKK+ZR0F4lE50iTnUuU6AVP/phWI4
+         lMaA==
+X-Gm-Message-State: ACgBeo32iCFA9mv+QY77vHkNL7pe3KYzAsO2BwnMSq7K38oVDb0zUefd
+        GGcA0myoDaZcbja/9saOKTh56Q==
+X-Google-Smtp-Source: AA6agR4XYlmLCRV4gxutH/sEqV7bQ2otU/wmbVqa6PTkW3/LnYb460CqqHSfiyVx/mjJ6G58El/QMg==
+X-Received: by 2002:a17:902:d4c4:b0:170:9fdb:4a2a with SMTP id o4-20020a170902d4c400b001709fdb4a2amr14047936plg.137.1660525464591;
+        Sun, 14 Aug 2022 18:04:24 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id b6-20020a170902650600b0016397da033csm5933924plk.62.2022.08.14.18.04.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 14 Aug 2022 18:04:23 -0700 (PDT)
+Message-ID: <1c057afa-92df-ee3c-5978-3731d3db9345@kernel.dk>
+Date:   Sun, 14 Aug 2022 19:04:22 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: upstream kernel crashes
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andres Freund <andres@anarazel.de>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>
+References: <20220814212610.GA3690074@roeck-us.net>
+ <CAHk-=wgf2EfLHui6A5NbWoaVBB2f8t-XBUiOMkyjN2NU41t6eA@mail.gmail.com>
+ <20220814223743.26ebsbnrvrjien4f@awork3.anarazel.de>
+ <CAHk-=wi6raoJE-1cyRU0YxJ+9ReO1eXmOAq0FwKAyZS7nhvk9w@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAHk-=wi6raoJE-1cyRU0YxJ+9ReO1eXmOAq0FwKAyZS7nhvk9w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,120 +80,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The page returned by follow_page with 'FOLL_GET' has get_page called, so
-it needs to call put_page for handling the reference count correctly.
+On 8/14/22 4:47 PM, Linus Torvalds wrote:
+> On Sun, Aug 14, 2022 at 3:37 PM Andres Freund <andres@anarazel.de> wrote:
+>>
+>> That range had different symptoms, I think (networking not working, but not
+>> oopsing). I hit similar issues when tried to reproduce the issue
+>> interactively, to produce more details, and unwisely did git pull instead of
+>> checking out the precise revision, ending up with aea23e7c464b. That's when
+>> symptoms look similar to the above.  So it'd be 69dac8e431af..aea23e7c464b
+>> that I'd be more suspicious off in the context of this thread.
+> 
+> Ok.
+> 
+>> Which would make me look at the following first:
+>> e140f731f980 Merge tag 'scsi-misc' of git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
+>> abe7a481aac9 Merge tag 'block-6.0-2022-08-12' of git://git.kernel.dk/linux-block
+>> 1da8cf961bb1 Merge tag 'io_uring-6.0-2022-08-13' of git://git.kernel.dk/linux-block
+> 
+> All right, that maks sense.The reported oopses seem to be about block
+> requests. Some of them were scsi in particular.
+> 
+> Let's bring in Jens and the SCSI people. Maybe that host reference
+> counting? There's quite a lot of "move freeing around" in that late
+> scsi pull, even if it was touted as "mostly small bug fixes and
+> trivial updates".
+> 
+> Here's the two threads:
+> 
+>   https://lore.kernel.org/all/20220814212610.GA3690074@roeck-us.net/
+>   https://lore.kernel.org/all/20220814043906.xkmhmnp23bqjzz4s@awork3.anarazel.de/
+> 
+> but I guess I'll do an -rc1 regardless of this, because I need to
+> close the merge window.
 
-And as David reviewed, "device pages are never PageKsm pages". Drop this
-zone device page check for break_ksm.
+I took a quick look and added more SCSI bits to my vm images, but
+haven't been able to hit it. But if this is happening after the above
+mentioned merges, does seem like it's more SCSI related. The block side
+is only really an error handling fix on that front, the rest is just
+nvme. Seems unlikely that'd be the culprit.
 
-Fixes: 3218f8712d6b ("mm: handling Non-LRU pages returned by vm_normal_pages")
-Signed-off-by: Haiyue Wang <haiyue.wang@intel.com>
----
- mm/huge_memory.c |  4 ++--
- mm/ksm.c         | 12 +++++++++---
- mm/migrate.c     | 10 +++++++---
- 3 files changed, 18 insertions(+), 8 deletions(-)
+Sounds like Andres is already bisecting this, so I guess we'll be wiser
+soon enough.
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 8a7c1b344abe..b2ba17c3dcd7 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2963,10 +2963,10 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
- 		/* FOLL_DUMP to ignore special (like zero) pages */
- 		page = follow_page(vma, addr, FOLL_GET | FOLL_DUMP);
- 
--		if (IS_ERR_OR_NULL(page) || is_zone_device_page(page))
-+		if (IS_ERR_OR_NULL(page))
- 			continue;
- 
--		if (!is_transparent_hugepage(page))
-+		if (is_zone_device_page(page) || !is_transparent_hugepage(page))
- 			goto next;
- 
- 		total++;
-diff --git a/mm/ksm.c b/mm/ksm.c
-index 42ab153335a2..e26f57fc1f0e 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -475,7 +475,7 @@ static int break_ksm(struct vm_area_struct *vma, unsigned long addr)
- 		cond_resched();
- 		page = follow_page(vma, addr,
- 				FOLL_GET | FOLL_MIGRATION | FOLL_REMOTE);
--		if (IS_ERR_OR_NULL(page) || is_zone_device_page(page))
-+		if (IS_ERR_OR_NULL(page))
- 			break;
- 		if (PageKsm(page))
- 			ret = handle_mm_fault(vma, addr,
-@@ -560,12 +560,15 @@ static struct page *get_mergeable_page(struct rmap_item *rmap_item)
- 		goto out;
- 
- 	page = follow_page(vma, addr, FOLL_GET);
--	if (IS_ERR_OR_NULL(page) || is_zone_device_page(page))
-+	if (IS_ERR_OR_NULL(page))
- 		goto out;
-+	if (is_zone_device_page(page))
-+		goto out_putpage;
- 	if (PageAnon(page)) {
- 		flush_anon_page(vma, page, addr);
- 		flush_dcache_page(page);
- 	} else {
-+out_putpage:
- 		put_page(page);
- out:
- 		page = NULL;
-@@ -2308,11 +2311,13 @@ static struct rmap_item *scan_get_next_rmap_item(struct page **page)
- 			if (ksm_test_exit(mm))
- 				break;
- 			*page = follow_page(vma, ksm_scan.address, FOLL_GET);
--			if (IS_ERR_OR_NULL(*page) || is_zone_device_page(*page)) {
-+			if (IS_ERR_OR_NULL(*page)) {
- 				ksm_scan.address += PAGE_SIZE;
- 				cond_resched();
- 				continue;
- 			}
-+			if (is_zone_device_page(*page))
-+				goto next_page;
- 			if (PageAnon(*page)) {
- 				flush_anon_page(vma, *page, ksm_scan.address);
- 				flush_dcache_page(*page);
-@@ -2327,6 +2332,7 @@ static struct rmap_item *scan_get_next_rmap_item(struct page **page)
- 				mmap_read_unlock(mm);
- 				return rmap_item;
- 			}
-+next_page:
- 			put_page(*page);
- 			ksm_scan.address += PAGE_SIZE;
- 			cond_resched();
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 581dfaad9257..fee12cd2f294 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -1672,9 +1672,12 @@ static int add_page_for_migration(struct mm_struct *mm, unsigned long addr,
- 		goto out;
- 
- 	err = -ENOENT;
--	if (!page || is_zone_device_page(page))
-+	if (!page)
- 		goto out;
- 
-+	if (is_zone_device_page(page))
-+		goto out_putpage;
-+
- 	err = 0;
- 	if (page_to_nid(page) == node)
- 		goto out_putpage;
-@@ -1868,8 +1871,9 @@ static void do_pages_stat_array(struct mm_struct *mm, unsigned long nr_pages,
- 		if (IS_ERR(page))
- 			goto set_status;
- 
--		if (page && !is_zone_device_page(page)) {
--			err = page_to_nid(page);
-+		if (page) {
-+			err = !is_zone_device_page(page) ? page_to_nid(page)
-+							 : -ENOENT;
- 			if (foll_flags & FOLL_GET)
- 				put_page(page);
- 		} else {
 -- 
-2.37.2
+Jens Axboe
 

@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB14594967
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5402594807
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243318AbiHOXYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54154 "EHLO
+        id S244111AbiHOXY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241501AbiHOXTM (ORCPT
+        with ESMTP id S243565AbiHOXTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:19:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642F514A1D6;
-        Mon, 15 Aug 2022 13:03:58 -0700 (PDT)
+        Mon, 15 Aug 2022 19:19:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F4014A1F0;
+        Mon, 15 Aug 2022 13:04:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E785D612E7;
-        Mon, 15 Aug 2022 20:03:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF4CEC433C1;
-        Mon, 15 Aug 2022 20:03:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0DE3EB81135;
+        Mon, 15 Aug 2022 20:04:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 363D7C433D6;
+        Mon, 15 Aug 2022 20:04:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593837;
-        bh=yRT4IHXH0eUR1dS7EIU5gkV3QRpYBYJ2aPTxUU5DRiw=;
+        s=korg; t=1660593843;
+        bh=SRi8kUHq7tGKlhz6xYUk1plavmbnQCBV5VrKeiUxa6k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HVUGZmLodEhrjLjZN9P/PqVzqZrd7k6tbrRcym8FOBkqwOxbArfTJAW2elYz+Nh6u
-         9fYf1+EouqzZA6OI3leaSyQ5Leq52567X5NCm4uxpdpUNQHgILeuvK4eiPZM1O4I3u
-         OY+u3jQe28hi5NIHLdPwFOaKzeEQbbEkcn7JDdNI=
+        b=x5RL2gfCQFM9tfDv+8mVfanov3AlS+RhVgAMWR9WQCXbOTE3SGh+RFvDQUZGDwNnG
+         zBJfKJXkDFCNbDODcjC0owNhDF3Zqb3F5Ii8MFtaBXeKM53PXUaepDUa/UAD516pof
+         XP/zk5l2SmKN2gJ30WTcY09gznA0vo4XIsmnx/G0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christian Ansuel Marangi <ansuelsmth@gmail.com>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>,
+        Manikanta Pubbisetty <quic_mpubbise@quicinc.com>,
         Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0333/1157] ath11k: fix missing skb drop on htc_tx_completion error
-Date:   Mon, 15 Aug 2022 19:54:49 +0200
-Message-Id: <20220815180452.977503852@linuxfoundation.org>
+Subject: [PATCH 5.19 0334/1157] ath11k: Fix incorrect debug_mask mappings
+Date:   Mon, 15 Aug 2022 19:54:50 +0200
+Message-Id: <20220815180453.023958182@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -57,44 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
+From: Manikanta Pubbisetty <quic_mpubbise@quicinc.com>
 
-[ Upstream commit e5646fe3b7ef739c392e59da7db6adf5e1fdef42 ]
+[ Upstream commit 9331f7d3c54a263bede5055e106e40b28d0bd937 ]
 
-On htc_tx_completion error the skb is not dropped. This is wrong since
-the completion_handler logic expect the skb to be consumed anyway even
-when an error is triggered. Not freeing the skb on error is a memory
-leak since the skb won't be freed anywere else. Correctly free the
-packet on eid >= ATH11K_HTC_EP_COUNT before returning.
+Currently a couple of debug_mask entries are mapped to the same value,
+this could enable unintended driver logging. If enabling DP_TX logs was
+the intention, then this could also enable PCI logs flooding the dmesg
+buffer or vice versa. Fix this by correctly assigning the debug masks.
 
-Tested-on: IPQ8074 hw2.0 AHB WLAN.HK.2.5.0.1-01208-QCAHKSWPL_SILICONZ-1
+Found during code review.
 
-Fixes: f951380a6022 ("ath11k: Disabling credit flow for WMI path")
-Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
-Reviewed-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+Tested-on: WCN6750 hw1.0 AHB WLAN.MSL.1.0.1-00887-QCAMSLSWPLZ-1
+
+Fixes: aa2092a9bab3f ("ath11k: add raw mode and software crypto support")
+Signed-off-by: Manikanta Pubbisetty <quic_mpubbise@quicinc.com>
 Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220528142516.20819-2-ansuelsmth@gmail.com
+Link: https://lore.kernel.org/r/20220602115621.15339-1-quic_mpubbise@quicinc.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath11k/htc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/net/wireless/ath/ath11k/debug.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/htc.c b/drivers/net/wireless/ath/ath11k/htc.c
-index 069c29a4fac7..ca3aedc0252d 100644
---- a/drivers/net/wireless/ath/ath11k/htc.c
-+++ b/drivers/net/wireless/ath/ath11k/htc.c
-@@ -258,8 +258,10 @@ void ath11k_htc_tx_completion_handler(struct ath11k_base *ab,
- 	u8 eid;
+diff --git a/drivers/net/wireless/ath/ath11k/debug.h b/drivers/net/wireless/ath/ath11k/debug.h
+index fbbd5fe02aa8..91545640c47b 100644
+--- a/drivers/net/wireless/ath/ath11k/debug.h
++++ b/drivers/net/wireless/ath/ath11k/debug.h
+@@ -23,8 +23,8 @@ enum ath11k_debug_mask {
+ 	ATH11K_DBG_TESTMODE	= 0x00000400,
+ 	ATH11k_DBG_HAL		= 0x00000800,
+ 	ATH11K_DBG_PCI		= 0x00001000,
+-	ATH11K_DBG_DP_TX	= 0x00001000,
+-	ATH11K_DBG_DP_RX	= 0x00002000,
++	ATH11K_DBG_DP_TX	= 0x00002000,
++	ATH11K_DBG_DP_RX	= 0x00004000,
+ 	ATH11K_DBG_ANY		= 0xffffffff,
+ };
  
- 	eid = ATH11K_SKB_CB(skb)->eid;
--	if (eid >= ATH11K_HTC_EP_COUNT)
-+	if (eid >= ATH11K_HTC_EP_COUNT) {
-+		dev_kfree_skb_any(skb);
- 		return;
-+	}
- 
- 	ep = &htc->endpoint[eid];
- 	spin_lock_bh(&htc->tx_lock);
 -- 
 2.35.1
 

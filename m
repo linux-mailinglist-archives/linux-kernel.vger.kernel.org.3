@@ -2,111 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90632592A59
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 09:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 336C3592A5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 09:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241115AbiHOHYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 03:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
+        id S240931AbiHOHYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 03:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbiHOHYa (ORCPT
+        with ESMTP id S229935AbiHOHYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 03:24:30 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF7A13D77
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:24:28 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id s5-20020a17090a13c500b001f4da9ffe5fso13671252pjf.5
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:24:28 -0700 (PDT)
+        Mon, 15 Aug 2022 03:24:46 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D98813DC6;
+        Mon, 15 Aug 2022 00:24:45 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id k6-20020a05600c1c8600b003a54ecc62f6so3517352wms.5;
+        Mon, 15 Aug 2022 00:24:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=Q5N86kLYxq9QmTfTNbzESbnomJfIEPTu6reZq/3gpMU=;
-        b=kjXCx/Qjj4J94lupFA6rAC7RCPECcsqNohB+htscOzUO2dcU5T1jQcHfjDQOXmcudY
-         V5Mrg81kDQgwmIs9WTYezPuPpfOx78Zw4IyYLh8JQL139VnFwnSJmgThhNbbidvQWNKw
-         BrYANp2A3GcIQsqNdBDweEF0WRAI+O7wMSlWE=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=bRJDHP4cs+l0S/Vq3FhjHYYjhVUbwWITH21+gCuf9PA=;
+        b=f/2ctWt1p/RNUXYK4u/QPfb7Gx7QoaxUiQa5h8VxVIH3EmMVJKau0NoYRKSygSe+ii
+         K5MnGfjrB+89bbKMrPPFl7HylHxqk+0mx+gtZ4CgehszgM7mTREoHCN6ybiHY1xQYX0l
+         4ZuJd06xpd/7VA00gaLVu/BMt6do2WvdTqAB1p9dq7HWqB032eVJP9/k+Hk+DjuVZJfw
+         pWwx7bZqDzsjDCjZDkUr23jD0KhoxUYKQ/W4BprtKeQKb8oCT3epiINmQd9LUMFRCCp1
+         gT8RbK6y2urJMbSsZepm/yaxhQZQJRh0Rs7ns7/g9fN8oh4yHnG037qnPclt0ODKKyeH
+         u3yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Q5N86kLYxq9QmTfTNbzESbnomJfIEPTu6reZq/3gpMU=;
-        b=eEMKIikxGsZtMsaFJcsyEH5P6GjIcIV1D8OeSpDdkePhsWQ0/zolby5MqxmRfXDPPF
-         cqLv4euBFK5YL7gt9LPuvFWT449o4ZuhoTcOf2eo8gZeqWOral2F5PkdLab9n1Yj4S2n
-         ANd3myNdStDArMl8Z3Mx4S2xrNvmU01IoZf8IdL7tw5iRjSzzx2aQIospaXByyT6AdPG
-         hwlZQfKn/UgDHB6SIXYmCaMor4h1wzZgKdvGnxUXd5mfRYtR9dhC/SuyTLTE05KhYaZm
-         wd/3Ezwy/7chzC7Vt8tpBaaFxPEGZZIuGf/05fM5+Wi+Ojvq/u7YgNkURTqro9ZUoyX8
-         ICEw==
-X-Gm-Message-State: ACgBeo3LxvGFSTq0S2sQmXuimxuzC2V1HtJWx/FVq65IevzkHFogxXzQ
-        zeui3O31WPEY0LplJe9aTduA8g==
-X-Google-Smtp-Source: AA6agR6TM+X5b2JG0yiMWjxNJG8ZVb1/6UTM+DZhRU91dN93au19pTx3Y/3QNjWVqlwzt7Sn2uc9IQ==
-X-Received: by 2002:a17:902:f30b:b0:170:c8ec:63b1 with SMTP id c11-20020a170902f30b00b00170c8ec63b1mr15978377ple.125.1660548268105;
-        Mon, 15 Aug 2022 00:24:28 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:110b:946c:84b2:7c95])
-        by smtp.gmail.com with ESMTPSA id p16-20020a170902e75000b0016dc2153f54sm6432130plf.299.2022.08.15.00.24.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 00:24:27 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 16:24:19 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Wang Yating <yating.wang@intel.com>,
-        Christoph Jechlitschek <christoph.jechlitschek@intel.com>,
-        Hao Yao <hao.yao@intel.com>, Andy Yeh <andy.yeh@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        linux-media@vger.kernel.org, Mark Pearson <markpearson@lenovo.com>,
-        Dell.Client.Kernel@dell.com, linux-kernel@vger.kernel.org,
-        Guenter Roeck <groeck@google.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Christian Schaller <cschalle@redhat.com>,
-        Wouter Bolsterlee <wouter@bolsterl.ee>,
-        Miguel Palhas <mpalhas@gmail.com>, it+linux-media@molgen.mpg.de
-Subject: Re: Missing MIPI IPU6 camera driver for Intel Alder Lake laptops
-Message-ID: <Yvn0o96K8j5gRaWM@google.com>
-References: <YvUKLbv/pOfbbeL+@pendragon.ideasonboard.com>
- <YvUaEDMbZD70x+hD@kroah.com>
- <YvUbhx4HSxAAwIvv@pendragon.ideasonboard.com>
- <YvUghWZbXIUofg5A@kroah.com>
- <YvmqL6Wz7o77ukF5@google.com>
- <YvnpVmnROTsWWw0o@kroah.com>
- <YvnrJBI8599+E43T@google.com>
- <YvnvnL9pBAgWMgTk@kroah.com>
- <YvnwtN1SwQjilJ97@google.com>
- <YvnybHVFmpUJs4qi@kroah.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=bRJDHP4cs+l0S/Vq3FhjHYYjhVUbwWITH21+gCuf9PA=;
+        b=TuCASSdmzWs8V/ldub1BvpMBTV4eXXWNHrBjzFLY/+U9J6SlRlStXuxJFBOMahj1yi
+         Dh1C+3XI1Wxj0I9ILaUucFoXXX+LFPtFZgIFPx40bBSP1oqZ+/MTV/wD7b3LkTJ297ia
+         IJYBaK8LiLSibru8DdM4uIb+W5bjhYI0EuNRS9yXdzlARUQAmRs4329KklP3f18rXdJV
+         dDm2Qw8gHQS1wbkXH0+ldQjB5sgdGqM2Es3Jy3tduLXTJS9xk7b+xLBL7tzOziOAOssN
+         LF+eWMqWlOffg3S+Eyt0vzcRyCoYTAE/w/Ch7F/SqpbiMO/j7BJk7LIVXWH68sKG1oE1
+         y7cg==
+X-Gm-Message-State: ACgBeo3kkPKDiCsQ/xElh7/Ikn7kGa2gdFA2Lz9GkLao+HoDqNaCJBDH
+        pL5hYDg9lY25InQxrVjkyNPlgIunLAQRwkXIeI7Xjt9UrTQ=
+X-Google-Smtp-Source: AA6agR44YLYJCEVr+7nBXbCM5zYovOrwibJKbST6ANvVb+2+QQA5nD3me/yk+io8Z7P0DW7E2dBwCcy9O0fCDFa6vpQ=
+X-Received: by 2002:a1c:3584:0:b0:3a5:fb0e:102e with SMTP id
+ c126-20020a1c3584000000b003a5fb0e102emr1185726wma.105.1660548284030; Mon, 15
+ Aug 2022 00:24:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvnybHVFmpUJs4qi@kroah.com>
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+References: <1660225318-4063-1-git-send-email-u0084500@gmail.com>
+ <1660225318-4063-3-git-send-email-u0084500@gmail.com> <CANhJrGMnjSu3MMQ2PgvSWztNgG1r-PdyLBdsT3JVqZZSfqky-w@mail.gmail.com>
+ <CADiBU39c4P-ZNwjrqm-VxSZOLiobEu--y=iH+Si7a+dwUdmeaA@mail.gmail.com>
+In-Reply-To: <CADiBU39c4P-ZNwjrqm-VxSZOLiobEu--y=iH+Si7a+dwUdmeaA@mail.gmail.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Date:   Mon, 15 Aug 2022 10:24:32 +0300
+Message-ID: <CANhJrGP_99rU6nGfKmEmvZP_QAW5eqgBuCFmjE4fRwu-Rk5j=w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] power: supply: rt9471: Add Richtek RT9471 charger driver
+To:     ChiYuan Huang <u0084500@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        =?UTF-8?B?5ri45a2Q6aao?= <alina_yu@richtek.com>,
+        ChiYuan Huang <cy_huang@richtek.com>, alinayu829@gmail.com,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/08/15 09:14), Greg KH wrote:
-> > Definitely not today. Someday, for sure :)
-> > 
-> > I don't want to promise any timelines. But we are certainly not
-> > talking "weeks", we are talking "months". Several months is a
-> > realistic timeline.
-> 
-> Ok, so getting this merged is a good year out at the best, realisticly 2
-> years given that once you submit the first version for review, the real
-> work will start happening.
+ma 15. elok. 2022 klo 9.11 ChiYuan Huang (u0084500@gmail.com) kirjoitti:
+>
+> Matti Vaittinen <mazziesaccount@gmail.com> =E6=96=BC 2022=E5=B9=B48=E6=9C=
+=8815=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=881:53=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+> >
+> > Hi ChiYuan,
+> >
+> > Thanks for the patch :)
+> >
+> > to 11. elok. 2022 klo 16.43 cy_huang (u0084500@gmail.com) kirjoitti:
+> > >
+> > > From: ChiYuan Huang <cy_huang@richtek.com>
+> > >
+> > > Add support for the RT9471 3A 1-Cell Li+ battery charger.
+> > >
+> > > The RT9471 is a highly-integrated 3A switch mode battery charger with
+> > > low impedance power path to better optimize the charging efficiency.
+> > >
+> > > Co-developed-by: Alina Yu <alina_yu@richtek.com>
+> > > Signed-off-by: Alina Yu <alina_yu@richtek.com>
+> > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > > ---
+> >
 
-Well, nothing is really set in stone here. We may revisit our strategy,
-say turn it upside down, and hit upstream mailing list as soon as possible
-instead.
+> > While skimming through the rest of the patch... This may just be my
+> > personal preference but wrapper functions with just one line are
+> > rarely beneficial. In the worst case they just add more lines AND hide
+> > the details of what actually is done without any clear benefits. Well,
+> > this is just my view so please ignore this comment if wrappers like
+> > this are a "subsystem standard"
+> >
+> I'm not sure what the 'subsystem standard' is.
+> I declare it as 'inline' function and the  function name to tell the
+> user what I'm doing.
+> This may be silly. But from my aspect, it makes each property set/get
+> more clear.
 
+I guess this is Ok if the maintainer does not complain. And if he does
+- then we at least know the "subsystem standard" ;)
 
-> So I'll stick with my original statement, don't buy this hardware
-  ... if you plan on running vanilla kernel. Otherwise do buy :)
+Yours
+  -- Matti
+--=20
+
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~

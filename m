@@ -2,111 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5B4593A4E
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78112593A2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245353AbiHOTe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 15:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37974 "EHLO
+        id S245204AbiHOTd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 15:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345067AbiHOT1o (ORCPT
+        with ESMTP id S1344909AbiHOT11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 15:27:44 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C715B7BA;
-        Mon, 15 Aug 2022 11:43:32 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FIMqc8011181;
-        Mon, 15 Aug 2022 18:43:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=o+kWYs+yHIy8cJ5iha1yG+ss0RBqFGfmFO2EG/z78kI=;
- b=YzTCk5ku3uS01TIBJHL3qfgMV0OF5s1/eXFwVlAW4tNZ1r0hZ9fcj1aaTqf6ccJ7MQjZ
- xxoeqEL2YNRbvQZM8EDPqP7bsrUp7DGeonrMKR/kPayaEaO6wixXqhsuGbM0ONqDONsg
- dR1anINkN4mPsa5LPNpZSpIpCUDYqRe7fOnApqcxj+b+kOOBlT08g4QPQrRYUeErgEho
- 8qWCEUBcawgFz1GTWq/86359MNQuHIGmdbOZ2tVvn59wGw3gzqmsLsJMQhWJ5ULZcvub
- QmwOmv/vzqjgvOSQ0Ckc8VT/Cctn1Y7X3RJFPNUaN79Blblj6Y+VpxyxLm8VaAqRCDX+ nQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hx39re1vc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Aug 2022 18:43:26 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27FIhPXj032220
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Aug 2022 18:43:25 GMT
-Received: from jhugo-lnx.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 15 Aug 2022 11:43:23 -0700
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-To:     <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>
-CC:     <quic_carlv@quicinc.com>, <quic_ajitpals@quicinc.com>,
-        <quic_pkanojiy@quicinc.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>
-Subject: [RFC PATCH 14/14] MAINTAINERS: Add entry for QAIC driver
-Date:   Mon, 15 Aug 2022 12:42:36 -0600
-Message-ID: <1660588956-24027-15-git-send-email-quic_jhugo@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1660588956-24027-1-git-send-email-quic_jhugo@quicinc.com>
-References: <1660588956-24027-1-git-send-email-quic_jhugo@quicinc.com>
+        Mon, 15 Aug 2022 15:27:27 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820655B789
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:43:17 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id 130so7043966pfy.6
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 11:43:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=EU6K+sVa6W0a7O9upd2Yf0LoGVDPysQI+lhW2bpO+II=;
+        b=Ghqf4iMDV+Aih0e2T3tonmRVv6/jPS7ebwaApTEj1IOUWhtSugxx7jwCkxykQMVM3v
+         N9LYTzHfrRo30hcVuUKtq1bxWF0QDn8HeTRVGJSIkH6/mB8tEVhFLPhYjhodXmBUrKRv
+         HDlhPAyTqAeWInnHnZqT4B1sa1asj9kV/jTBTO7SpwpIi5JBGUr9cTB16lSqWu4VhMcD
+         cJZpJRZ/YIIcAAsoVbyVv3yMagfzipBqfoAwM2ASJuELGhIQh1YGyFYj3alWsd3Iib6T
+         qJDGGnAPaugy6XbPEqzwKiFizWIsMBVpu2kjiKVcZOgIcHBqEPv4wvJoMxWC3sDnjzJV
+         etSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=EU6K+sVa6W0a7O9upd2Yf0LoGVDPysQI+lhW2bpO+II=;
+        b=HYcLpKee27QxnE6M+gN4pHoSBnlf/wgnmw/D5+Ef7+0U8/zTnUwzTbm65pS8OJ2vpx
+         TbMRo+ab0uFeVwL0Z+L13sYVs1uZLDJNFt36guVeitdfcaCX6EFLypJjyrbB7p8Dl7iK
+         Pzrpc5cgG4Y6fPz2U2/Kn/zm6gXJ/45svFdHq9M+4gWOZjP2UZ3LaUOmW7Y1fn+zzsC0
+         4To95LKBzM5Lx2/aa8y+n9hTbOKTHuGq9Kp8Vgquo9jFY3goAiO9QMpS67G761Aap4lB
+         wfxKLto5QMmjDfgE+WjbJDVmZ9Psh/FP/UOKsA9Wz0mL4g9uVQ9olXsQbX/vhbWMB/bk
+         cWYg==
+X-Gm-Message-State: ACgBeo1bIiipy+As677WmetnDaVkF2YTfBLq4B00dUWvp2D6g3lt3LGa
+        f7fx/IjZtHsC4JeoyGvOgrGLRA==
+X-Google-Smtp-Source: AA6agR7kVTsxhemScH4L4843BSFTf80xCn10CgpGE2t1gEfEaBXMn3iB5F9Ga4gRwQNHXleei9jwcw==
+X-Received: by 2002:a05:6a00:e85:b0:52b:5db8:f3df with SMTP id bo5-20020a056a000e8500b0052b5db8f3dfmr17746780pfb.14.1660588996681;
+        Mon, 15 Aug 2022 11:43:16 -0700 (PDT)
+Received: from google.com ([2620:15c:2d:3:2e7e:eaac:df8:6465])
+        by smtp.gmail.com with ESMTPSA id f5-20020a170902ce8500b0016ee3d7220esm7344480plg.24.2022.08.15.11.43.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 11:43:15 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 11:43:10 -0700
+From:   Isaac Manjarres <isaacmanjarres@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@armlinux.org.uk, kernel-team@android.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6] amba: Remove deferred device addition
+Message-ID: <YvqTvuqSll30Rv2k@google.com>
+References: <1196e002-c07d-44fd-b07a-aa5ae446ea0b@roeck-us.net>
+ <YvQnbq2RhMOElQE3@google.com>
+ <225747de-4348-58b3-19be-8b14356ab3a0@roeck-us.net>
+ <CAGETcx895=9wPF+jnUfiycJ0k8d1S3BA0HLz42nCegtMBeo3LQ@mail.gmail.com>
+ <971799be-8c15-fc81-ec71-bbca6483207d@roeck-us.net>
+ <YvUzpSAQDktDPRbR@google.com>
+ <YvVWEIn8veGL9Psa@google.com>
+ <20220811195234.GA4018948@roeck-us.net>
+ <YvXhJRlHN9OAIA5l@google.com>
+ <1c20eedf-4fa9-9cb1-b232-3bc490c1be7c@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: eLtFVYPA1KkZOT3NJpgLgaV1Y-huBgCh
-X-Proofpoint-GUID: eLtFVYPA1KkZOT3NJpgLgaV1Y-huBgCh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 mlxscore=0 lowpriorityscore=0 bulkscore=0 adultscore=0
- spamscore=0 malwarescore=0 phishscore=0 mlxlogscore=936 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208150070
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1c20eedf-4fa9-9cb1-b232-3bc490c1be7c@roeck-us.net>
+X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add MAINTAINERS entry for the Qualcomm Cloud AI 100 driver.
+On Fri, Aug 12, 2022 at 08:30:46AM -0700, Guenter Roeck wrote:
+> After more testing: the changes above result in qemu sx1 boot failures.
+> There is no crash, boot just hangs.
+> 
+> qemu command line:
+> 
+> qemu-system-arm -M sx1 -kernel arch/arm/boot/zImage -no-reboot \
+> 	-initrd rootfs-armv4.cpio \
+> 	--append "rdinit=/sbin/init console=ttyS0,115200 earlycon=uart8250,mmio32,0xfffb0000,115200n8" \
+> 	-nographic -monitor null -serial stdio
+> 
+> with configuration from
+> https://github.com/groeck/linux-build-test/blob/master/rootfs/arm/qemu_sx1_defconfig
+> and root file system from
+> https://github.com/groeck/linux-build-test/blob/master/rootfs/arm/rootfs-armv4.cpio.gz
+> 
+> This is with your other patch applied.
+> 
+> Guenter
 
-Change-Id: I149dbe34f1dbaeeca449b4ebf97f274c7484ed27
-Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
----
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+Thanks for testing out the patch and sharing the qemu commandline you
+used for the new issue. I was able to reproduce it on my end :) Can you
+please try the following patch instead of the second patch I gave you?
+This worked for me on sx1 and versatileab:
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cd0f68d..695654c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15962,6 +15962,13 @@ F:	Documentation/devicetree/bindings/clock/qcom,*
- F:	drivers/clk/qcom/
- F:	include/dt-bindings/clock/qcom,*
- 
-+QUALCOMM CLOUD AI (QAIC) DRIVER
-+M:	Jeffrey Hugo <quic_jhugo@quicinc.com>
-+L:	linux-arm-msm@vger.kernel.org
-+S:	Supported
-+F:	drivers/gpu/drm/qaic/
-+F:	include/uapi/drm/qaic_drm.h
-+
- QUALCOMM CORE POWER REDUCTION (CPR) AVS DRIVER
- M:	Niklas Cassel <nks@flawful.org>
- L:	linux-pm@vger.kernel.org
--- 
-2.7.4
+diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
+index 32b0e0b930c1..110a535648d2 100644
+--- a/drivers/amba/bus.c
++++ b/drivers/amba/bus.c
+@@ -209,6 +209,7 @@ static int amba_match(struct device *dev, struct device_driver *drv)
+        struct amba_device *pcdev = to_amba_device(dev);
+        struct amba_driver *pcdrv = to_amba_driver(drv);
 
++       mutex_lock(&pcdev->periphid_lock);
+        if (!pcdev->periphid) {
+                int ret = amba_read_periphid(pcdev);
+
+@@ -218,11 +219,14 @@ static int amba_match(struct device *dev, struct device_driver *drv)
+                 * permanent failure in reading pid and cid, simply map it to
+                 * -EPROBE_DEFER.
+                 */
+-               if (ret)
++               if (ret) {
++                       mutex_unlock(&pcdev->periphid_lock);
+                        return -EPROBE_DEFER;
++               }
+                dev_set_uevent_suppress(dev, false);
+                kobject_uevent(&dev->kobj, KOBJ_ADD);
+        }
++       mutex_unlock(&pcdev->periphid_lock);
+
+        /* When driver_override is set, only bind to the matching driver */
+        if (pcdev->driver_override)
+@@ -532,6 +536,7 @@ static void amba_device_release(struct device *dev)
+
+        if (d->res.parent)
+                release_resource(&d->res);
++       mutex_destroy(&d->periphid_lock);
+        kfree(d);
+ }
+
+@@ -584,6 +589,7 @@ static void amba_device_initialize(struct amba_device *dev, const char *name)
+        dev->dev.dma_mask = &dev->dev.coherent_dma_mask;
+        dev->dev.dma_parms = &dev->dma_parms;
+        dev->res.name = dev_name(&dev->dev);
++       mutex_init(&dev->periphid_lock);
+ }
+
+ /**
+diff --git a/include/linux/amba/bus.h b/include/linux/amba/bus.h
+index e94cdf235f1d..5001e14c5c06 100644
+--- a/include/linux/amba/bus.h
++++ b/include/linux/amba/bus.h
+@@ -67,6 +67,7 @@ struct amba_device {
+        struct clk              *pclk;
+        struct device_dma_parameters dma_parms;
+        unsigned int            periphid;
++       struct mutex            periphid_lock;
+        unsigned int            cid;
+        struct amba_cs_uci_id   uci;
+        unsigned int            irq[AMBA_NR_IRQS];
+
+
+Thanks,
+Isaac

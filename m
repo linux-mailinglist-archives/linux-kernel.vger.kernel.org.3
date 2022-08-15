@@ -2,121 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56E3B593229
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D66AC593249
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232845AbiHOPmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58714 "EHLO
+        id S232501AbiHOPox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232877AbiHOPlp (ORCPT
+        with ESMTP id S230099AbiHOPoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:41:45 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D47E0A7;
-        Mon, 15 Aug 2022 08:41:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=RqH1kAkjrnR3j/vdtYu6rW+fESWnaxFrU4NkHAF6vNI=; b=uPhfv9XO1VpipMfVxK4ub8qlnI
-        YOJkBDYjJNJ8qVCd1DM8qS9v+jZjW2dATV/UEF3vWRs3z20nWroKrc5dNMY0KXl+8wZ53mOEL9zYf
-        vZ9AHsP5C/J/W1NHTMpovc3LMAAOBGXuEHAGQ2q5ewW0gWkGzChFXTqwgx1wcL3mQi7NfFrQN1zOm
-        F5XGh34LDqcs69twWpP/d/xPhmHE5ySbAVx2YCps5JJDTVXxVRpg72go1AtSm2Mv2eNRvJ1J3wv/+
-        SPY5N7MWhQXqXbN/E+X7TUqDwCyR2Xex8CNhCuHyVLhVdKFf4S9DYJt5H6o90vQdc3+4Z+TbYImcR
-        UlD6Vzhg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oNcDZ-005pmp-4T; Mon, 15 Aug 2022 15:41:29 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 528529801D4; Mon, 15 Aug 2022 17:41:27 +0200 (CEST)
-Date:   Mon, 15 Aug 2022 17:41:27 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
-Message-ID: <YvppJ7TjMXD3cSdZ@worktop.programming.kicks-ass.net>
-References: <20220813150252.5aa63650@rorschach.local.home>
- <Yvn9xR7qhXW7FnFL@worktop.programming.kicks-ass.net>
- <YvoVgMzMuQbAEayk@krava>
- <Yvo+EpO9dN30G0XE@worktop.programming.kicks-ass.net>
- <CAADnVQJfvn2RYydqgO-nS_K+C8WJL7BdCnR44MiMF4rnAwWM5A@mail.gmail.com>
- <YvpZJQGQdVaa2Oh4@worktop.programming.kicks-ass.net>
- <CAADnVQKyfrFTZOM9F77i0NbaXLZZ7KbvKBvu7p6kgdnRgG+2=Q@mail.gmail.com>
- <Yvpf67eCerqaDmlE@worktop.programming.kicks-ass.net>
- <CAADnVQKX5xJz5N_mVyf7wg4BT8Q2cNh8ze-SxTRfk6KtcFQ0=Q@mail.gmail.com>
- <YvpmAnFldR0iwAFC@worktop.programming.kicks-ass.net>
+        Mon, 15 Aug 2022 11:44:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19511DF62;
+        Mon, 15 Aug 2022 08:44:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6F87B80EE4;
+        Mon, 15 Aug 2022 15:44:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29039C433D7;
+        Mon, 15 Aug 2022 15:44:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660578283;
+        bh=A5X+xGMzM1h8sTR3J20XfXnllhty+y5tSXqqki10rMo=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=aEU2Inhpca8EezctoKdfOp4qPnusitLbq0B9rmFklwqSkJ+1jVg6e9wIVIJ5xLfwo
+         ggjq9ccR/fricwS7cWCVXw240Fz51i5N5rqSfJ1DzOkdTaWfb4mlX6tLofAjTUUA4b
+         5HNoaDQ0mOSFR0A5vdS7IQuighEjyYdbx4zdhQZdgNc6wpkct31agY9mJLkz0MpZw+
+         FN/fpDxbKU1FgOX4WH1IPsDixFluOcF1EfK7aBMhYkqUSap/5t38Rdt79YP6/044zX
+         ZIuhTBxFdvCj2LGN4doYiVJyCG3kpDaQVJ75JphhPqenFhb5RuwcF2Bzu0VQ4zt+Ea
+         9QlNqD8F2c6Eg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+In-Reply-To: <20220726102024.1.Icc838fe7bf0ef54a014ab2fee8af311654f5342a@changeid>
+References: <20220726102024.1.Icc838fe7bf0ef54a014ab2fee8af311654f5342a@changeid>
+Subject: Re: [PATCH] regulator: qcom-rpmh: Implement get_optimum_mode(), not set_load()
+Message-Id: <166057828188.697572.9391830884435789646.b4-ty@kernel.org>
+Date:   Mon, 15 Aug 2022 16:44:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvpmAnFldR0iwAFC@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fe10a
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 05:28:02PM +0200, Peter Zijlstra wrote:
-> On Mon, Aug 15, 2022 at 08:17:42AM -0700, Alexei Starovoitov wrote:
-> > It's hiding a fake function from ftrace, since it's not a function
-> > and ftrace infra shouldn't show it tracing logs.
-> > In other words it's a _notrace_ function with nop5.
+On Tue, 26 Jul 2022 10:20:29 -0700, Douglas Anderson wrote:
+> Since we don't actually pass the load to the firmware, switch to using
+> get_optimum_mode() instead of open-coding it.
 > 
-> Then make it a notrace function with a nop5 in it. That isn't hard.
+> This is intended to have no effect other than cleanup.
 > 
-> The whole problem is that it isn't a notrace function and you're abusing
-> a __fentry__ site.
+> 
 
-https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?h=x86/fineibt&id=8d075bdf11193f1d276bf19fa56b4b8dfe24df9e
+Applied to
 
-foo.c:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-__attribute__((__no_instrument_function__))
-__attribute__((patchable_function_entry(5)))
-void my_func(void)
-{
-}
+Thanks!
 
-void my_foo(void)
-{
-}
+[1/1] regulator: qcom-rpmh: Implement get_optimum_mode(), not set_load()
+      commit: efb0cb50c42734f868908a97f0d93e9208da1f0e
 
-gcc -c foo.c -pg -mfentry -mcmodel=kernel -fno-PIE -O2
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-foo.o:     file format elf64-x86-64
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-Disassembly of section .text:
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-0000000000000000 <my_func>:
-   0:   f3 0f 1e fa             endbr64 
-   4:   90                      nop
-   5:   90                      nop
-   6:   90                      nop
-   7:   90                      nop
-   8:   90                      nop
-   9:   c3                      ret    
-   a:   66 0f 1f 44 00 00       nopw   0x0(%rax,%rax,1)
-
-0000000000000010 <my_foo>:
-  10:   f3 0f 1e fa             endbr64 
-  14:   e8 00 00 00 00          call   19 <my_foo+0x9>  15: R_X86_64_PLT32      __fentry__-0x4
-  19:   c3                      ret    
-
+Thanks,
+Mark

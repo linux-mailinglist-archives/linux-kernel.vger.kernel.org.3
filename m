@@ -2,214 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA8B592CE9
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D57592CCA
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242429AbiHOKl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 06:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
+        id S242458AbiHOKmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 06:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242410AbiHOKl0 (ORCPT
+        with ESMTP id S242410AbiHOKmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 06:41:26 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1AE220FE;
-        Mon, 15 Aug 2022 03:41:25 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 053F434EE2;
-        Mon, 15 Aug 2022 10:41:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1660560084; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2Exku+wXrQsKISLBaDqfxMSmFxIXd4YlKWcKQpRTjmQ=;
-        b=uVFV44cMn3FLComwW2bqAJsoGdYTA6vzO3gmsaVZh1D3iuqHGMGlhDLVDrUnEq7tMuSvKz
-        Rc1fwyODxbA1BOTi57h0xbmgC44Mfrbb9XX8f5dqniFHIQZ+b2jkreEdiY7KLRVcHwSOkI
-        gKoxW0dPFJ3um5Pa6UOLJQmgNnCmL7Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1660560084;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2Exku+wXrQsKISLBaDqfxMSmFxIXd4YlKWcKQpRTjmQ=;
-        b=SwnKm0WYR1BkHsWQSbSSMTLmloCNHqn+dmSUf9taFKebvKDRyv5bd7zUNEa0NDElfI8GFq
-        z3ViZp3AdYUj90Dg==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 9380C2C1B9;
-        Mon, 15 Aug 2022 10:41:23 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 2D1E8A066A; Mon, 15 Aug 2022 12:41:22 +0200 (CEST)
-Date:   Mon, 15 Aug 2022 12:41:22 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Khazhismel Kumykov <khazhy@chromium.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Khazhismel Kumykov <khazhy@google.com>
-Subject: Re: [PATCH v2] writeback: avoid use-after-free after removing device
-Message-ID: <20220815104122.2sr4s2nkevdmcrug@quack3>
-References: <20220729215123.1998585-1-khazhy@google.com>
- <20220801155034.3772543-1-khazhy@google.com>
+        Mon, 15 Aug 2022 06:42:33 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2071.outbound.protection.outlook.com [40.107.237.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E7F21834;
+        Mon, 15 Aug 2022 03:42:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nMXMlYTVAf4fMjy60KboL5eYpaz4+JDaiFTNqKwwbFKqezjiqv3WlfcJcTIt62cf304tBm/o40sFq/c7By54p8xgumhiymfZGwP8VdNgdyMztuAxJS4Hp9mzyOUq4KYAtDlrWj8yP1vf4SwZoXo3ut4c/2qSnwWeBs/KAkOBlyUcQ8j7BdAiqAkBFVs46QR8GOVVCTBnugQHZ+5g+X7kZeyqe5VRg2zKd1GWz2X7OX9tlbDOrKJhnzxs4VuznaiHk56Ioq8N4jKmgiAyAhSvEdLsqa37ztVwAS6T2eNrJYvhgEiEw+sW9IL5m/xtfHLjeOFbXUCbfBWuZRyCjNYu3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NdEM7mASNWY/WlXxM2w5jqRvCc2RGprOJ3UxiIjEE2Y=;
+ b=Xr2tuAPUT06EbcVNCGb5/vKmR8fo3Lmxi3m7dCPQ3srRIgOX6K/SujQqNc6PVZuG4up+Dqg34o5h5ubGhzmHOUW9mjWCfxixwI5wwhhoTHtp8VAjCjLsdpL+Cvl8EaOqvosijRBYbXL+YceYhAODAdAY7lsjl/KuWrDcGxE7JRxTcmLYtiRp3g6uLX4f4zqGQ0ocXa3+3QL1u7gKykjgyIvsXvuMdpCcnNsL9/DMYrMY6l0w4Stb+g1YH3pwDZEy7juZmZu9c8DiRAjcQ0exw/cW8rZudawErkE2N9OxuHCqrsUb/7BHi4wxjUp3lln+fXEJMmu2vBfAORhHNkOb/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NdEM7mASNWY/WlXxM2w5jqRvCc2RGprOJ3UxiIjEE2Y=;
+ b=I9yKjhHsTz3Ew70RRsxTIVNH/oea4+fhaSx8FGJPOK6qq7TSjEtdmpmojLhaqMbZWQYFLVPVjVeUgfRsorkYaMczwjv4Bs6iTg+6m5k7XHW/o97V1GLOKLMYzJ/+8T1Yaes3AVFMxkpNJE30Cxip/HbTTn/xM3Y738uk4EF7IlE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DM4PR12MB6158.namprd12.prod.outlook.com (2603:10b6:8:a9::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Mon, 15 Aug
+ 2022 10:42:29 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::905:1701:3b51:7e39]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::905:1701:3b51:7e39%2]) with mapi id 15.20.5504.020; Mon, 15 Aug 2022
+ 10:42:28 +0000
+Message-ID: <2e64c037-ee5a-0c60-5dba-2e48bb437014@amd.com>
+Date:   Mon, 15 Aug 2022 12:42:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1] drm/ttm: Refcount allocated tail pages
+Content-Language: en-US
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>, Huang Rui <ray.huang@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Trigger Huang <Trigger.Huang@gmail.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Antonio Caggiano <antonio.caggiano@collabora.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>, kvm@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org
+References: <20220815095423.11131-1-dmitry.osipenko@collabora.com>
+ <8230a356-be38-f228-4a8e-95124e8e8db6@amd.com>
+ <134bce02-58d6-8553-bb73-42dfda18a595@collabora.com>
+ <8caf3008-dcf3-985a-631e-e019b277c6f0@amd.com>
+ <4fcc4739-2da9-1b89-209c-876129604d7d@amd.com>
+ <14be3b22-1d60-732b-c695-ddacc6b21055@collabora.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <14be3b22-1d60-732b-c695-ddacc6b21055@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AS8PR04CA0209.eurprd04.prod.outlook.com
+ (2603:10a6:20b:2f3::34) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801155034.3772543-1-khazhy@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b7de8b93-6189-4f70-ccba-08da7eaad995
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6158:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BDD2f3kXN0j78ISkvJTKvaYziZsdFefQugRGnwHkdK4YKYfIZiPYhm5SRCjA0CfWjudreATdcO8sisaO5yCxIxiQPiF1Jjf1zNS2JQAmk/VUV3i+CafXckXp6cvblnZ/FNcgRGZlLtG1Si88G3uYdBI+Gy3bmPUbT5kp2JBygpAXor9TryOXlxB+PFxPM/lXsofDIxyx+YnKs5RZ13R4l909QBocnPRRd/6L6k5TjkasmWLuyEtJZ7BEbsUW05UWmY+dnElwuU1JXVl97uiYP+ApfF997bnIoAfhAT/sdicVcN7XrIuQY95GV/P+d4G2daHz8I8X9kGggc5JTsARRRfdfNRT/Sp2sTlVk3j7PZBql7oo+NnCt67tMbpU/Mffe/zodlma+K9m7ljPJYeusqiCTvvfj6p6xxE6iwJQYBJ/CAirYwcOrrSLyPX7fr5GdNCclr3dvCBtGjxCHlkFiFgp1N8yy1llIRvBqO3tME165jtGkkr7Ms13zM+a+y6EsfuLLCgGpGz5eoBJRazROmbd5dsw5S0Gfdq8B1mEIr0N0zaxray7ABPZSCPa3fpyjx79KMuSUqxYuMH20KmcqkGFF/htCN60zWxgj5vVULmH7BCBrKIH0iW7nZA274XBkiiVcPie7yj8U6Emhv2286083zoVYfyoI9g17efWA5DAaAk4HRPkSZKqhVt0zmRDGmwjjWw8e+hMwBz4yiZsefJzsoNLKF7g9JCpG+pb6dDBMzZ/ZIg8CEqfU4DcRdmDougg73uJ6nswpJPKUcZJXEoYLgo6a4ZMgPIZbpaDen8jBgGmHf8GDfIDIAex994fhbaLSdYcKZqwWLH+xiJ73A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(366004)(396003)(346002)(39860400002)(136003)(2616005)(66574015)(186003)(83380400001)(6486002)(478600001)(41300700001)(38100700002)(7416002)(6666004)(5660300002)(316002)(110136005)(2906002)(8676002)(66556008)(53546011)(66946007)(6512007)(4326008)(6506007)(31696002)(36756003)(8936002)(31686004)(66476007)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R0J0Tm5BRDB2WXZnWjB4MnBndmUvL0gxNTVMVlFRUWNHOFZZdEtSU1dac0pZ?=
+ =?utf-8?B?bzJXMWdVcHNDMkc2MnUwdldocUxYdTd3MHVuakxTNkYzOU5NUy8wL1NVbi9j?=
+ =?utf-8?B?d3pyalBlSjVZS1pYVlR6Q3dPdmltUjEvMEhJUk5jblcxT3lzODRBckszWHZI?=
+ =?utf-8?B?RFIzc1paOGZFNTNRV2hjQnVMbjFBTllBOGZXL2xxS0tlUkVLVEhrMDJ5aUx5?=
+ =?utf-8?B?U0lhSldvZFRieS81ZG9oZWU2N0U2amM4bEFSelJ1TmtLdFJ1MFhsc1FLbmVW?=
+ =?utf-8?B?a1VwMnA5aWh0SWdueWVUWS8yNlBhUFE3SzQzTThNazRwZkJLUDhqcTU5U24x?=
+ =?utf-8?B?OFV1bTBBVTdDcVVzSVJ0aldhTTlxYTFiVWx4MWE0cEkxNWJGenBLYmd5RDFP?=
+ =?utf-8?B?Z2NCU2FXNHFLK1lnaWlpL1hPVGMrQzV2K29IUS8zV2dmd21MbWhjU1dFT3Vu?=
+ =?utf-8?B?K3g3SWNYZDdQR3lsc2JyVmgrWlhzaHJTWEVrWWpJc1JoUW8vNkI5MmY2UklK?=
+ =?utf-8?B?QXdHNTBZaXgweGpKRFpESWVlOUJKL2ZTMWlKbjFNTEFNR0xpL3NXMjIyb1c4?=
+ =?utf-8?B?VFRGeER2QXc1SC81T3V4ak91cFBRZHc0NVE3WUVpK1ZJWGlKTnYxUVl4WmRX?=
+ =?utf-8?B?SHZ2KzU0RkNRb2dmVUZhYU1UeE9IQnZqd1BpZXlHK0ppYSsrMGRyK1RjUzJS?=
+ =?utf-8?B?aHVXcTVDbU4vRFFiVGM2c0d2a2dzaE9wc2VVRGtoMk5aODU2M2oraVlpc0pi?=
+ =?utf-8?B?MitIQUVma3FXR0RDVjdOa3FTdlpvbGNHWGhITzFmdnZWNU1rZWt1WXJpV2th?=
+ =?utf-8?B?NlJtUWVaZUREU0pEYS9zUHNCVlozR1RBcU5CNGlnK21tQmx0ZHNxUUs2b0pu?=
+ =?utf-8?B?Z05sYU1tZEZJc3VHaExkNXcrVnh0N3gyRzJnK1V2MXJoKzQxNWhRdzZ6VTlx?=
+ =?utf-8?B?SHlsQkp3NnU4aHRkR0M0QWVoTUhqMHlrMjhVcHhxa1N4eDYxeUx1UVhScjJu?=
+ =?utf-8?B?bkFnTGpseEhPckI5OC9mSXBLNmNzcE56R0tPL0M3SVJMSUlpS3d0WlJwdTdj?=
+ =?utf-8?B?YXRIN0srUFpqYi9sbnViWGVNdlZNVG1jUVhGcmFtblNmekFZT1RKTGxtZkJp?=
+ =?utf-8?B?Z0hEQzcxZG5pV2Z4YjN1ZXl2cmNzVEhTNWFQUTU0b1pmb1krb24yVjNrbkxM?=
+ =?utf-8?B?Q0hCdU1LcDI3ZUsvSU5jaXFtRXZyUnZ0OWFLQ0dLQjhycW55cjFaQnJpeTlO?=
+ =?utf-8?B?TjRyY1NXbnNZaXE0YVFReVJ0RnF3TXU1aHYvY1RNeHhFc2k2UitlVndVV2ts?=
+ =?utf-8?B?UUk5RllsTisrbDZSalI5SHowV2tqNnlkNFU2RGNVVGh3S1M5UUFyZEZuRXBz?=
+ =?utf-8?B?OTY3eDdIQU51QmhBaHY4N0hIT01pTDViT0NEVU4rSnZWK0duTHN0UVpBZzNJ?=
+ =?utf-8?B?NUY2cUM4STlORFQ5akdJMTUrMXFVdUJlWFRzM3EzcmIvc3lvODFjUkRmdWln?=
+ =?utf-8?B?VzM0Y2ZWWXp4aXRid1g1aEk3WHJhSVF1OTVJbXkvZStqOHpJZVlGYW5LMGRS?=
+ =?utf-8?B?WEhaby85eDM5NHN2ZzBPRmdvY2R0OVgzWkRrdWkzZ0RYUUpTQVd4VjF3ZHZF?=
+ =?utf-8?B?clpHNHZtU2c3ZVovdHlEUno0cGl4SGRocWFTOW9rQW8zd2U5YWNmVUZjWjJE?=
+ =?utf-8?B?RlVvRndoVkJCVU8rU2RaK1ptZk1qc0VZaXk5U3ZWMFM5YmtnRHIvSHN4UDhr?=
+ =?utf-8?B?VDlEeEhIRFRHMmxodmQrN1hwOW5FM05OTDVUNDA4ZVN2NnVLMHZZT1JtSm00?=
+ =?utf-8?B?NW5zc01ITDZoSjdOZWdsNkRFUVo1Sk1oZ2hSOTdWMExxcEJsVjJCZVBXMms1?=
+ =?utf-8?B?QUlsc1ZJTXo3b2tBOGZHaDRxS3dNZWh6ZTU5UDJueXhDampjbzY4Qy9GbFFL?=
+ =?utf-8?B?VkJneVpHMVFxeEp6eDRwSTE5ZU82VkJiZ01TN25pazB3OXdUNUU5V0hqTkVO?=
+ =?utf-8?B?ditsSXFDSTFNWEVaNS9UR2JRaW96cm4rb1RGejhTVTZqVUErVmJSZVlob013?=
+ =?utf-8?B?WURXV1BnVEtHTCtzMERSUFgyWVlOdTlzL0lHTURVZjBRYXNGSzNGSHJuNFNY?=
+ =?utf-8?B?V0JZbXp4QVROZWtIaFVOZUtTNGYzZEIyRGNyVm5KTGdUTmExQUhEM21RbjZo?=
+ =?utf-8?Q?/7EJIuQoqDnytSBLbzxqttYe/3ZQX7sqz1dz388IBcaA?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b7de8b93-6189-4f70-ccba-08da7eaad995
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2022 10:42:28.8859
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Vpg0KmSUOQ5zTLiowY8cdDJhWJPf+5Hlz7L0ez4awi7PQ7FBGKGtpoCg19GGe/Ej
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6158
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 01-08-22 08:50:34, Khazhismel Kumykov wrote:
-> When a disk is removed, bdi_unregister gets called to stop further
-> writeback and wait for associated delayed work to complete. However,
-> wb_inode_writeback_end() may schedule bandwidth estimation dwork after
-> this has completed, which can result in the timer attempting to access
-> the just freed bdi_writeback.
-> 
-> Fix this by checking if the bdi_writeback is alive, similar to when
-> scheduling writeback work.
-> 
-> Since this requires wb->work_lock, and wb_inode_writeback_end() may get
-> called from interrupt, switch wb->work_lock to an irqsafe lock.
-> 
-> Fixes: 45a2966fd641 ("writeback: fix bandwidth estimate for spiky workload")
-> Signed-off-by: Khazhismel Kumykov <khazhy@google.com>
+Am 15.08.22 um 12:18 schrieb Dmitry Osipenko:
+> On 8/15/22 13:14, Christian König wrote:
+>> Am 15.08.22 um 12:11 schrieb Christian König:
+>>> Am 15.08.22 um 12:09 schrieb Dmitry Osipenko:
+>>>> On 8/15/22 13:05, Christian König wrote:
+>>>>> Am 15.08.22 um 11:54 schrieb Dmitry Osipenko:
+>>>>>> Higher order pages allocated using alloc_pages() aren't refcounted and
+>>>>>> they
+>>>>>> need to be refcounted, otherwise it's impossible to map them by
+>>>>>> KVM. This
+>>>>>> patch sets the refcount of the tail pages and fixes the KVM memory
+>>>>>> mapping
+>>>>>> faults.
+>>>>>>
+>>>>>> Without this change guest virgl driver can't map host buffers into
+>>>>>> guest
+>>>>>> and can't provide OpenGL 4.5 profile support to the guest. The host
+>>>>>> mappings are also needed for enabling the Venus driver using host GPU
+>>>>>> drivers that are utilizing TTM.
+>>>>>>
+>>>>>> Based on a patch proposed by Trigger Huang.
+>>>>> Well I can't count how often I have repeated this: This is an
+>>>>> absolutely
+>>>>> clear NAK!
+>>>>>
+>>>>> TTM pages are not reference counted in the first place and because of
+>>>>> this giving them to virgl is illegal.
+>>>> A? The first page is refcounted when allocated, the tail pages are not.
+>>> No they aren't. The first page is just by coincident initialized with
+>>> a refcount of 1. This refcount is completely ignored and not used at all.
+>>>
+>>> Incrementing the reference count and by this mapping the page into
+>>> some other address space is illegal and corrupts the internal state
+>>> tracking of TTM.
+>> See this comment in the source code as well:
+>>
+>>          /* Don't set the __GFP_COMP flag for higher order allocations.
+>>           * Mapping pages directly into an userspace process and calling
+>>           * put_page() on a TTM allocated page is illegal.
+>>           */
+>>
+>> I have absolutely no idea how somebody had the idea he could do this.
+> I saw this comment, but it doesn't make sense because it doesn't explain
+> why it's illegal. Hence it looks like a bogus comment since the
+> refcouting certainly works, at least to a some degree because I haven't
+> noticed any problems in practice, maybe by luck :)
 
-Looks good to me. Feel free to add:
+Well exactly that's the problem. It does not work, you are just lucky :)
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+I will provide a patch to set the reference count to zero even for 
+non-compound pages. Maybe that will yield more backtrace to abusers of 
+this interface.
 
-								Honza
+Regards,
+Christian.
 
+>
+> I'll try to dig out the older discussions, thank you for the quick reply!
+>
 
-> ---
->  fs/fs-writeback.c   | 12 ++++++------
->  mm/backing-dev.c    | 10 +++++-----
->  mm/page-writeback.c |  6 +++++-
->  3 files changed, 16 insertions(+), 12 deletions(-)
-> 
-> v2: made changelog a bit more verbose
-> 
-> diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
-> index 05221366a16d..08a1993ab7fd 100644
-> --- a/fs/fs-writeback.c
-> +++ b/fs/fs-writeback.c
-> @@ -134,10 +134,10 @@ static bool inode_io_list_move_locked(struct inode *inode,
->  
->  static void wb_wakeup(struct bdi_writeback *wb)
->  {
-> -	spin_lock_bh(&wb->work_lock);
-> +	spin_lock_irq(&wb->work_lock);
->  	if (test_bit(WB_registered, &wb->state))
->  		mod_delayed_work(bdi_wq, &wb->dwork, 0);
-> -	spin_unlock_bh(&wb->work_lock);
-> +	spin_unlock_irq(&wb->work_lock);
->  }
->  
->  static void finish_writeback_work(struct bdi_writeback *wb,
-> @@ -164,7 +164,7 @@ static void wb_queue_work(struct bdi_writeback *wb,
->  	if (work->done)
->  		atomic_inc(&work->done->cnt);
->  
-> -	spin_lock_bh(&wb->work_lock);
-> +	spin_lock_irq(&wb->work_lock);
->  
->  	if (test_bit(WB_registered, &wb->state)) {
->  		list_add_tail(&work->list, &wb->work_list);
-> @@ -172,7 +172,7 @@ static void wb_queue_work(struct bdi_writeback *wb,
->  	} else
->  		finish_writeback_work(wb, work);
->  
-> -	spin_unlock_bh(&wb->work_lock);
-> +	spin_unlock_irq(&wb->work_lock);
->  }
->  
->  /**
-> @@ -2082,13 +2082,13 @@ static struct wb_writeback_work *get_next_work_item(struct bdi_writeback *wb)
->  {
->  	struct wb_writeback_work *work = NULL;
->  
-> -	spin_lock_bh(&wb->work_lock);
-> +	spin_lock_irq(&wb->work_lock);
->  	if (!list_empty(&wb->work_list)) {
->  		work = list_entry(wb->work_list.next,
->  				  struct wb_writeback_work, list);
->  		list_del_init(&work->list);
->  	}
-> -	spin_unlock_bh(&wb->work_lock);
-> +	spin_unlock_irq(&wb->work_lock);
->  	return work;
->  }
->  
-> diff --git a/mm/backing-dev.c b/mm/backing-dev.c
-> index 95550b8fa7fe..de65cb1e5f76 100644
-> --- a/mm/backing-dev.c
-> +++ b/mm/backing-dev.c
-> @@ -260,10 +260,10 @@ void wb_wakeup_delayed(struct bdi_writeback *wb)
->  	unsigned long timeout;
->  
->  	timeout = msecs_to_jiffies(dirty_writeback_interval * 10);
-> -	spin_lock_bh(&wb->work_lock);
-> +	spin_lock_irq(&wb->work_lock);
->  	if (test_bit(WB_registered, &wb->state))
->  		queue_delayed_work(bdi_wq, &wb->dwork, timeout);
-> -	spin_unlock_bh(&wb->work_lock);
-> +	spin_unlock_irq(&wb->work_lock);
->  }
->  
->  static void wb_update_bandwidth_workfn(struct work_struct *work)
-> @@ -334,12 +334,12 @@ static void cgwb_remove_from_bdi_list(struct bdi_writeback *wb);
->  static void wb_shutdown(struct bdi_writeback *wb)
->  {
->  	/* Make sure nobody queues further work */
-> -	spin_lock_bh(&wb->work_lock);
-> +	spin_lock_irq(&wb->work_lock);
->  	if (!test_and_clear_bit(WB_registered, &wb->state)) {
-> -		spin_unlock_bh(&wb->work_lock);
-> +		spin_unlock_irq(&wb->work_lock);
->  		return;
->  	}
-> -	spin_unlock_bh(&wb->work_lock);
-> +	spin_unlock_irq(&wb->work_lock);
->  
->  	cgwb_remove_from_bdi_list(wb);
->  	/*
-> diff --git a/mm/page-writeback.c b/mm/page-writeback.c
-> index 55c2776ae699..3c34db15cf70 100644
-> --- a/mm/page-writeback.c
-> +++ b/mm/page-writeback.c
-> @@ -2867,6 +2867,7 @@ static void wb_inode_writeback_start(struct bdi_writeback *wb)
->  
->  static void wb_inode_writeback_end(struct bdi_writeback *wb)
->  {
-> +	unsigned long flags;
->  	atomic_dec(&wb->writeback_inodes);
->  	/*
->  	 * Make sure estimate of writeback throughput gets updated after
-> @@ -2875,7 +2876,10 @@ static void wb_inode_writeback_end(struct bdi_writeback *wb)
->  	 * that if multiple inodes end writeback at a similar time, they get
->  	 * batched into one bandwidth update.
->  	 */
-> -	queue_delayed_work(bdi_wq, &wb->bw_dwork, BANDWIDTH_INTERVAL);
-> +	spin_lock_irqsave(&wb->work_lock, flags);
-> +	if (test_bit(WB_registered, &wb->state))
-> +		queue_delayed_work(bdi_wq, &wb->bw_dwork, BANDWIDTH_INTERVAL);
-> +	spin_unlock_irqrestore(&wb->work_lock, flags);
->  }
->  
->  bool __folio_end_writeback(struct folio *folio)
-> -- 
-> 2.37.1.455.g008518b4e5-goog
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR

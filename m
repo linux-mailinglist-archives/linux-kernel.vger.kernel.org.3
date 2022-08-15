@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DE6B594714
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D9559479D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347751AbiHOXbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
+        id S232157AbiHOXeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245481AbiHOXZt (ORCPT
+        with ESMTP id S1346406AbiHOX1S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:25:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA8DBA168;
-        Mon, 15 Aug 2022 13:06:05 -0700 (PDT)
+        Mon, 15 Aug 2022 19:27:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF843BA17C;
+        Mon, 15 Aug 2022 13:07:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4F3FB81135;
-        Mon, 15 Aug 2022 20:06:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A2CAC433D6;
-        Mon, 15 Aug 2022 20:06:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EAED16068D;
+        Mon, 15 Aug 2022 20:07:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3D33C433C1;
+        Mon, 15 Aug 2022 20:07:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593962;
-        bh=1XOe91fxNjGIb2u9g3lgu/kzddDaw0ZvQ1Xl6XRc3yk=;
+        s=korg; t=1660594027;
+        bh=RDj5KPfi2DGB835dglTgPaPt8BgMLgpCXvMGM1nKy5o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=evaDNqB9QF9C/jNwSjmm/FNDqg3wMpTnZwbnSXTvfERcQHx2E0uDQwCqTww+CbvWu
-         BV5KBhriCOD26Dvp81jfrcON9T6JwCgHfAkguHNkatvZTathJqSHJ55nIUwCllxmje
-         KZBm6RLVfbLrMGNJDyF/YLQxIK3lzz69F9fNi1ig=
+        b=EJj2YeTiohuzD8LhKevfl7RSSX63LGzqIW0kX/CuUxJJP6CkY/1f/Q4pauFl9/0qz
+         INYouWvdPhKkB7rM0f5DKBFT3h84IvvGgWPIN9PjIegrApHGTSEZz3wcv0ExG1UiUN
+         o8yDVNYWV+NZEAikYNVKigPNpIn1nafocKdr0gTw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Sachin Sant <sachinp@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Jianglei Nie <niejianglei2021@163.com>,
+        SeongJae Park <sj@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 1035/1095] powerpc/powernv/kvm: Use darn for H_RANDOM on Power9
-Date:   Mon, 15 Aug 2022 20:07:14 +0200
-Message-Id: <20220815180511.894527899@linuxfoundation.org>
+Subject: [PATCH 5.18 1044/1095] mm/damon/reclaim: fix potential memory leak in damon_reclaim_init()
+Date:   Mon, 15 Aug 2022 20:07:23 +0200
+Message-Id: <20220815180512.274821489@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
 References: <20220815180429.240518113@linuxfoundation.org>
@@ -56,143 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Jianglei Nie <niejianglei2021@163.com>
 
-[ Upstream commit 7ef3d06f1bc4a5e62273726f3dc2bd258ae1c71f ]
+[ Upstream commit 188043c7f4f2bd662f2a55957d684fffa543e600 ]
 
-The existing logic in KVM to support guests calling H_RANDOM only works
-on Power8, because it looks for an RNG in the device tree, but on Power9
-we just use darn.
+damon_reclaim_init() allocates a memory chunk for ctx with
+damon_new_ctx().  When damon_select_ops() fails, ctx is not released,
+which will lead to a memory leak.
 
-In addition the existing code needs to work in real mode, so we have the
-special cased powernv_get_random_real_mode() to deal with that.
+We should release the ctx with damon_destroy_ctx() when damon_select_ops()
+fails to fix the memory leak.
 
-Instead just have KVM call ppc_md.get_random_seed(), and do the real
-mode check inside of there, that way we use whatever RNG is available,
-including darn on Power9.
-
-Fixes: e928e9cb3601 ("KVM: PPC: Book3S HV: Add fast real-mode H_RANDOM implementation.")
-Cc: stable@vger.kernel.org # v4.1+
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Tested-by: Sachin Sant <sachinp@linux.ibm.com>
-[mpe: Rebase on previous commit, update change log appropriately]
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220727143219.2684192-2-mpe@ellerman.id.au
+Link: https://lkml.kernel.org/r/20220714063746.2343549-1-niejianglei2021@163.com
+Fixes: 4d69c3457821 ("mm/damon/reclaim: use damon_select_ops() instead of damon_{v,p}a_set_operations()")
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+Reviewed-by: SeongJae Park <sj@kernel.org>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/include/asm/archrandom.h |  5 ----
- arch/powerpc/kvm/book3s_hv_builtin.c  |  7 +++---
- arch/powerpc/platforms/powernv/rng.c  | 36 ++++++---------------------
- 3 files changed, 12 insertions(+), 36 deletions(-)
+ mm/damon/reclaim.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/include/asm/archrandom.h b/arch/powerpc/include/asm/archrandom.h
-index 9a53e29680f4..258174304904 100644
---- a/arch/powerpc/include/asm/archrandom.h
-+++ b/arch/powerpc/include/asm/archrandom.h
-@@ -38,12 +38,7 @@ static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
- #endif /* CONFIG_ARCH_RANDOM */
+diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
+index e34c4d0c4d93..11982685508e 100644
+--- a/mm/damon/reclaim.c
++++ b/mm/damon/reclaim.c
+@@ -384,8 +384,10 @@ static int __init damon_reclaim_init(void)
+ 	if (!ctx)
+ 		return -ENOMEM;
  
- #ifdef CONFIG_PPC_POWERNV
--int powernv_hwrng_present(void);
- int powernv_get_random_long(unsigned long *v);
--int powernv_get_random_real_mode(unsigned long *v);
--#else
--static inline int powernv_hwrng_present(void) { return 0; }
--static inline int powernv_get_random_real_mode(unsigned long *v) { return 0; }
- #endif
- 
- #endif /* _ASM_POWERPC_ARCHRANDOM_H */
-diff --git a/arch/powerpc/kvm/book3s_hv_builtin.c b/arch/powerpc/kvm/book3s_hv_builtin.c
-index 7e52d0beee77..5e4251b76e75 100644
---- a/arch/powerpc/kvm/book3s_hv_builtin.c
-+++ b/arch/powerpc/kvm/book3s_hv_builtin.c
-@@ -19,7 +19,7 @@
- #include <asm/interrupt.h>
- #include <asm/kvm_ppc.h>
- #include <asm/kvm_book3s.h>
--#include <asm/archrandom.h>
-+#include <asm/machdep.h>
- #include <asm/xics.h>
- #include <asm/xive.h>
- #include <asm/dbell.h>
-@@ -176,13 +176,14 @@ EXPORT_SYMBOL_GPL(kvmppc_hcall_impl_hv_realmode);
- 
- int kvmppc_hwrng_present(void)
- {
--	return powernv_hwrng_present();
-+	return ppc_md.get_random_seed != NULL;
- }
- EXPORT_SYMBOL_GPL(kvmppc_hwrng_present);
- 
- long kvmppc_rm_h_random(struct kvm_vcpu *vcpu)
- {
--	if (powernv_get_random_real_mode(&vcpu->arch.regs.gpr[4]))
-+	if (ppc_md.get_random_seed &&
-+	    ppc_md.get_random_seed(&vcpu->arch.regs.gpr[4]))
- 		return H_SUCCESS;
- 
- 	return H_HARDWARE;
-diff --git a/arch/powerpc/platforms/powernv/rng.c b/arch/powerpc/platforms/powernv/rng.c
-index 2287c9cd0cd5..d19305292e1e 100644
---- a/arch/powerpc/platforms/powernv/rng.c
-+++ b/arch/powerpc/platforms/powernv/rng.c
-@@ -29,15 +29,6 @@ struct powernv_rng {
- 
- static DEFINE_PER_CPU(struct powernv_rng *, powernv_rng);
- 
--int powernv_hwrng_present(void)
--{
--	struct powernv_rng *rng;
--
--	rng = get_cpu_var(powernv_rng);
--	put_cpu_var(rng);
--	return rng != NULL;
--}
--
- static unsigned long rng_whiten(struct powernv_rng *rng, unsigned long val)
- {
- 	unsigned long parity;
-@@ -58,19 +49,6 @@ static unsigned long rng_whiten(struct powernv_rng *rng, unsigned long val)
- 	return val;
- }
- 
--int powernv_get_random_real_mode(unsigned long *v)
--{
--	struct powernv_rng *rng;
--
--	rng = raw_cpu_read(powernv_rng);
--	if (!rng)
--		return 0;
--
--	*v = rng_whiten(rng, __raw_rm_readq(rng->regs_real));
--
--	return 1;
--}
--
- static int powernv_get_random_darn(unsigned long *v)
- {
- 	unsigned long val;
-@@ -107,12 +85,14 @@ int powernv_get_random_long(unsigned long *v)
- {
- 	struct powernv_rng *rng;
- 
--	rng = get_cpu_var(powernv_rng);
--
--	*v = rng_whiten(rng, in_be64(rng->regs));
--
--	put_cpu_var(rng);
--
-+	if (mfmsr() & MSR_DR) {
-+		rng = get_cpu_var(powernv_rng);
-+		*v = rng_whiten(rng, in_be64(rng->regs));
-+		put_cpu_var(rng);
-+	} else {
-+		rng = raw_cpu_read(powernv_rng);
-+		*v = rng_whiten(rng, __raw_rm_readq(rng->regs_real));
+-	if (damon_select_ops(ctx, DAMON_OPS_PADDR))
++	if (damon_select_ops(ctx, DAMON_OPS_PADDR)) {
++		damon_destroy_ctx(ctx);
+ 		return -EINVAL;
 +	}
- 	return 1;
- }
- EXPORT_SYMBOL_GPL(powernv_get_random_long);
+ 
+ 	ctx->callback.after_aggregation = damon_reclaim_after_aggregation;
+ 
 -- 
 2.35.1
 

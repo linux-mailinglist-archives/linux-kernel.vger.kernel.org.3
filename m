@@ -2,84 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9C6592865
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 06:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9FCA59286A
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 06:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbiHOEIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 00:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36774 "EHLO
+        id S230400AbiHOEL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 00:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbiHOEIR (ORCPT
+        with ESMTP id S230186AbiHOEL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 00:08:17 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC8613F85;
-        Sun, 14 Aug 2022 21:08:16 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id o3so5465460ple.5;
-        Sun, 14 Aug 2022 21:08:16 -0700 (PDT)
+        Mon, 15 Aug 2022 00:11:56 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752FE13E3C;
+        Sun, 14 Aug 2022 21:11:54 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id c19-20020a17090ae11300b001f2f94ed5c6so11030196pjz.1;
+        Sun, 14 Aug 2022 21:11:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=8hntQHoZ9Gf9EapoG7OUHkjCCy7RUxfP8D6OFpiBLZE=;
-        b=K0mPaT+Ne0sR56DQhZkB0bHdsZxqQQgYPtaXecGLmhyy89OMj07hkhf4ZjiHNxgMih
-         2C/aj9sPPTJorIJmhN1KFwrfHO5IAmGLlaliYGD3OfwydJNc38oVL+il+TN/iNm4hevE
-         3IrbI6fl4h05tlE9Vx0chJLS9IN9D5gltv/UZNERo4qsG8aj+WHDc+1fGZzthdBjoCFg
-         X2b09EmknfCM4ejvoFzWn2GNl+540olVVmkE4dF1tnr16UHKVxHKgzGIDjl34Jq20g0u
-         W1nsW9/EVC04ga9kSESpbx1j/9AhuFGYU+p7xsydnmJbiQ1CInBphFmwslnQX51zWBKR
-         kPug==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=vb8rCsWmHlVJjy/NaTZhvtDXtJh4hqkw3y+FnhmCRJs=;
+        b=AW3HLFVYU3/t661XFQZ9t9Nou2ANccdI2QBF0Fxku4eo395l0KS7FpRHVlJwG/7xy9
+         ZsEs6Z9vP9ZMc/pMUibpNEr5dSl3NO5lcDuUCrfURHBk64APUmdPCJSliGlVqjSInPw/
+         zF4iAeQgdXwNjoHgVts8nKDwCMiw7ydAblUamkXhkVcafTkje6xfXT/7k0xS03wim5f+
+         6vwYQFZHjsysBB9COkbv0HlxYFLSr5Wqlk4pOAyi1l0jNg9XDTLEo/Ety+60qL9lnoTi
+         qXxh+epw3+HBMHbIag5lqz9DSa80LO4Y+glGjqsT4gHinCzShXRZ7BhKej2kszfebjkt
+         1IbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=8hntQHoZ9Gf9EapoG7OUHkjCCy7RUxfP8D6OFpiBLZE=;
-        b=3MAL9fj/3TGBJ57bKPmGJChPyfIDyAzb6e5q4337YtwcAwa1uHJaBrc8PTejGQYp2v
-         TTvsnP6gVKOTidHbPJzcH+Tq4HJvzUH8OWrV5rplTWHwEf7CPU0Wn/MXf1ompbunf3Ur
-         wnepQOA2RcNcdWvjBZBcP74AE1i89SuX5cv1UKH/cuphqiGyNhGkLdSLDXPbX29yK6gM
-         lIDgFpEg7MEuUQwDtogoU40K0EuLWD2gpxWuAQqSg4U/eXs3Jo6uqLzidDdstVtzsBNz
-         EMIoXd9bCxE6cSEGgcZAvk2YbE864bkOIB3U5SkQoQv4mrLWkVlbLOGi7zE89TB+JJ+z
-         OO0Q==
-X-Gm-Message-State: ACgBeo3RJLjGal218N/M6dOLk1MGADtoh7syRuaskNtnMAdw7XmbGcZK
-        EKOkDev6EXV0vQfZoEA7Pn4=
-X-Google-Smtp-Source: AA6agR5ZjWehLH23fBf8T62x3uR4J1jayTxfMTMd8U2E8rJ59TUX5AIiemdUO1NZSKljU005g3Z6GA==
-X-Received: by 2002:a17:902:e811:b0:170:8af3:824d with SMTP id u17-20020a170902e81100b001708af3824dmr14932403plg.26.1660536496248;
-        Sun, 14 Aug 2022 21:08:16 -0700 (PDT)
-Received: from [192.168.0.110] ([103.159.189.148])
-        by smtp.gmail.com with ESMTPSA id f2-20020a170902ce8200b0015e8d4eb1d7sm6152838plg.33.2022.08.14.21.08.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Aug 2022 21:08:15 -0700 (PDT)
-Message-ID: <cc6560c3-98c2-bdb5-cfc3-b39d3675382e@gmail.com>
-Date:   Mon, 15 Aug 2022 10:08:07 +0600
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=vb8rCsWmHlVJjy/NaTZhvtDXtJh4hqkw3y+FnhmCRJs=;
+        b=pGRsNr+AMS2NQltourRUBhEYgZgIWe09B5PRPhpRUNXYzulct07Bemc7dOE5dDGeCQ
+         LiDdoxJ5OdAD2lkPY8n+X0EGi+CtQkk6F/6a1nrV4WWFVfzuX6z9v7LyQSENktR6To1u
+         fvEANe+nkDy+GQd31h893q8XG9YgjC39j4YjgnkRiPGUr/lhyXfxxXjqMQDG55xOtDPw
+         cbGsJUwloI6Dcgq0L/++edwe8Xm88xjihxqkuqflCPtVHnXEjDmgs+2Mj6SfcEIsbDdd
+         2LmbWIYEneryiLN5ZaE9twGSuO2GWZ8HVuzDu9Xus/RH/dzaO9YC3injhW31F7iOuTZK
+         0OHg==
+X-Gm-Message-State: ACgBeo3jFmn/N5GAkVuf3L2FCdKqFPRaBDjNjOSminVAyWeryhnWH7K0
+        f6TtRM68MuJ5pnE5jWOQFO4=
+X-Google-Smtp-Source: AA6agR4i40gIdQOjuAS6d0SkZTZFbOVlDwf8rV6SJr1grot6bURZPxQDxbQI+Mi2h5JBXxRTxUV+5A==
+X-Received: by 2002:a17:902:cf0c:b0:16f:9023:e07b with SMTP id i12-20020a170902cf0c00b0016f9023e07bmr14897839plg.143.1660536713644;
+        Sun, 14 Aug 2022 21:11:53 -0700 (PDT)
+Received: from sw.. (220-128-98-63.hinet-ip.hinet.net. [220.128.98.63])
+        by smtp.gmail.com with ESMTPSA id y1-20020a17090264c100b001713f45477asm6092300pli.250.2022.08.14.21.11.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Aug 2022 21:11:53 -0700 (PDT)
+From:   Szuying Chen <chensiying21@gmail.com>
+To:     gregkh@linuxfoundation.org, mika.westerberg@linux.intel.com,
+        andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Yd_Tseng@asmedia.com.tw, Chloe_Chen@asmedia.com.tw,
+        Richard_Hsu@asmedia.com.tw
+Subject: [PATCH] thunderbolt: thunderbolt: add vendor's NVM formats
+Date:   Mon, 15 Aug 2022 12:11:45 +0800
+Message-Id: <20220815041145.35629-1-chensiying21@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFC PATCH] Soundwire: Initialize multi_link with fwnode props
-Content-Language: en-US
-To:     Greg KH <greg@kroah.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Len Brown <lenb@kernel.org>
-References: <20220814080416.7531-1-khalid.masum.92@gmail.com>
- <YvjEIjXg7KxtTT/0@kroah.com>
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-In-Reply-To: <YvjEIjXg7KxtTT/0@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,83 +71,282 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/14/22 15:45, Greg KH wrote:
-> On Sun, Aug 14, 2022 at 02:04:15PM +0600, Khalid Masum wrote:
->> According to the TODO, In sw_bus_master_add, bus->multi_link is to be
->> populated with properties from FW node props. Make this happen by
->> creating a new fwnode_handle flag FWNODE_FLAG_MULTI_LINKED and use
->> the flag to store the multi_link value from intel_link_startup. Use
->> this flag to initialize bus->multi_link.
->>
->> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
->> ---
->> I do not think adding a new flag for fwnode_handle is a good idea.
->> So, what would be the best way to initialize bus->multilink with
->> fwnode props?
->>
->>    -- Khalid Masum
->>
->>   drivers/soundwire/bus.c   | 4 ++--
->>   drivers/soundwire/intel.c | 1 +
->>   include/linux/fwnode.h    | 1 +
->>   3 files changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
->> index a2bfb0434a67..80df1672c60b 100644
->> --- a/drivers/soundwire/bus.c
->> +++ b/drivers/soundwire/bus.c
->> @@ -74,9 +74,9 @@ int sdw_bus_master_add(struct sdw_bus *bus, struct device *parent,
->>   
->>   	/*
->>   	 * Initialize multi_link flag
->> -	 * TODO: populate this flag by reading property from FW node
->>   	 */
->> -	bus->multi_link = false;
->> +	bus->multi_link = (fwnode->flags & FWNODE_FLAG_MULTI_LINKED)
->> +		== FWNODE_FLAG_MULTI_LINKED;
->>   	if (bus->ops->read_prop) {
->>   		ret = bus->ops->read_prop(bus);
->>   		if (ret < 0) {
->> diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
->> index 505c5ef061e3..034d1c523ddf 100644
->> --- a/drivers/soundwire/intel.c
->> +++ b/drivers/soundwire/intel.c
->> @@ -1347,6 +1347,7 @@ int intel_link_startup(struct auxiliary_device *auxdev)
->>   		 */
->>   		bus->multi_link = true;
->>   		bus->hw_sync_min_links = 1;
->> +		dev->fwnode->flags |= FWNODE_FLAG_MULTI_LINKED;
->>   	}
->>   
->>   	/* Initialize shim, controller */
->> diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
->> index 9a81c4410b9f..446a52744953 100644
->> --- a/include/linux/fwnode.h
->> +++ b/include/linux/fwnode.h
->> @@ -32,6 +32,7 @@ struct device;
->>   #define FWNODE_FLAG_NOT_DEVICE			BIT(1)
->>   #define FWNODE_FLAG_INITIALIZED			BIT(2)
->>   #define FWNODE_FLAG_NEEDS_CHILD_BOUND_ON_ADD	BIT(3)
->> +#define FWNODE_FLAG_MULTI_LINKED		BIT(4)
-> 
-> What does this commit actually change?
+From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
 
-The new flag will lets us save if the device has multilink in 
-fwnode_handle whenever needed.
-Then for soundwire/intel, save the multi_link flag into fwnode during 
-startup.
-Later at master_add, as written in todo, initialize the multilink flag 
-with fwnode's flag property.
+The patch add tb_nvm_validate() contain an array that has functions
+pointers to asmedia_nvm_validate().
+And asmedia_nvm_validate() that recognize supported vendor works in one
+of the following cases:
+Case nvm_upgrade: enable nvm's attribute by setting no_nvm_upgrade
+flag to create nvm_authenticate file node.
+Case nvm_add:add active/non-active NVM devices.
+Case nvm_write:update firmware to non-ative NVM device.
 
-> 
-> Did you test this on real hardware?
+Our patches were through checkpatch.pl. But the file(switch.c.)
+have existed 13 warning before we patch it.
 
-I did not test this on real hardware.
-> 
-> thanks,
-> 
-> greg k-h
+Signed-off-by: Szuying Chen <Chloe_Chen@asmedia.com.tw>
+---
+ drivers/thunderbolt/nvm.c    | 147 +++++++++++++++++++++++++++++++++++
+ drivers/thunderbolt/switch.c |  17 ++++
+ drivers/thunderbolt/tb.h     |  18 +++++
+ 3 files changed, 182 insertions(+)
 
-thanks,
-  -- Khalid Masum
+diff --git a/drivers/thunderbolt/nvm.c b/drivers/thunderbolt/nvm.c
+index b3f310389378..6db2034ec8e5 100644
+--- a/drivers/thunderbolt/nvm.c
++++ b/drivers/thunderbolt/nvm.c
+@@ -9,11 +9,158 @@
+ #include <linux/idr.h>
+ #include <linux/slab.h>
+ #include <linux/vmalloc.h>
++#include <linux/pm_runtime.h>
+
+ #include "tb.h"
+
+ static DEFINE_IDA(nvm_ida);
+
++static int tb_switch_nvm_read(void *priv, unsigned int offset, void *val,
++			      size_t bytes)
++{
++	struct tb_nvm *nvm = priv;
++	struct tb_switch *sw = tb_to_switch(nvm->dev);
++	int ret;
++
++	pm_runtime_get_sync(&sw->dev);
++	if (!mutex_trylock(&sw->tb->lock)) {
++		ret = restart_syscall();
++		goto out;
++	}
++	ret = usb4_switch_nvm_read(sw, offset, val, bytes);
++	mutex_unlock(&sw->tb->lock);
++
++out:
++	pm_runtime_mark_last_busy(&sw->dev);
++	pm_runtime_put_autosuspend(&sw->dev);
++
++	return ret;
++}
++
++static int tb_switch_nvm_write(void *priv, unsigned int offset, void *val,
++			       size_t bytes)
++{
++	struct tb_nvm *nvm = priv;
++	struct tb_switch *sw = tb_to_switch(nvm->dev);
++	int ret;
++
++	if (!mutex_trylock(&sw->tb->lock))
++		return restart_syscall();
++
++	/*
++	 * Since writing the NVM image might require some special steps,
++	 * for example when CSS headers are written, we cache the image
++	 * locally here and handle the special cases when the user asks
++	 * us to authenticate the image.
++	 */
++	ret = tb_nvm_write_buf(nvm, offset, val, bytes);
++	mutex_unlock(&sw->tb->lock);
++
++	return ret;
++}
++
++static int asmedia_nvm_validate(struct tb_switch *sw, unsigned int mode)
++{
++	struct tb_nvm *nvm;
++	u32 val;
++	u32 nvm_size;
++	int ret = 0;
++	unsigned int image_size;
++	const u8 *buf = sw->nvm->buf;
++
++	switch (mode) {
++	case nvm_upgrade:
++		if (sw->no_nvm_upgrade)
++			sw->no_nvm_upgrade = false;
++
++		break;
++
++	case nvm_add:
++		nvm = tb_nvm_alloc(&sw->dev);
++		if (IS_ERR(nvm)) {
++			ret = PTR_ERR(nvm);
++			break;
++		}
++
++		ret = usb4_switch_nvm_read(sw, NVM_Date, &val, sizeof(val));
++		if (ret)
++			break;
++
++		nvm->nvm_asm.date = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
++		ret = usb4_switch_nvm_read(sw, NVM_CUSTOMER_ID, &val, sizeof(val));
++		if (ret)
++			break;
++
++		nvm->nvm_asm.customerID = (((u8)val) << 0x8 | ((u8)(val >> 0x8)));
++		nvm->nvm_asm.version = (u8)(val >> 0x10);
++		nvm_size = SZ_512K;
++		ret = tb_nvm_add_active(nvm, nvm_size, tb_switch_nvm_read);
++		if (ret)
++			break;
++
++		ret = tb_nvm_add_non_active(nvm, NVM_MAX_SIZE, tb_switch_nvm_write);
++		if (ret)
++			break;
++
++		sw->nvm = nvm;
++		break;
++
++	case nvm_write:
++		if (!buf) {
++			ret = -EINVAL;
++			break;
++		}
++		image_size = sw->nvm->buf_data_size;
++		if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE) {
++			ret = -EINVAL;
++			break;
++		}
++		ret = usb4_switch_nvm_write(sw, 0, buf, image_size);
++		if (!ret)
++			sw->nvm->flushed = true;
++
++		break;
++
++	default:
++		break;
++	}
++
++	if ((mode == nvm_add) && (ret != 0))
++		tb_nvm_free(sw->nvm);
++
++	return ret;
++}
++
++struct tb_nvm_id {
++	u16 hw_vendor_id;
++	int (*validate)(struct tb_switch *sw, unsigned int handle);
++};
++
++static const struct tb_nvm_id tb_nvm_vendors[] = {
++	/* ASMedia software CM firmware upgrade */
++	{ 0x174c, asmedia_nvm_validate },
++};
++
++/**
++ * tb_nvm_vendor_handle() - support vendor's NVM format
++ * @sw: Thunderbolt switch
++ * @handle: 0:NvmUpgradeSuppport, 1:NvmAdd, 2:NvmWrite
++ */
++int tb_nvm_validate(struct tb_switch *sw, unsigned int mode)
++{
++	int res, i;
++
++	for (i = 0; i < ARRAY_SIZE(tb_nvm_vendors); i++) {
++		const struct tb_nvm_id *id = &tb_nvm_vendors[i];
++
++		if (id->hw_vendor_id && id->hw_vendor_id != sw->config.vendor_id)
++			continue;
++
++		 res = id->validate(sw, mode);
++	}
++	return res;
++}
++
+ /**
+  * tb_nvm_alloc() - Allocate new NVM structure
+  * @dev: Device owning the NVM
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index 244f8cd38b25..352e64f3dc92 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -114,6 +114,14 @@ static int nvm_validate_and_write(struct tb_switch *sw)
+ 	if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE)
+ 		return -EINVAL;
+
++	/*
++	 * Vendor's nvm write. If the image has been flushed to the
++	 * storage are, nvm write is complete.
++	 */
++	ret = tb_nvm_validate(sw, nvm_write);
++	if (sw->nvm->flushed)
++		return ret;
++
+ 	/*
+ 	 * FARB pointer must point inside the image and must at least
+ 	 * contain parts of the digital section we will be reading here.
+@@ -390,6 +398,11 @@ static int tb_switch_nvm_add(struct tb_switch *sw)
+ 	if (!nvm_readable(sw))
+ 		return 0;
+
++	/* Vendor's NVM formats add */
++	ret = tb_nvm_validate(sw, nvm_add);
++	if (ret)
++		return ret;
++
+ 	/*
+ 	 * The NVM format of non-Intel hardware is not known so
+ 	 * currently restrict NVM upgrade for Intel hardware. We may
+@@ -1953,6 +1966,9 @@ static ssize_t nvm_version_show(struct device *dev,
+ 		ret = -ENODATA;
+ 	else if (!sw->nvm)
+ 		ret = -EAGAIN;
++	/*ASMedia NVM version show format xxxxxx_xxxx_xx */
++	else if (sw->config.vendor_id == 0x174C)
++		ret = sprintf(buf, "%06x_%04x_%02x\n", sw->nvm->nvm_asm.date, sw->nvm->nvm_asm.customerID, sw->nvm->nvm_asm.version);
+ 	else
+ 		ret = sprintf(buf, "%x.%x\n", sw->nvm->major, sw->nvm->minor);
+
+@@ -2860,6 +2876,7 @@ int tb_switch_add(struct tb_switch *sw)
+ 		tb_sw_dbg(sw, "uid: %#llx\n", sw->uid);
+
+ 		tb_check_quirks(sw);
++		tb_nvm_validate(sw, nvm_upgrade);
+
+ 		ret = tb_switch_set_uuid(sw);
+ 		if (ret) {
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index 5db76de40cc1..7f20f10352d9 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -28,6 +28,22 @@
+ #define NVM_VERSION		0x08
+ #define NVM_FLASH_SIZE		0x45
+
++/* ASMedia specific NVM offsets */
++#define NVM_Date	0x1c
++#define NVM_CUSTOMER_ID	0x28
++
++/* ASMedia specific validation mode */
++#define nvm_upgrade 0
++#define nvm_add 1
++#define nvm_write 2
++
++struct nvm_asmedia {
++	u32 date;
++	u32 customerID:16;
++	u32 version:8;
++	u32 reserved:8;
++};
++
+ /**
+  * struct tb_nvm - Structure holding NVM information
+  * @dev: Owner of the NVM
+@@ -57,6 +73,7 @@ struct tb_nvm {
+ 	size_t buf_data_size;
+ 	bool authenticating;
+ 	bool flushed;
++	struct nvm_asmedia nvm_asm;
+ };
+
+ enum tb_nvm_write_ops {
+@@ -736,6 +753,7 @@ static inline void tb_domain_put(struct tb *tb)
+ 	put_device(&tb->dev);
+ }
+
++int tb_nvm_validate(struct tb_switch *sw, unsigned int mode);
+ struct tb_nvm *tb_nvm_alloc(struct device *dev);
+ int tb_nvm_add_active(struct tb_nvm *nvm, size_t size, nvmem_reg_read_t reg_read);
+ int tb_nvm_write_buf(struct tb_nvm *nvm, unsigned int offset, void *val,
+--
+2.34.1
 

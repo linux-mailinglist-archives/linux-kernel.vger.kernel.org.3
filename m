@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F825942A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 23:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F775942AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 23:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349810AbiHOVxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 17:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60594 "EHLO
+        id S1348595AbiHOVx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 17:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349876AbiHOVsz (ORCPT
+        with ESMTP id S1350218AbiHOVuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 17:48:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119FF606B8;
-        Mon, 15 Aug 2022 12:32:08 -0700 (PDT)
+        Mon, 15 Aug 2022 17:50:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF530DEB57;
+        Mon, 15 Aug 2022 12:32:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2640461133;
-        Mon, 15 Aug 2022 19:32:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11D65C433C1;
-        Mon, 15 Aug 2022 19:32:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76B89B81126;
+        Mon, 15 Aug 2022 19:32:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC52AC433C1;
+        Mon, 15 Aug 2022 19:32:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660591926;
-        bh=cRcGwfrIuzA+tBZlDTT6JWtbArYGci7x41RI+xWkygM=;
+        s=korg; t=1660591939;
+        bh=Sl8pAt6Q0dhidSZAmwSvNFkkV5IgZon/SaDP+uWCIr0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f3+KWOYgzLfiZ2g/LTKQPdRQkL3Y5OJI5A5HJnSLYpwgVc8R+dtwBBUzKkglzJm88
-         efI7MXD9O2isrfneKHtJh+RlqyfXx/gJnpfmDsnl7zqpA5xy7zmGVtQT/QRGGXxy25
-         x4Qy+c6d07530W1zioSRaTsNIosCnsikon3/i+dc=
+        b=JF4CRkpFMQRi/6zirq/w9cGhy/l40AIDNwNerQsxoCInHzvBVfgOnJTvSJZcLTSRZ
+         5EUzPaZA6D0GuXhGhgU5L1eNBHMQ0PajVIcu94ALiqMD+XRujtJMpY38nLGDbMJE0n
+         TKjUAa56W9uxo3EaH0SqlLGYe80WlErgFaC7fwDM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jenny Hack <jhack@hpe.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        stable@vger.kernel.org, Robert Marko <robimarko@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 0705/1095] RDMA/rxe: Fix deadlock in rxe_do_local_ops()
-Date:   Mon, 15 Aug 2022 20:01:44 +0200
-Message-Id: <20220815180458.543648823@linuxfoundation.org>
+Subject: [PATCH 5.18 0707/1095] clk: qcom: ipq8074: SW workaround for UBI32 PLL lock
+Date:   Mon, 15 Aug 2022 20:01:46 +0200
+Message-Id: <20220815180458.639328837@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
 References: <20220815180429.240518113@linuxfoundation.org>
@@ -56,52 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bob Pearson <rpearsonhpe@gmail.com>
+From: Robert Marko <robimarko@gmail.com>
 
-[ Upstream commit 7cb33d1bc1ac8e51fd88928f96674d392f8e07c4 ]
+[ Upstream commit 3401ea2856ef84f39b75f0dc5ebcaeda81cb90ec ]
 
-When a local operation (invalidate mr, reg mr, bind mw) is finished there
-will be no ack packet coming from a responder to cause the wqe to be
-completed. This may happen anyway if a subsequent wqe performs
-IO. Currently if the wqe is signalled the completer tasklet is scheduled
-immediately but not otherwise.
+UBI32 Huayra PLL fails to lock in 5 us in some SoC silicon and thus it
+will cause the wait_for_pll() to timeout and thus return the error
+indicating that the PLL failed to lock.
 
-This leads to a deadlock if the next wqe has the fence bit set in send
-flags and the operation is not signalled. This patch removes the condition
-that the wqe must be signalled in order to schedule the completer tasklet
-which is the simplest fix for this deadlock and is fairly low cost. This
-is the analog for local operations of always setting the ackreq bit in all
-last or only request packets even if the operation is not signalled.
+This is bug in Huayra PLL HW for which SW workaround
+is to set bit 26 of TEST_CTL register.
 
-Link: https://lore.kernel.org/r/20220523223251.15350-1-rpearsonhpe@gmail.com
-Reported-by: Jenny Hack <jhack@hpe.com>
-Fixes: c1a411268a4b ("RDMA/rxe: Move local ops to subroutine")
-Signed-off-by: Bob Pearson <rpearsonhpe@gmail.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+This is ported from the QCA 5.4 based downstream kernel.
+
+Fixes: b8e7e519625f ("clk: qcom: ipq8074: add remaining PLL’s")
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220515210048.483898-2-robimarko@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/sw/rxe/rxe_req.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/clk/qcom/gcc-ipq8074.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/infiniband/sw/rxe/rxe_req.c b/drivers/infiniband/sw/rxe/rxe_req.c
-index 8a1cff80a68e..d574c47099b8 100644
---- a/drivers/infiniband/sw/rxe/rxe_req.c
-+++ b/drivers/infiniband/sw/rxe/rxe_req.c
-@@ -586,9 +586,11 @@ static int rxe_do_local_ops(struct rxe_qp *qp, struct rxe_send_wqe *wqe)
- 	wqe->status = IB_WC_SUCCESS;
- 	qp->req.wqe_index = queue_next_index(qp->sq.queue, qp->req.wqe_index);
+diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
+index 1a5141da7e23..b4291ba53c78 100644
+--- a/drivers/clk/qcom/gcc-ipq8074.c
++++ b/drivers/clk/qcom/gcc-ipq8074.c
+@@ -4805,6 +4805,9 @@ static int gcc_ipq8074_probe(struct platform_device *pdev)
+ 	if (IS_ERR(regmap))
+ 		return PTR_ERR(regmap);
  
--	if ((wqe->wr.send_flags & IB_SEND_SIGNALED) ||
--	    qp->sq_sig_type == IB_SIGNAL_ALL_WR)
--		rxe_run_task(&qp->comp.task, 1);
-+	/* There is no ack coming for local work requests
-+	 * which can lead to a deadlock. So go ahead and complete
-+	 * it now.
-+	 */
-+	rxe_run_task(&qp->comp.task, 1);
- 
- 	return 0;
- }
++	/* SW Workaround for UBI32 Huayra PLL */
++	regmap_update_bits(regmap, 0x2501c, BIT(26), BIT(26));
++
+ 	clk_alpha_pll_configure(&ubi32_pll_main, regmap, &ubi32_pll_config);
+ 	clk_alpha_pll_configure(&nss_crypto_pll_main, regmap,
+ 				&nss_crypto_pll_config);
 -- 
 2.35.1
 

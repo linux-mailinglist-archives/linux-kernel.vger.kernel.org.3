@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D03D859480F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 981B1594946
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355014AbiHOXvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
+        id S1355432AbiHOXwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354904AbiHOXqr (ORCPT
+        with ESMTP id S1354939AbiHOXqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:46:47 -0400
+        Mon, 15 Aug 2022 19:46:51 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21963C2769;
-        Mon, 15 Aug 2022 13:15:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC38F8E991;
+        Mon, 15 Aug 2022 13:15:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 41A3DB80EA9;
-        Mon, 15 Aug 2022 20:14:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71EA5C433D6;
-        Mon, 15 Aug 2022 20:14:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7257CB80EA9;
+        Mon, 15 Aug 2022 20:15:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C10EC433D7;
+        Mon, 15 Aug 2022 20:15:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594497;
-        bh=8Hk5y3THfewdtbF9VTpJrfqNWBag9S8m1fnT5yd1cBc=;
+        s=korg; t=1660594501;
+        bh=nUubxWZTlLnx+rOCghc0oRuIANaK9QPhD549Gb2CnV0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gdJPcvda/DDAK13vq4I2T+0w4Qwy439Ia14AqfWR7cHaO97EIFQsCeux2mkaz54GI
-         hka7GDl+vj9fKjDlqlW4Yl+6tTn17c7YaCyN4lK8pVu/SxVwsYfNOYbQS79WcHxkb5
-         UhlSZjSu7euPFzsEXCCN1BnsABA3vE6Ws1erbelM=
+        b=P0EjW0lmfIy8lPsOQAJDYxdDwxBcJIs9ilZq90VMoHbG7EesK50AsALspkzJThkCa
+         cGv6ARYOTwmBi4P4/v9uls3Kdc0NGEcxuFxHVdX6JbVml5GOR2E2VGEC/4/U8uRL7t
+         2ZR//HJUzwyskBxpbk5V1v26/YbFnQGA3Nr+klk0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0466/1157] media: amphion: sync buffer status with firmware during abort
-Date:   Mon, 15 Aug 2022 19:57:02 +0200
-Message-Id: <20220815180458.241114228@linuxfoundation.org>
+Subject: [PATCH 5.19 0467/1157] media: amphion: only insert the first sequence startcode for vc1l format
+Date:   Mon, 15 Aug 2022 19:57:03 +0200
+Message-Id: <20220815180458.278879721@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -58,68 +58,97 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ming Qian <ming.qian@nxp.com>
 
-[ Upstream commit d8f1eb105eab7aab36323c6b488dda479d5bd2da ]
+[ Upstream commit e670f5d672ef3d00b0b8c69eff09a019e6dd4ef9 ]
 
-1. prevent to allocate buffer to firmware during abort
-2. release buffer when clear the slots
+For format V4L2_PIX_FMT_VC1_ANNEX_L,
+the amphion vpu requires driver to help insert some custom startcode
+before sequence and frame.
+but only the first sequence startcode is needed,
+the extra startcode will cause decoding error.
+So after seek, we don't need to insert the sequence startcode.
 
-Fixes: 6de8d628df6ef ("media: amphion: add v4l2 m2m vpu decoder stateful driver")
+In other words, for V4L2_PIX_FMT_VC1_ANNEX_L,
+the vpu doesn't support dynamic resolution change.
+
+Fixes: 145e936380edb ("media: amphion: implement malone decoder rpc interface")
 Signed-off-by: Ming Qian <ming.qian@nxp.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/amphion/vdec.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/media/platform/amphion/vdec.c       | 2 +-
+ drivers/media/platform/amphion/vpu.h        | 1 +
+ drivers/media/platform/amphion/vpu_malone.c | 2 ++
+ drivers/media/platform/amphion/vpu_rpc.h    | 7 ++++++-
+ 4 files changed, 10 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/platform/amphion/vdec.c b/drivers/media/platform/amphion/vdec.c
-index a5bb997b000b..5e3b08d07abd 100644
+index 5e3b08d07abd..44dbca0fe17f 100644
 --- a/drivers/media/platform/amphion/vdec.c
 +++ b/drivers/media/platform/amphion/vdec.c
-@@ -63,6 +63,7 @@ struct vdec_t {
- 	bool is_source_changed;
- 	u32 source_change;
- 	u32 drain;
-+	bool aborting;
- };
- 
- static const struct vpu_format vdec_formats[] = {
-@@ -948,6 +949,9 @@ static int vdec_response_frame(struct vpu_inst *inst, struct vb2_v4l2_buffer *vb
- 	if (inst->state != VPU_CODEC_STATE_ACTIVE)
- 		return -EINVAL;
- 
-+	if (vdec->aborting)
-+		return -EINVAL;
-+
- 	if (!vdec->req_frame_count)
- 		return -EINVAL;
- 
-@@ -1057,6 +1061,8 @@ static void vdec_clear_slots(struct vpu_inst *inst)
- 		vpu_buf = vdec->slots[i];
- 		vbuf = &vpu_buf->m2m_buf.vb;
- 
-+		vpu_trace(inst->dev, "clear slot %d\n", i);
-+		vdec_response_fs_release(inst, i, vpu_buf->tag);
- 		vdec_recycle_buffer(inst, vbuf);
- 		vdec->slots[i]->state = VPU_BUF_STATE_IDLE;
- 		vdec->slots[i] = NULL;
-@@ -1318,6 +1324,8 @@ static void vdec_abort(struct vpu_inst *inst)
- 	int ret;
- 
- 	vpu_trace(inst->dev, "[%d] state = %d\n", inst->id, inst->state);
-+
-+	vdec->aborting = true;
- 	vpu_iface_add_scode(inst, SCODE_PADDING_ABORT);
- 	vdec->params.end_flag = 1;
- 	vpu_iface_set_decode_params(inst, &vdec->params, 1);
-@@ -1341,6 +1349,7 @@ static void vdec_abort(struct vpu_inst *inst)
- 	vdec->decoded_frame_count = 0;
- 	vdec->display_frame_count = 0;
- 	vdec->sequence = 0;
-+	vdec->aborting = false;
+@@ -105,7 +105,6 @@ static const struct vpu_format vdec_formats[] = {
+ 		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_L,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+-		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION
+ 	},
+ 	{
+ 		.pixfmt = V4L2_PIX_FMT_MPEG2,
+@@ -741,6 +740,7 @@ static void vdec_stop_done(struct vpu_inst *inst)
+ 	vdec->eos_received = 0;
+ 	vdec->is_source_changed = false;
+ 	vdec->source_change = 0;
++	inst->total_input_count = 0;
+ 	vpu_inst_unlock(inst);
  }
  
- static void vdec_stop(struct vpu_inst *inst, bool free)
+diff --git a/drivers/media/platform/amphion/vpu.h b/drivers/media/platform/amphion/vpu.h
+index e56b96a7e5d3..f914de6ed81e 100644
+--- a/drivers/media/platform/amphion/vpu.h
++++ b/drivers/media/platform/amphion/vpu.h
+@@ -258,6 +258,7 @@ struct vpu_inst {
+ 	struct vpu_format cap_format;
+ 	u32 min_buffer_cap;
+ 	u32 min_buffer_out;
++	u32 total_input_count;
+ 
+ 	struct v4l2_rect crop;
+ 	u32 colorspace;
+diff --git a/drivers/media/platform/amphion/vpu_malone.c b/drivers/media/platform/amphion/vpu_malone.c
+index 40267c73b1f9..542bbe361bd8 100644
+--- a/drivers/media/platform/amphion/vpu_malone.c
++++ b/drivers/media/platform/amphion/vpu_malone.c
+@@ -1298,6 +1298,8 @@ static int vpu_malone_insert_scode_vc1_l_seq(struct malone_scode_t *scode)
+ 	int size = 0;
+ 	u8 rcv_seqhdr[MALONE_VC1_RCV_SEQ_HEADER_LEN];
+ 
++	if (scode->inst->total_input_count)
++		return 0;
+ 	scode->need_data = 0;
+ 
+ 	ret = vpu_malone_insert_scode_seq(scode, MALONE_CODEC_ID_VC1_SIMPLE, sizeof(rcv_seqhdr));
+diff --git a/drivers/media/platform/amphion/vpu_rpc.h b/drivers/media/platform/amphion/vpu_rpc.h
+index 25119e5e807e..7eb6f01e6ab5 100644
+--- a/drivers/media/platform/amphion/vpu_rpc.h
++++ b/drivers/media/platform/amphion/vpu_rpc.h
+@@ -312,11 +312,16 @@ static inline int vpu_iface_input_frame(struct vpu_inst *inst,
+ 					struct vb2_buffer *vb)
+ {
+ 	struct vpu_iface_ops *ops = vpu_core_get_iface(inst->core);
++	int ret;
+ 
+ 	if (!ops || !ops->input_frame)
+ 		return -EINVAL;
+ 
+-	return ops->input_frame(inst->core->iface, inst, vb);
++	ret = ops->input_frame(inst->core->iface, inst, vb);
++	if (ret < 0)
++		return ret;
++	inst->total_input_count++;
++	return ret;
+ }
+ 
+ static inline int vpu_iface_config_memory_resource(struct vpu_inst *inst,
 -- 
 2.35.1
 

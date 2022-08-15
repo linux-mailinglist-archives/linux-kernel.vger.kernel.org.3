@@ -2,140 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C056A594DB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 979DC594C79
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349459AbiHPBGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 21:06:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
+        id S1344327AbiHPBJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 21:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348195AbiHPBCH (ORCPT
+        with ESMTP id S1349862AbiHPBGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 21:02:07 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DDCB9FB0;
-        Mon, 15 Aug 2022 13:50:56 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id q16so7482185pgq.6;
-        Mon, 15 Aug 2022 13:50:56 -0700 (PDT)
+        Mon, 15 Aug 2022 21:06:41 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D841A7C39
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 13:53:41 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id x64so6784755iof.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 13:53:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=glA+4AWskQ0XcBj8UcnWlDiqOn/xWKEln7bVu+o8za4=;
-        b=QQ7hvQ+ubp2iJzuj3UoaM8lWe4xQ/FUV+rXpyAd8B8F0q1DSanPwK8b8YKAu/ito2z
-         EEOcMyBXUxdpbxc0dNqHywfGBX/ICtK3jTaetbb5KdVBQw67gS0C/M+TgADZAbbeyH3q
-         aD0mXkAs0f4zzMC3gZJnm75uSpJnDu9MAVtISN9/J04MtSNTnO/X21jqiLLOyNMS1eji
-         5cIkLVKER5CUqI1FGbTCFj0MYnXlI3gKBJ8S6kgnXvv+7mAdb2e48QKEWDZMAPWiseak
-         wO2PBJnL1K5XxrkEb143yZe0LCXyHiz55SYAafuEXRc9M3XoXqVMr/rxlnUbY+ESvShL
-         QacQ==
+         :subject:cc:to:from:date:from:to:cc;
+        bh=uc9DV/Vm8k3ggZyBJiM4DPc4itKMLkWtsIueLCMUQls=;
+        b=bIzLQ1mCS/G20XnsaN4dTFCvt9i+9+LgfE1kqI80Xn2j8xy9S68G+j7zgUI9n+e9V0
+         iF7lz37EqbKz/yHauroPHA4IE9esnp+eSGtXZPje2+P/Nh67Xs6Jt3JA+kJ0paGNnVvF
+         d0uwcC2SiIxnEiE2t3Pf+nzvl8Av3XrytT21Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=glA+4AWskQ0XcBj8UcnWlDiqOn/xWKEln7bVu+o8za4=;
-        b=KOziWPBO8/o6+u4/gNzTnIbbmVvOnBMEpWZWAybi8UJMEv1sCQE04CbgJCEn7glbmE
-         TAXdvS9atS9+bsHcIjYEM52NRx14e0+jJlcH88ONceizg0/tGw5prkiG4bH8sgW091zO
-         Px4XrxiHdsNgjm4pxo2twoHlV6v8va0xpOnLkvuSPmBWHU3jAmVdkm4HR/2jh/Y2WWpT
-         VVbokeNjALBQfqU7PWyVOEW5haRjZ6f/pItx8hX+jY7z1i1kqPSYq5Ze9Kk7D0+IviQH
-         o0hVQGpmmFu+um6dpzp7cptaHMthTyV31WkHZSP+4472quI1bj9dwqLmm0YaEVVBArD4
-         k95g==
-X-Gm-Message-State: ACgBeo0N1diDEkddeDtQ9ocvtyRokdJJ6wwq5rEcaZemoxJ0IgAE/oaZ
-        oLL7KzFIZTGFBtM/Bd2cBdw=
-X-Google-Smtp-Source: AA6agR7sPBhzIixnkq0W8yjYSrUdkzbyY93STp5RF3u/3ixs6au3SDQM9HC93KIyhdO/SDet4xb6jw==
-X-Received: by 2002:a05:6a00:a04:b0:534:d8a6:40ce with SMTP id p4-20020a056a000a0400b00534d8a640cemr7012939pfh.15.1660596655420;
-        Mon, 15 Aug 2022 13:50:55 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l8-20020a17090a4d4800b001f4dd3b7d7fsm4975272pjh.9.2022.08.15.13.50.54
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=uc9DV/Vm8k3ggZyBJiM4DPc4itKMLkWtsIueLCMUQls=;
+        b=RNAURY4D12eXP/3eTzYGtBLBJcvj/5V54hE2WPeZl8E3P9nJq/DUmmN/MYilyW9cep
+         ue6/cKZ52nOe7qoNVrJCbjOPTxgJ1LDh8n0XgMXjkVm5od/QHJcUWC9OEyxEZGQE7HlN
+         qnh5RUQyDblXcXLuwBQnDP0AIFc5HuQkzrj/ldc7PA5nsUmEuJoe8CYhnEMH7mdIKOu3
+         pFvZPla3+lgvM6/AVg3p7GSDi9u/5tHJwR4pB1wgFuKj1k49YXQ7hky4M6mMBtI52Knx
+         uMlVvWYHDiRQCcU8FpCNe+SMLRp4J2tIi9MVsx+6u2os33+dDncPVQgzzDohIGhFmBBs
+         DSUQ==
+X-Gm-Message-State: ACgBeo3WRlTKM4CO8isGjyNLpT2TEtUnPw+FjhAigGWDh2a09YTvzDwR
+        A8RgiVgO3qeyvEP+Y3ZtK7gwJw==
+X-Google-Smtp-Source: AA6agR7ifnwUc81UjL6LH46tcLGYwLeVFtSQbHh/vtVpAp80K3Z9Mi4n+8FSzJE+HKr4UpM61ae/PQ==
+X-Received: by 2002:a05:6638:16d3:b0:346:a4c6:fcc6 with SMTP id g19-20020a05663816d300b00346a4c6fcc6mr612791jat.147.1660596820565;
+        Mon, 15 Aug 2022 13:53:40 -0700 (PDT)
+Received: from chromium.org ([100.107.108.157])
+        by smtp.gmail.com with ESMTPSA id d70-20020a0285cc000000b003415b95c097sm3804296jai.42.2022.08.15.13.53.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 13:50:54 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 15 Aug 2022 13:50:53 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andres Freund <andres@anarazel.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>, c@redhat.com
-Subject: Re: [PATCH] virtio_net: Revert "virtio_net: set the default max ring
- size by find_vqs()"
-Message-ID: <20220815205053.GD509309@roeck-us.net>
-References: <20220815090521.127607-1-mst@redhat.com>
- <20220815203426.GA509309@roeck-us.net>
- <20220815164013-mutt-send-email-mst@kernel.org>
+        Mon, 15 Aug 2022 13:53:40 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 14:53:07 -0600
+From:   Jack Rosenthal <jrosenth@chromium.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Julius Werner <jwerner@chromium.org>
+Subject: Re: [PATCH v8] firmware: google: Implement cbmem in sysfs driver
+Message-ID: <YvqyM3n48Q/0i9XZ@chromium.org>
+References: <20220806204857.3276448-1-jrosenth@chromium.org>
+ <CAE-0n53gc=1vwZbhGUaF2EyXotMPjqoQixUMJDidcs7vLmNORQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220815164013-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAE-0n53gc=1vwZbhGUaF2EyXotMPjqoQixUMJDidcs7vLmNORQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 04:42:51PM -0400, Michael S. Tsirkin wrote:
-> On Mon, Aug 15, 2022 at 01:34:26PM -0700, Guenter Roeck wrote:
-> > On Mon, Aug 15, 2022 at 05:16:50AM -0400, Michael S. Tsirkin wrote:
-> > > This reverts commit 762faee5a2678559d3dc09d95f8f2c54cd0466a7.
-> > > 
-> > > This has been reported to trip up guests on GCP (Google Cloud).  Why is
-> > > not yet clear - to be debugged, but the patch itself has several other
-> > > issues:
-> > > 
-> > > - It treats unknown speed as < 10G
-> > > - It leaves userspace no way to find out the ring size set by hypervisor
-> > > - It tests speed when link is down
-> > > - It ignores the virtio spec advice:
-> > >         Both \field{speed} and \field{duplex} can change, thus the driver
-> > >         is expected to re-read these values after receiving a
-> > >         configuration change notification.
-> > > - It is not clear the performance impact has been tested properly
-> > > 
-> > > Revert the patch for now.
-> > > 
-> > > Link: https://lore.kernel.org/r/20220814212610.GA3690074%40roeck-us.net
-> > > Link: https://lore.kernel.org/r/20220815070203.plwjx7b3cyugpdt7%40awork3.anarazel.de
-> > > Link: https://lore.kernel.org/r/3df6bb82-1951-455d-a768-e9e1513eb667%40www.fastmail.com
-> > > Link: https://lore.kernel.org/r/FCDC5DDE-3CDD-4B8A-916F-CA7D87B547CE%40anarazel.de
-> > > Fixes: 762faee5a267 ("virtio_net: set the default max ring size by find_vqs()")
-> > > Cc: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> > > Cc: Jason Wang <jasowang@redhat.com>
-> > > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> > > Tested-by: Andres Freund <andres@anarazel.de>
-> > 
-> > I ran this patch through a total of 14 syskaller tests, 2 test runs each on
-> > 7 different crashes reported by syzkaller (as reported to the linux-kernel
-> > mailing list). No problems were reported. I also ran a single cross-check
-> > with one of the syzkaller runs on top of v6.0-rc1, without this patch.
-> > That test run failed.
-> > 
-> > Overall, I think we can call this fixed.
-> > 
-> > Guenter
+Thanks for the detailed review!
+
+On 2022-08-09 at 20:49 -0500, Stephen Boyd wrote:
+> /sys/firmware/coreboot/cbmem?
+
+Fixed in v9.
+
+> > +#include <linux/ctype.h>
 > 
-> It's more of a work around though since we don't yet have the root
-> cause for this. I suspect a GCP hypervisor bug at the moment.
-> This is excercising a path we previously only took on GFP_KERNEL
-> allocation failures during probe, I don't think that happens a lot.
->
+> What is used from this header?
 
-Even a hypervisor bug should not trigger crashes like this one,
-though, or at least I think so. Any idea what to look for on the
-hypervisor side, and/or what it might be doing wrong ?
+Not used, fixed in v9.
 
-Thanks,
-Guenter
+> Are all entries supposed to be writeable? Are there entries that are
+> read-only?
+
+The idea here was that we could use crossystem to update the cbmem entry
+when it makes changes, however, I do see this as an odd usage of the
+ABI, and in v9, I removed writing entirely and all entries are now
+read-only.
+
+If tools like crossystem need to maintain changes to this buffer, they
+should either maintain that copy themselves in /run or something, or
+daemonize and keep it in their process' memory.
+
+> > +       return cbmem_entry_setup(entry);
+> 
+> Is there a reason this isn't inlined here?
+
+cbmem_entry_setup was already a little long, so I just did this for
+reading clarity.  If you think it would be clearer just inlined here, I
+can change it (let me know).
+
+> Need to set .owner = THIS_MODULE unless you use
+> module_coreboot_driver().
+
+Done.
+
+> > +       if (!coreboot_kobj)
+> 
+> cbmem_kobj?
+
+Done.

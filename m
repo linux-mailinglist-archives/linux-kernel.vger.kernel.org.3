@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B22592BB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C9B8592C29
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233127AbiHOJUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 05:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
+        id S241248AbiHOJUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 05:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbiHOJTe (ORCPT
+        with ESMTP id S231490AbiHOJTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 05:19:34 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9923722513
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 02:19:33 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id b4so5267901wrn.4
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 02:19:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=wrEhczNEpmqqq7VK32HILro+LXPMg7V+9Mu8TEubq68=;
-        b=X9dKLxsx5J6Y0Q5apGeawGDjpRu57kpRQUxeUJqf1KVbC6afNd9EmZrdIqucXBRsUv
-         6rsghCS7XYEqtlGxQXrxTtWqw/uz2JEoaWqT1ECMV5HYCkAlnAKFzjALqdPVhC0KY1/z
-         Q+xGiKLrDToOb61FRXLx3tHl0enxF7pyPr7IiRLVAbCXfa6AxP2s7vm9402+zmYmb+5X
-         qcUSsENWS41qJ3fg5J36gjQ4K9MPh6rneR5fMPlx0gOZn8s3PimkZHDGrPL42fPg8YEf
-         rfshze6qCi0rofBpzqi4qXFnrOQ1CwpjdZhEhdUgszLZE5uAsIu/n9Wh5nbOS3uhJLbh
-         4wCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=wrEhczNEpmqqq7VK32HILro+LXPMg7V+9Mu8TEubq68=;
-        b=LpxNliOAMSM3Cyz/1jVLGxMCVVYdjoVKS9erAx/pFNcMu5DZp04S7fTzLs8B165iQQ
-         URKG+x+LEzW5K1o/KpUvSxb78THWZ6as6DZjDhHhDawJuC4H3LIx0uChw4OHYDNvmRqf
-         E5KuglHtIy7QBQ4LcQjONw6J612ctsOs1vyyTb0D0I+3JAUuT0HMHLXZT88rIo/pVFYN
-         HBVPTmuKaRtx+PqD0engK8e+JUnf28cbmiH+HFfGKCbcw7jWY3kYBF2YRe6DQlw2/Bid
-         WFXs/tcF7GiSuiJMDi/vqf2Z691qk7QTtQEGn5jLDYImtTXhttvQNpIclaVjSn1d+w68
-         OgKA==
-X-Gm-Message-State: ACgBeo3v38EbAZNjn7fMqpW7GCFMw++Gg3aV4gc2qNVJfK4KUYxRG7qQ
-        P2Uio/5fvktnXpATG4nsuLK/5Q==
-X-Google-Smtp-Source: AA6agR7mMp/FaJHOcP3eNvxI6ohHw4X0eBa3uH6SugbJpC/+2RKXvZeOZjLBw9iy1OST3Aa3uGqvfw==
-X-Received: by 2002:a05:6000:120a:b0:21f:dfb:ff12 with SMTP id e10-20020a056000120a00b0021f0dfbff12mr7985664wrx.215.1660555172222;
-        Mon, 15 Aug 2022 02:19:32 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:84c4:662a:9629:cac6])
-        by smtp.gmail.com with ESMTPSA id p17-20020a5d48d1000000b0022159d92004sm6716993wrs.82.2022.08.15.02.19.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 02:19:31 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Hulk Robot <hulkci@huawei.com>, Yuan Can <yuancan@huawei.com>
-Subject: [PATCH] gpio: pxa: use devres for the clock struct
-Date:   Mon, 15 Aug 2022 11:19:29 +0200
-Message-Id: <20220815091929.130547-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.34.1
+        Mon, 15 Aug 2022 05:19:45 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CE922509;
+        Mon, 15 Aug 2022 02:19:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 13B02203A1;
+        Mon, 15 Aug 2022 09:19:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1660555181; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=byKdBkOnKfm6xsv9HwlPy69qW+GlO+5qPV3VOpbs2VQ=;
+        b=2qeZ/Y8/zNtKp27jzySFLrrSLQMeqBQU7VcKXub/oHUAmRwd0Xm3iErK2gwzvclGvQb7j0
+        rwsXH5tiPhkJHLoiFeucY4ICOc3oCp8O58OyY7ytHHIzgiALmWJp72L0ss6L2jAmZOvfcS
+        loolqbyBo+pPsSZs+vF8bamSSAAXHr8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1660555181;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=byKdBkOnKfm6xsv9HwlPy69qW+GlO+5qPV3VOpbs2VQ=;
+        b=A5z92i2c6IZb38CR8RIR7ZdIQx7x+eqEJYIhGyFJuHcKprGXvTC1i8HIRpzvCduq8mWTbD
+        0iBO6opzudAnmkCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E723A13A93;
+        Mon, 15 Aug 2022 09:19:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id B2EdN6wP+mKyVQAAMHmgww
+        (envelope-from <mliska@suse.cz>); Mon, 15 Aug 2022 09:19:40 +0000
+Message-ID: <49253b17-738d-795e-f539-55857fdaee64@suse.cz>
+Date:   Mon, 15 Aug 2022 11:19:40 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+From:   =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>
+Subject: [PATCH] docs/arm64: elf_hwcaps: Unify HWCAP lists as description
+ lists
+To:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     broonie@kernel.org, corbet@lwn.net,
+        linux-arm-kernel@lists.infradead.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,47 +71,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The clock is never released after probe(). Use devres to not leak
-resources.
+Extends what was changed in 94bdaa7d9a9d778d893c670d494c06d8e007c1cd.
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Reported-by: Yuan Can <yuancan@huawei.com>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Add a series of blank lines to this document to get consistend rendering as
+an RST description list.
+
+Signed-off-by: Martin Liska <mliska@suse.cz>
 ---
- drivers/gpio/gpio-pxa.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+ Documentation/arm64/elf_hwcaps.rst | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/drivers/gpio/gpio-pxa.c b/drivers/gpio/gpio-pxa.c
-index c7fbfa3ae43b..1198ab0305d0 100644
---- a/drivers/gpio/gpio-pxa.c
-+++ b/drivers/gpio/gpio-pxa.c
-@@ -661,24 +661,17 @@ static int pxa_gpio_probe(struct platform_device *pdev)
- 	if (IS_ERR(gpio_reg_base))
- 		return PTR_ERR(gpio_reg_base);
+diff --git a/Documentation/arm64/elf_hwcaps.rst b/Documentation/arm64/elf_hwcaps.rst
+index 52b75a25c205..311021f2e560 100644
+--- a/Documentation/arm64/elf_hwcaps.rst
++++ b/Documentation/arm64/elf_hwcaps.rst
+@@ -242,44 +242,34 @@ HWCAP2_MTE3
+     by Documentation/arm64/memory-tagging-extension.rst.
  
--	clk = clk_get(&pdev->dev, NULL);
-+	clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(clk)) {
- 		dev_err(&pdev->dev, "Error %ld to get gpio clock\n",
- 			PTR_ERR(clk));
- 		return PTR_ERR(clk);
- 	}
--	ret = clk_prepare_enable(clk);
--	if (ret) {
--		clk_put(clk);
--		return ret;
--	}
+ HWCAP2_SME
+-
+     Functionality implied by ID_AA64PFR1_EL1.SME == 0b0001, as described
+     by Documentation/arm64/sme.rst.
  
- 	/* Initialize GPIO chips */
- 	ret = pxa_init_gpio_chip(pchip, pxa_last_gpio + 1, gpio_reg_base);
--	if (ret) {
--		clk_put(clk);
-+	if (ret)
- 		return ret;
--	}
+ HWCAP2_SME_I16I64
+-
+     Functionality implied by ID_AA64SMFR0_EL1.I16I64 == 0b1111.
  
- 	/* clear all GPIO edge detects */
- 	for_each_gpio_bank(gpio, c, pchip) {
+ HWCAP2_SME_F64F64
+-
+     Functionality implied by ID_AA64SMFR0_EL1.F64F64 == 0b1.
+ 
+ HWCAP2_SME_I8I32
+-
+     Functionality implied by ID_AA64SMFR0_EL1.I8I32 == 0b1111.
+ 
+ HWCAP2_SME_F16F32
+-
+     Functionality implied by ID_AA64SMFR0_EL1.F16F32 == 0b1.
+ 
+ HWCAP2_SME_B16F32
+-
+     Functionality implied by ID_AA64SMFR0_EL1.B16F32 == 0b1.
+ 
+ HWCAP2_SME_F32F32
+-
+     Functionality implied by ID_AA64SMFR0_EL1.F32F32 == 0b1.
+ 
+ HWCAP2_SME_FA64
+-
+     Functionality implied by ID_AA64SMFR0_EL1.FA64 == 0b1.
+ 
+ HWCAP2_WFXT
+-
+     Functionality implied by ID_AA64ISAR2_EL1.WFXT == 0b0010.
+ 
+ HWCAP2_EBF16
+-
+     Functionality implied by ID_AA64ISAR1_EL1.BF16 == 0b0010.
+ 
+ 4. Unused AT_HWCAP bits
 -- 
-2.34.1
+2.37.1
 

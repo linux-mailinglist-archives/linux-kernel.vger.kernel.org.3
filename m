@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05C6593403
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 19:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36043593408
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 19:27:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbiHOR07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 13:26:59 -0400
+        id S231970AbiHOR1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 13:27:04 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231203AbiHOR0a (ORCPT
+        with ESMTP id S231309AbiHOR0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 13:26:30 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFCFE0C2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 10:26:29 -0700 (PDT)
+        Mon, 15 Aug 2022 13:26:31 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54E6FD17
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 10:26:30 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
         t=1660584388;
@@ -22,19 +22,18 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xApyLVCro7eU20RcMo1NJ1THL9oCFUnIETFY11BB7ns=;
-        b=NtClv4zVDcljnFhmHnTJjbHu6El1Cc9k0c0i0MLGp901m/6MyJBWgQSJC7MAJyKMSFv69u
-        N/dfTVPwE2LNwOALAr7yAtw2JYL3122agOa2HzWjfekM2c15h7cONySx/tp9kh3evkVB+r
-        2jOaPq8XrctzVq8qNXU0NHWlwyNAsNk=
+        bh=yhQDfoOmh4Mp5y5JtpsPUZ1S+MWlSFeCxKSY2ihEucw=;
+        b=lJtMCkHkTXwe3RkzBIyJ9CaGCVSO/mAn8DUqAw3DU9HRaiPnAz+Mu0cNeCr6UvviNShvGx
+        LYx7PBnF419zswuRMkGQhlZOb66DVBeVBIhBs5WZwhp1u4y5mUSBCCSHEYP1eoaxghxTsS
+        ZeDOEWv57LxP+9Ejd5XZoPhiMGte82s=
 From:   Kent Overstreet <kent.overstreet@linux.dev>
 To:     akpm@linux-foundation.org
 Cc:     linux-kernel@vger.kernel.org,
         Kent Overstreet <kent.overstreet@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: [PATCH 07/11] tracing: trace_events_synth: Convert to printbuf
-Date:   Mon, 15 Aug 2022 13:26:09 -0400
-Message-Id: <20220815172613.621627-8-kent.overstreet@linux.dev>
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: [PATCH 08/11] d_path: prt_path()
+Date:   Mon, 15 Aug 2022 13:26:10 -0400
+Message-Id: <20220815172613.621627-9-kent.overstreet@linux.dev>
 In-Reply-To: <20220815172613.621627-1-kent.overstreet@linux.dev>
 References: <20220815172613.621627-1-kent.overstreet@linux.dev>
 MIME-Version: 1.0
@@ -53,116 +52,81 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kent Overstreet <kent.overstreet@gmail.com>
 
-This converts from seq_buf to printbuf.
-
-This code was using seq_buf for building up dynamically allocated
-strings; the conversion uses printbuf's heap allocation functionality to
-simplify things (no longer need to calculate size of the output string).
-
-Also, alphabetize the #includes.
+This implements a new printbuf version of d_path()/mangle_path(), which
+will replace the seq_buf version.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
 ---
- kernel/trace/trace_events_synth.c | 51 ++++++++++---------------------
- 1 file changed, 16 insertions(+), 35 deletions(-)
+ fs/d_path.c            | 35 +++++++++++++++++++++++++++++++++++
+ include/linux/dcache.h |  1 +
+ 2 files changed, 36 insertions(+)
 
-diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
-index 5e8c07aef0..720c75429c 100644
---- a/kernel/trace/trace_events_synth.c
-+++ b/kernel/trace/trace_events_synth.c
-@@ -5,13 +5,14 @@
-  * Copyright (C) 2015, 2020 Tom Zanussi <tom.zanussi@linux.intel.com>
-  */
- 
--#include <linux/module.h>
- #include <linux/kallsyms.h>
--#include <linux/security.h>
-+#include <linux/module.h>
- #include <linux/mutex.h>
-+#include <linux/printbuf.h>
-+#include <linux/rculist.h>
-+#include <linux/security.h>
+diff --git a/fs/d_path.c b/fs/d_path.c
+index e4e0ebad1f..1bd9e85f2f 100644
+--- a/fs/d_path.c
++++ b/fs/d_path.c
+@@ -5,6 +5,7 @@
+ #include <linux/fs_struct.h>
+ #include <linux/fs.h>
  #include <linux/slab.h>
- #include <linux/stacktrace.h>
--#include <linux/rculist.h>
- #include <linux/tracefs.h>
++#include <linux/printbuf.h>
+ #include <linux/prefetch.h>
+ #include "mount.h"
  
- /* for gfp flag names */
-@@ -611,7 +612,7 @@ static struct synth_field *parse_synth_field(int argc, char **argv,
- 	const char *prefix = NULL, *field_type = argv[0], *field_name, *array;
- 	struct synth_field *field;
- 	int len, ret = -ENOMEM;
--	struct seq_buf s;
-+	struct printbuf buf;
- 	ssize_t size;
+@@ -294,6 +295,40 @@ char *d_path(const struct path *path, char *buf, int buflen)
+ }
+ EXPORT_SYMBOL(d_path);
  
- 	if (!strcmp(field_type, "unsigned")) {
-@@ -654,28 +655,16 @@ static struct synth_field *parse_synth_field(int argc, char **argv,
- 		goto free;
- 	}
++/**
++ * prt_path - format a path for output
++ * @out: printbuf to output to
++ * @path: path to write into the sequence buffer.
++ * @esc: set of characters to escape in the output
++ *
++ * Write a path name into the sequence buffer.
++ *
++ * Returns 0 on success, or error code from d_path
++ */
++int prt_path(struct printbuf *out, const struct path *path, const char *esc)
++{
++	char *p, *buf;
++	size_t size;
++again:
++	buf = out->buf + out->pos;
++	size = printbuf_remaining_size(out);
++
++	p = d_path(path, buf, size);
++	if (IS_ERR(p)) {
++		printbuf_make_room(out, max_t(size_t, 64, size * 2));
++		if (printbuf_remaining_size(out) > size)
++			goto again;
++
++		return PTR_ERR(p);
++	}
++
++	p = mangle_path(buf, p, esc);
++	if (p)
++		out->pos += p - buf;
++	return 0;
++}
++EXPORT_SYMBOL(prt_path);
++
+ /*
+  * Helper function for dentry_operations.d_dname() members
+  */
+diff --git a/include/linux/dcache.h b/include/linux/dcache.h
+index c73e5e327e..bdd5940aa7 100644
+--- a/include/linux/dcache.h
++++ b/include/linux/dcache.h
+@@ -293,6 +293,7 @@ extern char *d_absolute_path(const struct path *, char *, int);
+ extern char *d_path(const struct path *, char *, int);
+ extern char *dentry_path_raw(const struct dentry *, char *, int);
+ extern char *dentry_path(const struct dentry *, char *, int);
++extern int prt_path(struct printbuf *, const struct path *, const char *);
  
--	len = strlen(field_type) + 1;
--
--	if (array)
--		len += strlen(array);
--
--	if (prefix)
--		len += strlen(prefix);
--
--	field->type = kzalloc(len, GFP_KERNEL);
--	if (!field->type)
--		goto free;
--
--	seq_buf_init(&s, field->type, len);
-+	buf = PRINTBUF;
- 	if (prefix)
--		seq_buf_puts(&s, prefix);
--	seq_buf_puts(&s, field_type);
-+		prt_str(&buf, prefix);
-+	prt_str(&buf, field_type);
- 	if (array)
--		seq_buf_puts(&s, array);
--	if (WARN_ON_ONCE(!seq_buf_buffer_left(&s)))
-+		prt_str(&buf, array);
-+	if (buf.allocation_failure)
- 		goto free;
+ /* Allocation counts.. */
  
--	s.buffer[s.len] = '\0';
-+	field->type = buf.buf;
- 
- 	size = synth_field_size(field->type);
- 	if (size < 0) {
-@@ -687,23 +676,15 @@ static struct synth_field *parse_synth_field(int argc, char **argv,
- 		goto free;
- 	} else if (size == 0) {
- 		if (synth_field_is_string(field->type)) {
--			char *type;
--
--			len = sizeof("__data_loc ") + strlen(field->type) + 1;
--			type = kzalloc(len, GFP_KERNEL);
--			if (!type)
--				goto free;
--
--			seq_buf_init(&s, type, len);
--			seq_buf_puts(&s, "__data_loc ");
--			seq_buf_puts(&s, field->type);
-+			buf = PRINTBUF;
-+			prt_str(&buf, "__data_loc ");
-+			prt_str(&buf, field->type);
- 
--			if (WARN_ON_ONCE(!seq_buf_buffer_left(&s)))
-+			if (buf.allocation_failure)
- 				goto free;
--			s.buffer[s.len] = '\0';
- 
- 			kfree(field->type);
--			field->type = type;
-+			field->type = buf.buf;
- 
- 			field->is_dynamic = true;
- 			size = sizeof(u64);
 -- 
 2.36.1
 

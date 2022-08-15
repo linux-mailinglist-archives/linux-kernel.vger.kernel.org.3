@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5CA59476E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD3C594730
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355604AbiHOX5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
+        id S1355654AbiHOX5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355290AbiHOXvr (ORCPT
+        with ESMTP id S1355395AbiHOXwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:51:47 -0400
+        Mon, 15 Aug 2022 19:52:02 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A6A91D07;
-        Mon, 15 Aug 2022 13:16:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5EA2CCB2;
+        Mon, 15 Aug 2022 13:16:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9CE4FB810C5;
-        Mon, 15 Aug 2022 20:16:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F184DC433D6;
-        Mon, 15 Aug 2022 20:16:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1C45DB80EB1;
+        Mon, 15 Aug 2022 20:16:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 642FFC433C1;
+        Mon, 15 Aug 2022 20:16:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594584;
-        bh=4Ad6WHw+VEo7Yt24zjkg9al8JR/d0E217Ezuc9hpe3s=;
+        s=korg; t=1660594608;
+        bh=X9e1ULn5u8dN/vWtVUa60/Uy8EpTPSSad7gGvaqhSkQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aQTuVCQvRb6G4kaTJBXClG30dZUNULVxnIIzdftnV382+LLcpJaXfbK4/VbctqWGY
-         K909iC+Igd++X5ERCBAfIY/QKa45pd5q6CL6g1Zxebh7SDRSAPYsqqJRP11aB8zdA1
-         yKxW1GqnN/6yj2MLpfxLWFvbfcH4E5fwZpws/wSU=
+        b=J2jq8s3y63RKPKZXCOuc41vW0KgVLKNAQzSOm459RUD79eaSssTkTDI1ntvlOCqRk
+         dRdCPayOKQmFhAkN0UTTNLDkTlSB2YoWP92ip3V99ykXQK9u3hT+lc81o5oUmBwHYS
+         aI6LT8ORL7I/IfYlb+t5trHO4F+Um4Z7vkj0LYVU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <yujie.liu@intel.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        stable@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0495/1157] kunit: executor: Fix a memory leak on failure in kunit_filter_tests
-Date:   Mon, 15 Aug 2022 19:57:31 +0200
-Message-Id: <20220815180459.456122374@linuxfoundation.org>
+Subject: [PATCH 5.19 0502/1157] fs: check FMODE_LSEEK to control internal pipe splicing
+Date:   Mon, 15 Aug 2022 19:57:38 +0200
+Message-Id: <20220815180459.771925815@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -60,55 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Gow <davidgow@google.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-[ Upstream commit 94681e289bf5d10c9db9db143d1a22d8717205c5 ]
+[ Upstream commit 97ef77c52b789ec1411d360ed99dca1efe4b2c81 ]
 
-It's possible that memory allocation for 'filtered' will fail, but for the
-copy of the suite to succeed. In this case, the copy could be leaked.
+The original direct splicing mechanism from Jens required the input to
+be a regular file because it was avoiding the special socket case. It
+also recognized blkdevs as being close enough to a regular file. But it
+forgot about chardevs, which behave the same way and work fine here.
 
-Properly free 'copy' in the error case for the allocation of 'filtered'
-failing.
+This is an okayish heuristic, but it doesn't totally work. For example,
+a few chardevs should be spliceable here. And a few regular files
+shouldn't. This patch fixes this by instead checking whether FMODE_LSEEK
+is set, which represents decently enough what we need rewinding for when
+splicing to internal pipes.
 
-Note that there may also have been a similar issue in
-kunit_filter_subsuites, before it was removed in "kunit: flatten
-kunit_suite*** to kunit_suite** in .kunit_test_suites".
-
-This was reported by clang-analyzer via the kernel test robot, here:
-https://lore.kernel.org/all/c8073b8e-7b9e-0830-4177-87c12f16349c@intel.com/
-
-And by smatch via Dan Carpenter and the kernel test robot:
-https://lore.kernel.org/all/202207101328.ASjx88yj-lkp@intel.com/
-
-Fixes: a02353f49162 ("kunit: bail out of test filtering logic quicker if OOM")
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Signed-off-by: David Gow <davidgow@google.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Fixes: b92ce5589374 ("[PATCH] splice: add direct fd <-> fd splicing support")
+Cc: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/kunit/executor.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ fs/splice.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 96f96e42ce06..16fb88c0aca3 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -76,8 +76,10 @@ kunit_filter_tests(struct kunit_suite *const suite, const char *test_glob)
- 	memcpy(copy, suite, sizeof(*copy));
+diff --git a/fs/splice.c b/fs/splice.c
+index 047b79db8eb5..93a2c9bf6249 100644
+--- a/fs/splice.c
++++ b/fs/splice.c
+@@ -814,17 +814,15 @@ ssize_t splice_direct_to_actor(struct file *in, struct splice_desc *sd,
+ {
+ 	struct pipe_inode_info *pipe;
+ 	long ret, bytes;
+-	umode_t i_mode;
+ 	size_t len;
+ 	int i, flags, more;
  
- 	filtered = kcalloc(n + 1, sizeof(*filtered), GFP_KERNEL);
--	if (!filtered)
-+	if (!filtered) {
-+		kfree(copy);
- 		return ERR_PTR(-ENOMEM);
-+	}
+ 	/*
+-	 * We require the input being a regular file, as we don't want to
+-	 * randomly drop data for eg socket -> socket splicing. Use the
+-	 * piped splicing for that!
++	 * We require the input to be seekable, as we don't want to randomly
++	 * drop data for eg socket -> socket splicing. Use the piped splicing
++	 * for that!
+ 	 */
+-	i_mode = file_inode(in)->i_mode;
+-	if (unlikely(!S_ISREG(i_mode) && !S_ISBLK(i_mode)))
++	if (unlikely(!(in->f_mode & FMODE_LSEEK)))
+ 		return -EINVAL;
  
- 	n = 0;
- 	kunit_suite_for_each_test_case(suite, test_case) {
+ 	/*
 -- 
 2.35.1
 

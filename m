@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF2C59481C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D86895947B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353861AbiHOXiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50830 "EHLO
+        id S1353722AbiHOXkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353488AbiHOXe6 (ORCPT
+        with ESMTP id S1353684AbiHOXf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:34:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E682265817;
-        Mon, 15 Aug 2022 13:09:03 -0700 (PDT)
+        Mon, 15 Aug 2022 19:35:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCF515175B;
+        Mon, 15 Aug 2022 13:09:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DD9E6069F;
-        Mon, 15 Aug 2022 20:09:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6744EC433C1;
-        Mon, 15 Aug 2022 20:09:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DAC7EB810C5;
+        Mon, 15 Aug 2022 20:09:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4341CC433D6;
+        Mon, 15 Aug 2022 20:09:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594142;
-        bh=xhkzJaIPw6uC5XDjaB+Qwpm4wrgUSw4VM161AgL9y7k=;
+        s=korg; t=1660594148;
+        bh=Wv64WLePaMTiYT8GLdGRrBr0tGS1ZDL3nXXoLhy+o/U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K6XdLLw0n40tIdThYUBRwMf9d1ZBIWNmjASgDC3sdQXHVNfbM1XwvMKipsiB8sABo
-         YT+hiJUwcOj79U0IWl/mdBdlMerK1ZNz0Gy1dpZ/goT6JB3lRkye5EuOmtvWsMn9U4
-         cPnUSdTYDGm6nH3bQ/fHc3aS5cR4fOev7uFZq+48=
+        b=B064PjaZTQrG0HszkWjEF4LMgSQ+/SkHPZIN9ycaR1jR0qJio/wGS3owFxrd1HjYT
+         KEVQPxFfXiKjxrdpw2pHsEPqkRwKDesLyyJgAtdpMG4A3MKYGm+UpE0WKH2PXjgVBA
+         YtNBZ+hwLoz1dH756pbn3Mt4+GQ7+BdCjy7L5dwg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Evan Quan <evan.quan@amd.com>,
         Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0385/1157] drm/radeon: fix incorrrect SPDX-License-Identifiers
-Date:   Mon, 15 Aug 2022 19:55:41 +0200
-Message-Id: <20220815180455.113184781@linuxfoundation.org>
+Subject: [PATCH 5.19 0386/1157] drm/amd: Dont show warning on reading vbios values for SMU13 3.1
+Date:   Mon, 15 Aug 2022 19:55:42 +0200
+Message-Id: <20220815180455.144048569@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -56,60 +57,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Deucher <alexander.deucher@amd.com>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-[ Upstream commit 1f43b8903f3aae4a26a603c36f6d5dd25d6edb51 ]
+[ Upstream commit 1320d6c7b0deb7219701a55397e93e6c73d00366 ]
 
-radeon is MIT.  This were incorrectly changed in
-commit b24413180f56 ("License cleanup: add SPDX GPL-2.0 license identifier to files with no license")
-and
-commit d198b34f3855 (".gitignore: add SPDX License Identifier")
-and:
-commit ec8f24b7faaf ("treewide: Add SPDX license identifier - Makefile/Kconfig")
+Some APUs with SMU13 are showing the following message:
+`amdgpu 0000:63:00.0: amdgpu: Unexpected and unhandled version: 3.1`
 
-Fixes: d198b34f3855 (".gitignore: add SPDX License Identifier")
-Fixes: ec8f24b7faaf ("treewide: Add SPDX license identifier - Makefile/Kconfig")
-Fixes: b24413180f56 ("License cleanup: add SPDX GPL-2.0 license identifier to files with no license")
-Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/2053
-Reviewed-by: Christian König <christian.koenig@amd.com>
+This warning isn't relevant for smu info 3.1, as no bootup information
+is present in the table.
+
+Fixes: 593a54f18031 ("drm/amd/pm: correct the way for retrieving bootup clocks")
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Reviewed-by: Evan Quan <evan.quan@amd.com>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/radeon/.gitignore | 2 +-
- drivers/gpu/drm/radeon/Kconfig    | 2 +-
- drivers/gpu/drm/radeon/Makefile   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/radeon/.gitignore b/drivers/gpu/drm/radeon/.gitignore
-index 9c1a94153983..d8777383a64a 100644
---- a/drivers/gpu/drm/radeon/.gitignore
-+++ b/drivers/gpu/drm/radeon/.gitignore
-@@ -1,4 +1,4 @@
--# SPDX-License-Identifier: GPL-2.0-only
-+# SPDX-License-Identifier: MIT
- mkregtable
- *_reg_safe.h
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
+index ef9b56de143b..5aa08c031f72 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
+@@ -714,6 +714,8 @@ int smu_v13_0_get_vbios_bootup_values(struct smu_context *smu)
+ 			smu->smu_table.boot_values.vclk = smu_info_v3_6->bootup_vclk_10khz;
+ 			smu->smu_table.boot_values.dclk = smu_info_v3_6->bootup_dclk_10khz;
+ 			smu->smu_table.boot_values.fclk = smu_info_v3_6->bootup_fclk_10khz;
++		} else if ((frev == 3) && (crev == 1)) {
++			return 0;
+ 		} else if ((frev == 4) && (crev == 0)) {
+ 			smu_info_v4_0 = (struct atom_smu_info_v4_0 *)header;
  
-diff --git a/drivers/gpu/drm/radeon/Kconfig b/drivers/gpu/drm/radeon/Kconfig
-index 6f60f4840cc5..52819e7f1fca 100644
---- a/drivers/gpu/drm/radeon/Kconfig
-+++ b/drivers/gpu/drm/radeon/Kconfig
-@@ -1,4 +1,4 @@
--# SPDX-License-Identifier: GPL-2.0-only
-+# SPDX-License-Identifier: MIT
- config DRM_RADEON_USERPTR
- 	bool "Always enable userptr support"
- 	depends on DRM_RADEON
-diff --git a/drivers/gpu/drm/radeon/Makefile b/drivers/gpu/drm/radeon/Makefile
-index ea5380e24c3c..e3ab3aca1396 100644
---- a/drivers/gpu/drm/radeon/Makefile
-+++ b/drivers/gpu/drm/radeon/Makefile
-@@ -1,4 +1,4 @@
--# SPDX-License-Identifier: GPL-2.0
-+# SPDX-License-Identifier: MIT
- #
- # Makefile for the drm device driver.  This driver provides support for the
- # Direct Rendering Infrastructure (DRI) in XFree86 4.1.0 and higher.
 -- 
 2.35.1
 

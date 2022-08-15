@@ -2,219 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 097A35927FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 05:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7FF55927FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 05:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232614AbiHODLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 23:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
+        id S232948AbiHODLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 23:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232287AbiHODLJ (ORCPT
+        with ESMTP id S232966AbiHODLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 23:11:09 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF6C6468
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 20:11:04 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M5fPf00lyzmVlM;
-        Mon, 15 Aug 2022 11:08:53 +0800 (CST)
-Received: from use12-sp2.huawei.com (10.67.189.174) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 15 Aug 2022 11:11:03 +0800
-From:   Xiaoming Ni <nixiaoming@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <phillip@squashfs.org.uk>
-CC:     <nixiaoming@huawei.com>, <wangle6@huawei.com>,
-        <yi.zhang@huawei.com>, <wangbing6@huawei.com>,
-        <zhongjubin@huawei.com>, <chenjianguo3@huawei.com>
-Subject: [PATCH 2/2] squashfs: Allows users to configure the number of decompression threads.
-Date:   Mon, 15 Aug 2022 11:11:00 +0800
-Message-ID: <20220815031100.75243-3-nixiaoming@huawei.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220815031100.75243-1-nixiaoming@huawei.com>
-References: <20220815031100.75243-1-nixiaoming@huawei.com>
+        Sun, 14 Aug 2022 23:11:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0811D64DF
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 20:11:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660533091;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SjMszlsPJzqPdD9SX0g5g2TJ7r/jfUNF1gkXOi6GAxg=;
+        b=hnOvz8IepOsBbJSwH7bIasw7teAWZi9xcu8GcrYpVJ3djcY6agL6fp8alRHZriGEWly/KV
+        zfSYk3qeNwrfidCifw3hERQw4K7hOi2svOEge6bioXCjb9/7e2KbT1WJRSKqG83rcKk5rw
+        aO0hR7J8f1G67JWktdbEq0qzjwcZu+A=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-435-wJSQYP1DMdaV8iMGA_G_Og-1; Sun, 14 Aug 2022 23:11:29 -0400
+X-MC-Unique: wJSQYP1DMdaV8iMGA_G_Og-1
+Received: by mail-lf1-f69.google.com with SMTP id z1-20020a0565120c0100b0048ab2910b13so1002676lfu.23
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 20:11:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=SjMszlsPJzqPdD9SX0g5g2TJ7r/jfUNF1gkXOi6GAxg=;
+        b=6E+dMT1bOQbQKk3qlP+G9UZ5mp429gS2wAg+uTpPywS3d5RghVA0je5gaBQHI7KZfe
+         NHgrPnmMxi7CDDA+A9AxNG+IPFSvPnH+wyWrUkM4yH5rvCZYosw0qoLC4njUrjWbeJYf
+         ZBMpKzbJejrmn63Dv0LDF7RHO0QniHA+hasRuJvXpQFXFqtxL3uh9j2Z6jYIA+n7IJ5J
+         V32ent/rldPVYprT/uxWjau5JQ9xaBNlP7EtyONRs3nZcn2BuU3Y0h0fvo0xm/PmmCWi
+         h3m1zFpXvCyGcLWUgoJJq8si2vP954TSH6qGQyzVO499GD4l7WVv8TIuXdWD8uH3SK5Z
+         cKFw==
+X-Gm-Message-State: ACgBeo0QsFbbbj3VvMkFEtoxPVdGjfWEToXblc7IFDkTXZk4McxtoLUC
+        VLvWG2HwM4r3U92EZWc2E04/096hqeSlx+iSMWDQhbOXCUUDI7J8CE3O0DPrGN0/jQ5crYOcjAh
+        w9p86j+Nxc4eqoN5A3hRm3CY=
+X-Received: by 2002:a05:651c:1584:b0:25d:c6ad:6237 with SMTP id h4-20020a05651c158400b0025dc6ad6237mr4128017ljq.509.1660533088452;
+        Sun, 14 Aug 2022 20:11:28 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR75Rkq4uNFv4jWdO6CE/+UN/BzpT4Y4J0IXpmyBUcSf+60GXQXh+SEmp9hi7JNUXySLvgWU7A==
+X-Received: by 2002:a05:651c:1584:b0:25d:c6ad:6237 with SMTP id h4-20020a05651c158400b0025dc6ad6237mr4128010ljq.509.1660533088227;
+        Sun, 14 Aug 2022 20:11:28 -0700 (PDT)
+Received: from [192.168.1.121] (91-145-109-188.bb.dnainternet.fi. [91.145.109.188])
+        by smtp.gmail.com with ESMTPSA id h5-20020a05651c124500b0025e2cb58c6esm1271348ljh.37.2022.08.14.20.11.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 14 Aug 2022 20:11:27 -0700 (PDT)
+Message-ID: <58be2b37-0c3a-06d8-35f5-50bf4b765fb2@redhat.com>
+Date:   Mon, 15 Aug 2022 06:11:26 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.189.174]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/2] selftests/hmm-tests: Add test for dirty bits
+Content-Language: en-US
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>, linuxram@us.ibm.com,
+        paulus@ozlabs.org
+References: <a9daea363991c023d0364be22a762405b6c6f5c4.1660281458.git-series.apopple@nvidia.com>
+ <8f19b172d32be2e889b837f88b1ba070bf2c97ee.1660281458.git-series.apopple@nvidia.com>
+ <1ec090fa-f93b-c197-e5b3-ff2b0d5862ef@redhat.com>
+ <87lerqw72n.fsf@nvdebian.thelocal>
+From:   =?UTF-8?Q?Mika_Penttil=c3=a4?= <mpenttil@redhat.com>
+In-Reply-To: <87lerqw72n.fsf@nvdebian.thelocal>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The maximum number of threads in the decompressor_multi.c file is fixed
-and cannot be adjusted according to user needs.
-Therefore, the mount parameter needs to be added to allow users to
-configure the number of threads as required.
 
-Signed-off-by: Xiaoming Ni <nixiaoming@huawei.com>
----
- fs/squashfs/Kconfig              |  4 +++-
- fs/squashfs/decompressor_multi.c |  4 ++--
- fs/squashfs/squashfs_fs_sb.h     |  1 +
- fs/squashfs/super.c              | 45 ++++++++++++++++++++++++++++------------
- 4 files changed, 38 insertions(+), 16 deletions(-)
 
-diff --git a/fs/squashfs/Kconfig b/fs/squashfs/Kconfig
-index af9f8c41f2de..3f42b4099dc7 100644
---- a/fs/squashfs/Kconfig
-+++ b/fs/squashfs/Kconfig
-@@ -99,7 +99,9 @@ config SQUASHFS_DECOMP_MULTI
- 
- 	  This decompressor implementation uses up to two parallel
- 	  decompressors per core.  It dynamically allocates decompressors
--	  on a demand basis.
-+	  on a demand basis.  You can also set the number of threads by setting threads=<number> of
-+	  the mount parameter.
-+
- 
- config SQUASHFS_DECOMP_MULTI_PERCPU
- 	bool "Use percpu multiple decompressors for parallel I/O"
-diff --git a/fs/squashfs/decompressor_multi.c b/fs/squashfs/decompressor_multi.c
-index 7b2723b77e75..6d1cea325cca 100644
---- a/fs/squashfs/decompressor_multi.c
-+++ b/fs/squashfs/decompressor_multi.c
-@@ -144,7 +144,7 @@ static struct decomp_stream *get_decomp_stream(struct squashfs_sb_info *msblk,
- 		 * If there is no available decomp and already full,
- 		 * let's wait for releasing decomp from other users.
- 		 */
--		if (stream->avail_decomp >= MAX_DECOMPRESSOR)
-+		if (stream->avail_decomp >= msblk->max_thread_num)
- 			goto wait;
- 
- 		/* Let's allocate new decomp */
-@@ -160,7 +160,7 @@ static struct decomp_stream *get_decomp_stream(struct squashfs_sb_info *msblk,
- 		}
- 
- 		stream->avail_decomp++;
--		WARN_ON(stream->avail_decomp > MAX_DECOMPRESSOR);
-+		WARN_ON(stream->avail_decomp > msblk->max_thread_num);
- 
- 		mutex_unlock(&stream->mutex);
- 		break;
-diff --git a/fs/squashfs/squashfs_fs_sb.h b/fs/squashfs/squashfs_fs_sb.h
-index f1e5dad8ae0a..659082e9e51d 100644
---- a/fs/squashfs/squashfs_fs_sb.h
-+++ b/fs/squashfs/squashfs_fs_sb.h
-@@ -67,5 +67,6 @@ struct squashfs_sb_info {
- 	unsigned int				ids;
- 	bool					panic_on_errors;
- 	const struct squashfs_decompressor_thread_ops *thread_ops;
-+	int					max_thread_num;
- };
- #endif
-diff --git a/fs/squashfs/super.c b/fs/squashfs/super.c
-index 6fd44683a84b..f3533e20d0b7 100644
---- a/fs/squashfs/super.c
-+++ b/fs/squashfs/super.c
-@@ -53,6 +53,7 @@ enum squashfs_param {
- struct squashfs_mount_opts {
- 	enum Opt_errors errors;
- 	const struct squashfs_decompressor_thread_ops *thread_ops;
-+	int thread_num;
- };
- 
- static const struct constant_table squashfs_param_errors[] = {
-@@ -69,6 +70,8 @@ static const struct fs_parameter_spec squashfs_fs_parameters[] = {
- 
- static int squashfs_parse_param_threads(const char *str, struct squashfs_mount_opts *opts)
- {
-+	unsigned long num;
-+	int ret;
- #ifdef CONFIG_SQUASHFS_DECOMP_SINGLE
- 	if (strcmp(str, "single") == 0) {
- 		opts->thread_ops = &squashfs_decompressor_single;
-@@ -87,7 +90,24 @@ static int squashfs_parse_param_threads(const char *str, struct squashfs_mount_o
- 		return 0;
- 	}
- #endif
-+	ret = kstrtoul(str, 0, &num);
-+	if (ret != 0 || num == 0)
-+		return -EINVAL;
-+#ifdef CONFIG_SQUASHFS_DECOMP_SINGLE
-+	if (num == 1) {
-+		opts->thread_ops = &squashfs_decompressor_single;
-+		return 0;
-+	}
-+#endif
-+#ifdef CONFIG_SQUASHFS_DECOMP_MULTI
-+	opts->thread_ops = &squashfs_decompressor_multi;
-+	if (num > opts->thread_ops->max_decompressors())
-+		num = opts->thread_ops->max_decompressors();
-+	opts->thread_num = (int)num;
-+	return 0;
-+#else
- 	return -EINVAL;
-+#endif
- }
- 
- static int squashfs_parse_param(struct fs_context *fc, struct fs_parameter *param)
-@@ -198,6 +218,11 @@ static int squashfs_fill_super(struct super_block *sb, struct fs_context *fc)
- 		goto failed_mount;
- 	}
- 	msblk->thread_ops = opts->thread_ops;
-+	if (opts->thread_num == 0) {
-+		msblk->max_thread_num = opts->thread_ops->max_decompressors();
-+	} else {
-+		msblk->max_thread_num = opts->thread_num;
-+	}
- 
- 	/* Check the MAJOR & MINOR versions and lookup compression type */
- 	msblk->decompressor = supported_squashfs_filesystem(
-@@ -283,7 +308,7 @@ static int squashfs_fill_super(struct super_block *sb, struct fs_context *fc)
- 
- 	/* Allocate read_page block */
- 	msblk->read_page = squashfs_cache_init("data",
--		msblk->thread_ops->max_decompressors(), msblk->block_size);
-+		msblk->max_thread_num, msblk->block_size);
- 	if (msblk->read_page == NULL) {
- 		errorf(fc, "Failed to allocate read_page block");
- 		goto failed_mount;
-@@ -466,24 +491,17 @@ static int squashfs_show_options(struct seq_file *s, struct dentry *root)
- 	else
- 		seq_puts(s, ",errors=continue");
- 
--#ifdef CONFIG_SQUASHFS_DECOMP_SINGLE
--	if (msblk->thread_ops == &squashfs_decompressor_single) {
--		seq_puts(s, ",threads=single");
--		return 0;
--	}
--#endif
--#ifdef CONFIG_SQUASHFS_DECOMP_MULTI
--	if (msblk->thread_ops == &squashfs_decompressor_multi) {
--		seq_puts(s, ",threads=multi");
--		return 0;
--	}
--#endif
- #ifdef CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU
-+	/*
-+	 * thread=percpu and thread=<number> have different configuration effects.
-+	 * the parameters need to be treated differently when they are displayed.
-+	 */
- 	if (msblk->thread_ops == &squashfs_decompressor_percpu) {
- 		seq_puts(s, ",threads=percpu");
- 		return 0;
- 	}
- #endif
-+	seq_printf(s, ",threads=%u", msblk->max_thread_num);
- 	return 0;
- }
- 
-@@ -502,6 +520,7 @@ static int squashfs_init_fs_context(struct fs_context *fc)
- #elif defined(CONFIG_SQUASHFS_DECOMP_DEFAULT_PERCPU)
- 	opts->thread_ops = &squashfs_decompressor_percpu;
- #endif
-+	opts->thread_num = 0;
- 	fc->fs_private = opts;
- 	fc->ops = &squashfs_context_ops;
- 	return 0;
--- 
-2.12.3
+On 15.8.2022 5.35, Alistair Popple wrote:
+> 
+> Mika Penttilä <mpenttil@redhat.com> writes:
+> 
+>> Hi Alistair!
+>>
+>> On 12.8.2022 8.22, Alistair Popple wrote:
+> 
+> [...]
+> 
+>>> +	buffer->ptr = mmap(NULL, size,
+>>> +			   PROT_READ | PROT_WRITE,
+>>> +			   MAP_PRIVATE | MAP_ANONYMOUS,
+>>> +			   buffer->fd, 0);
+>>> +	ASSERT_NE(buffer->ptr, MAP_FAILED);
+>>> +
+>>> +	/* Initialize buffer in system memory. */
+>>> +	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
+>>> +		ptr[i] = 0;
+>>> +
+>>> +	ASSERT_FALSE(write_cgroup_param(cgroup, "memory.reclaim", 1UL<<30));
+>>> +
+>>> +	/* Fault pages back in from swap as clean pages */
+>>> +	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
+>>> +		tmp += ptr[i];
+>>> +
+>>> +	/* Dirty the pte */
+>>> +	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
+>>> +		ptr[i] = i;
+>>> +
+>>
+>> The anon pages are quite likely in memory at this point, and dirty in pte.
+> 
+> Why would the pte be dirty? I just confirmed using some modified pagemap
+> code that on my system at least this isn't the case.
+> 
+>>> +	/*
+>>> +	 * Attempt to migrate memory to device, which should fail because
+>>> +	 * hopefully some pages are backed by swap storage.
+>>> +	 */
+>>> +	ASSERT_TRUE(hmm_migrate_sys_to_dev(self->fd, buffer, npages));
+>>
+>> And pages marked dirty also now. But could you elaborate how and where the above
+>> fails in more detail, couldn't immediately see it...
+> 
+> Not if you don't have patch 1 of this series applied. If the
+> trylock_page() in migrate_vma_collect_pmd() succeeds (which it almost
+> always does) it will have cleared the pte without setting PageDirty.
+> 
+
+Ah yes but I meant with the patch 1 applied, the comment "Attempt to 
+migrate memory to device, which should fail because hopefully some pages 
+are backed by swap storage" indicates that hmm_migrate_sys_to_dev() 
+would fail..and there's that ASSERT_TRUE which means fail here.
+
+So I understand the data loss but where is the hmm_migrate_sys_to_dev() 
+failing, with or wihtout patch 1 applied?
+
+
+
+
+> So now we have a dirty page without PageDirty set and without a dirty
+> pte. If this page gets swapped back to disk and is still in the swap
+> cache data will be lost because reclaim will see a clean page and won't
+> write it out again.
+> 
+> At least that's my understanding - please let me know if you see
+> something that doesn't make sense.
+> 
+>>> +
+>>> +	ASSERT_FALSE(write_cgroup_param(cgroup, "memory.reclaim", 1UL<<30));
+>>> +
+>>> +	/* Check we still see the updated data after restoring from swap. */
+>>> +	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
+>>> +		ASSERT_EQ(ptr[i], i);
+>>> +
+>>> +	hmm_buffer_free(buffer);
+>>> +	destroy_cgroup();
+>>> +}
+>>> +
+>>>    /*
+>>>     * Read anonymous memory multiple times.
+>>>     */
+>>
+>>
+>> --Mika
+> 
 

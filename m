@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59BF75948FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9B45949DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355308AbiHOX6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
+        id S1344193AbiHOX6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355403AbiHOXwD (ORCPT
+        with ESMTP id S1355429AbiHOXwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:52:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13FA9410B;
-        Mon, 15 Aug 2022 13:16:53 -0700 (PDT)
+        Mon, 15 Aug 2022 19:52:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9C595699;
+        Mon, 15 Aug 2022 13:16:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E595760F9F;
-        Mon, 15 Aug 2022 20:16:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D790C433D6;
-        Mon, 15 Aug 2022 20:16:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B782B81135;
+        Mon, 15 Aug 2022 20:16:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EF0EC433D6;
+        Mon, 15 Aug 2022 20:16:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594612;
-        bh=Ggx5eMXhfYasjXBC9zesMgQQm7DndAkFwc/nvYHdF3c=;
+        s=korg; t=1660594615;
+        bh=kPXsbMgtJuozHfRLqTA/pedF3bB+3i7zxtM9TvfRZjA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P2gfnf5ylMiSuUvxL3pjw1F0uQP4XluSLV4GcBdC10g/zSx3lQWGDhRAwd5yhKhUl
-         3h3zfNKAZ+23Dy7cxe3QVS6dGdFjpiG8LfPjuXZQRLN3+id+U0xzbbEN8HxN38dm/J
-         O51FuTjAUBkzKvX67JIq5N+1N76Z3EX5vTk4vUzQ=
+        b=B8dkMuiaYfcDvYT8ubOZQNoipwH536kC8R4ddeg+E43NHr4cWpl/e4Qo1PmTSGEWl
+         lqBmDXb3IHbzXsXzKSRiMf0f6RgkMx7DPFWKctLT4licSpnNAdlK5onVJEX/xGSK/K
+         DI19MCNVzsjiwaOqQGDNiV4/FE9ckMh6l4PnRIxU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>,
+        stable@vger.kernel.org,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0503/1157] media: cedrus: h265: Fix flag name
-Date:   Mon, 15 Aug 2022 19:57:39 +0200
-Message-Id: <20220815180459.816329895@linuxfoundation.org>
+Subject: [PATCH 5.19 0504/1157] media: uapi: HEVC: Change pic_order_cnt definition in v4l2_hevc_dpb_entry
+Date:   Mon, 15 Aug 2022 19:57:40 +0200
+Message-Id: <20220815180459.861358998@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -56,68 +60,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jernej Skrabec <jernej.skrabec@gmail.com>
+From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 
-[ Upstream commit 104a70e1d0bcef28db13c4192b8729086089651c ]
+[ Upstream commit c4a179c7167ee16aad1267f9c99bc1ecff475585 ]
 
-Bit 21 in register 0x24 (slice header info 1) actually represents
-negated version of low delay flag. This can be seen in vendor Cedar
-library source code. While this flag is not part of the standard, it can
-be found in reference HEVC implementation.
+The HEVC specification describes the following:
+"PicOrderCntVal is derived as follows:
+PicOrderCntVal = PicOrderCntMsb + slice_pic_order_cnt_lsb
+The value of PicOrderCntVal shall be in the range of
+−2^31 to 2^31 − 1, inclusive."
 
-Fix macro name and change it to flag.
+To match with these definitions change __u16 pic_order_cnt[2]
+into __s32 pic_order_cnt_val.
+Change v4l2_ctrl_hevc_slice_params->slice_pic_order_cnt to __s32 too.
 
-Fixes: 86caab29da78 ("media: cedrus: Add HEVC/H.265 decoding support")
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Tested-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/sunxi/cedrus/cedrus_h265.c | 4 +++-
- drivers/staging/media/sunxi/cedrus/cedrus_regs.h | 3 +--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 2 +-
+ drivers/staging/media/hantro/hantro_g2_hevc_dec.c         | 7 +++----
+ drivers/staging/media/hantro/hantro_hevc.c                | 2 +-
+ drivers/staging/media/hantro/hantro_hw.h                  | 4 ++--
+ drivers/staging/media/sunxi/cedrus/cedrus_h265.c          | 4 ++--
+ include/media/hevc-ctrls.h                                | 4 ++--
+ 6 files changed, 11 insertions(+), 12 deletions(-)
 
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+index 6183f43f4d73..004b0ec62c44 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+@@ -2997,7 +2997,7 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+     * - __u8
+       - ``colour_plane_id``
+       -
+-    * - __u16
++    * - __s32
+       - ``slice_pic_order_cnt``
+       -
+     * - __u8
+diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+index 5df6f08e26f5..d28653d04d20 100644
+--- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
++++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+@@ -390,11 +390,10 @@ static int set_ref(struct hantro_ctx *ctx)
+ 			 !!(pps->flags & V4L2_HEVC_PPS_FLAG_LOOP_FILTER_ACROSS_TILES_ENABLED));
+ 
+ 	/*
+-	 * Write POC count diff from current pic. For frame decoding only compute
+-	 * pic_order_cnt[0] and ignore pic_order_cnt[1] used in field-coding.
++	 * Write POC count diff from current pic.
+ 	 */
+ 	for (i = 0; i < decode_params->num_active_dpb_entries && i < ARRAY_SIZE(cur_poc); i++) {
+-		char poc_diff = decode_params->pic_order_cnt_val - dpb[i].pic_order_cnt[0];
++		char poc_diff = decode_params->pic_order_cnt_val - dpb[i].pic_order_cnt_val;
+ 
+ 		hantro_reg_write(vpu, &cur_poc[i], poc_diff);
+ 	}
+@@ -421,7 +420,7 @@ static int set_ref(struct hantro_ctx *ctx)
+ 	dpb_longterm_e = 0;
+ 	for (i = 0; i < decode_params->num_active_dpb_entries &&
+ 	     i < (V4L2_HEVC_DPB_ENTRIES_NUM_MAX - 1); i++) {
+-		luma_addr = hantro_hevc_get_ref_buf(ctx, dpb[i].pic_order_cnt[0]);
++		luma_addr = hantro_hevc_get_ref_buf(ctx, dpb[i].pic_order_cnt_val);
+ 		if (!luma_addr)
+ 			return -ENOMEM;
+ 
+diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging/media/hantro/hantro_hevc.c
+index bd924896e409..4f7e2acb46ec 100644
+--- a/drivers/staging/media/hantro/hantro_hevc.c
++++ b/drivers/staging/media/hantro/hantro_hevc.c
+@@ -33,7 +33,7 @@ void hantro_hevc_ref_init(struct hantro_ctx *ctx)
+ }
+ 
+ dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx,
+-				   int poc)
++				   s32 poc)
+ {
+ 	struct hantro_hevc_dec_hw_ctx *hevc_dec = &ctx->hevc_dec;
+ 	int i;
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index a2e0f0836281..33d156ccbfeb 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -145,7 +145,7 @@ struct hantro_hevc_dec_hw_ctx {
+ 	struct hantro_aux_buf tile_bsd;
+ 	struct hantro_aux_buf ref_bufs[NUM_REF_PICTURES];
+ 	struct hantro_aux_buf scaling_lists;
+-	int ref_bufs_poc[NUM_REF_PICTURES];
++	s32 ref_bufs_poc[NUM_REF_PICTURES];
+ 	u32 ref_bufs_used;
+ 	struct hantro_hevc_dec_ctrls ctrls;
+ 	unsigned int num_tile_cols_allocated;
+@@ -357,7 +357,7 @@ void hantro_hevc_dec_exit(struct hantro_ctx *ctx);
+ int hantro_g2_hevc_dec_run(struct hantro_ctx *ctx);
+ int hantro_hevc_dec_prepare_run(struct hantro_ctx *ctx);
+ void hantro_hevc_ref_init(struct hantro_ctx *ctx);
+-dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, int poc);
++dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, s32 poc);
+ int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr);
+ int hantro_hevc_validate_sps(struct hantro_ctx *ctx, const struct v4l2_ctrl_hevc_sps *sps);
+ 
 diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-index 44f385be9f6c..2febdf7a97fe 100644
+index 2febdf7a97fe..c26e515d64c9 100644
 --- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
 +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-@@ -559,7 +559,6 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
+@@ -143,8 +143,8 @@ static void cedrus_h265_frame_info_write_dpb(struct cedrus_ctx *ctx,
+ 	for (i = 0; i < num_active_dpb_entries; i++) {
+ 		int buffer_index = vb2_find_timestamp(vq, dpb[i].timestamp, 0);
+ 		u32 pic_order_cnt[2] = {
+-			dpb[i].pic_order_cnt[0],
+-			dpb[i].pic_order_cnt[1]
++			dpb[i].pic_order_cnt_val,
++			dpb[i].pic_order_cnt_val
+ 		};
  
- 	reg = VE_DEC_H265_DEC_SLICE_HDR_INFO1_SLICE_TC_OFFSET_DIV2(slice_params->slice_tc_offset_div2) |
- 	      VE_DEC_H265_DEC_SLICE_HDR_INFO1_SLICE_BETA_OFFSET_DIV2(slice_params->slice_beta_offset_div2) |
--	      VE_DEC_H265_DEC_SLICE_HDR_INFO1_SLICE_POC_BIGEST_IN_RPS_ST(decode_params->num_poc_st_curr_after == 0) |
- 	      VE_DEC_H265_DEC_SLICE_HDR_INFO1_SLICE_CR_QP_OFFSET(slice_params->slice_cr_qp_offset) |
- 	      VE_DEC_H265_DEC_SLICE_HDR_INFO1_SLICE_CB_QP_OFFSET(slice_params->slice_cb_qp_offset) |
- 	      VE_DEC_H265_DEC_SLICE_HDR_INFO1_SLICE_QP_DELTA(slice_params->slice_qp_delta);
-@@ -572,6 +571,9 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
- 				V4L2_HEVC_SLICE_PARAMS_FLAG_SLICE_LOOP_FILTER_ACROSS_SLICES_ENABLED,
- 				slice_params->flags);
+ 		cedrus_h265_frame_info_write_single(ctx, i, dpb[i].field_pic,
+diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+index 01ccda48d8c5..88e804578cb1 100644
+--- a/include/media/hevc-ctrls.h
++++ b/include/media/hevc-ctrls.h
+@@ -135,7 +135,7 @@ struct v4l2_hevc_dpb_entry {
+ 	__u64	timestamp;
+ 	__u8	flags;
+ 	__u8	field_pic;
+-	__u16	pic_order_cnt[2];
++	__s32	pic_order_cnt_val;
+ 	__u8	padding[2];
+ };
  
-+	if (decode_params->num_poc_st_curr_after == 0)
-+		reg |= VE_DEC_H265_DEC_SLICE_HDR_INFO1_FLAG_SLICE_NOT_LOW_DELAY;
-+
- 	cedrus_write(dev, VE_DEC_H265_DEC_SLICE_HDR_INFO1, reg);
- 
- 	chroma_log2_weight_denom = pred_weight_table->luma_log2_weight_denom +
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h b/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
-index bdb062ad8682..d81f7513ade0 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
-@@ -377,13 +377,12 @@
- 
- #define VE_DEC_H265_DEC_SLICE_HDR_INFO1_FLAG_SLICE_DEBLOCKING_FILTER_DISABLED BIT(23)
- #define VE_DEC_H265_DEC_SLICE_HDR_INFO1_FLAG_SLICE_LOOP_FILTER_ACROSS_SLICES_ENABLED BIT(22)
-+#define VE_DEC_H265_DEC_SLICE_HDR_INFO1_FLAG_SLICE_NOT_LOW_DELAY BIT(21)
- 
- #define VE_DEC_H265_DEC_SLICE_HDR_INFO1_SLICE_TC_OFFSET_DIV2(v) \
- 	SHIFT_AND_MASK_BITS(v, 31, 28)
- #define VE_DEC_H265_DEC_SLICE_HDR_INFO1_SLICE_BETA_OFFSET_DIV2(v) \
- 	SHIFT_AND_MASK_BITS(v, 27, 24)
--#define VE_DEC_H265_DEC_SLICE_HDR_INFO1_SLICE_POC_BIGEST_IN_RPS_ST(v) \
--	((v) ? BIT(21) : 0)
- #define VE_DEC_H265_DEC_SLICE_HDR_INFO1_SLICE_CR_QP_OFFSET(v) \
- 	SHIFT_AND_MASK_BITS(v, 20, 16)
- #define VE_DEC_H265_DEC_SLICE_HDR_INFO1_SLICE_CB_QP_OFFSET(v) \
+@@ -178,7 +178,7 @@ struct v4l2_ctrl_hevc_slice_params {
+ 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: General slice segment header */
+ 	__u8	slice_type;
+ 	__u8	colour_plane_id;
+-	__u16	slice_pic_order_cnt;
++	__s32	slice_pic_order_cnt;
+ 	__u8	num_ref_idx_l0_active_minus1;
+ 	__u8	num_ref_idx_l1_active_minus1;
+ 	__u8	collocated_ref_idx;
 -- 
 2.35.1
 

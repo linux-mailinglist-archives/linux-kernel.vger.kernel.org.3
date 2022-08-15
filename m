@@ -2,41 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA01259330D
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 18:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF1D5932F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 18:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233759AbiHOQWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 12:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
+        id S232754AbiHOQVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 12:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232625AbiHOQUv (ORCPT
+        with ESMTP id S232452AbiHOQUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 12:20:51 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DC9E1CFF9
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 09:20:49 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2E6A2106F;
-        Mon, 15 Aug 2022 09:20:50 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E9B2F3F70D;
-        Mon, 15 Aug 2022 09:20:47 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     joro@8bytes.org
-Cc:     will@kernel.org, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, baolu.lu@linux.intel.com,
-        kevin.tian@intel.com, suravee.suthikulpanit@amd.com,
-        vasant.hegde@amd.com, mjrosato@linux.ibm.com,
-        schnelle@linux.ibm.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 16/16] iommu: Clean up bus_set_iommu()
-Date:   Mon, 15 Aug 2022 17:20:17 +0100
-Message-Id: <ea383d5f4d74ffe200ab61248e5de6e95846180a.1660572783.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.36.1.dirty
-In-Reply-To: <cover.1660572783.git.robin.murphy@arm.com>
-References: <cover.1660572783.git.robin.murphy@arm.com>
+        Mon, 15 Aug 2022 12:20:41 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1F11759F
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 09:20:36 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-116c7286aaaso8640522fac.11
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 09:20:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=BSoTNICrMj7u/TGLx7cm1e33DdNye1p3mIhcbsI607s=;
+        b=KInnq098LCWs5kg+cX63AWfFPPNfgicW4dz+z/PeD/+DN4q0G1c4WxPhxdS0HovuP6
+         Gw20+HN0SO+KQ+dpOPTgZ40IlusbkswAnwxW4ppuftQgEHziJp1APc6lf78h5nLctEqK
+         jJBxZ2sv/gFyKvOO4233k+8J81NsYuEOlODUQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=BSoTNICrMj7u/TGLx7cm1e33DdNye1p3mIhcbsI607s=;
+        b=QRDNCHNOv6TPgNNNWlEWpR5thPapX0z3CNoBeGWDRm5EaxZiSd81ZfQCKzh6+KMUQz
+         +uIHcmbuuZo/DjKFYWgkgTX/iqMrFlqJ4ZngTAb0mfDAjUyQDZFOwpmDHRLIy+vjnLgF
+         3gB1YaDkn37+jYVWGymVclUUzlyX82iYbCyTJlT5Lz3vpUSHowoQLEhPgykrJOPiVp/W
+         G4Jk99C6k7mQF1m79x/JT4j+anPCHQ/+9EqBP6YGNdzR65x9QC1YcuGILyyIEGDwqlL4
+         jiZoFV49Qkvthd+K07+3LLE3jcXrgm5aRBQslQSAnP65x1IaYjJ+Hcso5J+lkDwdBSj5
+         QP0A==
+X-Gm-Message-State: ACgBeo3vq4tHFfNKc4EvLo43hft6RPDH/iCKIvHE1WBT2Pu4I7WRCS+/
+        HcBcbbNmhBPJOBNYe9ZKzdBaLQ==
+X-Google-Smtp-Source: AA6agR78nAzd1nRQswnX5CWOif43etOxtDbBfDmKa4nzMrWkz8NAms1Thrx+XPtPcVl4miGYXiqyuQ==
+X-Received: by 2002:a05:6870:d60a:b0:10e:4333:d773 with SMTP id a10-20020a056870d60a00b0010e4333d773mr7168256oaq.78.1660580435563;
+        Mon, 15 Aug 2022 09:20:35 -0700 (PDT)
+Received: from localhost.localdomain ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id x91-20020a9d37e4000000b00636ee04e7aesm2163371otb.67.2022.08.15.09.20.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 09:20:35 -0700 (PDT)
+From:   Frederick Lawler <fred@cloudflare.com>
+To:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        paul@paul-moore.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
+        casey@schaufler-ca.com, ebiederm@xmission.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com, tixxdz@gmail.com,
+        Frederick Lawler <fred@cloudflare.com>
+Subject: [PATCH v5 0/4] Introduce security_create_user_ns()
+Date:   Mon, 15 Aug 2022 11:20:24 -0500
+Message-Id: <20220815162028.926858-1-fred@cloudflare.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -45,211 +75,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean up the remaining trivial bus_set_iommu() callsites along
-with the implementation. Now drivers only have to know and care
-about iommu_device instances, phew!
+While user namespaces do not make the kernel more vulnerable, they are however
+used to initiate exploits. Some users do not want to block namespace creation
+for the entirety of the system, which some distributions provide. Instead, we
+needed a way to have some applications be blocked, and others allowed. This is
+not possible with those tools. Managing hierarchies also did not fit our case
+because we're determining which tasks are allowed based on their attributes.
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Tested-by: Matthew Rosato <mjrosato@linux.ibm.com> # s390
-Tested-by: Niklas Schnelle <schnelle@linux.ibm.com> # s390
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
+While exploring a solution, we first leveraged the LSM cred_prepare hook
+because that is the closest hook to prevent a call to create_user_ns().
 
-v4: No change
+The calls look something like this:
 
- drivers/iommu/arm/arm-smmu/qcom_iommu.c |  4 ----
- drivers/iommu/fsl_pamu_domain.c         |  4 ----
- drivers/iommu/intel/iommu.c             |  2 --
- drivers/iommu/iommu.c                   | 24 ------------------------
- drivers/iommu/msm_iommu.c               |  2 --
- drivers/iommu/rockchip-iommu.c          |  2 --
- drivers/iommu/s390-iommu.c              |  6 ------
- drivers/iommu/sprd-iommu.c              |  5 -----
- drivers/iommu/sun50i-iommu.c            |  2 --
- include/linux/iommu.h                   |  1 -
- 10 files changed, 52 deletions(-)
+    cred = prepare_creds()
+        security_prepare_creds()
+            call_int_hook(cred_prepare, ...
+    if (cred)
+        create_user_ns(cred)
 
-diff --git a/drivers/iommu/arm/arm-smmu/qcom_iommu.c b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-index 17235116d3bb..a6aae2e20417 100644
---- a/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-+++ b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-@@ -837,8 +837,6 @@ static int qcom_iommu_device_probe(struct platform_device *pdev)
- 		goto err_pm_disable;
- 	}
- 
--	bus_set_iommu(&platform_bus_type, &qcom_iommu_ops);
--
- 	if (qcom_iommu->local_base) {
- 		pm_runtime_get_sync(dev);
- 		writel_relaxed(0xffffffff, qcom_iommu->local_base + SMMU_INTR_SEL_NS);
-@@ -856,8 +854,6 @@ static int qcom_iommu_device_remove(struct platform_device *pdev)
- {
- 	struct qcom_iommu_dev *qcom_iommu = platform_get_drvdata(pdev);
- 
--	bus_set_iommu(&platform_bus_type, NULL);
--
- 	pm_runtime_force_suspend(&pdev->dev);
- 	platform_set_drvdata(pdev, NULL);
- 	iommu_device_sysfs_remove(&qcom_iommu->iommu);
-diff --git a/drivers/iommu/fsl_pamu_domain.c b/drivers/iommu/fsl_pamu_domain.c
-index 011f9ab7f743..e4a6883228fd 100644
---- a/drivers/iommu/fsl_pamu_domain.c
-+++ b/drivers/iommu/fsl_pamu_domain.c
-@@ -476,11 +476,7 @@ int __init pamu_domain_init(void)
- 	if (ret) {
- 		iommu_device_sysfs_remove(&pamu_iommu);
- 		pr_err("Can't register iommu device\n");
--		return ret;
- 	}
- 
--	bus_set_iommu(&platform_bus_type, &fsl_pamu_ops);
--	bus_set_iommu(&pci_bus_type, &fsl_pamu_ops);
--
- 	return ret;
- }
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 65c340e2003c..85b09c34dc12 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -3890,7 +3890,6 @@ static int __init probe_acpi_namespace_devices(void)
- 					continue;
- 				}
- 
--				pn->dev->bus->iommu_ops = &intel_iommu_ops;
- 				ret = iommu_probe_device(pn->dev);
- 				if (ret)
- 					break;
-@@ -4023,7 +4022,6 @@ int __init intel_iommu_init(void)
- 	}
- 	up_read(&dmar_global_lock);
- 
--	bus_set_iommu(&pci_bus_type, &intel_iommu_ops);
- 	if (si_domain && !hw_pass_through)
- 		register_memory_notifier(&intel_iommu_memory_nb);
- 
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index 4db0874a5ed6..daa4c7f17677 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -1827,30 +1827,6 @@ int bus_iommu_probe(struct bus_type *bus)
- 	return ret;
- }
- 
--/**
-- * bus_set_iommu - set iommu-callbacks for the bus
-- * @bus: bus.
-- * @ops: the callbacks provided by the iommu-driver
-- *
-- * This function is called by an iommu driver to set the iommu methods
-- * used for a particular bus. Drivers for devices on that bus can use
-- * the iommu-api after these ops are registered.
-- * This special function is needed because IOMMUs are usually devices on
-- * the bus itself, so the iommu drivers are not initialized when the bus
-- * is set up. With this function the iommu-driver can set the iommu-ops
-- * afterwards.
-- */
--int bus_set_iommu(struct bus_type *bus, const struct iommu_ops *ops)
--{
--	if (bus->iommu_ops && ops && bus->iommu_ops != ops)
--		return -EBUSY;
--
--	bus->iommu_ops = ops;
--
--	return 0;
--}
--EXPORT_SYMBOL_GPL(bus_set_iommu);
--
- bool iommu_present(struct bus_type *bus)
- {
- 	return bus->iommu_ops != NULL;
-diff --git a/drivers/iommu/msm_iommu.c b/drivers/iommu/msm_iommu.c
-index 6a24aa804ea3..16179a9a7283 100644
---- a/drivers/iommu/msm_iommu.c
-+++ b/drivers/iommu/msm_iommu.c
-@@ -792,8 +792,6 @@ static int msm_iommu_probe(struct platform_device *pdev)
- 		goto fail;
- 	}
- 
--	bus_set_iommu(&platform_bus_type, &msm_iommu_ops);
--
- 	pr_info("device mapped at %p, irq %d with %d ctx banks\n",
- 		iommu->base, iommu->irq, iommu->ncb);
- 
-diff --git a/drivers/iommu/rockchip-iommu.c b/drivers/iommu/rockchip-iommu.c
-index ab57c4b8fade..a3fc59b814ab 100644
---- a/drivers/iommu/rockchip-iommu.c
-+++ b/drivers/iommu/rockchip-iommu.c
-@@ -1300,8 +1300,6 @@ static int rk_iommu_probe(struct platform_device *pdev)
- 	if (!dma_dev)
- 		dma_dev = &pdev->dev;
- 
--	bus_set_iommu(&platform_bus_type, &rk_iommu_ops);
--
- 	pm_runtime_enable(dev);
- 
- 	for (i = 0; i < iommu->num_irq; i++) {
-diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
-index 8158a4ed0c60..762f892b4ec3 100644
---- a/drivers/iommu/s390-iommu.c
-+++ b/drivers/iommu/s390-iommu.c
-@@ -390,9 +390,3 @@ static const struct iommu_ops s390_iommu_ops = {
- 		.free		= s390_domain_free,
- 	}
- };
--
--static int __init s390_iommu_init(void)
--{
--	return bus_set_iommu(&pci_bus_type, &s390_iommu_ops);
--}
--subsys_initcall(s390_iommu_init);
-diff --git a/drivers/iommu/sprd-iommu.c b/drivers/iommu/sprd-iommu.c
-index 511959c8a14d..fadd2c907222 100644
---- a/drivers/iommu/sprd-iommu.c
-+++ b/drivers/iommu/sprd-iommu.c
-@@ -496,9 +496,6 @@ static int sprd_iommu_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto remove_sysfs;
- 
--	if (!iommu_present(&platform_bus_type))
--		bus_set_iommu(&platform_bus_type, &sprd_iommu_ops);
--
- 	ret = sprd_iommu_clk_enable(sdev);
- 	if (ret)
- 		goto unregister_iommu;
-@@ -534,8 +531,6 @@ static int sprd_iommu_remove(struct platform_device *pdev)
- 	iommu_group_put(sdev->group);
- 	sdev->group = NULL;
- 
--	bus_set_iommu(&platform_bus_type, NULL);
--
- 	platform_set_drvdata(pdev, NULL);
- 	iommu_device_sysfs_remove(&sdev->iommu);
- 	iommu_device_unregister(&sdev->iommu);
-diff --git a/drivers/iommu/sun50i-iommu.c b/drivers/iommu/sun50i-iommu.c
-index a84c63518773..cd9b74ee24de 100644
---- a/drivers/iommu/sun50i-iommu.c
-+++ b/drivers/iommu/sun50i-iommu.c
-@@ -965,8 +965,6 @@ static int sun50i_iommu_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		goto err_unregister;
- 
--	bus_set_iommu(&platform_bus_type, &sun50i_iommu_ops);
--
- 	return 0;
- 
- err_unregister:
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index ea30f00dc145..79b6fb3c6b84 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -416,7 +416,6 @@ static inline const struct iommu_ops *dev_iommu_ops(struct device *dev)
- 	return dev->iommu->iommu_dev->ops;
- }
- 
--extern int bus_set_iommu(struct bus_type *bus, const struct iommu_ops *ops);
- extern int bus_iommu_probe(struct bus_type *bus);
- extern bool iommu_present(struct bus_type *bus);
- extern bool device_iommu_capable(struct device *dev, enum iommu_cap cap);
+We noticed that error codes were not propagated from this hook and
+introduced a patch [1] to propagate those errors.
+
+The discussion notes that security_prepare_creds() is not appropriate for
+MAC policies, and instead the hook is meant for LSM authors to prepare
+credentials for mutation. [2]
+
+Additionally, cred_prepare hook is not without problems. Handling the clone3
+case is a bit more tricky due to the user space pointer passed to it. This
+makes checking the syscall subject to a possible TOCTTOU attack.
+
+Ultimately, we concluded that a better course of action is to introduce
+a new security hook for LSM authors. [3]
+
+This patch set first introduces a new security_create_user_ns() function
+and userns_create LSM hook, then marks the hook as sleepable in BPF. The
+following patches after include a BPF test and a patch for an SELinux
+implementation.
+
+We want to encourage use of user namespaces, and also cater the needs
+of users/administrators to observe and/or control access. There is no
+expectation of an impact on user space applications because access control 
+is opt-in, and users wishing to observe within a LSM context 
+
+
+Links:
+1. https://lore.kernel.org/all/20220608150942.776446-1-fred@cloudflare.com/
+2. https://lore.kernel.org/all/87y1xzyhub.fsf@email.froward.int.ebiederm.org/
+3. https://lore.kernel.org/all/9fe9cd9f-1ded-a179-8ded-5fde8960a586@cloudflare.com/
+
+Past discussions:
+V4: https://lore.kernel.org/all/20220801180146.1157914-1-fred@cloudflare.com/
+V3: https://lore.kernel.org/all/20220721172808.585539-1-fred@cloudflare.com/
+V2: https://lore.kernel.org/all/20220707223228.1940249-1-fred@cloudflare.com/
+V1: https://lore.kernel.org/all/20220621233939.993579-1-fred@cloudflare.com/
+
+Changes since v4:
+- Update commit description
+- Update cover letter
+Changes since v3:
+- Explicitly set CAP_SYS_ADMIN to test namespace is created given
+  permission
+- Simplify BPF test to use sleepable hook only
+- Prefer unshare() over clone() for tests
+Changes since v2:
+- Rename create_user_ns hook to userns_create
+- Use user_namespace as an object opposed to a generic namespace object
+- s/domB_t/domA_t in commit message
+Changes since v1:
+- Add selftests/bpf: Add tests verifying bpf lsm create_user_ns hook patch
+- Add selinux: Implement create_user_ns hook patch
+- Change function signature of security_create_user_ns() to only take
+  struct cred
+- Move security_create_user_ns() call after id mapping check in
+  create_user_ns()
+- Update documentation to reflect changes
+
+Frederick Lawler (4):
+  security, lsm: Introduce security_create_user_ns()
+  bpf-lsm: Make bpf_lsm_userns_create() sleepable
+  selftests/bpf: Add tests verifying bpf lsm userns_create hook
+  selinux: Implement userns_create hook
+
+ include/linux/lsm_hook_defs.h                 |   1 +
+ include/linux/lsm_hooks.h                     |   4 +
+ include/linux/security.h                      |   6 ++
+ kernel/bpf/bpf_lsm.c                          |   1 +
+ kernel/user_namespace.c                       |   5 +
+ security/security.c                           |   5 +
+ security/selinux/hooks.c                      |   9 ++
+ security/selinux/include/classmap.h           |   2 +
+ .../selftests/bpf/prog_tests/deny_namespace.c | 102 ++++++++++++++++++
+ .../selftests/bpf/progs/test_deny_namespace.c |  33 ++++++
+ 10 files changed, 168 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/deny_namespace.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_deny_namespace.c
+
 -- 
-2.36.1.dirty
+2.30.2
 

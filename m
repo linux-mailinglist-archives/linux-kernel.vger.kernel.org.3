@@ -2,134 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B9359328F
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F043059329A
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbiHOPyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
+        id S232201AbiHOP4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbiHOPyx (ORCPT
+        with ESMTP id S230304AbiHOP4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:54:53 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8987217077;
-        Mon, 15 Aug 2022 08:54:52 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru [109.252.119.13])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 37E3D6601DAE;
-        Mon, 15 Aug 2022 16:54:50 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1660578891;
-        bh=R9SmFeYZ1iN/MuMsg2JDoB8UWfkyjtJieOUNto4HnGc=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=Sq3+jVX9uKW2EvCZcTaUGXKBFblrK2ajudH7TdKurWfkYXP/ERVIA0JRHClwf0pYK
-         xXhV2QbzM4Krsbu56L4ryvQZp1bm4oj5YzXdSauekrqt1dR6d/8nAwhKPq9x6qESqx
-         Sd2lnyaLyP18BM0F0mIXv4zFvhWjiX8q6PM6WCRUlSrljEZ0Utd/V7h9t4WthO4ODF
-         lI1hawKBM9898koa3SuQtvBu1Td29uudK3byjwnkGa6ithZrr+YwGSsXkmFC2K3Z3e
-         68qt4nYuu47BwJGIYtOTmMXS9gPmcv6qZjGdjSNg5EHAKLhJZ6vRZ3ePMLWdzPBHq8
-         008+F6NR/mUAw==
-Message-ID: <6effcd33-8cc3-a4e0-3608-b9cef7a76da7@collabora.com>
-Date:   Mon, 15 Aug 2022 18:54:47 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1] drm/ttm: Refcount allocated tail pages
-Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        David Airlie <airlied@linux.ie>, Huang Rui <ray.huang@amd.com>,
+        Mon, 15 Aug 2022 11:56:12 -0400
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9536D12D32;
+        Mon, 15 Aug 2022 08:56:11 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id b4so6428671wrn.4;
+        Mon, 15 Aug 2022 08:56:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=Vat6AZoY9+pk6p00nX/E13J/m0/mJwwh8QQBSGedRWI=;
+        b=iYe9lM3I2HfiLa/RejGyvAT1+FOoPhMX+L577RycoUNZOyMrdGNKLhOgNUdK4nTc+/
+         ardycnvQ2omH44g+pJmvHgMuxvOzBae4dffWT+REVO2e92Oj0m/Vpvar5qOeBz08jDcb
+         wmgXH5Gz+mvE35GAbZRS//lvYMNjqgEG1HGYlywhDja3QQ1RL+gxtNFW+cwH9UDA6e+O
+         e4jgwEsH0sGhUoB9WZw4s3Cv5mxDjUlHPoW2OVtfp0K6tB+krrxoZebEYnxUcIBNcbPc
+         50QZ4sSTwWUXg7xrecMma7M9PNgiIoVxxxYVmrGCgDaswKLu451m3HH2FpCQIZ0hV5y9
+         tMFg==
+X-Gm-Message-State: ACgBeo3b4w04HsKUNmFY1U/tJTeYi9LjySPiZxVZR7uWz/LDOVWcc5hR
+        JXoAKulDFBEhdZ6v0kTBX7s=
+X-Google-Smtp-Source: AA6agR6LqwBwhr8IBNtL5BKxuU4r3Y+LjMPMFEeYwRcLmbQKw/Ljf/Ui34QWaaHHynm6D1Y8i9VY5g==
+X-Received: by 2002:a05:6000:1e0e:b0:220:5c9f:a468 with SMTP id bj14-20020a0560001e0e00b002205c9fa468mr8849712wrb.587.1660578970160;
+        Mon, 15 Aug 2022 08:56:10 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id g15-20020a5d488f000000b0022395a63153sm7800412wrq.107.2022.08.15.08.56.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 08:56:09 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 15:56:08 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Deepak Rawat <drawat.floss@gmail.com>,
+        David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Trigger Huang <Trigger.Huang@gmail.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Antonio Caggiano <antonio.caggiano@collabora.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>, kvm@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-References: <20220815095423.11131-1-dmitry.osipenko@collabora.com>
- <8230a356-be38-f228-4a8e-95124e8e8db6@amd.com>
- <134bce02-58d6-8553-bb73-42dfda18a595@collabora.com>
- <8caf3008-dcf3-985a-631e-e019b277c6f0@amd.com>
- <4fcc4739-2da9-1b89-209c-876129604d7d@amd.com>
- <14be3b22-1d60-732b-c695-ddacc6b21055@collabora.com>
- <2df57a30-2afb-23dc-c7f5-f61c113dd5b4@collabora.com>
- <57562db8-bacf-e82d-8417-ab6343c1d2fa@amd.com>
- <86a87de8-24a9-3c53-3ac7-612ca97e41df@collabora.com>
- <8f749cd0-9a04-7c72-6a4f-a42d501e1489@amd.com>
- <5340d876-62b8-8a64-aa6d-7736c2c8710f@collabora.com>
- <594f1013-b925-3c75-be61-2d649f5ca54e@amd.com>
- <6893d5e9-4b60-0efb-2a87-698b1bcda63e@collabora.com>
- <73e5ed8d-0d25-7d44-8fa2-e1d61b1f5a04@amd.com>
- <c9d89644-409e-0363-69f0-a3b8f2ef0ae4@collabora.com>
-In-Reply-To: <c9d89644-409e-0363-69f0-a3b8f2ef0ae4@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Wei Liu <wei.liu@kernel.org>
+Subject: Re: [PATCH] drm/hyperv: Fix an error handling path in
+ hyperv_vmbus_probe()
+Message-ID: <20220815155608.uekossy5hejqflni@liuwe-devbox-debian-v2>
+References: <7dfa372af3e35fbb1d6f157183dfef2e4512d3be.1659297696.git.christophe.jaillet@wanadoo.fr>
+ <PH0PR21MB3025D61C85CD6E724919A9D8D79E9@PH0PR21MB3025.namprd21.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR21MB3025D61C85CD6E724919A9D8D79E9@PH0PR21MB3025.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/15/22 17:57, Dmitry Osipenko wrote:
-> On 8/15/22 16:53, Christian König wrote:
->> Am 15.08.22 um 15:45 schrieb Dmitry Osipenko:
->>> [SNIP]
->>>> Well that comment sounds like KVM is doing the right thing, so I'm
->>>> wondering what exactly is going on here.
->>> KVM actually doesn't hold the page reference, it takes the temporal
->>> reference during page fault and then drops the reference once page is
->>> mapped, IIUC. Is it still illegal for TTM? Or there is a possibility for
->>> a race condition here?
->>>
->>
->> Well the question is why does KVM grab the page reference in the first
->> place?
->>
->> If that is to prevent the mapping from changing then yes that's illegal
->> and won't work. It can always happen that you grab the address, solve
->> the fault and then immediately fault again because the address you just
->> grabbed is invalidated.
->>
->> If it's for some other reason than we should probably investigate if we
->> shouldn't stop doing this.
+On Fri, Aug 05, 2022 at 06:35:01PM +0000, Michael Kelley (LINUX) wrote:
+> From: Christophe JAILLET <christophe.jaillet@wanadoo.fr> Sent: Sunday, July 31, 2022 1:02 PM
+> > 
+> > hyperv_setup_vram() calls vmbus_allocate_mmio().
+> > This must be undone in the error handling path of the probe, as already
+> > done in the remove function.
+> > 
+> > This patch depends on commit a0ab5abced55 ("drm/hyperv : Removing the
+> > restruction of VRAM allocation with PCI bar size").
+> > Without it, something like what is done in commit e048834c209a
+> > ("drm/hyperv: Fix device removal on Gen1 VMs") should be done.
 > 
-> CC: +Paolo Bonzini who introduced this code
-> 
-> commit add6a0cd1c5ba51b201e1361b05a5df817083618
-> Author: Paolo Bonzini <pbonzini@redhat.com>
-> Date:   Tue Jun 7 17:51:18 2016 +0200
-> 
->     KVM: MMU: try to fix up page faults before giving up
-> 
->     The vGPU folks would like to trap the first access to a BAR by setting
->     vm_ops on the VMAs produced by mmap-ing a VFIO device.  The fault
-> handler
->     then can use remap_pfn_range to place some non-reserved pages in the
-> VMA.
-> 
->     This kind of VM_PFNMAP mapping is not handled by KVM, but follow_pfn
->     and fixup_user_fault together help supporting it.  The patch also
-> supports
->     VM_MIXEDMAP vmas where the pfns are not reserved and thus subject to
->     reference counting.
-> 
-> @Paolo,
-> https://lore.kernel.org/dri-devel/73e5ed8d-0d25-7d44-8fa2-e1d61b1f5a04@amd.com/T/#m7647ce5f8c4749599d2c6bc15a2b45f8d8cf8154
+> Should the above paragraph be below the '---' as a comment, rather than
+> part of the commit message?  It's more about staging instructions than a
+> long-term record of the actual functional/code change.
 > 
 
-If we need to bump the refcount only for VM_MIXEDMAP and not for
-VM_PFNMAP, then perhaps we could add a flag for that to the kvm_main
-code that will denote to kvm_release_page_clean whether it needs to put
-the page?
+I don't think this paragraph needs to be in the final commit message.
 
--- 
-Best regards,
-Dmitry
+> > 
+> > Fixes: 76c56a5affeb ("drm/hyperv: Add DRM driver for hyperv synthetic video device")
+> 
+> I wonder if the Fixes: dependency should be on a0ab5abced55.  As you noted,
+> this patch won't apply cleanly on stable kernel versions that lack that commit,
+> so we'll need a separate patch for stable if we want to make the fix there.
+> 
+
+I think a0ab5abced55 is more appropriate.
+
+> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> 
+> All that said, the fix looks good, so
+> 
+> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+
+I made the two changes listed above and applied this patch to
+hyperv-fixes.
+
+Thanks,
+Wei.

@@ -2,507 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3997592BA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF780592BEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:51:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241979AbiHOJEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 05:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
+        id S241846AbiHOJDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 05:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231468AbiHOJDf (ORCPT
+        with ESMTP id S241792AbiHOJC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 05:03:35 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F835220E1;
-        Mon, 15 Aug 2022 02:03:23 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id u133so6171363pfc.10;
-        Mon, 15 Aug 2022 02:03:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=rsqOzg+8z0odTvi0QRBHtWn8a4RjW0UauP4nVAZ6vck=;
-        b=NHKbJ+5Us229eXYZUHOliKTB7IYRSEEVMypXPvvpNSxqoXxTaNCT6T2kA+FT0BXZtE
-         ySvL8HfvCPeqLENm4L+8j7J3T2cEGap5k5cuukCLV3HbwVBABBLSMiE/dHKkZUc/0FkJ
-         /VhS7TGNhU+DYrYmgl73EokTeBK79PepGp42tgrUsIo2oSbrM6r94DxZAkcFsZUTxnFc
-         P1vv7n9/13HGSuJyJCfPo/9vVdvPhDsYoiqfHSr4VuGmAUMmb8yjCcaopGf6D1YHAJ8h
-         mIfl2xVp4m7GpMzxh158KQy/MDznTYvzyruGfyFdWGw+oNwV2J7AoO0DpOXrqsE2uWWv
-         Yjhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=rsqOzg+8z0odTvi0QRBHtWn8a4RjW0UauP4nVAZ6vck=;
-        b=2U/zZqK71H330VMwVwBJmmy4PndPP8d4d2owuidYjDn/OH+LrN2z7xo8xnzp2zT50H
-         Mm+x8ZAH5Ct7IRZi1c1PoaY3uCZMAiSo5O8weiqAREeB3LS3Ngxs+xD/hzio1T7H/fz8
-         3ZfptmnIJcL9tRY7Vgo1lnGZnPVCx0uJ1T9nR7Sr9owDkeBO7FO/tPfTWRvgc+ed+zXu
-         IZ7vMejy0gpc9SZmsDuhn37VKpBPmesbpNuBnzjn7OA8u5UKYDYaspyMtHtEX0yU+QsW
-         JpQ2c5vD4WovbbC5NAjKos6HEDir1WofU5oXhrN52emYhREXFusOmA0tDD03gn6+aG2X
-         nH+Q==
-X-Gm-Message-State: ACgBeo1HXXWBTw6d7Bu3in0Sk/PIvI3sG38wJha0FkhOGYxADtGF9mq7
-        E/PSY1XBzgOGKp183+SCkE4=
-X-Google-Smtp-Source: AA6agR5SmgsY3B2WP1f7UyaTMQc9J3dkqGWZ1G1PqGzpJ6aB/khumz0WIw8P4gEWj4uUIEZUjcWQ3Q==
-X-Received: by 2002:a65:6d13:0:b0:41d:7380:e9cc with SMTP id bf19-20020a656d13000000b0041d7380e9ccmr13078929pgb.153.1660554202604;
-        Mon, 15 Aug 2022 02:03:22 -0700 (PDT)
-Received: from DESKTOP-IBN2BAQ.localdomain ([123.110.155.185])
-        by smtp.gmail.com with ESMTPSA id a17-20020a656411000000b00412a708f38asm5491612pgv.35.2022.08.15.02.03.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 02:03:22 -0700 (PDT)
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-To:     lee@kernel.org, daniel.thompson@linaro.org, jingoohan1@gmail.com,
-        pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        linux@roeck-us.net, heikki.krogerus@linux.intel.com, deller@gmx.de,
-        broonie@kernel.org, mazziesaccount@gmail.com, lgirdwood@gmail.com,
-        andriy.shevchenko@linux.intel.com
-Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
-        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com
-Subject: [RESEND PATCH v8 12/12] video: backlight: mt6370: Add MediaTek MT6370 support
-Date:   Mon, 15 Aug 2022 17:01:25 +0800
-Message-Id: <20220815090125.27705-13-peterwu.pub@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220815090125.27705-1-peterwu.pub@gmail.com>
-References: <20220815090125.27705-1-peterwu.pub@gmail.com>
+        Mon, 15 Aug 2022 05:02:57 -0400
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419AC21E38;
+        Mon, 15 Aug 2022 02:02:45 -0700 (PDT)
+X-QQ-mid: bizesmtp70t1660554134t47qzo8d
+Received: from [10.4.23.219] ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 15 Aug 2022 17:02:13 +0800 (CST)
+X-QQ-SSF: 00400000002000B0I000B00A0000000
+X-QQ-FEAT: DRnj/z+Sqac/pDfMcGKewOhR8gwdyqv276yH3w/u2kw2jNHQieFeCF97uH08o
+        MgYYYfIP6Z23HyViNi3apYkWhX9dyjlh9tP6TnRDIdEk+EeZKdRY2M8KTLG/3bD6DsruTCF
+        FMxHIPzUzo17pO2CIrJv9TvrPlcDdONuNznoCaH6nNp0llct+cHEnzDWLeADHbezx7shODB
+        PQHA8q+lOMnz3ynakb4Vwfx5aRf3JZ55uamnAgd+lGF1h64p8i09hjDhLGyoR4N5CPcjP/H
+        29wYDhzNDPbBbS7FHfqD0PS80LEF1XjGOhiUjWNM4FTtiBLS9hU5sGT2MaiKyDC5d4WvhLY
+        S1kPMVukCIsIbZxrQ+8W1WR0CMgtSU5nESkrxjYcHoT/MR37bs2OweEEcHAmDpf2EsVs2t7
+        i5fn65HH14c=
+X-QQ-GoodBg: 2
+Message-ID: <6D38148AAA1F82C9+de98717f-8d03-7583-299e-f48050d11dba@uniontech.com>
+Date:   Mon, 15 Aug 2022 17:02:13 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] PCI/ASPM: Should not report ASPM support to BIOS if FADT
+ indicates ASPM is unsupported
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rajat Jain <rajatja@google.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+References: <20220713112612.6935-1-limanyi@uniontech.com>
+ <20220713182852.GA841582@bhelgaas>
+ <CAAd53p7g2Md73=UU6Rp-TZkksc+H02KAX58bWCzsgQ__VwvJ+g@mail.gmail.com>
+ <62d11a02.1c69fb81.ee60c.b0efSMTPIN_ADDED_BROKEN@mx.google.com>
+ <CAJZ5v0gKMqOwg3JLx4PBksnpUhgaDDfahmE5RjJMTByOLAQOFg@mail.gmail.com>
+ <CAJZ5v0gt761WUPn-3HQ3sA+8N_s_yHrSkk6CH1gBW0gy1c_+KA@mail.gmail.com>
+From:   Manyi Li <limanyi@uniontech.com>
+In-Reply-To: <CAJZ5v0gt761WUPn-3HQ3sA+8N_s_yHrSkk6CH1gBW0gy1c_+KA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiaEn Wu <chiaen_wu@richtek.com>
 
-MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
-with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
-driver, display bias voltage supply, one general purpose LDO, and the
-USB Type-C & PD controller complies with the latest USB Type-C and PD
-standards.
 
-Add support for the MediaTek MT6370 backlight driver.
-It controls 4 channels of 8 series WLEDs in
-2048 (only for MT6370/MT6371) / 16384 (only for MT6372)
-current steps (30 mA) in exponential or linear mapping curves.
+在 2022/7/15 22:07, Rafael J. Wysocki 写道:
+> On Fri, Jul 15, 2022 at 2:24 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>
+>> On Fri, Jul 15, 2022 at 9:40 AM Manyi Li <limanyi@uniontech.com> wrote:
+>>>
+>>>
+>>>
+>>> On 2022/7/14 11:20, Kai-Heng Feng wrote:
+>>>> [+Cc Matthew]
+>>>>
+>>>> On Thu, Jul 14, 2022 at 2:28 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>>>>>
+>>>>> [+cc Kai-Heng, Vidya, who also have ASPM patches in flight]
+>>>>>
+>>>>> On Wed, Jul 13, 2022 at 07:26:12PM +0800, Manyi Li wrote:
+>>>>>> Startup log of ASUSTeK X456UJ Notebook show:
+>>>>>> [    0.130563] ACPI FADT declares the system doesn't support PCIe ASPM, so disable it
+>>>>>> [   48.092472] pcieport 0000:00:1c.5: PCIe Bus Error: severity=Corrected, type=Physical Layer, (Receiver ID)
+>>>>>> [   48.092479] pcieport 0000:00:1c.5:   device [8086:9d15] error status/mask=00000001/00002000
+>>>>>> [   48.092481] pcieport 0000:00:1c.5:    [ 0] RxErr
+>>>>>> [   48.092490] pcieport 0000:00:1c.5: AER: Corrected error received: 0000:00:1c.5
+>>>>>> [   48.092504] pcieport 0000:00:1c.5: AER: can't find device of ID00e5
+>>>>>> [   48.092506] pcieport 0000:00:1c.5: AER: Corrected error received: 0000:00:1c.5
+>>>>>
+>>>>> Can you elaborate on the connection between the FADT ASPM bit and the
+>>>>> AER logs above?
+>>>
+>>> Sorry,I don't know about that.
+>>>
+>>>>>
+>>>>> What problem are we solving here?  A single corrected error being
+>>>>> logged?  An infinite stream of errors?  A device that doesn't work at
+>>>>> all?
+>>>>
+>>>> Agree, what's the real symptom of the issue?
+>>>
+>>> Please see the details of this issus:
+>>> https://bugzilla.kernel.org/show_bug.cgi?id=216245
+>>>
+>>>>
+>>>>>
+>>>>> We don't need the dmesg timestamps unless they contribute to
+>>>>> understanding the problem.  I don't think they do in this case.
+>>>>
+>>>> According to commit 387d37577fdd ("PCI: Don't clear ASPM bits when the
+>>>> FADT declares it's unsupported"), the bit means "just use the ASPM
+>>>> bits handed over by BIOS".
+>>>>
+>>>> However, I do wonder why both drivers/pci/pci-acpi.c and
+>>>> drivers/acpi/pci_root.c are doing the ACPI_FADT_NO_ASPM check,
+>>
+>> Because pci_root.c doesn't read aspm_disabled.
+> 
+> I've recalled a bit in the meantime.
+> 
+> First off, ACPI_FADT_NO_ASPM forbids the OS from enabling ASPM control
+> (quite literally).  It doesn't mean that the OS should not enumerate
+> ASPM and it doesn't mean that it should not report ASPM support to the
+> firmware via _OSC.  Moreover, there are (or at least there were)
+> systems where the firmware expected ASPM support to be reported via
+> _OSC anyway (see commit 8b8bae901ce2 PCI/ACPI: Report ASPM support to
+> BIOS if not disabled from command line).
+> 
+> Thus, if ASPM is not disabled from command line, it would be
+> consistent to carry out the _OSC negotiation as usual regardless of
+> ACPI_FADT_NO_ASPM and then handle the case in which it is set in the
+> same way as the case in which the firmware doesn't grant the kernel
+> control of some PCIe features.  Does this sound reasonable
 
-Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
----
+This sound reasonable.
 
-v8
-- Add missing header file <linux/property.h>
-- Remove useledd header file <linux/of_device.h>
-- Revise the comment of 'mt6370_check_vendor_info()'
----
- drivers/video/backlight/Kconfig            |  13 +
- drivers/video/backlight/Makefile           |   1 +
- drivers/video/backlight/mt6370-backlight.c | 351 +++++++++++++++++++++
- 3 files changed, 365 insertions(+)
- create mode 100644 drivers/video/backlight/mt6370-backlight.c
+> 
+> If it does, I think that ASPM should be enumerated regardless of
+> ACPI_FADT_NO_ASPM, but we need to ensure that its configuration is not
+> changed in any way if ACPI_FADT_NO_ASPM is set and I'm not sure if
+> that is the case now.
+> 
+> Of course, the same needs to happen when the kernel doesn't get full
+> control over PCIe features via _OSC, but AFAICS that case is handled
+> in the same way as the above already.
+> 
+>>>> maybe one of them should be removed?
+>>
+>> Arguably, pci_root.c could look at aspm_disabled instead of looking at
+>> the FADT flag directly.
+> 
+> Second, if the former does sound reasonable, I'd rather avoid setting
+> aspm_disabled from drivers/pci/pci-acpi.c upfront when
+> ACPI_FADT_NO_ASPM is set, because doing that is not consistent with
+> the above.
+> 
+> Now, there may be BIOSes that don't expect to be informed of the OS
+> support for ASPM via _OSC if ACPI_FADT_NO_ASPM is set, and the
+> question is what to do with them.  They clearly are at odds with the
+> BIOSes that do expect that to happen (mentioned above), so honestly
+> I'm not sure.
 
-diff --git a/drivers/video/backlight/Kconfig b/drivers/video/backlight/Kconfig
-index a003e02e13ce..936ba1e4d35e 100644
---- a/drivers/video/backlight/Kconfig
-+++ b/drivers/video/backlight/Kconfig
-@@ -268,6 +268,19 @@ config BACKLIGHT_MAX8925
- 	  If you have a LCD backlight connected to the WLED output of MAX8925
- 	  WLED output, say Y here to enable this driver.
- 
-+config BACKLIGHT_MT6370
-+	tristate "MediaTek MT6370 Backlight Driver"
-+	depends on MFD_MT6370
-+	help
-+	  This enables support for Mediatek MT6370 Backlight driver.
-+	  It's commonly used to drive the display WLED. There are 4 channels
-+	  inside, and each channel supports up to 30mA of current capability
-+	  with 2048 current steps (only for MT6370/MT6371) or 16384 current
-+	  steps (only for MT6372) in exponential or linear mapping curves.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called "mt6370-backlight".
-+
- config BACKLIGHT_APPLE
- 	tristate "Apple Backlight Driver"
- 	depends on X86 && ACPI
-diff --git a/drivers/video/backlight/Makefile b/drivers/video/backlight/Makefile
-index cae2c83422ae..e815f3f1deff 100644
---- a/drivers/video/backlight/Makefile
-+++ b/drivers/video/backlight/Makefile
-@@ -44,6 +44,7 @@ obj-$(CONFIG_BACKLIGHT_LP855X)		+= lp855x_bl.o
- obj-$(CONFIG_BACKLIGHT_LP8788)		+= lp8788_bl.o
- obj-$(CONFIG_BACKLIGHT_LV5207LP)	+= lv5207lp.o
- obj-$(CONFIG_BACKLIGHT_MAX8925)		+= max8925_bl.o
-+obj-$(CONFIG_BACKLIGHT_MT6370)		+= mt6370-backlight.o
- obj-$(CONFIG_BACKLIGHT_OMAP1)		+= omap1_bl.o
- obj-$(CONFIG_BACKLIGHT_PANDORA)		+= pandora_bl.o
- obj-$(CONFIG_BACKLIGHT_PCF50633)	+= pcf50633-backlight.o
-diff --git a/drivers/video/backlight/mt6370-backlight.c b/drivers/video/backlight/mt6370-backlight.c
-new file mode 100644
-index 000000000000..844c94655633
---- /dev/null
-+++ b/drivers/video/backlight/mt6370-backlight.c
-@@ -0,0 +1,351 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2022 Richtek Technology Corp.
-+ *
-+ * Author: ChiaEn Wu <chiaen_wu@richtek.com>
-+ */
-+
-+#include <linux/backlight.h>
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/kernel.h>
-+#include <linux/minmax.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/property.h>
-+#include <linux/regmap.h>
-+
-+#define MT6370_REG_DEV_INFO		0x100
-+#define MT6370_REG_BL_EN		0x1A0
-+#define MT6370_REG_BL_BSTCTRL		0x1A1
-+#define MT6370_REG_BL_PWM		0x1A2
-+#define MT6370_REG_BL_DIM2		0x1A4
-+
-+#define MT6370_VENID_MASK		GENMASK(7, 4)
-+#define MT6370_BL_EXT_EN_MASK		BIT(7)
-+#define MT6370_BL_EN_MASK		BIT(6)
-+#define MT6370_BL_CODE_MASK		BIT(0)
-+#define MT6370_BL_CH_MASK		GENMASK(5, 2)
-+#define MT6370_BL_CH_SHIFT		2
-+#define MT6370_BL_DIM2_COMMON_MASK	GENMASK(2, 0)
-+#define MT6370_BL_DIM2_COMMON_SHIFT	3
-+#define MT6370_BL_DIM2_6372_MASK	GENMASK(5, 0)
-+#define MT6370_BL_DIM2_6372_SHIFT	6
-+#define MT6370_BL_PWM_EN_MASK		BIT(7)
-+#define MT6370_BL_PWM_HYS_EN_MASK	BIT(2)
-+#define MT6370_BL_PWM_HYS_SEL_MASK	GENMASK(1, 0)
-+#define MT6370_BL_OVP_EN_MASK		BIT(7)
-+#define MT6370_BL_OVP_SEL_MASK		GENMASK(6, 5)
-+#define MT6370_BL_OVP_SEL_SHIFT		5
-+#define MT6370_BL_OC_EN_MASK		BIT(3)
-+#define MT6370_BL_OC_SEL_MASK		GENMASK(2, 1)
-+#define MT6370_BL_OC_SEL_SHIFT		1
-+
-+#define MT6370_BL_PWM_HYS_TH_MIN_STEP	1
-+#define MT6370_BL_PWM_HYS_TH_MAX_STEP	64
-+#define MT6370_BL_OVP_MIN_UV		17000000
-+#define MT6370_BL_OVP_MAX_UV		29000000
-+#define MT6370_BL_OVP_STEP_UV		4000000
-+#define MT6370_BL_OCP_MIN_UA		900000
-+#define MT6370_BL_OCP_MAX_UA		1800000
-+#define MT6370_BL_OCP_STEP_UA		300000
-+#define MT6370_BL_MAX_COMMON_BRIGHTNESS	2048
-+#define MT6370_BL_MAX_6372_BRIGHTNESS	16384
-+#define MT6370_BL_MAX_CH		15
-+
-+enum {
-+	MT6370_VID_COMMON = 1,
-+	MT6370_VID_6372,
-+};
-+
-+struct mt6370_priv {
-+	u8 dim2_mask;
-+	u8 dim2_shift;
-+	int def_max_brightness;
-+	struct backlight_device *bl;
-+	struct device *dev;
-+	struct gpio_desc *enable_gpio;
-+	struct regmap *regmap;
-+};
-+
-+static int mt6370_bl_update_status(struct backlight_device *bl_dev)
-+{
-+	struct mt6370_priv *priv = bl_get_data(bl_dev);
-+	int brightness = backlight_get_brightness(bl_dev);
-+	unsigned int enable_val;
-+	u8 brightness_val[2];
-+	int ret;
-+
-+	if (brightness) {
-+		brightness_val[0] = (brightness - 1) & priv->dim2_mask;
-+		brightness_val[1] = (brightness - 1) >> priv->dim2_shift;
-+
-+		ret = regmap_raw_write(priv->regmap, MT6370_REG_BL_DIM2,
-+				       brightness_val, sizeof(brightness_val));
-+		if (ret)
-+			return ret;
-+	}
-+
-+	gpiod_set_value(priv->enable_gpio, !!brightness);
-+
-+	enable_val = brightness ? MT6370_BL_EN_MASK : 0;
-+	return regmap_update_bits(priv->regmap, MT6370_REG_BL_EN,
-+				  MT6370_BL_EN_MASK, enable_val);
-+}
-+
-+static int mt6370_bl_get_brightness(struct backlight_device *bl_dev)
-+{
-+	struct mt6370_priv *priv = bl_get_data(bl_dev);
-+	unsigned int enable;
-+	u8 brightness_val[2];
-+	int brightness, ret;
-+
-+	ret = regmap_read(priv->regmap, MT6370_REG_BL_EN, &enable);
-+	if (ret)
-+		return ret;
-+
-+	if (!(enable & MT6370_BL_EN_MASK))
-+		return 0;
-+
-+	ret = regmap_raw_read(priv->regmap, MT6370_REG_BL_DIM2,
-+			      brightness_val, sizeof(brightness_val));
-+	if (ret)
-+		return ret;
-+
-+	brightness = brightness_val[1] << priv->dim2_shift;
-+	brightness += brightness_val[0] & priv->dim2_mask;
-+
-+	return brightness + 1;
-+}
-+
-+static const struct backlight_ops mt6370_bl_ops = {
-+	.options = BL_CORE_SUSPENDRESUME,
-+	.update_status = mt6370_bl_update_status,
-+	.get_brightness = mt6370_bl_get_brightness,
-+};
-+
-+static int mt6370_init_backlight_properties(struct mt6370_priv *priv,
-+					    struct backlight_properties *props)
-+{
-+	struct device *dev = priv->dev;
-+	u8 prop_val;
-+	u32 brightness, ovp_uV, ocp_uA;
-+	unsigned int mask, val;
-+	int ret;
-+
-+	/* Vendor optional properties */
-+	val = 0;
-+	if (device_property_read_bool(dev, "mediatek,bled-pwm-enable"))
-+		val |= MT6370_BL_PWM_EN_MASK;
-+
-+	if (device_property_read_bool(dev, "mediatek,bled-pwm-hys-enable"))
-+		val |= MT6370_BL_PWM_HYS_EN_MASK;
-+
-+	ret = device_property_read_u8(dev,
-+				      "mediatek,bled-pwm-hys-input-th-steps",
-+				      &prop_val);
-+	if (!ret) {
-+		prop_val = clamp_val(prop_val,
-+				     MT6370_BL_PWM_HYS_TH_MIN_STEP,
-+				     MT6370_BL_PWM_HYS_TH_MAX_STEP);
-+		prop_val = prop_val <= 1 ? 0 :
-+			   prop_val <= 4 ? 1 :
-+			   prop_val <= 16 ? 2 : 3;
-+		val |= prop_val;
-+	}
-+
-+	ret = regmap_update_bits(priv->regmap, MT6370_REG_BL_PWM,
-+				 val, val);
-+	if (ret)
-+		return ret;
-+
-+	val = 0;
-+	if (device_property_read_bool(dev, "mediatek,bled-ovp-shutdown"))
-+		val |= MT6370_BL_OVP_EN_MASK;
-+
-+	ret = device_property_read_u32(dev, "mediatek,bled-ovp-microvolt",
-+				       &ovp_uV);
-+	if (!ret) {
-+		ovp_uV = clamp_val(ovp_uV, MT6370_BL_OVP_MIN_UV,
-+				   MT6370_BL_OVP_MAX_UV);
-+		ovp_uV = DIV_ROUND_UP(ovp_uV - MT6370_BL_OVP_MIN_UV,
-+				      MT6370_BL_OVP_STEP_UV);
-+		val |= ovp_uV << MT6370_BL_OVP_SEL_SHIFT;
-+	}
-+
-+	if (device_property_read_bool(dev, "mediatek,bled-ocp-shutdown"))
-+		val |= MT6370_BL_OC_EN_MASK;
-+
-+	ret = device_property_read_u32(dev, "mediatek,bled-ocp-microamp",
-+				       &ocp_uA);
-+	if (!ret) {
-+		ocp_uA = clamp_val(ocp_uA, MT6370_BL_OCP_MIN_UA,
-+				   MT6370_BL_OCP_MAX_UA);
-+		ocp_uA = DIV_ROUND_UP(ocp_uA - MT6370_BL_OCP_MIN_UA,
-+				      MT6370_BL_OCP_STEP_UA);
-+		val |= ocp_uA << MT6370_BL_OC_SEL_SHIFT;
-+	}
-+
-+	ret = regmap_update_bits(priv->regmap, MT6370_REG_BL_BSTCTRL,
-+				 val, val);
-+	if (ret)
-+		return ret;
-+
-+	/* Common properties */
-+	ret = device_property_read_u32(dev, "max-brightness", &brightness);
-+	if (ret)
-+		brightness = priv->def_max_brightness;
-+
-+	props->max_brightness = min_t(u32, brightness, priv->def_max_brightness);
-+
-+	ret = device_property_read_u32(dev, "default-brightness", &brightness);
-+	if (ret)
-+		brightness = props->max_brightness;
-+
-+	props->brightness = min_t(u32, brightness, props->max_brightness);
-+
-+	val = 0;
-+	if (device_property_read_bool(dev, "mediatek,bled-exponential-mode-enable")) {
-+		val |= MT6370_BL_CODE_MASK;
-+		props->scale = BACKLIGHT_SCALE_NON_LINEAR;
-+	} else
-+		props->scale = BACKLIGHT_SCALE_LINEAR;
-+
-+	ret = device_property_read_u8(dev, "mediatek,bled-channel-use",
-+				      &prop_val);
-+	if (ret) {
-+		dev_err(dev, "mediatek,bled-channel-use DT property missing\n");
-+		return ret;
-+	}
-+
-+	if (!prop_val || prop_val > MT6370_BL_MAX_CH) {
-+		dev_err(dev,
-+			"No channel specified or over than upper bound (%d)\n",
-+			prop_val);
-+		return -EINVAL;
-+	}
-+
-+	mask = MT6370_BL_EXT_EN_MASK | MT6370_BL_CH_MASK;
-+	val |= prop_val << MT6370_BL_CH_SHIFT;
-+
-+	if (priv->enable_gpio)
-+		val |= MT6370_BL_EXT_EN_MASK;
-+
-+	return regmap_update_bits(priv->regmap, MT6370_REG_BL_EN, mask, val);
-+}
-+
-+static int mt6370_check_vendor_info(struct mt6370_priv *priv)
-+{
-+	/*
-+	 * Because MT6372 uses 14 bits to control the brightness,
-+	 * MT6370 and MT6371 use 11 bits.
-+	 * This function is used to check the vendor's ID and
-+	 * set the relative hardware mask, shift and
-+	 * default maximum brightness value that should be used.
-+	 */
-+	unsigned int dev_info, hw_vid, of_vid;
-+	int ret;
-+
-+	ret = regmap_read(priv->regmap, MT6370_REG_DEV_INFO, &dev_info);
-+	if (ret)
-+		return ret;
-+
-+	of_vid = (uintptr_t)device_get_match_data(priv->dev);
-+	hw_vid = FIELD_GET(MT6370_VENID_MASK, dev_info);
-+	hw_vid = (hw_vid == 0x9 || hw_vid == 0xb) ? MT6370_VID_6372 : MT6370_VID_COMMON;
-+	if (hw_vid != of_vid)
-+		return dev_err_probe(priv->dev, -EINVAL,
-+				     "Buggy DT, wrong compatible string\n");
-+
-+	if (hw_vid == MT6370_VID_6372) {
-+		priv->dim2_mask = MT6370_BL_DIM2_6372_MASK;
-+		priv->dim2_shift = MT6370_BL_DIM2_6372_SHIFT;
-+		priv->def_max_brightness = MT6370_BL_MAX_6372_BRIGHTNESS;
-+	} else {
-+		priv->dim2_mask = MT6370_BL_DIM2_COMMON_MASK;
-+		priv->dim2_shift = MT6370_BL_DIM2_COMMON_SHIFT;
-+		priv->def_max_brightness = MT6370_BL_MAX_COMMON_BRIGHTNESS;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mt6370_bl_probe(struct platform_device *pdev)
-+{
-+	struct backlight_properties props = {
-+		.type = BACKLIGHT_RAW,
-+	};
-+	struct device *dev = &pdev->dev;
-+	struct mt6370_priv *priv;
-+	int ret;
-+
-+	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->dev = dev;
-+
-+	priv->regmap = dev_get_regmap(dev->parent, NULL);
-+	if (!priv->regmap)
-+		return dev_err_probe(dev, -ENODEV, "Failed to get regmap\n");
-+
-+	ret = mt6370_check_vendor_info(priv);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to check vendor info\n");
-+
-+	priv->enable_gpio = devm_gpiod_get_optional(dev, "enable",
-+						    GPIOD_OUT_HIGH);
-+	if (IS_ERR(priv->enable_gpio))
-+		return dev_err_probe(dev, PTR_ERR(priv->enable_gpio),
-+				     "Failed to get 'enable' gpio\n");
-+
-+	ret = mt6370_init_backlight_properties(priv, &props);
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				     "Failed to init backlight properties\n");
-+
-+	priv->bl = devm_backlight_device_register(dev, pdev->name, dev, priv,
-+						  &mt6370_bl_ops, &props);
-+	if (IS_ERR(priv->bl))
-+		return dev_err_probe(dev, PTR_ERR(priv->bl),
-+				     "Failed to register backlight\n");
-+
-+	backlight_update_status(priv->bl);
-+	platform_set_drvdata(pdev, priv);
-+
-+	return 0;
-+}
-+
-+static int mt6370_bl_remove(struct platform_device *pdev)
-+{
-+	struct mt6370_priv *priv = platform_get_drvdata(pdev);
-+	struct backlight_device *bl_dev = priv->bl;
-+
-+	bl_dev->props.brightness = 0;
-+	backlight_update_status(priv->bl);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id mt6370_bl_of_match[] = {
-+	{ .compatible = "mediatek,mt6370-backlight", .data = (void *)MT6370_VID_COMMON },
-+	{ .compatible = "mediatek,mt6372-backlight", .data = (void *)MT6370_VID_6372 },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, mt6370_bl_of_match);
-+
-+static struct platform_driver mt6370_bl_driver = {
-+	.driver = {
-+		.name = "mt6370-backlight",
-+		.of_match_table = mt6370_bl_of_match,
-+	},
-+	.probe = mt6370_bl_probe,
-+	.remove = mt6370_bl_remove,
-+};
-+module_platform_driver(mt6370_bl_driver);
-+
-+MODULE_AUTHOR("ChiaEn Wu <chiaen_wu@richtek.com>");
-+MODULE_DESCRIPTION("MediaTek MT6370 Backlight Driver");
-+MODULE_LICENSE("GPL v2");
+I'm not sure my issues is caused by report ASPM support to the firmware 
+via _OSC.My issues is the same as this link:
+https://groups.google.com/g/fa.linux.kernel/c/0uz8Nr_NVOI
+
+Links to other discussions on this issue:
+https://lore.kernel.org/all/20151229155822.GA17321@localhost/T/#u
+https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1521173
+
+> 
+>>> I think duplicate work has been done, but comment
+>>> in drivers/acpi/pci_root.c is
+>>> * We want to disable ASPM here, but aspm_disabled
+>>> * needs to remain in its state from boot so that we
+>>> * properly handle PCIe 1.1 devices.  So we set this
+>>> * flag here, to defer the action until after the ACPI
+>>> * root scan.
+>>>
+>>> I don't understand this logic.
+>>
+>> This is about the case after failing acpi_pci_osc_control_set() and
+>> generally we need to defer setting aspm_disabled because of
+>> pcie_aspm_sanity_check().
+>>
+>>>>
+>>>>>
+>>>>>> Signed-off-by: Manyi Li <limanyi@uniontech.com>
+>>>>>> ---
+>>>>>>    drivers/pci/pcie/aspm.c | 1 +
+>>>>>>    1 file changed, 1 insertion(+)
+>>>>>>
+>>>>>> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+>>>>>> index a96b7424c9bc..b173d3c75ae7 100644
+>>>>>> --- a/drivers/pci/pcie/aspm.c
+>>>>>> +++ b/drivers/pci/pcie/aspm.c
+>>>>>> @@ -1359,6 +1359,7 @@ void pcie_no_aspm(void)
+>>>>>>         if (!aspm_force) {
+>>>>>>                 aspm_policy = POLICY_DEFAULT;
+>>>>>>                 aspm_disabled = 1;
+>>>>>> +             aspm_support_enabled = false;
+>>>>>
+>>>>> This makes pcie_no_aspm() work the same as booting with
+>>>>> "pcie_aspm=off".  That might be reasonable.
+>>>>>
+>>>>> I do wonder why we need both "aspm_disabled" and
+>>>>> "aspm_support_enabled".  And I wonder why we need to set "aspm_policy"
+>>>>> when we're disabling ASPM.  But those aren't really connected to your
+>>>>> change here.
+>>>>
+>>>>   From what I can understand "aspm_disabled" means "don't touch ASPM
+>>>> left by BIOS", and "aspm_support_enabled" means "whether ASPM is
+>>>> disabled via command line".
+>>>> There seems to be some overlaps though.
+>>>
+>>> According to commit 8b8bae901ce23 ("PCI/ACPI: Report ASPM support to
+>>> BIOS if not disabled from command line"), "aspm_support_enabled" means
+>>> whether or not report ASPM support to the BIOS through _OSC.
+>>
+>> Right.
+> 
+
 -- 
-2.34.1
-
+Manyi Li

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF31E594721
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F0E594752
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347927AbiHOXmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
+        id S1354073AbiHOXoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353901AbiHOXjV (ORCPT
+        with ESMTP id S1354188AbiHOXlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:39:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB2F153D19;
-        Mon, 15 Aug 2022 13:10:08 -0700 (PDT)
+        Mon, 15 Aug 2022 19:41:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7052B83F33;
+        Mon, 15 Aug 2022 13:11:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 432C660DDC;
-        Mon, 15 Aug 2022 20:10:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51A82C433D6;
-        Mon, 15 Aug 2022 20:10:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2016EB80EA9;
+        Mon, 15 Aug 2022 20:11:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CC8FC433C1;
+        Mon, 15 Aug 2022 20:11:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594206;
-        bh=nDA1+g2NaubviFa1DOmu3ipBe0bol/bx3Ni3Zx8vy+U=;
+        s=korg; t=1660594262;
+        bh=iYfeC75j6U9orOtsHn0ahFpgAnuaEkZWkuIbvo+iqNg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UcfCvveoIHZRDZ6adTt/MnSEcNQFuoXb7CPGDzgKKE3IHgzSoq1Odmfp6vhjWF91M
-         wb7uMLPGDacHRLblEkV5Mpx4igy46X3TWkOMdEnjRy4cTOfznKed6G2RqfNiPgnt9g
-         8kmPH2SnbZr53+21WqC1lnae+mvCnZ55BebBAlQQ=
+        b=u64gb0jRgJoe0w7lPzZ388S6+U4QUaZQ/R13i9ixk+lIGyFmnPOFuPWGAW2EfgZeV
+         yUczRPdpnMT3+rhCfZkmC8styx/pFF8AMrwjllGsmXKFGlYkOZ1CAKCFYzwwTHeSGL
+         QDEz00Vd4R8p27pwkEpW0Tlo3EMBUAG00mYmRLx4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, SeongJae Park <sj@kernel.org>,
-        Maximilian Heyne <mheyne@amazon.de>,
-        Juergen Gross <jgross@suse.com>
-Subject: [PATCH 5.18 1072/1095] xen-blkfront: Apply feature_persistent parameter when connect
-Date:   Mon, 15 Aug 2022 20:07:51 +0200
-Message-Id: <20220815180513.394355050@linuxfoundation.org>
+        stable@vger.kernel.org, John Sperbeck <jsperbeck@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.18 1080/1095] raw: fix a typo in raw_icmp_error()
+Date:   Mon, 15 Aug 2022 20:07:59 +0200
+Message-Id: <20220815180513.710889691@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
 References: <20220815180429.240518113@linuxfoundation.org>
@@ -55,73 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: SeongJae Park <sj@kernel.org>
+From: Eric Dumazet <edumazet@google.com>
 
-commit 402c43ea6b34a1b371ffeed9adf907402569eaf5 upstream.
+commit 97a4d46b1516250d640c1ae0c9e7129d160d6a1c upstream.
 
-In some use cases[1], the backend is created while the frontend doesn't
-support the persistent grants feature, but later the frontend can be
-changed to support the feature and reconnect.  In the past, 'blkback'
-enabled the persistent grants feature since it unconditionally checked
-if frontend supports the persistent grants feature for every connect
-('connect_ring()') and decided whether it should use persistent grans or
-not.
+I accidentally broke IPv4 traceroute, by swapping iph->saddr
+and iph->daddr.
 
-However, commit aac8a70db24b ("xen-blkback: add a parameter for
-disabling of persistent grants") has mistakenly changed the behavior.
-It made the frontend feature support check to not be repeated once it
-shown the 'feature_persistent' as 'false', or the frontend doesn't
-support persistent grants.
+Probably because raw_icmp_error() and raw_v4_input()
+use different order for iph->saddr and iph->daddr.
 
-Similar behavioral change has made on 'blkfront' by commit 74a852479c68
-("xen-blkfront: add a parameter for disabling of persistent grants").
-This commit changes the behavior of the parameter to make effect for
-every connect, so that the previous behavior of 'blkfront' can be
-restored.
-
-[1] https://lore.kernel.org/xen-devel/CAJwUmVB6H3iTs-C+U=v-pwJB7-_ZRHPxHzKRJZ22xEPW7z8a=g@mail.gmail.com/
-
-Fixes: 74a852479c68 ("xen-blkfront: add a parameter for disabling of persistent grants")
-Cc: <stable@vger.kernel.org> # 5.10.x
-Signed-off-by: SeongJae Park <sj@kernel.org>
-Reviewed-by: Maximilian Heyne <mheyne@amazon.de>
-Reviewed-by: Juergen Gross <jgross@suse.com>
-Link: https://lore.kernel.org/r/20220715225108.193398-4-sj@kernel.org
-Signed-off-by: Juergen Gross <jgross@suse.com>
+Fixes: ba44f8182ec2 ("raw: use more conventional iterators")
+Reported-by: John Sperbeck <jsperbeck@google.com>
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Link: https://lore.kernel.org/r/20220623193540.2851799-1-edumazet@google.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/ABI/testing/sysfs-driver-xen-blkfront |    2 +-
- drivers/block/xen-blkfront.c                        |    4 +---
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ net/ipv4/raw.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/Documentation/ABI/testing/sysfs-driver-xen-blkfront
-+++ b/Documentation/ABI/testing/sysfs-driver-xen-blkfront
-@@ -15,5 +15,5 @@ KernelVersion:  5.10
- Contact:        SeongJae Park <sj@kernel.org>
- Description:
-                 Whether to enable the persistent grants feature or not.  Note
--                that this option only takes effect on newly created frontends.
-+                that this option only takes effect on newly connected frontends.
-                 The default is Y (enable).
---- a/drivers/block/xen-blkfront.c
-+++ b/drivers/block/xen-blkfront.c
-@@ -2011,8 +2011,6 @@ static int blkfront_probe(struct xenbus_
- 	info->vdevice = vdevice;
- 	info->connected = BLKIF_STATE_DISCONNECTED;
- 
--	info->feature_persistent = feature_persistent;
--
- 	/* Front end dir is a number, which is used as the id. */
- 	info->handle = simple_strtoul(strrchr(dev->nodename, '/')+1, NULL, 0);
- 	dev_set_drvdata(&dev->dev, info);
-@@ -2306,7 +2304,7 @@ static void blkfront_gather_backend_feat
- 	if (xenbus_read_unsigned(info->xbdev->otherend, "feature-discard", 0))
- 		blkfront_setup_discard(info);
- 
--	if (info->feature_persistent)
-+	if (feature_persistent)
- 		info->feature_persistent =
- 			!!xenbus_read_unsigned(info->xbdev->otherend,
- 					       "feature-persistent", 0);
+--- a/net/ipv4/raw.c
++++ b/net/ipv4/raw.c
+@@ -278,7 +278,7 @@ void raw_icmp_error(struct sk_buff *skb,
+ 	hlist_nulls_for_each_entry(sk, hnode, hlist, sk_nulls_node) {
+ 		iph = (const struct iphdr *)skb->data;
+ 		if (!raw_v4_match(net, sk, iph->protocol,
+-				  iph->saddr, iph->daddr, dif, sdif))
++				  iph->daddr, iph->saddr, dif, sdif))
+ 			continue;
+ 		raw_err(sk, skb, info);
+ 	}
 
 

@@ -2,125 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3152592E3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D238592E3D
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbiHOLeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 07:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
+        id S231878AbiHOLfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 07:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbiHOLeF (ORCPT
+        with ESMTP id S230104AbiHOLfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 07:34:05 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49F41F607
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 04:34:02 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27F6Gifp000354;
-        Mon, 15 Aug 2022 06:33:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=CdlJBI37lWNvixE57726zjypfORIkbpeqIqDkA6MwRI=;
- b=QOYPwyzuH6DHJQE8udHEZunK2icIkEYzVslZT6+tZ1MGP4biTSCXUcy3dMsdsu8foRJD
- AFK9CA6Ou86tuTQDI/rLWXK1g1odfTdZWpqb8ql7rRlwb8xzKLQOpjxp+OIUB4sbsTsn
- S7mCkMqk2O/WYY9FiQ11KfvcxA17XWKM1nfpapZWwxBajKxxOiNo4hIT+f27rPSFf+Rt
- FGmVdL/+03Y9Q3EMuN26qKlv3UzNXWrSjWH5uAXNMGJCz+Divy3QRO1PwxyMfrG771t+
- Z1IcnHuqj/XnK1KxC9dz2PyxC/CKBJ8EzjD4vbCecsdcvfxMKcILnCX6BwImAkHy4dkU 2Q== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3hx9c1t435-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Aug 2022 06:33:49 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Mon, 15 Aug
- 2022 06:33:47 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.9 via Frontend
- Transport; Mon, 15 Aug 2022 06:33:47 -0500
-Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.95])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id A79F5B06;
-        Mon, 15 Aug 2022 11:33:46 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <broonie@kernel.org>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH] ASoC: soc-utils: Improve kerneldoc for snd_soc_tdm_params_to_bclk()
-Date:   Mon, 15 Aug 2022 12:33:46 +0100
-Message-ID: <20220815113346.3805075-1-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 15 Aug 2022 07:35:30 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2944A5F69
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 04:35:29 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 13:35:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1660563327;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+8j8r/+fxWtGp7ltQZJRssg22z9riGkFL/7W19HGVgw=;
+        b=Az2/1EuTkB3aUvY5PgM0oPumTF+GNJmfKg8lDxMhN/I3AutoedY++iaTxoZ6iO53JMFad8
+        9GPUtvHV0J/EcqgA/8+dTAnbs0WMpscmoXt4RXsZ5bHYtPvtJqU2fU/dYmYi4nOE46/LSO
+        ydOxSlKSB+pBXiTLYglU9eb2w3SiWpFYBVY6wvg1irdDjFEf90cFTIXDV8nQuLW3wy+iFs
+        FshHvwqao24VZEO941QhE5+aUh5arVbazaKXEmE1Ii+h04lOZOmQttWQRmN/LlhAdzH0aN
+        25Hf2+ViLAfvHeMlIALrVwbgZdc2zdLkBp8iTG2zqT0BzM6nhJL0W06yv/+nAg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1660563327;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+8j8r/+fxWtGp7ltQZJRssg22z9riGkFL/7W19HGVgw=;
+        b=A5RYR5HBboV0Y6ooBm/oF6gb7FJPb61MrxG+teQUDlqcUdSibCr6sQ81EfrdX30rOK37NM
+        F4GA638Rn/fdJwBA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Mike Snitzer <snitzer@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Nathan Huckleberry <nhuck@google.com>,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com,
+        Alasdair Kergon <agk@redhat.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH 0/3] dm-verity: optionally use tasklets in dm-verity
+Message-ID: <YvovfXMJQAUBsvBZ@linutronix.de>
+References: <20220722093823.4158756-1-nhuck@google.com>
+ <YtrTI/CJMoLihA/1@infradead.org>
+ <YtrahFs5wgweeB7f@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: LX-acjpnRm2C_z4MKRHKdNb55aGAD31p
-X-Proofpoint-GUID: LX-acjpnRm2C_z4MKRHKdNb55aGAD31p
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YtrahFs5wgweeB7f@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The statement that snd_soc_tdm_params_to_bclk() is equivalent to
-snd_soc_params_to_bclk() if tdm_width==tdm_slots==0 is not accurate,
-it is only true is slot_multiple is also <2.
+On 2022-07-22 13:12:36 [-0400], Mike Snitzer wrote:
+> On Fri, Jul 22 2022 at 12:41P -0400,
+> Christoph Hellwig <hch@infradead.org> wrote:
+>=20
+> > We've been tying to kill off task lets for about 15 years.  I don't
+> > think adding new users will make you a whole lot of friends..
+>=20
+> I don't have perspective on how serious that effort is. But ~2 years
+> ago DM introduced another consumer of tasklets in dm-crypt, see:
+> 39d42fa96ba1 dm crypt: add flags to optionally bypass kcryptd workqueues
 
-However, the description of special-case behaviour in terms of pairs of
-tdm_width and tdm_slot values is not particularly helpful so we might as
-well take the opportunity to rework the description to say the same thing
-in a simpler way. The behaviour of a pair of values is obvious from a
-description of each argument. At the same time make a few edits to clarify
-the rest of the description.
+I tried to get rid of the in_atomic() as it appeared work "magic" in
+there and in ended in a pointless discussion=E2=80=A6
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
----
- sound/soc/soc-utils.c | 23 ++++++++++++-----------
- 1 file changed, 12 insertions(+), 11 deletions(-)
+> Given that, and other numerous users, is the effort to remove tasklets
+> valid? What is the alternative to tasklets?
 
-diff --git a/sound/soc/soc-utils.c b/sound/soc/soc-utils.c
-index 70c380c0ac7b..a3b6df2378b4 100644
---- a/sound/soc/soc-utils.c
-+++ b/sound/soc/soc-utils.c
-@@ -56,23 +56,24 @@ EXPORT_SYMBOL_GPL(snd_soc_params_to_bclk);
- /**
-  * snd_soc_tdm_params_to_bclk - calculate bclk from params and tdm slot info.
-  *
-- * Calculate the bclk from the params sample rate and the tdm slot count and
-- * tdm slot width. Either or both of tdm_width and tdm_slots can be 0.
-+ * Calculate the bclk from the params sample rate, the tdm slot count and the
-+ * tdm slot width. Optionally round-up the slot count to a given multiple.
-+ * Either or both of tdm_width and tdm_slots can be 0.
-  *
-- * If tdm_width == 0 and tdm_slots > 0:	the params_width will be used.
-- * If tdm_width > 0 and tdm_slots == 0:	the params_channels will be used
-- *					as the slot count.
-- * Both tdm_width and tdm_slots are 0:	this is equivalent to calling
-- *					snd_soc_params_to_bclk().
-+ * If tdm_width == 0:	use params_width() as the slot width.
-+ * If tdm_slots == 0:	use params_channels() as the slot count.
-  *
-- * If slot_multiple > 1 the slot count (or params_channels if tdm_slots == 0)
-- * will be rounded up to a multiple of this value. This is mainly useful for
-+ * If slot_multiple > 1 the slot count (or params_channels() if tdm_slots == 0)
-+ * will be rounded up to a multiple of slot_multiple. This is mainly useful for
-  * I2S mode, which has a left and right phase so the number of slots is always
-  * a multiple of 2.
-  *
-+ * If tdm_width == 0 && tdm_slots == 0 && slot_multiple < 2, this is equivalent
-+ * to calling snd_soc_params_to_bclk().
-+ *
-  * @params:        Pointer to struct_pcm_hw_params.
-- * @tdm_width:     Width in bits of the tdm slots.
-- * @tdm_slots:     Number of tdm slots per frame.
-+ * @tdm_width:     Width in bits of the tdm slots. Must be >= 0.
-+ * @tdm_slots:     Number of tdm slots per frame. Must be >= 0.
-  * @slot_multiple: If >1 roundup slot count to a multiple of this value.
-  *
-  * Return: bclk frequency in Hz, else a negative error code if params format
--- 
-2.30.2
+The tasklets end up as anonymous load in the system. It is usually not
+visible due to the way accounting usually works (yes we do have full
+accounting) and you can't distinguish between work from USB-cam,
+storage, =E2=80=A6 if everything is fed into the same context. This becomes=
+ a
+problem on a smaller/ slower system of one softirq throttles the other
+(say the webcam processing gets delayed due to other tasklets).
 
+With the tasklet/BH context you need to disable BH while acquiring a
+spin_lock() so this ends up a per-CPU BKL since a random spin_lock_bh()
+is also synchronised again the timer as well as large parts of the
+networking subsystem and so on. This seems not to bother anyone in
+general it becomes a problem on PREEMPT_RT where this becomes visible.
+
+In general, a tasklet runs after the interrupt handler and were
+introduced a long time ago, before we had threaded interrupts available.
+Therefore threaded interrupts are a good substitute.
+
+> Mike
+
+Sebastian

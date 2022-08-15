@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00105594A81
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:18:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD46594A90
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348579AbiHPAEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 20:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
+        id S1351762AbiHPAEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 20:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356586AbiHOXyo (ORCPT
+        with ESMTP id S1354632AbiHOXzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:54:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E297F162C65;
-        Mon, 15 Aug 2022 13:19:48 -0700 (PDT)
+        Mon, 15 Aug 2022 19:55:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70A8162C7F;
+        Mon, 15 Aug 2022 13:19:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56442B81136;
-        Mon, 15 Aug 2022 20:19:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CA9DC433D6;
-        Mon, 15 Aug 2022 20:19:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1F726069F;
+        Mon, 15 Aug 2022 20:19:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4A19C433D7;
+        Mon, 15 Aug 2022 20:19:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594787;
-        bh=YxnjGagAXKYwl9x1vFjIhlV6RfgjGjLrQnuVa5abR54=;
+        s=korg; t=1660594790;
+        bh=r3G8/3p1eFirWwmLYKMYbRpBTw9Ek3gXCzt42vDMaCU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TWg1J/eirIa7cOvqgNWs0YczZBopDwGiK3u9wDB7WczbzVRoVGH1hxRDXD5f2KnPe
-         0IgZtC2X8V54OyWkxETTKSoqJZv4yr6CNKT+f7RJVJgMUDxO4fvJ2DixUb367NW+iW
-         7RrH+zXDlo4m5MNEpozA0eMe24CH3aXzhhdSrGjg=
+        b=G9s75+Xr5I6ISxwLodZbHUiMYkFL2LP8KofcVO9tii1tjtPLh7s2hK6V5UJ/zboxd
+         uB9u6OW5hLKx31/rAX+VgwP+M4IKevKYr9Oi23oS1979A9uIFnp1rVg+BRRsgMwKOB
+         UPrYTTyjK5dXhkGNYmhBeyAMhNmGqhLL48o9clTs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kai Ye <yekai13@huawei.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Mike Manning <mvrmanning@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0559/1157] crypto: hisilicon/sec - fix auth key size error
-Date:   Mon, 15 Aug 2022 19:58:35 +0200
-Message-Id: <20220815180501.978638099@linuxfoundation.org>
+Subject: [PATCH 5.19 0560/1157] net: allow unbound socket for packets in VRF when tcp_l3mdev_accept set
+Date:   Mon, 15 Aug 2022 19:58:36 +0200
+Message-Id: <20220815180502.015383421@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -55,58 +56,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kai Ye <yekai13@huawei.com>
+From: Mike Manning <mvrmanning@gmail.com>
 
-[ Upstream commit 45f5d0176d8426cc1ab0bab84fbd8ef5c57526c6 ]
+[ Upstream commit 944fd1aeacb627fa617f85f8e5a34f7ae8ea4d8e ]
 
-The authentication algorithm supports a maximum of 128-byte keys.
-The allocated key memory is insufficient.
+The commit 3c82a21f4320 ("net: allow binding socket in a VRF when
+there's an unbound socket") changed the inet socket lookup to avoid
+packets in a VRF from matching an unbound socket. This is to ensure the
+necessary isolation between the default and other VRFs for routing and
+forwarding. VRF-unaware processes running in the default VRF cannot
+access another VRF and have to be run with 'ip vrf exec <vrf>'. This is
+to be expected with tcp_l3mdev_accept disabled, but could be reallowed
+when this sysctl option is enabled. So instead of directly checking dif
+and sdif in inet[6]_match, here call inet_sk_bound_dev_eq(). This
+allows a match on unbound socket for non-zero sdif i.e. for packets in
+a VRF, if tcp_l3mdev_accept is enabled.
 
-Fixes: 2f072d75d1ab ("crypto: hisilicon - Add aead support on SEC2")
-Signed-off-by: Kai Ye <yekai13@huawei.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Fixes: 3c82a21f4320 ("net: allow binding socket in a VRF when there's an unbound socket")
+Signed-off-by: Mike Manning <mvrmanning@gmail.com>
+Link: https://lore.kernel.org/netdev/a54c149aed38fded2d3b5fdb1a6c89e36a083b74.camel@lasnet.de/
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/hisilicon/sec2/sec_crypto.c | 6 +++---
- drivers/crypto/hisilicon/sec2/sec_crypto.h | 1 +
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ include/net/inet6_hashtables.h |  7 +++----
+ include/net/inet_hashtables.h  | 19 +++----------------
+ include/net/inet_sock.h        | 11 +++++++++++
+ 3 files changed, 17 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/crypto/hisilicon/sec2/sec_crypto.c b/drivers/crypto/hisilicon/sec2/sec_crypto.c
-index 71dfa7db6394..77c9f13cf69a 100644
---- a/drivers/crypto/hisilicon/sec2/sec_crypto.c
-+++ b/drivers/crypto/hisilicon/sec2/sec_crypto.c
-@@ -620,7 +620,7 @@ static int sec_auth_init(struct sec_ctx *ctx)
+diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
+index f259e1ae14ba..56f1286583d3 100644
+--- a/include/net/inet6_hashtables.h
++++ b/include/net/inet6_hashtables.h
+@@ -110,8 +110,6 @@ static inline bool inet6_match(struct net *net, const struct sock *sk,
+ 			       const __portpair ports,
+ 			       const int dif, const int sdif)
  {
- 	struct sec_auth_ctx *a_ctx = &ctx->a_ctx;
+-	int bound_dev_if;
+-
+ 	if (!net_eq(sock_net(sk), net) ||
+ 	    sk->sk_family != AF_INET6 ||
+ 	    sk->sk_portpair != ports ||
+@@ -119,8 +117,9 @@ static inline bool inet6_match(struct net *net, const struct sock *sk,
+ 	    !ipv6_addr_equal(&sk->sk_v6_rcv_saddr, daddr))
+ 		return false;
  
--	a_ctx->a_key = dma_alloc_coherent(ctx->dev, SEC_MAX_KEY_SIZE,
-+	a_ctx->a_key = dma_alloc_coherent(ctx->dev, SEC_MAX_AKEY_SIZE,
- 					  &a_ctx->a_key_dma, GFP_KERNEL);
- 	if (!a_ctx->a_key)
- 		return -ENOMEM;
-@@ -632,8 +632,8 @@ static void sec_auth_uninit(struct sec_ctx *ctx)
- {
- 	struct sec_auth_ctx *a_ctx = &ctx->a_ctx;
+-	bound_dev_if = READ_ONCE(sk->sk_bound_dev_if);
+-	return bound_dev_if == dif || bound_dev_if == sdif;
++	/* READ_ONCE() paired with WRITE_ONCE() in sock_bindtoindex_locked() */
++	return inet_sk_bound_dev_eq(net, READ_ONCE(sk->sk_bound_dev_if), dif,
++				    sdif);
+ }
+ #endif /* IS_ENABLED(CONFIG_IPV6) */
  
--	memzero_explicit(a_ctx->a_key, SEC_MAX_KEY_SIZE);
--	dma_free_coherent(ctx->dev, SEC_MAX_KEY_SIZE,
-+	memzero_explicit(a_ctx->a_key, SEC_MAX_AKEY_SIZE);
-+	dma_free_coherent(ctx->dev, SEC_MAX_AKEY_SIZE,
- 			  a_ctx->a_key, a_ctx->a_key_dma);
+diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
+index fd6b510d114b..e9cf2157ed8a 100644
+--- a/include/net/inet_hashtables.h
++++ b/include/net/inet_hashtables.h
+@@ -175,17 +175,6 @@ static inline void inet_ehash_locks_free(struct inet_hashinfo *hashinfo)
+ 	hashinfo->ehash_locks = NULL;
  }
  
-diff --git a/drivers/crypto/hisilicon/sec2/sec_crypto.h b/drivers/crypto/hisilicon/sec2/sec_crypto.h
-index 5e039b50e9d4..d033f63b583f 100644
---- a/drivers/crypto/hisilicon/sec2/sec_crypto.h
-+++ b/drivers/crypto/hisilicon/sec2/sec_crypto.h
-@@ -7,6 +7,7 @@
- #define SEC_AIV_SIZE		12
- #define SEC_IV_SIZE		24
- #define SEC_MAX_KEY_SIZE	64
-+#define SEC_MAX_AKEY_SIZE	128
- #define SEC_COMM_SCENE		0
- #define SEC_MIN_BLOCK_SZ	1
+-static inline bool inet_sk_bound_dev_eq(struct net *net, int bound_dev_if,
+-					int dif, int sdif)
+-{
+-#if IS_ENABLED(CONFIG_NET_L3_MASTER_DEV)
+-	return inet_bound_dev_eq(!!READ_ONCE(net->ipv4.sysctl_tcp_l3mdev_accept),
+-				 bound_dev_if, dif, sdif);
+-#else
+-	return inet_bound_dev_eq(true, bound_dev_if, dif, sdif);
+-#endif
+-}
+-
+ struct inet_bind_bucket *
+ inet_bind_bucket_create(struct kmem_cache *cachep, struct net *net,
+ 			struct inet_bind_hashbucket *head,
+@@ -271,16 +260,14 @@ static inline bool inet_match(struct net *net, const struct sock *sk,
+ 			      const __addrpair cookie, const __portpair ports,
+ 			      int dif, int sdif)
+ {
+-	int bound_dev_if;
+-
+ 	if (!net_eq(sock_net(sk), net) ||
+ 	    sk->sk_portpair != ports ||
+ 	    sk->sk_addrpair != cookie)
+ 	        return false;
  
+-	/* Paired with WRITE_ONCE() from sock_bindtoindex_locked() */
+-	bound_dev_if = READ_ONCE(sk->sk_bound_dev_if);
+-	return bound_dev_if == dif || bound_dev_if == sdif;
++	/* READ_ONCE() paired with WRITE_ONCE() in sock_bindtoindex_locked() */
++	return inet_sk_bound_dev_eq(net, READ_ONCE(sk->sk_bound_dev_if), dif,
++				    sdif);
+ }
+ 
+ /* Sockets in TCP_CLOSE state are _always_ taken out of the hash, so we need
+diff --git a/include/net/inet_sock.h b/include/net/inet_sock.h
+index 6395f6b9a5d2..bf5654ce711e 100644
+--- a/include/net/inet_sock.h
++++ b/include/net/inet_sock.h
+@@ -149,6 +149,17 @@ static inline bool inet_bound_dev_eq(bool l3mdev_accept, int bound_dev_if,
+ 	return bound_dev_if == dif || bound_dev_if == sdif;
+ }
+ 
++static inline bool inet_sk_bound_dev_eq(struct net *net, int bound_dev_if,
++					int dif, int sdif)
++{
++#if IS_ENABLED(CONFIG_NET_L3_MASTER_DEV)
++	return inet_bound_dev_eq(!!READ_ONCE(net->ipv4.sysctl_tcp_l3mdev_accept),
++				 bound_dev_if, dif, sdif);
++#else
++	return inet_bound_dev_eq(true, bound_dev_if, dif, sdif);
++#endif
++}
++
+ struct inet_cork {
+ 	unsigned int		flags;
+ 	__be32			addr;
 -- 
 2.35.1
 

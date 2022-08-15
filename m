@@ -2,136 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9078592C38
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79160592D5D
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbiHOJSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 05:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
+        id S241585AbiHOJRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 05:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241666AbiHOJRx (ORCPT
+        with ESMTP id S233314AbiHOJRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 05:17:53 -0400
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 15 Aug 2022 02:17:52 PDT
-Received: from rcdn-iport-1.cisco.com (rcdn-iport-1.cisco.com [173.37.86.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27229220FF;
-        Mon, 15 Aug 2022 02:17:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=1852; q=dns/txt; s=iport;
-  t=1660555072; x=1661764672;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=QpiiM3DbmqyBkHT2kZF2nZitt5ASAzlJNOnL9SvqktM=;
-  b=PVvRZpYd4WK+1mFHJ1YwD6rVp8cbLv4Q3juDokyIJ5YEj7MCwkmw1kQA
-   E8ZUe9CckzWZ1zdZypNpHazoz2/HRUHNUkCYuGyNxsoQx753XX7KJkOv3
-   B0l8Qz9GUYyxV5c3afW8FQxawtPWpRsZABd7ubOxBgiMm1ofbDYGLIdcw
-   w=;
-IronPort-Data: =?us-ascii?q?A9a23=3AY7G1CaK0b7FTBaysFE+RbZclxSXFcZb7ZxGr2?=
- =?us-ascii?q?PjKsXjdYENS3zMEzGYcWWvVOfbbMGr8Kt8nb9yy8BlVv8fcxoBmTFAd+CA2R?=
- =?us-ascii?q?RqmiyZq6fd1j6vI0qj7wvTrFCqL1O1DLIiZRCwIZiWE/E31b+G/9SAUOZygH?=
- =?us-ascii?q?9IQNsaVYkideic8IMsRoUoLd98R2uaEs/Dga+++kYuaT/nkBbOQ82Uc3lT4R?=
- =?us-ascii?q?E60gEgHUPza4Fv0t7GlDBxBlAe2e3I9VPrzKUwtRkYUTLW4HsbiLwrC5Kuy8?=
- =?us-ascii?q?mWc9BA3B5b71L36aUYNBLXVOGBiiFIPBPPk2UcE93d0i/tkXBYfQR8/ZzGhk?=
- =?us-ascii?q?8J4x9JXqJ2YQgYyNaqKk+MYO/VdO3gmYfIWp+6ecCPXXcu7iheun2HX69BjC?=
- =?us-ascii?q?k5wGYww5edxDXtP6/ECbjsKa3irg+Ow3aL+SeR2gMknBNfkMZlZuXx6yzzdS?=
- =?us-ascii?q?/E8TvjrR6TM+M8d3TY3rt5BEOyYZMcDbzdrKhPabHVnJxEUDJ8/murthX7yd?=
- =?us-ascii?q?TxXgEqYo6Uq/3LUyg1hlrTgWPLRc8aRbcBYgk+WoWWA82mRKhMbP4bE4TmI6?=
- =?us-ascii?q?HShgqnIhyyTcKcTH72x+/osoFCVwGEJCRYWfVK9qP2+hQi1XNc3FqC+0kLCt?=
- =?us-ascii?q?oAo/0CtC9L6RRD9/jiPvwUXXJxbFOhS1e1E8YKMiy7xO4TOZmMphAQaifIL?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Aa0ie3au/IpkwDzoGlZnXaT+J7skDd9V00z?=
- =?us-ascii?q?EX/kB9WHVpmwKj+PxG+85rsSMc6QxhPU3I9urgBEDtex7hHP1OkOss1MmZPD?=
- =?us-ascii?q?UO0VHAROoJ0WKI+VPd8kPFmtK1rZ0QEJSXzLbLfD5HZQGQ2njeL+od?=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0A5AAB2bIJi/51dJa1aHQEBAQEJARI?=
- =?us-ascii?q?BBQUBQIE7CAELAYIqgUs9Q4ROiCGIapxngXwLAQEBDQEBQgQBAYUChUACJTQ?=
- =?us-ascii?q?JDgECBAEBARIBAQUBAQECAQcEgQkThWgNhmwECwFGMAUCJgIuMgkJgn2DGKt?=
- =?us-ascii?q?Wen8ygQGIGYFlgRAsAYlDgQGEQhyBSUSEfYFQhkqCZQSVYzsDCQYHBTmBBRK?=
- =?us-ascii?q?BIXEBCAYGBwoFMgYCDBgUBAITElMMEgITDAocDg5GGQwPAxIDEQEHAgsSCBU?=
- =?us-ascii?q?sCAMCAwgDAgMjCwIDGAkHCgMdCAocEhAUAgQTHwsIAxofLQkCBA4DQwgLCgM?=
- =?us-ascii?q?RBAMTGAsWCBAEBgMJLw0oCwMFDw8BBgMGAgUFAQMgAxQDBScHAyEHCyYNDQQ?=
- =?us-ascii?q?jHQMDBSYDAgIbBwICAwIGFwYCAkAxCigNCAQIBBweJQ4FBQIHMQUELwIeBAU?=
- =?us-ascii?q?GEQkCFgIGBAUCBAQWAgISCAIIJxsHFjYZAQVdBgsJIxwsEQUGFgMmUgYiHAG?=
- =?us-ascii?q?WcD4zARZuCoFxDL9fgi2DVp9wGjGDdZMckUUBkTiFLiCiOYQlAgQGBQIWgWE?=
- =?us-ascii?q?8gVkzGggbFYMjURkPlViHGEQxOwIGAQoBAQMJkRoBAQ?=
-X-IronPort-AV: E=Sophos;i="5.91,230,1647302400"; 
-   d="scan'208";a="1047879193"
-Received: from rcdn-core-6.cisco.com ([173.37.93.157])
-  by rcdn-iport-1.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 15 Aug 2022 09:16:48 +0000
-Received: from sjc-ads-9103.cisco.com (sjc-ads-9103.cisco.com [10.30.208.113])
-        by rcdn-core-6.cisco.com (8.15.2/8.15.2) with ESMTPS id 27F9GlH3015491
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 15 Aug 2022 09:16:48 GMT
-Received: by sjc-ads-9103.cisco.com (Postfix, from userid 487941)
-        id 698EACC128E; Mon, 15 Aug 2022 02:16:47 -0700 (PDT)
-From:   Denys Zagorui <dzagorui@cisco.com>
-To:     Meng.Li@windriver.com, jic23@kernel.org
-Cc:     lars@metafoo.de, Michael.Hennerich@analog.com,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: [PATCH] iio: ltc2497: Fix reading conversion results
-Date:   Mon, 15 Aug 2022 09:16:47 +0000
-Message-Id: <20220815091647.1523532-1-dzagorui@cisco.com>
-X-Mailer: git-send-email 2.28.0
+        Mon, 15 Aug 2022 05:17:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0366122280
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 02:17:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660555020;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=+lgH1hBRD1m/mzbQi1aYCWsf/2qMXaicGixcF+IMRPc=;
+        b=ax/FgiIJ3bFaojNaZ9WTG0zxbg0kDUFlApC73dQicKk11jlTzeAvupNBP6Y2xZnhxy9qQu
+        /AGbWlr7cjP6mPKy7JnL51ePQxYfVpLOimUDu2L4TPy5EZm9NnuIWthG5RjiYtadLJfOmQ
+        7Wy/cE9FXujLRC6erCQ3jMz/4RIxARc=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-594-vd5C2-7ZMU6icdutI_J4mw-1; Mon, 15 Aug 2022 05:16:58 -0400
+X-MC-Unique: vd5C2-7ZMU6icdutI_J4mw-1
+Received: by mail-ed1-f69.google.com with SMTP id o2-20020a056402438200b0043d552deb2aso4400428edc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 02:16:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=+lgH1hBRD1m/mzbQi1aYCWsf/2qMXaicGixcF+IMRPc=;
+        b=hYw8TyGpRmv4XQJ09AL1mgouSHS+fjIe1jMHGbC6KTOM9gMAQFgua76+CfV9dX3S3P
+         0Ts/aA4py+rWAyFOOIAAjMQXOmYutCR3bCxSr5iw6XAk8mo/zLs3N04SDe2FQkVztqJk
+         rA5uc3kaN0nhytY7ofJiMB8+w/vnExspdpMtw/v/i9bGYIUCllPH6dhrcC+pycHj6dnL
+         tPhh/NKj0a0Aqd71MQOjuK355PLiyOKcZ2b6NFWMIYDkGzPJIiIjduKqI4AjJpBw7EMN
+         VksIC6XQmpTfCy4Zope7vSEp1zwmNmnwS0ADyARtglGW0TjelGI4Dw0RsJGTWGBNqa46
+         JyGQ==
+X-Gm-Message-State: ACgBeo1QSgOIkVYDL/EEnMpJZM8OvCfpSLym/406HVxAx7BUD8yfJosi
+        hviRQcYXpe4Cpq1k7DT6C6mUO2QOwMwTCy3B3T7ZOTC8RHmEHYSJTqorx2gnHg7mCzGI1RK4EQR
+        U2pDOwl/hwBOI/ijsFBrFdjxzLoqLDyJlqDGMR/QPOON/DHf8TOF+JWgzf9489VKIZUWb6A==
+X-Received: by 2002:a05:6402:1e8d:b0:441:58db:b6a2 with SMTP id f13-20020a0564021e8d00b0044158dbb6a2mr13472969edf.277.1660555017152;
+        Mon, 15 Aug 2022 02:16:57 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4TUuxXLf4X9ZxvGDLmurzNR+B1PhAkCo7uKtZy520YFWqKHF1q3eDJtrRUZuNuy6tNLwZeog==
+X-Received: by 2002:a05:6402:1e8d:b0:441:58db:b6a2 with SMTP id f13-20020a0564021e8d00b0044158dbb6a2mr13472939edf.277.1660555016769;
+        Mon, 15 Aug 2022 02:16:56 -0700 (PDT)
+Received: from redhat.com ([2.54.169.49])
+        by smtp.gmail.com with ESMTPSA id i20-20020a17090685d400b00722e50dab2csm3817610ejy.109.2022.08.15.02.16.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 02:16:56 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 05:16:50 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andres Freund <andres@anarazel.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        c@redhat.com
+Subject: [PATCH] virtio_net: Revert "virtio_net: set the default max ring
+ size by find_vqs()"
+Message-ID: <20220815090521.127607-1-mst@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Outbound-SMTP-Client: 10.30.208.113, sjc-ads-9103.cisco.com
-X-Outbound-Node: rcdn-core-6.cisco.com
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
+X-Mutt-Fcc: =sent
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+This reverts commit 762faee5a2678559d3dc09d95f8f2c54cd0466a7.
 
-After the result of the previous conversion is read the chip
-automatically starts a new conversion and doesn't accept new i2c
-transfers until this conversion is completed which makes the function
-return failure.
+This has been reported to trip up guests on GCP (Google Cloud).  Why is
+not yet clear - to be debugged, but the patch itself has several other
+issues:
 
-So add an early return iff the programming of the new address isn't
-needed. Note this will not fix the problem in general, but all cases
-that are currently used. Once this changes we get the failure back, but
-this can be addressed when the need arises.
+- It treats unknown speed as < 10G
+- It leaves userspace no way to find out the ring size set by hypervisor
+- It tests speed when link is down
+- It ignores the virtio spec advice:
+        Both \field{speed} and \field{duplex} can change, thus the driver
+        is expected to re-read these values after receiving a
+        configuration change notification.
+- It is not clear the performance impact has been tested properly
 
-Fixes: 69548b7c2c4f ("iio: adc: ltc2497: split protocol independent part in a separate module ")
-Reported-by: Meng Li <Meng.Li@windriver.com>
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Tested-by: Denys Zagorui <dzagorui@cisco.com>
+Revert the patch for now.
+
+Link: https://lore.kernel.org/r/20220814212610.GA3690074%40roeck-us.net
+Link: https://lore.kernel.org/r/20220815070203.plwjx7b3cyugpdt7%40awork3.anarazel.de
+Link: https://lore.kernel.org/r/3df6bb82-1951-455d-a768-e9e1513eb667%40www.fastmail.com
+Link: https://lore.kernel.org/r/FCDC5DDE-3CDD-4B8A-916F-CA7D87B547CE%40anarazel.de
+Fixes: 762faee5a267 ("virtio_net: set the default max ring size by find_vqs()")
+Cc: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc: Jason Wang <jasowang@redhat.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Tested-by: Andres Freund <andres@anarazel.de>
 ---
- drivers/iio/adc/ltc2497.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/net/virtio_net.c | 42 ++++------------------------------------
+ 1 file changed, 4 insertions(+), 38 deletions(-)
 
-diff --git a/drivers/iio/adc/ltc2497.c b/drivers/iio/adc/ltc2497.c
-index f7c786f37ceb..78b93c99cc47 100644
---- a/drivers/iio/adc/ltc2497.c
-+++ b/drivers/iio/adc/ltc2497.c
-@@ -41,6 +41,19 @@ static int ltc2497_result_and_measure(struct ltc2497core_driverdata *ddata,
- 		}
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index d934774e9733..ece00b84e3a7 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -3432,29 +3432,6 @@ static unsigned int mergeable_min_buf_len(struct virtnet_info *vi, struct virtqu
+ 		   (unsigned int)GOOD_PACKET_LEN);
+ }
  
- 		*val = (be32_to_cpu(st->buf) >> 14) - (1 << 17);
-+
-+		/*
-+		 * The part started a new conversion at the end of the above i2c
-+		 * transfer, so if the address didn't change since the last call
-+		 * everything is fine and we can return early.
-+		 * If not (which should only happen when some sort of bulk
-+		 * conversion is implemented) we have to program the new
-+		 * address. Note that this probably fails as the conversion that
-+		 * was triggered above is like not complete yet and the two
-+		 * operations have to be done in a single transfer.
-+		 */
-+		if (ddata->addr_prev == address)
-+			return 0;
+-static void virtnet_config_sizes(struct virtnet_info *vi, u32 *sizes)
+-{
+-	u32 i, rx_size, tx_size;
+-
+-	if (vi->speed == SPEED_UNKNOWN || vi->speed < SPEED_10000) {
+-		rx_size = 1024;
+-		tx_size = 1024;
+-
+-	} else if (vi->speed < SPEED_40000) {
+-		rx_size = 1024 * 4;
+-		tx_size = 1024 * 4;
+-
+-	} else {
+-		rx_size = 1024 * 8;
+-		tx_size = 1024 * 8;
+-	}
+-
+-	for (i = 0; i < vi->max_queue_pairs; i++) {
+-		sizes[rxq2vq(i)] = rx_size;
+-		sizes[txq2vq(i)] = tx_size;
+-	}
+-}
+-
+ static int virtnet_find_vqs(struct virtnet_info *vi)
+ {
+ 	vq_callback_t **callbacks;
+@@ -3462,7 +3439,6 @@ static int virtnet_find_vqs(struct virtnet_info *vi)
+ 	int ret = -ENOMEM;
+ 	int i, total_vqs;
+ 	const char **names;
+-	u32 *sizes;
+ 	bool *ctx;
+ 
+ 	/* We expect 1 RX virtqueue followed by 1 TX virtqueue, followed by
+@@ -3490,15 +3466,10 @@ static int virtnet_find_vqs(struct virtnet_info *vi)
+ 		ctx = NULL;
  	}
  
- 	ret = i2c_smbus_write_byte(st->client,
+-	sizes = kmalloc_array(total_vqs, sizeof(*sizes), GFP_KERNEL);
+-	if (!sizes)
+-		goto err_sizes;
+-
+ 	/* Parameters for control virtqueue, if any */
+ 	if (vi->has_cvq) {
+ 		callbacks[total_vqs - 1] = NULL;
+ 		names[total_vqs - 1] = "control";
+-		sizes[total_vqs - 1] = 64;
+ 	}
+ 
+ 	/* Allocate/initialize parameters for send/receive virtqueues */
+@@ -3513,10 +3484,8 @@ static int virtnet_find_vqs(struct virtnet_info *vi)
+ 			ctx[rxq2vq(i)] = true;
+ 	}
+ 
+-	virtnet_config_sizes(vi, sizes);
+-
+-	ret = virtio_find_vqs_ctx_size(vi->vdev, total_vqs, vqs, callbacks,
+-				       names, sizes, ctx, NULL);
++	ret = virtio_find_vqs_ctx(vi->vdev, total_vqs, vqs, callbacks,
++				  names, ctx, NULL);
+ 	if (ret)
+ 		goto err_find;
+ 
+@@ -3536,8 +3505,6 @@ static int virtnet_find_vqs(struct virtnet_info *vi)
+ 
+ 
+ err_find:
+-	kfree(sizes);
+-err_sizes:
+ 	kfree(ctx);
+ err_ctx:
+ 	kfree(names);
+@@ -3897,9 +3864,6 @@ static int virtnet_probe(struct virtio_device *vdev)
+ 		vi->curr_queue_pairs = num_online_cpus();
+ 	vi->max_queue_pairs = max_queue_pairs;
+ 
+-	virtnet_init_settings(dev);
+-	virtnet_update_settings(vi);
+-
+ 	/* Allocate/initialize the rx/tx queues, and invoke find_vqs */
+ 	err = init_vqs(vi);
+ 	if (err)
+@@ -3912,6 +3876,8 @@ static int virtnet_probe(struct virtio_device *vdev)
+ 	netif_set_real_num_tx_queues(dev, vi->curr_queue_pairs);
+ 	netif_set_real_num_rx_queues(dev, vi->curr_queue_pairs);
+ 
++	virtnet_init_settings(dev);
++
+ 	if (virtio_has_feature(vdev, VIRTIO_NET_F_STANDBY)) {
+ 		vi->failover = net_failover_create(vi->dev);
+ 		if (IS_ERR(vi->failover)) {
 -- 
-2.28.0
+MST
 

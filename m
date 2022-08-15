@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B833592C57
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C582D592B96
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231805AbiHOJGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 05:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59908 "EHLO
+        id S241659AbiHOJGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 05:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiHOJGA (ORCPT
+        with ESMTP id S232892AbiHOJGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 05:06:00 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297B0BC8F;
-        Mon, 15 Aug 2022 02:05:59 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D5BE03486C;
-        Mon, 15 Aug 2022 09:05:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1660554357; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wmyLVShEDIO9zR9fd/Zd6KIwqvJ7WmFq3Q+f4veJxx4=;
-        b=Hr7FJApvmpacg+qsEsJ9ov0c/tj4crcwwKaC5VvYz8JZ5R2TTE2h7cECeD9EJfzdYfYWAc
-        cN6spABRKoxVA3aiXtRq3fSz0vQiAI+DH1UU/0eoeqEB7IGt1oHlgnYia5D4+XmpkvfT97
-        uWu7YDaPLs1jhiKEkKAQrGk8nHMwqEU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9321913A93;
-        Mon, 15 Aug 2022 09:05:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id lVbSInUM+mLXTwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Mon, 15 Aug 2022 09:05:57 +0000
-Date:   Mon, 15 Aug 2022 11:05:56 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     Tejun Heo <tj@kernel.org>, Imran Khan <imran.f.khan@oracle.com>,
-        lizefan.x@bytedance.com, hannes@cmpxchg.org, tglx@linutronix.de,
-        steven.price@arm.com, peterz@infradead.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhao Gongyi <zhaogongyi@huawei.com>,
-        Zhang Qiao <zhangqiao22@huawei.com>
-Subject: Re: Query regarding deadlock involving cgroup_threadgroup_rwsem and
- cpu_hotplug_lock
-Message-ID: <20220815090556.GB27407@blackbody.suse.cz>
-References: <8245b710-8acb-d8e6-7045-99a5f71dad4e@oracle.com>
- <26d0e4cc-be0e-2c12-6174-dfbb1edb1ed6@oracle.com>
- <bbc01477-231b-3dbb-3e09-9338f5413f06@oracle.com>
- <ba48eac5-8ef7-251b-11fe-8163bb7a2d54@quicinc.com>
- <224b19f3-912d-b858-7af4-185b8e55bc66@quicinc.com>
- <YthDz4BnfYHce1od@slm.duckdns.org>
- <YuGTBLkFerUboctl@slm.duckdns.org>
- <dc0cff0e-b744-9d5d-e727-70d1c31b2a74@quicinc.com>
+        Mon, 15 Aug 2022 05:06:15 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B843521274
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 02:06:12 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id o22so8799660edc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 02:06:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=44Fl8O7TjbclXQeBVlf9eeR2A/Qg5kDFt4fRh+hjhrE=;
+        b=IEgRbmGxJGN4flDsa/Phu7+0pG+lWoyUlmDIQgqzrw7LmZxYepepRA3e4gGM9je5v6
+         x6g7jYakBOyv5DjXADfAdk2shSK68hAYjpAzvxTKWzqtMo4H6yf3aywSV9JKagEwZIAh
+         7wwobTJ5FoLEpsXhe9QC/rblqS0IQSvuAur3Ex4S3XG+hoFDv7tY8hp1607qR8QVKvG1
+         ANfndZsS2RTMckXbbdQvdPS8MacvBsxBL2cJz39bC1D9iXa2rZWLdDaCbEYBpnrCAsNI
+         evuSdf7tJ0GQnh+jb6Myw9g4iG68NWUBZolXNYR7nvA/AfjMS7HfKpk/PaZjj5S6DPa7
+         Z+4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=44Fl8O7TjbclXQeBVlf9eeR2A/Qg5kDFt4fRh+hjhrE=;
+        b=oBlmHRzBAhAc53t/HrLAmXOyyqwabOfl/qCDkbTXAu693b1vLKC/ijUjfO4NbDRWZN
+         Lv1qUssvVKaiHZICx2BVvnhe7BJFTIqdVkl/iDiDx0x+pyL7qebupj2Vk6LOr6WNdjcd
+         lM7KIL8sWYfCW0r5awunl4BJgbdbnjeuXpyOjwT+3UpuQZp5oR4z/AzBNi1hOnHpkn7G
+         MgW2MiiErAwjLi6GZ6ehKbSldK4ASIpS4mdlPYEX6V1YYbSUrnpqd5xJvPh7fhac4RN7
+         upekJAftpNfgE5ImqT7KwBLKGSqRNq51ZNl/1B6XT3c8aHuSR/uEu9F+YLo5EqAWgmVT
+         caQg==
+X-Gm-Message-State: ACgBeo0F+q/6vN3E9Ea4TzzMEkt3XDm3XH4WmpZ3z5SS30If4afD8yYV
+        k4/PjoXHwj2+iqXBkUQk7iqPza+IbOxIVFUzzf38Fg==
+X-Google-Smtp-Source: AA6agR44r30PYJUVzZR0NjpgNUdMjyNkBe9wpD9qBBJNDQRLR8pt744u+pmvMEAbsFZILifQg9yCsfl7NP3jqBwEfWI=
+X-Received: by 2002:a05:6402:f02:b0:440:3693:e68d with SMTP id
+ i2-20020a0564020f0200b004403693e68dmr13896631eda.29.1660554371336; Mon, 15
+ Aug 2022 02:06:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dc0cff0e-b744-9d5d-e727-70d1c31b2a74@quicinc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+References: <20220812133012.7283-1-shenwei.wang@nxp.com> <20220812133012.7283-4-shenwei.wang@nxp.com>
+In-Reply-To: <20220812133012.7283-4-shenwei.wang@nxp.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 15 Aug 2022 11:06:00 +0200
+Message-ID: <CAMRc=MexvX_sZK6RdiAdjNQnvqAU_o_g7pCfUPDORHnQ4PcEMw@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] gpio: imx-scu: add imx-scu GPIO driver
+To:     Shenwei Wang <shenwei.wang@nxp.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        imx@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,31 +76,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Cc: Zhao Gongyi <zhaogongyi@huawei.com>, Zhang Qiao <zhangqiao22@huawei.com>
+On Fri, Aug 12, 2022 at 3:31 PM Shenwei Wang <shenwei.wang@nxp.com> wrote:
+>
+> The SCU firmware on i.MX8 platforms provides a set of APIs to
+> control the GPIO PINs on the SCU domain. This patch implements the
+> standard GPIO driver interface to access those PINs on the
+> SCU domain over the SCU APIs.
+>
+> Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
+> ---
 
-On Fri, Aug 12, 2022 at 03:57:00PM +0530, Mukesh Ojha <quic_mojha@quicinc.com> wrote:
-> The original patch of yours [1]  and the revert of [2] is fixing the issue
-> and it is also confirmed here [3].
-> Can we get proper fix merge on your tree?
-> 
-> [1] https://lore.kernel.org/lkml/YuGbYCfAG81mZBnN@slm.duckdns.org/
-> 
-> [2]
-> https://lore.kernel.org/all/20220121101210.84926-1-zhangqiao22@huawei.com/
+This looks good to me - Krzysztof: do you have any other comments?
+Otherwise, I'll pick it up soon.
 
-The revert + Tejun's patch looks fine wrt the problem of the reverted
-patch (just moves cpus_read_lock to upper callers).
-
-I'd just suggest a comment that'd explicitly document also the lock
-order that we stick to, IIUC, it should be:
-
-	cpu_hotplug_lock // cpus_read_lock
-	cgroup_threadgroup_rwsem
-	cpuset_rwsem
-
-Michal
-
-> 
-> [3] https://lore.kernel.org/lkml/CAB8ipk-72V-bYRfL-VcSRSyXTeQqkBVj+1d5MHSVV5CTar9a0Q@mail.gmail.com/
-> 
-> -Mukesh
+Bart

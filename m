@@ -2,74 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A6E5929BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 08:43:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F7E5929C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 08:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240386AbiHOGm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 02:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
+        id S240824AbiHOGnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 02:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbiHOGmv (ORCPT
+        with ESMTP id S239893AbiHOGnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 02:42:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0E81ADA6;
-        Sun, 14 Aug 2022 23:42:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02D4860BAF;
-        Mon, 15 Aug 2022 06:42:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83974C433C1;
-        Mon, 15 Aug 2022 06:42:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660545769;
-        bh=K7gjVJTcooAzyr8dmnCy71L8r9aZDglG5OQO4qk2cuQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VyFKl+pjX4M2Feribe7rGlLVxIH6mKbGYSxpqaHCUCcNUV+ihqdq90TK8qUuMOsR5
-         vbCbWru0Hbn82mdiVqXW2ucwR6wklzeamb+zPf/6GmeQbCnFVLHwA1GxfNyJ5ZNKcJ
-         HqvQqm91wWt+FVrA727FN5Vh/rYWPaf+OBrEp7sw=
-Date:   Mon, 15 Aug 2022 08:42:46 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Daniil Lunev <dlunev@chromium.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Keoseong Park <keosung.park@samsung.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v7] ufs: core: print UFSHCD capabilities in controller's
- sysfs node
-Message-ID: <Yvnq5o5f+qp5zs1c@kroah.com>
-References: <20220815104739.v7.1.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
+        Mon, 15 Aug 2022 02:43:07 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCDE1AF3F;
+        Sun, 14 Aug 2022 23:43:04 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id E4D2C5C00B9;
+        Mon, 15 Aug 2022 02:43:01 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 15 Aug 2022 02:43:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1660545781; x=1660632181; bh=8v1UNNv97h
+        9J2L3WvxkH00sK+2Af+0MdgE0J1dhPpWA=; b=QBYvXoFE2expmhkMkPUa5b9q5J
+        PJJ2hvuYdIuDuAStEHtfVpFxuE0rm9pi0n2MqT8brNudqMCmcIs9iMMb7udhtyQu
+        Jku39EGmJVm1Ssj6AamPCjWZzdFFfLjumzy9QPcewvh8JfdmkDJ72G42IUMCw4FS
+        dY4zC1H7DdhPpwZMMXrYLllHVJNk4cfil++OCi6mg3uIMKgtfIqhLTYzAI3s4CSZ
+        bhjbP6E7sPa4hdayqvNaqYbabL06vdMam6fahFpUOQRojr4F8QBCosgYl9Dyx/NM
+        Mo1XAE48Hm8nDCGZRWoClZnluZ4o7XD1+Ek+uFF8npJE7bCs2PTFxRE4RBag==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660545781; x=1660632181; bh=8v1UNNv97h9J2L3WvxkH00sK+2Af
+        +0MdgE0J1dhPpWA=; b=mYi0k5szCs5yZozk29RRx8q5qgOTdLBRsL8hGMEWLfnH
+        ez8RFhJdZEdDQOdWsSA/wMS270RyUrecpyaq7QjdnNyttVRBu1quc4+SD867LYro
+        41Gr25rR0YctXAS0odKzpWTU8nY+23p+681+AmJwC5EW23NI1YaKhH9BkP5EwiAs
+        0lqhSPE6Id/EJ7TOOqf397/CPpWxA/txw8bCu09H7Md8jvNWABv2oFXgqqRbwt1b
+        Mn6kBMDGLy67+47x6LXSwTvxDMjCFZjkv70itsEjcM6uXHs4U15dzrMoRhBuy+TC
+        AAaaxtH845XqkVGyhhIR/lgsXSh8uZxVy4yNVFXiiw==
+X-ME-Sender: <xms:9er5YmbPDT0JdOfn9FMUEzoXns9jT0o6gk3Kvl416ecLoTlZ5CQInA>
+    <xme:9er5YpYONVVk6v9MGzUWveEA27hHAy-pGy9Ne_p5GQOBxk6cm6Bwg5-7BD6Pe3tBD
+    s2BIFHWwue-w9C64s4>
+X-ME-Received: <xmr:9er5Yg9SWnCsZZjs9aeDVnuGso9ndQG1WSNZa8u-tEayhh4HVu2M7MdLyN3O>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehuddgudduhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheeh
+    fffhvedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:9er5YorW5eieMVy2cljIB4lVcVYjdRVQptdswd1VCSBAU2maX4hE1A>
+    <xmx:9er5YhoZGFiNdqZxuHq_5t9vxVZD_3NCg6kRG6RtG-Bqh1mVVIXouA>
+    <xmx:9er5YmSorlkhw-ItEgf4iwovSGC9316WpxYvm4b-_XmfNz4T_bbe7Q>
+    <xmx:9er5YiScjy43Usltq-fQC9u7FMsF0LG3ru--gDdz_rjhDCxwBLnKvg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 15 Aug 2022 02:43:00 -0400 (EDT)
+Date:   Mon, 15 Aug 2022 08:42:48 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 3/4] drm/sun4i: dsi: Add a variant structure
+Message-ID: <20220815064248.4ujitfpvtw6y3k4k@houat>
+References: <20220812074257.58254-1-samuel@sholland.org>
+ <20220812074257.58254-4-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fe5pr2l7i2tpjvdm"
 Content-Disposition: inline
-In-Reply-To: <20220815104739.v7.1.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220812074257.58254-4-samuel@sholland.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 10:48:03AM +1000, Daniil Lunev wrote:
-> Allows userspace to check if Clock Scaling and Write Booster are
-> supported.
-> 
-> Signed-off-by: Daniil Lunev <dlunev@chromium.org>
 
-Please provide a lot more information about this in the changelog text.
-What would you want to see here if you had to review this change?
+--fe5pr2l7i2tpjvdm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-thanks,
+Hi Samuel,
 
-greg k-h
+On Fri, Aug 12, 2022 at 02:42:55AM -0500, Samuel Holland wrote:
+> Replace the ad-hoc calls to of_device_is_compatible() with a structure
+> describing the differences between variants. This is in preparation for
+> adding more variants to the driver.
+>=20
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+>=20
+>  drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c | 50 +++++++++++++++++---------
+>  drivers/gpu/drm/sun4i/sun6i_mipi_dsi.h |  7 ++++
+>  2 files changed, 40 insertions(+), 17 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c b/drivers/gpu/drm/sun=
+4i/sun6i_mipi_dsi.c
+> index b4dfa166eccd..6479ade416b9 100644
+> --- a/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
+> +++ b/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
+> @@ -1101,12 +1101,16 @@ static const struct component_ops sun6i_dsi_ops =
+=3D {
+> =20
+>  static int sun6i_dsi_probe(struct platform_device *pdev)
+>  {
+> +	const struct sun6i_dsi_variant *variant;
+>  	struct device *dev =3D &pdev->dev;
+> -	const char *bus_clk_name =3D NULL;
+>  	struct sun6i_dsi *dsi;
+>  	void __iomem *base;
+>  	int ret;
+> =20
+> +	variant =3D device_get_match_data(dev);
+> +	if (!variant)
+> +		return -EINVAL;
+> +
+>  	dsi =3D devm_kzalloc(dev, sizeof(*dsi), GFP_KERNEL);
+>  	if (!dsi)
+>  		return -ENOMEM;
+> @@ -1114,10 +1118,7 @@ static int sun6i_dsi_probe(struct platform_device =
+*pdev)
+>  	dsi->dev =3D dev;
+>  	dsi->host.ops =3D &sun6i_dsi_host_ops;
+>  	dsi->host.dev =3D dev;
+> -
+> -	if (of_device_is_compatible(dev->of_node,
+> -				    "allwinner,sun6i-a31-mipi-dsi"))
+> -		bus_clk_name =3D "bus";
+> +	dsi->variant =3D variant;
+> =20
+>  	base =3D devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(base)) {
+> @@ -1142,7 +1143,7 @@ static int sun6i_dsi_probe(struct platform_device *=
+pdev)
+>  		return PTR_ERR(dsi->regs);
+>  	}
+> =20
+> -	dsi->bus_clk =3D devm_clk_get(dev, bus_clk_name);
+> +	dsi->bus_clk =3D devm_clk_get(dev, variant->has_mod_clk ? "bus" : NULL);
+>  	if (IS_ERR(dsi->bus_clk))
+>  		return dev_err_probe(dev, PTR_ERR(dsi->bus_clk),
+>  				     "Couldn't get the DSI bus clock\n");
+> @@ -1151,21 +1152,21 @@ static int sun6i_dsi_probe(struct platform_device=
+ *pdev)
+>  	if (ret)
+>  		return ret;
+> =20
+> -	if (of_device_is_compatible(dev->of_node,
+> -				    "allwinner,sun6i-a31-mipi-dsi")) {
+> +	if (variant->has_mod_clk) {
+>  		dsi->mod_clk =3D devm_clk_get(dev, "mod");
+>  		if (IS_ERR(dsi->mod_clk)) {
+>  			dev_err(dev, "Couldn't get the DSI mod clock\n");
+>  			ret =3D PTR_ERR(dsi->mod_clk);
+>  			goto err_attach_clk;
+>  		}
+> -	}
+> =20
+> -	/*
+> -	 * In order to operate properly, that clock seems to be always
+> -	 * set to 297MHz.
+> -	 */
+> -	clk_set_rate_exclusive(dsi->mod_clk, 297000000);
+> +		/*
+> +		 * In order to operate properly, the module clock on the
+> +		 * A31 variant always seems to be set to 297MHz.
+> +		 */
+> +		if (variant->set_mod_clk)
+> +			clk_set_rate_exclusive(dsi->mod_clk, 297000000);
+> +	}
+>
+>
+>  	dsi->dphy =3D devm_phy_get(dev, "dphy");
+>  	if (IS_ERR(dsi->dphy)) {
+> @@ -1205,16 +1206,31 @@ static int sun6i_dsi_remove(struct platform_devic=
+e *pdev)
+> =20
+>  	component_del(&pdev->dev, &sun6i_dsi_ops);
+>  	mipi_dsi_host_unregister(&dsi->host);
+> -	clk_rate_exclusive_put(dsi->mod_clk);
+> +	if (dsi->variant->has_mod_clk && dsi->variant->set_mod_clk)
+> +		clk_rate_exclusive_put(dsi->mod_clk);
+
+There's also a clk_rate_exclusive_put call in the bind error path
+
+Maxime
+
+--fe5pr2l7i2tpjvdm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYvnq6AAKCRDj7w1vZxhR
+xRUgAQC+Q6FefSqQzlCuirg8gH0Zff7RElCM+/kmmzZdz/QEiwEA1K0JgOyS8Xbv
+pApMRj4LRfKxndHBOk/R4DCvHbcNxwk=
+=pvGf
+-----END PGP SIGNATURE-----
+
+--fe5pr2l7i2tpjvdm--

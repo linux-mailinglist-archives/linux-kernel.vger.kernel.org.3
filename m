@@ -2,141 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79AEB592AA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 10:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F4175592AD8
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 10:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241312AbiHOHnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 03:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43752 "EHLO
+        id S231825AbiHOHoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 03:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241289AbiHOHnT (ORCPT
+        with ESMTP id S241453AbiHOHoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 03:43:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 599C718E24
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:43:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660549397;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yDB6Dng4odX19UxgKFSAsHyj7giMURZ2eqldW4V8gPs=;
-        b=hUYEKdKZ9HIkIGBmwBtkwMz1Cy+YnmFelNd+Ztr7tQg9DbOIUIm9G/xPD9osk92MRNHQnF
-        tk5X4Edp5eO6RaKsAmEghk614U3Runga7ykL2vE2e8NWNBNxO3gfr916onJnt1VMkSPpPC
-        IlwNJYWb/xPMYc2lMI3siFLqXCLZqn0=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-220-lC9QUwlrOIWStMNGh4tvAw-1; Mon, 15 Aug 2022 03:43:16 -0400
-X-MC-Unique: lC9QUwlrOIWStMNGh4tvAw-1
-Received: by mail-ed1-f69.google.com with SMTP id o2-20020a056402438200b0043d552deb2aso4282680edc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:43:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=yDB6Dng4odX19UxgKFSAsHyj7giMURZ2eqldW4V8gPs=;
-        b=WgC3Ytop4VMd/vN+Ge7DXL21O5BntqIBzCEhP4suE9H7LupXpHK2bc6mB+gUYLPunW
-         5I54vHugD+fBYXRHk67IZRiWnYIaYjlyhzQpMu9MGPYVcFkVnjcGk7Iksm2HK6fXkC44
-         nPZEVUtAnzdtY6RNsQeTN6QWTvbcpZKOAHv98LeVzos3GoFUVkp6EDHf6hPXexTLYOj/
-         k7JIM3WGbEEh3AT7vlcF0e2RtjiTCIxD9H1zS7SnzRPnHA79Rlr2EKSEbTrlgByFnljM
-         y36ZhWHoWOUvgNni+TSEFwFOSc2tVF6hPxPPE3917hao2aGj88hJo+JdgiX1FNhgc8yb
-         yB3g==
-X-Gm-Message-State: ACgBeo2JkRVYdCe/i6tS0nOAXryYnd3f81sQLdp2zjGnTL/G2FDvmxOl
-        KJ1DYmhBQrATDEziJSrktFcS1oJrDhJgEF30jfs6jdBoXWcjt0RN/cmSgn1Ym+bmWWuMgkjRgFm
-        ZU0DqfueqHxkRgn/qSk3AWAgp
-X-Received: by 2002:a05:6402:3514:b0:440:5538:3a97 with SMTP id b20-20020a056402351400b0044055383a97mr13689614edd.165.1660549394757;
-        Mon, 15 Aug 2022 00:43:14 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR52mfAhSTqnZj95HxvlqpvDfImskCbvWzlHKJ6rnWIZQixS47ES0gaMSYIq/FDh8FTxrHiIbg==
-X-Received: by 2002:a05:6402:3514:b0:440:5538:3a97 with SMTP id b20-20020a056402351400b0044055383a97mr13689603edd.165.1660549394589;
-        Mon, 15 Aug 2022 00:43:14 -0700 (PDT)
-Received: from redhat.com ([2.54.169.49])
-        by smtp.gmail.com with ESMTPSA id u5-20020a056402110500b0043bc19efc15sm6086720edv.28.2022.08.15.00.43.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 00:43:14 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 03:43:10 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Andres Freund <andres@anarazel.de>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: upstream kernel crashes
-Message-ID: <20220815033955-mutt-send-email-mst@kernel.org>
-References: <20220814212610.GA3690074@roeck-us.net>
- <CAHk-=wgf2EfLHui6A5NbWoaVBB2f8t-XBUiOMkyjN2NU41t6eA@mail.gmail.com>
- <20220814223743.26ebsbnrvrjien4f@awork3.anarazel.de>
- <CAHk-=wi6raoJE-1cyRU0YxJ+9ReO1eXmOAq0FwKAyZS7nhvk9w@mail.gmail.com>
- <1c057afa-92df-ee3c-5978-3731d3db9345@kernel.dk>
- <20220815013651.mrm7qgklk6sgpkbb@awork3.anarazel.de>
- <20220815022711-mutt-send-email-mst@kernel.org>
- <D887C3E7-4C2A-4576-8F63-4CFFF8479069@anarazel.de>
+        Mon, 15 Aug 2022 03:44:03 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33041D0C2;
+        Mon, 15 Aug 2022 00:44:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1660549441; x=1692085441;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=SIE66MGxDpRWZ2cps44EOenrs9VP7SJORPjECIaM/J8=;
+  b=aY0gkhy6FItAB7lqXiE4xb9u1vFeyoOspms8tB/31nCXS6SMbt+j/aaV
+   YL7N8xABz2WuYmM1JmmizN+EhstjBtBWb+Ep0O3VLbmRCrbqb87JSuQWc
+   Uo/Te1BE/awb1sX47qjmH0Cmrz8m3LXXjXAxHELitoMWFpuBC7FUCkJVO
+   1nzdtcoGZC86CaafH0JBhWN5upGxhSPF+/XDJd+mdAdcMG/UluiJwkY4M
+   mNjJNDP4p7ckXvR0xZqw7lLUYhLNnzwyb+YGYICFxBKqVhYI1miyPsoFE
+   8HRG5c4E+hU0n2Sy8jp4qMqrOCstBHTUoa7J1ODANCkStzIqFYc+UJ2JH
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,237,1654552800"; 
+   d="scan'208";a="25601393"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 15 Aug 2022 09:43:57 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 15 Aug 2022 09:43:58 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 15 Aug 2022 09:43:58 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1660549438; x=1692085438;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=SIE66MGxDpRWZ2cps44EOenrs9VP7SJORPjECIaM/J8=;
+  b=OPTI+PZvpxikOTum61xgzpOJTqIyb8naeDbElgSclZVGyI9eVyMbyxL+
+   Cnu8EMhptZqZ+H3Q2W5xK1Dt3dgwlfAYtCD3mLwAwD3aItQFVjekVEoqQ
+   LM8/wyhRvu68wFW6raE3sCVzOXK0tuXrZUtxE2wfd5exJyjNWfTDpNcEC
+   cJxPjZB+ahu4wiFM8BH9sWdVH8VLaeZYmC1Qn6KKbky/GC57fm7Xv4Dkr
+   odUhmrKnvU+kyR9NBQGAM9acabrFXE+YOtMSXJRTD3Mr0rsjuTqh+4MIP
+   FhqrhyRlkj5cHMzrcO/LjySM7gnnpGbS1YzjdzVPQd+lA+CbqYDB7XXwo
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,237,1654552800"; 
+   d="scan'208";a="25601392"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 15 Aug 2022 09:43:57 +0200
+Received: from schifferm-ubuntu (SCHIFFERM-M2.tq-net.de [10.121.49.14])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id ABA9F280056;
+        Mon, 15 Aug 2022 09:43:57 +0200 (CEST)
+Message-ID: <c434ba87606d3d7696ae076684ceea67bfe662e3.camel@ew.tq-group.com>
+Subject: Re: [PATCH 0/9] Input: synaptics-rmi4 - Bootloader v7/v8 firmware
+ update improvements
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Lyude Paul <lyude@redhat.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 15 Aug 2022 09:43:52 +0200
+In-Reply-To: <26790cfecb827245187233bc81f9fb89553bb4a7.camel@ew.tq-group.com>
+References: <20220608124808.51402-1-matthias.schiffer@ew.tq-group.com>
+         <26790cfecb827245187233bc81f9fb89553bb4a7.camel@ew.tq-group.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <D887C3E7-4C2A-4576-8F63-4CFFF8479069@anarazel.de>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 12:17:44AM -0700, Andres Freund wrote:
-> Hi, 
+On Mon, 2022-06-27 at 10:31 +0200, Matthias Schiffer wrote:
+> On Wed, 2022-06-08 at 14:47 +0200, Matthias Schiffer wrote:
+> > This fixes the firmware update function with bootloader v8, allows to
+> > recover from interrupted updates with v7/v8, and does some code cleanup.
+> > 
+> > I believe that the code that allows to recover from a broken partition
+> > table is also necessary to make flashing a different partition table
+> > work at all, but I wasn't able to verify that, as I don't have any firmware
+> > images with different partition tables to test with. In any case, I'm
+> > pretty sure that it is working correctly now, as recovery from a mostly
+> > empty flash without partition table has been tested successfully.
+> > 
+> > I have only tested the new code with bootloader v8, and I don't have the
+> > documentation / interfacing guide for v7, so it would be great if anyone
+> > could check that I didn't break updates for v7.
 > 
-> On August 14, 2022 11:36:55 PM PDT, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> >On Sun, Aug 14, 2022 at 06:36:51PM -0700, Andres Freund wrote:
-> >> Hi,
-> >> 
-> >> On 2022-08-14 19:04:22 -0600, Jens Axboe wrote:
-> >> > I took a quick look and added more SCSI bits to my vm images, but
-> >> > haven't been able to hit it.
-> >> 
-> >> Didn't immediately hit anything locally in a vm either...
-> >> 
-> >> 
-> >> > Sounds like Andres is already bisecting this, so I guess we'll be wiser
-> >> > soon enough.
-> >> 
-> >> I started bisecting the network issue, as it occurred first, and who knows
-> >> what else it could affect. Will bisect the other range after.
-> >> 
-> >> Due to the serial console issue mentioned upthread it's pretty slow
-> >> going. Each iteration I create a new gcp snapshot and vm. Adds like ~10min.
-> >> Doesn't help if intermediary steps don't boot with different symptoms and
-> >> another doesn't immediately build...
-> >
-> >Just so we can stop pestering everyone, could you try
-> >
-> >git revert --no-edit 0b6fd46ec5f5..a335b33f4f35 ?
-> >
-> >Equivalently I pushed it here:
-> >
-> >https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git test
+> Hi everyone,
 > 
-> Saw this too late - I assume you don't need this anymore now that I pinpointed the one commit?
+> any news regarding this patch series?
 > 
-> Andres
+> 
+> Kind regards,
+> Matthias
 
-Right, at least not yet - could you clarify the folliwing please:
+Ping - can we get this applied, or at least any kind of feedback?
 
-So IIUC you see several issues, right?
 
-With 762faee5a2678559d3dc09d95f8f2c54cd0466a7 you see networking issues.
+Kind regards,
+Matthias
 
-With ebcce492636506443e4361db6587e6acd1a624f9 you see crashes.
 
-I just want to make sure the issue is virtio specific and then we can drop
-Linus et al and move this to the virtio ML.
 
-Thanks!
-
--- 
-MST
+> 
+> 
+> 
+> > 
+> > Matthias Schiffer (9):
+> >   Input: synaptics-rmi4 - fix firmware update operations with bootloader
+> >     v8
+> >   Input: synaptics-rmi4 - introduce rmi_f34v7_check_command_status()
+> >     helper
+> >   Input: synaptics-rmi4 - fix command completion check for bootloader
+> >     v7/v8
+> >   Input: synaptics-rmi4 - rewrite partition table unconditionally
+> >   Input: synaptics-rmi4 - reset after writing partition table
+> >   Input: synaptics-rmi4 - make rmi_f34v7_erase_all() use the "erase all"
+> >     command
+> >   Input: synaptics-rmi4 - remove unneeded struct register_offset
+> >   Input: synaptics-rmi4 - simplify rmi_f34v7_start_reflash()
+> >   Input: synaptics-rmi4 - drop useless gotos in rmi_f34v7_do_reflash()
+> > 
+> >  drivers/input/rmi4/rmi_f34.c   |  16 +-
+> >  drivers/input/rmi4/rmi_f34.h   |  17 --
+> >  drivers/input/rmi4/rmi_f34v7.c | 349 +++++++--------------------------
+> >  3 files changed, 81 insertions(+), 301 deletions(-)
+> > 
 

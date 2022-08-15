@@ -2,91 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1B259325D
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A07E659326D
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233045AbiHOPqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32924 "EHLO
+        id S229627AbiHOPtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233222AbiHOPpS (ORCPT
+        with ESMTP id S230208AbiHOPtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:45:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13C0C16;
-        Mon, 15 Aug 2022 08:45:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B70B610FB;
-        Mon, 15 Aug 2022 15:45:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC428C43141;
-        Mon, 15 Aug 2022 15:45:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660578314;
-        bh=0Q6eADI3Tco1PDxr5yvf++mMgHZkrwSUpLo7KbmRoAk=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=uEU5JWu8stgqm5pe2bGYE0zdMHlrmz3BbgTES4nmXzlN5YrCX8tj7Lr5jqxvyV+6X
-         Kz7xZRVKiKMOF08AAre2L7Q9ozAV8elPeXoM9tErWQpfxJn01P4GEbrqIW2m6ZDpAH
-         BhazzIxFUKfCC1YK6e7cRIVLVK1BGBNfmp7zJ/dUdZAda4ExS01sWCL9SvRfZN3D0R
-         wS4TnQIpQymmUJ9EA9oQojz73UDJpGfBvuDHY6Jl/FKjWQlf9kHi81MZUge7kolGtf
-         iSVdINnViO85yYjVjeh6WEn6AelC08/Muou3TrriqS1hM7ZODabeWDhm553492eYFu
-         4C8fze+HUCI9w==
-From:   Mark Brown <broonie@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-spi@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <253543c462b765eca40ba54c66f4e3fdf4acdeb7.1659735546.git.christophe.jaillet@wanadoo.fr>
-References: <253543c462b765eca40ba54c66f4e3fdf4acdeb7.1659735546.git.christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH] spi: lpspi: Simplify some error message
-Message-Id: <166057831362.697678.10418733101562971754.b4-ty@kernel.org>
-Date:   Mon, 15 Aug 2022 16:45:13 +0100
+        Mon, 15 Aug 2022 11:49:00 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADE9EE32;
+        Mon, 15 Aug 2022 08:48:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=P5wY5zgg3rjOGWIVZoee4r16o0xMuIGJOZZTb6Q98pw=; b=cGyHTvHgOgGnA3KI+8g9w+XWlt
+        N/0YnVmrgyjEAkR/jU/cyKgYsOOyrOu8Y1c+vunhtZQCKA4ZdEtrEwD49WJf/9QWRc//3g8D4YqVp
+        DXX/ZDLGBSBuP9I1f9ZuRpaPakNRJqj7bxXP3WgvGEgXg7AlktKH1QKAb4LJ39AIDjEAonl3b6REk
+        qgy6llVcH+zA8neTygsz1XUcBAk6uEYaB6363ngNIjhwcJORPC27TiEJcyCaP0gezi2gmdoNUNBAE
+        Knszmkl3DyH4Uo25vNxpDvKNEXFPSo/y0WanxovWiil8U7KbOOXE23CDnyeUIjSlNHOrJepfbTzHt
+        zIIipRlw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oNcKb-005q2a-BO; Mon, 15 Aug 2022 15:48:45 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8613F9801D4; Mon, 15 Aug 2022 17:48:44 +0200 (CEST)
+Date:   Mon, 15 Aug 2022 17:48:44 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
+Message-ID: <Yvpq3JDk8fTgdMv8@worktop.programming.kicks-ass.net>
+References: <Yvn9xR7qhXW7FnFL@worktop.programming.kicks-ass.net>
+ <YvoVgMzMuQbAEayk@krava>
+ <Yvo+EpO9dN30G0XE@worktop.programming.kicks-ass.net>
+ <CAADnVQJfvn2RYydqgO-nS_K+C8WJL7BdCnR44MiMF4rnAwWM5A@mail.gmail.com>
+ <YvpZJQGQdVaa2Oh4@worktop.programming.kicks-ass.net>
+ <CAADnVQKyfrFTZOM9F77i0NbaXLZZ7KbvKBvu7p6kgdnRgG+2=Q@mail.gmail.com>
+ <Yvpf67eCerqaDmlE@worktop.programming.kicks-ass.net>
+ <CAADnVQKX5xJz5N_mVyf7wg4BT8Q2cNh8ze-SxTRfk6KtcFQ0=Q@mail.gmail.com>
+ <YvpmAnFldR0iwAFC@worktop.programming.kicks-ass.net>
+ <CAADnVQJuDS22o7fi9wPZx9siAWgu1grQXXB02KfasxZ-RPdRSw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fe10a
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQJuDS22o7fi9wPZx9siAWgu1grQXXB02KfasxZ-RPdRSw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 5 Aug 2022 23:39:19 +0200, Christophe JAILLET wrote:
-> dev_err_probe() already prints the error code in a human readable way, so
-> there is no need to duplicate it as a numerical value at the end of the
-> message.
+On Mon, Aug 15, 2022 at 08:35:53AM -0700, Alexei Starovoitov wrote:
+> On Mon, Aug 15, 2022 at 8:28 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Mon, Aug 15, 2022 at 08:17:42AM -0700, Alexei Starovoitov wrote:
+> > > It's hiding a fake function from ftrace, since it's not a function
+> > > and ftrace infra shouldn't show it tracing logs.
+> > > In other words it's a _notrace_ function with nop5.
+> >
+> > Then make it a notrace function with a nop5 in it. That isn't hard.
 > 
-> 
+> That's exactly what we're trying to do.
 
-Applied to
+All the while claiming ftrace is broken while it is not.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> Jiri's patch is one way to achieve that.
 
-Thanks!
+Fairly horrible way.
 
-[1/1] spi: lpspi: Simplify some error message
-      commit: 0df874c6712d9aa8f43c50ec887a21f7b86fc917
+> What is your suggestion?
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Mailed it already.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+> Move it from C to asm ?
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Would be much better than proposed IMO.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+> Make it naked function with explicit inline asm?
 
-Thanks,
-Mark
+Can be made to work but is iffy because the compiler can do horrible
+things with placing the asm().

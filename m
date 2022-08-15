@@ -2,122 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A6B59328A
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A4E1593293
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231975AbiHOPyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43042 "EHLO
+        id S232078AbiHOPzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiHOPyG (ORCPT
+        with ESMTP id S232201AbiHOPzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:54:06 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DAF17077
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:54:06 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id s5-20020a17090a13c500b001f4da9ffe5fso14801805pjf.5
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:54:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=rsucpEsc5D3CWajO1pTl308RBgWxNbG9t1oS7UmiC60=;
-        b=c9IES/GUi/YRTnq8ntFq9iy84T/2qbs+aIfYv0AyQOVaTtypUcAHdLJICt2zAB4X/B
-         4dYwLy7OnU1nSzGDcBqno4X26p9T2Rg3umFQoxDVNUxYdxj86i442PX0qvGtXBZBJT5O
-         3sQ5JTHhnGZBS32J/RkD8vUQ6rKmI+qWTjOgzPlT90vKfz4HJTgGYUiLH6LhUxHnPRWg
-         M503lWMUUWF75jkVCwy+h4wAHiI/g8EqkepRunM5afsGvgMLb76BvDnja1k0sJtz48N1
-         KfPpIcLxyCXHahCV+A1E+VmS4mGWbTJ5B6r4dj8WQC7yHITiP6iEfPkTD4I+ua+M2mn4
-         ob2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=rsucpEsc5D3CWajO1pTl308RBgWxNbG9t1oS7UmiC60=;
-        b=EdraPRyQeFCan2wO2loIlFbitEvrg1XsqR94gFo7xR0mCYw05PMASWA2g6QIIgYJlY
-         396Wx2ukRB33xBdIVlEVlyM/+npDpH+63M8J0ydi8TTbEX1UhFSmnKir8FsC5SNpVXwZ
-         42csZKNOqpZSeQSzTyb6/gV0M37UA4/4lLLdSAfoyMQMlgVITUWdI7MZ+MMni7pcFMNN
-         /pvDpQKE2iH06f1mNAPQikoanZTGQDmW9vw8XxnQtRV1p0/+lD/9EznBtc/LejAas7nR
-         YH+DLsjX1kijtxw7xJb+14FWeb25XLnPwWVcochFGYisfr6KW4/Tx1VljYkErgb2Qrdw
-         hcxw==
-X-Gm-Message-State: ACgBeo10xvJf746KRBqz0AaXTYw/v/n/kh9Q2ztW4HihAHcp19+NnrRK
-        16kAv2LZ7NaubeuYstfpQpY=
-X-Google-Smtp-Source: AA6agR7rXwMmQoFFhV9guzX50xC2Hx5lxc/ntTUb9/whlW1Pw7vwVN3TsUywF9bJ3hq6crg1K1/dIA==
-X-Received: by 2002:a17:90a:c38f:b0:1f3:2f26:e7c4 with SMTP id h15-20020a17090ac38f00b001f32f26e7c4mr28048030pjt.124.1660578845751;
-        Mon, 15 Aug 2022 08:54:05 -0700 (PDT)
-Received: from [192.168.141.45] ([103.230.106.6])
-        by smtp.gmail.com with ESMTPSA id p67-20020a62d046000000b0052ddaffbcc1sm6719244pfg.30.2022.08.15.08.53.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 08:54:05 -0700 (PDT)
-Message-ID: <f8734af1-6e31-75c9-9556-9519709284f1@gmail.com>
-Date:   Mon, 15 Aug 2022 21:53:54 +0600
+        Mon, 15 Aug 2022 11:55:05 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5191A05A;
+        Mon, 15 Aug 2022 08:55:02 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 26F5656D;
+        Mon, 15 Aug 2022 17:54:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1660578899;
+        bh=S8j7GbNbq17SRBvgGdMvUVVVDhDYQu28yqUMRIme4pw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KkMqLgeA3Hlou6eQxDNwuj/cAMOGRuZWf6psOJwAoE+lkqdgWTBYLUFWFiFmirC11
+         MV/sX2S9rJ9pHMvTFjbnnwFQbUhcqWxVXtYbPHGpZY4nQn8qmWU8YDavgsBevmlt5n
+         2eecXKodkdAhl5/HdCyGSGest6FWKhs5flNo+vq8=
+Date:   Mon, 15 Aug 2022 18:54:45 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        dri-devel@lists.freedesktop.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        linux-amlogic@lists.infradead.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-doc@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        linux-hwmon@vger.kernel.org, linux-clk@vger.kernel.org,
+        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        David Airlie <airlied@linux.ie>, linux-iio@vger.kernel.org
+Subject: Re: (subset) [PATCH v2 0/7] Devm helpers for regulator get and enable
+Message-ID: <YvpsRbguMXn74GhR@pendragon.ideasonboard.com>
+References: <cover.1660292316.git.mazziesaccount@gmail.com>
+ <166057828406.697572.228317501909350108.b4-ty@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH linux-next] drm/amdgpu/vcn: Remove unused assignment in
- vcn_v4_0_stop
-Content-Language: en-US
-To:     "Dong, Ruijing" <Ruijing.Dong@amd.com>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kernel-mentees@lists.linuxfoundation.org" 
-        <linux-kernel-mentees@lists.linuxfoundation.org>
-Cc:     "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "Zhu, James" <James.Zhu@amd.com>,
-        "Jiang, Sonny" <Sonny.Jiang@amd.com>,
-        Wan Jiabing <wanjiabing@vivo.com>, "Liu, Leo" <Leo.Liu@amd.com>
-References: <20220815070056.10816-1-khalid.masum.92@gmail.com>
- <SJ1PR12MB61944B1D53330D5E9531158695689@SJ1PR12MB6194.namprd12.prod.outlook.com>
- <86088c17-585c-4a53-312d-ef339b824538@gmail.com>
- <SJ1PR12MB6194C83D51101ACD97B55F0295689@SJ1PR12MB6194.namprd12.prod.outlook.com>
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-In-Reply-To: <SJ1PR12MB6194C83D51101ACD97B55F0295689@SJ1PR12MB6194.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <166057828406.697572.228317501909350108.b4-ty@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/15/22 21:17, Dong, Ruijing wrote:
-> [AMD Official Use Only - General]
+On Mon, Aug 15, 2022 at 04:44:44PM +0100, Mark Brown wrote:
+> On Fri, 12 Aug 2022 13:08:17 +0300, Matti Vaittinen wrote:
+> > Devm helpers for regulator get and enable
+> > 
+> > First patch in the series is actually just a simple documentation fix
+> > which could be taken in as it is now.
+> > 
+> > A few* drivers seem to use pattern demonstrated by pseudocode:
+> > 
+> > [...]
 > 
-> If the condition was met and it came to execute vcn_4_0_stop_dpg_mode, then it would never have a chance to go for /*wait for vcn idle*/, isn't it?
-
-Hypothetically, some other thread might set adev->pg_flags NULL and in 
-that case it will get the chance to go for /* wait for vcn idle */.
-
-
-> I still didn't see obvious purpose of this change.
+> Applied to
 > 
->                  if (adev->pg_flags & AMD_PG_SUPPORT_VCN_DPG) {
->       ==>              r = vcn_v4_0_stop_dpg_mode(adev, i);
-
-Regardless of that, this assignment to r is unnecessary. Because this 
-value of r is never used. This patch simply removes this unnecessary
-assignment.
-
->                           continue;
->                   }
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 > 
->                   /* wait for vcn idle */
->                   r = SOC15_WAIT_ON_RREG(VCN, i, regUVD_STATUS, UVD_STATUS__IDLE, 0x7);
+> Thanks!
 > 
-> Thanks
-> Ruijing
-> 
+> [1/7] docs: devres: regulator: Add missing devm_* functions to devres.rst
+>       commit: 9b6744f60b6b47bc0757a1955adb4d2c3ab22e13
+> [2/7] regulator: Add devm helpers for get and enable
+>       (no commit info)
 
-Thanks,
-   -- Khalid Masum
+I didn't have time to reply to the series yet, but I think this isn't a
+great idea. There are two issues:
+
+- With devres, you don't have full control over the order in which
+  resources will be released, which means that you can't control the
+  power off sequence, in particular if it needs to be sequenced with
+  GPIOs and clocks. That's not a concern for all drivers, but this API
+  will creep in in places where it shouldn't be used, driver authours
+  should really pay attention to power management and not live with the
+  false impression that everything will be handled automatically for
+  them. In the worst cases, an incorrect power off sequence could lead
+  to hardware damage.
+
+- Powering regulators on at probe time and leaving them on is a very bad
+  practice from a power management point of view, and should really be
+  discouraged. Adding convenience helpers to make this easy is the wrong
+  message, we should instead push driver authors to implement proper
+  runtime PM.
+
+> All being well this means that it will be integrated into the linux-next
+> tree (usually sometime in the next 24 hours) and sent to Linus during
+> the next merge window (or sooner if it is a bug fix), however if
+> problems are discovered then the patch may be dropped or reverted.
+> 
+> You may get further e-mails resulting from automated or manual testing
+> and review of the tree, please engage with people reporting problems and
+> send followup patches addressing any issues that are reported if needed.
+> 
+> If any updates are required or you are submitting further changes they
+> should be sent as incremental updates against current git, existing
+> patches will not be replaced.
+> 
+> Please add any relevant lists and maintainers to the CCs when replying
+> to this mail.
+
+-- 
+Regards,
+
+Laurent Pinchart

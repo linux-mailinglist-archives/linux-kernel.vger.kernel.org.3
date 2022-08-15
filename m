@@ -2,61 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C3DE593051
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E020593052
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240923AbiHONz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 09:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
+        id S232410AbiHON5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 09:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232281AbiHONzV (ORCPT
+        with ESMTP id S229527AbiHON46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 09:55:21 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D674110B1;
-        Mon, 15 Aug 2022 06:55:18 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oNaYe-0003xX-VX; Mon, 15 Aug 2022 15:55:09 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH v2 02/10] dt-bindings: sram: sunxi-sram: Add D1 compatible string
-Date:   Mon, 15 Aug 2022 15:55:08 +0200
-Message-ID: <8650738.VV5PYv0bhD@diego>
-In-Reply-To: <20220815041248.53268-3-samuel@sholland.org>
-References: <20220815041248.53268-1-samuel@sholland.org> <20220815041248.53268-3-samuel@sholland.org>
+        Mon, 15 Aug 2022 09:56:58 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C869912D3F
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 06:56:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=8H7M++LHjLPagFvc25ZTit0lX+9Q+HaL3iQSNzDSx5I=; b=oPueY7bmQ32LIM+kvz9NC4LcWF
+        ZD8OH1HwyTDACmg3Hu/I8PIzoB78jKBUoOqmXDNaUFoR1wBSaJcM4PR7aqexT9t14F7sUCvPSk6y/
+        eLCd1hYPIRpm5qbrVJAXCeEAtY2lkGYfKM9lhIFgbH0Oa7rg9altls4wuBad9FmfNICyklfd/s80Y
+        oozevP/mlOKuoPREQj2RpimUfCeNhFUhXwpahsbOeHTDHYvErQ6nH7ob7Kyq1Ww+CsB9hIpS7VZqo
+        pcOq0+38PWUQC7f5AQCyPgE4DftYv1nkk3gfmGIOWEYIF4K+0rsuoyOtSqB88iJWj5ohpH4Mi1eM5
+        g01TU4tg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oNaaC-005le7-Dw; Mon, 15 Aug 2022 13:56:44 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9CB96980153; Mon, 15 Aug 2022 15:56:43 +0200 (CEST)
+Date:   Mon, 15 Aug 2022 15:56:43 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Hector Martin <marcan@marcan.st>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Greg KH <gregkh@linuxfoundation.org>, jirislaby@kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Asahi Linux <asahi@lists.linux.dev>,
+        Oliver Neukum <oneukum@suse.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: Debugging a TTY race condition on M1 (memory ordering dragons)
+Message-ID: <YvpQmzt73Yj8xbxV@worktop.programming.kicks-ass.net>
+References: <6c089268-4f2c-9fdf-7bcb-107b611fbc21@marcan.st>
+ <20220815134711.GA10374@willie-the-truck>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220815134711.GA10374@willie-the-truck>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, 15. August 2022, 06:12:39 CEST schrieb Samuel Holland:
-> D1 needs to export a register for managing some LDO regulators, so it
-> needs a unique compatible.
+On Mon, Aug 15, 2022 at 02:47:11PM +0100, Will Deacon wrote:
+
+> > Behind the scenes, the work pending flag is atomically set with
+> > test_and_set_bit() by queue_work_on(). That compiles down to my old
+> > friend LDSETAL, which I already showed [2] does not provide the
+> > guarantees test_and_set_bit() claims to have (== full memory barrier).
+> > However, I can't get that litmus test to fail on real hardware, so that
+> > may be a red herring as far as this bug goes.
 > 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> As I mentioned in the thread you linked to, the architecture was undergoing
+> review in this area. I should've followed back up, but in the end it was
+> tightened retrospectively to provide the behaviour you wanted. This was
+> achieved by augmenting the barrier-ordered-before relation with:
+> 
+>   * RW1 is a memory write effect W1 and is generated by an atomic instruction
+>     with both Acquire and Release semantics.
+> 
+> You can see this in the latest Arm ARM.
+> 
+> However, test_and_set_bit() is unordered on failure (i.e. when the bit is
+> unchanged) and uses READ_ONCE() as a quick check before the RmW. See the
+> "ORDERING" section of Documentation/atomic_bitops.txt.
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Damn, I forgot that too... :/
 
+> I think you're missing the "shortcut" in test_and_set_bit():
+> 
+>         if (READ_ONCE(*p) & mask)
+>                 return 1;
+> 
+>         old = arch_atomic_long_fetch_or(mask, (atomic_long_t *)p);
+> 
+> so if the bit is already set (which I think is the 'ret == false' case)
+> then you've only got a control dependency here and we elide writing to
+> B.
 
-
+Given all that, I think workqueue wants to be fixed, it really does seem
+to rely on full ordering for it's test_and_set_bit() usage.

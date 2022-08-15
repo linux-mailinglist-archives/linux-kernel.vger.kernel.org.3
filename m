@@ -2,42 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 928FC5949F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4955949ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354731AbiHOXt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43948 "EHLO
+        id S1354738AbiHOXuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354421AbiHOXp1 (ORCPT
+        with ESMTP id S1354424AbiHOXp2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:45:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668F589834;
-        Mon, 15 Aug 2022 13:14:16 -0700 (PDT)
+        Mon, 15 Aug 2022 19:45:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82A689923;
+        Mon, 15 Aug 2022 13:14:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A2D2B80EAB;
-        Mon, 15 Aug 2022 20:14:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0653AC433C1;
-        Mon, 15 Aug 2022 20:14:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4399160B6E;
+        Mon, 15 Aug 2022 20:14:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33662C433C1;
+        Mon, 15 Aug 2022 20:14:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594453;
-        bh=UDGcVwRi7O++OPdySi9hrL7ej4PyhcDWLK6vrD9AdiA=;
+        s=korg; t=1660594456;
+        bh=9O9iAJb5khkUCY/Vmag+s/+bSwnnOfdvyRWWB2nxb6s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hgqa2Fl91YyQHKS0eXbvDqa/BcAoRBTgutkskw7roPAwB+tMcpCmB1F7pPDWJiFiA
-         nbJgXU0C/aLdK58FDn1kzSI75Ct8jA0tGrdAlqljMJdvFe4J0NTd7jgNazTo5qkPkR
-         VuvZB5BencwQeKLKq0gAehLjGJ3JRvv26YI4+olM=
+        b=ZSs2OMEfOWqp0kkbNdbGTbyp0vqbTz70tWLqdE4QcHbETr3CIo3EAu0fIplbo/PCa
+         UFEVhzgVOquGvqr6sMMTknIxVRea4FT80shrje3dpPV8ghFKTtB8DL8ObUsuZVYAZG
+         8m51H3ZuzlQb6IjSpv6GMpJ2R1ToHuIvm5qYLC0E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhengchao Shao <shaozhengchao@huawei.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0453/1157] crypto: hisilicon - Kunpeng916 crypto driver dont sleep when in softirq
-Date:   Mon, 15 Aug 2022 19:56:49 +0200
-Message-Id: <20220815180457.724541181@linuxfoundation.org>
+Subject: [PATCH 5.19 0454/1157] media: platform: mtk-mdp: Fix mdp_ipi_comm structure alignment
+Date:   Mon, 15 Aug 2022 19:56:50 +0200
+Message-Id: <20220815180457.757333630@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -55,94 +60,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhengchao Shao <shaozhengchao@huawei.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-[ Upstream commit 68740ab505431f268dc1ee26a54b871e75f0ddaa ]
+[ Upstream commit ab14c99c035da7156a3b66fa171171295bc4b89a ]
 
-When kunpeng916 encryption driver is used to deencrypt and decrypt
-packets during the softirq, it is not allowed to use mutex lock.
+The mdp_ipi_comm structure defines a command that is either
+PROCESS (start processing) or DEINIT (destroy instance); we
+are using this one to send PROCESS or DEINIT commands from Linux
+to an MDP instance through a VPU write but, while the first wants
+us to stay 4-bytes aligned, the VPU instead requires an 8-bytes
+data alignment.
 
-Fixes: 915e4e8413da ("crypto: hisilicon - SEC security accelerator driver")
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Keeping in mind that these commands are executed immediately
+after sending them (hence not chained with others before the
+VPU/MDP "actually" start executing), it is fine to simply add
+a padding of 4 bytes to this structure: this keeps the same
+performance as before, as we're still stack-allocating it,
+while avoiding hackery inside of mtk-vpu to ensure alignment
+bringing a definitely bigger performance impact.
+
+Fixes: c8eb2d7e8202 ("[media] media: Add Mediatek MDP Driver")
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Houlong Wei <houlong.wei@mediatek.com>
+Reviewed-by: Irui Wang <irui.wang@mediatek.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/hisilicon/sec/sec_algs.c | 14 +++++++-------
- drivers/crypto/hisilicon/sec/sec_drv.h  |  2 +-
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ drivers/media/platform/mediatek/mdp/mtk_mdp_ipi.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/crypto/hisilicon/sec/sec_algs.c b/drivers/crypto/hisilicon/sec/sec_algs.c
-index 0a3c8f019b02..490e1542305e 100644
---- a/drivers/crypto/hisilicon/sec/sec_algs.c
-+++ b/drivers/crypto/hisilicon/sec/sec_algs.c
-@@ -449,7 +449,7 @@ static void sec_skcipher_alg_callback(struct sec_bd_info *sec_resp,
- 		 */
- 	}
- 
--	mutex_lock(&ctx->queue->queuelock);
-+	spin_lock_bh(&ctx->queue->queuelock);
- 	/* Put the IV in place for chained cases */
- 	switch (ctx->cipher_alg) {
- 	case SEC_C_AES_CBC_128:
-@@ -509,7 +509,7 @@ static void sec_skcipher_alg_callback(struct sec_bd_info *sec_resp,
- 			list_del(&backlog_req->backlog_head);
- 		}
- 	}
--	mutex_unlock(&ctx->queue->queuelock);
-+	spin_unlock_bh(&ctx->queue->queuelock);
- 
- 	mutex_lock(&sec_req->lock);
- 	list_del(&sec_req_el->head);
-@@ -798,7 +798,7 @@ static int sec_alg_skcipher_crypto(struct skcipher_request *skreq,
- 	 */
- 
- 	/* Grab a big lock for a long time to avoid concurrency issues */
--	mutex_lock(&queue->queuelock);
-+	spin_lock_bh(&queue->queuelock);
- 
- 	/*
- 	 * Can go on to queue if we have space in either:
-@@ -814,15 +814,15 @@ static int sec_alg_skcipher_crypto(struct skcipher_request *skreq,
- 		ret = -EBUSY;
- 		if ((skreq->base.flags & CRYPTO_TFM_REQ_MAY_BACKLOG)) {
- 			list_add_tail(&sec_req->backlog_head, &ctx->backlog);
--			mutex_unlock(&queue->queuelock);
-+			spin_unlock_bh(&queue->queuelock);
- 			goto out;
- 		}
- 
--		mutex_unlock(&queue->queuelock);
-+		spin_unlock_bh(&queue->queuelock);
- 		goto err_free_elements;
- 	}
- 	ret = sec_send_request(sec_req, queue);
--	mutex_unlock(&queue->queuelock);
-+	spin_unlock_bh(&queue->queuelock);
- 	if (ret)
- 		goto err_free_elements;
- 
-@@ -881,7 +881,7 @@ static int sec_alg_skcipher_init(struct crypto_skcipher *tfm)
- 	if (IS_ERR(ctx->queue))
- 		return PTR_ERR(ctx->queue);
- 
--	mutex_init(&ctx->queue->queuelock);
-+	spin_lock_init(&ctx->queue->queuelock);
- 	ctx->queue->havesoftqueue = false;
- 
- 	return 0;
-diff --git a/drivers/crypto/hisilicon/sec/sec_drv.h b/drivers/crypto/hisilicon/sec/sec_drv.h
-index 179a8250d691..e2a50bf2234b 100644
---- a/drivers/crypto/hisilicon/sec/sec_drv.h
-+++ b/drivers/crypto/hisilicon/sec/sec_drv.h
-@@ -347,7 +347,7 @@ struct sec_queue {
- 	DECLARE_BITMAP(unprocessed, SEC_QUEUE_LEN);
- 	DECLARE_KFIFO_PTR(softqueue, typeof(struct sec_request_el *));
- 	bool havesoftqueue;
--	struct mutex queuelock;
-+	spinlock_t queuelock;
- 	void *shadow[SEC_QUEUE_LEN];
+diff --git a/drivers/media/platform/mediatek/mdp/mtk_mdp_ipi.h b/drivers/media/platform/mediatek/mdp/mtk_mdp_ipi.h
+index 2cb8cecb3077..b810c96695c8 100644
+--- a/drivers/media/platform/mediatek/mdp/mtk_mdp_ipi.h
++++ b/drivers/media/platform/mediatek/mdp/mtk_mdp_ipi.h
+@@ -40,12 +40,14 @@ struct mdp_ipi_init {
+  * @ipi_id        : IPI_MDP
+  * @ap_inst       : AP mtk_mdp_vpu address
+  * @vpu_inst_addr : VPU MDP instance address
++ * @padding       : Alignment padding
+  */
+ struct mdp_ipi_comm {
+ 	uint32_t msg_id;
+ 	uint32_t ipi_id;
+ 	uint64_t ap_inst;
+ 	uint32_t vpu_inst_addr;
++	uint32_t padding;
  };
  
+ /**
 -- 
 2.35.1
 

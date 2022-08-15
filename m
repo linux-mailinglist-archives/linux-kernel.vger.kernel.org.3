@@ -2,223 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE3F8593E58
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 22:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A337593E82
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 22:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346110AbiHOUlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 16:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
+        id S1345626AbiHOUoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 16:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346055AbiHOUfX (ORCPT
+        with ESMTP id S1346775AbiHOUmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 16:35:23 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04C54E626;
-        Mon, 15 Aug 2022 12:06:28 -0700 (PDT)
-Received: from pps.filterd (m0134420.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FJ4te5010959;
-        Mon, 15 Aug 2022 19:06:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pps0720;
- bh=qCh6I0+cDF6swBdDYOmEA/mJHXnGtsAsU0SP+AClfmE=;
- b=Ub0KNwFzAZhvt6rYkm/dOa6yB19Q/C8OVqcGHY5JcpWdFLGK7ZjiD12XkoqWzmE4BCWi
- IdMQC8c44alChEH+DKLX5ncij16sgEh++2gvTqmvXj3VQvvsvb6jhbBvPwiYIV3LS21i
- LXE6LDJDvdw7OKtS0C+qJN9dqeFwUcEsN1ZMW8IcVzYa1r5E7lHF3CbFM8VfzbKX/AgD
- FzbiYG1Yps6CPH65vCEWhjJUVnFJXKueLsRTMYp09jF7/CmHx3gqPxVcxA1fGFWPat1x
- 9CZRGCxbYXmTMc4TnJEKypxqvBgucH3xQjfzGWHkRR3lA/PGrp/kMLxC3HygJITddm/X 4Q== 
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3hyuys00ds-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Aug 2022 19:06:26 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 99787800E88;
-        Mon, 15 Aug 2022 19:06:25 +0000 (UTC)
-Received: from adevxp033-sys.us.rdlabs.hpecorp.net (unknown [16.231.227.36])
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 56A00808EA6;
-        Mon, 15 Aug 2022 19:06:25 +0000 (UTC)
-From:   Robert Elliott <elliott@hpe.com>
-To:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     toshi.kani@hpe.com, Robert Elliott <elliott@hpe.com>
-Subject: [PATCH 8/8] crypto: Kconfig - sort the ciphers
-Date:   Mon, 15 Aug 2022 14:06:08 -0500
-Message-Id: <20220815190608.47182-9-elliott@hpe.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220815190608.47182-1-elliott@hpe.com>
-References: <20220815190608.47182-1-elliott@hpe.com>
-X-Proofpoint-ORIG-GUID: uHjKQu-OpM44Ya7c7n1iQLIosvqeJO6e
-X-Proofpoint-GUID: uHjKQu-OpM44Ya7c7n1iQLIosvqeJO6e
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 15 Aug 2022 16:42:02 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF23AFAE6;
+        Mon, 15 Aug 2022 12:07:33 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id l5so6171945qtv.4;
+        Mon, 15 Aug 2022 12:07:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=hL/YxJ/IFnb2Rr2eHTccmTXhM5o8jIQ8tJcvbV9r0+w=;
+        b=DK3nNKcN+CtoEBzlgdLdBN2TUQD+X5Y/YRF3pn24jlTxsfiUIhkMwQpx0EWKqw/YE/
+         8FR8sUcyQ3sSRcv4ujH3K7Y6kz9h/HUS+3PyrbnU3wUA50pGx9J3EaWsRg4+hxxhhJZA
+         K0o/lMlVtBOqTxQrj723c87EoJ67m7TtncuZV3yA8pCL6aGqdqOPRuzs7xaKTkOWkGWa
+         6LE2SL8OzPGBr8IhDjgnv+JjOyW22g/UfPfwsez1+AKtGMb1/6yaHpp3JP8pe9OA5lUq
+         9NbWGTqPyAyoibnY8yCEQLuqh2m/GAoqVb6u6OV0UxZWHKqHAdOfwZxZm6zLtILXD/KT
+         Oqkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=hL/YxJ/IFnb2Rr2eHTccmTXhM5o8jIQ8tJcvbV9r0+w=;
+        b=l7HW+qutbnMkTE0p6STwDsjp/R2ixtc01Miee7cVz9mgpPdMFDb2iM02r5j7Q1gWba
+         MwPZ/JLfd4iqYu5IRdysTOq0fVjx2uAet0LlJLgbEdCJhHUMIOcDXn7V4H6kkPHL7lW7
+         va0JyeoqyaBi68fCy2TJiVExn5WXRA9XZejjoCgIGrHE+DHwRQs98iL+2UYWqzCo+/Gn
+         Ft05H3sKetrlIQJQdb29MlWvqIFkmxYX8CA/hJeM4xbquZgyJ2j6fINaiIirvQw48ozH
+         h2ZL3zmGQEMK3Gvo2xn0Nbppm9u9R2XVLGIqAP14BlrRfBT3uDpaEWq/Mg4TMBbHQ0qu
+         bKEg==
+X-Gm-Message-State: ACgBeo0gM+jpBycVN8Kk1tyysftjAt4GG+15Koz3a5IEd3MfvcJswBCb
+        MpouUir1Vh1f8wOBUBtCpb4=
+X-Google-Smtp-Source: AA6agR6n2NpzccTQTJOldUQ6j77kq3l0o/9m4P1loc2vEY7MUBD26j0MxtrwU5vEGi+YfSiqRxzUpg==
+X-Received: by 2002:a05:622a:13c6:b0:342:f6c7:5305 with SMTP id p6-20020a05622a13c600b00342f6c75305mr15504215qtk.348.1660590452277;
+        Mon, 15 Aug 2022 12:07:32 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id i17-20020a05620a405100b006b9c6d590fasm10336208qko.61.2022.08.15.12.07.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 12:07:31 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     netdev@vger.kernelorg
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev@vger.kernel.org (open list:BROADCOM ETHERNET PHY DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net-next v2] net: phy: broadcom: Implement suspend/resume for AC131 and BCM5241
+Date:   Mon, 15 Aug 2022 12:07:25 -0700
+Message-Id: <20220815190725.2749403-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 bulkscore=0 lowpriorityscore=0 spamscore=0 adultscore=0
- mlxlogscore=999 priorityscore=1501 clxscore=1015 suspectscore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208150071
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sort the entries in Ciphers by their displayed names.
-In particular, keep the optimized CPU implementations next to the
-generic implementations.
+Implement the suspend/resume procedure for the Broadcom AC131 and BCM5241 type
+of PHYs (10/100 only) by entering the standard power down followed by the
+proprietary standby mode in the auxiliary mode 4 shadow register. On resume,
+the PHY software reset is enough to make it come out of standby mode so we can
+utilize brcm_fet_config_init() as the resume hook.
 
-Signed-off-by: Robert Elliott <elliott@hpe.com>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- crypto/Kconfig | 118 ++++++++++++++++++++++++-------------------------
- 1 file changed, 59 insertions(+), 59 deletions(-)
+Changes in v2:
 
-diff --git a/crypto/Kconfig b/crypto/Kconfig
-index f5cfb73e2423..03f4e2d97ef9 100644
---- a/crypto/Kconfig
-+++ b/crypto/Kconfig
-@@ -1500,6 +1500,65 @@ menu "Ciphers"
+- utilize phy_modify() to write to MII_BRCM_FET_SHDW_AUXMODE4 (Russell)
+
+ drivers/net/phy/broadcom.c | 39 ++++++++++++++++++++++++++++++++++++++
+ include/linux/brcmphy.h    |  1 +
+ 2 files changed, 40 insertions(+)
+
+diff --git a/drivers/net/phy/broadcom.c b/drivers/net/phy/broadcom.c
+index 31fbcdddc9ad..ad71c88c87e7 100644
+--- a/drivers/net/phy/broadcom.c
++++ b/drivers/net/phy/broadcom.c
+@@ -766,6 +766,41 @@ static irqreturn_t brcm_fet_handle_interrupt(struct phy_device *phydev)
+ 	return IRQ_HANDLED;
+ }
  
- 	  Processes eight blocks in parallel.
++static int brcm_fet_suspend(struct phy_device *phydev)
++{
++	int reg, err, err2, brcmtest;
++
++	/* We cannot use a read/modify/write here otherwise the PHY continues
++	 * to drive LEDs which defeats the purpose of low power mode.
++	 */
++	err = phy_write(phydev, MII_BMCR, BMCR_PDOWN);
++	if (err < 0)
++		return err;
++
++	/* Enable shadow register access */
++	brcmtest = phy_read(phydev, MII_BRCM_FET_BRCMTEST);
++	if (brcmtest < 0)
++		return brcmtest;
++
++	reg = brcmtest | MII_BRCM_FET_BT_SRE;
++
++	err = phy_write(phydev, MII_BRCM_FET_BRCMTEST, reg);
++	if (err < 0)
++		return err;
++
++	/* Set standby mode */
++	err = phy_modify(phydev, MII_BRCM_FET_SHDW_AUXMODE4,
++			 MII_BRCM_FET_SHDW_AM4_STANDBY,
++			 MII_BRCM_FET_SHDW_AM4_STANDBY);
++
++	/* Disable shadow register access */
++	err2 = phy_write(phydev, MII_BRCM_FET_BRCMTEST, brcmtest);
++	if (!err)
++		err = err2;
++
++	return err;
++}
++
+ static int bcm54xx_phy_probe(struct phy_device *phydev)
+ {
+ 	struct bcm54xx_phy_priv *priv;
+@@ -1033,6 +1068,8 @@ static struct phy_driver broadcom_drivers[] = {
+ 	.config_init	= brcm_fet_config_init,
+ 	.config_intr	= brcm_fet_config_intr,
+ 	.handle_interrupt = brcm_fet_handle_interrupt,
++	.suspend	= brcm_fet_suspend,
++	.resume		= brcm_fet_config_init,
+ }, {
+ 	.phy_id		= PHY_ID_BCM5241,
+ 	.phy_id_mask	= 0xfffffff0,
+@@ -1041,6 +1078,8 @@ static struct phy_driver broadcom_drivers[] = {
+ 	.config_init	= brcm_fet_config_init,
+ 	.config_intr	= brcm_fet_config_intr,
+ 	.handle_interrupt = brcm_fet_handle_interrupt,
++	.suspend	= brcm_fet_suspend,
++	.resume		= brcm_fet_config_init,
+ }, {
+ 	.phy_id		= PHY_ID_BCM5395,
+ 	.phy_id_mask	= 0xfffffff0,
+diff --git a/include/linux/brcmphy.h b/include/linux/brcmphy.h
+index 6ff567ece34a..9e77165f3ef6 100644
+--- a/include/linux/brcmphy.h
++++ b/include/linux/brcmphy.h
+@@ -293,6 +293,7 @@
+ #define MII_BRCM_FET_SHDW_MC_FAME	0x4000	/* Force Auto MDIX enable */
  
-+config CRYPTO_CHACHA20
-+	tristate "ChaCha"
-+	select CRYPTO_LIB_CHACHA_GENERIC
-+	select CRYPTO_SKCIPHER
-+	help
-+	  The ChaCha20, XChaCha20, and XChaCha12 stream cipher algorithms
-+
-+	  ChaCha20 is a 256-bit high-speed stream cipher designed by Daniel J.
-+	  Bernstein and further specified in RFC7539 for use in IETF protocols.
-+	  This is the portable C implementation of ChaCha20.  See
-+	  https://cr.yp.to/chacha/chacha-20080128.pdf for further information.
-+
-+	  XChaCha20 is the application of the XSalsa20 construction to ChaCha20
-+	  rather than to Salsa20.  XChaCha20 extends ChaCha20's nonce length
-+	  from 64 bits (or 96 bits using the RFC7539 convention) to 192 bits,
-+	  while provably retaining ChaCha20's security.  See
-+	  https://cr.yp.to/snuffle/xsalsa-20081128.pdf for further information.
-+
-+	  XChaCha12 is XChaCha20 reduced to 12 rounds, with correspondingly
-+	  reduced security margin but increased performance.  It can be needed
-+	  in some performance-sensitive scenarios.
-+
-+config CRYPTO_CHACHA20_X86_64
-+	tristate "ChaCha (x86_64 with SSSE3/AVX2/AVX-512VL)"
-+	depends on X86 && 64BIT
-+	select CRYPTO_SKCIPHER
-+	select CRYPTO_LIB_CHACHA_GENERIC
-+	select CRYPTO_ARCH_HAVE_LIB_CHACHA
-+	help
-+	  ChaCha stream cipher algorithms
-+
-+	  Architecture: x86_64 using:
-+	  * SSSE3 (Supplemental SSE3)
-+	  * AVX2 (Advanced Vector Extensions 2)
-+	  * AVX-512VL (Advanced Vector Extensions-512VL)
-+
-+config CRYPTO_CHACHA_MIPS
-+	tristate "ChaCha (MIPS32r2)"
-+	depends on CPU_MIPS32_R2
-+	select CRYPTO_SKCIPHER
-+	select CRYPTO_ARCH_HAVE_LIB_CHACHA
-+	help
-+	  ChaCha stream cipher algorithms
-+
-+	  Architecture: MIPS32r2
-+
-+config CRYPTO_CHACHA_S390
-+	tristate "ChaCha20 (s390)"
-+	depends on S390
-+	select CRYPTO_SKCIPHER
-+	select CRYPTO_LIB_CHACHA_GENERIC
-+	select CRYPTO_ARCH_HAVE_LIB_CHACHA
-+	help
-+	  ChaCha20 stream cipher (RFC 7539)
-+
-+	  Architecture: s390
-+
-+	  It is available as of z13.
-+
- config CRYPTO_DES
- 	tristate "DES and Triple DES EDE"
- 	select CRYPTO_ALGAPI
-@@ -1566,65 +1625,6 @@ menu "Ciphers"
- 	  See https://web.archive.org/web/20171011071731/http://www.larc.usp.br/~pbarreto/KhazadPage.html
- 	  for further information.
+ #define MII_BRCM_FET_SHDW_AUXMODE4	0x1a	/* Auxiliary mode 4 */
++#define MII_BRCM_FET_SHDW_AM4_STANDBY	0x0008	/* Standby enable */
+ #define MII_BRCM_FET_SHDW_AM4_LED_MASK	0x0003
+ #define MII_BRCM_FET_SHDW_AM4_LED_MODE1 0x0001
  
--config CRYPTO_CHACHA20
--	tristate "ChaCha"
--	select CRYPTO_LIB_CHACHA_GENERIC
--	select CRYPTO_SKCIPHER
--	help
--	  The ChaCha20, XChaCha20, and XChaCha12 stream cipher algorithms
--
--	  ChaCha20 is a 256-bit high-speed stream cipher designed by Daniel J.
--	  Bernstein and further specified in RFC7539 for use in IETF protocols.
--	  This is the portable C implementation of ChaCha20.  See
--	  https://cr.yp.to/chacha/chacha-20080128.pdf for further information.
--
--	  XChaCha20 is the application of the XSalsa20 construction to ChaCha20
--	  rather than to Salsa20.  XChaCha20 extends ChaCha20's nonce length
--	  from 64 bits (or 96 bits using the RFC7539 convention) to 192 bits,
--	  while provably retaining ChaCha20's security.  See
--	  https://cr.yp.to/snuffle/xsalsa-20081128.pdf for further information.
--
--	  XChaCha12 is XChaCha20 reduced to 12 rounds, with correspondingly
--	  reduced security margin but increased performance.  It can be needed
--	  in some performance-sensitive scenarios.
--
--config CRYPTO_CHACHA20_X86_64
--	tristate "ChaCha (x86_64 with SSSE3/AVX2/AVX-512VL)"
--	depends on X86 && 64BIT
--	select CRYPTO_SKCIPHER
--	select CRYPTO_LIB_CHACHA_GENERIC
--	select CRYPTO_ARCH_HAVE_LIB_CHACHA
--	help
--	  ChaCha stream cipher algorithms
--
--	  Architecture: x86_64 using:
--	  * SSSE3 (Supplemental SSE3)
--	  * AVX2 (Advanced Vector Extensions 2)
--	  * AVX-512VL (Advanced Vector Extensions-512VL)
--
--config CRYPTO_CHACHA_MIPS
--	tristate "ChaCha (MIPS32r2)"
--	depends on CPU_MIPS32_R2
--	select CRYPTO_SKCIPHER
--	select CRYPTO_ARCH_HAVE_LIB_CHACHA
--	help
--	  ChaCha stream cipher algorithms
--
--	  Architecture: MIPS32r2
--
--config CRYPTO_CHACHA_S390
--	tristate "ChaCha20 (s390)"
--	depends on S390
--	select CRYPTO_SKCIPHER
--	select CRYPTO_LIB_CHACHA_GENERIC
--	select CRYPTO_ARCH_HAVE_LIB_CHACHA
--	help
--	  ChaCha20 stream cipher (RFC 7539)
--
--	  Architecture: s390
--
--	  It is available as of z13.
--
- config CRYPTO_SEED
- 	tristate "SEED"
- 	depends on CRYPTO_USER_API_ENABLE_OBSOLETE
 -- 
-2.37.1
+2.25.1
 

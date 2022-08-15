@@ -2,104 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E374593965
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE97A59346F
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 20:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344788AbiHOTVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 15:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
+        id S231356AbiHOSCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 14:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345052AbiHOTSC (ORCPT
+        with ESMTP id S233187AbiHOSCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 15:18:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E927956BA2;
-        Mon, 15 Aug 2022 11:39:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3EFD2B81082;
-        Mon, 15 Aug 2022 18:39:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 826A6C433D7;
-        Mon, 15 Aug 2022 18:39:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660588764;
-        bh=TAuUMR7MhN059r8wH39ZJ2WwqdyBclsgrNGwmEPdtag=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TXXqmpbtb7SL9OBYzWbxI1vBluuofNkCrFVllicmUQbd/+EpdzvQa4FemYMmQepNT
-         bo6YmzwTUEtRrCmpjpQOJdMKo/T4FBdgGExOu+x/+aSruqw4b/EGz7buQ+ksbebi2W
-         RHgcm8UkzRYfPxUq18GMJvLmz/Li92Apy+9Zrxyo=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Raviteja Garimella <raviteja.garimella@broadcom.com>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 490/779] usb: gadget: udc: amd5536 depends on HAS_DMA
-Date:   Mon, 15 Aug 2022 20:02:14 +0200
-Message-Id: <20220815180358.203350793@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180337.130757997@linuxfoundation.org>
-References: <20220815180337.130757997@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Mon, 15 Aug 2022 14:02:19 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4709E25C43;
+        Mon, 15 Aug 2022 11:02:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=GcrNBmy4B7oYPvzC1iQ3x9irNnquUnomstD6AlIWDjo=; b=mbnFdPKHRrDIndSjpd0B0OjzRe
+        GQl31o3UikiEGn6BQe9miqqX9F802O9C06p1/OSyBKP51WOUacxGnUx7z4T6ckelwcCtMvcfR8mrK
+        5hlTPVvydm+RDOa9tDO1fR4GyEKa0taddTbbOtN5/DLk48AvbH65vleCk4EEsitm3rRsQJ7GinDca
+        +MVUzc6eoN087h/COD/d3Eq28QKnb/gPmfW6dDXn2WMm++zYS6VfFmA4IuYw7kJRXaJvVMKKgpTB6
+        hl+hfewNBspeJQSXz/fNRpARhUvZzAJWJM8RAbwMeI7f2gU4yfGTRikkZem3Jys2K6TVQXNv/BNYI
+        +TUm5M8A==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oNePm-004k5t-Qd;
+        Mon, 15 Aug 2022 18:02:14 +0000
+Date:   Mon, 15 Aug 2022 19:02:14 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Jiacheng Xu <578001344xu@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        konishi.ryusuke@gmail.com, linux-nilfs@vger.kernel.org,
+        security@kernel.org
+Subject: Re: KASAN: use-after-free in nilfs_mdt_destroy
+Message-ID: <YvqKJppIL4lVCn9+@ZenIV>
+References: <CAO4S-mficMz1mQW06EuCF+o11+mRDiCpufqVfoHkcRbQbs8kVw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAO4S-mficMz1mQW06EuCF+o11+mRDiCpufqVfoHkcRbQbs8kVw@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+On Mon, Aug 15, 2022 at 10:03:21PM +0800, Jiacheng Xu wrote:
 
-[ Upstream commit 8097cf2fb3b2205257f1c76f4808e3398d66b6d9 ]
+> Patch:
+> Fix this bug by moving the assignment of inode->i_private before
+> security_inode_alloc.
+> An ad-hoc patch is proposed:
+> https://patchwork.kernel.org/project/linux-fsdevel/patch/20211011030956.2459172-1-mudongliangabcd@gmail.com/
 
-USB_AMD5536UDC should depend on HAS_DMA since it selects USB_SNP_CORE,
-which depends on HAS_DMA and since 'select' does not follow any
-dependency chains.
-
-Fixes this kconfig warning:
-
-WARNING: unmet direct dependencies detected for USB_SNP_CORE
-  Depends on [n]: USB_SUPPORT [=y] && USB_GADGET [=y] && (USB_AMD5536UDC [=y] || USB_SNP_UDC_PLAT [=n]) && HAS_DMA [=n]
-  Selected by [y]:
-  - USB_AMD5536UDC [=y] && USB_SUPPORT [=y] && USB_GADGET [=y] && USB_PCI [=y]
-
-Fixes: 97b3ffa233b9 ("usb: gadget: udc: amd5536: split core and PCI layer")
-Cc: Raviteja Garimella <raviteja.garimella@broadcom.com>
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: linux-usb@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/20220709013601.7536-1-rdunlap@infradead.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/gadget/udc/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
-index 69394dc1cdfb..2cdd37be165a 100644
---- a/drivers/usb/gadget/udc/Kconfig
-+++ b/drivers/usb/gadget/udc/Kconfig
-@@ -311,7 +311,7 @@ source "drivers/usb/gadget/udc/bdc/Kconfig"
- 
- config USB_AMD5536UDC
- 	tristate "AMD5536 UDC"
--	depends on USB_PCI
-+	depends on USB_PCI && HAS_DMA
- 	select USB_SNP_CORE
- 	help
- 	   The AMD5536 UDC is part of the AMD Geode CS5536, an x86 southbridge.
--- 
-2.35.1
-
-
-
+... and that looks like utter bollocks.  Why does security_inode_alloc()
+look at ->i_private?  Which LSM is involved?

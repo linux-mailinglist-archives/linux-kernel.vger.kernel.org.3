@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 483DE59479C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FFF959471D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354578AbiHOXsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40394 "EHLO
+        id S1355076AbiHOXzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354467AbiHOXmO (ORCPT
+        with ESMTP id S1354711AbiHOXtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:42:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B685491CA;
-        Mon, 15 Aug 2022 13:13:32 -0700 (PDT)
+        Mon, 15 Aug 2022 19:49:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EFE6A4AB;
+        Mon, 15 Aug 2022 13:15:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95B27B81154;
-        Mon, 15 Aug 2022 20:13:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2224C433D7;
-        Mon, 15 Aug 2022 20:13:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 140FA60B6E;
+        Mon, 15 Aug 2022 20:15:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BF78C433D6;
+        Mon, 15 Aug 2022 20:15:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594409;
-        bh=NyLGZrmkN/d+RhugtN39rrIWi6Tif1siwmp5jXnzoNU=;
+        s=korg; t=1660594548;
+        bh=+/8og7nAXh8EZTONpq3HcOHfiLWLKk9F6sS002CeqWo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BemnqsKAMlgCeEgbnJJ1IRFp47bqjHgDoDOlrDpgonvmSaWB5XsML47Tn7t3azKFq
-         x770NlOx+WlSRbaUp7ousj6wv2KRdk7WWw6whjvGYLdIfdrVpV+0CkWT7od+99RvZm
-         1srwhaZWa3L0yqzL0TKdIZBGZGYP+feq8ti7IxZs=
+        b=zAsZwVqBzRR/ZhsXn7CkI5Ofh//G/ogaE7AWtVfHeW/bjTBc1SEtYkEIDdKr36pDC
+         EQtw7jfICw4aeWdCFTsTqNuQYENIg1bIjzejxYCVpF4C4OCGefWkbJHviFBA6v5ToQ
+         BpWgL/PEPiHcBTg5FXRH4fQf+6z5JfzqggSDGSro=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0436/1157] drm/msm/dpu: move intf and wb assignment to dpu_encoder_setup_display()
-Date:   Mon, 15 Aug 2022 19:56:32 +0200
-Message-Id: <20220815180457.083799772@linuxfoundation.org>
+Subject: [PATCH 5.19 0448/1157] drm/msm: Avoid unclocked GMU register access in 6xx gpu_busy
+Date:   Mon, 15 Aug 2022 19:56:44 +0200
+Message-Id: <20220815180457.512847886@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -55,92 +56,327 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Abhinav Kumar <quic_abhinavk@quicinc.com>
+From: Douglas Anderson <dianders@chromium.org>
 
-[ Upstream commit b4a624acabe99f2ea912e895529b8b37d1fa909d ]
+[ Upstream commit 6694482a70e9536efbf2ac233cbf0c302d6e2dae ]
 
-intf and wb resources are not dependent on the rm global
-state so need not be allocated during dpu_encoder_virt_atomic_mode_set().
+>From testing on sc7180-trogdor devices, reading the GMU registers
+needs the GMU clocks to be enabled. Those clocks get turned on in
+a6xx_gmu_resume(). Confusingly enough, that function is called as a
+result of the runtime_pm of the GPU "struct device", not the GMU
+"struct device". Unfortunately the current a6xx_gpu_busy() grabs a
+reference to the GMU's "struct device".
 
-Move the allocation of intf and wb resources to dpu_encoder_setup_display()
-so that we can utilize the hw caps even during atomic_check() phase.
+The fact that we were grabbing the wrong reference was easily seen to
+cause crashes that happen if we change the GPU's pm_runtime usage to
+not use autosuspend. It's also believed to cause some long tail GPU
+crashes even with autosuspend.
 
-Since dpu_encoder_setup_display() already has protection against
-setting invalid intf_idx and wb_idx, these checks can now
-be dropped as well.
+We could look at changing it so that we do pm_runtime_get_if_in_use()
+on the GPU's "struct device", but then we run into a different
+problem. pm_runtime_get_if_in_use() will return 0 for the GPU's
+"struct device" the whole time when we're in the "autosuspend
+delay". That is, when we drop the last reference to the GPU but we're
+waiting a period before actually suspending then we'll think the GPU
+is off. One reason that's bad is that if the GPU didn't actually turn
+off then the cycle counter doesn't lose state and that throws off all
+of our calculations.
 
-changes in v2:
-	- add phys->hw_intf and phys->hw_wb checks back
+Let's change the code to keep track of the suspend state of
+devfreq. msm_devfreq_suspend() is always called before we actually
+suspend the GPU and msm_devfreq_resume() after we resume it. This
+means we can use the suspended state to know if we're powered or not.
 
-changes in v3:
-	- correct the Fixes tag
+NOTE: one might wonder when exactly our status function is called when
+devfreq is supposed to be disabled. The stack crawl I captured was:
+  msm_devfreq_get_dev_status
+  devfreq_simple_ondemand_func
+  devfreq_update_target
+  qos_notifier_call
+  qos_max_notifier_call
+  blocking_notifier_call_chain
+  pm_qos_update_target
+  freq_qos_apply
+  apply_constraint
+  __dev_pm_qos_update_request
+  dev_pm_qos_update_request
+  msm_devfreq_idle_work
 
-Fixes: e02a559a720f ("drm/msm/dpu: make changes to dpu_encoder to support virtual encoder")
-Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Patchwork: https://patchwork.freedesktop.org/patch/489885/
-Link: https://lore.kernel.org/r/1655406084-17407-1-git-send-email-quic_abhinavk@quicinc.com
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Fixes: eadf79286a4b ("drm/msm: Check for powered down HW in the devfreq callbacks")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Rob Clark <robdclark@gmail.com>
+Patchwork: https://patchwork.freedesktop.org/patch/489124/
+Link: https://lore.kernel.org/r/20220610124639.v4.1.Ie846c5352bc307ee4248d7cab998ab3016b85d06@changeid
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 36 ++++++++++-----------
- 1 file changed, 18 insertions(+), 18 deletions(-)
+ drivers/gpu/drm/msm/adreno/a5xx_gpu.c |  8 ------
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 13 ++++-----
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 12 +++------
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.h |  3 ++-
+ drivers/gpu/drm/msm/msm_gpu.h         | 11 +++++++-
+ drivers/gpu/drm/msm/msm_gpu_devfreq.c | 39 +++++++++++++++++++++------
+ 6 files changed, 53 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-index a1b8c4592943..9b4df3084366 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-@@ -1048,24 +1048,6 @@ static void dpu_encoder_virt_atomic_mode_set(struct drm_encoder *drm_enc,
- 		phys->hw_pp = dpu_enc->hw_pp[i];
- 		phys->hw_ctl = to_dpu_hw_ctl(hw_ctl[i]);
+diff --git a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
+index c424e9a37669..3dcec7acb384 100644
+--- a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
+@@ -1666,18 +1666,10 @@ static u64 a5xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
+ {
+ 	u64 busy_cycles;
  
--		if (phys->intf_idx >= INTF_0 && phys->intf_idx < INTF_MAX)
--			phys->hw_intf = dpu_rm_get_intf(&dpu_kms->rm, phys->intf_idx);
+-	/* Only read the gpu busy if the hardware is already active */
+-	if (pm_runtime_get_if_in_use(&gpu->pdev->dev) == 0) {
+-		*out_sample_rate = 1;
+-		return 0;
+-	}
 -
--		if (phys->wb_idx >= WB_0 && phys->wb_idx < WB_MAX)
--			phys->hw_wb = dpu_rm_get_wb(&dpu_kms->rm, phys->wb_idx);
+ 	busy_cycles = gpu_read64(gpu, REG_A5XX_RBBM_PERFCTR_RBBM_0_LO,
+ 			REG_A5XX_RBBM_PERFCTR_RBBM_0_HI);
+ 	*out_sample_rate = clk_get_rate(gpu->core_clk);
+ 
+-	pm_runtime_put(&gpu->pdev->dev);
 -
--		if (!phys->hw_intf && !phys->hw_wb) {
--			DPU_ERROR_ENC(dpu_enc,
--				      "no intf or wb block assigned at idx: %d\n", i);
--			return;
--		}
--
--		if (phys->hw_intf && phys->hw_wb) {
--			DPU_ERROR_ENC(dpu_enc,
--					"invalid phys both intf and wb block at idx: %d\n", i);
--			return;
--		}
--
- 		phys->cached_mode = crtc_state->adjusted_mode;
- 		if (phys->ops.atomic_mode_set)
- 			phys->ops.atomic_mode_set(phys, crtc_state, conn_state);
-@@ -2294,7 +2276,25 @@ static int dpu_encoder_setup_display(struct dpu_encoder_virt *dpu_enc,
- 		struct dpu_encoder_phys *phys = dpu_enc->phys_encs[i];
- 		atomic_set(&phys->vsync_cnt, 0);
- 		atomic_set(&phys->underrun_cnt, 0);
-+
-+		if (phys->intf_idx >= INTF_0 && phys->intf_idx < INTF_MAX)
-+			phys->hw_intf = dpu_rm_get_intf(&dpu_kms->rm, phys->intf_idx);
-+
-+		if (phys->wb_idx >= WB_0 && phys->wb_idx < WB_MAX)
-+			phys->hw_wb = dpu_rm_get_wb(&dpu_kms->rm, phys->wb_idx);
-+
-+		if (!phys->hw_intf && !phys->hw_wb) {
-+			DPU_ERROR_ENC(dpu_enc, "no intf or wb block assigned at idx: %d\n", i);
-+			ret = -EINVAL;
-+		}
-+
-+		if (phys->hw_intf && phys->hw_wb) {
-+			DPU_ERROR_ENC(dpu_enc,
-+					"invalid phys both intf and wb block at idx: %d\n", i);
-+			ret = -EINVAL;
-+		}
+ 	return busy_cycles;
+ }
+ 
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+index 9f76f5b15759..dc715d88ff21 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+@@ -102,7 +102,8 @@ bool a6xx_gmu_gx_is_on(struct a6xx_gmu *gmu)
+ 		A6XX_GMU_SPTPRAC_PWR_CLK_STATUS_GX_HM_CLK_OFF));
+ }
+ 
+-void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
++void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
++		       bool suspended)
+ {
+ 	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+ 	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
+@@ -127,15 +128,16 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
+ 
+ 	/*
+ 	 * This can get called from devfreq while the hardware is idle. Don't
+-	 * bring up the power if it isn't already active
++	 * bring up the power if it isn't already active. All we're doing here
++	 * is updating the frequency so that when we come back online we're at
++	 * the right rate.
+ 	 */
+-	if (pm_runtime_get_if_in_use(gmu->dev) == 0)
++	if (suspended)
+ 		return;
+ 
+ 	if (!gmu->legacy) {
+ 		a6xx_hfi_set_freq(gmu, perf_index);
+ 		dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
+-		pm_runtime_put(gmu->dev);
+ 		return;
  	}
-+
- 	mutex_unlock(&dpu_enc->enc_lock);
  
- 	return ret;
+@@ -159,7 +161,6 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
+ 		dev_err(gmu->dev, "GMU set GPU frequency error: %d\n", ret);
+ 
+ 	dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
+-	pm_runtime_put(gmu->dev);
+ }
+ 
+ unsigned long a6xx_gmu_get_freq(struct msm_gpu *gpu)
+@@ -895,7 +896,7 @@ static void a6xx_gmu_set_initial_freq(struct msm_gpu *gpu, struct a6xx_gmu *gmu)
+ 		return;
+ 
+ 	gmu->freq = 0; /* so a6xx_gmu_set_freq() doesn't exit early */
+-	a6xx_gmu_set_freq(gpu, gpu_opp);
++	a6xx_gmu_set_freq(gpu, gpu_opp, false);
+ 	dev_pm_opp_put(gpu_opp);
+ }
+ 
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+index 42ed9a3c4905..8c02a67f29f2 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+@@ -1658,27 +1658,21 @@ static u64 a6xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
+ 	/* 19.2MHz */
+ 	*out_sample_rate = 19200000;
+ 
+-	/* Only read the gpu busy if the hardware is already active */
+-	if (pm_runtime_get_if_in_use(a6xx_gpu->gmu.dev) == 0)
+-		return 0;
+-
+ 	busy_cycles = gmu_read64(&a6xx_gpu->gmu,
+ 			REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_L,
+ 			REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_H);
+ 
+-
+-	pm_runtime_put(a6xx_gpu->gmu.dev);
+-
+ 	return busy_cycles;
+ }
+ 
+-static void a6xx_gpu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
++static void a6xx_gpu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
++			      bool suspended)
+ {
+ 	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+ 	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
+ 
+ 	mutex_lock(&a6xx_gpu->gmu.lock);
+-	a6xx_gmu_set_freq(gpu, opp);
++	a6xx_gmu_set_freq(gpu, opp, suspended);
+ 	mutex_unlock(&a6xx_gpu->gmu.lock);
+ }
+ 
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
+index 86e0a7c3fe6d..ab853f61db63 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
+@@ -77,7 +77,8 @@ void a6xx_gmu_clear_oob(struct a6xx_gmu *gmu, enum a6xx_gmu_oob_state state);
+ int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node);
+ void a6xx_gmu_remove(struct a6xx_gpu *a6xx_gpu);
+ 
+-void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp);
++void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
++		       bool suspended);
+ unsigned long a6xx_gmu_get_freq(struct msm_gpu *gpu);
+ 
+ void a6xx_show(struct msm_gpu *gpu, struct msm_gpu_state *state,
+diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
+index 6def00883046..31269c1c896b 100644
+--- a/drivers/gpu/drm/msm/msm_gpu.h
++++ b/drivers/gpu/drm/msm/msm_gpu.h
+@@ -64,11 +64,14 @@ struct msm_gpu_funcs {
+ 	/* for generation specific debugfs: */
+ 	void (*debugfs_init)(struct msm_gpu *gpu, struct drm_minor *minor);
+ #endif
++	/* note: gpu_busy() can assume that we have been pm_resumed */
+ 	u64 (*gpu_busy)(struct msm_gpu *gpu, unsigned long *out_sample_rate);
+ 	struct msm_gpu_state *(*gpu_state_get)(struct msm_gpu *gpu);
+ 	int (*gpu_state_put)(struct msm_gpu_state *state);
+ 	unsigned long (*gpu_get_freq)(struct msm_gpu *gpu);
+-	void (*gpu_set_freq)(struct msm_gpu *gpu, struct dev_pm_opp *opp);
++	/* note: gpu_set_freq() can assume that we have been pm_resumed */
++	void (*gpu_set_freq)(struct msm_gpu *gpu, struct dev_pm_opp *opp,
++			     bool suspended);
+ 	struct msm_gem_address_space *(*create_address_space)
+ 		(struct msm_gpu *gpu, struct platform_device *pdev);
+ 	struct msm_gem_address_space *(*create_private_address_space)
+@@ -92,6 +95,9 @@ struct msm_gpu_devfreq {
+ 	/** devfreq: devfreq instance */
+ 	struct devfreq *devfreq;
+ 
++	/** lock: lock for "suspended", "busy_cycles", and "time" */
++	struct mutex lock;
++
+ 	/**
+ 	 * idle_constraint:
+ 	 *
+@@ -135,6 +141,9 @@ struct msm_gpu_devfreq {
+ 	 * elapsed
+ 	 */
+ 	struct msm_hrtimer_work boost_work;
++
++	/** suspended: tracks if we're suspended */
++	bool suspended;
+ };
+ 
+ struct msm_gpu {
+diff --git a/drivers/gpu/drm/msm/msm_gpu_devfreq.c b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+index d2539ca78c29..ea94bc18e72e 100644
+--- a/drivers/gpu/drm/msm/msm_gpu_devfreq.c
++++ b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+@@ -20,6 +20,7 @@ static int msm_devfreq_target(struct device *dev, unsigned long *freq,
+ 		u32 flags)
+ {
+ 	struct msm_gpu *gpu = dev_to_gpu(dev);
++	struct msm_gpu_devfreq *df = &gpu->devfreq;
+ 	struct dev_pm_opp *opp;
+ 
+ 	/*
+@@ -32,10 +33,13 @@ static int msm_devfreq_target(struct device *dev, unsigned long *freq,
+ 
+ 	trace_msm_gpu_freq_change(dev_pm_opp_get_freq(opp));
+ 
+-	if (gpu->funcs->gpu_set_freq)
+-		gpu->funcs->gpu_set_freq(gpu, opp);
+-	else
++	if (gpu->funcs->gpu_set_freq) {
++		mutex_lock(&df->lock);
++		gpu->funcs->gpu_set_freq(gpu, opp, df->suspended);
++		mutex_unlock(&df->lock);
++	} else {
+ 		clk_set_rate(gpu->core_clk, *freq);
++	}
+ 
+ 	dev_pm_opp_put(opp);
+ 
+@@ -58,15 +62,24 @@ static void get_raw_dev_status(struct msm_gpu *gpu,
+ 	unsigned long sample_rate;
+ 	ktime_t time;
+ 
++	mutex_lock(&df->lock);
++
+ 	status->current_frequency = get_freq(gpu);
+-	busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
+ 	time = ktime_get();
+-
+-	busy_time = busy_cycles - df->busy_cycles;
+ 	status->total_time = ktime_us_delta(time, df->time);
++	df->time = time;
+ 
++	if (df->suspended) {
++		mutex_unlock(&df->lock);
++		status->busy_time = 0;
++		return;
++	}
++
++	busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
++	busy_time = busy_cycles - df->busy_cycles;
+ 	df->busy_cycles = busy_cycles;
+-	df->time = time;
++
++	mutex_unlock(&df->lock);
+ 
+ 	busy_time *= USEC_PER_SEC;
+ 	do_div(busy_time, sample_rate);
+@@ -175,6 +188,8 @@ void msm_devfreq_init(struct msm_gpu *gpu)
+ 	if (!gpu->funcs->gpu_busy)
+ 		return;
+ 
++	mutex_init(&df->lock);
++
+ 	dev_pm_qos_add_request(&gpu->pdev->dev, &df->idle_freq,
+ 			       DEV_PM_QOS_MAX_FREQUENCY,
+ 			       PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
+@@ -244,12 +259,16 @@ void msm_devfreq_cleanup(struct msm_gpu *gpu)
+ void msm_devfreq_resume(struct msm_gpu *gpu)
+ {
+ 	struct msm_gpu_devfreq *df = &gpu->devfreq;
++	unsigned long sample_rate;
+ 
+ 	if (!has_devfreq(gpu))
+ 		return;
+ 
+-	df->busy_cycles = 0;
++	mutex_lock(&df->lock);
++	df->busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
+ 	df->time = ktime_get();
++	df->suspended = false;
++	mutex_unlock(&df->lock);
+ 
+ 	devfreq_resume_device(df->devfreq);
+ }
+@@ -261,6 +280,10 @@ void msm_devfreq_suspend(struct msm_gpu *gpu)
+ 	if (!has_devfreq(gpu))
+ 		return;
+ 
++	mutex_lock(&df->lock);
++	df->suspended = true;
++	mutex_unlock(&df->lock);
++
+ 	devfreq_suspend_device(df->devfreq);
+ 
+ 	cancel_idle_work(df);
 -- 
 2.35.1
 

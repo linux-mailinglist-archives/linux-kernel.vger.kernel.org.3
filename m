@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7D1594953
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9356B594DA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245074AbiHOXYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53856 "EHLO
+        id S232978AbiHPAzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 20:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343624AbiHOXUl (ORCPT
+        with ESMTP id S244541AbiHPAs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:20:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED9FB4E80;
-        Mon, 15 Aug 2022 13:04:14 -0700 (PDT)
+        Mon, 15 Aug 2022 20:48:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C25179E3C;
+        Mon, 15 Aug 2022 13:46:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 99CAD61226;
-        Mon, 15 Aug 2022 20:04:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84EEBC433B5;
-        Mon, 15 Aug 2022 20:04:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A913D61241;
+        Mon, 15 Aug 2022 20:46:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 991D7C433C1;
+        Mon, 15 Aug 2022 20:46:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593853;
-        bh=jB0ttoGjb7G3INqAt6pTRAlPqBFKPCcILx++1gjZ16o=;
+        s=korg; t=1660596373;
+        bh=IcbLk1GhyoHGK272IxYU3G2y4ZUBUBeDe0NY87khf28=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PpQ2WRJpdP2bFVxiNAmoMhsHZJWO6X4+7ndhW0RXuIvzRDra6KQM0bvMWXuKphdU6
-         FyncAfc+76mJYLX2GtXdToioYRQZiGwHYgiW4rKvRb5OJksrS7f7Rg27GBXrtjimEi
-         b2cAMq6qW8pd63gsu9oqAMMM282ooDUEuwBceR+k=
+        b=u/EOq3Q9rAjGPW+4vuW+mKwl/H/Q2FYmsAiH7ylPgc1Fe0oIjr9672wygolbXR1Gd
+         2W+45faZcZt4hjtvUO0E7Tv5aMxuvUXzNCTdFgq3kKg3egVxpwMvuAGG5LjLlDc/oX
+         k1ZMP/MsdCxvXZA2TkgTRvuvMoJuVd7dek204gUQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
-        Nikolay Borisov <nborisov@suse.com>,
-        David Sterba <dsterba@suse.com>,
+        stable@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        stable <stable@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 1016/1095] btrfs: properly flag filesystem with BTRFS_FEATURE_INCOMPAT_BIG_METADATA
-Date:   Mon, 15 Aug 2022 20:06:55 +0200
-Message-Id: <20220815180511.125864340@linuxfoundation.org>
+Subject: [PATCH 5.19 1060/1157] intel_th: pci: Add Meteor Lake-P support
+Date:   Mon, 15 Aug 2022 20:06:56 +0200
+Message-Id: <20220815180522.471553622@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
-References: <20220815180429.240518113@linuxfoundation.org>
+In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
+References: <20220815180439.416659447@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,71 +57,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nikolay Borisov <nborisov@suse.com>
+From: Alexander Shishkin <alexander.shishkin@linux.intel.com>
 
-[ Upstream commit e26b04c4c91925dba57324db177a24e18e2d0013 ]
+[ Upstream commit 802a9a0b1d91274ef10d9fe429b4cc1e8c200aef ]
 
-Commit 6f93e834fa7c seemingly inadvertently moved the code responsible
-for flagging the filesystem as having BIG_METADATA to a place where
-setting the flag was essentially lost. This means that
-filesystems created with kernels containing this bug (starting with 5.15)
-can potentially be mounted by older (pre-3.4) kernels. In reality
-chances for this happening are low because there are other incompat
-flags introduced in the mean time. Still the correct behavior is to set
-INCOMPAT_BIG_METADATA flag and persist this in the superblock.
+Add support for the Trace Hub in Meteor Lake-P.
 
-Fixes: 6f93e834fa7c ("btrfs: fix upper limit for max_inline for page size 64K")
-CC: stable@vger.kernel.org # 5.4+
-Reviewed-by: Qu Wenruo <wqu@suse.com>
-Signed-off-by: Nikolay Borisov <nborisov@suse.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: stable <stable@kernel.org>
+Signed-off-by: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Link: https://lore.kernel.org/r/20220705082637.59979-5-alexander.shishkin@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/disk-io.c | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+ drivers/hwtracing/intel_th/pci.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/fs/btrfs/disk-io.c b/fs/btrfs/disk-io.c
-index f45470798022..34cd57d799e4 100644
---- a/fs/btrfs/disk-io.c
-+++ b/fs/btrfs/disk-io.c
-@@ -3577,16 +3577,6 @@ int __cold open_ctree(struct super_block *sb, struct btrfs_fs_devices *fs_device
- 	 */
- 	fs_info->compress_type = BTRFS_COMPRESS_ZLIB;
- 
--	/*
--	 * Flag our filesystem as having big metadata blocks if they are bigger
--	 * than the page size.
--	 */
--	if (btrfs_super_nodesize(disk_super) > PAGE_SIZE) {
--		if (!(features & BTRFS_FEATURE_INCOMPAT_BIG_METADATA))
--			btrfs_info(fs_info,
--				"flagging fs with big metadata feature");
--		features |= BTRFS_FEATURE_INCOMPAT_BIG_METADATA;
--	}
- 
- 	/* Set up fs_info before parsing mount options */
- 	nodesize = btrfs_super_nodesize(disk_super);
-@@ -3627,6 +3617,17 @@ int __cold open_ctree(struct super_block *sb, struct btrfs_fs_devices *fs_device
- 	if (features & BTRFS_FEATURE_INCOMPAT_SKINNY_METADATA)
- 		btrfs_info(fs_info, "has skinny extents");
- 
-+	/*
-+	 * Flag our filesystem as having big metadata blocks if they are bigger
-+	 * than the page size.
-+	 */
-+	if (btrfs_super_nodesize(disk_super) > PAGE_SIZE) {
-+		if (!(features & BTRFS_FEATURE_INCOMPAT_BIG_METADATA))
-+			btrfs_info(fs_info,
-+				"flagging fs with big metadata feature");
-+		features |= BTRFS_FEATURE_INCOMPAT_BIG_METADATA;
-+	}
-+
- 	/*
- 	 * mixed block groups end up with duplicate but slightly offset
- 	 * extent buffers for the same range.  It leads to corruptions
--- 
-2.35.1
-
+--- a/drivers/hwtracing/intel_th/pci.c
++++ b/drivers/hwtracing/intel_th/pci.c
+@@ -285,6 +285,11 @@ static const struct pci_device_id intel_
+ 		.driver_data = (kernel_ulong_t)&intel_th_2x,
+ 	},
+ 	{
++		/* Meteor Lake-P */
++		PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x7e24),
++		.driver_data = (kernel_ulong_t)&intel_th_2x,
++	},
++	{
+ 		/* Alder Lake CPU */
+ 		PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x466f),
+ 		.driver_data = (kernel_ulong_t)&intel_th_2x,
 
 

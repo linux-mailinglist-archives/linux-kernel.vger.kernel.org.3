@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA99759287E
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 06:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 995D059287A
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 06:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240623AbiHOENg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 00:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
+        id S240711AbiHOENq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 00:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240445AbiHOENW (ORCPT
+        with ESMTP id S240410AbiHOENY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 00:13:22 -0400
+        Mon, 15 Aug 2022 00:13:24 -0400
 Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A2A140BD;
-        Sun, 14 Aug 2022 21:13:17 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 4BC1032004E7;
-        Mon, 15 Aug 2022 00:13:15 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78EF140DB;
+        Sun, 14 Aug 2022 21:13:20 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id A03F032005C1;
+        Mon, 15 Aug 2022 00:13:18 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 15 Aug 2022 00:13:16 -0400
+  by compute3.internal (MEProxy); Mon, 15 Aug 2022 00:13:19 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1660536794; x=1660623194; bh=0n
-        lG6ZDiBzbAdn9rMY9Wvc4mEHKC/xeUwBEc8zJn16s=; b=yEWx64jF6G5/dLN6NA
-        jPioeG+W1SSLewCp15W4PUN/F//rEfm+tw6KVILyGaORUNuSKZ4FYwEfNzNnIS0J
-        GCC0KOKS6QwW66vYejfeVsqoN5F2tyigXSC/H1xKISLNFi03dyvEBtN1D0NEORdv
-        W9DbGaQxP7zEXO7oAFaOeN8Q8JDDB5ikxviXVgb2pAzIeUrbeGUyY4P9eOT6CJyW
-        JTGQJqUdLwNQLBJJwXKP49vjVQa8YmOHspl0Nyv3+PF8aNekX4lait9oln+zaeDi
-        1kUqfMlVmLh6VYnGaLTHv5cqJRjf1P1UuIkoxDYHTZnKslZupinpDa60heXqmWva
-        zewQ==
+        :subject:subject:to:to; s=fm2; t=1660536798; x=1660623198; bh=RX
+        0SlEktfrQtPXw+non/OchyG9cDMb9wJ6p6VMV+d1s=; b=EwSRzuob6nUdMkFGOq
+        OtlL8jLm0ztjwX8kZ6U1ruba8+lk7YbMSl9l3tcE5/95GvZibNmn7sN/Fz5iOVc7
+        qcg+l17CrGgzC8MDVxBZlD9ATI0Tf/bqUvOyiyGXl8GgwPiD2RlHs+r4+EmV1YhC
+        FHzPWI2xSaaKJ8695KV8ZAYmsr5BBLGGlpg46BDzAZCOQg0NKY93gVEI/W8kopjU
+        3oQE0RiOfPj30lsC5gnH1YWQJ3u2xodlinChYTRhUNRogAr2IL815lWzpcsXHJyE
+        ntNWGBjcqip97YnRRwtg1X9B2rIQF/cJbN78Sn7GXPmkyNHEPxj0RaZzjtS4uQSl
+        tCTg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1660536794; x=1660623194; bh=0nlG6ZDiBzbAd
-        n9rMY9Wvc4mEHKC/xeUwBEc8zJn16s=; b=wjC8+hS7bps6cUT22i2PtCsj49FeS
-        uuKzq+2l1LjAMQ6X4RQXpV4wdTAS/gSl9kJJ/nDzavn14cHkvLpXvc1myg/SXnyn
-        nk3Z3zZBwEtXk+8IsEOdlUOuZakExUomWo1V0x0H0b0SAuASsFq5tIU6pRtuPFVS
-        X2euSKBqvWLMnSo+CAt6a/Iv9X5nZCvNtSlgPnJQyQ7N0XZSeSrZyCmQajaz6d2x
-        CUBo4bo/7AgirS0rwOjnhVBPgUnMx7ITJ5RSYgu3ydTua98htC+Ae1jd2cJlxfbD
-        BqZk7rR+4ARdNXZKWEjl7kF7WNsHrgZNX1+UtBeAQzm4h0cxKbpT/0LMA==
-X-ME-Sender: <xms:2sf5Yk3tDjR-wxW4LsZDe41g8b97kbWwm_LarZNH0oTrXmCw8NAAeQ>
-    <xme:2sf5YvFTgGQR1o2o6b_ZxfITOw3DgH4qsHh-m_IQbipjnKeTgS45L3ZLvKPY_-j4H
-    bQqJ34oTCPYoNtFig>
-X-ME-Received: <xmr:2sf5Ys6bmm13qyOq2_sxVg_JVyhYlYSztfGjN1IkBm97fjE2fdP96O5SPr94E8LHIosSgdm6NucLTbmkFEKiYgsN8S9aejMJX1W4uyum8cuaBo52e0aiUyeFRb-whiUdD9XIqA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehuddgkeehucetufdoteggodetrfdotf
+        :x-sasl-enc; s=fm1; t=1660536798; x=1660623198; bh=RX0SlEktfrQtP
+        Xw+non/OchyG9cDMb9wJ6p6VMV+d1s=; b=PI544408CbPVobr4ngPD4cmYSzoQe
+        BwCmcS5c/KAiflTF3MuhegUJ3F3Qct7zeQMqNAZPlPec/Sft73jQItlzghw7yueY
+        dhEpRZSYf73e6IsrNf3GddKTv8PSw3jbNSOi8jHCVR/KQEtNXz5Ssymk+YY9dtaV
+        zLPadexzfADR3X4vqK8iiZAwDQB5jSC9B1MxnhI47mb7pFiYeUEhuCT5zbS3JsUq
+        6Adpu5j+SJMbhd+BVXN1AWUaieeFTjFiJqr3A+yTwQBlDgMYzUHFof4n6CYjUcbw
+        XKL+hESNObgp+hSZZNbplECgp8Z71YTgMPDno5lp56ULMKFI0MKpfhcrQ==
+X-ME-Sender: <xms:3sf5Ykj-xYvYh-IBDdUIi8n11sqez-F8HwAO9qbh6NKqLJDsZPwOqw>
+    <xme:3sf5YtAQGIjoyXcK77AePwBNfqJLdtq_4TuGFlj9gvAIQdcvls2-MJ1IlY8TyHNfS
+    TDKuQLRTVWwRPR5FQ>
+X-ME-Received: <xmr:3sf5YsFgemjf-v4GwHvCZhb3Omwi9QHzVZrnHSL1w9IDkyDLM--0E6OsZi5qoyWrf7qiJxXYobhWiKvDwDrHkqgGwCdla9Zag5fZNhd2m_OB21BYryvEiKSuhqiKZ84XeX89JA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehuddgkeegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
     vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
     ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
-    udefiedtveetnecuvehluhhsthgvrhfuihiivgepfeenucfrrghrrghmpehmrghilhhfrh
+    udefiedtveetnecuvehluhhsthgvrhfuihiivgepvdenucfrrghrrghmpehmrghilhhfrh
     homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:2sf5Yt3Wmh1my8avFRv5CpsuNmXJDgKqtBRICG58GoZqx_JUVFk_Pw>
-    <xmx:2sf5YnHO961yvq7Bo-9HR4_qFrinpzSXMN-k0JoYzch1XR6Ok_bNTg>
-    <xmx:2sf5Ym8ID4X4tDap1rM-jNcX2Kk4_p5bdxxmTofAsZmkWP6W0RuNFQ>
-    <xmx:2sf5Yu8UxJc9sj-ZJZSWsVQtiyLt34R5UTmXfWQ5Pqgpyp5dzjWulw>
+X-ME-Proxy: <xmx:3sf5YlQE2EPuXY3FWLq8tAaaxXsr056YgfhJ8rBz7aauix-PnQPGEw>
+    <xmx:3sf5YhwUkQip5yaXbI4OOAPqclPhQIH20T4roi9XNNfW_SFa_mcK-Q>
+    <xmx:3sf5Yj5UjVCPr7lGTRSpJxNapLOwl1BWKFmgF-lfthmg_dSWFH72jg>
+    <xmx:3sf5Yn7yODn30h2SY4xuMzQ-fMGy4naPT8D_jIY8PDj0q94Xx0THxQ>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 Aug 2022 00:13:14 -0400 (EDT)
+ 15 Aug 2022 00:13:17 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>
@@ -74,9 +74,9 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-sunxi@lists.linux.dev
-Subject: [PATCH v2 07/10] soc: sunxi: sram: Return void from the release function
-Date:   Sun, 14 Aug 2022 23:12:44 -0500
-Message-Id: <20220815041248.53268-8-samuel@sholland.org>
+Subject: [PATCH v2 08/10] soc: sunxi: sram: Save a pointer to the OF match data
+Date:   Sun, 14 Aug 2022 23:12:45 -0500
+Message-Id: <20220815041248.53268-9-samuel@sholland.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220815041248.53268-1-samuel@sholland.org>
 References: <20220815041248.53268-1-samuel@sholland.org>
@@ -92,8 +92,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no point in returning an error here, as the caller can do
-nothing about it. In fact, all callers already ignore the return value.
+It is inefficient to match the compatible string every time the regmap
+is accessed.
 
 Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 Signed-off-by: Samuel Holland <samuel@sholland.org>
@@ -101,55 +101,33 @@ Signed-off-by: Samuel Holland <samuel@sholland.org>
 
 (no changes since v1)
 
- drivers/soc/sunxi/sunxi_sram.c       | 8 +++-----
- include/linux/soc/sunxi/sunxi_sram.h | 2 +-
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ drivers/soc/sunxi/sunxi_sram.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
-index 09754cd1d57d..9622fd45f5e5 100644
+index 9622fd45f5e5..7c6fb17cfe7f 100644
 --- a/drivers/soc/sunxi/sunxi_sram.c
 +++ b/drivers/soc/sunxi/sunxi_sram.c
-@@ -261,25 +261,23 @@ int sunxi_sram_claim(struct device *dev)
- }
- EXPORT_SYMBOL(sunxi_sram_claim);
- 
--int sunxi_sram_release(struct device *dev)
-+void sunxi_sram_release(struct device *dev)
+@@ -305,9 +305,7 @@ static const struct sunxi_sramc_variant sun50i_h616_sramc_variant = {
+ static bool sunxi_sram_regmap_accessible_reg(struct device *dev,
+ 					     unsigned int reg)
  {
- 	const struct sunxi_sram_data *sram_data;
- 	struct sunxi_sram_desc *sram_desc;
- 
- 	if (!dev || !dev->of_node)
--		return -EINVAL;
-+		return;
- 
- 	sram_data = sunxi_sram_of_parse(dev->of_node, NULL);
- 	if (IS_ERR(sram_data))
--		return -EINVAL;
-+		return;
- 
- 	sram_desc = to_sram_desc(sram_data);
- 
- 	spin_lock(&sram_lock);
- 	sram_desc->claimed = false;
- 	spin_unlock(&sram_lock);
+-	const struct sunxi_sramc_variant *variant;
 -
--	return 0;
- }
- EXPORT_SYMBOL(sunxi_sram_release);
+-	variant = of_device_get_match_data(dev);
++	const struct sunxi_sramc_variant *variant = dev_get_drvdata(dev);
  
-diff --git a/include/linux/soc/sunxi/sunxi_sram.h b/include/linux/soc/sunxi/sunxi_sram.h
-index c5f663bba9c2..60e274d1b821 100644
---- a/include/linux/soc/sunxi/sunxi_sram.h
-+++ b/include/linux/soc/sunxi/sunxi_sram.h
-@@ -14,6 +14,6 @@
- #define _SUNXI_SRAM_H_
+ 	if (reg < SUNXI_SRAM_EMAC_CLOCK_REG)
+ 		return false;
+@@ -340,6 +338,8 @@ static int __init sunxi_sram_probe(struct platform_device *pdev)
+ 	if (!variant)
+ 		return -EINVAL;
  
- int sunxi_sram_claim(struct device *dev);
--int sunxi_sram_release(struct device *dev);
-+void sunxi_sram_release(struct device *dev);
- 
- #endif /* _SUNXI_SRAM_H_ */
++	dev_set_drvdata(dev, (struct sunxi_sramc_variant *)variant);
++
+ 	base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(base))
+ 		return PTR_ERR(base);
 -- 
 2.35.1
 

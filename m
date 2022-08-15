@@ -2,143 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5806C59311F
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A21593122
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234640AbiHOO5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 10:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36686 "EHLO
+        id S242514AbiHOO5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 10:57:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiHOO5P (ORCPT
+        with ESMTP id S240377AbiHOO5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 10:57:15 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E21A1A054;
-        Mon, 15 Aug 2022 07:57:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=35PiSrycvZePEg2FpFCAwxoALwiBP5+CAc/F+ajRY6Q=; b=H7+4HEwwXMWtNjyIxyU/ZlLIAb
-        hFvadehrOwjtz7/deu55E5PKv0Plavk8ONWe0YSNcBsgx/VUhfwP11vMxbM0/33ZJHX0uT40uOM6e
-        lzTre6xcEAoQQW6r/MZEUIsjlTnvaPCahQYYJ11WPCFG+9PO1CJfeKNgMHZcToZ5DerxDQ/eF6rqR
-        AmhzoWf2kC+m3m4k6KKkS44rM4nWNUNXkASGoxuvy24NatNoRUUtCdBD++MTW9iubHl9E8VFaS84I
-        Go8HWhyIUR86GFaeXkdjp6bn5MCI+VJ3kxXf7dCVLrSPowGATmiivPI0HLlOsPYP5dgbc1tfVWDTn
-        usGwN5iA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oNbWG-002h34-A8; Mon, 15 Aug 2022 14:56:44 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 54C42980153; Mon, 15 Aug 2022 16:56:43 +0200 (CEST)
-Date:   Mon, 15 Aug 2022 16:56:43 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
-        bpf <bpf@vger.kernel.org>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Edward Cree <ecree@solarflare.com>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <thoiland@redhat.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH bpf-next v4 2/6] bpf: introduce BPF dispatcher
-Message-ID: <Yvpeq+vPz63n8gmi@worktop.programming.kicks-ass.net>
-References: <20191211123017.13212-1-bjorn.topel@gmail.com>
- <20191211123017.13212-3-bjorn.topel@gmail.com>
- <20220815101303.79ace3f8@gandalf.local.home>
- <CAADnVQLhHm-gxJXTbWxJN0fFGW_dyVV+5D-JahVA1Wrj2cGu7g@mail.gmail.com>
+        Mon, 15 Aug 2022 10:57:24 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C510B1C114;
+        Mon, 15 Aug 2022 07:57:23 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FEsflu014721;
+        Mon, 15 Aug 2022 14:57:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=8ZTg0G+Wa4/8+mqlKuuc4tufXoqRTRsIKVo19S0zDC0=;
+ b=P3+NnXyCWwQT1/K4lvaBzOtLYCFi+n+K7f0STa4RjjMc94GQgTHWaA8OCUdcFxvT18Gu
+ o5cdIaYGwREx+OUQuHe/WLDrgcZfdBUsi2TyHT4suyta02Boq3XVuX4frYupeuYzPAOp
+ f8xbTTNc8266SiqFpaVSeImTn9gJSqNhui9gfTvH4m71AedrhXzluH50Llvy1ehj+aIX
+ unKDUI5jHYfFGqW7YMrdL1T7TNYxGnVKdZE8uPYGuVnYqct5gwgiHMlN4HRZOK5Dkezc
+ 2lYquK+gAipaYuwXV9YJ1B1PlI0KcA3sytLETHj16snFmhIniOtPRVvNVOfki0rr74vL 7A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hyratr18c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 Aug 2022 14:57:09 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27FEsc9T014618;
+        Mon, 15 Aug 2022 14:57:09 GMT
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hyratr180-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 Aug 2022 14:57:09 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27FEoHIB018077;
+        Mon, 15 Aug 2022 14:57:08 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma01wdc.us.ibm.com with ESMTP id 3hx3k94jan-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 Aug 2022 14:57:08 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27FEv7o923593406
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 15 Aug 2022 14:57:07 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4AD0113604F;
+        Mon, 15 Aug 2022 14:57:07 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 683CA136051;
+        Mon, 15 Aug 2022 14:57:06 +0000 (GMT)
+Received: from slate16.aus.stglabs.ibm.com (unknown [9.77.146.160])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 15 Aug 2022 14:57:06 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     jic23@kernel.org
+Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, eajames@linux.ibm.com,
+        andy.shevchenko@gmail.com, joel@jms.id.au
+Subject: [PATCH v5 0/2] iio: pressure: dps310: Reset chip if MEAS_CFG is corrupt
+Date:   Mon, 15 Aug 2022 09:57:03 -0500
+Message-Id: <20220815145705.203017-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQLhHm-gxJXTbWxJN0fFGW_dyVV+5D-JahVA1Wrj2cGu7g@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 63zzjKSfGn8_H0hPmYbanUxRUB8zKibq
+X-Proofpoint-GUID: TLXgZYmcAp48EC3iOf81oHLjmYrDO9dm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=999 clxscore=1015
+ malwarescore=0 spamscore=0 impostorscore=0 bulkscore=0 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208150056
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 07:31:23AM -0700, Alexei Starovoitov wrote:
-> On Mon, Aug 15, 2022 at 7:13 AM Steven Rostedt <rostedt@goodmis.org> wrote:
-> >
-> > On Wed, 11 Dec 2019 13:30:13 +0100
-> > Björn Töpel <bjorn.topel@gmail.com> wrote:
-> >
-> > > From: Björn Töpel <bjorn.topel@intel.com>
-> > >
-> > > The BPF dispatcher is a multi-way branch code generator, mainly
-> > > targeted for XDP programs. When an XDP program is executed via the
-> > > bpf_prog_run_xdp(), it is invoked via an indirect call. The indirect
-> > > call has a substantial performance impact, when retpolines are
-> > > enabled. The dispatcher transform indirect calls to direct calls, and
-> > > therefore avoids the retpoline. The dispatcher is generated using the
-> > > BPF JIT, and relies on text poking provided by bpf_arch_text_poke().
-> > >
-> > > The dispatcher hijacks a trampoline function it via the __fentry__ nop
-> >
-> > Why was the ftrace maintainers not Cc'd on this patch?  I would have NACKED
-> > it. Hell, it wasn't even sent to LKML! This was BPF being sneaky in
-> > updating major infrastructure of the Linux kernel without letting the
-> > stakeholders of this change know about it.
-> >
-> > For some reason, the BPF folks think they own the entire kernel!
-> >
-> > When I heard that ftrace was broken by BPF I thought it was something
-> > unique they were doing, but unfortunately, I didn't investigate what they
-> > were doing at the time.
-> 
-> ftrace is still broken and refusing to accept the fact doesn't make it
-> non-broken.
+Corruption of the MEAS_CFG register has been observed soon after
+system boot. In order to recover this scenario, check MEAS_CFG if
+measurement isn't ready, and if it's incorrect, reset the DPS310
+and execute the startup procedure. Include a patch to move the
+startup procedure into a function.
 
-Alexei, stop this. The 'call __fentry__' sites are owned by ftrace.
-Always have been. If BPF somehow thinks it can use them without telling
-ftrace then it's BPF that's broken.
+Changes since v4:
+ - Just check for rc rather than rc < 0 in some cases
+ - Split declaration and init of rc
 
-> > Then they started sending me patches to hide fentry locations from ftrace.
-> > And even telling me that fentry != ftrace
-> 
-> It sounds that you've invented nop5 and kernel's ability
-> to replace nop5 with a jump or call.
+Changes since v3:
+ - Don't check regmap* return codes for < 0
+ - Fix comment spelling
 
-Ftrace has introduced the mcount/fentry patching into the kernel and has
-always owned it for those sites. There is a lot of other text writing
-not owned by ftrace. But the fentry sites are ftrace's.
+Changes since v2:
+ - Add some comments
+ - Fix the clunky control flow
 
-Ftrace was also the one that got us the text_poke_bp() infrastructure
-and got it reviewed by the CPU vendors.
+Changes since v1:
+ - Separate into two patches
+ - Rename 'dps310_verify_meas_cfg' to 'dps310_check_reset_meas_cfg'
 
-Since then we've grown static_branch and static_call, they have their
-own patch sites and do no interfere with ftrace.
+Eddie James (2):
+  iio: pressure: dps310: Refactor startup procedure
+  iio: pressure: dps310: Reset chip if MEAS_CFG is corrupt
 
-> ftrace should really stop trying to own all of the kernel text rewrites.
-> It's in the way. Like this case.
+ drivers/iio/pressure/dps310.c | 277 +++++++++++++++++++++-------------
+ 1 file changed, 173 insertions(+), 104 deletions(-)
 
-It doesn't. It hasn't. But it *does* own the fentry sites.
-
-> It was implemented long before static_calls made it to the kernel
-> and it's different.
-
-It wasn't long before. Yes it landed a few months prior to the
-static_call work, but the whole static_call thing was in progress for a
-long long time.
-
-Anyway, yes it is different. But it's still very much broken. You simply
-cannot step on __fentry__ sites like that.
-
+-- 
+2.31.1
 

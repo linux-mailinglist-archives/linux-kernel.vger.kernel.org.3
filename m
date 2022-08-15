@@ -2,80 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEC30593407
+	by mail.lfdr.de (Postfix) with ESMTP id 46804593405
 	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 19:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233114AbiHOR1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 13:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42868 "EHLO
+        id S233276AbiHOR1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 13:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231646AbiHOR0e (ORCPT
+        with ESMTP id S233088AbiHOR1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 13:26:34 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26B210554
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 10:26:33 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1660584392;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mBiufZJ2yRKMSs7mTEaqgH84ejhGptk3Wuu2oCsibD4=;
-        b=LUKEtSgJfkXe4vV/YyO8Fyyapa6eA+J+MvTXDrkIVnrotabbnH+qeBzCmbnDGjJaQGqBvo
-        zTx25r17kUApB51J280r/r16+13hUlJkZ7sUlyfY5aI/+GbREYwLvrZLu/+hm7+v4UXcpm
-        4xSxAvrWiiMI1pJ6q0wnLalqD6W7W4M=
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>
-Subject: [PATCH 11/11] MAINTAINERS: Add entry for printbufs
-Date:   Mon, 15 Aug 2022 13:26:13 -0400
-Message-Id: <20220815172613.621627-12-kent.overstreet@linux.dev>
-In-Reply-To: <20220815172613.621627-1-kent.overstreet@linux.dev>
-References: <20220815172613.621627-1-kent.overstreet@linux.dev>
+        Mon, 15 Aug 2022 13:27:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06F327FEF;
+        Mon, 15 Aug 2022 10:26:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 063F761229;
+        Mon, 15 Aug 2022 17:26:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51C41C433D7;
+        Mon, 15 Aug 2022 17:26:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660584413;
+        bh=gfrn3wi3lFlHb1DMO/mTQsg4NzAyb0o0/UVlWIOz7MA=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=ZAOTYbOZGP6hcCeGKRAn1Z3DXn8ojOCipv6CPTgverYtBWoJGH+QpFWjV+pzGcRVM
+         cgxjAeuHwTEXydOulDfNDCBUb9COW8hRN97s1SqcKsA6WyK3ZnOXnOh28hZ2TW7fp/
+         7GyamXOA4hvZB6hmDxuSM6BwVkBThqXWPaO7dnUZM8O2TMSGfSwr7YgaWj6QwIpRnd
+         VWhQ1OQtonKYXLx9ChnMwn2PiUeIANAK4RPPezezGfftPT3mgpbAxt7zehwOANvpa0
+         Do0HWzA6P2bZQH5cWfVkwUOXBxXQwtFIPFwDCoSGDc5WrEp65ousCby8cJRq37sjoc
+         /F9V1khJkN+yw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220810014024.27568-1-samuel@sholland.org>
+References: <20220810014024.27568-1-samuel@sholland.org>
+Subject: Re: [PATCH] clk: sunxi-ng: mp: Avoid computing the rate twice
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+Date:   Mon, 15 Aug 2022 10:26:51 -0700
+User-Agent: alot/0.10
+Message-Id: <20220815172653.51C41C433D7@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kent Overstreet <kent.overstreet@gmail.com>
+Quoting Samuel Holland (2022-08-09 18:40:24)
+> ccu_mp_find_best() already computes a best_rate at the same time as the
+> best m and p factors. Return it so the caller does not need to duplicate
+> the division.
 
-Printbufs are a new string building library; adding myself as the author
-of this code.
-
-Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b7deb6e92a..d954af7a84 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16365,6 +16365,12 @@ S:	Maintained
- F:	include/linux/psi*
- F:	kernel/sched/psi.c
- 
-+PRINTBUF
-+M:	Kent Overstreet <kent.overstreet@linux.dev>
-+S:	Maintained
-+F:	include/linux/printbuf.h
-+F:	lib/printbuf.c
-+
- PRINTK
- M:	Petr Mladek <pmladek@suse.com>
- M:	Sergey Senozhatsky <senozhatsky@chromium.org>
--- 
-2.36.1
-
+Did the compiler figure this out and thus this patch makes no difference
+to the final object code?

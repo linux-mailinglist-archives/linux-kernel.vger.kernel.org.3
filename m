@@ -2,125 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9FAE592AAA
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 10:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F76D592AAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 10:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240380AbiHOIAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 04:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
+        id S241092AbiHOICg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 04:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240812AbiHOIAi (ORCPT
+        with ESMTP id S240812AbiHOICQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 04:00:38 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4818AB7E7;
-        Mon, 15 Aug 2022 01:00:37 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6C9F3113E;
-        Mon, 15 Aug 2022 01:00:37 -0700 (PDT)
-Received: from [192.168.99.12] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9BC9F3F67D;
-        Mon, 15 Aug 2022 01:00:35 -0700 (PDT)
-Message-ID: <b679a0a9-938b-5039-8bce-b2cb1b45cb78@foss.arm.com>
-Date:   Mon, 15 Aug 2022 09:00:20 +0100
+        Mon, 15 Aug 2022 04:02:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46C161DA5F
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 01:02:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660550534;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4Jg8oqAlmws/gbyv4WS+sTS1PPZS3LzrawxvloBs8oY=;
+        b=Z24iyj5xhKIKE1u3wG4s7TIf7Nrm7kwvTQEKAlSPxyZlY3ZWDMvHsLGX2O8BVeSMxcyjmz
+        EqRIPNbAYtE6aTqSkVXmQzZMSlX0FiUOOs9C+u7V3kxrQTcLAYMteXQAqsK7bVR6WDZvth
+        3KOsdhkH0oAiJKd7eToCrd5i1D844mc=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-612-NiDb1c_XPHuc8k_IwWWekg-1; Mon, 15 Aug 2022 04:02:12 -0400
+X-MC-Unique: NiDb1c_XPHuc8k_IwWWekg-1
+Received: by mail-ed1-f70.google.com with SMTP id t13-20020a056402524d00b0043db1fbefdeso4299418edd.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 01:02:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=4Jg8oqAlmws/gbyv4WS+sTS1PPZS3LzrawxvloBs8oY=;
+        b=WFB3OXVhOjlSMJfc1qO8Yynpww/0h4iPPsRyibXcdI/ilE44q7YmJM4WGNOfjaehy9
+         4eYSx6vwwmFxClMb2EWGceUS0lWhwvPCS/SiFDdaw18NMQb8UK6m8P9LpAR9Dl75g0zm
+         EZPnWDLJmE2/n3EGzQuMlyQ4JLVTb4bfG/CXiwdAsSYyH9C3KjT9XNdtu4lbArzXnESd
+         Sd9rE8llbXyItZIXsMYqgmVODa1+FP6VLJ/W4JyNP7yRDxk3CAkPlVXNs8CtgHldPGVY
+         /5qDD2r4hxGizibwhcM4YTBIze/jFuGE+2YrX7YjwjAFa0KSBp83EEFKCoOha9g9ODae
+         WMPw==
+X-Gm-Message-State: ACgBeo0vMQ1lV3SANrs9K61gbQyvuqsLnanid/xLdsnuW+fP5/RMvgzz
+        ldIQiFlwbCJYloFacXAhEnTIhBBt48RFL268AmEOwYbtIcH8nZ6HY6XV3KYip03z41IhJ5nIctP
+        A51vqQ1bhTKvAtdGWm/HZWOiD
+X-Received: by 2002:a17:907:c0d:b0:730:a85d:8300 with SMTP id ga13-20020a1709070c0d00b00730a85d8300mr9882749ejc.558.1660550531938;
+        Mon, 15 Aug 2022 01:02:11 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4SndJAy1focKXdgrNdhVF4iukl3tw5+oox/Lgaz/m0ZIdCPTQsgSe8Nmrvc7s0AInVcbyaOg==
+X-Received: by 2002:a17:907:c0d:b0:730:a85d:8300 with SMTP id ga13-20020a1709070c0d00b00730a85d8300mr9882725ejc.558.1660550531668;
+        Mon, 15 Aug 2022 01:02:11 -0700 (PDT)
+Received: from redhat.com ([2.54.169.49])
+        by smtp.gmail.com with ESMTPSA id er6-20020a056402448600b00443d8118155sm789834edb.69.2022.08.15.01.02.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 01:02:11 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 04:02:05 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Andres Freund <andres@anarazel.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
+Subject: Re: upstream kernel crashes
+Message-ID: <20220815035406-mutt-send-email-mst@kernel.org>
+References: <20220814212610.GA3690074@roeck-us.net>
+ <CAHk-=wgf2EfLHui6A5NbWoaVBB2f8t-XBUiOMkyjN2NU41t6eA@mail.gmail.com>
+ <20220814223743.26ebsbnrvrjien4f@awork3.anarazel.de>
+ <CAHk-=wi6raoJE-1cyRU0YxJ+9ReO1eXmOAq0FwKAyZS7nhvk9w@mail.gmail.com>
+ <1c057afa-92df-ee3c-5978-3731d3db9345@kernel.dk>
+ <20220815013651.mrm7qgklk6sgpkbb@awork3.anarazel.de>
+ <CAHk-=wikzU4402P-FpJRK_QwfVOS+t-3p1Wx5awGHTvr-s_0Ew@mail.gmail.com>
+ <20220815071143.n2t5xsmifnigttq2@awork3.anarazel.de>
+ <20220815031549-mutt-send-email-mst@kernel.org>
+ <3df6bb82-1951-455d-a768-e9e1513eb667@www.fastmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v7 00/14] perf: test: Add trace data quality tests for
- CoreSight
-Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
-        mike.leach@linaro.org, leo.yan@linaro.org,
-        linux-perf-users@vger.kernel.org
-References: <20220812121641.336465-1-carsten.haitzler@foss.arm.com>
- <YvahJcUNAZ0WC8fj@kernel.org> <YvahnOSyts95F8xm@kernel.org>
- <YvaiE4w/Fb0XAmmM@kernel.org> <YvajWfaMUDjmrFoY@kernel.org>
-From:   Carsten Haitzler <carsten.haitzler@foss.arm.com>
-Organization: Arm Ltd.
-In-Reply-To: <YvajWfaMUDjmrFoY@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3df6bb82-1951-455d-a768-e9e1513eb667@www.fastmail.com>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Aug 15, 2022 at 12:46:36AM -0700, Andres Freund wrote:
+> Hi,
+> 
+> On Mon, Aug 15, 2022, at 00:29, Michael S. Tsirkin wrote:
+> > On Mon, Aug 15, 2022 at 12:11:43AM -0700, Andres Freund wrote:
+> >> Hi,
+> >> 
+> >> On 2022-08-14 20:18:44 -0700, Linus Torvalds wrote:
+> >> > On Sun, Aug 14, 2022 at 6:36 PM Andres Freund <andres@anarazel.de> wrote:
+> >> > >
+> >> > > Some of the symptoms could be related to the issue in this thread, hence
+> >> > > listing them here
+> >> > 
+> >> > Smells like slab corruption to me, and the problems may end up being
+> >> > then largely random just depending on who ends up using the allocation
+> >> > that gets trampled on.
+> >> > 
+> >> > I wouldn't be surprised if it's all the same thing - including your
+> >> > network issue.
+> >> 
+> >> Yea. As I just wrote in
+> >> https://postgr.es/m/20220815070203.plwjx7b3cyugpdt7%40awork3.anarazel.de I
+> >> bisected it down to one commit (762faee5a267). With that commit I only see the
+> >> networking issue across a few reboots, but with ebcce4926365 some boots oops
+> >> badly and other times it' "just" network not working.
+> >> 
+> >> 
+> >> [oopses]
+> 
+> >> If somebody knowledgeable staring at 762faee5a267 doesn't surface somebody I
+> >> can create a kernel with some more debugging stuff enabled, if somebody tells
+> >> me what'd work best here.
+> >> 
+> >> 
+> >> Greetings,
+> >> 
+> >> Andres Freund
+> >
+> > Thanks a lot for the work!
+> > Just a small clarification:
+> >
+> > So IIUC you see several issues, right?
+> 
+> Yes, although they might be related, as theorized by Linus upthread.
+> 
+> > With 762faee5a2678559d3dc09d95f8f2c54cd0466a7 you see networking issues.
+> 
+> Yes.
+> 
+> 
+> > With ebcce492636506443e4361db6587e6acd1a624f9 you see crashes.
+> 
+> Changed between rebooting. Sometimes the network issue, sometimes the crashes in the email you're replying to.
+>
 
+OK just adding:
 
-On 8/12/22 20:00, Arnaldo Carvalho de Melo wrote:
-> Em Fri, Aug 12, 2022 at 03:55:15PM -0300, Arnaldo Carvalho de Melo escreveu:
->> Em Fri, Aug 12, 2022 at 03:53:16PM -0300, Arnaldo Carvalho de Melo escreveu:
->>> Em Fri, Aug 12, 2022 at 03:51:17PM -0300, Arnaldo Carvalho de Melo escreveu:
->>>> Em Fri, Aug 12, 2022 at 01:16:27PM +0100, carsten.haitzler@foss.arm.com escreveu:
->>>>> previous older versions of test scripts that are editor backup files
->>>>> as well as skipping perf.data files that may appear and so on.
-> 
->>>>> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
-> 
->>>> On the next series, please add to the cover letter a summary of what
->>>> changed on each repost.
-> 
->>> I also saw that several of your patches got reviewed and given
->>> "Reviewed-by" tags, so if some of the patches in the previous versions
->>> didn't change and received Reviewed-by tags, please collect them on the
->>> current version.
-> 
->> I tried getting v5 to see if b4 would find v6 and v7 and go on figuring
->> this out for us, but somehow it can't match v5 to v6 and v7:
-> 
-> It seems you changed the subject on the cover letter, and AFAIK that is
-> what makes b4 find a previous version :-\
+    Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+    Acked-by: Jason Wang <jasowang@redhat.com>
+	L: virtualization@lists.linux-foundation.org
+	L: netdev@vger.kernel.org
 
-I was asked to change the subject... so I did. :)
+I think we can drop the original Cc list:
 
-> - Arnaldo
->   
->> ⬢[acme@toolbox perf]$ b4 am -ctsl --cc-trailers 20220728145256.2985298-1-carsten.haitzler@foss.arm.com
->> Grabbing thread from lore.kernel.org/all/20220728145256.2985298-1-carsten.haitzler%40foss.arm.com/t.mbox.gz
->> Checking for newer revisions on https://lore.kernel.org/all/
->> Analyzing 36 messages in the thread
->> ('Reviewed-by', 'Leo Yan <leo.yan@linaro.org>', None)
->> Checking attestation on all messages, may take a moment...
->> ---
->>    [PATCH v5 1/14] perf test: Refactor shell tests allowing subdirs
->>      + Reviewed-by: Leo Yan <leo.yan@linaro.org> (✓ DKIM/linaro.org)
->>    [PATCH v5 2/14] perf test: Add CoreSight shell lib shared code for future tests
->>      + Reviewed-by: Leo Yan <leo.yan@linaro.org> (✓ DKIM/linaro.org)
->>    [PATCH v5 3/14] perf test: Add build infra for perf test tools for CoreSight tests
->>    [PATCH v5 4/14] perf test: Add asm pureloop test tool
->>      + Reviewed-by: Leo Yan <leo.yan@linaro.org> (✓ DKIM/linaro.org)
->>    [PATCH v5 5/14] perf test: Add asm pureloop test shell script
->>      + Reviewed-by: Leo Yan <leo.yan@linaro.org> (✓ DKIM/linaro.org)
->>    [PATCH v5 6/14] perf test: Add git ignore for perf data generated by the CoreSight tests
->>      + Reviewed-by: Leo Yan <leo.yan@linaro.org> (✓ DKIM/linaro.org)
->>    [PATCH v5 7/14] perf test: Add memcpy thread test tool
->>      + Reviewed-by: Leo Yan <leo.yan@linaro.org> (✓ DKIM/linaro.org)
->>    [PATCH v5 8/14] perf test: Add memcpy thread test shell script
->>      + Reviewed-by: Leo Yan <leo.yan@linaro.org> (✓ DKIM/linaro.org)
->>    [PATCH v5 9/14] perf test: Add thread loop test tool
->>      + Reviewed-by: Leo Yan <leo.yan@linaro.org> (✓ DKIM/linaro.org)
->>    [PATCH v5 10/14] perf test: Add thread loop test shell scripts
->>      + Reviewed-by: Leo Yan <leo.yan@linaro.org> (✓ DKIM/linaro.org)
->>    [PATCH v5 11/14] perf test: Add unroll thread test tool
->>      + Reviewed-by: Leo Yan <leo.yan@linaro.org> (✓ DKIM/linaro.org)
->>    [PATCH v5 12/14] perf test: Add unroll thread test shell script
->>      + Reviewed-by: Leo Yan <leo.yan@linaro.org> (✓ DKIM/linaro.org)
->>    [PATCH v5 13/14] perf test: Add git ignore for tmp and output files of CoreSight tests
->>      + Reviewed-by: Leo Yan <leo.yan@linaro.org> (✓ DKIM/linaro.org)
->>    [PATCH v5 14/14] perf test: Add relevant documentation about CoreSight testing
->>      + Reviewed-by: Mike Leach <mike.leach@linaro.org> (✓ DKIM/linaro.org)
->>      + Reviewed-by: Leo Yan <leo.yan@linaro.org> (✓ DKIM/linaro.org)
->> ---
->> Total patches: 14
->> ---
->> Cover: ./v5_20220728_carsten_haitzler_a_patch_series_improving_data_quality_of_perf_test_for_coresight.cover
->>   Link: https://lore.kernel.org/r/20220728145256.2985298-1-carsten.haitzler@foss.arm.com
->>   Base: not specified
->>         git am ./v5_20220728_carsten_haitzler_a_patch_series_improving_data_quality_of_perf_test_for_coresight.mbx
->> ⬢[acme@toolbox perf]$
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Jens Axboe <axboe@kernel.dk>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+but I'm not sure, maybe they want to be informed.
+
+> 
+> > MST
+

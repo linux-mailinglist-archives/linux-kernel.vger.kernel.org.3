@@ -2,79 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B865931D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3025931EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232380AbiHOPbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:31:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
+        id S233288AbiHOPdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:33:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231970AbiHOPbr (ORCPT
+        with ESMTP id S231978AbiHOPcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:31:47 -0400
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD7BDF67;
-        Mon, 15 Aug 2022 08:31:45 -0700 (PDT)
-Received: by mail-wm1-f45.google.com with SMTP id r83-20020a1c4456000000b003a5cb389944so4062993wma.4;
-        Mon, 15 Aug 2022 08:31:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=gonRmhzBVac2V2N8Fv8ujJ3D6QMP5i+tjLo2hj32lw4=;
-        b=gLTMRlI1B9Zpx08oiE9+slu2AbGchKdVomj+2n3wcCgY6pOtB4wbM6WFtZ2pxZTwkY
-         iy4731K+79Hu6KikJDW7t6bhyKSDmlTeSlsqGz/qyhWKASosak1qae67mW/sLHWxcQzq
-         +u0QRHtsDROcsuYxoMj/WswqoO4hzzOzKCVtmJYMZCA/rSp0atM1q+LAzVpGk+4CioHN
-         AcMzlxFI8RRZmVxYO380WBVqDSrQRO7t+A9EohJLOa6GUw937NJd7LyqKV6RDgG/HUQk
-         BkLVe9jSDXLlE3LqHLO096QSq+ck8+K98WjPSkAPg3WNtm3h9CrEkLFUphO2rNI3AANG
-         bJQA==
-X-Gm-Message-State: ACgBeo1DpgbFY2M5HAAmyMTckr7dcMTbKaNQ9F1VtnwkwfUy+QW7G0du
-        w230guKmfJiVA11IgeaXBIU=
-X-Google-Smtp-Source: AA6agR5L79QLI3YGa5B+0m46Py2UasglBE8LXVeQJmSlHlqi/6hGb0xgT4cwr3okO/5JqqMnu/q+rA==
-X-Received: by 2002:a7b:ca58:0:b0:3a5:3c1c:6d71 with SMTP id m24-20020a7bca58000000b003a53c1c6d71mr17045618wml.118.1660577503668;
-        Mon, 15 Aug 2022 08:31:43 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id o30-20020a05600c511e00b003a5dde32e4bsm9494372wms.37.2022.08.15.08.31.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 08:31:43 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 15:31:41 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] Drivers: hv: vmbus: Optimize vmbus_on_event
-Message-ID: <20220815153141.x7q6qryxv25gvjgy@liuwe-devbox-debian-v2>
-References: <1658741848-4210-1-git-send-email-ssengar@linux.microsoft.com>
+        Mon, 15 Aug 2022 11:32:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232E41EEE1;
+        Mon, 15 Aug 2022 08:32:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4766610A2;
+        Mon, 15 Aug 2022 15:32:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B4ECC433C1;
+        Mon, 15 Aug 2022 15:32:34 +0000 (UTC)
+Date:   Mon, 15 Aug 2022 11:32:40 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Jiri Olsa <olsajiri@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
+Message-ID: <20220815113240.71edf5cf@gandalf.local.home>
+In-Reply-To: <CAADnVQKX5xJz5N_mVyf7wg4BT8Q2cNh8ze-SxTRfk6KtcFQ0=Q@mail.gmail.com>
+References: <20220722174120.688768a3@gandalf.local.home>
+        <YtxqjxJVbw3RD4jt@krava>
+        <YvbDlwJCTDWQ9uJj@krava>
+        <20220813150252.5aa63650@rorschach.local.home>
+        <Yvn9xR7qhXW7FnFL@worktop.programming.kicks-ass.net>
+        <YvoVgMzMuQbAEayk@krava>
+        <Yvo+EpO9dN30G0XE@worktop.programming.kicks-ass.net>
+        <CAADnVQJfvn2RYydqgO-nS_K+C8WJL7BdCnR44MiMF4rnAwWM5A@mail.gmail.com>
+        <YvpZJQGQdVaa2Oh4@worktop.programming.kicks-ass.net>
+        <CAADnVQKyfrFTZOM9F77i0NbaXLZZ7KbvKBvu7p6kgdnRgG+2=Q@mail.gmail.com>
+        <Yvpf67eCerqaDmlE@worktop.programming.kicks-ass.net>
+        <CAADnVQKX5xJz5N_mVyf7wg4BT8Q2cNh8ze-SxTRfk6KtcFQ0=Q@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1658741848-4210-1-git-send-email-ssengar@linux.microsoft.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 02:37:28AM -0700, Saurabh Sengar wrote:
-> In the vmbus_on_event loop, 2 jiffies timer will not serve the purpose if
-> callback_fn takes longer. For effective use move this check inside of
-> callback functions where needed. Out of all the VMbus drivers using
-> vmbus_on_event, only storvsc has a high packet volume, thus add this limit
-> only in storvsc callback for now.
-> There is no apparent benefit of loop itself because this tasklet will be
-> scheduled anyway again if there are packets left in ring buffer. This
-> patch removes this unnecessary loop as well.
-> 
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+On Mon, 15 Aug 2022 08:17:42 -0700
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-Unfortunately this missed the recent merge window so it will be picked
-up for the next release.
+> Ask yourself: should static_call patching logic go through
+> ftrace infra ? No. Right?
 
-Thanks,
-Wei.
+I agree that static_call (and jump_labels) are not part of the ftrace
+infrastructure (but ftrace was a strong motivator for those).
+
+> static_call has nothing to do with ftrace (function tracing).
+
+Besides the motivation, I agree.
+
+> Same thing here. bpf dispatching logic is nothing to do with
+> function tracing.
+
+But it used fentry, which is part of function tracing. Which is what I'm
+against. And why it broke ftrace.
+
+> In this case bpf_dispatcher_xdp_func is a placeholder written C.
+> If it was written in asm, fentry recording wouldn't have known about it.
+
+And I would not have had an issue with that approach (for ftrace that is).
+But that brings up other concerns (see below).
+
+> And that's more or less what Jiri patch is doing.
+> It's hiding a fake function from ftrace, since it's not a function
+> and ftrace infra shouldn't show it tracing logs.
+> In other words it's a _notrace_ function with nop5.
+
+On the ftrace side, I'm perfectly happy with Jiri's approach (the one I
+help extend).
+
+But dynamic code modification is something we need to take very seriously.
+It's very similar to writing your own locking primitives (which Linus
+always says "Don't do"). It's complex and easy to get wrong. The more
+dynamic code modifications we have, the less secure the kernel is.
+
+Here's the list of dynamic code modification infrastructures:
+
+ ftrace
+ kprobes
+ jump_labels
+ static_calls
+
+We now have the bpf dispatcher.
+
+The ftrace, kprobes, jump_labels and static_calls developers work together
+to make sure that we are all in line, not breaking anything, and try to
+consolidate when possible. We also review each others code.
+
+The issue I have is that BPF is largely doing it alone, and not
+communicating with the others. This gives me cause for concern on both a
+robustness and security point of view.
+
+-- Steve

@@ -2,158 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB814592E0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99820592E14
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232310AbiHOLTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 07:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37282 "EHLO
+        id S232024AbiHOLUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 07:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233466AbiHOLTi (ORCPT
+        with ESMTP id S231177AbiHOLUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 07:19:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67023193EB;
-        Mon, 15 Aug 2022 04:19:34 -0700 (PDT)
-Received: from [IPV6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1] (unknown [IPv6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id F2F006601BAA;
-        Mon, 15 Aug 2022 12:19:31 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1660562373;
-        bh=7VDcfaY/61kZaEB/yFutUdzjWcyPgxyXS1ILuPerbbU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jk5DoI+IH5DYDThdYAo546xqwrzNCAlGeakw8UoWGqd8lV9gPA2b/KQ2YYWjGdqUA
-         hmOdI4LhKNgbWTbZJnGvpI8USo6SvGUJYC2/kOzfe1jLwnIqNFVGLmJIbD9SVt0mPT
-         3Z7ifO3oOZ9O//shzPPbcdg1fE59p8WVl5Pz7PDyNnZbBqpXysQFiiGWGuzQdMIbWH
-         COLFjkRwkYNSw4fMMQlnXtHRjMVjiHrwHghVaz66ujxWugpReUYjFLzUybnU+Gd4J0
-         okPvahpqO2uP+RBtORXRy6zurFHcO8Rct6B15w5znGEA6qIPyZttehvwgD5m+bfLft
-         555lX0zRQXyaA==
-Message-ID: <86a87de8-24a9-3c53-3ac7-612ca97e41df@collabora.com>
-Date:   Mon, 15 Aug 2022 14:19:28 +0300
+        Mon, 15 Aug 2022 07:20:46 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405A3643E
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 04:20:45 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id h22so5201749qtu.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 04:20:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=bJIP1g+hM09ON1k9gg6gh/O38Wa2udi8wQnWVY2ihvc=;
+        b=df+rQmaCa/dDyhG2nv+cI1HBd1c962nhrgGBa+PujJ6Kh909sF4JHBvuiNrCITJl9q
+         46IQR81rpbeGKpyQC8/40DoTp5eKsChnFFEdOGMaglFLMXl/cX6NWkfNiJ/XEYXuj1Fy
+         VhokwlfDO7m3+p13ki78qU7lAs6JltwPt+FK0wS8bQMxDDn00r8BNBDnK+n9GXZxyCV4
+         wfwRYz7hEY9Tg7/BwJWoRfFW/eSMGYodoOCMq4+9xqXq97m6OnsE2ru7de3v38SUDQYp
+         US46t29f0L/fX4PN0pp6wNeO6euIlZi5KAVrQ0Oh6Bi6ycVFT+HPpKZVlKF3mcw9Wr9p
+         qayw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=bJIP1g+hM09ON1k9gg6gh/O38Wa2udi8wQnWVY2ihvc=;
+        b=S09+Kt5t3XPPJ5lGlc4/h5xRkKwtsdl+U2fod4U/Lv8y5v3ExiJ11w6PUUL6d6X481
+         UFU3M/CcpxKkgsORoGCgd0pi48U1BcTnQVAAFa5BF/6E3U7srfQ0j88pQ+xJ6fOCXjZn
+         v+dbtorKzHzQ8POgMNY5IAK3tQWC1vA5s30VzUCgIej8hmkADihJWOJukwZ4HF5m+t+M
+         Jj6dj0zPObwzB2rSEDA6G1ULcIdrKWciEl/oojp9LmtzWYndhfm5i/dqEivbJDCv40Ps
+         PvPUmnIkWWdldgI+5TzNvmqTNPoabfllDONcOlSkWBLp6Gymh/6nxnOzUfJGbX0KiSR8
+         ZK7w==
+X-Gm-Message-State: ACgBeo2Xs/8dH7W4fV/jAUpr1YK8wQ5W6mt/u4DpZoYuGP1GWa2f3Mmx
+        6L0T/QzDlODZoTFWO4H4DE0RzA==
+X-Google-Smtp-Source: AA6agR6Uo4gOQmYOHVKq6A4bRccs3tlswCW1D9T7mB39zGFLyLZbdz/TCQRBVlIlo+IetyP5h2iAbg==
+X-Received: by 2002:ac8:5d8b:0:b0:31e:ed61:b5a7 with SMTP id d11-20020ac85d8b000000b0031eed61b5a7mr13086482qtx.259.1660562444404;
+        Mon, 15 Aug 2022 04:20:44 -0700 (PDT)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id v3-20020a05620a440300b006b945519488sm6524983qkp.88.2022.08.15.04.20.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 04:20:43 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 07:20:41 -0400
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Julien Panis <jpanis@baylibre.com>
+Cc:     vilhelm.gray@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        mranostay@ti.com
+Subject: Re: [PATCH v4 3/3] counter: capture-tiecap: capture driver support
+ for ECAP
+Message-ID: <YvosCeuntEKXJz+e@fedora>
+References: <20220810140724.182389-1-jpanis@baylibre.com>
+ <20220810140724.182389-4-jpanis@baylibre.com>
+ <Yvkq9Hy+hxAPQd8J@fedora>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1] drm/ttm: Refcount allocated tail pages
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        David Airlie <airlied@linux.ie>, Huang Rui <ray.huang@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Trigger Huang <Trigger.Huang@gmail.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Antonio Caggiano <antonio.caggiano@collabora.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>, kvm@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-References: <20220815095423.11131-1-dmitry.osipenko@collabora.com>
- <8230a356-be38-f228-4a8e-95124e8e8db6@amd.com>
- <134bce02-58d6-8553-bb73-42dfda18a595@collabora.com>
- <8caf3008-dcf3-985a-631e-e019b277c6f0@amd.com>
- <4fcc4739-2da9-1b89-209c-876129604d7d@amd.com>
- <14be3b22-1d60-732b-c695-ddacc6b21055@collabora.com>
- <2df57a30-2afb-23dc-c7f5-f61c113dd5b4@collabora.com>
- <57562db8-bacf-e82d-8417-ab6343c1d2fa@amd.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <57562db8-bacf-e82d-8417-ab6343c1d2fa@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="31ldM9lRLLqWjxLp"
+Content-Disposition: inline
+In-Reply-To: <Yvkq9Hy+hxAPQd8J@fedora>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/15/22 13:51, Christian König wrote:
-> Am 15.08.22 um 12:47 schrieb Dmitry Osipenko:
->> On 8/15/22 13:18, Dmitry Osipenko wrote:
->>> On 8/15/22 13:14, Christian König wrote:
->>>> Am 15.08.22 um 12:11 schrieb Christian König:
->>>>> Am 15.08.22 um 12:09 schrieb Dmitry Osipenko:
->>>>>> On 8/15/22 13:05, Christian König wrote:
->>>>>>> Am 15.08.22 um 11:54 schrieb Dmitry Osipenko:
->>>>>>>> Higher order pages allocated using alloc_pages() aren't
->>>>>>>> refcounted and
->>>>>>>> they
->>>>>>>> need to be refcounted, otherwise it's impossible to map them by
->>>>>>>> KVM. This
->>>>>>>> patch sets the refcount of the tail pages and fixes the KVM memory
->>>>>>>> mapping
->>>>>>>> faults.
->>>>>>>>
->>>>>>>> Without this change guest virgl driver can't map host buffers into
->>>>>>>> guest
->>>>>>>> and can't provide OpenGL 4.5 profile support to the guest. The host
->>>>>>>> mappings are also needed for enabling the Venus driver using
->>>>>>>> host GPU
->>>>>>>> drivers that are utilizing TTM.
->>>>>>>>
->>>>>>>> Based on a patch proposed by Trigger Huang.
->>>>>>> Well I can't count how often I have repeated this: This is an
->>>>>>> absolutely
->>>>>>> clear NAK!
->>>>>>>
->>>>>>> TTM pages are not reference counted in the first place and
->>>>>>> because of
->>>>>>> this giving them to virgl is illegal.
->>>>>> A? The first page is refcounted when allocated, the tail pages are
->>>>>> not.
->>>>> No they aren't. The first page is just by coincident initialized with
->>>>> a refcount of 1. This refcount is completely ignored and not used
->>>>> at all.
->>>>>
->>>>> Incrementing the reference count and by this mapping the page into
->>>>> some other address space is illegal and corrupts the internal state
->>>>> tracking of TTM.
->>>> See this comment in the source code as well:
->>>>
->>>>          /* Don't set the __GFP_COMP flag for higher order allocations.
->>>>           * Mapping pages directly into an userspace process and
->>>> calling
->>>>           * put_page() on a TTM allocated page is illegal.
->>>>           */
->>>>
->>>> I have absolutely no idea how somebody had the idea he could do this.
->>> I saw this comment, but it doesn't make sense because it doesn't explain
->>> why it's illegal. Hence it looks like a bogus comment since the
->>> refcouting certainly works, at least to a some degree because I haven't
->>> noticed any problems in practice, maybe by luck :)
->>>
->>> I'll try to dig out the older discussions, thank you for the quick
->>> reply!
->> Are you sure it was really discussed in public previously? All I can
->> find is yours two answers to a similar patches where you're saying that
->> this it's a wrong solution without in-depth explanation and further
->> discussions.
-> 
-> Yeah, that's my problem as well I can't find that of hand.
-> 
-> But yes it certainly was discussed in public.
 
-If it was only CC'd to dri-devel, then could be that emails didn't pass
-the spam moderation :/
+--31ldM9lRLLqWjxLp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->> Maybe it was discussed privately? In this case I will be happy to get
->> more info from you about the root of the problem so I could start to
->> look at how to fix it properly. It's not apparent where the problem is
->> to a TTM newbie like me.
->>
-> 
-> Well this is completely unfixable. See the whole purpose of TTM is to
-> allow tracing where what is mapped of a buffer object.
-> 
-> If you circumvent that and increase the page reference yourself than
-> that whole functionality can't work correctly any more.
+On Sun, Aug 14, 2022 at 01:03:48PM -0400, William Breathitt Gray wrote:
+> On Wed, Aug 10, 2022 at 04:07:24PM +0200, Julien Panis wrote:
+> > +static int ecap_cnt_function_read(struct counter_device *counter,
+> > +				  struct counter_count *count,
+> > +				  enum counter_function *function)
+> > +{
+> > +	*function =3D COUNTER_FUNCTION_INCREASE;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int ecap_cnt_action_read(struct counter_device *counter,
+> > +				struct counter_count *count,
+> > +				struct counter_synapse *synapse,
+> > +				enum counter_synapse_action *action)
+> > +{
+> > +	*action =3D COUNTER_SYNAPSE_ACTION_BOTH_EDGES;
+> > +
+> > +	return 0;
+> > +}
+>=20
+> Right now you have a Signal defined for the ECAPSIG line, but there is
+> at least one more relevant Signal to define: the clock updating ECAPCNT.
+> The Synapse action of COUNTER_SYNAPSE_ACTION_BOTH_EDGES is for that
+> clock Signal, but for the ECAPSIG Signal you will need to report a
+> Synapse action based on the polarity of the next capture (i.e. whether
+> high or low).
 
-Are you suggesting that the problem is that TTM doesn't see the KVM page
-faults/mappings?
+I need to make a correction here. IIUC, the ECAPSIG signal doesn't
+affect the count value of ECAPCNT (ECAPSIG only triggers the captures),
+so the Synapse action for ECAPSIG should always be
+COUNTER_SYNAPSE_ACTION_NONE. You don't need to account for the capture
+polarities because they're not relevant in this particular situation:
+ECAPSIG doesn't trigger the ECAPCNT count function.
 
--- 
-Best regards,
-Dmitry
+William Breathitt Gray
+
+--31ldM9lRLLqWjxLp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYvosCQAKCRC1SFbKvhIj
+K6snAQCnHLXtaeFz7kheVRLMBzRZFRj428itPpXaS1E++G1YzQEA2He0P9PTIO3Z
+/8rNAGJz0tq11HR2c//Aw5ROzM5DWQw=
+=zMXK
+-----END PGP SIGNATURE-----
+
+--31ldM9lRLLqWjxLp--

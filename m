@@ -2,347 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFAB8592D0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1505A592B90
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbiHOKci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 06:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50054 "EHLO
+        id S242142AbiHOKdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 06:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiHOKcf (ORCPT
+        with ESMTP id S229752AbiHOKdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 06:32:35 -0400
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3257D2181E
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 03:32:34 -0700 (PDT)
-Received: from ramsan.of.borg ([84.195.186.194])
-        by albert.telenet-ops.be with bizsmtp
-        id 7mYX2800T4C55Sk06mYXFx; Mon, 15 Aug 2022 12:32:31 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1oNXOZ-0019aL-78; Mon, 15 Aug 2022 12:32:31 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1oNXOY-00C0OL-IA; Mon, 15 Aug 2022 12:32:30 +0200
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-m68k@lists.linux-m68k.org
-Cc:     linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH] m68k: defconfig: Update defconfigs for v6.0-rc1
-Date:   Mon, 15 Aug 2022 12:32:29 +0200
-Message-Id: <01a6abf7bc23a478d6a6c6801c6812ae96714620.1660559393.git.geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
+        Mon, 15 Aug 2022 06:33:06 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1329A2181E;
+        Mon, 15 Aug 2022 03:33:06 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id B44A680FB;
+        Mon, 15 Aug 2022 10:26:14 +0000 (UTC)
+Date:   Mon, 15 Aug 2022 13:33:04 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        John Stultz <jstultz@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v1 0/9] fw_devlink improvements
+Message-ID: <Yvog4K0barAvvVeb@atomide.com>
+References: <20220810060040.321697-1-saravanak@google.com>
+ <YvYiF36M09dX9ASm@atomide.com>
+ <CAGETcx-t0O0B+5i0FWwm5w2=ccOD5zVAaUvgQoP8PT9SOT_btw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGETcx-t0O0B+5i0FWwm5w2=ccOD5zVAaUvgQoP8PT9SOT_btw@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  - Enable modular build of the new HCTR2 and ARIA crypto algorithms,
-  - Drop CONFIG_CRYPTO_BLAKE2S=m (removed in commit 2d16803c562ecc64
-    ("crypto blake2s - remove shash module")).
+* Saravana Kannan <saravanak@google.com> [220813 00:45]:
+> On Fri, Aug 12, 2022 at 2:49 AM Tony Lindgren <tony@atomide.com> wrote:
+> >
+> > * Saravana Kannan <saravanak@google.com> [220810 05:54]:
+> > > Tony,
+> > >
+> > > This should handle the odd case of the child being the supplier of the
+> > > parent. Can you please give this a shot? I want to make sure the cycle
+> > > detection code handles this properly and treats it like it's NOT a cycle.
+> >
+> > Yup, this series works for me, so feel free to add:
+> >
+> > Tested-by: Tony Lindgren <tony@atomide.com>
+> 
+> Thanks for testing!
+> 
+> Btw, out of curiosity, how many different boards did you test this on?
+> IIRC you had an issue only in one board, right? Not to say I didn't
+> break anything else, I'm just trying to see how much confidence we
+> have on this series so far. I'm hoping the rest of the folks I listed
+> in the email will get around to testing this series.
 
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
----
-To be queued in the m68k for-v6.1 branch.
+Sorry if I was not clear earlier. The issue affects several generations
+of TI 32-bit SoCs at least, not just one board.
 
- arch/m68k/configs/amiga_defconfig    | 3 ++-
- arch/m68k/configs/apollo_defconfig   | 3 ++-
- arch/m68k/configs/atari_defconfig    | 3 ++-
- arch/m68k/configs/bvme6000_defconfig | 3 ++-
- arch/m68k/configs/hp300_defconfig    | 3 ++-
- arch/m68k/configs/mac_defconfig      | 3 ++-
- arch/m68k/configs/multi_defconfig    | 3 ++-
- arch/m68k/configs/mvme147_defconfig  | 3 ++-
- arch/m68k/configs/mvme16x_defconfig  | 3 ++-
- arch/m68k/configs/q40_defconfig      | 3 ++-
- arch/m68k/configs/sun3_defconfig     | 3 ++-
- arch/m68k/configs/sun3x_defconfig    | 3 ++-
- 12 files changed, 24 insertions(+), 12 deletions(-)
+> > I have some concerns though on how do we get a working -rc1 with the
+> > earlier series applied? See the comments in the last patch of this
+> > series.
+> 
+> I tried to reply, but not sure if it helps. We'll continue the discussion there.
 
-diff --git a/arch/m68k/configs/amiga_defconfig b/arch/m68k/configs/amiga_defconfig
-index a6a886a89be28382..1e545592ece66309 100644
---- a/arch/m68k/configs/amiga_defconfig
-+++ b/arch/m68k/configs/amiga_defconfig
-@@ -573,9 +573,9 @@ CONFIG_CRYPTO_PCBC=m
- CONFIG_CRYPTO_XTS=m
- CONFIG_CRYPTO_KEYWRAP=m
- CONFIG_CRYPTO_ADIANTUM=m
-+CONFIG_CRYPTO_HCTR2=m
- CONFIG_CRYPTO_XCBC=m
- CONFIG_CRYPTO_VMAC=m
--CONFIG_CRYPTO_BLAKE2S=m
- CONFIG_CRYPTO_MD4=m
- CONFIG_CRYPTO_MICHAEL_MIC=m
- CONFIG_CRYPTO_RMD160=m
-@@ -594,6 +594,7 @@ CONFIG_CRYPTO_DES=m
- CONFIG_CRYPTO_FCRYPT=m
- CONFIG_CRYPTO_KHAZAD=m
- CONFIG_CRYPTO_SEED=m
-+CONFIG_CRYPTO_ARIA=m
- CONFIG_CRYPTO_SERPENT=m
- CONFIG_CRYPTO_SM4_GENERIC=m
- CONFIG_CRYPTO_TEA=m
-diff --git a/arch/m68k/configs/apollo_defconfig b/arch/m68k/configs/apollo_defconfig
-index bffd24c2755e7117..8b3c02455f13e1c3 100644
---- a/arch/m68k/configs/apollo_defconfig
-+++ b/arch/m68k/configs/apollo_defconfig
-@@ -530,9 +530,9 @@ CONFIG_CRYPTO_PCBC=m
- CONFIG_CRYPTO_XTS=m
- CONFIG_CRYPTO_KEYWRAP=m
- CONFIG_CRYPTO_ADIANTUM=m
-+CONFIG_CRYPTO_HCTR2=m
- CONFIG_CRYPTO_XCBC=m
- CONFIG_CRYPTO_VMAC=m
--CONFIG_CRYPTO_BLAKE2S=m
- CONFIG_CRYPTO_MD4=m
- CONFIG_CRYPTO_MICHAEL_MIC=m
- CONFIG_CRYPTO_RMD160=m
-@@ -551,6 +551,7 @@ CONFIG_CRYPTO_DES=m
- CONFIG_CRYPTO_FCRYPT=m
- CONFIG_CRYPTO_KHAZAD=m
- CONFIG_CRYPTO_SEED=m
-+CONFIG_CRYPTO_ARIA=m
- CONFIG_CRYPTO_SERPENT=m
- CONFIG_CRYPTO_SM4_GENERIC=m
- CONFIG_CRYPTO_TEA=m
-diff --git a/arch/m68k/configs/atari_defconfig b/arch/m68k/configs/atari_defconfig
-index 97a6df6822f0f23f..217e286c2a760607 100644
---- a/arch/m68k/configs/atari_defconfig
-+++ b/arch/m68k/configs/atari_defconfig
-@@ -561,9 +561,9 @@ CONFIG_CRYPTO_PCBC=m
- CONFIG_CRYPTO_XTS=m
- CONFIG_CRYPTO_KEYWRAP=m
- CONFIG_CRYPTO_ADIANTUM=m
-+CONFIG_CRYPTO_HCTR2=m
- CONFIG_CRYPTO_XCBC=m
- CONFIG_CRYPTO_VMAC=m
--CONFIG_CRYPTO_BLAKE2S=m
- CONFIG_CRYPTO_MD4=m
- CONFIG_CRYPTO_MICHAEL_MIC=m
- CONFIG_CRYPTO_RMD160=m
-@@ -582,6 +582,7 @@ CONFIG_CRYPTO_DES=m
- CONFIG_CRYPTO_FCRYPT=m
- CONFIG_CRYPTO_KHAZAD=m
- CONFIG_CRYPTO_SEED=m
-+CONFIG_CRYPTO_ARIA=m
- CONFIG_CRYPTO_SERPENT=m
- CONFIG_CRYPTO_SM4_GENERIC=m
- CONFIG_CRYPTO_TEA=m
-diff --git a/arch/m68k/configs/bvme6000_defconfig b/arch/m68k/configs/bvme6000_defconfig
-index 42d969697f7f0352..083cbb179e708e1b 100644
---- a/arch/m68k/configs/bvme6000_defconfig
-+++ b/arch/m68k/configs/bvme6000_defconfig
-@@ -522,9 +522,9 @@ CONFIG_CRYPTO_PCBC=m
- CONFIG_CRYPTO_XTS=m
- CONFIG_CRYPTO_KEYWRAP=m
- CONFIG_CRYPTO_ADIANTUM=m
-+CONFIG_CRYPTO_HCTR2=m
- CONFIG_CRYPTO_XCBC=m
- CONFIG_CRYPTO_VMAC=m
--CONFIG_CRYPTO_BLAKE2S=m
- CONFIG_CRYPTO_MD4=m
- CONFIG_CRYPTO_MICHAEL_MIC=m
- CONFIG_CRYPTO_RMD160=m
-@@ -543,6 +543,7 @@ CONFIG_CRYPTO_DES=m
- CONFIG_CRYPTO_FCRYPT=m
- CONFIG_CRYPTO_KHAZAD=m
- CONFIG_CRYPTO_SEED=m
-+CONFIG_CRYPTO_ARIA=m
- CONFIG_CRYPTO_SERPENT=m
- CONFIG_CRYPTO_SM4_GENERIC=m
- CONFIG_CRYPTO_TEA=m
-diff --git a/arch/m68k/configs/hp300_defconfig b/arch/m68k/configs/hp300_defconfig
-index 97d6d9acb39520ab..291e250d843deefe 100644
---- a/arch/m68k/configs/hp300_defconfig
-+++ b/arch/m68k/configs/hp300_defconfig
-@@ -532,9 +532,9 @@ CONFIG_CRYPTO_PCBC=m
- CONFIG_CRYPTO_XTS=m
- CONFIG_CRYPTO_KEYWRAP=m
- CONFIG_CRYPTO_ADIANTUM=m
-+CONFIG_CRYPTO_HCTR2=m
- CONFIG_CRYPTO_XCBC=m
- CONFIG_CRYPTO_VMAC=m
--CONFIG_CRYPTO_BLAKE2S=m
- CONFIG_CRYPTO_MD4=m
- CONFIG_CRYPTO_MICHAEL_MIC=m
- CONFIG_CRYPTO_RMD160=m
-@@ -553,6 +553,7 @@ CONFIG_CRYPTO_DES=m
- CONFIG_CRYPTO_FCRYPT=m
- CONFIG_CRYPTO_KHAZAD=m
- CONFIG_CRYPTO_SEED=m
-+CONFIG_CRYPTO_ARIA=m
- CONFIG_CRYPTO_SERPENT=m
- CONFIG_CRYPTO_SM4_GENERIC=m
- CONFIG_CRYPTO_TEA=m
-diff --git a/arch/m68k/configs/mac_defconfig b/arch/m68k/configs/mac_defconfig
-index 8cbfc1c659a311b6..815ff8d9a65e4240 100644
---- a/arch/m68k/configs/mac_defconfig
-+++ b/arch/m68k/configs/mac_defconfig
-@@ -552,9 +552,9 @@ CONFIG_CRYPTO_PCBC=m
- CONFIG_CRYPTO_XTS=m
- CONFIG_CRYPTO_KEYWRAP=m
- CONFIG_CRYPTO_ADIANTUM=m
-+CONFIG_CRYPTO_HCTR2=m
- CONFIG_CRYPTO_XCBC=m
- CONFIG_CRYPTO_VMAC=m
--CONFIG_CRYPTO_BLAKE2S=m
- CONFIG_CRYPTO_MD4=m
- CONFIG_CRYPTO_MICHAEL_MIC=m
- CONFIG_CRYPTO_RMD160=m
-@@ -573,6 +573,7 @@ CONFIG_CRYPTO_DES=m
- CONFIG_CRYPTO_FCRYPT=m
- CONFIG_CRYPTO_KHAZAD=m
- CONFIG_CRYPTO_SEED=m
-+CONFIG_CRYPTO_ARIA=m
- CONFIG_CRYPTO_SERPENT=m
- CONFIG_CRYPTO_SM4_GENERIC=m
- CONFIG_CRYPTO_TEA=m
-diff --git a/arch/m68k/configs/multi_defconfig b/arch/m68k/configs/multi_defconfig
-index 9f45fe60757fab1c..5c84db94f9e11153 100644
---- a/arch/m68k/configs/multi_defconfig
-+++ b/arch/m68k/configs/multi_defconfig
-@@ -638,9 +638,9 @@ CONFIG_CRYPTO_PCBC=m
- CONFIG_CRYPTO_XTS=m
- CONFIG_CRYPTO_KEYWRAP=m
- CONFIG_CRYPTO_ADIANTUM=m
-+CONFIG_CRYPTO_HCTR2=m
- CONFIG_CRYPTO_XCBC=m
- CONFIG_CRYPTO_VMAC=m
--CONFIG_CRYPTO_BLAKE2S=m
- CONFIG_CRYPTO_MD4=m
- CONFIG_CRYPTO_MICHAEL_MIC=m
- CONFIG_CRYPTO_RMD160=m
-@@ -659,6 +659,7 @@ CONFIG_CRYPTO_DES=m
- CONFIG_CRYPTO_FCRYPT=m
- CONFIG_CRYPTO_KHAZAD=m
- CONFIG_CRYPTO_SEED=m
-+CONFIG_CRYPTO_ARIA=m
- CONFIG_CRYPTO_SERPENT=m
- CONFIG_CRYPTO_SM4_GENERIC=m
- CONFIG_CRYPTO_TEA=m
-diff --git a/arch/m68k/configs/mvme147_defconfig b/arch/m68k/configs/mvme147_defconfig
-index 4736cfacf6a2801c..0a2df9102b8e8404 100644
---- a/arch/m68k/configs/mvme147_defconfig
-+++ b/arch/m68k/configs/mvme147_defconfig
-@@ -521,9 +521,9 @@ CONFIG_CRYPTO_PCBC=m
- CONFIG_CRYPTO_XTS=m
- CONFIG_CRYPTO_KEYWRAP=m
- CONFIG_CRYPTO_ADIANTUM=m
-+CONFIG_CRYPTO_HCTR2=m
- CONFIG_CRYPTO_XCBC=m
- CONFIG_CRYPTO_VMAC=m
--CONFIG_CRYPTO_BLAKE2S=m
- CONFIG_CRYPTO_MD4=m
- CONFIG_CRYPTO_MICHAEL_MIC=m
- CONFIG_CRYPTO_RMD160=m
-@@ -542,6 +542,7 @@ CONFIG_CRYPTO_DES=m
- CONFIG_CRYPTO_FCRYPT=m
- CONFIG_CRYPTO_KHAZAD=m
- CONFIG_CRYPTO_SEED=m
-+CONFIG_CRYPTO_ARIA=m
- CONFIG_CRYPTO_SERPENT=m
- CONFIG_CRYPTO_SM4_GENERIC=m
- CONFIG_CRYPTO_TEA=m
-diff --git a/arch/m68k/configs/mvme16x_defconfig b/arch/m68k/configs/mvme16x_defconfig
-index 638cd38aa7d27303..951d37effb0cedff 100644
---- a/arch/m68k/configs/mvme16x_defconfig
-+++ b/arch/m68k/configs/mvme16x_defconfig
-@@ -522,9 +522,9 @@ CONFIG_CRYPTO_PCBC=m
- CONFIG_CRYPTO_XTS=m
- CONFIG_CRYPTO_KEYWRAP=m
- CONFIG_CRYPTO_ADIANTUM=m
-+CONFIG_CRYPTO_HCTR2=m
- CONFIG_CRYPTO_XCBC=m
- CONFIG_CRYPTO_VMAC=m
--CONFIG_CRYPTO_BLAKE2S=m
- CONFIG_CRYPTO_MD4=m
- CONFIG_CRYPTO_MICHAEL_MIC=m
- CONFIG_CRYPTO_RMD160=m
-@@ -543,6 +543,7 @@ CONFIG_CRYPTO_DES=m
- CONFIG_CRYPTO_FCRYPT=m
- CONFIG_CRYPTO_KHAZAD=m
- CONFIG_CRYPTO_SEED=m
-+CONFIG_CRYPTO_ARIA=m
- CONFIG_CRYPTO_SERPENT=m
- CONFIG_CRYPTO_SM4_GENERIC=m
- CONFIG_CRYPTO_TEA=m
-diff --git a/arch/m68k/configs/q40_defconfig b/arch/m68k/configs/q40_defconfig
-index ec8b6bb70ebdcaf3..258001e059baac3a 100644
---- a/arch/m68k/configs/q40_defconfig
-+++ b/arch/m68k/configs/q40_defconfig
-@@ -539,9 +539,9 @@ CONFIG_CRYPTO_PCBC=m
- CONFIG_CRYPTO_XTS=m
- CONFIG_CRYPTO_KEYWRAP=m
- CONFIG_CRYPTO_ADIANTUM=m
-+CONFIG_CRYPTO_HCTR2=m
- CONFIG_CRYPTO_XCBC=m
- CONFIG_CRYPTO_VMAC=m
--CONFIG_CRYPTO_BLAKE2S=m
- CONFIG_CRYPTO_MD4=m
- CONFIG_CRYPTO_MICHAEL_MIC=m
- CONFIG_CRYPTO_RMD160=m
-@@ -560,6 +560,7 @@ CONFIG_CRYPTO_DES=m
- CONFIG_CRYPTO_FCRYPT=m
- CONFIG_CRYPTO_KHAZAD=m
- CONFIG_CRYPTO_SEED=m
-+CONFIG_CRYPTO_ARIA=m
- CONFIG_CRYPTO_SERPENT=m
- CONFIG_CRYPTO_SM4_GENERIC=m
- CONFIG_CRYPTO_TEA=m
-diff --git a/arch/m68k/configs/sun3_defconfig b/arch/m68k/configs/sun3_defconfig
-index 7d8dc578d59c6ffb..eea582f0e4dc57f1 100644
---- a/arch/m68k/configs/sun3_defconfig
-+++ b/arch/m68k/configs/sun3_defconfig
-@@ -521,9 +521,9 @@ CONFIG_CRYPTO_PCBC=m
- CONFIG_CRYPTO_XTS=m
- CONFIG_CRYPTO_KEYWRAP=m
- CONFIG_CRYPTO_ADIANTUM=m
-+CONFIG_CRYPTO_HCTR2=m
- CONFIG_CRYPTO_XCBC=m
- CONFIG_CRYPTO_VMAC=m
--CONFIG_CRYPTO_BLAKE2S=m
- CONFIG_CRYPTO_MD4=m
- CONFIG_CRYPTO_MICHAEL_MIC=m
- CONFIG_CRYPTO_RMD160=m
-@@ -542,6 +542,7 @@ CONFIG_CRYPTO_DES=m
- CONFIG_CRYPTO_FCRYPT=m
- CONFIG_CRYPTO_KHAZAD=m
- CONFIG_CRYPTO_SEED=m
-+CONFIG_CRYPTO_ARIA=m
- CONFIG_CRYPTO_SERPENT=m
- CONFIG_CRYPTO_SM4_GENERIC=m
- CONFIG_CRYPTO_TEA=m
-diff --git a/arch/m68k/configs/sun3x_defconfig b/arch/m68k/configs/sun3x_defconfig
-index 96290aee530211e3..d2c857cf74b8c99f 100644
---- a/arch/m68k/configs/sun3x_defconfig
-+++ b/arch/m68k/configs/sun3x_defconfig
-@@ -520,9 +520,9 @@ CONFIG_CRYPTO_PCBC=m
- CONFIG_CRYPTO_XTS=m
- CONFIG_CRYPTO_KEYWRAP=m
- CONFIG_CRYPTO_ADIANTUM=m
-+CONFIG_CRYPTO_HCTR2=m
- CONFIG_CRYPTO_XCBC=m
- CONFIG_CRYPTO_VMAC=m
--CONFIG_CRYPTO_BLAKE2S=m
- CONFIG_CRYPTO_MD4=m
- CONFIG_CRYPTO_MICHAEL_MIC=m
- CONFIG_CRYPTO_RMD160=m
-@@ -541,6 +541,7 @@ CONFIG_CRYPTO_DES=m
- CONFIG_CRYPTO_FCRYPT=m
- CONFIG_CRYPTO_KHAZAD=m
- CONFIG_CRYPTO_SEED=m
-+CONFIG_CRYPTO_ARIA=m
- CONFIG_CRYPTO_SERPENT=m
- CONFIG_CRYPTO_SM4_GENERIC=m
- CONFIG_CRYPTO_TEA=m
--- 
-2.25.1
+Ack.
 
+Tony

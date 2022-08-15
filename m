@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB3759476F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8708E594749
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354609AbiHOXqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60346 "EHLO
+        id S1355065AbiHOXrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354305AbiHOXlu (ORCPT
+        with ESMTP id S1354318AbiHOXlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:41:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BD52BB24;
-        Mon, 15 Aug 2022 13:12:01 -0700 (PDT)
+        Mon, 15 Aug 2022 19:41:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D312C652;
+        Mon, 15 Aug 2022 13:12:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9CB26B80EA8;
-        Mon, 15 Aug 2022 20:12:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5A01C433D6;
-        Mon, 15 Aug 2022 20:11:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10DFD60B6E;
+        Mon, 15 Aug 2022 20:12:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 004B1C433C1;
+        Mon, 15 Aug 2022 20:12:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594319;
-        bh=MiXMrstoPWpyTCuBDxKm+tRaMe6TlgPj+u9hx714plc=;
+        s=korg; t=1660594341;
+        bh=tO76lJ66HsVJV3KXENX1SUk8oeNUKoWrD0rDT+0Y+lI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HhWZM0s3IIBzGxwSScSTWoE+30kJetG/u0pxcI4I+c45rW2TUYBLAAcfjWz/hmPIm
-         ssR9ZOjshSlfu2DeOUYegcZvs7Ol15Jm4Fq4gMWcWkEvVnxBFJNdpnTRN8RVpaD+Ke
-         wse2Yl72CuFut0Yp+m9OaEzHd/fYFiBo+cIlytN4=
+        b=png/pixYqbv4AWNf90gVIJIwv3RHazrRqi66RMiEWiTHUGfb0pHCrocjMF59yFMQE
+         wjhmlGn8FdsVLAnwt+Ut5AtW2wDtdMPI/IqRq2ZcneUzNoSWOOGsCB5B+qcmTcpNSv
+         leg2t+1NAL425nu4WGzEmuJRqoQIz2acLsltX+Yw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH 5.18 1092/1095] drm/vc4: change vc4_dma_range_matches from a global to static
-Date:   Mon, 15 Aug 2022 20:08:11 +0200
-Message-Id: <20220815180514.184361196@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Subject: [PATCH 5.18 1095/1095] Bluetooth: L2CAP: Fix l2cap_global_chan_by_psm regression
+Date:   Mon, 15 Aug 2022 20:08:14 +0200
+Message-Id: <20220815180514.297750540@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
 References: <20220815180429.240518113@linuxfoundation.org>
@@ -54,35 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-commit 63569d90863ff26c8b10c8971d1271c17a45224b upstream.
+commit 332f1795ca202489c665a75e62e18ff6284de077 upstream.
 
-sparse reports
-drivers/gpu/drm/vc4/vc4_drv.c:270:27: warning: symbol 'vc4_dma_range_matches' was not declared. Should it be static?
+The patch d0be8347c623: "Bluetooth: L2CAP: Fix use-after-free caused
+by l2cap_chan_put" from Jul 21, 2022, leads to the following Smatch
+static checker warning:
 
-vc4_dma_range_matches is only used in vc4_drv.c, so it's storage class specifier
-should be static.
+        net/bluetooth/l2cap_core.c:1977 l2cap_global_chan_by_psm()
+        error: we previously assumed 'c' could be null (see line 1996)
 
-Fixes: da8e393e23ef ("drm/vc4: drv: Adopt the dma configuration from the HVS or V3D component")
-Signed-off-by: Tom Rix <trix@redhat.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220629200101.498138-1-trix@redhat.com
+Fixes: d0be8347c623 ("Bluetooth: L2CAP: Fix use-after-free caused by l2cap_chan_put")
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/vc4/vc4_drv.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/bluetooth/l2cap_core.c |   13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
---- a/drivers/gpu/drm/vc4/vc4_drv.c
-+++ b/drivers/gpu/drm/vc4/vc4_drv.c
-@@ -209,7 +209,7 @@ static void vc4_match_add_drivers(struct
- 	}
- }
+--- a/net/bluetooth/l2cap_core.c
++++ b/net/bluetooth/l2cap_core.c
+@@ -1969,11 +1969,11 @@ static struct l2cap_chan *l2cap_global_c
+ 						   bdaddr_t *dst,
+ 						   u8 link_type)
+ {
+-	struct l2cap_chan *c, *c1 = NULL;
++	struct l2cap_chan *c, *tmp, *c1 = NULL;
  
--const struct of_device_id vc4_dma_range_matches[] = {
-+static const struct of_device_id vc4_dma_range_matches[] = {
- 	{ .compatible = "brcm,bcm2711-hvs" },
- 	{ .compatible = "brcm,bcm2835-hvs" },
- 	{ .compatible = "brcm,bcm2835-v3d" },
+ 	read_lock(&chan_list_lock);
+ 
+-	list_for_each_entry(c, &chan_list, global_l) {
++	list_for_each_entry_safe(c, tmp, &chan_list, global_l) {
+ 		if (state && c->state != state)
+ 			continue;
+ 
+@@ -1992,11 +1992,10 @@ static struct l2cap_chan *l2cap_global_c
+ 			dst_match = !bacmp(&c->dst, dst);
+ 			if (src_match && dst_match) {
+ 				c = l2cap_chan_hold_unless_zero(c);
+-				if (!c)
+-					continue;
+-
+-				read_unlock(&chan_list_lock);
+-				return c;
++				if (c) {
++					read_unlock(&chan_list_lock);
++					return c;
++				}
+ 			}
+ 
+ 			/* Closest match */
 
 

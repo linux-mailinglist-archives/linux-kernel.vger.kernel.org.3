@@ -2,130 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4857D592C96
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B0A592CCD
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241809AbiHOJIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 05:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
+        id S241874AbiHOJKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 05:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241794AbiHOJIB (ORCPT
+        with ESMTP id S230410AbiHOJKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 05:08:01 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00EDF21827;
-        Mon, 15 Aug 2022 02:08:01 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id 13so5846496plo.12;
-        Mon, 15 Aug 2022 02:08:00 -0700 (PDT)
+        Mon, 15 Aug 2022 05:10:00 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E796D21807
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 02:09:58 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id az6-20020a05600c600600b003a530cebbe3so3645108wmb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 02:09:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=c6YV89sLzCfE6GiVUft/eb1igCCifwtvh3OftDxp/M4=;
-        b=pR+mrvNHK07iKBkK6VYshAHOltu3tNxxDzv9RbKgbEbWjquwfYsYkHOhKUmG72rt7x
-         V/kKEjsc7mPZBDvmdgkzX/drCZ12BoCWCNIkgsDnxM5FIPrefx8Hn9oPsV52KVpZeNUH
-         KzGgs7WEEPmj+mgiMt9lTs9KAYsyttNAMlJuFNASSgXMdLoIKX2smD+7sA2y75xaRq8U
-         si1M999tzKGzW/XXEqN4lwm9bO0d6KB6qCwo697vt2TWKzZ/mKIZ6bVP26zTqpcrnW5T
-         wkjDBJ+z9hW87pVHW05kJjcdvphkEn/YZlxvlUDl/a8DqYEeFtgetg44jZQX9OaDr2G1
-         CyWw==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=KbV88Nyfrl4D5bH5/FyHyQsFA/7mQKDev2c0JUEvauU=;
+        b=USMSxPjaLyEqSmOQ+JNN+dZVW+o9dCB2RaU8Pv+eZeHGjWtBbUjmstLH8bSjQ++6x2
+         kNEtBgTVplhY4ClvB/8+vUiE7nLRptbhCKdxOfmBKH1U6EezrlndG+b5CVeRY9eNKeTR
+         qdB0fVb/1aLzjvQKIPcKptj/PBCJIIumKARLKhsfmfWm77+DFUkhGfzRpFQrMsnfYPTl
+         TJXHF5c4VDZtHdeUBAjBtlgP6CPzdWvNixDxThTIY8lrhRcmXkCeCrEySGN1C3j/kdiF
+         WmJGbmgplTIb+k1cEWo/H435UKgWDCR2n7P26AS6sM8WMzWUs1tuPKIFrCvo0ZFSctdR
+         4qWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=c6YV89sLzCfE6GiVUft/eb1igCCifwtvh3OftDxp/M4=;
-        b=o66oMPJPh3chRQov500VpzSDr7d5nKlo/OVbtfRYNuNBuK2JJTmwW3uvlspJvzNpz+
-         d5Si+RQG8DTWU6vr2OFv5/aQ/ZMV2WuGFqWcdKdn1PA89Uxl47MWCLRfGjz6/NL/KBRH
-         ksfxtzI6bIMWQXX3ZTyo1j2Wrfe+8sxcW+In7Bsqczdm80P0NOQZhrcvxoWtHMiTZGO8
-         O2XaLzmd74Lqc0lVEhXYyIoVMR0xDWjdmIyBGDGb5OJDxNIVGp5h2VramN2srJWB4yiJ
-         uHIdTTe5lxgwCCc7I+ZoPc5rnQze9chGuwkgATAnQhl2C2QIdgbuOD0pS6IKREVrIZ/L
-         wvyQ==
-X-Gm-Message-State: ACgBeo35+P5TwPKx8hjqBYDA+Lpp9k+jgLiyd992UZq8AcisJ7Zb+p7w
-        urq6EC7ooa0uS0QJBASHAEQ=
-X-Google-Smtp-Source: AA6agR6qU/u99YdT68C2E4GPc86lUJPytuIbHi+2sPqXMMCLpbyqQ+XecSHWABVbwgHFsvGNearNGA==
-X-Received: by 2002:a17:90a:fb4b:b0:1f3:1cbb:8912 with SMTP id iq11-20020a17090afb4b00b001f31cbb8912mr26922119pjb.239.1660554480499;
-        Mon, 15 Aug 2022 02:08:00 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-81.three.co.id. [180.214.233.81])
-        by smtp.gmail.com with ESMTPSA id z8-20020a170903018800b0016c9e5f290esm6642204plg.10.2022.08.15.02.07.59
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=KbV88Nyfrl4D5bH5/FyHyQsFA/7mQKDev2c0JUEvauU=;
+        b=zB3CLEKECxkKLE2fLl3F46Oayi/Ro8ZDoRk2yX4+nRQELSTkSsqS11NsXyrDTKr85F
+         3NRCEb5IkO9epLyMo+RC40Xr/5cuDKvCRbtmMbTC3WshXWkZReiDYOVeiTHHcot8YwMP
+         eNFWq9SsutXgauDPM7UNukkj2One/WSpVuchQQkD7xZLqqkJtrwTSk7CDhwT4b3RWUoP
+         rnoomCi8dsxXG15gYd/pT2CeROkYeNViTG2CGJjg1yCWnbJ4GYmtRL29pzSh6ywJnuQ6
+         mPe3FSLPK2ekBf1AHC1y74brHoYeEL02WJLnMzmHaTp0to7V+YJhUkoCwtc5QfJBwAXH
+         KNZg==
+X-Gm-Message-State: ACgBeo3D0O4owMJ/M0E8Vffad9pR5w7GnnRrawqFzJs32Is0OZqQD6pE
+        1zCcB/ivdfVF4zUnd/vsdYrLIw==
+X-Google-Smtp-Source: AA6agR5+bgtG2yUf7658VOqMIddUylxAqR2nIRuGuCRZU2nZPbNOpPJOIXjHe9nh7q6W/suV5c3erA==
+X-Received: by 2002:a05:600c:19c6:b0:3a5:ffb3:d527 with SMTP id u6-20020a05600c19c600b003a5ffb3d527mr890642wmq.106.1660554597513;
+        Mon, 15 Aug 2022 02:09:57 -0700 (PDT)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id b21-20020a05600c4e1500b003a50924f1c0sm8834296wmq.18.2022.08.15.02.09.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 02:08:00 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 7DF81103C03; Mon, 15 Aug 2022 16:07:57 +0700 (WIB)
-Date:   Mon, 15 Aug 2022 16:07:57 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
-        page-reclaim@google.com, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        Holger =?utf-8?Q?Hoffst=C3=A4tte?= 
-        <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Subject: Re: [PATCH v14 14/14] mm: multi-gen LRU: design doc
-Message-ID: <YvoM7e62p3HpTDcu@debian.me>
-References: <20220815071332.627393-1-yuzhao@google.com>
- <20220815071332.627393-15-yuzhao@google.com>
+        Mon, 15 Aug 2022 02:09:56 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 12:09:54 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, abelvesa@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+        Ye Li <ye.li@nxp.com>, Jacky Bai <ping.bai@nxp.com>
+Subject: Re: [PATCH V2 7/8] clk: imx93: add MU1/2 clock
+Message-ID: <YvoNYidBvJ/dkonW@linaro.org>
+References: <20220815013039.474970-1-peng.fan@oss.nxp.com>
+ <20220815013039.474970-8-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220815071332.627393-15-yuzhao@google.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220815013039.474970-8-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 01:13:33AM -0600, Yu Zhao wrote:
-> Add a design doc.
+On 22-08-15 09:30:38, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> Signed-off-by: Yu Zhao <yuzhao@google.com>
-> Acked-by: Brian Geffon <bgeffon@google.com>
-> Acked-by: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-> Acked-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-> Acked-by: Steven Barrett <steven@liquorix.net>
-> Acked-by: Suleiman Souhlal <suleiman@google.com>
-> Tested-by: Daniel Byrne <djbyrne@mtu.edu>
-> Tested-by: Donald Carr <d@chaos-reins.com>
-> Tested-by: Holger Hoffstätte <holger@applied-asynchrony.com>
-> Tested-by: Konstantin Kharlamov <Hi-Angel@yandex.ru>
-> Tested-by: Shuang Zhai <szhai2@cs.rochester.edu>
-> Tested-by: Sofia Trinh <sofia.trinh@edi.works>
-> Tested-by: Vaibhav Jain <vaibhav@linux.ibm.com>
+> The clk tree should be as:
+> bus_aon_root------>\               /--->MU1_B IP
+>                     -->MU_B gate-->
+> bus_wakeup_root--->/               \--->MU2_B IP
+> 
+> bus_aon_root------>\               /--->MU1_A IP
+>                     -->MU_A gate-->
+> bus_wakeup_root--->/               \--->MU2_A IP
+> 
+> So need use shared count gate. And linux use MU_B,
+> so set MU_A clk as CLK_IGNORE_UNUSED.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> Reviewed-by: Ye Li <ye.li@nxp.com>
+> Reviewed-by: Jacky Bai <ping.bai@nxp.com>
 
-LGTM to me (no new warnings).
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
--- 
-An old man doll... just what I always wanted! - Clara
+> ---
+>  drivers/clk/imx/clk-imx93.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/clk/imx/clk-imx93.c b/drivers/clk/imx/clk-imx93.c
+> index 73d30a2e64b0..4008ab075dfe 100644
+> --- a/drivers/clk/imx/clk-imx93.c
+> +++ b/drivers/clk/imx/clk-imx93.c
+> @@ -28,6 +28,8 @@ enum clk_sel {
+>  	MAX_SEL
+>  };
+>  
+> +static u32 share_count_mub;
+> +
+>  static const char *parent_names[MAX_SEL][4] = {
+>  	{"osc_24m", "sys_pll_pfd0_div2", "sys_pll_pfd1_div2", "video_pll"},
+>  	{"osc_24m", "sys_pll_pfd0_div2", "sys_pll_pfd1_div2", "sys_pll_pfd2_div2"},
+> @@ -159,8 +161,10 @@ static const struct imx93_clk_ccgr {
+>  	{ IMX93_CLK_WDOG5_GATE,		"wdog5",	"osc_24m",		0x8400, },
+>  	{ IMX93_CLK_SEMA1_GATE,		"sema1",	"bus_aon_root",		0x8440, },
+>  	{ IMX93_CLK_SEMA2_GATE,		"sema2",	"bus_wakeup_root",	0x8480, },
+> -	{ IMX93_CLK_MU_A_GATE,		"mu_a",		"bus_aon_root",		0x84c0, },
+> -	{ IMX93_CLK_MU_B_GATE,		"mu_b",		"bus_aon_root",		0x8500, },
+> +	{ IMX93_CLK_MU1_A_GATE,		"mu1_a",	"bus_aon_root",		0x84c0, CLK_IGNORE_UNUSED },
+> +	{ IMX93_CLK_MU2_A_GATE,		"mu2_a",	"bus_wakeup_root",	0x84c0, CLK_IGNORE_UNUSED },
+> +	{ IMX93_CLK_MU1_B_GATE,		"mu1_b",	"bus_aon_root",		0x8500, 0, &share_count_mub },
+> +	{ IMX93_CLK_MU2_B_GATE,		"mu2_b",	"bus_wakeup_root",	0x8500, 0, &share_count_mub },
+>  	{ IMX93_CLK_EDMA1_GATE,		"edma1",	"m33_root",		0x8540, },
+>  	{ IMX93_CLK_EDMA2_GATE,		"edma2",	"wakeup_axi_root",	0x8580, },
+>  	{ IMX93_CLK_FLEXSPI1_GATE,	"flexspi",	"flexspi_root",		0x8640, },
+> -- 
+> 2.37.1
+> 

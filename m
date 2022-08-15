@@ -2,284 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBEB6592897
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 06:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 124CF59289A
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 06:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240996AbiHOEPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 00:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
+        id S231124AbiHOESQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 00:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240604AbiHOEPW (ORCPT
+        with ESMTP id S230237AbiHOESO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 00:15:22 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCAC14085
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 21:15:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660536912; x=1692072912;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=IDZAMF3H0jOJUSFvgSQfeFD1dZ2psaQLK4sileStRHs=;
-  b=GBIXTVBMC1mJPETz0E4WI9uAwJNGBy8dqLiM5IeaI7LZWDWlW97gRhcj
-   jjgKxaWfPDiXG1w5Hq9wHoG7qPcA8DouvsXFHTXntvXYMfcsQQY1N/vLH
-   ol3I70kB1AeMgBD4bdsESXLW20oBLl0QLKEri5v2IBHZ2e8ABpN8VxEeN
-   bmLHRdYZYyUmHjwiWTAsOw7DNlJazrCGzGOd0PuYqiXJN0VLS88euRDoM
-   lYhRiAPLhcLuqWl6UyN3d4y1N4jSpPkKXx+2eJdYwxSDEQARWF1Yqs/Ku
-   oJ03yF8THjxwYpTNU8dTQH4QMTggqzgr/dO/+aJeGfNNAO97YM9i6FLKn
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="271658919"
-X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
-   d="scan'208";a="271658919"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 21:15:12 -0700
-X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
-   d="scan'208";a="635346906"
-Received: from dmalka-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.42.26])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 21:15:07 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 9A162104A70; Mon, 15 Aug 2022 07:18:04 +0300 (+03)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Weihong Zhang <weihong.zhang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv6 11/11] selftests/x86/lam: Add inherit test cases for linear-address masking
-Date:   Mon, 15 Aug 2022 07:18:03 +0300
-Message-Id: <20220815041803.17954-12-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220815041803.17954-1-kirill.shutemov@linux.intel.com>
-References: <20220815041803.17954-1-kirill.shutemov@linux.intel.com>
+        Mon, 15 Aug 2022 00:18:14 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0146260C2
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 21:18:13 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id o3so5478281ple.5
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 21:18:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=E+SbdWKle26nrNTvjrwjORRMK5B3fUHqQoLgOh5gagc=;
+        b=YCiOrOI4t57JroaK+DvgxUd40PqFb566csy0KZpoHxIAjL/vPPk6J1m/YLVAQJgafF
+         MBc/BEm1UbTvtrczItUPUi4//hLIjk/GfM4ooAEfFoZVAo14khCxzIa/7Xg2+FZDNVLe
+         Wc5wsr2o66GeVKuXZe7WjOqecyDFXKE0pAno4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=E+SbdWKle26nrNTvjrwjORRMK5B3fUHqQoLgOh5gagc=;
+        b=XF4busZF12fJkh6rZFE+LUUdMLn50SKBC6MI64EFIVWnk0iIXDzA9A8wGFuo13h9rM
+         3hZYbjbOnY/3k7w8TRxIXos7yjS7EqtlKm6B0ig2oYcRleesmFg1HCtDscKc+0T1hBJF
+         BeW8XdbSR4vMYCwYskr3X6Jvoi3hoTs4ZCTTQb8YchdjIUt2cugDSyrpb6J4ST/M4eru
+         3AxOyL93LFRcBoO5TETtTBorybA4P+XHrgldAAK8jjeANWwD78xijnRIV60dhRFZZWA4
+         wRR4iyIQfGkwdRlH6vlCQgfj2ImX+pphQsLtuHF1L9/ifF3I7iQS/hEyXYjf/+G6yHK4
+         bwkA==
+X-Gm-Message-State: ACgBeo3gQyaGV/MdXNXinUn1AG2Rp23cszXKP2cjx3F1j9MXPbAPEoDV
+        +dcKZLOyu2mtDafC/CYWIe+wtw==
+X-Google-Smtp-Source: AA6agR6GXAxP7HE9fOcv7/Zk0pGt69h2rxMcVW4JHZ34d0rGzZis2n5ZicCc9p418kS+2Tm2EbU2Cw==
+X-Received: by 2002:a17:90b:3807:b0:1f4:ecf7:5987 with SMTP id mq7-20020a17090b380700b001f4ecf75987mr15932324pjb.13.1660537092524;
+        Sun, 14 Aug 2022 21:18:12 -0700 (PDT)
+Received: from judyhsiao0523.c.googlers.com.com (21.160.199.104.bc.googleusercontent.com. [104.199.160.21])
+        by smtp.gmail.com with ESMTPSA id 6-20020a170902c20600b0016d2d0ce376sm6114433pll.215.2022.08.14.21.18.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Aug 2022 21:18:11 -0700 (PDT)
+From:   Judy Hsiao <judyhsiao@chromium.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+        dianders@chromium.org, mka@chromium.org, cychiang@google.com,
+        judyhsiao@google.com, swboyd@chromium.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Judy Hsiao <judyhsiao@chromium.org>,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v1] arm64: dts: qcom: sc7280: Use "PP1800_L2C" as the DMIC power source.
+Date:   Mon, 15 Aug 2022 04:18:04 +0000
+Message-Id: <20220815041804.583181-1-judyhsiao@chromium.org>
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Weihong Zhang <weihong.zhang@intel.com>
+Use "PP1800_L2C" as the DMIC power source.
 
-LAM is enabled per-thread and gets inherited on fork(2)/clone(2). exec()
-reverts LAM status to the default disabled state.
-
-There are two test scenarios:
-
- - Fork test cases:
-
-   These cases were used to test the inheritance of LAM for per-thread,
-   Child process generated by fork() should inherit LAM feature from
-   parent process, Child process can get the LAM mode same as parent
-   process.
-
- - Execve test cases:
-
-   Processes generated by execve() are different from processes
-   generated by fork(), these processes revert LAM status to disabled
-   status.
-
-Signed-off-by: Weihong Zhang <weihong.zhang@intel.com>
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
 ---
- tools/testing/selftests/x86/lam.c | 123 +++++++++++++++++++++++++++++-
- 1 file changed, 120 insertions(+), 3 deletions(-)
+This patch depends on:
+arm64: dts: qcom: sc7280: Add herobrine-villager-r1. [1]
 
-diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
-index 19208ba6047a..074fa0cd65ef 100644
---- a/tools/testing/selftests/x86/lam.c
-+++ b/tools/testing/selftests/x86/lam.c
-@@ -35,8 +35,9 @@
- #define FUNC_MMAP               0x4
- #define FUNC_SYSCALL            0x8
- #define FUNC_URING              0x10
-+#define FUNC_INHERITE           0x20
- 
--#define TEST_MASK               0x1f
-+#define TEST_MASK               0x3f
- 
- #define LOW_ADDR                (0x1UL << 30)
- #define HIGH_ADDR               (0x3UL << 48)
-@@ -169,6 +170,28 @@ static unsigned long get_default_tag_bits(void)
- 	return lam;
- }
- 
-+/*
-+ * Set tagged address and read back untag mask.
-+ * check if the untag mask is expected.
-+ */
-+static int get_lam(void)
-+{
-+	uint64_t ptr = 0;
-+	int ret = -1;
-+	/* Get untagged mask */
-+	if (syscall(SYS_arch_prctl, ARCH_GET_UNTAG_MASK, &ptr) == -1)
-+		return -1;
-+
-+	/* Check mask returned is expected */
-+	if (ptr == ~(0x3fULL << 57))
-+		ret = LAM_U57_BITS;
-+	else if (ptr == -1ULL)
-+		ret = LAM_NONE;
-+
-+
-+	return ret;
-+}
-+
- /* According to LAM mode, set metadata in high bits */
- static uint64_t get_metadata(uint64_t src, unsigned long lam)
- {
-@@ -623,6 +646,72 @@ static int fork_test(struct testcases *test)
- 	return ret;
- }
- 
-+static int handle_execve(struct testcases *test)
-+{
-+	int ret, child_ret;
-+	int lam = test->lam;
-+	pid_t pid;
-+
-+	pid = fork();
-+	if (pid < 0) {
-+		perror("Fork failed.");
-+		ret = 1;
-+	} else if (pid == 0) {
-+		char path[PATH_MAX];
-+
-+		/* Set LAM mode in parent process */
-+		if (set_lam(lam) != 0)
-+			return 1;
-+
-+		/* Get current binary's path and the binary was run by execve */
-+		if (readlink("/proc/self/exe", path, PATH_MAX) <= 0)
-+			exit(-1);
-+
-+		/* run binary to get LAM mode and return to parent process */
-+		if (execlp(path, path, "-t 0x0", NULL) < 0) {
-+			perror("error on exec");
-+			exit(-1);
-+		}
-+	} else {
-+		wait(&child_ret);
-+		ret = WEXITSTATUS(child_ret);
-+		if (ret != LAM_NONE)
-+			return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int handle_inheritance(struct testcases *test)
-+{
-+	int ret, child_ret;
-+	int lam = test->lam;
-+	pid_t pid;
-+
-+	/* Set LAM mode in parent process */
-+	if (set_lam(lam) != 0)
-+		return 1;
-+
-+	pid = fork();
-+	if (pid < 0) {
-+		perror("Fork failed.");
-+		return 1;
-+	} else if (pid == 0) {
-+		/* Set LAM mode in parent process */
-+		int child_lam = get_lam();
-+
-+		exit(child_lam);
-+	} else {
-+		wait(&child_ret);
-+		ret = WEXITSTATUS(child_ret);
-+
-+		if (lam != ret)
-+			return 1;
-+	}
-+
-+	return 0;
-+}
-+
- static void run_test(struct testcases *test, int count)
- {
- 	int i, ret = 0;
-@@ -724,11 +813,26 @@ static struct testcases mmap_cases[] = {
- 	},
+[1]
+https://patchwork.kernel.org/patch/12926099/
+
+
+ .../dts/qcom/sc7280-herobrine-villager-r1.dts | 28 +++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
+index c03b3ae4de50..983defa7c76d 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
++++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
+@@ -12,3 +12,31 @@ / {
+ 	model = "Google Villager (rev1+)";
+ 	compatible = "google,villager", "qcom,sc7280";
  };
- 
-+static struct testcases inheritance_cases[] = {
-+	{
-+		.expected = 0,
-+		.lam = LAM_U57_BITS,
-+		.test_func = handle_inheritance,
-+		.msg = "FORK: LAM_U57, child process should get LAM mode same as parent\n",
-+	},
-+	{
-+		.expected = 0,
-+		.lam = LAM_U57_BITS,
-+		.test_func = handle_execve,
-+		.msg = "EXECVE: LAM_U57, child process should get disabled LAM mode\n",
-+	},
++
++&lpass_va_macro {
++	vdd-micb-supply = <&pp1800_l2c>;
 +};
 +
- static void cmd_help(void)
- {
- 	printf("usage: lam [-h] [-t test list]\n");
- 	printf("\t-t test list: run tests specified in the test list, default:0x%x\n", TEST_MASK);
--	printf("\t\t0x1:malloc; 0x2:max_bits; 0x4:mmap; 0x8:syscall; 0x10:io_uring.\n");
-+	printf("\t\t0x1:malloc; 0x2:max_bits; 0x4:mmap; 0x8:syscall; 0x10:io_uring; 0x20:inherit;\n");
- 	printf("\t-h: help\n");
- }
- 
-@@ -748,7 +852,7 @@ int main(int argc, char **argv)
- 		switch (c) {
- 		case 't':
- 			tests = strtoul(optarg, NULL, 16);
--			if (!(tests & TEST_MASK)) {
-+			if (tests && !(tests & TEST_MASK)) {
- 				ksft_print_msg("Invalid argument!\n");
- 				return -1;
- 			}
-@@ -762,6 +866,16 @@ int main(int argc, char **argv)
- 		}
- 	}
- 
-+	/*
-+	 * When tests is 0, it is not a real test case;
-+	 * the option used by test case(execve) to check the lam mode in
-+	 * process generated by execve, the process read back lam mode and
-+	 * check with lam mode in parent process.
-+	 */
-+	if (!tests)
-+		return (get_lam());
++&sound {
++	audio-routing =
++			"IN1_HPHL", "HPHL_OUT",
++			"IN2_HPHR", "HPHR_OUT",
++			"AMIC1", "MIC BIAS1",
++			"AMIC2", "MIC BIAS2",
++			"VA DMIC0", "vdd-micb",
++			"VA DMIC1", "vdd-micb",
++			"VA DMIC2", "vdd-micb",
++			"VA DMIC3", "vdd-micb",
++			"TX SWR_ADC0", "ADC1_OUTPUT",
++			"TX SWR_ADC1", "ADC2_OUTPUT",
++			"TX SWR_ADC2", "ADC3_OUTPUT",
++			"TX SWR_DMIC0", "DMIC1_OUTPUT",
++			"TX SWR_DMIC1", "DMIC2_OUTPUT",
++			"TX SWR_DMIC2", "DMIC3_OUTPUT",
++			"TX SWR_DMIC3", "DMIC4_OUTPUT",
++			"TX SWR_DMIC4", "DMIC5_OUTPUT",
++			"TX SWR_DMIC5", "DMIC6_OUTPUT",
++			"TX SWR_DMIC6", "DMIC7_OUTPUT",
++			"TX SWR_DMIC7", "DMIC8_OUTPUT";
 +
-+	/* Run test cases */
- 	if (tests & FUNC_MALLOC)
- 		run_test(malloc_cases, ARRAY_SIZE(malloc_cases));
- 
-@@ -777,6 +891,9 @@ int main(int argc, char **argv)
- 	if (tests & FUNC_URING)
- 		run_test(uring_cases, ARRAY_SIZE(uring_cases));
- 
-+	if (tests & FUNC_INHERITE)
-+		run_test(inheritance_cases, ARRAY_SIZE(inheritance_cases));
-+
- 	ksft_set_plan(tests_cnt);
- 
- 	return ksft_exit_pass();
++};
 -- 
-2.35.1
+2.31.0
 

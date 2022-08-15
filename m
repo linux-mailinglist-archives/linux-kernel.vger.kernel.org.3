@@ -2,167 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B73D59304B
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA5659304F
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231295AbiHONyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 09:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
+        id S232431AbiHONzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 09:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241718AbiHONx4 (ORCPT
+        with ESMTP id S231978AbiHONzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 09:53:56 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2080.outbound.protection.outlook.com [40.107.101.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0F1222A1;
-        Mon, 15 Aug 2022 06:53:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K4DXpOZJyZEVV+Sy4dcjJWakbhyyEpCP/xhDU8KkQXWk6qc/bWEQ7s8zTk/tGAKRXEe5FU6oUweMU9grrS8/ZhfPas19gYO188DH61AhiOL+lxEzhdO5i1i4J2IAkeHdoxg2IlRhwdCQ6kC9ARsQnRCsbhmXWoLuYOZ0ul8DzGedVaCOeGZz8scjXLtwUEFof42oTYixeo1dIUenE437xekLQ9qapgwW3J4Jg4jeWyZAEQ4Dx12aX9jxSdM9BXz0CE2MVLunFaaUoWTeCmtT8swEHjokgm/h47qJiJyQbTZBJK5f2tpLgzLZyLHeYvoCU/XKaVs43DctyXN9t2HQ5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jzQIBALnW6s2lDAfI0j23heQGt76yt1ZxYeMUwho1Oo=;
- b=l6L0TjiEpyZ639mfU64CLyWMYbexzkLG35tO7JJQH+H/mqJdyXWVJkhaLU1Rw6KvXflKGGW2ruC5+eCXODNRcLV+PCuOBLeID3dL9myO9TVE55ITjj1RXx1KfdGZG49yVSCgBOhnFBuionRBFZkdynQ9UrZUkWjCzbLONrx7nJGBmiifjFpj/vLy1901p+ZsadWJP4EqSA1K2vmU2WeCeJC3aNi6/2ZGg7JM8r9ygT3+tCv2Gi/yWahhHhuCuGizyuFlqCyCL2vLESrR+Ypd3qU/YBacrqYepCjemLmjBZy6wLFDoPRnlecb0DfJokP8HB+/bII724VkqFtgQtLvGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jzQIBALnW6s2lDAfI0j23heQGt76yt1ZxYeMUwho1Oo=;
- b=bviOS4nimzv/ls3bDsshSS4a33Bdowem0pmLD2jUnCXiq1DiLoev7n4Tq0a+gz34lrfcJuN7q3ObuvI59bVJ+yGk9UibvtDhfAQxdAA8zQRsrPo+oCkp6kBaknF9PCq7I+4CMLRp8CAQeobKcFer4QkEuZerUBDq5QWgirsAoas=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by MN2PR12MB3344.namprd12.prod.outlook.com (2603:10b6:208:c5::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Mon, 15 Aug
- 2022 13:53:47 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39%2]) with mapi id 15.20.5504.020; Mon, 15 Aug 2022
- 13:53:47 +0000
-Message-ID: <73e5ed8d-0d25-7d44-8fa2-e1d61b1f5a04@amd.com>
-Date:   Mon, 15 Aug 2022 15:53:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1] drm/ttm: Refcount allocated tail pages
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>, Huang Rui <ray.huang@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Trigger Huang <Trigger.Huang@gmail.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Antonio Caggiano <antonio.caggiano@collabora.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>, kvm@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-References: <20220815095423.11131-1-dmitry.osipenko@collabora.com>
- <8230a356-be38-f228-4a8e-95124e8e8db6@amd.com>
- <134bce02-58d6-8553-bb73-42dfda18a595@collabora.com>
- <8caf3008-dcf3-985a-631e-e019b277c6f0@amd.com>
- <4fcc4739-2da9-1b89-209c-876129604d7d@amd.com>
- <14be3b22-1d60-732b-c695-ddacc6b21055@collabora.com>
- <2df57a30-2afb-23dc-c7f5-f61c113dd5b4@collabora.com>
- <57562db8-bacf-e82d-8417-ab6343c1d2fa@amd.com>
- <86a87de8-24a9-3c53-3ac7-612ca97e41df@collabora.com>
- <8f749cd0-9a04-7c72-6a4f-a42d501e1489@amd.com>
- <5340d876-62b8-8a64-aa6d-7736c2c8710f@collabora.com>
- <594f1013-b925-3c75-be61-2d649f5ca54e@amd.com>
- <6893d5e9-4b60-0efb-2a87-698b1bcda63e@collabora.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <6893d5e9-4b60-0efb-2a87-698b1bcda63e@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS8PR07CA0003.eurprd07.prod.outlook.com
- (2603:10a6:20b:451::18) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Mon, 15 Aug 2022 09:55:03 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F49F1F2C9;
+        Mon, 15 Aug 2022 06:55:01 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oNaYB-0003x2-Bp; Mon, 15 Aug 2022 15:54:39 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH v2 01/10] dt-bindings: sram: sunxi-sram: Clean up the compatible lists
+Date:   Mon, 15 Aug 2022 15:54:38 +0200
+Message-ID: <2133598.C4sosBPzcN@diego>
+In-Reply-To: <20220815041248.53268-2-samuel@sholland.org>
+References: <20220815041248.53268-1-samuel@sholland.org> <20220815041248.53268-2-samuel@sholland.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d861bd50-a980-4e14-15f6-08da7ec59368
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3344:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: N4/4mkY+hz6Aw7d/9jLOw0JpLFczHjzbjWk5a4LSbfOfqX9LnO9iqRbVV96x2VhEG9MJNqLSLuAS7JQabUoNNCNPVUTnq7veg1uKgIOEbM4iaaPob8RxQb4la6Q9wkgsiOZKa87dmCu6K1WEOrFFiNbyckEt+Ss1f/cM0QWYaubx+eGFVA5tNw14irPhJ21XOnSfV8dJSVovVwJHwIjFAmwnYYFePG6qUUZL7F/eg2P5L81GkKBhB55gSdLPP4gbLkBUo4uUpaYEGFjTMxKFtMKPMU3dFkXejh3iUBtqjKhU4F+PWdD516qSns6MUreaabusZ7ZeY3SPXWFX0M38TyBL1ZT0xoLHJTWXOYB7S6umJI5OLdh4Clv1Ibx4M1vsCJPcm/zz7KKwpT9ptM3ni1Anfh+EQ7NoXUe4jKJBXCAJxJLQK5yp+NwXdHtP1Wwqq9NQ7BMSkEZG+dld3bmLyjfZHBYe6u0srUMTnx6+YzbSHoPpMmMmXew6AxdStnTo33vdolKOAXN58dnIibdQqUfG9dKXpS7k0+q8Q2xbkv6BpjkLt+joKuscDlBbEMpEavQzYh+8XW1YTr/9zH+ZkHC+gYWzkQSB89xOl04ukMsV2CbJsD0TWRYdKUKr+fUUBjSkqsKhajmzvj5KYA6uDCNjkQwnch8tX2oJiuzSmO1pmkbq9CoHKq7aWUlZx81ZWih7Rrkz/6AsE0A2tLnSNIhw9D7FJF4T5CcY6q4tXKX5PeVR9pI34GHs/LU1erJq7ySxBpqJp88X6RQv+DDeQpkKO0cCAfnewQAWe+5+GLBqYuHOwjiObZvZpAUNigT8QfAJAcTm2oUCqni4xWNVTQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(39860400002)(346002)(366004)(136003)(8936002)(7416002)(2616005)(36756003)(83380400001)(4326008)(4744005)(66946007)(31686004)(5660300002)(66556008)(2906002)(66476007)(8676002)(110136005)(41300700001)(478600001)(316002)(186003)(6666004)(6512007)(6506007)(38100700002)(31696002)(86362001)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NFpsNE40YWhJZVBNdFkyLzdPaTdVd2s3aTlvZHk2NkUySStiWEVqTWdidktU?=
- =?utf-8?B?T2dYbTRDWDFJay9FaWN6aWQ4RW9BM0hiM3NWMXF3RE81WWxlT1RXRGdxM29Q?=
- =?utf-8?B?RTJncXM3Tnh0SGNZQUxzaUx6a0Nlc0t5dnNDUjdML2RJbGxVVzNaaUpBdG5w?=
- =?utf-8?B?aGxnLzZHZXdTNkNLY1ExdUdUd0d6cTdMTWl3SFp0b0lRYitQekZvY2l0bnU3?=
- =?utf-8?B?RlBOWFFONndnMnZLMmFTUnV3VTh5YkJZeVk2aTB6T1Vab3EvSm13YU90dEpB?=
- =?utf-8?B?RGZWeUx3VGN0SHZLeEV4dzhxa3FvUElGVE9naGJDMU9pQ09QNlJpdlp6Uy9u?=
- =?utf-8?B?MTRZQlVKZDg4U3h2SytkM0FHYU92SUszdG9Nd2Z5Zm00a2dDZHN6RXZQdnJx?=
- =?utf-8?B?Q2ZkeWFaa2JwOTFFQk02NGpZcnNETFVETzc5d1F3NHQwb2RoVTRhY1Y5NlNS?=
- =?utf-8?B?NkRjaHpSMUJyYUJkaVcrK0Uza0lYcTRjd1c1YUdtMDRCcTFXZ0xqSERVaDRM?=
- =?utf-8?B?dzkzRGtkVE5HVmU5MTVzcUR2VGZPd0o3QTFkZVZhTWZWS21zU0JYcUNrOUJn?=
- =?utf-8?B?MTN5eGZiK0N1U09WNk1oU281YzV5VFpwc0NpbmVzQUNyWjZoQ0NLaDdPVzRO?=
- =?utf-8?B?dW5kaEpNVUpGR1JKVFR0cjBBUy9mdlJYTmVtTGdSdjVNQ01iYTZFbi9nakNT?=
- =?utf-8?B?N0MxUDBoODNLdmplMitab204aUpSaGRRd2tsQ1RIL0FYUjFseVUxY0Yxall2?=
- =?utf-8?B?djBLY2NDSlRKNzBIR0x2eFU3SWZVSC85UERWemVGbzdZOG8ySmZvaVB3ODcz?=
- =?utf-8?B?R0FDV0NaSXlXcGlTbU4xNWhqYWk5RThzU2Q3dURNUE1vK3ZmYmdHR2l1UTg1?=
- =?utf-8?B?VWRiNFdLSnl5YzU3cTJFWlFnc3I3a1RMNHR5a2JGQnEvU1FvM0pPQzZsbVFs?=
- =?utf-8?B?ckpNTGlMejFPTjNBU1Zhbmx3UXI0QzhCSDJlSStXMm9XMy9sOGJhVGZFVFht?=
- =?utf-8?B?eHhocDlja1BtSnMvdUpFSnRISkdYWm5abDdGdlF0eFdDU2dDaXA3U1Z1dERk?=
- =?utf-8?B?djBSWGdSTFk5V0dnZ3pBMFNjOFExZU1wOVByV3p6cThUU3kyWWdpZkpUc0ZN?=
- =?utf-8?B?QVU1ZjlxL1JsVzl3UnZMb085UDNGVmVzQnFtY1o2M1poMzl2TWlRZmdnZW94?=
- =?utf-8?B?UzNlTXJlVUI1enpqRE5ob0VkdjNTbjYycWV5V0tWaVBWdHY5K21BRzh3SnBB?=
- =?utf-8?B?ZExpQnVpcUU0SUZJb1dxRDM3T2xGM05TRHFEb01JNW83bjBQWEJTanJ4SnpY?=
- =?utf-8?B?cEs2QmFQT3FySXUxZ1A4Q0lkbHVuYjUvUldGcjdPZXNVdFhrRWdhSkpJYUU3?=
- =?utf-8?B?YjRLdWdyM0g0K0E3bWJZdGdYQ2YraHZVeEk2VVY2MG5ZVktsUm92clh1QS85?=
- =?utf-8?B?eWZNeTZPaGMxUnByK1VRSlZYUC8wTWtqM0hnVmJWVDlYSlNHV3Y0NUkrM1RP?=
- =?utf-8?B?Rmh6NjdvRm9hb1F4ZVRQSEZqYmpDNjJIQzV1cDlvWFovWXlubUVSTzVnNTl3?=
- =?utf-8?B?NXJxRzVRSjhPRlZvU1poSWVxaFEzY0Zad2UvWVFFL2orRzZFYjhWbXE0YSt6?=
- =?utf-8?B?bHNnYjVzR1lmOHZpc0VjR1JiOVIzR2NCTG1nSUFDTUsrQnpPRjNLejlDSjJJ?=
- =?utf-8?B?ekNtZTNKeCs4clJpTDBXZFc3eXQyUFNhdnBTTGloRFJFbDZFRnVqNFJLY3lD?=
- =?utf-8?B?cFFGejY3UHd6Qnk3UkFMdktHOGV3OWl0TkR4KzlzUktoN1N3MHBhNUVsdlYv?=
- =?utf-8?B?b0xTdGp5aUFoZ25VTFAyc09hQXJ0UGlMOFlmTkp6RVN5eXY5Zm80RWJJY3Vo?=
- =?utf-8?B?NlRzdWVYSWE0OGhvOWNXcXZZWW1iYnBKVWV3aFFZbGEvZHZPTmZBRHJ2TTgy?=
- =?utf-8?B?dHloWU85YnkvOWQ0WlZwMys1NGd1MlBVTnVObUhZdWM1R0pQQkwyWlBOUG9W?=
- =?utf-8?B?ZVFMM3JKYkpFeW9JMk5iMWgyYUZocTlaNkdpUDRCbGlHdHljTEpEQmxVU3Yx?=
- =?utf-8?B?RU50UFliOVJqb3RIdUJrL0dSdUp4bC9zTDhoZnVxYmRtZ1pkb3VCNjJHK1d1?=
- =?utf-8?B?RzNJSVUzTXc2OUZabW80UzhlZFVNUFRPZldDSnlVN2syc2UzdGZCaU1VVjZI?=
- =?utf-8?Q?6t/nGmtbY4bkEn9T0kpFHINONfsE7k412wlIw8IYRTsy?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d861bd50-a980-4e14-15f6-08da7ec59368
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2022 13:53:47.5731
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /XzAm64Dg9HjXAj/QeFhUqfEJowh4cxBrE3oAAxtr2naYN7pjStEQE9PASrgdt++
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3344
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 15.08.22 um 15:45 schrieb Dmitry Osipenko:
-> [SNIP]
->> Well that comment sounds like KVM is doing the right thing, so I'm
->> wondering what exactly is going on here.
-> KVM actually doesn't hold the page reference, it takes the temporal
-> reference during page fault and then drops the reference once page is
-> mapped, IIUC. Is it still illegal for TTM? Or there is a possibility for
-> a race condition here?
->
+Am Montag, 15. August 2022, 06:12:38 CEST schrieb Samuel Holland:
+> Use enumerations where appropriate to combine "const" choices and
+> deduplicate fallback compatible strings.
+> 
+> Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 
-Well the question is why does KVM grab the page reference in the first 
-place?
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 
-If that is to prevent the mapping from changing then yes that's illegal 
-and won't work. It can always happen that you grab the address, solve 
-the fault and then immediately fault again because the address you just 
-grabbed is invalidated.
 
-If it's for some other reason than we should probably investigate if we 
-shouldn't stop doing this.
-
-Regards,
-Christian.

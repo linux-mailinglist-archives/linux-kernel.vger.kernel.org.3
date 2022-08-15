@@ -2,137 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2144559271C
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 02:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65AD359271D
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 02:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbiHOAl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 20:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41472 "EHLO
+        id S229977AbiHOAnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 20:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiHOAlY (ORCPT
+        with ESMTP id S229590AbiHOAno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 20:41:24 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8685F75
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 17:41:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660524084; x=1692060084;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nG0i8Kdv6v0yYaspB/vNr/mJCBvXZ6bkT/01hEiUMuk=;
-  b=jEnYKMa8mF9IuYPx+BqF/rh9gK8zAzlvLlcLey0zfMxQh6rXFXWgP5ZH
-   5468wtzxhWiQlkrCrXUDXSxZjif+9+LuGlEfrzVCVP5lkkkN/9d1M+IbN
-   Hq43oII+JsvrlvEb+Uxtu7Kmw+SgdDKzG3R0pkx624EBUQkboWC+ldyxj
-   YcucRVhEUYusPO9APobrRLOg3i/St0mT7RAcDsrzrMn5vKbC00brrH4ut
-   FXr/PZ4oGBzWChKPGsjATTe5hTsi5bq8QjrRmThecuaQhiVVMMELtrEc/
-   Oyy21BTN9kF2AWlIxBmsPJNe6k/FSuQd6fm4Py7zXjdnPrg5PwQmTWejb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="353605683"
-X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
-   d="scan'208";a="353605683"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 17:41:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
-   d="scan'208";a="606484043"
-Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 14 Aug 2022 17:41:22 -0700
-Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oNOAT-0000fG-2T;
-        Mon, 15 Aug 2022 00:41:21 +0000
-Date:   Mon, 15 Aug 2022 08:41:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: drivers/clocksource/timer-ti-dm.c:1039:34: warning:
- 'omap_timer_match' defined but not used
-Message-ID: <202208150851.T0MUBaQR-lkp@intel.com>
+        Sun, 14 Aug 2022 20:43:44 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396236398
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 17:43:44 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id p14-20020a17090a74ce00b001f4d04492faso5505289pjl.4
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 17:43:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc;
+        bh=lb7mKHsaIcUxW+3Jy2BJQ41sCMA+sLqu9myEjLcTq6E=;
+        b=anOO2IPFLaUuSvUf9E7Qpg5p6/NmGeyjbW7G+RX4Cpx5BlVWkPf8GgBvJ24LzQxOB1
+         ctAsE98DrtxgaaUdSiHcQSlJiRKmWMe+0h0aNLG8tGd+coHE0iZHcv42Iv8I9FSeQ4ig
+         8EtCPqpwoL24/hmvTrM7aDJdvRstLsW3fOOIoDWKCMtHTjWmi3hAlBOkK4fqy4wHp/ZF
+         WicwU5ysc/pHKg++a83qB5FMH36bRulq/+Wl++FYUvFFW5Y3xfEQG6LthDt+cvc0Ejzv
+         RYRyzks1pwAqe+ZS0bdZxkc4pUxoYl0i9wEpndYSIE7d3MZHW57BOTY9X5T92HtE7hG9
+         MvIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=lb7mKHsaIcUxW+3Jy2BJQ41sCMA+sLqu9myEjLcTq6E=;
+        b=Lxyr27mSgdYaHTEBTfP8omxgfvJlEOyUXzhr9aNv2tu9lLcXIxN/A8/UZ2oR6pmzyv
+         x9F5nSRuXLKIpwkXe9n4IXlOU22+b/cJlP7XGUJav2AcA5/LRNSlpYxttCmuPfrILCbn
+         xrswGJusB8Vvb8lSpj2mnEQkKtEP0LoqbI5K1zQ570B5qWwdRwceCg1u6M4oj8/E0b3E
+         AXcBbvNGOEn9qBugnNzf1fQwrazHtpDa4AzJXGRzBYzdZwn9Q2MlSrg/ERAx1eRtP8cV
+         xU6KDmvUEcL2UIpsszEYXdwX9GlDzJf60BKDNby+pnDxX35TZggTu4B4ZZyhIRwtJEu1
+         rkaA==
+X-Gm-Message-State: ACgBeo02azfpgWDfaobU/YbhkWcArx0K1g8Axr1/e0MjDek2AqKxKAUr
+        UCEBc12+TdBrl2IQNKn7jYM00rKL/30oCMwaT90=
+X-Google-Smtp-Source: AA6agR7uRPBdUCQJsn+HWXMWaemHpGc/nxXzJtR/ldFbFAE04XllZoATKRW9ziZ6ZE4bDjIpaxMvqBd87/TCVg7fGP0=
+X-Received: by 2002:a17:903:2611:b0:170:953d:e03e with SMTP id
+ jd17-20020a170903261100b00170953de03emr14890239plb.49.1660524223456; Sun, 14
+ Aug 2022 17:43:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Sender: ndubuisio992@gmail.com
+Received: by 2002:a05:7300:c09:b0:6f:e3f6:8ca4 with HTTP; Sun, 14 Aug 2022
+ 17:43:42 -0700 (PDT)
+From:   Jessica Daniel <jessicadaniel7833@gmail.com>
+Date:   Mon, 15 Aug 2022 00:43:42 +0000
+X-Google-Sender-Auth: kU1uFIzsDddQeG0Oes5Fw05x-9g
+Message-ID: <CAO7YTNn=POK=wdFN1Ho9c_TA3CHRvgGLBwrs1L0fX76TEHdSXA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tony,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-commit: ab0bbef3ae0f6b5a3b60671cd0124d0fc4fc2567 clocksource/drivers/timer-ti-dm: Make timer selectable for ARCH_K3
-date:   3 weeks ago
-config: x86_64-buildonly-randconfig-r004-20220815 (https://download.01.org/0day-ci/archive/20220815/202208150851.T0MUBaQR-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ab0bbef3ae0f6b5a3b60671cd0124d0fc4fc2567
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout ab0bbef3ae0f6b5a3b60671cd0124d0fc4fc2567
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/clocksource/ drivers/soc/mediatek/ drivers/usb/misc/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/clocksource/timer-ti-dm.c:1039:34: warning: 'omap_timer_match' defined but not used [-Wunused-const-variable=]
-    1039 | static const struct of_device_id omap_timer_match[] = {
-         |                                  ^~~~~~~~~~~~~~~~
-
-
-vim +/omap_timer_match +1039 drivers/clocksource/timer-ti-dm.c
-
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1038  
-9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14 @1039  static const struct of_device_id omap_timer_match[] = {
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1040  	{
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1041  		.compatible = "ti,omap2420-timer",
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1042  	},
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1043  	{
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1044  		.compatible = "ti,omap3430-timer",
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1045  		.data = &omap3plus_pdata,
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1046  	},
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1047  	{
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1048  		.compatible = "ti,omap4430-timer",
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1049  		.data = &omap3plus_pdata,
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1050  	},
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1051  	{
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1052  		.compatible = "ti,omap5430-timer",
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1053  		.data = &omap3plus_pdata,
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1054  	},
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1055  	{
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1056  		.compatible = "ti,am335x-timer",
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1057  		.data = &omap3plus_pdata,
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1058  	},
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1059  	{
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1060  		.compatible = "ti,am335x-timer-1ms",
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1061  		.data = &omap3plus_pdata,
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1062  	},
-8c0cabd7970c0d arch/arm/plat-omap/dmtimer.c Neil Armstrong 2015-10-22  1063  	{
-8c0cabd7970c0d arch/arm/plat-omap/dmtimer.c Neil Armstrong 2015-10-22  1064  		.compatible = "ti,dm816-timer",
-8c0cabd7970c0d arch/arm/plat-omap/dmtimer.c Neil Armstrong 2015-10-22  1065  		.data = &omap3plus_pdata,
-8c0cabd7970c0d arch/arm/plat-omap/dmtimer.c Neil Armstrong 2015-10-22  1066  	},
-9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14  1067  	{},
-9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14  1068  };
-9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14  1069  MODULE_DEVICE_TABLE(of, omap_timer_match);
-9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14  1070  
-
-:::::: The code at line 1039 was first introduced by commit
-:::::: 9725f4451a9ccd159b1d13f63e05896cd9bce07d ARM: OMAP: Add DT support for timer driver
-
-:::::: TO: Jon Hunter <jon-hunter@ti.com>
-:::::: CC: Jon Hunter <jon-hunter@ti.com>
-
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Hello Dear,
+Did you receive my mail
+thanks??

@@ -2,108 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22C37592D76
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47995592C5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242270AbiHOKA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 06:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
+        id S242279AbiHOKDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 06:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231228AbiHOKAx (ORCPT
+        with ESMTP id S230389AbiHOKDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 06:00:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6115596;
-        Mon, 15 Aug 2022 03:00:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27F6E60D3A;
-        Mon, 15 Aug 2022 10:00:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08702C433C1;
-        Mon, 15 Aug 2022 10:00:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660557651;
-        bh=9ZRWMUIwm/t3sHqvInJijL0j9kWxqZeofrlGARqlGOI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B6dKWE0dIWxc13kXUMjjXH3tmnScnyXC1ZUz6+8T2d8reqh+qAY3pY7InfREVAUlW
-         JbgsjKSEgRaDi88LjlUeMJbC97GtFcOtTU5JG1ldDARvMRS9DHVGmgLDCybG/7+YpA
-         Ey15Ot5/+E6Ec7RGLMfGevl3sK+Ph3MQSexZ2RDLRHU5iYyN1tYqeyWL++lz+AloLd
-         K+ab9n6Lqf0oNFEL73GvPCRqrKnIr5M5ua37QpIysvP4wutD3cKMgTitQ/n3FB0zRI
-         TXkeRVqYn84ZKjFoPceVbOAnxPSiS5JULMYdGpLgdAQ+2BTd6YfZxbjr/86NYTFPTG
-         u2TXeFxBk75ow==
-Date:   Mon, 15 Aug 2022 12:00:44 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Stefan Roesch <shr@fb.com>, Christoph Hellwig <hch@lst.de>,
-        Jan Kara <jack@suse.cz>
-Cc:     Stefan Roesch <shr@fb.com>, Jens Axboe <axboe@kernel.dk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, lkp@lists.01.org, lkp@intel.com,
-        ying.huang@intel.com, feng.tang@intel.com,
-        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com,
-        kernel test robot <oliver.sang@intel.com>
-Subject: Re: [fs]  faf99b5635:  will-it-scale.per_thread_ops -9.0% regression
-Message-ID: <20220815100044.7j2u2yjlkanhkrfg@wittgenstein>
-References: <YvnMWbRDhM0fH4E/@xsang-OptiPlex-9020>
+        Mon, 15 Aug 2022 06:03:18 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE481055D
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 03:03:17 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id kb8so12731645ejc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 03:03:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=NJX8jO1pYzzhVEPoTBTkL7Gt5+R43W0llgP4O+NknEE=;
+        b=4CsAeheZqpI88jrVCMl2Ai+HIPg1QRU2T31EcirAw8ECrKiz+vC+xtLbqswoQ0fOB0
+         8noIF8f7rSWmO43r3ua8N1XNq9wi67SqgVtQwjW0t1V0KNfR2uKcuew3vUilbZ5RonY4
+         kkIBtBqo/juDP+45QnPwpgeQqMXJwW25ciwd3F6kMhtr9p98qdPdtg9+FDegeaEewrPN
+         JAG4DOtpz+fl5YZl3xCUwuw0QAxEs4lq7LqeT2co9rwdHpclvIyKbjLw6KpEAFMmX5V7
+         vZr4qyplJqFHV+M6vmeUJ03UBhrqXY67cs4BOFqLx3AqJSBAtlEc3nQKKB73fHOJPhWP
+         TYNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=NJX8jO1pYzzhVEPoTBTkL7Gt5+R43W0llgP4O+NknEE=;
+        b=S96P4bzYU5IIrvkP4Px3rYT6xAup4aOj/KPgRG3osKf8ty2cJ9ZkJvkkIWmN4UK2Eo
+         Lcmqsi6MaS/Xl0XVRbJ39UezihZWiTCnpkcIflyq5dMbADbzGDo5NCOjiBtjk0XpIxXb
+         EBP774JissNKNsoU3SqLaP+6ssAIjcbDR6UOF6iZZ9oD0VCBVd1B72oA45UaK2YznFCR
+         suDFTQsrppSjPiQpclIvicMiX3aFKqg2K9QJQMDBdavwkqXKTeFJbh4YfEwiWytZi287
+         Shb8RGf7OOS1ol23pcz64cmk8cpyXdr3gaGFgz6YZkxwjUS/x+OWrEhIfQ4+IcjRzk/j
+         GfKA==
+X-Gm-Message-State: ACgBeo3BzknXxDtPrwn931+OWY6T68je9Qp4PP2ERJDKR28ebN/j39hD
+        vJrq4edMWczzLD6lJtSsrZhyKMlDk3lh0B8SCG6+Og==
+X-Google-Smtp-Source: AA6agR5hGQYDC8LGpVf58AajIYUmJAZOmVsl7JaDj51K6a6u15Jz5PUBvnJPwL0XuxQ4THkDa5RL10/XBiP2v+NWaSo=
+X-Received: by 2002:a17:907:7254:b0:731:61c6:ecf9 with SMTP id
+ ds20-20020a170907725400b0073161c6ecf9mr10022260ejc.101.1660557796390; Mon, 15
+ Aug 2022 03:03:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YvnMWbRDhM0fH4E/@xsang-OptiPlex-9020>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220810124109.34157-1-srinivas.neeli@xilinx.com>
+In-Reply-To: <20220810124109.34157-1-srinivas.neeli@xilinx.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 15 Aug 2022 12:03:05 +0200
+Message-ID: <CAMRc=Me_xqOG64yfQHygS=eBbYaqwqGKt6DK1D1DWr+xkM-N3A@mail.gmail.com>
+Subject: Re: [PATCH V2] dt-bindings: gpio: gpio-xilinx: Convert Xilinx axi
+ gpio binding to YAML
+To:     Srinivas Neeli <srinivas.neeli@xilinx.com>
+Cc:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        srinivas.neeli@amd.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        git@xilinx.com, git@amd.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 12:32:25PM +0800, kernel test robot wrote:
-> 
-> 
-> Greeting,
-> 
-> FYI, we noticed a -9.0% regression of will-it-scale.per_thread_ops due to commit:
-> 
-> 
-> commit: faf99b563558f74188b7ca34faae1c1da49a7261 ("fs: add __remove_file_privs() with flags parameter")
-> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+On Wed, Aug 10, 2022 at 2:41 PM Srinivas Neeli
+<srinivas.neeli@xilinx.com> wrote:
+>
+> Convert Xilinx axi gpio binding documentation to YAML.
+>
+> Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
+> ---
 
-This seems overall pretty odd tbh at least it's not immediately obvious
-how that specific commit would've caused this. But fwiw, I think there's
-one issue in this change which we originally overlooked which might
-explain this.
+Applied, thanks!
 
-Before faf99b563558 ("fs: add __remove_file_privs() with flags
-parameter") inode_has_no_xattr() was called when
-dentry_needs_remove_privs() returned 0.
-
-	int error = 0
-	[...]
-	kill = dentry_needs_remove_privs(dentry);
-	if (kill < 0)
-		return kill;
-	if (kill)
-		error = __remove_privs(file_mnt_user_ns(file), dentry, kill);
-	if (!error)
-		inode_has_no_xattr(inode);
-
-but now we do:
-
-	kill = dentry_needs_remove_privs(dentry);
-	if (kill <= 0)
-		return kill;
-
-which means we don't call inode_has_no_xattr(). I don't think that we
-did this intentionally. inode_has_no_xattr() just sets S_NOSEC which
-means next time we call into __file_remove_privs() we can return earlier
-instead of hitting dentry_needs_remove_privs() again:
-
-if (IS_NOSEC(inode) || !S_ISREG(inode->i_mode))
-	return 0;
-
-So I think that needs to be fixed?
-
-Christian
+Bart

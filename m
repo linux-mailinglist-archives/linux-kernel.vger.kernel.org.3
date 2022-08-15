@@ -2,42 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3D05951CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 07:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3E55951BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 07:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbiHPFQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 01:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
+        id S229757AbiHPFNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 01:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbiHPFQc (ORCPT
+        with ESMTP id S231848AbiHPFNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 01:16:32 -0400
-X-Greylist: delayed 649 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 15 Aug 2022 14:37:21 PDT
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC061F8DF5;
-        Mon, 15 Aug 2022 14:37:19 -0700 (PDT)
-Received: from [2603:3005:d05:2b00:6e0b:84ff:fee2:98bb] (helo=imladris.surriel.com)
-        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <riel@shelob.surriel.com>)
-        id 1oNhbJ-0006l4-5P;
-        Mon, 15 Aug 2022 17:26:21 -0400
-Date:   Mon, 15 Aug 2022 17:26:20 -0400
-From:   Rik van Riel <riel@surriel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Alexey Gladkov <legion@kernel.org>, linux-fs@vger.kernel.org,
-        kernel-team@fb.com
-Subject: [PATCH RFC] fs,ipc: batch RCU synchronization in free_ipc
-Message-ID: <20220815172620.5d7d4a78@imladris.surriel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        Tue, 16 Aug 2022 01:13:20 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E10F9953;
+        Mon, 15 Aug 2022 14:28:44 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id CFB323200488;
+        Mon, 15 Aug 2022 17:28:41 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 15 Aug 2022 17:28:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1660598921; x=1660685321; bh=TG6h01Br37
+        C4F3jMCzgHNyxb/LAU3CF9cYEYzRCIsQI=; b=yvn6DXBfwxjXrtC+Te4D/kWHmC
+        8tpQP1Oy6qo8wuY0MkPzKpaF7EClUYOUG59BtsYm9ZfRvBSquvXdy5mfZHcYhbmZ
+        dP6H7EkjwhjI6HakI4aJmwyyc9vuDFCKPp3yQwLJbhvTR6BhjHIDdcIcNpxVbSyn
+        0JNdwCzxF2sFLbKdcBtr/yHOSgOmVMVhE43sTlhYdEMAdz6Y3M03RmOJ2I1VUs3e
+        oTWR8JQxIMFyIK5Ksn7hSfygYEwXjhcbrHkXQQ/n+IREXnT6LDfA6hqL3xuf8SHY
+        +vHBwry8olWA8pGFxTPSq7htrRf4309y7TiZbBg5oqkJXhp1suGpdKndWyPg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660598921; x=1660685321; bh=TG6h01Br37C4F3jMCzgHNyxb/LAU
+        3CF9cYEYzRCIsQI=; b=aL+giPBMZwPuKrh+P+nNenINh0up9FTNUwrC7DJ+9PoQ
+        MY1M4lduN925t5IqjR1tllocqr3tgPgU2k8W1s//wroofSSjFq7moupvxizJ6R2k
+        tZ+ZOSlm+Bb0E8xvjVx+FsicYw8+GtNNNpkKCfU/NSmxuvA0w/arFA8pMS5JZHZI
+        FNG8FzBvE9Md5MJDSloBFcjrY7GSgttKQ01G4TLUNKtFFclR35+4LtvwLntizBb7
+        PP3fWCE+T/x+JgvYCvWqdjY6NH/WLrNoQ2U8MD/J6cxUy7j2JJkzX67dCYURTtWc
+        uYtxpCx6mvy2LSmxrsD5EZCCdFbQ69TD5nYgRhX5aQ==
+X-ME-Sender: <xms:iLr6Yg2uEn8EOWZu5l2Bn_cu_LbsPMC8ffavd88zftdvJb_yoF5vxQ>
+    <xme:iLr6YrHlReUxZmOT2ApQD-MciDV-BpW6pIASajOYBuLPd54kSv_-iBV91pYPjqU8B
+    _w2mK2MBeI12BkWhA>
+X-ME-Received: <xmr:iLr6Yo4qrJ88Us5p4mkQflTVPm7FxxgbW646IEXYOWWXCRq0rwTHc_yGYIfYaNnmdKKww-45Pfbgc7IsU3RtPf_p4_fbAxQx6iAWoxoW4JeB9HyCeEV58aiTCLuO>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehvddgudeifecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetnhgu
+    rhgvshcuhfhrvghunhguuceorghnughrvghssegrnhgrrhgriigvlhdruggvqeenucggtf
+    frrghtthgvrhhnpedvffefvefhteevffegieetfefhtddvffejvefhueetgeeludehteev
+    udeitedtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrnhgurhgvshesrghnrghrrgiivghlrdguvg
+X-ME-Proxy: <xmx:iLr6Yp0eVU7NJnUaOkwKOG7xyKFFsYMmfMCXZCuua0Az-YFL6n-8vw>
+    <xmx:iLr6YjHbvm6TWLpU6LIOqcwtEt2dTTPvg5uBsCyjcQXJo6KmPEZagQ>
+    <xmx:iLr6Yi_2Q7BtpolFX4o5wGQD6pwhUfS-dotaJo39PY8Ln9UfYRRKnQ>
+    <xmx:ibr6YtECLURIjGEkwZ2IMpYCf9iR1YGYoQninic5ysNhbiJCLqT8Bg>
+Feedback-ID: id4a34324:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 15 Aug 2022 17:28:40 -0400 (EDT)
+Date:   Mon, 15 Aug 2022 14:28:39 -0700
+From:   Andres Freund <andres@anarazel.de>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>, c@redhat.com
+Subject: Re: [PATCH] virtio_net: Revert "virtio_net: set the default max ring
+ size by find_vqs()"
+Message-ID: <20220815212839.aop6wwx4fkngihbf@awork3.anarazel.de>
+References: <20220815090521.127607-1-mst@redhat.com>
+ <20220815203426.GA509309@roeck-us.net>
+ <20220815164013-mutt-send-email-mst@kernel.org>
+ <20220815205053.GD509309@roeck-us.net>
+ <20220815165608-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Sender: riel@shelob.surriel.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220815165608-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,100 +99,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TL;DR: it runs better than it looks, and I am looking for ideas on how to make it look better
+Hi,
 
----8<---
+On 2022-08-15 17:04:10 -0400, Michael S. Tsirkin wrote:
+> So virtio has a queue_size register. When read, it will give you
+> originally the maximum queue size. Normally we just read it and
+> use it as queue size.
+> 
+> However, when queue memory allocation fails, and unconditionally with a
+> network device with the problematic patch, driver is asking the
+> hypervisor to make the ring smaller by writing a smaller value into this
+> register.
+> 
+> I suspect that what happens is hypervisor still uses the original value
+> somewhere.
 
-The following program will get ENOSPACE sooner or later, because
-the way ipc namespaces get freed currently results in only one
-ipc namespace being freed every RCU grace period.
+It looks more like the host is never told about the changed size for legacy
+devices...
 
-int main()
-{
-	int i;
+Indeed, adding a vp_legacy_set_queue_size() & call to it to setup_vq(), makes
+5.19 + restricting queue sizes to 1024 boot again.  I'd bet that it also would
+fix 6.0rc1, but I'm running out of time to test that.
 
-	for (i = 0; i < 1000000; i++) {
-		if (unshare(CLONE_NEWIPC) < 0)
-			error(EXIT_FAILURE, errno, "unshare");
-	}
-}
+Greetings,
 
-There are various ways to solve this issue, they all come down to
-batching the RCU synchronization, so multiple ipc namespaces can
-be freed in the same RCU grace period.
-
-Unfortunately there seems to be a tradeoff between temporarily
-allocating things on the stack, and having slightly uglier code,
-or adding a struct rcu_work to the struct vfsmount.
-
-I am not entirely happy with the way this code looks, and hoping
-for suggestions on how to improve it.
-
-However, I am quite happy with how this code runs. Between batching
-the kern_unmount RCU synchronization, moving to the expedited RCU
-grace period in kern_unmount_array, and grabbing things off the
-llist that were added after the work item started, freeing ipc
-namespaces is 2-3 orders of magnitude faster than before, and
-able to keep up with the test case above.
-
-Signed-off-by: Rik van Riel <riel@surriel.com>
----
- ipc/namespace.c | 31 +++++++++++++++++++++++--------
- 1 file changed, 23 insertions(+), 8 deletions(-)
-
-diff --git a/ipc/namespace.c b/ipc/namespace.c
-index e1fcaedba4fa..ba33015f1a23 100644
---- a/ipc/namespace.c
-+++ b/ipc/namespace.c
-@@ -127,10 +127,6 @@ void free_ipcs(struct ipc_namespace *ns, struct ipc_ids *ids,
- 
- static void free_ipc_ns(struct ipc_namespace *ns)
- {
--	/* mq_put_mnt() waits for a grace period as kern_unmount()
--	 * uses synchronize_rcu().
--	 */
--	mq_put_mnt(ns);
- 	sem_exit_ns(ns);
- 	msg_exit_ns(ns);
- 	shm_exit_ns(ns);
-@@ -144,14 +140,33 @@ static void free_ipc_ns(struct ipc_namespace *ns)
- 	kfree(ns);
- }
- 
-+#define FREE_IPC_BATCH 64
- static LLIST_HEAD(free_ipc_list);
- static void free_ipc(struct work_struct *unused)
- {
--	struct llist_node *node = llist_del_all(&free_ipc_list);
--	struct ipc_namespace *n, *t;
-+	struct ipc_namespace *ipc_nses[FREE_IPC_BATCH];
-+	struct vfsmount *mounts[FREE_IPC_BATCH];
-+	int i, j;
-+
-+ next_batch:
-+	i = 0;
-+	for (i = 0; !llist_empty(&free_ipc_list) && i < FREE_IPC_BATCH; i++) {
-+		struct llist_node *node = llist_del_first(&free_ipc_list);
-+		struct ipc_namespace *n = llist_entry(node,
-+						      struct ipc_namespace,
-+						      mnt_llist);
-+		ipc_nses[i] = n;
-+		mounts[i] = n->mq_mnt;
-+	}
-+
-+	/* Consolidate the RCU synchronization across the whole batch. */
-+	kern_unmount_array(mounts, i);
-+
-+	for (j = 0; j < i; j++)
-+		free_ipc_ns(ipc_nses[j]);
- 
--	llist_for_each_entry_safe(n, t, node, mnt_llist)
--		free_ipc_ns(n);
-+	if (i == FREE_IPC_BATCH)
-+		goto next_batch;
- }
- 
- /*
--- 
-2.24.1
-
+Andres Freund

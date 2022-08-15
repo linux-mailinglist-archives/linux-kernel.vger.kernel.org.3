@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33E0A5930F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 199D15930F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233194AbiHOOpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 10:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54944 "EHLO
+        id S240812AbiHOOp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 10:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232112AbiHOOph (ORCPT
+        with ESMTP id S232676AbiHOOpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 10:45:37 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2049.outbound.protection.outlook.com [40.107.95.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD3D25D5;
-        Mon, 15 Aug 2022 07:45:36 -0700 (PDT)
+        Mon, 15 Aug 2022 10:45:40 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2051.outbound.protection.outlook.com [40.107.94.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC096253;
+        Mon, 15 Aug 2022 07:45:39 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nOS+SiOG4DfKDz6iszCoz04FAVkHNZ0HAPAIi/9xCIu7WYiznTNzOSUOCo+V/7yKN1j+Wx2FWkqE2ckiG4/7UwDgb2I7+hpqxo2nzEJJDR0Kzm8Ctstddb5ZUTG6+wsf9snAtVMQmIzwaUT6tqzv2GNOkL6Qk2AtA9P0eYT9Nj4Nllg9vY3I2TcWlbObR1LEyfpKbfbSVAH9yOMqFvJkY0B4X/v4eYOZOk9O6gl8Hn+ZUfVATFL6UdbzrmfHeGzJldF39N5vtFveO1E8fBkV/tRo9U5g3x5hhQDg14a6mOLXprvHb4MdexC0i2bNnEn/al2bNDsCwdI3iPfjvGfVGQ==
+ b=UDkYivnxehNBXB4aox/iPax0EJdYUOw5IouL5+ajnlbTeothVsauN2iAFlZuuocHY/BVad/3D8y3Rz+RXtKvxt65BmYxuZmd0x/fFsYaBvGc/J4iyFs8j11fRfNjhpSYzFGMqvZxSvhn08NvWb2FVOYAA9Zgp9ofqHJCTBM7oP9khJMZJXFd/U/01lqc3AVMKYMclbu1rLXaPsrF4GGF3xUqQn/1InexY/icpaTkdU8dr+ZTOKGiuds6J6hPOflQ1Z+oVDuSk3dnU7zUhh29g3ccAgaWpzmBReLbGfIqcuSnx1lhG3az+rAE/kdU+JX8hx4D5eEVgBeD8d6GRc4YgQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/14NfztUiuxu3WZXH4IDIW9ZmDE+yI6NXjl7+KgnkDg=;
- b=Tr4WLqEqKEgFCZv19VCR6pU3PsgHkyEwbneTmpWaHa2a3PZ0svOoh5tjK2kGPUz/FxDjdDy78Ay71+EC95N/GchRcJis56/J+0r8E/+tyUtUY/dTUo4SQFVGV9bVgmasVqIHQBA3TwEO2V5/zB8lpGOQF0F11TRu4zyXK+FSy8QMKLKg3WNaB2wlUeF+di6a8cIlvo4k9IyU1AqOoRD3LYM4IN1nQzLVGiAQHkGOGSA2NPLqlx4d31jtVZyVoAz7aOasGTy1JfyHfVmDtV7qmtGterTGLxOOTVGgHGmlOLvH6jXC1pJJ8PxwSvYIPmcI716uO4M5aXT4znoJwv55+A==
+ bh=Fij/vQJdID+GPEWhz9oLFHc+Oav2a7wYAcccMSFRG1Y=;
+ b=N26qsuJnloXR9LiUaUjmHd32CUPgn2YhN6ySw542PJxZNy4hbIe4hTV/heL9oZizRv/JoMNRUyPGBZRzTjyhygCCgaPS1pnSetlkep6hH34NTVgZ12WNqAb5/CeifSYPcj7/D0cphXHfLzuNppwMSmJYmukvYevIwT5m8vOrX14PTpE+DgsowLiAMyclKDJr//Mnt8TEzIcKmvRwcaJv7W+QGtRAlqAGjHL9Di5p6Hu51bDNmhfq6SEFxs/IEbHX+7jhgq0cPRSBBaIXO6wIufl2J7UVroR2W9qKQvrlb+WRKWDrsn09B3fb66lxKitlvMjii1U7VXnx7URMsvwp4A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/14NfztUiuxu3WZXH4IDIW9ZmDE+yI6NXjl7+KgnkDg=;
- b=LpCKBg/gH47aHCRdUBc7Qys9gutJ8HTG+KSDaRYMLxtB21gI79j/BPztHp/GXjd+/iaC07VyMmUNVjxTgFGaI5VsLQgTgNGRUpdY82imK8pbtIXP4zboCp31MGNk6Hh0wo9jPeAadUumjrL8KRnx15qwm5aNQ7Lt5mcNxOVY0OHUdx1tIHdLPCNy0dn0tvys9auwUs/BzStTOwlBvMtLXJKQAn6oHZwADjuUahkmRVTcEzYeg4tBv/0hF5dX8owvMqjg3VLq/uI6oodUFMR7gbc59bVm3nUHl4jAz9abS3cjNJR6D7CQ6UC2chm6EBFt6gx73baGkZGDwrLxD5dtPw==
-Received: from BN0PR03CA0044.namprd03.prod.outlook.com (2603:10b6:408:e7::19)
- by BN9PR12MB5354.namprd12.prod.outlook.com (2603:10b6:408:103::22) with
+ bh=Fij/vQJdID+GPEWhz9oLFHc+Oav2a7wYAcccMSFRG1Y=;
+ b=A+HAnjIfU9XZ3SJFLgJoffyGp8WrAw9yX+lbl34KEHkQ6oBEb1LLZt+kH0HWvGBLZZ0JOaZtxoI9mKtU1ep58FtZatAms+61sWsfi4wyQlvqaIIh4Xv8S/+Wr2uB09HhWopsG8v+yszf/nV7sKN202ouIL9xKZeLMTWRfmzZNW24UPCMnuSVhoRVLEG1z9rHO80KYJrOLZDK/nFWvjcFbG+3+XVKDxHyFBcBZLLz7s2lBPZn1iquQXJ2pPDntyrDW9lPgWFmh17K/ZJqWABbyOw/m8FMwXjdZtGjmMQaH6qxipwS38tjJLsVUrcsB9baBcjyFUKuUIwT71vW1lp8vA==
+Received: from DS7PR06CA0014.namprd06.prod.outlook.com (2603:10b6:8:2a::11) by
+ BY5PR12MB3843.namprd12.prod.outlook.com (2603:10b6:a03:1a4::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Mon, 15 Aug
- 2022 14:45:35 +0000
-Received: from BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e7:cafe::aa) by BN0PR03CA0044.outlook.office365.com
- (2603:10b6:408:e7::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.18 via Frontend
- Transport; Mon, 15 Aug 2022 14:45:35 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Mon, 15 Aug
+ 2022 14:45:38 +0000
+Received: from DM6NAM11FT080.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:2a:cafe::bd) by DS7PR06CA0014.outlook.office365.com
+ (2603:10b6:8:2a::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10 via Frontend
+ Transport; Mon, 15 Aug 2022 14:45:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.236) by
- BN8NAM11FT016.mail.protection.outlook.com (10.13.176.97) with Microsoft SMTP
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.235) by
+ DM6NAM11FT080.mail.protection.outlook.com (10.13.173.105) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5525.11 via Frontend Transport; Mon, 15 Aug 2022 14:45:35 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by DRHQMAIL109.nvidia.com
- (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Mon, 15 Aug
- 2022 14:45:34 +0000
+ 15.20.5546.7 via Frontend Transport; Mon, 15 Aug 2022 14:45:37 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Mon, 15 Aug
+ 2022 14:45:37 +0000
 Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail203.nvidia.com
  (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 15 Aug
- 2022 07:45:33 -0700
+ 2022 07:45:36 -0700
 Received: from jilin-desktop.nvidia.com (10.127.8.11) by mail.nvidia.com
  (10.129.68.10) with Microsoft SMTP Server id 15.2.986.29 via Frontend
- Transport; Mon, 15 Aug 2022 07:45:31 -0700
+ Transport; Mon, 15 Aug 2022 07:45:34 -0700
 From:   Jim Lin <jilin@nvidia.com>
 To:     <jckuo@nvidia.com>, <thierry.reding@gmail.com>,
         <jonathanh@nvidia.com>
@@ -69,9 +69,9 @@ CC:     <kishon@ti.com>, <vkoul@kernel.org>, <balbi@kernel.org>,
         <bhsieh@nvidia.com>, <linux-phy@lists.infradead.org>,
         <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-usb@vger.kernel.org>
-Subject: [PATCH 1/2] phy: tegra: xusb: add utmi pad power on/down ops
-Date:   Mon, 15 Aug 2022 22:44:48 +0800
-Message-ID: <20220815144449.9525-2-jilin@nvidia.com>
+Subject: [PATCH 2/2] usb: gadget: tegra: Reduce pad power
+Date:   Mon, 15 Aug 2022 22:44:49 +0800
+Message-ID: <20220815144449.9525-3-jilin@nvidia.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220815144449.9525-1-jilin@nvidia.com>
 References: <20220815144449.9525-1-jilin@nvidia.com>
@@ -80,23 +80,23 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8a4788e8-fd03-44c4-9410-08da7ecccff3
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5354:EE_
+X-MS-Office365-Filtering-Correlation-Id: e8e5b580-2b1a-4119-3633-08da7eccd193
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3843:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2oiVS/V80VjXTxe8FpKumCM4qwReZGHPtTdwJu5MJ0XsUrBGRuP4OjAHpLK0q85eaViM4f5xYp+XckD8UALUe1EeDEViMfhvTf5ch0rnnRFom8MdbqlLA2fA9po3h9xHbVO5XdkdjXqiYljyXMYbARdhAErFZeXzh2uFJ0o8iM5IAPL/f//jtTsMY9XAeBB54DwhE2KGS020VSswqz+lASdHrwA0oR4O4TUXBusR2JIbPc2etCIZegvCN+Jx9yysD20YF/R5XfM5v0OodbxWSKqfQP/L3diJiaQAaRSvoH5mvB3hsO6pdPYyKIscV4s2yE5+7C+bzbvSEa2WaYTtdW/guy83UhFWytAPoFyNNKa6d44A4ESprp2WV5/IAUvG+TDMgXnAwmPzgIwjSId5zWMs7GfaY6PcPmwirMQFxwv5L3QWeGlVheRHAvRrBKfzA/w4wmUykMR0rFSNImD27L5e7rDBf+3POTatLJE60DZQfycF62TDQ+dY2t2FpXCSSoteADXFq/fqsUrq6BwNHZdewAy63VqjNr5lf7JVkyumAPWCJQla+hHyAvP0H0DzDX0M72wEF8KGgBMwZydfIqz2sCFrY+DasiDpUhuTyQ0FPms6CTjA/ECz4NKiXTTHMOmgG2E+3DaKGOU7MzlqfSFJ/kuqlBkpHPsH3xq3BKlvFbHgL6l6gRT8CTZYPSpBEsSlDz+5GTzmP30OssW1qdTK6GXCI+wic9HRXROAJeahIiTxEIhJh3kDC3/SqFrl0nPvh4oM4UB0IHj6H05OL3W0mOyK4RNgH3AeJj9skENIwR9rFIZmmbVbeTp5GAiuwyZCnndMWdkzSZZlQF3eqQ==
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(376002)(39860400002)(396003)(36840700001)(46966006)(40470700004)(186003)(8676002)(110136005)(70586007)(6636002)(40480700001)(316002)(70206006)(40460700003)(82310400005)(8936002)(5660300002)(82740400003)(2906002)(4326008)(54906003)(36860700001)(81166007)(356005)(86362001)(36756003)(478600001)(7696005)(6666004)(41300700001)(83380400001)(2616005)(26005)(1076003)(47076005)(426003)(336012)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: wiDHpCWayrFr2RF72y+oKcvk2AK3mjwWcMn+qk0+8eZzzsHw6ad1fBJit11DvKpcZHY2zydYIx06QMy093HfpPjTb93nBwhSoM0PU4e6LTkZbq7MnRXeJyB945ktfSLwc8ev1tSim194TI5hz6LuQpJM0UPiTf5ZhJRPh/PRwms9GClgKKxdMEyhmFRkx4mC5pFqoDWzMHkrmEY/4X6MXkNTMwH55BcBJImHdoKujfv8J5c7jq5iTJLOTOiSLwSZPE8ohUfwwEMhSFpH6xN+plD1jBy6D3gkztIdQDHYNArtMQ4AVFB3A0Kd+spaxzCWoqXg0E8672iOPsd8xaiVsaU+xT0g0WhcB6CksZPbM08Rji71GIKc7+AEjGVlpVsWKa+LoR6zGT79FY3Rv5eAkMc2ie3rk5BUQLNkKE/5R1HewMT1V7eV8zBVBVxMazjiuYGXk3JZiPRhJQhnkYBED5hjPgkKst3HjKo9CxrgTuGPP66aJrdMonVdWI8ksTo/YzQUlTcEyzvyxltUpbZFe4OhFN6VQuz1mGt7jE4rsR1f0ZYx+4RFHSJ5xRDYYFa+mlpLgm1RRzd7BIFl+vs7N9kPs4fsZ3q2wyHZFCw6lJFVexeJxsUnxZ4pl5XF15rJ8Rn/TJqkHvLPDQ5fZ5uXXeWTsz6T5491MUgHiXDLmExSuxBK87BqsSaRIsRpWdNF/4+qpSl78j6bHyr6cChr9h68wjl/bYgD44y/KfozcF0o+o+sQDORneLtgHHNhXCtK62Ra9dZVQN1jiHoL+DUV5z1HIKAtVlY7yEBOX6JHJPJuYwqXIF64ERhJ7yQCEHwaazCO8cmR/6jTesyO25gbQ==
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(346002)(136003)(376002)(40470700004)(46966006)(36840700001)(86362001)(186003)(36756003)(36860700001)(82740400003)(47076005)(2616005)(426003)(7696005)(1076003)(356005)(336012)(81166007)(6666004)(26005)(316002)(478600001)(54906003)(6636002)(41300700001)(8936002)(110136005)(8676002)(2906002)(5660300002)(70586007)(40480700001)(4326008)(82310400005)(70206006)(40460700003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2022 14:45:35.1746
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2022 14:45:37.9766
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a4788e8-fd03-44c4-9410-08da7ecccff3
+X-MS-Exchange-CrossTenant-Network-Message-Id: e8e5b580-2b1a-4119-3633-08da7eccd193
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT080.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5354
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3843
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -107,167 +107,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add utmi_pad_power_on/down ops for each SOC instead of exporting
-tegra_phy_xusb_utmi_pad_power_on/down directly for Tegra186 chip.
+Program USB2 UTMI pad PD controls during port connect/disconnect.
+Power down pad after disconnected to save power.
 
-Signed-off-by: BH Hsieh <bhsieh@nvidia.com>
 Signed-off-by: Jim Lin <jilin@nvidia.com>
 ---
- drivers/phy/tegra/xusb-tegra186.c | 19 ++++++++++++-------
- drivers/phy/tegra/xusb.c          | 22 +++++++++++++++++++++-
- drivers/phy/tegra/xusb.h          |  4 +++-
- include/linux/phy/tegra/xusb.h    |  2 ++
- 4 files changed, 38 insertions(+), 9 deletions(-)
+ drivers/usb/gadget/udc/tegra-xudc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/phy/tegra/xusb-tegra186.c b/drivers/phy/tegra/xusb-tegra186.c
-index ae3915ed9fef..5abdf81aa143 100644
---- a/drivers/phy/tegra/xusb-tegra186.c
-+++ b/drivers/phy/tegra/xusb-tegra186.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Copyright (c) 2016-2020, NVIDIA CORPORATION.  All rights reserved.
-+ * Copyright (c) 2016-2022, NVIDIA CORPORATION.  All rights reserved.
-  */
+diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
+index 43f1b0d461c1..f03bed263922 100644
+--- a/drivers/usb/gadget/udc/tegra-xudc.c
++++ b/drivers/usb/gadget/udc/tegra-xudc.c
+@@ -703,6 +703,8 @@ static void tegra_xudc_device_mode_on(struct tegra_xudc *xudc)
  
- #include <linux/delay.h>
-@@ -638,7 +638,7 @@ static void tegra186_utmi_bias_pad_power_off(struct tegra_xusb_padctl *padctl)
- 	mutex_unlock(&padctl->lock);
- }
+ 	pm_runtime_get_sync(xudc->dev);
  
--static void tegra_phy_xusb_utmi_pad_power_on(struct phy *phy)
-+static void tegra186_utmi_pad_power_on(struct phy *phy)
- {
- 	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
- 	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
-@@ -656,6 +656,8 @@ static void tegra_phy_xusb_utmi_pad_power_on(struct phy *phy)
- 		return;
- 	}
- 
-+	dev_dbg(dev, "power on UTMI pad %u\n", index);
++	tegra_phy_xusb_utmi_pad_power_on(xudc->curr_utmi_phy);
 +
- 	tegra186_utmi_bias_pad_power_on(padctl);
+ 	err = phy_power_on(xudc->curr_utmi_phy);
+ 	if (err < 0)
+ 		dev_err(xudc->dev, "UTMI power on failed: %d\n", err);
+@@ -757,6 +759,8 @@ static void tegra_xudc_device_mode_off(struct tegra_xudc *xudc)
+ 	/* Make sure interrupt handler has completed before powergating. */
+ 	synchronize_irq(xudc->irq);
  
- 	udelay(2);
-@@ -669,7 +671,7 @@ static void tegra_phy_xusb_utmi_pad_power_on(struct phy *phy)
- 	padctl_writel(padctl, value, XUSB_PADCTL_USB2_OTG_PADX_CTL1(index));
- }
- 
--static void tegra_phy_xusb_utmi_pad_power_down(struct phy *phy)
-+static void tegra186_utmi_pad_power_down(struct phy *phy)
- {
- 	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
- 	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
-@@ -679,6 +681,8 @@ static void tegra_phy_xusb_utmi_pad_power_down(struct phy *phy)
- 	if (!phy)
- 		return;
- 
-+	dev_dbg(padctl->dev, "power down UTMI pad %u\n", index);
++	tegra_phy_xusb_utmi_pad_power_down(xudc->curr_utmi_phy);
 +
- 	value = padctl_readl(padctl, XUSB_PADCTL_USB2_OTG_PADX_CTL0(index));
- 	value |= USB2_OTG_PD;
- 	padctl_writel(padctl, value, XUSB_PADCTL_USB2_OTG_PADX_CTL0(index));
-@@ -849,15 +853,14 @@ static int tegra186_utmi_phy_power_on(struct phy *phy)
- 	value |= RPD_CTRL(priv->calib.rpd_ctrl);
- 	padctl_writel(padctl, value, XUSB_PADCTL_USB2_OTG_PADX_CTL1(index));
- 
--	/* TODO: pad power saving */
--	tegra_phy_xusb_utmi_pad_power_on(phy);
-+	tegra186_utmi_pad_power_on(phy);
-+
- 	return 0;
- }
- 
- static int tegra186_utmi_phy_power_off(struct phy *phy)
- {
--	/* TODO: pad power saving */
--	tegra_phy_xusb_utmi_pad_power_down(phy);
-+	tegra186_utmi_pad_power_down(phy);
- 
- 	return 0;
- }
-@@ -1486,6 +1489,8 @@ static const struct tegra_xusb_padctl_ops tegra186_xusb_padctl_ops = {
- 	.suspend_noirq = tegra186_xusb_padctl_suspend_noirq,
- 	.resume_noirq = tegra186_xusb_padctl_resume_noirq,
- 	.vbus_override = tegra186_xusb_padctl_vbus_override,
-+	.utmi_pad_power_on = tegra186_utmi_pad_power_on,
-+	.utmi_pad_power_down = tegra186_utmi_pad_power_down,
- };
- 
- #if IS_ENABLED(CONFIG_ARCH_TEGRA_186_SOC)
-diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
-index 963de5913e50..49873718d54a 100644
---- a/drivers/phy/tegra/xusb.c
-+++ b/drivers/phy/tegra/xusb.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (c) 2014-2020, NVIDIA CORPORATION.  All rights reserved.
-+ * Copyright (c) 2014-2022, NVIDIA CORPORATION.  All rights reserved.
-  */
- 
- #include <linux/delay.h>
-@@ -1458,6 +1458,26 @@ int tegra_phy_xusb_utmi_port_reset(struct phy *phy)
- }
- EXPORT_SYMBOL_GPL(tegra_phy_xusb_utmi_port_reset);
- 
-+void tegra_phy_xusb_utmi_pad_power_on(struct phy *phy)
-+{
-+	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
-+	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
-+
-+	if (padctl->soc->ops->utmi_pad_power_on)
-+		padctl->soc->ops->utmi_pad_power_on(phy);
-+}
-+EXPORT_SYMBOL_GPL(tegra_phy_xusb_utmi_pad_power_on);
-+
-+void tegra_phy_xusb_utmi_pad_power_down(struct phy *phy)
-+{
-+	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
-+	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
-+
-+	if (padctl->soc->ops->utmi_pad_power_down)
-+		padctl->soc->ops->utmi_pad_power_down(phy);
-+}
-+EXPORT_SYMBOL_GPL(tegra_phy_xusb_utmi_pad_power_down);
-+
- int tegra_xusb_padctl_get_usb3_companion(struct tegra_xusb_padctl *padctl,
- 				    unsigned int port)
- {
-diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
-index 034f7a2c28d6..8cfbbdbd6e0c 100644
---- a/drivers/phy/tegra/xusb.h
-+++ b/drivers/phy/tegra/xusb.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- /*
-- * Copyright (c) 2014-2020, NVIDIA CORPORATION.  All rights reserved.
-+ * Copyright (c) 2014-2022, NVIDIA CORPORATION.  All rights reserved.
-  * Copyright (c) 2015, Google Inc.
-  */
- 
-@@ -412,6 +412,8 @@ struct tegra_xusb_padctl_ops {
- 				    unsigned int index, bool enable);
- 	int (*vbus_override)(struct tegra_xusb_padctl *padctl, bool set);
- 	int (*utmi_port_reset)(struct phy *phy);
-+	void (*utmi_pad_power_on)(struct phy *phy);
-+	void (*utmi_pad_power_down)(struct phy *phy);
- };
- 
- struct tegra_xusb_padctl_soc {
-diff --git a/include/linux/phy/tegra/xusb.h b/include/linux/phy/tegra/xusb.h
-index 3a35e74cdc61..beced277f40a 100644
---- a/include/linux/phy/tegra/xusb.h
-+++ b/include/linux/phy/tegra/xusb.h
-@@ -21,6 +21,8 @@ int tegra_xusb_padctl_usb3_set_lfps_detect(struct tegra_xusb_padctl *padctl,
- 					   unsigned int port, bool enable);
- int tegra_xusb_padctl_set_vbus_override(struct tegra_xusb_padctl *padctl,
- 					bool val);
-+void tegra_phy_xusb_utmi_pad_power_on(struct phy *phy);
-+void tegra_phy_xusb_utmi_pad_power_down(struct phy *phy);
- int tegra_phy_xusb_utmi_port_reset(struct phy *phy);
- int tegra_xusb_padctl_get_usb3_companion(struct tegra_xusb_padctl *padctl,
- 					 unsigned int port);
+ 	err = phy_power_off(xudc->curr_utmi_phy);
+ 	if (err < 0)
+ 		dev_err(xudc->dev, "UTMI PHY power off failed: %d\n", err);
 -- 
 2.17.1
 

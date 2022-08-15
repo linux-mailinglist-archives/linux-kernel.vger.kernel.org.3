@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F0E594752
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0193E594784
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354073AbiHOXoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
+        id S1354412AbiHOXpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354188AbiHOXlg (ORCPT
+        with ESMTP id S1354262AbiHOXlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:41:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7052B83F33;
-        Mon, 15 Aug 2022 13:11:05 -0700 (PDT)
+        Mon, 15 Aug 2022 19:41:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530FDA187;
+        Mon, 15 Aug 2022 13:11:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2016EB80EA9;
-        Mon, 15 Aug 2022 20:11:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CC8FC433C1;
-        Mon, 15 Aug 2022 20:11:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 936F66077B;
+        Mon, 15 Aug 2022 20:11:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99A39C433D6;
+        Mon, 15 Aug 2022 20:11:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594262;
-        bh=iYfeC75j6U9orOtsHn0ahFpgAnuaEkZWkuIbvo+iqNg=;
+        s=korg; t=1660594287;
+        bh=ee2XvZp7qZ5NKC+jn6QmcSc84kcU65loMihwoesT/Xw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u64gb0jRgJoe0w7lPzZ388S6+U4QUaZQ/R13i9ixk+lIGyFmnPOFuPWGAW2EfgZeV
-         yUczRPdpnMT3+rhCfZkmC8styx/pFF8AMrwjllGsmXKFGlYkOZ1CAKCFYzwwTHeSGL
-         QDEz00Vd4R8p27pwkEpW0Tlo3EMBUAG00mYmRLx4=
+        b=sgORQLLwqSN3H7Jwafe7gwiNMZx6WWOhzUHs1r8H7xsqkmXKxDSaZXNsqGxr3O0nT
+         +Jd4s9fFdSnxeBPaAI9MHMPjvgELfoNTefN38Upa3L8Pmx1f73g+a67/7QrfGQu33T
+         RzLYg3jfbwXSEK+zFHIUL5egDzsBsFDyv7AjVDRs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Sperbeck <jsperbeck@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.18 1080/1095] raw: fix a typo in raw_icmp_error()
-Date:   Mon, 15 Aug 2022 20:07:59 +0200
-Message-Id: <20220815180513.710889691@linuxfoundation.org>
+        stable@vger.kernel.org, Arun Easi <aeasi@marvell.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 5.18 1083/1095] tracing: Use a copy of the va_list for __assign_vstr()
+Date:   Mon, 15 Aug 2022 20:08:02 +0200
+Message-Id: <20220815180513.836978465@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
 References: <20220815180429.240518113@linuxfoundation.org>
@@ -55,36 +54,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-commit 97a4d46b1516250d640c1ae0c9e7129d160d6a1c upstream.
+commit 3a2dcbaf4d31023106975d6ae75b6df080c454cb upstream.
 
-I accidentally broke IPv4 traceroute, by swapping iph->saddr
-and iph->daddr.
+If an instance of tracing enables the same trace event as another
+instance, or the top level instance, or even perf, then the va_list passed
+into some tracepoints can be used more than once.
 
-Probably because raw_icmp_error() and raw_v4_input()
-use different order for iph->saddr and iph->daddr.
+As va_list can only be traversed once, this can cause issues:
 
-Fixes: ba44f8182ec2 ("raw: use more conventional iterators")
-Reported-by: John Sperbeck <jsperbeck@google.com>
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Link: https://lore.kernel.org/r/20220623193540.2851799-1-edumazet@google.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+ # cat /sys/kernel/tracing/instances/qla2xxx/trace
+             cat-56106   [012] ..... 2419873.470098: ql_dbg_log: qla2xxx [0000:05:00.0]-1054:14:  Entered (null).
+             cat-56106   [012] ..... 2419873.470101: ql_dbg_log: qla2xxx [0000:05:00.0]-1000:14:  Entered ×+<96>²Ü<98>^H.
+             cat-56106   [012] ..... 2419873.470102: ql_dbg_log: qla2xxx [0000:05:00.0]-1006:14:  Prepare to issue mbox cmd=0xde589000.
+
+ # cat /sys/kernel/tracing/trace
+             cat-56106   [012] ..... 2419873.470097: ql_dbg_log: qla2xxx [0000:05:00.0]-1054:14:  Entered qla2x00_get_firmware_state.
+             cat-56106   [012] ..... 2419873.470100: ql_dbg_log: qla2xxx [0000:05:00.0]-1000:14:  Entered qla2x00_mailbox_command.
+             cat-56106   [012] ..... 2419873.470102: ql_dbg_log: qla2xxx [0000:05:00.0]-1006:14:  Prepare to issue mbox cmd=0x69.
+
+The instance version is corrupted because the top level instance iterated
+the va_list first.
+
+Use va_copy() in the __assign_vstr() macro to make sure that each trace
+event for each use case gets a fresh va_list.
+
+Link: https://lore.kernel.org/all/259d53a5-958e-6508-4e45-74dba2821242@marvell.com/
+Link: https://lkml.kernel.org/r/20220719182004.21daa83e@gandalf.local.home
+
+Fixes: 0563231f93c6d ("tracing/events: Add __vstring() and __assign_vstr() helper macros")
+Reported-by: Arun Easi <aeasi@marvell.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/raw.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/trace/stages/stage6_event_callback.h | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
---- a/net/ipv4/raw.c
-+++ b/net/ipv4/raw.c
-@@ -278,7 +278,7 @@ void raw_icmp_error(struct sk_buff *skb,
- 	hlist_nulls_for_each_entry(sk, hnode, hlist, sk_nulls_node) {
- 		iph = (const struct iphdr *)skb->data;
- 		if (!raw_v4_match(net, sk, iph->protocol,
--				  iph->saddr, iph->daddr, dif, sdif))
-+				  iph->daddr, iph->saddr, dif, sdif))
- 			continue;
- 		raw_err(sk, skb, info);
- 	}
+diff --git a/include/trace/stages/stage6_event_callback.h b/include/trace/stages/stage6_event_callback.h
+index 0f51f6b3ab70..3c554a585320 100644
+--- a/include/trace/stages/stage6_event_callback.h
++++ b/include/trace/stages/stage6_event_callback.h
+@@ -40,7 +40,12 @@
+ 
+ #undef __assign_vstr
+ #define __assign_vstr(dst, fmt, va)					\
+-	vsnprintf(__get_str(dst), TRACE_EVENT_STR_MAX, fmt, *(va))
++	do {								\
++		va_list __cp_va;					\
++		va_copy(__cp_va, *(va));				\
++		vsnprintf(__get_str(dst), TRACE_EVENT_STR_MAX, fmt, __cp_va); \
++		va_end(__cp_va);					\
++	} while (0)
+ 
+ #undef __bitmask
+ #define __bitmask(item, nr_bits) __dynamic_array(unsigned long, item, -1)
+-- 
+2.37.2
+
 
 

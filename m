@@ -2,92 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 558C3592BFA
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05266592D58
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242037AbiHOJjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 05:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59900 "EHLO
+        id S242060AbiHOJkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 05:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbiHOJjj (ORCPT
+        with ESMTP id S242063AbiHOJkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 05:39:39 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538F71EC61;
-        Mon, 15 Aug 2022 02:39:38 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0EFDD34AAE;
-        Mon, 15 Aug 2022 09:39:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1660556377; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xLRt920Q9NTts46M0mpTJHEHc61MGrl7arvYDWKeJLY=;
-        b=E9YwOiQ68gGhWyMiRiOYeVdDaQUKtIKU4zieATyAoF5818GH7zRobg+wLoG3UwPtQKb233
-        Roaao9shepnktb6xBF9IfdPMSvpitaha+8BA5ugV3cQ6r89TiNLeMq9Chvtl8BB3hKc02/
-        qpcsakl9FCZQX72Lr9LuVDej/1rrTUc=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BADFB13A93;
-        Mon, 15 Aug 2022 09:39:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6U+RLFgU+mIvXwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Mon, 15 Aug 2022 09:39:36 +0000
-Date:   Mon, 15 Aug 2022 11:39:35 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Xuewen Yan <xuewen.yan94@gmail.com>
-Cc:     Mukesh Ojha <quic_mojha@quicinc.com>, Tejun Heo <tj@kernel.org>,
-        Imran Khan <imran.f.khan@oracle.com>, lizefan.x@bytedance.com,
-        hannes@cmpxchg.org, tglx@linutronix.de, steven.price@arm.com,
-        peterz@infradead.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zhao Gongyi <zhaogongyi@huawei.com>,
-        Zhang Qiao <zhangqiao22@huawei.com>
-Subject: Re: Query regarding deadlock involving cgroup_threadgroup_rwsem and
- cpu_hotplug_lock
-Message-ID: <20220815093934.GA29323@blackbody.suse.cz>
-References: <8245b710-8acb-d8e6-7045-99a5f71dad4e@oracle.com>
- <26d0e4cc-be0e-2c12-6174-dfbb1edb1ed6@oracle.com>
- <bbc01477-231b-3dbb-3e09-9338f5413f06@oracle.com>
- <ba48eac5-8ef7-251b-11fe-8163bb7a2d54@quicinc.com>
- <224b19f3-912d-b858-7af4-185b8e55bc66@quicinc.com>
- <YthDz4BnfYHce1od@slm.duckdns.org>
- <YuGTBLkFerUboctl@slm.duckdns.org>
- <dc0cff0e-b744-9d5d-e727-70d1c31b2a74@quicinc.com>
- <20220815090556.GB27407@blackbody.suse.cz>
- <CAB8ipk90LxNNbq5OKamd-ArkqhEZjxS1fFZJXtnbQwGzyyJ3wQ@mail.gmail.com>
+        Mon, 15 Aug 2022 05:40:04 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D501F2D4;
+        Mon, 15 Aug 2022 02:40:03 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M5q1V1fVHz67yfJ;
+        Mon, 15 Aug 2022 17:37:02 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 15 Aug 2022 11:40:00 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 15 Aug
+ 2022 10:40:00 +0100
+Date:   Mon, 15 Aug 2022 10:39:58 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+CC:     <will@kernel.org>, <mark.rutland@arm.com>, <Frank.li@nxp.com>,
+        <shawnguo@kernel.org>, <s.hauer@pengutronix.de>,
+        <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>,
+        <zhangshaokun@hisilicon.com>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <konrad.dybcio@somainline.org>,
+        <khuong@os.amperecomputing.com>, <john.garry@huawei.com>,
+        <yangyicong@hisilicon.com>, <gregkh@linuxfoundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH] drivers/perf: Change WARN_ON() to dev_err() on
+ irq_set_affinity() failure
+Message-ID: <20220815103958.000016c9@huawei.com>
+In-Reply-To: <20220815092815.11597-1-yangyicong@huawei.com>
+References: <20220815092815.11597-1-yangyicong@huawei.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAB8ipk90LxNNbq5OKamd-ArkqhEZjxS1fFZJXtnbQwGzyyJ3wQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 05:25:52PM +0800, Xuewen Yan <xuewen.yan94@gmail.com> wrote:
-> Your means is that the problem should be fixed by [1]+[2]'s revert ?
+On Mon, 15 Aug 2022 17:28:15 +0800
+Yicong Yang <yangyicong@huawei.com> wrote:
 
-I understood that was already the combination you had tested.
-You write in [T] that [1] alone causes (another) deadlock and therefore
-the revert of [2] was suggested.
+> From: Yicong Yang <yangyicong@hisilicon.com>
+> 
+> The WARN_ON() on irq_set_affinity() failure is misused according to the [1]
+> and may crash people's box unintentionally. This may also be redundant since
+> in the failure case we may also trigger the WARN and dump the stack in the
+> perf core[2] for a second time.
+> 
+> So change the WARN_ON() to dev_err() to just print the failure message.
+> 
+> [1] https://github.com/torvalds/linux/blob/master/include/asm-generic/bug.h#L74
+> [2] https://github.com/torvalds/linux/blob/master/kernel/events/core.c#L313
+> 
+> Suggested-by: Greg KH <gregkh@linuxfoundation.org>
+> [https://lore.kernel.org/lkml/YuOi3i0XHV++z1YI@kroah.com/]
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
 
-> I just tested the case which reverted the [2]. Need I test with [1] and [2]?
+Looks like progress in a sensible direction to me.
 
-It'd be better (unless you haven't already :-), my reasoning is for the
-[1]+[2] combo.
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Thanks,
-Michal
+Kind of unrelated question inline.
 
-[T] https://lore.kernel.org/r/CAB8ipk_gCLtvEahsp2DvPJf4NxRsM8WCYmmH=yTd7zQE+81_Yg@mail.gmail.com/
+>
+
+
+> diff --git a/drivers/perf/arm_smmuv3_pmu.c b/drivers/perf/arm_smmuv3_pmu.c
+> index 00d4c45a8017..05e1b3e274d7 100644
+> --- a/drivers/perf/arm_smmuv3_pmu.c
+> +++ b/drivers/perf/arm_smmuv3_pmu.c
+> @@ -646,7 +646,8 @@ static int smmu_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
+>  
+>  	perf_pmu_migrate_context(&smmu_pmu->pmu, cpu, target);
+>  	smmu_pmu->on_cpu = target;
+> -	WARN_ON(irq_set_affinity(smmu_pmu->irq, cpumask_of(target)));
+> +	if (irq_set_affinity(smmu_pmu->irq, cpumask_of(target)))
+> +		dev_err(smmu_pmu->dev, "Failed to set interrupt affinity\n");
+>  
+>  	return 0;
+>  }
+> @@ -892,7 +893,8 @@ static int smmu_pmu_probe(struct platform_device *pdev)
+>  
+>  	/* Pick one CPU to be the preferred one to use */
+>  	smmu_pmu->on_cpu = raw_smp_processor_id();
+> -	WARN_ON(irq_set_affinity(smmu_pmu->irq, cpumask_of(smmu_pmu->on_cpu)));
+> +	if (irq_set_affinity(smmu_pmu->irq, cpumask_of(smmu_pmu->on_cpu)))
+> +		dev_err(dev, "Failed to set interrupt affinity\n");
+
+In this case we have the option to fail probe.  Failing to set affinity means
+we are broken anyway, so perhaps that is cleaner than carrying on.
+
+As a side note, I wonder if other drivers could benefit from what I think
+is a micro optimization to short cut calling the hp handlers when the
+decision of which CPU is easy...
+
+>  
+>  	err = cpuhp_state_add_instance_nocalls(cpuhp_state_num,
+>  					       &smmu_pmu->node);

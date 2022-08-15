@@ -2,69 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48BEE593C7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 22:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF98593BC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 22:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242482AbiHOTke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 15:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
+        id S1344584AbiHOTnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 15:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245740AbiHOThs (ORCPT
+        with ESMTP id S1343538AbiHOTjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 15:37:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057D731368;
-        Mon, 15 Aug 2022 11:46:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 955BB61124;
-        Mon, 15 Aug 2022 18:46:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC9B2C433D6;
-        Mon, 15 Aug 2022 18:46:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660589184;
-        bh=xd05IOvXbZkYJrbK//9m4SCmIjrh7J1pnQoHMdMOv2E=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=oqY3F37rs1pwHEALe6zFf8ndvDZABmILsEEYN2S5kzrM06BlrHZBoDErpJdKg52cr
-         OtyJ8kKFRxoI2wk8XAY0Mq215EX0PjwE8A0dNsOoBhuowEHhfjvmJyGB2fMOEKCP+a
-         hx3yaAl9peS/f9SJF3QOcmYl1ROjwSQ/EyXRbckwPQU8uvq2G13qKvgfrlbRdNlPVU
-         TI+pEeJ3aLieY7o5gXG66CRwqV9jYISDZC1vKS6qhRnfLLKMFyEXmACUCgoemTu6Bc
-         pWl85vTuSeQ1RXE7iYNh2GpoIXccvymhqle/4G3OcQTErqHzU9PFpS0tuu+UBvgu1V
-         Puz20GODxIGrQ==
-Content-Type: text/plain; charset="utf-8"
+        Mon, 15 Aug 2022 15:39:33 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38906402CF;
+        Mon, 15 Aug 2022 11:47:03 -0700 (PDT)
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oNf73-000FWY-0a; Mon, 15 Aug 2022 20:46:57 +0200
+Received: from [85.1.206.226] (helo=linux-4.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oNf72-000MQi-PA; Mon, 15 Aug 2022 20:46:56 +0200
+Subject: Re: [PATCH bpf-next] selftests/bpf: fix attach point for non-x86
+ arches in test_progs/lsm
+To:     Artem Savkov <asavkov@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Daniel_M=c3=bcller?= <deso@posteo.net>
+References: <20220815122422.687116-1-asavkov@redhat.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <376f20c5-4b1c-efec-4dde-43d91b3d4308@iogearbox.net>
+Date:   Mon, 15 Aug 2022 20:46:56 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220811042855.3867774-2-bjorn.andersson@linaro.org>
-References: <20220811042855.3867774-1-bjorn.andersson@linaro.org> <20220811042855.3867774-2-bjorn.andersson@linaro.org>
-Subject: Re: [PATCH 1/2] dt-bindings: clock: Add Qualcomm SC8280XP GPU binding
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>
-Date:   Mon, 15 Aug 2022 11:46:22 -0700
-User-Agent: alot/0.10
-Message-Id: <20220815184623.EC9B2C433D6@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220815122422.687116-1-asavkov@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26628/Mon Aug 15 09:51:41 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Bjorn Andersson (2022-08-10 21:28:54)
-> Add compatible for the Qualcomm SC8280XP GPU.
->=20
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+On 8/15/22 2:24 PM, Artem Savkov wrote:
+> Use SYS_PREFIX macro from bpf_misc.h instead of hard-coded '__x64_'
+> prefix for sys_setdomainname attach point in lsm test.
+> 
+> Signed-off-by: Artem Savkov <asavkov@redhat.com>
 > ---
+>   tools/testing/selftests/bpf/progs/lsm.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/lsm.c b/tools/testing/selftests/bpf/progs/lsm.c
+> index 33694ef8acfa..d8d8af623bc2 100644
+> --- a/tools/testing/selftests/bpf/progs/lsm.c
+> +++ b/tools/testing/selftests/bpf/progs/lsm.c
+> @@ -4,6 +4,7 @@
+>    * Copyright 2020 Google LLC.
+>    */
+>   
+> +#include "bpf_misc.h"
+>   #include "vmlinux.h"
+>   #include <bpf/bpf_helpers.h>
+>   #include <bpf/bpf_tracing.h>
+> @@ -160,7 +161,7 @@ int BPF_PROG(test_task_free, struct task_struct *task)
+>   
+>   int copy_test = 0;
+>   
+> -SEC("fentry.s/__x64_sys_setdomainname")
+> +SEC("fentry.s/" SYS_PREFIX "sys_setdomainname")
+>   int BPF_PROG(test_sys_setdomainname, struct pt_regs *regs)
+>   {
+>   	void *ptr = (void *)PT_REGS_PARM1(regs);
+> 
 
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Good catch! Could you also update the comment in tools/testing/selftests/bpf/DENYLIST.s390x +46 :
+
+[...]
+test_lsm                                 # failed to find kernel BTF type ID of '__x64_sys_setdomainname': -3          (?)
+[...]
+
+It should likely say sth like `attach fentry unexpected error: -524 (trampoline)`.
+
+Thanks,
+Daniel

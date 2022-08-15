@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 383995947BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA34B594BE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353271AbiHOXWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:22:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
+        id S1348341AbiHPAwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 20:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344591AbiHOXO3 (ORCPT
+        with ESMTP id S1349372AbiHPAqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:14:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8147A530;
-        Mon, 15 Aug 2022 13:01:51 -0700 (PDT)
+        Mon, 15 Aug 2022 20:46:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4996FB5E6B;
+        Mon, 15 Aug 2022 13:45:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCC9B61299;
-        Mon, 15 Aug 2022 20:01:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1DA5C433C1;
-        Mon, 15 Aug 2022 20:01:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C90CB80EB1;
+        Mon, 15 Aug 2022 20:45:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C11E8C433D6;
+        Mon, 15 Aug 2022 20:45:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593710;
-        bh=uWra+Qzx8ugDojYZaaq+pat/bESp/okATL7sH1tOtCY=;
+        s=korg; t=1660596312;
+        bh=rBDcUaW6y7qrMZnKzZg6t/2s8g0030ERifBQbxVCGxs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QPie6zsPD2LRg5oww06kOVWV+MxtSmQl9Gs0cwl4N2Sg+luR2pK/lwy5nzV0nHrmv
-         Uo7kryncDsICRT7vAKRqpzV6xVKzWYrRLkg/s293dT0kEHF1IWXQp+0oFFPrM5oxZv
-         ScSOKF2Dx9R90fFHRcitPZCQvR30sQeIVMW1kCq4=
+        b=Oi2Ad80h9+Rm15rgTSKLZeUrMulW0k7Z2MYWtEMFDU5QFAtbVtaahhQiAYlj/5K3N
+         +0zYU1NSzdzwrDh4g8uZIAtblMtc7kODFfmeTvPEC0YFE5fXt3bpH3Jj0mp404X8uf
+         AYic8+GuF5JZ7e3bQjNS5+GiImjaRQrUTT3mtXvQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 0994/1095] KVM: x86: Signal #GP, not -EPERM, on bad WRMSR(MCi_CTL/STATUS)
-Date:   Mon, 15 Aug 2022 20:06:33 +0200
-Message-Id: <20220815180510.231278419@linuxfoundation.org>
+        stable@vger.kernel.org, Arun Easi <aeasi@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.19 1038/1157] scsi: qla2xxx: Fix crash due to stale SRB access around I/O timeouts
+Date:   Mon, 15 Aug 2022 20:06:34 +0200
+Message-Id: <20220815180521.511042881@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
-References: <20220815180429.240518113@linuxfoundation.org>
+In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
+References: <20220815180439.416659447@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +55,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Arun Easi <aeasi@marvell.com>
 
-[ Upstream commit 2368048bf5c2ec4b604ac3431564071e89a0bc71 ]
+commit c39587bc0abaf16593f7abcdf8aeec3c038c7d52 upstream.
 
-Return '1', not '-1', when handling an illegal WRMSR to a MCi_CTL or
-MCi_STATUS MSR.  The behavior of "all zeros' or "all ones" for CTL MSRs
-is architectural, as is the "only zeros" behavior for STATUS MSRs.  I.e.
-the intent is to inject a #GP, not exit to userspace due to an unhandled
-emulation case.  Returning '-1' gets interpreted as -EPERM up the stack
-and effecitvely kills the guest.
+Ensure SRB is returned during I/O timeout error escalation. If that is not
+possible fail the escalation path.
 
-Fixes: 890ca9aefa78 ("KVM: Add MCE support")
-Fixes: 9ffd986c6e4e ("KVM: X86: #GP when guest attempts to write MCi_STATUS register w/o 0")
+Following crash stack was seen:
+
+BUG: unable to handle kernel paging request at 0000002f56aa90f8
+IP: qla_chk_edif_rx_sa_delete_pending+0x14/0x30 [qla2xxx]
+Call Trace:
+ ? qla2x00_status_entry+0x19f/0x1c50 [qla2xxx]
+ ? qla2x00_start_sp+0x116/0x1170 [qla2xxx]
+ ? dma_pool_alloc+0x1d6/0x210
+ ? mempool_alloc+0x54/0x130
+ ? qla24xx_process_response_queue+0x548/0x12b0 [qla2xxx]
+ ? qla_do_work+0x2d/0x40 [qla2xxx]
+ ? process_one_work+0x14c/0x390
+
+Link: https://lore.kernel.org/r/20220616053508.27186-6-njavali@marvell.com
+Fixes: d74595278f4a ("scsi: qla2xxx: Add multiple queue pair functionality.")
 Cc: stable@vger.kernel.org
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Jim Mattson <jmattson@google.com>
-Link: https://lore.kernel.org/r/20220512222716.4112548-2-seanjc@google.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Arun Easi <aeasi@marvell.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/x86.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/qla2xxx/qla_os.c |   43 ++++++++++++++++++++++++++++++------------
+ 1 file changed, 31 insertions(+), 12 deletions(-)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 2316c978b598..0d6cea0d33a9 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -3233,13 +3233,13 @@ static int set_msr_mce(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 			 */
- 			if ((offset & 0x3) == 0 &&
- 			    data != 0 && (data | (1 << 10) | 1) != ~(u64)0)
--				return -1;
-+				return 1;
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -1337,21 +1337,20 @@ qla2xxx_eh_abort(struct scsi_cmnd *cmd)
+ /*
+  * Returns: QLA_SUCCESS or QLA_FUNCTION_FAILED.
+  */
+-int
+-qla2x00_eh_wait_for_pending_commands(scsi_qla_host_t *vha, unsigned int t,
+-	uint64_t l, enum nexus_wait_type type)
++static int
++__qla2x00_eh_wait_for_pending_commands(struct qla_qpair *qpair, unsigned int t,
++				       uint64_t l, enum nexus_wait_type type)
+ {
+ 	int cnt, match, status;
+ 	unsigned long flags;
+-	struct qla_hw_data *ha = vha->hw;
+-	struct req_que *req;
++	scsi_qla_host_t *vha = qpair->vha;
++	struct req_que *req = qpair->req;
+ 	srb_t *sp;
+ 	struct scsi_cmnd *cmd;
  
- 			/* MCi_STATUS */
- 			if (!msr_info->host_initiated &&
- 			    (offset & 0x3) == 1 && data != 0) {
- 				if (!can_set_mci_status(vcpu))
--					return -1;
-+					return 1;
- 			}
+ 	status = QLA_SUCCESS;
  
- 			vcpu->arch.mce_banks[offset] = data;
--- 
-2.35.1
-
+-	spin_lock_irqsave(&ha->hardware_lock, flags);
+-	req = vha->req;
++	spin_lock_irqsave(qpair->qp_lock_ptr, flags);
+ 	for (cnt = 1; status == QLA_SUCCESS &&
+ 		cnt < req->num_outstanding_cmds; cnt++) {
+ 		sp = req->outstanding_cmds[cnt];
+@@ -1378,12 +1377,32 @@ qla2x00_eh_wait_for_pending_commands(scs
+ 		if (!match)
+ 			continue;
+ 
+-		spin_unlock_irqrestore(&ha->hardware_lock, flags);
++		spin_unlock_irqrestore(qpair->qp_lock_ptr, flags);
+ 		status = qla2x00_eh_wait_on_command(cmd);
+-		spin_lock_irqsave(&ha->hardware_lock, flags);
++		spin_lock_irqsave(qpair->qp_lock_ptr, flags);
+ 	}
+-	spin_unlock_irqrestore(&ha->hardware_lock, flags);
++	spin_unlock_irqrestore(qpair->qp_lock_ptr, flags);
++
++	return status;
++}
++
++int
++qla2x00_eh_wait_for_pending_commands(scsi_qla_host_t *vha, unsigned int t,
++				     uint64_t l, enum nexus_wait_type type)
++{
++	struct qla_qpair *qpair;
++	struct qla_hw_data *ha = vha->hw;
++	int i, status = QLA_SUCCESS;
+ 
++	status = __qla2x00_eh_wait_for_pending_commands(ha->base_qpair, t, l,
++							type);
++	for (i = 0; status == QLA_SUCCESS && i < ha->max_qpairs; i++) {
++		qpair = ha->queue_pair_map[i];
++		if (!qpair)
++			continue;
++		status = __qla2x00_eh_wait_for_pending_commands(qpair, t, l,
++								type);
++	}
+ 	return status;
+ }
+ 
+@@ -1420,7 +1439,7 @@ qla2xxx_eh_device_reset(struct scsi_cmnd
+ 		return err;
+ 
+ 	if (fcport->deleted)
+-		return SUCCESS;
++		return FAILED;
+ 
+ 	ql_log(ql_log_info, vha, 0x8009,
+ 	    "DEVICE RESET ISSUED nexus=%ld:%d:%llu cmd=%p.\n", vha->host_no,
+@@ -1488,7 +1507,7 @@ qla2xxx_eh_target_reset(struct scsi_cmnd
+ 		return err;
+ 
+ 	if (fcport->deleted)
+-		return SUCCESS;
++		return FAILED;
+ 
+ 	ql_log(ql_log_info, vha, 0x8009,
+ 	    "TARGET RESET ISSUED nexus=%ld:%d cmd=%p.\n", vha->host_no,
 
 

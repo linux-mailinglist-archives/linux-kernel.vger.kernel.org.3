@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7844459499C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8465947E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239746AbiHOX2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58076 "EHLO
+        id S241780AbiHOX2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353381AbiHOXWF (ORCPT
+        with ESMTP id S1353418AbiHOXWH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:22:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EA31109;
-        Mon, 15 Aug 2022 13:05:14 -0700 (PDT)
+        Mon, 15 Aug 2022 19:22:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220FC5F8F;
+        Mon, 15 Aug 2022 13:05:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7DB8EB81135;
-        Mon, 15 Aug 2022 20:05:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD79DC433D6;
-        Mon, 15 Aug 2022 20:05:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B379560693;
+        Mon, 15 Aug 2022 20:05:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEF61C433C1;
+        Mon, 15 Aug 2022 20:05:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593911;
-        bh=7R7XRJk9VX5l9JuQ7DA+8HY+77GdZP4j+qwtfoEEtrE=;
+        s=korg; t=1660593917;
+        bh=YcHOJyY6Ze1wflj+HVPwk8FDdUytNxdCp0psuhP8bfI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1SCn6gEMYZ52scQxweo7dUa2vzlil6iyWSbjgqK6DQuCkzIW/60wYRXQZ+Pa6Cg8g
-         AcKyukryvdTwqSdHzweI2R1l4wSVK8AQBOyKvnNF9Bq6JeE1M/aYz+XIq69KxMgbMz
-         1xczASoJZ2zITdfAtF4c8vM9glCxn+Tuf1rZ5iCw=
+        b=P+ERtCSGpTP9Jjx2YpPDp+xNPCmbIhKHp00r9MKuUoPdFAHSWsDjeTIYaXbyca665
+         RWd5eSU7vqGp6JdgDFcoZLG0x3i5nDmJGzJCC0Oi7M1hA+s/w0GBDAKt5cg9Sh0hJX
+         L8yuTnPzj5R13IZ4rj9wS/L8kauBSLSjS7BlZIQo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0347/1157] i2c: mxs: Silence a clang warning
-Date:   Mon, 15 Aug 2022 19:55:03 +0200
-Message-Id: <20220815180453.599917677@linuxfoundation.org>
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 0348/1157] virtio-gpu: fix a missing check to avoid NULL dereference
+Date:   Mon, 15 Aug 2022 19:55:04 +0200
+Message-Id: <20220815180453.638153634@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -55,37 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio Estevam <festevam@gmail.com>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-[ Upstream commit 3d43273d7d1e1a5374d531e901d3c537b4c97bbf ]
+[ Upstream commit bd63f11f4c3c46afec07d821f74736161ff6e526 ]
 
-Change the of_device_get_match_data() cast to (uintptr_t)
-to silence the following clang warning:
+'cache_ent' could be set NULL inside virtio_gpu_cmd_get_capset()
+and it will lead to a NULL dereference by a lately use of it
+(i.e., ptr = cache_ent->caps_cache). Fix it with a NULL check.
 
-drivers/i2c/busses/i2c-mxs.c:802:18: warning: cast to smaller integer type 'enum mxs_i2c_devtype' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+Fixes: 62fb7a5e10962 ("virtio-gpu: add 3d/virgl support")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Reviewed-by: Chia-I Wu <olvaffe@gmail.com>
+Link: http://patchwork.freedesktop.org/patch/msgid/20220327050945.1614-1-xiam0nd.tong@gmail.com
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: c32abd8b5691 ("i2c: mxs: Remove unneeded platform_device_id")
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+[ kraxel: minor codestyle fixup ]
+
+Signed-off-by: Gerd Hoffmann <kraxel@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-mxs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/virtio/virtgpu_ioctl.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-mxs.c b/drivers/i2c/busses/i2c-mxs.c
-index 864a3f1bd4e1..68f67d084c63 100644
---- a/drivers/i2c/busses/i2c-mxs.c
-+++ b/drivers/i2c/busses/i2c-mxs.c
-@@ -799,7 +799,7 @@ static int mxs_i2c_probe(struct platform_device *pdev)
- 	if (!i2c)
- 		return -ENOMEM;
+diff --git a/drivers/gpu/drm/virtio/virtgpu_ioctl.c b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+index f8d83358d2a0..9b2702116f93 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_ioctl.c
++++ b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+@@ -580,8 +580,10 @@ static int virtio_gpu_get_caps_ioctl(struct drm_device *dev,
+ 	spin_unlock(&vgdev->display_info_lock);
  
--	i2c->dev_type = (enum mxs_i2c_devtype)of_device_get_match_data(&pdev->dev);
-+	i2c->dev_type = (uintptr_t)of_device_get_match_data(&pdev->dev);
+ 	/* not in cache - need to talk to hw */
+-	virtio_gpu_cmd_get_capset(vgdev, found_valid, args->cap_set_ver,
+-				  &cache_ent);
++	ret = virtio_gpu_cmd_get_capset(vgdev, found_valid, args->cap_set_ver,
++					&cache_ent);
++	if (ret)
++		return ret;
+ 	virtio_gpu_notify(vgdev);
  
- 	i2c->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(i2c->regs))
+ copy_exit:
 -- 
 2.35.1
 

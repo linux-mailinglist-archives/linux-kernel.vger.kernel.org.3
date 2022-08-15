@@ -2,169 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A59592CC6
+	by mail.lfdr.de (Postfix) with ESMTP id 18C38592CC4
 	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242081AbiHOJmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 05:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
+        id S242028AbiHOJi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 05:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233186AbiHOJmW (ORCPT
+        with ESMTP id S231493AbiHOJiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 05:42:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1925D1CB34;
-        Mon, 15 Aug 2022 02:42:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AEAD960FF1;
-        Mon, 15 Aug 2022 09:42:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11076C433D6;
-        Mon, 15 Aug 2022 09:42:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660556541;
-        bh=mIIGTw4aMzZ/OGv8lX0rJKJzHZ9/juqllmTKoHRRuhE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=N0D3MH8E8sRUuyIISUB0yg0MTGKTs+svFi/lTl6j9NLut5T1CmxLRaV3NvrJE1/Ft
-         O2Kc6H6qirviHJVUbSUUx1rF0hOUFv2CGDrmfLsOIq8Tts7zQRWEPxoR37u5FkPIfK
-         S3orIWnDsO8P3SleGpSYQz3xgZXZP5I8PorJgCW7sf8QqtCUM8QHMtfKS5M3UmF9yf
-         kNdaxVwA298T3CHhbUxzcsOO3YR0opEdWzidz2H9v1wCEpEBOX5HULsslrC32I8lDn
-         HTQQwCcuIponvsZ2IFu4tQL4vRFFoMI9g13eNGaOlKbj8I6a+IZeRMmGCIt2wUE2Z/
-         coT04CdADqLIA==
-Received: by mail-wr1-f41.google.com with SMTP id j7so8453737wrh.3;
-        Mon, 15 Aug 2022 02:42:20 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3cCKAHrmguHqqlALQ2ryq3VrgMu76OUy7/vajJlP+osofxkU/d
-        vFzNk6diQfoZU1ZMSheVGH7iSgNNmDAE6vdeDKY=
-X-Google-Smtp-Source: AA6agR4sVq1vePjI1vORqyjjgxd+/zzwKVWOL7SwNmNgiAKdmWT73zj5V2uLM0EH2VK1oXNXIBhbRYCzkz8x8zO+4Fg=
-X-Received: by 2002:a5d:64a6:0:b0:21f:b3b:5cc9 with SMTP id
- m6-20020a5d64a6000000b0021f0b3b5cc9mr7806696wrp.601.1660556539286; Mon, 15
- Aug 2022 02:42:19 -0700 (PDT)
+        Mon, 15 Aug 2022 05:38:25 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B3B1EC7C;
+        Mon, 15 Aug 2022 02:38:22 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27F88sgu016417;
+        Mon, 15 Aug 2022 09:38:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=IbpeGsBI/BRs+5EysySHvJxSdnMw6gNwuIS9nFUKMGg=;
+ b=Tl6kCUSCoLUk3uONjRsb8DPo1WTTL2BCskI+cE5BbgzwoMt1kZT5jDf4I/y9IXCMxfg1
+ ZESlB+fessZyv25ggqTN+P5V1hH48IthqmbnRA0tRCIbc6jGrimwEuoFD3qDOeZpvqdg
+ t7ILsuxm9YhyusBuYVD3iNCVAdX9Z7WuJX4ArMjcD/RgNbfLc/K/1RYOSR6v4cye90dS
+ ncx1eUx6cHLMcupLGlm3FHme1Ssi8twrfpvhq0TYCJtO12fRrYWuvVbAyRihuKLc4unF
+ 8zMRRJM0NxxB5nHmlIAf9kxkxzqsgeHB2HWIK+4Q7xgStob2TvPrU4Y2n4YfoyUSW5LE Tg== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3hyj0gtbj4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 Aug 2022 09:38:14 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27F9aiJK008239;
+        Mon, 15 Aug 2022 09:38:13 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3hx3k91c9s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 Aug 2022 09:38:12 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27F9c9p732178532
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 15 Aug 2022 09:38:09 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CDE4CAE045;
+        Mon, 15 Aug 2022 09:38:09 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6488BAE04D;
+        Mon, 15 Aug 2022 09:38:09 +0000 (GMT)
+Received: from [9.171.34.81] (unknown [9.171.34.81])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 15 Aug 2022 09:38:09 +0000 (GMT)
+Message-ID: <663c7595-1c18-043e-5f12-b0ce880b84bf@linux.ibm.com>
+Date:   Mon, 15 Aug 2022 11:43:15 +0200
 MIME-Version: 1.0
-References: <20220815042915.44547-1-elliott@hpe.com>
-In-Reply-To: <20220815042915.44547-1-elliott@hpe.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 15 Aug 2022 11:42:08 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXH1rU=HCd8bV4AP18JXhMKSs7wdJoiYQkPFsPRj=iuZPQ@mail.gmail.com>
-Message-ID: <CAMj1kXH1rU=HCd8bV4AP18JXhMKSs7wdJoiYQkPFsPRj=iuZPQ@mail.gmail.com>
-Subject: Re: [PATCH] crypto: tcrypt - remove mode=1000
-To:     Robert Elliott <elliott@hpe.com>
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        toshi.kani@hpe.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] vfio-pci/zdev: require KVM to be built-in
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20220814215154.32112-1-rdunlap@infradead.org>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <20220814215154.32112-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: dU61yVc1_xRQs_b-j0KqvCVIZOL7u_iF
+X-Proofpoint-ORIG-GUID: dU61yVc1_xRQs_b-j0KqvCVIZOL7u_iF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-15_06,2022-08-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 spamscore=0 mlxscore=0 phishscore=0 adultscore=0
+ bulkscore=0 impostorscore=0 clxscore=1011 lowpriorityscore=0
+ mlxlogscore=999 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2207270000 definitions=main-2208150034
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 Aug 2022 at 06:30, Robert Elliott <elliott@hpe.com> wrote:
->
-> The lists of algothms checked for existence by
->     modprobe tcrypt mode=1000
-> generates three bogus errors:
->     modprobe tcrypt mode=1000
->
->     console log:
->     tcrypt: alg rot13 not found
->     tcrypt: alg cts not found
->     tcrypt: alg arc4 not found
->
-> rot13 is not an algorithm in the crypto API or tested.
->
-> cts is a wrapper, not a base algorithm.
->
-> arc4 is named ecb(arc4), not arc4.
->
-> Also, the list is missing numerous algorithms that are tested by
-> other test modes:
->     blake2b-512
->     blake2s-256
->     crct10dif
->     xxhash64
->     ghash
->     cast5
->     sm4
->     ansi_prng
->
-> Several of the algorithms are only available if
-> CONFIG_CRYPTO_USER_API_ENABLE_OBSOLETE is enabled:
->     arc4
->     khazad
->     seed
->     tea, xtea, xeta
->
-> Rather that fix that list, remove test mode=1000 entirely.
-> It seems to have limited utility, and a web search shows no
-> discussion of anybody using it.
->
-> Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-> Signed-off-by: Robert Elliott <elliott@hpe.com>
+Thank you Randy for this good catch.
+However forcing KVM to be include statically in the kernel when using 
+VFIO_PCI extensions is not a good solution for us I think.
 
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+I suggest we better do something like:
 
+----
+
+diff --git a/arch/s390/include/asm/kvm_host.h 
+b/arch/s390/include/asm/kvm_host.h
+index 6287a843e8bc..1733339cc4eb 100644
+--- a/arch/s390/include/asm/kvm_host.h
++++ b/arch/s390/include/asm/kvm_host.h
+@@ -1038,7 +1038,7 @@ static inline void kvm_arch_vcpu_unblocking(struct 
+kvm_vcpu *vcpu) {}
+  #define __KVM_HAVE_ARCH_VM_FREE
+  void kvm_arch_free_vm(struct kvm *kvm);
+
+-#ifdef CONFIG_VFIO_PCI_ZDEV_KVM
++#if defined(CONFIG_VFIO_PCI_ZDEV_KVM) || 
+defined(CONFIG_VFIO_PCI_ZDEV_KVM_MODULE)
+  int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm);
+  void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev);
+  #else
+diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
+index f9d0c908e738..bbc375b028ef 100644
+--- a/drivers/vfio/pci/Kconfig
++++ b/drivers/vfio/pci/Kconfig
+@@ -45,9 +45,9 @@ config VFIO_PCI_IGD
+  endif
+
+  config VFIO_PCI_ZDEV_KVM
+-       bool "VFIO PCI extensions for s390x KVM passthrough"
++       def_tristate y
++       prompt "VFIO PCI extensions for s390x KVM passthrough"
+         depends on S390 && KVM
+-       default y
+         help
+           Support s390x-specific extensions to enable support for 
+enhancements
+           to KVM passthrough capabilities, such as interpretive 
+execution of
+
+----
+
+What do you think? It seems to me it solves the problem, what do you think?
+
+Regards,
+Pierre
+
+On 8/14/22 23:51, Randy Dunlap wrote:
+> Fix build errors when CONFIG_KVM=m:
+> 
+> s390-linux-ld: drivers/vfio/pci/vfio_pci_zdev.o: in function `vfio_pci_zdev_open_device':
+> vfio_pci_zdev.c:(.text+0x242): undefined reference to `kvm_s390_pci_register_kvm'
+> s390-linux-ld: drivers/vfio/pci/vfio_pci_zdev.o: in function `vfio_pci_zdev_close_device':
+> vfio_pci_zdev.c:(.text+0x296): undefined reference to `kvm_s390_pci_unregister_kvm'
+> 
+> Having a bool Kconfig symbol depend on a tristate symbol can often
+> lead to problems like this.
+> 
+> Fixes: 8061d1c31f1a ("vfio-pci/zdev: add open/close device hooks")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Matthew Rosato <mjrosato@linux.ibm.com>
+> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+> Cc: Pierre Morel <pmorel@linux.ibm.com>
+> Cc: Eric Farman <farman@linux.ibm.com>
+> Cc: linux-s390@vger.kernel.org
+> Cc: kvm@vger.kernel.org
 > ---
->  crypto/tcrypt.c | 28 ----------------------------
->  1 file changed, 28 deletions(-)
->
-> diff --git a/crypto/tcrypt.c b/crypto/tcrypt.c
-> index 2bacf8384f59..35d70382ee54 100644
-> --- a/crypto/tcrypt.c
-> +++ b/crypto/tcrypt.c
-> @@ -65,18 +65,6 @@ static int mode;
->  static u32 num_mb = 8;
->  static unsigned int klen;
->  static char *tvmem[TVMEMSIZE];
-> -
-> -static const char *check[] = {
-> -       "des", "md5", "des3_ede", "rot13", "sha1", "sha224", "sha256", "sm3",
-> -       "blowfish", "twofish", "serpent", "sha384", "sha512", "md4", "aes",
-> -       "cast6", "arc4", "michael_mic", "deflate", "crc32c", "tea", "xtea",
-> -       "khazad", "wp512", "wp384", "wp256", "xeta",  "fcrypt",
-> -       "camellia", "seed", "rmd160",
-> -       "lzo", "lzo-rle", "cts", "sha3-224", "sha3-256", "sha3-384",
-> -       "sha3-512", "streebog256", "streebog512",
-> -       NULL
-> -};
-> -
->  static const int block_sizes[] = { 16, 64, 128, 256, 1024, 1420, 4096, 0 };
->  static const int aead_sizes[] = { 16, 64, 256, 512, 1024, 1420, 4096, 8192, 0 };
->
-> @@ -1454,18 +1442,6 @@ static void test_cipher_speed(const char *algo, int enc, unsigned int secs,
->                                    false);
->  }
->
-> -static void test_available(void)
-> -{
-> -       const char **name = check;
-> -
-> -       while (*name) {
-> -               printk("alg %s ", *name);
-> -               printk(crypto_has_alg(*name, 0, 0) ?
-> -                      "found\n" : "not found\n");
-> -               name++;
-> -       }
-> -}
-> -
->  static inline int tcrypt_test(const char *alg)
->  {
->         int ret;
-> @@ -2825,10 +2801,6 @@ static int do_test(const char *alg, u32 type, u32 mask, int m, u32 num_mb)
->                 test_mb_skcipher_speed("ctr(blowfish)", DECRYPT, sec, NULL, 0,
->                                        speed_template_8_32, num_mb);
->                 break;
-> -
-> -       case 1000:
-> -               test_available();
-> -               break;
->         }
->
->         return ret;
-> --
-> 2.37.1
->
+>   drivers/vfio/pci/Kconfig |    2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> --- a/drivers/vfio/pci/Kconfig
+> +++ b/drivers/vfio/pci/Kconfig
+> @@ -46,7 +46,7 @@ endif
+>   
+>   config VFIO_PCI_ZDEV_KVM
+>   	bool "VFIO PCI extensions for s390x KVM passthrough"
+> -	depends on S390 && KVM
+> +	depends on S390 && KVM=y
+>   	default y
+>   	help
+>   	  Support s390x-specific extensions to enable support for enhancements
+> 
+
+-- 
+Pierre Morel
+IBM Lab Boeblingen

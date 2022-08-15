@@ -2,187 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3AB595237
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 07:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2673359523B
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 07:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229594AbiHPFwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 01:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54576 "EHLO
+        id S231159AbiHPFxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 01:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiHPFwa (ORCPT
+        with ESMTP id S230480AbiHPFx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 01:52:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B31413B891;
-        Mon, 15 Aug 2022 15:56:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D631612D4;
-        Mon, 15 Aug 2022 22:56:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BDF4C433C1;
-        Mon, 15 Aug 2022 22:55:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660604165;
-        bh=xMmA6oKgbgUn6m+9eT6q7pbLR6zVbVy796oIUBAaC34=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F9SlKgjQLmKKrMBqJ3vvsBrd/Yrlq/4jXbrxweWPj+yty8ovPhmdnEnTIWpGowipZ
-         ECHdt+y2tO9y8qZfE+f+YPkED7huG/w9HkviixPVFvChrzkt8yQHvMo9O2VEBMNnzT
-         JrgsR7XULrWGVBkNhntK/xnHOk7eDkZMlqsrXDiqjhP0aUimZ6hEjHJq68SJqJNXZ8
-         Mn7TB54t7gXDP09+nIigfo9+G8xUNeiGZ8KoKq/3xI0hTgVnGoFpEhhQ4uxC2ZsnD5
-         nbKSi9SZujYbs+PUjccW7ijsGglrXKDh+DVk9PUS1QTRrpf9KPISuwCizKTspA2CBS
-         QyObtjpXNSFrg==
-Date:   Mon, 15 Aug 2022 23:55:54 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        dri-devel@lists.freedesktop.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        linux-amlogic@lists.infradead.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-doc@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Michael Turq uette <mturquette@baylibre.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        linux-hwmon@vger.kernel.org, linux-clk@vger.kernel.org,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        David Airlie <airlied@linux.ie>, linux-iio@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 0/7] Devm helpers for regulator get and enable
-Message-ID: <YvrO+velKdYdGVve@sirena.org.uk>
-References: <cover.1660292316.git.mazziesaccount@gmail.com>
- <166057828406.697572.228317501909350108.b4-ty@kernel.org>
- <YvpsRbguMXn74GhR@pendragon.ideasonboard.com>
- <Yvp1Qkuh7xfeb/B2@sirena.org.uk>
- <YvqV9Mq6I3gXQaf2@pendragon.ideasonboard.com>
- <20220815205857.308B1C433D6@smtp.kernel.org>
- <Yvq33T+XCduoqv7Z@pendragon.ideasonboard.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4yZYFMFbpCwRNWoh"
-Content-Disposition: inline
-In-Reply-To: <Yvq33T+XCduoqv7Z@pendragon.ideasonboard.com>
-X-Cookie: We have ears, earther...FOUR OF THEM!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 16 Aug 2022 01:53:26 -0400
+Received: from mail-io1-xd4a.google.com (mail-io1-xd4a.google.com [IPv6:2607:f8b0:4864:20::d4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DD375FD5
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 15:59:40 -0700 (PDT)
+Received: by mail-io1-xd4a.google.com with SMTP id k22-20020a6bf716000000b0068898c0b395so975671iog.3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 15:59:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=qjxTwNs46mBErQ+98eCyfxk5QZmIEb2cOA8EBrFu9oc=;
+        b=tWMtvPeknQYFBSL7spt7SaiV96nFguiXlCt/bQ7nMaSfG0Ja6ya07XtqMamEMvhd1W
+         4bSb8u8+o/lu8KhKDgL81BN8gcBFGQCbuW4AKcGObZznNTP8Myhij12FwXjx63XmzpVv
+         UO5s0LWwv0gezIKQ4fMMdr1H7nGxLd1Idz+jwZbwXlLlIeGGN40yAffJjtUZLXvyJuDq
+         UouPrm2CJArWx3SxGMKo64k/QuDSC1DRp9YXUNc5B+gMH2fusgPg9+iuMHz4SUW+cOLi
+         tE8xZsxM4ZXJM2hEROEE9SQuFD9JQa+eflvKrMNcZSI05x8Rkmo77Tqlsdn+Z2Em9b1N
+         ZRRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=qjxTwNs46mBErQ+98eCyfxk5QZmIEb2cOA8EBrFu9oc=;
+        b=0brMCCCvehY7nSJX+xtL3wmLaMCQ42P1neZiqmqc9AUPh/RZzZzzSezOjg5oTBEbjC
+         Vq5/F1GVmO4eGAfu6p5z7BtuzhZNWbw8msjFgMJEvYZMlpD7He7rdJNl8qIYW7qmJea2
+         XdmGWI5aA7UKcFcNmrSlVA4inQwdZGm4VqxACHkSUJY/mxz98d46bkLd/VVL6VdIUpMy
+         EH//SVTahRMAjEkFEQ6KP8Ls3Gg3luY6GpholcPpkmKH4Veu9rbKcldXHzssuHqLZfFr
+         aW87qpoEnWBhw/qaE9wCWXtr6yhAyDkso+NftPUCxHj5kqkveaHMbr570kRbzArp2DJF
+         /zwQ==
+X-Gm-Message-State: ACgBeo3Xhv8H+puiQJRUsie1ntqrcTkbG/ye5VCcXf7iD6E1B5wlJteU
+        WMPs/6QmjBIEU1TdrrfBo2qKbai3Eiy2PQ==
+X-Google-Smtp-Source: AA6agR43YtkaciFxA5o18koQqVw4sEaVs9oQNrp2PsIfD5FgZeY7kwnbEQ2XUNzLjISkxrXBhtslS3mC6VvyoQ==
+X-Received: from riochico.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:b3e])
+ (user=rsilvera job=sendgmr) by 2002:a92:9506:0:b0:2e0:ed70:ea7d with SMTP id
+ y6-20020a929506000000b002e0ed70ea7dmr8114959ilh.207.1660604380104; Mon, 15
+ Aug 2022 15:59:40 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 22:59:22 +0000
+Message-Id: <20220815225922.2118745-1-rsilvera@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+Subject: [PATCH v4] perf inject: Add a command line option to specify build ids.
+From:   Raul Silvera <rsilvera@google.com>
+To:     Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Raul Silvera <rsilvera@google.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This commit adds the option --known-build-ids to perf inject.
+It allows the user to explicitly specify the build id for a given
+path, instead of retrieving it from the current system. This is
+useful in cases where a perf.data file is processed on a different
+system from where it was collected, or if some of the binaries are
+no longer available.
 
---4yZYFMFbpCwRNWoh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The build ids and paths are specified in pairs in the command line.
+Using the file:// specifier, build ids can be loaded from a file
+directly generated by perf buildid-list. This is convenient to copy
+build ids from one perf.data file to another.
 
-On Tue, Aug 16, 2022 at 12:17:17AM +0300, Laurent Pinchart wrote:
-> On Mon, Aug 15, 2022 at 01:58:55PM -0700, Stephen Boyd wrote:
+** Example: In this example we use perf record to create two
+perf.data files, one with build ids and another without, and use
+perf buildid-list and perf inject to copy the build ids from the
+first file to the second.
 
-> > The basic idea is that drivers should be focused on what they're
-> > driving, not navigating the (sometimes) complex integration that's
-> > taking place around them. When a device driver probe function is called
-> > the device should already be powered on.
+ $ perf record ls /tmp
+ $ perf record --no-buildid -o perf.data.no-buildid ls /tmp
+ $ perf buildid-list > build-ids.txt
+ $ perf inject -b --known-build-ids='file://build-ids.txt' \
+        -i perf.data.no-buildid -o perf.data.buildid
 
-> No. ACPI does that in many cases, and that's a real bad idea. There are
-> devices that you do *not* want to power up on probe. I'm thinking, for
-> example, about camera sensors that have a privacy LED that will light up
-> when the sensor is powered up. You don't want it to flash on boot. There
-> are also other use cases related to fault tolerance where you want
-> drivers to initialize properly and only access the device later.
+Signed-off-by: Raul Silvera <rsilvera@google.com>
+---
 
-I don't think it's an either/or thing in terms of approach here - we
-need a range of options to choose from.  ACPI is totally fine and solves
-real problems for the systems it targets, the problems we see with it
-are mainly that it has a very strong system abstraction and doesn't cope
-well when things go outside that coupled with the fact that Windows long
-ago decided that board files were totally fine for papering over any
-problems so people haven't worked on standardisation where they should.
-Some SoCs like to do similar things with their power controller cores.
+  V3 -> V4: Perform upfront validation of build ids
+  V2 -> V3: Added documentation and removed unnecessary temps
+  V1 -> V2: Cleaned up patch description, deleted the strlist during
+            cleanup, and updated validation of the build id strings
+	    
+ tools/perf/Documentation/perf-inject.txt |  7 +-
+ tools/perf/builtin-inject.c              | 85 ++++++++++++++++++++++++
+ 2 files changed, 91 insertions(+), 1 deletion(-)
 
-Conversely for example with many (but not all) SoC IPs the mechanics of
-the system integration and range of options available are such that
-dealing with them is kind of out of scope of the driver, but they're
-often very repetitive over any given SoC so there is a benefit in
-pushing things into power domains rather than having the driver for the
-IP manage everything.  We need to be able to be flexible so we can find
-the best idioms to represent the different systems in front of us rather
-than trying to force all systems into a single idiom.
+diff --git a/tools/perf/Documentation/perf-inject.txt b/tools/perf/Documentation/perf-inject.txt
+index ffc293fdf61d..70e2ac3cc91a 100644
+--- a/tools/perf/Documentation/perf-inject.txt
++++ b/tools/perf/Documentation/perf-inject.txt
+@@ -27,9 +27,14 @@ OPTIONS
+ --build-ids::
+         Inject build-ids into the output stream
+ 
+---buildid-all:
++--buildid-all::
+ 	Inject build-ids of all DSOs into the output stream
+ 
++--known-build-ids=::
++	Override build-ids to inject using these comma-separated pairs of
++	build-id and path. Understands file://filename to read these pairs
++	from a file, which can be generated with perf buildid-list.
++
+ -v::
+ --verbose::
+ 	Be more verbose.
+diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+index 2a0f992ca0be..8ec955402488 100644
+--- a/tools/perf/builtin-inject.c
++++ b/tools/perf/builtin-inject.c
+@@ -21,6 +21,7 @@
+ #include "util/data.h"
+ #include "util/auxtrace.h"
+ #include "util/jit.h"
++#include "util/string2.h"
+ #include "util/symbol.h"
+ #include "util/synthetic-events.h"
+ #include "util/thread.h"
+@@ -38,6 +39,7 @@
+ #include <linux/string.h>
+ #include <linux/zalloc.h>
+ #include <linux/hash.h>
++#include <ctype.h>
+ #include <errno.h>
+ #include <signal.h>
+ #include <inttypes.h>
+@@ -123,6 +125,7 @@ struct perf_inject {
+ 	char			event_copy[PERF_SAMPLE_MAX_SIZE];
+ 	struct perf_file_section secs[HEADER_FEAT_BITS];
+ 	struct guest_session	guest_session;
++	struct strlist		*known_build_ids;
+ };
+ 
+ struct event_entry {
+@@ -634,9 +637,73 @@ static int dso__read_build_id(struct dso *dso)
+ 	return dso->has_build_id ? 0 : -1;
+ }
+ 
++static struct strlist *perf_inject__parse_known_build_ids(
++	const char *known_build_ids_string)
++{
++	struct str_node *pos, *tmp;
++	struct strlist *known_build_ids;
++	int bid_len;
++
++	known_build_ids = strlist__new(known_build_ids_string, NULL);
++	if (known_build_ids == NULL)
++		return NULL;
++	strlist__for_each_entry_safe(pos, tmp, known_build_ids) {
++		const char *build_id, *dso_name;
++
++		build_id = skip_spaces(pos->s);
++		dso_name = strchr(build_id, ' ');
++		if (dso_name == NULL) {
++			strlist__remove(known_build_ids, pos);
++			continue;
++		}
++		bid_len = dso_name - pos->s;
++		dso_name = skip_spaces(dso_name);
++		if (bid_len % 2 != 0 || bid_len >= SBUILD_ID_SIZE) {
++			strlist__remove(known_build_ids, pos);
++			continue;
++		}
++		for (int ix = 0; 2 * ix + 1 < bid_len; ++ix) {
++			if (!isxdigit(build_id[2 * ix]) ||
++			    !isxdigit(build_id[2 * ix + 1])) {
++				strlist__remove(known_build_ids, pos);
++				break;
++			}
++		}
++	}
++	return known_build_ids;
++}
++
++static bool perf_inject__lookup_known_build_id(struct perf_inject *inject,
++					       struct dso *dso)
++{
++	struct str_node *pos;
++	int bid_len;
++
++	strlist__for_each_entry(pos, inject->known_build_ids) {
++		const char *build_id, *dso_name;
++
++		build_id = skip_spaces(pos->s);
++		dso_name = strchr(build_id, ' ');
++		bid_len = dso_name - pos->s;
++		dso_name = skip_spaces(dso_name);
++		if (strcmp(dso->long_name, dso_name))
++			continue;
++		for (int ix = 0; 2 * ix + 1 < bid_len; ++ix) {
++			dso->bid.data[ix] = (hex(build_id[2 * ix]) << 4 |
++					     hex(build_id[2 * ix + 1]));
++		}
++		dso->bid.size = bid_len / 2;
++		dso->has_build_id = 1;
++		return true;
++	}
++	return false;
++}
++
+ static int dso__inject_build_id(struct dso *dso, struct perf_tool *tool,
+ 				struct machine *machine, u8 cpumode, u32 flags)
+ {
++	struct perf_inject *inject = container_of(tool, struct perf_inject,
++						  tool);
+ 	int err;
+ 
+ 	if (is_anon_memory(dso->long_name) || flags & MAP_HUGETLB)
+@@ -644,6 +711,10 @@ static int dso__inject_build_id(struct dso *dso, struct perf_tool *tool,
+ 	if (is_no_dso_memory(dso->long_name))
+ 		return 0;
+ 
++	if (inject->known_build_ids != NULL &&
++	    perf_inject__lookup_known_build_id(inject, dso))
++		return 1;
++
+ 	if (dso__read_build_id(dso) < 0) {
+ 		pr_debug("no build_id found for %s\n", dso->long_name);
+ 		return -1;
+@@ -2112,12 +2183,16 @@ int cmd_inject(int argc, const char **argv)
+ 	};
+ 	int ret;
+ 	bool repipe = true;
++	const char *known_build_ids = NULL;
+ 
+ 	struct option options[] = {
+ 		OPT_BOOLEAN('b', "build-ids", &inject.build_ids,
+ 			    "Inject build-ids into the output stream"),
+ 		OPT_BOOLEAN(0, "buildid-all", &inject.build_id_all,
+ 			    "Inject build-ids of all DSOs into the output stream"),
++		OPT_STRING(0, "known-build-ids", &known_build_ids,
++			   "buildid path [,buildid path...]",
++			   "build-ids to use for given paths"),
+ 		OPT_STRING('i', "input", &inject.input_name, "file",
+ 			   "input file name"),
+ 		OPT_STRING('o', "output", &inject.output.path, "file",
+@@ -2257,6 +2332,15 @@ int cmd_inject(int argc, const char **argv)
+ 		 */
+ 		inject.tool.ordered_events = true;
+ 		inject.tool.ordering_requires_timestamps = true;
++		if (known_build_ids != NULL) {
++			inject.known_build_ids =
++				perf_inject__parse_known_build_ids(known_build_ids);
++
++			if (inject.known_build_ids == NULL) {
++				pr_err("Couldn't parse known build ids.\n");
++				goto out_delete;
++			}
++		}
+ 	}
+ 
+ 	if (inject.sched_stat) {
+@@ -2285,6 +2369,7 @@ int cmd_inject(int argc, const char **argv)
+ 	guest_session__exit(&inject.guest_session);
+ 
+ out_delete:
++	strlist__delete(inject.known_build_ids);
+ 	zstd_fini(&(inject.session->zstd_data));
+ 	perf_session__delete(inject.session);
+ out_close_output:
+-- 
+2.37.1.595.g718a3a8f04-goog
 
-> These devres helpers go in the exact opposite direction of what we
-> should be doing, by telling driver authors it's totally fine to not
-> implement power management. Why don't we just drop error handling and go
-> back to the big kernel lock in that case ? That was much easier to
-> program too.
-
-Sometimes it's totally fine to not worry, at least at a first pass.
-Perhaps you're more concerned with real time, perhaps your system
-doesn't provide control for the relevant resources.  Sometimes the
-savings are so negligable that it's questionable if doing the power
-manageement is an overall power saving.
-
-> You will very quickly see drivers doing this (either directly or
-> indirectly):
-
-> probe()
-> {
-> 	devm_clk_get_enabled();
-> 	devm_regulator_get_enable();
-> }
-
-> Without a devres-based get+enable API drivers can get the resources they
-> need in any order, possibly moving some of those resource acquisition
-> operations to different functions, and then have a clear block of code
-> that enables the resources in the right order. These devres helpers give
-> a false sense of security to driver authors and they will end up
-> introducing problems, the same way that devm_kzalloc() makes it
-> outrageously easy to crash the kernel by disconnecting a device that is
-> in use.
-
-TBH I think the problem you have here is with devm not with this
-particular function.  That's a different conversation, and a totally
-valid one especially when you start looking at things like implementing
-userspace APIs which need to cope with hardware going away while still
-visible to userspace.  It's *probably* more of a subsystem conversation
-than a driver one though, or at least I think subsystems should try to
-arrange to make it so.
-
---4yZYFMFbpCwRNWoh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL6zvkACgkQJNaLcl1U
-h9BEBgf/WTDdAdcRZ8SC6FxARw3vM71UeFKkIqUwBU+PYuhgUK2NBJXqpbKPrtVC
-yhBxnG6LjbPlUdTmuHr7/VqE4w4fNgcbxFZcYvfbmC/oBSNtHkHDEQSOC8CTi5Ud
-BhNvQSBIa3+a6oHsz1yPIG8kL5noW4VKMVNiRuvR+6X8cSrXhZpk8GJLLWM0zBzX
-99KnGDVttgaVcftUhxYXdmdeGIIU2t9DH5HaUG3txWB3IuuRlyJxBPY1mCNfjXl2
-xZXp0tLQFshCLqDSYsTQbS8X+xDNxeBSG8hbWEDfvFHxX/YYBUAb3nZ4+npTcaVl
-gZBIzTYNJg5nvwsv+0jghdLDxGTLnQ==
-=WE6e
------END PGP SIGNATURE-----
-
---4yZYFMFbpCwRNWoh--

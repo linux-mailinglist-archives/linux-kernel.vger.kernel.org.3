@@ -2,86 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FAC592BC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED811592D32
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232126AbiHOI5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 04:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
+        id S240068AbiHOI6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 04:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiHOI5a (ORCPT
+        with ESMTP id S230468AbiHOI6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 04:57:30 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28AA1D310;
-        Mon, 15 Aug 2022 01:57:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xGKSHpBSrA7bGy9HtaNlBZ6jRySHti4Z3/bSYrzElsk=; b=QfHLyNs2Gnm/SW58wQjhG43d4m
-        YtpYmGgwiw73SbX4veuzmapH8DV7A/3SrrNvsYp3sGIWUlJb/GP8afoCxYTKA8DXbu7hVeQfKLnoj
-        hBGXrJ+L7xHjybZuRnrduifHmMhYTDTmUPCKl/ByqVv5VVd9DQjBWn4HSMHudfi3VHRWBDun+CmdG
-        YseHXJ4cDfrGck+Tz1Xv31Hzsoxozc4iUOksmCJ48lksoc5+64RuVPVOrKYbfT/5187aWI1iYF0h7
-        rE6WodEhc+cSnV2XVz60fOqJXKONiC/HUZKoCktmpIMC0uNKek0Zqa3X8x+cyycjXHnt/oySgeHPC
-        SRLQGj6A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oNVuO-005Zg8-RC; Mon, 15 Aug 2022 08:57:17 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2455C980153; Mon, 15 Aug 2022 10:57:15 +0200 (CEST)
-Date:   Mon, 15 Aug 2022 10:57:15 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v3 1/3] sched: Use user_cpus_ptr for saving user provided
- cpumask in sched_setaffinity()
-Message-ID: <YvoKa3tbOaszsp1y@worktop.programming.kicks-ass.net>
-References: <20220812203929.364341-1-longman@redhat.com>
- <20220812203929.364341-2-longman@redhat.com>
+        Mon, 15 Aug 2022 04:58:03 -0400
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1715A20BF4;
+        Mon, 15 Aug 2022 01:58:03 -0700 (PDT)
+Received: by mail-qk1-f174.google.com with SMTP id n21so5108008qkk.3;
+        Mon, 15 Aug 2022 01:58:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=nk5EGLhK+gdgPOYsEk+ZMf81tiZAjsJWcHtjJMPh2io=;
+        b=MO7rx/gRV4nEILHUy9iNkAnnBJ6aqHvt8BC3qpDT9rL5OuIc9Dsyc19HabPdVk1cZs
+         fI2sKVvG68ZUkpN6sEcHAHGLRwy6sBnXww6VD9uiKNnA2mz78mQjX4+NspD9DXu0EYlU
+         8vxVjClUYbXy16HKwP9oCXLuHZN8EuZHzOXOXvlRuRbeEglgFXwKdX77ikxCoI06WjnH
+         akrHGPhA4XNr8Caxah/8KfU6wf5ucUwS+NaoiTdbVdls0VEy76hAksxlZvCp6mXpMnrK
+         aAPvER8ZDc8IUf1GGMh3l5e88dihdu1hJB9RiQPuOwF1nGxCxp6SfOubc7YBoldY646i
+         SRVA==
+X-Gm-Message-State: ACgBeo3rvokVXW+arBD+pdWEgmiTbNv4PkqL5JAOUcQ+PfkzzTPWpT1v
+        bzEUNv8qxP7pfsSC/mpFaAxFECOHZVsGS2jt
+X-Google-Smtp-Source: AA6agR54M2VFI2yoALTW89h0106r0/WF2JlQaFEmA3tTNXq22yXy2SAB2Xa4wf5irbR4I4kHsuMsLg==
+X-Received: by 2002:a37:9344:0:b0:6b9:b91a:1634 with SMTP id v65-20020a379344000000b006b9b91a1634mr10739071qkd.75.1660553882048;
+        Mon, 15 Aug 2022 01:58:02 -0700 (PDT)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id u11-20020a05620a430b00b006b99b78751csm8802718qko.112.2022.08.15.01.58.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Aug 2022 01:58:01 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id 64so8369737ybl.9;
+        Mon, 15 Aug 2022 01:58:01 -0700 (PDT)
+X-Received: by 2002:a25:2d4:0:b0:674:b112:4f37 with SMTP id
+ 203-20020a2502d4000000b00674b1124f37mr11285966ybc.202.1660553881297; Mon, 15
+ Aug 2022 01:58:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220812203929.364341-2-longman@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220805230736.1562801-1-f.fainelli@gmail.com>
+In-Reply-To: <20220805230736.1562801-1-f.fainelli@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 15 Aug 2022 10:57:49 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVgqqnhg2TeznSP49sqVN8Hs=D0LKkne+evJkqT9U-LqQ@mail.gmail.com>
+Message-ID: <CAMuHMdVgqqnhg2TeznSP49sqVN8Hs=D0LKkne+evJkqT9U-LqQ@mail.gmail.com>
+Subject: Re: [PATCH] arch_topology: Silence early cacheinfo errors when non-existent
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 04:39:27PM -0400, Waiman Long wrote:
-> The user_cpus_ptr field is added by commit b90ca8badbd1 ("sched:
-> Introduce task_struct::user_cpus_ptr to track requested affinity"). It
-> is currently used only by arm64 arch due to possible asymmetric cpu
-> setup. This patch extends its usage to save user provided cpumask when
-> sched_setaffinity() is called for all arches.
-> 
-> To preserve the existing arm64 use case, a new cpus_affinity_set flag is
-> added to differentiate if user_cpus_ptr is set up by sched_setaffinity()
-> or by force_compatible_cpus_allowed_ptr(). user_cpus_ptr
-> set by sched_setaffinity() has priority and won't be
-> overwritten by force_compatible_cpus_allowed_ptr() or
-> relax_compatible_cpus_allowed_ptr().
+Hi Florian,
 
-What why ?! The only possible case where
-restrict_cpus_allowed_ptr() will now need that weird new state is when
-the affinity has never been set before, in that case cpus_ptr should be
-possible_mask.
+On Sat, Aug 6, 2022 at 1:10 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
+> Architectures which do not have cacheinfo such as ARM 32-bit would spit
+> out the following during boot:
+>
+>  Early cacheinfo failed, ret = -2
+>
+> Treat -ENOENT specifically to silence this error since it means that the
+> platform does not support reporting its cache information.
+>
+> Fixes: 3fcbf1c77d08 ("arch_topology: Fix cache attributes detection in the CPU hotplug path")
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Please just make a single consistent rule and don't make weird corner
-cases like this.
+Thank you, this fixes the issue seen with v6.0-rc1 on e.g. R-Car Gen2.
+
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

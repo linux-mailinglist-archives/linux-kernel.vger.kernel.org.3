@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F57594E66
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 04:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 237D9594E69
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 04:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239634AbiHPCDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 22:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
+        id S240447AbiHPCD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 22:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233882AbiHPCBg (ORCPT
+        with ESMTP id S233054AbiHPCCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 22:01:36 -0400
+        Mon, 15 Aug 2022 22:02:17 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46562220B89
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:54:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6884A220BAA
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:54:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660600424;
+        s=mimecast20190719; t=1660600430;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=bnInJhTNmcRkk5WIZQp/adh2w/55qWjBovtngHxo1PM=;
-        b=LvyEx60idQ/fjXGx+vQMMOZ7NVMIO5WyMH2VgKkrAByxB1RkL1A3JR+t/3kNp5qG45I5R3
-        9PTbKouLnDJ2ADFaqVkKSh4dFW2XPoqbQjIj5QuvMtliMcRQM0BOLOUnumhyF7CD+rMAtE
-        vLhkCaJ8SVd1LVkXaLPnR1T2GabXAsg=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=0Woc1p74LnDMz9TXkvyQIlZ2BlUNGXfNgs76Y3D9lgg=;
+        b=gQy0pOCuABmxJxl68Yu24XbuqdXNkPrR3EMBsdIIthe8mL1+Rdp8YKxhbBE3XE2Q6ncgpz
+        NfmwUbnoE94v5mm7NRAaf2qzNIm/FUGlx9/qzJFrAjsCANGl6Zu7bc77/Sjm6XBUbT4+xf
+        Y0kkE7LzCiQ7PWgBdaUBU4kul1Yrey8=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-210-0b67NieTN_CNN0ZpF6KnbQ-1; Mon, 15 Aug 2022 17:53:43 -0400
-X-MC-Unique: 0b67NieTN_CNN0ZpF6KnbQ-1
-Received: by mail-wm1-f70.google.com with SMTP id i132-20020a1c3b8a000000b003a537064611so4048586wma.4
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:53:43 -0700 (PDT)
+ us-mta-594-3s6TYtLKOTaMlCPWPBUg-w-1; Mon, 15 Aug 2022 17:53:49 -0400
+X-MC-Unique: 3s6TYtLKOTaMlCPWPBUg-w-1
+Received: by mail-wr1-f71.google.com with SMTP id m2-20020adfc582000000b0021e28acded7so1482204wrg.13
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:53:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=bnInJhTNmcRkk5WIZQp/adh2w/55qWjBovtngHxo1PM=;
-        b=ya2EpO5NnpLycK2aZnWVxsXXMkZlC5mYagSMMlycktQ4vkL3bdiwE+MC8r6fO87dYi
-         ofiUVCco0Ufx+LR87CWixbFhKn2AMnVdVkXviA+6UWPpnZqTbd7bh5IUbQP735gtiyQ7
-         nxpNUo2tJJ3VxblCakgrNVOTjXN+KKcYlfpd+dpJrRR32W/YXsl/V8nt0Onru8g6hHOQ
-         xdVaOxKZObzMX581Yp0Z7ryuZXX6RvMz2C4ApvPYD8VtWXAS9o5VV+hp3nPlHixPhwQt
-         8nLrSXA8fe6Tp9+folKTBKhUBGmXs8N8op/x9+nigLzlSrm/2OMAjuC8Oo2VM0dmSMcQ
-         H57w==
-X-Gm-Message-State: ACgBeo3/xU3vNFQUilBFoULpB+L+iV3hxiQp9zyfjC6804Vgwpqak/Gc
-        9KiUlWUzesGP5bC/rIx3UaGEY+anhuz4E7zlwTVIDdsBDCEvCbsr02FqK9YGAOBvRrfQDq+SYPj
-        SfS77/868/DwUI42x2VK/w8yVElLUoezTSHk/kwe9Ri9L8+c8r246QpvdaSaz2Tw3VxqgJQ==
-X-Received: by 2002:adf:eb8e:0:b0:223:a1f6:26b2 with SMTP id t14-20020adfeb8e000000b00223a1f626b2mr9621611wrn.216.1660600422363;
-        Mon, 15 Aug 2022 14:53:42 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4jlIHrGyk0NQDFhbHw+XilfZD0zV7zttfZd98h/WsQfsn3+HtdmVcfipmuVvb8Tr8KPbBRvA==
-X-Received: by 2002:adf:eb8e:0:b0:223:a1f6:26b2 with SMTP id t14-20020adfeb8e000000b00223a1f626b2mr9621582wrn.216.1660600422078;
-        Mon, 15 Aug 2022 14:53:42 -0700 (PDT)
+        bh=0Woc1p74LnDMz9TXkvyQIlZ2BlUNGXfNgs76Y3D9lgg=;
+        b=bS6LKRNnFF6VUgcIQgq/ijdv+ZXJIcsbqnAMR6o4BNkzHWBcVJd91bhwokmB/DHUmy
+         7JCx6vQZIVjHWte93Dn9C/bW4EGZixLRFVjUtZzziIv1WjxwkBv+iUZTU1//TnyICeWN
+         fAfR0VTukm3Ci9GML3eVztTx41wD6G/3JknvGdVwiJY2ud2yy/V3nDoMArAAzh8vy6lr
+         5kd9KGInZnqz2NjU/yrUoMtxCpQviFANuIkJY0M60pQBb7g7UJ0jHcJja9nwJ88KyXHj
+         KbV9D7DRIixmPZcre4mZNl5Rj1qXp6xwmJsdWOsmL+sUo0shrlUJWumTU0p2o3qAHn2/
+         /Mrw==
+X-Gm-Message-State: ACgBeo3UPou5T8EbevL/+RZ8JHpizXi7urLz5N5DNMzGz0YLhlmWK0zw
+        in6i97wgMPi2YCN9yfjgY7tvrFzp0SMP6UdjJoDHkh5rlTHECh8FC32YDz9bV7Z/N79ejq3TzKF
+        Mb/8hMUg9OCU5Wjdi0ujL/Y2oO9LTHO5IWednTIAZFMCD5LfGhsbJgVvDT+yoUvnV6QkuHA==
+X-Received: by 2002:a05:600c:ad4:b0:3a5:50b2:f991 with SMTP id c20-20020a05600c0ad400b003a550b2f991mr16731051wmr.146.1660600426266;
+        Mon, 15 Aug 2022 14:53:46 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7WhVEK8u+bWBQ+vsIP1p2ogF6bjbQsW8dmESOECqvboXglS7PHGAZ3CszZnuGHypllX9oYGw==
+X-Received: by 2002:a05:600c:ad4:b0:3a5:50b2:f991 with SMTP id c20-20020a05600c0ad400b003a550b2f991mr16731025wmr.146.1660600425942;
+        Mon, 15 Aug 2022 14:53:45 -0700 (PDT)
 Received: from redhat.com ([2.55.4.37])
-        by smtp.gmail.com with ESMTPSA id b3-20020a05600010c300b002217339ce90sm8455090wrx.8.2022.08.15.14.53.39
+        by smtp.gmail.com with ESMTPSA id n32-20020a05600c502000b003a2d47d3051sm13154371wmr.41.2022.08.15.14.53.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 14:53:41 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 17:53:38 -0400
+        Mon, 15 Aug 2022 14:53:45 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 17:53:42 -0400
 From:   "Michael S. Tsirkin" <mst@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
@@ -70,9 +70,9 @@ Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Greg KH <gregkh@linuxfoundation.org>
-Subject: [PATCH v2 2/5] virtio: Revert "virtio: add helper
- virtio_find_vqs_ctx_size()"
-Message-ID: <20220815215251.154451-5-mst@redhat.com>
+Subject: [PATCH v2 3/5] virtio-mmio: Revert "virtio_mmio: support the arg
+ sizes of find_vqs()"
+Message-ID: <20220815215251.154451-6-mst@redhat.com>
 References: <20220815215251.154451-1-mst@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -82,7 +82,7 @@ X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
 X-Mutt-Fcc: =sent
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,40 +90,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit fe3dc04e31aa51f91dc7f741a5f76cc4817eb5b4: the
-API is now unused and in fact can't be implemented on top of a legacy
-device.
+This reverts commit fbed86abba6e0472d98079790e58060e4332608a.
+The API is now unused, let's not carry dead code around.
 
-Fixes: fe3dc04e31aa ("virtio: add helper virtio_find_vqs_ctx_size()")
-Cc: "Xuan Zhuo" <xuanzhuo@linux.alibaba.com>
+Fixes: fbed86abba6e ("virtio_mmio: support the arg sizes of find_vqs()")
 Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 ---
- include/linux/virtio_config.h | 12 ------------
- 1 file changed, 12 deletions(-)
+ drivers/virtio/virtio_mmio.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
-index 6adff09f7170..888f7e96f0c7 100644
---- a/include/linux/virtio_config.h
-+++ b/include/linux/virtio_config.h
-@@ -241,18 +241,6 @@ int virtio_find_vqs_ctx(struct virtio_device *vdev, unsigned nvqs,
- 				      ctx, desc);
- }
+diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
+index c492a57531c6..dfcecfd7aba1 100644
+--- a/drivers/virtio/virtio_mmio.c
++++ b/drivers/virtio/virtio_mmio.c
+@@ -360,7 +360,7 @@ static void vm_synchronize_cbs(struct virtio_device *vdev)
  
--static inline
--int virtio_find_vqs_ctx_size(struct virtio_device *vdev, u32 nvqs,
--			     struct virtqueue *vqs[],
--			     vq_callback_t *callbacks[],
--			     const char * const names[],
--			     u32 sizes[],
--			     const bool *ctx, struct irq_affinity *desc)
--{
--	return vdev->config->find_vqs(vdev, nvqs, vqs, callbacks, names, sizes,
--				      ctx, desc);
--}
+ static struct virtqueue *vm_setup_vq(struct virtio_device *vdev, unsigned int index,
+ 				  void (*callback)(struct virtqueue *vq),
+-				  const char *name, u32 size, bool ctx)
++				  const char *name, bool ctx)
+ {
+ 	struct virtio_mmio_device *vm_dev = to_virtio_mmio_device(vdev);
+ 	struct virtio_mmio_vq_info *info;
+@@ -395,11 +395,8 @@ static struct virtqueue *vm_setup_vq(struct virtio_device *vdev, unsigned int in
+ 		goto error_new_virtqueue;
+ 	}
+ 
+-	if (!size || size > num)
+-		size = num;
 -
- /**
-  * virtio_synchronize_cbs - synchronize with virtqueue callbacks
-  * @vdev: the device
+ 	/* Create the vring */
+-	vq = vring_create_virtqueue(index, size, VIRTIO_MMIO_VRING_ALIGN, vdev,
++	vq = vring_create_virtqueue(index, num, VIRTIO_MMIO_VRING_ALIGN, vdev,
+ 				 true, true, ctx, vm_notify, callback, name);
+ 	if (!vq) {
+ 		err = -ENOMEM;
+@@ -503,7 +500,6 @@ static int vm_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
+ 		}
+ 
+ 		vqs[i] = vm_setup_vq(vdev, queue_idx++, callbacks[i], names[i],
+-				     sizes ? sizes[i] : 0,
+ 				     ctx ? ctx[i] : false);
+ 		if (IS_ERR(vqs[i])) {
+ 			vm_del_vqs(vdev);
 -- 
 MST
 

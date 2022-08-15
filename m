@@ -2,105 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085D9593139
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E4A59313C
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbiHOPCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
+        id S232383AbiHOPC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiHOPCV (ORCPT
+        with ESMTP id S232344AbiHOPCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:02:21 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2EE1EAF3;
-        Mon, 15 Aug 2022 08:02:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZSXSrb04Cvhz9vI27pIR02EfAkscJlis2igbhxe+mTk=; b=oPu4jQM31XR0NOwZgtR7V+hnCr
-        pBbmQn7D2L7HMNLaw/2d3ZVIPrAETwq+Yf1wz3zHIfN4dDX4BoWsZpeyyRER2OU0izgKRgcRHfj6Y
-        NpDk+Q5ZUNtDJmUxUAHlxN/H7F/ziQW6B+vCf3Y6GKodwuLcNhNr7NgLEpbMwc14PrYZTe7GNl1uz
-        KmfC4xFZhSXkP9cW6VXAyDQyHIsnFlPKBTY4MUnRYIxnC2U8zief8CdomO4ieeaDmOfci4dq7Purh
-        nVOjo4xKw5hY9smdNFz1rRDyBe9gj/y8o2Wo7rt+xNLefIfMnJjKRlR7Tljy06/11KkJu+UVziOkj
-        kO3V/Onw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oNbbQ-005o7d-Tv; Mon, 15 Aug 2022 15:02:05 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7511F980153; Mon, 15 Aug 2022 17:02:03 +0200 (CEST)
-Date:   Mon, 15 Aug 2022 17:02:03 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
-Message-ID: <Yvpf67eCerqaDmlE@worktop.programming.kicks-ass.net>
-References: <20220722174120.688768a3@gandalf.local.home>
- <YtxqjxJVbw3RD4jt@krava>
- <YvbDlwJCTDWQ9uJj@krava>
- <20220813150252.5aa63650@rorschach.local.home>
- <Yvn9xR7qhXW7FnFL@worktop.programming.kicks-ass.net>
- <YvoVgMzMuQbAEayk@krava>
- <Yvo+EpO9dN30G0XE@worktop.programming.kicks-ass.net>
- <CAADnVQJfvn2RYydqgO-nS_K+C8WJL7BdCnR44MiMF4rnAwWM5A@mail.gmail.com>
- <YvpZJQGQdVaa2Oh4@worktop.programming.kicks-ass.net>
- <CAADnVQKyfrFTZOM9F77i0NbaXLZZ7KbvKBvu7p6kgdnRgG+2=Q@mail.gmail.com>
+        Mon, 15 Aug 2022 11:02:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C664220E0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:02:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660575770;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=g2yECLw+fKeeM6y1cLjr8I9qnE48sejea9S2eLZ2jxw=;
+        b=DYaoWqEcjzM68l7IO2qNMbDpqKSxfS0uAUDB+oW8JIw/QtcvhSXrtrGY2/106pIbLvfcEU
+        f4JyIBz+AfdZdnEwAFZ5SiBzohgpK2BcQC261iU09JOdP+a2aYHGKDTX5EmwKeKQ7hojSd
+        Bsxkx4JU7mCFEpQOKFtswu/N9yqG8Fg=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-631-jhoMWkRiPgiHlX2CTshwPw-1; Mon, 15 Aug 2022 11:02:48 -0400
+X-MC-Unique: jhoMWkRiPgiHlX2CTshwPw-1
+Received: by mail-ej1-f71.google.com with SMTP id qw34-20020a1709066a2200b00730ca5a94bfso1129033ejc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:02:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=g2yECLw+fKeeM6y1cLjr8I9qnE48sejea9S2eLZ2jxw=;
+        b=tPnLxplptYlZuC/b3giefCJ5IImHEqmnDMfOtSRs/CO9NEsjOotdONhzOj87NFHHsr
+         GFalyryuwjz5Mc2Sny7uRfkuXd0o0pVMTQitr7+ULy+x3Y426B7CFDBL78IoWBDLhnrk
+         wY5B1tmzDuZgap7AFH1aE9Tw68ttwannqmYmLr6H3wz5T4lNdRd0ZOgtr2NPimaYxAyK
+         grr+xM+286HSHuD4wwUaZ7T5jy4vda00WYr5aIik3DnnaVLbRwPUXum85ENByuAbgint
+         sAzx5vmFDtsPodFtZE6lL0p4t77NCdLL69XUBPpZ6qzTtUPWMCUQiCTP2tA3oorufnHq
+         PnHg==
+X-Gm-Message-State: ACgBeo1+Qto2nUsL3Fkm4G5Mw2g8Qjag6eYogNPwy9fERfXbRS/oK1cr
+        G49LuTW40Ra6vMWC4nMFw85xav1EGHc2m/dKgk86ATgEZ0edlT7YIsZt6P8ptsf29MsAkyY8BXP
+        GpZ+FmUcCgx6QF2zmd7/Vo5VO
+X-Received: by 2002:a17:906:8c7:b0:730:c1a9:e187 with SMTP id o7-20020a17090608c700b00730c1a9e187mr10882194eje.55.1660575767820;
+        Mon, 15 Aug 2022 08:02:47 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5LD4zKo/+auF625gRYdARIrc/DRdPkN9y4NN8HFq9hC5uXTUuugQODOjmSg32Pk51BGX3O7g==
+X-Received: by 2002:a17:906:8c7:b0:730:c1a9:e187 with SMTP id o7-20020a17090608c700b00730c1a9e187mr10882181eje.55.1660575767672;
+        Mon, 15 Aug 2022 08:02:47 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id jz18-20020a170906bb1200b00718e4e64b7bsm4208038ejb.79.2022.08.15.08.02.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Aug 2022 08:02:47 -0700 (PDT)
+Message-ID: <089e9d73-07c2-fcb4-fc76-b6e829e491cc@redhat.com>
+Date:   Mon, 15 Aug 2022 17:02:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQKyfrFTZOM9F77i0NbaXLZZ7KbvKBvu7p6kgdnRgG+2=Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 0/6] asus-wmi: cleanup dgpu_disable, egpu_enable, panel_od
+Content-Language: en-US
+To:     "Luke D. Jones" <luke@ljones.dev>
+Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220812222509.292692-1-luke@ljones.dev>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220812222509.292692-1-luke@ljones.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 07:45:16AM -0700, Alexei Starovoitov wrote:
-> On Mon, Aug 15, 2022 at 7:33 AM Peter Zijlstra <peterz@infradead.org> wrote:
+Hi,
 
-> > It is in full control of the 'call __fentry__'. Absolute full NAK on you
-> > trying to make it otherwise.
+On 8/13/22 00:25, Luke D. Jones wrote:
+> This patch series does two things for previously added features:
+> - dgpu_disable
+> - egpu_enable
+> - panel_od
 > 
-> Don't mix 'call fentry' generated by the compiler with nop5 inserted
-> by macroses or JITs.
+> The fixes add missing documentation, and the refactors vastly clean up how
+> the features work, including reading the values from WMI methods on *_show()
+> and checking the result correctly (these methods return 1 on success).
 
-Looking at:
+Thank you for your patch-series, I've applied the series to my
+review-hans branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
- https://lore.kernel.org/all/20191211123017.13212-3-bjorn.topel@gmail.com/
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
 
-this seems to want to prod at the __fentry__ sites.
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
 
-> > > Soon we will have nop5 in the middle of the function.
-> > > ftrace must not touch it.
-> >
-> > How are you generating that NOP and what for?
+Regards,
+
+Hans
+
+
 > 
-> We're generating nop5-s in JITed code to further
-> attach to.
+> Luke D. Jones (6):
+>   Fixes 98829e84dc67 ("asus-wmi: Add dgpu disable method")
+>   Fixes: 382b91db8044 ("asus-wmi: Add egpu enable method")
+>   Fixes: ca91ea34778f ("asus-wmi: Add panel overdrive functionality")
+>   asus-wmi: Refactor disable_gpu attribute
+>   asus-wmi: Refactor egpu_enable attribute
+>   asus-wmi: Refactor panel_od attribute
+> 
+>  .../ABI/testing/sysfs-platform-asus-wmi       |  28 +++
+>  drivers/platform/x86/asus-wmi.c               | 231 ++++++------------
+>  2 files changed, 103 insertions(+), 156 deletions(-)
+> 
 
-Ftrace doesn't know about those; so how can it break that?
-
-Likewise it doesn't know about the static_branch/static_call NOPs and
-nothing is broken.
-
-Ftrace only knows about the __fentry__ sites, and it *does* own them.
-Are you saying ftrace is writing to a code location not a __fentry__
-site?

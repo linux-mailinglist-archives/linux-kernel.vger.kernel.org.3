@@ -2,132 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA70594C50
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1982594D4B
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348161AbiHPAeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 20:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
+        id S244805AbiHPAk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 20:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353373AbiHPAbV (ORCPT
+        with ESMTP id S1344968AbiHPAj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 20:31:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D4B185995;
-        Mon, 15 Aug 2022 13:36:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80BEFB80EA8;
-        Mon, 15 Aug 2022 20:35:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3557C433D6;
-        Mon, 15 Aug 2022 20:35:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660595747;
-        bh=qf1uXQYDzbCjJhqp5PrXmCPOXnbpAKK9chCCYP5tWtQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=mo2MIfNF13xv6ntikuuQImFWHu1+thv5ivjIepIpCv0iYKXdmyrHjTCbOU+2XIS64
-         f6WCphkw7c+m0SbEE7D3r+DF+z9qjO0Z1nvGWl9PdvGqEm1i0N2oQK1ofz4DBye0c6
-         kj6LvC/Ml16VQRk1bWYc4eaz9vsohJtgqt+IC/MN5i82KcPba7lv5mwuk5dQ97Cz9j
-         pnUDHukh7zG3YKYptmuge4JNm6/ZCGUHaRe6eHL8pU4irn2Lv+zXOCALjx8MWlMbkY
-         rMzbII0WZ1fiQ8fNRhs1/1SFJF6mnieJxsQEaxZ75cCIu7tJvfsuhdhhelo2Dm5Thn
-         e7w/Qj1M67ScA==
-Date:   Mon, 15 Aug 2022 15:35:45 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     quic_jhugo@quicinc.com, wei.liu@kernel.org, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com,
-        lpieralisi@kernel.org, bhelgaas@google.com,
-        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mikelley@microsoft.com,
-        robh@kernel.org, kw@linux.com, alex.williamson@redhat.com,
-        boqun.feng@gmail.com, Boqun.Feng@microsoft.com,
-        Carl Vanderlip <quic_carlv@quicinc.com>
-Subject: Re: [PATCH] PCI: hv: Fix the definiton of vector in
- hv_compose_msi_msg()
-Message-ID: <20220815203545.GA1971949@bhelgaas>
+        Mon, 15 Aug 2022 20:39:28 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA2C18D5AF
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 13:38:52 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id t22so7916212pjy.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 13:38:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=WqMS7jx91IQ3kLNSPQa4j1WOze61V/lVS2Xj9Cco1ro=;
+        b=nE6p1fueMlFHETmgXLfezqagStbO3vFdONzYeDpjSJjbHo9DIEY4cM6BVNhMlkpUIq
+         IdpQEA07MBpqgh80L9iiiX8Q6vy0XF9P/enM/Y/mgNlYJJ+ghXEk47iOXSlUqi/guRw1
+         nhv5H6nCRrl3pDYe14JxlFpzajgwSzaQtBnCMHFZBrTgCFWEJv7eWAUtVisEwh3+g1AG
+         W4F0Wukdvy7bZ7NVulYgVdq/u3z4ivav2Jmqa1E9CC1WaRKqAxV4CgRgWVvrzSZ3CMmb
+         pebq0PharuqKPmi0PZ+tPoIeF4YJslt24nJixe1Gw7/HGeCUiCTqnr4+k851twZg9NiD
+         tn8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=WqMS7jx91IQ3kLNSPQa4j1WOze61V/lVS2Xj9Cco1ro=;
+        b=BjuvuyYuTz8LWms0x4qRYsFFZ2HhbfUkqLs89VBzfz+zeZRGnq3O562SmF/7A78BRO
+         bNeLUtz23AwUqiEcEtxWB5nrDuEx7ASEOmWrTaZLDvs6X87dGL8WvNueK43OaLmzWhCs
+         /M5TPULONsUL0WF0AW7rhihXtfvaTW1shUV4DalymxxN2O3Vgu3E7ChlTMZdqRPzWnDH
+         Lpno3qGzxgLv4Gg3nL6oorgCBNaosg/n8BkmI0vjVvcOuJlYIU2icVutz3j71wS/KCWh
+         G8Hq42CPcczpLO7l2x+8l2vUnoIHP+4x+Qv2jMVbYQKgS0hFxxEVmHc0pnA8jTG6WYLY
+         4j5A==
+X-Gm-Message-State: ACgBeo1auhByIseVwJLL6PF1cue8ePlDKhoQQXFZ2rpjIqw/mEFU3AKD
+        pPSW/2+546uizuDgaSF8nvU=
+X-Google-Smtp-Source: AA6agR63BOmqlpzqvhHlfX4I32k4NEOM1A1DYNyfdiUee0X12w4OAnaqWd3mT6QLZ84516A1l+pq5Q==
+X-Received: by 2002:a17:902:e548:b0:16f:93:2f97 with SMTP id n8-20020a170902e54800b0016f00932f97mr19379423plf.130.1660595931381;
+        Mon, 15 Aug 2022 13:38:51 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e15-20020a17090301cf00b0016a111c83cdsm7455167plh.119.2022.08.15.13.38.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 13:38:50 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 15 Aug 2022 13:38:49 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: upstream kernel crashes
+Message-ID: <20220815203849.GB509309@roeck-us.net>
+References: <20220814212610.GA3690074@roeck-us.net>
+ <20220815054117-mutt-send-email-mst@kernel.org>
+ <20220815154920.GA4027315@roeck-us.net>
+ <20220815120007-mutt-send-email-mst@kernel.org>
+ <20220815182254.GA3241114@roeck-us.net>
+ <CAHk-=wjWN6Wh1t5g48=ue4Ti6ig2P7u5nXBcQjLf=oiAZibk6w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220815185505.7626-1-decui@microsoft.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHk-=wjWN6Wh1t5g48=ue4Ti6ig2P7u5nXBcQjLf=oiAZibk6w@mail.gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-s/definiton/definition/ in subject
-(only if you have other occasion to repost this)
+On Mon, Aug 15, 2022 at 11:37:54AM -0700, Linus Torvalds wrote:
+> On Mon, Aug 15, 2022 at 11:22 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > I ended up publishing several of the syzkaller reports because I could
+> > not figure out how to test the proposed patch otherwise. Sorry for the
+> > noise on the mailing lists, but I just could not figure out how to
+> > trigger test runs without making the reports public. Various test runs
+> > are now queued. Hopefully we should get results soon.
+> 
+> I actually think that the best "test" is to just test the revert and
+> see if the problems go away.
+> 
+> You may not have found a way to reliably trigger one particular
+> problem, but apparently you can easily enough trigger some random
+> issue with enough tests.
+> 
+> If it's some random memory corruption, there may simply not ba a great
+> reproducer, with the oopses just depending on random layout and
+> timing.
+> 
+... and the environment. So far we have only been able to reproduce
+the problem on Google Cloud VMs (GCE), and there is seems to happen
+pretty much all the time.
 
-On Mon, Aug 15, 2022 at 11:55:05AM -0700, Dexuan Cui wrote:
-> The local variable 'vector' must be u32 rather than u8: see the
-> struct hv_msi_desc3.
-> 
-> 'vector_count' should be u16 rather than u8: see struct hv_msi_desc,
-> hv_msi_desc2 and hv_msi_desc3.
-> 
-> Fixes: a2bad844a67b ("PCI: hv: Fix interrupt mapping for multi-MSI")
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> Cc: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> Cc: Carl Vanderlip <quic_carlv@quicinc.com>
-
-Looks like Wei has been applying most changes to pci-hyperv.c, so I
-assume the same will happen here.
-
-> ---
-> 
-> The patch should be appplied after the earlier patch:
->     [PATCH] PCI: hv: Only reuse existing IRTE allocation for Multi-MSI
->     https://lwn.net/ml/linux-kernel/20220804025104.15673-1-decui%40microsoft.com/
-> 
->  drivers/pci/controller/pci-hyperv.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-> index 65d0dab25deb..53580899c859 100644
-> --- a/drivers/pci/controller/pci-hyperv.c
-> +++ b/drivers/pci/controller/pci-hyperv.c
-> @@ -1614,7 +1614,7 @@ static void hv_pci_compose_compl(void *context, struct pci_response *resp,
->  
->  static u32 hv_compose_msi_req_v1(
->  	struct pci_create_interrupt *int_pkt, struct cpumask *affinity,
-> -	u32 slot, u8 vector, u8 vector_count)
-> +	u32 slot, u8 vector, u16 vector_count)
->  {
->  	int_pkt->message_type.type = PCI_CREATE_INTERRUPT_MESSAGE;
->  	int_pkt->wslot.slot = slot;
-> @@ -1642,7 +1642,7 @@ static int hv_compose_msi_req_get_cpu(struct cpumask *affinity)
->  
->  static u32 hv_compose_msi_req_v2(
->  	struct pci_create_interrupt2 *int_pkt, struct cpumask *affinity,
-> -	u32 slot, u8 vector, u8 vector_count)
-> +	u32 slot, u8 vector, u16 vector_count)
->  {
->  	int cpu;
->  
-> @@ -1661,7 +1661,7 @@ static u32 hv_compose_msi_req_v2(
->  
->  static u32 hv_compose_msi_req_v3(
->  	struct pci_create_interrupt3 *int_pkt, struct cpumask *affinity,
-> -	u32 slot, u32 vector, u8 vector_count)
-> +	u32 slot, u32 vector, u16 vector_count)
->  {
->  	int cpu;
->  
-> @@ -1702,7 +1702,8 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
->  	struct tran_int_desc *int_desc;
->  	struct msi_desc *msi_desc;
->  	bool multi_msi;
-> -	u8 vector, vector_count;
-> +	u32 vector; /* Must be u32: see the struct hv_msi_desc3 */
-> +	u16 vector_count;
->  	struct {
->  		struct pci_packet pci_pkt;
->  		union {
-> -- 
-> 2.25.1
-> 
+Guenter

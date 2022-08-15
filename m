@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3EC8594530
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 418E65944AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 00:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343651AbiHOVzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 17:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
+        id S230366AbiHOVzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 17:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350608AbiHOVvq (ORCPT
+        with ESMTP id S1350293AbiHOVws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 17:51:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C5E10777C;
-        Mon, 15 Aug 2022 12:33:13 -0700 (PDT)
+        Mon, 15 Aug 2022 17:52:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8447108945;
+        Mon, 15 Aug 2022 12:33:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F11AE60EF0;
-        Mon, 15 Aug 2022 19:33:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 003C6C433D6;
-        Mon, 15 Aug 2022 19:33:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 18E2BB80EAC;
+        Mon, 15 Aug 2022 19:33:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45FB5C433C1;
+        Mon, 15 Aug 2022 19:33:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660591992;
-        bh=UDIfRdCg/9MJ7PfRFF1L942/9m5Ku730mwHGprEd1s8=;
+        s=korg; t=1660591998;
+        bh=wWCgrPVrYdAMVWPaZH24aEPoNQN+KLCiqhuw3uMJlzY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yF7ps9dAScO/QVqkTWHp4NauZV3vwtgogWPK+FjzBwUM4Ez3jpCXcY3OSu5S+Abdl
-         4Oj0/jcYS5NjeFB1v5PfHr0OZHKPk2AERQupMi/bf81T6+GrV547yk1F0KKqAMMjnh
-         UhiFdnbluCpvD5ZpgD6WzKubhV3xZtUxAyDhLxW8=
+        b=eQfhVkRhzbwCgGZgjuUS4PJ6em0GfiInftONwVttHiWz0VJyv4j2ykfov6S3cmlwj
+         /YPAhsK1+L/LbE7WsBsM0mQ+9R+kmjIARXHMAbS5tNQ/+d/eMumiDzEC8+pa/tW1Jd
+         L1PYyEise/Sjqwk7EC6Xkar53x8kUDbMMytUAo5k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Roth <michael.roth@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kai Huang <kai.huang@intel.com>,
+        stable@vger.kernel.org, David Woodhouse <dwmw@amazon.co.uk>,
         Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.19 0041/1157] KVM: x86/mmu: Fully re-evaluate MMIO caching when SPTE masks change
-Date:   Mon, 15 Aug 2022 19:49:57 +0200
-Message-Id: <20220815180441.084124063@linuxfoundation.org>
+Subject: [PATCH 5.19 0042/1157] KVM: x86: do not report preemption if the steal time cache is stale
+Date:   Mon, 15 Aug 2022 19:49:58 +0200
+Message-Id: <20220815180441.121490727@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -57,105 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Paolo Bonzini <pbonzini@redhat.com>
 
-commit c3e0c8c2e8b17bae30d5978bc2decdd4098f0f99 upstream.
+commit c3c28d24d910a746b02f496d190e0e8c6560224b upstream.
 
-Fully re-evaluate whether or not MMIO caching can be enabled when SPTE
-masks change; simply clearing enable_mmio_caching when a configuration
-isn't compatible with caching fails to handle the scenario where the
-masks are updated, e.g. by VMX for EPT or by SVM to account for the C-bit
-location, and toggle compatibility from false=>true.
+Commit 7e2175ebd695 ("KVM: x86: Fix recording of guest steal time
+/ preempted status", 2021-11-11) open coded the previous call to
+kvm_map_gfn, but in doing so it dropped the comparison between the cached
+guest physical address and the one in the MSR.  This cause an incorrect
+cache hit if the guest modifies the steal time address while the memslots
+remain the same.  This can happen with kexec, in which case the preempted
+bit is written at the address used by the old kernel instead of
+the old one.
 
-Snapshot the original module param so that re-evaluating MMIO caching
-preserves userspace's desire to allow caching.  Use a snapshot approach
-so that enable_mmio_caching still reflects KVM's actual behavior.
-
-Fixes: 8b9e74bfbf8c ("KVM: x86/mmu: Use enable_mmio_caching to track if MMIO caching is enabled")
-Reported-by: Michael Roth <michael.roth@amd.com>
-Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: David Woodhouse <dwmw@amazon.co.uk>
 Cc: stable@vger.kernel.org
-Tested-by: Michael Roth <michael.roth@amd.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Kai Huang <kai.huang@intel.com>
-Message-Id: <20220803224957.1285926-3-seanjc@google.com>
+Fixes: 7e2175ebd695 ("KVM: x86: Fix recording of guest steal time / preempted status")
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/mmu/mmu.c  |    4 ++++
- arch/x86/kvm/mmu/spte.c |   19 +++++++++++++++++++
- arch/x86/kvm/mmu/spte.h |    1 +
- 3 files changed, 24 insertions(+)
+ arch/x86/kvm/x86.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -6274,11 +6274,15 @@ static int set_nx_huge_pages(const char
- /*
-  * nx_huge_pages needs to be resolved to true/false when kvm.ko is loaded, as
-  * its default value of -1 is technically undefined behavior for a boolean.
-+ * Forward the module init call to SPTE code so that it too can handle module
-+ * params that need to be resolved/snapshot.
-  */
- void __init kvm_mmu_x86_module_init(void)
- {
- 	if (nx_huge_pages == -1)
- 		__set_nx_huge_pages(get_nx_auto_mode());
-+
-+	kvm_mmu_spte_module_init();
- }
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -4635,6 +4635,7 @@ static void kvm_steal_time_set_preempted
+ 	struct kvm_steal_time __user *st;
+ 	struct kvm_memslots *slots;
+ 	static const u8 preempted = KVM_VCPU_PREEMPTED;
++	gpa_t gpa = vcpu->arch.st.msr_val & KVM_STEAL_VALID_BITS;
  
- /*
---- a/arch/x86/kvm/mmu/spte.c
-+++ b/arch/x86/kvm/mmu/spte.c
-@@ -20,6 +20,7 @@
- #include <asm/vmx.h>
+ 	/*
+ 	 * The vCPU can be marked preempted if and only if the VM-Exit was on
+@@ -4662,6 +4663,7 @@ static void kvm_steal_time_set_preempted
+ 	slots = kvm_memslots(vcpu->kvm);
  
- bool __read_mostly enable_mmio_caching = true;
-+static bool __ro_after_init allow_mmio_caching;
- module_param_named(mmio_caching, enable_mmio_caching, bool, 0444);
- EXPORT_SYMBOL_GPL(enable_mmio_caching);
+ 	if (unlikely(slots->generation != ghc->generation ||
++		     gpa != ghc->gpa ||
+ 		     kvm_is_error_hva(ghc->hva) || !ghc->memslot))
+ 		return;
  
-@@ -43,6 +44,18 @@ u64 __read_mostly shadow_nonpresent_or_r
- 
- u8 __read_mostly shadow_phys_bits;
- 
-+void __init kvm_mmu_spte_module_init(void)
-+{
-+	/*
-+	 * Snapshot userspace's desire to allow MMIO caching.  Whether or not
-+	 * KVM can actually enable MMIO caching depends on vendor-specific
-+	 * hardware capabilities and other module params that can't be resolved
-+	 * until the vendor module is loaded, i.e. enable_mmio_caching can and
-+	 * will change when the vendor module is (re)loaded.
-+	 */
-+	allow_mmio_caching = enable_mmio_caching;
-+}
-+
- static u64 generation_mmio_spte_mask(u64 gen)
- {
- 	u64 mask;
-@@ -338,6 +351,12 @@ void kvm_mmu_set_mmio_spte_mask(u64 mmio
- 	BUG_ON((u64)(unsigned)access_mask != access_mask);
- 	WARN_ON(mmio_value & shadow_nonpresent_or_rsvd_lower_gfn_mask);
- 
-+	/*
-+	 * Reset to the original module param value to honor userspace's desire
-+	 * to (dis)allow MMIO caching.  Update the param itself so that
-+	 * userspace can see whether or not KVM is actually using MMIO caching.
-+	 */
-+	enable_mmio_caching = allow_mmio_caching;
- 	if (!enable_mmio_caching)
- 		mmio_value = 0;
- 
---- a/arch/x86/kvm/mmu/spte.h
-+++ b/arch/x86/kvm/mmu/spte.h
-@@ -444,6 +444,7 @@ static inline u64 restore_acc_track_spte
- 
- u64 kvm_mmu_changed_pte_notifier_make_spte(u64 old_spte, kvm_pfn_t new_pfn);
- 
-+void __init kvm_mmu_spte_module_init(void);
- void kvm_mmu_reset_all_pte_masks(void);
- 
- #endif
 
 

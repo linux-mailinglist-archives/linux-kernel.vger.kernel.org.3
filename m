@@ -2,94 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D0F5932CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 18:12:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6995932CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 18:13:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbiHOQMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 12:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60858 "EHLO
+        id S231952AbiHOQNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 12:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiHOQML (ORCPT
+        with ESMTP id S231182AbiHOQMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 12:12:11 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924C2D110
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 09:12:10 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id BF8895C00ED;
-        Mon, 15 Aug 2022 12:12:09 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 15 Aug 2022 12:12:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1660579929; x=1660666329; bh=rLRqhVPz0h
-        hQSREG0KQPS/nirdZJabRaj8W098mmp6M=; b=0FTKcOkFtzuOjeemBBTaEzhrya
-        RIAg0nko8kLNdqeiI0aMLMDbahNLctu/aMg65P1+ARi5z609hMokBOunDc9YTiKl
-        C6gXoSGsXKY5YJAssH96skJ/VAPMnGdi70JXN2P9A9bYnJhSKl6Mfm5QcgqvZvmy
-        yC1+OMu3Ke/AClIvjXWN079RHefo8eLCeA4XxhBdTHtKmpjasHijh7uaogV3Cx/M
-        ixwxo6s39pCUU9V+ORyOzh5Hpy4pUHjXKES/ID4DIb8uGghEBOCDtNaGTTDeB2Sd
-        6mPd5Ui8GKTDGDCpd3EN8JXUDBOfBOIL8l9wvZSw9Cl7LVVHQzJrcMz78AYQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660579929; x=1660666329; bh=rLRqhVPz0hhQSREG0KQPS/nirdZJ
-        abRaj8W098mmp6M=; b=Hf40hsSlIzpjbwJfoFz7iCWzy0PmguLzmLOeuoEetc3l
-        fvV8qHnybM9fqQTTKFys3VCQx0EpCdpK8MYu9eo7TIYuO3Zga3nV9MBFCXdSEDX7
-        CEytZxtG0DIMlnXmXpWJzrBFAqXUcC1gwbVwg1LRdUN8WNXNcThoyc+5l8TwPife
-        9/BI2YdgSCgQh7BgH6RXsyDNOB1w2o0Z1pll/BCcYiaYz5LKSrGQBG3zhqSNgxNe
-        NYRIB0s+VEhdarleLfmnEEpT4mYUbmjvKz/TA6vhfVOOuW1smVhYsNEw0Sm/V8Uj
-        7LXIn2iM6JpPiLOcOmQAqDFN04a5wgriU0tVQGMjQw==
-X-ME-Sender: <xms:WXD6YuFS5jDCNC9OKynEUERYHvPsXtTslB8li59GGdtycy8WWHIkAQ>
-    <xme:WXD6YvWL6Y2iBuWDfbDhnt1L8t018rw9Z5XugYO_fkg1Ggb6i0PTf9XDjEvD0ctgg
-    mrK6DLC-xEwvw>
-X-ME-Received: <xmr:WXD6YoINa7P_fm0eYrplAKSSG_yg6IWBRu6_WUgtj9aVkB23y84ih32mcMQux-KCxIyqCteXJyWkLNh9AWaVCQA6YpnrHPIp>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehvddgleelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:WXD6YoH4cgfXOnEy0Q-zHA_qvakWexNQf7HWeOHtwZvnZ-vyOa4ArQ>
-    <xmx:WXD6YkV5Z6iufp6rwF51P3Pu-Vph4utlVtlnOe_99u1kMCXUCx1vIA>
-    <xmx:WXD6YrM8hc13iZXKRaSwnj18whtLw21ivWvJwWnSB2o4EYrmpsSpBw>
-    <xmx:WXD6YmhHNMCNUuZOTkm95SNKMNVQ5vRgze0uaOTfIKZ_HBNg41GTAQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 Aug 2022 12:12:08 -0400 (EDT)
-Date:   Mon, 15 Aug 2022 18:12:06 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Khalid Masum <khalid.masum.92@gmail.com>
-Cc:     "Dong, Ruijing" <Ruijing.Dong@amd.com>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kernel-mentees@lists.linuxfoundation.org" 
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        David Airlie <airlied@linux.ie>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        "Jiang, Sonny" <Sonny.Jiang@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Zhu, James" <James.Zhu@amd.com>, "Liu, Leo" <Leo.Liu@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>
-Subject: Re: [PATCH linux-next] drm/amdgpu/vcn: Remove unused assignment in
- vcn_v4_0_stop
-Message-ID: <YvpwVh359EMGa5kO@kroah.com>
-References: <20220815070056.10816-1-khalid.masum.92@gmail.com>
- <SJ1PR12MB61944B1D53330D5E9531158695689@SJ1PR12MB6194.namprd12.prod.outlook.com>
- <86088c17-585c-4a53-312d-ef339b824538@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <86088c17-585c-4a53-312d-ef339b824538@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        Mon, 15 Aug 2022 12:12:55 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1626DFF6
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 09:12:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 84FA020931;
+        Mon, 15 Aug 2022 16:12:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1660579973; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JNDhL8OgFUz/XeEfNDIxRvrXP4pUtfmRxUz7skNSIcI=;
+        b=mWLAF9BQuy+qUJJPBInA4rW2/ghuJheww5AQH9mj3n+FNe0rEH9h7R+6T8GnWjWfempGrd
+        KA350tUhmu8tpglu56s21Tn/PrgBnPw8SRVZeOpISLjQ45BdKu1O3RTKJsUbQnyIEkyphD
+        6YHKXMFTiPkspKLUGYiCAX3Zp9gj9S0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1660579973;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JNDhL8OgFUz/XeEfNDIxRvrXP4pUtfmRxUz7skNSIcI=;
+        b=xcB5rA8+PcOMmUQUyMNI+AX+oWXK9yDEDOXPd7Uy2h0/zYc2tT+/tC6ANC92B0dxfOvZtm
+        Fo05dNoRepZklfCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5772413A93;
+        Mon, 15 Aug 2022 16:12:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id LkhIFIVw+mKaDwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 15 Aug 2022 16:12:53 +0000
+Date:   Mon, 15 Aug 2022 18:12:52 +0200
+Message-ID: <87fshxzdrv.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+Subject: Re: [PATCH v1] ALSA: hda: cs35l41: Clarify support for CSC3551 without _DSD Properties
+In-Reply-To: <20220815152844.462229-1-sbinding@opensource.cirrus.com>
+References: <20220815152844.462229-1-sbinding@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -98,79 +70,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 09:11:18PM +0600, Khalid Masum wrote:
-> On 8/15/22 20:15, Dong, Ruijing wrote:
-> > [AMD Official Use Only - General]
-> > 
-> > Sorry, which "r" value was overwritten?  I didn't see the point of making this change.
-> > 
-> > Thanks
-> > Ruijing
-> > 
-> > -----Original Message-----
-> > From: Khalid Masum <khalid.masum.92@gmail.com>
-> > Sent: Monday, August 15, 2022 3:01 AM
-> > To: amd-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux-kernel@vger.kernel.org; linux-kernel-mentees@lists.linuxfoundation.org
-> > Cc: Deucher, Alexander <Alexander.Deucher@amd.com>; Koenig, Christian <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; David Airlie <airlied@linux.ie>; Daniel Vetter <daniel@ffwll.ch>; Zhu, James <James.Zhu@amd.com>; Jiang, Sonny <Sonny.Jiang@amd.com>; Dong, Ruijing <Ruijing.Dong@amd.com>; Wan Jiabing <wanjiabing@vivo.com>; Liu, Leo <Leo.Liu@amd.com>; Khalid Masum <khalid.masum.92@gmail.com>
-> > Subject: [PATCH linux-next] drm/amdgpu/vcn: Remove unused assignment in vcn_v4_0_stop
-> > 
-> > The value assigned from vcn_v4_0_stop_dbg_mode to r is overwritten before it can be used. Remove this assignment.
-> > 
-> > Addresses-Coverity: 1504988 ("Unused value")
-> > Fixes: 8da1170a16e4 ("drm/amdgpu: add VCN4 ip block support")
-> > Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
-> > ---
-> >   drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c b/drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c
-> > index ca14c3ef742e..80b8a2c66b36 100644
-> > --- a/drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c
-> > +++ b/drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c
-> > @@ -1154,7 +1154,7 @@ static int vcn_v4_0_stop(struct amdgpu_device *adev)
-> >                  fw_shared->sq.queue_mode |= FW_QUEUE_DPG_HOLD_OFF;
-> > 
-> >                  if (adev->pg_flags & AMD_PG_SUPPORT_VCN_DPG) {
-> > -                       r = vcn_v4_0_stop_dpg_mode(adev, i);
-> > +                       vcn_v4_0_stop_dpg_mode(adev, i);
-> >                          continue;
-> >                  }
-> > 
-> > --
-> > 2.37.1
-> > 
+On Mon, 15 Aug 2022 17:28:44 +0200,
+Stefan Binding wrote:
 > 
-> After value is overwritten soon right after the diff.
+> For devices which use HID CSC3551, correct ACPI _DSD properties are
+> required to be able support those systems.
+> Add error message to clarify this.
 > 
-> See:
-> drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c
+> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
+> ---
+>  sound/pci/hda/cs35l41_hda.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> static int vcn_v4_0_stop(struct amdgpu_device *adev)
-> {
->         volatile struct amdgpu_vcn4_fw_shared *fw_shared;
-> ...
-> 
->         for (i = 0; i < adev->vcn.num_vcn_inst; ++i) {
->                 fw_shared = adev->vcn.inst[i].fw_shared.cpu_addr;
->                 fw_shared->sq.queue_mode |= FW_QUEUE_DPG_HOLD_OFF;
-> 
->                 if (adev->pg_flags & AMD_PG_SUPPORT_VCN_DPG) {
->                         r = vcn_v4_0_stop_dpg_mode(adev, i);
->                         continue;
->                 }
-> 
->                 /* wait for vcn idle */
->                 r = SOC15_WAIT_ON_RREG(VCN, i, regUVD_STATUS,
-> UVD_STATUS__IDLE, 0x7);
-> 
-> Here, any value assigned to r is overwritten before it could
-> be used. So the assignment in the true branch of the if statement
-> here can be removed.
+> diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
+> index 129bffb431c2..b9d94f3a5b99 100644
+> --- a/sound/pci/hda/cs35l41_hda.c
+> +++ b/sound/pci/hda/cs35l41_hda.c
+> @@ -1163,6 +1163,11 @@ static int cs35l41_no_acpi_dsd(struct cs35l41_hda *cs35l41, struct device *physd
+>  		hw_cfg->gpio1.func = CS35l41_VSPK_SWITCH;
+>  		hw_cfg->gpio1.valid = true;
+>  	} else {
+> +		/*
+> +		 * Note: CLSA010(0/1) are special cases which use a slightly different design.
+> +		 * All other HIDs e.g. CSC3551 require valid ACPI _DSD properties to be supported.
+> +		 */
+> +		dev_err(cs35l41->dev, "Error: ACPI _DSD Properties are missing for HID %s.", hid);
 
-Why not fix vcn_v4_0_stop_dpg_mode() to not return anything, as it does
-not, and then remove this assignment as well, which would fix up
-everything at once to be more obvious what is happening and why.
+A newline is missing at the end of the string?
 
-thanks,
 
-greg k-h
+Takashi

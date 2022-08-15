@@ -2,190 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24988594EB8
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 04:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DBF594ECA
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 04:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233066AbiHPCgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 22:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55722 "EHLO
+        id S233712AbiHPCk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 22:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232795AbiHPCgS (ORCPT
+        with ESMTP id S241687AbiHPCkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 22:36:18 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1507813A50B
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 15:54:24 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id f17-20020a6bdd11000000b00684f4e874b5so4974215ioc.13
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 15:54:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=Ah+1dZUt7UeRfkSg4ZXLRhIOVtV2gaNkjc7aI0CWsB8=;
-        b=b6b84OjzWjSFheL8RqmsdC9eaOzcfRwRCnBwBOiAz8NHOZ8mowhENT3U5K/VBIvnmg
-         GQ6KnVW6MXH++KSfZBXX16NjiYSkoKK4g02f46aPGXaY5ONYbo2uMExxTHCv27i02Eib
-         vKg8SEH+TcOMyKZba1s516wEtHz+hcyDsyQcNs16p8bie8f6g9dowX56HSZbXuQXiQiS
-         nczaLF01HHBz/gblLBvM0u7zfAD2hwsxUMV6o3R18FjkWCGhNNqD7ZE2fulXjDXgllUU
-         vevkAJw2on13kwaXpwJq84s03cvRz9/eUkB9YSLChSBGX2oCw9xAZLRg7yau39oQsdLs
-         eTzw==
-X-Gm-Message-State: ACgBeo01XO4+DOwTQ04GOe1Kfa6pVcOjjyuhfj+BoNAmI2GJS99YIi7D
-        CvgH4xGzb21GIWQkXyH33VPgYTfcnfDIjYjiTo3IkDhol+uK
-X-Google-Smtp-Source: AA6agR5/rHbEP3eKZ8WQtjVvfdcLY2yMw+rI1yPRRLHG02IyeR16Xo6aTBoscenX1GVyRLfG/xIh94pHlP7UgrdJ+dXHeLrbaFUV
+        Mon, 15 Aug 2022 22:40:43 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BE086054;
+        Mon, 15 Aug 2022 16:04:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jYgL/K8hz07GJiAK21af3KOIMQ0hiyPepA8O+pLBNvg=; b=Cr2ibY2f3ipwPYhnorMIGpCzis
+        OkyypRYHxZMcLaS1TmKCt0FoLJZKlhHWBHy9ZtXS1cJEHIlhJmT4M6ai9v/Njvp3DngRrGIxCW3+P
+        FpXaHY0gwqKGjnWCBiFml40myGDSCistV8dpo5ukSQJzLn3N1RrSGokCvmER6dw/gYyCIdsr4y9aR
+        TMAuLkutQZPVxj1nUb2iDbIuJ5sx5cXn4OGmDkYh/iTJx96KndAaDqEdRZtIbBnzrcboPDCWlWC/u
+        w4RX9AHXnnBBtdhl2Z5pR07qJLWR82WDfVosJflru3V2IEu1E6m7k2HulPNLFfiG4f8QROUfQPmKp
+        6R5egiiQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oNj87-004qO0-73;
+        Mon, 15 Aug 2022 23:04:19 +0000
+Date:   Tue, 16 Aug 2022 00:04:19 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-nilfs <linux-nilfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jiacheng Xu <stitch@zju.edu.cn>,
+        Mudong Liang <mudongliangabcd@gmail.com>
+Subject: Re: [PATCH] nilfs2: fix use-after-free bug in nilfs_mdt_destroy()
+Message-ID: <YvrQ8xO9Lx7rdKq8@ZenIV>
+References: <20220815175114.23576-1-konishi.ryusuke@gmail.com>
+ <YvqP/f2P2YgIIO9U@ZenIV>
+ <CAKFNMomyjXpsz-=BtG+G3q1J7CFUBMEfP13FfxwhWB==9qb++w@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:210d:b0:343:17cb:60a7 with SMTP id
- n13-20020a056638210d00b0034317cb60a7mr8436734jaj.292.1660604063454; Mon, 15
- Aug 2022 15:54:23 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 15:54:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000509beb05e64f8351@google.com>
-Subject: [syzbot] inconsistent lock state in p9_fd_request
-From:   syzbot <syzbot+c4455787f92b4f78d5b1@syzkaller.appspotmail.com>
-To:     asmadeus@codewreck.org, davem@davemloft.net, edumazet@google.com,
-        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux_oss@crudebyte.com, lucho@ionkov.net, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
-        v9fs-developer@lists.sourceforge.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKFNMomyjXpsz-=BtG+G3q1J7CFUBMEfP13FfxwhWB==9qb++w@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Aug 16, 2022 at 05:34:12AM +0900, Ryusuke Konishi wrote:
 
-syzbot found the following issue on:
+> Yes, I agree it's better if security_inode_alloc() is moved to the end as
+> possible in the sense of avoiding similar issues.
+> But, would that vfs change be safe to backport to stable trees?
 
-HEAD commit:    568035b01cfb Linux 6.0-rc1
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12a5b2a5080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e706e91b2a433db
-dashboard link: https://syzkaller.appspot.com/bug?extid=c4455787f92b4f78d5b1
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Yes.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+> It looks like the error handling for security_inode_alloc()  is in the
+> middle of inode_init_always() for a very long time..
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c4455787f92b4f78d5b1@syzkaller.appspotmail.com
+Look at the initializations done after it.  The only thing with effects
+outside of inode itself is (since 2010) an increment of nr_inodes.
 
-================================
-WARNING: inconsistent lock state
-6.0.0-rc1-syzkaller #0 Not tainted
---------------------------------
-inconsistent {IN-HARDIRQ-W} -> {HARDIRQ-ON-W} usage.
-syz-executor.3/5046 [HC0[0]:SC0[0]:HE1:SE1] takes:
-ffff88801e763818 (&clnt->lock){?...}-{2:2}, at: spin_lock include/linux/spinlock.h:349 [inline]
-ffff88801e763818 (&clnt->lock){?...}-{2:2}, at: p9_fd_request+0x85/0x330 net/9p/trans_fd.c:672
-{IN-HARDIRQ-W} state was registered at:
-  lock_acquire kernel/locking/lockdep.c:5666 [inline]
-  lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
-  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-  _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
-  p9_tag_remove net/9p/client.c:367 [inline]
-  p9_req_put net/9p/client.c:375 [inline]
-  p9_req_put+0xc6/0x250 net/9p/client.c:372
-  req_done+0x1de/0x2e0 net/9p/trans_virtio.c:148
-  vring_interrupt drivers/virtio/virtio_ring.c:2454 [inline]
-  vring_interrupt+0x29d/0x3d0 drivers/virtio/virtio_ring.c:2429
-  __handle_irq_event_percpu+0x227/0x870 kernel/irq/handle.c:158
-  handle_irq_event_percpu kernel/irq/handle.c:193 [inline]
-  handle_irq_event+0xa7/0x1e0 kernel/irq/handle.c:210
-  handle_edge_irq+0x25f/0xd00 kernel/irq/chip.c:819
-  generic_handle_irq_desc include/linux/irqdesc.h:158 [inline]
-  handle_irq arch/x86/kernel/irq.c:231 [inline]
-  __common_interrupt+0x9d/0x210 arch/x86/kernel/irq.c:250
-  common_interrupt+0xa4/0xc0 arch/x86/kernel/irq.c:240
-  asm_common_interrupt+0x22/0x40 arch/x86/include/asm/idtentry.h:640
-  lock_is_held_type+0xe/0x140 kernel/locking/lockdep.c:5694
-  lock_is_held include/linux/lockdep.h:283 [inline]
-  rcu_read_lock_sched_held+0x3a/0x70 kernel/rcu/update.c:125
-  trace_lock_release include/trace/events/lock.h:69 [inline]
-  lock_release+0x560/0x780 kernel/locking/lockdep.c:5677
-  rcu_lock_release include/linux/rcupdate.h:285 [inline]
-  rcu_read_unlock include/linux/rcupdate.h:739 [inline]
-  batadv_nc_purge_orig_hash net/batman-adv/network-coding.c:412 [inline]
-  batadv_nc_worker+0x86b/0xfa0 net/batman-adv/network-coding.c:719
-  process_one_work+0x991/0x1610 kernel/workqueue.c:2289
-  worker_thread+0x665/0x1080 kernel/workqueue.c:2436
-  kthread+0x2e4/0x3a0 kernel/kthread.c:376
-  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-irq event stamp: 527
-hardirqs last  enabled at (527): [<ffffffff8982206f>] __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:159 [inline]
-hardirqs last  enabled at (527): [<ffffffff8982206f>] _raw_spin_unlock_irq+0x1f/0x40 kernel/locking/spinlock.c:202
-hardirqs last disabled at (526): [<ffffffff89821e41>] __raw_spin_lock_irq include/linux/spinlock_api_smp.h:117 [inline]
-hardirqs last disabled at (526): [<ffffffff89821e41>] _raw_spin_lock_irq+0x41/0x50 kernel/locking/spinlock.c:170
-softirqs last  enabled at (0): [<ffffffff8146165e>] copy_process+0x213e/0x7090 kernel/fork.c:2201
-softirqs last disabled at (0): [<0000000000000000>] 0x0
+> If you want to see the impact of the vfs change, I think it's one way
+> to apply this one in advance.  Or if you want to fix it in one step,
+> I think it's good too.  How do you feel about this ?
 
-other info that might help us debug this:
- Possible unsafe locking scenario:
-
-       CPU0
-       ----
-  lock(&clnt->lock);
-  <Interrupt>
-    lock(&clnt->lock);
-
- *** DEADLOCK ***
-
-no locks held by syz-executor.3/5046.
-
-stack backtrace:
-CPU: 0 PID: 5046 Comm: syz-executor.3 Not tainted 6.0.0-rc1-syzkaller #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_usage_bug kernel/locking/lockdep.c:3961 [inline]
- valid_state kernel/locking/lockdep.c:3973 [inline]
- mark_lock_irq kernel/locking/lockdep.c:4176 [inline]
- mark_lock.part.0.cold+0x18/0xd8 kernel/locking/lockdep.c:4632
- mark_lock kernel/locking/lockdep.c:4596 [inline]
- mark_usage kernel/locking/lockdep.c:4541 [inline]
- __lock_acquire+0x847/0x56d0 kernel/locking/lockdep.c:5007
- lock_acquire kernel/locking/lockdep.c:5666 [inline]
- lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
- spin_lock include/linux/spinlock.h:349 [inline]
- p9_fd_request+0x85/0x330 net/9p/trans_fd.c:672
- p9_client_rpc+0x2f0/0xce0 net/9p/client.c:660
- p9_client_version net/9p/client.c:880 [inline]
- p9_client_create+0xaec/0x1070 net/9p/client.c:985
- v9fs_session_init+0x1e2/0x1810 fs/9p/v9fs.c:408
- v9fs_mount+0xba/0xc90 fs/9p/vfs_super.c:126
- legacy_get_tree+0x105/0x220 fs/fs_context.c:610
- vfs_get_tree+0x89/0x2f0 fs/super.c:1530
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1326/0x1e20 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f072b089279
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f072c122168 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007f072b19bf80 RCX: 00007f072b089279
-RDX: 0000000020000040 RSI: 0000000020000000 RDI: 0000000000000000
-RBP: 00007f072b0e3189 R08: 0000000020000400 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffcabcfe84f R14: 00007f072c122300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+IMO that should go into inode_init_always(), with Cc:stable.  If you
+(or Dongliang Mu, or anybody else) would post such variant with
+reasonable commit message, I'll pick it into vfs.git and feed to Linus
+in the next window.  E.g. into #work.inode, with that branch being
+made never-rebased, so that you could pull it into your development
+branch as soon as it's there...

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD4B5949AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 143F75948ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344261AbiHOXUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
+        id S1345842AbiHOXVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353434AbiHOXQc (ORCPT
+        with ESMTP id S1353491AbiHOXQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:16:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D771481FD;
-        Mon, 15 Aug 2022 13:03:14 -0700 (PDT)
+        Mon, 15 Aug 2022 19:16:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA8D47B8E;
+        Mon, 15 Aug 2022 13:03:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 920AC61299;
-        Mon, 15 Aug 2022 20:03:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 964AEC433D6;
-        Mon, 15 Aug 2022 20:03:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A005B810C5;
+        Mon, 15 Aug 2022 20:03:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F41C433D6;
+        Mon, 15 Aug 2022 20:03:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593793;
-        bh=5Yp6igdeXS+EWXG2NTOm4EuzoPMlhsDncrfw0qxvFDw=;
+        s=korg; t=1660593802;
+        bh=PjvIlGHNLRN6F/T3nDYHHiN9EJ37PSPnqadsUE8gwZo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z33Hk1t7duRNQxsHXNJ1H3hJqNtH4LHj+M1WRJqS3zCed6qvBeZGPSrZeOlCiZ5dX
-         AqkiWCoS4nd5ziQfUzqC0UCdTVJMNP50+tV2T267a3aK1KnbcVppfX/LxOHRMctWma
-         FsA01KmZTMxy9sOZJMUkE8GyT791ZQSqeE4LUsQc=
+        b=Z3mXJGnTv5EwOw7n/T0Eodr7YNEoOUyQxcnCNch80qwrt/EN9JHdzn+5AY//v5Un+
+         fIp3NdNjrROpUVW5Y4ZGAG3qUv/WF6Ow4DDPWcsTpRE1LvvuAxC9Ap546Rf823TdIk
+         6UVLpn8bFC7QAiSZyxFSpEAl2ahOYdKXavoWXt44=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        Dominique Martinet <asmadeus@codewreck.org>,
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Eric Biggers <ebiggers@google.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 1007/1095] net/9p: Initialize the iounit field during fid creation
-Date:   Mon, 15 Aug 2022 20:06:46 +0200
-Message-Id: <20220815180510.754918285@linuxfoundation.org>
+Subject: [PATCH 5.18 1008/1095] timekeeping: contribute wall clock to rng on time change
+Date:   Mon, 15 Aug 2022 20:06:47 +0200
+Message-Id: <20220815180510.803483817@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
 References: <20220815180429.240518113@linuxfoundation.org>
@@ -56,66 +56,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tyler Hicks <tyhicks@linux.microsoft.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-[ Upstream commit aa7aeee169480e98cf41d83c01290a37e569be6d ]
+[ Upstream commit b8ac29b40183a6038919768b5d189c9bd91ce9b4 ]
 
-Ensure that the fid's iounit field is set to zero when a new fid is
-created. Certain 9P operations, such as OPEN and CREATE, allow the
-server to reply with an iounit size which the client code assigns to the
-p9_fid struct shortly after the fid is created by p9_fid_create(). On
-the other hand, an XATTRWALK operation doesn't allow for the server to
-specify an iounit value. The iounit field of the newly allocated p9_fid
-struct remained uninitialized in that case. Depending on allocation
-patterns, the iounit value could have been something reasonable that was
-carried over from previously freed fids or, in the worst case, could
-have been arbitrary values from non-fid related usages of the memory
-location.
+The rng's random_init() function contributes the real time to the rng at
+boot time, so that events can at least start in relation to something
+particular in the real world. But this clock might not yet be set that
+point in boot, so nothing is contributed. In addition, the relation
+between minor clock changes from, say, NTP, and the cycle counter is
+potentially useful entropic data.
 
-The bug was detected in the Windows Subsystem for Linux 2 (WSL2) kernel
-after the uninitialized iounit field resulted in the typical sequence of
-two getxattr(2) syscalls, one to get the size of an xattr and another
-after allocating a sufficiently sized buffer to fit the xattr value, to
-hit an unexpected ERANGE error in the second call to getxattr(2). An
-uninitialized iounit field would sometimes force rsize to be smaller
-than the xattr value size in p9_client_read_once() and the 9P server in
-WSL refused to chunk up the READ on the attr_fid and, instead, returned
-ERANGE to the client. The virtfs server in QEMU seems happy to chunk up
-the READ and this problem goes undetected there.
+This commit addresses this by mixing in a time stamp on calls to
+settimeofday and adjtimex. No entropy is credited in doing so, so it
+doesn't make initialization faster, but it is still useful input to
+have.
 
-Link: https://lkml.kernel.org/r/20220710141402.803295-1-tyhicks@linux.microsoft.com
-Fixes: ebf46264a004 ("fs/9p: Add support user. xattr")
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 Cc: stable@vger.kernel.org
-Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-Reviewed-by: Christian Schoenebeck <linux_oss@crudebyte.com>
-Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Eric Biggers <ebiggers@google.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/9p/client.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ kernel/time/timekeeping.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/net/9p/client.c b/net/9p/client.c
-index a36a40137caa..87cde948f628 100644
---- a/net/9p/client.c
-+++ b/net/9p/client.c
-@@ -886,16 +886,13 @@ static struct p9_fid *p9_fid_create(struct p9_client *clnt)
- 	struct p9_fid *fid;
+diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
+index 871c912860ed..d6a0ff68df41 100644
+--- a/kernel/time/timekeeping.c
++++ b/kernel/time/timekeeping.c
+@@ -23,6 +23,7 @@
+ #include <linux/pvclock_gtod.h>
+ #include <linux/compiler.h>
+ #include <linux/audit.h>
++#include <linux/random.h>
  
- 	p9_debug(P9_DEBUG_FID, "clnt %p\n", clnt);
--	fid = kmalloc(sizeof(*fid), GFP_KERNEL);
-+	fid = kzalloc(sizeof(*fid), GFP_KERNEL);
- 	if (!fid)
- 		return NULL;
+ #include "tick-internal.h"
+ #include "ntp_internal.h"
+@@ -1326,8 +1327,10 @@ int do_settimeofday64(const struct timespec64 *ts)
+ 	/* Signal hrtimers about time change */
+ 	clock_was_set(CLOCK_SET_WALL);
  
--	memset(&fid->qid, 0, sizeof(fid->qid));
- 	fid->mode = -1;
- 	fid->uid = current_fsuid();
- 	fid->clnt = clnt;
--	fid->rdir = NULL;
--	fid->fid = 0;
- 	refcount_set(&fid->count, 1);
+-	if (!ret)
++	if (!ret) {
+ 		audit_tk_injoffset(ts_delta);
++		add_device_randomness(ts, sizeof(*ts));
++	}
  
- 	idr_preload(GFP_KERNEL);
+ 	return ret;
+ }
+@@ -2413,6 +2416,7 @@ int do_adjtimex(struct __kernel_timex *txc)
+ 	ret = timekeeping_validate_timex(txc);
+ 	if (ret)
+ 		return ret;
++	add_device_randomness(txc, sizeof(*txc));
+ 
+ 	if (txc->modes & ADJ_SETOFFSET) {
+ 		struct timespec64 delta;
+@@ -2430,6 +2434,7 @@ int do_adjtimex(struct __kernel_timex *txc)
+ 	audit_ntp_init(&ad);
+ 
+ 	ktime_get_real_ts64(&ts);
++	add_device_randomness(&ts, sizeof(ts));
+ 
+ 	raw_spin_lock_irqsave(&timekeeper_lock, flags);
+ 	write_seqcount_begin(&tk_core.seq);
 -- 
 2.35.1
 

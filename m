@@ -2,56 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74558592851
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 05:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FD8592852
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 05:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232328AbiHODzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 23:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56252 "EHLO
+        id S230159AbiHOD5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 23:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbiHODzc (ORCPT
+        with ESMTP id S229766AbiHOD5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 23:55:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562BF627A
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 20:55:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0AF04B80D20
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 03:55:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A5646C433B5;
-        Mon, 15 Aug 2022 03:55:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660535728;
-        bh=9cStDL6VDIu1GtVJwkvwpUgJHRXcmBxfDKU5KW3InG8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=HDJq+qF9bgTQIP6ZWDldAAV8hgsu5Kes38TB8Ljy4PnUISUwgnWs8J42GNlXeRrKa
-         LlGHqjPdLo9zLXO0hdt8aofmwXKC0jZ2JYK1XMn8lBZ8/ZpkSY+saoxn6l622p9rhA
-         kQbX0OKL0EqddrWPuIkWQo0s+Gkj3ZH/dnZEGD8XyNB3gA7bpBCdfuzTyYOyT8Lvsg
-         g8iEnKGnkGNF5FXkgMpji2ML/3Pzrxmkyj69rcETUc9mSFk/RRs2brEVm1sVSMPq+Q
-         2kqkmrC7OYD0XYXOuGcH9xMb1/0kY4PmuA+VzRWg3H1O2cvSts8XMxPuWx8KniFonc
-         IMlSZCL1dJNXg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 86D72E2A04E;
-        Mon, 15 Aug 2022 03:55:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 14 Aug 2022 23:57:32 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064FCBCB3
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 20:57:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660535852; x=1692071852;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YG16vjBnfqBbNTU/hzk6wALQfbQIM1s78gGFIPQZuXg=;
+  b=Dyjvd4moVVAhSnUZV7rYfJAh7b/MWPUyBxEHKXl+A5bzJO97O3k2TiB2
+   u589boK/N/JnWEZjhEKtJiu7J2wztc+FA6UDj7hxTUawl51c6HDB2mPRt
+   xcQXucxVssXCTDUBoSvAkfzyyXmGBBgQgiY+G1KR20ighquHk5AdWnqBd
+   KZehQkRSxNX2T/c38pgF6YqR8IHKrGtO5zwdBeThqa4Q/Uq2SvIgjRNO4
+   LmlqlqJr/asDbOUt8FquVZAjEqOyBIHSbAaWqn7b1pfiFNpaHJKa592w0
+   D9AnpybpzKIohazlOY7h7Rl2CskfLDv2ZDV0vZC4e8nvjHKiYvcBIVh/s
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="289454108"
+X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
+   d="scan'208";a="289454108"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 20:57:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
+   d="scan'208";a="674714191"
+Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 14 Aug 2022 20:57:29 -0700
+Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oNREE-0000kI-10;
+        Mon, 15 Aug 2022 03:57:26 +0000
+Date:   Mon, 15 Aug 2022 11:56:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tristram Ha <Tristram.Ha@microchip.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        George McCollister <george.mccollister@gmail.com>
+Subject: drivers/net/dsa/microchip/ksz9477_i2c.c:77:34: warning:
+ 'ksz9477_dt_ids' defined but not used
+Message-ID: <202208151149.g01fvM7O-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v1] platform/chrome: cros_ec_proto: Update version on
- GET_NEXT_EVENT failure
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <166053572854.30867.16514927913447252293.git-patchwork-notify@kernel.org>
-Date:   Mon, 15 Aug 2022 03:55:28 +0000
-References: <20220802154128.21175-1-pdk@semihalf.com>
-In-Reply-To: <20220802154128.21175-1-pdk@semihalf.com>
-To:     Patryk Duda <pdk@semihalf.com>
-Cc:     bleung@chromium.org, groeck@chromium.org, gwendal@google.com,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        upstream@semihalf.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,31 +62,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+commit: 20e03777d70923fe7eae0d7f043ef9488393ab95 net: dsa: microchip: add KSZ9477 I2C driver
+date:   2 years, 11 months ago
+config: x86_64-buildonly-randconfig-r002-20220815 (https://download.01.org/0day-ci/archive/20220815/202208151149.g01fvM7O-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=20e03777d70923fe7eae0d7f043ef9488393ab95
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 20e03777d70923fe7eae0d7f043ef9488393ab95
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/media/platform/ drivers/net/dsa/microchip/
 
-This patch was applied to chrome-platform/linux.git (for-next)
-by Tzung-Bi Shih <tzungbi@kernel.org>:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Tue,  2 Aug 2022 17:41:28 +0200 you wrote:
-> Some EC based devices (e.g. Fingerpint MCU) can jump to RO part of the
-> firmware (intentionally or due to device reboot). The RO part doesn't
-> change during the device lifecycle, so it won't support newer version
-> of EC_CMD_GET_NEXT_EVENT command.
-> 
-> Function cros_ec_query_all() is responsible for finding maximum
-> supported MKBP event version. It's usually called when the device is
-> running RW part of the firmware, so the command version can be
-> potentially higher than version supported by the RO.
-> 
-> [...]
+All warnings (new ones prefixed by >>):
 
-Here is the summary with links:
-  - [v1] platform/chrome: cros_ec_proto: Update version on GET_NEXT_EVENT failure
-    https://git.kernel.org/chrome-platform/c/f74c7557ed0d
+>> drivers/net/dsa/microchip/ksz9477_i2c.c:77:34: warning: 'ksz9477_dt_ids' defined but not used [-Wunused-const-variable=]
+      77 | static const struct of_device_id ksz9477_dt_ids[] = {
+         |                                  ^~~~~~~~~~~~~~
 
-You are awesome, thank you!
+
+vim +/ksz9477_dt_ids +77 drivers/net/dsa/microchip/ksz9477_i2c.c
+
+    76	
+  > 77	static const struct of_device_id ksz9477_dt_ids[] = {
+    78		{ .compatible = "microchip,ksz9477" },
+    79		{ .compatible = "microchip,ksz9897" },
+    80		{},
+    81	};
+    82	MODULE_DEVICE_TABLE(of, ksz9477_dt_ids);
+    83	
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

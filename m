@@ -2,153 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B942592BCA
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4BA592CFB
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233000AbiHOIjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 04:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33590 "EHLO
+        id S241338AbiHOIkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 04:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233314AbiHOIjE (ORCPT
+        with ESMTP id S241110AbiHOIkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 04:39:04 -0400
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63B5201BA;
-        Mon, 15 Aug 2022 01:39:01 -0700 (PDT)
-Received: by mail-qk1-f177.google.com with SMTP id g21so1397525qka.5;
-        Mon, 15 Aug 2022 01:39:01 -0700 (PDT)
+        Mon, 15 Aug 2022 04:40:12 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DB420181
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 01:40:10 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id z16so8255227wrh.12
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 01:40:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=bm9cYKRK81euJlBrGN8MvVluF+drZ+BzmhRUFWVH330=;
+        b=gJ5yrzBGibuV05aqPOSwb1FoEJAQ8a7yyHsvre8Cq5bFu/sT1A5miPn20lP1i5oi/i
+         dl4IpoSCsZ4OZUvf5Hai/FSvREYx6TgHG/nfPodyIJ02MV7m6HTKw+JMTLJQJkxb4QGi
+         ZRlYVQn8URafRJURRlNLQypBkEHjHIJwrna6lJ/424xgrUnaaux8J0SsWwUGyOl1DJRl
+         Zl+XHgrwW0YjPQVdWtA21tikSMParSQLhf3jiOWJee9V4j/b9P3vOVwVT1juPosc1+19
+         ZoikzieoyimJmgbeG4gKB35wpO2qZAjKJp07yPiU/QGE8mHe0W6tv+WpJxReTfqi6W41
+         3kiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=JtDCKm0cVxqAL7Pu8sRszUiFCITK99XhKJIX5xTH4x0=;
-        b=3BB7Wj5T6mz4vS17/lP3TNxbEKXpueP/U3C8QyBb1FS/Eu3B8PXeDUpD7O5B2tWmYo
-         e631E5FMoH/PS1Sssg6N9lRq4TNsFk/UVHoIyzJUoA0lLnZhaxJCqwRSzqfl+h7borgW
-         14uLnnnMOmqRzp3X5UzvkiMqjkmMgB8m7R9e+i1F4Q+ZBJ4HJAw9rSHisa2v5sU9yWZR
-         3VCrqTesfI/pk2XS1nBXdz1pUKnuSX4ml32Wm3defOknoa7dFaXv2mdUWdj4YlQMu4SS
-         VF6sxKRpynmHkCVmFjzTeqRaDokk9lwSpCCD2+zbb9/eQa7aTZGBanv1NFypryEGGQwW
-         9Ipw==
-X-Gm-Message-State: ACgBeo1Fs70PWQHacVhkoPb0WPfV9DJVixwOC8HGJt2crzJIsgPwKL/5
-        A4DYDVtUdWgK3YYt8IETi8Oujd9Ubbu1hkad
-X-Google-Smtp-Source: AA6agR5upkmc5Dx24BWnn3EskKFRinEPCDYjXf0T4LusHMjh/JWLPSCLJcFeHX7+waaB4dXKIYnMpw==
-X-Received: by 2002:a05:620a:458b:b0:6b6:aa5:1d59 with SMTP id bp11-20020a05620a458b00b006b60aa51d59mr10670876qkb.525.1660552740759;
-        Mon, 15 Aug 2022 01:39:00 -0700 (PDT)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id z3-20020a05622a124300b003437a694049sm6559964qtx.96.2022.08.15.01.38.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 01:38:59 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-31f443e276fso60835197b3.1;
-        Mon, 15 Aug 2022 01:38:58 -0700 (PDT)
-X-Received: by 2002:a81:502:0:b0:32f:dcc4:146e with SMTP id
- 2-20020a810502000000b0032fdcc4146emr5686051ywf.316.1660552738763; Mon, 15 Aug
- 2022 01:38:58 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=bm9cYKRK81euJlBrGN8MvVluF+drZ+BzmhRUFWVH330=;
+        b=O7DAQC8HFQwg/I2p/V2dUyE7SyJpUxgJzIBKn64FTPA37BrCaBPybVvk+Ts1bRIHEu
+         /4WBOJ4TGU3gch8JkpgewYz2YuxhfRYUO2F9ibcW4vLLhp9w8JiIGKdiATTdcX+X1Rv0
+         AJRmCTTdnVwFP/ogurCx30ZiRtFngvjLhFI9qdddH0QL5DnAF5UQ/05QtKh69olzkEsA
+         5OtpNX0GGe8y+FNdgWV9lTv47HPPq5cMe9zgFZW3haNMAIPLD4pukFbqyGo3aZi1sVro
+         u40FCX5qy3/tmU5bwkBEZk73tLnv+JP5fWjuR76NWpBalkI/4K3NGgKdSghBuVHDorIF
+         Zk5w==
+X-Gm-Message-State: ACgBeo0IaHA39QTCKe0my+NeE1vxsrlT1/8z3Dxqduy3DP4WwST96SAM
+        6Jhq9FVi96FLDtOl0fWtCrMqWw==
+X-Google-Smtp-Source: AA6agR4PzPl+pDuLWXzH5XMOvYgo5VUH0K440o80nb9n02ikvcPs1DEmxQgy5UVZZbh8rYoA6zT3VA==
+X-Received: by 2002:adf:fb0e:0:b0:21a:34a2:5ca9 with SMTP id c14-20020adffb0e000000b0021a34a25ca9mr8205199wrr.472.1660552809331;
+        Mon, 15 Aug 2022 01:40:09 -0700 (PDT)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id s4-20020adfdb04000000b002211fc70174sm8028501wri.99.2022.08.15.01.40.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 01:40:08 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 11:40:06 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, abelvesa@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH V2 1/8] dt-bindings: clock: imx93-clock: add more MU/SAI
+ clocks
+Message-ID: <YvoGZqrLOsxDWsWG@linaro.org>
+References: <20220815013039.474970-1-peng.fan@oss.nxp.com>
+ <20220815013039.474970-2-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com>
- <20220601070707.3946847-4-saravanak@google.com> <CAMuHMdWo_wRwV-i_iyTxVnEsf3Th9GBAG+wxUQMQGnw1t2ijTg@mail.gmail.com>
-In-Reply-To: <CAMuHMdWo_wRwV-i_iyTxVnEsf3Th9GBAG+wxUQMQGnw1t2ijTg@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 15 Aug 2022 10:38:47 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV0buz9JOHGs7_vMtV4GbLb+gmdpPihDu5B4ypqUDfAXQ@mail.gmail.com>
-Message-ID: <CAMuHMdV0buz9JOHGs7_vMtV4GbLb+gmdpPihDu5B4ypqUDfAXQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/9] net: mdio: Delete usage of driver_deferred_probe_check_state()
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220815013039.474970-2-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Saravana,
+On 22-08-15 09:30:32, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Add MU[1,2]_[A,B] clock entries.
+> Add SAI IPG clock entries.
+> 
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
-On Tue, Jul 5, 2022 at 11:11 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Wed, Jun 1, 2022 at 2:44 PM Saravana Kannan <saravanak@google.com> wrote:
-> > Now that fw_devlink=on by default and fw_devlink supports interrupt
-> > properties, the execution will never get to the point where
-> > driver_deferred_probe_check_state() is called before the supplier has
-> > probed successfully or before deferred probe timeout has expired.
-> >
-> > So, delete the call and replace it with -ENODEV.
-> >
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
->
-> Thanks for your patch, which is now commit f8217275b57aa48d ("net:
-> mdio: Delete usage of driver_deferred_probe_check_state()") in
-> driver-core/driver-core-next.
->
-> Seems like I missed something when providing my T-b for this series,
-> sorry for that.
->
-> arch/arm/boot/dts/r8a7791-koelsch.dts has:
->
->     &ether {
->             pinctrl-0 = <&ether_pins>, <&phy1_pins>;
->             pinctrl-names = "default";
->
->             phy-handle = <&phy1>;
->             renesas,ether-link-active-low;
->             status = "okay";
->
->             phy1: ethernet-phy@1 {
->                     compatible = "ethernet-phy-id0022.1537",
->                                  "ethernet-phy-ieee802.3-c22";
->                     reg = <1>;
->                     interrupt-parent = <&irqc0>;
->                     interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
->                     micrel,led-mode = <1>;
->                     reset-gpios = <&gpio5 22 GPIO_ACTIVE_LOW>;
->             };
->     };
->
-> Despite the interrupts property, &ether is now probed before irqc0
-> (interrupt-controller@e61c0000 in arch/arm/boot/dts/r8a7791.dtsi),
-> causing the PHY not finding its interrupt, and resorting to polling:
->
->     -Micrel KSZ8041RNLI ee700000.ethernet-ffffffff:01: attached PHY
-> driver (mii_bus:phy_addr=ee700000.ethernet-ffffffff:01, irq=185)
->     +Micrel KSZ8041RNLI ee700000.ethernet-ffffffff:01: attached PHY
-> driver (mii_bus:phy_addr=ee700000.ethernet-ffffffff:01, irq=POLL)
->
-> Reverting this commit, and commit 9cbffc7a59561be9 ("driver core:
-> Delete driver_deferred_probe_check_state()") fixes that.
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
 
-FTR, this issue is now present in v6.0-rc1.
-I haven't tried your newest series yet.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> ---
+>  include/dt-bindings/clock/imx93-clock.h | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/dt-bindings/clock/imx93-clock.h b/include/dt-bindings/clock/imx93-clock.h
+> index 21fda9c5cb5e..19bc32788d81 100644
+> --- a/include/dt-bindings/clock/imx93-clock.h
+> +++ b/include/dt-bindings/clock/imx93-clock.h
+> @@ -196,6 +196,13 @@
+>  #define IMX93_CLK_TMC_GATE		187
+>  #define IMX93_CLK_PMRO_GATE		188
+>  #define IMX93_CLK_32K			189
+> -#define IMX93_CLK_END			190
+> +#define IMX93_CLK_SAI1_IPG		190
+> +#define IMX93_CLK_SAI2_IPG		191
+> +#define IMX93_CLK_SAI3_IPG		192
+> +#define IMX93_CLK_MU1_A_GATE		193
+> +#define IMX93_CLK_MU1_B_GATE		194
+> +#define IMX93_CLK_MU2_A_GATE		195
+> +#define IMX93_CLK_MU2_B_GATE		196
+> +#define IMX93_CLK_END			197
+>  
+>  #endif
+> -- 
+> 2.37.1
+> 

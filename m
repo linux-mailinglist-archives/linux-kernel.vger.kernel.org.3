@@ -2,70 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65AD359271D
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 02:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76449592720
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 02:48:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbiHOAnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 20:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
+        id S229502AbiHOAsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 20:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiHOAno (ORCPT
+        with ESMTP id S229379AbiHOAsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 20:43:44 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396236398
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 17:43:44 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id p14-20020a17090a74ce00b001f4d04492faso5505289pjl.4
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 17:43:44 -0700 (PDT)
+        Sun, 14 Aug 2022 20:48:15 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BC163DA
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 17:48:14 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id p125so5530351pfp.2
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 17:48:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc;
-        bh=lb7mKHsaIcUxW+3Jy2BJQ41sCMA+sLqu9myEjLcTq6E=;
-        b=anOO2IPFLaUuSvUf9E7Qpg5p6/NmGeyjbW7G+RX4Cpx5BlVWkPf8GgBvJ24LzQxOB1
-         ctAsE98DrtxgaaUdSiHcQSlJiRKmWMe+0h0aNLG8tGd+coHE0iZHcv42Iv8I9FSeQ4ig
-         8EtCPqpwoL24/hmvTrM7aDJdvRstLsW3fOOIoDWKCMtHTjWmi3hAlBOkK4fqy4wHp/ZF
-         WicwU5ysc/pHKg++a83qB5FMH36bRulq/+Wl++FYUvFFW5Y3xfEQG6LthDt+cvc0Ejzv
-         RYRyzks1pwAqe+ZS0bdZxkc4pUxoYl0i9wEpndYSIE7d3MZHW57BOTY9X5T92HtE7hG9
-         MvIQ==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=wWwFnOcKNFFMa2I1f4N8kIQ8xtUH0qGmMJMSeLkGgUM=;
+        b=cnsvXZscMaGqqVzF6w1PgtzM7sxlYmPPO3j9kGlc8ZXTE2IFn2eOC6wD3VAoVD9TT9
+         59/vQySf7Y+OVSRyZKkC2ygpm052htPhd3WkJfrXLhOMKyQli9Nqb5Ggeo520kQOfvwS
+         a3XuDvYYcEDbYGm4d3KOWUiKffx/cYnCCpygI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=lb7mKHsaIcUxW+3Jy2BJQ41sCMA+sLqu9myEjLcTq6E=;
-        b=Lxyr27mSgdYaHTEBTfP8omxgfvJlEOyUXzhr9aNv2tu9lLcXIxN/A8/UZ2oR6pmzyv
-         x9F5nSRuXLKIpwkXe9n4IXlOU22+b/cJlP7XGUJav2AcA5/LRNSlpYxttCmuPfrILCbn
-         xrswGJusB8Vvb8lSpj2mnEQkKtEP0LoqbI5K1zQ570B5qWwdRwceCg1u6M4oj8/E0b3E
-         AXcBbvNGOEn9qBugnNzf1fQwrazHtpDa4AzJXGRzBYzdZwn9Q2MlSrg/ERAx1eRtP8cV
-         xU6KDmvUEcL2UIpsszEYXdwX9GlDzJf60BKDNby+pnDxX35TZggTu4B4ZZyhIRwtJEu1
-         rkaA==
-X-Gm-Message-State: ACgBeo02azfpgWDfaobU/YbhkWcArx0K1g8Axr1/e0MjDek2AqKxKAUr
-        UCEBc12+TdBrl2IQNKn7jYM00rKL/30oCMwaT90=
-X-Google-Smtp-Source: AA6agR7uRPBdUCQJsn+HWXMWaemHpGc/nxXzJtR/ldFbFAE04XllZoATKRW9ziZ6ZE4bDjIpaxMvqBd87/TCVg7fGP0=
-X-Received: by 2002:a17:903:2611:b0:170:953d:e03e with SMTP id
- jd17-20020a170903261100b00170953de03emr14890239plb.49.1660524223456; Sun, 14
- Aug 2022 17:43:43 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=wWwFnOcKNFFMa2I1f4N8kIQ8xtUH0qGmMJMSeLkGgUM=;
+        b=cuFzb7UM5C08/+xgEJilv4wTfEw4RBlgR/x4bg6DlejdMTm7O6j5DJY+TpIx1Gu7eW
+         hefotzGuxCi2X6wRkojuyzkBPDOd7qjlAeicja4MHPMzD26UTg178k3NzOEjQuKHuZ8g
+         EnUdAA/IrTZt1usBRs02cz/wmxmiZwtbYES9MNDwqp0HlcWkISsgm3UdTgsExoi3SPP3
+         Vp6kcj+FHt7J+HQAzlIBeBNy46ZvkK4PsFMXRzK1p6zqReUWt6zHxWNt3WoItUc6QrBL
+         oG8GlDCt+SepH3UbDnFVBK5E7qJ/ZZJulaxqP+NUe+o0kZsqjFbWyVktlt7kfprpV2DV
+         fJkQ==
+X-Gm-Message-State: ACgBeo0OlH3enj43WbKurXzk2ObvxWnkSNv6O9Jjpry2gBUqClQNCqw8
+        APde0LqlifnZDRaqfb4GBLFBAw==
+X-Google-Smtp-Source: AA6agR4aD0qJ8x85FdyFAvxRUXukVhHntihHkCxj9f7loaP4b/KZC0smqwYjpLfjFAVNOfmK1vowoQ==
+X-Received: by 2002:a63:135b:0:b0:41e:928:832c with SMTP id 27-20020a63135b000000b0041e0928832cmr11526135pgt.178.1660524494049;
+        Sun, 14 Aug 2022 17:48:14 -0700 (PDT)
+Received: from dlunevwfh.roam.corp.google.com (n122-107-196-14.sbr2.nsw.optusnet.com.au. [122.107.196.14])
+        by smtp.gmail.com with ESMTPSA id n16-20020a170902d2d000b001618b70dcc9sm5940776plc.101.2022.08.14.17.48.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Aug 2022 17:48:13 -0700 (PDT)
+From:   Daniil Lunev <dlunev@chromium.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Daniil Lunev <dlunev@chromium.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Keoseong Park <keosung.park@samsung.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: [PATCH v7] ufs: core: print UFSHCD capabilities in controller's sysfs node
+Date:   Mon, 15 Aug 2022 10:48:03 +1000
+Message-Id: <20220815104739.v7.1.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Sender: ndubuisio992@gmail.com
-Received: by 2002:a05:7300:c09:b0:6f:e3f6:8ca4 with HTTP; Sun, 14 Aug 2022
- 17:43:42 -0700 (PDT)
-From:   Jessica Daniel <jessicadaniel7833@gmail.com>
-Date:   Mon, 15 Aug 2022 00:43:42 +0000
-X-Google-Sender-Auth: kU1uFIzsDddQeG0Oes5Fw05x-9g
-Message-ID: <CAO7YTNn=POK=wdFN1Ho9c_TA3CHRvgGLBwrs1L0fX76TEHdSXA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Allows userspace to check if Clock Scaling and Write Booster are
+supported.
+
+Signed-off-by: Daniil Lunev <dlunev@chromium.org>
+
+---
+
+Changes in v7:
+* Move the comment to the documnetation
+* Update the month on the documentation
+
+Changes in v6:
+* Add comment to clarify meaning of the "capbilities" sysfs group.
+
+Changes in v5:
+* Correct wording for clock scaling.
+* Correct wording for the commit message.
+
+Changes in v4:
+* Dropped crypto node per Eric Biggers mentioning it can be queried from
+  disk's queue node
+
+Changes in v3:
+* Expose each capability individually.
+* Update documentation to represent new scheme.
+
+Changes in v2:
+* Add documentation entry for the new sysfs node.
+
+ Documentation/ABI/testing/sysfs-driver-ufs | 37 ++++++++++++++++++++++
+ drivers/ufs/core/ufs-sysfs.c               | 35 ++++++++++++++++++++
+ 2 files changed, 72 insertions(+)
+
+diff --git a/Documentation/ABI/testing/sysfs-driver-ufs b/Documentation/ABI/testing/sysfs-driver-ufs
+index 6b248abb1bd71..78f3e393d2498 100644
+--- a/Documentation/ABI/testing/sysfs-driver-ufs
++++ b/Documentation/ABI/testing/sysfs-driver-ufs
+@@ -1591,6 +1591,43 @@ Description:	This entry shows the status of HPB.
+ 
+ 		The file is read only.
+ 
++Contact:	Daniil Lunev <dlunev@chromium.org>
++What:		/sys/bus/platform/drivers/ufshcd/*/capabilities/
++What:		/sys/bus/platform/devices/*.ufs/capabilities/
++Date:		August 2022
++Description:	The group represents the effective capabilities of the
++		host-device pair. i.e. the capabilities which are enabled in the
++		driver for the specific host controller, supported by the host
++		controller and are supported and/or have compatible
++		configuration on the device side.
++
++Contact:	Daniil Lunev <dlunev@chromium.org>
++What:		/sys/bus/platform/drivers/ufshcd/*/capabilities/clock_scaling
++What:		/sys/bus/platform/devices/*.ufs/capabilities/clock_scaling
++Date:		August 2022
++Contact:	Daniil Lunev <dlunev@chromium.org>
++Description:	Indicates status of clock scaling.
++
++		== ============================
++		0  Clock scaling is not supported.
++		1  Clock scaling is supported.
++		== ============================
++
++		The file is read only.
++
++What:		/sys/bus/platform/drivers/ufshcd/*/capabilities/write_booster
++What:		/sys/bus/platform/devices/*.ufs/capabilities/write_booster
++Date:		August 2022
++Contact:	Daniil Lunev <dlunev@chromium.org>
++Description:	Indicates status of Write Booster.
++
++		== ============================
++		0  Write Booster can not be enabled.
++		1  Write Booster can be enabled.
++		== ============================
++
++		The file is read only.
++
+ What:		/sys/class/scsi_device/*/device/hpb_param_sysfs/activation_thld
+ Date:		February 2021
+ Contact:	Avri Altman <avri.altman@wdc.com>
+diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
+index 0a088b47d5570..75d4287657c80 100644
+--- a/drivers/ufs/core/ufs-sysfs.c
++++ b/drivers/ufs/core/ufs-sysfs.c
+@@ -279,6 +279,40 @@ static const struct attribute_group ufs_sysfs_default_group = {
+ 	.attrs = ufs_sysfs_ufshcd_attrs,
+ };
+ 
++static ssize_t clock_scaling_show(struct device *dev, struct device_attribute *attr,
++				  char *buf)
++{
++	struct ufs_hba *hba = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", ufshcd_is_clkscaling_supported(hba));
++}
++
++static ssize_t write_booster_show(struct device *dev, struct device_attribute *attr,
++				  char *buf)
++{
++	struct ufs_hba *hba = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", ufshcd_is_wb_allowed(hba));
++}
++
++static DEVICE_ATTR_RO(clock_scaling);
++static DEVICE_ATTR_RO(write_booster);
++
++/*
++ * See Documentation/ABI/testing/sysfs-driver-ufs for the semantics of this
++ * group.
++ */
++static struct attribute *ufs_sysfs_capabilities_attrs[] = {
++	&dev_attr_clock_scaling.attr,
++	&dev_attr_write_booster.attr,
++	NULL
++};
++
++static const struct attribute_group ufs_sysfs_capabilities_group = {
++	.name = "capabilities",
++	.attrs = ufs_sysfs_capabilities_attrs,
++};
++
+ static ssize_t monitor_enable_show(struct device *dev,
+ 				   struct device_attribute *attr, char *buf)
+ {
+@@ -1134,6 +1168,7 @@ static const struct attribute_group ufs_sysfs_attributes_group = {
+ 
+ static const struct attribute_group *ufs_sysfs_groups[] = {
+ 	&ufs_sysfs_default_group,
++	&ufs_sysfs_capabilities_group,
+ 	&ufs_sysfs_monitor_group,
+ 	&ufs_sysfs_device_descriptor_group,
+ 	&ufs_sysfs_interconnect_descriptor_group,
 -- 
-Hello Dear,
-Did you receive my mail
-thanks??
+2.31.0
+

@@ -2,126 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D48594E75
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 04:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EEC1594E7D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 04:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233407AbiHPCE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 22:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
+        id S233438AbiHPCIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 22:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233144AbiHPCEf (ORCPT
+        with ESMTP id S233481AbiHPCHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 22:04:35 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0948A2230BF
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:54:49 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 12so7617940pga.1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:54:49 -0700 (PDT)
+        Mon, 15 Aug 2022 22:07:53 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5BE10E7B9
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 15:00:12 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id z12so10495580wrs.9
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 15:00:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=fE+O/3kXgE+dfXX70zlf5gVmTreUt0ffvp9RAaWF4P4=;
-        b=GDo1cXAgIfU3xQO9g+UJaDIXYnd6qyBfZkeZBTu/XEGa3fsc642NUadPJU9PDcUMxt
-         3LT1l6boMp7QBD0xlSQjQYOKR5oxzAsEQ92APE0voe82Ep98mKUgaQpjaTiG0ovc1yA+
-         ilWEluzTPd59bDIKNf5CULsNvrHig0oE16T8InjQH3yXzl7IVhxsC/SBdM1QlM2nMjcN
-         ciOEqIkDHvdROr1YK31FVCwU9E2vNv0Pe0Xiri3i9DZJL9EVqbMokxi8STCcZUk/b7sv
-         w6Dd4G8xNF1e3mAh2D+8OpNcCnKli4r0lWaJXKi55fpQ9sUTpm8ZWBaamWc+PF6mBOR9
-         rUwA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=F2rGFENzHI0E3i8mswF35hHoUMszy0CZxP2MWQKHpBQ=;
+        b=SwigwelJnmy5DhbwCbX4EIFty2vdJVo6HL901+2tfj45cuM+Dm4xSkjCK5i5aB1ucr
+         BogTShuXqf9zG5AWFiFvUfiIYTKNG+Gg/fdYxyYjBA0kqyQujK08eirJUAS6pF40YghK
+         QHw3mHBtJLp0EJC/vs3bl/khLlZXi1+zp6i+VlHNGVUbEaOwZUEaJpRNj+e44esGtT3J
+         IY6Ljvy2jvT6QOjEJwNIM3fhCw4sSXWsNBGueBXZvsWAf8E3OQ4Q5LdITTsM15uvvpFT
+         oJGa+TnZX7IzahqmWQDHMWYfb701XbLihdRlnBqtunzTIdlATyWMi9NKr58jl2M0mYLM
+         sl9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=fE+O/3kXgE+dfXX70zlf5gVmTreUt0ffvp9RAaWF4P4=;
-        b=LqYlRzENbYJ9MWaN2Nrr3/HGORGPFi5f4GmypowGL9qtYhfKzqfQvsk41yym1pV+Ec
-         Kr5KmlXxoNV4FjxpFKK+E8mLmHyEk93cBKepRvPWjhMzVuHUNOkFultMR1tCxo9yZODT
-         YFEonDchN+8rw3wbSn3hLtTiOogtoIW/XUKFz6UvaY74pY1jT+QxYUlv0wm3WdHkayvv
-         gGDxV2B/TW3K52yywBFA6zxxv4qv4NTsYvN7Z8kuwDO0OEYMlXjLSmqk1MnjiR+5GrdT
-         3L4BRTowV3XwkZLl2vvEZw/HCkspcth/4EY9uiz/4DYJ+yvVAKuVXR0sLpL9WeUw/nV9
-         Rj2Q==
-X-Gm-Message-State: ACgBeo3ohJLNy/VSHqSzGpUiPsdePkcD5cxhlRRD8Ap3O7JTxTScooBg
-        p0IWAxFaLwqwbk9QitANFHRpQA==
-X-Google-Smtp-Source: AA6agR4LEfebbNxgwZm00oHENwptapxAdoFIvEJrRB8wE/oRxdrmd9As66oLGQflSobKmeTJwzNSPw==
-X-Received: by 2002:a63:cd4b:0:b0:421:95f3:1431 with SMTP id a11-20020a63cd4b000000b0042195f31431mr15336377pgj.486.1660600487602;
-        Mon, 15 Aug 2022 14:54:47 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id c139-20020a624e91000000b0052dddf69db2sm6966296pfb.57.2022.08.15.14.54.47
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=F2rGFENzHI0E3i8mswF35hHoUMszy0CZxP2MWQKHpBQ=;
+        b=aAe7JzpI9AjREEY09qCA+ozUlGOBH7evsgPOGFDio6UMlkmrEL5o+zQbCw6Rz75xBM
+         CsEUyXlTvwNGa3JGQJXd5ISMScCQlGCPKVCfGgrqbRCcgFgozJC9GpuiAYBX98+TvL2t
+         GlWttm3SfzDphGCKt+r59X7PQ/Mq/GFnbEzdEJ+jj5hNv17V8Sc7ExHFpPor1gj4RNQ4
+         Q18D8G5AGX9UWjm3O6j9qFrGRAIyW7rlBCdg4wi/UY3TdSx3QrXY35JPfbto8OHEXxNw
+         EtO0xygnTwth39sD7IkRzYtoY5BEei0VlxEeJnns8VCX1wn0NCQb9IJxY8yB3+sGzstl
+         hhkg==
+X-Gm-Message-State: ACgBeo2E+U74XRANwaD0ZNYv7QsSCGg9no2WQK5kFcTS6CVCIl85TElL
+        fRaqhvbZRMANYlCp0xavUDQ=
+X-Google-Smtp-Source: AA6agR7uQBKz9p2RoPuPctiBHIoYB4Qu2te8eOPpUxlusmYdKqLIHMU/LCxGvX4St+OzDGJl/1h/uw==
+X-Received: by 2002:adf:dbc1:0:b0:224:fc61:fef7 with SMTP id e1-20020adfdbc1000000b00224fc61fef7mr4956247wrj.312.1660600810584;
+        Mon, 15 Aug 2022 15:00:10 -0700 (PDT)
+Received: from localhost.localdomain ([105.235.130.28])
+        by smtp.gmail.com with ESMTPSA id y10-20020adfee0a000000b00223664ab3a8sm10195480wrn.90.2022.08.15.15.00.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 14:54:47 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 21:54:43 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Yan Zhao <yan.y.zhao@intel.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v3 3/8] KVM: x86/mmu: Rename NX huge pages
- fields/functions for consistency
-Message-ID: <YvrAoyhgNzTcvzkU@google.com>
-References: <20220805230513.148869-1-seanjc@google.com>
- <20220805230513.148869-4-seanjc@google.com>
- <YvhL6jKfKCj0+74w@google.com>
+        Mon, 15 Aug 2022 15:00:10 -0700 (PDT)
+From:   Yassine Oudjana <yassine.oudjana@gmail.com>
+X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Yassine Oudjana <yassine.oudjana@gmail.com>,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] phy: phy-mtk-tphy: Make USB PHY work on MT6735
+Date:   Mon, 15 Aug 2022 22:58:59 +0100
+Message-Id: <20220815215859.253962-1-y.oudjana@protonmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvhL6jKfKCj0+74w@google.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 14, 2022, Mingwei Zhang wrote:
-> On Fri, Aug 05, 2022, Sean Christopherson wrote:
-> > Rename most of the variables/functions involved in the NX huge page
-> > mitigation to provide consistency, e.g. lpage vs huge page, and NX huge
-> > vs huge NX, and also to provide clarity, e.g. to make it obvious the flag
-> > applies only to the NX huge page mitigation, not to any condition that
-> > prevents creating a huge page.
-> > 
-> > Leave the nx_lpage_splits stat alone as the name is ABI and thus set in
-> > stone.
-> > 
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >  arch/x86/include/asm/kvm_host.h |  8 ++--
-> >  arch/x86/kvm/mmu/mmu.c          | 70 +++++++++++++++++----------------
-> >  arch/x86/kvm/mmu/mmu_internal.h | 22 +++++++----
-> >  arch/x86/kvm/mmu/paging_tmpl.h  |  2 +-
-> >  arch/x86/kvm/mmu/tdp_mmu.c      |  8 ++--
-> >  5 files changed, 59 insertions(+), 51 deletions(-)
-> > 
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > index e8281d64a431..5634347e5d05 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -1143,7 +1143,7 @@ struct kvm_arch {
-> >  	struct hlist_head mmu_page_hash[KVM_NUM_MMU_PAGES];
-> >  	struct list_head active_mmu_pages;
-> >  	struct list_head zapped_obsolete_pages;
-> > -	struct list_head lpage_disallowed_mmu_pages;
-> > +	struct list_head possible_nx_huge_pages;
-> 
-> Honestly, I am struggling to understand this one. 'possible_*' indicates
-> that there are other possibilities. But what are those possibilities?
+The USB PHY on MT6735 seems to be a TPHY V1, but the FMREG base
+here is 0xf00 rather than 0x100. Since it is definitely not a V2
+or later as it has shared registers, would this mean that it is
+an even earlier revision, or one between V1 and V2? Or is the
+address used currently in this driver wrong?
 
-No, possible is being used as an adjective in this case.  possible_nx_huge_pages
-is the list of shadow pages for which it's possible to replace the shadow page
-with an NX huge page.
+Furthermore, there is one additional step needed in the power on
+sequence to make USB work on MT6735, which is to set the 10th bit
+of U3P_U2PHYDTM1. This was found through trial and error by adding
+the power on sequence from the downstream driver then stripping
+parts of it until a critical part is found. This specific part[1]
+was found under a comment saying "force enter device mode", but
+there are other bits that are cleared/set under the same comment,
+some of which are set in the same write as this bit, so it is
+unclear whether this bit is the one (or the only one) responsible
+for "forcing enter device mode". There is no documentation on this
+register (or any port registers for that matter) so this bit's
+name and function are unknown. Does anyone have more information
+on this? And if no information were to be found, would leaving
+this as a magic value, or with the placeholder name currently used
+(P2C_FORCE_ENTER_DEVICE_MODE) be acceptable?
 
-The noun version would yield a name like nx_huge_page_possiblities.
+[1] https://gitlab.com/Tooniis/linux-samsung-grandpplte/-/blob/master/drivers/misc/mediatek/usb20/mt6735/usb20_phy.c#L404
+---
+ drivers/phy/mediatek/phy-mtk-tphy.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-> I feel this name is more confusing than the original one. Maybe just keep
+diff --git a/drivers/phy/mediatek/phy-mtk-tphy.c b/drivers/phy/mediatek/phy-mtk-tphy.c
+index 8ee7682b8e93..f54b8a9872bf 100644
+--- a/drivers/phy/mediatek/phy-mtk-tphy.c
++++ b/drivers/phy/mediatek/phy-mtk-tphy.c
+@@ -23,7 +23,7 @@
+ /* version V1 sub-banks offset base address */
+ /* banks shared by multiple phys */
+ #define SSUSB_SIFSLV_V1_SPLLC		0x000	/* shared by u3 phys */
+-#define SSUSB_SIFSLV_V1_U2FREQ		0x100	/* shared by u2 phys */
++#define SSUSB_SIFSLV_V1_U2FREQ		0xf00	/* shared by u2 phys */
+ #define SSUSB_SIFSLV_V1_CHIP		0x300	/* shared by u3 phys */
+ /* u2 phy bank */
+ #define SSUSB_SIFSLV_V1_U2PHY_COM	0x000
+@@ -119,6 +119,7 @@
+ 
+ #define U3P_U2PHYDTM1		0x06C
+ #define P2C_RG_UART_EN			BIT(16)
++#define P2C_FORCE_ENTER_DEVICE_MODE	BIT(10)
+ #define P2C_FORCE_IDDIG		BIT(9)
+ #define P2C_RG_VBUSVALID		BIT(5)
+ #define P2C_RG_SESSEND			BIT(4)
+@@ -579,6 +580,8 @@ static void u2_phy_instance_power_on(struct mtk_tphy *tphy,
+ 		mtk_phy_set_bits(com + U3P_U2PHYDTM0, P2C_RG_SUSPENDM | P2C_FORCE_SUSPENDM);
+ 	}
+ 	dev_dbg(tphy->dev, "%s(%d)\n", __func__, index);
++
++	mtk_phy_set_bits(com + U3P_U2PHYDTM1, P2C_FORCE_ENTER_DEVICE_MODE);
+ }
+ 
+ static void u2_phy_instance_power_off(struct mtk_tphy *tphy,
+-- 
+2.37.1
 
-Ignoring lpage => huge_page, the current name is terribly inaccurate.  The list
-doesn't contain all disallowed huge pages, nor does it even contain all disallowed
-NX huge pages, it specifically tracks shadow pages that might be able to be
-replaced with an NX huge page.
-
-I'm open to other names, but whatever we choose should be paired with
-account_nx_huge_page()'s param that is currently named "nx_huge_page_possible".

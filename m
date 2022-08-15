@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C4F593074
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7498059307A
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242735AbiHOOKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 10:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51426 "EHLO
+        id S242776AbiHOOLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 10:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233272AbiHOOKK (ORCPT
+        with ESMTP id S242756AbiHOOLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 10:10:10 -0400
+        Mon, 15 Aug 2022 10:11:08 -0400
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D240421808;
-        Mon, 15 Aug 2022 07:10:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F108265F;
+        Mon, 15 Aug 2022 07:11:06 -0700 (PDT)
 Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
         by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <heiko@sntech.de>)
-        id 1oNan0-00045m-Ur; Mon, 15 Aug 2022 16:09:58 +0200
+        id 1oNany-00046h-Gc; Mon, 15 Aug 2022 16:10:58 +0200
 From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -33,11 +33,11 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-sunxi@lists.linux.dev, Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH v2 07/10] soc: sunxi: sram: Return void from the release function
-Date:   Mon, 15 Aug 2022 16:09:58 +0200
-Message-ID: <17857547.sWSEgdgrri@diego>
-In-Reply-To: <20220815041248.53268-8-samuel@sholland.org>
-References: <20220815041248.53268-1-samuel@sholland.org> <20220815041248.53268-8-samuel@sholland.org>
+Subject: Re: [PATCH v2 08/10] soc: sunxi: sram: Save a pointer to the OF match data
+Date:   Mon, 15 Aug 2022 16:10:57 +0200
+Message-ID: <2608792.KRxA6XjA2N@diego>
+In-Reply-To: <20220815041248.53268-9-samuel@sholland.org>
+References: <20220815041248.53268-1-samuel@sholland.org> <20220815041248.53268-9-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -50,9 +50,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, 15. August 2022, 06:12:44 CEST schrieb Samuel Holland:
-> There is no point in returning an error here, as the caller can do
-> nothing about it. In fact, all callers already ignore the return value.
+Am Montag, 15. August 2022, 06:12:45 CEST schrieb Samuel Holland:
+> It is inefficient to match the compatible string every time the regmap
+> is accessed.
 > 
 > Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 > Signed-off-by: Samuel Holland <samuel@sholland.org>

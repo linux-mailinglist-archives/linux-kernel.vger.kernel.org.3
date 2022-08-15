@@ -2,54 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D1159345E
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 20:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F7E59345F
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 20:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiHOR76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 13:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42396 "EHLO
+        id S230059AbiHOSAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 14:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231854AbiHOR70 (ORCPT
+        with ESMTP id S232721AbiHOR72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 13:59:26 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E18C28E2C
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 10:59:24 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id j8-20020a6b7948000000b0067c2923d1b8so4505204iop.6
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 10:59:24 -0700 (PDT)
+        Mon, 15 Aug 2022 13:59:28 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC1728E36
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 10:59:26 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id c9-20020a05660221c900b00688a5a621afso137626ioc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 10:59:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc;
-        bh=hWOOJX8NuM+oPIFYN51dx1eD//PoLJa22GbFPJ3c01w=;
-        b=LSZafZVeB/bl6AlYTVDTVHCfEJW77pDk6wfBgQPKlS+dkim9MgHF0D0pptHHengpu5
-         2WhDH2CHlIuC339i+ozKgsO0lxPEkO4yKGHWuD22cVNmZBI3iy4FGIYF6Gdi1IzsS6w2
-         r+bhHjBiz1V1PDS0jnROrq9dJFQDgsK4P0IkBg622MLw6ZTycck4J81KPkAiSK64FuR+
-         Um954TxSQghu/ZpVetMU8v0pwf25LR3t0h4KX3+zw0KNj6zE129OmfJGUThsgCDebb7n
-         HBRrug8r5B/QRhyaK4PLEZesPJW8c2TXtbQnpAUEJPTPFfUKIl82t8b5/JbbeC1uf7Yf
-         013Q==
-X-Gm-Message-State: ACgBeo10deQt37DRJ/HEweIK6GCulZxZXAY8tbewb+1v7JJajl35jcDz
-        uXOc/SxqGlAdr0lgzaUUfEtfUQhT0WzqWoSzdrZFic1P9VOx
-X-Google-Smtp-Source: AA6agR7O1GWq6dDpyGR/ua+eY6Qvu/0jJUV5+uS50D+L4CPtkHI+uQrFFRwdA53mRA9LX3HkRKDRRavZHFUiX8KkqWMGCi1wBKAI
+        bh=pc5WxU8NMnC+CnIzNPL1GwX0yvtsCVqhE7KfX+0SS/w=;
+        b=PqPkKsUd7vde7DCaM/Dwr2Qp7wkIF0QU3nmUFVZaOCZa8OUdATizWWcK2OSog0o7Am
+         H87hoDEjFQq/KWrW9ZS4HoI8RUHLeQEUa2kjINzUboZtu33tVGESlgXVDikq5gWPp7YV
+         tdgnPYrd3Lms1ZwIPAn/2QM6SHWEe1hRNMF3SNVlaNxQhjK95PUpqQAVFymCii7LB/gg
+         VkiwwBwDZnBTh9G0+lbbB809jiTL6GDhCJP+LAMpAEQvwHa7NLgg7NGfES09+BUxz3Qw
+         HDf84r1HhvpC1HdEn2/AeWbOGixVqfYkmTHeAbmvNjKBSdp7RB+Wt0SedJtunMl3G+lZ
+         YUAw==
+X-Gm-Message-State: ACgBeo0+plmghH3JrhXIzuniksK6dDQz5pYtBQ/E8WcCCNnZ/PoDQCUG
+        v6T5rWyMIpc3+XI8NEgtKJUsLnSelc+0Mybt5WCSiCiAeqzE
+X-Google-Smtp-Source: AA6agR7XNLSv+trWB7eGaaMeGYV48OHQ8WVQY5lpTMEJlKJLu6afFuOheCfxYnlH5qjQCSo5Jq7R1PaFAtbBO8eZhVwEZ4L6Ew1v
 MIME-Version: 1.0
-X-Received: by 2002:a6b:2a05:0:b0:688:d09:1e45 with SMTP id
- q5-20020a6b2a05000000b006880d091e45mr3334659ioq.128.1660586364091; Mon, 15
+X-Received: by 2002:a05:6638:dd1:b0:341:55c2:38b6 with SMTP id
+ m17-20020a0566380dd100b0034155c238b6mr7809604jaj.245.1660586364483; Mon, 15
  Aug 2022 10:59:24 -0700 (PDT)
 Date:   Mon, 15 Aug 2022 10:59:24 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000059c5b005e64b64ef@google.com>
-Subject: [syzbot] upstream boot error: general protection fault in mm_alloc
-From:   syzbot <syzbot+97f830ad641de86d08c0@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, bigeasy@linutronix.de,
-        bpf@vger.kernel.org, brauner@kernel.org, david@redhat.com,
-        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
-        luto@kernel.org, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de
+Message-ID: <0000000000005fbed305e64b6440@google.com>
+Subject: [syzbot] upstream boot error: general protection fault in scsi_alloc_sdev
+From:   syzbot <syzbot+9ada839c852179f13999@syzkaller.appspotmail.com>
+To:     jejb@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,79 +59,75 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    5d6a0f4da927 Merge tag 'for-linus-6.0-rc1b-tag' of git://g..
+HEAD commit:    568035b01cfb Linux 6.0-rc1
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1668343d080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f83c035536d7b2e3
-dashboard link: https://syzkaller.appspot.com/bug?extid=97f830ad641de86d08c0
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+console output: https://syzkaller.appspot.com/x/log.txt?x=17b23aa5080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3b9175e0879a7749
+dashboard link: https://syzkaller.appspot.com/bug?extid=9ada839c852179f13999
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+97f830ad641de86d08c0@syzkaller.appspotmail.com
+Reported-by: syzbot+9ada839c852179f13999@syzkaller.appspotmail.com
 
-general protection fault, probably for non-canonical address 0xffff00d300000338: 0000 [#1] PREEMPT SMP KASAN
-KASAN: maybe wild-memory-access in range [0xfff82698000019c0-0xfff82698000019c7]
-CPU: 1 PID: 1155 Comm: kworker/u4:4 Not tainted 5.19.0-syzkaller-14374-g5d6a0f4da927 #0
+scsi 0:0:1:0: Direct-Access     Google   PersistentDisk   1    PQ: 0 ANSI: 6
+general protection fault, probably for non-canonical address 0xffff000000000800: 0000 [#1] PREEMPT SMP KASAN
+KASAN: maybe wild-memory-access in range [0xfff8200000004000-0xfff8200000004007]
+CPU: 1 PID: 56 Comm: kworker/u4:4 Not tainted 6.0.0-rc1-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Workqueue: events_unbound async_run_entry_fn
+RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
+RIP: 0010:get_freepointer mm/slub.c:354 [inline]
+RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
+RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
 RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
-RIP: 0010:__kmem_cache_alloc_lru mm/slub.c:3258 [inline]
-RIP: 0010:kmem_cache_alloc+0x12d/0x310 mm/slub.c:3268
-Code: 84 1c 01 00 00 48 83 78 10 00 0f 84 11 01 00 00 49 8b 3f 40 f6 c7 0f 0f 85 e3 01 00 00 45 84 c0 0f 84 dc 01 00 00 41 8b 47 28 <49> 8b 5c 05 00 48 8d 4a 08 4c 89 e8 65 48 0f c7 0f 0f 94 c0 a8 01
-RSP: 0000:ffffc90004bcfda8 EFLAGS: 00010202
-RAX: 0000000000000338 RBX: 0000000000000cc0 RCX: 0000000000000000
-RDX: 0000000000000b89 RSI: 0000000000000cc0 RDI: 0000000000040aa0
-RBP: ffffffff8150835f R08: dffffc0000000001 R09: fffffbfff1c4ade6
-R10: fffffbfff1c4ade6 R11: 1ffffffff1c4ade5 R12: ffffffff8d38ce40
-R13: ffff00d300000000 R14: ffffffff8150835f R15: ffff8881400068c0
+RIP: 0010:__kmalloc+0x113/0x340 mm/slub.c:4420
+Code: 8b 51 08 48 8b 01 48 83 79 10 00 48 89 44 24 08 0f 84 18 02 00 00 48 85 c0 0f 84 0f 02 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 1b 02 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
+RSP: 0018:ffffc900015777f8 EFLAGS: 00010246
+
+RAX: ffff000000000000 RBX: ffff88801bd64000 RCX: 0000000000000800
+RDX: 0000000000005d09 RSI: 0000000000000dc0 RDI: 000000000003dce0
+RBP: ffff888011842140 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000dc0
+R13: 0000000000000000 R14: 0000000000000cb8 R15: 0000000000000dc0
 FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 000000000ca8e000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+CR2: 0000000000000000 CR3: 000000000bc8e000 CR4: 0000000000350ee0
 Call Trace:
  <TASK>
- mm_alloc+0x1f/0xb0 kernel/fork.c:1171
- bprm_mm_init fs/exec.c:369 [inline]
- alloc_bprm+0x1ef/0x3b0 fs/exec.c:1534
- kernel_execve+0x97/0xa00 fs/exec.c:1974
- call_usermodehelper_exec_async+0x262/0x3b0 kernel/umh.c:112
- ret_from_fork+0x1f/0x30
+ kmalloc include/linux/slab.h:605 [inline]
+ kzalloc include/linux/slab.h:733 [inline]
+ scsi_alloc_sdev+0x109/0xcc0 drivers/scsi/scsi_scan.c:287
+ scsi_probe_and_add_lun+0x22be/0x3660 drivers/scsi/scsi_scan.c:1191
+ __scsi_scan_target+0x21f/0xdb0 drivers/scsi/scsi_scan.c:1673
+ scsi_scan_channel drivers/scsi/scsi_scan.c:1761 [inline]
+ scsi_scan_channel+0x148/0x1e0 drivers/scsi/scsi_scan.c:1737
+ scsi_scan_host_selected+0x2df/0x3b0 drivers/scsi/scsi_scan.c:1790
+ do_scsi_scan_host+0x1e8/0x260 drivers/scsi/scsi_scan.c:1929
+ do_scan_async+0x3e/0x500 drivers/scsi/scsi_scan.c:1939
+ async_run_entry_fn+0x98/0x530 kernel/async.c:127
+ process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
  </TASK>
 Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
-RIP: 0010:__kmem_cache_alloc_lru mm/slub.c:3258 [inline]
-RIP: 0010:kmem_cache_alloc+0x12d/0x310 mm/slub.c:3268
-Code: 84 1c 01 00 00 48 83 78 10 00 0f 84 11 01 00 00 49 8b 3f 40 f6 c7 0f 0f 85 e3 01 00 00 45 84 c0 0f 84 dc 01 00 00 41 8b 47 28 <49> 8b 5c 05 00 48 8d 4a 08 4c 89 e8 65 48 0f c7 0f 0f 94 c0 a8 01
-RSP: 0000:ffffc90004bcfda8 EFLAGS: 00010202
-RAX: 0000000000000338 RBX: 0000000000000cc0 RCX: 0000000000000000
-RDX: 0000000000000b89 RSI: 0000000000000cc0 RDI: 0000000000040aa0
-RBP: ffffffff8150835f R08: dffffc0000000001 R09: fffffbfff1c4ade6
-R10: fffffbfff1c4ade6 R11: 1ffffffff1c4ade5 R12: ffffffff8d38ce40
-R13: ffff00d300000000 R14: ffffffff8150835f R15: ffff8881400068c0
-FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 000000000ca8e000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 ----------------
 Code disassembly (best guess):
-   0:	84 1c 01             	test   %bl,(%rcx,%rax,1)
-   3:	00 00                	add    %al,(%rax)
-   5:	48 83 78 10 00       	cmpq   $0x0,0x10(%rax)
-   a:	0f 84 11 01 00 00    	je     0x121
-  10:	49 8b 3f             	mov    (%r15),%rdi
-  13:	40 f6 c7 0f          	test   $0xf,%dil
-  17:	0f 85 e3 01 00 00    	jne    0x200
-  1d:	45 84 c0             	test   %r8b,%r8b
-  20:	0f 84 dc 01 00 00    	je     0x202
-  26:	41 8b 47 28          	mov    0x28(%r15),%eax
-* 2a:	49 8b 5c 05 00       	mov    0x0(%r13,%rax,1),%rbx <-- trapping instruction
-  2f:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
-  33:	4c 89 e8             	mov    %r13,%rax
-  36:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
-  3b:	0f 94 c0             	sete   %al
-  3e:	a8 01                	test   $0x1,%al
+   0:	8b 51 08             	mov    0x8(%rcx),%edx
+   3:	48 8b 01             	mov    (%rcx),%rax
+   6:	48 83 79 10 00       	cmpq   $0x0,0x10(%rcx)
+   b:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
+  10:	0f 84 18 02 00 00    	je     0x22e
+  16:	48 85 c0             	test   %rax,%rax
+  19:	0f 84 0f 02 00 00    	je     0x22e
+  1f:	48 8b 7d 00          	mov    0x0(%rbp),%rdi
+  23:	8b 4d 28             	mov    0x28(%rbp),%ecx
+  26:	40 f6 c7 0f          	test   $0xf,%dil
+* 2a:	48 8b 1c 08          	mov    (%rax,%rcx,1),%rbx <-- trapping instruction
+  2e:	0f 85 1b 02 00 00    	jne    0x24f
+  34:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
+  38:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
+  3d:	0f 94 c0             	sete   %al
 
 
 ---

@@ -2,53 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1144859325F
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D1B259325D
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233225AbiHOPqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
+        id S233045AbiHOPqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233234AbiHOPpS (ORCPT
+        with ESMTP id S233222AbiHOPpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 15 Aug 2022 11:45:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A165AC28;
-        Mon, 15 Aug 2022 08:45:16 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13C0C16;
+        Mon, 15 Aug 2022 08:45:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE3ADB80F2B;
-        Mon, 15 Aug 2022 15:45:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C419C4347C;
-        Mon, 15 Aug 2022 15:45:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B70B610FB;
+        Mon, 15 Aug 2022 15:45:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC428C43141;
+        Mon, 15 Aug 2022 15:45:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660578313;
-        bh=JwjxJ7MOVdbsgqpb/k0rGtudkHpbtxGUbAtOmA+7kb4=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=tsqfhZF0byibwTSWDbd8UBOt4qmu251PmImxGxyvih5jtAVHspXV8Bu51VzsPeM1U
-         oq8g/FuG5Hj72UVtFgziDO9U27EZZRnKIvdFF6g0RAmp+IsSkcZNelH3ffc7HAg0qw
-         1YPMFyCGw0I8cN27fVVcGCuhFtRUDuZo1rI2yNfIgBmyigj0ra2Gpzh7WrTia0H4vB
-         v5/GQn5Xhb3dSct2jCO56KXXGQqzOEuG8Wg7EVqgb7HEWTRIZufGztGmUf3YWb7mGw
-         Yc2gVUl2s1eNjrWS6zlQSyORnqVoFFb2UNHG7mJcdl17dcMQXoNODBQBVSSsEBfODd
-         p3d1SN03bHSbA==
+        s=k20201202; t=1660578314;
+        bh=0Q6eADI3Tco1PDxr5yvf++mMgHZkrwSUpLo7KbmRoAk=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=uEU5JWu8stgqm5pe2bGYE0zdMHlrmz3BbgTES4nmXzlN5YrCX8tj7Lr5jqxvyV+6X
+         Kz7xZRVKiKMOF08AAre2L7Q9ozAV8elPeXoM9tErWQpfxJn01P4GEbrqIW2m6ZDpAH
+         BhazzIxFUKfCC1YK6e7cRIVLVK1BGBNfmp7zJ/dUdZAda4ExS01sWCL9SvRfZN3D0R
+         wS4TnQIpQymmUJ9EA9oQojz73UDJpGfBvuDHY6Jl/FKjWQlf9kHi81MZUge7kolGtf
+         iSVdINnViO85yYjVjeh6WEn6AelC08/Muou3TrriqS1hM7ZODabeWDhm553492eYFu
+         4C8fze+HUCI9w==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        devicetree@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Bakker <xc-racer2@live.ca>,
-        Christophe Branchereau <cbranchereau@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-spi@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>
-In-Reply-To: <20220810131311.428645-1-krzysztof.kozlowski@linaro.org>
-References: <20220810131311.428645-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] spi/panel: dt-bindings: drop 3-wire from common properties
-Message-Id: <166057830909.697678.2981260978895066117.b4-ty@kernel.org>
-Date:   Mon, 15 Aug 2022 16:45:09 +0100
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linux-spi@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <253543c462b765eca40ba54c66f4e3fdf4acdeb7.1659735546.git.christophe.jaillet@wanadoo.fr>
+References: <253543c462b765eca40ba54c66f4e3fdf4acdeb7.1659735546.git.christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] spi: lpspi: Simplify some error message
+Message-Id: <166057831362.697678.10418733101562971754.b4-ty@kernel.org>
+Date:   Mon, 15 Aug 2022 16:45:13 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -63,15 +56,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 10 Aug 2022 16:13:11 +0300, Krzysztof Kozlowski wrote:
-> The spi-3wire property is device specific and should be accepted only if
-> device really needs them.  Drop it from common spi-peripheral-props.yaml
-> schema, mention in few panel drivers which use it and include instead in
-> the SPI controller bindings.  The controller bindings will provide
-> spi-3wire type validation and one place for description.  Each device
-> schema must list the property if it is applicable.
+On Fri, 5 Aug 2022 23:39:19 +0200, Christophe JAILLET wrote:
+> dev_err_probe() already prints the error code in a human readable way, so
+> there is no need to duplicate it as a numerical value at the end of the
+> message.
 > 
-> [...]
+> 
 
 Applied to
 
@@ -79,8 +69,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi/panel: dt-bindings: drop 3-wire from common properties
-      commit: 41f53a65444997f55c82c67f71a9cff05c1dee31
+[1/1] spi: lpspi: Simplify some error message
+      commit: 0df874c6712d9aa8f43c50ec887a21f7b86fc917
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

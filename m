@@ -2,94 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6372259309D
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B244A5930A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241569AbiHOOVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 10:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34426 "EHLO
+        id S242968AbiHOOYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 10:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbiHOOVu (ORCPT
+        with ESMTP id S229628AbiHOOYT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 10:21:50 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEA1DFFF
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 07:21:49 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id f65so6595056pgc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 07:21:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc;
-        bh=6bzerbOi1tWbohdKcxG2J4gHSK0DtZlDBSqHyHqYooQ=;
-        b=iPMTML2jz1BiYQfBqBGS3YYeXVtt15FuSdCGGuWOyT/67LoZPmxeP791Y7PUnYNPZx
-         P9rktkoVrvEwWoi7SYGQqj4y7WAYmueSavo6TpCvt44JCduT2CUYGG1BamB2Cy9TcRYK
-         jYt4r4S+D6hezp5gNLypnTmUsgvVgWCV5JPZQwMf8vFzEazCK8t6VjxBY6IIQCgyz/mp
-         01bfP9ONQGws96dCiD671x/PjQjxWh2ECUH2LNrUlOPubyP25fEdPX1co+oO/nh/Orwi
-         Kpsva5TdSnpKoKKHhS+rTCupCXf7Ok3j5dNyYfPH0M92XUXkYUruZkeuVfvOKmk0aAud
-         wKGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=6bzerbOi1tWbohdKcxG2J4gHSK0DtZlDBSqHyHqYooQ=;
-        b=xFyubLq9fq1HRT0XWKYOfI6diwg+gdH7NnEAERnczbVsQK9f190SDQmb2pzQFMWNS/
-         DPJsTWJVjtiHNIvrkidUkC/Lvx0mJJmnRDWxb/pVUUATAzfj90kXI8YEpmAjAH3H1J1t
-         LkuhinTO6LEwLvkyWCalWJEtmeeWVfrrkTSXEVOj+NEhm2q8R00X0BlNzqqIDSNr5qFm
-         VQQDy+koxcKocgpxVPpMo/gxOSsJxJUoo/Q2mTIsm8B4BAcfIaKpko44MS5wv+8MuqQp
-         Ay+yaFXk/WaTUffLxJyunF5pNUw7g7n54jhlsOD6PxcNZ4A8UgQIZ0FpNO2I7S2IOofg
-         tgIQ==
-X-Gm-Message-State: ACgBeo1tgPGsW4F1didAOKhWKNtk1cxEeGXdHbtD47j0Gj2kglU18m+x
-        ws+/I2/3tcGD6sg88Yv8hqc=
-X-Google-Smtp-Source: AA6agR7as9QSeTB5It8kcha2Bqy9jWQeAS4DTTUZyLZaU5nUjL/x4kinYNA2UfSEltgzYNQpwjx3WA==
-X-Received: by 2002:a63:d212:0:b0:41c:681b:e48a with SMTP id a18-20020a63d212000000b0041c681be48amr14006845pgg.79.1660573309521;
-        Mon, 15 Aug 2022 07:21:49 -0700 (PDT)
-Received: from localhost.localdomain ([182.160.5.243])
-        by smtp.gmail.com with ESMTPSA id f18-20020a17090aa79200b001ef9659d711sm4517373pjq.48.2022.08.15.07.21.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 07:21:49 -0700 (PDT)
-From:   Tuo Cao <91tuocao@gmail.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org
-Cc:     dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, 91tuocao@gmail.com
-Subject: [PATCH] sched: core: remove access_ok() before copy_to_user()
-Date:   Mon, 15 Aug 2022 22:21:37 +0800
-Message-Id: <20220815142137.29982-1-91tuocao@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 15 Aug 2022 10:24:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C183237D0;
+        Mon, 15 Aug 2022 07:24:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5476623A;
+        Mon, 15 Aug 2022 07:24:19 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2B3D13F66F;
+        Mon, 15 Aug 2022 07:24:17 -0700 (PDT)
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     robh@kernel.org, liviu.dudau@arm.com,
+        krzysztof.kozlowski+dt@linaro.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-kernel@lists.infradead.org, mathieu.poirier@linaro.org,
+        suzuki.poulose@arm.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: arm: juno: Remove legacy Coresight 'slave-mode' property
+Date:   Mon, 15 Aug 2022 15:24:10 +0100
+Message-Id: <166057205600.3028788.8763427332853911221.b4-ty@arm.com>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220721212952.1984382-1-robh@kernel.org>
+References: <20220721212952.1984382-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If usize > ksize, usize may be not valid and if(!access_ok()) will return
--EFAULT. But ksize may be valid, copy_to_user() should be executed.And
-also, copy_to_user() will calls access_ok() to test whether a block of
-memory is a valid user space address.
+On Thu, 21 Jul 2022 15:29:52 -0600, Rob Herring wrote:
+> The 'slave-mode' property is not valid under 'in-ports' as it was the
+> legacy way to find input ports. Warnings are generated from the Coresight
+> schema:
+> 
+> arch/arm64/boot/dts/arm/juno-r1.dtb: funnel@20150000: in-ports:port@0:endpoint: Unevaluated properties are not allowed ('slave-mode' was unexpected)
+>         From schema: Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
+> 
+> [...]
 
-Signed-off-by: Tuo Cao <91tuocao@gmail.com>
----
- kernel/sched/core.c | 3 ---
- 1 file changed, 3 deletions(-)
+Applied to sudeep.holla/linux (for-next/juno), thanks!
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index ee28253c9ac0..fe6a65a54626 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -7975,9 +7975,6 @@ sched_attr_copy_to_user(struct sched_attr __user *uattr,
- {
- 	unsigned int ksize = sizeof(*kattr);
- 
--	if (!access_ok(uattr, usize))
--		return -EFAULT;
--
- 	/*
- 	 * sched_getattr() ABI forwards and backwards compatibility:
- 	 *
--- 
-2.17.1
+[1/1] arm64: dts: arm: juno: Remove legacy Coresight 'slave-mode' property
+      https://git.kernel.org/sudeep.holla/c/2a9eb57e20e6
+
+--
+Regards,
+Sudeep
 

@@ -2,79 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3EB459515E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 06:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B40595196
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 07:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233137AbiHPE4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 00:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56820 "EHLO
+        id S233801AbiHPFBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 01:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233885AbiHPEzp (ORCPT
+        with ESMTP id S234729AbiHPFB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 00:55:45 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758D11A6246
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 13:52:53 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id r69so7490931pgr.2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 13:52:53 -0700 (PDT)
+        Tue, 16 Aug 2022 01:01:27 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C2150054
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 13:56:44 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-32194238c77so103111107b3.4
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 13:56:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc;
-        bh=c+KhdgocO4zsjTWrfEV5k5L4Uxolaa6Gk/jRei7Y/Oc=;
-        b=TS0+ZzP9+U3VDMoCF/KWdxpkXkeK9XBjuv9Qdin0izW547qxfmT/bA8xx8wwbmRPMm
-         YyFvlXPDcb6xeyzuuSZDKfFQKR10Ww7hlSNSuWjku2HbH5tCvGdTad7S0zdd/exgT3Kp
-         DkK4/aWC25K2HvXNWn8tHyUzcfbT+pB+7idD9/9SgIxfRJ5pHqTz9Jo8n+NT0fyVGIgw
-         QYuKP8CDazls33bgYYwojsdwRcP+pKigDbNeoXK9tC0bRsPLjSnXrv5j0leIwJrCMiUk
-         4jQvMS6q3J3P2CwxlMjJH/k948lSu4TjZYlZXfrN5CQEgANr0UvLmqB7qtsyUPvvrNr9
-         cUYQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=D0fn3micXKWrfIVT3rhbLog8MKgivLXDeSRBFlVQCe0=;
+        b=pWNCA5tjhz3ifbg/zoi8mxeHNbQqyS6Wr+tkXqszwau/3juKJt1cJiDeWd/xTUYikf
+         3m+lUs8TRS/ONqZP2kr37pSkam/ltj8dFUHNbQSVUtOocrZd8kNivuozAsPDZGUebja5
+         8qoXrSub6bi/48WY6kMdn5wD62DzaKBuNTtBjPgC1vqE2ofoH7+pemKiSTDhtCXK+BKg
+         tM0mwmFWdjDKI5x8PolzvWsp9Wa9f7ueMXN26rQ8TanPpj13nakHNrDAbc0WTCILPcKm
+         sITU3U2AXFoq3SQH3e7W+zw/P6tvdNfqQuIWIBXSOdodHIwUTxZT8vAAFSIly2OhmtPn
+         X4/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc;
-        bh=c+KhdgocO4zsjTWrfEV5k5L4Uxolaa6Gk/jRei7Y/Oc=;
-        b=MO2Fx7OJrDxJQl958OzLF8LqRwvTofQWIk6Ia+R/dQ9KpDQxOzHQ/MCH9tTRSxDwgV
-         gY+w+jAubIXcNkxX0VIiAkSBoEcvyrzHAFsNPerBNLrTxqR8XWTsAtW4pR9CSQEulnUC
-         SqlXEYc1A/N0FQMZgMK2E5xPE4Ky89N0WUWzr/mnL0BcrGqR2mAHCOMJ5hsdWTzP8OSk
-         C+XpOy8qVQU+cCPV+487TsgTsJvHlC10IgYfg6xcUbtZalsOCCwAht1kbGZhdnyzXYVw
-         HLaPGaV6NifAhqT/kurMTOdbWjOZ8ef0SUj4XLgiDXoFMmN8BzOWoe6xXp2rxP1ElMfa
-         5FQQ==
-X-Gm-Message-State: ACgBeo0nCMeTb8GRYI3JZ5OSqJLtAvu9qp54BhWCz6b2ra8FFCnC7Ltt
-        /ba66Snln0l67rNw0NficcI=
-X-Google-Smtp-Source: AA6agR7rwQ+jhfuSVG+xP3HP1o2g8wJCiy47OwluqMsTQl2gJNobuOXBh1yf09JSr8vzaFu8WioaYA==
-X-Received: by 2002:a63:cf0d:0:b0:429:983d:272a with SMTP id j13-20020a63cf0d000000b00429983d272amr1746473pgg.209.1660596772468;
-        Mon, 15 Aug 2022 13:52:52 -0700 (PDT)
-Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
-        by smtp.gmail.com with ESMTPSA id q2-20020a170902f78200b0016d1f474653sm7437465pln.52.2022.08.15.13.52.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 15 Aug 2022 13:52:51 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v3 5/7] mm: Remember young/dirty bit for page migrations
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <YvqcGq44oonHNyCO@xz-m1.local>
-Date:   Mon, 15 Aug 2022 13:52:49 -0700
-Cc:     "Huang, Ying" <ying.huang@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Minchan Kim <minchan@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andi Kleen <andi.kleen@intel.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <5B21352C-2BE6-4070-BB6B-C1B7A5D4D225@gmail.com>
-References: <20220809220100.20033-1-peterx@redhat.com>
- <20220809220100.20033-6-peterx@redhat.com> <YvUeB0jc6clz59z5@xz-m1.local>
- <87pmh6dwdr.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <YvqcGq44oonHNyCO@xz-m1.local>
-To:     Peter Xu <peterx@redhat.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=D0fn3micXKWrfIVT3rhbLog8MKgivLXDeSRBFlVQCe0=;
+        b=OiL/7UNjaqBMfjzddNYw6WiFDL0tiE6CIfCBlPMXa3hTZRTHrZyFSkW6EQMHNvvQBi
+         eso5so5C22PKIzqFAdPz9S2nVj0Q2cbQoAAt08CjKifn1xtlpUrO8Up9Zq+KkH6TltNI
+         1GUhUFpA+8JGih9hpDsFOEBEYYeABekYb2kuhei1BdSz1L/YPhpnH3JZmI4Oq/+Z/Bml
+         8lZ3xEerSnOi8+T6WSbmExja5SN5fNuT1oD+VynsWiEgWUPa6l2WZiAsDm0lTEpcc9rH
+         sWKZrQ79iPszQCnHWkOEt5z9c1SE6soq/GNrBWp7OLCf/RoT/I8ZrWVoPCEm+hRhtYz8
+         IZTg==
+X-Gm-Message-State: ACgBeo2LkPN4xJ2KwGqrF/iA76RgYuixTZjWBr47//j5nglecfiCYCUT
+        n3H4WhxVNG2LgOMBAt+5OwcArEUYuvqM+Q5M65E+DQ==
+X-Google-Smtp-Source: AA6agR4LEloPmUVOkPnMV81xQJEVCPf91bSwXVvWmCOFrRCoq8LfZMc0EKGNipgQdo+jv9Jrr6eZZKs9QGFjnp+Twkw=
+X-Received: by 2002:a0d:efc1:0:b0:32a:8e40:cd70 with SMTP id
+ y184-20020a0defc1000000b0032a8e40cd70mr14737568ywe.83.1660597003258; Mon, 15
+ Aug 2022 13:56:43 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220810060040.321697-1-saravanak@google.com> <3601760.iIbC2pHGDl@steina-w>
+ <CAGETcx_tSndU0xerz=DF9JQxYFRC2aaxyOE-bR2JpM0L0ht=sw@mail.gmail.com>
+In-Reply-To: <CAGETcx_tSndU0xerz=DF9JQxYFRC2aaxyOE-bR2JpM0L0ht=sw@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 15 Aug 2022 13:56:07 -0700
+Message-ID: <CAGETcx-JUV1nj8wBJrTPfyvM7=Mre5j_vkVmZojeiumUGG6QZQ@mail.gmail.com>
+Subject: Re: [PATCH v1 0/9] fw_devlink improvements
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        John Stultz <jstultz@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,77 +88,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Aug 15, 2022, at 12:18 PM, Peter Xu <peterx@redhat.com> wrote:
+On Mon, Aug 15, 2022 at 12:17 PM Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Mon, Aug 15, 2022 at 5:39 AM Alexander Stein
+> <alexander.stein@ew.tq-group.com> wrote:
+> >
+> > Hello Saravana,
+> >
+> > Am Mittwoch, 10. August 2022, 08:00:29 CEST schrieb Saravana Kannan:
+> > > Alexander,
+> > >
+> > > This should fix your issue where the power domain device not having a
+> > > compatible property. Can you give it a shot please?
+> >
+> > thanks for the update. Unfortunately this does not work:
+> >
+> > > [    0.774838] PM: Added domain provider from /soc@0/bus@30000000/
+> > gpc@303a0000/pgc/power-domain@0
+> > > [    0.775100] imx-pgc imx-pgc-domain.1: __genpd_dev_pm_attach() failed to
+> > find PM domain: -2
+> > > [    0.775324] PM: Added domain provider from /soc@0/bus@30000000/
+> > gpc@303a0000/pgc/power-domain@2
+> > > [    0.775601] PM: Added domain provider from /soc@0/bus@30000000/
+> > gpc@303a0000/pgc/power-domain@3
+> > > [    0.775842] PM: Added domain provider from /soc@0/bus@30000000/
+> > gpc@303a0000/pgc/power-domain@4
+> > > [    0.776642] PM: Added domain provider from /soc@0/bus@30000000/
+> > gpc@303a0000/pgc/power-domain@7
+> > > [    0.776897] PM: Added domain provider from /soc@0/bus@30000000/
+> > gpc@303a0000/pgc/power-domain@8
+> > > [    0.777158] PM: Added domain provider from /soc@0/bus@30000000/
+> > gpc@303a0000/pgc/power-domain@9
+> > > [    0.777405] PM: Added domain provider from /soc@0/bus@30000000/
+> > gpc@303a0000/pgc/power-domain@a
+> > > [    0.779342] genpd genpd:0:38320000.blk-ctrl: __genpd_dev_pm_attach()
+> > failed to find PM domain: -2
+> > > [    0.779422] imx8m-blk-ctrl 38320000.blk-ctrl: error -ENODEV: failed to
+> > attach power domain "bus"
+> > > [    0.848785] etnaviv-gpu 38000000.gpu: __genpd_dev_pm_attach() failed to
+> > find PM domain: -2
+> > > [    1.114220] pfuze100-regulator 0-0008: Full layer: 2, Metal layer: 1
+> > > [    1.122267] pfuze100-regulator 0-0008: FAB: 0, FIN: 0
+> > > [    1.132970] pfuze100-regulator 0-0008: pfuze100 found.
+> > > [    1.157011] imx-gpcv2 303a0000.gpc: Failed to create device link with
+> > 0-0008
+> > > [    1.164094] imx-gpcv2 303a0000.gpc: Failed to create device link with
+> > 0-0008
+> >
+> > The required power-supply for the power domains is still not yet available.
+> > Does this series require some other patches as well?
+>
+> Ah sorry, yeah, this needs additional patches. The one I gave in the
+> other thread when I debugged this and I also noticed another issue.
+> Here's the combined diff of what's needed. Can you add this on top of
+> the series and test it?
+>
+> diff --git a/drivers/irqchip/irq-imx-gpcv2.c b/drivers/irqchip/irq-imx-gpcv2.c
+> index b9c22f764b4d..8a0e82067924 100644
+> --- a/drivers/irqchip/irq-imx-gpcv2.c
+> +++ b/drivers/irqchip/irq-imx-gpcv2.c
+> @@ -283,6 +283,7 @@ static int __init imx_gpcv2_irqchip_init(struct
+> device_node *node,
+>          * later the GPC power domain driver will not be skipped.
+>          */
+>         of_node_clear_flag(node, OF_POPULATED);
+> +       fwnode_dev_initialized(domain->fwnode, false);
+>         return 0;
+>  }
+>
+> diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
+> index 6383a4edc360..181fbfe5bd4d 100644
+> --- a/drivers/soc/imx/gpcv2.c
+> +++ b/drivers/soc/imx/gpcv2.c
+> @@ -1513,6 +1513,7 @@ static int imx_gpcv2_probe(struct platform_device *pdev)
+>
+>                 pd_pdev->dev.parent = dev;
+>                 pd_pdev->dev.of_node = np;
+> +               pd_pdev->dev.fwnode = of_fwnode_handle(np);
+>
+>                 ret = platform_device_add(pd_pdev);
+>                 if (ret) {
+>
+> With this patch, I'd really expect the power domain dependency to be
+> handled correctly.
+>
+> > Whats worse, starting with commit 9/9 [of: property: Simplify
+> > of_link_to_phandle()], other drivers fail to probe waiting for pinctrl to be
+> > available.
+>
+> Heh, Patch 9/9 and all its other dependencies in this series was to
+> fix your use case. Ironic that it's causing you more issues.
+>
+> > > $ cat /sys/kernel/debug/devices_deferred
+> > > gpio-leds       platform: wait for supplier gpioledgrp
+> > > extcon-usbotg0  platform: wait for supplier usb0congrp
+> > > gpio-keys       platform: wait for supplier gpiobuttongrp
+> > > regulator-otg-vbus      platform: wait for supplier reggotgvbusgrp
+> > > regulator-vdd-arm       platform: wait for supplier dvfsgrp
+> >
+> > Apparently for some reason they are not probed again, once the pinctrl driver
+> > probed.
+>
+> I'm hoping that this is just some issue due to the missing patch
+> above, but doesn't sound like it if you say that the pinctrl ended up
+> probing eventually.
+>
+> So when device_links_driver_bound() calls
+> __fw_devlink_pickup_dangling_consumers(), it should have picked up the
+> consumers of node like gpiobuttongrp and moved it to the pinctrl
+> device. And right after that we call __fw_devlink_link_to_consumers()
+> that would have created the device links. And then right after that,
+> we go through all the consumers and add them to the deferred probe
+> list. After that deferred probe should have run... either because it's
+> enabled at late_initcall() or because a new device probed
+> successfully.
+>
+> Can you check which one of my expectations isn't true in your case?
 
-> On Fri, Aug 12, 2022 at 10:32:48AM +0800, Huang, Ying wrote:
->> Peter Xu <peterx@redhat.com> writes:
->>=20
->>> On Tue, Aug 09, 2022 at 06:00:58PM -0400, Peter Xu wrote:
->>>> diff --git a/mm/migrate_device.c b/mm/migrate_device.c
->>>> index 27fb37d65476..699f821b8443 100644
->>>> --- a/mm/migrate_device.c
->>>> +++ b/mm/migrate_device.c
->>>> @@ -221,6 +221,10 @@ static int migrate_vma_collect_pmd(pmd_t =
-*pmdp,
->>>> 			else
->>>> 				entry =3D make_readable_migration_entry(
->>>> 							=
-page_to_pfn(page));
->>>> +			if (pte_young(pte))
->>>> +				entry =3D =
-make_migration_entry_young(entry);
->>>> +			if (pte_dirty(pte))
->>>> +				entry =3D =
-make_migration_entry_dirty(entry);
->>>> 			swp_pte =3D swp_entry_to_pte(entry);
->>>> 			if (pte_present(pte)) {
->>>> 				if (pte_soft_dirty(pte))
->>>=20
->>> This change needs to be wrapped with pte_present() at least..
->>>=20
->>> I also just noticed that this change probably won't help anyway =
-because:
->>>=20
->>>  (1) When ram->device, the pte will finally be replaced with a =
-device
->>>      private entry, and device private entry does not yet support =
-A/D, it
->>>      means A/D will be dropped again,
->>>=20
->>>  (2) When device->ram, we are missing information on either A/D =
-bits, or
->>>      even if device private entries start to suport A/D, it's still =
-not
->>>      clear whether we should take device read/write into =
-considerations
->>>      too on the page A/D bits to be accurate.
->>>=20
->>> I think I'll probably keep the code there for completeness, but I =
-think it
->>> won't really help much until more things are done.
->>=20
->> It appears that there are more issues.  Between "pte =3D *ptep" and =
-pte
->> clear, CPU may set A/D bit in PTE, so we may need to update pte when
->> clearing PTE.
->=20
-> Agreed, I didn't see it a huge problem with current code, but it =
-should be
-> better in that way.
->=20
->> And I don't find the TLB is flushed in some cases after PTE is =
-cleared.
->=20
-> I think it's okay to not flush tlb if pte not present.  But maybe =
-you're
-> talking about something else?
+Actually I have a hypothesis on what might be happening. It could be a
+case of the consumer device getting added after the supplier has been
+initialized.
 
-I think Huang refers to situation in which the PTE is cleared, still not
-flushed, and then A/D is being set by the hardware.
+If the patch above doesn't fix everything, can you add this diff on
+top of the patch above and see if that fixes everything? If it fixes
+the pinctrl issue, can you check my hypothesis be checking in what
+order the devices get added and get probed?
 
-At least on x86, the hardware is not supposed to do so. The only case I
-remember (and sometimes misremembers) is with KNL erratum, which perhaps
-needs to be considered:
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 2f012e826986..866755d8ad95 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2068,7 +2068,11 @@ static int fw_devlink_create_devlink(struct device *con,
+                device_links_write_unlock();
+        }
 
-https://lore.kernel.org/all/20160708001911.9A3FD2B6@viggo.jf.intel.com/
+-       sup_dev = get_dev_from_fwnode(sup_handle);
++       if (sup_handle->flags & FWNODE_FLAG_NOT_DEVICE)
++               sup_dev = fwnode_get_next_parent_dev(sup_handle);
++       else
++               sup_dev = get_dev_from_fwnode(sup_handle);
++
+        if (sup_dev) {
+                /*
+                 * If it's one of those drivers that don't actually bind to
 
+Thanks,
+Saravana

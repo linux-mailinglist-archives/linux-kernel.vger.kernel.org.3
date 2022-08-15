@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62CE059476D
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F111F594763
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 01:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353492AbiHOXe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43794 "EHLO
+        id S1354129AbiHOXnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:43:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353375AbiHOX2I (ORCPT
+        with ESMTP id S1354075AbiHOXlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:28:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D0E14D737;
-        Mon, 15 Aug 2022 13:07:32 -0700 (PDT)
+        Mon, 15 Aug 2022 19:41:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792E798CA4;
+        Mon, 15 Aug 2022 13:10:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A288FB81155;
-        Mon, 15 Aug 2022 20:07:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CED93C433D6;
-        Mon, 15 Aug 2022 20:07:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28718B80EA8;
+        Mon, 15 Aug 2022 20:10:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 945C4C433D6;
+        Mon, 15 Aug 2022 20:10:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594049;
-        bh=qeb5GrAM5tjHD+f6qoo0ZN7mzMf6nXXjTVEBx2JIzE0=;
+        s=korg; t=1660594225;
+        bh=HvlymAI/0v47dl1gQMbakE7KNs6h3AoSjWfLIO/fnk0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OHBGL22viRw6ClJknetEj+OL111etGQB8YZJMVuWBTALdZrRCliZs/IiqOXQ4srQh
-         IQsrZOQM9Kdt444fMUmdFUS11NNH2yUbCJcxFj7jiDNYwSnOMk/smeiOiXL1+9PL5e
-         umLKLrhcq5yPDSdadzAuASnTKTODVusZga4Ma+3A=
+        b=gZXlovj8z8PoC1/eONEo0CSPISDQvWw/Hi0tGZ6Wc9vXCJTvTMjPCjZ4JVoQwvtT+
+         RGUHnm5hPyUX9myxbeu58o+8q8OgTgaytZS1VxVEAdZUJpNyL0zJNv/cyhiomnt1gz
+         wzfX8mqCUfBAwO+u/JdZ58hYEvA4qP9ea9It37rg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0367/1157] ping: convert to RCU lookups, get rid of rwlock
-Date:   Mon, 15 Aug 2022 19:55:23 +0200
-Message-Id: <20220815180454.402115916@linuxfoundation.org>
+Subject: [PATCH 5.19 0375/1157] media: Hantro: Correct G2 init qp field
+Date:   Mon, 15 Aug 2022 19:55:31 +0200
+Message-Id: <20220815180454.727301911@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -55,170 +58,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 
-[ Upstream commit dbca1596bbb08318f5e3b3b99f8ca0a0d3830a65 ]
+[ Upstream commit 300065f966d30baa59a13849753305aac8c320c3 ]
 
-Using rwlock in networking code is extremely risky.
-writers can starve if enough readers are constantly
-grabing the rwlock.
+Documentation said that g2 init_qp field use bits 24 to 30 of
+the 8th register.
+Change the field mask to be able to set 7 bits and not only 6 of them.
 
-I thought rwlock were at fault and sent this patch:
+Conformance test INITQP_B_Main10_Sony_1 decoding is OK with this
+patch.
 
-https://lkml.org/lkml/2022/6/17/272
-
-But Peter and Linus essentially told me rwlock had to be unfair.
-
-We need to get rid of rwlock in networking code.
-
-Fixes: c319b4d76b9e ("net: ipv4: add IPPROTO_ICMP socket kind")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: cb5dd5a0fa518 ("media: hantro: Introduce G2/HEVC decoder")
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/ping.c | 36 ++++++++++++++++--------------------
- 1 file changed, 16 insertions(+), 20 deletions(-)
+ drivers/staging/media/hantro/hantro_g2_regs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv4/ping.c b/net/ipv4/ping.c
-index 3c6101def7d6..b83c2bd9d722 100644
---- a/net/ipv4/ping.c
-+++ b/net/ipv4/ping.c
-@@ -50,7 +50,7 @@
+diff --git a/drivers/staging/media/hantro/hantro_g2_regs.h b/drivers/staging/media/hantro/hantro_g2_regs.h
+index 877d663a8181..82606783591a 100644
+--- a/drivers/staging/media/hantro/hantro_g2_regs.h
++++ b/drivers/staging/media/hantro/hantro_g2_regs.h
+@@ -107,7 +107,7 @@
  
- struct ping_table {
- 	struct hlist_nulls_head	hash[PING_HTABLE_SIZE];
--	rwlock_t		lock;
-+	spinlock_t		lock;
- };
- 
- static struct ping_table ping_table;
-@@ -82,7 +82,7 @@ int ping_get_port(struct sock *sk, unsigned short ident)
- 	struct sock *sk2 = NULL;
- 
- 	isk = inet_sk(sk);
--	write_lock_bh(&ping_table.lock);
-+	spin_lock(&ping_table.lock);
- 	if (ident == 0) {
- 		u32 i;
- 		u16 result = ping_port_rover + 1;
-@@ -128,14 +128,15 @@ int ping_get_port(struct sock *sk, unsigned short ident)
- 	if (sk_unhashed(sk)) {
- 		pr_debug("was not hashed\n");
- 		sock_hold(sk);
--		hlist_nulls_add_head(&sk->sk_nulls_node, hlist);
-+		sock_set_flag(sk, SOCK_RCU_FREE);
-+		hlist_nulls_add_head_rcu(&sk->sk_nulls_node, hlist);
- 		sock_prot_inuse_add(sock_net(sk), sk->sk_prot, 1);
- 	}
--	write_unlock_bh(&ping_table.lock);
-+	spin_unlock(&ping_table.lock);
- 	return 0;
- 
- fail:
--	write_unlock_bh(&ping_table.lock);
-+	spin_unlock(&ping_table.lock);
- 	return 1;
- }
- EXPORT_SYMBOL_GPL(ping_get_port);
-@@ -153,19 +154,19 @@ void ping_unhash(struct sock *sk)
- 	struct inet_sock *isk = inet_sk(sk);
- 
- 	pr_debug("ping_unhash(isk=%p,isk->num=%u)\n", isk, isk->inet_num);
--	write_lock_bh(&ping_table.lock);
-+	spin_lock(&ping_table.lock);
- 	if (sk_hashed(sk)) {
--		hlist_nulls_del(&sk->sk_nulls_node);
--		sk_nulls_node_init(&sk->sk_nulls_node);
-+		hlist_nulls_del_init_rcu(&sk->sk_nulls_node);
- 		sock_put(sk);
- 		isk->inet_num = 0;
- 		isk->inet_sport = 0;
- 		sock_prot_inuse_add(sock_net(sk), sk->sk_prot, -1);
- 	}
--	write_unlock_bh(&ping_table.lock);
-+	spin_unlock(&ping_table.lock);
- }
- EXPORT_SYMBOL_GPL(ping_unhash);
- 
-+/* Called under rcu_read_lock() */
- static struct sock *ping_lookup(struct net *net, struct sk_buff *skb, u16 ident)
- {
- 	struct hlist_nulls_head *hslot = ping_hashslot(&ping_table, net, ident);
-@@ -190,8 +191,6 @@ static struct sock *ping_lookup(struct net *net, struct sk_buff *skb, u16 ident)
- 		return NULL;
- 	}
- 
--	read_lock_bh(&ping_table.lock);
--
- 	ping_portaddr_for_each_entry(sk, hnode, hslot) {
- 		isk = inet_sk(sk);
- 
-@@ -230,13 +229,11 @@ static struct sock *ping_lookup(struct net *net, struct sk_buff *skb, u16 ident)
- 		    sk->sk_bound_dev_if != sdif)
- 			continue;
- 
--		sock_hold(sk);
- 		goto exit;
- 	}
- 
- 	sk = NULL;
- exit:
--	read_unlock_bh(&ping_table.lock);
- 
- 	return sk;
- }
-@@ -592,7 +589,7 @@ void ping_err(struct sk_buff *skb, int offset, u32 info)
- 	sk->sk_err = err;
- 	sk_error_report(sk);
- out:
--	sock_put(sk);
-+	return;
- }
- EXPORT_SYMBOL_GPL(ping_err);
- 
-@@ -998,7 +995,6 @@ enum skb_drop_reason ping_rcv(struct sk_buff *skb)
- 			reason = __ping_queue_rcv_skb(sk, skb2);
- 		else
- 			reason = SKB_DROP_REASON_NOMEM;
--		sock_put(sk);
- 	}
- 
- 	if (reason)
-@@ -1084,13 +1080,13 @@ static struct sock *ping_get_idx(struct seq_file *seq, loff_t pos)
- }
- 
- void *ping_seq_start(struct seq_file *seq, loff_t *pos, sa_family_t family)
--	__acquires(ping_table.lock)
-+	__acquires(RCU)
- {
- 	struct ping_iter_state *state = seq->private;
- 	state->bucket = 0;
- 	state->family = family;
- 
--	read_lock_bh(&ping_table.lock);
-+	rcu_read_lock();
- 
- 	return *pos ? ping_get_idx(seq, *pos-1) : SEQ_START_TOKEN;
- }
-@@ -1116,9 +1112,9 @@ void *ping_seq_next(struct seq_file *seq, void *v, loff_t *pos)
- EXPORT_SYMBOL_GPL(ping_seq_next);
- 
- void ping_seq_stop(struct seq_file *seq, void *v)
--	__releases(ping_table.lock)
-+	__releases(RCU)
- {
--	read_unlock_bh(&ping_table.lock);
-+	rcu_read_unlock();
- }
- EXPORT_SYMBOL_GPL(ping_seq_stop);
- 
-@@ -1202,5 +1198,5 @@ void __init ping_init(void)
- 
- 	for (i = 0; i < PING_HTABLE_SIZE; i++)
- 		INIT_HLIST_NULLS_HEAD(&ping_table.hash[i], i);
--	rwlock_init(&ping_table.lock);
-+	spin_lock_init(&ping_table.lock);
- }
+ #define g2_start_code_e		G2_DEC_REG(10, 31, 0x1)
+ #define g2_init_qp_old		G2_DEC_REG(10, 25, 0x3f)
+-#define g2_init_qp		G2_DEC_REG(10, 24, 0x3f)
++#define g2_init_qp		G2_DEC_REG(10, 24, 0x7f)
+ #define g2_num_tile_cols_old	G2_DEC_REG(10, 20, 0x1f)
+ #define g2_num_tile_cols	G2_DEC_REG(10, 19, 0x1f)
+ #define g2_num_tile_rows_old	G2_DEC_REG(10, 15, 0x1f)
 -- 
 2.35.1
 

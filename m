@@ -2,142 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2E35951A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 07:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2175951A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 07:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233190AbiHPFEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 01:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42590 "EHLO
+        id S230239AbiHPFFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 01:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232992AbiHPFDl (ORCPT
+        with ESMTP id S232338AbiHPFE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 01:03:41 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24EAC6E94
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:01:33 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-328303afa6eso103160407b3.10
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:01:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=elGV48BlDszZRuy8S9+m13PY1kqIqtWfREXP+EXFmrg=;
-        b=r8NjbapBTS67+vpVF7+sCFfdYsvuzVpSbreXNSPasBnVSUXsEkW2Tdiy0vBzbOigcM
-         qkHezPAEwRYmAfuMzU7q6qw4S5wZy3KRTtCpEP69ti5057pFT/Te3P5tEFe+xNHwZC+m
-         Tf3GeanOn8C43ORFxDvYPY4oID2CctIoeScmjdwsfdlI5xtnUMR9bJ2JRxwTzOdhN6B/
-         Q2jJ//9GPDv5iPdQrFBgt1hXlMV7dlgnVz+CxBkfIXZqtN0HMa5iF1fqfIMMDJHs3IbN
-         gHVjl6QzTSIciKflXKOAYtOtwqyjwYxUfM2HGX2gXXOcMk2jxDLBXTVALHOUX/KDTSv6
-         vfmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=elGV48BlDszZRuy8S9+m13PY1kqIqtWfREXP+EXFmrg=;
-        b=er0MNSwHxh146w7ofhi63PZ7AckI5qyNucqSmj2fpjSHAS20GLSt7FNqw5jp52p0U3
-         cgoLr2+iZ9VhQNnynAHQVcrf5FaGecpVAVXx2MVqYT0hYfg0jkqxmsXM7VEGCwTauJYd
-         KKeLAkUl0rZ30/Zwplw37fLEGlkkmxtw36mWT63M+wlHosIXQskD9RNyt0d1amRuB+bP
-         KQPIlS/gb75r4//iuXIqaTl8SflDfqwUjXrz8vBrw4MFxlkf2cjE20srBsf4qgAVxKm0
-         bJenNPAW9rYfy5Y77fzDxOlMrVKbvhQj6D+sZPz4NggkJIunnvKSG0ROs8fiDkhWHghL
-         mtvA==
-X-Gm-Message-State: ACgBeo3MHfrr7hvGDf11tbXPen4AKUowhE/jvjxltXVIb1D8BPzl+wso
-        3avvCBR4R0phyzFy7jlAMzmA3yPOgOkp8MOaJRf0SQ==
-X-Google-Smtp-Source: AA6agR41q4yHanMi1A+gXLO08ia/kXxxT1OUdvxPqS+JZ3AYLwYDjl7erHXWMxbaY8NeTp1jebE8Ei5/XTiAHc+ZS+o=
-X-Received: by 2002:a25:6612:0:b0:670:7c81:3aa6 with SMTP id
- a18-20020a256612000000b006707c813aa6mr13305548ybc.530.1660597293043; Mon, 15
- Aug 2022 14:01:33 -0700 (PDT)
+        Tue, 16 Aug 2022 01:04:26 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7478FCB5E9;
+        Mon, 15 Aug 2022 14:02:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660597368; x=1692133368;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VmGl5Uf58OVl4vnbualwt0d6SOklcWUqb3Q8mIDSMf8=;
+  b=lbVwMLrK9qRZN0NeaO6QvqR2xsGfumIJRcphoibcKl1mfRMKo3fCQsbQ
+   +WTdx2gcleoAoaxbw/gLKJO9PghNTw1SmI1gcbdxWz1W7eFBCzGmKYqFG
+   qSMv37ClVVwLHT1rtYEr3eS7+J/c0XPQS62GL4U4lIJoj3fb9JEWA7aHf
+   +bJ25XTUxcx10O86I2wQtGyAhIbbv3awrRX1PLQm7rsXJEFWAsBCiu2BY
+   AaHphbA588e7Eas+KBH+N9pYw9x+8TUtrJPv6N/xnUJWR+F+HyajxA28V
+   3oDUs9Vc1gQxlSV4Mgz605psYs2fZFdYlJePX/TOzbdd4ktuJiQJj4HEY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="292853641"
+X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
+   d="scan'208";a="292853641"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 14:02:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
+   d="scan'208";a="749063797"
+Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Aug 2022 14:02:42 -0700
+Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oNhEN-0001E1-1P;
+        Mon, 15 Aug 2022 21:02:39 +0000
+Date:   Tue, 16 Aug 2022 05:02:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bobby Eshleman <bobby.eshleman@gmail.com>
+Cc:     kbuild-all@lists.01.org, Bobby Eshleman <bobbyeshleman@gmail.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/6] virtio/vsock: add support for dgram
+Message-ID: <202208160405.cG02E3MZ-lkp@intel.com>
+References: <3cb082f1c88f3f2ef1fc250dbc0745fb79c745c7.1660362668.git.bobby.eshleman@bytedance.com>
 MIME-Version: 1.0
-References: <20220810060040.321697-1-saravanak@google.com> <20220810060040.321697-10-saravanak@google.com>
- <YvYhoGdemyKEx++d@atomide.com> <CAGETcx_SdxJKV56jGSx8GbmA4y_zaoP6z8n8xKZGZbCcmewvDQ@mail.gmail.com>
- <YvoglKDbsDLHq2S0@atomide.com>
-In-Reply-To: <YvoglKDbsDLHq2S0@atomide.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 15 Aug 2022 14:00:57 -0700
-Message-ID: <CAGETcx-wz0k13K2fOjTN9RfuMzUPti=UQqY5Mq9XYLK8vudYng@mail.gmail.com>
-Subject: Re: [PATCH v1 9/9] of: property: Simplify of_link_to_phandle()
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        John Stultz <jstultz@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3cb082f1c88f3f2ef1fc250dbc0745fb79c745c7.1660362668.git.bobby.eshleman@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 3:31 AM Tony Lindgren <tony@atomide.com> wrote:
->
-> * Saravana Kannan <saravanak@google.com> [220813 00:30]:
-> > On Fri, Aug 12, 2022 at 2:47 AM Tony Lindgren <tony@atomide.com> wrote:
-> > >
-> > > Hi,
-> > >
-> > > * Saravana Kannan <saravanak@google.com> [220810 05:54]:
-> > > > The driver core now:
-> > > > - Has the parent device of a supplier pick up the consumers if the
-> > > >   supplier never has a device created for it.
-> > > > - Ignores a supplier if the supplier has no parent device and will never
-> > > >   be probed by a driver
-> > > >
-> > > > And already prevents creating a device link with the consumer as a
-> > > > supplier of a parent.
-> > > >
-> > > > So, we no longer need to find the "compatible" node of the supplier or
-> > > > do any other checks in of_link_to_phandle(). We simply need to make sure
-> > > > that the supplier is available in DT.
-> > >
-> > > This patch fixes booting for me, so it should be applied as a fix and
-> > > tagged with:
-> > >
-> > > Fixes: 5a46079a9645 ("PM: domains: Delete usage of driver_deferred_probe_check_state()")
-> > >
-> > > If there are dependencies to the other patches in this series, it might
-> > > make sense to revert commit 5a46079a9645 instead.
-> >
-> > Yes, there are dependencies on the rest of the patches in this series.
-> > For linux-next, I think we should pick up this series once we get more
-> > Tested-bys.
-> >
-> >  So if 5a46079a9645 is causing any regression in stable branches, we
-> > should pick up the revert series [1] instead of this series we are
-> > replying to.
->
-> Agreed we should apply the reverts in [1] for v6.0-rc series. At least
-> several generations of the TI 32-bit ARM SoCs are failing to boot
-> otherwise.
+Hi Bobby,
 
-Actually I wasn't clear in my earlier email. I meant to say "releases
-branches", as in 5.19.xxx and not "stable branches". So for 5.19.xxx
-we'd pick up these reverts.
+Thank you for the patch! Perhaps something to improve:
 
-And for v6.0-rc if my other patch series [1] fixes the issue, I'd
-rather apply [1] than this series. Because this series is meant to be
-temporary (I'll be reverting this in the future).
+[auto build test WARNING on mst-vhost/linux-next]
+[also build test WARNING on linus/master v6.0-rc1 next-20220815]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
--Saravana
+url:    https://github.com/intel-lab-lkp/linux/commits/Bobby-Eshleman/virtio-vsock-introduce-dgrams-sk_buff-and-qdisc/20220816-015812
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220816/202208160405.cG02E3MZ-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/cbb332da78c86ac574688831ed6f404d04d506db
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Bobby-Eshleman/virtio-vsock-introduce-dgrams-sk_buff-and-qdisc/20220816-015812
+        git checkout cbb332da78c86ac574688831ed6f404d04d506db
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash net/vmw_vsock/
 
-[1] - https://lore.kernel.org/lkml/20220810060040.321697-1-saravanak@google.com/
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   net/vmw_vsock/virtio_transport_common.c: In function 'virtio_transport_dgram_do_dequeue':
+>> net/vmw_vsock/virtio_transport_common.c:605:13: warning: variable 'free_space' set but not used [-Wunused-but-set-variable]
+     605 |         u32 free_space;
+         |             ^~~~~~~~~~
+
+
+vim +/free_space +605 net/vmw_vsock/virtio_transport_common.c
+
+   597	
+   598	static ssize_t
+   599	virtio_transport_dgram_do_dequeue(struct vsock_sock *vsk,
+   600					  struct msghdr *msg, size_t len)
+   601	{
+   602		struct virtio_vsock_sock *vvs = vsk->trans;
+   603		struct sk_buff *skb;
+   604		size_t total = 0;
+ > 605		u32 free_space;
+   606		int err = -EFAULT;
+   607	
+   608		spin_lock_bh(&vvs->rx_lock);
+   609		if (total < len && !skb_queue_empty_lockless(&vvs->rx_queue)) {
+   610			skb = __skb_dequeue(&vvs->rx_queue);
+   611	
+   612			total = len;
+   613			if (total > skb->len - vsock_metadata(skb)->off)
+   614				total = skb->len - vsock_metadata(skb)->off;
+   615			else if (total < skb->len - vsock_metadata(skb)->off)
+   616				msg->msg_flags |= MSG_TRUNC;
+   617	
+   618			/* sk_lock is held by caller so no one else can dequeue.
+   619			 * Unlock rx_lock since memcpy_to_msg() may sleep.
+   620			 */
+   621			spin_unlock_bh(&vvs->rx_lock);
+   622	
+   623			err = memcpy_to_msg(msg, skb->data + vsock_metadata(skb)->off, total);
+   624			if (err)
+   625				return err;
+   626	
+   627			spin_lock_bh(&vvs->rx_lock);
+   628	
+   629			virtio_transport_dec_rx_pkt(vvs, skb);
+   630			consume_skb(skb);
+   631		}
+   632	
+   633		free_space = vvs->buf_alloc - (vvs->fwd_cnt - vvs->last_fwd_cnt);
+   634	
+   635		spin_unlock_bh(&vvs->rx_lock);
+   636	
+   637		if (total > 0 && msg->msg_name) {
+   638			/* Provide the address of the sender. */
+   639			DECLARE_SOCKADDR(struct sockaddr_vm *, vm_addr, msg->msg_name);
+   640	
+   641			vsock_addr_init(vm_addr, le64_to_cpu(vsock_hdr(skb)->src_cid),
+   642					le32_to_cpu(vsock_hdr(skb)->src_port));
+   643			msg->msg_namelen = sizeof(*vm_addr);
+   644		}
+   645		return total;
+   646	}
+   647	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,63 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB47659314F
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED18593152
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:10:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232922AbiHOPJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
+        id S232853AbiHOPKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232888AbiHOPI4 (ORCPT
+        with ESMTP id S231589AbiHOPKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:08:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 34FE91CFCB
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:08:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660576134;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k7YHlPDxvn6aKCUYE+2wTzM3aDuBX7cJJssz0Clp2o8=;
-        b=J/oFi12Fa/rMMF3ZVHALuy3VjXC1USW4sZc5X+BOYpxoirpBnWQmbfrovv2FDLH0To6pP5
-        UxIPCotmWtgt7BlNxQprbe+Xks6BnbMNwBDmoKlg/+jjxquCXGDenfKjyl32reLhQPnUi/
-        KdBRFkp4B6olMwvCmQ+O80HmSb00Crg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-648-N9tP-R2GO2u-RLkm0HYh5g-1; Mon, 15 Aug 2022 11:08:50 -0400
-X-MC-Unique: N9tP-R2GO2u-RLkm0HYh5g-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 15 Aug 2022 11:10:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E2B62CA
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:10:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4A8903C02B72;
-        Mon, 15 Aug 2022 15:08:50 +0000 (UTC)
-Received: from jtoppins.rdu.csb (unknown [10.22.34.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D41EB492C3B;
-        Mon, 15 Aug 2022 15:08:49 +0000 (UTC)
-From:   Jonathan Toppins <jtoppins@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     liuhangbin@gmail.com, Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH net v3 2/2] bonding: 802.3ad: fix no transmission of LACPDUs
-Date:   Mon, 15 Aug 2022 11:08:35 -0400
-Message-Id: <0639f1e3d366c5098d561a947fd416fa5277e7f4.1660572700.git.jtoppins@redhat.com>
-In-Reply-To: <cover.1660572700.git.jtoppins@redhat.com>
-References: <cover.1660572700.git.jtoppins@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE97D60FF6
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 15:10:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39CF8C433C1;
+        Mon, 15 Aug 2022 15:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660576219;
+        bh=EeOLEYWrkj5+ibYmr3Cp7OFxCnJPsqiDgEVrLkweeqs=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=FyIUSsp6+xxBjFRRlp31ZnIb7pfvA6/Tlyvc32a4w+igDZBQ9tMY4/GA+QongBuKt
+         wPuWXgNzzaeqB2bAyi5OV0kvkYTuHNr6E3rLo/h77n3pfviGzeWjiYjJAefFvbqtoI
+         JnwlBl9zJ2W5zXws89dKcC99daB1ID95lTKYDajx9luOUCRKW6fcj4aDLCaGGL4Kfp
+         9+3SbzTFK8dcEb1aoh8ccuNdwBtutjtGFcH/rUqyH1lTGcI8Ry36WWLMR+20h2Iyfk
+         mmknk62ivUqyx9TT9U3EgPSHo+MS5jqFk/An4e12MSUET1zNJSFAasunQMuKXOFJgx
+         f0FXnNT8FTuaA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+In-Reply-To: <20220726151213.71712-1-andriy.shevchenko@linux.intel.com>
+References: <20220726151213.71712-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] regmap: Make use of get_unaligned_be24(), put_unaligned_be24()
+Message-Id: <166057621785.624931.15173366927907651824.b4-ty@kernel.org>
+Date:   Mon, 15 Aug 2022 16:10:17 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Mailer: b4 0.10.0-dev-fe10a
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,90 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is caused by the global variable ad_ticks_per_sec being zero as
-demonstrated by the reproducer script discussed below. This causes
-all timer values in __ad_timer_to_ticks to be zero, resulting
-in the periodic timer to never fire.
+On Tue, 26 Jul 2022 18:12:13 +0300, Andy Shevchenko wrote:
+> Since we have a proper endianness converters for BE 24-bit data use
+> them. While at it, format the code using switch-cases as it's done
+> for the rest of the endianness handlers.
+> 
+> 
 
-To reproduce:
-Run the script in
-`tools/testing/selftests/drivers/net/bonding/bond-break-lacpdu-tx.sh` which
-puts bonding into a state where it never transmits LACPDUs.
+Applied to
 
-line 44: ip link add fbond type bond mode 4 miimon 200 \
-            xmit_hash_policy 1 ad_actor_sys_prio 65535 lacp_rate fast
-setting bond param: ad_actor_sys_prio
-given:
-    params.ad_actor_system = 0
-call stack:
-    bond_option_ad_actor_sys_prio()
-    -> bond_3ad_update_ad_actor_settings()
-       -> set ad.system.sys_priority = bond->params.ad_actor_sys_prio
-       -> ad.system.sys_mac_addr = bond->dev->dev_addr; because
-            params.ad_actor_system == 0
-results:
-     ad.system.sys_mac_addr = bond->dev->dev_addr
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
 
-line 48: ip link set fbond address 52:54:00:3B:7C:A6
-setting bond MAC addr
-call stack:
-    bond->dev->dev_addr = new_mac
+Thanks!
 
-line 52: ip link set fbond type bond ad_actor_sys_prio 65535
-setting bond param: ad_actor_sys_prio
-given:
-    params.ad_actor_system = 0
-call stack:
-    bond_option_ad_actor_sys_prio()
-    -> bond_3ad_update_ad_actor_settings()
-       -> set ad.system.sys_priority = bond->params.ad_actor_sys_prio
-       -> ad.system.sys_mac_addr = bond->dev->dev_addr; because
-            params.ad_actor_system == 0
-results:
-     ad.system.sys_mac_addr = bond->dev->dev_addr
+[1/1] regmap: Make use of get_unaligned_be24(), put_unaligned_be24()
+      commit: 060004431df4958a326d6a45107b2fe3406d10f2
 
-line 60: ip link set veth1-bond down master fbond
-given:
-    params.ad_actor_system = 0
-    params.mode = BOND_MODE_8023AD
-    ad.system.sys_mac_addr == bond->dev->dev_addr
-call stack:
-    bond_enslave
-    -> bond_3ad_initialize(); because first slave
-       -> if ad.system.sys_mac_addr != bond->dev->dev_addr
-          return
-results:
-     Nothing is run in bond_3ad_initialize() because dev_add equals
-     sys_mac_addr leaving the global ad_ticks_per_sec zero as it is
-     never initialized anywhere else.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Notes:
-    v2:
-     * split this fix from the reproducer
-    v3:
-     * rebased to latest net/master
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
- drivers/net/bonding/bond_3ad.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
-index d7fb33c078e8..957d30db6f95 100644
---- a/drivers/net/bonding/bond_3ad.c
-+++ b/drivers/net/bonding/bond_3ad.c
-@@ -84,7 +84,8 @@ enum ad_link_speed_type {
- static const u8 null_mac_addr[ETH_ALEN + 2] __long_aligned = {
- 	0, 0, 0, 0, 0, 0
- };
--static u16 ad_ticks_per_sec;
-+
-+static u16 ad_ticks_per_sec = 1000 / AD_TIMER_INTERVAL;
- static const int ad_delta_in_ticks = (AD_TIMER_INTERVAL * HZ) / 1000;
- 
- static const u8 lacpdu_mcast_addr[ETH_ALEN + 2] __long_aligned =
--- 
-2.31.1
-
+Thanks,
+Mark

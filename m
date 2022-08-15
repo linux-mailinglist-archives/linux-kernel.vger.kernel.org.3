@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9050559495C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12789594DFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243600AbiHOXI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
+        id S233399AbiHPAzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 20:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352796AbiHOXGP (ORCPT
+        with ESMTP id S240795AbiHPAr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:06:15 -0400
+        Mon, 15 Aug 2022 20:47:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E733140CBC;
-        Mon, 15 Aug 2022 12:58:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95B7B5E67;
+        Mon, 15 Aug 2022 13:45:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D986C60FD8;
-        Mon, 15 Aug 2022 19:58:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFF53C433B5;
-        Mon, 15 Aug 2022 19:58:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD1E061265;
+        Mon, 15 Aug 2022 20:45:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8646C433D6;
+        Mon, 15 Aug 2022 20:45:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593529;
-        bh=x41DbS8qV3r1/pYkKDJeNP/yz9M9kqdvIN4rxibxN+0=;
+        s=korg; t=1660596345;
+        bh=o3wlLHJ0FeVKurwv53Nfr7pBx/G+aKgzwMVRwDgmasU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yHxvA7O8j+DUJHmiFUaULU9ljY/bxHh61WX5EVtm7nk1xQ4SvRnUHlQULZvy24y/q
-         CEjUXi2kLqJ1XoV4o6/l24aijpKUenZFzjF8Hj87O0BeQEBWcnVXuGq4aM8jyooLkx
-         FYRqaI2q/Hm5kC37GKwVkBcVfN4CRlE6917Fe6NE=
+        b=hLYZVuKEszrUl6xNnFK5ddjZuyquhADE44TltucuZNMqsL2gDbhU3MQUKhpG8NdQ+
+         V0s8/JrENEuDMO6QKgLG+pHtrq5na6qsnVPnt+ErYpNFzDaahQKvOBX2sl53X3IOVu
+         45XbscptSuPUa6en69FQv3Jd9zErM1biOnIutRM4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Quinn Tran <qutran@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.18 0963/1095] scsi: qla2xxx: Turn off multi-queue for 8G adapters
-Date:   Mon, 15 Aug 2022 20:06:02 +0200
-Message-Id: <20220815180508.906617776@linuxfoundation.org>
+        stable@vger.kernel.org, Chao Yu <chao.yu@oppo.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 1007/1157] f2fs: fix to check inline_data during compressed inode conversion
+Date:   Mon, 15 Aug 2022 20:06:03 +0200
+Message-Id: <20220815180520.102413690@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
-References: <20220815180429.240518113@linuxfoundation.org>
+In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
+References: <20220815180439.416659447@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,61 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
+From: Chao Yu <chao@kernel.org>
 
-commit 5304673bdb1635e27555bd636fd5d6956f1cd552 upstream.
+[ Upstream commit 7165841d578e0592848e09dc9d131aa30be44e1b ]
 
-For 8G adapters, multi-queue was enabled accidentally. Make sure
-multi-queue is not enabled.
+When converting inode to compressed one via ioctl, it needs to check
+inline_data, since inline_data flag and compressed flag are incompatible.
 
-Link: https://lore.kernel.org/r/20220616053508.27186-5-njavali@marvell.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Quinn Tran <qutran@marvell.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 4c8ff7095bef ("f2fs: support data compression")
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/qla2xxx/qla_def.h |    4 ++--
- drivers/scsi/qla2xxx/qla_isr.c |   16 ++++++----------
- 2 files changed, 8 insertions(+), 12 deletions(-)
+ fs/f2fs/f2fs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/scsi/qla2xxx/qla_def.h
-+++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -4264,8 +4264,8 @@ struct qla_hw_data {
- #define IS_OEM_001(ha)          ((ha)->device_type & DT_OEM_001)
- #define HAS_EXTENDED_IDS(ha)    ((ha)->device_type & DT_EXTENDED_IDS)
- #define IS_CT6_SUPPORTED(ha)	((ha)->device_type & DT_CT6_SUPPORTED)
--#define IS_MQUE_CAPABLE(ha)	((ha)->mqenable || IS_QLA83XX(ha) || \
--				IS_QLA27XX(ha) || IS_QLA28XX(ha))
-+#define IS_MQUE_CAPABLE(ha)	(IS_QLA83XX(ha) || IS_QLA27XX(ha) || \
-+				 IS_QLA28XX(ha))
- #define IS_BIDI_CAPABLE(ha) \
-     (IS_QLA25XX(ha) || IS_QLA2031(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha))
- /* Bit 21 of fw_attributes decides the MCTP capabilities */
---- a/drivers/scsi/qla2xxx/qla_isr.c
-+++ b/drivers/scsi/qla2xxx/qla_isr.c
-@@ -4419,16 +4419,12 @@ msix_register_fail:
- 	}
- 
- 	/* Enable MSI-X vector for response queue update for queue 0 */
--	if (IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
--		if (ha->msixbase && ha->mqiobase &&
--		    (ha->max_rsp_queues > 1 || ha->max_req_queues > 1 ||
--		     ql2xmqsupport))
--			ha->mqenable = 1;
--	} else
--		if (ha->mqiobase &&
--		    (ha->max_rsp_queues > 1 || ha->max_req_queues > 1 ||
--		     ql2xmqsupport))
--			ha->mqenable = 1;
-+	if (IS_MQUE_CAPABLE(ha) &&
-+	    (ha->msixbase && ha->mqiobase && ha->max_qpairs))
-+		ha->mqenable = 1;
-+	else
-+		ha->mqenable = 0;
-+
- 	ql_dbg(ql_dbg_multiq, vha, 0xc005,
- 	    "mqiobase=%p, max_rsp_queues=%d, max_req_queues=%d.\n",
- 	    ha->mqiobase, ha->max_rsp_queues, ha->max_req_queues);
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index d9bbecd008d2..5c950298837f 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -4401,7 +4401,7 @@ static inline bool f2fs_lfs_mode(struct f2fs_sb_info *sbi)
+ static inline bool f2fs_may_compress(struct inode *inode)
+ {
+ 	if (IS_SWAPFILE(inode) || f2fs_is_pinned_file(inode) ||
+-				f2fs_is_atomic_file(inode))
++		f2fs_is_atomic_file(inode) || f2fs_has_inline_data(inode))
+ 		return false;
+ 	return S_ISREG(inode->i_mode) || S_ISDIR(inode->i_mode);
+ }
+-- 
+2.35.1
+
 
 

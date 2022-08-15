@@ -2,202 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B54D1594E2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0103594E3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241863AbiHPBoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 21:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41506 "EHLO
+        id S239465AbiHPBoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 21:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240447AbiHPBni (ORCPT
+        with ESMTP id S233940AbiHPBnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 21:43:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE581F84F6;
-        Mon, 15 Aug 2022 14:35:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C159B611D5;
-        Mon, 15 Aug 2022 21:35:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAB31C433C1;
-        Mon, 15 Aug 2022 21:35:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660599326;
-        bh=WJpJzeWfA2lvPyxEHsoYw4ISY9kus0KMPLf49JB424Y=;
-        h=Date:From:To:Cc:Subject:From;
-        b=clL2MlL/2HrVYwVTdD9BXwzNkWLmzssDTHI9xZO5YD6OlmAKFDJvlQ7brTnbrczwg
-         lgUqfI23njTS8GinsiwxDH1QIirKTNxfZAVLHtmbh2j8APsJRqNdoZhE4IphaOtG8z
-         ds9sCwP8Dxi4DRPpQOszm/E+KC3uX8kCmLpu6vvrMHpoYDUOQ8NR5nr2tSB8SS200r
-         59SNHNoECeA7oqOB/3/8Ow2Bnea5fjnbjYpAX+arKiCMh3PH8OtfLNpSUT0PMwaJve
-         kXqx9qvhC724/KMzW8BIw7tSRq6wddTKjQEmgPaGPDQhn1zdjWDA4meR7W+iHbrizB
-         /1SEHGh646elg==
-Date:   Mon, 15 Aug 2022 16:35:19 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH v3 0/6] Replace one-element arrays with flexible-array members
-Message-ID: <cover.1660592640.git.gustavoars@kernel.org>
+        Mon, 15 Aug 2022 21:43:31 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F745FF63;
+        Mon, 15 Aug 2022 14:35:04 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 2933C320090F;
+        Mon, 15 Aug 2022 17:35:03 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 15 Aug 2022 17:35:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bur.io; h=cc:cc
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1660599302; x=1660685702; bh=q1GHOVR2HG
+        8hGzbylQv89Zpmm6U7IK8HwWlEMQHeE0Q=; b=p3DcQwx3UhVFNJ4Ne5ggFH8HYU
+        ATT7E9nfCS8FTf9zCUoIhljDt29iiTJWrtOK/Ab/CQvN7XGl7piu6A2EeQ9S8l7s
+        colERk4NTdmTr9hj9AELhEw8ZBYpt58zkcKkafj5nH/SFcndpasyMgICCdu/4/JS
+        KUNXKHMAUmP3wKXX0FHxUz7wPNMKCw591YgYwOXQT5TS3oJpn2Lze0pkBn401VLK
+        x7ul9uVCoYdKajgrlyHmaijX1IDUCEHhA7dotI0NV3BT2uxlVxmx08mle76kmGON
+        JMgl2tzeKi0LR9MLXE0v/VwrPa9WBFlTXPGsHtRiLsvNAE93BPeCmZjG94ew==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660599302; x=1660685702; bh=q1GHOVR2HG8hGzbylQv89Zpmm6U7
+        IK8HwWlEMQHeE0Q=; b=Vxg/pwxQbhtAkJ0Q2vd4ulSLVjnVhVTflw2nXiy58SeF
+        acjKBnkJ5NTuQoSVt7cOzyknL7BdAIyo2R3Tz9dmJSUUDBNVPur2Zz5UTDrqMoxs
+        xfG5x5ZbjdE3a3CrLlo8o+u3kUbmQPIC/U4RIvpvgVI/UahZMEDJgoYu1oWwDtd+
+        wpKH6OMydaDaSOd2CrvvU125bE8YgfCZGJWkxoM5oDdKotZiF0GC9dXDQF4gx3fK
+        3HeHTmmBF/cTvpbg6WxxPObLA3Su+iq+sN8J6udrbMp+ZfHHbScW/uGgOLuzBRe6
+        yXlCaKHZ0Wj0GCw6I2f6RyKMV33i7tZmsFgLFosMJg==
+X-ME-Sender: <xms:Brz6YpDtXH1F8rzGvUVQIZVNV2vktbAnDBSHYQ-Cw9IuZH7H8f1svg>
+    <xme:Brz6YniitgapBWPd7WpR2qmqIrZ7Veo3vXcW4kQv4BREew4T4MlKGuvjKa_X5Oc_h
+    imFrTlLMbZilR8FaWE>
+X-ME-Received: <xmr:Brz6YklVu7-0Ia1kTzxS2V2ncdVINpS8qyFKR-xtY1hw7GMwhAVfRZEt-kEVcHlt05qMKgWVvftJtu1VmHIxxSh6dQgV0w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehfedgtdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehorhhi
+    shcuuehurhhkohhvuceosghorhhishessghurhdrihhoqeenucggtffrrghtthgvrhhnpe
+    ekvdekffejleelhfevhedvjeduhfejtdfhvdevieeiiedugfeugfdtjefgfeeljeenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhrihhsse
+    gsuhhrrdhioh
+X-ME-Proxy: <xmx:Brz6YjxSkiM2fJQeWQcvFurVIBMAfSK17pzY6KKUASqtqrZiPylTsA>
+    <xmx:Brz6YuSvwq6P4R72--bl5Z3EA90W7kbjOsu8Y6F1i2l6RXgQ7aez4w>
+    <xmx:Brz6YmZYArL9TJxZI4eON9okZLZ5xqgUa1TWQPEC1zTNsQhA5WSyVQ>
+    <xmx:Brz6YkMSIWAARV3P_73MYpqn3Io3sVc0ezOaelra0qlsvNEPxAWtdA>
+Feedback-ID: i083147f8:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 15 Aug 2022 17:35:02 -0400 (EDT)
+Date:   Mon, 15 Aug 2022 14:36:25 -0700
+From:   Boris Burkov <boris@bur.io>
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>
+Subject: Re: [PATCH] fs/btrfs: Use atomic_try_cmpxchg in free_extent_buffer
+Message-ID: <Yvq8WaTZzWWusB25@zen>
+References: <20220809163633.8255-1-ubizjak@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220809163633.8255-1-ubizjak@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
-
-This series aims to replace one-element arrays with flexible-array
-members in drivers/scsi/megaraid/
-
-I followed the below steps in order to verify the changes don't
-significally impact the code (.text) section generated by the compiler,
-for each object file involved:
-
-1. Prepare the build with the following settings and configurations:
-
-        linux$ KBF="KBUILD_BUILD_TIMESTAMP=1970-01-01 KBUILD_BUILD_USER=user
-               KBUILD_BUILD_HOST=host KBUILD_BUILD_VERSION=1"
-        linux$ make $KBF allyesconfig
-        linux$ ./scripts/config -d GCOV_KERNEL -d KCOV -d GCC_PLUGINS \
-                         -d IKHEADERS -d KASAN -d UBSAN \
-                         -d DEBUG_INFO_NONE \
-                         -e DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-        linux$ make $KBF olddefconfig
-
-2. Build drivers/scsi/megaraid/ with the same settings and configurations
-   as in Step 1, and copy the generated object files in directory before/
-
-        linux$ make -j128 $KBF drivers/scsi/megaraid/
-        linux$ mkdir -p before
-        linux$ cp drivers/scsi/megaraid/*.o before/
-
-3. Implement all the needed changes and create the patch series. In this
-   case, six patches.
-
-        linux$ vi code.c
-               ...do the magic :)
-        linux$ git format-patch ...all the rest
-
-4. Apply a patch at a time (of the previously created series) and, after
-   applying EACH patch, build (as in Step 2) drivers/scsi/megaraid/ and
-   copy the generated object files in directory after/
-
-5. Compare the code section (.text) of each before/file.o and
-   after/file.o. I use the following bash script:
-
-   compare.sh:
-        ARGS="--disassemble --demangle --reloc --no-show-raw-insn --section=.text"
-        for i in $(cd before && echo *.o); do
-                echo $i
-                diff -u <(objdump $ARGS before/$i | sed "0,/^Disassembly/d") \
-                        <(objdump $ARGS after/$i  | sed "0,/^Disassembly/d")
-        done
-
-   linux$ ./compare.sh > code_comparison.diff
-
-6. Open the code_comparison.diff file from the example above, look for
-   any differences that might show up and analyze them in order to
-   determine their impact, and what (if something) should be changed
-   or study further.
-
-The above process (code section comparison of object files) is based on
-this[0] blog post by Kees Cook. The compiler used to build the code was
-GCC-12.
-
-In this series I only found the following sorts of differences in files
-megaraid_sas.o and megaraid_sas_base.o:
-
-...
-...@@ -7094,24 +7094,24 @@
-     6302:      movq   $0x0,0x1e20(%rbx)
-     630d:      test   %r15,%r15
-     6310:      je     6316 <megasas_aen_polling+0x56>
--                       6312: R_X86_64_PC32     .text.unlikely+0x3ae3
-+                       6312: R_X86_64_PC32     .text.unlikely+0x3ae0
-     6316:      mov    0x0(%rip),%eax        # 631c <megasas_aen_polling+0x5c>
-                        6318: R_X86_64_PC32     event_log_level-0x4
-     631c:      mov    0xc(%r15),%r14d
-     6320:      lea    0x2(%rax),%edx
-     6323:      cmp    $0x6,%edx
-     6326:      ja     632c <megasas_aen_polling+0x6c>
--                       6328: R_X86_64_PC32     .text.unlikely+0x3ac3
-+                       6328: R_X86_64_PC32     .text.unlikely+0x3ac0
-     632c:      mov    %r14d,%edx
-     632f:      sar    $0x18,%edx
-     6332:      mov    %edx,%ecx
-     6334:      cmp    %eax,%edx
-     6336:      jge    633c <megasas_aen_polling+0x7c>
--                       6338: R_X86_64_PC32     .text.unlikely+0x399c
-+                       6338: R_X86_64_PC32     .text.unlikely+0x3999
-...
-
-All of them have to do with the relocation of symbols in the
-.text.unlikely subsection and they don't seem to be of any actual
-relevance. So, we can safely ignore them.
-
-Also, notice there is an open issue in bugzilla.kernel.org [1] that's
-seems could be fixed by this series. :)
-
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-routines on memcpy() and help us make progress towards globally
-enabling -fstrict-flex-arrays [2].
-
-Link: https://en.wikipedia.org/wiki/Flexible_array_member
-Link: https://www.kernel.org/doc/html/v5.10/process/deprecated.html#zero-length-and-one-element-arrays
-Link: https://github.com/KSPP/linux/issues/79
-Link: https://github.com/KSPP/linux/issues/109
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215943 [1]
-Link: https://reviews.llvm.org/D126864 [2]
-
-Thanks
-
-[0] https://outflux.net/blog/archives/2022/06/24/finding-binary-differences/
-
-Changes in v3:
- - Split the struct_size() changes into a couple of separate patches.
- - Use objdump to compare the code (.text) sections of the object
-   files before and after the changes.
- - Modify MR_FW_RAID_MAP_ALL and MR_DRV_RAID_MAP_ALL structures. Change
-   suggested by Kees Cook.
-
-Changes in v2:
- - Revert changes in struct MR_FW_RAID_MAP_ALL.
-
-Gustavo A. R. Silva (6):
-  scsi: megaraid_sas: Replace one-element array with flexible-array
-    member in MR_FW_RAID_MAP
-  scsi: megaraid_sas: Replace one-element array with flexible-array
-    member in MR_FW_RAID_MAP_DYNAMIC
-  scsi: megaraid_sas: Replace one-element array with flexible-array
-    member in MR_DRV_RAID_MAP
-  scsi: megaraid_sas: Replace one-element array with flexible-array
-    member in MR_PD_CFG_SEQ_NUM_SYNC
-  scsi: megaraid_sas: Use struct_size() in code related to struct
-    MR_FW_RAID_MAP
-  scsi: megaraid_sas: Use struct_size() in code related to struct
-    MR_PD_CFG_SEQ_NUM_SYNC
-
- drivers/scsi/megaraid/megaraid_sas_base.c   | 20 ++++++++++----------
- drivers/scsi/megaraid/megaraid_sas_fp.c     |  6 +++---
- drivers/scsi/megaraid/megaraid_sas_fusion.c |  2 +-
- drivers/scsi/megaraid/megaraid_sas_fusion.h | 12 ++++++------
- 4 files changed, 20 insertions(+), 20 deletions(-)
-
--- 
-2.34.1
-
+On Tue, Aug 09, 2022 at 06:36:33PM +0200, Uros Bizjak wrote:
+> Use `atomic_try_cmpxchg(ptr, &old, new)` instead of
+> `atomic_cmpxchg(ptr, old, new) == old` in free_extent_buffer. This
+> has two benefits:
+> 
+> - The x86 cmpxchg instruction returns success in the ZF flag, so this
+>   change saves a compare after cmpxchg, as well as a related move
+>   instruction in the front of cmpxchg.
+> 
+> - atomic_try_cmpxchg implicitly assigns the *ptr value to &old when
+>   cmpxchg fails, enabling further code simplifications.
+> 
+> This patch has no functional change.
+> 
+> Cc: Chris Mason <clm@fb.com>
+> Cc: Josef Bacik <josef@toxicpanda.com>
+> Cc: David Sterba <dsterba@suse.com>
+> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Reviewed-by: Boris Burkov <boris@bur.io>
+> ---
+>  fs/btrfs/extent_io.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
+> index bfae67c593c5..15ff196cbd6d 100644
+> --- a/fs/btrfs/extent_io.c
+> +++ b/fs/btrfs/extent_io.c
+> @@ -6328,18 +6328,16 @@ static int release_extent_buffer(struct extent_buffer *eb)
+>  void free_extent_buffer(struct extent_buffer *eb)
+>  {
+>  	int refs;
+> -	int old;
+>  	if (!eb)
+>  		return;
+>  
+> +	refs = atomic_read(&eb->refs);
+>  	while (1) {
+> -		refs = atomic_read(&eb->refs);
+>  		if ((!test_bit(EXTENT_BUFFER_UNMAPPED, &eb->bflags) && refs <= 3)
+>  		    || (test_bit(EXTENT_BUFFER_UNMAPPED, &eb->bflags) &&
+>  			refs == 1))
+>  			break;
+> -		old = atomic_cmpxchg(&eb->refs, refs, refs - 1);
+> -		if (old == refs)
+> +		if (atomic_try_cmpxchg(&eb->refs, &refs, refs - 1))
+>  			return;
+>  	}
+>  
+> -- 
+> 2.37.1
+> 

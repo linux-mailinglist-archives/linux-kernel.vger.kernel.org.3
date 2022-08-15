@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0488594803
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B268594882
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245178AbiHOXZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
+        id S1343542AbiHOXRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345398AbiHOXVA (ORCPT
+        with ESMTP id S232573AbiHOXO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:21:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9CBB4EB8;
-        Mon, 15 Aug 2022 13:04:23 -0700 (PDT)
+        Mon, 15 Aug 2022 19:14:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC13D7B1D6;
+        Mon, 15 Aug 2022 13:01:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E52C260025;
-        Mon, 15 Aug 2022 20:04:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D39EFC4314C;
-        Mon, 15 Aug 2022 20:04:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79D9DB80EAD;
+        Mon, 15 Aug 2022 20:01:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDDB7C433D6;
+        Mon, 15 Aug 2022 20:01:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593862;
-        bh=kAyO+nz/zUmhS98Qlahcj3U4y3xPvdN4M6aw9dZu9FM=;
+        s=korg; t=1660593701;
+        bh=sgTuMiFPF54ACuOVTfBonHG/zBfkQGkStRcBCG6GKZE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EHkhlM4EBymbwUhrO6ZftZponsYfdUjs02q9U69llGuTdiDu3kfrQ61MNxQGMERcN
-         aYe4ptMTYj6QOQU5EkoOwZKwkkb+0hf8622LbTRYRzK/YTq3Y9jT1IrqJyokTaHfoq
-         BTylnmWYn/UjBa9r/GTrzfv4iMvGvuC0G1Ea+/U4=
+        b=lkIYz8B67J5PyEBI2+AFMRIVJFY+yMW2wBTy9xIzDihm0HmNO1UhCxtgdw+jcq+3u
+         vEpElxG44YkSWSPldA5iKbIpcy6KhlWBIaQ9SGB09HjZT3HxEqnuIDPG0K9tU+ghRa
+         TIYswK7tmtMrFEXszwnwqFDsfF4i6eoYeJfNQeD8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>,
-        Jocelyn Falempe <jfalempe@redhat.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Dave Airlie <airlied@redhat.com>,
-        dri-devel@lists.freedesktop.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0310/1157] drm/mgag200: Acquire I/O lock while reading EDID
-Date:   Mon, 15 Aug 2022 19:54:26 +0200
-Message-Id: <20220815180452.062508070@linuxfoundation.org>
+        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 0312/1157] drm/dp: Export symbol / kerneldoc fixes for DP AUX bus
+Date:   Mon, 15 Aug 2022 19:54:28 +0200
+Message-Id: <20220815180452.136975843@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -57,65 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Zimmermann <tzimmermann@suse.de>
+From: Douglas Anderson <dianders@chromium.org>
 
-[ Upstream commit 5913ab941d6ea782e841234c76958c6872ea752d ]
+[ Upstream commit 39c28cdfb719f0e306b447f0827dfd712f81858b ]
 
-DDC operation conflicts with concurrent mode setting. Acquire the
-driver's I/O lock in get_modes to prevent this. This change should
-have been part of commit 931e3f3a0e99 ("drm/mgag200: Protect
-concurrent access to I/O registers with lock"), but apparently got
-lost somewhere.
+While working on the DP AUX bus code I found a few small things that
+should be fixed. Namely the non-devm version of
+of_dp_aux_populate_ep_devices() was missing an export. There was also
+an extra blank line in a kerneldoc and a kerneldoc that incorrectly
+documented a return value. Fix these.
 
-v3:
-	* fix commit message to say 'drm/mgag200' (Jocelyn)
-
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Fixes: 931e3f3a0e99 ("drm/mgag200: Protect concurrent access to I/O registers with lock")
-Reviewed-by: Jocelyn Falempe <jfalempe@redhat.com>
-Tested-by: Jocelyn Falempe <jfalempe@redhat.com>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Jocelyn Falempe <jfalempe@redhat.com>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Dave Airlie <airlied@redhat.com>
-Cc: dri-devel@lists.freedesktop.org
-Link: https://patchwork.freedesktop.org/patch/msgid/20220516134343.6085-2-tzimmermann@suse.de
+Fixes: aeb33699fc2c ("drm: Introduce the DP AUX bus")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220510122726.v3.1.Ia91f4849adfc5eb9da1eb37ba79aa65fb3c95a0f@changeid
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/mgag200/mgag200_mode.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/gpu/drm/display/drm_dp_aux_bus.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/mgag200/mgag200_mode.c b/drivers/gpu/drm/mgag200/mgag200_mode.c
-index abde7655477d..4ad8d62c5631 100644
---- a/drivers/gpu/drm/mgag200/mgag200_mode.c
-+++ b/drivers/gpu/drm/mgag200/mgag200_mode.c
-@@ -667,16 +667,26 @@ static void mgag200_disable_display(struct mga_device *mdev)
- 
- static int mga_vga_get_modes(struct drm_connector *connector)
+diff --git a/drivers/gpu/drm/display/drm_dp_aux_bus.c b/drivers/gpu/drm/display/drm_dp_aux_bus.c
+index dccf3e2ea323..552f949cff59 100644
+--- a/drivers/gpu/drm/display/drm_dp_aux_bus.c
++++ b/drivers/gpu/drm/display/drm_dp_aux_bus.c
+@@ -66,7 +66,6 @@ static int dp_aux_ep_probe(struct device *dev)
+  * @dev: The device to remove.
+  *
+  * Calls through to the endpoint driver remove.
+- *
+  */
+ static void dp_aux_ep_remove(struct device *dev)
  {
-+	struct mga_device *mdev = to_mga_device(connector->dev);
- 	struct mga_connector *mga_connector = to_mga_connector(connector);
- 	struct edid *edid;
- 	int ret = 0;
+@@ -120,8 +119,6 @@ ATTRIBUTE_GROUPS(dp_aux_ep_dev);
+ /**
+  * dp_aux_ep_dev_release() - Free memory for the dp_aux_ep device
+  * @dev: The device to free.
+- *
+- * Return: 0 if no error or negative error code.
+  */
+ static void dp_aux_ep_dev_release(struct device *dev)
+ {
+@@ -256,6 +253,7 @@ int of_dp_aux_populate_ep_devices(struct drm_dp_aux *aux)
  
-+	/*
-+	 * Protect access to I/O registers from concurrent modesetting
-+	 * by acquiring the I/O-register lock.
-+	 */
-+	mutex_lock(&mdev->rmmio_lock);
-+
- 	edid = drm_get_edid(connector, &mga_connector->i2c->adapter);
- 	if (edid) {
- 		drm_connector_update_edid_property(connector, edid);
- 		ret = drm_add_edid_modes(connector, edid);
- 		kfree(edid);
- 	}
-+
-+	mutex_unlock(&mdev->rmmio_lock);
-+
- 	return ret;
+ 	return 0;
  }
++EXPORT_SYMBOL_GPL(of_dp_aux_populate_ep_devices);
  
+ static void of_dp_aux_depopulate_ep_devices_void(void *data)
+ {
 -- 
 2.35.1
 

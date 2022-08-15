@@ -2,89 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F77593385
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 18:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB94593389
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 18:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231848AbiHOQus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 12:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
+        id S232023AbiHOQvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 12:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbiHOQu2 (ORCPT
+        with ESMTP id S230503AbiHOQvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 12:50:28 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A203F60C6;
-        Mon, 15 Aug 2022 09:50:27 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id s11so5870315qtx.6;
-        Mon, 15 Aug 2022 09:50:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=872ysycXiBBBtnAOZC3AeLP8Fp8sH0X3DkOilTdN2P0=;
-        b=b+KyyUVncaYLfusxP2awoCphMv2gDjV+ajQvCZG0lU/wtbW5imU3SQVkbF1V1b82Zw
-         oDw7Kb7G0UzdmFXtl3pNPOIcfF6+rWpF87L+hsW1tUTC2iDMk8jCRV/zF6OxsFKJcq6L
-         /LS2tEm6bca2vXVIW9vB8kwjQIdH6G2tYSxWs52DGYUaBrhJf5VVva64/Mlb2cYf+iQ4
-         LF108C3sx/y928SrG3kTgyT9YyMMI+UKhm9i5+IndsUCbp+asjJ+aWFb/qVzqCVr4EPO
-         QjrLfRcAA8qEKEFjL8LHl9Kq4pSCbN/ymrvy+6zk2Pb3yL2BohiBc+m6VJq7O1L4D7pa
-         CPxg==
+        Mon, 15 Aug 2022 12:51:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B95C17E36
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 09:51:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660582264;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=e1xpd0eYnShseb7U86x6m8V2giOiRt5hzyF/+OIPBxs=;
+        b=SXUSaVexpvhiD5ftUZEv0/PFfMrFNa4+m+vn1Emm8QWB+yx8ITytjMYFT3XGTnxCDHOWKU
+        eEIoekQ4IiJWpPMIL8lzEggFWhWGq4M9HaO/SZmPfLABvv+BVtTgN5ciqy4M6ic1Nh3q+H
+        jlTdPwy9nZY4oBmcEzFJ2vm2w8c6+YA=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-458-u1ziETkJOnmNijfEqIvRBg-1; Mon, 15 Aug 2022 12:51:00 -0400
+X-MC-Unique: u1ziETkJOnmNijfEqIvRBg-1
+Received: by mail-ed1-f70.google.com with SMTP id m22-20020a056402431600b0043d6a88130aso5013377edc.18
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 09:51:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=872ysycXiBBBtnAOZC3AeLP8Fp8sH0X3DkOilTdN2P0=;
-        b=kTumOQJcIPGeaCFJCgy32qtDDUSKN0EdWwPfJFToF7TASy29yfMY4C1LM5QXEc0E8U
-         1kHj0yHDlzkBnx2Bfi4KYoQDL2b9SnuU2zuKm7xITqqMBAEi9CfsAcQIJCKJaq6hKbl1
-         lKBWhUXgvktKRVVaMlXsKOW9e7dKKVjGIJhUDanwEOGRQ1S0YuZ98FbxVnButRFugINg
-         aF8QMkAdDJ3dhoxMQDrOm4hErZdXOKL2qaoOOwgmy68+Ajo8HB1a+HTEFU5msFY4e4Cy
-         YnVcySwciAd1uIm5ZEeIR+YFBNIerRFwlTDZJgDEjemBLA81pt9xZW65q0UAHj+XQ1sv
-         nPeA==
-X-Gm-Message-State: ACgBeo3XRI85xbPViixejOSpBJuKn0Fi/528lnxM5X2zpx1uIodoKAfX
-        xSXCPr9Innzn/b+i6fn1hQ0paElRiCA=
-X-Google-Smtp-Source: AA6agR6ec3SPzBCkvGW3qCJqaUBoRsH0Sc5QERgJg6SNVYVuLo4yHZspWn04tjjvs04P7cQoioZ6ig==
-X-Received: by 2002:ac8:7f0e:0:b0:31f:402f:1b89 with SMTP id f14-20020ac87f0e000000b0031f402f1b89mr15052379qtk.590.1660582226763;
-        Mon, 15 Aug 2022 09:50:26 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id l1-20020a05620a28c100b006b958c34bf1sm50759qkp.10.2022.08.15.09.50.24
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=e1xpd0eYnShseb7U86x6m8V2giOiRt5hzyF/+OIPBxs=;
+        b=kIB2MMtNwFNZO83n/A9Sbblzg+ztHLJNH7jv9IYX1v7VAOyJoUclXwoJ48bKsnw/++
+         kYtbilqkcne5LQiPOxfkyb5ByAzCbcQjupkQCXCB4Z9BYblXwBK/Nvnn+cUKs3Zb+IxG
+         LvX5muimHhiy7xQ1SmrIS4yr8Xa34U9QET9uVPw1IPVtkfEblnPl1fmQSUiuHKJ52atv
+         EIW/Gge6aN0gOya/IeNBHFFSyKpniNPTVhK1ZFuBZ9pyp+RlRCRtQqX4lfFtQ6PcKYa9
+         iZKM/yM6uxWmfdax+OuDWp3MJzGPFQ4ZT2L2uZX3mA0Xr1u+i2w1Azr2MFG70vcays/l
+         0A9A==
+X-Gm-Message-State: ACgBeo1mCNeLhunVK+I5/6cKqp4i8gkhlq528k6XUYdIuozc2toS83Xf
+        SXwfqoSkgn3D8oUxFzgls2WPPpv9roVKlr5tJNWCPXxDPmVqW0sFZkhW/cPY42GfhW8SSmQ/VzL
+        MifGRTZg/BHq9A8GbnkDm2bG5
+X-Received: by 2002:a17:906:4787:b0:737:2a03:6dd6 with SMTP id cw7-20020a170906478700b007372a036dd6mr7144184ejc.476.1660582259259;
+        Mon, 15 Aug 2022 09:50:59 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4Kq398qIS73sa2XmampCUb4c1rZhRFG3AQ2Jy1zVIHuoFcNh1946zoEsZkjbBY3ykk5wd17Q==
+X-Received: by 2002:a17:906:4787:b0:737:2a03:6dd6 with SMTP id cw7-20020a170906478700b007372a036dd6mr7144170ejc.476.1660582258959;
+        Mon, 15 Aug 2022 09:50:58 -0700 (PDT)
+Received: from redhat.com ([2.54.169.49])
+        by smtp.gmail.com with ESMTPSA id fu17-20020a170907b01100b0073095265adesm4199677ejc.165.2022.08.15.09.50.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 09:50:25 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
-        krzysztof.kozlowski@linaro.org, rafal@milecki.pl,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/9] arm64: dts: bcmbca: update BCM4908 board dts files
-Date:   Mon, 15 Aug 2022 09:50:23 -0700
-Message-Id: <20220815165023.2500696-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220803175455.47638-4-william.zhang@broadcom.com>
-References: <20220803175455.47638-1-william.zhang@broadcom.com> <20220803175455.47638-4-william.zhang@broadcom.com>
+        Mon, 15 Aug 2022 09:50:58 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 12:50:52 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Andres Freund <andres@anarazel.de>
+Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        c@redhat.com
+Subject: Re: upstream kernel crashes
+Message-ID: <20220815124748-mutt-send-email-mst@kernel.org>
+References: <1c057afa-92df-ee3c-5978-3731d3db9345@kernel.dk>
+ <20220815013651.mrm7qgklk6sgpkbb@awork3.anarazel.de>
+ <CAHk-=wikzU4402P-FpJRK_QwfVOS+t-3p1Wx5awGHTvr-s_0Ew@mail.gmail.com>
+ <20220815071143.n2t5xsmifnigttq2@awork3.anarazel.de>
+ <20220815034532-mutt-send-email-mst@kernel.org>
+ <20220815081527.soikyi365azh5qpu@awork3.anarazel.de>
+ <20220815042623-mutt-send-email-mst@kernel.org>
+ <FCDC5DDE-3CDD-4B8A-916F-CA7D87B547CE@anarazel.de>
+ <20220815113729-mutt-send-email-mst@kernel.org>
+ <20220815164503.jsoezxcm6q4u2b6j@awork3.anarazel.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220815164503.jsoezxcm6q4u2b6j@awork3.anarazel.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  3 Aug 2022 10:54:49 -0700, William Zhang <william.zhang@broadcom.com> wrote:
-> Append "brcm,bcmbca" to compatible strings based on the new bcmbca
-> binding rule for BCM4908 family based boards.
+On Mon, Aug 15, 2022 at 09:45:03AM -0700, Andres Freund wrote:
+> Hi,
 > 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> Acked-by: Rafał Miłecki <rafal@milecki.pl>
+> On 2022-08-15 11:40:59 -0400, Michael S. Tsirkin wrote:
+> > OK so this gives us a quick revert as a solution for now.
+> > Next, I would appreciate it if you just try this simple hack.
+> > If it crashes we either have a long standing problem in virtio
+> > code or more likely a gcp bug where it can't handle smaller
+> > rings than what device requestes.
+> > Thanks!
 > 
-> ---
+> I applied the below and the problem persists.
+> 
+> > diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
+> > index f7965c5dd36b..bdd5f481570b 100644
+> > --- a/drivers/virtio/virtio_pci_modern.c
+> > +++ b/drivers/virtio/virtio_pci_modern.c
+> > @@ -314,6 +314,9 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
+> >  	if (!size || size > num)
+> >  		size = num;
+> >  
+> > +	if (size > 1024)
+> > +		size = 1024;
+> > +
+> >  	if (size & (size - 1)) {
+> >  		dev_warn(&vp_dev->pci_dev->dev, "bad queue size %u", size);
+> >  		return ERR_PTR(-EINVAL);
+> > 
+> > 
+> 
+> [    1.165162] virtio_net virtio1 enp0s4: renamed from eth0
+> [    1.177815] general protection fault, probably for non-canonical address 0xffff000000000400: 0000 [#1] PREEMPT SMP PTI
+> [    1.179565] CPU: 1 PID: 125 Comm: systemd-udevd Not tainted 6.0.0-rc1-bisect14-dirty #14
+> [    1.180785] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+> [    1.182475] RIP: 0010:__kmalloc_node_track_caller+0x19e/0x380
+> [    1.183365] Code: 2b 04 25 28 00 00 00 0f 85 f8 01 00 00 48 83 c4 18 48 89 e8 5b 5d 41 5c 41 5d 41 5e 41 5f c3 cc cc cc cc 8b 4d 28 48 8b 7d 00 <48> 8b 1c 08 48 8d 4a 40 65 48 0f c7 0f 0f 94 c0 84 c0 0f 84 0b ff
+> [    1.186208] RSP: 0018:ffff9c470021b860 EFLAGS: 00010246
+> [    1.187194] RAX: ffff000000000000 RBX: 00000000000928c0 RCX: 0000000000000400
+> [    1.188634] RDX: 0000000000005781 RSI: 00000000000928c0 RDI: 000000000002e0f0
+> [    1.190177] RBP: ffff908380042c00 R08: 0000000000000600 R09: ffff908380b665e4
+> [    1.191256] R10: 0000000000000003 R11: 0000000000000002 R12: 00000000000928c0
+> [    1.192269] R13: 0000000000000740 R14: 00000000ffffffff R15: 0000000000000000
+> [    1.193368] FS:  00007f746702a8c0(0000) GS:ffff9084b7d00000(0000) knlGS:0000000000000000
+> [    1.194846] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    1.195661] CR2: 00007ffc010df980 CR3: 0000000103826005 CR4: 00000000003706e0
+> [    1.196912] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [    1.198216] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [    1.199367] Call Trace:
+> [    1.199815]  <TASK>
+> [    1.200138]  ? netlink_trim+0x85/0xb0
+> [    1.200754]  pskb_expand_head+0x92/0x340
+> [    1.202512]  netlink_trim+0x85/0xb0
+> [    1.203069]  netlink_unicast+0x54/0x390
+> [    1.203630]  rtnl_getlink+0x366/0x410
+> [    1.204155]  ? __d_alloc+0x24/0x1d0
+> [    1.204668]  rtnetlink_rcv_msg+0x146/0x3b0
+> [    1.205256]  ? _raw_spin_unlock+0xd/0x30
+> [    1.205867]  ? __d_add+0xf2/0x1b0
+> [    1.206600]  ? rtnl_calcit.isra.0+0x130/0x130
+> [    1.207221]  netlink_rcv_skb+0x49/0xf0
+> [    1.207904]  netlink_unicast+0x23a/0x390
+> [    1.208585]  netlink_sendmsg+0x23b/0x4b0
+> [    1.209203]  sock_sendmsg+0x57/0x60
+> [    1.210118]  __sys_sendto+0x117/0x170
+> [    1.210694]  ? __wake_up_common_lock+0x83/0xc0
+> [    1.211420]  __x64_sys_sendto+0x1b/0x30
+> [    1.211992]  do_syscall_64+0x37/0x90
+> [    1.212497]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> [    1.213407] RIP: 0033:0x7f74677404e6
+> [    1.213973] Code: 69 0e 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b8 0f 1f 00 41 89 ca 64 8b 04 25 18 00 00 00 85 c0 75 11 b8 2c 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 72 c3 90 41 54 48 83 ec 30 44 89 4c 24 2c 4c
+> [    1.217098] RSP: 002b:00007ffc010daa78 EFLAGS: 00000246 ORIG_RAX: 000000000000002c
+> [    1.219539] RAX: ffffffffffffffda RBX: 000000000011bc98 RCX: 00007f74677404e6
+> [    1.220552] RDX: 0000000000000020 RSI: 0000563160679570 RDI: 0000000000000005
+> [    1.222378] RBP: 00005631606796b0 R08: 00007ffc010daaf0 R09: 0000000000000080
+> [    1.223692] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
+> [    1.224793] R13: 0000000000000000 R14: 0000000000000000 R15: 00005631606794b0
+> [    1.226228]  </TASK>
+> [    1.226775] Modules linked in:
+> [    1.227414] ---[ end trace 0000000000000000 ]---
+> 
+> Greetings,
+> 
+> Andres Freund
 
-Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
---
-Florian
+Okay! And just to be 100% sure, can you try the following on top of 5.19:
+
+
+diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
+index 623906b4996c..6f4e54a618bc 100644
+--- a/drivers/virtio/virtio_pci_modern.c
++++ b/drivers/virtio/virtio_pci_modern.c
+@@ -208,6 +208,9 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
+ 		return ERR_PTR(-EINVAL);
+ 	}
+ 
++	if (num > 1024)
++		num = 1024;
++
+ 	info->msix_vector = msix_vec;
+ 
+ 	/* create the vring */
+
+-- 
+MST
+

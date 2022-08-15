@@ -2,173 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DBBF592CCE
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE79592BCC
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbiHOKM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 06:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
+        id S242550AbiHOKOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 06:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231539AbiHOKMC (ORCPT
+        with ESMTP id S242491AbiHOKOV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 06:12:02 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2040.outbound.protection.outlook.com [40.107.93.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3EB140EE;
-        Mon, 15 Aug 2022 03:12:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PpLg0rsFmKM7VFh23UmJBWRKIh5xY08pqwfpHN23eQ7+EDZtk0Y+74HXPcfc0OXYGKYZlD5qIuNrxwvWaigOHzY5o3dIcOVJMEMrWudVQD4WAIoQNmaumi/lqwk+iK1sjOaDQLu4MSY2l7zDMjGunXNNaEzVpWdzXS/WS58ZfWP/5ofT05BXy6vVmHD+m/5YPQ9HZIiBx0dypIgdLEVoRDh5zXSELHOw/z2xeXBz4mnYljW/l63zwwPHCgcUxsfFRmoOIx8sYKiv7HtdWD29zIEvTpiK2s4qr5e/nZznE/E/UERhsjstwtke4wWcu0q6SRmlmlAIDrklKMR3zolcTA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=inBftJlKOMmZecCK/n1gTNUguOSc1CLw7dOvEg19/Pg=;
- b=NcoTxid62cmoD266XwIYPFBLF8tILBiBIaIJm1vky1tTUgJFKGgy30We1ImudjmwagLv+EDUdcE+EZ/lUQoNyfCfqKqcIPPOxL4jL1GorXHOi9yBshnHCFNfJf9rrA/LiyLmPOakk0JZgbudcxJOGmNJKXQip8gHn6TaE1rbcY/3VJe4MejYHbe/NAFvne6AEIw6/YOmCqlm4VysL3Q0fUxBfaWp5rnQM6Levk7TfpU/pRfKZdxv0CXmbhwZ0f/sg2M5CyVearA6EV14Lbc3Qieew977NOrwzLrk9hqvguhHNjf+NlfjXVwRQG0RCDqQhq61g9ReXcsEX74AaN5wBA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=inBftJlKOMmZecCK/n1gTNUguOSc1CLw7dOvEg19/Pg=;
- b=3zw4PBaMbwgJ3G/LLZ1RRtJiNsEB0tzlMhit4ylwMnjoEri/eJ+Njo+IK4jY9+HYQ4iQ1He4Jo4frdvOfjl+1QXImOqGCW4fGua5Q3bZi7FkamA6SErbVBxUNu4I3lGX/MLa1XWlMXck1hbgx6ZPIZ71soTK/aU/Bpta9Dn0xcM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by DM6PR12MB4251.namprd12.prod.outlook.com (2603:10b6:5:21e::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Mon, 15 Aug
- 2022 10:11:58 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39%2]) with mapi id 15.20.5504.020; Mon, 15 Aug 2022
- 10:11:58 +0000
-Message-ID: <8caf3008-dcf3-985a-631e-e019b277c6f0@amd.com>
-Date:   Mon, 15 Aug 2022 12:11:52 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1] drm/ttm: Refcount allocated tail pages
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>, Huang Rui <ray.huang@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Trigger Huang <Trigger.Huang@gmail.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Antonio Caggiano <antonio.caggiano@collabora.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>, kvm@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-References: <20220815095423.11131-1-dmitry.osipenko@collabora.com>
- <8230a356-be38-f228-4a8e-95124e8e8db6@amd.com>
- <134bce02-58d6-8553-bb73-42dfda18a595@collabora.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <134bce02-58d6-8553-bb73-42dfda18a595@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AM5PR1001CA0059.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:206:15::36) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Mon, 15 Aug 2022 06:14:21 -0400
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1DE1EC66;
+        Mon, 15 Aug 2022 03:13:52 -0700 (PDT)
+Received: by mail-qv1-f44.google.com with SMTP id mz1so116867qvb.4;
+        Mon, 15 Aug 2022 03:13:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=o6xCOA86Hungq+d+MPhC/+jht0io7Fvy+/Zhbi5ZEAs=;
+        b=bFb3HODVMgxuuXVCxbHtv0h1hrzn9Hfvv6Ic6zP76t/z3EcbYDuuG4ZkDWnUV7d285
+         BGH+UQUGD/zQKPuiKUVNtoESdjd25ogXzZ3UTtUV6GWZVwGqyKC5wRTa5+dukPYTooLD
+         kvJysdtAsf+FtAoX/Gl0ja8rFBXUr8DKmWdyNkz+90CC8azrPBNbVHDfRGp3XkDugDno
+         wWJapqweK+H54/HUGqRexY/yn0CbRF+D2zJA9AfotSU9RSSSCHw1nLXBHEmh9WbCuoDW
+         zRtHQPra2LpgNlk620kvN9obiKuVTU4Tdz4eAyUOq3VjODsIE05j69G7uiygJaQtONus
+         ng4Q==
+X-Gm-Message-State: ACgBeo3/4zXdYv4Nix5+qHrqRWzjW/pItJ5WAbidVAIXO/O2nj7dJu4i
+        8limkfhn12b6Hlq5ymeKcOOuqXrDAR9pYf9c
+X-Google-Smtp-Source: AA6agR7QViD+S0O2H9qc6JvlauZv7z9vQuWsyYfm+yuZ9qj1yCm83Qtjib25s8Juebm8sL+tSh7/ew==
+X-Received: by 2002:ad4:4eeb:0:b0:474:8435:1508 with SMTP id dv11-20020ad44eeb000000b0047484351508mr12943269qvb.5.1660558431299;
+        Mon, 15 Aug 2022 03:13:51 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id h5-20020a05620a284500b006b9a24dc9d7sm8008240qkp.7.2022.08.15.03.13.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Aug 2022 03:13:49 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 21so11519699ybf.4;
+        Mon, 15 Aug 2022 03:13:49 -0700 (PDT)
+X-Received: by 2002:a25:da0b:0:b0:67a:7fb6:8ae with SMTP id
+ n11-20020a25da0b000000b0067a7fb608aemr11373117ybf.89.1660558429300; Mon, 15
+ Aug 2022 03:13:49 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2408e371-ee95-4125-1e74-08da7ea69670
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4251:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KJd+JUXroGqBlZeIjxVJPR0fYPhp+jCxlNu5ZuzHzCPQqWHm+thcrc9fLoJJB6LAY3mcck7S8tEm/5GBm0x7edn9Wld8BQa7lT7m3A534By3T/d/D8sXApqgU29FMQu84XHNSeaF+6T5DmLEvQl2cd/dchuMRpJLUsgDtWd1QvAmqQa13AHN9Riw4cu5VdEwgKYhl+f44hwIO86/qtz42J5hU2WjWX3xjqxeJ3GFry2Fxq5AXInDMa7S/boNcSs5c5pmFxzYGfrbNxABOxbzfk330O7C0ZAAvgevaVaN98yg32S07ZKTAZTorNXamJlCYzSVKz+0h6tdRBdDhS977HOvQYLm3CcZyGGGVfoEMdBMVAg1d3nvc8io+MhhA91MOFiIPg+tsTAYTbmnmZdHJ54z6pR5JfMgSHcUQKk1L4R/TtglIXTliuMYNFwUwyHrenn8XCUYQXaV3BJBjtM02R9atwQ6pjY/tHNiJNOCnQz+Y/1id++1pEFW2Cb8e7aGHfEBdaFDaOAVHr/3bEB+ia0Vi6e0N2LqPNyYHuXs+gmq0LxAWA4t3mZsKSZLkRIHpxhAAxXyVbNkwy5skyYjkAUUuivl3YwA4xE5uVPDDxTUsvBYa5cQoLbkmhhyCgHRoVXaK/OgA3+4qQ31tRTONL+kTwmj1VrTW5jr9JrCuFIqNCMzht9izWhSjWf7EyXobuMrDmk0Fs7tyWHaiBy8lGKPnSXz/bwH/ivS8QqMMKtci5Sr9Jb+OcrV/MFbInfmp7siuSjxs0h8TM4eFxss4nIUYjOcLP9oGCMfCKXeMbDwnmqSMEFX84zEcrC4sKHIc+lyTMhBjfRxUkS+M6wGLQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(136003)(366004)(39860400002)(376002)(7416002)(8936002)(5660300002)(31696002)(2906002)(86362001)(41300700001)(66476007)(66574015)(186003)(6666004)(2616005)(6506007)(6512007)(83380400001)(478600001)(53546011)(38100700002)(66556008)(4326008)(8676002)(316002)(110136005)(6486002)(36756003)(66946007)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WnNzaThMU0owZUY1bGFHVjdzbEpvNGVQUDlrYytJS2x0dDNiSmQ5dlUxODMz?=
- =?utf-8?B?UU5kTWtaZ2Z5OUllRlRwVStCZXJkcE5kOHo2ajNsayt2ZTE3amd0ZUZ1elJs?=
- =?utf-8?B?eEttVy9EWTNlTWpPM3JBSEhKcU5IaDVpdHkyLzlOZEdwMDFweEtZbUFsR2F6?=
- =?utf-8?B?eWlqaVM0UXNabngxTnVMV3lQc05ZalRvWTZZbTJYVVBwbW5pQXM1YnJaaTZU?=
- =?utf-8?B?TFdmVSsvT1dwSVNYMG1DbVlubUNtdnU2dGhObFVSSTJkcXh6RkZJTGZQOFl2?=
- =?utf-8?B?Zi9mSWcxS2R2MUswbldONFNlcnlVcERmM1RZa3FMSjFZdThRZVA2VkN3TFpK?=
- =?utf-8?B?UGIrenBMU3dpbis4VFV3djRXaGhNSnovSEJlSVFzR1lMT2VscHhIbTU3RGNL?=
- =?utf-8?B?SW1iU1FVQkswTytHZHdtdEZ1TFhySmdmTy8wUjdHQ29pRmh6aEs4TzJyNEc0?=
- =?utf-8?B?UDFEREx2c1FDUW1KZ2EzdXlIS0U4ZTA3MEEwOFFqMmhkZU1vN2VoK1dDR0Uv?=
- =?utf-8?B?cEJWYWd2M0xxRGdSSUtoMi96TUxFS3RuRVYyWHBiZndTOFV5K3NDU24zZTls?=
- =?utf-8?B?YWpqRDVsT1puZDNBS1ZKTFFWVWZ6L1pTMU9OQlVhQ1BXeENzTCsxaXRYZUhy?=
- =?utf-8?B?YURtL2FWd2NYbTBvSy94QTA5ZlhwZ3NMKzRXVFJFL2NkbUJKOExpd1FUSkhs?=
- =?utf-8?B?dFRBZXFEYWxuV2x2bXRuRU52eGE1RExRdG00bWVRYnFOQWRsb0U4OUlqR0Zq?=
- =?utf-8?B?M0NTOGVqU09kTlBEeTBJNXowOFBQN2Z5cnRvb1d3R2xaWjl5MG5XZ2JZcDYy?=
- =?utf-8?B?ZTlZeThlZFh3YXFTSGVGTmo3VTRCK2RnYVlvMS9mdkgrcHhzMStVSmVXeVJT?=
- =?utf-8?B?WFZDMUw2RUhPYk9ZQThIOStUbzdRYXRsUmZiZnRaRG83c01yQjRpYUtjQ1lF?=
- =?utf-8?B?YlF3OGVtSDkvNkFPcUlSS3Rzekk4MVkvSlRQTHg2MUZBRWw2VG50TGdMUmdD?=
- =?utf-8?B?WWgrZ3JrYzE4dnJKVXVqU01rQ2lmTFpmTlFVSGNYUEw5Mk5oRnZtTHhIMnVN?=
- =?utf-8?B?dmwvQmVMTHNjTXMxQUwwUENDY2dNK3FRNC9VZld3dC9DaG84SHYvTFh6Q2Nm?=
- =?utf-8?B?MWptSWN4akMzT2dNdll5WlIxYlFHcDhlVmd4WnNFRmg3WmRGS09ieW4vUFho?=
- =?utf-8?B?dnhyRldWZUtDSXd4VE1xK3pOY2tQanl6bFZ4enpGU1FMZXlRYlJGTnd6blVn?=
- =?utf-8?B?Vk92bzJ3NmlOM2JzUTdCWWlZSnhsYzRTWHRBRURaU3VnbmVrcnpyWElVZkZs?=
- =?utf-8?B?UTRrdHQ5d0tNYldmdWdWSkxCaEI4SXZrQkxQMHg4c1JXYUNyNUZGZi96WTQ2?=
- =?utf-8?B?R0dJSC9XUXhYU1ROT01IcnJodXFjb21mQUttdXdiay9LenlSeUczdFJhajN1?=
- =?utf-8?B?YkRUR2U3WTgwODRTclVsdkpNZmNIVzBPU25DSGNjVW5yT2FER3Zyd0Noby9z?=
- =?utf-8?B?emFDMlVoWGpJS0FndnRqazBYOGRublhaYy9aQjBoWVlRelhnZGJYbTBsNWdy?=
- =?utf-8?B?b2JMNHpld01vdDc0dzljaWlIRjVZc2dPaGhYUnVlZmRmR2lMZEVKelRVbmE0?=
- =?utf-8?B?bUZITUdlMGM0UVhGbE0vcFRvQkVUMEluZi9oNXpiWk05N011T3NNRTVPcHVH?=
- =?utf-8?B?YktDRmNybDMrM2pwYktPNjIyMUVyamZ1MEg3T2Y2NGoybkpOM3dVcnJmcCtM?=
- =?utf-8?B?WnhUSEVaaXk1T0dDdWljemJ3Z1lrekpDbE1leHVpNFozM2FnUDNIOUMvNC9I?=
- =?utf-8?B?ME9QN2F2cGhESS9udXZUdUkxRDFKYk1Ba1M3RXFTOUdFakt4bFZ6Qlo5TlRD?=
- =?utf-8?B?WUQyYkVSbFFPY3pYQ1l0VWJqcXJ1V1VXM0xxekwrWnB0Tk85YzNmUGZGSGEy?=
- =?utf-8?B?aFk1Rm81ZE5SaCtFMEMwVHdVeDArcVZiQVpzYkJGcUxZOTA5WVBSQ1Noc2Y3?=
- =?utf-8?B?ZjNhU0RycExCdzIwSlFYd29OWXJJeXBHTC9qSW50cW5jRGZSOEFzZWJmSWNn?=
- =?utf-8?B?R3JLa0hMQit2Z2JnN1Fsc09PREJDZmJ3SU1jZSt1S2VCVXpIckNBQlZiSFln?=
- =?utf-8?B?dldyMXMzQi9GV3hLcXRiVXZ2ekxzY3ZUaXNYcWFJTnpYY3hDV3R6SE9rZkdv?=
- =?utf-8?Q?+69ZLcuRlrUWufC9ip5W/7DUSuVdid0ByDckCEpyuLbH?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2408e371-ee95-4125-1e74-08da7ea69670
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2022 10:11:58.3228
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /6amPt3rAAIocRnt1ujLPZAoo+tajaLJ5xsc78Onfu748jqehN/nS3KPOnH3F7i6
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4251
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220630195703.10155-1-bvanassche@acm.org> <20220630195703.10155-3-bvanassche@acm.org>
+ <alpine.DEB.2.22.394.2207191125130.1006766@ramsan.of.borg>
+ <db19ed29-e7f9-e5b0-3a6c-f2812078a07d@acm.org> <CAMuHMdVzsgSYtbJQnaigNax_JbxPsQfU+gHcteS-ojWbxUdMfw@mail.gmail.com>
+ <CAMuHMdWtxBj8ug7AHTqentF8UD4jpO2sgoWWcQCOvEKLJtdq8A@mail.gmail.com>
+ <506ca1a6-1122-5755-fc74-60f7c7bfbd0d@acm.org> <CAMuHMdVQ2K2v8jpsFfOMk99DG_sBB4_ioiQRroC7K_Ov1wvp9w@mail.gmail.com>
+ <6f70e742-9d8a-f389-0482-0ba9696bf445@acm.org> <CAMuHMdVc+ATGV-=R3uV6RyF0-mZiuKv7HpmogRBgqGVyO-MKWg@mail.gmail.com>
+ <54e20a27-a10b-b77a-e950-1d3398e2e907@acm.org> <CAMuHMdURQpAEGgv4cY7v0rqzs12v2TT=Amt26Y0OoBSW7YAoaw@mail.gmail.com>
+ <084e7c5a-f98d-d61e-de81-83525851ecf9@acm.org> <CAMuHMdW2vOC8ZsE_XF8TbSNoF9zCrwq7UkGZ5jXen1E1mTZe+g@mail.gmail.com>
+ <14ec47f3-f3b8-61c7-2c64-d96d00dd7076@acm.org>
+In-Reply-To: <14ec47f3-f3b8-61c7-2c64-d96d00dd7076@acm.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 15 Aug 2022 12:13:37 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW7nGxV_3Z2JV_TCM+WtTdYv5P+0cE6Tw=6krcseNCdAw@mail.gmail.com>
+Message-ID: <CAMuHMdW7nGxV_3Z2JV_TCM+WtTdYv5P+0cE6Tw=6krcseNCdAw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] scsi: sd: Rework asynchronous resume support
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
+        John Garry <john.garry@huawei.com>, ericspero@icloud.com,
+        jason600.groome@gmail.com,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-ide@vger.kernel.org,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 15.08.22 um 12:09 schrieb Dmitry Osipenko:
-> On 8/15/22 13:05, Christian König wrote:
->> Am 15.08.22 um 11:54 schrieb Dmitry Osipenko:
->>> Higher order pages allocated using alloc_pages() aren't refcounted and
->>> they
->>> need to be refcounted, otherwise it's impossible to map them by KVM. This
->>> patch sets the refcount of the tail pages and fixes the KVM memory
->>> mapping
->>> faults.
->>>
->>> Without this change guest virgl driver can't map host buffers into guest
->>> and can't provide OpenGL 4.5 profile support to the guest. The host
->>> mappings are also needed for enabling the Venus driver using host GPU
->>> drivers that are utilizing TTM.
->>>
->>> Based on a patch proposed by Trigger Huang.
->> Well I can't count how often I have repeated this: This is an absolutely
->> clear NAK!
->>
->> TTM pages are not reference counted in the first place and because of
->> this giving them to virgl is illegal.
-> A? The first page is refcounted when allocated, the tail pages are not.
+Hoi Bart,
 
-No they aren't. The first page is just by coincident initialized with a 
-refcount of 1. This refcount is completely ignored and not used at all.
+On Fri, Aug 12, 2022 at 5:53 PM Bart Van Assche <bvanassche@acm.org> wrote:
+> On 8/12/22 03:48, Geert Uytterhoeven wrote:
+> > sd_submit_start() is called once during suspend, and once during
+> > resume.  It does not hang.
+> >
+> > Reading from /dev/sda hangs after resume (not in sd_submit_start(),
+> > which is never called for reading).
 
-Incrementing the reference count and by this mapping the page into some 
-other address space is illegal and corrupts the internal state tracking 
-of TTM.
+FTR, this issue is now present in v6.0-rc1. Reverting commit
+88f1669019bd62b3 ("scsi: sd: Rework asynchronous resume support")
+fixes it.
 
->> Please immediately stop this completely broken approach. We have
->> discussed this multiple times now.
-> Could you please give me a link to these discussions?
+> > Two tasks are blocked in blk_mq_get_tag() calling io_schedule():
+> >
+> > task:kworker/7:1     state:D stack:    0 pid:  122 ppid:     2 flags:0x00000008
+> > Workqueue: events ata_scsi_dev_rescan
+> > Call trace:
+> >   __switch_to+0xbc/0x124
+> >   __schedule+0x540/0x71c
+> >   schedule+0x58/0xa0
+> >   io_schedule+0x18/0x34
+> >   blk_mq_get_tag+0x138/0x244
+> >   __blk_mq_alloc_requests+0x130/0x2f0
+> >   blk_mq_alloc_request+0x74/0xa8
+> >   scsi_alloc_request+0x10/0x30
+> >   __scsi_execute+0x5c/0x18c
+> >   scsi_vpd_inquiry+0x7c/0xdc
+> >   scsi_get_vpd_size+0x34/0xa8
+> >   scsi_get_vpd_buf+0x28/0xf4
+> >   scsi_attach_vpd+0x44/0x170
+> >   scsi_rescan_device+0x30/0x98
+> >   ata_scsi_dev_rescan+0xc8/0xfc
+> >   process_one_work+0x2e0/0x474
+> >   worker_thread+0x1cc/0x270
+> >   kthread+0xd8/0xe8
+> >   ret_from_fork+0x10/0x20
+> >
+> >
+> > task:hd              state:D stack:    0 pid: 1163 ppid:  1076 flags:0x00000000
+> > Call trace:
+> >   __switch_to+0xbc/0x124
+> >   __schedule+0x540/0x71c
+> >   schedule+0x58/0xa0
+> >   io_schedule+0x18/0x34
+> >   blk_mq_get_tag+0x138/0x244
+> >   __blk_mq_alloc_requests+0x130/0x2f0
+> >   blk_mq_submit_bio+0x44c/0x5b4
+> >   __submit_bio+0x24/0x5c
+> >   submit_bio_noacct_nocheck+0x8c/0x178
+> >   submit_bio_noacct+0x380/0x3b0
+> >   submit_bio+0x34/0x3c
+> >   mpage_bio_submit+0x28/0x38
+> >   mpage_readahead+0xa8/0x178
+> >   blkdev_readahead+0x14/0x1c
+> >   read_pages+0x4c/0x158
+> >   page_cache_ra_unbounded+0xd8/0x174
+> >   do_page_cache_ra+0x40/0x4c
+> >   page_cache_ra_order+0x14/0x1c
+> >   ondemand_readahead+0x124/0x2fc
+> >   page_cache_sync_ra+0x50/0x54
+> >   filemap_read+0x130/0x6e8
+> >   blkdev_read_iter+0xf0/0x164
+> >   new_sync_read+0x74/0xc0
+> >   vfs_read+0xbc/0xd8
+> >   ksys_read+0x6c/0xd4
+> >   __arm64_sys_read+0x14/0x1c
+> >   invoke_syscall+0x70/0xf4
+> >   el0_svc_common.constprop.0+0xbc/0xf0
+> >   do_el0_svc+0x18/0x20
+> >   el0_svc+0x30/0x84
+> >   el0t_64_sync_handler+0x90/0xf8
+> >   el0t_64_sync+0x14c/0x150
+>
+> All that can be concluded from the above is that blk_mq_get_tag() is
+> waiting for other I/O request(s) to finish. One or more other requests
+> are in progress and either scsi_done() has not been called for these
+> requests or the error handler got stuck. Since the issue reported above
+> is not observed with other ATA interfaces, this may be related to the
+> ATA interface driver used in your test setup.
 
-Not of hand, please search the dri-devel list for similar patches. This 
-was brought up multiple times now.
+I have added debug prints to all ata_port_operations in
+sata_rcar_port_ops.  After s2idle, running "hd /dev/sda | head -70"
+hangs before any of these functions are called.
 
-Regards,
-Christian.
+Showing all locks held in the system:
+1 lock held by rcu_tasks_kthre/10:
+ #0: ffff800009575c38 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at:
+rcu_tasks_one_gp+0x34/0x4c8
+4 locks held by kworker/0:10/104:
+ #0: ffff0004c0008738 ((wq_completion)events){+.+.}-{0:0}, at:
+process_one_work+0x1f4/0x6a0
+ #1: ffff80000a90bde0
+((work_completion)(&ap->scsi_rescan_task)){+.+.}-{0:0}, at:
+process_one_work+0x1f4/0x6a0
+ #2: ffff0004c2b6bf60 (&ap->scsi_scan_mutex){+.+.}-{3:3}, at:
+ata_scsi_dev_rescan+0x28/0x118
+ #3: ffff0004c2902368 (&dev->mutex){....}-{3:3}, at:
+scsi_rescan_device+0x28/0x78
+1 lock held by in:imklog/636:
+ #0: ffff0004c5ee86e8 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0x54/0x68
+1 lock held by hd/1013:
+ #0: ffff0004c06388b8 (mapping.invalidate_lock#2){.+.+}-{3:3}, at:
+page_cache_ra_unbounded+0x64/0x1a8
+
+I've just tried with a USB storage device on the same platform,
+and it can be read fine after s2idle.  So it looks like the issue
+is related to SATA.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

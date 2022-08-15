@@ -2,109 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA42592929
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 07:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5AE592926
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 07:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240440AbiHOFp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 01:45:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
+        id S233252AbiHOFpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 01:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbiHOFpX (ORCPT
+        with ESMTP id S229887AbiHOFo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 01:45:23 -0400
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5D55FCE;
-        Sun, 14 Aug 2022 22:45:22 -0700 (PDT)
+        Mon, 15 Aug 2022 01:44:59 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8853A14081
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 22:44:58 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id a89so8342672edf.5
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 22:44:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1660542323; x=1692078323;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=MN6DZzBy9X27OEYsKBr2tzzbyxhyziDucda9ItSouK4=;
-  b=ZRmm7FzeriUOpGDeBI1QopzXyEZx2E0Jxb2n9awAhxSjhmMUo9Yw3u7l
-   ejSyT8kqUpPMB/ieWUH+v1KsQfW7rRh3C5lSV7hbCJ8rQ+Yvwc355IOfx
-   BlbgYZ54J7fDpuPHk/TAP/BJIwtgcyHd6w/qr+2j7wV12eG0HIPB4kiI9
-   Y=;
-X-IronPort-AV: E=Sophos;i="5.93,237,1654560000"; 
-   d="scan'208";a="119102256"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-35b1f9a2.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 05:45:03 +0000
-Received: from EX13D16EUB003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1d-35b1f9a2.us-east-1.amazon.com (Postfix) with ESMTPS id F32032011F5;
-        Mon, 15 Aug 2022 05:44:58 +0000 (UTC)
-Received: from [192.168.12.137] (10.43.162.134) by
- EX13D16EUB003.ant.amazon.com (10.43.166.99) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Mon, 15 Aug 2022 05:44:52 +0000
-Message-ID: <05dbdf57-e990-465d-e4cc-e83e7f2b697a@amazon.com>
-Date:   Mon, 15 Aug 2022 08:44:42 +0300
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=mMUN8Qee6AU9PyduawvjEcL4SapJHncscr/7tXu4+K4=;
+        b=Tm5jgzTUgOoMSpl3LI8IvwEC8JMinl+dfgcGXsPbqWsYTOq549KDt7bK8DtuIhoqfd
+         AFlbevdMUrem9eftVh5qM2VuCXBx1BoQnw2fa/tNbicaGYRDoqkEu0Ungjj0AMd5YBbW
+         ClNV4qmZBmiFhJg0D/n2jAeIYC/xIpR7T8X3b/HXdkD9KRu3Ectb0IWkXE/e3REKDILA
+         I6mm9CK7IErvIAP/FlFTdF0vXQAq2+TTZlAHaWGYxM589WTZTAnr99Jpav2WcRfbSryo
+         7H7MeQ48OrAFyosCRasiMYIiMJE29a8VqsRZRUrgDw3KiXE5MXaoNYXdpVV3JWT1RsFK
+         5NPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=mMUN8Qee6AU9PyduawvjEcL4SapJHncscr/7tXu4+K4=;
+        b=I4+e1b+SPu12/nw45ZM+fIsbmqsNOQnGTabmpZAcFUd1KThz9ZpZpE3FaCePrjZd/F
+         P9XzVqfEwQZnpzLBjVuEQbPd9dqqoLrfzbe+PPpOH9NR9LzZdyfbVanzSbhm9gt8bLrf
+         LStewy2HsYKMIovcoA3+OM7Em3MuAnM/wdpgb0LPwGWZRNVsrs+jKmznLygameFX53Ja
+         8OhRTmjzquhHV+UI4RH6uYWTTPzlQYHjWxgEgjirLyoimuUOAnEnoZSfQdreI0Z8S70U
+         6BqV4F9hUeG/a29A/xtbxs0gJzVQlrU5V50ln1V/lCn6JThkClOe4FDHNETFI477iIce
+         PNvQ==
+X-Gm-Message-State: ACgBeo0MzVz9nqJcwU2own5C6g7/FPPirUHY9drnFBHw3X5h7XHgxVtJ
+        lqXM6DdcULFLWxDPjix9xaxaQg==
+X-Google-Smtp-Source: AA6agR4Z6hwKoMrydksGcFsvhS3VExRGPQc6QMqRIYwU9hUrshQYx5Yt//HSTO0ijqaMxIFKRRB70w==
+X-Received: by 2002:a05:6402:3408:b0:43c:2dd3:d86b with SMTP id k8-20020a056402340800b0043c2dd3d86bmr13277953edc.108.1660542297073;
+        Sun, 14 Aug 2022 22:44:57 -0700 (PDT)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id r21-20020aa7cb95000000b0043cfc872e7dsm5979905edt.10.2022.08.14.22.44.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 14 Aug 2022 22:44:56 -0700 (PDT)
+Message-ID: <feff23c6-529c-3421-c48c-463846e59630@blackwall.org>
+Date:   Mon, 15 Aug 2022 08:44:55 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.0.3
-Subject: Re: [PATCH] kunit: fix Kconfig for build-in tests USB4 and Nitro
- Enclaves
-To:     Nico Pache <npache@redhat.com>, <kunit-dev@googlegroups.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <davidgow@google.com>
-CC:     <skhan@linuxfoundation.org>, <dlatypov@google.com>,
-        <brendan.higgins@linux.dev>, <alcioa@amazon.com>,
-        <lexnv@amazon.com>, <YehezkelShB@gmail.com>,
-        <mika.westerberg@linux.intel.com>, <michael.jamet@intel.com>,
-        <andreas.noever@gmail.com>
-References: <20220810234056.2494993-1-npache@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH net-next] net: rtnetlink: fix module reference count leak
+ issue in rtnetlink_rcv_msg
 Content-Language: en-US
-From:   "Paraschiv, Andra-Irina" <andraprs@amazon.com>
-In-Reply-To: <20220810234056.2494993-1-npache@redhat.com>
-X-Originating-IP: [10.43.162.134]
-X-ClientProxiedBy: EX13D18UWC002.ant.amazon.com (10.43.162.88) To
- EX13D16EUB003.ant.amazon.com (10.43.166.99)
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Zhengchao Shao <shaozhengchao@huawei.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     idosch@nvidia.com, petrm@nvidia.com, florent.fourcot@wifirst.fr,
+        weiyongjun1@huawei.com, yuehaibing@huawei.com
+References: <20220815024629.240367-1-shaozhengchao@huawei.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20220815024629.240367-1-shaozhengchao@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgpPbiAxMS4wOC4yMDIyIDAyOjQwLCBOaWNvIFBhY2hlIHdyb3RlOgo+IAo+IEJvdGggdGhlIFVT
-QjQgYW5kIE5pdHJvIEVuY2xhdmVzIEtVTklUIHRlc3RzIGFyZSBub3cgYWJsZSB0byBiZSBjb21w
-aWxlZAo+IGlmIEtVTklUIGlzIGNvbXBpbGVkIGFzIGEgbW9kdWxlLiBUaGlzIGxlYWRzIHRvIGlz
-c3VlcyBpZiBLVU5JVCBpcyBiZWluZwo+IHBhY2thZ2VkIHNlcGFyYXRlbHkgZnJvbSB0aGUgY29y
-ZSBrZXJuZWwgYW5kIHdoZW4gS1VOSVQgaXMgcnVuIGJhcmVtZXRhbAo+IHdpdGhvdXQgdGhlIHJl
-cXVpcmVkIGRyaXZlciBjb21waWxlZCBpbnRvIHRoZSBrZXJuZWwuCj4gCj4gRml4ZXM6IDYzNWRj
-ZDE2ODQ0YiAoInRodW5kZXJib2x0OiB0ZXN0OiBVc2Uga3VuaXRfdGVzdF9zdWl0ZSgpIG1hY3Jv
-IikKPiBGaXhlczogZmU1YmU4MDhmYTZjICgibml0cm9fZW5jbGF2ZXM6IHRlc3Q6IFVzZSBrdW5p
-dF90ZXN0X3N1aXRlKCkgbWFjcm8iKQo+IFNpZ25lZC1vZmYtYnk6IE5pY28gUGFjaGUgPG5wYWNo
-ZUByZWRoYXQuY29tPgo+IC0tLQo+ICAgZHJpdmVycy90aHVuZGVyYm9sdC9LY29uZmlnICAgICAg
-ICAgfCAzICstLQo+ICAgZHJpdmVycy92aXJ0L25pdHJvX2VuY2xhdmVzL0tjb25maWcgfCAyICst
-Cj4gICAyIGZpbGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKPiAK
-PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy90aHVuZGVyYm9sdC9LY29uZmlnIGIvZHJpdmVycy90aHVu
-ZGVyYm9sdC9LY29uZmlnCj4gaW5kZXggZTc2YTZjMTczNjM3Li5mMTJkMGEzZWUzZTIgMTAwNjQ0
-Cj4gLS0tIGEvZHJpdmVycy90aHVuZGVyYm9sdC9LY29uZmlnCj4gKysrIGIvZHJpdmVycy90aHVu
-ZGVyYm9sdC9LY29uZmlnCj4gQEAgLTI5LDggKzI5LDcgQEAgY29uZmlnIFVTQjRfREVCVUdGU19X
-UklURQo+IAo+ICAgY29uZmlnIFVTQjRfS1VOSVRfVEVTVAo+ICAgICAgICAgIGJvb2wgIktVbml0
-IHRlc3RzIiBpZiAhS1VOSVRfQUxMX1RFU1RTCj4gLSAgICAgICBkZXBlbmRzIG9uIChVU0I0PW0g
-fHwgS1VOSVQ9eSkKPiAtICAgICAgIGRlcGVuZHMgb24gS1VOSVQKPiArICAgICAgIGRlcGVuZHMg
-b24gVVNCNCAmJiBLVU5JVD15Cj4gICAgICAgICAgZGVmYXVsdCBLVU5JVF9BTExfVEVTVFMKPiAK
-PiAgIGNvbmZpZyBVU0I0X0RNQV9URVNUCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdmlydC9uaXRy
-b19lbmNsYXZlcy9LY29uZmlnIGIvZHJpdmVycy92aXJ0L25pdHJvX2VuY2xhdmVzL0tjb25maWcK
-PiBpbmRleCBjZTkxYWRkODE0MDEuLmRjNGQyNWMyNjI1NiAxMDA2NDQKPiAtLS0gYS9kcml2ZXJz
-L3ZpcnQvbml0cm9fZW5jbGF2ZXMvS2NvbmZpZwo+ICsrKyBiL2RyaXZlcnMvdmlydC9uaXRyb19l
-bmNsYXZlcy9LY29uZmlnCj4gQEAgLTE3LDcgKzE3LDcgQEAgY29uZmlnIE5JVFJPX0VOQ0xBVkVT
-Cj4gCj4gICBjb25maWcgTklUUk9fRU5DTEFWRVNfTUlTQ19ERVZfVEVTVAo+ICAgICAgICAgIGJv
-b2wgIlRlc3RzIGZvciB0aGUgbWlzYyBkZXZpY2UgZnVuY3Rpb25hbGl0eSBvZiB0aGUgTml0cm8g
-RW5jbGF2ZXMiIGlmICFLVU5JVF9BTExfVEVTVFMKPiAtICAgICAgIGRlcGVuZHMgb24gTklUUk9f
-RU5DTEFWRVMgJiYgS1VOSVQKPiArICAgICAgIGRlcGVuZHMgb24gTklUUk9fRU5DTEFWRVMgJiYg
-S1VOSVQ9eQo+ICAgICAgICAgIGRlZmF1bHQgS1VOSVRfQUxMX1RFU1RTCj4gICAgICAgICAgaGVs
-cAo+ICAgICAgICAgICAgRW5hYmxlIEtVbml0IHRlc3RzIGZvciB0aGUgbWlzYyBkZXZpY2UgZnVu
-Y3Rpb25hbGl0eSBvZiB0aGUgTml0cm8KCgpGb3IgdGhlIE5pdHJvIEVuY2xhdmVzIHBhcnQ6CgpS
-ZXZpZXdlZC1ieTogQW5kcmEgUGFyYXNjaGl2IDxhbmRyYXByc0BhbWF6b24uY29tPgoKVGhhbmsg
-eW91LgoKQW5kcmEKCj4gLS0KPiAyLjM2LjEKPiAKCgoKQW1hem9uIERldmVsb3BtZW50IENlbnRl
-ciAoUm9tYW5pYSkgUy5SLkwuIHJlZ2lzdGVyZWQgb2ZmaWNlOiAyN0EgU2YuIExhemFyIFN0cmVl
-dCwgVUJDNSwgZmxvb3IgMiwgSWFzaSwgSWFzaSBDb3VudHksIDcwMDA0NSwgUm9tYW5pYS4gUmVn
-aXN0ZXJlZCBpbiBSb21hbmlhLiBSZWdpc3RyYXRpb24gbnVtYmVyIEoyMi8yNjIxLzIwMDUuCg==
+On 15/08/2022 05:46, Zhengchao Shao wrote:
+> When bulk delete command is received in the rtnetlink_rcv_msg function,
+> if bulk delete is not supported, module_put is not called to release
+> the reference counting. As a result, module reference count is leaked.
+> 
+> Fixes: a6cec0bcd342("net: rtnetlink: add bulk delete support flag")
+> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+> ---
+>  net/core/rtnetlink.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
+> index ac45328607f7..4b5b15c684ed 100644
+> --- a/net/core/rtnetlink.c
+> +++ b/net/core/rtnetlink.c
+> @@ -6070,6 +6070,7 @@ static int rtnetlink_rcv_msg(struct sk_buff *skb, struct nlmsghdr *nlh,
+>  	if (kind == RTNL_KIND_DEL && (nlh->nlmsg_flags & NLM_F_BULK) &&
+>  	    !(flags & RTNL_FLAG_BULK_DEL_SUPPORTED)) {
+>  		NL_SET_ERR_MSG(extack, "Bulk delete is not supported");
+> +		module_put(owner);
+>  		goto err_unlock;
+>  	}
+>  
 
+Oops, thanks.
+Acked-by: Nikolay Aleksandrov <razor@blackwall.org>

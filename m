@@ -2,96 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6F0593467
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 20:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BD2359376E
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbiHOSBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 14:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
+        id S245503AbiHOTHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 15:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233033AbiHOSAw (ORCPT
+        with ESMTP id S245699AbiHOTCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 14:00:52 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964C3BC18;
-        Mon, 15 Aug 2022 11:00:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=/1Bx4HDcIyS39X1ZLODVkDqCVJcvom8FSa7thBn5AsE=; b=mENEtynCU/ALxF5w4Q0Ehssk5Q
-        O5IupNEBxUgN7s73l+WpbLWR7KJDJaAjc/w01JiKOQUfUUGGi8AapQHL0Sf76sM3jAz7nm6amNxmK
-        TAo5EfGIS0GpbTQpicxWprZ+iNJX4vFkTUfGuCjdBtjGYmyNcAMe61WRzJD8wPC9Sm1oZ0FgD+MEA
-        H9gA5RUix9i25JSNE8mDv4y+iR/pEkC5Io094XmSiz61hdyh+XOizyPeQdU4fES4cprdAx114605i
-        tXSIBiSoKYTRADPVzdrlPQosCEccXopfGXUDuik+l8aY4QKpq0sC5VBWz1rramrs1l1sioy08lUKn
-        MAgr9C4w==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33802)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oNeOL-0003TT-Hg; Mon, 15 Aug 2022 19:00:45 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oNeOI-00041h-LD; Mon, 15 Aug 2022 19:00:42 +0100
-Date:   Mon, 15 Aug 2022 19:00:42 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     netdev@vger.kernel.org,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next] net: phy: broadcom: Implement suspend/resume
- for AC131 and BCM5241
-Message-ID: <YvqJyg3eUusc8jkC@shell.armlinux.org.uk>
-References: <20220815174356.2681127-1-f.fainelli@gmail.com>
+        Mon, 15 Aug 2022 15:02:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487FD357DE;
+        Mon, 15 Aug 2022 11:33:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB415B8106C;
+        Mon, 15 Aug 2022 18:33:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5750CC433D6;
+        Mon, 15 Aug 2022 18:33:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660588423;
+        bh=xfN3aMUT72GVuYA0umVk3VuFaMgbIjj+rzjPO5QTWwk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=s5Ggvkf4lIJuQH8ZrftclfNj+Hir2PXCA+j4+167GUuVVsGoHPeefyqvv/46uDMjO
+         kGujbaptCYG5/GDwLfi5gBWpE2f2/xG4iX1BOdOO83eMbezow+xhyCL3g6J7PshTMs
+         PftPoRyoNUAXrolULPCtftLolbSnTd01GYx8brpc=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Quinn Tran <qutran@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 399/779] scsi: qla2xxx: edif: Add retry for ELS passthrough
+Date:   Mon, 15 Aug 2022 20:00:43 +0200
+Message-Id: <20220815180354.323284746@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220815180337.130757997@linuxfoundation.org>
+References: <20220815180337.130757997@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815174356.2681127-1-f.fainelli@gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 10:43:56AM -0700, Florian Fainelli wrote:
-> +	/* We cannot use a read/modify/write here otherwise the PHY continues
-> +	 * to drive LEDs which defeats the purpose of low power mode.
-> +	 */
-...
-> +	/* Set standby mode */
-> +	reg = phy_read(phydev, MII_BRCM_FET_SHDW_AUXMODE4);
-> +	if (reg < 0) {
-> +		err = reg;
-> +		goto done;
-> +	}
-> +
-> +	reg |= MII_BRCM_FET_SHDW_AM4_STANDBY;
-> +
-> +	err = phy_write(phydev, MII_BRCM_FET_SHDW_AUXMODE4, reg);
+From: Quinn Tran <qutran@marvell.com>
 
-Does the read-modify-write problem extend to this register? Why would
-the PHY behave differently whether you used phy_modify() here or not?
-On the mdio bus, it should be exactly the same - the only difference
-is that we're guaranteed to hold the lock over the sequence whereas
-this drops and re-acquires the lock.
+[ Upstream commit 0b3f3143d473b489a7aa0779c43bcdb344bd3014 ]
 
-If it's sensitive to the timing of the read and the write, it suggests
-the above code is fragile - maybe there needs to be a minimum delay
-inserted between the read and the write?
+Relating to EDIF, when sending IKE message, updating key or deleting key,
+driver can encounter IOCB queue full. Add additional retries to reduce
+higher level recovery.
 
+Link: https://lore.kernel.org/r/20220607044627.19563-8-njavali@marvell.com
+Fixes: dd30706e73b7 ("scsi: qla2xxx: edif: Add key update")
+Signed-off-by: Quinn Tran <qutran@marvell.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/qla2xxx/qla_edif.c | 52 +++++++++++++++++++++++----------
+ drivers/scsi/qla2xxx/qla_os.c   |  2 +-
+ 2 files changed, 38 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/scsi/qla2xxx/qla_edif.c b/drivers/scsi/qla2xxx/qla_edif.c
+index bdcc38bd955a..ee8e1ae2c300 100644
+--- a/drivers/scsi/qla2xxx/qla_edif.c
++++ b/drivers/scsi/qla2xxx/qla_edif.c
+@@ -1274,6 +1274,8 @@ qla24xx_check_sadb_avail_slot(struct bsg_job *bsg_job, fc_port_t *fcport,
+ 
+ #define QLA_SA_UPDATE_FLAGS_RX_KEY      0x0
+ #define QLA_SA_UPDATE_FLAGS_TX_KEY      0x2
++#define EDIF_MSLEEP_INTERVAL 100
++#define EDIF_RETRY_COUNT  50
+ 
+ int
+ qla24xx_sadb_update(struct bsg_job *bsg_job)
+@@ -1286,7 +1288,7 @@ qla24xx_sadb_update(struct bsg_job *bsg_job)
+ 	struct edif_list_entry *edif_entry = NULL;
+ 	int			found = 0;
+ 	int			rval = 0;
+-	int result = 0;
++	int result = 0, cnt;
+ 	struct qla_sa_update_frame sa_frame;
+ 	struct srb_iocb *iocb_cmd;
+ 	port_id_t portid;
+@@ -1527,11 +1529,23 @@ qla24xx_sadb_update(struct bsg_job *bsg_job)
+ 	sp->done = qla2x00_bsg_job_done;
+ 	iocb_cmd = &sp->u.iocb_cmd;
+ 	iocb_cmd->u.sa_update.sa_frame  = sa_frame;
+-
++	cnt = 0;
++retry:
+ 	rval = qla2x00_start_sp(sp);
+-	if (rval != QLA_SUCCESS) {
++	switch (rval) {
++	case QLA_SUCCESS:
++		break;
++	case EAGAIN:
++		msleep(EDIF_MSLEEP_INTERVAL);
++		cnt++;
++		if (cnt < EDIF_RETRY_COUNT)
++			goto retry;
++
++		fallthrough;
++	default:
+ 		ql_log(ql_dbg_edif, vha, 0x70e3,
+-		    "qla2x00_start_sp failed=%d.\n", rval);
++		       "%s qla2x00_start_sp failed=%d.\n",
++		       __func__, rval);
+ 
+ 		qla2x00_rel_sp(sp);
+ 		rval = -EIO;
+@@ -2254,7 +2268,6 @@ qla24xx_issue_sa_replace_iocb(scsi_qla_host_t *vha, struct qla_work_evt *e)
+ 	rval = qla2x00_start_sp(sp);
+ 
+ 	if (rval != QLA_SUCCESS) {
+-		rval = QLA_FUNCTION_FAILED;
+ 		goto done_free_sp;
+ 	}
+ 
+@@ -3383,7 +3396,7 @@ int qla_edif_process_els(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
+ 	fc_port_t *fcport = NULL;
+ 	struct qla_hw_data *ha = vha->hw;
+ 	srb_t *sp;
+-	int rval =  (DID_ERROR << 16);
++	int rval =  (DID_ERROR << 16), cnt;
+ 	port_id_t d_id;
+ 	struct qla_bsg_auth_els_request *p =
+ 	    (struct qla_bsg_auth_els_request *)bsg_job->request;
+@@ -3474,17 +3487,26 @@ int qla_edif_process_els(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
+ 	sp->free = qla2x00_bsg_sp_free;
+ 	sp->done = qla2x00_bsg_job_done;
+ 
++	cnt = 0;
++retry:
+ 	rval = qla2x00_start_sp(sp);
+-
+-	ql_dbg(ql_dbg_edif, vha, 0x700a,
+-	    "%s %s %8phN xchg %x ctlflag %x hdl %x reqlen %xh bsg ptr %p\n",
+-	    __func__, sc_to_str(p->e.sub_cmd), fcport->port_name,
+-	    p->e.extra_rx_xchg_address, p->e.extra_control_flags,
+-	    sp->handle, sp->remap.req.len, bsg_job);
+-
+-	if (rval != QLA_SUCCESS) {
++	switch (rval) {
++	case QLA_SUCCESS:
++		ql_dbg(ql_dbg_edif, vha, 0x700a,
++		       "%s %s %8phN xchg %x ctlflag %x hdl %x reqlen %xh bsg ptr %p\n",
++		       __func__, sc_to_str(p->e.sub_cmd), fcport->port_name,
++		       p->e.extra_rx_xchg_address, p->e.extra_control_flags,
++		       sp->handle, sp->remap.req.len, bsg_job);
++		break;
++	case EAGAIN:
++		msleep(EDIF_MSLEEP_INTERVAL);
++		cnt++;
++		if (cnt < EDIF_RETRY_COUNT)
++			goto retry;
++		fallthrough;
++	default:
+ 		ql_log(ql_log_warn, vha, 0x700e,
+-		    "qla2x00_start_sp failed = %d\n", rval);
++		    "%s qla2x00_start_sp failed = %d\n", __func__, rval);
+ 		SET_DID_STATUS(bsg_reply->result, DID_IMM_RETRY);
+ 		rval = -EIO;
+ 		goto done_free_remap_rsp;
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index e683b1c01c9f..e87ad7e0dc94 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -5466,7 +5466,7 @@ qla2x00_do_work(struct scsi_qla_host *vha)
+ 			    e->u.fcport.fcport, false);
+ 			break;
+ 		case QLA_EVT_SA_REPLACE:
+-			qla24xx_issue_sa_replace_iocb(vha, e);
++			rc = qla24xx_issue_sa_replace_iocb(vha, e);
+ 			break;
+ 		}
+ 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.35.1
+
+
+

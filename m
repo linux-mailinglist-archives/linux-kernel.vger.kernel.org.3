@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F29594815
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E282B594A55
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353218AbiHOX6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
+        id S1352734AbiHOX7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355444AbiHOXwJ (ORCPT
+        with ESMTP id S1355528AbiHOXwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:52:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D811695AE2;
-        Mon, 15 Aug 2022 13:17:00 -0700 (PDT)
+        Mon, 15 Aug 2022 19:52:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0BDC59D8;
+        Mon, 15 Aug 2022 13:17:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D501E60F9F;
-        Mon, 15 Aug 2022 20:16:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5CFBC433C1;
-        Mon, 15 Aug 2022 20:16:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2CA92B80EB1;
+        Mon, 15 Aug 2022 20:17:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 488C6C433C1;
+        Mon, 15 Aug 2022 20:17:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594619;
-        bh=TMDXt7jtDWdicJEzEyNkxrX+6SxG2YI30o1x7P3pwRI=;
+        s=korg; t=1660594625;
+        bh=ybd09Vc2nJeq4SVb7k1C88wFe9kRvGJKQUI0L0zWLYQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sWAgvWB0X2Mq08kSaMemthiYQ/ywv4MLea8moKrfrFG47YWj9cRsbpXkvqQCCMMgx
-         Od/qUEiQV0sHZTxbyDsH+IERjyHF1LYySX2mgv14at/i6CStpY2GgKNanjspJ7HaKa
-         AZ2/J/Z4sBEaztezUaTuICj2g7EmscQLE60cwxqk=
+        b=PcCUYN+QAmINq7foh7o7dF8WJLQP0Ue4PKBmfZ3+T5A/CbC1TzZF+4DxF9bobwAsN
+         KVoUNtGQAGpLt78n4sQ4ahtgky7MWAGmtz7S1jzqNgYUx7vAw1nNZ/4CIa8Zu6P1GS
+         XAxRoOtM0fBV5T/zB6udoAzFQyWBmLNKQf2GH8r8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0505/1157] media: cedrus: h265: Fix logic for not low delay flag
-Date:   Mon, 15 Aug 2022 19:57:41 +0200
-Message-Id: <20220815180459.897601855@linuxfoundation.org>
+Subject: [PATCH 5.19 0506/1157] wifi: wil6210: debugfs: fix info leak in wil_write_file_wmi()
+Date:   Mon, 15 Aug 2022 19:57:42 +0200
+Message-Id: <20220815180459.935374948@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -56,74 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jernej Skrabec <jernej.skrabec@gmail.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit f1a413902aa71044b6ec41265e5e28ebaf29a9ce ]
+[ Upstream commit 7a4836560a6198d245d5732e26f94898b12eb760 ]
 
-Now that we know real purpose of "not low delay" flag, logic for
-applying this flag should be fixed too. According to vendor and
-reference implementation, low delay is signaled when POC of current
-frame is lower than POC of at least one reference of a slice.
+The simple_write_to_buffer() function will succeed if even a single
+byte is initialized.  However, we need to initialize the whole buffer
+to prevent information leaks.  Just use memdup_user().
 
-Implement mentioned logic and invert it to conform to flag meaning. Also
-don't apply flag for I frames. They don't have any reference.
-
-This fixes decoding of 3 reference bitstreams.
-
-Fixes: 86caab29da78 ("media: cedrus: Add HEVC/H.265 decoding support")
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: ff974e408334 ("wil6210: debugfs interface to send raw WMI command")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/Ysg14NdKAZF/hcNG@kili
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../staging/media/sunxi/cedrus/cedrus_h265.c  | 27 ++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+ drivers/net/wireless/ath/wil6210/debugfs.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-index c26e515d64c9..2f6404fccd5a 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-@@ -301,6 +301,31 @@ static void cedrus_h265_write_scaling_list(struct cedrus_ctx *ctx,
- 		}
- }
+diff --git a/drivers/net/wireless/ath/wil6210/debugfs.c b/drivers/net/wireless/ath/wil6210/debugfs.c
+index 64d6c98174c8..fe84362718de 100644
+--- a/drivers/net/wireless/ath/wil6210/debugfs.c
++++ b/drivers/net/wireless/ath/wil6210/debugfs.c
+@@ -1012,18 +1012,12 @@ static ssize_t wil_write_file_wmi(struct file *file, const char __user *buf,
+ 	u16 cmdid;
+ 	int rc, rc1;
  
-+static int cedrus_h265_is_low_delay(struct cedrus_run *run)
-+{
-+	const struct v4l2_ctrl_hevc_slice_params *slice_params;
-+	const struct v4l2_hevc_dpb_entry *dpb;
-+	s32 poc;
-+	int i;
-+
-+	slice_params = run->h265.slice_params;
-+	poc = run->h265.decode_params->pic_order_cnt_val;
-+	dpb = run->h265.decode_params->dpb;
-+
-+	for (i = 0; i < slice_params->num_ref_idx_l0_active_minus1 + 1; i++)
-+		if (dpb[slice_params->ref_idx_l0[i]].pic_order_cnt_val > poc)
-+			return 1;
-+
-+	if (slice_params->slice_type != V4L2_HEVC_SLICE_TYPE_B)
-+		return 0;
-+
-+	for (i = 0; i < slice_params->num_ref_idx_l1_active_minus1 + 1; i++)
-+		if (dpb[slice_params->ref_idx_l1[i]].pic_order_cnt_val > poc)
-+			return 1;
-+
-+	return 0;
-+}
-+
- static void cedrus_h265_setup(struct cedrus_ctx *ctx,
- 			      struct cedrus_run *run)
- {
-@@ -571,7 +596,7 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
- 				V4L2_HEVC_SLICE_PARAMS_FLAG_SLICE_LOOP_FILTER_ACROSS_SLICES_ENABLED,
- 				slice_params->flags);
+-	if (cmdlen < 0)
++	if (cmdlen < 0 || *ppos != 0)
+ 		return -EINVAL;
  
--	if (decode_params->num_poc_st_curr_after == 0)
-+	if (slice_params->slice_type != V4L2_HEVC_SLICE_TYPE_I && !cedrus_h265_is_low_delay(run))
- 		reg |= VE_DEC_H265_DEC_SLICE_HDR_INFO1_FLAG_SLICE_NOT_LOW_DELAY;
+-	wmi = kmalloc(len, GFP_KERNEL);
+-	if (!wmi)
+-		return -ENOMEM;
+-
+-	rc = simple_write_to_buffer(wmi, len, ppos, buf, len);
+-	if (rc < 0) {
+-		kfree(wmi);
+-		return rc;
+-	}
++	wmi = memdup_user(buf, len);
++	if (IS_ERR(wmi))
++		return PTR_ERR(wmi);
  
- 	cedrus_write(dev, VE_DEC_H265_DEC_SLICE_HDR_INFO1, reg);
+ 	cmd = (cmdlen > 0) ? &wmi[1] : NULL;
+ 	cmdid = le16_to_cpu(wmi->command_id);
 -- 
 2.35.1
 

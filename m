@@ -2,521 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8DC593F62
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 23:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E8B593F13
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 23:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345698AbiHOVV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 17:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37244 "EHLO
+        id S1347006AbiHOVZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 17:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245363AbiHOVQy (ORCPT
+        with ESMTP id S1346873AbiHOVSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 17:16:54 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2059.outbound.protection.outlook.com [40.107.100.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FC0C39;
-        Mon, 15 Aug 2022 12:20:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hPjQUb6Wcj4m/qZ0Cufs7b2mhGrxBefoulurHH+Tgn6pmx/1olJN2RbRAvjE5ua4uGvRsm1MeFqt7wxZzcnkXSQIXqFrvI3tsoZ8YJBOxjxtcTR5fjVbbzYz3CDUTJcFBezzHHpec6Rzq3q4GwvJCfIh8HP0l7Vm+2u5PqRZt5IMlPR4X+QaXzOx7DZ8oVRUnkt67f8IuU3thfj+SBy9Fc6+IcG213oyELnIsFBEFvr6HpZW+o5pGYU7BpkKYayeYzs8bb+4kG41QeRoThDbsSUhirep1poPynNDBl4ViyW6PwhXWDE1Vj6IQAl5IgnJZgh0X+7qAg1j5R3SkSikew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5h2YnwujvVy8kzuQCOkWSEcAYpPib+52ebMhj/wSErg=;
- b=N3V5HrlYtHRFT2qq6HbsmXSbU72eulNp8YHlRxFJuZAqyHHN3LNYamBWP5M7gGlMl32MmhbISuWVH5tSwluM0Z+7sDe521doOF27CPmXWowrL9Ca1Svsf0xhJIMH6Bn4q4vd3klUqsDHYOBh9KQ1h17W7Q/Ie8mZKNcEh6lL71uUIUpb/1sQ7aJIIo+twzJg/30xrqrqYSvP2ZXwIql7UceoKQrMT5oDBGbGtO60wAPvKo66mtf5hlVtwmJM+9RvrSJn/Y5FXEIyTdw/1xVKfwSF2RIhOdfqhZUaoSJCVQ2eJiyutS26CpFrfrPmPJ43HI3EatR4nRKuW+wi9TdeAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5h2YnwujvVy8kzuQCOkWSEcAYpPib+52ebMhj/wSErg=;
- b=4tNwT4LOqiSlD6cngpGYCqxvvx25Rs/KHJAUCBHKdu2YmQVoyaIMnBXlvnMQRod2hjLT3ymYLLH4w67FaeJjBEnZtMBJwjnPivhUdtlK0ko71CqhjzkXx0XDmm09yqxk8DxpTCw7A97w2Psi0usfEEnbG67oXBVa/pGkmHVFURo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DM4PR12MB5865.namprd12.prod.outlook.com (2603:10b6:8:64::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.28; Mon, 15 Aug
- 2022 19:20:13 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::4489:9a98:ef82:6c67]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::4489:9a98:ef82:6c67%3]) with mapi id 15.20.5504.027; Mon, 15 Aug 2022
- 19:20:13 +0000
-Message-ID: <97b2a9a6-f08e-0212-fb93-a7158e188497@amd.com>
-Date:   Mon, 15 Aug 2022 14:20:10 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] thunderbolt: thunderbolt: add vendor's NVM formats
-Content-Language: en-US
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-To:     Szuying Chen <chensiying21@gmail.com>, gregkh@linuxfoundation.org,
-        mika.westerberg@linux.intel.com, andreas.noever@gmail.com,
-        michael.jamet@intel.com, YehezkelShB@gmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Yd_Tseng@asmedia.com.tw, Chloe_Chen@asmedia.com.tw,
-        Richard_Hsu@asmedia.com.tw, Richard Hughes <rhughes@redhat.com>
-References: <20220815041145.35629-1-chensiying21@gmail.com>
- <e49679b9-7b5a-5d97-c63f-a6004af0aaaa@amd.com>
-In-Reply-To: <e49679b9-7b5a-5d97-c63f-a6004af0aaaa@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CH2PR20CA0019.namprd20.prod.outlook.com
- (2603:10b6:610:58::29) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        Mon, 15 Aug 2022 17:18:09 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE0FCCC
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 12:21:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660591301; x=1692127301;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DNE7j4vaojzJrnBwEihEdfKPbtdRhibxG2zyatiDeik=;
+  b=W/dQ9mftsJ4gRrbg9Zyfdt5rNugD5SxahQQmxl8nktsFoh0ed+D8lahk
+   QzrkzI/MKJJ2j9+61TQm3VTI4MvVxQiKiabEIrkTgZchS2VZ/fcWAUAoE
+   UMJ7M/EbFQyfExAuFbXiKyqkgcLzPOh1b1XhZqSdMac18e9GXNverFwIj
+   CfcmN/Bk7aY2L2avgSCnz2Xc1Ee6bL2irMCdIcDE4f7u82BeB2NTxCoBs
+   Oaa2v4GjlM4Ll2bojtD1FazfBUM5rvmfEhuyqbejzGTBeLsu7zSs1QneQ
+   WlTxBEkoETin61DJZwAoO53EWSYP9u0FYSNZOXCzeCsE3N4sNxLlqZEZ2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="378328786"
+X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
+   d="scan'208";a="378328786"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 12:21:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
+   d="scan'208";a="934595757"
+Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 15 Aug 2022 12:21:39 -0700
+Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oNfec-0001Bl-1w;
+        Mon, 15 Aug 2022 19:21:38 +0000
+Date:   Tue, 16 Aug 2022 03:20:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alex Deucher <alexander.deucher@amd.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Dave Airlie <airlied@redhat.com>
+Subject: drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c:1078:12: warning: stack frame
+ size (1040) exceeds limit (1024) in 'vcn_v3_0_start'
+Message-ID: <202208160326.lPl4G0el-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d4b3f634-b35e-4a05-fd62-08da7ef32d79
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5865:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: U9gJS2e2iZo3NS+os+gAUESlgoRSaA2PlQZZUGepfcMy0Bzi9EGrkiniUCCTi+R/LIgEeON0d+MRlZTMrfEk9bv2CxwztNgA0SDA6sdDOCbHeDlvv1BrDq9EotyUnrbzp9F7AmtPd209BniKZYfl9RZV4VvFo/8aGqwyUP4Wp66cm5lYPlsQY1eLxS69ul93qgXo+aJ/BMhp2IXIu4GgpjZRQgX2dg1/VjtgaV0JaBc6M5A/duUg3OZhfuBnmcWuKgMt41OBB7BtOSY4BnjmIRra3h0yzYJViO0k9BAQY1AcmHK8sBBaEgTpvY982lzlmsMl0JUmBsl0Qs+W27kUeWBLl96JTrDM3kzbRgdh9iHBIu6EH/S19ahAogvZZWrLfSApg58R7WHtwCSWLE5pZJny7YLhyAvjSY4cG6RhfKjcCKDvoesF7YuJ/o9DTjUvLXnAMfJEvQQDFTimTalzkXrPDP5WokrBfRi3jLHhbwo9fY5guKkDSEw9mbIMLnrWVcA2I8Ub6xzQC0TZlBNoFHf4t5O7Tist/hjn/Nwy6VNDzC6WOAtI4BvrA7cNljcw90FGF1B+w4eppA0mjEVKsB4U3dtgiyWwRKCSWT0TCNiSpcTZ5KT0jab2jCKALskbjaCLgALRi9ZV67K23rz5eXxoqa4xiepxgX+Rfc+uYNmCt7rpD9HNaHIPEVZjud2omgOm2Dxq5oKVExZVUjLlHPNNwuFtq7BXcJ63s9SPK2NuzZC0Ot/g08pwy7jXParV2En4y+c0ezQuro4oTb4a4H15SRryIRpmhdF85CLIEgS5lcHIq2D4x03OkGihswKzYZYKh5BWrepYJxte8ds9GQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(136003)(396003)(346002)(39860400002)(376002)(5660300002)(7416002)(30864003)(36756003)(31686004)(66476007)(66946007)(66556008)(316002)(41300700001)(86362001)(31696002)(83380400001)(8676002)(4326008)(6512007)(53546011)(38100700002)(6486002)(478600001)(26005)(2906002)(8936002)(6506007)(2616005)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZVlxVU9tUVV0MjN2Wm9BcnpYdjdLZmlnMG1sQjlqSVkyQWxFN1lKMG9GeXdI?=
- =?utf-8?B?MmdYTHZ1VUphTW1VdjdFU3dlNVhQa2EvT3ErQWRDR25vTzkwYmMrT04vV3Ry?=
- =?utf-8?B?c21pK00zT0xEdHhKQS9mSE1HUjRGYW16bjR3MWpadjhoelFFRjBVaGxnSXc2?=
- =?utf-8?B?bmpBclkzUE9ROUIwNnE1M3pVVmtURFh3bC96YXU1eGJ2SE85QWhHUG9MOVFP?=
- =?utf-8?B?OFk2eUhxNE0vbVlWSXRhdjdSWnhyQ0ZXZ0FXdmhRWWs3Q2czWisvU3ZMcmtV?=
- =?utf-8?B?a3VqcElKL3p6Sjh0WEJnRjAwRFZQekFLSEZTSFhVV1BvUVV6NUlqZGwwT3RN?=
- =?utf-8?B?OGlLS0lxNkZXRjk4cjFOME5FSytJR3lob3FUcFh2dnhuNURkRXhibmgwTHdr?=
- =?utf-8?B?SnZFQ1hlendESTJHa0ttRjNtdzc4Q3lmNXJpQW12Mjd2STB5d2dTdVBoVDlq?=
- =?utf-8?B?UWFTT05reHpwTjhVOC9MU0YwR3hzTW4wZDVSMjRvUUpNVFAzaitJbHhMWUxz?=
- =?utf-8?B?a3Baa2t2UVBTdGdCejg1OVJWL0FsNGVESTg3VzJGT1dESXZ6djZNalNwU0c5?=
- =?utf-8?B?QjNTaDY4SlRsa2VERDdVenZYejN4QXRiVE53S2JwVmZKdzlObUNmN1YwNVFy?=
- =?utf-8?B?MmZFOGs5d1ZlanJTRTZqMnA5OTFFRzN0Z0M0NEhrQVVST0hGS0lVN1NTL2Fq?=
- =?utf-8?B?SWE1ZENzdHFnSmpyR0Vyc0ZJc2NtSDBuUHBHekFZUkdoL1cyYkhmTVFBTENK?=
- =?utf-8?B?RFByS0Z0d0VFRzZJT0YrcEJISWhJbWJVRzdXVWZqMkdwcXlYaFpLUWY1YXp0?=
- =?utf-8?B?SmhOVjQzRm1Gem5mWklmU1JtUnJnMk1uWUVBYjZYMWp0YTgvbUNFblZJZ0lB?=
- =?utf-8?B?dXFIZFJDeTVjbWFmSlE0RUhIcGJqeHNaQkY1NWthbDJ1SlA3ZGNYK1hlYTBq?=
- =?utf-8?B?bzd0Q21OSG1CUFhtWUE2KzM0WFpvSmVSZ2syaHgzWHVCcmdYL3BHeUJPQ3lU?=
- =?utf-8?B?NUhkcFl1RTJIVFhPN3N5VGloaWorNGZQeUpwUXlHTllUTDZ1dVdYMzZjcTJH?=
- =?utf-8?B?VDN5K0ptNHJWVEVqMTg0TWRKdzg5SHNLWW1PcitUOGpzcExzUmRqNU0zYWxw?=
- =?utf-8?B?NWNtb0hKd0J0dmtBM2VRWk93cjBlaTk1YlpJVHB0UnQxMFlHdXMrSkRaODRI?=
- =?utf-8?B?Um10ZUdjUkNIcG9EWUlIQ0trTjVzUlJZMm82V01ZY1JoZGxWa1BtbTF2UXhM?=
- =?utf-8?B?dkdkbHRrRnpHSTF3ek9kanBLUkRkRVNrQnpmRGFtYnFwTEZrSVIyWk9NcGZl?=
- =?utf-8?B?ampKUk1BTU45SlJnTjl0dUc4TGZ4L1ZlMW5ZRjdOR0N3eTRUMElnMy94RnMw?=
- =?utf-8?B?L21ybkE3b0R6RXlMZ21EaElrYkVBNkdyeExsT3kzVnJxaDhWdDlhTjdqdzNJ?=
- =?utf-8?B?ZkNWWHczdEd3Ui95L1RNQ0Q4ckNLdVZUMkdYb1REVnNMdUxjRHBOR3Izc2k5?=
- =?utf-8?B?YlREV0Vhc2RSNllpMHcxRTRlaFNUL0NiTUQya252ZjRya3VrUWdheWtBNTZE?=
- =?utf-8?B?UFVwUk5Xdk1QKy9rTTBLZVR2NVlwdCs4alNjZHVCSVk1NGNDL1NiV3NldjBk?=
- =?utf-8?B?Yzh0ZVNWYlNuMGs4S29CeitSN2NsRjhyUlR6K1oyY1FybURQWUc1QXRZcExh?=
- =?utf-8?B?alU3VXVRTjcrdk8wYUp5SG9FQmNCYjlqTU11M3lOWEFuZWlhdkZQNk1abmkv?=
- =?utf-8?B?QjZsUjluVnBxQUZLTlE3ZFBIb0IrRTVaZlVGZ0dCV1Ryc2RGcEFTcmtoQWc0?=
- =?utf-8?B?aE5PeVdIaHlmZUw2Sk5oR1VDUVE2Z3FMRkpPQzJqWmZxRlpham84N3dLMWcw?=
- =?utf-8?B?S3BZLy9qMVhqdEpqbHozMXNBT3Y0MGhiVFAwSmk4eU42akU0ZXM2eW45ZEdM?=
- =?utf-8?B?dTNUOHlPeVBCM1NrbEt0VEMxZVkrWnZCbFV2VW03c0ZhVWw5MHlLMVFlMExP?=
- =?utf-8?B?TkhjMmVqelI5QmRGMVVuSE5HODBXejVucXpoaXR1WklWMnV2MFp1L21ZSkty?=
- =?utf-8?B?NUljMWVBcHY2bWdSaGxQSUEvUVFqM210WnNVNlN5bFhveG5EOCszSHA2R2tY?=
- =?utf-8?Q?x9C/38ov07fgyI4mDvgtTjuG9?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d4b3f634-b35e-4a05-fd62-08da7ef32d79
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2022 19:20:13.2718
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QlNZ+RQauXF+W3MvqBUewj0sPq6REbrhvfSaWvjYW43QHY0EUzk+o2jUWrEMCoaTC28U7CvokqhSWGdqKfH73g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5865
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/15/2022 12:28, Limonciello, Mario wrote:
-> +hughsie for additional comments
-> 
-> Various inline comments below.
-> 
-> On 8/14/2022 23:11, Szuying Chen wrote:
->> From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
->>
->> The patch add tb_nvm_validate() contain an array that has functions
->> pointers to asmedia_nvm_validate().
->> And asmedia_nvm_validate() that recognize supported vendor works in one
->> of the following cases:
->> Case nvm_upgrade: enable nvm's attribute by setting no_nvm_upgrade
->> flag to create nvm_authenticate file node.
->> Case nvm_add:add active/non-active NVM devices.
->> Case nvm_write:update firmware to non-ative NVM device.
->>
->> Our patches were through checkpatch.pl. But the file(switch.c.)
->> have existed 13 warning before we patch it.
-> 
-> Please feel free to add other patches to the series to clean up 
-> warnings.  Just because you didn't introduce them doesn't mean you can't 
-> fix them =)
-> 
->>
->> Signed-off-by: Szuying Chen <Chloe_Chen@asmedia.com.tw>
->> ---
->>   drivers/thunderbolt/nvm.c    | 147 +++++++++++++++++++++++++++++++++++
->>   drivers/thunderbolt/switch.c |  17 ++++
->>   drivers/thunderbolt/tb.h     |  18 +++++
->>   3 files changed, 182 insertions(+)
+Hi Dave,
 
-When you submit patches to the mailing list, you'll want to do two 
-things I haven't noticed you doing:
+FYI, the error/warning still remains.
 
-1) When you create the patch with git format-patch use the 
-"--subject-prefix" option to set your subject prefix.  I see that your 
-patch has been submitted at least 3 times but Lore groups all 3 
-submissions together.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+commit: 123db17ddff007080d464e785689fb14f94cbc7a Merge tag 'amd-drm-next-5.18-2022-02-11-1' of https://gitlab.freedesktop.org/agd5f/linux into drm-next
+date:   6 months ago
+config: mips-buildonly-randconfig-r003-20220815 (https://download.01.org/0day-ci/archive/20220816/202208160326.lPl4G0el-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6afcc4a459ead8809a0d6d9b4bf7b64bcc13582b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=123db17ddff007080d464e785689fb14f94cbc7a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 123db17ddff007080d464e785689fb14f94cbc7a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
 
-The first should have been [PATCH], next should have been [PATCH v2], 
-next [PATCH v3].
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-So I think technically your next submission SHOULD be [PATCH v4]
+All warnings (new ones prefixed by >>):
 
-2) You should add below the --- comments about what changed from last 
-submission.  This helps people have reviewed it in the past be able to 
-better focus on what they should look most closely at.
-It should be something like this:
+>> drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c:1078:12: warning: stack frame size (1040) exceeds limit (1024) in 'vcn_v3_0_start' [-Wframe-larger-than]
+   static int vcn_v3_0_start(struct amdgpu_device *adev)
+              ^
+   1 warning generated.
 
-```
-.
-.
-.
-Signed-off-by: User Name <user@name.com>
----
 
-changes from v3->v4:
-- Foo the bar
+vim +/vcn_v3_0_start +1078 drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c
 
-Note: The three previous submissions accidentally used the same subject 
-prefix.  This changelog is relative to the most recent submission at $URL.
+ec2d0577b466c2 Boyuan Zhang                2020-03-27  1077  
+cf14826cdfb5c9 Leo Liu                     2019-11-15 @1078  static int vcn_v3_0_start(struct amdgpu_device *adev)
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1079  {
+e42dd87e70e66a Sonny Jiang                 2020-11-27  1080  	volatile struct amdgpu_fw_shared *fw_shared;
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1081  	struct amdgpu_ring *ring;
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1082  	uint32_t rb_bufsz, tmp;
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1083  	int i, j, k, r;
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1084  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1085  	if (adev->pm.dpm_enabled)
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1086  		amdgpu_dpm_enable_uvd(adev, true);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1087  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1088  	for (i = 0; i < adev->vcn.num_vcn_inst; ++i) {
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1089  		if (adev->vcn.harvest_config & (1 << i))
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1090  			continue;
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1091  
+ec2d0577b466c2 Boyuan Zhang                2020-03-27  1092  		if (adev->pg_flags & AMD_PG_SUPPORT_VCN_DPG){
+ec2d0577b466c2 Boyuan Zhang                2020-03-27  1093  			r = vcn_v3_0_start_dpg_mode(adev, i, adev->vcn.indirect_sram);
+ec2d0577b466c2 Boyuan Zhang                2020-03-27  1094  			continue;
+ec2d0577b466c2 Boyuan Zhang                2020-03-27  1095  		}
+ec2d0577b466c2 Boyuan Zhang                2020-03-27  1096  
+fedac0155a1c28 Leo Liu                     2019-11-27  1097  		/* disable VCN power gating */
+fedac0155a1c28 Leo Liu                     2019-11-27  1098  		vcn_v3_0_disable_static_power_gating(adev, i);
+fedac0155a1c28 Leo Liu                     2019-11-27  1099  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1100  		/* set VCN status busy */
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1101  		tmp = RREG32_SOC15(VCN, i, mmUVD_STATUS) | UVD_STATUS__UVD_BUSY;
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1102  		WREG32_SOC15(VCN, i, mmUVD_STATUS, tmp);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1103  
+fedac0155a1c28 Leo Liu                     2019-11-27  1104  		/*SW clock gating */
+fedac0155a1c28 Leo Liu                     2019-11-27  1105  		vcn_v3_0_disable_clock_gating(adev, i);
+fedac0155a1c28 Leo Liu                     2019-11-27  1106  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1107  		/* enable VCPU clock */
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1108  		WREG32_P(SOC15_REG_OFFSET(VCN, i, mmUVD_VCPU_CNTL),
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1109  			UVD_VCPU_CNTL__CLK_EN_MASK, ~UVD_VCPU_CNTL__CLK_EN_MASK);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1110  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1111  		/* disable master interrupt */
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1112  		WREG32_P(SOC15_REG_OFFSET(VCN, i, mmUVD_MASTINT_EN), 0,
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1113  			~UVD_MASTINT_EN__VCPU_EN_MASK);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1114  
+d6b0185b8dc738 Leo Liu                     2020-01-28  1115  		/* enable LMI MC and UMC channels */
+d6b0185b8dc738 Leo Liu                     2020-01-28  1116  		WREG32_P(SOC15_REG_OFFSET(VCN, i, mmUVD_LMI_CTRL2), 0,
+d6b0185b8dc738 Leo Liu                     2020-01-28  1117  			~UVD_LMI_CTRL2__STALL_ARB_UMC_MASK);
+d6b0185b8dc738 Leo Liu                     2020-01-28  1118  
+d6b0185b8dc738 Leo Liu                     2020-01-28  1119  		tmp = RREG32_SOC15(VCN, i, mmUVD_SOFT_RESET);
+d6b0185b8dc738 Leo Liu                     2020-01-28  1120  		tmp &= ~UVD_SOFT_RESET__LMI_SOFT_RESET_MASK;
+d6b0185b8dc738 Leo Liu                     2020-01-28  1121  		tmp &= ~UVD_SOFT_RESET__LMI_UMC_SOFT_RESET_MASK;
+d6b0185b8dc738 Leo Liu                     2020-01-28  1122  		WREG32_SOC15(VCN, i, mmUVD_SOFT_RESET, tmp);
+d6b0185b8dc738 Leo Liu                     2020-01-28  1123  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1124  		/* setup mmUVD_LMI_CTRL */
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1125  		tmp = RREG32_SOC15(VCN, i, mmUVD_LMI_CTRL);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1126  		WREG32_SOC15(VCN, i, mmUVD_LMI_CTRL, tmp |
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1127  			UVD_LMI_CTRL__WRITE_CLEAN_TIMER_EN_MASK	|
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1128  			UVD_LMI_CTRL__MASK_MC_URGENT_MASK |
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1129  			UVD_LMI_CTRL__DATA_COHERENCY_EN_MASK |
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1130  			UVD_LMI_CTRL__VCPU_DATA_COHERENCY_EN_MASK);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1131  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1132  		/* setup mmUVD_MPC_CNTL */
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1133  		tmp = RREG32_SOC15(VCN, i, mmUVD_MPC_CNTL);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1134  		tmp &= ~UVD_MPC_CNTL__REPLACEMENT_MODE_MASK;
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1135  		tmp |= 0x2 << UVD_MPC_CNTL__REPLACEMENT_MODE__SHIFT;
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1136  		WREG32_SOC15(VCN, i, mmUVD_MPC_CNTL, tmp);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1137  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1138  		/* setup UVD_MPC_SET_MUXA0 */
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1139  		WREG32_SOC15(VCN, i, mmUVD_MPC_SET_MUXA0,
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1140  			((0x1 << UVD_MPC_SET_MUXA0__VARA_1__SHIFT) |
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1141  			(0x2 << UVD_MPC_SET_MUXA0__VARA_2__SHIFT) |
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1142  			(0x3 << UVD_MPC_SET_MUXA0__VARA_3__SHIFT) |
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1143  			(0x4 << UVD_MPC_SET_MUXA0__VARA_4__SHIFT)));
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1144  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1145  		/* setup UVD_MPC_SET_MUXB0 */
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1146  		WREG32_SOC15(VCN, i, mmUVD_MPC_SET_MUXB0,
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1147  			((0x1 << UVD_MPC_SET_MUXB0__VARB_1__SHIFT) |
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1148  			(0x2 << UVD_MPC_SET_MUXB0__VARB_2__SHIFT) |
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1149  			(0x3 << UVD_MPC_SET_MUXB0__VARB_3__SHIFT) |
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1150  			(0x4 << UVD_MPC_SET_MUXB0__VARB_4__SHIFT)));
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1151  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1152  		/* setup mmUVD_MPC_SET_MUX */
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1153  		WREG32_SOC15(VCN, i, mmUVD_MPC_SET_MUX,
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1154  			((0x0 << UVD_MPC_SET_MUX__SET_0__SHIFT) |
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1155  			(0x1 << UVD_MPC_SET_MUX__SET_1__SHIFT) |
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1156  			(0x2 << UVD_MPC_SET_MUX__SET_2__SHIFT)));
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1157  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1158  		vcn_v3_0_mc_resume(adev, i);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1159  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1160  		/* VCN global tiling registers */
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1161  		WREG32_SOC15(VCN, i, mmUVD_GFX10_ADDR_CONFIG,
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1162  			adev->gfx.config.gb_addr_config);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1163  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1164  		/* unblock VCPU register access */
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1165  		WREG32_P(SOC15_REG_OFFSET(VCN, i, mmUVD_RB_ARB_CTRL), 0,
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1166  			~UVD_RB_ARB_CTRL__VCPU_DIS_MASK);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1167  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1168  		/* release VCPU reset to boot */
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1169  		WREG32_P(SOC15_REG_OFFSET(VCN, i, mmUVD_VCPU_CNTL), 0,
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1170  			~UVD_VCPU_CNTL__BLK_RST_MASK);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1171  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1172  		for (j = 0; j < 10; ++j) {
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1173  			uint32_t status;
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1174  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1175  			for (k = 0; k < 100; ++k) {
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1176  				status = RREG32_SOC15(VCN, i, mmUVD_STATUS);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1177  				if (status & 2)
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1178  					break;
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1179  				mdelay(10);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1180  			}
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1181  			r = 0;
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1182  			if (status & 2)
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1183  				break;
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1184  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1185  			DRM_ERROR("VCN[%d] decode not responding, trying to reset the VCPU!!!\n", i);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1186  			WREG32_P(SOC15_REG_OFFSET(VCN, i, mmUVD_VCPU_CNTL),
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1187  				UVD_VCPU_CNTL__BLK_RST_MASK,
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1188  				~UVD_VCPU_CNTL__BLK_RST_MASK);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1189  			mdelay(10);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1190  			WREG32_P(SOC15_REG_OFFSET(VCN, i, mmUVD_VCPU_CNTL), 0,
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1191  				~UVD_VCPU_CNTL__BLK_RST_MASK);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1192  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1193  			mdelay(10);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1194  			r = -1;
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1195  		}
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1196  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1197  		if (r) {
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1198  			DRM_ERROR("VCN[%d] decode not responding, giving up!!!\n", i);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1199  			return r;
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1200  		}
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1201  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1202  		/* enable master interrupt */
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1203  		WREG32_P(SOC15_REG_OFFSET(VCN, i, mmUVD_MASTINT_EN),
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1204  			UVD_MASTINT_EN__VCPU_EN_MASK,
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1205  			~UVD_MASTINT_EN__VCPU_EN_MASK);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1206  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1207  		/* clear the busy bit of VCN_STATUS */
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1208  		WREG32_P(SOC15_REG_OFFSET(VCN, i, mmUVD_STATUS), 0,
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1209  			~(2 << UVD_STATUS__VCPU_REPORT__SHIFT));
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1210  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1211  		WREG32_SOC15(VCN, i, mmUVD_LMI_RBC_RB_VMID, 0);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1212  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1213  		ring = &adev->vcn.inst[i].ring_dec;
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1214  		/* force RBC into idle state */
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1215  		rb_bufsz = order_base_2(ring->ring_size);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1216  		tmp = REG_SET_FIELD(0, UVD_RBC_RB_CNTL, RB_BUFSZ, rb_bufsz);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1217  		tmp = REG_SET_FIELD(tmp, UVD_RBC_RB_CNTL, RB_BLKSZ, 1);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1218  		tmp = REG_SET_FIELD(tmp, UVD_RBC_RB_CNTL, RB_NO_FETCH, 1);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1219  		tmp = REG_SET_FIELD(tmp, UVD_RBC_RB_CNTL, RB_NO_UPDATE, 1);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1220  		tmp = REG_SET_FIELD(tmp, UVD_RBC_RB_CNTL, RB_RPTR_WR_EN, 1);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1221  		WREG32_SOC15(VCN, i, mmUVD_RBC_RB_CNTL, tmp);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1222  
+e42dd87e70e66a Sonny Jiang                 2020-11-27  1223  		fw_shared = adev->vcn.inst[i].fw_shared_cpu_addr;
+e42dd87e70e66a Sonny Jiang                 2020-11-27  1224  		fw_shared->multi_queue.decode_queue_mode |= cpu_to_le32(FW_QUEUE_RING_RESET);
+e42dd87e70e66a Sonny Jiang                 2020-11-27  1225  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1226  		/* programm the RB_BASE for ring buffer */
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1227  		WREG32_SOC15(VCN, i, mmUVD_LMI_RBC_RB_64BIT_BAR_LOW,
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1228  			lower_32_bits(ring->gpu_addr));
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1229  		WREG32_SOC15(VCN, i, mmUVD_LMI_RBC_RB_64BIT_BAR_HIGH,
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1230  			upper_32_bits(ring->gpu_addr));
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1231  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1232  		/* Initialize the ring buffer's read and write pointers */
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1233  		WREG32_SOC15(VCN, i, mmUVD_RBC_RB_RPTR, 0);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1234  
+b2576c3bf4ce9b Sonny Jiang                 2021-01-31  1235  		WREG32_SOC15(VCN, i, mmUVD_SCRATCH2, 0);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1236  		ring->wptr = RREG32_SOC15(VCN, i, mmUVD_RBC_RB_RPTR);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1237  		WREG32_SOC15(VCN, i, mmUVD_RBC_RB_WPTR,
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1238  			lower_32_bits(ring->wptr));
+b2576c3bf4ce9b Sonny Jiang                 2021-01-31  1239  		fw_shared->rb.wptr = lower_32_bits(ring->wptr);
+e42dd87e70e66a Sonny Jiang                 2020-11-27  1240  		fw_shared->multi_queue.decode_queue_mode &= cpu_to_le32(~FW_QUEUE_RING_RESET);
+e42dd87e70e66a Sonny Jiang                 2020-11-27  1241  
+1d789535a03679 Alex Deucher                2021-10-04  1242  		if (adev->ip_versions[UVD_HWIP][0] != IP_VERSION(3, 0, 33)) {
+e42dd87e70e66a Sonny Jiang                 2020-11-27  1243  			fw_shared->multi_queue.encode_generalpurpose_queue_mode |= cpu_to_le32(FW_QUEUE_RING_RESET);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1244  			ring = &adev->vcn.inst[i].ring_enc[0];
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1245  			WREG32_SOC15(VCN, i, mmUVD_RB_RPTR, lower_32_bits(ring->wptr));
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1246  			WREG32_SOC15(VCN, i, mmUVD_RB_WPTR, lower_32_bits(ring->wptr));
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1247  			WREG32_SOC15(VCN, i, mmUVD_RB_BASE_LO, ring->gpu_addr);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1248  			WREG32_SOC15(VCN, i, mmUVD_RB_BASE_HI, upper_32_bits(ring->gpu_addr));
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1249  			WREG32_SOC15(VCN, i, mmUVD_RB_SIZE, ring->ring_size / 4);
+e42dd87e70e66a Sonny Jiang                 2020-11-27  1250  			fw_shared->multi_queue.encode_generalpurpose_queue_mode &= cpu_to_le32(~FW_QUEUE_RING_RESET);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1251  
+e42dd87e70e66a Sonny Jiang                 2020-11-27  1252  			fw_shared->multi_queue.encode_lowlatency_queue_mode |= cpu_to_le32(FW_QUEUE_RING_RESET);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1253  			ring = &adev->vcn.inst[i].ring_enc[1];
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1254  			WREG32_SOC15(VCN, i, mmUVD_RB_RPTR2, lower_32_bits(ring->wptr));
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1255  			WREG32_SOC15(VCN, i, mmUVD_RB_WPTR2, lower_32_bits(ring->wptr));
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1256  			WREG32_SOC15(VCN, i, mmUVD_RB_BASE_LO2, ring->gpu_addr);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1257  			WREG32_SOC15(VCN, i, mmUVD_RB_BASE_HI2, upper_32_bits(ring->gpu_addr));
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1258  			WREG32_SOC15(VCN, i, mmUVD_RB_SIZE2, ring->ring_size / 4);
+e42dd87e70e66a Sonny Jiang                 2020-11-27  1259  			fw_shared->multi_queue.encode_lowlatency_queue_mode &= cpu_to_le32(~FW_QUEUE_RING_RESET);
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1260  		}
+f703d4b6f20688 Veerabadhran Gopalakrishnan 2021-03-11  1261  	}
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1262  
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1263  	return 0;
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1264  }
+cf14826cdfb5c9 Leo Liu                     2019-11-15  1265  
 
-    drivers/thunderbolt/nvm.c    | 147
-.
-.
-.
+:::::: The code at line 1078 was first introduced by commit
+:::::: cf14826cdfb5c9fe10f98210d040b9d7486c381d drm/amdgpu: add VCN3.0 support for Sienna_Cichlid
 
-```
+:::::: TO: Leo Liu <leo.liu@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
 
->>
->> diff --git a/drivers/thunderbolt/nvm.c b/drivers/thunderbolt/nvm.c
->> index b3f310389378..6db2034ec8e5 100644
->> --- a/drivers/thunderbolt/nvm.c
->> +++ b/drivers/thunderbolt/nvm.c
->> @@ -9,11 +9,158 @@
->>   #include <linux/idr.h>
->>   #include <linux/slab.h>
->>   #include <linux/vmalloc.h>
->> +#include <linux/pm_runtime.h>
->>
->>   #include "tb.h"
->>
->>   static DEFINE_IDA(nvm_ida);
->>
->> +static int tb_switch_nvm_read(void *priv, unsigned int offset, void 
->> *val,
->> +                  size_t bytes)
->> +{
->> +    struct tb_nvm *nvm = priv;
->> +    struct tb_switch *sw = tb_to_switch(nvm->dev);
->> +    int ret;
->> +
->> +    pm_runtime_get_sync(&sw->dev);
->> +    if (!mutex_trylock(&sw->tb->lock)) {
->> +        ret = restart_syscall();
->> +        goto out;
->> +    }
->> +    ret = usb4_switch_nvm_read(sw, offset, val, bytes);
->> +    mutex_unlock(&sw->tb->lock);
->> +
->> +out:
->> +    pm_runtime_mark_last_busy(&sw->dev);
->> +    pm_runtime_put_autosuspend(&sw->dev);
->> +
->> +    return ret;
->> +}
->> +
->> +static int tb_switch_nvm_write(void *priv, unsigned int offset, void 
->> *val,
->> +                   size_t bytes)
->> +{
->> +    struct tb_nvm *nvm = priv;
->> +    struct tb_switch *sw = tb_to_switch(nvm->dev);
->> +    int ret;
->> +
->> +    if (!mutex_trylock(&sw->tb->lock))
->> +        return restart_syscall();
->> +
->> +    /*
->> +     * Since writing the NVM image might require some special steps,
->> +     * for example when CSS headers are written, we cache the image
->> +     * locally here and handle the special cases when the user asks
->> +     * us to authenticate the image.
->> +     */
->> +    ret = tb_nvm_write_buf(nvm, offset, val, bytes);
->> +    mutex_unlock(&sw->tb->lock);
->> +
->> +    return ret;
->> +}
->> +
->> +static int asmedia_nvm_validate(struct tb_switch *sw, unsigned int mode)
->> +{
->> +    struct tb_nvm *nvm;
->> +    u32 val;
->> +    u32 nvm_size;
->> +    int ret = 0;
->> +    unsigned int image_size;
->> +    const u8 *buf = sw->nvm->buf;
->> +
->> +    switch (mode) {
->> +    case nvm_upgrade:
->> +        if (sw->no_nvm_upgrade)
->> +            sw->no_nvm_upgrade = false;
->> +
->> +        break;
->> +
->> +    case nvm_add:
->> +        nvm = tb_nvm_alloc(&sw->dev);
->> +        if (IS_ERR(nvm)) {
->> +            ret = PTR_ERR(nvm);
->> +            break;
->> +        }
->> +
->> +        ret = usb4_switch_nvm_read(sw, NVM_Date, &val, sizeof(val));
->> +        if (ret)
->> +            break;
->> +
->> +        nvm->nvm_asm.date = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) 
->> << 0x8 | (u8)(val >> 0x10));
->> +        ret = usb4_switch_nvm_read(sw, NVM_CUSTOMER_ID, &val, 
->> sizeof(val));
->> +        if (ret)
->> +            break;
->> +
->> +        nvm->nvm_asm.customerID = (((u8)val) << 0x8 | ((u8)(val >> 
->> 0x8)));
->> +        nvm->nvm_asm.version = (u8)(val >> 0x10);
->> +        nvm_size = SZ_512K;
->> +        ret = tb_nvm_add_active(nvm, nvm_size, tb_switch_nvm_read);
->> +        if (ret)
->> +            break;
->> +
->> +        ret = tb_nvm_add_non_active(nvm, NVM_MAX_SIZE, 
->> tb_switch_nvm_write);
->> +        if (ret)
->> +            break;
->> +
->> +        sw->nvm = nvm;
->> +        break;
->> +
->> +    case nvm_write:
->> +        if (!buf) {
->> +            ret = -EINVAL;
->> +            break;
->> +        }
->> +        image_size = sw->nvm->buf_data_size;
->> +        if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE) {
->> +            ret = -EINVAL;
->> +            break;
->> +        }
->> +        ret = usb4_switch_nvm_write(sw, 0, buf, image_size);
->> +        if (!ret)
->> +            sw->nvm->flushed = true;
->> +
->> +        break;
->> +
->> +    default:
->> +        break;
->> +    }
->> +
->> +    if ((mode == nvm_add) && (ret != 0))
->> +        tb_nvm_free(sw->nvm);
->> +
->> +    return ret;
->> +}
->> +
->> +struct tb_nvm_id {
->> +    u16 hw_vendor_id;
->> +    int (*validate)(struct tb_switch *sw, unsigned int handle);
->> +};
->> +
->> +static const struct tb_nvm_id tb_nvm_vendors[] = {
->> +    /* ASMedia software CM firmware upgrade */
->> +    { 0x174c, asmedia_nvm_validate },
->> +};
->> +
->> +/**
->> + * tb_nvm_vendor_handle() - support vendor's NVM format
->> + * @sw: Thunderbolt switch
->> + * @handle: 0:NvmUpgradeSuppport, 1:NvmAdd, 2:NvmWrite
->> + */
->> +int tb_nvm_validate(struct tb_switch *sw, unsigned int mode)
->> +{
->> +    int res, i;
->> +
->> +    for (i = 0; i < ARRAY_SIZE(tb_nvm_vendors); i++) {
->> +        const struct tb_nvm_id *id = &tb_nvm_vendors[i];
->> +
->> +        if (id->hw_vendor_id && id->hw_vendor_id != 
->> sw->config.vendor_id)
->> +            continue;
->> +
->> +         res = id->validate(sw, mode);
->> +    }
->> +    return res;
->> +}
->> +
->>   /**
->>    * tb_nvm_alloc() - Allocate new NVM structure
->>    * @dev: Device owning the NVM
->> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
->> index 244f8cd38b25..352e64f3dc92 100644
->> --- a/drivers/thunderbolt/switch.c
->> +++ b/drivers/thunderbolt/switch.c
->> @@ -114,6 +114,14 @@ static int nvm_validate_and_write(struct 
->> tb_switch *sw)
->>       if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE)
->>           return -EINVAL;
->>
->> +    /*
->> +     * Vendor's nvm write. If the image has been flushed to the
->> +     * storage are, nvm write is complete.
->> +     */
->> +    ret = tb_nvm_validate(sw, nvm_write);
->> +    if (sw->nvm->flushed)
->> +        return ret;
->> +
->>       /*
->>        * FARB pointer must point inside the image and must at least
->>        * contain parts of the digital section we will be reading here.
->> @@ -390,6 +398,11 @@ static int tb_switch_nvm_add(struct tb_switch *sw)
->>       if (!nvm_readable(sw))
->>           return 0;
->>
->> +    /* Vendor's NVM formats add */
->> +    ret = tb_nvm_validate(sw, nvm_add);
->> +    if (ret)
->> +        return ret;
->> +
->>       /*
->>        * The NVM format of non-Intel hardware is not known so
->>        * currently restrict NVM upgrade for Intel hardware. We may
-> 
-> This comment should be adjusted as after your patch lands both Intel and 
-> ASMedia formats are known and included.
-> 
->> @@ -1953,6 +1966,9 @@ static ssize_t nvm_version_show(struct device *dev,
->>           ret = -ENODATA;
->>       else if (!sw->nvm)
->>           ret = -EAGAIN;
->> +    /*ASMedia NVM version show format xxxxxx_xxxx_xx */
->> +    else if (sw->config.vendor_id == 0x174C)
->> +        ret = sprintf(buf, "%06x_%04x_%02x\n", sw->nvm->nvm_asm.date, 
->> sw->nvm->nvm_asm.customerID, sw->nvm->nvm_asm.version);
-> 
-> Are you hard-pressed to use this specific format for the string?  I feel 
-> like it's overloading the definition of a version string quite a bit.
-> 
-> I also worry that userspace has come to expect "major.minor" for this 
-> and making your string use 2 decimals may mean more deviations for 
-> userspace too.
-> 
-> Perhaps should you just export it instead as:
-> 
-> "%02x.%06x", sw->nvm->nvm_asm.version, sw->nvm->nvm_asm.date
-> 
-> And move the customer ID into another sysfs file?  I would think this 
-> fits pretty well with the existing "vendor" or "device" sysfs file 
-> depending upon it's meaning.
-> 
-> If you do end up having a strong reason for deviating the version string 
-> format, then I think you should document both what the Intel format is 
-> (major.minor) and your format explicitly in 
-> Documentation/admin-guide/thunderbolt.rst.
-> 
->>       else
->>           ret = sprintf(buf, "%x.%x\n", sw->nvm->major, sw->nvm->minor);
->>
->> @@ -2860,6 +2876,7 @@ int tb_switch_add(struct tb_switch *sw)
->>           tb_sw_dbg(sw, "uid: %#llx\n", sw->uid);
->>
->>           tb_check_quirks(sw);
->> +        tb_nvm_validate(sw, nvm_upgrade);
->>
->>           ret = tb_switch_set_uuid(sw);
->>           if (ret) {
->> diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
->> index 5db76de40cc1..7f20f10352d9 100644
->> --- a/drivers/thunderbolt/tb.h
->> +++ b/drivers/thunderbolt/tb.h
->> @@ -28,6 +28,22 @@
->>   #define NVM_VERSION        0x08
->>   #define NVM_FLASH_SIZE        0x45
->>
->> +/* ASMedia specific NVM offsets */
->> +#define NVM_Date    0x1c
->> +#define NVM_CUSTOMER_ID    0x28
->> +
->> +/* ASMedia specific validation mode */
->> +#define nvm_upgrade 0
->> +#define nvm_add 1
->> +#define nvm_write 2
-> 
-> As all of these values are ASMedia specific, I think the #defines should 
-> have ASMEDIA in the name.  I know Greg mentioned to roll into an enum, 
-> and I think you still can but make it something like:
-> 
-> #define ASMEDIA_NVM_DATE    0x1c
-> #define ASMEDIA_NVM_CUSTOMER_ID    0x28
-> enum asmeda_nvm_ops {
->      ASMEDIA_NVM_UPGRADE = 0,
->      ASMEDIA_NVM_ADD = 1,
->      ASMEDIA_NVM_WRITE = 2,
-> };
-> 
->> +
->> +struct nvm_asmedia {
->> +    u32 date;
->> +    u32 customerID:16;
->> +    u32 version:8;
->> +    u32 reserved:8;
->> +};
->> +
->>   /**
->>    * struct tb_nvm - Structure holding NVM information
->>    * @dev: Owner of the NVM
->> @@ -57,6 +73,7 @@ struct tb_nvm {
->>       size_t buf_data_size;
->>       bool authenticating;
->>       bool flushed;
->> +    struct nvm_asmedia nvm_asm;
-> 
-> Furthermore if you follow my suggestion on how to encode the version you 
-> can re-use the 'major' and 'minor' members from this struct and don't 
-> need to deviate in any way from it for your data.
-> 
-> * Major would map to your "version".
-> * Minor would map to "date".
-> 
-> You could instead then store the customer ID into the switches vendor ID 
-> or device ID member (whichever makes more sense).
-> 
->>   };
->>
->>   enum tb_nvm_write_ops {
->> @@ -736,6 +753,7 @@ static inline void tb_domain_put(struct tb *tb)
->>       put_device(&tb->dev);
->>   }
->>
->> +int tb_nvm_validate(struct tb_switch *sw, unsigned int mode);
->>   struct tb_nvm *tb_nvm_alloc(struct device *dev);
->>   int tb_nvm_add_active(struct tb_nvm *nvm, size_t size, 
->> nvmem_reg_read_t reg_read);
->>   int tb_nvm_write_buf(struct tb_nvm *nvm, unsigned int offset, void 
->> *val,
->> -- 
->> 2.34.1
->>
->>
-> 
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

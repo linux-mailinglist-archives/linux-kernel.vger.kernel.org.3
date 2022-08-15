@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF70D5948BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B78A2594958
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346294AbiHOXjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50916 "EHLO
+        id S1354373AbiHOXoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353829AbiHOXgm (ORCPT
+        with ESMTP id S1354228AbiHOXll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:36:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F79BCCE0;
-        Mon, 15 Aug 2022 13:09:20 -0700 (PDT)
+        Mon, 15 Aug 2022 19:41:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77CD960D1;
+        Mon, 15 Aug 2022 13:11:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 464F1B810C5;
-        Mon, 15 Aug 2022 20:09:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91591C433C1;
-        Mon, 15 Aug 2022 20:09:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 374BDB81135;
+        Mon, 15 Aug 2022 20:11:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F0A1C433D6;
+        Mon, 15 Aug 2022 20:11:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594157;
-        bh=x6NVRyUZTEf4nFxk/dq0sp7TxgAoTWMakjs1/z/O3Hs=;
+        s=korg; t=1660594274;
+        bh=CNC3RHZtr4Vx0ECyRUs2YPM5WBx6e2DmCYMF7MiujFQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DWr66RVgxtEIgrdSC8gPSLzFo539WRNIW3i+3eVredzpYVVDCRV5hur8TXjnggx5+
-         V2aED5Lj8blo/kFL480oVWvjCcpKD4MfahwA1r7/PJ2+YPJVMJaqrl2pr/Vi9iPdTt
-         DdaJ2+T12WKVZ9G6sjhC+gstkx/foS1PMnLKHEBU=
+        b=qXIN2ilr6pfr6eJHmLDcvYd+JnWm1YLklqEBP8eTbdAndzYgM4TQUSg06tMe5spiL
+         0utEjqNaf3aGLZ/RTmX+/I095pvj3rDcdPB/9dvXnedBsul3s0dTgL3N8nj0Q5wa/5
+         zFFAaaMXcv+bVzCe0ycvCyJBjaafy+qFCEGMSKTk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Ming Qian <ming.qian@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0374/1157] media: amphion: return error if format is unsupported by vpu
-Date:   Mon, 15 Aug 2022 19:55:30 +0200
-Message-Id: <20220815180454.682192679@linuxfoundation.org>
+Subject: [PATCH 5.19 0376/1157] media: imx-jpeg: Correct some definition according specification
+Date:   Mon, 15 Aug 2022 19:55:32 +0200
+Message-Id: <20220815180454.765446069@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -58,53 +59,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ming Qian <ming.qian@nxp.com>
 
-[ Upstream commit a3a2efca36a3a1ddba229a7be7991e8b5de4ac35 ]
+[ Upstream commit 5a601f89e846c1b6005ab274d039e5036fc22015 ]
 
-return error if format is unsupported by vpu,
-otherwise the vpu will be stalled at decoding
+the register CAST_NOMFRSIZE_LO should be equal to CAST_STATUS16
+the register CAST_NOMFRSIZE_HI should be equal to CAST_STATUS17
+the register CAST_OFBSIZE_LO should be equal to CAST_STATUS18
+the register CAST_OFBSIZE_HI should be equal to CAST_STATUS19
 
-Fixes: 3cd084519c6f9 ("media: amphion: add vpu v4l2 m2m support")
+Fixes: 2db16c6ed72ce ("media: imx-jpeg: Add V4L2 driver for i.MX8 JPEG Encoder/Decoder")
 Signed-off-by: Ming Qian <ming.qian@nxp.com>
+Reviewed-by: Mirela Rabulea <mirela.rabulea@nxp.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/amphion/vpu_malone.c | 2 ++
- drivers/media/platform/amphion/vpu_v4l2.c   | 6 ++++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/amphion/vpu_malone.c b/drivers/media/platform/amphion/vpu_malone.c
-index f29c223eefce..40267c73b1f9 100644
---- a/drivers/media/platform/amphion/vpu_malone.c
-+++ b/drivers/media/platform/amphion/vpu_malone.c
-@@ -610,6 +610,8 @@ static int vpu_malone_set_params(struct vpu_shared_addr *shared,
- 	enum vpu_malone_format malone_format;
+diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
+index d838e875616c..5f64cbbe0fa9 100644
+--- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
++++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
+@@ -53,10 +53,10 @@
+ #define CAST_REC_REGS_SEL		CAST_STATUS4
+ #define CAST_LUMTH			CAST_STATUS5
+ #define CAST_CHRTH			CAST_STATUS6
+-#define CAST_NOMFRSIZE_LO		CAST_STATUS7
+-#define CAST_NOMFRSIZE_HI		CAST_STATUS8
+-#define CAST_OFBSIZE_LO			CAST_STATUS9
+-#define CAST_OFBSIZE_HI			CAST_STATUS10
++#define CAST_NOMFRSIZE_LO		CAST_STATUS16
++#define CAST_NOMFRSIZE_HI		CAST_STATUS17
++#define CAST_OFBSIZE_LO			CAST_STATUS18
++#define CAST_OFBSIZE_HI			CAST_STATUS19
  
- 	malone_format = vpu_malone_format_remap(params->codec_format);
-+	if (WARN_ON(malone_format == MALONE_FMT_NULL))
-+		return -EINVAL;
- 	iface->udata_buffer[instance].base = params->udata.base;
- 	iface->udata_buffer[instance].slot_size = params->udata.size;
- 
-diff --git a/drivers/media/platform/amphion/vpu_v4l2.c b/drivers/media/platform/amphion/vpu_v4l2.c
-index 446f07d09d0b..da455e5ab337 100644
---- a/drivers/media/platform/amphion/vpu_v4l2.c
-+++ b/drivers/media/platform/amphion/vpu_v4l2.c
-@@ -500,10 +500,12 @@ static int vpu_vb2_start_streaming(struct vb2_queue *q, unsigned int count)
- 		  fmt->sizeimage[1], fmt->bytesperline[1],
- 		  fmt->sizeimage[2], fmt->bytesperline[2],
- 		  q->num_buffers);
--	call_void_vop(inst, start, q->type);
-+	ret = call_vop(inst, start, q->type);
- 	vb2_clear_last_buffer_dequeued(q);
-+	if (ret)
-+		vpu_vb2_buffers_return(inst, q->type, VB2_BUF_STATE_QUEUED);
- 
--	return 0;
-+	return ret;
- }
- 
- static void vpu_vb2_stop_streaming(struct vb2_queue *q)
+ #define MXC_MAX_SLOTS	1 /* TODO use all 4 slots*/
+ /* JPEG-Decoder Wrapper Slot Registers 0..3 */
 -- 
 2.35.1
 

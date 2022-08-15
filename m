@@ -2,113 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B2E595226
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 07:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF0D59523A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 07:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbiHPFlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 01:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47976 "EHLO
+        id S229864AbiHPFxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 01:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbiHPFkx (ORCPT
+        with ESMTP id S231173AbiHPFwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 01:40:53 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D13E74BB5
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 15:28:53 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id v128so8505804vsb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 15:28:53 -0700 (PDT)
+        Tue, 16 Aug 2022 01:52:39 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3CA25E87
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 15:56:34 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id j6so6992814qkl.10
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 15:56:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=eWIMPcC8rYDUoL4i24r1Ay9EOFQlCfU2RuQLr3PwMF0=;
-        b=slPWKfh1v9YKnzV3O0YOhDovrpXET34xFrRdNMmfE83qPHZTMM+ukV2bxTk5rnypPg
-         Q9CNgQTqR8HdD1kdY0J/7oEFjzwyD1zs0mKN2bVCmjdYDH8zP2JeyohNQn6pQpElFxjO
-         0gLCvC47W5bGpeCOJsCwEQwSN2dLdhDb34ibUDeiQOCDzIuGjzhWW81ruLPWz/UPy6SJ
-         Ti1JHnDZYfo3c0uzN1Q6+D3uTFisp4gnPK19RYUSXKWyllHIFbQuGYcHx1w0C38p7y+S
-         IXOPqUvyr5LC6YGerxWGTQWABIF2e/sjQZI9g0Me3f0yvV7YEeX2CWZUuOFZstnJIsSh
-         EiiQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=Ac3JvCwAmKuPc3kldTLNS+yBvHZ3Bhe8L1hxK+NbPB0=;
+        b=EOCISOZ/yFup2jyMuBNguNp9UguY0b5klvmRasgAPspUx0XeDol7zNXd2FHAp/a2E9
+         E+E/1Yv7HCBsSCbL6kxzhSE8j0/UJoNQ29K/dNK+sRWUUsHSw6uPsIH5nl8JMlandbYg
+         XeHm5bjDHpCfH9Vdqsey5mNysJaDKWffheKd9zOcowlh10rX05VuDIiitCb5Yf2CA9uf
+         ErfrCjAm6fVzqMbulXFlb0GpQYs8OrZcwNQizGwtOvUYY3PhXvFRhuS3i5Sjls7xJJrg
+         DwZDoBrwrC95sjNOqyMFtMXqehVTBExgtV2lWy074ZKe7Ko3n13dZIqKpOND6TRtgSdT
+         dVlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=eWIMPcC8rYDUoL4i24r1Ay9EOFQlCfU2RuQLr3PwMF0=;
-        b=zwAwOEOIs6AqSdWldmN+GRF2y2iyz53LdlgNSaqW5Oslb5OMGxpVGTxhLNMLtQy4xt
-         VPqBYgM+apJKK2gzdg0SU1jlBiMLhivb7rm/d5Ybo0rrVSUcVa4gL6camfhKPnip9bhM
-         lpnfpvF0OInAW3+PPHwVi/PL7/PhRKLKke+E0M2J1SSWHAYIpZxoH2u4wZyOsTTxF/uN
-         YYLom1QloESNYfIc3axpVwlhUlt1MLT++JU4fpb9igIGSK661kp9CJ2o3O4F6MuUiHE+
-         VtAauiVCeiaX0bB8+1wSsX97zEx5vsnK6QkDU4hBdX5W0jIaLAJN9BLnhRHQRMq7V7Az
-         rs7g==
-X-Gm-Message-State: ACgBeo0pQ4kT3bo8eHt5R0nQl+9gjwapFsd7RqSed5CEkjQy3Ui3u1S5
-        Xf/94MP6G9RY3vC7FC6WUxteB2HIbRo+OvllbBpG4A==
-X-Google-Smtp-Source: AA6agR4HPZrAIXN6EW/4MtdinTczw9qBIQC+HL3vsb7kMMNWm8akBESXxlFp8FvJSdExV4wQGFDh1RmKPo5TpcJdTtk=
-X-Received: by 2002:a67:a408:0:b0:38a:dbca:760 with SMTP id
- n8-20020a67a408000000b0038adbca0760mr1767464vse.54.1660602528273; Mon, 15 Aug
- 2022 15:28:48 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=Ac3JvCwAmKuPc3kldTLNS+yBvHZ3Bhe8L1hxK+NbPB0=;
+        b=cj5xgLdUgoUki+Ry66fMxIDxBWgSMUJcdzM1/DGjQwSnksBR/L2EYkAKdxOIhMW5iQ
+         n4t+OW7kSi+9xu8ST//pKgEN+qYzYAHhk2ZDcxHmwZuVlFTALUansBtyqx4uhB7fgSaG
+         xs+ytgNCB9i5wqpivxVhy83I5i+kAoTAlaHhXBQjKFIIIklLH7PpOo/p5z5dkl0jCjW3
+         gQo/5n7VzxXTE4hISeMZYEd4zfZtK87TJPYTdTOBK3ThgqJHgmhfpYjusHMqe98UPAhu
+         BuqR/i8FwkGB4H+2COE6CILuElU9206HxhVnrC/ATAr0wyVpeVeY4JucCjJlC15Lb0GX
+         l20g==
+X-Gm-Message-State: ACgBeo33uIrz5Olb8GcCTj82WWEVOQpkKsiymSCs4UIn41oeDgNe9xlL
+        cY92Hpw9W+Gbsbq9X8soWJSv4A==
+X-Google-Smtp-Source: AA6agR4OgMytBVHSK2x+UfrqWfy6TQ0pQFCJYAId3wdKwXnNjgcxkBn0lXdyDAanMZ2UFmVoEsND9Q==
+X-Received: by 2002:a05:620a:8014:b0:6b9:2866:c7f0 with SMTP id ee20-20020a05620a801400b006b92866c7f0mr12971491qkb.23.1660604193224;
+        Mon, 15 Aug 2022 15:56:33 -0700 (PDT)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id h11-20020a05620a244b00b006b633dc839esm10497057qkn.66.2022.08.15.15.56.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 15:56:32 -0700 (PDT)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     jic23@kernel.org, lars@metafoo.de
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Frede@cmslaser.com,
+        William Breathitt Gray <william.gray@linaro.org>
+Subject: [PATCH] iio: stx104: Move to addac subdirectory
+Date:   Mon, 15 Aug 2022 18:29:21 -0400
+Message-Id: <20220815222921.138945-1-william.gray@linaro.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220803160031.1379788-1-eranian@google.com> <4cad9f06-f24d-a6e6-477b-5a00f64600ed@linux.intel.com>
-In-Reply-To: <4cad9f06-f24d-a6e6-477b-5a00f64600ed@linux.intel.com>
-From:   Stephane Eranian <eranian@google.com>
-Date:   Mon, 15 Aug 2022 15:28:36 -0700
-Message-ID: <CABPqkBSGXwm_OFWt9tDq2WuXpuLtOJzekhiqH=c0_rOX6ZM2=g@mail.gmail.com>
-Subject: Re: [PATCH] perf/x86/intel/uncore: fix broken read_counter() for SNB
- IMC PMU
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        kan.liang@intel.com, ak@linux.intel.com, namhyung.kim@kernel.org,
-        irogers@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 4, 2022 at 6:09 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
->
->
->
-> On 2022-08-03 12:00 p.m., Stephane Eranian wrote:
-> > Existing code was generating bogus counts for the SNB IMC bandwidth counters:
-> >
-> > $ perf stat -a -I 1000 -e uncore_imc/data_reads/,uncore_imc/data_writes/
-> >      1.000327813           1,024.03 MiB  uncore_imc/data_reads/
-> >      1.000327813              20.73 MiB  uncore_imc/data_writes/
-> >      2.000580153         261,120.00 MiB  uncore_imc/data_reads/
-> >      2.000580153              23.28 MiB  uncore_imc/data_writes/
-> >
-> > The problem was introduced by commit:
-> >   07ce734dd8ad ("perf/x86/intel/uncore: Clean up client IMC")
-> >
-> > Where the read_counter callback was replace to point to the generic
-> > uncore_mmio_read_counter() function.
-> >
-> > The SNB IMC counters are freerunnig 32-bit counters laid out contiguously in
-> > MMIO. But uncore_mmio_read_counter() is using a readq() call to read from
-> > MMIO therefore reading 64-bit from MMIO. Although this is okay for the
-> > uncore_perf_event_update() function because it is shifting the value based
-> > on the actual counter width to compute a delta, it is not okay for the
-> > uncore_pmu_event_start() which is simply reading the counter  and therefore
-> > priming the event->prev_count with a bogus value which is responsible for
-> > causing bogus deltas in the perf stat command above.
-> >
-> > The fix is to reintroduce the custom callback for read_counter for the SNB
-> > IMC PMU and use readl() instead of readq(). With the change the output of
-> > perf stat is back to normal:
-> > $ perf stat -a -I 1000 -e uncore_imc/data_reads/,uncore_imc/data_writes/
-> >      1.000120987             296.94 MiB  uncore_imc/data_reads/
-> >      1.000120987             138.42 MiB  uncore_imc/data_writes/
-> >      2.000403144             175.91 MiB  uncore_imc/data_reads/
-> >      2.000403144              68.50 MiB  uncore_imc/data_writes/
-> >
-> > Signed-off-by: Stephane Eranian <eranian@google.com>
->
-> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
->
-Any further comments?
-Thanks.
+The stx104 driver supports both ADC and DAC functionality.
+
+Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+---
+ MAINTAINERS                         |  2 +-
+ drivers/iio/adc/Kconfig             | 16 ----------------
+ drivers/iio/adc/Makefile            |  1 -
+ drivers/iio/addac/Kconfig           | 16 ++++++++++++++++
+ drivers/iio/addac/Makefile          |  1 +
+ drivers/iio/{adc => addac}/stx104.c |  0
+ 6 files changed, 18 insertions(+), 18 deletions(-)
+ rename drivers/iio/{adc => addac}/stx104.c (100%)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b8b6544ba27c..f4ef070f474a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1382,7 +1382,7 @@ APEX EMBEDDED SYSTEMS STX104 IIO DRIVER
+ M:	William Breathitt Gray <william.gray@linaro.org>
+ L:	linux-iio@vger.kernel.org
+ S:	Maintained
+-F:	drivers/iio/adc/stx104.c
++F:	drivers/iio/addac/stx104.c
+ 
+ APM DRIVER
+ M:	Jiri Kosina <jikos@kernel.org>
+diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
+index 5a3e8d9ae26c..e3c2881ed23a 100644
+--- a/drivers/iio/adc/Kconfig
++++ b/drivers/iio/adc/Kconfig
+@@ -1037,22 +1037,6 @@ config STMPE_ADC
+ 	  Say yes here to build support for ST Microelectronics STMPE
+ 	  built-in ADC block (stmpe811).
+ 
+-config STX104
+-	tristate "Apex Embedded Systems STX104 driver"
+-	depends on PC104 && X86
+-	select ISA_BUS_API
+-	select GPIOLIB
+-	help
+-	  Say yes here to build support for the Apex Embedded Systems STX104
+-	  integrated analog PC/104 card.
+-
+-	  This driver supports the 16 channels of single-ended (8 channels of
+-	  differential) analog inputs, 2 channels of analog output, 4 digital
+-	  inputs, and 4 digital outputs provided by the STX104.
+-
+-	  The base port addresses for the devices may be configured via the base
+-	  array module parameter.
+-
+ config SUN4I_GPADC
+ 	tristate "Support for the Allwinner SoCs GPADC"
+ 	depends on IIO
+diff --git a/drivers/iio/adc/Makefile b/drivers/iio/adc/Makefile
+index c1a861a978ad..ab084094263b 100644
+--- a/drivers/iio/adc/Makefile
++++ b/drivers/iio/adc/Makefile
+@@ -89,7 +89,6 @@ obj-$(CONFIG_RICHTEK_RTQ6056) += rtq6056.o
+ obj-$(CONFIG_RZG2L_ADC) += rzg2l_adc.o
+ obj-$(CONFIG_SC27XX_ADC) += sc27xx_adc.o
+ obj-$(CONFIG_SPEAR_ADC) += spear_adc.o
+-obj-$(CONFIG_STX104) += stx104.o
+ obj-$(CONFIG_SUN4I_GPADC) += sun4i-gpadc-iio.o
+ obj-$(CONFIG_STM32_ADC_CORE) += stm32-adc-core.o
+ obj-$(CONFIG_STM32_ADC) += stm32-adc.o
+diff --git a/drivers/iio/addac/Kconfig b/drivers/iio/addac/Kconfig
+index 138492362f20..fcf6d2269bfc 100644
+--- a/drivers/iio/addac/Kconfig
++++ b/drivers/iio/addac/Kconfig
+@@ -17,4 +17,20 @@ config AD74413R
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called ad74413r.
+ 
++config STX104
++	tristate "Apex Embedded Systems STX104 driver"
++	depends on PC104 && X86
++	select ISA_BUS_API
++	select GPIOLIB
++	help
++	  Say yes here to build support for the Apex Embedded Systems STX104
++	  integrated analog PC/104 card.
++
++	  This driver supports the 16 channels of single-ended (8 channels of
++	  differential) analog inputs, 2 channels of analog output, 4 digital
++	  inputs, and 4 digital outputs provided by the STX104.
++
++	  The base port addresses for the devices may be configured via the base
++	  array module parameter.
++
+ endmenu
+diff --git a/drivers/iio/addac/Makefile b/drivers/iio/addac/Makefile
+index cfd4bbe64ad3..17de20ef0d8e 100644
+--- a/drivers/iio/addac/Makefile
++++ b/drivers/iio/addac/Makefile
+@@ -5,3 +5,4 @@
+ 
+ # When adding new entries keep the list in alphabetical order
+ obj-$(CONFIG_AD74413R) += ad74413r.o
++obj-$(CONFIG_STX104) += stx104.o
+diff --git a/drivers/iio/adc/stx104.c b/drivers/iio/addac/stx104.c
+similarity index 100%
+rename from drivers/iio/adc/stx104.c
+rename to drivers/iio/addac/stx104.c
+
+base-commit: b82217e73b5aa6db8453ad91b929ca2366e47184
+-- 
+2.37.2
+

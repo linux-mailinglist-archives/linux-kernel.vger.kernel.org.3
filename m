@@ -2,40 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7268A592DB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CFA592DBA
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242554AbiHOLCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 07:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48588 "EHLO
+        id S234621AbiHOLDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 07:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242006AbiHOLCe (ORCPT
+        with ESMTP id S242175AbiHOLCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 07:02:34 -0400
-Received: from mail.fris.de (mail.fris.de [IPv6:2a01:4f8:c2c:390b::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2698224095;
-        Mon, 15 Aug 2022 04:02:30 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B8926BFC15;
-        Mon, 15 Aug 2022 13:02:25 +0200 (CEST)
+        Mon, 15 Aug 2022 07:02:36 -0400
+Received: from mail.fris.de (mail.fris.de [116.203.77.234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6880D248D1;
+        Mon, 15 Aug 2022 04:02:32 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2E318C017B;
+        Mon, 15 Aug 2022 13:02:29 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
-        t=1660561347; h=from:subject:date:message-id:to:cc:mime-version:
-         content-transfer-encoding; bh=di9qAzMMt0Uch8kPIvSmTcNkx/O6Br+B8hRhRF4lYGs=;
-        b=krvljssHeJ6ZlYsMS9O9emhoDvEBaxp0Pugx2H+g7k3oMNwALh8w3y+bwJ7C1rKPSbNl4m
-        +pJOuJwF+2LJ1FGq0/Ke1iuDLy0SpYnOExZD01nfhYM0Z8wfj1BGs/9Lamt2jtWnUuJljV
-        pVozdiXnlFSxcJlUQ3HpmNFXNdgP9lx37NhtZ+Sl/6IADT/9nkLa13Gl0Q4PlOgPIz4qo5
-        +k89kX7ekkge0zBDegRb2rPx2dDUVfXM1XQbaeFccdWoOKNVkXkMaBpmFaZ5OQNyWEVub1
-        4bRl1TvcDkYETHiou+xZ5rC5FcSsDtxdKXPyuojPNPvP3RbiGn6HSZIo9Cyduw==
+        t=1660561351; h=from:subject:date:message-id:to:cc:mime-version:
+         content-transfer-encoding:in-reply-to:references;
+        bh=zU7RWqah3dWELUuDIGga8OUgOvhVsdQkNRY8DYAu0mA=;
+        b=UE+2ciGotMn/GtfPYy2TWR1AqWcJiNfdKYIfBAo2091NfNMlXSUz1DB+VLvzjsKuTD0BtZ
+        XNwFlvqX65XiMEXl3JJqBvLtw0aruTYvImS8K+tuxjq9R7Q1EPkzn4NoN8PMYZmguF76yG
+        7wp2KbRWxVo0jdNKqNRge+T+8Ff/6OGWGuu2DvFu7tenFx4mMsmm6addZej2AuEID88iqO
+        MwgmnwYxRfrLXSaLrBpi1C6Ham9yI26+zEcN+IgJwjXWq3VP58YP/hAh4SD5tLeYy+amv0
+        9Hthko3EPAyRu3+33tXv116UTg52lJP70PDzJTZ0L3NEakiti6hC6z+FBpT7Mw==
 From:   Frieder Schrempf <frieder@fris.de>
-To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+To:     devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Shawn Guo <shawnguo@kernel.org>
 Cc:     Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Subject: [PATCH v3 0/8] arm64: dts: imx8mm-kontron: Improvements and OSM board support
-Date:   Mon, 15 Aug 2022 13:01:23 +0200
-Message-Id: <20220815110134.49683-1-frieder@fris.de>
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Denys Drozdov <denys.drozdov@toradex.com>,
+        Fabio Estevam <festevam@denx.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Marek Vasut <marex@denx.de>,
+        Matthias Schiffer <matthias.schiffer@tq-group.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v3 1/8] dt-bindings: arm: fsl: Rename compatibles for Kontron i.MX8MM SoM/board
+Date:   Mon, 15 Aug 2022 13:01:24 +0200
+Message-Id: <20220815110134.49683-2-frieder@fris.de>
+In-Reply-To: <20220815110134.49683-1-frieder@fris.de>
+References: <20220815110134.49683-1-frieder@fris.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
@@ -50,52 +61,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-This set contains a few improvements for the imx8mm-kontron devicetrees
-(patch 3-7) and support for a new SoM (patch 8, including baseboard) that
-complies to the Open Standard Module (OSM) 1.0 hardware specification, size S
-(https://sget.org/standards/osm).
+This updates the bindings in order to use names for the boards that
+follow the latest convention used by Kontron marketing.
 
-It also includes binding changes in patch 1 and 2.
+By updating we make sure, that we can maintain this more easily in
+future and make sure that the proper devicetree can be selected for
+the hardware.
 
+Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+---
 Changes in v3:
-* drop patch for 2 which was applied separately
-* rebase on v6.0-rc1
-* rename compatibles and file names
+* new patch
+---
+ Documentation/devicetree/bindings/arm/fsl.yaml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Changes in v2:
-* move binding changes to beginning of patchset
-* Allow arbitrary regulator names in PCA9450 bindings
-* Use voltage rail names from schematic for PMIC regulator-names
-* Add SPI NOR partition layout to devicetree
-* Remove unneeded header include
-* Add tags
-
-Frieder Schrempf (8):
-  dt-bindings: arm: fsl: Rename compatibles for Kontron i.MX8MM
-    SoM/board
-  dt-bindings: arm: fsl: Add Kontron BL i.MX8MM OSM-S board
-  arm64: dts: imx8mm-kontron: Adjust compatibles, file names and model
-    strings
-  arm64: dts: imx8mm-kontron: Use the VSELECT signal to switch SD card
-    IO voltage
-  arm64: dts: imx8mm-kontron: Remove low DDRC operating point
-  arm64: dts: imx8mm-kontron: Use voltage rail names from schematic for
-    PMIC regulator-names
-  arm64: dts: imx8mm-kontron: Add SPI NOR partition layout
-  arm64: dts: Add support for Kontron SL/BL i.MX8MM OSM-S
-
- .../devicetree/bindings/arm/fsl.yaml          |  13 +-
- arch/arm64/boot/dts/freescale/Makefile        |   3 +-
- .../dts/freescale/imx8mm-kontron-bl-osm-s.dts | 376 ++++++++++++++++++
- ...tron-n801x-s.dts => imx8mm-kontron-bl.dts} |   7 +-
- .../dts/freescale/imx8mm-kontron-osm-s.dtsi   | 330 +++++++++++++++
- ...-n801x-som.dtsi => imx8mm-kontron-sl.dtsi} |  53 ++-
- 6 files changed, 757 insertions(+), 25 deletions(-)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-kontron-bl-osm-s.dts
- rename arch/arm64/boot/dts/freescale/{imx8mm-kontron-n801x-s.dts => imx8mm-kontron-bl.dts} (96%)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
- rename arch/arm64/boot/dts/freescale/{imx8mm-kontron-n801x-som.dtsi => imx8mm-kontron-sl.dtsi} (87%)
-
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index 7431579ab0e8..4dcfa27044f0 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -831,7 +831,7 @@ properties:
+               - gw,imx8mm-gw7901          # i.MX8MM Gateworks Board
+               - gw,imx8mm-gw7902          # i.MX8MM Gateworks Board
+               - gw,imx8mm-gw7903          # i.MX8MM Gateworks Board
+-              - kontron,imx8mm-n801x-som  # i.MX8MM Kontron SL (N801X) SOM
++              - kontron,imx8mm-sl         # i.MX8MM Kontron SL (N801X) SOM
+               - menlo,mx8menlo            # i.MX8MM Menlo board with Verdin SoM
+               - toradex,verdin-imx8mm     # Verdin iMX8M Mini Modules
+               - toradex,verdin-imx8mm-nonwifi  # Verdin iMX8M Mini Modules without Wi-Fi / BT
+@@ -850,8 +850,8 @@ properties:
+ 
+       - description: Kontron BL i.MX8MM (N801X S) Board
+         items:
+-          - const: kontron,imx8mm-n801x-s
+-          - const: kontron,imx8mm-n801x-som
++          - const: kontron,imx8mm-bl
++          - const: kontron,imx8mm-sl
+           - const: fsl,imx8mm
+ 
+       - description: Toradex Boards with Verdin iMX8M Mini Modules
 -- 
 2.37.1
 

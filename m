@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30575949F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2768B594DB7
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353496AbiHOXhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51672 "EHLO
+        id S1348298AbiHPBCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 21:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244663AbiHOXch (ORCPT
+        with ESMTP id S1344972AbiHPA4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:32:37 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EDB150BA1;
-        Mon, 15 Aug 2022 13:08:28 -0700 (PDT)
+        Mon, 15 Aug 2022 20:56:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F9319ECB1;
+        Mon, 15 Aug 2022 13:48:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 09DA9CE12E7;
-        Mon, 15 Aug 2022 20:08:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C29CCC433D6;
-        Mon, 15 Aug 2022 20:08:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 02A19B811AE;
+        Mon, 15 Aug 2022 20:48:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EB0CC433C1;
+        Mon, 15 Aug 2022 20:48:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594105;
-        bh=wlL1Y8aNRe0v0Bc7HGBJS/rY5In1hAG+X05x15i94HY=;
+        s=korg; t=1660596506;
+        bh=7tARl1TSUtB1EY1AcMUAeuoi5nZ03zGTLEJW5dprqRM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tb4rRmi5b7IdaCUTcG61qba8+Sw8YwFCQJHJUApSeD6MjtiWbrc+h7n9/MaozKE3X
-         hU/SueOr11stxO8S3gZXl6aN1u+HRllScI+EhmkphMICXV5viTRZD5a0/LJJteVVM+
-         UgLblBO1K2lIQD4/UEa2mGrcPdsVm/jjAP8Xwbpw=
+        b=geJ1bQXYzu5eMdJzT84KYmugScO1OLTUdCoIYaQFtZoM2Zv3FqnaNYQQnj5kOyu/E
+         A+4QPZXte++NgFuuXlhzzwx2ntD7j+kc69mKwgXeZS6leSxdhJnAfzOJ0xI3gOqEXw
+         c+10R6/0vgle3199arUALyltQ0HU5O8h2gkNap9g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Hulk Robot <hulkci@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>,
-        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
+        stable@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 1057/1095] ext4: fix use-after-free in ext4_xattr_set_entry
-Date:   Mon, 15 Aug 2022 20:07:36 +0200
-Message-Id: <20220815180512.774510385@linuxfoundation.org>
+Subject: [PATCH 5.19 1101/1157] s390/unwind: fix fgraph return address recovery
+Date:   Mon, 15 Aug 2022 20:07:37 +0200
+Message-Id: <20220815180524.302933945@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
-References: <20220815180429.240518113@linuxfoundation.org>
+In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
+References: <20220815180439.416659447@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,126 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baokun Li <libaokun1@huawei.com>
+From: Sumanth Korikkar <sumanthk@linux.ibm.com>
 
-[ Upstream commit 67d7d8ad99beccd9fe92d585b87f1760dc9018e3 ]
+[ Upstream commit ded466e1806686794b403ebf031133bbaca76bb2 ]
 
-Hulk Robot reported a issue:
-==================================================================
-BUG: KASAN: use-after-free in ext4_xattr_set_entry+0x18ab/0x3500
-Write of size 4105 at addr ffff8881675ef5f4 by task syz-executor.0/7092
+When HAVE_FUNCTION_GRAPH_RET_ADDR_PTR is defined, the return
+address to the fgraph caller is recovered by tagging it along with the
+stack pointer of ftrace stack. This makes the stack unwinding more
+reliable.
 
-CPU: 1 PID: 7092 Comm: syz-executor.0 Not tainted 4.19.90-dirty #17
-Call Trace:
-[...]
- memcpy+0x34/0x50 mm/kasan/kasan.c:303
- ext4_xattr_set_entry+0x18ab/0x3500 fs/ext4/xattr.c:1747
- ext4_xattr_ibody_inline_set+0x86/0x2a0 fs/ext4/xattr.c:2205
- ext4_xattr_set_handle+0x940/0x1300 fs/ext4/xattr.c:2386
- ext4_xattr_set+0x1da/0x300 fs/ext4/xattr.c:2498
- __vfs_setxattr+0x112/0x170 fs/xattr.c:149
- __vfs_setxattr_noperm+0x11b/0x2a0 fs/xattr.c:180
- __vfs_setxattr_locked+0x17b/0x250 fs/xattr.c:238
- vfs_setxattr+0xed/0x270 fs/xattr.c:255
- setxattr+0x235/0x330 fs/xattr.c:520
- path_setxattr+0x176/0x190 fs/xattr.c:539
- __do_sys_lsetxattr fs/xattr.c:561 [inline]
- __se_sys_lsetxattr fs/xattr.c:557 [inline]
- __x64_sys_lsetxattr+0xc2/0x160 fs/xattr.c:557
- do_syscall_64+0xdf/0x530 arch/x86/entry/common.c:298
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x459fe9
-RSP: 002b:00007fa5e54b4c08 EFLAGS: 00000246 ORIG_RAX: 00000000000000bd
-RAX: ffffffffffffffda RBX: 000000000051bf60 RCX: 0000000000459fe9
-RDX: 00000000200003c0 RSI: 0000000020000180 RDI: 0000000020000140
-RBP: 000000000051bf60 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000001009 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc73c93fc0 R14: 000000000051bf60 R15: 00007fa5e54b4d80
-[...]
-==================================================================
+When the fgraph return address is modified to return_to_handler,
+ftrace_graph_ret_addr tries to restore it to the original
+value using tagged stack pointer.
 
-Above issue may happen as follows:
--------------------------------------
-ext4_xattr_set
-  ext4_xattr_set_handle
-    ext4_xattr_ibody_find
-      >> s->end < s->base
-      >> no EXT4_STATE_XATTR
-      >> xattr_check_inode is not executed
-    ext4_xattr_ibody_set
-      ext4_xattr_set_entry
-       >> size_t min_offs = s->end - s->base
-       >> UAF in memcpy
+Fix this by passing tagged sp to ftrace_graph_ret_addr.
 
-we can easily reproduce this problem with the following commands:
-    mkfs.ext4 -F /dev/sda
-    mount -o debug_want_extra_isize=128 /dev/sda /mnt
-    touch /mnt/file
-    setfattr -n user.cat -v `seq -s z 4096|tr -d '[:digit:]'` /mnt/file
-
-In ext4_xattr_ibody_find, we have the following assignment logic:
-  header = IHDR(inode, raw_inode)
-         = raw_inode + EXT4_GOOD_OLD_INODE_SIZE + i_extra_isize
-  is->s.base = IFIRST(header)
-             = header + sizeof(struct ext4_xattr_ibody_header)
-  is->s.end = raw_inode + s_inode_size
-
-In ext4_xattr_set_entry
-  min_offs = s->end - s->base
-           = s_inode_size - EXT4_GOOD_OLD_INODE_SIZE - i_extra_isize -
-	     sizeof(struct ext4_xattr_ibody_header)
-  last = s->first
-  free = min_offs - ((void *)last - s->base) - sizeof(__u32)
-       = s_inode_size - EXT4_GOOD_OLD_INODE_SIZE - i_extra_isize -
-         sizeof(struct ext4_xattr_ibody_header) - sizeof(__u32)
-
-In the calculation formula, all values except s_inode_size and
-i_extra_size are fixed values. When i_extra_size is the maximum value
-s_inode_size - EXT4_GOOD_OLD_INODE_SIZE, min_offs is -4 and free is -8.
-The value overflows. As a result, the preceding issue is triggered when
-memcpy is executed.
-
-Therefore, when finding xattr or setting xattr, check whether
-there is space for storing xattr in the inode to resolve this issue.
-
-Cc: stable@kernel.org
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
-Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220616021358.2504451-3-libaokun1@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Fixes: d81675b60d09 ("s390/unwind: recover kretprobe modified return address in stacktrace")
+Cc: <stable@vger.kernel.org> # 5.18
+Reviewed-by: Vasily Gorbik <gor@linux.ibm.com>
+Signed-off-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
+Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/xattr.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ arch/s390/include/asm/unwind.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
-index 042325349098..c3c3194f3ee1 100644
---- a/fs/ext4/xattr.c
-+++ b/fs/ext4/xattr.c
-@@ -2176,8 +2176,9 @@ int ext4_xattr_ibody_find(struct inode *inode, struct ext4_xattr_info *i,
- 	struct ext4_inode *raw_inode;
- 	int error;
- 
--	if (EXT4_I(inode)->i_extra_isize == 0)
-+	if (!EXT4_INODE_HAS_XATTR_SPACE(inode))
- 		return 0;
-+
- 	raw_inode = ext4_raw_inode(&is->iloc);
- 	header = IHDR(inode, raw_inode);
- 	is->s.base = is->s.first = IFIRST(header);
-@@ -2205,8 +2206,9 @@ int ext4_xattr_ibody_set(handle_t *handle, struct inode *inode,
- 	struct ext4_xattr_search *s = &is->s;
- 	int error;
- 
--	if (EXT4_I(inode)->i_extra_isize == 0)
-+	if (!EXT4_INODE_HAS_XATTR_SPACE(inode))
- 		return -ENOSPC;
-+
- 	error = ext4_xattr_set_entry(i, s, handle, inode, false /* is_block */);
- 	if (error)
- 		return error;
+diff --git a/arch/s390/include/asm/unwind.h b/arch/s390/include/asm/unwind.h
+index 0bf06f1682d8..02462e7100c1 100644
+--- a/arch/s390/include/asm/unwind.h
++++ b/arch/s390/include/asm/unwind.h
+@@ -47,7 +47,7 @@ struct unwind_state {
+ static inline unsigned long unwind_recover_ret_addr(struct unwind_state *state,
+ 						    unsigned long ip)
+ {
+-	ip = ftrace_graph_ret_addr(state->task, &state->graph_idx, ip, NULL);
++	ip = ftrace_graph_ret_addr(state->task, &state->graph_idx, ip, (void *)state->sp);
+ 	if (is_kretprobe_trampoline(ip))
+ 		ip = kretprobe_find_ret_addr(state->task, (void *)state->sp, &state->kr_cur);
+ 	return ip;
 -- 
 2.35.1
 

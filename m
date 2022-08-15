@@ -2,246 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 612C1594444
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 00:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1315859442A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 00:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347531AbiHOWYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 18:24:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
+        id S1349227AbiHOWZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 18:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350788AbiHOWSd (ORCPT
+        with ESMTP id S1350834AbiHOWSk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 18:18:33 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32CB40BE1;
-        Mon, 15 Aug 2022 12:41:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660592504; x=1692128504;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=t539oKwDhI262eAFaZTn1ud3XYVbT+XoZk3kFbmmWGE=;
-  b=lFGkagEEUQYlQBD25Fe2tm7GogEJIS30WiuPMm07Zf5mTy+Ns7AeA8Le
-   8uRhruWOLp6ZyVtcDn4djiB191oa5MlKbAfE+4MdardStavGIfoGKSrPx
-   zM99Q7lekMNvbaO/1EHInaCDlZqy4ZNUXNoblTifkGL6fFucvXfwyL0i/
-   +ydTIEtYKJ0e5LCF3axuHFfKtHZzFG/oAtULEof9tX2eF3u7GUhZpMKz8
-   SXkzBgACdBDGU8kw7tZuPJOq42aDn9CxG8kNlyR5NEtgTXDfpmxWE/69U
-   gAwfM//Mzw1SY2XyKXKavQHy474gKHjtMOsssqUdY4YRtHkp6+M58MfuY
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="318033810"
-X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
-   d="scan'208";a="318033810"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 12:41:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
-   d="scan'208";a="749043084"
-Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Aug 2022 12:41:39 -0700
-Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oNfxy-0001CK-2e;
-        Mon, 15 Aug 2022 19:41:38 +0000
-Date:   Tue, 16 Aug 2022 03:41:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, linux@armlinux.org.uk, arnd@arndb.de,
-        linus.walleij@linaro.org, ardb@kernel.org,
-        rmk+kernel@armlinux.org.uk, rostedt@goodmis.org,
-        nick.hawkins@hpe.com, john@phrozen.org, mhiramat@kernel.org,
-        chenzhongjin@huawei.com
-Subject: Re: [PATCH] x86/unwind/orc: Add 'unwind_debug' cmdline option
-Message-ID: <202208160326.pFZMVgFP-lkp@intel.com>
-References: <20220815105808.17385-2-chenzhongjin@huawei.com>
+        Mon, 15 Aug 2022 18:18:40 -0400
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADE341D32
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 12:42:38 -0700 (PDT)
+Received: by mail-vk1-xa35.google.com with SMTP id s194so4181614vka.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 12:42:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=RGBjkPaE8J9hO2HXiD58roaLLtlMCd9GApWRbn/4InE=;
+        b=FPnuTloO45sF2T+4wEAf823pe7ogF3QnjRaKt7CEVoHfJADFo52qIDJ1ZW2Z4LsAcu
+         H1W2iVmPI4c522AHFCUyx7ONp/gv20XWuh3LLqi1W1gNTA7Go2R4zwn18WsNaore+syl
+         0eYy6eJq/oyYLaYS+z59QmSMvokUC+mywr5AIISm+KTlLsOJU4LPOKV0XxpFu3UwdcS0
+         dYc0WrRklRJfH4uzQCrjttrHj/om6vTyzT/5gmlSslEJoj/j2XoWwJu62hNTThOfBCfK
+         uwOFZ9py99FCDB/TEkuZ2PIS8vruJ36GwJ47bJEEbddUQ86rJ18LozZWAOKcFsQXzuXX
+         elKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=RGBjkPaE8J9hO2HXiD58roaLLtlMCd9GApWRbn/4InE=;
+        b=iV1FoVuCAapvgYQQWnwndDAUu9j8pHU1tqNTPYfKPL6SjCYaNOE9ILs4IYqOK6f+NT
+         1aNAdMPfR5Ru2Eg3qSn5q6aZfnxmbsZiuHwUw35gelUiLpRHruumUk8YPoqX3n4kk8bh
+         WQblVUdXcZfh4+pFA5HkUEZ/HDj9xjN/wKrDVbbELosbnnHB3anLXr6jLL2fPL7umoZR
+         hQXCGrJ+mqufLwfm77qda2Jw1L49V0JCW0iRkuCwQThC+/cZ5OIDfNGG3LP88CDdKvqZ
+         k9H1N2tmIfwSmRt8Wr9sFuKGSES3JHt+AtzSphLV906kOXLOsoGhKdjL0CLfjsMXLblA
+         XrFQ==
+X-Gm-Message-State: ACgBeo38fAdRGQqlnLeKxIxqkWWyV22TGOt3xEW3aOa1FNs1+C8ZXX7d
+        gmetPyX4HVhNA5TdK8kZY9F8ck2U6tZeoQM9Vf6q3KtkDXK/+g==
+X-Google-Smtp-Source: AA6agR7pGITv9xB++a81UrxiizddUCff4tMML/JKgOT3cUKsfaaQ9Khq0zhzod+3R31qgsSrSVaAxFx5/6Bs+6Zfd0E=
+X-Received: by 2002:a1f:2b47:0:b0:380:59c5:8b8f with SMTP id
+ r68-20020a1f2b47000000b0038059c58b8fmr1092986vkr.20.1660592557245; Mon, 15
+ Aug 2022 12:42:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815105808.17385-2-chenzhongjin@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1660211399.git.sandipan.das@amd.com> <172d2b0df39306ed77221c45ee1aa62e8ae0548d.1660211399.git.sandipan.das@amd.com>
+ <YvotoHMaLE1XawiO@worktop.programming.kicks-ass.net>
+In-Reply-To: <YvotoHMaLE1XawiO@worktop.programming.kicks-ass.net>
+From:   Stephane Eranian <eranian@google.com>
+Date:   Mon, 15 Aug 2022 12:42:23 -0700
+Message-ID: <CABPqkBQ1YLAu+sJC_U4QsQuo3PuzUwRDrNm9KcrUAEUxeBaYbg@mail.gmail.com>
+Subject: Re: [PATCH 04/13] x86/cpufeatures: Add LbrExtV2 feature bit
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Sandipan Das <sandipan.das@amd.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, x86@kernel.org, bp@alien8.de,
+        acme@kernel.org, namhyung@kernel.org, jolsa@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, dave.hansen@linux.intel.com,
+        like.xu.linux@gmail.com, ananth.narayan@amd.com,
+        ravi.bangoria@amd.com, santosh.shukla@amd.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chen,
+Hi,
 
-I love your patch! Perhaps something to improve:
+On Mon, Aug 15, 2022 at 4:27 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Thu, Aug 11, 2022 at 05:59:52PM +0530, Sandipan Das wrote:
+> > CPUID leaf 0x80000022 i.e. ExtPerfMonAndDbg advertises some new performance
+> > monitoring features for AMD processors.
+> >
+> > Bit 1 of EAX indicates support for Last Branch Record Extension Version 2
+> > (LbrExtV2) features. If found to be set during PMU initialization, the EBX
+> > bits of the same leaf can be used to determine the number of available LBR
+> > entries.
+> >
+> > For better utilization of feature words, LbrExtV2 is added as a scattered
+> > feature bit.
+> >
+> > Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+> > ---
+> >  arch/x86/include/asm/cpufeatures.h | 2 +-
+> >  arch/x86/kernel/cpu/scattered.c    | 1 +
+> >  2 files changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> > index 393f2bbb5e3a..e3fa476a24b0 100644
+> > --- a/arch/x86/include/asm/cpufeatures.h
+> > +++ b/arch/x86/include/asm/cpufeatures.h
+> > @@ -96,7 +96,7 @@
+> >  #define X86_FEATURE_SYSCALL32                ( 3*32+14) /* "" syscall in IA32 userspace */
+> >  #define X86_FEATURE_SYSENTER32               ( 3*32+15) /* "" sysenter in IA32 userspace */
+> >  #define X86_FEATURE_REP_GOOD         ( 3*32+16) /* REP microcode works well */
+> > -/* FREE!                                ( 3*32+17) */
+> > +#define X86_FEATURE_LBREXT_V2                ( 3*32+17) /* AMD Last Branch Record Extension Version 2 */
+> >  #define X86_FEATURE_LFENCE_RDTSC     ( 3*32+18) /* "" LFENCE synchronizes RDTSC */
+> >  #define X86_FEATURE_ACC_POWER                ( 3*32+19) /* AMD Accumulated Power Mechanism */
+> >  #define X86_FEATURE_NOPL             ( 3*32+20) /* The NOPL (0F 1F) instructions */
+> > diff --git a/arch/x86/kernel/cpu/scattered.c b/arch/x86/kernel/cpu/scattered.c
+> > index dbaa8326d6f2..6be46dffddbf 100644
+> > --- a/arch/x86/kernel/cpu/scattered.c
+> > +++ b/arch/x86/kernel/cpu/scattered.c
+> > @@ -44,6 +44,7 @@ static const struct cpuid_bit cpuid_bits[] = {
+> >       { X86_FEATURE_PROC_FEEDBACK,    CPUID_EDX, 11, 0x80000007, 0 },
+> >       { X86_FEATURE_MBA,              CPUID_EBX,  6, 0x80000008, 0 },
+> >       { X86_FEATURE_PERFMON_V2,       CPUID_EAX,  0, 0x80000022, 0 },
+> > +     { X86_FEATURE_LBREXT_V2,        CPUID_EAX,  1, 0x80000022, 0 },
+> >       { 0, 0, 0, 0, 0 }
+> >  };
+>
+> Would LBR_V2 work at all? It being a new version already seems to imply
+> extention, no? Then again, I suppose there's an argument to be had for
+> avoiding confusion vs the Intel LBR thing.. Couldn't you have called
+> this BRS_V2 :-)
+>
+I believe it is called v2 because there was already a LBR in previous
+generations, however it
+was 1-deep and it was not connected to the PMU like this one. The
+public PPR mentions it
+(MSR 0x1DB/0x1DC, Last Branch From IP, Last Branch To IP). See for
+instance the PPR
+for Fam17h model 71h:
+https://www.amd.com/system/files/TechDocs/56176_ppr_Family_17h_Model_71h_B0_pub_Rev_3.06.zip
 
-[auto build test WARNING on tip/x86/core]
-[also build test WARNING on soc/for-next clk/clk-next linus/master v6.0-rc1 next-20220815]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+BRS is a model specific feature for Zen3.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Zhongjin/x86-unwind-orc-Add-unwind_debug-cmdline-option/20220815-190328
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git a1a5482a2c6e38a3ebed32e571625c56a8cc41a6
-config: x86_64-randconfig-a003-20220815 (https://download.01.org/0day-ci/archive/20220816/202208160326.pFZMVgFP-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/3295e738f5b51f1f1f223bf52a8ecee2ab93fbca
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Chen-Zhongjin/x86-unwind-orc-Add-unwind_debug-cmdline-option/20220815-190328
-        git checkout 3295e738f5b51f1f1f223bf52a8ecee2ab93fbca
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   arch/x86/kernel/unwind_orc.c:17:9: error: expected identifier or '(' before 'if'
-      17 |         if (state->task == current && !state->error)                    \
-         |         ^~
-   In file included from include/asm-generic/bug.h:7,
-                    from arch/x86/include/asm/bug.h:87,
-                    from include/linux/bug.h:5,
-                    from include/linux/jump_label.h:257,
-                    from include/linux/static_key.h:1,
-                    from arch/x86/include/asm/nospec-branch.h:6,
-                    from arch/x86/include/asm/paravirt_types.h:40,
-                    from arch/x86/include/asm/ptrace.h:97,
-                    from arch/x86/include/asm/math_emu.h:5,
-                    from arch/x86/include/asm/processor.h:13,
-                    from arch/x86/include/asm/timex.h:5,
-                    from include/linux/timex.h:67,
-                    from include/linux/time32.h:13,
-                    from include/linux/time.h:60,
-                    from include/linux/stat.h:19,
-                    from include/linux/module.h:13,
-                    from arch/x86/kernel/unwind_orc.c:3:
-   include/linux/once_lite.h:34:10: error: expected identifier or '(' before ')' token
-      34 |         })
-         |          ^
-   include/linux/once_lite.h:11:9: note: in expansion of macro 'DO_ONCE_LITE_IF'
-      11 |         DO_ONCE_LITE_IF(true, func, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~
-   include/linux/printk.h:605:9: note: in expansion of macro 'DO_ONCE_LITE'
-     605 |         DO_ONCE_LITE(printk_deferred, fmt, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:12:9: note: in expansion of macro 'printk_deferred_once'
-      12 |         printk_deferred_once(KERN_WARNING "WARNING: " fmt, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:18:17: note: in expansion of macro 'orc_warn'
-      18 |                 orc_warn(args);                                         \
-         |                 ^~~~~~~~
-   arch/x86/kernel/unwind_orc.c:19:17: error: expected identifier or '(' before 'if'
-      19 |                 if (unwind_debug && !dumped_before)                     \
-         |                 ^~
->> arch/x86/kernel/unwind_orc.c:21:17: warning: data definition has no type or storage class
-      21 |                 dumped_before = true;                                   \
-         |                 ^~~~~~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:21:17: error: type defaults to 'int' in declaration of 'dumped_before' [-Werror=implicit-int]
-   arch/x86/kernel/unwind_orc.c:22:9: error: expected identifier or '(' before '}' token
-      22 |         }                                                               \
-         |         ^
-   arch/x86/kernel/unwind_orc.c:23:1: error: expected identifier or '(' before '}' token
-      23 | })
-         | ^
-   arch/x86/kernel/unwind_orc.c:23:2: error: expected identifier or '(' before ')' token
-      23 | })
-         |  ^
-   arch/x86/kernel/unwind_orc.c: In function 'orc_find':
-   arch/x86/kernel/unwind_orc.c:219:35: error: '__start_orc_unwind_ip' undeclared (first use in this function); did you mean '__start_orc_unwind'?
-     219 |                 return __orc_find(__start_orc_unwind_ip + start,
-         |                                   ^~~~~~~~~~~~~~~~~~~~~
-         |                                   __start_orc_unwind
-   arch/x86/kernel/unwind_orc.c:219:35: note: each undeclared identifier is reported only once for each function it appears in
-   arch/x86/kernel/unwind_orc.c: At top level:
-   arch/x86/kernel/unwind_orc.c:239:32: error: '__start_orc_unwind_ip' undeclared here (not in a function); did you mean '__start_orc_unwind'?
-     239 | static int *cur_orc_ip_table = __start_orc_unwind_ip;
-         |                                ^~~~~~~~~~~~~~~~~~~~~
-         |                                __start_orc_unwind
-   arch/x86/kernel/unwind_orc.c: In function 'unwind_next_frame':
-   arch/x86/kernel/unwind_orc.c:534:18: error: expected ')' before 'break'
-     534 |                 }
-         |                  ^
-         |                  )
-     535 |                 break;
-         |                 ~~~~~
->> arch/x86/kernel/unwind_orc.c:16:21: warning: unused variable 'dumped_before' [-Wunused-variable]
-      16 |         static bool dumped_before;
-         |                     ^~~~~~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:531:25: note: in expansion of macro 'orc_warn_current'
-     531 |                         orc_warn_current("missing R10 value at %pB\n",
-         |                         ^~~~~~~~~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:767:1: error: expected declaration or statement at end of input
-     767 | EXPORT_SYMBOL_GPL(__unwind_start);
-         | ^~~~~~~~~~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:767:1: error: expected declaration or statement at end of input
-   arch/x86/kernel/unwind_orc.c:767:1: error: expected declaration or statement at end of input
-   arch/x86/kernel/unwind_orc.c:533:25: error: label 'err' used but not defined
-     533 |                         goto err;
-         |                         ^~~~
-   arch/x86/kernel/unwind_orc.c:506:17: error: label 'the_end' used but not defined
-     506 |                 goto the_end;
-         |                 ^~~~
->> arch/x86/kernel/unwind_orc.c:468:14: warning: variable 'indirect' set but not used [-Wunused-but-set-variable]
-     468 |         bool indirect = false;
-         |              ^~~~~~~~
->> arch/x86/kernel/unwind_orc.c:466:25: warning: unused variable 'prev_type' [-Wunused-variable]
-     466 |         enum stack_type prev_type = state->stack_info.type;
-         |                         ^~~~~~~~~
->> arch/x86/kernel/unwind_orc.c:465:59: warning: unused variable 'prev_sp' [-Wunused-variable]
-     465 |         unsigned long ip_p, sp, tmp, orig_ip = state->ip, prev_sp = state->sp;
-         |                                                           ^~~~~~~
->> arch/x86/kernel/unwind_orc.c:465:38: warning: unused variable 'orig_ip' [-Wunused-variable]
-     465 |         unsigned long ip_p, sp, tmp, orig_ip = state->ip, prev_sp = state->sp;
-         |                                      ^~~~~~~
->> arch/x86/kernel/unwind_orc.c:465:33: warning: unused variable 'tmp' [-Wunused-variable]
-     465 |         unsigned long ip_p, sp, tmp, orig_ip = state->ip, prev_sp = state->sp;
-         |                                 ^~~
->> arch/x86/kernel/unwind_orc.c:465:23: warning: unused variable 'ip_p' [-Wunused-variable]
-     465 |         unsigned long ip_p, sp, tmp, orig_ip = state->ip, prev_sp = state->sp;
-         |                       ^~~~
-   arch/x86/kernel/unwind_orc.c:768: error: control reaches end of non-void function [-Werror=return-type]
-   At top level:
->> arch/x86/kernel/unwind_orc.c:16:21: warning: 'dumped_before' defined but not used [-Wunused-variable]
-      16 |         static bool dumped_before;
-         |                     ^~~~~~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:531:25: note: in expansion of macro 'orc_warn_current'
-     531 |                         orc_warn_current("missing R10 value at %pB\n",
-         |                         ^~~~~~~~~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:421:13: warning: 'deref_stack_iret_regs' defined but not used [-Wunused-function]
-     421 | static bool deref_stack_iret_regs(struct unwind_state *state, unsigned long addr,
-         |             ^~~~~~~~~~~~~~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:405:13: warning: 'deref_stack_regs' defined but not used [-Wunused-function]
-     405 | static bool deref_stack_regs(struct unwind_state *state, unsigned long addr,
-         |             ^~~~~~~~~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:395:13: warning: 'deref_stack_reg' defined but not used [-Wunused-function]
-     395 | static bool deref_stack_reg(struct unwind_state *state, unsigned long addr,
-         |             ^~~~~~~~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:42:13: warning: 'unwind_dump' defined but not used [-Wunused-function]
-      42 | static void unwind_dump(struct unwind_state *state)
-         |             ^~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +21 arch/x86/kernel/unwind_orc.c
-
-    10	
-    11	#define orc_warn(fmt, ...) \
-    12		printk_deferred_once(KERN_WARNING "WARNING: " fmt, ##__VA_ARGS__)
-    13	
-    14	#define orc_warn_current(args...)					\
-    15	({									\
-  > 16		static bool dumped_before;
-    17		if (state->task == current && !state->error)			\
-    18			orc_warn(args);						\
-    19			if (unwind_debug && !dumped_before)			\
-    20				unwind_dump(state);				\
-  > 21			dumped_before = true;					\
-    22		}								\
-    23	})
-    24	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+LBRv2 is a great improvement including over Zen3 BRS.

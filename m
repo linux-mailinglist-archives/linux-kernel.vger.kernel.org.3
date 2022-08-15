@@ -2,47 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF5559332C
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 18:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C320593328
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 18:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232748AbiHOQ0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 12:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
+        id S233084AbiHOQ0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 12:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233092AbiHOQZS (ORCPT
+        with ESMTP id S232514AbiHOQZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 12:25:18 -0400
+        Mon, 15 Aug 2022 12:25:19 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D84727149;
-        Mon, 15 Aug 2022 09:23:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A706C25C7C;
+        Mon, 15 Aug 2022 09:23:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9334CB80FEC;
-        Mon, 15 Aug 2022 16:23:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCD97C433D7;
-        Mon, 15 Aug 2022 16:23:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63450B80EA5;
+        Mon, 15 Aug 2022 16:23:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C375FC433C1;
+        Mon, 15 Aug 2022 16:23:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660580588;
-        bh=sVw0jX2MDbbtxdw3C7N48E1ZHL6zGdjBiKamZBFLaoA=;
+        s=k20201202; t=1660580591;
+        bh=LmpGns7c5wLoId8LSEZ+UEolch41Y3wjGy4mOteOmBE=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=o9tAnFaExPSXTyRBiAxWXv+fgfGnQRgJIs4/Y+AT47nw+QMibM9bsfkUSr23qz7i4
-         EpJrNbvhV+sEZdnS3yWNFXDbMYWW5VKphYVIe3Lp2M1dCX98SnW1J5cCnfFFlcG8LU
-         i3Xtnei8VmL0yF9og2KubxN4tgPXY/NwBdQfEZjk3KZ0ALnB+5xhR0XYSP+XKCVqSq
-         j6dqLl2SJG30+ImCqHWIevyheqhSqcv9wyQhzLHklDiX6pYPRbvF6098NlVHSvfpHe
-         Fi0ppRp3S/Ww2eK+pJTNICA1MQvUX47gyNi4vrn5RhySJ2Evu5aOpmhEPuJWyKlSnF
-         RPgTvzlN5cz5A==
+        b=IMAiOSv3VHv6/nNPdcMyK5VmhwP5QuIWADxtgV9ax/xQb3nqmUS3h4QniqMkXpSAk
+         zXEiX5DngrWuz8mT+sNsut/FFBGEFRF+XmU3AfR++4P8+tM/Z0fOKPMDEXoolJz0Pv
+         EwII4+u6PoHS/3RuEX8PxT8iczF6n0jryTf5QDs2+Ram8ZhwtCnSyjNAVSEYjTUXtj
+         2zHH9rgAPb/yKy1rigi2YBN15XAUtn03PRNcPcBeh4LBdZZw5XMzMtEXX199GD8EFk
+         0CdfEgpXowpOP1EUVBlxqofhjrJRuc8HDlyDOiAiiCimlMxQAz1MQVDFSkRmTe91+I
+         MUVRnNpu73N3w==
 From:   Mark Brown <broonie@kernel.org>
 To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Liam Girdwood <lgirdwood@gmail.com>
 Cc:     kernel-janitors@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <63efe8fe4e25a8ac386762d2d7cfe9bb9482333f.1659814389.git.christophe.jaillet@wanadoo.fr>
-References: <63efe8fe4e25a8ac386762d2d7cfe9bb9482333f.1659814389.git.christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH] ASoC: tlv320adcx140: Fix a typo in a comment
-Message-Id: <166058058662.769843.9592183911230477031.b4-ty@kernel.org>
-Date:   Mon, 15 Aug 2022 17:23:06 +0100
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <fb959b3bda689aa47e1fbe9948de957b77530b24.1659764734.git.christophe.jaillet@wanadoo.fr>
+References: <fb959b3bda689aa47e1fbe9948de957b77530b24.1659764734.git.christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] ASoC: sam9g20_wm8731: Simplify some error message
+Message-Id: <166058058851.769843.12342144572880656518.b4-ty@kernel.org>
+Date:   Mon, 15 Aug 2022 17:23:08 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,8 +61,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 6 Aug 2022 21:33:22 +0200, Christophe JAILLET wrote:
-> s/TLV320ADCX104/TLV320ADCX140/
+On Sat, 6 Aug 2022 07:45:48 +0200, Christophe JAILLET wrote:
+> dev_err_probe() already prints the error code in a human readable way, so
+> there is no need to duplicate it as a numerical value at the end of the
+> message.
 > 
 > 
 
@@ -68,8 +74,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: tlv320adcx140: Fix a typo in a comment
-      commit: 98c17a01bc5965047890bd30c95966007234e6d1
+[1/1] ASoC: sam9g20_wm8731: Simplify some error message
+      commit: 7d67657cb472a80d54457362bc421f2b57ee250b
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

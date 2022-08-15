@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3695947F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C945948C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353968AbiHOXo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
+        id S1354380AbiHOXo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354171AbiHOXle (ORCPT
+        with ESMTP id S1354202AbiHOXli (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:41:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2A1BC9;
-        Mon, 15 Aug 2022 13:10:56 -0700 (PDT)
+        Mon, 15 Aug 2022 19:41:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF272705;
+        Mon, 15 Aug 2022 13:11:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08283B80EA9;
-        Mon, 15 Aug 2022 20:10:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DC45C433C1;
-        Mon, 15 Aug 2022 20:10:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 71A1E60B9B;
+        Mon, 15 Aug 2022 20:11:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AF9AC433C1;
+        Mon, 15 Aug 2022 20:11:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594253;
-        bh=RZ1/XKi6ZZB/5Yh58YWyGEnCsTUCnClIq0g2pJhdLjQ=;
+        s=korg; t=1660594268;
+        bh=UsI/1rvqLECPRbEyqNSSrEWNvQrZbquWROC02DqDgvM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KeFuE6cyAuR343bBVOsTpoR83IXVLUUshFvzyFyeeD/nLOl1MsxvLf3mEUUtE3RAD
-         OhlWpWBA3mj/PMLP2L8eslkhUnmubTZSIi2sJlvi46LWzrCmw/PJE/AhGel6iYtOlJ
-         QMWbuuBeK4NAtlxHUW9UfI9MX/WbWUO36TTzTs7Y=
+        b=xSiu7KmR+75O08RVUGFCu0rEEjaxTtdG2qq/lxvaOuWsAnViKDLnWHBhiyGldILeJ
+         FNSSTLpdZ2gVz3jMivUOBvxgRao9yNk85lX13DxjrpOEAC3OckgAQ4dNpdj1Dk7aUi
+         mY4azbbGBluaSU5ptGn5v1pNTpUbU5BwJszerSUQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.18 1079/1095] raw: remove unused variables from raw6_icmp_error()
-Date:   Mon, 15 Aug 2022 20:07:58 +0200
-Message-Id: <20220815180513.671224904@linuxfoundation.org>
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        Brian Norris <briannorris@chromium.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH 5.18 1081/1095] Revert "mwifiex: fix sleep in atomic context bugs caused by dev_coredumpv"
+Date:   Mon, 15 Aug 2022 20:08:00 +0200
+Message-Id: <20220815180513.748936524@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
 References: <20220815180429.240518113@linuxfoundation.org>
@@ -56,41 +56,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit c4fceb46add65481ef0dfb79cad24c3c269b4cad upstream.
+commit 5f8954e099b8ae96e7de1bb95950e00c85bedd40 upstream.
 
-saddr and daddr are set but not used.
+This reverts commit a52ed4866d2b90dd5e4ae9dabd453f3ed8fa3cbc as it
+causes build problems in linux-next.  It needs to be reintroduced in a
+way that can allow the api to evolve and not require a "flag day" to
+catch all users.
 
-Fixes: ba44f8182ec2 ("raw: use more conventional iterators")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Acked-by: Jonathan Lemon <jonathan.lemon@gmail.com>
-Link: https://lore.kernel.org/r/20220622032303.159394-1-edumazet@google.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lore.kernel.org/r/20220623160723.7a44b573@canb.auug.org.au
+Cc: Duoming Zhou <duoming@zju.edu.cn>
+Cc: Brian Norris <briannorris@chromium.org>
+Cc: Johannes Berg <johannes@sipsolutions.net>
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv6/raw.c |    3 ---
- 1 file changed, 3 deletions(-)
+ drivers/net/wireless/marvell/mwifiex/init.c      |    9 ++++-----
+ drivers/net/wireless/marvell/mwifiex/main.h      |    3 +--
+ drivers/net/wireless/marvell/mwifiex/sta_event.c |    6 +++---
+ 3 files changed, 8 insertions(+), 10 deletions(-)
 
---- a/net/ipv6/raw.c
-+++ b/net/ipv6/raw.c
-@@ -332,7 +332,6 @@ static void rawv6_err(struct sock *sk, s
- void raw6_icmp_error(struct sk_buff *skb, int nexthdr,
- 		u8 type, u8 code, int inner_offset, __be32 info)
- {
--	const struct in6_addr *saddr, *daddr;
- 	struct net *net = dev_net(skb->dev);
- 	struct hlist_nulls_head *hlist;
- 	struct hlist_nulls_node *hnode;
-@@ -345,8 +344,6 @@ void raw6_icmp_error(struct sk_buff *skb
- 	hlist_nulls_for_each_entry(sk, hnode, hlist, sk_nulls_node) {
- 		/* Note: ipv6_hdr(skb) != skb->data */
- 		const struct ipv6hdr *ip6h = (const struct ipv6hdr *)skb->data;
--		saddr = &ip6h->saddr;
--		daddr = &ip6h->daddr;
+--- a/drivers/net/wireless/marvell/mwifiex/init.c
++++ b/drivers/net/wireless/marvell/mwifiex/init.c
+@@ -63,10 +63,9 @@ static void wakeup_timer_fn(struct timer
+ 		adapter->if_ops.card_reset(adapter);
+ }
  
- 		if (!raw_v6_match(net, sk, nexthdr, &ip6h->saddr, &ip6h->daddr,
- 				  inet6_iif(skb), inet6_iif(skb)))
+-static void fw_dump_work(struct work_struct *work)
++static void fw_dump_timer_fn(struct timer_list *t)
+ {
+-	struct mwifiex_adapter *adapter =
+-		container_of(work, struct mwifiex_adapter, devdump_work.work);
++	struct mwifiex_adapter *adapter = from_timer(adapter, t, devdump_timer);
+ 
+ 	mwifiex_upload_device_dump(adapter);
+ }
+@@ -322,7 +321,7 @@ static void mwifiex_init_adapter(struct
+ 	adapter->active_scan_triggered = false;
+ 	timer_setup(&adapter->wakeup_timer, wakeup_timer_fn, 0);
+ 	adapter->devdump_len = 0;
+-	INIT_DELAYED_WORK(&adapter->devdump_work, fw_dump_work);
++	timer_setup(&adapter->devdump_timer, fw_dump_timer_fn, 0);
+ }
+ 
+ /*
+@@ -401,7 +400,7 @@ static void
+ mwifiex_adapter_cleanup(struct mwifiex_adapter *adapter)
+ {
+ 	del_timer(&adapter->wakeup_timer);
+-	cancel_delayed_work_sync(&adapter->devdump_work);
++	del_timer_sync(&adapter->devdump_timer);
+ 	mwifiex_cancel_all_pending_cmd(adapter);
+ 	wake_up_interruptible(&adapter->cmd_wait_q.wait);
+ 	wake_up_interruptible(&adapter->hs_activate_wait_q);
+--- a/drivers/net/wireless/marvell/mwifiex/main.h
++++ b/drivers/net/wireless/marvell/mwifiex/main.h
+@@ -49,7 +49,6 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/slab.h>
+ #include <linux/of_irq.h>
+-#include <linux/workqueue.h>
+ 
+ #include "decl.h"
+ #include "ioctl.h"
+@@ -1056,7 +1055,7 @@ struct mwifiex_adapter {
+ 	/* Device dump data/length */
+ 	void *devdump_data;
+ 	int devdump_len;
+-	struct delayed_work devdump_work;
++	struct timer_list devdump_timer;
+ 
+ 	bool ignore_btcoex_events;
+ };
+--- a/drivers/net/wireless/marvell/mwifiex/sta_event.c
++++ b/drivers/net/wireless/marvell/mwifiex/sta_event.c
+@@ -623,8 +623,8 @@ mwifiex_fw_dump_info_event(struct mwifie
+ 		 * transmission event get lost, in this cornel case,
+ 		 * user would still get partial of the dump.
+ 		 */
+-		schedule_delayed_work(&adapter->devdump_work,
+-				      msecs_to_jiffies(MWIFIEX_TIMER_10S));
++		mod_timer(&adapter->devdump_timer,
++			  jiffies + msecs_to_jiffies(MWIFIEX_TIMER_10S));
+ 	}
+ 
+ 	/* Overflow check */
+@@ -643,7 +643,7 @@ mwifiex_fw_dump_info_event(struct mwifie
+ 	return;
+ 
+ upload_dump:
+-	cancel_delayed_work_sync(&adapter->devdump_work);
++	del_timer_sync(&adapter->devdump_timer);
+ 	mwifiex_upload_device_dump(adapter);
+ }
+ 
 
 

@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 393E25948D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 455EB59487E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354746AbiHOXuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40808 "EHLO
+        id S1354541AbiHOXuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354501AbiHOXpr (ORCPT
+        with ESMTP id S1354608AbiHOXqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:45:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BBA8A6FA;
-        Mon, 15 Aug 2022 13:14:22 -0700 (PDT)
+        Mon, 15 Aug 2022 19:46:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3038C039;
+        Mon, 15 Aug 2022 13:14:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 316D0B80EA9;
-        Mon, 15 Aug 2022 20:14:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7271CC433D6;
-        Mon, 15 Aug 2022 20:14:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDAE360F0C;
+        Mon, 15 Aug 2022 20:14:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3A61C43140;
+        Mon, 15 Aug 2022 20:14:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594459;
-        bh=+52ntI2e1KU5OBA4ew9V71YL6B2bJ+BVsws6QREl/Bc=;
+        s=korg; t=1660594466;
+        bh=QmY7IY0N8v9tui8zXSS90JphJI9wW2dfzECDf4wggX8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tWvFh4VwXB3fWHoObZagw3iLYxfXZ3TTIA9In74icbcvdkEqR1bhMjBeBWxiyOlGT
-         jZ13q18jYxmF86puZJYxRxUARbeHV0K9kPJUSwkluW5MlnYtvE84gJIpbv2WYfvWuH
-         pxLMG2uF0257rg4QWOd2+fddWbB9kE/7NstmZFZA=
+        b=197K9dbeoyv9AANhg0X23O2aZG8SG5wcrcr3C8NHlbmCtG94P1/6Zo/vKPwjtWSqs
+         lKB6l8eHNYXPvo//wLfY7fn+L5rgCqE39JHf37KuJYPlyacR13s+VkWthl/0U3qG7N
+         VQTKlZ/rRlsvt4nBEmLR5hj63+EbL+V3/jlDv34g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ming Qian <ming.qian@nxp.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0455/1157] media: amphion: release core lock before reset vpu core
-Date:   Mon, 15 Aug 2022 19:56:51 +0200
-Message-Id: <20220815180457.795323741@linuxfoundation.org>
+Subject: [PATCH 5.19 0457/1157] media: atomisp: revert "dont pass a pointer to a local variable"
+Date:   Mon, 15 Aug 2022 19:56:53 +0200
+Message-Id: <20220815180457.875359702@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -56,43 +55,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ming Qian <ming.qian@nxp.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit a621cc4bed97e49f5a8019f5215dec7e208a7c4d ]
+[ Upstream commit a3b36a8ce3d0c277fe243fa1be6bd3f606ed130f ]
 
-In reset vpu core, driver will wait for a response event,
-but if there are still some events unhandled,
-they will be handled first, driver may acquire core lock for that.
-So if we do reset in core lock, it may led to reset timeout.
+The gcc is warning about returning a pointer to a local variable
+is a false positive.
 
-Fixes: 9f599f351e86a ("media: amphion: add vpu core driver")
-Signed-off-by: Ming Qian <ming.qian@nxp.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+The type of handle is "struct ia_css_rmgr_vbuf_handle **" and
+"h.vptr" is left to NULL, so the "if ((*handle)->vptr == 0x0)"
+check always succeeds when the "*handle = &h;" statement which
+gcc warns about executes. Leading to this statement being executed:
+
+	rmgr_pop_handle(pool, handle);
+
+If that succeeds,  then *handle has been set to point to one of
+the pre-allocated array of handles, so it no longer points to h.
+
+If that fails the following statement will be executed:
+
+	/* Note that handle will change to an internally maintained one */
+	ia_css_rmgr_refcount_retain_vbuf(handle);
+
+Which allocated a new handle from the array of pre-allocated handles
+and then makes *handle point to this. So the address of h is actually
+never returned.
+
+The fix for the false-postive compiler warning actually breaks the code,
+the new:
+
+	**handle = h;
+
+is part of a "if (pool->copy_on_write) { ... }" which means that the
+handle where *handle points to should be treated read-only, IOW
+**handle must never be set, instead *handle must be set to point to
+a new handle (with a copy of the contents of the old handle).
+
+The old code correctly did this and the new fixed code gets this wrong.
+
+Note there is another patch in this series, which fixes the warning
+in another way.
+
+Link: https://lore.kernel.org/linux-media/20220612160556.108264-2-hdegoede@redhat.com
+Fixes: fa1451374ebf ("media: atomisp: don't pass a pointer to a local variable")
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/amphion/vpu_core.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ .../staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c    | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/amphion/vpu_core.c b/drivers/media/platform/amphion/vpu_core.c
-index 68ad183925fd..51a764713159 100644
---- a/drivers/media/platform/amphion/vpu_core.c
-+++ b/drivers/media/platform/amphion/vpu_core.c
-@@ -455,8 +455,13 @@ int vpu_inst_unregister(struct vpu_inst *inst)
- 	}
- 	vpu_core_check_hang(core);
- 	if (core->state == VPU_CORE_HANG && !core->instance_mask) {
-+		int err;
-+
- 		dev_info(core->dev, "reset hang core\n");
--		if (!vpu_core_sw_reset(core)) {
-+		mutex_unlock(&core->lock);
-+		err = vpu_core_sw_reset(core);
-+		mutex_lock(&core->lock);
-+		if (!err) {
- 			core->state = VPU_CORE_ACTIVE;
- 			core->hang_mask = 0;
+diff --git a/drivers/staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c b/drivers/staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c
+index 39604752785b..d96aaa4bc75d 100644
+--- a/drivers/staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c
++++ b/drivers/staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c
+@@ -254,7 +254,7 @@ void rmgr_pop_handle(struct ia_css_rmgr_vbuf_pool *pool,
+ void ia_css_rmgr_acq_vbuf(struct ia_css_rmgr_vbuf_pool *pool,
+ 			  struct ia_css_rmgr_vbuf_handle **handle)
+ {
+-	struct ia_css_rmgr_vbuf_handle h = { 0 };
++	struct ia_css_rmgr_vbuf_handle h;
+ 
+ 	if ((!pool) || (!handle) || (!*handle)) {
+ 		IA_CSS_LOG("Invalid inputs");
+@@ -272,7 +272,7 @@ void ia_css_rmgr_acq_vbuf(struct ia_css_rmgr_vbuf_pool *pool,
+ 			h.size = (*handle)->size;
+ 			/* release ref to current buffer */
+ 			ia_css_rmgr_refcount_release_vbuf(handle);
+-			**handle = h;
++			*handle = &h;
  		}
+ 		/* get new buffer for needed size */
+ 		if ((*handle)->vptr == 0x0) {
 -- 
 2.35.1
 

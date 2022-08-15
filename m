@@ -2,80 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE35592EC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 14:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C8A592EC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 14:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbiHOMPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 08:15:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
+        id S231593AbiHOMQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 08:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241794AbiHOMPc (ORCPT
+        with ESMTP id S230502AbiHOMQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 08:15:32 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF8F101F3
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 05:15:26 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id ay39-20020a05600c1e2700b003a5503a80cfso3819652wmb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 05:15:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=OOBxVifVngH1dKlf3OhsPXEXbSU6u+dGQCi1trZkNMs=;
-        b=NU2OuWeeR1OWqN+lo3NwERctgB9H4hGpXgDpMGG89Qfp93YTLIsT+IH6hEh4j1blc9
-         v2qqk8iu+hht36+5yrVJeFs7wY/wcihkdBjOsrtLXfeB0LIh9yWtshWOewecZ5rgqMwW
-         HXq1+KNbaM5L2PQwUrImSeqhfmX973nhByWh/CqcCKHPl9TP5P47rzZIHw/TZGdFPhQn
-         tMnMFK29hrkyGhXJFxgwrz/c6HClVhTUIYKb4glREW1ziWVJqFzCjAXiomOeE/qDTR5C
-         xMKGHeoWa2uwsfq6UzbRLAjuTKw6U8682B+HYV4gnuDOZM688AV0/a62pn/eT7KJKxWW
-         Bo0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=OOBxVifVngH1dKlf3OhsPXEXbSU6u+dGQCi1trZkNMs=;
-        b=F+731B5xyEV/WGUG1E0EeSTKe3qdEEnTRwer5IhI8o/R73zdcee1NAKF/93+VIRsDA
-         wV0lBVF9PHteTjylWq6EBOlkkoleyALbCEdOboQNeJ3N+EKPSNyVKeh0fk7oeWhYageH
-         QSwVF4PawlsQQSaNhP2kCXLXNIQVfm0ojMmWbJXQsMkeCSH8Zk2+PjgOnrnUDoIsYekn
-         4x9iGsIrcBVD5Vd3/9e/LkqitO3HrxN2lE+X5rkgNzkD7Q0TQlzLwKm8CQjUxK8gkt/8
-         oPjMVBr5WYLDPr9ndBzTvjfV2uijLX4n2ZgRQIKy052kOtnhcGrVz6i7Th06TJTdk6uH
-         YteA==
-X-Gm-Message-State: ACgBeo0J2KraAHn8C7NWOqPTUjyw0XFCrQhBtfALhFdZgRMy0tzbL8xW
-        c/CBFzWIp9wO6rRl3DnWfwJcgA==
-X-Google-Smtp-Source: AA6agR4lYWNXb2X8qKrmsTV/gZaJJ7w1dG1SUJCm7wll2Bbq7UZfd+Js3+RWAO35FL6sEWiHr84z9g==
-X-Received: by 2002:a05:600c:4ed2:b0:3a5:f177:8a9a with SMTP id g18-20020a05600c4ed200b003a5f1778a9amr3635440wmq.4.1660565724983;
-        Mon, 15 Aug 2022 05:15:24 -0700 (PDT)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id t8-20020adfdc08000000b002238a1f6b74sm7115947wri.37.2022.08.15.05.15.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 05:15:24 -0700 (PDT)
-Message-ID: <20b6dd31-0ac3-ff92-0b58-629847508fa1@linaro.org>
-Date:   Mon, 15 Aug 2022 14:15:18 +0200
+        Mon, 15 Aug 2022 08:16:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CB8101F3;
+        Mon, 15 Aug 2022 05:16:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CDCC6119B;
+        Mon, 15 Aug 2022 12:16:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B54AC433D6;
+        Mon, 15 Aug 2022 12:16:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660565782;
+        bh=nfbt+cMYBqWgl0fPp91G7ZvYuKe2jGdemUvUTgTKcck=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WOZiCy6Nd2UcpBAsjq8fyZyu5zousJCj2105E4SuqFOFlZLsN8TYWrddzmWZAwphg
+         jqVxMEOo/Ip8nIaMjGCCHgDmO/MM4E+fi/kNljYYeZKYsCYX0mF8R162H8aGki0Vn6
+         +4l9ntWb3zP3hoKT3/7bwqvoqyhGo87JcOLLUYDSjgYO8vNuylc8MMbYs8jcOWJzRA
+         cea79+GSP4DRX5pho4OyO6QlflqVOFPjdYs9+13nH5W0k6r9BmYob0MS/pxuXGnBmM
+         YkP211PE6LOWHrA4wQ6fVgdThadC1wCSPobjyQRmETrFx/Cu/yCt2+Kp++gwTfNh+y
+         JneIwD/T61Wow==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oNZ12-0034zE-5V;
+        Mon, 15 Aug 2022 13:16:20 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/2] Revert "mlxsw: core: Add the hottest thermal zone
- detection"
-Content-Language: en-US
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     rafael@kernel.org, vadimp@mellanox.com, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-References: <20220815091032.1731268-1-daniel.lezcano@linaro.org>
- <20220815091032.1731268-2-daniel.lezcano@linaro.org>
- <Yvo0IWgDQ0wZ20g6@shredder>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <Yvo0IWgDQ0wZ20g6@shredder>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Date:   Mon, 15 Aug 2022 13:16:19 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     lewis.hanly@microchip.com
+Cc:     linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linus.walleij@linaro.org, brgl@bgdev.pl,
+        linux-kernel@vger.kernel.org, palmer@dabbelt.com,
+        conor.dooley@microchip.com, daire.mcnamara@microchip.com
+Subject: Re: [PATCH v6 0/1] Add Polarfire SoC GPIO support
+In-Reply-To: <20220815120834.1562544-1-lewis.hanly@microchip.com>
+References: <20220815120834.1562544-1-lewis.hanly@microchip.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <727f07f843a9d06d84c1c28c3b905a4c@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: lewis.hanly@microchip.com, linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org, linus.walleij@linaro.org, brgl@bgdev.pl, linux-kernel@vger.kernel.org, palmer@dabbelt.com, conor.dooley@microchip.com, daire.mcnamara@microchip.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,41 +69,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/08/2022 13:55, Ido Schimmel wrote:
-> On Mon, Aug 15, 2022 at 11:10:32AM +0200, Daniel Lezcano wrote:
->> diff --git a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
->> index f5751242653b..237a813fbb52 100644
->> --- a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
->> +++ b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
->> @@ -22,7 +22,6 @@
->>   #define MLXSW_THERMAL_HYSTERESIS_TEMP	5000	/* 5C */
->>   #define MLXSW_THERMAL_MODULE_TEMP_SHIFT	(MLXSW_THERMAL_HYSTERESIS_TEMP * 2)
->>   #define MLXSW_THERMAL_ZONE_MAX_NAME	16
+On 2022-08-15 13:08, lewis.hanly@microchip.com wrote:
+> From: Lewis Hanly <lewis.hanly@microchip.com>
 > 
-> Which tree is this patch from? The define is no longer in mainline:
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-
-It applies against:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next
-
-But it is not refreshed against v6.0-rc1
-
-I'll take care of giving a respin of the patch before resending.
-
-
-> Getting a conflict when trying to apply this patch
+> Add a driver to support the Polarfire SoC gpio controller.
+> Tested with latest 5.19 kernel.
 > 
->> -#define MLXSW_THERMAL_TEMP_SCORE_MAX	GENMASK(31, 0)
->>   #define MLXSW_THERMAL_MAX_STATE	10
->>   #define MLXSW_THERMAL_MIN_STATE	2
->>   #define MLXSW_THERMAL_MAX_DUTY	255
+> MPFS gpio interrupts are connected to IOMUX configured by system
+> register GPIO_INTERRUPT_FAB_CR(31:0). Interrupt connection for
+> some GPIO's to the PLIC (Platform Level Interrupt Controller) can be
+> shared (not directly connected) or direct if connection is available.
+> 
+> previously upstreamed dt-bindings: gpio: microchip,mpfs-gpio.yaml
+> 
+> Changes in v6
+> Fixed typo causing compile issue with kernel 6.0-rc1
 
+3 versions in just over 5 hours. How about taking a step back
+and *wait* for people to review this code? It isn't like this
+is going to be merged tomorrow anyway...
 
+The expected rate for new versions of a patch is about once
+a week (see Documentation/process/submitting-patches.rst).
+
+         M.
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Jazz is not dead. It just smells funny...

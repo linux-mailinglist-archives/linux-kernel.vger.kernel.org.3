@@ -2,143 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA305930E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0BB65930F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232943AbiHOOm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 10:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
+        id S232394AbiHOOpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 10:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbiHOOmY (ORCPT
+        with ESMTP id S231674AbiHOOpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 10:42:24 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79B71572D
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 07:42:23 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id t5so9826005edc.11
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 07:42:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=jof2N1iEfYV37LDrPYxrY/5EEQHPjeHoyCRHq5VfC5Y=;
-        b=mpFtgAILA8kt5KRom+uJfi10GVXDXshLvnbM927dyX9LZx2Fx6wyB+t4jaxV5GaF9l
-         0hOb9Jza9cqMXO7fjZAZVLg3iCclMkphv+sC1afIiD7ev2kgDkuaHPOQHR8NV1n+TIBz
-         s3Ond8NPtbCP3gHnfwGDCwj2lTL1txPQzvZ9004RkOGqo2vA5IZKT+SBqwgX17rRKwT1
-         NEMAAjSHJq/bV5GySyPsKC1E5h1W7kD99dd7URzsUhZteYRhrl2xUlezQXh0vgTJ4/yf
-         gMJqyfOda9AmujvEyNztK3JKUfbdK3UgA0LegYEEHtaNsHgaD2/KSR4FNFTBB8sHUUBh
-         pGFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=jof2N1iEfYV37LDrPYxrY/5EEQHPjeHoyCRHq5VfC5Y=;
-        b=isxF4iZZVHxld22pFecoVKfSlOHjmiB7Ybmc+Y1Uv8nH6ck6F5djK2CFs83e0u/S1F
-         3ocXkVvtPl5j4aDts4qNJl0bt5810XFmY+4nl63fHV7Pzpd2keHFnfX3BdyCngoJ23HS
-         +gVVMS+mSq6MVdRmvvgvA5qASryVxSv50pokPScnuZMEQfgPQBPjdwKFUCKvKRgKUu/q
-         GypgLhO+N1E/ZQyYLE546EEmeTi/rbz1gPxaRsVPDFRD30CnIdpCavGh7DQjJJcto8e5
-         RWdozKPmpNRIj68jn/sLePbSNPgIZXd5VMf9D9Cm3nhnkvBmOIrD1H80+nCCEBMCjTdx
-         HYsw==
-X-Gm-Message-State: ACgBeo12Pz/zvMfzKLoS3rSR8zlQvHNht0C1gIjQBtZxdG9/VkoZkWzV
-        E0vQBvx248Ksw07ytHmqOjY=
-X-Google-Smtp-Source: AA6agR7bd/zGLA4ALKllKHzRtAchu874EwVSeNFi/lTGp5/Hqq/FSE+pkXIVmaHF4BvAFSS+xkPgNw==
-X-Received: by 2002:a05:6402:50cb:b0:440:87d4:3ad2 with SMTP id h11-20020a05640250cb00b0044087d43ad2mr14875248edb.219.1660574542520;
-        Mon, 15 Aug 2022 07:42:22 -0700 (PDT)
-Received: from opensuse.localnet (host-95-250-231-56.retail.telecomitalia.it. [95.250.231.56])
-        by smtp.gmail.com with ESMTPSA id d20-20020aa7d5d4000000b0043c92c44c53sm6651235eds.93.2022.08.15.07.42.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 07:42:21 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     dhowells@redhat.com, marc.dionne@auristor.com,
-        zhaoxiao <zhaoxiao@uniontech.com>
-Cc:     linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
-        zhaoxiao <zhaoxiao@uniontech.com>, ira.weiny@intel.com
-Subject: Re: [PATCH] afs: convert kmap() to kmap_local_page() in mntpt.c
-Date:   Mon, 15 Aug 2022 16:42:19 +0200
-Message-ID: <1752846.TLkxdtWsSY@opensuse>
-In-Reply-To: <20220812080432.14909-1-zhaoxiao@uniontech.com>
-References: <20220812080432.14909-1-zhaoxiao@uniontech.com>
+        Mon, 15 Aug 2022 10:45:36 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2070.outbound.protection.outlook.com [40.107.94.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E65C25D5;
+        Mon, 15 Aug 2022 07:45:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nwu+ZFyz1j9cwafCgQU1eRn9AmyljWpyqaa99CHT/EhqkKFv7LDLqFzjalGyvUO+x3+i3VmprmcIwQAT2kz7x4jM8ugghySj1aSpwNc9ii3szIIvlVfGbPMAbmXSZjCDEKe3KjmChZDunHD+s2JBDrxFfo5RxhaHjtvykp3t/C+Q1U+sh01c7Y4KAL7IVQ5mIG+318yynBmQzX4nzC1rp4uAwjeaMTgg0yP6ibP7VqcF3EzJcIGx8ncey9YOjNmTvgp2/Hj7yYKAlpRDByoOTUisu+4zVmpEKN9M0xyT4LvOnEo7//FHFmMeT52BSGqkUSWrM6vyPqAY3hPnL9sEnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rV6aFZhwlMIKe8BW/4iD7Fc9HRKFVUHewdKVeTg9ruU=;
+ b=dgYmHyjj2ry/9pHotuLz++WDbw5REGzfCnQKF3vtH6lFrncydGY0g8Lcp7LdpgyO7/s3CSzi5r1g0hZVpvrFwNrAQ/lUiH6FH34r1YYB6wFJvK8SUu2vFahfSPDBq2PhwaGcxmmze2Ry6v99rjMqIBnycNTrlyj/Z2Sejaa4Pd5fscIDXKEcQhz4MtImz6P4xRJ2eKDcZZGnb1P1TTW83kHeIqgebU+buyp+TLYpQuYXMNugBFpzgRw/vuAaWw5sn6AfEIHDlVOMmx94qYIMgrbtp0xBXZjPYinNtBLaNnT2WINAkPlc3MLRxfdHM5/f2tEKAEtpo8xs6b24uO3gNA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rV6aFZhwlMIKe8BW/4iD7Fc9HRKFVUHewdKVeTg9ruU=;
+ b=H589z16b7ptR8TAf77TnthvYj2dNQV+eOGstSZAJysrpLIPVWWRjsbf3b2H9zi7J0zpBFapC6QxVU/XSVb3M2TRM3gaX4T3aklgWqWcWmgF/78PiWRc5lpimbgaB8YwijhnYEiyhUMaQ8Wel9nRqh1M1fRIWA61KJ08SZMyN6vAypuh6yyL9ItpOQKk0BYbaJYQXmldVcJCOOq9nhj5UyXvbTqUpSAZNfuzL8l5ssHvENjP34pt5mmthRt6q7Oc9dEPgNA+HyJFLwV6GsNVhgn59wbp2hOLRmtXPp7PU5sStuTYSLy+9/UQYQRM7B/b3cmGBHNkmilcRDOAPTbDI8Q==
+Received: from BN9P221CA0012.NAMP221.PROD.OUTLOOK.COM (2603:10b6:408:10a::7)
+ by DM5PR12MB2424.namprd12.prod.outlook.com (2603:10b6:4:b7::34) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Mon, 15 Aug
+ 2022 14:45:32 +0000
+Received: from BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:10a:cafe::b2) by BN9P221CA0012.outlook.office365.com
+ (2603:10b6:408:10a::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.16 via Frontend
+ Transport; Mon, 15 Aug 2022 14:45:32 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.234; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.234) by
+ BN8NAM11FT059.mail.protection.outlook.com (10.13.177.120) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5525.11 via Frontend Transport; Mon, 15 Aug 2022 14:45:32 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by DRHQMAIL101.nvidia.com
+ (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Mon, 15 Aug
+ 2022 14:45:31 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 15 Aug
+ 2022 07:45:30 -0700
+Received: from jilin-desktop.nvidia.com (10.127.8.11) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Mon, 15 Aug 2022 07:45:28 -0700
+From:   Jim Lin <jilin@nvidia.com>
+To:     <jckuo@nvidia.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>
+CC:     <kishon@ti.com>, <vkoul@kernel.org>, <balbi@kernel.org>,
+        <gregkh@linuxfoundation.org>, <jilin@nvidia.com>,
+        <bhsieh@nvidia.com>, <linux-phy@lists.infradead.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+Subject: [PATCH 0/2] usb: tegra: power down UTMI pad
+Date:   Mon, 15 Aug 2022 22:44:47 +0800
+Message-ID: <20220815144449.9525-1-jilin@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6e5feb56-3f6b-454d-0dd5-08da7eccce26
+X-MS-TrafficTypeDiagnostic: DM5PR12MB2424:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: voCeQl3ucvl5cQXKTo6CybMF8/5ecmypcvT6NwcJ82X5rnzCKSzp65evS6CQ4WW5k8eoCRK7S7JaeuiCOcpjf+/EXWQvHMsx3TTRYZygzS4+vvz5Qo7/s6940CxWEyprzkOEKZ4aR3OvttBNbbmJiT6c82gGgTmS3RnuU1iEHjaVCFzJTP8+6Rvqi8IpoUsRSiOsjKGszrSJpRxu3QG/orGgdojMf9T2TJvx9ZmTjz8tOu6EhBP/Ixiubj1V9M6WcawCm/dpZR3aha5hlWNXUv7dSz7ILtLIceX53L/NGhvRVrhDH3xss8Z/GuwadZnmBHVS6mWZhYVJczNWG4Ayqsfe6DX41nsK9C0hGtFhginRMXj44qu+nhBqG57cB78LIo+bpfAgxjAewdOqRnOUYBSV4sKCENwelraPbcMwkqb1KgAEmD9cbkNZr/o5Qhply63BbCzYdqLseAxmZGPDt4SUbF2wT0JmlzW7hmwfCVtsmKkZqAtK53pWKOP0CONu9VnXAv+BeZ+ENhGxmaNKVy4zEMdxa/E/SofEiwd2Jctne9AOGFBPGBFXepcwF3vfN7/wt6L2ATGdMWE82Sr/R69Go/i5r/2t3leOe5/Mod/gQUZ4H80Z7b7XJTpJPZDFwhn3QeXNJfxY3ZCIMrn/NTuWgpSGvrxXMo+ImXXg2284zfD1YaaSjt35fYsgK4HUWhBQcnqSZFtaVcJkyAeA1JhYgLrq/MhM6KeUvOpXO0+WC5xqp1vjgMb8wudHz1OS2zuYXdq6pv8XcyY/qMCM86kybsayz7IAgy/OVuJmST4sARp8plnVRz6qCiBECo8Rvq1GmOThIR2Nk9uzMtU0kA==
+X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(346002)(396003)(376002)(136003)(39860400002)(46966006)(36840700001)(40470700004)(40480700001)(36860700001)(83380400001)(40460700003)(81166007)(356005)(86362001)(82740400003)(70206006)(70586007)(316002)(478600001)(82310400005)(4326008)(8676002)(54906003)(6636002)(186003)(336012)(426003)(1076003)(7696005)(47076005)(26005)(5660300002)(110136005)(2906002)(2616005)(36756003)(8936002)(6666004)(4744005)(41300700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2022 14:45:32.1656
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6e5feb56-3f6b-454d-0dd5-08da7eccce26
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2424
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On venerd=C3=AC 12 agosto 2022 10:04:32 CEST zhaoxiao wrote:
-> kmap() is being deprecated in favor of kmap_local_page().
->=20
-> There are two main problems with kmap(): (1) It comes with an overhead as
-> mapping space is restricted and protected by a global lock for
-> synchronization and (2) it also requires global TLB invalidation when the
-> kmap's pool wraps and it might block when the mapping space is fully
-> utilized until a slot becomes available.
->=20
-> With kmap_local_page() the mappings are per thread, CPU local, can take
-> page faults, and can be called from any context (including interrupts).
-> It is faster than kmap() in kernels with HIGHMEM enabled.  Furthermore,
-> the tasks can be preempted and, when they are scheduled to run again, the
-> kernel virtual addresses are restored and are still valid.
->=20
-> Since its use in mntpt.c is safe everywhere, it should be preferred.
->=20
-> Therefore, replace kmap() with kmap_local_page() in mntpt.c.
->=20
-> Tested in a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel with
-> HIGHMEM64GB enabled.
->=20
-> Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
-> ---
->  fs/afs/mntpt.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/fs/afs/mntpt.c b/fs/afs/mntpt.c
-> index 97f50e9fd9eb..7e3cacb11780 100644
-> --- a/fs/afs/mntpt.c
-> +++ b/fs/afs/mntpt.c
-> @@ -132,11 +132,11 @@ static int afs_mntpt_set_params(struct fs_context *=
-fc,
-> struct dentry *mntpt) if (IS_ERR(page))
->  			return PTR_ERR(page);
->=20
-> -		buf =3D kmap(page);
-> +		buf =3D kmap_local_page(page);
->  		ret =3D -EINVAL;
->  		if (buf[size - 1] =3D=3D '.')
->  			ret =3D vfs_parse_fs_string(fc, "source", buf,=20
-size - 1);
-> -		kunmap(page);
-> +		kunmap_local(buf);
->  		put_page(page);
->  		if (ret < 0)
->  			return ret;
-> --
-> 2.20.1
+1. Make functions to be generic and public for tegra host/gadget driver 
+ to power on/down UTMI pad
+2. For tegra gadget driver to power down pad after disconnected
 
-I doubt that zhaoxiao is your legal name.
-If I'm not wrong, can you please submit a v2 with the name that you use to=
-=20
-sign documents with legal value? Otherwise, please discard this warning.
+Jim Lin (2):
+  phy: tegra: xusb: add utmi pad power on/down ops
+  usb: gadget: tegra: Reduce pad power
 
-Aside from the above, this conversion looks good to me, so feel free to=20
-forward my tag to next version...
+ drivers/phy/tegra/xusb-tegra186.c   | 19 ++++++++++++-------
+ drivers/phy/tegra/xusb.c            | 22 +++++++++++++++++++++-
+ drivers/phy/tegra/xusb.h            |  4 +++-
+ drivers/usb/gadget/udc/tegra-xudc.c |  4 ++++
+ include/linux/phy/tegra/xusb.h      |  2 ++
+ 5 files changed, 42 insertions(+), 9 deletions(-)
 
-Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-
-Thanks,
-
-=46abio
-
-P.S.: I'm adding Ira to the list of recipients. Ira and I have been
-working through converting kmap() calls to kmap_local_page(). Please let Ir=
-a=20
-or me know if you plan on tacking more conversions so we can mark it
-off the list and avoid duplicate works.
-
+-- 
+2.17.1
 

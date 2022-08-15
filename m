@@ -2,43 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF26594799
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11752594772
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344206AbiHOX0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
+        id S1347441AbiHOXVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346627AbiHOXVj (ORCPT
+        with ESMTP id S241876AbiHOXO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:21:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5A87E305;
-        Mon, 15 Aug 2022 13:04:39 -0700 (PDT)
+        Mon, 15 Aug 2022 19:14:29 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10DA474FB;
+        Mon, 15 Aug 2022 13:01:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 615DBB80EA8;
-        Mon, 15 Aug 2022 20:04:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9476C433C1;
-        Mon, 15 Aug 2022 20:04:36 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 09617CE12E7;
+        Mon, 15 Aug 2022 20:01:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3C7CC433C1;
+        Mon, 15 Aug 2022 20:01:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593877;
-        bh=hP/9KZye9mvWkD+qnzNh7Mn9ujOi/BfJgmHbNS6xy7k=;
+        s=korg; t=1660593707;
+        bh=nDbHqfhdNpzYZKdbkZ4LGk/SQWMKL/OIcQRYU9Jk20o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dq/JmeaqkWtarQzuNxI4nkjKmDFmE3bWq8XESEyPPUdSN6uiskvqu7kNi4eiGncep
-         cM28E52ljwHSIwKY/WKSLhtPqPFQ5mSnf/ItlelmaTx2G1zRDTTq6c3fEVCc8cGWad
-         1g+nIxZZW96WPqS0IXBAQLaNpJKo5eza2+8qoyNI=
+        b=WkV4qifhuorlxeXj/qCJ2R6gL9rZ2C0bWOL0FZq7e90/IFeJ5ZqsFk9EFxS3EjA73
+         K12n8SksGVd3mnMmZSnbWMpWu/ez8C6KsSFNJ0U8tvZr0+o7siAS3fYeirOBWqRioQ
+         7OgGJ0S+LxOOoeMy0KaWJ1u0I0JPaPXaZTPuHmVk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        stable@vger.kernel.org, Andrzej Hajda <andrzej.hajda@intel.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Marek Vasut <marex@denx.de>, Jonas Karlman <jonas@kwiboo.se>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
         Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0311/1157] drm/meson: Fix refcount leak in meson_encoder_hdmi_init
-Date:   Mon, 15 Aug 2022 19:54:27 +0200
-Message-Id: <20220815180452.097271850@linuxfoundation.org>
+Subject: [PATCH 5.19 0313/1157] drm/bridge: tc358767: Handle dsi_lanes == 0 as invalid
+Date:   Mon, 15 Aug 2022 19:54:29 +0200
+Message-Id: <20220815180452.170706172@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -56,42 +61,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Marek Vasut <marex@denx.de>
 
-[ Upstream commit 7381076809586528e2a812a709e2758916318a99 ]
+[ Upstream commit 0d662350928e6787d29ab205e47e5aa6f1f792f9 ]
 
-of_find_device_by_node() takes reference, we should use put_device()
-to release it when not need anymore.
-Add missing put_device() in error path to avoid refcount
-leak.
+Handle empty data-lanes = < >; property, which translates to
+dsi_lanes = 0 as invalid.
 
-Fixes: 0af5e0b41110 ("drm/meson: encoder_hdmi: switch to bridge DRM_BRIDGE_ATTACH_NO_CONNECTOR")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220511054052.51981-1-linmq006@gmail.com
+Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
+Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+Fixes: bbfd3190b6562 ("drm/bridge: tc358767: Add DSI-to-DPI mode support")
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Jonas Karlman <jonas@kwiboo.se>
+Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Cc: Lucas Stach <l.stach@pengutronix.de>
+Cc: Marek Vasut <marex@denx.de>
+Cc: Maxime Ripard <maxime@cerno.tech>
+Cc: Neil Armstrong <narmstrong@baylibre.com>
+Cc: Robert Foss <robert.foss@linaro.org>
+Cc: Sam Ravnborg <sam@ravnborg.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220519095137.11896-1-marex@denx.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/meson/meson_encoder_hdmi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/bridge/tc358767.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/meson/meson_encoder_hdmi.c b/drivers/gpu/drm/meson/meson_encoder_hdmi.c
-index 5e306de6f485..de87f02cd388 100644
---- a/drivers/gpu/drm/meson/meson_encoder_hdmi.c
-+++ b/drivers/gpu/drm/meson/meson_encoder_hdmi.c
-@@ -435,8 +435,10 @@ int meson_encoder_hdmi_init(struct meson_drm *priv)
- 		cec_fill_conn_info_from_drm(&conn_info, meson_encoder_hdmi->connector);
+diff --git a/drivers/gpu/drm/bridge/tc358767.c b/drivers/gpu/drm/bridge/tc358767.c
+index 485717c8f0b4..466b8fc9836a 100644
+--- a/drivers/gpu/drm/bridge/tc358767.c
++++ b/drivers/gpu/drm/bridge/tc358767.c
+@@ -1871,7 +1871,7 @@ static int tc_mipi_dsi_host_attach(struct tc_data *tc)
+ 	of_node_put(host_node);
+ 	of_node_put(endpoint);
  
- 		notifier = cec_notifier_conn_register(&pdev->dev, NULL, &conn_info);
--		if (!notifier)
-+		if (!notifier) {
-+			put_device(&pdev->dev);
- 			return -ENOMEM;
-+		}
+-	if (dsi_lanes < 0 || dsi_lanes > 4)
++	if (dsi_lanes <= 0 || dsi_lanes > 4)
+ 		return -EINVAL;
  
- 		meson_encoder_hdmi->cec_notifier = notifier;
- 	}
+ 	if (!host)
 -- 
 2.35.1
 

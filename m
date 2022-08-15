@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8BF9592AC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 10:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD0C592ABA
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 10:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbiHOHzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 03:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
+        id S232846AbiHOH6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 03:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiHOHzx (ORCPT
+        with ESMTP id S230527AbiHOH6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 03:55:53 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD5F12743
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:55:52 -0700 (PDT)
-Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com [209.85.160.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D21B93F13A
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 07:55:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1660550150;
-        bh=ZeK/4GM2DAERl5jSwdbqaxPua0JzPliZulx33fNAkb8=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=ZEJaeJnJep4z8AmdoKJRVqtbJiZLI9nQ04cPdpx6Lxj5ucvT5g95dE/Tv2QOHMaZo
-         JbhvcJdJcEYoGoHpyTMHSHc5Za6eGZbour2hTPCyxvAkYqgbDuc+H4CQFi3ZKKsP8B
-         At9IfMfwbs1dH25tpWyTCjB4dj3g21XdjbzfworDxEFeny85iUUTnwWZ70Hi1wBFKb
-         6TngLkiGBzl3m4MNgQ6iA1LQAvTnDPX160g2hFhJ2DNXi90iGv9zmZRbO0zGfp89Qb
-         Cr2AWN0RoIR/vAb9J4tZkl4ITpSJbVOm/mYMeDlyMi9ao2ZaPH/yfwRRm5ZcqoeX1D
-         HBvuH1YZ9/pUw==
-Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-10e8118cb3fso1009411fac.22
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:55:50 -0700 (PDT)
+        Mon, 15 Aug 2022 03:58:16 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68571DA73
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:58:14 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id z12so8160480wrs.9
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:58:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=4LHTOGZsFNehN7nMM3hFYDsNPkYY0DIUJCRTeMZ3RtQ=;
+        b=qL3ecjHfsDCQmiIjDc5/oL+z+SJNdLWzHZNHyjSi/211iOUz10Fyt0nf2RgsXYAbF7
+         40MLmWPqWN/2OtJrfMfucccnZIDsDAfLcAUlhi5Py76A/ukWhCJUfx8uMRHnXIRIaGPR
+         OVvgkEOQErsJOP11nIL5ufk4XDxvyOqXRsDK2H4bt+k8toyqzRTMdovE3WWyYetP0+W7
+         J1spod2ijPUeon/4aCBYqIMwebZyVOCjpIRcgRyNClksaDoc0qltD62JItV/1jJQb2YI
+         7WpOpS+NsBWS5CnW6/tA579ICLmBz/VNSoFQ+uK7bsoceDDMKqdl05RC4T04RIcWqYf5
+         kCBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ZeK/4GM2DAERl5jSwdbqaxPua0JzPliZulx33fNAkb8=;
-        b=Jd+2VAfnGGedKlIvaaHQKquDq6UM45XqhqIrLh69vT3SOooP309WmrQhlrv7h0sjmd
-         IsbTT7vrnvewSG+dhSgs71QOse4mT/hhERClv+dDjHdu7T527+5ksBnOthoUCTf6xyL1
-         hy1DglHjml7/E1S45xYNcadEHdHXNDmweQgSz0Lf1oxIt7WgUnTfBDDtyl39CKEwIdsW
-         4FBTVScZ/o00GrF4JGmFYo8V7DAZ6xpTUpU4V7mPYJ/cwbPgkSytKPlPMy88x7l37Rn7
-         sKrGTXt8Eq3NkydYgU8qxgDp6NDvpjrzSG4DrI3ItP2Qzt4BnCGuamWyUWexk8O4UhYy
-         aSQg==
-X-Gm-Message-State: ACgBeo3eaQ3WgAEpblpDKSocExvu22eGfgdO4hwInw33tHZ6V6/lHaR+
-        UcTcCETiB0y5r7ppx/XBgUFDBt9nwOURK7mxfJhGVT+TNq3mncSw3/uJsNKCTGIhxn24CXYNVsN
-        iMNCp5RRVM3XwhAGT6+daGrrB2PllgTt2cMeMjWKFIEGZ5DlZoQ5KxemA/g==
-X-Received: by 2002:a05:6870:2111:b0:e6:8026:8651 with SMTP id f17-20020a056870211100b000e680268651mr6234001oae.42.1660550149814;
-        Mon, 15 Aug 2022 00:55:49 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5IrHGGx4EgeCSzds0PVIvFzXVMzkl0mOjPY4nJL7WACPeiDtQcM0ACWeSWTM/uXP0x6AY+wCHRJEw3NdSM+bg=
-X-Received: by 2002:a05:6870:2111:b0:e6:8026:8651 with SMTP id
- f17-20020a056870211100b000e680268651mr6233991oae.42.1660550149504; Mon, 15
- Aug 2022 00:55:49 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=4LHTOGZsFNehN7nMM3hFYDsNPkYY0DIUJCRTeMZ3RtQ=;
+        b=3XJsZMuz9ROIqMeL4GqglJAy+QHcug1ytBY4cTiXMw9pRWJvP7pt2Q9bIzWJWmcnkE
+         +y/XxQttQd3M/N3aikmRCeqcZTv/sjhlLfHe73qLHTWZ512cScjp2M3dpd7xX1G11Kwd
+         9Jcy9cMaX/Tt3sMROwg+InusAAEsFRZHBSHefjfHsstqoG1rBOx4Bqn5WxruR9x1j2DT
+         iurqpPPo2H0WSbau8NnmUF8Q4FJevrKQm9X93rkyIxjGSxvVJsU2GQMhPgI1pBsijsk2
+         i05luKbDThYpAIXxIYxNsNaOn33+mFnDTiPA8tr4LgutqNtUkTfqfJiR6V8/9v5YeHgg
+         1wqw==
+X-Gm-Message-State: ACgBeo0JeKlGrzAfBbyPYRe/R01sMYGhIsTdN/48ztyomqJR9n9h4BFF
+        ZY2oaCNwiDaUZA27JdVp4n80/w==
+X-Google-Smtp-Source: AA6agR4hZeAYzYRs+PLcDNRErousrS1A4XiKlllB0GiCkfj7oR+Cp1G2Ybl/w45MUb9AH3Bzs9kl+g==
+X-Received: by 2002:a05:6000:114b:b0:220:5ff2:b9dc with SMTP id d11-20020a056000114b00b002205ff2b9dcmr8250922wrx.297.1660550293307;
+        Mon, 15 Aug 2022 00:58:13 -0700 (PDT)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id a10-20020a05600c348a00b003a531c7aa66sm8820073wmq.1.2022.08.15.00.58.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 00:58:12 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 10:58:11 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     abelvesa@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>, Ye Li <ye.li@nxp.com>
+Subject: Re: [PATCH V2] clk: imx8mp: tune the order of enet_qos_root_clk
+Message-ID: <Yvn8k0INnkF40Oky@linaro.org>
+References: <20220815013428.476015-1-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-References: <20220706123244.18056-1-kai.heng.feng@canonical.com>
-In-Reply-To: <20220706123244.18056-1-kai.heng.feng@canonical.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Mon, 15 Aug 2022 15:55:36 +0800
-Message-ID: <CAAd53p4Kg=mu8boPY-jGefsqxSBLdo6WPYHv+=eD5ZYz3_1AXw@mail.gmail.com>
-Subject: Re: [PATCH] PCI: Disable upstream port PTM during suspend
-To:     bhelgaas@google.com
-Cc:     mika.westerberg@linux.intel.com, koba.ko@canonical.com,
-        "David E . Box" <david.e.box@linux.intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220815013428.476015-1-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,83 +73,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 8:33 PM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
->
-> On Intel Alder Lake platforms, Thunderbolt entering D3cold can cause
-> some errors reported by AER:
-> pcieport 0000:00:1d.0: AER: Uncorrected (Non-Fatal) error received: 0000:00:1d.0
-> pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
-> pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
-> pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 08000052 00000000 00000000
-> thunderbolt 0000:0a:00.0: AER: can't recover (no error_detected callback)
-> xhci_hcd 0000:3e:00.0: AER: can't recover (no error_detected callback)
-> pcieport 0000:00:1d.0: AER: device recovery failed
->
-> In addition to that, it can also block system from suspending when
-> a Thunderbolt dock is attached to the same system.
->
-> The original approach [1] is to disable AER and DPC when link is in
-> L2/L3 Ready, L2 and L3, but Bjorn identified the root cause is the Unsupported
-> Request:
->   - 08:00.0 sent a PTM Request Message (a Posted Request)
->   - 00:1d.0 received the PTM Request Message
->   - The link transitioned to DL_Down
->   - Per sec 2.9.1, 00:1d.0 discarded the Request and reported an
->     Unsupported Request
->   - Or, per sec 6.21.3, if 00:1d.0 received a PTM Request when its
->     own PTM Enable was clear, it would also be treated as an
->     Unsupported Request
->
-> And further: 'David did something like this [1], but just for Root Ports. That
-> looks wrong to me because sec 6.21.3 says we should not have PTM enabled in an
-> Upstream Port (i.e., in a downstream device like 08:00.0) unless it is already
-> enabled in the Downstream Port (i.e., in the Root Port 00:1d.0).'
->
-> So also disable upstream port PTM to make the PCI driver conform to the spec
-> and solve the issue.
->
-> [1] https://lore.kernel.org/all/20220408153159.106741-1-kai.heng.feng@canonical.com/
-> [2] https://lore.kernel.org/all/20220422222433.GA1464120@bhelgaas/
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215453
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216210
-> Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: David E. Box <david.e.box@linux.intel.com>
-> Cc: Sathyanarayanan Kuppuswamy <sathyanarayanan.kuppuswamy@linux.intel.com>
->
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+On 22-08-15 09:34:28, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> The enet_qos_root_clk takes sim_enet_root_clk as parent. When
+> registering enet_qos_root_clk, it will be put into clk orphan list,
+> because sim_enet_root_clk is not ready.
+> 
+> When sim_enet_root_clk is ready, clk_core_reparent_orphans_nolock will
+> set enet_qos_root_clk parent to sim_enet_root_clk.
+> 
+> Because CLK_OPS_PARENT_ENABLE is set, sim_enet_root_clk will be
+> enabled and disabled during the enet_qos_root_clk reparent phase.
+> 
+> All the above are correct. But with M7 booted early and using
+> enet, M7 enet feature will be broken, because clk driver probe phase
+> disable the needed clks, in case M7 firmware not configure
+> sim_enet_root_clk.
+> 
+> And tune the order would also save cpu cycles.
+> 
+> Reviewed-by: Ye Li <ye.li@nxp.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
-A gentle ping...
+Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
 
 > ---
->  drivers/pci/pci.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index cfaf40a540a82..8ba8a0e12946e 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -2717,7 +2717,8 @@ int pci_prepare_to_sleep(struct pci_dev *dev)
->          * port to enter a lower-power PM state and the SoC to reach a
->          * lower-power idle state as a whole.
->          */
-> -       if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
-> +       if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
-> +           pci_pcie_type(dev) == PCI_EXP_TYPE_UPSTREAM)
->                 pci_disable_ptm(dev);
->
->         pci_enable_wake(dev, target_state, wakeup);
-> @@ -2775,7 +2776,8 @@ int pci_finish_runtime_suspend(struct pci_dev *dev)
->          * port to enter a lower-power PM state and the SoC to reach a
->          * lower-power idle state as a whole.
->          */
-> -       if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
-> +       if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
-> +           pci_pcie_type(dev) == PCI_EXP_TYPE_UPSTREAM)
->                 pci_disable_ptm(dev);
->
->         __pci_enable_wake(dev, target_state, pci_dev_run_wake(dev));
-> --
-> 2.36.1
->
+> 
+> V2:
+>  Use Abel's new address
+> 
+> V1:
+>  Patch got reviewed in NXP internal.
+> 
+>  drivers/clk/imx/clk-imx8mp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
+> index e89db568f5a8..652ae58c2735 100644
+> --- a/drivers/clk/imx/clk-imx8mp.c
+> +++ b/drivers/clk/imx/clk-imx8mp.c
+> @@ -665,8 +665,8 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
+>  	hws[IMX8MP_CLK_CAN1_ROOT] = imx_clk_hw_gate2("can1_root_clk", "can1", ccm_base + 0x4350, 0);
+>  	hws[IMX8MP_CLK_CAN2_ROOT] = imx_clk_hw_gate2("can2_root_clk", "can2", ccm_base + 0x4360, 0);
+>  	hws[IMX8MP_CLK_SDMA1_ROOT] = imx_clk_hw_gate4("sdma1_root_clk", "ipg_root", ccm_base + 0x43a0, 0);
+> -	hws[IMX8MP_CLK_ENET_QOS_ROOT] = imx_clk_hw_gate4("enet_qos_root_clk", "sim_enet_root_clk", ccm_base + 0x43b0, 0);
+>  	hws[IMX8MP_CLK_SIM_ENET_ROOT] = imx_clk_hw_gate4("sim_enet_root_clk", "enet_axi", ccm_base + 0x4400, 0);
+> +	hws[IMX8MP_CLK_ENET_QOS_ROOT] = imx_clk_hw_gate4("enet_qos_root_clk", "sim_enet_root_clk", ccm_base + 0x43b0, 0);
+>  	hws[IMX8MP_CLK_GPU2D_ROOT] = imx_clk_hw_gate4("gpu2d_root_clk", "gpu2d_core", ccm_base + 0x4450, 0);
+>  	hws[IMX8MP_CLK_GPU3D_ROOT] = imx_clk_hw_gate4("gpu3d_root_clk", "gpu3d_core", ccm_base + 0x4460, 0);
+>  	hws[IMX8MP_CLK_UART1_ROOT] = imx_clk_hw_gate4("uart1_root_clk", "uart1", ccm_base + 0x4490, 0);
+> -- 
+> 2.37.1
+> 

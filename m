@@ -2,90 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7947E593CCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 22:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA8E593CDC
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 22:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347428AbiHOUZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 16:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
+        id S1344911AbiHOUad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 16:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242296AbiHOURX (ORCPT
+        with ESMTP id S1347335AbiHOUWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 16:17:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24950F46;
-        Mon, 15 Aug 2022 12:00:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6833FB81113;
-        Mon, 15 Aug 2022 19:00:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 11F38C4347C;
-        Mon, 15 Aug 2022 19:00:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660590014;
-        bh=igEtDFyDX86Zzd6H6ZqMLRuFCiTeU4CezPBsoU96YE4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=c2rm9cGD0iojsVby0QXR3dyizi/DpuQu4QRgtk7T/5+c64xKH/1UTgBzKJOwJTce7
-         ycO2cIRkHEJ1YFpO4iCsDifaTUhMV8Lu46ddd63PL9IwAtXGOHWTbfavSyOLRahHS/
-         Iq7jEBItDlMTbe1b69EMnV0v3BR0ZSFhG5c6Wyf0G1VrRife6W8jXw1eRMTCiFwMIi
-         lO0HswApYjh7bdf8sh6XjCYbQqsNyTLwZ6RTZp13UQdgRNvSiR1PDKVIpettx3iHzT
-         NnbOJfggTIdVmqkulPfaleaZx8/SbdB6gD22nnmQE+5giIX05+2ipMtfdHSyxT0ESr
-         ZvyAQVT001Gww==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EB6DCE2A051;
-        Mon, 15 Aug 2022 19:00:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 15 Aug 2022 16:22:18 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935C033E2E;
+        Mon, 15 Aug 2022 12:02:40 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id c19-20020a17090ae11300b001f2f94ed5c6so12221211pjz.1;
+        Mon, 15 Aug 2022 12:02:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc;
+        bh=Mfaz1LfXGr/UvNceveiY5fzXa9npXeyxxs1DRSGlQXM=;
+        b=TJdHQlV13t5HaX6d59FUc8yeKaJbrW/xMo+z1XHIGdY7INXEbXfmYAMK8eywuM6ZDL
+         viQ7G5tjLNHqug/kuwOV28/G71gB7DJhEQ+od6NH+H1cKKhAkwiQx8fP8GcNrjDcP4L7
+         qoWsKGYKoz9X7HQj593QzsA/DnCMhn8w3CqijHLm8bYWeQvGD1+nhWmSd+4MAXMPn1hi
+         p7ItCQDUWPLdrn5DYKcOkCgiDQpP8Sh54XWLTKCPFVT3Ayc/OzWHg4qOfTVPnAwlJ5EH
+         K9Vd5GrPag980at0QRUDL7piVmgD38pB2hGAZFSls1FyIFz/eYWxXb4CGTpmE1Z3NBRm
+         y8TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc;
+        bh=Mfaz1LfXGr/UvNceveiY5fzXa9npXeyxxs1DRSGlQXM=;
+        b=TWa4B+DbVsNEkd+/ufxBNQrg+xJjHA+sJLLIztTzB2GJQTaqPjBT07wwGT8SjO0HX1
+         LCQiYR8KvRNG9uxuVw7I9WoTkHirORrQgjXpJTzxjIQKqCBM9WyWPdnkdDnKZBWqt5rx
+         TfkgmiSHaR/3tsGBjEOYDe6sa8vbkg/yPfdU9Q6jQeiAEyKFlVumChJXTctrwv6TguKD
+         NIYW8WlgiubUybmoRMx//pAeD7gpPhP+DcaMuTDembscPBYjyT/0uoyESLTbCmVYG7N5
+         d7W6Jhnp6Ux2kUJumBaeuxss49liLU26j47d8dO0KV1345exshnmB6CUZW/0CGRtoy7E
+         WbxQ==
+X-Gm-Message-State: ACgBeo0R614fqF4xpMmgZgq6cR+64FIYc/GTnSI/bZRAJ16ose150BNx
+        WbAjYl/EiOBJksgozVnoS3kqR8G5Wc04JQ==
+X-Google-Smtp-Source: AA6agR40RmTIFkna2ofomi+uvVaNt6zWBUj5/bra+glY6LQazm5zkKj+fzOFrggoGaTxiIwUA4OLCg==
+X-Received: by 2002:a17:902:c406:b0:16e:df76:5267 with SMTP id k6-20020a170902c40600b0016edf765267mr18295281plk.8.1660590159240;
+        Mon, 15 Aug 2022 12:02:39 -0700 (PDT)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:df3e:22e0:b905:822b])
+        by smtp.gmail.com with ESMTPSA id q13-20020a170902a3cd00b0016a4db13429sm7266926plb.192.2022.08.15.12.01.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 12:01:25 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH 0/4] perf tools: Support reading PERF_FORMAT_LOST
+Date:   Mon, 15 Aug 2022 12:01:02 -0700
+Message-Id: <20220815190106.1293082-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 0/3] Add more bpf_*_ct_lookup() selftests
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166059001395.9081.18240847737000160882.git-patchwork-notify@kernel.org>
-Date:   Mon, 15 Aug 2022 19:00:13 +0000
-References: <cover.1660254747.git.dxu@dxuuu.xyz>
-In-Reply-To: <cover.1660254747.git.dxu@dxuuu.xyz>
-To:     Daniel Xu <dxu@dxuuu.xyz>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, memxor@gmail.com, pablo@netfilter.org,
-        fw@strlen.de, netfilter-devel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hello,
 
-This series was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+The kernel v6.0 added PERF_FORMAT_LOST which can read a number of lost
+samples for the given event.  As it can change the output format of
+read(2) and perf sample data, it needs to access them carefully.
 
-On Thu, 11 Aug 2022 15:55:24 -0600 you wrote:
-> This patchset adds more bpf_*_ct_lookup() selftests. The goal is to test
-> interaction with netfilter subsystem as well as reading from `struct
-> nf_conn`. The first is important when migrating legacy systems towards
-> bpf. The latter is important in general to take full advantage of
-> connection tracking.
-> 
-> I'll follow this patchset up with support for writing to `struct nf_conn`.
-> 
-> [...]
+You can get the code from 'perf/read-lost-v1' brach on
 
-Here is the summary with links:
-  - [bpf-next,v4,1/3] selftests/bpf: Add existing connection bpf_*_ct_lookup() test
-    https://git.kernel.org/bpf/bpf-next/c/e81fbd4c1ba7
-  - [bpf-next,v4,2/3] selftests/bpf: Add connmark read test
-    https://git.kernel.org/bpf/bpf-next/c/99799de2cba2
-  - [bpf-next,v4,3/3] selftests/bpf: Update CI kconfig
-    https://git.kernel.org/bpf/bpf-next/c/8308bf207ce6
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
 
-You are awesome, thank you!
+Thanks,
+Namhyung
+
+
+Namhyung Kim (4):
+  tools headers UAPI: Sync linux/perf_event.h with the kernel sources
+  tools lib perf: Handle read format in perf_evsel__read()
+  tools lib perf: Add a test case for read formats
+  perf tools: Support reading PERF_FORMAT_LOST
+
+ tools/include/uapi/linux/perf_event.h         |   5 +-
+ tools/lib/perf/evsel.c                        |  72 ++++++++
+ tools/lib/perf/include/perf/event.h           |   3 +-
+ tools/lib/perf/include/perf/evsel.h           |   4 +-
+ tools/lib/perf/tests/test-evsel.c             | 161 ++++++++++++++++++
+ tools/perf/tests/sample-parsing.c             |  14 +-
+ tools/perf/util/event.h                       |  18 +-
+ tools/perf/util/evsel.c                       |  33 +++-
+ .../scripting-engines/trace-event-python.c    |  16 +-
+ tools/perf/util/session.c                     |  32 ++--
+ tools/perf/util/synthetic-events.c            |  34 +++-
+ 11 files changed, 354 insertions(+), 38 deletions(-)
+
+
+base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.37.1.595.g718a3a8f04-goog
 

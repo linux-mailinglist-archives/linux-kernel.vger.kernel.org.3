@@ -2,159 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40ED259301A
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0A759301C
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231695AbiHONkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 09:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
+        id S232108AbiHONmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 09:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231912AbiHONkh (ORCPT
+        with ESMTP id S231840AbiHONmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 09:40:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C3E663EA
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 06:40:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660570835;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WFznknxYVUIEfYgBOXexxkEEuynTrS8Oz/t2Nz94EIw=;
-        b=dhsFPazmTXS4cEtebCTpeD0heOUfrKO7QHEc+yPAjOqvDxkW/KG1QO0RmEb0yYgd7v0vSQ
-        bcCMg77Sgx7+l4G/UJD9O3gtkF5S013FW/CmK7DrS4OXjElxOt2iDbl17fZiEGpRTVVAXE
-        NmiS2aEmOuvhNCVgu2HwyrGoJP77ci8=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-407-8vOpApuNN_m8ywBBPyxZNA-1; Mon, 15 Aug 2022 09:40:34 -0400
-X-MC-Unique: 8vOpApuNN_m8ywBBPyxZNA-1
-Received: by mail-ed1-f70.google.com with SMTP id s21-20020a056402521500b00440e91f30easo4721652edd.7
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 06:40:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=WFznknxYVUIEfYgBOXexxkEEuynTrS8Oz/t2Nz94EIw=;
-        b=Q4cn6dpiRH83XhebH7Xs6AFZTyMZU3c3HsMeRBuHNib9zC/mvVmOWJFIsQLkm7zo2Q
-         yTKm+h7jAZDMlfm4BBXVMOxYaHuHfBRX3OPozkkDFSmXrHEugQ5ZtujcWjDwgWgU00yg
-         2XFtQ3lXlewSrYiqP8b0TA8oKNnfd+mXoSu99gIibiq3sa9tB/ak0wAjzoebY5b5aGUh
-         Sv6ve8PHBGNrx86OLBVVk9MmDf2ktK8yV4Ihm5cmK/LpGVcetNvHEpthp7WYo5wZp9dM
-         hQ6n0ejoW0ve6wm8Ii21X/J5Lr5nbabZUKe4s0RIGDgUfOfyq0H+SRLG/PoWD1Fz/8c1
-         a+tA==
-X-Gm-Message-State: ACgBeo0GoHKvyomZaoYrl2OjWcRbrdYvIROBPsCkMsNPQvdixKFgNCy7
-        v5eDfFCUEGRyVi47MFZvmsq4oG9Q1WhcHHTZIJ+8CPrnNVfabMPCz5CaocNf2OERNqRV20ZIiwi
-        Gjppy85Xqv6GjdOGHc1USmjOr
-X-Received: by 2002:a17:907:6095:b0:731:87a0:b9e8 with SMTP id ht21-20020a170907609500b0073187a0b9e8mr10680395ejc.124.1660570832241;
-        Mon, 15 Aug 2022 06:40:32 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5oZ7fArE1z6FU2jiWJzYS68Y0xeV9C+owuOUu+SUoYpcY6/WJu+7AZUENP6EKBs3mosb+cIw==
-X-Received: by 2002:a17:907:6095:b0:731:87a0:b9e8 with SMTP id ht21-20020a170907609500b0073187a0b9e8mr10680387ejc.124.1660570832079;
-        Mon, 15 Aug 2022 06:40:32 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id s23-20020a508d17000000b0043d7923af6esm6625114eds.95.2022.08.15.06.40.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 06:40:31 -0700 (PDT)
-Message-ID: <657998b3-0f26-9a66-8191-713715622c01@redhat.com>
-Date:   Mon, 15 Aug 2022 15:40:30 +0200
+        Mon, 15 Aug 2022 09:42:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926292654;
+        Mon, 15 Aug 2022 06:42:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A970B80EBD;
+        Mon, 15 Aug 2022 13:42:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 357C4C433C1;
+        Mon, 15 Aug 2022 13:42:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660570950;
+        bh=vOrjNzXszuYSKIoVOutNND6b9HJPnaJFwYZ99c1sEpM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=L6AofjnmkPKGcf53VtHVQyNxg8hoyPkOuo23lpP8yQ0gvQfK/EGiV54aPb2lQTwY7
+         +i0v333J9s8ncEyz/nP4AEjY78wndP0GBDbNJuz96GesijRNq6zw3kN/IwUhXTNs5P
+         F60/7UlxJd5BwyuM9JD8fGfo4/lv6mSrERWFtzZwdi0hlsTylqGza3CIOsh3HuWYn5
+         FZFDi2t6GVuNGHHwX7YdmlK1cZLmOxtf4DP76rIQAr21z5f7tq2MBeetJkFXiHlLqd
+         iZ8ufzMsbf0ZyBWumFCU/eClWeK3W2CUZ1EIpDuS5KlIpjv80XHnj1VWxDPHZG0x89
+         xUMVe6rhLYnjw==
+From:   Ard Biesheuvel <ardb@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-efi@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Michael Roth <michael.roth@amd.com>
+Subject: [PATCH 0/6] x86: head_64.S spring cleaning
+Date:   Mon, 15 Aug 2022 15:42:17 +0200
+Message-Id: <20220815134223.740112-1-ardb@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/6] Fixes 98829e84dc67 ("asus-wmi: Add dgpu disable
- method")
-Content-Language: en-US
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     "Luke D. Jones" <luke@ljones.dev>
-Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220812222509.292692-1-luke@ljones.dev>
- <20220812222509.292692-2-luke@ljones.dev>
- <fc250b82-c7c7-9215-f3dd-be87e0a72edd@redhat.com>
-In-Reply-To: <fc250b82-c7c7-9215-f3dd-be87e0a72edd@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1754; i=ardb@kernel.org; h=from:subject; bh=vOrjNzXszuYSKIoVOutNND6b9HJPnaJFwYZ99c1sEpM=; b=owEB7QES/pANAwAKAcNPIjmS2Y8kAcsmYgBi+k0wclk1/FLjSLfWMne91Li85TFGgIkZ7TAsYPfl EDfg9p6JAbMEAAEKAB0WIQT72WJ8QGnJQhU3VynDTyI5ktmPJAUCYvpNMAAKCRDDTyI5ktmPJDvTC/ 91TWwxW89Jdi9hYfqKtN1SxQ21esuUJrsjCFV2BIX5rqtEbSU9e/eKbQn7OeuZx1U+DNGe73al4Ugj pvABnxTAtH3YX59H3lLZgv1M8701imI5m6HFYz5i96rjA0Cq1Wl7dJ2IuQz51FNRgVlI3qcKatK+b6 XgL2PaoKknYL1KMpF3rW924KY0RNxEmi5hkL7fMUJWkR5uq1iktuXZy1G+qBPrlZz2E+IlRjbDFe3E UchUsch+5yyMqmuelp/EbUaTBRViZlR7wLLUf5y1s5XvIodgRaRZ43rdVZ/87an6ZgeUzmi1tRphbI rv7FU+lnxhIBsafjLgAk9f/XskG0NbLK0cQ4iroIC9W1xNVGvo5UHsx9taOkX9yoc5NsycnS9zgrTO h5DuV+aEwHaRXaRZ3ZCY1gO/WZM2D3vIY0szGbVNuT5VhJVC+gSHBXhFdvv2xrO9JErqslitzX++j/ x/x743bwARdAuPG6TSDy1Pf7sVm/hCnNbDoWZ2JtXGuZE=
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+After doing some cleanup work on the EFI code in head_64.S, the mixed
+mode code in particular, I noticed that the memory encryption pieces
+could use some attention as well, so I cleaned that up too.
 
-On 8/15/22 15:25, Hans de Goede wrote:
-> Hi Luke,
-> 
-> On 8/13/22 00:25, Luke D. Jones wrote:
->> The dgpu_disable attribute was not documented, this adds the
->> required documentation.
->>
->> Signed-off-by: Luke D. Jones <luke@ljones.dev>
-> 
-> Thanks for the patch. Note that the Fixes tag should be above your
-> signed-off-by and then the patch should otherwise have a normal
-> subject + body. I've changed the commit msg to the following
-> while merging this:
-> 
-> """
-> platform/x86: asus-wmi: Document the dgpu_disable sysfs attribute
->     
-> The dgpu_disable attribute was not documented, this adds the
-> required documentation.
->     
-> Fixes 98829e84dc67 ("asus-wmi: Add dgpu disable method")
-> Signed-off-by: Luke D. Jones <luke@ljones.dev>
-> """
+I have been sitting on these patches since November, waiting for the
+right time to post them, i.e., after the SEV/SNP review had finished.
+This has yet to happen, so I'm posting them now instead. Please feel
+free to disregard for the time being, and propose a suitable timeframe
+to repost them if this is likely to conflict with ongoing work.
 
-While merging this I noticed that this is also using spaces
-instead of tabs for indentation, where as the rest of
-the file is using tabs.
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Michael Roth <michael.roth@amd.com>
 
-I've also fixed this up while merging, but next time
-please make sure to use spaces.
+Ard Biesheuvel (6):
+  x86/head_64: clean up mixed mode 32-bit entry code
+  efi/x86: simplify IDT/GDT preserve/restore
+  x86/compressed: move startup32_load_idt() out of startup code
+  x86/compressed: move startup32_check_sev_cbit out of startup code
+  x86/compressed: adhere to calling convention in
+    get_sev_encryption_bit()
+  x86/compressed: only build mem_encrypt.S if AMD_MEM_ENCRYPT=y
 
-I will make similar spaces -> tabs changes to patch 2/6 and 3/6
+ arch/x86/boot/compressed/Makefile       |   8 +-
+ arch/x86/boot/compressed/efi_mixed.S    | 352 ++++++++++++++++++++
+ arch/x86/boot/compressed/efi_thunk_64.S | 195 -----------
+ arch/x86/boot/compressed/head_32.S      |   4 -
+ arch/x86/boot/compressed/head_64.S      | 309 +----------------
+ arch/x86/boot/compressed/mem_encrypt.S  | 146 +++++++-
+ drivers/firmware/efi/libstub/x86-stub.c |   3 +-
+ 7 files changed, 506 insertions(+), 511 deletions(-)
+ create mode 100644 arch/x86/boot/compressed/efi_mixed.S
+ delete mode 100644 arch/x86/boot/compressed/efi_thunk_64.S
 
-Regards,
-
-Hans
-
-
-
-
->> ---
->>  Documentation/ABI/testing/sysfs-platform-asus-wmi | 9 +++++++++
->>  1 file changed, 9 insertions(+)
->>
->> diff --git a/Documentation/ABI/testing/sysfs-platform-asus-wmi b/Documentation/ABI/testing/sysfs-platform-asus-wmi
->> index 04885738cf15..0f932fd60f4a 100644
->> --- a/Documentation/ABI/testing/sysfs-platform-asus-wmi
->> +++ b/Documentation/ABI/testing/sysfs-platform-asus-wmi
->> @@ -57,3 +57,12 @@ Description:
->>  			* 0 - default,
->>  			* 1 - overboost,
->>  			* 2 - silent
->> +
->> +What:          /sys/devices/platform/<platform>/dgpu_disable
->> +Date:          Aug 2022
->> +KernelVersion: 5.17
->> +Contact:       "Luke Jones" <luke@ljones.dev>
->> +Description:
->> +               Disable discrete GPU:
->> +                       * 0 - Enable dGPU,
->> +                       * 1 - Disable dGPU,
->> \ No newline at end of file
-> 
-> Next time please make sure the file always ends with a newline
-> even in intermediate patches.
-> 
-> Regards,
-> 
-> Hans
-> 
-> 
+-- 
+2.35.1
 

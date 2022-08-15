@@ -2,70 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B420D592EDD
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 14:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E52592EE3
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 14:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbiHOMZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 08:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37118 "EHLO
+        id S241988AbiHOM3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 08:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241851AbiHOMZ2 (ORCPT
+        with ESMTP id S241894AbiHOM3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 08:25:28 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1BC5FEB;
-        Mon, 15 Aug 2022 05:25:23 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id z20so9340349edb.9;
-        Mon, 15 Aug 2022 05:25:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=HuV6ZnXA4g77sAz8lv0IoaoXUF+lgKniFR4loQkFu7s=;
-        b=hem/w74dGCE7vRtJDFaAnyfuNb1UvqzjYYxYy7Dl18calZdt/AoPp+OXRCitRPw4g5
-         cIvd8YsjdgGyaLUsi9ep3/UM4jVfGEwwQ+Rj+4ULIMhQYcDVUlnaepthzrHS8J7gX5yb
-         aBnL844ntmBOPftM+PvGd6XpKrwFXpO19c5kjRCgw2vmH99bW6Dy2mpeYGqNh4+de0JT
-         a6JfwPoe2nWTWacR+kNcSoJvQX4hF797XdxiXj7GFbDNnXOw6Q6r1MSR0tyQSyca3aBg
-         iLD0jAmeNOTWhjisENWiiBV6NxLqbgCOvcA/sXxegSM1v5UP1BVjjVJHhRINm1Tqjt/R
-         8CPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=HuV6ZnXA4g77sAz8lv0IoaoXUF+lgKniFR4loQkFu7s=;
-        b=v9FVUayU6cx8DHNjwYj7o2mqb3E6KILQaNOp/L2CfLSS4xDEs4eP5cJAWFZ/NrHxBI
-         ZaGpqj53d5df0jwBFt1lIzPCI3DUyj2LXvNlG9YiZ4yS1h3lsmAPQiSKv/hDrcG49xWp
-         LD2dgnEKgepUxgvmab3GAOis+l9mnoJAmbTWe5sdd0RTUOm/J+8KXGD+eJoVSyJgjzfI
-         8us+tMRtPcRokIvlXlz/s8MSRS9FtGIQ3aEhnC2FjjTXO6WS1iWlVoP2pwn1CKUQ3OBy
-         SBG+7hGiq4J/A2drcJGQkCbmBaqc7HFdSTejRyLQt3FhCT/dkgSvF5LrVawSCu45k4NM
-         8+/Q==
-X-Gm-Message-State: ACgBeo2Poh0sJYjqi70IbmMZsKoTt1jqUO5qJlWrNXSvGLqg77vxrJK5
-        DvGfXZkRPcF435QjGHSLYqh3F67qmd7E63w3KgU=
-X-Google-Smtp-Source: AA6agR4Q7CswgoEuf6wKDrJSLMawgXZ02/67A9XTjfkrBSPCyjHEeWP90PAyu2EA0FT7E+z0jwY1rQHH1+QbzdzlW5E=
-X-Received: by 2002:aa7:d159:0:b0:43d:73ba:64cf with SMTP id
- r25-20020aa7d159000000b0043d73ba64cfmr14794679edo.36.1660566322365; Mon, 15
- Aug 2022 05:25:22 -0700 (PDT)
+        Mon, 15 Aug 2022 08:29:03 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45FE25EAC;
+        Mon, 15 Aug 2022 05:29:02 -0700 (PDT)
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oNZDH-0002QY-Cc; Mon, 15 Aug 2022 14:28:59 +0200
+Received: from [85.1.206.226] (helo=linux-4.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oNZDH-000CiP-10; Mon, 15 Aug 2022 14:28:59 +0200
+Subject: Re: [syzbot] WARNING: suspicious RCU usage in bpf_sk_reuseport_detach
+To:     syzbot <syzbot+24bcff6e82ce253f23ec@syzkaller.appspotmail.com>,
+        bpf@vger.kernel.org, davem@davemloft.net, ecree.xilinx@gmail.com,
+        edumazet@google.com, habetsm.xilinx@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+References: <0000000000007902fc05e6458697@google.com>
+Cc:     Hawkins Jiawei <yin31149@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jakub Sitnicki <jakub@cloudflare.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <7119881e-5a7a-fd90-8d2f-87ce9cd45831@iogearbox.net>
+Date:   Mon, 15 Aug 2022 14:28:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20220815092815.11597-1-yangyicong@huawei.com> <YvotEZigh0+I/RIb@FVFF77S0Q05N>
-In-Reply-To: <YvotEZigh0+I/RIb@FVFF77S0Q05N>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Tue, 16 Aug 2022 00:25:10 +1200
-Message-ID: <CAGsJ_4zgaLdPJ5smOMYp2MQMw_ofkhrRNnWo+21DKx0+U5v6QA@mail.gmail.com>
-Subject: Re: [PATCH] drivers/perf: Change WARN_ON() to dev_err() on
- irq_set_affinity() failure
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Yicong Yang <yangyicong@huawei.com>, will@kernel.org,
-        Frank.li@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        zhangshaokun@hisilicon.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        khuong@os.amperecomputing.com, john.garry@huawei.com,
-        jonathan.cameron@huawei.com, yangyicong@hisilicon.com,
-        gregkh@linuxfoundation.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <0000000000007902fc05e6458697@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26628/Mon Aug 15 09:51:41 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,229 +56,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 12:06 AM Mark Rutland <mark.rutland@arm.com> wrote:
->
-> On Mon, Aug 15, 2022 at 05:28:15PM +0800, Yicong Yang wrote:
-> > From: Yicong Yang <yangyicong@hisilicon.com>
-> >
-> > The WARN_ON() on irq_set_affinity() failure is misused according to the [1]
-> > and may crash people's box unintentionally. This may also be redundant since
-> > in the failure case we may also trigger the WARN and dump the stack in the
-> > perf core[2] for a second time.
->
-> In what way do you think are these misused? I can't immediately see what you
-> think applies from [1].
->
-> In perf we rely upon interrupt affinity to enforce serialization in a few
-> places, so if we fail to set the interrupt affinity there are a number of
-> things which could go wrong (e.g. memory corruption, and all the fun that could
-> result from that). We use WARN_ON() to catch that early.
+[ +Hawkins ]
 
-Hi Mark,
+On 8/15/22 12:59 PM, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    94ce3b64c62d net/tls: Use RCU API to access tls_ctx->netdev
+> git tree:       net
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=14641e15080000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=53da55f2bdeb0d4c
+> dashboard link: https://syzkaller.appspot.com/bug?extid=24bcff6e82ce253f23ec
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=106c89fd080000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17ead885080000
+> 
+> The issue was bisected to:
+> 
+> commit f72c38fad234759fe943cb2e40bf3d0f7de1d4d9
+> Author: Edward Cree <ecree.xilinx@gmail.com>
+> Date:   Wed Jul 20 18:33:48 2022 +0000
+> 
+>      sfc: hook up ef100 representor TX
 
-If this is the case, is it better for us to return an ERROR after
-printing a dev_err then
-let the driver fail?
+Looks rather related to:
 
-I really don't understand how a WARN_ON can help fix or even alert something is
-wrong if we always need a successful irq_sey_affinity to make the driver work.
+commit 2a0133723f9ebeb751cfce19f74ec07e108bef1f
+Author: Hawkins Jiawei <yin31149@gmail.com>
+Date:   Fri Aug 5 15:48:34 2022 +0800
 
->
-> I can't immediately see how [2] is relevant, since that's in the context of an
-> IPI handler, and this patch affects the affinity of the PMU HW IRQ handler.
->
-> Thanks,
-> Mark.
->
-> >
-> > So change the WARN_ON() to dev_err() to just print the failure message.
-> >
-> > [1] https://github.com/torvalds/linux/blob/master/include/asm-generic/bug.h#L74
-> > [2] https://github.com/torvalds/linux/blob/master/kernel/events/core.c#L313
-> >
-> > Suggested-by: Greg KH <gregkh@linuxfoundation.org>
-> > [https://lore.kernel.org/lkml/YuOi3i0XHV++z1YI@kroah.com/]
-> > Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> > ---
-> >  drivers/perf/arm-ccn.c                   | 5 +++--
-> >  drivers/perf/arm_dmc620_pmu.c            | 3 ++-
-> >  drivers/perf/arm_smmuv3_pmu.c            | 6 ++++--
-> >  drivers/perf/fsl_imx8_ddr_perf.c         | 3 ++-
-> >  drivers/perf/hisilicon/hisi_pcie_pmu.c   | 6 ++++--
-> >  drivers/perf/hisilicon/hisi_uncore_pmu.c | 6 ++++--
-> >  drivers/perf/qcom_l2_pmu.c               | 8 ++++++--
-> >  drivers/perf/xgene_pmu.c                 | 6 ++++--
-> >  8 files changed, 29 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/drivers/perf/arm-ccn.c b/drivers/perf/arm-ccn.c
-> > index 728d13d8e98a..83abd909ba49 100644
-> > --- a/drivers/perf/arm-ccn.c
-> > +++ b/drivers/perf/arm-ccn.c
-> > @@ -1210,8 +1210,9 @@ static int arm_ccn_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
-> >               return 0;
-> >       perf_pmu_migrate_context(&dt->pmu, cpu, target);
-> >       dt->cpu = target;
-> > -     if (ccn->irq)
-> > -             WARN_ON(irq_set_affinity(ccn->irq, cpumask_of(dt->cpu)));
-> > +     if (ccn->irq && irq_set_affinity(ccn->irq, cpumask_of(dt->cpu)))
-> > +             dev_err(ccn->dev, "Failed to set interrupt affinity\n");
-> > +
-> >       return 0;
-> >  }
-> >
-> > diff --git a/drivers/perf/arm_dmc620_pmu.c b/drivers/perf/arm_dmc620_pmu.c
-> > index 280a6ae3e27c..b59d3d9eb779 100644
-> > --- a/drivers/perf/arm_dmc620_pmu.c
-> > +++ b/drivers/perf/arm_dmc620_pmu.c
-> > @@ -621,7 +621,8 @@ static int dmc620_pmu_cpu_teardown(unsigned int cpu,
-> >               perf_pmu_migrate_context(&dmc620_pmu->pmu, irq->cpu, target);
-> >       mutex_unlock(&dmc620_pmu_irqs_lock);
-> >
-> > -     WARN_ON(irq_set_affinity(irq->irq_num, cpumask_of(target)));
-> > +     if (irq_set_affinity(irq->irq_num, cpumask_of(target)))
-> > +             dev_err(dmc620_pmu->pmu.dev, "Failed to set interrupt affinity\n");
-> >       irq->cpu = target;
-> >
-> >       return 0;
-> > diff --git a/drivers/perf/arm_smmuv3_pmu.c b/drivers/perf/arm_smmuv3_pmu.c
-> > index 00d4c45a8017..05e1b3e274d7 100644
-> > --- a/drivers/perf/arm_smmuv3_pmu.c
-> > +++ b/drivers/perf/arm_smmuv3_pmu.c
-> > @@ -646,7 +646,8 @@ static int smmu_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
-> >
-> >       perf_pmu_migrate_context(&smmu_pmu->pmu, cpu, target);
-> >       smmu_pmu->on_cpu = target;
-> > -     WARN_ON(irq_set_affinity(smmu_pmu->irq, cpumask_of(target)));
-> > +     if (irq_set_affinity(smmu_pmu->irq, cpumask_of(target)))
-> > +             dev_err(smmu_pmu->dev, "Failed to set interrupt affinity\n");
-> >
-> >       return 0;
-> >  }
-> > @@ -892,7 +893,8 @@ static int smmu_pmu_probe(struct platform_device *pdev)
-> >
-> >       /* Pick one CPU to be the preferred one to use */
-> >       smmu_pmu->on_cpu = raw_smp_processor_id();
-> > -     WARN_ON(irq_set_affinity(smmu_pmu->irq, cpumask_of(smmu_pmu->on_cpu)));
-> > +     if (irq_set_affinity(smmu_pmu->irq, cpumask_of(smmu_pmu->on_cpu)))
-> > +             dev_err(dev, "Failed to set interrupt affinity\n");
-> >
-> >       err = cpuhp_state_add_instance_nocalls(cpuhp_state_num,
-> >                                              &smmu_pmu->node);
-> > diff --git a/drivers/perf/fsl_imx8_ddr_perf.c b/drivers/perf/fsl_imx8_ddr_perf.c
-> > index 8e058e08fe81..c44192e2d9db 100644
-> > --- a/drivers/perf/fsl_imx8_ddr_perf.c
-> > +++ b/drivers/perf/fsl_imx8_ddr_perf.c
-> > @@ -671,7 +671,8 @@ static int ddr_perf_offline_cpu(unsigned int cpu, struct hlist_node *node)
-> >       perf_pmu_migrate_context(&pmu->pmu, cpu, target);
-> >       pmu->cpu = target;
-> >
-> > -     WARN_ON(irq_set_affinity(pmu->irq, cpumask_of(pmu->cpu)));
-> > +     if (irq_set_affinity(pmu->irq, cpumask_of(pmu->cpu)))
-> > +             dev_err(pmu->dev, "Failed to set interrupt affinity\n");
-> >
-> >       return 0;
-> >  }
-> > diff --git a/drivers/perf/hisilicon/hisi_pcie_pmu.c b/drivers/perf/hisilicon/hisi_pcie_pmu.c
-> > index 21771708597d..90aed9e51396 100644
-> > --- a/drivers/perf/hisilicon/hisi_pcie_pmu.c
-> > +++ b/drivers/perf/hisilicon/hisi_pcie_pmu.c
-> > @@ -655,7 +655,8 @@ static int hisi_pcie_pmu_online_cpu(unsigned int cpu, struct hlist_node *node)
-> >
-> >       if (pcie_pmu->on_cpu == -1) {
-> >               pcie_pmu->on_cpu = cpu;
-> > -             WARN_ON(irq_set_affinity(pcie_pmu->irq, cpumask_of(cpu)));
-> > +             if (irq_set_affinity(pcie_pmu->irq, cpumask_of(cpu)))
-> > +                     pci_err(pcie_pmu->pdev, "Failed to set interrupt affinity\n");
-> >       }
-> >
-> >       return 0;
-> > @@ -681,7 +682,8 @@ static int hisi_pcie_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
-> >       perf_pmu_migrate_context(&pcie_pmu->pmu, cpu, target);
-> >       /* Use this CPU for event counting */
-> >       pcie_pmu->on_cpu = target;
-> > -     WARN_ON(irq_set_affinity(pcie_pmu->irq, cpumask_of(target)));
-> > +     if (irq_set_affinity(pcie_pmu->irq, cpumask_of(target)))
-> > +             pci_err(pcie_pmu->pdev, "Failed to set interrupt affinity\n");
-> >
-> >       return 0;
-> >  }
-> > diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pmu.c
-> > index fbc8a93d5eac..74397b5ec889 100644
-> > --- a/drivers/perf/hisilicon/hisi_uncore_pmu.c
-> > +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.c
-> > @@ -492,7 +492,8 @@ int hisi_uncore_pmu_online_cpu(unsigned int cpu, struct hlist_node *node)
-> >       hisi_pmu->on_cpu = cpu;
-> >
-> >       /* Overflow interrupt also should use the same CPU */
-> > -     WARN_ON(irq_set_affinity(hisi_pmu->irq, cpumask_of(cpu)));
-> > +     if (irq_set_affinity(hisi_pmu->irq, cpumask_of(cpu)))
-> > +             dev_err(hisi_pmu->dev, "Failed to set interrupt affinity\n");
-> >
-> >       return 0;
-> >  }
-> > @@ -525,7 +526,8 @@ int hisi_uncore_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
-> >       perf_pmu_migrate_context(&hisi_pmu->pmu, cpu, target);
-> >       /* Use this CPU for event counting */
-> >       hisi_pmu->on_cpu = target;
-> > -     WARN_ON(irq_set_affinity(hisi_pmu->irq, cpumask_of(target)));
-> > +     if (irq_set_affinity(hisi_pmu->irq, cpumask_of(target)))
-> > +             dev_err(hisi_pmu->dev, "Failed to set interrupt affinity\n");
-> >
-> >       return 0;
-> >  }
-> > diff --git a/drivers/perf/qcom_l2_pmu.c b/drivers/perf/qcom_l2_pmu.c
-> > index 30234c261b05..c6fe01c7e637 100644
-> > --- a/drivers/perf/qcom_l2_pmu.c
-> > +++ b/drivers/perf/qcom_l2_pmu.c
-> > @@ -793,7 +793,9 @@ static int l2cache_pmu_online_cpu(unsigned int cpu, struct hlist_node *node)
-> >       cpumask_set_cpu(cpu, &l2cache_pmu->cpumask);
-> >       cluster_pmu_reset();
-> >
-> > -     WARN_ON(irq_set_affinity(cluster->irq, cpumask_of(cpu)));
-> > +     if (irq_set_affinity(cluster->irq, cpumask_of(cpu)))
-> > +             dev_err(&l2cache_pmu->pdev->dev,
-> > +                     "Failed to set interrupt affinity\n");
-> >       enable_irq(cluster->irq);
-> >
-> >       return 0;
-> > @@ -831,7 +833,9 @@ static int l2cache_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
-> >       perf_pmu_migrate_context(&l2cache_pmu->pmu, cpu, target);
-> >       cluster->on_cpu = target;
-> >       cpumask_set_cpu(target, &l2cache_pmu->cpumask);
-> > -     WARN_ON(irq_set_affinity(cluster->irq, cpumask_of(target)));
-> > +     if (irq_set_affinity(cluster->irq, cpumask_of(target)))
-> > +             dev_err(&l2cache_pmu->pdev->dev,
-> > +                     "Failed to set interrupt affinity\n");
-> >
-> >       return 0;
-> >  }
-> > diff --git a/drivers/perf/xgene_pmu.c b/drivers/perf/xgene_pmu.c
-> > index 0c32dffc7ede..f31e678fdb69 100644
-> > --- a/drivers/perf/xgene_pmu.c
-> > +++ b/drivers/perf/xgene_pmu.c
-> > @@ -1790,7 +1790,8 @@ static int xgene_pmu_online_cpu(unsigned int cpu, struct hlist_node *node)
-> >               cpumask_set_cpu(cpu, &xgene_pmu->cpu);
-> >
-> >       /* Overflow interrupt also should use the same CPU */
-> > -     WARN_ON(irq_set_affinity(xgene_pmu->irq, &xgene_pmu->cpu));
-> > +     if (irq_set_affinity(xgene_pmu->irq, &xgene_pmu->cpu))
-> > +             dev_err(xgene_pmu->dev, "Failed to set interrupt affinity\n");
-> >
-> >       return 0;
-> >  }
-> > @@ -1823,7 +1824,8 @@ static int xgene_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
-> >
-> >       cpumask_set_cpu(target, &xgene_pmu->cpu);
-> >       /* Overflow interrupt also should use the same CPU */
-> > -     WARN_ON(irq_set_affinity(xgene_pmu->irq, &xgene_pmu->cpu));
-> > +     if (irq_set_affinity(xgene_pmu->irq, &xgene_pmu->cpu))
-> > +             dev_err(xgene_pmu->dev, "Failed to set interrupt affinity\n");
-> >
-> >       return 0;
-> >  }
-> > --
-> > 2.24.0
-> >
+     net: fix refcount bug in sk_psock_get (2)
 
-Thanks
-Barry
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=125bf9fd080000
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=115bf9fd080000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=165bf9fd080000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+24bcff6e82ce253f23ec@syzkaller.appspotmail.com
+> Fixes: f72c38fad234 ("sfc: hook up ef100 representor TX")
+> 
+> =============================
+> WARNING: suspicious RCU usage
+> 5.19.0-syzkaller-05408-g94ce3b64c62d #0 Not tainted
+> -----------------------------
+> include/net/sock.h:592 suspicious rcu_dereference_check() usage!
+> 
+> other info that might help us debug this:
+> 
+> 
+> rcu_scheduler_active = 2, debug_locks = 1
+> 4 locks held by syz-executor334/3611:
+>   #0: ffff888073b7be10 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:760 [inline]
+>   #0: ffff888073b7be10 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: __sock_release+0x86/0x280 net/socket.c:649
+>   #1: ffffc900014e5c28 (&table->hash[i].lock){+...}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:354 [inline]
+>   #1: ffffc900014e5c28 (&table->hash[i].lock){+...}-{2:2}, at: udp_lib_unhash net/ipv4/udp.c:2014 [inline]
+>   #1: ffffc900014e5c28 (&table->hash[i].lock){+...}-{2:2}, at: udp_lib_unhash+0x1d5/0x730 net/ipv4/udp.c:2004
+>   #2: ffffffff8d7a9a78 (reuseport_lock){+...}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:354 [inline]
+>   #2: ffffffff8d7a9a78 (reuseport_lock){+...}-{2:2}, at: reuseport_detach_sock+0x22/0x4a0 net/core/sock_reuseport.c:346
+>   #3: ffff888145f9a0b8 (clock-AF_INET){++..}-{2:2}, at: bpf_sk_reuseport_detach+0x26/0x190 kernel/bpf/reuseport_array.c:26
+> 
+> stack backtrace:
+> CPU: 1 PID: 3611 Comm: syz-executor334 Not tainted 5.19.0-syzkaller-05408-g94ce3b64c62d #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+> Call Trace:
+>   <TASK>
+>   __dump_stack lib/dump_stack.c:88 [inline]
+>   dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>   __rcu_dereference_sk_user_data_with_flags include/net/sock.h:592 [inline]
+>   bpf_sk_reuseport_detach+0x156/0x190 kernel/bpf/reuseport_array.c:27
+>   reuseport_detach_sock+0x8c/0x4a0 net/core/sock_reuseport.c:362
+>   udp_lib_unhash net/ipv4/udp.c:2016 [inline]
+>   udp_lib_unhash+0x210/0x730 net/ipv4/udp.c:2004
+>   sk_common_release+0xba/0x390 net/core/sock.c:3600
+>   inet_release+0x12e/0x280 net/ipv4/af_inet.c:428
+>   __sock_release+0xcd/0x280 net/socket.c:650
+>   sock_close+0x18/0x20 net/socket.c:1365
+>   __fput+0x277/0x9d0 fs/file_table.c:320
+>   task_work_run+0xdd/0x1a0 kernel/task_work.c:177
+>   exit_task_work include/linux/task_work.h:38 [inline]
+>   do_exit+0xade/0x29d0 kernel/exit.c:795
+>   do_group_exit+0xd2/0x2f0 kernel/exit.c:925
+>   __do_sys_exit_group kernel/exit.c:936 [inline]
+>   __se_sys_exit_group kernel/exit.c:934 [inline]
+>   __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:934
+>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7fe407d09699
+> Code: Unable to access opcode bytes at RIP 0x7fe407d0966f.
+> RSP: 002b:00007ffc0ff152a8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
+> 
+

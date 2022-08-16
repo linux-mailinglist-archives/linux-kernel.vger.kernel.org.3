@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E54D95958EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6455958E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233978AbiHPKtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37282 "EHLO
+        id S235128AbiHPKtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235024AbiHPKsx (ORCPT
+        with ESMTP id S234970AbiHPKst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:48:53 -0400
+        Tue, 16 Aug 2022 06:48:49 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4AB0FC307;
-        Tue, 16 Aug 2022 03:16:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A5CFC30F;
+        Tue, 16 Aug 2022 03:16:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660644981; x=1692180981;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=xF5gG7Oy9lHphcE7lhSpuLFD+wByK3zXWrKkUkteKYw=;
-  b=CNI4YNi9oNULA7+YtJtoXygH4UBw/+5u0CI7naJE7NDpfV1PpxrmGpdH
-   DbU3bDVvjtdDltPug/ZeoS6d9Jnbv1hQzD0uFbU68HErZCh+PQOfbNsOs
-   wA81qs1B3H/lNRd4DoEzmfnchpd2Fg2bhZFyEuukqciwMAVpS7vEZgBDk
-   t4vuELddrpw4bYY2Un2Ct2JKNsbDxE/nHJA9nN9nTQ2tvAgyQpgEDap0w
-   6uzH4SrZXzeVZgw+JO1xPoUttKaVSZ/ZH9mJ8biWPR9xNCWh7IMgAS2rx
-   z01axY+TgHoUt3CJnizAaYOWjzGdqx2Qy1I3doOItcDxJsIZXM5gJ5huK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="279141254"
+  t=1660644984; x=1692180984;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=hkWcQNjVhGcUtHECBaMGjDVMJWJKeF34QritOqABUew=;
+  b=ZrxRQfBCt5F+BNabZdkOjlN2hzvo5bqBcGoDzyZOfk0oG290X21MCRg0
+   SGpdd34hFVLX7ai4w7JH7RVonQnPCyea5jYmeBvGTa66INYPtFXDlMhWr
+   L0k7OIh04E71OVijvoqB+uqrFbCpRdjoMYT3zaosQDP84xMD12fZPWvdT
+   hzeBUrf0sh+EumLZwP9Ltq4+82xGfqLQMuBJN42EFvU9vHkGJ6X/Urmol
+   0WBcI5x0fj3MC/NIqfsGxSv+uP1Zsna6ytKbMhQD9cMFiE45qhTxQmL22
+   dQcvcEl4352ji8MlwTtwexEpn1Z90KVbk2p3UWko9tpePDgoHHaIJceE/
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="279141259"
 X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="279141254"
+   d="scan'208";a="279141259"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 03:16:19 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 03:16:21 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="749260741"
+   d="scan'208";a="749260748"
 Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Aug 2022 03:16:16 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 16 Aug 2022 03:16:19 -0700
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Utkarsh Patel <utkarsh.h.patel@intel.com>, rajmohan.mani@intel.com,
         linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH 0/6] ACPI: New helper function acpi_dev_get_memory_resources() and a new ACPI ID
-Date:   Tue, 16 Aug 2022 13:16:23 +0300
-Message-Id: <20220816101629.69054-1-heikki.krogerus@linux.intel.com>
+        linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH 1/6] usb: typec: intel_pmc_mux: Add new ACPI ID for Meteor Lake IOM device
+Date:   Tue, 16 Aug 2022 13:16:24 +0300
+Message-Id: <20220816101629.69054-2-heikki.krogerus@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220816101629.69054-1-heikki.krogerus@linux.intel.com>
+References: <20220816101629.69054-1-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -60,48 +62,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Utkarsh Patel <utkarsh.h.patel@intel.com>
 
-The helper function returns all memory resources described for a
-device regardless of the ACPI descriptor type (as long as it's
-memory), but the first patch introduces new ACPI ID for the IOM
-controller on Intel Meteor Lake and also separately modifies the
-driver so that it can get the memory resource from Address Space
-Resource Descriptor.
+This adds the necessary ACPI ID for Intel Meteor Lake
+IOM devices.
 
-An alternative would have been to introduce that helper function first
-so we would not need to modify the driver when the new ID is added,
-but then the helper would also need to be applied to the stable kernel
-releases, and that does not feel necessary or appropriate in this
-case, at least not IMO.
+The callback function is_memory() is modified so that it
+also checks if the resource descriptor passed to it is a
+memory type "Address Space Resource Descriptor".
 
-So that's why I'm proposing here that we first add the ID, and only
-after that introduce the helper, and only for mainline. That way the
-patch introducing the ID is the only that goes to the stable releases.
+On Intel Meteor Lake the ACPI memory resource is not
+described using the "32-bit Memory Range Descriptor" because
+the memory is outside of the 32-bit address space. The
+memory resource is described using the "Address Space
+Resource Descriptor" instead.
 
-If that's okay, and these don't have any other problems, I assume it's
-OK if Rafael takes all of these, including the ID?
+Intel Meteor Lake is the first platform to describe the
+memory resource for this device with Address Space Resource
+Descriptor, but it most likely will not be the last.
+Therefore the change to the is_memory() callback function
+is made generic.
 
-thanks,
+Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
+Cc: stable@vger.kernel.org
+[ heikki: Rewrote the commit message. ]
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/typec/mux/intel_pmc_mux.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-Heikki Krogerus (5):
-  ACPI: resource: Filter out the non memory resources in is_memory()
-  ACPI: resource: Add helper function acpi_dev_get_memory_resources()
-  ACPI: APD: Use the helper acpi_dev_get_memory_resources()
-  ACPI: LPSS: Use the helper acpi_dev_get_memory_resources()
-  usb: typec: intel_pmc_mux: Use the helper
-    acpi_dev_get_memory_resources()
-
-Utkarsh Patel (1):
-  usb: typec: intel_pmc_mux: Add new ACPI ID for Meteor Lake IOM device
-
- drivers/acpi/acpi_apd.c               |  9 +--------
- drivers/acpi/acpi_lpss.c              |  9 +--------
- drivers/acpi/resource.c               | 20 ++++++++++++++++++++
- drivers/usb/typec/mux/intel_pmc_mux.c | 12 ++++--------
- include/linux/acpi.h                  |  1 +
- 5 files changed, 27 insertions(+), 24 deletions(-)
-
+diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+index 47b733f78fb0d..a8e273fe204ab 100644
+--- a/drivers/usb/typec/mux/intel_pmc_mux.c
++++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+@@ -571,9 +571,11 @@ static int pmc_usb_register_port(struct pmc_usb *pmc, int index,
+ 
+ static int is_memory(struct acpi_resource *res, void *data)
+ {
+-	struct resource r;
++	struct resource_win win = {};
++	struct resource *r = &win.res;
+ 
+-	return !acpi_dev_resource_memory(res, &r);
++	return !(acpi_dev_resource_memory(res, r) ||
++		 acpi_dev_resource_address_space(res, &win));
+ }
+ 
+ /* IOM ACPI IDs and IOM_PORT_STATUS_OFFSET */
+@@ -583,6 +585,9 @@ static const struct acpi_device_id iom_acpi_ids[] = {
+ 
+ 	/* AlderLake */
+ 	{ "INTC1079", 0x160, },
++
++	/* Meteor Lake */
++	{ "INTC107A", 0x160, },
+ 	{}
+ };
+ 
 -- 
 2.35.1
 

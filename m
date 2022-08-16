@@ -2,91 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D97595B18
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C721595B1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234693AbiHPMBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 08:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
+        id S235132AbiHPMBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 08:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235424AbiHPMAg (ORCPT
+        with ESMTP id S235494AbiHPMAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 08:00:36 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DBCA2866;
-        Tue, 16 Aug 2022 04:45:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1660650349;
-  x=1692186349;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=0PwUiz2cZ6J2ZE4+k54D/cPS4GO274f8vuj7tTp6RnQ=;
-  b=eEzpxSwUQW2HhH1j9RdkArFphB/ZwBjtX1b48V4nFRbVe9LNOdAS8CT6
-   9aqzYneMVnbhLMn2JJBXV5dG2boPtIZ74XGOjE4V347qMNeUbwAjQvqVX
-   VUacou23TEiXAX4BtYg99tfw0wXcQ0RUKPLUJqtMP1n3PoigRkH9YVjPJ
-   jO8tsxXeFgWZBb7UN/My3Jvsv4Cb6acjo46lA4RfIffgT8ZqFkaxZ58Kf
-   rkGDSlFfYKWoPm7kJfNQJqZ1jjioqZY6hkCBRqOxT1vpj71A1gV2mX4du
-   1F8yhk+dGcNtG9p2hfde2nTIJ4mE6/ga65IdcN41Uh2/mwklRlZaBwg1h
-   A==;
-From:   Marcus Carlberg <marcus.carlberg@axis.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     <kernel@axis.com>, Marcus Carlberg <marcus.carlberg@axis.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] net: dsa: mv88e6xxx: support RGMII cmode
-Date:   Tue, 16 Aug 2022 13:45:34 +0200
-Message-ID: <20220816114534.10407-1-marcus.carlberg@axis.com>
-X-Mailer: git-send-email 2.20.1
+        Tue, 16 Aug 2022 08:00:46 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0957B7A7
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 04:46:07 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id u5-20020a6b4905000000b00681e48dbd92so5838735iob.21
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 04:46:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=wzeIiQ9mwpwIUmhJcR2Ov1nD29260pv02saoYmpgAuA=;
+        b=hjXqP879ja2+CPkwfkfb2OMCBk3I0Oi/i7F4TvGdDbfDSO6Zael3m7wBNxOyh4I118
+         6tICOPQJR7KTICUUdiVRw6KF3EQafECjPx+tZ9fYwmyuFzb711KiB/FwGTTljj018Un0
+         H7YZEukQhkyAG3u1cxqSvROFFN6jIDap6KjqKSx8corQpZ4NFbHur8D6+rAH1HTo6HxC
+         zCvEpf24ML9e/YPK4vTkPRvdcDsl8cfg3QlDPi0CNz/gbcDBBGJlLpeSOuPaXaPwpAfN
+         jN3m/HSC/bRv5dWVcRi4POyphURPaHR6SJsImfOIA1zTQdSkGUyHEJMapsOZTjRQaKsH
+         U0DQ==
+X-Gm-Message-State: ACgBeo0HOSJ9YpBQQ0AhuXGGpAcBuJplfU7icrsqtDSzpqj8Iod8kRGD
+        mpabVfzkCykCFYAkJQYlr7ThNFJyddPeDgmDjyAlcUlAciEu
+X-Google-Smtp-Source: AA6agR6GqZD8Afq8+hbY6Jp+6jHd6Izx19F8tkgWrJu85pzdN253VEWOHg5iQIQ2PMoshJbmGSJGBD2Xptt1AghWUhdlTYUj9yQR
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6e02:1d8a:b0:2de:aa0d:b99e with SMTP id
+ h10-20020a056e021d8a00b002deaa0db99emr9383562ila.138.1660650366959; Tue, 16
+ Aug 2022 04:46:06 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 04:46:06 -0700
+In-Reply-To: <20220816112228.1024-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003809f605e65a4b5f@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in send_packet
+From:   syzbot <syzbot+f1a69784f6efe748c3bf@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the probe defaults all interfaces to the highest speed possible
-(10GBASE-X in mv88e6393x) before the phy mode configuration from the
-devicetree is considered it is currently impossible to use port 0 in
-RGMII mode.
+Hello,
 
-This change will allow RGMII modes to be configurable for port 0
-enabling port 0 to be configured as RGMII as well as serial depending
-on configuration.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Signed-off-by: Marcus Carlberg <marcus.carlberg@axis.com>
----
- drivers/net/dsa/mv88e6xxx/port.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Reported-and-tested-by: syzbot+f1a69784f6efe748c3bf@syzkaller.appspotmail.com
 
-diff --git a/drivers/net/dsa/mv88e6xxx/port.c b/drivers/net/dsa/mv88e6xxx/port.c
-index 90c55f23b7c9..2e005449e733 100644
---- a/drivers/net/dsa/mv88e6xxx/port.c
-+++ b/drivers/net/dsa/mv88e6xxx/port.c
-@@ -517,6 +517,12 @@ static int mv88e6xxx_port_set_cmode(struct mv88e6xxx_chip *chip, int port,
- 	case PHY_INTERFACE_MODE_RMII:
- 		cmode = MV88E6XXX_PORT_STS_CMODE_RMII;
- 		break;
-+	case PHY_INTERFACE_MODE_RGMII:
-+	case PHY_INTERFACE_MODE_RGMII_ID:
-+	case PHY_INTERFACE_MODE_RGMII_RXID:
-+	case PHY_INTERFACE_MODE_RGMII_TXID:
-+		cmode = MV88E6XXX_PORT_STS_CMODE_RGMII;
-+		break;
- 	case PHY_INTERFACE_MODE_1000BASEX:
- 		cmode = MV88E6XXX_PORT_STS_CMODE_1000BASEX;
- 		break;
--- 
-2.20.1
+Tested on:
 
+commit:         568035b0 Linux 6.0-rc1
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=1552c1f3080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e706e91b2a433db
+dashboard link: https://syzkaller.appspot.com/bug?extid=f1a69784f6efe748c3bf
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1452c1f3080000
+
+Note: testing is done by a robot and is best-effort only.

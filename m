@@ -2,127 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB19595B7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB9E595B81
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235487AbiHPMNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 08:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41010 "EHLO
+        id S235499AbiHPMOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 08:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235446AbiHPMNU (ORCPT
+        with ESMTP id S235411AbiHPMNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 08:13:20 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7E4B44;
-        Tue, 16 Aug 2022 05:08:27 -0700 (PDT)
+        Tue, 16 Aug 2022 08:13:32 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B598253D00;
+        Tue, 16 Aug 2022 05:08:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660651707; x=1692187707;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1660651740; x=1692187740;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=RDrxEWvz7k6Dum1EVZKsL+hLIXjBY4xQVpMumbMEgZM=;
-  b=CF2T9cD3xxt0H1FsyGQ80jhmqfqnDhLXdRERqXUp4u4JwH89WvR30laz
-   Eev6aTyWxBtBroue760PAgQFS5hMs4FUSA+3Pl83VQbkgC8twClFD7cy5
-   1N4HxjufeFCJSAvIH71KCV6D4a5DfH0KfbkuDopriGOASb7S0rucZbXD9
-   eIeEcCZE8sniw6BmNtYWwusGPthR74pPlK6CMNpzz///8eTc+/AdkW3na
-   4A3aAha7Qrrr9QlcZnu+Jv2izlVhJH6SKTdLuPAQSv8Shm9B9VLP6OHhm
-   ngM4aYJP2uXUN0AAdAheCgnpcUghpJpsN0p8EqMx0erPhrvIrlAQhwggh
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="356201199"
+  bh=Tn/qQFYz5KIe5ySlji7fQeK6RfhXsdNtBpQADNtHANI=;
+  b=Wz9fFwtIzmubwEvc1PPCpenQYi8AOhlTscnB9/F8DxlJsbTO37B3XMCu
+   wRj5WjF89yvL0MXs2JuZsjaiigB1TE4yLv8UPKQNzcYXyFCCtXnZ8Cry4
+   59gih8cuuyZs6YBkrGSLikN3cbYn/kQk72B4dpLhJ1FCTWZqvQt8k+9NX
+   qUayi1w15F/pEEitzjATer/gkjvlo2ZK7y9GFQ2IBdtdvWF9AWnfCGc7Y
+   xe5uJYW8yiJQHlAV9RJ0XxFUZ1cPyQsFzkEwGc3FxZJAt4ZW2BWg26UEs
+   ZDNaUaelXtVMiQHAi37A/TAicMfzvVJElBB4jRZGbP/0IyNjNZ1lm9vBE
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="356201199"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 05:08:26 -0700
-X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="635864826"
-Received: from tturcu-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.51.153])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 05:08:24 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 1/1] serial: 8250: Add helper for clearing IER
-Date:   Tue, 16 Aug 2022 15:07:59 +0300
-Message-Id: <20220816120759.11552-1-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+   d="scan'208";a="169493744"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Aug 2022 05:08:59 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 16 Aug 2022 05:08:58 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Tue, 16 Aug 2022 05:08:56 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Daire McNamara <daire.mcnamara@microchip.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v8 0/4] Microchip soft ip corePWM driver
+Date:   Tue, 16 Aug 2022 13:08:26 +0100
+Message-ID: <20220816120829.719749-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A number of places want to clear IER with the same CAP_UUE trick.
-Create a helper for that.
+Hey Uwe, all,
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/tty/serial/8250/8250_port.c | 24 +++++++++++-------------
- 1 file changed, 11 insertions(+), 13 deletions(-)
+6.0-rc1 has rolled around so here is the promised v8.
+The prior cover letter/series is here:
+https://lore.kernel.org/linux-pwm/20220721172109.941900-1-mail@conchuod.ie
 
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 39b35a61958c..25e4761e3c57 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -752,6 +752,14 @@ static void serial8250_set_sleep(struct uart_8250_port *p, int sleep)
- 	serial8250_rpm_put(p);
- }
- 
-+static void serial8250_clear_IER(struct uart_8250_port *up)
-+{
-+	if (up->capabilities & UART_CAP_UUE)
-+		serial_out(up, UART_IER, UART_IER_UUE);
-+	else
-+		serial_out(up, UART_IER, 0);
-+}
-+
- #ifdef CONFIG_SERIAL_8250_RSA
- /*
-  * Attempts to turn on the RSA FIFO.  Returns zero on failure.
-@@ -1329,10 +1337,7 @@ static void autoconfig(struct uart_8250_port *up)
- 	serial8250_out_MCR(up, save_mcr);
- 	serial8250_clear_fifos(up);
- 	serial_in(up, UART_RX);
--	if (up->capabilities & UART_CAP_UUE)
--		serial_out(up, UART_IER, UART_IER_UUE);
--	else
--		serial_out(up, UART_IER, 0);
-+	serial8250_clear_IER(up);
- 
- out_unlock:
- 	spin_unlock_irqrestore(&port->lock, flags);
-@@ -2142,10 +2147,7 @@ static void serial8250_put_poll_char(struct uart_port *port,
- 	 *	First save the IER then disable the interrupts
- 	 */
- 	ier = serial_port_in(port, UART_IER);
--	if (up->capabilities & UART_CAP_UUE)
--		serial_port_out(port, UART_IER, UART_IER_UUE);
--	else
--		serial_port_out(port, UART_IER, 0);
-+	serial8250_clear_IER(up);
- 
- 	wait_for_xmitr(up, UART_LSR_BOTH_EMPTY);
- 	/*
-@@ -3383,11 +3385,7 @@ void serial8250_console_write(struct uart_8250_port *up, const char *s,
- 	 *	First save the IER then disable the interrupts
- 	 */
- 	ier = serial_port_in(port, UART_IER);
--
--	if (up->capabilities & UART_CAP_UUE)
--		serial_port_out(port, UART_IER, UART_IER_UUE);
--	else
--		serial_port_out(port, UART_IER, 0);
-+	serial8250_clear_IER(up);
- 
- 	/* check scratch reg to see if port powered off during system sleep */
- 	if (up->canary && (up->canary != serial_port_in(port, UART_SCR))) {
+I'll take the dts change myself once the rest is merged.
+
+There is one change here that is not directly from your feedback, I
+added a test for invalid PERIOD_STEPS values, in which case we abort if
+the period is locked and cannot be fixed. Hopefully the rounding is not
+ruined..
+
+Thanks,
+Conor.
+
+Changes since v7:
+- rebased on 6.0-rc1
+- reworded comments you highlighted in v7
+- fixed the overkill sleeping
+- removed the unused variables in calc_duty
+- added some extra comments to explain behaviours you questioned in v7
+- make the mutexes un-interruptible
+- fixed added the 1s you suggested for the if(period_locked) logic
+- added setup of the channel_enabled shadowing
+- fixed the period reporting for the negedge == posedge case in
+  get_state() I had to add the enabled check, as otherwise it broke
+  setting the period for the first time out of reset.
+- added a test for invalid PERIOD_STEPS values, in which case we abort
+  if we cannot fix the period
+
+Changes from v6:
+- Dropped an unused variable that I'd missed
+- Actually check the return values of the mutex lock()s
+- Re-rebased on -next for the MAINTAINERS patch (again...)
+
+Changes from v5:
+- switched to a mutex b/c we must sleep with the lock taken
+- simplified the locking in apply() and added locking to get_state()
+- reworked apply() as requested
+- removed the loop in the period calculation (thanks Uwe!)
+- add a copy of the enable registers in the driver to save on reads.
+- remove the second (useless) write to sync_update
+- added some missing rounding in get_state()
+- couple other minor cleanups as requested in:
+https://lore.kernel.org/linux-riscv/20220709160206.cw5luo7kxdshoiua@pengutronix.de/
+
+Changes from v4:
+- dropped some accidentally added files
+
+Conor Dooley (4):
+  dt-bindings: pwm: fix microchip corePWM's pwm-cells
+  riscv: dts: fix the icicle's #pwm-cells
+  pwm: add microchip soft ip corePWM driver
+  MAINTAINERS: add pwm to PolarFire SoC entry
+
+ .../bindings/pwm/microchip,corepwm.yaml       |   4 +-
+ MAINTAINERS                                   |   1 +
+ .../dts/microchip/mpfs-icicle-kit-fabric.dtsi |   2 +-
+ drivers/pwm/Kconfig                           |  10 +
+ drivers/pwm/Makefile                          |   1 +
+ drivers/pwm/pwm-microchip-core.c              | 396 ++++++++++++++++++
+ 6 files changed, 412 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/pwm/pwm-microchip-core.c
+
 -- 
-2.30.2
+2.36.1
 

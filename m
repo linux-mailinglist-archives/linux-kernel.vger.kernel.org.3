@@ -2,284 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9745B5965F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 01:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41EC65965F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 01:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237622AbiHPXUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 19:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39226 "EHLO
+        id S237597AbiHPXUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 19:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237610AbiHPXUL (ORCPT
+        with ESMTP id S230336AbiHPXUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 19:20:11 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32957333A;
-        Tue, 16 Aug 2022 16:20:09 -0700 (PDT)
+        Tue, 16 Aug 2022 19:20:06 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A0011C3F;
+        Tue, 16 Aug 2022 16:20:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660692009; x=1692228009;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aJeN90HVF/ei3jDxKECmS++0CA+/54+qZwuC6Tfbrcs=;
-  b=ZeJxfjPXQjRBWdU3iQtUFXfpHW5lU8FVxrlixf6GQ7D3zabQlwKChLZa
-   AOUz7+btav4jwCfAOh/PJweH459kk3Nuns8Ai5Z2bhaE9Th9ka+ekVV23
-   KJmSHzLzEgOy8muZyxzQSMdByxD14CPaZ/mXbp1K9sRhzJLOk8tmc16yx
-   2igZ0YhhopxfOpjJaXVuaLLr+GPeO5CXfjWTrsEiDzrjoYlwtAfcEoP1P
-   u1erECc2LSZheetfStMk3pQ/roO5U2X2VrWnfiDnqXdJNFSNL5IDeYm6o
-   cyVFBFa+KASLkQ8baACh5rpQ8p42i66qsZsDpNqNfbv4LsJaQ4Ff4im4d
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="354096877"
+  t=1660692004; x=1692228004;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DLynHZET2acG5Gj5TYndmhTuc8yNK1YXJbk/LA3IMMw=;
+  b=MVs6WXjlfirq9U0XOW02DqY+1I5VXCsYDxMIHRENjoTTHWxDigovYVi1
+   seWzkDU3K+T2jLnfjv5qamNTqszN5azS64AC5ak5CnoKvHS/5BrM4zlUj
+   AlLR4xMp4hljlVvHiNDQbUPQplVPAGPooejg25kCXVd3l3Sc+XMDTNMWv
+   6o939S7qOrCYeuWIooy5pURKN+tb472LxZCD0RQC9gu8B6xqI+5zNTl6q
+   6nYgVq2ndSFtLJo5ijQmrRgEJgXcQXJ1GyjD9vlNwlcCXOPeSdp4IIYOa
+   sLexEU5gMfmOKsmoP8zICgmPqeynpJOUTH8nZnS38mNErBsG1Zu78scI4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="272744250"
 X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="354096877"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 16:20:09 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="272744250"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 16:20:04 -0700
 X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="640224507"
-Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 16 Aug 2022 16:20:04 -0700
-Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oO5qt-0000KG-1Y;
-        Tue, 16 Aug 2022 23:20:03 +0000
-Date:   Wed, 17 Aug 2022 07:19:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Frank Li <Frank.Li@nxp.com>, maz@kernel.org, tglx@linutronix.de,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kw@linux.com,
-        bhelgaas@google.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        peng.fan@nxp.com, aisheng.dong@nxp.com, jdmason@kudzu.us,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        kishon@ti.com, lorenzo.pieralisi@arm.com, ntb@lists.linux.dev,
-        lznuaa@gmail.com
-Subject: Re: [PATCH v5 2/4] irqchip: Add IMX MU MSI controller driver
-Message-ID: <202208170756.pO5LueSf-lkp@intel.com>
-References: <20220815213936.2380439-3-Frank.Li@nxp.com>
+   d="scan'208";a="583519745"
+Received: from jzhu1-mobl.ccr.corp.intel.com (HELO dsneddon-desk.sneddon.lan) ([10.254.68.75])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 16:20:03 -0700
+From:   Daniel Sneddon <daniel.sneddon@linux.intel.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     pawan.kumar.gupta@linux.intel.com,
+        antonio.gomez.iglesias@linux.intel.com,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Neelima Krishnan <neelima.krishnan@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] x86/apic: Don't disable x2APIC if locked
+Date:   Tue, 16 Aug 2022 16:19:42 -0700
+Message-Id: <20220816231943.1152579-1-daniel.sneddon@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815213936.2380439-3-Frank.Li@nxp.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frank,
+The APIC supports two modes, legacy APIC (or xAPIC), and Extended APIC
+(or x2APIC).  X2APIC mode is mostly compatible with legacy APIC, but
+it disables the memory-mapped APIC interface in favor of one that uses
+MSRs.  The APIC mode is controlled by the EXT bit in the APIC MSR.
 
-I love your patch! Yet something to improve:
+The MMIO/xAPIC interface has some problems, most notably the APIC LEAK
+[1].  This bug allows an attacker to use the APIC MMIO interface to
+extract data from the SGX enclave.
 
-[auto build test ERROR on jonmason-ntb/ntb-next]
-[also build test ERROR on robh/for-next linus/master v6.0-rc1 next-20220816]
-[cannot apply to tip/irq/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Introduce support for a new feature that will allow the BIOS to lock
+the APIC in x2APIC mode.  If the APIC is locked in x2APIC mode and the
+kernel tries to disable the APIC or revert to legacy APIC mode a GP
+fault will occur.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Li/PCI-EP-driver-support-MSI-doorbell-from-host/20220816-131930
-base:   https://github.com/jonmason/ntb ntb-next
-config: arm-imx_v4_v5_defconfig (https://download.01.org/0day-ci/archive/20220817/202208170756.pO5LueSf-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/71296e2ad757d90e870b2ab81f2b06b9c76e7c41
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Frank-Li/PCI-EP-driver-support-MSI-doorbell-from-host/20220816-131930
-        git checkout 71296e2ad757d90e870b2ab81f2b06b9c76e7c41
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Introduce support for a new MSR (IA32_XAPIC_DISABLE_STATUS) and handle
+the new locked mode when the LEGACY_XAPIC_DISABLED bit is set by
+preventing the kernel from trying to disable the x2APIC.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On platforms with the IA32_XAPIC_DISABLE_STATUS MSR, if SGX or TDX are
+enabled the LEGACY_XAPIC_DISABLED will be set by the BIOS.  If
+legacy APIC is required, then it SGX and TDX need to be disabled in the
+BIOS.
 
-All errors (new ones prefixed by >>):
+[1]: https://aepicleak.com/aepicleak.pdf
 
->> drivers/irqchip/irq-imx-mu-msi.c:124:13: error: use of undeclared identifier 'irq_chip_ack_parent'
-           .irq_ack = irq_chip_ack_parent,
-                      ^
->> drivers/irqchip/irq-imx-mu-msi.c:127:30: error: variable has incomplete type 'struct msi_domain_ops'
-   static struct msi_domain_ops imx_mu_msi_irq_ops = {
-                                ^
-   drivers/irqchip/irq-imx-mu-msi.c:127:15: note: forward declaration of 'struct msi_domain_ops'
-   static struct msi_domain_ops imx_mu_msi_irq_ops = {
-                 ^
->> drivers/irqchip/irq-imx-mu-msi.c:131:12: error: use of undeclared identifier 'MSI_FLAG_USE_DEF_DOM_OPS'
-           .flags  = (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS),
-                      ^
->> drivers/irqchip/irq-imx-mu-msi.c:131:39: error: use of undeclared identifier 'MSI_FLAG_USE_DEF_CHIP_OPS'
-           .flags  = (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS),
-                                                 ^
->> drivers/irqchip/irq-imx-mu-msi.c:130:31: error: variable has incomplete type 'struct msi_domain_info'
-   static struct msi_domain_info imx_mu_msi_domain_info = {
-                                 ^
-   drivers/irqchip/irq-imx-mu-msi.c:130:15: note: forward declaration of 'struct msi_domain_info'
-   static struct msi_domain_info imx_mu_msi_domain_info = {
-                 ^
->> drivers/irqchip/irq-imx-mu-msi.c:203:3: error: field designator 'alloc' does not refer to any field in type 'const struct irq_domain_ops'
-           .alloc  = imx_mu_msi_domain_irq_alloc,
-            ^
->> drivers/irqchip/irq-imx-mu-msi.c:204:3: error: field designator 'free' does not refer to any field in type 'const struct irq_domain_ops'
-           .free   = imx_mu_msi_domain_irq_free,
-            ^
->> drivers/irqchip/irq-imx-mu-msi.c:241:25: error: call to undeclared function 'platform_msi_create_irq_domain'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           msi_data->msi_domain = platform_msi_create_irq_domain(
-                                  ^
-   drivers/irqchip/irq-imx-mu-msi.c:295:32: warning: variable 'priv' set but not used [-Wunused-but-set-variable]
-           struct imx_mu_msi *msi_data, *priv;
-                                         ^
-   1 warning and 8 errors generated.
+Signed-off-by: Daniel Sneddon <daniel.sneddon@linux.intel.com>
+Tested-by: Neelima Krishnan <neelima.krishnan@intel.com>
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+---
+V1 -> V2:
+	Updated commit message (Dave)
+	Added note to nox2apic documentation and Kconfig (Dave)
+	Made SGX depend on X2APIC (TGLX)
+	Added Tested-by
+	Added Dave's Ack
 
+[v1] https://lore.kernel.org/lkml/20220809234000.783284-1-daniel.sneddon@linux.intel.com/
 
-vim +/irq_chip_ack_parent +124 drivers/irqchip/irq-imx-mu-msi.c
+ .../admin-guide/kernel-parameters.txt         |  4 ++
+ arch/x86/Kconfig                              |  7 ++-
+ arch/x86/include/asm/cpu.h                    |  2 +
+ arch/x86/include/asm/msr-index.h              | 13 ++++++
+ arch/x86/kernel/apic/apic.c                   | 44 +++++++++++++++++--
+ 5 files changed, 65 insertions(+), 5 deletions(-)
 
-   121	
-   122	static struct irq_chip imx_mu_msi_irq_chip = {
-   123		.name = "MU-MSI",
- > 124		.irq_ack = irq_chip_ack_parent,
-   125	};
-   126	
- > 127	static struct msi_domain_ops imx_mu_msi_irq_ops = {
-   128	};
-   129	
- > 130	static struct msi_domain_info imx_mu_msi_domain_info = {
- > 131		.flags	= (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS),
-   132		.ops	= &imx_mu_msi_irq_ops,
-   133		.chip	= &imx_mu_msi_irq_chip,
-   134	};
-   135	
-   136	static void imx_mu_msi_parent_compose_msg(struct irq_data *data,
-   137						  struct msi_msg *msg)
-   138	{
-   139		struct imx_mu_msi *msi_data = irq_data_get_irq_chip_data(data);
-   140		u64 addr = msi_data->msiir_addr + 4 * data->hwirq;
-   141	
-   142		msg->address_hi = upper_32_bits(addr);
-   143		msg->address_lo = lower_32_bits(addr);
-   144		msg->data = data->hwirq;
-   145	}
-   146	
-   147	static int imx_mu_msi_parent_set_affinity(struct irq_data *irq_data,
-   148					   const struct cpumask *mask, bool force)
-   149	{
-   150		return -EINVAL;
-   151	}
-   152	
-   153	static struct irq_chip imx_mu_msi_parent_chip = {
-   154		.name		= "MU",
-   155		.irq_mask	= imx_mu_msi_parent_mask_irq,
-   156		.irq_unmask	= imx_mu_msi_parent_unmask_irq,
-   157		.irq_ack	= imx_mu_msi_parent_ack_irq,
-   158		.irq_compose_msi_msg	= imx_mu_msi_parent_compose_msg,
-   159		.irq_set_affinity = imx_mu_msi_parent_set_affinity,
-   160	};
-   161	
-   162	static int imx_mu_msi_domain_irq_alloc(struct irq_domain *domain,
-   163						unsigned int virq,
-   164						unsigned int nr_irqs,
-   165						void *args)
-   166	{
-   167		struct imx_mu_msi *msi_data = domain->host_data;
-   168		unsigned long flags;
-   169		int pos, err = 0;
-   170	
-   171		WARN_ON(nr_irqs != 1);
-   172	
-   173		spin_lock_irqsave(&msi_data->lock, flags);
-   174		pos = find_first_zero_bit(&msi_data->used, IMX_MU_CHANS);
-   175		if (pos < IMX_MU_CHANS)
-   176			__set_bit(pos, &msi_data->used);
-   177		else
-   178			err = -ENOSPC;
-   179		spin_unlock_irqrestore(&msi_data->lock, flags);
-   180	
-   181		if (err)
-   182			return err;
-   183	
-   184		irq_domain_set_info(domain, virq, pos,
-   185				    &imx_mu_msi_parent_chip, msi_data,
-   186				    handle_edge_irq, NULL, NULL);
-   187		return 0;
-   188	}
-   189	
-   190	static void imx_mu_msi_domain_irq_free(struct irq_domain *domain,
-   191					       unsigned int virq, unsigned int nr_irqs)
-   192	{
-   193		struct irq_data *d = irq_domain_get_irq_data(domain, virq);
-   194		struct imx_mu_msi *msi_data = irq_data_get_irq_chip_data(d);
-   195		unsigned long flags;
-   196	
-   197		spin_lock_irqsave(&msi_data->lock, flags);
-   198		__clear_bit(d->hwirq, &msi_data->used);
-   199		spin_unlock_irqrestore(&msi_data->lock, flags);
-   200	}
-   201	
-   202	static const struct irq_domain_ops imx_mu_msi_domain_ops = {
- > 203		.alloc	= imx_mu_msi_domain_irq_alloc,
- > 204		.free	= imx_mu_msi_domain_irq_free,
-   205	};
-   206	
-   207	static void imx_mu_msi_irq_handler(struct irq_desc *desc)
-   208	{
-   209		struct imx_mu_msi *msi_data = irq_desc_get_handler_data(desc);
-   210		struct irq_chip *chip = irq_desc_get_chip(desc);
-   211		u32 status;
-   212		int i;
-   213	
-   214		status = imx_mu_read(msi_data, msi_data->cfg->xSR[IMX_MU_RSR]);
-   215	
-   216		chained_irq_enter(chip, desc);
-   217		for (i = 0; i < IMX_MU_CHANS; i++) {
-   218			if (status & IMX_MU_xSR_RFn(msi_data, i))
-   219				generic_handle_domain_irq(msi_data->msi_domain, i);
-   220		}
-   221		chained_irq_exit(chip, desc);
-   222	}
-   223	
-   224	static int imx_mu_msi_domains_init(struct imx_mu_msi *msi_data, struct device *dev)
-   225	{
-   226		struct fwnode_handle *fwnodes = dev_fwnode(dev);
-   227		struct irq_domain *parent;
-   228	
-   229		/* Initialize MSI domain parent */
-   230		parent = irq_domain_create_linear(fwnodes,
-   231						    IMX_MU_CHANS,
-   232						    &imx_mu_msi_domain_ops,
-   233						    msi_data);
-   234		if (!parent) {
-   235			dev_err(dev, "failed to create IRQ domain\n");
-   236			return -ENOMEM;
-   237		}
-   238	
-   239		irq_domain_update_bus_token(parent, DOMAIN_BUS_NEXUS);
-   240	
- > 241		msi_data->msi_domain = platform_msi_create_irq_domain(
-   242					fwnodes,
-   243					&imx_mu_msi_domain_info,
-   244					parent);
-   245	
-   246		if (!msi_data->msi_domain) {
-   247			dev_err(dev, "failed to create MSI domain\n");
-   248			irq_domain_remove(parent);
-   249			return -ENOMEM;
-   250		}
-   251	
-   252		irq_domain_set_pm_device(msi_data->msi_domain, dev);
-   253	
-   254		return 0;
-   255	}
-   256	
-
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 54a9756f2dad..a3bf1707dcd3 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3804,6 +3804,10 @@
+ 
+ 	nox2apic	[X86-64,APIC] Do not enable x2APIC mode.
+ 
++			NOTE: this parameter will be ignored on systems with the
++			LEGACY_XAPIC_DISABLED bit set in the
++			IA32_XAPIC_DISABLE_STATUS MSR.
++
+ 	nps_mtm_hs_ctr=	[KNL,ARC]
+ 			This parameter sets the maximum duration, in
+ 			cycles, each HW thread of the CTOP can run
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index f9920f1341c8..159c025ebb03 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -448,6 +448,11 @@ config X86_X2APIC
+ 	  This allows 32-bit apic IDs (so it can support very large systems),
+ 	  and accesses the local apic via MSRs not via mmio.
+ 
++	  Some Intel systems circa 2022 and later are locked into x2APIC mode
++	  and can not fall back to the legacy APIC modes if SGX or TDX are
++	  enabled in the BIOS.  They will be unable to boot without enabling
++	  this option.
++
+ 	  If you don't know what to do here, say N.
+ 
+ config X86_MPPARSE
+@@ -1919,7 +1924,7 @@ endchoice
+ 
+ config X86_SGX
+ 	bool "Software Guard eXtensions (SGX)"
+-	depends on X86_64 && CPU_SUP_INTEL
++	depends on X86_64 && CPU_SUP_INTEL && X86_X2APIC
+ 	depends on CRYPTO=y
+ 	depends on CRYPTO_SHA256=y
+ 	select SRCU
+diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
+index 8cbf623f0ecf..b472ef76826a 100644
+--- a/arch/x86/include/asm/cpu.h
++++ b/arch/x86/include/asm/cpu.h
+@@ -94,4 +94,6 @@ static inline bool intel_cpu_signatures_match(unsigned int s1, unsigned int p1,
+ 	return p1 & p2;
+ }
+ 
++extern u64 x86_read_arch_cap_msr(void);
++
+ #endif /* _ASM_X86_CPU_H */
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index 6674bdb096f3..1e086b37a307 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -155,6 +155,11 @@
+ 						 * Return Stack Buffer Predictions.
+ 						 */
+ 
++#define ARCH_CAP_XAPIC_DISABLE		BIT(21)	/*
++						 * IA32_XAPIC_DISABLE_STATUS MSR
++						 * supported
++						 */
++
+ #define MSR_IA32_FLUSH_CMD		0x0000010b
+ #define L1D_FLUSH			BIT(0)	/*
+ 						 * Writeback and invalidate the
+@@ -1054,4 +1059,12 @@
+ #define MSR_IA32_HW_FEEDBACK_PTR        0x17d0
+ #define MSR_IA32_HW_FEEDBACK_CONFIG     0x17d1
+ 
++/* x2APIC locked status */
++#define MSR_IA32_XAPIC_DISABLE_STATUS	0xBD
++#define LEGACY_XAPIC_DISABLED		BIT(0) /*
++						* x2APIC mode is locked and
++						* disabling x2APIC will cause
++						* a #GP
++						*/
++
+ #endif /* _ASM_X86_MSR_INDEX_H */
+diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
+index 6d303d1d276c..c6876d3ea4b1 100644
+--- a/arch/x86/kernel/apic/apic.c
++++ b/arch/x86/kernel/apic/apic.c
+@@ -61,6 +61,7 @@
+ #include <asm/cpu_device_id.h>
+ #include <asm/intel-family.h>
+ #include <asm/irq_regs.h>
++#include <asm/cpu.h>
+ 
+ unsigned int num_processors;
+ 
+@@ -1751,11 +1752,26 @@ EXPORT_SYMBOL_GPL(x2apic_mode);
+ 
+ enum {
+ 	X2APIC_OFF,
+-	X2APIC_ON,
+ 	X2APIC_DISABLED,
++	/* All states below here have X2APIC enabled */
++	X2APIC_ON,
++	X2APIC_ON_LOCKED
+ };
+ static int x2apic_state;
+ 
++static bool x2apic_hw_locked(void)
++{
++	u64 ia32_cap;
++	u64 msr;
++
++	ia32_cap = x86_read_arch_cap_msr();
++	if (ia32_cap & ARCH_CAP_XAPIC_DISABLE) {
++		rdmsrl(MSR_IA32_XAPIC_DISABLE_STATUS, msr);
++		return (msr & LEGACY_XAPIC_DISABLED);
++	}
++	return false;
++}
++
+ static void __x2apic_disable(void)
+ {
+ 	u64 msr;
+@@ -1793,6 +1809,10 @@ static int __init setup_nox2apic(char *str)
+ 				apicid);
+ 			return 0;
+ 		}
++		if (x2apic_hw_locked()) {
++			pr_warn("APIC locked in x2apic mode, can't disable\n");
++			return 0;
++		}
+ 		pr_warn("x2apic already enabled.\n");
+ 		__x2apic_disable();
+ 	}
+@@ -1807,10 +1827,18 @@ early_param("nox2apic", setup_nox2apic);
+ void x2apic_setup(void)
+ {
+ 	/*
+-	 * If x2apic is not in ON state, disable it if already enabled
++	 * Try to make the AP's APIC state match that of the BSP,  but if the
++	 * BSP is unlocked and the AP is locked then there is a state mismatch.
++	 * Warn about the mismatch in case a GP fault occurs due to a locked AP
++	 * trying to be turned off.
++	 */
++	if (x2apic_state != X2APIC_ON_LOCKED && x2apic_hw_locked())
++		pr_warn("x2apic lock mismatch between BSP and AP.\n");
++	/*
++	 * If x2apic is not in ON or LOCKED state, disable it if already enabled
+ 	 * from BIOS.
+ 	 */
+-	if (x2apic_state != X2APIC_ON) {
++	if (x2apic_state < X2APIC_ON) {
+ 		__x2apic_disable();
+ 		return;
+ 	}
+@@ -1831,6 +1859,11 @@ static __init void x2apic_disable(void)
+ 	if (x2apic_id >= 255)
+ 		panic("Cannot disable x2apic, id: %08x\n", x2apic_id);
+ 
++	if (x2apic_hw_locked()) {
++		pr_warn("Cannot disable locked x2apic, id: %08x\n", x2apic_id);
++		return;
++	}
++
+ 	__x2apic_disable();
+ 	register_lapic_address(mp_lapic_addr);
+ }
+@@ -1889,7 +1922,10 @@ void __init check_x2apic(void)
+ 	if (x2apic_enabled()) {
+ 		pr_info("x2apic: enabled by BIOS, switching to x2apic ops\n");
+ 		x2apic_mode = 1;
+-		x2apic_state = X2APIC_ON;
++		if (x2apic_hw_locked())
++			x2apic_state = X2APIC_ON_LOCKED;
++		else
++			x2apic_state = X2APIC_ON;
+ 	} else if (!boot_cpu_has(X86_FEATURE_X2APIC)) {
+ 		x2apic_state = X2APIC_DISABLED;
+ 	}
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

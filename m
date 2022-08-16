@@ -2,187 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9381B595D57
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F13595D6A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235757AbiHPN31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43928 "EHLO
+        id S235573AbiHPNbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235651AbiHPN3Z (ORCPT
+        with ESMTP id S235778AbiHPNaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 09:29:25 -0400
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A686AB6D39
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:29:22 -0700 (PDT)
-Received: by mail-qt1-f180.google.com with SMTP id h4so8061745qtj.11
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:29:22 -0700 (PDT)
+        Tue, 16 Aug 2022 09:30:23 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DB5B8A6E
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:30:21 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id x19so14931137lfq.7
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:30:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc;
+        bh=HS3oZr3WBhNNsRHtdxFrbXCE2V9zgobb5QWVf0AGmdY=;
+        b=hkBUgKtApBf6JtTX0hC2k+Z0jGioeWYa6a/JVa5tXkNG5uZjlGMVy4rdTzS/lJfu1T
+         xQauPa0OuY6GxehVYSl1oNh5WJ0ng1KiGGOcziZqY+EdF3tYAdjGVLDMmefJK6oxy41j
+         Jn1C24mnEDkpVsS4W2S1MQa/nnfAvl5vqhwKUJTcrTpG1kwTAgxm3ADXa/zk56cvMupO
+         ILMAcMGCThoDTEwr/DCYvdJx6fjrEq3TKnLfooODc6hMdR4vG7l+ABZX7np5ngETKtgz
+         uOfp/vnx3cHr1H/4DFm7SlEB+1lC/rDinO26R/UwCxf8ycklEy9XQIzzUH937q6T54Uc
+         RQKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=hdhYrvwFVCJ/wIIa+DKIK8qp10gL+xmn48+Cm6GZTzY=;
-        b=jsbjZwxeGQRGwT1SdR+xPeru2lA/mZgpZrAg27ouIi70evum/8Jsg/4csrkDhKDWf2
-         GHanqjAocpVMoSTent7bJ7DDRwHW1xNmuj59Ytru/E9MmljRJk+Yds/r0QDSBloOxYCs
-         Mv9vsip3fOHq57MeyHYYQpZYjw6HZpn5kSY8nvtqhoBhmBJ/DDPtng1ofglpZ3M58xKp
-         gNIT4GvumLza3woC/Chyym14xdHy+YBqXUrq7i0RKc8bN4C3fIV/0Z9hwY9u1044bh1i
-         AW7mC5O+nmOcTK9QUjo7AGEGbj2DvJcX7TfE7cg/0hnJ0lz0AGtbQ/4jr2QbC5RwryTx
-         DAWA==
-X-Gm-Message-State: ACgBeo2q5oM0NCCsx1RwjtrZ0gy4MDplslZ7Qcf3oPuyTa9Jv1jPWjaA
-        G1kZDsNBkgCdP+89FURiia+V1o3KPz4U9Q==
-X-Google-Smtp-Source: AA6agR7/R1EycEKRK8JucE3czcRuN0S3r9RqWj3zDBiHvVYINJ2eFRpflENJYDZ4t8nKrvOiplOC+A==
-X-Received: by 2002:ac8:7e88:0:b0:344:6b01:1146 with SMTP id w8-20020ac87e88000000b003446b011146mr5193161qtj.37.1660656561401;
-        Tue, 16 Aug 2022 06:29:21 -0700 (PDT)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id bb12-20020a05622a1b0c00b0031ef67386a5sm10120297qtb.68.2022.08.16.06.29.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 06:29:20 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-33365a01f29so53082067b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:29:20 -0700 (PDT)
-X-Received: by 2002:a81:502:0:b0:32f:dcc4:146e with SMTP id
- 2-20020a810502000000b0032fdcc4146emr10322596ywf.316.1660656559751; Tue, 16
- Aug 2022 06:29:19 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc;
+        bh=HS3oZr3WBhNNsRHtdxFrbXCE2V9zgobb5QWVf0AGmdY=;
+        b=YIB7dibyKxREq0QWRTYFsLX9AdLULauRbt/KZAvQewHtUjOXrd7aKtNT6eQXN3G2g3
+         uLwZa8YIxkrI0gJ4Zv72O0tkhN0Tlm01F5rArQubjClD3B9e3TJAEWdWQD3PRtrmJqVE
+         fbOVxsL60vFF4TZBOPRZZIys5H0CGGijmWRK60j1WeHbLDv6QzZ3uKTjpL4t3twSOUi/
+         vmoX+5s2N7F3u0mL/FSnSC63tNjkIhlLQv6rDpYN13boYzVX9ym59wefN6kGviJAzCYS
+         4y+QK4SvZ1YuEaUEI7yvbeMpWp1usPK200KnSe+LuN7r1IXf0sVH3C3Dx2LvtLex1+kV
+         o4mQ==
+X-Gm-Message-State: ACgBeo2vrTCMXraieH2rAG7wmwPZ22QrgIKGia/4vNk3tUQ9qPuotPfY
+        5UzXdxgIUS4Tgv3zR5XBfXLhCAWcExUS+LXz
+X-Google-Smtp-Source: AA6agR5tpEp1fDlN49U9Zv9v0kUqYCywdThruRzO+ILElAG4Qm47gDL97wqjtoPF51H2AioBtrdEvQ==
+X-Received: by 2002:a05:6512:3f0e:b0:48a:5edd:99b2 with SMTP id y14-20020a0565123f0e00b0048a5edd99b2mr6712350lfa.124.1660656619410;
+        Tue, 16 Aug 2022 06:30:19 -0700 (PDT)
+Received: from krzk-bin.. (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
+        by smtp.gmail.com with ESMTPSA id k19-20020a2eb753000000b0025e42f8e771sm1816301ljo.34.2022.08.16.06.30.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 06:30:18 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Tomasz Figa <tomasz.figa@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/2] pinctrl/arm: dt-bindings: deprecate header with register constants
+Date:   Tue, 16 Aug 2022 16:30:14 +0300
+Message-Id: <20220816133016.77553-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
- <CAMuHMdWYo7M44uLNhTmJenGDreGALBZ9E48oyBDEeAuL=0h=dw@mail.gmail.com> <20220816132040.uwirtjm5yr6rdd3q@houat>
-In-Reply-To: <20220816132040.uwirtjm5yr6rdd3q@houat>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 16 Aug 2022 15:29:07 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWevP=3af=NneAJEDfOR+sz1thrQEhAQPNGrgitBtLjGA@mail.gmail.com>
-Message-ID: <CAMuHMdWevP=3af=NneAJEDfOR+sz1thrQEhAQPNGrgitBtLjGA@mail.gmail.com>
-Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Dom Cobley <dom@raspberrypi.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
+Hi,
 
-On Tue, Aug 16, 2022 at 3:20 PM Maxime Ripard <maxime@cerno.tech> wrote:
-> On Fri, Aug 12, 2022 at 03:25:18PM +0200, Geert Uytterhoeven wrote:
-> > > --- a/drivers/gpu/drm/drm_connector.c
-> > > +++ b/drivers/gpu/drm/drm_connector.c
-> > > @@ -1649,11 +1650,40 @@ EXPORT_SYMBOL(drm_mode_create_tv_margin_properties);
-> > >   * 0 on success or a negative error code on failure.
-> > >   */
-> > >  int drm_mode_create_tv_properties(struct drm_device *dev,
-> > > +                                 unsigned int supported_tv_norms,
-> > >                                   unsigned int num_modes,
-> > >                                   const char * const modes[])
-> > >  {
-> > > +       static const struct drm_prop_enum_list tv_norm_values[] = {
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_NTSC_443) - 1, "NTSC-443" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_NTSC_J) - 1, "NTSC-J" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_NTSC_M) - 1, "NTSC-M" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_60) - 1, "PAL-60" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_B) - 1, "PAL-B" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_D) - 1, "PAL-D" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_G) - 1, "PAL-G" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_H) - 1, "PAL-H" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_I) - 1, "PAL-I" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_M) - 1, "PAL-M" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_N) - 1, "PAL-N" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_NC) - 1, "PAL-Nc" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_60) - 1, "SECAM-60" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_B) - 1, "SECAM-B" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_D) - 1, "SECAM-D" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_G) - 1, "SECAM-G" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_K) - 1, "SECAM-K" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_K1) - 1, "SECAM-K1" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_L) - 1, "SECAM-L" },
-> >
-> > The above are analog standards, with a variable horizontal resolution.
-> >
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_HD480I) - 1, "hd480i" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_HD480P) - 1, "hd480p" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_HD576I) - 1, "hd576i" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_HD576P) - 1, "hd576p" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_HD720P) - 1, "hd720p" },
-> > > +               { __builtin_ffs(DRM_MODE_TV_NORM_HD1080I) - 1, "hd1080i" },
-> >
-> > The above are digital standards, with a fixed resolution.
->
-> Are they?
->
-> It's not clear to me from looking at nouveau, but I was under the
-> impression that they were modes for a component output, so CEA 770.3. I
-> don't have the spec though, so I can't check.
+Changes since v3
+================
+1. Add patch 1 - bindings example fixes.
+2. All dependencies were merged, so this can go via Samsung pinctrl tree.
 
-Oh right, I forgot about analog HD over component, where you can use
-other pixel clocks than in the digital standard.
+Changes since v2
+================
+1. Split last bindings patch per driver changes and bindings.
+2. Add tags.
 
-> > You seem to have missed "hd1080p"?
->
-> Nobody is using it. If we ever have a driver that uses it I think we can
-> add it.
+Changes since v1
+================
+1. Correct title (in the comment) of each header (Chanho).
+2. Patch #7: Adjust warning message.
+3. Add tags.
 
-The PS3 supports 1080p over component
-https://manuals.playstation.net/document/en/ps3/current/settings/videooutput.html
+Description
+===========
+The Samsung pin controller drivers were always expecting DTS to use raw
+register values for pin configuration (e.g. pull up/down, drive strength).  DTS
+had these values hard-coded all over, so at some point we decided for
+convenience to move them to dt-bindings header.  Less code duplication, some
+meaning added to raw number, etc.
 
-> > In addition, "hd720p", "hd080i", and "hd1080p" are available in both 50
-> > and 60 (actually 59.94) Hz, while "hd1080p" can also use 24 or 25 Hz.
->
-> It looks like nouveau only exposes modes for 480p at 59.94Hz, 576p at
-> 50Hz, 720p at 60Hz, 1080i at 30Hz.
+However these constants do not fit the purpose of bindings.  They do not
+provide any abstraction, any hardware and driver independent ID.  With minor
+exceptions, the Linux drivers actually do not use the bindings header at
+all.  Because of this "dt-bindings ID" approach, these constants were re-used
+between chips, e.g. Exynos ones in S5PV210.  These does not make much sense
+because the values between Exynos and S5PV210 (or S3C24xx) are not related.  If
+it was an abstraction ID, this would be fine. But it's not.
 
-PS3 supports both 50 and 60 Hz (same link above).
+Clean this up by:
+1. Moving the constants to DTS-local headers.
+2. Deprecating the bindings header.
 
-> > Either you have to add them here (e.g. "hd720p50" and "hd720p60"), or
-> > handle them through "@<refresh>".  The latter would impact "[PATCH v1
-> > 09/35] drm/modes: Move named modes parsing to a separate function", as
-> > currently a named mode and a refresh rate can't be specified both.
->
-> I think the former would make more sense. It simplifies a bit the
-> parser, and we're going to use a named mode anyway.
->
-> > As "[PATCH v1 34/35] drm/modes: Introduce the tv_mode property as a
-> > command-line option" uses a separate "tv_mode" option, and not the main
-> > mode name, I think you want to add them here.
->
-> It's a separate story I think, we could have a named mode hd720p50,
-> which would be equivalent to 1280x720,tv_mode=hd720p
+Tested by comparing DTBs (dtx_diff, fdtdump).
 
-So where's the field rate in "1280x720,tv_mode=hd720p"?
+Best regards,
+Krzysztof
 
-Gr{oetje,eeting}s,
+Krzysztof Kozlowski (2):
+  dt-bindings: pinctrl: samsung: stop using bindings header with
+    constants
+  dt-bindings: pinctrl: samsung: deprecate header with register
+    constants
 
-                        Geert
+ .../pinctrl/samsung,pinctrl-pins-cfg.yaml     |  1 -
+ .../bindings/pinctrl/samsung,pinctrl.yaml     | 63 ++++++++-----------
+ include/dt-bindings/pinctrl/samsung.h         |  7 +++
+ 3 files changed, 34 insertions(+), 37 deletions(-)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-- 
+2.34.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

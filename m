@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 156C6596316
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F512596324
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237161AbiHPTZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 15:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
+        id S237199AbiHPT2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 15:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237156AbiHPTZm (ORCPT
+        with ESMTP id S237177AbiHPT1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 15:25:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7787549C;
-        Tue, 16 Aug 2022 12:25:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 16 Aug 2022 15:27:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4D67549C
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:27:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660678068;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AdMi5hAffNheIEpe+PDcz4KKHqhLgVrtN02bVmFviGo=;
+        b=ZTk6SZqx+RRZenOWJjcPwJxjM8s0uAcmgQdFnzGkxALtTlC25qwl2XVMM2G6aUVbhek1K2
+        6CScuwZhF5Dbll3onqVWu39GwCWePTioyPLaIL1OZ9Z2iXFCx2lcRp4m+YhUYesZLXQGxP
+        g3i5RhtqTchzswQaMtsBKvWoX6Airnk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-462-3UYZxSw9PVS8DynTZNmmKw-1; Tue, 16 Aug 2022 15:27:44 -0400
+X-MC-Unique: 3UYZxSw9PVS8DynTZNmmKw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F24BD61449;
-        Tue, 16 Aug 2022 19:25:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 312AAC433C1;
-        Tue, 16 Aug 2022 19:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660677937;
-        bh=XjTfd+V+GT/DlFSYxIKxS+oQDaAKsyKqTh3uSDGCIeg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F/YRjeydG3WfemscVqTTVwYaq0sNyT6+i8ZAPAPCfT1mnEZGash0UOWzLzUVMi8Qq
-         9McluBUVZDVBYyEetWmolZyhuDXsf0TlDTYPBQSZqr5BbefjH1LGXrcHOMcjG+auWO
-         4RHhWVfVj3txDwkD3PBGrFZsNRACBzaVJoa3DB8OILEaehkBxQX18VIC9yFXIsn8Sx
-         Q+Eiior8CZ0wLhABJflnpIy16eDJUbFigcgmi1mcpw9z0RROAUGcKkU+Vmya5gDS/m
-         HE+0mpWnMN2WMxjYFDztgkNeEyddbDOu5BmQacKNDoj7333P7ohcNWDSZiwbC0mZZg
-         JUBlvH76SH+pg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id CD7F64035A; Tue, 16 Aug 2022 16:25:33 -0300 (-03)
-Date:   Tue, 16 Aug 2022 16:25:33 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Mayuresh Chitale <mchitale@ventanamicro.com>, linux@yadro.com,
-        Genevieve Chan <genevieve.chan@starfivetech.com>,
-        =?iso-8859-1?Q?Jo=E3o_M=E1rio?= Domingos 
-        <joao.mario@tecnico.ulisboa.pt>,
-        Nikita Shubin <n.shubin@yadro.com>,
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 091C03800C27;
+        Tue, 16 Aug 2022 19:27:44 +0000 (UTC)
+Received: from llong.com (unknown [10.22.10.201])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D6B801121314;
+        Tue, 16 Aug 2022 19:27:42 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Kautuk Consul <kconsul@ventanamicro.com>
-Subject: Re: [PATCH v5] perf arch events: riscv sbi firmware std event files
-Message-ID: <YvvvLUnVaO+Fvw3U@kernel.org>
-References: <20220628114625.166665-1-nikita.shubin@maquefel.me>
- <20220628114625.166665-4-nikita.shubin@maquefel.me>
- <18c8e9c74955c08fdbd631a35c51b30f3cff3cd3.camel@ventanamicro.com>
- <20220811112303.4e5f0566@redslave.neermore.group>
- <Yvas60duFUkSzuz+@kernel.org>
- <20220815162755.7ed970c6@redslave.neermore.group>
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Will Deacon <will@kernel.org>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v5 0/3] sched, cgroup/cpuset: Keep user set cpus affinity
+Date:   Tue, 16 Aug 2022 15:27:31 -0400
+Message-Id: <20220816192734.67115-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815162755.7ed970c6@redslave.neermore.group>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,17 +70,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Aug 15, 2022 at 04:27:55PM +0300, Nikita Shubin escreveu:
-> > If I get this today it may even get into v6.0. :-)
- 
-> Well... i missed it :), on the other hand this series depends on 
-> https://lkml.org/lkml/2022/7/27/23 
-> which hasn't been merged yet.
- 
-> Just have sent a v6 series.
- 
-> Thank you for review!
+v5:
+ - Update patch 3 to handle race with concurrent sched_setaffinity()
+   by rechecking a previously cleared user_cpus_ptr afterward.
 
-Ok! Hopefully it'll make 6.1 then. :-)
+v4:
+ - Update patch 1 to make sched_setaffinity() the only function to
+   update user_cpus_ptr to make the logic simpler and
+   easier to understand. restrict_cpus_allowed_ptr() and
+   relax_compatible_cpus_allowed_ptr() will just use it if present.
 
-- Arnaldo
+v3:
+ - Attach a new patch 2 to introduce a copy_user_cpus_mask() to copy
+   out user masks with lock protection & use it in patch 3.
+
+v2:
+ - Rework the v1 patch by extending the semantics of user_cpus_ptr to
+   store user set cpus affinity and keeping to it as much as possible.
+
+The user_cpus_ptr field is added by commit b90ca8badbd1 ("sched:
+Introduce task_struct::user_cpus_ptr to track requested affinity")
+which uses it narrowly to allow keeping cpus affinity intact with
+asymmetric cpu setup.
+
+This patchset extends user_cpus_ptr to store user set cpus affinity via
+sched_setaffinity() API. With that information available, it will enable
+cpuset to keep cpus afinity as close to what the user wants as possible
+within the cpu list constraint of the current cpuset. Otherwise some
+change to the cpuset hierarchy may reset the cpumask of the tasks in
+the affected cpusets to the default cpuset value even if those tasks
+have cpus affinity explicitly set by the users before.
+
+It also means that once sched_setaffinity() is called, user_cpus_ptr
+will remain allocated until the task exits.
+
+Waiman Long (3):
+  sched: Use user_cpus_ptr for saving user provided cpumask in
+    sched_setaffinity()
+  sched: Provide copy_user_cpus_mask() to copy out user mask
+  cgroup/cpuset: Keep user set cpus affinity
+
+ include/linux/sched.h  |   1 +
+ kernel/cgroup/cpuset.c |  42 ++++++++++++++-
+ kernel/sched/core.c    | 119 ++++++++++++++++++++++++-----------------
+ kernel/sched/sched.h   |   1 -
+ 4 files changed, 112 insertions(+), 51 deletions(-)
+
+-- 
+2.31.1
+

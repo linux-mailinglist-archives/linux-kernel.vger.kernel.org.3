@@ -2,102 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0366459567A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CEF159567E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233499AbiHPJcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46464 "EHLO
+        id S233590AbiHPJcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232453AbiHPJam (ORCPT
+        with ESMTP id S233558AbiHPJcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:30:42 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB992F01D
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:52:35 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id f20so13708900lfc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:52:35 -0700 (PDT)
+        Tue, 16 Aug 2022 05:32:11 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738F2205D4
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:54:33 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id v4so4253015pgi.10
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:54:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=lQtHUsLH/WWCjoSjGefd7DortRFai1vXhVwE4aiVS2E=;
-        b=Gpqfoc8EPuBG/IljADnLwp/zZ7Nu6MdA2w8NhpnOCBNu9qs8xm0QIuRHmed86YGInA
-         z4FqE3LGcbyeZKuqzdqYkN3c7is6lO+R1yDTrwClA4vLaTzzDnWBF3Y+txa+1VBeypwr
-         SaXP//AlTJcEacqBsAGcykak0VHCzos8jgsTjyfbQylCtiWDMjOukU1f6fWR8YdymijK
-         7lviToGRHXGreerj/g15B8oy2C0mBKLXa1WY5LCOq+2qX3GOrnjj6iOBcMs9pTZFdbT6
-         3huQNMrBaYBMsrC6JzASl+D7SxlxSZl9GL8z8CJR6Zvlap0LH1vi0c2jCGq5oiiM3Lrq
-         48qw==
+        d=quanta-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=Q+2OJPxyAh41VkQNVhVIveQFr71J1YrrJRjA24sZS6s=;
+        b=Gr5cK8eokw/wW8HUesUmQvbAMvIqb3T6PNglwlE8uUDGw1OFSrNVzSOuPTB7JPBYPl
+         ZrDxIW4BfGbb4vWF7FjuEqhnEt+KLy2hdGz2dbt90MVeo9hrivk3iivUgHcbSUVlFBtv
+         agnXviWLUHnTQKZetBQkBjBzM2d9UtvXJd83uM0iXGjlhMX9mKIREF4PfLosmPZxNtTr
+         XPnpkEg9f8R98swVFTKVwt+OvX5RKLTKvxHYqhMauzA4+lmiJSG83fdwlI0x4lbda4mj
+         tWewh+ubCectSST3toS7g9bKvCIXng0L0OTcaEveLhWt8295/RUXe8k8gqF/fufbBUNV
+         cHww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=lQtHUsLH/WWCjoSjGefd7DortRFai1vXhVwE4aiVS2E=;
-        b=4qykzLIU3s1/l3DbfsBgjThNyGh9TdaK5IMPnH0F1A5ACNdruRGpuGZXrFAL3KQk1I
-         7ZSia4E4lURQMMOjsnwRz45w++UZj60LHVFKRJGOqjBI1HSZBMSx7uUue/OBq1gvmh+8
-         hzz1oiSy+NNXaJDJzDgkXxA97Sf8Yp8Hmbevzmjc0OGuWGi96vIVvdHRT6UDuhIlNqfA
-         /SX3ccW+0WIHRFRSEeYRMbPH/8nN66YjQHRvEkKB6w0XNurVj2478VbGPhPxTazwAITB
-         h0eacPquZAyCuFT62SkhT8cWjkOvIm3tEKrVDBJH2EDMiWeifgNOeSX3YloGLSeM0cRs
-         hJcg==
-X-Gm-Message-State: ACgBeo2g/bn1kous5mfnXb5/hGdz3MRsC948n/b6I18uv3LGrDXuF7+t
-        /sPONeLODmDaK7dPHJaza3sx98k5FKdnY0XO
-X-Google-Smtp-Source: AA6agR5VnT3udntrZZ7EpKwe70edEBA0fLvgAKcwEb7zHnAozngFaACreSwQIdagnlyVDCnpihCy4A==
-X-Received: by 2002:a05:6512:ba2:b0:48b:7c:84 with SMTP id b34-20020a0565120ba200b0048b007c0084mr6544937lfv.48.1660636353707;
-        Tue, 16 Aug 2022 00:52:33 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id s3-20020a056512314300b0048aa0ab6448sm1312234lfi.15.2022.08.16.00.52.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 00:52:33 -0700 (PDT)
-Message-ID: <8b912cdd-e69d-dea0-046e-6e02a9984859@linaro.org>
-Date:   Tue, 16 Aug 2022 10:52:31 +0300
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=Q+2OJPxyAh41VkQNVhVIveQFr71J1YrrJRjA24sZS6s=;
+        b=0qJuQFvzF4YYM4IsPw5+kIuKJ3bgLacfMB/hLb7a6jojxP02yeduDi+VJgyhQqKwNG
+         VAlrhuqsG8ZLICL8QLpvyjnUn5GMfLRuDp5raNHmrV8hJ6Gb+HTCRwb3h0LdLYCuPuP/
+         dHFTUH422F8IkqhD1+XVWOuHmqDmOHUASi2xrPRrVNdR/bwmtlMzA2HxSQ2qNVP8xdpW
+         HcZoSitdgkxkYqRIVUKrlybUCmummzmf70n9ixzOK1b2RtTtu9bElxFPmYbrTJtiEq/e
+         P/aYJSEUU5+Xi43uJ8oL1+aPNSkTfrIQ2iPLj2M/pq5tUS6TRqDbzbhjuD6uh/uKMNdF
+         gbVg==
+X-Gm-Message-State: ACgBeo1/BLFds06ViQEAZvuUYFI/YUpZP+FXGv4oAZFYckwiLIgHB2Cs
+        xERETrFTirVvaPmLMf1ETKddRg==
+X-Google-Smtp-Source: AA6agR6D9B+2I/h+hZSwACo5e4NCzdYEYH/wXIDeXMr84ap6jJDKP8sEYnl6/SNzQqLQnYXdwx+L3A==
+X-Received: by 2002:a05:6a00:1a44:b0:528:6af7:ff4a with SMTP id h4-20020a056a001a4400b005286af7ff4amr20222768pfv.78.1660636473521;
+        Tue, 16 Aug 2022 00:54:33 -0700 (PDT)
+Received: from sean-biuld-server.itotolink.net (1-34-200-211.hinet-ip.hinet.net. [1.34.200.211])
+        by smtp.gmail.com with ESMTPSA id d65-20020a621d44000000b0052c7ff2ac74sm8035010pfd.17.2022.08.16.00.54.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 00:54:33 -0700 (PDT)
+From:   Sean Hong <sean.hong@quanta.corp-partner.google.com>
+To:     pierre-louis.bossart@linux.intel.com, perex@perex.cz,
+        tiwai@suse.com, brent.lu@intel.com
+Cc:     cezary.rojewski@intel.com, liam.r.girdwood@linux.intel.com,
+        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
+        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
+        broonie@kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        Sean Hong <sean.hong@quanta.corp-partner.google.com>
+Subject: [PATCH v2] ASoC: Intel: sof_rt5682: Add support for jsl_rt5682_rt1019
+Date:   Tue, 16 Aug 2022 15:54:24 +0800
+Message-Id: <20220816075424.1245593-1-sean.hong@quanta.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 3/8] dt-bindings: soc: renesas: renesas.yaml: Document
- Renesas RZ/Five SoC
-Content-Language: en-US
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Conor Dooley <Conor.Dooley@microchip.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-References: <20220815151451.23293-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220815151451.23293-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220815151451.23293-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/08/2022 18:14, Lad Prabhakar wrote:
-> Document Renesas RZ/Five (R9A07G043) SoC.
-> 
-> More info about RZ/Five SoC:
-> https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-mpus/rzfive-risc-v-general-purpose-microprocessors-risc-v-cpu-core-andes-ax45mp-single-10-ghz-2ch-gigabit-ethernet
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+This patch adds the driver data for rt5682 support jsl_rt5682_rt1019.
 
+Signed-off-by: Sean Hong <sean.hong@quanta.corp-partner.google.com>
+---
+ sound/soc/intel/boards/sof_rt5682.c               |  9 +++++++++
+ sound/soc/intel/common/soc-acpi-intel-jsl-match.c | 12 ++++++++++++
+ 2 files changed, 21 insertions(+)
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+diff --git a/sound/soc/intel/boards/sof_rt5682.c b/sound/soc/intel/boards/sof_rt5682.c
+index 045965312..3a840f3a9 100644
+--- a/sound/soc/intel/boards/sof_rt5682.c
++++ b/sound/soc/intel/boards/sof_rt5682.c
+@@ -1100,6 +1100,15 @@ static const struct platform_device_id board_ids[] = {
+ 					SOF_RT5682_SSP_AMP(1) |
+ 					SOF_RT5682_NUM_HDMIDEV(4)),
+ 	},
++	{
++		.name = "jsl_rt5682_rt1019",
++		.driver_data = (kernel_ulong_t)(SOF_RT5682_MCLK_EN |
++					SOF_RT5682_MCLK_24MHZ |
++					SOF_RT5682_SSP_CODEC(0) |
++					SOF_SPEAKER_AMP_PRESENT |
++					SOF_RT1019_SPEAKER_AMP_PRESENT |
++					SOF_RT5682_SSP_AMP(1)),
++	},
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(platform, board_ids);
+diff --git a/sound/soc/intel/common/soc-acpi-intel-jsl-match.c b/sound/soc/intel/common/soc-acpi-intel-jsl-match.c
+index b95c4b2cd..e374bf163 100644
+--- a/sound/soc/intel/common/soc-acpi-intel-jsl-match.c
++++ b/sound/soc/intel/common/soc-acpi-intel-jsl-match.c
+@@ -29,6 +29,11 @@ static const struct snd_soc_acpi_codecs rt1015p_spk = {
+ 	.codecs = {"RTL1015"}
+ };
+ 
++static struct snd_soc_acpi_codecs rt1019p_spk = {
++	.num_codecs = 1,
++	.codecs = {"RTL1019"}
++};
++
+ static const struct snd_soc_acpi_codecs mx98360a_spk = {
+ 	.num_codecs = 1,
+ 	.codecs = {"MX98360A"}
+@@ -78,6 +83,13 @@ struct snd_soc_acpi_mach snd_soc_acpi_intel_jsl_machines[] = {
+ 		.quirk_data = &mx98360a_spk,
+ 		.sof_tplg_filename = "sof-jsl-rt5682-mx98360a.tplg",
+ 	},
++	{
++		.comp_ids = &rt5682_rt5682s_hp,
++		.drv_name = "jsl_rt5682_rt1019",
++		.machine_quirk = snd_soc_acpi_codec_list,
++		.quirk_data = &rt1019p_spk,
++		.sof_tplg_filename = "sof-jsl-rt5682-rt1019.tplg",
++	},
+ 	{
+ 		.id = "10134242",
+ 		.drv_name = "jsl_cs4242_mx98360a",
+-- 
+2.25.1
 
-
-Best regards,
-Krzysztof

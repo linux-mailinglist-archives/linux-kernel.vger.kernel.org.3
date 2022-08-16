@@ -2,121 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4CAA5952B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 08:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC085952AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 08:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbiHPGk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 02:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47074 "EHLO
+        id S229706AbiHPGjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 02:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiHPGj5 (ORCPT
+        with ESMTP id S229673AbiHPGjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 02:39:57 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68FE8F971;
-        Mon, 15 Aug 2022 20:25:26 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id dc19so16619619ejb.12;
-        Mon, 15 Aug 2022 20:25:26 -0700 (PDT)
+        Tue, 16 Aug 2022 02:39:18 -0400
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6118529F1AA
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 20:25:56 -0700 (PDT)
+Received: by mail-oo1-xc2f.google.com with SMTP id a1-20020a4ab101000000b0044acf001f83so21960ooo.10
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 20:25:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=0+fOHte+oOjdt0ZcS9IxeZxJv4FE7v9fXbd9M9vTVIU=;
-        b=KpnzdQRG3/WPprMvYVg5B3iZfpc5bUgwIiRuujqtM8qqYLp5nR8x01nJ5ZS1xvL4uy
-         871+vwwCOc0PkvDt0siufAeAvqFMyj3JcLqAgmA53l/CKS9Sw87+XeRs4L/vdhGF9Qb8
-         vQr4ksYMFRpJxhkifOawB1CCYt5Ez29v4PeyZxtvNg0lZ3xl2hVyclINQ/AJCgyoVP4k
-         FW+03YnPcO8gPujo9nCTQ1LI5qEQE3B+Vqy2lUbFwhYO6XFmo0rckz82YVudlT0BQiF6
-         2MeZ2KAdjj3yRRykrleJ7rIpNyIWorxYK8y73Jk4M/yBXD8vWI9M2Wd0M6Lx6tvYlOOJ
-         M4HA==
+        bh=zaeaXOVhK8m3M+XNtVCsn3FcDPtm1Tez2CwtXwPcxOY=;
+        b=ARpEypITrGuMgsrdF/wN/8bNfpLSXuim/YQsP6UIexuLvx9eah8yn7l0kXMXTyjwRE
+         8qEhtjeKt2qs0E1Bh8Eo4E50vhNsHzDuxXjsy8Vj9b9wOEz7F0cKQq91DTLmhFa8ZmzR
+         ZSRerEin4ZzObLPGAcdjLG4Oct5E0rKGX6n6LyKNvFmuGYb+0/8nwNP9weHRw7JRtPG5
+         gDR5e0wMYm2WtchMcwKiu6iURzB2Z2tlaVfJsciS3HYKxa4MxLUHIx30a6b/OAROicQN
+         6sijuR8Y27JwEPCvlIQ3zLMZyP7xl11JHJDUrGgbcAyEL0jSsQP3GnvvVETSqzGeMEgX
+         tVgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=0+fOHte+oOjdt0ZcS9IxeZxJv4FE7v9fXbd9M9vTVIU=;
-        b=rnsM3rnt7WRz9Phw7Luz5e1w1mWH0xmbbGdPLMFMh6KGDqleshmxLWGZDSphy7n5JK
-         mHzo0V5XvZ4WGFinmvcY2j7N/Tx39tCpOw/74aIY8MKdY1asp93+h20lO+x5bo6hERcG
-         r4uu8fQWFZ2Y+Qj/ELFDTiGmjMxG9uXqQAJYv4ZtibLrcDLLbIXRZScNW+6eeOzdgWVC
-         5Lp2pQHOGVnlBtr/WkdAmVU8wdzBxEreMeOEFHW7feQ2fRCclWXtbrpqJpms9I7dkCJR
-         rtJ7hAsnCTNDI3C5Tl+k0ebVMawphHO0Y3fAfd8usNL+gK2IFAirN6gvMHD1wxbgYisl
-         j/gA==
-X-Gm-Message-State: ACgBeo0SpsGyT3bDHT5iyIQy5/ZE0I8IoaZbMcNtKF51POyaeZOxt1xy
-        DVe567ph+1dreIKOkoE+BJkH7OU0xzqweovTLSk=
-X-Google-Smtp-Source: AA6agR5oYGYEN7tCYcsQ/OzI6j2xbu1zrOO3eqEuqP57x4iCag+XkjYWhCQ30rAR4Jnv1yY7d+T0zoSsowi2FCi0TFk=
-X-Received: by 2002:a17:907:d9e:b0:731:1a5:8c68 with SMTP id
- go30-20020a1709070d9e00b0073101a58c68mr12186610ejc.365.1660620324829; Mon, 15
- Aug 2022 20:25:24 -0700 (PDT)
+        bh=zaeaXOVhK8m3M+XNtVCsn3FcDPtm1Tez2CwtXwPcxOY=;
+        b=WN0b/sEtfaHA06c9MI0fpnQw7jw1XkzGvQdmmqtoCM2SDIW6UBbsR1GG86NNvZhPyz
+         YH8hJvxz1dBZyRQl9xJYshlzXrhTdPMclSIboPYZhAzpm7aCyHGsgBtkruSghhTVicvl
+         abn0+aA4CzggAe8Heb9OZbgsbOmv+frOd2xwSsQ3WuY83AowddTy7dtaIydZ7s6mwxON
+         7CVlBbJD8gPKGxP8+viWoSv0cONchAY21VFAswN84ho+iBOuoBjrFopkHGUhuQv9kcl6
+         YehvQVDzS8Yt7RUJfYiI01RretTzf4SWP48nAlKIBJ/K4JJ9gMN9arDobOmAmT0+4LfF
+         adOQ==
+X-Gm-Message-State: ACgBeo2NX3Aitgl7TJkybCowZ6/Vir2XCDU8oyOjSRYDo+Gp5+ZPO7Th
+        AunamwCU/8bS6yebSSpWx7L7tIfSPvrAHtFAh5lO
+X-Google-Smtp-Source: AA6agR5jcjvLLnXLLTG9WPjI04CMRso162GWkwQVn+kAtpYa5HfLpsgdVT8wApsA1aQLcKFgfc03rLsSBvXINeCUPls=
+X-Received: by 2002:a4a:1103:0:b0:435:4c6c:6f92 with SMTP id
+ 3-20020a4a1103000000b004354c6c6f92mr5750472ooc.26.1660620355452; Mon, 15 Aug
+ 2022 20:25:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220815175114.23576-1-konishi.ryusuke@gmail.com>
- <YvqP/f2P2YgIIO9U@ZenIV> <CAKFNMomyjXpsz-=BtG+G3q1J7CFUBMEfP13FfxwhWB==9qb++w@mail.gmail.com>
- <YvrQ8xO9Lx7rdKq8@ZenIV> <CAKFNMoniwM5x0w03cezGTFDWt=apNmGWpur83+vjghg3zcawpQ@mail.gmail.com>
-In-Reply-To: <CAKFNMoniwM5x0w03cezGTFDWt=apNmGWpur83+vjghg3zcawpQ@mail.gmail.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Tue, 16 Aug 2022 11:24:10 +0800
-Message-ID: <CAD-N9QW5-kVR85t1canTqrF9RMkOjC1Z2q8BSQKxLwaay97Mgg@mail.gmail.com>
-Subject: Re: [PATCH] nilfs2: fix use-after-free bug in nilfs_mdt_destroy()
-To:     Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-nilfs <linux-nilfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jiacheng Xu <stitch@zju.edu.cn>
+References: <165970659095.2812394.6868894171102318796.stgit@warthog.procyon.org.uk>
+ <CAFqZXNv+ahpN3Hdv54ixa4u-LKaqTtCyjtkpzKGbv7x4dzwc0Q@mail.gmail.com>
+In-Reply-To: <CAFqZXNv+ahpN3Hdv54ixa4u-LKaqTtCyjtkpzKGbv7x4dzwc0Q@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 15 Aug 2022 23:25:44 -0400
+Message-ID: <CAHC9VhTpqvFbjKG5FMKGRBRHavOUrsCSFgayh+BNgSrry8bWLg@mail.gmail.com>
+Subject: Re: [PATCH v3] nfs: Fix automount superblock LSM init problem,
+ preventing sb sharing
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Scott Mayhew <smayhew@redhat.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        linux-nfs <linux-nfs@vger.kernel.org>,
+        SElinux list <selinux@vger.kernel.org>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        dwysocha@redhat.com,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 11:11 AM Ryusuke Konishi
-<konishi.ryusuke@gmail.com> wrote:
+On Thu, Aug 11, 2022 at 8:28 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+> On Fri, Aug 5, 2022 at 3:36 PM David Howells <dhowells@redhat.com> wrote:
+> > When NFS superblocks are created by automounting, their LSM parameters
+> > aren't set in the fs_context struct prior to sget_fc() being called,
+> > leading to failure to match existing superblocks.
+> >
+> > Fix this by adding a new LSM hook to load fc->security for submount
+> > creation when alloc_fs_context() is creating the fs_context for it.
+> >
+> > However, this uncovers a further bug: nfs_get_root() initialises the
+> > superblock security manually by calling security_sb_set_mnt_opts() or
+> > security_sb_clone_mnt_opts() - but then vfs_get_tree() calls
+> > security_sb_set_mnt_opts(), which can lead to SELinux, at least,
+> > complaining.
+> >
+> > Fix that by adding a flag to the fs_context that suppresses the
+> > security_sb_set_mnt_opts() call in vfs_get_tree().  This can be set by NFS
+> > when it sets the LSM context on the new superblock.
+> >
+> > The first bug leads to messages like the following appearing in dmesg:
+> >
+> >         NFS: Cache volume key already in use (nfs,4.2,2,108,106a8c0,1,,,,100000,100000,2ee,3a98,1d4c,3a98,1)
+> >
+> > Changes
+> > =======
+> > ver #2)
+> >  - Made LSM parameter extraction dependent on fc->purpose ==
+> >    FS_CONTEXT_FOR_SUBMOUNT.  Shouldn't happen on FOR_RECONFIGURE.
+> >
+> > ver #2)
+> >  - Added Smack support
+> >  - Made LSM parameter extraction dependent on reference != NULL.
+> >
+> > Signed-off-by: David Howells <dhowells@redhat.com>
+> > Fixes: 9bc61ab18b1d ("vfs: Introduce fs_context, switch vfs_kern_mount() to it.")
+> > Fixes: 779df6a5480f ("NFS: Ensure security label is set for root inode)
+> > cc: Trond Myklebust <trond.myklebust@hammerspace.com>
+> > cc: Anna Schumaker <anna@kernel.org>
+> > cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> > cc: Scott Mayhew <smayhew@redhat.com>
+> > cc: Jeff Layton <jlayton@kernel.org>
+> > cc: Paul Moore <paul@paul-moore.com>
+> > cc: Casey Schaufler <casey@schaufler-ca.com>
+> > cc: linux-nfs@vger.kernel.org
+> > cc: selinux@vger.kernel.org
+> > cc: linux-security-module@vger.kernel.org
+> > cc: linux-fsdevel@vger.kernel.org
+> > ---
+> >
+> >  fs/fs_context.c               |    4 +++
+> >  fs/nfs/getroot.c              |    1 +
+> >  fs/super.c                    |   10 ++++---
+> >  include/linux/fs_context.h    |    1 +
+> >  include/linux/lsm_hook_defs.h |    1 +
+> >  include/linux/lsm_hooks.h     |    6 +++-
+> >  include/linux/security.h      |    6 ++++
+> >  security/security.c           |    5 +++
+> >  security/selinux/hooks.c      |   29 +++++++++++++++++++
+> >  security/smack/smack_lsm.c    |   61 +++++++++++++++++++++++++++++++++++++++++
+> >  10 files changed, 119 insertions(+), 5 deletions(-)
 >
-> On Tue, Aug 16, 2022 at 8:04 AM Al Viro wrote:
-> >
-> > On Tue, Aug 16, 2022 at 05:34:12AM +0900, Ryusuke Konishi wrote:
-> >
-> > > Yes, I agree it's better if security_inode_alloc() is moved to the end as
-> > > possible in the sense of avoiding similar issues.
-> > > But, would that vfs change be safe to backport to stable trees?
-> >
-> > Yes.
-> >
-> > > It looks like the error handling for security_inode_alloc()  is in the
-> > > middle of inode_init_always() for a very long time..
-> >
-> > Look at the initializations done after it.  The only thing with effects
-> > outside of inode itself is (since 2010) an increment of nr_inodes.
-> >
-> > > If you want to see the impact of the vfs change, I think it's one way
-> > > to apply this one in advance.  Or if you want to fix it in one step,
-> > > I think it's good too.  How do you feel about this ?
-> >
-> > IMO that should go into inode_init_always(), with Cc:stable.  If you
-> > (or Dongliang Mu, or anybody else) would post such variant with
-> > reasonable commit message, I'll pick it into vfs.git and feed to Linus
-> > in the next window.  E.g. into #work.inode, with that branch being
-> > made never-rebased, so that you could pull it into your development
-> > branch as soon as it's there...
+> <snip>
 >
-> I agree with your thoughts on the course of action.
-> Andrew, I withdraw this patch.
+> > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> > index 1bbd53321d13..ddeaff4f3bb1 100644
+> > --- a/security/selinux/hooks.c
+> > +++ b/security/selinux/hooks.c
+> > @@ -2768,6 +2768,34 @@ static int selinux_umount(struct vfsmount *mnt, int flags)
+> >                                    FILESYSTEM__UNMOUNT, NULL);
+> >  }
+> >
+> > +static int selinux_fs_context_init(struct fs_context *fc,
+> > +                                  struct dentry *reference)
+> > +{
+> > +       const struct superblock_security_struct *sbsec;
+> > +       const struct inode_security_struct *root_isec;
+> > +       struct selinux_mnt_opts *opts;
+> > +
+> > +       if (fc->purpose == FS_CONTEXT_FOR_SUBMOUNT) {
+> > +               opts = kzalloc(sizeof(*opts), GFP_KERNEL);
+> > +               if (!opts)
+> > +                       return -ENOMEM;
+> > +
+> > +               root_isec = backing_inode_security(reference->d_sb->s_root);
+> > +               sbsec = selinux_superblock(reference->d_sb);
+> > +               if (sbsec->flags & FSCONTEXT_MNT)
+> > +                       opts->fscontext_sid     = sbsec->sid;
+> > +               if (sbsec->flags & CONTEXT_MNT)
+> > +                       opts->context_sid       = sbsec->mntpoint_sid;
+> > +               if (sbsec->flags & ROOTCONTEXT_MNT)
+> > +                       opts->rootcontext_sid   = root_isec->sid;
 >
-> Dongliang (or Jiacheng?), would it be possible for you to post a revised patch
-> against inode_init_always() that moves the call of security_inode_alloc()
-> instead of i_private initialization (as Al Viro said in a nearby thread [1]) ?
-> If you have time, I would like to leave it to you since you wrote the
-> original patch for inode_init_always().
+> I wonder if this part is correct... The rootcontext=... mount option
+> relates to the root inode of the mount where it is specified - i.e. in
+> case of NFS only to the toplevel inode of the initial mount. Setting
+> the same context on the root inode of submounts, which AFAIK are
+> supposed to be transparent to the user, doesn't seem correct to me -
+> i.e. it should just be left unset for the automatically created
+> submounts.
 
-Sure, I will post a v2 patch that moves security_inode_alloc to the
-location just prior to
-        this_cpu_inc(nr_inodes);
-with proper commit message.
+Like Ondrej, I'm not going to say I'm very comfortable with some of
+the VFS corner cases, but this is an interesting case ... as far as I
+can tell, the submount has a superblock and is treated like a normal
+filesystem mount with the one exception that it is mounted
+automatically so that users might not be aware it is a separate mount.
 
->
-> [1] https://lkml.kernel.org/r/CAO4S-mficMz1mQW06EuCF+o11+mRDiCpufqVfoHkcRbQbs8kVw@mail.gmail.com
->
-> Thanks,
-> Ryusuke Konishi
+I guess my question is this: for inodes inside the superblock, does
+their superblock pointer point to the submount's superblock, or the
+parent filesystem's superblock?
+
+-- 
+paul-moore.com

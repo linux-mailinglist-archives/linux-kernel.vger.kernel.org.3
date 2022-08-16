@@ -2,115 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E12F7595FAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 17:55:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B42595FAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 17:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233540AbiHPPzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 11:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
+        id S235892AbiHPPzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 11:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236133AbiHPPym (ORCPT
+        with ESMTP id S235993AbiHPPyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 11:54:42 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9209F7676;
-        Tue, 16 Aug 2022 08:51:02 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id pm17so10088046pjb.3;
-        Tue, 16 Aug 2022 08:51:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=dZzIcHBxE3lkefRICNpDvJxqV+9R54fIIT6t9/ak+2g=;
-        b=F9EtWNSJnp3vj+vG9H74zj9nGRgtw4oOq7NorgJzh8QnbjOeJKFbmQGWQtuTmwYDP7
-         shQStJZWjcuCb47Q3LSfHo3wzDBB+Mmhp57SPYmrtWOqKZ/8LwBI/+JqdOoWotjux7YB
-         Z/jurLogBucIQ71kg3fTWTsiygQI2CQeKV5vy03DwzkzjRUn0tBrCVR+YtrUWIpeVXFv
-         MdYy8lW1g5cka/3FickSLmhGpVWsMXNNlmQqT0gRdOp8Jm9fiX0uVYQ8wjJlTsNeTBb+
-         BaI/FShBA8t7BtyFGVKzI/1hNt2wrYkxOQSCRVeuZTy7kdM9WPr6acHkxMYVXh67Wzby
-         hOCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=dZzIcHBxE3lkefRICNpDvJxqV+9R54fIIT6t9/ak+2g=;
-        b=zugUfIYhv/WGG5PJnKd66M0a1/1jY05lBH3MfU1gUDlxA6SiIImxduJ1LrIqkc6Fgx
-         evuyvGqa0v2Rn/T+ie0TIoqYjt0wUXMoAvLG+qWW0EfzQm3cv93TSRPIgEtG6ukKIjv6
-         aEmdEs3/Ubi+IFGG+oOtD68A7BIc632nDbOb6g0CwQWnVnzZeD6bTMJ/oj0ppIneU7qW
-         d46dIWGVsVBnZjXn5RnJlXJHjvxn9MULGxj7DODpjQqbuYeVdkLAfNnkLF4V6yv7b1JD
-         ovN+tTCvtagQ6iVQCRituxrtkBpkzSePQejWiv9QubXYHOYJfVPc8BDeeK7fjKI0Fgar
-         fyBw==
-X-Gm-Message-State: ACgBeo0RStnJhLeVYMv2cG2kkOECC3piWDekvZ46oSb9gaffGLf3uKaH
-        GXGyWSbxniRdlg0i4JS+YBnRqGi5/ps=
-X-Google-Smtp-Source: AA6agR5l+XM0sK4Q0oxVQSNnOgUdpHQnFaqBzV/ZDNmPbroRtygwjQ7CNdj4aCNlZBleiapWX0H6Vg==
-X-Received: by 2002:a17:902:f70a:b0:170:c5e7:874c with SMTP id h10-20020a170902f70a00b00170c5e7874cmr22252821plo.109.1660665062013;
-        Tue, 16 Aug 2022 08:51:02 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 128-20020a621886000000b0052d200c8040sm8595567pfy.211.2022.08.16.08.51.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 08:51:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 16 Aug 2022 08:50:59 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers/watchdog: fix repeated words in comments
-Message-ID: <20220816155059.GA3310237@roeck-us.net>
-References: <20220816124126.14298-1-yuanjilin@cdjrlc.com>
+        Tue, 16 Aug 2022 11:54:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6753A1EAE5;
+        Tue, 16 Aug 2022 08:51:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F102C61219;
+        Tue, 16 Aug 2022 15:51:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14EF7C433C1;
+        Tue, 16 Aug 2022 15:51:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660665084;
+        bh=OV6VJXE+0fWt4xZsdqxIflMMuIFBP3K3SaK3qB6dBE8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=YGwtdd7icB+GKhr2UQPBQncxK0tuCwFnaDRjxdJw7CLgT9XFlACDawvLmTMdxEpLa
+         fSdBv8nREI/mWgFMQNGyw4+JAUOSwyosHUPxsW6TMbFgD+Qrb6p7WOMMX3Izts+Vf0
+         oMhMrBpbRjZ2amNf7ZG7FGDyJvNXRWiF/BJiFABkEoD+9A6q5xwHPkH7dOIK2kI9tY
+         rrsY0O66xii6NgmfdZioC5kvD1pg8k1BrEb1rNNqKykqr1qOSl9pciIqN2WQNk4oGe
+         6AxI9V2TkDZ0gQ4K24RSA7HJn654Wh1I5m6IuPvL5sgqFZIuMSpMDKjGmWrmnr4CrR
+         PDVEEmYDXG8Wg==
+Date:   Tue, 16 Aug 2022 10:51:22 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     quic_jhugo@quicinc.com, wei.liu@kernel.org, kys@microsoft.com,
+        haiyangz@microsoft.com, sthemmin@microsoft.com,
+        lpieralisi@kernel.org, bhelgaas@google.com,
+        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mikelley@microsoft.com,
+        robh@kernel.org, kw@linux.com, alex.williamson@redhat.com,
+        boqun.feng@gmail.com, Boqun.Feng@microsoft.com,
+        Carl Vanderlip <quic_carlv@quicinc.com>
+Subject: Re: [PATCH] PCI: hv: Only reuse existing IRTE allocation for
+ Multi-MSI
+Message-ID: <20220816155122.GA2064495@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220816124126.14298-1-yuanjilin@cdjrlc.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220804025104.15673-1-decui@microsoft.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 08:41:26PM +0800, Jilin Yuan wrote:
->  Delete the redundant word 'we'.
->  Delete the redundant word 'set'.
+On Wed, Aug 03, 2022 at 07:51:04PM -0700, Dexuan Cui wrote:
+> Jeffrey's 4 recent patches added Multi-MSI support to the pci-hyperv driver.
+> Unluckily, one of the patches, i.e., b4b77778ecc5, causes a regression to a
+> fio test for the Azure VM SKU Standard L64s v2 (64 AMD vCPUs, 8 NVMe drives):
 > 
-> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+> when fio runs against all the 8 NVMe drives, it runs fine with a low io-depth
+> (e.g., 2 or 4); when fio runs with a high io-depth (e.g., 256), somehow
+> queue-29 of each NVMe drive suddenly no longer receives any interrupts, and
+> the NVMe core code has to abort the queue after a timeout of 30 seconds, and
+> then queue-29 starts to receive interrupts again for several seconds, and
+> later queue-29 no longer receives interrupts again, and this pattern repeats:
+> 
+> [  223.891249] nvme nvme2: I/O 320 QID 29 timeout, aborting
+> [  223.896231] nvme nvme0: I/O 320 QID 29 timeout, aborting
+> [  223.898340] nvme nvme4: I/O 832 QID 29 timeout, aborting
+> [  259.471309] nvme nvme2: I/O 320 QID 29 timeout, aborting
+> [  259.476493] nvme nvme0: I/O 321 QID 29 timeout, aborting
+> [  259.482967] nvme nvme0: I/O 322 QID 29 timeout, aborting
+> 
+> Some other symptoms are: the throughput of the NVMe drives drops due to
+> commit b4b77778ecc5. When the fio test is running, the kernel prints some
+> soft lock-up messages from time to time.
+> 
+> Commit b4b77778ecc5 itself looks good, and at the moment it's unclear where
+> the issue is. While the issue is being investigated, restore the old behavior
+> in hv_compose_msi_msg(), i.e., don't reuse the existing IRTE allocation for
+> single-MSI and MSI-X. This is a stopgap for the above NVMe issue.
 
-I am going to ignore all those patches simply because the subject does
-not mention the affected driver (but does mention the unnecessary
-"drivers"). Really, and I have said that before, if you really have
-to submit those cosmetic patches, at least do it right.
+This has only observations with no explanations, and I don't see how
+it will be useful to future readers of the git history.
 
-Guenter
+I assume you bisected the problem to b4b77778ecc5?  Can you just
+revert that?  A revert requires no more explanation than "this broke
+something."
 
+I guess this is a fine distinction, but I really don't like random
+code changes that "seem to avoid a problem but we don't know how."
+A revert at least has the advantage that we can cover our eyes and
+pretend the commit never happened.  This patch feels like future
+readers will have to try to understand the code even though we
+clearly don't understand why it makes a difference.
+
+> Fixes: b4b77778ecc5 ("PCI: hv: Reuse existing IRTE allocation in compose_msi_msg()")
+> Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> Cc: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> Cc: Carl Vanderlip <quic_carlv@quicinc.com>
 > ---
->  drivers/watchdog/wdt_pci.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/pci/controller/pci-hyperv.c | 23 +++++++++++++++++++----
+>  1 file changed, 19 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/watchdog/wdt_pci.c b/drivers/watchdog/wdt_pci.c
-> index d5e56b601351..a5fed7ea0243 100644
-> --- a/drivers/watchdog/wdt_pci.c
-> +++ b/drivers/watchdog/wdt_pci.c
-> @@ -347,7 +347,7 @@ static irqreturn_t wdtpci_interrupt(int irq, void *dev_id)
->   *	@ppos: pointer to the position to write. No seeks allowed
->   *
->   *	A write to a watchdog device is defined as a keepalive signal. Any
-> - *	write of data will do, as we we don't define content meaning.
-> + *	write of data will do, as we don't define content meaning.
->   */
+> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+> index db814f7b93ba..65d0dab25deb 100644
+> --- a/drivers/pci/controller/pci-hyperv.c
+> +++ b/drivers/pci/controller/pci-hyperv.c
+> @@ -1701,6 +1701,7 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+>  	struct compose_comp_ctxt comp;
+>  	struct tran_int_desc *int_desc;
+>  	struct msi_desc *msi_desc;
+> +	bool multi_msi;
+>  	u8 vector, vector_count;
+>  	struct {
+>  		struct pci_packet pci_pkt;
+> @@ -1714,8 +1715,16 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+>  	u32 size;
+>  	int ret;
 >  
->  static ssize_t wdtpci_write(struct file *file, const char __user *buf,
-> @@ -443,7 +443,7 @@ static long wdtpci_ioctl(struct file *file, unsigned int cmd,
->   *	open and on opening we load the counters. Counter zero is a 100Hz
->   *	cascade, into counter 1 which downcounts to reboot. When the counter
->   *	triggers counter 2 downcounts the length of the reset pulse which
-> - *	set set to be as long as possible.
-> + *	set to be as long as possible.
->   */
+> -	/* Reuse the previous allocation */
+> -	if (data->chip_data) {
+> +	msi_desc = irq_data_get_msi_desc(data);
+> +	multi_msi = !msi_desc->pci.msi_attrib.is_msix &&
+> +		    msi_desc->nvec_used > 1;
+> +	/*
+> +	 * Reuse the previous allocation for Multi-MSI. This is required for
+> +	 * Multi-MSI and is optional for single-MSI and MSI-X. Note: for now,
+> +	 * don't reuse the previous allocation for MSI-X because this causes
+> +	 * unreliable interrupt delivery for some NVMe devices.
+> +	 */
+> +	if (data->chip_data && multi_msi) {
+>  		int_desc = data->chip_data;
+>  		msg->address_hi = int_desc->address >> 32;
+>  		msg->address_lo = int_desc->address & 0xffffffff;
+> @@ -1723,7 +1732,6 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+>  		return;
+>  	}
 >  
->  static int wdtpci_open(struct inode *inode, struct file *file)
+> -	msi_desc  = irq_data_get_msi_desc(data);
+>  	pdev = msi_desc_to_pci_dev(msi_desc);
+>  	dest = irq_data_get_effective_affinity_mask(data);
+>  	pbus = pdev->bus;
+> @@ -1733,11 +1741,18 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+>  	if (!hpdev)
+>  		goto return_null_message;
+>  
+> +	/* Free any previous message that might have already been composed. */
+> +	if (data->chip_data && !multi_msi) {
+> +		int_desc = data->chip_data;
+> +		data->chip_data = NULL;
+> +		hv_int_desc_free(hpdev, int_desc);
+> +	}
+> +
+>  	int_desc = kzalloc(sizeof(*int_desc), GFP_ATOMIC);
+>  	if (!int_desc)
+>  		goto drop_reference;
+>  
+> -	if (!msi_desc->pci.msi_attrib.is_msix && msi_desc->nvec_used > 1) {
+> +	if (multi_msi) {
+>  		/*
+>  		 * If this is not the first MSI of Multi MSI, we already have
+>  		 * a mapping.  Can exit early.
 > -- 
-> 2.36.1
+> 2.25.1
 > 

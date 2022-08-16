@@ -2,136 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDC65958F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB4B595986
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbiHPKu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
+        id S235327AbiHPLJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 07:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235183AbiHPKu2 (ORCPT
+        with ESMTP id S235188AbiHPLJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:50:28 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0C59D8F4;
-        Tue, 16 Aug 2022 03:35:16 -0700 (PDT)
-Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M6SBg6djFz67bbZ;
-        Tue, 16 Aug 2022 18:32:11 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 16 Aug 2022 12:35:13 +0200
-Received: from [10.48.156.171] (10.48.156.171) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 16 Aug 2022 11:35:12 +0100
-Message-ID: <aabf7ed8-8d4d-dc68-1b8b-c91653701def@huawei.com>
-Date:   Tue, 16 Aug 2022 11:35:11 +0100
+        Tue, 16 Aug 2022 07:09:29 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AD9100946
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:36:21 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id kb8so18132593ejc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:36:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=bI7Y225GCpQ4NdJRGg8+FzYb7W08NKsY6HOs76y3GX8=;
+        b=5pvZMceVU+vt/halR4ASWruqRlsrJFiGvHKGtnsoWzFkwgfV4vnNUJh2p3QtpY9xr1
+         8Zxx5WK/YSwesSB4IgIX9mGPRIJoVpRDIWhJOi0iZSRxEIoNcYdW5s5q3u3QQKidVkrS
+         IXIh3BTy5OdIHU5JffTMASUOV7XuPLqeT70DB7exqRFB/teb7ucp1/bEjEo2EGD7GaSY
+         a8ZbMxx9Y4zUB/VuFs1TJPMeHtkaeHHa+nZY6PvZrsTsw8E+UBaxNpMNdbofHyHF6jlg
+         DVk4+zHzEEjF2oFaF7U4oTWrTr+YcXnM9TsvLqURCLRIwSNchDKaT6efN6ibCKh/WBhX
+         yJqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=bI7Y225GCpQ4NdJRGg8+FzYb7W08NKsY6HOs76y3GX8=;
+        b=md6NELj5G2usCgJR3VWaAtA0hL3NLYJ2GAbq7/0wxMq1pk1mAx259gAHLgRqDydcR+
+         lzq7AnLAn+0cm6XG6fFgRa8ObVjJHXbTXqUBTyqY7jq7yhrf35+YXL4qEZTFPUF+xF7Q
+         FrilySmxxS3+CkfCqPh4PVT3CeNbgi4R3WTpS78MvZe4B35L3yq4uogp3y8ryaDcLftM
+         ZYCy1XJjykC/VwBtBCnDJBSeQ8P3QMJzqgqAyrROWus4ZDvtaM3V1ds2YvKaz7hD71MG
+         wF7gT5gcEL5URs/AVINXGsL51NkG6/ifTzw+c4GpTbVgfeW9kQwgLp7x57uXPBYCmG4T
+         UeEQ==
+X-Gm-Message-State: ACgBeo1kdyqNGyOVwLHmRHWRWumjFMjPri6Cj543gxmS/CUuCsYKKvVn
+        9VJ/+O3CPVhaHFQ93087NBTw5w==
+X-Google-Smtp-Source: AA6agR56VBuI9frf3ORaTQsmlP25dS59QhJ5fbrC1X4vbMonLouSSlVNSuudiw3lYIiJYzAiVXCI4A==
+X-Received: by 2002:a17:907:1611:b0:733:636:5686 with SMTP id hb17-20020a170907161100b0073306365686mr13181883ejc.226.1660646179611;
+        Tue, 16 Aug 2022 03:36:19 -0700 (PDT)
+Received: from fedora.robimarko.hr (cpe-94-253-165-78.zg.cable.xnet.hr. [94.253.165.78])
+        by smtp.googlemail.com with ESMTPSA id o24-20020aa7dd58000000b0043d742104efsm8175945edw.19.2022.08.16.03.36.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 03:36:19 -0700 (PDT)
+From:   Robert Marko <robert.marko@sartura.hr>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lars.povlsen@microchip.com, Steen.Hegelund@microchip.com,
+        UNGLinuxDriver@microchip.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     luka.perkov@sartura.hr, Robert Marko <robert.marko@sartura.hr>
+Subject: [PATCH] arm64: dts: microchip: use "okay" instead of "ok"
+Date:   Tue, 16 Aug 2022 12:36:13 +0200
+Message-Id: <20220816103613.22806-1-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-From:   John Garry <john.garry@huawei.com>
-Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
- regression
-To:     Oliver Sang <oliver.sang@intel.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-CC:     Christoph Hellwig <hch@lst.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Linux Memory Management List" <linux-mm@kvack.org>,
-        <linux-ide@vger.kernel.org>, <lkp@lists.01.org>, <lkp@intel.com>,
-        <ying.huang@intel.com>, <feng.tang@intel.com>,
-        <zhengjun.xing@linux.intel.com>, <fengwei.yin@intel.com>
-References: <YuzPMMnnY739Tnit@xsang-OptiPlex-9020>
- <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
- <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
- <e4106ffa-3842-45c0-9756-5226cfcfa17d@opensource.wdc.com>
- <YvXeuCAK780OuJPz@xsang-OptiPlex-9020>
- <2e9cf5a6-c043-5ccf-e363-097c6c941891@huawei.com>
- <f1c3d717-339d-ba2b-9775-fc0e00f57ae3@huawei.com>
- <Yvs/w93KUkgD9f7/@xsang-OptiPlex-9020>
-In-Reply-To: <Yvs/w93KUkgD9f7/@xsang-OptiPlex-9020>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.156.171]
-X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/08/2022 07:57, Oliver Sang wrote:
->>> For me, a complete kernel log may help.
->> and since only 1HDD, the output of the following would be helpful:
->>
->> /sys/block/sda/queue/max_sectors_kb
->> /sys/block/sda/queue/max_hw_sectors_kb
->>
->> And for 5.19, if possible.
-> for commit
-> 0568e61225 ("ata: libata-scsi: cap ata_device->max_sectors according to shost->max_sectors")
-> 
-> root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_sectors_kb
-> 512
-> root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_hw_sectors_kb
-> 512
-> 
-> for both commit
-> 4cbfca5f77 ("scsi: scsi_transport_sas: cap shost opt_sectors according to DMA optimal limit")
-> and v5.19
-> 
-> root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_sectors_kb
-> 1280
-> root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_hw_sectors_kb
-> 32767
-> 
+DT specification only allows "okay", and for projects like U-boot
+status = "ok" won't enable the device at all.
 
-thanks, I appreciate this.
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+---
+ arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi | 2 +-
+ arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- From the dmesg, I see 2x SATA disks - I was under the impression that 
-the system only has 1x.
+diff --git a/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi b/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi
+index 4d55ae868b50..80217d5f3f66 100644
+--- a/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi
++++ b/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi
+@@ -529,7 +529,7 @@ i2c_sfp20: i2c_sfp20 {
+ };
+ 
+ &mdio3 {
+-	status = "ok";
++	status = "okay";
+ 	phy64: ethernet-phy@64 {
+ 		reg = <28>;
+ 	};
+diff --git a/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi b/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi
+index ec90bda7ed6a..0760cf2e48bc 100644
+--- a/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi
++++ b/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi
+@@ -208,7 +208,7 @@ sfp_eth63: sfp-eth63 {
+ };
+ 
+ &mdio0 {
+-	status = "ok";
++	status = "okay";
+ 	phy0: ethernet-phy@0 {
+ 		reg = <0>;
+ 	};
+@@ -284,7 +284,7 @@ phy23: ethernet-phy@23 {
+ };
+ 
+ &mdio1 {
+-	status = "ok";
++	status = "okay";
+ 	phy24: ethernet-phy@24 {
+ 		reg = <0>;
+ 	};
+@@ -360,7 +360,7 @@ phy47: ethernet-phy@47 {
+ };
+ 
+ &mdio3 {
+-	status = "ok";
++	status = "okay";
+ 	phy64: ethernet-phy@64 {
+ 		reg = <28>;
+ 	};
+-- 
+2.37.2
 
-Anyway, both drives show LBA48, which means the large max hw sectors at 
-32767KB:
-[   31.129629][ T1146] ata6.00: 1562824368 sectors, multi 1: LBA48 NCQ 
-(depth 32)
-
-So this is what I suspected: we are capped from the default shost max 
-sectors (1024 sectors).
-
-This seems like the simplest fix for you:
-
---- a/include/linux/libata.h
-+++ b/include/linux/libata.h
-@@ -1382,7 +1382,8 @@ extern const struct attribute_group 
-*ata_common_sdev_groups[];
-        .proc_name              = drv_name,                     \
-        .slave_destroy          = ata_scsi_slave_destroy,       \
-        .bios_param             = ata_std_bios_param,           \
--       .unlock_native_capacity = ata_scsi_unlock_native_capacity
-+       .unlock_native_capacity = ata_scsi_unlock_native_capacity,\
-+       .max_sectors = ATA_MAX_SECTORS_LBA48
-
-
-A concern is that other drivers which use libata may have similar 
-issues, as they use default in SCSI_DEFAULT_MAX_SECTORS for max_sectors:
-hisi_sas
-pm8001
-aic9xxx
-mvsas
-isci
-
-So they may be needlessly hobbled for some SATA disks. However I have a 
-system with hisi_sas controller and attached LBA48 disk. I tested 
-performance for v5.19 vs 6.0 and it was about the same for fio rw=read @ 
-~120K IOPS. I can test this further.
-
-Thanks,
-John

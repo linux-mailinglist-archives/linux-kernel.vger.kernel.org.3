@@ -2,71 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23FD359565F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE13C595671
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233045AbiHPJ3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49998 "EHLO
+        id S233514AbiHPJaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232915AbiHPJ3Q (ORCPT
+        with ESMTP id S233499AbiHPJ3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:29:16 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EE0D1E15
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:48:20 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id v2so13716603lfi.6
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:48:20 -0700 (PDT)
+        Tue, 16 Aug 2022 05:29:36 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B50D5EAF
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:49:03 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id v2so13718463lfi.6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:49:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=yFUBgz3pK9QWwSbzGCfInZAjRCTvtg/IqzHSqSibfcQ=;
-        b=xnI8Hz/2eFboCj+I/E9Q3gczZYmeokZidCXOP6RRvwhoBE63XLgs6sWYGFqMc3NLYp
-         8IyN6HZvy4oiy+xSyyUGVc7AGKp+8SnlqLcGF+6KnqhtkaMwq8njFwmRjwro2nUIIZQ3
-         kcmbV3vSzzuy/+hl+zh1kVaNuNnQgEJokBzCBAFXXSNGVne9r7ccDJ6+u0nGQIUTI7ya
-         /b4Ra6OiRwTP1Db0vRF9+1HEKoO4Gn2LO21wiBzYZ98erHndtOn+Hz/6dwE+Bnuvy9OW
-         peXDzW9csz6gfL5NIoWLpXArGX6YFSBjeGWFyZl1/iCmLV7Imy/B2Q6d5ik5k6+iu/oX
-         rrDA==
+        bh=OWzEWZaxyxOuDUG77wk5x1RGXvDnyDigjIAWDCcNa50=;
+        b=CP1SJ1WCfBQTbSs+JNdpd5uWIIWOz8Jb8vnE7FWAWuSq59Yw/w37A5RWLfljFndIHa
+         Jl47Lr1GQqwc3pA2UdAQ4ay+qnswguoef8YolXVncCvnkoXLNFB/5Ijivs1e/muPp/Ts
+         FCihLDDNgWHjyAmzkqZJQTNOGemyzQvEzBiv4KBeXlYMJT86Ea5DPH6LSTk4Puy2nINh
+         1ozyypJj1CJzGB+SYAnzAi4ZgC9H8dJ50YeLgqA3d33XqLJpLgPaNOlzAOI57xySfZFa
+         YN0HkZygzsBdpF2VLkj/XULURUhlJrtHaywC3ZAhXs+px9HZh+v2sYeN4b/qwZI6QtZE
+         Vxuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=yFUBgz3pK9QWwSbzGCfInZAjRCTvtg/IqzHSqSibfcQ=;
-        b=Ei5XsK+zQnPQ7PVxVJMGBFJR+tislhsz75pbcEQvitlxcw8TNwxPbUKsIuDJfgkAoL
-         5Lmia8yNAkfI9B9OiHycaAIVczp2W0tbo7HST3HLv+rQ1HU1UOPk1NyHLwXMezOl8ZbW
-         gABk4VqVVWKacRfOS8lcOw7tEWhaVygD9iPP0+KoX5JQ8e0a8uXzWxqPD2kycKkixs5+
-         SmwGssoCjjcMNhP8NAPMYDCRc6OODO3ltzq8ptUp6O2l69ahZkJM3ETg6z6XiOtBhokG
-         v7r8v6zifz+1JruERMQXFmcyrGcTY2yP7kXqI3KR95GWnc/bJ/U4CZ/I4UT4YTMWBBCE
-         Z3Og==
-X-Gm-Message-State: ACgBeo2ajCnMBTidozIe6MQ4plZoGYJYnHHoY8720w1XzT827gMEBwb5
-        ZlvCQomacjTEKo2JTdoFt2bIgA==
-X-Google-Smtp-Source: AA6agR6s2CP6tfcHWtaPiCDJpAarnXCTA2bmkyEejKPAQnbvBOwBxcmdrgA45aqTgPA2oPxw7fTnFg==
-X-Received: by 2002:a05:6512:2989:b0:48a:f4b9:84bf with SMTP id du9-20020a056512298900b0048af4b984bfmr7204878lfb.39.1660636099244;
-        Tue, 16 Aug 2022 00:48:19 -0700 (PDT)
+        bh=OWzEWZaxyxOuDUG77wk5x1RGXvDnyDigjIAWDCcNa50=;
+        b=wb6y+o6tzF97AGyqK9KbqsNbNtvbgvD6Gb/YGKKHkoEJg9ONRiX5rYa/2oGNMJXetv
+         7AUzvZCz54r8L3eFZZYJIczdO8m3K/u9HXVRTN+D9/WAKdyT4ncEZo7C4i+TTHQQXU1M
+         53RqdD3C0pSVRg4W9p5FUN2snUedfqKikweYsahr8qq5oVKcDJmTouNtTnhrLJD5J7IH
+         P4TXSnRfj++CvujqZtQKHoKnjN5viBRMBsY/9+dx8WBCG5g8j8KBWHWf6/A3/5pLojdx
+         +tNLNP4FKQaXoxiYzuLwGEqztNRypiUHVXw3ZEe+fVS4kPODmu9Pm7fhN369unDNgC9d
+         os6Q==
+X-Gm-Message-State: ACgBeo1Ntv1IyOcTJMmssrsQdbS3hdFzUBtEPpTjEItOYniFdqcOcq5M
+        KSTrvZ9meBByPW7LsMZuRWgXKA==
+X-Google-Smtp-Source: AA6agR5ql1UCM6jh0XKUGnlAiHiqXduAtZTrJfQZ4cfHKMl6uCLp6yMnP9THXPVGKy4dJsgFSps1eQ==
+X-Received: by 2002:a05:6512:15a7:b0:492:85af:e9f7 with SMTP id bp39-20020a05651215a700b0049285afe9f7mr3727101lfb.1.1660636142100;
+        Tue, 16 Aug 2022 00:49:02 -0700 (PDT)
 Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id k14-20020ac257ce000000b0048ae4cf8a2csm1299811lfo.258.2022.08.16.00.48.18
+        by smtp.gmail.com with ESMTPSA id z13-20020a05651c11cd00b0025e4fcadc72sm1692159ljo.92.2022.08.16.00.49.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 00:48:18 -0700 (PDT)
-Message-ID: <dccdc50e-2a59-8b06-7d44-e4c9116612c9@linaro.org>
-Date:   Tue, 16 Aug 2022 10:48:17 +0300
+        Tue, 16 Aug 2022 00:49:01 -0700 (PDT)
+Message-ID: <8c970e9d-3179-6fe9-3773-ce9d58d80be4@linaro.org>
+Date:   Tue, 16 Aug 2022 10:48:59 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH v3 1/2] dt-binding: pinctrl: Add cypress,cy8c95x0
+Subject: Re: [PATCH 1/7] dt-bindings: dmaengine: qcom: gpi: add compatible for
+ SM6115
 Content-Language: en-US
-To:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+To:     Adam Skladowski <a39.skl@gmail.com>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220816054917.7893-1-patrick.rudolph@9elements.com>
- <20220816054917.7893-2-patrick.rudolph@9elements.com>
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Emma Anholt <emma@anholt.net>,
+        Rob Clark <robdclark@chromium.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-mmc@vger.kernel.org, linux-pm@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Sibi Sankar <sibis@codeaurora.org>
+References: <20220815100952.23795-1-a39.skl@gmail.com>
+ <20220815100952.23795-2-a39.skl@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220816054917.7893-2-patrick.rudolph@9elements.com>
+In-Reply-To: <20220815100952.23795-2-a39.skl@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,14 +99,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/08/2022 08:49, Patrick Rudolph wrote:
-> Added device tree binding documentation for
-> Cypress CY8C95x0 I2C pin-controller.
+On 15/08/2022 13:09, Adam Skladowski wrote:
+> Document the compatible for GPI DMA controller on SM6115 SoC.
 > 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
 Best regards,

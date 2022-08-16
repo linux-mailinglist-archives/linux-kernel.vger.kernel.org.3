@@ -2,64 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74360596011
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14460596016
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236140AbiHPQWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 12:22:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
+        id S236288AbiHPQZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 12:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236100AbiHPQWm (ORCPT
+        with ESMTP id S236237AbiHPQZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 12:22:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1546878BCF
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:22:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660666959;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=4DAtuJXwJxNFl0h5f041851ZUlBg+KLhg+1Meihp510=;
-        b=OuS9vNDcspd0n/S4cIyYUD6p1IhSSa61Q43JjLBa3cUOrcRGktjMN1FWeXRsHdItpVYZYp
-        qQ5pPMAPcwyT3L4z4jMc8VKnaoKMMc5+/QYjffr/0leFjs1C3rOpdev2i46x/8mAxss/Gn
-        1kQLgt9m5KxOrAba0yHVPphcgTBvrRc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-224-rbAWc-cgOSWzhDIFudp8oA-1; Tue, 16 Aug 2022 12:22:35 -0400
-X-MC-Unique: rbAWc-cgOSWzhDIFudp8oA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ABCD01C06ECB;
-        Tue, 16 Aug 2022 16:22:33 +0000 (UTC)
-Received: from p1.luc.cera.cz (unknown [10.40.192.152])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 971BF945D9;
-        Tue, 16 Aug 2022 16:22:31 +0000 (UTC)
-From:   Ivan Vecera <ivecera@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Patryk Piotrowski <patryk.piotrowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mitch Williams <mitch.a.williams@intel.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        intel-wired-lan@lists.osuosl.org (moderated list:INTEL ETHERNET DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net] i40e: Fix kernel crash during module removal
-Date:   Tue, 16 Aug 2022 18:22:30 +0200
-Message-Id: <20220816162230.3486915-1-ivecera@redhat.com>
+        Tue, 16 Aug 2022 12:25:41 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CA843E7A
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:25:39 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id e13so14146687edj.12
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:25:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=xZbhJ86qeK0iLd6MKqiB1IUq4Y7ffH3veK//inJpuGw=;
+        b=HzNHJZQijj8JlSfru6AkH1YQh8sNxBD2pCT1ub30EiGUr0dZ23NNVuEaAlcJjV1IvI
+         tn0PLnUb8rx4bgsOqlc8OOR1pWZOGydPdvCj+evhLgKSf/N+XPJWxq7aQ4awMlKkxxjD
+         4PnROEjPsEBlyzR6PN6036HFnI7IfWvcedC3oiom/MVIwvnhdOGDMep6UNhhOXsE92TU
+         qNb5y1D8TUMisu6UriV2L6PJZNyELkyF227cyUsZ0mqKeF1ZAq7lge59LwBgSKxXwMby
+         /DteO3ayYFl/nJUCrPtutk9GpPy4YBcHzpTA1bIqF/boOg9ZxOCKd+HI5ps76Lo0p7Kx
+         zCsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=xZbhJ86qeK0iLd6MKqiB1IUq4Y7ffH3veK//inJpuGw=;
+        b=apTDjrGdk5yBs9Jf1aK2ygX5HHjsX6KPtOXkqybo9dIam26JVoPYfoi+d3f2WwGJWV
+         cqLQiXjH489xKJQYopELlgfsrDTzL+4JPX4WupFWwjnJK/DdDNv5UVr1XHqcwuFUmkUL
+         QWU2JfxqoSvKZQPcrc26DQh4F4ieCgAoBB/fUDe8CNsV+UkXvBWfz6YkRzaIMmWxkGwG
+         TZkjW9iBEv0yFZfpO6vAt0PjJgoo7o/RpKTG0PZRLIZAOgcfTA0wrCo2TsqcSC4/yVkt
+         Ti7xapBsV21ezoW+9o/abkQBZN1i2Vx3DkUl8w4Rzqo2nl3ulp9ae+k9ZVC0rg4ecoK4
+         HjQQ==
+X-Gm-Message-State: ACgBeo2+mSZdI0853Ib+D2KE4kShg72f4ajbuKPEN1Itmue9MD++gQzI
+        V/dkhVHiE9yMl4/SC+6QCI2+wyJ/paP3VSzG4e2haA==
+X-Google-Smtp-Source: AA6agR5NVFdAVohPgwh9aCpwEvDJ61/gn3bBBuGoIDZroPm5V68OkeO32ZjkMjk/zjPc2mpGkdLRzqAUgozWEgN77lc=
+X-Received: by 2002:a05:6402:2387:b0:43d:3e0:4daf with SMTP id
+ j7-20020a056402238700b0043d03e04dafmr19547097eda.208.1660667138236; Tue, 16
+ Aug 2022 09:25:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220816124604.978842485@linuxfoundation.org> <CADVatmPOCPfHQHEuwVmOb5oeN2HfWWMztVok3qvoq7Ndndb14A@mail.gmail.com>
+ <YvutIhMRZW/nKOPi@kroah.com>
+In-Reply-To: <YvutIhMRZW/nKOPi@kroah.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 16 Aug 2022 21:55:26 +0530
+Message-ID: <CA+G9fYuW48_0c08iVk9oeHLGse73tuft2ubdkC2Y-fyZdJpr9w@mail.gmail.com>
+Subject: Re: [PATCH 5.18 0000/1094] 5.18.18-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,97 +75,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver incorrectly frees client instance and subsequent
-i40e module removal leads to kernel crash.
+On Tue, 16 Aug 2022 at 20:13, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Aug 16, 2022 at 03:34:56PM +0100, Sudip Mukherjee wrote:
+> > Hi Greg,
+> >
+> > On Tue, Aug 16, 2022 at 1:59 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > This is the start of the stable review cycle for the 5.18.18 release.
+> > > There are 1094 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > >
+> > > Responses should be made by Thu, 18 Aug 2022 12:43:14 +0000.
+> > > Anything received after that time might be too late.
+> >
+> > The hung task problem I reported for v5.18.18-rc1 is not seen with rc2.
+>
+> Nice!
+>
+> > The drm warning is still there and a bisect pointed it to:
+> > 4b8701565b59 ("drm/vc4: hdmi: Move HDMI reset to
+> > pm_resume")4b8701565b59 ("drm/vc4: hdmi: Move HDMI reset to
+> > pm_resume")
+>
+> What drm warning?
 
-Reproducer:
-1. Do ethtool offline test followed immediately by another one
-host# ethtool -t eth0 offline; ethtool -t eth0 offline
-2. Remove recursively irdma module that also removes i40e module
-host# modprobe -r irdma
+WARNING: CPU: 0 PID: 246 at drivers/gpu/drm/vc4/vc4_hdmi_regs.h:487
+vc5_hdmi_reset+0x1f0/0x240 [vc4]
+https://lore.kernel.org/all/CA+G9fYve16J7=4f+WAVrTUspxkKA+3BonHzGyk8VP=U+D9irOQ@mail.gmail.com/
 
-Result:
-[ 8675.035651] i40e 0000:3d:00.0 eno1: offline testing starting
-[ 8675.193774] i40e 0000:3d:00.0 eno1: testing finished
-[ 8675.201316] i40e 0000:3d:00.0 eno1: offline testing starting
-[ 8675.358921] i40e 0000:3d:00.0 eno1: testing finished
-[ 8675.496921] i40e 0000:3d:00.0: IRDMA hardware initialization FAILED init_state=2 status=-110
-[ 8686.188955] i40e 0000:3d:00.1: i40e_ptp_stop: removed PHC on eno2
-[ 8686.943890] i40e 0000:3d:00.1: Deleted LAN device PF1 bus=0x3d dev=0x00 func=0x01
-[ 8686.952669] i40e 0000:3d:00.0: i40e_ptp_stop: removed PHC on eno1
-[ 8687.761787] BUG: kernel NULL pointer dereference, address: 0000000000000030
-[ 8687.768755] #PF: supervisor read access in kernel mode
-[ 8687.773895] #PF: error_code(0x0000) - not-present page
-[ 8687.779034] PGD 0 P4D 0
-[ 8687.781575] Oops: 0000 [#1] PREEMPT SMP NOPTI
-[ 8687.785935] CPU: 51 PID: 172891 Comm: rmmod Kdump: loaded Tainted: G        W I        5.19.0+ #2
-[ 8687.794800] Hardware name: Intel Corporation S2600WFD/S2600WFD, BIOS SE5C620.86B.0X.02.0001.051420190324 05/14/2019
-[ 8687.805222] RIP: 0010:i40e_lan_del_device+0x13/0xb0 [i40e]
-[ 8687.810719] Code: d4 84 c0 0f 84 b8 25 01 00 e9 9c 25 01 00 41 bc f4 ff ff ff eb 91 90 0f 1f 44 00 00 41 54 55 53 48 8b 87 58 08 00 00 48 89 fb <48> 8b 68 30 48 89 ef e8 21 8a 0f d5 48 89 ef e8 a9 78 0f d5 48 8b
-[ 8687.829462] RSP: 0018:ffffa604072efce0 EFLAGS: 00010202
-[ 8687.834689] RAX: 0000000000000000 RBX: ffff8f43833b2000 RCX: 0000000000000000
-[ 8687.841821] RDX: 0000000000000000 RSI: ffff8f4b0545b298 RDI: ffff8f43833b2000
-[ 8687.848955] RBP: ffff8f43833b2000 R08: 0000000000000001 R09: 0000000000000000
-[ 8687.856086] R10: 0000000000000000 R11: 000ffffffffff000 R12: ffff8f43833b2ef0
-[ 8687.863218] R13: ffff8f43833b2ef0 R14: ffff915103966000 R15: ffff8f43833b2008
-[ 8687.870342] FS:  00007f79501c3740(0000) GS:ffff8f4adffc0000(0000) knlGS:0000000000000000
-[ 8687.878427] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 8687.884174] CR2: 0000000000000030 CR3: 000000014276e004 CR4: 00000000007706e0
-[ 8687.891306] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[ 8687.898441] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[ 8687.905572] PKRU: 55555554
-[ 8687.908286] Call Trace:
-[ 8687.910737]  <TASK>
-[ 8687.912843]  i40e_remove+0x2c0/0x330 [i40e]
-[ 8687.917040]  pci_device_remove+0x33/0xa0
-[ 8687.920962]  device_release_driver_internal+0x1aa/0x230
-[ 8687.926188]  driver_detach+0x44/0x90
-[ 8687.929770]  bus_remove_driver+0x55/0xe0
-[ 8687.933693]  pci_unregister_driver+0x2a/0xb0
-[ 8687.937967]  i40e_exit_module+0xc/0xf48 [i40e]
+This was reported on mainline kernel on June 30th.
 
-Two offline tests cause IRDMA driver failure (ETIMEDOUT) and this
-failure is indicated back to i40e_client_subtask() that calls
-i40e_client_del_instance() to free client instance referenced
-by pf->cinst and sets this pointer to NULL. During the module
-removal i40e_remove() calls i40e_lan_del_device() that dereferences
-pf->cinst that is NULL -> crash.
-Do not remove client instance when client open callbacks fails and
-just clear __I40E_CLIENT_INSTANCE_OPENED bit. The driver also needs
-to take care about this situation (when netdev is up and client
-is NOT opened) in i40e_notify_client_of_netdev_close() and
-calls client close callback only when __I40E_CLIENT_INSTANCE_OPENED
-is set.
-
-Fixes: 0ef2d5afb12d ("i40e: KISS the client interface")
-Signed-off-by: Ivan Vecera <ivecera@redhat.com>
----
- drivers/net/ethernet/intel/i40e/i40e_client.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_client.c b/drivers/net/ethernet/intel/i40e/i40e_client.c
-index ea2bb0140a6e..10d7a982a5b9 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_client.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_client.c
-@@ -177,6 +177,10 @@ void i40e_notify_client_of_netdev_close(struct i40e_vsi *vsi, bool reset)
- 			"Cannot locate client instance close routine\n");
- 		return;
- 	}
-+	if (!test_bit(__I40E_CLIENT_INSTANCE_OPENED, &cdev->state)) {
-+		dev_dbg(&pf->pdev->dev, "Client is not open, abort close\n");
-+		return;
-+	}
- 	cdev->client->ops->close(&cdev->lan_info, cdev->client, reset);
- 	clear_bit(__I40E_CLIENT_INSTANCE_OPENED, &cdev->state);
- 	i40e_client_release_qvlist(&cdev->lan_info);
-@@ -429,7 +433,6 @@ void i40e_client_subtask(struct i40e_pf *pf)
- 				/* Remove failed client instance */
- 				clear_bit(__I40E_CLIENT_INSTANCE_OPENED,
- 					  &cdev->state);
--				i40e_client_del_instance(pf);
- 				return;
- 			}
- 		}
--- 
-2.35.1
-
+>
+> > I have not noticed earlier, the warning is there with mainline also. I
+> > will verify tonight and send another mail for mainline.
+>
+> Ah, ok, being bug compatible is good :)
+>
+> > Also, mips and csky allmodconfig build fails with gcc-12 due to
+> > 85d03e83bbfc ("Bluetooth: L2CAP: Fix l2cap_global_chan_by_psm
+> > regression").
+> > Mainline also has the same build failure reported at
+> > https://lore.kernel.org/lkml/YvY4xdZEWAPosFdJ@debian/
+>
+> Looks like they have a fix somewhere for that, any hints on where to
+> find it?
+>
+> thanks,
+>
+> greg k-h

@@ -2,137 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE09595F8B
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 17:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE33F595F88
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 17:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236009AbiHPPq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 11:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41100 "EHLO
+        id S236199AbiHPPqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 11:46:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236427AbiHPPpi (ORCPT
+        with ESMTP id S236514AbiHPPps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 11:45:38 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5906A80EA2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:41:48 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id x19so15447085lfq.7
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:41:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=ETcTb291U+LQVGzQDxoqXPmvwJRL1DHZCtw/kAWPJKs=;
-        b=iMG9agruLuSZJoHKUeKqxb/AV2q+NiGrkld/xQ7F7T8AQpriWl5PjlXoWOfOHpjvxE
-         ojHoBeJjeR6hF0d/quBa5gW3Nzgo7KpSqK5X9g6Oal81XMXs3NlaDEziAzorhhPdmXJ2
-         u5+ziGLlIk3K9c26xwAOzjEZpFxzoSzO4ITVsZ31RnbVaG71b5HOxOr/u75IAYTx7yzx
-         NFFGHrIjF8s3A+psTsr3bFPE3ikRIgVy4vSyS027nvuMGXS6PEjqIZilQjvhjbK1coQs
-         OBxo/vIOlbuDBCtk3k+lxOE4WEW7U97jtH0fKeZ4e+1//PjkKMzKEKjVanyAlDT0Vona
-         zIOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ETcTb291U+LQVGzQDxoqXPmvwJRL1DHZCtw/kAWPJKs=;
-        b=FLYD3Zn9eV2EkSC7k6Ky8w9PMjtzxpn7KSgCnzPeVHaZLNLYaYxZWAZQvjF7+MmX/a
-         bjZxwNZcjbXlISdLosh4EhryIFutp0Dx/uMwymAY2olHaMx4b1MzmNw6rI/VmyRSFYKx
-         feoiHrIVN4MPMwMq/KsL5YD2k6tUyQsRNXk9uc+nmPHXfFFQok46lhPenScNJqnGvyzf
-         bA0SMZiRU/5TgFmBJ1ilysADT+WYqQgp8BTNUi7bQx7oyArHTO0mjzLlzSF/5pe2EXHW
-         K6cyjH8rYbd4VpiIYBWjoRQDEIij4oaDdsLOyIVUlyAtS7Lr0mpMX/x9q7jTLouiQRIL
-         XRKg==
-X-Gm-Message-State: ACgBeo0N0JhCs3CQlyTCI82luD8Zsq+Nd3Swvyvzzek3LT3h9Nr9TneF
-        KmD8W1R/TDNwuteTGPMKexjuoGgij0UdesGhP4JeLA==
-X-Google-Smtp-Source: AA6agR4emIVekADYUUGr+odBqVZs1VV9rhpti9ZtTSlJakfYa8xIKrYnwyLFAfIFQYXKUJSFOCsH/LXoh7+ZxxeFUzk=
-X-Received: by 2002:a05:6512:1283:b0:48b:9817:ce2b with SMTP id
- u3-20020a056512128300b0048b9817ce2bmr7021243lfs.417.1660664506516; Tue, 16
- Aug 2022 08:41:46 -0700 (PDT)
+        Tue, 16 Aug 2022 11:45:48 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42DFD3ECDC
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:42:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1660664568; x=1692200568;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4pLJV4ar6F2DZGfMkGTvI6mAYr0kU7DMXxSq+tx3CnI=;
+  b=RNxZ44BjOGqrZ6joIz08tkrEniCmylJLOOpjnz6apaSirBhNW06MAi4z
+   QSJjwRdDlqDtCiFH+A62IAlwQ5Mc+FEmne742xc/Aei4SC5o+/OsuD5su
+   zGn5bFVEqrPu8b1FAbKqVeGEvRd2d8ZaA6XMUoEmHjgpk9FYHh1TH02gX
+   chQArVtNfO9hva4RjIiCWSh6IGpeloXWZGNCvroC+0hS7BO2zfHOeQ1oy
+   StYx2C9ij9wdelA1qk65fdAinrUOBitwAYOm2g87hsARQe7rvJGmhMBCp
+   aZVO53noFm2z288pyudIJHKl1MWUFxLf5MujpjfWwIXP/TDEb7/xHawqZ
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,241,1654531200"; 
+   d="scan'208";a="207324725"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 16 Aug 2022 23:42:45 +0800
+IronPort-SDR: UNQeAfpjJ4UD74Y6kWy5Jb1i92Ah2FgP+v0PBBEAjnvhOJB2Ca/913sWbhH5MrtpyQi9C+xRMa
+ DID4HTS9Vst1lgfPu6xvnHSgaGjnER/VT9+uRLq6bolz7w9vxd8i0bNWhgg4f5LHMGfiXVXHRH
+ KHNBjYJ0SGUzrm9wOcOAlRGH/57FePD7eKRUd644n5fxZImjA1zi436Z27czU26HljGlOZzia2
+ qCnxhM4eqP2LedviYjTuSQ/1D4iWKH/n8nWqadkigzlvIwFDgFClnxdahUwAHnV+bKsvtgRV6s
+ MDDjueh44or9OzPno/V7c5Pj
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Aug 2022 08:03:33 -0700
+IronPort-SDR: RZNEZijJk1KkzvlF2BkPqIhYiWgoEZGnSKVInhlc6uPqnG/wR2YPTYqgp4jmokUnyWz8b2Mx/o
+ R4+1/hJ1J6d3w1G7GKHEOc+Ali+NHfn2xZPAUJ5cb6ZwXyaST51vn+iHWe5QpwCChg6xfnK7d7
+ 1pe0EUBHWiMak0j8/Yp4nECQe5hr7hGoxLeopb7xY5iWnc6NQs8Vr/nFL5x+Kh9aJeeNWbflmz
+ t7NGN3B58WaV2Ct8dhclBhVSJYGQaoQCD/VEKWDUDpHWG8VnZbD8MSTXK1Psgzjp5YpMIyo5yl
+ cYI=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Aug 2022 08:42:46 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4M6b505pp2z1Rws0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:42:44 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1660664563; x=1663256564; bh=4pLJV4ar6F2DZGfMkGTvI6mAYr0kU7DMXxS
+        q+tx3CnI=; b=e0qjTEK1a/CGS/wzw8PO1PPgqa5Mh4ewGrb9xtlNIw/XtP6zjNb
+        t4gQD91p3DRj1OF7hSAPR8ENxjL3nGvWhVqHV3j5cULreJvOxbSPo7+b7S4EEFuV
+        9uMJ1mR1wUnNU0WJdMLvxzVY8hLkJB6bEWCBelCx5JPJSCyfmtiM69KUc1LisJjY
+        6ZCvFZXvEBZyOOeKOgKqGNX9uCy096KNfrLGCZuhLGiSBc+TfBr6rxH/cy7BBrRe
+        kr8+bH/VKtIjiXK8F2M6W6zo/c6QLxPJwSXWjZUo+YtJZBzfChhxcUPjjLtgoIHD
+        bkCrXBWIu2AGeRtNv0lvxxmTDi440sArQZA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id eqQPiUxcnfjq for <linux-kernel@vger.kernel.org>;
+        Tue, 16 Aug 2022 08:42:43 -0700 (PDT)
+Received: from [10.111.64.29] (c02drav6md6t.sdcorp.global.sandisk.com [10.111.64.29])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4M6b4z2HJkz1RtVk;
+        Tue, 16 Aug 2022 08:42:43 -0700 (PDT)
+Message-ID: <43eaa104-5b09-072c-56aa-6289569b0015@opensource.wdc.com>
+Date:   Tue, 16 Aug 2022 08:42:42 -0700
 MIME-Version: 1.0
-References: <0000000000002c46ec05e6572415@google.com> <CAHC9VhQmtggv-P9RoG9mHp8JJMUB-qTWNiKVh8q4ygmdi-x2rA@mail.gmail.com>
-In-Reply-To: <CAHC9VhQmtggv-P9RoG9mHp8JJMUB-qTWNiKVh8q4ygmdi-x2rA@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 16 Aug 2022 17:41:34 +0200
-Message-ID: <CACT4Y+YmW25fSaRvGOm3Do0LWgR3BqT+-cY8cbsCeYtd-fULqw@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in sock_has_perm
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     syzbot <syzbot+2f2c6bea25b08dc06f86@syzkaller.appspotmail.com>,
-        anton@enomsg.org, bpf@vger.kernel.org, ccross@android.com,
-        eparis@parisplace.org, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, selinux@vger.kernel.org,
-        stephen.smalley.work@gmail.com, syzkaller-bugs@googlegroups.com,
-        tony.luck@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
+ regression
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>,
+        Oliver Sang <oliver.sang@intel.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-ide@vger.kernel.org, lkp@lists.01.org, lkp@intel.com,
+        ying.huang@intel.com, feng.tang@intel.com,
+        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
+References: <YuzPMMnnY739Tnit@xsang-OptiPlex-9020>
+ <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
+ <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
+ <e4106ffa-3842-45c0-9756-5226cfcfa17d@opensource.wdc.com>
+ <YvXeuCAK780OuJPz@xsang-OptiPlex-9020>
+ <2e9cf5a6-c043-5ccf-e363-097c6c941891@huawei.com>
+ <f1c3d717-339d-ba2b-9775-fc0e00f57ae3@huawei.com>
+ <Yvs/w93KUkgD9f7/@xsang-OptiPlex-9020>
+ <aabf7ed8-8d4d-dc68-1b8b-c91653701def@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <aabf7ed8-8d4d-dc68-1b8b-c91653701def@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 Aug 2022 at 17:02, Paul Moore <paul@paul-moore.com> wrote:
->
-> On Tue, Aug 16, 2022 at 4:00 AM syzbot
-> <syzbot+2f2c6bea25b08dc06f86@syzkaller.appspotmail.com> wrote:
-> >
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    200e340f2196 Merge tag 'pull-work.dcache' of git://git.ker..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=16021dfd080000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=f2886ebe3c7b3459
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=2f2c6bea25b08dc06f86
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> >
-> > Unfortunately, I don't have any reproducer for this issue yet.
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+2f2c6bea25b08dc06f86@syzkaller.appspotmail.com
-> >
-> > ==================================================================
-> > BUG: KASAN: use-after-free in sock_has_perm+0x258/0x280 security/selinux/hooks.c:4532
-> > Read of size 8 at addr ffff88807630e480 by task syz-executor.0/8123
-> >
-> > CPU: 1 PID: 8123 Comm: syz-executor.0 Not tainted 5.19.0-syzkaller-02972-g200e340f2196 #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-> > Call Trace:
-> >  <TASK>
-> >  __dump_stack lib/dump_stack.c:88 [inline]
-> >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
-> >  print_address_description.constprop.0.cold+0xeb/0x467 mm/kasan/report.c:313
-> >  print_report mm/kasan/report.c:429 [inline]
-> >  kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
-> >  sock_has_perm+0x258/0x280 security/selinux/hooks.c:4532
-> >  selinux_socket_setsockopt+0x3e/0x80 security/selinux/hooks.c:4913
-> >  security_socket_setsockopt+0x50/0xb0 security/security.c:2249
-> >  __sys_setsockopt+0x107/0x6a0 net/socket.c:2233
-> >  __do_sys_setsockopt net/socket.c:2266 [inline]
-> >  __se_sys_setsockopt net/socket.c:2263 [inline]
-> >  __x64_sys_setsockopt+0xba/0x150 net/socket.c:2263
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > RIP: 0033:0x7f96c7289279
-> > Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> > RSP: 002b:00007f96c842f168 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
-> > RAX: ffffffffffffffda RBX: 00007f96c739c050 RCX: 00007f96c7289279
-> > RDX: 0000000000000007 RSI: 0000000000000103 RDI: 0000000000000004
-> > RBP: 00007f96c72e3189 R08: 0000000000000004 R09: 0000000000000000
-> > R10: 0000000020000000 R11: 0000000000000246 R12: 0000000000000000
-> > R13: 00007ffe7030593f R14: 00007f96c842f300 R15: 0000000000022000
-> >  </TASK>
->
-> SELinux hasn't changed anything in this area for a while, and looking
-> over everything again just now it still looks sane to me.  I suspect
-> there is something else going on with respect to socket lifetimes and
-> SELinux just happens to be the one that catches the use-after-free
-> first.
+On 2022/08/16 3:35, John Garry wrote:
+> On 16/08/2022 07:57, Oliver Sang wrote:
+>>>> For me, a complete kernel log may help.
+>>> and since only 1HDD, the output of the following would be helpful:
+>>>
+>>> /sys/block/sda/queue/max_sectors_kb
+>>> /sys/block/sda/queue/max_hw_sectors_kb
+>>>
+>>> And for 5.19, if possible.
+>> for commit
+>> 0568e61225 ("ata: libata-scsi: cap ata_device->max_sectors according to shost->max_sectors")
+>>
+>> root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_sectors_kb
+>> 512
+>> root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_hw_sectors_kb
+>> 512
+>>
+>> for both commit
+>> 4cbfca5f77 ("scsi: scsi_transport_sas: cap shost opt_sectors according to DMA optimal limit")
+>> and v5.19
+>>
+>> root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_sectors_kb
+>> 1280
+>> root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_hw_sectors_kb
+>> 32767
+>>
+> 
+> thanks, I appreciate this.
+> 
+>  From the dmesg, I see 2x SATA disks - I was under the impression that 
+> the system only has 1x.
+> 
+> Anyway, both drives show LBA48, which means the large max hw sectors at 
+> 32767KB:
+> [   31.129629][ T1146] ata6.00: 1562824368 sectors, multi 1: LBA48 NCQ 
+> (depth 32)
+> 
+> So this is what I suspected: we are capped from the default shost max 
+> sectors (1024 sectors).
+> 
+> This seems like the simplest fix for you:
+> 
+> --- a/include/linux/libata.h
+> +++ b/include/linux/libata.h
+> @@ -1382,7 +1382,8 @@ extern const struct attribute_group 
+> *ata_common_sdev_groups[];
+>         .proc_name              = drv_name,                     \
+>         .slave_destroy          = ata_scsi_slave_destroy,       \
+>         .bios_param             = ata_std_bios_param,           \
+> -       .unlock_native_capacity = ata_scsi_unlock_native_capacity
+> +       .unlock_native_capacity = ata_scsi_unlock_native_capacity,\
+> +       .max_sectors = ATA_MAX_SECTORS_LBA48
 
-My completely unfounded guess would be that net/netrom/af_netrom.c
-does incorrect socket lifetime management.
+This is crazy large (65535 x 512 B sectors) and never result in that being
+exposed as the actual max_sectors_kb since other limits will apply first
+(mapping size).
 
-Though, that wouldn't explain what Casey mentioned re UDP. But it can
-well be 2 separate issues.
+The regression may come not from commands becoming tiny, but from the fact that
+after the patch, max_sectors_kb is too large, causing a lot of overhead with
+qemu swiotlb mapping and slowing down IO processing.
+
+Above, it can be seen that we ed up with max_sectors_kb being 1280, which is the
+default for most scsi disks (including ATA drives). That is normal. But before
+that, it was 512, which likely better fits qemu swiotlb and does not generate
+overhead. So the above fix will not change anything I think...
+
+> A concern is that other drivers which use libata may have similar 
+> issues, as they use default in SCSI_DEFAULT_MAX_SECTORS for max_sectors:
+> hisi_sas
+> pm8001
+> aic9xxx
+> mvsas
+> isci
+> 
+> So they may be needlessly hobbled for some SATA disks. However I have a 
+> system with hisi_sas controller and attached LBA48 disk. I tested 
+> performance for v5.19 vs 6.0 and it was about the same for fio rw=read @ 
+> ~120K IOPS. I can test this further.
+> 
+> Thanks,
+> John
+
+
+-- 
+Damien Le Moal
+Western Digital Research

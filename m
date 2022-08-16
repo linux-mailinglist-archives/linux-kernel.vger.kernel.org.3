@@ -2,113 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003725954D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CE85954C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiHPISI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 04:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43474 "EHLO
+        id S232577AbiHPIPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 04:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbiHPIRb (ORCPT
+        with ESMTP id S232117AbiHPIOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:17:31 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F72118DD9
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 23:12:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660630370; x=1692166370;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OCTurReto08p/Yn/8a5qxxlFZM8SnUJ15m3nnDnfQIc=;
-  b=L3Omw0Anz9TjUKqLKkKvTimpUILsANCgFBnPRyMUxZGqsLZ8/+gfxdQv
-   rUY72/weQ53GstGe6RP3xCD/04n0bwGX+br04SQ/fi1Hw/LPM7BGbmcYc
-   pjJSqatD3ItaByBUmSYPxOZ9P4KRSMkXeufjHW5rBsGY1Sj6UEkyMlvr/
-   0ho50eQqw3Q/mbIU1h6OgNdOpcPjpSSTfuWPrEqHyfJfUYdkaN4MFFUyn
-   S3gVgt6Pp7xFS+aGqqt4TYCtmOLf5dXu0sXckIkfBnNzcE5OlFEHA0Qrm
-   Nwubwa4zf+jHKQWBEF2jyUr9eH4D8kE47EOUFcQ51NS3UT05gFXgSYBwC
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="292131839"
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="292131839"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 23:12:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="639909154"
-Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 15 Aug 2022 23:12:48 -0700
-Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oNpol-0001YP-2v;
-        Tue, 16 Aug 2022 06:12:47 +0000
-Date:   Tue, 16 Aug 2022 14:12:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jianpeng Ma <jianpeng.ma@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Coly Li <colyli@suse.de>, Qiaowei Ren <qiaowei.ren@intel.com>
-Subject: [colyli-bcache:nvdimm-meta 2/16]
- drivers/md/bcache/nvmpg_format.h:132:19: warning: 'bch_nvmpg_recs_magic'
- defined but not used
-Message-ID: <202208161410.TIsjGMiZ-lkp@intel.com>
+        Tue, 16 Aug 2022 04:14:44 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694DBB2494;
+        Mon, 15 Aug 2022 23:21:27 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id EF26D5C00D9;
+        Tue, 16 Aug 2022 02:21:23 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 16 Aug 2022 02:21:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1660630883; x=
+        1660717283; bh=jy6xmsOjEA2Va/wNOYVF/8wst1Di1Hg7OHE3XzBlbbw=; b=f
+        8mb6KOmAZ79IMZEWUx+YYQgDjG3pM2Od7tcVe2Czx4wLSiKMCLPwGhTVsozbJndh
+        CbR9zxZjfuSbUFBedV1S0xgP1sf1+wuaGv2olaZmU0EyZxdg8poOjoacUJ1pynwr
+        eGPauIDzNi7VWOFI+8GOTZCqAreMYzgnN94o73ZjylDtDEUglsCy7l4S6XLcEIjj
+        GPcG+cAzKseunXaVGNQKXLlEBNsZ/j7/NE1SJpR0mlb4By7Cc5p7V1kZUbkhGgH0
+        5g15RN9BZaktlZ0V8BWlAcrf7roHE6SdhTR9l7666wV/2ps8xjQMfFF3opClwv5M
+        1DlSgX53H7Din23pXLnPQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660630883; x=
+        1660717283; bh=jy6xmsOjEA2Va/wNOYVF/8wst1Di1Hg7OHE3XzBlbbw=; b=W
+        xDkgwflJ2OlqqhsqlbQ0RK1cYVY5u+6p83MBO4c7NlcmcVLbhUEr6EphS9kWtpky
+        lrSiWch7/VpKo+Jx5vgzbHPjz4tgBz5YhbFrGFs4CDQuD7nIpLAWQTHsiBRBDAgS
+        Mh4yBjtlPmuVNiGD7A304LzY1I6Sx8pqNgDorH7U8UbAmoSQSivJD4KIG2UvlTxo
+        H9spb6QuGk+GT+njYZDaGS2nKLrxAPUDAXmOqbR76gJQz9pz3JE+rbPLWRRoMTL0
+        rXQT9nNeg7Lpva8htHaqH/BTI0g0RYQGMSsULaKM4G1C+wDXuAWwatrYXseehyl7
+        qea1X2G3usWbN6eQLfCvw==
+X-ME-Sender: <xms:Yzf7YiqXqZXe_qWxXuvjpm4-3DMZM-HypQH9y3AYOsXM1ijGkFIsSg>
+    <xme:Yzf7Ygo1syUW0pmk9-RLgNX1pegGYUxZCB7UptlcxLqXsopk_HV4hUbVGnwxGj8-I
+    p39cuT-5q-Z1FZAgrE>
+X-ME-Received: <xmr:Yzf7YnPpjJcr8c7E14jmd-hMDzS9C7YtQ4U3rlMEEDBpQ-66Q6RaND5vAj6IawB13CEz4w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehfedguddtlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefkuffhvfevffgjfhgtgfgfggesthhqredttderjeenucfhrhhomhepnfhu
+    khgvucflohhnvghsuceolhhukhgvsehljhhonhgvshdruggvvheqnecuggftrfgrthhtvg
+    hrnhepteegteefhefhteegleejudfffffghfekleeijeeugfffteeiudefvdetteeuuedv
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvgeslhhjohhnvghsrdguvghv
+X-ME-Proxy: <xmx:Yzf7Yh4kpFWaZxqvGYAQXldbAZWPJvnHyAbiDHf6MmCURsjJXddsKg>
+    <xmx:Yzf7Yh4ZQnusbyGdx-udyTl9vea8O5kYxkg-8ubNIpPb-zeJTaxOYA>
+    <xmx:Yzf7YhhCRIql1VMxQa42-P4LyeGgmGqDVdg8pC_h_N_xmRg_GRk1iw>
+    <xmx:Yzf7YjRVRPIie8C0yumJECDBJ7LwaPE1-oAe-hC1SNRb8_po0TCbmA>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 16 Aug 2022 02:21:20 -0400 (EDT)
+Message-ID: <449cf9505daeb7b49deb199c101eb7b94e518ea7.camel@ljones.dev>
+Subject: Re: [PATCH 1/6] Fixes 98829e84dc67 ("asus-wmi: Add dgpu disable
+ method")
+From:   Luke Jones <luke@ljones.dev>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 16 Aug 2022 18:21:10 +1200
+In-Reply-To: <fc250b82-c7c7-9215-f3dd-be87e0a72edd@redhat.com>
+References: <20220812222509.292692-1-luke@ljones.dev>
+         <20220812222509.292692-2-luke@ljones.dev>
+         <fc250b82-c7c7-9215-f3dd-be87e0a72edd@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (by Flathub.org) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/colyli/linux-bcache.git nvdimm-meta
-head:   b3a2634cd2ac86de5e7ac607104db6866b1b9f6b
-commit: 08ce6a36470047a30ac9db26714a566280adddde [2/16] bcache: initialize the nvm pages allocator
-config: i386-randconfig-a003-20220815 (https://download.01.org/0day-ci/archive/20220816/202208161410.TIsjGMiZ-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/colyli/linux-bcache.git/commit/?id=08ce6a36470047a30ac9db26714a566280adddde
-        git remote add colyli-bcache https://git.kernel.org/pub/scm/linux/kernel/git/colyli/linux-bcache.git
-        git fetch --no-tags colyli-bcache nvdimm-meta
-        git checkout 08ce6a36470047a30ac9db26714a566280adddde
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/md/
+> Thanks for the patch. Note that the Fixes tag should be above your
+> signed-off-by and then the patch should otherwise have a normal
+> subject + body. I've changed the commit msg to the following
+> while merging this:
+>=20
+> """
+> platform/x86: asus-wmi: Document the dgpu_disable sysfs attribute
+> =C2=A0=C2=A0=C2=A0=20
+> The dgpu_disable attribute was not documented, this adds the
+> required documentation.
+> =C2=A0=C2=A0=C2=A0=20
+> Fixes 98829e84dc67 ("asus-wmi: Add dgpu disable method")
+> Signed-off-by: Luke D. Jones <luke@ljones.dev>
+> """
+>=20
+> and I will make similar changes to patch 2/6 and 3/6
+>=20
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Ah thank you, sorry about that, I thought I got it correct Perhaps I
+didn't read
+https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#descr=
+ibe-changes
+well enough.
 
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/md/bcache/nvmpg.h:8,
-                    from drivers/md/bcache/super.c:17:
->> drivers/md/bcache/nvmpg_format.h:132:19: warning: 'bch_nvmpg_recs_magic' defined but not used [-Wunused-const-variable=]
-     132 | static const __u8 bch_nvmpg_recs_magic[] = {
-         |                   ^~~~~~~~~~~~~~~~~~~~
->> drivers/md/bcache/nvmpg_format.h:129:19: warning: 'bch_nvmpg_magic' defined but not used [-Wunused-const-variable=]
-     129 | static const __u8 bch_nvmpg_magic[] = {
-         |                   ^~~~~~~~~~~~~~~
-
-
-vim +/bch_nvmpg_recs_magic +132 drivers/md/bcache/nvmpg_format.h
-
-e9147021c67818 Coly Li 2021-07-26  128  
-e9147021c67818 Coly Li 2021-07-26 @129  static const __u8 bch_nvmpg_magic[] = {
-e9147021c67818 Coly Li 2021-07-26  130  	0x17, 0xbd, 0x53, 0x7f, 0x1b, 0x23, 0xd6, 0x83,
-e9147021c67818 Coly Li 2021-07-26  131  	0x46, 0xa4, 0xf8, 0x28, 0x17, 0xda, 0xec, 0xa9 };
-e9147021c67818 Coly Li 2021-07-26 @132  static const __u8 bch_nvmpg_recs_magic[] = {
-e9147021c67818 Coly Li 2021-07-26  133  	0x39, 0x25, 0x3f, 0xf7, 0x27, 0x17, 0xd0, 0xb9,
-e9147021c67818 Coly Li 2021-07-26  134  	0x10, 0xe6, 0xd2, 0xda, 0x38, 0x68, 0x26, 0xae };
-e9147021c67818 Coly Li 2021-07-26  135  
-
-:::::: The code at line 132 was first introduced by commit
-:::::: e9147021c678184512de1776d163b5a994a209a3 bcache: add initial data structures for nvm pages
-
-:::::: TO: Coly Li <colyli@suse.de>
-:::::: CC: Coly Li <colyli@suse.de>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> > ---
+> > =C2=A0Documentation/ABI/testing/sysfs-platform-asus-wmi | 9 +++++++++
+> > =C2=A01 file changed, 9 insertions(+)
+> >=20
+> > diff --git a/Documentation/ABI/testing/sysfs-platform-asus-wmi
+> > b/Documentation/ABI/testing/sysfs-platform-asus-wmi
+> > index 04885738cf15..0f932fd60f4a 100644
+> > --- a/Documentation/ABI/testing/sysfs-platform-asus-wmi
+> > +++ b/Documentation/ABI/testing/sysfs-platform-asus-wmi
+> > @@ -57,3 +57,12 @@ Description:
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+* 0 - default,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+* 1 - overboost,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+* 2 - silent
+> > +
+> > +What:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /sys/devic=
+es/platform/<platform>/dgpu_disable
+> > +Date:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Aug 2022
+> > +KernelVersion: 5.17
+> > +Contact:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "Luke Jones" <luke@ljones=
+.dev>
+> > +Description:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 Disable discrete GPU:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * 0 - Enabl=
+e dGPU,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * 1 - Disab=
+le dGPU,
+> > \ No newline at end of file
+>=20
+> Next time please make sure the file always ends with a newline
+> even in intermediate patches.
+>=20
+> Regards,
+>=20
+> Hans
+>=20
+>=20

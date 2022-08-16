@@ -2,182 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94AE5964F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 23:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC579596501
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 23:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237470AbiHPVvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 17:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
+        id S237515AbiHPVyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 17:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237719AbiHPVv0 (ORCPT
+        with ESMTP id S237105AbiHPVys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 17:51:26 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824BD8E0C7
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 14:51:23 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id w197so13529880oie.5
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 14:51:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=cINbdQx9vuTQNR1x1rEsEZ4jjGMUWdf19tZ6cChgAaA=;
-        b=CJvwxuwd+0rt/bo4TkCNqYjlT4SJ6Aesn0zM6uXzP6TCT+LreKW44m+4ak4S4QcpN8
-         Z3emQFWvCmqT6EmdYqBJBiTKDxs25SPIFHJWRc2lCFCaMDG285aPNFHSJURzJUXrItiL
-         Ui0T4+b4CX6rGWwwzQfjXo8/X0Ju4rYSJ9xG3J7ltDjyoURr0U0yWlyr6RXfyYXVOrj/
-         dZni714OJ/a9KGzQWNmYg0CEkelbTwf73pNCb8n0Ac9BiqIv1/rm9RuUiqu/Zp2s8EQx
-         XozhxC5/9Z05RYEinUrW7q9aA6G43Pjq/Ad7nHIMnr1jM1fRLjCBEg6+JP0Ma1IBiniW
-         viLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=cINbdQx9vuTQNR1x1rEsEZ4jjGMUWdf19tZ6cChgAaA=;
-        b=S229wJ0rbYk2hXQhUm01k6v60xJkElfcwn4SHSE4I4SJB9TVJ0cN1cVPvThFo0C4N4
-         13n3SgLRh8AXI17y4/TTPee4KgyQmo9AS8HC4sMo45wxnBRASmnHZfN8ugYYT1SC5jT0
-         6xyYZHYhz4HSJzUo6tjjD2NT2vbutjE2ZV/QLRKx6kcRr8DXr4ExjGm0RHzh8VpsIuxq
-         pNftZzWSrcoNub4E9mlBcKHQ9RZ/6UplOQxrIBZecbv5ElPtwgcxqV1omzLsz3DzATh2
-         49ePvhhkZ5Q28UNBUoIyWueb8mNXQmXQCDbu+uZtj/MC3HBcKkFPqDZ1aq0wCqs/piae
-         UGhQ==
-X-Gm-Message-State: ACgBeo2Gt41wPm2FtUN/flKMJiOhbDK6Xk/5LEnU+cX7ZP8vXehrxNAC
-        o1y86T9y3O/j+ZVtG+bBYBsthvWNnQNWU4ohH4Gl
-X-Google-Smtp-Source: AA6agR4ffEEKYkbE47q7/sRZQjQuSsIQ8phb3aTW9UCETN6ndapbDy186fFAcL9M3UIMnxT1iC01UQw6kwBHZYMTE0o=
-X-Received: by 2002:aca:b7d5:0:b0:343:c478:91c6 with SMTP id
- h204-20020acab7d5000000b00343c47891c6mr257896oif.136.1660686682803; Tue, 16
- Aug 2022 14:51:22 -0700 (PDT)
+        Tue, 16 Aug 2022 17:54:48 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE04C52DFB;
+        Tue, 16 Aug 2022 14:54:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1660686829; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=cxwQ1WMR00lHnGYAVyGK0+SuWRoNIS9p15F1MWhE1PdicDfyEpCNMCudXWTUI9MFYl/+o5ZfEg+GWSuE76klI7uWsjBYRWgfFLboQOSY9IK45cPaESj8omtCDTMFlJ09cCEodygSseqJo34w73xSQJJK8rwcx5LmFU+rdg7iYVI=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1660686829; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=JfkAEDsCIWyxNmI4mhwJ5mn7xuF3EwVazopkyV9HuQY=; 
+        b=lcrM0XzMAkhg/fDf3O3b2+G9+wBcUXFo1hJwAg8/I1RXxJEI56qXaTCJYZs9YJvZQUrGVyabUbnbgAsHz0KjXSgdvXEYLZH6FQK3FDqSA7ebnU9SXXFQF/DyKsLI9xsEouvlxWu3K539BI7bVDfPeEy0N1wLFbvnqWlfPlKfspI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1660686829;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=JfkAEDsCIWyxNmI4mhwJ5mn7xuF3EwVazopkyV9HuQY=;
+        b=PgkQ6qf/dl0nMSLdNDRFu5czFHKSBpy4/KalbfVejqx8Vdevne9K8KW9jd36qMdu
+        0qr219GkbrNlUMHZesCOCW5j1G9JIC13uDDxjMWv6d2qQM7hTRgln8GYd/yyVoHLZrE
+        bh7McL80X4XytMJHfGA7U7hkvTuF8bpBxJe6lTOo=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1660686827773292.2548995045163; Tue, 16 Aug 2022 14:53:47 -0700 (PDT)
+Message-ID: <112f47d9-5b8a-8be5-52da-42f7c5223161@arinc9.com>
+Date:   Wed, 17 Aug 2022 00:53:33 +0300
 MIME-Version: 1.0
-References: <20220815162028.926858-1-fred@cloudflare.com>
-In-Reply-To: <20220815162028.926858-1-fred@cloudflare.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 16 Aug 2022 17:51:12 -0400
-Message-ID: <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
-Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
-To:     Frederick Lawler <fred@cloudflare.com>
-Cc:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        ebiederm@xmission.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com,
-        tixxdz@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 7/7] dt-bindings: net: dsa: mediatek,mt7530: update
+ binding description
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220813154415.349091-1-arinc.unal@arinc9.com>
+ <20220813154415.349091-8-arinc.unal@arinc9.com>
+ <20220816212558.GA2754986-robh@kernel.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20220816212558.GA2754986-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 12:20 PM Frederick Lawler <fred@cloudflare.com> wrote:
->
-> While user namespaces do not make the kernel more vulnerable, they are however
-> used to initiate exploits. Some users do not want to block namespace creation
-> for the entirety of the system, which some distributions provide. Instead, we
-> needed a way to have some applications be blocked, and others allowed. This is
-> not possible with those tools. Managing hierarchies also did not fit our case
-> because we're determining which tasks are allowed based on their attributes.
->
-> While exploring a solution, we first leveraged the LSM cred_prepare hook
-> because that is the closest hook to prevent a call to create_user_ns().
->
-> The calls look something like this:
->
->     cred = prepare_creds()
->         security_prepare_creds()
->             call_int_hook(cred_prepare, ...
->     if (cred)
->         create_user_ns(cred)
->
-> We noticed that error codes were not propagated from this hook and
-> introduced a patch [1] to propagate those errors.
->
-> The discussion notes that security_prepare_creds() is not appropriate for
-> MAC policies, and instead the hook is meant for LSM authors to prepare
-> credentials for mutation. [2]
->
-> Additionally, cred_prepare hook is not without problems. Handling the clone3
-> case is a bit more tricky due to the user space pointer passed to it. This
-> makes checking the syscall subject to a possible TOCTTOU attack.
->
-> Ultimately, we concluded that a better course of action is to introduce
-> a new security hook for LSM authors. [3]
->
-> This patch set first introduces a new security_create_user_ns() function
-> and userns_create LSM hook, then marks the hook as sleepable in BPF. The
-> following patches after include a BPF test and a patch for an SELinux
-> implementation.
->
-> We want to encourage use of user namespaces, and also cater the needs
-> of users/administrators to observe and/or control access. There is no
-> expectation of an impact on user space applications because access control
-> is opt-in, and users wishing to observe within a LSM context
->
->
-> Links:
-> 1. https://lore.kernel.org/all/20220608150942.776446-1-fred@cloudflare.com/
-> 2. https://lore.kernel.org/all/87y1xzyhub.fsf@email.froward.int.ebiederm.org/
-> 3. https://lore.kernel.org/all/9fe9cd9f-1ded-a179-8ded-5fde8960a586@cloudflare.com/
->
-> Past discussions:
-> V4: https://lore.kernel.org/all/20220801180146.1157914-1-fred@cloudflare.com/
-> V3: https://lore.kernel.org/all/20220721172808.585539-1-fred@cloudflare.com/
-> V2: https://lore.kernel.org/all/20220707223228.1940249-1-fred@cloudflare.com/
-> V1: https://lore.kernel.org/all/20220621233939.993579-1-fred@cloudflare.com/
->
-> Changes since v4:
-> - Update commit description
-> - Update cover letter
-> Changes since v3:
-> - Explicitly set CAP_SYS_ADMIN to test namespace is created given
->   permission
-> - Simplify BPF test to use sleepable hook only
-> - Prefer unshare() over clone() for tests
-> Changes since v2:
-> - Rename create_user_ns hook to userns_create
-> - Use user_namespace as an object opposed to a generic namespace object
-> - s/domB_t/domA_t in commit message
-> Changes since v1:
-> - Add selftests/bpf: Add tests verifying bpf lsm create_user_ns hook patch
-> - Add selinux: Implement create_user_ns hook patch
-> - Change function signature of security_create_user_ns() to only take
->   struct cred
-> - Move security_create_user_ns() call after id mapping check in
->   create_user_ns()
-> - Update documentation to reflect changes
->
-> Frederick Lawler (4):
->   security, lsm: Introduce security_create_user_ns()
->   bpf-lsm: Make bpf_lsm_userns_create() sleepable
->   selftests/bpf: Add tests verifying bpf lsm userns_create hook
->   selinux: Implement userns_create hook
->
->  include/linux/lsm_hook_defs.h                 |   1 +
->  include/linux/lsm_hooks.h                     |   4 +
->  include/linux/security.h                      |   6 ++
->  kernel/bpf/bpf_lsm.c                          |   1 +
->  kernel/user_namespace.c                       |   5 +
->  security/security.c                           |   5 +
->  security/selinux/hooks.c                      |   9 ++
->  security/selinux/include/classmap.h           |   2 +
->  .../selftests/bpf/prog_tests/deny_namespace.c | 102 ++++++++++++++++++
->  .../selftests/bpf/progs/test_deny_namespace.c |  33 ++++++
->  10 files changed, 168 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/deny_namespace.c
->  create mode 100644 tools/testing/selftests/bpf/progs/test_deny_namespace.c
+On 17.08.2022 00:25, Rob Herring wrote:
+> On Sat, Aug 13, 2022 at 06:44:15PM +0300, Arınç ÜNAL wrote:
+>> Update the description of the binding.
+>>
+>> - Describe the switches, which SoCs they are in, or if they are standalone.
+>> - Explain the various ways of configuring MT7530's port 5.
+>> - Remove phy-mode = "rgmii-txid" from description. Same code path is
+>> followed for delayed rgmii and rgmii phy-mode on mtk_eth_soc.c.
+>>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
+>>   .../bindings/net/dsa/mediatek,mt7530.yaml     | 97 ++++++++++++-------
+>>   1 file changed, 62 insertions(+), 35 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> index 530ef5a75a2f..cf6340d072df 100644
+>> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> @@ -13,41 +13,68 @@ maintainers:
+>>     - Sean Wang <sean.wang@mediatek.com>
+>>   
+>>   description: |
+>> -  Port 5 of mt7530 and mt7621 switch is muxed between:
+>> -  1. GMAC5: GMAC5 can interface with another external MAC or PHY.
+>> -  2. PHY of port 0 or port 4: PHY interfaces with an external MAC like 2nd GMAC
+>> -     of the SOC. Used in many setups where port 0/4 becomes the WAN port.
+>> -     Note: On a MT7621 SOC with integrated switch: 2nd GMAC can only connected to
+>> -       GMAC5 when the gpios for RGMII2 (GPIO 22-33) are not used and not
+>> -       connected to external component!
+>> -
+>> -  Port 5 modes/configurations:
+>> -  1. Port 5 is disabled and isolated: An external phy can interface to the 2nd
+>> -     GMAC of the SOC.
+>> -     In the case of a build-in MT7530 switch, port 5 shares the RGMII bus with 2nd
+>> -     GMAC and an optional external phy. Mind the GPIO/pinctl settings of the SOC!
+>> -  2. Port 5 is muxed to PHY of port 0/4: Port 0/4 interfaces with 2nd GMAC.
+>> -     It is a simple MAC to PHY interface, port 5 needs to be setup for xMII mode
+>> -     and RGMII delay.
+>> -  3. Port 5 is muxed to GMAC5 and can interface to an external phy.
+>> -     Port 5 becomes an extra switch port.
+>> -     Only works on platform where external phy TX<->RX lines are swapped.
+>> -     Like in the Ubiquiti ER-X-SFP.
+>> -  4. Port 5 is muxed to GMAC5 and interfaces with the 2nd GAMC as 2nd CPU port.
+>> -     Currently a 2nd CPU port is not supported by DSA code.
+>> -
+>> -  Depending on how the external PHY is wired:
+>> -  1. normal: The PHY can only connect to 2nd GMAC but not to the switch
+>> -  2. swapped: RGMII TX, RX are swapped; external phy interface with the switch as
+>> -     a ethernet port. But can't interface to the 2nd GMAC.
+>> -
+>> -    Based on the DT the port 5 mode is configured.
+>> -
+>> -  Driver tries to lookup the phy-handle of the 2nd GMAC of the master device.
+>> -  When phy-handle matches PHY of port 0 or 4 then port 5 set-up as mode 2.
+>> -  phy-mode must be set, see also example 2 below!
+>> -  * mt7621: phy-mode = "rgmii-txid";
+>> -  * mt7623: phy-mode = "rgmii";
+>> +  There are two versions of MT7530, standalone and in a multi-chip module.
+>> +
+>> +  MT7530 is a part of the multi-chip module in MT7620AN, MT7620DA, MT7620DAN,
+>> +  MT7620NN, MT7621AT, MT7621DAT, MT7621ST and MT7623AI SoCs.
+>> +
+>> +  MT7530 in MT7620AN, MT7620DA, MT7620DAN and MT7620NN SoCs has got 10/100 PHYs
+> 
+> s/got //
 
-I just merged this into the lsm/next tree, thanks for seeing this
-through Frederick, and thank you to everyone who took the time to
-review the patches and add their tags.
+Can't use British English on bindings? :)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git next
+> 
+>> +  and the switch registers are directly mapped into SoC's memory map rather than
+>> +  using MDIO. There is currently no support for this.
+> 
+> No support in the binding or driver? Driver capabilities are relevant to
+> the binding.
 
--- 
-paul-moore.com
+In the driver. Also, did you mean irrelevant? Should I remove this part 
+from the binding?
+
+> 
+>> +
+>> +  There is only the standalone version of MT7531.
+>> +
+>> +  Port 5 on MT7530 has got various ways of configuration.
+> 
+> s/got //
+> 
+>> +
+>> +  For standalone MT7530:
+>> +
+>> +    - Port 5 can be used as a CPU port.
+>> +
+>> +    - PHY 0 or 4 of the switch can be muxed to connect to the gmac of the SoC
+>> +      which port 5 is wired to. Usually used for connecting the wan port
+>> +      directly to the CPU to achieve 2 Gbps routing in total.
+>> +
+>> +      The driver looks up the reg on the ethernet-phy node which the phy-handle
+>> +      property refers to on the gmac node to mux the specified phy.
+>> +
+>> +      The driver requires the gmac of the SoC to have "mediatek,eth-mac" as the
+>> +      compatible string and the reg must be 1. So, for now, only gmac1 of an
+>> +      MediaTek SoC can benefit this. Banana Pi BPI-R2 suits this.
+>> +      Check out example 5 for a similar configuration.
+>> +
+>> +    - Port 5 can be wired to an external phy. Port 5 becomes a DSA slave.
+>> +      Check out example 7 for a similar configuration.
+>> +
+>> +  For multi-chip module MT7530:
+>> +
+>> +    - Port 5 can be used as a CPU port.
+>> +
+>> +    - PHY 0 or 4 of the switch can be muxed to connect to gmac1 of the SoC.
+>> +      Usually used for connecting the wan port directly to the CPU to achieve 2
+>> +      Gbps routing in total.
+>> +
+>> +      The driver looks up the reg on the ethernet-phy node which the phy-handle
+>> +      property refers to on the gmac node to mux the specified phy.
+>> +
+>> +      For the MT7621 SoCs, rgmii2 group must be claimed with rgmii2 function.
+>> +      Check out example 5.
+>> +
+>> +    - In case of an external phy wired to gmac1 of the SoC, port 5 must not be
+>> +      enabled.
+>> +
+>> +      In case of muxing PHY 0 or 4, the external phy must not be enabled.
+>> +
+>> +      For the MT7621 SoCs, rgmii2 group must be claimed with rgmii2 function.
+>> +      Check out example 6.
+>> +
+>> +    - Port 5 can be muxed to an external phy. Port 5 becomes a DSA slave.
+>> +      The external phy must be wired TX to TX to gmac1 of the SoC for this to
+>> +      work. Ubiquiti EdgeRouter X SFP is wired this way.
+>> +
+>> +      Muxing PHY 0 or 4 won't work when the external phy is connected TX to TX.
+>> +
+>> +      For the MT7621 SoCs, rgmii2 group must be claimed with gpio function.
+>> +      Check out example 7.
+>>   
+>>   properties:
+>>     compatible:
+>> -- 
+>> 2.34.1
+>>
+>>

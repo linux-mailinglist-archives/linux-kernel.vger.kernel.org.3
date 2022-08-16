@@ -2,263 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62BC45957B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08DA8595818
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234369AbiHPKMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38026 "EHLO
+        id S234443AbiHPKYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234188AbiHPKLa (ORCPT
+        with ESMTP id S234211AbiHPKXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:11:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59AB21372B2;
-        Tue, 16 Aug 2022 01:28:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFF23611A1;
-        Tue, 16 Aug 2022 08:28:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B49AC433C1;
-        Tue, 16 Aug 2022 08:28:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660638495;
-        bh=EmPoDDOrmxZizY34vsnNzHSlCf7i+dCyUot8tQaZBjg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XI95BQPQh6RpNOD0Bs5nBCKpR0pqBZQyYCa18uzfz70pZq9O8PW9cn03ovIHTj4ng
-         ii6Kz+lUG0CJw2+CRc5WpRLz7qBWPpBcyBevINsmGrdrrhhN0vD3wbVFsLBklQDSx3
-         wvCfPENpwGeattgqY45/ARnmvoK+l2XG3HTBrS+A=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 714/779] serial: 8250_pci: Replace dev_*() by pci_*() macros
-Date:   Mon, 15 Aug 2022 20:05:58 +0200
-Message-Id: <20220815180407.976919968@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180337.130757997@linuxfoundation.org>
-References: <20220815180337.130757997@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Tue, 16 Aug 2022 06:23:36 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75ED9116EE6;
+        Tue, 16 Aug 2022 01:13:53 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d16so8523400pll.11;
+        Tue, 16 Aug 2022 01:13:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc;
+        bh=HaNa5Lj7TflIsF441E038f4wpAfhumsnkH45RU607sM=;
+        b=Ww0bVrST1e5NUEUTrrq+iIFizUm7dif9ZWs/qC/0+v0oYqNsPQgUzmHmengaPvV1/s
+         JIBIzjKY729iRHUZMD7mivMzVkjgF4p6SyVWQFs9UFGeOh41T15QyQ4izQR9Ihn3H5FD
+         NyxpBtwQgCV+UL6wGus1uFHVaZ6Mi0HR0CGki6oJqqVF2CJJyQtyTDFUpBjBCapCjBYK
+         c/7jh+DTayooy/abN6tPsz98QnZ8vQOe4iKeKV+AD4VRCX9sNkwiRjwr9QIrmftu/DXM
+         /9Ffo9O8sq9oDuvYw9Vnx6Q0+oy9xTIRkZF2Tf2Siuqhmtv48BphvxP7ooDLwp3GgTtA
+         2F/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=HaNa5Lj7TflIsF441E038f4wpAfhumsnkH45RU607sM=;
+        b=yTjdAh58GdVxgq9lOKpv23YBVfhsfkrhdTFN7FA2KGgYXsC39+3/vuEJkxM5/B0Qi9
+         ytk2Q7rlU5lAis7p+sivX+SHQZ/9a3nFEyY4hxu0zfQ7+5UCpzclLw/vXa8euND32NMm
+         bd8VOXYaatYqfY7n7qaUxxAmH+TPXPkwt5LOoNPRLjhcgqKtyl9WD/RRebsO/0t/8Bg3
+         Z1on0Gds35vDvwRS9aIF4suTOrYKz7+Z4PSj96Aw0jRTj/jSJX0YiJOx1JbkSCS6HhXE
+         3Z7klCHuX5gY+lnal8fHbG0EPiCj4l3hu699e6qJpfOz+9zr9q7I32GqXu8yYacJpZV4
+         Dkug==
+X-Gm-Message-State: ACgBeo31MGM+S/fZNPD4ZLTza7D3tixJ4g/LrBFA8iPsNTMUD1Du+S2c
+        qHR5m7RJ8iaqhwUa8Lr6ORq7Eb4pisrtgYq3fVRD1Uu7v//9gW4=
+X-Google-Smtp-Source: AA6agR7yu8H4/ggphVQvnzGDYaE0m6ytOr7ga/16iVCtxT7N/L8vPgzY1qvU0c8CdIJkIaxTn6om5QAkBJ3RjCObDmY=
+X-Received: by 2002:a17:902:720b:b0:16d:2c4c:b52a with SMTP id
+ ba11-20020a170902720b00b0016d2c4cb52amr20409714plb.155.1660637633487; Tue, 16
+ Aug 2022 01:13:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Hao Sun <sunhao.th@gmail.com>
+Date:   Tue, 16 Aug 2022 08:13:42 +0800
+Message-ID: <CACkBjsbuxaR6cv0kXJoVnBfL9ZJXjjoUcMpw_Ogc313jSrg14A@mail.gmail.com>
+Subject: KASAN: slab-out-of-bounds Read in __htab_map_lookup_and_delete_batch
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Hello,
 
-[ Upstream commit 1177384179416c7136e1348f07609e0da1ae6b91 ]
+Last email was not formatted correctly, resend it here. The following
+crash can be triggered on:
 
-PCI subsystem provides convenient shortcut macros for message printing.
-Use those macros instead of dev_*().
+HEAD commit: ffcf9c5700e4  x86: link vdso and boot
+git tree: upstream
+console output: https://pastebin.com/raw/ngeVmgpK
+kernel config: https://pastebin.com/raw/3JYdi5mp
+C reproducer: https://paste.ubuntu.com/p/D2sz87PQ4k/
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Jiri Slaby <jslaby@kernel.org>
-Link: https://lore.kernel.org/r/20211022135147.70965-3-andriy.shevchenko@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/tty/serial/8250/8250_pci.c | 52 +++++++++++++-----------------
- 1 file changed, 22 insertions(+), 30 deletions(-)
+==================================================================
+BUG: KASAN: slab-out-of-bounds in instrument_copy_to_user
+include/linux/instrumented.h:118 [inline]
+BUG: KASAN: slab-out-of-bounds in _copy_to_user lib/usercopy.c:32 [inline]
+BUG: KASAN: slab-out-of-bounds in _copy_to_user+0x9c/0xc0 lib/usercopy.c:26
+Read of size 54 at addr ffff8881055c0100 by task syz-executor382/8357
 
-diff --git a/drivers/tty/serial/8250/8250_pci.c b/drivers/tty/serial/8250/8250_pci.c
-index ef44e5320bef..1994d2db213c 100644
---- a/drivers/tty/serial/8250/8250_pci.c
-+++ b/drivers/tty/serial/8250/8250_pci.c
-@@ -75,13 +75,12 @@ static int pci_default_setup(struct serial_private*,
- 
- static void moan_device(const char *str, struct pci_dev *dev)
- {
--	dev_err(&dev->dev,
--	       "%s: %s\n"
-+	pci_err(dev, "%s\n"
- 	       "Please send the output of lspci -vv, this\n"
- 	       "message (0x%04x,0x%04x,0x%04x,0x%04x), the\n"
- 	       "manufacturer and name of serial board or\n"
- 	       "modem board to <linux-serial@vger.kernel.org>.\n",
--	       pci_name(dev), str, dev->vendor, dev->device,
-+	       str, dev->vendor, dev->device,
- 	       dev->subsystem_vendor, dev->subsystem_device);
- }
- 
-@@ -238,7 +237,7 @@ static int pci_inteli960ni_init(struct pci_dev *dev)
- 	/* is firmware started? */
- 	pci_read_config_dword(dev, 0x44, &oldval);
- 	if (oldval == 0x00001000L) { /* RESET value */
--		dev_dbg(&dev->dev, "Local i960 firmware missing\n");
-+		pci_dbg(dev, "Local i960 firmware missing\n");
- 		return -ENODEV;
- 	}
- 	return 0;
-@@ -588,9 +587,8 @@ static int pci_timedia_probe(struct pci_dev *dev)
- 	 * (0,2,3,5,6: serial only -- 7,8,9: serial + parallel)
- 	 */
- 	if ((dev->subsystem_device & 0x00f0) >= 0x70) {
--		dev_info(&dev->dev,
--			"ignoring Timedia subdevice %04x for parport_serial\n",
--			dev->subsystem_device);
-+		pci_info(dev, "ignoring Timedia subdevice %04x for parport_serial\n",
-+			 dev->subsystem_device);
- 		return -ENODEV;
- 	}
- 
-@@ -827,8 +825,7 @@ static int pci_netmos_9900_numports(struct pci_dev *dev)
- 		if (sub_serports > 0)
- 			return sub_serports;
- 
--		dev_err(&dev->dev,
--			"NetMos/Mostech serial driver ignoring port on ambiguous config.\n");
-+		pci_err(dev, "NetMos/Mostech serial driver ignoring port on ambiguous config.\n");
- 		return 0;
- 	}
- 
-@@ -927,7 +924,7 @@ static int pci_ite887x_init(struct pci_dev *dev)
- 	}
- 
- 	if (i == ARRAY_SIZE(inta_addr)) {
--		dev_err(&dev->dev, "ite887x: could not find iobase\n");
-+		pci_err(dev, "could not find iobase\n");
- 		return -ENODEV;
- 	}
- 
-@@ -1022,9 +1019,7 @@ static int pci_endrun_init(struct pci_dev *dev)
- 	/* EndRun device */
- 	if (deviceID == 0x07000200) {
- 		number_uarts = ioread8(p + 4);
--		dev_dbg(&dev->dev,
--			"%d ports detected on EndRun PCI Express device\n",
--			number_uarts);
-+		pci_dbg(dev, "%d ports detected on EndRun PCI Express device\n", number_uarts);
- 	}
- 	pci_iounmap(dev, p);
- 	return number_uarts;
-@@ -1054,9 +1049,7 @@ static int pci_oxsemi_tornado_init(struct pci_dev *dev)
- 	/* Tornado device */
- 	if (deviceID == 0x07000200) {
- 		number_uarts = ioread8(p + 4);
--		dev_dbg(&dev->dev,
--			"%d ports detected on Oxford PCI Express device\n",
--			number_uarts);
-+		pci_dbg(dev, "%d ports detected on Oxford PCI Express device\n", number_uarts);
- 	}
- 	pci_iounmap(dev, p);
- 	return number_uarts;
-@@ -1116,15 +1109,15 @@ static struct quatech_feature quatech_cards[] = {
- 	{ 0, }
- };
- 
--static int pci_quatech_amcc(u16 devid)
-+static int pci_quatech_amcc(struct pci_dev *dev)
- {
- 	struct quatech_feature *qf = &quatech_cards[0];
- 	while (qf->devid) {
--		if (qf->devid == devid)
-+		if (qf->devid == dev->device)
- 			return qf->amcc;
- 		qf++;
- 	}
--	pr_err("quatech: unknown port type '0x%04X'.\n", devid);
-+	pci_err(dev, "unknown port type '0x%04X'.\n", dev->device);
- 	return 0;
- };
- 
-@@ -1287,7 +1280,7 @@ static int pci_quatech_rs422(struct uart_8250_port *port)
- 
- static int pci_quatech_init(struct pci_dev *dev)
- {
--	if (pci_quatech_amcc(dev->device)) {
-+	if (pci_quatech_amcc(dev)) {
- 		unsigned long base = pci_resource_start(dev, 0);
- 		if (base) {
- 			u32 tmp;
-@@ -1311,7 +1304,7 @@ static int pci_quatech_setup(struct serial_private *priv,
- 	port->port.uartclk = pci_quatech_clock(port);
- 	/* For now just warn about RS422 */
- 	if (pci_quatech_rs422(port))
--		pr_warn("quatech: software control of RS422 features not currently supported.\n");
-+		pci_warn(priv->dev, "software control of RS422 features not currently supported.\n");
- 	return pci_default_setup(priv, board, port, idx);
- }
- 
-@@ -1525,7 +1518,7 @@ static int pci_fintek_setup(struct serial_private *priv,
- 	/* Get the io address from configuration space */
- 	pci_read_config_word(pdev, config_base + 4, &iobase);
- 
--	dev_dbg(&pdev->dev, "%s: idx=%d iobase=0x%x", __func__, idx, iobase);
-+	pci_dbg(pdev, "idx=%d iobase=0x%x", idx, iobase);
- 
- 	port->port.iotype = UPIO_PORT;
- 	port->port.iobase = iobase;
-@@ -1689,7 +1682,7 @@ static int skip_tx_en_setup(struct serial_private *priv,
- 			struct uart_8250_port *port, int idx)
- {
- 	port->port.quirks |= UPQ_NO_TXEN_TEST;
--	dev_dbg(&priv->dev->dev,
-+	pci_dbg(priv->dev,
- 		"serial8250: skipping TxEn test for device [%04x:%04x] subsystem [%04x:%04x]\n",
- 		priv->dev->vendor, priv->dev->device,
- 		priv->dev->subsystem_vendor, priv->dev->subsystem_device);
-@@ -4007,12 +4000,12 @@ pciserial_init_ports(struct pci_dev *dev, const struct pciserial_board *board)
- 		uart.port.irq = 0;
- 	} else {
- 		if (pci_match_id(pci_use_msi, dev)) {
--			dev_dbg(&dev->dev, "Using MSI(-X) interrupts\n");
-+			pci_dbg(dev, "Using MSI(-X) interrupts\n");
- 			pci_set_master(dev);
- 			uart.port.flags &= ~UPF_SHARE_IRQ;
- 			rc = pci_alloc_irq_vectors(dev, 1, 1, PCI_IRQ_ALL_TYPES);
- 		} else {
--			dev_dbg(&dev->dev, "Using legacy interrupts\n");
-+			pci_dbg(dev, "Using legacy interrupts\n");
- 			rc = pci_alloc_irq_vectors(dev, 1, 1, PCI_IRQ_LEGACY);
- 		}
- 		if (rc < 0) {
-@@ -4030,12 +4023,12 @@ pciserial_init_ports(struct pci_dev *dev, const struct pciserial_board *board)
- 		if (quirk->setup(priv, board, &uart, i))
- 			break;
- 
--		dev_dbg(&dev->dev, "Setup PCI port: port %lx, irq %d, type %d\n",
-+		pci_dbg(dev, "Setup PCI port: port %lx, irq %d, type %d\n",
- 			uart.port.iobase, uart.port.irq, uart.port.iotype);
- 
- 		priv->line[i] = serial8250_register_8250_port(&uart);
- 		if (priv->line[i] < 0) {
--			dev_err(&dev->dev,
-+			pci_err(dev,
- 				"Couldn't register serial port %lx, irq %d, type %d, error %d\n",
- 				uart.port.iobase, uart.port.irq,
- 				uart.port.iotype, priv->line[i]);
-@@ -4131,8 +4124,7 @@ pciserial_init_one(struct pci_dev *dev, const struct pci_device_id *ent)
- 	}
- 
- 	if (ent->driver_data >= ARRAY_SIZE(pci_boards)) {
--		dev_err(&dev->dev, "invalid driver_data: %ld\n",
--			ent->driver_data);
-+		pci_err(dev, "invalid driver_data: %ld\n", ent->driver_data);
- 		return -EINVAL;
- 	}
- 
-@@ -4215,7 +4207,7 @@ static int pciserial_resume_one(struct device *dev)
- 		err = pci_enable_device(pdev);
- 		/* FIXME: We cannot simply error out here */
- 		if (err)
--			dev_err(dev, "Unable to re-enable ports, trying to continue.\n");
-+			pci_err(pdev, "Unable to re-enable ports, trying to continue.\n");
- 		pciserial_resume_ports(priv);
- 	}
- 	return 0;
--- 
-2.35.1
+CPU: 1 PID: 8357 Comm: syz-executor382 Not tainted
+5.19.0-13666-gffcf9c5700e4-dirty #15
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x57/0x7d lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:317 [inline]
+ print_report.cold+0xe5/0x66d mm/kasan/report.c:433
+ kasan_report+0x8a/0x1b0 mm/kasan/report.c:495
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13b/0x190 mm/kasan/generic.c:189
+ instrument_copy_to_user include/linux/instrumented.h:118 [inline]
+ _copy_to_user lib/usercopy.c:32 [inline]
+ _copy_to_user+0x9c/0xc0 lib/usercopy.c:26
+ copy_to_user include/linux/uaccess.h:160 [inline]
+ __htab_map_lookup_and_delete_batch+0x1169/0x1cf0 kernel/bpf/hashtab.c:1809
+ bpf_map_do_batch+0x2d6/0x590 kernel/bpf/syscall.c:4498
+ __sys_bpf+0x1193/0x48b0 kernel/bpf/syscall.c:5014
+ __do_sys_bpf kernel/bpf/syscall.c:5058 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5056 [inline]
+ __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5056
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f797e7e5b9d
+Code: c3 e8 97 2a 00 00 0f 1f 80 00 00 00 00 f3 0f 1e fa 48 89 f8 48
+89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f797e76ad78 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00007f797e87a2d0 RCX: 00007f797e7e5b9d
+RDX: 0000000000000038 RSI: 0000000020000680 RDI: 0000000000000019
+RBP: 00007f797e84700c R08: 00007f797e76b700 R09: 0000000000000000
+R10: 00007f797e76b700 R11: 0000000000000246 R12: 00007f797e87a2d8
+R13: 00007f797e87a2dc R14: 00000000200014c0 R15: 00007f797e846008
+ </TASK>
 
+Allocated by task 8357:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:437 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:516 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:475 [inline]
+ __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:525
+ kasan_kmalloc include/linux/kasan.h:234 [inline]
+ __kmalloc_node+0x1e9/0x360 mm/slub.c:4472
+ kvmalloc include/linux/slab.h:750 [inline]
+ kvmalloc_array include/linux/slab.h:768 [inline]
+ __htab_map_lookup_and_delete_batch+0x538/0x1cf0 kernel/bpf/hashtab.c:1680
+ bpf_map_do_batch+0x2d6/0x590 kernel/bpf/syscall.c:4498
+ __sys_bpf+0x1193/0x48b0 kernel/bpf/syscall.c:5014
+ __do_sys_bpf kernel/bpf/syscall.c:5058 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5056 [inline]
+ __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5056
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
+The buggy address belongs to the object at ffff8881055c0100
+ which belongs to the cache kmalloc-64 of size 64
+The buggy address is located 0 bytes inside of
+ 64-byte region [ffff8881055c0100, ffff8881055c0140)
 
+The buggy address belongs to the physical page:
+page:ffffea0004157000 refcount:1 mapcount:0 mapping:0000000000000000
+index:0x0 pfn:0x1055c0
+flags: 0x57ff00000000200(slab|node=1|zone=2|lastcpupid=0x7ff)
+raw: 057ff00000000200 0000000000000000 dead000000000122 ffff888010c42640
+raw: 0000000000000000 0000000080200020 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask
+0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 6756, tgid 6756
+(syz-executor382), ts 131529364832, free_ts 131498233118
+ set_page_owner include/linux/page_owner.h:31 [inline]
+ post_alloc_hook mm/page_alloc.c:2525 [inline]
+ prep_new_page+0x2c6/0x350 mm/page_alloc.c:2532
+ get_page_from_freelist+0xae9/0x3a80 mm/page_alloc.c:4283
+ __alloc_pages+0x321/0x710 mm/page_alloc.c:5515
+ alloc_slab_page mm/slub.c:1824 [inline]
+ allocate_slab mm/slub.c:1969 [inline]
+ new_slab+0x246/0x3a0 mm/slub.c:2029
+ ___slab_alloc+0xa50/0x1060 mm/slub.c:3031
+ __slab_alloc.isra.0+0x4d/0xa0 mm/slub.c:3118
+ slab_alloc_node mm/slub.c:3209 [inline]
+ __kmalloc_node+0x2ed/0x360 mm/slub.c:4468
+ kmalloc_node include/linux/slab.h:623 [inline]
+ __vmalloc_area_node mm/vmalloc.c:3012 [inline]
+ __vmalloc_node_range+0x30a/0xf70 mm/vmalloc.c:3196
+ alloc_thread_stack_node kernel/fork.c:312 [inline]
+ dup_task_struct kernel/fork.c:977 [inline]
+ copy_process+0x4069/0x6660 kernel/fork.c:2087
+ kernel_clone+0xba/0xba0 kernel/fork.c:2673
+ __do_sys_clone+0xa1/0xe0 kernel/fork.c:2807
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1449 [inline]
+ free_pcp_prepare+0x5ab/0xd00 mm/page_alloc.c:1499
+ free_unref_page_prepare mm/page_alloc.c:3380 [inline]
+ free_unref_page+0x19/0x410 mm/page_alloc.c:3476
+ __tlb_remove_table arch/x86/include/asm/tlb.h:34 [inline]
+ __tlb_remove_table_free mm/mmu_gather.c:114 [inline]
+ tlb_remove_table_rcu+0x6e/0xb0 mm/mmu_gather.c:169
+ rcu_do_batch kernel/rcu/tree.c:2245 [inline]
+ rcu_core+0x785/0x1720 kernel/rcu/tree.c:2505
+ __do_softirq+0x1d0/0x908 kernel/softirq.c:571
+
+Memory state around the buggy address:
+ ffff8881055c0000: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
+ ffff8881055c0080: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
+>ffff8881055c0100: 00 00 00 00 00 05 fc fc fc fc fc fc fc fc fc fc
+                                  ^
+ ffff8881055c0180: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff8881055c0200: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================

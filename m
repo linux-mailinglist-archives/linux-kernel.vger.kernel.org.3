@@ -2,193 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040EC5956B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 303D25956B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232346AbiHPJiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
+        id S233783AbiHPJic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233544AbiHPJiH (ORCPT
+        with ESMTP id S233738AbiHPJhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:38:07 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E592D8E1D
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:59:47 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id ha11so9087834pjb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:59:47 -0700 (PDT)
+        Tue, 16 Aug 2022 05:37:52 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE349F1B4
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:59:34 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id bx38so9844648ljb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:59:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=kvxJ31pMs7iubHIwtBMkPHRJw222fpBj25ImczwoxRk=;
-        b=g1OnjbncFfK2BW8/IezCZRmKlCi1L4tXB4x0I02Mld2WTywa9Vf9KiTHGp+NOdhRKH
-         pYy6Ne4MeQnU50Q5KeX6liGhp2EEKXA4x19KhxYZTKKi5kEzzNABlhepnkpBZSIqwsVN
-         k9zLt2SvCwPaDrNmF+QIwsE8sAkTx1bd8otp+6EiuhnsENZzBDLUCgrxB8kbh1AM/KnJ
-         eSmzVO0uLyxnUeYkh1m6kwARgVnqIZcX/KKXXX8e+CdLHbSSYS2i6/8TdAUOrqF+On2y
-         F3F6ONZVP5DRBlbqAyKyu9+rIy88XUBKOHkgFwbI0aibsyTol/tDHrTItrgjgBDxAtdj
-         t+AA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=g9AVhSipbaf/eXJy1pQ1TuttjNQk/U+DsKSgY1pczUU=;
+        b=Uy6ZJgSKHU3wkm4PXrWnNLDqhjscMTqd0Ux0IrKuwQlJzNcE1idKJ01LVbbz+DwEbp
+         0NaniCFs53GfwgdvFUL+EbwjEVdbeR7nuZph0C0MUk/EE9srqfIBGfJl+0s7m33T2ky3
+         rDMpTTO/0Vx+ZD1eh/ZupuG3PU0Ir75fFSPVUn9b1F0J6rv7cBJBQyzuapg1lHhxFcBT
+         3FtOb1TMEKgs9M8oWOwqhMPFzmojkygIdW0YwbgBVcT+i9RHURGWJQmWs5oecGT3cGSo
+         ToFBbahVd1Hdr+pHXbUwBqiqDdKnUW6AWRKH415NRa6XxavubS5Q0WVCJXwc6CaJr6On
+         I1EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=kvxJ31pMs7iubHIwtBMkPHRJw222fpBj25ImczwoxRk=;
-        b=VNYni2d9p4XsckoptithdcGMq5y9sSf8EoPl33pe8CiuK794C3D3XjrVhc7xj0ar8+
-         bh9LqLT42P0beOSz8mzxeEKCz47d7IPeOo73+k51MoYYDodRY+vJOCta+YUvJzcJLd8L
-         8eD/ej06qBTUSlYKXj/qrPxHcKTGltbEjrsjgKExPMciuozSTIj63U3JdoZYFtpzCuI4
-         oXQSqMhxEbJcPy0fs8iETIM4CfIFioPV/LnhdGhsaM6NHE8UY9KJjnS3S0AZOf7e75hx
-         Hn3VXJ1n426UM+Ay59jAl3rnkxOZ0x/r1W/JlVRg69loxH6B43anudi33CJY6U48pKDj
-         gu5g==
-X-Gm-Message-State: ACgBeo2nSl/Hcb1ohW8gOJWzf2lpE5rvH4zj8NK8xpz+3E98T0YH672w
-        GQRs0YOmLdMy0ipj3KbxDkhIzQ==
-X-Google-Smtp-Source: AA6agR6q1iuy02bAx0HwOXInhdES5zIFbm3q7tFNcVwrq2sakYMaYPpShkuoobkVem5XFJBpgs8skQ==
-X-Received: by 2002:a17:90b:164b:b0:1f5:15ae:3206 with SMTP id il11-20020a17090b164b00b001f515ae3206mr21921654pjb.140.1660636786654;
-        Tue, 16 Aug 2022 00:59:46 -0700 (PDT)
-Received: from FVFDK26JP3YV.bytedance.net ([61.120.150.76])
-        by smtp.gmail.com with ESMTPSA id r2-20020a17090a454200b001f280153b4dsm5631276pjm.47.2022.08.16.00.59.43
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Aug 2022 00:59:46 -0700 (PDT)
-From:   Lei He <helei.sig11@bytedance.com>
-To:     arei.gonglei@huawei.com, herbert@gondor.apana.org.au
-Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pizhenwei@bytedance.com, lei he <helei.sig11@bytedance.com>
-Subject: [PATCH] crypto-virtio: fix memory-leak
-Date:   Tue, 16 Aug 2022 15:59:16 +0800
-Message-Id: <20220816075916.23651-1-helei.sig11@bytedance.com>
-X-Mailer: git-send-email 2.29.2
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=g9AVhSipbaf/eXJy1pQ1TuttjNQk/U+DsKSgY1pczUU=;
+        b=tgYkUxn6gXPkl/Lw6NT9ixXaVol6IGC3hzzEVUktFRTguD89bSGzBTmw9XODcYbi9F
+         gTTS2GX/7pjex0ew/1sDek9HyL2iIDEz2smSP7yXAQ72lhnvSB6VP8qwzgrsy1YNz1Pj
+         NhsQ5U0O1bdgjZPMH7ONygltwyGjkfQBC8OLKLoI8eILJu2i3pSF8zB09rFkWBgcoBFU
+         K9PoY4ti3B0FIcRolAJhqhKVJmLpterkS+tkHT/Wi76u02yB7Tow8nz6NMM3wf40UQBj
+         Zvo2//cCgrzQUn4F8Y9Lndcdao0uwFSZS7oFf2WmfuypKygeQ4zTEoJ3o7m/yAMvFITv
+         EShA==
+X-Gm-Message-State: ACgBeo3h8UjHIN8iroEgOvSSy+s0mEGe+vW/VTMZ1qYftCo+rAjfOGID
+        W3WJMnwA+LnBFdJPhGYHpHGe3A==
+X-Google-Smtp-Source: AA6agR6xQcCDwa5Y7ZedEXSH3KPdCrhgYaOW8MRt2LmiBXBDpKyIkaGnAKC7W2LpJgA43dLKExvbYg==
+X-Received: by 2002:a2e:a78f:0:b0:25f:dedf:efb8 with SMTP id c15-20020a2ea78f000000b0025fdedfefb8mr6167930ljf.317.1660636771402;
+        Tue, 16 Aug 2022 00:59:31 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
+        by smtp.gmail.com with ESMTPSA id m23-20020a2e8717000000b0025e5631194dsm1695640lji.21.2022.08.16.00.59.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 00:59:30 -0700 (PDT)
+Message-ID: <c7146f96-fec6-5371-7137-9829e635ea20@linaro.org>
+Date:   Tue, 16 Aug 2022 10:59:29 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/2] dt-bindings: edac: Add bindings for Xilinx ZynqMP OCM
+Content-Language: en-US
+To:     Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        saikrishna12468@gmail.com, git@amd.com,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+References: <20220816073203.27314-1-sai.krishna.potthuri@amd.com>
+ <20220816073203.27314-2-sai.krishna.potthuri@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220816073203.27314-2-sai.krishna.potthuri@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: lei he <helei.sig11@bytedance.com>
+On 16/08/2022 10:32, Sai Krishna Potthuri wrote:
+> From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> 
+> Add bindings for Xilinx ZynqMP OCM controller.
+> 
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> Signed-off-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+> ---
+>  .../bindings/edac/xlnx,zynqmp-ocmc.yaml       | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/edac/xlnx,zynqmp-ocmc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/edac/xlnx,zynqmp-ocmc.yaml b/Documentation/devicetree/bindings/edac/xlnx,zynqmp-ocmc.yaml
+> new file mode 100644
+> index 000000000000..9bcecaccade2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/edac/xlnx,zynqmp-ocmc.yaml
+> @@ -0,0 +1,41 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/edac/xlnx,zynqmp-ocmc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Xilinx Zynqmp OCM EDAC driver
 
-Fix memory-leak for virtio-crypto akcipher request, this problem is
-introduced by 59ca6c93387d3(virtio-crypto: implement RSA algorithm).
-The leak can be reproduced and tested with the following script
-inside virtual machine:
+s/EDAC driver//
+Is it a memory controller?
 
-#!/bin/bash
+> +
+> +maintainers:
+> +  - Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+> +  - Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+> +
+> +description: |
+> +  Xilinx ZynqMP OCM EDAC driver, it does reports the OCM ECC single bit errors
 
-LOOP_TIMES=10000
+The same. Describe the hardware, not the Linux driver or its subsystem.
 
-# required module: pkcs8_key_parser, virtio_crypto
-modprobe pkcs8_key_parser # if CONFIG_PKCS8_PRIVATE_KEY_PARSER=m
-modprobe virtio_crypto # if CONFIG_CRYPTO_DEV_VIRTIO=m
-rm -rf /tmp/data
-dd if=/dev/random of=/tmp/data count=1 bs=230
+> +  that are corrected and double bit ecc errors that are detected by the OCM
 
-# generate private key and self-signed cert
-openssl req -nodes -x509 -newkey rsa:2048 -keyout key.pem \
-		-outform der -out cert.der  \
-		-subj "/C=CN/ST=GD/L=SZ/O=vihoo/OU=dev/CN=always.com/emailAddress=yy@always.com"
-# convert private key from pem to der
-openssl pkcs8 -in key.pem -topk8 -nocrypt -outform DER -out key.der
+s/ecc/ECC/
 
-# add key
-PRIV_KEY_ID=`cat key.der | keyctl padd asymmetric test_priv_key @s`
-echo "priv key id = "$PRIV_KEY_ID
-PUB_KEY_ID=`cat cert.der | keyctl padd asymmetric test_pub_key @s`
-echo "pub key id = "$PUB_KEY_ID
+> +  ECC controller.
+> +
+> +properties:
+> +  compatible:
+> +    const: xlnx,zynqmp-ocmc-1.0
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    memory-controller@ff960000 {
+> +      compatible = "xlnx,zynqmp-ocmc-1.0";
+> +      reg = <0xff960000 0x1000>;
+> +      interrupts = <0 10 4>;
 
-# query key
-keyctl pkey_query $PRIV_KEY_ID 0
-keyctl pkey_query $PUB_KEY_ID 0
+Isn't the interrupt using common flags? If so, use proper defines.
 
-# here we only run pkey_encrypt becasuse it is the fastest interface
-function bench_pub() {
-	keyctl pkey_encrypt $PUB_KEY_ID 0 /tmp/data enc=pkcs1 >/tmp/enc.pub
-}
+> +    };
 
-# do bench_pub in loop to obtain the memory leak
-for (( i = 0; i < ${LOOP_TIMES}; ++i )); do
-	bench_pub
-done
 
-Signed-off-by: lei he <helei.sig11@bytedance.com>
-
-# Please enter the commit message for your changes. Lines starting
-# with '#' will be kept; you may remove them yourself if you want to.
-# An empty message aborts the commit.
-#
-# Date:      Tue Aug 16 11:53:30 2022 +0800
-#
-# On branch master
-# Your branch is ahead of 'origin/master' by 1 commit.
-#   (use "git push" to publish your local commits)
-#
-# Changes to be committed:
-#	modified:   drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-#
-# Untracked files:
-#	cert.der
-#	key.der
-#	key.pem
-#
-
-# Please enter the commit message for your changes. Lines starting
-# with '#' will be kept; you may remove them yourself if you want to.
-# An empty message aborts the commit.
-#
-# Date:      Tue Aug 16 11:53:30 2022 +0800
-#
-# On branch master
-# Your branch is ahead of 'origin/master' by 1 commit.
-#   (use "git push" to publish your local commits)
-#
-# Changes to be committed:
-#	modified:   drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-#
-# Untracked files:
-#	cert.der
-#	key.der
-#	key.pem
-#
-
-# Please enter the commit message for your changes. Lines starting
-# with '#' will be kept; you may remove them yourself if you want to.
-# An empty message aborts the commit.
-#
-# Date:      Tue Aug 16 11:53:30 2022 +0800
-#
-# On branch master
-# Your branch is ahead of 'origin/master' by 1 commit.
-#   (use "git push" to publish your local commits)
-#
-# Changes to be committed:
-#	modified:   drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-#
-# Untracked files:
-#	cert.der
-#	key.der
-#	key.pem
-#
----
- drivers/crypto/virtio/virtio_crypto_akcipher_algs.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-index 2a60d0525cde..168195672e2e 100644
---- a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-+++ b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-@@ -56,6 +56,10 @@ static void virtio_crypto_akcipher_finalize_req(
- 	struct virtio_crypto_akcipher_request *vc_akcipher_req,
- 	struct akcipher_request *req, int err)
- {
-+	kfree(vc_akcipher_req->src_buf);
-+	kfree(vc_akcipher_req->dst_buf);
-+	vc_akcipher_req->src_buf = NULL;
-+	vc_akcipher_req->dst_buf = NULL;
- 	virtcrypto_clear_request(&vc_akcipher_req->base);
- 
- 	crypto_finalize_akcipher_request(vc_akcipher_req->base.dataq->engine, req, err);
--- 
-2.20.1
-
+Best regards,
+Krzysztof

@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 098B3595438
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 09:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A418595448
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 09:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiHPH52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 03:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38130 "EHLO
+        id S231210AbiHPH5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 03:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbiHPH4j (ORCPT
+        with ESMTP id S232103AbiHPH4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 03:56:39 -0400
+        Tue, 16 Aug 2022 03:56:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722475D0F9
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:12:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC64DC084
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:12:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03BFB612C3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 05:12:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60262C433D6;
-        Tue, 16 Aug 2022 05:12:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D7B9612AC
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 05:12:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19C80C433C1;
+        Tue, 16 Aug 2022 05:12:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660626762;
-        bh=PyvgnXmrmnbT6B4C9lNYxGIRrb3s7yATU2so3O1O4GA=;
+        s=k20201202; t=1660626774;
+        bh=0NPCl8h/PhjoO6Udfj2C+IRqq9TJkwg8U+5iaTjcdhQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HCiHeYSktAemVxbfn+FEU16LXFFvTN16+XtYCsKKQGvcdeH6Z6XglzATRLrryOGt8
-         2CIA1xuIfUOXqKlI2TzpuL8tBbuJ3ySTp1UA7MsIvz9kHGW9+u9fzQttn8T5oo9KLT
-         43NCEQDnHl7WG7YmeMPV7EDwj6kfQaJVbdQ7DsiwO2E3OFGPTF3wd8amY4GsaNzwS5
-         YwRwaKdF4EGorMXXtkAA4zuPBcQXUpcJkkXNMHWRCN0c+Qtjkfhf5fhjnaWJO6BIDv
-         Sm0Ns1oLzPqPzar5YWIwayb/BhVxPtN0c6TB5Hx70Sp9cP17vcbKwBnk9hRlC+HE09
-         HJ3YV9XnacyTg==
-Date:   Tue, 16 Aug 2022 05:12:37 +0000
+        b=WCHOmWEx9qhPG1+ocGxP2ppCfP6gcV8IFx1eF9iRd1VT7XQS2ntm5onLCq9u/u6BW
+         iPkVqkRUNZXHJTQazU2k8t6b29GHnyiowYvoTVmvczo1TPk4vx29N/yv7xXdbGVhgX
+         1zC9ei14STqkiLjEVF5/nJ2zsKB25QYeb1S09sL6U+qZfWIHe5X7Wk6eP+Pr9NV2ei
+         sHSobNc1Rof+w/GWRr+CMOyFHHZz5fUjJ/ke+ZWZuOyBy7rzrZo+ELcBZ3bcCeV5TN
+         oUYQcR5MUcT4aD/0jA4M3i39fsVHDC3qXMhPq5lKao92PoQLxG4QuNwrui2mwH7X88
+         05L5AL8suwPQw==
+Date:   Tue, 16 Aug 2022 05:12:50 +0000
 From:   Tzung-Bi Shih <tzungbi@kernel.org>
 To:     Prashant Malani <pmalani@chromium.org>
 Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
@@ -42,18 +42,17 @@ Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
         Guenter Roeck <groeck@chromium.org>,
         "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         Kees Cook <keescook@chromium.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
         Tinghan Shen <tinghan.shen@mediatek.com>,
         Xiang wangx <wangxiang@cdjrlc.com>
-Subject: Re: [PATCH v5 5/7] platform/chrome: cros_typec_switch: Register mode
- switches
-Message-ID: <YvsnRXLVbcI+McEo@google.com>
+Subject: Re: [PATCH v5 6/7] platform/chrome: cros_ec_typec: Cleanup switch
+ handle return paths
+Message-ID: <YvsnUqn6EMxD0Bo5@google.com>
 References: <20220815063555.1384505-1-pmalani@chromium.org>
- <20220815063555.1384505-6-pmalani@chromium.org>
+ <20220815063555.1384505-7-pmalani@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220815063555.1384505-6-pmalani@chromium.org>
+In-Reply-To: <20220815063555.1384505-7-pmalani@chromium.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,23 +63,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 06:34:26AM +0000, Prashant Malani wrote:
-> Register mode switch devices for Type C connectors, when they are
-> specified by firmware. These control Type C configuration for any USB
-> Type-C mode switches (sometimes known as "muxes") which are controlled
-> by the Chrome EC.
+On Mon, Aug 15, 2022 at 06:34:28AM +0000, Prashant Malani wrote:
+> Some of the return paths for the cros_typec_get_switch_handles()
+> aren't necessary. Clean up the return paths to only undo the handle
+> get's which succeeded.
+> 
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-To be consistent to the commit message, s/Type C/Type-C/g.
-
-To be consistent to the series, I guess you would like to use ChromeOS
-instead of Chrome?
-
-> @@ -235,6 +264,17 @@ static int cros_typec_register_switches(struct cros_typec_switch_data *sdata)
->  		}
->  
->  		dev_dbg(dev, "Retimer switch registered for index %llu\n", index);
-> +
-> +		if (!fwnode_property_read_bool(fwnode, "mode-switch"))
-> +			continue;
-
-Would it be better to use device_property_present()?
+Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>

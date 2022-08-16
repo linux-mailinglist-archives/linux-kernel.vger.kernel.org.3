@@ -2,162 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB5D595798
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C875595869
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233694AbiHPKIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59494 "EHLO
+        id S234699AbiHPKdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234262AbiHPKID (ORCPT
+        with ESMTP id S234761AbiHPKdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:08:03 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB1E356F4;
-        Tue, 16 Aug 2022 01:42:58 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id b2so7628325qkh.12;
-        Tue, 16 Aug 2022 01:42:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=M8+zN5n51GohpbStdjKXmJWXHgqhXr7wmE0QoYJl1Tg=;
-        b=qLuGJVydbZapmuhh/ri/mPvYA5bm4nMtIaG76TKtA3Mvo/gBhkJK17beJcQl4lBkM0
-         iPBdZSSrCNgcezsRIABTJwp7UtgOhSIzqLsuYw6uKZIdWj2+EzGX4Ynvo2pcygJ3ES0H
-         rNv2bDiwY+8yFgEBX8y3Q+RZ0w+7z61uHWS67T1C+ZdmOf9xIz3+Ss494E0LnAKj62KJ
-         uuV7tjhnSgJ133uq7dK9dc8YkqzpGgSLl11+J0G8NNyLbKRknzb7wyR2X4f7YRD/3396
-         ChRcoJ8Z8tpfDVeQs7eHQAwLSDOEU4j8m9CRydpoEnGFQI0rjqmOED+9BOVCNq8moS5U
-         UQgA==
+        Tue, 16 Aug 2022 06:33:22 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1787AE75
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:42:25 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id j5-20020a056e02218500b002de1cf2347bso6580062ila.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:42:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=M8+zN5n51GohpbStdjKXmJWXHgqhXr7wmE0QoYJl1Tg=;
-        b=Nepdhtws48v2xij5S/nWebWOJnxuWP4JOjF/2KqaCvOgfmk3TiLhtYBKBiom95hkNS
-         gjU0XOwr5MW8JOxkNuPDG6BBnecPqoc09gvIePtGlb7iPAGaRs4Qo+5b28OYCPcgC+43
-         6Pty5tXDIzbhTHaXVTpEIitd1Qn2ZlJScZDw8ffK/aZUzgt22Xf+Z/o51x/oYWOVoAqF
-         gndFTmrZnjwe7UmD2gFmx9lPVUwkOnsUldY6hrO2HaZOHoRcb5eVIxDxyuyTBIZ/xz/M
-         uiDUCOmdl7judNDA1Pv8TNapNmlFTMwTYeev0jkQKrr4gRq7KWUX8Nhr7Hr/7OT2JfAW
-         Pinw==
-X-Gm-Message-State: ACgBeo0uJw2fp/LLnGgtYGDsjU4qdXa/Lai1LTrrKIn0na9QclHQfC75
-        hAcLSuZIYCKtjqJHK9m8xBDMqPvqpvdgcDp7bds=
-X-Google-Smtp-Source: AA6agR4R4lk0CDBQHZmGfGnS3MaEvTJE6k0Sqbe/jCHB+ee624GaEK+KH/pS5yDyRz1iFyVysOe/Lnz9Oes4idkTrfs=
-X-Received: by 2002:ae9:e311:0:b0:6ba:e711:fb27 with SMTP id
- v17-20020ae9e311000000b006bae711fb27mr11131735qkf.320.1660639377250; Tue, 16
- Aug 2022 01:42:57 -0700 (PDT)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=dwmvJf4EgEnwBidyybsf7yv6kRRFLPIA27vvnskiIhE=;
+        b=v2x40I1526x3EEGN9sYxvZx2ctdFSKbj2/65kWVs96Vs2dB7fIkmZ8oaDYYErAaTJX
+         /WjZat4ZlahLNjCii1syF5Ey8oHES9/yxHWO/yqF58w0yIqXV0C1Dz13h6L7PbYz1KR0
+         q40pFpModLre7V7TqF9VldmgGJvy6GZI9Tg3s7Ix1nseFHCBzfIZ7BfMkUK7n2VIEMhX
+         Z2zU9oabXWWgPhkuAIio2HHob0RucTqas3jd9XW0Of4sAcBB70Nz6vhtvvDWPtiwsW1t
+         rXMCwkbjzF53FeM6PRRurbypYXO6xiYD2LwSlfAwimDgt/lgePu1LhtdiIU03DzoWjWY
+         E9cQ==
+X-Gm-Message-State: ACgBeo2k8DYUgdMzPxjDrGAGaTgw7Xz/AkH1I4sh43Yyp6d8/mj+rkZl
+        Kv56XmCoRVCX1o/bdsKWKA+c8nXRfcTffp9Cndj+qZvm10jb
+X-Google-Smtp-Source: AA6agR7jjDPJUdk8sEqPjPKRJSOyW1xg7jn+o/f7DD5m8Uygk+/FhA9SCsaoa1U29c8HQCuwChnNG5hcmwnyle411BwKHzZ3dmgL
 MIME-Version: 1.0
-References: <cover.1660292316.git.mazziesaccount@gmail.com>
- <166057828406.697572.228317501909350108.b4-ty@kernel.org> <YvpsRbguMXn74GhR@pendragon.ideasonboard.com>
- <Yvp1Qkuh7xfeb/B2@sirena.org.uk> <YvqV9Mq6I3gXQaf2@pendragon.ideasonboard.com>
- <20220815205857.308B1C433D6@smtp.kernel.org> <Yvq33T+XCduoqv7Z@pendragon.ideasonboard.com>
-In-Reply-To: <Yvq33T+XCduoqv7Z@pendragon.ideasonboard.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 16 Aug 2022 11:42:20 +0300
-Message-ID: <CAHp75VefRphjAhSmrUVC8aaAhrwMD+9Jr=OROFU-0JuNhuFYDw@mail.gmail.com>
-Subject: Re: (subset) [PATCH v2 0/7] Devm helpers for regulator get and enable
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-amlogic <linux-amlogic@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Michael Turq uette <mturquette@baylibre.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        linux-hwmon@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
-        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        David Airlie <airlied@linux.ie>,
-        linux-iio <linux-iio@vger.kernel.org>
+X-Received: by 2002:a92:c984:0:b0:2dd:eacf:da3c with SMTP id
+ y4-20020a92c984000000b002ddeacfda3cmr8907868iln.245.1660639345372; Tue, 16
+ Aug 2022 01:42:25 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 01:42:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000047f3c405e657bae5@google.com>
+Subject: [syzbot] upstream boot error: BUG: unable to handle kernel paging
+ request in ext4_get_group_desc
+From:   syzbot <syzbot+5a9aafd202006e109827@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 8:37 AM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
-> On Mon, Aug 15, 2022 at 01:58:55PM -0700, Stephen Boyd wrote:
-> > Quoting Laurent Pinchart (2022-08-15 11:52:36)
-> > > On Mon, Aug 15, 2022 at 05:33:06PM +0100, Mark Brown wrote:
+Hello,
 
-...
+syzbot found the following issue on:
 
-> > > we'll run into trouble. Supplying active high input signals
-> > > to a device that is not powered can lead to latch-up, which tends to
-> > > only manifest after a statistically significant number of occurrences of
-> > > the condition, and can slowly damage the hardware over time. This is a
-> > > real concern as it will typically not be caught during early
-> > > development. I think we would still be better off with requiring drivers
-> > > to manually handle powering off the device until we provide a mechanism
-> > > that can do so safely in an automated way.
-> >
-> > Can you describe the error scenario further? I think it's driver author
-> > error that would lead to getting and enabling the regulator after
-> > getting and enabling a clk that drives out a clock signal on some pins
-> > that aren't powered yet. I'm not sure that's all that much easier to do
-> > with these sorts of devm APIs, but if it is then I'm concerned.
->
-> You will very quickly see drivers doing this (either directly or
-> indirectly):
->
-> probe()
-> {
->         devm_clk_get_enabled();
->         devm_regulator_get_enable();
-> }
+HEAD commit:    6c833c0581f1 Merge tag 'devicetree-fixes-for-6.0-1' of git..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=114179dd080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ffbab52ef9fab60
+dashboard link: https://syzkaller.appspot.com/bug?extid=5a9aafd202006e109827
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-And how is it devm specific? If the author puts the same without devm
-the ordering would be wrong, correct? devm allows us to focus on
-ordering in a *single* place, which is a win. You seem to be proposing
-to make a high burden on a driver's author to focus on ordering in the
-*three* places. I disagree with that. Yet the driver author has to
-understand many issues with any tool they use. So the root cause of
-your whining is rather on the edge of documentation and education.
-(Yes, I have heard about issues with object lifetime in v4l2
-subdevices regarding to devm, but it seems irrelevant to devm
-mechanism itself.)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5a9aafd202006e109827@syzkaller.appspotmail.com
 
-> Without a devres-based get+enable API drivers can get the resources they
-> need in any order, possibly moving some of those resource acquisition
-> operations to different functions, and then have a clear block of code
-> that enables the resources in the right order. These devres helpers give
-> a false sense of security to driver authors and they will end up
-> introducing problems, the same way that devm_kzalloc() makes it
-> outrageously easy to crash the kernel by disconnecting a device that is
-> in use.
+BUG: unable to handle page fault for address: ffffdc0000000005
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 11826067 P4D 11826067 PUD 0 
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 3268 Comm: S50sshd Not tainted 5.19.0-syzkaller-14135-g6c833c0581f1 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:ext4_get_group_desc+0x231/0x500 fs/ext4/balloc.c:299
+Code: 8b e8 e3 12 4d ff 4d 85 e4 0f 84 3d 02 00 00 e8 35 ab 69 ff 49 8d 7c 24 28 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 86 02 00 00 48 b8 00 00 00 00 00 fc ff df 4c 89
+RSP: 0018:ffffc900033ff4d8 EFLAGS: 00010a06
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 1fffe00000000005 RSI: ffffffff82118a8b RDI: ffff000000000028
+RBP: ffff88801dd4c000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff000000000000
+R13: 0000000000000000 R14: ffff88801dd4c678 R15: 0000000000000001
+FS:  00007f116a35e800(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffdc0000000005 CR3: 0000000020f64000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __ext4_get_inode_loc+0x1c9/0x11a0 fs/ext4/inode.c:4459
+ ext4_get_inode_loc+0xba/0x160 fs/ext4/inode.c:4600
+ ext4_xattr_ibody_get+0xe4/0x4a0 fs/ext4/xattr.c:602
+ ext4_xattr_get+0x166/0x740 fs/ext4/xattr.c:666
+ vfs_getxattr_alloc+0x1bc/0x350 fs/xattr.c:384
+ ima_read_xattr+0x31/0x70 security/integrity/ima/ima_appraise.c:228
+ process_measurement+0xca2/0x18b0 security/integrity/ima/ima_main.c:319
+ ima_bprm_check+0xd0/0x220 security/integrity/ima/ima_main.c:492
+ security_bprm_check+0x7d/0xa0 security/security.c:870
+ search_binary_handler fs/exec.c:1719 [inline]
+ exec_binprm fs/exec.c:1772 [inline]
+ bprm_execve fs/exec.c:1841 [inline]
+ bprm_execve+0x732/0x1960 fs/exec.c:1803
+ do_execveat_common+0x727/0x890 fs/exec.c:1946
+ do_execve fs/exec.c:2020 [inline]
+ __do_sys_execve fs/exec.c:2096 [inline]
+ __se_sys_execve fs/exec.c:2091 [inline]
+ __x64_sys_execve+0x8f/0xc0 fs/exec.c:2091
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f116a4c8337
+Code: ff ff 76 e7 f7 d8 64 41 89 00 eb df 0f 1f 80 00 00 00 00 f7 d8 64 41 89 00 eb dc 0f 1f 84 00 00 00 00 00 b8 3b 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 11 1b 0f 00 f7 d8 64 89 01 48
+RSP: 002b:00007ffe54ebe008 EFLAGS: 00000206 ORIG_RAX: 000000000000003b
+RAX: ffffffffffffffda RBX: 0000564f4f1c5e70 RCX: 00007f116a4c8337
+RDX: 0000564f4f1c5e88 RSI: 0000564f4f1c5e70 RDI: 0000564f4f1c5e28
+RBP: 0000564f4f1c5e28 R08: 0000564f4f1c5e88 R09: 0000000000000000
+R10: 0000000000000008 R11: 0000000000000206 R12: 0000564f4f1c5e88
+R13: 00007f116a66dff4 R14: 0000564f4f1c5e88 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+CR2: ffffdc0000000005
+---[ end trace 0000000000000000 ]---
+RIP: 0010:ext4_get_group_desc+0x231/0x500 fs/ext4/balloc.c:299
+Code: 8b e8 e3 12 4d ff 4d 85 e4 0f 84 3d 02 00 00 e8 35 ab 69 ff 49 8d 7c 24 28 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 86 02 00 00 48 b8 00 00 00 00 00 fc ff df 4c 89
+RSP: 0018:ffffc900033ff4d8 EFLAGS: 00010a06
+
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 1fffe00000000005 RSI: ffffffff82118a8b RDI: ffff000000000028
+RBP: ffff88801dd4c000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff000000000000
+R13: 0000000000000000 R14: ffff88801dd4c678 R15: 0000000000000001
+FS:  00007f116a35e800(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffdc0000000005 CR3: 0000000020f64000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	8b e8                	mov    %eax,%ebp
+   2:	e3 12                	jrcxz  0x16
+   4:	4d ff 4d 85          	rex.WRB decq -0x7b(%r13)
+   8:	e4 0f                	in     $0xf,%al
+   a:	84 3d 02 00 00 e8    	test   %bh,-0x17fffffe(%rip)        # 0xe8000012
+  10:	35 ab 69 ff 49       	xor    $0x49ff69ab,%eax
+  15:	8d 7c 24 28          	lea    0x28(%rsp),%edi
+  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  20:	fc ff df
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2e:	0f 85 86 02 00 00    	jne    0x2ba
+  34:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  3b:	fc ff df
+  3e:	4c                   	rex.WR
+  3f:	89                   	.byte 0x89
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
--- 
-With Best Regards,
-Andy Shevchenko
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

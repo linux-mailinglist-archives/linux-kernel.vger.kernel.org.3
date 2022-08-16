@@ -2,80 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135145955F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 426545955F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233414AbiHPJJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
+        id S229994AbiHPJLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231173AbiHPJIi (ORCPT
+        with ESMTP id S233508AbiHPJKd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:08:38 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BEED11F8
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:25:30 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id o2so13675141lfb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:25:30 -0700 (PDT)
+        Tue, 16 Aug 2022 05:10:33 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7233CDAEDC
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:27:18 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id u6so9806196ljk.8
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:27:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=ooE16zehdw/Qev5T+ZmUnjytAB9yy5ywmdc6ijRB7DU=;
-        b=vsbEHpL2RqIY2QslVwDqFfp3XtMgHpHexPeU7C7kkWJq9Vq0XI2sRGSqgt5nWsO1hm
-         +T5H7I3m0VVO7Yygf/ziEdb826My+optK01l52i8aQPhSGBi+y4MkCZ2dLgcR1et5mGa
-         N9m32uGyTjvej0rn9DPJiXTvSL4HY4BlnKWuP+YkgjAYdqUuvC3cB1YIF4vX7rQQ4kf5
-         JWH7/zpvE4X1qvrDhyPss0d3EBSVe46JZkl5u145kQLkNV+KKV8J9E3p+uIvAcBNng/2
-         Cn2LYpunvdGkkOwInxwuCuHNobZOTstauY/+ZLjaJBZb+IKB1BisMwJKdL00sRrOkDyr
-         0Ivw==
+        bh=jgkKAq27nalp4xFLW3mk73yjlH+iPel54g7OBjDZ1oI=;
+        b=Mq7r6vRNCChXlYPF+zT+4Ept2VrTSrrP38C87uSqO8mXR/YVOX0bc2McxNSYlkkJTO
+         e+yH0rOVHqI0INUR/tSCYNXQU+p5/vwbT6u6aPRBaxQ6rMZpSy5k/VWsBL9Xp6vvIR8X
+         0PA3lUFcXPoMfb260xJiszNnXlRH9NvLF1m2hpHFs9gT4V8lV0SsJpmw9BR4vZ1gHH1j
+         c9kr3Vsajkbe22PtuANvdRgPeaUZ8sSt9fVW+ovyMLUS7440oFkcHs1atjIug+i2nGDx
+         WK6smRGXOaT1y5GxG6ZvcY5C348l7BHW39G0lV6+iqdC754xonpL8n7jbkfhynuZP2bv
+         sBig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=ooE16zehdw/Qev5T+ZmUnjytAB9yy5ywmdc6ijRB7DU=;
-        b=H/YOwyMqcGGT2LlDl36rG/G9CUWOKcp35jHV+KN/QZE9notg+MVkOHeS0hx8+F4W4j
-         ke8RkZx5lv0LQVbTciFZhGE7DrpIW3lvXRlUe/4RQCdHn9F78BwWtWrCAdQhulHBFziC
-         VKp4OxjozbQwQjrY6VGDp1Lf/NARQic70ilyM4aXMk00yZ7ycpLOiRBoIeuHc32zTK2m
-         0avjwe+1r0Gdhqe6nt5ERjomaNEuh4d7z5CHRLimHCMpyq8DuqCgRiz8ed2SnC2kb0Hm
-         Cots9d74c6iQA4ZtpbXGsx5rAw0yLKJQB42n9sbx5rvbky+c1m7rsqha3egAryXEI+gp
-         s8lQ==
-X-Gm-Message-State: ACgBeo39V4wD3USBhD5M6eqbUKvlkzWzuf/U5a4DqFvStoZFPR/gpl9L
-        0TOsfxsL7JAq7wBGX/dcsfheJA==
-X-Google-Smtp-Source: AA6agR4AvhM4cDhXvQ1UTG+En6e9pMhUjfadNQTORfvzlu9ebxyZUTSlog8Wr6qGvgUaMN87z3ocDA==
-X-Received: by 2002:a19:d611:0:b0:492:8e15:ba18 with SMTP id n17-20020a19d611000000b004928e15ba18mr2268836lfg.524.1660634728747;
-        Tue, 16 Aug 2022 00:25:28 -0700 (PDT)
+        bh=jgkKAq27nalp4xFLW3mk73yjlH+iPel54g7OBjDZ1oI=;
+        b=V0vXXT4ANFvUAVXDxnw6tyhlzg3QpZvbmMKHzEI3TWLvXRK4MjMRZD9O/7ItZ5YzrD
+         06OlrrEIFKmQ8+SkHOF4UEASV2MGALZRqQDurg5GJpH5o2m2zKZkn6BVdM5su13OKxPL
+         Go1bX55BV+e6BCIu6mKUn03IVZ4vveTYjDCymiJ02GO/XyfvoQ2yv4Nq5UzRF2bK3Dfh
+         wdeD2qKgLsf8oNtGCRT7TLRlVVtrxpxI2YUPL9fHOj+FwnEle5MdEffnsb9R3yKPppD3
+         J4iYG7TrKrJnqp561ZqZdjpWSsYT2WbB+HG0zIRNa86VN5Vkq2mgwVdd6vi2l8VnZi/r
+         t4yw==
+X-Gm-Message-State: ACgBeo2AwFExSvXM+jSrRf3R0oP/dTapyXACowRgwvdSZz+YLEmLvmLd
+        Z5mzDVHr7yVaDxAEV8TRwoGquQ==
+X-Google-Smtp-Source: AA6agR4jEHWzEqPmD1v9ED+1vw84vjsvdHwzpp1nZoCUPf9WX8jWoeSl8sl+A2IWC5wW16bz/hCrFg==
+X-Received: by 2002:a2e:a311:0:b0:25f:d95a:9c66 with SMTP id l17-20020a2ea311000000b0025fd95a9c66mr6273478lje.208.1660634836806;
+        Tue, 16 Aug 2022 00:27:16 -0700 (PDT)
 Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id bd18-20020a05651c169200b0025e5b5474a4sm1706639ljb.85.2022.08.16.00.25.26
+        by smtp.gmail.com with ESMTPSA id q22-20020a056512211600b00491dda41e4bsm794337lfr.172.2022.08.16.00.27.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 00:25:28 -0700 (PDT)
-Message-ID: <febf654a-66ad-48e2-072c-7e1f4b521964@linaro.org>
-Date:   Tue, 16 Aug 2022 10:25:26 +0300
+        Tue, 16 Aug 2022 00:27:16 -0700 (PDT)
+Message-ID: <343268e1-0c11-ae5f-c99a-62617e23f396@linaro.org>
+Date:   Tue, 16 Aug 2022 10:27:14 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH 2/4] dt-bindings: PCI: microchip,pcie-host: fix missing
- clocks properties
+Subject: Re: [PATCH 1/2] dt-bindings: power: supply: Add Richtek RT9471
+ battery charger
 Content-Language: en-US
-To:     Conor.Dooley@microchip.com, mail@conchuod.ie,
-        Daire.McNamara@microchip.com, bhelgaas@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        paul.walmsley@sifive.com, greentime.hu@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, lpieralisi@kernel.org
-Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20220811203306.179744-1-mail@conchuod.ie>
- <20220811203306.179744-3-mail@conchuod.ie>
- <99b5bddb-4a09-a3ac-e01b-d0ae624ad2f8@linaro.org>
- <d25f8901-b9d7-ae8e-0061-2a033af16693@microchip.com>
+To:     ChiYuan Huang <u0084500@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        =?UTF-8?B?5ri45a2Q6aao?= <alina_yu@richtek.com>,
+        cy_huang <cy_huang@richtek.com>, alinayu829@gmail.com,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
+References: <1660225318-4063-1-git-send-email-u0084500@gmail.com>
+ <1660225318-4063-2-git-send-email-u0084500@gmail.com>
+ <3cae9d60-4012-1dfd-abd9-4d0b9379e6bb@linaro.org>
+ <CADiBU3_depGDZtiyizU3MB939A3oH1uTWzTMyruUy0z=u6BZkQ@mail.gmail.com>
+ <40261b95-637a-1304-2e06-8c8ff7fc377b@linaro.org>
+ <CADiBU38+9sR1r20=YWt-9s2+u7maHH+1VudCnV1-0+F4jYKdQQ@mail.gmail.com>
+ <CADiBU3_Jt6n6tm=oVvjk5vsoEAneH7t-37S6skepA6v6bVVYUw@mail.gmail.com>
+ <f2a664be-71e9-7a26-2f0c-5f654d9cb3cb@linaro.org>
+ <CADiBU3-bKGhW2Yy13svNUykqW+WN3VS6LftWMU0rMeCc+fMySg@mail.gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <d25f8901-b9d7-ae8e-0061-2a033af16693@microchip.com>
+In-Reply-To: <CADiBU3-bKGhW2Yy13svNUykqW+WN3VS6LftWMU0rMeCc+fMySg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,121 +90,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/08/2022 16:47, Conor.Dooley@microchip.com wrote:
-> On 12/08/2022 08:35, Krzysztof Kozlowski wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+On 13/08/2022 17:52, ChiYuan Huang wrote:
+>>> Some gauge HW needs this information to enhance the battery capacity accuracy.
 >>
->> On 11/08/2022 23:33, Conor Dooley wrote:
->>> From: Conor Dooley <conor.dooley@microchip.com>
->>>
->>> Upgrading dt-schema to v2022.08 reveals unevaluatedProperties issues
->>> that were not previously visible, such as the missing clocks and
->>> clock-names properties for PolarFire SoC's PCI controller:
->>> arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dtb: pcie@2000000000: Unevaluated properties are not allowed ('clock-names', 'clocks', 'legacy-interrupt-controller', 'microchip,axi-m-atr0' were unexpected)
->>>         From schema: Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
->>>
->>> The clocks are required to enable interfaces between the FPGA fabric
->>> and the core complex, so add them to the binding.
->>>
->>> Fixes: 6ee6c89aac35 ("dt-bindings: PCI: microchip: Add Microchip PolarFire host binding")
->>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->>> ---
->>>  .../bindings/pci/microchip,pcie-host.yaml     | 25 +++++++++++++++++++
->>>  1 file changed, 25 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
->>> index edb4f81253c8..2a2166f09e2c 100644
->>> --- a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
->>> +++ b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
->>> @@ -25,6 +25,31 @@ properties:
->>>        - const: cfg
->>>        - const: apb
->>>
->>> +  clocks:
->>> +    description:
->>> +      Fabric Interface Controllers, FICs, are the interface between the FPGA
->>> +      fabric and the core complex on PolarFire SoC. The FICs require two clocks,
->>> +      one from each side of the interface. The "FIC clocks" described by this
->>> +      property are on the core complex side & communication through a FIC is not
->>> +      possible unless it's corresponding clock is enabled. A clock must be
->>> +      enabled for each of the interfaces the root port is connected through.
->>> +    minItems: 1
->>> +    items:
->>> +      - description: FIC0's clock
->>> +      - description: FIC1's clock
->>> +      - description: FIC2's clock
->>> +      - description: FIC3's clock
->>> +
->>> +  clock-names:
->>> +    items:
->>> +      enum:
->>> +        - fic0
->>> +        - fic1
->>> +        - fic2
->>> +        - fic3
->>> +    minItems: 1
->>> +    maxItems: 4
+>> Other supply stack pieces do it via supplies (supplied to/from in
+>> include/linux/power_supply.h) and reporting power_supply_changed().
 >>
->> No need for maxItems.
+>> With such explanation, your device is an interrupt source, but it is not
+>> an interrupt controller. If your device is interrupt controller, it
+>> means someone routes the interrupt line to your device. Physical line.
+>>
+> Yap, sure. And so on, just use the SW power supply chain to do this
+> kind of event notification.
+> To remove it, it doesn't affect the internal interrupt request inside
+> the driver.
+> Just cannot be used for the outer driver to request the events directly.
 > 
-> I brought this up on IRC, but transferring it here since it's been
-> an (understandable!!) few days & just didn't want things to get lost
-> if my net died. Cutting out the back & forth, in summary:
-> "
-> I'm trying to remove the maxItems from the clock-names array you
-> didn't like - but I can't figure out what to do instead that doesn't
-> trigger errors. All 4 clocks are optional, the only requirement is
-> that any one of them is present. Either I seem to get complaints that
-> my property is not an array (simply removing the maxItems) or complaints
-> that because I have clock0,1,3 and not 2 that clock3 is unexpected.
+> If so, I think 'interrupt-controller' and even '#interrupt-cells' need
+> to be removed.
+> OK?
 
-Eh, I misread the code and thought that you list the items, but you just
-enumerate the schema for each item. My advice was wrong, you need maxItems.
-
-> The root port is physically on the opposite side of the FPGA to the cpus
-> & the AXI connection is through the FPGA fabric. There are 4 AXI
-> interconnects to the fabric  which the PCI controller could in theory be
-> connected to all 4, but it only needs to be connected to one.. I had
-> done done minItems and maxItems a la:
-> devicetree/bindings/watchdog/st,stm32-iwdg.yaml
-> b/c that seems to have two clocks that it doesnt care about the order of
-> "
-> 
-> Rob then suggested:
-> "
-> I would remove the 'items' list in 'clocks' and make the description
-> clear that any of clocks is possible. It's not ideal, but it's a case of
-> that's what is already there.
-> "
-> 
-> I'd then have something along the lines of:
->   clocks:
->     description:
->       Fabric Interface Controllers, FICs, are the interface between the FPGA
->       fabric and the core complex on PolarFire SoC. The FICs require two clocks,
->       one from each side of the interface. The "FIC clocks" described by this
->       property are on the core complex side & communication through a FIC is not
->       possible unless it's corresponding clock is enabled. A clock must be
->       enabled for each of the interfaces the root port is connected through.
->       This could in theory be all 4 interfaces, one interface or any combination
->       in between.
->     minItems: 1
->     maxItems: 4
-> 
->   clock-names:
->     items:
->       enum:
->         - fic0
->         - fic1
->         - fic2
->         - fic3
->     minItems: 1
->     maxItems: 4
-> 
-> Does that seem reasonable to you?
-
-
-Yes.
+Yes, both should be removed. Your device is not an interrupt controller...
 
 Best regards,
 Krzysztof

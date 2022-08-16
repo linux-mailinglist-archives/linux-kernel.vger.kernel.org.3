@@ -2,132 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51467596442
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 23:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 518CC59644E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 23:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237459AbiHPVK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 17:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
+        id S237428AbiHPVNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 17:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237437AbiHPVKW (ORCPT
+        with ESMTP id S233835AbiHPVNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 17:10:22 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031AE7E80C;
-        Tue, 16 Aug 2022 14:10:20 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id p10so14040307wru.8;
-        Tue, 16 Aug 2022 14:10:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=NvNulZm0TaP1hFN6sFnwsfQo9WSALWLxEbOFV0/Etb0=;
-        b=llH9ZkFRAetfgniIRfo626k3PmRVOGGhOmX6sWe3T6jLtLLCgL57AInAEjvDL1lRF/
-         TdhvAPFcoCaps76Pai/2DjNQpHUC4cZxNPffYiHe1hH4UGTUNHPauXloHTdUOcINnVBb
-         WekGW/pwkRmJLwkH0kRKUWsXKbYJzwaeydW8Nb4eEtUObTfQ4MHk4Yu8TzGaI45coZLn
-         eEx1JlFuv/VGkwK00fVuX77ij4ku3RTGsLunasCNJYUcBtizMYZzCw/L8gfpkegIb2XG
-         H+vz687uPAUd5TIEClEzIdxKWuK3/b+aYUAqEOYNepdJ8QqZKmlEQRMV6XoJ3WoFdAsq
-         NqoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=NvNulZm0TaP1hFN6sFnwsfQo9WSALWLxEbOFV0/Etb0=;
-        b=WueYmIV8ouQrL2sflWK19r5cvFpAxeN9MBLzAc3vGpks2yzzB0vQ5gJ3eAVx99Oh3A
-         dATTCeLiYIRgGYT4hq+neXdFnYp9BP82xiPvq+LFn+3nK4m6MlrYKUfQBKEnXU62/Un8
-         ccbQvNZmtAl97V+koAni6J7v8CL5NOsV1F8xkHz6Sil9fiPl6weKNsqlY4f0MKrZR+PQ
-         d+CUfifhzNbJgggSzH9wjMBstH/SL5TXJnCT+XM19YxQhC12EBlSa4q0R0gZzPeSSW4D
-         HWsKWBbONnjWBPeZmkRlr0NmcNxEJunEPAnWou+Poza0qgyL8ajle6+Yo2SoFIcbPk8R
-         uZ1w==
-X-Gm-Message-State: ACgBeo14eCOTqGqd7B8oataMYXumRfnttjfWqBc8YHbNXyt/vVTY0lck
-        NZPXh6EyVlyDzv/gbdPGDVF3LHr1e1EouA==
-X-Google-Smtp-Source: AA6agR54R0jvZDNto8jeRWNpADovphd1WCeclyeH4A9PeiGp62sUC3gDIh2XRPDjsc4b1Af5wLMuHw==
-X-Received: by 2002:a5d:6285:0:b0:225:1fb3:5ca4 with SMTP id k5-20020a5d6285000000b002251fb35ca4mr1637056wru.332.1660684218287;
-        Tue, 16 Aug 2022 14:10:18 -0700 (PDT)
-Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id v7-20020a05600c12c700b003a53e6c5425sm6504wmd.8.2022.08.16.14.10.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 14:10:17 -0700 (PDT)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: [PATCH] KVM/VMX: Avoid stack engine synchronization uop in __vmx_vcpu_run
-Date:   Tue, 16 Aug 2022 23:10:10 +0200
-Message-Id: <20220816211010.25693-1-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Tue, 16 Aug 2022 17:13:21 -0400
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C456852E63;
+        Tue, 16 Aug 2022 14:13:18 -0700 (PDT)
+Received: from debian-tgbt.home (unknown [IPv6:2a01:cb08:8f65:d300:4b96:ac4c:4229:8341])
+        (Authenticated sender: thierry.guibert@free.fr)
+        by smtp2-g21.free.fr (Postfix) with ESMTPSA id 960EA2003B4;
+        Tue, 16 Aug 2022 23:13:11 +0200 (CEST)
+From:   Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
+To:     gregkh@linuxfoundation.org, oneukum@suse.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
+Subject: [PATCH] CDC-ACM : Add Icom PMR F3400 support (0c26:0020)
+Date:   Tue, 16 Aug 2022 23:12:50 +0200
+Message-Id: <20220816211250.20985-1-thierry.guibert@croix-rouge.fr>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid instructions with explicit uses of the stack pointer between
-instructions that implicitly refer to it. The sequence of
-POP %reg; ADD $x, %RSP; POP %reg forces emission of synchronization
-uop to synchronize the value of the stack pointer in the stack engine
-and the out-of-order core.
+Supports for ICOM F3400 and ICOM F4400 PMR radios in CDC-ACM driver
+enabling the AT serial port.
+The Vendor Id is 0x0C26
+The Product ID is 0x0020
 
-Using POP with the dummy register instead of ADD $x, %RSP results in a
-smaller code size and faster code.
+Output of lsusb :
+Bus 001 Device 009: ID 0c26:0020 Prolific Technology Inc. ICOM Radio
+Couldn't open device, some information will be missing
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            2 Communications
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x0c26 Prolific Technology Inc.
+  idProduct          0x0020
+  bcdDevice            0.00
+  iManufacturer           1 ICOM Inc.
+  iProduct                2 ICOM Radio
+  iSerial                 3 *obfuscated*
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0030
+    bNumInterfaces          2
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xc0
+      Self Powered
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2 Communications
+      bInterfaceSubClass      2 Abstract (modem)
+      bInterfaceProtocol      1 AT-commands (v.25ter)
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval              12
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10 CDC Data
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
 
-The patch also fixes the reference to the wrong register in the
-nearby comment.
-
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Signed-off-by: Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
 ---
- arch/x86/kvm/vmx/vmenter.S | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/usb/class/cdc-acm.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
-index 6de96b943804..afcb237e1c17 100644
---- a/arch/x86/kvm/vmx/vmenter.S
-+++ b/arch/x86/kvm/vmx/vmenter.S
-@@ -189,13 +189,16 @@ SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
- 	xor %ebx, %ebx
- 
- .Lclear_regs:
-+	/* "POP" @regs. */
-+	pop %_ASM_AX
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 9b9aea24d58c..091fcfac3717 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -1813,6 +1813,10 @@ static const struct usb_device_id acm_ids[] = {
+ 	{ USB_DEVICE(0x0ca6, 0xa050), /* Castles VEGA3000 */
+ 	.driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
+ 	},
++	{ USB_DEVICE(0x0c26, 0x0020), /* Icom ICF3400 Serie */
++	.driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
++	},
 +
- 	/*
- 	 * Clear all general purpose registers except RSP and RBX to prevent
- 	 * speculative use of the guest's values, even those that are reloaded
- 	 * via the stack.  In theory, an L1 cache miss when restoring registers
- 	 * could lead to speculative execution with the guest's values.
- 	 * Zeroing XORs are dirt cheap, i.e. the extra paranoia is essentially
--	 * free.  RSP and RAX are exempt as RSP is restored by hardware during
-+	 * free.  RSP and RBX are exempt as RSP is restored by hardware during
- 	 * VM-Exit and RBX is explicitly loaded with 0 or 1 to hold the return
- 	 * value.
- 	 */
-@@ -216,9 +219,6 @@ SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
- 	xor %r15d, %r15d
- #endif
  
--	/* "POP" @regs. */
--	add $WORD_SIZE, %_ASM_SP
--
- 	/*
- 	 * IMPORTANT: RSB filling and SPEC_CTRL handling must be done before
- 	 * the first unbalanced RET after vmexit!
-@@ -234,7 +234,6 @@ SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
- 	FILL_RETURN_BUFFER %_ASM_CX, RSB_CLEAR_LOOPS, X86_FEATURE_RSB_VMEXIT,\
- 			   X86_FEATURE_RSB_VMEXIT_LITE
- 
--
- 	pop %_ASM_ARG2	/* @flags */
- 	pop %_ASM_ARG1	/* @vmx */
- 
+ 	{ USB_DEVICE(0x2912, 0x0001), /* ATOL FPrint */
+ 	.driver_info = CLEAR_HALT_CONDITIONS,
 -- 
-2.37.1
+2.37.2
 

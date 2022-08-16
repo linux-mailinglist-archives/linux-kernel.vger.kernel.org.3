@@ -2,73 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA264595823
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FBE59577C
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234567AbiHPK1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32992 "EHLO
+        id S233135AbiHPKGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234557AbiHPK0g (ORCPT
+        with ESMTP id S234194AbiHPKFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:26:36 -0400
-X-Greylist: delayed 610 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 16 Aug 2022 02:35:42 PDT
-Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FDEB79607
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:35:40 -0700 (PDT)
-From:   Denis Arefev <arefev@swemel.ru>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
-        t=1660641925;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=4pN/HWYNP5Og6NT88D8bQhfdAYmJL0p3JtbVeMHSDU4=;
-        b=Ivk+0ti/i5rbLhfDR13Gj4UMSC2U3igGCdFugoWc8EPkhACXCtRR4JODk28pbDVJpywEis
-        2VtcV3npfjFwQo2yL/1PYuvYlF0MW/6vgEXe5i5n59RgkAKPpwI1iNZPH2OvyNjjgOsJ3/
-        SU+u5ghxEgNErrG6VQphdU8tEUZFgc8=
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org,
-        trufanov@swemel.ru, vfh@swemel.ru
-Subject: [PATCH 3/3] i915-pmu: Add extra check NULL
-Date:   Tue, 16 Aug 2022 12:25:25 +0300
-Message-Id: <20220816092525.37670-1-arefev@swemel.ru>
+        Tue, 16 Aug 2022 06:05:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19105C6CD0;
+        Tue, 16 Aug 2022 02:26:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91F6161255;
+        Tue, 16 Aug 2022 09:26:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7680CC433D6;
+        Tue, 16 Aug 2022 09:26:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660641977;
+        bh=HH0LKZi3cN9iX3f5XbyBtL6oi9LZPkk8/xXhG4QPW80=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G2ZnPky8rXQ5BjWdDQNabGVWclVBlCj+X50TlFjw93zEzKIv6w81vP4s9yU+ZwGVD
+         x9GnxgBfA6hNlC05qTuaVoEbFTpnXIEMt9uLe1n0jwhnaNoTFepvrxqr+q+7r+v7Q6
+         CRk3jGUp//ZprOKphnK7zXQq/brx/Mct2PIxjyb4=
+Date:   Tue, 16 Aug 2022 11:26:14 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     nobuhiro1.iwamatsu@toshiba.co.jp
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        stern@rowland.harvard.edu,
+        syzbot+b0de012ceb1e2a97891b@syzkaller.appspotmail.com
+Subject: Re: [PATCH 5.15 103/779] USB: gadget: Fix use-after-free Read in
+ usb_udc_uevent()
+Message-ID: <YvtitluWL33RPxSW@kroah.com>
+References: <20220815180337.130757997@linuxfoundation.org>
+ <20220815180341.711918032@linuxfoundation.org>
+ <TYWPR01MB94203CD9FB4E48250368E1D7926B9@TYWPR01MB9420.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <TYWPR01MB94203CD9FB4E48250368E1D7926B9@TYWPR01MB9420.jpnprd01.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+On Tue, Aug 16, 2022 at 01:43:11AM +0000, nobuhiro1.iwamatsu@toshiba.co.jp wrote:
+> Hi,
+> 
+> This patch is related to "fc274c1e9973 "USB: gadget: Add a new bus for gadgets".
+> 5.15.y, 5.10.y, 5.5.y and 4.19.y tree doesn't include it, so it's unnecessary. Please drop each tree.
 
-Signed-off-by: Denis Arefev <arefev@swemel.ru>
----
- drivers/gpu/drm/i915/i915_pmu.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Ick, good catch, my scripts got confused here.  Now dropped from
+everywhere.
 
-diff --git a/drivers/gpu/drm/i915/i915_pmu.c b/drivers/gpu/drm/i915/i915_pmu.c
-index 34a7f0ef1f67..33db49ffac3d 100644
---- a/drivers/gpu/drm/i915/i915_pmu.c
-+++ b/drivers/gpu/drm/i915/i915_pmu.c
-@@ -704,8 +704,7 @@ static void i915_pmu_disable(struct perf_event *event)
- 		 * Decrement the reference count and clear the enabled
- 		 * bitmask when the last listener on an event goes away.
- 		 */
--		if(engine != NULL)
--		{
-+		if (engine != NULL) {
- 		        if (--engine->pmu.enable_count[sample] == 0)
- 			        engine->pmu.enable &= ~BIT(sample);
- 		}
--- 
-2.25.1
+thanks,
 
+greg k-h

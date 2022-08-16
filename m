@@ -2,191 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 718F8596255
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 20:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA1059625D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 20:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236287AbiHPSYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 14:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
+        id S237058AbiHPSZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 14:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236444AbiHPSYx (ORCPT
+        with ESMTP id S237053AbiHPSZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 14:24:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56759696F1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 11:24:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660674290;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4APrCzNvCJvZdPPei2VGvsAl7TnezkG7b9sD5lHxu5w=;
-        b=Upja8xbvLbonlVRadJMto3T+iLGBNADdZu2tE3R/YfWmW5TmXP8dgJFq3BkpaSLKS4EYd9
-        v9h5YVoM17/T8Rp949qk0Q12jjqCJqQWRYimZwpK3OHW53+klDd+wi9wZhe+2xaC4wu+Fj
-        a4zJWHXtKVMSrMSGcQ4GF8rVEg3Nw+E=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-94-Z50mV2z1PPi9CNuHdvgwgg-1; Tue, 16 Aug 2022 14:24:49 -0400
-X-MC-Unique: Z50mV2z1PPi9CNuHdvgwgg-1
-Received: by mail-qt1-f198.google.com with SMTP id s2-20020ac85cc2000000b00342f8ad1f40so8901524qta.12
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 11:24:49 -0700 (PDT)
+        Tue, 16 Aug 2022 14:25:08 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35417198B
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 11:25:05 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-333a4a5d495so63428527b3.10
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 11:25:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=jh5Eur1xH7TUcw/KyH0b+upiru51QcqFI31rJnzh5yc=;
+        b=OgbGNkaNr33pOmBPKEY2/zGo3Q2htOs5e2SwlTvvs9Ewx5Kap+vdDhgWiEHwtZjY6p
+         rgedUDOvHE0CaFTFZStQkaLAPeO/yePrNMWPwEKYWXYhYFXR3LdpWwj5N90LObmDHnry
+         /1+jjairKpXx2/M4LVD2ZmnvEo3dhvtHNJXZsnELBMy5tqeNSAeRPxc/Yfx07LUu6Cus
+         agra6s3DaZyTcBhXE0xoRDNBJ9DNSKRQg56gcSSEEC8EZ3YMU1ulLUA/7uSEe/ZhDitT
+         Xqveukqk4fdlb6K1NoNs18LgkiYxY1i0H2DGNOkvcTXUCSBqDe8x4d0NHs13QcE2jADW
+         9H8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:organization
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=4APrCzNvCJvZdPPei2VGvsAl7TnezkG7b9sD5lHxu5w=;
-        b=xi2ZLMG0pYOdrpig3zZ0OTkLCMF6i99I8Itx+38N98pYChfw3s91D0JHAkvz/ZfUzG
-         dzr4C+rKn0KRunjQK67OLb+O6fB6aN0ZVrPkMj3hAOamvuOk6onXAnJvEZasHCvOalzv
-         fPjpJ6y/VMT1mfNuNYfhd/06namrzb+uqTU2dRwQOqnQ9nMT/hVB1FwyuzEOw9vDoJrI
-         ukL+T3erb7Aag2OtfF1EL0/BMWftov4nqg9994AZKHJRcOMbGDRzunhjlQn3161ESPh5
-         Wo3+NwXOF7vGArNsjWtUKLQ/cCOr1KMr1/M9PTM+75VVg4vyVlaZfYV3oJ8YVz64abzo
-         VD+g==
-X-Gm-Message-State: ACgBeo0YT/SrFCWZ29tGekCk9Q8AYGTrGhzjCaaLtrokxOO/QLU3qSvN
-        +wB+H704w42+7n0SB7l5h+a9azEq1WtbEuZ0PLH9J7gAzR4k/+19pu59F5JULB2fSGER3pE3QKZ
-        gyA5rT+xanD8Whfd5UNwhKQb3
-X-Received: by 2002:a05:6214:1cc8:b0:46e:1920:70f8 with SMTP id g8-20020a0562141cc800b0046e192070f8mr19091597qvd.6.1660674288849;
-        Tue, 16 Aug 2022 11:24:48 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6Ti0MgWn0jiwlVJ6LdWNLM26lzw3bFgeBehbTERAFTZ4fs8kfkv9GKykgPccJegrzfWy3cMQ==
-X-Received: by 2002:a05:6214:1cc8:b0:46e:1920:70f8 with SMTP id g8-20020a0562141cc800b0046e192070f8mr19091582qvd.6.1660674288564;
-        Tue, 16 Aug 2022 11:24:48 -0700 (PDT)
-Received: from [192.168.8.138] (pool-100-0-245-4.bstnma.fios.verizon.net. [100.0.245.4])
-        by smtp.gmail.com with ESMTPSA id t3-20020a05620a450300b006b5df4d2c81sm13607026qkp.94.2022.08.16.11.24.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 11:24:47 -0700 (PDT)
-Message-ID: <b8ebc447ea464371102df765882fc5010cc0c784.camel@redhat.com>
-Subject: Re: [PATCH] drm/i915: Switch TGL-H DP-IN to dGFX when it's supported
-From:   Lyude Paul <lyude@redhat.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
-        tvrtko.ursulin@linux.intel.com, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Ville =?ISO-8859-1?Q?Syrj=E4l=E4?= 
-        <ville.syrjala@linux.intel.com>, Zenghui Yu <yuzenghui@huawei.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 16 Aug 2022 14:24:46 -0400
-In-Reply-To: <CAAd53p76ut7QRFdM4NjaRua=Hc4bu9_=7+Q_t8ExJysEAhJf=Q@mail.gmail.com>
-References: <20220816025217.618181-1-kai.heng.feng@canonical.com>
-         <87leror4sl.fsf@intel.com>
-         <CAAd53p76ut7QRFdM4NjaRua=Hc4bu9_=7+Q_t8ExJysEAhJf=Q@mail.gmail.com>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=jh5Eur1xH7TUcw/KyH0b+upiru51QcqFI31rJnzh5yc=;
+        b=kYzvxY8N+hNXKw7UJJUBcd2NE9keo8dIr9LC4NEHuv0TE+n8SBKM1ok9TzdIbBMif7
+         1w3y6h/5fDQRfazmUu/USwgKeDm3p03hFV43rCtMz1qor/LhLexx1syo196Z16RmEA5e
+         9sTqMJlABF3TgKtW/3ttYWAuvQUktcoG1XJthz5unNmSyF0OKB8nZOkhSotawsG+VQ0s
+         4M/y8wx0Gn6Zp1tFKg3LIoQ4m5D5/Gud0kFYJVqXkaA1id7MRaXXk9dYYxl4JDPgzs9+
+         Qfj9NVYnntYBe+xQIcznssrKgQkxwG84XPgCizNi4KiRo7pVYVOrAJ+kmJV8fjd7yGSz
+         UB7A==
+X-Gm-Message-State: ACgBeo2+nDx6FZvmXzK4aZDCiXw81DWmKjhpr5Yqigb+I3woW60udplu
+        k47ErMETj04a8PbymuOXs4q4G6RprMtz7Z0FJz23Yw==
+X-Google-Smtp-Source: AA6agR6erbFHcUf1QHp9W7LL9pyB5PF+z5gnIylIsjfXeM6tsEJW7hQnCKIJuWmgjPzXmhV5YCZERapiExjJ7GqSkuk=
+X-Received: by 2002:a25:9a47:0:b0:680:955c:1487 with SMTP id
+ r7-20020a259a47000000b00680955c1487mr16850498ybo.359.1660674304507; Tue, 16
+ Aug 2022 11:25:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220811234941.887747-1-void@manifault.com> <20220811234941.887747-3-void@manifault.com>
+ <CA+khW7jW6mgu2+DZyJMSX1beRYk917S=824NLFG7M5D1+2F57w@mail.gmail.com> <YvuZg7F/IVjozlu8@maniforge.dhcp.thefacebook.com>
+In-Reply-To: <YvuZg7F/IVjozlu8@maniforge.dhcp.thefacebook.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Tue, 16 Aug 2022 11:24:53 -0700
+Message-ID: <CA+khW7iKX9Xr6fkSwsbWPoXr_wY5NhupKaWhr0MwsMfB2u3Fgw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] bpf: Add bpf_user_ringbuf_drain() helper
+To:     David Vernet <void@manifault.com>
+Cc:     bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, joannelkoong@gmail.com,
+        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, martin.lau@linux.dev, sdf@google.com,
+        song@kernel.org, yhs@fb.com, kernel-team@fb.com, tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-08-16 at 19:29 +0800, Kai-Heng Feng wrote:
-> On Tue, Aug 16, 2022 at 4:06 PM Jani Nikula <jani.nikula@linux.intel.com> wrote:
-> > 
-> > On Tue, 16 Aug 2022, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
-> > > On mobile workstations like HP ZBook Fury G8, iGFX's DP-IN can switch to
-> > > dGFX so external monitors are routed to dGFX, and more monitors can be
-> > > supported as result.
-> > > 
-> > > To switch the DP-IN to dGFX, the driver needs to invoke _DSM function 20
-> > > on intel_dsm_guid2. This method is described in Intel document 632107.
-
-Is this documentation released anywhere? We've been wondering about these
-interfaces for quite a long time, and it would be good to know if there's docs
-for this we haven't really been seeing.
-
-> > 
-> > Is this the policy decision that we want to unconditionally make,
-> > though?
-> 
-> I believes so, so more external monitors can be supported at the same time.
-> 
-> Kai-Heng
-
-Is this for systems with dual Intel GPUs? I ask because if this affects
-Intel/Nvidia hybrid systems then this is a huge no from me. Nouveau is able to
-support these systems, but at a limited capacity. This would imply that we are
-making external displays work for users of the nvidia proprietary driver, at
-the expense making external display support for mainline kernel users
-substantially worse for people who are using the mainline kernel. Which isn't
-a choice we should be making, because nvidia's OOT driver is not a mainline
-kernel driver.
-
-If this is just for Intel/Intel systems though that's probably fine, and it
-might also be fine for AMD systems.
-
-> 
-> > 
-> > BR,
-> > Jani.
-> > 
-> > > 
-> > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+On Tue, Aug 16, 2022 at 6:20 AM David Vernet <void@manifault.com> wrote:
+>
+> On Mon, Aug 15, 2022 at 02:23:04PM -0700, Hao Luo wrote:
+>
+> Hi Hao,
+>
+> Thanks for the review.
+>
+> > On Thu, Aug 11, 2022 at 4:50 PM David Vernet <void@manifault.com> wrote:
+> > >
+> > > Now that we have a BPF_MAP_TYPE_USER_RINGBUF map type, we need to add a
+> > > helper function that allows BPF programs to drain samples from the ring
+> > > buffer, and invoke a callback for each. This patch adds a new
+> > > bpf_user_ringbuf_drain() helper that provides this abstraction.
+> > >
+> > > In order to support this, we needed to also add a new PTR_TO_DYNPTR
+> > > register type to reflect a dynptr that was allocated by a helper function
+> > > and passed to a BPF program. The verifier currently only supports
+> > > PTR_TO_DYNPTR registers that are also DYNPTR_TYPE_LOCAL and MEM_ALLOC.
+> > >
+> > > Signed-off-by: David Vernet <void@manifault.com>
 > > > ---
-> > >  drivers/gpu/drm/i915/display/intel_acpi.c | 18 +++++++++++++++++-
-> > >  1 file changed, 17 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/gpu/drm/i915/display/intel_acpi.c b/drivers/gpu/drm/i915/display/intel_acpi.c
-> > > index e78430001f077..3bd5930e2769b 100644
-> > > --- a/drivers/gpu/drm/i915/display/intel_acpi.c
-> > > +++ b/drivers/gpu/drm/i915/display/intel_acpi.c
-> > > @@ -20,6 +20,7 @@ static const guid_t intel_dsm_guid =
-> > >                 0xa8, 0x54, 0x0f, 0x13, 0x17, 0xb0, 0x1c, 0x2c);
-> > > 
-> > >  #define INTEL_DSM_FN_GET_BIOS_DATA_FUNCS_SUPPORTED 0 /* No args */
-> > > +#define INTEL_DSM_FN_DP_IN_SWITCH_TO_DGFX 20 /* No args */
-> > > 
-> > >  static const guid_t intel_dsm_guid2 =
-> > >       GUID_INIT(0x3e5b41c6, 0xeb1d, 0x4260,
-> > > @@ -187,6 +188,7 @@ void intel_dsm_get_bios_data_funcs_supported(struct drm_i915_private *i915)
-> > >       struct pci_dev *pdev = to_pci_dev(i915->drm.dev);
-> > >       acpi_handle dhandle;
-> > >       union acpi_object *obj;
-> > > +     int supported = 0;
-> > > 
-> > >       dhandle = ACPI_HANDLE(&pdev->dev);
-> > >       if (!dhandle)
-> > > @@ -194,8 +196,22 @@ void intel_dsm_get_bios_data_funcs_supported(struct drm_i915_private *i915)
-> > > 
-> > >       obj = acpi_evaluate_dsm(dhandle, &intel_dsm_guid2, INTEL_DSM_REVISION_ID,
-> > >                               INTEL_DSM_FN_GET_BIOS_DATA_FUNCS_SUPPORTED, NULL);
-> > > -     if (obj)
-> > > +     if (obj) {
-> > > +             if (obj->type == ACPI_TYPE_INTEGER)
-> > > +                     supported = obj->integer.value;
+> > [...]
+> > > diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
+> > > index c0f3bca4bb09..73fa6ed12052 100644
+> > > --- a/kernel/bpf/ringbuf.c
+> > > +++ b/kernel/bpf/ringbuf.c
+> > [...]
+> > > +static int __bpf_user_ringbuf_poll(struct bpf_ringbuf *rb, void **sample,
+> > > +                                  u32 *size)
+> > > +{
+> > > +       unsigned long cons_pos, prod_pos;
+> > > +       u32 sample_len, total_len;
+> > > +       u32 *hdr;
+> > > +       int err;
+> > > +       int busy = 0;
 > > > +
-> > >               ACPI_FREE(obj);
-> > > +     }
+> > > +       /* If another consumer is already consuming a sample, wait for them to
+> > > +        * finish.
+> > > +        */
+> > > +       if (!atomic_try_cmpxchg(&rb->busy, &busy, 1))
+> > > +               return -EBUSY;
 > > > +
-> > > +     /* Tiger Lake H DP-IN Boot Time Switching from iGfx to dGfx */
-> > > +     if (supported & BIT(20)) {
-> > > +             obj = acpi_evaluate_dsm(dhandle, &intel_dsm_guid2,
-> > > +                                     INTEL_DSM_REVISION_ID,
-> > > +                                     INTEL_DSM_FN_DP_IN_SWITCH_TO_DGFX,
-> > > +                                     NULL);
-> > > +             if (obj)
-> > > +                     ACPI_FREE(obj);
-> > > +     }
-> > >  }
-> > > 
-> > >  /*
-> > 
-> > --
-> > Jani Nikula, Intel Open Source Graphics Center
-> 
+> > > +       /* Synchronizes with smp_store_release() in user-space. */
+> > > +       prod_pos = smp_load_acquire(&rb->producer_pos);
+> > > +       /* Synchronizes with smp_store_release() in
+> > > +        * __bpf_user_ringbuf_sample_release().
+> > > +        */
+> > > +       cons_pos = smp_load_acquire(&rb->consumer_pos);
+> > > +       if (cons_pos >= prod_pos) {
+> > > +               atomic_set(&rb->busy, 0);
+> > > +               return -ENODATA;
+> > > +       }
+> > > +
+> > > +       hdr = (u32 *)((uintptr_t)rb->data + (uintptr_t)(cons_pos & rb->mask));
+> > > +       sample_len = *hdr;
+> > > +
+> >
+> > rb->data and rb->mask better be protected by READ_ONCE.
+>
+> Could you please clarify about the behavior you're protecting against here?
+> We're just calculating an offset from rb->data, and both rb->data and
+> rb->mask are set only once when the ringbuffer is first created in
+> bpf_ringbuf_area_alloc(). I'm not following what we'd be protecting against
+> by making these volatile, though I freely admit that I may be missing some
+> weird possible behavior in the compiler.
+>
 
--- 
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
+Sorry, I missed the fact that rb->data and rb->mask are set only once.
+I thought rb->data also moved somewhere.
 
+My mental model is: normally for accessing shared data, if there is no
+clear critical section protected by locks or mutex etc, I would wrap
+them in READ_ONCE and WRITE_ONCE. But here, if it's read-only, it
+should be ok IMHO.
+
+> For what it's worth, in a follow-on version of the patch, I've updated this
+> read of the sample len to be an smp_load_acquire() to accommodate Andrii's
+> suggestion [0] that we should support using the busy bit and discard bit in
+> the header from the get-go, as we do with BPF_MAP_TYPE_RINGBUF ringbuffers.
+>
+> [0]: https://lore.kernel.org/all/CAEf4BzYVLgd=rHaxzZjyv0WJBzBpMqGSStgVhXG9XOHpB7qDRQ@mail.gmail.com/
+>
+> > > +       /* Check that the sample can fit into a dynptr. */
+> > > +       err = bpf_dynptr_check_size(sample_len);
+> > > +       if (err) {
+> > > +               atomic_set(&rb->busy, 0);
+> > > +               return err;
+> > > +       }
+> > > +
+> > > +       /* Check that the sample fits within the region advertised by the
+> > > +        * consumer position.
+> > > +        */
+> > > +       total_len = sample_len + BPF_RINGBUF_HDR_SZ;
+> > > +       if (total_len > prod_pos - cons_pos) {
+> > > +               atomic_set(&rb->busy, 0);
+> > > +               return -E2BIG;
+> > > +       }
+> > > +
+> > > +       /* Check that the sample fits within the data region of the ring buffer.
+> > > +        */
+> > > +       if (total_len > rb->mask + 1) {
+> > > +               atomic_set(&rb->busy, 0);
+> > > +               return -E2BIG;
+> > > +       }
+> > > +
+> > > +       /* consumer_pos is updated when the sample is released.
+> > > +        */
+> > > +
+> > > +       *sample = (void *)((uintptr_t)rb->data +
+> > > +                          (uintptr_t)((cons_pos + BPF_RINGBUF_HDR_SZ) & rb->mask));
+> > > +       *size = sample_len;
+> > > +
+> > > +       return 0;
+> > > +}
+> > > +
+> > > +static void
+> > > +__bpf_user_ringbuf_sample_release(struct bpf_ringbuf *rb, size_t size,
+> > > +                                 u64 flags)
+> > > +{
+> > > +
+> > > +
+> > > +       /* To release the ringbuffer, just increment the producer position to
+> > > +        * signal that a new sample can be consumed. The busy bit is cleared by
+> > > +        * userspace when posting a new sample to the ringbuffer.
+> > > +        */
+> > > +       smp_store_release(&rb->consumer_pos, rb->consumer_pos + size +
+> > > +                         BPF_RINGBUF_HDR_SZ);
+> > > +
+> > > +       if (flags & BPF_RB_FORCE_WAKEUP || !(flags & BPF_RB_NO_WAKEUP))
+> > > +               irq_work_queue(&rb->work);
+> > > +
+> > > +       atomic_set(&rb->busy, 0);
+> > > +}
+> >
+> > atomic_set() doesn't imply barrier, so it could be observed before
+> > smp_store_release(). So the paired smp_load_acquire could observe
+> > rb->busy == 0 while seeing the old consumer_pos. At least, you need
+> > smp_mb__before_atomic() as a barrier before atomic_set. Or smp_wmb()
+> > to ensure all _writes_ complete when see rb->busy == 0.
+>
+> Thanks for catching this. I should have been more careful to not assume the
+> semantics of atomic_set(), and I see now that you're of course correct that
+> it's just a WRITE_ONCE() and has no implications at all w.r.t. memory or
+> compiler barriers. I'll fix this in the follow-on version, and will give
+> another closer read over memory-barriers.txt and atomic_t.txt.
+>
+
+No problem. These things are tricky.
+
+> > Similarly rb->work could be observed before smp_store_release.
+>
+> Yes, in the follow-on version I'll move the atomic_set() to before the
+> irq_work_queue() invocation (per Andrii's comment in [1], though that
+> discussion is still ongoing), and will add the missing
+> smp_mb__before_atomic(). Thanks again for catching this.
+>
+> [1]: https://lore.kernel.org/all/CAEf4BzZ-m-AUX+1+CGr7nMxMDnT=fjkn8DP9nP21Uts1y7fMyg@mail.gmail.com/
+>
+> > Is it possible for __bpf_user_ringbuf_sample_release to be called
+> > concurrently? If yes, there are races. Because the load of
+> > rb->consumer_pos is not protected by smp_load_acquire, they are not
+> > synchronized with this smp_store_release. Concurrently calling
+> > __bpf_user_ringbuf_sample_release may cause both threads getting stale
+> > consumer_pos values.
+>
+> If we add smp_mb__before_atomic() per your proposed fix above, I don't
+> believe this is an issue. __bpf_user_ringbuf_sample_release() should only
+> be invoked when a caller has an unreleased sample, and that can only happen
+> in a serial context due to the protection afforded by the atomic busy bit.
+>
+
+Right. I gave it more thought after publishing the comment yesterday.
+There are two parts of synchronization: sync between multi producers
+and sync between producer and consumer. It looks like multi producers
+are serialized by the atomic busy bit. We need to fix the barrier. The
+sync between producer and consumer is weaker, using the lockless
+primitives like store_release/load_acquire. It should be fine.
+
+
+> A single caller will not see a stale value, as they must first invoke
+> __bpf_user_ringbuf_peek(), and then invoke
+> __bpf_user_ringbuf_sample_release() with the sample they received. The
+> consumer pos they read in __bpf_user_ringbuf_sample_release() was already
+> smp_load_acquire()'d in __bpf_user_ringbuf_peek(), so they shouldn't see a
+> stale value there. We could certainly add another smp_load_acquire() here
+> for safety, but it would be redundant.
+>
+> Thanks,
+> David

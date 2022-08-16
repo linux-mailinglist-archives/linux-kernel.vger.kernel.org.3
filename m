@@ -2,210 +2,461 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DD9596095
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34648596096
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236626AbiHPQu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 12:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52950 "EHLO
+        id S236647AbiHPQvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 12:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiHPQuy (ORCPT
+        with ESMTP id S236628AbiHPQvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 12:50:54 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1C36566C;
-        Tue, 16 Aug 2022 09:50:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660668653; x=1692204653;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=IpNK6qLUvV/ULSseM9aN7cNAERw/bXVWnBmhLCFn1MU=;
-  b=jMXg+QSuxonmKEkHN0ycFJbWpc28MNcQKTPYIl1QSWGgqr16ffKklSmF
-   gtMeLxSQ9prlknE5M8gw5J6euDPW6dngOMbxKWxxvt1nV+M+g+H4FHEMU
-   dro6giXq68NjdEsAu0Huqt8f8bcoIuoZdDfRTTYONECqiHVjKqd7bDvL3
-   tA1nnH3XGi7h2B/GA+VGAdY+3/R9jJ4tivsyEgpEQx8K2T9k9ez/Apv2O
-   8tkHJJsFRNopamZ/wwNdhfwcwkYB2Unsqml2t3W10cBjePeh0P9EWWDej
-   jL6ElkGmTnA1vPBlgTkq8FXsVi6VNTP59I4TvBOcBvLr+5ZGbUv+zVCUW
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="293547395"
-X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="293547395"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 09:50:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="667188838"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Aug 2022 09:50:52 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Tue, 16 Aug 2022 09:50:51 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Tue, 16 Aug 2022 09:50:51 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28 via Frontend Transport; Tue, 16 Aug 2022 09:50:50 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.170)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.28; Tue, 16 Aug 2022 09:50:51 -0700
+        Tue, 16 Aug 2022 12:51:06 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2080.outbound.protection.outlook.com [40.107.92.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46086B653;
+        Tue, 16 Aug 2022 09:51:04 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hiGOHL9uvdhr0tXWT0eQWz4iAIfKQMtVfCKaAJSvxdkjpPBYoX3nZJMCA8A3SICT8EEIvYTw2lgZxtfS28L2r7ZXW2LnpO7a0wV8Yyw5457bkR4M1vQ2u2iQy+GPKuDa4qdgEcHD2ixGsprXI5YB1uEGmnXs6+b9juaX4fgm4PpoXVVouOkK28QoBzyxtsJ1lFCA+Tt1LIQ7RouDb2N+X0rxzs5niZ5r2Pf6z57uPpgM5sE0U8sODYYgptlZxRce3qc0sbf3aE+fUSzxXYISFHEeHuKKCrWneVUawkGqTuZwEut+oNWwUvoY8krvXjnJCLVVRUeSP4sB5hRwjKmGng==
+ b=kRqabzE7CN+nAPO7HdM3aIuxdLLqYusmFBQ1+eFeSodT8HCzP+iE6j5DecTVwu/5H9AqaqNJ3swGP3G/zEsXmgC22DVravwwYzuVb/9P3B5DrE2D+MIaW1w8uNbzfuNclW0QNPAh+EbsPdvKnMX7o9gn6m1d7hSsdfNGCekXmZo2wupqLmR7RCJjYcXaG/9iAMQSCbqqdLw+dwwYZpvXi2ZG6tCObSPW6G0SonNAyu1cxgUxiwWjMCE5cKqWMg3A/ZAMaC98v1SxufhUB9e4eqVRpBP8yTPm0gcpBhyWohpP0ymqn35rC86bEo5pxbMSPe2oR3hY/qYvbv7Qh0JB3g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M0cd4PkPEInMl/GCRJ82j8hD2BZuDsKBg8fpI5gHukg=;
- b=gXRPOw0npHerfMGZW7Az4enT3mUsQmOBdh8FPqj0CLaE1PvJfRs8lCj4MNe3Y/8wmQEsf0yoU+xeSytCwBfy61zg5QCDH55KhH6tr2vGTdiwjwB0u/jopbf4g9ILV4C7cwemqy7Zk4omQSa3jOfNu/4HpzB9jWUegeuLSAak6otw7ais0/mYcVrhh0yzztP3rHdy0UlMvfibbz+Lc2J7JfME8mXx3d5nFUVcvyDKWBf78TN+oIzhGLdQJXcxiqVil6TeMs4Z7OU4LxON3fnYR4osHcJXmBQrshRkwEw1/JQYp5ZRlVPelBNWSFtFqERv/dbAHUZpdv3JVqJ+/aSd7g==
+ bh=h9gANgFdQVGk51hiUtj4X5yHe/rDB7AmKtcrhAJJSnw=;
+ b=DxZ/+7HMsZuiS+DGx7wa5OeVaGhwrSt9GnLxMy7DPVYMfu/4pULR/WUvTRBsLuAbcG5gz+gDpBm/9n7m21673feMgPVKPK1B6XwxsHLZzk50h95WlG+SZANK7+T3K1C891Y0IzfnwOi1bLVPy1EYQGVaGl1eWLTFex0KE5wiQDIEzV+XiCv2eaDPkTCxQExj1AasYOQJYvA8YIW8rV7BIRgWskT60httdaXxVXGjd4fxtNS1kGQeZ2lZX2sYj3LQBpy72UjqwCCSdw/l0u0K3DjmCZabCmo0d++TYc8AWhaYmxr91YVTjCTpS2Xq3f+WMsZmokjLWptm9ApC/VYAXA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=h9gANgFdQVGk51hiUtj4X5yHe/rDB7AmKtcrhAJJSnw=;
+ b=KvSiXOgPIq6bUsywBg+VLbRXE0L8OE9AAMEkL37H9cjoBHGVGKExbWXQJF6O688Eke/Xqc6vQPjtRB7IhjYtoVXa8xC7XkJzx55LI8QHLFUnXkk9Fgk5TtyeOEJ/E82FKjPqh6cZhN/HvBPQ9n6RSo5zTerVVYz5fkdis2k2z9c=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by DM4PR11MB5327.namprd11.prod.outlook.com
- (2603:10b6:5:392::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Tue, 16 Aug
- 2022 16:50:49 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::9847:345e:4c5b:ca12]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::9847:345e:4c5b:ca12%6]) with mapi id 15.20.5504.028; Tue, 16 Aug 2022
- 16:50:48 +0000
-Date:   Tue, 16 Aug 2022 09:50:45 -0700
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        <linux-cxl@vger.kernel.org>, <nvdimm@lists.linux.dev>,
-        <bwidawsk@kernel.org>, <ira.weiny@intel.com>,
-        <vishal.l.verma@intel.com>, <alison.schofield@intel.com>,
-        <a.manzanares@samsung.com>, <linux-arch@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        <linux-arm-kernel@lists.infradead.org>, <bp@alien8.de>,
-        <x86@kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arch/cacheflush: Introduce flush_all_caches()
-Message-ID: <62fbcae511ec1_dfbc129453@dwillia2-xfh.jf.intel.com.notmuch>
-References: <165791918718.2491387.4203738301057301285.stgit@djiang5-desk3.ch.intel.com>
- <165791937063.2491387.15277418618265930924.stgit@djiang5-desk3.ch.intel.com>
- <20220718053039.5whjdcxynukildlo@offworld>
- <4bedc81d-62fa-7091-029e-a2e56b4f8f7a@intel.com>
- <20220803183729.00002183@huawei.com>
- <9f3705e1-de21-0f3c-12af-fd011b6d613d@intel.com>
- <YvO8pP7NUOdH17MM@FVFF77S0Q05N>
- <62f40fba338af_3ce6829466@dwillia2-xfh.jf.intel.com.notmuch>
- <20220815160706.tqd42dv24tgb7x7y@offworld>
- <Yvtc2u1J/qip8za9@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Yvtc2u1J/qip8za9@worktop.programming.kicks-ass.net>
-X-ClientProxiedBy: SJ0PR03CA0027.namprd03.prod.outlook.com
- (2603:10b6:a03:33a::32) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB3589.namprd12.prod.outlook.com (2603:10b6:a03:df::29)
+ by BYAPR12MB3094.namprd12.prod.outlook.com (2603:10b6:a03:db::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Tue, 16 Aug
+ 2022 16:51:01 +0000
+Received: from BYAPR12MB3589.namprd12.prod.outlook.com
+ ([fe80::78a4:a1dc:b951:15cd]) by BYAPR12MB3589.namprd12.prod.outlook.com
+ ([fe80::78a4:a1dc:b951:15cd%4]) with mapi id 15.20.5525.011; Tue, 16 Aug 2022
+ 16:51:01 +0000
+Message-ID: <6396ccf9-a677-427d-f5f9-12d30ad2197e@amd.com>
+Date:   Tue, 16 Aug 2022 18:50:54 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/3] dma-buf: Add ioctl to query mmap coherency/cache
+ info
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220815211516.3169470-1-robdclark@gmail.com>
+ <20220815211516.3169470-2-robdclark@gmail.com>
+ <327c77d5-5812-a158-6c9f-c68e15a5a6b4@amd.com>
+ <CAF6AEGu3oxM+EX_FsLpw4m0KouMyFMLN=AGGbf=6TVQGkJ7jQg@mail.gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <CAF6AEGu3oxM+EX_FsLpw4m0KouMyFMLN=AGGbf=6TVQGkJ7jQg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AS9PR06CA0537.eurprd06.prod.outlook.com
+ (2603:10a6:20b:49d::34) To BYAPR12MB3589.namprd12.prod.outlook.com
+ (2603:10b6:a03:df::29)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: da25945d-ea8b-4eb8-63d4-08da7fa778a0
-X-MS-TrafficTypeDiagnostic: DM4PR11MB5327:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Office365-Filtering-Correlation-Id: 52dcbb50-08b7-4202-1b9b-08da7fa77fe0
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3094:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yCtGe4Pqvpw98PvoB6Yg62qnkBMcJaXUTxVNfP6GH/r9FsrFa8TEpYkauiuxhyRH4AJDhtCXdtDN+QD0u+HhxCR3daJBzkb0nz1Tq26exyH2v+rpaSNcRrZEXWwn9srSq0GQEE1qcIFDwTvA/tUulBUgw3QCkbTB2z0WmWA5pcFt+cGk8sZAQ2vVLcpdlzxd13vHzdRDY9ER8y3vMSS5JsZfUzpN6UB9hblms1vslUUcchBfn+JjJ81kb+kRUlBaer64ixBTWsomDbFRURh/amv1l/N7y+MY/N7OcocZy6SQcJ8pc7UgCdBMH1VpmAhji5Lu0XeGtQMmrQuSm8VKzB304aukOw4qCjGjn+e/ncxjFJyo5NCJTyNYJxdcmtzo1huEbE6cDoTnBglRHJ/AMnoIf3DyBc1JqQcgNyAb2oL2wYaKiwxq1s6xetClRZ26KUyo/kjou8+2+w94F/IOY8Rpozm1zUwSqnHDq7sd+xzn9yTvuE5KgZgQDvL9qzCL0p88CqbeOnAiQnfJ7a5IkYgcXYbwLK1OmrUZAhiQGEVxCGkCdjDgyswq+XDGQvJc0/SBd3ZUIlVHKACXO46y5Ap9fsidMDsrbVLOYQqHkok4q9vgMvtvbVaP3FcZPpE9spEFRUNkxIzeg83LE2h200hpe05+6e1O01vfwHHPrAt54wkZ4wlLyIfBrzybU2rEsxE0ZOWQV/po3R2yoSv1ye4CNvkN909QmZiD3GmdjVVsqoF358VCmOfPkYxxCc0i
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(346002)(39860400002)(136003)(376002)(396003)(110136005)(82960400001)(6512007)(26005)(9686003)(38100700002)(6486002)(7416002)(8936002)(5660300002)(86362001)(6506007)(478600001)(41300700001)(6666004)(66476007)(8676002)(66946007)(2906002)(66556008)(4326008)(83380400001)(186003)(54906003)(316002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: g+vCDKnrcbgpjbHrsDxGhVVuk+9hrk3GO9hDIaBYX36q1BCbZj90zu7jcxQkHXRw/ReEWw8drfymPZ+4aBZjhBcSQm2KPwLvObtdPAE1HisEiBiTW4ivQqkyw48nbnZo6fM0FT38iv3mTJ1g9YYgDxxeGHoXDhdGLbeKJG8ixCrpjhmWjFQiwGZa7f2nSrV1ejLJcfOCIiF6FFQPDZXLDem+KvCbdXhzlE97895bA0HUH2kXUulUFGRbwKufnHIq1Z5UjTJyBfX7mHYdRER9+66Y3cOoUP60L0/U/rdWburkCexc0oeIBgcKQGqmyidPXVVB0zXm79TpjGJcj6z2ix33yyWuR0jntf98ZdRq1ST5pDyuCCAWPUYHuTpjyOty38Peg4/flAiE1lUxbOchiXHDghrMhrGLcsIHH2lXMTfVyiz2DoJ2IabiasqtqSvjZlHnmvvCnsZzl/cZPM0F1ImuX5wctRQtYrDo4EXYmvxgT9zsyLce1cU/mHt68r2aqoBDbDl3Xh+swpAPDZEERWrvebK6tFUA0XQSnd6Bl1Ul+wmhqOqJVicSBX77dPtTRN4VUtKZlxL20uHTQLWbHBW1+0PGtuyef/LGLCla5x6wkWZkpVG5bmOANb6oCWXNvTDgB0BqqQsP9w8vwHGyxlHurc36yq6l2bvVukuFfKW1C2+W1Gn5JnThHFflyiG4a3YHLq4Dani/9Euna1/GM8qoYgQQhUPBypSxYFPIWLEds9NONWaU6pFPrG86Cpb9rhSI1NiNXUADrx59botFVxqE97FpdNg11VjclHorDSJCURpxS53LDB5h5j8dT/PPIVLw8xk+pH5kYuPVLtEbpQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3589.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(396003)(39860400002)(376002)(366004)(41300700001)(478600001)(54906003)(316002)(38100700002)(4326008)(6486002)(7416002)(66946007)(8676002)(30864003)(8936002)(66476007)(66556008)(5660300002)(2906002)(6916009)(31696002)(53546011)(31686004)(36756003)(186003)(86362001)(6506007)(66574015)(6666004)(2616005)(83380400001)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?o3edS/bSC4apiehzqQ7R6DF+STbRV2MjKbc54gFwbWuRo/GiZALUsczUu4wI?=
- =?us-ascii?Q?/iqz/3f1psJdujiHYUKqjzDjnRK6xtBByazbHNYbCo6gbwiAZJjTbhdxZ5jm?=
- =?us-ascii?Q?Lt5NH+QzlsQbISI8R8NwUapNaxyS6nJki/EVNQ9wmXPOWrpdZ0hKvrk7Q7UX?=
- =?us-ascii?Q?nOtbIPsCzH6nMdDfr8vlBcam1E4tw9d4D413R8sp7MbITz7Xia6bAdCMMw77?=
- =?us-ascii?Q?CGwGswGCdJcjZUBClVj/pH99f+fhgxSbu7NdQ/KujgOC3J3bj6/OstiNMNKm?=
- =?us-ascii?Q?7sl5yfx/iLVTaF9JSqnngPGjopr4XlxIZXP1RJQgbZAZOM9G2DHHAZh1tVdc?=
- =?us-ascii?Q?0YwW466DvaNeO1w5GB+8OrMW9oZE1kVgAOgebkbzW0Yo/kwI6WBh0MBBtKDm?=
- =?us-ascii?Q?Wgqb87JTwFxSryw18D9BCLBo3u5j6YL7riHdhuCcbLs2C71dMxvrCm5d6HZZ?=
- =?us-ascii?Q?Bf5cwS83uhy3S0EumMU4trilRozGg5bke0tec1pRJJnUjoKT75J0Tt4MZxc6?=
- =?us-ascii?Q?hlD2BpAAZQ3vLRD8Mug4rXRyUhSuKP6w4gt6z1Djt1Y0EkpY5PeZgxIOsROQ?=
- =?us-ascii?Q?onYmvsRcCTOdoW0/6//9C9Gg2r6rWuTYhO67S1l9nFMJqh+jfDceXIc9CXzS?=
- =?us-ascii?Q?sB5Oe+SdBFNHNfv8wHmGgFGPKjhqJV+3nwhomBMkdUhiIdrCzuf8lypLNwv9?=
- =?us-ascii?Q?T55ErC/BN4s1uTo3lEnh9HmLDR7UpQ9NG0x5sPqMBtzS831XX4yP8N4B/Xcs?=
- =?us-ascii?Q?ox1r6IQEHaAjnA6kiox3/+fohA5nAOQMUBL/mdThenuuyp6o/gc8NMBOd9m+?=
- =?us-ascii?Q?cJPepXQtnHXf+AgrY9qfJtbCcAYdRNJjHbyMDEfWOX0Tw4AuPUX+7XdWTYtX?=
- =?us-ascii?Q?940LtDH89zjHLnq8unKcPmoYMTwwYHVr+4uifpcC0GCH3tSWI6M+HYtbsu4R?=
- =?us-ascii?Q?Ihg2inNUvZY70lR4wk850WU4UO//lRWpgIzGFegVI6FgYdwBmGnjr9Mzcntd?=
- =?us-ascii?Q?Pkru5TELh7UdwiWK1QStNRmCFC7ZVRt+GKwLS4vJ6l7pa/JzlorUh7Tsp1fF?=
- =?us-ascii?Q?AFFetkxSKxTVs1j32ueZ2gTw9nHmE5Bb7ivaprdsUNa3D5G+VYdZFdsKlc2+?=
- =?us-ascii?Q?ctXYaDBJl6+CndzmhEk1eHO78VMvebu2RnvGmskJRv9S3u0zpVbD+L/LTiR/?=
- =?us-ascii?Q?acEdbPhUUxBeXYwAaRAyRaYhgqbSe4BrGb/fXMOdrWizDsRMTABpXReiuV1h?=
- =?us-ascii?Q?yp6IVuFqneDIZQbWWu6phjHB3PSyuWBzbM9ME0E3sucjdBSMx3dCQrsBLV5B?=
- =?us-ascii?Q?2qiPe53MuXQIOMe/OhZSqiHPcFgRuKvNrjNJajcUyhd7oYVOtevVvJq6M6yf?=
- =?us-ascii?Q?E2fqr18qfw6ksppWcvnr3RS8vyjD7OQAL2JhOj+f+T3uLasnw6v06dqve9Id?=
- =?us-ascii?Q?4McwVgDrS9Cdf6+z3arGMQMNaq3YVT+ATC251JH2UZPrQNqy5ugNvIY2jAoU?=
- =?us-ascii?Q?huHsCuqAtuhpI8ZxZxQ6MDaqB+Eg2YJoF7LmJFZ5vu3AYQfo5qbLBT9Urrsg?=
- =?us-ascii?Q?f74/4nfYAmr9pF8G7ur/Gm6S7Pn4edhK+byFoTaeu1OmDZnjxX9Gn93VWbPD?=
- =?us-ascii?Q?Qg=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: da25945d-ea8b-4eb8-63d4-08da7fa778a0
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MkJ0NFdqMTJ3OWMzZWxwZUp3eURuTFRBb1NyaVhoZkE0NXBmajk4SEFwdDg1?=
+ =?utf-8?B?UEFWNjEzb1M5QUMvbzRuaEV2S2FpakZPWGtvVDRubTgvRVZ3L3BIc1MrZklo?=
+ =?utf-8?B?V29jd2ZSVHllaVRwUnV0a2FDSUF4TWhLWU1WdGkrc2JNWkF1S2REYm9uUzh4?=
+ =?utf-8?B?YTBvWlByWjhHQmdKZ3VEZ2ZmZkdyM29QYlRYMG53U0ZnZHVwYVFZcGlFMXpV?=
+ =?utf-8?B?b3VHL2lDWjgzcW8yQ3BKM296dGMrdEFpSVhaejRxRkJhcElmTFlrckUvNU1E?=
+ =?utf-8?B?MG9DMnREME0wNVNWK3BRTll4RldWektiWThuVzV5OEJtU0hqdmJDTHBXb2Nk?=
+ =?utf-8?B?VzQ0NHFUdXdEVkVKYXhBallBQkQxeWdySmpwWkFFTkl2dDRvKzVJeHpML25z?=
+ =?utf-8?B?UUJOck1HOWVqSTlVMEV3YkhENEV6RUZwOUNHWklxS2hQNVpXcURNZ2I5dFho?=
+ =?utf-8?B?ZDJ6aGYxbGEwQW5FbUNPY2h3Rlh0ZGEya2VuemZaczc1ZUU1Qi9KWk1CL0pi?=
+ =?utf-8?B?WmIydEpSVlZSRlh4a3Q2cTJHN01JZ1VoZUFLcWg3OEJUVXhVN0hGYzRJazdi?=
+ =?utf-8?B?T2prb0lpOG1JcVd3MUFON25yRTZFejZjVC91TjZQc0ptaW1oZU9iSUtNRXU4?=
+ =?utf-8?B?djNLWS9Vb0JVZFYzNHF0WFZMQ1Uxa1duTW45SzBpdldQcmhDZGZZQ1I4S1RV?=
+ =?utf-8?B?QWRqbGNqcXEyVzhNM0JZU1dIaDVCemk4QU9FSnVTMzJpZVN5NEN0VGI3Qi93?=
+ =?utf-8?B?UjNGTVRMR0VJbDdKUE1rT3JPRFZBSFVOZFkzTFlvY1hEWGs3UjdJeVNrbnl3?=
+ =?utf-8?B?TitsZ0JsaWhTWGxVVEd2eGFMUG5yR0NBa3NjRzkxWGhnSjBpd2ZBcUx1R3hs?=
+ =?utf-8?B?blAyWWVEZzVWS3JpTmZtYXV0ZnZyRWs0U2ZnSDJEVVBZK25OVks0QmlHNHNK?=
+ =?utf-8?B?VFZvek5xN3h3aWlNTGJrSDl4YVkyQTBuZ3dQQzNtTWQ3QVc1VmMrakJwcXhO?=
+ =?utf-8?B?cnExVGlUWVo4QWJ1UlBieWFaVUdrZk1DVDFnYUJKcG5ENUhXNmRtZU9QMDhq?=
+ =?utf-8?B?bnNpeW8vMVlUOG5Vb25Hb1JEdjJhK29Mb2JiZEFDNXRvQWh6eW1ndXlDUzMz?=
+ =?utf-8?B?bEc1Ui83dmFTd2xSQjhTR0V1eE1VWC9zQUVxRjJ6NUU0Y2Y4MFBLNVBiVFVq?=
+ =?utf-8?B?MDkyVkJSeXQ1aFlubjlQcklXKyt0dFAyYXdnblFRNy9YM3NIWjlMdTZ6anlm?=
+ =?utf-8?B?UlgrWEk2Q2QxZWtJT1dscUJDc2o3VjZhWlp5NHNVYWJwZDdCYXc1YnVFdGpM?=
+ =?utf-8?B?S1h1R1VDcldPQW5wczVZYmlVY3lGNS9nQjU0ZXQySXNOUFBIY2EzcnFWcmsy?=
+ =?utf-8?B?QW9JVjBSVmxTUDAvdWx2cVJaUDQ5TDRwTlRQeDBDV1BicnIzNkcrc2wzWjRM?=
+ =?utf-8?B?d2lXbnJSbHptUFVKUk9kVTNHbmlUNFN1THcrTHhpaGxycXk3bC9hQkk3SGV0?=
+ =?utf-8?B?dmk1R3dWL25HVmlpV2NramtyNmdnb29rcHNyUkNNdVJKWmcvSjNKRVJWZmt6?=
+ =?utf-8?B?K0twN1R5djRTc1JVa0xTU0RwelBSYjJEVDh2UkNCc2ZLSm91UWd2TTd5cDVN?=
+ =?utf-8?B?VmZMZnc0S1NJaWZaelpZeHYvY04vMlB4My9IWk91VFhQdTdnamM4SXIrZDFq?=
+ =?utf-8?B?QmZMV2hhdmZaMnZYRGl3eHE3enVvU3d1U0pienBhRnQybzFWY04xVkxNRkY2?=
+ =?utf-8?B?MnlEWkJzTityWllhaHF1Z1JrZ0M1cXJrbUgzY1Y1SkZVc1dGVDNzRjRyM0NE?=
+ =?utf-8?B?R2k2S0FZR0VWbzFSZ1NaSzZxa2dsUVAzOE5RYzB4U2h3aW1FbXJhcTdjMjRj?=
+ =?utf-8?B?MTQ3K1pFTFhzVWc0SGVGTVlRYTY2Z05Kdm42TFRIUFpack93MjZsNDM4Y1l0?=
+ =?utf-8?B?SVFZKzU4SkRIWW1pbXlOVkpOejFnbzlJa1FmaUdjeVJ0ZDNrQ3BQVGdHYjJ3?=
+ =?utf-8?B?cVRsUWFtNzB0dDR4TWtUMkFqNjRQYW1TSlczZzBlSzIwS012WGlkVXJTNXFo?=
+ =?utf-8?B?aVFSNzRwUUZtVml2MGxCNk5lQzJKYXV4VklpV2dITzNRQjFLWUI1MEtOV21J?=
+ =?utf-8?B?R1JiazhzTHI2SU5Hb3VNQWYraXZPSC9ldXA4N3F4NEx6YWV0djQzUG1vdUts?=
+ =?utf-8?Q?KJuQjbV9C3utU99fUTllwj21HHou7Mpe4AHvjTwGueA7?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 52dcbb50-08b7-4202-1b9b-08da7fa77fe0
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3589.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2022 16:50:48.8733
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2022 16:51:01.0974
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: evZdvf3s2WrO6su+43qmSO7R3H2WFJC+h5NpDZTcJzw0q04mtOsiPh9TvMAM+AKVMcR82OS9DYedmoUUugDeDfkclncx7h3Atn+gSII42dE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5327
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: PgYxUzPKC1UmRZXSnLA9qCa2gjHJ7RUe07ejLqHPVhTjw8GU+0eJUD9Yz0uNU7hb
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3094
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Zijlstra wrote:
-> On Mon, Aug 15, 2022 at 09:07:06AM -0700, Davidlohr Bueso wrote:
-> > diff --git a/arch/x86/include/asm/cacheflush.h b/arch/x86/include/asm/cacheflush.h
-> > index b192d917a6d0..ce2ec9556093 100644
-> > --- a/arch/x86/include/asm/cacheflush.h
-> > +++ b/arch/x86/include/asm/cacheflush.h
-> > @@ -10,4 +10,7 @@
-> > 
-> >  void clflush_cache_range(void *addr, unsigned int size);
-> > 
-> > +#define flush_all_caches() \
-> > +	do { wbinvd_on_all_cpus(); } while(0)
-> > +
-> 
-> This is horrific... we've done our utmost best to remove all WBINVD
-> usage and here you're adding it back in the most horrible form possible
-> ?!?
-> 
-> Please don't do this, do *NOT* use WBINVD.
+Am 16.08.22 um 16:26 schrieb Rob Clark:
+> On Tue, Aug 16, 2022 at 1:27 AM Christian König
+> <christian.koenig@amd.com> wrote:
+>> Am 15.08.22 um 23:15 schrieb Rob Clark:
+>>> From: Rob Clark <robdclark@chromium.org>
+>>>
+>>> This is a fairly narrowly focused interface, providing a way for a VMM
+>>> in userspace to tell the guest kernel what pgprot settings to use when
+>>> mapping a buffer to guest userspace.
+>>>
+>>> For buffers that get mapped into guest userspace, virglrenderer returns
+>>> a dma-buf fd to the VMM (crosvm or qemu).  In addition to mapping the
+>>> pages into the guest VM, it needs to report to drm/virtio in the guest
+>>> the cache settings to use for guest userspace.  In particular, on some
+>>> architectures, creating aliased mappings with different cache attributes
+>>> is frowned upon, so it is important that the guest mappings have the
+>>> same cache attributes as any potential host mappings.
+>>>
+>>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+>>> ---
+>>> v2: Combine with coherency, as that is a related concept.. and it is
+>>>       relevant to the VMM whether coherent access without the SYNC ioctl
+>>>       is possible; set map_info at export time to make it more clear
+>>>       that it applies for the lifetime of the dma-buf (for any mmap
+>>>       created via the dma-buf)
+>> Well, exactly that's a conceptual NAK from my side.
+>>
+>> The caching information can change at any time. For CPU mappings even
+>> without further notice from the exporter.
+> You should look before you criticize, as I left you a way out.. the
+> idea was that DMA_BUF_MAP_INCOHERENT should indicate that the buffer
+> cannot be mapped to the guest.  We could ofc add more DMA_BUF_MAP_*
+> values if something else would suit you better.  But the goal is to
+> give the VMM enough information to dtrt, or return an error if mapping
+> to guest is not possible.  That seems better than assuming mapping to
+> guest will work and guessing about cache attrs
 
-Unfortunately there are a few good options here, and the changelog did
-not make clear that this is continuing legacy [1], not adding new wbinvd
-usage.
+Well I'm not rejecting the implementation, I'm rejecting this from the 
+conceptual point of view.
 
-The functionality this is enabling is to be able to instantaneously
-secure erase potentially terabytes of memory at once and the kernel
-needs to be sure that none of the data from before the secure is still
-present in the cache. It is also used when unlocking a memory device
-where speculative reads and firmware accesses could have cached poison
-from before the device was unlocked.
+We intentional gave the exporter full control over the CPU mappings. 
+This approach here breaks that now.
 
-This capability is typically only used once per-boot (for unlock), or
-once per bare metal provisioning event (secure erase), like when handing
-off the system to another tenant. That small scope plus the fact that
-none of this is available to a VM limits the potential damage. So,
-similar to the mitigation we did in [2] that did not kill off wbinvd
-completely, this is limited to specific scenarios and should be disabled
-in any scenario where wbinvd is painful / forbidden.
+I haven't seen the full detailed reason why we should do that and to be 
+honest KVM seems to mess with things it is not supposed to touch.
 
-[1]: 4c6926a23b76 ("acpi/nfit, libnvdimm: Add unlock of nvdimm support for Intel DIMMs")
-[2]: e2efb6359e62 ("ACPICA: Avoid cache flush inside virtual machines")
+For example the page reference count of mappings marked with VM_IO is a 
+complete no-go. This is a very strong evidence that this was based on 
+rather dangerous halve knowledge about the background of the handling here.
+
+So as long as I don't see a full explanation why KVM is grabbing 
+reference to pages while faulting them and why we manually need to 
+forward the caching while the hardware documentation indicates otherwise 
+I will be rejecting this whole approach.
+
+Regards,
+Christian.
+
+>
+> BR,
+> -R
+>
+>> If the hardware can't use the caching information from the host CPU page
+>> tables directly then that pretty much completely breaks the concept that
+>> the exporter is responsible for setting up those page tables.
+>>
+>> Regards,
+>> Christian.
+>>
+>>>    drivers/dma-buf/dma-buf.c    | 63 +++++++++++++++++++++++++++------
+>>>    include/linux/dma-buf.h      | 11 ++++++
+>>>    include/uapi/linux/dma-buf.h | 68 ++++++++++++++++++++++++++++++++++++
+>>>    3 files changed, 132 insertions(+), 10 deletions(-)
+>>>
+>>> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+>>> index 32f55640890c..262c4706f721 100644
+>>> --- a/drivers/dma-buf/dma-buf.c
+>>> +++ b/drivers/dma-buf/dma-buf.c
+>>> @@ -125,6 +125,32 @@ static struct file_system_type dma_buf_fs_type = {
+>>>        .kill_sb = kill_anon_super,
+>>>    };
+>>>
+>>> +static int __dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
+>>> +{
+>>> +     int ret;
+>>> +
+>>> +     /* check if buffer supports mmap */
+>>> +     if (!dmabuf->ops->mmap)
+>>> +             return -EINVAL;
+>>> +
+>>> +     ret = dmabuf->ops->mmap(dmabuf, vma);
+>>> +
+>>> +     /*
+>>> +      * If the exporter claims to support coherent access, ensure the
+>>> +      * pgprot flags match the claim.
+>>> +      */
+>>> +     if ((dmabuf->map_info != DMA_BUF_MAP_INCOHERENT) && !ret) {
+>>> +             pgprot_t wc_prot = pgprot_writecombine(vma->vm_page_prot);
+>>> +             if (dmabuf->map_info == DMA_BUF_COHERENT_WC) {
+>>> +                     WARN_ON_ONCE(pgprot_val(vma->vm_page_prot) != pgprot_val(wc_prot));
+>>> +             } else {
+>>> +                     WARN_ON_ONCE(pgprot_val(vma->vm_page_prot) == pgprot_val(wc_prot));
+>>> +             }
+>>> +     }
+>>> +
+>>> +     return ret;
+>>> +}
+>>> +
+>>>    static int dma_buf_mmap_internal(struct file *file, struct vm_area_struct *vma)
+>>>    {
+>>>        struct dma_buf *dmabuf;
+>>> @@ -134,16 +160,12 @@ static int dma_buf_mmap_internal(struct file *file, struct vm_area_struct *vma)
+>>>
+>>>        dmabuf = file->private_data;
+>>>
+>>> -     /* check if buffer supports mmap */
+>>> -     if (!dmabuf->ops->mmap)
+>>> -             return -EINVAL;
+>>> -
+>>>        /* check for overflowing the buffer's size */
+>>>        if (vma->vm_pgoff + vma_pages(vma) >
+>>>            dmabuf->size >> PAGE_SHIFT)
+>>>                return -EINVAL;
+>>>
+>>> -     return dmabuf->ops->mmap(dmabuf, vma);
+>>> +     return __dma_buf_mmap(dmabuf, vma);
+>>>    }
+>>>
+>>>    static loff_t dma_buf_llseek(struct file *file, loff_t offset, int whence)
+>>> @@ -326,6 +348,27 @@ static long dma_buf_set_name(struct dma_buf *dmabuf, const char __user *buf)
+>>>        return 0;
+>>>    }
+>>>
+>>> +static long dma_buf_info(struct dma_buf *dmabuf, void __user *uarg)
+>>> +{
+>>> +     struct dma_buf_info arg;
+>>> +
+>>> +     if (copy_from_user(&arg, uarg, sizeof(arg)))
+>>> +             return -EFAULT;
+>>> +
+>>> +     switch (arg.param) {
+>>> +     case DMA_BUF_INFO_MAP_INFO:
+>>> +             arg.value = dmabuf->map_info;
+>>> +             break;
+>>> +     default:
+>>> +             return -EINVAL;
+>>> +     }
+>>> +
+>>> +     if (copy_to_user(uarg, &arg, sizeof(arg)))
+>>> +             return -EFAULT;
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>>    static long dma_buf_ioctl(struct file *file,
+>>>                          unsigned int cmd, unsigned long arg)
+>>>    {
+>>> @@ -369,6 +412,9 @@ static long dma_buf_ioctl(struct file *file,
+>>>        case DMA_BUF_SET_NAME_B:
+>>>                return dma_buf_set_name(dmabuf, (const char __user *)arg);
+>>>
+>>> +     case DMA_BUF_IOCTL_INFO:
+>>> +             return dma_buf_info(dmabuf, (void __user *)arg);
+>>> +
+>>>        default:
+>>>                return -ENOTTY;
+>>>        }
+>>> @@ -530,6 +576,7 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
+>>>        dmabuf->priv = exp_info->priv;
+>>>        dmabuf->ops = exp_info->ops;
+>>>        dmabuf->size = exp_info->size;
+>>> +     dmabuf->map_info = exp_info->map_info;
+>>>        dmabuf->exp_name = exp_info->exp_name;
+>>>        dmabuf->owner = exp_info->owner;
+>>>        spin_lock_init(&dmabuf->name_lock);
+>>> @@ -1245,10 +1292,6 @@ int dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma,
+>>>        if (WARN_ON(!dmabuf || !vma))
+>>>                return -EINVAL;
+>>>
+>>> -     /* check if buffer supports mmap */
+>>> -     if (!dmabuf->ops->mmap)
+>>> -             return -EINVAL;
+>>> -
+>>>        /* check for offset overflow */
+>>>        if (pgoff + vma_pages(vma) < pgoff)
+>>>                return -EOVERFLOW;
+>>> @@ -1262,7 +1305,7 @@ int dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma,
+>>>        vma_set_file(vma, dmabuf->file);
+>>>        vma->vm_pgoff = pgoff;
+>>>
+>>> -     return dmabuf->ops->mmap(dmabuf, vma);
+>>> +     return __dma_buf_mmap(dmabuf, vma);
+>>>    }
+>>>    EXPORT_SYMBOL_NS_GPL(dma_buf_mmap, DMA_BUF);
+>>>
+>>> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+>>> index 71731796c8c3..37923c8d5c24 100644
+>>> --- a/include/linux/dma-buf.h
+>>> +++ b/include/linux/dma-buf.h
+>>> @@ -23,6 +23,8 @@
+>>>    #include <linux/dma-fence.h>
+>>>    #include <linux/wait.h>
+>>>
+>>> +#include <uapi/linux/dma-buf.h>
+>>> +
+>>>    struct device;
+>>>    struct dma_buf;
+>>>    struct dma_buf_attachment;
+>>> @@ -307,6 +309,13 @@ struct dma_buf {
+>>>         */
+>>>        size_t size;
+>>>
+>>> +     /**
+>>> +      * @map_info:
+>>> +      *
+>>> +      * CPU mapping/coherency information for the buffer.
+>>> +      */
+>>> +     enum dma_buf_map_info map_info;
+>>> +
+>>>        /**
+>>>         * @file:
+>>>         *
+>>> @@ -533,6 +542,7 @@ struct dma_buf_attachment {
+>>>     * @ops:    Attach allocator-defined dma buf ops to the new buffer
+>>>     * @size:   Size of the buffer - invariant over the lifetime of the buffer
+>>>     * @flags:  mode flags for the file
+>>> + * @map_info:        CPU mapping/coherency information for the buffer
+>>>     * @resv:   reservation-object, NULL to allocate default one
+>>>     * @priv:   Attach private data of allocator to this buffer
+>>>     *
+>>> @@ -545,6 +555,7 @@ struct dma_buf_export_info {
+>>>        const struct dma_buf_ops *ops;
+>>>        size_t size;
+>>>        int flags;
+>>> +     enum dma_buf_map_info map_info;
+>>>        struct dma_resv *resv;
+>>>        void *priv;
+>>>    };
+>>> diff --git a/include/uapi/linux/dma-buf.h b/include/uapi/linux/dma-buf.h
+>>> index b1523cb8ab30..07b403ffdb43 100644
+>>> --- a/include/uapi/linux/dma-buf.h
+>>> +++ b/include/uapi/linux/dma-buf.h
+>>> @@ -85,6 +85,72 @@ struct dma_buf_sync {
+>>>
+>>>    #define DMA_BUF_NAME_LEN    32
+>>>
+>>> +/**
+>>> + * enum dma_buf_map_info - CPU mapping info
+>>> + *
+>>> + * This enum describes coherency of a userspace mapping of the dmabuf.
+>>> + *
+>>> + * Importing devices should check dma_buf::map_info flag and reject an
+>>> + * import if unsupported.  For example, if the exporting device uses
+>>> + * @DMA_BUF_COHERENT_CACHED but the importing device does not support
+>>> + * CPU cache coherency, the dma-buf import should fail.
+>>> + */
+>>> +enum dma_buf_map_info {
+>>> +     /**
+>>> +      * @DMA_BUF_MAP_INCOHERENT: CPU mapping is incoherent.
+>>> +      *
+>>> +      * Use of DMA_BUF_IOCTL_SYNC is required for CPU managed coherenency.
+>>> +      */
+>>> +     DMA_BUF_MAP_INCOHERENT,
+>>> +
+>>> +     /**
+>>> +      * @DMA_BUF_COHERENT_WC: CPU mapping is coherent but not cached.
+>>> +      *
+>>> +      * A cpu mmap'ing is coherent, and DMA_BUF_IOCTL_SYNC is not required.
+>>> +      * However fences may be still required for synchronizing access.  Ie.
+>>> +      * coherency can only be relied upon by an explicit-fencing userspace.
+>>> +      * An implicit-sync userspace must still use DMA_BUF_IOCTL_SYNC.
+>>> +      *
+>>> +      * The cpu mapping is writecombine.
+>>> +      */
+>>> +     DMA_BUF_COHERENT_WC,
+>>> +
+>>> +     /**
+>>> +      * @DMA_BUF_COHERENT_CACHED: CPU mapping is coherent and CPU cached.
+>>> +      *
+>>> +      * A cpu mmap'ing is coherent, and DMA_BUF_IOCTL_SYNC is not required.
+>>> +      * However fences may be still required for synchronizing access.  Ie.
+>>> +      * coherency can only be relied upon by an explicit-fencing userspace.
+>>> +      * An implicit-sync userspace must still use DMA_BUF_IOCTL_SYNC.
+>>> +      *
+>>> +      * The cpu mapping is cached.
+>>> +      */
+>>> +     DMA_BUF_COHERENT_CACHED,
+>>> +};
+>>> +
+>>> +/**
+>>> + * struct dma_buf_info - Query info about the buffer.
+>>> + */
+>>> +struct dma_buf_info {
+>>> +
+>>> +#define DMA_BUF_INFO_MAP_INFO    1
+>>> +
+>>> +     /**
+>>> +      * @param: Which param to query
+>>> +      *
+>>> +      * DMA_BUF_INFO_MAP_INFO:
+>>> +      *     Returns enum dma_buf_map_info, describing the coherency and
+>>> +      *     caching of a CPU mapping of the buffer.
+>>> +      */
+>>> +     __u32 param;
+>>> +     __u32 pad;
+>>> +
+>>> +     /**
+>>> +      * @value: Return value of the query.
+>>> +      */
+>>> +     __u64 value;
+>>> +};
+>>> +
+>>>    #define DMA_BUF_BASE                'b'
+>>>    #define DMA_BUF_IOCTL_SYNC  _IOW(DMA_BUF_BASE, 0, struct dma_buf_sync)
+>>>
+>>> @@ -95,4 +161,6 @@ struct dma_buf_sync {
+>>>    #define DMA_BUF_SET_NAME_A  _IOW(DMA_BUF_BASE, 1, __u32)
+>>>    #define DMA_BUF_SET_NAME_B  _IOW(DMA_BUF_BASE, 1, __u64)
+>>>
+>>> +#define DMA_BUF_IOCTL_INFO   _IOWR(DMA_BUF_BASE, 2, struct dma_buf_info)
+>>> +
+>>>    #endif
+

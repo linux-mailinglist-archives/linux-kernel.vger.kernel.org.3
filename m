@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1A1595C82
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FBB595C83
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbiHPM5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 08:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
+        id S232167AbiHPM51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 08:57:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232777AbiHPM5C (ORCPT
+        with ESMTP id S232550AbiHPM5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 16 Aug 2022 08:57:02 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9B79569E;
-        Tue, 16 Aug 2022 05:56:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA838979E3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 05:56:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660654587; x=1692190587;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=2ihjIlPX6JjmDxqCOX9kWD6/gEsrQbsIvOIDX6hkyik=;
-  b=HTc449DYX3N/md+dYtwVUZDWMXZZdUiSt6e4ygZyDNFqBZYtRrKy8nma
-   32FJdDUrSY4+mhLczp9Ut0SVUAF3C7fYpPO3+C6C85JGsCqYnXdSChRCB
-   +0LbC9ZiS/T9QY6Nd0kJnka9A0UqO95CSc6pqFWjJfeOL8w5+I4jks+X3
-   BdrcA+TFcdcBHCRuwt0o2RVLZaVkKq5kAe5rLiL5i+gBTHeBd8eTe0yA6
-   nCBmSJCgFTo8Ucb4Asiwc0etOKhlVIXW3vMcS77aCpb4k6OZ1ygPj5RWx
-   Z7fHj/sfri9krYjqukKqulLYHALnpKqt9UT4IO5bWb/2wZ16clm1m4H1c
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="293004106"
+  t=1660654589; x=1692190589;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=9dmsjCXBkUH6EeoqDGUhnKaCzPvSWsgnyLBDIcgCWsU=;
+  b=TAg/SUxNr8WXB7luDmAqP7atoTWoTzewEFD5JGrNIt5QM0H9JSAla5wM
+   TYdDMFWg1hHjEC8fHQ3SBE9uTuq+f1xEf8h3LhMISzUoIlPwnimtodOLA
+   cwmfp9pRQf826iA4wfAT+MFwjo7IxW/RSO4LNyn694Ef5lZrNWV47pPV8
+   Uxaozlh1jDxXvIAk0RTfafZTrz/HyqXJOtSbNr1LI+hz2ijoauyUOkeOO
+   uK8zqj6yf22cL5x23L2lXrQznduxcybXcbgE4Wq13m6gGbRe8STnPDyHw
+   TBqmIZQzLaJCTFVAHfqTtu5T0A5CpwGAmkPQqztTk4XVTxy1zdaGMIxc/
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="293004107"
 X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="293004106"
+   d="scan'208";a="293004107"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 05:56:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="557686019"
+   d="scan'208";a="557686020"
 Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
   by orsmga003.jf.intel.com with ESMTP; 16 Aug 2022 05:56:27 -0700
 From:   kan.liang@linux.intel.com
 To:     peterz@infradead.org, acme@redhat.com, linux-kernel@vger.kernel.org
 Cc:     eranian@google.com, ak@linux.intel.com, namhyung@kernel.org,
-        irogers@google.com, Kan Liang <kan.liang@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH 1/2] perf/x86/lbr: Enable the branch type for the Arch LBR by default
-Date:   Tue, 16 Aug 2022 05:56:11 -0700
-Message-Id: <20220816125612.2042397-1-kan.liang@linux.intel.com>
+        irogers@google.com, Kan Liang <kan.liang@linux.intel.com>
+Subject: [PATCH 2/2] perf docs: Update the documentation for the save_type filter
+Date:   Tue, 16 Aug 2022 05:56:12 -0700
+Message-Id: <20220816125612.2042397-2-kan.liang@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220816125612.2042397-1-kan.liang@linux.intel.com>
+References: <20220816125612.2042397-1-kan.liang@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -61,56 +62,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kan Liang <kan.liang@linux.intel.com>
 
-On the platform with Arch LBR, the HW raw branch type encoding may leak
-to the perf tool when the SAVE_TYPE option is not set.
+Update the documentation to reflect the kernel changes.
 
-In the intel_pmu_store_lbr(), the HW raw branch type is stored in
-lbr_entries[].type. If the SAVE_TYPE option is set, the
-lbr_entries[].type will be converted into the generic PERF_BR_* type
-in the intel_pmu_lbr_filter() and exposed to the user tools.
-But if the SAVE_TYPE option is NOT set by the user, the current perf
-kernel doesn't clear the field. The HW raw branch type leaks.
-
-There are two solutions to fix the issue for the Arch LBR.
-One is to clear the field if the SAVE_TYPE option is NOT set.
-The other solution is to unconditionally convert the branch type and
-expose the generic type to the user tools.
-
-The latter is implemented here, because
-- The branch type is valuable information. I don't see a case where
-  you would not benefit from the branch type. (Stephane Eranian)
-- Not having the branch type DOES NOT save any space in the
-  branch record (Stephane Eranian)
-- The Arch LBR HW can retrieve the common branch types from the
-  LBR_INFO. It doesn't require the high overhead SW disassemble.
-
-Fixes: 47125db27e47 ("perf/x86/intel/lbr: Support Architectural LBR")
-Reported-by: Stephane Eranian <eranian@google.com>
 Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Cc: stable@vger.kernel.org
 ---
- arch/x86/events/intel/lbr.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ tools/perf/Documentation/perf-record.txt | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-index a4a36d482b21..247d36825474 100644
---- a/arch/x86/events/intel/lbr.c
-+++ b/arch/x86/events/intel/lbr.c
-@@ -1149,6 +1149,14 @@ static int intel_pmu_setup_hw_lbr_filter(struct perf_event *event)
+diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
+index 099817ef5150..d5c57ac1ee0a 100644
+--- a/tools/perf/Documentation/perf-record.txt
++++ b/tools/perf/Documentation/perf-record.txt
+@@ -397,6 +397,9 @@ following filters are defined:
+ 	- abort_tx: only when the target is a hardware transaction abort
+ 	- cond: conditional branches
+ 	- save_type: save branch type during sampling in case binary is not available later
++		     For the platforms with Intel Arch LBR support (12th-Gen+ client or
++		     4th-Gen Xeon+ server), the save branch type is unconditionally enabled
++		     when the taken branch stack sampling is enabled.
  
- 	if (static_cpu_has(X86_FEATURE_ARCH_LBR)) {
- 		reg->config = mask;
-+
-+		/*
-+		 * The Arch LBR HW can retrieve the common branch types
-+		 * from the LBR_INFO. It doesn't require the high overhead
-+		 * SW disassemble.
-+		 * Enable the branch type by default for the Arch LBR.
-+		 */
-+		reg->reg |= X86_BR_TYPE_SAVE;
- 		return 0;
- 	}
- 
+ +
+ The option requires at least one branch type among any, any_call, any_ret, ind_call, cond.
 -- 
 2.35.1
 

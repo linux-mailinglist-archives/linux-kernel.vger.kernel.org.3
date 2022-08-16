@@ -2,261 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743AA595B37
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEFBA595B3B
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbiHPMFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 08:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
+        id S233634AbiHPMGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 08:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235372AbiHPMEk (ORCPT
+        with ESMTP id S234866AbiHPMFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 08:04:40 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB57B443D;
-        Tue, 16 Aug 2022 04:52:20 -0700 (PDT)
-Received: from [192.168.2.145] (unknown [109.252.119.13])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A9B6E6600373;
-        Tue, 16 Aug 2022 12:52:17 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1660650738;
-        bh=kqKfHUdOjX/jiDvnlWraX7Xx48/f4964xeZX7O95bw8=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=j6x1zL5fq6e4V5W504IPzxEnHQNFy8U6jSRtlqwi7t/AdhXj/xtkSNVYGOxhZKsG2
-         3ptwwZ9zW9D4kChAn4iEYfI7FoGTBt7yf91qhLFHQThaw6CfqGjkmjXY+EnG5gByZe
-         0a+UBHRDopmcDrEnG+DIcyfvwTTDzNnqQibVGzmfeXnZ/ELkDBJfsucopu6tB0VcIK
-         HHLDNzeKrgtXUUp8IXdomolyHXZjm+Q9Hj7o2bhhwt54VoAUahnT9rzy+hdiR5RPaD
-         /xcj3SutWutCjP+tvritwcqMnkDJ7CiTdQzVDp4jFeDQqlT5K2McPiu2MmUGDs2nZK
-         LgEELEl1XO5eA==
-Message-ID: <b2aeb72a-196d-6dd6-84b0-8fcbe28e2f08@collabora.com>
-Date:   Tue, 16 Aug 2022 14:52:15 +0300
+        Tue, 16 Aug 2022 08:05:43 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2051.outbound.protection.outlook.com [40.107.93.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92813D8F;
+        Tue, 16 Aug 2022 04:55:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M6xIvaoiXwkpRnwh63XkPasgjUZS3aTd0hXJpWmD3fK+O2LyLjgZw0gA9SaiUVXbbEOulrbWCp2m9oyqrzQ8pT2KBsRnZpUoLe93U7p2FojbxxvqAdmwWRj6EPMZ1dEa+kn6lan/b33XkbKvx7NhwScOq5oE29s7t/fA15FDjzFgxgT2qoXvBM7Y1JIBdtXBGKrpYYlTeT6tYf/jVEt/YypFppDS4jBz568jnTRUYajNUQ8+KzHxTykmyBPqv2hK7GjakS+KTE+n6wzUgQ9ROeYZTrbgJCpTqtis2LODJa2irixLHQddmqMy4YlCiny8C7ds5+DXYsoGJs5EvoYj5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HZUVJTFdm23UzkJW9BcbQGhtCVIfVJ6pcOO74cSL/ao=;
+ b=b78ywA+fFFSm4fqwds+qTLqrB3CZKyc179utlm3SzSRe62w0P/+SApNojUmerdw3vXjBi0FY+iMLDBhyz1yfyvzi0tn/P754FvtO/4d/3aI2/9r3nZRBdQ7anPJN71a4as0PHgexKh60foTXIqqmUfwxeNQ2lEjFV5DDB7MI+/jHF+2/iGG96Re49b6fqi+d6JPR5Ej4e5lYzHfL0jyPZuVGnIVB6cPZcACts2YJ7hUqBiOUe3xDPRdCZAtWl8TpxC0SMRrVvx7u0IWUL1GTC0eT2S86r7rMR3/wddT3B+ZPaZ/lsF2n9bwlg/EAYCsP+D9SXosxWF9C/IE781Ihyw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=microchip.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HZUVJTFdm23UzkJW9BcbQGhtCVIfVJ6pcOO74cSL/ao=;
+ b=ivCwxTMuzgcfOTAKBhk/e6OCgtwEAhXYeMulFgrSMDLtEb+O9DMH55EyHdZsUw1MY/T3Niw3fuMWsIvPfIwQosMelNUTswU16Nc/iHUfqGYC2Zw6Oe1zf+SmHHQq+RNQ9m3JbIygoVvzX8XmbEUiu9cK7zDOB8TevEfDgz911o4=
+Received: from MW2PR2101CA0022.namprd21.prod.outlook.com (2603:10b6:302:1::35)
+ by BN7PR12MB2772.namprd12.prod.outlook.com (2603:10b6:408:26::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Tue, 16 Aug
+ 2022 11:55:08 +0000
+Received: from CO1NAM11FT010.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:302:1:cafe::c3) by MW2PR2101CA0022.outlook.office365.com
+ (2603:10b6:302:1::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.3 via Frontend
+ Transport; Tue, 16 Aug 2022 11:55:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT010.mail.protection.outlook.com (10.13.175.88) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5525.11 via Frontend Transport; Tue, 16 Aug 2022 11:55:07 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 16 Aug
+ 2022 06:55:06 -0500
+Received: from xhdharinik40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
+ Transport; Tue, 16 Aug 2022 06:55:01 -0500
+From:   Harini Katakam <harini.katakam@amd.com>
+To:     <nicolas.ferre@microchip.com>, <davem@davemloft.net>,
+        <richardcochran@gmail.com>, <claudiu.beznea@microchip.com>,
+        <andrei.pistirica@microchip.com>, <kuba@kernel.org>,
+        <edumazet@google.com>, <pabeni@redhat.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <michal.simek@xilinx.com>, <harinikatakamlinux@gmail.com>,
+        <harini.katakam@xilinx.com>, <michal.simek@amd.com>,
+        <harini.katakam@amd.com>, <radhey.shyam.pandey@amd.com>
+Subject: [RESEND PATCH 0/2] Macb PTP enhancements
+Date:   Tue, 16 Aug 2022 17:24:58 +0530
+Message-ID: <20220816115500.353-1-harini.katakam@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v8 2/2] drm/gem: Don't map imported GEMs
-Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     Rob Clark <robdclark@gmail.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        linux-tegra@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
-        kernel@collabora.com, Daniel Vetter <daniel@ffwll.ch>
-References: <20220701090240.1896131-1-dmitry.osipenko@collabora.com>
- <20220701090240.1896131-3-dmitry.osipenko@collabora.com>
- <2bb95e80-b60a-36c0-76c8-a06833032c77@amd.com>
- <CAF6AEGtqPeF1DjmBKgzWK39Yi81YiNjTjDNn85TKx7uwicFTSA@mail.gmail.com>
- <2a646ce4-c2ec-3b11-77a0-cc720afd6fe1@collabora.com>
- <YvOav/vF2awVWIu0@phenom.ffwll.local>
- <CAF6AEGvfAJgwBe4+sK0gAkZ++MwH9x4=698C8XSnmfYNMFZqfA@mail.gmail.com>
- <9674d00e-c0d6-ceba-feab-5dc475bda694@collabora.com>
- <CAF6AEGv1cVC9ZNMwpwFOki5CrwD3kSAHM9EUFZGWY-y5zcQsCg@mail.gmail.com>
- <fc019528-7ec7-9e5b-1b6d-c44da14346cf@collabora.com>
- <CAF6AEGv8zSd0fEYB9hd2QOyTt53gFSQoL8JdZtCvtCdYfMfB2Q@mail.gmail.com>
- <73b51dde-689f-64ce-a1c8-0d7c84a2ed66@collabora.com>
- <CAF6AEGuR1cRQYaQBYGnMBzy=XJUcN2o2gzabZaGO2Dj62Uq1DA@mail.gmail.com>
- <CAF6AEGvvR1NUd_GKP=Bxp3VTDMBYT+OwTkkgOWxgYFijZaVVEQ@mail.gmail.com>
- <5f118e10-db7a-a128-1e87-c9dddb65b2ac@collabora.com>
-In-Reply-To: <5f118e10-db7a-a128-1e87-c9dddb65b2ac@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6a7f3946-12c3-4ff8-8b8c-08da7f7e2a1b
+X-MS-TrafficTypeDiagnostic: BN7PR12MB2772:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: r5ucxb5g8YGR436lvyeG/fLp/pS8Yrd0qgGjf8Y68lAjH7q6hdUTJwW1m5YfN+aIX8p3YwizEypTVC7xmpuFwcTxtqyTxmU2aUoRdezYPB4wO/JrAgb/d8p+gKHYGTcAaw2FdPUk8hY1AijhVfYfGJ1hMJ+2pkpczttLA/MlJ3Cju7vjPDkniJVVl1o7V9rGQ7Fa3XeD0sr+1kS/jDtoMD2HrO0QliACT1a4DCb4wUzDrobTQzLB3ppv5lXISn56AlVCxlv/wR0KFpebVbzxax1vs+SnJQ7G0UX2k/6fkdZdBHvZ3QmGlOg801GGDPt04BbMhWepdHGASKeOsefow54avSHwwd5UQLb0oypvMhpHAcImQ34tbOsxz9rNU5PqWSlEzGZXlotkIZWv517gyROeaZmI/OYVzOTkiUhntbIFc3XwC6cSJaGmVdiT6vIPAqPQI12z9jCktCuKH/nSaCeZlrvdYrnKcAeHcJppfdB3zLY7aaSTajNnUJVg7fsf6xwBwpV7JU/v24pb9jnTHa8c07jw24bgW+lNQkGqwjPbwMGfyDHCoeFzEJMgdyoa+gXxZ1fUrTbXltPiV+XcLTHCbywyOha4YMmEPgmTX+GFaSn5ofRZ/wf6qv8JGVQhJCmhmBcxKk9TXo7ltwDzggqiUrn2WT7yROuGL41CfZT9BR3ewIcInCE95Mrs4v0/uGNek6ghK3U/UahncgkIRraJ+BtmnjPGjjcpi7A//U5PmjjCazD5Cvl1kJcIy23/pf8GkEru74nuGFhhYm1xhkXOVOvAZaKX7dVVOv4A8H1aRzfpwTdj+DYoxRzeTwNFXpCUCuvP3QGCozbJKzXMc+z3jq1b0SWKf4JDhroVXWwB4jbSjZafe18E93TGDq0FNNqdEI/PDYIUV77JmntQMCYa/eifbSbgm5hJtS009dA=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(136003)(346002)(376002)(36840700001)(46966006)(40470700004)(2906002)(5660300002)(8676002)(4326008)(70586007)(70206006)(7416002)(83380400001)(36756003)(36860700001)(8936002)(316002)(4744005)(44832011)(478600001)(40480700001)(26005)(41300700001)(6666004)(82310400005)(54906003)(110136005)(86362001)(426003)(47076005)(2616005)(1076003)(966005)(186003)(336012)(356005)(82740400003)(81166007)(40460700003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2022 11:55:07.3682
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a7f3946-12c3-4ff8-8b8c-08da7f7e2a1b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT010.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR12MB2772
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/16/22 14:44, Dmitry Osipenko wrote:
-> On 8/12/22 18:01, Rob Clark wrote:
->> On Fri, Aug 12, 2022 at 7:57 AM Rob Clark <robdclark@gmail.com> wrote:
->>>
->>> On Fri, Aug 12, 2022 at 4:26 AM Dmitry Osipenko
->>> <dmitry.osipenko@collabora.com> wrote:
->>>>
->>>> On 8/11/22 02:19, Rob Clark wrote:
->>>>> On Wed, Aug 10, 2022 at 3:23 PM Dmitry Osipenko
->>>>> <dmitry.osipenko@collabora.com> wrote:
->>>>>>
->>>>>> On 8/11/22 01:03, Rob Clark wrote:
->>>>>>> On Wed, Aug 10, 2022 at 12:26 PM Dmitry Osipenko
->>>>>>> <dmitry.osipenko@collabora.com> wrote:
->>>>>>>>
->>>>>>>> On 8/10/22 18:08, Rob Clark wrote:
->>>>>>>>> On Wed, Aug 10, 2022 at 4:47 AM Daniel Vetter <daniel@ffwll.ch> wrote:
->>>>>>>>>>
->>>>>>>>>> On Wed, Jul 06, 2022 at 10:02:07AM +0300, Dmitry Osipenko wrote:
->>>>>>>>>>> On 7/6/22 00:48, Rob Clark wrote:
->>>>>>>>>>>> On Tue, Jul 5, 2022 at 4:51 AM Christian König <christian.koenig@amd.com> wrote:
->>>>>>>>>>>>>
->>>>>>>>>>>>> Am 01.07.22 um 11:02 schrieb Dmitry Osipenko:
->>>>>>>>>>>>>> Drivers that use drm_gem_mmap() and drm_gem_mmap_obj() helpers don't
->>>>>>>>>>>>>> handle imported dma-bufs properly, which results in mapping of something
->>>>>>>>>>>>>> else than the imported dma-buf. On NVIDIA Tegra we get a hard lockup when
->>>>>>>>>>>>>> userspace writes to the memory mapping of a dma-buf that was imported into
->>>>>>>>>>>>>> Tegra's DRM GEM.
->>>>>>>>>>>>>>
->>>>>>>>>>>>>> Majority of DRM drivers prohibit mapping of the imported GEM objects.
->>>>>>>>>>>>>> Mapping of imported GEMs require special care from userspace since it
->>>>>>>>>>>>>> should sync dma-buf because mapping coherency of the exporter device may
->>>>>>>>>>>>>> not match the DRM device. Let's prohibit the mapping for all DRM drivers
->>>>>>>>>>>>>> for consistency.
->>>>>>>>>>>>>>
->>>>>>>>>>>>>> Suggested-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
->>>>>>>>>>>>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
->>>>>>>>>>>>>
->>>>>>>>>>>>> I'm pretty sure that this is the right approach, but it's certainly more
->>>>>>>>>>>>> than possible that somebody abused this already.
->>>>>>>>>>>>
->>>>>>>>>>>> I suspect that this is abused if you run deqp cts on android.. ie. all
->>>>>>>>>>>> winsys buffers are dma-buf imports from gralloc.  And then when you
->>>>>>>>>>>> hit readpix...
->>>>>>>>>>>>
->>>>>>>>>>>> You might only hit this in scenarios with separate gpu and display (or
->>>>>>>>>>>> dGPU+iGPU) because self-imports are handled differently in
->>>>>>>>>>>> drm_gem_prime_import_dev().. and maybe not in cases where you end up
->>>>>>>>>>>> with a blit from tiled/compressed to linear.. maybe that narrows the
->>>>>>>>>>>> scope enough to just fix it in userspace?
->>>>>>>>>>>
->>>>>>>>>>> Given that that only drivers which use DRM-SHMEM potentially could've
->>>>>>>>>>> map imported dma-bufs (Panfrost, Lima) and they already don't allow to
->>>>>>>>>>> do that, I think we're good.
->>>>>>>>>>
->>>>>>>>>> So can I have an ack from Rob here or are there still questions that this
->>>>>>>>>> might go boom?
->>>>>>>>>>
->>>>>>>>>> Dmitry, since you have a bunch of patches merged now I think would also be
->>>>>>>>>> good to get commit rights so you can drive this more yourself. I've asked
->>>>>>>>>> Daniel Stone to help you out with getting that.
->>>>>>>>>
->>>>>>>>> I *think* we'd be ok with this on msm, mostly just by dumb luck.
->>>>>>>>> Because the dma-buf's we import will be self-import.  I'm less sure
->>>>>>>>> about panfrost (src/panfrost/lib/pan_bo.c doesn't seem to have a
->>>>>>>>> special path for imported dma-bufs either, and in that case they won't
->>>>>>>>> be self-imports.. but I guess no one has tried to run android cts on
->>>>>>>>> panfrost).
->>>>>>>>
->>>>>>>> The last time I tried to mmap dma-buf imported to Panfrost didn't work
->>>>>>>> because Panfrost didn't implement something needed for that. I'll need
->>>>>>>> to take a look again because can't recall what it was.
->>>> Upd: I re-checked Panfrost using today's linux-next and mapping of
->>>> imported dma-buf works, I mapped imported buf from video decoder.
->>>> Apparently previously I had some local kernel change that broke the mapping.
->>>>
->>>>>>>>> What about something less drastic to start, like (apologies for
->>>>>>>>> hand-edited patch):
->>>>>>>>>
->>>>>>>>> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
->>>>>>>>> index 86d670c71286..fc9ec42fa0ab 100644
->>>>>>>>> --- a/drivers/gpu/drm/drm_gem.c
->>>>>>>>> +++ b/drivers/gpu/drm/drm_gem.c
->>>>>>>>> @@ -1034,6 +1034,10 @@ int drm_gem_mmap_obj(struct drm_gem_object
->>>>>>>>> *obj, unsigned long obj_size,
->>>>>>>>>  {
->>>>>>>>>         int ret;
->>>>>>>>>
->>>>>>>>> +       WARN_ON_ONCE(obj->import_attach);
->>>>>>>>
->>>>>>>> This will hang NVIDIA Tegra, which is what this patch fixed initially.
->>>>>>>> If neither of upstream DRM drivers need to map imported dma-bufs and
->>>>>>>> never needed, then why do we need this?
->>>>>>>
->>>>>>> oh, tegra isn't using shmem helpers?  I assumed it was.  Well my point
->>>>>>> was to make a more targeted fail on tegra, and a WARN_ON for everyone
->>>>>>> else to make it clear that what they are doing is undefined behavior.
->>>>>>> Because so far existing userspace (or well, panfrost and freedreno at
->>>>>>> least, those are the two I know or checked) don't make special cases
->>>>>>> for mmap'ing against the dmabuf fd against the dmabuf fd instead of
->>>>>>> the drm device fd.
->>>>>>
->>>>>> It's not clear to me what bad Android does form yours comments. Does it
->>>>>> export dma-buf from GPU and then import it to GPU? If yes, then DRM core
->>>>>> has a check for the self-importing [1].
->>>>>>
->>>>>> [1]
->>>>>> https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_prime.c#L918
->>>>>>
->>>>>> If you're meaning something else, then please explain in a more details.
->>>>>
->>>>> So, android/gralloc allocates buffers externally to the driver and
->>>>> imports them into driver.  (And that seems to not just be window
->>>>> surfaces, but in cases random textures, etc)
->>>>>
->>>>> In the normal case these should be allocated from drm/msm so it should
->>>>> hit [1].. this is the "dumb luck" I mentioned earlier.  But I'm not
->>>>> confident enough to say that there is no other case.
->>>>>
->>>>>>
->>>>>>> I *think* it should work out that we don't hit this path with
->>>>>>> freedreno but on android I can't really guarantee or prove it.  So
->>>>>>> your patch would potentially break existing working userspace.  Maybe
->>>>>>> it is userspace that isn't portable (but OTOH it isn't like you are
->>>>>>> going to be using freedreno on tegra).  So why don't you go for a more
->>>>>>> targeted fix that only returns an error on hw where this is
->>>>>>> problematic?
->>>>>>
->>>>>> That's what the first versions of the patch did and Christian suggested
->>>>>> that it's not a good approach. In fact it should be not only Tegra that
->>>>>> has a broken dma-buf mapping, but apparently OMAP driver too.
->>>>>
->>>>> Hmm, I guess I'm a bit more conservative when it comes to potentially
->>>>> breaking userspace.
->>>>
->>>> If such userspace exists, then of course the mapping should continue to
->>>> work. Still will be great to know what that userpsace is.
->>>
->>> Definitely existing mesa does not have a special mmap path for
->>> imported dma-bufs (both in the case of panfrost and freedreno, I
->>> didn't check any others).  The only question is whether there is a
->>> case where some app/test/etc imports a foreign dma-buf fd and then
->>> does something that would trigger mmap'ing, like readpix.
->>
->> The other complication I noticed is that we don't seem to keep around
->> the fd after importing to a GEM handle.  And I could imagine that
->> doing so could cause issues with too many fd's.  So I guess the best
->> thing is to keep the status quo and let drivers that cannot mmap
->> imported buffers just fail mmap?
-> 
-> That actually should be all the drivers excluding those that use
-> DRM-SHMEM because only DRM-SHMEM uses dma_buf_mmap(), that's why it
-> works for Panfrost. I'm pretty sure mmaping of imported GEMs doesn't
-> work for the MSM driver, isn't it?
-> 
-> Intel and AMD drivers don't allow to map the imported dma-bufs. Both
-> refuse to do the mapping.
-> 
-> Although, AMDGPU "succeeds" to do the mapping using
-> AMDGPU_GEM_DOMAIN_GTT, but then touching the mapping causes bus fault,
-> hence mapping actually fails. I think it might be the AMDGPU
-> driver/libdrm bug, haven't checked yet.
+This series is a follow up for patches 2 and 3 from a previous series:
+https://lore.kernel.org/all/ca4c97c9-1117-a465-5202-e1bf276fe75b@microchip.com/
+https://lore.kernel.org/all/20220517135525.GC3344@hoboy.vegasvil.org/
+Sorry for the delay.
 
-To make it more clear, I imported AMDGPU dma-buf to Intel iGPU and vice
-versa.
+ACK is added only to patch 3 (now patch 2).
+Patch 1 is updated with check for gem_has_ptp as per Claudiu's comments.
 
-> So we're back to the point that neither of DRM drivers need to map
-> imported dma-bufs and this was never tested. In this case this patch is
-> valid, IMO.
-> 
+Resending as net-next was closed when this series was sent a few weeks ago.
 
+Harini Katakam (2):
+  net: macb: Enable PTP unicast
+  net: macb: Optimize reading HW timestamp
+
+ drivers/net/ethernet/cadence/macb.h      |  4 ++++
+ drivers/net/ethernet/cadence/macb_main.c | 13 ++++++++++++-
+ drivers/net/ethernet/cadence/macb_ptp.c  |  8 ++++++--
+ 3 files changed, 22 insertions(+), 3 deletions(-)
 
 -- 
-Best regards,
-Dmitry
+2.17.1
+

@@ -2,112 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA0C595786
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48D46595862
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234288AbiHPKHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
+        id S234754AbiHPKdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234264AbiHPKHC (ORCPT
+        with ESMTP id S234661AbiHPKcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:07:02 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA01975399;
-        Tue, 16 Aug 2022 01:44:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660639451; x=1692175451;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=utA9ZYYdfIzqRA7D5VhDGQl155B+SJSPa8zrvZsBoyo=;
-  b=W3X4oA0n//X/JB6no7U5QVmmgcnB9EciEP7whI6w4+mH+vP+pYS4yy91
-   5Ny1jQHp/KyxH2YDkOOlj3aAt6ByvbGRMlUs0NjZCbeXuUf7SgNggjml/
-   0DtrILzcxt1amq5eCaPsRG+U1bZ3svNhYt8THAYmZShzFYxB4L5STbtNR
-   q1OpoL03owXC43jmeyqq4hdRRilt6u86sQwIuGFBXnajam59tsWb2IXRb
-   BxBCHx7kjasZkkwOJ3MPf6mfgQbGY3ntAcfK/f1yUVheMRqjj/UrvBFQs
-   +FnCI3PQw4sxzYw3q8av1losN9oSviw1IRMC6K5Vn0RZXnIxwYouilgR8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="292161431"
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="292161431"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 01:44:11 -0700
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="667018321"
-Received: from rongch2-desk.sh.intel.com (HELO localhost) ([10.239.159.175])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 01:44:09 -0700
-Date:   Tue, 16 Aug 2022 16:44:07 +0800
-From:   kernel test robot <rong.a.chen@intel.com>
-To:     Ashok Raj <ashok.raj@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Borislav Petkov <bp@suse.de>,
-        linux-doc@vger.kernel.org
-Subject: [tip:x86/microcode 1/2] htmldocs:
- Documentation/admin-guide/tainted-kernels.rst:143: WARNING: Block quote ends
- without a blank line; unexpected unindent.
-Message-ID: <YvtY15K5lzCW9EmI@rongch2-desk2>
+        Tue, 16 Aug 2022 06:32:35 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E880E1838C
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:38:44 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M6PZv4SZ8zXdkF;
+        Tue, 16 Aug 2022 16:34:31 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 16 Aug 2022 16:38:42 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 16 Aug 2022 16:38:42 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-mm@kvack.org>
+CC:     <linux-kernel@vger.kernel.org>, Liu Shixin <liushixin2@huawei.com>,
+        "Kefeng Wang" <wangkefeng.wang@huawei.com>
+Subject: [PATCH RFC] mm, proc: add PcpFree to meminfo
+Date:   Tue, 16 Aug 2022 16:44:26 +0800
+Message-ID: <20220816084426.135528-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/microcode
-head:   71da8a554f25713964a919311c324e5a32f08239
-commit: 35da8ad78e9b1a25d95a281966c439da1ef9a98a [1/2] x86/microcode: Document the whole late loading problem
-reproduce: make htmldocs
+From: Liu Shixin <liushixin2@huawei.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The page on pcplist could be used, but not counted into memory free or
+avaliable, and pcp_free is only showed by show_mem(). Since commit
+d8a759b57035 ("mm, page_alloc: double zone's batchsize"), there is a
+significant decrease in the display of free memory, with a large number
+of cpus and nodes, the number of pages in the percpu list can be very
+large, so it is better to let user to know the pcp count.
 
-All warnings (new ones prefixed by >>):
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ drivers/base/node.c | 14 +++++++++++++-
+ fs/proc/meminfo.c   |  9 +++++++++
+ 2 files changed, 22 insertions(+), 1 deletion(-)
 
->> Documentation/admin-guide/tainted-kernels.rst:143: WARNING: Block quote ends without a blank line; unexpected unindent.
-
-vim +143 Documentation/admin-guide/tainted-kernels.rst
-
-896dd323abbf6a Thorsten Leemhuis         2019-01-08  111  
-896dd323abbf6a Thorsten Leemhuis         2019-01-08  112   0)  ``G`` if all modules loaded have a GPL or compatible license, ``P`` if
-337c188dff4a85 Mauro Carvalho Chehab     2016-11-07  113       any proprietary module has been loaded.  Modules without a
-337c188dff4a85 Mauro Carvalho Chehab     2016-11-07  114       MODULE_LICENSE or with a MODULE_LICENSE that is not recognised by
-337c188dff4a85 Mauro Carvalho Chehab     2016-11-07  115       insmod as GPL compatible are assumed to be proprietary.
-337c188dff4a85 Mauro Carvalho Chehab     2016-11-07  116  
-896dd323abbf6a Thorsten Leemhuis         2019-01-08  117   1)  ``F`` if any module was force loaded by ``insmod -f``, ``' '`` if all
-337c188dff4a85 Mauro Carvalho Chehab     2016-11-07  118       modules were loaded normally.
-337c188dff4a85 Mauro Carvalho Chehab     2016-11-07  119  
-547f574fd9d5e3 Mathieu Chouquet-Stringer 2020-12-02  120   2)  ``S`` if the kernel is running on a processor or system that is out of
-547f574fd9d5e3 Mathieu Chouquet-Stringer 2020-12-02  121       specification: hardware has been put into an unsupported configuration,
-547f574fd9d5e3 Mathieu Chouquet-Stringer 2020-12-02  122       therefore proper execution cannot be guaranteed.
-547f574fd9d5e3 Mathieu Chouquet-Stringer 2020-12-02  123       Kernel will be tainted if, for example:
-547f574fd9d5e3 Mathieu Chouquet-Stringer 2020-12-02  124  
-547f574fd9d5e3 Mathieu Chouquet-Stringer 2020-12-02  125       - on x86: PAE is forced through forcepae on intel CPUs (such as Pentium M)
-547f574fd9d5e3 Mathieu Chouquet-Stringer 2020-12-02  126         which do not report PAE but may have a functional implementation, an SMP
-547f574fd9d5e3 Mathieu Chouquet-Stringer 2020-12-02  127         kernel is running on non officially capable SMP Athlon CPUs, MSRs are
-547f574fd9d5e3 Mathieu Chouquet-Stringer 2020-12-02  128         being poked at from userspace.
-547f574fd9d5e3 Mathieu Chouquet-Stringer 2020-12-02  129       - on arm: kernel running on certain CPUs (such as Keystone 2) without
-547f574fd9d5e3 Mathieu Chouquet-Stringer 2020-12-02  130         having certain kernel features enabled.
-547f574fd9d5e3 Mathieu Chouquet-Stringer 2020-12-02  131       - on arm64: there are mismatched hardware features between CPUs, the
-547f574fd9d5e3 Mathieu Chouquet-Stringer 2020-12-02  132         bootloader has booted CPUs in different modes.
-547f574fd9d5e3 Mathieu Chouquet-Stringer 2020-12-02  133       - certain drivers are being used on non supported architectures (such as
-547f574fd9d5e3 Mathieu Chouquet-Stringer 2020-12-02  134         scsi/snic on something else than x86_64, scsi/ips on non
-547f574fd9d5e3 Mathieu Chouquet-Stringer 2020-12-02  135         x86/x86_64/itanium, have broken firmware settings for the
-547f574fd9d5e3 Mathieu Chouquet-Stringer 2020-12-02  136         irqchip/irq-gic on arm64 ...).
-35da8ad78e9b1a Ashok Raj                 2022-08-13  137       - x86/x86_64: Microcode late loading is dangerous and will result in
-35da8ad78e9b1a Ashok Raj                 2022-08-13  138         tainting the kernel. It requires that all CPUs rendezvous to make sure
-35da8ad78e9b1a Ashok Raj                 2022-08-13  139         the update happens when the system is as quiescent as possible. However,
-35da8ad78e9b1a Ashok Raj                 2022-08-13  140         a higher priority MCE/SMI/NMI can move control flow away from that
-35da8ad78e9b1a Ashok Raj                 2022-08-13  141         rendezvous and interrupt the update, which can be detrimental to the
-35da8ad78e9b1a Ashok Raj                 2022-08-13  142         machine.
-35da8ad78e9b1a Ashok Raj                 2022-08-13 @143  e
-
+diff --git a/drivers/base/node.c b/drivers/base/node.c
+index eb0f43784c2b..846864e45db6 100644
+--- a/drivers/base/node.c
++++ b/drivers/base/node.c
+@@ -375,6 +375,9 @@ static ssize_t node_read_meminfo(struct device *dev,
+ 	struct sysinfo i;
+ 	unsigned long sreclaimable, sunreclaimable;
+ 	unsigned long swapcached = 0;
++	unsigned long free_pcp = 0;
++	struct zone *zone;
++	int cpu;
+ 
+ 	si_meminfo_node(&i, nid);
+ 	sreclaimable = node_page_state_pages(pgdat, NR_SLAB_RECLAIMABLE_B);
+@@ -382,9 +385,17 @@ static ssize_t node_read_meminfo(struct device *dev,
+ #ifdef CONFIG_SWAP
+ 	swapcached = node_page_state_pages(pgdat, NR_SWAPCACHE);
+ #endif
++	for_each_populated_zone(zone) {
++		if (zone_to_nid(zone) != nid)
++			continue;
++		for_each_online_cpu(cpu)
++			free_pcp += per_cpu_ptr(zone->per_cpu_pageset, cpu)->count;
++	}
++
+ 	len = sysfs_emit_at(buf, len,
+ 			    "Node %d MemTotal:       %8lu kB\n"
+ 			    "Node %d MemFree:        %8lu kB\n"
++			    "Node %d PcpFree:        %8lu kB\n"
+ 			    "Node %d MemUsed:        %8lu kB\n"
+ 			    "Node %d SwapCached:     %8lu kB\n"
+ 			    "Node %d Active:         %8lu kB\n"
+@@ -397,7 +408,8 @@ static ssize_t node_read_meminfo(struct device *dev,
+ 			    "Node %d Mlocked:        %8lu kB\n",
+ 			    nid, K(i.totalram),
+ 			    nid, K(i.freeram),
+-			    nid, K(i.totalram - i.freeram),
++			    nid, K(free_pcp),
++			    nid, K(i.totalram - i.freeram - free_pcp),
+ 			    nid, K(swapcached),
+ 			    nid, K(node_page_state(pgdat, NR_ACTIVE_ANON) +
+ 				   node_page_state(pgdat, NR_ACTIVE_FILE)),
+diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
+index 6e89f0e2fd20..672c784dfc8a 100644
+--- a/fs/proc/meminfo.c
++++ b/fs/proc/meminfo.c
+@@ -38,6 +38,9 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
+ 	unsigned long pages[NR_LRU_LISTS];
+ 	unsigned long sreclaimable, sunreclaim;
+ 	int lru;
++	unsigned long free_pcp = 0;
++	struct zone *zone;
++	int cpu;
+ 
+ 	si_meminfo(&i);
+ 	si_swapinfo(&i);
+@@ -55,8 +58,14 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
+ 	sreclaimable = global_node_page_state_pages(NR_SLAB_RECLAIMABLE_B);
+ 	sunreclaim = global_node_page_state_pages(NR_SLAB_UNRECLAIMABLE_B);
+ 
++	for_each_populated_zone(zone) {
++		for_each_online_cpu(cpu)
++			free_pcp += per_cpu_ptr(zone->per_cpu_pageset, cpu)->count;
++	}
++
+ 	show_val_kb(m, "MemTotal:       ", i.totalram);
+ 	show_val_kb(m, "MemFree:        ", i.freeram);
++	show_val_kb(m, "PcpFree:        ", free_pcp);
+ 	show_val_kb(m, "MemAvailable:   ", available);
+ 	show_val_kb(m, "Buffers:        ", i.bufferram);
+ 	show_val_kb(m, "Cached:         ", cached);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.3
 

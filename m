@@ -2,53 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BED4595BA4
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8E7595BA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235389AbiHPMTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 08:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46514 "EHLO
+        id S235369AbiHPMUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 08:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235291AbiHPMSu (ORCPT
+        with ESMTP id S235485AbiHPMTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 08:18:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368F313E84;
-        Tue, 16 Aug 2022 05:17:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BCCA3B8188B;
-        Tue, 16 Aug 2022 12:17:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E990AC433D6;
-        Tue, 16 Aug 2022 12:17:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660652223;
-        bh=nofA9ptQDb1h/gvhqEy4REcEOPebrt4+12qzsya4d+w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zuUHw4EiV3eaffoaD7us/ZQEjSBizwYfczYcy0j7P4JNgmTbsatP/ouEmweY1zP3w
-         rmkdDCEGsrpKSB9glDK7/7/btEu3JYP77uy90qMra1iQTdMIvnrd9HHPY8VIapm+gN
-         zoGJEi4LyKXzP/+KRgkv7UYjh6fnFSqpWfwdEfdg=
-Date:   Tue, 16 Aug 2022 14:17:00 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/779] 5.15.61-rc1 review
-Message-ID: <YvuKvBUIGUXPUUDz@kroah.com>
-References: <20220815180337.130757997@linuxfoundation.org>
- <20220816113407.GA1809610@roeck-us.net>
+        Tue, 16 Aug 2022 08:19:48 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0B76C1C;
+        Tue, 16 Aug 2022 05:19:41 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9225C113E;
+        Tue, 16 Aug 2022 05:19:42 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.57.14.225])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 550183F66F;
+        Tue, 16 Aug 2022 05:19:40 -0700 (PDT)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     lukasz.luba@arm.com, siyanteng@loongson.cn, alexs@kernel.org,
+        corbet@lwn.net, peterz@infradead.org
+Subject: [PATCH] docs: scheduler: Update new path for the sysctl knobs
+Date:   Tue, 16 Aug 2022 13:19:07 +0100
+Message-Id: <20220816121907.841-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220816113407.GA1809610@roeck-us.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_50,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,40 +41,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 04:34:07AM -0700, Guenter Roeck wrote:
-> On Mon, Aug 15, 2022 at 07:54:04PM +0200, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.15.61 release.
-> > There are 779 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> > 
-> > Responses should be made by Wed, 17 Aug 2022 18:01:29 +0000.
-> > Anything received after that time might be too late.
-> > 
-> 
-> Building powerpc:ppc32_allmodconfig ... failed
-> Building powerpc:ppc6xx_defconfig ... failed
-> --------------
-> Error log:
-> arch/powerpc/sysdev/fsl_pci.c: In function 'fsl_add_bridge':
-> arch/powerpc/sysdev/fsl_pci.c:601:39: error: 'PCI_CLASS_BRIDGE_PCI_NORMAL' undeclared
-> 
-> This affects v5.15.y and earlier branches. Several patches
-> would be needded to make this work. In mainline:
-> 
-> 0c551abfa004 powerpc/fsl-pci: Fix Class Code of PCIe Root Port
-> 113fe88eed53 powerpc: Don't include asm/setup.h in asm/machdep.h
-> e6f6390ab7b9 powerpc: Add missing headers
-> 904b10fb189c PCI: Add defines for normal and subtractive PCI bridges
-> 
-> There may be others since the patches touch several files, and it seems
-> quite unlikely that they all apply to older kernels. It may be easier
-> to define PCI_CLASS_BRIDGE_PCI_NORMAL locally.
+Add missing update for the documentation bit of some scheduler knob.
+The knobs have been moved to /debug/sched/ location (with adjusted names).
 
-Yeah, I'll just pick that portion out of 904b10fb189c ("PCI: Add defines
-for normal and subtractive PCI bridges") to fix this build up (and the
-build on older queues.)
+Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+---
+ Documentation/scheduler/sched-design-CFS.rst                    | 2 +-
+ Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-thanks,
+diff --git a/Documentation/scheduler/sched-design-CFS.rst b/Documentation/scheduler/sched-design-CFS.rst
+index 59b2d1fb4dc4..03db55504515 100644
+--- a/Documentation/scheduler/sched-design-CFS.rst
++++ b/Documentation/scheduler/sched-design-CFS.rst
+@@ -94,7 +94,7 @@ other HZ detail.  Thus the CFS scheduler has no notion of "timeslices" in the
+ way the previous scheduler had, and has no heuristics whatsoever.  There is
+ only one central tunable (you have to switch on CONFIG_SCHED_DEBUG):
+ 
+-   /proc/sys/kernel/sched_min_granularity_ns
++   /sys/kernel/debug/sched/min_granularity_ns
+ 
+ which can be used to tune the scheduler from "desktop" (i.e., low latencies) to
+ "server" (i.e., good batching) workloads.  It defaults to a setting suitable
+diff --git a/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst b/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst
+index 26b0f36f793d..3076402406c4 100644
+--- a/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst
++++ b/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst
+@@ -80,7 +80,7 @@ p->se.vruntime。一旦p->se.vruntime变得足够大，其它的任务将成为
+ CFS使用纳秒粒度的计时，不依赖于任何jiffies或HZ的细节。因此CFS并不像之前的调度器那样
+ 有“时间片”的概念，也没有任何启发式的设计。唯一可调的参数（你需要打开CONFIG_SCHED_DEBUG）是：
+ 
+-   /proc/sys/kernel/sched_min_granularity_ns
++   /sys/kernel/debug/sched/min_granularity_ns
+ 
+ 它可以用来将调度器从“桌面”模式（也就是低时延）调节为“服务器”（也就是高批处理）模式。
+ 它的默认设置是适合桌面的工作负载。SCHED_BATCH也被CFS调度器模块处理。
+-- 
+2.17.1
 
-greg k-h

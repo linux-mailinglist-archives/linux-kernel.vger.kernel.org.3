@@ -2,90 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774FC5962EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 767EA5962EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236624AbiHPTNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 15:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
+        id S236942AbiHPTO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 15:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236326AbiHPTNT (ORCPT
+        with ESMTP id S232754AbiHPTOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 15:13:19 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6E730F77
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:13:18 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id jl18so2246166plb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:13:18 -0700 (PDT)
+        Tue, 16 Aug 2022 15:14:24 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6316564D
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:14:23 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id g21so5181808qka.5
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:14:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=Wjb5AIGvJ0V/NRfbnr8gg1CmISm7LqELqnVgTQyStiY=;
-        b=kcRvnsyQxQFHsWdfWXFnfndrEg9iTlHZ6mWrwbnit1nAo6eG6dy+jF7fzmrAOX0D6w
-         PV/SPPDR/yqFq61RQA3XA2PArX4zhNJBJ6T15oJzHiKglGulaShDpvWscxkNM5zm1jLX
-         x/1NLGqoybEaNuaplQ5naYBLROAf3CXKFVEqE=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=2na/qB5N5lOlz/8+8KgAPgP6/03l17atLw+bjUACA4E=;
+        b=AhVwvbHPjpgNhznL0xXQDP0pjy95GODO2qConQ5goFMxmO7dcnYhSBdyOBzgVSDStF
+         8X5YzJVisV16LefelAQPvYcpthjdfCfmvKYKCHwrSoQAhvZMKMhRzYlmd8ND5DUQMJRj
+         FgpqNl8gSsZb/noBFZy5isTbkEL3aFXKI6Xk0pL/qOokRiBLI1NhpUMdgwfEUeqGYyIp
+         68RFy8SbgxJxYEbi/lfbgLWR0CZ7K1QdWrpo2AnZ8ow5mC4B+lNujLzDE7suc4Dr8NyD
+         SIjju3gofVbuE9CA2FCQKDmgrl6XfShsqfGFsW0HoLu5WwRjUakR0uFgHcu2yQH9JsmN
+         swSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=Wjb5AIGvJ0V/NRfbnr8gg1CmISm7LqELqnVgTQyStiY=;
-        b=2pe/2DH4pRT4uTSzA3fcOjoiI9jfSgyIZcWOunOBq9TGi+Trb6w0J0m50DddfCQcPn
-         1a+6LAAdPphz72b9IboSov6FfPo4PPABwXeUc1wNZpsOpNZMIeBt6Uu1qPeIetZzDJYA
-         wrGltPQ3FGDiI9Fgn24h0p3i6lq9ne0MPvlEQiKmOAfwgRhkkdK3PWqFX4oCNfW6hqLj
-         hQ2LFjDHSfHBG7sA+t6t2P5cw4n+CnK10DxnwzWNGxulrAhKNFxbnFdzLJ3pp1y/ZVwS
-         vD0ffb/G94l3pBcxpC4DpXJVa1tp6PZeHsgBR8uxY/SroSa8FiZNmfudhrgeYa0iqyGA
-         QZgQ==
-X-Gm-Message-State: ACgBeo0iL+Zx5HdlctZBRszYXP1GX60OjCXEX7EkcXBgFaZYAq8rK7ia
-        utQ0Aa7+LmJ+VXZTquE0pXqBAg==
-X-Google-Smtp-Source: AA6agR5RH5ulJC813IEBEmxie0ssFd9t03UEuh1L8tR0gUeIP734M/uNntfcALDO/3NmVB5msDGQ1g==
-X-Received: by 2002:a17:902:f083:b0:172:9128:c70d with SMTP id p3-20020a170902f08300b001729128c70dmr2154759pla.145.1660677198128;
-        Tue, 16 Aug 2022 12:13:18 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l6-20020a170903120600b0017272667a56sm3734063plh.196.2022.08.16.12.13.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 12:13:17 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        fmdefrancesco@gmail.com, linux-fsdevel@vger.kernel.org,
-        ebiederm@xmission.com, Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Kees Cook <keescook@chromium.org>, ira.weiny@intel.com
-Subject: Re: [PATCH v2] fs: Replace kmap{,_atomic}() with kmap_local_page()
-Date:   Tue, 16 Aug 2022 12:13:08 -0700
-Message-Id: <166067718637.5584.14452180962626793627.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220803182856.28246-1-fmdefrancesco@gmail.com>
-References: <20220803182856.28246-1-fmdefrancesco@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=2na/qB5N5lOlz/8+8KgAPgP6/03l17atLw+bjUACA4E=;
+        b=xNZwR5vBalCwW4x/8XCv2qvq+IPNuOdH8Xd1rMHk8M0HYlkeqFUITOZIU2iNtpmGyj
+         WpnCDd3/khOv/3vzNiH0iu0SLufTxuqtk2B4TzQyROuZ+S5XOxBFl3xIX0kCnBWxP6J+
+         /vIdvzrC4a99Fst14VHuV52baNIfcrBTNxUE23XqwgyletaqjJ9pNJXjdFP2gyhtaxr5
+         yrh9KwxeADBM5+jER6k7UED0P/rr17jq/EEpwf9wxOhgXimCgp9dXZD0DlVkzFnsv9ir
+         DMm9edBAhWEGgkhUIfgEeXDabC6XDS3VYD4LXTSMAe4yLd3cY4NUdHyAUB31dOa3xQ8Y
+         6sAw==
+X-Gm-Message-State: ACgBeo3LIApkTX88brvzJTHJz10rQjaYw0dNGEkmHJOvwJqTnOLMbIf3
+        04FSpyOHhdoChnGZvrxlDIpTzKFOLVKy2t9JmKI=
+X-Google-Smtp-Source: AA6agR7dEIBdG3yyFdlI9pBUKJupoTPoXeKG6ePOm01R7wXlVXUEz+bpz6TJvi97Hxb85z/1563pKyaYXDgQQz4eZpU=
+X-Received: by 2002:a05:620a:4249:b0:6b6:7b2f:4d94 with SMTP id
+ w9-20020a05620a424900b006b67b2f4d94mr16183527qko.580.1660677262335; Tue, 16
+ Aug 2022 12:14:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <CABXGCsM58-8fxVKAVkwsshg+33B_1_t_WesG160AtVBe1ZvKiw@mail.gmail.com>
+ <be6f1ce4-46b1-7a80-230c-b99f203ce8ad@riseup.net> <CABXGCsMFYnE+Wn2EAWuC8DSVj=TVprj6ABZwRK-hXcw-1hnMyw@mail.gmail.com>
+In-Reply-To: <CABXGCsMFYnE+Wn2EAWuC8DSVj=TVprj6ABZwRK-hXcw-1hnMyw@mail.gmail.com>
+From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date:   Wed, 17 Aug 2022 00:14:11 +0500
+Message-ID: <CABXGCsMpGabZ32j_ObEHa_har2W8M8RWuqnx3d=yJT2NX_ztNg@mail.gmail.com>
+Subject: Re: [BUG][5.20] refcount_t: underflow; use-after-free
+To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 3 Aug 2022 20:28:56 +0200, Fabio M. De Francesco wrote:
-> The use of kmap() and kmap_atomic() are being deprecated in favor of
-> kmap_local_page().
-> 
-> There are two main problems with kmap(): (1) It comes with an overhead as
-> mapping space is restricted and protected by a global lock for
-> synchronization and (2) it also requires global TLB invalidation when the
-> kmap’s pool wraps and it might block when the mapping space is fully
-> utilized until a slot becomes available.
-> 
-> [...]
+On Mon, Aug 15, 2022 at 3:37 PM Mikhail Gavrilov
+<mikhail.v.gavrilov@gmail.com> wrote:
+>
+> Thanks, I tested this patch.
+> But with this patch use-after-free problem happening in another place:
 
-Applied to for-next/execve, thanks!
+Does anyone have an idea why the second use-after-free happened?
+From the trace I don't understand which code is related.
+I don't quite understand what the "Workqueue" entry in the trace means.
 
-[1/1] fs: Replace kmap{,_atomic}() with kmap_local_page()
-      https://git.kernel.org/kees/c/3a608cfee97e
+[ 408.358737] ------------[ cut here ]------------
+[ 408.358743] refcount_t: underflow; use-after-free.
+[ 408.358760] WARNING: CPU: 9 PID: 62 at lib/refcount.c:28
+refcount_warn_saturate+0xba/0x110
+[ 408.358769] Modules linked in: uinput snd_seq_dummy rfcomm
+snd_hrtimer nft_objref nf_conntrack_netbios_ns nf_conntrack_broadcast
+nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet
+nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat
+nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip_set nf_tables nfnetlink
+qrtr bnep sunrpc binfmt_misc snd_seq_midi snd_seq_midi_event mt76x2u
+mt76x2_common snd_hda_codec_realtek mt76x02_usb snd_hda_codec_generic
+iwlmvm snd_hda_codec_hdmi mt76_usb intel_rapl_msr snd_hda_intel
+mt76x02_lib intel_rapl_common snd_intel_dspcfg snd_intel_sdw_acpi mt76
+snd_hda_codec vfat fat snd_usb_audio snd_hda_core edac_mce_amd
+mac80211 snd_usbmidi_lib snd_hwdep snd_rawmidi mc snd_seq btusb
+kvm_amd iwlwifi snd_seq_device btrtl btbcm libarc4 btintel eeepc_wmi
+snd_pcm iwlmei kvm btmtk asus_wmi ledtrig_audio irqbypass joydev
+snd_timer sparse_keymap bluetooth platform_profile rapl cfg80211 snd
+video wmi_bmof soundcore i2c_piix4 k10temp rfkill mei
+[ 408.358853] asus_ec_sensors acpi_cpufreq zram hid_logitech_hidpp
+amdgpu igb dca drm_ttm_helper ttm iommu_v2 crct10dif_pclmul gpu_sched
+crc32_pclmul ucsi_ccg crc32c_intel drm_buddy nvme typec_ucsi
+drm_display_helper ghash_clmulni_intel ccp typec nvme_core sp5100_tco
+cec wmi ip6_tables ip_tables fuse
+[ 408.358880] Unloaded tainted modules: amd64_edac():1 amd64_edac():1
+amd64_edac():1 amd64_edac():1 amd64_edac():1 amd64_edac():1
+amd64_edac():1 amd64_edac():1 amd64_edac():1 amd64_edac():1
+pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1
+amd64_edac():1 amd64_edac():1 pcc_cpufreq():1 amd64_edac():1
+pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1 amd64_edac():1
+pcc_cpufreq():1 pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1
+amd64_edac():1 pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1
+pcc_cpufreq():1 amd64_edac():1 amd64_edac():1 pcc_cpufreq():1
+pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1 amd64_edac():1
+pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1
+amd64_edac():1 pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1
+amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1 amd64_edac():1
+pcc_cpufreq():1 amd64_edac():1 amd64_edac():1 pcc_cpufreq():1
+amd64_edac():1 pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1
+pcc_cpufreq():1 pcc_cpufreq():1 fjes():1 pcc_cpufreq():1 fjes():1
+[ 408.358953] pcc_cpufreq():1 pcc_cpufreq():1 fjes():1 pcc_cpufreq():1
+fjes():1 fjes():1 fjes():1 fjes():1 fjes():1
+[ 408.358967] CPU: 9 PID: 62 Comm: kworker/9:0 Tainted: G W L -------
+--- 6.0.0-0.rc1.13.fc38.x86_64+debug #1
+[ 408.358971] Hardware name: System manufacturer System Product
+Name/ROG STRIX X570-I GAMING, BIOS 4403 04/27/2022
+[ 408.358974] Workqueue: events drm_sched_entity_kill_jobs_work [gpu_sched]
+[ 408.358982] RIP: 0010:refcount_warn_saturate+0xba/0x110
+[ 408.358987] Code: 01 01 e8 d9 59 6f 00 0f 0b e9 a2 46 a5 00 80 3d 3e
+7e be 01 00 75 85 48 c7 c7 70 99 8e 92 c6 05 2e 7e be 01 01 e8 b6 59
+6f 00 <0f> 0b e9 7f 46 a5 00 80 3d 19 7e be 01 00 0f 85 5e ff ff ff 48
+c7
+[ 408.358990] RSP: 0018:ffffb124003efe60 EFLAGS: 00010286
+[ 408.358994] RAX: 0000000000000026 RBX: ffff9987a025d428 RCX: 0000000000000000
+[ 408.358997] RDX: 0000000000000001 RSI: ffffffff928d0754 RDI: 00000000ffffffff
+[ 408.358999] RBP: ffff9994e4ff5600 R08: 0000000000000000 R09: ffffb124003efd10
+[ 408.359001] R10: 0000000000000003 R11: ffff99952e2fffe8 R12: ffff9994e4ffc800
+[ 408.359004] R13: ffff998600228cc0 R14: ffff9994e4ffc805 R15: ffff9987a025d430
+[ 408.359006] FS: 0000000000000000(0000) GS:ffff9994e4e00000(0000)
+knlGS:0000000000000000
+[ 408.359009] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 408.359012] CR2: 000027ac39e78000 CR3: 00000001a66d8000 CR4: 0000000000350ee0
+[ 408.359015] Call Trace:
+[ 408.359017] <TASK>
+[ 408.359020] process_one_work+0x2a0/0x600
+[ 408.359032] worker_thread+0x4f/0x3a0
+[ 408.359036] ? process_one_work+0x600/0x600
+[ 408.359039] kthread+0xf5/0x120
+[ 408.359044] ? kthread_complete_and_exit+0x20/0x20
+[ 408.359049] ret_from_fork+0x22/0x30
+[ 408.359061] </TASK>
+[ 408.359063] irq event stamp: 5468
+[ 408.359064] hardirqs last enabled at (5467): [<ffffffff91f2b9e4>]
+_raw_spin_unlock_irq+0x24/0x50
+[ 408.359071] hardirqs last disabled at (5468): [<ffffffff91f22d8c>]
+__schedule+0xe2c/0x16d0
+[ 408.359076] softirqs last enabled at (2482): [<ffffffff917acc28>]
+rht_deferred_worker+0x708/0xc00
+[ 408.359079] softirqs last disabled at (2480): [<ffffffff917ac717>]
+rht_deferred_worker+0x1f7/0xc00
+[ 408.359082] ---[ end trace 0000000000000000 ]---
+
+
+Full kernel log is here: https://pastebin.com/Lam9CRLV
 
 -- 
-Kees Cook
-
+Best Regards,
+Mike Gavrilov.

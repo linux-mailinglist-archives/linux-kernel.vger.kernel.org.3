@@ -2,176 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC2E595DE4
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 16:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E8D595DE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 16:01:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235377AbiHPOAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 10:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51950 "EHLO
+        id S235482AbiHPOBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 10:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235585AbiHPOAa (ORCPT
+        with ESMTP id S235349AbiHPOBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 10:00:30 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7BC4DB35
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 07:00:29 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27GBWBfW021035
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 07:00:29 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=VnKI2p9F7lsB7NxKiuJl2dToVpYX6lGSZuife1T99VQ=;
- b=HlILdw51Pn+QHWMYcgawEmOimsCw62pJKk5G0gCyg+UOiHd7v/lhq+c+/tBpwlLfzTzv
- y2K/99DB+ZRJJKAFl4VpjPgw0PAabI+1cW8/nFBdKZh6Sfz7tIp+QLnGHI9zPQzMbw4p
- LUJc7ElkmLznlsBQTc7Fgh/jtP1gdP0Ceac= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j0aek8tdc-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 07:00:29 -0700
-Received: from twshared7556.02.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 16 Aug 2022 07:00:27 -0700
-Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id 786BA4A9B6F3; Tue, 16 Aug 2022 07:00:17 -0700 (PDT)
-From:   Dylan Yudaken <dylany@fb.com>
-To:     <viro@zeniv.linux.org.uk>, <bcrl@kvack.org>
-CC:     <linux-fsdevel@vger.kernel.org>, <linux-aio@kvack.org>,
-        <linux-kernel@vger.kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        <Kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH] eventfd: guard wake_up in eventfd fs calls as well
-Date:   Tue, 16 Aug 2022 06:59:59 -0700
-Message-ID: <20220816135959.1490641-1-dylany@fb.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 16 Aug 2022 10:01:43 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEB26EF11
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 07:01:41 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id d65-20020a17090a6f4700b001f303a97b14so9705428pjk.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 07:01:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=erk4QjfKLI1wqXEF6e5iSvx1UiCDlKAdjqB4/lN4Erk=;
+        b=Y0g/2vtkm1HDsEQno8ZsLNKBwZANZXHmx08W3wcN28MC03rqN8MuI64iRs+rHEj/xM
+         Mhgh3CWWqwIHvp1zbpwHD9c7qXg8eE0IRMI8lE/Bs7Oc8V/33m9VXiuhskmTBfgxD9NZ
+         Mq62JekBPMAcUxs3Ilcqg2rqG1qAlFVad2zD270PHvYGPCENWlJsVUgAAgaml9ycj8+R
+         a3jNEi3vDV1kpIpykK09HTqW8zI8WIjy7FGbgBfUo8YJAns9J0U7Fg6u4PI2mpVSLveW
+         3onWPrEs8plVxEpuEm8C8LSAqbQuxfh0aI9mUsW5fx9yeIMqQ/EHbVhAWxDUX3eJSAq/
+         eMZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=erk4QjfKLI1wqXEF6e5iSvx1UiCDlKAdjqB4/lN4Erk=;
+        b=xNqR4JZrNv+uy3Bi8huh1nepNf0DQbHi/8rh/opkVeex9gsZCK7/l1CDsEs+qZBaiM
+         284n867IALYUsVNBUJOoCS90E/aKtioDbjnh1h3s4HvrwBACCIFWHyj15yvRjEXfdXXp
+         ftoh7mcTGKhP8MeyLuIG2AyahP6sSmgm1oHwTV9yWIxKUVK0/gpTDpmhdX7q/U4SV58b
+         hnS6/xK5hSW7e9i4QfNRYADcYAxo/mkZK2LEZmaUzzFvONCFJCjHS/TsBO3xiN61AJ8n
+         UURaVZBKm3iKiMoI8B6Cdevh0Sih7i4dvPoesF+nn17iybhk1Tt4zsty82vlUbWoMYyi
+         325w==
+X-Gm-Message-State: ACgBeo1h8S+Yb1bkbHQjV3E0/FB9U0xHPTg2bOxt6pcEki8b9fLu+Ei7
+        PxSex4dPiHmqWPtgBwOqkjUxyrk8BQNtsA==
+X-Google-Smtp-Source: AA6agR5Vh5FoZEV/vDsCM3Tgms3lMElLgMMSYRP2EDYbKRNWdE3cxEILRzOEG90g4VS6xpelMOT0Tw==
+X-Received: by 2002:a17:903:2291:b0:16e:cf55:5c72 with SMTP id b17-20020a170903229100b0016ecf555c72mr22182498plh.121.1660658501401;
+        Tue, 16 Aug 2022 07:01:41 -0700 (PDT)
+Received: from [10.4.196.37] ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id r35-20020a17090a43a600b001f522180d46sm6396363pjg.8.2022.08.16.07.01.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 07:01:41 -0700 (PDT)
+Message-ID: <08ec9c4f-80b2-f731-aa8b-fb4e852ece25@bytedance.com>
+Date:   Tue, 16 Aug 2022 22:01:30 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: uK_9Q0eaiKIVeORzYeS0aWTUqPBNxBDI
-X-Proofpoint-ORIG-GUID: uK_9Q0eaiKIVeORzYeS0aWTUqPBNxBDI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-16_08,2022-08-16_02,2022-06-22_01
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.2
+Subject: Re: [PATCH v2 00/10] sched/psi: some optimization and extension
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     hannes@cmpxchg.org, tj@kernel.org, corbet@lwn.net,
+        surenb@google.com, mingo@redhat.com, peterz@infradead.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        songmuchun@bytedance.com
+References: <20220808110341.15799-1-zhouchengming@bytedance.com>
+ <20220815132514.GB22640@blackbody.suse.cz>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <20220815132514.GB22640@blackbody.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Guard wakeups that the user can trigger, and that may end up triggering a
-call back into eventfd_signal. This is in addition to the current approac=
-h
-that only guards in eventfd_signal.
+On 2022/8/15 21:25, Michal Koutný wrote:
+> On Mon, Aug 08, 2022 at 07:03:31PM +0800, Chengming Zhou <zhouchengming@bytedance.com> wrote:
+>> This patch series are some optimization and extension for PSI,
+> 
+> BTW do you have some numbers/example how much these modifications save
+> when aggregated together?
+> 
 
-Rename in_eventfd_signal -> in_eventfd at the same time to reflect this.
+I lost my test data last time, I will use mmtests/config-scheduler-perfpipe
+to get some performance numbers right now.
 
-Without this there would be a deadlock in the following code using libaio=
-:
-
-int main()
-{
-	struct io_context *ctx =3D NULL;
-	struct iocb iocb;
-	struct iocb *iocbs[] =3D { &iocb };
-	int evfd;
-        uint64_t val =3D 1;
-
-	evfd =3D eventfd(0, EFD_CLOEXEC);
-	assert(!io_setup(2, &ctx));
-	io_prep_poll(&iocb, evfd, POLLIN);
-	io_set_eventfd(&iocb, evfd);
-	assert(1 =3D=3D io_submit(ctx, 1, iocbs));
-        write(evfd, &val, 8);
-}
-
-Signed-off-by: Dylan Yudaken <dylany@fb.com>
----
- fs/eventfd.c            | 10 +++++++---
- include/linux/eventfd.h |  2 +-
- include/linux/sched.h   |  2 +-
- 3 files changed, 9 insertions(+), 5 deletions(-)
-
-diff --git a/fs/eventfd.c b/fs/eventfd.c
-index 3627dd7d25db..c0ffee99ad23 100644
---- a/fs/eventfd.c
-+++ b/fs/eventfd.c
-@@ -69,17 +69,17 @@ __u64 eventfd_signal(struct eventfd_ctx *ctx, __u64 n=
-)
- 	 * it returns false, the eventfd_signal() call should be deferred to a
- 	 * safe context.
- 	 */
--	if (WARN_ON_ONCE(current->in_eventfd_signal))
-+	if (WARN_ON_ONCE(current->in_eventfd))
- 		return 0;
-=20
- 	spin_lock_irqsave(&ctx->wqh.lock, flags);
--	current->in_eventfd_signal =3D 1;
-+	current->in_eventfd =3D 1;
- 	if (ULLONG_MAX - ctx->count < n)
- 		n =3D ULLONG_MAX - ctx->count;
- 	ctx->count +=3D n;
- 	if (waitqueue_active(&ctx->wqh))
- 		wake_up_locked_poll(&ctx->wqh, EPOLLIN);
--	current->in_eventfd_signal =3D 0;
-+	current->in_eventfd =3D 0;
- 	spin_unlock_irqrestore(&ctx->wqh.lock, flags);
-=20
- 	return n;
-@@ -253,8 +253,10 @@ static ssize_t eventfd_read(struct kiocb *iocb, stru=
-ct iov_iter *to)
- 		__set_current_state(TASK_RUNNING);
- 	}
- 	eventfd_ctx_do_read(ctx, &ucnt);
-+	current->in_eventfd =3D 1;
- 	if (waitqueue_active(&ctx->wqh))
- 		wake_up_locked_poll(&ctx->wqh, EPOLLOUT);
-+	current->in_eventfd =3D 0;
- 	spin_unlock_irq(&ctx->wqh.lock);
- 	if (unlikely(copy_to_iter(&ucnt, sizeof(ucnt), to) !=3D sizeof(ucnt)))
- 		return -EFAULT;
-@@ -301,8 +303,10 @@ static ssize_t eventfd_write(struct file *file, cons=
-t char __user *buf, size_t c
- 	}
- 	if (likely(res > 0)) {
- 		ctx->count +=3D ucnt;
-+		current->in_eventfd =3D 1;
- 		if (waitqueue_active(&ctx->wqh))
- 			wake_up_locked_poll(&ctx->wqh, EPOLLIN);
-+		current->in_eventfd =3D 0;
- 	}
- 	spin_unlock_irq(&ctx->wqh.lock);
-=20
-diff --git a/include/linux/eventfd.h b/include/linux/eventfd.h
-index 305d5f19093b..30eb30d6909b 100644
---- a/include/linux/eventfd.h
-+++ b/include/linux/eventfd.h
-@@ -46,7 +46,7 @@ void eventfd_ctx_do_read(struct eventfd_ctx *ctx, __u64=
- *cnt);
-=20
- static inline bool eventfd_signal_allowed(void)
- {
--	return !current->in_eventfd_signal;
-+	return !current->in_eventfd;
- }
-=20
- #else /* CONFIG_EVENTFD */
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index e7b2f8a5c711..8d82d6d32670 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -936,7 +936,7 @@ struct task_struct {
- #endif
- #ifdef CONFIG_EVENTFD
- 	/* Recursion prevention for eventfd_signal() */
--	unsigned			in_eventfd_signal:1;
-+	unsigned			in_eventfd:1;
- #endif
- #ifdef CONFIG_IOMMU_SVA
- 	unsigned			pasid_activated:1;
---=20
-2.30.2
-
+Thanks.

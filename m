@@ -2,48 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4AB5954C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F3D5954AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231481AbiHPIOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 04:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
+        id S232518AbiHPINK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 04:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232505AbiHPINa (ORCPT
+        with ESMTP id S231515AbiHPIMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:13:30 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B0969F60;
-        Mon, 15 Aug 2022 23:24:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=5mwKLMlqlsmYbtuyi4aXzonUQ8/kmoqLmUhmFoodlO8=; b=GkbwgdirZZUpz61FCNvNhgX3h3
-        DKSv0OCJl9yp0v8E0fujD4t5nvp2H1W2rgPEr91bf9OgOjMFA61W0Sh7UFRD04UmFW7noRpyBv6os
-        xyjJ7UFbttn0qzhLBJvUuU0ZVpF6bmTjai84VJ9G3D3kKMx1EavmJczinX87urxPcx5dviIoTmANa
-        2S+1ftsCuZ5QcH3nVcKYt+KWXZU/x1cOeRmivadO2KmvkENapsnz2CpUcpLKqDSPVZTFtLkP/EUEV
-        V9Cc1sOmUCs0jEWRFgK2Uny39YVOQcAt/aVzyAA3FZnoiPPSR5w77IPnhBYjPnGDvOP5LOzKM6TpS
-        nCk9byzQ==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oNpzt-004wki-P2;
-        Tue, 16 Aug 2022 06:24:17 +0000
-Date:   Tue, 16 Aug 2022 07:24:17 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Greg Ungerer <gerg@linux-m68k.org>
-Cc:     Xin Gao <gaoxin@cdjrlc.com>, geert@linux-m68k.org,
-        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] m68k: Complete variable type
-Message-ID: <Yvs4EUfVUdOgEW4f@ZenIV>
-References: <20220815194806.3487-1-gaoxin@cdjrlc.com>
- <4ae72d0b-b197-f9d8-5cbe-ce7cfaf3affc@linux-m68k.org>
+        Tue, 16 Aug 2022 04:12:10 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B857D5998;
+        Mon, 15 Aug 2022 23:26:54 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M6Lfn3YgtzXdjl;
+        Tue, 16 Aug 2022 14:22:41 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 16 Aug 2022 14:26:52 +0800
+CC:     <yangyicong@hisilicon.com>, <will@kernel.org>,
+        <mark.rutland@arm.com>, <Frank.li@nxp.com>, <shawnguo@kernel.org>,
+        <s.hauer@pengutronix.de>, <kernel@pengutronix.de>,
+        <festevam@gmail.com>, <linux-imx@nxp.com>,
+        <zhangshaokun@hisilicon.com>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <konrad.dybcio@somainline.org>,
+        <khuong@os.amperecomputing.com>, <john.garry@huawei.com>,
+        <jonathan.cameron@huawei.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH] drivers/perf: Change WARN_ON() to dev_err() on
+ irq_set_affinity() failure
+To:     Greg KH <gregkh@linuxfoundation.org>
+References: <20220815092815.11597-1-yangyicong@huawei.com>
+ <YvokT+ZQQMlEAga8@kroah.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <d4603a04-c1df-e57a-d167-1d063e8d2f23@huawei.com>
+Date:   Tue, 16 Aug 2022 14:26:51 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4ae72d0b-b197-f9d8-5cbe-ce7cfaf3affc@linux-m68k.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <YvokT+ZQQMlEAga8@kroah.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,22 +59,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 09:37:19AM +1000, Greg Ungerer wrote:
-> On 16/8/22 05:48, Xin Gao wrote:
-> > @@ -169,7 +169,7 @@ void q40_sched_init (void)
-> >    *
-> >   */
-> > -struct IRQ_TABLE{ unsigned int mask; int irq ;};
-> > +struct IRQ_TABLE{ unsigned int mask; int irq };
-> >   #if 0
-> >   static struct IRQ_TABLE iirqs[]={
-> >     {Q40_IRQ_FRAME_MASK,Q40_IRQ_FRAME},
+On 2022/8/15 18:47, Greg KH wrote:
+> On Mon, Aug 15, 2022 at 05:28:15PM +0800, Yicong Yang wrote:
+>> From: Yicong Yang <yangyicong@hisilicon.com>
+>>
+>> The WARN_ON() on irq_set_affinity() failure is misused according to the [1]
+>> and may crash people's box unintentionally. This may also be redundant since
+>> in the failure case we may also trigger the WARN and dump the stack in the
+>> perf core[2] for a second time.
+>>
+>> So change the WARN_ON() to dev_err() to just print the failure message.
+>>
+>> [1] https://github.com/torvalds/linux/blob/master/include/asm-generic/bug.h#L74
+>> [2] https://github.com/torvalds/linux/blob/master/kernel/events/core.c#L313
 > 
-> This last change doesn't match the commit message.
-> It should be a separate patch.
+> Please point to git.kernel.org links, we do not control github.com and
+> it's random mirrors.
+> 
 
-	The last change is not a valid C.  Never had been.
-In C semicolon is *NOT* a separator - it's a part of declaration.
+Got it. Will update with a git.kernel.org link. Thanks for point it out!
 
--- 
-improve the kernel quality - git rm scripts/checkpatch.pl
+>>
+>> Suggested-by: Greg KH <gregkh@linuxfoundation.org>
+>> [https://lore.kernel.org/lkml/YuOi3i0XHV++z1YI@kroah.com/]
+>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+>> ---
+>>  drivers/perf/arm-ccn.c                   | 5 +++--
+>>  drivers/perf/arm_dmc620_pmu.c            | 3 ++-
+>>  drivers/perf/arm_smmuv3_pmu.c            | 6 ++++--
+>>  drivers/perf/fsl_imx8_ddr_perf.c         | 3 ++-
+>>  drivers/perf/hisilicon/hisi_pcie_pmu.c   | 6 ++++--
+>>  drivers/perf/hisilicon/hisi_uncore_pmu.c | 6 ++++--
+>>  drivers/perf/qcom_l2_pmu.c               | 8 ++++++--
+>>  drivers/perf/xgene_pmu.c                 | 6 ++++--
+>>  8 files changed, 29 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/drivers/perf/arm-ccn.c b/drivers/perf/arm-ccn.c
+>> index 728d13d8e98a..83abd909ba49 100644
+>> --- a/drivers/perf/arm-ccn.c
+>> +++ b/drivers/perf/arm-ccn.c
+>> @@ -1210,8 +1210,9 @@ static int arm_ccn_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
+>>  		return 0;
+>>  	perf_pmu_migrate_context(&dt->pmu, cpu, target);
+>>  	dt->cpu = target;
+>> -	if (ccn->irq)
+>> -		WARN_ON(irq_set_affinity(ccn->irq, cpumask_of(dt->cpu)));
+>> +	if (ccn->irq && irq_set_affinity(ccn->irq, cpumask_of(dt->cpu)))
+>> +		dev_err(ccn->dev, "Failed to set interrupt affinity\n");
+>> +
+>>  	return 0;
+> 
+> Why are you returning with no error, if an error happened?
+> 
+> Same everywhere else, you need to explain this in your changelog text.
+> 
+
+This patch intends no functional change but to switch the way on the error notification to avoid
+crash the box. So just keep the current handling behaviour. Will mention this in the commit in v2.
+I think whether we should actually reponse to the error should be according to the driver.
+
+Thanks.

@@ -2,120 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F3D5954AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A275954AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232518AbiHPINK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 04:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59022 "EHLO
+        id S232118AbiHPIMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 04:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbiHPIMK (ORCPT
+        with ESMTP id S232025AbiHPILL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:12:10 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B857D5998;
-        Mon, 15 Aug 2022 23:26:54 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M6Lfn3YgtzXdjl;
-        Tue, 16 Aug 2022 14:22:41 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 16 Aug 2022 14:26:52 +0800
-CC:     <yangyicong@hisilicon.com>, <will@kernel.org>,
-        <mark.rutland@arm.com>, <Frank.li@nxp.com>, <shawnguo@kernel.org>,
-        <s.hauer@pengutronix.de>, <kernel@pengutronix.de>,
-        <festevam@gmail.com>, <linux-imx@nxp.com>,
-        <zhangshaokun@hisilicon.com>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <konrad.dybcio@somainline.org>,
-        <khuong@os.amperecomputing.com>, <john.garry@huawei.com>,
-        <jonathan.cameron@huawei.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH] drivers/perf: Change WARN_ON() to dev_err() on
- irq_set_affinity() failure
-To:     Greg KH <gregkh@linuxfoundation.org>
-References: <20220815092815.11597-1-yangyicong@huawei.com>
- <YvokT+ZQQMlEAga8@kroah.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <d4603a04-c1df-e57a-d167-1d063e8d2f23@huawei.com>
-Date:   Tue, 16 Aug 2022 14:26:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Tue, 16 Aug 2022 04:11:11 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12654DEA64;
+        Mon, 15 Aug 2022 23:29:00 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id AAA75447D4;
+        Tue, 16 Aug 2022 06:28:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1660631338; bh=ckiDupmPBCFt5SMzFxURk+watAFEoPDuoc/9452gvXQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=Ar5abDx7A0c+SPmkDgRjZvHgyC3acBWOhO1cnDNxSe1PiunFA2WMG2wwfUHYow0pb
+         /kok3Crx9W64fVR5DXxsBmJKq7RoPPI1d6gDVGnARbs1M0QAFeXWKbMtyIB4uJNEib
+         ZHnKnuuED1+ByvC3nmXwOvwI74o92uHcrhz7WfQg0XBz35JLo5xLvmAOFVjP765eqA
+         NCVgsON2k+Q5nky+RyZU96b9dqN4aXKKxWgSagg8/u2nM5MBmI7Ao9q4/Sf0aOT4r2
+         YYPsxNKXe0/qeD16deX+5sDbKSdaeRmE+Bh1Vj2lN6rtgJbpqEA/kCPJW66t1EprpL
+         Y/kHN5S5EUsfA==
+Message-ID: <24c88c4f-aea5-1fb7-0ead-95c88629d72b@marcan.st>
+Date:   Tue, 16 Aug 2022 15:28:50 +0900
 MIME-Version: 1.0
-In-Reply-To: <YvokT+ZQQMlEAga8@kroah.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH] workqueue: Fix memory ordering race in queue_work*()
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Will Deacon <will@kernel.org>, Tejun Heo <tj@kernel.org>,
+        peterz@infradead.org, jirislaby@kernel.org, maz@kernel.org,
+        mark.rutland@arm.com, boqun.feng@gmail.com,
+        catalin.marinas@arm.com, oneukum@suse.com,
+        roman.penyaev@profitbricks.com, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <YvqaK3hxix9AaQBO@slm.duckdns.org>
+ <YvsZ6vObgLaDeSZk@gondor.apana.org.au>
+ <CAHk-=wgSNiT5qJX53RHtWECsUiFq6d6VWYNAvu71ViOEan07yw@mail.gmail.com>
+ <cd51b422-89f3-1856-5d3b-d6e5b0029085@marcan.st>
+ <CAHk-=wjfLT7nL8pV8RWATpjgm0zDtUwT8UMtroqnGcXRjN8tgw@mail.gmail.com>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <CAHk-=wjfLT7nL8pV8RWATpjgm0zDtUwT8UMtroqnGcXRjN8tgw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/15 18:47, Greg KH wrote:
-> On Mon, Aug 15, 2022 at 05:28:15PM +0800, Yicong Yang wrote:
->> From: Yicong Yang <yangyicong@hisilicon.com>
->>
->> The WARN_ON() on irq_set_affinity() failure is misused according to the [1]
->> and may crash people's box unintentionally. This may also be redundant since
->> in the failure case we may also trigger the WARN and dump the stack in the
->> perf core[2] for a second time.
->>
->> So change the WARN_ON() to dev_err() to just print the failure message.
->>
->> [1] https://github.com/torvalds/linux/blob/master/include/asm-generic/bug.h#L74
->> [2] https://github.com/torvalds/linux/blob/master/kernel/events/core.c#L313
+On 2022/08/16 14:52, Linus Torvalds wrote:
+> I think I understand *why* it's broken - it looks like a "harmless"
+> optimization. After all, if the bitop doesn't do anything, there's
+> nothing to order it with.
 > 
-> Please point to git.kernel.org links, we do not control github.com and
-> it's random mirrors.
+> It makes a certain amount of sense - as long as you don't think about
+> it too hard.
 > 
+> The reason it is completely and utterly broken is that it's not
+> actually just "the bitop doesn't do anything". Even when it doesn't
+> change the bit value, just the ordering of the read of the old bit
+> value can be meaningful, exactly for that case of "I added more work
+> to the queue, I need to set the bit to tell the consumers, and if I'm
+> the first person to set the bit I may need to wake the consumer up".
 
-Got it. Will update with a git.kernel.org link. Thanks for point it out!
+This is the same reason I argued queue_work() itself needs to have a
+similar guarantee, even when it doesn't queue work (and I updated the
+doc to match). If test_and_set_bit() is used in this kind of context
+often in the kernel, clearly the current implementation/doc clashes with
+that.
 
->>
->> Suggested-by: Greg KH <gregkh@linuxfoundation.org>
->> [https://lore.kernel.org/lkml/YuOi3i0XHV++z1YI@kroah.com/]
->> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
->> ---
->>  drivers/perf/arm-ccn.c                   | 5 +++--
->>  drivers/perf/arm_dmc620_pmu.c            | 3 ++-
->>  drivers/perf/arm_smmuv3_pmu.c            | 6 ++++--
->>  drivers/perf/fsl_imx8_ddr_perf.c         | 3 ++-
->>  drivers/perf/hisilicon/hisi_pcie_pmu.c   | 6 ++++--
->>  drivers/perf/hisilicon/hisi_uncore_pmu.c | 6 ++++--
->>  drivers/perf/qcom_l2_pmu.c               | 8 ++++++--
->>  drivers/perf/xgene_pmu.c                 | 6 ++++--
->>  8 files changed, 29 insertions(+), 14 deletions(-)
->>
->> diff --git a/drivers/perf/arm-ccn.c b/drivers/perf/arm-ccn.c
->> index 728d13d8e98a..83abd909ba49 100644
->> --- a/drivers/perf/arm-ccn.c
->> +++ b/drivers/perf/arm-ccn.c
->> @@ -1210,8 +1210,9 @@ static int arm_ccn_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
->>  		return 0;
->>  	perf_pmu_migrate_context(&dt->pmu, cpu, target);
->>  	dt->cpu = target;
->> -	if (ccn->irq)
->> -		WARN_ON(irq_set_affinity(ccn->irq, cpumask_of(dt->cpu)));
->> +	if (ccn->irq && irq_set_affinity(ccn->irq, cpumask_of(dt->cpu)))
->> +		dev_err(ccn->dev, "Failed to set interrupt affinity\n");
->> +
->>  	return 0;
-> 
-> Why are you returning with no error, if an error happened?
-> 
-> Same everywhere else, you need to explain this in your changelog text.
-> 
+As I said, I don't have any particular beef in this fight, but this is
+horribly broken on M1/2 right now, so I'll send a patch to change the
+bitops instead and you all can fight it out over which way is correct :)
 
-This patch intends no functional change but to switch the way on the error notification to avoid
-crash the box. So just keep the current handling behaviour. Will mention this in the commit in v2.
-I think whether we should actually reponse to the error should be according to the driver.
-
-Thanks.
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

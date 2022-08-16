@@ -2,102 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0319059659D
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2AC5965A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237501AbiHPWqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 18:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
+        id S237508AbiHPWrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 18:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiHPWqM (ORCPT
+        with ESMTP id S230056AbiHPWrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 18:46:12 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597D9910A5
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 15:46:11 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id r16so5034183wrm.6
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 15:46:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=s8pSl43fKh9JnCgmD3zX1WMUhwtcyLQMOInMOIHCWPM=;
-        b=thGApBqcLsCEmh3pIRfPPTjA3/bLHUE0lVp6KZuhpZ8/XaxKjSsw2BgdMdYpP7ymnM
-         ESvhyZMAMxvD3tRAEHWhsBP4GBQ7bWNSFVOiHm8hVtj7TtWfbSO7esaMlrJdPbZVLxNL
-         CYhy1R0vjrjAWOGyIkBU1oDpc7QJ07rRnQEI96teV0fQ7kB206wfqAtWu/n5JTBwin+Y
-         gfYvRzKW0pP5oI6tx+cfkf8sbbDsqbDcDAmH/p3uB1UdWO0XuhgPb1atJCwrJPXkl4ZR
-         z7vyDT8KVdEDBNzSqmC9WOKYvYldB8VcollbxJa2iys4s4DTw12zi5MwFE7uJjE7PIWS
-         1jNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=s8pSl43fKh9JnCgmD3zX1WMUhwtcyLQMOInMOIHCWPM=;
-        b=zBc4T9j4rfgu2+xQF6+eLZNfoWrPjaf83cFbkBIhBJJxrPZ3U2ZRoVXZNbbQlIoNl0
-         sQNMQRhoaV9vlr0yOh2NXeD118A+iu/PuGEjIypYXXWKqareNNtT3a8hGCEdCQziEPa+
-         rWanUjA75qbkw55bh9Np3DjPOapMSuYbjrh1DHuonUB4vhsybF/UemVXpaT7HZGp1KlW
-         i6ICxq10FXff8cQjAQS5/Sc9cuVsakp3pasTfCb3jFjnGWalIWxzEmlOG8wAtEwBXOH5
-         D0sgXwApXIdF43a7QVPYZaUAHC65foXUF2kovaDk2GdYmG+Rr8UsZj3gK2Ys15gHoLig
-         K+wQ==
-X-Gm-Message-State: ACgBeo0p8NPQRMV5aJud95NVP3qj8R2OijWjovMoQVNDzGWvHxlUU+AM
-        2LP3ZTF8EFH74A6Q1ZQa2bmdOEGyuZiFpsc7H3/S8A==
-X-Google-Smtp-Source: AA6agR5YDZNX8BGW0we+ymcE37/vFJkAbxtvIx5oh+8aSvN3oBazJLky1o2ZU3nNXabaqECW4fCIGnOv1/Bxx2ETrTo=
-X-Received: by 2002:a05:6000:11d0:b0:225:1c12:65f8 with SMTP id
- i16-20020a05600011d000b002251c1265f8mr2254049wrx.80.1660689969725; Tue, 16
- Aug 2022 15:46:09 -0700 (PDT)
+        Tue, 16 Aug 2022 18:47:51 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4B7910A6;
+        Tue, 16 Aug 2022 15:47:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=2YSX9MTzjphg3Pl8EWZLgii2B9uxrEDNzX37H2U4FY8=; b=EDzLUTgn+Obi4+hBg0tFp/TxJJ
+        D/CcmuyO0mF0oZABfIlNwYmbY1rgLj675s5hGvnGABb5faUdtmkwZ8U6TeAq7/PJLLbMu7IXqEZQE
+        dwjpeMNdPkn1/HHnnElhyJI/xBlGxhsZcYob/xstU7pwfa7tHMZ1a0vK5zv1KaC4xiQuySYtwwvCD
+        NAQuHgKerHAZ/y8AUB1k5vLlehjnAGYVABRXunH9i/Yqrtt4XtnFAd+CEElraS4Hr5IkH9LRC+u5j
+        9iQbfMAQSvKSXdl2enGSIkjJ5jmAe6Av4C5jBX6FqVcbkw+7/j62jrQOdvsMUbKUsoKzZF2ZgM+Io
+        AZ4YOigQ==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oO5Le-007bMa-HA; Tue, 16 Aug 2022 22:47:46 +0000
+Message-ID: <a063c19e-f6b9-a7ae-a199-1fc60de01c21@infradead.org>
+Date:   Tue, 16 Aug 2022 15:47:45 -0700
 MIME-Version: 1.0
-References: <20220816185801.651091-1-shy828301@gmail.com> <CALvZod5t7Qo1NQ040pRyWco+nJGn3hSrxZyuFQ0UBi31Ni6=_g@mail.gmail.com>
-In-Reply-To: <CALvZod5t7Qo1NQ040pRyWco+nJGn3hSrxZyuFQ0UBi31Ni6=_g@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Tue, 16 Aug 2022 15:45:33 -0700
-Message-ID: <CAJD7tkZrQZ8CR0E0vKnXGWFLPChxFmNaSQUkFAm1icnGnE6Tew@mail.gmail.com>
-Subject: Re: [PATCH] mm: memcg: export workingset refault stats for cgroup v1
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Yang Shi <shy828301@gmail.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH -next] fs/kernel_read_file: Fix some kernel-doc comments
+Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>, viro@zeniv.linux.org.uk
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20220815054411.68818-1-yang.lee@linux.alibaba.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220815054411.68818-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 3:06 PM Shakeel Butt <shakeelb@google.com> wrote:
->
-> On Tue, Aug 16, 2022 at 11:58 AM Yang Shi <shy828301@gmail.com> wrote:
-> >
-> > Workingset refault stats are important and usefule metrics to measure
-> > how well reclaimer and swapping work and how healthy the services are,
-> > but they are just available for cgroup v2.  There are still plenty users
-> > with cgroup v1, export the stats for cgroup v1.
-> >
-> > Signed-off-by: Yang Shi <shy828301@gmail.com>
-> > ---
-> > I do understand the development of cgroup v1 is actually stalled and
-> > the community is reluctant to accept new features for v1.  However
-> > the workingset refault stats are really quite useful and exporting
-> > two new stats, which have been supported by v2, seems ok IMHO.  So
-> > hopefully this patch could be considered.  Thanks.
-> >
->
-> Is just workingset refault good enough for your use-case? What about
-> the other workingset stats? I don't have a strong opinion against
-> adding these to v1 and I think these specific stats should be fine.
-> (There is subtlety in exposing objcg based stats (i.e. reparenting) in
-> v1 due to non-hierarchical stats in v1. I remember Yosry and Muchun
-> were looking into that.)
 
-I think only kernel memory stats and zswap stats are objcg-based at
-this point, right? The workingset refault stats seem to be memcg-based
-and should not face the reparenting problem.
+
+On 8/14/22 22:44, Yang Li wrote:
+> Add a colon between the parameter name and description to meet the
+> scripts/kernel-doc.
+> 
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=1901
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
+> ---
+>  fs/kernel_read_file.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/fs/kernel_read_file.c b/fs/kernel_read_file.c
+> index 5d826274570c..c4fc84e6d099 100644
+> --- a/fs/kernel_read_file.c
+> +++ b/fs/kernel_read_file.c
+> @@ -8,16 +8,16 @@
+>  /**
+>   * kernel_read_file() - read file contents into a kernel buffer
+>   *
+> - * @file	file to read from
+> - * @offset	where to start reading from (see below).
+> - * @buf		pointer to a "void *" buffer for reading into (if
+> + * @file:	file to read from
+> + * @offset:	where to start reading from (see below).
+> + * @buf:	pointer to a "void *" buffer for reading into (if
+>   *		*@buf is NULL, a buffer will be allocated, and
+>   *		@buf_size will be ignored)
+> - * @buf_size	size of buf, if already allocated. If @buf not
+> + * @buf_size:	size of buf, if already allocated. If @buf not
+>   *		allocated, this is the largest size to allocate.
+> - * @file_size	if non-NULL, the full size of @file will be
+> + * @file_size:	if non-NULL, the full size of @file will be
+>   *		written here.
+> - * @id		the kernel_read_file_id identifying the type of
+> + * @id:	the kernel_read_file_id identifying the type of
+>   *		file contents being read (for LSMs to examine)
+>   *
+>   * @offset must be 0 unless both @buf and @file_size are non-NULL
+
+-- 
+~Randy

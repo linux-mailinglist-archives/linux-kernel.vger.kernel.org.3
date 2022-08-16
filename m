@@ -2,118 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC5A595FDF
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50764595FE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235441AbiHPQKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 12:10:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
+        id S233312AbiHPQLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 12:11:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236202AbiHPQJz (ORCPT
+        with ESMTP id S236467AbiHPQKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 12:09:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768DC4B0EE;
-        Tue, 16 Aug 2022 09:06:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39A17B81A58;
-        Tue, 16 Aug 2022 16:06:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87ED9C433D6;
-        Tue, 16 Aug 2022 16:06:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660665990;
-        bh=AXRucAZuPQWJSTJD1Vx5mJLTnGXWgijQwgdKGA4Eue0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eGzWZBgFTUxW507AhfQMNZWfwQDDW8wwAZ2QA9lOmD5wnOPvXiec4TPN0UZfRu6Qs
-         Btn1lOgyowcm3l43mJejDK4tGw1stHHIz4Bk2XvxvmseQ3kB5yEhnSygHSSeONuPAf
-         4aM6h4QEOqs6y6VlNUMiZIAxM/zh2ZlyTLCetImtkbL7Uk7/CYETDvxqIJM8k80o5k
-         zBQAsHN5qfymfuNLMQKTftOEwbGNyfXLCGtW/PhxNteArXLm5StumOauOQAoSb6v7I
-         Yiaxlr+V7xCNmInhyjfsN6T1WJ+vCnWhlV9Kx7foKfHmf41RLysOXiO20v8S1J+oJH
-         QsnIx5UF6xx/Q==
-Date:   Tue, 16 Aug 2022 18:06:21 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Brian Masney <bmasney@redhat.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 8/8] PCI: qcom: Sort device-id table
-Message-ID: <YvvAfQJChCVX4cPH@lpieralisi>
-References: <20220714071348.6792-1-johan+linaro@kernel.org>
- <20220714071348.6792-9-johan+linaro@kernel.org>
- <YtAny03L/RLk9nv6@xps13>
- <YtEaqHT7NdXPhK+y@hovoldconsulting.com>
+        Tue, 16 Aug 2022 12:10:46 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9CA63204B;
+        Tue, 16 Aug 2022 09:10:20 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id p12-20020a7bcc8c000000b003a5360f218fso9637082wma.3;
+        Tue, 16 Aug 2022 09:10:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
+        bh=VNGeV/c4lH4sYoSOZM8OmJVDymhn+MJK+It11cuEEyU=;
+        b=lbX1Ha0KPRd7xdtFmhUNQXCWVe+0LZsby37oTlcs5lG4bFdqh+Y99M8AmKu2q3nouO
+         Cd6nyGgs2mwNnzKCoFvD+DYzNoDk/npMI8DnPvRNdPH/RToJzXSATBF40/njPAjR211a
+         wfE9cGDD1ADRXdGSJ8O8ptbdQDq1b8XgTQ8sQWHRZRhfAaz90msy6Ba+Xo6jMs+yzdcm
+         HrY4yLOuiLgseZSm5LUWjdkOkjP22wtZxZvsb6PYn8CP2LMV8/C/zDB1B6mlxEiDMPxS
+         2hcYiz8jyek06I0kvuCt2AkwN11vyKcxPjWE6Au9gwYGLB/7AS/R2GiJHiWrOig++FMZ
+         opgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=VNGeV/c4lH4sYoSOZM8OmJVDymhn+MJK+It11cuEEyU=;
+        b=c/FQ3eMimm12A7KXJdVu+f6f6ucV0GswWkxCMfmZn4VNZlIhyUlkGPYauVlECyBKkQ
+         E/r2LbsheJKkuP2MIQY5TYzGNVgRUylei537WzHeXjyRDfVQOW3lcYNnC5bLxfagNkRY
+         CyEfRiNWd/yO9JxKFfnb+PYdd9kiTmXykV4LD2hdNHVFAN3oC//C26c4AgF0ddBwYtfn
+         ubZj+SHZoSUMJjtaRcuN83pcuDS+Bev58M6CHDugRcIp9erNkkPX7ZyD+G7EKDeQB7fQ
+         BTcw1aaImkR0TdkxZruU9InBr5Sp+Pu5kltDR+TbzProZL538PN6fWA9F6KSpC+/Hup2
+         mx/A==
+X-Gm-Message-State: ACgBeo3gbf4a7ITCS5m7K0+n8uD/aUgRDHTQnYfknr8IKpTsSOXdVefa
+        4ElMyMr7/rwQF6Z/bs/QPKrMMcxK7kXD1XIqEtSzY7HxuLhcsas0
+X-Google-Smtp-Source: AA6agR4JRMXCBnDZrj4pN9GqvA30EnYi9QliS53uv5SQuHiU9ZW00Zi/Bg9XJsXUvP6d3Pfu/eoolEgtri31IakzM+E=
+X-Received: by 2002:a1c:44d5:0:b0:3a5:4fa3:b260 with SMTP id
+ r204-20020a1c44d5000000b003a54fa3b260mr13607481wma.165.1660666218849; Tue, 16
+ Aug 2022 09:10:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtEaqHT7NdXPhK+y@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Jiacheng Xu <578001344xu@gmail.com>
+Date:   Wed, 17 Aug 2022 00:10:09 +0800
+Message-ID: <CAO4S-mdVW5GkODk0+vbQexNAAJZopwzFJ9ACvRCJ989fQ4A6Ow@mail.gmail.com>
+Subject: KASAN: null-ptr-deref Write in io_file_get_normal
+To:     linux-kernel@vger.kernel.org, axboe@kernel.dk,
+        asml.silence@gmail.co
+Cc:     io-uring@vger.kernel.org, security@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_STARTS_WITH_NUMS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 09:43:36AM +0200, Johan Hovold wrote:
-> On Thu, Jul 14, 2022 at 10:27:23AM -0400, Brian Masney wrote:
-> > On Thu, Jul 14, 2022 at 09:13:48AM +0200, Johan Hovold wrote:
-> > > Sort the device-id table entries alphabetically by compatible string to
-> > > make it easier to find entries and add new ones.
-> > > 
-> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > > ---
-> > >  drivers/pci/controller/dwc/pcie-qcom.c | 12 ++++++------
-> > >  1 file changed, 6 insertions(+), 6 deletions(-)
-> > > 
-> > > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> > > index 8dddb72f8647..fea921cca8fa 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> > > @@ -1749,24 +1749,24 @@ static int qcom_pcie_remove(struct platform_device *pdev)
-> > >  }
-> > >  
-> > >  static const struct of_device_id qcom_pcie_match[] = {
-> > > +	{ .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
-> > >  	{ .compatible = "qcom,pcie-apq8084", .data = &cfg_1_0_0 },
-> > > +	{ .compatible = "qcom,pcie-ipq6018", .data = &cfg_2_9_0 },
-> > >  	{ .compatible = "qcom,pcie-ipq8064", .data = &cfg_2_1_0 },
-> > >  	{ .compatible = "qcom,pcie-ipq8064-v2", .data = &cfg_2_1_0 },
-> > > -	{ .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
-> > > -	{ .compatible = "qcom,pcie-msm8996", .data = &cfg_2_3_2 },
-> > >  	{ .compatible = "qcom,pcie-ipq8074", .data = &cfg_2_3_3 },
-> > >  	{ .compatible = "qcom,pcie-ipq4019", .data = &cfg_2_4_0 },
-> > 
-> > qcom,pcie-ipq4019 should be moved up above qcom,pcie-ipq6018.
-> 
-> If we only had some sort of machine that could sort strings for us... ;)
-> I'll rely on vim for this from now on.
-> 
-> Perhaps Bjorn H can fix that up when applying unless I'll be sending a
-> v3 for some other reason. This series still depends on the MSI rework to
-> be applied first.
+Hello,
 
-I can do it while applying. A link to the lore archive for the MSI
-rework please (I don't think it was merged for v6.0) ? I was away for
-two months, catching up with threads.
+When using modified Syzkaller to fuzz the Linux kernel-5.15.58, the
+following crash was triggered.
 
-Thanks,
-Lorenzo
+HEAD commit: 568035b01cfb Linux-5.15.58
+git tree: upstream
 
-> Thanks for reviewing.
-> 
-> Johan
+console output:
+https://drive.google.com/file/d/1lW1tGegMXfLgS1gfyWmZShhX7LOx3vFJ/view?usp=sharing
+kernel config: https://drive.google.com/file/d/1wgIUDwP5ho29AM-K7HhysSTfWFpfXYkG/view?usp=sharing
+syz repro: https://drive.google.com/file/d/13l2TaalviEK6WBoXjF4tAiYfSUmlzstU/view?usp=sharing
+C reproducer: https://drive.google.com/file/d/1iHOn1jRiQs4iKxxRTDZcATyJcZlVFQqR/view?usp=sharing
+
+There is a similar problem: https://www.spinics.net/lists/io-uring/msg13047.html
+
+Environment:
+Ubuntu 20.04 on Linux 5.4.0
+QEMU 4.2.1:
+qemu-system-x86_64 \
+  -m 2G \
+  -smp 2 \
+  -kernel /home/workdir/bzImage \
+  -append "console=ttyS0 root=/dev/sda earlyprintk=serial net.ifnames=0" \
+  -drive file=/home/workdir/stretch.img,format=raw \
+  -net user,host=10.0.2.10,hostfwd=tcp:127.0.0.1:10021-:22 \
+  -net nic,model=e1000 \
+  -enable-kvm \
+  -nographic \
+  -pidfile vm.pid \
+  2>&1 | tee vm.log
+
+If you fix this issue, please add the following tag to the commit:
+Reported-by:  Jiacheng Xu<stitch@zju.edu.cn>
+
+==================================================================
+BUG: KASAN: null-ptr-deref in instrument_atomic_read_write
+include/linux/instrumented.h:101 [inline]
+BUG: KASAN: null-ptr-deref in atomic_inc
+include/linux/atomic/atomic-instrumented.h:181 [inline]
+BUG: KASAN: null-ptr-deref in io_req_track_inflight fs/io_uring.c:1408 [inline]
+BUG: KASAN: null-ptr-deref in io_file_get_normal+0x318/0x340 fs/io_uring.c:6934
+Write of size 4 at addr 0000000000000118 by task iou-wrk-13680/13681
+
+CPU: 3 PID: 13681 Comm: iou-wrk-13680 Not tainted 5.15.58 #2
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x8b/0xb3 lib/dump_stack.c:106
+ __kasan_report mm/kasan/report.c:446 [inline]
+ kasan_report.cold+0x66/0xdf mm/kasan/report.c:459
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x14e/0x1b0 mm/kasan/generic.c:189
+ instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+ atomic_inc include/linux/atomic/atomic-instrumented.h:181 [inline]
+ io_req_track_inflight fs/io_uring.c:1408 [inline]
+ io_file_get_normal+0x318/0x340 fs/io_uring.c:6934
+ io_file_get fs/io_uring.c:6944 [inline]
+ io_tee fs/io_uring.c:4051 [inline]
+ io_issue_sqe+0x4ad9/0x7540 fs/io_uring.c:6797
+ io_wq_submit_work+0x1bc/0x390 fs/io_uring.c:6863
+ io_worker_handle_work+0x97c/0x1710 fs/io-wq.c:576
+ io_wqe_worker+0x5b1/0xd30 fs/io-wq.c:630
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+ </TASK>
+==================================================================
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 2 PID: 13681 Comm: iou-wrk-13680 Tainted: G    B             5.15.58 #2
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x8b/0xb3 lib/dump_stack.c:106
+ panic+0x2b0/0x6dd kernel/panic.c:232
+ end_report mm/kasan/report.c:128 [inline]
+ end_report.cold+0x63/0x6f mm/kasan/report.c:113
+ __kasan_report mm/kasan/report.c:449 [inline]
+ kasan_report.cold+0x71/0xdf mm/kasan/report.c:459
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x14e/0x1b0 mm/kasan/generic.c:189
+ instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+ atomic_inc include/linux/atomic/atomic-instrumented.h:181 [inline]
+ io_req_track_inflight fs/io_uring.c:1408 [inline]
+ io_file_get_normal+0x318/0x340 fs/io_uring.c:6934
+ io_file_get fs/io_uring.c:6944 [inline]
+ io_tee fs/io_uring.c:4051 [inline]
+ io_issue_sqe+0x4ad9/0x7540 fs/io_uring.c:6797
+ io_wq_submit_work+0x1bc/0x390 fs/io_uring.c:6863
+ io_worker_handle_work+0x97c/0x1710 fs/io-wq.c:576
+ io_wqe_worker+0x5b1/0xd30 fs/io-wq.c:630
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+ </TASK>

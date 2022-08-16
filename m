@@ -2,126 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9374A595B44
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC312595B47
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234653AbiHPMHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 08:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
+        id S235315AbiHPMHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 08:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235380AbiHPMGw (ORCPT
+        with ESMTP id S235446AbiHPMG6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 08:06:52 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F354CB275F;
-        Tue, 16 Aug 2022 04:56:23 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 1CAC31C0006; Tue, 16 Aug 2022 13:56:21 +0200 (CEST)
-Date:   Tue, 16 Aug 2022 13:56:14 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: Big load on lkml created by -stable patchbombs was Re: [PATCH 5.19
- 0000/1157] 5.19.2-rc1 review
-Message-ID: <20220816115614.GB27428@duo.ucw.cz>
-References: <20220815180439.416659447@linuxfoundation.org>
- <YvruPKI4dCyrXCp5@home.goodmis.org>
- <YvsocKly+n9S4CsB@kroah.com>
+        Tue, 16 Aug 2022 08:06:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B07C32BA7
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 04:56:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC7E06124E
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 11:56:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AACE5C433D6;
+        Tue, 16 Aug 2022 11:56:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660650995;
+        bh=FVUSKZvyxeYHla7DAI1S7uQ9b45W1lFMmWt54ll5JlA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=v8PP2Y7zNU+FVQizPga9MODb0WFzHKVad+1VohxTjTDc+95kRo6+FlTlwZiET+gOj
+         rI3kpk1WipL/kLv/6gv0XXNK+NrFFcDJFwt2vngBa+mVLRX7m5i+DafP+blpINyKqM
+         iF0Qnt+XnOywNTiwwOBU918gkxWz6UVgzOTVIBMA=
+Date:   Tue, 16 Aug 2022 13:56:32 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nadav Amit <namit@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 1/4] Make place for common balloon code
+Message-ID: <YvuF8CsP0M1TAK1a@kroah.com>
+References: <20220816094117.3144881-1-alexander.atanasov@virtuozzo.com>
+ <20220816094117.3144881-2-alexander.atanasov@virtuozzo.com>
+ <YvtoDxvefWUJBfAS@kroah.com>
+ <f88fe469-d4a4-3240-b325-a745255bf01c@virtuozzo.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="BwCQnh7xodEAoBMC"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YvsocKly+n9S4CsB@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <f88fe469-d4a4-3240-b325-a745255bf01c@virtuozzo.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Aug 16, 2022 at 02:47:22PM +0300, Alexander Atanasov wrote:
+> Hello,
+> 
+> On 16.08.22 12:49, Greg Kroah-Hartman wrote:
+> > On Tue, Aug 16, 2022 at 12:41:14PM +0300, Alexander Atanasov wrote:
+> 
+> > >   rename include/linux/{balloon_compaction.h => balloon_common.h} (99%)
+> > 
+> > Why rename the .h file?  It still handles the "balloon compaction"
+> > logic.
+> 
+> File contains code that is common to balloon drivers,
+> compaction is only part of it. Series add more code to it.
+> Since it was suggested to use it for such common code.
+> I find that common becomes a better name for it so the rename.
+> I can drop the rename easy on next iteration if you suggest to.
 
---BwCQnh7xodEAoBMC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+"balloon_common.h" is very vague, you should only need one balloon.h
+file in the include/linux/ directory, right, so of course it is "common"
+:)
 
-Hi!
+thanks,
 
-> > > This is the start of the stable review cycle for the 5.19.2 release.
-> > > There are 1157 patches in this series, all will be posted as a respon=
-se
-> > > to this one.  If anyone has any issues with these being applied, plea=
-se
-> > > let me know.
-> >=20
-> > Hi Greg,
-> >=20
-> > Perhaps its time that you just send a single email to LKML pointing whe=
-re to
-> > find the stable releases. These patch bombs are bringing vger down to i=
-ts
-> > knees, and causing delays in people's workflows. This doesn't just affe=
-ct
-> > LKML, but all other vger mailing lists. Probably because LKML has the b=
-iggest
-> > subscriber base that patch bombs to it can slow everything else down.
-> >=20
-> > I sent 3 patches to the linux-trace-devel list almost 4 hours ago, and =
-they
-> > still haven't shown up. I was going to point people to it tonight but i=
-t's now
-> > going to have to wait till tomorrow.
->=20
-> Email is async, sometimes it takes longer than others to recieve
-> messages.
-
-Well, email is pretty fast most of the month.
-
-> My "patch bombs" get sent out slow to the mail servers, there is work to
-> fix up vger and move it over to the LF-managed infrastructure, perhaps
-> work with the vger admins to help that effort out?
-
-I'm pretty used to -stable patches going to l-k, so I got used to
-current workflow. OTOH ... -stable _is_ quite significant fraction of
-total lkml traffic, and I see how people may hate that.
-
-Is not it ultimately for vger admins to decide what kind of load they
-consider acceptable?
-
-Would it make sense to somehow batch the messages, or perhaps to
-modify patchbombing scripts to send patches "slowly" so that -stable
-does not DoS other lkml users?
-
-Actually, if the patch is same between multiple -stable releases
-(which is rather common case) sending it just once tagged with "this
-goes to 4.9, 4.14, 4.19 and 5.10" would both take less bandwidth and
-make review easier. (But I see it may not be that easy).
-
-Best regards,
-								Pavel
-							=09
-PS: ...who is currently on EDGE connection. LF-managed infrastructure
-is not going to help for people who use slow links to access lkml.
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---BwCQnh7xodEAoBMC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYvuF3gAKCRAw5/Bqldv6
-8rVhAJ4+dAqoazRNbBm8GEweuZaPUCb6QgCeLqbpLUmN9Z24i17Q79OQbtCFaVQ=
-=4pqH
------END PGP SIGNATURE-----
-
---BwCQnh7xodEAoBMC--
+greg "naming is hard" k-h

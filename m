@@ -2,65 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6B1595B89
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1096C595B90
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235406AbiHPMO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 08:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
+        id S235164AbiHPMQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 08:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235497AbiHPMNq (ORCPT
+        with ESMTP id S235529AbiHPMPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 08:13:46 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3409774E16;
-        Tue, 16 Aug 2022 05:09:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1660651755; x=1692187755;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=EW5WWQcuhe1n/gF8QxR46HQULYTGKaa7UvnqyPxMU0w=;
-  b=KaUQKI41ccBUDFy5Y7n5shcPdLA/POWQXyfvLXvcXQNMxjbcLgGqZU9I
-   RBBa/mjDXVlat4cPIMSAy1CQJkN2jqSfcMEpOkkJeIJtqEcDgTjpaz/3T
-   6GuBaYtv9KcHR4tSEnCjDMQiZcdsoAEg/piVJEaZLeR2r7wNydqCdvxMe
-   c/ItqMNtysgMrOrKxhv43Z5a/BVX9DxrjOG2RrAbCOZk/IlX59dd+Xwy9
-   50ZE23lWoprcTejYtgbnUrH4u1LeenicSIs4xQmW+OtXXZc89ZUfRKJwZ
-   lCyaNQ8Z6VMJL6M8FEnoSzz6YbgP+IB42lLO+FmFAPeYyGW4/aopG7j16
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="176569956"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Aug 2022 05:09:15 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 16 Aug 2022 05:09:06 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Tue, 16 Aug 2022 05:09:04 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Daire McNamara <daire.mcnamara@microchip.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v8 4/4] MAINTAINERS: add pwm to PolarFire SoC entry
-Date:   Tue, 16 Aug 2022 13:08:30 +0100
-Message-ID: <20220816120829.719749-5-conor.dooley@microchip.com>
+        Tue, 16 Aug 2022 08:15:16 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C743A48A;
+        Tue, 16 Aug 2022 05:10:10 -0700 (PDT)
+X-QQ-mid: bizesmtp86t1660651801tm1ik1lg
+Received: from localhost.localdomain ( [182.148.12.144])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 16 Aug 2022 20:10:00 +0800 (CST)
+X-QQ-SSF: 01000000002000B0D000B00A0000000
+X-QQ-FEAT: 5x8Sgf4S6/hEid5+0EMTFNWT1lMwH5fir4bYCXKG37zV429uH/yppgCRr6lZp
+        qtgW+5ZkhTyqosvsawDvCH8tBHHen6xHQaiYlcxVQglMR6XQOw12J/USQ2vDpFA88RzXo0O
+        m7ZhVW8LZ7fPz/wG1mrVQAfUPCELTuHnlwyZEVjJ8oitSUCOLB8IJFGQv5TOXnRqDOKyXbt
+        hagdjhbhW19LoYxJ5bhAgau4udpWPSy+Qn1hY3lNDbevgKcMTPqoyz0LwbVev7rf1WU+fRi
+        ymqDPh+c+04yWxEj3LHzjmE0RqlDIlYHRhjw6rBOUTUfZeVgg0/zzTF8Zsw1SNE7uJIyCvJ
+        FThLeY9yoIxW3vhktZ+zznu0QkUI9dCk8wn2QNa/NBkSnu1/A8=
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] block: fix repeated words in comments
+Date:   Tue, 16 Aug 2022 20:09:52 +0800
+Message-Id: <20220816120952.56713-1-yuanjilin@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220816120829.719749-1-conor.dooley@microchip.com>
-References: <20220816120829.719749-1-conor.dooley@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,25 +48,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the newly introduced pwm driver to the existing PolarFire SoC entry.
+ Delete the redundant word 'can'.
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ block/bio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8a5012ba6ff9..5db66c743595 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17532,6 +17532,7 @@ F:	drivers/char/hw_random/mpfs-rng.c
- F:	drivers/clk/microchip/clk-mpfs.c
- F:	drivers/mailbox/mailbox-mpfs.c
- F:	drivers/pci/controller/pcie-microchip-host.c
-+F:	drivers/pwm/pwm-microchip-core.c
- F:	drivers/rtc/rtc-mpfs.c
- F:	drivers/soc/microchip/
- F:	drivers/spi/spi-microchip-core.c
+diff --git a/block/bio.c b/block/bio.c
+index f92d0223247b..c883f8963c14 100644
+--- a/block/bio.c
++++ b/block/bio.c
+@@ -567,7 +567,7 @@ EXPORT_SYMBOL(bio_alloc_bioset);
+  * be reused by calling bio_uninit() before calling bio_init() again.
+  *
+  * Note that unlike bio_alloc() or bio_alloc_bioset() allocations from this
+- * function are not backed by a mempool can can fail.  Do not use this function
++ * function are not backed by a mempool can fail.  Do not use this function
+  * for allocations in the file system I/O path.
+  *
+  * Returns: Pointer to new bio on success, NULL on failure.
 -- 
 2.36.1
 

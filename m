@@ -2,111 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F295956A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0230959569D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233187AbiHPJgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
+        id S233742AbiHPJhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232431AbiHPJgQ (ORCPT
+        with ESMTP id S233716AbiHPJgo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:36:16 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860567C527;
-        Tue, 16 Aug 2022 00:58:51 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id a22so8122139pfg.3;
-        Tue, 16 Aug 2022 00:58:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=Pgdn9/K/AEvoxC94fa7Lnq0paBMzAMlSw0UYFlts4Io=;
-        b=naCxKB8AxV/sHNgv9mx5nPFcF9TSfqyaPBF5a4vZIUwuhIG6YTN+v/82X/5VnbFmQy
-         e7kuTBOECi8KBqgh1UqlMOfPoG1vwcwPoXIu9hlElMS4uqZ+uWsct1E2Ai2ba7NQNZyy
-         gj70WcdWLnQNJJXbb8oqcpwvI445RTJeqlJzn3YIQjLFhVQt7NdNuBqVBfWZWvwjHq87
-         Z700PCbfoY5vkInD6GD6Way7vwrN3SaBBOuV0vecyzY/mswvASvEpbHbv0mtGC+8YPZH
-         4dI41ZH9hkmDgRp+/Iq/XRfMHef+quvz7pk3IYfn+VvhyC9IJGQS5iCiV3AQltYHJHOk
-         IeWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Pgdn9/K/AEvoxC94fa7Lnq0paBMzAMlSw0UYFlts4Io=;
-        b=Z10wtrrNjAhbH8mf/1TdURVrFRDctCCZ/uIIRvGSKBcO3qBOH788jNtde+ywZDeBAr
-         3PfcwqRcDe0V2KzzhBOUK5D0uJxSnoidglu1TCAQq+4bLOg8uQC9NcJfeOfqyqKOwLCk
-         JVU1G4ZaEpMwWAF8ZxHsc+EaFzEC75Oia5rRv3WoP5t6WvQG+EDmMNNZjzgSN2fg0VMt
-         ipr1OHNnTSEdikWDof4DTuJH222GzKXwmYqruKdwoSDh+S0GegDlF0WodIGExj6Xif6X
-         982LNn+VhCf0ZiDJjCl0Db022lfC3SlMk0jrOHrzwW7J4f4yBLO1QwXZ3Ddn3fp0qsyb
-         krow==
-X-Gm-Message-State: ACgBeo0FtKMyWFnS1dYZLekebEGL1GkKM0RVIlfCrVwkz7T8VFYFISKO
-        hor2WxE3/n0qQXtpyxDMvMU=
-X-Google-Smtp-Source: AA6agR7TYrXmuwcnENT/h8E8CwTeCIZLAmCTOT3Btg9cIrbXde8D04uGD+zcMbXS4YJhbHvWZGA69g==
-X-Received: by 2002:a05:6a00:1745:b0:52f:83ad:22cf with SMTP id j5-20020a056a00174500b0052f83ad22cfmr20276957pfc.68.1660636724843;
-        Tue, 16 Aug 2022 00:58:44 -0700 (PDT)
-Received: from debian.me (subs32-116-206-28-42.three.co.id. [116.206.28.42])
-        by smtp.gmail.com with ESMTPSA id c83-20020a624e56000000b005251f4596f0sm7747304pfb.107.2022.08.16.00.58.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 00:58:44 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id AB397103124; Tue, 16 Aug 2022 14:58:40 +0700 (WIB)
-Date:   Tue, 16 Aug 2022 14:58:40 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/779] 5.15.61-rc1 review
-Message-ID: <YvtOMJquQHz3ddnL@debian.me>
-References: <20220815180337.130757997@linuxfoundation.org>
+        Tue, 16 Aug 2022 05:36:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6E2BB68B;
+        Tue, 16 Aug 2022 00:59:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6BD2FB81647;
+        Tue, 16 Aug 2022 07:59:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43541C433D6;
+        Tue, 16 Aug 2022 07:59:05 +0000 (UTC)
+Date:   Tue, 16 Aug 2022 08:59:05 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     Will Deacon <will@kernel.org>, linux-pci@vger.kernel.org,
+        bhelgaas@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lpieralisi@kernel.org,
+        kw@linux.com, mark.rutland@arm.com, sudeep.holla@arm.com,
+        boqun.feng@gmail.com, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        maz@kernel.org, jonmasters@google.com
+Subject: Re: [PATCH 0/4] PCI SMC conduit, now with DT support
+Message-ID: <YvtOSedi3SqYngbV@arm.com>
+References: <20220725163905.2024437-1-jeremy.linton@arm.com>
+ <20220726114000.GA21450@willie-the-truck>
+ <7e4a0b4a-ac2f-5454-9778-e83f651b84a3@arm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="mQmvaP/tevZ0EIjX"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220815180337.130757997@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7e4a0b4a-ac2f-5454-9778-e83f651b84a3@arm.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jeremy,
 
---mQmvaP/tevZ0EIjX
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jul 28, 2022 at 12:20:55PM -0500, Jeremy Linton wrote:
+> On 7/26/22 06:40, Will Deacon wrote:
+> > On Mon, Jul 25, 2022 at 11:39:01AM -0500, Jeremy Linton wrote:
+> > > This is a rebase of the later revisions of [1], but refactored
+> > > slightly to add a DT method as well. It has all the same advantages of
+> > > the ACPI method (putting HW quirks in the firmware rather than the
+> > > kernel) but now applied to a 'pci-host-smc-generic' compatible
+> > > property which extends the pci-host-generic logic to handle cases
+> > > where the PCI Config region isn't ECAM compliant. With this in place,
+> > > and firmware managed clock/phy/etc its possible to run the generic
+> > > driver on hardware that isn't what one would consider standards
+> > > compliant PCI root ports.
+> > 
+> > I still think that hiding the code in firmware because the hardware is
+> > broken is absolutely the wrong way to tackle this problem and I thought
+> > the general idea from last time was that we were going to teach Linux
+> > about the broken hardware instead [1]. I'd rather have the junk where we
+> > can see it, reason about it and modify it.
+[...]
+> Is it the official position of the Linux kernel maintainers that they will
+> refuse to support future Arm standards in order to gate keep specific
+> hardware platforms?
 
-On Mon, Aug 15, 2022 at 07:54:04PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.61 release.
-> There are 779 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+(just back from holiday; well, briefly, going away for a few days soon)
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.1.0).
+We shouldn't generalise what maintainers wwould accept or not. We decide
+on a case by case basis. With speculative execution mitigations, for
+example, we try to do as much as we can in the kernel but sometimes
+that's just not possible, hence an EL3 call and we'd rather have this
+standardised (e.g. custom branch loops to flush the branch predictor if
+possible from the normal world, secure call if not).
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+You mention PSCI but that's not working around broken hardware, it was a
+concious decision from the start to standardise the booting protocol and
+CPU power management.
 
---=20
-An old man doll... just what I always wanted! - Clara
+Now this PCI SMC protocol was simply created because hardware did not
+comply with another PCI standard that has been around for a long time.
+As with the speculative execution mitigations, we'd rather work around
+broken hardware in the kernel first and, if it's not possible, we can
+look at a firmware interface (and ideally standardised). Do you have an
+example where we cannot work around the PCI hardware bugs in the kernel
+and EL3 firmware involvement is necessary?
 
---mQmvaP/tevZ0EIjX
-Content-Type: application/pgp-signature; name="signature.asc"
+So, in summary, Arm Ltd proposing a new standard because hardware
+companies can't be bothered with an existing one is not an argument for
+accepting its support in the Linux kernel. This PCI SMC conduit is not
+presented as a hardware bug workaround interface but rather as an
+alternative to ECAM (and, yes, the kernel maintainers can choose not to
+support specific "standards" in Linux).
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYvtOIgAKCRD2uYlJVVFO
-o1LoAP4qeJ1bwt5qBz9qkOcceAoaNPEw8L+lxV7ri3WMjMnlFwD/UX2UyOb54YuL
-lYKbF6b1Avwa9m/qlOgknXGoSV2HiQg=
-=O1cU
------END PGP SIGNATURE-----
-
---mQmvaP/tevZ0EIjX--
+-- 
+Catalin

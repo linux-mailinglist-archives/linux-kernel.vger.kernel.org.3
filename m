@@ -2,128 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012BA5960BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF14C5960C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236696AbiHPRB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 13:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
+        id S236707AbiHPRBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 13:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236683AbiHPRBV (ORCPT
+        with ESMTP id S236704AbiHPRBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 13:01:21 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2B67C50E;
-        Tue, 16 Aug 2022 10:01:20 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id ch17-20020a17090af41100b001fa74771f61so1859185pjb.0;
-        Tue, 16 Aug 2022 10:01:20 -0700 (PDT)
+        Tue, 16 Aug 2022 13:01:46 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE86E80B6F
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 10:01:44 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id k17so5525689wmr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 10:01:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=DSgs9FXvT0o0PS270q9G9zIUeRmTOeFz5O3WONwu3Mk=;
-        b=cVYr3H5SygxO+XmAclLhhXc7RtFloxydR//dRTs4yJGOtAqMVsO899vZ6hxX+VMRaO
-         UUpwA56b/35VyN63TGCZwUT01AtbQw7nTWErn/GlAu2E3gVxW6m+Irjki4x4rwPWsrLc
-         sOOXKvn33jURA2xT84NFPjPR1dmmxLCiflfjtStrZx3cu/VEmz+s928EWHnUU4fElYYM
-         Da65Em2BrchCTE/RLAuR3W0tW5NsLuYOl+N/+nsdXR97aIgRbxRaSeSPkuwt09Xc7uNz
-         qSlP8MhplPw8KeWy5WbM8qmfFIpxooVZzuPDVVC9e6WXrwDDspC8l5XBoBlrCm+sXPaV
-         fWpw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=Z+IK169aH4eo4oE/yazCWb+E6gZJBwkTwFMy3pmkBbE=;
+        b=tXxE5CxvL4XRHBZMKl7I+t8bJ7mpL80Q2V5+u/Fa+hQNVuyLnua1wsTEDEo+vM4eeK
+         nt/zsqLCbtCJqj2b8TKM2CDb65ypsE+mgncG4u2oHraVyhxRcKJFm1bq9siYsPNDw5Gr
+         0IFnztVyOlaKjI+ToN21O0UsUuP7/kXqcEGh3MvNNpH12YedG8CBSrC5UhQIB1uKYYOP
+         tPj/C6cfzrECAs6IQJP06nYn3SNIcSemivgIoQcZhVNd/g7McInd0wOulO9d9nUtEsYx
+         J92V3hWaiXQYvRvCtD8C8wh4DD+Sbc6xfjku9HLu6aY8Q/3MlPL9XudQA2mKdeRtmVGB
+         fZ4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=DSgs9FXvT0o0PS270q9G9zIUeRmTOeFz5O3WONwu3Mk=;
-        b=mVbkBm7eD1YDsvDZrixGMXm9tkhPsM8RV8HBsNSv3YdpbRSI7zwNQymYgBaHrlTeCn
-         /W19uNH2Yn9FtYL6NNDDz+9cxYJqQCdo+dXCQPcMiyUXjCTasENfa5HDBLtZiTfnebvZ
-         xd6GsL4EPX5Blkh276OovxTSm6p6tpwjhtmtxUbwgoLvRF4RPWX5Ukz8YRnbOD2gDAOb
-         KqDvZ8+ByXsxCi/MxQ7y97NKy5K2eupHgIJYvCV0U5M+vL+SyHdD6tDDlfu49HVu6adq
-         YZ0M1Ix7eAu6dhRLAUeWi9KZG9E6YUEW8bLZFA8SRqX+TaY+O7SYJlHUg3DN7Qdw84RT
-         ZS8g==
-X-Gm-Message-State: ACgBeo178BTpjeF6CCPNEXJ6JfxIod0v8KvKzo26/rZbCj0Yt9V4OGE+
-        SslsNYR0dkH4wy5bb9hJKQw=
-X-Google-Smtp-Source: AA6agR5cNmTS7DV8fDmfAQnwCliasLqsFugEiciNPzXT4UUDQ0TfkEogwl0eiMTrZNWEkpL/8s/SNg==
-X-Received: by 2002:a17:90b:1389:b0:1f3:a782:ab28 with SMTP id hr9-20020a17090b138900b001f3a782ab28mr23804741pjb.181.1660669279541;
-        Tue, 16 Aug 2022 10:01:19 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:7229])
-        by smtp.gmail.com with ESMTPSA id x6-20020a170902a38600b0017150330889sm9285711pla.189.2022.08.16.10.01.18
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=Z+IK169aH4eo4oE/yazCWb+E6gZJBwkTwFMy3pmkBbE=;
+        b=U/HWzU1xyLgrq7VXDj1CnSvegPcWBhSzgrgqHh2W+lWh7a75F9IoaBoVi+WedD+e+g
+         7uy0lb+B2BcQflD43KV6xuY77eYxEGGL/Q35MJTdehLb+bDqhQfsypb7Ua6wGUywWmUi
+         vkweRuUema8zxR+OgjPqIavSAbFMDvk4Sg76vu+zZXBM+WH/+0onhhsabDCR9QuctVf9
+         RMl4ZmmFM/Hvr0s90AzLH2qmOGERSNaIglGlWuy/dKI29jWDeCeAj2ogoRqFQcrVrp5p
+         GWANj1nacZt+XfVcQ7xi77F7N54g1sroz3dkCKZyJDmi4iG/huio95TCbESYLx4JGse6
+         kAFA==
+X-Gm-Message-State: ACgBeo2Neifv8JaX9x5lLYnrrfiwQxrikCqsrcaspHgNb/b/TvbnCbC2
+        u7Js/aRG+S0h1nRwROjp0IO2BQ==
+X-Google-Smtp-Source: AA6agR6a0b//5vAESrxZNaPs/j34eNRQa88EX/3HRkt3V06pu7BoM2GP1N9k6uWC5zMoEI4Ka1jYwg==
+X-Received: by 2002:a05:600c:3d91:b0:3a5:4132:b6a0 with SMTP id bi17-20020a05600c3d9100b003a54132b6a0mr13237626wmb.126.1660669303392;
+        Tue, 16 Aug 2022 10:01:43 -0700 (PDT)
+Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id j3-20020a5d6043000000b0021d6dad334bsm10659535wrt.4.2022.08.16.10.01.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 10:01:18 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 16 Aug 2022 07:01:17 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>, marcan@marcan.st,
-        peterz@infradead.org, jirislaby@kernel.org, maz@kernel.org,
-        mark.rutland@arm.com, boqun.feng@gmail.com,
-        catalin.marinas@arm.com, oneukum@suse.com,
-        roman.penyaev@profitbricks.com, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] workqueue: Fix memory ordering race in queue_work*()
-Message-ID: <YvvNXdkrtlmKZRex@slm.duckdns.org>
-References: <YvqaK3hxix9AaQBO@slm.duckdns.org>
- <YvsZ6vObgLaDeSZk@gondor.apana.org.au>
- <CAHk-=wgSNiT5qJX53RHtWECsUiFq6d6VWYNAvu71ViOEan07yw@mail.gmail.com>
- <20220816134156.GB11202@willie-the-truck>
+        Tue, 16 Aug 2022 10:01:42 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        perex@perex.cz, tiwai@suse.com,
+        pierre-louis.bossart@linux.intel.com,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH] ASoC: qcom: qdsp6: q6prm: add new clocks
+Date:   Tue, 16 Aug 2022 18:01:18 +0100
+Message-Id: <20220816170118.13470-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220816134156.GB11202@willie-the-truck>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Will.
+Add support to new clocks that are added in Q6DSP as part of newer version
+of LPASS support on SM8450 and SC8280XP.
 
-On Tue, Aug 16, 2022 at 02:41:57PM +0100, Will Deacon wrote:
-> /**
->  * test_and_set_bit - Set a bit and return its old value
->  * @nr: Bit to set
->  * @addr: Address to count from
->  *
->  * This operation is atomic and cannot be reordered.
->  * It may be reordered on other architectures than x86.
->  * It also implies a memory barrier.
->  */
-> 
-> so while Peter and I were trying to improve the documentation for
-> atomics and memory barriers we clearly ended up making the wrong call
-> trying to treat this like e.g. a cmpxchg() (which has the
-> unordered-on-failure semantics).
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+ .../sound/qcom,q6dsp-lpass-ports.h            | 18 ++++++++++++++++++
+ sound/soc/qcom/qdsp6/q6prm-clocks.c           |  9 +++++++++
+ sound/soc/qcom/qdsp6/q6prm.h                  | 19 +++++++++++++++++++
+ 3 files changed, 46 insertions(+)
 
-I think the doc can be improved here. atomic_t.txt says under ORDERING:
-
- - RMW operations that have a return value are fully ordered;
-
- - RMW operations that are conditional are unordered on FAILURE,
-   otherwise the above rules apply.
-
-But nothing spells out what's conditional. Maybe it's okay to expect people
-to read this doc and extrapolate how it applies, but I think it'd be better
-if we spell out clearly per operaiton so that readers can search for a
-speicific operation and then follow what the rules are from there.
-
-It bothers me that there doesn't seem to be a comprehensive
-operation-indexed doc on the subject. memory-barrier.txt doesn't cover which
-operations do what barriers. atomic_t.txt and atomic_bitops.txt cover the
-atomic_t operations but not in a comprehensive or searchable manner (e.g.
-does test_and_set_bit() return 0 or 1 on success?) and it's not clear where
-to look for non-atomic_t atomic operations. I guess it's implied that they
-follow the same rules as atomic_t counterparts but I can't seem to find that
-spelled out anywhere. The source code docs are layered and dispersed for
-generic and arch implemetnations making them difficult to follow.
-
-It'd be awesome if the documentation situation can be improved.
-
-Thanks.
-
+diff --git a/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h b/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
+index 0d3276c8fc11..9f7c5103bc82 100644
+--- a/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
++++ b/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
+@@ -193,6 +193,24 @@
+ #define LPASS_CLK_ID_RX_CORE_MCLK	59
+ #define LPASS_CLK_ID_RX_CORE_NPL_MCLK	60
+ #define LPASS_CLK_ID_VA_CORE_2X_MCLK	61
++/* Clock ID for MCLK for WSA2 core */
++#define LPASS_CLK_ID_WSA2_CORE_MCLK	62
++/* Clock ID for NPL MCLK for WSA2 core */
++#define LPASS_CLK_ID_WSA2_CORE_2X_MCLK	63
++/* Clock ID for RX Core TX MCLK */
++#define LPASS_CLK_ID_RX_CORE_TX_MCLK	64
++/* Clock ID for RX CORE TX 2X MCLK */
++#define LPASS_CLK_ID_RX_CORE_TX_2X_MCLK	65
++/* Clock ID for WSA core TX MCLK */
++#define LPASS_CLK_ID_WSA_CORE_TX_MCLK	66
++/* Clock ID for WSA core TX 2X MCLK */
++#define LPASS_CLK_ID_WSA_CORE_TX_2X_MCLK	67
++/* Clock ID for WSA2 core TX MCLK */
++#define LPASS_CLK_ID_WSA2_CORE_TX_MCLK	68
++/* Clock ID for WSA2 core TX 2X MCLK */
++#define LPASS_CLK_ID_WSA2_CORE_TX_2X_MCLK	69
++/* Clock ID for RX CORE MCLK2 2X  MCLK */
++#define LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK	70
+ 
+ #define LPASS_HW_AVTIMER_VOTE		101
+ #define LPASS_HW_MACRO_VOTE		102
+diff --git a/sound/soc/qcom/qdsp6/q6prm-clocks.c b/sound/soc/qcom/qdsp6/q6prm-clocks.c
+index a26cda5140c1..73b0cbac73d4 100644
+--- a/sound/soc/qcom/qdsp6/q6prm-clocks.c
++++ b/sound/soc/qcom/qdsp6/q6prm-clocks.c
+@@ -50,6 +50,15 @@ static const struct q6dsp_clk_init q6prm_clks[] = {
+ 	Q6PRM_CLK(LPASS_CLK_ID_RX_CORE_MCLK),
+ 	Q6PRM_CLK(LPASS_CLK_ID_RX_CORE_NPL_MCLK),
+ 	Q6PRM_CLK(LPASS_CLK_ID_VA_CORE_2X_MCLK),
++	Q6PRM_CLK(LPASS_CLK_ID_WSA2_CORE_MCLK),
++	Q6PRM_CLK(LPASS_CLK_ID_WSA2_CORE_2X_MCLK),
++	Q6PRM_CLK(LPASS_CLK_ID_RX_CORE_TX_MCLK),
++	Q6PRM_CLK(LPASS_CLK_ID_RX_CORE_TX_2X_MCLK),
++	Q6PRM_CLK(LPASS_CLK_ID_WSA_CORE_TX_MCLK),
++	Q6PRM_CLK(LPASS_CLK_ID_WSA_CORE_TX_2X_MCLK),
++	Q6PRM_CLK(LPASS_CLK_ID_WSA2_CORE_TX_MCLK),
++	Q6PRM_CLK(LPASS_CLK_ID_WSA2_CORE_TX_2X_MCLK),
++	Q6PRM_CLK(LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK),
+ 	Q6DSP_VOTE_CLK(LPASS_HW_MACRO_VOTE, Q6PRM_HW_CORE_ID_LPASS,
+ 		       "LPASS_HW_MACRO"),
+ 	Q6DSP_VOTE_CLK(LPASS_HW_DCODEC_VOTE, Q6PRM_HW_CORE_ID_DCODEC,
+diff --git a/sound/soc/qcom/qdsp6/q6prm.h b/sound/soc/qcom/qdsp6/q6prm.h
+index fea4d1954bc1..a988a32086fe 100644
+--- a/sound/soc/qcom/qdsp6/q6prm.h
++++ b/sound/soc/qcom/qdsp6/q6prm.h
+@@ -64,6 +64,25 @@
+ #define Q6PRM_LPASS_CLK_ID_RX_CORE_MCLK				0x30e
+ #define Q6PRM_LPASS_CLK_ID_RX_CORE_NPL_MCLK			0x30f
+ 
++/* Clock ID for MCLK for WSA2 core */
++#define Q6PRM_LPASS_CLK_ID_WSA2_CORE_MCLK 0x310
++/* Clock ID for NPL MCLK for WSA2 core */
++#define Q6PRM_LPASS_CLK_ID_WSA2_CORE_2X_MCLK 0x311
++/* Clock ID for RX Core TX MCLK */
++#define Q6PRM_LPASS_CLK_ID_RX_CORE_TX_MCLK 0x312
++/* Clock ID for RX CORE TX 2X MCLK */
++#define Q6PRM_LPASS_CLK_ID_RX_CORE_TX_2X_MCLK 0x313
++/* Clock ID for WSA core TX MCLK */
++#define Q6PRM_LPASS_CLK_ID_WSA_CORE_TX_MCLK 0x314
++/* Clock ID for WSA core TX 2X MCLK */
++#define Q6PRM_LPASS_CLK_ID_WSA_CORE_TX_2X_MCLK 0x315
++/* Clock ID for WSA2 core TX MCLK */
++#define Q6PRM_LPASS_CLK_ID_WSA2_CORE_TX_MCLK 0x316
++/* Clock ID for WSA2 core TX 2X MCLK */
++#define Q6PRM_LPASS_CLK_ID_WSA2_CORE_TX_2X_MCLK 0x317
++/* Clock ID for RX CORE MCLK2 2X  MCLK */
++#define Q6PRM_LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK 0x318
++
+ #define Q6PRM_LPASS_CLK_SRC_INTERNAL	1
+ #define Q6PRM_LPASS_CLK_ROOT_DEFAULT	0
+ #define Q6PRM_HW_CORE_ID_LPASS		1
 -- 
-tejun
+2.21.0
+

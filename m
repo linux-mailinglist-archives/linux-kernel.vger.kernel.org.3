@@ -2,217 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D2D597363
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 619195973BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239652AbiHQPzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 11:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
+        id S240984AbiHQQLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 12:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239581AbiHQPzG (ORCPT
+        with ESMTP id S240881AbiHQQLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 11:55:06 -0400
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8CA9AFF1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:55:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1660751705; x=1692287705;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Da4nMJ1F9CkVDkvWNzoxhW66X+iNWqedHoEO8QVLg1M=;
-  b=GQS90URI10L6O5lMYeeAJYTNJ6s2MBTHfaNpFnOjEaDx1Wvb6rmIhAut
-   Duzv/ItZvD+nKSYoT3KyP1fhTI0MVgXXibB1K08lLirfYwNlPyAn4uLV7
-   8LQP0PiMtRGGmIo6NjleMsEQKZylUpgCJi/bYwMOIOwiHtQt12GWCCa62
-   1YrcpTFDo8/fIV+wPZavb31G9aog1gAk5j9aj1L9vuDAB7piCr2G4HWJc
-   jitvaK2GwmiIDhjriJkV5VgrjcZW4TuiyFgoxJTaDc7UXZQXIv4C/XzO6
-   CgncBxMjBgja5RKk2nERbOjL0MHdMXd6zbG1YEc5yikFFj1Bjru4zHrTv
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,243,1654531200"; 
-   d="scan'208";a="208953481"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 17 Aug 2022 23:55:02 +0800
-IronPort-SDR: f0JiwR5w70KhPFD1ZT9KbiIcMuQLgqrVWiCs1mzbXif0PPVzCW9+9cWjKqE2P7dJm4kJY4uBk1
- jO0KQPX8jA92DwoweVwW4lD+4iXwS3Yf6ZNjV6RXs2tesoM9pLdHe4+e7wtqUdLvJ2vtqHV8dV
- vQwXb0TL3Y2gyCD+KU3cizxM+iM505EACvohyDxom++YzPcrGtksYbwr9+mb+Pta5wNDtqb2eD
- GXW2Yh1nLdlC5Ayfa2cazPzNm+WU1UbK8+I9ABVKRRe3MxLOZrfh/B+xutWvq76oKwCUcASC5b
- 4V8/FSpSVfa5hk91VvUbOqwz
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Aug 2022 08:15:50 -0700
-IronPort-SDR: FywJWHRpbEU8eE6XoDX6STeCuQFjJPKSITpYNmNZLOX8YIYw08Ka90oxJRgxdEjcsOMSY9X6c/
- XSK1uYAmX/tJuJ0v5DFkJDp3NDLffbzaD5KmSOwkV+hRFMRcWQlR7sY41PlRuxQ8F5SJvM/wmI
- WrItPN15lDL0D3UOyB0fFIwcBWH9ddnzEdHMEXXxlrq+D7C3wQVgVpdt/1dAY1Pa5GVKcdRRJF
- nePh2BNskW9lIXaOP82nS/7Po7GCouY1xHWpxG4uikzuPzVUFlGy5iPs71MydTI7RTw7fjCv72
- cc4=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Aug 2022 08:55:04 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4M7CJk69Vkz1Rwqy
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:55:02 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1660751701; x=1663343702; bh=Da4nMJ1F9CkVDkvWNzoxhW66X+iNWqedHoE
-        O8QVLg1M=; b=a8E4b6TYglEZqemoz/IvureRzXS2h0BxBVr6myCFT2djYIy2Q8a
-        uOrg4utMi2iF33DWYAUjZqOmQaw1UBg+6PgpvdnUc0iK3eCJPYfDxFwhTf6dfmTY
-        JHnFaA/ID4knX74B60BkhAOSskHkaZkiSU6f38w2oHAMtukmu3yxxD/Xs5Lru4Zp
-        sxx4mUhPpPhdUoL3KQ6NLjyBu2lS0QUZIsOdWFD7Pl5qXlud0P12cRKB95aXshh1
-        QMDX19qWOf/gEkJY/DXJihU7aS22PvfgMk07HAt18C2uG2m0ArHlQOxCAS74EytQ
-        p1z4ZW1/Gu7LXGJqpKytFjoPi5uNgNzKd6g==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id qnASGpzl5dYo for <linux-kernel@vger.kernel.org>;
-        Wed, 17 Aug 2022 08:55:01 -0700 (PDT)
-Received: from [10.11.46.122] (unknown [10.11.46.122])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4M7CJh5Fs8z1RtVk;
-        Wed, 17 Aug 2022 08:55:00 -0700 (PDT)
-Message-ID: <e46c8627-3444-1dd1-8fd9-a10b7f3f3851@opensource.wdc.com>
-Date:   Wed, 17 Aug 2022 08:55:00 -0700
+        Wed, 17 Aug 2022 12:11:20 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A93F9F76C;
+        Wed, 17 Aug 2022 09:11:09 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id r69so12356161pgr.2;
+        Wed, 17 Aug 2022 09:11:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=MecChw+7gX16c23ZglNUB2LcmNSIQPOmIL4PPR6f9Ek=;
+        b=RC3Bcsjz+Tt/WKmtQIcxzHpr6VlfHcVwuCYhhyjhlMY0iFwVRz+CrSrre4h9hzgA8e
+         a+0dRoipxqsQiC8J15r4HlSOqvqiL0ECPZB7b/al2XN8LZArVQqFOTqcBELIywim7TJj
+         8GS89CzE7+8i9IYuiVUAhppK/F1JJ/6w6NXJEHprNRMm1YnBFUyGdeW0n+/w6iNHEPVm
+         VjpTI2qspfUNtgNN9LLgpeBJ1zUC/OlcFsmJQ/NeO/9dX9WoMolVpJlBRzgP9L3j+SIQ
+         2lgWw5beGR8nfFSQdW6ciW5guLaLk/ZpoFw/jeiNBByFUCj5hY93OymA9jxnybfjJsy6
+         12Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=MecChw+7gX16c23ZglNUB2LcmNSIQPOmIL4PPR6f9Ek=;
+        b=W/07aw8pzYB9vbZphEnddW9VkT1g0ZtDKgAOwPWHteNom5h9JXlGijeOyyG9gcMtHb
+         /nKBPdVjuu5owkSUZsbKwxGJLH6ph4zg9Lu6GfgXmCsgM/1PPOpbQ7TXyBjoPilmNFz1
+         DI9vLgGuLGNQ6O/9TVnA5Oy4f9eRAITYgr5/YM+/9z7Pj4aOc7RWFFtxKmteLYjVJb9L
+         RnfdwvkbELUMuyHgYEYUtxLtHmRyep0PPj+pWTBgy29r4ypIh3Ofm7jlGARwxhmmreBM
+         enx5f3eFYoIgNmrfoUddR5bOJUUcCr0YriQzhLjWe7XHfPmt29bEbVKdLa7pZX5GWVLD
+         OyvQ==
+X-Gm-Message-State: ACgBeo3/TLy0ATgxAKy00wqB5raQZcfTejgE8bSUtx1RpAMo+NINUFb1
+        Q4wfFe5rS+2epYgTR2X9/Ac=
+X-Google-Smtp-Source: AA6agR51o8Q+PHdYduMQAiLT/vq4twBjog7wFsfFXrbDSHoWsRTQ2lnX1+Ji8LbLYrqEQo74+Ytzlw==
+X-Received: by 2002:a63:b07:0:b0:429:411a:ff51 with SMTP id 7-20020a630b07000000b00429411aff51mr11987848pgl.207.1660752669309;
+        Wed, 17 Aug 2022 09:11:09 -0700 (PDT)
+Received: from localhost (c-73-164-155-12.hsd1.wa.comcast.net. [73.164.155.12])
+        by smtp.gmail.com with ESMTPSA id 5-20020a620605000000b0052e57ed8cdasm10685780pfg.55.2022.08.17.09.10.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 09:10:50 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 09:42:51 +0000
+From:   Bobby Eshleman <bobbyeshleman@gmail.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Bobby Eshleman <bobby.eshleman@gmail.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org
+Subject: Re: [PATCH 0/6] virtio/vsock: introduce dgrams, sk_buff, and qdisc
+Message-ID: <YvtmYpMieMFb80qR@bullseye>
+References: <cover.1660362668.git.bobby.eshleman@bytedance.com>
+ <20220817025250-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
- regression
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>,
-        Oliver Sang <oliver.sang@intel.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-ide@vger.kernel.org, lkp@lists.01.org, lkp@intel.com,
-        ying.huang@intel.com, feng.tang@intel.com,
-        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
-References: <YuzPMMnnY739Tnit@xsang-OptiPlex-9020>
- <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
- <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
- <e4106ffa-3842-45c0-9756-5226cfcfa17d@opensource.wdc.com>
- <YvXeuCAK780OuJPz@xsang-OptiPlex-9020>
- <2e9cf5a6-c043-5ccf-e363-097c6c941891@huawei.com>
- <f1c3d717-339d-ba2b-9775-fc0e00f57ae3@huawei.com>
- <Yvs/w93KUkgD9f7/@xsang-OptiPlex-9020>
- <aabf7ed8-8d4d-dc68-1b8b-c91653701def@huawei.com>
- <43eaa104-5b09-072c-56aa-6289569b0015@opensource.wdc.com>
- <28d6e48b-f52f-9467-8260-262504a1a1ff@huawei.com>
- <05a48c68-33ae-10e2-e565-6c124bad93c5@opensource.wdc.com>
- <c93e529d-b688-9910-50c4-779c2f85fbc3@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <c93e529d-b688-9910-50c4-779c2f85fbc3@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220817025250-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/08/16 13:44, John Garry wrote:
-> On 16/08/2022 21:02, Damien Le Moal wrote:
->>> ou confirm this? Thanks!
->>>
->>> On this basis, it appears that max_hw_sectors_kb is getting capped from
->>> scsi default @ 1024 sectors by commit 0568e61225. If it were getting
->>> capped by swiotlb mapping limit then that would give us 512 sectors -
->>> this value is fixed.
->>>
->>> So for my SHT change proposal I am just trying to revert to previous
->>> behaviour in 5.19 - make max_hw_sectors_kb crazy big again.
->> I reread the entire thing and I think I got things reverted here. The perf
->> regression happens with the 512/512 settings, while the original 1280/32767
->> before your patches was OK.
+On Wed, Aug 17, 2022 at 02:54:33AM -0400, Michael S. Tsirkin wrote:
+> On Mon, Aug 15, 2022 at 10:56:03AM -0700, Bobby Eshleman wrote:
+> > Hey everybody,
+> > 
+> > This series introduces datagrams, packet scheduling, and sk_buff usage
+> > to virtio vsock.
+> > 
+> > The usage of struct sk_buff benefits users by a) preparing vsock to use
+> > other related systems that require sk_buff, such as sockmap and qdisc,
+> > b) supporting basic congestion control via sock_alloc_send_skb, and c)
+> > reducing copying when delivering packets to TAP.
+> > 
+> > The socket layer no longer forces errors to be -ENOMEM, as typically
+> > userspace expects -EAGAIN when the sk_sndbuf threshold is reached and
+> > messages are being sent with option MSG_DONTWAIT.
+> > 
+> > The datagram work is based off previous patches by Jiang Wang[1].
+> > 
+> > The introduction of datagrams creates a transport layer fairness issue
+> > where datagrams may freely starve streams of queue access. This happens
+> > because, unlike streams, datagrams lack the transactions necessary for
+> > calculating credits and throttling.
+> > 
+> > Previous proposals introduce changes to the spec to add an additional
+> > virtqueue pair for datagrams[1]. Although this solution works, using
+> > Linux's qdisc for packet scheduling leverages already existing systems,
+> > avoids the need to change the virtio specification, and gives additional
+> > capabilities. The usage of SFQ or fq_codel, for example, may solve the
+> > transport layer starvation problem. It is easy to imagine other use
+> > cases as well. For example, services of varying importance may be
+> > assigned different priorities, and qdisc will apply appropriate
+> > priority-based scheduling. By default, the system default pfifo qdisc is
+> > used. The qdisc may be bypassed and legacy queuing is resumed by simply
+> > setting the virtio-vsock%d network device to state DOWN. This technique
+> > still allows vsock to work with zero-configuration.
 > 
-> Right, that's as I read it. It would be useful for Oliver to confirm the 
-> results.
-> 
->> So is your patch defining the optimal mapping size
->> cause the reduction to 512/512.
-> 
-> The optimal mapping size only affects specifically sas controllers, so I 
-> think that we can ignore that one for now. The reduction to 512/512 
-> comes from the change in ata_scsi_dev_config().
-> 
->> It would mean that for ATA, we need a sane
->> default mapping instead of SCSI default 1024 sectors.
-> 
-> Right
-> 
->> Now I understand your
->> proposed change using ATA_MAX_SECTORS_LBA48.
->>
->> However, that would be correct only for LBA48 capable drives.
->> ata_dev_configure() already sets dev->max_sectors correctly according to the
->> drive type, capabilities and eventual quirks. So the problem comes from the
->> libata-scsi change:
->>
->> dev->max_sectors = min(dev->max_sectors, sdev->host->max_sectors);
->>
->> when sdev->host->max_sectors is 0 (not initialized).
-> 
-> That cannot happen. If sht->max_sectors is 0, then we set 
-> shost->max_sectors at SCSI default 1024 sectors in scsi_host_alloc()
-> 
-> For my proposed change, dev->max_sectors would still be initialized in 
-> ata_dev_configure() according to drive type, etc. And it should be <= 
-> LBA48 max sectors (=65535).
-> 
-> So then in ata_scsi_dev_config():
-> 
-> dev->max_sectors = min(dev->max_sectors, sdev->host->max_sectors)
-> 
-> this only has an impact for ahci controllers if sdev->host->max_sectors 
-> was capped according to host dma dev max mapping size.
-
-Got it. I think your fix is fine then. It brings everything the defaults to what
-they were before the dma max mapping patches.
-
-> 
-> I will admit that this is not ideal. An alt approach is to change 
-> ata_scsi_dev_config() to cap the dev max_sectors only according to shost 
-> dma dev mapping limit (similar to scsi_add_host_with_dma()), but that 
-> would not work for a controller like ipr, which does have a geniune 
-> max_sectors limit (which we should respect).
-> 
-> Thanks,
-> John
-> 
-> 
->> So maybe simply changing
->> this line to:
->>
->> dev->max_sectors = min_not_zero(dev->max_sectors, sdev->host->max_sectors);
->>
->> would do the trick ? Any particular adapter driver that needs a mapping cap on
->> the adpter max mapping size can still set sdev->host->max_sectors as needed, and
->> we keep the same defaults as before when it is not set. Thoughts ? Or am I
->> missing something else ?
->>
->>
->>>> The regression may come not from commands becoming tiny, but from the fact that
->>>> after the patch, max_sectors_kb is too large,
->>> I don't think it is, but need confirmation.
->>>
->>>> causing a lot of overhead with
->>>> qemu swiotlb mapping and slowing down IO processing.
->>>> Above, it can be seen that we ed up with max_sectors_kb being 1280, which is the
->>>> default for most scsi disks (including ATA drives). That is normal. But before
->>>> that, it was 512, which likely better fits qemu swiotlb and does not generate
->>> Again, I don't think this this is the case. Need confirmation.
->>>
->>>> overhead. So the above fix will not change anything I think...
+> The basic question to answer then is this: with a net device qdisc
+> etc in the picture, how is this different from virtio net then?
+> Why do you still want to use vsock?
 > 
 
+When using virtio-net, users looking for inter-VM communication are
+required to setup bridges, TAPs, allocate IP addresses or setup DNS,
+etc... and then finally when you have a network, you can open a socket
+on an IP address and port. This is the configuration that vsock avoids.
+For vsock, we just need a CID and a port, but no network configuration.
 
--- 
-Damien Le Moal
-Western Digital Research
+This benefit still exists after introducing a netdev to vsock. The major
+added benefit is that when you have many different vsock flows in
+parallel and you are observing issues like starvation and tail latency
+that are caused by pure FIFO queuing, now there is a mechanism to fix
+those issues. You might recall such an issue discussed here[1].
+
+[1]: https://gitlab.com/vsock/vsock/-/issues/1
+
+> > In summary, this series introduces these major changes to vsock:
+> > 
+> > - virtio vsock supports datagrams
+> > - virtio vsock uses struct sk_buff instead of virtio_vsock_pkt
+> >   - Because virtio vsock uses sk_buff, it also uses sock_alloc_send_skb,
+> >     which applies the throttling threshold sk_sndbuf.
+> > - The vsock socket layer supports returning errors other than -ENOMEM.
+> >   - This is used to return -EAGAIN when the sk_sndbuf threshold is
+> >     reached.
+> > - virtio vsock uses a net_device, through which qdisc may be used.
+> >  - qdisc allows scheduling policies to be applied to vsock flows.
+> >   - Some qdiscs, like SFQ, may allow vsock to avoid transport layer congestion. That is,
+> >     it may avoid datagrams from flooding out stream flows. The benefit
+> >     to this is that additional virtqueues are not needed for datagrams.
+> >   - The net_device and qdisc is bypassed by simply setting the
+> >     net_device state to DOWN.
+> > 
+> > [1]: https://lore.kernel.org/all/20210914055440.3121004-1-jiang.wang@bytedance.com/
+> > 
+> > Bobby Eshleman (5):
+> >   vsock: replace virtio_vsock_pkt with sk_buff
+> >   vsock: return errors other than -ENOMEM to socket
+> >   vsock: add netdev to vhost/virtio vsock
+> >   virtio/vsock: add VIRTIO_VSOCK_F_DGRAM feature bit
+> >   virtio/vsock: add support for dgram
+> > 
+> > Jiang Wang (1):
+> >   vsock_test: add tests for vsock dgram
+> > 
+> >  drivers/vhost/vsock.c                   | 238 ++++----
+> >  include/linux/virtio_vsock.h            |  73 ++-
+> >  include/net/af_vsock.h                  |   2 +
+> >  include/uapi/linux/virtio_vsock.h       |   2 +
+> >  net/vmw_vsock/af_vsock.c                |  30 +-
+> >  net/vmw_vsock/hyperv_transport.c        |   2 +-
+> >  net/vmw_vsock/virtio_transport.c        | 237 +++++---
+> >  net/vmw_vsock/virtio_transport_common.c | 771 ++++++++++++++++--------
+> >  net/vmw_vsock/vmci_transport.c          |   9 +-
+> >  net/vmw_vsock/vsock_loopback.c          |  51 +-
+> >  tools/testing/vsock/util.c              | 105 ++++
+> >  tools/testing/vsock/util.h              |   4 +
+> >  tools/testing/vsock/vsock_test.c        | 195 ++++++
+> >  13 files changed, 1176 insertions(+), 543 deletions(-)
+> > 
+> > -- 
+> > 2.35.1
+> 

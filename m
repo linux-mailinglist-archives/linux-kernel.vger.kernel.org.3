@@ -2,43 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 290525958F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A055958C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234970AbiHPKtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
+        id S234478AbiHPKpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235084AbiHPKtE (ORCPT
+        with ESMTP id S235038AbiHPKox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:49:04 -0400
+        Tue, 16 Aug 2022 06:44:53 -0400
 Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC50DEB79
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:54:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B216E4330B
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:54:43 -0700 (PDT)
 Received: from dev011.ch-qa.sw.ru ([172.29.1.16])
         by relay.virtuozzo.com with esmtp (Exim 4.95)
         (envelope-from <alexander.atanasov@virtuozzo.com>)
-        id 1oNt3k-00FxfB-0V;
-        Tue, 16 Aug 2022 11:41:39 +0200
+        id 1oNt3o-00FxfB-BO;
+        Tue, 16 Aug 2022 11:41:43 +0200
 From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Nadav Amit <namit@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
         David Hildenbrand <david@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>
 Cc:     kernel@openvz.org,
         Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, linux-mm@kvack.org
-Subject: [PATCH v2 1/4] Make place for common balloon code
-Date:   Tue, 16 Aug 2022 12:41:14 +0300
-Message-Id: <20220816094117.3144881-2-alexander.atanasov@virtuozzo.com>
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v2 2/4] Enable balloon drivers to report inflated memory
+Date:   Tue, 16 Aug 2022 12:41:15 +0300
+Message-Id: <20220816094117.3144881-3-alexander.atanasov@virtuozzo.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220816094117.3144881-1-alexander.atanasov@virtuozzo.com>
 References: <20220816094117.3144881-1-alexander.atanasov@virtuozzo.com>
@@ -53,157 +45,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-File already contains code that is common along balloon
-drivers so rename it to reflect its contents.
-mm/balloon_compaction.c -> mm/balloon_common.c
+Add counters to be updated by the balloon drivers.
+Create balloon notifier to propagate changes.
 
 Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
 ---
- MAINTAINERS                                              | 4 ++--
- arch/powerpc/platforms/pseries/cmm.c                     | 2 +-
- drivers/misc/vmw_balloon.c                               | 2 +-
- drivers/virtio/virtio_balloon.c                          | 2 +-
- include/linux/{balloon_compaction.h => balloon_common.h} | 2 +-
- mm/Makefile                                              | 2 +-
- mm/{balloon_compaction.c => balloon_common.c}            | 4 ++--
- mm/migrate.c                                             | 2 +-
- mm/vmscan.c                                              | 2 +-
- 9 files changed, 11 insertions(+), 11 deletions(-)
- rename include/linux/{balloon_compaction.h => balloon_common.h} (99%)
- rename mm/{balloon_compaction.c => balloon_common.c} (99%)
+ include/linux/balloon_common.h | 18 ++++++++++++++++++
+ mm/balloon_common.c            | 34 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 52 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8a5012ba6ff9..1b94bf3eb95d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21493,8 +21493,8 @@ L:	virtualization@lists.linux-foundation.org
- S:	Maintained
- F:	drivers/virtio/virtio_balloon.c
- F:	include/uapi/linux/virtio_balloon.h
--F:	include/linux/balloon_compaction.h
--F:	mm/balloon_compaction.c
-+F:	include/linux/balloon_common.h
-+F:	mm/balloon_common.c
- 
- VIRTIO CRYPTO DRIVER
- M:	Gonglei <arei.gonglei@huawei.com>
-diff --git a/arch/powerpc/platforms/pseries/cmm.c b/arch/powerpc/platforms/pseries/cmm.c
-index 5f4037c1d7fe..3beb109c7e44 100644
---- a/arch/powerpc/platforms/pseries/cmm.c
-+++ b/arch/powerpc/platforms/pseries/cmm.c
-@@ -19,7 +19,7 @@
- #include <linux/stringify.h>
- #include <linux/swap.h>
- #include <linux/device.h>
--#include <linux/balloon_compaction.h>
-+#include <linux/balloon_common.h>
- #include <asm/firmware.h>
- #include <asm/hvcall.h>
- #include <asm/mmu.h>
-diff --git a/drivers/misc/vmw_balloon.c b/drivers/misc/vmw_balloon.c
-index 61a2be712bf7..6c6d24783548 100644
---- a/drivers/misc/vmw_balloon.c
-+++ b/drivers/misc/vmw_balloon.c
-@@ -29,7 +29,7 @@
- #include <linux/rwsem.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
--#include <linux/balloon_compaction.h>
-+#include <linux/balloon_common.h>
- #include <linux/vmw_vmci_defs.h>
- #include <linux/vmw_vmci_api.h>
- #include <asm/hypervisor.h>
-diff --git a/drivers/virtio/virtio_balloon.c b/drivers/virtio/virtio_balloon.c
-index 3f78a3a1eb75..6f69e483d98a 100644
---- a/drivers/virtio/virtio_balloon.c
-+++ b/drivers/virtio/virtio_balloon.c
-@@ -13,7 +13,7 @@
- #include <linux/delay.h>
- #include <linux/slab.h>
- #include <linux/module.h>
--#include <linux/balloon_compaction.h>
-+#include <linux/balloon_common.h>
- #include <linux/oom.h>
- #include <linux/wait.h>
- #include <linux/mm.h>
-diff --git a/include/linux/balloon_compaction.h b/include/linux/balloon_common.h
-similarity index 99%
-rename from include/linux/balloon_compaction.h
-rename to include/linux/balloon_common.h
-index 5ca2d5699620..a45e9fd76235 100644
---- a/include/linux/balloon_compaction.h
+diff --git a/include/linux/balloon_common.h b/include/linux/balloon_common.h
+index a45e9fd76235..e707f57f58da 100644
+--- a/include/linux/balloon_common.h
 +++ b/include/linux/balloon_common.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-- * include/linux/balloon_compaction.h
-+ * include/linux/balloon_common.h
-  *
-  * Common interface definitions for making balloon pages movable by compaction.
-  *
-diff --git a/mm/Makefile b/mm/Makefile
-index 9a564f836403..a3390f255b82 100644
---- a/mm/Makefile
-+++ b/mm/Makefile
-@@ -112,7 +112,7 @@ obj-$(CONFIG_ZSMALLOC)	+= zsmalloc.o
- obj-$(CONFIG_Z3FOLD)	+= z3fold.o
- obj-$(CONFIG_GENERIC_EARLY_IOREMAP) += early_ioremap.o
- obj-$(CONFIG_CMA)	+= cma.o
--obj-$(CONFIG_MEMORY_BALLOON) += balloon_compaction.o
-+obj-$(CONFIG_MEMORY_BALLOON) += balloon_common.o
- obj-$(CONFIG_PAGE_EXTENSION) += page_ext.o
- obj-$(CONFIG_PAGE_TABLE_CHECK) += page_table_check.o
- obj-$(CONFIG_CMA_DEBUGFS) += cma_debug.o
-diff --git a/mm/balloon_compaction.c b/mm/balloon_common.c
-similarity index 99%
-rename from mm/balloon_compaction.c
-rename to mm/balloon_common.c
-index 22c96fed70b5..54ed98653c78 100644
---- a/mm/balloon_compaction.c
+@@ -59,6 +59,24 @@ struct balloon_dev_info {
+ 			struct page *page, enum migrate_mode mode);
+ };
+ 
++extern atomic_long_t mem_balloon_inflated_total_kb;
++extern atomic_long_t mem_balloon_inflated_free_kb;
++
++void balloon_set_inflated_total(long inflated_kb);
++void balloon_set_inflated_free(long inflated_kb);
++
++#define BALLOON_CHANGED_TOTAL 0
++#define BALLOON_CHANGED_FREE  1
++
++extern int register_balloon_notifier(struct notifier_block *nb);
++extern void unregister_balloon_notifier(struct notifier_block *nb);
++
++#define balloon_notifier(fn, pri) ({						\
++	static struct notifier_block fn##_mem_nb __meminitdata =\
++		{ .notifier_call = fn, .priority = pri };			\
++	register_balloon_notifier(&fn##_mem_nb);				\
++})
++
+ extern struct page *balloon_page_alloc(void);
+ extern void balloon_page_enqueue(struct balloon_dev_info *b_dev_info,
+ 				 struct page *page);
+diff --git a/mm/balloon_common.c b/mm/balloon_common.c
+index 54ed98653c78..abeee6882649 100644
+--- a/mm/balloon_common.c
 +++ b/mm/balloon_common.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * mm/balloon_compaction.c
-+ * mm/balloon_common.c
-  *
-  * Common interface for making balloon pages movable by compaction.
-  *
-@@ -9,7 +9,7 @@
+@@ -9,8 +9,42 @@
  #include <linux/mm.h>
  #include <linux/slab.h>
  #include <linux/export.h>
--#include <linux/balloon_compaction.h>
-+#include <linux/balloon_common.h>
++#include <linux/notifier.h>
+ #include <linux/balloon_common.h>
  
++atomic_long_t mem_balloon_inflated_total_kb = ATOMIC_LONG_INIT(0);
++atomic_long_t mem_balloon_inflated_free_kb = ATOMIC_LONG_INIT(0);
++SRCU_NOTIFIER_HEAD_STATIC(balloon_chain);
++
++int register_balloon_notifier(struct notifier_block *nb)
++{
++	return srcu_notifier_chain_register(&balloon_chain, nb);
++}
++EXPORT_SYMBOL(register_balloon_notifier);
++
++void unregister_balloon_notifier(struct notifier_block *nb)
++{
++	srcu_notifier_chain_unregister(&balloon_chain, nb);
++}
++EXPORT_SYMBOL(unregister_balloon_notifier);
++
++static int balloon_notify(unsigned long val)
++{
++	return srcu_notifier_call_chain(&balloon_chain, val, NULL);
++}
++
++void balloon_set_inflated_total(long inflated_kb)
++{
++	atomic_long_set(&mem_balloon_inflated_total_kb, inflated_kb);
++	balloon_notify(BALLOON_CHANGED_TOTAL);
++}
++
++void balloon_set_inflated_free(long inflated_kb)
++{
++	atomic_long_set(&mem_balloon_inflated_free_kb, inflated_kb);
++	balloon_notify(BALLOON_CHANGED_FREE);
++}
++
  static void balloon_page_enqueue_one(struct balloon_dev_info *b_dev_info,
  				     struct page *page)
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 6a1597c92261..a6df467a250a 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -41,7 +41,7 @@
- #include <linux/pfn_t.h>
- #include <linux/memremap.h>
- #include <linux/userfaultfd_k.h>
--#include <linux/balloon_compaction.h>
-+#include <linux/balloon_common.h>
- #include <linux/page_idle.h>
- #include <linux/page_owner.h>
- #include <linux/sched/mm.h>
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index b2b1431352dc..4732f8c24264 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -54,7 +54,7 @@
- #include <asm/div64.h>
- 
- #include <linux/swapops.h>
--#include <linux/balloon_compaction.h>
-+#include <linux/balloon_common.h>
- #include <linux/sched/sysctl.h>
- 
- #include "internal.h"
+ {
 -- 
 2.31.1
 

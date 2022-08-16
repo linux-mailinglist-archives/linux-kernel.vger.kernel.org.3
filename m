@@ -2,131 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542D45963E6
+	by mail.lfdr.de (Postfix) with ESMTP id 0BEB55963E5
 	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:45:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236193AbiHPUoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 16:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
+        id S237179AbiHPUpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 16:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236635AbiHPUnz (ORCPT
+        with ESMTP id S237207AbiHPUol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 16:43:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122503FA22
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 13:43:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660682631;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Fxf9g37yt4QV3sYboUS8drWbHKZT6H8bVu/xJaEn0Rg=;
-        b=OnJanxmtG7pIMv5uiyCapIthtKNHB5A39pUY36vsUmny4C7lj5hGy1prJyTlGBuid+pE0x
-        fFJ5Z+XggM3tDVMbC/hjPb0On88q6UPxHMaFmuWQkw8u9avcwWN5qed/QYhwcU//f89d0R
-        p4kJCqyGsO+kH55g1pyvYerKSQoTp1M=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-640-a1GdagdWOyquF5oNJuyGoA-1; Tue, 16 Aug 2022 16:43:49 -0400
-X-MC-Unique: a1GdagdWOyquF5oNJuyGoA-1
-Received: by mail-ej1-f72.google.com with SMTP id sa33-20020a1709076d2100b0073101bdd612so2256153ejc.14
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 13:43:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Fxf9g37yt4QV3sYboUS8drWbHKZT6H8bVu/xJaEn0Rg=;
-        b=wlpiCCfCKBknJUNgt+WoGSkLmwoAA5rlEV3jy+L4Gj4cNWzT+BartnyVzBjKDrpoj+
-         JDRytWTSpD6OMy1U5OyQyl50NHkzLVlGtjpPGjTVC/7p6i4pWLLhzv60DN4+igU1EHOL
-         jV6CddNuvWs1Cky8+BVZm91TGRCIpe2NLg/6XPBDficSHrseOQAHhJsqTi5kvngNUDbD
-         fINWCB727o64jfPkmOhxI6TJD1lh8VgtS8ZLpFzya5DvdI145Rzp4eVahDwQV1L6+YsQ
-         5+010mV+xB8ZCjZYWuUXTocMB7uMiMuNIHa2Tu2FjWQKGzhK8dfimmIAkZKFuYzXMWif
-         kIcg==
-X-Gm-Message-State: ACgBeo2BCNUzF2mkxDPK9SwL7DlMMd9ElpkZVmC6pOOTr9cDmdqNFXnM
-        254zPS9MLZpm4jrbbn30QoSkuvH2lDVYgHLlCio4AMuldgw0+tCm2KI191Tn/v4GA6EQodc7x1v
-        d/cwdYrvwVs9P1KNg8dVcrEVkyN/kw1EepfnWDifn
-X-Received: by 2002:a17:907:2d12:b0:731:6a4e:ceb0 with SMTP id gs18-20020a1709072d1200b007316a4eceb0mr14858113ejc.115.1660682628499;
-        Tue, 16 Aug 2022 13:43:48 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6mQoJ2O5YQF6G2r3WkspIUVkvBOxFCch0fVBSiDl1gYE66/cPrbW4OldsDj5twWFTyEbDTfZf7egY2AUaRKbQ=
-X-Received: by 2002:a17:907:2d12:b0:731:6a4e:ceb0 with SMTP id
- gs18-20020a1709072d1200b007316a4eceb0mr14858098ejc.115.1660682628222; Tue, 16
- Aug 2022 13:43:48 -0700 (PDT)
+        Tue, 16 Aug 2022 16:44:41 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C093696EC;
+        Tue, 16 Aug 2022 13:44:36 -0700 (PDT)
+Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M6jgf5VMJz67N4d;
+        Wed, 17 Aug 2022 04:39:42 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 16 Aug 2022 22:44:34 +0200
+Received: from [10.195.244.204] (10.195.244.204) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 16 Aug 2022 21:44:33 +0100
+Message-ID: <c93e529d-b688-9910-50c4-779c2f85fbc3@huawei.com>
+Date:   Tue, 16 Aug 2022 21:44:33 +0100
 MIME-Version: 1.0
-References: <20220811103435.188481-1-david@redhat.com> <20220811103435.188481-3-david@redhat.com>
- <YvVRfSYsPOraTo6o@monkey> <20220815153549.0288a9c6@thinkpad>
- <CADFyXm7-0zXDG+ZHjft95aAAiSZh_RyAqgJw1nGsALwEL1XKiw@mail.gmail.com>
- <20220815175929.303774fd@thinkpad> <CADFyXm40iiz-xFpLK4qGgHGh5Qp+98G9qxnqC20c8qtRiKt9_A@mail.gmail.com>
- <20220815203844.43b74fd1@thinkpad> <Yvq99MmpaGJBhlt4@monkey> <20220816113359.33843f54@thinkpad>
-In-Reply-To: <20220816113359.33843f54@thinkpad>
-From:   David Hildenbrand <david@redhat.com>
-Date:   Tue, 16 Aug 2022 22:43:37 +0200
-Message-ID: <CADFyXm5m1a+ZRwp1Kejt0L4HFcVBSoSz6mG-19_65CnR7s7Q-A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] mm/hugetlb: support write-faults in shared mappings
-To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>, stable <stable@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
+ regression
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Oliver Sang <oliver.sang@intel.com>
+CC:     Christoph Hellwig <hch@lst.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Linux Memory Management List" <linux-mm@kvack.org>,
+        <linux-ide@vger.kernel.org>, <lkp@lists.01.org>, <lkp@intel.com>,
+        <ying.huang@intel.com>, <feng.tang@intel.com>,
+        <zhengjun.xing@linux.intel.com>, <fengwei.yin@intel.com>
+References: <YuzPMMnnY739Tnit@xsang-OptiPlex-9020>
+ <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
+ <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
+ <e4106ffa-3842-45c0-9756-5226cfcfa17d@opensource.wdc.com>
+ <YvXeuCAK780OuJPz@xsang-OptiPlex-9020>
+ <2e9cf5a6-c043-5ccf-e363-097c6c941891@huawei.com>
+ <f1c3d717-339d-ba2b-9775-fc0e00f57ae3@huawei.com>
+ <Yvs/w93KUkgD9f7/@xsang-OptiPlex-9020>
+ <aabf7ed8-8d4d-dc68-1b8b-c91653701def@huawei.com>
+ <43eaa104-5b09-072c-56aa-6289569b0015@opensource.wdc.com>
+ <28d6e48b-f52f-9467-8260-262504a1a1ff@huawei.com>
+ <05a48c68-33ae-10e2-e565-6c124bad93c5@opensource.wdc.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <05a48c68-33ae-10e2-e565-6c124bad93c5@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.195.244.204]
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gerald,
+On 16/08/2022 21:02, Damien Le Moal wrote:
+>> ou confirm this? Thanks!
+>>
+>> On this basis, it appears that max_hw_sectors_kb is getting capped from
+>> scsi default @ 1024 sectors by commit 0568e61225. If it were getting
+>> capped by swiotlb mapping limit then that would give us 512 sectors -
+>> this value is fixed.
+>>
+>> So for my SHT change proposal I am just trying to revert to previous
+>> behaviour in 5.19 - make max_hw_sectors_kb crazy big again.
+> I reread the entire thing and I think I got things reverted here. The perf
+> regression happens with the 512/512 settings, while the original 1280/32767
+> before your patches was OK.
 
->
-> Thanks, we were also trying to reproduce on x86, w/o success so far. But
-> I guess that matches David latest observations wrt to our exception handling
-> code on s390.
->
-> Good news is that the problem goes away when I add this simple patch, which
-> should result in proper VM_WRITE check for vma flags, before triggering a
-> FAULT_FLAG_WRITE fault:
->
-> --- a/arch/s390/mm/fault.c
-> +++ b/arch/s390/mm/fault.c
-> @@ -379,7 +379,9 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
->         flags = FAULT_FLAG_DEFAULT;
->         if (user_mode(regs))
->                 flags |= FAULT_FLAG_USER;
-> -       if (access == VM_WRITE || is_write)
-> +       if (is_write)
-> +               access = VM_WRITE;
-> +       if (access == VM_WRITE)
->                 flags |= FAULT_FLAG_WRITE;
->         mmap_read_lock(mm);
+Right, that's as I read it. It would be useful for Oliver to confirm the 
+results.
 
-That's what I had in mind, good.
+> So is your patch defining the optimal mapping size
+> cause the reduction to 512/512.
 
->
-> Still find it a bit hard to believe that this > 10 years old logic really
-> is/was broken all the time. I guess it simply did not matter for normal
-> PTE faults, probably because the common fault handling code later would
-> check itself via maybe_mkwrite(). And for hugetlb PTEs, it might not have
-> mattered before commit bcd51a3c679d.
+The optimal mapping size only affects specifically sas controllers, so I 
+think that we can ignore that one for now. The reduction to 512/512 
+comes from the change in ata_scsi_dev_config().
 
-It is akward, but maybe we never really noticed for hugetlb (not sure
-how common read-only mappings are after all).
+> It would mean that for ATA, we need a sane
+> default mapping instead of SCSI default 1024 sectors.
 
->
-> >
-> > bcd51a3c679d eliminates the copying of page tables at fork for non-anon
-> > hugetlb vmas.  So, in these tests you would likely see more pte_none()
-> > faults.
->
-> Yes, makes sense, assuming now that it actually is related to s390
-> exception handling code, not checking for VM_WRITE before triggering a
-> write fault for pte_none().
->
-> Thanks for checking! And Thanks a lot to David for finding that issue
-> in s390 exception handling code!
+Right
 
-Thanks! Looks like adding the WARN_ON_ONCE was the right decision.
+> Now I understand your
+> proposed change using ATA_MAX_SECTORS_LBA48.
+> 
+> However, that would be correct only for LBA48 capable drives.
+> ata_dev_configure() already sets dev->max_sectors correctly according to the
+> drive type, capabilities and eventual quirks. So the problem comes from the
+> libata-scsi change:
+> 
+> dev->max_sectors = min(dev->max_sectors, sdev->host->max_sectors);
+> 
+> when sdev->host->max_sectors is 0 (not initialized).
+
+That cannot happen. If sht->max_sectors is 0, then we set 
+shost->max_sectors at SCSI default 1024 sectors in scsi_host_alloc()
+
+For my proposed change, dev->max_sectors would still be initialized in 
+ata_dev_configure() according to drive type, etc. And it should be <= 
+LBA48 max sectors (=65535).
+
+So then in ata_scsi_dev_config():
+
+dev->max_sectors = min(dev->max_sectors, sdev->host->max_sectors)
+
+this only has an impact for ahci controllers if sdev->host->max_sectors 
+was capped according to host dma dev max mapping size.
+
+I will admit that this is not ideal. An alt approach is to change 
+ata_scsi_dev_config() to cap the dev max_sectors only according to shost 
+dma dev mapping limit (similar to scsi_add_host_with_dma()), but that 
+would not work for a controller like ipr, which does have a geniune 
+max_sectors limit (which we should respect).
+
+Thanks,
+John
+
+
+> So maybe simply changing
+> this line to:
+> 
+> dev->max_sectors = min_not_zero(dev->max_sectors, sdev->host->max_sectors);
+> 
+> would do the trick ? Any particular adapter driver that needs a mapping cap on
+> the adpter max mapping size can still set sdev->host->max_sectors as needed, and
+> we keep the same defaults as before when it is not set. Thoughts ? Or am I
+> missing something else ?
+> 
+> 
+>>> The regression may come not from commands becoming tiny, but from the fact that
+>>> after the patch, max_sectors_kb is too large,
+>> I don't think it is, but need confirmation.
+>>
+>>> causing a lot of overhead with
+>>> qemu swiotlb mapping and slowing down IO processing.
+>>> Above, it can be seen that we ed up with max_sectors_kb being 1280, which is the
+>>> default for most scsi disks (including ATA drives). That is normal. But before
+>>> that, it was 512, which likely better fits qemu swiotlb and does not generate
+>> Again, I don't think this this is the case. Need confirmation.
+>>
+>>> overhead. So the above fix will not change anything I think...
 

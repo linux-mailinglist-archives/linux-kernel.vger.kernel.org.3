@@ -2,117 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 991225954DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 773805954E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232449AbiHPIVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 04:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47212 "EHLO
+        id S232537AbiHPIVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 04:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232793AbiHPIUh (ORCPT
+        with ESMTP id S232813AbiHPIUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:20:37 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65A64A107;
-        Mon, 15 Aug 2022 23:04:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=SVRLcL3c7t4xux2inMx+BQpiWgYVYAAoRoR2FuDT7Po=; b=FPLQsd26E6o6WLCt+bSUPdpcHx
-        H9fzOawMmwXCUd6JIc6pq2/MNU1uf5NZ2Os9nxttup0lT0c4jxRMTQKFbNWofQ0IN0EnSWcJaszbl
-        A8a7kl5zECeBVavX2dn/B1mow7kwwxRrg42YLrY7VF9sS2PP7tK1kUwLnzcWtzURl7WrQuAv79IFO
-        H1EnwIKP7LTF6YGEZaOKj0g1ueoX8KZsKmaodtWIJuFzNkjkyg6tXxMmnVPk7UcMdVcJdsF4SgHJc
-        RZD/IEmYkCXZPZTBt1e9BPJ2ArqPF1daq3tYalwzMuWQno/XcatUU/YXa1LwAlYi5ZnOkmFcuDGGe
-        l0ygrUzQ==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oNpgs-00D70J-NI; Tue, 16 Aug 2022 06:04:38 +0000
-Message-ID: <5530ed1f-90ec-ce84-2348-80e484fa48cb@infradead.org>
-Date:   Mon, 15 Aug 2022 23:04:35 -0700
+        Tue, 16 Aug 2022 04:20:42 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9085A4A11B
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 23:04:46 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id bh13so8410443pgb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 23:04:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=quanta-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=Q+2OJPxyAh41VkQNVhVIveQFr71J1YrrJRjA24sZS6s=;
+        b=LBtmGVtAw3vAkbdCYeYLO7DRihAkgZRYcRd+blZGRm7YNgcVdGNaxzsz3tOGMGs32z
+         BC12FPIjoEAGufi88HkburDDZtqbZNXGrDrOwsE/OpEi2PnDk0ugeNCLN+hlAr8sr+TZ
+         nzHA8XUAl7nVN1GWflmzYtK05v0KsbuVtENxYSxGtQrJ0O2JToqqTZ9RRoVNBwIYjtGm
+         VW1sTXpJZgJX84bCStEfQ62b1UyvK2gi91lKgHqc3BuhkBu7gYKZ2rViKSanruavuQa/
+         EHq0kWM2U1B7bLN+ozHDJhKY01MKaO+88bBomsHgX80iXcoH1bz3sO3JYhjM02oCADTS
+         r5XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=Q+2OJPxyAh41VkQNVhVIveQFr71J1YrrJRjA24sZS6s=;
+        b=QmYSoX9Rjrxegq0kHRHLzAeVIi/bis2oXXUU2ZmHv7VQo8N0dhfywZnAjHn2UI+pGi
+         ev2hFWssModD6vpA9y6i5hKw9SrSMKXVy14GxI3quO0WD/qLl86khEb5iwEpzIM190VN
+         7vu8cUFNW4fQu1hFCW39sOy3BnQrPOM9L7g81Mwv5AEjeroNA83gJms2e4YafzPS7Tz8
+         GaVp0KpOFccOiuLC+V/j6B1IStMZ+wV2F5f4pDG/dHKBl12ftbjvCknBgbwd0fFTxGgF
+         bNYJlNuqlpizboDKo/m273AI6lUYjlFqaPLvECxd7DHrXxpKQDBbNSelRJtdRr6/Zb11
+         xNdg==
+X-Gm-Message-State: ACgBeo3T7n49cddnbpsEpyxHz5RZQXfuowEqAQtGeBCYI6ZUrBhPqINP
+        ONJvP1/QxBDfEh9EVGmI9TyCZQ==
+X-Google-Smtp-Source: AA6agR5dfOx1zMXF/vjwOZNL/T/IdfH4UimFNyngVvdR9B5C+3FuWTaFVAoB9PRN48Uyqdcm8ZDYLA==
+X-Received: by 2002:a63:8b44:0:b0:41c:df4c:7275 with SMTP id j65-20020a638b44000000b0041cdf4c7275mr17003557pge.434.1660629886100;
+        Mon, 15 Aug 2022 23:04:46 -0700 (PDT)
+Received: from sean-biuld-server.itotolink.net (1-34-200-211.hinet-ip.hinet.net. [1.34.200.211])
+        by smtp.gmail.com with ESMTPSA id r23-20020a170902be1700b001714e7608fdsm7994549pls.256.2022.08.15.23.04.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 23:04:45 -0700 (PDT)
+From:   Sean Hong <sean.hong@quanta.corp-partner.google.com>
+To:     pierre-louis.bossart@linux.intel.com, perex@perex.cz,
+        tiwai@suse.com, brent.lu@intel.com
+Cc:     cezary.rojewski@intel.com, liam.r.girdwood@linux.intel.com,
+        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
+        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
+        broonie@kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        Sean Hong <sean.hong@quanta.corp-partner.google.com>
+Subject: [PATCH] ASoC: Intel: sof_rt5682: Add support for jsl_rt5682_rt1019
+Date:   Tue, 16 Aug 2022 14:04:37 +0800
+Message-Id: <20220816060437.1115039-1-sean.hong@quanta.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] vfio-pci/zdev: require KVM to be built-in
-Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>, linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20220814215154.32112-1-rdunlap@infradead.org>
- <663c7595-1c18-043e-5f12-b0ce880b84bf@linux.ibm.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <663c7595-1c18-043e-5f12-b0ce880b84bf@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+This patch adds the driver data for rt5682 support jsl_rt5682_rt1019.
 
-On 8/15/22 02:43, Pierre Morel wrote:
-> Thank you Randy for this good catch.
-> However forcing KVM to be include statically in the kernel when using VFIO_PCI extensions is not a good solution for us I think.
-> 
-> I suggest we better do something like:
-> 
-> ----
-> 
-> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
-> index 6287a843e8bc..1733339cc4eb 100644
-> --- a/arch/s390/include/asm/kvm_host.h
-> +++ b/arch/s390/include/asm/kvm_host.h
-> @@ -1038,7 +1038,7 @@ static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
->  #define __KVM_HAVE_ARCH_VM_FREE
->  void kvm_arch_free_vm(struct kvm *kvm);
-> 
-> -#ifdef CONFIG_VFIO_PCI_ZDEV_KVM
-> +#if defined(CONFIG_VFIO_PCI_ZDEV_KVM) || defined(CONFIG_VFIO_PCI_ZDEV_KVM_MODULE)
+Signed-off-by: Sean Hong <sean.hong@quanta.corp-partner.google.com>
+---
+ sound/soc/intel/boards/sof_rt5682.c               |  9 +++++++++
+ sound/soc/intel/common/soc-acpi-intel-jsl-match.c | 12 ++++++++++++
+ 2 files changed, 21 insertions(+)
 
-This all looks good except for the line above.
-It should be:
-
-#if IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM)
-
-Thanks.
-
-
->  int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm);
->  void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev);
->  #else
-> diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
-> index f9d0c908e738..bbc375b028ef 100644
-> --- a/drivers/vfio/pci/Kconfig
-> +++ b/drivers/vfio/pci/Kconfig
-> @@ -45,9 +45,9 @@ config VFIO_PCI_IGD
->  endif
-> 
->  config VFIO_PCI_ZDEV_KVM
-> -       bool "VFIO PCI extensions for s390x KVM passthrough"
-> +       def_tristate y
-> +       prompt "VFIO PCI extensions for s390x KVM passthrough"
->         depends on S390 && KVM
-> -       default y
->         help
->           Support s390x-specific extensions to enable support for enhancements
->           to KVM passthrough capabilities, such as interpretive execution of
-> 
-> ----
-> 
-> What do you think? It seems to me it solves the problem, what do you think?
-> 
-> Regards,
-> Pierre
-
-
+diff --git a/sound/soc/intel/boards/sof_rt5682.c b/sound/soc/intel/boards/sof_rt5682.c
+index 045965312..3a840f3a9 100644
+--- a/sound/soc/intel/boards/sof_rt5682.c
++++ b/sound/soc/intel/boards/sof_rt5682.c
+@@ -1100,6 +1100,15 @@ static const struct platform_device_id board_ids[] = {
+ 					SOF_RT5682_SSP_AMP(1) |
+ 					SOF_RT5682_NUM_HDMIDEV(4)),
+ 	},
++	{
++		.name = "jsl_rt5682_rt1019",
++		.driver_data = (kernel_ulong_t)(SOF_RT5682_MCLK_EN |
++					SOF_RT5682_MCLK_24MHZ |
++					SOF_RT5682_SSP_CODEC(0) |
++					SOF_SPEAKER_AMP_PRESENT |
++					SOF_RT1019_SPEAKER_AMP_PRESENT |
++					SOF_RT5682_SSP_AMP(1)),
++	},
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(platform, board_ids);
+diff --git a/sound/soc/intel/common/soc-acpi-intel-jsl-match.c b/sound/soc/intel/common/soc-acpi-intel-jsl-match.c
+index b95c4b2cd..e374bf163 100644
+--- a/sound/soc/intel/common/soc-acpi-intel-jsl-match.c
++++ b/sound/soc/intel/common/soc-acpi-intel-jsl-match.c
+@@ -29,6 +29,11 @@ static const struct snd_soc_acpi_codecs rt1015p_spk = {
+ 	.codecs = {"RTL1015"}
+ };
+ 
++static struct snd_soc_acpi_codecs rt1019p_spk = {
++	.num_codecs = 1,
++	.codecs = {"RTL1019"}
++};
++
+ static const struct snd_soc_acpi_codecs mx98360a_spk = {
+ 	.num_codecs = 1,
+ 	.codecs = {"MX98360A"}
+@@ -78,6 +83,13 @@ struct snd_soc_acpi_mach snd_soc_acpi_intel_jsl_machines[] = {
+ 		.quirk_data = &mx98360a_spk,
+ 		.sof_tplg_filename = "sof-jsl-rt5682-mx98360a.tplg",
+ 	},
++	{
++		.comp_ids = &rt5682_rt5682s_hp,
++		.drv_name = "jsl_rt5682_rt1019",
++		.machine_quirk = snd_soc_acpi_codec_list,
++		.quirk_data = &rt1019p_spk,
++		.sof_tplg_filename = "sof-jsl-rt5682-rt1019.tplg",
++	},
+ 	{
+ 		.id = "10134242",
+ 		.drv_name = "jsl_cs4242_mx98360a",
 -- 
-~Randy
+2.25.1
+

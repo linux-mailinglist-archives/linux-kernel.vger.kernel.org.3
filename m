@@ -2,99 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9245954C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4AB5954C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232552AbiHPION (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 04:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S231481AbiHPIOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 04:14:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbiHPINd (ORCPT
+        with ESMTP id S232505AbiHPINa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:13:33 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED41DBC820
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 23:23:45 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oNpzA-0008La-5A; Tue, 16 Aug 2022 08:23:32 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oNpz8-0007Um-9l; Tue, 16 Aug 2022 08:23:30 +0200
-Date:   Tue, 16 Aug 2022 08:23:30 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     "Alice Guo (OSS)" <alice.guo@oss.nxp.com>
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com, kernel@pengutronix.de,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 2/7] watchdog: imx7ulp: Add explict memory barrier for
- unlock sequence
-Message-ID: <20220816062330.z2fvurteg337krw2@pengutronix.de>
-References: <20220816043643.26569-1-alice.guo@oss.nxp.com>
- <20220816043643.26569-3-alice.guo@oss.nxp.com>
+        Tue, 16 Aug 2022 04:13:30 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B0969F60;
+        Mon, 15 Aug 2022 23:24:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5mwKLMlqlsmYbtuyi4aXzonUQ8/kmoqLmUhmFoodlO8=; b=GkbwgdirZZUpz61FCNvNhgX3h3
+        DKSv0OCJl9yp0v8E0fujD4t5nvp2H1W2rgPEr91bf9OgOjMFA61W0Sh7UFRD04UmFW7noRpyBv6os
+        xyjJ7UFbttn0qzhLBJvUuU0ZVpF6bmTjai84VJ9G3D3kKMx1EavmJczinX87urxPcx5dviIoTmANa
+        2S+1ftsCuZ5QcH3nVcKYt+KWXZU/x1cOeRmivadO2KmvkENapsnz2CpUcpLKqDSPVZTFtLkP/EUEV
+        V9Cc1sOmUCs0jEWRFgK2Uny39YVOQcAt/aVzyAA3FZnoiPPSR5w77IPnhBYjPnGDvOP5LOzKM6TpS
+        nCk9byzQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oNpzt-004wki-P2;
+        Tue, 16 Aug 2022 06:24:17 +0000
+Date:   Tue, 16 Aug 2022 07:24:17 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Greg Ungerer <gerg@linux-m68k.org>
+Cc:     Xin Gao <gaoxin@cdjrlc.com>, geert@linux-m68k.org,
+        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] m68k: Complete variable type
+Message-ID: <Yvs4EUfVUdOgEW4f@ZenIV>
+References: <20220815194806.3487-1-gaoxin@cdjrlc.com>
+ <4ae72d0b-b197-f9d8-5cbe-ce7cfaf3affc@linux-m68k.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220816043643.26569-3-alice.guo@oss.nxp.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <4ae72d0b-b197-f9d8-5cbe-ce7cfaf3affc@linux-m68k.org>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-08-16, Alice Guo (OSS) wrote:
-> From: Jacky Bai <ping.bai@nxp.com>
+On Tue, Aug 16, 2022 at 09:37:19AM +1000, Greg Ungerer wrote:
+> On 16/8/22 05:48, Xin Gao wrote:
+> > @@ -169,7 +169,7 @@ void q40_sched_init (void)
+> >    *
+> >   */
+> > -struct IRQ_TABLE{ unsigned int mask; int irq ;};
+> > +struct IRQ_TABLE{ unsigned int mask; int irq };
+> >   #if 0
+> >   static struct IRQ_TABLE iirqs[]={
+> >     {Q40_IRQ_FRAME_MASK,Q40_IRQ_FRAME},
 > 
-> Add explict memory barrier for the wdog unlock sequence.
+> This last change doesn't match the commit message.
+> It should be a separate patch.
 
-Did you inspected any failures? It's not enough to say what you did, you
-need to specify the why as well.
+	The last change is not a valid C.  Never had been.
+In C semicolon is *NOT* a separator - it's a part of declaration.
 
-Regards,
-  Marco
-
-
-> 
-> Suggested-by: Ye Li <ye.li@nxp.com>
-> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
-> Signed-off-by: Alice Guo <alice.guo@nxp.com>
-> Reviewed-by: Ye Li <ye.li@nxp.com>
-> ---
->  drivers/watchdog/imx7ulp_wdt.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/watchdog/imx7ulp_wdt.c b/drivers/watchdog/imx7ulp_wdt.c
-> index 014f497ea0dc..b8ac0cb04d2f 100644
-> --- a/drivers/watchdog/imx7ulp_wdt.c
-> +++ b/drivers/watchdog/imx7ulp_wdt.c
-> @@ -179,9 +179,13 @@ static int imx7ulp_wdt_init(void __iomem *base, unsigned int timeout)
->  	int ret;
->  
->  	local_irq_disable();
-> +
-> +	mb();
->  	/* unlock the wdog for reconfiguration */
->  	writel_relaxed(UNLOCK_SEQ0, base + WDOG_CNT);
->  	writel_relaxed(UNLOCK_SEQ1, base + WDOG_CNT);
-> +	mb();
-> +
->  	ret = imx7ulp_wdt_wait(base, WDOG_CS_ULK);
->  	if (ret)
->  		goto init_out;
-> -- 
-> 2.17.1
-> 
-> 
-> 
+-- 
+improve the kernel quality - git rm scripts/checkpatch.pl

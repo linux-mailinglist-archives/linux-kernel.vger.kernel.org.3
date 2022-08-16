@@ -2,160 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28CE65964BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 23:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A0075964CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 23:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236381AbiHPVh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 17:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
+        id S237659AbiHPVkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 17:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233550AbiHPVh0 (ORCPT
+        with ESMTP id S236666AbiHPVk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 17:37:26 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C8F8B985
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 14:37:22 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id t3so2498178ply.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 14:37:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=thSDw69OBYs6EfsBdSFpUoSc0SPob+6FERoL5av+zQ8=;
-        b=hgYGQ6fvQu+WmlcJoxSVdZtZBZc1WrNZZiVOS8gGyW9Fj7+b54VWzgoveaM8H55EGT
-         Hi6ZxkNJP9CCc+Q+PD1ZeDBtBQs1AXMVbmKSNH8/rqnK8q6CKLZAJvPLpEmK99wH/uHO
-         DikuwLg3JVF8zVA6a/HZ3foNxoy8pV7peh+3sUS2iGTL9el2pkBTrCoBP3QmtvIiTp2y
-         mZ15BjAUsseUX/dhzL4Kgfzz0en2pYdudeiBpzsxzOeENv11LBOs0VZhoN9qxAplHllV
-         BI9OLR8h/C4l5rLMPIJdJiJNae9ZGwDTQvdwE7BvcFTQTovGHNRp5z3upjhtlUgusILu
-         XAOw==
+        Tue, 16 Aug 2022 17:40:26 -0400
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5950674E19;
+        Tue, 16 Aug 2022 14:40:24 -0700 (PDT)
+Received: by mail-qk1-f173.google.com with SMTP id n21so9162981qkk.3;
+        Tue, 16 Aug 2022 14:40:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=thSDw69OBYs6EfsBdSFpUoSc0SPob+6FERoL5av+zQ8=;
-        b=5C5P60PCrKrFP3uP9njLzq/nbwvxZUvG6KZiGM9wCWSG7oA+/CrFsw/PaAWnrKo+W1
-         55NGl4omTnt/UTrKCjVo6cgPNqqBBl52IosGb8ooYpGSifonzNWVxoHqGq0em8tvRy5I
-         jONUz09sK4GougMqINDWtE4OISR8C8PYSIaNJLr/MiIw5IW/wIYbPhwNRjaZ/rw+F5Vs
-         YqCyyhy31dgoIowzUCy47JEzEtJWwvtT8ULGIDx1FG3Sh+ReyCZBnN8QD/9/oJ7h4stv
-         3PScmaKBYehrmS0JIk+T9yX4otys7vdxQkAC/Ir1ap6gP4nBhqObmLaNfiGWk0FxqVkm
-         jHoA==
-X-Gm-Message-State: ACgBeo2awmwaP0TAYYtLDV4D+Iyu054CAiwl/wBjIebGcfxLbGon0tHK
-        aefsznHhD4ydpATIMQvK4egRvw==
-X-Google-Smtp-Source: AA6agR5jgV99sVVYGTK+5Fsy8W0ABW7Jmij59m/Rs9vKbUbYddLcjeBMZRIs7a8DkUgNDppn7vlHmQ==
-X-Received: by 2002:a17:902:da92:b0:16e:f4a4:9f93 with SMTP id j18-20020a170902da9200b0016ef4a49f93mr23641439plx.27.1660685841828;
-        Tue, 16 Aug 2022 14:37:21 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id e19-20020a17090a4a1300b001f23db09351sm5082pjh.46.2022.08.16.14.37.21
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=OFB+vwmFlMkdVZ/s3bOlcrdQ4LPF6bvFIAzYn5YHwNY=;
+        b=EnDfbsKJaP+d1KRnlYL77BU3Zy5ZiFNGu+gvx3abe9Jrh9lJP4Rxztj32WzA/YFbsa
+         ScrGh++vYTDlsti6GcT1zFf7k5YEglO2Hc8EZ0kjBTJ9Ulp1oJGnz4MoSE3oWu7e+qmX
+         7viTkp4izlmp2pxyYcbdX0v3c5k40O5kG4eHCyB+rqvggLgMt8ta3XdnfWaZDb94fefU
+         RE1Cxa5T+7gM69JrXsD9g6QPcVnTGjjkmHxd/Jo6/mLAHcpt9qLVnIw5D2pPmX6fE5kA
+         NKryUQwdotsQOF/lpGbgz8X9AtDVkNQ64i4d2tIIwv3eYhR1+ItSOX0eifLwBG45R6Z9
+         jGSg==
+X-Gm-Message-State: ACgBeo0xjt5E2pa1VjzArhtnh8tFDttttRb8uMsJttuB6J11CuKMV6yW
+        2jwocqanCQBRRAxpwP3C5eQq4dAFKEIFGcOr
+X-Google-Smtp-Source: AA6agR4vvHHI+nXguuQhR5xp//MAHKz9RZ36QS2CX4onFjNpwreJWXlVrI2q6gClSAmuKS+SWLiHNg==
+X-Received: by 2002:a05:620a:4441:b0:6bb:6034:f1d4 with SMTP id w1-20020a05620a444100b006bb6034f1d4mr3791255qkp.451.1660686023322;
+        Tue, 16 Aug 2022 14:40:23 -0700 (PDT)
+Received: from maniforge.DHCP.thefacebook.com ([2620:10d:c091:480::a5ed])
+        by smtp.gmail.com with ESMTPSA id br20-20020a05620a461400b006b8619a67f4sm2454118qkb.34.2022.08.16.14.40.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 14:37:21 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 21:37:17 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Dr. David Alan Gilbert (git)" <dgilbert@redhat.com>
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, tglx@linutronix.de,
-        leobras@redhat.com, linux-kernel@vger.kernel.org, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org
-Subject: Re: [PATCH] KVM: x86: Always enable legacy fp/sse
-Message-ID: <YvwODUu/rdzjzDjk@google.com>
-References: <20220816175936.23238-1-dgilbert@redhat.com>
+        Tue, 16 Aug 2022 14:40:23 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 16:39:59 -0500
+From:   David Vernet <void@manifault.com>
+To:     Hao Luo <haoluo@google.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        jolsa@kernel.org, tj@kernel.org, joannelkoong@gmail.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] bpf: Add user-space-publisher ringbuffer map type
+Message-ID: <YvwOr11K4VjNsNzJ@maniforge.DHCP.thefacebook.com>
+References: <20220808155248.2475981-1-void@manifault.com>
+ <CA+khW7iuENZHvbyWUkq1T1ieV9Yz+MJyRs=7Kd6N59kPTjz7Rg@mail.gmail.com>
+ <20220810011510.c3chrli27e6ebftt@maniforge>
+ <CA+khW7iBeAW9tzuZqVaafcAFQZhNwjdEBwE8C-zAaq8gkyujFQ@mail.gmail.com>
+ <YvuzNaam90n4AJcm@maniforge.dhcp.thefacebook.com>
+ <CA+khW7gXXEtRg-m5NY16PG1hCMJb2-Bnfrp7rkedAz8JHC5HWA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220816175936.23238-1-dgilbert@redhat.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CA+khW7gXXEtRg-m5NY16PG1hCMJb2-Bnfrp7rkedAz8JHC5HWA@mail.gmail.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022, Dr. David Alan Gilbert (git) wrote:
-> From: "Dr. David Alan Gilbert" <dgilbert@redhat.com>
+On Tue, Aug 16, 2022 at 10:01:38AM -0700, Hao Luo wrote:
+> On Tue, Aug 16, 2022 at 8:10 AM David Vernet <void@manifault.com> wrote:
+> >
+> > On Mon, Aug 15, 2022 at 02:13:13PM -0700, Hao Luo wrote:
+> > > >
+> > > > Iters allow userspace to kick the kernel, but IMO they're meant to enable
+> > > > data extraction from the kernel, and dumping kernel data into user-space.
+> > >
+> > > Not necessarily extracting data and dumping data. It could be used to
+> > > do operations on a set of objects, the operation could be
+> > > notification. Iterating and notifying are orthogonal IMHO.
+> > >
+> > > > What I'm proposing is a more generalizable way of driving logic in the
+> > > > kernel from user-space.
+> > > > Does that make sense? Looking forward to hearing your thoughts.
+> > >
+> > > Yes, sort of. I see the difference between iter and the proposed
+> > > interface. But I am not clear about the motivation of a new APis for
+> > > kicking callbacks from userspace. I guess maybe it will become clear,
+> > > when you publish a concerte RFC of that interface and integrates with
+> > > your userspace publisher.
+> >
+> > Fair enough -- let me remove this from the cover letter in future
+> > versions of the patch-set. To your point, there's probably little to be
+> > gained in debating the merits of adding such APIs until there's a
+> > concrete use-case.
+> >
 > 
-> A live migration under qemu is currently failing when the source
-> host is ~Nehalem era (pre-xsave) and the destination is much newer,
-> (configured with a guest CPU type of Nehalem).
-> QEMU always calls kvm_put_xsave, even on this combination because
-> KVM_CAP_CHECK_EXTENSION_VM always returns true for KVM_CAP_XSAVE.
-> 
-> When QEMU calls kvm_put_xsave it's rejected by
->    fpu_copy_uabi_to_guest_fpstate->
->      copy_uabi_to_xstate->
->        validate_user_xstate_header
-> 
-> when the validate checks the loaded xfeatures against
-> user_xfeatures, which it finds to be 0.
-> 
-> I think our initialisation of user_xfeatures is being
-> too strict here, and we should always allow the base FP/SSE.
-> 
-> Fixes: ad856280ddea ("x86/kvm/fpu: Limit guest user_xfeatures to supported bits of XCR0")
-> bz: https://bugzilla.redhat.com/show_bug.cgi?id=2079311
-> 
-> Signed-off-by: Dr. David Alan Gilbert <dgilbert@redhat.com>
-> ---
->  arch/x86/kvm/cpuid.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index de6d44e07e34..3b2319cecfd1 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -298,7 +298,8 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
->  	guest_supported_xcr0 =
->  		cpuid_get_supported_xcr0(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent);
->  
-> -	vcpu->arch.guest_fpu.fpstate->user_xfeatures = guest_supported_xcr0;
-> +	vcpu->arch.guest_fpu.fpstate->user_xfeatures = guest_supported_xcr0 |
-> +		XFEATURE_MASK_FPSSE;
+> Yep, sounds good. I don't mean to debate :) I would like to help. If
+> we could build on top of existing infra and make improvements, IMHO it
+> would be easier to maintain. Anyway, I'm looking forward to your
+> proposed APIs.
 
-I don't think this is correct.  This will allow the guest to set the SSE bit
-even when XSAVE isn't supported due to kvm_guest_supported_xcr0() returning
-user_xfeatures.
-
-  static inline u64 kvm_guest_supported_xcr0(struct kvm_vcpu *vcpu)
-  {
-	return vcpu->arch.guest_fpu.fpstate->user_xfeatures;
-  }
-
-I believe the right place to fix this is in validate_user_xstate_header().  It's
-reachable if and only if XSAVE is supported in the host, and when XSAVE is _not_
-supported, the kernel unconditionally allows FP+SSE.  So it follows that the kernel
-should also allow FP+SSE when using XSAVE too.  That would also align the logic
-with fpu_copy_guest_fpstate_to_uabi(), which fordces the FPSSE flags.  Ditto for
-the non-KVM save_xstate_epilog().
-
-Aha!  And fpu__init_system_xstate() ensure the host supports FP+SSE when XSAVE
-is enabled (knew their had to be a sanity check somewhere).
-
----
- arch/x86/kernel/fpu/xstate.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index c8340156bfd2..83b9a9653d47 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -399,8 +399,13 @@ int xfeature_size(int xfeature_nr)
- static int validate_user_xstate_header(const struct xstate_header *hdr,
- 				       struct fpstate *fpstate)
- {
--	/* No unknown or supervisor features may be set */
--	if (hdr->xfeatures & ~fpstate->user_xfeatures)
-+	/*
-+	 * No unknown or supervisor features may be set.  Userspace is always
-+	 * allowed to restore FP+SSE state (XSAVE/XRSTOR are used by the kernel
-+	 * if and only if FP+SSE are supported in xstate).
-+	 */
-+	if (hdr->xfeatures & ~fpstate->user_xfeatures &
-+	    ~(XFEATURE_MASK_FP | XFEATURE_MASK_SSE))
- 		return -EINVAL;
-
- 	/* Userspace must use the uncompacted format */
-
-base-commit: de3d415edca23831c5d1f24f10c74a715af7efdb
---
-
+Don't worry, I did not take it that you were debating. I very much
+appreciate your thoughts and help. If and when I send out that RFC
+patchset, I'll be sure to cc you (if not reach out beforehand as well to
+discuss).

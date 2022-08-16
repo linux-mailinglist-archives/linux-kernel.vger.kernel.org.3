@@ -2,438 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7471859546A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A53595462
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231859AbiHPID0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 04:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56630 "EHLO
+        id S230307AbiHPIC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 04:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiHPICu (ORCPT
+        with ESMTP id S230480AbiHPIB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:02:50 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A20106510;
-        Mon, 15 Aug 2022 22:24:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
-         references;
-        bh=EAvLzQGnwaprdwx+8VpcNZtCVqrzSKYC6sVuWTcnjPg=;
-        b=Nh4qIiKMujYPjDl6BnMpadw5c3vABesoc/qfg5U3m5FK1ynaLm/GU5mIBaTKDw92d2r7nzl1l2kvI
-         VqWd7ghpwPVRP/uXfnxvV4/0xkbybtrZD2xrtS7V2QW7nwLOKd1kMIXVoMP5JFtdZlshcnic3J54PK
-         Yqj+Ljt+V65TNxnz8Mo86PMAx4reky4IJyDIdGt2wfKvSzd4UeGFBBPnbHw3+QC/L4z2j53DW76Sgc
-         62VIz9ki1c83BaGzFQBdnAtF+RA0V35++2qO2ipW7LixEE0utU8Ke6fBlCWECCMsqlECyX/D9SaG0q
-         5YqaY6bYdLvdUT5OkAXCAOEt6IQFk3g==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000011,0.034197)], BW: [Enabled, t: (0.000016,0.000001)], RTDA: [Enabled, t: (0.077507), Hit: No, Details: v2.41.0; Id: 15.52kb6b.1gaihodap.1uep; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from x260 ([92.100.85.134])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Tue, 16 Aug 2022 08:24:23 +0300
-Date:   Tue, 16 Aug 2022 07:58:41 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, dg@emlix.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, system@metrotek.ru
-Subject: Re: [PATCH v6 1/2] fpga: ecp5-spi: add Lattice ECP5 FPGA manager
-Message-ID: <20220816045841.irhr5vigemdqknaw@x260>
-References: <20220815132157.8083-1-i.bornyakov@metrotek.ru>
- <20220815132157.8083-2-i.bornyakov@metrotek.ru>
- <Yvr6SY5WGXlYiLig@yilunxu-OptiPlex-7050>
+        Tue, 16 Aug 2022 04:01:58 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F313C9EBE
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:22:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660627335; x=1692163335;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=K8+ZieLx4LUwarMhkki7W5XlUpQB1fSOMaMTl6ZlIKA=;
+  b=mPlncjHx3Wi4JSD+AGSA0nN1aoo6SiJVrnkRmK2i4+R+P/5ZS/ilmGh3
+   U3mQSI6XHflolIhMOpHii6EliLiwJS4rd4NJ8zKMJXqlOsVMpnKjWT5QO
+   dxGTPgcZEiGIES0DMyz2vDz7pEDvJ41zOucExXXxXQ54F+3rP3gC1lQY3
+   dxDhS8aIVEO3ZR0nyJajviwTO3krrLENowzAqdZgOe/sWJQLhnNzIz2/m
+   RcSvr3Ii/8RcePn4Xt7/rFWxotr0x6JUM5tmIPphM40oGJSJyZYHu+9hj
+   Nd6bVicpZto2R48nMU8bTRrWe2mw+ZkO1dALKzn1RXIqDEesBMioH/SQU
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="293400780"
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="293400780"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 22:22:14 -0700
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="583158661"
+Received: from rongch2-desk.sh.intel.com (HELO localhost) ([10.239.159.175])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 22:22:13 -0700
+Date:   Tue, 16 Aug 2022 13:22:11 +0800
+From:   kernel test robot <rong.a.chen@intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [broonie-misc:arm64-sysreg-gen-4 4/28]
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c:153:50: error: use of
+ undeclared identifier 'ID_AA64MMFR0_PARANGE_SHIFT'
+Message-ID: <Yvspg7zU0Mb8xyah@rongch2-desk2>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yvr6SY5WGXlYiLig@yilunxu-OptiPlex-7050>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 10:00:41AM +0800, Xu Yilun wrote:
-> On 2022-08-15 at 16:21:56 +0300, Ivan Bornyakov wrote:
-> > Add support to the FPGA manager for programming Lattice ECP5 FPGA over
-> > slave SPI interface with .bit formatted uncompressed bitstream image.
-> 
-> Not sure if something is missed.
-> 
-> https://lore.kernel.org/all/20220729145757.GA2601292@yilunxu-OptiPlex-7050/
-> 
-> I was considering if a generic driver for lattice slave SPI sysCONFIG
-> interface could be introduced. From machxo2 & ecp5 Programming Usage
-> Guide, or others in this series, they basically use the same reconfigure
-> interface & protocol.
-> 
-> Thanks,
-> Yilun
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git arm64-sysreg-gen-4
+head:   36985fd29b63e897332d6d831d3aa03ea8722f3c
+commit: e520c3303ffbf18b004d7cc16d60141def9bf675 [4/28] arm64/sysreg: Add _EL1 into ID_AA64MMFR0_EL1 definition names
+config: arm64-randconfig-r022-20220815 (https://download.01.org/0day-ci/archive/20220816/202208161156.9HEoSNJb-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git/commit/?id=e520c3303ffbf18b004d7cc16d60141def9bf675
+        git remote add broonie-misc https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git
+        git fetch --no-tags broonie-misc arm64-sysreg-gen-4
+        git checkout e520c3303ffbf18b004d7cc16d60141def9bf675
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/iommu/arm/arm-smmu-v3/
 
-I only have HW with ECP5, can't vouch for the rest.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > 
-> > Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> > ---
-> >  drivers/fpga/Kconfig    |   7 +
-> >  drivers/fpga/Makefile   |   1 +
-> >  drivers/fpga/ecp5-spi.c | 311 ++++++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 319 insertions(+)
-> >  create mode 100644 drivers/fpga/ecp5-spi.c
-> > 
-> > diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> > index 6c416955da53..920277a08ed9 100644
-> > --- a/drivers/fpga/Kconfig
-> > +++ b/drivers/fpga/Kconfig
-> > @@ -263,4 +263,11 @@ config FPGA_MGR_MICROCHIP_SPI
-> >  	  programming over slave SPI interface with .dat formatted
-> >  	  bitstream image.
-> >  
-> > +config FPGA_MGR_ECP5_SPI
-> > +	tristate "Lattice ECP5 SPI FPGA manager"
-> > +	depends on SPI
-> > +	help
-> > +	  FPGA manager driver support for Lattice ECP5 programming over slave
-> > +	  SPI interface with .bit formatted uncompressed bitstream image.
-> > +
-> >  endif # FPGA
-> > diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-> > index 42ae8b58abce..17c7a3c4b385 100644
-> > --- a/drivers/fpga/Makefile
-> > +++ b/drivers/fpga/Makefile
-> > @@ -20,6 +20,7 @@ obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
-> >  obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
-> >  obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)	+= versal-fpga.o
-> >  obj-$(CONFIG_FPGA_MGR_MICROCHIP_SPI)	+= microchip-spi.o
-> > +obj-$(CONFIG_FPGA_MGR_ECP5_SPI)		+= ecp5-spi.o
-> >  obj-$(CONFIG_ALTERA_PR_IP_CORE)		+= altera-pr-ip-core.o
-> >  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)	+= altera-pr-ip-core-plat.o
-> >  
-> > diff --git a/drivers/fpga/ecp5-spi.c b/drivers/fpga/ecp5-spi.c
-> > new file mode 100644
-> > index 000000000000..aa0dd10823a3
-> > --- /dev/null
-> > +++ b/drivers/fpga/ecp5-spi.c
-> > @@ -0,0 +1,311 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Lattice ECP5 FPGA programming over slave SPI interface.
-> > + */
-> > +
-> > +#include <linux/delay.h>
-> > +#include <linux/fpga/fpga-mgr.h>
-> > +#include <linux/spi/spi.h>
-> > +
-> > +#define	ECP5_SPI_MAX_SPEED_HZ		60000000
-> > +
-> > +#define	ECP5_SPI_ISC_ENABLE		{0xC6, 0x00, 0x00, 0x00}
-> > +#define	ECP5_SPI_ISC_DISABLE		{0x26, 0x00, 0x00, 0x00}
-> > +#define	ECP5_SPI_ISC_ERASE		{0x0E, 0x01, 0x00, 0x00}
-> > +#define	ECP5_SPI_LSC_INIT_ADDR		{0x46, 0x00, 0x00, 0x00}
-> > +#define	ECP5_SPI_LSC_BITSTREAM_BURST	{0x7a, 0x00, 0x00, 0x00}
-> > +#define	ECP5_SPI_LSC_CHECK_BUSY		{0xF0, 0x00, 0x00, 0x00}
-> > +
-> > +#define ECP5_POLL_RETRIES		100000
-> > +
-> > +struct ecp5_priv {
-> > +	struct gpio_desc *program;
-> > +	struct gpio_desc *init;
-> > +	struct gpio_desc *done;
-> > +	struct spi_device *spi;
-> > +};
-> > +
-> > +static enum fpga_mgr_states ecp5_ops_state(struct fpga_manager *mgr)
-> > +{
-> > +	struct ecp5_priv *priv = mgr->priv;
-> > +
-> > +	return gpiod_get_value(priv->done) ? FPGA_MGR_STATE_OPERATING :
-> > +					     FPGA_MGR_STATE_UNKNOWN;
-> > +}
-> > +
-> > +static int ecp5_poll_busy(struct spi_device *spi)
-> > +{
-> > +	const u8 lsc_check_busy[] = ECP5_SPI_LSC_CHECK_BUSY;
-> > +	int ret, retries = ECP5_POLL_RETRIES;
-> > +	struct spi_transfer xfers[2] = { 0 };
-> > +	struct spi_message msg;
-> > +	u8 busy;
-> > +
-> > +	xfers[0].tx_buf = lsc_check_busy;
-> > +	xfers[0].len = sizeof(lsc_check_busy);
-> > +	xfers[1].rx_buf = &busy;
-> > +	xfers[1].len = sizeof(busy);
-> > +
-> > +	while (retries--) {
-> > +		spi_message_init_with_transfers(&msg, xfers, ARRAY_SIZE(xfers));
-> > +		ret = spi_sync_locked(spi, &msg);
-> > +		if (ret)
-> > +			return ret;
-> > +
-> > +		if (!busy)
-> > +			return 0;
-> > +
-> > +		usleep_range(50, 100);
-> > +	}
-> > +
-> > +	return -EBUSY;
-> > +}
-> > +
-> > +static int ecp5_poll_gpio(struct gpio_desc *gpio, bool is_active)
-> > +{
-> > +	int value, retries = ECP5_POLL_RETRIES;
-> > +
-> > +	while (retries--) {
-> > +		value = gpiod_get_value(gpio);
-> > +		if (value < 0)
-> > +			return value;
-> > +
-> > +		if ((!is_active && !value) || (is_active && value))
-> > +			return 0;
-> > +
-> > +		ndelay(10);
-> > +	}
-> > +
-> > +	return -EFAULT;
-> > +}
-> > +
-> > +static int ecp5_ops_write_init(struct fpga_manager *mgr,
-> > +			       struct fpga_image_info *info,
-> > +			       const char *buf, size_t count)
-> > +{
-> > +	const u8 lsc_bitstream_burst[] = ECP5_SPI_LSC_BITSTREAM_BURST;
-> > +	const u8 lsc_init_addr[] = ECP5_SPI_LSC_INIT_ADDR;
-> > +	const u8 isc_enable[] = ECP5_SPI_ISC_ENABLE;
-> > +	const u8 isc_erase[] = ECP5_SPI_ISC_ERASE;
-> > +	struct ecp5_priv *priv = mgr->priv;
-> > +	struct spi_device *spi = priv->spi;
-> > +	struct device *dev = &mgr->dev;
-> > +	struct spi_transfer isc_xfers[] = {
-> > +		{
-> > +			.tx_buf = isc_enable,
-> > +			.len = sizeof(isc_enable),
-> > +			.cs_change = 1,
-> > +		}, {
-> > +			.tx_buf = isc_erase,
-> > +			.len = sizeof(isc_erase),
-> > +		},
-> > +	};
-> > +	struct spi_transfer lsc_xfers[] = {
-> > +		{
-> > +			.tx_buf = lsc_init_addr,
-> > +			.len = sizeof(lsc_init_addr),
-> > +			.cs_change = 1,
-> > +		}, {
-> > +			.tx_buf = lsc_bitstream_burst,
-> > +			.len = sizeof(lsc_bitstream_burst),
-> > +			.cs_change = 1,
-> > +		},
-> > +	};
-> > +	struct spi_message msg;
-> > +	int ret;
-> > +
-> > +	if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
-> > +		dev_err(dev, "Partial reconfiguration is not supported\n");
-> > +		return -EOPNOTSUPP;
-> > +	}
-> > +
-> > +	/* Enter init mode */
-> > +	gpiod_set_value(priv->program, 1);
-> > +
-> > +	ret = ecp5_poll_gpio(priv->init, true);
-> > +	if (!ret)
-> > +		ret = ecp5_poll_gpio(priv->done, false);
-> > +
-> > +	if (ret) {
-> > +		dev_err(dev, "Failed to go to initialization mode\n");
-> > +		return ret;
-> > +	}
-> > +
-> > +	/* Enter program mode */
-> > +	gpiod_set_value(priv->program, 0);
-> > +
-> > +	ret = ecp5_poll_gpio(priv->init, false);
-> > +	if (ret) {
-> > +		dev_err(dev, "Failed to go to program mode\n");
-> > +		return ret;
-> > +	}
-> > +
-> > +	/*
-> > +	 * Lock SPI bus for exclusive usage until FPGA programming is done.
-> > +	 * SPI bus will be released in ecp5_ops_write_complete() or on error.
-> > +	 */
-> > +	spi_bus_lock(spi->controller);
-> > +
-> > +	/* Enter ISC mode */
-> > +	spi_message_init_with_transfers(&msg, isc_xfers, ARRAY_SIZE(isc_xfers));
-> > +	ret = spi_sync_locked(spi, &msg);
-> > +	if (!ret)
-> > +		ret = ecp5_poll_busy(spi);
-> > +
-> > +	if (ret) {
-> > +		dev_err(dev, "Failed to go to ISC mode\n");
-> > +		goto out;
-> > +	}
-> > +
-> > +	/* Prepare for bitstream burst write */
-> > +	spi_message_init_with_transfers(&msg, lsc_xfers, ARRAY_SIZE(lsc_xfers));
-> > +	ret = spi_sync_locked(spi, &msg);
-> > +	if (ret)
-> > +		dev_err(dev, "Failed to prepare for bitstream burst write\n");
-> > +
-> > +out:
-> > +	if (ret)
-> > +		spi_bus_unlock(spi->controller);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static int ecp5_ops_write(struct fpga_manager *mgr, const char *buf, size_t count)
-> > +{
-> > +	struct ecp5_priv *priv = mgr->priv;
-> > +	struct spi_device *spi = priv->spi;
-> > +	struct spi_transfer xfer = {
-> > +		.tx_buf = buf,
-> > +		.len = count,
-> > +		.cs_change = 1,
-> > +	};
-> > +	struct spi_message msg;
-> > +	int ret;
-> > +
-> > +	spi_message_init_with_transfers(&msg, &xfer, 1);
-> > +	ret = spi_sync_locked(spi, &msg);
-> > +	if (ret)
-> > +		spi_bus_unlock(spi->controller);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static int ecp5_ops_write_complete(struct fpga_manager *mgr,
-> > +				   struct fpga_image_info *info)
-> > +{
-> > +	const u8 isc_disable[] = ECP5_SPI_ISC_DISABLE;
-> > +	struct ecp5_priv *priv = mgr->priv;
-> > +	struct spi_device *spi = priv->spi;
-> > +	struct spi_transfer xfer = { 0 };
-> > +	struct device *dev = &mgr->dev;
-> > +	struct spi_message msg;
-> > +	int ret;
-> > +
-> > +	/* Toggle CS and wait for bitstream write to finish */
-> > +	spi_message_init_with_transfers(&msg, &xfer, 1);
-> > +	ret = spi_sync_locked(spi, &msg);
-> > +	if (!ret)
-> > +		ret = ecp5_poll_busy(spi);
-> > +
-> > +	if (ret) {
-> > +		dev_err(dev, "Error while waiting bitstream write to finish\n");
-> > +		goto out;
-> > +	}
-> > +
-> > +	/* Exit ISC mode */
-> > +	xfer.tx_buf = isc_disable;
-> > +	xfer.len = sizeof(isc_disable);
-> > +	spi_message_init_with_transfers(&msg, &xfer, 1);
-> > +	ret = spi_sync_locked(spi, &msg);
-> > +	if (!ret)
-> > +		ret = ecp5_poll_gpio(priv->done, true);
-> > +
-> > +	if (ret)
-> > +		dev_err(dev, "Failed to finish ISC\n");
-> > +
-> > +out:
-> > +	spi_bus_unlock(spi->controller);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static const struct fpga_manager_ops ecp5_fpga_ops = {
-> > +	.state = ecp5_ops_state,
-> > +	.write_init = ecp5_ops_write_init,
-> > +	.write = ecp5_ops_write,
-> > +	.write_complete = ecp5_ops_write_complete,
-> > +};
-> > +
-> > +static int ecp5_probe(struct spi_device *spi)
-> > +{
-> > +	struct device *dev = &spi->dev;
-> > +	struct fpga_manager *mgr;
-> > +	struct ecp5_priv *priv;
-> > +	int ret;
-> > +
-> > +	if (spi->max_speed_hz > ECP5_SPI_MAX_SPEED_HZ) {
-> > +		dev_err(dev, "SPI speed %u is too high, maximum speed is %u\n",
-> > +			spi->max_speed_hz, ECP5_SPI_MAX_SPEED_HZ);
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> > +	if (!priv)
-> > +		return -ENOMEM;
-> > +
-> > +	priv->spi = spi;
-> > +
-> > +	priv->done = devm_gpiod_get(dev, "done", GPIOD_IN);
-> > +	if (IS_ERR(priv->done)) {
-> > +		ret = PTR_ERR(priv->done);
-> > +		dev_err(dev, "Failed to get DONE GPIO: %d\n", ret);
-> > +		return ret;
-> > +	}
-> > +
-> > +	priv->init = devm_gpiod_get(dev, "init", GPIOD_IN);
-> > +	if (IS_ERR(priv->init)) {
-> > +		ret = PTR_ERR(priv->init);
-> > +		dev_err(dev, "Failed to get INIT GPIO: %d\n", ret);
-> > +		return ret;
-> > +	}
-> > +
-> > +	priv->program = devm_gpiod_get(dev, "program", GPIOD_OUT_LOW);
-> > +	if (IS_ERR(priv->program)) {
-> > +		ret = PTR_ERR(priv->program);
-> > +		dev_err(dev, "Failed to get PROGRAM GPIO: %d\n", ret);
-> > +		return ret;
-> > +	}
-> > +
-> > +	mgr = devm_fpga_mgr_register(dev, "Lattice ECP5 SPI FPGA Manager",
-> > +				     &ecp5_fpga_ops, priv);
-> > +
-> > +	return PTR_ERR_OR_ZERO(mgr);
-> > +}
-> > +
-> > +static const struct spi_device_id ecp5_spi_ids[] = {
-> > +	{ .name = "ecp5-fpga-mgr" },
-> > +	{},
-> > +};
-> > +MODULE_DEVICE_TABLE(spi, ecp5_spi_ids);
-> > +
-> > +#if IS_ENABLED(CONFIG_OF)
-> > +static const struct of_device_id ecp5_of_ids[] = {
-> > +	{ .compatible = "lattice,ecp5-fpga-mgr" },
-> > +	{},
-> > +};
-> > +MODULE_DEVICE_TABLE(of, ecp5_of_ids);
-> > +#endif /* IS_ENABLED(CONFIG_OF) */
-> > +
-> > +static struct spi_driver ecp5_driver = {
-> > +	.probe = ecp5_probe,
-> > +	.id_table = ecp5_spi_ids,
-> > +	.driver = {
-> > +		.name = "lattice_ecp5_spi_fpga_mgr",
-> > +		.of_match_table = of_match_ptr(ecp5_of_ids),
-> > +	},
-> > +};
-> > +
-> > +module_spi_driver(ecp5_driver);
-> > +
-> > +MODULE_DESCRIPTION("Lattice ECP5 SPI FPGA Manager");
-> > +MODULE_LICENSE("GPL");
-> > -- 
-> > 2.37.1
-> > 
-> > 
+All errors (new ones prefixed by >>):
 
+>> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c:153:50: error: use of undeclared identifier 'ID_AA64MMFR0_PARANGE_SHIFT'
+           par = cpuid_feature_extract_unsigned_field(reg, ID_AA64MMFR0_PARANGE_SHIFT);
+                                                           ^
+   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c:428:50: error: use of undeclared identifier 'ID_AA64MMFR0_PARANGE_SHIFT'
+           fld = cpuid_feature_extract_unsigned_field(reg, ID_AA64MMFR0_PARANGE_SHIFT);
+                                                           ^
+>> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c:434:50: error: use of undeclared identifier 'ID_AA64MMFR0_ASID_SHIFT'
+           fld = cpuid_feature_extract_unsigned_field(reg, ID_AA64MMFR0_ASID_SHIFT);
+                                                           ^
+   3 errors generated.
+
+
+vim +/ID_AA64MMFR0_PARANGE_SHIFT +153 drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18   91  
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18   92  static struct arm_smmu_ctx_desc *arm_smmu_alloc_shared_cd(struct mm_struct *mm)
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18   93  {
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18   94  	u16 asid;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18   95  	int err = 0;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18   96  	u64 tcr, par, reg;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18   97  	struct arm_smmu_ctx_desc *cd;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18   98  	struct arm_smmu_ctx_desc *ret = NULL;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18   99  
+cbd23144f7662b Jean-Philippe Brucker 2022-04-26  100  	/* Don't free the mm until we release the ASID */
+cbd23144f7662b Jean-Philippe Brucker 2022-04-26  101  	mmgrab(mm);
+cbd23144f7662b Jean-Philippe Brucker 2022-04-26  102  
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  103  	asid = arm64_mm_context_get(mm);
+cbd23144f7662b Jean-Philippe Brucker 2022-04-26  104  	if (!asid) {
+cbd23144f7662b Jean-Philippe Brucker 2022-04-26  105  		err = -ESRCH;
+cbd23144f7662b Jean-Philippe Brucker 2022-04-26  106  		goto out_drop_mm;
+cbd23144f7662b Jean-Philippe Brucker 2022-04-26  107  	}
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  108  
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  109  	cd = kzalloc(sizeof(*cd), GFP_KERNEL);
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  110  	if (!cd) {
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  111  		err = -ENOMEM;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  112  		goto out_put_context;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  113  	}
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  114  
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  115  	refcount_set(&cd->refs, 1);
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  116  
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  117  	mutex_lock(&arm_smmu_asid_lock);
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  118  	ret = arm_smmu_share_asid(mm, asid);
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  119  	if (ret) {
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  120  		mutex_unlock(&arm_smmu_asid_lock);
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  121  		goto out_free_cd;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  122  	}
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  123  
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  124  	err = xa_insert(&arm_smmu_asid_xa, asid, cd, GFP_KERNEL);
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  125  	mutex_unlock(&arm_smmu_asid_lock);
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  126  
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  127  	if (err)
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  128  		goto out_free_asid;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  129  
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  130  	tcr = FIELD_PREP(CTXDESC_CD_0_TCR_T0SZ, 64ULL - vabits_actual) |
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  131  	      FIELD_PREP(CTXDESC_CD_0_TCR_IRGN0, ARM_LPAE_TCR_RGN_WBWA) |
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  132  	      FIELD_PREP(CTXDESC_CD_0_TCR_ORGN0, ARM_LPAE_TCR_RGN_WBWA) |
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  133  	      FIELD_PREP(CTXDESC_CD_0_TCR_SH0, ARM_LPAE_TCR_SH_IS) |
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  134  	      CTXDESC_CD_0_TCR_EPD1 | CTXDESC_CD_0_AA64;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  135  
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  136  	switch (PAGE_SIZE) {
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  137  	case SZ_4K:
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  138  		tcr |= FIELD_PREP(CTXDESC_CD_0_TCR_TG0, ARM_LPAE_TCR_TG0_4K);
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  139  		break;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  140  	case SZ_16K:
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  141  		tcr |= FIELD_PREP(CTXDESC_CD_0_TCR_TG0, ARM_LPAE_TCR_TG0_16K);
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  142  		break;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  143  	case SZ_64K:
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  144  		tcr |= FIELD_PREP(CTXDESC_CD_0_TCR_TG0, ARM_LPAE_TCR_TG0_64K);
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  145  		break;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  146  	default:
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  147  		WARN_ON(1);
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  148  		err = -EINVAL;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  149  		goto out_free_asid;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  150  	}
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  151  
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  152  	reg = read_sanitised_ftr_reg(SYS_ID_AA64MMFR0_EL1);
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18 @153  	par = cpuid_feature_extract_unsigned_field(reg, ID_AA64MMFR0_PARANGE_SHIFT);
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  154  	tcr |= FIELD_PREP(CTXDESC_CD_0_TCR_IPS, par);
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  155  
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  156  	cd->ttbr = virt_to_phys(mm->pgd);
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  157  	cd->tcr = tcr;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  158  	/*
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  159  	 * MAIR value is pretty much constant and global, so we can just get it
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  160  	 * from the current CPU register
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  161  	 */
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  162  	cd->mair = read_sysreg(mair_el1);
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  163  	cd->asid = asid;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  164  	cd->mm = mm;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  165  
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  166  	return cd;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  167  
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  168  out_free_asid:
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  169  	arm_smmu_free_asid(cd);
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  170  out_free_cd:
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  171  	kfree(cd);
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  172  out_put_context:
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  173  	arm64_mm_context_put(mm);
+cbd23144f7662b Jean-Philippe Brucker 2022-04-26  174  out_drop_mm:
+cbd23144f7662b Jean-Philippe Brucker 2022-04-26  175  	mmdrop(mm);
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  176  	return err < 0 ? ERR_PTR(err) : ret;
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  177  }
+3f1ce8e85ee06d Jean-Philippe Brucker 2020-09-18  178  
+
+:::::: The code at line 153 was first introduced by commit
+:::::: 3f1ce8e85ee06dbe6a8b2e037e9b35f6b32e9ab3 iommu/arm-smmu-v3: Share process page tables
+
+:::::: TO: Jean-Philippe Brucker <jean-philippe@linaro.org>
+:::::: CC: Will Deacon <will@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

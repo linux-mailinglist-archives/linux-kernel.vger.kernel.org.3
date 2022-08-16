@@ -2,82 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFADE596397
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD4C59639B
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236554AbiHPUPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 16:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
+        id S237306AbiHPURS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 16:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237394AbiHPUPj (ORCPT
+        with ESMTP id S233421AbiHPURQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 16:15:39 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC277A776;
-        Tue, 16 Aug 2022 13:15:38 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id z187so10256305pfb.12;
-        Tue, 16 Aug 2022 13:15:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=zU1X1POINU9AFqquPUG2+wIDvwycYABzLVLgeZNxxE0=;
-        b=e3Ei/n53VysaXj/X8x6hxVU3orxvP+NRLitVxM6miL6Z2bplRXrj59msWPDEv+TpZ0
-         2yl6HS2NFS2NRG56vvkbWtxmHmtoPAWCYx2/I5NaQT20scQ8a/Du/5ipfD0JHD6EIThU
-         b5LAgm7F2nRktClrucEeVGHdY2V48Ab3VWlkIfVCOAAmrL8c9PA/2N6l5fzSwQoWHrd0
-         jGWz1XJ3OIkjLF1qqX1ue8vcvlPz1ljf5KX7n4xKC1MTXYaIpmO7xyf0jq93o0CqGe3M
-         w1I3TKlJyXv9XsUfC+G6xivbZCl63jTICYtJVH8CizE3buHBcH3s8XiMU7BN16NA5zap
-         pq8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=zU1X1POINU9AFqquPUG2+wIDvwycYABzLVLgeZNxxE0=;
-        b=oH8FEc+w688PjIJzD8LEqw7D6mCzrvaMgP/p7GsJinjPlz6IxMh/+w0jX2tHWaonHS
-         iYwz4OQe5xhrqhg/p26GW7azMDs6pkG2IYgBtK4seFneYciZ4p8WvABIK9NVOJELEw84
-         NW9AmN8c+UmZwIG9QK9X5Dbv039uhq7AOQvSvzjJUz3cl16+VYEveSwQDlnOcFRYSn/R
-         NqHdyHdCRz/3DR2pa+2dDCX9tpYcHR0ze+STqw6dAjlSeqPTm+FI1pfSu+kNs0XTc+ks
-         wYRT4/ntDzNaC9atv+gLN60J7PquKgeZaEgfhfcIvoFJQEbIfXV70vx5cosoomliCSoz
-         i2DA==
-X-Gm-Message-State: ACgBeo2r9Lfu/2L/kdYXQmQZL54YT59MIYmXjAnGMa8IORvvA5uPxJuj
-        sOZFr3Rvxh/sq4FB2x/8xZI=
-X-Google-Smtp-Source: AA6agR4wy5xaDqMLslgTGwBemunicFBuJMkswuk5RCzivgHcTvzbgianZH7PPy5j4hdCZxzcS88+kA==
-X-Received: by 2002:a05:6a00:3106:b0:52d:53d4:ccc9 with SMTP id bi6-20020a056a00310600b0052d53d4ccc9mr22815752pfb.9.1660680938146;
-        Tue, 16 Aug 2022 13:15:38 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:7229])
-        by smtp.gmail.com with ESMTPSA id a5-20020a17090a70c500b001f23db09351sm6593841pjm.46.2022.08.16.13.15.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 13:15:37 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 16 Aug 2022 10:15:36 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v5 3/3] cgroup/cpuset: Keep user set cpus affinity
-Message-ID: <Yvv66EWygCwHUCqy@slm.duckdns.org>
-References: <20220816192734.67115-1-longman@redhat.com>
- <20220816192734.67115-4-longman@redhat.com>
+        Tue, 16 Aug 2022 16:17:16 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 191C4895C2;
+        Tue, 16 Aug 2022 13:17:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=pZZrETtmIKdExVtzVzQ8UXA3eX9WZ6xF2u4zNFYqj/s=; b=ptR8j4dyawkqM37lf86AbKOFwy
+        vqD50LNT3FK4b3Ha/zFTVqxf8zbh3as0oeroZaX2TnivXLllApZfmMbDzp8qAWTXqFTbpSfaGHF0M
+        fGxN+PX2kx8r82YMpSjijG5sV1i4AJ3z7/651SDn3tt7vvF34lL8Cw1zArzLWGGCqiDFTlnFroQ/O
+        5az02/1DGkptKGyHRtFk1d5VW8G2DCfsRqvfE6Zwy5OCe/NROVnv7MEnif7q2Ohiv81GpvC/S4Fqf
+        dBzhukKSo/tmSLNp0plhiwEcbku8B/ZsP+BOQSlMf5f1yudhZ/U0xeMxA3KNfSl3VsKfa80FtLsYm
+        TV6FA3wA==;
+Received: from [179.232.144.59] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oO2zs-00AHrG-K9; Tue, 16 Aug 2022 22:17:08 +0200
+Message-ID: <7da27e6f-ff45-9b28-5b67-ab8eabca1ed2@igalia.com>
+Date:   Tue, 16 Aug 2022 17:16:45 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220816192734.67115-4-longman@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 10/13] EDAC/altera: Skip the panic notifier if kdump is
+ loaded
+Content-Language: en-US
+To:     Dinh Nguyen <dinguyen@kernel.org>, kexec@lists.infradead.org,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        bp@alien8.de
+Cc:     akpm@linux-foundation.org, pmladek@suse.com, bhe@redhat.com,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
+        kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+References: <20220719195325.402745-1-gpiccoli@igalia.com>
+ <20220719195325.402745-11-gpiccoli@igalia.com>
+ <9f114876-d402-6e74-c1db-4e4983c2d695@kernel.org>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <9f114876-d402-6e74-c1db-4e4983c2d695@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,28 +74,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 03:27:34PM -0400, Waiman Long wrote:
-> +static int cpuset_set_cpus_allowed_ptr(struct task_struct *p,
-> +				       const struct cpumask *mask)
-> +{
-> +	cpumask_var_t new_mask;
-> +	int ret;
-> +
-> +	if (!READ_ONCE(p->user_cpus_ptr)) {
-> +		ret = set_cpus_allowed_ptr(p, mask);
-> +		/*
-> +		 * If user_cpus_ptr becomes set now, we are racing with
-> +		 * a concurrent sched_setaffinity(). So use the newly
-> +		 * set user_cpus_ptr and retry again.
-> +		 *
-> +		 * TODO: We cannot detect change in the cpumask pointed to
-> +		 * by user_cpus_ptr. We will have to add a sequence number
-> +		 * if such a race needs to be addressed.
-> +		 */
+On 16/08/2022 15:44, Dinh Nguyen wrote:
+> [...] 
+>> V2:
+>> - new patch, based on the discussion in [0].
+>> [0] https://lore.kernel.org/lkml/62a63fc2-346f-f375-043a-fa21385279df@igalia.com/
+>>
+> 
+> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
 
-This is too ugly and obviously broken. Let's please do it properly.
+Thanks a lot Dinh!
 
-Thanks.
+There is something I'm asking for maintainers on patches in this series,
+so here it goes for you (CC Borislav / Tony): do you think it's possible
+to pick this one in your tree directly, from this series, or do you
+prefer I re-submit as a standalone patch, on linux-edac maybe?
 
--- 
-tejun
+Thanks,
+
+
+Guilherme

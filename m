@@ -2,179 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA849595BB7
+	by mail.lfdr.de (Postfix) with ESMTP id 61FD4595BB6
 	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbiHPMWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 08:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
+        id S230237AbiHPMWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 08:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbiHPMWI (ORCPT
+        with ESMTP id S232412AbiHPMWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 08:22:08 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B561217065;
-        Tue, 16 Aug 2022 05:22:07 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4C37837345;
-        Tue, 16 Aug 2022 12:22:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1660652526; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1YZdKJUujIVhtSIXvaGEXXbp4ZWZrHyQ4cBO+Ol5Uzc=;
-        b=jR/qir+F1KvQkprGo27HCBr/wg+RgDRjFlUcYrQpq0in+tS2B9OYkys3SX01TXNf104tpd
-        /b7YMDFrE0stbEzgGS7Y/LKHseiM7PdSdXhr4YtNarFcIV7kg6WUIVIIzMu6qBJtb/IaBG
-        weR4np2ArM4V5RHr4xxQV3Kmptm7xks=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 292381345B;
-        Tue, 16 Aug 2022 12:22:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /Q6iCO6L+2KjSgAAMHmgww
-        (envelope-from <jgross@suse.com>); Tue, 16 Aug 2022 12:22:06 +0000
-Message-ID: <6ded15cd-381d-24f2-ab0f-bae31117bbc5@suse.com>
-Date:   Tue, 16 Aug 2022 14:22:05 +0200
+        Tue, 16 Aug 2022 08:22:40 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3798357D9
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 05:22:37 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id bu15so3919924wrb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 05:22:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=K+gdbXGX7sTipYoI1hbcvxGCF62qNZJxUQfUKALJAPQ=;
+        b=653mtiOz+xhTjJvQu/Z8561OQZ/7yZgXascR7WHeo+CK7dRlhjy+Pq3wT3ZBDFJ21i
+         oJKNjxmxmUdqt6mrGY8kvub3ZiKfNcp/lmuGeAxR7lihOi9dguTy8jHRrzinw44OVbnc
+         CMs0onKkiB1dxcEIDMPewbFr5Q/sDl/Klvh0M9AGoiosBAzQSwblc7Y+XDsGdVbw0R4+
+         RyQsMOhjiajyRExT1KhuTZG4x9qG5dGUHGptj2Tapqp1Iw+LBbJuZjn//AN3cOcfvtAV
+         HDvCGQqRYvG+Y/Qff57TRjaY6Rn3dntmPB6ef9s7uLxe8v+zEGAf9ibCq/TMkJW5YDte
+         LYfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=K+gdbXGX7sTipYoI1hbcvxGCF62qNZJxUQfUKALJAPQ=;
+        b=WaltuE3Ad3hhiOaTFcZ8x5GfVWhVCQo2b/7M7Qx886fLjOdRvlGjJe6NhGv5t9XnOz
+         34TQV0GaR715NWOlrWtAAsAW3ZflbJRMLP6HMypi7dMAZ5HcWAPqTap1ANcT3vwMbUm9
+         ZcdhGDpXxXzaebLfGWr+cUV8XYE938KsfAB3xzPXq8VPCSCzFDXFhhZdSgagsfodGyJz
+         Vh3ibeZo+WrQD5ty8cZgZzaPal4IuC6QcyDTKzXximBk+rdZ8Ln5i7kRZgiShCDCxXKL
+         trt5VIS0wcJU9KeSICFUBXGnWQSTzX9VHAnMTrFrJqyePBOsSLtv/QqKeKNP3bHEmiqw
+         pBsQ==
+X-Gm-Message-State: ACgBeo0dbx8PSlwksSdBqYikC0Loq8DmCCegRu7GJ6mtMOL0VYizKZuo
+        vCTIm3J8YKqj2PJ666mznmoDOu6kk/5+NQ==
+X-Google-Smtp-Source: AA6agR4mWwoCuQHHvTE6vn6N3LqhAmKu+A7J3AQ88Wt275PoY4JM7vCv03znTgErhkDwLb2BpzYjcQ==
+X-Received: by 2002:a5d:6f08:0:b0:21e:cfc7:bfd1 with SMTP id ay8-20020a5d6f08000000b0021ecfc7bfd1mr11687835wrb.329.1660652556367;
+        Tue, 16 Aug 2022 05:22:36 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:982:cbb0:ef0b:d58b:b15c:96e6])
+        by smtp.gmail.com with ESMTPSA id n21-20020a05600c4f9500b003a5f3f5883dsm7990873wmq.17.2022.08.16.05.22.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 05:22:35 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     Vyacheslav Bocharov <adeep@lexina.in>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH 0/2] arm64: meson: add support for JetHome JetHub D1p (j110)
+Date:   Tue, 16 Aug 2022 14:22:34 +0200
+Message-Id: <166065254995.976383.683359500915068130.b4-ty@baylibre.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220811103113.3097868-1-adeep@lexina.in>
+References: <20220811103113.3097868-1-adeep@lexina.in>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] block: fix repeated words in comments
-Content-Language: en-US
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220816120952.56713-1-yuanjilin@cdjrlc.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20220816120952.56713-1-yuanjilin@cdjrlc.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------9TcQLo8nP9HQ5Mkv0SO1vvUj"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------9TcQLo8nP9HQ5Mkv0SO1vvUj
-Content-Type: multipart/mixed; boundary="------------cSoRuB31Eb67XX0KMBZ92bgR";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Jilin Yuan <yuanjilin@cdjrlc.com>, axboe@kernel.dk
-Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <6ded15cd-381d-24f2-ab0f-bae31117bbc5@suse.com>
-Subject: Re: [PATCH] block: fix repeated words in comments
-References: <20220816120952.56713-1-yuanjilin@cdjrlc.com>
-In-Reply-To: <20220816120952.56713-1-yuanjilin@cdjrlc.com>
+Hi,
 
---------------cSoRuB31Eb67XX0KMBZ92bgR
-Content-Type: multipart/mixed; boundary="------------0vTlOk0UD9WPngsIONQ8xbHp"
+On Thu, 11 Aug 2022 13:31:11 +0300, Vyacheslav Bocharov wrote:
+> - add support for JetHome JetHub D1p (https://jethome.ru/d1p) is a home
+> automation controller with the following features:
+>   - DIN Rail Mounting
+>   - Amlogic A113X (ARM Cortex-A53) quad-core up to 1.5GHz
+>   - no video out
+>   - 1/2/4GB LPDDR4
+>   - 8/16/32GB eMMC flash
+>   - 1 x USB 2.0
+>   - 1 x 10/100Mbps ethernet
+>   - WiFi / Bluetooth Realtek 8822CS or similar IEEE 802.11a/b/g/n/ac
+>   - TI CC2652P1 Zigbee Wireless Module with up to 20dBm output power
+>     and Zigbee 3.0 support.
+>   - 2 x gpio LEDS
+>   - GPIO user Button
+>   - 1 x 1-Wire
+>   - 2 x RS-485
+>   - 4 x dry contact digital GPIO inputs
+>   - 3 x relay GPIO outputs
+>   - DC source with a voltage of 9 to 56 V / Active POE
+> 
+> [...]
 
---------------0vTlOk0UD9WPngsIONQ8xbHp
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.1/dt64)
 
-T24gMTYuMDguMjIgMTQ6MDksIEppbGluIFl1YW4gd3JvdGU6DQo+ICAgRGVsZXRlIHRoZSBy
-ZWR1bmRhbnQgd29yZCAnY2FuJy4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEppbGluIFl1YW4g
-PHl1YW5qaWxpbkBjZGpybGMuY29tPg0KPiAtLS0NCj4gICBibG9jay9iaW8uYyB8IDIgKy0N
-Cj4gICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4g
-DQo+IGRpZmYgLS1naXQgYS9ibG9jay9iaW8uYyBiL2Jsb2NrL2Jpby5jDQo+IGluZGV4IGY5
-MmQwMjIzMjQ3Yi4uYzg4M2Y4OTYzYzE0IDEwMDY0NA0KPiAtLS0gYS9ibG9jay9iaW8uYw0K
-PiArKysgYi9ibG9jay9iaW8uYw0KPiBAQCAtNTY3LDcgKzU2Nyw3IEBAIEVYUE9SVF9TWU1C
-T0woYmlvX2FsbG9jX2Jpb3NldCk7DQo+ICAgICogYmUgcmV1c2VkIGJ5IGNhbGxpbmcgYmlv
-X3VuaW5pdCgpIGJlZm9yZSBjYWxsaW5nIGJpb19pbml0KCkgYWdhaW4uDQo+ICAgICoNCj4g
-ICAgKiBOb3RlIHRoYXQgdW5saWtlIGJpb19hbGxvYygpIG9yIGJpb19hbGxvY19iaW9zZXQo
-KSBhbGxvY2F0aW9ucyBmcm9tIHRoaXMNCj4gLSAqIGZ1bmN0aW9uIGFyZSBub3QgYmFja2Vk
-IGJ5IGEgbWVtcG9vbCBjYW4gY2FuIGZhaWwuICBEbyBub3QgdXNlIHRoaXMgZnVuY3Rpb24N
-Cj4gKyAqIGZ1bmN0aW9uIGFyZSBub3QgYmFja2VkIGJ5IGEgbWVtcG9vbCBjYW4gZmFpbC4g
-IERvIG5vdCB1c2UgdGhpcyBmdW5jdGlvbg0KDQpUaGlzIHNlbnRlbmNlIGlzIHN0aWxsIG5v
-dCBjb3JyZWN0LiBJIGd1ZXNzIHRoZSBmaXJzdCAiY2FuIiBzaG91bGQgYmUgcmVwbGFjZWQN
-CndpdGggImFuZCIuDQoNCg0KSnVlcmdlbg0K
---------------0vTlOk0UD9WPngsIONQ8xbHp
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+[1/2] arm64: dts: meson-axg: add support for JetHub D1p (j110)
+      https://git.kernel.org/amlogic/c/59ec069d50550273a83180ea6c950d382d7bf8e3
+[2/2] dt-bindings: arm: amlogic: add bindings for Jethub D1p (j110)
+      https://git.kernel.org/amlogic/c/a80c60359a42cf146872b9442cf847e7c2452a23
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+These changes has been applied on the intermediate git tree [1].
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+The v6.1/dt64 branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+for inclusion in their intermediate git branches in order to be sent to Linus during
+the next merge window, or sooner if it's a set of fixes.
 
---------------0vTlOk0UD9WPngsIONQ8xbHp--
+In the cases of fixes, those will be merged in the current release candidate
+kernel and as soon they appear on the Linux master branch they will be
+backported to the previous Stable and Long-Stable kernels [2].
 
---------------cSoRuB31Eb67XX0KMBZ92bgR--
+The intermediate git branches are merged daily in the linux-next tree [3],
+people are encouraged testing these pre-release kernels and report issues on the
+relevant mailing-lists.
 
---------------9TcQLo8nP9HQ5Mkv0SO1vvUj
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+If problems are discovered on those changes, please submit a signed-off-by revert
+patch followed by a corrective changeset.
 
------BEGIN PGP SIGNATURE-----
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmL7i+0FAwAAAAAACgkQsN6d1ii/Ey8k
-LggAgZc3cEIadhgiZZHfY8EMvIFJiPwY2h0WMqyNt2D/Hii0QEa7cl60yU0AVOMD06CdnAu/oQOf
-zFo3LH5uPU8XO6t8g0n9WCwwDQWvievfcfgOMea+9fWICpZbuDJ4UwD4dUQKMnLYRDvSABpEMRVA
-vsvp0t7/Q7hlgnMsGKtWXbEYCIzpIatj0EFzKRn3tw9U17ClAnnD7VyngGLjgypevPINMXU3g7TX
-POSbGQsFQOPyUITVsNx8HGtRQy+vmuT8MAif3YAq8F6sO3QR0372lm87ZqhaGb9j/Yobdop7buHJ
-crbJivkDK29iDyMMOiga1VkN/4bWTs3EekM/GzfWkA==
-=UwQO
------END PGP SIGNATURE-----
-
---------------9TcQLo8nP9HQ5Mkv0SO1vvUj--
+-- 
+Neil

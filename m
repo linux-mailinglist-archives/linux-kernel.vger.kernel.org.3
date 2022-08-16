@@ -2,86 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F13DD5959A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED42595900
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbiHPLPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 07:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38842 "EHLO
+        id S234336AbiHPKxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234382AbiHPLOj (ORCPT
+        with ESMTP id S230172AbiHPKxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 07:14:39 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3778CABD6A;
-        Tue, 16 Aug 2022 02:53:54 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27G8NjSa003123;
-        Tue, 16 Aug 2022 09:53:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=dR/uvLs6SiwPEgsqsis5avHAdp7Zj1BQdn9EYbxX6NM=;
- b=ay6d4TjFdW1k3vlXkHbZZlKeiRL7Y1DVQ+uNbgJU07e/OmQwPpB8vuLOc+KIqR+GDNIt
- sS6ONLnAbQ+TF3Y5eImFs/DfCABP8LmOuNHRuXHxql//dj4yjJtP5q72mSHvllBLFJv0
- ajUeMEnAT8/eMBhq+TtxFcD+SlQfCoc+0oEQ6VFF/qrGLxcx7354ta+QPr3sDljn41BJ
- 4h+1rNk7dWob939LaGfWg0CCDOP7CTAiX6Gw85aoz3navYDpCUndU9W7OaoMaGYZN8YF
- xrasAWNvUZSd31/3B7PI0M6IkPzbChHYe3bLQt9xOc4O1mywS1dm3XbCwjiTcYnsXLiP gw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j06wr0c60-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Aug 2022 09:53:06 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27G9r57Y001431
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Aug 2022 09:53:05 GMT
-Received: from [10.216.49.243] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 16 Aug
- 2022 02:52:58 -0700
-Message-ID: <b9c56267-05f8-04ac-405c-bd3dca9f0add@quicinc.com>
-Date:   Tue, 16 Aug 2022 15:22:55 +0530
+        Tue, 16 Aug 2022 06:53:23 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51444E842
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:55:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660643729; x=1692179729;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Qs5JcP0DyxdDr2M+TfNbeXHgZMZJ7UyRrbaQPUfUtUw=;
+  b=G3syNGWH7XTVsW+Dfbw5P2o85olKoCqDYcF6A7Ro8g7tJyZKWA+Gaoxy
+   D7WibQiKXC5uePe9IwygX3FumpnJuuOjKxPFZgW+20lqGdkDYIVdy33Dt
+   uWbl30VZEIyMgo9yuogCnoU+BPCrVdiZdoFenFWzvgPAiwjLcmuk9W2Bz
+   rif4NN3AIEV9nAnDm43NqVpdq6M7HvKD/PgcoZSMSVgXnUiALMlyATSDD
+   RvySU3LNseJttDjIV+ZLANeRhwop5611RSBcvJ8V8mzFGUZ475Hu9XnOx
+   bV2GWGxt244cwDgHBrZi0iI/UwiICwpD4lg2ctIHCl4yuVglpn6cOE6PN
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="293449978"
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="293449978"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 02:55:29 -0700
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="610208209"
+Received: from kroegerb-mobl1.ger.corp.intel.com (HELO [10.252.51.43]) ([10.252.51.43])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 02:55:24 -0700
+Message-ID: <f6baa98e-af46-7ca8-397a-2e762cd444c6@linux.intel.com>
+Date:   Tue, 16 Aug 2022 11:55:21 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 1/8] dt-bindings: remoteproc: qcom: adsp: Make ADSP pil
- loader as generic
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v2] ASoC: Intel: sof_rt5682: Add support for
+ jsl_rt5682_rt1019
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <lgirdwood@gmail.com>,
-        <devicetree@vger.kernel.org>, <broonie@kernel.org>,
-        <bjorn.andersson@linaro.org>, <agross@kernel.org>,
-        <quic_plai@quicinc.com>, <linux-remoteproc@vger.kernel.org>,
-        <robh+dt@kernel.org>, <perex@perex.cz>, <tiwai@suse.com>,
-        <quic_rohkumar@quicinc.com>, <bgoswami@quicinc.com>,
-        <swboyd@chromium.org>, <srinivas.kandagatla@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <judyhsiao@chromium.org>
-References: <1660117558-21829-1-git-send-email-quic_srivasam@quicinc.com>
- <1660117558-21829-2-git-send-email-quic_srivasam@quicinc.com>
- <20220814204505.GA677523-robh@kernel.org>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <20220814204505.GA677523-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Sean Hong <sean.hong@quanta.corp-partner.google.com>,
+        perex@perex.cz, tiwai@suse.com, brent.lu@intel.com
+Cc:     cezary.rojewski@intel.com, kai.vehmanen@linux.intel.com,
+        peter.ujfalusi@linux.intel.com, ranjani.sridharan@linux.intel.com,
+        linux-kernel@vger.kernel.org, liam.r.girdwood@linux.intel.com,
+        broonie@kernel.org, alsa-devel@alsa-project.org,
+        yung-chuan.liao@linux.intel.com
+References: <20220816075424.1245593-1-sean.hong@quanta.corp-partner.google.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220816075424.1245593-1-sean.hong@quanta.corp-partner.google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 3VhQ6nOFnHdI4jGJYBLjMSx8Hq2May52
-X-Proofpoint-GUID: 3VhQ6nOFnHdI4jGJYBLjMSx8Hq2May52
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-16_07,2022-08-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- lowpriorityscore=0 clxscore=1015 mlxlogscore=880 impostorscore=0
- adultscore=0 mlxscore=0 spamscore=0 priorityscore=1501 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208160038
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,20 +68,71 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 8/15/2022 2:15 AM, Rob Herring wrote:
-Thanks for Your time Rob!!!
-> On Wed, 10 Aug 2022 13:15:51 +0530, Srinivasa Rao Mandadapu wrote:
->> Rename sdm845 adsp pil bindings to generic name, for using same binings
->> file for subsequent SoCs.
->>
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->> ---
->> Changes since V2:
->> 	-- Generate patch with -M flag.
->>
->>   .../{qcom,sdm845-adsp-pil.yaml => qcom,lpass-adsp-pil.yaml}           | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>   rename Documentation/devicetree/bindings/remoteproc/{qcom,sdm845-adsp-pil.yaml => qcom,lpass-adsp-pil.yaml} (97%)
->>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-This patch dropped in consequent series. Please ignore this patch.
+
+On 8/16/22 09:54, Sean Hong wrote:
+> This patch adds the driver data for rt5682 support jsl_rt5682_rt1019.
+> 
+> Signed-off-by: Sean Hong <sean.hong@quanta.corp-partner.google.com>
+> ---
+>  sound/soc/intel/boards/sof_rt5682.c               |  9 +++++++++
+>  sound/soc/intel/common/soc-acpi-intel-jsl-match.c | 12 ++++++++++++
+>  2 files changed, 21 insertions(+)
+> 
+> diff --git a/sound/soc/intel/boards/sof_rt5682.c b/sound/soc/intel/boards/sof_rt5682.c
+> index 045965312..3a840f3a9 100644
+> --- a/sound/soc/intel/boards/sof_rt5682.c
+> +++ b/sound/soc/intel/boards/sof_rt5682.c
+> @@ -1100,6 +1100,15 @@ static const struct platform_device_id board_ids[] = {
+>  					SOF_RT5682_SSP_AMP(1) |
+>  					SOF_RT5682_NUM_HDMIDEV(4)),
+>  	},
+> +	{
+> +		.name = "jsl_rt5682_rt1019",
+> +		.driver_data = (kernel_ulong_t)(SOF_RT5682_MCLK_EN |
+> +					SOF_RT5682_MCLK_24MHZ |
+
+I see it's the same setting for all JSL devices but I am having doubts
+on this MCLK.  Is this 24MHz value correct for JSL? It's derived from
+ICL so in theory the MCLK should be a multiple of 19.2MHz if the root
+frequency was the oscillator.
+
+Is this intentional?
+
+> +					SOF_RT5682_SSP_CODEC(0) |
+> +					SOF_SPEAKER_AMP_PRESENT |
+> +					SOF_RT1019_SPEAKER_AMP_PRESENT |
+> +					SOF_RT5682_SSP_AMP(1)),
+> +	},
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(platform, board_ids);
+> diff --git a/sound/soc/intel/common/soc-acpi-intel-jsl-match.c b/sound/soc/intel/common/soc-acpi-intel-jsl-match.c
+> index b95c4b2cd..e374bf163 100644
+> --- a/sound/soc/intel/common/soc-acpi-intel-jsl-match.c
+> +++ b/sound/soc/intel/common/soc-acpi-intel-jsl-match.c
+> @@ -29,6 +29,11 @@ static const struct snd_soc_acpi_codecs rt1015p_spk = {
+>  	.codecs = {"RTL1015"}
+>  };
+>  
+> +static struct snd_soc_acpi_codecs rt1019p_spk = {
+> +	.num_codecs = 1,
+> +	.codecs = {"RTL1019"}
+> +};
+> +
+>  static const struct snd_soc_acpi_codecs mx98360a_spk = {
+>  	.num_codecs = 1,
+>  	.codecs = {"MX98360A"}
+> @@ -78,6 +83,13 @@ struct snd_soc_acpi_mach snd_soc_acpi_intel_jsl_machines[] = {
+>  		.quirk_data = &mx98360a_spk,
+>  		.sof_tplg_filename = "sof-jsl-rt5682-mx98360a.tplg",
+>  	},
+> +	{
+> +		.comp_ids = &rt5682_rt5682s_hp,
+> +		.drv_name = "jsl_rt5682_rt1019",
+> +		.machine_quirk = snd_soc_acpi_codec_list,
+> +		.quirk_data = &rt1019p_spk,
+> +		.sof_tplg_filename = "sof-jsl-rt5682-rt1019.tplg",
+> +	},
+>  	{
+>  		.id = "10134242",
+>  		.drv_name = "jsl_cs4242_mx98360a",

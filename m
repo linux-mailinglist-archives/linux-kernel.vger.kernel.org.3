@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC1559613B
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D4259613D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:35:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236438AbiHPRed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 13:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48974 "EHLO
+        id S236460AbiHPRew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 13:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236491AbiHPReZ (ORCPT
+        with ESMTP id S236477AbiHPRes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 13:34:25 -0400
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8946526A;
-        Tue, 16 Aug 2022 10:34:22 -0700 (PDT)
-Received: by mail-io1-f54.google.com with SMTP id r141so5236772iod.4;
-        Tue, 16 Aug 2022 10:34:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=vNdSUDIuCoXELlH9XMziCohsKXYqhqiaV6prSiBstnQ=;
-        b=WZoxFtnjGTM51Hx+rVwuPw8J5zlalrb3ISDBoEp8aGycoPaQ/j4QqMOZBgkOnhXeGh
-         OoJYzw06DSmYduHiRp1BEwd9oyzrkyHLbI20aZvIMPLEtjsW1aAA+ffmE8ZZXbSNLvgO
-         bPaGPXCKIhOGUEFZGkXkicKFFoby+dw1dvJjdiksSrPJvMyvC9jRd9NWjZIV+7gz2r2U
-         CN2JskeR+TNF0NYx5PgxIqEPlCczoU05VygiOGIxw4vW/Nc9+7ir1TU67pY6yNmeVUU/
-         bw0ZiZIXHO4ZIpechpO6taRy7nbS9l/BLwJJjotYT9glh8cfof0Mv1ibYGbFTKfmq33c
-         JdnQ==
-X-Gm-Message-State: ACgBeo1YqWi3+fXqewy3IPipx9AMGc9bG6O6tWOWOlao53uYizHAXN97
-        hv1S1Koqk3emfootehoXOw==
-X-Google-Smtp-Source: AA6agR5x+GlJ3IuesfolxVkxENyVw8nMHypHsYHjBlt7Y2d8nb8vjeQSOsB8rWSXq8mciC32FhkGrg==
-X-Received: by 2002:a05:6638:16d3:b0:346:a4c6:fcc6 with SMTP id g19-20020a05663816d300b00346a4c6fcc6mr2674535jat.147.1660671261318;
-        Tue, 16 Aug 2022 10:34:21 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id b22-20020a026f56000000b003436da41c78sm4600918jae.76.2022.08.16.10.34.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 10:34:20 -0700 (PDT)
-Received: (nullmailer pid 2424921 invoked by uid 1000);
-        Tue, 16 Aug 2022 17:34:19 -0000
-Date:   Tue, 16 Aug 2022 11:34:19 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev, Chen-Yu Tsai <wens@csie.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 03/12] dt-bindings: vendor-prefixes: Add Allwinner D1
- board vendors
-Message-ID: <20220816173419.GA2424864-robh@kernel.org>
-References: <20220815050815.22340-1-samuel@sholland.org>
- <20220815050815.22340-4-samuel@sholland.org>
+        Tue, 16 Aug 2022 13:34:48 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670F1659E7;
+        Tue, 16 Aug 2022 10:34:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660671283; x=1692207283;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=18C6ARl9ap+Cedl7PD7j87s90Sel1myV+oWO8N8wL14=;
+  b=JzD2Y8WQRdHeJ1+Ux0KLdV16tmT5vmbkRR+hh4/VXM9OFujkPlZW2NaZ
+   TS6JQB3ap9njzyhr/TR56xSpt+bx9WJCTUQHR+P64FkUyEUesPKJtE/f/
+   Qhl3Xq1lU2ObQctovMFTCRiZHJSDsb8hVxce9/gwviU8hfv7PAfqucDw/
+   0YQJw6ffVVgJStvFpcNRvPPSZ0qg7qqjKYWEs/6ChqwJqZEeHkjjjzaJf
+   tSZRIbESxJ0SECxpeneRyzub+NumDNSs668ifW7RvOzSaqR6dRk7izBKY
+   OaB63Pn11v1iZY0PRkJxlMTSH2kVuWVB/V5DXM2pp5za046T4IcYy0Kqo
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="272675962"
+X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
+   d="scan'208";a="272675962"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 10:34:43 -0700
+X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
+   d="scan'208";a="852730709"
+Received: from jzhu1-mobl.ccr.corp.intel.com (HELO [10.254.68.75]) ([10.254.68.75])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 10:34:42 -0700
+Message-ID: <839e2877-bb16-dbb5-d4da-bc611733c7e1@linux.intel.com>
+Date:   Tue, 16 Aug 2022 10:34:38 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815050815.22340-4-samuel@sholland.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+References: <20220809175513.345597655@linuxfoundation.org>
+ <20220809175513.979067723@linuxfoundation.org>
+ <YvuNdDWoUZSBjYcm@worktop.programming.kicks-ass.net>
+From:   Daniel Sneddon <daniel.sneddon@linux.intel.com>
+Subject: Re: [PATCH] x86/nospec: Unwreck the RSB stuffing
+In-Reply-To: <YvuNdDWoUZSBjYcm@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,21 +69,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 Aug 2022 00:08:06 -0500, Samuel Holland wrote:
-> Some boards using the Allwinner D1 SoC are made by vendors not
-> previously documented.
-> 
-> Clockwork Tech LLC (https://www.clockworkpi.com/) manufactures the
-> ClockworkPi and DevTerm boards.
-> 
-> Beijing Widora Technology Co., Ltd. (https://mangopi.cc/) manufactures
-> the MangoPi family of boards.
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
-> 
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
+On 8/16/22 05:28, Peter Zijlstra wrote:
 
-Acked-by: Rob Herring <robh@kernel.org>
+> 
+> Could you please test this; I've only compiled it.
+> 
+When booting I get the following BUG:
+
+------------[ cut here ]------------
+kernel BUG at arch/x86/kernel/alternative.c:290!
+invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.0.0-rc1-00001-gb72b03c96999 #3
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1
+04/01/2014
+RIP: 0010:apply_alternatives+0x287/0x2d0
+Code: 4c 29 f6 03 74 24 13 89 74 24 13 45 85 c0 0f 85 d2 41 e9 00 41 0f b6 02 83
+e0 fd 3c e9 0f 84 46 ff ff ff e9 5e fe ff ff 0f 0b <0f> 0b f7 c6 00 ff ff ff 0f
+84 68 ff ff ff 8d 71 fb c6 44 24 12 e9
+RSP: 0000:ffffffff82c03d68 EFLAGS: 00010206
+RAX: 0000000000000000 RBX: ffffffff83728c24 RCX: 0000000000007fff
+RDX: 00000000ffffffea RSI: 0000000000000000 RDI: 000000000000ffff
+RBP: ffffffff82c03d7a R08: e800000010c4c749 R09: 0001e8cc00000001
+R10: 10c48348cc000000 R11: e8ae0feb75ccff49 R12: ffffffff8372fcf8
+R13: 0000000000000000 R14: ffffffff81001a68 R15: 000000000000001f
+FS:  0000000000000000(0000) GS:ffff88813bc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88813ffff000 CR3: 0000000002c0c001 CR4: 0000000000770ef0
+PKRU: 55555554
+Call Trace:
+ <TASK>
+ ? insn_get_opcode+0xef/0x1c0
+ ? ct_nmi_enter+0xb3/0x180
+ ? ct_nmi_exit+0xbe/0x1d0
+ ? irqentry_exit+0x2d/0x40
+ ? asm_common_interrupt+0x22/0x40
+ alternative_instructions+0x5b/0xf5
+ check_bugs+0xdaf/0xdef
+ start_kernel+0x66a/0x6a2
+ secondary_startup_64_no_verify+0xe0/0xeb
+ </TASK>
+Modules linked in:
+Dumping ftrace buffer:
+   (ftrace buffer empty)
+---[ end trace 0000000000000000 ]---
+RIP: 0010:apply_alternatives+0x287/0x2d0
+Code: 4c 29 f6 03 74 24 13 89 74 24 13 45 85 c0 0f 85 d2 41 e9 00 41 0f b6 02 83
+e0 fd 3c e9 0f 84 46 ff ff ff e9 5e fe ff ff 0f 0b <0f> 0b f7 c6 00 ff ff ff 0f
+84 68 ff ff ff 8d 71 fb c6 44 24 12 e9
+RSP: 0000:ffffffff82c03d68 EFLAGS: 00010206
+RAX: 0000000000000000 RBX: ffffffff83728c24 RCX: 0000000000007fff
+RDX: 00000000ffffffea RSI: 0000000000000000 RDI: 000000000000ffff
+RBP: ffffffff82c03d7a R08: e800000010c4c749 R09: 0001e8cc00000001
+R10: 10c48348cc000000 R11: e8ae0feb75ccff49 R12: ffffffff8372fcf8
+R13: 0000000000000000 R14: ffffffff81001a68 R15: 000000000000001f
+FS:  0000000000000000(0000) GS:ffff88813bc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88813ffff000 CR3: 0000000002c0c001 CR4: 0000000000770ef0
+PKRU: 55555554
+Kernel panic - not syncing: Attempted to kill the idle task!
+Dumping ftrace buffer:
+   (ftrace buffer empty)
+---[ end Kernel panic - not syncing: Attempted to kill the idle task! ]---
+
+
+

@@ -2,130 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9A75957A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB5D595798
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232790AbiHPKJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:09:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59446 "EHLO
+        id S233694AbiHPKIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233918AbiHPKJX (ORCPT
+        with ESMTP id S234262AbiHPKID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:09:23 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD19BFC71
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:41:58 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id kb8so17662888ejc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:41:58 -0700 (PDT)
+        Tue, 16 Aug 2022 06:08:03 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB1E356F4;
+        Tue, 16 Aug 2022 01:42:58 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id b2so7628325qkh.12;
+        Tue, 16 Aug 2022 01:42:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=m7Ylrhpsm6OVfghN5qH4zCT0WFeKmrFF6mCDrHN6og0=;
-        b=z75K1phbqPlNfL1Bdg7U4n5nvKu7v9Jn1AXWrXin10tH6qqLH5SNIXPBfRkvhCmCqR
-         gWzNMB4cKuoGCJf5M02GSGsLsO2Mo76s7R/DaStA4YfuqiC8kd4maI5J3UPk/N1R6csp
-         WbnecpfSKfO1CSkDfPejCzlSIFsf4pQBsdf0Lw/eEHku2pk6QsntrFaPuqp8RokxErVp
-         TwC6PFV85a/gW/JImsk9hAODQ+9CYlqMZapgRLmvMCTBU3EV0VYsfjakmlWpQCed/SJf
-         KSHDt2kuFiUPnx6uT4WkiHx8OXmoitZt9UVgpWR8cCmRTCAk9Yz9TUuFWU+7fv1dnU5a
-         3jrg==
+        bh=M8+zN5n51GohpbStdjKXmJWXHgqhXr7wmE0QoYJl1Tg=;
+        b=qLuGJVydbZapmuhh/ri/mPvYA5bm4nMtIaG76TKtA3Mvo/gBhkJK17beJcQl4lBkM0
+         iPBdZSSrCNgcezsRIABTJwp7UtgOhSIzqLsuYw6uKZIdWj2+EzGX4Ynvo2pcygJ3ES0H
+         rNv2bDiwY+8yFgEBX8y3Q+RZ0w+7z61uHWS67T1C+ZdmOf9xIz3+Ss494E0LnAKj62KJ
+         uuV7tjhnSgJ133uq7dK9dc8YkqzpGgSLl11+J0G8NNyLbKRknzb7wyR2X4f7YRD/3396
+         ChRcoJ8Z8tpfDVeQs7eHQAwLSDOEU4j8m9CRydpoEnGFQI0rjqmOED+9BOVCNq8moS5U
+         UQgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=m7Ylrhpsm6OVfghN5qH4zCT0WFeKmrFF6mCDrHN6og0=;
-        b=5lKpuja2QCxEYjAzjh1YWCGriqj2qa7nSEct/Ybvi9xWNVk7szJb/Gaq5ZemJYby5r
-         BdQztOPfjDVvlI+evg1m+GFBBRcd6781i3YefzKe//mfizlDdEeTzjXlwDtJoA2w2VPa
-         8XABAvcdG40lMrhLuMYiyBNV9lk2NRTESGwpZepoAWrG2aKjI06pnieW9eCQnj4GrNnD
-         aPIMtEja3wLfZvHT4WzZFuDpYsCJ8t7wHUEPmpnc+eakGO4T/Zu7OJEE+E6mq60kxRfU
-         VvpfC4aXx4jt6/8s+TBcNEHpCYQJ/6uiW71KnJ+FLuYlfxn1tH+UdokEOuS1nemU4d13
-         oCxQ==
-X-Gm-Message-State: ACgBeo2+pBt4G7+PiSB6Rc2sR42DlLTiX02SnQ5o1c4wLOGUWRYIbAxW
-        JY7bwMIYtDtFszMWZXZl6V++NfZDIzBWgGsTXn55Vg==
-X-Google-Smtp-Source: AA6agR5WJcbhdI+a8fZ4r4PXRD9/RB3FMkf3bBU2V6bl986OSujcFf8WPx4pl8Erh1Ikff3d5PXSq+8N15Zu34T5E4o=
-X-Received: by 2002:a17:907:2cd1:b0:730:a980:d593 with SMTP id
- hg17-20020a1709072cd100b00730a980d593mr12859182ejc.48.1660639316945; Tue, 16
- Aug 2022 01:41:56 -0700 (PDT)
+        bh=M8+zN5n51GohpbStdjKXmJWXHgqhXr7wmE0QoYJl1Tg=;
+        b=Nepdhtws48v2xij5S/nWebWOJnxuWP4JOjF/2KqaCvOgfmk3TiLhtYBKBiom95hkNS
+         gjU0XOwr5MW8JOxkNuPDG6BBnecPqoc09gvIePtGlb7iPAGaRs4Qo+5b28OYCPcgC+43
+         6Pty5tXDIzbhTHaXVTpEIitd1Qn2ZlJScZDw8ffK/aZUzgt22Xf+Z/o51x/oYWOVoAqF
+         gndFTmrZnjwe7UmD2gFmx9lPVUwkOnsUldY6hrO2HaZOHoRcb5eVIxDxyuyTBIZ/xz/M
+         uiDUCOmdl7judNDA1Pv8TNapNmlFTMwTYeev0jkQKrr4gRq7KWUX8Nhr7Hr/7OT2JfAW
+         Pinw==
+X-Gm-Message-State: ACgBeo0uJw2fp/LLnGgtYGDsjU4qdXa/Lai1LTrrKIn0na9QclHQfC75
+        hAcLSuZIYCKtjqJHK9m8xBDMqPvqpvdgcDp7bds=
+X-Google-Smtp-Source: AA6agR4R4lk0CDBQHZmGfGnS3MaEvTJE6k0Sqbe/jCHB+ee624GaEK+KH/pS5yDyRz1iFyVysOe/Lnz9Oes4idkTrfs=
+X-Received: by 2002:ae9:e311:0:b0:6ba:e711:fb27 with SMTP id
+ v17-20020ae9e311000000b006bae711fb27mr11131735qkf.320.1660639377250; Tue, 16
+ Aug 2022 01:42:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220815180337.130757997@linuxfoundation.org>
-In-Reply-To: <20220815180337.130757997@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 16 Aug 2022 14:11:45 +0530
-Message-ID: <CA+G9fYuXHvYQkWnDac6T8s9XnP_jctCbV=yEx3Z9EhWko2dPPg@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/779] 5.15.61-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
+References: <cover.1660292316.git.mazziesaccount@gmail.com>
+ <166057828406.697572.228317501909350108.b4-ty@kernel.org> <YvpsRbguMXn74GhR@pendragon.ideasonboard.com>
+ <Yvp1Qkuh7xfeb/B2@sirena.org.uk> <YvqV9Mq6I3gXQaf2@pendragon.ideasonboard.com>
+ <20220815205857.308B1C433D6@smtp.kernel.org> <Yvq33T+XCduoqv7Z@pendragon.ideasonboard.com>
+In-Reply-To: <Yvq33T+XCduoqv7Z@pendragon.ideasonboard.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 16 Aug 2022 11:42:20 +0300
+Message-ID: <CAHp75VefRphjAhSmrUVC8aaAhrwMD+9Jr=OROFU-0JuNhuFYDw@mail.gmail.com>
+Subject: Re: (subset) [PATCH v2 0/7] Devm helpers for regulator get and enable
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-amlogic <linux-amlogic@lists.infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Documentation List <linux-doc@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Michael Turq uette <mturquette@baylibre.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        linux-hwmon@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
+        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        David Airlie <airlied@linux.ie>,
+        linux-iio <linux-iio@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 Aug 2022 at 23:44, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Tue, Aug 16, 2022 at 8:37 AM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+> On Mon, Aug 15, 2022 at 01:58:55PM -0700, Stephen Boyd wrote:
+> > Quoting Laurent Pinchart (2022-08-15 11:52:36)
+> > > On Mon, Aug 15, 2022 at 05:33:06PM +0100, Mark Brown wrote:
+
+...
+
+> > > we'll run into trouble. Supplying active high input signals
+> > > to a device that is not powered can lead to latch-up, which tends to
+> > > only manifest after a statistically significant number of occurrences of
+> > > the condition, and can slowly damage the hardware over time. This is a
+> > > real concern as it will typically not be caught during early
+> > > development. I think we would still be better off with requiring drivers
+> > > to manually handle powering off the device until we provide a mechanism
+> > > that can do so safely in an automated way.
+> >
+> > Can you describe the error scenario further? I think it's driver author
+> > error that would lead to getting and enabling the regulator after
+> > getting and enabling a clk that drives out a clock signal on some pins
+> > that aren't powered yet. I'm not sure that's all that much easier to do
+> > with these sorts of devm APIs, but if it is then I'm concerned.
 >
-> This is the start of the stable review cycle for the 5.15.61 release.
-> There are 779 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> You will very quickly see drivers doing this (either directly or
+> indirectly):
 >
-> Responses should be made by Wed, 17 Aug 2022 18:01:29 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.61-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+> probe()
+> {
+>         devm_clk_get_enabled();
+>         devm_regulator_get_enable();
+> }
 
-The powerpc defconfig failed on stable-rc 5.15.
+And how is it devm specific? If the author puts the same without devm
+the ordering would be wrong, correct? devm allows us to focus on
+ordering in a *single* place, which is a win. You seem to be proposing
+to make a high burden on a driver's author to focus on ordering in the
+*three* places. I disagree with that. Yet the driver author has to
+understand many issues with any tool they use. So the root cause of
+your whining is rather on the edge of documentation and education.
+(Yes, I have heard about issues with object lifetime in v4l2
+subdevices regarding to devm, but it seems irrelevant to devm
+mechanism itself.)
 
-* powerpc, build
-  - gcc-10-ppc6xx_defconfig
-  - gcc-11-ppc6xx_defconfig
-  - gcc-8-ppc6xx_defconfig
-  - gcc-9-ppc6xx_defconfig
-
-arch/powerpc/sysdev/fsl_pci.c: In function 'fsl_add_bridge':
-arch/powerpc/sysdev/fsl_pci.c:601:39: error:
-'PCI_CLASS_BRIDGE_PCI_NORMAL' undeclared (first use in this function);
-did you mean 'PCI_CLASS_BRIDGE_PCI'?
-  601 |                         class_code |= PCI_CLASS_BRIDGE_PCI_NORMAL << 8;
-      |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                       PCI_CLASS_BRIDGE_PCI
-arch/powerpc/sysdev/fsl_pci.c:601:39: note: each undeclared identifier
-is reported only once for each function it appears in
-make[3]: *** [scripts/Makefile.build:289: arch/powerpc/sysdev/fsl_pci.o] Error 1
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Steps to reproduce:
---------------------
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
-
-tuxmake --runtime podman --target-arch powerpc --toolchain gcc-11
---kconfig ppc6xx_defconfig
+> Without a devres-based get+enable API drivers can get the resources they
+> need in any order, possibly moving some of those resource acquisition
+> operations to different functions, and then have a clear block of code
+> that enables the resources in the right order. These devres helpers give
+> a false sense of security to driver authors and they will end up
+> introducing problems, the same way that devm_kzalloc() makes it
+> outrageously easy to crash the kernel by disconnecting a device that is
+> in use.
 
 
---
-Linaro LKFT
-https://lkft.linaro.org
+
+-- 
+With Best Regards,
+Andy Shevchenko

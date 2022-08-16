@@ -2,93 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7E92595EC7
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 17:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECECC595ECD
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 17:12:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232047AbiHPPKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 11:10:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
+        id S236019AbiHPPLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 11:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbiHPPKE (ORCPT
+        with ESMTP id S233117AbiHPPLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 11:10:04 -0400
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4E2543CF;
-        Tue, 16 Aug 2022 08:10:02 -0700 (PDT)
-Received: by mail-qv1-f42.google.com with SMTP id mk9so8048858qvb.11;
-        Tue, 16 Aug 2022 08:10:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=dmgWwEwfSK7FGsGGvHTpCWRuqiYbuUsXIkCtXthtW4o=;
-        b=h64S4wkiwJ9kr5LkPNu1MnA4VHptnYRU5RBoLqa6wrSsRQxzuQyzGWVpo2sCiG13KX
-         ogJBJ9XN2yee8BRFyZ5CQ8LP2SEqtCk8DrtlBMOO/HwxlLjJ+a08aWTE9uE6wFTxq5Bo
-         7uk2LpAKGZyxL8A1k/JGCGcrQJZe/Owec0uPZhnPyKBFAiV7nNth7sG9jd6KggEpjf6F
-         AH5w9W1gWm3Yy3KZ9wt2pDzRt4IWOxf/JSK3ElWDFU9DTZ6EekuuMvBYTgokQHXvUgyN
-         hkMiCFuntWmNG0fJFJXgP0BdxhvmiqPM0FsBDa7A5buVP3UdQrPR038PFeioPhS+y9ca
-         E2+A==
-X-Gm-Message-State: ACgBeo0QyT0R1xQ/d9vQ8zgUBHp34V6TwXXJBuU6Na2r2LJvRhVgBFem
-        qnoee4Bt/Ooiu3YKrlI3B+sYq6TnAFfKcJxm
-X-Google-Smtp-Source: AA6agR4EeFp05FpPHq8UdmVOXNNu464JjT1fmdsjyoMQjlwI69GiHM8ow57TAxJ2PMe6tP3RBnqjVw==
-X-Received: by 2002:a05:6214:c6c:b0:496:8e7:a93b with SMTP id t12-20020a0562140c6c00b0049608e7a93bmr1193772qvj.97.1660662601979;
-        Tue, 16 Aug 2022 08:10:01 -0700 (PDT)
-Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::a5ed])
-        by smtp.gmail.com with ESMTPSA id dm14-20020a05620a1d4e00b006bad20a6cfesm10794561qkb.102.2022.08.16.08.10.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 08:10:01 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 10:09:41 -0500
-From:   David Vernet <void@manifault.com>
-To:     Hao Luo <haoluo@google.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        jolsa@kernel.org, tj@kernel.org, joannelkoong@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/5] bpf: Add user-space-publisher ringbuffer map type
-Message-ID: <YvuzNaam90n4AJcm@maniforge.dhcp.thefacebook.com>
-References: <20220808155248.2475981-1-void@manifault.com>
- <CA+khW7iuENZHvbyWUkq1T1ieV9Yz+MJyRs=7Kd6N59kPTjz7Rg@mail.gmail.com>
- <20220810011510.c3chrli27e6ebftt@maniforge>
- <CA+khW7iBeAW9tzuZqVaafcAFQZhNwjdEBwE8C-zAaq8gkyujFQ@mail.gmail.com>
+        Tue, 16 Aug 2022 11:11:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC6A7269D
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:11:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660662698;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jEYRKj1nlSqtCrHOWIArTdrELJ6+dwpREnZJE+d8OE8=;
+        b=NlhGKQg5Fnfz2cejt3KVKddjp9zO/GJ3dOkfIY9H+biFvjT6LRyU/x7L3rzD0aUQsxQwgV
+        3PwFjJqaPPRwI6hg7qBu5j8BK+lp4s99H1BR9NCYRmMa87pSISXqjAtDZVTkeFdFOeRNR+
+        HHIDldqEF2KXr0TTTBVuCQpZtefUF84=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-581-d357ltXUNxGd5u3M3tPu0g-1; Tue, 16 Aug 2022 11:11:34 -0400
+X-MC-Unique: d357ltXUNxGd5u3M3tPu0g-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DE868811E87;
+        Tue, 16 Aug 2022 15:11:32 +0000 (UTC)
+Received: from llong.com (unknown [10.22.10.201])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0BC25403340;
+        Tue, 16 Aug 2022 15:11:32 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Will Deacon <will@kernel.org>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v4 0/3] sched, cgroup/cpuset: Keep user set cpus affinity
+Date:   Tue, 16 Aug 2022 11:11:16 -0400
+Message-Id: <20220816151119.29534-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+khW7iBeAW9tzuZqVaafcAFQZhNwjdEBwE8C-zAaq8gkyujFQ@mail.gmail.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 02:13:13PM -0700, Hao Luo wrote:
-> >
-> > Iters allow userspace to kick the kernel, but IMO they're meant to enable
-> > data extraction from the kernel, and dumping kernel data into user-space.
-> 
-> Not necessarily extracting data and dumping data. It could be used to
-> do operations on a set of objects, the operation could be
-> notification. Iterating and notifying are orthogonal IMHO.
-> 
-> > What I'm proposing is a more generalizable way of driving logic in the
-> > kernel from user-space.
-> > Does that make sense? Looking forward to hearing your thoughts.
-> 
-> Yes, sort of. I see the difference between iter and the proposed
-> interface. But I am not clear about the motivation of a new APis for
-> kicking callbacks from userspace. I guess maybe it will become clear,
-> when you publish a concerte RFC of that interface and integrates with
-> your userspace publisher.
+v4:
+ - Update patch 1 to make sched_setaffinity() the only function to
+   update user_cpus_ptr to make the logic simpler and
+   easier to understand. restrict_cpus_allowed_ptr() and
+   relax_compatible_cpus_allowed_ptr() will just use it if present.
 
-Fair enough -- let me remove this from the cover letter in future
-versions of the patch-set. To your point, there's probably little to be
-gained in debating the merits of adding such APIs until there's a
-concrete use-case.
+v3:
+ - Attach a new patch 2 to introduce a copy_user_cpus_mask() to copy
+   out user masks with lock protection & use it in patch 3.
 
-Thanks,
-David
+v2:
+ - Rework the v1 patch by extending the semantics of user_cpus_ptr to
+   store user set cpus affinity and keeping to it as much as possible.
+
+The user_cpus_ptr field is added by commit b90ca8badbd1 ("sched:
+Introduce task_struct::user_cpus_ptr to track requested affinity")
+which uses it narrowly to allow keeping cpus affinity intact with
+asymmetric cpu setup.
+
+This patchset extends user_cpus_ptr to store user set cpus affinity via
+sched_setaffinity() API. With that information avaiable, it will enable
+cpuset to keep cpus afinity as close to what the user wants as possible
+within the cpu list constraint of the current cpuset. Otherwise some
+change to the cpuset hierarchy may reset the cpumask of the tasks in
+the affected cpusets to the default cpuset value even if those tasks
+have cpus affinity explicitly set by the users before.
+
+It also means that once sched_setaffinity() is called, user_cpus_ptr
+will remain allocated until the task exits.
+
+Waiman Long (3):
+  sched: Use user_cpus_ptr for saving user provided cpumask in
+    sched_setaffinity()
+  sched: Provide copy_user_cpus_mask() to copy out user mask
+  cgroup/cpuset: Keep user set cpus affinity
+
+ include/linux/sched.h  |   1 +
+ kernel/cgroup/cpuset.c |  28 +++++++++-
+ kernel/sched/core.c    | 119 ++++++++++++++++++++++++-----------------
+ kernel/sched/sched.h   |   1 -
+ 4 files changed, 98 insertions(+), 51 deletions(-)
+
+-- 
+2.31.1
+

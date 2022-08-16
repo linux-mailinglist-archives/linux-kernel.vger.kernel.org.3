@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840AC5953AD
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1D95953AC
 	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 09:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232007AbiHPHYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 03:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
+        id S231823AbiHPHYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 03:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231799AbiHPHY3 (ORCPT
+        with ESMTP id S231810AbiHPHYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 03:24:29 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90BA2BDADE;
-        Mon, 15 Aug 2022 20:29:10 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id w14so8060597plp.9;
-        Mon, 15 Aug 2022 20:29:10 -0700 (PDT)
+        Tue, 16 Aug 2022 03:24:30 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465B82C922C;
+        Mon, 15 Aug 2022 20:30:55 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id k14so8299339pfh.0;
+        Mon, 15 Aug 2022 20:30:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=OjANN6U8pA8sv88uCgiJ2ZB40yWpGc8cpzibqLjqsTs=;
-        b=JGv7upUA7KU3uEQOy/3IXnjKJWpHIR89MEJnKkwtTYXMI1tZzthQAOIG6Dpa6qAVdZ
-         +EOVzBZ7jJYULdJfgYTFFBVrP+JWoqIfaOyJuq7xjKW9Rf3DSCyIZOm8RW0P3D4Pupd2
-         jlhIQDU69adeFGdwIAFuESMAT5v+9Oe3tpnnAlcU6LUAi4ERlWrJ76FaSUTcRCh3uoY6
-         AwSG28h6SLyhxy9ezQXyfGowFCZ3ZHeUNsr34AUvDW+NxaccGXyxSsDqTNxXvJikfCgB
-         N6v9nQCJrr0GGZZ4xu+zOweOPA1N1lE8acMEaD/IBHEzRkPS+pJCCfiBI3FdUsJm5Ytx
-         v+1Q==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=P1ObS2Ks4kjBRkWKn0mTEfRTELGUp7wMDYb+ScsU4UA=;
+        b=fSxPpxevvj1qJBqzaHMjw1Ls7IWVszx+J6lgCpDdFJXF1JvXXNOPcJOAkvR4FPIjd1
+         qFLVmFhFi6I6XkDYZCaqWOPdTd+znVbExdQb/GUuGjraM9/y/KhJBB50qTOPPfHM2v46
+         3dLHuK4itNpokN5SWZOjaa2aTRXgM1ni95OVY1RwShPv09mZ7Pu5KEo09LYICplZAt7m
+         lAWDJzV5d2P0ikziLIV2TVC+gGOrQYLZ+SqudiZAymB4MahqOsbexCnyGV00TcT5UoB0
+         flhoKXGFP/t29BzYvoZOjgBQg4t41ThZcY1dNP6wQeL3M6FRA1KKM38ZRs/vykTQdI8j
+         yq6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=OjANN6U8pA8sv88uCgiJ2ZB40yWpGc8cpzibqLjqsTs=;
-        b=v/DOtR472yc3HNRbj3MiXg2adRwPsB2v7lB6l7wTeA7W0SQMhak6CCVJEc6L33lvRT
-         ljeIb/qo3IKRnpPp50u97PfjHG/jM66WFWPq9NzZK/V4CAashKoCIHMPSYYYJykof8Lv
-         /i7G2fsQmQ47hBGQIo2vOSLwLl/QTFGKpn3z1LCENWglcy+6LGxIXfUPwI0zkyCbTfJo
-         dGyOvwAP3fyTCBNmTicpexmDVI80NziPcUxbD+YNQd1Fd0T5cUaXFmW/CzBJhVf3XL5/
-         9gixlktOB+Jl7/ixN68jfvLYGB/xtQT+T1KFAIduXcM80bSjYh8d9qzxsgpZV/quWr0X
-         D21Q==
-X-Gm-Message-State: ACgBeo0iUWscSrx8gCE1AuBHn6iXInI1NGKM16hCZcH99Oa5m+7ajchA
-        +474ccE4Gx8suhrIQO8CxPU=
-X-Google-Smtp-Source: AA6agR6Tx4qYm+YQ/HOdjF2Lj+IIWATa0PhcoyiB1folfWva+IA4ompclIEHgGDQg/1lqzxYeZpx4g==
-X-Received: by 2002:a17:90a:fc2:b0:1f3:20d0:2e47 with SMTP id 60-20020a17090a0fc200b001f320d02e47mr21075881pjz.117.1660620549312;
-        Mon, 15 Aug 2022 20:29:09 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.15])
-        by smtp.gmail.com with ESMTPSA id f4-20020a623804000000b0052f20d70845sm7227227pfa.150.2022.08.15.20.29.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 20:29:08 -0700 (PDT)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     kuba@kernel.org, miguel.ojeda.sandonis@gmail.com
-Cc:     ojeda@kernel.org, ndesaulniers@google.com, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, asml.silence@gmail.com,
-        imagedong@tencent.com, luiz.von.dentz@intel.com,
-        vasily.averin@linux.dev, jk@codeconstruct.com.au,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH net-next v4] net: skb: prevent the split of kfree_skb_reason() by gcc
-Date:   Tue, 16 Aug 2022 11:28:46 +0800
-Message-Id: <20220816032846.2579217-1-imagedong@tencent.com>
-X-Mailer: git-send-email 2.36.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=P1ObS2Ks4kjBRkWKn0mTEfRTELGUp7wMDYb+ScsU4UA=;
+        b=spT3wWQHk2mHFbdtvvZ+BynWOpCvNlYystQkQy5A2WZzg5Lr40QZzecMpqmc4e7bOy
+         hdy+92q8TKDsQHWqWNCpkYYdoe7H8zQL4LGDN7uNkLsVdlIgT3Av+3TMlwN/5fPvcxhC
+         5m7nA3wQUbMqmeZA13TSX/gfTF0jmF5e5FH2yMWqhiPU4H5xBe7mr1ox1LTtyflrYZAL
+         bApHJFtHxKhRSt/kjPjwTOGoLRkkA/zYr+TpK7g/OkskmyMCRYtJ5Oh+F7u9QS9F7hqf
+         wem0YAsTyXCD3Bof7PZj3ehqhoK+wwstentQH/RQ59aMiUlBLym7Yr6zV5SNz/N0tGtu
+         Qp/w==
+X-Gm-Message-State: ACgBeo0hqiOnjOIInizTfTg7WmSGNMb4es3QisCPCeesyqBjAYpG3rx1
+        0gCffVKF+ut3+2PoE4wQyq+a8K3/uV/8yyVSnc0=
+X-Google-Smtp-Source: AA6agR5FUwb36fCXc58Tr80N2474jeS+A4xJF4DoAJBA9UUfPktru8hbWIAz25MhebnsO9i8WLPLs4rtyzyVMD5fTZU=
+X-Received: by 2002:a65:6a0c:0:b0:429:7ade:490b with SMTP id
+ m12-20020a656a0c000000b004297ade490bmr4442285pgu.621.1660620653469; Mon, 15
+ Aug 2022 20:30:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220815062727.1203589-1-imagedong@tencent.com> <CANiq72=01dzC5zs6-7Y4qrKYoFE1JpKes0ykN+x=FgGSmt9PCg@mail.gmail.com>
+In-Reply-To: <CANiq72=01dzC5zs6-7Y4qrKYoFE1JpKes0ykN+x=FgGSmt9PCg@mail.gmail.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Tue, 16 Aug 2022 11:30:42 +0800
+Message-ID: <CADxym3YnD=eP4n_RCrKy67z55e=tQZDNuJUw9hpTKZ6JNwspaA@mail.gmail.com>
+Subject: Re: [PATCH net-next v3] net: skb: prevent the split of
+ kfree_skb_reason() by gcc
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     kuba@kernel.org, ojeda@kernel.org, ndesaulniers@google.com,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        asml.silence@gmail.com, imagedong@tencent.com,
+        luiz.von.dentz@intel.com, vasily.averin@linux.dev,
+        jk@codeconstruct.com.au, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -73,92 +71,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+On Mon, Aug 15, 2022 at 7:52 PM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On Mon, Aug 15, 2022 at 8:27 AM <menglong8.dong@gmail.com> wrote:
+> >
+> >  include/linux/compiler-gcc.h   | 12 ++++++++++++
+> >  include/linux/compiler_types.h |  4 ++++
+>
+> No, this should be in `compiler_attributes.h` like you had it before.
+>
+> To be clear, what you did here would be fine, but it is the "old way"
+> (we added `compiler_attributes.h` to reduce the complexity of
+> `compiler-*` and `compiler_types.h` and make it a bit more
+> normalized).
+>
+> Please take a moment and read how other attributes do it in
+> `compiler_attributes.h` with `__has_attribute`. Check, for instance,
+> `__copy`, which is very similar to your case (not supported by Clang
+> and ICC, except in your case GCC always supports at least since 5.1).
+>
 
-Sometimes, gcc will optimize the function by spliting it to two or
-more functions. In this case, kfree_skb_reason() is splited to
-kfree_skb_reason and kfree_skb_reason.part.0. However, the
-function/tracepoint trace_kfree_skb() in it needs the return address
-of kfree_skb_reason().
+Okay, I think I'm getting it now! Thank you, and I'm sending the V4.
 
-This split makes the call chains becomes:
-  kfree_skb_reason() -> kfree_skb_reason.part.0 -> trace_kfree_skb()
+Menglong Dong
 
-which makes the return address that passed to trace_kfree_skb() be
-kfree_skb().
-
-Therefore, prevent this kind of optimization to kfree_skb_reason() by
-making the optimize level to "O1". I think these should be better
-method instead of this "O1", but I can't figure it out......
-
-This optimization CAN happen, which depend on the behavior of gcc.
-I'm not able to reproduce it in the latest kernel code, but it happens
-in my kernel of version 5.4.119. Maybe the latest code already do someting
-that prevent this happen?
-
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
----
-v4:
-- move the definition of __nofnsplit to compiler_attributes.h
-
-v3:
-- define __nofnsplit only for GCC
-- add some document
-
-v2:
-- replace 'optimize' with '__optimize__' in __nofnsplit, as Miguel Ojeda
-  advised.
----
- include/linux/compiler_attributes.h | 19 +++++++++++++++++++
- net/core/skbuff.c                   |  3 ++-
- 2 files changed, 21 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
-index 445e80517cab..968cbafa2421 100644
---- a/include/linux/compiler_attributes.h
-+++ b/include/linux/compiler_attributes.h
-@@ -270,6 +270,25 @@
-  */
- #define __noreturn                      __attribute__((__noreturn__))
- 
-+/*
-+ * Optional: not supported by clang.
-+ * Optional: not supported by icc.
-+ *
-+ * Prevent function from being splited to multiple part. As what the
-+ * document says in gcc/ipa-split.cc, single function will be splited
-+ * when necessary:
-+ *
-+ *   https://github.com/gcc-mirror/gcc/blob/master/gcc/ipa-split.cc
-+ *
-+ * This optimization seems only take effect on O2 and O3 optimize level.
-+ * Therefore, make the optimize level to O1 to prevent this optimization.
-+ */
-+#if __has_attribute(__optimize__)
-+# define __nofnsplit			__attribute__((__optimize__("O1")))
-+#else
-+# define __nofnsplit
-+#endif
-+
- /*
-  * Optional: not supported by gcc.
-  * Optional: not supported by icc.
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 974bbbbe7138..ff9ccbc032b9 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -777,7 +777,8 @@ EXPORT_SYMBOL(__kfree_skb);
-  *	hit zero. Meanwhile, pass the drop reason to 'kfree_skb'
-  *	tracepoint.
-  */
--void kfree_skb_reason(struct sk_buff *skb, enum skb_drop_reason reason)
-+void __nofnsplit
-+kfree_skb_reason(struct sk_buff *skb, enum skb_drop_reason reason)
- {
- 	if (!skb_unref(skb))
- 		return;
--- 
-2.36.1
-
+> Cheers,
+> Miguel

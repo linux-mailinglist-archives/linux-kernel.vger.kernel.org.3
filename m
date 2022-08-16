@@ -2,88 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF84595667
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7335359565E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233624AbiHPJbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
+        id S233657AbiHPJbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233619AbiHPJac (ORCPT
+        with ESMTP id S233631AbiHPJac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 16 Aug 2022 05:30:32 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5385679611;
-        Tue, 16 Aug 2022 00:51:35 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id D084F18848BC;
-        Tue, 16 Aug 2022 07:51:32 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id C689725032B7;
-        Tue, 16 Aug 2022 07:51:32 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id A3C93A1A0049; Tue, 16 Aug 2022 07:51:32 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2B3DEC9
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:51:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD3BAB81647
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 07:51:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3A48C433D7;
+        Tue, 16 Aug 2022 07:51:46 +0000 (UTC)
+Date:   Tue, 16 Aug 2022 08:51:47 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     Evgenii Stepanov <eugenis@google.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mte: Follow arm64.nomte override in MMU setup.
+Message-ID: <YvtMk2cNDrrzVX3g@arm.com>
+References: <20220805214734.1937451-1-eugenis@google.com>
+ <875yj1x0k0.wl-maz@kernel.org>
+ <CAFKCwrjVaOdrGktxVHLCDPyJSRjZ0B3FHTGsb3PXMULL=dw9rA@mail.gmail.com>
+ <87v8r1uztz.wl-maz@kernel.org>
+ <CAFKCwriq-Vh+fhxso=xqtKzkL95QkYOOkMR8XwTOJfeg1M-2qQ@mail.gmail.com>
+ <CAMn1gO5Va0eVFqzoOLLLJ+C+x-5=cc4qXDTw0e9J7v0RpYWusA@mail.gmail.com>
 MIME-Version: 1.0
-Date:   Tue, 16 Aug 2022 09:51:32 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-In-Reply-To: <YvNcitNnyFxTw8bs@shredder>
-References: <20220708091550.2qcu3tyqkhgiudjg@skbuf>
- <e3ea3c0d72c2417430e601a150c7f0dd@kapio-technology.com>
- <20220708115624.rrjzjtidlhcqczjv@skbuf>
- <723e2995314b41ff323272536ef27341@kapio-technology.com>
- <YsqPWK67U0+Iw2Ru@shredder>
- <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
- <Ys69DiAwT0Md+6ai@shredder>
- <79683d9cf122e22b66b5da3bbbb0ee1f@kapio-technology.com>
- <YvIm+OvXvxbH6POv@shredder>
- <6c6fe135ce7b5b118289dc370135b0d3@kapio-technology.com>
- <YvNcitNnyFxTw8bs@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <a1fc2c378816489e15995eb481c318eb@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMn1gO5Va0eVFqzoOLLLJ+C+x-5=cc4qXDTw0e9J7v0RpYWusA@mail.gmail.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-10 09:21, Ido Schimmel wrote:
->> >
->> > 1. It discards packets with matching DMAC, regardless of ingress port. I
->> > read the document [1] you linked to in a different reply and could not
->> > find anything against this approach, so this might be fine or at least
->> > not very significant.
->> >
->> > Note that this means that "locked" entries need to be notified to device
->> > drivers so that they will install a matching entry in the HW FDB.
->> 
+On Tue, Aug 09, 2022 at 06:24:23PM -0700, Peter Collingbourne wrote:
+> On Tue, Aug 9, 2022 at 10:29 AM Evgenii Stepanov <eugenis@google.com> wrote:
+> > On Tue, Aug 9, 2022 at 9:49 AM Marc Zyngier <maz@kernel.org> wrote:
+> > > In which case what is the tag memory doing in the linear map?
+> > > Shouldn't it be marked as reserved, not mapped, and in general
+> > > completely ignored by the NS OS?
+> >
+> > That would be wasteful. The idea is to only reserve the parts of the
+> > tag memory that correspond to the TZ carveout and release the rest to
+> > the NS OS.
+> 
+> More generally, one can imagine a system where *any* tagged memory
+> transaction can result in an SError because the MTE implementation was
+> not configured by an earlier bootloader phase, e.g. because the
+> bootloader was configured to disable MTE at runtime. On such systems,
+> the kernel must refrain from causing tagged memory transactions to be
+> issued via the linear map, and that's exactly what this patch does.
 
-I just want to be completely sure as what should be done in version 5 
-with locked entries from the bridge, as - if I should implement it so 
-that they are sent to all the drivers, and the drivers then ignore them 
-if they don't need to take action? (for the mv88e6xxx driver, it does 
-not need them and can ignore but other drivers might need.)
+The problem is that it doesn't. The 8.5 architecture allows any Normal
+Cacheable (even non-tagged) mapping to fetch tags. It may happen that on
+certain implementations setting MAIR to non-tagged works but that's not
+guaranteed and with the Linux kernel we tend to stick to the architected
+behaviour (with a few exceptions like PMU counters and errata).
+
+There is an ongoing discussion with the architects and partners on
+whether we can tighten the architecture as not to cause visible
+side-effects like SError but not sure whether that has been closed yet
+(just back from holiday).
+
+Until that's sorted, tag storage cannot be reused in an arm64-generic
+way in the kernel.
+
+-- 
+Catalin

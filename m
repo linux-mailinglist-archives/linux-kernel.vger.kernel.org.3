@@ -2,53 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10455595E8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 16:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46661595E95
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 16:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235938AbiHPOrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 10:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
+        id S235975AbiHPOvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 10:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiHPOrh (ORCPT
+        with ESMTP id S229607AbiHPOvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 10:47:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7225B659D1;
-        Tue, 16 Aug 2022 07:47:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F227B8164C;
-        Tue, 16 Aug 2022 14:47:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31CABC433D6;
-        Tue, 16 Aug 2022 14:47:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660661253;
-        bh=ZVa8gCDk1BH2nIq9ZqAesRRRF4G1PspK7ZnMFfuGswg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iQQLDJv2GSL86ubns3Tt3+c69qvbJntma3tkirDITFwA6QKaGd7hMJ/RyoyuTa3yI
-         R0TEVEAaHJ4hf7Xgd/N4GmAdqI2bHSBHZZFhHsG+DVTBuUT/2M0Kvi5MdoZLuVB5x+
-         zJ7T+ngFxRbjtyZhL79DHPPPUDmpNuNbaWn66Ai0=
-Date:   Tue, 16 Aug 2022 16:47:30 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Paul Chaignon <paul@isovalent.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.19 0537/1157] bpf: Set flow flag to allow any source IP
- in bpf_tunnel_key
-Message-ID: <YvuuAprVhybi0CMj@kroah.com>
-References: <20220815180439.416659447@linuxfoundation.org>
- <20220815180501.149595269@linuxfoundation.org>
- <20220816143554.GA67569@Mem>
+        Tue, 16 Aug 2022 10:51:02 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7CCE4D4E1;
+        Tue, 16 Aug 2022 07:51:00 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27GB0Hus032057;
+        Tue, 16 Aug 2022 14:50:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=FVmxu4Kpgh/PEz4lvaHtDQ+ONJaDkADmoBabIh6f9Xk=;
+ b=BdoAvu97dstuMW5cD0MVOuainuxwZRkcrjwxk2G8xHhjYD8eTqRmwlWB5vhe+CzZppVr
+ cxY6+dPSGhm/iq9GzOwBiIaAuIfiT/vFxk3CPzaVVIIWkgJOtc8wBcosVpJUzTmg1ecn
+ 3KJdK9PjF+U3xhks7mVDTdeIbeG9giMd6m3s+CyjJ1YG1eFl2theSKBwFVHIkDfveX58
+ hxAMTRP/YrOPbyouwI2LuJsCBa9e09A0MdYAbke2kJfRHpSf0udtog6GsTDpjXMAGPyM
+ Ytt1maBYO5IPWadsiiLYRGPkhki2iqijVTeia+DU3y+UgtXHHEu7jJ1PD0dhMxHWCPPM 6A== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j05ev1mb7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Aug 2022 14:50:52 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27GEoqL9019177
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Aug 2022 14:50:52 GMT
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 16 Aug 2022 07:50:51 -0700
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 16 Aug
+ 2022 07:50:50 -0700
+Message-ID: <3981919c-1e48-8249-c09d-1c8ded3f3fc7@quicinc.com>
+Date:   Tue, 16 Aug 2022 08:50:49 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220816143554.GA67569@Mem>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [RFC PATCH 01/14] drm/qaic: Add documentation for AIC100
+ accelerator driver
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>
+CC:     <quic_carlv@quicinc.com>, <quic_ajitpals@quicinc.com>,
+        <quic_pkanojiy@quicinc.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1660588956-24027-1-git-send-email-quic_jhugo@quicinc.com>
+ <1660588956-24027-2-git-send-email-quic_jhugo@quicinc.com>
+ <a9c71f3b-0c7b-ee8f-d350-0ab453018558@linaro.org>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <a9c71f3b-0c7b-ee8f-d350-0ab453018558@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: E3qxsNLRgCkD31k514xqDxc7I7dpqr1p
+X-Proofpoint-GUID: E3qxsNLRgCkD31k514xqDxc7I7dpqr1p
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-16_08,2022-08-16_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 spamscore=0
+ phishscore=0 malwarescore=0 suspectscore=0 bulkscore=0 mlxlogscore=563
+ adultscore=0 impostorscore=0 lowpriorityscore=0 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208160056
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,33 +90,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 04:35:54PM +0200, Paul Chaignon wrote:
-> On Mon, Aug 15, 2022 at 07:58:13PM +0200, Greg Kroah-Hartman wrote:
-> > From: Paul Chaignon <paul@isovalent.com>
-> > 
-> > [ Upstream commit b8fff748521c7178b9a7d32b5a34a81cec8396f3 ]
-> > 
-> > Commit 26101f5ab6bd ("bpf: Add source ip in "struct bpf_tunnel_key"")
-> > added support for getting and setting the outer source IP of encapsulated
-> > packets via the bpf_skb_{get,set}_tunnel_key BPF helper. This change
-> > allows BPF programs to set any IP address as the source, including for
-> > example the IP address of a container running on the same host.
-> > 
-> > In that last case, however, the encapsulated packets are dropped when
-> > looking up the route because the source IP address isn't assigned to any
-> > interface on the host. To avoid this, we need to set the
-> > FLOWI_FLAG_ANYSRC flag.
+On 8/16/2022 4:55 AM, Krzysztof Kozlowski wrote:
+> On 15/08/2022 21:42, Jeffrey Hugo wrote:
+>> Add documentation covering both the QAIC driver, and the device that it
+>> drives.
 > 
-> This fix will also require upstream commits 861396ac0b47 ("geneve: Use
-> ip_tunnel_key flow flags in route lookups") and 7e2fb8bc7ef6 ("vxlan:
-> Use ip_tunnel_key flow flags in route lookups") to have the intended
-> effect. In short, these two commits "consume" the new field introduced
-> in 451ef36bd229 ("ip_tunnels: Add new flow flags field to
-> ip_tunnel_key") and populated in the present commit.
+> Thank you for your patch. There is something to discuss/improve.
+> 
+> 
+>>
+>> Change-Id: Iee519cc0a276249c4e8684507d27ae2c33e29aeb
+> 
+> You need to drop all such non-standard tags. 
 
-Ick.  Is it better to just drop this commit instead?  Or is it ok to
-also backport those 2 patches to 5.19.y?
+Noted.
 
-thanks,
-
-greg k-h

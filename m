@@ -2,116 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B55DF595A71
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F314595A72
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234569AbiHPLnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 07:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49234 "EHLO
+        id S233784AbiHPLnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 07:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234464AbiHPLmo (ORCPT
+        with ESMTP id S234357AbiHPLm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 07:42:44 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D64EBB004
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 04:12:29 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id o2so14472740lfb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 04:12:29 -0700 (PDT)
+        Tue, 16 Aug 2022 07:42:59 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA2F32E
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 04:13:14 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id r69so8939730pgr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 04:13:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=3voalfDQmBkJPM0iEJsy/pKGiIZwChjwOwKTgiPpcq4=;
-        b=u1jHFXVQelHvAsNbis29DRi8FSq7YOKJir1/5EgPIni7IHBviuSNWkvqKcxU6mb40R
-         BlTCsCYh1K7sEgITXhZRYuYCN5pe2icqTkOWfoMuklIV/+8Gz8Km9Ua5GakzZb5C6vYE
-         c/gtolt2fQpzqg7RzUa7JJJZHGFZesC1epB+YBppY3+iXA3X9R/+A+b/Cs8fSx7Zfgj9
-         HkhIRc/RtFysjq/jswJbCKcPVLXfYAkP/TdFb/zRc/nvYNbE7Tr0tyCAg9dK61Mg2I+X
-         kYaLufS6xx2BrN+tOj97sb3WT5EVJ4DulT3EMA5N8rYLWheSzQTjpo0MJU1zCmaGZXGZ
-         808w==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=V5IkeuSVi9fKfp3zra01ncb3hrHpLVL3k3XVBC9wdIU=;
+        b=klS9soVKVxOs0Xqft08jBbZnbUmDJ2wGnHyztAXIP9Sbl/u3vHNVMSVLlxj2KCtKsB
+         DTjQPJEJJAKzL20lI8KoI7ajyPxwgQk5SeWXMJtTTmX18eFC/fJq+uF+7U4S99HSGfuf
+         HsrlcQ4A/Npdnir/K26lp5dYANl2vb2kp5CkiSjDnfZ7FmGyHO6gUugb+ShZZBhUZ7h2
+         BXt5SDXJWUvE9rqUs4JN5yHddrtvoqxcKLo3xr8PuZ5lL/F7zcrRjBGPSQV/kdwNftbP
+         jpsKPhPqiY5YSjNlQT4srBuDt61wDMQ/C+5JStujMLDxZf1gy0KDDFP/pdOXz7jF9NMS
+         OKgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=3voalfDQmBkJPM0iEJsy/pKGiIZwChjwOwKTgiPpcq4=;
-        b=dftDZMEYbbXamMfROid3znd/MFNcViCNL/oqL6uMOyVq417/9WKUk0o9dAG7I/uqwx
-         VWEm9MJoUzuc4ux/gix/ziHkVW38DYbeK3W/4bIjQvHMw1vZSDlOZSxspCIwet+rM5z3
-         6AhGHQH/8cbgxyjZwdZwmyzY+w3TTet8RVaRdCh0ExGcK8L+5209/vHnQevqd/tIA0F7
-         xbEFPeVU9c1OOf/FF3TAAgJGLomttmepFg+mursdQ7ftX8Al8z9nzzrGMlnFH11xep+E
-         1M8fTPr5CRrJ2QIUWzhdYc/gMv83vBj2sXWtLqpIPIQPIcKK0eSwgB/8ywSeaYGi92d/
-         l/rg==
-X-Gm-Message-State: ACgBeo1RGnI3BIzg8fyuGFXKtPkTOhV363jemD1Ucl7Z0Vx+vU3yRNAt
-        1o2qbgt6biF/93pd810FUyV32g==
-X-Google-Smtp-Source: AA6agR5s6mmYOckWupogUoGlmi0i4i7rbgUk9CW8zTxihnx3AOW7S9ITLQhn/Y/uWTfocKkgvLXxHg==
-X-Received: by 2002:ac2:50d7:0:b0:492:8830:4819 with SMTP id h23-20020ac250d7000000b0049288304819mr3641459lfm.36.1660648347906;
-        Tue, 16 Aug 2022 04:12:27 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id b16-20020a056512025000b0048b18d65998sm1358896lfo.38.2022.08.16.04.12.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 04:12:26 -0700 (PDT)
-Message-ID: <14753794-245a-7b27-3bd9-46b80666b7af@linaro.org>
-Date:   Tue, 16 Aug 2022 14:12:25 +0300
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=V5IkeuSVi9fKfp3zra01ncb3hrHpLVL3k3XVBC9wdIU=;
+        b=Y2RNvQ8Fq+K65ml10uxskVLHVAj9kTslPOGFBZwzveozLv/26lqYVJ3RII4IEsach/
+         KJiTEK49XtEcBBRCfyEYafYybFb4mwJDG6cIVVX6FU8eNPgzPAJMiVWBExvuHPg/7Xgw
+         CBaTc1HSotvlpBMEVfsLZUy7YE7YUCCUhTyyQvjvNO38NhXCW/pLj+dzF81EMxS5gSk6
+         PenKdOITG9hb/mAlmHyVBfkaz/ORElDCVFZvmpPVwGN4s9Ck/uNErxr9qq/shtPl0jWV
+         TmqFFwlpfmjIhU7tRoOjHVIoNM2BiBYxafExHKRCkv6ktkddIBCadliKtekMhaCd3zbZ
+         BKvQ==
+X-Gm-Message-State: ACgBeo2iOYmp6mQmeEwrVib+64rV0lMqQ1CE9+jkiBVW/YWwMxguYNm1
+        Xa9ej7mfBUTcymwYs7X/hsI=
+X-Google-Smtp-Source: AA6agR5YH/ZznegVN44Uy5995PYYL+udWnPOF5P90bgS+oePK8xqjC8K/9U6cX36GyQyj03+K08Qkg==
+X-Received: by 2002:a63:2a95:0:b0:41a:27e5:1996 with SMTP id q143-20020a632a95000000b0041a27e51996mr17241093pgq.447.1660648393943;
+        Tue, 16 Aug 2022 04:13:13 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j9-20020a655589000000b0041d90d681e7sm7340496pgs.48.2022.08.16.04.13.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 04:13:12 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 16 Aug 2022 04:13:11 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Isaac Manjarres <isaacmanjarres@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Saravana Kannan <saravanak@google.com>, stable@kernel.org,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] driver core: Fix bus_type.match() error handling
+Message-ID: <20220816111311.GC1108868@roeck-us.net>
+References: <20220815211919.2028890-1-isaacmanjarres@google.com>
+ <20220816042507.GB1108868@roeck-us.net>
+ <YvsoYzIhOtX9DOi2@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 06/12] riscv: dts: allwinner: Add the D1 SoC base
- devicetree
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Chen-Yu Tsai <wens@csie.org>, linux-sunxi@lists.linux.dev,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org,
-        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220815050815.22340-1-samuel@sholland.org>
- <5593349.DvuYhMxLoT@jernej-laptop> <3881930.ZaRXLXkqSa@diego>
- <2249129.ElGaqSPkdT@jernej-laptop>
- <b5401052-e803-9788-64d6-82b2737533ce@linaro.org>
- <20220816120050.07dc2416@donnerap.cambridge.arm.com>
- <29072f12-b9a3-9815-ad52-5c4f6b1634b3@linaro.org>
-In-Reply-To: <29072f12-b9a3-9815-ad52-5c4f6b1634b3@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvsoYzIhOtX9DOi2@google.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/08/2022 14:11, Krzysztof Kozlowski wrote:
->>
->> I think one reason might be that this is so central to the whole SoC
->> operation, that it's already referenced multiple times in the base .dtsi.
->> And having a yet unresolved reference in the .dtsi looks dodgy.
->>
->> NVidia seems to omit a base oscillator (maybe it's implicit in their
->> binding design), Marvell doesn't use a fixed-clock (but still puts their
->> base clock in armada-37xx.dtsi).
->>
->> Exynos and Renesas put a *stub* fixed-clock in the .dtsi, and set the
->> frequency in the board .dts files. Would this be a compromise?
+On Mon, Aug 15, 2022 at 10:17:23PM -0700, Isaac Manjarres wrote:
+> On Mon, Aug 15, 2022 at 09:25:07PM -0700, Guenter Roeck wrote:
+> > > v1 -> v2:
+> > > - Fixed the logic in __driver_attach() to allow a driver to continue
+> > >   attempting to match and bind with devices in case of any error, not
+> > >   just probe deferral.
+> > > 
+> > > Guenter,
+> > > 
+> > > Can you please give test this patch to make sure it still works for you?
+> > > 
+> > 
+> > Not as well as v1. I still see the clk crash with versatileab, and imx25-pdk
+> > emulations now stall during boot when trying to boot from usb.
+> > 
+> > Guenter
+> Thanks for trying the patch out. This patch isn't meant to fix the clk
+> crash that you mentioned on another thread. I had made the following patch for
+> that: https://lore.kernel.org/lkml/YvqTvuqSll30Rv2k@google.com/. Have
+> you been able to give that a shot yet? If not can you please test with the
+> patch in this e-mail and that patch?
 > 
-> This is exactly what I said before. The clock frequency is a property of
-> the board. Feel free to keep the rest of the clock in the SoC DTSI to
-> reduce duplication, but at minimum the clock should go to the board.
 
+No, sorry, I missed that one. It does not apply, though - it is whitespace
+corrupted. I tried to fix it up, but that failed.
 
-s/minimum the clock should go to the board/minimum the clock frequency
-should go to the board./
+> Please make sure you do not include this patch as it is known to cause
+> deadlocks: https://lore.kernel.org/lkml/YvXhJRlHN9OAIA5l@google.com/.
+> 
+No, I did not include that patch.
 
+> Did you test imx25-pdk emulations with just v1 of this patch previously?
+> 
 
+I am quite sure I did because it is a single setup.
 
-Best regards,
-Krzysztof
+Thanks,
+Guenter

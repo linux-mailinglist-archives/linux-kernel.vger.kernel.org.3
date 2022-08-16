@@ -2,104 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7C3595D9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABCF0595D94
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232888AbiHPNqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
+        id S234155AbiHPNnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234278AbiHPNqb (ORCPT
+        with ESMTP id S233563AbiHPNnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 09:46:31 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AFF90C5B
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:46:28 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id CF7A85803B8;
-        Tue, 16 Aug 2022 09:46:27 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 16 Aug 2022 09:46:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1660657587; x=1660664787; bh=gHbL+MytjJ
-        sZvOVGVzDN1GM9hKYjC7rxGk40WyTKaIo=; b=g5XU3Y09Fp0m6twECmjiDPgoD8
-        SlSF+LAfJbkef44m7fWMWdW6HV2pS8Rl6yMS4aqsH+reDeg0xYhJpkyl06HlSiGS
-        NhkqwOPuDcU5X5mmwbKdFkJSLfL3xMUbf1VSrJij1t1lgyNtXf4d3JaAEK1djaHV
-        955s/W/wAZCpzb/9Dma0gBHmULtU7/xrZL49O6Sp0gQcze1wdeHTgqmhWEurWo86
-        CHU43FOJBFSeXSfJftsTiUJx+aHQm5s1GJSuQYoE43+LVuQnW1WzOkmmGyBSOTmm
-        FdcDkO+sLNBuPxXgd1oHCa0Z01GatPcRdW5mlyldKfx9mnTSDbuvYIWrZYwg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660657587; x=1660664787; bh=gHbL+MytjJsZvOVGVzDN1GM9hKYj
-        C7rxGk40WyTKaIo=; b=kmAgyWxk9CRWsdlOPMowrQ81I+xu32+X9sXWngkrs64D
-        SpOvcWAlxbw4Z7Ks4uXYyMx5fSC0RmtNSYud9WV7FPvtPCdlXlRCwWUXW8mJVN1G
-        RmUrd8KXTue9ZVbBDHQXUwylRMHzD4wm0u60mUJ+imY8cTogoOd734xD19lkT/LJ
-        KX8tO6ikVBnZSRUERu3BcC7LJ6/Ux9czDptrE4aGzhssG7V3TWFjaeufH9waKDyN
-        SeXuuL4AGKV2dr03uawgCjnZL6ltWaXMrMs1StJtc5ATl112Gbz+Hth1PAp4J3pl
-        8r+eaBxJ3JQvPIuuyo2otHLpBAhF80CIdzeSgYQiLA==
-X-ME-Sender: <xms:s5_7YqzzZQoAWUgz1kfH2ymHepyDm213uAckzgqFSzuMaMENVi6OvA>
-    <xme:s5_7YmRk2xhRYIKNBPL4rKPaaDGM-WL0mlsQMugX_AJhMl-ZzxSU2uvV2BgqwcnOJ
-    NyWuvY05qtQfyjYOzg>
-X-ME-Received: <xmr:s5_7YsXuK-3JVFMmyMVM2XGYJzmQJN3e8iWhTp0eTeEZkQ8npxP1GXZaUoU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehgedgjedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
-    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:s5_7YggUuaxFesnjbcsrU2LUladhr5kLaWWzL5KaGVvRylgv9wHsYg>
-    <xmx:s5_7YsB7cHZfSR07JuLU_cnuM3OwfsClKgn7QiX8wWN4CQE6hYD60w>
-    <xmx:s5_7YhLN-ZJinuVFhhhltyU-kp6lbX_ruN80INBF1QvhJvew5W1rVQ>
-    <xmx:s5_7YuxTmg5yDXXc4a6DbirShoBajE24XWu7p0WiFGAumrChOuVWbg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 16 Aug 2022 09:46:26 -0400 (EDT)
-Date:   Tue, 16 Aug 2022 15:46:24 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Dom Cobley <dom@raspberrypi.com>
-Subject: Re: [PATCH v1 09/35] drm/modes: Move named modes parsing to a
- separate function
-Message-ID: <20220816134624.cmb5s6i6pkdhu3qj@houat>
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <20220728-rpi-analog-tv-properties-v1-9-3d53ae722097@cerno.tech>
- <CAMuHMdUiMEybnhgxgBXh1Cbv6syVe9iVU=sb17zHM72R8A2Dew@mail.gmail.com>
+        Tue, 16 Aug 2022 09:43:04 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493E785FAF;
+        Tue, 16 Aug 2022 06:43:03 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27GCTXOU020589;
+        Tue, 16 Aug 2022 13:42:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=qSmCgUkiKFSPrl9wRss/YSlSfXGLPxBQcr0ruFYm4TE=;
+ b=ER6q5huXcrTsYzUPijasmL27sSuPjshBhmQsYo+U9SmdxAVNlF6RHvB9LMAApVCZWA6R
+ HeG/YWUcvIQjOcFlzdWdIosUtnIeqyMBx6fKBSCZ8omvqjeAakE6UpvLjn9WcwzFqQo7
+ DcjXximE/aRhvoj1pWXvVKcjtJ/MqEMTReib2FU+XzByQ2MV6cJLnrWRCuIvDPBw31+7
+ jyzyMhPIlEBtUy6O+9xjw8AnkSbqRBTpHY3Sy4T6TG3xDlVdI9UKxs1ZUzwDx9q2xlOo
+ EttsI4FG3ZbotnX1TgqoEwVmyb0eOHfy1NNTfhtI2VyJC3v+14SQaYkxWPNXTULhHnsG eQ== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j0b9t27rw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Aug 2022 13:42:52 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27GDM51B005646;
+        Tue, 16 Aug 2022 13:42:50 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3hx37jba7b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Aug 2022 13:42:50 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27GDh6lP27394522
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 Aug 2022 13:43:06 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 57D945204E;
+        Tue, 16 Aug 2022 13:42:47 +0000 (GMT)
+Received: from [9.171.18.167] (unknown [9.171.18.167])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id E43315204F;
+        Tue, 16 Aug 2022 13:42:46 +0000 (GMT)
+Message-ID: <fa1e62d7-30c3-693e-e31a-352dde8c339f@linux.ibm.com>
+Date:   Tue, 16 Aug 2022 15:47:53 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xbotrfh2f6jawwvu"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUiMEybnhgxgBXh1Cbv6syVe9iVU=sb17zHM72R8A2Dew@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] vfio-pci/zdev: require KVM to be built-in
+Content-Language: en-US
+From:   Pierre Morel <pmorel@linux.ibm.com>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20220814215154.32112-1-rdunlap@infradead.org>
+ <663c7595-1c18-043e-5f12-b0ce880b84bf@linux.ibm.com>
+ <5530ed1f-90ec-ce84-2348-80e484fa48cb@infradead.org>
+ <47cfc72d-62f6-2bd3-db91-99f91591fc30@linux.ibm.com>
+In-Reply-To: <47cfc72d-62f6-2bd3-db91-99f91591fc30@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: SbCic7_lFjCT3UETxpFroWyQ5mpcuhQf
+X-Proofpoint-GUID: SbCic7_lFjCT3UETxpFroWyQ5mpcuhQf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-16_08,2022-08-16_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ priorityscore=1501 impostorscore=0 lowpriorityscore=0 clxscore=1015
+ mlxlogscore=999 bulkscore=0 spamscore=0 mlxscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208160051
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -108,90 +90,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Randy,
 
---xbotrfh2f6jawwvu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I need to provide the correction patch rapidly.
+Without answer I will propose the patch.
 
-On Fri, Aug 12, 2022 at 03:27:17PM +0200, Geert Uytterhoeven wrote:
-> Hi Maxime,
->=20
-> On Fri, Jul 29, 2022 at 6:36 PM Maxime Ripard <maxime@cerno.tech> wrote:
-> > The current construction of the named mode parsing doesn't allow to ext=
-end
-> > it easily. Let's move it to a separate function so we can add more
-> > parameters and modes.
-> >
-> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
->=20
-> Thanks for your patch, which looks similar to my "[PATCH v2 2/5]
-> drm/modes: Extract drm_mode_parse_cmdline_named_mode()"
-> (https://lore.kernel.org/dri-devel/1371554419ae63cb54c2a377db0c1016fcf200=
-bb.1657788997.git.geert@linux-m68k.org
-> ;-)
+Regards,
+Pierre
 
-Indeed, I forgot about that one, sorry :/
+On 8/16/22 09:55, Pierre Morel wrote:
+> 
+> 
+> On 8/16/22 08:04, Randy Dunlap wrote:
+>> Hi--
+>>
+>> On 8/15/22 02:43, Pierre Morel wrote:
+>>> Thank you Randy for this good catch.
+>>> However forcing KVM to be include statically in the kernel when using 
+>>> VFIO_PCI extensions is not a good solution for us I think.
+>>>
+>>> I suggest we better do something like:
+>>>
+>>> ----
+>>>
+>>> diff --git a/arch/s390/include/asm/kvm_host.h 
+>>> b/arch/s390/include/asm/kvm_host.h
+>>> index 6287a843e8bc..1733339cc4eb 100644
+>>> --- a/arch/s390/include/asm/kvm_host.h
+>>> +++ b/arch/s390/include/asm/kvm_host.h
+>>> @@ -1038,7 +1038,7 @@ static inline void 
+>>> kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
+>>>   #define __KVM_HAVE_ARCH_VM_FREE
+>>>   void kvm_arch_free_vm(struct kvm *kvm);
+>>>
+>>> -#ifdef CONFIG_VFIO_PCI_ZDEV_KVM
+>>> +#if defined(CONFIG_VFIO_PCI_ZDEV_KVM) || 
+>>> defined(CONFIG_VFIO_PCI_ZDEV_KVM_MODULE)
+>>
+>> This all looks good except for the line above.
+>> It should be:
+>>
+>> #if IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM)
+>>
+>> Thanks.
+> 
+> Yes, better, thanks.
+> How do we do? Should I repost it with reported-by you or do you want to 
+> post it?
+> 
+> Pierre
+> 
+> 
+>>
+>>
+>>>   int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm);
+>>>   void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev);
+>>>   #else
+>>> diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
+>>> index f9d0c908e738..bbc375b028ef 100644
+>>> --- a/drivers/vfio/pci/Kconfig
+>>> +++ b/drivers/vfio/pci/Kconfig
+>>> @@ -45,9 +45,9 @@ config VFIO_PCI_IGD
+>>>   endif
+>>>
+>>>   config VFIO_PCI_ZDEV_KVM
+>>> -       bool "VFIO PCI extensions for s390x KVM passthrough"
+>>> +       def_tristate y
+>>> +       prompt "VFIO PCI extensions for s390x KVM passthrough"
+>>>          depends on S390 && KVM
+>>> -       default y
+>>>          help
+>>>            Support s390x-specific extensions to enable support for 
+>>> enhancements
+>>>            to KVM passthrough capabilities, such as interpretive 
+>>> execution of
+>>>
+>>> ----
+>>>
+>>> What do you think? It seems to me it solves the problem, what do you 
+>>> think?
+>>>
+>>> Regards,
+>>> Pierre
+>>
+>>
+> 
 
-I think I'd still prefer to have the check for refresh + named mode
-outside of the function, since I see them as an "integration" issue, not
-a parsing one.
-
-It's not the named mode parsing that fails, but the fact that we both
-have a valid refresh and a valid named mode.
-
->=20
-> > --- a/drivers/gpu/drm/drm_modes.c
-> > +++ b/drivers/gpu/drm/drm_modes.c
-> > @@ -1773,6 +1773,28 @@ static const char * const drm_named_modes_whitel=
-ist[] =3D {
-> >         "PAL",
-> >  };
-> >
-> > +static bool drm_mode_parse_cmdline_named_mode(const char *name,
-> > +                                             unsigned int name_end,
-> > +                                             struct drm_cmdline_mode *=
-cmdline_mode)
-> > +{
-> > +       unsigned int i;
-> > +
-> > +       for (i =3D 0; i < ARRAY_SIZE(drm_named_modes_whitelist); i++) {
-> > +               int ret;
-> > +
-> > +               ret =3D str_has_prefix(name, drm_named_modes_whitelist[=
-i]);
-> > +               if (ret !=3D name_end)
-> > +                       continue;
-> > +
-> > +               strcpy(cmdline_mode->name, drm_named_modes_whitelist[i]=
-);
-> > +               cmdline_mode->specified =3D true;
-> > +
-> > +               return true;
-> > +       }
-> > +
-> > +       return false;
->=20
-> What's the point in returning a value, if it is never checked?
-> Just make this function return void?
-
-Yeah, it's something I went back and forth to between the dev, and it's
-an artifact.
-
-I'll drop that patch, take your version and move the refresh check to
-drm_mode_parse_command_line_for_connector if that's alright for you?
-
-Maxime
-
---xbotrfh2f6jawwvu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYvufsAAKCRDj7w1vZxhR
-xRvYAP9DR7LzVwd0ITVjjsOrO+BQ9andM/0A4P6qCsx/ywFipQEA+bV9F+NyoFUN
-oNXdDnnG7g+hOqMsx28nmzB45wcO6w0=
-=uJzR
------END PGP SIGNATURE-----
-
---xbotrfh2f6jawwvu--
+-- 
+Pierre Morel
+IBM Lab Boeblingen

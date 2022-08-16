@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9423D5954F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 474F75954E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232724AbiHPIWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 04:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55504 "EHLO
+        id S232679AbiHPIV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 04:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232583AbiHPIVm (ORCPT
+        with ESMTP id S231493AbiHPIU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:21:42 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510D97C1CE;
-        Mon, 15 Aug 2022 23:02:20 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27G61x0D030732;
-        Tue, 16 Aug 2022 01:01:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1660629719;
-        bh=Z2DNymLmxHB0vBDy7BS86mi/cofNLLwiOhvJqU3VvW8=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=OLdEnd2UWFzcH32t6suxdSIAm93xhUlhXxY2FZdIknrgtgVkw2i5OddIvsP4jl5df
-         1ryCD4LKFzOIwPARwMv2kcM/Q+grYRkzHDhTLZ7+JyIoV12/eFtdfJQNLe8O+cExhC
-         0EXgxOxEuevqZEinwNqeCpzb6iTBPbAnyLPTL4So=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27G61xIa016749
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 16 Aug 2022 01:01:59 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 16
- Aug 2022 01:01:59 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Tue, 16 Aug 2022 01:01:59 -0500
-Received: from uda0492258.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27G61dq5114915;
-        Tue, 16 Aug 2022 01:01:54 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linux@armlinux.org.uk>,
-        <vladimir.oltean@nxp.com>, <grygorii.strashko@ti.com>,
-        <vigneshr@ti.com>, <nsekhar@ti.com>
-CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kishon@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [PATCH v4 3/3] net: ethernet: ti: am65-cpsw: Move phy_set_mode_ext() to correct location
-Date:   Tue, 16 Aug 2022 11:31:39 +0530
-Message-ID: <20220816060139.111934-4-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220816060139.111934-1-s-vadapalli@ti.com>
-References: <20220816060139.111934-1-s-vadapalli@ti.com>
+        Tue, 16 Aug 2022 04:20:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943A530F46;
+        Mon, 15 Aug 2022 23:03:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B1A2B81600;
+        Tue, 16 Aug 2022 06:03:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52582C433D6;
+        Tue, 16 Aug 2022 06:03:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660629817;
+        bh=Op1C0ruR4yfGwck7Lh6JhCOywz+i+Hxt6tKxf5OV0tc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uEc2u1kJrahMwQXigTsouxNkaYv7rQTdHUSi+mObFEZoh+ENEz6Kt4Jli5NJOaJ9Z
+         YUTGffSm1pj0CcyxRNWR7YSYfnbn6ZRrvst1UcLhbl3EQqNgXgki2dKEWwVQ80zBYt
+         irXcsDwkcq/1f+7CU+Ps6J/znzKLtA75Mk/etff7o9ywvC7DS9laGWK0m8RWxgaTwB
+         EjRiKV6kebXtOLPqrROgYiEst0LwQdz7XGS5SOaGRDaGPaPHKpe7zEFl/WspYM0al7
+         +W+xUD+u0KB/rQhfesmxHFrADxNkuaXeB6I9yAdrTm+5Mtdn2cXI2nmc2Kkxy3SPwX
+         psGnVpzSg3MOg==
+Date:   Tue, 16 Aug 2022 08:03:25 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Eddie James <eajames@linux.ibm.com>,
+        linux-input@vger.kernel.org
+Subject: Re: linux-next: Tree for Aug 15 (input/misc/ibm-panel.c)
+Message-ID: <YvszHpWoIT37lcoD@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Eddie James <eajames@linux.ibm.com>, linux-input@vger.kernel.org
+References: <20220815122926.7fd3ac58@canb.auug.org.au>
+ <0d836243-6a02-e031-961e-1e334dfd167d@infradead.org>
+ <YvsaCjnkucMeyj60@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tMCH14dxriKnVX9v"
+Content-Disposition: inline
+In-Reply-To: <YvsaCjnkucMeyj60@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,51 +68,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In TI's J7200 SoC CPSW5G ports, each of the 4 ports can be configured
-as a QSGMII main or QSGMII-SUB port. This configuration is performed
-by phy-gmii-sel driver on invoking the phy_set_mode_ext() function.
 
-It is necessary for the QSGMII main port to be configured before any of
-the QSGMII-SUB interfaces are brought up. Currently, the QSGMII-SUB
-interfaces come up before the QSGMII main port is configured.
+--tMCH14dxriKnVX9v
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fix this by moving the call to phy_set_mode_ext() from
-am65_cpsw_nuss_ndo_slave_open() to am65_cpsw_nuss_init_slave_ports(),
-thereby ensuring that the QSGMII main port is configured before any of
-the QSGMII-SUB ports are brought up.
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
- drivers/net/ethernet/ti/am65-cpsw-nuss.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+> It sounds like I need to adjust the depend statement to be:
+>=20
+> 	depends on I2C && I2C_SLAVE
 
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-index 033b40649308..7ef5d8208a4e 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-@@ -593,11 +593,6 @@ static int am65_cpsw_nuss_ndo_slave_open(struct net_device *ndev)
- 	/* mac_sl should be configured via phy-link interface */
- 	am65_cpsw_sl_ctl_reset(port);
- 
--	ret = phy_set_mode_ext(port->slave.ifphy, PHY_MODE_ETHERNET,
--			       port->slave.phy_if);
--	if (ret)
--		goto error_cleanup;
--
- 	ret = phylink_of_phy_connect(port->slave.phylink, port->slave.phy_node, 0);
- 	if (ret)
- 		goto error_cleanup;
-@@ -1898,6 +1893,10 @@ static int am65_cpsw_nuss_init_slave_ports(struct am65_cpsw_common *common)
- 			goto of_node_put;
- 		}
- 
-+		ret = phy_set_mode_ext(port->slave.ifphy, PHY_MODE_ETHERNET, port->slave.phy_if);
-+		if (ret)
-+			goto of_node_put;
-+
- 		ret = of_get_mac_address(port_np, port->slave.mac_addr);
- 		if (ret) {
- 			am65_cpsw_am654_get_efuse_macid(port_np,
--- 
-2.25.1
+Yes.
 
+Thanks!
+
+
+--tMCH14dxriKnVX9v
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmL7My0ACgkQFA3kzBSg
+KbYu7RAAntx4h7OI+nbik5C3ob6SCavobkUI89eS+S0aazjO391XxCv4zMp/UVMm
+TKJiYGA/HpZkp2XxloSXqCrvJhWINWVj59PtPUPggUq5IShXusvVKGFYA9mtS5cg
+co7WSXatItVDZTkCimfvhxMExCVB0MBD++YXF4E7lUM4z6IutPsY/ceuZ96KnCpJ
+nDoWpww+26k3Mq+R1a2svEuZNIZsHIwkgBxhBOYB9W1Ytlv9/jNdBcJNHF3yICry
+UqSuNA2KBAiFqs0KACmv+qVO19ISECbIQE1o4y6AgRuZwE3wf7UeUypCbwxMpJT3
+l6PD28awPyI1EjvR8cZ5XuX8sH+QP1e/YiW/s/6UM3BsH8G2Cv7XFOsQnPpfJ6wf
+FYgdUzv8a6+u367FVuVHNsdyi8tbk5Bc3bM61btnN/aoIScItLVt/0Ka5m4q7rkK
+6C6sxRLAAxTbrH5/l1pGx+TnhUMB0KYiYnlP8FkKT+DxEHAv6cmmvx1+uiQQwzNx
+1ot/kw6DGgWUa0TyWQWLUXdd1cNVEfsCXw2oB8bxT3o/uGlFwhTtkS+hNr9jS3T+
+0OdSwSaXTA8wec3ZVgdboIHefWwnCuq5o0xqi5NNi4sbX8eTRtZjHHWfH3QiXuTv
+QAOsHIJUexTf10JpRo8I+dUl4GUrDNW3QCvA3szyyVfYHyOv0jA=
+=o0e6
+-----END PGP SIGNATURE-----
+
+--tMCH14dxriKnVX9v--

@@ -2,129 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA2AE595EB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 17:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C18E595EBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 17:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235903AbiHPPE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 11:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
+        id S231294AbiHPPFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 11:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235852AbiHPPEc (ORCPT
+        with ESMTP id S231877AbiHPPFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 11:04:32 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C1595E66
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:02:00 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-f2a4c51c45so11901018fac.9
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:02:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=1ugMil36Xtwd1/JKqCHKq4YVp/gm6cZn6rXrNAhsLYg=;
-        b=YonhW7ZsvSSq1LlU1473zmh9bn8mDEW3u3IBe61E0fEG6iCtfKHZ61zAZ9ZaQI+yvU
-         W+uVY2FriHHxRqPHB1StJ7rHgZYPYHvmIW1PMemedTOOycvqaMNzEdpim3vX8vKmlGsD
-         3vQn1Za+7NBq9+e1Xz1DSVkKlIdplv+E5zhbCksYOQ+/tO4tN4e3sHq4Co/D61htJyed
-         TArsJUh1fr0Ixfqxczvz+pYCu/+iVUOI1z8ZJ//eR5zOXnSnSd7ETu2K6X8+sxdRONBF
-         44eaS+/X5OgA6XllGhpd5gah5I0HB637F6aI8EB2OqViU1w6n1Q1A7OBcxRmB7u/D6JT
-         f0Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=1ugMil36Xtwd1/JKqCHKq4YVp/gm6cZn6rXrNAhsLYg=;
-        b=FEbiGvbWRwfvcfPaYQHBtVtI7EETVujwXJegavEaQ1fE9y2da8ZZR6R+t95jmc34xm
-         Zf7GSOXKUmFJUGkwhtTAlysxpax/17V9WjQ50HFI5vqyNzs4LJ+G2y/ELvO8FwEzSW13
-         RiN+UnQmPozmIln3xv4gTCnnII4jK/N/dlPhvsqt0nfFTXi14xmHfKnBa/5UV6nNaMb0
-         IYsnyRfMCiOkPdBuK2VB/RIygXddTzZQbEjNzYlPxklrjYRED+lbmahvf8qa/SKfaTpx
-         2b0OiFP8vfPb86pHKoEY4SLk70+rQlDGrxDZjYmUYXlO7wrDcjTIgLpi7kdrsYU7tyIv
-         S4ew==
-X-Gm-Message-State: ACgBeo3sejQAtSQ+SO7qObsKcCq1OwAADJJqP2sEwQnJpQVJ1+q4uE8a
-        ysjo/aVsn28U26DytBkeMmhHGKVYa430/e0vZas7
-X-Google-Smtp-Source: AA6agR47lZNuu4bYrC/2xpGEcKzszPSh01aBKHkSmrxNtTp8FF+IfEotviWQNwGdbw0s4mwvXylXOvGRgb9GIueL0YM=
-X-Received: by 2002:a05:6870:9588:b0:101:c003:bfe6 with SMTP id
- k8-20020a056870958800b00101c003bfe6mr13535837oao.41.1660662119002; Tue, 16
- Aug 2022 08:01:59 -0700 (PDT)
+        Tue, 16 Aug 2022 11:05:12 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE94184EFB
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:02:19 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oNy4w-0000Sj-T5; Tue, 16 Aug 2022 17:02:02 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oNy4v-0005Bt-Vv; Tue, 16 Aug 2022 17:02:01 +0200
+Date:   Tue, 16 Aug 2022 17:02:01 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     abelvesa@kernel.org, abel.vesa@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, shawnguo@kernel.org, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH V2] clk: imx: support protected-clocks
+Message-ID: <20220816150201.GS2387@pengutronix.de>
+References: <20220816130327.2987710-1-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-References: <0000000000002c46ec05e6572415@google.com>
-In-Reply-To: <0000000000002c46ec05e6572415@google.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 16 Aug 2022 11:01:48 -0400
-Message-ID: <CAHC9VhQmtggv-P9RoG9mHp8JJMUB-qTWNiKVh8q4ygmdi-x2rA@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in sock_has_perm
-To:     syzbot <syzbot+2f2c6bea25b08dc06f86@syzkaller.appspotmail.com>
-Cc:     anton@enomsg.org, bpf@vger.kernel.org, ccross@android.com,
-        eparis@parisplace.org, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, selinux@vger.kernel.org,
-        stephen.smalley.work@gmail.com, syzkaller-bugs@googlegroups.com,
-        tony.luck@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816130327.2987710-1-peng.fan@oss.nxp.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 16:59:46 up 139 days,  3:29, 84 users,  load average: 0.17, 0.13,
+ 0.10
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 4:00 AM syzbot
-<syzbot+2f2c6bea25b08dc06f86@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    200e340f2196 Merge tag 'pull-work.dcache' of git://git.ker..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=16021dfd080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=f2886ebe3c7b3459
-> dashboard link: https://syzkaller.appspot.com/bug?extid=2f2c6bea25b08dc06f86
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->
-> Unfortunately, I don't have any reproducer for this issue yet.
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+2f2c6bea25b08dc06f86@syzkaller.appspotmail.com
->
-> ==================================================================
-> BUG: KASAN: use-after-free in sock_has_perm+0x258/0x280 security/selinux/hooks.c:4532
-> Read of size 8 at addr ffff88807630e480 by task syz-executor.0/8123
->
-> CPU: 1 PID: 8123 Comm: syz-executor.0 Not tainted 5.19.0-syzkaller-02972-g200e340f2196 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  print_address_description.constprop.0.cold+0xeb/0x467 mm/kasan/report.c:313
->  print_report mm/kasan/report.c:429 [inline]
->  kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
->  sock_has_perm+0x258/0x280 security/selinux/hooks.c:4532
->  selinux_socket_setsockopt+0x3e/0x80 security/selinux/hooks.c:4913
->  security_socket_setsockopt+0x50/0xb0 security/security.c:2249
->  __sys_setsockopt+0x107/0x6a0 net/socket.c:2233
->  __do_sys_setsockopt net/socket.c:2266 [inline]
->  __se_sys_setsockopt net/socket.c:2263 [inline]
->  __x64_sys_setsockopt+0xba/0x150 net/socket.c:2263
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f96c7289279
-> Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f96c842f168 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
-> RAX: ffffffffffffffda RBX: 00007f96c739c050 RCX: 00007f96c7289279
-> RDX: 0000000000000007 RSI: 0000000000000103 RDI: 0000000000000004
-> RBP: 00007f96c72e3189 R08: 0000000000000004 R09: 0000000000000000
-> R10: 0000000020000000 R11: 0000000000000246 R12: 0000000000000000
-> R13: 00007ffe7030593f R14: 00007f96c842f300 R15: 0000000000022000
->  </TASK>
+On Tue, Aug 16, 2022 at 09:03:27PM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> For the clocks listed in protected-clocks, enable them to avoid
+> Linux disable them. This will benifit root Linux and inmate cell run
+> on top of Jailhouse hypervisor, and benifit the other case(
+> A53 Linux run together with M7 RTOS).
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+> 
+> V2:
+>  Per Sascha, use common protected-clocks property.
 
-SELinux hasn't changed anything in this area for a while, and looking
-over everything again just now it still looks sane to me.  I suspect
-there is something else going on with respect to socket lifetimes and
-SELinux just happens to be the one that catches the use-after-free
-first.
+See my mail to v1. I did not request that you should use the
+protected-clocks property:
+
+> There were cases when a property first started with a "soc," prefix and
+> later when people realized that it could be useful for other
+> drivers/SoCs as well, the prefix was removed. With that in mind I
+> would expect that a "fsl,protected-clocks" property behaves the same
+> as a "protected-clocks" property without the prefix.
+> 
+> If it doesn't please pick a different name. I didn't want to suggest
+> to just drop the "fsl," prefix and to use the generic property name
+> when the properties have a different meaning.
+
+Sascha
 
 -- 
-paul-moore.com
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

@@ -2,152 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 331355958CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:47:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04FE35958D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234485AbiHPKrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60702 "EHLO
+        id S235099AbiHPKrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233990AbiHPKqY (ORCPT
+        with ESMTP id S235027AbiHPKrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:46:24 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D73D261D
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:06:51 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id p14-20020a17090a74ce00b001f4d04492faso9139107pjl.4
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:06:51 -0700 (PDT)
+        Tue, 16 Aug 2022 06:47:35 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D0EAE22B
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:06:47 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id by6so10002777ljb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:06:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc;
-        bh=95RmrDaOTs+TArBQIen65/TK8NYN58Pk/yEsVpA/XLQ=;
-        b=zz9Kx3opIvtvTrScnyxJFs+GMVOTDDp5nBSvQKpeRSoleANTX97HmK+QRmChlfTaKV
-         jGVVnWVywSPSjU/a1ky6Uzb13fGSTlUMNszCrAZnwHKYSsuJRvLnm9XnY/hSfuhXTxbY
-         UP3EsrGopcq32sK+1wS/JrcKLEUuEmAHuhB8T0Rlkd63ALxbuaOALnGeUDDAZpvicfFw
-         wBm6+MTqaNHlBnO60iQ98zQp0sfAdXY84wjR0IIBqqmM+NTV5XhCYShRZXQ6l/lxcEcD
-         0TdQrSd2U16XmkLX3UFTO3u2dhKUX1gwgXDG+2jiPAWkcbZRzCOEACiokc4Ud8V0GdU2
-         4mgA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=3P+rHXFq/Ju0+klAigNeKQlci4oKet9YOA0bldjm0Zs=;
+        b=csHnIcOwUWQxrQCh4kMZCM3lIHd/7QbLGLsWO0pdvwAF9+9GQoRb6Ia4FcgmceJfvP
+         BHynpZrRt5dGjq8BpcXQdRwEpJ3bDbr2mCaeslxUxw7Ntkl7yZoH4hBtF0JpE6iZxVR/
+         JVkMN5M4IiY1ptjbQ0o8GYQOS2H0Rg/WpGUqykfDw6RBj5ij3Jcv19c6YOcFHxtpF7bW
+         aTXpX13HCqPzWz93p0tLATReG5w33k29t/MixKOTAxXLsvM2gDJqwsJ1C18dA0y5dq7W
+         fAD/WrvRjt0eYtE1RaLUO/0yvAOaHSNRMYrw4AeByRv4h4LsVD17ZnuLgvwA7BMPkSzu
+         T5gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=95RmrDaOTs+TArBQIen65/TK8NYN58Pk/yEsVpA/XLQ=;
-        b=YjLUkNKbVjJwPKA1HhLuZRMWT+WOmDMWDUH2GxmuLzREg+I/p4/hjlRdz+qumLRHWm
-         XTJba9fg4D1n02cKzx4sM8Bf0e5uv3XH+fNp0mX6UX829lM5QU7wS+GA6AAKlqtVnrlV
-         36/xawtBt8BTqYz3axw77cO+/K94q4lxb6c1qr1eCLWrvXLLMI3D82lNJPeOAiqJZxjg
-         ORRKMk8+4riMw1Mm1qFmFUMxZedg5jMD5kSg1xu6QASZJhGZug0/FpxghcXbGzjG7R14
-         3wbN61XoCB4Ix00fImY0yasN/Zq+LpD9cYbmDBu4x8P6hcaEtlHHsSMBWdBO8suH77MC
-         ozsQ==
-X-Gm-Message-State: ACgBeo0seeUrOpbWzG+n3Xp1DBaau+J5NSqNQCCE7IBPU+QzR2FN0UNh
-        0riw1CrsHZybcdRoNYiHAK8rWA==
-X-Google-Smtp-Source: AA6agR6iuIfqsnKC8rmEvnL+RqpghMmdGBLz80IUfA88+gmFc61k0TjFisYsOWDicYjBJ7EdB/T1VA==
-X-Received: by 2002:a17:90b:17ce:b0:1f4:d068:5722 with SMTP id me14-20020a17090b17ce00b001f4d0685722mr31558785pjb.28.1660644411079;
-        Tue, 16 Aug 2022 03:06:51 -0700 (PDT)
-Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id y24-20020a631818000000b004202cb1c491sm7219029pgl.31.2022.08.16.03.06.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 03:06:50 -0700 (PDT)
-From:   Shunsuke Mie <mie@igel.co.jp>
-To:     Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shunsuke Mie <mie@igel.co.jp>
-Subject: [PATCH] misc: pci_endpoint_test: Fix pci_endpoint_test_{copy,write,read}() panic
-Date:   Tue, 16 Aug 2022 19:06:17 +0900
-Message-Id: <20220816100617.90720-1-mie@igel.co.jp>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=3P+rHXFq/Ju0+klAigNeKQlci4oKet9YOA0bldjm0Zs=;
+        b=DMS0eqOQ8jl+HOw0Shey3S4pahDjMRoWkp4IvvljC0cR8JANh32W33CTvjD6kV3yIy
+         h2HRg87eHrJSrGiRZ6swPWI+al5vuBWc6U1n/M0FzKMT1O9mPun+xQ6v0xrYu6raAso4
+         Nq3Mkuk4NciZpWbbUgHqrDYysCMvHaZk4Af6jotEkNmoW1As+7kFYMT3bpMZNv27JyCU
+         8Rgb8wmBTzpwgOTqWYQUamLeCdrYIv7YpzGYZQvKWppfUEruSTwo9QTiUQDfUIDKLPNF
+         fqwyKPvCZotAFoWra5wSgeVOLk/tpqs4/b8wgooGp44JAt1F2V8oc9uhLOJ5SN6t3UFC
+         8prw==
+X-Gm-Message-State: ACgBeo3AHp2fFyjvZZ1nZylUDrw8c8/XqeP+vZVpW3VVkky/gWh2aa/0
+        +LlzqVy4/o87fa3DTog/PYOR9A==
+X-Google-Smtp-Source: AA6agR4BH5PwcsY3gEJ8rvtE71DqoG3p/u7jTfoGw6gfPC++4bLqy79XHhPj7FU2rIJuhiD66NqjJQ==
+X-Received: by 2002:a2e:8881:0:b0:255:7790:25e6 with SMTP id k1-20020a2e8881000000b00255779025e6mr6184568lji.525.1660644405978;
+        Tue, 16 Aug 2022 03:06:45 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
+        by smtp.gmail.com with ESMTPSA id a20-20020a056512201400b0048aeff37812sm1328349lfb.308.2022.08.16.03.06.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 03:06:45 -0700 (PDT)
+Message-ID: <7532753c-60d6-a8cd-b462-bcbf01035d89@linaro.org>
+Date:   Tue, 16 Aug 2022 13:06:44 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 2/3] arm64: dts: qcom: sa8295p: move common nodes to
+ dtsi
+Content-Language: en-US
+To:     Parikshit Pareek <quic_ppareek@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>
+References: <20220812165453.11608-1-quic_ppareek@quicinc.com>
+ <20220812165453.11608-3-quic_ppareek@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220812165453.11608-3-quic_ppareek@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Although dma_map_single() doesn't permit zero length mapping, the each
-test functions called the function without zero checking.
+On 12/08/2022 19:54, Parikshit Pareek wrote:
+> There are many ADP boards with lot of common features. Move common
+> nodes to sa8540p-adp.dtsi file. This will be base for many ADP boards
+> to be introduced in near future.
+> 
+> Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sa8295p-adp.dts  | 377 +--------------------
+>  arch/arm64/boot/dts/qcom/sa8540p-adp.dtsi | 384 ++++++++++++++++++++++
 
-A panic was reported on arm64:
+Please send patch with tweaking -B/-M/-C parameters, so the copy is
+properly detected.
 
-[   60.137988] ------------[ cut here ]------------
-[   60.142630] kernel BUG at kernel/dma/swiotlb.c:624!
-[   60.147508] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-[   60.152992] Modules linked in: dw_hdmi_cec crct10dif_ce simple_bridge rcar_fdp1 vsp1 rcar_vin videobuf2_vmalloc rcar_csi2 v4l
-2_mem2mem videobuf2_dma_contig videobuf2_memops pci_endpoint_test videobuf2_v4l2 videobuf2_common rcar_fcp v4l2_fwnode v4l2_asyn
-c videodev mc gpio_bd9571mwv max9611 pwm_rcar ccree at24 authenc libdes phy_rcar_gen3_usb3 usb_dmac display_connector pwm_bl
-[   60.186252] CPU: 0 PID: 508 Comm: pcitest Not tainted 6.0.0-rc1rpci-dev+ #237
-[   60.193387] Hardware name: Renesas Salvator-X 2nd version board based on r8a77951 (DT)
-[   60.201302] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   60.208263] pc : swiotlb_tbl_map_single+0x2c0/0x590
-[   60.213149] lr : swiotlb_map+0x88/0x1f0
-[   60.216982] sp : ffff80000a883bc0
-[   60.220292] x29: ffff80000a883bc0 x28: 0000000000000000 x27: 0000000000000000
-[   60.227430] x26: 0000000000000000 x25: ffff0004c0da20d0 x24: ffff80000a1f77c0
-[   60.234567] x23: 0000000000000002 x22: 0001000040000010 x21: 000000007a000000
-[   60.241703] x20: 0000000000200000 x19: 0000000000000000 x18: 0000000000000000
-[   60.248840] x17: 0000000000000000 x16: 0000000000000000 x15: ffff0006ff7b9180
-[   60.255977] x14: ffff0006ff7b9180 x13: 0000000000000000 x12: 0000000000000000
-[   60.263113] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
-[   60.270249] x8 : 0001000000000010 x7 : ffff0004c6754b20 x6 : 0000000000000000
-[   60.277385] x5 : ffff0004c0da2090 x4 : 0000000000000000 x3 : 0000000000000001
-[   60.284521] x2 : 0000000040000000 x1 : 0000000000000000 x0 : 0000000040000010
-[   60.291658] Call trace:
-[   60.294100]  swiotlb_tbl_map_single+0x2c0/0x590
-[   60.298629]  swiotlb_map+0x88/0x1f0
-[   60.302115]  dma_map_page_attrs+0x188/0x230
-[   60.306299]  pci_endpoint_test_ioctl+0x5e4/0xd90 [pci_endpoint_test]
-[   60.312660]  __arm64_sys_ioctl+0xa8/0xf0
-[   60.316583]  invoke_syscall+0x44/0x108
-[   60.320334]  el0_svc_common.constprop.0+0xcc/0xf0
-[   60.325038]  do_el0_svc+0x2c/0xb8
-[   60.328351]  el0_svc+0x2c/0x88
-[   60.331406]  el0t_64_sync_handler+0xb8/0xc0
-[   60.335587]  el0t_64_sync+0x18c/0x190
-[   60.339251] Code: 52800013 d2e00414 35fff45c d503201f (d4210000)
-[   60.345344] ---[ end trace 0000000000000000 ]---
-
-To fix it, this patch adds checkings the payload length if it is zero.
-
-Fixes: 343dc693f7b7 ("misc: pci_endpoint_test: Prevent some integer overflows")
-Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
----
- drivers/misc/pci_endpoint_test.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
-index 8f786a225dcf..d45426a73396 100644
---- a/drivers/misc/pci_endpoint_test.c
-+++ b/drivers/misc/pci_endpoint_test.c
-@@ -364,7 +364,7 @@ static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
- 	}
- 
- 	size = param.size;
--	if (size > SIZE_MAX - alignment)
-+	if (size > SIZE_MAX - alignment || !size)
- 		goto err;
- 
- 	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
-@@ -498,7 +498,7 @@ static bool pci_endpoint_test_write(struct pci_endpoint_test *test,
- 	}
- 
- 	size = param.size;
--	if (size > SIZE_MAX - alignment)
-+	if (size > SIZE_MAX - alignment || !size)
- 		goto err;
- 
- 	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
-@@ -596,7 +596,7 @@ static bool pci_endpoint_test_read(struct pci_endpoint_test *test,
- 	}
- 
- 	size = param.size;
--	if (size > SIZE_MAX - alignment)
-+	if (size > SIZE_MAX - alignment || !size)
- 		goto err;
- 
- 	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
--- 
-2.17.1
-
+Best regards,
+Krzysztof

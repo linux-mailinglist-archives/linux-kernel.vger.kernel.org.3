@@ -2,364 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0498C596602
+	by mail.lfdr.de (Postfix) with ESMTP id 71873596603
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 01:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237248AbiHPXaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 19:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
+        id S237416AbiHPXb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 19:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233550AbiHPXaI (ORCPT
+        with ESMTP id S233550AbiHPXbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 19:30:08 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7631CF58
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 16:30:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660692606; x=1692228606;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vz5xjTtCrN6+2TR5pSizt3o7/Rp/mlTV2P++6Fb6qPk=;
-  b=e0p/a1+IQ7ntnNst44tNKSPaOlOU1Abdonz4dcCjIXK/wB7Z6p8WvM45
-   evOnTHnWlCC24LU2fgm0DkZu1573FcNjPVw4cSpYsm+wv6hbdrXrfdRMc
-   CwqGyUbAYfERl9hRWgP/8fC4qtZii+9o1R46E9Aoof/9cElNuN/P6WMCh
-   4lENlD2jnc+LTCSQZqegPZ8m+6aLAJ0AWKqvjnWIfn6VJaFhihOg1+e2b
-   WPakmupjjsDHJ8bclxPIY1yGZcuTVnjTvm90ZkSxbI/gCVe1u0yKMsxN5
-   S5/ohoCkIMfBPjGNNyHaOGn82aU+26eUAlghQf/JFp+jYL5PdWBFTSpNn
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="272123060"
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="272123060"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 16:30:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="696559745"
-Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 16 Aug 2022 16:30:04 -0700
-Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oO60Z-0000Ke-1u;
-        Tue, 16 Aug 2022 23:30:03 +0000
-Date:   Wed, 17 Aug 2022 07:29:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
-Subject: [ammarfaizi2-block:tglx/devel/depthtracking 58/59]
- arch/x86/net/bpf_jit_comp.c:2103:40: error: use of undeclared identifier
- '__fentry__'
-Message-ID: <202208170727.cRWzeoJx-lkp@intel.com>
-MIME-Version: 1.0
+        Tue, 16 Aug 2022 19:31:25 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B600690835
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 16:31:23 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27GN0LQU032471;
+        Tue, 16 Aug 2022 23:31:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=mBf8Dyf/X+j0+eIdzzOK6gbl93SgyY1qJl2fnc9sa5Q=;
+ b=VTg2ANAag66FPU2O5sg4JnvfQtd7hhhMk3OgJlUaIs86t2uQwaK/okI1kvOSkPpqxUKx
+ 7ddrMg4SxcNvdrOyLL7KlOa+B35I7zYX92G2FmEKwbYOGHqbzAxu/9m0ePkyhqIMWxnv
+ fIEhZYKKcwPbL6Czl4SN3wjHQy9W9Yjz7O2pnmV8AJGTQZw7F5LlqgPVaZXjd+bJPcws
+ akku8azxt0vNcOLLPDeG3EGl+Wi0am3des4z/RxYn8RAPdrpSz1emBQ6msy9fYMI16Pq
+ UUAvKBJ4HMtFFhXw0NmzvehdYl4tC50aKEFPYZ6i4ri6tz4U0V4EVuQWicUpdpDn/rb4 7Q== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hx3js7j9k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 Aug 2022 23:31:14 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27GKg8Qs004258;
+        Tue, 16 Aug 2022 23:31:14 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2107.outbound.protection.outlook.com [104.47.58.107])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3j0c478sua-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 Aug 2022 23:31:14 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NpeIyswse52sJkFuwtGRWnL1JOGkHURDB5nw+EnyZ1NVs6oNPIVf4WXJWV1XF1+HWOxxZHrMGi8J4RJXoIMgJZjE64nT16B9a9XUDhLJVUWICtKYfWTXSLXcbeXHh8qIHEx46gA+3KjOS3rQPTD5IOm20XxAItqO4D9oAkTf5MasN8j1s+hG0p5VkHPzGZFeKsMiE9ronWOqeSBYNnmSOZ0X8MvEGYq2sVoQQjz9lOepa/z0HnhQyh0jGIHRHsOAyNKEoSL4BQtBQETw8I43oGNwrpfb5T6WnI9hNTrvP6COOAp/+sQDUK7Us3QA0/DhMp6VwOeHHc1PdXg5IqQ/GQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mBf8Dyf/X+j0+eIdzzOK6gbl93SgyY1qJl2fnc9sa5Q=;
+ b=nSKvTL2o7nAV8ct0g9Y4SthIiOLHWX6XBdH2+Gk7rLhic8ku6OMFFPzE3IpqC6XblbLSbY8bMZun6DikWkQCZp2BJ1LDIKiqy8nbKYHBobKAie9C4uV5fU9iPauP3MJTYaL/WvAyAP07eGQYFDE9NqB8A7NbayJx+wyA8X358tRK0uC1Aefh7koQ22z7O/ioFcn9AaIRu2hNaZHgSX2k7J6i4b5PLd2lBiZRAspif71HYqkqS2hfcAtR7mDy0hi0BdMD9JXUVzftyCoS4PW8QAHoEV+gXHvBzrXCmQRF7ywx8Tcx/7FUipUPeRoLMqSM7LGnpZtAfxVVenDCYXWVcw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mBf8Dyf/X+j0+eIdzzOK6gbl93SgyY1qJl2fnc9sa5Q=;
+ b=Qro/8B2zCfvOqbLIrm7kQk2gMLJfl5mMk3cUnhIEqsjh1deoaTZ4qmj+qGxxIf3EmdsPCQ5opwbs+CIoqHhp0TOXMHJSEEZWKiDlmX6NlEs453NqVgdo2z01ah5zU0wy04jXFi606gphspwWOoPfP8hiSYtQE2qc5Vn+Zl5gg4Q=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by DM6PR10MB2426.namprd10.prod.outlook.com (2603:10b6:5:b4::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Tue, 16 Aug
+ 2022 23:31:11 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::c1ba:c197:f81f:ec0]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::c1ba:c197:f81f:ec0%5]) with mapi id 15.20.5504.028; Tue, 16 Aug 2022
+ 23:31:11 +0000
+Date:   Tue, 16 Aug 2022 16:31:08 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/6] mm/hugetlb: fix missing call to
+ restore_reserve_on_error()
+Message-ID: <YvwovBboCJBOJ1Wm@monkey>
+References: <20220816130553.31406-1-linmiaohe@huawei.com>
+ <20220816130553.31406-4-linmiaohe@huawei.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220816130553.31406-4-linmiaohe@huawei.com>
+X-ClientProxiedBy: MW4PR02CA0012.namprd02.prod.outlook.com
+ (2603:10b6:303:16d::35) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: be6cea6e-4677-494f-19c8-08da7fdf6719
+X-MS-TrafficTypeDiagnostic: DM6PR10MB2426:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9dDkebZLJiK60bnKq06y0jHl9RkDWGPu/U8dpq/diP+1749XLMoOZmvDbaCwa2vFZ8DNr9pAWF62uSxQwV7L3SN6Fipx2ah/0JgD4VIp2aYXzvokk+ywzG/krwc8qt7Ps1qXCFdb2AZLD6YiY2Diyspwu/EadTRaz5ei/sekvnTb/vvx6sg1+RBGKIuLKpoZxM8cNh6gSZDs2RfgDhz3re0BDLEiJfL1aOqO5vKVaP1xPOgMWICbHsQOUkyLK+QIR/ZdOBybrER4hn8e3QtLoKfyooGQVkESxPaG6Vkpqlggs6ArF+ImYvjamUmRzZAbQz61D9jxifgFuKojj3gpwhtCmQtrAty/E7hG3c60rinhqIJYDp8tzU5DAI+kBJwgsY8ApB8vULStrcTlcJn9cg/1FC5OvHaf1KOBd/DEMidB3XbzIU4C31lgZTJdrnT4bXodTAqeLlTgyw2kk7lTDDMU08TLZIph6z21Oeh6OBJrN2InURlm6yVajzup3fxUsMKwva96bV3Kx4Heg4OCPLpRawIkEdhV28cCefZ50UgcaYwnQiaZq6PUA51TOCKmEUXCguncLp6MXgdGWvreCijmF/QWaQbCcqn6b9M/XxqjTsQ2SlqtIqxefAZ6JVJ56B2ns69rMo9OYf/sxZIad1FKFyvxB5NrqAJf+8Xaz6aKw0zuS8jSAHHsTrTKmf946gi5u04P9JdfKt0tZNFWnk9GQHb3vauu/lQGblF+OFUROkH99mw8W5PPeDJdj97h
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(376002)(366004)(346002)(136003)(39860400002)(38100700002)(86362001)(66476007)(66946007)(66556008)(4326008)(8676002)(2906002)(6916009)(44832011)(316002)(5660300002)(8936002)(26005)(6512007)(9686003)(53546011)(6506007)(83380400001)(186003)(6666004)(478600001)(33716001)(41300700001)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/YIfm0UPChabL3kfU0dMdwb6RPh52CebSptvK8m4w+obD4t7OywzYvHtuyot?=
+ =?us-ascii?Q?q/JQYF0JnuirunY/x3IYd9u4djVkWZNvWzEnHHUHBmcEDxNnepxBmqNxJin3?=
+ =?us-ascii?Q?aAHVDApOmRJAPFXnTiXTDpkWjgH6M4a6N1UM60XWlylDx5itIkxqWYUzSQRs?=
+ =?us-ascii?Q?+5SavMKcoZcR/3z5CYIx9dyFQm2nJPHuzeFkCqq9/vxwmNboERChcVgBblE9?=
+ =?us-ascii?Q?9EOFWR8Oc/u7Rs9W7zu4OvW/ADuV+1Tmg0awPi2t/DbZZ/ErqEZ5fR0oUoqc?=
+ =?us-ascii?Q?wHUHgMQUUrfbmkqCBc5LmuUIY/LaCRIuA2mpChXekTd7e2ardxMXqmbQ3nfP?=
+ =?us-ascii?Q?CKPqgDt2dZQHcS7eQgLhjTLXMaBP1q3jbZY2c+LGH3hqXm47yE2111ZZy6ot?=
+ =?us-ascii?Q?Bt918wA3vKAoLpBZWbkuIG6KlgTQlGg9NTK+MY49fq68oSbap794H2WQdVZs?=
+ =?us-ascii?Q?nK9gG5x1rLy3dM9ZIb07GwbM9y+yXdU9aSvkn/QwD75B+Ad+X3O136NhDLj1?=
+ =?us-ascii?Q?vErMBcYQB/PNcW5WXRtLReZvmkpsOiA/qphSC5uDy+Z06N3Bacmh1HWHdVjZ?=
+ =?us-ascii?Q?aGg2NMZWMK6Ltk4wFjdXlWtMf/wBzH6h2WxoEJdEyYiQrJIm/gO+1v2BR0xW?=
+ =?us-ascii?Q?4UcNt3uWlzHG8GWXU8J5dDxCafOCC97K/KE8cgsu8odYoyHsVlpEDDcdANke?=
+ =?us-ascii?Q?FQ1hIj83Lnchbk7vvQ4lnbBokvRtky00BfjX/nBskhd9c68aER2pDHbxwv5p?=
+ =?us-ascii?Q?bfs6SwhPTLB4BvK4qyBvlUxAnxB8j/HJSJzWAXueBPzHDoyomoLbiZu5tvTG?=
+ =?us-ascii?Q?zj0yQlk4SxsV7oQglyCUgv9nokcG5D+PThLO52jYCDUk838v0RN0hy2HLlcD?=
+ =?us-ascii?Q?7xuDLqkMySg9mjoddL0bjW+JMf8jHhjhxm9bBTsip1y/fSWvgFTIKmvLEdkT?=
+ =?us-ascii?Q?h94Aisb58FJK0GMcY2oqIo5NE94xGoLzpBBQuH/r+XJJaeSxYYVhIUH3GkIC?=
+ =?us-ascii?Q?lWQgk8Y0g5os1muBVboHlNM0bq9CRNuOZSSrtWo0UinDOS7MMpry5AnwBob+?=
+ =?us-ascii?Q?5fyschHUp4lT4gZyJK5GBJhoH4gYF1BXWSoMjmgrIBPeQtHT8AxdI23VvaU+?=
+ =?us-ascii?Q?cNG3aUeGEcDqUdW+IoUyD+JJ5gDUo3KK97wk7y40VFxN0D9Zruh+Zp1Q7VNp?=
+ =?us-ascii?Q?xzRcjWnhBZNbBqXDt0CKooeZveP3FTHQeqz6t/xVqNyyzcfd9BMiH9tAqWBk?=
+ =?us-ascii?Q?XmOnBZImjJPTCkOfGx/1PFIm6hJrfznEQbBfifudu9mHpS/QKtmgROo675Fc?=
+ =?us-ascii?Q?mydF99uC9FIQfDS4C0srntdtyFJXirLfWjko6C7GUwLtOqXQgaIFQpUe3JWR?=
+ =?us-ascii?Q?qkkeg1EdnkDhLSU+5eq9R16WpZgK0EYBIyA2eEB5zO4XXwXKlm5Nabu7bqTD?=
+ =?us-ascii?Q?WZk1JDr3Deu1BCELixGChwfnjsdWbeR5GRwl2pAW5BMgqxcLcm+BNNXcZRlX?=
+ =?us-ascii?Q?RKQGYsODKcJG+ZzygRv1+GraXhIs1l1L0/WMPbm81nrvFse/cfF/fHnJ3G0j?=
+ =?us-ascii?Q?AK9ykfA6WK5R0XRSoRcBmXDrVGU1O5XGPoySiNZAQrooJ7/B3YOxT0GFlrQx?=
+ =?us-ascii?Q?Fg=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?i2vEF8EA24yJrZqqHWWji7YOPK3kHnvtHIntK3gep16p07WsDx86U6XUt/Kw?=
+ =?us-ascii?Q?O+PhqrQFlTCKei+m3gTYpVOn5v74eeUXovpt7yxYCI0mm3MGw1v7s/C9eP7w?=
+ =?us-ascii?Q?qTBPp8V3lcWoeHi6hyYoST7zsXCimF6aXch9Mg0O8pkoJ8gV4G0s8HrNn1v9?=
+ =?us-ascii?Q?PajJj0q0gXRKlXTO+ReYMFaTzjq+qxXXpb39/j0JWvhKpoFXJKQgCs49hjcr?=
+ =?us-ascii?Q?LdnrFzKMxjc/BUn9lKQHkH346p5GzBNyBfCuzCcYOpxXbFKoVAs4X7NpGWxy?=
+ =?us-ascii?Q?3wEgo4GKxrAIKLNzO51nFSqQKGaXxz0uUbnGciu3ZLWYi99q1E4hw/ofoVl2?=
+ =?us-ascii?Q?n+Q7BFNv6xKdOtbx6qxrPQCCc4w+HzcuvqQrBme0jFkluiA1dxgdJweTujAK?=
+ =?us-ascii?Q?QRpRhCbRrOSsZfDnNLp+352qPo0fScO7mA8kGIvBXDEvq6tYVLtAuxhjF9qX?=
+ =?us-ascii?Q?LXpb8q0osRXlYrgchiL/rCzUQMoDZhynhH34eu/kMHV9bhN57m1+6DKdwA7H?=
+ =?us-ascii?Q?jetMMJcs9lH1qc2GpAE3esluU3AatoCiq7//UJxd0fsFnmKu7TgLqs5/WCDS?=
+ =?us-ascii?Q?bdaepODmhfLXLWuZWOHXFKdwYMJBtVNOmqzApYA/BO2OF5tSwHy6zd3sUHVt?=
+ =?us-ascii?Q?YtzI6FYPp96Mm+d+ZlPolVnbklure+CnhuGYIUxy8zXfvMX59mZM4h7+GqbH?=
+ =?us-ascii?Q?kTZGhDMiRzMvc3yJkrVScAwxtqgdc4UN764MyR7FXmzeRWo0xEwIXg9gLfmd?=
+ =?us-ascii?Q?I0J1uLAFpxGl9/rCzddkmrBq62hLKSdlXU+JpKTt27mIukf1Wq5jKJMBfWzx?=
+ =?us-ascii?Q?rdS3PmGynLKl09wp9+BlP4J3Y0pgzeQ5MMrSyN2DaAhwQQpnDyiIfRqTRMy0?=
+ =?us-ascii?Q?adpboXMvpXbMyLI6lQp0lwozI/sBzLOjadt5Q9YQKmm3IlUZSl4gcuIfHi5F?=
+ =?us-ascii?Q?YvHl2GEPC+9fZAnUQgJjYw=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: be6cea6e-4677-494f-19c8-08da7fdf6719
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2022 23:31:11.2510
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BNFtkOZA0GLSeI5HzZnDpMmAOe4tfa/4CRXGpvN6/JPQfUnMEsqc/2JHkPt48CzbHSv7O2pcuXQHKvOEFpDn1A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB2426
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-16_08,2022-08-16_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
+ adultscore=0 suspectscore=0 spamscore=0 mlxlogscore=999 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208160084
+X-Proofpoint-GUID: PsLgeyMBJz_DACqHDElzSxoDrJBlchxF
+X-Proofpoint-ORIG-GUID: PsLgeyMBJz_DACqHDElzSxoDrJBlchxF
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block tglx/devel/depthtracking
-head:   9bbf33b92f4c755dd56f4d9bc1b40e94fdd1fff7
-commit: 5f5bcd6ccea80ee1fa71477dbf80d43d9cbbf30a [58/59] x86/ftrace: Make it call depth tracking aware
-config: x86_64-randconfig-a013-20220815 (https://download.01.org/0day-ci/archive/20220817/202208170727.cRWzeoJx-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6afcc4a459ead8809a0d6d9b4bf7b64bcc13582b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/5f5bcd6ccea80ee1fa71477dbf80d43d9cbbf30a
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block tglx/devel/depthtracking
-        git checkout 5f5bcd6ccea80ee1fa71477dbf80d43d9cbbf30a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
+On 08/16/22 21:05, Miaohe Lin wrote:
+> When huge_add_to_page_cache() fails, the page is freed directly without
+> calling restore_reserve_on_error() to restore reserve for newly allocated
+> pages not in page cache. Fix this by calling restore_reserve_on_error()
+> when huge_add_to_page_cache fails.
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  mm/hugetlb.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index ff991e5bdf1f..b69d7808f457 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -5603,6 +5603,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+>  		if (vma->vm_flags & VM_MAYSHARE) {
+>  			int err = huge_add_to_page_cache(page, mapping, idx);
+>  			if (err) {
+> +				restore_reserve_on_error(h, vma, haddr, page);
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Hmmmm.  I was going to comment that restore_reserve_on_error would not handle
+the situation where 'err == -EEXIST' below.  This is because it implies we
+raced with someone else that added the page to the cache.  And, that other
+allocation, not this one, consumed the reservation.  However, I am not sure
+how that could be possible?  The hugetlb fault mutex (which we hold)
+must be held to add a page to the page cache.
 
-All errors (new ones prefixed by >>):
+Searching git history I see that code was added (or at least existed) before
+the hugetlb fault mutex was introduced.  So, I believe that check for -EEXIST
+and retry can go.
 
->> arch/x86/net/bpf_jit_comp.c:2103:40: error: use of undeclared identifier '__fentry__'
-           x86_call_depth_emit_accounting(&prog, __fentry__);
-                                                 ^
-   1 error generated.
-
-
-vim +/__fentry__ +2103 arch/x86/net/bpf_jit_comp.c
-
-  1970	
-  1971	/* Example:
-  1972	 * __be16 eth_type_trans(struct sk_buff *skb, struct net_device *dev);
-  1973	 * its 'struct btf_func_model' will be nr_args=2
-  1974	 * The assembly code when eth_type_trans is executing after trampoline:
-  1975	 *
-  1976	 * push rbp
-  1977	 * mov rbp, rsp
-  1978	 * sub rsp, 16                     // space for skb and dev
-  1979	 * push rbx                        // temp regs to pass start time
-  1980	 * mov qword ptr [rbp - 16], rdi   // save skb pointer to stack
-  1981	 * mov qword ptr [rbp - 8], rsi    // save dev pointer to stack
-  1982	 * call __bpf_prog_enter           // rcu_read_lock and preempt_disable
-  1983	 * mov rbx, rax                    // remember start time in bpf stats are enabled
-  1984	 * lea rdi, [rbp - 16]             // R1==ctx of bpf prog
-  1985	 * call addr_of_jited_FENTRY_prog
-  1986	 * movabsq rdi, 64bit_addr_of_struct_bpf_prog  // unused if bpf stats are off
-  1987	 * mov rsi, rbx                    // prog start time
-  1988	 * call __bpf_prog_exit            // rcu_read_unlock, preempt_enable and stats math
-  1989	 * mov rdi, qword ptr [rbp - 16]   // restore skb pointer from stack
-  1990	 * mov rsi, qword ptr [rbp - 8]    // restore dev pointer from stack
-  1991	 * pop rbx
-  1992	 * leave
-  1993	 * ret
-  1994	 *
-  1995	 * eth_type_trans has 5 byte nop at the beginning. These 5 bytes will be
-  1996	 * replaced with 'call generated_bpf_trampoline'. When it returns
-  1997	 * eth_type_trans will continue executing with original skb and dev pointers.
-  1998	 *
-  1999	 * The assembly code when eth_type_trans is called from trampoline:
-  2000	 *
-  2001	 * push rbp
-  2002	 * mov rbp, rsp
-  2003	 * sub rsp, 24                     // space for skb, dev, return value
-  2004	 * push rbx                        // temp regs to pass start time
-  2005	 * mov qword ptr [rbp - 24], rdi   // save skb pointer to stack
-  2006	 * mov qword ptr [rbp - 16], rsi   // save dev pointer to stack
-  2007	 * call __bpf_prog_enter           // rcu_read_lock and preempt_disable
-  2008	 * mov rbx, rax                    // remember start time if bpf stats are enabled
-  2009	 * lea rdi, [rbp - 24]             // R1==ctx of bpf prog
-  2010	 * call addr_of_jited_FENTRY_prog  // bpf prog can access skb and dev
-  2011	 * movabsq rdi, 64bit_addr_of_struct_bpf_prog  // unused if bpf stats are off
-  2012	 * mov rsi, rbx                    // prog start time
-  2013	 * call __bpf_prog_exit            // rcu_read_unlock, preempt_enable and stats math
-  2014	 * mov rdi, qword ptr [rbp - 24]   // restore skb pointer from stack
-  2015	 * mov rsi, qword ptr [rbp - 16]   // restore dev pointer from stack
-  2016	 * call eth_type_trans+5           // execute body of eth_type_trans
-  2017	 * mov qword ptr [rbp - 8], rax    // save return value
-  2018	 * call __bpf_prog_enter           // rcu_read_lock and preempt_disable
-  2019	 * mov rbx, rax                    // remember start time in bpf stats are enabled
-  2020	 * lea rdi, [rbp - 24]             // R1==ctx of bpf prog
-  2021	 * call addr_of_jited_FEXIT_prog   // bpf prog can access skb, dev, return value
-  2022	 * movabsq rdi, 64bit_addr_of_struct_bpf_prog  // unused if bpf stats are off
-  2023	 * mov rsi, rbx                    // prog start time
-  2024	 * call __bpf_prog_exit            // rcu_read_unlock, preempt_enable and stats math
-  2025	 * mov rax, qword ptr [rbp - 8]    // restore eth_type_trans's return value
-  2026	 * pop rbx
-  2027	 * leave
-  2028	 * add rsp, 8                      // skip eth_type_trans's frame
-  2029	 * ret                             // return to its caller
-  2030	 */
-  2031	int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *image_end,
-  2032					const struct btf_func_model *m, u32 flags,
-  2033					struct bpf_tramp_links *tlinks,
-  2034					void *orig_call)
-  2035	{
-  2036		int ret, i, nr_args = m->nr_args;
-  2037		int regs_off, ip_off, args_off, stack_size = nr_args * 8, run_ctx_off;
-  2038		struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
-  2039		struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
-  2040		struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
-  2041		u8 **branches = NULL;
-  2042		u8 *prog;
-  2043		bool save_ret;
-  2044	
-  2045		/* x86-64 supports up to 6 arguments. 7+ can be added in the future */
-  2046		if (nr_args > 6)
-  2047			return -ENOTSUPP;
-  2048	
-  2049		/* Generated trampoline stack layout:
-  2050		 *
-  2051		 * RBP + 8         [ return address  ]
-  2052		 * RBP + 0         [ RBP             ]
-  2053		 *
-  2054		 * RBP - 8         [ return value    ]  BPF_TRAMP_F_CALL_ORIG or
-  2055		 *                                      BPF_TRAMP_F_RET_FENTRY_RET flags
-  2056		 *
-  2057		 *                 [ reg_argN        ]  always
-  2058		 *                 [ ...             ]
-  2059		 * RBP - regs_off  [ reg_arg1        ]  program's ctx pointer
-  2060		 *
-  2061		 * RBP - args_off  [ args count      ]  always
-  2062		 *
-  2063		 * RBP - ip_off    [ traced function ]  BPF_TRAMP_F_IP_ARG flag
-  2064		 *
-  2065		 * RBP - run_ctx_off [ bpf_tramp_run_ctx ]
-  2066		 */
-  2067	
-  2068		/* room for return value of orig_call or fentry prog */
-  2069		save_ret = flags & (BPF_TRAMP_F_CALL_ORIG | BPF_TRAMP_F_RET_FENTRY_RET);
-  2070		if (save_ret)
-  2071			stack_size += 8;
-  2072	
-  2073		regs_off = stack_size;
-  2074	
-  2075		/* args count  */
-  2076		stack_size += 8;
-  2077		args_off = stack_size;
-  2078	
-  2079		if (flags & BPF_TRAMP_F_IP_ARG)
-  2080			stack_size += 8; /* room for IP address argument */
-  2081	
-  2082		ip_off = stack_size;
-  2083	
-  2084		stack_size += (sizeof(struct bpf_tramp_run_ctx) + 7) & ~0x7;
-  2085		run_ctx_off = stack_size;
-  2086	
-  2087		if (flags & BPF_TRAMP_F_SKIP_FRAME) {
-  2088			/* skip patched call instruction and point orig_call to actual
-  2089			 * body of the kernel function.
-  2090			 */
-  2091			if (is_endbr(*(u32 *)orig_call))
-  2092				orig_call += ENDBR_INSN_SIZE;
-  2093			orig_call += X86_PATCH_SIZE;
-  2094		}
-  2095	
-  2096		prog = image;
-  2097	
-  2098		EMIT_ENDBR();
-  2099		/*
-  2100		 * This is the direct-call trampoline, as such it needs accounting
-  2101		 * for the __fentry__ call.
-  2102		 */
-> 2103		x86_call_depth_emit_accounting(&prog, __fentry__);
-  2104		EMIT1(0x55);		 /* push rbp */
-  2105		EMIT3(0x48, 0x89, 0xE5); /* mov rbp, rsp */
-  2106		EMIT4(0x48, 0x83, 0xEC, stack_size); /* sub rsp, stack_size */
-  2107		EMIT1(0x53);		 /* push rbx */
-  2108	
-  2109		/* Store number of arguments of the traced function:
-  2110		 *   mov rax, nr_args
-  2111		 *   mov QWORD PTR [rbp - args_off], rax
-  2112		 */
-  2113		emit_mov_imm64(&prog, BPF_REG_0, 0, (u32) nr_args);
-  2114		emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -args_off);
-  2115	
-  2116		if (flags & BPF_TRAMP_F_IP_ARG) {
-  2117			/* Store IP address of the traced function:
-  2118			 * mov rax, QWORD PTR [rbp + 8]
-  2119			 * sub rax, X86_PATCH_SIZE
-  2120			 * mov QWORD PTR [rbp - ip_off], rax
-  2121			 */
-  2122			emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, 8);
-  2123			EMIT4(0x48, 0x83, 0xe8, X86_PATCH_SIZE);
-  2124			emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -ip_off);
-  2125		}
-  2126	
-  2127		save_regs(m, &prog, nr_args, regs_off);
-  2128	
-  2129		if (flags & BPF_TRAMP_F_CALL_ORIG) {
-  2130			/* arg1: mov rdi, im */
-  2131			emit_mov_imm64(&prog, BPF_REG_1, (long) im >> 32, (u32) (long) im);
-  2132			if (emit_rsb_call(&prog, __bpf_tramp_enter, prog)) {
-  2133				ret = -EINVAL;
-  2134				goto cleanup;
-  2135			}
-  2136		}
-  2137	
-  2138		if (fentry->nr_links)
-  2139			if (invoke_bpf(m, &prog, fentry, regs_off, run_ctx_off,
-  2140				       flags & BPF_TRAMP_F_RET_FENTRY_RET))
-  2141				return -EINVAL;
-  2142	
-  2143		if (fmod_ret->nr_links) {
-  2144			branches = kcalloc(fmod_ret->nr_links, sizeof(u8 *),
-  2145					   GFP_KERNEL);
-  2146			if (!branches)
-  2147				return -ENOMEM;
-  2148	
-  2149			if (invoke_bpf_mod_ret(m, &prog, fmod_ret, regs_off,
-  2150					       run_ctx_off, branches)) {
-  2151				ret = -EINVAL;
-  2152				goto cleanup;
-  2153			}
-  2154		}
-  2155	
-  2156		if (flags & BPF_TRAMP_F_CALL_ORIG) {
-  2157			restore_regs(m, &prog, nr_args, regs_off);
-  2158	
-  2159			if (flags & BPF_TRAMP_F_ORIG_STACK) {
-  2160				emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, 8);
-  2161				EMIT2(0xff, 0xd0); /* call *rax */
-  2162			} else {
-  2163				/* call original function */
-  2164				if (emit_rsb_call(&prog, orig_call, prog)) {
-  2165					ret = -EINVAL;
-  2166					goto cleanup;
-  2167				}
-  2168			}
-  2169			/* remember return value in a stack for bpf prog to access */
-  2170			emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -8);
-  2171			im->ip_after_call = prog;
-  2172			memcpy(prog, x86_nops[5], X86_PATCH_SIZE);
-  2173			prog += X86_PATCH_SIZE;
-  2174		}
-  2175	
-  2176		if (fmod_ret->nr_links) {
-  2177			/* From Intel 64 and IA-32 Architectures Optimization
-  2178			 * Reference Manual, 3.4.1.4 Code Alignment, Assembly/Compiler
-  2179			 * Coding Rule 11: All branch targets should be 16-byte
-  2180			 * aligned.
-  2181			 */
-  2182			emit_align(&prog, 16);
-  2183			/* Update the branches saved in invoke_bpf_mod_ret with the
-  2184			 * aligned address of do_fexit.
-  2185			 */
-  2186			for (i = 0; i < fmod_ret->nr_links; i++)
-  2187				emit_cond_near_jump(&branches[i], prog, branches[i],
-  2188						    X86_JNE);
-  2189		}
-  2190	
-  2191		if (fexit->nr_links)
-  2192			if (invoke_bpf(m, &prog, fexit, regs_off, run_ctx_off, false)) {
-  2193				ret = -EINVAL;
-  2194				goto cleanup;
-  2195			}
-  2196	
-  2197		if (flags & BPF_TRAMP_F_RESTORE_REGS)
-  2198			restore_regs(m, &prog, nr_args, regs_off);
-  2199	
-  2200		/* This needs to be done regardless. If there were fmod_ret programs,
-  2201		 * the return value is only updated on the stack and still needs to be
-  2202		 * restored to R0.
-  2203		 */
-  2204		if (flags & BPF_TRAMP_F_CALL_ORIG) {
-  2205			im->ip_epilogue = prog;
-  2206			/* arg1: mov rdi, im */
-  2207			emit_mov_imm64(&prog, BPF_REG_1, (long) im >> 32, (u32) (long) im);
-  2208			if (emit_rsb_call(&prog, __bpf_tramp_exit, prog)) {
-  2209				ret = -EINVAL;
-  2210				goto cleanup;
-  2211			}
-  2212		}
-  2213		/* restore return value of orig_call or fentry prog back into RAX */
-  2214		if (save_ret)
-  2215			emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, -8);
-  2216	
-  2217		EMIT1(0x5B); /* pop rbx */
-  2218		EMIT1(0xC9); /* leave */
-  2219		if (flags & BPF_TRAMP_F_SKIP_FRAME)
-  2220			/* skip our return address and return to parent */
-  2221			EMIT4(0x48, 0x83, 0xC4, 8); /* add rsp, 8 */
-  2222		emit_return(&prog, prog);
-  2223		/* Make sure the trampoline generation logic doesn't overflow */
-  2224		if (WARN_ON_ONCE(prog > (u8 *)image_end - BPF_INSN_SAFETY)) {
-  2225			ret = -EFAULT;
-  2226			goto cleanup;
-  2227		}
-  2228		ret = prog - (u8 *)image;
-  2229	
-  2230	cleanup:
-  2231		kfree(branches);
-  2232		return ret;
-  2233	}
-  2234	
-
+With that said, restore_reserve_on_error can be called here.  But, let's
+look into removing that err == -EEXIST check to avoid confusion.
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Mike Kravetz
+
+>  				put_page(page);
+>  				if (err == -EEXIST)
+>  					goto retry;
+> -- 
+> 2.23.0
+> 

@@ -2,72 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4630595CDE
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC77D595CE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235537AbiHPNKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
+        id S235601AbiHPNKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235399AbiHPNJ7 (ORCPT
+        with ESMTP id S235639AbiHPNKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 09:09:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C79B274F
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:09:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660655396;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8awJny9/ykLwiE6dZBhJI/2SwPImayCQ0hkEt7cHi1w=;
-        b=gBseYpV7MhL48gp60qum0qMeBqkls399KmMRRxsm94IidlbKD+CYJC2W5UvwgAEkJ4SJKB
-        C9OezqDmzr1hyvfSeTd3A50GMiL+31QVAH8XBYCi+v3YIYW1QlGpACXImkaIDU89tipHKx
-        PD3vf5Td6XkOkPr8i38nSQtxTrnXa78=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-645-CUgRfkWnO82eztXDflM4gA-1; Tue, 16 Aug 2022 09:09:50 -0400
-X-MC-Unique: CUgRfkWnO82eztXDflM4gA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 949E13C1014B;
-        Tue, 16 Aug 2022 13:09:49 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7F7B0C15BA6;
-        Tue, 16 Aug 2022 13:09:47 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220816103452.479281-1-yin31149@gmail.com>
-References: <20220816103452.479281-1-yin31149@gmail.com> <166064248071.3502205.10036394558814861778.stgit@warthog.procyon.org.uk>
-To:     Hawkins Jiawei <yin31149@gmail.com>
-Cc:     dhowells@redhat.com, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] net: Fix suspicious RCU usage in bpf_sk_reuseport_detach()
+        Tue, 16 Aug 2022 09:10:39 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2133AB24A2;
+        Tue, 16 Aug 2022 06:10:30 -0700 (PDT)
+X-QQ-mid: bizesmtp62t1660655421t8je3jh3
+Received: from localhost.localdomain ( [182.148.12.144])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 16 Aug 2022 21:10:20 +0800 (CST)
+X-QQ-SSF: 01000000002000B0D000B00A0000000
+X-QQ-FEAT: ILHsT53NKPjhC6sTij/xeN8rhMmPWGvtPJWDYLMgqxtZVM17yqE/y8x0oYmur
+        P3QNT5Z+NZ2Q7QT5l4tKEdo0LQ5FIjMBiHYQFqeRGLXgCYvv+5HrDPvVPYMO7AeYC2FQX5n
+        n5XVMiCVIWdhxo1eP3QsY+fq8o79IPJMfNhkr9lr8DEgRvuEGlH9wfrkDNnY44bxKoK5myb
+        wS3wZkQIS0ofdF2hcVsQsThYeFiGDiOE5arlFcm7csNcgcWYe7ec/znNS+g1N5WasmNvHB0
+        paeFk/BJErwZyQGzBkdQu/qkJWHOKMnpNidV2BIUuCWfOHRcO1xK41gtBZqbyd34t8epPiL
+        l4zgg5ap6dFjEPPNaKrfaMLwgtKLrfnGcMH8I2VjGz+cQ/gOobYAT3Gx2tVlP6NVIqmFHYJ
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     deller@gmx.de
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] video/fbdev: fix repeated words in comments
+Date:   Tue, 16 Aug 2022 21:10:13 +0800
+Message-Id: <20220816131013.30643-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3961604.1660655386.1@warthog.procyon.org.uk>
-Date:   Tue, 16 Aug 2022 14:09:46 +0100
-Message-ID: <3961607.1660655386@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,13 +48,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hawkins Jiawei <yin31149@gmail.com> wrote:
+ Delete the redundant word 'its'.
 
->  	if (socks) {
->  		WRITE_ONCE(sk->sk_user_data, NULL);
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/video/fbdev/skeletonfb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Btw, shouldn't this be rcu_assign_pointer() or RCU_INIT_POINTER(), not
-WRITE_ONCE()?
-
-David
+diff --git a/drivers/video/fbdev/skeletonfb.c b/drivers/video/fbdev/skeletonfb.c
+index 818b3a5003e1..f316ea320d29 100644
+--- a/drivers/video/fbdev/skeletonfb.c
++++ b/drivers/video/fbdev/skeletonfb.c
+@@ -97,7 +97,7 @@ static const struct fb_fix_screeninfo xxxfb_fix = {
+     /*
+      * 	Modern graphical hardware not only supports pipelines but some 
+      *  also support multiple monitors where each display can have its  
+-     *  own unique data. In this case each display could be  
++     *  own unique data. In this case each display could be
+      *  represented by a separate framebuffer device thus a separate 
+      *  struct fb_info. Now the struct xxx_par represents the graphics
+      *  hardware state thus only one exist per card. In this case the 
+-- 
+2.36.1
 

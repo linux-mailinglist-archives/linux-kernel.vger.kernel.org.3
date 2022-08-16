@@ -2,151 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADADE59660F
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 01:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89FD659661A
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 01:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237599AbiHPXfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 19:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
+        id S237198AbiHPXhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 19:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237279AbiHPXfZ (ORCPT
+        with ESMTP id S229472AbiHPXhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 19:35:25 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1555F7DF79;
-        Tue, 16 Aug 2022 16:35:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660692922; x=1692228922;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=S0XN3OYq2AKZe0h+1cYQ54H0TedXbZNTncgc3CyAOlw=;
-  b=UUqQHOKasZqXRR1WzS+kXl8bv8WYyaP1qeT2h/XgN7ctnJDMnIUcgwZP
-   V2Cgl6FJ02o8ybGsBB1Sh8Dwm7wgCv5NLzn9jyAOHQHntNtA5nzJLtzMn
-   +zgIal/rMjVX8ThKYPh/wJshjg+bd5szpMmDFmQHiUBvkZfAU8Lq3k6Nd
-   oEnTUvJRqiXkj1FFi6e5b+lCUCe7S1vbm+TuJwXz7Fd6VG7HAqyjASWmh
-   +wZ6FTb8hofsGnV1dpf+yxRwh9l4OIbYJHbb4d6sIfU7lWwMsXULiqi3Q
-   NvxXz1q+3DDS83l7MrGJMLAT3qWHQclKIpNPMG44vy1b81KJGFF02Ok32
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="356354609"
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="356354609"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 16:35:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="667351646"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Aug 2022 16:35:21 -0700
-Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Tue, 16 Aug 2022 16:35:21 -0700
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Tue, 16 Aug 2022 16:35:20 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28 via Frontend Transport; Tue, 16 Aug 2022 16:35:20 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.28; Tue, 16 Aug 2022 16:35:20 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kfSRIA65NDwnTxeGBa9QSNHREwv4hCYYrOOcmxBV+COjCBlGlsl6ibCxYfvpJO0ItwtamgFScgVd/vc2E2nCNj6ryXjbuCDjI2MW7vIwX9Zpzw2ULoI/BkvS3znfqovpPWbPyS8Ty1l2xuypFEIQ0F6xWLUKnVC8nsV2X7N3Ivhln6mECrE/LurdsLcwwDkdCaypiTR3OgFW6/0pVSGF9kf/+dprsUU/ZHgkZ9qA1a8z5WX8FEanz+873lu9tE1RoWk8MXU5T42v2mxgzs3Wd0QOnKMKtRaWl0bWBPNAnNAnt7URYwRvz04x0sp5od+nJEouEFDpAWmnqJoU+jmezw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=x6KXckYwB0F+WlvosIjCs3VkhI28z1DOKURaoClrM2c=;
- b=AoASMqce+i6agfkzZ0cgG9Yg0fhnNAgvN3zLTqs7eyreMsvb1GIqbhepBL3UxGSESTIEZeAKn/4xLFJy5iu33E2I0bDpwW0xsvcXpoFVrMKGqUysdDU+WgvB7hhq0OO1WACMn49z13DCHIVWolxfAWfEa7wQQLoZ+pwSkrLDZOQ1rxLx4ASzItgHOi7KFPPiFYABn2QysYuHrA9dXJoMU1JHVBJbV8V7DnCS3PXS2TmbC0m3IgohBiLrhjTjBez0hlanuDvll5BHxtWgn9JCizXINUVq5+F2JY9Jc/+Axh5avv4L/cZeNZ2H0PWVeAV5iideZhJ0jTM5JVJFtfzXCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by SJ1PR11MB6228.namprd11.prod.outlook.com (2603:10b6:a03:459::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Tue, 16 Aug
- 2022 23:35:13 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::4ef:8e90:8ed9:870]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::4ef:8e90:8ed9:870%5]) with mapi id 15.20.5525.011; Tue, 16 Aug 2022
- 23:35:13 +0000
-Date:   Tue, 16 Aug 2022 16:35:09 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Ben Widawsky" <bwidawsk@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [RFC PATCH 1/9] cxl/mem: Implement Get Event Records command
-Message-ID: <YvwprR3eeD7hOwHx@iweiny-desk3>
-References: <20220813053243.757363-1-ira.weiny@intel.com>
- <20220813053243.757363-2-ira.weiny@intel.com>
- <20220816123958.2b49674a@gandalf.local.home>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220816123958.2b49674a@gandalf.local.home>
-X-ClientProxiedBy: BYAPR01CA0029.prod.exchangelabs.com (2603:10b6:a02:80::42)
- To SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
+        Tue, 16 Aug 2022 19:37:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F51E90C5C;
+        Tue, 16 Aug 2022 16:37:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3426B81AB3;
+        Tue, 16 Aug 2022 23:37:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C266C433D6;
+        Tue, 16 Aug 2022 23:37:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660693053;
+        bh=9EB/lj+iK8bR1znjPuV7tcbBvyDFdDdbGQc0A81N08o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aqojIHzbDNAIpuETB+uzcCTNleuFyVXxvHIFoJNPzuUXZjEfsRpgPri/A6Iu1HI8D
+         sKnUNvqKsvDoFIpvd80xWjA+7FJ6fNquhIAMfCIytgjkTKZ+UEkxKSk0wpk9GqXnIU
+         XJyRgGxiSx1YMimhdPOgClP/2thMvJpOIiPmoMGTodd/CSsOw/0f6awcdBSsa4hV2W
+         47CuNl8uRImYAtU+Tnqi211wvnDcYEqLt9wJWjD+Ch6H4SF3eLWXpzUYlBl5ob2SuO
+         oEXJHGlFmZYximIr3JrH//E7VNvVQofwtFOpQP1is8QkXdcQn2ejqScU3MqKCyQvWi
+         smGqUQonKd6bw==
+Date:   Wed, 17 Aug 2022 02:37:29 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-sgx@vger.kernel.org, Vijay Dhanraj <vijay.dhanraj@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] selftests/sgx: Add SGX selftest
+ augment_via_eaccept_long
+Message-ID: <YvwqOfGozKVk5SY9@kernel.org>
+References: <20220815233900.11225-1-jarkko@kernel.org>
+ <20220815233900.11225-2-jarkko@kernel.org>
+ <6b304bb4-01cc-c88a-7299-19217a7a692b@intel.com>
+ <YvwpX7pYOW3Jv+vJ@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e4dbbbee-75a6-4cc9-0ff0-08da7fdff767
-X-MS-TrafficTypeDiagnostic: SJ1PR11MB6228:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yJYTlVFRU0P4ozoJYffYnr7+j/AiOEeNaFJ59+i1kz8HiVnG6/wFKIgBTCmK9mP7obG2stN6VgXOvSR6r5RaspYnlSekYvIIK1j9Diz3dcT3Ct27FwVZJw1xR80Xcy9rjGn10yweMXdWnZHvy5N3AcYwqGn8K68xkhgzZFkSGnCyVWGrQydG0wMCsloYQPl9YSbXjGSVqMag4uYxhgR+QOlnURPN9mBD9oTY4lW48ByNbmoVbJ+PpZiuTeTNV9gcqDoHn7RFH9SXStAcPt0s0M3//IwLR/eHNbGLqUBTWdjSDYL0kMWJ7e8HIn7Bh+ZhlbUw6Ceg6i980INVibzEP9XeflV60AkeI363yHWN9VtHLGeSGyu9R3ut8h/PkctFbs/M8cxhLu2dYOdNPr++Yd89igzJVIwSB3UCGW0+nHdePmItCVLFAYjDYggLZ5coH8n2Q9l3+Pne5mIirTHEyLax/np6o3LiAqaDSOXI3eIArRvrlc+vR9jdAGM7EOrwAxLzsKgcjQmyLCwQ9U/GD+e/huT8zJaSZGgBymbfaDNwrSa2fWeYNblkR0BCBNcAZ6mD5mNbH+aJNI84JC9N1QjkmCwxKh7TjktQOAb3MUWgVny7OA8/2CS+yf9eFC/4eriUVVBpUhvTLAY0mn+DGeSqjsYkAv5pTbE7BPS/ae6wBWGI6EpaEOGFmSGnGGGqNQM/24RceI1FcrWune2PfsUXKIv+4jw8EinMUea5JNTlfw3E5lAkzp6mxeimct5H
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(396003)(346002)(376002)(39860400002)(136003)(44832011)(316002)(82960400001)(66476007)(5660300002)(9686003)(6916009)(86362001)(4326008)(54906003)(66556008)(66946007)(38100700002)(8936002)(6666004)(8676002)(26005)(41300700001)(6506007)(6512007)(186003)(478600001)(33716001)(6486002)(83380400001)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VT/QFLKSSF8IPKSvSjtvHHeo7M/xHcHTl6ZW7KLT8Otf05bZ+oNXMPWahHeB?=
- =?us-ascii?Q?kWUW1zAmOwwk0A45c7Kn9YczevARQzsWlpSQ+6jV4HZj0UxTUTP6yvu7IIbW?=
- =?us-ascii?Q?AOLEWliIwib501h8eltb67eJef7hiZBmwZ9kW/qLCh3guO0gFUYpcr0StDLw?=
- =?us-ascii?Q?diJHbPU5xyXg61b8JibuKTv8/UccDchB6dFDyNrbZbAoh6YBfXIPinrQPA0q?=
- =?us-ascii?Q?eo3ehtyJ73i4u2RmQ+10T9urDv7dmRIQ+QxKbLIu9B3hssyGW4LQtbtMH/fj?=
- =?us-ascii?Q?QzwiAdPpkkO2YvGhoPi0fQgy+h2G6DRow7PZgdmPX1Rynjh0ORyer2e/oYJW?=
- =?us-ascii?Q?Dpm72zk1pD+l582/tCMcnw6hMcGYmPiNcDS7pUIsxfsP++WAAylq/jT9Ggi6?=
- =?us-ascii?Q?Z4ldux/RaRFpdYv69xjL+GQJ8Mto3Pt/PNSuilAAfXR4IE06bRL7BY5S7cEB?=
- =?us-ascii?Q?NUwFVVAtLQxIoFqvwUZ8io9/zjrmDN2c5QHd5bomadMyOclp6YdUMiYkFMOM?=
- =?us-ascii?Q?EnCBJZkksVsrD7Fgrn32Oo9i3kqrJ7A2AyEElNSgRw50+HX2DqFZSjIAOl5a?=
- =?us-ascii?Q?nxy9EO8qc3PELw4ovkgQFQTTlCaTz6GJQEqf2zxzakd40Z/sY+4F+0RILrir?=
- =?us-ascii?Q?LaRIwYqboQz9Nch2r5cZZn01a1FSFI+k0CVTQWTYpovMYXbyfwysc5jBAB9m?=
- =?us-ascii?Q?+XudEkDykuakCz6ufqys0xbqn7pODR7v5Sr/wltWiIHEUuoRU8ni7c6RBrdO?=
- =?us-ascii?Q?VsHDDpAfHgC4LLZfv2n7jUc+iGQqi8NsYNJ0DixijXNNb6J3LDl+F8dpSJ6H?=
- =?us-ascii?Q?BwxXF3Qk0y4cLeLqBGpLvg+knoYuOyjP7WGLIJgKWkWBgmMLaCfG8fuTSNiR?=
- =?us-ascii?Q?FLTeAzhZfxzZjDvzsRqt789gStdlQT2BxHHqkSRWmhJtCF08L5NxgrWNTOpN?=
- =?us-ascii?Q?IKHc5jMRR3wKIElZGz4I7aw9BH7rtML3OhwZy4UcfstntyNE8R0NMnIi2uQU?=
- =?us-ascii?Q?+zXIu2J+iYSkGo6RCa9ssB34BadyP2fpdglw609HHrYg1D7jeiJjGmLVm1vs?=
- =?us-ascii?Q?Hvtr1jFhAG4UHxEHZtDiwvT5OccVwOl7NQU0ehsUr+Bgg5bk0OCXgSimKgTj?=
- =?us-ascii?Q?o/57b4m3ONgOL8T81Yv2SWZNvroxZWCAZqxcsmC4pTsbPgBp7fgeaKEmB/XS?=
- =?us-ascii?Q?2dAFmjgZX9//51fPgUXFHvSB4yYluOWv/KmQDqr4hrhIFsxC/gSspQ7HC4Dc?=
- =?us-ascii?Q?oJabWC16Y76tekO7RJn1ACACpPJxJNIaH7dCukMpqY/Hg+fj5YrcxEUyyloT?=
- =?us-ascii?Q?BojentbZWEg1u1PaNybKdK0BGqM28ljG56hwb6+wlS2FePdwloIZpXObp+58?=
- =?us-ascii?Q?MUnQ6XVsg2l0OjjZJ598XNzu7ZoYqgrMY79uU1XXS+dyMmSTHql+OjcQbJih?=
- =?us-ascii?Q?IE8Y9hJPSAu2A2KGsFZQ0rYY55gxs9aKIxVt3fbX8vnoItof7eI2f+/tYpnE?=
- =?us-ascii?Q?cT05vdAWrWSdeYza3bUUReek/eIQkb9szozzPHl537zGAq9lOaVxKlKZnHya?=
- =?us-ascii?Q?+XTkzhbcDWXAUURjuihcOgGRHmcH4ejXHX9S4++u?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4dbbbee-75a6-4cc9-0ff0-08da7fdff767
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2022 23:35:13.3069
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3Bgm5cOiI+X4QEvklcPu/xXt3iizjPEADCBP/P/VlQxc61Ck/F4yz1DDFNdl6r7eC3VV0Sgq/R3L4YPpZraIzA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR11MB6228
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvwpX7pYOW3Jv+vJ@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -154,214 +62,279 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 12:39:58PM -0400, Steven Rostedt wrote:
-> On Fri, 12 Aug 2022 22:32:35 -0700
-> ira.weiny@intel.com wrote:
-> 
-> > From: Ira Weiny <ira.weiny@intel.com>
+On Wed, Aug 17, 2022 at 02:33:54AM +0300, Jarkko Sakkinen wrote:
+> On Tue, Aug 16, 2022 at 09:26:40AM -0700, Reinette Chatre wrote:
+> > Hi Vijay,
 > > 
-> > Event records are defined for CXL devices.  Each record is reported in
-> > one event log.  Devices are required to support the storage of at least
-> > one event record in each event log type.
+> > Thank you very much for digging into this. A few comments below.
 > > 
-> > Devices track event log overflow by incrementing a counter and tracking
-> > the time of the first and last overflow event seen.
+> > On 8/15/2022 4:39 PM, Jarkko Sakkinen wrote:
+> > > From: Vijay Dhanraj <vijay.dhanraj@intel.com>
+> > > 
+> > > Add a new test case which is same as augment_via_eaccept but adds a
+> > > larger number of EPC pages to stress test EAUG via EACCEPT.
+> > > 
+> > > Signed-off-by: Vijay Dhanraj <vijay.dhanraj@intel.com>
+> > > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > ---
+> > > I removed Githubisms (hyphens), added missing subsystem tag, and
+> > > cleaned up the commit message a bit.
+> > >  tools/testing/selftests/sgx/load.c      |   5 +-
+> > >  tools/testing/selftests/sgx/main.c      | 120 +++++++++++++++++++++++-
+> > >  tools/testing/selftests/sgx/main.h      |   3 +-
+> > >  tools/testing/selftests/sgx/sigstruct.c |   2 +-
+> > >  4 files changed, 125 insertions(+), 5 deletions(-)
+> > > 
+> > > diff --git a/tools/testing/selftests/sgx/load.c b/tools/testing/selftests/sgx/load.c
+> > > index 94bdeac1cf04..7de1b15c90b1 100644
+> > > --- a/tools/testing/selftests/sgx/load.c
+> > > +++ b/tools/testing/selftests/sgx/load.c
+> > > @@ -171,7 +171,8 @@ uint64_t encl_get_entry(struct encl *encl, const char *symbol)
+> > >  	return 0;
+> > >  }
+> > >  
+> > > -bool encl_load(const char *path, struct encl *encl, unsigned long heap_size)
+> > > +bool encl_load(const char *path, struct encl *encl, unsigned long heap_size,
+> > > +			   unsigned long edmm_size)
+> > >  {
+> > >  	const char device_path[] = "/dev/sgx_enclave";
+> > >  	struct encl_segment *seg;
+> > > @@ -300,7 +301,7 @@ bool encl_load(const char *path, struct encl *encl, unsigned long heap_size)
+> > >  
+> > >  	encl->src_size = encl->segment_tbl[j].offset + encl->segment_tbl[j].size;
+> > >  
+> > > -	for (encl->encl_size = 4096; encl->encl_size < encl->src_size; )
+> > > +	for (encl->encl_size = 4096; encl->encl_size < encl->src_size + edmm_size;)
+> > >  		encl->encl_size <<= 1;
+> > >  
 > > 
-> > Software queries events via the Get Event Record mailbox command; CXL
-> > v3.0 section 8.2.9.2.2.
+> > This seems to create the hardcoded 8GB larger enclave for all (SGX1 and SGX2) tests,
+> > not just the test introduced with this commit (and the only user of this extra space).
+> > Is this intended? This can be done without impacting all the other tests.
+> 
+> It's a valid point. I can adjust the patch.
+> 
 > > 
-> > Issue the Get Event Record mailbox command on driver load.  Trace each
-> > record found, as well as any overflow conditions.  Only 1 event is
-> > requested for each query.  Optimization of multiple record queries is
-> > deferred.
+> > >  	return true;
+> > > diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
+> > > index 9820b3809c69..65e79682f75e 100644
+> > > --- a/tools/testing/selftests/sgx/main.c
+> > > +++ b/tools/testing/selftests/sgx/main.c
+> > > @@ -25,6 +25,8 @@ static const uint64_t MAGIC = 0x1122334455667788ULL;
+> > >  static const uint64_t MAGIC2 = 0x8877665544332211ULL;
+> > >  vdso_sgx_enter_enclave_t vdso_sgx_enter_enclave;
+> > >  
+> > > +static const unsigned long edmm_size = 8589934592; //8G
+> > > +
 > > 
-> > This patch traces a raw event record only and leaves the specific event
-> > record types to subsequent patches.
+> > Could you please elaborate how this constant was chosen? I understand that this test helped
+> > to uncover a bug and it is useful to add to the kernel. When doing so this test will be
+> > run on systems with a variety of SGX memory sizes, could you please elaborate (and add a
+> > snippet) how 8GB is the right value for all systems?
+> 
+> It is the only constant I know for sure that some people
+> (Vijay and Haitao) have been able to reproduce the bug.
+> 
+> Unless someone can show that the same bug reproduces
+> with a smaller constant, changing it would make the
+> whole test irrelevant.
+> 
 > > 
-> > NOTE: checkpatch is not completely happy with the tracing part of this
-> > patch but AFAICT it is correct.  I'm open to suggestions if I've done
-> > something wrong.
+> > /on page to be added/on every page to be added/ ?
+> > 
+> > > + */
+> > > +#define TIMEOUT_LONG 900 /* seconds */
+> > > +TEST_F_TIMEOUT(enclave, augment_via_eaccept_long, TIMEOUT_LONG)
+> > > +{
+> > > +	struct encl_op_get_from_addr get_addr_op;
+> > > +	struct encl_op_put_to_addr put_addr_op;
+> > > +	struct encl_op_eaccept eaccept_op;
+> > > +	size_t total_size = 0;
+> > > +	void *addr;
+> > > +	unsigned long i;
+> > 
+> > (reverse fir tree order)
 > 
-> The include/trace/events/*.h files are all broken according to
-> checkpatch.pl ;-) Don't worry about the formatting there. I need to update
-> that script to detect that it's looking at TRACE_EVENT() that has different
-> rules than normal macros.
-
-Thanks!
-
-[snip]
-
-> > +
-> > +/*
-> > + * Now redefine the EM and EMe macros to map the enums to the strings that will
-> > + * be printed in the output
-> > + */
-> > +#undef EM
-> > +#undef EMe
-> > +#define EM(a, b)        {a, b},
-> > +#define EMe(a, b)       {a, b}
-> > +
-> > +TRACE_EVENT(cxl_event_overflow,
-> > +
-> > +	TP_PROTO(const char *dev_name, enum cxl_event_log_type log,
-> > +		 struct cxl_get_event_payload *payload),
-> > +
-> > +	TP_ARGS(dev_name, log, payload),
-> > +
-> > +	TP_STRUCT__entry(
-> > +		__string(dev_name, dev_name)
-> > +		__field(int, log)
-> > +		__field(u16, count)
-> > +		__field(u64, first)
-> > +		__field(u64, last)
+> I would just change this to "int i" instead.
 > 
-> Because you have a dynamic string, you will save some bytes in the ring
-> buffer if you have:
+> > 
+> > > +
+> > > +	if (!sgx2_supported())
+> > > +		SKIP(return, "SGX2 not supported");
+> > > +
+> > > +	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
+> > > +
+> > > +	memset(&self->run, 0, sizeof(self->run));
+> > > +	self->run.tcs = self->encl.encl_base;
+> > > +
+> > > +	for (i = 0; i < self->encl.nr_segments; i++) {
+> > > +		struct encl_segment *seg = &self->encl.segment_tbl[i];
+> > > +
+> > > +		total_size += seg->size;
+> > > +		TH_LOG("test enclave: total_size = %ld, seg->size = %ld", total_size, seg->size);
+> > > +	}
+> > > +
+> > > +	/*
+> > > +	 * Actual enclave size is expected to be larger than the loaded
+> > > +	 * test enclave since enclave size must be a power of 2 in bytes while
+> > > +	 * test_encl does not consume it all.
+> > > +	 */
+> > > +	EXPECT_LT(total_size + edmm_size, self->encl.encl_size);
+> > 
+> > Will this test ever fail?
 > 
-> 		__string(dev_name, dev_name)
-> 		__field(int, log)
-> 		__field(u64, first)
-> 		__field(u64, last)
-> 		__field(u16, count)
-
-Thanks I missed this one.  I was trying to pack things better but I missed this
-one.
-
+> With a *quick* look: no.
 > 
+> Vijay, what was the point of this check?
 > 
-> > +	),
-> > +
-> > +	TP_fast_assign(
-> > +		__assign_str(dev_name, dev_name);
-> > +		__entry->log = log;
-> > +		__entry->count = le16_to_cpu(payload->overflow_err_count);
-> > +		__entry->first = le64_to_cpu(payload->first_overflow_timestamp);
-> > +		__entry->last = le64_to_cpu(payload->last_overflow_timestamp);
-> > +	),
-> > +
-> > +	TP_printk("%s: EVENT LOG %s OVERFLOW %u records from %llu to %llu",
-> > +		__get_str(dev_name), show_log_type(__entry->log),
-> > +		__entry->count, __entry->first, __entry->last)
-> > +
-> > +);
-> > +
-> > +/*
-> > + * Common Event Record Format
-> > + * CXL v2.0 section 8.2.9.1.1; Table 153
-> > + */
-> > +#define CXL_EVENT_RECORD_FLAG_PERMANENT		BIT(2)
-> > +#define CXL_EVENT_RECORD_FLAG_MAINT_NEEDED	BIT(3)
-> > +#define CXL_EVENT_RECORD_FLAG_PERF_DEGRADED	BIT(4)
-> > +#define CXL_EVENT_RECORD_FLAG_HW_REPLACE	BIT(5)
-> > +#define show_hdr_flags(flags)	__print_flags(flags, " | ",			   \
-> > +	{ CXL_EVENT_RECORD_FLAG_PERMANENT,	"Permanent Condition"		}, \
-> > +	{ CXL_EVENT_RECORD_FLAG_MAINT_NEEDED,	"Maintanance Needed"		}, \
-> > +	{ CXL_EVENT_RECORD_FLAG_PERF_DEGRADED,	"Performance Degraded"		}, \
-> > +	{ CXL_EVENT_RECORD_FLAG_HW_REPLACE,	"Hardware Replacement Needed"	}  \
-> > +)
-> > +
-> > +TRACE_EVENT(cxl_event,
-> > +
-> > +	TP_PROTO(const char *dev_name, enum cxl_event_log_type log,
-> > +		 struct cxl_event_record_raw *rec),
-> > +
-> > +	TP_ARGS(dev_name, log, rec),
-> > +
-> > +	TP_STRUCT__entry(
-> > +		__string(dev_name, dev_name)
-> > +		__field(int, log)
-> > +		__array(u8, id, UUID_SIZE)
-> > +		__field(u32, flags)
-> > +		__field(u16, handle)
-> > +		__field(u16, related_handle)
-> > +		__field(u64, timestamp)
-> > +		__array(u8, data, EVENT_RECORD_DATA_LENGTH)
-> > +		__field(u8, length)
+> > > +
+> > > +	/*
+> > > +	 * mmap() a page at end of existing enclave to be used for dynamic
+> > > +	 * EPC page.
+> > 
+> > copy&paste line still refers to single page
+> > 
+> > > +	 *
+> > > +	 * Kernel will allow new mapping using any permissions if it
+> > > +	 * falls into the enclave's address range but not backed
+> > > +	 * by existing enclave pages.
+> > > +	 */
+> > > +	TH_LOG("mmaping pages at end of enclave...");
+> > > +	addr = mmap((void *)self->encl.encl_base + total_size, edmm_size,
+> > > +			PROT_READ | PROT_WRITE | PROT_EXEC, MAP_SHARED | MAP_FIXED,
+> > > +			self->encl.fd, 0);
+> > > +	EXPECT_NE(addr, MAP_FAILED);
+> > > +
+> > > +	self->run.exception_vector = 0;
+> > > +	self->run.exception_error_code = 0;
+> > > +	self->run.exception_addr = 0;
+> > > +
+> > > +	/*
+> > > +	 * Run EACCEPT on new page to trigger the #PF->EAUG->EACCEPT(again
+> > > +	 * without a #PF). All should be transparent to userspace.
+> > > +	 */
+> > 
+> > copy&paste from single page test referring to one page
+> > 
+> > > +	TH_LOG("Entering enclave to run EACCEPT for each page of %zd bytes may take a while ...",
+> > > +			edmm_size);
+> > > +	eaccept_op.flags = SGX_SECINFO_R | SGX_SECINFO_W | SGX_SECINFO_REG | SGX_SECINFO_PENDING;
+> > > +	eaccept_op.ret = 0;
+> > > +	eaccept_op.header.type = ENCL_OP_EACCEPT;
+> > > +
+> > > +	for (i = 0; i < edmm_size; i += 4096) {
+> > > +		eaccept_op.epc_addr = (uint64_t)(addr + i);
+> > > +
+> > > +		EXPECT_EQ(ENCL_CALL(&eaccept_op, &self->run, true), 0);
+> > > +		if (self->run.exception_vector == 14 &&
+> > > +			self->run.exception_error_code == 4 &&
+> > > +			self->run.exception_addr == self->encl.encl_base) {
+> > > +			munmap(addr, edmm_size);
+> > > +			SKIP(return, "Kernel does not support adding pages to initialized enclave");
+> > > +		}
+> > > +
+> > > +		EXPECT_EQ(self->run.exception_vector, 0);
+> > > +		EXPECT_EQ(self->run.exception_error_code, 0);
+> > > +		EXPECT_EQ(self->run.exception_addr, 0);
+> > > +		ASSERT_EQ(eaccept_op.ret, 0);
+> > > +		ASSERT_EQ(self->run.function, EEXIT);
+> > > +	}
+> > > +
+> > > +	/*
+> > > +	 * New page should be accessible from within enclave - attempt to
+> > > +	 * write to it.
+> > > +	 */
+> > 
+> > This portion below was also copied from previous test and by only testing
+> > a write to the first page of the range the purpose is not clear. Could you
+> > please elaborate if the intention is to only test accessibility of the first
+> > page and why that is sufficient?
 > 
-> The above looks good.
+> It is sufficient because the test reproduces the bug. It would
+> have to be rather elaborated why you would possibly want to do
+> more than that.
 > 
-> > +	),
-> > +
-> > +	TP_fast_assign(
-> > +		__assign_str(dev_name, dev_name);
-> > +		memcpy(__entry->id, &rec->hdr.id, UUID_SIZE);
-> > +		__entry->log = log;
-> > +		__entry->flags = le32_to_cpu(rec->hdr.flags_length) >> 8;
-> > +		__entry->length = le32_to_cpu(rec->hdr.flags_length) & 0xFF;
-> > +		__entry->handle = le16_to_cpu(rec->hdr.handle);
-> > +		__entry->related_handle = le16_to_cpu(rec->hdr.related_handle);
-> > +		__entry->timestamp = le64_to_cpu(rec->hdr.timestamp);
+> > > +	put_addr_op.value = MAGIC;
+> > > +	put_addr_op.addr = (unsigned long)addr;
+> > > +	put_addr_op.header.type = ENCL_OP_PUT_TO_ADDRESS;
+> > > +
+> > > +	EXPECT_EQ(ENCL_CALL(&put_addr_op, &self->run, true), 0);
+> > > +
+> > > +	EXPECT_EEXIT(&self->run);
+> > > +	EXPECT_EQ(self->run.exception_vector, 0);
+> > > +	EXPECT_EQ(self->run.exception_error_code, 0);
+> > > +	EXPECT_EQ(self->run.exception_addr, 0);
+> > > +
+> > > +	/*
+> > > +	 * Read memory from newly added page that was just written to,
+> > > +	 * confirming that data previously written (MAGIC) is present.
+> > > +	 */
+> > > +	get_addr_op.value = 0;
+> > > +	get_addr_op.addr = (unsigned long)addr;
+> > > +	get_addr_op.header.type = ENCL_OP_GET_FROM_ADDRESS;
+> > > +
+> > > +	EXPECT_EQ(ENCL_CALL(&get_addr_op, &self->run, true), 0);
+> > > +
+> > > +	EXPECT_EQ(get_addr_op.value, MAGIC);
+> > > +	EXPECT_EEXIT(&self->run);
+> > > +	EXPECT_EQ(self->run.exception_vector, 0);
+> > > +	EXPECT_EQ(self->run.exception_error_code, 0);
+> > > +	EXPECT_EQ(self->run.exception_addr, 0);
+> > > +
+> > > +	munmap(addr, edmm_size);
+> > > +}
+> > > +
+> > >  /*
+> > >   * SGX2 page type modification test in two phases:
+> > >   * Phase 1:
+> > > diff --git a/tools/testing/selftests/sgx/main.h b/tools/testing/selftests/sgx/main.h
+> > > index fc585be97e2f..fe5d39ac0e1e 100644
+> > > --- a/tools/testing/selftests/sgx/main.h
+> > > +++ b/tools/testing/selftests/sgx/main.h
+> > > @@ -35,7 +35,8 @@ extern unsigned char sign_key[];
+> > >  extern unsigned char sign_key_end[];
+> > >  
+> > >  void encl_delete(struct encl *ctx);
+> > > -bool encl_load(const char *path, struct encl *encl, unsigned long heap_size);
+> > > +bool encl_load(const char *path, struct encl *encl, unsigned long heap_size,
+> > > +			   unsigned long edmm_size);
+> > >  bool encl_measure(struct encl *encl);
+> > >  bool encl_build(struct encl *encl);
+> > >  uint64_t encl_get_entry(struct encl *encl, const char *symbol);
+> > > diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
+> > > index 50c5ab1aa6fa..6000cf0e4975 100644
+> > > --- a/tools/testing/selftests/sgx/sigstruct.c
+> > > +++ b/tools/testing/selftests/sgx/sigstruct.c
+> > > @@ -343,7 +343,7 @@ bool encl_measure(struct encl *encl)
+> > >  	if (!ctx)
+> > >  		goto err;
+> > >  
+> > > -	if (!mrenclave_ecreate(ctx, encl->src_size))
+> > > +	if (!mrenclave_ecreate(ctx, encl->encl_size))
+> > >  		goto err;
+> > >  
+> > >  	for (i = 0; i < encl->nr_segments; i++) {
+> > 
+> > 
+> > Looking at mrenclave_ecreate() the above snippet seems separate from this test and incomplete
+> > since it now obtains encl->encl_size but continues to compute it again internally. Should
+> > this be a separate fix?
 > 
-> I wonder if I should add le64_to_cpu() and le32_to_cpu() to the functions
-> that libtraceevent can parse, and then we could move that logic to the
-> TP_printk(). That is, out of the fast path.
+> I would remove this part completely but this also needs
+> comment from Vijay.
+> 
+> > Reinette
 
-I would not do it for this series.  I don't see performance on these traces
-being an issue.  The built in logging the trace mechanism provides (space
-considerations) as well as user API to gain access to the data is what we are
-leveraging more.
+Related:
 
-What I would really like (and was looking for the time to enhance) would be a
-way to create 'sub-class' like events.
+https://github.com/jarkkojs/bpftrace-sgx/blob/main/sgx-alloc-error.bt
 
-In this case each of the traces comes with a common header which is part of the
-generic cxl_event trace point.
+Thought that this might be useful, if there is still some
+need to discuss about the bug, e.g. to compare the results.
+Can be run with bpftrace.
 
-It would be nice if we could define something like:
+The bug did not reproduce in my side, even after changing
+to the 2GB PRMRR configuration.
 
-DECLARE_EVENT_BASE_CLASS(event_header,
-
-	TP_PROTO(const char *dev_name, enum cxl_event_log_type log_type,
-		 struct cxl_event_record_hdr hdr),
-	...
-
-	TP_base_printk(<print header fields>),
-);
-
-Then somehow use that header in the 
-
-TRACE_EVENT(cxl_event,
-
-	TP_PROTO(const char *dev_name, enum cxl_event_log_type log,
-		 struct cxl_event_record_raw *rec),
-
-	TP_SUB_CLASS(dev_name, log, (struct cxl_event_record_hdr *)rec),
-
-	TP_fast_assign(
-		call_base_assign(rec),
-		...
-	),
-
-	TP_printk(<automatically print header fields>
-		  <print raw data>),
-	...
-);
-
-TRACE_EVENT(cxl_gen_media_event,
-
-	TP_PROTO(const char *dev_name, enum cxl_event_log_type log,
-		 struct cxl_evt_gen_media *rec),
-
-	TP_SUB_CLASS(dev_name, log, (struct cxl_event_record_hdr *)rec),
-
-	TP_fast_assign(
-		call_base_assign(rec),
-		...
-	),
-
-	TP_printk(<automatically print header fields>
-		  <print media event fields>),
-	...
-);
-
-<etc>
-
-Does that make sense?  I've no idea how this could be done.  But I think the
-real work would be in the printk merging between the base class (header prints)
-and the rest of the record.  I _think_ that the fast assign could just call the
-assign defined in the base class somehow.
-
-Am I way off base thinking this is possible?
-
-Thanks for the review!
-Ira
+BR, Jarkko

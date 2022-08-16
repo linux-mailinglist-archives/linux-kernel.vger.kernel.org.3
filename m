@@ -2,250 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9790B595828
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B92E5957F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234576AbiHPK1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43750 "EHLO
+        id S234424AbiHPKUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234524AbiHPK1D (ORCPT
+        with ESMTP id S233539AbiHPKTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:27:03 -0400
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150040.outbound.protection.outlook.com [40.107.15.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F9920BEF
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:20:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MMbjT8bcgjSSUOuQNal2OQ6+BVlJYv/h5G1MS90eJqgK6/j53XkdCOksDXEmvKWxQw3xyA4I3BGja2xqW/JpOBJ2RWdnscgw6FqxwSPbkI8vRUwbO2aisv2J0hW78wUWU10/NUBvH7WU3DJffAypEU9y+5jtKdvO6SA4t/Lsdl/W+yOElpNp9CXomXvkEmSVuGg5Goi+xqG/QtY2mFlF6QbhBS+UAB+X6GINvL+vWIAo7XNlXQYjfNd3Phywms7jXF5zNByYt+ZB/5XOfVRmIvutlKMKZCCgmTWZi+qK3Wu688r9jlumK2FaZlJkb7pnfomq9veGzRf8oIm9csVe4A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dF+6d6MfOSIAkE5R6AdVTdVC/mczVEuIJ8B+91gNGW0=;
- b=JtwCGoAZFongzGGYu9L9G3WX+6Ee2qdA4GT2BLs/9bGrRVnNnmFWthmlFCzQauED0gE4nifwQcVJJA8ZYOYGCp/juSDAFD1D7dgwl6zyF537IMRQdEsnJOTxr0BJIICU8Cv9w7Y1B01QG7mkRVL/EXqKvrLCsfAhn85xYwqn+fUjhaeXshhMZJgMPm/cgNgpOLIRRfly6JrZHT9v4JngBqay1twNBXBzUWg6gfe58JaQWfGrsngOU7xSbwQSXfqoUETRZiDj1xwUYH75wl0wDmAdZ44YLZPI1+jeTOeznnDHX6EueuOBVFRP2nDHT6GJNKhBIcTOp3xaS0vEXkeDzg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dF+6d6MfOSIAkE5R6AdVTdVC/mczVEuIJ8B+91gNGW0=;
- b=O3VXF+pIT0pfnnyIOg2A1xzyxQPJhRA4HceIqk12ZWpxS67BK8wu+9ipYG4fjZfeokAd8pXqhrDlCw+cBHUDjzF33cXa6IME4b/CKqtK5YkGqFb0XDCEp3hGOPGWT3rSeEzKXwDm/X339+g4uOUmKGZyBSxar7hXt2qcfncGamo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from AM4PR0802MB2131.eurprd08.prod.outlook.com
- (2603:10a6:200:5c::22) by AM9PR08MB7014.eurprd08.prod.outlook.com
- (2603:10a6:20b:41b::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Tue, 16 Aug
- 2022 09:20:21 +0000
-Received: from AM4PR0802MB2131.eurprd08.prod.outlook.com
- ([fe80::dcaa:905c:ff8:1f5b]) by AM4PR0802MB2131.eurprd08.prod.outlook.com
- ([fe80::dcaa:905c:ff8:1f5b%9]) with mapi id 15.20.5525.010; Tue, 16 Aug 2022
- 09:20:21 +0000
-Message-ID: <ec3d2515-b2a2-8441-2e9a-a7fe664e048a@wolfvision.net>
-Date:   Tue, 16 Aug 2022 11:20:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [BUG BISECT] phy: rockchip-inno-usb2: Sync initial otg state
-Content-Language: en-US
-To:     Peter Geis <pgwipeout@gmail.com>,
-        Markus Reichl <m.reichl@fivetechno.de>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220622003140.30365-1-pgwipeout@gmail.com>
- <88f2de00-32e3-ed74-082f-c0972a81f0f8@fivetechno.de>
- <CAMdYzYoTLjRW1FgwfizUu-+k0R4tCO78qYa7MEpgfz99aj3SvQ@mail.gmail.com>
-From:   Michael Riesch <michael.riesch@wolfvision.net>
-Organization: WolfVision GmbH
-In-Reply-To: <CAMdYzYoTLjRW1FgwfizUu-+k0R4tCO78qYa7MEpgfz99aj3SvQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: VI1PR0501CA0033.eurprd05.prod.outlook.com
- (2603:10a6:800:60::19) To AM4PR0802MB2131.eurprd08.prod.outlook.com
- (2603:10a6:200:5c::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 88597ab9-7212-443d-9057-08da7f688b24
-X-MS-TrafficTypeDiagnostic: AM9PR08MB7014:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3M6exVgb3+9PR4f3gh3EYbuFFiRyxfvKBa2KmaKKVAwIBgRvX0RZx0+rWTAq00WwJ7nXb7cznOatZ6uLjftSwkQ6UYU98BoGgbWVTY4IbjaNJxhNZgDuYtA4vGEix8vXA8uFHWCnbbm4tHEKEhCjSd/vOoaXypRI4ZPGhrwU/wL8FSa1RX3RViygS20j60tF7u2dKR64zRWMMzpsMg6eh7ABVCH4cO9Q66t6lqNgL3GpDNRgMaRIlczM8Rr8aSyqQlw5LEsj5MXwFtE4ugrPX6FrPz/s2ReIYeYzbst9hdmZQTPeziiGgMqy2kIkvzWI9kEgD5TamSzKFOwWyfSsMx2A8/FYinv91QHdITPqqCodripPO/rf6uWPeA/F0LszIuOlroK/a7wGfOV8J8DDVKzSGEVHJN3CpsSEvWFvKN8z/TAFvO2p8KP0Ss5HN0sQyvIq5LwnfrDUZsNc+A7X8aVBvZef0l4LtfifswrdVRAHmcHp/GtsbIwhwJlymbRbs/EbXZkku0pYZA+oMB6214mAdMIyA/jrRew5dKJIfxuBDABxkz2oeA05VPAEELQ9jtO3vynRz703c7mg+87iVIY/zWRa9XK5DONO/qRG1Qb4WZhj0h1Vwo6c0m41PsOnw57GopDVpUNXMzey3xB15PUP8DwR5wmMZRngHZHA+ugjTLLeMuYqm5v2O3blkHGyk6FyxhNH26B94Y2X/2R4crrUr8jJLpzeuBN5xZrkXH0xBrwG+AqDLHNsaUTZ8zb3RVDwOX/OxF+xrmutFzAuFLiQGioODEybd/f7orYeoVOh9z6JufQ+CMsQvRL5NqVdkCWnYsjiDB8xVXOcnrIrt3IGsJ37KaXlo1jLyVJ0NR2Sz6/92uzocV+91fobcvhF/ZOuIZ0dMmSYoFCM0YxZ/w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM4PR0802MB2131.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(346002)(366004)(396003)(39850400004)(186003)(478600001)(6506007)(53546011)(52116002)(36916002)(36756003)(31696002)(86362001)(2616005)(26005)(6512007)(31686004)(45080400002)(41300700001)(966005)(6486002)(83380400001)(8676002)(5660300002)(66946007)(66556008)(66476007)(316002)(4326008)(110136005)(54906003)(38100700002)(38350700002)(7416002)(8936002)(44832011)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MDZtOG5HUUFpZXdQSXRyTFJOVzNlUHQ5Qk56R0NrYzVDUU94MWlLSzlnSGZh?=
- =?utf-8?B?RTZDdko1UGtBQm50THd5Y1JzeWE0VlpJK2JMNmZTSWpaSU9uY2pZTlhMdy9R?=
- =?utf-8?B?NXQyMEVHZnFJdkJ2amFwWDhQTDJ5VnVWQmgzNWZpSmg2RDJ2OG9wSGZSM3Rq?=
- =?utf-8?B?dVVzYlRpKzJ0VW1DM25sOWk3MWQ4Y2RNRjZJV0JaOTBVV2pOOXZVNzFXVXp2?=
- =?utf-8?B?SUpVYlNkSTc2Z3ZhQWRlbis1TUFwK3BYcXFCM2wwR1RhaEt4akovc0JxdkM0?=
- =?utf-8?B?WlRWSjFzZ0gwNUxpd0FpNDY2dW5RZitmMWQrWk5tMkc3YyszWDhnYjRRNUFK?=
- =?utf-8?B?WUpWMHhDTjZ0dmhZUm5CVU9rY0xvWklyUUVWYXdDRzRqaGlRQzVhMG04QTZG?=
- =?utf-8?B?QXJxUWVUalFHRnI2cGtjeElQRlBnMGV6SGVTR2gxczM1WnFmRy9ETXVzK3R5?=
- =?utf-8?B?a3UxU0ZNcFhZZ0xBQ2ZEQ3dKSHU1SDFOVzRpcXN0eEVEVnViL2RLd1JvK1JK?=
- =?utf-8?B?ZXJUZ3BFWUtFTVhqK1RjbGRCZVRTamVBeW4wS1V2VzhwcWI2YzE2cUFwZkp0?=
- =?utf-8?B?MGJoQ3hvMVl4WU5jMzJSUkxnTk1wYml5cTZ2UFBZM3d4N0tMSVMra090VE9M?=
- =?utf-8?B?SnZpNjd6ZDV0dmNYYW93UElrclQrMEROL013RkptZHNzZHZRWHJXL2g2ZHh4?=
- =?utf-8?B?SEI3UlJLNmVJeFFFQko5RXkzSjNTbHVwU1lYNEM3SitzQXRMVWZLcEpUMndi?=
- =?utf-8?B?VjgrV0kyZU9ZYjl6aVh0YUUveEc2NkdLZEhaRm5BQ2N6cllKdUYyaE45WnZY?=
- =?utf-8?B?bDBUamtzNDlYa0VDMFRqbDZpWEJSOTNZMXNmTzAyQ3Zvc04vVGJZeHNFc1FW?=
- =?utf-8?B?TWFNRDVnTXNGYlZVVTk3M2FpSE1NcW4xTUVOWnhuRkZVZlA5VjZiL2w5bUVV?=
- =?utf-8?B?endJR2ZyNk84U0ZvRmIrVXIxNEJGSzRMVUlJZWFYUEttblFRaEZEd2VDYUJV?=
- =?utf-8?B?K04rMjZjQThVeWdYOGpHSllNV3M3NEdxeHZIL25EWjY3ektGeGRKL25QR0d1?=
- =?utf-8?B?cWp1bW9DcmtFV25xTDZRNlliZjQ1cUVQaE0wNWt2QVlDT2ZSai95Q2pWNmV0?=
- =?utf-8?B?R1A4QmxLQi82NzlmblhkNmRXdURhaWdXVlFaY1NPb0VWSTE4QVBTMkl3aEFq?=
- =?utf-8?B?bzA1UkxNc1lTWnlXTFNRK2w4aFNtYmZFR2xMZE5kYlhhdkV4NzVBaHhIaWQy?=
- =?utf-8?B?aHpjeWJNRDF3Um5teVJMTzg1S3RtV0I5SWNiSU05WmdaMWhxMEpiVFhJaWow?=
- =?utf-8?B?U2dmdkc1bkFsdUhGZ3BEU2I5dCsxREppZktsVzJTRnJRb1UxUVMxd3lvTEhK?=
- =?utf-8?B?TUpwcUprRTRlOUN2RWtDcTVuSlVhRlBxcEl0Q1dPZU1KYmwyMTZ1OUF5aUlN?=
- =?utf-8?B?ZWUyR0JpZnlZNWxMcnF4cG9HQlBlUUNOS0FLNEs5cVhTS2hpdDUrU3BOU0Ry?=
- =?utf-8?B?aWdObnJSaytBUTBnMWpvdjVJN3pwN1VRbytOT2lHaEtIZXlaZ0hvOSszdzNX?=
- =?utf-8?B?QmNpWUdITzRRY0c2SG9MQlZKMWJYZkVCL1hRYUlJZmhJUFVZcGxkNlRSdVl1?=
- =?utf-8?B?dkhMYTRSVEhkZStmc1BiQzRyN0dOMUtrWE92YWR3RThLUzJidVpQVWJFT3Zn?=
- =?utf-8?B?eDRLc3pJb2ZZeklDcnIvb3BLUzB3b1FWUGpoaWIvSFR4U05LcFV3UjVBa1BT?=
- =?utf-8?B?TGJ0WEFySzNTbTJnalVHOU1TWXM3cG01QjhGL1JPNDRad1ZmSGpGZyt0UHFO?=
- =?utf-8?B?Q2RLQVAzbXR5VlI1RWpoSldYK2RqZVdHZWRkR1ZUSDBaR1RydSs1ZzJraTVy?=
- =?utf-8?B?cmk2Zm0rN1lSME9ldG1nYWcvdmJ3MmFzSy9uU0RZS0NSZWxLSll1M2lHRTdS?=
- =?utf-8?B?OXA2ZXhvbEpIS1krWTJ5T2NjR3VTRkwxQ1lpQWNnNjQrUzkwM050NmtFNHph?=
- =?utf-8?B?SnZkZzU4MENRbm5tZDhSZng3c3ovK3o3YWRNUHBmejE0eCtHM1dQemVhQ1hj?=
- =?utf-8?B?STZXUkpjWlJFOFV5b0kxS0VoancyUkMxSGtOSUU4aW9jd3U4SHQwQ2tjQ2Qv?=
- =?utf-8?B?emdHc2grZTNDNTArb0J5SUlZMHNYNnRmU1VsTlNDTmdKd1NjZXk2TnF4eE43?=
- =?utf-8?B?Ymc9PQ==?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 88597ab9-7212-443d-9057-08da7f688b24
-X-MS-Exchange-CrossTenant-AuthSource: AM4PR0802MB2131.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2022 09:20:21.5195
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sVpt2SnbR9id8d/xY/q6vbECswZWEujl/vDB/BveeQCw1g5fxndYDG2/zSFVIwZEtdEo5t+3oLf16ShzeLzHIrm82r4XTivMp88RL4iJkls=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR08MB7014
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 16 Aug 2022 06:19:43 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411164B4A2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:20:56 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id f65so8720649pgc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:20:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=synaptics-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc;
+        bh=NYMVGkKHTI2397pZiPkc6thZcKXJkTNnoZ83oivJ0hA=;
+        b=3MdnH6Wu+h0/6p9F+Sgw7j7Zn84mdhKm9pp478xVH+Xp2ZCl4a+WzmIBdqHbo0hWVS
+         6CT6RuTe7l0wSqvznHsR955Z8o4RcpaTM1bNCQ0NM/xZC8tEn5ayEFQYRaH3yzHw8aq5
+         wejBHEBpZyJyzxqZd5g6JjhDkqTqYnu9ajHalVYW1tUS7aVIBck3/VZvpKLzJu8WIjR1
+         hpab0KlgWt9FeRf+0C8e/AvO1AVSOAADFn4FjJ4bgTVFjUhKc93YThSznAaKAhmsL/mU
+         4qyXi3Fyq6uMJoRiP6trVc8oA0bxZyhAgmXKhQ0gbq0DS4vP7EQcIj+mSqkpknux86hK
+         Fx/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=NYMVGkKHTI2397pZiPkc6thZcKXJkTNnoZ83oivJ0hA=;
+        b=vK+6hNPzkb8xiw+kJ+Lq9o1PbKe26UDHHHbMJ5qnxnsFruHNAAHPkEoiMdMy87pyMX
+         wk4zwgU+a82p19HL4q2GS0FtMn8zjVKO6jhUEmFf/pCeQuQ04Nd8ryIEAJ9rBnTjxi82
+         F+QI0fHZwX3Ums6etbLLM0R9o3qNEMzscCHlaYhh7BzB4sRc/ilEPQZHp8tRMFhcuo8k
+         37BQ/aCnic5WO33Xi1hDHiYzNXr0p/cYS11BzxWoWm2pPHEaD05JaMwwIepqD++dTmoN
+         02G2o176iWx5hH6Tqsio2Cko8to7XzPH+GgqGWF8M5hzZuIvHqjVh7N7TG4VyGZfnfgm
+         OWhg==
+X-Gm-Message-State: ACgBeo2IRMt6m+aLilq949Ok8uWWXvYrgqjGl1AWf0o4r/oBwatcZW7D
+        s02lIxrEe83q3cPVcqbBUMSrmYBfpnbh0CLJ
+X-Google-Smtp-Source: AA6agR4ycWJjwl2rFgkoYIo9fC0Cg8flQ7zt65qwLV9hxmhCn9wMJd8m0S2RL9ct/jVoxEkqZs0PSw==
+X-Received: by 2002:a63:6587:0:b0:41b:dacc:1826 with SMTP id z129-20020a636587000000b0041bdacc1826mr16835970pgb.142.1660641655741;
+        Tue, 16 Aug 2022 02:20:55 -0700 (PDT)
+Received: from margeyang-ThinkPad-T440.synaptics-inc.local ([63.222.17.37])
+        by smtp.gmail.com with ESMTPSA id i14-20020a056a00004e00b0052db5872d7esm7963897pfk.22.2022.08.16.02.20.52
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 16 Aug 2022 02:20:55 -0700 (PDT)
+From:   margeyang <marge.yang@synaptics.corp-partner.google.com>
+To:     dmitry.torokhov@gmail.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hdegoede@redhat.com,
+        benjamin.tissoires@redhat.com
+Cc:     marge.yang@tw.synaptics.com, derek.cheng@tw.synaptics.com,
+        vincent.huang@tw.synaptics.com,
+        Marge Yang <marge.yang@synaptics.corp-partner.google.com>
+Subject: [PATCH V4] Input: synaptics-rmi4 - filter incomplete relative packet.
+Date:   Tue, 16 Aug 2022 17:20:49 +0800
+Message-Id: <1660641649-11929-1-git-send-email-marge.yang@synaptics.corp-partner.google.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+From: Marge Yang <marge.yang@synaptics.corp-partner.google.com>
 
-On 8/4/22 11:49, Peter Geis wrote:
-> On Tue, Aug 2, 2022 at 2:39 PM Markus Reichl <m.reichl@fivetechno.de> wrote:
->>
->> Hi,
->>
->> with linux-next-20220728 rk3399-roc-pc does not boot.
->> Bisecting pointed to this commit.
->> By reverting this commit the board boots again.
-> 
-> Thank you for reporting this, someone was kind enough to reproduce the
-> problem on the rockpro64 and confirmed this is an issue. As I won't
-> have access to my hardware until next month, we should probably revert
-> this until the root cause can be identified.
+RMI4 F03 supports the Stick function,
+it's designed to support relative packet.
+This patch supports the following case.
+When relative packet can't be reported completely,
+it may miss one byte or two byte.
+New Synaptics firmware will report PARITY error.
+When timeout error or parity error happens,
+RMI4 driver will sends 0xFE command and
+ask FW to Re-send stick packet again.
 
-Just experienced this issue on my ROCK3 Model A board (RK3568) and
-reverting this commit solved it.
+Signed-off-by: Marge Yang<marge.yang@synaptics.corp-partner.google.com>
+---
+ drivers/input/rmi4/rmi_f03.c | 74 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 73 insertions(+), 1 deletion(-)
 
-Having the revert in v6.0-rc2 would be great -- if there is anything I
-can help to accelerate this please let me know.
+diff --git a/drivers/input/rmi4/rmi_f03.c b/drivers/input/rmi4/rmi_f03.c
+index c194b1664b10..563b40c2dc06 100644
+--- a/drivers/input/rmi4/rmi_f03.c
++++ b/drivers/input/rmi4/rmi_f03.c
+@@ -23,8 +23,12 @@
+ #define RMI_F03_BYTES_PER_DEVICE_SHIFT	4
+ #define RMI_F03_QUEUE_LENGTH		0x0F
+ 
++#define RMI_F03_RESET_STYK		0xFE
++
+ #define PSMOUSE_OOB_EXTRA_BTNS		0x01
+ 
++#define RELATIVE_PACKET_SIZE		3
++
+ struct f03_data {
+ 	struct rmi_function *fn;
+ 
+@@ -33,6 +37,11 @@ struct f03_data {
+ 
+ 	unsigned int overwrite_buttons;
+ 
++	int iwritecommandcounter;
++	unsigned int ipacketindex;
++	unsigned int serio_flagsArry[RELATIVE_PACKET_SIZE];
++	u8 ob_dataArry[RELATIVE_PACKET_SIZE];
++
+ 	u8 device_count;
+ 	u8 rx_queue_length;
+ };
+@@ -88,6 +97,7 @@ static int rmi_f03_pt_write(struct serio *id, unsigned char val)
+ 		return error;
+ 	}
+ 
++	f03->iwritecommandcounter++;
+ 	return 0;
+ }
+ 
+@@ -107,6 +117,8 @@ static int rmi_f03_initialize(struct f03_data *f03)
+ 		return error;
+ 	}
+ 
++	f03->iwritecommandcounter = 0;
++	f03->ipacketindex = 0;
+ 	f03->device_count = query1 & RMI_F03_DEVICE_COUNT;
+ 	bytes_per_device = (query1 >> RMI_F03_BYTES_PER_DEVICE_SHIFT) &
+ 				RMI_F03_BYTES_PER_DEVICE;
+@@ -284,6 +296,22 @@ static irqreturn_t rmi_f03_attention(int irq, void *ctx)
+ 		ob_data = obs[i + RMI_F03_OB_DATA_OFFSET];
+ 		serio_flags = 0;
+ 
++		if (ob_status & (RMI_F03_OB_FLAG_TIMEOUT | RMI_F03_OB_FLAG_PARITY)) {
++			//  Send resend command to stick when timeout or parity error.
++			//  Driver can receive the last stick packet.
++			unsigned char val = RMI_F03_RESET_STYK;
++
++			error = rmi_write(f03->fn->rmi_dev, f03->fn->fd.data_base_addr, val);
++			if (error) {
++				dev_err(&f03->fn->dev,
++					"%s: Failed to rmi_write to F03 TX register (%d).\n",
++					__func__, error);
++				return error;
++			}
++			f03->ipacketindex = 0;
++			break;
++		}
++
+ 		if (!(ob_status & RMI_F03_RX_DATA_OFB))
+ 			continue;
+ 
+@@ -298,7 +326,51 @@ static irqreturn_t rmi_f03_attention(int irq, void *ctx)
+ 			serio_flags & SERIO_TIMEOUT ?  'Y' : 'N',
+ 			serio_flags & SERIO_PARITY ? 'Y' : 'N');
+ 
+-		serio_interrupt(f03->serio, ob_data, serio_flags);
++		if (f03->iwritecommandcounter > 0) {
++			// Read Acknowledge Byte after writing the PS2 command.
++			// It is not trackpoint data.
++			serio_interrupt(f03->serio, ob_data, serio_flags);
++		} else {
++			//   The relative-mode PS/2 packet format is as follows:
++			//
++			//              bit position            position (as array of bytes)
++			//     7   6   5   4   3   2   1   0
++			//   =================================+
++			//    Yov Xov DY8 DX8  1   M   R   L  | DATA[0]
++			//                DX[7:0]             | DATA[1]
++			//                DY[7:0]             | DATA[2]
++			//   =================================+
++			//		Yov: Y overflow
++			//    Xov: X overflow
++			if ((f03->ipacketindex == 0) && (ob_data & ((BIT(7)|BIT(6))))) {
++				dev_err(&f03->fn->dev,
++				"%s: X or Y is overflow. (%x)\n",
++				__func__, ob_data);
++				break;
++			} else if ((f03->ipacketindex == 0) && !(ob_data & BIT(3))) {
++				dev_err(&f03->fn->dev,
++				"%s: New BIT 3 is not 1 for the first byte\n",
++				__func__);
++				break;
++			}
++			f03->ob_dataArry[f03->ipacketindex] = ob_data;
++			f03->serio_flagsArry[f03->ipacketindex] = serio_flags;
++			f03->ipacketindex++;
++
++			if (f03->ipacketindex == RELATIVE_PACKET_SIZE)	{
++				serio_interrupt(f03->serio, f03->ob_dataArry[0],
++				 f03->serio_flagsArry[0]);
++				serio_interrupt(f03->serio, f03->ob_dataArry[1],
++				 f03->serio_flagsArry[1]);
++				serio_interrupt(f03->serio, f03->ob_dataArry[2],
++				 f03->serio_flagsArry[2]);
++				f03->ipacketindex = 0;
++			}
++		}
++	}
++	if (f03->iwritecommandcounter > 0) {
++		f03->ipacketindex = 0;
++		f03->iwritecommandcounter = f03->iwritecommandcounter - 1;
+ 	}
+ 
+ 	return IRQ_HANDLED;
+-- 
+2.22.0.windows.1
 
-Thanks and best regards,
-Michael
-
-> 
-> Very Respectfully,
-> Peter Geis
-> 
->>
->> [    2.398700] Unable to handle kernel NULL pointer dereference at virtual address
->> 0000000000000008
->> [    2.399517] Mem abort info:
->> [    2.399772]   ESR = 0x0000000096000004
->> [    2.400114]   EC = 0x25: DABT (current EL), IL = 32 bits
->> [    2.400594]   SET = 0, FnV = 0
->> [    2.400873]   EA = 0, S1PTW = 0
->> [    2.401161]   FSC = 0x04: level 0 translation fault
->> [    2.401602] Data abort info:
->> [    2.401864]   ISV = 0, ISS = 0x00000004
->> [    2.402212]   CM = 0, WnR = 0
->> [    2.402484] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000001376000
->> [    2.403071] [0000000000000008] pgd=0000000000000000, p4d=0000000000000000
->> [    2.403687] Internal error: Oops: 96000004 [#1] SMP
->> [    2.404130] Modules linked in: ip_tables x_tables ipv6 xhci_plat_hcd xhci_hcd
->> dwc3 rockchipdrm drm_cma_helper analogix_dp dw_hdmi realtek drm_display_helper
->> dwc3_of_simple dw_mipi_dsi ehci_platform ohci_platform ohci_hcd ehci_hcd
->> drm_kms_helper dwmac_rk syscopyarea sysfillrect stmmac_platform sysimgblt
->> fb_sys_fops usbcore stmmac pcs_xpcs drm phylink drm_panel_orientation_quirks
->> [    2.407155] CPU: 4 PID: 71 Comm: kworker/4:6 Not tainted
->> 5.19.0-rc8-next-20220728 #437
->> [    2.407868] Hardware name: Firefly ROC-RK3399-PC Mezzanine Board (DT)
->> [    2.408448] Workqueue: events rockchip_usb2phy_otg_sm_work
->> [    2.408958] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->> [    2.411634] pc : rockchip_usb2phy_otg_sm_work+0x50/0x330
->> [    2.414332] lr : process_one_work+0x1d8/0x380
->> [    2.416948] sp : ffff800009373d60
->> [    2.419406] x29: ffff800009373d60 x28: 0000000000000000 x27: 0000000000000000
->> [    2.422199] x26: ffff0000f779fcb8 x25: ffff0000f77a3a05 x24: 000000000000000c
->> [    2.424978] x23: 0000000000000000 x22: ffff0000010c8258 x21: ffff80000888ec10
->> [    2.427768] x20: ffff0000010c82f0 x19: 000000000000000c x18: 0000000000000001
->> [    2.430604] x17: 000000040044ffff x16: 00400034b5503510 x15: 0000000000000000
->> [    2.433390] x14: ffff000000708000 x13: ffff8000eec96000 x12: 0000000034d4d91d
->> [    2.436185] x11: 0000000000000000 x10: 0000000000000a10 x9 : ffff000001aa7a74
->> [    2.438958] x8 : fefefefefefefeff x7 : 0000000000000018 x6 : ffff000001aa7a74
->> [    2.441668] x5 : 000073746e657665 x4 : 000000000000002f x3 : ffff00000356c808
->> [    2.444407] x2 : ffff800009373da4 x1 : 000000000000e2ac x0 : ffff80000888eb34
->> [    2.447190] Call trace:
->> [    2.449557]  rockchip_usb2phy_otg_sm_work+0x50/0x330
->> [    2.452169]  process_one_work+0x1d8/0x380
->> [    2.454684]  worker_thread+0x170/0x4e0
->> [    2.457056]  kthread+0xd8/0xdc
->> [    2.459354]  ret_from_fork+0x10/0x20
->> [    2.461728] Code: 91037015 295be001 f9403c77 b940e413 (f94006e0)
->> [    2.464338] ---[ end trace 0000000000000000 ]---
->>
->> Am 22.06.22 um 02:31 schrieb Peter Geis:
->>> The initial otg state for the phy defaults to device mode. The actual
->>> state isn't detected until an ID IRQ fires. Fix this by syncing the ID
->>> state during initialization.
->>>
->>> Fixes: 51a9b2c03dd3 ("phy: rockchip-inno-usb2: Handle ID IRQ")
->>> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
->>> ---
->>>   drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 6 ++++++
->>>   1 file changed, 6 insertions(+)
->>>
->>> diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
->>> index 6711659f727c..6e44069617df 100644
->>> --- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
->>> +++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
->>> @@ -1162,6 +1162,12 @@ static int rockchip_usb2phy_otg_port_init(struct rockchip_usb2phy *rphy,
->>>                                       EXTCON_USB_HOST, &rport->event_nb);
->>>               if (ret)
->>>                       dev_err(rphy->dev, "register USB HOST notifier failed\n");
->>> +
->>> +             if (!of_property_read_bool(rphy->dev->of_node, "extcon")) {
->>> +                     /* do initial sync of usb state */
->>> +                     ret = property_enabled(rphy->grf, &rport->port_cfg->utmi_id);
->>> +                     extcon_set_state_sync(rphy->edev, EXTCON_USB_HOST, !ret);
->>> +             }
->>>       }
->>>
->>>   out:
->>
->> Gruß,
->> --
->> Markus Reichl
-> 
-> _______________________________________________
-> Linux-rockchip mailing list
-> Linux-rockchip@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-rockchip

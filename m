@@ -2,60 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AF459598E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 045F2595868
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235295AbiHPLK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 07:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56270 "EHLO
+        id S234765AbiHPKdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235519AbiHPLKj (ORCPT
+        with ESMTP id S234759AbiHPKdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 07:10:39 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0218E1F60C
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:39:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660639192; x=1692175192;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=haZJJ6qIsp18u5JMSxLBwZ3xo8DIn7m1qKopIr+1Xfg=;
-  b=OK1hXaQncULTuYAnDR9zKW5Q4r5ylVMlZC6PCFy+l0VptTqLDdeo5xuT
-   TAPlh76221rPFoDZl8si7DJLjYxkKQxq0LP+IUNs9QHF+6mkf8EjnKCDZ
-   EW2ru12vddDJFzRF2z2IXxTTkO55J2nXXLhPU6G8RegMxQnvy0/m/Rzqr
-   O0wv2fV15qgycSKSJkURu1AhyBqUgaDX3IO7eUeHzQfKrLB44ucWXdB41
-   3WN0YeAJqezHIX5kUaeVF2KlS7vMlwkEHoVsVvYGhOxgAYgWhj5psEV+/
-   KEl9uCwy2OWXyAl4ps/iYneIzMLJjTx12cGWpEhGdy5XSftDbbJslGFWp
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="289733824"
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="289733824"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 01:39:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="610189582"
-Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 16 Aug 2022 01:39:51 -0700
-Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oNs74-0001e1-2d;
-        Tue, 16 Aug 2022 08:39:50 +0000
-Date:   Tue, 16 Aug 2022 16:39:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/070-audio 4/16] sound/soc/codecs/tas2764.c:681:20:
- warning: cast to smaller integer type 'enum tas2764_devid' from 'const void
- *'
-Message-ID: <202208161624.BKESkCXj-lkp@intel.com>
+        Tue, 16 Aug 2022 06:33:22 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39CB3DF01
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:39:23 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id y4-20020a056e021be400b002e5a1e77e04so4008328ilv.22
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:39:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=JkpVsI0vVPj8RzizLdCZTqU3XDY5DwFa0e5r86U/htQ=;
+        b=JIopR43K+IuqkhTWKYtz+hmTrtViVYUbeBJ6G2shtfZcbg7SwrQzKPl+SpWq0sZwkO
+         Qbc4LEmWURN1sUQXFosRuWGqo6PA1+LxrZdOabMkhiSmP6fPoRhoQLP7lbLJxImP7jIW
+         R7iolR3JBOX85Xc/Fws0Vke4Wzdw+5Zckn8d+c0VqL9+tUBJe/6Jzj3ws+4h/O/fgEQ0
+         vHP7A3Gh2fFGFrTwx2OgoYQvJ82/dwUo9XqDjN852+Kd8lO742/K3CQNIGxglU0OCyZ9
+         HkhPCwsOk0ynQUHrDxeOETnALQeYlIoaj+qh7LLBwK3a9FCe+JUdeb0EGdlamwToVs4u
+         Fuvw==
+X-Gm-Message-State: ACgBeo0KIbE+yJEvcTwmv94BERBs8ENmIjE3YmyozmAz3uv7n+xNaGAY
+        aCiKGR9L1CCvrs/Bf16M76yPZ/Z2diykEDWPqCksqm4R04Ns
+X-Google-Smtp-Source: AA6agR6isTvwzJ/sWPV7XmqsP8+eKsrR8Mzhq+fIa5AjUYwdiQHljXLoYnTmh/IfASdX0dVtV0SeGdpXSiM+K6NTfFLCuOJTyc6R
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a5d:8b8c:0:b0:67b:8779:753b with SMTP id
+ p12-20020a5d8b8c000000b0067b8779753bmr8315867iol.57.1660639162828; Tue, 16
+ Aug 2022 01:39:22 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 01:39:22 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000066926e05e657af2b@google.com>
+Subject: [syzbot] upstream boot error: BUG: unable to handle kernel paging
+ request in get_kobj_path_length
+From:   syzbot <syzbot+0c48c24994617c1e1c7a@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,85 +55,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/070-audio
-head:   51024ef467ff6c288e679bc72d0e3fcdd54d9b39
-commit: e8c4eabb2252a8ee21269737e90c57973ab36269 [4/16] ASoC: tas2764: Extend driver to SN012776
-config: arm64-randconfig-r022-20220815 (https://download.01.org/0day-ci/archive/20220816/202208161624.BKESkCXj-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/e8c4eabb2252a8ee21269737e90c57973ab36269
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/070-audio
-        git checkout e8c4eabb2252a8ee21269737e90c57973ab36269
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash sound/soc/codecs/
+Hello,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+syzbot found the following issue on:
 
-All warnings (new ones prefixed by >>):
+HEAD commit:    4a9350597aff Merge tag 'sound-fix-6.0-rc1' of git://git.ke..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=10814197080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5d647c9572405910
+dashboard link: https://syzkaller.appspot.com/bug?extid=0c48c24994617c1e1c7a
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
->> sound/soc/codecs/tas2764.c:681:20: warning: cast to smaller integer type 'enum tas2764_devid' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-                   tas2764->devid = (enum tas2764_devid) of_id->data;
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0c48c24994617c1e1c7a@syzkaller.appspotmail.com
+
+BUG: unable to handle page fault for address: ffffffff00007c61
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD bc8f067 P4D bc8f067 PUD 0 
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 2973 Comm: udevadm Not tainted 5.19.0-syzkaller-14090-g4a9350597aff #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:strlen+0x2c/0x90 lib/string.c:487
+Code: 00 00 00 00 00 fc ff df 48 89 fa 55 48 89 fd 48 c1 ea 03 53 48 83 ec 08 0f b6 04 02 48 89 fa 83 e2 07 38 d0 7f 04 84 c0 75 48 <80> 7d 00 00 74 39 48 bb 00 00 00 00 00 fc ff df 48 89 e8 48 83 c0
+RSP: 0018:ffffc90003067ad8 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: ffff88801c063000 RCX: 0000000000000000
+RDX: 0000000000000001 RSI: ffffffff84204670 RDI: ffffffff00007c61
+RBP: ffffffff00007c61 R08: 0000000000002000 R09: 0000000000000dc0
+R10: 0000000080000000 R11: 000000000008c07c R12: 0000000000000001
+R13: dffffc0000000000 R14: 00000000fffffffe R15: ffff8880170c2000
+FS:  00007f2a81ab9840(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffff00007c61 CR3: 000000007c7ce000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __fortify_strlen include/linux/fortify-string.h:141 [inline]
+ get_kobj_path_length+0x28/0x90 lib/kobject.c:109
+ kobject_get_path+0x1b/0x70 lib/kobject.c:144
+ kobject_uevent_env+0x254/0x1640 lib/kobject_uevent.c:529
+ kobject_synth_uevent+0x701/0x850 lib/kobject_uevent.c:208
+ uevent_store+0x42/0x90 drivers/base/bus.c:581
+ drv_attr_store+0x6d/0xa0 drivers/base/bus.c:77
+ sysfs_kf_write+0x110/0x160 fs/sysfs/file.c:136
+ kernfs_fop_write_iter+0x3f8/0x610 fs/kernfs/file.c:354
+ call_write_iter include/linux/fs.h:2192 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x9e9/0xdd0 fs/read_write.c:578
+ ksys_write+0x127/0x250 fs/read_write.c:631
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f2a817259a3
+Code: 8b 15 d9 f4 0c 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 55 c3 0f 1f 40 00 48 83 ec 28 48 89 54 24 18
+RSP: 002b:00007fff9a55acc8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00007fff9a55bf41 RCX: 00007f2a817259a3
+RDX: 0000000000000003 RSI: 00007fff9a55bf41 RDI: 0000000000000003
+RBP: 00005647bb783e80 R08: 0000000000000000 R09: 00007f2a817f5a60
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
+R13: 00007fff9a55acd8 R14: 0000000000000000 R15: 00005647bb1660b4
+ </TASK>
+Modules linked in:
+CR2: ffffffff00007c61
+---[ end trace 0000000000000000 ]---
+RIP: 0010:strlen+0x2c/0x90 lib/string.c:487
+Code: 00 00 00 00 00 fc ff df 48 89 fa 55 48 89 fd 48 c1 ea 03 53 48 83 ec 08 0f b6 04 02 48 89 fa 83 e2 07 38 d0 7f 04 84 c0 75 48 <80> 7d 00 00 74 39 48 bb 00 00 00 00 00 fc ff df 48 89 e8 48 83 c0
+RSP: 0018:ffffc90003067ad8 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: ffff88801c063000 RCX: 0000000000000000
+RDX: 0000000000000001 RSI: ffffffff84204670 RDI: ffffffff00007c61
+RBP: ffffffff00007c61 R08: 0000000000002000 R09: 0000000000000dc0
+R10: 0000000080000000 R11: 000000000008c07c R12: 0000000000000001
+R13: dffffc0000000000 R14: 00000000fffffffe R15: ffff8880170c2000
+FS:  00007f2a81ab9840(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffff00007c61 CR3: 000000007c7ce000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess), 7 bytes skipped:
+   0:	df 48 89             	fisttps -0x77(%rax)
+   3:	fa                   	cli
+   4:	55                   	push   %rbp
+   5:	48 89 fd             	mov    %rdi,%rbp
+   8:	48 c1 ea 03          	shr    $0x3,%rdx
+   c:	53                   	push   %rbx
+   d:	48 83 ec 08          	sub    $0x8,%rsp
+  11:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax
+  15:	48 89 fa             	mov    %rdi,%rdx
+  18:	83 e2 07             	and    $0x7,%edx
+  1b:	38 d0                	cmp    %dl,%al
+  1d:	7f 04                	jg     0x23
+  1f:	84 c0                	test   %al,%al
+  21:	75 48                	jne    0x6b
+* 23:	80 7d 00 00          	cmpb   $0x0,0x0(%rbp) <-- trapping instruction
+  27:	74 39                	je     0x62
+  29:	48 bb 00 00 00 00 00 	movabs $0xdffffc0000000000,%rbx
+  30:	fc ff df
+  33:	48 89 e8             	mov    %rbp,%rax
+  36:	48                   	rex.W
+  37:	83                   	.byte 0x83
+  38:	c0                   	.byte 0xc0
 
 
-vim +681 sound/soc/codecs/tas2764.c
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-   665	
-   666	static int tas2764_i2c_probe(struct i2c_client *client)
-   667	{
-   668		struct tas2764_priv *tas2764;
-   669		const struct of_device_id *of_id = NULL;
-   670		int result;
-   671	
-   672		tas2764 = devm_kzalloc(&client->dev, sizeof(struct tas2764_priv),
-   673				       GFP_KERNEL);
-   674		if (!tas2764)
-   675			return -ENOMEM;
-   676	
-   677		if (client->dev.of_node)
-   678			of_id = of_match_device(tas2764_of_match, &client->dev);	
-   679	
-   680		if (of_id)
- > 681			tas2764->devid = (enum tas2764_devid) of_id->data;
-   682		else
-   683			tas2764->devid = DEVID_TAS2764;
-   684	
-   685		tas2764->dev = &client->dev;
-   686		i2c_set_clientdata(client, tas2764);
-   687		dev_set_drvdata(&client->dev, tas2764);
-   688	
-   689		tas2764->regmap = devm_regmap_init_i2c(client, &tas2764_i2c_regmap);
-   690		if (IS_ERR(tas2764->regmap)) {
-   691			result = PTR_ERR(tas2764->regmap);
-   692			dev_err(&client->dev, "Failed to allocate register map: %d\n",
-   693						result);
-   694			return result;
-   695		}
-   696	
-   697		if (client->dev.of_node) {
-   698			result = tas2764_parse_dt(&client->dev, tas2764);
-   699			if (result) {
-   700				dev_err(tas2764->dev, "%s: Failed to parse devicetree\n",
-   701					__func__);
-   702				return result;
-   703			}
-   704		}
-   705	
-   706		return devm_snd_soc_register_component(tas2764->dev,
-   707						       &soc_component_driver_tas2764,
-   708						       tas2764_dai_driver,
-   709						       ARRAY_SIZE(tas2764_dai_driver));
-   710	}
-   711	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

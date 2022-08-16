@@ -2,49 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 224C8595E8C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 16:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10455595E8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 16:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235966AbiHPOsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 10:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
+        id S235938AbiHPOrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 10:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiHPOs2 (ORCPT
+        with ESMTP id S229607AbiHPOrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 10:48:28 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE425B7AA;
-        Tue, 16 Aug 2022 07:48:25 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M6YpQ4yc9zkWMp;
-        Tue, 16 Aug 2022 22:45:02 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 16 Aug 2022 22:48:22 +0800
-Received: from localhost.localdomain (10.69.192.56) by
- kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 16 Aug 2022 22:48:21 +0800
-From:   Guangbin Huang <huangguangbin2@huawei.com>
-To:     <pmladek@suse.com>, <rostedt@goodmis.org>,
-        <senozhatsky@chromium.org>, <andriy.shevchenko@linux.intel.com>,
-        <linux@rasmusvillemoes.dk>
-CC:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <lipeng321@huawei.com>, <shenjian15@huawei.com>,
-        <huangguangbin2@huawei.com>
-Subject: [PATCH] lib/vnsprintf: add const modifier for param 'bitmap'
-Date:   Tue, 16 Aug 2022 22:45:57 +0800
-Message-ID: <20220816144557.30779-1-huangguangbin2@huawei.com>
-X-Mailer: git-send-email 2.33.0
+        Tue, 16 Aug 2022 10:47:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7225B659D1;
+        Tue, 16 Aug 2022 07:47:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F227B8164C;
+        Tue, 16 Aug 2022 14:47:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31CABC433D6;
+        Tue, 16 Aug 2022 14:47:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660661253;
+        bh=ZVa8gCDk1BH2nIq9ZqAesRRRF4G1PspK7ZnMFfuGswg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iQQLDJv2GSL86ubns3Tt3+c69qvbJntma3tkirDITFwA6QKaGd7hMJ/RyoyuTa3yI
+         R0TEVEAaHJ4hf7Xgd/N4GmAdqI2bHSBHZZFhHsG+DVTBuUT/2M0Kvi5MdoZLuVB5x+
+         zJ7T+ngFxRbjtyZhL79DHPPPUDmpNuNbaWn66Ai0=
+Date:   Tue, 16 Aug 2022 16:47:30 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Paul Chaignon <paul@isovalent.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 5.19 0537/1157] bpf: Set flow flag to allow any source IP
+ in bpf_tunnel_key
+Message-ID: <YvuuAprVhybi0CMj@kroah.com>
+References: <20220815180439.416659447@linuxfoundation.org>
+ <20220815180501.149595269@linuxfoundation.org>
+ <20220816143554.GA67569@Mem>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600016.china.huawei.com (7.193.23.20)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816143554.GA67569@Mem>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,40 +57,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jian Shen <shenjian15@huawei.com>
+On Tue, Aug 16, 2022 at 04:35:54PM +0200, Paul Chaignon wrote:
+> On Mon, Aug 15, 2022 at 07:58:13PM +0200, Greg Kroah-Hartman wrote:
+> > From: Paul Chaignon <paul@isovalent.com>
+> > 
+> > [ Upstream commit b8fff748521c7178b9a7d32b5a34a81cec8396f3 ]
+> > 
+> > Commit 26101f5ab6bd ("bpf: Add source ip in "struct bpf_tunnel_key"")
+> > added support for getting and setting the outer source IP of encapsulated
+> > packets via the bpf_skb_{get,set}_tunnel_key BPF helper. This change
+> > allows BPF programs to set any IP address as the source, including for
+> > example the IP address of a container running on the same host.
+> > 
+> > In that last case, however, the encapsulated packets are dropped when
+> > looking up the route because the source IP address isn't assigned to any
+> > interface on the host. To avoid this, we need to set the
+> > FLOWI_FLAG_ANYSRC flag.
+> 
+> This fix will also require upstream commits 861396ac0b47 ("geneve: Use
+> ip_tunnel_key flow flags in route lookups") and 7e2fb8bc7ef6 ("vxlan:
+> Use ip_tunnel_key flow flags in route lookups") to have the intended
+> effect. In short, these two commits "consume" the new field introduced
+> in 451ef36bd229 ("ip_tunnels: Add new flow flags field to
+> ip_tunnel_key") and populated in the present commit.
 
-There is no modification for param bitmap in function
-bitmap_string() and bitmap_list_string(), so add const
-modifier for it.
+Ick.  Is it better to just drop this commit instead?  Or is it ok to
+also backport those 2 patches to 5.19.y?
 
-Signed-off-by: Jian Shen <shenjian15@huawei.com>
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
----
- lib/vsprintf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+thanks,
 
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 3c1853a9d1c0..07b36d8b29c3 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -1189,7 +1189,7 @@ char *hex_string(char *buf, char *end, u8 *addr, struct printf_spec spec,
- }
- 
- static noinline_for_stack
--char *bitmap_string(char *buf, char *end, unsigned long *bitmap,
-+char *bitmap_string(char *buf, char *end, const unsigned long *bitmap,
- 		    struct printf_spec spec, const char *fmt)
- {
- 	const int CHUNKSZ = 32;
-@@ -1233,7 +1233,7 @@ char *bitmap_string(char *buf, char *end, unsigned long *bitmap,
- }
- 
- static noinline_for_stack
--char *bitmap_list_string(char *buf, char *end, unsigned long *bitmap,
-+char *bitmap_list_string(char *buf, char *end, const unsigned long *bitmap,
- 			 struct printf_spec spec, const char *fmt)
- {
- 	int nr_bits = max_t(int, spec.field_width, 0);
--- 
-2.33.0
-
+greg k-h

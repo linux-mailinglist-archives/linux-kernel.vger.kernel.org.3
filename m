@@ -2,205 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84007595DC1
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C91595DCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235366AbiHPNvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
+        id S229997AbiHPNx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiHPNvK (ORCPT
+        with ESMTP id S231877AbiHPNxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 09:51:10 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC39098CB6
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:51:08 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 419555801CF;
-        Tue, 16 Aug 2022 09:51:08 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 16 Aug 2022 09:51:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1660657868; x=1660665068; bh=yuVLbrrN+N
-        1iK12i7DUjM6pGqTkdcihboprTmt6Byjw=; b=odX2548XwGXoGeKNs0MbkWaSSx
-        lfpsoLA8A8tZ3+XRhAbG1K21dnqkAYavMxd5ydxZzSSazv9h7PvZWs3oaJqIVzdA
-        RfmZLhQ6h0EfZpOr1x+wr6wcBilxBz5VUTfO6oIvSod3iW4DRW9iZAY5JWrBRVWy
-        8RbA1h9nm3vFyOx+F+XZ3Oi0Ew0Vp7PsnmwPJmo+2pX+i+6ZJpekDYbdmpGtfVCo
-        3VAKjkXEUHf0bOEZYobFiUnvijuSsqOZ7WAeqXo3nvUpCPV8fn3snx0SW0lCtRGR
-        3K7tv7ETwiQEhEEeQLinpzolbgJNH5qkXFL+wVcSjhd7ht2J/SWD6yDSAvuw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660657868; x=1660665068; bh=yuVLbrrN+N1iK12i7DUjM6pGqTkd
-        cihboprTmt6Byjw=; b=A1Si8qi+Laz5mf39bB95eWK9Z9k4Uwq/ARX10hcF5KoC
-        rsCZ4h4myKe7lFZDNiG31Mst8v4bkATp+OYda5/B48kbYWQ2u0KmB9codo9djrHe
-        yTOUZjbJZyB8E2j3I25Q+pbwyeqoVuqgfw6Eb/Ta82kHO4XwYxUPaMPA+8XxwcC+
-        bTV1VisVVgUolSf0+JPD6hqwLHiiFwPXAG/3ChEFsyvxGYNAfSU1zvmJVn9fuQJm
-        kxGz4+rdbVp3wtvdqh8E4B2HCDmNbzxD8l1XRhP9sDDFyjJPZjCwbnP9t0tfssr5
-        yfc8ortuZ8OiMn3m0oboGq9/2l0bSlAJDth5K7vXyQ==
-X-ME-Sender: <xms:y6D7Yi5dGJhRTsSGZBa9vyukMq9hYKB9U0_RHpfh03QgEetm5byqvg>
-    <xme:y6D7Yr4cdbgoEw_0L-SdM11M8wG7DlbMGgv-7R9rQA-mUT5LaO75CFlSi5iBSgWaD
-    __y_zatS_jJqtm1Es0>
-X-ME-Received: <xmr:y6D7YhdJOPym6auR3F3LbUaT7Gw7xA6ooEFtcT0WCjCINXg2WimtbPEekYY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehgedgjedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
-    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:y6D7YvI0uY1gs0_NlIylruE9Zs-XXwZlX_P_FEl_My6SPc7HLEwL4A>
-    <xmx:y6D7YmK7yKTdmpQmBSGQH2Y4I_GTRd_KRzJGnECTVLhPLnKVUgehWw>
-    <xmx:y6D7YgxxEL2lavOAuWvzDdfmduCHGRSf9UhoPNKAuLZ7cRiW3e-2BA>
-    <xmx:zKD7Ym6mGad4cGanjPeIgtE-CDNYjoT7Vt1767fMSgxfM1B86VJUWQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 16 Aug 2022 09:51:06 -0400 (EDT)
-Date:   Tue, 16 Aug 2022 15:51:05 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Dom Cobley <dom@raspberrypi.com>
-Subject: Re: [PATCH v1 34/35] drm/modes: Introduce the tv_mode property as a
- command-line option
-Message-ID: <20220816135105.goztqjzqqhhigytd@houat>
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <20220728-rpi-analog-tv-properties-v1-34-3d53ae722097@cerno.tech>
- <CAMuHMdXizN9OgXgxwdFc1gpnhZof-SZrCH8PczEiJrtYpB62Ow@mail.gmail.com>
+        Tue, 16 Aug 2022 09:53:54 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id C90A5266F
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:53:53 -0700 (PDT)
+Received: (qmail 129095 invoked by uid 1000); 16 Aug 2022 09:53:53 -0400
+Date:   Tue, 16 Aug 2022 09:53:53 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Ray Chi <raychi@google.com>
+Cc:     gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+        badhri@google.com, albertccwang@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] usb: core: add a hook to check port init status
+Message-ID: <YvuhcUx9R8Rdyfr4@rowland.harvard.edu>
+References: <20220816083854.1491886-1-raychi@google.com>
+ <20220816083854.1491886-2-raychi@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oapqvc3fwa7skyps"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdXizN9OgXgxwdFc1gpnhZof-SZrCH8PczEiJrtYpB62Ow@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220816083854.1491886-2-raychi@google.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Aug 16, 2022 at 04:38:53PM +0800, Ray Chi wrote:
+> This patch add a hook to check the port init status. Currently, only
+> usbcore knows port init status even if the result is bad. It will cause
+> a USB host keep doing USB enumeration for a long time when the USB host
+> connects to a broken USB accessory.
+> 
+> The hc_driver could use the hook to know port init status and do possible
+> error handling according to platform requirements or limitations.
+> 
+> Signed-off-by: Ray Chi <raychi@google.com>
+> ---
+>  drivers/usb/core/hub.c  | 14 ++++++++++++++
+>  include/linux/usb/hcd.h |  8 ++++++++
+>  2 files changed, 22 insertions(+)
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 2633acde7ac1..6ce6092816cb 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
 
---oapqvc3fwa7skyps
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> @@ -4855,6 +4865,10 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+>  					buf->bMaxPacketSize0;
+>  			kfree(buf);
+>  
+> +			retval = hub_port_check_init_status(udev, r);
+> +			if (retval < 0)
+> +				goto fail;
 
-On Fri, Aug 12, 2022 at 03:31:19PM +0200, Geert Uytterhoeven wrote:
-> Hi Maxime,
->=20
-> On Fri, Jul 29, 2022 at 6:37 PM Maxime Ripard <maxime@cerno.tech> wrote:
-> > Our new tv mode option allows to specify the TV mode from a property.
-> > However, it can still be useful, for example to avoid any boot time
-> > artifact, to set that property directly from the kernel command line.
-> >
-> > Let's add some code to allow it, and some unit tests to exercise that c=
-ode.
-> >
-> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
->=20
-> Thanks for your patch!
->=20
-> > --- a/drivers/gpu/drm/drm_modes.c
-> > +++ b/drivers/gpu/drm/drm_modes.c
-> > @@ -1677,6 +1677,80 @@ static int drm_mode_parse_panel_orientation(cons=
-t char *delim,
-> >         return 0;
-> >  }
-> >
-> > +#define TV_OPTION_EQUAL(value, len, option) \
-> > +       ((strlen(option) =3D=3D len) && !strncmp(value, option, len))
-> > +
-> > +static int drm_mode_parse_tv_mode(const char *delim,
-> > +                                 struct drm_cmdline_mode *mode)
-> > +{
-> > +       const char *value;
-> > +       unsigned int len;
-> > +
-> > +       if (*delim !=3D '=3D')
-> > +               return -EINVAL;
-> > +
-> > +       value =3D delim + 1;
-> > +       delim =3D strchr(value, ',');
-> > +       if (!delim)
-> > +               delim =3D value + strlen(value);
-> > +
-> > +       len =3D delim - value;
-> > +       if (TV_OPTION_EQUAL(value, len, "NTSC-443"))
-> > +               mode->tv_mode =3D DRM_MODE_TV_NORM_NTSC_443;
-> > +       else if (TV_OPTION_EQUAL(value, len, "NTSC-J"))
-> > +               mode->tv_mode =3D DRM_MODE_TV_NORM_NTSC_J;
-> > +       else if (TV_OPTION_EQUAL(value, len, "NTSC-M"))
-> > +               mode->tv_mode =3D DRM_MODE_TV_NORM_NTSC_M;
->=20
-> [...]
->=20
-> You already have the array tv_norm_values[] from "[PATCH v1 05/35]
-> drm/connector: Add TV standard property". Can't you export that, and
-> loop over that array instead?
+For future reference, you should be aware that this code won't get 
+executed if do_new_scheme is false.
 
-I'm not sure, the command line doesn't follow the same conventions than
-the property names for a number of conventions, but at the same time we
-should try to keep it as consistent as possible...
-
-Then again, Jani and Thomas didn't seem too fond about exposing data as
-part of the API, so I'm not sure how we could expose that properly.
-
-> > +       else if (TV_OPTION_EQUAL(value, len, "HD480I"))
-> > +               mode->tv_mode =3D DRM_MODE_TV_NORM_HD480I;
-> > +       else if (TV_OPTION_EQUAL(value, len, "HD480P"))
-> > +               mode->tv_mode =3D DRM_MODE_TV_NORM_HD480P;
-> > +       else if (TV_OPTION_EQUAL(value, len, "HD576I"))
-> > +               mode->tv_mode =3D DRM_MODE_TV_NORM_HD576I;
-> > +       else if (TV_OPTION_EQUAL(value, len, "HD576P"))
-> > +               mode->tv_mode =3D DRM_MODE_TV_NORM_HD576P;
-> > +       else if (TV_OPTION_EQUAL(value, len, "HD720P"))
-> > +               mode->tv_mode =3D DRM_MODE_TV_NORM_HD720P;
-> > +       else if (TV_OPTION_EQUAL(value, len, "HD1080I"))
-> > +               mode->tv_mode =3D DRM_MODE_TV_NORM_HD1080I;
->=20
-> The names in tv_norm_values[] use lower-case, while you use upper-case
-> here.
-
-Indeed, I'll fix it, thanks!
-Maxime
-
---oapqvc3fwa7skyps
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYvugyAAKCRDj7w1vZxhR
-xYVoAQDFAMNuU1dbZgCiVBYUf+Y13tqfHCtlOuPYmSb6Gmh3xgEAgXYxzEcBWNLK
-j9bSNzYbE9lp+H3MaLuAPoiaBAXIRQE=
-=szbm
------END PGP SIGNATURE-----
-
---oapqvc3fwa7skyps--
+Alan Stern

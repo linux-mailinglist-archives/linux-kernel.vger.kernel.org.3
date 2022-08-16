@@ -2,157 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54764595486
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B734559548E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbiHPIGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 04:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
+        id S231895AbiHPIHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 04:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231876AbiHPIFO (ORCPT
+        with ESMTP id S231970AbiHPIFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:05:14 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9119F15817E
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:27:29 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id w19so16938190ejc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:27:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=8GCiBPOuQM/bTY94OlYfkl/LuAf0jjQOGAAIwdS74Fg=;
-        b=JisZo1jwcqMFxEogkyBSj7CD2OQejIZwVaBZLDUMPXyd1/XDJk4yhm5S4XaUclV41a
-         DNf6C3jtGn/ICcktl7kKvB8oEvCJEthJjCnq/oKtpHE4qJRvd1ePCf/5cpTiwt6ADx8y
-         6ZKi3THb4uQY/A2F+hAzzTdYwLtU3q7b8PgG8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=8GCiBPOuQM/bTY94OlYfkl/LuAf0jjQOGAAIwdS74Fg=;
-        b=rT6oKIG7Y9FqULkbOIBBmWYOZAWZAsXrdxIUYYPSbQ0YxPlcJEU/REFoidu0suqXD4
-         +d5aR5KR4ExT/fweJveR/eg6TLjXz+v2nunweyWhKKwvMFP6K/0UhCj16dvKeAGQdNeu
-         w4RzePItV9JVJ9xIIqiVMrhn3+RQfI/E6qJVMt4LqU6aNW5AqYCEezihi0wsQ33fQb67
-         ou6S/BRckjr5z9hsJoB9N4nYbRJ9ofeGygEejB8gbUCugV4hHQs9GEECa5lG8dZoozpN
-         bEQEFAcVrg8Lj2d7G3kZE36/EZoE7epq5r1nLNIX1YfYzIG7oC25Y9QjVlsiPb5LvZMB
-         dE+A==
-X-Gm-Message-State: ACgBeo2jTLZcM4v2yshTzuxuRiI87eFSP7hRyKlHIqim8JaWN542KqKV
-        ZfSsUkOmRknyqM7wfkD9goM0WoaBbrEKGSai/Io=
-X-Google-Smtp-Source: AA6agR4d7RGHN5C4KHSdjnTQoT3+3YqKc5mGLI1JYAgcq7K3tcmhftkiLbTJ7DOlgGlFNEjLSur8Ww==
-X-Received: by 2002:a17:907:da2:b0:731:60e4:2261 with SMTP id go34-20020a1709070da200b0073160e42261mr12256651ejc.679.1660627647834;
-        Mon, 15 Aug 2022 22:27:27 -0700 (PDT)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id l6-20020a056402344600b0043cbdb16fbbsm7792130edc.24.2022.08.15.22.27.27
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 22:27:27 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id v3so11315559wrp.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:27:27 -0700 (PDT)
-X-Received: by 2002:a5d:6248:0:b0:222:cd3b:94c8 with SMTP id
- m8-20020a5d6248000000b00222cd3b94c8mr10739050wrv.97.1660627646821; Mon, 15
- Aug 2022 22:27:26 -0700 (PDT)
+        Tue, 16 Aug 2022 04:05:20 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C63E14ECB2;
+        Mon, 15 Aug 2022 22:28:04 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id DA5963200909;
+        Tue, 16 Aug 2022 01:28:00 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 16 Aug 2022 01:28:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1660627680; x=1660714080; bh=M6/1ZM1Ic+
+        C8Vmra2mooIPDUlrEFKSfGzdn/09DQyGU=; b=PEPwSGaKzfS43wRbLHr9thEzoR
+        c1yMU56PmNEljoXrPNVpANyjxB1zQQtvcZb4PQKOEJnR3OAnmB66Doowlc+J4oRm
+        tV8Tsh7Hw5/z6R+FSoJcw8f6jMT1F/PKLWMc0ySgGRrTkLvPbJwwyKgudbc6i5yH
+        wb258FTbfk127RxpJVCe1wHJ4q4h3Z9lUe5bOOCrKw4aQ/Xg5TfzVh9BCXPpGLS1
+        9HZnagUp5WeFF3gSvhrpEIX5JRw4bGyuXFprtmSg8S2F5EMmA0a/ttsOafFN+S+5
+        gAYz8tkY6oRylf7u+/udUlql/rdtjVk9hGJYYMaookdI6vWilvTg3BQopvzQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660627680; x=1660714080; bh=M6/1ZM1Ic+C8Vmra2mooIPDUlrEF
+        KSfGzdn/09DQyGU=; b=GZ9LOO1gR491IzHHo4jzB4zUKDDQnYTBSzl+NlbjoT5s
+        qUCrgD6aGqqWg1HT3gmKMjOkhEnkK6wrsGOfSr1IqNfu726Tn/TAPv7WEqrJJ+1K
+        6J1hmrepCbfgdEIZUGmx8ak3Ce6NrpOeM9dQzGsCcGEMlkYA9RwX+qAjxZsZxf8d
+        0kOeeIAAtSW7QMpRw7jD5ru1sxTrHZO7vzs2zcwWZq8xA/W2QiDOdILepiDY1tqH
+        N89KdH+EpvvfC42WeL2WsQI6BKGjSaM4OT1TNwSYNwof3krzfyyTtTTfcmQEjlus
+        g4H7RMt4E206RjVlflbVrVPcbN+69qHV1W7kSUtqXw==
+X-ME-Sender: <xms:3yr7YrCsYCOHpPk7VxdZCbgiRD6fftdwFjrVKquyXsLsVOKH0At3ww>
+    <xme:3yr7YhjDhQWvhZkcxC52q7Snvu2sBDpmwK0EzDklIVXSxKwduoQs0DFnQNpdg8IJb
+    fimkrYFBwlqyA>
+X-ME-Received: <xmr:3yr7Ymn5uyhVu27fllZsTBTWK4bf-0NpYVf66TNYxJwY0kggYyF55vkJ9teCRoVooSD6utiZCM8WPvXj7Ev4rhCPHWp3mVM4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehfedgleekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:3yr7YtzzzHnNNFsx2i0iMgr5HmAqCTkOYxMmSwojJFfgbNBi0t995Q>
+    <xmx:3yr7YgRBb9JS3ZX2n_ta9gmZx6Gir5QgyNFv_rmJ8mX2JRj6uSpoGg>
+    <xmx:3yr7YgbjXnaaSn9olz8bHfua1C9mUzfBHMLMEORbdRErGBdVHbCj1g>
+    <xmx:4Cr7YlIc-NLsPPnNhVgLPCmwPTtQ-cqv3J-QiWD9GZ2f5jdYPPBZhg>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 16 Aug 2022 01:27:59 -0400 (EDT)
+Date:   Tue, 16 Aug 2022 07:27:56 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tsbogend@alpha.franken.de, linux-api@vger.kernel.org,
+        f.fainelli@gmail.com
+Subject: Re: [PATCH v3] MIPS: Expose prid and globalnumber to sysfs
+Message-ID: <Yvsq3CPf3+ZjYyat@kroah.com>
+References: <20220815165658.11887-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-References: <YvqaK3hxix9AaQBO@slm.duckdns.org> <YvsZ6vObgLaDeSZk@gondor.apana.org.au>
-In-Reply-To: <YvsZ6vObgLaDeSZk@gondor.apana.org.au>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 15 Aug 2022 22:27:10 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgSNiT5qJX53RHtWECsUiFq6d6VWYNAvu71ViOEan07yw@mail.gmail.com>
-Message-ID: <CAHk-=wgSNiT5qJX53RHtWECsUiFq6d6VWYNAvu71ViOEan07yw@mail.gmail.com>
-Subject: Re: [PATCH] workqueue: Fix memory ordering race in queue_work*()
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Will Deacon <will@kernel.org>
-Cc:     Tejun Heo <tj@kernel.org>, marcan@marcan.st, peterz@infradead.org,
-        jirislaby@kernel.org, maz@kernel.org, mark.rutland@arm.com,
-        boqun.feng@gmail.com, catalin.marinas@arm.com, oneukum@suse.com,
-        roman.penyaev@profitbricks.com, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220815165658.11887-1-jiaxun.yang@flygoat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 9:15 PM Herbert Xu <herbert@gondor.apana.org.au> wrote:
->
-> Please revert this as test_and_set_bit was always supposed to be
-> a full memory barrier.  This is an arch bug.
+On Mon, Aug 15, 2022 at 04:56:58PM +0000, Jiaxun Yang wrote:
+> Some application would like to know precise model and rev of processor
+> to do errata workaround or optimization.
+> 
+> Expose them in sysfs as:
+> /sys/devices/system/cpu/cpuX/regs/identification/prid
+> /sys/devices/system/cpu/cpuX/regs/identification/globalnumber
+> 
+> Reusing AArch64 CPU registers directory.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+> v2: Drop static qualifier for kobj (gregkh)
+> v3: Use kzalloc to allocate struct cpuregs.
+>     note: When Greg mentioned about static I was thinking about
+>     static qualifier of percpu variable. After reading documents
+>     again it turns out kobjs should be allocated at runtime. Arm64's
+>     cpuinfo kobj is also on a percpu variable... I guess that was a
+>     intentional use?
+> ---
+>  .../ABI/testing/sysfs-devices-system-cpu      |  11 ++
+>  arch/mips/kernel/topology.c                   | 103 ++++++++++++++++++
+>  2 files changed, 114 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+> index 5bf61881f012..adf855e7bb9b 100644
+> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
+> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+> @@ -512,6 +512,17 @@ Description:	information about CPUs heterogeneity.
+>  
+>  		cpu_capacity: capacity of cpuX.
+>  
+> +What:		/sys/devices/system/cpu/cpuX/regs/
+> +		/sys/devices/system/cpu/cpuX/regs/identification/
+> +		/sys/devices/system/cpu/cpuX/regs/identification/prid
+> +		/sys/devices/system/cpu/cpuX/regs/identification/globalnumber
+> +Date:		Augest 2022
+> +Contact:	Linux MIPS Kernel Mailing list <linux-mips@vger.kernel.org>
+> +Description:	MIPS CPU registers
+> +
+> +		'identification' directory exposes the Processor ID and Global Number
+> +		registers for identifying model and revision of the CPU.
+> +
+>  What:		/sys/devices/system/cpu/vulnerabilities
+>  		/sys/devices/system/cpu/vulnerabilities/meltdown
+>  		/sys/devices/system/cpu/vulnerabilities/spectre_v1
+> diff --git a/arch/mips/kernel/topology.c b/arch/mips/kernel/topology.c
+> index 9429d85a4703..bbb7d4b51ffe 100644
+> --- a/arch/mips/kernel/topology.c
+> +++ b/arch/mips/kernel/topology.c
+> @@ -5,6 +5,8 @@
+>  #include <linux/node.h>
+>  #include <linux/nodemask.h>
+>  #include <linux/percpu.h>
+> +#include <linux/seq_file.h>
+> +#include <linux/smp.h>
+>  
+>  static DEFINE_PER_CPU(struct cpu, cpu_devices);
+>  
+> @@ -26,3 +28,104 @@ static int __init topology_init(void)
+>  }
+>  
+>  subsys_initcall(topology_init);
+> +
+> +static struct kobj_type cpuregs_kobj_type = {
+> +	.sysfs_ops = &kobj_sysfs_ops,
+> +};
+> +
+> +struct cpureg {
+> +	struct kobject kobj;
+> +	struct cpuinfo_mips *info;
+> +};
+> +static DEFINE_PER_CPU(struct cpureg *, cpuregs);
+> +
+> +#define kobj_to_cpureg(kobj)	container_of(kobj, struct cpureg, kobj)
+> +#define CPUREGS_ATTR_RO(_name, _field)						\
+> +	static ssize_t _name##_show(struct kobject *kobj,			\
+> +			struct kobj_attribute *attr, char *buf)			\
+> +	{									\
+> +		struct cpuinfo_mips *info = kobj_to_cpureg(kobj)->info;		\
+> +										\
+> +		return sprintf(buf, "0x%08x\n", info->_field);	\
+> +	}									\
+> +	static struct kobj_attribute cpuregs_attr_##_name = __ATTR_RO(_name)
+> +
+> +CPUREGS_ATTR_RO(prid, processor_id);
+> +CPUREGS_ATTR_RO(globalnumber, globalnumber);
+> +
+> +static struct attribute *cpuregs_id_attrs[] = {
+> +	&cpuregs_attr_prid.attr,
+> +	&cpuregs_attr_globalnumber.attr,
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group cpuregs_attr_group = {
+> +	.attrs = cpuregs_id_attrs,
+> +	.name = "identification"
+> +};
+> +
+> +static int cpuregs_cpu_online(unsigned int cpu)
+> +{
+> +	int rc;
+> +	struct device *dev;
+> +	struct cpureg *reg;
+> +
+> +	dev = get_cpu_device(cpu);
+> +	if (!dev) {
+> +		rc = -ENODEV;
+> +		goto out;
+> +	}
+> +	reg = kzalloc(sizeof(struct cpureg), GFP_KERNEL);
+> +	if (!reg) {
+> +		rc = -ENOMEM;
+> +		goto out;
+> +	}
+> +	rc = kobject_init_and_add(&reg->kobj, &cpuregs_kobj_type,
+> +					&dev->kobj, "regs");
+> +	if (rc)
+> +		goto out_kfree;
 
-Yes, the bitops are kind of strange for various legacy reasons:
+No, please read the documentation for kobject_init_and_add() for what to
+properly do in a failure of this function.
 
- - set/clear_bit is atomic, but without a memory barrier, and need a
-"smp_mb__before_atomic()" or similar for barriers
+thanks,
 
- - test_and_set/clear_bit() are atomic, _and_ are memory barriers
-
- - test_and_set_bit_lock and test_and_clear_bit_unlock are atomic and
-_weaker_ than full memory barriers, but sufficient for locking (ie
-acquire/release)
-
-Does any of this make any sense at all? No. But those are the
-documented semantics exactly because people were worried about
-test_and_set_bit being used for locking, since on x86 all the atomics
-are also memory barriers.
-
-From looking at it, the asm-generic implementation is a bit
-questionable, though. In particular, it does
-
-        if (READ_ONCE(*p) & mask)
-                return 1;
-
-so it's *entirely* unordered for the "bit was already set" case.
-
-That looks very wrong to me, since it basically means that the
-test_and_set_bit() can return "bit was already set" based on an old
-value - not a memory barrier at all.
-
-So if you use "test_and_set_bit()" as some kind of "I've done my work,
-now I am going to set the bit to tell people to pick it up", then that
-early "bit was already set" code completely breaks it.
-
-Now, arguably our atomic bitop semantics are very very odd, and it
-might be time to revisit them. But that code looks very very buggy to
-me.
-
-The bug seems to go back to commit e986a0d6cb36 ("locking/atomics,
-asm-generic/bitops/atomic.h: Rewrite using atomic_*() APIs"), and the
-fix looks to be as simple as just removing that early READ_ONCE return
-case (test_and_clear has the same bug).
-
-Will?
-
-IOW, the proper fix for this should, I think, look something like this
-(whitespace mangled) thing:
-
-   --- a/include/asm-generic/bitops/atomic.h
-   +++ b/include/asm-generic/bitops/atomic.h
-   @@ -39,9 +39,6 @@ arch_test_and_set_bit(
-        unsigned long mask = BIT_MASK(nr);
-
-        p += BIT_WORD(nr);
-   -    if (READ_ONCE(*p) & mask)
-   -            return 1;
-   -
-        old = arch_atomic_long_fetch_or(mask, (atomic_long_t *)p);
-        return !!(old & mask);
-    }
-   @@ -53,9 +50,6 @@ arch_test_and_clear_bit
-        unsigned long mask = BIT_MASK(nr);
-
-        p += BIT_WORD(nr);
-   -    if (!(READ_ONCE(*p) & mask))
-   -            return 0;
-   -
-        old = arch_atomic_long_fetch_andnot(mask, (atomic_long_t *)p);
-        return !!(old & mask);
-    }
-
-but the above is not just whitespace-damaged, it's entirely untested
-and based purely on me looking at that code.
-
-            Linus
+greg k-h

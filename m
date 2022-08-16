@@ -2,81 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35517595799
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65945595847
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234206AbiHPKIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
+        id S234549AbiHPKa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234316AbiHPKIN (ORCPT
+        with ESMTP id S234698AbiHPKa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:08:13 -0400
-Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4EB6103C66
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:12:44 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id NrgXoquoiGDTnNrgXo13bw; Tue, 16 Aug 2022 10:12:26 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 16 Aug 2022 10:12:26 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <b6025226-4fcd-1d82-60eb-301734cc8e5a@wanadoo.fr>
-Date:   Tue, 16 Aug 2022 10:12:25 +0200
+        Tue, 16 Aug 2022 06:30:26 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20D984EF6;
+        Tue, 16 Aug 2022 01:16:22 -0700 (PDT)
+Received: from mail-ej1-f41.google.com ([209.85.218.41]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MuDPh-1nVmG00fXh-00ucal; Tue, 16 Aug 2022 10:16:21 +0200
+Received: by mail-ej1-f41.google.com with SMTP id a7so17567241ejp.2;
+        Tue, 16 Aug 2022 01:16:21 -0700 (PDT)
+X-Gm-Message-State: ACgBeo33ceRETs9/Jye2QbXxzU5AEAna2/4O5cDeSTf88pRW+k587zJF
+        RQYlmByLPR1eD1q8YbKGd7/q3DHxJT/QjiHV0e0=
+X-Google-Smtp-Source: AA6agR6iJ0nwhhROioKsW3KiCcnkE21PLtVwi8+SbpiQ4ZkczWhJ8i5DpkLee3nWEvIKF41nGXZNZm3jeBE6JuFII7g=
+X-Received: by 2002:a17:906:8a67:b0:738:7bcd:dca1 with SMTP id
+ hy7-20020a1709068a6700b007387bcddca1mr1923189ejc.547.1660637780770; Tue, 16
+ Aug 2022 01:16:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] scsi: target: Save a few cycles in
- transport_lookup_[cmd|tmr]_lun()
-Content-Language: en-US
-To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "michael.christie@oracle.com" <michael.christie@oracle.com>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-References: <03705222390bfa3b48ad7658f693fc0fc030b3ae.1660596679.git.christophe.jaillet@wanadoo.fr>
- <757f1326-bc70-aa93-b2d3-dfd91698406e@nvidia.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <757f1326-bc70-aa93-b2d3-dfd91698406e@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220816070311.89186-1-marcan@marcan.st>
+In-Reply-To: <20220816070311.89186-1-marcan@marcan.st>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 16 Aug 2022 10:16:04 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a03pfrPzjnx1tB5z0HcKnY=JL=y+F8PMQDpc=Bavs3UCA@mail.gmail.com>
+Message-ID: <CAK8P3a03pfrPzjnx1tB5z0HcKnY=JL=y+F8PMQDpc=Bavs3UCA@mail.gmail.com>
+Subject: Re: [PATCH] locking/atomic: Make test_and_*_bit() ordered on failure
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>, Tejun Heo <tj@kernel.org>,
+        jirislaby@kernel.org, Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Asahi Linux <asahi@lists.linux.dev>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:Jg5mkr7l+zrNyfFzBvs5i1+/l2UlfgBGsjuyilNfjoCAl7e0vIK
+ TicO0qiEDijREu19FTd6lsJ/xG/qL+EIpVuiumbZd62aIFx2OXh1gQ+2geNFdBVwvelIaws
+ U/qaLsKuC7aXaYHFXRmlVqfYYgxXkdSQJQ1VV3jTdwC81L27G6FvdY7TSzor0+xh/J7PEDb
+ qG4zsEw7nQqMDQnoYIF+Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:0YAPTbXMD6Q=:Cpy3XZMvFH2GhcX0VVyvOx
+ 0YzlCxR6gGq9Pz3C5g7UZVwFHunn/VyMHkyx8i8pVxdcNhLTiZhcOSq/VKk3uS69cn8rThieC
+ 191ZejESr8C3yo26hkMLJcrOk6z9Vo7EeTMVzPT1SrhFNJeg029pH9llcmlNznfIfSq2l/yIi
+ n70ffHRZBUVLLcRASCGyf6Ht2a1xAvBCw+wtxUjILb324Hqr1BY9nDl2Xhb4YcnD4rhHUmnvd
+ CBPw8M17qfmdxtn7bSaRbZ2gXnGca/UQLP9Arj4y0Rc4Yq1ZCdEsOum560JZuBd4IH5HWkw2d
+ aPrVpwDiOYHnxK2tKkQOIf6N1TeXIP/RuU3RGT2B6itpK1tCO1VFRa4r/75bQYTtPGLPsY5wE
+ 9BC2YTZVmza2ADitrSTrAO6yCOE7sAepV6ZIg+KmGB+v5uJhhicb7OoTQ9/AWTW/vPCO6qvjS
+ Gc8VBh9rDEoGHZF0SBxY5w+AEPmdykpWxbn1iYKASCGStVasZHrKR/JpV7ldQ1gRmImc0yNYw
+ Ch51lpl7AeGzkZwYOZrXSR4OWKc5bPxjw/tliWPkeHuyhdZH59NvYSqE9ZJ7/JRazAOgMS5HN
+ j5ohyglFYFGM5PB7pLegV6Ze4tuhGTmZp5/WCMLXciq8C6sSZQqLEjYC63qBIQ6OagxNpPDed
+ a1kSkcKSdgzGaBKyW/yTu32BNgyFTKIsdH4C8Jj8TzyD5WZoU/astR6yZN6UyZw8WfXyFt0rl
+ gNh0wPeo7rDK6GMzLvZt8KlWzdZLv/GwAUZCJw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Le 16/08/2022 à 08:06, Chaitanya Kulkarni a écrit :
-> On 8/15/22 13:52, Christophe JAILLET wrote:
->> Use percpu_ref_tryget_live_rcu() instead of percpu_ref_tryget_live() to
->> save a few cycles when it is known that the rcu lock is already
->> taken/released.
->>
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> ---
-> do you have a quantitative data that shows actual savings of cycles?
+On Tue, Aug 16, 2022 at 9:03 AM Hector Martin <marcan@marcan.st> wrote:
 >
-> -ck
+> These operations are documented as always ordered in
+> include/asm-generic/bitops/instrumented-atomic.h, and producer-consumer
+> type use cases where one side needs to ensure a flag is left pending
+> after some shared data was updated rely on this ordering, even in the
+> failure case.
 >
+> This is the case with the workqueue code, which currently suffers from a
+> reproducible ordering violation on Apple M1 platforms (which are
+> notoriously out-of-order) that ends up causing the TTY layer to fail to
+> deliver data to userspace properly under the right conditions. This
+> change fixes that bug.
+>
+> Change the documentation to restrict the "no order on failure" story to
+> the _lock() variant (for which it makes sense), and remove the
+> early-exit from the generic implementation, which is what causes the
+> missing barrier semantics in that case. Without this, the remaining
+> atomic op is fully ordered (including on ARM64 LSE, as of recent
+> versions of the architecture spec).
+>
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: stable@vger.kernel.org
+> Fixes: e986a0d6cb36 ("locking/atomics, asm-generic/bitops/atomic.h: Rewrite using atomic_*() APIs")
+> Fixes: 61e02392d3c7 ("locking/atomic/bitops: Document and clarify ordering semantics for failed test_and_{}_bit()")
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  Documentation/atomic_bitops.txt     | 2 +-
+>  include/asm-generic/bitops/atomic.h | 6 ------
 
-Some numbers were given for io_uring by the one who introduced 
-percpu_ref_tryget_live_rcu().
+I double-checked all the architecture specific implementations to ensure
+that the asm-generic one is the only one that needs the fix.
 
-See [1].
+I assume this gets merged through the locking tree or that Linus picks it up
+directly, not through my asm-generic tree.
 
-I don't have specific numbers for the patch against scsi.
-
-CJ
-
-
-[1]: 
-https://lore.kernel.org/linux-kernel/cover.1634822969.git.asml.silence@gmail.com/
-
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>

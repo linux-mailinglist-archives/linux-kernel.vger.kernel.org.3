@@ -2,142 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC3E595835
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00AF459598E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234538AbiHPK3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
+        id S235295AbiHPLK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 07:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234601AbiHPK2j (ORCPT
+        with ESMTP id S235519AbiHPLKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:28:39 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4623AB08
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:39:13 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id o18-20020a17090aac1200b001f3252af009so9460334pjq.7
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:39:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=bB93z6epEEktgqWPKqCS2yAkD9gaQQnHEzx7X0wo89k=;
-        b=LBUekVZbKwjYB6iREXgnr6/dM7aUHkeeUVgIKavekxJRHMpaR5GmbH36Wo7f35PhMr
-         qFed3KzKfZEhK6wbXZCuUJg0wj88/OsxPnGsu7Mx+2hcwgoKib/YEaqtlEdOJRIXaQ6N
-         ujLmjUERqv4Xqmb0I3ospKzIO6NkBRgvK1ufjI/hB9DWc3yFWOKtGv1lGx7R2QFL7xmT
-         hwx9srMqjWHG4F+T+cXDyL6WffHLHty/vt9nTIa/c7DQuVGJsXphgdSSK5ebrBEIB9Ve
-         FCnGXHkRgYzC8TNkBtKXABrWNZYQE69QH2JUsIBGNuav6Ow3IKnI7JLSCIPZSgmNi9e5
-         FtQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=bB93z6epEEktgqWPKqCS2yAkD9gaQQnHEzx7X0wo89k=;
-        b=tc53xyFDL/92lrRDA8RovYj8KadDzceAf1v06XWfFttuOk8y7namNzsPKXtB4dQbhu
-         WDy1bcmXiDWJ95nKjB2Mx0EHNkxlT5qK+FU5KL+rlefkfkHZxFS3GSjL7lo8iy+y82LZ
-         hkkly5DfMLwGVlyRsZX0Av+KyF164BEJBidDct4JvynRQth+h4HFAlQTA6aSoUtK8JYn
-         c9zNleZrU6pAWkK3F3Zy2TzZfMX6PBRQpGdotpUQa9VUXH9FwFx9/aEtLER9hNBU2uEU
-         3Tc86vn4VzIClmajXW9fvvKvDh9sLEWM1R8LVrvigcfMFmNu4dpZyZX7pTe1i9AMW7+T
-         hKOg==
-X-Gm-Message-State: ACgBeo1oOSOQvxhSZHpZaAU2Ye/tVjrGKmj3k+ZN/KFs80eF+Z6JdgTl
-        sXVgWFHdz+qobYjQ2LtHDMvWoUwl2NY=
-X-Google-Smtp-Source: AA6agR54uF8KKRbV8DX/kPh89GDgFvO2Xmrnjc3ibq1RSfDiZt18v2MUXc+jMD8Q35DJXDMBoxLKFfJ0VuM=
-X-Received: from raychi.tao.corp.google.com ([2401:fa00:fc:202:5bfb:2ce6:1e1b:f496])
- (user=raychi job=sendgmr) by 2002:a05:6a00:10ca:b0:4f7:5af4:47b6 with SMTP id
- d10-20020a056a0010ca00b004f75af447b6mr20152772pfu.6.1660639152696; Tue, 16
- Aug 2022 01:39:12 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 16:38:54 +0800
-In-Reply-To: <20220816083854.1491886-1-raychi@google.com>
-Message-Id: <20220816083854.1491886-3-raychi@google.com>
-Mime-Version: 1.0
-References: <20220816083854.1491886-1-raychi@google.com>
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH 2/2] usb: xhci: add check_init_status hook support
-From:   Ray Chi <raychi@google.com>
-To:     gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-        stern@rowland.harvard.edu
-Cc:     badhri@google.com, albertccwang@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ray Chi <raychi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 16 Aug 2022 07:10:39 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0218E1F60C
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:39:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660639192; x=1692175192;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=haZJJ6qIsp18u5JMSxLBwZ3xo8DIn7m1qKopIr+1Xfg=;
+  b=OK1hXaQncULTuYAnDR9zKW5Q4r5ylVMlZC6PCFy+l0VptTqLDdeo5xuT
+   TAPlh76221rPFoDZl8si7DJLjYxkKQxq0LP+IUNs9QHF+6mkf8EjnKCDZ
+   EW2ru12vddDJFzRF2z2IXxTTkO55J2nXXLhPU6G8RegMxQnvy0/m/Rzqr
+   O0wv2fV15qgycSKSJkURu1AhyBqUgaDX3IO7eUeHzQfKrLB44ucWXdB41
+   3WN0YeAJqezHIX5kUaeVF2KlS7vMlwkEHoVsVvYGhOxgAYgWhj5psEV+/
+   KEl9uCwy2OWXyAl4ps/iYneIzMLJjTx12cGWpEhGdy5XSftDbbJslGFWp
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="289733824"
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="289733824"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 01:39:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="610189582"
+Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 16 Aug 2022 01:39:51 -0700
+Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oNs74-0001e1-2d;
+        Tue, 16 Aug 2022 08:39:50 +0000
+Date:   Tue, 16 Aug 2022 16:39:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/070-audio 4/16] sound/soc/codecs/tas2764.c:681:20:
+ warning: cast to smaller integer type 'enum tas2764_devid' from 'const void
+ *'
+Message-ID: <202208161624.BKESkCXj-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In general, xHCI didn't do anything for port initialization. However,
-there are some requirement or limitation on various platforms, so
-vendors need to do some error handlings if the device connected to a
-broken USB accessory.
+tree:   https://github.com/AsahiLinux/linux bits/070-audio
+head:   51024ef467ff6c288e679bc72d0e3fcdd54d9b39
+commit: e8c4eabb2252a8ee21269737e90c57973ab36269 [4/16] ASoC: tas2764: Extend driver to SN012776
+config: arm64-randconfig-r022-20220815 (https://download.01.org/0day-ci/archive/20220816/202208161624.BKESkCXj-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/e8c4eabb2252a8ee21269737e90c57973ab36269
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/070-audio
+        git checkout e8c4eabb2252a8ee21269737e90c57973ab36269
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash sound/soc/codecs/
 
-This patch also add the hook to xhci_driver_overrides so that vendors
-can add their specific protection easily if needed.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Ray Chi <raychi@google.com>
----
- drivers/usb/host/xhci.c | 17 +++++++++++++++++
- drivers/usb/host/xhci.h |  1 +
- 2 files changed, 18 insertions(+)
+All warnings (new ones prefixed by >>):
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 65858f607437..f237af9d6e2e 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -4358,6 +4358,20 @@ static int xhci_enable_device(struct usb_hcd *hcd, struct usb_device *udev)
- 	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ONLY);
- }
- 
-+/*
-+ * The function could get the status of port initialization.
-+ */
-+static int xhci_check_init_status(struct usb_hcd *hcd, struct usb_device *udev, int r)
-+{
-+	/*
-+	 * In general, this function is not necessory. Some platforms may
-+	 * need doing error handling when the port initialization takes a
-+	 * long time to do. The device can use the override callback to
-+	 * do specific handlings.
-+	 */
-+	return 0;
-+}
-+
- /*
-  * Transfer the port index into real index in the HW port status
-  * registers. Caculate offset between the port's PORTSC register
-@@ -5455,6 +5469,7 @@ static const struct hc_driver xhci_hc_driver = {
- 	.enable_device =	xhci_enable_device,
- 	.update_hub_device =	xhci_update_hub_device,
- 	.reset_device =		xhci_discover_or_reset_device,
-+	.check_init_status =	xhci_check_init_status,
- 
- 	/*
- 	 * scheduling support
-@@ -5503,6 +5518,8 @@ void xhci_init_driver(struct hc_driver *drv,
- 			drv->check_bandwidth = over->check_bandwidth;
- 		if (over->reset_bandwidth)
- 			drv->reset_bandwidth = over->reset_bandwidth;
-+		if (over->check_init_status)
-+			drv->check_init_status = over->check_init_status;
- 	}
- }
- EXPORT_SYMBOL_GPL(xhci_init_driver);
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 1960b47acfb2..33ce873236e9 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1944,6 +1944,7 @@ struct xhci_driver_overrides {
- 			     struct usb_host_endpoint *ep);
- 	int (*check_bandwidth)(struct usb_hcd *, struct usb_device *);
- 	void (*reset_bandwidth)(struct usb_hcd *, struct usb_device *);
-+	int (*check_init_status)(struct usb_hcd *hcd, struct usb_device *udev, int r);
- };
- 
- #define	XHCI_CFC_DELAY		10
+>> sound/soc/codecs/tas2764.c:681:20: warning: cast to smaller integer type 'enum tas2764_devid' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+                   tas2764->devid = (enum tas2764_devid) of_id->data;
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +681 sound/soc/codecs/tas2764.c
+
+   665	
+   666	static int tas2764_i2c_probe(struct i2c_client *client)
+   667	{
+   668		struct tas2764_priv *tas2764;
+   669		const struct of_device_id *of_id = NULL;
+   670		int result;
+   671	
+   672		tas2764 = devm_kzalloc(&client->dev, sizeof(struct tas2764_priv),
+   673				       GFP_KERNEL);
+   674		if (!tas2764)
+   675			return -ENOMEM;
+   676	
+   677		if (client->dev.of_node)
+   678			of_id = of_match_device(tas2764_of_match, &client->dev);	
+   679	
+   680		if (of_id)
+ > 681			tas2764->devid = (enum tas2764_devid) of_id->data;
+   682		else
+   683			tas2764->devid = DEVID_TAS2764;
+   684	
+   685		tas2764->dev = &client->dev;
+   686		i2c_set_clientdata(client, tas2764);
+   687		dev_set_drvdata(&client->dev, tas2764);
+   688	
+   689		tas2764->regmap = devm_regmap_init_i2c(client, &tas2764_i2c_regmap);
+   690		if (IS_ERR(tas2764->regmap)) {
+   691			result = PTR_ERR(tas2764->regmap);
+   692			dev_err(&client->dev, "Failed to allocate register map: %d\n",
+   693						result);
+   694			return result;
+   695		}
+   696	
+   697		if (client->dev.of_node) {
+   698			result = tas2764_parse_dt(&client->dev, tas2764);
+   699			if (result) {
+   700				dev_err(tas2764->dev, "%s: Failed to parse devicetree\n",
+   701					__func__);
+   702				return result;
+   703			}
+   704		}
+   705	
+   706		return devm_snd_soc_register_component(tas2764->dev,
+   707						       &soc_component_driver_tas2764,
+   708						       tas2764_dai_driver,
+   709						       ARRAY_SIZE(tas2764_dai_driver));
+   710	}
+   711	
+
 -- 
-2.37.1.595.g718a3a8f04-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

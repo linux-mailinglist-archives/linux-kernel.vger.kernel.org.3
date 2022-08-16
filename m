@@ -2,138 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5BF9595964
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3772E59596E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235170AbiHPLFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 07:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
+        id S235307AbiHPLHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 07:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234722AbiHPLFN (ORCPT
+        with ESMTP id S235287AbiHPLG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 07:05:13 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3777BD5EA9
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:30:53 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id r16so2864302wrm.6
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:30:53 -0700 (PDT)
+        Tue, 16 Aug 2022 07:06:57 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00A6FFD;
+        Tue, 16 Aug 2022 03:36:31 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id z187so8974327pfb.12;
+        Tue, 16 Aug 2022 03:36:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=CC0I+QyhCl78LNGXSDcokb2Igja0kEp2SAvinKMmolw=;
-        b=oIdwil5N6ek5uKSZgnjVAREcevTGeVp8vs/IUDYbqm1xSpyJDNbt69srWRT6oBdBxz
-         /VLUHr0lFB2q5HZ3fS7K1cltoi8knDjQkfqECjrY+dl4xc5s1KBn3Uz5Np6gC0eOmFVl
-         e68cazOb6z5hTOGDvlBRGMzTeLNgJhVgcfq+gApoomWMNBdmrE+Qz8SWj0OtvpqFFYYD
-         FftV4YD9V+gHoiN0yXyXxF1YHWvvC9g38yulx7A7wjhDe47fp/qnS+Zgflom8NRx/Dri
-         aAvCPyNpbLrydjojgGcsB7K4ws4E+h/DwogtbYwrGrA1hp9H2vgcvGq5gqzv38JtS6cp
-         3JNw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=5A5RtN/YS/4w7sXimiNz+39ndA1ngcqHQiad4s8fg4Q=;
+        b=i6P3O5ievivOXk5mzbsJWm6wlAnJEdrEfilGpTvRGnyai46rxm0+Jxp11BbZf4IsKj
+         qO97j0j41kC2x7RN6OHQ5vKhu3lUys1t4Y/+GkEuD9xgT/9qOQNr3CRdg6oE1xXIBPeJ
+         ynhUqnRAtvl35XghDcmpU28lgm0ECn2J1dvMqcf3vlfFFhlWg1IRbPXGhMBWZoKhsFwa
+         xQFqWuBeH0sO4xR/fjRkJWxPidM8yOpSI+msEzo9XfCYVIqj4/B4g4B0FcEESZHhcxV0
+         /jObHO/tfzPys3En7Dz6pDXNkWxwZgmanen3mAEOEL3lgL110Iz6twsy/infxn/w03bi
+         DfOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=CC0I+QyhCl78LNGXSDcokb2Igja0kEp2SAvinKMmolw=;
-        b=ptDsYmB5I6nl5+2RqdwBmULKAk69mxyKNIkL7FR2Ih9HOrCpn07kDNh2hHOK7n2TdK
-         uc/cGoFiTEqJDDe3QAXmunO2J9eIc+ZGGqhiuY+8ld9fcZqU81BVgBShhTizBqGNOOJi
-         DOUpRcij4VZBx5iLwdVVcKf7cfu53ckVyKFM8zS28zZYYevTHwsMV37W6kFdPobSwqF2
-         AuIGz5rIVmrCwphKQ8P126XX/Nn3LiOCS//vBEr95KG5Pq8piaNog2yxFeFMIqKIs3aY
-         bxpU/OICloN8DYhEcXrZ1hBGDWWlb0m5rCfSsW6flUWVpHSSS/3VdpHfcGJXLiZ/6kfM
-         +uAw==
-X-Gm-Message-State: ACgBeo2Xw1Fu56v6xj4GXbsK27aj68bDykfO8jr7NoJ6IV7Y+5orgmBT
-        VGq+/58E1Au0x6SOpoV8JRcf6Q==
-X-Google-Smtp-Source: AA6agR76pYX2cHzKIS2Dwr7HqLUjs0UXKxQglBa1qAWdPWQkucfK0/8maBGva4XqPPlS2/nYn+bWUg==
-X-Received: by 2002:a5d:4205:0:b0:223:654d:a2f8 with SMTP id n5-20020a5d4205000000b00223654da2f8mr11417330wrq.114.1660645851944;
-        Tue, 16 Aug 2022 03:30:51 -0700 (PDT)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id j15-20020a05600c190f00b003a5f54e3bbbsm7494134wmq.38.2022.08.16.03.30.50
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=5A5RtN/YS/4w7sXimiNz+39ndA1ngcqHQiad4s8fg4Q=;
+        b=dDBtcD4dfzW/X/5s7EeR6dMAOm9IdGFJD7Hcq8VHc1CZeWd9FJ3iuef7nrKpTbE4y4
+         sD5N+ENdD6qyyKJB60QkTq8Yu+5tJkiNKr2LqW3TkTZVdNJYOTdQ3kUWlVYlRE6Yfpo8
+         yDhvXMPU73FxeiCI5r1ZzU6vb5KDfrY1AXOlAlU2NugKN8Ga2lECwBYwTpZUQuUEdD82
+         tRgTq5XnBY3IS3E8VDS2fyRKbpfVOtj7pETWkozH5nB+IqJJ3j5SUMGPOKd5utWbk86h
+         PoQjgTRPIzznRiAy5663OF+764AY4OR5/DcmXEJZdptJ7LUZxzgIhulxhlkbTsIexio5
+         djeA==
+X-Gm-Message-State: ACgBeo2RIIbGWxghv4jrAm6fzm/HVX68sjjQNXfafKCMeGLM8CYtt+1C
+        +BearPuihUXnzGxS6dVy/jg=
+X-Google-Smtp-Source: AA6agR7VYoPwJ0fUKY7DGeSKdzzsM77Cgyq30uiP5ZbMuykBi4NKULWYUxSi8YlueLMCiucRw4dhxA==
+X-Received: by 2002:a63:5620:0:b0:429:9ad7:b4f2 with SMTP id k32-20020a635620000000b004299ad7b4f2mr3326930pgb.162.1660646190469;
+        Tue, 16 Aug 2022 03:36:30 -0700 (PDT)
+Received: from localhost ([36.112.86.8])
+        by smtp.gmail.com with ESMTPSA id a8-20020a170902ecc800b0016efbccf2c0sm8771705plh.56.2022.08.16.03.36.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 03:30:50 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 13:30:49 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Caleb Connolly <caleb.connolly@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/4] arm64: dts: qcom: sdm845: Add the RPMh stats node
-Message-ID: <Yvtx2aK1Uu51hTPM@linaro.org>
-References: <20220812101240.1869605-1-abel.vesa@linaro.org>
- <T2Uz7zs4Ht58lYc5zWg1VBY0ju6bVaSKa9y3RhBQWDDHmPXBHbAxI2J34jSeY0BFQy2y4JtFn3nQS0Lz4xI5jw==@protonmail.internalid>
- <20220812101240.1869605-3-abel.vesa@linaro.org>
- <e6821eef-4fcb-97b1-24be-e2bb62b99039@linaro.org>
+        Tue, 16 Aug 2022 03:36:30 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     dhowells@redhat.com, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        yin31149@gmail.com, linux-kernel-mentees@lists.linuxfoundation.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH] net: Fix suspicious RCU usage in bpf_sk_reuseport_detach()
+Date:   Tue, 16 Aug 2022 18:34:52 +0800
+Message-Id: <20220816103452.479281-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <166064248071.3502205.10036394558814861778.stgit@warthog.procyon.org.uk>
+References: <166064248071.3502205.10036394558814861778.stgit@warthog.procyon.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e6821eef-4fcb-97b1-24be-e2bb62b99039@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-08-15 21:34:07, Caleb Connolly wrote:
-> 
-> 
-> On 12/08/2022 11:12, Abel Vesa wrote:
-> > SDM845 is a special case compared to the other platforms that use RPMh
-> > stats, since it only has 2 stats (aosd and cxsd), while the others have
-> > a 3rd one (ddr).
-> > 
-> > So lets add the node but with a SDM845 dedicated compatible to make
-> > the driver aware of the different stats config.
-> Hi,
-> 
-> I gave this a go on the OnePlus 6, I noticed the driver is also meant to
-> read the stats for remote procs via smem, however this seems to fail for me
-> - it can't find any of the SMEM items even if I probe the driver manually
-> after ensuring remoteprocs have booted. Is this an unsupported feature on
-> SDM845?
+On Tue, 16 Aug 2022 at 17:34, David Howells <dhowells@redhat.com> wrote:
+>
+> Fix this by adding a new helper, __locked_read_sk_user_data_with_flags()
+> that checks to see if sk->sk_callback_lock() is held and use that here
+> instead.
+Hi, I wonder if we make this more geniric, for I think maybe the future
+code who use __rcu_dereference_sk_user_data_with_flags() may
+also meet this bug.
 
-Thanks for giving it a test.
+To be more specific, maybe we can refactor
+__rcu_dereference_sk_user_data_with_flags() to
+__rcu_dereference_sk_user_data_with_flags_check(), like
+rcu_dereference() and rcu_dereference_check(). Maybe:
 
-Actually, you need to probe the qcom_stats after the remoteprocs have
-booted.
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 05a1bbdf5805..cf123954eab9 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -578,18 +578,27 @@ static inline bool sk_user_data_is_nocopy(const struct sock *sk)
+ #define __sk_user_data(sk) ((*((void __rcu **)&(sk)->sk_user_data)))
+ 
+ /**
+- * __rcu_dereference_sk_user_data_with_flags - return the pointer
+- * only if argument flags all has been set in sk_user_data. Otherwise
+- * return NULL
++ * __rcu_dereference_sk_user_data_with_flags_check - return the pointer
++ * only if argument flags all has been set in sk_user_data, with debug
++ * checking. Otherwise return NULL
+  *
+- * @sk: socket
+- * @flags: flag bits
++ * Do __rcu_dereference_sk_user_data_with_flags(), but check that the
++ * conditions under which the rcu dereference will take place are correct,
++ * which is a bit like rcu_dereference_check() and rcu_derefence().
++ *
++ * @sk		: socket
++ * @flags	: flag bits
++ * @condition	: the conditions under which the rcu dereference will
++ * take place
+  */
+ static inline void *
+-__rcu_dereference_sk_user_data_with_flags(const struct sock *sk,
+-					  uintptr_t flags)
++__rcu_dereference_sk_user_data_with_flags_check(const struct sock *sk,
++						uintptr_t flags, bool condition)
+ {
+-	uintptr_t sk_user_data = (uintptr_t)rcu_dereference(__sk_user_data(sk));
++	uintptr_t sk_user_data;
++
++	sk_user_data = (uintptr_t)rcu_dereference_check(__sk_user_data(sk),
++							condition);
+ 
+ 	WARN_ON_ONCE(flags & SK_USER_DATA_PTRMASK);
+ 
+@@ -598,6 +607,8 @@ __rcu_dereference_sk_user_data_with_flags(const struct sock *sk,
+ 	return NULL;
+ }
+ 
++#define __rcu_dereference_sk_user_data_with_flags(sk, flags) \
++	__rcu_dereference_sk_user_data_with_flags_check(sk, flags, 0)
+ #define rcu_dereference_sk_user_data(sk)				\
+ 	__rcu_dereference_sk_user_data_with_flags(sk, 0)
+ #define __rcu_assign_sk_user_data_with_flags(sk, ptr, flags)		\
 
-Doing so, you'll end up having the following:
-adsp  aosd  cdsp  cxsd
+> +/**
+> + * __locked_read_sk_user_data_with_flags - return the pointer
+> + * only if argument flags all has been set in sk_user_data. Otherwise
+> + * return NULL
+> + *
+> +               (uintptr_t)rcu_dereference_check(__sk_user_data(sk),
+> +                                                lockdep_is_held(&sk->sk_callback_lock));
 
-> > 
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > ---
-> > 
-> > Changed qcom,rpmh-stats-sdm845 to qcom,sdm845-rpmh-stats, as suggested
-> > by Krzysztof.
-> > 
-> >   arch/arm64/boot/dts/qcom/sdm845.dtsi | 5 +++++
-> >   1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > index 5bea96a9ce06..67fe08b837be 100644
-> > --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > @@ -4851,6 +4851,11 @@ ebi_cdev: ebi {
-> >   			};
-> >   		};
-> > 
-> > +		sram@c3f0000 {
-> > +			compatible = "qcom,sdm845-rpmh-stats";
-> > +			reg = <0 0x0c3f0000 0 0x400>;
-> > +		};
-> > +
-> >   		spmi_bus: spmi@c440000 {
-> >   			compatible = "qcom,spmi-pmic-arb";
-> >   			reg = <0 0x0c440000 0 0x1100>,
-> > --
-> > 2.34.1
-> > 
+> diff --git a/kernel/bpf/reuseport_array.c b/kernel/bpf/reuseport_array.c
+> index 85fa9dbfa8bf..82c61612f382 100644
+> --- a/kernel/bpf/reuseport_array.c
+> +++ b/kernel/bpf/reuseport_array.c
+> @@ -24,7 +24,7 @@ void bpf_sk_reuseport_detach(struct sock *sk)
+>         struct sock __rcu **socks;
 > 
-> -- 
-> Kind Regards,
-> Caleb (they/he)
+>         write_lock_bh(&sk->sk_callback_lock);
+> -       socks = __rcu_dereference_sk_user_data_with_flags(sk, SK_USER_DATA_BPF);
+> +       socks = __locked_read_sk_user_data_with_flags(sk, SK_USER_DATA_BPF);
+>         if (socks) {
+>                 WRITE_ONCE(sk->sk_user_data, NULL);
+>                 /*
+Then, as you point out, we can pass
+condition(lockdep_is_held(&sk->sk_callback_lock)) to
+__rcu_dereference_sk_user_data_with_flags_check() in order to
+make compiler happy as below:
+
+diff --git a/kernel/bpf/reuseport_array.c b/kernel/bpf/reuseport_array.c
+index 85fa9dbfa8bf..a772610987c5 100644
+--- a/kernel/bpf/reuseport_array.c
++++ b/kernel/bpf/reuseport_array.c
+@@ -24,7 +24,10 @@ void bpf_sk_reuseport_detach(struct sock *sk)
+ 	struct sock __rcu **socks;
+ 
+ 	write_lock_bh(&sk->sk_callback_lock);
+-	socks = __rcu_dereference_sk_user_data_with_flags(sk, SK_USER_DATA_BPF);
++	socks = __rcu_dereference_sk_user_data_with_flags_check(
++			sk, SK_USER_DATA_BPF,
++			lockdep_is_held(&sk->sk_callback_lock));
++
+ 	if (socks) {
+ 		WRITE_ONCE(sk->sk_user_data, NULL);
+ 		/*

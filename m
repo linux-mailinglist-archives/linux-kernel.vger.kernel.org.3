@@ -2,184 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6F8596571
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B085B596577
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237985AbiHPWXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 18:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51620 "EHLO
+        id S238000AbiHPW0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 18:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237974AbiHPWXI (ORCPT
+        with ESMTP id S237995AbiHPW0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 18:23:08 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45451282
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 15:23:06 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id 130so10520473pfv.13
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 15:23:06 -0700 (PDT)
+        Tue, 16 Aug 2022 18:26:45 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF68C90814;
+        Tue, 16 Aug 2022 15:26:44 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id p132so13620763oif.9;
+        Tue, 16 Aug 2022 15:26:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=+TNnx1dvmda/Lv7ys0WsGi7Qw8HijA+5loROtGlHDMQ=;
-        b=LQ1EVAcV5dNOwoU/W9/2lHc048oEom0zyeEB5KHkA+qwNr+/I4LkjK+TLTeNJak9zH
-         u5lBg5s9ADmflAAE/AUqYG0c2CpRwnNquEv33BPHHMNohvPzzs6yh6soip5xpKZWEGs1
-         O4CIkxGzEq/EQpcuVtgo1ar3zyv2x3Jg5i6fypRCUJBmxSkIq1SKf7GHWN2Lkmj1SKho
-         9nu57cfn7o6wwrcOuEWOCtQzQhmeV53CS3eH6kjpiktfpBCEjEy8EPivvpikwJx/r7MD
-         1OLwRYSOlD8m20USk21OHThe0zRLVegrMrlWAvSdisk5yEQOEathlxHbIw4FbkJuvcp4
-         W3UA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=CwyJ6GUKaEkPsKlT4efasHrB0kt/DM6/7ER1yUHSsiI=;
+        b=TTcyewG+T9Wi//ubAMpljSmvJgj/c00kw7sJ/Kz4AFxKfugrcGs1LIeL90hyTdh1/n
+         zHFkv/zpUhY3FQUnO5IMBL8HA1jZq8GWaPDFyzyz+7Swk2wSX6v4P3U4mPo8MIDLloR2
+         1BN04uO+3dfls7pqh7hM+l4pdy3ICm8ZQ7g2rmaWYCIeozqeg+vv3dlO+GgKHgScHb0i
+         tnBVA9JaPEONcXJ3apTmHyTVaS1x1mCQsY6Yr11yFD/h642ov7rQupKurNm6E9Io0Opg
+         1uHBvveRiRvFfko/J6Vwad5fNsvuUGLuB65p5TgZEqXiLtJTZYZTd+eOgzP5eWeaZ+yU
+         pohQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=+TNnx1dvmda/Lv7ys0WsGi7Qw8HijA+5loROtGlHDMQ=;
-        b=eUsloCjaCKUOjzaaURV7WhO1Z5UBqGHGk5trHkyFeqCKXdJNZPd3FasRpu959UINzm
-         eprRsqlbM/4t6nw0bQVhRPvmcRSzX5/HQnp/IBQo89FIt/oZ5TDWUVCbAdSCcKH8FifR
-         bLUt1Pn9lbtrejRuIqjUrymQ69E1Hhn6y1MzUIkQq8fqD2WuWbLlBClThSfc2QlybRhk
-         k0TFCKaSekspNOIZCEIAM5J09cbqyC7uNKtz0yLhiun/+AYR8rL5kOeHNqrFoe4PgNn9
-         wLtED7HsoMAEY8kUwanr/Mw1XP7X33h22cqqQ9JVt3Ll9jgbGmywrMY9UsQfMLCcDb23
-         SHRw==
-X-Gm-Message-State: ACgBeo3A6NIzbSCwqTXwB/7I8l0sBwE1Pnon3g1hFmlSwSmknPC/iiue
-        Gq0pY/rBGRC+EdvjZuzsuEk4sA==
-X-Google-Smtp-Source: AA6agR75Oq14Fdh+tX2fxCj/DPx+VQc5mfO76YBWcRAtPB/vfTWm4VKe0ZIorrzX4EsFqy1Q0/6L1A==
-X-Received: by 2002:a63:9042:0:b0:41c:cdd4:ae66 with SMTP id a63-20020a639042000000b0041ccdd4ae66mr19087027pge.47.1660688585597;
-        Tue, 16 Aug 2022 15:23:05 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id nh14-20020a17090b364e00b001fa867105a3sm62942pjb.4.2022.08.16.15.23.04
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=CwyJ6GUKaEkPsKlT4efasHrB0kt/DM6/7ER1yUHSsiI=;
+        b=IBJBVrxHExKPTkBP1vfVEc9k2XHZsrGzGvdepV4oHFOXR9LJtNynjnOJpGFsN+amzV
+         77QThY/Xb4VjwFHqtsKiMx52wCm7vJsbuBgyF0MC3JPHRHDEDLHLdkSHx/uGL0L19gXv
+         NQ8HGj93q8QNaW1uwr7x4KDdbBL71h2RRhRPyqOexSPRSHrdXCGnegIQ1vSrpAlE5IAX
+         Sf4qfnePsDcmFVAtBlkNryxyKScXiktRbSl2G5tS0y+dYspQJf9k5bVAc8YxvIUX+H/4
+         ZvC2yGT+GPMYQNo8fmYh0zgXOwIJqs/slxMn9G52QjgzWA8CVQwrp4/4qHxLyXLJEijZ
+         KoiQ==
+X-Gm-Message-State: ACgBeo1PruwhFsJQepedVPKudz1Md24PdkE/gO4LbU8Q+Yc62sB5/kF5
+        /rcP3A06KtE6r3QFZaBmV3A=
+X-Google-Smtp-Source: AA6agR682aZxFQBk2EsMway+bI4HV3bR1eTLOKhCLig8pI3hw4sPKolUMPk/EOostjJB3af3CHgBCg==
+X-Received: by 2002:a05:6808:1596:b0:344:9136:8b1d with SMTP id t22-20020a056808159600b0034491368b1dmr297704oiw.250.1660688803750;
+        Tue, 16 Aug 2022 15:26:43 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id u12-20020a4aa34c000000b00432ac97ad09sm2622224ool.26.2022.08.16.15.26.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 15:23:05 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 22:23:01 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Andrew Jones <andrew.jones@linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        lkp@lists.01.org, lkp@intel.com, xudong.hao@intel.com,
-        regressions@lists.linux.dev
-Subject: Re: [KVM] e923b0537d: kernel-selftests.kvm.rseq_test.fail
-Message-ID: <YvwYxeE4vc/Srbil@google.com>
-References: <Yvn60W/JpPO8URLY@xsang-OptiPlex-9020>
- <Yvq9wzXNF4ZnlCdk@google.com>
- <5034abb9-e176-d480-c577-1ec5dd47182b@redhat.com>
- <9bfeae26-b4b1-eedb-6cbd-b4f9f1e1cc55@redhat.com>
+        Tue, 16 Aug 2022 15:26:43 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 15:24:31 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Gal Pressman <gal@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>
+Subject: Re: [PATCH 2/5] cpumask: Introduce for_each_cpu_andnot()
+Message-ID: <YvwZH/q5rvT6JD5S@yury-laptop>
+References: <20220816180727.387807-1-vschneid@redhat.com>
+ <20220816180727.387807-3-vschneid@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9bfeae26-b4b1-eedb-6cbd-b4f9f1e1cc55@redhat.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220816180727.387807-3-vschneid@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022, Gavin Shan wrote:
-> Hi Sean,
+On Tue, Aug 16, 2022 at 07:07:24PM +0100, Valentin Schneider wrote:
+> for_each_cpu_and() is very convenient as it saves having to allocate a
+> temporary cpumask to store the result of cpumask_and(). The same issue
+> applies to cpumask_andnot() which doesn't actually need temporary storage
+> for iteration purposes.
 > 
-> On 8/16/22 3:02 PM, Gavin Shan wrote:
-> > On 8/16/22 7:42 AM, Sean Christopherson wrote:
-> > > On Mon, Aug 15, 2022, kernel test robot wrote:
-> > > > commit: e923b0537d28e15c9d31ce8b38f810b325816903 ("KVM: selftests: Fix target thread to be migrated in rseq_test")
-> > > > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-> > > 
-> > > ...
-> > > 
-> > > > # selftests: kvm: rseq_test
-> > > > # ==== Test Assertion Failure ====
-> > > > #   rseq_test.c:278: i > (NR_TASK_MIGRATIONS / 2)
-> > > > #   pid=49599 tid=49599 errno=4 - Interrupted system call
-> > > > #      1    0x000000000040265d: main at rseq_test.c:278
-> > > > #      2    0x00007fe44eed07fc: ?? ??:0
-> > > > #      3    0x00000000004026d9: _start at ??:?
-> > > > #   Only performed 23174 KVM_RUNs, task stalled too much?
-> > > > #
-> > > > not ok 56 selftests: kvm: rseq_test # exit=254
-> > > 
-> > > ...
-> > > 
-> > > > # Automatically generated file; DO NOT EDIT.
-> > > > # Linux/x86_64 5.19.0-rc6 Kernel Configuration
-> > > > #
-> > > > CONFIG_CC_VERSION_TEXT="gcc-11 (Debian 11.3.0-3) 11.3.0"
-> > > > CONFIG_CC_IS_GCC=y
-> > > > CONFIG_GCC_VERSION=110300
-> > > > CONFIG_CLANG_VERSION=0
-> > > > CONFIG_AS_IS_GNU=y
-> > > > CONFIG_AS_VERSION=23800
-> > > > CONFIG_LD_IS_BFD=y
-> > > > CONFIG_LD_VERSION=23800
-> > > > CONFIG_LLD_VERSION=0
-> > > 
-> > > Assuming 23800 == 2.38, this is a known issue.
-> > > 
-> > > https://lore.kernel.org/all/20220810104114.6838-1-gshan@redhat.com
-> > > 
-> > 
-> > It's probably different story this time.
-
-Doh, if I had bothered to actually look at the error message...
-
-> > The assert is triggered because of the following instructions. I would
-> > guess the reason is vcpu thread has been running on CPU where we has high
-> > CPU load. In this case, the vcpu thread can't be run in time. More
-> > specific, the vcpu thread can't be run in the 1 - 10us time window, which
-> > is specified by the migration worker (thread).
-> > 
-> >      TEST_ASSERT(i > (NR_TASK_MIGRATIONS / 2),
-> >                  "Only performed %d KVM_RUNs, task stalled too much?\n", i);
-> > 
-> > I think we need to improve the handshake mechanism between the vcpu thread
-> > and migration worker. In current implementation, the handshake is done through
-> > the atomic counter. The mechanism is simple enough, but vcpu thread can miss
-> > the aforementioned time window. Another issue is the test case much more time
-> > than expected to finish.
-
-There's not really an expected time to finish.  The original purpose of the test
-is to trigger a kernel race condition, so it's a balance between letting the test
-run long enough to have some confidence that the kernel is bug free, and not running
-so long that it wastes time.
-
-> > Sean, if you think it's reasonable, I can figure out something to do:
-> > 
-> > - Reuse the atomic counter for a full synchronization between these two
-> >    threads. Something like below:
-> > 
-> >    #define RSEQ_TEST_STATE_RUN_VCPU       0     // vcpu_run()
-> >    #define RSEQ_TEST_STATE_MIGRATE        1     // sched_setaffinity()
-> >    #define RSEQ_TEST_STATE_CHECK          2     // Check rseq.cpu_id and get_cpu()
-> > 
-> >    The atomic counter is reset to RSEQ_TEST_STATE_RUN_VCPU after RSEQ_TEST_STATE_RUN_VCPU
-
-Again, because one of the primary goals is to ensure the kernel is race free, the
-test should avoid full synchronization.
-
-> > 
-> > - Reduce NR_TASK_MIGRATIONS from 100000 to num_of_online_cpus(). With this,
-> >    less time is needed to finish the test case.
-> > 
+> Following what has been done for for_each_cpu_and(), introduce
+> for_each_cpu_andnot().
 > 
-> I'm able to recreate the issue on my local arm64 system.
+> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+> ---
+>  include/linux/cpumask.h | 32 ++++++++++++++++++++++++++++++++
+>  lib/cpumask.c           | 19 +++++++++++++++++++
+>  2 files changed, 51 insertions(+)
 > 
-> - From the source code, the iteration count is changed from 100000 to 1000
-> - Only CPU#0 and CPU#1 are exposed in calc_min_max_cpu, meaning other CPUs
->   are cleared from @possible_mask
-> - Run some CPU bound task on CPU#0 and CPU#1
->   # while true; do taskset -c 0 ./a; done
->   # while true; do taskset -c 1 ./a; done
-> - Run 'rseq_test' and hit the issue
+> diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+> index fe29ac7cc469..a8b2ca160e57 100644
+> --- a/include/linux/cpumask.h
+> +++ b/include/linux/cpumask.h
+> @@ -157,6 +157,13 @@ static inline unsigned int cpumask_next_and(int n,
+>  	return n+1;
+>  }
+>  
+> +static inline unsigned int cpumask_next_andnot(int n,
+> +					    const struct cpumask *srcp,
+> +					    const struct cpumask *andp)
+> +{
+> +	return n+1;
+> +}
+> +
 
-At this point, this isn't a test bug.  The test is right to complain that it didn't
-provide the coverage it's supposed to provide.
+It looks like the patch is not based on top of 6.0, where UP cpumask
+operations were fixed.  Can you please rebase?
 
-If the bot failure is a one-off, my preference is to leave things as-is for now.
-If the failure is an ongoing issue, then we probably need to understand why the
-bot is failing.
+Thanks,
+Yury
+
+>  static inline unsigned int cpumask_next_wrap(int n, const struct cpumask *mask,
+>  					     int start, bool wrap)
+>  {
+> @@ -194,6 +201,8 @@ static inline int cpumask_any_distribute(const struct cpumask *srcp)
+>  	for ((cpu) = 0; (cpu) < 1; (cpu)++, (void)mask, (void)(start))
+>  #define for_each_cpu_and(cpu, mask1, mask2)	\
+>  	for ((cpu) = 0; (cpu) < 1; (cpu)++, (void)mask1, (void)mask2)
+> +#define for_each_cpu_andnot(cpu, mask1, mask2)	\
+> +	for ((cpu) = 0; (cpu) < 1; (cpu)++, (void)mask1, (void)mask2)
+>  #else
+>  /**
+>   * cpumask_first - get the first cpu in a cpumask
+> @@ -259,6 +268,9 @@ static inline unsigned int cpumask_next_zero(int n, const struct cpumask *srcp)
+>  }
+>  
+>  int __pure cpumask_next_and(int n, const struct cpumask *, const struct cpumask *);
+> +int __pure cpumask_next_andnot(int n,
+> +			       const struct cpumask *src1p,
+> +			       const struct cpumask *src2p);
+>  int __pure cpumask_any_but(const struct cpumask *mask, unsigned int cpu);
+>  unsigned int cpumask_local_spread(unsigned int i, int node);
+>  int cpumask_any_and_distribute(const struct cpumask *src1p,
+> @@ -324,6 +336,26 @@ extern int cpumask_next_wrap(int n, const struct cpumask *mask, int start, bool
+>  	for ((cpu) = -1;						\
+>  		(cpu) = cpumask_next_and((cpu), (mask1), (mask2)),	\
+>  		(cpu) < nr_cpu_ids;)
+> +
+> +/**
+> + * for_each_cpu_andnot - iterate over every cpu in one mask but not in another
+> + * @cpu: the (optionally unsigned) integer iterator
+> + * @mask1: the first cpumask pointer
+> + * @mask2: the second cpumask pointer
+> + *
+> + * This saves a temporary CPU mask in many places.  It is equivalent to:
+> + *	struct cpumask tmp;
+> + *	cpumask_andnot(&tmp, &mask1, &mask2);
+> + *	for_each_cpu(cpu, &tmp)
+> + *		...
+> + *
+> + * After the loop, cpu is >= nr_cpu_ids.
+> + */
+> +#define for_each_cpu_andnot(cpu, mask1, mask2)				\
+> +	for ((cpu) = -1;						\
+> +		(cpu) = cpumask_next_andnot((cpu), (mask1), (mask2)),	\
+> +		(cpu) < nr_cpu_ids;)
+> +
+>  #endif /* SMP */
+>  
+>  #define CPU_BITS_NONE						\
+> diff --git a/lib/cpumask.c b/lib/cpumask.c
+> index a971a82d2f43..6896ff4a08fd 100644
+> --- a/lib/cpumask.c
+> +++ b/lib/cpumask.c
+> @@ -42,6 +42,25 @@ int cpumask_next_and(int n, const struct cpumask *src1p,
+>  }
+>  EXPORT_SYMBOL(cpumask_next_and);
+>  
+> +/**
+> + * cpumask_next_andnot - get the next cpu in *src1p & ~*src2p
+> + * @n: the cpu prior to the place to search (ie. return will be > @n)
+> + * @src1p: the first cpumask pointer
+> + * @src2p: the second cpumask pointer
+> + *
+> + * Returns >= nr_cpu_ids if no further cpus set in *src1p & ~*src2p.
+> + */
+> +int cpumask_next_andnot(int n, const struct cpumask *src1p,
+> +		     const struct cpumask *src2p)
+> +{
+> +	/* -1 is a legal arg here. */
+> +	if (n != -1)
+> +		cpumask_check(n);
+> +	return find_next_andnot_bit(cpumask_bits(src1p), cpumask_bits(src2p),
+> +		nr_cpumask_bits, n + 1);
+> +}
+> +EXPORT_SYMBOL(cpumask_next_andnot);
+> +
+>  /**
+>   * cpumask_any_but - return a "random" in a cpumask, but not this one.
+>   * @mask: the cpumask to search
+> -- 
+> 2.31.1

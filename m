@@ -2,73 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798CA596148
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:39:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C83B596147
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbiHPRip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 13:38:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59822 "EHLO
+        id S236756AbiHPRi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 13:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236759AbiHPRih (ORCPT
+        with ESMTP id S229988AbiHPRiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 13:38:37 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C791C3718C;
-        Tue, 16 Aug 2022 10:38:33 -0700 (PDT)
-X-QQ-mid: bizesmtp86t1660671497tp0hmleu
-Received: from harry-jrlc.. ( [182.148.12.144])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 17 Aug 2022 01:38:05 +0800 (CST)
-X-QQ-SSF: 0100000000200060D000B00A0000020
-X-QQ-FEAT: r/cTxDoDoiHFKS4LFalCA3jzslwrLAnPDYJotktburOuxpIbzU2Nz4ejWIojG
-        YfYQG6qV5Nr5Mln0E1HFO3Mbhv2SRzh54hosARBoMD29aUBa8fMZ/5SNk3JF/HWY5/36hMG
-        bIxSI/yvWVWkc9w//De82CmXkDoKOfnVx+6UOLdhvV1GJF8KsBXNLAMQF+r9CmrgT7PfoMw
-        BavNCMEwba7wUTZjkY3hjm67SuR4eK0jUcFUw3no+Q73XnMwDRSymEEXEsuro2IFJpdS9/V
-        LsgMz9gjns9mJ++JTvjX8iEh7C3n9FsJW1CHkLoiM+dgdexcr9uomgpsL0z75pkkARIQxMq
-        rR8glep3N/qYRcLn4UoxCefKmbhJGi4pmvYyZVKAtZ++jR4j8A=
-X-QQ-GoodBg: 0
-From:   Xin Gao <gaoxin@cdjrlc.com>
-To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org
-Cc:     namhyung@kernel.org, irogers@google.com, john.garry@huawei.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xin Gao <gaoxin@cdjrlc.com>
-Subject: [PATCH] perf metrics: Variable type completion
-Date:   Wed, 17 Aug 2022 01:38:04 +0800
-Message-Id: <20220816173804.7539-1-gaoxin@cdjrlc.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 16 Aug 2022 13:38:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCEE4623E
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 10:38:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660671502;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gdnOT0e5CEKzDOC4PBc+9OuYz+K252RaUVT9XjoI0RA=;
+        b=ZL2rfhb1+i5ocVlGl8J/VvZQiZTqd5krrx0h9uoqYBGiLl3tGKe8+wrsnIr6ovHG0uJbAU
+        bDAGxEaWNdqUMutTaSTHIHk9ML62rC2XkWmyjnbcI5feJhJ96VBP5G1vd/fZLUI54TR5DG
+        kdCcoR0K10dg+1GPkl3EV2VPkv59IHY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-584-ZQwKywmoMzKnBC7iwCiyhQ-1; Tue, 16 Aug 2022 13:38:19 -0400
+X-MC-Unique: ZQwKywmoMzKnBC7iwCiyhQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0A9C92999B31;
+        Tue, 16 Aug 2022 17:38:19 +0000 (UTC)
+Received: from [10.22.10.201] (unknown [10.22.10.201])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D961B945D9;
+        Tue, 16 Aug 2022 17:38:17 +0000 (UTC)
+Message-ID: <349849aa-937d-8b08-a836-7c5c70168139@redhat.com>
+Date:   Tue, 16 Aug 2022 13:38:17 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 3/3] cgroup/cpuset: Keep user set cpus affinity
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Will Deacon <will@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20220816151119.29534-1-longman@redhat.com>
+ <20220816151119.29534-4-longman@redhat.com>
+ <YvvR2Sa6LxZLwXsJ@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YvvR2Sa6LxZLwXsJ@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'unsigned int' is better than 'unsigned'.
+On 8/16/22 13:20, Tejun Heo wrote:
+> Hello,
+>
+> So, overall I think this is the right direction.
+>
+>> +static int cpuset_set_cpus_allowed_ptr(struct task_struct *p,
+>> +				       const struct cpumask *mask)
+>> +{
+>> +	if (p->user_cpus_ptr) {
+>> +		cpumask_var_t new_mask;
+>> +
+>> +		if (alloc_cpumask_var(&new_mask, GFP_KERNEL) &&
+>> +		    copy_user_cpus_mask(p, new_mask) &&
+>> +		    cpumask_and(new_mask, new_mask, mask)) {
+>> +			int ret = set_cpus_allowed_ptr(p, new_mask);
+>> +
+>> +			free_cpumask_var(new_mask);
+>> +			return ret;
+>> +		}
+>> +		free_cpumask_var(new_mask);
+>> +	}
+>> +
+>> +	return set_cpus_allowed_ptr(p, mask);
+>> +}
+> But this seems racy to me. Let's say attach and setaffinity race. The
+> expectation should be that we'd end up with the same eventual mask no matter
+> what the operation order may be. The above code wouldn't do that, right?
+> There's nothing synchronizing the two and if setaffinity takes place between
+> the user_cpus_ptr test and set_cpus_allowed_ptr(), it'd get ignored.
 
-Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
----
- tools/perf/util/metricgroup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yes, a race like this is possible. To completely eliminate the race may 
+require taking task_rq_lock() and then calling 
+__set_cpus_allowed_ptr_locked() which is internal to kernel/sched/core.c.
 
-diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-index ee8fcfa115e5..8926de9617ef 100644
---- a/tools/perf/util/metricgroup.c
-+++ b/tools/perf/util/metricgroup.c
-@@ -1620,7 +1620,7 @@ int metricgroup__copy_metric_events(struct evlist *evlist, struct cgroup *cgrp,
- 				    struct rblist *new_metric_events,
- 				    struct rblist *old_metric_events)
- {
--	unsigned i;
-+	unsigned int i;
- 
- 	for (i = 0; i < rblist__nr_entries(old_metric_events); i++) {
- 		struct rb_node *nd;
--- 
-2.30.2
+Alternatively, we can check user_cpus_ptr again after the scond 
+set_cpus_allowed_ptr() and retry it with the other path if set. That 
+will probably address your concern. Please let me know if you are OK 
+with that.
+
+Cheers,
+Longman
+
+>
+> This gotta be more integrated. There is what the user requested and there
+> are restrictions from CPU hotplug state and cpuset. All three should be
+> synchronized so that there is one synchronzied way to obtain and apply the
+> current effective mask.
+>
+> Thanks.
+>
 

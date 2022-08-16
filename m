@@ -2,156 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB3765965CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 01:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 797245965B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237870AbiHPXBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 19:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
+        id S237717AbiHPWz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 18:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237804AbiHPXBN (ORCPT
+        with ESMTP id S237506AbiHPWzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 19:01:13 -0400
-Received: from mellanox.co.il (mail-il-dmz.mellanox.com [193.47.165.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E5307E03E
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 16:01:10 -0700 (PDT)
-Received: from Internal Mail-Server by MTLPINE1 (envelope-from asmaa@mellanox.com)
-        with SMTP; 17 Aug 2022 01:54:27 +0300
-Received: from bu-vnc02.mtbu.labs.mlnx (bu-vnc02.mtbu.labs.mlnx [10.15.2.65])
-        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id 27GMsQsM022551;
-        Tue, 16 Aug 2022 18:54:26 -0400
-Received: (from asmaa@localhost)
-        by bu-vnc02.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id 27GMsQbN009263;
-        Tue, 16 Aug 2022 18:54:26 -0400
-From:   Asmaa Mnebhi <asmaa@nvidia.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Asmaa Mnebhi <asmaa@nvidia.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>
-Subject: [PATCH v1 7/7] i2c-mlxbf.c: support lock mechanism
-Date:   Tue, 16 Aug 2022 18:54:12 -0400
-Message-Id: <20220816225412.9095-8-asmaa@nvidia.com>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20220816225412.9095-1-asmaa@nvidia.com>
-References: <20220816225412.9095-1-asmaa@nvidia.com>
+        Tue, 16 Aug 2022 18:55:52 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48CB647EC;
+        Tue, 16 Aug 2022 15:55:51 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a7so21644107ejp.2;
+        Tue, 16 Aug 2022 15:55:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=xaLBKYz/NspcrKgbukvBxgHlffMD/LglZ9aKHRnhLQ8=;
+        b=hWqOro8AZlpQdEaXISXR45I2wiGhkQk2hp6z1USBnkJYFD6ba/1WM//2yKnkXUsnrF
+         7ef3/f59Rr7TgfYKxTHe/vksIFsGaLc7L91YmsvdeS7tnOMEj9HbPsx7zRcRbJ8s+lPy
+         YffV6mqVGMcmuACVanSF2WnOnslVjhINaAS/IYQ0P0gcgAJXP2i79KSDgvXicuTmTEfy
+         wLMXAY6tBc3JNFbNOynEHBM7TS1YnurXEOdsZ0KRiBsjnjCSJJ+jKhCZ+AV6YDR+hvAL
+         yTLwwngmWD0l6bxyJCVL3QS/GPCx/d+OhVSDcjWZ5dkjGdF68h1mZRK7OEU+IA+nyVP9
+         a13w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=xaLBKYz/NspcrKgbukvBxgHlffMD/LglZ9aKHRnhLQ8=;
+        b=oQAkZ6Bx8fzBedFyxYYPaNIAMRkIxiLxDgSBc3kuz+vpMZA3Rt0gBqS0YSE89/Hl0Y
+         AIg3BFJ/A5hJyiVAfgBNVaDUT6g0Sm7F6LTra0R7+fXEFzl6HK7aR1oL8EpJkAC0Qy0U
+         XHVaIMls0BCJYQqwJaleKO203cEqX62pII92H+9pCghHFyD9s7DldY3MN1Oc0/vc+2SZ
+         wlKQ2pbwBd8/eXdnKo/jnNWoTlU1ScFHMJw1HMkyDZJ08Zqunlo8c7/QDPgiRC7B+D2l
+         on0rk3Arc8Kb2jabGRBCb7g5tx/frdxhT/+rZIEQkOXfj1lPpPmmdVG7Nx8FClX1DqQj
+         42bA==
+X-Gm-Message-State: ACgBeo3fYyjMmYItOa1BpKF+QFbnP4uksQ75SlqxjiLovfi6SiC3YRqi
+        hbg3GBGSzghj/N+NZfsTPt70RgyxwfThIcncyVyxAI8Y
+X-Google-Smtp-Source: AA6agR5heqRzrlUztQskbhhE0ThFAjz6hXfg3a4sCRN4LkCKa0L1Zv25uwz68ovMeAWJGquZIv0BM71PQaeJTwLpt9w=
+X-Received: by 2002:a17:907:1361:b0:730:8f59:6434 with SMTP id
+ yo1-20020a170907136100b007308f596434mr15116251ejb.745.1660690550251; Tue, 16
+ Aug 2022 15:55:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220816214945.742924-1-haoluo@google.com> <CAEf4Bza1SMFvzofz4RkBF=pByFHp+Z1v16Z+TMAQZ6rD2m9Lxg@mail.gmail.com>
+ <CA+khW7hHGL1DAMSOjbJSj21wJYY=j4VrRJcFB1zv52Db20_MGA@mail.gmail.com>
+In-Reply-To: <CA+khW7hHGL1DAMSOjbJSj21wJYY=j4VrRJcFB1zv52Db20_MGA@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 16 Aug 2022 15:55:38 -0700
+Message-ID: <CAEf4BzbBOrVU+BWySMk_v3w6019+5VpNXZY03JpmiwoQPnV1yA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] libbpf: allow disabling auto attach
+To:     Hao Luo <haoluo@google.com>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linux is not the only entity using the BlueField I2C busses so
-support a lock mechanism provided by hardware to avoid issues
-when multiple entities are trying to access the same bus.
+On Tue, Aug 16, 2022 at 3:16 PM Hao Luo <haoluo@google.com> wrote:
+>
+> On Tue, Aug 16, 2022 at 3:01 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Tue, Aug 16, 2022 at 2:49 PM Hao Luo <haoluo@google.com> wrote:
+> > >
+> > > Add libbpf APIs for disabling auto-attach for individual functions.
+> > > This is motivated by the use case of cgroup iter [1]. Some iter
+> > > types require their parameters to be non-zero, therefore applying
+> > > auto-attach on them will fail. With these two new APIs, Users who
+> > > want to use auto-attach and these types of iters can disable
+> > > auto-attach for them and perform manual attach.
+> > >
+> > > [1] https://lore.kernel.org/bpf/CAEf4BzZ+a2uDo_t6kGBziqdz--m2gh2_EUwkGLDtMd65uwxUjA@mail.gmail.com/
+> > >
+> > > Signed-off-by: Hao Luo <haoluo@google.com>
+> > > ---
+> > >  tools/lib/bpf/libbpf.c | 16 ++++++++++++++++
+> > >  tools/lib/bpf/libbpf.h |  2 ++
+> > >  2 files changed, 18 insertions(+)
+> > >
+> > > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > > index aa05a99b913d..25f654d25b46 100644
+> > > --- a/tools/lib/bpf/libbpf.c
+> > > +++ b/tools/lib/bpf/libbpf.c
+> [...]
+> > >  const struct bpf_insn *bpf_program__insns(const struct bpf_program *prog)
+> > >  {
+> > >         return prog->insns;
+> > > @@ -12349,6 +12362,9 @@ int bpf_object__attach_skeleton(struct bpf_object_skeleton *s)
+> > >                 if (!prog->autoload)
+> > >                         continue;
+> > >
+> > > +               if (!prog->autoattach)
+> > > +                       continue;
+> > > +
+> >
+> > nit: I'd combine as if (!prog->autoload || !prog->autoattach), they
+> > are very coupled in this sense
+> >
+>
+> Sure.
+>
+> > >                 /* auto-attaching not supported for this program */
+> > >                 if (!prog->sec_def || !prog->sec_def->prog_attach_fn)
+> > >                         continue;
+> > > diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> > > index 61493c4cddac..88a1ac34b12a 100644
+> > > --- a/tools/lib/bpf/libbpf.h
+> > > +++ b/tools/lib/bpf/libbpf.h
+> > > @@ -260,6 +260,8 @@ LIBBPF_API const char *bpf_program__name(const struct bpf_program *prog);
+> > >  LIBBPF_API const char *bpf_program__section_name(const struct bpf_program *prog);
+> > >  LIBBPF_API bool bpf_program__autoload(const struct bpf_program *prog);
+> > >  LIBBPF_API int bpf_program__set_autoload(struct bpf_program *prog, bool autoload);
+> > > +LIBBPF_API bool bpf_program__autoattach(const struct bpf_program *prog);
+> > > +LIBBPF_API void bpf_program__set_autoattach(struct bpf_program *prog, bool autoattach);
+> >
+> > please add these APIs to libbpf.map as well
+> >
+>
+> Ok. Which section? LIBBPF_1.0.0? Do the items in each section have a
+> particular order?
 
-The lock is acquired whenever written explicitely or the lock register
-is read. So make sure it is always released at the end of a
-successful or failed transaction.
+Yes, 1.0.0 section. All the functions are sorted alphabetically.
 
-Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
-Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
----
- drivers/i2c/busses/i2c-mlxbf.c | 42 ++++++++++++++++++++++++++++++----
- 1 file changed, 38 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-mlxbf.c b/drivers/i2c/busses/i2c-mlxbf.c
-index cc87c2511678..aa0ea41e7bfd 100644
---- a/drivers/i2c/busses/i2c-mlxbf.c
-+++ b/drivers/i2c/busses/i2c-mlxbf.c
-@@ -296,6 +296,7 @@
-  * exact.
-  */
- #define MLXBF_I2C_SMBUS_TIMEOUT   (300 * 1000) /* 300ms */
-+#define MLXBF_I2C_SMBUS_LOCK_POLL_TIMEOUT (300 * 1000) /* 300ms */
- 
- /* Polling frequency in microseconds. */
- #define MLXBF_I2C_POLL_FREQ_IN_USEC        200
-@@ -523,6 +524,25 @@ static bool mlxbf_i2c_smbus_master_wait_for_idle(struct mlxbf_i2c_priv *priv)
- 	return false;
- }
- 
-+/*
-+ * wait for the lock to be released before acquiring it.
-+ */
-+static bool mlxbf_i2c_smbus_master_lock(struct mlxbf_i2c_priv *priv)
-+{
-+	if (mlxbf_i2c_poll(priv->mst->io, MLXBF_I2C_SMBUS_MASTER_GW,
-+			   MLXBF_I2C_MASTER_LOCK_BIT, true,
-+			   MLXBF_I2C_SMBUS_LOCK_POLL_TIMEOUT))
-+		return true;
-+
-+	return false;
-+}
-+
-+static void mlxbf_i2c_smbus_master_unlock(struct mlxbf_i2c_priv *priv)
-+{
-+	/* Clear the gw to clear the lock */
-+	writel(0, priv->mst->io + MLXBF_I2C_SMBUS_MASTER_GW);
-+}
-+
- static bool mlxbf_i2c_smbus_transaction_success(u32 master_status,
- 						u32 cause_status)
- {
-@@ -725,10 +745,18 @@ mlxbf_i2c_smbus_start_transaction(struct mlxbf_i2c_priv *priv,
- 	slave = request->slave & GENMASK(6, 0);
- 	addr = slave << 1;
- 
--	/* First of all, check whether the HW is idle. */
--	if (WARN_ON(!mlxbf_i2c_smbus_master_wait_for_idle(priv)))
-+	/* Try to acquire the smbus gw lock before any reads of the GW register since
-+	 * a read sets the lock.
-+	 */
-+	if (WARN_ON(!mlxbf_i2c_smbus_master_lock(priv)))
- 		return -EBUSY;
- 
-+	/* Check whether the HW is idle */
-+	if (WARN_ON(!mlxbf_i2c_smbus_master_wait_for_idle(priv))) {
-+		mlxbf_i2c_smbus_master_unlock(priv);
-+		return -EBUSY;
-+	}
-+
- 	/* Set first byte. */
- 	data_desc[data_idx++] = addr;
- 
-@@ -752,8 +780,10 @@ mlxbf_i2c_smbus_start_transaction(struct mlxbf_i2c_priv *priv,
- 			write_en = 1;
- 			write_len += operation->length;
- 			if (data_idx + operation->length >
--					MLXBF_I2C_MASTER_DATA_DESC_SIZE)
-+					MLXBF_I2C_MASTER_DATA_DESC_SIZE) {
-+				mlxbf_i2c_smbus_master_unlock(priv);
- 				return -ENOBUFS;
-+			}
- 			memcpy(data_desc + data_idx,
- 			       operation->buffer, operation->length);
- 			data_idx += operation->length;
-@@ -784,8 +814,10 @@ mlxbf_i2c_smbus_start_transaction(struct mlxbf_i2c_priv *priv,
- 	if (write_en) {
- 		ret = mlxbf_i2c_smbus_enable(priv, slave, write_len, block_en,
- 					 pec_en, 0);
--		if (ret)
-+		if (ret) {
-+			mlxbf_i2c_smbus_master_unlock(priv);
- 			return ret;
-+		}
- 	}
- 
- 	if (read_en) {
-@@ -812,6 +844,8 @@ mlxbf_i2c_smbus_start_transaction(struct mlxbf_i2c_priv *priv,
- 			priv->mst->io + priv->chip->smbus_master_fsm_off);
- 	}
- 
-+	mlxbf_i2c_smbus_master_unlock(priv);
-+
- 	return ret;
- }
- 
--- 
-2.30.1
-
+> > it would be also nice to have a simple test validating that skeleton's
+> > auto-attach doesn't attach program (no link will be created) if
+> > bpf_program__set_autoattach(false) is called before. Can you please
+> > add that as well?
+> >
+>
+> Ok. Will add a test and send v2.
+>
+> > >
+> > >  struct bpf_insn;
+> > >
+> > > --
+> > > 2.37.1.595.g718a3a8f04-goog
+> > >

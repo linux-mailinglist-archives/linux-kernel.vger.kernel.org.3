@@ -2,117 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B8A759661E
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 01:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4D0596620
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 01:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237431AbiHPXnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 19:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41654 "EHLO
+        id S237667AbiHPXoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 19:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230378AbiHPXnh (ORCPT
+        with ESMTP id S229675AbiHPXoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 19:43:37 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5E57C513;
-        Tue, 16 Aug 2022 16:43:36 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 16 Aug 2022 19:44:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C578915C2;
+        Tue, 16 Aug 2022 16:44:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M6nlj6wFGz4x1d;
-        Wed, 17 Aug 2022 09:43:29 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1660693411;
-        bh=1joVLRurNjXqvg91Uhg67IK/Pr4u5RtG/v1PA3c93Nk=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EA616134B;
+        Tue, 16 Aug 2022 23:44:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B4F7C433C1;
+        Tue, 16 Aug 2022 23:44:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660693476;
+        bh=OAzkgD5LmFOw0cU+/xIlB9h5Vph5ExEgMh4qFj5H50A=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hSmcAHHclccdST7TTvOZDeh5DnAFk4PSL6ssZo976eYBRkSoJvWDe9YhnE7xwODDe
-         kwKguHM4lc1Y22bAp85OVKHixFkKO56NGqux8Bbsyqu2TgJEyMIebOhStlH/qVXtV6
-         sTnFAwwRS7ID52mTxzBMXi/FV09o/TyXt2PMZxVTdU6aa2VIfhEmG+T/QpExPq0lkL
-         WFQK5VlsSWbt4KJL8XjQ+ar93fktGIti2EN1fBncNbLPYv3U3E8MEoS5v0zlNh1ZdI
-         VWhdb2gAEbmF1aPDSwoxk4d831l+oJW1CcEBIMMWhTW056yRM2A3DbJwJql3q2/GcV
-         2BFya4V3NwDjQ==
-Date:   Wed, 17 Aug 2022 09:43:09 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Cc:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: Re: build failure of next-20220811 due to b1a63a0b48ad
- ("drm/amd/display: consider DSC pass-through during mode validation")
-Message-ID: <20220817094309.140c346e@canb.auug.org.au>
-In-Reply-To: <20220812090731.31da7d85@oak.ozlabs.ibm.com>
-References: <YvU4GD8HtZ1A4dhI@debian>
-        <20220812090731.31da7d85@oak.ozlabs.ibm.com>
+        b=uDEO8H5QZeU9XvjDP5n5ihdX6f32eqoyRUxcYOZ+bvYDd1xTbA2RNWjQB4igljzDh
+         y6IpaJ62pAdBsyCSQvq/RUtbV3aYd422+8gP+ek/eY02kLD5grw6qqazi9T02C1uuP
+         LJ8JdErwQK8O9NDuaB/SaX+Q2Cvp8TyKk6S0AY5OGhvuWr5RNTs/tFOPpNR0M+sbUC
+         pFQmNwlP6KVQmXTdZ0rAOCW/iC7aydW6xumFXJN6vWXAbcKM8oiK/ZEw4V+/Mhil/z
+         AyyuJbTmuNuoUrYr92W8nZ+kZY/ZuGtjoO+1FshsEgJ2Q+wmOEMV/6ICtNI8+7NnyN
+         GgJ52V4PQ2xsw==
+Date:   Tue, 16 Aug 2022 16:44:35 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Hawkins Jiawei <yin31149@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        bpf@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>
+Subject: Re: [PATCH] net: Fix suspicious RCU usage in
+ bpf_sk_reuseport_detach()
+Message-ID: <20220816164435.0558ef94@kernel.org>
+In-Reply-To: <804153.1660684606@warthog.procyon.org.uk>
+References: <20220816103452.479281-1-yin31149@gmail.com>
+        <166064248071.3502205.10036394558814861778.stgit@warthog.procyon.org.uk>
+        <804153.1660684606@warthog.procyon.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Lf4Tp9XrPgg1rBwr5oUcjJR";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Lf4Tp9XrPgg1rBwr5oUcjJR
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 16 Aug 2022 22:16:46 +0100 David Howells wrote:
+> So either __rcu_dereference_sk_user_data_with_flags_check() has to be a macro,
+> or we need to go with something like the first version of my patch where I
+> don't pass the condition through.  Do you have a preference?
 
-Hi all,
+I like your version because it documents what the lock protecting this
+field is. 
 
-On Fri, 12 Aug 2022 09:07:31 +1000 Stephen Rothwell <sfr@rothwell.id.au> wr=
-ote:
->
-> On Thu, 11 Aug 2022 18:10:48 +0100 "Sudip Mukherjee (Codethink)" <sudipm.=
-mukherjee@gmail.com> wrote:
-> >
-> > Not sure if it has been reported, builds of riscv, alpha, s390, arm,
-> > arm64, xtensa, mips, csky allmodconfig have failed to build next-202208=
-11
-> > with the error:
-> >=20
-> > ERROR: modpost: "dc_dsc_compute_bandwidth_range" [drivers/gpu/drm/amd/a=
-mdgpu/amdgpu.ko] undefined!
-> > ERROR: modpost: "dc_dsc_get_policy_for_timing" [drivers/gpu/drm/amd/amd=
-gpu/amdgpu.ko] undefined!
-> >=20
-> > git bisect pointed to b1a63a0b48ad ("drm/amd/display: consider DSC pass=
--through during mode validation")
-> > And, reverting that commit has fixed the build failure.
-> >=20
-> > I will be happy to test any patch or provide any extra log if needed. =
-=20
->=20
-> I have reverted that commit in today's linux-next.
+In fact should we also add && sock_owned_by_user(). Martin, WDYT? Would
+that work for reuseport? Jakub S is fixing l2tp to hold the socket lock
+while setting this field, yet most places take the callback lock...
 
-I have removed that revert.  Sudip, can you recheck when linux-next is
-released, please?
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Lf4Tp9XrPgg1rBwr5oUcjJR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL8K44ACgkQAVBC80lX
-0GzweQf/YqwUSCDESrTqpmvAAQqipA2BEXb9Zkb2sI5+rD2TDLlBxZfHitvws/1/
-RLwL+a/qvXJf86/BISMIUcnKdpJlnWZ+bQ1HOI/u6Qn5Zuxu9SBEk5qk7ET9sgeY
-iPXkIFfm7NoD5EHoNkw3DAJMivjYdXlGvuuz4WTNMR0XdwObY7NKqSstf4xcNCFr
-Gy7ooodIH75XqQg+07vyv+cBFcMd9bvscIhWaaovpWFWwuNkBu5U4U9Fms/1er6T
-GEJFp/V9vllFTQQWmjEpo1lDB9fzdZ1RVkHltTuhY1BibsW+5ULutPjEUr8r1t5K
-73jFph69ddwCVxt22n5Dvjabl1V0/w==
-=KI4/
------END PGP SIGNATURE-----
-
---Sig_/Lf4Tp9XrPgg1rBwr5oUcjJR--
+One the naming - maybe just drop the _with_flags() ? There's no version
+of locked helper which does not take the flags. And not underscores?

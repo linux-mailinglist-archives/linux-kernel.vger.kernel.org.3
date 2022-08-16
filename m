@@ -2,55 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2379F5957AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:11:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A562F5957FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233017AbiHPKKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56156 "EHLO
+        id S234296AbiHPKVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234262AbiHPKKE (ORCPT
+        with ESMTP id S234473AbiHPKU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:10:04 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99874CA0A
+        Tue, 16 Aug 2022 06:20:28 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF2F65656
         for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:40:24 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id j5-20020a056e02218500b002de1cf2347bso6577743ila.2
+Received: by mail-il1-f197.google.com with SMTP id i4-20020a056e0212c400b002e5c72b3bd7so2963397ilm.6
         for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:40:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc;
-        bh=S7sXChFfUUDqSARJ95OntzRb6yK9dHFthrmWhZP2eZY=;
-        b=VCbbwaQeg/GvJ1D0oLWIFvC5/SHCER7ND5+evpm3bDeVMKUYLLwjqOCeNAwztWYrI5
-         zdAjgDLCwwKNFAecPdd+XtIQEJWMz8CRgFsCfaCPGOuz3FGlnn2fc8/AJeKUxWdCMMLY
-         7w2yip2lUZVjxsWVUPRKNYBDewXbhDCsEXHcsVjsgX5PUK9h6P5DcWfCYEqFRard1QdI
-         bwPEOFKPanqk0BZ3XGw1YptdoF5QsPui379xrhB9lN5HZKSOkMRLu/FY39/M+ZrbJ3Xv
-         Bjicltc18/qVccZyvduV9xQDRKAt1AFnG6zGI3iIZ2lhrlxpwQtRMeG6sQi7hprLl//o
-         vH9Q==
-X-Gm-Message-State: ACgBeo2upvBukr6fI2HdkIm3YPa4/LnozKDb7/AaoAKPVLMsbCdhJFvn
-        X75IG38L8dqRF71+FTGFFOlXVTYu4JSfI4yjIBBik6xgVphL
-X-Google-Smtp-Source: AA6agR4KYBTAkbzdDt+iqgXQAeuVNL/5PRmdr0Xm9+Ri8L+Gjxo676Q2XGjawBiHrpsy7415qhjZqC44zZ3h8xHwHQnxzqB+JzgH
+        bh=Dwh0gS8jFs64hNlsf+lze9dSVRbAm8u7yK5LBD0pdLg=;
+        b=z/K4yMb54VzlNG1MbQLf3QIHeCqypbUXDKSmZAMKJPe+LjNcjfKC/kpDrKN6tNolYO
+         QCk0SLQBXGV4ZTW70e6T53wXcFiZszWDZPuk1sBu/jmnACOdvomTCuGL3qF/gmFWQOuP
+         sBNb0CKpHeIDKXg0W0Vgxx8N3kv14TJGZgfZcN1p4cHtQQyzqcDzN3XZYV4qK/qxT4Mz
+         NnALJKhzAXlE4+3GsajWQM3mFNGAeMKB5qaNpFwrlhCWMIMPdPaconkqGI4Q1ceTbDF+
+         4F2jeKJYZ1F98I+L1dCyqVj0noUICes8l9JzcDnbtUegLPhdQslduo1v/n8wMBKLdHb0
+         wp/Q==
+X-Gm-Message-State: ACgBeo3q+6ceRR4gmRQ0/qlB4zhdh64w4bCNlc4TzTEeNKoRJawkUgfE
+        0wXcBzC/d25QXk6Eq1CEyUDjG2z4p9IzVNjqsCmpYWcmCOdI
+X-Google-Smtp-Source: AA6agR5JuP2uqd8wNlSCkhc1kduZjGIqEpA1RqxELHnxLkd+IhD9MVUPeRbpXgTi1daetG2qSY6uOlsAAjkVx9Zb6Lkaj+8Y/c/v
 MIME-Version: 1.0
-X-Received: by 2002:a6b:b802:0:b0:67b:de15:c1fb with SMTP id
- i2-20020a6bb802000000b0067bde15c1fbmr8215634iof.215.1660639223858; Tue, 16
- Aug 2022 01:40:23 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 01:40:23 -0700
+X-Received: by 2002:a92:ca46:0:b0:2e5:d3dc:3d28 with SMTP id
+ q6-20020a92ca46000000b002e5d3dc3d28mr3090095ilo.238.1660639224209; Tue, 16
+ Aug 2022 01:40:24 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 01:40:24 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000009cd7a05e657b38e@google.com>
-Subject: [syzbot] upstream boot error: BUG: unable to handle kernel paging
- request in ieee80211_register_hw
-From:   syzbot <syzbot+655209e079e67502f2da@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com,
-        johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <0000000000000f266f05e657b373@google.com>
+Subject: [syzbot] upstream boot error: general protection fault in timerqueue_del
+From:   syzbot <syzbot+621d4ae5dc548c7ac3f6@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,134 +60,82 @@ syzbot found the following issue on:
 
 HEAD commit:    4a9350597aff Merge tag 'sound-fix-6.0-rc1' of git://git.ke..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11515705080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bc6716795f118372
-dashboard link: https://syzkaller.appspot.com/bug?extid=655209e079e67502f2da
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
+console output: https://syzkaller.appspot.com/x/log.txt?x=1249c047080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4757943c2b26daff
+dashboard link: https://syzkaller.appspot.com/bug?extid=621d4ae5dc548c7ac3f6
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+655209e079e67502f2da@syzkaller.appspotmail.com
+Reported-by: syzbot+621d4ae5dc548c7ac3f6@syzkaller.appspotmail.com
 
-usbcore: registered new interface driver nfcmrvl
-Loading iSCSI transport class v2.0-870.
-scsi host0: Virtio SCSI HBA
-st: Version 20160209, fixed bufsize 32768, s/g segs 256
-Rounding down aligned max_sectors from 4294967295 to 4294967288
-db_root: cannot open: /etc/target
-slram: not enough parameters.
-ftl_cs: FTL header not found.
-wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
-wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
-MACsec IEEE 802.1AE
-tun: Universal TUN/TAP device driver, 1.6
-vcan: Virtual CAN interface driver
-vxcan: Virtual CAN Tunnel driver
-slcan: serial line CAN interface driver
-CAN device driver interface
-usbcore: registered new interface driver usb_8dev
-usbcore: registered new interface driver ems_usb
-usbcore: registered new interface driver gs_usb
-usbcore: registered new interface driver kvaser_usb
-usbcore: registered new interface driver mcba_usb
-usbcore: registered new interface driver peak_usb
-e100: Intel(R) PRO/100 Network Driver
-e100: Copyright(c) 1999-2006 Intel Corporation
-e1000: Intel(R) PRO/1000 Network Driver
-e1000: Copyright (c) 1999-2006 Intel Corporation.
-e1000e: Intel(R) PRO/1000 Network Driver
-e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
-mkiss: AX.25 Multikiss, Hans Albas PE1AYX
-AX.25: 6pack driver, Revision: 0.3.0
-AX.25: bpqether driver version 004
-PPP generic driver version 2.4.2
-PPP BSD Compression module registered
-PPP Deflate Compression module registered
-PPP MPPE Compression module registered
-NET: Registered PF_PPPOX protocol family
-PPTP driver version 0.8.5
-SLIP: version 0.8.4-NET3.019-NEWTTY (dynamic channels, max=256) (6 bit encapsulation enabled).
-CSLIP: code copyright 1989 Regents of the University of California.
-SLIP linefill/keepalive option.
-hdlc: HDLC support module revision 1.22
-LAPB Ethernet driver version 0.02
-usbcore: registered new interface driver ath9k_htc
-usbcore: registered new interface driver carl9170
-usbcore: registered new interface driver ath6kl_usb
-usbcore: registered new interface driver ar5523
-usbcore: registered new interface driver ath10k_usb
-usbcore: registered new interface driver rndis_wlan
-mac80211_hwsim: initializing netlink
-BUG: unable to handle page fault for address: ffffddffe0000001
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 11829067 P4D 11829067 PUD 0 
-Oops: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.19.0-syzkaller-14090-g4a9350597aff #0
+general protection fault, probably for non-canonical address 0xdffffdffe0000000: 0000 [#1] PREEMPT SMP KASAN
+KASAN: probably user-memory-access in range [0x00000fff00000000-0x00000fff00000007]
+CPU: 0 PID: 1108 Comm: kworker/u4:3 Not tainted 5.19.0-syzkaller-14090-g4a9350597aff #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:ieee80211_register_hw+0x2872/0x3eb0 net/mac80211/main.c:1069
-Code: 89 e7 e8 31 3b b8 f8 45 39 ec 0f 84 0b 03 00 00 e8 e3 3e b8 f8 4c 8d 75 f4 48 89 e8 48 b9 00 00 00 00 00 fc ff df 48 c1 e8 03 <0f> b6 14 08 48 89 e8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 d6
-RSP: 0000:ffffc90000067a40 EFLAGS: 00010a03
-RAX: 1fffe1ffe0000001 RBX: 0000000000000000 RCX: dffffc0000000000
-RDX: ffff8881401b8000 RSI: ffffffff88c3c82d RDI: 0000000000000005
-RBP: ffff0fff0000000c R08: 0000000000000005 R09: 0000000000000000
-R10: 000000000000076d R11: 0000000000000000 R12: 0000000000000000
-R13: 000000000000076d R14: ffff0fff00000000 R15: 0000000000000000
+RIP: 0010:timerqueue_del+0x26/0xf0 lib/timerqueue.c:55
+Code: 0f 1f 40 00 55 41 57 41 56 41 55 41 54 53 49 89 f5 49 89 fe 48 bd 00 00 00 00 00 fc ff df e8 21 3a 20 fd 4d 89 ec 49 c1 ec 03 <41> 80 3c 2c 00 74 08 4c 89 ef e8 cb d8 73 fd 49 8b 5d 00 48 89 df
+RSP: 0000:ffffc90004ebfc30 EFLAGS: 00010006
+
+RAX: ffffffff846958af RBX: 00000fff00000000 RCX: ffff888020858000
+RDX: 0000000000000000 RSI: 00000fff00000000 RDI: ffff8880207744d8
+RBP: dffffc0000000000 R08: dffffc0000000000 R09: fffff520009d7f84
+R10: fffff520009d7f85 R11: 1ffff920009d7f84 R12: 000001ffe0000000
+R13: 00000fff00000000 R14: ffff8880207744d8 R15: ffff8880207744d8
 FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffddffe0000001 CR3: 000000000bc8e000 CR4: 00000000003506f0
+CR2: ffff88823ffff000 CR3: 000000000ca8e000 CR4: 00000000003506f0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- mac80211_hwsim_new_radio+0x255f/0x4dd0 drivers/net/wireless/mac80211_hwsim.c:4129
- init_mac80211_hwsim+0x5aa/0x73b drivers/net/wireless/mac80211_hwsim.c:5379
- do_one_initcall+0xfe/0x650 init/main.c:1296
- do_initcall_level init/main.c:1369 [inline]
- do_initcalls init/main.c:1385 [inline]
- do_basic_setup init/main.c:1404 [inline]
- kernel_init_freeable+0x6b1/0x73a init/main.c:1611
- kernel_init+0x1a/0x1d0 init/main.c:1500
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ cleanup_timerqueue kernel/time/posix-cpu-timers.c:519 [inline]
+ cleanup_timers kernel/time/posix-cpu-timers.c:534 [inline]
+ posix_cpu_timers_exit_group+0x7b/0x200 kernel/time/posix-cpu-timers.c:550
+ __exit_signal kernel/exit.c:109 [inline]
+ release_task+0x5b8/0x1890 kernel/exit.c:203
+ exit_notify kernel/exit.c:708 [inline]
+ do_exit+0x16ac/0x20a0 kernel/exit.c:815
+ call_usermodehelper_exec_async+0x3a1/0x3b0 kernel/umh.c:125
+ ret_from_fork+0x1f/0x30
  </TASK>
 Modules linked in:
-CR2: ffffddffe0000001
 ---[ end trace 0000000000000000 ]---
-RIP: 0010:ieee80211_register_hw+0x2872/0x3eb0 net/mac80211/main.c:1069
-Code: 89 e7 e8 31 3b b8 f8 45 39 ec 0f 84 0b 03 00 00 e8 e3 3e b8 f8 4c 8d 75 f4 48 89 e8 48 b9 00 00 00 00 00 fc ff df 48 c1 e8 03 <0f> b6 14 08 48 89 e8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 d6
-RSP: 0000:ffffc90000067a40 EFLAGS: 00010a03
-RAX: 1fffe1ffe0000001 RBX: 0000000000000000 RCX: dffffc0000000000
-RDX: ffff8881401b8000 RSI: ffffffff88c3c82d RDI: 0000000000000005
-RBP: ffff0fff0000000c R08: 0000000000000005 R09: 0000000000000000
-R10: 000000000000076d R11: 0000000000000000 R12: 0000000000000000
-R13: 000000000000076d R14: ffff0fff00000000 R15: 0000000000000000
+RIP: 0010:timerqueue_del+0x26/0xf0 lib/timerqueue.c:55
+Code: 0f 1f 40 00 55 41 57 41 56 41 55 41 54 53 49 89 f5 49 89 fe 48 bd 00 00 00 00 00 fc ff df e8 21 3a 20 fd 4d 89 ec 49 c1 ec 03 <41> 80 3c 2c 00 74 08 4c 89 ef e8 cb d8 73 fd 49 8b 5d 00 48 89 df
+RSP: 0000:ffffc90004ebfc30 EFLAGS: 00010006
+
+RAX: ffffffff846958af RBX: 00000fff00000000 RCX: ffff888020858000
+RDX: 0000000000000000 RSI: 00000fff00000000 RDI: ffff8880207744d8
+RBP: dffffc0000000000 R08: dffffc0000000000 R09: fffff520009d7f84
+R10: fffff520009d7f85 R11: 1ffff920009d7f84 R12: 000001ffe0000000
+R13: 00000fff00000000 R14: ffff8880207744d8 R15: ffff8880207744d8
 FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffddffe0000001 CR3: 000000000bc8e000 CR4: 00000000003506f0
+CR2: ffff88823ffff000 CR3: 000000000ca8e000 CR4: 00000000003506f0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 ----------------
 Code disassembly (best guess):
-   0:	89 e7                	mov    %esp,%edi
-   2:	e8 31 3b b8 f8       	callq  0xf8b83b38
-   7:	45 39 ec             	cmp    %r13d,%r12d
-   a:	0f 84 0b 03 00 00    	je     0x31b
-  10:	e8 e3 3e b8 f8       	callq  0xf8b83ef8
-  15:	4c 8d 75 f4          	lea    -0xc(%rbp),%r14
-  19:	48 89 e8             	mov    %rbp,%rax
-  1c:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
-  23:	fc ff df
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	0f b6 14 08          	movzbl (%rax,%rcx,1),%edx <-- trapping instruction
-  2e:	48 89 e8             	mov    %rbp,%rax
-  31:	83 e0 07             	and    $0x7,%eax
-  34:	83 c0 03             	add    $0x3,%eax
-  37:	38 d0                	cmp    %dl,%al
-  39:	7c 08                	jl     0x43
-  3b:	84 d2                	test   %dl,%dl
-  3d:	0f                   	.byte 0xf
-  3e:	85 d6                	test   %edx,%esi
+   0:	0f 1f 40 00          	nopl   0x0(%rax)
+   4:	55                   	push   %rbp
+   5:	41 57                	push   %r15
+   7:	41 56                	push   %r14
+   9:	41 55                	push   %r13
+   b:	41 54                	push   %r12
+   d:	53                   	push   %rbx
+   e:	49 89 f5             	mov    %rsi,%r13
+  11:	49 89 fe             	mov    %rdi,%r14
+  14:	48 bd 00 00 00 00 00 	movabs $0xdffffc0000000000,%rbp
+  1b:	fc ff df
+  1e:	e8 21 3a 20 fd       	callq  0xfd203a44
+  23:	4d 89 ec             	mov    %r13,%r12
+  26:	49 c1 ec 03          	shr    $0x3,%r12
+* 2a:	41 80 3c 2c 00       	cmpb   $0x0,(%r12,%rbp,1) <-- trapping instruction
+  2f:	74 08                	je     0x39
+  31:	4c 89 ef             	mov    %r13,%rdi
+  34:	e8 cb d8 73 fd       	callq  0xfd73d904
+  39:	49 8b 5d 00          	mov    0x0(%r13),%rbx
+  3d:	48 89 df             	mov    %rbx,%rdi
 
 
 ---

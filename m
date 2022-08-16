@@ -2,89 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895B6595648
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F2459568C
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233527AbiHPJbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
+        id S233732AbiHPJfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233517AbiHPJaF (ORCPT
+        with ESMTP id S233678AbiHPJen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:30:05 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BD29DF88;
-        Tue, 16 Aug 2022 00:50:20 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27G7ULfF002836;
-        Tue, 16 Aug 2022 07:50:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=tX039jGbtcecrO3BmdGc6iS5RY3LYX7/B+TxRQu6bMo=;
- b=dtyYjhkAqIljkwnALwtNIsisqQs3klRPq7qrzUGbDzAeeha+YKZBBoY4nqbfCj7qK3hh
- lJPSJovo5Vw3fChK/zYPvk2QEPa+YY88ssyhLaEZyInBeHpm5EOsbYEhXhgFixEgnD81
- 2gtsu0Spuj7Ihhb2QC9a9adnovet+r5A68IL9gD9MjCZlj+HoNtawyok36np3Mtfv/QX
- vgUR+wbSbakf7hQ07Xx18wkV60Lm9APIjL74gMeGYcKtY2H1N139T4ktZos4cp0Iwbcd
- cdotz2PN0f/CQTKTNoIeAWxE4o6FHBCLY01DwC0olUA39KlRWaD2wfC4J0Qqoo6UqxCj bQ== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j06wa0d8b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Aug 2022 07:50:03 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27G7aNH9004291;
-        Tue, 16 Aug 2022 07:50:01 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3hx3k9avk9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Aug 2022 07:50:01 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27G7oGSl32833830
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Aug 2022 07:50:16 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 429A511C050;
-        Tue, 16 Aug 2022 07:49:58 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CCF6C11C04C;
-        Tue, 16 Aug 2022 07:49:57 +0000 (GMT)
-Received: from [9.171.18.167] (unknown [9.171.18.167])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 16 Aug 2022 07:49:57 +0000 (GMT)
-Message-ID: <47cfc72d-62f6-2bd3-db91-99f91591fc30@linux.ibm.com>
-Date:   Tue, 16 Aug 2022 09:55:04 +0200
+        Tue, 16 Aug 2022 05:34:43 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEE133A04
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:57:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660636672; x=1692172672;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sci//bv1yKymlc/OSN7fR4o5lblJiNJQzbk5YpceH5k=;
+  b=ZrFYeD/SWwnKDhOd2diRMkS82lDdzvoh1YiZpkG0HFCT1OCw/u8gILTv
+   m8zjZZIxliIpcqvtZ7sxIVqQR19BGEWBt2TyKau2lL/4wQRxoKgr2Fte3
+   TFLvA3hRSeXSmEgvGZJ9gDvkMs8AaGsqcea8HKg/Kbses0VXtjg+ch/8j
+   qkmf7I6eoWtuNrype4OwBZk/I+eFc+eGWJ2DRbGiE2U3eZhqnBjGylhCQ
+   CUcmfk5H+LGrgPsYyhkgPWaiPSaV8ApHXTbBE9L5vgWVpqAXsHTQGIIap
+   o1cDRoynwoNsJtitS4BIt1LFxSucEIgPtNap7RB8rS98eCee/1cUW9w/C
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="275208730"
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="275208730"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 00:57:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="749222894"
+Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 16 Aug 2022 00:57:50 -0700
+Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oNrSQ-0001c9-0C;
+        Tue, 16 Aug 2022 07:57:50 +0000
+Date:   Tue, 16 Aug 2022 15:56:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/cleanups] BUILD SUCCESS
+ 4630535c64725bcd722eb59fb8d92be8db943d3d
+Message-ID: <62fb4dc2.Vy+6VqZXlcy00YUR%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] vfio-pci/zdev: require KVM to be built-in
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20220814215154.32112-1-rdunlap@infradead.org>
- <663c7595-1c18-043e-5f12-b0ce880b84bf@linux.ibm.com>
- <5530ed1f-90ec-ce84-2348-80e484fa48cb@infradead.org>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <5530ed1f-90ec-ce84-2348-80e484fa48cb@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: gB5kFG1VzBcJ4zxDYC6kuwC7hs7FARpL
-X-Proofpoint-GUID: gB5kFG1VzBcJ4zxDYC6kuwC7hs7FARpL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-16_06,2022-08-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 phishscore=0 mlxlogscore=999 mlxscore=0 spamscore=0
- lowpriorityscore=0 suspectscore=0 malwarescore=0 adultscore=0
- impostorscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2207270000 definitions=main-2208160029
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,75 +63,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cleanups
+branch HEAD: 4630535c64725bcd722eb59fb8d92be8db943d3d  x86/uaccess: Improve __try_cmpxchg64_user_asm() for x86_32
 
+elapsed time: 708m
 
-On 8/16/22 08:04, Randy Dunlap wrote:
-> Hi--
-> 
-> On 8/15/22 02:43, Pierre Morel wrote:
->> Thank you Randy for this good catch.
->> However forcing KVM to be include statically in the kernel when using VFIO_PCI extensions is not a good solution for us I think.
->>
->> I suggest we better do something like:
->>
->> ----
->>
->> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
->> index 6287a843e8bc..1733339cc4eb 100644
->> --- a/arch/s390/include/asm/kvm_host.h
->> +++ b/arch/s390/include/asm/kvm_host.h
->> @@ -1038,7 +1038,7 @@ static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
->>   #define __KVM_HAVE_ARCH_VM_FREE
->>   void kvm_arch_free_vm(struct kvm *kvm);
->>
->> -#ifdef CONFIG_VFIO_PCI_ZDEV_KVM
->> +#if defined(CONFIG_VFIO_PCI_ZDEV_KVM) || defined(CONFIG_VFIO_PCI_ZDEV_KVM_MODULE)
-> 
-> This all looks good except for the line above.
-> It should be:
-> 
-> #if IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM)
-> 
-> Thanks.
+configs tested: 100
+configs skipped: 69
 
-Yes, better, thanks.
-How do we do? Should I repost it with reported-by you or do you want to 
-post it?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Pierre
+gcc tested configs:
+i386                                defconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+i386                             allyesconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                 randconfig-a001-20220815
+i386                 randconfig-a005-20220815
+i386                 randconfig-a004-20220815
+i386                 randconfig-a006-20220815
+i386                 randconfig-a003-20220815
+i386                 randconfig-a002-20220815
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+sh                            shmin_defconfig
+xtensa                              defconfig
+m68k                        m5307c3_defconfig
+xtensa                  nommu_kc705_defconfig
+riscv                    nommu_k210_defconfig
+x86_64               randconfig-a006-20220815
+x86_64               randconfig-a003-20220815
+x86_64               randconfig-a005-20220815
+x86_64               randconfig-a004-20220815
+x86_64               randconfig-a001-20220815
+x86_64               randconfig-a002-20220815
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+mips                         bigsur_defconfig
+powerpc                      chrp32_defconfig
+i386                 randconfig-c001-20220815
+sh                            hp6xx_defconfig
+powerpc                     redwood_defconfig
+powerpc                     sequoia_defconfig
+ia64                      gensparse_defconfig
+arm                           corgi_defconfig
+sh                        sh7785lcr_defconfig
+arm                      footbridge_defconfig
+powerpc                     stx_gp3_defconfig
+nios2                               defconfig
+arm                         vf610m4_defconfig
+s390                       zfcpdump_defconfig
+powerpc                 mpc8540_ads_defconfig
+powerpc              randconfig-c003-20220815
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+m68k                            q40_defconfig
+arm                         s3c6400_defconfig
+powerpc                      makalu_defconfig
+arc                            hsdk_defconfig
+powerpc                    klondike_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+xtensa                         virt_defconfig
+powerpc                       eiger_defconfig
+arm                          iop32x_defconfig
+m68k                       m5208evb_defconfig
+m68k                         amcore_defconfig
+arc                           tb10x_defconfig
 
-
-> 
-> 
->>   int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm);
->>   void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev);
->>   #else
->> diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
->> index f9d0c908e738..bbc375b028ef 100644
->> --- a/drivers/vfio/pci/Kconfig
->> +++ b/drivers/vfio/pci/Kconfig
->> @@ -45,9 +45,9 @@ config VFIO_PCI_IGD
->>   endif
->>
->>   config VFIO_PCI_ZDEV_KVM
->> -       bool "VFIO PCI extensions for s390x KVM passthrough"
->> +       def_tristate y
->> +       prompt "VFIO PCI extensions for s390x KVM passthrough"
->>          depends on S390 && KVM
->> -       default y
->>          help
->>            Support s390x-specific extensions to enable support for enhancements
->>            to KVM passthrough capabilities, such as interpretive execution of
->>
->> ----
->>
->> What do you think? It seems to me it solves the problem, what do you think?
->>
->> Regards,
->> Pierre
-> 
-> 
+clang tested configs:
+i386                 randconfig-a012-20220815
+i386                 randconfig-a011-20220815
+i386                 randconfig-a013-20220815
+i386                 randconfig-a015-20220815
+i386                 randconfig-a014-20220815
+i386                 randconfig-a016-20220815
+x86_64               randconfig-a013-20220815
+x86_64               randconfig-a012-20220815
+x86_64               randconfig-a011-20220815
+x86_64               randconfig-a014-20220815
+riscv                randconfig-r042-20220815
+s390                 randconfig-r044-20220815
+hexagon              randconfig-r045-20220815
+hexagon              randconfig-r041-20220815
+x86_64               randconfig-a015-20220815
+x86_64               randconfig-a016-20220815
+arm                        multi_v5_defconfig
+x86_64               randconfig-k001-20220815
+powerpc                          g5_defconfig
+powerpc                          allmodconfig
+powerpc                 mpc836x_mds_defconfig
 
 -- 
-Pierre Morel
-IBM Lab Boeblingen
+0-DAY CI Kernel Test Service
+https://01.org/lkp

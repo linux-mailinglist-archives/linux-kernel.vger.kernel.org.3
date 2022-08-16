@@ -2,139 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B179C5953CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 09:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502345953DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 09:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbiHPHcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 03:32:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35860 "EHLO
+        id S229920AbiHPHef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 03:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232225AbiHPHbp (ORCPT
+        with ESMTP id S231913AbiHPHeM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 03:31:45 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCD518B8AF
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 21:09:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660622987; x=1692158987;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IzQEN72TmBDMzkJL4xzg5eFSIZtKllar5ZCeHaEg3wo=;
-  b=B45YLX81hN11Vv1vakI1LEkM21X416UK6p3K0t+HHfhs8+GrR+bLQKWR
-   xslw3HIiKDTj3aDYnGEoCjDoewWivyil86ZhfFx7a06HLo4dz+KJRtTnr
-   18sRz4LarWBtHPFMyFpaYZnglebbc5VGVXaHkejbsQV/MXzzJ4tPhBV4V
-   w9BTN1TVqr52rTsC30esh1zBbIdaDxnVbxrSMcYnAsQi9cmJiSpS8lYP6
-   JhgTaU1coc/cu1JYONThtFDpLUYxhlvTbEd+yddlCzcknzFtj5io981kO
-   HuABjJy8GMKKiwkzaFJlJqGgwQOOKcYsHp1Z5qFccGKYtAj28jba81XKx
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="292915366"
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="292915366"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 21:09:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="934733071"
-Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 15 Aug 2022 21:09:45 -0700
-Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oNntg-0001RR-31;
-        Tue, 16 Aug 2022 04:09:44 +0000
-Date:   Tue, 16 Aug 2022 12:09:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [asahilinux:bits/110-smc 4/17]
- drivers/platform/apple/smc_core.c:210:26: sparse: sparse: cast to restricted
- __be32
-Message-ID: <202208161228.iyoLmbTO-lkp@intel.com>
+        Tue, 16 Aug 2022 03:34:12 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2193E7FFAF;
+        Mon, 15 Aug 2022 21:13:09 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id tl27so16783660ejc.1;
+        Mon, 15 Aug 2022 21:13:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=E36fWmPh7uE8eC/oxj202Sk4LfbNCTfTw1OCIdIjfv8=;
+        b=BH3/pf1hjF6ZCJlhrBlccHek4xDpGK3/GD7Qh+FbJLIN1Hx43Rp8H2062fM5AzCLMT
+         3HIMe5qvf/Fd1poqRcJQOQuVV0LLdzLsa+9LpYXMm/K1R6UXcxClZPAN7BwafKIRpUR2
+         oKwLXpF/A+mPi+OhwEDDmCnhrFf0EZvpRZBejXX0oeE6QFPp3ji3eKHeAiqfcrs37rXk
+         L9FuX4lUkX6Qg6bnbfN8bsNMMXkTiRwCn8+cwu7upMDAPdZ1Tq+BwrVfJdeOSsCleyT7
+         jWfo75P5sV74NsHX91p5qC3TbDc1bNZVE/fOzoJ61I86L1+axvpucGpy1pFAaGAxCyOB
+         88Fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=E36fWmPh7uE8eC/oxj202Sk4LfbNCTfTw1OCIdIjfv8=;
+        b=PI4oa6YN3/hrB+kaZkZjeyiWLIhfwwmU5E16uOq4Sod58WYC9/jOlfBdSQ2UZ/kHIA
+         XaZTNRucuwEHMjbzjtZb3UamRybX8WPxvbt9qfjvJCZ/uWkih1i9sug+f/qAxvuv6j73
+         vamNicksCbpX1x/TYxMtYL369U8+km2N5BAgSDgPfT2uskhZZeqVy621dC1hiU/3l4KD
+         GlL9/IO1iutx4EuzAe2/TmMaLn8Rm9ybeimNjVHnJms5BB0zN2Dy7cVf/CVa6Dyja0xg
+         cCyr0/SwPd5b8N+3D8+KFIWEUFGwnPiJUfjWg5oXylzzzs/n8uE71e/ho93Yoi92O4Nr
+         gLKw==
+X-Gm-Message-State: ACgBeo0azZ1k/+Q+e5uQkWf5b8VXPZLKB0djsC6JGoyMPx88LNeNEM3k
+        LZZoonqsaVm6PdBuiOUcYB3xdGXzjt1sU5STkSQ=
+X-Google-Smtp-Source: AA6agR5tKpYOPU5f+hw/j5C2Zb+lwPT3kpiJYKxm4zp+rpTtFOLxyfaVnCpvbHEPlbBm8g5RcvPJsn/GTk1echfch/A=
+X-Received: by 2002:a17:907:6e22:b0:731:152:2504 with SMTP id
+ sd34-20020a1709076e2200b0073101522504mr12575234ejc.545.1660623187547; Mon, 15
+ Aug 2022 21:13:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220805214821.1058337-1-haoluo@google.com> <20220805214821.1058337-5-haoluo@google.com>
+ <CAEf4BzZHf89Ds8nQWFCH00fKs9-9GkJ0d+Hrp-LkMCDUP_td0A@mail.gmail.com>
+ <CA+khW7hUVOkHBO3dhRze2_VKZuxD-LuNQdO3nHUkLCYmuuR6eg@mail.gmail.com>
+ <20220809162325.hwgvys5n3rivuz7a@MacBook-Pro-3.local.dhcp.thefacebook.com>
+ <CA+khW7j0kzP+W_Qgsim52J+HeR27XJcyMk73Hq93tsmNzT7q6w@mail.gmail.com>
+ <CA+khW7j1Ni_PfvsGisUpUgFtgg=f_qEUVd1VUmocn6L3=kndhw@mail.gmail.com> <CAJD7tkY6ihK9PkaAwrdRr-3QyiVFf8h4WkLXx73zYwNUjS_7pw@mail.gmail.com>
+In-Reply-To: <CAJD7tkY6ihK9PkaAwrdRr-3QyiVFf8h4WkLXx73zYwNUjS_7pw@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 15 Aug 2022 21:12:56 -0700
+Message-ID: <CAEf4BzZTrsBOPpCTFouoWZJG9yXkz8LZgLQrqDREAY-XdGb7ew@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 4/8] bpf: Introduce cgroup iter
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Hao Luo <haoluo@google.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Cgroups <cgroups@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Michal Koutny <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shakeel Butt <shakeelb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/110-smc
-head:   85225bbe01a2a74102db8d75e316b4e46f1cb07f
-commit: 59000ffdca0f77c3f45fe7610510b17382fc8974 [4/17] platform/apple: Add new Apple Mac SMC driver
-config: arm64-randconfig-s053-20220815 (https://download.01.org/0day-ci/archive/20220816/202208161228.iyoLmbTO-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/AsahiLinux/linux/commit/59000ffdca0f77c3f45fe7610510b17382fc8974
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/110-smc
-        git checkout 59000ffdca0f77c3f45fe7610510b17382fc8974
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/platform/apple/
+On Thu, Aug 11, 2022 at 7:10 AM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> On Wed, Aug 10, 2022 at 8:10 PM Hao Luo <haoluo@google.com> wrote:
+> >
+> > On Tue, Aug 9, 2022 at 11:38 AM Hao Luo <haoluo@google.com> wrote:
+> > >
+> > > On Tue, Aug 9, 2022 at 9:23 AM Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >
+> > > > On Mon, Aug 08, 2022 at 05:56:57PM -0700, Hao Luo wrote:
+> > > > > On Mon, Aug 8, 2022 at 5:19 PM Andrii Nakryiko
+> > > > > <andrii.nakryiko@gmail.com> wrote:
+> > > > > >
+> > > > > > On Fri, Aug 5, 2022 at 2:49 PM Hao Luo <haoluo@google.com> wrote:
+> > > > > > >
+> > > > > > > Cgroup_iter is a type of bpf_iter. It walks over cgroups in four modes:
+> > > > > > >
+> > > > > > >  - walking a cgroup's descendants in pre-order.
+> > > > > > >  - walking a cgroup's descendants in post-order.
+> > > > > > >  - walking a cgroup's ancestors.
+> > > > > > >  - process only the given cgroup.
+> > > > > > >
+> > > [...]
+> > > > > > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > > > > > > index 59a217ca2dfd..4d758b2e70d6 100644
+> > > > > > > --- a/include/uapi/linux/bpf.h
+> > > > > > > +++ b/include/uapi/linux/bpf.h
+> > > > > > > @@ -87,10 +87,37 @@ struct bpf_cgroup_storage_key {
+> > > > > > >         __u32   attach_type;            /* program attach type (enum bpf_attach_type) */
+> > > > > > >  };
+> > > > > > >
+> > > > > > > +enum bpf_iter_order {
+> > > > > > > +       BPF_ITER_ORDER_DEFAULT = 0,     /* default order. */
+> > > > > >
+> > > > > > why is this default order necessary? It just adds confusion (I had to
+> > > > > > look up source code to know what is default order). I might have
+> > > > > > missed some discussion, so if there is some very good reason, then
+> > > > > > please document this in commit message. But I'd rather not do some
+> > > > > > magical default order instead. We can set 0 to mean invalid and error
+> > > > > > out, or just do SELF as the very first value (and if user forgot to
+> > > > > > specify more fancy mode, they hopefully will quickly discover this in
+> > > > > > their testing).
+> > > > > >
+> > > > >
+> > > > > PRE/POST/UP are tree-specific orders. SELF applies on all iters and
+> > > > > yields only a single object. How does task_iter express a non-self
+> > > > > order? By non-self, I mean something like "I don't care about the
+> > > > > order, just scan _all_ the objects". And this "don't care" order, IMO,
+> > > > > may be the common case. I don't think everyone cares about walking
+> > > > > order for tasks. The DEFAULT is intentionally put at the first value,
+> > > > > so that if users don't care about order, they don't have to specify
+> > > > > this field.
+> > > > >
+> > > > > If that sounds valid, maybe using "UNSPEC" instead of "DEFAULT" is better?
+> > > >
+> > > > I agree with Andrii.
+> > > > This:
+> > > > +       if (order == BPF_ITER_ORDER_DEFAULT)
+> > > > +               order = BPF_ITER_DESCENDANTS_PRE;
+> > > >
+> > > > looks like an arbitrary choice.
+> > > > imo
+> > > > BPF_ITER_DESCENDANTS_PRE = 0,
+> > > > would have been more obvious. No need to dig into definition of "default".
+> > > >
+> > > > UNSPEC = 0
+> > > > is fine too if we want user to always be conscious about the order
+> > > > and the kernel will error if that field is not initialized.
+> > > > That would be my preference, since it will match the rest of uapi/bpf.h
+> > > >
+> > >
+> > > Sounds good. In the next version, will use
+> > >
+> > > enum bpf_iter_order {
+> > >         BPF_ITER_ORDER_UNSPEC = 0,
+> > >         BPF_ITER_SELF_ONLY,             /* process only a single object. */
+> > >         BPF_ITER_DESCENDANTS_PRE,       /* walk descendants in pre-order. */
+> > >         BPF_ITER_DESCENDANTS_POST,      /* walk descendants in post-order. */
+> > >         BPF_ITER_ANCESTORS_UP,          /* walk ancestors upward. */
+> > > };
+> > >
+> >
+> > Sigh, I find that having UNSPEC=0 and erroring out when seeing UNSPEC
+> > doesn't work. Basically, if we have a non-iter prog and a cgroup_iter
+> > prog written in the same source file, I can't use
+> > bpf_object__attach_skeleton to attach them. Because the default
+> > prog_attach_fn for iter initializes `order` to 0 (that is, UNSPEC),
+> > which is going to be rejected by the kernel. In order to make
+> > bpf_object__attach_skeleton work on cgroup_iter, I think I need to use
+> > the following
+> >
+> > enum bpf_iter_order {
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+so first of all, this can't be called "bpf_iter_order" as it doesn't
+apply to BPF iterators in general. I think this should be called
+bpf_iter_cgroup_order (or maybe bpf_cgroup_iter_order) and if/when we
+add ability to iterate tasks within cgroups then we'll just reuse enum
+bpf_iter_cgroup_order as an extra parameter for task iterator.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/platform/apple/smc_core.c:210:26: sparse: sparse: cast to restricted __be32
+And with that future case in mind I do think that we should have 0
+being "UNSPEC" case.
 
-vim +210 drivers/platform/apple/smc_core.c
+> >         BPF_ITER_DESCENDANTS_PRE,       /* walk descendants in pre-order. */
+> >         BPF_ITER_DESCENDANTS_POST,      /* walk descendants in post-order. */
+> >         BPF_ITER_ANCESTORS_UP,          /* walk ancestors upward. */
+> >         BPF_ITER_SELF_ONLY,             /* process only a single object. */
+> > };
+> >
+> > So that when calling bpf_object__attach_skeleton() on cgroup_iter, a
+> > link can be generated and the generated link defaults to pre-order
+> > walk on the whole hierarchy. Is there a better solution?
+> >
 
-   190	
-   191	struct apple_smc *apple_smc_probe(struct device *dev, const struct apple_smc_backend_ops *ops, void *cookie)
-   192	{
-   193		struct apple_smc *smc;
-   194		u32 count;
-   195		int ret;
-   196	
-   197		smc = devm_kzalloc(dev, sizeof(*smc), GFP_KERNEL);
-   198		if (!smc)
-   199			return ERR_PTR(-ENOMEM);
-   200	
-   201		smc->dev = dev;
-   202		smc->be_cookie = cookie;
-   203		smc->be = ops;
-   204		mutex_init(&smc->mutex);
-   205		BLOCKING_INIT_NOTIFIER_HEAD(&smc->event_handlers);
-   206	
-   207		ret = apple_smc_read_u32(smc, SMC_KEY(#KEY), &count);
-   208		if (ret)
-   209			return ERR_PTR(dev_err_probe(dev, ret, "Failed to get key count"));
- > 210		smc->key_count = be32_to_cpu(count);
-   211	
-   212		ret = apple_smc_get_key_by_index(smc, 0, &smc->first_key);
-   213		if (ret)
-   214			return ERR_PTR(dev_err_probe(dev, ret, "Failed to get first key"));
-   215	
-   216		ret = apple_smc_get_key_by_index(smc, smc->key_count - 1, &smc->last_key);
-   217		if (ret)
-   218			return ERR_PTR(dev_err_probe(dev, ret, "Failed to get last key"));
-   219	
-   220		/* Enable notifications */
-   221		apple_smc_write_flag(smc, SMC_KEY(NTAP), 1);
-   222	
-   223		dev_info(dev, "Initialized (%d keys %p4ch..%p4ch)\n",
-   224			 smc->key_count, &smc->first_key, &smc->last_key);
-   225	
-   226		dev_set_drvdata(dev, smc);
-   227	
-   228		ret = mfd_add_devices(dev, -1, apple_smc_devs, ARRAY_SIZE(apple_smc_devs), NULL, 0, NULL);
-   229		if (ret)
-   230			return ERR_PTR(dev_err_probe(dev, ret, "Subdevice initialization failed"));
-   231	
-   232		return smc;
-   233	}
-   234	EXPORT_SYMBOL(apple_smc_probe);
-   235	
+I was actually surprised that we specify these additional parameters
+at attach (LINK_CREATE) time, and not at bpf_iter_create() call time.
+It seems more appropriate to allow to specify such runtime parameters
+very late, when we create a specific instance of seq_file. But I guess
+this was done because one of the initial motivations for iterators was
+to be pinned in BPFFS and read as a file, so it was more convenient to
+store such parameters upfront at link creation time to keep
+BPF_OBJ_PIN simpler. I guess it makes sense, worst case you'll need to
+create multiple bpf_link files, one for each cgroup hierarchy you'd
+like to query with the same single BPF program.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+But I digress.
+
+As for not being able to auto-attach cgroup iterator. I think that's
+sort of expected and is in line with not being able to auto-attach
+cgroup programs, as you need cgroup FD at runtime. So even if you had
+some reasonable default order, you still would need to specify target
+cgroup (either through FD or ID).
+
+So... either don't do skeleton auto-attach, or let's teach libbpf code
+to not auto-attach some iter types?
+
+Alternatively, we could teach libbpf to parse some sort of cgroup
+iterator spec, like:
+
+SEC("iter/cgroup:/path/to/cgroup:descendants_pre")
+
+But this approach won't work for a bunch of other parameterized
+iterators (e.g., task iter, or map elem iter), so I'm hesitant about
+adding this to libbpf as a generic functionality.
+
+>
+> I think this can be handled by userspace? We can attach the
+> cgroup_iter separately first (and maybe we will need to set prog->link
+> as well) so that bpf_object__attach_skeleton() doesn't try to attach
+> it? I am following this pattern in the selftest in the final patch,
+> although I think I might be missing setting prog->link, so I am
+> wondering why there are no issues in that selftest which has the same
+> scenario that you are talking about.
+>
+> I think such a pattern will need to be used anyway if the users need
+> to set any non-default arguments for the cgroup_iter prog (like the
+> selftest), right? The only case we are discussing here is the case
+> where the user wants to attach the cgroup_iter with all default
+> options (in which case the default order will fail).
+> I agree that it might be inconvenient if the default/uninitialized
+> options don't work for cgroup_iter, but Alexei pointed out that this
+> matches other bpf uapis.
+>
+> My concern is that in the future we try to reuse enum bpf_iter_order
+> to set ordering for other iterators, and then the
+> default/uninitialized value (BPF_ITER_DESCENDANTS_PRE) doesn't make
+> sense for that iterator (e.g. not a tree). In this case, the same
+> problem that we are avoiding for cgroup_iter here will show up for
+> that iterator, and we can't easily change it at this point because
+> it's uapi.
+
+Yep, valid concern, I agree.
+
+>
+>
+> > > and explicitly list the values acceptable by cgroup_iter, error out if
+> > > UNSPEC is detected.
+> > >
+> > > Also, following Andrii's comments, will change BPF_ITER_SELF to
+> > > BPF_ITER_SELF_ONLY, which does seem a little bit explicit in
+> > > comparison.
+> > >
+> > > > I applied the first 3 patches to ease respin.
+> > >
+> > > Thanks! This helps!
+> > >
+> > > > Thanks!

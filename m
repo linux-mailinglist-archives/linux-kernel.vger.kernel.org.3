@@ -2,168 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04DF1596578
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F7A59658C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237991AbiHPW0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 18:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
+        id S237795AbiHPWez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 18:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237741AbiHPW0a (ORCPT
+        with ESMTP id S233286AbiHPWex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 18:26:30 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1458FD78;
-        Tue, 16 Aug 2022 15:26:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1660688754; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=iPK7Jhd8ypbEHwD/n+VtVEaj5rJAQKANFd4jbZYUJqfyaHpikst0/xxoi9x4uZS49n27Lfcc9NYd/R34Wjsv8KiKpTM//U4ghN7MxqKNRw60srjH9/hl8Ov/6e4W1mmpgKie9yQoo4JejvmbC8by3ugeVTX5uF6vPJGnkm4xZjs=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1660688754; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=qZYvwhY+9f843t/9+9YeemY82s4b/y6qSCIkArr4MHo=; 
-        b=LX0p2Bqi7yEFJCOKc5jBnZMoCsjDwBkAUDAe9VERP0ll/nwFaGWYNO3F3fIXrgfM+OmjTkm2NUH56R0gDXRDEvqZNOEQDUuXWr26TYBlTPlaEBTfV2gOLeHYbRONxoZZNgkVno2pR4B4rJA2a63Dv2OY/HiCwZ6XZuvTNrxLCTk=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1660688754;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=qZYvwhY+9f843t/9+9YeemY82s4b/y6qSCIkArr4MHo=;
-        b=R191Jh7nPNErVKrhNalKb34SdbPW1G6pI6ieMvF9bSLuGQ8Y85GW6iNLP99Eo37x
-        AlvySHC3n41V4KyccZ5H8V/61wY8vzze6yzUyNiTUclYS/Kfc1JbsmWs7dQLW7cTSXu
-        MM0BG4eDpRyH35h3RUkTbxte2yVojwwvuDQf073M=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1660688751681828.667318330111; Tue, 16 Aug 2022 15:25:51 -0700 (PDT)
-Message-ID: <87f7dd90-d6b3-dad6-fe46-0b4ce38d9c29@arinc9.com>
-Date:   Wed, 17 Aug 2022 01:25:44 +0300
+        Tue, 16 Aug 2022 18:34:53 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1CC8B983;
+        Tue, 16 Aug 2022 15:34:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660689293; x=1692225293;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=6pfW2WXsMRsIUuCNg17XL4F8HxUNrXi8GfvszKCgQcE=;
+  b=n05bCByahb2b7aiyRZHfALVoRqwJJHNOjfSmOc5AsrdhMcjB0+AG1Omp
+   l2DdfUBxi9G0M2ilYaobiWD1vesSrp/yrhsSQdgRiR9ArWsuK03AUImtq
+   hHZj5+hceJtU2/LPuzXsYCJhvyvOy1X4aYvTsis6LM5PnyGmMgEHbFsmp
+   E+QfdyXOySwfjgWfhIttBWBpo92ugnDQ0DTRNJT2nfnYRtNg1vmH3o9Gy
+   ElO5v1R6ANzj7t8fCdBwd08fMoksyb7MY3DzyOa3Kby3qApaJ9FkA50c0
+   GlNTO9dlbXfKQ9D7YBacS5lB6NBruJz7egtrLy2BIQ650yM8OyLc0br1u
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="275398671"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="275398671"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 15:34:52 -0700
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="749480801"
+Received: from elgartsx-mobl1.amr.corp.intel.com (HELO desk) ([10.209.109.200])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 15:34:52 -0700
+Date:   Tue, 16 Aug 2022 15:34:50 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH] x86/nospec: Unwreck the RSB stuffing
+Message-ID: <20220816223450.f2vpu2yobaao6jhg@desk>
+References: <20220809175513.345597655@linuxfoundation.org>
+ <20220809175513.979067723@linuxfoundation.org>
+ <YvuNdDWoUZSBjYcm@worktop.programming.kicks-ass.net>
+ <82d09944-9118-e727-705d-da513eca0bf1@citrix.com>
+ <YvuVLUXjCBkLf8sJ@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/7] dt-bindings: net: dsa: mediatek,mt7530: fix reset
- lines
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
-        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220813154415.349091-1-arinc.unal@arinc9.com>
- <20220813154415.349091-3-arinc.unal@arinc9.com>
- <20220816205228.GA2709277-robh@kernel.org>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20220816205228.GA2709277-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YvuVLUXjCBkLf8sJ@zn.tnic>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.08.2022 23:52, Rob Herring wrote:
-> On Sat, Aug 13, 2022 at 06:44:10PM +0300, Arınç ÜNAL wrote:
->> - Fix description of mediatek,mcm. mediatek,mcm is not used on MT7623NI.
->> - Add description for reset-gpios.
->> - Invalidate reset-gpios if mediatek,mcm is used.
->> - Invalidate mediatek,mcm if the compatible device is mediatek,mt7531.
->> - Require mediatek,mcm for the described MT7621 SoCs as the compatible
->> string is only used for MT7530 which is a part of the multi-chip module.
+On Tue, Aug 16, 2022 at 03:01:33PM +0200, Borislav Petkov wrote:
+> On Tue, Aug 16, 2022 at 12:52:58PM +0000, Andrew Cooper wrote:
+> > One minor point.  Stuff 32 slots.
+> > 
+> > There are Intel parts out in the world with RSBs larger than 32 entries,
+> > and this loop does not fill the entire RSB on those.
+> > 
+> > This is why the 32-entry stuffing loop is explicitly not supported on
+> > eIBRS hardware as a general mechanism.
 > 
-> The commit message should answer 'why is this change needed/wanted?' not
-> 'what changed'. I can read the diff to see what changed.
+> I'm guessing there will be an Intel patch forthcoming, making that
+> RSB_CLEAR_LOOPS more dynamic, based on the current model.
 
-I'll explain why to invalidating reset-gpios and mediatek,mcm.
-
-> 
-> d>
->> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->> ---
->>   .../bindings/net/dsa/mediatek,mt7530.yaml     | 31 +++++++++++++++++--
->>   1 file changed, 28 insertions(+), 3 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->> index edf48e917173..4c99266ce82a 100644
->> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->> @@ -110,11 +110,15 @@ properties:
->>     mediatek,mcm:
->>       type: boolean
->>       description:
->> -      if defined, indicates that either MT7530 is the part on multi-chip
->> -      module belong to MT7623A has or the remotely standalone chip as the
->> -      function MT7623N reference board provided for.
->> +      Used for MT7621AT, MT7621DAT, MT7621ST and MT7623AI SoCs which the MT7530
->> +      switch is a part of the multi-chip module.
->>   
->>     reset-gpios:
->> +    description:
->> +      GPIO to reset the switch. Use this if mediatek,mcm is not used.
->> +      This property is optional because some boards share the reset line with
->> +      other components which makes it impossible to probe the switch if the
->> +      reset line is used.
->>       maxItems: 1
->>   
->>     reset-names:
->> @@ -165,6 +169,9 @@ allOf:
->>         required:
->>           - mediatek,mcm
->>       then:
->> +      properties:
->> +        reset-gpios: false
->> +
->>         required:
->>           - resets
->>           - reset-names
->> @@ -182,6 +189,24 @@ allOf:
->>           - core-supply
->>           - io-supply
->>   
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          items:
->> +            - const: mediatek,mt7531
->> +    then:
->> +      properties:
->> +        mediatek,mcm: false
->> +
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          items:
->> +            - const: mediatek,mt7621
->> +    then:
->> +      required:
->> +        - mediatek,mcm
->> +
->>   unevaluatedProperties: false
->>   
->>   examples:
->> -- 
->> 2.34.1
->>
->>
+This is being discussed internally, but likely Enhanced IBRS parts don't
+need RSB stuffing (except for the single entry stuffing for mitigating
+PBRSB).

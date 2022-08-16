@@ -2,100 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D345963E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56B75963ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237241AbiHPUqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 16:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57658 "EHLO
+        id S237088AbiHPUrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 16:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiHPUqH (ORCPT
+        with ESMTP id S231594AbiHPUrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 16:46:07 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D3A88DEE;
-        Tue, 16 Aug 2022 13:46:04 -0700 (PDT)
-Received: from [192.168.1.138] ([37.4.248.80]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MO9r5-1o0Dxc2Fk9-00OTr7; Tue, 16 Aug 2022 22:45:49 +0200
-Message-ID: <b8a5e43a-4d1e-aede-e0f7-f731fd8acf1d@i2se.com>
-Date:   Tue, 16 Aug 2022 22:45:48 +0200
+        Tue, 16 Aug 2022 16:47:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D5589800
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 13:47:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660682860;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3JoZZmMRTLKhHqlvu8uJZ3OdJLMTuykuadzU2PRUVyo=;
+        b=HfULhG6FF0CDCsfYL0BbhyoZM2GPxb6aovAEAMbfFiyRwIX9tCC60XYpfnzpBAsbLAqj5R
+        leHFy0T0fyBNNHGcEjAohXqEdlSpTyH5P7A6YOgbSpX9FFVhJzZ8Ld0P5VglkfXf6XpdRX
+        qGm2wWpm8Ahi1CNaJl5hDz5C5kMbDZc=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-316-Ew1wESaJPzmPz9vYjNve1w-1; Tue, 16 Aug 2022 16:47:39 -0400
+X-MC-Unique: Ew1wESaJPzmPz9vYjNve1w-1
+Received: by mail-qk1-f197.google.com with SMTP id l15-20020a05620a28cf00b006b46997c070so10284890qkp.20
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 13:47:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=3JoZZmMRTLKhHqlvu8uJZ3OdJLMTuykuadzU2PRUVyo=;
+        b=lBzP+U6MpTusZW0D5okx1hN4uFjP/f575ljXm3TM+keZudVe5MpCGBhpKnkK4GfDO7
+         4NmlorDp3kF/WhYjMTMFObacWPO6pYZuUwJU8cB37bI9gTyn2BGQ27Z9uRlu3dVUmQXJ
+         L7fRRc6MtfznXThQXhuLW8HcUJ0ZYPnKvuL0k1wjlJMrRpGiV0bLTAR0txn1gngxy1ma
+         S/qL4rzjFMzdr1Iq3FeYJYVDV7wRZzhaSTU5gM64FxUVAAOahiFtUVY7ZtukPHxiVRcg
+         RzePZRKtvHG15zNKIFxHVrQVhMVrLdp9FHNzhQC6/X+Kz0pTLgFxGAneR1SZs2zngmVp
+         JfKg==
+X-Gm-Message-State: ACgBeo3dnYlYc0yMWQ6YBO4nBa5BYWA0YOncoDu9aj/fdV8hr8DcZiIF
+        RkNxftzrGsBQz4GMJOjJnFcOMExu28w8W7VcndALdQhpC0Ie+Ya5gbu/IWV5fBf87cSjVskTnOs
+        8jgCIRgsbNbwR1+YkP+zViXeK
+X-Received: by 2002:ac8:4e45:0:b0:343:5faf:3af6 with SMTP id e5-20020ac84e45000000b003435faf3af6mr20160984qtw.340.1660682857449;
+        Tue, 16 Aug 2022 13:47:37 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6IwiJJXWm5YftOp/luO9AW0MDhFAjgzItfksuHh5hDaCvWVcPNx39suKAdXZ2GyDmA+23zUg==
+X-Received: by 2002:ac8:4e45:0:b0:343:5faf:3af6 with SMTP id e5-20020ac84e45000000b003435faf3af6mr20160915qtw.340.1660682855766;
+        Tue, 16 Aug 2022 13:47:35 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id h5-20020a05620a400500b006b615cd8c13sm12717718qko.106.2022.08.16.13.47.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 13:47:35 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 16:47:34 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: Re: [PATCH v2 3/3] kvm/x86: Allow to respond to generic signals
+ during slow page faults
+Message-ID: <YvwCZsHxZV9kPn6I@xz-m1.local>
+References: <20220721000318.93522-1-peterx@redhat.com>
+ <20220721000318.93522-4-peterx@redhat.com>
+ <YvVitqmmj7Y0eggY@google.com>
+ <YvVtX+rosTLxFPe3@xz-m1.local>
+ <Yvq6DSu4wmPfXO5/@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [Regression] ext4: changes to mb_optimize_scan cause issues on
- Raspberry Pi
-Content-Language: en-US
-To:     Jan Kara <jack@suse.cz>
-Cc:     linux-ext4@vger.kernel.org, Ojaswin Mujoo <ojaswin@linux.ibm.com>,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geetika.Moolchandani1@ibm.com, regressions@lists.linux.dev,
-        Florian Fainelli <f.fainelli@gmail.com>
-References: <0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com>
- <20220728100055.efbvaudwp3ofolpi@quack3>
- <64b7899f-d84d-93de-f9c5-49538bd080d0@i2se.com>
- <20220816093421.ok26tcyvf6bm3ngy@quack3>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20220816093421.ok26tcyvf6bm3ngy@quack3>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:QATVIxUIzO4XNP67B+8HP4QQNAu7SDUyzpY148ZnYDJfs7tnRBJ
- P4nHE8TnbMh+WgAS4rs/lgc7XTshocNV1OpZ44YQvy18WcgxRaLBk+kobb43uc74GoOFyUp
- gR19howWA1OqDL8Aq7YNa5EhexZE8b5NFYrK0PM4hMG49wBDM/sICkgNrOWNn1soXhDp+O8
- TqJAbNdm7pr3HJsnooNqA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Dra9fYDHkDA=:LvzOC2xL//tX1hAXYwU6nP
- Xf8alCLDOQOQVZ1lFlSGB67f41WkgrfgssPP1f4+UaS3E3TG4cGF0tsXcRWiFUN4G9iS0FMah
- PfPmyvrCtS0hTE2PxsxyoA1jZttLzTnGWoDD72bDtMalXNh1BJFx5BL/JHLMMg3C9T2xCgBO+
- EaeBMnfhvgUCiVIuJC+xJJ19ULU0VIr/x+NclzX0Awh8QgGj0ImzqqW6lPtkTOwcjplQGXpXV
- qJFD/Nyy9NrT9TcSNnL2urdRZh0Sdt79CcFlGiqyLGHsEPHQly2MOS1R980Pfwz9dk/vwgBx3
- 8PM0SILNrkSW57E/ebKxgzhzoWcg9e+4CP4PT8gKy0z+owfBgbry7NQLrni4dLDgiRa+/KCGJ
- S4k8aA9an1czUvCWKOvTghF0ItEE65m3HK7p+9LZn4gYRCzdRwjtlnnfJl/NjzV5dilVZHEip
- vuNDwZr+qi3FJdRwvayJafSpWBulsOcNVXpxnmQmQFWcYKGue2BSPk6bVefWqWYKTqSQrmybU
- LSzgd0IRYtVKNnYn7HvQ91MwBCDATC4NMyvdboc0p6smOgcwuixLPz23NBibReFoPTuMfvES0
- qELwYqY1vOAGwZshxk9S4yHJsC5digby73z7VshICqFAvOEoUuI8C0631KS+oQ8yIKJ69a3ye
- 8euDAUwAqvZMis6VzjlfpFpuQvvd3DrYyUIV/0ACn9+XcaOSx3E1okAxgw7RrGIVEFDXi+f+x
- zuITU/bdK06q5H2UVfcfhxbuIaXn960VSqOyEgTHQQwhHBfaLtvHmZZdZoc=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yvq6DSu4wmPfXO5/@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jan,
+On Mon, Aug 15, 2022 at 09:26:37PM +0000, Sean Christopherson wrote:
+> On Thu, Aug 11, 2022, Peter Xu wrote:
+> > On Thu, Aug 11, 2022 at 08:12:38PM +0000, Sean Christopherson wrote:
+> > > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > > index 17252f39bd7c..aeafe0e9cfbf 100644
+> > > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > > @@ -3012,6 +3012,13 @@ static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
+> > > >  static int handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+> > > >  			       unsigned int access)
+> > > >  {
+> > > > +	/* NOTE: not all error pfn is fatal; handle sigpending pfn first */
+> > > > +	if (unlikely(is_sigpending_pfn(fault->pfn))) {
+> > > 
+> > > Move this into kvm_handle_bad_page(), then there's no need for a comment to call
+> > > out that this needs to come before the is_error_pfn() check.  This _is_ a "bad"
+> > > PFN, it just so happens that userspace might be able to resolve the "bad" PFN.
+> > 
+> > It's a pity it needs to be in "bad pfn" category since that's the only
+> > thing we can easily use, but true it is now.
+> 
+> Would renaming that to kvm_handle_error_pfn() help?  I agree that "bad" is poor
+> terminology now that it handles a variety of errors, hence the quotes.
 
-Am 16.08.22 um 11:34 schrieb Jan Kara:
-> Hi Stefan!
-> So this is interesting. We can see the card is 100% busy. The IO submitted
-> to the card is formed by small requests - 18-38 KB per request - and each
-> request takes 0.3-0.5s to complete. So the resulting throughput is horrible
-> - only tens of KB/s. Also we can see there are many IOs queued for the
-> device in parallel (aqu-sz columnt). This does not look like load I would
-> expect to be generated by download of a large file from the web.
->
-> You have mentioned in previous emails that with dd(1) you can do couple
-> MB/s writing to this card which is far more than these tens of KB/s. So the
-> file download must be doing something which really destroys the IO pattern
-> (and with mb_optimize_scan=0 ext4 happened to be better dealing with it and
-> generating better IO pattern). Can you perhaps strace the process doing the
-> download (or perhaps strace -f the whole rpi-update process) so that we can
-> see how does the load generated on the filesystem look like? Thanks!
+It could be slightly helpful I think, at least it starts to match with how
+we name KVM_PFN_ERR_*.  Will squash the renaming into the same patch.
 
-i didn't create the strace yet, but i looked at the source of 
-rpi-update. At the end the download phase is a curl call to download a 
-tar archive and pipe it directly to tar.
+Thanks,
 
-You can find the content list of the tar file here:
+-- 
+Peter Xu
 
-https://raw.githubusercontent.com/lategoodbye/mb_optimize_scan_regress/main/rpi-firmware-tar-content-list.txt
-
-Best regards
-
->
-> 								Honza

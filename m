@@ -2,284 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC41595D8C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85832595D8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233401AbiHPNlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48208 "EHLO
+        id S235837AbiHPNmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233972AbiHPNle (ORCPT
+        with ESMTP id S233925AbiHPNmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 09:41:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B267075CF0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:41:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660657291;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HojF8xQDqjPycN8F1tM6BoPC6Kr90xBpJgnkgFRMbN4=;
-        b=AS3yBpOWgz2l13AsObposuFjiP1D0DAjFdR+fJ3jjPZw8rxqL3a3DpBevFbNWKRWFsRXSx
-        SIdXTRG1H6YS1dBU7SOB4IP+hhDkQ9iV6FOZTJzStPgBuM9TevOOyF1zuaWDWqKQHA607H
-        LBKzqCebBY1KQxgL0E6QAGGeTE1yRT0=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-513-e9vMnYD-NCepvHtNWVKcdw-1; Tue, 16 Aug 2022 09:41:29 -0400
-X-MC-Unique: e9vMnYD-NCepvHtNWVKcdw-1
-Received: by mail-qt1-f198.google.com with SMTP id z6-20020ac875c6000000b0034454b14c91so6185273qtq.15
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:41:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=HojF8xQDqjPycN8F1tM6BoPC6Kr90xBpJgnkgFRMbN4=;
-        b=aGa9N6tFNdKnrk4Asdyv/ChUN6jlSdqtQKf3Tp9FPzP2TtsMiH2fJEifMPHH3T5A07
-         B0USq/6w+DpQr3tswPS8ZPz/ZTbCueTGikk5yQaLcc9+5Foju6FBr6AfDoG3xj4E3vkX
-         wLfKR1QfIlwgOh6P8mbSX5sPaQJvENx1RpUQA9L9oegYKah3oBRnCH2ba1gY22E/O4Aq
-         9Se432hd0rZVSKvniZZOVkVud+fUOMbO1ULo8SnQVbuWJFLBSMdBkYJFicb0rvBnQibh
-         djFW0c66612n7G2pxCQRyc/dK6DUdhlMkSsVl9MxTT15+qMeuc4zWr06pIpw20cPR+Wb
-         Y59Q==
-X-Gm-Message-State: ACgBeo1zYqc1YaWA6DKOSoiR+/eOZUfU1CsHiHmW0/UfbV9tjm0ePsiG
-        MllZESOuJT9+jgc6SvKtEJ1vWfjBkfNj/ra6PSKAPLttf1CFlNT+TFwkv6y0SZ/7kNhU5mfNM65
-        BlQ3QpaBShm3eplsYjTZNcmlH
-X-Received: by 2002:a05:622a:18a3:b0:343:5a0b:4884 with SMTP id v35-20020a05622a18a300b003435a0b4884mr18881130qtc.396.1660657287714;
-        Tue, 16 Aug 2022 06:41:27 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7/XnqL08o4gV66q7PF+HLU1re1fOaCsTZdcrXzc98AiasccD9nyC3mvDzO7EghclDphq7Pvw==
-X-Received: by 2002:a05:622a:18a3:b0:343:5a0b:4884 with SMTP id v35-20020a05622a18a300b003435a0b4884mr18881109qtc.396.1660657287400;
-        Tue, 16 Aug 2022 06:41:27 -0700 (PDT)
-Received: from [192.168.98.18] ([107.12.98.143])
-        by smtp.gmail.com with ESMTPSA id cp5-20020a05622a420500b0031f41ea94easm10020381qtb.28.2022.08.16.06.41.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 06:41:27 -0700 (PDT)
-Message-ID: <3d55690a-8932-4560-4267-ab28816fdb47@redhat.com>
-Date:   Tue, 16 Aug 2022 09:41:25 -0400
+        Tue, 16 Aug 2022 09:42:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D53A76446;
+        Tue, 16 Aug 2022 06:42:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A888B819FD;
+        Tue, 16 Aug 2022 13:42:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2356C433D6;
+        Tue, 16 Aug 2022 13:42:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660657324;
+        bh=Qq7Od/WKrPNgJutT+rQAJ/KGqHp84OSZZFvuxh53vfs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Uxm4xm+ALMb01rM4sXSeb76GPtpquhJHUuGAQPan5hjPTY2PG2/VVJT+yzlSqJSp4
+         gbuO20i7MQ/V7LbXJBKi1Kv09HDlPEiykqQMiYrWfUuyR+4RMtgbrS/pNK3Ld1tEBz
+         iIteDr8uwY6qNZQEt56Qo4uW7G8/lP+qi52hqjEEwFQkOg6aDn23w+NX3EvCN1bG8/
+         BHbwbkZnhyPnYs2uzf/FiTBySdqnGim674TWzDv0o2cWLgMBBhZT84l3ZuxIHs2LhU
+         0MFGrARz8A7GOsadQ1/ZmP+BWv6OdePO4izMwZkkb0oCjNAyEJ2dXzgtG2zHhN6Vzo
+         71xzl9WdEbD4w==
+Date:   Tue, 16 Aug 2022 14:41:57 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Tejun Heo <tj@kernel.org>, marcan@marcan.st,
+        peterz@infradead.org, jirislaby@kernel.org, maz@kernel.org,
+        mark.rutland@arm.com, boqun.feng@gmail.com,
+        catalin.marinas@arm.com, oneukum@suse.com,
+        roman.penyaev@profitbricks.com, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] workqueue: Fix memory ordering race in queue_work*()
+Message-ID: <20220816134156.GB11202@willie-the-truck>
+References: <YvqaK3hxix9AaQBO@slm.duckdns.org>
+ <YvsZ6vObgLaDeSZk@gondor.apana.org.au>
+ <CAHk-=wgSNiT5qJX53RHtWECsUiFq6d6VWYNAvu71ViOEan07yw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH net v3 2/2] bonding: 802.3ad: fix no transmission of
- LACPDUs
-Content-Language: en-US
-To:     Jay Vosburgh <jay.vosburgh@canonical.com>
-Cc:     netdev@vger.kernel.org, liuhangbin@gmail.com,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-References: <cover.1660572700.git.jtoppins@redhat.com>
- <0639f1e3d366c5098d561a947fd416fa5277e7f4.1660572700.git.jtoppins@redhat.com>
- <17000.1660655501@famine>
-From:   Jonathan Toppins <jtoppins@redhat.com>
-In-Reply-To: <17000.1660655501@famine>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgSNiT5qJX53RHtWECsUiFq6d6VWYNAvu71ViOEan07yw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/16/22 09:11, Jay Vosburgh wrote:
-> Jonathan Toppins <jtoppins@redhat.com> wrote:
+On Mon, Aug 15, 2022 at 10:27:10PM -0700, Linus Torvalds wrote:
+> On Mon, Aug 15, 2022 at 9:15 PM Herbert Xu <herbert@gondor.apana.org.au> wrote:
+> >
+> > Please revert this as test_and_set_bit was always supposed to be
+> > a full memory barrier.  This is an arch bug.
 > 
->> This is caused by the global variable ad_ticks_per_sec being zero as
->> demonstrated by the reproducer script discussed below. This causes
->> all timer values in __ad_timer_to_ticks to be zero, resulting
->> in the periodic timer to never fire.
->>
->> To reproduce:
->> Run the script in
->> `tools/testing/selftests/drivers/net/bonding/bond-break-lacpdu-tx.sh` which
->> puts bonding into a state where it never transmits LACPDUs.
->>
->> line 44: ip link add fbond type bond mode 4 miimon 200 \
->>             xmit_hash_policy 1 ad_actor_sys_prio 65535 lacp_rate fast
->> setting bond param: ad_actor_sys_prio
->> given:
->>     params.ad_actor_system = 0
->> call stack:
->>     bond_option_ad_actor_sys_prio()
->>     -> bond_3ad_update_ad_actor_settings()
->>        -> set ad.system.sys_priority = bond->params.ad_actor_sys_prio
->>        -> ad.system.sys_mac_addr = bond->dev->dev_addr; because
->>             params.ad_actor_system == 0
->> results:
->>      ad.system.sys_mac_addr = bond->dev->dev_addr
->>
->> line 48: ip link set fbond address 52:54:00:3B:7C:A6
->> setting bond MAC addr
->> call stack:
->>     bond->dev->dev_addr = new_mac
->>
->> line 52: ip link set fbond type bond ad_actor_sys_prio 65535
->> setting bond param: ad_actor_sys_prio
->> given:
->>     params.ad_actor_system = 0
->> call stack:
->>     bond_option_ad_actor_sys_prio()
->>     -> bond_3ad_update_ad_actor_settings()
->>        -> set ad.system.sys_priority = bond->params.ad_actor_sys_prio
->>        -> ad.system.sys_mac_addr = bond->dev->dev_addr; because
->>             params.ad_actor_system == 0
->> results:
->>      ad.system.sys_mac_addr = bond->dev->dev_addr
->>
->> line 60: ip link set veth1-bond down master fbond
->> given:
->>     params.ad_actor_system = 0
->>     params.mode = BOND_MODE_8023AD
->>     ad.system.sys_mac_addr == bond->dev->dev_addr
->> call stack:
->>     bond_enslave
->>     -> bond_3ad_initialize(); because first slave
->>        -> if ad.system.sys_mac_addr != bond->dev->dev_addr
->>           return
->> results:
->>      Nothing is run in bond_3ad_initialize() because dev_add equals
->>      sys_mac_addr leaving the global ad_ticks_per_sec zero as it is
->>      never initialized anywhere else.
->>
->> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
->> Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
->> ---
->>
->> Notes:
->>     v2:
->>      * split this fix from the reproducer
->>     v3:
->>      * rebased to latest net/master
->>
->> drivers/net/bonding/bond_3ad.c | 3 ++-
->> 1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
->> index d7fb33c078e8..957d30db6f95 100644
->> --- a/drivers/net/bonding/bond_3ad.c
->> +++ b/drivers/net/bonding/bond_3ad.c
->> @@ -84,7 +84,8 @@ enum ad_link_speed_type {
->> static const u8 null_mac_addr[ETH_ALEN + 2] __long_aligned = {
->> 	0, 0, 0, 0, 0, 0
->> };
->> -static u16 ad_ticks_per_sec;
->> +
->> +static u16 ad_ticks_per_sec = 1000 / AD_TIMER_INTERVAL;
->> static const int ad_delta_in_ticks = (AD_TIMER_INTERVAL * HZ) / 1000;
+> Yes, the bitops are kind of strange for various legacy reasons:
 > 
-> 	I still feel like this is kind of a hack, as it's not really
-> fixing bond_3ad_initialize to actually work (which is the real problem
-> as I understand it).  If it's ok to skip all that for this case, then
-> why do we ever need to call bond_3ad_initialize?
+>  - set/clear_bit is atomic, but without a memory barrier, and need a
+> "smp_mb__before_atomic()" or similar for barriers
 > 
+>  - test_and_set/clear_bit() are atomic, _and_ are memory barriers
+> 
+>  - test_and_set_bit_lock and test_and_clear_bit_unlock are atomic and
+> _weaker_ than full memory barriers, but sufficient for locking (ie
+> acquire/release)
+> 
+> Does any of this make any sense at all? No. But those are the
+> documented semantics exactly because people were worried about
+> test_and_set_bit being used for locking, since on x86 all the atomics
+> are also memory barriers.
+> 
+> From looking at it, the asm-generic implementation is a bit
+> questionable, though. In particular, it does
+> 
+>         if (READ_ONCE(*p) & mask)
+>                 return 1;
+> 
+> so it's *entirely* unordered for the "bit was already set" case.
+> 
+> That looks very wrong to me, since it basically means that the
+> test_and_set_bit() can return "bit was already set" based on an old
+> value - not a memory barrier at all.
+> 
+> So if you use "test_and_set_bit()" as some kind of "I've done my work,
+> now I am going to set the bit to tell people to pick it up", then that
+> early "bit was already set" code completely breaks it.
+> 
+> Now, arguably our atomic bitop semantics are very very odd, and it
+> might be time to revisit them. But that code looks very very buggy to
+> me.
+> 
+> The bug seems to go back to commit e986a0d6cb36 ("locking/atomics,
+> asm-generic/bitops/atomic.h: Rewrite using atomic_*() APIs"), and the
+> fix looks to be as simple as just removing that early READ_ONCE return
+> case (test_and_clear has the same bug).
+> 
+> Will?
 
-The way it is currently written you still need to call 
-bond_3ad_initialize() just not for setting the tick resolution. The 
-issue here is ad_ticks_per_sec is used in several places to calculate 
-timer periods, __ad_timer_to_ticks(), for various timers in the 802.3ad 
-protocol. And if this variable, ad_ticks_per_sec, is left uninitialized 
-all of these timer periods go to zero. Since the value passed in 
-bond_3ad_initialize() is an immediate value I simply moved it off of the 
-call stack and set the static global variable instead.
+Right, this looks like it's all my fault, so sorry about that.
 
-To fix bond_3ad_initialize(), probably something like the below is 
-needed, but I do not understand why the guard if check was placed in 
-bond_3ad_initialize().
+In an effort to replace the spinlock-based atomic bitops with a version
+based on atomic instructions in e986a0d6cb36, I inadvertently added this
+READ_ONCE() shortcut to test_and_set_bit() because at the time that's
+what we had (incorrectly) documented in our attempts at cleaning things
+up in this area. I confess that I have never been comfortable with the
+comment for test_and_set_bit() prior to my problematic patch:
 
-diff --git i/drivers/net/bonding/bond_3ad.c w/drivers/net/bonding/bond_3ad.c
-index d7fb33c078e8..5b5146f5c4ea 100644
---- i/drivers/net/bonding/bond_3ad.c
-+++ w/drivers/net/bonding/bond_3ad.c
-@@ -2005,32 +2005,21 @@ void bond_3ad_initiate_agg_selection(struct 
-bonding *bond, int timeout)
-   *
-   * Can be called only after the mac address of the bond is set.
-   */
--void bond_3ad_initialize(struct bonding *bond, u16 tick_resolution)
-+void bond_3ad_initialize(struct bonding *bond)
-  {
--	/* check that the bond is not initialized yet */
--	if (!MAC_ADDRESS_EQUAL(&(BOND_AD_INFO(bond).system.sys_mac_addr),
--				bond->dev->dev_addr)) {
--
--		BOND_AD_INFO(bond).aggregator_identifier = 0;
--
--		BOND_AD_INFO(bond).system.sys_priority =
--			bond->params.ad_actor_sys_prio;
--		if (is_zero_ether_addr(bond->params.ad_actor_system))
--			BOND_AD_INFO(bond).system.sys_mac_addr =
--			    *((struct mac_addr *)bond->dev->dev_addr);
--		else
--			BOND_AD_INFO(bond).system.sys_mac_addr =
--			    *((struct mac_addr *)bond->params.ad_actor_system);
--
--		/* initialize how many times this module is called in one
--		 * second (should be about every 100ms)
--		 */
--		ad_ticks_per_sec = tick_resolution;
-+	BOND_AD_INFO(bond).aggregator_identifier = 0;
-+	BOND_AD_INFO(bond).system.sys_priority =
-+		bond->params.ad_actor_sys_prio;
-+	if (is_zero_ether_addr(bond->params.ad_actor_system))
-+		BOND_AD_INFO(bond).system.sys_mac_addr =
-+		    *((struct mac_addr *)bond->dev->dev_addr);
-+	else
-+		BOND_AD_INFO(bond).system.sys_mac_addr =
-+		    *((struct mac_addr *)bond->params.ad_actor_system);
+/**
+ * test_and_set_bit - Set a bit and return its old value
+ * @nr: Bit to set
+ * @addr: Address to count from
+ *
+ * This operation is atomic and cannot be reordered.
+ * It may be reordered on other architectures than x86.
+ * It also implies a memory barrier.
+ */
 
--		bond_3ad_initiate_agg_selection(bond,
--						AD_AGGREGATOR_SELECTION_TIMER *
--						ad_ticks_per_sec);
--	}
-+	bond_3ad_initiate_agg_selection(bond,
-+					AD_AGGREGATOR_SELECTION_TIMER *
-+					ad_ticks_per_sec);
-  }
+so while Peter and I were trying to improve the documentation for
+atomics and memory barriers we clearly ended up making the wrong call
+trying to treat this like e.g. a cmpxchg() (which has the
+unordered-on-failure semantics).
 
-  /**
-diff --git i/drivers/net/bonding/bond_main.c 
-w/drivers/net/bonding/bond_main.c
-index 50e60843020c..5f56af9dc3ba 100644
---- i/drivers/net/bonding/bond_main.c
-+++ w/drivers/net/bonding/bond_main.c
-@@ -2078,10 +2078,10 @@ int bond_enslave(struct net_device *bond_dev, 
-struct net_device *slave_dev,
-  		/* if this is the first slave */
-  		if (!prev_slave) {
-  			SLAVE_AD_INFO(new_slave)->id = 1;
--			/* Initialize AD with the number of times that the AD timer is 
-called in 1 second
--			 * can be called only after the mac address of the bond is set
-+			/* can be called only after the mac address of the
-+			 * bond is set
-  			 */
--			bond_3ad_initialize(bond, 1000/AD_TIMER_INTERVAL);
-+			bond_3ad_initialize(bond);
-  		} else {
-  			SLAVE_AD_INFO(new_slave)->id =
-  				SLAVE_AD_INFO(prev_slave)->id + 1;
-diff --git i/include/net/bond_3ad.h w/include/net/bond_3ad.h
-index 184105d68294..be2992e6de5d 100644
---- i/include/net/bond_3ad.h
-+++ w/include/net/bond_3ad.h
-@@ -290,7 +290,7 @@ static inline const char 
-*bond_3ad_churn_desc(churn_state_t state)
-  }
+It's worth noting that with the spinlock-based implementation (i.e.
+prior to e986a0d6cb36) then we would have the same problem on
+architectures that implement spinlocks with acquire/release semantics;
+accesses from outside of the critical section can drift in and reorder
+with each other there, so the conversion looked legitimate to me in
+isolation and I vaguely remember going through callers looking for
+potential issues. Alas, I obviously missed this case.
 
-  /* ========== AD Exported functions to the main bonding code ========== */
--void bond_3ad_initialize(struct bonding *bond, u16 tick_resolution);
-+void bond_3ad_initialize(struct bonding *bond);
-  void bond_3ad_bind_slave(struct slave *slave);
-  void bond_3ad_unbind_slave(struct slave *slave);
-  void bond_3ad_state_machine_handler(struct work_struct *);
+So it looks to me like we need to:
 
--Jon
+  1. Upgrade test_and_{set,clear}_bit() to have a full memory barrier
+     regardless of the value which is read from memory. The lock/unlock
+     flavours can remain as-is.
 
+  2. Fix the documentation
+
+  3. Figure out what to do about architectures building atomics out of
+     spinlocks (probably ok as lock+unlock == full barrier there?)
+
+  4. Accept my sincerest apologies for the mess!
+
+> IOW, the proper fix for this should, I think, look something like this
+> (whitespace mangled) thing:
+> 
+>    --- a/include/asm-generic/bitops/atomic.h
+>    +++ b/include/asm-generic/bitops/atomic.h
+>    @@ -39,9 +39,6 @@ arch_test_and_set_bit(
+>         unsigned long mask = BIT_MASK(nr);
+> 
+>         p += BIT_WORD(nr);
+>    -    if (READ_ONCE(*p) & mask)
+>    -            return 1;
+>    -
+>         old = arch_atomic_long_fetch_or(mask, (atomic_long_t *)p);
+>         return !!(old & mask);
+>     }
+>    @@ -53,9 +50,6 @@ arch_test_and_clear_bit
+>         unsigned long mask = BIT_MASK(nr);
+> 
+>         p += BIT_WORD(nr);
+>    -    if (!(READ_ONCE(*p) & mask))
+>    -            return 0;
+>    -
+>         old = arch_atomic_long_fetch_andnot(mask, (atomic_long_t *)p);
+>         return !!(old & mask);
+>     }
+> 
+> but the above is not just whitespace-damaged, it's entirely untested
+> and based purely on me looking at that code.
+
+Yes, I think that's step 1, thanks! I'm a bit worried about the perf
+numbers on the other thread, but we can get to the bottom of that
+separately.
+
+Will

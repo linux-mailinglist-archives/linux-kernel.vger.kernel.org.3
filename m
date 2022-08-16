@@ -2,141 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18DA15955AD
+	by mail.lfdr.de (Postfix) with ESMTP id A64FB5955AE
 	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232798AbiHPI4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 04:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47862 "EHLO
+        id S229982AbiHPI4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 04:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233431AbiHPIzu (ORCPT
+        with ESMTP id S229619AbiHPIz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:55:50 -0400
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56ACC10651D;
-        Tue, 16 Aug 2022 00:03:31 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id E22484195A;
-        Tue, 16 Aug 2022 07:03:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1660633407; bh=kUwKJCbfhFuqlbG5x8uMKMwiqOIdhALURpt/vstQk4s=;
-        h=From:To:Cc:Subject:Date;
-        b=oZugG863BdtFggJGMD5WWyU3O9TQMqUzQI0Q0opxDi9IBIIqfCX8bmf5N2YMyCiRZ
-         2keRbaZtAzfI4XvjVQnFFtSCOUOYOXWaZyrqqG+ut2RkHO3zGaiMgjnKx2yzNSXjrY
-         bL0tH7UpAmYsOIYiNTgRd5LkWG2+SpzNXCpk5BfDO7izM9Wj4UYSLYoFzMD3cpXTZ8
-         ItJ56cokotDvC/wfZXdCqNw5B15pSrAFIdJqh7kKil/FvjbCbQlT+5659azbnI/9q9
-         FIqW/hbHLrCYNw8X0r/KatC+tbn1Qx3TCxeSt4gV/vPUZv3KtMdasKqGbmccXcukE5
-         vd9SMut5DVlkQ==
-From:   Hector Martin <marcan@marcan.st>
-To:     Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@kernel.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>, Tejun Heo <tj@kernel.org>,
-        jirislaby@kernel.org, Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Asahi Linux <asahi@lists.linux.dev>,
-        Hector Martin <marcan@marcan.st>, stable@vger.kernel.org
-Subject: [PATCH] locking/atomic: Make test_and_*_bit() ordered on failure
-Date:   Tue, 16 Aug 2022 16:03:11 +0900
-Message-Id: <20220816070311.89186-1-marcan@marcan.st>
-X-Mailer: git-send-email 2.35.1
+        Tue, 16 Aug 2022 04:55:58 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B775E1272E4
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:03:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660633430; x=1692169430;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=x3vHKljaHoPorOmYOVh/bLWoEv7HxufbaQXL1gLFzlo=;
+  b=QBFO7hivNWaHAcPWhPsc5zGv4ZbqK+Jt3zmAalbHyQ1uF0k/Bz8OPSjv
+   WaG3jslhzX9IBn+rpZ3iFqyZO3PwhRUNV5YyP8V1MKAEFwxpfafHThaeI
+   Dq59a7St/qNx1M4+2usOCbFykqgcS+814rhzgSypaJyc3BFt/jsTwRE2R
+   rERqn9SqMV74frDQ6dS1vyxyW296bsRazbL624gvow0F8cW5eo3L/IBDa
+   K6GKQfsZF3aCLVhjXgkpKDbZlt7aPPPpiA0x6d8L/PuJihnbKfB8nPDQY
+   qYzWJMmmR7rYNWi6uYZTce57Ow2oMfPZPxZ/Oc0Tw8vm0iKJdsByxiebA
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="290897135"
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="290897135"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 00:03:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="675105312"
+Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 16 Aug 2022 00:03:49 -0700
+Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oNqc8-0001aX-2C;
+        Tue, 16 Aug 2022 07:03:48 +0000
+Date:   Tue, 16 Aug 2022 15:03:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Venkata Lakshmi Narayana Gubba <gubbaven@codeaurora.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Marcel Holtmann <marcel@holtmann.org>
+Subject: drivers/bluetooth/hci_qca.c:1860:37: warning: 'qca_soc_data_wcn6750'
+ defined but not used
+Message-ID: <202208161416.YMrgM5RB-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These operations are documented as always ordered in
-include/asm-generic/bitops/instrumented-atomic.h, and producer-consumer
-type use cases where one side needs to ensure a flag is left pending
-after some shared data was updated rely on this ordering, even in the
-failure case.
+Hi Venkata,
 
-This is the case with the workqueue code, which currently suffers from a
-reproducible ordering violation on Apple M1 platforms (which are
-notoriously out-of-order) that ends up causing the TTY layer to fail to
-deliver data to userspace properly under the right conditions. This
-change fixes that bug.
+FYI, the error/warning still remains.
 
-Change the documentation to restrict the "no order on failure" story to
-the _lock() variant (for which it makes sense), and remove the
-early-exit from the generic implementation, which is what causes the
-missing barrier semantics in that case. Without this, the remaining
-atomic op is fully ordered (including on ARM64 LSE, as of recent
-versions of the architecture spec).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+commit: d8f97da1b92d2fe89d51c673ecf80c4016119e5c Bluetooth: hci_qca: Add support for QTI Bluetooth chip wcn6750
+date:   1 year, 2 months ago
+config: i386-buildonly-randconfig-r005-20220815 (https://download.01.org/0day-ci/archive/20220816/202208161416.YMrgM5RB-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d8f97da1b92d2fe89d51c673ecf80c4016119e5c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d8f97da1b92d2fe89d51c673ecf80c4016119e5c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: stable@vger.kernel.org
-Fixes: e986a0d6cb36 ("locking/atomics, asm-generic/bitops/atomic.h: Rewrite using atomic_*() APIs")
-Fixes: 61e02392d3c7 ("locking/atomic/bitops: Document and clarify ordering semantics for failed test_and_{}_bit()")
-Signed-off-by: Hector Martin <marcan@marcan.st>
----
- Documentation/atomic_bitops.txt     | 2 +-
- include/asm-generic/bitops/atomic.h | 6 ------
- 2 files changed, 1 insertion(+), 7 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/Documentation/atomic_bitops.txt b/Documentation/atomic_bitops.txt
-index 093cdaefdb37..d8b101c97031 100644
---- a/Documentation/atomic_bitops.txt
-+++ b/Documentation/atomic_bitops.txt
-@@ -59,7 +59,7 @@ Like with atomic_t, the rule of thumb is:
-  - RMW operations that have a return value are fully ordered.
- 
-  - RMW operations that are conditional are unordered on FAILURE,
--   otherwise the above rules apply. In the case of test_and_{}_bit() operations,
-+   otherwise the above rules apply. In the case of test_and_set_bit_lock(),
-    if the bit in memory is unchanged by the operation then it is deemed to have
-    failed.
- 
-diff --git a/include/asm-generic/bitops/atomic.h b/include/asm-generic/bitops/atomic.h
-index 3096f086b5a3..71ab4ba9c25d 100644
---- a/include/asm-generic/bitops/atomic.h
-+++ b/include/asm-generic/bitops/atomic.h
-@@ -39,9 +39,6 @@ arch_test_and_set_bit(unsigned int nr, volatile unsigned long *p)
- 	unsigned long mask = BIT_MASK(nr);
- 
- 	p += BIT_WORD(nr);
--	if (READ_ONCE(*p) & mask)
--		return 1;
--
- 	old = arch_atomic_long_fetch_or(mask, (atomic_long_t *)p);
- 	return !!(old & mask);
- }
-@@ -53,9 +50,6 @@ arch_test_and_clear_bit(unsigned int nr, volatile unsigned long *p)
- 	unsigned long mask = BIT_MASK(nr);
- 
- 	p += BIT_WORD(nr);
--	if (!(READ_ONCE(*p) & mask))
--		return 0;
--
- 	old = arch_atomic_long_fetch_andnot(mask, (atomic_long_t *)p);
- 	return !!(old & mask);
- }
+All warnings (new ones prefixed by >>):
+
+>> drivers/bluetooth/hci_qca.c:1860:37: warning: 'qca_soc_data_wcn6750' defined but not used [-Wunused-const-variable=]
+    1860 | static const struct qca_device_data qca_soc_data_wcn6750 = {
+         |                                     ^~~~~~~~~~~~~~~~~~~~
+   drivers/bluetooth/hci_qca.c:1844:37: warning: 'qca_soc_data_wcn3998' defined but not used [-Wunused-const-variable=]
+    1844 | static const struct qca_device_data qca_soc_data_wcn3998 = {
+         |                                     ^~~~~~~~~~~~~~~~~~~~
+   drivers/bluetooth/hci_qca.c:1832:37: warning: 'qca_soc_data_wcn3991' defined but not used [-Wunused-const-variable=]
+    1832 | static const struct qca_device_data qca_soc_data_wcn3991 = {
+         |                                     ^~~~~~~~~~~~~~~~~~~~
+   drivers/bluetooth/hci_qca.c:1821:37: warning: 'qca_soc_data_wcn3990' defined but not used [-Wunused-const-variable=]
+    1821 | static const struct qca_device_data qca_soc_data_wcn3990 = {
+         |                                     ^~~~~~~~~~~~~~~~~~~~
+
+
+vim +/qca_soc_data_wcn6750 +1860 drivers/bluetooth/hci_qca.c
+
+  1859	
+> 1860	static const struct qca_device_data qca_soc_data_wcn6750 = {
+  1861		.soc_type = QCA_WCN6750,
+  1862		.vregs = (struct qca_vreg []) {
+  1863			{ "vddio", 5000 },
+  1864			{ "vddaon", 26000 },
+  1865			{ "vddbtcxmx", 126000 },
+  1866			{ "vddrfacmn", 12500 },
+  1867			{ "vddrfa0p8", 102000 },
+  1868			{ "vddrfa1p7", 302000 },
+  1869			{ "vddrfa1p2", 257000 },
+  1870			{ "vddrfa2p2", 1700000 },
+  1871			{ "vddasd", 200 },
+  1872		},
+  1873		.num_vregs = 9,
+  1874		.capabilities = QCA_CAP_WIDEBAND_SPEECH | QCA_CAP_VALID_LE_STATES,
+  1875	};
+  1876	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

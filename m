@@ -2,96 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171D459529A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 08:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 630C05952A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 08:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbiHPGhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 02:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40708 "EHLO
+        id S230079AbiHPGiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 02:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiHPGhH (ORCPT
+        with ESMTP id S229772AbiHPGh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 02:37:07 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9554A1AB883;
-        Mon, 15 Aug 2022 18:13:31 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M6Cny4fhGz4xV4;
-        Tue, 16 Aug 2022 11:13:26 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1660612406;
-        bh=snNpycHxM/XQfHLoQriesMPQxXB226j+ksKeX43PHSo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ZGvCq3/YwHAtG2mgItxXvv1hOqdoQ/x5cK6sefPTJgi1kh1MG7IGPp+53tBaYEnBx
-         8/jM8sa+EIitvNDyTpT+d4ZpDlMBQGSyg2sKNb/XHsXswS9A7Z1Mtag4vqWnn3VlxD
-         6I/tBDsEAI8s2xk2R1YQ4QrEJQJ3/rrNZU/Y3AxpcGw1OcFBSxsDSuPipouE3kA1yC
-         vg5UHZaooVm72Ccxvo+St9fjNP+oy/eksutb9ATqOF40kqrvul2EfYwHLFX+XRnfOu
-         r0zP62nHYE3ySR1Nt1/q7aDWq2Xs8UHFiwEE05IOee1igf5Dwe/6v3bQkWJ5DE1ZSI
-         09kIOlvVRtkDw==
-Date:   Tue, 16 Aug 2022 11:13:23 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the vhost tree
-Message-ID: <20220816111323.05b3c314@canb.auug.org.au>
+        Tue, 16 Aug 2022 02:37:58 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1C9C3F6D;
+        Mon, 15 Aug 2022 18:16:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660612605; x=1692148605;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LGPJbg4YSGE8kGvV/+MMwres2qQJGjWYu0L1b7FKRhE=;
+  b=ELRkR2j1k99KuJmwKFAuMd3EZk19xB9XFwD1m3elDOIJ/99+sIdebamR
+   BPlxiwKrSATGt8r0FVnjxTZg2R9AnPplI3rWDKZl93hNRipjow5kb5V3y
+   jZoUzRg5s82gd6CunLWVcSV0iTKD/QIO6FXUx7iYPO4JGCD3q66DZ6I2n
+   dsCBypP0P08a85N7ywODoZLQyacGutLWasCv1Juw7vCsoeTEmlssEY1cp
+   t8d2L6lZzlp/dYoxYTxYNwKE6EcpGn090h7gPqU7pgfMDGt/kPyB8QZzC
+   klr52tGFjSaa8NXxv5oSnV1j9tvcpwIY/mIXXzG9Ne3RrK+YdCwXZngay
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="293368083"
+X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
+   d="scan'208";a="293368083"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 18:16:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
+   d="scan'208";a="639838790"
+Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 15 Aug 2022 18:16:42 -0700
+Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oNlCD-0001KD-2Z;
+        Tue, 16 Aug 2022 01:16:41 +0000
+Date:   Tue, 16 Aug 2022 09:15:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
+Cc:     kbuild-all@lists.01.org, Daniel Xu <dxu@dxuuu.xyz>,
+        pablo@netfilter.org, fw@strlen.de, netfilter-devel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 2/3] bpf: Add support for writing to nf_conn:mark
+Message-ID: <202208160931.5FG8tZ8G-lkp@intel.com>
+References: <f850bb7e20950736d9175c61d7e0691098e06182.1660592020.git.dxu@dxuuu.xyz>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mHlB/mK8Z7Pj/FFx6gwWY99";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f850bb7e20950736d9175c61d7e0691098e06182.1660592020.git.dxu@dxuuu.xyz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/mHlB/mK8Z7Pj/FFx6gwWY99
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Daniel,
 
-Hi all,
+Thank you for the patch! Yet something to improve:
 
-After merging the vhost tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+[auto build test ERROR on bpf-next/master]
 
-drivers/virtio/virtio_vdpa.c: In function 'virtio_vdpa_find_vqs':
-drivers/virtio/virtio_vdpa.c:291:61: error: 'sizes' undeclared (first use i=
-n this function)
-  291 |                                                   names[i], sizes ?=
- sizes[i] : 0,
-      |                                                             ^~~~~
-drivers/virtio/virtio_vdpa.c:291:61: note: each undeclared identifier is re=
-ported only once for each function it appears in
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Xu/Support-direct-writes-to-nf_conn-mark/20220816-060429
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: um-x86_64_defconfig (https://download.01.org/0day-ci/archive/20220816/202208160931.5FG8tZ8G-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/c7b21d163eb9c61514dd86baf4281deb4d4387bb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Xu/Support-direct-writes-to-nf_conn-mark/20220816-060429
+        git checkout c7b21d163eb9c61514dd86baf4281deb4d4387bb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um SUBARCH=x86_64 SHELL=/bin/bash
 
-Caused by commit
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-  71545b3c933a ("virtio: Revert "virtio: find_vqs() add arg sizes"")
+All errors (new ones prefixed by >>):
 
-I have used the vhost tree from next-20220815 for today.
+   net/core/filter.c: In function 'tc_cls_act_btf_struct_access':
+>> net/core/filter.c:8723:24: error: implicit declaration of function 'btf_struct_access' [-Werror=implicit-function-declaration]
+    8723 |                 return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
+         |                        ^~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/mHlB/mK8Z7Pj/FFx6gwWY99
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+vim +/btf_struct_access +8723 net/core/filter.c
 
------BEGIN PGP SIGNATURE-----
+  8714	
+  8715	static int tc_cls_act_btf_struct_access(struct bpf_verifier_log *log,
+  8716						const struct btf *btf,
+  8717						const struct btf_type *t, int off,
+  8718						int size, enum bpf_access_type atype,
+  8719						u32 *next_btf_id,
+  8720						enum bpf_type_flag *flag)
+  8721	{
+  8722		if (atype == BPF_READ)
+> 8723			return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
+  8724						 flag);
+  8725	
+  8726		return nf_conntrack_btf_struct_access(log, btf, t, off, size, atype,
+  8727						      next_btf_id, flag);
+  8728	}
+  8729	
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL67zMACgkQAVBC80lX
-0GzZewf/cit26uB9DjYtXsiZ5fyyM1b+GdHipoLVZiHJyE9BHSuJAjWbI5FN109k
-I/jCcfUS2vaBH2aRHOnNTfEKTjOOSg1o15SjNMIXMTWaYnPoRFCubLY/MsbmUo+9
-91J1y3pqlCAfGafxL9Z94dWZeTABtH+CexLS9zn1ImsVEqLNRIoQjubUvW/n3DK7
-E31RcqEJgaBbBMvnFKjvnw1BXq7ix6zWslJov7/VobtrwBZl676U89PbIBDJjdod
-4/qwTrh6JVG41ArFb0OyuWEcdKLK5fPvG0Lmv95/O7z62RnYlsgltHxQWui4s0zp
-kcp61wSirNx8XbpNHGXtOvJrykPhKA==
-=lOQF
------END PGP SIGNATURE-----
-
---Sig_/mHlB/mK8Z7Pj/FFx6gwWY99--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

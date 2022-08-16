@@ -2,54 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8C55956BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22EB759571B
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233558AbiHPJjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51804 "EHLO
+        id S231878AbiHPJwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233709AbiHPJi3 (ORCPT
+        with ESMTP id S234031AbiHPJwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:38:29 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B9B11945B
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:00:27 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id v5-20020a5d9405000000b0067c98e0011dso5515942ion.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:00:27 -0700 (PDT)
+        Tue, 16 Aug 2022 05:52:18 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323A013E56D
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:06:17 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id d14so13740071lfl.13
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:06:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=qACRoIaUIx4q7Fq4+bP1/fvXnrMmd2GKs256tlkcKt4=;
+        b=BBO5LjKSiDFTYMhsWb3L99v5jd7KieKgdC3QskfSxYOOyAE7SNmfZ3GKt8U5fijlz0
+         UrobL5lUxrdDbTHHX/KYtanOIdwds87TbKepBUBpVz5HgeANmaBUry+m83dWcePHcQ/W
+         NeLyrbRPsqer3RC6HdC8/tti28uRzSYbtQQr5Qjw3mYAaujMqi8CtttKACVyLftkrpT0
+         /Jz59nJzkmCkuZ/YQQ126zpBfmWm7/pexFTT/APo1MqLcF2jY4vHas5fgOtWXdGa8xS6
+         yKcSy6pdp6TWQFpHW9hYEPXtUSeOoK/Q5aNJJVLlVEAOA4tP1tCvdgTWuJ7OK78K7S9L
+         P9RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=/u2jeEEoiyJZpO0ZrnI7yKagwWTGYr7cBjjav6KTDEQ=;
-        b=n0IeESSRtVvyAHQ9h4ezhcr4eMnArNizPGDWQFE1uWkkICSglR86owgbu2AIX8itXD
-         prFsdISzkYEPzD7qnMtW/tl8/0uSMKO3OXFBuI9iU3TCUiYjONAmm8o7l035fiDOxwE1
-         abYsDcqYgyTgzEUaQWc4B6LSX0caf3mjXfpPTbjAPiG97qJVTmamMkuNi3EZuWOV6xbU
-         OrTtMl+WAo6RaQztOeY/nlUS6sDaKlbpWszydYV2aBwqh7xTfcRfJVzts8OU2l+4I+MA
-         uwjFtDm+NUo88DZHGx0RNYXEM3bdom6NMik5WwBSDoNjydxUcnM+D9b1la2hti4R4+K4
-         +ELA==
-X-Gm-Message-State: ACgBeo1yqIC1LbqnNqq2GkvVSbJ1nr9Uq5EiT6Fr2J5fXz8dt4IMcsyh
-        oTZ0OaxvpuGrGndRtGjZMdB1FF8AZQXDesutOKs3dc+NJne2
-X-Google-Smtp-Source: AA6agR758k4dVTcV3GFPZiuhqFH7+ge5uru4PHLGXVTxvhhWRcfxjVGblr3p5btRyPYAJjX7pupVHyDUWWNXSwQqR1eJN/p0CFh8
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=qACRoIaUIx4q7Fq4+bP1/fvXnrMmd2GKs256tlkcKt4=;
+        b=TJv6qGVc/uJTnlZMOg1d6KtuL2w1f0unrI8LT+lR/epf7VMFCirhUU9rI4WFMmwx6e
+         GQw8cBpVDXPLY9J8RqS3SHVUstCr9w1cpmhj+VXqNbCdJ/amH2wgppGNpIPEItfx5GoU
+         fEtIaSaUYb8zHNGV00CKTRP60i2sTrOKSpxchhBvECg5QxKY7ewiqees6D8IDJNkrMpL
+         mWPwAd3QN0wCOikhpImxcJrvu8ZR1pxkOFdQykh7KlDpK904TvdhCmoPu1XEelNRtDNS
+         Cyr78oi0CzXwDzE4ZV520IuOQAUuYELKWROqDUantlImXgTDZuC5Pfqtw/mZZYiCa0BT
+         uRnA==
+X-Gm-Message-State: ACgBeo0vzgLrZdQFQIFOUDNAoKhof5DDbySIgof8RjMLKGDWgM9upddO
+        MZDEP6fr+2+NA9bmtTB4oQl2ZQ==
+X-Google-Smtp-Source: AA6agR4ieUtBeNjjuanFgiNBKumVBvcQFgBFOIrRWccADDgSCX1mhvrhAIa2+vNHgbE9eqtjw/zKFg==
+X-Received: by 2002:a05:6512:250b:b0:48b:2c5:fe1e with SMTP id be11-20020a056512250b00b0048b02c5fe1emr7294718lfb.598.1660637176012;
+        Tue, 16 Aug 2022 01:06:16 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
+        by smtp.gmail.com with ESMTPSA id f26-20020a2e381a000000b0025e2e70b41fsm1696716lja.71.2022.08.16.01.06.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 01:06:15 -0700 (PDT)
+Message-ID: <e1f1be24-7178-ceae-9038-ec90ffd9a28f@linaro.org>
+Date:   Tue, 16 Aug 2022 11:06:13 +0300
 MIME-Version: 1.0
-X-Received: by 2002:a92:ca4e:0:b0:2df:1aae:47c4 with SMTP id
- q14-20020a92ca4e000000b002df1aae47c4mr9068356ilo.57.1660636826976; Tue, 16
- Aug 2022 01:00:26 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 01:00:26 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002c46ec05e6572415@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in sock_has_perm
-From:   syzbot <syzbot+2f2c6bea25b08dc06f86@syzkaller.appspotmail.com>
-To:     anton@enomsg.org, bpf@vger.kernel.org, ccross@android.com,
-        eparis@parisplace.org, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com,
-        selinux@vger.kernel.org, stephen.smalley.work@gmail.com,
-        syzkaller-bugs@googlegroups.com, tony.luck@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 2/2] edac: zynqmp_ocm: Add EDAC support for ZynqMP OCM
+Content-Language: en-US
+To:     Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        saikrishna12468@gmail.com, git@amd.com,
+        Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+References: <20220816073203.27314-1-sai.krishna.potthuri@amd.com>
+ <20220816073203.27314-3-sai.krishna.potthuri@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220816073203.27314-3-sai.krishna.potthuri@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,172 +86,229 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 16/08/2022 10:32, Sai Krishna Potthuri wrote:
+> Add EDAC support for Xilinx ZynqMP OCM Controller, this driver
+> reports CE and UE errors based on the interrupts, and also creates ue/ce
+> sysfs entries for error injection.
+> 
+> Signed-off-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
 
-syzbot found the following issue on:
+A bit confusing SoB order, although sometimes rational. Are you sure
+about authorship here?
 
-HEAD commit:    200e340f2196 Merge tag 'pull-work.dcache' of git://git.ker..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16021dfd080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f2886ebe3c7b3459
-dashboard link: https://syzkaller.appspot.com/bug?extid=2f2c6bea25b08dc06f86
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> ---
+>  MAINTAINERS                    |   7 +
+>  drivers/edac/Kconfig           |   9 +
+>  drivers/edac/Makefile          |   1 +
+>  drivers/edac/zynqmp_ocm_edac.c | 643 +++++++++++++++++++++++++++++++++
+>  4 files changed, 660 insertions(+)
+>  create mode 100644 drivers/edac/zynqmp_ocm_edac.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index edc96cdb85e8..cd4c6c90bca3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -21692,6 +21692,13 @@ F:	Documentation/devicetree/bindings/dma/xilinx/xlnx,zynqmp-dpdma.yaml
+>  F:	drivers/dma/xilinx/xilinx_dpdma.c
+>  F:	include/dt-bindings/dma/xlnx-zynqmp-dpdma.h
+>  
+> +XILINX ZYNQMP OCM EDAC DRIVER
+> +M:	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+> +M:	Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/edac/xlnx,zynqmp-ocmc.yaml
+> +F:	drivers/edac/zynqmp_ocm_edac.c
+> +
+>  XILINX ZYNQMP PSGTR PHY DRIVER
+>  M:	Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+>  M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+> index 58ab63642e72..fece60f586af 100644
+> --- a/drivers/edac/Kconfig
+> +++ b/drivers/edac/Kconfig
+> @@ -539,4 +539,13 @@ config EDAC_DMC520
+>  	  Support for error detection and correction on the
+>  	  SoCs with ARM DMC-520 DRAM controller.
+>  
+> +config EDAC_ZYNQMP_OCM
+> +	tristate "Xilinx ZynqMP OCM Controller"
+> +	depends on ARCH_ZYNQMP
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2f2c6bea25b08dc06f86@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: use-after-free in sock_has_perm+0x258/0x280 security/selinux/hooks.c:4532
-Read of size 8 at addr ffff88807630e480 by task syz-executor.0/8123
-
-CPU: 1 PID: 8123 Comm: syz-executor.0 Not tainted 5.19.0-syzkaller-02972-g200e340f2196 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xeb/0x467 mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- sock_has_perm+0x258/0x280 security/selinux/hooks.c:4532
- selinux_socket_setsockopt+0x3e/0x80 security/selinux/hooks.c:4913
- security_socket_setsockopt+0x50/0xb0 security/security.c:2249
- __sys_setsockopt+0x107/0x6a0 net/socket.c:2233
- __do_sys_setsockopt net/socket.c:2266 [inline]
- __se_sys_setsockopt net/socket.c:2263 [inline]
- __x64_sys_setsockopt+0xba/0x150 net/socket.c:2263
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f96c7289279
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f96c842f168 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
-RAX: ffffffffffffffda RBX: 00007f96c739c050 RCX: 00007f96c7289279
-RDX: 0000000000000007 RSI: 0000000000000103 RDI: 0000000000000004
-RBP: 00007f96c72e3189 R08: 0000000000000004 R09: 0000000000000000
-R10: 0000000020000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe7030593f R14: 00007f96c842f300 R15: 0000000000022000
- </TASK>
-
-Allocated by task 8113:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:437 [inline]
- ____kasan_kmalloc mm/kasan/common.c:516 [inline]
- ____kasan_kmalloc mm/kasan/common.c:475 [inline]
- __kasan_kmalloc+0xa6/0xd0 mm/kasan/common.c:525
- kasan_kmalloc include/linux/kasan.h:234 [inline]
- __do_kmalloc mm/slab.c:3696 [inline]
- __kmalloc+0x209/0x4e0 mm/slab.c:3705
- kmalloc include/linux/slab.h:605 [inline]
- sk_prot_alloc+0x110/0x290 net/core/sock.c:1975
- sk_alloc+0x36/0x770 net/core/sock.c:2028
- nr_create+0xb2/0x5f0 net/netrom/af_netrom.c:433
- __sock_create+0x355/0x790 net/socket.c:1515
- sock_create net/socket.c:1566 [inline]
- __sys_socket_create net/socket.c:1603 [inline]
- __sys_socket_create net/socket.c:1588 [inline]
- __sys_socket+0x12f/0x240 net/socket.c:1636
- __do_sys_socket net/socket.c:1649 [inline]
- __se_sys_socket net/socket.c:1647 [inline]
- __x64_sys_socket+0x6f/0xb0 net/socket.c:1647
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 15:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:367 [inline]
- ____kasan_slab_free+0x13d/0x180 mm/kasan/common.c:329
- kasan_slab_free include/linux/kasan.h:200 [inline]
- __cache_free mm/slab.c:3426 [inline]
- kfree+0x173/0x390 mm/slab.c:3796
- sk_prot_free net/core/sock.c:2011 [inline]
- __sk_destruct+0x5e5/0x710 net/core/sock.c:2097
- sk_destruct net/core/sock.c:2112 [inline]
- __sk_free+0x1a4/0x4a0 net/core/sock.c:2123
- sk_free+0x78/0xa0 net/core/sock.c:2134
- sock_put include/net/sock.h:1927 [inline]
- nr_heartbeat_expiry+0x2de/0x460 net/netrom/nr_timer.c:148
- call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1474
- expire_timers kernel/time/timer.c:1519 [inline]
- __run_timers.part.0+0x679/0xa80 kernel/time/timer.c:1790
- __run_timers kernel/time/timer.c:1768 [inline]
- run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1803
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:571
-
-The buggy address belongs to the object at ffff88807630e000
- which belongs to the cache kmalloc-2k of size 2048
-The buggy address is located 1152 bytes inside of
- 2048-byte region [ffff88807630e000, ffff88807630e800)
-
-The buggy address belongs to the physical page:
-page:ffffea0001d8c380 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7630e
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffffea00004a5648 ffffea0001e43248 ffff888011840800
-raw: 0000000000000000 ffff88807630e000 0000000100000001 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x3c20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL|__GFP_THISNODE), pid 7307, tgid 7301 (syz-executor.3), ts 520580080833, free_ts 520081225704
- prep_new_page mm/page_alloc.c:2457 [inline]
- get_page_from_freelist+0x1298/0x3b80 mm/page_alloc.c:4203
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5431
- __alloc_pages_node include/linux/gfp.h:587 [inline]
- kmem_getpages mm/slab.c:1363 [inline]
- cache_grow_begin+0x75/0x350 mm/slab.c:2569
- cache_alloc_refill+0x27f/0x380 mm/slab.c:2942
- ____cache_alloc mm/slab.c:3024 [inline]
- ____cache_alloc mm/slab.c:3007 [inline]
- slab_alloc_node mm/slab.c:3227 [inline]
- kmem_cache_alloc_node_trace+0x51d/0x5b0 mm/slab.c:3611
- __do_kmalloc_node mm/slab.c:3633 [inline]
- __kmalloc_node_track_caller+0x38/0x60 mm/slab.c:3648
- kmalloc_reserve net/core/skbuff.c:354 [inline]
- __alloc_skb+0xde/0x340 net/core/skbuff.c:426
- alloc_skb include/linux/skbuff.h:1434 [inline]
- nlmsg_new include/net/netlink.h:953 [inline]
- audit_buffer_alloc kernel/audit.c:1782 [inline]
- audit_log_start.part.0+0x27f/0x740 kernel/audit.c:1900
- audit_log_start+0x5f/0x90 kernel/audit.c:1856
- integrity_audit_message+0xf6/0x470 security/integrity/integrity_audit.c:47
- integrity_audit_msg+0x3d/0x50 security/integrity/integrity_audit.c:32
- ima_collect_measurement+0x3b7/0x710 security/integrity/ima/ima_api.c:317
- process_measurement+0xd0d/0x1880 security/integrity/ima/ima_main.c:337
- ima_file_check+0xac/0x100 security/integrity/ima/ima_main.c:517
- do_open fs/namei.c:3501 [inline]
- path_openat+0x1611/0x28f0 fs/namei.c:3632
- do_filp_open+0x1b6/0x400 fs/namei.c:3659
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1371 [inline]
- free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1421
- free_unref_page_prepare mm/page_alloc.c:3344 [inline]
- free_unref_page+0x19/0x6a0 mm/page_alloc.c:3439
- __vunmap+0x85d/0xd30 mm/vmalloc.c:2665
- free_work+0x58/0x70 mm/vmalloc.c:97
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-
-Memory state around the buggy address:
- ffff88807630e380: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88807630e400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff88807630e480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                   ^
- ffff88807630e500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88807630e580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+|| COMPILE_TEST
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> +	help
+> +	  Support for error de
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+> +/**
+> + * zynqmp_ocm_edac_get_eccstate - Return the controller ecc status
+> + * @base:	Pointer to the ddr memory controller base address
+> + *
+> + * Get the ECC enable/disable status for the controller
+> + *
+> + * Return: ecc status 0/1.
+> + */
+> +static bool zynqmp_ocm_edac_get_eccstate(void __iomem *base)
+> +{
+> +	return readl(base + ECC_CTRL_OFST) & OCM_ECC_ENABLE_MASK;
+> +}
+> +
+> +static const struct of_device_id zynqmp_ocm_edac_match[] = {
+> +	{ .compatible = "xlnx,zynqmp-ocmc-1.0"},
+> +	{ /* end of table */ }
+> +};
+> +
+> +MODULE_DEVICE_TABLE(of, zynqmp_ocm_edac_match);
+
+This goes to the end. Do not embed static variables in the middle of the
+code.
+
+
+> +
+> +/**
+> + * zynqmp_set_ocm_edac_sysfs_attributes - create sysfs attributes
+> + * @edac_dev:	Pointer to the edac device struct
+> + *
+> + * Creates sysfs entries for error injection
+> + */
+> +static void zynqmp_set_ocm_edac_sysfs_attributes(struct edac_device_ctl_info
+> +						*edac_dev)
+> +{
+> +	edac_dev->sysfs_attributes = zynqmp_ocm_edac_sysfs_attributes;
+> +}
+> +
+> +/**
+> + * zynqmp_ocm_edac_probe - Check controller and bind driver
+> + * @pdev:	Pointer to the platform_device struct
+> + *
+> + * Probes a specific controller instance for binding with the driver.
+> + *
+> + * Return: 0 if the controller instance was successfully bound to the
+> + * driver; otherwise error code.
+> + */
+
+Drop the kerneldoc for probe(). It's obvious and exactly the same
+everywhere. You could keep it if you write something different than theh
+same message for 1000 other probes.
+
+> +static int zynqmp_ocm_edac_probe(struct platform_device *pdev)
+> +{
+> +	struct zynqmp_ocm_edac_priv *priv;
+> +	struct edac_device_ctl_info *dci;
+> +	void __iomem *baseaddr;
+> +	struct resource *res;
+> +	int irq, ret;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	baseaddr = devm_ioremap_resource(&pdev->dev, res);
+
+There is a wrapper for these.
+
+> +	if (IS_ERR(baseaddr))
+> +		return PTR_ERR(baseaddr);
+> +
+> +	if (!zynqmp_ocm_edac_get_eccstate(baseaddr)) {
+> +		edac_printk(KERN_INFO, EDAC_DEVICE,
+> +			    "ECC not enabled - Disabling EDAC driver\n");
+
+How do you disable the driver? What if there are two devices - how does
+this disables the driver for second device?
+
+> +		return -ENXIO;
+> +	}
+> +
+> +	dci = edac_device_alloc_ctl_info(sizeof(*priv), ZYNQMP_OCM_EDAC_STRING,
+> +					 1, ZYNQMP_OCM_EDAC_STRING, 1, 0, NULL, 0,
+> +					 edac_device_alloc_index());
+> +	if (!dci) {
+> +		edac_printk(KERN_ERR, EDAC_DEVICE,
+> +			    "Unable to allocate EDAC device\n");
+
+No ENOMEM prints.
+
+> +		return -ENOMEM;
+> +	}
+> +
+> +	priv = dci->pvt_info;
+> +	platform_set_drvdata(pdev, dci);
+> +	dci->dev = &pdev->dev;
+> +	priv->baseaddr = baseaddr;
+> +	dci->mod_name = pdev->dev.driver->name;
+> +	dci->ctl_name = ZYNQMP_OCM_EDAC_STRING;
+> +	dci->dev_name = dev_name(&pdev->dev);
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq < 0) {
+> +		edac_printk(KERN_ERR, EDAC_DEVICE,
+> +			    "No irq %d in DT\n", irq);
+
+The same, no need for printks. Core does it.
+
+> +		ret = irq;
+> +		goto free_dev_ctl;
+> +	}
+> +
+> +	ret = devm_request_irq(&pdev->dev, irq,
+> +			       zynqmp_ocm_edac_intr_handler,
+> +			       0, dev_name(&pdev->dev), dci);
+> +	if (ret) {
+> +		edac_printk(KERN_ERR, EDAC_DEVICE, "Failed to request Irq\n");
+> +		goto free_dev_ctl;
+> +	}
+> +
+> +	writel(OCM_CEUE_MASK, priv->baseaddr + OCM_IEN_OFST);
+> +
+> +	zynqmp_set_ocm_edac_sysfs_attributes(dci);
+> +	ret = edac_device_add_device(dci);
+> +	if (ret)
+> +		goto free_dev_ctl;
+> +
+> +	return 0;
+> +
+> +free_dev_ctl:
+> +	edac_device_free_ctl_info(dci);
+> +
+> +	return ret;
+> +}
+> +
+> +/**
+> + * zynqmp_ocm_edac_remove - Unbind driver from controller
+> + * @pdev:	Pointer to the platform_device struct
+> + *
+> + * Return: Unconditionally 0
+> + */
+
+Same comment for kerneldoc.
+
+> +static int zynqmp_ocm_edac_remove(struct platform_device *pdev)
+> +{
+> +	struct edac_device_ctl_info *dci = platform_get_drvdata(pdev);
+> +	struct zynqmp_ocm_edac_priv *priv = dci->pvt_info;
+> +
+> +	writel(OCM_CEUE_MASK, priv->baseaddr + OCM_IDS_OFST);
+> +	edac_device_del_device(&pdev->dev);
+> +	edac_device_free_ctl_info(dci);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver zynqmp_ocm_edac_driver = {
+> +	.driver = {
+> +		   .name = "zynqmp-ocm-edac",
+> +		   .of_match_table = zynqmp_ocm_edac_match,
+> +		   },
+> +	.probe = zynqmp_ocm_edac_probe,
+> +	.remove = zynqmp_ocm_edac_remove,
+> +};
+> +
+> +module_platform_driver(zynqmp_ocm_edac_driver);
+> +
+> +MODULE_AUTHOR("Advanced Micro Devices, Inc");
+> +MODULE_DESCRIPTION("ZynqMP OCM ECC driver");
+> +MODULE_LICENSE("GPL");
+
+
+Best regards,
+Krzysztof

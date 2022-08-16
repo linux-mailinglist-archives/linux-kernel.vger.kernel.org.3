@@ -2,82 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C53AD595DED
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 16:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73EAE595DF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 16:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235682AbiHPOCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 10:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55726 "EHLO
+        id S235750AbiHPODK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 10:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235843AbiHPOCj (ORCPT
+        with ESMTP id S235789AbiHPODH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 10:02:39 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613BD90192
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 07:02:35 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id s11so13588262edd.13
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 07:02:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=fzP2NQgZqJYKRDX1t6xLZ4tBPZDpSneow1UcjWoKMPQ=;
-        b=n2K8ihSCpPw+4a4A8ph+BqFPQ3fqVunte+rj+d8r1nZsvumLrZp5gSlVUM09a4+csu
-         eJALVsbeR6mQENUEWohsfqNrrgmtuiLG41ucEzA5iDPquNVmyvy5AicINVsztZJTHGN0
-         HSM2duWWn6m2RqnisXlHnTJqhM+vTzDcumDD1umOgurUJdbsn4I0XBQnBcj7sHFQ5bV9
-         tzO0hjKvHDYBDfhF/M1g+I/sBSrKDGNXm8tuwWT33TdwhJwSnOwwVS0+IX32vMSHbneY
-         i2L+z65AQ52Mi9XjSv0VD0DSwztm+OwYEkgreIBN+iTeOePHQlMwdzHmd2uG/6cEFxZq
-         T6mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=fzP2NQgZqJYKRDX1t6xLZ4tBPZDpSneow1UcjWoKMPQ=;
-        b=iSgmrG11zd+lcj2FOCN6QVyw00Dt4amTPmylTffgIdGcbD/K1k/FZoAVnIUqPknvNk
-         c+d++ATNqpEWcWgm1Kk4/iXx5ReL6XRN0rQAiQVbcDlbaLxyyeEBYRMRACpY2CHyAdke
-         1t0Sfo0AtzTsPae7JbhfSdDuxGULBv782vcbPeZ50o7vaIfvWq/4+znOx9EWmAikKBSn
-         db6+V3X1w/HmKFKXwfGBDpbZOLtikbYUTqkU4+QD//0pgTO7U33qLCLMZxq9VfcfUJi7
-         CpaQyDNJNmEQhdOGXQcn2enZIw/ST0qZCkZSHrNUu24OCi5owc7qeWPasuKh+oVQju2w
-         MeUQ==
-X-Gm-Message-State: ACgBeo0InM7j+17kbPyY0aBCzW0aoLJOVUZ7kenFjvxkR3lN3YSU6S/r
-        V/PFhYTIGwiLUMRUPl8YzAT+yrr7KjUc8AEKySrTFV+XDo0=
-X-Google-Smtp-Source: AA6agR4Vabpt+DN6t/1Exw3ucKd1y7AVm2YfLygo9JJoNkxXDVddXKfSiG4auaQhK8+Uq4IFK+vmy3lrEBqvbkX+DXg=
-X-Received: by 2002:a05:6402:4517:b0:443:7fe1:2d60 with SMTP id
- ez23-20020a056402451700b004437fe12d60mr12983777edb.133.1660658553774; Tue, 16
- Aug 2022 07:02:33 -0700 (PDT)
+        Tue, 16 Aug 2022 10:03:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEAE7F0B0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 07:03:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18F2260FB5
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 14:03:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED2FBC433D6;
+        Tue, 16 Aug 2022 14:03:01 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="e+bGvBnb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1660658580;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UlxUyVT2PDOeWDZxuI8fYc7rJW5gk6gfvHPINj1OvPk=;
+        b=e+bGvBnbPzoQdVSrnCA5bkLfOnBHLjLowxqeABj14NaPXWFX9yrJeEjGwTRvhusYVMXh/N
+        L1cIQuJNCXHdES63lN0XTYfuiussjFEoHzTCByU3YvU/Fy/D3MrIjTSkECwn6D03s5rIXV
+        K4y5KEFfDYwiBEAO7sTZnmKN2K1/Xx0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 301312b6 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 16 Aug 2022 14:02:59 +0000 (UTC)
+Date:   Tue, 16 Aug 2022 16:02:55 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de
+Subject: Re: [PATCH] random: use raw spinlocks for use on RT
+Message-ID: <YvujjzfkJL2+1+9d@zx2c4.com>
+References: <20220801142530.133007-1-Jason@zx2c4.com>
+ <YufkZU9kGkHHUhAK@linutronix.de>
+ <YvRKm/IpbUID18FK@zx2c4.com>
+ <YvSsf5uds7zGgWPX@linutronix.de>
+ <YvUQJTDREXSAA9J6@zx2c4.com>
 MIME-Version: 1.0
-References: <20220816130823.97903-1-linus.walleij@linaro.org>
- <20220816130823.97903-2-linus.walleij@linaro.org> <YvuYCO4uuw+O0PN9@sirena.org.uk>
-In-Reply-To: <YvuYCO4uuw+O0PN9@sirena.org.uk>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 16 Aug 2022 16:02:22 +0200
-Message-ID: <CACRpkda-Mcg+6-h+QQ8YOPceSWmBeBJSpD9T1J1d8SHxhQnogg@mail.gmail.com>
-Subject: Re: [PATCH 2/2 v3] regmap: mmio: Support accelerared noinc operations
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YvUQJTDREXSAA9J6@zx2c4.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 3:13 PM Mark Brown <broonie@kernel.org> wrote:
-> On Tue, Aug 16, 2022 at 03:08:23PM +0200, Linus Walleij wrote:
->
-> > ChangeLog v2->v3:
-> > - Rebase on kernel v6.0-rc1
->
-> This doesn't apply against current code, please check and resend - I
-> already applied some other patches.
+Hey Sebastian,
 
-Oopsie I just assumed v6.0-rc1 was clean :D
+On Thu, Aug 11, 2022 at 04:20:21PM +0200, Jason A. Donenfeld wrote:
+> Hi Sebastian,
+> 
+> On Thu, Aug 11, 2022 at 09:15:11AM +0200, Sebastian Andrzej Siewior wrote:
+> > On 2022-08-11 02:17:31 [+0200], Jason A. Donenfeld wrote:
+> > > Hey Sebastian,
+> > Hi Jason,
+> > 
+> > > > > Sebastian - I won't move forward with this without your Ack, obviously.
+> > > > > What do you think of this general approach? -Jason
+> > > > 
+> > > > I would need to do worst-case measurements and I've been looking at this
+> > > > just before writting the other email and there was a local_lock_t
+> > > > somewhere which needs also change…
+> > > 
+> > > Did you ever come up some measurements here? It sure would be nice if I
+> > > could apply this, but obviously that's contingent on you saying it's
+> > > okay latency-wise on RT.
+> > 
+> > No, I did not. But I've been thinking a little about it. The worst case
+> > latency is important now and later.
+> > Looking at it, all we need is one init in vsprintf at boot time and we
+> > are done. That is the third fallout that I am aware of since the rework
+> > of get_random_*().
+> > We managed to get rid of all memory allocations (including GFP_ATOMIC)
+> > from preempt/IRQ-off section on PREEMPT_RT. Therefore I am not convinced
+> > to make all locks in random core a raw_spinlock_t just to make things
+> > work here as of now.
+> 
+> By grouping everything into "the rework of get_random_*()", you miss
+> important subtleties, as I mentioned before. Importantly, in this case,
+> the issue we're facing has absolutely nothing at all to do with that,
+> but is rather entirely the result of removing the async notifier
+> mechanism in favor of doing things more directly, more straight
+> forwardly. So let's not muddle what we're discussing here.
+> 
+> But more generally, the RNG is supposed to be usable from any context.
+> And adding wild workarounds, or worse, adding back complex async
+> notifier stuff, seems bad. So far your proposals for the printk issue
+> haven't been acceptable at all.
+> 
+> So why don't we actually fix this, so we don't have to keep coming up
+> with hacks? The question is: does using raw spinlocks over this code
+> result in any real issue for RT latency? If so, I'd like to know where,
+> and maybe I can do something about that (or maybe I can't). If not, then
+> this is a non problem and I'll apply this patch with your blessing.
+> 
+> If you don't want to spend time doing latency measurements, could you
+> instead share a document or similar to the type of methodology you
+> usually use for that, so I can do the same? And at the very least, I am
+> simply curious and want to know more about the RT world.
 
-I'll rebase on your regmap tree, just a sec.
+Thought I'd ping you about this again...
 
-Yours,
-Linus Walleij
+Jason

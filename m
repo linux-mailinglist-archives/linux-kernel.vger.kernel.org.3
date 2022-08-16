@@ -2,139 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE8C59572F
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD0B59572D
 	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234105AbiHPJzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49086 "EHLO
+        id S234090AbiHPJzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234173AbiHPJyH (ORCPT
+        with ESMTP id S234129AbiHPJx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:54:07 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58BA28E12
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:39:06 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31f4450c963so97310337b3.19
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:39:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=qW4FpPn+3U6rWBjf7f7ZHOYJOIjzLtnGkLPoxDCEiqo=;
-        b=PcLu0Pjn7hJcarJlBUUfD59TZO6YllkuNLqEkpOvYOBrZiRYizQWXRTIWEsPSKaB/b
-         h05wxNQy+Y/vuxoIQd8q0jesq9TRfz2hDHPWW4l8SmNYJGUQE5pNOY6KNh2sQvafro2x
-         naxUGO/uIcR+Kk6Co3VJCXd7NtA+lvj+SFYxw/KculVDjhcKNxFWCrVITzM/240ghQrc
-         DTpXdF2hEccRuwMu/1ngAGcpLPcsWd1TDlk+UNkoTh4K13o7XUZ/xfELjbRnZR92nnn6
-         saPDPi1CyZSJYq9Tq8Wt+dnb78SKxmFZqk6K8EvHyU+F5Id12rvafFRDhkQTLjyp96nU
-         msqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=qW4FpPn+3U6rWBjf7f7ZHOYJOIjzLtnGkLPoxDCEiqo=;
-        b=aQhqZQgBTMO0CKJNk5QiWyYpSz88jAeSk7l7I7hXcgSVWxry2EGjx1tGj8+OIMTCF8
-         uDicrih6qBVKhZoBz9Hs3Xg7zUDgRHmCMQhzcaAP/Cg7hNFSvmYByfe7kc/CKV72/601
-         1j2FWIKhg1AybdGqbCEnZ+YINJSU6uFYA9aDp6K6Zuw3V27qNWdJkkfRECLH0fIAiLow
-         mPVknn0vyZ3xOOFb3xtNMgoymoJxT2+t1XTtH4SubPp7ojw8zeecQPx4OjcuEltqwYSE
-         uyoEx2mUGdBJz/3CJFud0tnkhUudU3PE2P54GdT+K5BBIWaaw0QvI0pwrSGEcjy2Jvaq
-         TTvw==
-X-Gm-Message-State: ACgBeo35Acl+LDMOfIMuqB2LFqLYCwDAR1w6zRDA/T8VCVPxjYTcDvuS
-        Q5AwEkXr0g5oJZ2/O0AEFx2IFOl/SWY=
-X-Google-Smtp-Source: AA6agR5THf29zvJ3EExhdVRpGCeWm8v3qH+6f6RsLDJEdTyDlC+jve0nJf4SN1Yr9fHCyeLFWEXEilhrMqs=
-X-Received: from raychi.tao.corp.google.com ([2401:fa00:fc:202:5bfb:2ce6:1e1b:f496])
- (user=raychi job=sendgmr) by 2002:a81:8414:0:b0:323:e952:eb8a with SMTP id
- u20-20020a818414000000b00323e952eb8amr16321867ywf.103.1660639146073; Tue, 16
- Aug 2022 01:39:06 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 16:38:53 +0800
-In-Reply-To: <20220816083854.1491886-1-raychi@google.com>
-Message-Id: <20220816083854.1491886-2-raychi@google.com>
-Mime-Version: 1.0
-References: <20220816083854.1491886-1-raychi@google.com>
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH 1/2] usb: core: add a hook to check port init status
-From:   Ray Chi <raychi@google.com>
-To:     gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-        stern@rowland.harvard.edu
-Cc:     badhri@google.com, albertccwang@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ray Chi <raychi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 16 Aug 2022 05:53:59 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7571A3A1;
+        Tue, 16 Aug 2022 01:39:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660639199; x=1692175199;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RSEQvzyLuQNM7I4Q/O8zTlnKSg2x78+IvGBFvjba1ps=;
+  b=ZJQhUY37KNj5BcnSIqxBhb8EGUC3gDMC6DNmGKTBctXxtM6z/SDEx3z9
+   eFrPJE3ruj1U5jt/JCaVlAeXzElzr/4SX6l65EGFxhyfzOjCel1thYtcu
+   Vnm5iR/KcNEW8w0dUOsc0wh23pgMtMSNvN/bcLY8xqknaUft6ByTeJ6T0
+   DIvdxrM4vjfCfu45XPCcoFjStzSx4fW9EN9EsTmBzBGm080VrIwwYfxnL
+   Ji+2SAnZnwsBxIxwJzKYOkoE88Wek4N239WIXOoVI+Jsmq87CrBP+T3f0
+   s3FYHfqUnx+uXnh8zvt6PO9KTQ3eqzqsjybNLwZjdWIGZtPTmZdCqCMlM
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="279124302"
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="279124302"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 01:39:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="710058969"
+Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 16 Aug 2022 01:39:52 -0700
+Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oNs74-0001dx-2Y;
+        Tue, 16 Aug 2022 08:39:50 +0000
+Date:   Tue, 16 Aug 2022 16:39:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Frank Li <Frank.Li@nxp.com>, maz@kernel.org, tglx@linutronix.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kw@linux.com,
+        bhelgaas@google.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        peng.fan@nxp.com, aisheng.dong@nxp.com, jdmason@kudzu.us,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        kishon@ti.com, lorenzo.pieralisi@arm.com, ntb@lists.linux.dev,
+        lznuaa@gmail.com
+Subject: Re: [PATCH v5 2/4] irqchip: Add IMX MU MSI controller driver
+Message-ID: <202208161638.7Rn1SHT2-lkp@intel.com>
+References: <20220815213936.2380439-3-Frank.Li@nxp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220815213936.2380439-3-Frank.Li@nxp.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch add a hook to check the port init status. Currently, only
-usbcore knows port init status even if the result is bad. It will cause
-a USB host keep doing USB enumeration for a long time when the USB host
-connects to a broken USB accessory.
+Hi Frank,
 
-The hc_driver could use the hook to know port init status and do possible
-error handling according to platform requirements or limitations.
+I love your patch! Perhaps something to improve:
 
-Signed-off-by: Ray Chi <raychi@google.com>
----
- drivers/usb/core/hub.c  | 14 ++++++++++++++
- include/linux/usb/hcd.h |  8 ++++++++
- 2 files changed, 22 insertions(+)
+[auto build test WARNING on jonmason-ntb/ntb-next]
+[also build test WARNING on robh/for-next linus/master v6.0-rc1 next-20220816]
+[cannot apply to tip/irq/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 2633acde7ac1..6ce6092816cb 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -4659,6 +4659,16 @@ static int hub_enable_device(struct usb_device *udev)
- 	return hcd->driver->enable_device(hcd, udev);
- }
- 
-+static int hub_port_check_init_status(struct usb_device *udev, int r)
-+{
-+	struct usb_hcd *hcd = bus_to_hcd(udev->bus);
-+
-+	if (!hcd->driver->check_init_status)
-+		return 0;
-+
-+	return hcd->driver->check_init_status(hcd, udev, r);
-+}
-+
- /* Reset device, (re)assign address, get device descriptor.
-  * Device connection must be stable, no more debouncing needed.
-  * Returns device in USB_STATE_ADDRESS, except on error.
-@@ -4855,6 +4865,10 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
- 					buf->bMaxPacketSize0;
- 			kfree(buf);
- 
-+			retval = hub_port_check_init_status(udev, r);
-+			if (retval < 0)
-+				goto fail;
-+
- 			retval = hub_port_reset(hub, port1, udev, delay, false);
- 			if (retval < 0)		/* error or disconnect */
- 				goto fail;
-diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
-index 67f8713d3fa3..8fa30b4a6b7d 100644
---- a/include/linux/usb/hcd.h
-+++ b/include/linux/usb/hcd.h
-@@ -297,6 +297,14 @@ struct hc_driver {
- 				   gfp_t mem_flags);
- 	void    (*unmap_urb_for_dma)(struct usb_hcd *hcd, struct urb *urb);
- 
-+	/*
-+	 * (optional) HCD could get the information of GET_DESCRIPTOR by this hook.
-+	 * In general, it is not necessary unless the enumeration takes long
-+	 * time to do. The host controller could know the enumeration status by
-+	 * this hook and do some error handlings.
-+	 */
-+	int	(*check_init_status)(struct usb_hcd *hcd, struct usb_device *udev, int r);
-+
- 	/* hw synch, freeing endpoint resources that urb_dequeue can't */
- 	void	(*endpoint_disable)(struct usb_hcd *hcd,
- 			struct usb_host_endpoint *ep);
+url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Li/PCI-EP-driver-support-MSI-doorbell-from-host/20220816-131930
+base:   https://github.com/jonmason/ntb ntb-next
+config: arm64-randconfig-r025-20220815 (https://download.01.org/0day-ci/archive/20220816/202208161638.7Rn1SHT2-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/71296e2ad757d90e870b2ab81f2b06b9c76e7c41
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Frank-Li/PCI-EP-driver-support-MSI-doorbell-from-host/20220816-131930
+        git checkout 71296e2ad757d90e870b2ab81f2b06b9c76e7c41
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/irqchip/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/irqchip/irq-imx-mu-msi.c:295:32: warning: variable 'priv' set but not used [-Wunused-but-set-variable]
+           struct imx_mu_msi *msi_data, *priv;
+                                         ^
+   1 warning generated.
+
+
+vim +/priv +295 drivers/irqchip/irq-imx-mu-msi.c
+
+   288	
+   289	static int __init imx_mu_of_init(struct device_node *dn,
+   290					 struct device_node *parent,
+   291					 const struct imx_mu_dcfg *cfg
+   292					)
+   293	{
+   294		struct platform_device *pdev = of_find_device_by_node(dn);
+ > 295		struct imx_mu_msi *msi_data, *priv;
+   296		struct device_link *pd_link_a;
+   297		struct device_link *pd_link_b;
+   298		struct resource *res;
+   299		struct device *pd_a;
+   300		struct device *pd_b;
+   301		struct device *dev;
+   302		int ret;
+   303		int irq;
+   304	
+   305		if (!pdev)
+   306			return -ENODEV;
+   307	
+   308		dev = &pdev->dev;
+   309	
+   310		priv = msi_data = devm_kzalloc(&pdev->dev, sizeof(*msi_data), GFP_KERNEL);
+   311		if (!msi_data)
+   312			return -ENOMEM;
+   313	
+   314		msi_data->cfg = cfg;
+   315	
+   316		msi_data->regs = devm_platform_ioremap_resource_byname(pdev, "processor a-facing");
+   317		if (IS_ERR(msi_data->regs)) {
+   318			dev_err(&pdev->dev, "failed to initialize 'regs'\n");
+   319			return PTR_ERR(msi_data->regs);
+   320		}
+   321	
+   322		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "processor b-facing");
+   323		if (!res)
+   324			return -EIO;
+   325	
+   326		msi_data->msiir_addr = res->start + msi_data->cfg->xTR;
+   327	
+   328		irq = platform_get_irq(pdev, 0);
+   329		if (irq <= 0)
+   330			return -ENODEV;
+   331	
+   332		platform_set_drvdata(pdev, msi_data);
+   333	
+   334		msi_data->clk = devm_clk_get(dev, NULL);
+   335		if (IS_ERR(msi_data->clk)) {
+   336			if (PTR_ERR(msi_data->clk) != -ENOENT)
+   337				return PTR_ERR(msi_data->clk);
+   338	
+   339			msi_data->clk = NULL;
+   340		}
+   341	
+   342		pd_a = dev_pm_domain_attach_by_name(dev, "processor a-facing");
+   343		if (IS_ERR(pd_a))
+   344			return PTR_ERR(pd_a);
+   345	
+   346		pd_b = dev_pm_domain_attach_by_name(dev, "processor b-facing");
+   347		if (IS_ERR(pd_b))
+   348			return PTR_ERR(pd_b);
+   349	
+   350		pd_link_a = device_link_add(dev, pd_a,
+   351				DL_FLAG_STATELESS |
+   352				DL_FLAG_PM_RUNTIME |
+   353				DL_FLAG_RPM_ACTIVE);
+   354	
+   355		if (!pd_link_a) {
+   356			dev_err(dev, "Failed to add device_link to mu a.\n");
+   357			goto err_pd_a;
+   358		}
+   359	
+   360		pd_link_b = device_link_add(dev, pd_b,
+   361				DL_FLAG_STATELESS |
+   362				DL_FLAG_PM_RUNTIME |
+   363				DL_FLAG_RPM_ACTIVE);
+   364	
+   365	
+   366		if (!pd_link_b) {
+   367			dev_err(dev, "Failed to add device_link to mu a.\n");
+   368			goto err_pd_b;
+   369		}
+   370	
+   371		ret = imx_mu_msi_domains_init(msi_data, dev);
+   372		if (ret)
+   373			goto err_dm_init;
+   374	
+   375		irq_set_chained_handler_and_data(irq,
+   376						 imx_mu_msi_irq_handler,
+   377						 msi_data);
+   378	
+   379		pm_runtime_enable(dev);
+   380	
+   381		return 0;
+   382	
+   383	err_dm_init:
+   384		device_link_remove(dev,	pd_b);
+   385	err_pd_b:
+   386		device_link_remove(dev, pd_a);
+   387	err_pd_a:
+   388		return -EINVAL;
+   389	}
+   390	
+
 -- 
-2.37.1.595.g718a3a8f04-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

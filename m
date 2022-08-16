@@ -2,127 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2068359653A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DEDA596542
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237886AbiHPWLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 18:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
+        id S237869AbiHPWMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 18:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237869AbiHPWLL (ORCPT
+        with ESMTP id S237348AbiHPWMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 18:11:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D128F975
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 15:11:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660687869;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=K219zFXEgyRo40dCsRP0DxF0BwKck2dNw2HkaSxa61Y=;
-        b=V6lRhCG0d30EnyWkmwoVnyYLQztQ69pHDJBLzkP/1I/9y9SZjrLYtqMXPqefvmijN5YcT7
-        gIs4hIHz1nlLWBq7UjUnaP930n6KstCPKDAzm0KC+xarxdc2/OuUdIwPHzofMceaOesxH/
-        7y3q5xTDIStkDR/O23bEskkmsMpf5lc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-645-QGgImqF0P82MT71U89AKng-1; Tue, 16 Aug 2022 18:11:05 -0400
-X-MC-Unique: QGgImqF0P82MT71U89AKng-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E714329ABA39;
-        Tue, 16 Aug 2022 22:11:04 +0000 (UTC)
-Received: from [10.22.16.150] (unknown [10.22.16.150])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9A5BD2026D4C;
-        Tue, 16 Aug 2022 22:11:03 +0000 (UTC)
-Message-ID: <c10e4f69-9951-6c38-6e28-fafcaec00d89@redhat.com>
-Date:   Tue, 16 Aug 2022 18:11:03 -0400
+        Tue, 16 Aug 2022 18:12:14 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4368FD57
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 15:12:13 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-f2a4c51c45so13226774fac.9
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 15:12:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=bknMuEzY2g2ODMFx0pPstR6QEhnsKog5Pl0iH/Ldgz4=;
+        b=sL5dB1VPJNsbf7G8+raTZ4CNHBvpk7wuUoHen4F/fRTlul2K/o6MnEL0QELNEgsXV5
+         8uwAQx9hINB2uTWQ0G+WTB+PukHYNee/MzAqYyyV44+Yri8pGj61r+lHfamUK8p8w4X7
+         QRKqDPOPL9df5lxT34qEXLNreDeG9SXoOiwcQAPOeFr88+qXNgL64ohaZHIVEk+mgB5R
+         wnGXnCFP58BNzbyVX8OjR1IGJbgoEjD+wT7pAjEFqxbJu1di5xE14EIVzTnYMG1XM9Y9
+         6uf1djrUsKmdWrPsGSGSoKlADOPuJiThHSoMfwFLvak3qmxWc7ku1U1IrL0Q701vNeVo
+         jU+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=bknMuEzY2g2ODMFx0pPstR6QEhnsKog5Pl0iH/Ldgz4=;
+        b=3UwLQG37sUawsG1m6zXhDnpLiFd+H7WOUK6c76QPE0462N+l5CgTjUN/pMT0Guce52
+         eyZXh/kKViQRoW7jne5P3sv5bzEzlwoHhy+bo6GQEjpouEpnymbUPxFvQykpW8A3Yz4B
+         yVdOtFeijzpGWp5oh49Gwaq1oSc9uVqbgGTKMAud1euL0tMmfIyrljJPrKxtC6IY2fqe
+         jg+qQZa24/BkuAdecXM3EzsNxOOz6k7FaOx9Mjr8DSqS2TtjBSzWGYFdDHtoeEnRt5uf
+         0qynYBwUBwyUxDkHYHnp+dRLlIWAinjCH0Q4z/ouoJQG57gU571KyQ7Ry/lqtEbdG2kX
+         qFLg==
+X-Gm-Message-State: ACgBeo1XCEe5CqfhUWOEyv7yZpCkOUNdMKhILRp1TfZWvtpTSPNqKUTP
+        M3yKx1gWOgOoaINyASTfJINYFDe7QQIsTxYH6n5u
+X-Google-Smtp-Source: AA6agR4Kj8XNYB9B3lGnewDxsdQnXfT+Fb5iBt539vCMF1wUyb8ZJN1qBsC0HMD5LPLcd7Vjw7gmG8QhiI7dUCI9BGQ=
+X-Received: by 2002:a05:6870:a78d:b0:11c:437b:ec70 with SMTP id
+ x13-20020a056870a78d00b0011c437bec70mr320272oao.136.1660687932528; Tue, 16
+ Aug 2022 15:12:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 3/3] cgroup/cpuset: Keep user set cpus affinity
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>, cgroups@vger.kernel.org,
+References: <20220708093451.472870-1-omosnace@redhat.com>
+In-Reply-To: <20220708093451.472870-1-omosnace@redhat.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 16 Aug 2022 18:12:01 -0400
+Message-ID: <CAHC9VhSFUJ6J4_wt1SKAoLourNGVkxu0Tbd9NPDbYqjjrs-qoQ@mail.gmail.com>
+Subject: Re: [RFC PATCH RESEND] userfaultfd: open userfaultfds with O_RDONLY
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Lokesh Gidra <lokeshgidra@google.com>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20220816192734.67115-1-longman@redhat.com>
- <20220816192734.67115-4-longman@redhat.com>
- <Yvv66EWygCwHUCqy@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Yvv66EWygCwHUCqy@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        "Robert O'Callahan" <roc@ocallahan.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jul 8, 2022 at 5:35 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+>
+> Since userfaultfd doesn't implement a write operation, it is more
+> appropriate to open it read-only.
+>
+> When userfaultfds are opened read-write like it is now, and such fd is
+> passed from one process to another, SELinux will check both read and
+> write permissions for the target process, even though it can't actually
+> do any write operation on the fd later.
+>
+> Inspired by the following bug report, which has hit the SELinux scenario
+> described above:
+> https://bugzilla.redhat.com/show_bug.cgi?id=1974559
+>
+> Reported-by: Robert O'Callahan <roc@ocallahan.org>
+> Fixes: 86039bd3b4e6 ("userfaultfd: add new syscall to provide memory externalization")
+> Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
+> ---
+>
+> Resending as the last submission was ignored for over a year...
+>
+> https://lore.kernel.org/lkml/20210624152515.1844133-1-omosnace@redhat.com/T/
+>
+> I marked this as RFC, because I'm not sure if this has any unwanted side
+> effects. I only ran this patch through selinux-testsuite, which has a
+> simple userfaultfd subtest, and a reproducer from the Bugzilla report.
+>
+> Please tell me whether this makes sense and/or if it passes any
+> userfaultfd tests you guys might have.
+>
+>  fs/userfaultfd.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-On 8/16/22 16:15, Tejun Heo wrote:
-> On Tue, Aug 16, 2022 at 03:27:34PM -0400, Waiman Long wrote:
->> +static int cpuset_set_cpus_allowed_ptr(struct task_struct *p,
->> +				       const struct cpumask *mask)
->> +{
->> +	cpumask_var_t new_mask;
->> +	int ret;
->> +
->> +	if (!READ_ONCE(p->user_cpus_ptr)) {
->> +		ret = set_cpus_allowed_ptr(p, mask);
->> +		/*
->> +		 * If user_cpus_ptr becomes set now, we are racing with
->> +		 * a concurrent sched_setaffinity(). So use the newly
->> +		 * set user_cpus_ptr and retry again.
->> +		 *
->> +		 * TODO: We cannot detect change in the cpumask pointed to
->> +		 * by user_cpus_ptr. We will have to add a sequence number
->> +		 * if such a race needs to be addressed.
->> +		 */
-> This is too ugly and obviously broken. Let's please do it properly.
+VFS folks, any objection to this patch?  It seems reasonable to me and
+I'd really prefer this to go in via the vfs tree, but I'm not above
+merging this via the lsm/next tree to get someone in vfs land to pay
+attention to this ...
 
-Actually, there is similar construct in __sched_setaffinity():
+> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> index e943370107d0..8ccf00be63e1 100644
+> --- a/fs/userfaultfd.c
+> +++ b/fs/userfaultfd.c
+> @@ -989,7 +989,7 @@ static int resolve_userfault_fork(struct userfaultfd_ctx *new,
+>         int fd;
+>
+>         fd = anon_inode_getfd_secure("[userfaultfd]", &userfaultfd_fops, new,
+> -                       O_RDWR | (new->flags & UFFD_SHARED_FCNTL_FLAGS), inode);
+> +                       O_RDONLY | (new->flags & UFFD_SHARED_FCNTL_FLAGS), inode);
+>         if (fd < 0)
+>                 return fd;
+>
+> @@ -2090,7 +2090,7 @@ SYSCALL_DEFINE1(userfaultfd, int, flags)
+>         mmgrab(ctx->mm);
+>
+>         fd = anon_inode_getfd_secure("[userfaultfd]", &userfaultfd_fops, ctx,
+> -                       O_RDWR | (flags & UFFD_SHARED_FCNTL_FLAGS), NULL);
+> +                       O_RDONLY | (flags & UFFD_SHARED_FCNTL_FLAGS), NULL);
+>         if (fd < 0) {
+>                 mmdrop(ctx->mm);
+>                 kmem_cache_free(userfaultfd_ctx_cachep, ctx);
+> --
+> 2.36.1
 
-again:
-         retval = __set_cpus_allowed_ptr(p, new_mask, SCA_CHECK);
-         if (retval)
-                 goto out_free_new_mask;
-
-         cpuset_cpus_allowed(p, cpus_allowed);
-         if (!cpumask_subset(new_mask, cpus_allowed)) {
-                 /*
-                  * We must have raced with a concurrent cpuset update.
-                  * Just reset the cpumask to the cpuset's cpus_allowed.
-                  */
-                 cpumask_copy(new_mask, cpus_allowed);
-                 goto again;
-         }
-
-It is hard to synchronize different subsystems atomically without 
-running into locking issue. Let me think about what can be done in this 
-case.
-
-Is using a sequence number to check for race with retry good enough?
-
-Cheers,
-Longman
-
+-- 
+paul-moore.com

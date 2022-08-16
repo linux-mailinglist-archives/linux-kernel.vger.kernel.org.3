@@ -2,183 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E95D059526D
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 08:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43230595279
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 08:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbiHPGSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 02:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45138 "EHLO
+        id S229917AbiHPGWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 02:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiHPGRn (ORCPT
+        with ESMTP id S229831AbiHPGVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 02:17:43 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA92170D2E
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 17:07:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660608444; x=1692144444;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Dm62JUBwIyAaLuk4bDQ0xZJ3mBhSTUqA23F0UfzoqnQ=;
-  b=AMEFF4G/QIpJ3YMXbjJ0lX34EVPu5ut2MssRo9IFbiDdXFQX7TmwchGu
-   lRaspzmeqigi8gGfBOlRs/fBdkf0foFBBvDzHBOEWE6K00iluqBPQcnNM
-   sHUTqyb/uM37hWTeGFq9UaDkVeJGrLrZ98QRoPPYZorI1QGU2Rr0gHpDH
-   urBw/W2uPx3XeH9sLAGo42/vKWFFk3DdHJcPlUOfvXxNV959ihXG8R0hJ
-   zY3+67/rXMtUmLV/ljprGMX5e2BAOiywENbvikf1oYMpQB0PYOEZGj/g2
-   r3tpWMVD2OKd2iJsgW4yKeH1ro7H3rSpXZ8xfNMauy0koWwFFHbGVyiZz
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="271857089"
-X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
-   d="scan'208";a="271857089"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 17:07:23 -0700
-X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
-   d="scan'208";a="696145142"
-Received: from mpetrica-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.38.195])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 17:07:19 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id CDA15104A4B; Tue, 16 Aug 2022 03:10:22 +0300 (+03)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     kirill.shutemov@linux.intel.com
-Cc:     ak@linux.intel.com, andreyknvl@gmail.com,
-        dave.hansen@linux.intel.com, dvyukov@google.com, glider@google.com,
-        hjl.tools@gmail.com, kcc@google.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, luto@kernel.org, peterz@infradead.org,
-        rick.p.edgecombe@intel.com, ryabinin.a.a@gmail.com,
-        tarasmadan@google.com, x86@kernel.org
-Subject: [PATCHv6.1 06/11] x86/mm: Provide arch_prctl() interface for LAM
-Date:   Tue, 16 Aug 2022 03:10:21 +0300
-Message-Id: <20220816001021.9476-1-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220815041803.17954-7-kirill.shutemov@linux.intel.com>
-References: <20220815041803.17954-7-kirill.shutemov@linux.intel.com>
+        Tue, 16 Aug 2022 02:21:41 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3469133891
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 17:14:31 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id s9so9132471ljs.6
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 17:14:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=DJuMC9uSqOfhxPndYeVwtr9rxlpKg28GSgzlSwv/L28=;
+        b=BV4tp2k8RBXcCx1l8s/tFTKmUvWsMF/hxlKkZJmau4/wgSv3cnBpJFEzAaAnlEJ9mI
+         60u78fY4TWhUJiSaU1wuuda54nZJD7XGeg1IAlp+meHPw1doVWdW2basHPjaWKsz655g
+         ZbRKfwNS7O9xZwG+G9/HLBa62fPBftqFj891v6dh/kT9PhyBxwrT6QEQMQo86W8InOhl
+         Y4KLBokEBsuUhfs8zt3oesRsGyAmrRZ7mEppc3/8ulReClZ4TNQHBqiU8UjIA8EuKzHP
+         oPjviqxJOhK8SvEKWZTefZykRl0+EQrk+hjIloqaUUkRe//EbS4I8l/3+dqSeHgbGpl8
+         q3XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=DJuMC9uSqOfhxPndYeVwtr9rxlpKg28GSgzlSwv/L28=;
+        b=ZtnD23Ii5UYV6FiNUkBt4R46d7lOSz0L2L3IUU32G4nGqchzx65Dd0X0RRXvBoxbdX
+         L2LLsdxRN3ix/bPgNO+JJQ1euQJwRebMQUGZsDFpQIbJqHu2ag4boqmh87L0kvROVv++
+         iJadxJy/O/YTR+cOuhjaZuhrmS/R+kdnxvETnimR+P5edDGGXFJFnniAV7prfBsUhulf
+         dpIU4uP258m12leOKFcGofeQ4uzG32r9iPCo7lpWWcUqE1MmZXi100wQn4ge/GffKC5g
+         hyQZwThPtcXr0h9iDbahz4BnZnfV1bzhrFZ7wLBA9c1F6rE5EMPl55OHU9qz5YFKdMcI
+         glAw==
+X-Gm-Message-State: ACgBeo0dFtbJnbP9qgV2t8ZsEzexI+jL+AceXJCPo5MHDO5r61JHU4Wn
+        Na3qKMNXtWQe7n6tSqL3jGg0mV/CU6jKewIRhFM=
+X-Google-Smtp-Source: AA6agR6++SyMXn2wyE5DieTUPNAsFJS6y2O/a1w0bnkdCfje26h4WDLcvC+Loy4RZ1wiVV1G1yD5G7XkmdnFIIoF9II=
+X-Received: by 2002:a2e:8009:0:b0:25e:9d69:7cb with SMTP id
+ j9-20020a2e8009000000b0025e9d6907cbmr5625363ljg.405.1660608869779; Mon, 15
+ Aug 2022 17:14:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:6520:2b81:b0:1fe:ccf5:aa58 with HTTP; Mon, 15 Aug 2022
+ 17:14:29 -0700 (PDT)
+Reply-To: zjianxin700@gmail.com
+From:   Zong Jianxin <gitetumary8@gmail.com>
+Date:   Mon, 15 Aug 2022 17:14:29 -0700
+Message-ID: <CADiDABgariXGK-yF+b2t2AkCwRLHQMCMoaUHWNtHAoeEHvFbNw@mail.gmail.com>
+Subject: Deal
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:22f listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4970]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [zjianxin700[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [gitetumary8[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [gitetumary8[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a couple of arch_prctl() handles:
-
- - ARCH_ENABLE_TAGGED_ADDR enabled LAM. The argument is required number
-   of tag bits. It is rounded up to the nearest LAM mode that can
-   provide it. For now only LAM_U57 is supported, with 6 tag bits.
-
- - ARCH_GET_UNTAG_MASK returns untag mask. It can indicates where tag
-   bits located in the address.
-
- - ARCH_GET_MAX_TAG_BITS returns the maximum tag bits user can request.
-   Zero if LAM is not supported.
-
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
----
- v6.1:
-  - Drop redundant smb_mb() in prctl_enable_tagged_addr();
----
- arch/x86/include/uapi/asm/prctl.h |  4 ++
- arch/x86/kernel/process_64.c      | 62 ++++++++++++++++++++++++++++++-
- 2 files changed, 65 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
-index 500b96e71f18..a31e27b95b19 100644
---- a/arch/x86/include/uapi/asm/prctl.h
-+++ b/arch/x86/include/uapi/asm/prctl.h
-@@ -20,4 +20,8 @@
- #define ARCH_MAP_VDSO_32		0x2002
- #define ARCH_MAP_VDSO_64		0x2003
- 
-+#define ARCH_GET_UNTAG_MASK		0x4001
-+#define ARCH_ENABLE_TAGGED_ADDR		0x4002
-+#define ARCH_GET_MAX_TAG_BITS		0x4003
-+
- #endif /* _ASM_X86_PRCTL_H */
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index 1962008fe743..28b9657ce2d0 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -742,6 +742,57 @@ static long prctl_map_vdso(const struct vdso_image *image, unsigned long addr)
- }
- #endif
- 
-+static void enable_lam_func(void *mm)
-+{
-+	struct mm_struct *loaded_mm = this_cpu_read(cpu_tlbstate.loaded_mm);
-+	unsigned long lam_mask;
-+	unsigned long cr3;
-+
-+	if (loaded_mm != mm)
-+		return;
-+
-+	lam_mask = READ_ONCE(loaded_mm->context.lam_cr3_mask);
-+
-+	/* Update CR3 to get LAM active on the CPU */
-+	cr3 = __read_cr3();
-+	cr3 &= ~(X86_CR3_LAM_U48 | X86_CR3_LAM_U57);
-+	cr3 |= lam_mask;
-+	write_cr3(cr3);
-+	set_tlbstate_cr3_lam_mask(lam_mask);
-+}
-+
-+static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
-+{
-+	int ret = 0;
-+
-+	if (!cpu_feature_enabled(X86_FEATURE_LAM))
-+		return -ENODEV;
-+
-+	mutex_lock(&mm->context.lock);
-+
-+	/* Already enabled? */
-+	if (mm->context.lam_cr3_mask) {
-+		ret = -EBUSY;
-+		goto out;
-+	}
-+
-+	if (!nr_bits) {
-+		ret = -EINVAL;
-+		goto out;
-+	} else if (nr_bits <= 6) {
-+		mm->context.lam_cr3_mask = X86_CR3_LAM_U57;
-+		mm->context.untag_mask =  ~GENMASK(62, 57);
-+	} else {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	on_each_cpu_mask(mm_cpumask(mm), enable_lam_func, mm, true);
-+out:
-+	mutex_unlock(&mm->context.lock);
-+	return ret;
-+}
-+
- long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
- {
- 	int ret = 0;
-@@ -829,7 +880,16 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
- 	case ARCH_MAP_VDSO_64:
- 		return prctl_map_vdso(&vdso_image_64, arg2);
- #endif
--
-+	case ARCH_GET_UNTAG_MASK:
-+		return put_user(task->mm->context.untag_mask,
-+				(unsigned long __user *)arg2);
-+	case ARCH_ENABLE_TAGGED_ADDR:
-+		return prctl_enable_tagged_addr(task->mm, arg2);
-+	case ARCH_GET_MAX_TAG_BITS:
-+		if (!cpu_feature_enabled(X86_FEATURE_LAM))
-+			return put_user(0, (unsigned long __user *)arg2);
-+		else
-+			return put_user(6, (unsigned long __user *)arg2);
- 	default:
- 		ret = -EINVAL;
- 		break;
 -- 
-2.35.1
+I have a deal for you
 
+Thanks
+Zong Jianxin

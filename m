@@ -2,146 +2,463 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9676E596124
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76BF859612C
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236609AbiHPR3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 13:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33290 "EHLO
+        id S236584AbiHPRaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 13:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236477AbiHPR2z (ORCPT
+        with ESMTP id S236566AbiHPR3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 13:28:55 -0400
-Received: from sonic316-54.consmr.mail.gq1.yahoo.com (sonic316-54.consmr.mail.gq1.yahoo.com [98.137.69.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CAD4A10A
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 10:28:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1660670926; bh=KCxALGeHtNmf+3+P8Y4LRK3Lfy1e+K4XtBP8EuNrVm4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=M4nhksOD3u9NZzS/9aLZOPrS6gLu5DR9iCwBT0C8drb4ZlMuS+MFHgE/y3HhwbYtUufLeMsO31b+hYR37uYZSGVnBBH6fDqKcTRT4EIzXc7ueBlfFRunsEQT87PQ5TLV3os5wZbDwUHcRFLzjozujwVLwzPkUZUE4kLwvhzqwwZVNSShfKeXsFjc5r3W85iafy8GOx9Wgf5orhU7Av7jE0dHvpoDBvGHR+JFYO4qhtCc2qQAsQKDUy0B81Zzst1p1hsWpdergS8lwxz0c+8gJOKVZPz3kT8L/bA0N2EhNZuWHThFeSZkIw5qz/AH5+fAdABtazbmwviscGXy78hmmg==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660670926; bh=bkF1+RMhS2K5zivCW5WL/yunorG7Ih+jBW05ZZmojUM=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=UPZ2XB8BTTjE3rUkAUIy1MR7E9Ngk3JICAFA8AELE9jVzjnwXfU3S7U/tmvWPd/Rfk+HBAQoZ18ey/H26fG8LPI48G12a4eRYf+UE2I3Queq6q91qjdnB53NJEJrOtKa+z4qVqcytEbsbUnv2576gxCV1AqWTQln09NPY+6xYRBdjtfmXqPn7o05nOP7prZXwD3asNA8D4PXj8mlFJQRVXdqKSsauEQUZ7ajUILRScusnku2gSfAf5IRhuYlngDEukcKeYUEDIJyHhDWite+2CVkyXtnWZ/YxFQ/X36E9gPpZdvx5EAkmZibxjqkAPoFJQl3vsLzMwrBgEf0As+Vhg==
-X-YMail-OSG: eOwkS4MVM1myXdKg7_PGSnkSBeSzvsuUpKD7HJgzqIWkOcngW8.D1i9kBHAfCPh
- _RwIcAx_fxxLIYYnvtNAPVGk9tKKGSbNnJ6w.EvnEnNjiz5AabaFjIQTpb.nPOxWaVTIU_TtNJnj
- yoOxs6SGGqBf4vs0MVBswIC1ypaVPSI8jiGEUgcVKMN4QXOa2YRBlQxqm_3YIflnNnLDl6zvc.ZJ
- BtZ0rN77G8MBmQ6mb4Zvgy.z5oR6CaC4rteXNkibPa3yfZ8guysNECNrfMPoEaPVx1agKJGwPU3Y
- Xo6uIuq2Ha8s1g9VBoDdLKRgHSVZI_XMGIJtrHS46OQ5XHtuxSGz29yX3evsokvW.LxM3K6qTT62
- 6vOUlJCKu6yW5WgsaENFeqCH3ASZVzKMgfE4NjFpTNM6NwKxHBYyeFy6GH8TWe74pLkawTz5.OwA
- qFyUC8Oks2nUYybY20sCfjd01sL3Hj6VUEN8AkJQEH1ufT4wkVDTgfu8kwSA7d5thElsmrvfqppj
- ut2N5nsxmvEfnm6S5BAGX1d8naDAEh1Kw15JTX4NwOEJp3qB4rEZ0nms9W4ynkPlgQki3ePyHo2n
- OgH1xWtbHiEjFoBag8ngTuFXZqWUFYPhoFQmnnx.v.aIQfWWx1.jDoJ1T6o21EUrhCMF4qaZfL2p
- jJyX8QFDyTIZGXHdqRJPW3BEOYUGupQWWW3934M_mmRIH_z4_aTAslk5_mPwCe3opgRqzKOHbmut
- xkJfvk0FI8M.mIwPRobNEDrLyELGKf51dN4DRtH9qSb8r12Ej.9Nahz7krJ.nXTLvWXCPsE0JpmX
- e6eIrlwj3pExi38ZlD4iKHwVS.TBikSSvjRhDy.ycw_FCi_evtm.64JSSKObgQPOZvcgSPnpgL2w
- 0b4JL217wlYu_8ngi.jsOPzKr7Ledlqgj6IvcIn9l6zOs7DbffkdaKTXmfuXtTMHtw7zTWSPdC1v
- quyNdM_71gqk8HuvM2dMTBE.CjzMlBnEWRNwKLcZjnodkAifgXI3O685vbU6aYu7Ckgy_gDHncHC
- IkAudF_0yTrG3tu_mrc08Rcw1r7v90mGQLqVWEZ5wr3MQX.iT7i_O5HcPueDz1ECvhnPVT2JPLoZ
- eb28Eac9z.0y2Nv9cndKScZJhdVBIuV1NkkMPTMERW9AeBoUMRSpDn8kSl3yU0J0oULz3JKC1OQU
- u46g9cao0q8e56Z1H.up_tlm0DGGLTXaU4NXeFAjSOjs.h0yAhJh4RsQPatclGSUj4Il3eXMkNor
- cCU4dU5lvNZYJxA.5KBdx_CE21W4mKHpfvYu6xsuawCM3053t027pbXXHtWnHWsK_K1.Zn_4iZRx
- _Ry79F8PYo1WzQqIvlOx8gGrTaiRkDhdLa_KgwepDFpl5xD8sOhR1cSfyiZs9hTfNLyvvXRNTN4o
- RWd0N64Cdu0jMGBbQ.pCOsRJa.bT9kPbR5H6JROPnTsCU8mdqNFwbK5M_LgtCwWAqbtkDy8.lgFc
- sUz1mGrrFJPqq476R0MELwKvKxgn0WgA7tYarBcEJu_H9rjcUX8wmIcdWkeTi_B29JOqv7NDkG.b
- 3.9qPDAohRnUK7mFgbbXZvFSs9FGmvsbwpgMVxQd2wldCBPo5HmXtO_gOn0TKJKZq8In96CbjWhj
- 9qHdWQLvLPyYW5VJH1OqU7NcgLMu82w9EPt4INTIDRrOjjduwygCGVp4NO2mbJ0ncGVjhNSOhwGG
- WzroZwl4kI6EyLdHR_9ByoZPDiX8ZwnndqMvB2AQlH8znUAwSmWknyKxBIxaFwtPEWvYgiR0Jssi
- 345DCR6mFXP2jlEnOzeLib48xo4psO2yq7Q4I9oSPqzI3VFXYiE6pd.x2uHNzLhKApXYmbj1NT1P
- FvyEYgKIixMKag0lVIXMfkWg2N.vWl29mwpLks0GSufqDaore2rJxFLT_txsRHR4uB5jhUGLXvSB
- 479jMtNfcoutSQvFjpMTAqBj12_xK_A66ItvWaNOPs.aghuwijBAuPsPQST9LBur4RiZERTKu.CD
- _aGZ2ButJUkh3ldMkUY5HelBig.xSGusNci5BNCHrerFW9gxeoYL2MkPZrUJA50ltUV1Khe5I._I
- doYNLsdtZWuBJwVtolqPq.aVs5Qk0e_Vw9UG4jBT_Vqy3HQJ0yPkhXeBB8efX4Re1Hv88l_ygIfN
- ZpKi81dSiYCUlbujzMAscqZyj8kmQmT16UDgkJv3y_8eZ18E3DiSUputUK0Tx7hf1d8xrFW1QMj.
- aK.gbRODmwrBrGAjMqcvS
-X-Sonic-MF: <brchuckz@aim.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.gq1.yahoo.com with HTTP; Tue, 16 Aug 2022 17:28:46 +0000
-Received: by hermes--production-bf1-7586675c46-6jlzf (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID f5181726492e835e0f6b4b78a77ba927;
-          Tue, 16 Aug 2022 17:28:40 +0000 (UTC)
-Message-ID: <5c40a423-f70a-abb8-360c-a601c5b157fe@netscape.net>
-Date:   Tue, 16 Aug 2022 13:28:36 -0400
+        Tue, 16 Aug 2022 13:29:38 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99E68275D;
+        Tue, 16 Aug 2022 10:29:21 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id q74so4712429iod.9;
+        Tue, 16 Aug 2022 10:29:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=4o155QaZQuD8qm7MI4O8okVjEDTqIZy55Z4sPe7oT5g=;
+        b=jnnsiX7G+dUoOH5+ROcE0bTG6XWLxBEQCWLDE9mHktOjMmb2qsqtAZyUSsvNFgv+kP
+         xAL/eOC4cT9w7Ik+FvGGoteVAFK6sPmLD6iMzzMdZJnY2mnvQ1CsDwKYmhg3cs/4gK2/
+         5ZFu8V0Lcn7cWeMjhkCyhTEqHe2E5V9qFTDyur2WmxUB8cHnEm0QMsPyVwW/uLfa/kq/
+         C9xFeDY0pjwovtQgymj6HyIS7I9yWM9oA2t79ZxiPLQEGXY7jxjSt48l8s8dVq4ROXKZ
+         zVYSWz3qpFtVyHgcSdlT+yU1v2MqcokBEfl95wg6cogrRLFvUdjrhH7nnT+KxXvNgKaE
+         sDNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=4o155QaZQuD8qm7MI4O8okVjEDTqIZy55Z4sPe7oT5g=;
+        b=MyTNv89FvYm4SJfBPpLFz1SUp7HHPBA7/tHmUJqY4sPaH8alR5dZD1CFQ88fvQM/pM
+         8mMvY2V6X55CLhpm0R83L3tK9qfBcnfx/UJTP+4wm1rarizC0ga1D0AC4qRi5PtB6iaf
+         X5xapVaRSBqnUu+txfxK4+7XrDkK2C5lN0PJmTTjobzLcNFNKUetM8elGAdXLzHll3eV
+         9IwZe93n4J20wMibD5IC9DpzzRA0JcNSCDi4zxJTJO7fm1vLYKoxJre8wVeb5XgPAuhV
+         yoFMN/M9Nu7qLqNgsMrazAPFqX8n0s/A78dFjpLvfF8zuy085FIirGGijgAb9lwVQJvK
+         cWBg==
+X-Gm-Message-State: ACgBeo3pAuVCKKvIBMFPlb16oNlbj7ZFFCchSwr4dgArnW2e0trmViC/
+        RS2XOisV/7UX4f7P86O8/5ynXENGJySzYaFgUoA=
+X-Google-Smtp-Source: AA6agR6ETfz+kJcyDU8fuH4n+LxW26e0xYbG9TSvCTS90ookzjzYt5aqiDJqFzfMYksjvi/dkVKTVEHdzQRBpjdEy4E=
+X-Received: by 2002:a05:6638:134b:b0:344:9e5f:ce31 with SMTP id
+ u11-20020a056638134b00b003449e5fce31mr6832608jad.129.1660670960245; Tue, 16
+ Aug 2022 10:29:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        regressions@lists.linux.dev, xen-devel@lists.xenproject.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Juergen Gross <jgross@suse.com>
-References: <20220715142549.25223-1-jgross@suse.com>
- <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
- <a0ce2f59-b653-fa8b-a016-1335f05c86ae@netscape.net>
- <32ed59c9-c894-c426-dd27-3602625cf3b1@netscape.net>
- <c88ea08c-a9d5-ef6a-333a-db9e00c6da6f@suse.com>
- <bd66b5bc-4d07-d968-f46c-40cf624499a7@netscape.net>
- <a29a66e0-2075-8084-84ad-8bd3e8a9fd4a@netscape.net>
- <a7d10605-87e3-c4bd-4a76-f07a04f5751c@leemhuis.info>
- <8d148826-62a5-95f9-8662-be14f56a6336@netscape.net>
- <6b40ecc3-a2d3-3efd-4a19-2faf737f098b@leemhuis.info>
- <be9d077c-ed4d-d5e3-a134-33afff027af4@netscape.net>
- <6294958a-177a-5c67-47c6-3a95c23ac58e@leemhuis.info>
-Content-Language: en-US
-From:   Chuck Zmudzinski <brchuckz@netscape.net>
-In-Reply-To: <6294958a-177a-5c67-47c6-3a95c23ac58e@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20531 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220815211516.3169470-1-robdclark@gmail.com> <20220815211516.3169470-2-robdclark@gmail.com>
+ <327c77d5-5812-a158-6c9f-c68e15a5a6b4@amd.com> <CAF6AEGu3oxM+EX_FsLpw4m0KouMyFMLN=AGGbf=6TVQGkJ7jQg@mail.gmail.com>
+ <6396ccf9-a677-427d-f5f9-12d30ad2197e@amd.com>
+In-Reply-To: <6396ccf9-a677-427d-f5f9-12d30ad2197e@amd.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 16 Aug 2022 10:29:51 -0700
+Message-ID: <CAF6AEGsbc9PuSOyvhnr0ALQiLY9gSBySHyisEOfteZq9NXN0VA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] dma-buf: Add ioctl to query mmap coherency/cache info
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/16/2022 12:53 PM, Thorsten Leemhuis wrote:
-> On 16.08.22 18:16, Chuck Zmudzinski wrote:
-> > On 8/16/2022 10:41 AM, Thorsten Leemhuis wrote:
-> >> On 15.08.22 20:17, Chuck Zmudzinski wrote:
-> >>> On 8/15/2022 2:00 PM, Thorsten Leemhuis wrote:
-> >>>
-> >>>> And FWIW: I've seen indicators that a solution to resolve this is
-> >>>> hopefully pretty close now.
-> >>> That's good to know. But I must ask, can you provide a link to a public
-> >>> discussion that indicates a fix is close?
-> >> I just searched for the commit id of the culprit yesterday like this:
-> >> https://lore.kernel.org/all/?q=bdd8b6c982*
-> >>
-> >> Which brought me to this message, which looks like Boris applied a
-> >> slightly(?) modified version of Jan's patch to a branch that afaik is
-> >> regularly pushed to Linus:
-> >> https://lore.kernel.org/all/166055884287.401.612271624942869534.tip-bot2@tip-bot2/
-> >>
-> >> So unless problems show up in linux-next I expect this will land in
-> >> master soon (and a bit later be backported to stable due to the CC
-> >> stable tag).
-> > 
-> > OK, that's exactly the kind of thing I am looking for. It would be
-> > nice if regzbot could have found that patch in that tree and
-> > display it in the web interface as a notable patch. Currently,
-> > regzbot is only linking to a dead patch that does not even fix
-> > the regression as a notable patch associated with this regression.
-> > 
-> > If regzbot is not yet smart enough to find it, could you take the
-> > time to manually intervene with a regzbot command so that
-> > patch is displayed as a notable patch for this regression?
+On Tue, Aug 16, 2022 at 9:51 AM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
 >
-> regzbot will notice when the patch hit's Linux next,
+> Am 16.08.22 um 16:26 schrieb Rob Clark:
+> > On Tue, Aug 16, 2022 at 1:27 AM Christian K=C3=B6nig
+> > <christian.koenig@amd.com> wrote:
+> >> Am 15.08.22 um 23:15 schrieb Rob Clark:
+> >>> From: Rob Clark <robdclark@chromium.org>
+> >>>
+> >>> This is a fairly narrowly focused interface, providing a way for a VM=
+M
+> >>> in userspace to tell the guest kernel what pgprot settings to use whe=
+n
+> >>> mapping a buffer to guest userspace.
+> >>>
+> >>> For buffers that get mapped into guest userspace, virglrenderer retur=
+ns
+> >>> a dma-buf fd to the VMM (crosvm or qemu).  In addition to mapping the
+> >>> pages into the guest VM, it needs to report to drm/virtio in the gues=
+t
+> >>> the cache settings to use for guest userspace.  In particular, on som=
+e
+> >>> architectures, creating aliased mappings with different cache attribu=
+tes
+> >>> is frowned upon, so it is important that the guest mappings have the
+> >>> same cache attributes as any potential host mappings.
+> >>>
+> >>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> >>> ---
+> >>> v2: Combine with coherency, as that is a related concept.. and it is
+> >>>       relevant to the VMM whether coherent access without the SYNC io=
+ctl
+> >>>       is possible; set map_info at export time to make it more clear
+> >>>       that it applies for the lifetime of the dma-buf (for any mmap
+> >>>       created via the dma-buf)
+> >> Well, exactly that's a conceptual NAK from my side.
+> >>
+> >> The caching information can change at any time. For CPU mappings even
+> >> without further notice from the exporter.
+> > You should look before you criticize, as I left you a way out.. the
+> > idea was that DMA_BUF_MAP_INCOHERENT should indicate that the buffer
+> > cannot be mapped to the guest.  We could ofc add more DMA_BUF_MAP_*
+> > values if something else would suit you better.  But the goal is to
+> > give the VMM enough information to dtrt, or return an error if mapping
+> > to guest is not possible.  That seems better than assuming mapping to
+> > guest will work and guessing about cache attrs
+>
+> Well I'm not rejecting the implementation, I'm rejecting this from the
+> conceptual point of view.
+>
+> We intentional gave the exporter full control over the CPU mappings.
+> This approach here breaks that now.
+>
+> I haven't seen the full detailed reason why we should do that and to be
+> honest KVM seems to mess with things it is not supposed to touch.
+>
+> For example the page reference count of mappings marked with VM_IO is a
+> complete no-go. This is a very strong evidence that this was based on
+> rather dangerous halve knowledge about the background of the handling her=
+e.
+>
+> So as long as I don't see a full explanation why KVM is grabbing
+> reference to pages while faulting them and why we manually need to
+> forward the caching while the hardware documentation indicates otherwise
+> I will be rejecting this whole approach.
 
-IIUC, regzbot might not notice because the patch lacks a Link: tag
-to the original regression report. The Link tag is to Jan's patch
-that was posted sometime in April, I think, which also lacks the
-Link tag to the original report of the regression which did not
-happen until May 4. If regzbot is smart enough to notice that the
-patch also has a Fixes: tag for the commit that was identified as
-bad in the original regression report, then I expect regzbot will
-find it.
+Didn't we cover this on the previous iteration already.  From a host
+kernel PoV these are just normal host userspace mappings.  The
+userspace VMM mapping becomes the "physical address" in the guest and
+the stage 2 translation tables map it to the guest userspace.
 
-Best regards,
+The resulting cache attrs from combination of S1 and S2 translation
+can differ.  So ideally we setup the S2 pgtables in guest aligned with
+host userspace mappings
 
-Chuck
+BR,
+-R
+
+>
+> Regards,
+> Christian.
+>
+> >
+> > BR,
+> > -R
+> >
+> >> If the hardware can't use the caching information from the host CPU pa=
+ge
+> >> tables directly then that pretty much completely breaks the concept th=
+at
+> >> the exporter is responsible for setting up those page tables.
+> >>
+> >> Regards,
+> >> Christian.
+> >>
+> >>>    drivers/dma-buf/dma-buf.c    | 63 +++++++++++++++++++++++++++-----=
+-
+> >>>    include/linux/dma-buf.h      | 11 ++++++
+> >>>    include/uapi/linux/dma-buf.h | 68 ++++++++++++++++++++++++++++++++=
+++++
+> >>>    3 files changed, 132 insertions(+), 10 deletions(-)
+> >>>
+> >>> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> >>> index 32f55640890c..262c4706f721 100644
+> >>> --- a/drivers/dma-buf/dma-buf.c
+> >>> +++ b/drivers/dma-buf/dma-buf.c
+> >>> @@ -125,6 +125,32 @@ static struct file_system_type dma_buf_fs_type =
+=3D {
+> >>>        .kill_sb =3D kill_anon_super,
+> >>>    };
+> >>>
+> >>> +static int __dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_str=
+uct *vma)
+> >>> +{
+> >>> +     int ret;
+> >>> +
+> >>> +     /* check if buffer supports mmap */
+> >>> +     if (!dmabuf->ops->mmap)
+> >>> +             return -EINVAL;
+> >>> +
+> >>> +     ret =3D dmabuf->ops->mmap(dmabuf, vma);
+> >>> +
+> >>> +     /*
+> >>> +      * If the exporter claims to support coherent access, ensure th=
+e
+> >>> +      * pgprot flags match the claim.
+> >>> +      */
+> >>> +     if ((dmabuf->map_info !=3D DMA_BUF_MAP_INCOHERENT) && !ret) {
+> >>> +             pgprot_t wc_prot =3D pgprot_writecombine(vma->vm_page_p=
+rot);
+> >>> +             if (dmabuf->map_info =3D=3D DMA_BUF_COHERENT_WC) {
+> >>> +                     WARN_ON_ONCE(pgprot_val(vma->vm_page_prot) !=3D=
+ pgprot_val(wc_prot));
+> >>> +             } else {
+> >>> +                     WARN_ON_ONCE(pgprot_val(vma->vm_page_prot) =3D=
+=3D pgprot_val(wc_prot));
+> >>> +             }
+> >>> +     }
+> >>> +
+> >>> +     return ret;
+> >>> +}
+> >>> +
+> >>>    static int dma_buf_mmap_internal(struct file *file, struct vm_area=
+_struct *vma)
+> >>>    {
+> >>>        struct dma_buf *dmabuf;
+> >>> @@ -134,16 +160,12 @@ static int dma_buf_mmap_internal(struct file *f=
+ile, struct vm_area_struct *vma)
+> >>>
+> >>>        dmabuf =3D file->private_data;
+> >>>
+> >>> -     /* check if buffer supports mmap */
+> >>> -     if (!dmabuf->ops->mmap)
+> >>> -             return -EINVAL;
+> >>> -
+> >>>        /* check for overflowing the buffer's size */
+> >>>        if (vma->vm_pgoff + vma_pages(vma) >
+> >>>            dmabuf->size >> PAGE_SHIFT)
+> >>>                return -EINVAL;
+> >>>
+> >>> -     return dmabuf->ops->mmap(dmabuf, vma);
+> >>> +     return __dma_buf_mmap(dmabuf, vma);
+> >>>    }
+> >>>
+> >>>    static loff_t dma_buf_llseek(struct file *file, loff_t offset, int=
+ whence)
+> >>> @@ -326,6 +348,27 @@ static long dma_buf_set_name(struct dma_buf *dma=
+buf, const char __user *buf)
+> >>>        return 0;
+> >>>    }
+> >>>
+> >>> +static long dma_buf_info(struct dma_buf *dmabuf, void __user *uarg)
+> >>> +{
+> >>> +     struct dma_buf_info arg;
+> >>> +
+> >>> +     if (copy_from_user(&arg, uarg, sizeof(arg)))
+> >>> +             return -EFAULT;
+> >>> +
+> >>> +     switch (arg.param) {
+> >>> +     case DMA_BUF_INFO_MAP_INFO:
+> >>> +             arg.value =3D dmabuf->map_info;
+> >>> +             break;
+> >>> +     default:
+> >>> +             return -EINVAL;
+> >>> +     }
+> >>> +
+> >>> +     if (copy_to_user(uarg, &arg, sizeof(arg)))
+> >>> +             return -EFAULT;
+> >>> +
+> >>> +     return 0;
+> >>> +}
+> >>> +
+> >>>    static long dma_buf_ioctl(struct file *file,
+> >>>                          unsigned int cmd, unsigned long arg)
+> >>>    {
+> >>> @@ -369,6 +412,9 @@ static long dma_buf_ioctl(struct file *file,
+> >>>        case DMA_BUF_SET_NAME_B:
+> >>>                return dma_buf_set_name(dmabuf, (const char __user *)a=
+rg);
+> >>>
+> >>> +     case DMA_BUF_IOCTL_INFO:
+> >>> +             return dma_buf_info(dmabuf, (void __user *)arg);
+> >>> +
+> >>>        default:
+> >>>                return -ENOTTY;
+> >>>        }
+> >>> @@ -530,6 +576,7 @@ struct dma_buf *dma_buf_export(const struct dma_b=
+uf_export_info *exp_info)
+> >>>        dmabuf->priv =3D exp_info->priv;
+> >>>        dmabuf->ops =3D exp_info->ops;
+> >>>        dmabuf->size =3D exp_info->size;
+> >>> +     dmabuf->map_info =3D exp_info->map_info;
+> >>>        dmabuf->exp_name =3D exp_info->exp_name;
+> >>>        dmabuf->owner =3D exp_info->owner;
+> >>>        spin_lock_init(&dmabuf->name_lock);
+> >>> @@ -1245,10 +1292,6 @@ int dma_buf_mmap(struct dma_buf *dmabuf, struc=
+t vm_area_struct *vma,
+> >>>        if (WARN_ON(!dmabuf || !vma))
+> >>>                return -EINVAL;
+> >>>
+> >>> -     /* check if buffer supports mmap */
+> >>> -     if (!dmabuf->ops->mmap)
+> >>> -             return -EINVAL;
+> >>> -
+> >>>        /* check for offset overflow */
+> >>>        if (pgoff + vma_pages(vma) < pgoff)
+> >>>                return -EOVERFLOW;
+> >>> @@ -1262,7 +1305,7 @@ int dma_buf_mmap(struct dma_buf *dmabuf, struct=
+ vm_area_struct *vma,
+> >>>        vma_set_file(vma, dmabuf->file);
+> >>>        vma->vm_pgoff =3D pgoff;
+> >>>
+> >>> -     return dmabuf->ops->mmap(dmabuf, vma);
+> >>> +     return __dma_buf_mmap(dmabuf, vma);
+> >>>    }
+> >>>    EXPORT_SYMBOL_NS_GPL(dma_buf_mmap, DMA_BUF);
+> >>>
+> >>> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+> >>> index 71731796c8c3..37923c8d5c24 100644
+> >>> --- a/include/linux/dma-buf.h
+> >>> +++ b/include/linux/dma-buf.h
+> >>> @@ -23,6 +23,8 @@
+> >>>    #include <linux/dma-fence.h>
+> >>>    #include <linux/wait.h>
+> >>>
+> >>> +#include <uapi/linux/dma-buf.h>
+> >>> +
+> >>>    struct device;
+> >>>    struct dma_buf;
+> >>>    struct dma_buf_attachment;
+> >>> @@ -307,6 +309,13 @@ struct dma_buf {
+> >>>         */
+> >>>        size_t size;
+> >>>
+> >>> +     /**
+> >>> +      * @map_info:
+> >>> +      *
+> >>> +      * CPU mapping/coherency information for the buffer.
+> >>> +      */
+> >>> +     enum dma_buf_map_info map_info;
+> >>> +
+> >>>        /**
+> >>>         * @file:
+> >>>         *
+> >>> @@ -533,6 +542,7 @@ struct dma_buf_attachment {
+> >>>     * @ops:    Attach allocator-defined dma buf ops to the new buffer
+> >>>     * @size:   Size of the buffer - invariant over the lifetime of th=
+e buffer
+> >>>     * @flags:  mode flags for the file
+> >>> + * @map_info:        CPU mapping/coherency information for the buffe=
+r
+> >>>     * @resv:   reservation-object, NULL to allocate default one
+> >>>     * @priv:   Attach private data of allocator to this buffer
+> >>>     *
+> >>> @@ -545,6 +555,7 @@ struct dma_buf_export_info {
+> >>>        const struct dma_buf_ops *ops;
+> >>>        size_t size;
+> >>>        int flags;
+> >>> +     enum dma_buf_map_info map_info;
+> >>>        struct dma_resv *resv;
+> >>>        void *priv;
+> >>>    };
+> >>> diff --git a/include/uapi/linux/dma-buf.h b/include/uapi/linux/dma-bu=
+f.h
+> >>> index b1523cb8ab30..07b403ffdb43 100644
+> >>> --- a/include/uapi/linux/dma-buf.h
+> >>> +++ b/include/uapi/linux/dma-buf.h
+> >>> @@ -85,6 +85,72 @@ struct dma_buf_sync {
+> >>>
+> >>>    #define DMA_BUF_NAME_LEN    32
+> >>>
+> >>> +/**
+> >>> + * enum dma_buf_map_info - CPU mapping info
+> >>> + *
+> >>> + * This enum describes coherency of a userspace mapping of the dmabu=
+f.
+> >>> + *
+> >>> + * Importing devices should check dma_buf::map_info flag and reject =
+an
+> >>> + * import if unsupported.  For example, if the exporting device uses
+> >>> + * @DMA_BUF_COHERENT_CACHED but the importing device does not suppor=
+t
+> >>> + * CPU cache coherency, the dma-buf import should fail.
+> >>> + */
+> >>> +enum dma_buf_map_info {
+> >>> +     /**
+> >>> +      * @DMA_BUF_MAP_INCOHERENT: CPU mapping is incoherent.
+> >>> +      *
+> >>> +      * Use of DMA_BUF_IOCTL_SYNC is required for CPU managed cohere=
+nency.
+> >>> +      */
+> >>> +     DMA_BUF_MAP_INCOHERENT,
+> >>> +
+> >>> +     /**
+> >>> +      * @DMA_BUF_COHERENT_WC: CPU mapping is coherent but not cached=
+.
+> >>> +      *
+> >>> +      * A cpu mmap'ing is coherent, and DMA_BUF_IOCTL_SYNC is not re=
+quired.
+> >>> +      * However fences may be still required for synchronizing acces=
+s.  Ie.
+> >>> +      * coherency can only be relied upon by an explicit-fencing use=
+rspace.
+> >>> +      * An implicit-sync userspace must still use DMA_BUF_IOCTL_SYNC=
+.
+> >>> +      *
+> >>> +      * The cpu mapping is writecombine.
+> >>> +      */
+> >>> +     DMA_BUF_COHERENT_WC,
+> >>> +
+> >>> +     /**
+> >>> +      * @DMA_BUF_COHERENT_CACHED: CPU mapping is coherent and CPU ca=
+ched.
+> >>> +      *
+> >>> +      * A cpu mmap'ing is coherent, and DMA_BUF_IOCTL_SYNC is not re=
+quired.
+> >>> +      * However fences may be still required for synchronizing acces=
+s.  Ie.
+> >>> +      * coherency can only be relied upon by an explicit-fencing use=
+rspace.
+> >>> +      * An implicit-sync userspace must still use DMA_BUF_IOCTL_SYNC=
+.
+> >>> +      *
+> >>> +      * The cpu mapping is cached.
+> >>> +      */
+> >>> +     DMA_BUF_COHERENT_CACHED,
+> >>> +};
+> >>> +
+> >>> +/**
+> >>> + * struct dma_buf_info - Query info about the buffer.
+> >>> + */
+> >>> +struct dma_buf_info {
+> >>> +
+> >>> +#define DMA_BUF_INFO_MAP_INFO    1
+> >>> +
+> >>> +     /**
+> >>> +      * @param: Which param to query
+> >>> +      *
+> >>> +      * DMA_BUF_INFO_MAP_INFO:
+> >>> +      *     Returns enum dma_buf_map_info, describing the coherency =
+and
+> >>> +      *     caching of a CPU mapping of the buffer.
+> >>> +      */
+> >>> +     __u32 param;
+> >>> +     __u32 pad;
+> >>> +
+> >>> +     /**
+> >>> +      * @value: Return value of the query.
+> >>> +      */
+> >>> +     __u64 value;
+> >>> +};
+> >>> +
+> >>>    #define DMA_BUF_BASE                'b'
+> >>>    #define DMA_BUF_IOCTL_SYNC  _IOW(DMA_BUF_BASE, 0, struct dma_buf_s=
+ync)
+> >>>
+> >>> @@ -95,4 +161,6 @@ struct dma_buf_sync {
+> >>>    #define DMA_BUF_SET_NAME_A  _IOW(DMA_BUF_BASE, 1, __u32)
+> >>>    #define DMA_BUF_SET_NAME_B  _IOW(DMA_BUF_BASE, 1, __u64)
+> >>>
+> >>> +#define DMA_BUF_IOCTL_INFO   _IOWR(DMA_BUF_BASE, 2, struct dma_buf_i=
+nfo)
+> >>> +
+> >>>    #endif
+>

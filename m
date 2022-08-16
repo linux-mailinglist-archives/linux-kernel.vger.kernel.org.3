@@ -2,125 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7E615960F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 126F65960F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiHPRUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 13:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43704 "EHLO
+        id S236522AbiHPRU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 13:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236748AbiHPRU3 (ORCPT
+        with ESMTP id S234836AbiHPRUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 13:20:29 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F8F5FEF;
-        Tue, 16 Aug 2022 10:20:28 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id q7-20020a17090a7a8700b001f300db8677so10244731pjf.5;
-        Tue, 16 Aug 2022 10:20:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=r91jzjWZhlEdAsAG7xnJCiSvfb9cchZedVFaXE4bjp4=;
-        b=TvooP6Vs8oiEoPmqq4G62BVNWO56dW0DcKJ15qUCu0ZE9ECb409mZosxkdMVDSOj0a
-         y2m0JwIDYAGdwXcSZXXK/5oOGh+IA6tmHPZpqSfdQaIm5M/Z2/Zy88MwZI0G6GHRbeXC
-         mugphGGr+otsfCPJd58BcMJt3dzuyWsZ7gfLWkHWjakj1FEsFu+WTYyckNYIeWpTvJZ6
-         NPMH6pk+NbDQSwtXJ6Y1Zjz3GF/ADed8ASD9bVoJukmUOgmtqTef2oNq7vSsrLPp9tRr
-         YLrZjaVXBRmFC8uQstb8aaxgDfv+hYWb9Gy2+jdVAx/K8GTo8LBoA2D+wwyU5yTHh+/D
-         uWxA==
+        Tue, 16 Aug 2022 13:20:53 -0400
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B852558DE3;
+        Tue, 16 Aug 2022 10:20:52 -0700 (PDT)
+Received: by mail-il1-f181.google.com with SMTP id p9so5674692ilq.13;
+        Tue, 16 Aug 2022 10:20:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=r91jzjWZhlEdAsAG7xnJCiSvfb9cchZedVFaXE4bjp4=;
-        b=tCTJaie62C5gd7e3VptO7SEHtov2+dt9WrG5hZGgK+9JZr+riLTXgnr/RB2aiMAWvt
-         +Z18CR2JPD6/b+nCiB4lwippwcLfgtBx1CVX8+Tl7NGzZZ3AKP8CFQvBTHrxOhZ+JBIS
-         2yo23bIB38dzT1SjRFVEubvz72j4lFqPQhuOxIUU/ak42a1Mu+E0bTYMDFuI88hXZuJ0
-         an+jrwdfl549coOV2sYuwckBei//kO3kuCXAGr7UAmKhe3R6TvYgp5YrlkD3Z6CI445w
-         qjbvQXOgnvWSyPmbrhQ8H6O3DRCpbNFP0P205V6J72kko24ZnyZ5FowjqemHVVml695z
-         2FTQ==
-X-Gm-Message-State: ACgBeo0qZ79H2FxDbP+GQ9ADSpyTnUPZqU0Hwp8Qy5MiauH5CXGA3Oh8
-        sCxrP5pinxaCf486+dIYT5Q=
-X-Google-Smtp-Source: AA6agR64VZz5ccV9Mq8nhQlttdjGhTpP/74xWW8SIPGFhdhMs8ibKywgtG8w3+gYadGwMen+2/m7BA==
-X-Received: by 2002:a17:902:b184:b0:172:766e:7f35 with SMTP id s4-20020a170902b18400b00172766e7f35mr6974947plr.174.1660670427971;
-        Tue, 16 Aug 2022 10:20:27 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:7229])
-        by smtp.gmail.com with ESMTPSA id a70-20020a621a49000000b0052e6c073a3csm9020956pfa.142.2022.08.16.10.20.27
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=Q4O14z9xwYqtANeX5XgH5CYQKkWWRtuCHaM8jAT6Q3g=;
+        b=Q7qBMnqtSt+xJFqxMToRIPLFWPVd+fk7wB1ufVxmkSUywFNBpozz/aWjtkhxWU4fXP
+         JwA2bO307jIGYDO532rCrrgvQ66Eg+DkjpcV2D29x1ew59lHiglwOErqDGVaTJ3jYizp
+         AJ5hGbIg5Hc8/GC/RWgX5koMv6QQLD1s/3q0ACTTbFzUn8iANqjpfHCCKkeUZvfF9DM4
+         uaBsDzxgFDG9zcf9gjSjhAL2UcSbTSYguMures2Zb0eP85yH6/cr+NMVXxUQPU6ODViN
+         W8FStf/APFfgSM59rA8+OVgHgnv8nFnzYJwof2ZIYyN4Woh9zIbrnVpm9KKxX2HajuxT
+         vEog==
+X-Gm-Message-State: ACgBeo23vDd5CG/BpZQLc8LRWReRE0AMD1uPlmL3FOsowReBX51BevRa
+        Kn7tfMbMSg7pDDbXttb2Jg==
+X-Google-Smtp-Source: AA6agR5ZkcmLOLet1JuEVooD2xVihqqO7zvL7WDWAtwn65oOI8FX2j14zzLHmu4qlu5VGUHiaLdrjg==
+X-Received: by 2002:a05:6e02:194d:b0:2df:8893:90bb with SMTP id x13-20020a056e02194d00b002df889390bbmr9950968ilu.242.1660670451967;
+        Tue, 16 Aug 2022 10:20:51 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id r6-20020a02c6c6000000b0034142dad202sm4009039jan.31.2022.08.16.10.20.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 10:20:27 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 16 Aug 2022 07:20:25 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v4 3/3] cgroup/cpuset: Keep user set cpus affinity
-Message-ID: <YvvR2Sa6LxZLwXsJ@slm.duckdns.org>
-References: <20220816151119.29534-1-longman@redhat.com>
- <20220816151119.29534-4-longman@redhat.com>
+        Tue, 16 Aug 2022 10:20:51 -0700 (PDT)
+Received: (nullmailer pid 2404777 invoked by uid 1000);
+        Tue, 16 Aug 2022 17:20:49 -0000
+Date:   Tue, 16 Aug 2022 11:20:49 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Matt Ranostay <mranostay@ti.com>
+Cc:     nm@ti.com, j-keerthy@ti.com, lee@kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 1/6] Documentation: tps6594x: Add DT bindings for the
+ TPS6594x PMIC
+Message-ID: <20220816172049.GA2399563-robh@kernel.org>
+References: <20220812032242.564026-1-mranostay@ti.com>
+ <20220812032242.564026-2-mranostay@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220816151119.29534-4-longman@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220812032242.564026-2-mranostay@ti.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Aug 11, 2022 at 08:22:37PM -0700, Matt Ranostay wrote:
+> Signed-off-by: Matt Ranostay <mranostay@ti.com>
 
-So, overall I think this is the right direction.
+Commit message? Use a subject prefix appropriate for the subsystem.
 
-> +static int cpuset_set_cpus_allowed_ptr(struct task_struct *p,
-> +				       const struct cpumask *mask)
-> +{
-> +	if (p->user_cpus_ptr) {
-> +		cpumask_var_t new_mask;
+> ---
+>  .../devicetree/bindings/mfd/ti,tps6594x.yaml  | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/ti,tps6594x.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/ti,tps6594x.yaml b/Documentation/devicetree/bindings/mfd/ti,tps6594x.yaml
+> new file mode 100644
+> index 000000000000..9b5e17f63709
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/ti,tps6594x.yaml
+> @@ -0,0 +1,56 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/ti,tps6594x.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +		if (alloc_cpumask_var(&new_mask, GFP_KERNEL) &&
-> +		    copy_user_cpus_mask(p, new_mask) &&
-> +		    cpumask_and(new_mask, new_mask, mask)) {
-> +			int ret = set_cpus_allowed_ptr(p, new_mask);
+> +title: TPS6594x Power Management Integrated Circuit (PMIC)
 > +
-> +			free_cpumask_var(new_mask);
-> +			return ret;
-> +		}
-> +		free_cpumask_var(new_mask);
-> +	}
+> +maintainers:
+> +  - Keerthy <j-keerthy@ti.com>
 > +
-> +	return set_cpus_allowed_ptr(p, mask);
-> +}
+> +properties:
+> +  compatible:
+> +    contains:
 
-But this seems racy to me. Let's say attach and setaffinity race. The
-expectation should be that we'd end up with the same eventual mask no matter
-what the operation order may be. The above code wouldn't do that, right?
-There's nothing synchronizing the two and if setaffinity takes place between
-the user_cpus_ptr test and set_cpus_allowed_ptr(), it'd get ignored.
+No, this means '"foo", "ti,tps6594x", "bar"' is valid.
 
-This gotta be more integrated. There is what the user requested and there
-are restrictions from CPU hotplug state and cpuset. All three should be
-synchronized so that there is one synchronzied way to obtain and apply the
-current effective mask.
+> +      enum:
 
-Thanks.
+Use 'const' if only 1 entry.
 
--- 
-tejun
+> +        - ti,tps6594x
+
+Don't use wildcards in compatible strings.
+
+> +
+> +  reg:
+> +    const: 0x48
+> +    description: I2C slave address
+> +
+> +  ti,system-power-controller:
+> +    type: boolean
+> +    description: PMIC is controlling the system power.
+> +
+> +  rtc:
+
+Why do you need a sub-node here? Is the RTC a separate block with its 
+own resources?
+
+> +    type: object
+> +    $ref: /schemas/rtc/rtc.yaml#
+> +    unevaluatedProperties: false
+> +    properties:
+> +      compatible:
+> +        const: ti,tps6594x-rtc
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +examples:
+> +  - |
+> +    i2c0 {
+
+i2c {
+
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        pmic: pmic@48 {
+> +            compatible = "ti,tps6594x";
+> +            reg = <0x48>;
+> +
+> +            rtc {
+> +                compatible = "ti,tps6594x-rtc";
+> +            };
+> +        };
+> +    };
+> +
+> +...
+> -- 
+> 2.36.1
+> 
+> 

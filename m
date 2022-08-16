@@ -2,76 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2D0595BD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D06A595BDC
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234221AbiHPMi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 08:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46902 "EHLO
+        id S234613AbiHPMjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 08:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232208AbiHPMi1 (ORCPT
+        with ESMTP id S234505AbiHPMiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 08:38:27 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F9C5EDF7;
-        Tue, 16 Aug 2022 05:38:25 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id 17so9114745pli.0;
-        Tue, 16 Aug 2022 05:38:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc;
-        bh=KyIawfeWtCWjFVR0/zyQY4FM/yjIIpkpCCdIx8dakdk=;
-        b=IN7yT+IENiDj8CQ/pkDT/lrYusRzb2mwnhfGBClmw8VUeElB9fpRp2LHyLsM4P5744
-         gM6tMqcog3NuChENSEKwQL8m65VHIkcMrBMZ4GWSVdr9mvv5kBDAHb/KfwKtIKXZF8Zw
-         VdcXv7CBR3rtXCRccIvelb+R68ak5SGqnqB3PItyb/QQYwz5z9OBK5Zcrchna5r4p1DE
-         YZ6x0loo2o/cka0J7eawkmRUbZ123BTeosLD/qDrQuAh5aMKj+alsfI0EpMTaBsxyXRd
-         DraTIcc7sD65uqOmxVJfFvBX2I3rwRcc8EYpB/WXQPMMNPTbDBtpe0QrM+DpqctK5wxg
-         Pv+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=KyIawfeWtCWjFVR0/zyQY4FM/yjIIpkpCCdIx8dakdk=;
-        b=CTWprlSmsRRJ81hfR+miBFGhPO5n2h8V8ldbtW0cm+W5ZCjesHFcauH84gMrikZypH
-         axlUoVczguXOuvS/YRHq9p6Ark67we1l+NfgWlZZfwAl2kh6E9U1uiYF4EY3z8pEnYax
-         BPeYel2XoYoD0KKg2pTeJiumkytiGsexdgXddE+Sl12HKhXSg9MSXIZvcrFyWP2ZDXrn
-         /33q3DiHE83dKWDzRTEp1PhKDEb9VmrH2yjyviHq/Lp/1w1CJyhl/UZhngG8CZX7SzG5
-         HieriHqzIX71yNb2tUaTNi/mv35hPchoO+jrGQKqMUFSk5lH8UXuLA73RDHPXkk/RD1i
-         /0rw==
-X-Gm-Message-State: ACgBeo1kLoDTMAa0e9pksEZjKlujc/cIjF4bHp5cNjNb6DwD9mFk0SGP
-        ryU9pg+/9v7BtWOrmY+Wl14=
-X-Google-Smtp-Source: AA6agR6MZVxLTWSrIx699h6LSoqS0z8rqe29ARhyaP0fKYBneQt1ceBt9feUKbv5rGd4h8vxAn88FQ==
-X-Received: by 2002:a17:903:120d:b0:171:4fa0:7b4a with SMTP id l13-20020a170903120d00b001714fa07b4amr21184838plh.45.1660653505064;
-        Tue, 16 Aug 2022 05:38:25 -0700 (PDT)
-Received: from debian.me (subs10b-223-255-225-224.three.co.id. [223.255.225.224])
-        by smtp.gmail.com with ESMTPSA id 202-20020a6214d3000000b00518285976cdsm8349667pfu.9.2022.08.16.05.38.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 05:38:24 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 1EFA9103124; Tue, 16 Aug 2022 19:38:20 +0700 (WIB)
-Date:   Tue, 16 Aug 2022 19:38:20 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: Big load on lkml created by -stable patchbombs was Re: [PATCH
- 5.19 0000/1157] 5.19.2-rc1 review
-Message-ID: <YvuPvHb7T6WYEQf/@debian.me>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ddTInXOxl7VxFpBB"
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Tue, 16 Aug 2022 08:38:55 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB77398A78;
+        Tue, 16 Aug 2022 05:38:51 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id AD9973200915;
+        Tue, 16 Aug 2022 08:38:49 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute4.internal (MEProxy); Tue, 16 Aug 2022 08:38:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1660653529; x=
+        1660739929; bh=qiN45Q11NPTk5Rs4MYK+8OHu5fZC4SzQoWKWpX8YGFI=; b=N
+        6scrB6ZgHrXL/GExIbxkM+ie6PzR2UuqslRNTofrAMbfv/YT11hkQHfuzi8/cRur
+        BN8er9ChPU00KBX9XAVvPR1FO2kf7Qyf+78Gz48/Wra7NYE1oNx4y3R01xzR642M
+        x1Z2IByMJFBoOz2SHX6Uo7QM2cUvDa5s4kfA41K8VefZcrgmWOqEKhSLyOI6GjPF
+        VjCv5nqRihS/6cXVhUJCLlL+Y4iQq+Yf7WqN2+2XN7k89hbcBSIiIFpHgwVakJLO
+        ZJ1Ip9UErNJb2martFDlz2DngXjmj9K5WcbUOmuXfOohXUaiQu1ioNlIZ0OcxymD
+        hKhnRNeeuLhEbTJ2v12sg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660653529; x=
+        1660739929; bh=qiN45Q11NPTk5Rs4MYK+8OHu5fZC4SzQoWKWpX8YGFI=; b=J
+        tadQTc1nh0QXPgN16GFqF8Yq2QW8v7tO6aZdmEy7X3DDyljXtxgrSoOriUmU9yo9
+        RcOWOBTgssIGI5v2R0XyvmlsOrKCOVbVn55xpJmewra91R/5UM4Yl9arSw1aNpv+
+        TBtcizI8dDZJ3dqrcMKaQ7oodTvPyc+EIAI9vQfkXa0mVaG6l+ClYyeD0268+xWM
+        +wLIOE7s9WNzKkb2DRJKJZ7mSKyLYcYu3bQY/amNuwJg5foaiFnEIXQjQaxZPPz5
+        XomsqDm1PkRPM2bcC75ZovZXYGn9UfdxMeapq5xcD8Q0YXeLbaIFFqBjiFLteDV3
+        34ZcBppAb69KMWIYLtg6w==
+X-ME-Sender: <xms:2Y_7Yp21s31GoP_OMNp4dVeeVboXQc_4PIt0t-cnosLJP3PqF70i-g>
+    <xme:2Y_7YgF-YdURcLrqfogzVZS4WL-txH6an5da6dPB76vqGvMZlKaVFWr0SqsVg8neq
+    CfbF_t-lIohRrA3S7Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehgedgheehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
+    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
+    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:2Y_7Yp7kA3C__J467ms2fuyZ0XLuZG0FxIkV4xcsPpWj66WdrhKn8w>
+    <xmx:2Y_7Ym23mTtiPF5W7jlqFIPlDQ-JLi02KTw8S_WHgmqpOWKYyYH4uw>
+    <xmx:2Y_7YsHL_lX8Rii9eY2lsGzQC6ou8qJxwsUldqzlKbZcge0GjU6IxQ>
+    <xmx:2Y_7YgB6psx0VQVHbJ6yfsphEHzDNVzMWiZUe9MLLAV7nrAVXv3P0g>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 060B836A0071; Tue, 16 Aug 2022 08:38:48 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
+Mime-Version: 1.0
+Message-Id: <c17cdcf9-14bd-4287-9525-287dfc908fa2@www.fastmail.com>
+In-Reply-To: <YvthfQUfv0TiO/bK@kroah.com>
+References: <20220816091258.9571-1-jiaxun.yang@flygoat.com>
+ <YvthfQUfv0TiO/bK@kroah.com>
+Date:   Tue, 16 Aug 2022 13:38:27 +0100
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Greg KH" <greg@kroah.com>
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        linux-api@vger.kernel.org, f.fainelli@gmail.com
+Subject: Re: [PATCH v4] MIPS: Expose prid and globalnumber to sysfs
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,98 +90,65 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---ddTInXOxl7VxFpBB
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 16, 2022 at 01:56:14PM +0200, Pavel Machek wrote:
-> Hi!
->=20
-> > > > This is the start of the stable review cycle for the 5.19.2 release.
-> > > > There are 1157 patches in this series, all will be posted as a resp=
-onse
-> > > > to this one.  If anyone has any issues with these being applied, pl=
-ease
-> > > > let me know.
-> > >=20
-> > > Hi Greg,
-> > >=20
-> > > Perhaps its time that you just send a single email to LKML pointing w=
-here to
-> > > find the stable releases. These patch bombs are bringing vger down to=
- its
-> > > knees, and causing delays in people's workflows. This doesn't just af=
-fect
-> > > LKML, but all other vger mailing lists. Probably because LKML has the=
- biggest
-> > > subscriber base that patch bombs to it can slow everything else down.
-> > >=20
-> > > I sent 3 patches to the linux-trace-devel list almost 4 hours ago, an=
-d they
-> > > still haven't shown up. I was going to point people to it tonight but=
- it's now
-> > > going to have to wait till tomorrow.
-> >=20
-> > Email is async, sometimes it takes longer than others to recieve
-> > messages.
->=20
-> Well, email is pretty fast most of the month.
->=20
-> > My "patch bombs" get sent out slow to the mail servers, there is work to
-> > fix up vger and move it over to the LF-managed infrastructure, perhaps
-> > work with the vger admins to help that effort out?
->=20
-> I'm pretty used to -stable patches going to l-k, so I got used to
-> current workflow. OTOH ... -stable _is_ quite significant fraction of
-> total lkml traffic, and I see how people may hate that.
->=20
-> Is not it ultimately for vger admins to decide what kind of load they
-> consider acceptable?
->=20
-> Would it make sense to somehow batch the messages, or perhaps to
-> modify patchbombing scripts to send patches "slowly" so that -stable
-> does not DoS other lkml users?
->=20
-> Actually, if the patch is same between multiple -stable releases
-> (which is rather common case) sending it just once tagged with "this
-> goes to 4.9, 4.14, 4.19 and 5.10" would both take less bandwidth and
-> make review easier. (But I see it may not be that easy).
->=20
+=E5=9C=A82022=E5=B9=B48=E6=9C=8816=E6=97=A5=E5=85=AB=E6=9C=88 =E4=B8=8A=E5=
+=8D=8810:21=EF=BC=8CGreg KH=E5=86=99=E9=81=93=EF=BC=9A
+> On Tue, Aug 16, 2022 at 09:12:58AM +0000, Jiaxun Yang wrote:
+>> Some application would like to know precise model and rev of processor
+>> to do errata workaround or optimization.
+>>=20
+>> Expose them in sysfs as:
+>> /sys/devices/system/cpu/cpuX/regs/identification/prid
+>> /sys/devices/system/cpu/cpuX/regs/identification/globalnumber
+>>=20
+>> Reusing AArch64 CPU registers directory.
+>>=20
+>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>> ---
+>> v2: Drop static qualifier for kobj (gregkh)
+>> v3: Use kzalloc to allocate struct cpuregs.
+>>     note: When Greg mentioned about static I was thinking about
+>>     static qualifier of percpu variable. After reading documents
+>>     again it turns out kobjs should be allocated at runtime. Arm64's
+>>     cpuinfo kobj is also on a percpu variable... I guess that was a
+>>     intentional use?
+>> v4: Properly handle err of kobj creation. (gregkh)
+>
+> Nothing was fixed :(
 
-Hi Pavel,
+[Resending due to previous mail contains HTML. I just got a Macbook
+and was trying to use it's built-in mail client. Turns out that it's
+sending HTML even with "Plain Text" selected...
+Now turning back to mutt. Apologise for inconvinence.]
 
-I have to breakdown In-Reply-To chain.
+Hi Greg,
 
-I can't see the message you sent above on lore, so I had to "lei up"
-in order to get it. On lore, the patch series thread [1] displayed
-is until [1001/1157], and rest of the thread (including yours) is skipped.
-Actually, I can see your message from search results [2].
+Sorry for misinterpret your comments again :(
 
-I guess why more than a thousand of patches must be reviewed for this
-stable review cycle is because many of them (which have stable list CCed)
-are errorneously submitted and merged for 6.0 merge window, not as
-stabilization fixes for 5.19. But I also wonder if any of these patches
-are not actually qualified for stable (new drivers?).
+Hmm I just use kobject_put to replace kobject_del.
+I thought that was what you were trying to say?
 
-[1]: https://lore.kernel.org/stable/20220815180439.416659447@linuxfoundatio=
-n.org/T/#u
-[2]: https://lore.kernel.org/stable/20220816115614.GB27428@duo.ucw.cz/
+>
+> Again, please read the documentation for the kobject calls you are
+> making as it explains how to properly handle errors being returned from
+> them, and what you need to call if that happens.
 
-Thanks.
+Quoting the document the only sentence mentioning error handling is:
 
---=20
-An old man doll... just what I always wanted! - Clara
+It is good practice to always use kobject_put() after kobject_init() to =
+avoid
+errors creeping in.
 
---ddTInXOxl7VxFpBB
-Content-Type: application/pgp-signature; name="signature.asc"
+In our case is it safe to call kobject_put if() the error happens at kob=
+ject_init()
+stage of kobject_init_and_add()? Do you mean that I should use kobject_p=
+ut to
+clean up kobject_init_and_add() error?
 
------BEGIN PGP SIGNATURE-----
+Thanks
+- Jiaxun
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYvuPswAKCRD2uYlJVVFO
-o+tQAQCkbjFkJzkL4kNynWznFOadIgus2/HuOELuSpoRaVvXTQEAn7R6WOpcOs73
-EJqG4em/mjsNdkTEIwocebccyM9U7gE=
-=pgX5
------END PGP SIGNATURE-----
-
---ddTInXOxl7VxFpBB--
+>
+> thanks,
+>
+> greg k-h

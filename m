@@ -2,275 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F8B5952BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 08:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D199F5952C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 08:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbiHPGlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 02:41:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44048 "EHLO
+        id S230145AbiHPGmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 02:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiHPGl2 (ORCPT
+        with ESMTP id S230142AbiHPGmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 02:41:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108E4DABBC;
-        Mon, 15 Aug 2022 18:27:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9685B815A5;
-        Tue, 16 Aug 2022 01:27:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC7FFC433D7;
-        Tue, 16 Aug 2022 01:27:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660613237;
-        bh=RnR2Mr7WZilnclmvzrxgM74fS3XQBeMDDiYYA4FNk6k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ANB+4wO0ZCNoyog0Jk++b09hO/EK1JE5jPKriN5QjMxSm2OlijxpsnQ1Wh/Futoiu
-         sdj+iZGG68QUkAIZalgse1CnnKdi0CxpyftnhjZX/sqAxMjZvNmflvgiomJYXT8blZ
-         w3QNVx549NHeHlQ9bFPbcboQNWL4r2TEJEVMxl6YvA234Fma6mp6y4QN9fTjfS0b1o
-         J+rLwRS1UotufDsSWpaHVwJx+bYn6+eR7qLzxZPplNfLYeNTZ0Nb2flQ3l8lKXB2jm
-         w2ZK4Etdp/rfB9OlcVsz3wYc23dGGOy2M+P726bCUkmMnAJSmYCAwLyakg6zC4mfe1
-         ob6gYVubW242A==
-From:   guoren@kernel.org
-To:     xianting.tian@linux.alibaba.com, palmer@dabbelt.com,
-        heiko@sntech.de
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, liaochang1@huawei.com,
-        mick@ics.forth.gr, jszhang@kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>,
-        AKASHI Takahiro <takahiro.akashi@linaro.org>
-Subject: [PATCH 2/2] riscv: kexec: Implement crash_smp_send_stop with percpu crash_save_cpu
-Date:   Mon, 15 Aug 2022 21:27:01 -0400
-Message-Id: <20220816012701.561435-3-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220816012701.561435-1-guoren@kernel.org>
-References: <20220816012701.561435-1-guoren@kernel.org>
+        Tue, 16 Aug 2022 02:42:37 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F1214EBBA
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 18:31:23 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id u3so12864288lfk.8
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 18:31:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=7TyoM62NCZIF/E5AFBSvac1IoKHCKnc+Y34dVW1eFns=;
+        b=52twqYpswvNn+4ufPoVuXYwtbANQzS3ciJHHysFqnHecqsLdTFoUN61U2QnWgSOr/i
+         TQXgO1Kgv9T1Y5tejanZLTzhnIOUEsj5CMpDvBvcmdPa8Ln6VeZXc+jRILGAocJ6E8RW
+         7y08HcEa1rce+7Swcc0KuD+qTjLsrwqbtFz126x5RHIN/0PddL+W1xRRoH7AH1YRe/Rp
+         CXDOW5VF9sZxW9yiFOQMjwzFnMIDKsAw/XyYbFvxPA2rDgUt1AgEnHLi0I5dZKVeURfk
+         ZP4BOyrrJzorHKeWyI48/PMOKhIAdiBwuCr9OkfvKfwMUdHgOk+7ncSIvuE5Zpd605x2
+         Q6eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=7TyoM62NCZIF/E5AFBSvac1IoKHCKnc+Y34dVW1eFns=;
+        b=2fqKHj8O+uGTgUXADLBTkvxowXA1gMILYhnV03feVVsHgkOaBLW3NlSgAQr6113ksO
+         TNmG57h3L9IPMg0JxNEK0FD5Lby25Ja5UM7VwELjLtYiCSuNu8l6LAfr3ctNI8WNYZFk
+         ZArQstyKcxX0Nat0AR7n3DCotKgeWKn2xlRyEOsB59kk3HklgcMffRETfLkYR3aL/eez
+         rljeOC+coH2VqTDolAgZxOgfoFd+R4zc3fejc9TkGmGD2z5b1ExFiKEM2/R0HSnqgnXo
+         Du29CaEy96oW+5DPmyQgMCO6hxxDmKhlQQxJEVNijRr1jcieMbWJVQ4JNO4LJ9tDkQOa
+         8Ifw==
+X-Gm-Message-State: ACgBeo3m5a6mE6vDWKzZCULi3axRMYjecYA1rnDiXp6Ymws6VadXIGT3
+        up+LLAXyR+LGdnPKybEAzZHR7muSRydycgl/ebVol131JbkRgA==
+X-Google-Smtp-Source: AA6agR49I5XQ54GRFcSaPPrWeKWJQ1VX4qlPtuaRTyVtiXCjCJXwKQDjJPBmvzfPhHNye0mxtkh2JKlWpGWhbwfbcxg=
+X-Received: by 2002:ac2:563b:0:b0:492:8f3a:44fc with SMTP id
+ b27-20020ac2563b000000b004928f3a44fcmr1878799lff.645.1660613482321; Mon, 15
+ Aug 2022 18:31:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CANXvt5osmx+iFdVXYQhGcdBiz5VsA60jzdKXg42c_zSDuxoHxg@mail.gmail.com>
+ <20220815183920.GA1960006@bhelgaas>
+In-Reply-To: <20220815183920.GA1960006@bhelgaas>
+From:   Shunsuke Mie <mie@igel.co.jp>
+Date:   Tue, 16 Aug 2022 10:31:11 +0900
+Message-ID: <CANXvt5oOZfPZp6gMjS7AL=NPjUuKTXW6Co-o9w+-X3hyM0k+aQ@mail.gmail.com>
+Subject: Re: [PATCH] PCI: endpoint: fix Kconfig indent style
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Jon Mason <jdmason@kudzu.us>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ren Zhijie <renzhijie2@huawei.com>, linux-pci@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+Hi Bjom,
 
-Current crash_smp_send_stop is the same as the generic one in
-kernel/panic. without crash_save_cpu in percpu. This patch is inspired
-by 78fd584cdec0 ("arm64: kdump: implement machine_crash_shutdown()")
-and adds the same mechanism for riscv.
+2022=E5=B9=B48=E6=9C=8816=E6=97=A5(=E7=81=AB) 3:39 Bjorn Helgaas <helgaas@k=
+ernel.org>:
+>
+> On Mon, Aug 15, 2022 at 12:00:23PM +0900, Shunsuke Mie wrote:
+> > I have a question, not related to the patch. Could you please tell me
+> > why the ntb related patches are managed outside the pci branch,
+> > Helgaas's branch? It confused me a little to find the ntb branch.
+>
+> My understanding is that the recent drivers/pci/endpoint/functions/*ntb.c
+> patches were merged by Jon because they had dependencies on other
+> patches in his tree.
+That makes sense.
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Cc: AKASHI Takahiro <takahiro.akashi@linaro.org>
----
- arch/riscv/include/asm/smp.h      |  6 +++
- arch/riscv/kernel/machine_kexec.c | 19 ++-----
- arch/riscv/kernel/smp.c           | 89 ++++++++++++++++++++++++++++++-
- 3 files changed, 96 insertions(+), 18 deletions(-)
+> In the future, I think most NTB-related patches in drivers/pci/ will
+> be merged via my PCI tree.
+>
+> Bjorn
 
-diff --git a/arch/riscv/include/asm/smp.h b/arch/riscv/include/asm/smp.h
-index d3443be7eedc..e0ddbfcf7c43 100644
---- a/arch/riscv/include/asm/smp.h
-+++ b/arch/riscv/include/asm/smp.h
-@@ -50,6 +50,12 @@ void riscv_set_ipi_ops(const struct riscv_ipi_ops *ops);
- /* Clear IPI for current CPU */
- void riscv_clear_ipi(void);
- 
-+/* stop and save status for other CPUs */
-+void crash_smp_send_stop(void);
-+
-+/* Check other CPUs stop or not */
-+extern bool smp_crash_stop_failed(void);
-+
- /* Secondary hart entry */
- asmlinkage void smp_callin(void);
- 
-diff --git a/arch/riscv/kernel/machine_kexec.c b/arch/riscv/kernel/machine_kexec.c
-index db41c676e5a2..34c86d337448 100644
---- a/arch/riscv/kernel/machine_kexec.c
-+++ b/arch/riscv/kernel/machine_kexec.c
-@@ -140,22 +140,6 @@ void machine_shutdown(void)
- #endif
- }
- 
--/* Override the weak function in kernel/panic.c */
--void crash_smp_send_stop(void)
--{
--	static int cpus_stopped;
--
--	/*
--	 * This function can be called twice in panic path, but obviously
--	 * we execute this only once.
--	 */
--	if (cpus_stopped)
--		return;
--
--	smp_send_stop();
--	cpus_stopped = 1;
--}
--
- static void machine_kexec_mask_interrupts(void)
- {
- 	unsigned int i;
-@@ -230,6 +214,9 @@ machine_kexec(struct kimage *image)
- 	void *control_code_buffer = page_address(image->control_code_page);
- 	riscv_kexec_method kexec_method = NULL;
- 
-+	WARN(smp_crash_stop_failed(),
-+		"Some CPUs may be stale, kdump will be unreliable.\n");
-+
- 	if (image->type != KEXEC_TYPE_CRASH)
- 		kexec_method = control_code_buffer;
- 	else
-diff --git a/arch/riscv/kernel/smp.c b/arch/riscv/kernel/smp.c
-index 760a64518c58..a75ad9c373cd 100644
---- a/arch/riscv/kernel/smp.c
-+++ b/arch/riscv/kernel/smp.c
-@@ -12,6 +12,7 @@
- #include <linux/clockchips.h>
- #include <linux/interrupt.h>
- #include <linux/module.h>
-+#include <linux/kexec.h>
- #include <linux/profile.h>
- #include <linux/smp.h>
- #include <linux/sched.h>
-@@ -27,6 +28,7 @@ enum ipi_message_type {
- 	IPI_RESCHEDULE,
- 	IPI_CALL_FUNC,
- 	IPI_CPU_STOP,
-+	IPI_CPU_CRASH_STOP,
- 	IPI_IRQ_WORK,
- 	IPI_TIMER,
- 	IPI_MAX
-@@ -71,6 +73,22 @@ static void ipi_stop(void)
- 		wait_for_interrupt();
- }
- 
-+#ifdef CONFIG_KEXEC_CORE
-+static atomic_t waiting_for_crash_ipi = ATOMIC_INIT(0);
-+
-+static void ipi_cpu_crash_stop(unsigned int cpu, struct pt_regs *regs)
-+{
-+	crash_save_cpu(regs, cpu);
-+
-+	atomic_dec(&waiting_for_crash_ipi);
-+
-+	local_irq_disable();
-+
-+	while(1)
-+		wait_for_interrupt();
-+}
-+#endif
-+
- static const struct riscv_ipi_ops *ipi_ops __ro_after_init;
- 
- void riscv_set_ipi_ops(const struct riscv_ipi_ops *ops)
-@@ -124,8 +142,9 @@ void arch_irq_work_raise(void)
- 
- void handle_IPI(struct pt_regs *regs)
- {
--	unsigned long *pending_ipis = &ipi_data[smp_processor_id()].bits;
--	unsigned long *stats = ipi_data[smp_processor_id()].stats;
-+	unsigned int cpu = smp_processor_id();
-+	unsigned long *pending_ipis = &ipi_data[cpu].bits;
-+	unsigned long *stats = ipi_data[cpu].stats;
- 
- 	riscv_clear_ipi();
- 
-@@ -154,6 +173,13 @@ void handle_IPI(struct pt_regs *regs)
- 			ipi_stop();
- 		}
- 
-+		if (ops & (1 << IPI_CPU_CRASH_STOP)) {
-+#ifdef CONFIG_KEXEC_CORE
-+			ipi_cpu_crash_stop(cpu, get_irq_regs());
-+#endif
-+			unreachable();
-+		}
-+
- 		if (ops & (1 << IPI_IRQ_WORK)) {
- 			stats[IPI_IRQ_WORK]++;
- 			irq_work_run();
-@@ -176,6 +202,7 @@ static const char * const ipi_names[] = {
- 	[IPI_RESCHEDULE]	= "Rescheduling interrupts",
- 	[IPI_CALL_FUNC]		= "Function call interrupts",
- 	[IPI_CPU_STOP]		= "CPU stop interrupts",
-+	[IPI_CPU_CRASH_STOP]	= "CPU stop (for crash dump) interrupts",
- 	[IPI_IRQ_WORK]		= "IRQ work interrupts",
- 	[IPI_TIMER]		= "Timer broadcast interrupts",
- };
-@@ -235,6 +262,64 @@ void smp_send_stop(void)
- 			   cpumask_pr_args(cpu_online_mask));
- }
- 
-+#ifdef CONFIG_KEXEC_CORE
-+/*
-+ * The number of CPUs online, not counting this CPU (which may not be
-+ * fully online and so not counted in num_online_cpus()).
-+ */
-+static inline unsigned int num_other_online_cpus(void)
-+{
-+	unsigned int this_cpu_online = cpu_online(smp_processor_id());
-+
-+	return num_online_cpus() - this_cpu_online;
-+}
-+
-+void crash_smp_send_stop(void)
-+{
-+	static int cpus_stopped;
-+	cpumask_t mask;
-+	unsigned long timeout;
-+
-+	/*
-+	 * This function can be called twice in panic path, but obviously
-+	 * we execute this only once.
-+	 */
-+	if (cpus_stopped)
-+		return;
-+
-+	cpus_stopped = 1;
-+
-+	/*
-+	 * If this cpu is the only one alive at this point in time, online or
-+	 * not, there are no stop messages to be sent around, so just back out.
-+	 */
-+	if (num_other_online_cpus() == 0)
-+		return;
-+
-+	cpumask_copy(&mask, cpu_online_mask);
-+	cpumask_clear_cpu(smp_processor_id(), &mask);
-+
-+	atomic_set(&waiting_for_crash_ipi, num_other_online_cpus());
-+
-+	pr_crit("SMP: stopping secondary CPUs\n");
-+	send_ipi_mask(&mask, IPI_CPU_CRASH_STOP);
-+
-+	/* Wait up to one second for other CPUs to stop */
-+	timeout = USEC_PER_SEC;
-+	while ((atomic_read(&waiting_for_crash_ipi) > 0) && timeout--)
-+		udelay(1);
-+
-+	if (atomic_read(&waiting_for_crash_ipi) > 0)
-+		pr_warn("SMP: failed to stop secondary CPUs %*pbl\n",
-+			cpumask_pr_args(&mask));
-+}
-+
-+bool smp_crash_stop_failed(void)
-+{
-+	return (atomic_read(&waiting_for_crash_ipi) > 0);
-+}
-+#endif
-+
- void smp_send_reschedule(int cpu)
- {
- 	send_ipi_single(cpu, IPI_RESCHEDULE);
--- 
-2.36.1
-
+Thanks,
+Shunsuke

@@ -2,544 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B4959616B
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 842CC596167
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236606AbiHPRrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 13:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44098 "EHLO
+        id S236219AbiHPRrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 13:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236247AbiHPRrX (ORCPT
+        with ESMTP id S229536AbiHPRrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 13:47:23 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF3481B1A;
-        Tue, 16 Aug 2022 10:47:21 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27GGY0vu024985;
-        Tue, 16 Aug 2022 17:47:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=/Wuc0B6y4vX6bDn7I6gIO/zcUN12rv4sZHwiSegwac4=;
- b=PiZPT3jG+GzLY4LSUhPzs7uXojnWmfe6EQ5g1IcJeKmkdVShVYOOhdPWx9ugEBKPAxYC
- 50hq2FGFQ0uoRfJ/Z+yZsddr92tOFht/MFJsZLSZE4s92qOTHzQoK6UKwr+BBJ6oh8RI
- bLYZhDAKPFsV7qCxIUVXYMB4WLtNzwvUVCDUcatpqLq2D9wsGLCXGVj1XT/yuFHYY28r
- wkDfTeWm0qsgE+VD4/q4/o4DvcTZFCZdqvJLpKr8XkG/XDF+fa3RZ108flrTJJRg0JDl
- ZmtfwHUEYebWxPM8yujWx1HYFKBTQueWYK07d7P0+BEV+eoQBgdB2gqpaMKWFlSKhTWT Qg== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j0ev4r9ut-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Aug 2022 17:47:06 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27GHl5pf028694
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Aug 2022 17:47:05 GMT
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 16 Aug 2022 10:47:04 -0700
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 16 Aug
- 2022 10:47:03 -0700
-Message-ID: <e9786447-edd4-90e0-25a9-b35e96adbfc2@quicinc.com>
-Date:   Tue, 16 Aug 2022 11:47:03 -0600
+        Tue, 16 Aug 2022 13:47:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1E4816B5
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 10:47:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660672031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dj1tyTPGam6HV0rJ+pvzk7Sxt5XXudoZurS6UEBOfd8=;
+        b=BRkDpEScQ07Z2oO1hwFLkMyP/kSRxe3MtaDLUkJg0sy2hMiBFNwnUQERiAW6KbGl7klwAU
+        zJkyNHa9rukWjx+efVpzBYnGCyJ92CMEHahsEA6OGnsgVS4+JEiefGcCnILDaB+9fjwgdG
+        SF/GMJdETRB9bMZDeIpxeHwbmipjwpM=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-478-0ig2Rfh5PhG0lMNH0gLTRA-1; Tue, 16 Aug 2022 13:47:10 -0400
+X-MC-Unique: 0ig2Rfh5PhG0lMNH0gLTRA-1
+Received: by mail-qt1-f199.google.com with SMTP id b10-20020a05622a020a00b003437e336ca7so8207114qtx.16
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 10:47:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=dj1tyTPGam6HV0rJ+pvzk7Sxt5XXudoZurS6UEBOfd8=;
+        b=7rWcs8fLgUJRgTF0nHds/hh4u5dHB5of6bTcHeyB5DTsE+ydKec6nTbFHE69qNZI1w
+         FPpfJOr5/+QeOZwNFIqiCcsTkuRJyVUjckSNDY7W1XknYhtfLnheGVzl3urCO3004LQf
+         pzZVz9CT14OsdthfxEKDJjL8O7DpykX67OO8ObSwgPzOesd3h3HRZekei9Njl68EFmNY
+         fK1f0qUgDfc67lvU2sp3bzDqwFmOjT4gkeaw57Ns3FvVD9FcDWbDzpmXuBTGlqyhXUkl
+         buf5j45pNr1JXJHDJgmSFdGEo7NMg28ogtUljCFlqV6fxzk40xQM5gPuEscyzM2x97hQ
+         BhsQ==
+X-Gm-Message-State: ACgBeo1wvVWOTbMHtnYg168oTD+ttt9YB3566AjdCPfvXGWm0tzs8H26
+        9k+5TljJWPHbd8a6q7jkWlcAjeD214bdxzysLYFtYt5CLBtksBN3Ti+9Gs44vS1KkxEhlPbZTNz
+        puVTP2kmp+W3WeZHirD7oOIQW
+X-Received: by 2002:a05:622a:48f:b0:343:6db4:d3b1 with SMTP id p15-20020a05622a048f00b003436db4d3b1mr18670714qtx.202.1660672029631;
+        Tue, 16 Aug 2022 10:47:09 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4CGS0h5qnYtWm8VGu9WljKt+S7Po/0MxXNws8lS+BhDcUz0su3oTtsN4AaftcVXNOu0jgH3Q==
+X-Received: by 2002:a05:622a:48f:b0:343:6db4:d3b1 with SMTP id p15-20020a05622a048f00b003436db4d3b1mr18670696qtx.202.1660672029345;
+        Tue, 16 Aug 2022 10:47:09 -0700 (PDT)
+Received: from [192.168.98.18] ([107.12.98.143])
+        by smtp.gmail.com with ESMTPSA id s14-20020a05620a254e00b0069fe1dfbeffsm11710245qko.92.2022.08.16.10.47.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 10:47:09 -0700 (PDT)
+Message-ID: <3d76f4c3-916a-9abe-745f-e2781fad1b24@redhat.com>
+Date:   Tue, 16 Aug 2022 13:47:07 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [RFC PATCH 02/14] drm/qaic: Add uapi and core driver file
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH net v3 2/2] bonding: 802.3ad: fix no transmission of
+ LACPDUs
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>
-CC:     <quic_carlv@quicinc.com>, <quic_ajitpals@quicinc.com>,
-        <quic_pkanojiy@quicinc.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1660588956-24027-1-git-send-email-quic_jhugo@quicinc.com>
- <1660588956-24027-3-git-send-email-quic_jhugo@quicinc.com>
- <10ad6023-703d-65cf-6b00-2caa658c49e9@linaro.org>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <10ad6023-703d-65cf-6b00-2caa658c49e9@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: uJQvdK3hAEWX0PwIUNU6pEb8JebSdL7v
-X-Proofpoint-ORIG-GUID: uJQvdK3hAEWX0PwIUNU6pEb8JebSdL7v
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-16_08,2022-08-16_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- lowpriorityscore=0 priorityscore=1501 mlxlogscore=999 suspectscore=0
- clxscore=1015 impostorscore=0 phishscore=0 malwarescore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208160066
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Jonathan Toppins <jtoppins@redhat.com>
+To:     Jay Vosburgh <jay.vosburgh@canonical.com>
+Cc:     netdev@vger.kernel.org, liuhangbin@gmail.com,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+References: <cover.1660572700.git.jtoppins@redhat.com>
+ <0639f1e3d366c5098d561a947fd416fa5277e7f4.1660572700.git.jtoppins@redhat.com>
+ <17000.1660655501@famine> <3d55690a-8932-4560-4267-ab28816fdb47@redhat.com>
+In-Reply-To: <3d55690a-8932-4560-4267-ab28816fdb47@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/16/2022 5:06 AM, Krzysztof Kozlowski wrote:
-> On 15/08/2022 21:42, Jeffrey Hugo wrote:
->> Add the QAIC driver uapi file and core driver file that binds to the PCIe
->> device.  The core driver file also creates the drm device and manages all
->> the interconnections between the different parts of the driver.
-> 
-> Thank you for your patch. There is something to discuss/improve.
-> 
-> 
+On 8/16/22 09:41, Jonathan Toppins wrote:
+> On 8/16/22 09:11, Jay Vosburgh wrote:
+>> Jonathan Toppins <jtoppins@redhat.com> wrote:
 >>
->> Change-Id: I28854e8a5dacda217439be2f65a4ab67d4dccd1e
+>>> This is caused by the global variable ad_ticks_per_sec being zero as
+>>> demonstrated by the reproducer script discussed below. This causes
+>>> all timer values in __ad_timer_to_ticks to be zero, resulting
+>>> in the periodic timer to never fire.
+>>>
+>>> To reproduce:
+>>> Run the script in
+>>> `tools/testing/selftests/drivers/net/bonding/bond-break-lacpdu-tx.sh` 
+>>> which
+>>> puts bonding into a state where it never transmits LACPDUs.
+>>>
+>>> line 44: ip link add fbond type bond mode 4 miimon 200 \
+>>>             xmit_hash_policy 1 ad_actor_sys_prio 65535 lacp_rate fast
+>>> setting bond param: ad_actor_sys_prio
+>>> given:
+>>>     params.ad_actor_system = 0
+>>> call stack:
+>>>     bond_option_ad_actor_sys_prio()
+>>>     -> bond_3ad_update_ad_actor_settings()
+>>>        -> set ad.system.sys_priority = bond->params.ad_actor_sys_prio
+>>>        -> ad.system.sys_mac_addr = bond->dev->dev_addr; because
+>>>             params.ad_actor_system == 0
+>>> results:
+>>>      ad.system.sys_mac_addr = bond->dev->dev_addr
+>>>
+>>> line 48: ip link set fbond address 52:54:00:3B:7C:A6
+>>> setting bond MAC addr
+>>> call stack:
+>>>     bond->dev->dev_addr = new_mac
+>>>
+>>> line 52: ip link set fbond type bond ad_actor_sys_prio 65535
+>>> setting bond param: ad_actor_sys_prio
+>>> given:
+>>>     params.ad_actor_system = 0
+>>> call stack:
+>>>     bond_option_ad_actor_sys_prio()
+>>>     -> bond_3ad_update_ad_actor_settings()
+>>>        -> set ad.system.sys_priority = bond->params.ad_actor_sys_prio
+>>>        -> ad.system.sys_mac_addr = bond->dev->dev_addr; because
+>>>             params.ad_actor_system == 0
+>>> results:
+>>>      ad.system.sys_mac_addr = bond->dev->dev_addr
+>>>
+>>> line 60: ip link set veth1-bond down master fbond
+>>> given:
+>>>     params.ad_actor_system = 0
+>>>     params.mode = BOND_MODE_8023AD
+>>>     ad.system.sys_mac_addr == bond->dev->dev_addr
+>>> call stack:
+>>>     bond_enslave
+>>>     -> bond_3ad_initialize(); because first slave
+>>>        -> if ad.system.sys_mac_addr != bond->dev->dev_addr
+>>>           return
+>>> results:
+>>>      Nothing is run in bond_3ad_initialize() because dev_add equals
+>>>      sys_mac_addr leaving the global ad_ticks_per_sec zero as it is
+>>>      never initialized anywhere else.
+>>>
+>>> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+>>> Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+>>> ---
+>>>
+>>> Notes:
+>>>     v2:
+>>>      * split this fix from the reproducer
+>>>     v3:
+>>>      * rebased to latest net/master
+>>>
+>>> drivers/net/bonding/bond_3ad.c | 3 ++-
+>>> 1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/net/bonding/bond_3ad.c 
+>>> b/drivers/net/bonding/bond_3ad.c
+>>> index d7fb33c078e8..957d30db6f95 100644
+>>> --- a/drivers/net/bonding/bond_3ad.c
+>>> +++ b/drivers/net/bonding/bond_3ad.c
+>>> @@ -84,7 +84,8 @@ enum ad_link_speed_type {
+>>> static const u8 null_mac_addr[ETH_ALEN + 2] __long_aligned = {
+>>>     0, 0, 0, 0, 0, 0
+>>> };
+>>> -static u16 ad_ticks_per_sec;
+>>> +
+>>> +static u16 ad_ticks_per_sec = 1000 / AD_TIMER_INTERVAL;
+>>> static const int ad_delta_in_ticks = (AD_TIMER_INTERVAL * HZ) / 1000;
+>>
+>>     I still feel like this is kind of a hack, as it's not really
+>> fixing bond_3ad_initialize to actually work (which is the real problem
+>> as I understand it).  If it's ok to skip all that for this case, then
+>> why do we ever need to call bond_3ad_initialize?
+>>
 > 
-> This has to go...
+> The way it is currently written you still need to call 
+> bond_3ad_initialize() just not for setting the tick resolution. The 
+> issue here is ad_ticks_per_sec is used in several places to calculate 
+> timer periods, __ad_timer_to_ticks(), for various timers in the 802.3ad 
+> protocol. And if this variable, ad_ticks_per_sec, is left uninitialized 
+> all of these timer periods go to zero. Since the value passed in 
+> bond_3ad_initialize() is an immediate value I simply moved it off of the 
+> call stack and set the static global variable instead.
 > 
+> To fix bond_3ad_initialize(), probably something like the below is 
+> needed, but I do not understand why the guard if check was placed in 
+> bond_3ad_initialize().
 
-Yep, made this mistake in the entire series.  I have a note to do better 
-next time.  It won't be necessary to continue pointing this out for the 
-rest of the series.
+I looked at the history of the if guard in bond_3ad_initialize and it 
+has existed since the creation of the git tree. It appears since commit 
+5ee14e6d336f ("bonding: 3ad: apply ad_actor settings changes 
+immediately") the if guard is no longer needed and removing the if guard 
+would also fix the problem, I have not tested yet.
 
-Since this is RFC and not expected to be merged anyways, I'm hoping it's 
-not necessary to respin just to enable further reviews.
+I think this patch series can be accepted as-is because, it does fix the 
+issue as demonstrated by the kselftest accompanying the series and is 
+the smallest change to fix the issue.
 
-> 
->> +static int qaic_pci_probe(struct pci_dev *pdev,
->> +			  const struct pci_device_id *id)
->> +{
->> +	int ret;
->> +	int i;
->> +	int mhi_irq;
->> +	struct qaic_device *qdev;
->> +
->> +	qdev = kzalloc(sizeof(*qdev), GFP_KERNEL);
->> +	if (!qdev) {
-> 
-> return -ENOMEM;
+Further, I don't see why we want to set the file-scoped variable, 
+ad_ticks_per_sec, inside bond_3ad_initialize() as ad_ticks_per_sec is 
+utilized across all bonds. It seems like ad_ticks_per_sec should be 
+changed to a const and set at the top of the file. I see no value in 
+passing the value as an unnamed constant on the stack when 
+bond_3ad_initialize is called. These changes however could be done in 
+the net-next tree as follow-on cleanup patches.
 
-So, no centralized exit per the coding style?  Ok.
+Jay, how would you like to proceed?
 
-> 
->> +		ret = -ENOMEM;
->> +		goto qdev_fail;
->> +	}
->> +
->> +	if (id->device == PCI_DEV_AIC100) {
->> +		qdev->num_dbc = 16;
->> +		qdev->dbc = kcalloc(qdev->num_dbc, sizeof(*qdev->dbc),
->> +				    GFP_KERNEL);
-> 
-> Why not devm?
+[...]
 
-We were having issues with devm and the PCI stuff.  Looking at this 
-again, I think we can apply that here.
-
-> 
->> +		if (!qdev->dbc) {
->> +			ret = -ENOMEM;
->> +			goto device_id_fail;
->> +		}
->> +	} else {
->> +		pci_dbg(pdev, "%s: No matching device found for device id %d\n",
->> +			__func__, id->device);
-> 
-> How this can happen?
-
-Badly functioning hardware.  That hardware has been removed from 
-circulation.  Given that this is an init path and not performance 
-critical, having this handle the scenario in a sane way instead of 
-having the driver blow up in a weird way much later on makes me feel better.
-
-> 
->> +		ret = -EINVAL;
->> +		goto device_id_fail;
->> +	}
->> +
->> +	qdev->cntl_wq = alloc_workqueue("qaic_cntl", WQ_UNBOUND, 0);
->> +	if (!qdev->cntl_wq) {
->> +		ret = -ENOMEM;
->> +		goto wq_fail;
->> +	}
->> +	qdev->tele_wq = alloc_workqueue("qaic_tele", WQ_UNBOUND, 0);
->> +	if (!qdev->tele_wq) {
->> +		ret = -ENOMEM;
->> +		goto tele_wq_fail;
->> +	}
->> +	qdev->ssr_wq = alloc_workqueue("qaic_ssr", WQ_UNBOUND, 0);
->> +	if (!qdev->ssr_wq) {
->> +		ret = -ENOMEM;
->> +		goto ssr_wq_fail;
->> +	}
->> +	pci_set_drvdata(pdev, qdev);
->> +	qdev->pdev = pdev;
->> +	mutex_init(&qdev->cntl_mutex);
->> +	INIT_LIST_HEAD(&qdev->cntl_xfer_list);
->> +	init_srcu_struct(&qdev->dev_lock);
->> +	mutex_init(&qdev->tele_mutex);
->> +	INIT_LIST_HEAD(&qdev->tele_xfer_list);
->> +	INIT_LIST_HEAD(&qdev->bootlog);
->> +	mutex_init(&qdev->bootlog_mutex);
->> +	INIT_LIST_HEAD(&qdev->qaic_drm_devices);
->> +	mutex_init(&qdev->qaic_drm_devices_mutex);
->> +	for (i = 0; i < qdev->num_dbc; ++i) {
->> +		mutex_init(&qdev->dbc[i].handle_lock);
->> +		spin_lock_init(&qdev->dbc[i].xfer_lock);
->> +		idr_init(&qdev->dbc[i].buf_handles);
->> +		qdev->dbc[i].qdev = qdev;
->> +		qdev->dbc[i].id = i;
->> +		INIT_LIST_HEAD(&qdev->dbc[i].xfer_list);
->> +		init_srcu_struct(&qdev->dbc[i].ch_lock);
->> +		init_waitqueue_head(&qdev->dbc[i].dbc_release);
->> +		INIT_LIST_HEAD(&qdev->dbc[i].bo_lists);
->> +	}
->> +
->> +	qdev->bars = pci_select_bars(pdev, IORESOURCE_MEM);
->> +
->> +	/* make sure the device has the expected BARs */
->> +	if (qdev->bars != (BIT(0) | BIT(2) | BIT(4))) {
->> +		pci_dbg(pdev, "%s: expected BARs 0, 2, and 4 not found in device.  Found 0x%x\n",
->> +			__func__, qdev->bars);
->> +		ret = -EINVAL;
->> +		goto bar_fail;
->> +	}
->> +
->> +	ret = pci_enable_device(pdev);
->> +	if (ret)
->> +		goto enable_fail;
->> +
->> +	ret = pci_request_selected_regions(pdev, qdev->bars, "aic100");
->> +	if (ret)
->> +		goto request_regions_fail;
->> +
->> +	pci_set_master(pdev);
->> +
->> +	ret = dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
->> +	if (ret)
->> +		goto dma_mask_fail;
->> +	ret = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(64));
->> +	if (ret)
->> +		goto dma_mask_fail;
->> +	ret = dma_set_max_seg_size(&pdev->dev, UINT_MAX);
->> +	if (ret)
->> +		goto dma_mask_fail;
->> +
->> +	qdev->bar_0 = pci_ioremap_bar(pdev, 0);
->> +	if (!qdev->bar_0) {
->> +		ret = -ENOMEM;
->> +		goto ioremap_0_fail;
->> +	}
->> +
->> +	qdev->bar_2 = pci_ioremap_bar(pdev, 2);
->> +	if (!qdev->bar_2) {
->> +		ret = -ENOMEM;
->> +		goto ioremap_2_fail;
->> +	}
->> +
->> +	for (i = 0; i < qdev->num_dbc; ++i)
->> +		qdev->dbc[i].dbc_base = qdev->bar_2 + QAIC_DBC_OFF(i);
->> +
->> +	ret = pci_alloc_irq_vectors(pdev, 1, 32, PCI_IRQ_MSI);
->> +	if (ret < 0)
->> +		goto alloc_irq_fail;
->> +
->> +	if (ret < 32) {
->> +		pci_err(pdev, "%s: Requested 32 MSIs.  Obtained %d MSIs which is less than the 32 required.\n",
->> +			__func__, ret);
->> +		ret = -ENODEV;
->> +		goto invalid_msi_config;
->> +	}
->> +
->> +	mhi_irq = pci_irq_vector(pdev, 0);
->> +	if (mhi_irq < 0) {
->> +		ret = mhi_irq;
->> +		goto get_mhi_irq_fail;
->> +	}
->> +
->> +	for (i = 0; i < qdev->num_dbc; ++i) {
->> +		ret = devm_request_threaded_irq(&pdev->dev,
->> +						pci_irq_vector(pdev, i + 1),
->> +						dbc_irq_handler,
->> +						dbc_irq_threaded_fn,
->> +						IRQF_SHARED,
->> +						"qaic_dbc",
->> +						&qdev->dbc[i]);
->> +		if (ret)
->> +			goto get_dbc_irq_failed;
->> +
->> +		if (poll_datapath) {
->> +			qdev->dbc[i].irq = pci_irq_vector(pdev, i + 1);
->> +			disable_irq_nosync(qdev->dbc[i].irq);
->> +			INIT_WORK(&qdev->dbc[i].poll_work, irq_polling_work);
->> +		}
->> +	}
->> +
->> +	qdev->mhi_cntl = qaic_mhi_register_controller(pdev, qdev->bar_0, mhi_irq);
->> +	if (IS_ERR(qdev->mhi_cntl)) {
->> +		ret = PTR_ERR(qdev->mhi_cntl);
->> +		goto mhi_register_fail;
->> +	}
->> +
->> +	return 0;
->> +
->> +mhi_register_fail:
->> +get_dbc_irq_failed:
->> +	for (i = 0; i < qdev->num_dbc; ++i)
->> +		devm_free_irq(&pdev->dev, pci_irq_vector(pdev, i + 1),
->> +			      &qdev->dbc[i]);
->> +get_mhi_irq_fail:
->> +invalid_msi_config:
->> +	pci_free_irq_vectors(pdev);
->> +alloc_irq_fail:
->> +	iounmap(qdev->bar_2);
->> +ioremap_2_fail:
->> +	iounmap(qdev->bar_0);
->> +ioremap_0_fail:
->> +dma_mask_fail:
->> +	pci_clear_master(pdev);
->> +	pci_release_selected_regions(pdev, qdev->bars);
->> +request_regions_fail:
->> +	pci_disable_device(pdev);
->> +enable_fail:
->> +	pci_set_drvdata(pdev, NULL);
->> +bar_fail:
->> +	for (i = 0; i < qdev->num_dbc; ++i) {
->> +		cleanup_srcu_struct(&qdev->dbc[i].ch_lock);
->> +		idr_destroy(&qdev->dbc[i].buf_handles);
->> +	}
->> +	cleanup_srcu_struct(&qdev->dev_lock);
->> +	destroy_workqueue(qdev->ssr_wq);
->> +ssr_wq_fail:
->> +	destroy_workqueue(qdev->tele_wq);
->> +tele_wq_fail:
->> +	destroy_workqueue(qdev->cntl_wq);
->> +wq_fail:
->> +	kfree(qdev->dbc);
->> +device_id_fail:
->> +	kfree(qdev);
->> +qdev_fail:
->> +	return ret;
->> +}
->> +
->> +static void qaic_pci_remove(struct pci_dev *pdev)
->> +{
->> +	struct qaic_device *qdev = pci_get_drvdata(pdev);
->> +	int i;
->> +
->> +	if (!qdev)
->> +		return;
->> +
->> +	qaic_dev_reset_clean_local_state(qdev, false);
->> +	qaic_mhi_free_controller(qdev->mhi_cntl, link_up);
->> +	for (i = 0; i < qdev->num_dbc; ++i) {
->> +		devm_free_irq(&pdev->dev, pci_irq_vector(pdev, i + 1),
->> +			      &qdev->dbc[i]);
->> +		cleanup_srcu_struct(&qdev->dbc[i].ch_lock);
->> +		idr_destroy(&qdev->dbc[i].buf_handles);
->> +	}
->> +	destroy_workqueue(qdev->cntl_wq);
->> +	destroy_workqueue(qdev->tele_wq);
->> +	destroy_workqueue(qdev->ssr_wq);
->> +	pci_free_irq_vectors(pdev);
->> +	iounmap(qdev->bar_0);
->> +	pci_clear_master(pdev);
->> +	pci_release_selected_regions(pdev, qdev->bars);
->> +	pci_disable_device(pdev);
->> +	pci_set_drvdata(pdev, NULL);
->> +	kfree(qdev->dbc);
->> +	kfree(qdev);
->> +}
->> +
->> +static void qaic_pci_shutdown(struct pci_dev *pdev)
->> +{
->> +	link_up = true;
->> +	qaic_pci_remove(pdev);
->> +}
->> +
->> +static pci_ers_result_t qaic_pci_error_detected(struct pci_dev *pdev,
->> +						pci_channel_state_t error)
->> +{
->> +	return PCI_ERS_RESULT_NEED_RESET;
->> +}
->> +
->> +static void qaic_pci_reset_prepare(struct pci_dev *pdev)
->> +{
->> +	struct qaic_device *qdev = pci_get_drvdata(pdev);
->> +
->> +	qaic_notify_reset(qdev);
->> +	qaic_mhi_start_reset(qdev->mhi_cntl);
->> +	qaic_dev_reset_clean_local_state(qdev, false);
->> +}
->> +
->> +static void qaic_pci_reset_done(struct pci_dev *pdev)
->> +{
->> +	struct qaic_device *qdev = pci_get_drvdata(pdev);
->> +
->> +	qdev->in_reset = false;
->> +	qaic_mhi_reset_done(qdev->mhi_cntl);
->> +}
->> +
->> +static const struct mhi_device_id qaic_mhi_match_table[] = {
->> +	{ .chan = "QAIC_CONTROL", },
->> +	{},
->> +};
->> +
->> +static struct mhi_driver qaic_mhi_driver = {
->> +	.id_table = qaic_mhi_match_table,
->> +	.remove = qaic_mhi_remove,
->> +	.probe = qaic_mhi_probe,
->> +	.ul_xfer_cb = qaic_mhi_ul_xfer_cb,
->> +	.dl_xfer_cb = qaic_mhi_dl_xfer_cb,
->> +	.driver = {
->> +		.name = "qaic_mhi",
->> +		.owner = THIS_MODULE,
-> 
-> Please run coccinelle/coccicheck and fix the warnings. Usually core sets
-> THIS_MODULE.
-
-Ah, thats right.  Legacy compatibility that should not be here.
-
-> 
->> +	},
->> +};
->> +
->> +static const struct pci_device_id ids[] = {
-> 
-> qaic_ids
-
-Fair.
-
-> 
->> +	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, PCI_DEV_AIC100), },
->> +	{ 0, }
-> 
-> Just {}
-
-Fair.
-
-> 
->> +};
->> +MODULE_DEVICE_TABLE(pci, ids);
->> +
->> +static const struct pci_error_handlers qaic_pci_err_handler = {
->> +	.error_detected = qaic_pci_error_detected,
->> +	.reset_prepare = qaic_pci_reset_prepare,
->> +	.reset_done = qaic_pci_reset_done,
->> +};
->> +
->> +static struct pci_driver qaic_pci_driver = {
->> +	.name = QAIC_NAME,
->> +	.id_table = ids,
->> +	.probe = qaic_pci_probe,
->> +	.remove = qaic_pci_remove,
->> +	.shutdown = qaic_pci_shutdown,
->> +	.err_handler = &qaic_pci_err_handler,
->> +};
->> +
->> +static int __init qaic_init(void)
->> +{
->> +	int ret;
->> +
->> +	if (datapath_polling) {
->> +		poll_datapath = true;
->> +		pr_info("qaic: driver initializing in datapath polling mode\n");
-> 
-> No pr() in normal path of init/exit.
-
-This is not the normal path.  datapath_polling is a module parameter. 
-This is something the user can enable, and so it would be good to have 
-the user informed that the option took effect.
-
-> 
->> +	}
->> +
->> +	qaic_logging_register();
->> +
->> +	ret = mhi_driver_register(&qaic_mhi_driver);
->> +	if (ret) {
->> +		pr_debug("qaic: mhi_driver_register failed %d\n", ret);
->> +		goto free_class;
->> +	}
->> +
->> +	ret = pci_register_driver(&qaic_pci_driver);
->> +
-> 
-> No need for such blank lines.
-
-Agreed.
-
-> 
->> +	if (ret) {
->> +		pr_debug("qaic: pci_register_driver failed %d\n", ret);
->> +		goto free_mhi;
->> +	}
->> +
->> +	qaic_telemetry_register();
->> +	qaic_ras_register();
->> +	qaic_ssr_register();
->> +	goto out;
-> 
-> return 0.
-
-Ok.
-
-> 
->> +
->> +free_mhi:
->> +	mhi_driver_unregister(&qaic_mhi_driver);
->> +free_class:
->> +out:
->> +	if (ret)
->> +		qaic_logging_unregister();
->> +
->> +	return ret;
->> +}
->> +
->> +static void __exit qaic_exit(void)
->> +{
->> +	pr_debug("qaic: exit\n");
-> 
-> No pr() in normal path of init/exit.
-
-Sure.
-
-> 
->> +	link_up = true;
-> 
-> This is confusing...
-
-Will add a comment.  This ties into MHI, and how it can tear down in two 
-different ways, usually based on the link state.
-
-In this case, we are doing a clean tear down where the link is still up, 
-and so we should have MHI do the extra tear down that leaves the device 
-in a good state, in the event the driver gets added again.
-
-> 
->> +	pci_unregister_driver(&qaic_pci_driver);
->> +	mhi_driver_unregister(&qaic_mhi_driver);
->> +	qaic_telemetry_unregister();
->> +	qaic_ras_unregister();
->> +	qaic_ssr_unregister();
-> 
-> Order of cleanup is usually reverse from init.
-
-Fair.
-
-> 
->> +	qaic_logging_unregister();
->> +}
->> +
->> +module_init(qaic_init);
->> +module_exit(qaic_exit);
-> 
-> Best regards,
-> Krzysztof
+Thanks,
+-Jon
 

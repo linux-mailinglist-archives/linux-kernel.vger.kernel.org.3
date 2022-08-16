@@ -2,104 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 236DD5964D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 23:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A7D5964D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 23:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237063AbiHPVnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 17:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49084 "EHLO
+        id S237587AbiHPVo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 17:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbiHPVnN (ORCPT
+        with ESMTP id S231594AbiHPVo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 17:43:13 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AE71C5
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 14:43:11 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id jm11so8151924plb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 14:43:11 -0700 (PDT)
+        Tue, 16 Aug 2022 17:44:57 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FBF6525B
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 14:44:56 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-32fd97c199fso161081337b3.6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 14:44:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=fHoaQuQyrNOHA1CxVanqB+3Y6dYUWxDy7qrwrkskMNM=;
-        b=j03HDlXVQVJ9go7wU3LUhqLEtXGqZRIIx4a+gV3xfUzmx9FveQlrGHP0cTzS7hAEtA
-         0AjKIumdLifjWu/ZY/c2QAI61e/LU4mar+fa2w3AODG4eMxptX6kBdFI8h73MyZX6I8g
-         rJgjPVNJEVsU/H9aK8ViD/wvirZ2qf7HdntLAv7f7S0V9YSuVPBZbiDRJZdY4e2oqasO
-         SyFyFfJuGeKSqFv7/fWyEYC/o4XYjiflNKFmwj/fUUkxdY3TpwUBwjiEgov0is4uN1oH
-         Hx3EgJthTnCPgv9hmhQqqeArchhQ2hiGmmnGEJi8QkErohO2PFDJ2+rlAOU/8AHNBiB7
-         V+Rw==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=HVy2dhpgUq+TCa1+gNzXEDC+2DKw2nqR1kkYuPYSqUw=;
+        b=ftyIhd9V+q2A29zdiypNsQVoUh2exbA2eIUGJcoay9088xFM15YHBmgU16PeKDsFuY
+         Gw7FHeTI5lVY0Wj3An1IYErXR9AVLYmOw3opdXc0bpv5Ys90pXC4lxrI+QUWottezu2P
+         eMWW6OTfY/xw5NMk9D/l+o1N2PaZ+HtfTZR+U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=fHoaQuQyrNOHA1CxVanqB+3Y6dYUWxDy7qrwrkskMNM=;
-        b=HvvITiBj/ubXgcU7WZkoTg5srX7uDmxAIaG79ryrtpNLy/GuWS0tbTnXEyfmAku53P
-         ELcoDyjnNG070NQNAoa6YneU/VhPZl80xOTOusO+hItElsq7mEmHLc6UoXrbHilz1ude
-         HI8mEwOZTAPqiAsQ16RnrzCSE3/R5/HPXZ82z7ELCRd7257BD19xW/YNcnKl3Dxl3G2A
-         R7bk+tr7RhP/N/bsaM3+LWqd0wt+DJrWbIJqefxO8i4JTmrknGtmH6RSc+jeqlDshFQC
-         aJa7SO6qqWBtydcO5FyrHyAhzTp5cuoih+ZPsJ2Iq3S6x4uZp97f0gMNA8EfYkBJPdU7
-         XVFQ==
-X-Gm-Message-State: ACgBeo0oB5L3NXBbLyeEip2z+v8WRS/sK5vP/SYCVnlt/TA/7N3Ecxug
-        H4Yk/uP0qKGmyN3BbbtTQc18qw==
-X-Google-Smtp-Source: AA6agR4aqvIq74t1vyp7m/HiiEbuxiLefbEN5Ecig7re+ePSp2kvKMMY09q7oON6KvCRY2iBzeP+Cw==
-X-Received: by 2002:a17:902:d2d1:b0:16e:eeac:29ab with SMTP id n17-20020a170902d2d100b0016eeeac29abmr24111405plc.125.1660686191203;
-        Tue, 16 Aug 2022 14:43:11 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id m7-20020a1709026bc700b0016bf5557690sm9533377plt.4.2022.08.16.14.43.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 14:43:10 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 21:43:07 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+744e173caec2e1627ee0@syzkaller.appspotmail.com,
-        Oliver Upton <oliver.upton@linux.dev>
-Subject: Re: [PATCH 2/3] KVM: Unconditionally get a ref to /dev/kvm module
- when creating a VM
-Message-ID: <YvwPa5GuR8gjQdpc@google.com>
-References: <20220816053937.2477106-1-seanjc@google.com>
- <20220816053937.2477106-3-seanjc@google.com>
- <YvvNfTouc22hiLwo@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=HVy2dhpgUq+TCa1+gNzXEDC+2DKw2nqR1kkYuPYSqUw=;
+        b=tYA9reIr2AZvwWWWdCEwlyMrH+s4YtHWOgCPRYrjGtHR03NcaY8jsFAUFgmzqIuTb5
+         BOog+1G+WvZistytylTDe1aI5YL1qetkJtczEZ5XptaP9y6LsMunGq/gbdVmKgzAZ2Nw
+         axQcsqXDsvbKKOt20+mGe6Wt0aMKJJ422g5k8Eub73GbBQJLQMWti0vlnRjYrvOWmGbS
+         /hhE8PKXsWjvavRCE/rm6e2TMcv0wsn74RlawrhOgzpFpSHc0Z3Zvx2DJaPGdU0J7CQQ
+         koMjzgTHxz3aQr8leDzzMHVJ5sYz85/rDquCCWOChOYHPs1Ls3Qj8zpx1X2pQjvjNVaj
+         8Sow==
+X-Gm-Message-State: ACgBeo07kYrMHBe+JTiMVGUVPU9l69/0yuZ6AoK94bGOh1Lcwu3gRy5q
+        xEbC86nAQZ/PXKhrwdTDayCtjug7Pj+4rmUuozHjbr06tVo=
+X-Google-Smtp-Source: AA6agR50R5+yZwR0E9gjbHI0sJwF86HfBORhJh0SzaLt1EEjVs6AYC4BYIG9uitnV3tHcz0Rs8DT4IcNwkM1uJT2dx8=
+X-Received: by 2002:a25:4ce:0:b0:67c:3362:c396 with SMTP id
+ 197-20020a2504ce000000b0067c3362c396mr17283128ybe.336.1660686295674; Tue, 16
+ Aug 2022 14:44:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvvNfTouc22hiLwo@google.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220815063555.1384505-1-pmalani@chromium.org>
+ <20220815063555.1384505-3-pmalani@chromium.org> <Yvsm7qEiCpoYPeTS@google.com>
+In-Reply-To: <Yvsm7qEiCpoYPeTS@google.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Tue, 16 Aug 2022 14:44:45 -0700
+Message-ID: <CACeCKadOK22FzOwyOEkmaqw+V4-Jna=QqetDmsqNhs27skzU7A@mail.gmail.com>
+Subject: Re: [PATCH v5 2/7] platform/chrome: cros_typec_switch: Add switch driver
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        bleung@chromium.org, Daisuke Nojiri <dnojiri@chromium.org>,
+        "Dustin L. Howett" <dustin@howett.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Xiang wangx <wangxiang@cdjrlc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022, David Matlack wrote:
-> On Tue, Aug 16, 2022 at 05:39:36AM +0000, Sean Christopherson wrote:
-> > Unconditionally get a reference to the /dev/kvm module when creating a VM
-> > instead of using try_get_module(), which will fail if the module is in
-> > the process of being forcefully unloaded.  The error handling when
-> > try_get_module() fails doesn't properly unwind all that has been done,
-> > e.g. doesn't call kvm_arch_pre_destroy_vm() and doesn't remove the VM
-> > from the global list.  Not removing VMs from the global list tends to be
-> > fatal, e.g. leads to use-after-free explosions.
-> > 
-> > The obvious alternative would be to add proper unwinding, but the
-> > justification for using try_get_module(), "rmmod --wait", is completely
-> > bogus as support for "rmmod --wait", i.e. delete_module() without
-> > O_NONBLOCK, was removed by commit 3f2b9c9cdf38 ("module: remove rmmod
-> > --wait option.") nearly a decade ago.
-> 
-> Ah! include/linux/module.h may also need a cleanup then. The comment
-> above __module_get() explicitly mentions "rmmod --wait", which is what
-> led me to use try_module_get() for commit 5f6de5cbebee ("KVM: Prevent
-> module exit until all VMs are freed").
+Hi Tzung-Bi,
 
-Ugh, I didn't see that one.  The whole thing is a mess.  try_module_get() also
-has a comment (just below the "rmmod --wait" comment) saying that it's the one
-true way of doing things, but that's at best misleading for cases like this where
-a module is taking a reference of _itself_.
+Thanks for reviewing the patch series.
 
-The man pages are also woefully out of date :-/
+On Mon, Aug 15, 2022 at 10:11 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> On Mon, Aug 15, 2022 at 06:34:19AM +0000, Prashant Malani wrote:
+> > Introduce a driver to configure USB Type-C mode switches and retimers
+> > which are controlled by the Chrome OS EC (Embedded Controller).
+> > This allows Type-C port drivers, as well as alternate mode drivers to
+> > configure their relevant mode switches and retimers according to the
+> > Type-C state they want to achieve.
+>
+> s/Chrome OS/ChromeOS/.
+
+Fixed in v6.
+
+>
+> > diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
+> [...]
+> > +config CROS_TYPEC_SWITCH
+> > +     tristate "ChromeOS EC Type-C Switch Control"
+> > +     depends on MFD_CROS_EC_DEV && TYPEC && ACPI
+> > +     default MFD_CROS_EC_DEV
+> > +     help
+> > +       If you say Y here, you get support for configuring the Chrome OS EC Type C
+> > +       muxes and retimers.
+>
+> s/Chrome OS/ChromeOS/.
+>
+> Up to you, s/Type C/Type-C/g.
+
+Fixed in v6.
+
+>
+> > diff --git a/drivers/platform/chrome/cros_typec_switch.c b/drivers/platform/chrome/cros_typec_switch.c
+> > new file mode 100644
+> > index 000000000000..0d319e315d57
+> > --- /dev/null
+> > +++ b/drivers/platform/chrome/cros_typec_switch.c
+> > @@ -0,0 +1,170 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright 2022 Google LLC
+> > + *
+> > + * This driver provides the ability to configure Type C muxes and retimers which are controlled by
+> > + * the Chrome OS EC.
+> > + */
+>
+> s/Chrome OS/ChromeOS/.
+Fixed in v6.
+
+>
+> > +static int cros_typec_register_switches(struct cros_typec_switch_data *sdata)
+> > +{
+> > +     struct cros_typec_port *port = NULL;
+> > +     struct device *dev = sdata->dev;
+> > +     struct fwnode_handle *fwnode;
+> > +     struct acpi_device *adev;
+> > +     unsigned long long index;
+> > +     int ret = 0;
+>
+> `port` and `ret` don't need to be initialized.
+Fixed in v6.
+
+>
+> > +MODULE_DESCRIPTION("Chrome OS EC Type C Switch control");
+>
+> s/Chrome OS/ChromeOS/.
+
+Fixed in v6.

@@ -2,118 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1E759570F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 487E65956EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiHPJuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
+        id S233986AbiHPJql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234076AbiHPJuX (ORCPT
+        with ESMTP id S233786AbiHPJpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:50:23 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E4CDABA4
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:29:04 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id 66so9434631vse.4
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:29:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=5+JNREwE1A4uHAEmXDcDFaNJYYYR64QtVhTwaoPWxKs=;
-        b=BcZI6X0enB0qHLc2Ct1J/KkDNfJlGhCI8b15E1w1HHolQiPpqeCJ2koir8AliM9dbq
-         HAW/Yk4mnDYIGF/jbmSpSaUCUK56UMbDN9oU3UidOPCWunPcf9Uzwre0g2ywMdwlHAG6
-         Z/qDmDTkkrZ43r30niypHjN6bVu13qjEF4cEz2GbbGeGZlNzQlt80/kUDbBk5z38bHz/
-         +Km70PwltDktN2QcWPlc7KM1BGcx+YYK1hdVAwlVL2bf5R0UxwyJOJ8zc5wowtR9Dc+q
-         qmvpLA39ydXUiOHVE4730u4O6FtjnUYMd+7tdUE0TU9FHuPVQ6bGgjWqKfrYUEcwScxk
-         REAg==
+        Tue, 16 Aug 2022 05:45:51 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861F732DB0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:35:30 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id h8-20020a6bfb08000000b00684f0587d0cso5621951iog.14
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:35:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=5+JNREwE1A4uHAEmXDcDFaNJYYYR64QtVhTwaoPWxKs=;
-        b=CqWXDDKJdkj7+ebkigpx4No2xdNKUHtuaqRbxgIzwk96OOmAesI38yKAqWNpa5WC10
-         QrNX5jGGYx1Xhn24+Fc0heXN+s8CFSwSOcJiDEhIW9tumpxV0Tc98yDpIohtWvJIQsxQ
-         gzMCX/tr4BUtNVPfaqs97TB+qgCGPO6d+V7FXeqTQWcHBiiw6vgA61BSFuFs/tzE2xt7
-         T/ZYX6+cCOmGLo/0kmARi8KG4v61qomIHCSgczW3jdj/SPXQDpXUMit8QdmXJblYsZIK
-         EtQbo+ArwY34lXuTcptynXDHHFvqnn3eGgaqpLP9ZDvRJfpG6+rkbgpyalbGwpUkPc6/
-         bdOg==
-X-Gm-Message-State: ACgBeo03nNjiUYHiGEgsCPM0KklTdLVr1u115Lv0KFTqiqqViap1qsuQ
-        C2/yEOV+UcFKII9KnR26xV+ZouCzTIHznWBTHdE=
-X-Google-Smtp-Source: AA6agR5Cv9y0PctSYtKsM3IP6P3qlpaHGkogF2MPKOhbQ8gvEwzSqrOfvt9FFQZQse9Xl+U2A3lTiyJ8IZn/Gmsu44o=
-X-Received: by 2002:a67:d312:0:b0:388:4bb8:1a2e with SMTP id
- a18-20020a67d312000000b003884bb81a2emr7682696vsj.17.1660638543553; Tue, 16
- Aug 2022 01:29:03 -0700 (PDT)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=FJLGzvROQ+nIWhtqcQm1Jz3F8DdI8R4iJIfFvyEB0OU=;
+        b=y1NAnqrrUgY9b0KnWx1flZT0lYokS6yl47RLvxM0y+e3jaiQVsYI7B1nvuQ42Lasxo
+         K0wpn9/vb0t0XTdL99u/6011NB3rygiULcq366USKUcfYcvavfOhDeIoqrh1IizapmJS
+         GCoDk8kh+lCU4nhCSDUmp83GPClHXavvbb21/Dl4iZwYfrcEqWl4qD2F0r5DwAegcrZG
+         8XB0CHNwe/CTosKqS26y35zYw5PSnku8vpwNhr1Clb/mhAZS0tiGJlnDsUO+rrF63Lnz
+         +C0EEiWo5G/WeFVMrxfVMb+XpTyrnIxo4jeKDVY+RvSeWX7F09UgTgbLfA/bxeaeTUQ7
+         jVhg==
+X-Gm-Message-State: ACgBeo3XmLLPcs6KVckuON5YXkePosFqFwKuN2p/QDud/IbFtjmtfDLY
+        Fz+VEqEUHOOXP1PJLQQ0L/o9C88Nzy+xPPXTZRMTccOsPNdg
+X-Google-Smtp-Source: AA6agR7qQLsENsZCVmuZyK658eGeowfy5aXiXevbDBunq8uBRS9Nlm6hPlxU/ogvdgOn1SqZ8MWT08xiKOsz07b0GrmoEKhi+rfl
 MIME-Version: 1.0
-References: <20220812055710.357820-1-aneesh.kumar@linux.ibm.com> <20220812055710.357820-2-aneesh.kumar@linux.ibm.com>
-In-Reply-To: <20220812055710.357820-2-aneesh.kumar@linux.ibm.com>
-From:   huang ying <huang.ying.caritas@gmail.com>
-Date:   Tue, 16 Aug 2022 16:28:51 +0800
-Message-ID: <CAC=cRTNDN7mHvHfk=bSN5SDUY864+1EOAOAg6Wd030ENWfY+fg@mail.gmail.com>
-Subject: Re: [PATCH v14 01/10] mm/demotion: Add support for explicit memory tiers
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
-        Bharata B Rao <bharata@amd.com>
+X-Received: by 2002:a05:6e02:1c8b:b0:2de:ec44:e139 with SMTP id
+ w11-20020a056e021c8b00b002deec44e139mr8489667ill.215.1660638929802; Tue, 16
+ Aug 2022 01:35:29 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 01:35:29 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000082da7c05e657a15a@google.com>
+Subject: [syzbot] upstream boot error: general protection fault in driver_register
+From:   syzbot <syzbot+8b304fd3170053b5307b@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 1:58 PM Aneesh Kumar K.V
-<aneesh.kumar@linux.ibm.com> wrote:
+Hello,
 
-[snip]
+syzbot found the following issue on:
 
-> diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
-> new file mode 100644
-> index 000000000000..bc7c1b799bef
-> --- /dev/null
-> +++ b/include/linux/memory-tiers.h
-> @@ -0,0 +1,15 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _LINUX_MEMORY_TIERS_H
-> +#define _LINUX_MEMORY_TIERS_H
-> +
-> +/*
-> + * Each tier cover a abstrace distance chunk size of 128
-> + */
-> +#define MEMTIER_CHUNK_BITS     7
-> +#define MEMTIER_CHUNK_SIZE     (1 << MEMTIER_CHUNK_BITS)
-> +/*
-> + * Smaller abstract distance value imply faster(higher) memory tiers.
-> + */
-> +#define MEMTIER_ADISTANCE_DRAM (4 * MEMTIER_CHUNK_SIZE)
+HEAD commit:    568035b01cfb Linux 6.0-rc1
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=176d627b080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3b9175e0879a7749
+dashboard link: https://syzkaller.appspot.com/bug?extid=8b304fd3170053b5307b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-This will make the abstract distance of DRAM the start of its memory
-tier.  So that any memory type that is slightly slower than DRAM will
-be put in a lower memory tier.  So I think it's better to put the DRAM
-at the middle of its memory tier by default.  For example,
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8b304fd3170053b5307b@syzkaller.appspotmail.com
 
-    4 * MEMTIER_CHUNK_SIZE + MEMTIER_CHUNK_SIZE / 2
+input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input1
+ACPI: button: Sleep Button [SLPF]
+ACPI: \_SB_.LNKC: Enabled at IRQ 11
+virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
+ACPI: \_SB_.LNKD: Enabled at IRQ 10
+virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
+ACPI: \_SB_.LNKB: Enabled at IRQ 10
+virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
+virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
+N_HDLC line discipline registered with maxframe=4096
+Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
+00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
+00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
+Non-volatile memory driver v1.3
+Linux agpgart interface v0.103
+ACPI: bus type drm_connector registered
+[drm] Initialized vgem 1.0.0 20120112 for vgem on minor 0
+[drm] Initialized vkms 1.0.0 20180514 for vkms on minor 1
+Console: switching to colour frame buffer device 128x48
+platform vkms: [drm] fb0: vkmsdrmfb frame buffer device
+usbcore: registered new interface driver udl
+brd: module loaded
+loop: module loaded
+zram: Added device: zram0
+null_blk: disk nullb0 created
+null_blk: module loaded
+Guest personality initialized and is inactive
+VMCI host device registered (name=vmci, major=10, minor=120)
+Initialized host personality
+usbcore: registered new interface driver rtsx_usb
+usbcore: registered new interface driver viperboard
+usbcore: registered new interface driver dln2
+usbcore: registered new interface driver pn533_usb
+nfcsim 0.2 initialized
+usbcore: registered new interface driver port100
+usbcore: registered new interface driver nfcmrvl
+Loading iSCSI transport class v2.0-870.
+scsi host0: Virtio SCSI HBA
+st: Version 20160209, fixed bufsize 32768, s/g segs 256
+Rounding down aligned max_sectors from 4294967295 to 4294967288
+db_root: cannot open: /etc/target
+slram: not enough parameters.
+ftl_cs: FTL header not found.
+wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
+wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
+MACsec IEEE 802.1AE
+tun: Universal TUN/TAP device driver, 1.6
+general protection fault, probably for non-canonical address 0xffff000000000800: 0000 [#1] PREEMPT SMP KASAN
+KASAN: maybe wild-memory-access in range [0xfff8200000004000-0xfff8200000004007]
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
+RIP: 0010:get_freepointer mm/slub.c:354 [inline]
+RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
+RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
+RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
+RIP: 0010:kmem_cache_alloc_trace+0x164/0x3e0 mm/slub.c:3282
+Code: 8b 51 08 48 8b 01 48 83 79 10 00 48 89 44 24 08 0f 84 bf 01 00 00 48 85 c0 0f 84 b6 01 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 c2 01 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
+RSP: 0000:ffffc90000067ce8 EFLAGS: 00010246
+RAX: ffff000000000000 RBX: 0000000000000000 RCX: 0000000000000800
+RDX: 0000000000002d90 RSI: 0000000000000dc0 RDI: 000000000003dce0
+RBP: ffff888011842140 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000dc0 R14: 0000000000000a20 R15: 0000000000000dc0
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 000000000bc8e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ kmalloc include/linux/slab.h:600 [inline]
+ kzalloc include/linux/slab.h:733 [inline]
+ kobject_uevent_env+0x230/0x1640 lib/kobject_uevent.c:524
+ driver_register+0x2db/0x3a0 drivers/base/driver.c:248
+ virtio_net_driver_init+0x93/0xd2 drivers/net/virtio_net.c:4108
+ do_one_initcall+0xfe/0x650 init/main.c:1296
+ do_initcall_level init/main.c:1369 [inline]
+ do_initcalls init/main.c:1385 [inline]
+ do_basic_setup init/main.c:1404 [inline]
+ kernel_init_freeable+0x6b1/0x73a init/main.c:1611
+ kernel_init+0x1a/0x1d0 init/main.c:1500
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
+RIP: 0010:get_freepointer mm/slub.c:354 [inline]
+RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
+RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
+RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
+RIP: 0010:kmem_cache_alloc_trace+0x164/0x3e0 mm/slub.c:3282
+Code: 8b 51 08 48 8b 01 48 83 79 10 00 48 89 44 24 08 0f 84 bf 01 00 00 48 85 c0 0f 84 b6 01 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 c2 01 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
+RSP: 0000:ffffc90000067ce8 EFLAGS: 00010246
 
-> +
-> +#endif  /* _LINUX_MEMORY_TIERS_H */
+RAX: ffff000000000000 RBX: 0000000000000000 RCX: 0000000000000800
+RDX: 0000000000002d90 RSI: 0000000000000dc0 RDI: 000000000003dce0
+RBP: ffff888011842140 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000dc0 R14: 0000000000000a20 R15: 0000000000000dc0
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 000000000bc8e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	8b 51 08             	mov    0x8(%rcx),%edx
+   3:	48 8b 01             	mov    (%rcx),%rax
+   6:	48 83 79 10 00       	cmpq   $0x0,0x10(%rcx)
+   b:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
+  10:	0f 84 bf 01 00 00    	je     0x1d5
+  16:	48 85 c0             	test   %rax,%rax
+  19:	0f 84 b6 01 00 00    	je     0x1d5
+  1f:	48 8b 7d 00          	mov    0x0(%rbp),%rdi
+  23:	8b 4d 28             	mov    0x28(%rbp),%ecx
+  26:	40 f6 c7 0f          	test   $0xf,%dil
+* 2a:	48 8b 1c 08          	mov    (%rax,%rcx,1),%rbx <-- trapping instruction
+  2e:	0f 85 c2 01 00 00    	jne    0x1f6
+  34:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
+  38:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
+  3d:	0f 94 c0             	sete   %al
 
-[snip]
 
-Best Regards,
-Huang, Ying
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

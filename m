@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 187C5596560
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8F159655B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237966AbiHPWSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 18:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
+        id S237911AbiHPWSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 18:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237998AbiHPWRx (ORCPT
+        with ESMTP id S237999AbiHPWRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 16 Aug 2022 18:17:53 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A987901A9;
-        Tue, 16 Aug 2022 15:17:50 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d16so10428868pll.11;
-        Tue, 16 Aug 2022 15:17:50 -0700 (PDT)
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7296A901B7;
+        Tue, 16 Aug 2022 15:17:51 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id l64so10482704pge.0;
+        Tue, 16 Aug 2022 15:17:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc;
-        bh=OB8RDF87cTmELNf7aw7q4YYpUSHmX8OtlvjYs3kFhr0=;
-        b=cLdY1RNjmC1OlOQ58Aj1kl0m1QGT70JSthx1sOxB6PLSZLnXytfnW7KVUyJrw4ILU6
-         n7N6DPzadmTiMz5IL6S4fdu0FVkq+/FJ2HdYvMLYEC4zRwa67JbF6Sny9B40YcBLn4fg
-         ohnYCLh5WtAvF0bc9dFPHItMkPxb4pdO5J++g2APvYqVgvfENoNCY4RB7pbrrF1BVIT3
-         anw7II4R90l1B63xdm3wVCCeULjT7spaLcd0hocWNQiWzNqZzoMwzIGMKJzrFDWYFbhR
-         8R8zZxwu8MzQFDVdNetpC4RnPL6bFFcmoP3td/QP09ra2EXEQbwt1mSk2feHRb/+qz0y
-         h4+A==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc;
+        bh=84gL6qYXoIL91eAhUH7dgvAezoFgyrY4+iuV6650YZc=;
+        b=cYK3wI6YLLfLwF08C0BXRx0SjLpb5jVdFgPwFiFNGD7iqYTo8GOVDvWG7Jmb/7WXKj
+         LZqDhlcFpn1xH3Rt+OkY8yAesdoU+LiRMTqkoFuxLQ3RqgA/b9Yk/uzjHTId2jQ9OOWR
+         0CAzm282cGgT6on95ZFkONfXjLnxT2yWLDFx+0JrPUQjyFIE9wrMllZel1FMDJVV+yVF
+         NmDUSrT/6W04x3S5qm5drBTu/mXHtmn65n5P1J4kKVufEF2Xrvgr4rH1DZ04QUdkZi/n
+         EkiovqyPY+bDGmO41dlaUlvTJreyii310HhegiZDWOUHyZnWSVM8qyCr0/lS8GQyXald
+         Smew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc;
-        bh=OB8RDF87cTmELNf7aw7q4YYpUSHmX8OtlvjYs3kFhr0=;
-        b=SBoXTAh11+kwBOAJlPUbvXrycTb9IVbWcRckf73AimqJOFPbxnRu8vdZlGrIR/0QPs
-         SQkFVCBcXzrepXOZqzi24yocLtnkxd7wkRAzVqt1iNRQaVVkS+GbbKq6G8yDU3D1qtA9
-         QAPqUXa40P3/8uxFCyoDcqWUowu/K6rdU/DBV5YywdVG/4NH//MrhJ/LXg72alf+On37
-         AYjvtfXCZqo/2wXopnwZqU2DkWaoRPKX1Jq3H1YbJi265kkvfTAzOFMx21Z7swI53mKg
-         Y+n1wKsyJh7A2EfkTpImt8eT/OJpPWMmKoAfhdZKt5MEfcEDwrfrTMNib3M7JJm0Jjfs
-         SAPw==
-X-Gm-Message-State: ACgBeo3lpCnUeEJvu32jvrnZXhRmSaBHu3XRsvYA0d7bxT7OkZTfmqUc
-        GXqrjPh7mGPyZM8mIb0ftPPWyN1aEzI=
-X-Google-Smtp-Source: AA6agR7/vFKp5+pTpC3YdQO45AeYq4bPMXwFZsqW8mnAS7I6tSnHUwmI/rSTcyZmN9GCFgnup+dUDg==
-X-Received: by 2002:a17:90b:17c9:b0:1f3:3a7c:a3a7 with SMTP id me9-20020a17090b17c900b001f33a7ca3a7mr734547pjb.76.1660688269758;
-        Tue, 16 Aug 2022 15:17:49 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc;
+        bh=84gL6qYXoIL91eAhUH7dgvAezoFgyrY4+iuV6650YZc=;
+        b=vBVjC4V9sEmJ/RMcSvNbv7dil+988uamzcKJFJKpkktrXqDlSyNN6ltIvGjwsye05A
+         yhM5usYh964xje0vMAN/S2NCtGgckanrOYQzNdCsLdh3bimvdszO1Ub3tksor88F/Qmz
+         ivW61qmtHCyGTDymdjA39BdsPE3OIlGGjn3G3MKRifNh97TVknW3ewiX4iOvffIaoeOY
+         2TXW48mb1Or/6N79DD7yozA+tF+JJHLVRxjWnzoPrnw1xPSs55o7H6akwB+BudNH8ZpV
+         57cSTekNegynBwFoCggng825sO93pU+aO0JI/qNTpfa2IQQfkSpQawhyVKTHMM2tXwP4
+         9AKg==
+X-Gm-Message-State: ACgBeo2CIO9xXShY/vQaIzX5RHj1IAaikFCdPTK3QxxuxT3Jnv/Aw9Ca
+        BZ5Ia+jMUdz9AR1EGtZzc/U=
+X-Google-Smtp-Source: AA6agR65u1hPTOpZiganCVlM6hJi4TdQ8cu//l+GzkFJSC517cP01lba9WOpusrLCNOakdJIhLZdHQ==
+X-Received: by 2002:a05:6a00:1a4f:b0:52e:33bf:f3d with SMTP id h15-20020a056a001a4f00b0052e33bf0f3dmr22914951pfv.61.1660688270902;
+        Tue, 16 Aug 2022 15:17:50 -0700 (PDT)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:d539:e967:9fd8:5c81])
-        by smtp.gmail.com with ESMTPSA id 3-20020a620603000000b0052b7f0ff197sm8965943pfg.49.2022.08.16.15.17.48
+        by smtp.gmail.com with ESMTPSA id 3-20020a620603000000b0052b7f0ff197sm8965943pfg.49.2022.08.16.15.17.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 15:17:49 -0700 (PDT)
+        Tue, 16 Aug 2022 15:17:50 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -57,10 +58,12 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Ian Rogers <irogers@google.com>,
         linux-perf-users@vger.kernel.org
-Subject: [PATCH 0/4] perf tools: Support reading PERF_FORMAT_LOST (v2)
-Date:   Tue, 16 Aug 2022 15:17:43 -0700
-Message-Id: <20220816221747.275828-1-namhyung@kernel.org>
+Subject: [PATCH 1/4] tools headers UAPI: Sync linux/perf_event.h with the kernel sources
+Date:   Tue, 16 Aug 2022 15:17:44 -0700
+Message-Id: <20220816221747.275828-2-namhyung@kernel.org>
 X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+In-Reply-To: <20220816221747.275828-1-namhyung@kernel.org>
+References: <20220816221747.275828-1-namhyung@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,46 +77,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+To pick the trivial change in:
 
-The kernel v6.0 added PERF_FORMAT_LOST which can read a number of lost
-samples for the given event.  As it can change the output format of
-read(2) and perf sample data, it needs to access them carefully.
+  119a784c8127 ("perf/core: Add a new read format to get a number of lost samples")
 
-Changes in v2)
- * add a comment in perf_evsel__read_group()  (Jiri)
- * simplify perf_evsel__adjust_values()  (Jiri)
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/include/uapi/linux/perf_event.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-
-You can get the code from 'perf/read-lost-v2' brach on
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
-
-Thanks,
-Namhyung
-
-
-Namhyung Kim (4):
-  tools headers UAPI: Sync linux/perf_event.h with the kernel sources
-  tools lib perf: Handle read format in perf_evsel__read()
-  tools lib perf: Add a test case for read formats
-  perf tools: Support reading PERF_FORMAT_LOST
-
- tools/include/uapi/linux/perf_event.h         |   5 +-
- tools/lib/perf/evsel.c                        |  79 ++++++++-
- tools/lib/perf/include/perf/event.h           |   3 +-
- tools/lib/perf/include/perf/evsel.h           |   4 +-
- tools/lib/perf/tests/test-evsel.c             | 161 ++++++++++++++++++
- tools/perf/tests/sample-parsing.c             |  14 +-
- tools/perf/util/event.h                       |  18 +-
- tools/perf/util/evsel.c                       |  33 +++-
- .../scripting-engines/trace-event-python.c    |  16 +-
- tools/perf/util/session.c                     |  32 ++--
- tools/perf/util/synthetic-events.c            |  34 +++-
- 11 files changed, 360 insertions(+), 39 deletions(-)
-
-
-base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
+index e2b77fbca91e..581ed4bdc062 100644
+--- a/tools/include/uapi/linux/perf_event.h
++++ b/tools/include/uapi/linux/perf_event.h
+@@ -301,6 +301,7 @@ enum {
+  *	  { u64		time_enabled; } && PERF_FORMAT_TOTAL_TIME_ENABLED
+  *	  { u64		time_running; } && PERF_FORMAT_TOTAL_TIME_RUNNING
+  *	  { u64		id;           } && PERF_FORMAT_ID
++ *	  { u64		lost;         } && PERF_FORMAT_LOST
+  *	} && !PERF_FORMAT_GROUP
+  *
+  *	{ u64		nr;
+@@ -308,6 +309,7 @@ enum {
+  *	  { u64		time_running; } && PERF_FORMAT_TOTAL_TIME_RUNNING
+  *	  { u64		value;
+  *	    { u64	id;           } && PERF_FORMAT_ID
++ *	    { u64	lost;         } && PERF_FORMAT_LOST
+  *	  }		cntr[nr];
+  *	} && PERF_FORMAT_GROUP
+  * };
+@@ -317,8 +319,9 @@ enum perf_event_read_format {
+ 	PERF_FORMAT_TOTAL_TIME_RUNNING		= 1U << 1,
+ 	PERF_FORMAT_ID				= 1U << 2,
+ 	PERF_FORMAT_GROUP			= 1U << 3,
++	PERF_FORMAT_LOST			= 1U << 4,
+ 
+-	PERF_FORMAT_MAX = 1U << 4,		/* non-ABI */
++	PERF_FORMAT_MAX = 1U << 5,		/* non-ABI */
+ };
+ 
+ #define PERF_ATTR_SIZE_VER0	64	/* sizeof first published struct */
 -- 
 2.37.1.595.g718a3a8f04-goog
 

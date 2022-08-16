@@ -2,99 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7075B5960B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E553E5960BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236679AbiHPQ7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 12:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
+        id S236693AbiHPRAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 13:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236682AbiHPQ7R (ORCPT
+        with ESMTP id S236683AbiHPRAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 12:59:17 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB90796A2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:59:15 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id z2so14303258edc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:59:15 -0700 (PDT)
+        Tue, 16 Aug 2022 13:00:41 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC387786E6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 10:00:40 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-31f445bd486so167484067b3.13
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 10:00:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=PZiFKHAPInSqLmOQSyV+TmAHEnPDfiBJsJIlSVONBUo=;
-        b=LRCjpJNqVhX8469WWIWi7kwgE6So402iY3NGTnuzSThPccWIrskygornwb3D41OzQ8
-         AUJcD7neOIjJ1r8h+Jp8C9vYMNzRMuvxPNuRcwR+OxVlO2b01+dqO7h3GoedFTyK4/ix
-         FxYRfhKhFY51NZt1Ph4W4hbaBuIKb82elRAmY=
+        bh=AFXUApVom+DNuZKpfEUejz7pP/LfFyAYaE0Pt08DBKU=;
+        b=haVwI37xfonrnZIKY8V7jvDBWI9LEDFeEGXNJs8lgC/bxW9jgvMfpZxBtmpnftr5Um
+         EX9HLT6pjIdGGDDhGLWWfn0kiXYqYtEP0w/1aFCp22dTSJm7bRUNnxtosK98hjCfQSjo
+         GezoF4GX7vbJSNAKHHWbAJWsItDW/XQ+SlVzZlBR2O2oc4AG6mWA/1G3SjY3uUpMY8Kl
+         DFCYAybiXXg8VwnncjhQ9tJX9SlLA3fFFjBAZVt0FprWrD9qnxFBhs5pcZ/CtAC+Duwg
+         /dG4R3rRGm9tbcfWjV+2dF53GBag37NwCGm7CFTkj5i3JMx17aDAuZ2yOOOLMsxYNk4R
+         fPOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=PZiFKHAPInSqLmOQSyV+TmAHEnPDfiBJsJIlSVONBUo=;
-        b=wGZ29Hk42kKOvHk7GbnMYOE2Y+k3iugqNM+s3bbD7BiXQBrqccQDRuXRmjCBI6CpGO
-         mOBy1YF6BKI9kKDGghAWzAw+dcVIEz2KyjTCDX3JXOhYIqBBJnVqIaWSYRVNxeZtZrhn
-         SpEik5juWLNIit1g5dNhoRvQnqwujINQ+O/Kab682/4SaIlfWNKZ4mmcSfKw536SRoxL
-         w/P4WtNlMKqCa37SIrtbw6FjrM+XlFvPIDZPz6mcZDuYHMZvPXLfy8l4vz31f/Z95C6Q
-         FnGuoaQfqcyaBqBRKxRrzIxyhv+W/zcpXxRvksU729nlt6Mv/Ah8D6SXFo2yHEmULRPh
-         e91A==
-X-Gm-Message-State: ACgBeo35B8n24GzMf4DvBRp5O1UHz81yG1kXNw5D+xZ9MrMa6ztVuhil
-        CrC1D4xO+Mk34y1ElDNCDfOvQRAUdRCU9i9iL7M=
-X-Google-Smtp-Source: AA6agR6l+A+8fYyopkCteu+6ArdsBelvP1La7o1l6ILnOc8L2BWLIeqFuJXWCq3dkSaUBxKeA0YHmw==
-X-Received: by 2002:aa7:cb92:0:b0:443:98d6:20da with SMTP id r18-20020aa7cb92000000b0044398d620damr11828873edt.399.1660669153686;
-        Tue, 16 Aug 2022 09:59:13 -0700 (PDT)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
-        by smtp.gmail.com with ESMTPSA id j4-20020aa7ca44000000b0043d1a9f6e4asm8917764edt.9.2022.08.16.09.59.12
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 09:59:13 -0700 (PDT)
-Received: by mail-wm1-f47.google.com with SMTP id k18-20020a05600c0b5200b003a5dab49d0bso5125029wmr.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:59:12 -0700 (PDT)
-X-Received: by 2002:a05:600c:657:b0:3a5:e4e6:ee24 with SMTP id
- p23-20020a05600c065700b003a5e4e6ee24mr8635263wmm.68.1660669152579; Tue, 16
- Aug 2022 09:59:12 -0700 (PDT)
+        bh=AFXUApVom+DNuZKpfEUejz7pP/LfFyAYaE0Pt08DBKU=;
+        b=vQ7OkteZb1OUjYzZpZR1zE3Q8rKvzwaDIF+FyHf04718IZShcqxwLRkLcPBmTtnf42
+         dmZA8kY3TB9i0eWfWLtiaZA8H8doGkLep7M57alQnYSSrr8eqD8M3V6c9t+78Xljedo+
+         X80OQENCd8xZ6XnhxbMQN8ZF6atnXsKc6U6Q+EBFnet3dlUPFvN2/0EUCHmspHV0vEcW
+         yDrm71DvZdnvuzxaOLtCbF3i4s3rlfRFo2YRGVZlS5jwN8tBM+tNPigyAN0eRiJE9axf
+         xQMFxcp2IC3ycxCvm8VO6tJj9NG8AL0Erkato72wmuHkjioAfjc455SfzH+txzpkNSyc
+         nZQQ==
+X-Gm-Message-State: ACgBeo1fE7Om80n4B9GyiJ29Jf2MP4Nz0+MI5w2P9LGliLcN0dycBv4A
+        KsyTLhHvy/DlY81l40vWjdcUWbLL+8HYgXQIZ30Cxg==
+X-Google-Smtp-Source: AA6agR7OimpQPwJJIpSO4Sw9pAkvcSmYHrPH+JP+mYVuD9PEj3WRkBPmDWQFqzjGuujaEveJUZSaDUIBus0+5cX8CmY=
+X-Received: by 2002:a0d:e745:0:b0:320:ae6a:ac06 with SMTP id
+ q66-20020a0de745000000b00320ae6aac06mr17027700ywe.185.1660669239852; Tue, 16
+ Aug 2022 10:00:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <YvqaK3hxix9AaQBO@slm.duckdns.org> <YvsZ6vObgLaDeSZk@gondor.apana.org.au>
- <CAHk-=wgSNiT5qJX53RHtWECsUiFq6d6VWYNAvu71ViOEan07yw@mail.gmail.com>
- <20220816134156.GB11202@willie-the-truck> <YvuvxnfHIRUAuCrD@boqun-archlinux> <74559da4-5cd4-7cc4-0303-ab5f6a8b92ae@marcan.st>
-In-Reply-To: <74559da4-5cd4-7cc4-0303-ab5f6a8b92ae@marcan.st>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 16 Aug 2022 09:58:56 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whn=gkf8kOxVPPeTpcgsFk21P9sk4SZRQ26=Jhqo6ewRA@mail.gmail.com>
-Message-ID: <CAHk-=whn=gkf8kOxVPPeTpcgsFk21P9sk4SZRQ26=Jhqo6ewRA@mail.gmail.com>
-Subject: Re: [PATCH] workqueue: Fix memory ordering race in queue_work*()
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Will Deacon <will@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Tejun Heo <tj@kernel.org>, peterz@infradead.org,
-        jirislaby@kernel.org, maz@kernel.org, mark.rutland@arm.com,
-        catalin.marinas@arm.com, oneukum@suse.com,
-        roman.penyaev@profitbricks.com, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
+References: <20220816130221.885920-1-peternewman@google.com> <YvunKCJHSXKz/kZB@FVFF77S0Q05N>
+In-Reply-To: <YvunKCJHSXKz/kZB@FVFF77S0Q05N>
+From:   Peter Newman <peternewman@google.com>
+Date:   Tue, 16 Aug 2022 19:00:29 +0200
+Message-ID: <CALPaoCjJyYW68Vn1CNbf0Asggyu1AY68DbqcoK5n5FcXqeybJA@mail.gmail.com>
+Subject: Re: [PATCH v3] perf/arm: adjust hwevents mappings on boot
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, Stephane Eranian <eranian@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 9:22 AM Hector Martin <marcan@marcan.st> wrote:
+On Tue, Aug 16, 2022 at 4:18 PM Mark Rutland <mark.rutland@arm.com> wrote:
+> On big.LITTLE systems this is array is shared by multiple PMUs, so this cannot
+> be altered based on a single PMU.
 >
-> It's worth pointing out that the workqueue code does *not* pair
-> test_and_set_bit() with clear_bit(). It does an atomic_long_set()
-> instead
+> Rather than applying a fixup, could we special-case this at mapping time?
+>
+> Does the following work for you?
+>
+> Thanks
+> Mark.
+>
+> ---->8----
+> From 6cf78ec72194296e8d0c87572b81f2b02a097918 Mon Sep 17 00:00:00 2001
+> From: Mark Rutland <mark.rutland@arm.com>
+> Date: Tue, 16 Aug 2022 15:16:23 +0100
+> Subject: [PATCH] arm64: pmuv3: dynamically map
+>  PERF_COUNT_HW_BRANCH_INSTRUCTIONS
+>
+> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
 
-Yes. That code is much too subtle.
 
-And yes, I think those barriers are
+Reviewed-by: Peter Newman <peternewman@google.com>
+Tested-by: Peter Newman <peternewman@google.com>
 
- (a) misleading
 
- (b) don't work with the "serialize bits using spinlock" model at all
+> ---
+>  arch/arm64/kernel/perf_event.c | 27 +++++++++++++++++++++++----
+>  1 file changed, 23 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
+> index cb69ff1e61380..0435adee5cab8 100644
+> --- a/arch/arm64/kernel/perf_event.c
+> +++ b/arch/arm64/kernel/perf_event.c
+> @@ -45,7 +45,6 @@ static const unsigned armv8_pmuv3_perf_map[PERF_COUNT_HW_MAX] = {
+>         [PERF_COUNT_HW_INSTRUCTIONS]            = ARMV8_PMUV3_PERFCTR_INST_RETIRED,
+>         [PERF_COUNT_HW_CACHE_REFERENCES]        = ARMV8_PMUV3_PERFCTR_L1D_CACHE,
+>         [PERF_COUNT_HW_CACHE_MISSES]            = ARMV8_PMUV3_PERFCTR_L1D_CACHE_REFILL,
+> -       [PERF_COUNT_HW_BRANCH_INSTRUCTIONS]     = ARMV8_PMUV3_PERFCTR_PC_WRITE_RETIRED,
+>         [PERF_COUNT_HW_BRANCH_MISSES]           = ARMV8_PMUV3_PERFCTR_BR_MIS_PRED,
+>         [PERF_COUNT_HW_BUS_CYCLES]              = ARMV8_PMUV3_PERFCTR_BUS_CYCLES,
+>         [PERF_COUNT_HW_STALLED_CYCLES_FRONTEND] = ARMV8_PMUV3_PERFCTR_STALL_FRONTEND,
+> @@ -1050,6 +1049,28 @@ static void armv8pmu_reset(void *info)
+>         armv8pmu_pmcr_write(pmcr);
+>  }
+>
+> +static int __armv8_pmuv3_map_event_id(struct arm_pmu *armpmu,
+> +                                     struct perf_event *event)
+> +{
+> +       if (event->attr.type == PERF_TYPE_HARDWARE &&
+> +           event->attr.config == PERF_COUNT_HW_BRANCH_INSTRUCTIONS) {
+> +
+> +               if (test_bit(ARMV8_PMUV3_PERFCTR_PC_WRITE_RETIRED,
+> +                            armpmu->pmceid_bitmap))
+> +                       return ARMV8_PMUV3_PERFCTR_PC_WRITE_RETIRED;
+> +
+> +               if (test_bit(ARMV8_PMUV3_PERFCTR_BR_RETIRED,
+> +                            armpmu->pmceid_bitmap))
+> +                       return ARMV8_PMUV3_PERFCTR_BR_RETIRED;
+> +
+> +               return HW_OP_UNSUPPORTED;
+> +       }
+> +
+> +       return armpmu_map_event(event, &armv8_pmuv3_perf_map,
+> +                               &armv8_pmuv3_perf_cache_map,
+> +                               ARMV8_PMU_EVTYPE_EVENT);
+> +}
+> +
+>  static int __armv8_pmuv3_map_event(struct perf_event *event,
+>                                    const unsigned (*extra_event_map)
+>                                                   [PERF_COUNT_HW_MAX],
+> @@ -1061,9 +1082,7 @@ static int __armv8_pmuv3_map_event(struct perf_event *event,
+>         int hw_event_id;
+>         struct arm_pmu *armpmu = to_arm_pmu(event->pmu);
+>
+> -       hw_event_id = armpmu_map_event(event, &armv8_pmuv3_perf_map,
+> -                                      &armv8_pmuv3_perf_cache_map,
+> -                                      ARMV8_PMU_EVTYPE_EVENT);
+> +       hw_event_id = __armv8_pmuv3_map_event_id(armpmu, event);
+>
+>         if (armv8pmu_event_is_64bit(event))
+>                 event->hw.flags |= ARMPMU_EVT_64BIT;
+> --
+> 2.30.2
+>
 
-It's a good example of "we need to really have a better model for this".
+Hi Mark,
 
-             Linus
+I can confirm that your patch fixes the issue we saw.
+
+Thank you for coming back with this quickly, it looks like a better
+solution to me.
+
+Which branch were you going to apply it to?
+
+Thanks!
+-Peter

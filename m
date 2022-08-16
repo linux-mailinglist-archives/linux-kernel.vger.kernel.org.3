@@ -2,424 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA6E5957F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A05B5957E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233391AbiHPKUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
+        id S232332AbiHPKRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234422AbiHPKUE (ORCPT
+        with ESMTP id S234397AbiHPKQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:20:04 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D0E7CB72;
-        Tue, 16 Aug 2022 01:27:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DU3U4ZqdUiTdqdyqUB6K4Ivc4HbCetSb5S2WEilbMeaCDd8ikY3Z/TT3qWnQG2YCBKcJel+gtR5Zn73rFdGooE27XbDTrujKZdB1Zd9eLXFrjFBAmzeifKk5GL0LHk9sfI8bz1wA3+0o21zO4JIc4omYuJqlngGj72vTbv+SuPGXN2O4O67KfJrZdQ6g6Z0ybshFUkRIXTm2+Buftf5b72C+CW6IS/kJ5hjcO+nFbOC+zAHbiAncvoCHAKgupw6l5O6/OeTTl2OgwWEs+B8XPRlxRm+/9CNfHT+f06JVoaInbuOYs01s0GJ7lzr6UutaVggCqcSqIcC/L+74nkahWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vOubXvrRDcyx/MQMgcWpc9/cXRkd/m8ucNk64I1uR8Q=;
- b=g3MNxsqNUMcrvIlzJuStppfQ+5s5+XN8RmrUHkdmvJOqONXbWRx3WXYslHZhJNOfhHY2gPTdS/JW4J0Z9QYwhDMb96zIq0XNzf2ZHnRE6uole4hEZ4jea9UJVR/Xuoo3PDCfcwpktnLrZEmc3NNdCVn2CYIk4q3YuwdRwurjMY0uxYVvMCumUDTGeqPn+Ldm4lcanTbR0FstwVtL1LzHM03fAVbupviijZG9KDc8CP7hSqyb70nUrKPonKF69Jh3cKFu8hAERW3KLLhsYzsdz7dukfXPnRw+CAP6+/GyIzyMCrrXPEFTZ3R7oyWJaYNbldnkAoNrEAvuip4wbcdgjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vOubXvrRDcyx/MQMgcWpc9/cXRkd/m8ucNk64I1uR8Q=;
- b=0RN2+C6TX8rjxPAd+qC4KRLZJ4Kwj9eovgApP/o6l2QEIDvUsq97ZwycQIa3L11C8z7JLsTecrmP6sDCpONt1h7BvL77lIxzwABNYgQc9gB0Eukn9uvrULlqGtOIOA8nn2fbTUxxAnFjcinDaO2cvOxcNMHykeld/CCgbDrL7OU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by CY4PR1201MB0245.namprd12.prod.outlook.com (2603:10b6:910:1e::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Tue, 16 Aug
- 2022 08:27:34 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39%2]) with mapi id 15.20.5504.020; Tue, 16 Aug 2022
- 08:27:34 +0000
-Message-ID: <327c77d5-5812-a158-6c9f-c68e15a5a6b4@amd.com>
-Date:   Tue, 16 Aug 2022 10:27:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/3] dma-buf: Add ioctl to query mmap coherency/cache
- info
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@chromium.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220815211516.3169470-1-robdclark@gmail.com>
- <20220815211516.3169470-2-robdclark@gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220815211516.3169470-2-robdclark@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0074.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1f::12) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Tue, 16 Aug 2022 06:16:36 -0400
+Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3548DF0B3;
+        Tue, 16 Aug 2022 01:28:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1660638501; x=1692174501;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ULkqAHITNyNY+nb/F2KUcwZfWxaEdjYhDYRpVxQWyfI=;
+  b=vZF3rZuQuo4YNJXjDkVRkT9o0m6qo8vDPkO3XxIGS/qT3SAelrx6VY8k
+   1gVd89lxvtmr2KxQ+r+Ll8HtSPn7jvSngY/rJOHNkEzp4jegBvZzBZR3S
+   +e5v+XBZXhAvPB0Xkk0Mcs+l/WE6HiXbUhtEfUWnLcp9W7NJy4TTvg4TK
+   Q=;
+X-IronPort-AV: E=Sophos;i="5.93,240,1654560000"; 
+   d="scan'208";a="233486642"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-2d7489a4.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 08:28:20 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1a-2d7489a4.us-east-1.amazon.com (Postfix) with ESMTPS id 9A42C8705F;
+        Tue, 16 Aug 2022 08:28:20 +0000 (UTC)
+Received: from EX19D013UWA004.ant.amazon.com (10.13.138.207) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 16 Aug 2022 08:28:00 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX19D013UWA004.ant.amazon.com (10.13.138.207) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Tue, 16 Aug 2022 08:27:59 +0000
+Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
+ (172.19.116.181) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Tue, 16 Aug 2022 08:27:59
+ +0000
+Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
+        id 61ACF4C09; Tue, 16 Aug 2022 08:27:57 +0000 (UTC)
+From:   Eliav Farber <farbere@amazon.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <mark.rutland@arm.com>, <linux-hwmon@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
+        <jonnyc@amazon.com>, <hanochu@amazon.com>, <ronenk@amazon.com>,
+        <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
+        <amitlavi@amazon.com>, <almogbs@amazon.com>, <dwmw@amazon.co.uk>,
+        <rtanwar@maxlinear.com>
+Subject: [PATCH 01/16] hwmon: (mr75203) fix VM sensor allocation when "intel,vm-map" not defined
+Date:   Tue, 16 Aug 2022 08:27:42 +0000
+Message-ID: <20220816082757.11990-2-farbere@amazon.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220816082757.11990-1-farbere@amazon.com>
+References: <20220816082757.11990-1-farbere@amazon.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 39dd0c79-83e2-4630-cc09-08da7f612ba0
-X-MS-TrafficTypeDiagnostic: CY4PR1201MB0245:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lbvWhSf0aj2flxwtAMBU/338I+vtuiXTy0kkjyLHzqLVPy0UW+XFExXROBlQ29LgrXifQpymNQKJftsU4I78Vk6umdX9PdvaiVBUUsj1K6PEeNYS7I69OhsgEZ5NpBXomYYREHUGQb9iYY3fF4PvIQhmCdhpM2CROsX1tbPhlw0Qrs2ZfYoBQSrIRn5ULkUVBlYnsyvpCTWKu34gsaJh2/cHHqYKG+vFBZPx4kUsaZ3JhUDf4ji0hThXXsDjMpG0lqQEd0Z829JJHxsvGHGZQrLzUgZTsLPN6iy9MIlgPZgStf+8JFq/26XY5x0/hX4s3nb9opuA2A/24N7hyONqTqALuA5gCVr27bXgOJ+laSfYPyUlzlgB6OCnzTxFCTCMMto5EgH8PHI2Wx7M1ai/5mvwuYFVRbsvlfSRuudm2Y44PFZ+ZNdkho27E825Zokb83vXfk0SazOQqxdtQ3+MhGBhukhkouba3G7XamrOb1SlYr0pt5ZP730+WihMB7D8l+jL6lhWJJWfgLC3DAk+ybsG9D87I2j7QzPZMMnpN7VRxBqQpTrA5OVaybmotL9hFIcXXcUO2g/Et9LkbSCQd2sAR0wIK1VN/vGoq7kCyYqfS7oe/WrJ/+3d0e/MVopONpaWPF5mSXnl6Bgz44YpWtHC132LPxj/INTRPny5hY+ZpT576H7klaY/ho9iNqmrPZekiT3aK7oIXI4BgzhD2yNo5YetlGApfGSyS+oU4EaQbOREnbAR+Z3tQE3zrUYBMzNVp7xwP5DfW+U5+YQXzO7q4ev+9LgoTWKeVCpsBp8q+HjXxo+2t9Yfi50pLXp8mON5VJpenx9uDVak/xhnGg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(39860400002)(376002)(366004)(136003)(66476007)(31696002)(38100700002)(86362001)(66946007)(66556008)(316002)(478600001)(36756003)(83380400001)(6486002)(6512007)(8676002)(4326008)(54906003)(186003)(6506007)(41300700001)(2906002)(31686004)(8936002)(2616005)(7416002)(5660300002)(26005)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d2FQVEtweWc1R0l3TkFpTjQ0V2t5eWs5SCtUL0JuZTRVU3EwUEM0clBRWnQr?=
- =?utf-8?B?SGJub2JhdFo1cHFPRGFka1BZUmcwRjNwOEFFNjJyODYyQWhLYlNUT1VBUXdQ?=
- =?utf-8?B?MEJMNlRTM3p4YlVBM3JFQjc1QjE3Z1NkVm1PdjZLaUNjUWpQaVRXUll1RTR3?=
- =?utf-8?B?aGY3ZXoyR1FweHZ3czNPaEJyZmVZM1grWEFjTlhZc09WeVZyZFpGTjh4RmM3?=
- =?utf-8?B?RUtqZ2lZdlRiUG84SVBIMlM3Y2F3TWc0UDBaVFRNY0UvZlkyK3BDT0E3eEZa?=
- =?utf-8?B?R2xleGVPYWV3dG5wRi9wbXJuTG1BWUdOZGJFUjlaY3lpd0hkUm1BbXZnblRB?=
- =?utf-8?B?V2gvMTQzZDRTUTFnT2tGUHNSVkZ5alN3WFdpMndFZ1FNR1pmTlZEUkdOT0Zp?=
- =?utf-8?B?STlHUzhKbTlKMzNoeVIrMnd5cXR5aVlwcU11bjlrdDVjanFqL0oyT0dsMHV4?=
- =?utf-8?B?U1JBN2RVa2Q5Q1hPa04zcDFzNWJlUEtrY0Zya2dpc0NYemNLOXFiNWczendS?=
- =?utf-8?B?Sld3RkNMNXV2ZUJ5TWF4aFV6dTdNdUFmVE1NYmtCc1IwYXBwN1VVT1R0aS91?=
- =?utf-8?B?bWNlVjlsOFFadElTaG1aMlZsMWMyUXJUem5jWUtHbXhBQnlUVzdUUjg2OS9N?=
- =?utf-8?B?aEFKa24xd0w3eVR5SW9nYnNMc2JlaDN1NVBhTXZQS1N5NDR2b0JiQkIyZzJi?=
- =?utf-8?B?RlNXMWliQUV3SE5pU3NOL1QyQURiUklSeE05RXNiWkhCQWthbG1lOGFoREtO?=
- =?utf-8?B?dVRaeEpRWkVyalREdzFYeUNYMGFGUG1wM3JTZXYxYmhpS2prQkFycHhaZVdZ?=
- =?utf-8?B?QTFkYStNKzM5Rm03ZXBlOVZGaVVDQm5xUkx3NTFja0FIbE12eHF6bE8wOTEv?=
- =?utf-8?B?SFlTRFVFYjM5QmpqNkc4MnRwQXhEVEdOY2wxcnVTeExEM1ZkbmIrR3dQOUxz?=
- =?utf-8?B?SUl0c0NyRmtSYzRlTys1dWlmZG05STNpZGFzUjhaU3JrbmxpUDRKYTJuS1hm?=
- =?utf-8?B?d2p4bisxWVVaNVFiQ0tYZ09aVnp6WXNQVFZERjlpOThlZ1RRREY0MHErclZF?=
- =?utf-8?B?QzRFM1J5L0lIVWd1TlFqdG9sbG5ENy8waGJpaTFlTUZBSUZpVlo1VWk1bVUv?=
- =?utf-8?B?Rm1WTEFlRjRGaDNoamJjc1dGRlk1eDJQbGU5cHlnNjdpMm9YVVcwZ21NYnY4?=
- =?utf-8?B?NjNNdUhRaUJPTXgvRG1keERYVjZ1NVh3bHQ3VTZLMmNNQnd3cjkyY2tyY0pv?=
- =?utf-8?B?L0pTbGJuN0N0Yzk1U3lCQjVxMkYweTV1UHVScW9aOFBRL0ExOUkwejBRbzl3?=
- =?utf-8?B?bEh4TzU2bFZxaDEvMkdWejlvazJyUGw5QzJCSkNvdGxCQjh4VkU3c2tEZ1hW?=
- =?utf-8?B?b00wb3RGVW1hS011WE9Jc3JNOE9pQWZ5QXlaSWtmY2NhcXN6a1dSUEVpUDRG?=
- =?utf-8?B?dG9jQTBsbWRrZzBkWjhsWnF4Ly9Sa0VBVGxBUjF2YXBGYVFCeGREdzBhUFNL?=
- =?utf-8?B?RjNNQXRaR25aalZvZ29HeVBsRmFSb1BMdEhuc28vdm05RFJXMkZLSVE3blQv?=
- =?utf-8?B?RVo1SkxCZWZzaFJsaUgyRHlTRk5xazRUN0dRSjhwbTg5QitGTC8zeUNlTk1h?=
- =?utf-8?B?TXhVQXJCT2dSNEdjcW05Z0U0ZGtTaDBLZDRUOGV5cTV0L1VDQm1XZkhISFgv?=
- =?utf-8?B?UE9wSzJDYURrejdHZWhjLzd1SGEwTmpNYklMd0QvUUpvd2NiRGF4emF5Zlhj?=
- =?utf-8?B?VnlhUHJ3cG1XampUZVo5Z3hQQkQ2R1ZhampiVUw4dnFPK2NrOWRkZkVmUWZI?=
- =?utf-8?B?Z0R1eUhDZVFKYUFvRHlVbm1MN1A3SUQ1V1dUQ2lFRW40aDJydXR5NXk2aE40?=
- =?utf-8?B?aXhyZC9JR2M1dzN6cEtZZGk3bmloWHlmVnNXK2J4ZHhQY3QwbWhTSzFnTHEw?=
- =?utf-8?B?OWRvdXIrWmpRd092MDdqVkVKbWZkdHpMZDZqTEQvVVBtZnp6QUIvZGRRU3NM?=
- =?utf-8?B?Kzg5L01sT1c0YlRqcFp3LzZVbVgwMGhzM1RUSzRzY2lIR2NCRVdSd0FFekE4?=
- =?utf-8?B?Wk43Vnk1endic1ZyTStKL3JhWk1PM0NVSHEyRFBsWitCWjAvcWNZSjNZZWdw?=
- =?utf-8?Q?dR65M0xpha/izjGx2LOnmKCst?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 39dd0c79-83e2-4630-cc09-08da7f612ba0
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2022 08:27:34.8266
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4zVwVVy8UGAlA7bPV0DEsQ153Ucv803tPSwRu4/LwlHBW/RuKXZEVrc6RKp5Uh68
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0245
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 15.08.22 um 23:15 schrieb Rob Clark:
-> From: Rob Clark <robdclark@chromium.org>
->
-> This is a fairly narrowly focused interface, providing a way for a VMM
-> in userspace to tell the guest kernel what pgprot settings to use when
-> mapping a buffer to guest userspace.
->
-> For buffers that get mapped into guest userspace, virglrenderer returns
-> a dma-buf fd to the VMM (crosvm or qemu).  In addition to mapping the
-> pages into the guest VM, it needs to report to drm/virtio in the guest
-> the cache settings to use for guest userspace.  In particular, on some
-> architectures, creating aliased mappings with different cache attributes
-> is frowned upon, so it is important that the guest mappings have the
-> same cache attributes as any potential host mappings.
->
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
-> v2: Combine with coherency, as that is a related concept.. and it is
->      relevant to the VMM whether coherent access without the SYNC ioctl
->      is possible; set map_info at export time to make it more clear
->      that it applies for the lifetime of the dma-buf (for any mmap
->      created via the dma-buf)
+Fix a bug that in case "intel,vm-map" is missing 'num' is set to 0,
+and no voltage channel infos are allocated.
 
-Well, exactly that's a conceptual NAK from my side.
+Signed-off-by: Eliav Farber <farbere@amazon.com>
+---
+ drivers/hwmon/mr75203.c | 28 ++++++++++++----------------
+ 1 file changed, 12 insertions(+), 16 deletions(-)
 
-The caching information can change at any time. For CPU mappings even 
-without further notice from the exporter.
-
-If the hardware can't use the caching information from the host CPU page 
-tables directly then that pretty much completely breaks the concept that 
-the exporter is responsible for setting up those page tables.
-
-Regards,
-Christian.
-
->
->   drivers/dma-buf/dma-buf.c    | 63 +++++++++++++++++++++++++++------
->   include/linux/dma-buf.h      | 11 ++++++
->   include/uapi/linux/dma-buf.h | 68 ++++++++++++++++++++++++++++++++++++
->   3 files changed, 132 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> index 32f55640890c..262c4706f721 100644
-> --- a/drivers/dma-buf/dma-buf.c
-> +++ b/drivers/dma-buf/dma-buf.c
-> @@ -125,6 +125,32 @@ static struct file_system_type dma_buf_fs_type = {
->   	.kill_sb = kill_anon_super,
->   };
->   
-> +static int __dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
-> +{
-> +	int ret;
-> +
-> +	/* check if buffer supports mmap */
-> +	if (!dmabuf->ops->mmap)
-> +		return -EINVAL;
-> +
-> +	ret = dmabuf->ops->mmap(dmabuf, vma);
-> +
-> +	/*
-> +	 * If the exporter claims to support coherent access, ensure the
-> +	 * pgprot flags match the claim.
-> +	 */
-> +	if ((dmabuf->map_info != DMA_BUF_MAP_INCOHERENT) && !ret) {
-> +		pgprot_t wc_prot = pgprot_writecombine(vma->vm_page_prot);
-> +		if (dmabuf->map_info == DMA_BUF_COHERENT_WC) {
-> +			WARN_ON_ONCE(pgprot_val(vma->vm_page_prot) != pgprot_val(wc_prot));
-> +		} else {
-> +			WARN_ON_ONCE(pgprot_val(vma->vm_page_prot) == pgprot_val(wc_prot));
-> +		}
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->   static int dma_buf_mmap_internal(struct file *file, struct vm_area_struct *vma)
->   {
->   	struct dma_buf *dmabuf;
-> @@ -134,16 +160,12 @@ static int dma_buf_mmap_internal(struct file *file, struct vm_area_struct *vma)
->   
->   	dmabuf = file->private_data;
->   
-> -	/* check if buffer supports mmap */
-> -	if (!dmabuf->ops->mmap)
-> -		return -EINVAL;
-> -
->   	/* check for overflowing the buffer's size */
->   	if (vma->vm_pgoff + vma_pages(vma) >
->   	    dmabuf->size >> PAGE_SHIFT)
->   		return -EINVAL;
->   
-> -	return dmabuf->ops->mmap(dmabuf, vma);
-> +	return __dma_buf_mmap(dmabuf, vma);
->   }
->   
->   static loff_t dma_buf_llseek(struct file *file, loff_t offset, int whence)
-> @@ -326,6 +348,27 @@ static long dma_buf_set_name(struct dma_buf *dmabuf, const char __user *buf)
->   	return 0;
->   }
->   
-> +static long dma_buf_info(struct dma_buf *dmabuf, void __user *uarg)
-> +{
-> +	struct dma_buf_info arg;
-> +
-> +	if (copy_from_user(&arg, uarg, sizeof(arg)))
-> +		return -EFAULT;
-> +
-> +	switch (arg.param) {
-> +	case DMA_BUF_INFO_MAP_INFO:
-> +		arg.value = dmabuf->map_info;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (copy_to_user(uarg, &arg, sizeof(arg)))
-> +		return -EFAULT;
-> +
-> +	return 0;
-> +}
-> +
->   static long dma_buf_ioctl(struct file *file,
->   			  unsigned int cmd, unsigned long arg)
->   {
-> @@ -369,6 +412,9 @@ static long dma_buf_ioctl(struct file *file,
->   	case DMA_BUF_SET_NAME_B:
->   		return dma_buf_set_name(dmabuf, (const char __user *)arg);
->   
-> +	case DMA_BUF_IOCTL_INFO:
-> +		return dma_buf_info(dmabuf, (void __user *)arg);
-> +
->   	default:
->   		return -ENOTTY;
->   	}
-> @@ -530,6 +576,7 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
->   	dmabuf->priv = exp_info->priv;
->   	dmabuf->ops = exp_info->ops;
->   	dmabuf->size = exp_info->size;
-> +	dmabuf->map_info = exp_info->map_info;
->   	dmabuf->exp_name = exp_info->exp_name;
->   	dmabuf->owner = exp_info->owner;
->   	spin_lock_init(&dmabuf->name_lock);
-> @@ -1245,10 +1292,6 @@ int dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma,
->   	if (WARN_ON(!dmabuf || !vma))
->   		return -EINVAL;
->   
-> -	/* check if buffer supports mmap */
-> -	if (!dmabuf->ops->mmap)
-> -		return -EINVAL;
-> -
->   	/* check for offset overflow */
->   	if (pgoff + vma_pages(vma) < pgoff)
->   		return -EOVERFLOW;
-> @@ -1262,7 +1305,7 @@ int dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma,
->   	vma_set_file(vma, dmabuf->file);
->   	vma->vm_pgoff = pgoff;
->   
-> -	return dmabuf->ops->mmap(dmabuf, vma);
-> +	return __dma_buf_mmap(dmabuf, vma);
->   }
->   EXPORT_SYMBOL_NS_GPL(dma_buf_mmap, DMA_BUF);
->   
-> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-> index 71731796c8c3..37923c8d5c24 100644
-> --- a/include/linux/dma-buf.h
-> +++ b/include/linux/dma-buf.h
-> @@ -23,6 +23,8 @@
->   #include <linux/dma-fence.h>
->   #include <linux/wait.h>
->   
-> +#include <uapi/linux/dma-buf.h>
-> +
->   struct device;
->   struct dma_buf;
->   struct dma_buf_attachment;
-> @@ -307,6 +309,13 @@ struct dma_buf {
->   	 */
->   	size_t size;
->   
-> +	/**
-> +	 * @map_info:
-> +	 *
-> +	 * CPU mapping/coherency information for the buffer.
-> +	 */
-> +	enum dma_buf_map_info map_info;
-> +
->   	/**
->   	 * @file:
->   	 *
-> @@ -533,6 +542,7 @@ struct dma_buf_attachment {
->    * @ops:	Attach allocator-defined dma buf ops to the new buffer
->    * @size:	Size of the buffer - invariant over the lifetime of the buffer
->    * @flags:	mode flags for the file
-> + * @map_info:	CPU mapping/coherency information for the buffer
->    * @resv:	reservation-object, NULL to allocate default one
->    * @priv:	Attach private data of allocator to this buffer
->    *
-> @@ -545,6 +555,7 @@ struct dma_buf_export_info {
->   	const struct dma_buf_ops *ops;
->   	size_t size;
->   	int flags;
-> +	enum dma_buf_map_info map_info;
->   	struct dma_resv *resv;
->   	void *priv;
->   };
-> diff --git a/include/uapi/linux/dma-buf.h b/include/uapi/linux/dma-buf.h
-> index b1523cb8ab30..07b403ffdb43 100644
-> --- a/include/uapi/linux/dma-buf.h
-> +++ b/include/uapi/linux/dma-buf.h
-> @@ -85,6 +85,72 @@ struct dma_buf_sync {
->   
->   #define DMA_BUF_NAME_LEN	32
->   
-> +/**
-> + * enum dma_buf_map_info - CPU mapping info
-> + *
-> + * This enum describes coherency of a userspace mapping of the dmabuf.
-> + *
-> + * Importing devices should check dma_buf::map_info flag and reject an
-> + * import if unsupported.  For example, if the exporting device uses
-> + * @DMA_BUF_COHERENT_CACHED but the importing device does not support
-> + * CPU cache coherency, the dma-buf import should fail.
-> + */
-> +enum dma_buf_map_info {
-> +	/**
-> +	 * @DMA_BUF_MAP_INCOHERENT: CPU mapping is incoherent.
-> +	 *
-> +	 * Use of DMA_BUF_IOCTL_SYNC is required for CPU managed coherenency.
-> +	 */
-> +	DMA_BUF_MAP_INCOHERENT,
-> +
-> +	/**
-> +	 * @DMA_BUF_COHERENT_WC: CPU mapping is coherent but not cached.
-> +	 *
-> +	 * A cpu mmap'ing is coherent, and DMA_BUF_IOCTL_SYNC is not required.
-> +	 * However fences may be still required for synchronizing access.  Ie.
-> +	 * coherency can only be relied upon by an explicit-fencing userspace.
-> +	 * An implicit-sync userspace must still use DMA_BUF_IOCTL_SYNC.
-> +	 *
-> +	 * The cpu mapping is writecombine.
-> +	 */
-> +	DMA_BUF_COHERENT_WC,
-> +
-> +	/**
-> +	 * @DMA_BUF_COHERENT_CACHED: CPU mapping is coherent and CPU cached.
-> +	 *
-> +	 * A cpu mmap'ing is coherent, and DMA_BUF_IOCTL_SYNC is not required.
-> +	 * However fences may be still required for synchronizing access.  Ie.
-> +	 * coherency can only be relied upon by an explicit-fencing userspace.
-> +	 * An implicit-sync userspace must still use DMA_BUF_IOCTL_SYNC.
-> +	 *
-> +	 * The cpu mapping is cached.
-> +	 */
-> +	DMA_BUF_COHERENT_CACHED,
-> +};
-> +
-> +/**
-> + * struct dma_buf_info - Query info about the buffer.
-> + */
-> +struct dma_buf_info {
-> +
-> +#define DMA_BUF_INFO_MAP_INFO    1
-> +
-> +	/**
-> +	 * @param: Which param to query
-> +	 *
-> +	 * DMA_BUF_INFO_MAP_INFO:
-> +	 *     Returns enum dma_buf_map_info, describing the coherency and
-> +	 *     caching of a CPU mapping of the buffer.
-> +	 */
-> +	__u32 param;
-> +	__u32 pad;
-> +
-> +	/**
-> +	 * @value: Return value of the query.
-> +	 */
-> +	__u64 value;
-> +};
-> +
->   #define DMA_BUF_BASE		'b'
->   #define DMA_BUF_IOCTL_SYNC	_IOW(DMA_BUF_BASE, 0, struct dma_buf_sync)
->   
-> @@ -95,4 +161,6 @@ struct dma_buf_sync {
->   #define DMA_BUF_SET_NAME_A	_IOW(DMA_BUF_BASE, 1, __u32)
->   #define DMA_BUF_SET_NAME_B	_IOW(DMA_BUF_BASE, 1, __u64)
->   
-> +#define DMA_BUF_IOCTL_INFO	_IOWR(DMA_BUF_BASE, 2, struct dma_buf_info)
-> +
->   #endif
+diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+index 046523d47c29..0e29877a1a9c 100644
+--- a/drivers/hwmon/mr75203.c
++++ b/drivers/hwmon/mr75203.c
+@@ -580,8 +580,6 @@ static int mr75203_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	if (vm_num) {
+-		u32 num = vm_num;
+-
+ 		ret = pvt_get_regmap(pdev, "vm", pvt);
+ 		if (ret)
+ 			return ret;
+@@ -594,30 +592,28 @@ static int mr75203_probe(struct platform_device *pdev)
+ 		ret = device_property_read_u8_array(dev, "intel,vm-map",
+ 						    pvt->vm_idx, vm_num);
+ 		if (ret) {
+-			num = 0;
++			/*
++			 * Incase intel,vm-map property is not defined, we
++			 * assume incremental channel numbers.
++			 */
++			for (i = 0; i < vm_num; i++)
++				pvt->vm_idx[i] = i;
+ 		} else {
+ 			for (i = 0; i < vm_num; i++)
+ 				if (pvt->vm_idx[i] >= vm_num ||
+-				    pvt->vm_idx[i] == 0xff) {
+-					num = i;
++				    pvt->vm_idx[i] == 0xff)
+ 					break;
+-				}
+-		}
+ 
+-		/*
+-		 * Incase intel,vm-map property is not defined, we assume
+-		 * incremental channel numbers.
+-		 */
+-		for (i = num; i < vm_num; i++)
+-			pvt->vm_idx[i] = i;
++			vm_num = i;
++		}
+ 
+-		in_config = devm_kcalloc(dev, num + 1,
++		in_config = devm_kcalloc(dev, vm_num + 1,
+ 					 sizeof(*in_config), GFP_KERNEL);
+ 		if (!in_config)
+ 			return -ENOMEM;
+ 
+-		memset32(in_config, HWMON_I_INPUT, num);
+-		in_config[num] = 0;
++		memset32(in_config, HWMON_I_INPUT, vm_num);
++		in_config[vm_num] = 0;
+ 		pvt_in.config = in_config;
+ 
+ 		pvt_info[index++] = &pvt_in;
+-- 
+2.37.1
 

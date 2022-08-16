@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D48595C1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4545F595C0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235574AbiHPMo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 08:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39382 "EHLO
+        id S232478AbiHPMov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 08:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235465AbiHPMoX (ORCPT
+        with ESMTP id S235546AbiHPMoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 08:44:23 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843D027141
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 05:43:53 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id w15so10417759ljw.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 05:43:53 -0700 (PDT)
+        Tue, 16 Aug 2022 08:44:19 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6551E1D307
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 05:43:50 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id s9so10394313ljs.6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 05:43:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=xZf4OdbV43HHtgf1qVIKge/GbJKtAf7d2TC+uXlE1iw=;
-        b=rynTyXcnrVRTS54XR7mT6cVGmocPdZptL7qoj9PIuLLKX/oUq5SEsUJ4SAWFFIy+ft
-         qEHzX9Ek4Wg9PbKDvyrvwMWpuYFwe1YIEvW3jRelSnmhJfwTbkLC2KIxO0/oq8x6mu13
-         lFMwNVxfTIJJa+VJrZ4cX9brlj2YJtuAJPFxtktswcmwD1M8kX0GznqwtfaN2geGmocX
-         UrM1DO2i5vNOaAYIx4Fmn1lRxfxCVZlYc3AdNKdGl4A4giWxpWReyUPkRh16n8JP7SyK
-         PDQ+qb4xM4FIwfrInTW0g2z9EFvEsiys6HqaRhPucMr9TbyqI1mYjNnYMM84Aux2TXCF
-         vK0w==
+        bh=G58v43xma03waMnam16LPp6PjErsC4YB3W0kFW2yXEw=;
+        b=wKykd0jfLa6ln6qzngmN0KmyKxnB3mosydffrjPYx9Dc42pwXbyrKrPJ5f+2viL/uN
+         V8DhsuhKnyFH2c171npQA8uT6gJ424HduMl6o3VWiHjaxTBKz7BB+//h3IodFxA1IIj1
+         qcs8aExwYFZzC4pvkmXXX5TltdPDSTX/zR2BWQaXzrIPJWkSwc0jiUKHfQtwTSOhOKHo
+         snKWosUECw4alp46ZG1TW0k+Mn2b6yI+2CLfOscs30sff+KFgbKEZNa7Vw/gr/0h7neC
+         uiMV/LfYiotjKBC2fvQnRmjTYr3ITLaAx8Q3boWs5n4zBB4XGQnJiQxndtwSf77gSOhd
+         D6mQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=xZf4OdbV43HHtgf1qVIKge/GbJKtAf7d2TC+uXlE1iw=;
-        b=XAtiC02wIj8LD/STLjGwiUpD2GzG3wkrsrJyT2Vu6Qx3lTD17o1GKh/dYvkutbpqvL
-         t8oE13bp++tBi3ydJgMs81NsttGpFf9HIKAjrzVogsLVm/6rftiR8G9Jdh4wCzynhpmE
-         yFGBsL/a35l/JkJoNue1irernDkAg/bBip48bWj4nh+A8TkKTUG7exxShGcWQpaKv5m0
-         pI4qfMvpMosfVn7ljHpZMZuruWWaXfKyCFd4rObpMTMXmByvYP+HXZPOHhbrLzYLUE5y
-         Wmd+DrGadx3xH/JXq8tcfpVn1G0Io+ic5tsssWrg3RCH5T10cLVQjLXVDQnphBzIDXwe
-         mVQQ==
-X-Gm-Message-State: ACgBeo2Plgl5PghL4F4NdfvF6C50An7XK+sR/lNslgLe9EyIG/zEhqbv
-        cyd6ikQU+JmQKpj9nObNdR1ZXw==
-X-Google-Smtp-Source: AA6agR57fSo7pVY4ZIk5F5u3ttbwWZp5ySDOFnLtt+9ASM6Kt4+3r9g7xKRWIOC/1ek3/2L0OPw4vA==
-X-Received: by 2002:a2e:9cc2:0:b0:25e:4ec0:19cc with SMTP id g2-20020a2e9cc2000000b0025e4ec019ccmr6283914ljj.401.1660653826933;
-        Tue, 16 Aug 2022 05:43:46 -0700 (PDT)
+        bh=G58v43xma03waMnam16LPp6PjErsC4YB3W0kFW2yXEw=;
+        b=xvUURpSnHuVoq7wZ8nH5cAfv6VsQwFR6AoM2eMHic0mjq527ReZceBg/LOqCY89cXy
+         OYCiqtRCBkUXPbAnagmNTK0yjJzUg75jxrwDIprX3mV/IGpcCOB4pVlr4X09ShVcNKgd
+         mLdfrmS8ZtMkj8Uxf3eDWT6X/5i7CaQXEPz4gWwoUqvfrWcjcFpavjATUZAnIpjuS28r
+         qEn2GWLlVMHF6fdh0QsXfwo+zybSpV6mdFkrZTFGkX+wgL1DFObm6IgEjuqVIK23o5ia
+         pJ4PO4yc4pmkPjujRzSHsuJZZ1nrUYeCr3ipYu8dzQ6FYRp3QUCvGOIEIk6se68QzMnf
+         pt0A==
+X-Gm-Message-State: ACgBeo0ZEON8Y/CvYqnfpHanZp2XhsgGQO+xXxUMgQDOh/GKXqY4S11h
+        r+K+cAgdIf20Zc5rbRFNysqZPQ==
+X-Google-Smtp-Source: AA6agR5tb5v0bJLxFO8Z9+DLbjoeqY7kklBphXZZiqNll+gANwlDrXqM6VyVQQ1ArfEiVkuFcaLicQ==
+X-Received: by 2002:a2e:b88c:0:b0:25f:eae4:74ff with SMTP id r12-20020a2eb88c000000b0025feae474ffmr6817912ljp.48.1660653830207;
+        Tue, 16 Aug 2022 05:43:50 -0700 (PDT)
 Received: from krzk-bin.. (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id k14-20020ac257ce000000b0048ae4cf8a2csm1374331lfo.258.2022.08.16.05.43.44
+        by smtp.gmail.com with ESMTPSA id k14-20020ac257ce000000b0048ae4cf8a2csm1374331lfo.258.2022.08.16.05.43.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 05:43:46 -0700 (PDT)
+        Tue, 16 Aug 2022 05:43:49 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Lars-Peter Clausen <lars@metafoo.de>,
         Michael Hennerich <Michael.Hennerich@analog.com>,
@@ -97,9 +97,9 @@ To:     Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 05/10] dt-bindings: iio: frequency: adf4371: use spi-peripheral-props.yaml
-Date:   Tue, 16 Aug 2022 15:43:16 +0300
-Message-Id: <20220816124321.67817-6-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 06/10] dt-bindings: iio: health: ti,afe4403: use spi-peripheral-props.yaml
+Date:   Tue, 16 Aug 2022 15:43:17 +0300
+Message-Id: <20220816124321.67817-7-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220816124321.67817-1-krzysztof.kozlowski@linaro.org>
 References: <20220816124321.67817-1-krzysztof.kozlowski@linaro.org>
@@ -129,33 +129,33 @@ typical place, just before example DTS.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../devicetree/bindings/iio/frequency/adf4371.yaml         | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ .../devicetree/bindings/iio/health/ti,afe4403.yaml       | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/iio/frequency/adf4371.yaml b/Documentation/devicetree/bindings/iio/frequency/adf4371.yaml
-index 6b3a611e1cf1..0144f74a4768 100644
---- a/Documentation/devicetree/bindings/iio/frequency/adf4371.yaml
-+++ b/Documentation/devicetree/bindings/iio/frequency/adf4371.yaml
-@@ -40,15 +40,16 @@ properties:
-       output stage will shut down until the ADF4371/ADF4372 achieves lock as
-       measured by the digital lock detect circuitry.
+diff --git a/Documentation/devicetree/bindings/iio/health/ti,afe4403.yaml b/Documentation/devicetree/bindings/iio/health/ti,afe4403.yaml
+index d861526c5c42..6c5ad426a016 100644
+--- a/Documentation/devicetree/bindings/iio/health/ti,afe4403.yaml
++++ b/Documentation/devicetree/bindings/iio/health/ti,afe4403.yaml
+@@ -25,14 +25,15 @@ properties:
+ 
+   reset-gpios: true
  
 -  spi-max-frequency: true
+-
+-additionalProperties: false
 -
  required:
    - compatible
    - reg
-   - clocks
-   - clock-names
  
--additionalProperties: false
 +allOf:
 +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
 +
 +unevaluatedProperties: false
- 
++
  examples:
    - |
+     #include <dt-bindings/gpio/gpio.h>
 -- 
 2.34.1
 

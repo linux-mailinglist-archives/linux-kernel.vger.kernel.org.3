@@ -2,103 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA6E596407
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBDF5963F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237377AbiHPUxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 16:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40156 "EHLO
+        id S237269AbiHPUtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 16:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237135AbiHPUxB (ORCPT
+        with ESMTP id S237097AbiHPUtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 16:53:01 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5082F8A1C3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 13:53:00 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 6EB972281E
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 20:52:59 +0000 (UTC)
-Received: from pdx1-sub0-mail-a305.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 17E0C2228A
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 20:52:59 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1660683179; a=rsa-sha256;
-        cv=none;
-        b=CZUOIOhqwd+JRiUT1fvrvftKZYFxAuIKzl7KhWIgxqXSVz/GWJvrsg890NwgsnEgJxQ40x
-        lm4ccgSeD3jhjhA/Vxr/rpb2aN0Z9MhPMkqvX1votpQCJzWgtTio3paRjH3vna9Z8Dre2k
-        aYXCRh1/MibNEn/HXgOso4jccsGMHjhAYREGk2jv/1Ee3bkg+qJKQrtKMxRhcbZEPqtiCd
-        ebXyI/i79IfZraihSRoPwPSHAS8+fnkLLGsQWO2QRC8btOf7yXfnszX89NS2DgMKOd4/hc
-        7pYTwGepIn29tLbNirZb4x4N7usWfvGmAJUSm8QuIwIPAaHlI9CM6Z8pHKPWJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1660683179;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=ArGYP1NggPCb8Uo+jTV64iG9x+WcB+Ng0C17pccaPQI=;
-        b=hJIqloH/225lKqWkq+LuOK5LxGDEPDQ07w7fObBDS9T5E9qTF4piB2ezntmcBpazM4yZst
-        Exrj1CyBAl2JUCA/3Yidni892F9m1sBvTEGHgoBMRwLUlt3lZQgyxz+pcYhGH4OIkU8Lc4
-        P6SaCbVqqU63AhvURg+9IL4C6gpQXSFEi8XTJ99qFvF6V1GCpgMW3Otl8lEbCyiC2ZQmO+
-        HOO3p7R3RxncGosR+crCoIJ+3Rvvl4wtbg338WWllUr9M+/7E8mcf/DppwkSEP40+9RC4x
-        D8hViM4SCOxP8skpW/ULA/1x7rt4n/9RtKP1Gue0WgbY6k18SXLujGDno2ug8Q==
-ARC-Authentication-Results: i=1;
-        rspamd-7697cc766f-5lpgz;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Troubled-Coil: 23c0df9a59af2efe_1660683179323_3317257040
-X-MC-Loop-Signature: 1660683179323:2040146718
-X-MC-Ingress-Time: 1660683179323
-Received: from pdx1-sub0-mail-a305.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.120.38.158 (trex/6.7.1);
-        Tue, 16 Aug 2022 20:52:59 +0000
-Received: from kmjvbox (unknown [98.42.138.125])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a305.dreamhost.com (Postfix) with ESMTPSA id 4M6jyy420QzLt
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 13:52:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1660683178;
-        bh=ArGYP1NggPCb8Uo+jTV64iG9x+WcB+Ng0C17pccaPQI=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=P/4OTaW5cm5SH5Tdq5da9MBXsPXXwMKjs3CXFbsySac/tLJFNODGmoO2BV+r8/Vsv
-         DUtjW1kCnr/3BCqGiHR2yR61a+4ijRav+V5xEjdbsMZ3uye0qQdmlbBhOFml8Iw++y
-         5LVx+uZ5HjJ0U091ucbXErapEXv6c4rhBEVPDHEw=
-Received: from johansen (uid 1000)
-        (envelope-from kjlx@templeofstupid.com)
-        id e0118
-        by kmjvbox (DragonFly Mail Agent v0.12);
-        Tue, 16 Aug 2022 13:48:43 -0700
-Date:   Tue, 16 Aug 2022 13:48:43 -0700
-From:   Krister Johansen <kjlx@templeofstupid.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        David Reaver <me@davidreaver.com>,
-        linux-kernel@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>
-Subject: Re: [PATCH 1/1] tracing: fix a WARN from trace_event_dyn_put_ref
-Message-ID: <20220816204843.GB2004@templeofstupid.com>
-References: <cover.1660347763.git.kjlx@templeofstupid.com>
- <4e43a4eece5f382d1636397fb3c0208f2afe81fc.1660347763.git.kjlx@templeofstupid.com>
- <20220816122559.17869abc@gandalf.local.home>
- <20220816185418.GA2004@templeofstupid.com>
- <20220816152411.086ce631@gandalf.local.home>
+        Tue, 16 Aug 2022 16:49:15 -0400
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550AD5E67A;
+        Tue, 16 Aug 2022 13:49:13 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id b142so6287683iof.10;
+        Tue, 16 Aug 2022 13:49:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=Igzpe2dfFh072dG7M9af7EwnEZkHHQlF9Pf46jZtejY=;
+        b=PqEGG3q64rKWeyKsEbJNiL3pY5X5LW7lCo1WACA46+Oe5m6JfwodqHOwqvsbtsoYPZ
+         JoZ1eU58aEm0crqWqRvxdlYlE3ddcz13NQxDM65t04ESBuHa7XmyDupBejzEB+800hct
+         BYYsK+bbxexiW0xU0i6S4BeYoJZjrKnvsCMT4DilH59YzLLbJbwqDfmxofGlnbyf7DXQ
+         1n9VcSoBMsmEmPrdDWDONthBL2xq7kW0NyQde3eP7yLCDYVFKm6xrg/bByGKGSXeQ7wi
+         iOV7rpiyjXgIPCGjabzbgJPb4cxZ+ZRKXhX6Ahi17VfQci4vEbES4eImgGLL4eEbsVoA
+         n6yw==
+X-Gm-Message-State: ACgBeo0y0bHH5a5QvS25JVX+WokbLaCQg82dlVJ25haRKOMvcM7+SiIL
+        Y0W5Xuy9GMWsPEe1h3MW3w==
+X-Google-Smtp-Source: AA6agR4JUMnAxe73i4k/USANa7oT8A2bvPIyHs4SYiN3MfNVQoRaN9YqHKUNH74CBK0dcaCnelKJeg==
+X-Received: by 2002:a5d:94d6:0:b0:67c:55f9:f355 with SMTP id y22-20020a5d94d6000000b0067c55f9f355mr9749658ior.133.1660682952543;
+        Tue, 16 Aug 2022 13:49:12 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id z25-20020a056602081900b00688b30a7812sm1312208iow.42.2022.08.16.13.49.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 13:49:12 -0700 (PDT)
+Received: (nullmailer pid 2709183 invoked by uid 1000);
+        Tue, 16 Aug 2022 20:49:08 -0000
+Date:   Tue, 16 Aug 2022 14:49:08 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        =?UTF-8?Q?Ren=C3=A9_van_Dorst?= <opensource@vdorst.com>,
+        linux-mediatek@lists.infradead.org, Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        devicetree@vger.kernel.org, erkin.bozoglu@xeront.com,
+        Eric Dumazet <edumazet@google.com>,
+        DENG Qingfang <dqfext@gmail.com>
+Subject: Re: [PATCH v2 1/7] dt-bindings: net: dsa: mediatek,mt7530: make
+ trivial changes
+Message-ID: <20220816204908.GA2709132-robh@kernel.org>
+References: <20220813154415.349091-1-arinc.unal@arinc9.com>
+ <20220813154415.349091-2-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220816152411.086ce631@gandalf.local.home>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220813154415.349091-2-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,72 +87,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 03:24:11PM -0400, Steven Rostedt wrote:
-> Actually, I think the issue is that the unreg() calls trace_event_put_ref()
-> but the reg() does not do the try_get_ref(), but the perf_trace_init()
-> does. Which is the broken symmetry.
+On Sat, 13 Aug 2022 18:44:09 +0300, Arınç ÜNAL wrote:
+> Make trivial changes on the binding.
 > 
-> I think if we pull out the trace_event_put_ref() from the unreg() function,
-> we fix the bug and also put back the symmetry.
+> - Update title to include MT7531 switch.
+> - Add me as a maintainer. List maintainers in alphabetical order by first
+> name.
+> - Add description to compatible strings.
+> - Stretch descriptions up to the 80 character limit.
+> - Remove quotes from $ref: "dsa.yaml#".
 > 
-> Does this patch work?
-
-Yes, thanks, this change looks correct.  It also does build and pass the
-tests that I included in the original e-mail.
-
-> diff --git a/kernel/trace/trace_event_perf.c b/kernel/trace/trace_event_perf.c
-> index a114549720d6..61e3a2620fa3 100644
-> --- a/kernel/trace/trace_event_perf.c
-> +++ b/kernel/trace/trace_event_perf.c
-> @@ -157,7 +157,7 @@ static void perf_trace_event_unreg(struct perf_event *p_event)
->  	int i;
->  
->  	if (--tp_event->perf_refcount > 0)
-> -		goto out;
-> +		return;
->  
->  	tp_event->class->reg(tp_event, TRACE_REG_PERF_UNREGISTER, NULL);
->  
-> @@ -176,8 +176,6 @@ static void perf_trace_event_unreg(struct perf_event *p_event)
->  			perf_trace_buf[i] = NULL;
->  		}
->  	}
-> -out:
-> -	trace_event_put_ref(tp_event);
->  }
->  
->  static int perf_trace_event_open(struct perf_event *p_event)
-> @@ -241,6 +239,7 @@ void perf_trace_destroy(struct perf_event *p_event)
->  	mutex_lock(&event_mutex);
->  	perf_trace_event_close(p_event);
->  	perf_trace_event_unreg(p_event);
-> +	trace_event_put_ref(p_event->tp_event);
->  	mutex_unlock(&event_mutex);
->  }
->  
-> @@ -292,6 +291,7 @@ void perf_kprobe_destroy(struct perf_event *p_event)
->  	mutex_lock(&event_mutex);
->  	perf_trace_event_close(p_event);
->  	perf_trace_event_unreg(p_event);
-> +	trace_event_put_ref(p_event->tp_event);
->  	mutex_unlock(&event_mutex);
->  
->  	destroy_local_trace_kprobe(p_event->tp_event);
-> @@ -347,6 +347,7 @@ void perf_uprobe_destroy(struct perf_event *p_event)
->  	mutex_lock(&event_mutex);
->  	perf_trace_event_close(p_event);
->  	perf_trace_event_unreg(p_event);
-> +	trace_event_put_ref(p_event->tp_event);
->  	mutex_unlock(&event_mutex);
->  	destroy_local_trace_uprobe(p_event->tp_event);
->  }
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
+>  .../bindings/net/dsa/mediatek,mt7530.yaml     | 36 ++++++++++++-------
+>  1 file changed, 24 insertions(+), 12 deletions(-)
 > 
 
-If it matters:
-
-Reviewed-by: Krister Johansen <kjlx@templeofstupid.com>
-Tested-by: Krister Johansen <kjlx@templeofstupid.com>
-
-Thanks again,
-
--K
+Reviewed-by: Rob Herring <robh@kernel.org>

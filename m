@@ -2,60 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28459595811
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 479BD595881
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231686AbiHPKXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
+        id S234895AbiHPKgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:36:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234456AbiHPKWv (ORCPT
+        with ESMTP id S234816AbiHPKgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:22:51 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47063580A6
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:59:53 -0700 (PDT)
+        Tue, 16 Aug 2022 06:36:24 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1948E5B79A;
+        Tue, 16 Aug 2022 01:59:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660640394; x=1692176394;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fIyH/EsN9uGDzPUOVv8MRVeFeWSDbgqWlKO80BxyRoI=;
-  b=GWnBnzjCtDkX+Wq2rzs3J3V+gPQqODQuKWMpJ0PX2NrZcDk3SnAdTbjw
-   1nUIc8G7KzJcw59+XuWtMC4F2igNCr/NOrmsd4Pc8FaE+WP/qgepTeRS1
-   2vsOnVixGLCpEGALENK9Q/lg3O/Xb969XJZewHVfsdQKv3mNewwXBaoCA
-   q4aI5HrI8L3b332awn+0epl3u7WlYjz3FlDXbw0b3PkpWY+zKestaIGxh
-   sgUIGRkajeWtMVn/6uQr/a7197KfcKYfwk24UMlU9jF8FW8bLzck5d6zE
-   etNILGba/rYtaoMNJIOJoGn6Fws4VbJ+3Jt/ifr+bapaxakwd6jMtocbD
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="272559310"
+  t=1660640398; x=1692176398;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Fsbw9VD64WNebEA9SmUmkH3lTdV9uckYpcgbPhxuwEE=;
+  b=cbXdimhMXhSdqUijOstcJb6n+4pQ9EPwcVRvjT7YR0ShuLOcI+lfMflJ
+   rslMlXVtIQS9VJ4MaKRTIFC98J9Yg9iZZKsCT56qJmrUc6GdHfRtGvoGn
+   DVXaKX6YxAoSfnEQVz0TLq5qZ8rPkc/KaSoeorQrAQ8jhEOknW+FsFn/2
+   rF+0nbDGlcG7V03qEXG78T41J7Xfw2MryiJ5Lo4Q7JaKMjLoXxU0V0p81
+   6uj1q9g64CVt1OV7g9prBctfj0A0Qtt2I0wpcIjk8H2w1oJrN47XDgYax
+   fDOX+Or27oDXN7CGVmYobQUTFBckcA9fRZcuSQm+o/ae0LqjmKY72gyVd
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="292164224"
 X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="272559310"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 01:59:53 -0700
+   d="scan'208";a="292164224"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 01:59:56 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="852570717"
+   d="scan'208";a="733222124"
 Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Aug 2022 01:59:51 -0700
+  by orsmga004.jf.intel.com with ESMTP; 16 Aug 2022 01:59:51 -0700
 Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oNsQR-0001fB-0g;
+        id 1oNsQR-0001f6-0Z;
         Tue, 16 Aug 2022 08:59:51 +0000
-Date:   Tue, 16 Aug 2022 16:59:36 +0800
+Date:   Tue, 16 Aug 2022 16:59:37 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Bert Vermeulen <bert@biot.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sander Vanheule <sander@svanheule.net>
-Subject: arch/mips/kernel/vpe-mt.c:178:7: warning: no previous prototype for
- function 'vpe_alloc'
-Message-ID: <202208161658.sdpdzSqz-lkp@intel.com>
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     kbuild-all@lists.01.org, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] LoongArch: Add perf events support
+Message-ID: <202208161648.zq48ilEV-lkp@intel.com>
+References: <20220815124702.3330803-1-chenhuacai@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20220815124702.3330803-1-chenhuacai@loongson.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,159 +76,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bert,
+Hi Huacai,
 
-First bad commit (maybe != root cause):
+I love your patch! Perhaps something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-commit: 4042147a0cc6af5a400b5e12a7855e893dec01b4 MIPS: Add Realtek RTL838x/RTL839x support as generic MIPS system
-date:   1 year, 6 months ago
-config: mips-randconfig-c004-20220815 (https://download.01.org/0day-ci/archive/20220816/202208161658.sdpdzSqz-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6afcc4a459ead8809a0d6d9b4bf7b64bcc13582b)
-reproduce (this is a W=1 build):
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.0-rc1 next-20220816]
+[cannot apply to soc/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Huacai-Chen/LoongArch-Add-perf-events-support/20220815-204852
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+config: loongarch-randconfig-s051-20220815 (https://download.01.org/0day-ci/archive/20220816/202208161648.zq48ilEV-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce:
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4042147a0cc6af5a400b5e12a7855e893dec01b4
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 4042147a0cc6af5a400b5e12a7855e893dec01b4
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/0e6d9490ff3f6129799675b9288135022a0908e2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Huacai-Chen/LoongArch-Add-perf-events-support/20220815-204852
+        git checkout 0e6d9490ff3f6129799675b9288135022a0908e2
         # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' ARCH=loongarch 
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+sparse warnings: (new ones prefixed by >>)
+>> arch/loongarch/kernel/perf_event.c:30:50: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned long [noderef] __user *user_frame_tail @@     got unsigned long * @@
+   arch/loongarch/kernel/perf_event.c:30:50: sparse:     expected unsigned long [noderef] __user *user_frame_tail
+   arch/loongarch/kernel/perf_event.c:30:50: sparse:     got unsigned long *
+   arch/loongarch/kernel/perf_event.c: note: in included file (through arch/loongarch/include/asm/cpu-info.h, arch/loongarch/include/asm/processor.h, ...):
+   arch/loongarch/include/asm/loongarch.h:237:16: sparse: sparse: undefined identifier '__builtin_loongarch_csrrd_d'
+   arch/loongarch/include/asm/loongarch.h:237:16: sparse: sparse: cast from unknown type
+   arch/loongarch/include/asm/loongarch.h:237:16: sparse: sparse: cast from unknown type
+   arch/loongarch/include/asm/loongarch.h:237:16: sparse: sparse: cast from unknown type
+   arch/loongarch/include/asm/loongarch.h:237:16: sparse: sparse: cast from unknown type
+   arch/loongarch/include/asm/loongarch.h:247:9: sparse: sparse: undefined identifier '__builtin_loongarch_csrwr_d'
+   arch/loongarch/include/asm/loongarch.h:247:9: sparse: sparse: cast from unknown type
+   arch/loongarch/include/asm/loongarch.h:247:9: sparse: sparse: cast from unknown type
+   arch/loongarch/include/asm/loongarch.h:247:9: sparse: sparse: cast from unknown type
+   arch/loongarch/include/asm/loongarch.h:247:9: sparse: sparse: cast from unknown type
+   arch/loongarch/include/asm/loongarch.h:237:16: sparse: sparse: cast from unknown type
+   arch/loongarch/include/asm/loongarch.h:237:16: sparse: sparse: cast from unknown type
+   arch/loongarch/include/asm/loongarch.h:237:16: sparse: sparse: cast from unknown type
+   arch/loongarch/include/asm/loongarch.h:237:16: sparse: sparse: cast from unknown type
+   arch/loongarch/include/asm/loongarch.h:247:9: sparse: sparse: cast from unknown type
+   arch/loongarch/include/asm/loongarch.h:247:9: sparse: sparse: cast from unknown type
+   arch/loongarch/include/asm/loongarch.h:247:9: sparse: sparse: cast from unknown type
+   arch/loongarch/include/asm/loongarch.h:247:9: sparse: sparse: cast from unknown type
 
->> arch/mips/kernel/vpe-mt.c:178:7: warning: no previous prototype for function 'vpe_alloc' [-Wmissing-prototypes]
-   void *vpe_alloc(void)
-         ^
-   arch/mips/kernel/vpe-mt.c:178:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *vpe_alloc(void)
-   ^
-   static 
->> arch/mips/kernel/vpe-mt.c:196:5: warning: no previous prototype for function 'vpe_start' [-Wmissing-prototypes]
-   int vpe_start(void *vpe, unsigned long start)
-       ^
-   arch/mips/kernel/vpe-mt.c:196:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int vpe_start(void *vpe, unsigned long start)
-   ^
-   static 
->> arch/mips/kernel/vpe-mt.c:206:5: warning: no previous prototype for function 'vpe_stop' [-Wmissing-prototypes]
-   int vpe_stop(void *vpe)
-       ^
-   arch/mips/kernel/vpe-mt.c:206:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int vpe_stop(void *vpe)
-   ^
-   static 
->> arch/mips/kernel/vpe-mt.c:227:5: warning: no previous prototype for function 'vpe_free' [-Wmissing-prototypes]
-   int vpe_free(void *vpe)
-       ^
-   arch/mips/kernel/vpe-mt.c:227:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int vpe_free(void *vpe)
-   ^
-   static 
-   4 warnings generated.
+vim +30 arch/loongarch/kernel/perf_event.c
 
-
-vim +/vpe_alloc +178 arch/mips/kernel/vpe-mt.c
-
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  175  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  176  /* module wrapper entry points */
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  177  /* give me a vpe */
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30 @178  void *vpe_alloc(void)
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  179  {
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  180  	int i;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  181  	struct vpe *v;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  182  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  183  	/* find a vpe */
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  184  	for (i = 1; i < MAX_VPES; i++) {
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  185  		v = get_vpe(i);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  186  		if (v != NULL) {
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  187  			v->state = VPE_STATE_INUSE;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  188  			return v;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  189  		}
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  190  	}
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  191  	return NULL;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  192  }
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  193  EXPORT_SYMBOL(vpe_alloc);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  194  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  195  /* start running from here */
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30 @196  int vpe_start(void *vpe, unsigned long start)
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  197  {
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  198  	struct vpe *v = vpe;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  199  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  200  	v->__start = start;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  201  	return vpe_run(v);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  202  }
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  203  EXPORT_SYMBOL(vpe_start);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  204  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  205  /* halt it for now */
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30 @206  int vpe_stop(void *vpe)
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  207  {
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  208  	struct vpe *v = vpe;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  209  	struct tc *t;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  210  	unsigned int evpe_flags;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  211  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  212  	evpe_flags = dvpe();
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  213  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  214  	t = list_entry(v->tc.next, struct tc, tc);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  215  	if (t != NULL) {
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  216  		settc(t->index);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  217  		write_vpe_c0_vpeconf0(read_vpe_c0_vpeconf0() & ~VPECONF0_VPA);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  218  	}
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  219  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  220  	evpe(evpe_flags);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  221  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  222  	return 0;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  223  }
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  224  EXPORT_SYMBOL(vpe_stop);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  225  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  226  /* I've done with it thank you */
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30 @227  int vpe_free(void *vpe)
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  228  {
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  229  	struct vpe *v = vpe;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  230  	struct tc *t;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  231  	unsigned int evpe_flags;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  232  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  233  	t = list_entry(v->tc.next, struct tc, tc);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  234  	if (t == NULL)
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  235  		return -ENOEXEC;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  236  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  237  	evpe_flags = dvpe();
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  238  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  239  	/* Put MVPE's into 'configuration state' */
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  240  	set_c0_mvpcontrol(MVPCONTROL_VPC);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  241  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  242  	settc(t->index);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  243  	write_vpe_c0_vpeconf0(read_vpe_c0_vpeconf0() & ~VPECONF0_VPA);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  244  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  245  	/* halt the TC */
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  246  	write_tc_c0_tchalt(TCHALT_H);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  247  	mips_ihb();
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  248  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  249  	/* mark the TC unallocated */
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  250  	write_tc_c0_tcstatus(read_tc_c0_tcstatus() & ~TCSTATUS_A);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  251  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  252  	v->state = VPE_STATE_UNUSED;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  253  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  254  	clear_c0_mvpcontrol(MVPCONTROL_VPC);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  255  	evpe(evpe_flags);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  256  
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  257  	return 0;
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  258  }
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  259  EXPORT_SYMBOL(vpe_free);
-1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  260  
-
-:::::: The code at line 178 was first introduced by commit
-:::::: 1a2a6d7e8816ed2b2679a0c4f7ba4019cd31dd62 MIPS: APRP: Split VPE loader into separate files.
-
-:::::: TO: Deng-Cheng Zhu <dengcheng.zhu@imgtec.com>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+    20	
+    21	/*
+    22	 * Get the return address for a single stackframe and return a pointer to the
+    23	 * next frame tail.
+    24	 */
+    25	static unsigned long
+    26	user_backtrace(struct perf_callchain_entry_ctx *entry, unsigned long fp)
+    27	{
+    28		struct stack_frame buftail;
+    29		unsigned long err;
+  > 30		unsigned long __user *user_frame_tail = (unsigned long *)(fp - sizeof(struct stack_frame));
+    31	
+    32		/* Also check accessibility of one struct frame_tail beyond */
+    33		if (!access_ok(user_frame_tail, sizeof(buftail)))
+    34			return 0;
+    35	
+    36		pagefault_disable();
+    37		err = __copy_from_user_inatomic(&buftail, user_frame_tail, sizeof(buftail));
+    38		pagefault_enable();
+    39	
+    40		if (err || (unsigned long)user_frame_tail >= buftail.fp)
+    41			return 0;
+    42	
+    43		perf_callchain_store(entry, buftail.ra);
+    44	
+    45		return buftail.fp;
+    46	}
+    47	
 
 -- 
 0-DAY CI Kernel Test Service

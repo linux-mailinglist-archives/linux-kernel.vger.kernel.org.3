@@ -2,54 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31E659588C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9A75957A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234723AbiHPKhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
+        id S232790AbiHPKJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:09:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234697AbiHPKgd (ORCPT
+        with ESMTP id S233918AbiHPKJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:36:33 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4BCDB7D2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:41:35 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id a13-20020a921a0d000000b002e5f544ee47so1599574ila.9
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:41:35 -0700 (PDT)
+        Tue, 16 Aug 2022 06:09:23 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD19BFC71
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:41:58 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id kb8so17662888ejc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:41:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=m7Ylrhpsm6OVfghN5qH4zCT0WFeKmrFF6mCDrHN6og0=;
+        b=z75K1phbqPlNfL1Bdg7U4n5nvKu7v9Jn1AXWrXin10tH6qqLH5SNIXPBfRkvhCmCqR
+         gWzNMB4cKuoGCJf5M02GSGsLsO2Mo76s7R/DaStA4YfuqiC8kd4maI5J3UPk/N1R6csp
+         WbnecpfSKfO1CSkDfPejCzlSIFsf4pQBsdf0Lw/eEHku2pk6QsntrFaPuqp8RokxErVp
+         TwC6PFV85a/gW/JImsk9hAODQ+9CYlqMZapgRLmvMCTBU3EV0VYsfjakmlWpQCed/SJf
+         KSHDt2kuFiUPnx6uT4WkiHx8OXmoitZt9UVgpWR8cCmRTCAk9Yz9TUuFWU+7fv1dnU5a
+         3jrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=QoJU5GGMy8v8yEZNFxM99bTCjQW1eFlhk+iiG3fJdLI=;
-        b=gyQTv/ikgE7AyLCZdzHIOhaYSjH85SYEgmMPnCFhahCbuK6snhVojpekqYzzVgIKVO
-         wZuWDUt/GnTdLE6DzceTdY3SBQCKtmZmPw6M+jCYwXJqkDeUBIbcJLyTHQVFB6xvSazv
-         LoBRI2Kblll4c6+R2kV8iyLjRVoz0eiiqv2yeTPmqLrESW/mljmaq35kkjDiMVZ93yhX
-         gC4U7ryyuTWzBsU9r6XdwPsofS+R1xMQ2qOl9uOgnN31B+meJU99j3TuwBojHgzLgBy0
-         VVKLpcNM2FQJwz5cA9XZCQ14zR/x17MJRsrcPY27cnrfw0aB1LCBA3VYq03VetYqVI5f
-         /Jnw==
-X-Gm-Message-State: ACgBeo0QaAYpK4/zMSzlkTyTwU9ccw1t3sIWOlyp52kIdb+MDJVcZv70
-        cJrPFbyPUL6qLQ0rK2RfcZudRbTAYwiqYS/zda0POykMMo/O
-X-Google-Smtp-Source: AA6agR72pfTFc5Nk70AuqknQizPu6jLKL7iJFFPqgDk7a5kQ7izKd/NlV+VSVv6WZrRf/Lm1ZySMpdIMRZk6PsLGPasFpCgAOzQH
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=m7Ylrhpsm6OVfghN5qH4zCT0WFeKmrFF6mCDrHN6og0=;
+        b=5lKpuja2QCxEYjAzjh1YWCGriqj2qa7nSEct/Ybvi9xWNVk7szJb/Gaq5ZemJYby5r
+         BdQztOPfjDVvlI+evg1m+GFBBRcd6781i3YefzKe//mfizlDdEeTzjXlwDtJoA2w2VPa
+         8XABAvcdG40lMrhLuMYiyBNV9lk2NRTESGwpZepoAWrG2aKjI06pnieW9eCQnj4GrNnD
+         aPIMtEja3wLfZvHT4WzZFuDpYsCJ8t7wHUEPmpnc+eakGO4T/Zu7OJEE+E6mq60kxRfU
+         VvpfC4aXx4jt6/8s+TBcNEHpCYQJ/6uiW71KnJ+FLuYlfxn1tH+UdokEOuS1nemU4d13
+         oCxQ==
+X-Gm-Message-State: ACgBeo2+pBt4G7+PiSB6Rc2sR42DlLTiX02SnQ5o1c4wLOGUWRYIbAxW
+        JY7bwMIYtDtFszMWZXZl6V++NfZDIzBWgGsTXn55Vg==
+X-Google-Smtp-Source: AA6agR5WJcbhdI+a8fZ4r4PXRD9/RB3FMkf3bBU2V6bl986OSujcFf8WPx4pl8Erh1Ikff3d5PXSq+8N15Zu34T5E4o=
+X-Received: by 2002:a17:907:2cd1:b0:730:a980:d593 with SMTP id
+ hg17-20020a1709072cd100b00730a980d593mr12859182ejc.48.1660639316945; Tue, 16
+ Aug 2022 01:41:56 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:2145:b0:2e4:b2f3:d6fb with SMTP id
- d5-20020a056e02214500b002e4b2f3d6fbmr7270506ilv.163.1660639294552; Tue, 16
- Aug 2022 01:41:34 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 01:41:34 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000040801b05e657b77f@google.com>
-Subject: [syzbot] upstream boot error: BUG: unable to handle kernel paging
- request in __rhashtable_lookup
-From:   syzbot <syzbot+6fccf62d7c237e1b4c85@syzkaller.appspotmail.com>
-To:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        fw@strlen.de, harshit.m.mogalapalli@oracle.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+References: <20220815180337.130757997@linuxfoundation.org>
+In-Reply-To: <20220815180337.130757997@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 16 Aug 2022 14:11:45 +0530
+Message-ID: <CA+G9fYuXHvYQkWnDac6T8s9XnP_jctCbV=yEx3Z9EhWko2dPPg@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/779] 5.15.61-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,113 +72,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, 15 Aug 2022 at 23:44, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.61 release.
+> There are 779 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 17 Aug 2022 18:01:29 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.61-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-syzbot found the following issue on:
+The powerpc defconfig failed on stable-rc 5.15.
 
-HEAD commit:    4a9350597aff Merge tag 'sound-fix-6.0-rc1' of git://git.ke..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16259e35080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5d647c9572405910
-dashboard link: https://syzkaller.appspot.com/bug?extid=6fccf62d7c237e1b4c85
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+* powerpc, build
+  - gcc-10-ppc6xx_defconfig
+  - gcc-11-ppc6xx_defconfig
+  - gcc-8-ppc6xx_defconfig
+  - gcc-9-ppc6xx_defconfig
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6fccf62d7c237e1b4c85@syzkaller.appspotmail.com
+arch/powerpc/sysdev/fsl_pci.c: In function 'fsl_add_bridge':
+arch/powerpc/sysdev/fsl_pci.c:601:39: error:
+'PCI_CLASS_BRIDGE_PCI_NORMAL' undeclared (first use in this function);
+did you mean 'PCI_CLASS_BRIDGE_PCI'?
+  601 |                         class_code |= PCI_CLASS_BRIDGE_PCI_NORMAL << 8;
+      |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                       PCI_CLASS_BRIDGE_PCI
+arch/powerpc/sysdev/fsl_pci.c:601:39: note: each undeclared identifier
+is reported only once for each function it appears in
+make[3]: *** [scripts/Makefile.build:289: arch/powerpc/sysdev/fsl_pci.o] Error 1
 
-8021q: adding VLAN 0 to HW filter on device bond0
-eql: remember to turn off Van-Jacobson compression on your slave devices
-BUG: unable to handle page fault for address: ffffdbffffffffc8
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 11825067 P4D 11825067 PUD 0 
-Oops: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 3187 Comm: dhcpcd Not tainted 5.19.0-syzkaller-14090-g4a9350597aff #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:netlink_compare net/netlink/af_netlink.c:500 [inline]
-RIP: 0010:__rhashtable_lookup.constprop.0+0x2ae/0x5e0 include/linux/rhashtable.h:601
-Code: 01 44 89 e6 e8 83 19 e8 f9 45 84 e4 0f 85 8f 01 00 00 e8 f5 1c e8 f9 4d 8d 24 1f 49 8d bc 24 00 05 00 00 48 89 f8 48 c1 e8 03 <42> 0f b6 04 30 84 c0 74 08 3c 03 0f 8e 9c 02 00 00 45 8b ac 24 00
-RSP: 0018:ffffc9000351f818 EFLAGS: 00010a02
-RAX: 1fffdfffffffffc8 RBX: fffffffffffff940 RCX: 0000000000000000
-RDX: ffff88807cc7c140 RSI: ffffffff879318cb RDI: fffefffffffffe40
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: fffefffffffff940
-R13: ffffffff9152ccc0 R14: dffffc0000000000 R15: ffff000000000000
-FS:  00007fbe244b5740(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffdbffffffffc8 CR3: 0000000021e67000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- rhashtable_lookup include/linux/rhashtable.h:638 [inline]
- rhashtable_lookup_fast include/linux/rhashtable.h:664 [inline]
- __netlink_lookup net/netlink/af_netlink.c:518 [inline]
- netlink_lookup+0x130/0x470 net/netlink/af_netlink.c:538
- netlink_getsockbyportid net/netlink/af_netlink.c:1154 [inline]
- netlink_unicast+0x244/0x7f0 net/netlink/af_netlink.c:1339
- netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:734
- ____sys_sendmsg+0x6eb/0x810 net/socket.c:2482
- ___sys_sendmsg+0x110/0x1b0 net/socket.c:2536
- __sys_sendmsg+0xf3/0x1c0 net/socket.c:2565
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fbe245ad163
-Code: 64 89 02 48 c7 c0 ff ff ff ff eb b7 66 2e 0f 1f 84 00 00 00 00 00 90 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 2e 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 55 c3 0f 1f 40 00 48 83 ec 28 89 54 24 1c 48
-RSP: 002b:00007ffd4a7738f8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007fbe244b56c8 RCX: 00007fbe245ad163
-RDX: 0000000000000000 RSI: 00007ffd4a787aa8 RDI: 0000000000000005
-RBP: 0000000000000005 R08: 0000000000000000 R09: 00007ffd4a787aa8
-R10: 0000000000000000 R11: 0000000000000246 R12: ffffffffffffffff
-R13: 00007ffd4a787aa8 R14: 0000000000000030 R15: 0000000000000001
- </TASK>
-Modules linked in:
-CR2: ffffdbffffffffc8
----[ end trace 0000000000000000 ]---
-RIP: 0010:netlink_compare net/netlink/af_netlink.c:500 [inline]
-RIP: 0010:__rhashtable_lookup.constprop.0+0x2ae/0x5e0 include/linux/rhashtable.h:601
-Code: 01 44 89 e6 e8 83 19 e8 f9 45 84 e4 0f 85 8f 01 00 00 e8 f5 1c e8 f9 4d 8d 24 1f 49 8d bc 24 00 05 00 00 48 89 f8 48 c1 e8 03 <42> 0f b6 04 30 84 c0 74 08 3c 03 0f 8e 9c 02 00 00 45 8b ac 24 00
-RSP: 0018:ffffc9000351f818 EFLAGS: 00010a02
-RAX: 1fffdfffffffffc8 RBX: fffffffffffff940 RCX: 0000000000000000
-RDX: ffff88807cc7c140 RSI: ffffffff879318cb RDI: fffefffffffffe40
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: fffefffffffff940
-R13: ffffffff9152ccc0 R14: dffffc0000000000 R15: ffff000000000000
-FS:  00007fbe244b5740(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffdbffffffffc8 CR3: 0000000021e67000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	01 44 89 e6          	add    %eax,-0x1a(%rcx,%rcx,4)
-   4:	e8 83 19 e8 f9       	callq  0xf9e8198c
-   9:	45 84 e4             	test   %r12b,%r12b
-   c:	0f 85 8f 01 00 00    	jne    0x1a1
-  12:	e8 f5 1c e8 f9       	callq  0xf9e81d0c
-  17:	4d 8d 24 1f          	lea    (%r15,%rbx,1),%r12
-  1b:	49 8d bc 24 00 05 00 	lea    0x500(%r12),%rdi
-  22:	00
-  23:	48 89 f8             	mov    %rdi,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	42 0f b6 04 30       	movzbl (%rax,%r14,1),%eax <-- trapping instruction
-  2f:	84 c0                	test   %al,%al
-  31:	74 08                	je     0x3b
-  33:	3c 03                	cmp    $0x3,%al
-  35:	0f 8e 9c 02 00 00    	jle    0x2d7
-  3b:	45                   	rex.RB
-  3c:	8b                   	.byte 0x8b
-  3d:	ac                   	lods   %ds:(%rsi),%al
-  3e:	24 00                	and    $0x0,%al
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+Steps to reproduce:
+--------------------
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+#
+# See https://docs.tuxmake.org/ for complete documentation.
+# Original tuxmake command with fragments listed below.
+
+tuxmake --runtime podman --target-arch powerpc --toolchain gcc-11
+--kconfig ppc6xx_defconfig
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--
+Linaro LKFT
+https://lkft.linaro.org

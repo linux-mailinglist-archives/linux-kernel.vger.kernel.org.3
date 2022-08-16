@@ -2,165 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B055960D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD54C5960A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233073AbiHPRKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 13:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
+        id S236398AbiHPQyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 12:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236776AbiHPRKq (ORCPT
+        with ESMTP id S231383AbiHPQyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 13:10:46 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE6E659EE;
-        Tue, 16 Aug 2022 10:10:44 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 8F2006C1B90;
-        Tue, 16 Aug 2022 17:10:43 +0000 (UTC)
-Received: from pdx1-sub0-mail-a225.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id AEDA46C1977;
-        Tue, 16 Aug 2022 17:10:42 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1660669843; a=rsa-sha256;
-        cv=none;
-        b=IbHFQs+XHp4MZI3X6oCtUbIZS0/XG+6TYvsn8I5KVkcFEbRthAx3z/u/xMqP+fReeDCFai
-        Z3Y7WnvekUrlkotbQKRIqZVWFgdrrXMgehf/6yQUmYjzOl8xBbMagixZ0erABnsQYjWcm+
-        JXD/9n8ut9ePLNRvhrcKAUcp8ZC/vH4YAsV2VwJVJwBEbzuc1QPmsE1boSkHKGdr/J31fL
-        Iq5QQEWGKvX97E1u4DZk4jgAyZapMVF1ISnAtI1AVZ4Gw4qHn1u7N6IBi5OCHODClQGWU/
-        FA54Vv7PV/UOmG8URN5smUid4VNZu8h+qKGchGJwvx0W5Ji6TYigj2n5XmzrUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1660669843;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=OHBgu+nCXZPgIF8SF+iAlqU9/Ri3M1yE/jeNQa9OyJ8=;
-        b=sqUdMlhmauBvWpJJdPaZzAT9WJQcj7oPOrs5e1+DYWIQHYeXAUylZOB2solv/r9cDy4MJa
-        /Vn3kxQN0o1V2pc6VaMxXb88kR/ZiDFiYLRmPuI11kR9aszKtpUjMKNYM/4F7cz3RecL1z
-        8T9Q9/mY5GmHeVupSd9kbFjdaikGdRO8ein1Uu+MFsmSM+SeE74oJpIHJHrpk+prTKUswz
-        VyQMe+ZZ7wU50z9sFwzbGEIVg9KikGf4n+Xr1q+eBcrLLZjZuDANeO3A8jXyC+OiuGlHjS
-        5/gv+xlxCkjhhzr+h8GTRvWr2eB2GqDFrulFkRwsNTVFrd7xIl598YkiyGsD+g==
-ARC-Authentication-Results: i=1;
-        rspamd-7697cc766f-vpvlp;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Bitter-Robust: 2ac89aff49f3d01c_1660669843343_3379587907
-X-MC-Loop-Signature: 1660669843343:2764178874
-X-MC-Ingress-Time: 1660669843343
-Received: from pdx1-sub0-mail-a225.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.124.238.93 (trex/6.7.1);
-        Tue, 16 Aug 2022 17:10:43 +0000
-Received: from offworld (unknown [104.36.25.245])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a225.dreamhost.com (Postfix) with ESMTPSA id 4M6d2T1Wsvz2V;
-        Tue, 16 Aug 2022 10:10:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1660669842;
-        bh=OHBgu+nCXZPgIF8SF+iAlqU9/Ri3M1yE/jeNQa9OyJ8=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=NJfSoY0zDKVG3Yq23Z8ww/mW+b8bq82/EFoJqrDMz2sdpQW5WWBb0SZ0gcH+gSaMD
-         MJfmttLaOMlcKx8nIPtmIKcf7pp+9DH39izVmSbD8+KrK5N0jC7pfDMriq8eKC1rE4
-         x3T/C2ADWt7uoU0nXrG/msbyzT0Jh3J/A/i3/AU2I26hh4VIsQOVGsLDMpCSG/wSc7
-         EpSyHLLUskSnCFYWzK7LZL2SvbpwVswJ+si6XS2laX1HTGXQlkZCiDeOiYc7WPyDxU
-         Yh5DfgfPlkFc/Rm7xvoU5lukELPTcMwYHhOvBwT4bBQ4nEV/YicmNKprHd/Flrq+hk
-         W9i5FRKQDlcBg==
-Date:   Tue, 16 Aug 2022 09:53:01 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
-        bwidawsk@kernel.org, ira.weiny@intel.com, vishal.l.verma@intel.com,
-        alison.schofield@intel.com, a.manzanares@samsung.com,
-        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, bp@alien8.de, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arch/cacheflush: Introduce flush_all_caches()
-Message-ID: <20220816165301.4m4w6zsse62z4hxz@offworld>
-References: <165791937063.2491387.15277418618265930924.stgit@djiang5-desk3.ch.intel.com>
- <20220718053039.5whjdcxynukildlo@offworld>
- <4bedc81d-62fa-7091-029e-a2e56b4f8f7a@intel.com>
- <20220803183729.00002183@huawei.com>
- <9f3705e1-de21-0f3c-12af-fd011b6d613d@intel.com>
- <YvO8pP7NUOdH17MM@FVFF77S0Q05N>
- <62f40fba338af_3ce6829466@dwillia2-xfh.jf.intel.com.notmuch>
- <20220815160706.tqd42dv24tgb7x7y@offworld>
- <Yvtc2u1J/qip8za9@worktop.programming.kicks-ass.net>
- <62fbcae511ec1_dfbc129453@dwillia2-xfh.jf.intel.com.notmuch>
+        Tue, 16 Aug 2022 12:54:07 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05BA76947;
+        Tue, 16 Aug 2022 09:54:05 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oNzp7-0007gN-Qm; Tue, 16 Aug 2022 18:53:49 +0200
+Message-ID: <6294958a-177a-5c67-47c6-3a95c23ac58e@leemhuis.info>
+Date:   Tue, 16 Aug 2022 18:53:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <62fbcae511ec1_dfbc129453@dwillia2-xfh.jf.intel.com.notmuch>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
+Content-Language: en-US
+To:     Chuck Zmudzinski <brchuckz@netscape.net>
+Cc:     jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        regressions@lists.linux.dev, xen-devel@lists.xenproject.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Juergen Gross <jgross@suse.com>
+References: <20220715142549.25223-1-jgross@suse.com>
+ <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
+ <a0ce2f59-b653-fa8b-a016-1335f05c86ae@netscape.net>
+ <32ed59c9-c894-c426-dd27-3602625cf3b1@netscape.net>
+ <c88ea08c-a9d5-ef6a-333a-db9e00c6da6f@suse.com>
+ <bd66b5bc-4d07-d968-f46c-40cf624499a7@netscape.net>
+ <a29a66e0-2075-8084-84ad-8bd3e8a9fd4a@netscape.net>
+ <a7d10605-87e3-c4bd-4a76-f07a04f5751c@leemhuis.info>
+ <8d148826-62a5-95f9-8662-be14f56a6336@netscape.net>
+ <6b40ecc3-a2d3-3efd-4a19-2faf737f098b@leemhuis.info>
+ <be9d077c-ed4d-d5e3-a134-33afff027af4@netscape.net>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <be9d077c-ed4d-d5e3-a134-33afff027af4@netscape.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1660668845;474d7408;
+X-HE-SMSGID: 1oNzp7-0007gN-Qm
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 Aug 2022, Dan Williams wrote:
-
->Peter Zijlstra wrote:
->> On Mon, Aug 15, 2022 at 09:07:06AM -0700, Davidlohr Bueso wrote:
->> > diff --git a/arch/x86/include/asm/cacheflush.h b/arch/x86/include/asm/cacheflush.h
->> > index b192d917a6d0..ce2ec9556093 100644
->> > --- a/arch/x86/include/asm/cacheflush.h
->> > +++ b/arch/x86/include/asm/cacheflush.h
->> > @@ -10,4 +10,7 @@
->> >
->> >  void clflush_cache_range(void *addr, unsigned int size);
->> >
->> > +#define flush_all_caches() \
->> > +	do { wbinvd_on_all_cpus(); } while(0)
->> > +
+On 16.08.22 18:16, Chuck Zmudzinski wrote:
+> On 8/16/2022 10:41 AM, Thorsten Leemhuis wrote:
+>> On 15.08.22 20:17, Chuck Zmudzinski wrote:
+>>> On 8/15/2022 2:00 PM, Thorsten Leemhuis wrote:
+>>>
+>>>> And FWIW: I've seen indicators that a solution to resolve this is
+>>>> hopefully pretty close now.
+>>> That's good to know. But I must ask, can you provide a link to a public
+>>> discussion that indicates a fix is close?
+>> I just searched for the commit id of the culprit yesterday like this:
+>> https://lore.kernel.org/all/?q=bdd8b6c982*
 >>
->> This is horrific... we've done our utmost best to remove all WBINVD
->> usage and here you're adding it back in the most horrible form possible
->> ?!?
+>> Which brought me to this message, which looks like Boris applied a
+>> slightly(?) modified version of Jan's patch to a branch that afaik is
+>> regularly pushed to Linus:
+>> https://lore.kernel.org/all/166055884287.401.612271624942869534.tip-bot2@tip-bot2/
 >>
->> Please don't do this, do *NOT* use WBINVD.
->
->Unfortunately there are a few good options here, and the changelog did
->not make clear that this is continuing legacy [1], not adding new wbinvd
->usage.
+>> So unless problems show up in linux-next I expect this will land in
+>> master soon (and a bit later be backported to stable due to the CC
+>> stable tag).
+> 
+> OK, that's exactly the kind of thing I am looking for. It would be
+> nice if regzbot could have found that patch in that tree and
+> display it in the web interface as a notable patch. Currently,
+> regzbot is only linking to a dead patch that does not even fix
+> the regression as a notable patch associated with this regression.
+> 
+> If regzbot is not yet smart enough to find it, could you take the
+> time to manually intervene with a regzbot command so that
+> patch is displayed as a notable patch for this regression?
 
-While I was hoping that it was obvious from the intel.c changes that this
-was not a new wbinvd, I can certainly improve the changelog with the below.
+regzbot will notice when the patch hit's Linux next, where many changes
+land and hang around for a few days before they hit mainline. Watching
+all the different development trees would be possible and would catch
+this patch earlier, but I'm not sure that's worth the work. Maybe
+regzbot will do that one day, but there are more important missing
+features on my todo list for now.
 
-Thanks,
-Davidlohr
-
->
->The functionality this is enabling is to be able to instantaneously
->secure erase potentially terabytes of memory at once and the kernel
->needs to be sure that none of the data from before the secure is still
->present in the cache. It is also used when unlocking a memory device
->where speculative reads and firmware accesses could have cached poison
->from before the device was unlocked.
->
->This capability is typically only used once per-boot (for unlock), or
->once per bare metal provisioning event (secure erase), like when handing
->off the system to another tenant. That small scope plus the fact that
->none of this is available to a VM limits the potential damage. So,
->similar to the mitigation we did in [2] that did not kill off wbinvd
->completely, this is limited to specific scenarios and should be disabled
->in any scenario where wbinvd is painful / forbidden.
->
->[1]: 4c6926a23b76 ("acpi/nfit, libnvdimm: Add unlock of nvdimm support for Intel DIMMs")
->[2]: e2efb6359e62 ("ACPICA: Avoid cache flush inside virtual machines")
+Ciao, Thorsten

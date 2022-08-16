@@ -2,121 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF535960D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A9FA5960E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236231AbiHPRNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 13:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54914 "EHLO
+        id S236433AbiHPRQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 13:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236160AbiHPRNi (ORCPT
+        with ESMTP id S231502AbiHPRQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 13:13:38 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789D7FD3A
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 10:13:34 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id o3so9791481ple.5
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 10:13:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=nCnzPY6Zh9VdSsRKwhjox/WjI1k8bZC9jPf83kIBEEk=;
-        b=HTfIRePpzriHYdTea6DPwsWvn5y7QXMY8OVfQqwJlLpcZ+tVonA1BaB3HbImWENSah
-         reUGQ3FY4VDi/URRoQFsKIJYDFXa7LtbZKpLNEMks8xGJ+BdmWV94LfdJ/9q9aCFR1EZ
-         VDkGtT6lwdjDVih7UFgGzSCOzZORYGs0DgvhwXa2zLSXz4J1PccV8OcenqD6PSPsF0nd
-         zTO/Q3gmzfQz6U576HV6fOyurzdW4TMSx7r6cDpJpNmW3+JcO2pYtkoGR+3Q4KSzGH+y
-         1J4rISS3nLnG5Y6eKv7HRSVhzDYiZj+8YkeKB4D3s8jdh1VS2r7QDkWQotQAptmi8cKn
-         V5lw==
+        Tue, 16 Aug 2022 13:16:56 -0400
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DED7B1D3;
+        Tue, 16 Aug 2022 10:16:55 -0700 (PDT)
+Received: by mail-io1-f46.google.com with SMTP id x64so8741876iof.1;
+        Tue, 16 Aug 2022 10:16:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=nCnzPY6Zh9VdSsRKwhjox/WjI1k8bZC9jPf83kIBEEk=;
-        b=Nly+EDsmZfX2X93NCXlE1c4Yen4/Hj4WvkFe0AzJjti2dSar0QYCzXXjUNRkpttHf2
-         Aqkbyd4eLKVx239eKynuDp7e2C8dFUJsbEL6jqb4ei+TvrfY8v/jBDL6I09knyo4/z/6
-         goiCP95qMZPUgJD52FIMUsu9O3qkeQl3toQSeduQiVbGD+07KDpTwgsoRQAT3CclOjTE
-         p2UTSLDVhttKlnP7q+013ZjW/oQIez4VpxnvDuk5OtW1WYvqQAybsAPv8aLv6VK1a4l4
-         Dik5dOe1mWcTSWZCvtJU5SrP8cuYEBkD5JPCo02RX5j3mvyd7oauTTpjvKSvT5XCqKVU
-         zBVQ==
-X-Gm-Message-State: ACgBeo0UKhzAMZp43y0vionLqqVzktEfih3mWnpzHMNic49Duvq8zuLM
-        VLEU6tI9IlT//Bf4DDPvvHqGFQ==
-X-Google-Smtp-Source: AA6agR5L/kCG6++/8HFb3cejkYGUqynoOmOraywNSR1IjQL8jDmOhtSQz5ZOi6O2lTVdIfpucPzXww==
-X-Received: by 2002:a17:90a:4801:b0:1fa:98ec:fa2 with SMTP id a1-20020a17090a480100b001fa98ec0fa2mr3521502pjh.41.1660670013710;
-        Tue, 16 Aug 2022 10:13:33 -0700 (PDT)
-Received: from google.com ([2620:15c:2d:3:df29:644b:8119:e30a])
-        by smtp.gmail.com with ESMTPSA id n11-20020a170902d2cb00b0016e808dbe55sm9401312plc.96.2022.08.16.10.13.32
+        bh=D6Sgt43wReIJnABbhCpmxjkDmeNfZCDyXj29Wo+CNs8=;
+        b=oqsGkJNcK9PlGa0hC+MpVDFoUX2AprOvdi8mcPanOLRigWx5JGABs70fBOcrv7GAs4
+         hpBEgIuLq9Q7UqJqxXfU8n2kW/d4KJit8+JrVLt4tZ3MctWzoIhXA/NcPrSqUCIkRjFt
+         htf9Cuflbo0A2gadI3GbF7dMUQvNC28FQ8DO9uE3+UDyUv787MXbjxhkAqrEmbhtEWpp
+         SWzaoDgGCZnrwQvp64iZY2e39+5C9b0V8Q0abt3xNuHqj/po1qelVRrDH1ysYQFHYC0r
+         lUD6SB0i7Iz2VW7v6KBZrO31eKKRIwGNPLfAT4GBAKxiKe3XT9kvKTQ+fcvdHdaTITOW
+         3Isg==
+X-Gm-Message-State: ACgBeo1Vmpe62eEieuI9yIefLFt1ug2dowkVxwF7ihWtnpkhz+/E1oMH
+        vl32G2c8ZyanLuqG0rS0Rw==
+X-Google-Smtp-Source: AA6agR4UoyqZp5rPDlBv+twyXjIBp3pBBc8VUd5rGKNF9vZzXP9/deWo2SFDDC4yGZQAjMi/xA1z6A==
+X-Received: by 2002:a05:6638:1450:b0:346:8b01:c980 with SMTP id l16-20020a056638145000b003468b01c980mr4307459jad.286.1660670214577;
+        Tue, 16 Aug 2022 10:16:54 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id f24-20020a02a118000000b00339df77c491sm4536515jag.114.2022.08.16.10.16.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 10:13:33 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 10:13:28 -0700
-From:   Isaac Manjarres <isaacmanjarres@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Saravana Kannan <saravanak@google.com>, stable@kernel.org,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] driver core: Fix bus_type.match() error handling
-Message-ID: <YvvQOBk9T3J1uX8k@google.com>
-References: <20220815211919.2028890-1-isaacmanjarres@google.com>
- <20220816042507.GB1108868@roeck-us.net>
- <YvsoYzIhOtX9DOi2@google.com>
- <20220816111311.GC1108868@roeck-us.net>
+        Tue, 16 Aug 2022 10:16:54 -0700 (PDT)
+Received: (nullmailer pid 2399174 invoked by uid 1000);
+        Tue, 16 Aug 2022 17:16:52 -0000
+Date:   Tue, 16 Aug 2022 11:16:52 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Conor.Dooley@microchip.com
+Cc:     krzysztof.kozlowski@linaro.org, mail@conchuod.ie,
+        Daire.McNamara@microchip.com, bhelgaas@google.com,
+        krzysztof.kozlowski+dt@linaro.org, paul.walmsley@sifive.com,
+        greentime.hu@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+        lpieralisi@kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 4/4] dt-bindings: PCI: microchip,pcie-host: fix missing
+ address translation property
+Message-ID: <20220816171652.GA2390778-robh@kernel.org>
+References: <20220811203306.179744-1-mail@conchuod.ie>
+ <20220811203306.179744-5-mail@conchuod.ie>
+ <edf3da1b-79dc-4e09-8d3e-73aca09e847f@linaro.org>
+ <0dd12c70-70f9-1dc1-c5c8-a3ff15be81f6@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220816111311.GC1108868@roeck-us.net>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <0dd12c70-70f9-1dc1-c5c8-a3ff15be81f6@microchip.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 04:13:11AM -0700, Guenter Roeck wrote:
-> On Mon, Aug 15, 2022 at 10:17:23PM -0700, Isaac Manjarres wrote:
-> > On Mon, Aug 15, 2022 at 09:25:07PM -0700, Guenter Roeck wrote:
-> > > > v1 -> v2:
-> > > > - Fixed the logic in __driver_attach() to allow a driver to continue
-> > > >   attempting to match and bind with devices in case of any error, not
-> > > >   just probe deferral.
-> > > > 
-> > > > Guenter,
-> > > > 
-> > > > Can you please give test this patch to make sure it still works for you?
-> > > > 
-> > > 
-> > > Not as well as v1. I still see the clk crash with versatileab, and imx25-pdk
-> > > emulations now stall during boot when trying to boot from usb.
-> > > 
-> > > Guenter
-> > Thanks for trying the patch out. This patch isn't meant to fix the clk
-> > crash that you mentioned on another thread. I had made the following patch for
-> > that: https://lore.kernel.org/lkml/YvqTvuqSll30Rv2k@google.com/. Have
-> > you been able to give that a shot yet? If not can you please test with the
-> > patch in this e-mail and that patch?
+On Fri, Aug 12, 2022 at 08:20:45AM +0000, Conor.Dooley@microchip.com wrote:
+> On 12/08/2022 08:52, Krzysztof Kozlowski wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 > > 
-> 
-> No, sorry, I missed that one. It does not apply, though - it is whitespace
-> corrupted. I tried to fix it up, but that failed.
-
-When applying the patch, can you please try with
-git apply --ignore-whitespace ? That worked for me.
-> 
-> > Did you test imx25-pdk emulations with just v1 of this patch previously?
+> > On 11/08/2022 23:33, Conor Dooley wrote:
+> >> From: Conor Dooley <conor.dooley@microchip.com>
+> >>
+> >> When the PCI controller node was added to the PolarFire SoC dtsi,
+> >> dt-schema was not able to detect the presence of some undocumented
+> >> properties due to how it handled unevaluatedProperties. v2022.08
+> >> introduces better validation, producing the following error:
+> >>
+> >> arch/riscv/boot/dts/microchip/mpfs-polarberry.dtb: pcie@2000000000: Unevaluated properties are not allowed ('clock-names', 'microchip,axi-m-atr0' were unexpected)
+> >>          From schema: Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+> >>
+> >> Fixes: 528a5b1f2556 ("riscv: dts: microchip: add new peripherals to icicle kit device tree")
+> >> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> >> ---
+> >> I feel like there's a pretty good chance that this is not the way this
+> >> should have been done and the property should be marked as deprecated
+> >> but I don't know enough about PCI to answer that.
 > > 
+> > It seems bindings were added incomplete and now based on DTS (which did
+> > not match bindings), we keep adding "missing" properties. I don't think
+> > it is good. It creates a precedence where someone might intentionally
+> > sneak limited bindings (without controversial property) and later claim
+> > "I forgot to include foo,bar".
 > 
-> I am quite sure I did because it is a single setup.
+> Yup, again pretty much the same thoughts as me. I don't think that, even
+> if the property is valid, should be either named as it is or only work
+> for translation table 0.
 > 
-That's odd. Is this something that I can try out on qemu? If so, can you
-please share the qemu commandline so I can take a look?
+> > 
+> > Therefore the property should pass review just like it is newly added
+> > property.
+> 
+> SGTM.
+> 
+> > 
+> >> ---
+> >>   .../devicetree/bindings/pci/microchip,pcie-host.yaml  | 11 +++++++++++
+> >>   1 file changed, 11 insertions(+)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+> >> index 9b123bcd034c..9ac34b33c4b2 100644
+> >> --- a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+> >> +++ b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+> >> @@ -71,6 +71,17 @@ properties:
+> >>     msi-parent:
+> >>       description: MSI controller the device is capable of using.
+> >>
+> >> +  microchip,axi-m-atr0:
+> > 
+> > Name is not helping. If it is offset, add such suffix (see
+> > brcm,iproc-pcie.yaml).
+> > 
+> > Unfortunately I don't know PCIe good enough to judge whether the
+> > property makes any sense or some other ranges-style should be used.
+> 
+> Yup, I think it is similar to that. Except we have 4 tables rather
+> than one.
 
-Thanks,
-Isaac
+Looks to me like dma-ranges is the answer.
+
+Rob

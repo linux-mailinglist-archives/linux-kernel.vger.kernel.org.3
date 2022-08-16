@@ -2,141 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9FD75959B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33CDC5959BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbiHPLT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 07:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
+        id S232176AbiHPLUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 07:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233544AbiHPLS5 (ORCPT
+        with ESMTP id S234715AbiHPLTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 07:18:57 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC31E0FD0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:43:54 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso962525pjk.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:43:54 -0700 (PDT)
+        Tue, 16 Aug 2022 07:19:55 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4342E2C55
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:44:40 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id v2so14179866lfi.6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:44:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=GTvbctvJNpJ5XFFAVjSyyK1oKWoGjmVgAKwPqHF7qTs=;
-        b=n6yB+De5LjG5J02vO6g0oPWkj3A2U2tkMwkcwVOgupo09upQEcL0TRkdI25JKNKj8n
-         Pnr5oW7kcZ+bsh8CkL+v4FHrwgbQv9zYbjC4eac45qnROLw8+chC/y4ycI2CsyEYGB7f
-         FDwchZJQIAjypZZ1C7XKKktbfWh72dp06/Yh56cBvpO+5jDq4ZLe8huL1FrOJdPibtB7
-         E0VY/CgbKLbIOdDOgSZpvFeIgQXszz4HMxIa9NwKNNd+uJrCDH3xcD7HS47ytEPl4VC5
-         fWZFSML8wxR5joZXGb6oPgAnLjn8M+UwjptMWBtSWGadM5JgzOLWn7bcyGrY88CglbJ2
-         9jfQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=Enloy5lgKrMKVLbqE4UqCEXL8D9Wgy3KUpK/qyBoIrI=;
+        b=bmhY0kYxRm0Pu1Cs0YlMSETk0hz7OlpKbOUt8eVnlNIeRbuboqVaSXl/78n+u1O29t
+         RWkFw0mRgGs6O9xp37PVWEjfbpC9cvfDuPeJDbI1CWUKikDaalsk6P+uWh8uNsnn+f/P
+         QIFsP8CfQuNuSIih2QvNTFRYGLDmv2wNF3ku4sXH+o83ZAkPRnbVk/wplO4egti048ZD
+         ErxTSkVmZxvFPLxaqXZd1gC4KD0DYq32h2XL+NCU4wmEzS981G+5fm+K2KJHHNjFk5CC
+         UzE9+Q6LCgzSP1ffDEM/NbheuzW8sp649Ns0J1nneXwCLJwPo+miQhcLwuRVAiQukuJU
+         I7aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=GTvbctvJNpJ5XFFAVjSyyK1oKWoGjmVgAKwPqHF7qTs=;
-        b=nfQ/531dZEc5+oTjZGEcsrpPCJQbk9l/fyOoP/nw7i33U7dmSoCy6ikzWUBC8YY8bd
-         sWZ/FJQpFv6pW/iCqnagSp9tMP0mJEAuzarNajUH6Itl9DXX6Vq2EkRrsaCoJoJGwabS
-         f05ZB/nfi5ds9HSmCBpaj8P3iXxwdei3ocdoY1DliHMHyQhe79ZLimlwQp3Fz+q+lhpG
-         XIifEYG+LCEfOshfl1t78y7Ej8gJ1BuLR5il3JGXt4NEliIwdHs19CY+LjL5bu+WybNf
-         HcB5feI/+XKH3/KBCaT0mJYyiR69/5yS2eLBerg+GygDLhcfNSYbI49vKHEPvU2pXmIm
-         StUw==
-X-Gm-Message-State: ACgBeo1r+7NT3WO/gLFU6If72KjIXYC2y63cfm71f1jHvJxURS/aMoWj
-        t/pBbOV/x9Cnpa7MRG4qJCWWbPkw6IPn/A==
-X-Google-Smtp-Source: AA6agR6FZQ9i+Tf/3XIz0/damoZoUYQmUBv+ZJ8T1Pk9l/5Np+oxwasrX2uAUzYHFZrxINjaXD6fsA==
-X-Received: by 2002:a17:90b:3e86:b0:1f5:2b4f:7460 with SMTP id rj6-20020a17090b3e8600b001f52b4f7460mr32854131pjb.97.1660643033650;
-        Tue, 16 Aug 2022 02:43:53 -0700 (PDT)
-Received: from FVFDK26JP3YV.bytedance.net ([61.120.150.76])
-        by smtp.gmail.com with ESMTPSA id w12-20020a170902e88c00b0016a6caacaefsm8643350plg.103.2022.08.16.02.43.49
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Aug 2022 02:43:53 -0700 (PDT)
-From:   Lei He <helei.sig11@bytedance.com>
-To:     mst@redhat.com, herbert@gondor.apana.org.au,
-        arei.gonglei@huawei.com
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pizhenwei@bytedance.com, lei he <helei.sig11@bytedance.com>
-Subject: [PATCH v2] virtio-crypto: fix memory-leak
-Date:   Tue, 16 Aug 2022 17:43:36 +0800
-Message-Id: <20220816094336.27806-1-helei.sig11@bytedance.com>
-X-Mailer: git-send-email 2.29.2
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Enloy5lgKrMKVLbqE4UqCEXL8D9Wgy3KUpK/qyBoIrI=;
+        b=JNj/9a+Q+bucNnPuSUjhvh2fyPePrYDmCQAV3r8SMLcsZ0/QYIsDHkbQswP5i992cj
+         y9nnfDUetn5evzzRnThtyA8v6OCHxp7uEYsI1kJk6hM0eronTmJwB23pro+VrQMaIrbc
+         lLkwDQiFg0cfgUB9x49QbI8XPXi1uzY5aWrl6fFF74IVoFDFcwWHGO6dlwaEEcEsuD/r
+         Bt4C2AAegKpvTIRK8fqwDY5YHhjXC9JxZHgZokruMk7EC5kGbv3dgzCpzcRNbzmd5O40
+         C6Le6V5Q5RXaPZZ/N36pIQ9HmDiwO/ry/V1T4qSXh3Kz47YqBg+cvDvcK08w7e/O0RE7
+         E3yQ==
+X-Gm-Message-State: ACgBeo0YXYJaJN5nPsmYjz6wB67WvsXvBzAFJ9alQX96xxhmdz0jYoli
+        In25B33EXBm1ao8E/HxG54mW9Q==
+X-Google-Smtp-Source: AA6agR54PZx7XS1rYcJtMRhTAqOXN6+VFqLfzj/NiD8GAFWFKJ+lry6TmRGXna2tZtdoMf6GdwYMxQ==
+X-Received: by 2002:ac2:44af:0:b0:48a:f361:fe1d with SMTP id c15-20020ac244af000000b0048af361fe1dmr7226313lfm.190.1660643079100;
+        Tue, 16 Aug 2022 02:44:39 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
+        by smtp.gmail.com with ESMTPSA id z12-20020a056512370c00b0048b08e25979sm1330665lfr.199.2022.08.16.02.44.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 02:44:38 -0700 (PDT)
+Message-ID: <b630a007-2548-2196-a963-786c6a98b748@linaro.org>
+Date:   Tue, 16 Aug 2022 12:44:37 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 0/6] i2c-imx-lpi2c: add IPG clock
+Content-Language: en-US
+To:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Clark Wang <xiaoning.wang@nxp.com>
+References: <20220812043424.4078034-1-peng.fan@oss.nxp.com>
+ <f1add9c7-fc2e-a600-49a6-a6579f17db1b@linaro.org>
+ <DU0PR04MB9417D62230578AC8CA4234F288689@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <039566a7-5c65-b2d8-7b45-c616863cb292@linaro.org>
+ <DU0PR04MB9417EF15DD50EC51B4FBBCFF886B9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <DU0PR04MB9417EF15DD50EC51B4FBBCFF886B9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: lei he <helei.sig11@bytedance.com>
+On 16/08/2022 11:43, Peng Fan wrote:
+>> No. For such patch ABI break is also not allowed in that case. Just make the
+>> driver backwards compatible and both problems - non bisectability and ABI
+>> break - go away.
+> 
+> One more point that I am not very clear about  
+> "non bisectability and ABI break "
+> 
+> ABI, I suppose you mean dt-binding, right?
+> The I2C bindings and dts update will go through different tree, I think. So
+> dtbs_check may fail considering the PR merge order.
 
-Fix memory-leak for virtio-crypto akcipher request, this problem is
-introduced by 59ca6c93387d3(virtio-crypto: implement RSA algorithm).
-The leak can be reproduced and tested with the following script
-inside virtual machine:
+ABI break means breaking Application Binary Interface, so out of tree
+DTS conforming to old bindings stop working with new kernel.
 
-#!/bin/bash
+ABI is described by bindings and implemented by driver. You broke it in
+the driver.
 
-LOOP_TIMES=10000
-
-# required module: pkcs8_key_parser, virtio_crypto
-modprobe pkcs8_key_parser # if CONFIG_PKCS8_PRIVATE_KEY_PARSER=m
-modprobe virtio_crypto # if CONFIG_CRYPTO_DEV_VIRTIO=m
-rm -rf /tmp/data
-dd if=/dev/random of=/tmp/data count=1 bs=230
-
-# generate private key and self-signed cert
-openssl req -nodes -x509 -newkey rsa:2048 -keyout key.pem \
-		-outform der -out cert.der  \
-		-subj "/C=CN/ST=GD/L=SZ/O=vihoo/OU=dev/CN=always.com/emailAddress=yy@always.com"
-# convert private key from pem to der
-openssl pkcs8 -in key.pem -topk8 -nocrypt -outform DER -out key.der
-
-# add key
-PRIV_KEY_ID=`cat key.der | keyctl padd asymmetric test_priv_key @s`
-echo "priv key id = "$PRIV_KEY_ID
-PUB_KEY_ID=`cat cert.der | keyctl padd asymmetric test_pub_key @s`
-echo "pub key id = "$PUB_KEY_ID
-
-# query key
-keyctl pkey_query $PRIV_KEY_ID 0
-keyctl pkey_query $PUB_KEY_ID 0
-
-# here we only run pkey_encrypt becasuse it is the fastest interface
-function bench_pub() {
-	keyctl pkey_encrypt $PUB_KEY_ID 0 /tmp/data enc=pkcs1 >/tmp/enc.pub
-}
-
-# do bench_pub in loop to obtain the memory leak
-for (( i = 0; i < ${LOOP_TIMES}; ++i )); do
-	bench_pub
-done
-
-Signed-off-by: lei he <helei.sig11@bytedance.com>
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
-Reviewed-by: Gonglei <arei.gonglei@huawei.com>
----
- drivers/crypto/virtio/virtio_crypto_akcipher_algs.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-index 2a60d0525cde..168195672e2e 100644
---- a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-+++ b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-@@ -56,6 +56,10 @@ static void virtio_crypto_akcipher_finalize_req(
- 	struct virtio_crypto_akcipher_request *vc_akcipher_req,
- 	struct akcipher_request *req, int err)
- {
-+	kfree(vc_akcipher_req->src_buf);
-+	kfree(vc_akcipher_req->dst_buf);
-+	vc_akcipher_req->src_buf = NULL;
-+	vc_akcipher_req->dst_buf = NULL;
- 	virtcrypto_clear_request(&vc_akcipher_req->base);
- 
- 	crypto_finalize_akcipher_request(vc_akcipher_req->base.dataq->engine, req, err);
-
-base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
--- 
-2.20.1
-
+Best regards,
+Krzysztof

@@ -2,205 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78BD4595D21
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9972595D1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233412AbiHPNUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
+        id S235463AbiHPNUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235463AbiHPNTx (ORCPT
+        with ESMTP id S235615AbiHPNUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 09:19:53 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB85DF0;
-        Tue, 16 Aug 2022 06:19:23 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id s11so13417125edd.13;
-        Tue, 16 Aug 2022 06:19:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=qmHSiAZVfahNJyGDQHqY9RH0z385W5MNqPmTHwP/rM0=;
-        b=RxFatrzfZbS95Eg3KXfsn18/tlkBlSKOXix79F8ldtLP7WNS4nnyylSkfkbNfZAyXa
-         XNexvzCa0kZ2tW6DXUqWbXxlujxiLZ36wZ8LF6eYjxjWUmXADth7ljPGSsOili4BQ7to
-         FEPC1bv/9wkt0GBW2Ug4ncOm3bn2wflANsD7PU4yZ6Q7mXqTozTZEZisoTtNhIwKGstH
-         Hgv9PLnDxiyUsAcCa6ndeYF7DR1i9A+ntaEQ2QyNGHtlukeVvA87ntPIaz3rx+p9dsgv
-         9fNcxM4FdP9HC6xNeVmCxcE0YgeSlEhuy5j9lNesX9XZ5sy5SyBwMH+LCRqmC81rwjPY
-         DNdg==
+        Tue, 16 Aug 2022 09:20:22 -0400
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5E755A8;
+        Tue, 16 Aug 2022 06:20:19 -0700 (PDT)
+Received: by mail-qt1-f182.google.com with SMTP id x5so8040008qtv.9;
+        Tue, 16 Aug 2022 06:20:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=qmHSiAZVfahNJyGDQHqY9RH0z385W5MNqPmTHwP/rM0=;
-        b=vH8kC9TI18gzNknpRMTfjN/nn5aqE2qseXBN91x4Q0qZvP9lMzSlkYuHp9m7P9TjR1
-         YuTulef/petl4oZqFwyScxc18ao0ywC4QLViqctacfRgnhPUfpdxJ5N/32lLiWDc0KnO
-         b9aSPrBXi3xMyd41Mc79Ay3diJYiwWoS2WWYPvWRySHLuz4lZFMXkmwC6PkqE6EMqeh9
-         bo+2iH1Sr2W3hijQE+jEAXJHjl3PMXjVj6BWqhwmAd+p7ctLFn5O33LwOsTyi2MvoJ6t
-         98QU7+y6Pp3QsszlM5J21ewwq9blpPPCExTtVMl5SWq/J58usgB/1hOFXPRGKZ19qLYN
-         vWoQ==
-X-Gm-Message-State: ACgBeo3pTaE1OQHLKhDA9pJq3X/mVLxCbkj/ThSiHtYdHTChAJGo16k9
-        MWl/9zusfoln2lUbC8CWkWpcGU4h3zebyQ==
-X-Google-Smtp-Source: AA6agR5eqJMOuTyl7XBOWuq4mnBTsgrS/8h6hKrqf/TqzZKKZ0DHsNBaBwulO3l1ROSFKn9qUoxcYg==
-X-Received: by 2002:a05:6402:3492:b0:43e:9666:ece2 with SMTP id v18-20020a056402349200b0043e9666ece2mr19078057edc.65.1660655962362;
-        Tue, 16 Aug 2022 06:19:22 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id l13-20020a1709066b8d00b007262b9f7120sm5281259ejr.167.2022.08.16.06.19.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 06:19:22 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 16 Aug 2022 15:19:20 +0200
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH 2/4] tools lib perf: Handle read format in
- perf_evsel__read()
-Message-ID: <YvuZWAzsBVo/l9sf@krava>
-References: <20220815190106.1293082-1-namhyung@kernel.org>
- <20220815190106.1293082-3-namhyung@kernel.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=hDkAAnw+hHxd4arV3hgrWxC6jV6Ka7uhFxxYbXDlq84=;
+        b=Ie69SXBnTFwHYq+2qoaVNTMJqlSlP9rGPH8gDFzZrNLW3RVfxY+4H6NPLctCFAX7JJ
+         MX5LOnbaDo+nw1QfpqvH4maxInHlhgD9n+KbEMkUKI4z7Ytb5ne2Vm+4oLPdjrn1Qaiy
+         NV694j6yYFFJxw0Uzi/SjeBXkrZeL5JtZl3W5ohiVAHo7W9JIzDlTk9O60ed9rffZTJk
+         5X9BAXDzth5kHhlXJuDqRLV/tGiYDX5jiJi7eia1DxIqdRcUIeUqqbWJFL920Kz2agDA
+         LYav3MtVbAtITi5R1OGrUu8t2P5MuVyvReYX80e0lawG4+Khnh2SYVzp5TAkMLccfizw
+         IkIw==
+X-Gm-Message-State: ACgBeo3QAI8E62iaDX3FIU7RRLJc6/wTBsRdDMvjeoOjmMZQlwNAbSeI
+        xPT+fhgD3/pFI51iy7lBG4n2EP7qWPwQGQ==
+X-Google-Smtp-Source: AA6agR5mtz+9F5/sG4+zrfZmReY9+LbVHIt/DB8co+JfWJP78E9Xz7B2Q5oRDve48VIykbFBeatPaA==
+X-Received: by 2002:ac8:5b0d:0:b0:33b:f61b:d173 with SMTP id m13-20020ac85b0d000000b0033bf61bd173mr18273671qtw.668.1660656017223;
+        Tue, 16 Aug 2022 06:20:17 -0700 (PDT)
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
+        by smtp.gmail.com with ESMTPSA id n17-20020a05620a295100b006b64d36342fsm12047357qkp.68.2022.08.16.06.20.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 06:20:16 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-3321c2a8d4cso97038637b3.5;
+        Tue, 16 Aug 2022 06:20:15 -0700 (PDT)
+X-Received: by 2002:a81:502:0:b0:32f:dcc4:146e with SMTP id
+ 2-20020a810502000000b0032fdcc4146emr10295665ywf.316.1660656015710; Tue, 16
+ Aug 2022 06:20:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815190106.1293082-3-namhyung@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220801233403.258871-1-f.fainelli@gmail.com> <CGME20220812111948eucas1p2bf97e7f4558eb024f419346367a87b45@eucas1p2.samsung.com>
+ <27016cc0-f228-748b-ea03-800dda4e5f0c@samsung.com> <8c21e530-8e8f-ce2a-239e-9d3a354996cf@gmail.com>
+In-Reply-To: <8c21e530-8e8f-ce2a-239e-9d3a354996cf@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 16 Aug 2022 15:20:03 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV8vsbFx+nikAwn1po1-PeZVhzotMaLLk+wXNquZceaRQ@mail.gmail.com>
+Message-ID: <CAMuHMdV8vsbFx+nikAwn1po1-PeZVhzotMaLLk+wXNquZceaRQ@mail.gmail.com>
+Subject: Re: [PATCH net] net: phy: Warn about incorrect mdio_bus_phy_resume() state
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        netdev <netdev@vger.kernel.org>,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        Doug Berger <opendmb@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 12:01:04PM -0700, Namhyung Kim wrote:
-> The perf_counts_values should be increased to read the new lost data.
-> Also adjust values after read according the read format.
-> 
-> This supports PERF_FORMAT_GROUP which has a different data format but
-> it's only available for leader events.  Currently it doesn't have an API
-> to read sibling (member) events in the group.  But users may read the
-> sibling event directly.
-> 
-> Also reading from mmap would be disabled when the read format has ID or
-> LOST bit as it's not exposed via mmap.
-> 
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/lib/perf/evsel.c              | 72 +++++++++++++++++++++++++++++
->  tools/lib/perf/include/perf/event.h |  3 +-
->  tools/lib/perf/include/perf/evsel.h |  4 +-
->  3 files changed, 77 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/lib/perf/evsel.c b/tools/lib/perf/evsel.c
-> index 952f3520d5c2..fc23670231cb 100644
-> --- a/tools/lib/perf/evsel.c
-> +++ b/tools/lib/perf/evsel.c
-> @@ -305,6 +305,9 @@ int perf_evsel__read_size(struct perf_evsel *evsel)
->  	if (read_format & PERF_FORMAT_ID)
->  		entry += sizeof(u64);
->  
-> +	if (read_format & PERF_FORMAT_LOST)
-> +		entry += sizeof(u64);
-> +
->  	if (read_format & PERF_FORMAT_GROUP) {
->  		nr = evsel->nr_members;
->  		size += sizeof(u64);
-> @@ -314,24 +317,93 @@ int perf_evsel__read_size(struct perf_evsel *evsel)
->  	return size;
->  }
->  
-> +/* This only reads values for the leader */
-> +static int perf_evsel__read_group(struct perf_evsel *evsel, int cpu_map_idx,
-> +				  int thread, struct perf_counts_values *count)
-> +{
-> +	size_t size = perf_evsel__read_size(evsel);
-> +	int *fd = FD(evsel, cpu_map_idx, thread);
-> +	u64 read_format = evsel->attr.read_format;
-> +	u64 *data;
-> +	int idx = 1;
-> +
-> +	if (fd == NULL || *fd < 0)
-> +		return -EINVAL;
-> +
-> +	data = calloc(1, size);
-> +	if (data == NULL)
-> +		return -ENOMEM;
-> +
-> +	if (readn(*fd, data, size) <= 0) {
-> +		free(data);
-> +		return -errno;
-> +	}
+Hi Florian,
 
-could you please put in here some comment that this is intentionaly
-reading only the leader or better yet rename the function? I was lost
-before I got to read the changelog ;-)
+On Fri, Aug 12, 2022 at 6:39 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+> On 8/12/22 04:19, Marek Szyprowski wrote:
+> > On 02.08.2022 01:34, Florian Fainelli wrote:
+> >> Calling mdio_bus_phy_resume() with neither the PHY state machine set to
+> >> PHY_HALTED nor phydev->mac_managed_pm set to true is a good indication
+> >> that we can produce a race condition looking like this:
+> >>
+> >> CPU0                                         CPU1
+> >> bcmgenet_resume
+> >>    -> phy_resume
+> >>      -> phy_init_hw
+> >>    -> phy_start
+> >>      -> phy_resume
+> >>                                                   phy_start_aneg()
+> >> mdio_bus_phy_resume
+> >>    -> phy_resume
+> >>       -> phy_write(..., BMCR_RESET)
+> >>        -> usleep()                                  -> phy_read()
+> >>
+> >> with the phy_resume() function triggering a PHY behavior that might have
+> >> to be worked around with (see bf8bfc4336f7 ("net: phy: broadcom: Fix
+> >> brcm_fet_config_init()") for instance) that ultimately leads to an error
+> >> reading from the PHY.
+> >>
+> >> Fixes: fba863b81604 ("net: phy: make PHY PM ops a no-op if MAC driver manages PHY PM")
+> >> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> >
+> > This patch, as probably intended, triggers a warning during system
+> > suspend/resume cycle in the SMSC911x driver. I've observed it on ARM
+> > Juno R1 board on the kernel compiled from next-202208010:
+> >
+> >    ------------[ cut here ]------------
+> >    WARNING: CPU: 1 PID: 398 at drivers/net/phy/phy_device.c:323
+> > mdio_bus_phy_resume+0x34/0xc8
 
-> +
-> +	if (read_format & PERF_FORMAT_TOTAL_TIME_ENABLED)
-> +		count->ena = data[idx++];
-> +	if (read_format & PERF_FORMAT_TOTAL_TIME_RUNNING)
-> +		count->run = data[idx++];
-> +
-> +	/* value is always available */
-> +	count->val = data[idx++];
-> +	if (read_format & PERF_FORMAT_ID)
-> +		count->id = data[idx++];
-> +	if (read_format & PERF_FORMAT_LOST)
-> +		count->lost = data[idx++];
-> +
-> +	free(data);
-> +	return 0;
-> +}
-> +
-> +/*
-> + * The perf read format is very flexible.  It needs to set the proper
-> + * values according to the read format.
-> + */
-> +static void perf_evsel__adjust_values(struct perf_evsel *evsel,
-> +				      struct perf_counts_values *count)
-> +{
-> +	u64 read_format = evsel->attr.read_format;
-> +
-> +	if (!(read_format & PERF_FORMAT_TOTAL_TIME_ENABLED)) {
-> +		memmove(&count->values[2], &count->values[1], 24);
-> +		count->ena = 0;
-> +	}
-> +
-> +	if (!(read_format & PERF_FORMAT_TOTAL_TIME_RUNNING)) {
-> +		memmove(&count->values[3], &count->values[2], 16);
-> +		count->run = 0;
-> +	}
-> +
-> +	if (!(read_format & PERF_FORMAT_ID)) {
-> +		memmove(&count->values[4], &count->values[3], 8);
-> +		count->id = 0;
-> +	}
-> +}
+I am seeing the same on the ape6evm and kzm9g development
+boards with smsc911x Ethernet, and on various boards with Renesas
+Ethernet (sh_eth or ravb) if Wake-on-LAN is disabled.
 
+> Yes this is catching an actual issue in the driver in that the PHY state
+> machine is still running while the system is trying to suspend. We could
+> go about fixing it in a different number of ways, though I believe this
+> one is probably correct enough to work and fix the warning:
 
-could we do this the same way we read group counters.. like make read
-into local buffer and initialize perf_counts_values values based on
-format, something like:
+> --- a/drivers/net/ethernet/smsc/smsc911x.c
+> +++ b/drivers/net/ethernet/smsc/smsc911x.c
+> @@ -1037,6 +1037,8 @@ static int smsc911x_mii_probe(struct net_device *dev)
+>                  return ret;
+>          }
+>
+> +       /* Indicate that the MAC is responsible for managing PHY PM */
+> +       phydev->mac_managed_pm = true;
+>          phy_attached_info(phydev);
+>
+>          phy_set_max_speed(phydev, SPEED_100);
+> @@ -2587,6 +2589,8 @@ static int smsc911x_suspend(struct device *dev)
+>          if (netif_running(ndev)) {
+>                  netif_stop_queue(ndev);
+>                  netif_device_detach(ndev);
+> +               if (!device_may_wakeup(dev))
+> +                       phy_suspend(dev->phydev);
+>          }
+>
+>          /* enable wake on LAN, energy detection and the external PME
+> @@ -2628,6 +2632,8 @@ static int smsc911x_resume(struct device *dev)
+>          if (netif_running(ndev)) {
+>                  netif_device_attach(ndev);
+>                  netif_start_queue(ndev);
+> +               if (!device_may_wakeup(dev))
+> +                       phy_resume(dev->phydev);
+>          }
+>
+>          return 0;
 
-        readn(fd, data ...
+Thanks for your patch, but unfortunately this does not work on ape6evm
+and kzm9g, where the smsc911x device is connected to a power-managed
+bus.  It looks like the PHY registers are accessed while the device
+is already suspended, causing a crash during system suspend:
 
-        if (read_format & PERF_FORMAT_TOTAL_TIME_ENABLED)
-                count->ena = data[idx++];
-        if (read_format & PERF_FORMAT_TOTAL_TIME_RUNNING)
-                count->run = data[idx++];
+8<--- cut here ---
+Unhandled fault: imprecise external abort (0x1406) at 0x00000000
+[00000000] *pgd=00000000
+Internal error: : 1406 [#1] SMP ARM
+CPU: 2 PID: 75 Comm: kworker/2:2 Not tainted
+6.0.0-rc1-ape6evm-00977-gdc70725fbca5-dirty #375
+Hardware name: Generic R8A73A4 (Flattened Device Tree)
+Workqueue: events_power_efficient phy_state_machine
+PC is at smsc911x_reg_read+0x30/0x48
+LR is at smsc911x_reg_read+0x30/0x48
+pc : [<c03807cc>]    lr : [<c03807cc>]    psr: 20030093
+sp : f0891e30  ip : 00000000  fp : eff98605
+r10: c092af80  r9 : c202e6e8  r8 : 20030013
+r7 : c202e70c  r6 : 000000a4  r5 : 20030093  r4 : c202e6c0
+r3 : f0a31000  r2 : 00000002  r1 : f0a310a4  r0 : 00000000
+Flags: nzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment none
+Control: 10c5387d  Table: 4552006a  DAC: 00000051
+Register r0 information: NULL pointer
+Register r1 information: 0-page vmalloc region starting at 0xf0a31000
+allocated at smsc911x_drv_probe+0x108/0x934
+Register r2 information: non-paged memory
+Register r3 information: 0-page vmalloc region starting at 0xf0a31000
+allocated at smsc911x_drv_probe+0x108/0x934
+Register r4 information: slab kmalloc-4k start c202e000 pointer offset
+1728 size 4096
+Register r5 information: non-paged memory
+Register r6 information: non-paged memory
+Register r7 information: slab kmalloc-4k start c202e000 pointer offset
+1804 size 4096
+Register r8 information: non-paged memory
+Register r9 information: slab kmalloc-4k start c202e000 pointer offset
+1768 size 4096
+Register r10 information: non-slab/vmalloc memory
+Register r11 information: non-slab/vmalloc memory
+Register r12 information: NULL pointer
+Process kworker/2:2 (pid: 75, stack limit = 0x5239c21f)
+Stack: (0xf0891e30 to 0xf0892000)
+1e20:                                     c202e6c0 00000006 c19da000 c202e6c0
+1e40: 20030013 c03815bc 00000000 00000001 c19da000 c0381820 00000001 c19da000
+1e60: c19da000 00000000 c39eacc0 00000000 c092af80 c037e694 c19da000 00000001
+1e80: 00000000 c19da758 c19da000 00000001 00000000 c037e888 c29a0000 c29a03f4
+1ea0: 00000078 c29a0448 c39eacc0 c037c878 c29a0000 c037cab4 c29a0000 c29a03f4
+1ec0: c29a0000 c037fbc8 c29a0000 c29a03f4 c29a0000 c29a0448 00000004 c0377540
+1ee0: c3ac8f00 c29a03f4 c29a0000 c0378588 009a03f4 c07cce88 c3ac8f00 c29a03f4
+1f00: eff96780 00000000 eff98600 00000080 c092af80 c00426f0 00000001 00000000
+1f20: c00425c4 c07cce88 c07bb574 00000000 c13fa5b8 c0da3f6c 00000000 c071c1da
+1f40: 00000000 c07cce88 00000000 c3ac8f00 c3ac8f18 eff96780 c092a665 c07c9d00
+1f60: eff967bc c0934e20 00000000 c0042b30 c2b8a500 c2ba65c0 c3ac8880 f0901ebc
+1f80: c00428f0 c3ac8f00 00000000 c00494c4 c2ba65c0 c00493f4 00000000 00000000
+1fa0: 00000000 00000000 00000000 c0009108 00000000 00000000 00000000 00000000
+1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+1fe0: 00000000 00000000 00000000 00000000 00000013 00000000 00000000 00000000
+ smsc911x_reg_read from smsc911x_mac_read+0x4c/0xa0
+ smsc911x_mac_read from smsc911x_mii_read+0x38/0xb4
+ smsc911x_mii_read from __mdiobus_read+0x70/0xc4
+ __mdiobus_read from mdiobus_read+0x34/0x48
+ mdiobus_read from genphy_update_link+0x10/0xc8
+ genphy_update_link from genphy_read_status+0x10/0xc4
+ genphy_read_status from lan87xx_read_status+0x10/0x11c
+ lan87xx_read_status from phy_check_link_status+0x5c/0xbc
+ phy_check_link_status from phy_state_machine+0x78/0x218
+ phy_state_machine from process_one_work+0x2f0/0x4c4
+ process_one_work from worker_thread+0x240/0x2d0
+ worker_thread from kthread+0xd0/0xe0
+ kthread from ret_from_fork+0x14/0x2c
+Exception stack(0xf0891fb0 to 0xf0891ff8)
+1fa0:                                     00000000 00000000 00000000 00000000
+1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+Code: e5933000 e1a05000 e1a00004 e12fff33 (e1a01005)
+---[ end trace 0000000000000000 ]---
 
-        /* value is always available */
-        count->val = data[idx++];
-        if (read_format & PERF_FORMAT_ID)
-                count->id = data[idx++];
-        if (read_format & PERF_FORMAT_LOST)
-                count->lost = data[idx++];
+Gr{oetje,eeting}s,
 
+                        Geert
 
-and perhaps we should cancel that perf_counts_values's union and keep
-only 'val/ena/run...' fields?
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-jirka
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

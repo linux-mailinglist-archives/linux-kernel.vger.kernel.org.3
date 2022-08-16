@@ -2,115 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBAC595596
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24CF459559C
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233341AbiHPItd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 04:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43706 "EHLO
+        id S231767AbiHPIwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 04:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbiHPIss (ORCPT
+        with ESMTP id S232622AbiHPIvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:48:48 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E201814EBB9;
-        Mon, 15 Aug 2022 23:53:58 -0700 (PDT)
-X-UUID: ccaf7371070f47dabbfaa3ebd7dd80be-20220816
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=5t0XM1737ZWX1mhSCQ9gGUR194bfXWMaXzOPq4liWSc=;
-        b=ZvpuhY0qEWRyZJGe8XOW1mtDprZvBNjLeXqwISJll48/iLaP8QIVp0RFO/D0dOUcrIBwHKxjXOBACCYV8G15QevC7poThBDuij0TTf1+m++nv0lNcEaJgOqUcI8AV7d74KU16yqQcVRWbqu1n5uPgRvlPZVzBmuczM5WrYi2UCU=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.9,REQID:25ceddc5-54e6-4106-a126-50a8d656b611,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_H
-        am,ACTION:release,TS:0
-X-CID-META: VersionHash:3d8acc9,CLOUDID:92c1f0ae-9535-44a6-aa9b-7f62b79b6ff6,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: ccaf7371070f47dabbfaa3ebd7dd80be-20220816
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <runyang.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 738991589; Tue, 16 Aug 2022 14:53:53 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 16 Aug 2022 14:53:48 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 16 Aug 2022 14:53:48 +0800
-From:   Runyang Chen <Runyang.Chen@mediatek.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, <nfraprado@collabora.com>
-CC:     <angelogioacchino.delregno@collabora.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Runyang Chen <runyang.chen@mediatek.com>
-Subject: [PATCH v2 3/3] watchdog: mediatek: mt8188: add wdt support
-Date:   Tue, 16 Aug 2022 14:53:30 +0800
-Message-ID: <20220816065330.27570-4-Runyang.Chen@mediatek.com>
-X-Mailer: git-send-email 2.9.2
-In-Reply-To: <20220816065330.27570-1-Runyang.Chen@mediatek.com>
-References: <20220816065330.27570-1-Runyang.Chen@mediatek.com>
+        Tue, 16 Aug 2022 04:51:36 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CE1F619B;
+        Mon, 15 Aug 2022 23:56:38 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id fy5so17228961ejc.3;
+        Mon, 15 Aug 2022 23:56:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc;
+        bh=pyTZytG+72+2/FZ5A1dNsnzW13neVvkCe+2kVkYrp8Q=;
+        b=AV3ifGSEj5rwDb3AbGDo+NVEIw1WNeHbNMtVSKR9X9ruPzZ1XfEv0oy7KrPKo0RQn/
+         H64hT1+5BCeY7aa8v2Ydr11tm4uXivRuo/riY/K5DG8E5GzfPm+1VoChYqdCG2my64d7
+         mc48Axjwqcq/1AkhvPx3ZdYEEJDtRUvvp69/c4dnUkbldDO8A9I96i2O/C+vd5BOwgu2
+         YxTRxBM61+3MOPgE7Epi8XNbGRLilLC6hQqk94BVhDbZ53qiN1sCok933/BAo/vprrr1
+         +FEn0et+6PpudVZBRFIBREcrDjIJdlEZjF9BwIW6S9PlVER95rtLqlx1GVeIHRgWrQWY
+         6nXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
+        bh=pyTZytG+72+2/FZ5A1dNsnzW13neVvkCe+2kVkYrp8Q=;
+        b=QFrFsiNsp+6gLzZMdP7gpRjm/XoRnh7z/sQIsoya/jQASdiY9XzU6JoamF8lqoxEMx
+         sDcsWy2N59z8WFEtN/ODN4e1YN39bldpqnpHbwWQPiQLTz6FMtJK0Yqz8rXRoy0Zh79U
+         bLYdgt8urcWqtbjX+tstgFZ/THSk1ZZ4xawGsf/bJlsy7L0P27EYE47tlNX0YJ925tXP
+         GRWqizyXmWnOLty2xneJ5cOVXYHCZSCEL2VSF6EvwdT5CAUdWM6TC4HiSFwLDwEms9wQ
+         6SDIXPfI6dKHORs6VI0HdpxVJLiTX7glcx9SUgnH4IVli1O+Wg4d2hUBVErPSGjs7U30
+         b6Wg==
+X-Gm-Message-State: ACgBeo1kgdzgBed4v0ZdHCHnKKP1DkXPdqFezlzauf7fytc/oBzHSEcP
+        r7LMTs99WZR1jK9p0adMEOI=
+X-Google-Smtp-Source: AA6agR6ZArVqpiETQpMGqtMCRP5KS4v0UE+Nj3hnOVE5nDn7IH2UZNQB7n3kCmxpBJDVtFc2Dii5Vg==
+X-Received: by 2002:a17:907:60c7:b0:731:148b:c515 with SMTP id hv7-20020a17090760c700b00731148bc515mr12509099ejc.724.1660632997158;
+        Mon, 15 Aug 2022 23:56:37 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id h26-20020a17090619da00b00734bfab4d59sm4985944ejd.170.2022.08.15.23.56.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 23:56:36 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Tue, 16 Aug 2022 08:56:33 +0200
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Jiri Olsa <olsajiri@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
+Message-ID: <Yvs/oey1NUlkI30d@krava>
+References: <YvoVgMzMuQbAEayk@krava>
+ <Yvo+EpO9dN30G0XE@worktop.programming.kicks-ass.net>
+ <CAADnVQJfvn2RYydqgO-nS_K+C8WJL7BdCnR44MiMF4rnAwWM5A@mail.gmail.com>
+ <YvpZJQGQdVaa2Oh4@worktop.programming.kicks-ass.net>
+ <CAADnVQKyfrFTZOM9F77i0NbaXLZZ7KbvKBvu7p6kgdnRgG+2=Q@mail.gmail.com>
+ <Yvpf67eCerqaDmlE@worktop.programming.kicks-ass.net>
+ <CAADnVQKX5xJz5N_mVyf7wg4BT8Q2cNh8ze-SxTRfk6KtcFQ0=Q@mail.gmail.com>
+ <YvpmAnFldR0iwAFC@worktop.programming.kicks-ass.net>
+ <CAADnVQJuDS22o7fi9wPZx9siAWgu1grQXXB02KfasxZ-RPdRSw@mail.gmail.com>
+ <Yvpq3JDk8fTgdMv8@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yvpq3JDk8fTgdMv8@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Runyang Chen <runyang.chen@mediatek.com>
+On Mon, Aug 15, 2022 at 05:48:44PM +0200, Peter Zijlstra wrote:
+> On Mon, Aug 15, 2022 at 08:35:53AM -0700, Alexei Starovoitov wrote:
+> > On Mon, Aug 15, 2022 at 8:28 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > On Mon, Aug 15, 2022 at 08:17:42AM -0700, Alexei Starovoitov wrote:
+> > > > It's hiding a fake function from ftrace, since it's not a function
+> > > > and ftrace infra shouldn't show it tracing logs.
+> > > > In other words it's a _notrace_ function with nop5.
+> > >
+> > > Then make it a notrace function with a nop5 in it. That isn't hard.
+> > 
+> > That's exactly what we're trying to do.
+> 
+> All the while claiming ftrace is broken while it is not.
+> 
+> > Jiri's patch is one way to achieve that.
+> 
+> Fairly horrible way.
+> 
+> > What is your suggestion?
+> 
+> Mailed it already.
+> 
+> > Move it from C to asm ?
+> 
+> Would be much better than proposed IMO.
 
-Support MT8188 watchdog device.
+nice, that would be independent of the compiler atributes
+and config checking..  will check on this one ;-)
 
-Signed-off-by: Runyang Chen <runyang.chen@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/watchdog/mtk_wdt.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+thanks,
+jirka
 
-diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-index e97787536792..b53763ad90cf 100644
---- a/drivers/watchdog/mtk_wdt.c
-+++ b/drivers/watchdog/mtk_wdt.c
-@@ -13,6 +13,7 @@
- #include <dt-bindings/reset/mt7986-resets.h>
- #include <dt-bindings/reset/mt8183-resets.h>
- #include <dt-bindings/reset/mt8186-resets.h>
-+#include <dt-bindings/reset/mt8188-resets.h>
- #include <dt-bindings/reset/mt8192-resets.h>
- #include <dt-bindings/reset/mt8195-resets.h>
- #include <linux/delay.h>
-@@ -90,6 +91,10 @@ static const struct mtk_wdt_data mt8186_data = {
- 	.toprgu_sw_rst_num = MT8186_TOPRGU_SW_RST_NUM,
- };
- 
-+static const struct mtk_wdt_data mt8188_data = {
-+	.toprgu_sw_rst_num = MT8188_TOPRGU_SW_RST_NUM,
-+};
-+
- static const struct mtk_wdt_data mt8192_data = {
- 	.toprgu_sw_rst_num = MT8192_TOPRGU_SW_RST_NUM,
- };
-@@ -429,6 +434,7 @@ static const struct of_device_id mtk_wdt_dt_ids[] = {
- 	{ .compatible = "mediatek,mt7986-wdt", .data = &mt7986_data },
- 	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
- 	{ .compatible = "mediatek,mt8186-wdt", .data = &mt8186_data },
-+	{ .compatible = "mediatek,mt8188-wdt", .data = &mt8188_data },
- 	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
- 	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
- 	{ /* sentinel */ }
--- 
-2.18.0
-
+> 
+> > Make it naked function with explicit inline asm?
+> 
+> Can be made to work but is iffy because the compiler can do horrible
+> things with placing the asm().

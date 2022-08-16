@@ -2,51 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF87595819
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B31E659588C
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234463AbiHPKYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
+        id S234723AbiHPKhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234061AbiHPKYB (ORCPT
+        with ESMTP id S234697AbiHPKgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:24:01 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8802CDB7DC
+        Tue, 16 Aug 2022 06:36:33 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4BCDB7D2
         for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:41:35 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id i3-20020a5d8403000000b0067bd73cc9eeso5543687ion.19
+Received: by mail-il1-f197.google.com with SMTP id a13-20020a921a0d000000b002e5f544ee47so1599574ila.9
         for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:41:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc;
-        bh=SWW2JdQKgZyM59f/eas46kio4wWyz76LiMyjXYoftec=;
-        b=msiQsxOBgTH0/jMepQAtDjom/o/fMJfqcNGv7oVX+PGshVI8PgTkZSYR0rNoEiYxU5
-         Q2vrE01Z+VQltnIKcnESh3oWljgqr1k7vLqZjJyh3jfDUL4/gx2Hdqa2YVirN4MZ8kRG
-         PwkeVh1y1RYagmF2z5MNIH2bCq/0I0QstwdgWLcSmGkNhEXzXsn3nqPcxHI4eewKld2l
-         DV1U1kts8DSN3WSjTCL5jIAyV9IW0mYihR75DlzTNDF++URkvFNpqq4GsKxEYZEeKHgt
-         jFSowl4Jw4tviJtOkaJBkXkvpG7s1goX+elhbfXc2An9K9iD1khFkdKRvOVBX0oUhEaB
-         bPxQ==
-X-Gm-Message-State: ACgBeo2HGs6LwnKyZv0htKEg+58Dgj5RkI5qJn4dUwhzXS5SshzAhXgK
-        rKY9vSJbZoHVDt4Uzt2S0s1WlX0egrblqCgUR/Hcn4nedaeF
-X-Google-Smtp-Source: AA6agR48O3UImcs39iqhvruJnFLstRPcgabHR/WdD2EXtn4XHt+z+YFnMRVwAwzHtlR0imbolvZLt1FSySKpPWM8z0wJqrD8/5Gz
+        bh=QoJU5GGMy8v8yEZNFxM99bTCjQW1eFlhk+iiG3fJdLI=;
+        b=gyQTv/ikgE7AyLCZdzHIOhaYSjH85SYEgmMPnCFhahCbuK6snhVojpekqYzzVgIKVO
+         wZuWDUt/GnTdLE6DzceTdY3SBQCKtmZmPw6M+jCYwXJqkDeUBIbcJLyTHQVFB6xvSazv
+         LoBRI2Kblll4c6+R2kV8iyLjRVoz0eiiqv2yeTPmqLrESW/mljmaq35kkjDiMVZ93yhX
+         gC4U7ryyuTWzBsU9r6XdwPsofS+R1xMQ2qOl9uOgnN31B+meJU99j3TuwBojHgzLgBy0
+         VVKLpcNM2FQJwz5cA9XZCQ14zR/x17MJRsrcPY27cnrfw0aB1LCBA3VYq03VetYqVI5f
+         /Jnw==
+X-Gm-Message-State: ACgBeo0QaAYpK4/zMSzlkTyTwU9ccw1t3sIWOlyp52kIdb+MDJVcZv70
+        cJrPFbyPUL6qLQ0rK2RfcZudRbTAYwiqYS/zda0POykMMo/O
+X-Google-Smtp-Source: AA6agR72pfTFc5Nk70AuqknQizPu6jLKL7iJFFPqgDk7a5kQ7izKd/NlV+VSVv6WZrRf/Lm1ZySMpdIMRZk6PsLGPasFpCgAOzQH
 MIME-Version: 1.0
-X-Received: by 2002:a92:d10b:0:b0:2e2:be22:8da8 with SMTP id
- a11-20020a92d10b000000b002e2be228da8mr8530129ilb.85.1660639294769; Tue, 16
+X-Received: by 2002:a05:6e02:2145:b0:2e4:b2f3:d6fb with SMTP id
+ d5-20020a056e02214500b002e4b2f3d6fbmr7270506ilv.163.1660639294552; Tue, 16
  Aug 2022 01:41:34 -0700 (PDT)
 Date:   Tue, 16 Aug 2022 01:41:34 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000043d2f305e657b766@google.com>
-Subject: [syzbot] upstream boot error: general protection fault in wiphy_register
-From:   syzbot <syzbot+eb0ca3583c29f36ba521@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Message-ID: <00000000000040801b05e657b77f@google.com>
+Subject: [syzbot] upstream boot error: BUG: unable to handle kernel paging
+ request in __rhashtable_lookup
+From:   syzbot <syzbot+6fccf62d7c237e1b4c85@syzkaller.appspotmail.com>
+To:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        fw@strlen.de, harshit.m.mogalapalli@oracle.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,138 +63,101 @@ syzbot found the following issue on:
 
 HEAD commit:    4a9350597aff Merge tag 'sound-fix-6.0-rc1' of git://git.ke..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1623af25080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bc6716795f118372
-dashboard link: https://syzkaller.appspot.com/bug?extid=eb0ca3583c29f36ba521
+console output: https://syzkaller.appspot.com/x/log.txt?x=16259e35080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5d647c9572405910
+dashboard link: https://syzkaller.appspot.com/bug?extid=6fccf62d7c237e1b4c85
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+eb0ca3583c29f36ba521@syzkaller.appspotmail.com
+Reported-by: syzbot+6fccf62d7c237e1b4c85@syzkaller.appspotmail.com
 
-usbcore: registered new interface driver nfcmrvl
-Loading iSCSI transport class v2.0-870.
-scsi host0: Virtio SCSI HBA
-st: Version 20160209, fixed bufsize 32768, s/g segs 256
-Rounding down aligned max_sectors from 4294967295 to 4294967288
-db_root: cannot open: /etc/target
-slram: not enough parameters.
-ftl_cs: FTL header not found.
-wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
-wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
-MACsec IEEE 802.1AE
-tun: Universal TUN/TAP device driver, 1.6
-vcan: Virtual CAN interface driver
-vxcan: Virtual CAN Tunnel driver
-slcan: serial line CAN interface driver
-CAN device driver interface
-usbcore: registered new interface driver usb_8dev
-usbcore: registered new interface driver ems_usb
-usbcore: registered new interface driver gs_usb
-usbcore: registered new interface driver kvaser_usb
-usbcore: registered new interface driver mcba_usb
-usbcore: registered new interface driver peak_usb
-e100: Intel(R) PRO/100 Network Driver
-e100: Copyright(c) 1999-2006 Intel Corporation
-e1000: Intel(R) PRO/1000 Network Driver
-e1000: Copyright (c) 1999-2006 Intel Corporation.
-e1000e: Intel(R) PRO/1000 Network Driver
-e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
-mkiss: AX.25 Multikiss, Hans Albas PE1AYX
-AX.25: 6pack driver, Revision: 0.3.0
-AX.25: bpqether driver version 004
-PPP generic driver version 2.4.2
-PPP BSD Compression module registered
-PPP Deflate Compression module registered
-PPP MPPE Compression module registered
-NET: Registered PF_PPPOX protocol family
-PPTP driver version 0.8.5
-SLIP: version 0.8.4-NET3.019-NEWTTY (dynamic channels, max=256) (6 bit encapsulation enabled).
-CSLIP: code copyright 1989 Regents of the University of California.
-SLIP linefill/keepalive option.
-hdlc: HDLC support module revision 1.22
-LAPB Ethernet driver version 0.02
-usbcore: registered new interface driver ath9k_htc
-usbcore: registered new interface driver carl9170
-usbcore: registered new interface driver ath6kl_usb
-usbcore: registered new interface driver ar5523
-usbcore: registered new interface driver ath10k_usb
-usbcore: registered new interface driver rndis_wlan
-mac80211_hwsim: initializing netlink
-general protection fault, probably for non-canonical address 0xffff000000000800: 0000 [#1] PREEMPT SMP KASAN
-KASAN: maybe wild-memory-access in range [0xfff8200000004000-0xfff8200000004007]
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.19.0-syzkaller-14090-g4a9350597aff #0
+8021q: adding VLAN 0 to HW filter on device bond0
+eql: remember to turn off Van-Jacobson compression on your slave devices
+BUG: unable to handle page fault for address: ffffdbffffffffc8
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 11825067 P4D 11825067 PUD 0 
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 3187 Comm: dhcpcd Not tainted 5.19.0-syzkaller-14090-g4a9350597aff #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
-RIP: 0010:get_freepointer mm/slub.c:354 [inline]
-RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
-RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
-RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
-RIP: 0010:kmem_cache_alloc_trace+0x164/0x3e0 mm/slub.c:3282
-Code: 8b 51 08 48 8b 01 48 83 79 10 00 48 89 44 24 08 0f 84 bf 01 00 00 48 85 c0 0f 84 b6 01 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 c2 01 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
-RSP: 0018:ffffc90000067728 EFLAGS: 00010246
-RAX: ffff000000000000 RBX: 0000000000000000 RCX: 0000000000000800
-RDX: 0000000000001fa8 RSI: 0000000000000dc0 RDI: 000000000003dce0
-RBP: ffff888011842140 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000dc0 R14: 0000000000000a20 R15: 0000000000000dc0
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+RIP: 0010:netlink_compare net/netlink/af_netlink.c:500 [inline]
+RIP: 0010:__rhashtable_lookup.constprop.0+0x2ae/0x5e0 include/linux/rhashtable.h:601
+Code: 01 44 89 e6 e8 83 19 e8 f9 45 84 e4 0f 85 8f 01 00 00 e8 f5 1c e8 f9 4d 8d 24 1f 49 8d bc 24 00 05 00 00 48 89 f8 48 c1 e8 03 <42> 0f b6 04 30 84 c0 74 08 3c 03 0f 8e 9c 02 00 00 45 8b ac 24 00
+RSP: 0018:ffffc9000351f818 EFLAGS: 00010a02
+RAX: 1fffdfffffffffc8 RBX: fffffffffffff940 RCX: 0000000000000000
+RDX: ffff88807cc7c140 RSI: ffffffff879318cb RDI: fffefffffffffe40
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: fffefffffffff940
+R13: ffffffff9152ccc0 R14: dffffc0000000000 R15: ffff000000000000
+FS:  00007fbe244b5740(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000bc8e000 CR4: 0000000000350ef0
+CR2: ffffdbffffffffc8 CR3: 0000000021e67000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- kmalloc include/linux/slab.h:600 [inline]
- kzalloc include/linux/slab.h:733 [inline]
- kobject_uevent_env+0x230/0x1640 lib/kobject_uevent.c:524
- device_add+0xb72/0x1e90 drivers/base/core.c:3498
- wiphy_register+0x1ee8/0x2a40 net/wireless/core.c:928
- ieee80211_register_hw+0x22a3/0x3eb0 net/mac80211/main.c:1379
- mac80211_hwsim_new_radio+0x255f/0x4dd0 drivers/net/wireless/mac80211_hwsim.c:4129
- init_mac80211_hwsim+0x5aa/0x73b drivers/net/wireless/mac80211_hwsim.c:5379
- do_one_initcall+0xfe/0x650 init/main.c:1296
- do_initcall_level init/main.c:1369 [inline]
- do_initcalls init/main.c:1385 [inline]
- do_basic_setup init/main.c:1404 [inline]
- kernel_init_freeable+0x6b1/0x73a init/main.c:1611
- kernel_init+0x1a/0x1d0 init/main.c:1500
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ rhashtable_lookup include/linux/rhashtable.h:638 [inline]
+ rhashtable_lookup_fast include/linux/rhashtable.h:664 [inline]
+ __netlink_lookup net/netlink/af_netlink.c:518 [inline]
+ netlink_lookup+0x130/0x470 net/netlink/af_netlink.c:538
+ netlink_getsockbyportid net/netlink/af_netlink.c:1154 [inline]
+ netlink_unicast+0x244/0x7f0 net/netlink/af_netlink.c:1339
+ netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:734
+ ____sys_sendmsg+0x6eb/0x810 net/socket.c:2482
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2536
+ __sys_sendmsg+0xf3/0x1c0 net/socket.c:2565
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fbe245ad163
+Code: 64 89 02 48 c7 c0 ff ff ff ff eb b7 66 2e 0f 1f 84 00 00 00 00 00 90 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 2e 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 55 c3 0f 1f 40 00 48 83 ec 28 89 54 24 1c 48
+RSP: 002b:00007ffd4a7738f8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007fbe244b56c8 RCX: 00007fbe245ad163
+RDX: 0000000000000000 RSI: 00007ffd4a787aa8 RDI: 0000000000000005
+RBP: 0000000000000005 R08: 0000000000000000 R09: 00007ffd4a787aa8
+R10: 0000000000000000 R11: 0000000000000246 R12: ffffffffffffffff
+R13: 00007ffd4a787aa8 R14: 0000000000000030 R15: 0000000000000001
  </TASK>
 Modules linked in:
+CR2: ffffdbffffffffc8
 ---[ end trace 0000000000000000 ]---
-RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
-RIP: 0010:get_freepointer mm/slub.c:354 [inline]
-RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
-RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
-RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
-RIP: 0010:kmem_cache_alloc_trace+0x164/0x3e0 mm/slub.c:3282
-Code: 8b 51 08 48 8b 01 48 83 79 10 00 48 89 44 24 08 0f 84 bf 01 00 00 48 85 c0 0f 84 b6 01 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 c2 01 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
-RSP: 0018:ffffc90000067728 EFLAGS: 00010246
-
-RAX: ffff000000000000 RBX: 0000000000000000 RCX: 0000000000000800
-RDX: 0000000000001fa8 RSI: 0000000000000dc0 RDI: 000000000003dce0
-RBP: ffff888011842140 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000dc0 R14: 0000000000000a20 R15: 0000000000000dc0
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+RIP: 0010:netlink_compare net/netlink/af_netlink.c:500 [inline]
+RIP: 0010:__rhashtable_lookup.constprop.0+0x2ae/0x5e0 include/linux/rhashtable.h:601
+Code: 01 44 89 e6 e8 83 19 e8 f9 45 84 e4 0f 85 8f 01 00 00 e8 f5 1c e8 f9 4d 8d 24 1f 49 8d bc 24 00 05 00 00 48 89 f8 48 c1 e8 03 <42> 0f b6 04 30 84 c0 74 08 3c 03 0f 8e 9c 02 00 00 45 8b ac 24 00
+RSP: 0018:ffffc9000351f818 EFLAGS: 00010a02
+RAX: 1fffdfffffffffc8 RBX: fffffffffffff940 RCX: 0000000000000000
+RDX: ffff88807cc7c140 RSI: ffffffff879318cb RDI: fffefffffffffe40
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: fffefffffffff940
+R13: ffffffff9152ccc0 R14: dffffc0000000000 R15: ffff000000000000
+FS:  00007fbe244b5740(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000bc8e000 CR4: 0000000000350ef0
+CR2: ffffdbffffffffc8 CR3: 0000000021e67000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 ----------------
 Code disassembly (best guess):
-   0:	8b 51 08             	mov    0x8(%rcx),%edx
-   3:	48 8b 01             	mov    (%rcx),%rax
-   6:	48 83 79 10 00       	cmpq   $0x0,0x10(%rcx)
-   b:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
-  10:	0f 84 bf 01 00 00    	je     0x1d5
-  16:	48 85 c0             	test   %rax,%rax
-  19:	0f 84 b6 01 00 00    	je     0x1d5
-  1f:	48 8b 7d 00          	mov    0x0(%rbp),%rdi
-  23:	8b 4d 28             	mov    0x28(%rbp),%ecx
-  26:	40 f6 c7 0f          	test   $0xf,%dil
-* 2a:	48 8b 1c 08          	mov    (%rax,%rcx,1),%rbx <-- trapping instruction
-  2e:	0f 85 c2 01 00 00    	jne    0x1f6
-  34:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
-  38:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
-  3d:	0f 94 c0             	sete   %al
+   0:	01 44 89 e6          	add    %eax,-0x1a(%rcx,%rcx,4)
+   4:	e8 83 19 e8 f9       	callq  0xf9e8198c
+   9:	45 84 e4             	test   %r12b,%r12b
+   c:	0f 85 8f 01 00 00    	jne    0x1a1
+  12:	e8 f5 1c e8 f9       	callq  0xf9e81d0c
+  17:	4d 8d 24 1f          	lea    (%r15,%rbx,1),%r12
+  1b:	49 8d bc 24 00 05 00 	lea    0x500(%r12),%rdi
+  22:	00
+  23:	48 89 f8             	mov    %rdi,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 0f b6 04 30       	movzbl (%rax,%r14,1),%eax <-- trapping instruction
+  2f:	84 c0                	test   %al,%al
+  31:	74 08                	je     0x3b
+  33:	3c 03                	cmp    $0x3,%al
+  35:	0f 8e 9c 02 00 00    	jle    0x2d7
+  3b:	45                   	rex.RB
+  3c:	8b                   	.byte 0x8b
+  3d:	ac                   	lods   %ds:(%rsi),%al
+  3e:	24 00                	and    $0x0,%al
 
 
 ---

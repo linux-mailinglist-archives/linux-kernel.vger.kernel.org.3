@@ -2,117 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1602C59527A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 08:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D49459527C
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 08:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbiHPGYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 02:24:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
+        id S229480AbiHPGZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 02:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiHPGXo (ORCPT
+        with ESMTP id S229781AbiHPGZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 02:23:44 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2117.outbound.protection.outlook.com [40.107.93.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77B7180B5F
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 17:28:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ri6RgunLXuY41CfAFLttG1MOxqHps0SRezmVP+e0FRszoyiRdr2+cVdQhXzH38+7FQfDPVPf6aj8rMVi6FkEok93PMNIijBXf92xraVLQLCH3v4M62kMuLLt3kKma/VkXoOIYwFHN7yP+mJClUpkdhzsMYEtbwKHClhNozHE0CQzk3REpVOxg1d4bkERp5MUKw9jIFXeJkIUsnGIxmp81C8iQdtpIY0iQs3VGgKI2Ii1NpTHvRMif/Ljd4rrp+ZZR/HO1V3j4cCNeN94mhSP09sVDnfesZwtG7IMsFWrcwz9edHie9DTUyGt/yyuMDmi2d/HE95S0r1QU3N/7n0hJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HKYhxuf0HMMsStJEN0QuEQTPyVFI4isgFRoijk5GeWk=;
- b=gBtiKyxwjH2qMAd135jdW+1trjFWqriCc41J8J+c56ZgPj5nsUxJX8V0wgTUdR5qzDlswOWGT//9cpQpiiFPmR8aH6Cq9bczPJni9/uW4xNJf6yA7DgVDpBJVD1P35DDR1MCOxAiCCnOlqaQNPcoJC2mDLH0P6s9UHsrSuYu31G/1Z/ufePKZ4iZA/OOepZWSrIiwEV8vmNtYrFizaTXoSjRqCVzx4sEE7NuYtCWV4eEQ7RHnzJwgPsRY8EIOv5X5ASkel3bSXLJIhmYJMwrg3cQTnp59edYqDxECekgSzYhZkR8qr0oZV1j6QeQkXONzOu5tXL/fbhz/L7IVqSGXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+        Tue, 16 Aug 2022 02:25:36 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8967F13674B
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 17:31:20 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-10ea30a098bso10004592fac.8
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 17:31:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HKYhxuf0HMMsStJEN0QuEQTPyVFI4isgFRoijk5GeWk=;
- b=evYCEF+YnoBTUzBTBb0BUWIUqOWaPT3otY9TIrZLWoAILuHBbGx7H7W8iDyoVnu11cvaZ2YyW0RIBoWe5F65FghTzPAOn0ETfZ8qC90QksgUZPD+YU8PHkwAPJ4rOS681IwTqbHcLZbcQ12M0eSmHQBM4g4BXBEIhtNWLjx+s68=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by BYAPR10MB2776.namprd10.prod.outlook.com
- (2603:10b6:a03:87::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Tue, 16 Aug
- 2022 00:28:00 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::b869:6c52:7a8d:ddee]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::b869:6c52:7a8d:ddee%4]) with mapi id 15.20.5504.027; Tue, 16 Aug 2022
- 00:27:59 +0000
-Date:   Mon, 15 Aug 2022 17:27:56 -0700
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Len Brown <len.brown@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: boot stuck at starting kernel, due to __genpd_dev_pm_attach?
-Message-ID: <YvrkjH6/FpIzyAv+@euler>
-References: <Yvpd2pwUJGp7R+YE@euler>
- <20220815182307.GA4658@duo.ucw.cz>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815182307.GA4658@duo.ucw.cz>
-X-ClientProxiedBy: BYAPR03CA0018.namprd03.prod.outlook.com
- (2603:10b6:a02:a8::31) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=sjHa9icqRlJ0JksO3F6ZvE7i15gfikQ5o3Vy7JFxppE=;
+        b=h0YbD3es2uiuXm+iZMywYsWMiom4/q54qBleqHYw3O9z1DwQ1PDlGF7Oyud718lg1x
+         v39v3Ab3qyz/iA8AwkK9PidS3HjQqrJLfMvtJobFOkfLKkYQp8LgYozNCFwKGTgWzHV6
+         AU4FLhPWOZnSok4kEb/PWbb9inD8DI/xUupOvz+CO+iQMAQsqVvdyLd58vbCGY2aHGGl
+         ijXXD3GpqM2Z7MgXjowUbLaAvK8lhnjeEBWxfx/MYLlQnYEJNqEw9wqhzl9S7bEvgjXa
+         AdfC04QQAFuTXNxf5uQWCVF4h8ix74FubFDHSZ5Q7SHRJ6mqpL+dnF17CUYYUn8Gs5zG
+         fskg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=sjHa9icqRlJ0JksO3F6ZvE7i15gfikQ5o3Vy7JFxppE=;
+        b=E1CrYT0OAQWcwEEMlRisWKLgOEQ5UgrrmUoEATBbNEhyNVy0GiZmnUrlkIcS7Ot5mx
+         c7GWVz5cqVBTKrQi5hZBtDw658lrnink9wBcxmM0GrJ/P/n5njDL/hFUDrKk3ppgf/cH
+         4IfNz2ER500fJiT/wwCtdgjhOV4v+Grir1DgDbfMGhjLzbUZOo3kViJlfUo6whNt5fJb
+         +EKr/wNDcETML80+XUuu4UeAsLPk20WiKKxe6H4WtQOl5UY4HrHAYBsIBZgmuPIgte1j
+         X80UXEfIVyl/nLxJDNC/HUc00SjBCH/LR0NnxiPGXvf2sV7cnFu6D1BuR1W2adXPSCa6
+         2viQ==
+X-Gm-Message-State: ACgBeo00I/ELMP1oGnwr/tUU+70AkntvimE0IT+syZ8y3Lspt0BQKiTk
+        hC4Fyd8jNhmscoOcd/CyIqfEgXczJ2eAWACVtlgE
+X-Google-Smtp-Source: AA6agR41whzPOTaUXB+gAEEw9HlVd4Fqc0u91wOZVxmy2wI70Rmkkyj4tbRzAUD7nn3ppYKyaYWLu9psp1gGsRe7Mvo=
+X-Received: by 2002:a05:6870:b41e:b0:116:5dc7:192a with SMTP id
+ x30-20020a056870b41e00b001165dc7192amr8115012oap.136.1660609879901; Mon, 15
+ Aug 2022 17:31:19 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 42445d89-672a-493f-aca0-08da7f1e2c37
-X-MS-TrafficTypeDiagnostic: BYAPR10MB2776:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0u5ZXVIwwsu1i6Hvej7VAOtqfJFnNyM5h4adBNFXOtlflN8mR6om0wFTrHXxIEUwIgrRcr78rBayEgWFrKilUF/Eqfnh+zc5SkjQS8Pm9DZ6rRTmhFvDKxmHBIk2W78sqQcefwwLqZIi+0tf7xJl5A+YvXQttLnrKTZrwjY73sqE1DzpG65hnb1kNNUOs9YyPlWbfR8ANK+8Ymk9FWV6QvmEcOnJ+QRfdIaE8Y/CrnUu/G1nRN8XXKkpi80+uqhExatLa0Mrc/e5GAtgHubgipQ3DOCSCtXyikLj/bJv8QMyAWIiWoFd+V7awKFLPJ6MKlF4sxSjJ+m5bV+v2HNWbhHEcrMs9jgPV3gUdH1RUtNolRfDRSa1JUlIXQCQiOtRnu4eRayX1yYfBbHA1HkZpyTxqV09jjf/ptisSd3ipICzp1QQFTBxfbLgCk4LGs338AzN3jXpLNAvT1uWiuBBtLXg5x3AV8dCIat9h32UVEaCNe/Y4j0pRcbgTEAysdRD8O+Xhk7M+1b/QvesIIMO8vZSysU0Cb2dWt9uh12sWqP4fjUelbsVbR1zCi00citFiosuKmIRs/d1yOW2W5B1NBBYET9pUx7BIlAzWjRysZLmUUpubtnTQceEosy4L4yMTbuyPsxN1ui+4zXQPOcDEyyGo/zooKhdzBjapneZ9ckWSLXOdxc+KyCxPpqecuyLC1LYjCXrOC7jb226TTsJ0up8xQakIfWYaBhVx+wsKOGR5z6N0rfwo+NCkchV2o99
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(136003)(39830400003)(376002)(396003)(346002)(366004)(9686003)(316002)(6916009)(54906003)(6512007)(6666004)(478600001)(41300700001)(6506007)(26005)(6486002)(66946007)(86362001)(8936002)(66556008)(33716001)(66476007)(2906002)(8676002)(4326008)(44832011)(5660300002)(186003)(83380400001)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/7T+Icg0zc6Zsl33mXYL6qeqZ5FW5zrfoUnPFAW4Tx4mFNv8dHBHRJi/GI0t?=
- =?us-ascii?Q?7VESbkGZX6rNwHGz4aMjyntpSjlCWhHXuq2CyFUbvzm20ZWw5ChkWefDHVYA?=
- =?us-ascii?Q?/o+B48Tvi1D7oVhedXrXISPlEAQogr5QRb+h+ru0om+aDUoNN6JT9sOai/N2?=
- =?us-ascii?Q?LFZO9uiY1JffnqyTnGxv1Dv1isnKEqaqnb9vnK3DaRZJM+ChVwUmftkxrPPP?=
- =?us-ascii?Q?7kM5CG2QFdghdHX7F7uKSkIwSmIOeGNat8E1ZyoaMsFI+CJAGgEyxsGt8CBi?=
- =?us-ascii?Q?ftzFUZRPicRG8AYLMuNaEgdJFBFk021d7Lh8KMNUT06MEFxhdrIy7/ctWmmt?=
- =?us-ascii?Q?/iitWjkxktGdWmVMDaN2GN8Ha1oc+Rcld+ZafZ5BLBJ03ircJfMh7iYZ08oH?=
- =?us-ascii?Q?RMdiI9CFMiF6MwGqMJLLq24RgMbssPxP+YnkgHXOOeut1MPQ0d3hvIDf1Ujh?=
- =?us-ascii?Q?RxqA6BQWk8xiM1dqpGiJtI4RrQ7TpoV5uLbaFNKd3g2SjH9E/YyTpfADS2tG?=
- =?us-ascii?Q?qoOtllu4dAT3X2ZvExtFXL13cj1a0prRlw6RDnY3NOHB/6K+AOgqOdlIDBsr?=
- =?us-ascii?Q?B7qMn6PFMYYaidwD/l27e6foC3rmyYr1YTK0tBnZ473hMaunvx35TjXOg+U0?=
- =?us-ascii?Q?66iCTrVAS55gdBfXXJtARmpodt/U61oeThMNZECnxOsXwXljr3z2sstTN3eI?=
- =?us-ascii?Q?2WRybCHTOm0GnajsUVZRGA8rQQx6t10Tv/iq0VSsvqhS1bLdC67xBhMRaZBE?=
- =?us-ascii?Q?D5XuSnZ48y5HvJDz4OytHTAnMHCPDWNXww1/3KPl3cm8kynfTshrgPDzXEge?=
- =?us-ascii?Q?yybzu4ha5BZN7ZTY1C4VLUPXW6OWFE27kllwcTlPCh9LVhaJrvYaP6/2IW4W?=
- =?us-ascii?Q?Z5T/4yJNkpfYprTPQnpA1frjnbLwrTUqGRP8VmLlH6lwC9CKAJLbtD9ByIpq?=
- =?us-ascii?Q?Avg9A7NCAApJakvu/bGni6a1W1faeyDFkrcOeMFRJyxISRhsXFqQs5KiiuHV?=
- =?us-ascii?Q?4GdqG1ivhvoGp3FOxTUaqvn8nTji0Bn6eo9N83RZ2XwRxG6GxR6S3CS8Crjy?=
- =?us-ascii?Q?ytERGGCLcn1PUHs4hBUJYxj6Xx22hh9dt/dv0j/7HJ7MqphBTJomFttqFLls?=
- =?us-ascii?Q?byO49xb5QPqW7/+Wm+XqQjwIRTJCi4EH+qwVMqIVMfScbtZzqJdx4hikJ51I?=
- =?us-ascii?Q?e/5tUsm6VUu1KX4siFgVkvx/p21qmN88sQiMjg2aLHxtRK0z7Se0FWzs4k+y?=
- =?us-ascii?Q?yWpzNscInGnXBMPykS7ry5scWPVZqMjqz+cY2cTgTROn4jjFSzrxtBoJOetp?=
- =?us-ascii?Q?QehCLhYRPXKLB70dSuAxec380vioC3nDgS58NIQ0dO4p/Ixzt5x9Bwn/0wBj?=
- =?us-ascii?Q?NFZPf7nGHr2C4GPtKKYmux/8uQKvUZ7i1ho9srVByYz7d0KntwKk9ZRgyx1w?=
- =?us-ascii?Q?QK8hbYsI9tlcSJinNj+UjuRelu+3gnYMMToP8KVNyB0S77qWHYT1eXJRMErt?=
- =?us-ascii?Q?LOgLRkUncKkv+xXcWDhzWtTHLhxwDkCyBDIPaa6b8KHxqMhoF8+9c2TMbfO9?=
- =?us-ascii?Q?/TRA78tRxWv8JcUG7FloMx+3mlW9hcGEK2OCUOt/NVjcedBEHHl72BpLBlVc?=
- =?us-ascii?Q?8A=3D=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 42445d89-672a-493f-aca0-08da7f1e2c37
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2022 00:27:59.6751
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: baq4CnTZGWBA3NZXuwgqkrFY4KDH/5tsE57yaDAI1AbwK67aCjmkyFwALhp9bmwCcPozG8tLU9bjBsFlVgnsfat37RKmKOJkb0biR5YJojM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB2776
+References: <cover.1659996830.git.rgb@redhat.com> <2d8159cec4392029dabfc39b55ac5fbd0faa9fbd.1659996830.git.rgb@redhat.com>
+In-Reply-To: <2d8159cec4392029dabfc39b55ac5fbd0faa9fbd.1659996830.git.rgb@redhat.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 15 Aug 2022 20:31:09 -0400
+Message-ID: <CAHC9VhQYDsjx2QVRqU8NUr2p4MsWi7DKEFXMk4MvVyEbv4niHQ@mail.gmail.com>
+Subject: Re: [PATCH v4 4/4] fanotify,audit: deliver fan_info as a hex-encoded string
+To:     Richard Guy Briggs <rgb@redhat.com>
+Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -120,37 +68,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 08:23:07PM +0200, Pavel Machek wrote:
-> Hi!
-> 
-> > You might have already gotten this report, but I tried running v6.0-rc1
-> > on my BeagleBone Black and it gets stuck right after "Starting kernel
-> > ..." from U-Boot.
-> > 
-> > A bisect pointed me to commit 5a46079a9645 ("PM: domains: Delete usage
-> > of driver_deferred_probe_check_state()").
-> > 
-> > I don't have much more detail than that, other than I'm using the
-> > in-tree am335x-boneblack.dts device tree and I believe I had tested with
-> > the multi-v7-defconfig for this verification. I'm happy to test anything
-> > that might offer more information.
-> 
-> Well, standart next step is reverting 5a46079a9645 on top of v6.0-rc1,
-> and if it starts working, either you get fix in your inbox, or you ask
-> Linus to revert :-).
+On Tue, Aug 9, 2022 at 1:23 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+>
+> Currently the only type of fanotify info that is defined is an audit
+> rule number, but convert it to hex encoding to future-proof the field.
+>
+> Sample record:
+>   type=FANOTIFY msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=3F
+>
+> Suggested-by: Paul Moore <paul@paul-moore.com>
+> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> ---
+>  kernel/auditsc.c | 28 +++++++++++++++++++++-------
+>  1 file changed, 21 insertions(+), 7 deletions(-)
 
-I was able to revert 5a46079a9645 and 9cbffc7a5956 and successfully boot
-v6.0-rc1 on the Beaglebone Black.
+This needs to be squashed with patch 3/4; it's a user visible change
+so we don't want someone backporting 3/4 without 4/4, especially when
+it is part of the same patchset.
 
-I still don't know whether the root cause is the patch, or perhaps an
-invalid boneblack DTS. I'll try and dig to get more info about what
-might be failing. But I do think anyone using a Beaglebone will have
-this issue, and I also think I'm not the only using the BBB.
+> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> index f000fec52360..0f747015c577 100644
+> --- a/kernel/auditsc.c
+> +++ b/kernel/auditsc.c
+> @@ -2908,22 +2908,36 @@ void __audit_fanotify(u32 response, size_t len, char *buf)
+>
+>         if (!(len && buf)) {
+>                 audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
+> -                         "resp=%u fan_type=0 fan_info=?", response);
+> +                         "resp=%u fan_type=0 fan_info=3F", response); /* "?" */
 
-> 
-> Best regards,
-> 								Pavel
-> -- 
-> People of Russia, stop Putin before his war on Ukraine escalates.
+Please drop the trailing comment, it's not necessary and it makes the
+code messier.
 
+>                 return;
+>         }
+>         while (c >= sizeof(struct fanotify_response_info_header)) {
+> +               struct audit_context *ctx = audit_context();
+> +               struct audit_buffer *ab;
+> +
+>                 friar = (struct fanotify_response_info_audit_rule *)buf;
+>                 switch (friar->hdr.type) {
+>                 case FAN_RESPONSE_INFO_AUDIT_RULE:
+>                         if (friar->hdr.len < sizeof(*friar)) {
+> -                               audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
+> -                                         "resp=%u fan_type=%u fan_info=(incomplete)",
+> -                                         response, friar->hdr.type);
+> +                               ab = audit_log_start(ctx, GFP_KERNEL, AUDIT_FANOTIFY);
+> +                               if (ab) {
+> +                                       audit_log_format(ab, "resp=%u fan_type=%u fan_info=",
+> +                                                        response, friar->hdr.type);
+> +#define INCOMPLETE "(incomplete)"
+> +                                       audit_log_n_hex(ab, INCOMPLETE, sizeof(INCOMPLETE));
 
+Is the distinction between "?" and "(incomplete)" really that
+important?  I'm not going to go digging through all of the
+audit_log_format() callers to check, but I believe there is precedence
+for using "?" not only for when a value is missing, but when it is
+bogus as well.
+
+If we are really going to use "(incomplete)" here, let's do a better
+job than defining a macro mid-function and only using it in one other
+place - the line immediately below the definition.  This is both ugly
+and a little silly (especially when one considers that the macro name
+is almost exactly the same as the string it replaces.  If we must use
+"(incomplete)" here, just ditch the macro; any conceptual arguments
+about macros vs literals is largely rendered moot since there is only
+one user.
+
+> +                                       audit_log_end(ab);
+> +                               }
+>                                 return;
+>                         }
+> -                       audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
+> -                                 "resp=%u fan_type=%u fan_info=%u",
+> -                                 response, friar->hdr.type, friar->audit_rule);
+> +                       ab = audit_log_start(ctx, GFP_KERNEL, AUDIT_FANOTIFY);
+> +                       if (ab) {
+> +                               audit_log_format(ab, "resp=%u fan_type=%u fan_info=",
+> +                                                response, friar->hdr.type);
+> +                               audit_log_n_hex(ab, (char *)&friar->audit_rule,
+> +                                               sizeof(friar->audit_rule));
+> +                               audit_log_end(ab);
+> +
+> +                       }
+>                 }
+>                 c -= friar->hdr.len;
+>                 ib += friar->hdr.len;
+> --
+> 2.27.0
+
+-- 
+paul-moore.com

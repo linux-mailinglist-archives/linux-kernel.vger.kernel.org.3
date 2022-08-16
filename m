@@ -2,94 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E70595FFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B02596001
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235542AbiHPQQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 12:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
+        id S235897AbiHPQTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 12:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbiHPQQo (ORCPT
+        with ESMTP id S235689AbiHPQTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 12:16:44 -0400
-Received: from sonic316-54.consmr.mail.gq1.yahoo.com (sonic316-54.consmr.mail.gq1.yahoo.com [98.137.69.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F927676A
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:16:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1660666602; bh=SVFpb7xegGotvuUMr/bQJEt7nllzUEym3/0lYR9WT10=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=FFv7bUZvpnJs2n+O83iqdRkeMAdzw11+D8NUNQHgaUatSqUXZjVO8ctQxSWlkJFB/rWixYrq+Gw7d+5yPr1KbyXRNxikzlz5Iw/4Wc+mstP4hh56CIp32QJv9o0GxOpNgVUdlJM9AoJzSqmHEs3C0qTvyofqOszI4WNLX2/yQ5qnzZxATqK2uxwLZLcpgpu6hBGGz23skrKMKOMr1TVnAAwvYyhByXnpkeo9fCmsH5EvCpzei3psJUmC1L1WZUeDYtyiW9/QJSioN00qttFW4Nrby3wzYAw99NR1fSkNsvI0XdmMybRJNkAat2LGUTF7lSk9nma/P1DOmOrrXuKNxg==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660666602; bh=Tfqvvv7EU3gvthsqcGgyOCwFs+Bx0FIjsQtDmfITapf=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=rbKEwah+2mT7efuKQB1NiCk44Lutpvr07U2rBlSvwf9q0K5vVkNwYnSdk4XrA3FSVDOUZ+Lp17t0IBH/qsFFEdjBTd52ydoDbbH5zP0CilHQJ+y36uPh1Zc7An0oS2V4M2diw70qvPj9ZOD0chYj9JpqCzQNTzX1DGWsS3hU++oUdLrAw4zyE2o+fG1Z90P8RYdzHA3cwlQ4OZbtbGzMEkH5QmB9XcSldlgWLzytYFLN1XieZFNDJ0CYN0MXrnK273dYK9jCKvMVu/jx+Vu7od+OkCKQO8FebyGbyPMyvMKNpROZhU1gKHKaysdN+/sRJr+00EviLfXisE+7M5EyYw==
-X-YMail-OSG: 6sjBv.0VM1kJ7aiBXQwq5Iiw4BmNpQWsnMbdt3_6LIEmzlmVk99MPJ22aR_fM7h
- 1DpmRWIvVsAXWanKGK8QDMk59hyMeEi4Lksp1qqU9t4dmMpD30eHIXQSxKb98e6wcWJFZADEpHtU
- IaXMw2lc9eklyG_WK0u46dzL9Kk1ImA09a2e8hwX4vXhc9motZTXzxxga9_YwxMnZKkz0ZW0_Tmi
- 6KP5QjdzleKsC1e94nhaM8uRqqz2.K5oRvY.oIxlXCOJKUtAvSlH8AF3Q9D0bQqjY6MvPb0Idrx8
- Ui2eRRzwV78KxhxEcPr3QWtQ2bqYo..WMPfSAgrX.iYZEV2GL1cKQzN82y8omwtmH2H7.zvpjeB.
- brWjUt85UnRolA.kEV3yAzi_g6ZhUDP9fEvoXbKtzPtHsqfkxqYPaEyJiwhkUFcB9YJE9gl2owDB
- u0U_bYbFBBfP1FohtbkYqF9u72XljCdHcMEUq43kOtJRlgkqYzhYpzBANMMr4Ab4hg9TIjrGJ9jz
- 2gyTZ_zu2_xTUNX2MWHFkMPKMv7GwQL1oJOJ2w7YnF6kqKeI68r4_qICme8NC9AlgK2.5id5LM8U
- Wef4v.4AKz2nLAk0Ccl7I1EYOstPiJ62A_7hyuv8PF.7udh7f32aHhLpYVCFDDUwryB1Yq90Aqjc
- wI670AqlXgIcyHvMLbSM2RbWJXrbJyyj7KUpMtZ_Nr7gLb_d1sik.dPizAlYY_Ruqo_CPAkQMjMk
- .X9oZLKSMzzKVd7Hm6yizyDnyknOR38Ux8N6gMZbq9vyI4uogrdNaC6rDE2o5YfUDixy4KgUD5bo
- Uv4cIbV.F5w..ZiUSIQuo.9hAo9VD6JJtu4Rxfc7ELQuvf_8qAXBu9Zz4f8azXpfLINe99GLViPV
- 5_M7yDEGoz4jBE0fHm3CqhW9dKUwUfoaBz1f.GeN54oVIvfG8DavFMipnj9GMA9nfvrzkN2gao3C
- kQL7s8jGTkBir7RSq3xy53uB6_nj1leX69mm.uhma2hiCzuvjgiqLKxoRb54LMFfRqN82QELPwG8
- dNYpMe4pNslTqdcfXxQehToqJHSa1wX8b8Dsa5sT6eQy_E_Iws.6vqo9xI_eJeOQ.2B8wkpzMcpO
- azUGBK.6XQEasDcspuApHknttQZosL_ZqgD5Zdb8z7Q45TfDWKdPGwd30OE0PZYfuZ.n7Ht9sWAm
- Eq6RZqoFq6y.aQZqzhfEoPYR0DZlKTrwk0MlP.EkdWhu.Ic1_Uf0pBHzYm280u4iLf8PeWLh8G.o
- fGNzI3nnTCuqrGZoX5Lrxr.1IetTp601oE1D1.zzXzODemu9RVmHG9EA17RuRT5cVAJD_30EFkwA
- 7FQC105U1C1Sfc5BXF1pNHKbM2GnVO8umc9dlQxRV0qPxVIDWLrrIidfPxSBDFm2ahOgw1ruaMig
- HLTNEDlgwzzugGGSy9DqIMtYis9QwoBpJt92pZGvuYMcN9kUAyBx_9mXr58r8Hd0EIua.MSNdpJw
- 2UqEc6L6fp_OJrmABECoFkXoTSL8WQUaDsRUG9TZvmpQalMlPfG4R.e1.04w2ho1a_Fi9N6Fpazn
- FfTbfhqg1fzYOtqSn.TwOHbjpgNBFYIafyyg5UrLISlKnL3TXeTR2lekIDq88e58I6b2soJaXhyE
- PsuBSgL1FazNG9kSmak30L0J968oc0frHJG4N3mV4DrpjiX5N0qL2.GjSqgggv0P_axUrZoFgAUa
- MmBi6F9RxdyJSvxGURCaWfdQnDedW2GtAyUCSV49PKebnCEMFoeu9QmnM8.Hg1PVpY0QL1ddHkpI
- z1hlWz4uKGwVcqPuZQYVI4ck3VJpSb4xgjdg7CRJP0OuhUgFIVNR931bBPPtWHtsry89XMwefnhH
- n6ls9uGY0GUwOIJbWbtoQn3BVM6enAAx_pE0szhWi8x_K8tbl4R_CyiEIJaa7wCxIRWvSPOkEBT3
- HrDeNaGTa1dBAUikijqKHvKYjnq9.guzp5PetKDFxJcMeVY0Air34tdqO71h85zJ3KFE.bGFyxVF
- Hb1U34vIUdnty1.Z8WmvvxDCw3jEbHK8Vu1z38S1a_XbGdl_Mqdfbq5KDI9Z97x0yCzmc1q.X3Xx
- LDQATlItZFs17eUtz7444h5zLBgDRczqxcCTSZuWR5W3tLSzkOljcbjbf1m.M5qXpJDndMGJmRZf
- e8tsAD7kYM8WA8s6TkyejciH4jxLmHVNN4VDtWBkumWBkObBebldQAlENVpykzrjN64ntotu1GLw
- UIQs6rhzaqZzWCuk-
-X-Sonic-MF: <brchuckz@aim.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.gq1.yahoo.com with HTTP; Tue, 16 Aug 2022 16:16:42 +0000
-Received: by hermes--production-ne1-6649c47445-dfpjm (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 0539108f3a14b27640c2679d028594e8;
-          Tue, 16 Aug 2022 16:16:40 +0000 (UTC)
-Message-ID: <be9d077c-ed4d-d5e3-a134-33afff027af4@netscape.net>
-Date:   Tue, 16 Aug 2022 12:16:36 -0400
+        Tue, 16 Aug 2022 12:19:03 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE07D4DF22
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:18:59 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id gk3so19851175ejb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:18:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=iJ/7niCppHSg4c2xRIFrYJlepL2BitnkJuwZF5uynfA=;
+        b=buNPgX8gTxP2FDCSa+pcBQ4bIRAKTsb+yEdF0PLKD9u+iS4MWh4mwWTvidYITNV3Or
+         pXFuowSxGbudOS82DanCQNxsJ/m6SAc69Gb3BthhwGH7/fBsOh9w140RrES0uxoMnWmI
+         7HAV4tYOUgxpSyzqr3OIbljnRyGFfyzSjOCtlfhdrQDf82ghVFlSRQNpGcMLZcAkw/CI
+         zfxmodYbP2M5E2GDoYfrukImE4nTHwFyC0Ge8qjUfegLSY2SezQ3Qlr+tjxYD1PVoxeu
+         6F9iU6tt0q/x0aOnRmGUm86S9TOQuS3PqS40OM1MBhv327M9R0Lot97+uvVCpkYM8BaK
+         hSZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=iJ/7niCppHSg4c2xRIFrYJlepL2BitnkJuwZF5uynfA=;
+        b=5bm2H/Y/YgZ2WrmCip7wibAO74jR1SSVPqC9Pn8bDTQxlDWeXUUzAGbq2zw7ZdPs2T
+         +zPP9mmGrYe798YlbVFznDN/gNMcPWuoyz+JCu6Pa2Z+yP0wOWN963E+WjmHNkmjRZ5p
+         YyLKdFJb2a9JoX44F6HZOQTzWdjGD4Ll6EvpUhpKs/IupU+Zotb4fqe1liQ5OukoaNcs
+         q2KnDgGKx2ZzZBMw5yjcqXyWzMoUJwXyaiby4rzfy7z69dZWee1sxUY3awGoSz6BJVom
+         4A6omsK7zaPIEFwjjt+Gey1dvFKEHVghhFmLB/TcVQyYg7eKMVZ2BgDe24egTwvM/IOr
+         ldEw==
+X-Gm-Message-State: ACgBeo0OU/FdBTStLkTwqc2cEWniNdkB5p3NV8E2CEpxBfTeIOIBnRXI
+        0DMDI78PGgkHBJMQze/LbVodmA==
+X-Google-Smtp-Source: AA6agR600R++4mbQeNarzZjjCHlFT8XZ2wMrDV5ScMxgSQSxd3fz/LZGbl21Lhb3PI1TasCFVejofQ==
+X-Received: by 2002:a17:907:3f95:b0:733:1e1f:d75c with SMTP id hr21-20020a1709073f9500b007331e1fd75cmr14080427ejc.727.1660666738172;
+        Tue, 16 Aug 2022 09:18:58 -0700 (PDT)
+Received: from localhost (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
+        by smtp.gmail.com with ESMTPSA id j10-20020aa7de8a000000b0043af8007e7fsm8717902edv.3.2022.08.16.09.18.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 09:18:57 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 18:18:56 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Conor.Dooley@microchip.com
+Cc:     palmer@dabbelt.com, daolu@rivosinc.com,
+        linux-kernel@vger.kernel.org, heiko@sntech.de,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        atishp@atishpatra.org, anup@brainfault.org, guoren@kernel.org,
+        jszhang@kernel.org, rdunlap@infradead.org, niklas.cassel@wdc.com,
+        panqinglin2020@iscas.ac.cn, alexandre.ghiti@canonical.com,
+        robh@kernel.org, research_trasio@irq.a4lg.com,
+        yury.norov@gmail.com, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4] arch/riscv: add Zihintpause support
+Message-ID: <20220816161856.jbmobccceki7hfzi@kamzik>
+References: <mhng-1b17506c-8dd7-4868-bd58-7df010313902@palmer-ri-x1c9>
+ <73c7e97a-ebdc-5509-7e74-4b1dbb62b2bb@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        regressions@lists.linux.dev, xen-devel@lists.xenproject.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Juergen Gross <jgross@suse.com>
-References: <20220715142549.25223-1-jgross@suse.com>
- <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
- <a0ce2f59-b653-fa8b-a016-1335f05c86ae@netscape.net>
- <32ed59c9-c894-c426-dd27-3602625cf3b1@netscape.net>
- <c88ea08c-a9d5-ef6a-333a-db9e00c6da6f@suse.com>
- <bd66b5bc-4d07-d968-f46c-40cf624499a7@netscape.net>
- <a29a66e0-2075-8084-84ad-8bd3e8a9fd4a@netscape.net>
- <a7d10605-87e3-c4bd-4a76-f07a04f5751c@leemhuis.info>
- <8d148826-62a5-95f9-8662-be14f56a6336@netscape.net>
- <6b40ecc3-a2d3-3efd-4a19-2faf737f098b@leemhuis.info>
-Content-Language: en-US
-From:   Chuck Zmudzinski <brchuckz@netscape.net>
-In-Reply-To: <6b40ecc3-a2d3-3efd-4a19-2faf737f098b@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20531 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <73c7e97a-ebdc-5509-7e74-4b1dbb62b2bb@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,64 +80,245 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/16/2022 10:41 AM, Thorsten Leemhuis wrote:
-> On 15.08.22 20:17, Chuck Zmudzinski wrote:
-> > On 8/15/2022 2:00 PM, Thorsten Leemhuis wrote:
-> >
-> >> And FWIW: I've seen indicators that a solution to resolve this is
-> >> hopefully pretty close now.
+On Tue, Aug 16, 2022 at 04:04:06PM +0000, Conor.Dooley@microchip.com wrote:
+> On 16/08/2022 16:54, Palmer Dabbelt wrote:
+> > On Fri, 12 Aug 2022 00:21:40 PDT (-0700), Conor.Dooley@microchip.com wrote:
+> >> On 12/08/2022 07:57, Conor Dooley - M52691 wrote:
+> >>> On 11/08/2022 16:17, Palmer Dabbelt wrote:
+> >>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> >>>>
+> >>>> On Mon, 20 Jun 2022 13:15:25 PDT (-0700), daolu@rivosinc.com wrote:
+> >>>>> Implement support for the ZiHintPause extension.
+> >>>>>
+> >>>>> The PAUSE instruction is a HINT that indicates the current hart’s rate
+> >>>>> of instruction retirement should be temporarily reduced or paused.
+> >>>>>
+> >>>>> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+> >>>>> Tested-by: Heiko Stuebner <heiko@sntech.de>
+> >>>>> Signed-off-by: Dao Lu <daolu@rivosinc.com>
+> >>>>> ---
+> >>>>>
+> >>>>> v1 -> v2:
+> >>>>>  Remove the usage of static branch, use PAUSE if toolchain supports it
+> >>>>> v2 -> v3:
+> >>>>>  Added the static branch back, cpu_relax() behavior is kept the same for
+> >>>>> systems that do not support ZiHintPause
+> >>>>> v3 -> v4:
+> >>>>>  Adopted the newly added unified static keys for extensions
+> >>>>> ---
+> >>>>>  arch/riscv/Makefile                     |  4 ++++
+> >>>>>  arch/riscv/include/asm/hwcap.h          |  5 +++++
+> >>>>>  arch/riscv/include/asm/vdso/processor.h | 21 ++++++++++++++++++---
+> >>>>>  arch/riscv/kernel/cpu.c                 |  1 +
+> >>>>>  arch/riscv/kernel/cpufeature.c          |  1 +
+> >>>>>  5 files changed, 29 insertions(+), 3 deletions(-)
+> >>>>>
+> >>>>> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> >>>>> index 34cf8a598617..6ddacc6f44b9 100644
+> >>>>> --- a/arch/riscv/Makefile
+> >>>>> +++ b/arch/riscv/Makefile
+> >>>>> @@ -56,6 +56,10 @@ riscv-march-$(CONFIG_RISCV_ISA_C)  := $(riscv-march-y)c
+> >>>>>  toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
+> >>>>>  riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
+> >>>>>
+> >>>>> +# Check if the toolchain supports Zihintpause extension
+> >>>>> +toolchain-supports-zihintpause := $(call cc-option-yn, -march=$(riscv-march-y)_zihintpause)
+> >>>>> +riscv-march-$(toolchain-supports-zihintpause) := $(riscv-march-y)_zihintpause
+> >>>>> +
+> >>>>>  KBUILD_CFLAGS += -march=$(subst fd,,$(riscv-march-y))
+> >>>>>  KBUILD_AFLAGS += -march=$(riscv-march-y)
+> >>>>>
+> >>>>> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> >>>>> index e48eebdd2631..dc47019a0b38 100644
+> >>>>> --- a/arch/riscv/include/asm/hwcap.h
+> >>>>> +++ b/arch/riscv/include/asm/hwcap.h
+> >>>>> @@ -8,6 +8,7 @@
+> >>>>>  #ifndef _ASM_RISCV_HWCAP_H
+> >>>>>  #define _ASM_RISCV_HWCAP_H
+> >>>>>
+> >>>>> +#include <asm/errno.h>
+> >>>>>  #include <linux/bits.h>
+> >>>>>  #include <uapi/asm/hwcap.h>
+> >>>>>
+> >>>>> @@ -54,6 +55,7 @@ extern unsigned long elf_hwcap;
+> >>>>>  enum riscv_isa_ext_id {
+> >>>>>       RISCV_ISA_EXT_SSCOFPMF = RISCV_ISA_EXT_BASE,
+> >>>>>       RISCV_ISA_EXT_SVPBMT,
+> >>>>> +     RISCV_ISA_EXT_ZIHINTPAUSE,
+> >>>>>       RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
+> >>>>>  };
+> >>>>>
+> >>>>> @@ -64,6 +66,7 @@ enum riscv_isa_ext_id {
+> >>>>>   */
+> >>>>>  enum riscv_isa_ext_key {
+> >>>>>       RISCV_ISA_EXT_KEY_FPU,          /* For 'F' and 'D' */
+> >>>>> +     RISCV_ISA_EXT_KEY_ZIHINTPAUSE,
+> >>>>>       RISCV_ISA_EXT_KEY_MAX,
+> >>>>>  };
+> >>>>>
+> >>>>> @@ -83,6 +86,8 @@ static __always_inline int riscv_isa_ext2key(int num)
+> >>>>>               return RISCV_ISA_EXT_KEY_FPU;
+> >>>>>       case RISCV_ISA_EXT_d:
+> >>>>>               return RISCV_ISA_EXT_KEY_FPU;
+> >>>>> +     case RISCV_ISA_EXT_ZIHINTPAUSE:
+> >>>>> +             return RISCV_ISA_EXT_KEY_ZIHINTPAUSE;
+> >>>>>       default:
+> >>>>>               return -EINVAL;
+> >>>>>       }
+> >>>>> diff --git a/arch/riscv/include/asm/vdso/processor.h b/arch/riscv/include/asm/vdso/processor.h
+> >>>>> index 134388cbaaa1..1e4f8b4aef79 100644
+> >>>>> --- a/arch/riscv/include/asm/vdso/processor.h
+> >>>>> +++ b/arch/riscv/include/asm/vdso/processor.h
+> >>>>> @@ -4,15 +4,30 @@
+> >>>>>
+> >>>>>  #ifndef __ASSEMBLY__
+> >>>>>
+> >>>>> +#include <linux/jump_label.h>
+> >>>>>  #include <asm/barrier.h>
+> >>>>> +#include <asm/hwcap.h>
+> >>>>>
+> >>>>>  static inline void cpu_relax(void)
+> >>>>>  {
+> >>>>> +     if (!static_branch_likely(&riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_ZIHINTPAUSE])) {
+> >>>>>  #ifdef __riscv_muldiv
+> >>>>> -     int dummy;
+> >>>>> -     /* In lieu of a halt instruction, induce a long-latency stall. */
+> >>>>> -     __asm__ __volatile__ ("div %0, %0, zero" : "=r" (dummy));
+> >>>>> +             int dummy;
+> >>>>> +             /* In lieu of a halt instruction, induce a long-latency stall. */
+> >>>>> +             __asm__ __volatile__ ("div %0, %0, zero" : "=r" (dummy));
+> >>>>>  #endif
+> >>>>> +     } else {
+> >>>>> +             /*
+> >>>>> +              * Reduce instruction retirement.
+> >>>>> +              * This assumes the PC changes.
+> >>>>> +              */
+> >>>>> +#ifdef __riscv_zihintpause
+> >>>>> +             __asm__ __volatile__ ("pause");
+> >>>>> +#else
+> >>>>> +             /* Encoding of the pause instruction */
+> >>>>> +             __asm__ __volatile__ (".4byte 0x100000F");
+> >>>>> +#endif
+> >>>>> +     }
+> >>>>>       barrier();
+> >>>>>  }
+> >>>>>
+> >>>>> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> >>>>> index fba9e9f46a8c..a123e92b14dd 100644
+> >>>>> --- a/arch/riscv/kernel/cpu.c
+> >>>>> +++ b/arch/riscv/kernel/cpu.c
+> >>>>> @@ -89,6 +89,7 @@ int riscv_of_parent_hartid(struct device_node *node)
+> >>>>>  static struct riscv_isa_ext_data isa_ext_arr[] = {
+> >>>>>       __RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
+> >>>>>       __RISCV_ISA_EXT_DATA(svpbmt, RISCV_ISA_EXT_SVPBMT),
+> >>>>> +     __RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
+> >>>>>       __RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
+> >>>>>  };
+> >>>>>
+> >>>>> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> >>>>> index 1b3ec44e25f5..708df2c0bc34 100644
+> >>>>> --- a/arch/riscv/kernel/cpufeature.c
+> >>>>> +++ b/arch/riscv/kernel/cpufeature.c
+> >>>>> @@ -198,6 +198,7 @@ void __init riscv_fill_hwcap(void)
+> >>>>>                       } else {
+> >>>>>                               SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_EXT_SSCOFPMF);
+> >>>>>                               SET_ISA_EXT_MAP("svpbmt", RISCV_ISA_EXT_SVPBMT);
+> >>>>> +                             SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_EXT_ZIHINTPAUSE);
+> >>>>>                       }
+> >>>>>  #undef SET_ISA_EXT_MAP
+> >>>>>               }
+> >>>>
+> >>>> Thanks, this is on for-next.  It needs a sparse patch, which I put in as a link.
+> >>>
+> >>> This breaks the C=1 build for all toolchains, not just new ones as your sparse
+> >>> patch suggests. I amn't 100% what my CI is running, but I replicated this on
+> >>> my own machine with:
+> >>
+> >> Argh, I went poking around and my toolchain's binutils etc is newer than I thought.
+> >> Good for people searching on lore I suppose...
+> >> Sorry!
 > > 
-> > That's good to know. But I must ask, can you provide a link to a public
-> > discussion that indicates a fix is close?
->
-> I just searched for the commit id of the culprit yesterday like this:
-> https://lore.kernel.org/all/?q=bdd8b6c982*
->
-> Which brought me to this message, which looks like Boris applied a
-> slightly(?) modified version of Jan's patch to a branch that afaik is
-> regularly pushed to Linus:
-> https://lore.kernel.org/all/166055884287.401.612271624942869534.tip-bot2@tip-bot2/
->
-> So unless problems show up in linux-next I expect this will land in
-> master soon (and a bit later be backported to stable due to the CC
-> stable tag).
+> > So just to be clear: you're saying this only breaks with new binutils?
+> 
+> Yes, sorry - I *thought* the binutils in our CI predated Zihintpause but
+> it doesn't. It (and so would the Zicbom stuff) breaks the builds in our CI
+> as they run with C=1. I manually patched sparse to get that going again & I
+> /suspect/ it may have impacted LKP too.
+> 
+> "New" is relative though - it breaks C=1 for anyone running a toolchain
+> from riscv-collab/riscv-gnu-toolchain.
+> 
+> I guess it's just that Zicbom is newer so not many people will be on a
+> toolchain that supports that. My GCC doesn't only my clang-15.
+> 
+> > I ask because Dao is also seeing some crashes, if it's breaking arbitrary
+> > builds too then it's a stronger hint to revert it.
+> 
+> It is breaking module loading on RISC-V in general from what it seems.
+> See:
+> https://lore.kernel.org/linux-riscv/728ecbd5-975a-168e-efab-3c0030be21d5@w6rz.net/
 
-OK, that's exactly the kind of thing I am looking for. It would be
-nice if regzbot could have found that patch in that tree and
-display it in the web interface as a notable patch. Currently,
-regzbot is only linking to a dead patch that does not even fix
-the regression as a notable patch associated with this regression.
+Hi Conor,
 
-If regzbot is not yet smart enough to find it, could you take the
-time to manually intervene with a regzbot command so that
-patch is displayed as a notable patch for this regression?
+I have a patch for this which I'll send in just a second.
 
->
-> > Or do you know a fix is close
-> > because of private discussions? That distinction is important to me
-> > because open source software is much less useful to me if the solutions
-> > to problems are not discussed openly (except, of course, for solutions
-> > to security vulnerabilities that are not yet public).
->
-> You IMHO are expecting a bit too much here IMHO. Solutions to problems
-> in open source software get discussed on various, sometimes private
-> channels all the time. Just take conferences for example, where people
-> discuss them during talks, meetings, or in one-to-ones over coffee;
-> sometimes they are the only way to solve complex problems. But as you
-> can see from above link it's not like anybody is trying to sneak things
-> into the kernel.
->
-> Ciao, Thorsten
+Thanks,
+drew
 
-Well, as a user of Linux, I would like to see more of those discussions in
-the open, especially if they relate directly to a fix of a regression tracked
-by regzbot. it would be helpful for me to decide questions such as, does
-it make sense for me to keep using the foo project to provide a feature,
-or should I switch to project baz that provides the same feature?
-
-In any case, watching what Linus actually chooses to commit into
-mainline gives me a pretty good clue about such questions.
-
-Best regards,
-
-Chuck
+> 
+> Thanks,
+> Conor.
+> 
+> > 
+> >> Conor.
+> >>
+> >>>
+> >>> sparse --version
+> >>> 0.6.4 (Ubuntu: 0.6.4-2)
+> >>>
+> >>> ---8<---
+> >>>    YACC    scripts/dtc/dtc-parser.tab.[ch]
+> >>>    HOSTCC  scripts/dtc/libfdt/fdt.o
+> >>>    HOSTCC  scripts/dtc/libfdt/fdt_ro.o
+> >>>    HOSTCC  scripts/dtc/libfdt/fdt_wip.o
+> >>>    UPD     include/generated/uapi/linux/version.h
+> >>>    HOSTCC  scripts/dtc/libfdt/fdt_sw.o
+> >>>    UPD     include/config/kernel.release
+> >>>    HOSTCC  scripts/dtc/libfdt/fdt_rw.o
+> >>>    HOSTCC  scripts/dtc/libfdt/fdt_strerror.o
+> >>>    HOSTCC  scripts/dtc/libfdt/fdt_empty_tree.o
+> >>>    HOSTCC  scripts/dtc/libfdt/fdt_addresses.o
+> >>>    HOSTCC  scripts/dtc/libfdt/fdt_overlay.o
+> >>>    HOSTCC  scripts/dtc/fdtoverlay.o
+> >>>    HOSTCC  scripts/dtc/dtc-lexer.lex.o
+> >>>    HOSTCC  scripts/dtc/dtc-parser.tab.o
+> >>>    UPD     include/generated/utsrelease.h
+> >>>    HOSTLD  scripts/dtc/fdtoverlay
+> >>>    HOSTLD  scripts/dtc/dtc
+> >>>    HOSTCC  scripts/kallsyms
+> >>>    HOSTCC  scripts/sorttable
+> >>>    HOSTCC  scripts/asn1_compiler
+> >>>    HOSTCC  scripts/selinux/genheaders/genheaders
+> >>>    HOSTCC  scripts/selinux/mdp/mdp
+> >>>    CC      scripts/mod/empty.o
+> >>>    HOSTCC  scripts/mod/mk_elfconfig
+> >>>    CC      scripts/mod/devicetable-offsets.s
+> >>>    CHECK   ../scripts/mod/empty.c
+> >>> invalid argument to '-march': '_zihintpause'
+> >>>
+> >>> make[2]: *** [../scripts/Makefile.build:250: scripts/mod/empty.o] Error 1
+> >>> make[2]: *** Deleting file 'scripts/mod/empty.o'
+> >>> make[2]: *** Waiting for unfinished jobs....
+> >>> make[1]: *** [/mnt/automation/corp/workspace/ux-test_upstream-next-develop-cd@2/linux/Makefile:1287: prepare0] Error 2
+> >>> make[1]: Leaving directory '/mnt/automation/corp/workspace/ux-test_upstream-next-develop-cd@2/linux/builddir'
+> >>> make: *** [Makefile:231: __sub-make] Error 2
+> >>
+> > 
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv

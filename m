@@ -2,159 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FDC2595EAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 17:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0F14595EB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 17:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236053AbiHPPCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 11:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
+        id S235308AbiHPPC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 11:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236046AbiHPPCO (ORCPT
+        with ESMTP id S232047AbiHPPCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 11:02:14 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5094C8670E
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:00:33 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DF3E51424;
-        Tue, 16 Aug 2022 08:00:33 -0700 (PDT)
-Received: from [10.57.13.180] (unknown [10.57.13.180])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB3EC3F66F;
-        Tue, 16 Aug 2022 08:00:31 -0700 (PDT)
-Message-ID: <413d8666-7a82-efd7-6716-13658016ca10@arm.com>
-Date:   Tue, 16 Aug 2022 16:00:27 +0100
+        Tue, 16 Aug 2022 11:02:37 -0400
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D845108D
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:00:52 -0700 (PDT)
+Received: by mail-qt1-f171.google.com with SMTP id y18so8293547qtv.5
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:00:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=5LUM7nzor1/XqC5vXK/cNLgsMpFS8BfigyHBrmKtMuQ=;
+        b=MXCOR8D7/S0L5R9wqYsXNcrYtAdlgnay6V1TOWTBTqS6YlvA/dDZj/c9RRcN5mPifM
+         1G5AJsX70AKWPWum7ows9CdHSLIw7ZcRSYyZnR8MuVEFUdHjvnbK9O7oOjBY/hfmJV8B
+         hilQUM1IFjwV/jEkJkOR2eMAWGidCsRnLMUbeYnocOAqC6lX/ZIDWeoytcaWGmctpfj3
+         Lqof8H42BOYwveB1ylfJvoVFde3bju22lDriuO1Dh396gphyxR4JAMqgUf8X9jOsm9u3
+         FGEkifsb+nhlrvCWGuGV/SILGrF/fyG5MBUK9+Jk5T3ljbR0JINjZ+5PTpOI7oLv8oKo
+         3P/Q==
+X-Gm-Message-State: ACgBeo026Y1j0Gy+u8xHkSF4npdIg/K32rzhvEAScyWDNdWV1Gta/iT5
+        7kwVcoilt99yfmU0qgWvajDZuyxdoLloIA==
+X-Google-Smtp-Source: AA6agR7aktzKP+flTWZCoWWMuXdwkjrsVo1gaOQvwRR8w+qWoBA0C+usnUdFvxJ91J1yQp5xmsInHA==
+X-Received: by 2002:ac8:5c52:0:b0:343:3dc7:db0d with SMTP id j18-20020ac85c52000000b003433dc7db0dmr18798925qtj.179.1660662050964;
+        Tue, 16 Aug 2022 08:00:50 -0700 (PDT)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id r23-20020ae9d617000000b006af1f0af045sm12028339qkk.107.2022.08.16.08.00.50
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 08:00:50 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-32a09b909f6so158431067b3.0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:00:50 -0700 (PDT)
+X-Received: by 2002:a5b:bcd:0:b0:68f:b4c0:7eca with SMTP id
+ c13-20020a5b0bcd000000b0068fb4c07ecamr130640ybr.202.1660662049765; Tue, 16
+ Aug 2022 08:00:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2] mm/dmapool.c: avoid duplicate memset within
- dma_pool_alloc
-Content-Language: en-GB
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Liu Song <liusong@linux.alibaba.com>,
-        akpm@linux-foundation.org,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-References: <1658125690-76930-1-git-send-email-liusong@linux.alibaba.com>
- <CGME20220816123958eucas1p1b03a5efa1f5804245a5c1a9b27529015@eucas1p1.samsung.com>
- <1dbe63ff-5575-745b-653a-a992ae53e1aa@samsung.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <1dbe63ff-5575-745b-653a-a992ae53e1aa@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v1-4-3d53ae722097@cerno.tech>
+ <CAMuHMdUrwzPYjA0wdR7ADj5Ov6+m03JbnY8fBYzRYyWDuNm5=g@mail.gmail.com> <20220816132636.3tmwqmrox64pu3lt@houat>
+In-Reply-To: <20220816132636.3tmwqmrox64pu3lt@houat>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 16 Aug 2022 17:00:38 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUNLPbjs=usYQBim5FxsrC1oJLuF+3JB7auzHHRoOqavQ@mail.gmail.com>
+Message-ID: <CAMuHMdUNLPbjs=usYQBim5FxsrC1oJLuF+3JB7auzHHRoOqavQ@mail.gmail.com>
+Subject: Re: [PATCH v1 04/35] drm/modes: Introduce 480i and 576i modes
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-16 13:39, Marek Szyprowski wrote:
-> Hi,
-> 
-> On 18.07.2022 08:28, Liu Song wrote:
->> From: Liu Song <liusong@linux.alibaba.com>
->>
->> In "dma_alloc_from_dev_coherent" and "dma_direct_alloc",
->> the allocated memory is explicitly set to 0.
->>
->> A helper function "use_dev_coherent_memory" is introduced here to
->> determine whether the memory is allocated by "dma_alloc_from_dev_coherent".
->>
->> And use "get_dma_ops" to determine whether the memory is allocated by
->> "dma_direct_alloc".
->>
->> After this modification, memory allocated using "dma_pool_zalloc" can avoid
->> duplicate memset.
->>
->> Signed-off-by: Liu Song <liusong@linux.alibaba.com>
-> 
-> This patch landed linux next-20220816. Unfortunately it causes serious
-> issues on ARM 32bit systems. I've observed it on ARM 32bit Samsung
-> Exynos 5422 based Odroid XU4 board with USB r8152 driver. After applying
-> this patch and loading r8152 driver I only the following endless
-> messages in the log:
-> 
-> xhci-hcd xhci-hcd.9.auto: WARN Event TRB for slot 1 ep 0 with no TDs queued?
-> xhci-hcd xhci-hcd.9.auto: WARN Event TRB for slot 1 ep 0 with no TDs queued?
-> xhci-hcd xhci-hcd.9.auto: WARN Event TRB for slot 1 ep 0 with no TDs queued?
-> 
-> It looks that there are drivers which rely on the fact that the dma
-> coherent buffers are always zeroed.
+Hi Maxime,
 
-It's not even that, the change here is just obviously broken, since it 
-ends up entirely ignoring want_init_on_alloc() for devices using 
-dma-direct. Sure, the memory backing a dma_page is zeroed *once* by its 
-initial dma-coherent allocation, but who says we're not not reallocating 
-pool entries from an existing dma_page?
+On Tue, Aug 16, 2022 at 3:26 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> On Fri, Aug 12, 2022 at 03:18:58PM +0200, Geert Uytterhoeven wrote:
+> > On Fri, Jul 29, 2022 at 6:35 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> > > Multiple drivers (meson, vc4) define the analog TV 525-lines and 625-lines
+> > > modes in the drivers.
+> >
+> > Nit: strictly speaking these are not analog modes, but the digital
+> > variants (ITU-R BT.656 and DVD-Video D1) of NTSC and PAL, using a
+> > 13.5 MHz sampling frequency for pixels.
+> >
+> > In analog modes, the only discrete values are the number of lines, and
+> > the frame/field rate (fixing the horizontal sync rate when combined).
+> >
+> > The number of (in)visible pixels per line depends on the available
+> > bandwidth.  In a digital variant (which is anything generated by a
+> > digital computer system), the latter depends on the pixel clock, which
+> > can wildly differ from the 13.5 MHz used in the BT.656 standard. (e.g.
+> > Amiga uses 7.09/14.19/28.38 MHz (PAL) or 7.16/14.32/28.64 MHz (NTSC)).
+> >
+> > So I think we probably need some way to generate a PAL/NTSC-compatible
+> > mode based not only on resolution, but also on pixel clock.
+>
+> This would also fix the comments made by Jani and Thomas, so I quite
+> like the idea of it.
+>
+> I'm struggling a bit to find how would could implement this though.
+>
+> From what you were saying, I guess the prototype would be something like
+>
+> struct drm_display_mode *drm_create_analog_mode(unsigned int pixel_clock,
+>                                                 unsigned int lines,
+>                                                 unsigned int frame_rate)
+>
+> But I have zero idea on what the implementation would be. Do you have
+> some resources for this you could point me to?
 
-I'm not convinced it's worth trying to special-case this at all, since 
-we can only do it reliably for the first pool entry allocated from a new 
-dma_page, and that will only happen as the pool initially grows to a 
-suitable size for its working set, after which no further new pages are 
-likely to be allocated for the lifetime of the pool. Even if there is a 
-case to be made for doing so, it would need to be based on the flow 
-through dma_pool_alloc() itself, not some nonsense heuristic on the device.
+Horizontally, I think you should calculate left/right margins and
+hsync length to yield timings that match those for the BT.656 PAL/NTSC
+modes.  I.e. when a 640x512 mode with a pixel clock of 14 MHz is
+requested, you want to calculate left', right', and hslen' for
 
-Andrew, please drop this patch.
+| <---- left' ---> | <- 640 pixels -> | <---- right' ---> | <--- hslen' --> |
+                        @ 14 MHz
 
-Thanks,
-Robin.
+so they match the timings for left, right, and hslen for
 
->> ---
->>    include/linux/dma-map-ops.h | 5 +++++
->>    mm/dmapool.c                | 5 ++++-
->>    2 files changed, 9 insertions(+), 1 deletion(-)
->>
->> diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
->> index 0d5b06b..c29948d 100644
->> --- a/include/linux/dma-map-ops.h
->> +++ b/include/linux/dma-map-ops.h
->> @@ -171,6 +171,10 @@ int dma_alloc_from_dev_coherent(struct device *dev, ssize_t size,
->>    int dma_release_from_dev_coherent(struct device *dev, int order, void *vaddr);
->>    int dma_mmap_from_dev_coherent(struct device *dev, struct vm_area_struct *vma,
->>    		void *cpu_addr, size_t size, int *ret);
->> +static inline bool use_dev_coherent_memory(struct device *dev)
->> +{
->> +	return dev->dma_mem ? true : false;
->> +}
->>    #else
->>    static inline int dma_declare_coherent_memory(struct device *dev,
->>    		phys_addr_t phys_addr, dma_addr_t device_addr, size_t size)
->> @@ -180,6 +184,7 @@ static inline int dma_declare_coherent_memory(struct device *dev,
->>    #define dma_alloc_from_dev_coherent(dev, size, handle, ret) (0)
->>    #define dma_release_from_dev_coherent(dev, order, vaddr) (0)
->>    #define dma_mmap_from_dev_coherent(dev, vma, vaddr, order, ret) (0)
->> +#define use_dev_coherent_memory(dev) (0)
->>    #endif /* CONFIG_DMA_DECLARE_COHERENT */
->>    
->>    #ifdef CONFIG_DMA_GLOBAL_POOL
->> diff --git a/mm/dmapool.c b/mm/dmapool.c
->> index a7eb5d0..6e03530 100644
->> --- a/mm/dmapool.c
->> +++ b/mm/dmapool.c
->> @@ -21,6 +21,7 @@
->>    
->>    #include <linux/device.h>
->>    #include <linux/dma-mapping.h>
->> +#include <linux/dma-map-ops.h>
->>    #include <linux/dmapool.h>
->>    #include <linux/kernel.h>
->>    #include <linux/list.h>
->> @@ -372,7 +373,9 @@ void *dma_pool_alloc(struct dma_pool *pool, gfp_t mem_flags,
->>    #endif
->>    	spin_unlock_irqrestore(&pool->lock, flags);
->>    
->> -	if (want_init_on_alloc(mem_flags))
->> +	if (want_init_on_alloc(mem_flags) &&
->> +		!use_dev_coherent_memory(pool->dev) &&
->> +		get_dma_ops(pool->dev))
->>    		memset(retval, 0, pool->size);
->>    
->>    	return retval;
-> 
-> Best regards
+| <--- left ---> | <--- 720 pixels ---> | <--- right ---> | <--- hslen ---> |
+                        @ 13.5 MHz
+
+As 640 pixels @ 14 MHz are less wide than 720 pixels @ 13.5 MHz,
+you want to make sure to align the center of the visible part.
+
+Vertically, it's simpler, as the number of lines is discrete.
+You do have to take into account interlace and doublescan, and
+progressive modes with 262/312 lines.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

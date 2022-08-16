@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F33DD595B50
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD31595B4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235256AbiHPMI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 08:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
+        id S234751AbiHPMIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 08:08:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235085AbiHPMHo (ORCPT
+        with ESMTP id S235279AbiHPMHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 08:07:44 -0400
+        Tue, 16 Aug 2022 08:07:45 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D68EE01E;
-        Tue, 16 Aug 2022 04:58:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1C4D62;
+        Tue, 16 Aug 2022 04:58:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660651088; x=1692187088;
+  t=1660651092; x=1692187092;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=g/F4tMrll8nHV2susd2hq+bFV1Y77UKistuJ9wgFtd4=;
-  b=GK8EXZH2jQhbzwp/siVI8lsinxg2K9olh8EVDwDbh+vpN6aUMPZcPw8g
-   5gz2v18kIa7DK53UcxbSYynVq+YkrPk/zIQ1v+Lo7kc1MIAp+IM+TtPYQ
-   Z3Tq+ijsI9/nKk3tz0LxYEnhqKOn/edM23nXHT78yLo0TJr5IB4PDry7z
-   pZWj8HIhqMllUCfU0LJncjACxXITEVSsjIfbXA0zIjM/MpJXcJsbc65RF
-   zeWENIwwLijZ1ld9vtWoeqlJk/6EQCxd55H+fO3EBO47URXV2VmyU84BJ
-   rrD8KV2aHpOf44Xg7+BlTEPdpO9UF9z4AkD/xTO6/8L/o8PTKx8T++Xdt
+  bh=jViNROObNO3h6Uyd+viPlFHM6zP9PKpgfEeghIlk4cw=;
+  b=F/B58Oud4Dt7w9NvXdipCymfhxan2EoWMKT34l041LL1XZWLWVNVo+Ut
+   ZMSlTCEXC9xYrWkBgNFNucRshMQGYNgbKFZdb7dkw4QGqTBlgQgTyGUqG
+   Y/3h4JAQLig1uVQXad6IkKNGf7o2iHXnFLXwAt9Lb48UOGyS1LxSk6BkE
+   41/3iHdPt5SXeEoP7fpVp5cFsGXnXwlSLWYGtZozQQrLzeiOav0rh52rM
+   e4gbFk8DrGSSgaZMnCWS5FwefchtgFhmcY28VKcxzG79aE9J7h3k/npw8
+   CAOpDSi58206mkLOPzOmGXxmUWMyM8IWtVUGVji9ZwmWoWXL/Vth0HYu1
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="356199340"
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="356199344"
 X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="356199340"
+   d="scan'208";a="356199344"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 04:58:08 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 04:58:11 -0700
 X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="667080814"
+   d="scan'208";a="667080819"
 Received: from tturcu-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.51.153])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 04:58:05 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 04:58:09 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-serial@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -45,9 +45,9 @@ To:     linux-serial@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Johan Hovold <johan@kernel.org>,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 4/8] tty: Make tty_termios_copy_hw() old ktermios const
-Date:   Tue, 16 Aug 2022 14:57:35 +0300
-Message-Id: <20220816115739.10928-5-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 5/8] tty: Make ldisc ->set_termios() old ktermios const
+Date:   Tue, 16 Aug 2022 14:57:36 +0300
+Message-Id: <20220816115739.10928-6-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220816115739.10928-1-ilpo.jarvinen@linux.intel.com>
 References: <20220816115739.10928-1-ilpo.jarvinen@linux.intel.com>
@@ -69,36 +69,45 @@ discarded anyway.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/tty/tty_ioctl.c | 2 +-
- include/linux/tty.h     | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/tty/n_tty.c       | 2 +-
+ include/linux/tty_ldisc.h | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/tty/tty_ioctl.c b/drivers/tty/tty_ioctl.c
-index 2a76b330e108..fc94988f0283 100644
---- a/drivers/tty/tty_ioctl.c
-+++ b/drivers/tty/tty_ioctl.c
-@@ -249,7 +249,7 @@ static void unset_locked_termios(struct tty_struct *tty, struct ktermios *old)
-  *	in some cases where only minimal reconfiguration is supported
+diff --git a/drivers/tty/n_tty.c b/drivers/tty/n_tty.c
+index 3afdd9033a9c..597019690ae6 100644
+--- a/drivers/tty/n_tty.c
++++ b/drivers/tty/n_tty.c
+@@ -1758,7 +1758,7 @@ static int n_tty_receive_buf2(struct tty_struct *tty, const unsigned char *cp,
+  *
+  * Locking: Caller holds @tty->termios_rwsem
   */
- 
--void tty_termios_copy_hw(struct ktermios *new, struct ktermios *old)
-+void tty_termios_copy_hw(struct ktermios *new, const struct ktermios *old)
+-static void n_tty_set_termios(struct tty_struct *tty, struct ktermios *old)
++static void n_tty_set_termios(struct tty_struct *tty, const struct ktermios *old)
  {
- 	/* The bits a dumb device handles in software. Smart devices need
- 	   to always provide a set_termios method */
-diff --git a/include/linux/tty.h b/include/linux/tty.h
-index cf5ab26de73d..ae41893f8653 100644
---- a/include/linux/tty.h
-+++ b/include/linux/tty.h
-@@ -458,7 +458,7 @@ static inline speed_t tty_get_baud_rate(struct tty_struct *tty)
- unsigned char tty_get_char_size(unsigned int cflag);
- unsigned char tty_get_frame_size(unsigned int cflag);
+ 	struct n_tty_data *ldata = tty->disc_data;
  
--void tty_termios_copy_hw(struct ktermios *new, struct ktermios *old);
-+void tty_termios_copy_hw(struct ktermios *new, const struct ktermios *old);
- int tty_termios_hw_change(const struct ktermios *a, const struct ktermios *b);
- int tty_set_termios(struct tty_struct *tty, struct ktermios *kt);
- 
+diff --git a/include/linux/tty_ldisc.h b/include/linux/tty_ldisc.h
+index ede6f2157f32..dcb61ec11424 100644
+--- a/include/linux/tty_ldisc.h
++++ b/include/linux/tty_ldisc.h
+@@ -130,7 +130,7 @@ int ldsem_down_write_nested(struct ld_semaphore *sem, int subclass,
+  *	a pointer to wordsize-sensitive structure belongs here, but most of
+  *	ldiscs will happily leave it %NULL.
+  *
+- * @set_termios: [TTY] ``void ()(struct tty_struct *tty, struct ktermios *old)``
++ * @set_termios: [TTY] ``void ()(struct tty_struct *tty, const struct ktermios *old)``
+  *
+  *	This function notifies the line discpline that a change has been made
+  *	to the termios structure.
+@@ -227,7 +227,7 @@ struct tty_ldisc_ops {
+ 			unsigned long arg);
+ 	int	(*compat_ioctl)(struct tty_struct *tty, unsigned int cmd,
+ 			unsigned long arg);
+-	void	(*set_termios)(struct tty_struct *tty, struct ktermios *old);
++	void	(*set_termios)(struct tty_struct *tty, const struct ktermios *old);
+ 	__poll_t (*poll)(struct tty_struct *tty, struct file *file,
+ 			     struct poll_table_struct *wait);
+ 	void	(*hangup)(struct tty_struct *tty);
 -- 
 2.30.2
 

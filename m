@@ -2,169 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEAD7595E55
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 16:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0166B595E5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 16:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbiHPO04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 10:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
+        id S235753AbiHPObC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 10:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233790AbiHPO0u (ORCPT
+        with ESMTP id S233425AbiHPObA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 10:26:50 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E37B6D56
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 07:26:49 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id 130so9220817pfy.6
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 07:26:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=xxtvqSTTGpNlBZwMQ1VxRmEf46ztEqQH/d/PUohA5hw=;
-        b=qcnquCp/HtX2Qy+eSVKR4hzJlwV+nAtJDTiYlZ83QLDsUQnZD0K9ugd5JcQVpNWUNl
-         wwkFwzGMJiwXThlWLQtyDJe417YZMTXV0YeX75lZ0ZhEqvDp39juUCkSu9/tGM++X1Mp
-         cMln65RmF7IX1iZZ6hPzvZok6qVrKtfG8PVlb+QGZMclIHuBmHdpnCTwompETQVnR7af
-         wgGNTcpR6fCpAUYPilwXuBOo1F13MC+yecaBfQzbsO0EjHBwOVfj213kvYkbf47y4WMb
-         Qsh/aKQDdf1zb/e1KXnualtWLRxEq3ZRGvLx1cuWAKQaEGDambIAaX6uzKpdKEjH6PKE
-         Pkjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=xxtvqSTTGpNlBZwMQ1VxRmEf46ztEqQH/d/PUohA5hw=;
-        b=6hQLnpeaeWtSoQff0idhBGSF978Ll0PbbnTZcMafW9YOdaYI9d2Be2ofZJNR+rtRn9
-         TLzQ6AsuOWGux+9dQ45pQah5De1V7t3Cg8aeoEzbgFWVWcTFenOYDo6Mtc04/iaAAphh
-         zlJ4ZDmsNyMzhv8Lq43/9QSi/pcNrp8vlLxPot3r7cu94OUGyG3WcUXBPrCBSY8jrtYH
-         6UKkZ48vQWbBICaI6rtolSeqlq9d1sGIh/wIEY1bSpE+IVP6/2BTrt4WtxyxjRJKNdZ3
-         VSIAKB75VHaqEcS5f2bN8uetO8R3Odp9L4YBVZdpvkbfViiKeTf7YktNPOom1vUBjmqT
-         Filg==
-X-Gm-Message-State: ACgBeo1urSJboE5GcBYrq3sNeoYKfY7soRokHdm+mOxVUjlKCesFGh+Y
-        ecZ1rhXRLwZZbD/XoVWe4yt9M8/OZx3Dwg==
-X-Google-Smtp-Source: AA6agR4WWnbzqai8APk1Xxdaooy6RcWu8SH4QdJZ5dlsXpQEdsjZwdG73cTN4oUcJZHu2CULEo5cXg==
-X-Received: by 2002:a65:4c0e:0:b0:41b:c11a:c006 with SMTP id u14-20020a654c0e000000b0041bc11ac006mr18516615pgq.299.1660660009087;
-        Tue, 16 Aug 2022 07:26:49 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id w11-20020a1709029a8b00b00168dadc7354sm9114276plp.78.2022.08.16.07.26.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 07:26:48 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 14:26:44 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marcorr@google.com, michael.roth@amd.com, thomas.lendacky@amd.com,
-        joro@8bytes.org, mizhang@google.com, pbonzini@redhat.com,
-        andrew.jones@linux.dev, vannapurve@google.com
-Subject: Re: [V3 09/11] tools: Add atomic_test_and_set_bit()
-Message-ID: <YvupJOJ38CWUDhze@google.com>
-References: <20220810152033.946942-1-pgonda@google.com>
- <20220810152033.946942-10-pgonda@google.com>
+        Tue, 16 Aug 2022 10:31:00 -0400
+X-Greylist: delayed 26849 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 16 Aug 2022 07:30:58 PDT
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A74BB01C;
+        Tue, 16 Aug 2022 07:30:58 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 802E441A42;
+        Tue, 16 Aug 2022 14:30:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1660660256; bh=RXDhD3eaQro8sLd9ZZYd+bWIFJzrClxvA777Nr31aD8=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=TzzCiy3YyjTkASOnEwI6W+tFnN3sJBxL3VLE1Veld95z+1MlpanmIItYE+VmkChOI
+         RQZewugcAr7YvLG6MyIulxPeKeudbc1jV/MjHtuxtbmVjYyYF/Cx8kwGyPARWgUOFE
+         MhYhKf8+lYLxtgZWnVFG2ogD9Kf6/gyhxJEXJjX07xWtXazHxSa9ibLPZ9MxJzZJBN
+         kZ9AqExT5PKNsnfR+wag4icaBgYkbrSgSDQ5P5WoTlpl1yrBTWUajc3b9IFSVUxU6T
+         OFFoHV5s1l0eJFIbKwjpGww1vPQIkmW0jpj7w6InqPpLId+AVO51Duj1he/DgIgkhr
+         JgrJxQ9GkMQTg==
+Message-ID: <c545705f-ee7e-4442-ebfc-64a3baca2836@marcan.st>
+Date:   Tue, 16 Aug 2022 23:30:45 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220810152033.946942-10-pgonda@google.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: es-ES
+To:     Will Deacon <will@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>, Tejun Heo <tj@kernel.org>,
+        jirislaby@kernel.org, Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Asahi Linux <asahi@lists.linux.dev>, stable@vger.kernel.org
+References: <20220816070311.89186-1-marcan@marcan.st>
+ <20220816140423.GC11202@willie-the-truck>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH] locking/atomic: Make test_and_*_bit() ordered on failure
+In-Reply-To: <20220816140423.GC11202@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022, Peter Gonda wrote:
-> atomic_test_and_set_bit() allows for atomic bitmap usage from KVM
-> selftests.
+On 16/08/2022 23.04, Will Deacon wrote:
+>> diff --git a/Documentation/atomic_bitops.txt b/Documentation/atomic_bitops.txt
+>> index 093cdaefdb37..d8b101c97031 100644
+>> --- a/Documentation/atomic_bitops.txt
+>> +++ b/Documentation/atomic_bitops.txt
+>> @@ -59,7 +59,7 @@ Like with atomic_t, the rule of thumb is:
+>>   - RMW operations that have a return value are fully ordered.
+>>  
+>>   - RMW operations that are conditional are unordered on FAILURE,
+>> -   otherwise the above rules apply. In the case of test_and_{}_bit() operations,
+>> +   otherwise the above rules apply. In the case of test_and_set_bit_lock(),
+>>     if the bit in memory is unchanged by the operation then it is deemed to have
+>>     failed.
 > 
-> Signed-off-by: Peter Gonda <pgonda@google.com>
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> ---
->  tools/arch/x86/include/asm/atomic.h    |  7 +++++++
->  tools/include/asm-generic/atomic-gcc.h | 15 +++++++++++++++
->  2 files changed, 22 insertions(+)
+> The next sentence is:
 > 
-> diff --git a/tools/arch/x86/include/asm/atomic.h b/tools/arch/x86/include/asm/atomic.h
-> index 1f5e26aae9fc..01cc27ec4520 100644
-> --- a/tools/arch/x86/include/asm/atomic.h
-> +++ b/tools/arch/x86/include/asm/atomic.h
-> @@ -8,6 +8,7 @@
->  
->  #define LOCK_PREFIX "\n\tlock; "
->  
-> +#include <asm/asm.h>
->  #include <asm/cmpxchg.h>
->  
->  /*
-> @@ -70,4 +71,10 @@ static __always_inline int atomic_cmpxchg(atomic_t *v, int old, int new)
->  	return cmpxchg(&v->counter, old, new);
->  }
->  
-> +static inline int atomic_test_and_set_bit(long nr, unsigned long *addr)
-> +{
-> +	GEN_BINARY_RMWcc(LOCK_PREFIX __ASM_SIZE(bts), *addr, "Ir", nr, "%0", "c");
-> +
-
-Unnecessary newline.
-
-> +}
-> +
->  #endif /* _TOOLS_LINUX_ASM_X86_ATOMIC_H */
-> diff --git a/tools/include/asm-generic/atomic-gcc.h b/tools/include/asm-generic/atomic-gcc.h
-> index 4c1966f7c77a..8d9b2d1768bf 100644
-> --- a/tools/include/asm-generic/atomic-gcc.h
-> +++ b/tools/include/asm-generic/atomic-gcc.h
-> @@ -4,6 +4,7 @@
->  
->  #include <linux/compiler.h>
->  #include <linux/types.h>
-> +#include <linux/bitops.h>
->  
->  /*
->   * Atomic operations that C can't guarantee us.  Useful for
-> @@ -69,4 +70,18 @@ static inline int atomic_cmpxchg(atomic_t *v, int oldval, int newval)
->  	return cmpxchg(&(v)->counter, oldval, newval);
->  }
-> +static inline int atomic_test_and_set_bit(long nr, unsigned long *addr)
-> +{
-> +	long old, val;
-> +	unsigned long mask = BIT_MASK(nr);
-> +
-> +	addr += BIT_WORD(nr);
-> +	val = READ_ONCE(*addr);
-> +	if (val & mask)
-> +		return 1;
-
-Probably should drop the READ_ONCE() shortcut to stay consistent with the kernel
-proper.
-
-https://lore.kernel.org/all/CAHk-=wgSNiT5qJX53RHtWECsUiFq6d6VWYNAvu71ViOEan07yw@mail.gmail.com
-
-> +
-> +	old = cmpxchg(addr, val, val & mask);
-
-This is wrong on two fronts: 1) cmpxchg() writes the entire new value, and 2) it
-fails if the old value is not an exact match with what's in memory.  Bug #1 means
-that setting a bit will clear all existing bits, and bug #2 means that this will
-fail to set the bit if another atomic_test_and_set_bit() sneaks in between reading
-into "val" and doing the cmpxchg.
-
-And obviously dropping the READ_ONCE() above makes cmpxchg impossible (not a
-coincidence, it's simply the wrong operation to use).
-
-I believe what we want is:
-
-	unsigned long mask = BIT_MASK(nr);
-	long old;
-
-	old = __sync_fetch_and_or(addr, mask);
-	return !!(old & mask);
-
-> +	return !!(old & mask);
-> +}
-> +
->  #endif /* __TOOLS_ASM_GENERIC_ATOMIC_H */
-> -- 
-> 2.37.1.559.g78731f0fdb-goog
+>   | Except for a successful test_and_set_bit_lock() which has ACQUIRE
+>   | semantics and clear_bit_unlock() which has RELEASE semantics.
 > 
+> so I think it reads a bit strangely now. How about something like:
+> 
+> 
+> diff --git a/Documentation/atomic_bitops.txt b/Documentation/atomic_bitops.txt
+> index 093cdaefdb37..3b516729ec81 100644
+> --- a/Documentation/atomic_bitops.txt
+> +++ b/Documentation/atomic_bitops.txt
+> @@ -59,12 +59,15 @@ Like with atomic_t, the rule of thumb is:
+>   - RMW operations that have a return value are fully ordered.
+>  
+>   - RMW operations that are conditional are unordered on FAILURE,
+> -   otherwise the above rules apply. In the case of test_and_{}_bit() operations,
+> -   if the bit in memory is unchanged by the operation then it is deemed to have
+> -   failed.
+> +   otherwise the above rules apply. For the purposes of ordering, the
+> +   test_and_{}_bit() operations are treated as unconditional.
+>  
+> -Except for a successful test_and_set_bit_lock() which has ACQUIRE semantics and
+> -clear_bit_unlock() which has RELEASE semantics.
+> +Except for:
+> +
+> + - test_and_set_bit_lock() which has ACQUIRE semantics on success and is
+> +   unordered on failure;
+> +
+> + - clear_bit_unlock() which has RELEASE semantics.
+>  
+>  Since a platform only has a single means of achieving atomic operations
+>  the same barriers as for atomic_t are used, see atomic_t.txt.
+
+Makes sense! I'll send a v2 with that in a couple of days if nothing
+else comes up.
+
+>> diff --git a/include/asm-generic/bitops/atomic.h b/include/asm-generic/bitops/atomic.h
+>> index 3096f086b5a3..71ab4ba9c25d 100644
+>> --- a/include/asm-generic/bitops/atomic.h
+>> +++ b/include/asm-generic/bitops/atomic.h
+>> @@ -39,9 +39,6 @@ arch_test_and_set_bit(unsigned int nr, volatile unsigned long *p)
+>>  	unsigned long mask = BIT_MASK(nr);
+>>  
+>>  	p += BIT_WORD(nr);
+>> -	if (READ_ONCE(*p) & mask)
+>> -		return 1;
+>> -
+>>  	old = arch_atomic_long_fetch_or(mask, (atomic_long_t *)p);
+>>  	return !!(old & mask);
+>>  }
+>> @@ -53,9 +50,6 @@ arch_test_and_clear_bit(unsigned int nr, volatile unsigned long *p)
+>>  	unsigned long mask = BIT_MASK(nr);
+>>  
+>>  	p += BIT_WORD(nr);
+>> -	if (!(READ_ONCE(*p) & mask))
+>> -		return 0;
+>> -
+>>  	old = arch_atomic_long_fetch_andnot(mask, (atomic_long_t *)p);
+>>  	return !!(old & mask);
+> 
+> I suppose one sad thing about this is that, on arm64, we could reasonably
+> keep the READ_ONCE() path with a DMB LD (R->RW) barrier before the return
+> but I don't think we can express that in the Linux memory model so we
+> end up in RmW territory every time.
+
+You'd need a barrier *before* the READ_ONCE(), since what we're trying
+to prevent is a consumer from writing to the value without being able to
+observe the writes that happened prior, while this side read the old
+value. A barrier after the READ_ONCE() doesn't do anything, as that read
+is the last memory operation in this thread (of the problematic sequence).
+
+At that point, I'm not sure DMB LD / early read / LSE atomic would be
+any faster than just always doing the LSE atomic?
+
+- Hector

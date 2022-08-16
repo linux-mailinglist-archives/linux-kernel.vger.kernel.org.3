@@ -2,217 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4205958C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 331355958CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234940AbiHPKpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59404 "EHLO
+        id S234485AbiHPKrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235030AbiHPKox (ORCPT
+        with ESMTP id S233990AbiHPKqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:44:53 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C62D422D9;
-        Tue, 16 Aug 2022 03:05:38 -0700 (PDT)
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oNtRe-000AM5-2C; Tue, 16 Aug 2022 12:05:10 +0200
-Received: from [85.1.206.226] (helo=linux-4.home)
-        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oNtRd-000Rzb-C5; Tue, 16 Aug 2022 12:05:09 +0200
-Subject: Re: [PATCH v11 0/9] bpf: Add kfuncs for PKCS#7 signature verification
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "martin.lau@linux.dev" <martin.lau@linux.dev>,
-        "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "sdf@google.com" <sdf@google.com>,
-        "haoluo@google.com" <haoluo@google.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "mykolal@fb.com" <mykolal@fb.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "shuah@kernel.org" <shuah@kernel.org>
-Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220812101902.2846182-1-roberto.sassu@huawei.com>
- <14032690-e7a9-9d14-1ec1-14dd3503037c@iogearbox.net>
- <b61eb3b95843409eb6ab03aea4a0ca30@huawei.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <be1fdbba-73ba-3106-622e-57ef5f471a26@iogearbox.net>
-Date:   Tue, 16 Aug 2022 12:05:08 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <b61eb3b95843409eb6ab03aea4a0ca30@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26629/Tue Aug 16 09:51:41 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 16 Aug 2022 06:46:24 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D73D261D
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:06:51 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id p14-20020a17090a74ce00b001f4d04492faso9139107pjl.4
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:06:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc;
+        bh=95RmrDaOTs+TArBQIen65/TK8NYN58Pk/yEsVpA/XLQ=;
+        b=zz9Kx3opIvtvTrScnyxJFs+GMVOTDDp5nBSvQKpeRSoleANTX97HmK+QRmChlfTaKV
+         jGVVnWVywSPSjU/a1ky6Uzb13fGSTlUMNszCrAZnwHKYSsuJRvLnm9XnY/hSfuhXTxbY
+         UP3EsrGopcq32sK+1wS/JrcKLEUuEmAHuhB8T0Rlkd63ALxbuaOALnGeUDDAZpvicfFw
+         wBm6+MTqaNHlBnO60iQ98zQp0sfAdXY84wjR0IIBqqmM+NTV5XhCYShRZXQ6l/lxcEcD
+         0TdQrSd2U16XmkLX3UFTO3u2dhKUX1gwgXDG+2jiPAWkcbZRzCOEACiokc4Ud8V0GdU2
+         4mgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=95RmrDaOTs+TArBQIen65/TK8NYN58Pk/yEsVpA/XLQ=;
+        b=YjLUkNKbVjJwPKA1HhLuZRMWT+WOmDMWDUH2GxmuLzREg+I/p4/hjlRdz+qumLRHWm
+         XTJba9fg4D1n02cKzx4sM8Bf0e5uv3XH+fNp0mX6UX829lM5QU7wS+GA6AAKlqtVnrlV
+         36/xawtBt8BTqYz3axw77cO+/K94q4lxb6c1qr1eCLWrvXLLMI3D82lNJPeOAiqJZxjg
+         ORRKMk8+4riMw1Mm1qFmFUMxZedg5jMD5kSg1xu6QASZJhGZug0/FpxghcXbGzjG7R14
+         3wbN61XoCB4Ix00fImY0yasN/Zq+LpD9cYbmDBu4x8P6hcaEtlHHsSMBWdBO8suH77MC
+         ozsQ==
+X-Gm-Message-State: ACgBeo0seeUrOpbWzG+n3Xp1DBaau+J5NSqNQCCE7IBPU+QzR2FN0UNh
+        0riw1CrsHZybcdRoNYiHAK8rWA==
+X-Google-Smtp-Source: AA6agR6iuIfqsnKC8rmEvnL+RqpghMmdGBLz80IUfA88+gmFc61k0TjFisYsOWDicYjBJ7EdB/T1VA==
+X-Received: by 2002:a17:90b:17ce:b0:1f4:d068:5722 with SMTP id me14-20020a17090b17ce00b001f4d0685722mr31558785pjb.28.1660644411079;
+        Tue, 16 Aug 2022 03:06:51 -0700 (PDT)
+Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
+        by smtp.gmail.com with ESMTPSA id y24-20020a631818000000b004202cb1c491sm7219029pgl.31.2022.08.16.03.06.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 03:06:50 -0700 (PDT)
+From:   Shunsuke Mie <mie@igel.co.jp>
+To:     Kishon Vijay Abraham I <kishon@ti.com>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shunsuke Mie <mie@igel.co.jp>
+Subject: [PATCH] misc: pci_endpoint_test: Fix pci_endpoint_test_{copy,write,read}() panic
+Date:   Tue, 16 Aug 2022 19:06:17 +0900
+Message-Id: <20220816100617.90720-1-mie@igel.co.jp>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/16/22 9:12 AM, Roberto Sassu wrote:
->> From: Daniel Borkmann [mailto:daniel@iogearbox.net]
->> Sent: Monday, August 15, 2022 6:10 PM
->> On 8/12/22 12:18 PM, Roberto Sassu wrote:
->>> One of the desirable features in security is the ability to restrict import
->>> of data to a given system based on data authenticity. If data import can be
->>> restricted, it would be possible to enforce a system-wide policy based on
->>> the signing keys the system owner trusts.
->>>
->> [...]
->>> Changelog
->>>
->>> v10:
->>>    - Introduce key_lookup_flags_check() and system_keyring_id_check() inline
->>>      functions to check parameters (suggested by KP)
->>>    - Fix descriptions and comment of key-related kfuncs (suggested by KP)
->>>    - Register kfunc set only once (suggested by Alexei)
->>>    - Move needed kernel options to the architecture-independent configuration
->>>      for testing
->>
->> Looks like from BPF CI side, the selftest throws a WARN in test_progs /
->> test_progs-no_alu32
->> and subsequently fails with error, ptal:
->>
->>     https://github.com/kernel-
->> patches/bpf/runs/7804422038?check_suite_focus=true
-> 
-> it is due to the missing SHA256 kernel module (not copied to
-> the virtual machine).
-> 
-> I made a small patch in libbpf/ci to change kernel options =m
-> into =y. With that patch, my instance of vmtest gives success
-> (except for z15, which requires adding openssl and keyctl
-> to the virtual machine image).
+Although dma_map_single() doesn't permit zero length mapping, the each
+test functions called the function without zero checking.
 
-The code in pkcs1pad_verify() triggering the warning is:
+A panic was reported on arm64:
 
-     [...]
-         if (WARN_ON(req->dst) || WARN_ON(!digest_size) ||
-             !ctx->key_size || sig_size != ctx->key_size)
-                 return -EINVAL;
-     [...]
+[   60.137988] ------------[ cut here ]------------
+[   60.142630] kernel BUG at kernel/dma/swiotlb.c:624!
+[   60.147508] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+[   60.152992] Modules linked in: dw_hdmi_cec crct10dif_ce simple_bridge rcar_fdp1 vsp1 rcar_vin videobuf2_vmalloc rcar_csi2 v4l
+2_mem2mem videobuf2_dma_contig videobuf2_memops pci_endpoint_test videobuf2_v4l2 videobuf2_common rcar_fcp v4l2_fwnode v4l2_asyn
+c videodev mc gpio_bd9571mwv max9611 pwm_rcar ccree at24 authenc libdes phy_rcar_gen3_usb3 usb_dmac display_connector pwm_bl
+[   60.186252] CPU: 0 PID: 508 Comm: pcitest Not tainted 6.0.0-rc1rpci-dev+ #237
+[   60.193387] Hardware name: Renesas Salvator-X 2nd version board based on r8a77951 (DT)
+[   60.201302] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   60.208263] pc : swiotlb_tbl_map_single+0x2c0/0x590
+[   60.213149] lr : swiotlb_map+0x88/0x1f0
+[   60.216982] sp : ffff80000a883bc0
+[   60.220292] x29: ffff80000a883bc0 x28: 0000000000000000 x27: 0000000000000000
+[   60.227430] x26: 0000000000000000 x25: ffff0004c0da20d0 x24: ffff80000a1f77c0
+[   60.234567] x23: 0000000000000002 x22: 0001000040000010 x21: 000000007a000000
+[   60.241703] x20: 0000000000200000 x19: 0000000000000000 x18: 0000000000000000
+[   60.248840] x17: 0000000000000000 x16: 0000000000000000 x15: ffff0006ff7b9180
+[   60.255977] x14: ffff0006ff7b9180 x13: 0000000000000000 x12: 0000000000000000
+[   60.263113] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
+[   60.270249] x8 : 0001000000000010 x7 : ffff0004c6754b20 x6 : 0000000000000000
+[   60.277385] x5 : ffff0004c0da2090 x4 : 0000000000000000 x3 : 0000000000000001
+[   60.284521] x2 : 0000000040000000 x1 : 0000000000000000 x0 : 0000000040000010
+[   60.291658] Call trace:
+[   60.294100]  swiotlb_tbl_map_single+0x2c0/0x590
+[   60.298629]  swiotlb_map+0x88/0x1f0
+[   60.302115]  dma_map_page_attrs+0x188/0x230
+[   60.306299]  pci_endpoint_test_ioctl+0x5e4/0xd90 [pci_endpoint_test]
+[   60.312660]  __arm64_sys_ioctl+0xa8/0xf0
+[   60.316583]  invoke_syscall+0x44/0x108
+[   60.320334]  el0_svc_common.constprop.0+0xcc/0xf0
+[   60.325038]  do_el0_svc+0x2c/0xb8
+[   60.328351]  el0_svc+0x2c/0x88
+[   60.331406]  el0t_64_sync_handler+0xb8/0xc0
+[   60.335587]  el0t_64_sync+0x18c/0x190
+[   60.339251] Code: 52800013 d2e00414 35fff45c d503201f (d4210000)
+[   60.345344] ---[ end trace 0000000000000000 ]---
 
-It is not obvious at all to users that sha256 module is missing in their kernel,
-how will they be able to figure it out?
+To fix it, this patch adds checkings the payload length if it is zero.
 
-Should the helper be gated if dependency is not available, or return a -EOPNOTSUPP
-if the specific request cannot be satisfied (but others can..)?
+Fixes: 343dc693f7b7 ("misc: pci_endpoint_test: Prevent some integer overflows")
+Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
+---
+ drivers/misc/pci_endpoint_test.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
->>     [...]
->>     #235     verif_scale_xdp_loop:OK
->>     #236     verif_stats:OK
->>     #237     verif_twfw:OK
->>     [  760.448652] ------------[ cut here ]------------
->>     [  760.449506] WARNING: CPU: 3 PID: 930 at crypto/rsa-pkcs1pad.c:544
->> pkcs1pad_verify+0x184/0x190
->>     [  760.450806] Modules linked in: bpf_testmod(OE) [last unloaded:
->> bpf_testmod]
->>     [  760.452340] CPU: 3 PID: 930 Comm: keyctl Tainted: G           OE      5.19.0-
->> g9f0260338e31-dirty #1
->>     [  760.453626] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
->> 1.13.0-1ubuntu1.1 04/01/2014
->>     [  760.454801] RIP: 0010:pkcs1pad_verify+0x184/0x190
->>     [  760.455380] Code: 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc 48 89 df 89 c6 5b 41
->> 5c 41 5d 41 5e 41 5f 5d e9 a5 04 00 00 0f 0b b8 ea ff ff ff eb d4 <0f> 0b b8 ea ff
->> ff ff eb cb 0f 0b 90 0f 1f 44 00 00 53 48 89 fb c7
->>     [  760.456866] RSP: 0018:ffffad55478dbb58 EFLAGS: 00000246
->>     [  760.457684] RAX: ffff9b3c43c42458 RBX: ffff9b3c48975b00 RCX:
->> 0000000000000000
->>     [  760.458672] RDX: ffffffffa7277438 RSI: ffffffffa5275510 RDI:
->> 0000000000000000
->>     [  760.459670] RBP: ffffad55478dbcf8 R08: 0000000000000002 R09:
->> 0000000000000000
->>     [  760.460688] R10: ffffad55478dbc20 R11: ffffffffa44dde10 R12:
->> ffff9b3c43de2e80
->>     [  760.461695] R13: ffff9b3c58459ea0 R14: ffff9b3c44d59600 R15:
->> ffffad55478dbc20
->>     [  760.462270] FS:  00007ff1ee0eb740(0000) GS:ffff9b3cf9cc0000(0000)
->> knlGS:0000000000000000
->>     [  760.462722] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>     [  760.463026] CR2: 000055b9a4c17588 CR3: 0000000107bb2000 CR4:
->> 00000000000006e0
->>     [  760.464039] Call Trace:
->>     [  760.464465]  <TASK>
->>     [  760.464749]  public_key_verify_signature+0x4a2/0x570
->>     [  760.465623]  x509_check_for_self_signed+0x4e/0xd0
->>     [  760.465937]  x509_cert_parse+0x193/0x220
->>     [  760.466656]  x509_key_preparse+0x20/0x1f0
->>     [  760.466975]  asymmetric_key_preparse+0x43/0x80
->>     [  760.467552]  key_create_or_update+0x24e/0x510
->>     [  760.468366]  __x64_sys_add_key+0x19b/0x220
->>     [  760.468704]  ? syscall_enter_from_user_mode+0x24/0x1f0
->>     [  760.469056]  do_syscall_64+0x43/0x90
->>     [  760.469657]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->>     [  760.470413] RIP: 0033:0x7ff1edf0ba9d
->>     [  760.470832] Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8
->> 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff
->> ff 73 01 c3 48 8b 0d cb e2 0e 00 f7 d8 64 89 01 48
->>     [  760.472742] RSP: 002b:00007ffe635e7a18 EFLAGS: 00000246 ORIG_RAX:
->> 00000000000000f8
->>     [  760.473355] RAX: ffffffffffffffda RBX: 00007ffe635e7be0 RCX:
->> 00007ff1edf0ba9d
->>     [  760.474523] RDX: 000055982fed80c0 RSI: 00007ffe635e7f17 RDI:
->> 00007ffe635e7f0c
->>     [  760.475500] RBP: 00007ffe635e7a38 R08: 00000000fffffffd R09:
->> 0000000000000000
->>     [  760.475913] R10: 0000000000000355 R11: 0000000000000246 R12:
->> 0000000000000000
->>     [  760.476594] R13: 00007ffe635e7bd8 R14: 000055982fed48ae R15:
->> 000055982fed76e8
->>     [  760.477579]  </TASK>
->>     [  760.477769] irq event stamp: 4727
->>     [  760.477963] hardirqs last  enabled at (4735): [<ffffffffa4101df5>]
->> __up_console_sem+0x75/0xa0
->>     [  760.479036] hardirqs last disabled at (4744): [<ffffffffa4a31cca>]
->> sysvec_apic_timer_interrupt+0xa/0xb0
->>     [  760.480403] softirqs last  enabled at (4762): [<ffffffffa4085172>]
->> __irq_exit_rcu+0xb2/0x140
->>     [  760.480869] softirqs last disabled at (4755): [<ffffffffa4085172>]
->> __irq_exit_rcu+0xb2/0x140
->>     [  760.481706] ---[ end trace 0000000000000000 ]---
->>     Generating a RSA private key
->>     .+++++
->>     ..................................................+++++
->>     writing new private key to '/tmp/verify_sigXdOL5V/signing_key.pem'
->>     -----
->>     add_key: Invalid argument
->>     test_verify_pkcs7_sig:PASS:mkdtemp 0 nsec
->>     test_verify_pkcs7_sig:FAIL:_run_setup_process unexpected error: 1 (errno
->> 126)
->>     #238     verify_pkcs7_sig:FAIL
->>     #239     vmlinux:OK
->>     #240     xdp:OK
->>     #241/1   xdp_adjust_frags/xdp_adjust_frags:OK
->>     #241     xdp_adjust_frags:OK
->>     #242/1   xdp_adjust_tail/xdp_adjust_tail_shrink:OK
->>     #242/2   xdp_adjust_tail/xdp_adjust_tail_grow:OK
->>     [...]
+diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
+index 8f786a225dcf..d45426a73396 100644
+--- a/drivers/misc/pci_endpoint_test.c
++++ b/drivers/misc/pci_endpoint_test.c
+@@ -364,7 +364,7 @@ static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
+ 	}
+ 
+ 	size = param.size;
+-	if (size > SIZE_MAX - alignment)
++	if (size > SIZE_MAX - alignment || !size)
+ 		goto err;
+ 
+ 	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
+@@ -498,7 +498,7 @@ static bool pci_endpoint_test_write(struct pci_endpoint_test *test,
+ 	}
+ 
+ 	size = param.size;
+-	if (size > SIZE_MAX - alignment)
++	if (size > SIZE_MAX - alignment || !size)
+ 		goto err;
+ 
+ 	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
+@@ -596,7 +596,7 @@ static bool pci_endpoint_test_read(struct pci_endpoint_test *test,
+ 	}
+ 
+ 	size = param.size;
+-	if (size > SIZE_MAX - alignment)
++	if (size > SIZE_MAX - alignment || !size)
+ 		goto err;
+ 
+ 	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
+-- 
+2.17.1
 

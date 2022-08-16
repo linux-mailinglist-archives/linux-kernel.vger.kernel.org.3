@@ -2,47 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2B059563A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84844595632
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232609AbiHPJ2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
+        id S232043AbiHPJ1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232344AbiHPJ2K (ORCPT
+        with ESMTP id S233296AbiHPJ1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:28:10 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162BF63E3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:46:14 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M6NRf3jXNzlVhj;
-        Tue, 16 Aug 2022 15:43:10 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 16 Aug 2022 15:46:12 +0800
-Received: from huawei.com (10.67.174.169) by dggpemm500001.china.huawei.com
- (7.185.36.107) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 16 Aug
- 2022 15:46:12 +0800
-From:   Chen Lifu <chenlifu@huawei.com>
-To:     <linux@armlinux.org.uk>, <akpm@linux-foundation.org>,
-        <bhe@redhat.com>, <pmladek@suse.com>, <kexec@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <linux-kernel@vger.kernel.org>, <chenlifu@huawei.com>
-Subject: [PATCH -next] ARM: kexec: Make machine_crash_nonpanic_core() static
-Date:   Tue, 16 Aug 2022 15:42:50 +0800
-Message-ID: <20220816074250.3991633-1-chenlifu@huawei.com>
-X-Mailer: git-send-email 2.37.1
+        Tue, 16 Aug 2022 05:27:03 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BFFCCD64
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:44:27 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id r17so13683931lfm.11
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:44:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=eW0BKLF2qOs6HIKXDGD1nZcnaClG8yzeNVvRjOtKgmU=;
+        b=NKHDJ5lh18mKPYLkddbp9+8g8sxcFvRUMNfHAepw1zkXD8tklVH3aFMh4ewDTGW4LT
+         esafB0wz+2fli6fob89gOZ9oQQ2UKbuceCJxU8kQEvqKF765GSS8UjkOjAeAru/M+28G
+         H2jeuXm6zbphb2hf+Us4CDZ8OiLys6TTWmyt0lMX8g6PK3/CGnYeBeEOY4jAt7zZplUt
+         cp+K4YmLhhI0+MwWCr3+9Et7wwTfbXOej2jq50J38qV6EIa6ygEbM2w8ou72HhMxvUrb
+         BWQ6uFs+fqKvyNnuel2HyQuPTUvcJXqdYMbm31sQDaSwGcWPiR5KIXwXjaAyAMNcexyz
+         vsPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=eW0BKLF2qOs6HIKXDGD1nZcnaClG8yzeNVvRjOtKgmU=;
+        b=4dMKTfaoEi+Px/Y5rarSkBM5v/w+IGUQiaQf+HOg0+0635cvfX2i/CfxIh68yr49g+
+         mDqz/i/E4CV9nh75O+w6XGlkM2SZAbBIuoY2Il7DOMYiu/aK+cKPQeEVicxctgJnZ1rU
+         qoaEafotgtEvDi0jLRUj6G3k6RZSb+fxmWIqIn6RexiAeglocp57J69c6tlmKAJCO6Dv
+         oV2AtRM7zFdlqkU3YlYLkx89nkG8K5Oqs5LAd0XFGSYpzpehN4pznX0zP5eIv5YfX/+R
+         QN/dVCv6EBO/AaE8b6ycDbKTTc7L57rfzraQblqFtbRJ/4vhV8LDEn0B8eq/8sQd3b+6
+         QEgQ==
+X-Gm-Message-State: ACgBeo2qtdk8UxMQuzTKX8sOMxLOqiQSC6vgGelFrAmSQWgqey8+x6t9
+        D367ecIWkcJzbHBdNdPa3Lgq0A==
+X-Google-Smtp-Source: AA6agR5IU5HhckObuSpdlJNkE+m2kU5ia/mfjOH6wJr3dBTV9VK8I9kwEk18VjBw1XMcM01PIAtuyQ==
+X-Received: by 2002:a05:6512:2a8d:b0:48b:7f1:fe46 with SMTP id dt13-20020a0565122a8d00b0048b07f1fe46mr6171564lfb.261.1660635865972;
+        Tue, 16 Aug 2022 00:44:25 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
+        by smtp.gmail.com with ESMTPSA id v8-20020ac25928000000b0048a918717c3sm1304392lfi.57.2022.08.16.00.44.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 00:44:25 -0700 (PDT)
+Message-ID: <79e58157-f8f2-6ca8-1aa6-b5cf6c83d9e6@linaro.org>
+Date:   Tue, 16 Aug 2022 10:44:23 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.169]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v4 1/3] dt-bindings: net: ti: k3-am654-cpsw-nuss: Update
+ bindings for J7200 CPSW5G
+Content-Language: en-US
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux@armlinux.org.uk, vladimir.oltean@nxp.com,
+        grygorii.strashko@ti.com, vigneshr@ti.com, nsekhar@ti.com
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kishon@ti.com
+References: <20220816060139.111934-1-s-vadapalli@ti.com>
+ <20220816060139.111934-2-s-vadapalli@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220816060139.111934-2-s-vadapalli@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,34 +81,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This symbol is not used outside of the file, so mark it static.
+On 16/08/2022 09:01, Siddharth Vadapalli wrote:
+> Update bindings for TI K3 J7200 SoC which contains 5 ports (4 external
+> ports) CPSW5G module and add compatible for it.
+> 
+> Changes made:
+>     - Add new compatible ti,j7200-cpswxg-nuss for CPSW5G.
+>     - Extend pattern properties for new compatible.
+>     - Change maximum number of CPSW ports to 4 for new compatible.
+> 
+> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> ---
+>  .../bindings/net/ti,k3-am654-cpsw-nuss.yaml     | 17 +++++++++++++++--
+>  1 file changed, 15 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+> index b8281d8be940..5366a367c387 100644
+> --- a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+> +++ b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+> @@ -57,6 +57,7 @@ properties:
+>        - ti,am654-cpsw-nuss
+>        - ti,j721e-cpsw-nuss
+>        - ti,am642-cpsw-nuss
+> +      - ti,j7200-cpswxg-nuss
 
-Fixes the following warning:
+Keep some order in the list, so maybe before j721e.
 
-arch/arm/kernel/machine_kexec.c:76:6: warning: symbol 'machine_crash_nonpanic_core' was not declared. Should it be static?
+>  
+>    reg:
+>      maxItems: 1
+> @@ -110,7 +111,7 @@ properties:
+>          const: 0
+>  
+>      patternProperties:
+> -      port@[1-2]:
+> +      "^port@[1-4]$":
+>          type: object
+>          description: CPSWxG NUSS external ports
+>  
+> @@ -119,7 +120,7 @@ properties:
+>          properties:
+>            reg:
+>              minimum: 1
+> -            maximum: 2
+> +            maximum: 4
+>              description: CPSW port number
+>  
+>            phys:
+> @@ -151,6 +152,18 @@ properties:
+>  
+>      additionalProperties: false
+>  
+> +if:
 
-Signed-off-by: Chen Lifu <chenlifu@huawei.com>
----
- arch/arm/kernel/machine_kexec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This goes under allOf just before unevaluated/additionalProperties:false
 
-diff --git a/arch/arm/kernel/machine_kexec.c b/arch/arm/kernel/machine_kexec.c
-index f567032a09c0..a2e9ac763a9f 100644
---- a/arch/arm/kernel/machine_kexec.c
-+++ b/arch/arm/kernel/machine_kexec.c
-@@ -71,11 +71,11 @@ int machine_kexec_prepare(struct kimage *image)
- 
- void machine_kexec_cleanup(struct kimage *image)
- {
- }
- 
--void machine_crash_nonpanic_core(void *unused)
-+static void machine_crash_nonpanic_core(void *unused)
- {
- 	struct pt_regs regs;
- 
- 	crash_setup_regs(&regs, get_irq_regs());
- 	printk(KERN_DEBUG "CPU %u will stop doing anything useful since another CPU has crashed\n",
--- 
-2.37.1
 
+Best regards,
+Krzysztof

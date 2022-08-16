@@ -2,103 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54323595CCD
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16486595CCF
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:07:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235451AbiHPNGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56476 "EHLO
+        id S235141AbiHPNGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234359AbiHPNGX (ORCPT
+        with ESMTP id S234759AbiHPNGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 09:06:23 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D107DD108
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:06:22 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4M6WXh6pW3z1M8ym;
-        Tue, 16 Aug 2022 21:03:00 +0800 (CST)
-Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
- (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 16 Aug
- 2022 21:06:20 +0800
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     <akpm@linux-foundation.org>, <mike.kravetz@oracle.com>,
-        <songmuchun@bytedance.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <linmiaohe@huawei.com>
-Subject: [PATCH 6/6] mm/hugetlb: make detecting shared pte more reliable
-Date:   Tue, 16 Aug 2022 21:05:53 +0800
-Message-ID: <20220816130553.31406-7-linmiaohe@huawei.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20220816130553.31406-1-linmiaohe@huawei.com>
-References: <20220816130553.31406-1-linmiaohe@huawei.com>
+        Tue, 16 Aug 2022 09:06:32 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09BDE60C9
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:06:32 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id b142so5224610iof.10
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:06:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=solid-run-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=jYFy/Ap+uf26Gcpe/I0MSisZFVmPhCJtSmEvqbaImns=;
+        b=TPm7sp/EC7y75Bb9Hebx9wUeTQofUP3E8N5rnoRewYyUMY2eWw6qAfh2vaf06LqTso
+         YjKjRjDFQEcsxNlFOM1iFupmE5nz6Q3XbtcBGZh25VL1dE4iLkyEx+d2OdQkCDQV4F1I
+         Q3Gws5+w1yGxQXqr1/i3xdwfJnmv+szNLKS5kWYlfZBsfM5RmI/eB+NWZWPry33NMS3K
+         7KUwALiD/FTal89vHgf+W/bQjMhZ1WW4azMae9jdTw2nbZknuM1sk1Pi3+wD/VsqnjMN
+         lZ7NcixEG9dmbkdfKcDkCLc/FtxPozmizq5rTPPr/72lRhKJj6KYyso7a0aS6JqLGCVp
+         xn8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=jYFy/Ap+uf26Gcpe/I0MSisZFVmPhCJtSmEvqbaImns=;
+        b=GhX+2/exqQHMqenHZseXZrAyqq1cSeSSBkrUGSqDENMRYXuzwSPlesm5AC6puya5kM
+         Ueo4ul5abNpA342XXQPDDsFSSpnvfTq/bdke3oBHs3YjeiEwdzvD8/z73tEb261VfjVl
+         y4Vq8QHkcvYLAzf8nC4oN22LeZKjPCIAs6V0hm/7v3cbTWuLzC43EJ7926rgneDyMYEo
+         Zbg1xvjvhD22ELuB3dC+HWEfgLJh9sLwDlL6JUF3SDL4aR89z5ruMHV7gYsSw8iPgvfA
+         N+DA/G669D/7spGjwjGGS431EpYj2l4kyc0/1DRJFb/8+N3JaYuPpAQhYe2SHOkrDtiq
+         qEPg==
+X-Gm-Message-State: ACgBeo09+ojrOZ6071DaAmdv7t99bUr6kBWQrBWFdJ4UE/wTAxfak+sa
+        TqSVaie83p9gHL+NsC12VgMigyVFxPdWX0Z5WVKBAQ==
+X-Google-Smtp-Source: AA6agR4LYPGyytQ7zXtN6CVNQG0RmLGJHMQuUxL8SF2Np6jEPA1mTRDJD83cAn/zEamlnjrEgjfTpWUAWi1BuGTNAGw=
+X-Received: by 2002:a05:6638:d45:b0:343:2ae6:e39a with SMTP id
+ d5-20020a0566380d4500b003432ae6e39amr9740158jak.139.1660655191422; Tue, 16
+ Aug 2022 06:06:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220816070311.89186-1-marcan@marcan.st> <CAK8P3a03pfrPzjnx1tB5z0HcKnY=JL=y+F8PMQDpc=Bavs3UCA@mail.gmail.com>
+ <CABdtJHvZt=av5YEQvRMtf4-dMFR6JS1jM1Ntj7DMVy5fijvkMw@mail.gmail.com> <20220816130048.GA11202@willie-the-truck>
+In-Reply-To: <20220816130048.GA11202@willie-the-truck>
+From:   Jon Nettleton <jon@solid-run.com>
+Date:   Tue, 16 Aug 2022 15:05:54 +0200
+Message-ID: <CABdtJHuRGaod9iGCYXq1ivNPZGw=1cszE024WGmzXMQ4S_9AQw@mail.gmail.com>
+Subject: Re: [PATCH] locking/atomic: Make test_and_*_bit() ordered on failure
+To:     Will Deacon <will@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Hector Martin <marcan@marcan.st>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>, Tejun Heo <tj@kernel.org>,
+        jirislaby@kernel.org, Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Asahi Linux <asahi@lists.linux.dev>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the pagetables are shared, we shouldn't copy or take references. Since
-src could have unshared and dst shares with another vma, huge_pte_none()
-is thus used to determine whether dst_pte is shared. But this check isn't
-reliable. A shared pte could have pte none in pagetable in fact. The page
-count of ptep page should be checked here in order to reliably determine
-whether pte is shared.
+On Tue, Aug 16, 2022 at 3:01 PM Will Deacon <will@kernel.org> wrote:
+>
+> On Tue, Aug 16, 2022 at 02:29:49PM +0200, Jon Nettleton wrote:
+> > On Tue, Aug 16, 2022 at 10:17 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> > >
+> > > On Tue, Aug 16, 2022 at 9:03 AM Hector Martin <marcan@marcan.st> wrote:
+> > > >
+> > > > These operations are documented as always ordered in
+> > > > include/asm-generic/bitops/instrumented-atomic.h, and producer-consumer
+> > > > type use cases where one side needs to ensure a flag is left pending
+> > > > after some shared data was updated rely on this ordering, even in the
+> > > > failure case.
+> > > >
+> > > > This is the case with the workqueue code, which currently suffers from a
+> > > > reproducible ordering violation on Apple M1 platforms (which are
+> > > > notoriously out-of-order) that ends up causing the TTY layer to fail to
+> > > > deliver data to userspace properly under the right conditions. This
+> > > > change fixes that bug.
+> > > >
+> > > > Change the documentation to restrict the "no order on failure" story to
+> > > > the _lock() variant (for which it makes sense), and remove the
+> > > > early-exit from the generic implementation, which is what causes the
+> > > > missing barrier semantics in that case. Without this, the remaining
+> > > > atomic op is fully ordered (including on ARM64 LSE, as of recent
+> > > > versions of the architecture spec).
+> > > >
+> > > > Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> > > > Cc: stable@vger.kernel.org
+> > > > Fixes: e986a0d6cb36 ("locking/atomics, asm-generic/bitops/atomic.h: Rewrite using atomic_*() APIs")
+> > > > Fixes: 61e02392d3c7 ("locking/atomic/bitops: Document and clarify ordering semantics for failed test_and_{}_bit()")
+> > > > Signed-off-by: Hector Martin <marcan@marcan.st>
+> > > > ---
+> > > >  Documentation/atomic_bitops.txt     | 2 +-
+> > > >  include/asm-generic/bitops/atomic.h | 6 ------
+> > >
+> > > I double-checked all the architecture specific implementations to ensure
+> > > that the asm-generic one is the only one that needs the fix.
+> > >
+> > > I assume this gets merged through the locking tree or that Linus picks it up
+> > > directly, not through my asm-generic tree.
+> > >
+> > > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> > >
+> > > _______________________________________________
+> > > linux-arm-kernel mailing list
+> > > linux-arm-kernel@lists.infradead.org
+> > > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> >
+> > Testing this patch on pre Armv8.1 specifically Cortex-A72 and
+> > Cortex-A53 cores I am seeing
+> > a huge performance drop with this patch applied. Perf is showing
+> > lock_is_held_type() as the worst offender
+>
+> Hmm, that should only exist if LOCKDEP is enabled and performance tends to
+> go out of the window if you have that on. Can you reproduce the same
+> regression with lockdep disabled?
+>
+> Will
 
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
----
- mm/hugetlb.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+Yep I am working on it.  We should note that
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index e1356ad57087..25db6d07479e 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -4795,15 +4795,13 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 
- 		/*
- 		 * If the pagetables are shared don't copy or take references.
--		 * dst_pte == src_pte is the common case of src/dest sharing.
- 		 *
-+		 * dst_pte == src_pte is the common case of src/dest sharing.
- 		 * However, src could have 'unshared' and dst shares with
--		 * another vma.  If dst_pte !none, this implies sharing.
--		 * Check here before taking page table lock, and once again
--		 * after taking the lock below.
-+		 * another vma. So page_count of ptep page is checked instead
-+		 * to reliably determine whether pte is shared.
- 		 */
--		dst_entry = huge_ptep_get(dst_pte);
--		if ((dst_pte == src_pte) || !huge_pte_none(dst_entry)) {
-+		if (page_count(virt_to_page(dst_pte)) > 1) {
- 			addr |= last_addr_mask;
- 			continue;
- 		}
-@@ -4814,11 +4812,9 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 		entry = huge_ptep_get(src_pte);
- 		dst_entry = huge_ptep_get(dst_pte);
- again:
--		if (huge_pte_none(entry) || !huge_pte_none(dst_entry)) {
-+		if (huge_pte_none(entry)) {
- 			/*
--			 * Skip if src entry none.  Also, skip in the
--			 * unlikely case dst entry !none as this implies
--			 * sharing with another vma.
-+			 * Skip if src entry none.
- 			 */
- 			;
- 		} else if (unlikely(is_hugetlb_entry_hwpoisoned(entry))) {
--- 
-2.23.0
+config LOCKDEP_SUPPORT
+        def_bool y
 
+is the default for arm64
+
+-Jon

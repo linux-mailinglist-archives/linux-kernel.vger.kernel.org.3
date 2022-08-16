@@ -2,97 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D382D59616D
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD27596171
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236099AbiHPRs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 13:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46224 "EHLO
+        id S236208AbiHPRt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 13:49:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234406AbiHPRsh (ORCPT
+        with ESMTP id S236241AbiHPRt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 13:48:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713977F133
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 10:48:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2B65611C5
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 17:48:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33637C433D6;
-        Tue, 16 Aug 2022 17:48:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660672115;
-        bh=C1YHGG0YthjMsSCOVUr69nW/0HuxBkeuELLm36VaKp8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CG5FO7Ro7muFsASvnQgq8oAf3p64sAFGzrIXKyZWgrXwS6GNIu9NV+J9iv7av2Haa
-         z8tITTyxL2DBgmcQWjE7YO4rA2Eg6Axnxvgt56JME1OANLCTZb6rn/MBWQARvVN9hB
-         j7P2GASTFNlV9c3+YOtWrUjXU1yqPRewC0cYMzJzWikwY6rEw8Df26suIoJii2vmqV
-         6Ytt4APrZXiT4LjGRe3dAhFPxq0DfjfG+6I0kI4IEtVmfQUIoc3jBCxiY/4gZouAe2
-         YQ6alo8OXxMqNlMdB4fz84VCtSJ7I6uQXpGqeaq3lZ77NWenbwWFrZUz8tiACxP+2p
-         NE4WH1ex/10Cw==
-Date:   Tue, 16 Aug 2022 18:48:30 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Kevin Lu <luminlong@139.com>
-Cc:     linux-kernel@vger.kernel.org, shenghao-ding@ti.com, kevin-lu@ti.com
-Subject: Re: [PATCH v1 1/1] sound: Add a new kcontrol
-Message-ID: <YvvYbkDSodLBkD0R@sirena.org.uk>
-References: <20220815112715.21617-1-luminlong@139.com>
+        Tue, 16 Aug 2022 13:49:56 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC8E804AF
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 10:49:54 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id v185so8782728ioe.11
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 10:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=solid-run-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=kjqRKq9oJnes+t5wbhe3Qf46+H6wK6o+K4jvO1Tjuz8=;
+        b=2Pp8bzj1MnGCU6V3vFJNsSKqqD/ziYTUDm2CF1NJhzXFBX0xc9mbyDXDKdd+QB6Wzg
+         fnZJp2eKCWYuykufGDOSXGPsv7jAdNiq872uZ6+YS3FEFDrsSvziP6q9qSsi0Ckj3rGk
+         XHwBXg1srh4Gm2YSVxSA6FWxO8UL52ni/TVzR7B/j2W6YFIoS6dNX9hcZaecsBB51/48
+         +kYqS4rCI7UtAK7/T6NtJ9t9wNKLMRAm8kGrTxwRKhYfTpMqr49Lyx3o36X27FzopYeX
+         UT/Tl9jNtv43LRs9+KljN2KuIM+HYa4Z0ZT/eAtIJuPoK4dcHdAc27Zu4v9ChOlJn8pk
+         BZMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=kjqRKq9oJnes+t5wbhe3Qf46+H6wK6o+K4jvO1Tjuz8=;
+        b=Y7zN51h47tRIkoQLWyyb3U+JgaCg2UHQDkS0XAvV9eMKs7bgoUtqgKQ7HBHqOLqHKR
+         YnzkPG29AFdj2f0FL1HYpD2jJSYbh1gDa3r3cFYkLzFG4sAlRA06uM/b/erg3PyJt/15
+         J9I6G44gx6WXieROks3/11PJjeLG9o57JU6A+gkfn4HNvn6ncq+rObHNWLNY2EDND3ai
+         Drt/rPv75fYgycxBlEvlXkJJ3/5jIsWP5QPfzP7t8aYaBrTtrdJz9FwZote7mPmtSs3J
+         VSINXb+XVjoJdc+FOJvW0jKF1h1b7/mX3HOx4wI/MR5RFv7G6CsL1fbGpGS1cQtgz7Pd
+         1k4w==
+X-Gm-Message-State: ACgBeo3wKqaAyXsmgjblOVSLdoNY3+ki1ycT7mnpKFig3RWNjkp+hT9z
+        QNRVmIuJ2/9kp2rynVQgc19cajJBKuU0jDntB6oNNg==
+X-Google-Smtp-Source: AA6agR7IlYaeIBknvmvu0X+8YEBbXtjhQpsdJAi0dy2tbyCrCmJ4c7rG6mWa+yox2ulVDU8DDG9g31v9WMcdQCjTBiU=
+X-Received: by 2002:a05:6602:3cc:b0:679:61e7:3928 with SMTP id
+ g12-20020a05660203cc00b0067961e73928mr9381040iov.217.1660672193863; Tue, 16
+ Aug 2022 10:49:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="XfXYlpbAJLpIqcAb"
-Content-Disposition: inline
-In-Reply-To: <20220815112715.21617-1-luminlong@139.com>
-X-Cookie: A bachelor is an unaltared male.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220816070311.89186-1-marcan@marcan.st> <20220816140423.GC11202@willie-the-truck>
+ <c545705f-ee7e-4442-ebfc-64a3baca2836@marcan.st> <20220816173654.GA11766@willie-the-truck>
+In-Reply-To: <20220816173654.GA11766@willie-the-truck>
+From:   Jon Nettleton <jon@solid-run.com>
+Date:   Tue, 16 Aug 2022 19:49:16 +0200
+Message-ID: <CABdtJHt_3TKJVLhLiYMcBtvyA_DwaNapv1xHVeDdQH7cAC6YWw@mail.gmail.com>
+Subject: Re: [PATCH] locking/atomic: Make test_and_*_bit() ordered on failure
+To:     Will Deacon <will@kernel.org>
+Cc:     Hector Martin <marcan@marcan.st>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>, Tejun Heo <tj@kernel.org>,
+        jirislaby@kernel.org, Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Asahi Linux <asahi@lists.linux.dev>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Aug 16, 2022 at 7:38 PM Will Deacon <will@kernel.org> wrote:
+>
+> On Tue, Aug 16, 2022 at 11:30:45PM +0900, Hector Martin wrote:
+> > On 16/08/2022 23.04, Will Deacon wrote:
+> > >> diff --git a/include/asm-generic/bitops/atomic.h b/include/asm-generic/bitops/atomic.h
+> > >> index 3096f086b5a3..71ab4ba9c25d 100644
+> > >> --- a/include/asm-generic/bitops/atomic.h
+> > >> +++ b/include/asm-generic/bitops/atomic.h
+> > >> @@ -39,9 +39,6 @@ arch_test_and_set_bit(unsigned int nr, volatile unsigned long *p)
+> > >>    unsigned long mask = BIT_MASK(nr);
+> > >>
+> > >>    p += BIT_WORD(nr);
+> > >> -  if (READ_ONCE(*p) & mask)
+> > >> -          return 1;
+> > >> -
+> > >>    old = arch_atomic_long_fetch_or(mask, (atomic_long_t *)p);
+> > >>    return !!(old & mask);
+> > >>  }
+> > >> @@ -53,9 +50,6 @@ arch_test_and_clear_bit(unsigned int nr, volatile unsigned long *p)
+> > >>    unsigned long mask = BIT_MASK(nr);
+> > >>
+> > >>    p += BIT_WORD(nr);
+> > >> -  if (!(READ_ONCE(*p) & mask))
+> > >> -          return 0;
+> > >> -
+> > >>    old = arch_atomic_long_fetch_andnot(mask, (atomic_long_t *)p);
+> > >>    return !!(old & mask);
+> > >
+> > > I suppose one sad thing about this is that, on arm64, we could reasonably
+> > > keep the READ_ONCE() path with a DMB LD (R->RW) barrier before the return
+> > > but I don't think we can express that in the Linux memory model so we
+> > > end up in RmW territory every time.
+> >
+> > You'd need a barrier *before* the READ_ONCE(), since what we're trying
+> > to prevent is a consumer from writing to the value without being able to
+> > observe the writes that happened prior, while this side read the old
+> > value. A barrier after the READ_ONCE() doesn't do anything, as that read
+> > is the last memory operation in this thread (of the problematic sequence).
+>
+> Right, having gone back to your litmus test, I now realise it's the "SB"
+> shape from the memory ordering terminology. It's funny because the arm64
+> acquire/release instructions are RCsc and so upgrading the READ_ONCE()
+> to an *arm64* acquire instruction would work for your specific case, but
+> only because the preceeding store is a release.
+>
+> > At that point, I'm not sure DMB LD / early read / LSE atomic would be
+> > any faster than just always doing the LSE atomic?
+>
+> It depends a lot on the configuration of the system and the state of the
+> relevant cacheline, but generally avoiding an RmW by introducing a barrier
+> is likely to be a win. It just gets ugly here as we'd want to avoid the
+> DMB in the case where we end up doing the RmW. Possibly we could do
+> something funky like a test-and-test-and-test-and-set (!) where we do
+> the DMB+READ_ONCE() only if the first READ_ONCE() has the bit set, but
+> even just typing that is horrible and I'd _absolutely_ want to see perf
+> numbers to show that it's a benefit once you start taking into account
+> things like branch prediction.
+>
+> Anywho, since Linus has applied the patch and it should work, this is
+> just an interesting aside.
+>
+> Will
+>
 
---XfXYlpbAJLpIqcAb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+It is moot if Linus has already taken the patch, but with a stock
+kernel config I am
+still seeing a slight performance dip but only ~1-2% in the specific
+tests I was running.
+Sorry about the noise I will need to look at my kernel builder and see what went
+wrong when I have more time.
 
-On Mon, Aug 15, 2022 at 07:27:15PM +0800, Kevin Lu wrote:
-> Add a new kcontrol for phase calib
-
-This looks mostly good now - one small issue below which I'll fix up
-myself and apply.
-
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
-
-> +	ADCX140_PHASE_CALIB_SWITCH("Adcx140 Phase Calib Switch"),
-
-We wouldn't normally put the CODEC name in the control name, it's not
-really relevant to users and if some disambiguation is needed it's
-usually better to do it in a board specific way (eg, describing the
-output the CODEC is connected to) using the support ASoC has for adding
-prefixes.  Better would be "Phase Callibration Switch".
-
---XfXYlpbAJLpIqcAb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL72G4ACgkQJNaLcl1U
-h9Ca0wf/XQssZO8ZQOX6JyoFp4Z1CVs4uZOwqeWylT4J6B8nCgcGCjl9ct5BVMhN
-I3KTKUtW0utYNhtaT1VcQ5l/ufMxXWoG9xv4KWa081bBM8qY7VGfMAV6McK2Z93f
-aY9CxZnr+3WURXKVO1kpi+ZKKffNup4hPNgSJ+a9+UOjAioGrjT7Zqs7Z0U40/XF
-3AYkbqXVIBTbMP7sDOoFu0dOqrNix5e/KLIrkkUDRZBrkWjwcp0jo05J9jFc7PdV
-RXFfJ3Af1EfSEHS719e0LUHolccdtzZqH6SXIgVee6YoY229oaQO06cl5Xi6ugAA
-Ns+nepN6aFUBkzXDsFA8kIRBFgi/hw==
-=EuU3
------END PGP SIGNATURE-----
-
---XfXYlpbAJLpIqcAb--
+Cheers,
+Jon

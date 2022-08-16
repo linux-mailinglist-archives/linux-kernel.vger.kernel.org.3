@@ -2,97 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8756259574E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 254C159570A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232310AbiHPJ57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
+        id S233836AbiHPJuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:50:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233984AbiHPJ5T (ORCPT
+        with ESMTP id S231232AbiHPJtd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:57:19 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD20194;
-        Tue, 16 Aug 2022 02:18:37 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id v2so14042036lfi.6;
-        Tue, 16 Aug 2022 02:18:37 -0700 (PDT)
+        Tue, 16 Aug 2022 05:49:33 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E377BD76E
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:22:04 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id a9so14030139lfm.12
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:22:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Kk2g2IEl/Ua+BBCBiaozArRy7OGG11VduF5q3BhTDG0=;
-        b=KcBiWrctfetchJMsY/eFWVoCsx3SblR9qr6NI6BPQ60NgilShdjZlJUj4AiV5t0Yz1
-         QLi+cwFAww1Sh0xZjHgdFm2wXeNc1qu+yYPcoCpbHeauU5+BHlq8vB3ETrA+3wNlMNAq
-         YfbF3VYWZjWcHbXYEqnmKbHbidsO/eQQGJjM3gLluTqbtBegGjkkFls9VZZOLZYpzsB/
-         kt2bO+DyeinL1VidVfznhy9aVsAasdL03No67OrGbIRpxJ9O733KT4e2UUBk18Sg6RIE
-         BvRr9ja784eIHZZDWo5KueuM0LZCwwgjFh7PRZkYjhHV500L74V1q7n0lwlIANYOoPvV
-         fvBQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=Cc5a/Z1OZQ/Sp4oex9dmkDkQnrPr8Y8hlCBI2uCYHzA=;
+        b=fiDRi2HZhnLH0aZUZxx5zMFYg+kRxqfZ8b/gbzXvdbEOMUSsLkKCvcNynL4hySDQxA
+         m1GK8w5qxNUXZbhnbUOAb/RWoVguEnK7mq6wmLTVFwGDw++AVwE97trf0cZJGRUKHk4B
+         ugdqIQgEN/iEh8C4L4b5JRrnQ/26tifMaIyc4O7HpNoSyICCI3YfXHi6BEJAVxkwfsoC
+         4dXDHxU+eadTKBUHD1fgqE6Zq3Hmseu0E10W0cwd/dRDKo7b7wWBN7zhjkCK4R6N9lSf
+         qRZ/bk+TKFGA2FewRcrhJcWB7mn/MYynRQCArUicMErP3l3KcqAYTACWZ1/r4jHH8EoE
+         HRLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Kk2g2IEl/Ua+BBCBiaozArRy7OGG11VduF5q3BhTDG0=;
-        b=GZVhmcHyprqs3B5Z9jKNl0dcyq41VPIwmEkZZLmFWh+YgL+xFCjZTBrpOfxPUezfO+
-         Inrwlb/5IywmbNkERF2mxrffqbXFhKdhS2ggb4GoTASsUm6akD/+TTeBbPo8zDHjIWhO
-         ict1jbDHwMf/FAOCuwTX7Qxy+/11uUu9ly3nAMYuGqf38ZoJhmYP3OasmTbTyjN2Hlxf
-         lQt98I+VEIyiXSmPUQvp+ygsET4D1unYSdKR4omOdHik7lsITT7bRljriQQ7FAd2wkVw
-         9of+w/u/Ya01ni7oxnNUsScYDdHMPcxmhI4bRfF7kecWWgOYxincSnfLYCI17K3DmHP9
-         51xA==
-X-Gm-Message-State: ACgBeo1D+F8lS/ln7U8nwO0jNVpk0EVrSZnO1KCfx0oOMy2LCO+HOX/m
-        T5nxWXKFWZ4B01CHzfyeAU3WLe6vKxm1WNcIN/Sdb3RF7EcEOg==
-X-Google-Smtp-Source: AA6agR7PDcg9fUP4aVag2k2cXXyHGw1wbNV0WesqmcGnmlmXEndYbcZ7+VdLCCjesog4PO6/2bAL/31vc+5aUkDs4mU=
-X-Received: by 2002:a2e:b88c:0:b0:25f:eae4:74ff with SMTP id
- r12-20020a2eb88c000000b0025feae474ffmr6545964ljp.48.1660641515791; Tue, 16
- Aug 2022 02:18:35 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=Cc5a/Z1OZQ/Sp4oex9dmkDkQnrPr8Y8hlCBI2uCYHzA=;
+        b=chCKCB97ZMUYCdTIrWLTPwySSK/BeuoYo/eD97UJl7e0qPqCahLZxe9jtPGqo4M/gp
+         rXXL6bCNc8/K+mQzuadV+GFwG3FBIrmU4ZmwaZGLW9kvCn8iWKdF8Mf4YipPtKxjQNWC
+         i423yHCmpFhrEcK7RtAuxoO0cQLTdFuS36ghpwXnVy4vUQPWC0v5JN54fBGYe4vQbR1d
+         Hid8g3KzbySQBFWweMyBu0AhukC0Ag2QrT1yTEK22S/3sLPpPlM1/8JbVw7hYRZItPFQ
+         Dk2DcLNuA0lSy+zRUMMIi10tKlLq8cgpFZY9Hkf77iyo1v6xsNrPc/Amgysqe4MHGSVI
+         Ai2g==
+X-Gm-Message-State: ACgBeo3Ovhilq7quVJv/PIb0TuhogLFX2MbNSNFuvrPFOVUFKsWM+/C3
+        aOfBm7hHQCES2SknaKgC39jr4A==
+X-Google-Smtp-Source: AA6agR7LFK/9gYrW8u+lnQRIAyItIlW8HzneqHrf3znVQXnPj5MscIKAG/LghM5wSDnWni05dkHGvg==
+X-Received: by 2002:a2e:80da:0:b0:25e:6d34:6169 with SMTP id r26-20020a2e80da000000b0025e6d346169mr6447417ljg.531.1660641722837;
+        Tue, 16 Aug 2022 02:22:02 -0700 (PDT)
+Received: from krzk-bin.. (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
+        by smtp.gmail.com with ESMTPSA id s17-20020a056512215100b0048aea84fa80sm1335691lfr.87.2022.08.16.02.22.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 02:22:02 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     yong.wu@mediatek.com, robin.murphy@arm.com, lee@kernel.org,
+        angelogioacchino.delregno@collabora.com, robh+dt@kernel.org,
+        tinghan.shen@mediatek.com, mandyjh.liu@mediatek.com,
+        will@kernel.org, joro@8bytes.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: (subset) [PATCH v4 02/20] dt-bindings: memory: mediatek: Update condition for mt8195 smi node
+Date:   Tue, 16 Aug 2022 12:21:59 +0300
+Message-Id: <166064169630.37858.3837655509098916044.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220729063208.16799-3-tinghan.shen@mediatek.com>
+References: <20220729063208.16799-1-tinghan.shen@mediatek.com> <20220729063208.16799-3-tinghan.shen@mediatek.com>
 MIME-Version: 1.0
-References: <20220815175114.23576-1-konishi.ryusuke@gmail.com>
- <YvqP/f2P2YgIIO9U@ZenIV> <CAKFNMomyjXpsz-=BtG+G3q1J7CFUBMEfP13FfxwhWB==9qb++w@mail.gmail.com>
- <YvrQ8xO9Lx7rdKq8@ZenIV> <CAKFNMoniwM5x0w03cezGTFDWt=apNmGWpur83+vjghg3zcawpQ@mail.gmail.com>
- <CAD-N9QW5-kVR85t1canTqrF9RMkOjC1Z2q8BSQKxLwaay97Mgg@mail.gmail.com>
-In-Reply-To: <CAD-N9QW5-kVR85t1canTqrF9RMkOjC1Z2q8BSQKxLwaay97Mgg@mail.gmail.com>
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Date:   Tue, 16 Aug 2022 18:18:18 +0900
-Message-ID: <CAKFNMonVb6s3Cey5riXFwd+C3wy87fHbMUtnq3SXooXgsSD5yA@mail.gmail.com>
-Subject: Re: [PATCH] nilfs2: fix use-after-free bug in nilfs_mdt_destroy()
-To:     Dongliang Mu <mudongliangabcd@gmail.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-nilfs <linux-nilfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jiacheng Xu <stitch@zju.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 12:25 PM Dongliang Mu wrote:
-> > Dongliang (or Jiacheng?), would it be possible for you to post a revised patch
-> > against inode_init_always() that moves the call of security_inode_alloc()
-> > instead of i_private initialization (as Al Viro said in a nearby thread [1]) ?
-> > If you have time, I would like to leave it to you since you wrote the
-> > original patch for inode_init_always().
->
-> Sure, I will post a v2 patch that moves security_inode_alloc to the
-> location just prior to
->         this_cpu_inc(nr_inodes);
-> with proper commit message.
->
+On Fri, 29 Jul 2022 14:31:50 +0800, Tinghan Shen wrote:
+> The max clock items for the dts node with compatible
+> 'mediatek,mt8195-smi-sub-common' should be 3.
+> 
+> However, the dtbs_check of such node will get following message,
+> arch/arm64/boot/dts/mediatek/mt8195-evb.dtb: smi@14010000: clock-names: ['apb', 'smi', 'gals0'] is too long
+>          From schema: Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+> 
+> [...]
 
-I saw you already sent the v2 patch on linux-fsdevel, etc.
-Just thank you for your quick follow.
+Applied, thanks!
 
-Regards,
-Ryusuke Konishi
+[02/20] dt-bindings: memory: mediatek: Update condition for mt8195 smi node
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/9f8fb8032febf594914999c33493c682eaf138cb
 
-> >
-> > [1] https://lkml.kernel.org/r/CAO4S-mficMz1mQW06EuCF+o11+mRDiCpufqVfoHkcRbQbs8kVw@mail.gmail.com
-> >
-> > Thanks,
-> > Ryusuke Konishi
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>

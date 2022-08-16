@@ -2,110 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE28596339
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 821EA59633C
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236815AbiHPTdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 15:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59958 "EHLO
+        id S236660AbiHPTfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 15:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237200AbiHPTdM (ORCPT
+        with ESMTP id S237232AbiHPTfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 15:33:12 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E26A326;
-        Tue, 16 Aug 2022 12:33:07 -0700 (PDT)
-Received: from notapiano.myfiosgateway.com (unknown [70.107.189.129])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8B3F3660159E;
-        Tue, 16 Aug 2022 20:33:04 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1660678386;
-        bh=3Atu3UpSZ4NSwkk/RpeysbRl/HDbYyNWeDk1tmMm5o4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fgcc95d6bWLpL2xDmRdqaQW5J4WH8gXjJRycYLzE/iJzXIWBvMcrkyZVwDdARwqan
-         0VknMxD1CyUu8X33QvQRInyTC0WzTqt0V5gzryo//tE4IfvUIjgTQ6IngvvkzzpaR5
-         vvf1fjTzQoRl8cDC9jmRmnMqxwYiBg6CDtFXWS/K2sCtHDn5QLohxSEHlagRn1dhs5
-         5hBU9puHmaWM8qssGcT9OtLku5Hl1roGncbqQcLUkY+APDSQlwV2aR5AYv7NKqjPbi
-         NktevX7MkbWtzoMzVllc2Zg4VofrS/H80VtTYP2JZuIiX1gK0ivCy0QxtMHwrvzsz4
-         7r7/cs9yoCnJg==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Michael Turquette <mturquette@baylibre.com>
-Cc:     Bo-Chen Chen <rex-bc.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
-        <nfraprado@collabora.com>, Chen-Yu Tsai <wenst@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: [RESEND PATCH v3 2/2] clk: mediatek: clk-mt8195-vdo1: Reparent and set rate on vdo1_dpintf's parent
-Date:   Tue, 16 Aug 2022 15:32:56 -0400
-Message-Id: <20220816193257.658487-3-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220816193257.658487-1-nfraprado@collabora.com>
-References: <20220816193257.658487-1-nfraprado@collabora.com>
+        Tue, 16 Aug 2022 15:35:36 -0400
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E74895C3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:35:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=N6mMsJ2BCoZ712tXYE1aSGPGNeJ3vya4PzRd0XZ/7z4=; b=mkdC9S+GC1GHSWx19K+4TdMmER
+        +j47uiu8lrqvMS5wURYrQe1KY/jjKtcogGtFftBAgONXOmNAHUEtcdni2lmlHFhBJdQgzfLotEXha
+        RzXlBd/j7Q4WkgCnDT+shmx64gOtYKWUW11GsVSizEDMn9k6FtAFz/KCbeRIlSQAypwwb26/zvrzw
+        iDpciw7w/M/mda8dsgDl4CyavM3ZIvj3a+oesW8ZNNe0PDIF8EYWx+Rz6B5VmqJcyqPtWSD1KfoHs
+        8Cb6a4zY6MlPYr5xGh7o7XQSDPTI3GUBIZ2DTdPlWWbASB/a1lz43G96gEpqdNVlRytGBDMguuINE
+        oaftHmJQ==;
+Received: from [2a01:799:961:d200:cca0:57ac:c55d:a485] (port=58447)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1oO2Lb-00029A-Be; Tue, 16 Aug 2022 21:35:31 +0200
+Message-ID: <be9b6b71-fa2a-3290-2bce-901342e01981@tronnes.org>
+Date:   Tue, 16 Aug 2022 21:35:24 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        Dom Cobley <dom@raspberrypi.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
+ <9fdecae2-80ad-6212-0522-7dccf9fb57be@tronnes.org>
+ <20220816082612.grebxql5ynnfnvfd@houat>
+ <ea6ebdda-f779-78af-1ffd-bd86d715077f@tronnes.org>
+ <20220816094922.oqhrhefv327zo2ou@houat>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <20220816094922.oqhrhefv327zo2ou@houat>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Like it was done for the vdo0_dp_intf0_dp_intf clock (used for eDP),
-add the CLK_SET_RATE_PARENT flag to CLK_VDO1_DPINTF (used for DP)
-and also fix its parent clock name as it has to be "top_dp" for two
-reasons:
- - This is its real parent!
- - Likewise to eDP/VDO0 counterpart, we need clock source
-   selection on CLK_TOP_DP.
 
-Fixes: 269987505ba9 ("clk: mediatek: Add MT8195 vdosys1 clock support")
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Reviewed-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
- drivers/clk/mediatek/clk-mt8195-vdo1.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Den 16.08.2022 11.49, skrev Maxime Ripard:
+> On Tue, Aug 16, 2022 at 11:42:20AM +0200, Noralf Trønnes wrote:
+>>
+>>
+>> Den 16.08.2022 10.26, skrev Maxime Ripard:
+>>> Hi,
+>>>
+>>> On Mon, Aug 08, 2022 at 02:44:56PM +0200, Noralf Trønnes wrote:
+>>>> Den 29.07.2022 18.34, skrev Maxime Ripard:
+>>>>> The TV mode property has been around for a while now to select and get the
+>>>>> current TV mode output on an analog TV connector.
+>>>>>
+>>>>> Despite that property name being generic, its content isn't and has been
+>>>>> driver-specific which makes it hard to build any generic behaviour on top
+>>>>> of it, both in kernel and user-space.
+>>>>>
+>>>>> Let's create a new bitmask tv norm property, that can contain any of the
+>>>>> analog TV standards currently supported by kernel drivers. Each driver can
+>>>>> then pass in a bitmask of the modes it supports.
+>>>>>
+>>>>> We'll then be able to phase out the older tv mode property.
+>>>>>
+>>>>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+>>>>>
+>>>>
+>>>> Please also update Documentation/gpu/kms-properties.csv
+>>>>
+>>>> Requirements for adding a new property is found in
+>>>> Documentation/gpu/drm-kms.rst
+>>>
+>>> I knew this was going to be raised at some point, so I'm glad it's that
+>>> early :)
+>>>
+>>> I really don't know what to do there. If we stick by our usual rules,
+>>> then we can't have any of that work merged.
+>>>
+>>> However, I think the status quo is not really satisfactory either.
+>>> Indeed, we have a property, that doesn't follow those requirements
+>>> either, with a driver-specific content, and that stands in the way of
+>>> fixes and further improvements at both the core framework and driver
+>>> levels.
+>>>
+>>> So having that new property still seems like a net improvement at the
+>>> driver, framework and uAPI levels, even if it's not entirely following
+>>> the requirements we have in place.
+>>>
+>>> Even more so since, realistically, those kind of interfaces will never
+>>> get any new development on the user-space side of things, it's
+>>> considered by everyone as legacy.
+>>>
+>>> This also is something we need to support at some point if we want to
+>>> completely deprecate the fbdev drivers and provide decent alternatives
+>>> in KMS.
+>>>
+>>> So yeah, strictly speaking, we would not qualify for our requirements
+>>> there. I still think we have a strong case for an exception though.
+>>
+>> Which requirements would that be? The only one I can see is the
+>> documentation and maybe an IGT test.
+> 
+> This is the one I had in mind
+> https://dri.freedesktop.org/docs/drm/gpu/drm-uapi.html#open-source-userspace-requirements
+> 
 
-diff --git a/drivers/clk/mediatek/clk-mt8195-vdo1.c b/drivers/clk/mediatek/clk-mt8195-vdo1.c
-index 3378487d2c90..d54d7726d186 100644
---- a/drivers/clk/mediatek/clk-mt8195-vdo1.c
-+++ b/drivers/clk/mediatek/clk-mt8195-vdo1.c
-@@ -43,6 +43,10 @@ static const struct mtk_gate_regs vdo1_3_cg_regs = {
- #define GATE_VDO1_2(_id, _name, _parent, _shift)			\
- 	GATE_MTK(_id, _name, _parent, &vdo1_2_cg_regs, _shift, &mtk_clk_gate_ops_setclr)
- 
-+#define GATE_VDO1_2_FLAGS(_id, _name, _parent, _shift, _flags)		\
-+	GATE_MTK_FLAGS(_id, _name, _parent, &vdo1_2_cg_regs, _shift,	\
-+		       &mtk_clk_gate_ops_setclr, _flags)
-+
- #define GATE_VDO1_3(_id, _name, _parent, _shift)			\
- 	GATE_MTK(_id, _name, _parent, &vdo1_3_cg_regs, _shift, &mtk_clk_gate_ops_setclr)
- 
-@@ -99,7 +103,7 @@ static const struct mtk_gate vdo1_clks[] = {
- 	GATE_VDO1_2(CLK_VDO1_DISP_MONITOR_DPI0, "vdo1_disp_monitor_dpi0", "top_vpp", 1),
- 	GATE_VDO1_2(CLK_VDO1_DPI1, "vdo1_dpi1", "top_vpp", 8),
- 	GATE_VDO1_2(CLK_VDO1_DISP_MONITOR_DPI1, "vdo1_disp_monitor_dpi1", "top_vpp", 9),
--	GATE_VDO1_2(CLK_VDO1_DPINTF, "vdo1_dpintf", "top_vpp", 16),
-+	GATE_VDO1_2_FLAGS(CLK_VDO1_DPINTF, "vdo1_dpintf", "top_dp", 16, CLK_SET_RATE_PARENT),
- 	GATE_VDO1_2(CLK_VDO1_DISP_MONITOR_DPINTF, "vdo1_disp_monitor_dpintf", "top_vpp", 17),
- 	/* VDO1_3 */
- 	GATE_VDO1_3(CLK_VDO1_26M_SLOW, "vdo1_26m_slow", "clk26m", 8),
--- 
-2.37.1
+Oh right, I had forgotten about that one.
 
+One benefit of having a userspace implementation is that it increases
+the chance of widespread adoption having a working implementation to
+look at. I don't think the reason tv.mode is not used anywhere (that I
+know of) is because the driver picks the enum values resulting in no
+standard names. It's a niche thing and way down on the todo list.
+nouveau and ch7006 has a tv_norm module parameter which certainly
+doesn't help in moving people/projects over to the DRM property
+(downstream rpi also has it now).
+
+mpv[1] is a commandline media player that after a quick look might be a
+candidate for implementing the property without too much effort.
+
+How do you test the property? I've used modetest but I can only change
+to a tv.mode that matches the current display mode. I can't switch from
+ntsc to pal for instance.
+
+I have tried changing mode on rpi-5.15 (which I will switch to for the
+gud gadget), but I always end up with flip timeouts when changing the value:
+
+$ cat /proc/cpuinfo | grep Model
+Model           : Raspberry Pi 4 Model B Rev 1.1
+$ uname -a
+Linux pi4t 5.15.56-v7l+ #1575 SMP Fri Jul 22 20:29:46 BST 2022 armv7l
+GNU/Linux
+$ sudo dmesg -C
+$ modetest -M vc4 -s 45:720x480i -w 45:mode:1
+setting mode 720x480i-29.97Hz on connectors 45, crtc 73
+failed to set gamma: Function not implemented
+
+$ dmesg
+$ modetest -M vc4 -s 45:720x480i -w 45:mode:0
+setting mode 720x480i-29.97Hz on connectors 45, crtc 73
+failed to set gamma: Function not implemented
+
+$ dmesg
+[   95.193059] [drm:drm_atomic_helper_wait_for_flip_done
+[drm_kms_helper]] *ERROR* [CRTC:73:crtc-1] flip_done timed out
+[  105.433112] [drm:drm_crtc_commit_wait [drm]] *ERROR* flip_done timed out
+[  105.433519] [drm:drm_atomic_helper_wait_for_dependencies
+[drm_kms_helper]] *ERROR* [CRTC:73:crtc-1] commit wait timed out
+[  115.673095] [drm:drm_crtc_commit_wait [drm]] *ERROR* flip_done timed out
+[  115.673498] [drm:drm_atomic_helper_wait_for_dependencies
+[drm_kms_helper]] *ERROR* [PLANE:63:plane-1] commit wait timed out
+[  125.913106] [drm:drm_crtc_commit_wait [drm]] *ERROR* flip_done timed out
+[  125.913510] vc4-drm gpu: [drm] *ERROR* Timed out waiting for commit
+[  136.153411] [drm:drm_atomic_helper_wait_for_flip_done
+[drm_kms_helper]] *ERROR* [CRTC:73:crtc-1] flip_done timed out
+
+I doesn't help to reload vc4, I have to reboot to get it working again.
+I get this when reloading:
+[  776.799784] vc4_vec fec13000.vec: Unbalanced pm_runtime_enable!
+
+I know this was working in rpi-5.10 on the Pi Zero (Pi4 tvout using vc4
+did not work at all when I tried).
+
+
+Noralf.
+
+[1] https://mpv.io/
+    https://github.com/mpv-player/mpv/blob/master/video/out/drm_common.c
+    https://github.com/mpv-player/mpv/blob/master/video/out/drm_atomic.c

@@ -2,432 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF3DE595416
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 09:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11689595384
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 09:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232397AbiHPHpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 03:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53686 "EHLO
+        id S231892AbiHPHNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 03:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232344AbiHPHoe (ORCPT
+        with ESMTP id S231689AbiHPHMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 03:44:34 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5218138A9BB
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 21:40:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660624804; x=1692160804;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=J00K2StCdEs0R/yUirw4VjNAGUKukj1ClH8RInNxsQY=;
-  b=IMp3SBoVHj/HAcEd4wb9LycuAh/3LVnEC8CrEqWG7VBf7twfIahlf8Zp
-   y18J+QXSX5cp7g0b0PVymQj6vI7tr0JpV/IVQyxw/CtxxmIdIC2XwHOcd
-   gRl9f8ZEH0Md0yDe1F8uyiWcrLYN+C79R1LtRVKywXey/2bUfMKJiTAcZ
-   gywfmG19E3ElH3vkzHAal2fl3HztyoCahjWK8SiA9X5tsUrDfdkFStbkM
-   syN8v6mbbGDu0ToeF2+d4kxeY0ckt+b2QlKS7ZD6IqZ/m5Y+HUgxRalIY
-   BTPMj3SknjPNS6iWciChPPwk5OtkzpFrVPIzD0l5ilVdgYK0V5ObBfBSz
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="293395142"
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="293395142"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 21:38:20 -0700
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="675071604"
-Received: from araj-dh-work.jf.intel.com ([10.165.157.158])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 21:38:19 -0700
-From:   Ashok Raj <ashok.raj@intel.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     "LKML Mailing List" <linux-kernel@vger.kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        "Ashok Raj" <ashok.raj@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>
-Subject: [PATCH v2 4/4] x86/microcode: Place siblings in NMI loop while update in progress
-Date:   Tue, 16 Aug 2022 04:37:54 +0000
-Message-Id: <20220816043754.3258815-6-ashok.raj@intel.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220816043754.3258815-1-ashok.raj@intel.com>
-References: <20220816043754.3258815-1-ashok.raj@intel.com>
+        Tue, 16 Aug 2022 03:12:48 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2062.outbound.protection.outlook.com [40.107.95.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74AD1C4740
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 21:44:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=k9V8vnI7dI15dFEjyvqQYQ7dbNumlSC6J/1CUOYavrCOqKHINB0ml1W1y9i3LfomjEAfxo4efG0+iQCN5NsONQXZFQWC0QdaBfiW5rlHdLKfuCpfoc+7u9N03EIpZq3XctD3G/MRdubVBHqxl2bhX3oXYu1HSauxny6oV/SlwdHm7FfsWwJDgZu5RRbaSYBtsw2gG4E+6gRoRMs+XWjyPssiSo2VhB875XzyJlN3s7LDG9grv+h7xY3yl8+d27PP23Jxjwas7qqzeF7FTwf2tSLIRfhrYdToVyrBNKuimgCsIQwa6qPeunp8p4amVG73cu093k3Bem9L4yT61EHRbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=x67OEHyAO7q+gFvLoWKxmzFCxqFJj3vLmYZA6bdvwSs=;
+ b=J3iqNFGqJWM9B8fWrGig/J4opZjiLEabZMRIj15EaHy68bti92d22Yrh/Jyr+FTTNcYmouJQ45H2orDiGOaSOoNwiT4QLyOt8IwBzggLzJa6rc+2gkq8f2TAy4tQLDuw/KLpXbcN6V76f91u2Lo9/TU1QTkfLJURUOLYR21QQleUZglvdEg/2tA4QuWGjvxjs9yceyjDZWFFOYmg2pH8oQ180wTaCY9zNFUCeJwoOSciTF3iNqhIzf5AwiUhALx5jgIhJsL5Wuf9GIHXP4If25JlDg7gr3wH/KEbuNRHW+7DDIVheUz53OiRZLQhGjOxSFPRZZxxUoH7LT07tbDvRQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=x67OEHyAO7q+gFvLoWKxmzFCxqFJj3vLmYZA6bdvwSs=;
+ b=ryzD3nL5XVDZOUldzMBp1d7vinNUCBjAxmgJg9KxugYihzNk2LIZeERJ4YGmP60KrMYo2ex91IZafhZCO3FahMri6cZvQtCWcuBMHVHtKZY+P3E2iGdK2TmwHZ/AqzpCENE4b/Wsal9VdnB6qAM2iNX4xgzPkx0qGYiTZlQh8SOYDLsqLekjQNP9cuOo6LP5VZHom2QcjnENumKeKyVf63AdLZWH0EUAvv/Cl1kRa8fpxT/YUbahCOKl/dM0g+A0Bx4xCxzM99d7LwYrcamNZtL/bhVy2pT5nnkesdydkcKYPA7fOp+RvcFdGXWyoN9s80WdCHjOTdlRlKfltGagUA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by BL1PR12MB5079.namprd12.prod.outlook.com (2603:10b6:208:31a::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Tue, 16 Aug
+ 2022 04:43:10 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::eca6:a4a7:e2b2:27e7]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::eca6:a4a7:e2b2:27e7%5]) with mapi id 15.20.5504.027; Tue, 16 Aug 2022
+ 04:43:10 +0000
+References: <20220812084921.409142-1-haiyue.wang@intel.com>
+ <20220816022102.582865-1-haiyue.wang@intel.com>
+ <20220816022102.582865-3-haiyue.wang@intel.com>
+User-agent: mu4e 1.6.9; emacs 27.1
+From:   Alistair Popple <apopple@nvidia.com>
+To:     Haiyue Wang <haiyue.wang@intel.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, david@redhat.com, linmiaohe@huawei.com,
+        ying.huang@intel.com, songmuchun@bytedance.com,
+        naoya.horiguchi@linux.dev, alex.sierra@amd.com,
+        Felix Kuehling <Felix.Kuehling@amd.com>
+Subject: Re: [PATCH v6 2/2] mm: fix the handling Non-LRU pages returned by
+ follow_page
+Date:   Tue, 16 Aug 2022 14:42:38 +1000
+In-reply-to: <20220816022102.582865-3-haiyue.wang@intel.com>
+Message-ID: <87ilmsvlwk.fsf@nvdebian.thelocal>
+Content-Type: text/plain
+X-ClientProxiedBy: BY3PR10CA0027.namprd10.prod.outlook.com
+ (2603:10b6:a03:255::32) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1a4201be-c3dc-419b-bb55-08da7f41d1ee
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5079:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: reb0R9B+bj38ZaNu9Lw34tEBIYB5XC2uLD7oe20iWo88XVMHlbKqJO54E3sgLQL8y+bt+mUFeVcSvdPsw4lOcKkLAx1k/NYqQvlh8gy4xqaXtrOF+fsDLQabDAZBvQPZS0j6hnQhj+qAnUb50K+VzrmuLBkrmQD7OcVKFu9fjgpGeDkWVdENF+NItvQguZMFxyXaMXZ8SlGX+F9rQLO0eiA8PNe6XUlUoy0CNO9RQZNEA4v7YVyzCOKFVKKisRo9kGseuq77kAT/KdJJXyGBPLHgcEnLWaNKllDEV76FllskPxJ/Kl7tQg9nMp1sqtaZ7DOKzVkXd68+QQZ/duKefP3n1R6YI0JC/xKfEvuO1a69GyJ6bjSImL6CSEeWfDLEgvUCOf4rBavopV94LRRxcQMiqRkdHWsl6b/nwWUfVOaBCwbLjl0LwpItL59Q6P05bfMnFMtt/4Mc3bzsL3dJounywb/nzywZI+2vVCSVtKI5yrltRNrG1eX2cgJtRsDC2xMFJx5F/vaVtliOzrJD2PUntzXSP2PfZCHxuWPbwefpFBv6vLzNoB2bGt72NYndjRI21BxvVmhOFmVUbcesGIqDCUui1j5k+7JdLZ9zmdQTh3hWyVSD8BIl5HRLCCsQ8HcruyNMv0baDvz53J+q1uVu29sORQS/kq1tq8HZfeKx4q7SbMyawdoYKdyRA0sCLsYDLhi+9bg1W6uNjGLXfAVeq6Ovl0fKB5cRnvBON2bp2STalT7VErQGcE0UDPwI
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(39860400002)(346002)(376002)(396003)(136003)(9686003)(38100700002)(26005)(7416002)(5660300002)(6486002)(66476007)(6512007)(478600001)(6506007)(86362001)(8936002)(6666004)(41300700001)(83380400001)(8676002)(2906002)(4326008)(6916009)(66946007)(66556008)(316002)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tU5OlVhyUl6wm8TFEbtwqz3Uwj8EkezbY5Mc/hNeqijL02ji5EDcgNJMDYE0?=
+ =?us-ascii?Q?bioQlIoUyWe592oeArgV5Aj54ArRVxo2JmrhVzszekCwploBEwEnp6KlwQOO?=
+ =?us-ascii?Q?5TThbsGRmVXuIoPDm+ZQ7cVTUMVSNON19Wz/tFfUXQDXnV0qWtiw4pVYBTVm?=
+ =?us-ascii?Q?3HaCK5Y1xTtFdtykIrHAVhMeiY3z3yPPS4LjpC4Vq4H1uufgQuGOBa1AQlgO?=
+ =?us-ascii?Q?Y8PzWalGFGkry0iH/3H4xiCkm22bRgqjHjCeZ6eRoZfXc5g3ZUxUoh9crlCy?=
+ =?us-ascii?Q?1I1q6UzGJmrgnRFFFowUuLwOZYKGzFJF26bzRyM0Wl9S/sMGaKsYQL2KAX6Z?=
+ =?us-ascii?Q?uXe0eftSpKUYGrS3KKkyLQWlqVk+T8RTs2V13DUfSe5JH94hkTeKLgj4/Zs+?=
+ =?us-ascii?Q?X8+pawrd5v/RGJcHJCWTRqdtAOqt5oI7wiWKslgGk6pT1bUy5NkQknvCfBCd?=
+ =?us-ascii?Q?gCk1ke+xNPCNuz9UP3IoBdu4yqh6m+4TbRDdxhw6lqrSNNEPXWNBkbMeX71l?=
+ =?us-ascii?Q?dMReXxVTSonB/HE3wrf9+m+Kju1dUZIw/oAYv736Br+SPz0SUaVRNOkk/p+L?=
+ =?us-ascii?Q?YaEUSv85GoHfBuoCFW3kY8l8QF2aqHnwRfEiebz8dF5lilowmak2QSjvL/xj?=
+ =?us-ascii?Q?aj1EdLZI3zYOVEpxDQrRbPwkTHsi89RAm8h1XZQSqlMC7YINZM/SaOHmNKRP?=
+ =?us-ascii?Q?mnmdh2Hv6m2QgsNXkeG3zCIdtVJhwpCStAtPoK9Kz5UgkJTfhs0D5Hf7ytgt?=
+ =?us-ascii?Q?ttaEr6KgOKs+BsZ4v23Gho53Vs+b25BXbZUhCgXBcX59qWjmsBX57t69H9AB?=
+ =?us-ascii?Q?nYO6F+k9dt2rM8cj4vqaKJtONa0gyWiWDFD9J7t4hDWCzxd9vDwHKkre86Yo?=
+ =?us-ascii?Q?Emq1fDoANVLQU2C4uEfkanEOMGYuokONWlqvCvO57RIUU6Rywnm6d4qtNXJh?=
+ =?us-ascii?Q?C56bbFIVHYnZfywYJ7brWP8eoR6a9RZYMYCx9iz9UV2Q9adFiajCpmRJEQoT?=
+ =?us-ascii?Q?ki07q3WiH2FCblGQL7clyAW6Os39qlkuYOIe7FebUi6KGWjej5lG1TH/CQFT?=
+ =?us-ascii?Q?WMM8XbQjKzaUj8mcUDVaoAczFzvyyTUju2cR/NSTs591vrlh9dmhGkW/Ul6R?=
+ =?us-ascii?Q?MuLjMKRNXvtW9Up2BbYk/AyY9S4zElH6uIqmTRX2JVI8pMQ0pp5jk1R9MHvf?=
+ =?us-ascii?Q?6Mbpf1hsqFRmxDaKg3rLqIaH+AGzf4Umt/qUV4Dpga7WoTmYzozwfcuQIRyd?=
+ =?us-ascii?Q?dMInGDGvWLo4q3Zy6OkqM393lRF6p5lBY8ybg5mYw/lxoYAhAIX9WNDP705K?=
+ =?us-ascii?Q?FgnKHci3SwWfJoHoP18va0QG2uku9T1nchMQEP9GMzhNftXpYAFpkxV41pwX?=
+ =?us-ascii?Q?sS6pXD+WFfBeUPo/puHVYJNRmH7JnpiM1qC2i7beg8pZaO7P17Jp25dgGbgb?=
+ =?us-ascii?Q?RkWFGCtKUy6iS5xDECYDf7Xk7LN3JJeryalUy7oumYUQ8N2KRUqv3VwUcz6g?=
+ =?us-ascii?Q?hWXIeaUcpus9MXOB2FSl/zHSX3OsyG4sInNeB0iAdGf22V2mv2BZUM3EfsgS?=
+ =?us-ascii?Q?HrUPL7643z3mPLebSYVHft5y/MAJI4tofLlUhdxq?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a4201be-c3dc-419b-bb55-08da7f41d1ee
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2022 04:43:09.9750
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: df+LBH4scSgL2bmkFvis9VNjZdddNmQ8Na+c+gUVxYKWjEy/aGz+WYWfzhHd+o6Ie+wTwiXVgiZvgE1oDIdICg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5079
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Microcode updates need a guarantee that the thread sibling that is waiting
-for the update to finish on the primary core will not execute any
-instructions until the update is complete. This is required to guarantee
-any MSR or instruction that's being patched will be executed before the
-update is complete.
 
-After the stop_machine() rendezvous, an NMI handler is registered. If an
-NMI were to happen while the microcode update is not complete, the
-secondary thread will spin until the ucode update state is cleared.
+Looks good, thanks.
 
-Couple of choices discussed are:
+Reviewed-by: Alistair Popple <apopple@nvidia.com>
 
-1. Rendezvous inside the NMI handler, and also perform the update from
-   within the handler. This seemed too risky and might cause instability
-   with the races that we would need to solve. This would be a difficult
-   choice.
-   	1.a Since the primary thread of every core is performing a wrmsr
-	for the update, once the wrmsr has started, it can't be
-	interrupted. Hence its not required to NMI the primary thread of
-	the core. Only the secondary thread needs to be parked in NMI
-	before the update begins.
-	Suggested by From Andy Cooper
-2. Thomas (tglx) suggested that we could look into masking all the LVT
-   originating NMI's. Such as LINT1, Perf control LVT entries and such.
-   Since we are in the rendezvous loop, we don't need to worry about any
-   NMI IPI's generated by the OS.
+Haiyue Wang <haiyue.wang@intel.com> writes:
 
-   The one we didn't have any control over is the ACPI mechanism of sending
-   notifications to kernel for Firmware First Processing (FFM). Apparently
-   it seems there is a PCH register that BIOS in SMI would write to
-   generate such an interrupt (ACPI GHES).
-3. This is a simpler option. OS registers an NMI handler and doesn't do any
-   NMI rendezvous dance. But if an NMI were to happen, we check if any of
-   the CPUs thread siblings have an update in progress. Only those CPUs
-   would take an NMI. The thread performing the wrmsr() will only take an
-   NMI after the completion of the wrmsr 0x79 flow.
-
-   [ Lutomirsky thinks this is weak, and what happens from taking the
-   interrupt and the path to the registered callback handler might be
-   exposed.]
-
-   Seems like 1.a is the best candidate.
-
-The algorithm is something like this:
-
-After stop_machine() all threads are executing __reload_late()
-
-nmi_callback()
-{
-	if (!in_ucode_update)
-		return NMI_DONE;
-	if (cpu not in sibling_mask)
-		return NMI_DONE;
-	update sibling reached NMI for primary to continue
-
-	while (cpu in sibling_mask)
-		wait;
-	return NMI_HANDLED;
-}
-
-__reload_late()
-{
-
-	entry_rendezvous(&late_cpus_in);
-	set_mcip()
-	if (this_cpu is first_cpu in the core)
-		wait for siblings to drop in NMI
-		apply_microcode()
-	else
-		wait_for_siblings;
-
-wait_for_siblings:
-
-	exit_rendezvous(&late_cpus_out);
-	clear_mcip
-}
-
-reload_late()
-{
-	register_nmi_handler()
-	prepare_mask of all sibling cpus()
-	update state = ucode in progress;
-	send NMI to all threads in sibling_mask
-	unregister_nmi_handler();
-}
-
-Signed-off-by: Ashok Raj <ashok.raj@intel.com>
----
- arch/x86/kernel/cpu/microcode/core.c | 191 ++++++++++++++++++++++++++-
- 1 file changed, 184 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index d24e1c754c27..26ceb4e37a53 100644
---- a/arch/x86/kernel/cpu/microcode/core.c
-+++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -39,7 +39,9 @@
- #include <asm/processor.h>
- #include <asm/cmdline.h>
- #include <asm/setup.h>
-+#include <asm/apic.h>
- #include <asm/mce.h>
-+#include <asm/nmi.h>
- 
- #define DRIVER_VERSION	"2.2"
- 
-@@ -411,6 +413,12 @@ static int check_online_cpus(void)
- 
- static atomic_t late_cpus_in;
- static atomic_t late_cpus_out;
-+static atomic_t nmi_cpus;	// number of CPUs that enter NMI
-+static atomic_t nmi_timeouts;   // number of siblings that timeout
-+static atomic_t nmi_siblings;   // Nmber of siblings that enter NMI
-+static atomic_t in_ucode_update;// Are we in microcode update?
-+
-+static struct cpumask all_sibling_mask;
- 
- static int __wait_for_cpus(atomic_t *t, long long timeout)
- {
-@@ -433,6 +441,74 @@ static int __wait_for_cpus(atomic_t *t, long long timeout)
- 	return 0;
- }
- 
-+struct core_rendez {
-+	int num_core_cpus;
-+	atomic_t callin;
-+};
-+
-+static DEFINE_PER_CPU(struct core_rendez, core_sync);
-+
-+static int ucode_nmi_cb(unsigned int val, struct pt_regs *regs)
-+{
-+	int first_cpu, cpu = smp_processor_id();
-+	int timeout = 100 * NSEC_PER_USEC;
-+	struct core_rendez *rendez;
-+
-+	atomic_inc(&nmi_cpus);
-+	if (!atomic_read(&in_ucode_update))
-+		return NMI_DONE;
-+
-+	if (!cpumask_test_cpu(cpu, &all_sibling_mask))
-+		return NMI_DONE;
-+
-+	atomic_inc(&nmi_siblings);
-+	pr_debug("CPU %d made into NMI handler\n", cpu);
-+	/*
-+	 * primary thread waits for this
-+	 * before performing update
-+	 */
-+	first_cpu = cpumask_first(topology_sibling_cpumask(cpu));
-+	rendez = &per_cpu(core_sync, first_cpu);
-+
-+	atomic_inc(&rendez->callin);
-+	while (timeout < NSEC_PER_USEC) {
-+		if (timeout < NSEC_PER_USEC) {
-+			atomic_inc(&nmi_timeouts);
-+			pr_debug("CPU %d sibling timedout\n",cpu);
-+			break;
-+		}
-+		ndelay(NSEC_PER_USEC);
-+		timeout -= NSEC_PER_USEC;
-+		touch_nmi_watchdog();
-+		/*
-+		 * Once primary clears it from all_sibling_mask, we are
-+		 * released from the NMI loop
-+		 */
-+		if (!cpumask_test_cpu(cpu, &all_sibling_mask)) {
-+			pr_debug("CPU %d breaking from NMI\n",cpu);
-+			break;
-+		}
-+	}
-+	return NMI_HANDLED;
-+}
-+
-+/*
-+ * Primary thread clears the cpumask to release the siblings from the NMI
-+ * jail
-+ */
-+
-+static void clear_nmi_cpus(void)
-+{
-+	int first_cpu, wait_cpu, cpu = smp_processor_id();
-+
-+	first_cpu = cpumask_first(topology_sibling_cpumask(cpu));
-+	for_each_cpu(wait_cpu, topology_sibling_cpumask(cpu)) {
-+		if (wait_cpu == first_cpu)
-+			continue;
-+		cpumask_clear_cpu(wait_cpu, &all_sibling_mask);
-+	}
-+}
-+
- /*
-  * Returns:
-  * < 0 - on error
-@@ -440,14 +516,14 @@ static int __wait_for_cpus(atomic_t *t, long long timeout)
-  */
- static int __reload_late(void *info)
- {
--	int cpu = smp_processor_id();
-+	int first_cpu, cpu = smp_processor_id();
- 	enum ucode_state err;
- 	int ret = 0;
- 
- 	/*
- 	 * Wait for all CPUs to arrive. A load will not be attempted unless all
- 	 * CPUs show up.
--	 * */
-+	 */
- 	if (__wait_for_cpus(&late_cpus_in, NSEC_PER_SEC))
- 		return -1;
- 
-@@ -459,6 +535,7 @@ static int __reload_late(void *info)
- 	 * the platform is taken to reset predictively.
- 	 */
- 	mce_set_mcip();
-+
- 	/*
- 	 * On an SMT system, it suffices to load the microcode on one sibling of
- 	 * the core because the microcode engine is shared between the threads.
-@@ -466,13 +543,47 @@ static int __reload_late(void *info)
- 	 * loading attempts happen on multiple threads of an SMT core. See
- 	 * below.
- 	 */
-+	first_cpu = cpumask_first(topology_sibling_cpumask(cpu));
- 
--	if (cpumask_first(topology_sibling_cpumask(cpu)) == cpu)
-+	/*
-+	 * Set the CPUs that we should hold in NMI until the primary has
-+	 * completed the microcode update.
-+	 */
-+	if (first_cpu == cpu) {
-+		struct core_rendez *pcpu_core = &per_cpu(core_sync, cpu);
-+		int num_sibs = pcpu_core->num_core_cpus - 1;
-+		int timeout = 100 * NSEC_PER_USEC;
-+
-+		/*
-+		 * Wait for all siblings to enter
-+		 * NMI before performing the update
-+		 */
-+		while (atomic_read(&pcpu_core->callin) < num_sibs) {
-+			if (timeout < NSEC_PER_USEC) {
-+				timeout -= NSEC_PER_USEC;
-+				ndelay(NSEC_PER_USEC);
-+				touch_nmi_watchdog();
-+			} else {
-+				/*
-+				 * Some unknown reason the siblings didn't
-+				 * check in with primary. We just signal
-+				 * failure, but better to update since
-+				 * other cores might be successful and we
-+				 * don't want to leave this alone
-+				 */
-+				pr_err("CPU %d core lead timeout waiting for"
-+				       " siblings\n", cpu);
-+				ret = -1;
-+				break;
-+			}
-+		}
-+		pr_debug("Primary CPU %d proceeding with update\n", cpu);
- 		apply_microcode_local(&err);
--	else
-+		clear_nmi_cpus();
-+	} else
- 		goto wait_for_siblings;
- 
--	if (err >= UCODE_NFOUND) {
-+	if (ret || err >= UCODE_NFOUND) {
- 		if (err == UCODE_ERROR)
- 			pr_warn("Error reloading microcode on CPU %d\n", cpu);
- 
-@@ -496,26 +607,92 @@ static int __reload_late(void *info)
- 	return ret;
- }
- 
-+static void set_nmi_cpus(int cpu)
-+{
-+	int first_cpu, wait_cpu;
-+	struct core_rendez *pcpu_core = &per_cpu(core_sync, cpu);
-+
-+	first_cpu = cpumask_first(topology_sibling_cpumask(cpu));
-+	for_each_cpu(wait_cpu, topology_sibling_cpumask(cpu)) {
-+		if (wait_cpu == first_cpu) {
-+			pcpu_core->num_core_cpus =
-+					cpumask_weight(topology_sibling_cpumask(wait_cpu));
-+			continue;
-+		}
-+		cpumask_set_cpu(wait_cpu, &all_sibling_mask);
-+	}
-+}
-+
-+static void prepare_siblings(void)
-+{
-+	int cpu;
-+
-+	for_each_cpu(cpu, cpu_online_mask) {
-+		set_nmi_cpus(cpu);
-+	}
-+}
-+
- /*
-  * Reload microcode late on all CPUs. Wait for a sec until they
-  * all gather together.
-  */
- static int microcode_reload_late(void)
- {
--	int ret;
-+	int ret = 0;
- 
- 	pr_err("Attempting late microcode loading - it is dangerous and taints the kernel.\n");
- 	pr_err("You should switch to early loading, if possible.\n");
- 
-+	/*
-+	 * Used for late_load entry and exit rendezvous
-+	 */
- 	atomic_set(&late_cpus_in,  0);
- 	atomic_set(&late_cpus_out, 0);
- 
-+	/*
-+	 * in_ucode_update: Global state while in ucode update
-+	 * nmi_cpus: Count of CPUs entering NMI while ucode in progress
-+	 * nmi_siblings: Count of siblings that enter NMI
-+	 * nmi_timeouts: Count of siblings that fail to see mask clear
-+	 */
-+	atomic_set(&in_ucode_update,0);
-+	atomic_set(&nmi_cpus, 0);
-+	atomic_set(&nmi_timeouts, 0);
-+	atomic_set(&nmi_siblings, 0);
-+
-+	cpumask_clear(&all_sibling_mask);
-+
-+	ret = register_nmi_handler(NMI_LOCAL, ucode_nmi_cb, NMI_FLAG_FIRST,
-+				   "ucode_nmi");
-+	if (ret) {
-+		pr_err("Unable to register NMI handler\n");
-+		goto done;
-+	}
-+
-+	/*
-+	 * Prepare everything for siblings threads to drop into NMI while
-+	 * the update is in progress.
-+	 */
-+	prepare_siblings();
-+	atomic_set(&in_ucode_update, 1);
-+	apic->send_IPI_mask(&all_sibling_mask, NMI_VECTOR);
-+	pr_debug("Sent NMI broadcast to all sibling cpus\n");
- 	ret = stop_machine_cpuslocked(__reload_late, NULL, cpu_online_mask);
- 	if (ret == 0)
- 		microcode_check();
- 
--	pr_info("Reload completed, microcode revision: 0x%x\n", boot_cpu_data.microcode);
-+	unregister_nmi_handler(NMI_LOCAL, "ucode_nmi");
-+
-+	pr_debug("Total CPUs that entered NMI     ... %d\n",
-+			atomic_read(&nmi_cpus));
-+	pr_debug("Total siblings that entered NMI ... %d\n",
-+		  	atomic_read(&nmi_siblings));
-+	pr_debug("Total siblings timedout         ... %d\n",
-+			atomic_read(&nmi_timeouts));
-+	pr_info("Reload completed, microcode revision: 0x%x\n",
-+	        boot_cpu_data.microcode);
- 
-+done:
- 	return ret;
- }
- 
--- 
-2.32.0
-
+> The handling Non-LRU pages returned by follow_page() jumps directly, it
+> doesn't call put_page() to handle the reference count, since 'FOLL_GET'
+> flag for follow_page() has get_page() called. Fix the zone device page
+> check by handling the page reference count correctly before returning.
+>
+> And as David reviewed, "device pages are never PageKsm pages". Drop this
+> zone device page check for break_ksm().
+>
+> Fixes: 3218f8712d6b ("mm: handling Non-LRU pages returned by vm_normal_pages")
+> Signed-off-by: Haiyue Wang <haiyue.wang@intel.com>
+> Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
+> Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+> ---
+>  mm/huge_memory.c |  4 ++--
+>  mm/ksm.c         | 12 +++++++++---
+>  mm/migrate.c     | 19 ++++++++++++-------
+>  3 files changed, 23 insertions(+), 12 deletions(-)
+>
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index 8a7c1b344abe..b2ba17c3dcd7 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -2963,10 +2963,10 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
+>  		/* FOLL_DUMP to ignore special (like zero) pages */
+>  		page = follow_page(vma, addr, FOLL_GET | FOLL_DUMP);
+>
+> -		if (IS_ERR_OR_NULL(page) || is_zone_device_page(page))
+> +		if (IS_ERR_OR_NULL(page))
+>  			continue;
+>
+> -		if (!is_transparent_hugepage(page))
+> +		if (is_zone_device_page(page) || !is_transparent_hugepage(page))
+>  			goto next;
+>
+>  		total++;
+> diff --git a/mm/ksm.c b/mm/ksm.c
+> index 42ab153335a2..e26f57fc1f0e 100644
+> --- a/mm/ksm.c
+> +++ b/mm/ksm.c
+> @@ -475,7 +475,7 @@ static int break_ksm(struct vm_area_struct *vma, unsigned long addr)
+>  		cond_resched();
+>  		page = follow_page(vma, addr,
+>  				FOLL_GET | FOLL_MIGRATION | FOLL_REMOTE);
+> -		if (IS_ERR_OR_NULL(page) || is_zone_device_page(page))
+> +		if (IS_ERR_OR_NULL(page))
+>  			break;
+>  		if (PageKsm(page))
+>  			ret = handle_mm_fault(vma, addr,
+> @@ -560,12 +560,15 @@ static struct page *get_mergeable_page(struct rmap_item *rmap_item)
+>  		goto out;
+>
+>  	page = follow_page(vma, addr, FOLL_GET);
+> -	if (IS_ERR_OR_NULL(page) || is_zone_device_page(page))
+> +	if (IS_ERR_OR_NULL(page))
+>  		goto out;
+> +	if (is_zone_device_page(page))
+> +		goto out_putpage;
+>  	if (PageAnon(page)) {
+>  		flush_anon_page(vma, page, addr);
+>  		flush_dcache_page(page);
+>  	} else {
+> +out_putpage:
+>  		put_page(page);
+>  out:
+>  		page = NULL;
+> @@ -2308,11 +2311,13 @@ static struct rmap_item *scan_get_next_rmap_item(struct page **page)
+>  			if (ksm_test_exit(mm))
+>  				break;
+>  			*page = follow_page(vma, ksm_scan.address, FOLL_GET);
+> -			if (IS_ERR_OR_NULL(*page) || is_zone_device_page(*page)) {
+> +			if (IS_ERR_OR_NULL(*page)) {
+>  				ksm_scan.address += PAGE_SIZE;
+>  				cond_resched();
+>  				continue;
+>  			}
+> +			if (is_zone_device_page(*page))
+> +				goto next_page;
+>  			if (PageAnon(*page)) {
+>  				flush_anon_page(vma, *page, ksm_scan.address);
+>  				flush_dcache_page(*page);
+> @@ -2327,6 +2332,7 @@ static struct rmap_item *scan_get_next_rmap_item(struct page **page)
+>  				mmap_read_unlock(mm);
+>  				return rmap_item;
+>  			}
+> +next_page:
+>  			put_page(*page);
+>  			ksm_scan.address += PAGE_SIZE;
+>  			cond_resched();
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index 581dfaad9257..44e05ce41d49 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1672,9 +1672,12 @@ static int add_page_for_migration(struct mm_struct *mm, unsigned long addr,
+>  		goto out;
+>
+>  	err = -ENOENT;
+> -	if (!page || is_zone_device_page(page))
+> +	if (!page)
+>  		goto out;
+>
+> +	if (is_zone_device_page(page))
+> +		goto out_putpage;
+> +
+>  	err = 0;
+>  	if (page_to_nid(page) == node)
+>  		goto out_putpage;
+> @@ -1868,13 +1871,15 @@ static void do_pages_stat_array(struct mm_struct *mm, unsigned long nr_pages,
+>  		if (IS_ERR(page))
+>  			goto set_status;
+>
+> -		if (page && !is_zone_device_page(page)) {
+> +		err = -ENOENT;
+> +		if (!page)
+> +			goto set_status;
+> +
+> +		if (!is_zone_device_page(page))
+>  			err = page_to_nid(page);
+> -			if (foll_flags & FOLL_GET)
+> -				put_page(page);
+> -		} else {
+> -			err = -ENOENT;
+> -		}
+> +
+> +		if (foll_flags & FOLL_GET)
+> +			put_page(page);
+>  set_status:
+>  		*status = err;

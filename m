@@ -2,70 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72767595D26
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B38595D30
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:23:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233926AbiHPNVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
+        id S234859AbiHPNXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231131AbiHPNVo (ORCPT
+        with ESMTP id S229974AbiHPNXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 09:21:44 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89FAE73911
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:21:43 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id v2so14900508lfi.6
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:21:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=yE7zn3+63TAoBI4QapAvwqAkJrBFU8gy8jfI0uwa9Io=;
-        b=MDzvxydaTkVDEjoHMlvPvOnwvlr7ONZ2+VmBXkidWml+0GhHByNN6EWuo39IFC8yZ4
-         4CbvNwRQuYmzzuwIB0kqA6keBCbjCiZg59ROuHLbpcXGUyVOn6GwQgA+dSn3f9kGCVrj
-         +iWgLCl5YeyTgXVm0yzI89zqlenbzT/mODrQZon8JM1W/XtNcUj0eKf7JKBqzKY4NDtq
-         N8PKaTLB1cNJqgDJkCnAtqQV9NYHQsqVWn6QyuEZU0egFpKBIA9yaWsAcGDIjJQTXPQ6
-         6JtHdJ9wy8/vfI6svnRYpghzayyrCwMeNXciOKiV4MZ7AsAPEHBmDDqPoIAd59/bcDzI
-         2vkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=yE7zn3+63TAoBI4QapAvwqAkJrBFU8gy8jfI0uwa9Io=;
-        b=LzXUdNPWLacVOXdcrlohJ6n05wfRXXhLimp7kTfTjd/Wloj2uNdmIfOm+SV5GSCAgG
-         4mfnM3xsEihSKdEsXwlYVQhvFq8PzIJyVtnO629Ml2Qv8ugbeBIFTgEc7BEakv9BZJRz
-         k20XJW9RKvgPrJtjOjoAWnTaOp28yRd4Rq/AdZFNuNMoFcuIudUMws4lG1QvPzXxq0Oe
-         6e/kaVWQAPJXhnCmM5jD/AvtD5Ys3lCAmTMqHMNF71rOJTufKFmKAzRVK60zKBXBpyzK
-         IJVjuy+USJZqChGHGqwuVw4Z/RyDVjA8X2JRQ6sg+9HjPgwJ9PGl+7OLj+2UBQwkclFy
-         KF1g==
-X-Gm-Message-State: ACgBeo2NXGnrREg4bTmc3h/VbrsazThFECUL4Jx+8ozxmnLctVChf1n0
-        L0vvG153f/lIZ1UxafqlG0za9NfZ6SLqHGAe
-X-Google-Smtp-Source: AA6agR6XKqcse24maA6Z7f54Nlx/n9AiCKXjXCJKSey1kamKIawSJ0X2wWxzj59gOcgEC27vgTh/uQ==
-X-Received: by 2002:a19:d611:0:b0:492:8e15:ba18 with SMTP id n17-20020a19d611000000b004928e15ba18mr2700922lfg.524.1660656101921;
-        Tue, 16 Aug 2022 06:21:41 -0700 (PDT)
-Received: from krzk-bin.. (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id m17-20020a056512015100b0048ae518364dsm1387442lfo.148.2022.08.16.06.21.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 06:21:41 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v2] dt-bindings: phy: Update Pratyush Yadav's email
-Date:   Tue, 16 Aug 2022 16:21:31 +0300
-Message-Id: <20220816132131.75591-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Tue, 16 Aug 2022 09:23:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3E212098;
+        Tue, 16 Aug 2022 06:23:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C401461387;
+        Tue, 16 Aug 2022 13:23:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22AEEC433C1;
+        Tue, 16 Aug 2022 13:23:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660656190;
+        bh=JumyuZeI/tr0PhD+GYJH6A/O4IFXRoWVZzgl4XKHznE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Efap14+pMVDok7IK+6QRPjif/aQmWMGBSjZrJPWz+qZTnKjt8fW1Uc7L2WkYF4kjQ
+         G6oi1jK2jk9sr7bRVb8z/1ifDCA45tbY2evJ2Cv8Qy/CrKCwj+EdM8LkRHnpaFig8W
+         /PVLfsIPt7ZR8HIO7bggfapXP8NUhtcz+GyAN6bXg4B6/1QSx+S953tIR9Wej0oX+M
+         Bka5mKS63I0ZXllJpWzq4/bz5ORlrZFTFcrUBDL61B1lZKiUUWkcxzp+GFaXoghOkW
+         9LYpbnYWT+GOLKoWgF2yG8bp0zpGngSI1CwUMYjzy6AH24tTdVVCnwx5xoD1rx6hKh
+         b6AH3B1Y5XJSQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oNwXD-003Umf-M3;
+        Tue, 16 Aug 2022 14:23:07 +0100
+Date:   Tue, 16 Aug 2022 14:23:02 +0100
+Message-ID: <87v8qswceh.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jon Nettleton <jon@solid-run.com>
+Cc:     Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Hector Martin <marcan@marcan.st>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>, Tejun Heo <tj@kernel.org>,
+        jirislaby@kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Asahi Linux <asahi@lists.linux.dev>, stable@vger.kernel.org
+Subject: Re: [PATCH] locking/atomic: Make test_and_*_bit() ordered on failure
+In-Reply-To: <CABdtJHuRGaod9iGCYXq1ivNPZGw=1cszE024WGmzXMQ4S_9AQw@mail.gmail.com>
+References: <20220816070311.89186-1-marcan@marcan.st>
+        <CAK8P3a03pfrPzjnx1tB5z0HcKnY=JL=y+F8PMQDpc=Bavs3UCA@mail.gmail.com>
+        <CABdtJHvZt=av5YEQvRMtf4-dMFR6JS1jM1Ntj7DMVy5fijvkMw@mail.gmail.com>
+        <20220816130048.GA11202@willie-the-truck>
+        <CABdtJHuRGaod9iGCYXq1ivNPZGw=1cszE024WGmzXMQ4S_9AQw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jon@solid-run.com, will@kernel.org, arnd@arndb.de, marcan@marcan.st, peterz@infradead.org, mingo@kernel.org, stern@rowland.harvard.edu, parri.andrea@gmail.com, boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr, paulmck@kernel.org, akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org, mark.rutland@arm.com, corbet@lwn.net, tj@kernel.org, jirislaby@kernel.org, catalin.marinas@arm.com, oneukum@suse.com, torvalds@linux-foundation.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev, stable@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,48 +91,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Emails to Pratyush Yadav bounce ("550 Invalid recipient"), so update to
-match one in commit 92714596cdbe ("MAINTAINERS: Use my kernel.org
-email").
+On Tue, 16 Aug 2022 14:05:54 +0100,
+Jon Nettleton <jon@solid-run.com> wrote:
+> 
+> On Tue, Aug 16, 2022 at 3:01 PM Will Deacon <will@kernel.org> wrote:
+> >
+> > On Tue, Aug 16, 2022 at 02:29:49PM +0200, Jon Nettleton wrote:
+> > > On Tue, Aug 16, 2022 at 10:17 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > >
+> > > > On Tue, Aug 16, 2022 at 9:03 AM Hector Martin <marcan@marcan.st> wrote:
+> > > > >
+> > > > > These operations are documented as always ordered in
+> > > > > include/asm-generic/bitops/instrumented-atomic.h, and producer-consumer
+> > > > > type use cases where one side needs to ensure a flag is left pending
+> > > > > after some shared data was updated rely on this ordering, even in the
+> > > > > failure case.
+> > > > >
+> > > > > This is the case with the workqueue code, which currently suffers from a
+> > > > > reproducible ordering violation on Apple M1 platforms (which are
+> > > > > notoriously out-of-order) that ends up causing the TTY layer to fail to
+> > > > > deliver data to userspace properly under the right conditions. This
+> > > > > change fixes that bug.
+> > > > >
+> > > > > Change the documentation to restrict the "no order on failure" story to
+> > > > > the _lock() variant (for which it makes sense), and remove the
+> > > > > early-exit from the generic implementation, which is what causes the
+> > > > > missing barrier semantics in that case. Without this, the remaining
+> > > > > atomic op is fully ordered (including on ARM64 LSE, as of recent
+> > > > > versions of the architecture spec).
+> > > > >
+> > > > > Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> > > > > Cc: stable@vger.kernel.org
+> > > > > Fixes: e986a0d6cb36 ("locking/atomics, asm-generic/bitops/atomic.h: Rewrite using atomic_*() APIs")
+> > > > > Fixes: 61e02392d3c7 ("locking/atomic/bitops: Document and clarify ordering semantics for failed test_and_{}_bit()")
+> > > > > Signed-off-by: Hector Martin <marcan@marcan.st>
+> > > > > ---
+> > > > >  Documentation/atomic_bitops.txt     | 2 +-
+> > > > >  include/asm-generic/bitops/atomic.h | 6 ------
+> > > >
+> > > > I double-checked all the architecture specific implementations to ensure
+> > > > that the asm-generic one is the only one that needs the fix.
+> > > >
+> > > > I assume this gets merged through the locking tree or that Linus picks it up
+> > > > directly, not through my asm-generic tree.
+> > > >
+> > > > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> > > >
+> > > > _______________________________________________
+> > > > linux-arm-kernel mailing list
+> > > > linux-arm-kernel@lists.infradead.org
+> > > > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> > >
+> > > Testing this patch on pre Armv8.1 specifically Cortex-A72 and
+> > > Cortex-A53 cores I am seeing
+> > > a huge performance drop with this patch applied. Perf is showing
+> > > lock_is_held_type() as the worst offender
+> >
+> > Hmm, that should only exist if LOCKDEP is enabled and performance tends to
+> > go out of the window if you have that on. Can you reproduce the same
+> > regression with lockdep disabled?
+> >
+> > Will
+> 
+> Yep I am working on it.  We should note that
+> 
+> config LOCKDEP_SUPPORT
+>         def_bool y
+> 
+> is the default for arm64
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Rob Herring <robh@kernel.org>
+Yes, as the architecture supports LOCKDEP. However, you probably have
+something like CONFIG_PROVE_LOCKING to see such a performance hit (and
+that's definitely not on by default).
 
----
+	M.
 
-Changes since v1:
-1. Update email instead of dropping.
----
- Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml | 2 +-
- Documentation/devicetree/bindings/phy/cdns,dphy.yaml    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml b/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
-index 07be031d82e6..d24ec47c038e 100644
---- a/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
-+++ b/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Cadence DPHY Rx Device Tree Bindings
- 
- maintainers:
--  - Pratyush Yadav <p.yadav@ti.com>
-+  - Pratyush Yadav <pratyush@kernel.org>
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/phy/cdns,dphy.yaml b/Documentation/devicetree/bindings/phy/cdns,dphy.yaml
-index f0e9ca8427bb..649e0b953df0 100644
---- a/Documentation/devicetree/bindings/phy/cdns,dphy.yaml
-+++ b/Documentation/devicetree/bindings/phy/cdns,dphy.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Cadence DPHY Device Tree Bindings
- 
- maintainers:
--  - Pratyush Yadav <p.yadav@ti.com>
-+  - Pratyush Yadav <pratyush@kernel.org>
- 
- properties:
-   compatible:
 -- 
-2.34.1
-
+Without deviation from the norm, progress is not possible.

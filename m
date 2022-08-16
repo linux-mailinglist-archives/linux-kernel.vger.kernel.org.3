@@ -2,167 +2,373 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4AA59528E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 08:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4EF0595298
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 08:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbiHPGdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 02:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35704 "EHLO
+        id S229718AbiHPGhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 02:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbiHPGdP (ORCPT
+        with ESMTP id S229500AbiHPGg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 02:33:15 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2044.outbound.protection.outlook.com [40.107.102.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31E43771C8
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 17:54:04 -0700 (PDT)
+        Tue, 16 Aug 2022 02:36:59 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E999E50194
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 18:12:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660612346; x=1692148346;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=qfi2w9hQNVOVcqPD0nKJ69SE2QJsPvqYIt+COwmLgWw=;
+  b=gPcEYrFdQSnVFOYO4jlnzaz8lrNrA5WByZ818QAPLj6VP8co3fP7ss8U
+   Y93+crY+sWoPDUXylPT0lt8fFGck0lMaMtoOCX9mwdyVHQLX3aFjX1Vl8
+   DLJiONPMRGUUGBVmQCXG9Qxaum98Em8ZgUPTJJGSjvwpIs/EY8R6BZ1c8
+   s5okOkccp2MhLThdfrm2Zf1Jy1orQvvGqEtGixxQqajAapMTTh+uiFQaG
+   goV7wxhdw8k8ui7hc12u8agwkvhVjzd9o5hPIRD5chMrMnGCg9sD9F6Ha
+   4ePVXUk9Cc8GA/tGsPIrBt5j7qq2DQnbDXF7qUMBVjNtNBJYUZBKRRr0N
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="272487649"
+X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
+   d="scan'208";a="272487649"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 18:12:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
+   d="scan'208";a="606845043"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga002.jf.intel.com with ESMTP; 15 Aug 2022 18:12:25 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Mon, 15 Aug 2022 18:12:25 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Mon, 15 Aug 2022 18:12:25 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28 via Frontend Transport; Mon, 15 Aug 2022 18:12:24 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.104)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.28; Mon, 15 Aug 2022 18:12:24 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mlaDNNKbxshJjhInVSht6ctDZXCoPQapOPH4Fy9UgPN2+5Pb2FQAuvHgzDtYaQYMlXX3Ar0awkR/Ph8Dt8QchrFhvmwpO96U3/UP60YgrYzA7/N1h0EwsbQC81WIQ4muNCownPZiFVKgwO49S866xS0ImbmnGhvh0a5wYZ9BUFcDryeVZ5N2ix3Ol/VItjUiLxni5k5NUZ5omog//L2dvzMlQMEpcw1kEvqnW3FHPActMxMOwh5mxeGN6C/M1f9lwWRdRE6wbfYb1FkIAU2tfj43MH2opxNfc4RzcaLQGN0ZmstweKctMPzNz2/J0Gg1RWNtHHNX2yTJLSpmUjWNiw==
+ b=gxQG9M6v5dveeD3eOGOXPsaL0K/FMicdq7omla2uwpfpOFaRU/Twb2L2bpbwIJOEg8yeFdsDVQmxi4DaGnwpxlIwd5FJKgvvH+hfvUMHmEtLSdm5suqsetdQdbYjXYR+Fdt2qeKt+T88lVPBv1lPbZAszSEg8WZEJlvrAG+ZTl3LA9MMhHoPMQPrOZRcZTjxCU+bD5ykuRr04RTUhriqOLjIT4d9n1ahyrMkkKxRIP5qE3EQPL52tUD3M8n0fwRKqt1OVDsKcCgFKeGSQAISN3fhdXdRVHs6PBWYYIje71rWQ/shhHqtiATdM6gz3RrcysJyYNQNqSbx1BuJW5766Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9Xdu99J7cL8+of3s1iMLxJKV8OVZx1n9g6QSOfPM7mU=;
- b=LxcWcC0XKa4gi3pyErWsDdcANDWM0jz6UCzTHhgW98mpul5RMuztLlq7euGTHEnDlB4hkAYdle8wD2ujvpg62GFjuUS53ps+q5wHRzMuz9oRymHT+L1XOtn+LopTtm0AxUPywpxSK25FfhcHckjqZIl+nbWLyuRBjAB94yjuMwrMm2LaN8ap/FlpV9fzW0grX/d72NVxZC8Cxc9yQ86WzsdTfQCQiB+yFw5YeSE2C7gnEMXg1vSmspBBLTM841qVd7sZ4JzXMbssAm6SSdizHNIRxvaUDMuOfUYAU3fMF6LTnvyrucJS6GZFwsPLDbCWvTa5EmJ6fpOI9TK9LXLGsQ==
+ bh=WuJuCanXY0UJMTZmDYPmuNUTU1s+vqAzhpAJw2oXkiQ=;
+ b=eQ5jNI4TgRWOxwJfQinex8zOrcmZOHuYlpd24eecEeqzHGn47ivxHtrtgAQSaG7iPUmHHdEUMTJlfa3G5bSDkI9kBhI314TV9T1s8/bkjTyBG/1SKEFVHx+moz67+S8YV4XaN2gvpHJml0SFaMAEKOjnTkbFIj+KQv5Jwpiqae2AG6F/kpX/PwJ68taII6wF72jd8Jg9HqEZoO3uKKIdaG7L4Xs8Ix0a9Z95PLVIUWxnVdPjAg3MIHVTBG/nor5KsS13ba5kOXQvzNPXKdJzOFw0potpytzwJcj09ErtBFAvbJYmfyt311fMEMIGo4cDu/T89PnYd6hPpnecTZ4oDw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9Xdu99J7cL8+of3s1iMLxJKV8OVZx1n9g6QSOfPM7mU=;
- b=t/mJm0YsdDq7DquHG5LSAli1vRcIxoDNEM47NJvXRiee1lkovAtkk9uevARWZRYOwW2Mfa5EOj/PKMIE3jiUs6hF1IKF5JNjMeBcdf7mdZ2Ar4Q9yujnSQaNwPR8kQtqVu6Kb88gPlk3+DhAFwl72tQ3Pr2jBRVJmO7Ogo0omlpIMPHgI/+01X96uzUmVf5IL1pqMtaw2fuzpLHieF+zcgGtPtHiTGmA5ChKXqpZMmWGZNcJnZgWkX18OOvo2Xct53Aq81DRlQWXHvJpKYG88jas1qsiRhDGN482hlZ8jVod2U2JG4FDH3Lo+9vVv5F/L7F4b9dYyjgQofTqkEz56Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by DM4PR12MB6349.namprd12.prod.outlook.com (2603:10b6:8:a4::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5525.11; Tue, 16 Aug 2022 00:53:55 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::eca6:a4a7:e2b2:27e7]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::eca6:a4a7:e2b2:27e7%5]) with mapi id 15.20.5504.027; Tue, 16 Aug 2022
- 00:53:55 +0000
-References: <a9daea363991c023d0364be22a762405b6c6f5c4.1660281458.git-series.apopple@nvidia.com>
- <YvqsoL7fKJzEqTA3@xz-m1.local>
-User-agent: mu4e 1.6.9; emacs 27.1
-From:   Alistair Popple <apopple@nvidia.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>, linuxram@us.ibm.com,
-        paulus@ozlabs.org
-Subject: Re: [PATCH 1/2] mm/migrate_device.c: Copy pte dirty bit to page
-Date:   Tue, 16 Aug 2022 10:51:57 +1000
-In-reply-to: <YvqsoL7fKJzEqTA3@xz-m1.local>
-Message-ID: <87zgg5uhy7.fsf@nvdebian.thelocal>
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR04CA0022.namprd04.prod.outlook.com
- (2603:10b6:a03:40::35) To BYAPR12MB3176.namprd12.prod.outlook.com
- (2603:10b6:a03:134::26)
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BYAPR11MB3495.namprd11.prod.outlook.com (2603:10b6:a03:8a::14)
+ by PH7PR11MB6030.namprd11.prod.outlook.com (2603:10b6:510:1d1::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.28; Tue, 16 Aug
+ 2022 01:12:23 +0000
+Received: from BYAPR11MB3495.namprd11.prod.outlook.com
+ ([fe80::6133:d318:f357:48d7]) by BYAPR11MB3495.namprd11.prod.outlook.com
+ ([fe80::6133:d318:f357:48d7%7]) with mapi id 15.20.5525.011; Tue, 16 Aug 2022
+ 01:12:23 +0000
+From:   "Wang, Haiyue" <haiyue.wang@intel.com>
+To:     Alistair Popple <apopple@nvidia.com>
+CC:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "david@redhat.com" <david@redhat.com>,
+        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "naoya.horiguchi@linux.dev" <naoya.horiguchi@linux.dev>,
+        "alex.sierra@amd.com" <alex.sierra@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>
+Subject: RE: [PATCH v5 2/2] mm: fix the handling Non-LRU pages returned by
+ follow_page
+Thread-Topic: [PATCH v5 2/2] mm: fix the handling Non-LRU pages returned by
+ follow_page
+Thread-Index: AQHYsHUAsdqcAiEDdEqE2PI2IKO5la2wpY+AgAANwTA=
+Date:   Tue, 16 Aug 2022 01:12:23 +0000
+Message-ID: <BYAPR11MB34954F8869F88E8BD34035B0F76B9@BYAPR11MB3495.namprd11.prod.outlook.com>
+References: <20220812084921.409142-1-haiyue.wang@intel.com>
+ <20220815070240.470469-1-haiyue.wang@intel.com>
+ <20220815070240.470469-3-haiyue.wang@intel.com>
+ <874jydvxfh.fsf@nvdebian.thelocal>
+In-Reply-To: <874jydvxfh.fsf@nvdebian.thelocal>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.500.17
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c2327b8a-feae-4b76-a772-08da7f245fe1
+x-ms-traffictypediagnostic: PH7PR11MB6030:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ZW5wbHQrybIz83uzptZhLbUXFEl315yfbOnm+rnn9oG3TEb+rVS848O6vap6RM6RQDLlm8Yqtq1tAeVRce5lta5zv4FoczDZiVonOgRmfvGIeGzr/gav6OfcNMM5F4pff0kBu4k11DBFIAMVbGqYV0E+VolsfZCnX5HbPNhoF6UjJtHXTwR1NKUZfjWl/r70ufb7LP0I3jjMkflpuBTdHjYJQ3/BpoGaDkJUisXDYK2bvIKaSdBgZM8sAVUVtVDVgwzXdwWFkCePcrUsNymO2wM1hri+Z5INPs45B0cQuizBAHdmJqxxnrLRZnSnO77uZfxGrnu56oSu5FBUMLcrvisFUJzSse/0imBLnzcveMGQ/jIWiLRssnMo6qrYF6TZ9ediN9zzUk3yw+lwmSuEcs3u3Qc8Q/PaZ5pB+Lf0KkeZZ/TWleRsB7cSbOLkUda5vNW4/2OB9areyqvx6qss2DsE3feP8dFtlhwWVGAfIBHYJZfxnnfFuM1vnFkoxmn7YDylmGztVt9pDwbJFBLfo3FeMAyfNsxOnCNDkz/94y8UgXpkbgOIX5dCFS5wm1vho9VVN0U9pD8AqA1Z2g2VIkTEe/Uofbz7s/tkyyA/Muus0OtVM2mXmfAyETADm9zAYsyWcRLtf09WopRK2b+7BAaGNXzizc3F7RJfQuhSm4BATBnpPaabpiMscJ/IZ9HacMaRfiNeg0gaBvqTu73crAafGpv58/3K7Nzlx0aNXMyGT0edGlGuPgiBRXEZJjtJZBzyrgyIUc3q+LWhWDjTBfgySaVfyAqJhc7P32UfruJt6v1x6SmdY7fsc0fx2Pd9
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3495.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(39860400002)(366004)(136003)(396003)(376002)(8676002)(55016003)(76116006)(41300700001)(64756008)(66556008)(4326008)(66946007)(83380400001)(66476007)(2906002)(66446008)(54906003)(186003)(316002)(6916009)(122000001)(38100700002)(26005)(9686003)(82960400001)(86362001)(5660300002)(8936002)(6506007)(33656002)(38070700005)(7696005)(478600001)(53546011)(71200400001)(7416002)(52536014);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vgtcuqr/70TJ3elE8WExyieX5sUfUrLLc8G7iCD+ujfvK/EE73vslZwnUnrF?=
+ =?us-ascii?Q?OM0CxdAg17sl/wTAZsfow+M5/1S7FG7MvbwV643XeZtJslFoAMeBH2XmyA2p?=
+ =?us-ascii?Q?3r4B32ypIlphIK1J9sBhuL2L4Ng07Dc7MId0ae4c0wTOGW8fyMrWys+3ijcj?=
+ =?us-ascii?Q?4n3WxDkMCc9efYFHcZIv8y/EM8K+FRpjgDFoOClPMz8MhLqBV1XjCGBp7T8b?=
+ =?us-ascii?Q?V0KnOGoe3w/W4gibte7CSfiZfB2sunBlu8bA8FPKhf85PAxwq92DHpxzfalB?=
+ =?us-ascii?Q?hksD0ZioCJA0BQBWDcNiZ422Jr22hDAqLEqxSkOavQlbw/QylA0qKSraexyJ?=
+ =?us-ascii?Q?Lcv747kKb5pVYspsNsB1xUe3wxrYKhda2EEp29eMyeA3yp7MY66CdbXNdIKC?=
+ =?us-ascii?Q?crky4YJYoBRdU9puJHoaRG2tKUg2oK75myUR2aFtEONXUetjNHkTskfNXxzT?=
+ =?us-ascii?Q?4D3X+hSnjiJggvoARS0/1RkqNGfIwHTMc7IoboD4SQh+tEJQMlTgvcAfh9Js?=
+ =?us-ascii?Q?KoXemmYV6nmUTey3mud/WbhuxaoI3nnZbdJIPntFJghNNANHxIXI73QaOydA?=
+ =?us-ascii?Q?Ku04Obu9VIySneNMQ2S0ryK49MC4bchgxA+2kxXzo1tz1y9vCVgis1XkVvDb?=
+ =?us-ascii?Q?LPOdAAWxJTr5iE5SI22Uvhw3/547jFFBAnUI+UQB6AOO1iQxApnfayd/LipC?=
+ =?us-ascii?Q?jgcaullUi62jzbPLPOtvD7UtMzjp0Xu4T0o9wD/4J+C17IVtejr4VN2Rg2Ik?=
+ =?us-ascii?Q?/TeKuZ81QcRYaWXePeBzj6GI3RgLkwVtQoua0UF9RwWMawVsdsyPcEWhpQp7?=
+ =?us-ascii?Q?KPgu4cUWNeU62Q/DPpB5c/XEeGQaRWZL2+PZ3sj1XifBZsXiCSQbjJQvxQ6q?=
+ =?us-ascii?Q?7ciwOdTe+RUqz7jeMK5ixKR86B1MtVh/Ly4TaB9g26Hz514sQmGeyim3rxFD?=
+ =?us-ascii?Q?fq3cKK8G9PVwpp7I1UWSGLNd2lCZwnfJoTurtrwKcS9CKyJphm46vp08dnrK?=
+ =?us-ascii?Q?B3CjVfPzlQHYoV1PB1XsfZo9X6xrfw+zin3O6niZONC3yexyWTY6q6K3X1G8?=
+ =?us-ascii?Q?zccizXpiqXjYFoqpt0XDp0SuSec2sEeH5qfDGeEGETN/puMx2aKcIdOy1g1L?=
+ =?us-ascii?Q?K2x7ZEvw/WZA0riJtKT9+Fc8WE0e4Ez+MdiPSI0a8YSoUBzAmUTwICPNepOC?=
+ =?us-ascii?Q?xEG01uIhba8H53c/OxjE7WVcF9Oyz3V6GadTcT3L1HLVofXls4OTTUPu8hCY?=
+ =?us-ascii?Q?H/So3I9BHM/CPccK6IUjMutsLYp25Xnf4ek7553eoZMyI0Ucrf10S+iUmPd2?=
+ =?us-ascii?Q?S6BEcjEvz+SAjUrsoNfzIWbZMvCJ4SC4A37oQCfyCvPR0ghcgchn+T7w8A8X?=
+ =?us-ascii?Q?2fAAPCC6I1oc50DftpJdymHuPT6aRyrUZADTwuz9wihL1jn6rXhVzsGLMSHG?=
+ =?us-ascii?Q?XwVvtYLwZ8qFveDtwZ9SkxtzioNR9kcOFFbCMf50C1JiJhosZvgUDnWL3zOT?=
+ =?us-ascii?Q?4nLLQbPA1ufEMin9/6GD4A/TIaSRQbtumR8Cfd1yCaicPVpYuv/s7cDFASPu?=
+ =?us-ascii?Q?ZROIe6o0S7piWql5yTD7jtjJFB2Q+R4QmArrNKAX?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8b28c564-d6b5-4a02-771b-08da7f21cb8b
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6349:EE_
-X-LD-Processed: 43083d15-7273-40c1-b7db-39efd9ccc17a,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4SfwGoqbKu3eO5qBqeQ93Y5wwk0L+P/APE9/LMBpRGHZL7cq9NcP2WW+AuLL0UOTAVwJHTdzgEliHJERKbDO6UJc7S6Z2MQxTyRiMQ2soKU9K0OAu2riQJ8rB/lpjdEHfbiXK1NBRwBFjz7eTOFrda8qBqVGQGHTIA9GO5WPdlZtHou5BLXFylCfFARzLm73dktnyJgKJHSOeLs+zxyR4J6FUoFqpmU7onBmbDP4/mbNTh6a37Ae72s6d5/1yjUhW8lAiIoeFPTCp6m0f2EYhufUveuIuyakFvU0BqkDHVoVOwbzoWUzoOP/73UYkV3Zs0z78WDsce6g7zI/WpDbpL9jiALbv9YbbUrp1CrfoUCRpswu3hYSSuqJvdfJXj/+/LpRLGI7wokmTvN7V+28RGtZTK6qaQptKzjAdpm2J2mp1LJQvtVLIEsJchygP2blohw/kYJVRy4RB6vxPVgO2Rt5uTJtnLMUIXW3BWyb0TBnic3S/M/eXucr4NfxgyfquSe/+TNOMaP9103tndKhxlE2Acha2HkJAXKgYA73d8kVFDm/1fJnLZXBV6cCc5QtY4eu4PHs6kwpd+4tvu6nkBnWing9P0+hTQrRWaNSJtswxqpmnUi9yn51RKrtA+WY0lg3Q1sMmS6boPCoDXosHpfGRoY1DfB0Yv3y9e8t66IRk6Uj324DwylsO7gWQ3WTRcm4ZowJ7q4MqSB3oAsZUjBFZd3K4mDyY1B4Son+6UpNc0dbVGZrpJfm9GK9Lj1b8yl9xmmnh9yHxaGe3EI/M6sZJxD+FAFUyvQCKzs+waE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(376002)(396003)(346002)(366004)(316002)(38100700002)(66556008)(8676002)(4326008)(83380400001)(6916009)(478600001)(66946007)(54906003)(6486002)(2906002)(86362001)(26005)(7416002)(5660300002)(8936002)(9686003)(6512007)(6506007)(41300700001)(66476007)(186003)(14143004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sxqkMsr6ZQelvVMMbkFTB9DQ2+vY2BalfyUTaMHL0bX+RjWjxj2Lnoqwd835?=
- =?us-ascii?Q?9ni6jAQe+6xmzmALVB9KAEcgrL2QTO5ZceYIGwR9IAfhRn+V46+nHcJ3oBJ4?=
- =?us-ascii?Q?5k6jpUQ5qTyaRym0XK5S9Y3V5u+hp+EZGx1u+pDdF5kM9EktBp6AqOeMgL59?=
- =?us-ascii?Q?IFz0cw+M6iyjJUquPe9HRoWpVI4Nog2DFMZajIz97oHRPfyot1QbtA6psNPM?=
- =?us-ascii?Q?E/8jeRhH+1VtS+53/bGWRmuZNZwqAc7SUyKvn6aKLJJ+aalh1HstnNQWID9V?=
- =?us-ascii?Q?s6znbirl0Rdt8pjgLnleAqO8mEENhb4ppYzzHOpDIVKA16cborMIIDiZuifR?=
- =?us-ascii?Q?J7liTiP7788e8rUu4fODFN39XGEDOsVT62LdwXpWbDjDvckBP6caPqZjHWXk?=
- =?us-ascii?Q?DywgK/QG1A676IHwvpEfKTCT1mOPEHdZYx3RRqD0X0IgdIS9fsTPrOAoXz/N?=
- =?us-ascii?Q?dOv2ZKMD2rSyhit13fI/9V5Av0Ss9Iya7i3fAhGrYUYrsnUS/5abY9nhgdMH?=
- =?us-ascii?Q?3Vnue67lkFgb0S8fF/j013AosrzdTpgiWJUcZ/+T8A1v6XGwGy7xv2Qetkqa?=
- =?us-ascii?Q?JEW8Uy83DAiQbjT+dLKgQ623TRrcKA/9+N/JdtjQSfB7K9N/LqbYhTGp5blc?=
- =?us-ascii?Q?Uo1rHsBbnfcCWN5Y7OLbC9kFLGnf8kzOPq16vuWGo+XkBzQXft/zL09MUvcY?=
- =?us-ascii?Q?y63znSgeOfkJF8w6FVZxKT78pHaehRTR8ub5Xme/AUPnhtIgmp/PdkgsqvEz?=
- =?us-ascii?Q?VvueqYyw0WnBlY1+A+3USF/e9UxQr72UpfhRzYtrkEDsEHl533W5pZsWy4OT?=
- =?us-ascii?Q?+dZB9kaPUAenKUl1ES3n/wZ0r9513xq8CPSCnu4h3RG96pF9C05MZsGU39UF?=
- =?us-ascii?Q?5PRBc29Rpn31AY06iP5r6apa3HdKq8FisMoaiihBNnq7CM7TL6rBRVY2Q7EA?=
- =?us-ascii?Q?t9jxnnZwgR6wixJohTiNnGeScq/1/AFi8Oz97dBFkDvw6wjqd6v+CD/ujNv5?=
- =?us-ascii?Q?KlFvDv999mq1Z9tLjy2pFhCky5vcwXKsRp1/bX2T0UPZJcMLoHGzeOl+Qr6t?=
- =?us-ascii?Q?V6Ak6N3nfNddVLdyfRParlCdSiyu0hyAkTJD/UivEDb0ShGL057sfa79SPOJ?=
- =?us-ascii?Q?xrgZLtxAaRugYYVeCLrWgoCvWu5Y0Uw9c7ppDgd3reLhDl1ZeEHgLcl0IA43?=
- =?us-ascii?Q?3pNcXoRpAHvtTQLNfhC0YVNiDd2vqf7ZzSldIEw72QK+VFr8lohdLGbm/Nh5?=
- =?us-ascii?Q?/LVYHYoVW3Nfxhpas0wQoBXYteYfKgi9uLh0Oqa6gUIRKXc9ecTyhmSpFWh8?=
- =?us-ascii?Q?TFIPnPEfRcqrTWP3fsI8MrOh+1BUogobfthZWoiySw5BXCD6vz1HrJno99ul?=
- =?us-ascii?Q?Fgu3sf7/C9FG95CeIccxqRcsOy03fnZX2v0BJq/HbtafP007jDJdORlZ+PaO?=
- =?us-ascii?Q?u+799DaC78TX7kyGwZl/r8gKUa4HtUUZ4XwrAMxd/iZWxSmAdgQx7p1z/SAZ?=
- =?us-ascii?Q?poi/FDmobEV8mMMmkaFfh3aEr2mKQDUDP05YHf6qzEnfZgpu/vD/AI2N0ch4?=
- =?us-ascii?Q?KR27DuVf0MEPiesUrYTv5GD5gq4+uqF0aP+r/Vrw?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8b28c564-d6b5-4a02-771b-08da7f21cb8b
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2022 00:53:55.3472
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3495.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2327b8a-feae-4b76-a772-08da7f245fe1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Aug 2022 01:12:23.0364
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ygr1KD5F79MJhn+N2G7CZZh0Z7gVjAg7OppJ+oFA9sW3HHJGtwAVD+cd/0jVvYAtSmKzTPAUNbMKmhO/UhIwSA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6349
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jR7PLnGYdYcP3/6b+F8qgC3RQWRRkJw5YoRfKwBXy38rD1rBOeaZMpYmbEFmYAP0WlGHW7V5oWs4imVZw+0c3g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6030
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> -----Original Message-----
+> From: Alistair Popple <apopple@nvidia.com>
+> Sent: Tuesday, August 16, 2022 08:01
+> To: Wang, Haiyue <haiyue.wang@intel.com>
+> Cc: linux-mm@kvack.org; linux-kernel@vger.kernel.org; akpm@linux-foundati=
+on.org; david@redhat.com;
+> linmiaohe@huawei.com; Huang, Ying <ying.huang@intel.com>; songmuchun@byte=
+dance.com;
+> naoya.horiguchi@linux.dev; alex.sierra@amd.com; Felix Kuehling <Felix.Kue=
+hling@amd.com>
+> Subject: Re: [PATCH v5 2/2] mm: fix the handling Non-LRU pages returned b=
+y follow_page
+>=20
+>=20
+> Haiyue Wang <haiyue.wang@intel.com> writes:
+>=20
+> > The handling Non-LRU pages returned by follow_page() jumps directly, it
+> > doesn't call put_page() to handle the reference count, since 'FOLL_GET'
+> > flag for follow_page() has get_page() called. Fix the zone device page
+> > check by handling the page reference count correctly before returning.
+> >
+> > And as David reviewed, "device pages are never PageKsm pages". Drop thi=
+s
+> > zone device page check for break_ksm().
+> >
+> > Fixes: 3218f8712d6b ("mm: handling Non-LRU pages returned by vm_normal_=
+pages")
+> > Signed-off-by: Haiyue Wang <haiyue.wang@intel.com>
+> > ---
+> >  mm/huge_memory.c |  4 ++--
+> >  mm/ksm.c         | 12 +++++++++---
+> >  mm/migrate.c     | 10 +++++++---
+> >  3 files changed, 18 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> > index 8a7c1b344abe..b2ba17c3dcd7 100644
+> > --- a/mm/huge_memory.c
+> > +++ b/mm/huge_memory.c
+> > @@ -2963,10 +2963,10 @@ static int split_huge_pages_pid(int pid, unsign=
+ed long vaddr_start,
+> >  		/* FOLL_DUMP to ignore special (like zero) pages */
+> >  		page =3D follow_page(vma, addr, FOLL_GET | FOLL_DUMP);
+> >
+> > -		if (IS_ERR_OR_NULL(page) || is_zone_device_page(page))
+> > +		if (IS_ERR_OR_NULL(page))
+> >  			continue;
+> >
+> > -		if (!is_transparent_hugepage(page))
+> > +		if (is_zone_device_page(page) || !is_transparent_hugepage(page))
+> >  			goto next;
+> >
+> >  		total++;
+> > diff --git a/mm/ksm.c b/mm/ksm.c
+> > index 42ab153335a2..e26f57fc1f0e 100644
+> > --- a/mm/ksm.c
+> > +++ b/mm/ksm.c
+> > @@ -475,7 +475,7 @@ static int break_ksm(struct vm_area_struct *vma, un=
+signed long addr)
+> >  		cond_resched();
+> >  		page =3D follow_page(vma, addr,
+> >  				FOLL_GET | FOLL_MIGRATION | FOLL_REMOTE);
+> > -		if (IS_ERR_OR_NULL(page) || is_zone_device_page(page))
+> > +		if (IS_ERR_OR_NULL(page))
+> >  			break;
+> >  		if (PageKsm(page))
+> >  			ret =3D handle_mm_fault(vma, addr,
+> > @@ -560,12 +560,15 @@ static struct page *get_mergeable_page(struct rma=
+p_item *rmap_item)
+> >  		goto out;
+> >
+> >  	page =3D follow_page(vma, addr, FOLL_GET);
+> > -	if (IS_ERR_OR_NULL(page) || is_zone_device_page(page))
+> > +	if (IS_ERR_OR_NULL(page))
+> >  		goto out;
+> > +	if (is_zone_device_page(page))
+>=20
+> Same as for break_ksm() I think we should be able to drop the
+> is_zone_device_page() check here because scan_get_next_rmap_item()
+> already filters out zone device pages.
+>=20
 
-Peter Xu <peterx@redhat.com> writes:
+The 'page' for scan_get_next_rmap_item() is from 'vma' which is NOT MERGEAB=
+LE:
+	for (; vma; vma =3D vma->vm_next) {
+		if (!(vma->vm_flags & VM_MERGEABLE))
+			continue;
 
-> Hi, Alistair,
->
-> On Fri, Aug 12, 2022 at 03:22:30PM +1000, Alistair Popple wrote:
->> migrate_vma_setup() has a fast path in migrate_vma_collect_pmd() that
->> installs migration entries directly if it can lock the migrating page.
->> When removing a dirty pte the dirty bit is supposed to be carried over
->> to the underlying page to prevent it being lost.
->>
->> Currently migrate_vma_*() can only be used for private anonymous
->> mappings. That means loss of the dirty bit usually doesn't result in
->> data loss because these pages are typically not file-backed. However
->> pages may be backed by swap storage which can result in data loss if an
->> attempt is made to migrate a dirty page that doesn't yet have the
->> PageDirty flag set.
->>
->> In this case migration will fail due to unexpected references but the
->> dirty pte bit will be lost. If the page is subsequently reclaimed data
->> won't be written back to swap storage as it is considered uptodate,
->> resulting in data loss if the page is subsequently accessed.
->>
->> Prevent this by copying the dirty bit to the page when removing the pte
->> to match what try_to_migrate_one() does.
->>
->> Signed-off-by: Alistair Popple <apopple@nvidia.com>
->> Reported-by: Peter Xu <peterx@redhat.com>
->
-> This line should be:
->
-> Reported-by: Huang Ying <ying.huang@intel.com>
->
-> Please also feel free to add:
->
-> Acked-by: Peter Xu <peterx@redhat.com>
+The 'page' for get_mergeable_page() is from 'vma' which is MERGEABLE by 'fi=
+nd_mergeable_vma()'
 
-Thanks Peter, my bad. I assume Andrew can fix up the tags if I don't
-need to re-spin this series.
+So they may be different, and the unstable_tree_search_insert() shows the l=
+ogical:
 
-> Thanks,
+ 'page' vs 'tree_page':
+
+		tree_page =3D get_mergeable_page(tree_rmap_item);
+		if (!tree_page)
+			return NULL;
+
+		/*
+		 * Don't substitute a ksm page for a forked page.
+		 */
+		if (page =3D=3D tree_page) {
+			put_page(tree_page);
+			return NULL;
+		}
+
+		ret =3D memcmp_pages(page, tree_page);
+
+
+> > +		goto out_putpage;
+> >  	if (PageAnon(page)) {
+> >  		flush_anon_page(vma, page, addr);
+> >  		flush_dcache_page(page);
+> >  	} else {
+> > +out_putpage:
+> >  		put_page(page);
+> >  out:
+> >  		page =3D NULL;
+> > @@ -2308,11 +2311,13 @@ static struct rmap_item *scan_get_next_rmap_ite=
+m(struct page **page)
+> >  			if (ksm_test_exit(mm))
+> >  				break;
+> >  			*page =3D follow_page(vma, ksm_scan.address, FOLL_GET);
+> > -			if (IS_ERR_OR_NULL(*page) || is_zone_device_page(*page)) {
+> > +			if (IS_ERR_OR_NULL(*page)) {
+> >  				ksm_scan.address +=3D PAGE_SIZE;
+> >  				cond_resched();
+> >  				continue;
+> >  			}
+> > +			if (is_zone_device_page(*page))
+> > +				goto next_page;
+> >  			if (PageAnon(*page)) {
+> >  				flush_anon_page(vma, *page, ksm_scan.address);
+> >  				flush_dcache_page(*page);
+> > @@ -2327,6 +2332,7 @@ static struct rmap_item *scan_get_next_rmap_item(=
+struct page **page)
+> >  				mmap_read_unlock(mm);
+> >  				return rmap_item;
+> >  			}
+> > +next_page:
+> >  			put_page(*page);
+> >  			ksm_scan.address +=3D PAGE_SIZE;
+> >  			cond_resched();
+> > diff --git a/mm/migrate.c b/mm/migrate.c
+> > index 581dfaad9257..fee12cd2f294 100644
+> > --- a/mm/migrate.c
+> > +++ b/mm/migrate.c
+> > @@ -1672,9 +1672,12 @@ static int add_page_for_migration(struct mm_stru=
+ct *mm, unsigned long addr,
+> >  		goto out;
+> >
+> >  	err =3D -ENOENT;
+> > -	if (!page || is_zone_device_page(page))
+> > +	if (!page)
+> >  		goto out;
+> >
+> > +	if (is_zone_device_page(page))
+> > +		goto out_putpage;
+> > +
+> >  	err =3D 0;
+> >  	if (page_to_nid(page) =3D=3D node)
+> >  		goto out_putpage;
+> > @@ -1868,8 +1871,9 @@ static void do_pages_stat_array(struct mm_struct =
+*mm, unsigned long nr_pages,
+> >  		if (IS_ERR(page))
+> >  			goto set_status;
+> >
+> > -		if (page && !is_zone_device_page(page)) {
+> > -			err =3D page_to_nid(page);
+> > +		if (page) {
+> > +			err =3D !is_zone_device_page(page) ? page_to_nid(page)
+> > +							 : -ENOENT;
+>=20
+> Can we remove the multiple layers of conditionals here? Something like
+> this is cleaner and easier to understand IMHO:
+
+OK, I will try it in new patch.
+
+>=20
+> -               if (page && !is_zone_device_page(page)) {
+> -                       err =3D page_to_nid(page);
+> -                       if (foll_flags & FOLL_GET)
+> -                               put_page(page);
+> -               } else {
+> +               if (!page) {
+>                         err =3D -ENOENT;
+> +                       goto set_status;
+>                 }
+> +
+> +               if (is_zone_device_page(page))
+> +                       err =3D -ENOENT;
+> +               else
+> +                       err =3D page_to_nid_page(page);
+> +
+> +               if (foll_flags & FOLL_GET)
+> +                       put_page(page);
+>=20
+> Thanks.
+>=20
+>  - Alistair
+>=20
+> >  			if (foll_flags & FOLL_GET)
+> >  				put_page(page);
+> >  		} else {

@@ -2,260 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25DEE596549
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 677FA596553
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237906AbiHPWPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 18:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
+        id S237898AbiHPWQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 18:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237912AbiHPWPb (ORCPT
+        with ESMTP id S237958AbiHPWQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 18:15:31 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EA178225;
-        Tue, 16 Aug 2022 15:15:29 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27GLjsEY002968;
-        Tue, 16 Aug 2022 22:15:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=d0V+gitQ+pENDmKEI1yQuDeN9jRxsYsOaUJNKg4xUKY=;
- b=R1SSE4jXVrYJww6k3e+Svf/qOCmOi6s01otGX1RRvA5HIGN85ABQImKnNWAPC7I7yI4a
- piVrbBcR5l7q0eoAd9uHSyL6HNq5/yB7QHIO2zhK5aBhvqqistbFGeNZ6ogXTOKRUPFv
- TOeIo7L3jMbP/q/A/DZ0SAHsvhswgMIdO3RklM6EAhaJvM7oMALYHlNMx61rjyI5HXh7
- QegP6zR6L+VIQP8Royq+u2Du59+PIBFv9/H/B9XZYOSdz7LICjDwFUNB20xb271NpyPf
- UfkyjfuV4Ogc1QAYbboXLxiTl/ryjZg0k+vuzscTh2/TXzVT46qRdegxwGonaqkSZTT0 fg== 
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j0kekrmfr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Aug 2022 22:15:23 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27GM6c5K001852;
-        Tue, 16 Aug 2022 22:15:22 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma04dal.us.ibm.com with ESMTP id 3hx3ka1pqq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Aug 2022 22:15:22 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27GMFKKH14287466
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Aug 2022 22:15:20 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BF1B8BE058;
-        Tue, 16 Aug 2022 22:15:20 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EDBECBE053;
-        Tue, 16 Aug 2022 22:15:18 +0000 (GMT)
-Received: from [9.211.48.181] (unknown [9.211.48.181])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 16 Aug 2022 22:15:18 +0000 (GMT)
-Message-ID: <b03be97f-cc03-cb58-bd1b-5eda3abd249a@linux.ibm.com>
-Date:   Tue, 16 Aug 2022 18:15:17 -0400
+        Tue, 16 Aug 2022 18:16:51 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07EF78BCD
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 15:16:50 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id u10so8889049qvp.12
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 15:16:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=zAVoK2y0IblTkUtCF2+DJlXYzSXXXw12A5petDOhN5E=;
+        b=IP+BohMQzQjIx2VjirAenZa/lMePA7zPokS9BlYFTRN8m/nGjLgAQ/rTpaE9elClY7
+         LeObnzazdZXAcQxZ+7mv03rgF3EcrZsMotDhbdt4jZQ4KtN3R6y57tuD8Cy3ZbBotVZh
+         GrBeWl3KTeEfYXH606jCLEHMaBIYhCD6+bi2duKLThctxnxDArlUqsAV2s2IRzoJA514
+         5l0EOsva/nmhAYKFZdRuXIEZeGB90/CTD/gGDevfLJ/ymkbVc0dUR6DnN/BaNX6zZo59
+         BLMxOxTSp3Uqccmqb3QyNVBDXliGREWGBITeNloI4zvjEj0ZmJXkIL1/xqUMdZC6/ogh
+         Rrwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=zAVoK2y0IblTkUtCF2+DJlXYzSXXXw12A5petDOhN5E=;
+        b=TERMNA8AymWwlBWrqsEwER5V5xFieceUs6IGJ/lqqfs0TiRlAGiUVV1SQoaWIPYbkr
+         jHsXXTQzs5uoS/a029ddYlX23a0NqJ3Ixq8zBqbE6m4rgsUcvsoGCW7+qnGKKhRHAR9S
+         epX+nyC0VH1CfvI2/phN6twWIEq7UOVGx4HpkirI70InOlXRxym9lZUHcZtHxmzGSszh
+         7Fstii0ANCga1Zz8lv8HYkzCVyJqOFtySRn2yrcaNBGX4wfJt1pQQv0Kv9O9SQidg0HB
+         WdTJBN/SFFsLM+NqOfNgqqM59xae6VnSvBVUPyph3XhucqBIzC9WQeu3eBQysBLP0wYR
+         EeRw==
+X-Gm-Message-State: ACgBeo3woizP9SkKLH8B595am4w+3PYkQN/kW5tEirZXQUKmPnqPBe3D
+        wmGRqoeW5b9Ou3QfHS3U3lhoqUM0aqFaYiYWlLxCFQ==
+X-Google-Smtp-Source: AA6agR4rcZ3y0cSZ5tIp/Q/Gtnd8PqnUBfvhciEjwRRV0JFXzi+SKPnM81czOBZvk96BaLNcdiEFk8k8DislOFP+L+8=
+X-Received: by 2002:a05:6214:20a8:b0:477:1882:3e7 with SMTP id
+ 8-20020a05621420a800b00477188203e7mr19871631qvd.44.1660688209597; Tue, 16 Aug
+ 2022 15:16:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] KVM: s390: pci: VFIO_PCI ZDEV configuration fix
-Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>
-Cc:     rdunlap@infradead.org, linux-kernel@vger.kernel.org, lkp@intel.com,
-        borntraeger@linux.ibm.com, farman@linux.ibm.com,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org
-References: <1f2dd65e-b79b-44df-cc6a-8b3aa8fd61af@linux.ibm.com>
- <20220816202855.189410-1-pmorel@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <20220816202855.189410-1-pmorel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: WFXgZDDTnst9prixxtIFQYqqMmzhVs9A
-X-Proofpoint-ORIG-GUID: WFXgZDDTnst9prixxtIFQYqqMmzhVs9A
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-16_08,2022-08-16_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- suspectscore=0 mlxscore=0 priorityscore=1501 mlxlogscore=999
- malwarescore=0 impostorscore=0 clxscore=1015 bulkscore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208160080
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220816214945.742924-1-haoluo@google.com> <CAEf4Bza1SMFvzofz4RkBF=pByFHp+Z1v16Z+TMAQZ6rD2m9Lxg@mail.gmail.com>
+In-Reply-To: <CAEf4Bza1SMFvzofz4RkBF=pByFHp+Z1v16Z+TMAQZ6rD2m9Lxg@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Tue, 16 Aug 2022 15:16:38 -0700
+Message-ID: <CA+khW7hHGL1DAMSOjbJSj21wJYY=j4VrRJcFB1zv52Db20_MGA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] libbpf: allow disabling auto attach
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/16/22 4:28 PM, Pierre Morel wrote:
-> Fixing configuration for VFIO PCI interpretation.
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
-> Fixes: 09340b2fca007 ("KVM: s390: pci: add routines to start/stop inter..")
-> Fixes: c435c54639aa5 ("vfio/pci: introduce CONFIG_VFIO_PCI_ZDEV_KVM..")
-> Cc: <stable@vger.kernel.org>
-> ---
->  arch/s390/include/asm/kvm_host.h | 9 ---------
->  arch/s390/kvm/Makefile           | 2 +-
->  arch/s390/kvm/pci.c              | 4 ++--
->  drivers/vfio/pci/Kconfig         | 4 ++--
->  include/linux/vfio_pci_core.h    | 2 +-
->  5 files changed, 6 insertions(+), 15 deletions(-)
-> 
-> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
-> index f39092e0ceaa..f6cf961731af 100644
-> --- a/arch/s390/include/asm/kvm_host.h
-> +++ b/arch/s390/include/asm/kvm_host.h
-> @@ -1038,16 +1038,7 @@ static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
->  #define __KVM_HAVE_ARCH_VM_FREE
->  void kvm_arch_free_vm(struct kvm *kvm);
->  
-> -#ifdef CONFIG_VFIO_PCI_ZDEV_KVM
->  int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm);
->  void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev);
-> -#else
-> -static inline int kvm_s390_pci_register_kvm(struct zpci_dev *dev,
-> -					    struct kvm *kvm)
-> -{
-> -	return -EPERM;
-> -}
-> -static inline void kvm_s390_pci_unregister_kvm(struct zpci_dev *dev) {}
-> -#endif
->  
->  #endif
-> diff --git a/arch/s390/kvm/Makefile b/arch/s390/kvm/Makefile
-> index 02217fb4ae10..be36afcfd6ff 100644
-> --- a/arch/s390/kvm/Makefile
-> +++ b/arch/s390/kvm/Makefile
-> @@ -9,6 +9,6 @@ ccflags-y := -Ivirt/kvm -Iarch/s390/kvm
->  
->  kvm-y += kvm-s390.o intercept.o interrupt.o priv.o sigp.o
->  kvm-y += diag.o gaccess.o guestdbg.o vsie.o pv.o
-> +kvm-y += pci.o
->  
-> -kvm-$(CONFIG_VFIO_PCI_ZDEV_KVM) += pci.o
+On Tue, Aug 16, 2022 at 3:01 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Tue, Aug 16, 2022 at 2:49 PM Hao Luo <haoluo@google.com> wrote:
+> >
+> > Add libbpf APIs for disabling auto-attach for individual functions.
+> > This is motivated by the use case of cgroup iter [1]. Some iter
+> > types require their parameters to be non-zero, therefore applying
+> > auto-attach on them will fail. With these two new APIs, Users who
+> > want to use auto-attach and these types of iters can disable
+> > auto-attach for them and perform manual attach.
+> >
+> > [1] https://lore.kernel.org/bpf/CAEf4BzZ+a2uDo_t6kGBziqdz--m2gh2_EUwkGLDtMd65uwxUjA@mail.gmail.com/
+> >
+> > Signed-off-by: Hao Luo <haoluo@google.com>
+> > ---
+> >  tools/lib/bpf/libbpf.c | 16 ++++++++++++++++
+> >  tools/lib/bpf/libbpf.h |  2 ++
+> >  2 files changed, 18 insertions(+)
+> >
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index aa05a99b913d..25f654d25b46 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+[...]
+> >  const struct bpf_insn *bpf_program__insns(const struct bpf_program *prog)
+> >  {
+> >         return prog->insns;
+> > @@ -12349,6 +12362,9 @@ int bpf_object__attach_skeleton(struct bpf_object_skeleton *s)
+> >                 if (!prog->autoload)
+> >                         continue;
+> >
+> > +               if (!prog->autoattach)
+> > +                       continue;
+> > +
+>
+> nit: I'd combine as if (!prog->autoload || !prog->autoattach), they
+> are very coupled in this sense
+>
 
-You would need to switch this to CONFIG_PCI at least, else we get build errors with CONFIG_PCI=n.
+Sure.
 
->  obj-$(CONFIG_KVM) += kvm.o
-> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
-> index 4946fb7757d6..cf8ab72a2109 100644
-> --- a/arch/s390/kvm/pci.c
-> +++ b/arch/s390/kvm/pci.c
-> @@ -435,7 +435,7 @@ int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm)
->  {
->  	int rc;
->  
-> -	if (!zdev)
-> +	if (!IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM) || !zdev)
->  		return -EINVAL;
->  
->  	mutex_lock(&zdev->kzdev_lock);
-> @@ -516,7 +516,7 @@ void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev)
->  {
->  	struct kvm *kvm;
->  
-> -	if (!zdev)
-> +	if (!IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM) || !zdev)
->  		return;
->  
->  	mutex_lock(&zdev->kzdev_lock);
-> diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
-> index f9d0c908e738..bbc375b028ef 100644
-> --- a/drivers/vfio/pci/Kconfig
-> +++ b/drivers/vfio/pci/Kconfig
-> @@ -45,9 +45,9 @@ config VFIO_PCI_IGD
->  endif
->  
->  config VFIO_PCI_ZDEV_KVM
-> -	bool "VFIO PCI extensions for s390x KVM passthrough"
-> +	def_tristate y
-> +	prompt "VFIO PCI extensions for s390x KVM passthrough"
->  	depends on S390 && KVM
-> -	default y
->  	help
->  	  Support s390x-specific extensions to enable support for enhancements
->  	  to KVM passthrough capabilities, such as interpretive execution of
-> diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
-> index 5579ece4347b..7db3bb8129b1 100644
-> --- a/include/linux/vfio_pci_core.h
-> +++ b/include/linux/vfio_pci_core.h
-> @@ -205,7 +205,7 @@ static inline int vfio_pci_igd_init(struct vfio_pci_core_device *vdev)
->  }
->  #endif
->  
-> -#ifdef CONFIG_VFIO_PCI_ZDEV_KVM
-> +#if IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM)
->  int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
->  				struct vfio_info_cap *caps);
->  int vfio_pci_zdev_open_device(struct vfio_pci_core_device *vdev);
+> >                 /* auto-attaching not supported for this program */
+> >                 if (!prog->sec_def || !prog->sec_def->prog_attach_fn)
+> >                         continue;
+> > diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> > index 61493c4cddac..88a1ac34b12a 100644
+> > --- a/tools/lib/bpf/libbpf.h
+> > +++ b/tools/lib/bpf/libbpf.h
+> > @@ -260,6 +260,8 @@ LIBBPF_API const char *bpf_program__name(const struct bpf_program *prog);
+> >  LIBBPF_API const char *bpf_program__section_name(const struct bpf_program *prog);
+> >  LIBBPF_API bool bpf_program__autoload(const struct bpf_program *prog);
+> >  LIBBPF_API int bpf_program__set_autoload(struct bpf_program *prog, bool autoload);
+> > +LIBBPF_API bool bpf_program__autoattach(const struct bpf_program *prog);
+> > +LIBBPF_API void bpf_program__set_autoattach(struct bpf_program *prog, bool autoattach);
+>
+> please add these APIs to libbpf.map as well
+>
 
-This still doesn't seem quite right...  I tried some variations:
+Ok. Which section? LIBBPF_1.0.0? Do the items in each section have a
+particular order?
 
-1)
-CONFIG_KVM=m
-CONFIG_VFIO_PCI_CORE=m
-CONFIG_VFIO_PCI=m
-CONFIG_VFIO_PCI_ZDEV_KVM=m
+> it would be also nice to have a simple test validating that skeleton's
+> auto-attach doesn't attach program (no link will be created) if
+> bpf_program__set_autoattach(false) is called before. Can you please
+> add that as well?
+>
 
-compiles, works with a small change:
+Ok. Will add a test and send v2.
 
-diff --git a/include/linux/sched/user.h b/include/linux/sched/user.h
-index f054d0360a75..99734e135420 100644
---- a/include/linux/sched/user.h
-+++ b/include/linux/sched/user.h
-@@ -25,7 +25,7 @@ struct user_struct {
- 
- #if defined(CONFIG_PERF_EVENTS) || defined(CONFIG_BPF_SYSCALL) || \
-        defined(CONFIG_NET) || defined(CONFIG_IO_URING) || \
--       defined(CONFIG_VFIO_PCI_ZDEV_KVM)
-+       IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM)
-
-
-2)
-CONFIG_KVM=y
-CONFIG_VFIO_PCI_CORE=m
-CONFIG_VFIO_PCI=m
-CONFIG_VFIO_PCI_ZDEV_KVM=m
-
-compiles, works with above user.h change
-
-3)
-CONFIG_KVM=y
-CONFIG_VFIO_PCI_CORE=y
-CONFIG_VFIO_PCI=y
-CONFIG_VFIO_PCI_ZDEV_KVM=y
-
-compiles, works with above user.h change
-
-4)
-CONFIG_KVM=m
-CONFIG_VFIO_PCI_CORE=y
-CONFIG_VFIO_PCI=y
-CONFIG_VFIO_PCI_ZDEV_KVM=m
-
-fails with:
-
-ld: drivers/vfio/pci/vfio_pci_core.o: in function `vfio_pci_core_enable':
-/usr/src/linux/drivers/vfio/pci/vfio_pci_core.c:320: undefined reference to `vfio_pci_zdev_open_device'
-ld: /usr/src/linux/drivers/vfio/pci/vfio_pci_core.c:349: undefined reference to `vfio_pci_zdev_close_device'
-ld: drivers/vfio/pci/vfio_pci_core.o: in function `vfio_pci_core_disable':
-/usr/src/linux/drivers/vfio/pci/vfio_pci_core.c:428: undefined reference to `vfio_pci_zdev_close_device'
-ld: drivers/vfio/pci/vfio_pci_core.o: in function `vfio_pci_core_ioctl':
-/usr/src/linux/drivers/vfio/pci/vfio_pci_core.c:712: undefined reference to `vfio_pci_info_zdev_add_caps'
-
-
-5)
-CONFIG_KVM=m
-CONFIG_VFIO_PCI_CORE=y
-CONFIG_VFIO_PCI=y
-CONFIG_VFIO_PCI_ZDEV_KVM=y
-
-This forces CONFIG_VFIO_PCI_ZDEV_KVM to 'm' and fails as above.
-
-
-
+> >
+> >  struct bpf_insn;
+> >
+> > --
+> > 2.37.1.595.g718a3a8f04-goog
+> >

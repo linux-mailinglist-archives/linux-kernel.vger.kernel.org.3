@@ -2,116 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD73596A92
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6781596BBD
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233559AbiHQHps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 03:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38334 "EHLO
+        id S233332AbiHQIzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 04:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233272AbiHQHpd (ORCPT
+        with ESMTP id S229704AbiHQIzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 03:45:33 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303D079EE2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:45:32 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M70PL3qVHzhXWh;
-        Wed, 17 Aug 2022 15:43:18 +0800 (CST)
-Received: from CHINA (10.175.102.38) by canpemm500009.china.huawei.com
- (7.192.105.203) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 17 Aug
- 2022 15:45:29 +0800
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-To:     Akinobu Mita <akinobu.mita@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Isabella Basso <isabbasso@riseup.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-CC:     Wei Yongjun <weiyongjun1@huawei.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 4/4 -next] fault-injection: make stacktrace filter works as expected
-Date:   Wed, 17 Aug 2022 08:03:32 +0000
-Message-ID: <20220817080332.1052710-5-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220817080332.1052710-1-weiyongjun1@huawei.com>
-References: <20220817080332.1052710-1-weiyongjun1@huawei.com>
+        Wed, 17 Aug 2022 04:55:05 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6314C78BCD;
+        Wed, 17 Aug 2022 01:55:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660726504; x=1692262504;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CTKtDOyB60/QGOd7TsvIyNY16TNwoiQhsBzxyF3hBas=;
+  b=OpLfnuGcvvDzpbmnETUMJ3+U2+hJCpZQSLy5taYbfZxBO/fGMrIl3iKR
+   fplH8F6evRqnnE2pL67jFLTC4oA6xEdqdKHvCu24Ib8E5qjbRtxmLkJkA
+   SvGYjT03AgSczj0fEX975zwDJ5XiZZKJvPewSzkGZguAMZOvC0/Jn2zgG
+   Dks3JgvEkmGFECr+/23+V7MApWGW3Me/x0x6/o+X2FY1m/aN5w4/eeg6T
+   XrxxqYWZJwvU0GSIlwNDqqlMM6aKCx3gNLOdC5oD5+RVhB9ERDCyNQ7py
+   5P7szJw0JzY4FavbFE/n2xZ6t2CKs4f3mlzg5ZOYYw9ToD2eaw6rzEuiN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="378734610"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="378734610"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 01:55:01 -0700
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="667519870"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.49.3])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 01:54:58 -0700
+Message-ID: <b42344bc-86f6-9047-b015-88ef3b58a619@intel.com>
+Date:   Tue, 16 Aug 2022 23:48:22 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.102.38]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: perf tools man pages on the web
+Content-Language: en-US
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>
+References: <cecae74c-6bb2-d7da-bce3-35772b6e3f8c@intel.com>
+ <CAP-5=fXJtRVKuPA_xpa=jBzq66y5JMv+jmr1GFNzh-zQ-7j5QA@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAP-5=fXJtRVKuPA_xpa=jBzq66y5JMv+jmr1GFNzh-zQ-7j5QA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-stacktrace filter is checked after others, such as fail-nth,
-interval and probability. This make it doesn't work well as
-expected.
+On 15/08/22 17:56, Ian Rogers wrote:
+> On Mon, Aug 15, 2022 at 5:05 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>
+>> Hi
+>>
+>> I notice man pages on man7.org e.g.
+>>
+>>         https://www.man7.org/linux/man-pages/man1/perf.1.html
+>>
+>> do not get updated every release, and I wondered if the perf tools
+>> man pages should also be under:
+>>
+>>         https://docs.kernel.org/tools/index.html
+>>
+>> Thoughts?
+> 
+> Sounds good to me. I'm assuming it would be some kind of build step
+> that would take the man pages and add them to what linux-doc needs?
+> 
+> Fwiw, there has been some effort to try to improve the wiki:
+> https://perf.wiki.kernel.org/index.php/Main_Page
+> For example, the useful links are now broken apart and have more
+> links, there is a work-in-progress glossary. Perhaps there can be some
+> guidance on what to capture and where.
 
-Fix to running stacktrace filter before other filters. It will
-speed up fault inject testing for driver modules.
-
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- lib/fault-inject.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/lib/fault-inject.c b/lib/fault-inject.c
-index deca05e7c9b3..9dd1dd1d2610 100644
---- a/lib/fault-inject.c
-+++ b/lib/fault-inject.c
-@@ -105,10 +105,16 @@ static inline bool fail_stacktrace(struct fault_attr *attr)
- 
- bool should_fail(struct fault_attr *attr, ssize_t size)
- {
-+	bool stack_checked = false;
-+
- 	if (in_task()) {
- 		unsigned int fail_nth = READ_ONCE(current->fail_nth);
- 
- 		if (fail_nth) {
-+			if (!fail_stacktrace(attr))
-+				return false;
-+
-+			stack_checked = true;
- 			fail_nth--;
- 			WRITE_ONCE(current->fail_nth, fail_nth);
- 			if (!fail_nth)
-@@ -128,6 +134,9 @@ bool should_fail(struct fault_attr *attr, ssize_t size)
- 	if (atomic_read(&attr->times) == 0)
- 		return false;
- 
-+	if (!stack_checked && !fail_stacktrace(attr))
-+		return false;
-+
- 	if (atomic_read(&attr->space) > size) {
- 		atomic_sub(size, &attr->space);
- 		return false;
-@@ -142,9 +151,6 @@ bool should_fail(struct fault_attr *attr, ssize_t size)
- 	if (attr->probability <= prandom_u32() % 100)
- 		return false;
- 
--	if (!fail_stacktrace(attr))
--		return false;
--
- fail:
- 	fail_dump(attr);
- 
--- 
-2.34.1
-
+Speaking of the wiki, anyone know how to change the
+"Set $wgLogo to the URL path to your own logo image." image?

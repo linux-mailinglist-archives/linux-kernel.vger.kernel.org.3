@@ -2,144 +2,457 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 031F95954DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D675954CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232630AbiHPITg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 04:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
+        id S232303AbiHPIQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 04:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232613AbiHPISv (ORCPT
+        with ESMTP id S232285AbiHPIPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:18:51 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2065.outbound.protection.outlook.com [40.107.95.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797C5E81;
-        Mon, 15 Aug 2022 23:06:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R1EGaILiimfTfiPlClVyNj7ew05v9kWwCL2cz8JNVGZOxf3QbFcuHHeYxfjdm24YG/lB0+5Li7r7Ngweg1h592u5yApHz5FuQ3TIsJQOvfPHlNSSUyDATnw2thLaH2OlHyiKJh/32P4Jwmo+PbprzTe0JGN5yvBKhf1oggiz5MSSGWdm7Ua2UVkab+U3xii/qTDIDa+VULp1nuE3h8lyHx5uDtE7iNTX4CvB0mCrCewBnO42OTZoGkMqBtCkakfaIxgd62LALlWvBTLVf/qCJ+2gafToeiNGPKstx5mFIDb6dYEBJh7FqLk/Wzu9lNsFdNVmvUvAgv3K1ligC0R6AQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MTZHFnZOvA7+4j5gAMQja4Mc0YTuNoOtwrxGtaHX5Gs=;
- b=cXsnx4lWbNkTZb+z3s7V6Y/4tn5OdQJpnov6fXC4M9Jq3/Cnt8rN91c0YHS6STNi6P8QLQuzZttzTTCyTlUi8ieNUQfzf9WfFEGc1OtqT3bOEfDk2o+wLthFGoWmM6theB8x/c4YyLPlPGxqeoCaL74CdwTGl9rigDRprTrH/2mTiRgXRA0nPFPHiH5V/nYCmISEIfmco0a59DrdUN7lwOVDJc/cRm1EBohY6D6sAEX716dAq4Pd9QgCLxnAvUMwrTS63WqUOYPp/BhqPfkaSI99K0mmv0s5uueWJ8BRwwqMwvKQ0kLl0R+i2kr3k/jRtP2q091AntAWd4q5mZWQdg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MTZHFnZOvA7+4j5gAMQja4Mc0YTuNoOtwrxGtaHX5Gs=;
- b=klzCXtOOvhRSrCUDsMwSsW+VOEYvCuT1jc6F6aDdDRqjuOhry7J7anWs1oe1b/SwO6mxbm5+yvCa82xV13hNYxD/JVjp9e4xjrbboXq7DJEHrrR41oN6D3gFU6laMeIAQB/zzPiJm7p1I8c4+zqcJWEiG0w3ewuyBRrubOcA9ure+suX/1191OOeLDzG0J718SGKJ4zNCyzNlJ0pCE7ulX68rsxyFaUISzoUdmkGK5VuUKZWXJ2w0q6NDu3niJVzZyyF5uCXjtYD0M5gpJgJIy7u5072Vg4Ty2U9k3Ddqwe2bGaPgqp+4tby52HFxHzg5pWUBxlngg/EWnxdT79kjQ==
-Received: from DM5PR12MB4663.namprd12.prod.outlook.com (2603:10b6:4:a9::26) by
- MWHPR1201MB0143.namprd12.prod.outlook.com (2603:10b6:301:54::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.15; Tue, 16 Aug
- 2022 06:06:51 +0000
-Received: from DM5PR12MB4663.namprd12.prod.outlook.com
- ([fe80::b4ab:4d63:1cdd:b051]) by DM5PR12MB4663.namprd12.prod.outlook.com
- ([fe80::b4ab:4d63:1cdd:b051%4]) with mapi id 15.20.5504.025; Tue, 16 Aug 2022
- 06:06:50 +0000
-From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "michael.christie@oracle.com" <michael.christie@oracle.com>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH v2] scsi: target: Save a few cycles in
- transport_lookup_[cmd|tmr]_lun()
-Thread-Topic: [PATCH v2] scsi: target: Save a few cycles in
- transport_lookup_[cmd|tmr]_lun()
-Thread-Index: AQHYsS180iavOQZ500+RL+n6yaTQEa2xCmQA
-Date:   Tue, 16 Aug 2022 06:06:50 +0000
-Message-ID: <757f1326-bc70-aa93-b2d3-dfd91698406e@nvidia.com>
-References: <03705222390bfa3b48ad7658f693fc0fc030b3ae.1660596679.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <03705222390bfa3b48ad7658f693fc0fc030b3ae.1660596679.git.christophe.jaillet@wanadoo.fr>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 47a063fb-26a9-474d-68c5-08da7f4d82ba
-x-ms-traffictypediagnostic: MWHPR1201MB0143:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wmxM7whPoDGPXIh2N2nIj3i9wWYXgQqosn/701sLnT/xBPl6A1xpH4qr3E+P7bymqgffmr26bdJqsRuLRMY+TVqkn3B0MPVNnjOLo4xKRiSiJImQF7/crzTVFhMXqG/U4TcB7KJmlKagwnXD05DRnhi5Ol3BB+Dj+i91iGvE8HBHJg4L/97/Rh85/9avRezFC0+36CV/qUfDXYNliQqVSjBX/IX6T33NL2vb9np4ZjFn20hrQcWUFe6j5YM9Um8UCtOFzX0mOJqh3rEcmKGRLGmbJaCI20NoHX4y1GieucCB1f2BICvuPXUbfM9MNXGEqHrD0vXpOIPOs1fwuVSf3ST+vHcCD0IHyIzw6Yp14QlGg6HmJBf8e+uZWT+oALOB1KcQsJ3J/PfBTknySt6gEFBlmNqw1OYFRPPNT0E//nIB3xLWNTuU3RSNDImfnC3hCjY9w7/kr7LHGXghg1yyCptRJV5OF4Cvwaz2Ni7MLF6wYDyT638hCP5+uZdl3NLkAHa1u9sthJkzhA4yVF7I3Q8bvkf8Yw/8ltz8PoflChYe1fiUNQrKa+N/KWjSUvmOgb38+8WYympYs7JnWO8dovD5fUnqDQuWkmkykAv2ldwmezqFuF5ZycUTmECO9DvzKg+xbCBpeHkydzC/ihbo8e4wwZYT/e4bbjw9D0b9G1iuuCYiEQIlaCQ9W7Vq4HDLW/hI7nB8CxoxMGPUYakb2RQ9/aJ5DXaxbj81unoOWLQD8dTb9UIDVGmqHzrM06R9khKVpELo860DZBgLYhCBJ7fEEM9IYx8zFMQpH8TruvH7pUqUCIPDXJm52F9cnuihxgJ0Tll/IvEGRd08s94cBWz/n9nkpRv2s9+GeIFJxzsKz+MmEdaILVju62AM/rIW
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB4663.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(346002)(396003)(366004)(136003)(4326008)(31686004)(41300700001)(66446008)(66946007)(83380400001)(66476007)(66556008)(8676002)(91956017)(76116006)(64756008)(2906002)(54906003)(186003)(2616005)(36756003)(6916009)(316002)(38100700002)(122000001)(6512007)(86362001)(6506007)(31696002)(5660300002)(8936002)(478600001)(38070700005)(4744005)(53546011)(6486002)(71200400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TzQyTG43ZTVkUXg3QzlPZHBFSmdvdmlvb0Yvd3E3VzdXKzB0eVpnUk5zd3dx?=
- =?utf-8?B?Rm9EMHduN0l1dkRCRm4wZldMV3lNemJyOFpET04rZ21RQi9jeE5IMFF3TmRt?=
- =?utf-8?B?ZFdJZXJpU1puV1ZkSWdWTzJGek5lb1NQbDdRMWo1bkUySlhxT2gzUkZxYUhq?=
- =?utf-8?B?ME11dFlZM0lDMFVlSE91MFdBOVNVMU42M3ZBRkRPdmhqRndsWWFhbC9nRlo4?=
- =?utf-8?B?TXViMTAzMUsyUzFVQjd0MUZrdGFvTWFmaWZPd2pFRUJmMjAvdU03T3huTFFm?=
- =?utf-8?B?ZVA0VFVRNTRQdUtzdGpDZTQzL1dhR0c0WVhXK3QvVm9sdFZEZzBDSFFIKzRT?=
- =?utf-8?B?aHVzQ1o4K1NGYlZpUWJFMlRhVDRPY2RYMktMNklvdW5ZbS8xMWFxeE9xOFYv?=
- =?utf-8?B?VWhDM0RKUE5tV3RubVpyTWpsSXc5TmVGMGUyblNRMzJRVzdXdFZ6RmRrZmN5?=
- =?utf-8?B?dmFPT1hiQ3RrZXVWeEwvQisvTmZ0Q2NrbXZ0QmJVQzhJOWRtdTRPaGUvWHgy?=
- =?utf-8?B?TDU0WE4rbXBMc3BabEU4dW5QOGlTS3pweEg0dGRBWHRNeGhFVUZPY043S2lU?=
- =?utf-8?B?amx2WEJOTTFKbXpYZzZydWhHdEhiMVE3am9WRWdnRU9VeWJEYitPa0xUT3dl?=
- =?utf-8?B?a2Nza1ZLSlRtR2JsZmFNT0gwL1NubmJ5NmRnem1hUW9TKzhZUC81d1NwRlNK?=
- =?utf-8?B?aW03TUw3QzBFMi92OTJZYmFwYnZ0NlFLYmpxTGRTWUYyTGUrcFNPQ0IwNkt2?=
- =?utf-8?B?bHZUV3BveVlnajZmT3ZxWFpaL0J6bzNKT1VQazR0N3V1cFR3REdTUFVDMGZn?=
- =?utf-8?B?ZWo3RE1ybk5VaFJwU0VaL0xka0crSkxKSFZJZithYktaNkRRaVA4VzRZM291?=
- =?utf-8?B?V2F0ZFdmbmk1c255d0pIYlNFM0xpaXZkbVZ4Sm9BdUJ0V2FhL0RvaHQrY2c1?=
- =?utf-8?B?ZXpVdDFLTWxtTm9kR2lRRHh4SDBXejlUekZ4TTlTREhyU25hSHRqTlB0ZDBx?=
- =?utf-8?B?QytHRktBK3ZLRS85UDU5VTVVSzl0TlJvRnU2NFJ0V2lSelVOWFo3VzN3ZjNp?=
- =?utf-8?B?cTZPbFFUSC9iTUp0RGVSdVdhb0c4Yk5yUDBBVktmaHFrbkVnbG1BT2wzNzRI?=
- =?utf-8?B?SlA2dExUQjhYS2Y3Q0F1NzhqNnlmd3AxUllkNlRBYjBsRTFIckdiWjJTbDl3?=
- =?utf-8?B?Wnk3K2tveGNzUEJPY251QVc0SnhlVjFlNVpDcjVqV2tLa0FDVkdOWi8wb2Fv?=
- =?utf-8?B?aHk3bmNuVDNhR2k0UHl6MXpCL0w5anFFWUVXUkhjZFFYcExmU0xHbmtOcHJB?=
- =?utf-8?B?dStoMHpheG5OQnplTTVoc1VqN2tTSSt1VDNPWXVHcUY4LzNrNHJSd1lvTm9h?=
- =?utf-8?B?cVdrTG9qaEJCSk9ucDE3OGI3RWR6dVNBbUlRSmhTekxra0I3UUltSmZvTlMy?=
- =?utf-8?B?ODVQN05TN1hnc1JNUjhjUVQ4alRreHhsOWZiazY0NitYa2hrL1pjRVlESjRV?=
- =?utf-8?B?ZnhzTjNKNm1nYzFDd2pZa0NsbVBpTEtsTm9EbTZPZ29PRGhFQXpGbUNEWGxN?=
- =?utf-8?B?cDFKQUQzQnIwTWRLZTlDUXFRYlVjK3IrZFVvSjFQTXJRTHYzV1NWQzlUTGpR?=
- =?utf-8?B?OGxiR1gwV1RmVi84MFpFTmxwWDBnOEZXSVZhNWp3K2R3S3ZzYlowMUlCSFZw?=
- =?utf-8?B?YzVuaDdNakZMSnZ6aUpRNXdtaXVBM3A1U1hiV0JoZXJ2UnF4RXpkcnlIMHFT?=
- =?utf-8?B?V2VUVEQzbXV6c0NTSGlJcjV3OHRBTHN6V3lvVnZ4RUFsTE5rczlNS201SUhD?=
- =?utf-8?B?cVFFd0FueDVMNWNUa0FjendmWTVDa0wvMWFQRjRqalBKUmwvUUNKeDd1Rkdo?=
- =?utf-8?B?NE1UcEhuMFBlUzloMmpYQTFxT0FIcnFEdG14OU1WTGxTbDQvcnk0TFlCc2Fu?=
- =?utf-8?B?NjB5MkhvdTJlTWtGTDRITm5zYktMeFMwcVFNYVRnOXlVcGp5SXAzWUo2UkMx?=
- =?utf-8?B?c2pWeXh3bjVTYXV5dGdHOWtWcmVyd3MxWDE4dVVVWVdMdENhcWRwTHNxK0ZC?=
- =?utf-8?B?bHRHNEg1TjhLMUpiWHNJMFFwblZzUDdiSGJCK3FpT3pyS3o4QmgyZkhqUGVB?=
- =?utf-8?B?YjBLU3JobUFsUDhQcjJXSjRkMDF6M3ppNW82TWNkVEg4RHc0dmZMS2Z2SlFI?=
- =?utf-8?B?OEE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B4791193A7FED2428714E7828749AA27@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 16 Aug 2022 04:15:43 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3320149F25;
+        Mon, 15 Aug 2022 23:18:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660630706; x=1692166706;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bdWgaP48qD+9JA+ub9b9FevdP7NlY5NXdxOlJWmRplU=;
+  b=nJf0/mRkMgjN6f9TJoGnUuyzgaoRw2Ws7BkWC5c00FPevmk8RXB2TbH3
+   wjpE8GeTxSH0KjmryEysHrMaPBLVrjmbMmLyvFEuC8Ptw2C9UxMuZ2YPb
+   XtaTm9k8w8usNA+Z2D5YOKSM5P1N1lnnQ6rbt/1svgsCIZ7/SIg3XoH85
+   qub9JCHpEfBGNuQZA5mR6vGK66yOt0ZFRKLoRvb+FOyj0TeIZ/5koLq96
+   k6hqrp/5Ah8qxWfEUbjofmp8fUajb/MWV7d71fWl8dpgVuG8eYmPGL/Ko
+   MWzrvySMbZpM5CKMZn/kqF0vCOwxsB73UKjeeCf6VCum6+pl02id6I1W7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="353880111"
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="353880111"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 23:18:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="666972567"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga008.fm.intel.com with ESMTP; 15 Aug 2022 23:18:22 -0700
+Date:   Tue, 16 Aug 2022 14:09:18 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, dg@emlix.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, system@metrotek.ru,
+        yilun.xu@intel.com
+Subject: Re: [PATCH v6 1/2] fpga: ecp5-spi: add Lattice ECP5 FPGA manager
+Message-ID: <Yvs0jieXsyzhn8q9@yilunxu-OptiPlex-7050>
+References: <20220815132157.8083-1-i.bornyakov@metrotek.ru>
+ <20220815132157.8083-2-i.bornyakov@metrotek.ru>
+ <Yvr6SY5WGXlYiLig@yilunxu-OptiPlex-7050>
+ <20220816045841.irhr5vigemdqknaw@x260>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB4663.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 47a063fb-26a9-474d-68c5-08da7f4d82ba
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Aug 2022 06:06:50.8185
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: iICRVWn+3CDE17yAerV1ILeZhVPzsMlfI7tNzN6jGuGrQobMaMjv33jsgwMmNpKSreQGEEaebCO+bgQvZIvPLA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB0143
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816045841.irhr5vigemdqknaw@x260>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gOC8xNS8yMiAxMzo1MiwgQ2hyaXN0b3BoZSBKQUlMTEVUIHdyb3RlOg0KPiBVc2UgcGVyY3B1
-X3JlZl90cnlnZXRfbGl2ZV9yY3UoKSBpbnN0ZWFkIG9mIHBlcmNwdV9yZWZfdHJ5Z2V0X2xpdmUo
-KSB0bw0KPiBzYXZlIGEgZmV3IGN5Y2xlcyB3aGVuIGl0IGlzIGtub3duIHRoYXQgdGhlIHJjdSBs
-b2NrIGlzIGFscmVhZHkNCj4gdGFrZW4vcmVsZWFzZWQuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBD
-aHJpc3RvcGhlIEpBSUxMRVQgPGNocmlzdG9waGUuamFpbGxldEB3YW5hZG9vLmZyPg0KPiAtLS0N
-Cg0KZG8geW91IGhhdmUgYSBxdWFudGl0YXRpdmUgZGF0YSB0aGF0IHNob3dzIGFjdHVhbCBzYXZp
-bmdzIG9mIGN5Y2xlcz8NCg0KLWNrDQoNCg0K
+On 2022-08-16 at 07:58:41 +0300, Ivan Bornyakov wrote:
+> On Tue, Aug 16, 2022 at 10:00:41AM +0800, Xu Yilun wrote:
+> > On 2022-08-15 at 16:21:56 +0300, Ivan Bornyakov wrote:
+> > > Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+> > > slave SPI interface with .bit formatted uncompressed bitstream image.
+> > 
+> > Not sure if something is missed.
+> > 
+> > https://lore.kernel.org/all/20220729145757.GA2601292@yilunxu-OptiPlex-7050/
+> > 
+> > I was considering if a generic driver for lattice slave SPI sysCONFIG
+> > interface could be introduced. From machxo2 & ecp5 Programming Usage
+> > Guide, or others in this series, they basically use the same reconfigure
+> > interface & protocol.
+> > 
+> > Thanks,
+> > Yilun
+> > 
+> 
+> I only have HW with ECP5, can't vouch for the rest.
+
+I understand your concern, but having separate drivers for the same IP on
+different boards makes the maintaining harder.
+
+We don't have to make everything fine, but start with machxo2 and ecp5
+first. If the change affects machxo2, other people may help.
+
+Thanks,
+Yilun
+
+> 
+> > > 
+> > > Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> > > ---
+> > >  drivers/fpga/Kconfig    |   7 +
+> > >  drivers/fpga/Makefile   |   1 +
+> > >  drivers/fpga/ecp5-spi.c | 311 ++++++++++++++++++++++++++++++++++++++++
+> > >  3 files changed, 319 insertions(+)
+> > >  create mode 100644 drivers/fpga/ecp5-spi.c
+> > > 
+> > > diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> > > index 6c416955da53..920277a08ed9 100644
+> > > --- a/drivers/fpga/Kconfig
+> > > +++ b/drivers/fpga/Kconfig
+> > > @@ -263,4 +263,11 @@ config FPGA_MGR_MICROCHIP_SPI
+> > >  	  programming over slave SPI interface with .dat formatted
+> > >  	  bitstream image.
+> > >  
+> > > +config FPGA_MGR_ECP5_SPI
+> > > +	tristate "Lattice ECP5 SPI FPGA manager"
+> > > +	depends on SPI
+> > > +	help
+> > > +	  FPGA manager driver support for Lattice ECP5 programming over slave
+> > > +	  SPI interface with .bit formatted uncompressed bitstream image.
+> > > +
+> > >  endif # FPGA
+> > > diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> > > index 42ae8b58abce..17c7a3c4b385 100644
+> > > --- a/drivers/fpga/Makefile
+> > > +++ b/drivers/fpga/Makefile
+> > > @@ -20,6 +20,7 @@ obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
+> > >  obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
+> > >  obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)	+= versal-fpga.o
+> > >  obj-$(CONFIG_FPGA_MGR_MICROCHIP_SPI)	+= microchip-spi.o
+> > > +obj-$(CONFIG_FPGA_MGR_ECP5_SPI)		+= ecp5-spi.o
+> > >  obj-$(CONFIG_ALTERA_PR_IP_CORE)		+= altera-pr-ip-core.o
+> > >  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)	+= altera-pr-ip-core-plat.o
+> > >  
+> > > diff --git a/drivers/fpga/ecp5-spi.c b/drivers/fpga/ecp5-spi.c
+> > > new file mode 100644
+> > > index 000000000000..aa0dd10823a3
+> > > --- /dev/null
+> > > +++ b/drivers/fpga/ecp5-spi.c
+> > > @@ -0,0 +1,311 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +/*
+> > > + * Lattice ECP5 FPGA programming over slave SPI interface.
+> > > + */
+> > > +
+> > > +#include <linux/delay.h>
+> > > +#include <linux/fpga/fpga-mgr.h>
+> > > +#include <linux/spi/spi.h>
+> > > +
+> > > +#define	ECP5_SPI_MAX_SPEED_HZ		60000000
+> > > +
+> > > +#define	ECP5_SPI_ISC_ENABLE		{0xC6, 0x00, 0x00, 0x00}
+> > > +#define	ECP5_SPI_ISC_DISABLE		{0x26, 0x00, 0x00, 0x00}
+> > > +#define	ECP5_SPI_ISC_ERASE		{0x0E, 0x01, 0x00, 0x00}
+> > > +#define	ECP5_SPI_LSC_INIT_ADDR		{0x46, 0x00, 0x00, 0x00}
+> > > +#define	ECP5_SPI_LSC_BITSTREAM_BURST	{0x7a, 0x00, 0x00, 0x00}
+> > > +#define	ECP5_SPI_LSC_CHECK_BUSY		{0xF0, 0x00, 0x00, 0x00}
+> > > +
+> > > +#define ECP5_POLL_RETRIES		100000
+> > > +
+> > > +struct ecp5_priv {
+> > > +	struct gpio_desc *program;
+> > > +	struct gpio_desc *init;
+> > > +	struct gpio_desc *done;
+> > > +	struct spi_device *spi;
+> > > +};
+> > > +
+> > > +static enum fpga_mgr_states ecp5_ops_state(struct fpga_manager *mgr)
+> > > +{
+> > > +	struct ecp5_priv *priv = mgr->priv;
+> > > +
+> > > +	return gpiod_get_value(priv->done) ? FPGA_MGR_STATE_OPERATING :
+> > > +					     FPGA_MGR_STATE_UNKNOWN;
+> > > +}
+> > > +
+> > > +static int ecp5_poll_busy(struct spi_device *spi)
+> > > +{
+> > > +	const u8 lsc_check_busy[] = ECP5_SPI_LSC_CHECK_BUSY;
+> > > +	int ret, retries = ECP5_POLL_RETRIES;
+> > > +	struct spi_transfer xfers[2] = { 0 };
+> > > +	struct spi_message msg;
+> > > +	u8 busy;
+> > > +
+> > > +	xfers[0].tx_buf = lsc_check_busy;
+> > > +	xfers[0].len = sizeof(lsc_check_busy);
+> > > +	xfers[1].rx_buf = &busy;
+> > > +	xfers[1].len = sizeof(busy);
+> > > +
+> > > +	while (retries--) {
+> > > +		spi_message_init_with_transfers(&msg, xfers, ARRAY_SIZE(xfers));
+> > > +		ret = spi_sync_locked(spi, &msg);
+> > > +		if (ret)
+> > > +			return ret;
+> > > +
+> > > +		if (!busy)
+> > > +			return 0;
+> > > +
+> > > +		usleep_range(50, 100);
+> > > +	}
+> > > +
+> > > +	return -EBUSY;
+> > > +}
+> > > +
+> > > +static int ecp5_poll_gpio(struct gpio_desc *gpio, bool is_active)
+> > > +{
+> > > +	int value, retries = ECP5_POLL_RETRIES;
+> > > +
+> > > +	while (retries--) {
+> > > +		value = gpiod_get_value(gpio);
+> > > +		if (value < 0)
+> > > +			return value;
+> > > +
+> > > +		if ((!is_active && !value) || (is_active && value))
+> > > +			return 0;
+> > > +
+> > > +		ndelay(10);
+> > > +	}
+> > > +
+> > > +	return -EFAULT;
+> > > +}
+> > > +
+> > > +static int ecp5_ops_write_init(struct fpga_manager *mgr,
+> > > +			       struct fpga_image_info *info,
+> > > +			       const char *buf, size_t count)
+> > > +{
+> > > +	const u8 lsc_bitstream_burst[] = ECP5_SPI_LSC_BITSTREAM_BURST;
+> > > +	const u8 lsc_init_addr[] = ECP5_SPI_LSC_INIT_ADDR;
+> > > +	const u8 isc_enable[] = ECP5_SPI_ISC_ENABLE;
+> > > +	const u8 isc_erase[] = ECP5_SPI_ISC_ERASE;
+> > > +	struct ecp5_priv *priv = mgr->priv;
+> > > +	struct spi_device *spi = priv->spi;
+> > > +	struct device *dev = &mgr->dev;
+> > > +	struct spi_transfer isc_xfers[] = {
+> > > +		{
+> > > +			.tx_buf = isc_enable,
+> > > +			.len = sizeof(isc_enable),
+> > > +			.cs_change = 1,
+> > > +		}, {
+> > > +			.tx_buf = isc_erase,
+> > > +			.len = sizeof(isc_erase),
+> > > +		},
+> > > +	};
+> > > +	struct spi_transfer lsc_xfers[] = {
+> > > +		{
+> > > +			.tx_buf = lsc_init_addr,
+> > > +			.len = sizeof(lsc_init_addr),
+> > > +			.cs_change = 1,
+> > > +		}, {
+> > > +			.tx_buf = lsc_bitstream_burst,
+> > > +			.len = sizeof(lsc_bitstream_burst),
+> > > +			.cs_change = 1,
+> > > +		},
+> > > +	};
+> > > +	struct spi_message msg;
+> > > +	int ret;
+> > > +
+> > > +	if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
+> > > +		dev_err(dev, "Partial reconfiguration is not supported\n");
+> > > +		return -EOPNOTSUPP;
+> > > +	}
+> > > +
+> > > +	/* Enter init mode */
+> > > +	gpiod_set_value(priv->program, 1);
+> > > +
+> > > +	ret = ecp5_poll_gpio(priv->init, true);
+> > > +	if (!ret)
+> > > +		ret = ecp5_poll_gpio(priv->done, false);
+> > > +
+> > > +	if (ret) {
+> > > +		dev_err(dev, "Failed to go to initialization mode\n");
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	/* Enter program mode */
+> > > +	gpiod_set_value(priv->program, 0);
+> > > +
+> > > +	ret = ecp5_poll_gpio(priv->init, false);
+> > > +	if (ret) {
+> > > +		dev_err(dev, "Failed to go to program mode\n");
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	/*
+> > > +	 * Lock SPI bus for exclusive usage until FPGA programming is done.
+> > > +	 * SPI bus will be released in ecp5_ops_write_complete() or on error.
+> > > +	 */
+> > > +	spi_bus_lock(spi->controller);
+> > > +
+> > > +	/* Enter ISC mode */
+> > > +	spi_message_init_with_transfers(&msg, isc_xfers, ARRAY_SIZE(isc_xfers));
+> > > +	ret = spi_sync_locked(spi, &msg);
+> > > +	if (!ret)
+> > > +		ret = ecp5_poll_busy(spi);
+> > > +
+> > > +	if (ret) {
+> > > +		dev_err(dev, "Failed to go to ISC mode\n");
+> > > +		goto out;
+> > > +	}
+> > > +
+> > > +	/* Prepare for bitstream burst write */
+> > > +	spi_message_init_with_transfers(&msg, lsc_xfers, ARRAY_SIZE(lsc_xfers));
+> > > +	ret = spi_sync_locked(spi, &msg);
+> > > +	if (ret)
+> > > +		dev_err(dev, "Failed to prepare for bitstream burst write\n");
+> > > +
+> > > +out:
+> > > +	if (ret)
+> > > +		spi_bus_unlock(spi->controller);
+> > > +
+> > > +	return ret;
+> > > +}
+> > > +
+> > > +static int ecp5_ops_write(struct fpga_manager *mgr, const char *buf, size_t count)
+> > > +{
+> > > +	struct ecp5_priv *priv = mgr->priv;
+> > > +	struct spi_device *spi = priv->spi;
+> > > +	struct spi_transfer xfer = {
+> > > +		.tx_buf = buf,
+> > > +		.len = count,
+> > > +		.cs_change = 1,
+> > > +	};
+> > > +	struct spi_message msg;
+> > > +	int ret;
+> > > +
+> > > +	spi_message_init_with_transfers(&msg, &xfer, 1);
+> > > +	ret = spi_sync_locked(spi, &msg);
+> > > +	if (ret)
+> > > +		spi_bus_unlock(spi->controller);
+> > > +
+> > > +	return ret;
+> > > +}
+> > > +
+> > > +static int ecp5_ops_write_complete(struct fpga_manager *mgr,
+> > > +				   struct fpga_image_info *info)
+> > > +{
+> > > +	const u8 isc_disable[] = ECP5_SPI_ISC_DISABLE;
+> > > +	struct ecp5_priv *priv = mgr->priv;
+> > > +	struct spi_device *spi = priv->spi;
+> > > +	struct spi_transfer xfer = { 0 };
+> > > +	struct device *dev = &mgr->dev;
+> > > +	struct spi_message msg;
+> > > +	int ret;
+> > > +
+> > > +	/* Toggle CS and wait for bitstream write to finish */
+> > > +	spi_message_init_with_transfers(&msg, &xfer, 1);
+> > > +	ret = spi_sync_locked(spi, &msg);
+> > > +	if (!ret)
+> > > +		ret = ecp5_poll_busy(spi);
+> > > +
+> > > +	if (ret) {
+> > > +		dev_err(dev, "Error while waiting bitstream write to finish\n");
+> > > +		goto out;
+> > > +	}
+> > > +
+> > > +	/* Exit ISC mode */
+> > > +	xfer.tx_buf = isc_disable;
+> > > +	xfer.len = sizeof(isc_disable);
+> > > +	spi_message_init_with_transfers(&msg, &xfer, 1);
+> > > +	ret = spi_sync_locked(spi, &msg);
+> > > +	if (!ret)
+> > > +		ret = ecp5_poll_gpio(priv->done, true);
+> > > +
+> > > +	if (ret)
+> > > +		dev_err(dev, "Failed to finish ISC\n");
+> > > +
+> > > +out:
+> > > +	spi_bus_unlock(spi->controller);
+> > > +
+> > > +	return ret;
+> > > +}
+> > > +
+> > > +static const struct fpga_manager_ops ecp5_fpga_ops = {
+> > > +	.state = ecp5_ops_state,
+> > > +	.write_init = ecp5_ops_write_init,
+> > > +	.write = ecp5_ops_write,
+> > > +	.write_complete = ecp5_ops_write_complete,
+> > > +};
+> > > +
+> > > +static int ecp5_probe(struct spi_device *spi)
+> > > +{
+> > > +	struct device *dev = &spi->dev;
+> > > +	struct fpga_manager *mgr;
+> > > +	struct ecp5_priv *priv;
+> > > +	int ret;
+> > > +
+> > > +	if (spi->max_speed_hz > ECP5_SPI_MAX_SPEED_HZ) {
+> > > +		dev_err(dev, "SPI speed %u is too high, maximum speed is %u\n",
+> > > +			spi->max_speed_hz, ECP5_SPI_MAX_SPEED_HZ);
+> > > +		return -EINVAL;
+> > > +	}
+> > > +
+> > > +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> > > +	if (!priv)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	priv->spi = spi;
+> > > +
+> > > +	priv->done = devm_gpiod_get(dev, "done", GPIOD_IN);
+> > > +	if (IS_ERR(priv->done)) {
+> > > +		ret = PTR_ERR(priv->done);
+> > > +		dev_err(dev, "Failed to get DONE GPIO: %d\n", ret);
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	priv->init = devm_gpiod_get(dev, "init", GPIOD_IN);
+> > > +	if (IS_ERR(priv->init)) {
+> > > +		ret = PTR_ERR(priv->init);
+> > > +		dev_err(dev, "Failed to get INIT GPIO: %d\n", ret);
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	priv->program = devm_gpiod_get(dev, "program", GPIOD_OUT_LOW);
+> > > +	if (IS_ERR(priv->program)) {
+> > > +		ret = PTR_ERR(priv->program);
+> > > +		dev_err(dev, "Failed to get PROGRAM GPIO: %d\n", ret);
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	mgr = devm_fpga_mgr_register(dev, "Lattice ECP5 SPI FPGA Manager",
+> > > +				     &ecp5_fpga_ops, priv);
+> > > +
+> > > +	return PTR_ERR_OR_ZERO(mgr);
+> > > +}
+> > > +
+> > > +static const struct spi_device_id ecp5_spi_ids[] = {
+> > > +	{ .name = "ecp5-fpga-mgr" },
+> > > +	{},
+> > > +};
+> > > +MODULE_DEVICE_TABLE(spi, ecp5_spi_ids);
+> > > +
+> > > +#if IS_ENABLED(CONFIG_OF)
+> > > +static const struct of_device_id ecp5_of_ids[] = {
+> > > +	{ .compatible = "lattice,ecp5-fpga-mgr" },
+> > > +	{},
+> > > +};
+> > > +MODULE_DEVICE_TABLE(of, ecp5_of_ids);
+> > > +#endif /* IS_ENABLED(CONFIG_OF) */
+> > > +
+> > > +static struct spi_driver ecp5_driver = {
+> > > +	.probe = ecp5_probe,
+> > > +	.id_table = ecp5_spi_ids,
+> > > +	.driver = {
+> > > +		.name = "lattice_ecp5_spi_fpga_mgr",
+> > > +		.of_match_table = of_match_ptr(ecp5_of_ids),
+> > > +	},
+> > > +};
+> > > +
+> > > +module_spi_driver(ecp5_driver);
+> > > +
+> > > +MODULE_DESCRIPTION("Lattice ECP5 SPI FPGA Manager");
+> > > +MODULE_LICENSE("GPL");
+> > > -- 
+> > > 2.37.1
+> > > 
+> > > 
+> 

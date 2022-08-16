@@ -2,51 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0927595831
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 805B9595851
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234112AbiHPK16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:27:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45114 "EHLO
+        id S234652AbiHPKbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234480AbiHPK1X (ORCPT
+        with ESMTP id S234628AbiHPKbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:27:23 -0400
+        Tue, 16 Aug 2022 06:31:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086A1140399
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:27:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01490EF9DC;
+        Tue, 16 Aug 2022 01:27:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 365CC61029
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:27:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F213C433D7;
-        Tue, 16 Aug 2022 08:27:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91E66611EA;
+        Tue, 16 Aug 2022 08:27:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62648C433D7;
+        Tue, 16 Aug 2022 08:27:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660638436;
-        bh=nd7XrfWW5VTyg8CmThVCU5gCXi7zDbey5kxwNLdc4iY=;
+        s=korg; t=1660638440;
+        bh=obWd8LHyjUz6HAn1zvUeZVyW4fXbYD54xEC0S6zE2+I=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=v2CzO7q9yAZpDeAAYd+SubkFwrskEPUWhivezYekuhFXWRFLZ/LP/qsydSsdYeSj/
-         FDra6jnB9tXexpEd2rue2hm3mBQvJoV3VwzOLVgeFO28G+12S0bsaaSFfo7UJ+jo0e
-         SFhERawMb8Vb3E5wSnBJpl8zI6jax1Bfv0yJ3vCE=
-Date:   Tue, 16 Aug 2022 09:15:18 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     mawupeng <mawupeng1@huawei.com>
-Cc:     rppt@linux.vnet.ibm.com, hughd@google.com, aarcange@redhat.com,
-        hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, wangkefeng.wang@huawei.com,
-        willy@infradead.org
-Subject: Re: [PATCH stable 4.14,4.19 1/1] mm: Fix page counter mismatch in
- shmem_mfill_atomic_pte
-Message-ID: <YvtEBv35OUEtDsAj@kroah.com>
-References: <20220802013251.3022141-1-mawupeng1@huawei.com>
- <09129cd3-7363-3079-bd57-dde9c73684f1@huawei.com>
- <YvsruBZBP+KpEBdb@kroah.com>
- <b7468bcc-4b75-1190-5eae-9796d35b048c@huawei.com>
+        b=F3a6Lur4sVvnK5fFie94HDOKySHW/PVNBZ913vVTNmSNi1J5Ndl8MC6oViQfkvLxR
+         CC9ncYonSznVX8CiGtrMtm8AUUiL6wmwrSK6XVfIbdf9WbpJNn0UrmY0UuiTmT1DvY
+         6T326dK3KG4bgXqoTaDI+lXhtNuWmX9t01yNuNog=
+Date:   Tue, 16 Aug 2022 09:55:18 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com, Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Subject: Re: [PATCH 5.19 0000/1157] 5.19.2-rc1 review
+Message-ID: <YvtNZuap/oCKVv9O@kroah.com>
+References: <20220815180439.416659447@linuxfoundation.org>
+ <CA+G9fYtZP_rYnmRyLbMrxKPGtJuoOw4h412dJXBJnzab41CzUw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b7468bcc-4b75-1190-5eae-9796d35b048c@huawei.com>
+In-Reply-To: <CA+G9fYtZP_rYnmRyLbMrxKPGtJuoOw4h412dJXBJnzab41CzUw@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,37 +61,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 03:04:08PM +0800, mawupeng wrote:
+On Tue, Aug 16, 2022 at 01:08:26PM +0530, Naresh Kamboju wrote:
+> On Tue, 16 Aug 2022 at 00:58, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is the start of the stable review cycle for the 5.19.2 release.
+> > There are 1157 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Wed, 17 Aug 2022 18:01:29 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.2-rc1.gz
+> > or in the git tree and branch at:
+> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
+> 
+> The arm64 clang-14 allmodconfig failed on stable-rc 5.19.
+> This build failure got fixed on the mainline tree two weeks ago.
+> 
+> * arm64, build
+>   - clang-12-allmodconfig
+>   - clang-13-allmodconfig
+>   - clang-14-allmodconfig
+>   - clang-nightly-allmodconfig
 > 
 > 
-> On 2022/8/16 13:31, Greg KH wrote:
-> > On Tue, Aug 16, 2022 at 11:27:08AM +0800, mawupeng wrote:
-> >> Cc Greg
-> > 
-> > Cc Greg for what?  I have no context here at all as to what you want me
-> > to do..
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/2/build LLVM=1 LLVM_IAS=1
+> ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- 'HOSTCC=sccache clang'
+> 'CC=sccache clang' allmodconfig
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/2/build LLVM=1 LLVM_IAS=1
+> ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- 'HOSTCC=sccache clang'
+> 'CC=sccache clang'
+> sound/soc/intel/avs/path.c:815:18: error: stack frame size (2192)
+> exceeds limit (2048) in 'avs_path_create'
+> [-Werror,-Wframe-larger-than]
+> struct avs_path *avs_path_create(struct avs_dev *adev, u32 dma_id,
+>                  ^
+> 1 error generated.
+> make[5]: *** [/builds/linux/scripts/Makefile.build:249:
+> sound/soc/intel/avs/path.o] Error 1
 > 
-> We found a bug related to memory cgroup counter in stable 4.14/4.19.
-> shmem_mfill_atomic_pte() wrongly called mem_cgroup_cancel_charge() in "success"
-> path, it should mem_cgroup_uncharge() to dec memory counter instead.
-> mem_cgroup_cancel_charge() should only be used if this transaction is
-> unsuccessful and mem_cgroup_uncharge() is used to do this if this transaction
-> succeed.
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 > 
-> Commit 3fea5a499d57 ("mm: memcontrol: convert page cache to a new mem_cgroup_charge() API")
-> in v5.8-rc1 change is charge/uncharge/cancel logic so don't have this
-> problem.
+> Steps to reproduce:
+> -------------------------
+> # See https://docs.tuxmake.org/ for complete documentation.
+> # Original tuxmake command with fragments listed below.
+> # tuxmake --runtime podman --target-arch arm64 --toolchain clang-14
+> --kconfig allmodconfig LLVM=1 LLVM_IAS=1
 > 
-> This counter will underflow to negative maximum value and trigger oom to kill all
-> process include sshd and leave system unaccessible.
-> 
-> The reason cc you is that we want to merge this bugfix into stable 4.14/4.19.
+> tuxmake --runtime podman --target-arch arm64 --toolchain clang-14
+> --kconfig https://builds.tuxbuild.com/2DPEiUmdALSZq7DeNthZFYoPLaN/config
+> LLVM=1 LLVM_IAS=1
 
-<formletter>
+What is the commit on mainline that resolved this issue?
 
-This is not the correct way to submit patches for inclusion in the
-stable kernel tree.  Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
+thanks,
 
-</formletter>
+greg k-h

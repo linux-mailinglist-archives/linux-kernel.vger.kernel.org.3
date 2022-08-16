@@ -2,67 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0125962AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 20:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE07C5962B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 20:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236466AbiHPSs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 14:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
+        id S236587AbiHPSuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 14:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236309AbiHPSs4 (ORCPT
+        with ESMTP id S236556AbiHPSuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 14:48:56 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6793825C45
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 11:48:55 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a7so20618469ejp.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 11:48:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=umXdews0vq7L28/0LeGK6dqrIoN411edLeQ0zKnuS9Y=;
-        b=PtQh7bKbVzOtclr+DCdG7crv3hM20tk7mUw1nkSKnFi3ZkE2bi7oWIBieYusld6ahY
-         bLaPxh8/p+beH45uhV8H920EsXF0pvtQ1k7YW3rx8KTps4GTrZqmoTmVHcdnNS1XKLsI
-         jz25rL/b2urCK2OyiRswuS2gQ13ThhFn7RpELLmib8RagsSa7BvQxzFKaRmAANbiS0sm
-         ujSQsS5uNxW8xgRFFm0saxKSd0Q509LCAzeZexDyhQnzoY/JK5EsVt8siD1gUrmVaFDq
-         ZurDZqow4XU+wffiQqgKoVpND4kL+JtXZ8bIy9XjXsc6mw8HFxB4hARl2Q5IwICIYV56
-         MBaQ==
+        Tue, 16 Aug 2022 14:50:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A77880B77
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 11:50:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660675810;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AkK5XVOSKnldgDxtfSJhIQ0VryUaBistREPEqG430YQ=;
+        b=JOcvcCtlCsv2esMbSV0YocJZqb2bMVhSNn+vSucXSmOpZX8h145QVQ/FPbarCsEYUarBp5
+        0Of93DcsYnmVZJjItIXnaWZFUf4HgZW+qgHFqXi14/ojB1Rgoa0UZUdQmMqQeSGGRTrfQD
+        m686cBUhgtM2QbITWgPtVfnD3xEtUic=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-250-fgM9JszUNQGKQjquwrLOeA-1; Tue, 16 Aug 2022 14:50:09 -0400
+X-MC-Unique: fgM9JszUNQGKQjquwrLOeA-1
+Received: by mail-qt1-f198.google.com with SMTP id bz20-20020a05622a1e9400b003436a76c6e6so8901184qtb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 11:50:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=umXdews0vq7L28/0LeGK6dqrIoN411edLeQ0zKnuS9Y=;
-        b=WfigTRTouEsyDRnXZF8pDE6/WvCXkHwnIwMDVAoiJi+1EhoVSY8tSq/PyLh1sqYRco
-         ijJ8tz30Vx8410WpDuObuUlIYlKA+t+9rSP0rPcIYjiCusd04FWjsV/QXiABNE8C1unP
-         4Y9NQ8fP/flw2ki3/D1s18u5dwpbRlSAVU3LXWaq8eUTaXw50tUYymwSuY3kwMmtjwvv
-         b1dLHYBPjgeBYSrncqibOhqjRqY5v06+XMJm1svkOsTRIs1cnYD59If0ELHjfTHkIh6D
-         +3PTWqXJyqD3+12HR/OqgsGYCVFmPn5UTXNJeSxPNjUADlo3w+r03csVz/PxLODur/U0
-         aqoA==
-X-Gm-Message-State: ACgBeo3EI1VzOYW2jOKTJUe/2iT3yQDX6TGwrfyJAQIb8Lwqv+RS1zIU
-        G9luovQ1+T6gulPEBYa7h8dvo6+Td8nuiiS+8zuXtg==
-X-Google-Smtp-Source: AA6agR6LdGXLXGN8563S6AGxlBGb8lY9ZsngHkw+nNTWSBl6gob/bW44JB/jpjtqbmvRkQgWz/G3DQdFBnpYnsU+WI4=
-X-Received: by 2002:a17:907:86ac:b0:731:5180:8aa0 with SMTP id
- qa44-20020a17090786ac00b0073151808aa0mr14443871ejc.366.1660675733743; Tue, 16
- Aug 2022 11:48:53 -0700 (PDT)
+        bh=AkK5XVOSKnldgDxtfSJhIQ0VryUaBistREPEqG430YQ=;
+        b=YTdJ93tgZuGdYKZYbacy/dzexGdRTDrk5PgC4hny+FJWtvkMqNksvzWiMQQYovGQF3
+         F5+Uh5mdQwG/ekHHIojwOYSQg2g7y09ek1nKfR5iAdciRoP2gkCsmvQBJpUhu/MSLOa9
+         GcJnwH/IOLHGYEmYXsLyrjv9c8Wf+lZqIl9uovxEQgVgeG7b6YroQqiVhqGkil2Plajl
+         AdEZkrvsmT9QHSfmOT1lipOU7OACL8Pwb+4RYFBIa9o5brh4/EZjExuVlPpTJ4JFu+fe
+         b7eJwNGScjuow2otv0KYnVOQD8hACgRHVFGOEee7EAPt13t99vakPsjy+snw9ELTXaSh
+         cO8Q==
+X-Gm-Message-State: ACgBeo15eSmspzFZ+yDnhpdckp0140XLhOcWifZpc7L8f+riugwPz7Pj
+        yYcc/FHrB01zwcTguyTDeDnaHdtOaTwGxjPbb//EB5e0R59z4Ed3keACt+UIzePDKAdRZnUAeZ+
+        65wNVijorUiTKyod5mFP16RduCVIWZXInMxxmYG+L
+X-Received: by 2002:a05:620a:2444:b0:6bb:3397:556b with SMTP id h4-20020a05620a244400b006bb3397556bmr7441194qkn.336.1660675809311;
+        Tue, 16 Aug 2022 11:50:09 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5dUXuiPf2SvaQ6qdoG4GXaAVy4hA4WC5ASn4P0jVmQCPTsYvEx5t9BOulk4AEAIjwyNZlyUh+bojKePuTiVL4=
+X-Received: by 2002:a05:620a:2444:b0:6bb:3397:556b with SMTP id
+ h4-20020a05620a244400b006bb3397556bmr7441175qkn.336.1660675809065; Tue, 16
+ Aug 2022 11:50:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220816124610.393032991@linuxfoundation.org>
-In-Reply-To: <20220816124610.393032991@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 17 Aug 2022 00:18:42 +0530
-Message-ID: <CA+G9fYuBFvr8yOTD3obkMkYjWtOF3u9HQ3Vk7ihQevrq61a1gA@mail.gmail.com>
-Subject: Re: [PATCH 5.19 0000/1157] 5.19.2-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
+References: <20220816025217.618181-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20220816025217.618181-1-kai.heng.feng@canonical.com>
+From:   Karol Herbst <kherbst@redhat.com>
+Date:   Tue, 16 Aug 2022 20:49:58 +0200
+Message-ID: <CACO55tt=Op=0E94kK+1M8cDXNCk5Tkc=FMR8=OQFc5ohehjwaw@mail.gmail.com>
+Subject: Re: [PATCH] drm/i915: Switch TGL-H DP-IN to dGFX when it's supported
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Zenghui Yu <yuzenghui@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,109 +78,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 Aug 2022 at 18:29, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Tue, Aug 16, 2022 at 4:53 AM Kai-Heng Feng
+<kai.heng.feng@canonical.com> wrote:
 >
-> This is the start of the stable review cycle for the 5.19.2 release.
-> There are 1157 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> On mobile workstations like HP ZBook Fury G8, iGFX's DP-IN can switch to
+> dGFX so external monitors are routed to dGFX, and more monitors can be
+> supported as result.
 >
-> Responses should be made by Thu, 18 Aug 2022 12:43:10 +0000.
-> Anything received after that time might be too late.
+> To switch the DP-IN to dGFX, the driver needs to invoke _DSM function 20
+> on intel_dsm_guid2. This method is described in Intel document 632107.
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.2-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-> and the diffstat can be found below.
+
+Can we please not do things like this just because?
+
+It forces the discrete GPU to be on leading to higher thermal pressure
+and power consumption of the system. Lower battery runtime or higher
+fan noise is the result. Not everybody wants to use an AC simply just
+because they attach an external display.
+
+If the problem is "we run out of displays" then can we have something
+more dynamic, where we are doing this only and only if we run out of
+resources to drive as that many displays.
+
+Most users will be fine with ports being driven by the iGPU. Why hurt
+most users, because of some weird special case with mostly only
+drawbacks?
+
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+>  drivers/gpu/drm/i915/display/intel_acpi.c | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
 >
-> thanks,
+> diff --git a/drivers/gpu/drm/i915/display/intel_acpi.c b/drivers/gpu/drm/i915/display/intel_acpi.c
+> index e78430001f077..3bd5930e2769b 100644
+> --- a/drivers/gpu/drm/i915/display/intel_acpi.c
+> +++ b/drivers/gpu/drm/i915/display/intel_acpi.c
+> @@ -20,6 +20,7 @@ static const guid_t intel_dsm_guid =
+>                   0xa8, 0x54, 0x0f, 0x13, 0x17, 0xb0, 0x1c, 0x2c);
 >
-> greg k-h
+>  #define INTEL_DSM_FN_GET_BIOS_DATA_FUNCS_SUPPORTED 0 /* No args */
+> +#define INTEL_DSM_FN_DP_IN_SWITCH_TO_DGFX 20 /* No args */
+>
+>  static const guid_t intel_dsm_guid2 =
+>         GUID_INIT(0x3e5b41c6, 0xeb1d, 0x4260,
+> @@ -187,6 +188,7 @@ void intel_dsm_get_bios_data_funcs_supported(struct drm_i915_private *i915)
+>         struct pci_dev *pdev = to_pci_dev(i915->drm.dev);
+>         acpi_handle dhandle;
+>         union acpi_object *obj;
+> +       int supported = 0;
+>
+>         dhandle = ACPI_HANDLE(&pdev->dev);
+>         if (!dhandle)
+> @@ -194,8 +196,22 @@ void intel_dsm_get_bios_data_funcs_supported(struct drm_i915_private *i915)
+>
+>         obj = acpi_evaluate_dsm(dhandle, &intel_dsm_guid2, INTEL_DSM_REVISION_ID,
+>                                 INTEL_DSM_FN_GET_BIOS_DATA_FUNCS_SUPPORTED, NULL);
+> -       if (obj)
+> +       if (obj) {
+> +               if (obj->type == ACPI_TYPE_INTEGER)
+> +                       supported = obj->integer.value;
+> +
+>                 ACPI_FREE(obj);
+> +       }
+> +
+> +       /* Tiger Lake H DP-IN Boot Time Switching from iGfx to dGfx */
+> +       if (supported & BIT(20)) {
+> +               obj = acpi_evaluate_dsm(dhandle, &intel_dsm_guid2,
+> +                                       INTEL_DSM_REVISION_ID,
+> +                                       INTEL_DSM_FN_DP_IN_SWITCH_TO_DGFX,
+> +                                       NULL);
+> +               if (obj)
+> +                       ACPI_FREE(obj);
+> +       }
+>  }
+>
+>  /*
+> --
+> 2.36.1
+>
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.19.2-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.19.y
-* git commit: 6078b149fc3d1f553499f53f8615846b1836b768
-* git describe: v5.19.1-1158-g6078b149fc3d
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.19.y/build/v5.19.1-1158-g6078b149fc3d
-
-## No test Regressions (compared to v5.19-22-g8054ca350126)
-
-## No metric Regressions (compared to v5.19-22-g8054ca350126)
-
-## No test Fixes (compared to v5.19-22-g8054ca350126)
-
-## No metric Fixes (compared to v5.19-22-g8054ca350126)
-
-## Test result summary
-total: 132125, pass: 118300, fail: 1369, skip: 12260, xfail: 196
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 306 total, 303 passed, 3 failed
-* arm64: 68 total, 66 passed, 2 failed
-* i386: 57 total, 51 passed, 6 failed
-* mips: 50 total, 47 passed, 3 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 65 total, 56 passed, 9 failed
-* riscv: 32 total, 27 passed, 5 failed
-* s390: 22 total, 20 passed, 2 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x86_64: 61 total, 59 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org

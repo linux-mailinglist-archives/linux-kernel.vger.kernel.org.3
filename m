@@ -2,82 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8471F595DC0
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84007595DC1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234944AbiHPNvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
+        id S235366AbiHPNvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:51:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235744AbiHPNuz (ORCPT
+        with ESMTP id S231146AbiHPNvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 09:50:55 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC6AA0616
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:50:53 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id s23so5260710wmj.4
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:50:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=9LJBpIo0+SZSSb+h19vRrs4FS+ALmCyNcdSZjAMWnnU=;
-        b=uG81MiHOkTX3xbhyR0HXE1/6snjgxsPTqzo2PJsn3LIUJ70O5hgmkiAjnwl7ah/vBw
-         cNNsouDNVBA1AOO1jgln0yTZ/1h7NVTgOSJ6c01qkZfJf/W+mjLKt1VVs4WhRsy4LGPp
-         muGfkOClFeyQvLTSz/SEqjvcIiLMBR7pRa8uBLqVd3BNGyvVFWOixrSm6B67Rvdrfunr
-         CfKQS9JNSveXyWzYqNU3EVpEEdULlGTIhkKPfo379bbtxnEXYT+GBUNWAZBe62JwAJTQ
-         hBU4yxF8HGL0W/zHnl3GQbYju+3e4olQ2ixzr40ZGabYiuXtdJIKRX+W5EiXh2zXPVV2
-         njdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=9LJBpIo0+SZSSb+h19vRrs4FS+ALmCyNcdSZjAMWnnU=;
-        b=S5f2bIakop0etxOD4OKR3oe9h6FCq98OzWgUWYVochuJ7r7Ul4F3MiVeepvEt9OI/H
-         O3sjZVlVRUVI4u+6BIDShyAV1IFaVX3X5Xfgi0hDXAG6wfCx3Ynt0vX5bCw/33U5JG8L
-         6SSJFhxBNa/vnr8fY8kftEDGz/WSRA9dawm9j4mcGUaMfHUfc4nJxM4n2cUlmpiLfyby
-         qWKF9NTp66F0HjbOH/J9jHiv3jeOUSbIS/f181XI8vdNOPscuJ6EF44xMwOzETYAJjqC
-         cHx6Dma8Powst+PxL3Iiq131RcKxGbDJyiM33yNsOPoshzCco+eDeKbd/wztbcNwRBW+
-         8Txg==
-X-Gm-Message-State: ACgBeo1McnkiqCnfLXIigNAv4mvuxgUieOaq+fzqzn4JIb0eAP4O177I
-        46E1FBnz+dfW/isa4VugS8zh+g==
-X-Google-Smtp-Source: AA6agR5tssHuRnKgToto8PwA2NfWmIXwAZFjcgWsLI8g0vnP6ItXMOwY2BKuji4CeuOq5DfrTobmDA==
-X-Received: by 2002:a05:600c:430c:b0:3a6:26e:88e8 with SMTP id p12-20020a05600c430c00b003a6026e88e8mr3360740wme.48.1660657852032;
-        Tue, 16 Aug 2022 06:50:52 -0700 (PDT)
-Received: from [192.168.0.12] (cpc76482-cwma10-2-0-cust629.7-3.cable.virginm.net. [86.14.22.118])
-        by smtp.gmail.com with ESMTPSA id c5-20020adffb05000000b0021e4f595590sm10391715wrr.28.2022.08.16.06.50.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 06:50:51 -0700 (PDT)
-Message-ID: <b34b2fa6-7dbf-e4d3-9833-57efd42f9137@linaro.org>
-Date:   Tue, 16 Aug 2022 14:50:50 +0100
+        Tue, 16 Aug 2022 09:51:10 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC39098CB6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:51:08 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 419555801CF;
+        Tue, 16 Aug 2022 09:51:08 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 16 Aug 2022 09:51:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1660657868; x=1660665068; bh=yuVLbrrN+N
+        1iK12i7DUjM6pGqTkdcihboprTmt6Byjw=; b=odX2548XwGXoGeKNs0MbkWaSSx
+        lfpsoLA8A8tZ3+XRhAbG1K21dnqkAYavMxd5ydxZzSSazv9h7PvZWs3oaJqIVzdA
+        RfmZLhQ6h0EfZpOr1x+wr6wcBilxBz5VUTfO6oIvSod3iW4DRW9iZAY5JWrBRVWy
+        8RbA1h9nm3vFyOx+F+XZ3Oi0Ew0Vp7PsnmwPJmo+2pX+i+6ZJpekDYbdmpGtfVCo
+        3VAKjkXEUHf0bOEZYobFiUnvijuSsqOZ7WAeqXo3nvUpCPV8fn3snx0SW0lCtRGR
+        3K7tv7ETwiQEhEEeQLinpzolbgJNH5qkXFL+wVcSjhd7ht2J/SWD6yDSAvuw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660657868; x=1660665068; bh=yuVLbrrN+N1iK12i7DUjM6pGqTkd
+        cihboprTmt6Byjw=; b=A1Si8qi+Laz5mf39bB95eWK9Z9k4Uwq/ARX10hcF5KoC
+        rsCZ4h4myKe7lFZDNiG31Mst8v4bkATp+OYda5/B48kbYWQ2u0KmB9codo9djrHe
+        yTOUZjbJZyB8E2j3I25Q+pbwyeqoVuqgfw6Eb/Ta82kHO4XwYxUPaMPA+8XxwcC+
+        bTV1VisVVgUolSf0+JPD6hqwLHiiFwPXAG/3ChEFsyvxGYNAfSU1zvmJVn9fuQJm
+        kxGz4+rdbVp3wtvdqh8E4B2HCDmNbzxD8l1XRhP9sDDFyjJPZjCwbnP9t0tfssr5
+        yfc8ortuZ8OiMn3m0oboGq9/2l0bSlAJDth5K7vXyQ==
+X-ME-Sender: <xms:y6D7Yi5dGJhRTsSGZBa9vyukMq9hYKB9U0_RHpfh03QgEetm5byqvg>
+    <xme:y6D7Yr4cdbgoEw_0L-SdM11M8wG7DlbMGgv-7R9rQA-mUT5LaO75CFlSi5iBSgWaD
+    __y_zatS_jJqtm1Es0>
+X-ME-Received: <xmr:y6D7YhdJOPym6auR3F3LbUaT7Gw7xA6ooEFtcT0WCjCINXg2WimtbPEekYY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehgedgjedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
+    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:y6D7YvI0uY1gs0_NlIylruE9Zs-XXwZlX_P_FEl_My6SPc7HLEwL4A>
+    <xmx:y6D7YmK7yKTdmpQmBSGQH2Y4I_GTRd_KRzJGnECTVLhPLnKVUgehWw>
+    <xmx:y6D7YgxxEL2lavOAuWvzDdfmduCHGRSf9UhoPNKAuLZ7cRiW3e-2BA>
+    <xmx:zKD7Ym6mGad4cGanjPeIgtE-CDNYjoT7Vt1767fMSgxfM1B86VJUWQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 16 Aug 2022 09:51:06 -0400 (EDT)
+Date:   Tue, 16 Aug 2022 15:51:05 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>
+Subject: Re: [PATCH v1 34/35] drm/modes: Introduce the tv_mode property as a
+ command-line option
+Message-ID: <20220816135105.goztqjzqqhhigytd@houat>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v1-34-3d53ae722097@cerno.tech>
+ <CAMuHMdXizN9OgXgxwdFc1gpnhZof-SZrCH8PczEiJrtYpB62Ow@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 3/4] arm64: dts: qcom: sdm845: Add the RPMh stats node
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220812101240.1869605-1-abel.vesa@linaro.org>
- <T2Uz7zs4Ht58lYc5zWg1VBY0ju6bVaSKa9y3RhBQWDDHmPXBHbAxI2J34jSeY0BFQy2y4JtFn3nQS0Lz4xI5jw==@protonmail.internalid>
- <20220812101240.1869605-3-abel.vesa@linaro.org>
- <e6821eef-4fcb-97b1-24be-e2bb62b99039@linaro.org>
- <Yvtx2aK1Uu51hTPM@linaro.org>
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <Yvtx2aK1Uu51hTPM@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oapqvc3fwa7skyps"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdXizN9OgXgxwdFc1gpnhZof-SZrCH8PczEiJrtYpB62Ow@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,166 +108,99 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--oapqvc3fwa7skyps
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 16/08/2022 11:30, Abel Vesa wrote:
-> On 22-08-15 21:34:07, Caleb Connolly wrote:
->>
->>
->> On 12/08/2022 11:12, Abel Vesa wrote:
->>> SDM845 is a special case compared to the other platforms that use RPMh
->>> stats, since it only has 2 stats (aosd and cxsd), while the others have
->>> a 3rd one (ddr).
->>>
->>> So lets add the node but with a SDM845 dedicated compatible to make
->>> the driver aware of the different stats config.
->> Hi,
->>
->> I gave this a go on the OnePlus 6, I noticed the driver is also meant to
->> read the stats for remote procs via smem, however this seems to fail for me
->> - it can't find any of the SMEM items even if I probe the driver manually
->> after ensuring remoteprocs have booted. Is this an unsupported feature on
->> SDM845?
-> 
-> Thanks for giving it a test.
-> 
-> Actually, you need to probe the qcom_stats after the remoteprocs have
-> booted.
+On Fri, Aug 12, 2022 at 03:31:19PM +0200, Geert Uytterhoeven wrote:
+> Hi Maxime,
+>=20
+> On Fri, Jul 29, 2022 at 6:37 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> > Our new tv mode option allows to specify the TV mode from a property.
+> > However, it can still be useful, for example to avoid any boot time
+> > artifact, to set that property directly from the kernel command line.
+> >
+> > Let's add some code to allow it, and some unit tests to exercise that c=
+ode.
+> >
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+>=20
+> Thanks for your patch!
+>=20
+> > --- a/drivers/gpu/drm/drm_modes.c
+> > +++ b/drivers/gpu/drm/drm_modes.c
+> > @@ -1677,6 +1677,80 @@ static int drm_mode_parse_panel_orientation(cons=
+t char *delim,
+> >         return 0;
+> >  }
+> >
+> > +#define TV_OPTION_EQUAL(value, len, option) \
+> > +       ((strlen(option) =3D=3D len) && !strncmp(value, option, len))
+> > +
+> > +static int drm_mode_parse_tv_mode(const char *delim,
+> > +                                 struct drm_cmdline_mode *mode)
+> > +{
+> > +       const char *value;
+> > +       unsigned int len;
+> > +
+> > +       if (*delim !=3D '=3D')
+> > +               return -EINVAL;
+> > +
+> > +       value =3D delim + 1;
+> > +       delim =3D strchr(value, ',');
+> > +       if (!delim)
+> > +               delim =3D value + strlen(value);
+> > +
+> > +       len =3D delim - value;
+> > +       if (TV_OPTION_EQUAL(value, len, "NTSC-443"))
+> > +               mode->tv_mode =3D DRM_MODE_TV_NORM_NTSC_443;
+> > +       else if (TV_OPTION_EQUAL(value, len, "NTSC-J"))
+> > +               mode->tv_mode =3D DRM_MODE_TV_NORM_NTSC_J;
+> > +       else if (TV_OPTION_EQUAL(value, len, "NTSC-M"))
+> > +               mode->tv_mode =3D DRM_MODE_TV_NORM_NTSC_M;
+>=20
+> [...]
+>=20
+> You already have the array tv_norm_values[] from "[PATCH v1 05/35]
+> drm/connector: Add TV standard property". Can't you export that, and
+> loop over that array instead?
 
-Hi, thanks for getting back to me. I did try this as mentioned above but I think I must have been 
-doing something wrong as I get different behaviour now:
+I'm not sure, the command line doesn't follow the same conventions than
+the property names for a number of conventions, but at the same time we
+should try to keep it as consistent as possible...
 
+Then again, Jani and Thomas didn't seem too fond about exposing data as
+part of the API, so I'm not sure how we could expose that properly.
 
-enchilada:/ # cat /sys/class/remoteproc/remoteproc*/state
+> > +       else if (TV_OPTION_EQUAL(value, len, "HD480I"))
+> > +               mode->tv_mode =3D DRM_MODE_TV_NORM_HD480I;
+> > +       else if (TV_OPTION_EQUAL(value, len, "HD480P"))
+> > +               mode->tv_mode =3D DRM_MODE_TV_NORM_HD480P;
+> > +       else if (TV_OPTION_EQUAL(value, len, "HD576I"))
+> > +               mode->tv_mode =3D DRM_MODE_TV_NORM_HD576I;
+> > +       else if (TV_OPTION_EQUAL(value, len, "HD576P"))
+> > +               mode->tv_mode =3D DRM_MODE_TV_NORM_HD576P;
+> > +       else if (TV_OPTION_EQUAL(value, len, "HD720P"))
+> > +               mode->tv_mode =3D DRM_MODE_TV_NORM_HD720P;
+> > +       else if (TV_OPTION_EQUAL(value, len, "HD1080I"))
+> > +               mode->tv_mode =3D DRM_MODE_TV_NORM_HD1080I;
+>=20
+> The names in tv_norm_values[] use lower-case, while you use upper-case
+> here.
 
-running
+Indeed, I'll fix it, thanks!
+Maxime
 
-running
+--oapqvc3fwa7skyps
+Content-Type: application/pgp-signature; name="signature.asc"
 
-running
+-----BEGIN PGP SIGNATURE-----
 
-running
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYvugyAAKCRDj7w1vZxhR
+xYVoAQDFAMNuU1dbZgCiVBYUf+Y13tqfHCtlOuPYmSb6Gmh3xgEAgXYxzEcBWNLK
+j9bSNzYbE9lp+H3MaLuAPoiaBAXIRQE=
+=szbm
+-----END PGP SIGNATURE-----
 
-enchilada:/ # ls /d/qcom_stats/
-aosd  cxsd
-enchilada:/ # rmmod qcom_stats
-enchilada:/ # insmod /data/qcom_stats.ko
-enchilada:/ # ls /d/qcom_stats/
-adsp  aosd  cdsp  cxsd  modem  slpi
-
-
-
-Weirdly, despite it succeeding it prints the following in dmesg with logging added to 
-qcom_create_subsystem_stat_files() [1]:
-
-[  156.540307] Couldn't get smem object 'wpss' (item: 605, pid: 13): -2
-[  156.546899] Couldn't get smem object 'gpu' (item: 609, pid: 0): -2
-[  156.553260] Couldn't get smem object 'display' (item: 610, pid: 0): -2
-[  156.559957] Couldn't get smem object 'adsp_island' (item: 613, pid: 2): -2
-[  156.567007] Couldn't get smem object 'slpi_island' (item: 613, pid: 3): -2
-> 
-> Doing so, you'll end up having the following:
-> adsp  aosd  cdsp  cxsd
-
-I seem to get a few more, I have some out of tree patches enabling the SLPI, and iirc the db845c 
-doesn't have a full modem firmware. If these look good to you I'd appreciate it if you add my Tested-by.
-
-enchilada:/ # for x in /d/qcom_stats/*; do echo $x; cat $x; done
-/d/qcom_stats/adsp
-Count: 48
-Last Entered At: 1199663157
-Last Exited At: 1524359015
-Accumulated Duration: 793060082
-/d/qcom_stats/aosd
-Count: 0
-Last Entered At: 0
-Last Exited At: 0
-Accumulated Duration: 0
-/d/qcom_stats/cdsp
-Count: 35
-Last Entered At: 1194818037
-Last Exited At: 1194769648
-Accumulated Duration: 3223580811
-/d/qcom_stats/cxsd
-Count: 0
-Last Entered At: 0
-Last Exited At: 0
-Accumulated Duration: 0
-/d/qcom_stats/modem
-Count: 49
-Last Entered At: 3687081003
-Last Exited At: 3686727026
-Accumulated Duration: 2915592136
-/d/qcom_stats/slpi
-Count: 53
-Last Entered At: 3120905905
-Last Exited At: 3120894535
-Accumulated Duration: 3218969498
-
-Am I right in thinking the aosd and cxsd being all 0 is probably a similar issue to the one reported 
-by Stephen in [2]?
-
-
-[1]:
-
-diff --git a/drivers/soc/qcom/qcom_stats.c b/drivers/soc/qcom/qcom_stats.c
-index 121ea409fafc..56cfb20d3683 100644
---- a/drivers/soc/qcom/qcom_stats.c
-+++ b/drivers/soc/qcom/qcom_stats.c
-@@ -178,8 +178,12 @@ static void qcom_create_subsystem_stat_files(struct dentry *root,
-
-         for (i = 0; i < ARRAY_SIZE(subsystems); i++) {
-                 stat = qcom_smem_get(subsystems[i].pid, subsystems[i].smem_item, NULL);
--               if (IS_ERR(stat))
-+               if (IS_ERR(stat)) {
-+                       pr_info("Couldn't get smem object '%s' (item: %d, pid: %d): %ld\n",
-+                               subsystems[i].name, subsystems[i].smem_item, subsystems[i].pid,
-+                               PTR_ERR(stat));
-                         continue;
-+               }
-
-                 debugfs_create_file(subsystems[i].name, 0400, root, (void *)&subsystems[i],
-                                     &qcom_subsystem_sleep_stats_fops);
-
-
-
-[2]: https://lore.kernel.org/linux-arm-msm/20220628201340.3981860-1-swboyd@chromium.org/
-> 
->>>
->>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-
-Tested-by: Caleb Connolly <caleb.connolly@linaro.org>
->>> ---
->>>
->>> Changed qcom,rpmh-stats-sdm845 to qcom,sdm845-rpmh-stats, as suggested
->>> by Krzysztof.
->>>
->>>    arch/arm64/boot/dts/qcom/sdm845.dtsi | 5 +++++
->>>    1 file changed, 5 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
->>> index 5bea96a9ce06..67fe08b837be 100644
->>> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
->>> @@ -4851,6 +4851,11 @@ ebi_cdev: ebi {
->>>    			};
->>>    		};
->>>
->>> +		sram@c3f0000 {
->>> +			compatible = "qcom,sdm845-rpmh-stats";
->>> +			reg = <0 0x0c3f0000 0 0x400>;
->>> +		};
->>> +
->>>    		spmi_bus: spmi@c440000 {
->>>    			compatible = "qcom,spmi-pmic-arb";
->>>    			reg = <0 0x0c440000 0 0x1100>,
->>> --
->>> 2.34.1
->>>
->>
->> -- 
->> Kind Regards,
->> Caleb (they/he)
-
--- 
-Kind Regards,
-Caleb (they/he)
+--oapqvc3fwa7skyps--

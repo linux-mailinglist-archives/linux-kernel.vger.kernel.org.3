@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC5E59655E
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 187C5596560
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237951AbiHPWSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 18:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
+        id S237966AbiHPWSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 18:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237953AbiHPWRl (ORCPT
+        with ESMTP id S237998AbiHPWRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 18:17:41 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213099081A
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 15:17:37 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id u133so10517047pfc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 15:17:36 -0700 (PDT)
+        Tue, 16 Aug 2022 18:17:53 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A987901A9;
+        Tue, 16 Aug 2022 15:17:50 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d16so10428868pll.11;
+        Tue, 16 Aug 2022 15:17:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=x8S/E0PtG8sPm0KWAXrWqz0p4VFvR6HOroPcaO7G+0g=;
-        b=PQZPGnkmcVJmDrzwsKCHAwq9rz9mheWDEXixV0dP60Di6iQR/xt3hIUTrr6gRyfG8a
-         4ES5yPaT+3QJmSyuOikwMRYsnsmD1ZTrexxWs2AYFWvjLqADgXFE2NqiUHOf8lKYpYTI
-         2bSwd+OUzjDYZ+hXWcDTU+l/Kw19XfCQroI5IuVvtCvMHZqDEYeHxWo0MGmhSgLlY+Wx
-         2fv8CN9CUzEUpkpldCNtCsLSDMWg8Jkd4VETtuNzYQdJl4KzmJbzslbjKxnVW5OoSq8p
-         k3BjEakAQE0AY5pGbnU1V8slfYBUWkE0vTkfaruaThYLJLrnqpjLWoFLmoVNZ/2dqyMD
-         whCA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc;
+        bh=OB8RDF87cTmELNf7aw7q4YYpUSHmX8OtlvjYs3kFhr0=;
+        b=cLdY1RNjmC1OlOQ58Aj1kl0m1QGT70JSthx1sOxB6PLSZLnXytfnW7KVUyJrw4ILU6
+         n7N6DPzadmTiMz5IL6S4fdu0FVkq+/FJ2HdYvMLYEC4zRwa67JbF6Sny9B40YcBLn4fg
+         ohnYCLh5WtAvF0bc9dFPHItMkPxb4pdO5J++g2APvYqVgvfENoNCY4RB7pbrrF1BVIT3
+         anw7II4R90l1B63xdm3wVCCeULjT7spaLcd0hocWNQiWzNqZzoMwzIGMKJzrFDWYFbhR
+         8R8zZxwu8MzQFDVdNetpC4RnPL6bFFcmoP3td/QP09ra2EXEQbwt1mSk2feHRb/+qz0y
+         h4+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=x8S/E0PtG8sPm0KWAXrWqz0p4VFvR6HOroPcaO7G+0g=;
-        b=zBNte1ukfjce1Cvb0yp0ZH87fEgxQavF2LQICeCfHN9LSO2zvPexKsQzxBGpsJQG2c
-         cnxBtkdeCgI5j3+rw3NM6p8cJDmr52gSp1R+bhhLNIQ8slq9P2sdOwO7uGqmHjQv896e
-         TGfgIjXAgUlDfBiI1piA3L2gkcOIAm/2xyX8nTZ6d0VGr9p+VXPa84io1iGfxExpu+4+
-         DdTwuglU/w3VJ4VMzIUNdHm3Gj5RIbIeY4bQoaEy2pV56bfxwfFIgr89GyLZfzfqQYZE
-         GE1hL/HCjuSW4n9oFdoey+laX6Jsa3MZBPDfHRRgMGmoE6GKb6cWxzMtw1JHuYR7uDK2
-         NuQg==
-X-Gm-Message-State: ACgBeo2xv2HUmK65dYH1JVDA3RclvipS6dGXECBVeMNISwAkaj4qhkhU
-        9hK1rgffkGSqVg0QZ3D83pnudg==
-X-Google-Smtp-Source: AA6agR46pneYPQRgITUM5bPRGS4+667SguLEnVClkb9qEnDOHs8epukpakvDd5snTJp24ycbhCquJA==
-X-Received: by 2002:a05:6a00:4193:b0:535:2aea:ea55 with SMTP id ca19-20020a056a00419300b005352aeaea55mr5726810pfb.63.1660688255865;
-        Tue, 16 Aug 2022 15:17:35 -0700 (PDT)
-Received: from google.com (201.215.168.34.bc.googleusercontent.com. [34.168.215.201])
-        by smtp.gmail.com with ESMTPSA id x12-20020aa7940c000000b00528f9597fb3sm8887970pfo.197.2022.08.16.15.17.35
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc;
+        bh=OB8RDF87cTmELNf7aw7q4YYpUSHmX8OtlvjYs3kFhr0=;
+        b=SBoXTAh11+kwBOAJlPUbvXrycTb9IVbWcRckf73AimqJOFPbxnRu8vdZlGrIR/0QPs
+         SQkFVCBcXzrepXOZqzi24yocLtnkxd7wkRAzVqt1iNRQaVVkS+GbbKq6G8yDU3D1qtA9
+         QAPqUXa40P3/8uxFCyoDcqWUowu/K6rdU/DBV5YywdVG/4NH//MrhJ/LXg72alf+On37
+         AYjvtfXCZqo/2wXopnwZqU2DkWaoRPKX1Jq3H1YbJi265kkvfTAzOFMx21Z7swI53mKg
+         Y+n1wKsyJh7A2EfkTpImt8eT/OJpPWMmKoAfhdZKt5MEfcEDwrfrTMNib3M7JJm0Jjfs
+         SAPw==
+X-Gm-Message-State: ACgBeo3lpCnUeEJvu32jvrnZXhRmSaBHu3XRsvYA0d7bxT7OkZTfmqUc
+        GXqrjPh7mGPyZM8mIb0ftPPWyN1aEzI=
+X-Google-Smtp-Source: AA6agR7/vFKp5+pTpC3YdQO45AeYq4bPMXwFZsqW8mnAS7I6tSnHUwmI/rSTcyZmN9GCFgnup+dUDg==
+X-Received: by 2002:a17:90b:17c9:b0:1f3:3a7c:a3a7 with SMTP id me9-20020a17090b17c900b001f33a7ca3a7mr734547pjb.76.1660688269758;
+        Tue, 16 Aug 2022 15:17:49 -0700 (PDT)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:d539:e967:9fd8:5c81])
+        by smtp.gmail.com with ESMTPSA id 3-20020a620603000000b0052b7f0ff197sm8965943pfg.49.2022.08.16.15.17.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 15:17:35 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 22:17:31 +0000
-From:   William McVicker <willmcvicker@google.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
-        Sajid Dalvi <sdalvi@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] PCI/PM: Switch D3Hot delay to use usleep_range
-Message-ID: <YvwXe1k6uRSTFuKR@google.com>
-References: <20220811184001.2512121-1-willmcvicker@google.com>
- <YvwGvmWPrIQ557C+@google.com>
+        Tue, 16 Aug 2022 15:17:49 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH 0/4] perf tools: Support reading PERF_FORMAT_LOST (v2)
+Date:   Tue, 16 Aug 2022 15:17:43 -0700
+Message-Id: <20220816221747.275828-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvwGvmWPrIQ557C+@google.com>
-X-Spam-Status: No, score=-12.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,47 +74,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/16/2022, Matthias Kaehlcke wrote:
-> On Thu, Aug 11, 2022 at 06:40:01PM +0000, Will McVicker wrote:
-> > From: Sajid Dalvi <sdalvi@google.com>
-> > 
-> > Since the PCI spec requires a 10ms D3Hot delay (defined by
-> > PCI_PM_D3HOT_WAIT) and a few of the PCI quirks update the D3Hot delay up
-> > to 20ms, let's switch from msleep to usleep_range to improve the delay
-> > accuracy.
-> > 
-> > This patch came from Sajid Dalvi <sdalvi@google.com> in the Pixel 6
-> > kernel tree [1]. Testing on a Pixel 6, found that the 10ms delay for
-> > the Exynos PCIe device was on average delaying for 19ms when the spec
-> > requires 10ms. Switching from msleep to uslseep_delay therefore
-> > decreases the resume time on a Pixel 6 on average by 9ms.
-> > 
-> > [1] https://android.googlesource.com/kernel/gs/+/18a8cad68d8e6d50f339a716a18295e6d987cee3
-> > 
-> > Signed-off-by: Sajid Dalvi <sdalvi@google.com>
-> > Signed-off-by: Will McVicker <willmcvicker@google.com>
-> > ---
-> >  drivers/pci/pci.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> > index 95bc329e74c0..5ae5b3c4dc9b 100644
-> > --- a/drivers/pci/pci.c
-> > +++ b/drivers/pci/pci.c
-> > @@ -72,7 +72,8 @@ static void pci_dev_d3_sleep(struct pci_dev *dev)
-> >  		delay = pci_pm_d3hot_delay;
-> >  
-> >  	if (delay)
-> > -		msleep(delay);
-> > +		usleep_range(delay * USEC_PER_MSEC,
-> > +			     (delay + 2) * USEC_PER_MSEC);
-> 
-> You could also use fsleep(), which ends up calling usleep_range()
-> for (usecs > 10 && usecs <= 20000).
+Hello,
 
-Thanks for the suggestion. I see fsleep() uses 2 * usec for the upper range
-which I think is a bit much for this optimization. The documentation says
-in the worse case an interrupt will be triggered for the upper bound, but
-I'm not entirely sure how often that'd be. Thoughts?
+The kernel v6.0 added PERF_FORMAT_LOST which can read a number of lost
+samples for the given event.  As it can change the output format of
+read(2) and perf sample data, it needs to access them carefully.
 
---Will
+Changes in v2)
+ * add a comment in perf_evsel__read_group()  (Jiri)
+ * simplify perf_evsel__adjust_values()  (Jiri)
+
+
+You can get the code from 'perf/read-lost-v2' brach on
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+
+Thanks,
+Namhyung
+
+
+Namhyung Kim (4):
+  tools headers UAPI: Sync linux/perf_event.h with the kernel sources
+  tools lib perf: Handle read format in perf_evsel__read()
+  tools lib perf: Add a test case for read formats
+  perf tools: Support reading PERF_FORMAT_LOST
+
+ tools/include/uapi/linux/perf_event.h         |   5 +-
+ tools/lib/perf/evsel.c                        |  79 ++++++++-
+ tools/lib/perf/include/perf/event.h           |   3 +-
+ tools/lib/perf/include/perf/evsel.h           |   4 +-
+ tools/lib/perf/tests/test-evsel.c             | 161 ++++++++++++++++++
+ tools/perf/tests/sample-parsing.c             |  14 +-
+ tools/perf/util/event.h                       |  18 +-
+ tools/perf/util/evsel.c                       |  33 +++-
+ .../scripting-engines/trace-event-python.c    |  16 +-
+ tools/perf/util/session.c                     |  32 ++--
+ tools/perf/util/synthetic-events.c            |  34 +++-
+ 11 files changed, 360 insertions(+), 39 deletions(-)
+
+
+base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+-- 
+2.37.1.595.g718a3a8f04-goog
+

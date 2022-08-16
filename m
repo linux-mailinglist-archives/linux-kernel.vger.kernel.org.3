@@ -2,109 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9179596569
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CD4596570
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:22:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237971AbiHPWUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 18:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43890 "EHLO
+        id S237970AbiHPWWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 18:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238053AbiHPWTY (ORCPT
+        with ESMTP id S237893AbiHPWVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 18:19:24 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3A17AC3A;
-        Tue, 16 Aug 2022 15:19:10 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id e8-20020a17090a280800b001f2fef7886eso175402pjd.3;
-        Tue, 16 Aug 2022 15:19:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=v/EIdBGUkUPtNpLpVOdmRMecyshYK7WIwF9D88OOScU=;
-        b=XFz549JzgGby3QShSMg1u6ld0qYxrMD3+idlLFNetfD3Uf4CUVmSJzQwu21B0nSuY3
-         DE4olgojem8eez9w5KVGDNKI9NvFlyOpx319HD1Xz0JPYqZ7GtDaO4Vyu517VUEk0vBa
-         3EPbHmc4qV8pUgXU3pMJS7zvviFi4hykmH28LUfjweBN4/f1jde/ZTjmWze/tOVxcjiD
-         4wVtggFwXqgarGqZBPJL4V5dNiKgZShkmuN19HOl8yD0CjcppHuDpJIaW2fOtUgfImf7
-         O+dicxS87PkLT0yR/gQzPEFBhH8VvmUxwvw6Z992mJ3fcqgr6NEgfIBdiJy8L84CfIGW
-         C8oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=v/EIdBGUkUPtNpLpVOdmRMecyshYK7WIwF9D88OOScU=;
-        b=PHunzgMkHWkSQGfpeSAxGHQNhMl4Xl2Mpzn2Wgz7ucL3OaPAQDcF3L8PwXFs8UWC4b
-         DgnIRhiQio7glLlV6Q0dPed1LpUhxxreK2VMvAgiJxjG9dOgiZYCexhN2BFvTsxO5+I6
-         Iiyetls0j7V9KuOoXpUK6Lby9aN2ktEbJlVQqMcAjAR2TmvamBBJ7CwR31bojmagZOKc
-         hUzAXkKHXxrq5HLeVnTAopdC0QW+G4DjjkVSOeQ/qYkbzC438W7t8851lRVxHdbGGypH
-         MTWGYP7t1w2f/aDpbKDHGES6t9W1ObNF1+UJVLH9xRwj5Ty77GAKGnmxhyyqLoRsOIB1
-         nxbA==
-X-Gm-Message-State: ACgBeo0QYxxhwIZFHC7UarjbotFsI/0sFU0khOUh9ucz3jWQKAiaF1hX
-        izQiOEHloUQgxB+gmGqNJCM=
-X-Google-Smtp-Source: AA6agR5444hR3/D5RFxnx5aA31sSW3PzrPcGowK1Az0EUVJCo7nNYyNnIRaopp2BUk8/pmHkiVzyjg==
-X-Received: by 2002:a17:90b:180f:b0:1f5:160c:a656 with SMTP id lw15-20020a17090b180f00b001f5160ca656mr693043pjb.193.1660688349662;
-        Tue, 16 Aug 2022 15:19:09 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:7229])
-        by smtp.gmail.com with ESMTPSA id n12-20020a170902d2cc00b0016cbb46806asm9595537plc.278.2022.08.16.15.19.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 15:19:08 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 16 Aug 2022 12:19:07 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v5 3/3] cgroup/cpuset: Keep user set cpus affinity
-Message-ID: <YvwX24GXadKQNp6V@slm.duckdns.org>
-References: <20220816192734.67115-1-longman@redhat.com>
- <20220816192734.67115-4-longman@redhat.com>
- <Yvv66EWygCwHUCqy@slm.duckdns.org>
- <c10e4f69-9951-6c38-6e28-fafcaec00d89@redhat.com>
+        Tue, 16 Aug 2022 18:21:53 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F083A7C519;
+        Tue, 16 Aug 2022 15:21:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1660688477; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=NDa+061Xblq9xAwNXmKcv17QPR2sLX3FhHhmESb1b8pgFXJpC4RsjI6lshyl5b8uGAnsfd0VenkgKfQmvlvUb4xb3FzeG6IQ1y5bDzj8igQsM3qWAMtf530W0VzbQSx6WOHGxZA4EIUnEURTp+yCWpEaKfu4OBzi5zaWlBXiUIk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1660688477; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=nDTa5//nWj0Esms9kmwbp72Q9GG2XuE8CLV0rVm05OU=; 
+        b=FNd0K0wsnycSXgfDGw+2jBnr+YiOBQNV87VdOrVPrP0D+a1Hh71XiBgKM0a0QPiJOei3knCh+ZBA5tvjEB82nv1wnAkmTtswjDCpzlfOCx6tv5ByV+AX8yJ7vaL81xV9DuxtPm4rnwyPgvELLuaMUuBBEnl4UY2pKdy2C52nwOc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1660688477;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:From:From:Subject:Subject:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=nDTa5//nWj0Esms9kmwbp72Q9GG2XuE8CLV0rVm05OU=;
+        b=PrUQ84eiaZMAzNAz87ySIRMyHo6lq90+7mpr+fefTGiTteckeRDGLgem3+0MIEcn
+        +lIjubL1TdKrUwk5E/B95tNIdkQxoGNppf9KeaMv3OGMAInBY0JBY+Vo+z9aXcL637X
+        iJUiy5lrPhl4XRPkWO6CvObCMpF66Drzb0FlyfP4=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1660688475774900.170062109623; Tue, 16 Aug 2022 15:21:15 -0700 (PDT)
+Message-ID: <5d51394b-cef2-6bb2-763c-e801994f67ea@arinc9.com>
+Date:   Wed, 17 Aug 2022 01:21:09 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c10e4f69-9951-6c38-6e28-fafcaec00d89@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Subject: Re: [PATCH v2 5/7] dt-bindings: net: dsa: mediatek,mt7530: remove
+ unnecesary lines
+To:     Rob Herring <robh@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220813154415.349091-1-arinc.unal@arinc9.com>
+ <20220813154415.349091-6-arinc.unal@arinc9.com>
+ <20220816211454.GA2734299-robh@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20220816211454.GA2734299-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 17.08.2022 00:14, Rob Herring wrote:
+> On Sat, Aug 13, 2022 at 06:44:13PM +0300, Arınç ÜNAL wrote:
+>> Remove unnecessary lines as they are already included from the referred
+>> dsa.yaml.
+> 
+> You are duplicating the schema and then removing parts twice. I would
+> combine patches 4 and 5 or reverse the order.
 
-On Tue, Aug 16, 2022 at 06:11:03PM -0400, Waiman Long wrote:
-> It is hard to synchronize different subsystems atomically without running
-> into locking issue. Let me think about what can be done in this case.
+Will combine.
 
-I have a hard time seeing why this would be particularly difficult. cpuset
-just needs to make the latest cpumask available to sched core in an easily
-accessible form and whenever that changes, trigger a set_cpus_allowed call.
-There's no need to entangle operations across the whole subsystems. All
-that's needed to be communicated is the current cpumask.
+> 
+>>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
+>>   .../bindings/net/dsa/mediatek,mt7530.yaml     | 27 -------------------
+>>   1 file changed, 27 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> index ff51a2f6875f..a27cb4fa490f 100644
+>> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> @@ -162,15 +162,8 @@ allOf:
+>>   
+>>         patternProperties:
+>>           "^(ethernet-)?ports$":
+>> -          type: object
+>> -
+>>             patternProperties:
+>>               "^(ethernet-)?port@[0-9]+$":
+>> -              type: object
+>> -              description: Ethernet switch ports
+>> -
+>> -              unevaluatedProperties: false
+>> -
+>>                 properties:
+>>                   reg:
+>>                     description:
+>> @@ -178,7 +171,6 @@ allOf:
+>>                       0 to 5 for user ports.
+>>   
+>>                 allOf:
+>> -                - $ref: dsa-port.yaml#
+>>                   - if:
+> 
+> This 'if' schema is the only part you need actually (though you have to
+> create the node structure).
 
-> Is using a sequence number to check for race with retry good enough?
+Do you mean that I should take "if:" out of allOf?
 
-It seems unnecessarily fragile and complicated to me. If we're gonna change
-it, let's change it right.
-
-Thanks.
-
--- 
-tejun
+> 
+>>                       properties:
+>>                         label:
+>> @@ -186,7 +178,6 @@ allOf:
+>>                             - const: cpu
+>>                     then:
+>>                       required:
+>> -                      - reg
+>>                         - phy-mode
+>>   
+>>     - if:
+>> @@ -200,15 +191,8 @@ allOf:
+>>   
+>>         patternProperties:
+>>           "^(ethernet-)?ports$":
+>> -          type: object
+>> -
+>>             patternProperties:
+>>               "^(ethernet-)?port@[0-9]+$":
+>> -              type: object
+>> -              description: Ethernet switch ports
+>> -
+>> -              unevaluatedProperties: false
+>> -
+>>                 properties:
+>>                   reg:
+>>                     description:
+>> @@ -216,7 +200,6 @@ allOf:
+>>                       0 to 5 for user ports.
+>>   
+>>                 allOf:
+>> -                - $ref: dsa-port.yaml#
+>>                   - if:
+>>                       properties:
+>>                         label:
+>> @@ -224,7 +207,6 @@ allOf:
+>>                             - const: cpu
+>>                     then:
+>>                       required:
+>> -                      - reg
+>>                         - phy-mode
+>>   
+>>     - if:
+>> @@ -238,15 +220,8 @@ allOf:
+>>   
+>>         patternProperties:
+>>           "^(ethernet-)?ports$":
+>> -          type: object
+>> -
+>>             patternProperties:
+>>               "^(ethernet-)?port@[0-9]+$":
+>> -              type: object
+>> -              description: Ethernet switch ports
+>> -
+>> -              unevaluatedProperties: false
+>> -
+>>                 properties:
+>>                   reg:
+>>                     description:
+>> @@ -254,7 +229,6 @@ allOf:
+>>                       0 to 5 for user ports.
+>>   
+>>                 allOf:
+>> -                - $ref: dsa-port.yaml#
+>>                   - if:
+>>                       properties:
+>>                         label:
+>> @@ -262,7 +236,6 @@ allOf:
+>>                             - const: cpu
+>>                     then:
+>>                       required:
+>> -                      - reg
+>>                         - phy-mode
+>>   
+>>   unevaluatedProperties: false
+>> -- 
+>> 2.34.1
+>>
+>>

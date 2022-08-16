@@ -2,303 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C11355958AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA98595806
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234829AbiHPKk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44276 "EHLO
+        id S234318AbiHPKVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235020AbiHPKk0 (ORCPT
+        with ESMTP id S234075AbiHPKU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:40:26 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E126E1AA4
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:56:11 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27G6rYEg026269;
-        Tue, 16 Aug 2022 09:55:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=FQp52PLFgVbJw2aht4M/bASp8ZYFDR4UuvYTkFhDuyY=;
- b=XrCaKDNGEo1+OY3FO1PREM4pIoZ1XR/1Z3gLVFFp5l2+sbHZc8AcBDoUnowGjqW4VJ5g
- D9Y+Ih9vjzFulAmUhagq25uowNRa6zdOS1rPvqqh1XWdnATEdfDSy9tzaQNK9V4l+iZT
- ttpYd1i5+TjNNoXlDZuyF11ZN4ouf1WTfAjr62ZxYGLQoWEGwYZiI0+Weh+1h3M4Y7O+
- a6f58FG5aO+lH8sTh3Gn6ckm1t8ELc7xz/GwdlihZjTtHoCqaa2Rle4HcuLVVYfm3DJw
- vpo/uZQodPktxI9HuxY1jRHVP3PmqVbNAzRE9V2AiYDfJI+QnUHiAD6AUTHfQ9Lc45NA 0A== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j06c0rh55-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Aug 2022 09:55:58 +0000
-Received: from pps.filterd (NALASPPMTA05.qualcomm.com [127.0.0.1])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 27G9WU5r029316;
-        Tue, 16 Aug 2022 09:34:09 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 3hxnebq3xh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Aug 2022 09:34:09 +0000
-Received: from NALASPPMTA05.qualcomm.com (NALASPPMTA05.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27G9Y9sk031703;
-        Tue, 16 Aug 2022 09:34:09 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 27G9Y9Fk031701
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Aug 2022 09:34:09 +0000
-Received: from [10.216.44.198] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 16 Aug
- 2022 02:34:05 -0700
-Message-ID: <286e47e7-3d63-133c-aa6c-05100b557d42@quicinc.com>
-Date:   Tue, 16 Aug 2022 15:04:01 +0530
+        Tue, 16 Aug 2022 06:20:56 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D562052097;
+        Tue, 16 Aug 2022 02:36:08 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 4A308346EC;
+        Tue, 16 Aug 2022 09:34:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1660642463; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iEdYfa1M4GgGzZG+RuOCPAb/W8L0e/bqVBO0WbncbEE=;
+        b=pBpO8XTXlRzfr9XHY2EY5XFEQIVO6s1UiN7LVjuYTNaMxZ1PC+GyuKrmKnORBcGFydH69W
+        CnwM9Nb68o57IONPf+0uX7J958FobhMNbGv/VNAWtKCxykUsWfcMZPwYgZZKLSDI6+2qzn
+        RfQVriyqAxiodJYgcae2V5FcNO57/cQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1660642463;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iEdYfa1M4GgGzZG+RuOCPAb/W8L0e/bqVBO0WbncbEE=;
+        b=34FB+9QK0NXSIgtZkv3faxX4+8s2JgaMoRYkRu/il6P0qmVqGJ2OQE0yPWlt+IeVyDZPd1
+        p2RTyT8AIQphYQDQ==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 221792C143;
+        Tue, 16 Aug 2022 09:34:23 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id CC041A066C; Tue, 16 Aug 2022 11:34:21 +0200 (CEST)
+Date:   Tue, 16 Aug 2022 11:34:21 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org,
+        Ojaswin Mujoo <ojaswin@linux.ibm.com>,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geetika.Moolchandani1@ibm.com, regressions@lists.linux.dev,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [Regression] ext4: changes to mb_optimize_scan cause issues on
+ Raspberry Pi
+Message-ID: <20220816093421.ok26tcyvf6bm3ngy@quack3>
+References: <0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com>
+ <20220728100055.efbvaudwp3ofolpi@quack3>
+ <64b7899f-d84d-93de-f9c5-49538bd080d0@i2se.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V3] mm: fix use-after free of page_ext after race with
- memory-offline
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-CC:     <akpm@linux-foundation.org>, <david@redhat.com>,
-        <pasha.tatashin@soleen.com>, <sieberf@amazon.com>,
-        <shakeelb@google.com>, <sjpark@amazon.de>, <dhowells@redhat.com>,
-        <willy@infradead.org>, <quic_pkondeti@quicinc.com>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
-References: <1660056403-20894-1-git-send-email-quic_charante@quicinc.com>
- <Yvpg6odyDsXrjw5i@dhcp22.suse.cz>
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-In-Reply-To: <Yvpg6odyDsXrjw5i@dhcp22.suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: S-duNGSCNRSsd3EgSFzJ9C-7F0IYt5ZO
-X-Proofpoint-GUID: S-duNGSCNRSsd3EgSFzJ9C-7F0IYt5ZO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-16_07,2022-08-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- priorityscore=1501 mlxlogscore=999 impostorscore=0 clxscore=1015
- suspectscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208160038
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <64b7899f-d84d-93de-f9c5-49538bd080d0@i2se.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Michal!!
+Hi Stefan!
 
-On 8/15/2022 8:36 PM, Michal Hocko wrote:
-> On Tue 09-08-22 20:16:43, Charan Teja Kalla wrote:
-> [...]
->> diff --git a/include/linux/page_ext.h b/include/linux/page_ext.h
->> index fabb2e1..0e259da 100644
->> --- a/include/linux/page_ext.h
->> +++ b/include/linux/page_ext.h
-> [...]
->> @@ -87,5 +83,14 @@ static inline void page_ext_init_flatmem_late(void)
->>  static inline void page_ext_init_flatmem(void)
->>  {
->>  }
->> +
->> +static inline struct page *page_ext_get(struct page *page)
-> struct page_ext *
+On Sat 06-08-22 11:50:28, Stefan Wahren wrote:
+> Am 28.07.22 um 12:00 schrieb Jan Kara:
+> > Hello!
+> > 
+> > On Mon 18-07-22 15:29:47, Stefan Wahren wrote:
+> > > i noticed that since Linux 5.18 (Linux 5.19-rc6 is still affected) i'm
+> > > unable to run "rpi-update" without massive performance regression on my
+> > > Raspberry Pi 4 (multi_v7_defconfig + CONFIG_ARM_LPAE). Using Linux 5.17 this
+> > > tool successfully downloads the latest firmware (> 100 MB) on my development
+> > > micro SD card (Kingston 16 GB Industrial) with a ext4 filesystem within ~ 1
+> > > min. The same scenario on Linux 5.18 shows the following symptoms:
+> > Thanks for report and the bisection!
+> > > - download takes endlessly much time and leads to an abort by userspace in
+> > > most cases because of the poor performance
+> > > - massive system load during download even after download has been aborted
+> > > (heartbeat LED goes wild)
+> > OK, is it that the CPU is busy or are we waiting on the storage card?
+> > Observing top(1) for a while should be enough to get the idea.  (sorry, I'm
+> > not very familiar with RPi so I'm not sure what heartbeat LED shows).
 > 
-oops!! It didn't get caught as this is in !CONFIG_PAGE_EXTENSION.
->> +{
->> +	return NULL;
->> +}
->> +
->> +static inline void page_ext_put(void)
->> +{
->> +}
->>  #endif /* CONFIG_PAGE_EXTENSION */
->>  #endif /* __LINUX_PAGE_EXT_H */
-> [...]
->> diff --git a/mm/page_ext.c b/mm/page_ext.c
->> index 3dc715d..91d7bd2 100644
->> --- a/mm/page_ext.c
->> +++ b/mm/page_ext.c
->> @@ -9,6 +9,7 @@
->>  #include <linux/page_owner.h>
->>  #include <linux/page_idle.h>
->>  #include <linux/page_table_check.h>
->> +#include <linux/rcupdate.h>
->>  
->>  /*
->>   * struct page extension
->> @@ -59,6 +60,10 @@
->>   * can utilize this callback to initialize the state of it correctly.
->>   */
->>  
->> +#ifdef CONFIG_SPARSEMEM
->> +#define PAGE_EXT_INVALID       (0x1)
->> +#endif
->> +
->>  #if defined(CONFIG_PAGE_IDLE_FLAG) && !defined(CONFIG_64BIT)
->>  static bool need_page_idle(void)
->>  {
->> @@ -84,6 +89,7 @@ static struct page_ext_operations *page_ext_ops[] __initdata = {
->>  unsigned long page_ext_size = sizeof(struct page_ext);
->>  
->>  static unsigned long total_usage;
->> +static struct page_ext *lookup_page_ext(const struct page *page);
->>  
->>  static bool __init invoke_need_callbacks(void)
->>  {
->> @@ -125,6 +131,37 @@ static inline struct page_ext *get_entry(void *base, unsigned long index)
->>  	return base + page_ext_size * index;
->>  }
->>  
->> +/*
->> + * This function gives proper page_ext of a memory section
->> + * during race with the offline operation on a memory block
->> + * this section falls into. Not using this function to get
->> + * page_ext of a page, in code paths where extra refcount
->> + * is not taken on that page eg: pfn walking, can lead to
->> + * use-after-free access of page_ext.
-> I do not think this is really useful comment, it goes into way too much
-> detail about memory hotplug yet not enough to actually understand the
-> interaction because there are no references to the actual
-> synchronization scheme. I would go with something like:
+> My description wasn't precise. I mean the green ACT LED, which uses the LED
+> heartbeat trigger:
 > 
-> /*
->  * Get a page_ext associated with the given page. Returns NULL if
->  * no such page_ext exists otherwise ensures that the page_ext will
->  * stay alive until page_ext_put is called.
->  * This implies a non-sleeping context.
->  */
+> "This allows LEDs to be controlled by a CPU load average. The flash
+> frequency is a hyperbolic function of the 1-minute load average."
+> 
+> I'm not sure if it's CPU or IO driven load, here the top output in bad case:
+> 
+> top - 08:44:17 up 43 min,  2 users,  load average: 5,02, 5,45, 5,17
+> Tasks: 142 total,   1 running, 141 sleeping,   0 stopped,   0 zombie
+> %Cpu(s):  0,4 us,  0,4 sy,  0,0 ni, 49,0 id, 50,2 wa,  0,0 hi, 0,0 si,  0,0
+> st
+> MiB Mem :   7941,7 total,   4563,1 free,    312,7 used,   3066,0 buff/cache
+> MiB Swap:    100,0 total,    100,0 free,      0,0 used.   7359,6 avail Mem
 
-Will update as per the Matthew input @
-https://lore.kernel.org/all/YvplthTjM8Ez5DIq@casper.infradead.org/
->> + */
->> +struct page_ext *page_ext_get(struct page *page)
->> +{
->> +	struct page_ext *page_ext;
->> +
->> +	rcu_read_lock();
->> +	page_ext = lookup_page_ext(page);
->> +	if (!page_ext) {
->> +		rcu_read_unlock();
->> +		return NULL;
->> +	}
->> +
->> +	return page_ext;
->> +}
->> +
->> +/*
->> + * Must be called after work is done with the page_ext received
->> + * with page_ext_get().
->> + */
->> +
->> +void page_ext_put(void)
->> +{
->> +	rcu_read_unlock();
->> +}
-> Thinking about this some more I am not sure this is a good interface. It
-> doesn't have any reference to the actual object this is called for. This
-> is nicely visible in __folio_copy_owner which just calles page_ext_put()
-> twice because there are 2 page_exts and I can already see how somebody
-> might get confused this is just an error and send a patch to drop one of
-> them.
-> 
-> I do understand why you went this way because having a parameter which
-> is not used will likely lead to the same situation. On the other hand it
-> could be annotated to not raise warnings. One potential way to
-> workaround that would be
-> 
-> void page_ext_put(struct page_ext *page_ext)
-> {
-> 	if (unlikely(!page_ext))
-> 		return;
-> 	
-> 	rcu_read_unlock();
-> }
-> 
-> which would help to make the api slightly more robust in case somebody
-> does page_ext_put in a branch where page_ext_get returns NULL.
-> 
-Looks better. Will change this accordingly.
+OK, there's plenty of memory available, CPUs are mostly idle, the load is
+likely created by tasks waiting for IO (which also contribute to load
+despite not consuming CPU). Not much surprising here.
 
-> No strong opinion on that though. WDYI?
+> > Can you run "iostat -x 1" while the download is running so that we can see
+> > roughly how the IO pattern looks?
+> > 
+> Here the output during download:
 > 
->>  #ifndef CONFIG_SPARSEMEM
->>  
->>  
-> [...]
->> @@ -183,19 +184,26 @@ static inline void __set_page_owner_handle(struct page_ext *page_ext,
->>  noinline void __set_page_owner(struct page *page, unsigned short order,
->>  					gfp_t gfp_mask)
->>  {
->> -	struct page_ext *page_ext = lookup_page_ext(page);
->> +	struct page_ext *page_ext = page_ext_get(page);
->>  	depot_stack_handle_t handle;
->>  
->>  	if (unlikely(!page_ext))
->>  		return;
-> Either add a comment like this
-> 	/* save_stack can sleep in general so we have to page_ext_put */
-
-
-Vlastimil suggested to go for save stack first since !page_ext is mostly
-unlikely.  Snip from his comments:
-Why not simply do the save_stack() first and then page_ext_get() just
-once? It should be really rare that it's NULL, so I don't think we save
-much by avoiding an unnecessary save_stack(), while the overhead of
-doing two get/put instead of one will affect every call.
-
-https://lore.kernel.org/all/f5fd4942-b03e-1d1c-213b-9cd5283ced91@suse.cz/
->> +	page_ext_put();
->>  
->>  	handle = save_stack(gfp_mask);
-> or just drop the initial page_ext_get altogether. This function is
-> called only when page_ext is supposed to be initialized and !page_ext
-> case above should be very unlikely. Or is there any reason to keep this?
+> Device            r/s     w/s     rkB/s     wkB/s   rrqm/s wrqm/s  %rrqm 
+> %wrqm r_await w_await aqu-sz rareq-sz wareq-sz svctm  %util
+> mmcblk1          0,00    2,00      0,00     36,00     0,00 0,00   0,00  
+> 0,00    0,00 23189,50  46,38     0,00    18,00 500,00 100,00
 > 
-
-
->> +
->> +	/* Ensure page_ext is valid after page_ext_put() above */
->> +	page_ext = page_ext_get(page);
->> +	if (unlikely(!page_ext))
->> +		return;
->>  	__set_page_owner_handle(page_ext, handle, order, gfp_mask);
->> +	page_ext_put();
->>  }
->>  
-> [...]
->> @@ -558,13 +590,17 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
->>  		 */
->>  		handle = READ_ONCE(page_owner->handle);
->>  		if (!handle)
->> -			continue;
->> +			goto loop;
->>  
->>  		/* Record the next PFN to read in the file offset */
->>  		*ppos = (pfn - min_low_pfn) + 1;
->>  
->> +		memcpy(&page_owner_tmp, page_owner, sizeof(struct page_owner));
->> +		page_ext_put();
-> why not
-> 		page_owner_tmp = *page_owner;
-
-Done!!
+> avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+>            0,25    0,00    0,00   49,62    0,00   50,13
 > 
->>  		return print_page_owner(buf, count, pfn, page,
->> -				page_owner, handle);
->> +				&page_owner_tmp, handle);
->> +loop:
->> +		page_ext_put();
->>  	}
->>  
->>  	return 0;
+> Device            r/s     w/s     rkB/s     wkB/s   rrqm/s wrqm/s  %rrqm 
+> %wrqm r_await w_await aqu-sz rareq-sz wareq-sz svctm  %util
+> mmcblk1          0,00    2,00      0,00     76,00     0,00 0,00   0,00  
+> 0,00    0,00 46208,50  92,42     0,00    38,00 500,00 100,00
+> 
+> avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+>            0,25    0,00    0,00   49,62    0,00   50,13
+> 
+> Device            r/s     w/s     rkB/s     wkB/s   rrqm/s wrqm/s  %rrqm 
+> %wrqm r_await w_await aqu-sz rareq-sz wareq-sz svctm  %util
+> mmcblk1          0,00    3,00      0,00     76,00     0,00 0,00   0,00  
+> 0,00    0,00 48521,67 145,56     0,00    25,33 333,33 100,00
+> 
+> avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+>            0,25    0,00    0,00   49,62    0,00   50,13
+
+So this is interesting. We can see the card is 100% busy. The IO submitted
+to the card is formed by small requests - 18-38 KB per request - and each
+request takes 0.3-0.5s to complete. So the resulting throughput is horrible
+- only tens of KB/s. Also we can see there are many IOs queued for the
+device in parallel (aqu-sz columnt). This does not look like load I would
+expect to be generated by download of a large file from the web.
+
+You have mentioned in previous emails that with dd(1) you can do couple
+MB/s writing to this card which is far more than these tens of KB/s. So the
+file download must be doing something which really destroys the IO pattern
+(and with mb_optimize_scan=0 ext4 happened to be better dealing with it and
+generating better IO pattern). Can you perhaps strace the process doing the
+download (or perhaps strace -f the whole rpi-update process) so that we can
+see how does the load generated on the filesystem look like? Thanks!
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E267595A38
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E7E595A3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234571AbiHPLeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 07:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33698 "EHLO
+        id S234300AbiHPLen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 07:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234523AbiHPLdu (ORCPT
+        with ESMTP id S234622AbiHPLd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 07:33:50 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C557C1C5;
-        Tue, 16 Aug 2022 03:55:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1660647333; x=1692183333;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ydczOs/B4f5E5PAGhD2udvBxWaaSFQ2xVkQP9xvCjU8=;
-  b=oTQzoV7YDMSyipRcfysxVCwIl8eYAFhxbhN38G9QCUwVU3uvdQIleI3Y
-   kahM2iMEBPswwj0IV1VBo3vLipO+KGBwKQk/RzOk1LW3ddU+/zhIRYyaG
-   6gvqX25GasRvTci3lEtuPT4xwuEgZiL8wucqGTvfUMK+Nqbj8KKgVdCAG
-   sRzjlRJo4z3jisqf/Q2TTHc7/5qrjEUlE2MmSTUQZzczyOLnWPTYwpmzK
-   DEHibJwbYVuu5/hbktrOGBa6wuafzsPYk1uEvMBQaI2C8Eosd7X5Rjiat
-   +OPU6r6RUqtq004icNz/HguJ8K5MsofZEfpfRSrvXiFvauEsYsPI8IMQ6
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="169486516"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Aug 2022 03:55:32 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 16 Aug 2022 03:55:30 -0700
-Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Tue, 16 Aug 2022 03:55:24 -0700
-From:   Arun Ramadoss <arun.ramadoss@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Woojung Huh <woojung.huh@microchip.com>,
-        <UNGLinuxDriver@microchip.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        Tristram Ha <Tristram.Ha@microchip.com>
-Subject: [patch net v3] net: dsa: microchip: ksz9477: fix fdb_dump last invalid entry
-Date:   Tue, 16 Aug 2022 16:25:16 +0530
-Message-ID: <20220816105516.18350-1-arun.ramadoss@microchip.com>
-X-Mailer: git-send-email 2.36.1
+        Tue, 16 Aug 2022 07:33:58 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE7A66A53
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:55:49 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id l4so12122882wrm.13
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:55:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=UwGclAPKpRElqSb0slB3YI1UbidqkoclQLHrUzSqvlg=;
+        b=l/hcMAVKaPG6eBpWzxcJ+D86RTu1F1RNf1z1FDxlWs52NFbQP78T5n2830h/+N96dw
+         rtTdIPTYo6N/902CMQLhwYGKpo7c2qhfPOPc0aTMyVcwk2T+XCKBFIuuG5coJiZW9qFF
+         8+R05ypD4TX2lz0gcnosZTsZmSP2fU2/GE5BYN6T45Ja019z2tBMuNba+cm0a+6cruLV
+         j2+kcbTzCPHkLOKshZaT1cDHabbz9AGW04mdroXDxwxchbTrSsJWpcaVoh8YzHJQ3y0S
+         8ideVfspHwWwqN8E25VX+m3E5Ge4qUTBDtR05n/9FbfveAho27nIQlg8yZIHK2sB8Ldd
+         S2eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=UwGclAPKpRElqSb0slB3YI1UbidqkoclQLHrUzSqvlg=;
+        b=cVy2//kirj3yQb34YfVvWH1xhBJy+ttKmw+81IQ3Zy9R1HfQtva5Vj9yaYsmlGOY+0
+         wyBViSM7DvdzdKJBASQLTNUkI8HFsFhe1r3QFLj7NVP6bladK3mzFQr4XymWiDK6ghKA
+         CVukIn0Vj8jINJbl/m+UJqDnD9te1ZmoEuIXKpXNpU3Q/1Q3OnD4pCgyBcFZKzMgDWQU
+         aICATCXFt+vTCJjLjflAjCy6UknqfPN9nBTs4zvVIW0rYqdMW6vwe2stKq9CfTlWPvIT
+         TzKre79DHgFOpEhWgdR/xMmQknOSGyGfMOkiv9+IJf9DNPAl4HyAgBzPd9anw9w0LPBf
+         tjag==
+X-Gm-Message-State: ACgBeo0DsWSep1WYKehgQ7Tyx/PPTNYpi0YDdJ9fQtECkBZqtpmCYW08
+        z0qL3qLpbwSK6+hzBfZlkp6ewQ==
+X-Google-Smtp-Source: AA6agR7ORNMHdMKLRnaII7L2dXayQffVP+aZiQzPFLcwMcmQl3BOgRIrdp/Bqn4+pG6d67LysnHONQ==
+X-Received: by 2002:a5d:638b:0:b0:220:6e1a:8794 with SMTP id p11-20020a5d638b000000b002206e1a8794mr11440308wru.193.1660647347544;
+        Tue, 16 Aug 2022 03:55:47 -0700 (PDT)
+Received: from hackbox.lan ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id k2-20020a7bc402000000b003a32297598csm12362799wmi.43.2022.08.16.03.55.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 03:55:46 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [PATCH] misc: fastrpc: Use USER_PD define in fastrpc_get_info_from_dsp
+Date:   Tue, 16 Aug 2022 13:55:28 +0300
+Message-Id: <20220816105528.3222763-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,45 +71,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the ksz9477_fdb_dump function it reads the ALU control register and
-exit from the timeout loop if there is valid entry or search is
-complete. After exiting the loop, it reads the alu entry and report to
-the user space irrespective of entry is valid. It works till the valid
-entry. If the loop exited when search is complete, it reads the alu
-table. The table returns all ones and it is reported to user space. So
-bridge fdb show gives ff:ff:ff:ff:ff:ff as last entry for every port.
-To fix it, after exiting the loop the entry is reported only if it is
-valid one.
+There are defines for each type of protection domain now.
+Use the USER_PD instead of magic value in fastrpc_get_info_from_dsp.
 
-Fixes: b987e98e50ab ("dsa: add DSA switch driver for Microchip KSZ9477")
-Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: Amol Maheshwari <amahesh@qti.qualcomm.com>
 ---
-changes in v3
-- changed the subject from net-next to net
+ drivers/misc/fastrpc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-changes in v2
-- changed the fixes commit id
-- reduced the indentation level by using ! and continue statement
-
- drivers/net/dsa/microchip/ksz9477.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-index 4b14d80d27ed..e4f446db0ca1 100644
---- a/drivers/net/dsa/microchip/ksz9477.c
-+++ b/drivers/net/dsa/microchip/ksz9477.c
-@@ -613,6 +613,9 @@ int ksz9477_fdb_dump(struct ksz_device *dev, int port,
- 			goto exit;
- 		}
+diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+index 93ebd174d848..8895ca593911 100644
+--- a/drivers/misc/fastrpc.c
++++ b/drivers/misc/fastrpc.c
+@@ -1515,7 +1515,7 @@ static int fastrpc_get_info_from_dsp(struct fastrpc_user *fl, uint32_t *dsp_attr
+ 	args[1].ptr = (u64)(uintptr_t)&dsp_attr_buf[1];
+ 	args[1].length = dsp_attr_buf_len;
+ 	args[1].fd = -1;
+-	fl->pd = 1;
++	fl->pd = USER_PD;
  
-+		if (!(ksz_data & ALU_VALID))
-+			continue;
-+
- 		/* read ALU table */
- 		ksz9477_read_table(dev, alu_table);
- 
-
-base-commit: 7ebfc85e2cd7b08f518b526173e9a33b56b3913b
+ 	return fastrpc_internal_invoke(fl, true, FASTRPC_DSP_UTILITIES_HANDLE,
+ 				       FASTRPC_SCALARS(0, 1, 1), args);
 -- 
-2.36.1
+2.34.1
 

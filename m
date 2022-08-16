@@ -2,95 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9CE2596598
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0319059659D
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237477AbiHPWmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 18:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
+        id S237501AbiHPWqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 18:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiHPWmV (ORCPT
+        with ESMTP id S230056AbiHPWqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 18:42:21 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B6A90815;
-        Tue, 16 Aug 2022 15:42:20 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id q19so10572952pfg.8;
-        Tue, 16 Aug 2022 15:42:20 -0700 (PDT)
+        Tue, 16 Aug 2022 18:46:12 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597D9910A5
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 15:46:11 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id r16so5034183wrm.6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 15:46:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=JgdM6PCu4xquExA3dHL+HJQyYf6q82sc1qa9WCQu3gg=;
-        b=ZnzfzCZP/hNebeixm1qHo6YLgGhuGVkdNxUrDCvXage6xxIo8K5aYhuJBElHwXNlGD
-         H7keXWn5xtNUsKJC7oB1DZSN60uAjV9ILO1hz2+KPHr2sHx5qWwJHXgI7wHHT2zkeqHW
-         RiRpchXpmgnqfXD4eL2i64a0Hso7KLbH8dJN218q6cXEjhPb4wObLbDn3rmBxwabtVOm
-         8nOeFT4lj4HIMxMj9Jp65P8fzonyI6PwwFnSvn1dkH7ZNO3JOaiu/8HIOJVtKw+dhMLJ
-         QDhUKcrNUf6IgmCAkR9wz/GM0KLrx3hcKz0Gpr8FvgMKMGYcZqOaBTL3QcDH8uL504d+
-         1tFw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=s8pSl43fKh9JnCgmD3zX1WMUhwtcyLQMOInMOIHCWPM=;
+        b=thGApBqcLsCEmh3pIRfPPTjA3/bLHUE0lVp6KZuhpZ8/XaxKjSsw2BgdMdYpP7ymnM
+         ESvhyZMAMxvD3tRAEHWhsBP4GBQ7bWNSFVOiHm8hVtj7TtWfbSO7esaMlrJdPbZVLxNL
+         CYhy1R0vjrjAWOGyIkBU1oDpc7QJ07rRnQEI96teV0fQ7kB206wfqAtWu/n5JTBwin+Y
+         gfYvRzKW0pP5oI6tx+cfkf8sbbDsqbDcDAmH/p3uB1UdWO0XuhgPb1atJCwrJPXkl4ZR
+         z7vyDT8KVdEDBNzSqmC9WOKYvYldB8VcollbxJa2iys4s4DTw12zi5MwFE7uJjE7PIWS
+         1jNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=JgdM6PCu4xquExA3dHL+HJQyYf6q82sc1qa9WCQu3gg=;
-        b=qplVCjGsAITLY34AH/Cmh4AroPyz8wq0PrKTKK4pw0bHH3GzvWIlFpcxHxCMPo/elV
-         R9MhZbncl6H5RiFTYn6n+w0hZwQeFdhShHau7kxfxpxakh9r0B+QB8GSPMIxqdvKY+n0
-         7gfwuG4emfQPQq8r+MhBwAe9cTEhh2n+KCq+F8/7k1XXcq8PyAtluynN97lKOQSm7pkT
-         aeV3NNtyjcBcFzbKhBomRXdL61RBhZPVcKtHdNqgzi89O8+z4IHScaV6sMtR1dZy4H4k
-         eZZyx9N18Hi7jzfkMRlIddQELhN7ehH/5GXbsq+J0v+dZN/DB28Ja0vq06K2tnUVgPUi
-         GwEA==
-X-Gm-Message-State: ACgBeo1GrMLkGt6BmlFH/d12btcWpf3+EJ55aUip2OdfGH7BrWYJOC/i
-        N2TJ5ARHO/WRjwhK8nyCBoM=
-X-Google-Smtp-Source: AA6agR7oV11+9KJzqokY0E/MJ+Ti4nqWQcmG7NQZdyHrFhYegwzn8YN4NXJNs8GuY6k9mwbRJ1loTA==
-X-Received: by 2002:a63:1857:0:b0:41c:4217:426e with SMTP id 23-20020a631857000000b0041c4217426emr19565486pgy.285.1660689740295;
-        Tue, 16 Aug 2022 15:42:20 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:7229])
-        by smtp.gmail.com with ESMTPSA id m13-20020a170902db0d00b0016c46ff9741sm9656054plx.67.2022.08.16.15.42.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 15:42:19 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 16 Aug 2022 12:42:18 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Imran Khan <imran.f.khan@oracle.com>
-Cc:     gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [RESEND PATCH 4/5] kernfs: Replace per-fs rwsem with hashed
- rwsems.
-Message-ID: <YvwdShstDCK+uQ+R@slm.duckdns.org>
-References: <20220810111017.2267160-1-imran.f.khan@oracle.com>
- <20220810111017.2267160-5-imran.f.khan@oracle.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=s8pSl43fKh9JnCgmD3zX1WMUhwtcyLQMOInMOIHCWPM=;
+        b=zBc4T9j4rfgu2+xQF6+eLZNfoWrPjaf83cFbkBIhBJJxrPZ3U2ZRoVXZNbbQlIoNl0
+         sQNMQRhoaV9vlr0yOh2NXeD118A+iu/PuGEjIypYXXWKqareNNtT3a8hGCEdCQziEPa+
+         rWanUjA75qbkw55bh9Np3DjPOapMSuYbjrh1DHuonUB4vhsybF/UemVXpaT7HZGp1KlW
+         i6ICxq10FXff8cQjAQS5/Sc9cuVsakp3pasTfCb3jFjnGWalIWxzEmlOG8wAtEwBXOH5
+         D0sgXwApXIdF43a7QVPYZaUAHC65foXUF2kovaDk2GdYmG+Rr8UsZj3gK2Ys15gHoLig
+         K+wQ==
+X-Gm-Message-State: ACgBeo0p8NPQRMV5aJud95NVP3qj8R2OijWjovMoQVNDzGWvHxlUU+AM
+        2LP3ZTF8EFH74A6Q1ZQa2bmdOEGyuZiFpsc7H3/S8A==
+X-Google-Smtp-Source: AA6agR5YDZNX8BGW0we+ymcE37/vFJkAbxtvIx5oh+8aSvN3oBazJLky1o2ZU3nNXabaqECW4fCIGnOv1/Bxx2ETrTo=
+X-Received: by 2002:a05:6000:11d0:b0:225:1c12:65f8 with SMTP id
+ i16-20020a05600011d000b002251c1265f8mr2254049wrx.80.1660689969725; Tue, 16
+ Aug 2022 15:46:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220810111017.2267160-5-imran.f.khan@oracle.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220816185801.651091-1-shy828301@gmail.com> <CALvZod5t7Qo1NQ040pRyWco+nJGn3hSrxZyuFQ0UBi31Ni6=_g@mail.gmail.com>
+In-Reply-To: <CALvZod5t7Qo1NQ040pRyWco+nJGn3hSrxZyuFQ0UBi31Ni6=_g@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 16 Aug 2022 15:45:33 -0700
+Message-ID: <CAJD7tkZrQZ8CR0E0vKnXGWFLPChxFmNaSQUkFAm1icnGnE6Tew@mail.gmail.com>
+Subject: Re: [PATCH] mm: memcg: export workingset refault stats for cgroup v1
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Yang Shi <shy828301@gmail.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Aug 16, 2022 at 3:06 PM Shakeel Butt <shakeelb@google.com> wrote:
+>
+> On Tue, Aug 16, 2022 at 11:58 AM Yang Shi <shy828301@gmail.com> wrote:
+> >
+> > Workingset refault stats are important and usefule metrics to measure
+> > how well reclaimer and swapping work and how healthy the services are,
+> > but they are just available for cgroup v2.  There are still plenty users
+> > with cgroup v1, export the stats for cgroup v1.
+> >
+> > Signed-off-by: Yang Shi <shy828301@gmail.com>
+> > ---
+> > I do understand the development of cgroup v1 is actually stalled and
+> > the community is reluctant to accept new features for v1.  However
+> > the workingset refault stats are really quite useful and exporting
+> > two new stats, which have been supported by v2, seems ok IMHO.  So
+> > hopefully this patch could be considered.  Thanks.
+> >
+>
+> Is just workingset refault good enough for your use-case? What about
+> the other workingset stats? I don't have a strong opinion against
+> adding these to v1 and I think these specific stats should be fine.
+> (There is subtlety in exposing objcg based stats (i.e. reparenting) in
+> v1 due to non-hierarchical stats in v1. I remember Yosry and Muchun
+> were looking into that.)
 
-I'm bandwidth constrained right now and can't really shepherd this patchset,
-so I'm not gonna ack or nack the series. That said, here are my thoughts
-after glancing through it:
-
-* I find the returning-with-rwsem-held interface and usage odd. We return
-  with locks held all the time, so that part in itself is fine but how it's
-  used in the proposed patch is pretty alien.
-
-* I don't understand why the topo_mutex is needed. What is its relationship
-  with rename_lock?
-
-* Can't the double/triple lock helpers loop over the sorted list instead of
-  if'ing each case?
-
-Thanks.
-
--- 
-tejun
+I think only kernel memory stats and zswap stats are objcg-based at
+this point, right? The workingset refault stats seem to be memcg-based
+and should not face the reparenting problem.

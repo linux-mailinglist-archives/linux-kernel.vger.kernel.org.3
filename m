@@ -2,87 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AAD7595760
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF12C595749
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:57:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234041AbiHPKBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
+        id S233985AbiHPJ5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234037AbiHPKAI (ORCPT
+        with ESMTP id S234113AbiHPJ4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:00:08 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C574C45053;
-        Tue, 16 Aug 2022 02:01:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rFcsh5EaXMjyQvBz6Px9JuV8hMB5E551U26Ntc3NwIA=; b=GJchraaCp4Klmfi3ZVHxYa9oRu
-        b4agUH2uWZUTGNSV7SBi9fApi/iBoiVncfCPPHT8N/smFMxxCHdxc2qJL0NAbVmP78DMRliIAybve
-        8oFbik7+x32aIcWla7kp5/4bFOB86cScaS8UEumAsr9W+yElrNSfNFCf5pwnIHawItattmLVPtF9Q
-        nfyPrB4EWP+fCEnqnTrsY0Kxaw8X+ypYlJQyIHjy3clqn11hb/eScLGNIiJg3D3XNKZAnZcpbMVi5
-        Sl+UKBGD4B3ss+b8KxyJ1OrSsUMsYYCNDfajqcuNNHcv/f0zui+onWZGz0gCItg5Kw8bJdifIBHG8
-        +E+BKhcw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oNsRn-002ufq-7J; Tue, 16 Aug 2022 09:01:15 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 6E714980083; Tue, 16 Aug 2022 11:01:14 +0200 (CEST)
-Date:   Tue, 16 Aug 2022 11:01:14 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Davidlohr Bueso <dave@stgolabs.net>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
-        bwidawsk@kernel.org, ira.weiny@intel.com, vishal.l.verma@intel.com,
-        alison.schofield@intel.com, a.manzanares@samsung.com,
-        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, bp@alien8.de, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arch/cacheflush: Introduce flush_all_caches()
-Message-ID: <Yvtc2u1J/qip8za9@worktop.programming.kicks-ass.net>
-References: <165791918718.2491387.4203738301057301285.stgit@djiang5-desk3.ch.intel.com>
- <165791937063.2491387.15277418618265930924.stgit@djiang5-desk3.ch.intel.com>
- <20220718053039.5whjdcxynukildlo@offworld>
- <4bedc81d-62fa-7091-029e-a2e56b4f8f7a@intel.com>
- <20220803183729.00002183@huawei.com>
- <9f3705e1-de21-0f3c-12af-fd011b6d613d@intel.com>
- <YvO8pP7NUOdH17MM@FVFF77S0Q05N>
- <62f40fba338af_3ce6829466@dwillia2-xfh.jf.intel.com.notmuch>
- <20220815160706.tqd42dv24tgb7x7y@offworld>
+        Tue, 16 Aug 2022 05:56:16 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A71E30556;
+        Tue, 16 Aug 2022 02:02:30 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id o14so5055579ilt.2;
+        Tue, 16 Aug 2022 02:02:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=9HxXIhlJ8egb+tUhCrrqxA/twApe2EwzTrM2sMlQQzE=;
+        b=GhjmGk3SkLWdGC6hiDpPT7eKuLZO8Lx9BJgpNsKi16+G1De2HNSVvNTleAnQpbWgFe
+         /lpzlSCy7JYg+wjvpiuoqUYNhkq4hVMsnK/1DA16tZkfO77VUgjGispkBUAx+1xiDnCz
+         aec0AKrdXZDsRMoLNmfeNwkK0R6sy7GeARPAUll6nYxFpopNLG+CNNLOqyF7msEnseCY
+         rV9vuvtQCzrI0EID1KS9KvSJ3wgmIGBNmRk1fDUSFbwQNu3bPFzrwN78uQO2yMZBm+mi
+         NpOKtL3CvkD6oeF5xR6Fj6Ld1ahlv1jZgAf9qs8LwRuwHzD/ke9fSg0h4MbUwyGUSslb
+         VyLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=9HxXIhlJ8egb+tUhCrrqxA/twApe2EwzTrM2sMlQQzE=;
+        b=vVG2nUVDVcP9vbeusOC1dODXytBMmtbt6TyfP68MVU+1LFzcFb/veF7n2akE7mm2Ee
+         VILicmJYsoBf5LlZCxn+MiMsyhlNBsFWS+AhgU5yZYu1Pp9LYJe/hAm61P1ikbjONYDm
+         dL5Ft33gqHBg+Zg3Dt6bPLedcgeD0EyhK+eSjF1EPQiKAoFg4fheGTL0dhqmwp0oSfxK
+         zzExiBJxz5KzB4bNuAX+W0AXCdLUWN2Eul4oLML/ItzDcR//DI5+UMkjsqxJnLSyO6gq
+         4FEYO3TVEOFUxAJZFOuWEzIT9002FnFjGdY/I65VpKAC24Zrz8zV+ky6fzDLJTd98JEv
+         YLvg==
+X-Gm-Message-State: ACgBeo1F8VBL8q5GHNwcZuzRlZC4qlkVQ+WWXFFhFj/KZk7rlIjivoin
+        swHCif8sBKZvVn4W4WWZCgXhkK/DvDGJ2Uybqo8=
+X-Google-Smtp-Source: AA6agR6vrFP8ihEQ/t5hzL2CGHbBK/VDTFu94MFdeRo6ma61vC0x8/MWQTOphRW6mllMw8pv8V8062edXmTR4HqUVqs=
+X-Received: by 2002:a05:6e02:1c26:b0:2e0:d8eb:22d6 with SMTP id
+ m6-20020a056e021c2600b002e0d8eb22d6mr9161577ilh.151.1660640550007; Tue, 16
+ Aug 2022 02:02:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815160706.tqd42dv24tgb7x7y@offworld>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220816032846.2579217-1-imagedong@tencent.com>
+In-Reply-To: <20220816032846.2579217-1-imagedong@tencent.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 16 Aug 2022 11:02:19 +0200
+Message-ID: <CANiq72mQpZ-z1vVeOwdaOB3b=jjQHtPwz3-jaPRV330-yL_FqQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v4] net: skb: prevent the split of
+ kfree_skb_reason() by gcc
+To:     menglong8.dong@gmail.com
+Cc:     kuba@kernel.org, ojeda@kernel.org, ndesaulniers@google.com,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        asml.silence@gmail.com, imagedong@tencent.com,
+        luiz.von.dentz@intel.com, vasily.averin@linux.dev,
+        jk@codeconstruct.com.au, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 09:07:06AM -0700, Davidlohr Bueso wrote:
-> diff --git a/arch/x86/include/asm/cacheflush.h b/arch/x86/include/asm/cacheflush.h
-> index b192d917a6d0..ce2ec9556093 100644
-> --- a/arch/x86/include/asm/cacheflush.h
-> +++ b/arch/x86/include/asm/cacheflush.h
-> @@ -10,4 +10,7 @@
-> 
->  void clflush_cache_range(void *addr, unsigned int size);
-> 
-> +#define flush_all_caches() \
-> +	do { wbinvd_on_all_cpus(); } while(0)
-> +
+On Tue, Aug 16, 2022 at 5:29 AM <menglong8.dong@gmail.com> wrote:
+>
+> Reported-by: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
 
-This is horrific... we've done our utmost best to remove all WBINVD
-usage and here you're adding it back in the most horrible form possible
-?!?
+Hmm... Why did you add me as a reporter?
 
-Please don't do this, do *NOT* use WBINVD.
+> + * Optional: not supported by clang.
+> + * Optional: not supported by icc.
+
+Much better, thank you! Please add the links to GCC's docs, like in
+most attributes (some newer attributes may have been added without
+them -- I will fix that).
+
+In any case, no need to send a new version just for this for the
+moment, I would recommend waiting until others comment on whether they
+want `__optimize__` used here as the workaround.
+
+Cheers,
+Miguel

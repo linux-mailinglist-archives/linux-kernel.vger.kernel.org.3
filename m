@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CEF5957CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:15:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16DB5957BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234144AbiHPKPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33480 "EHLO
+        id S234050AbiHPKNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234365AbiHPKO2 (ORCPT
+        with ESMTP id S232536AbiHPKNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:14:28 -0400
+        Tue, 16 Aug 2022 06:13:14 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE53D6B86
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:37:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3E695AE2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:37:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660642666; x=1692178666;
+  t=1660642667; x=1692178667;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=YbTZ5iIy9piEvqt+t49zjJcJD4S60yZwdImbMwTaINQ=;
-  b=LzBVBZ1i9ynbky0ifrIIeD2XlLNxy7Q9eNNAgAGbyQP+qkZHSzCB8la6
-   GBMGFK/GFdYNNVuiGXKFgltEXrE4x++K336BFoUQg1Jeu1lpXc8rYZNRG
-   9L84Bk+pdK1CiVkcinnyMCGAcPS3zFfbvS4vPfvsgC1tUw5GN0mNdKE+I
-   P54pjZYEpVkyCK24+b5YXlABNts6NdR0UdYz2u9YjxCaDdT97uYyDgLU0
-   rjGjPn2orrAXUjbkJjigeOMuD82BIz47MccJsmFVj5v7B7SSNv3CVixEI
-   +BsfbFwzs/Af9S9VoIxm1GxKuM3nA+iUeXcC5IOffIynBPNjcE9bi16v2
+  bh=KrqKUXm8zxAx+xUgfzAnf90BYMAv5LCjSDW1jp1aEC0=;
+  b=llpqdswoa72rVBSJ3Rx7iBeeRYOENriFNniRvngpF/mkuJZTIT9XzO4/
+   qtOZb4SpXcXVlINFiTYGrFTB9BUeGi8a+sw8mQXmXdkbLzSsBSf0AMX6C
+   Bq69R2i5Gas2MotgE3JJdAgN8b9NykmXxYmNe2NcVkfIMM3QFNAcrOnb5
+   yfjKL7/gfwrIQjv5MMwumoepKwZrvA3u0SCuXdqvs+d0R6FaMZdUCVEth
+   dTesajAavFLtTYFLxUH5+rfV/g5oBMfNGg0NlIcak688s2r/2wHEG9xEx
+   28U37sPxMidR7D/WWp7LPgN52lanqwSvRUa487+ROoXDHtk14mAbNR+bW
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="293446823"
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="293446834"
 X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="293446823"
+   d="scan'208";a="293446834"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 02:35:58 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 02:36:00 -0700
 X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="733231051"
+   d="scan'208";a="733231060"
 Received: from clbarnes-mobl.amr.corp.intel.com (HELO paris.amr.corp.intel.com) ([10.254.7.166])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 02:35:55 -0700
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 02:35:58 -0700
 From:   Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
 To:     intel-gfx@lists.freedesktop.org
 Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
@@ -45,9 +45,9 @@ Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         jani.nikula@intel.com, nirmoy.das@intel.com, airlied@linux.ie,
         daniel@ffwll.ch, andi.shyti@linux.intel.com,
         andrzej.hajda@intel.com
-Subject: [PATCH v7 5/8] drm/i915: Check for integer truncation on the configuration of ttm place
-Date:   Tue, 16 Aug 2022 18:35:22 +0900
-Message-Id: <20220816093525.184940-6-gwan-gyeong.mun@intel.com>
+Subject: [PATCH v7 6/8] drm/i915: Check if the size is too big while creating shmem file
+Date:   Tue, 16 Aug 2022 18:35:23 +0900
+Message-Id: <20220816093525.184940-7-gwan-gyeong.mun@intel.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220816093525.184940-1-gwan-gyeong.mun@intel.com>
 References: <20220816093525.184940-1-gwan-gyeong.mun@intel.com>
@@ -64,98 +64,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is an impedance mismatch between the first/last valid page
-frame number of ttm place in unsigned and our memory/page accounting in
-unsigned long.
-As the object size is under the control of userspace, we have to be prudent
-and catch the conversion errors.
-To catch the implicit truncation as we switch from unsigned long to
-unsigned, we use overflows_type check and report E2BIG or overflow_type
-prior to the operation.
+The __shmem_file_setup() function returns -EINVAL if size is greater than
+MAX_LFS_FILESIZE. To handle the same error as other code that returns
+-E2BIG when the size is too large, it add a code that returns -E2BIG when
+the size is larger than the size that can be handled.
 
-v3: Not to change execution inside a macro. (Mauro)
-    Add safe_conversion_gem_bug_on() macro and remove temporal
-    SAFE_CONVERSION() macro.
-v4: Fix unhandled GEM_BUG_ON() macro call from safe_conversion_gem_bug_on()
-v6: Fix to follow general use case for GEM_BUG_ON(). (Jani)
-v7: Fix to use WARN_ON() macro where GEM_BUG_ON() macro was used. (Jani)
+v4: If BITS_PER_LONG is 32, size > MAX_LFS_FILESIZE is always false, so it
+    checks only when BITS_PER_LONG is 64.
 
 Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
 Cc: Chris Wilson <chris@chris-wilson.co.uk>
 Cc: Matthew Auld <matthew.auld@intel.com>
 Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-Cc: Jani Nikula <jani.nikula@intel.com>
-Reviewed-by: Nirmoy Das <nirmoy.das@intel.com> (v2)
-Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org> (v3)
+Reviewed-by: Nirmoy Das <nirmoy.das@intel.com>
+Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Reported-by: kernel test robot <lkp@intel.com>
-Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com> (v5)
+Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
 ---
- drivers/gpu/drm/i915/gem/i915_gem_ttm.c |  6 +++---
- drivers/gpu/drm/i915/intel_region_ttm.c | 17 ++++++++++++++---
- 2 files changed, 17 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/i915/gem/i915_gem_shmem.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-index 9f2be1892b6c..69805cbe850c 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-@@ -140,14 +140,14 @@ i915_ttm_place_from_region(const struct intel_memory_region *mr,
- 	if (flags & I915_BO_ALLOC_CONTIGUOUS)
- 		place->flags |= TTM_PL_FLAG_CONTIGUOUS;
- 	if (offset != I915_BO_INVALID_OFFSET) {
--		place->fpfn = offset >> PAGE_SHIFT;
--		place->lpfn = place->fpfn + (size >> PAGE_SHIFT);
-+		WARN_ON(!safe_conversion(&place->fpfn, offset >> PAGE_SHIFT));
-+		WARN_ON(!safe_conversion(&place->lpfn, place->fpfn + (size >> PAGE_SHIFT)));
- 	} else if (mr->io_size && mr->io_size < mr->total) {
- 		if (flags & I915_BO_ALLOC_GPU_ONLY) {
- 			place->flags |= TTM_PL_FLAG_TOPDOWN;
- 		} else {
- 			place->fpfn = 0;
--			place->lpfn = mr->io_size >> PAGE_SHIFT;
-+			WARN_ON(!safe_conversion(&place->lpfn, mr->io_size >> PAGE_SHIFT));
- 		}
- 	}
- }
-diff --git a/drivers/gpu/drm/i915/intel_region_ttm.c b/drivers/gpu/drm/i915/intel_region_ttm.c
-index 575d67bc6ffe..c8c6c2e22e01 100644
---- a/drivers/gpu/drm/i915/intel_region_ttm.c
-+++ b/drivers/gpu/drm/i915/intel_region_ttm.c
-@@ -209,14 +209,23 @@ intel_region_ttm_resource_alloc(struct intel_memory_region *mem,
- 	if (flags & I915_BO_ALLOC_CONTIGUOUS)
- 		place.flags |= TTM_PL_FLAG_CONTIGUOUS;
- 	if (offset != I915_BO_INVALID_OFFSET) {
--		place.fpfn = offset >> PAGE_SHIFT;
--		place.lpfn = place.fpfn + (size >> PAGE_SHIFT);
-+		if (WARN_ON(!safe_conversion(&place.fpfn, offset >> PAGE_SHIFT))) {
-+			ret = -E2BIG;
-+			goto out;
-+		}
-+		if (WARN_ON(!safe_conversion(&place.lpfn, place.fpfn + (size >> PAGE_SHIFT)))) {
-+			ret = -E2BIG;
-+			goto out;
-+		}
- 	} else if (mem->io_size && mem->io_size < mem->total) {
- 		if (flags & I915_BO_ALLOC_GPU_ONLY) {
- 			place.flags |= TTM_PL_FLAG_TOPDOWN;
- 		} else {
- 			place.fpfn = 0;
--			place.lpfn = mem->io_size >> PAGE_SHIFT;
-+			if (WARN_ON(!safe_conversion(&place.lpfn, mem->io_size >> PAGE_SHIFT))) {
-+				ret = -E2BIG;
-+				goto out;
-+			}
- 		}
- 	}
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
+index 4cb35808e431..4a7a6d65fc7a 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
+@@ -541,6 +541,20 @@ static int __create_shmem(struct drm_i915_private *i915,
  
-@@ -224,6 +233,8 @@ intel_region_ttm_resource_alloc(struct intel_memory_region *mem,
- 	mock_bo.bdev = &mem->i915->bdev;
+ 	drm_gem_private_object_init(&i915->drm, obj, size);
  
- 	ret = man->func->alloc(man, &mock_bo, &place, &res);
++	/* XXX: The __shmem_file_setup() function returns -EINVAL if size is
++	 * greater than MAX_LFS_FILESIZE.
++	 * To handle the same error as other code that returns -E2BIG when
++	 * the size is too large, we add a code that returns -E2BIG when the
++	 * size is larger than the size that can be handled.
++	 * If BITS_PER_LONG is 32, size > MAX_LFS_FILESIZE is always false,
++	 * so we only needs to check when BITS_PER_LONG is 64.
++	 * If BITS_PER_LONG is 32, E2BIG checks are processed when
++	 * i915_gem_object_size_2big() is called before init_object() callback
++	 * is called.
++	 */
++	if (BITS_PER_LONG == 64 && size > MAX_LFS_FILESIZE)
++		return -E2BIG;
 +
-+out:
- 	if (ret == -ENOSPC)
- 		ret = -ENXIO;
- 	if (!ret)
+ 	if (i915->mm.gemfs)
+ 		filp = shmem_file_setup_with_mnt(i915->mm.gemfs, "i915", size,
+ 						 flags);
 -- 
 2.37.1
 

@@ -2,273 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D20595347
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 09:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6DF59535E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 09:06:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231460AbiHPHCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 03:02:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44848 "EHLO
+        id S231513AbiHPHGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 03:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbiHPHBI (ORCPT
+        with ESMTP id S231531AbiHPHFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 03:01:08 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B20D7B2B7
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 19:27:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660616866; x=1692152866;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3FImA/E6G053fIq/POKgHEjV0v+LDdMCfjkEKjJD9/Y=;
-  b=IsU9Cvf5xW6evxBJ+Jt7kocxBFhX1RGldjAbBsxGtF34r6swxItejQjG
-   M34l911z52yIJQ/uOMWd695HKf+z0B/Q0pqdOpL4IddawRiyJVBCar7ah
-   /5lo74LGgw/yZrXQtUDn6ZABQkZiPlDlwFuvjQWdj7sT+o+smG7d7zwbL
-   Dua1eX9sjzNsYXRc2iEKgvLlZCZnPspMsWcvtjGduB++RuEgVhm1XOdWd
-   +EkVy/ugOcFoKNH724VLNo3TitJlTuyQHic5HiJpglufmjk+86aPBaLcQ
-   oU/h+nqhTaaISLgPi14d/vfZubpcoAGo70JxUHh35sxm+HAWF7J4LO21c
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="356109745"
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="356109745"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 19:27:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="749141964"
-Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Aug 2022 19:27:43 -0700
-Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oNmIw-0001NP-2v;
-        Tue, 16 Aug 2022 02:27:42 +0000
-Date:   Tue, 16 Aug 2022 10:27:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/070-audio 12/16] sound/soc/codecs/cs42l84.c:264:3:
- error: field designator 'non_legacy_dai_naming' does not refer to any field
- in type 'const struct snd_soc_component_driver'; did you mean
- 'legacy_dai_naming'?
-Message-ID: <202208161047.O1zmHDKj-lkp@intel.com>
+        Tue, 16 Aug 2022 03:05:13 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2070.outbound.protection.outlook.com [40.107.92.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31079B9FBB
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 19:33:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E2n0/Djh6PpuR4TGp53uNXG7ZyEoF2zrIGoMjqs7hWXSRoARRIcaC5WqEdjz5zyLlN5MmwyYC+N3q0nyeLAhVxDJAwNTboQqG07QDSRS5lw/qqdToyJyTtAuEKIF/+qyzrnW4XFQy2o+XVRBa7EuHZOQMECB/dS8WnDqt7o+OTAvKnowxwIEuaCzPHAU34gm+dVmOJV165gXX3v607+s4V7lYisc2Q6fEnQXY3folgr8dIWHN4Y9dT55+st0gm/1BkbbRlqI5TyWeWa9/iPHdpztBHgdKVkqH/Nnp6XLxu663H5DjMLixGycLwzjgHrzVtUW74gO4tPv2BKGRGprMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YUPzT22fGn7wCkQYvJ03rqj9HFW9xZ+DTw+Bt82JWvs=;
+ b=VPBWo+vhAlUKKj2Ajggg63+jZNhQI4w4r6x+AtSX/1sbDxkk2muz9PO2USOJFfKDnNnlA6vKQQFopxsBSzzgwv8QQVUNHfusR3XgvhVqNoZye3Gknz/rmflosmER95VnbC0VeK+rxDC91q0khcg7Ih3nnaS/zdIohQLk5v/yQNDd0oNfa/wMYYIcEYkTQnfC8EggshgLdNXDgaLxG3UMVz4ZZceLNuJOt+GPKiXuUGhOf1GpyY7BpgiXo9lPyWQYlUsLdbaySj10HFvR6IT3tTJgQzE/rZNISVhQnfI+GfG3sG1WmQW/SkYD5ZogOy4WnO1/+rToma6Q+KZZ80E5XQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YUPzT22fGn7wCkQYvJ03rqj9HFW9xZ+DTw+Bt82JWvs=;
+ b=ojOPqNDS7Wcy7pR/4G6wShzycvG3wJGnSmNbEzBR58t/Xc9aUBxdEmJQ0F2P1iqlv+mIwpYtzLsAYo1xZWG/4pmcKqSCmTo33AY2Xy2iSrOmPrdKfz7YgF1nNsm7+Zzuj2JpPerWbrfUq7Oe4jINqpw+xAk9cQUpBr9jtnUb5mBnRLQe5EWXRBiSP3YpEaQl20rfEjKmHO7+EVPpa9xxI7LCy9tng7TVfAvxYnmUBcqs12rwpPQGiHL46cbTx1WI2mDf3TGodq3vA1T3hcSFwBTOWSEKI1p8+/vRrvKZGFrj6v/dSXmbTYjfi5I5P90wUrQEX3y/x35ZdKZLoXMfrQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by BN6PR12MB1330.namprd12.prod.outlook.com (2603:10b6:404:1e::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Tue, 16 Aug
+ 2022 02:33:13 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::eca6:a4a7:e2b2:27e7]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::eca6:a4a7:e2b2:27e7%5]) with mapi id 15.20.5504.027; Tue, 16 Aug 2022
+ 02:33:12 +0000
+References: <a9daea363991c023d0364be22a762405b6c6f5c4.1660281458.git-series.apopple@nvidia.com>
+ <CAC=cRTON4s6LJ+09mg4SxMjNirBih3QSt6cr10gNjs3k0o+BgQ@mail.gmail.com>
+User-agent: mu4e 1.6.9; emacs 27.1
+From:   Alistair Popple <apopple@nvidia.com>
+To:     huang ying <huang.ying.caritas@gmail.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>, linuxram@us.ibm.com,
+        paulus@ozlabs.org, Peter Xu <peterx@redhat.com>
+Subject: Re: [PATCH 1/2] mm/migrate_device.c: Copy pte dirty bit to page
+Date:   Tue, 16 Aug 2022 12:28:56 +1000
+In-reply-to: <CAC=cRTON4s6LJ+09mg4SxMjNirBih3QSt6cr10gNjs3k0o+BgQ@mail.gmail.com>
+Message-ID: <87r11gvrx6.fsf@nvdebian.thelocal>
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR13CA0048.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c2::23) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 91c81508-ed97-44db-1aeb-08da7f2faa63
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1330:EE_
+X-LD-Processed: 43083d15-7273-40c1-b7db-39efd9ccc17a,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zRri6IplTZfOlvt5u3pY8OREUDom100NSA82IRcfuMG1PcsSPkYDpM/eTamPZvtq8A7Wkt+VOC4t3lYzd3ylpw6Cfow2Xp7yU4XPhEqMVlX87QnzN5YS5XdMa7ma0vJ7Y3fzq5UsaED5Z+JT9Nm5LA2TpSdvIoJwhjbUvlNhB8nh6TTmm1es845TyYDPnuklzZxhiQFHBfLpN4ZsXGinLMCX/68WWY31nYkPvj8QlB6BEGZMQf6Mf4Prlt9mCSY0+EvPRus+zUaHz5LOPI0oVsUTL+iL89PG2btrEPi+0ZGkxwaa4SKHdcJ77Ru0s7UWseEMV8UROLLx7b1zsp0Yo0yyZFAJMBSCacf2x5BgDK+waO1CSnqnG3cRwg0pjnC54WxaKkIExwcW3NuuZL1gQIhZGs1FKnFlcWvoqkGHTpqaVhorU/qI+0rqEZMm33ASGSMjN3Is7k2wc2h8I+4lQZubcjBjhy78mE3gMKvur0QtLHSkDu5wxH2HJwD+32rGPKl6CJR4JZtjQ7XCEE9YZN/PiyPbMtvzaetnCfc/zaB65toMQ7IEn6dHccFCDGfvYqhoEmeMeu0QZplMykw/MrBJrxKtOeu/+IA3w9cWfZSTp7BF9QZgsIKVU6euN1S5MF0MET4IMxm1ZsLR/xLvBGxa0MUAXD/iy0SKpRajH6Bh4B61W39vyzLDi672HQ7Mx2eNkaQh6QofTw79IYD1X7e+6um8NFeTqvm5Te91zZkSI+62slMS2FSuX9u27QlT8IrcOnIKR1n4MqJSBdeFqNCYpV9INgTZqK+b3q3+RuU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(346002)(136003)(376002)(366004)(86362001)(186003)(53546011)(83380400001)(6512007)(9686003)(6506007)(6666004)(26005)(316002)(54906003)(478600001)(41300700001)(8936002)(7416002)(66946007)(8676002)(5660300002)(2906002)(6916009)(66476007)(66556008)(38100700002)(4326008)(6486002)(14143004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?P9/Stfl4McLaI6HGh4hQsMUNioPpJueDccGgJ83EN/+rchJbhn6yjJWeZ+WY?=
+ =?us-ascii?Q?k603vB/EJsfuNAXj1URtsvfrXY1s1MWhfMW7JmYpPTCqGqixZktuHs+2VlWl?=
+ =?us-ascii?Q?qbExyAoDB0Ss9zFy9MA26OcleTYcPYNh8QVNsPj/3ZNu0qOaKLE8S+g3Zlto?=
+ =?us-ascii?Q?A29L2r+tQlnnjubb0uyNLdFVV4rlf9b0hK97k/bRys+ed7525/gbsPIlN8e2?=
+ =?us-ascii?Q?nBqyqe8KOUG35JU8TFxh9JY+q+Hz4CGnxcA/3E0qyQNVNjb+tXxRR0kart75?=
+ =?us-ascii?Q?WDvPsCFmDQMbSIMw2lpWsNiVdJNxrtVN1K4cEj9lrQpi/BHFrjGoGbMoMFWC?=
+ =?us-ascii?Q?zXgWSZgpvHglgM4zKG93YpeRNYrRbICM7bdlG4Bovx1i923+ddZ/mqCQ/jcC?=
+ =?us-ascii?Q?DQWRzV9paBvuGOEaTVZNgC7vyrpLLF/I9pu8NbgyGes+ZivDMWoBHV4c09ct?=
+ =?us-ascii?Q?ddV6RkT3nvxvYVJqcqri1yg8e/aKh52V4965yLIli92lCI+zBxQDhCIGwM4/?=
+ =?us-ascii?Q?jS/KNMLlLwfMMeF83M/y7uvhPPW3AjLtwjcdo1cRqNfw4q1AUudLAreBVLjE?=
+ =?us-ascii?Q?CoIfVFXc0hPhD0elPYbgLpg8yknVdDr8vC4I1JNWZHP/EQ2oTnRibpojLb4v?=
+ =?us-ascii?Q?ad02tyI7h3LgicG52wlOTuaJ+Nuh73pIFleVoQFR/+eBnLGL0GeSDMI82oGk?=
+ =?us-ascii?Q?HYLyzuVca48CYVPnWbPWVn57++Mam5+rOIVo4XYmjA8DEzAhJzK9l9y0Q96H?=
+ =?us-ascii?Q?a9iWX7+GOKT3T9BTpI4Njxf0uJGbwxHo2iAv7H7RjM/J5shw5oTjV8m5SF1n?=
+ =?us-ascii?Q?Al7gI47IUkUAUVXPHXGc8NBj/PAg2CFcZUo2CqPfEvK/KwV/8XkJvgPloGdk?=
+ =?us-ascii?Q?7iO09roKQcmEgNg1hwoJ3wdLpiYGtqYxujYf+QMB3awWQJnxqNQrfthFHyio?=
+ =?us-ascii?Q?TotwsL+DopX/bDiMCrLv9nc6jT1K+TtndZnGOu8PzMouwePqS0SyxQGfbgkW?=
+ =?us-ascii?Q?IGnRK+iARS73nQgkJylOgE4GcMHFxauhVedIR/1E/XHpp+U40mKGtpcOiwMR?=
+ =?us-ascii?Q?owfx70LkZ/VrV5bfJyb5oB5Hn94U9E4kkOH9U1YFmWnbxirj8KU6coTSf6Jl?=
+ =?us-ascii?Q?/HdInQqDIeWUseJbLxDB6Ne6lS7QZ7abUUIGiMJpaEUtuP49GwGWd/k2GoBb?=
+ =?us-ascii?Q?uXSPotws9gwyG/wk0JJielDR2IjRbk8fWTlRf4SqmlZxM7VUxDPyFYHEdPEN?=
+ =?us-ascii?Q?bTzbKW4RxZAjB+YunrYAoV5EZ7ZGHGYie1xW/yH4xmMY7Un+ypTmOY39WNp/?=
+ =?us-ascii?Q?1c3ZRTI7GWyWKp9dVz7ns/fVPVHGLGrcwzNXoZv97H9imdAa0T8JioKNYVtJ?=
+ =?us-ascii?Q?Z6J2p7YTbOm3aXkHoKRW3D6X1kWcVnXWRJlC2Nm21HEvky940Mv9B7DOIbbB?=
+ =?us-ascii?Q?prhXxjMsLznWAfTpBFDTPkyzd7QHjCx1Oc0JRGLWCL+4tSsx8O6pauggjOLn?=
+ =?us-ascii?Q?4kkyS5Y6Xh6hebZ3WJrWuSVB4YYEcbKg5znwzGGBRw/+3dXqxF6DwyFKtWCF?=
+ =?us-ascii?Q?fjA7+CMycG/XXVku4ZyZK7r7CiMglPvmM4Yvcr2h?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 91c81508-ed97-44db-1aeb-08da7f2faa63
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2022 02:33:12.6408
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1O42AvrEHfjJs/arK1lPqGjtFnLQKBnwArAyK35NTQ76ORdbScZTqRDlIdspYeUhZj+GFVIm/UHJweIzF0/Mpw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1330
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/070-audio
-head:   54b20e361303307d4ed9f2903ad7b1f41caf8bea
-commit: 597396968a38d331432d796f7071670c61e5170f [12/16] wip: ASoC: cs42l84: Start new codec driver
-config: riscv-randconfig-r042-20220815 (https://download.01.org/0day-ci/archive/20220816/202208161047.O1zmHDKj-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/597396968a38d331432d796f7071670c61e5170f
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/070-audio
-        git checkout 597396968a38d331432d796f7071670c61e5170f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash sound/soc/codecs/
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+huang ying <huang.ying.caritas@gmail.com> writes:
 
-All error/warnings (new ones prefixed by >>):
+> Hi, Alistair,
+>
+> On Fri, Aug 12, 2022 at 1:23 PM Alistair Popple <apopple@nvidia.com> wrote:
+>>
+>> migrate_vma_setup() has a fast path in migrate_vma_collect_pmd() that
+>> installs migration entries directly if it can lock the migrating page.
+>> When removing a dirty pte the dirty bit is supposed to be carried over
+>> to the underlying page to prevent it being lost.
+>>
+>> Currently migrate_vma_*() can only be used for private anonymous
+>> mappings. That means loss of the dirty bit usually doesn't result in
+>> data loss because these pages are typically not file-backed. However
+>> pages may be backed by swap storage which can result in data loss if an
+>> attempt is made to migrate a dirty page that doesn't yet have the
+>> PageDirty flag set.
+>>
+>> In this case migration will fail due to unexpected references but the
+>> dirty pte bit will be lost. If the page is subsequently reclaimed data
+>> won't be written back to swap storage as it is considered uptodate,
+>> resulting in data loss if the page is subsequently accessed.
+>>
+>> Prevent this by copying the dirty bit to the page when removing the pte
+>> to match what try_to_migrate_one() does.
+>>
+>> Signed-off-by: Alistair Popple <apopple@nvidia.com>
+>> Reported-by: Peter Xu <peterx@redhat.com>
+>> ---
+>>  mm/migrate_device.c | 5 +++++
+>>  1 file changed, 5 insertions(+)
+>>
+>> diff --git a/mm/migrate_device.c b/mm/migrate_device.c
+>> index 27fb37d..d38f8a6 100644
+>> --- a/mm/migrate_device.c
+>> +++ b/mm/migrate_device.c
+>> @@ -7,6 +7,7 @@
+>>  #include <linux/export.h>
+>>  #include <linux/memremap.h>
+>>  #include <linux/migrate.h>
+>> +#include <linux/mm.h>
+>>  #include <linux/mm_inline.h>
+>>  #include <linux/mmu_notifier.h>
+>>  #include <linux/oom.h>
+>> @@ -211,6 +212,10 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
+>>
+>>                         migrate->cpages++;
+>>
+>> +                       /* Set the dirty flag on the folio now the pte is gone. */
+>> +                       if (pte_dirty(pte))
+>> +                               folio_mark_dirty(page_folio(page));
+>> +
+>
+> I think that this isn't sufficient to fix all issues.  Firstly, "pte"
+> is assigned at the begin of the loop, before the PTE is cleared via
+> ptep_clear_flush() or ptep_get_and_clear().  That is, the pte isn't
+> changed atomically.  Between "pte" assignment and PTE clear, the PTE
+> may become dirty.  That is, we need to update pte when we clear the
+> PTE.
 
->> sound/soc/codecs/cs42l84.c:244:5: warning: no previous prototype for function 'cs42l84_component_probe' [-Wmissing-prototypes]
-   int cs42l84_component_probe(struct snd_soc_component *component)
-       ^
-   sound/soc/codecs/cs42l84.c:244:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int cs42l84_component_probe(struct snd_soc_component *component)
-   ^
-   static 
->> sound/soc/codecs/cs42l84.c:264:3: error: field designator 'non_legacy_dai_naming' does not refer to any field in type 'const struct snd_soc_component_driver'; did you mean 'legacy_dai_naming'?
-           .non_legacy_dai_naming  = 1,
-            ^~~~~~~~~~~~~~~~~~~~~
-            legacy_dai_naming
-   include/sound/soc-component.h:182:15: note: 'legacy_dai_naming' declared here
-           unsigned int legacy_dai_naming:1;
-                        ^
->> sound/soc/codecs/cs42l84.c:328:3: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   FIELD_PREP(CS42L84_ASP_FSYNC_CTL2_BCLK_PERIOD_LO, fsync & 0x7f));
-                   ^
-   sound/soc/codecs/cs42l84.c:517:10: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                                                                           CS42L84_CCM_CTL1_RCO);
-                                                                           ^
-   sound/soc/codecs/cs42l84.h:59:3: note: expanded from macro 'CS42L84_CCM_CTL1_RCO'
-           (FIELD_PREP(CS42L84_CCM_CTL1_MCLK_SRC, CS42L84_CCM_CTL1_MCLK_SRC_RCO) \
-            ^
-   sound/soc/codecs/cs42l84.c:563:6: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                                           FIELD_PREP(CS42L84_CCM_CTL1_MCLK_SRC, CS42L84_CCM_CTL1_MCLK_SRC_PLL)
-                                           ^
-   sound/soc/codecs/cs42l84.c:570:6: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                                           FIELD_PREP(CS42L84_CCM_CTL1_MCLK_SRC, CS42L84_CCM_CTL1_MCLK_SRC_BCLK)
-                                           ^
-   sound/soc/codecs/cs42l84.c:637:3: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   FIELD_PREP(CS42L84_MISC_DET_CTL_HSBIAS_CTL, 3) | /* 2.7 V */
-                   ^
-   sound/soc/codecs/cs42l84.c:713:3: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   FIELD_PREP(CS42L84_MISC_DET_CTL_HSBIAS_CTL, 1) | /* 0.0 V */
-                   ^
-   sound/soc/codecs/cs42l84.c:823:4: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           FIELD_PREP(CS42L84_TIP_SENSE_CTL2_MODE, CS42L84_TIP_SENSE_CTL2_MODE_SHORT_DET));
-                           ^
-   1 warning and 8 errors generated.
+Oh good catch, thanks. Will fix.
 
+> And I don't know why we use ptep_get_and_clear() to clear PTE if
+> (!anon_exclusive).  Why don't we need to flush the TLB?
 
-vim +264 sound/soc/codecs/cs42l84.c
+We do the TLB flush at the end if anything was modified:
 
-   243	
- > 244	int cs42l84_component_probe(struct snd_soc_component *component)
-   245	{
-   246		snd_soc_component_update_bits(component, CS42L84_ASP_CTL,
-   247					      CS42L84_ASP_CTL_TDM_MODE, 0);
-   248		snd_soc_component_update_bits(component, CS42L84_HP_VOL_CTL,
-   249					      CS42L84_HP_VOL_CTL_SOFT | CS42L84_HP_VOL_CTL_ZERO_CROSS,
-   250					      CS42L84_HP_VOL_CTL_ZERO_CROSS);
-   251	
-   252		return 0;
-   253	}
-   254	
-   255	static const struct snd_soc_component_driver soc_component_dev_cs42l84 = {
-   256		.probe			= cs42l84_component_probe,
-   257		.controls			= cs42l84_snd_controls,
-   258		.num_controls		= ARRAY_SIZE(cs42l84_snd_controls),
-   259		.dapm_widgets		= cs42l84_dapm_widgets,
-   260		.num_dapm_widgets	= ARRAY_SIZE(cs42l84_dapm_widgets),
-   261		.dapm_routes		= cs42l84_audio_map,
-   262		.num_dapm_routes	= ARRAY_SIZE(cs42l84_audio_map),
-   263		.endianness		= 1,
- > 264		.non_legacy_dai_naming	= 1,
-   265	};
-   266	
-   267	struct cs42l84_pll_params {
-   268		u32 bclk;
-   269		u8 mclk_src_sel;
-   270		u8 bclk_prediv;
-   271		u8 pll_div_int;
-   272		u32 pll_div_frac;
-   273		u8 pll_mode;
-   274		u8 pll_divout;
-   275		u32 mclk_int;
-   276	};
-   277	
-   278	/*
-   279	 * Common PLL Settings for given BCLK
-   280	 */
-   281	static const struct cs42l84_pll_params pll_ratio_table[] = {
-   282		{  3072000, 1, 0, 0x40, 0x000000, 0x03, 0x10, 12288000},
-   283		{  6144000, 1, 1, 0x40, 0x000000, 0x03, 0x10, 12288000},
-   284		{ 12288000, 0, 0, 0, 0, 0, 0,                 12288000},
-   285		{ 24576000, 1, 3, 0x40, 0x000000, 0x03, 0x10, 12288000},
-   286	};
-   287	
-   288	static int cs42l84_pll_config(struct snd_soc_component *component)
-   289	{
-   290		struct cs42l84_private *cs42l84 = snd_soc_component_get_drvdata(component);
-   291		int i;
-   292		u32 clk;
-   293		u32 fsync;
-   294	
-   295		clk = cs42l84->bclk;
-   296	
-   297		/* Don't reconfigure if there is an audio stream running */
-   298		if (cs42l84->stream_use) {
-   299			if (pll_ratio_table[cs42l84->pll_config].bclk == clk)
-   300				return 0;
-   301			else
-   302				return -EBUSY;
-   303		}
-   304	
-   305		for (i = 0; i < ARRAY_SIZE(pll_ratio_table); i++) {
-   306			if (pll_ratio_table[i].bclk == clk) {
-   307				cs42l84->pll_config = i;
-   308				break;
-   309			}
-   310		}
-   311	
-   312		if (i == ARRAY_SIZE(pll_ratio_table))
-   313			return -EINVAL;
-   314	
-   315		/* Set up the LRCLK */
-   316		fsync = clk / cs42l84->srate;
-   317		if (((fsync * cs42l84->srate) != clk)
-   318				|| ((fsync % 2) != 0)) {
-   319			dev_err(component->dev,
-   320				"Unsupported bclk %d/sample rate %d\n",
-   321				clk, cs42l84->srate);
-   322			return -EINVAL;
-   323		}
-   324	
-   325		/* Set the LRCLK period */
-   326		snd_soc_component_update_bits(component, CS42L84_ASP_FSYNC_CTL2,
-   327			CS42L84_ASP_FSYNC_CTL2_BCLK_PERIOD_LO,
- > 328			FIELD_PREP(CS42L84_ASP_FSYNC_CTL2_BCLK_PERIOD_LO, fsync & 0x7f));
-   329		snd_soc_component_update_bits(component, CS42L84_ASP_FSYNC_CTL3,
-   330			CS42L84_ASP_FSYNC_CTL3_BCLK_PERIOD_HI,
-   331			FIELD_PREP(CS42L84_ASP_FSYNC_CTL3_BCLK_PERIOD_HI, fsync >> 7));
-   332	
-   333		/* Save what the MCLK will be */
-   334		switch (pll_ratio_table[i].mclk_int) {
-   335		case 12000000:
-   336			cs42l84->pll_mclk_f = CS42L84_CCM_CTL1_MCLK_F_12MHZ;
-   337			break;
-   338		case 12288000:
-   339			cs42l84->pll_mclk_f = CS42L84_CCM_CTL1_MCLK_F_12_288KHZ;
-   340			break;
-   341		case 24000000:
-   342			cs42l84->pll_mclk_f = CS42L84_CCM_CTL1_MCLK_F_24MHZ;
-   343			break;
-   344		case 24576000:
-   345			cs42l84->pll_mclk_f = CS42L84_CCM_CTL1_MCLK_F_24_576KHZ;
-   346			break;
-   347		}
-   348	
-   349		if (pll_ratio_table[i].mclk_src_sel) {
-   350			/* Configure PLL */
-   351			snd_soc_component_update_bits(component,
-   352				CS42L84_CCM_CTL3, CS42L84_CCM_CTL3_REFCLK_DIV,
-   353				FIELD_PREP(CS42L84_CCM_CTL3_REFCLK_DIV, pll_ratio_table[i].bclk_prediv));
-   354			snd_soc_component_write(component,
-   355				CS42L84_PLL_DIV_INT,
-   356				pll_ratio_table[i].pll_div_int);
-   357			snd_soc_component_write(component,
-   358				CS42L84_PLL_DIV_FRAC0,
-   359				pll_ratio_table[i].pll_div_frac);
-   360			snd_soc_component_write(component,
-   361				CS42L84_PLL_DIV_FRAC1,
-   362				pll_ratio_table[i].pll_div_frac >> 8);
-   363			snd_soc_component_write(component,
-   364				CS42L84_PLL_DIV_FRAC2,
-   365				pll_ratio_table[i].pll_div_frac >> 16);
-   366			snd_soc_component_update_bits(component,
-   367				CS42L84_PLL_CTL1, CS42L84_PLL_CTL1_MODE,
-   368				FIELD_PREP(CS42L84_PLL_CTL1_MODE, pll_ratio_table[i].pll_mode));
-   369			snd_soc_component_write(component,
-   370				CS42L84_PLL_DIVOUT,
-   371				pll_ratio_table[i].pll_divout);
-   372	
-   373			snd_soc_component_update_bits(component,
-   374				CS42L84_PLL_CTL1, CS42L84_PLL_CTL1_EN,
-   375				CS42L84_PLL_CTL1_EN);
-   376		}
-   377	
-   378		return 0;
-   379	}
-   380	
+	/* Only flush the TLB if we actually modified any entries */
+	if (unmapped)
+		flush_tlb_range(walk->vma, start, end);
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Obviously I don't think that will work correctly now given we have to
+read the dirty bits and clear the PTE atomically. I assume it was
+originally written this way for some sort of performance reason.
+
+ - Alistair
+
+> Best Regards,
+> Huang, Ying
+>
+>>                         /* Setup special migration page table entry */
+>>                         if (mpfn & MIGRATE_PFN_WRITE)
+>>                                 entry = make_writable_migration_entry(
+>>
+>> base-commit: ffcf9c5700e49c0aee42dcba9a12ba21338e8136
+>> --
+>> git-series 0.9.1
+>>

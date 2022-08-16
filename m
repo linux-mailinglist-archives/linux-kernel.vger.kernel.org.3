@@ -2,141 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B81594F4A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 06:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E27A594F58
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 06:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiHPEMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 00:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46940 "EHLO
+        id S229490AbiHPEXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 00:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiHPELk (ORCPT
+        with ESMTP id S229541AbiHPEW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 00:11:40 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B952F192330
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 17:43:56 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-32a17d3bba2so113404867b3.9
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 17:43:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=WKMPsfX2YY3EVd9RV9ksbRmKXR/EDca2WzQ8fdbr+uI=;
-        b=YTcjl+UV4HsG12QrfaCzq/5R9TxJFIKVsOnSM30g08BZbVvNxx3wfPko9tQBz/wVsv
-         XAkCs1qPuJ8zj3h0NcmMcMGAJCq/k2y/lYo7YHeiEiG0LdefAc5YcaN0dQxFgRpKvWTe
-         C4M3Z2MPP8Y6V/zv3NI3OK+I23Y9T803dr7VKejNK0YVKaZ5OSxLOOyqb7iY6c6oNsXb
-         6eNkS97Y3rIuZn7cEtNsHSD//ttHPU2Kp9vYB26T9xbk8lUA3SO0sT/k3YPOu52n493B
-         x0deTuRo3lsfjN1irJo2ogYGWobwlXWa2eYQJtn40hlynOCZFqoNiScMjHA2tnutJsE8
-         TVlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=WKMPsfX2YY3EVd9RV9ksbRmKXR/EDca2WzQ8fdbr+uI=;
-        b=ms9A0iRF+cup7ssEBIse6lumFQTyAuxaqi7upLaTBG85KNY48cSFsEa2u4/8Yefsxh
-         IjIOCvD9pkqw02SmwPxUUfxVxCBLWPAXPLxPYwM/8H1QIodOvZGix+F9NE7JL/p6lBDD
-         7QBMkKUSxWauGmsUjxU/LfgQIRrL74OnIAlmnDYC/iKFOtw5ARPinlMIRaagR7HZUwUa
-         F3cqB+G+7BCmg/hZ7b0ZRVAUK5s4tRn3iRieAqM2mHRcvK3ufaCfOL8zjZFc58JndULG
-         uDKWegXkwadfsq1Rgb5Gk/LNh7V6YrRR1VBu7JPd0pVdx6bjYmQ6Z3z8Muwf01pPgJxu
-         PYqg==
-X-Gm-Message-State: ACgBeo0RyZdt9gyO+N2D6O3jdq6s4QCm5iqB9R2VktfuZ0Tu09vxrG+N
-        m7TJFgVNOAS6JXXMADJUe3rj2SnZYCAW1/TJypt2Lw==
-X-Google-Smtp-Source: AA6agR6zYGJECr1teU70klV5BLsgwAte+kRR0+Y+ZYnqGBPOt+ojfvhP3Magt7Y+1bNG9hR4JtHNjZkV95Tqb63jQPM=
-X-Received: by 2002:a25:6612:0:b0:670:7c81:3aa6 with SMTP id
- a18-20020a256612000000b006707c813aa6mr13902592ybc.530.1660610635743; Mon, 15
- Aug 2022 17:43:55 -0700 (PDT)
+        Tue, 16 Aug 2022 00:22:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C58337BB3D;
+        Mon, 15 Aug 2022 17:55:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4303A6125E;
+        Tue, 16 Aug 2022 00:55:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5212EC433C1;
+        Tue, 16 Aug 2022 00:55:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660611347;
+        bh=iu6B25e0sTxWSWP58J3cvJLRVLHWY1NS7egktCILRVc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=krd6+dWmORUQTM50F/8J5UTDFvQpmjgyE2xt2quw2vdfZh6niGmFxiiV4AIz32H48
+         v/54PgeHP2vwqXwK32ajRlxpPJzlh1estyjWKs69bXa2t8XK5AILpoD8G+6e6l6TN2
+         JacTQRI/ggjw/oFEBUWvGlPNpoBqWi7pvwHjXWTNYZ4waocnQ7ZvCRK+HV+rcPvgUj
+         rn2X10wArCcnKg5D/Bt2iE7+193xqZkmDFK77dfsfvgi03cysOyvwTWWYr7n7HZDYk
+         5Leu70it3DTXaYFTpbub7m2JQZmVrC/jYpJVhrCsVduHmj+8JAVU1IiAScCxzXl5Gb
+         5hx6GXtLZcXBw==
+Date:   Mon, 15 Aug 2022 17:55:45 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Keith Busch <kbusch@kernel.org>
+Subject: Re: [PATCH v4 6/9] f2fs: don't allow DIO reads but not DIO writes
+Message-ID: <YvrrEcw4E+rpDLwM@sol.localdomain>
+References: <20220722071228.146690-1-ebiggers@kernel.org>
+ <20220722071228.146690-7-ebiggers@kernel.org>
+ <YtyoF89iOg8gs7hj@google.com>
+ <Yt7dCcG0ns85QqJe@sol.localdomain>
+ <YuXyKh8Zvr56rR4R@google.com>
 MIME-Version: 1.0
-References: <Yvpd2pwUJGp7R+YE@euler> <20220815182307.GA4658@duo.ucw.cz> <YvrkjH6/FpIzyAv+@euler>
-In-Reply-To: <YvrkjH6/FpIzyAv+@euler>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 15 Aug 2022 17:43:19 -0700
-Message-ID: <CAGETcx_1dDrfrctWMb1rLhZS1Q_hiuQyKBh_1uujE+6S0Fhj2Q@mail.gmail.com>
-Subject: Re: boot stuck at starting kernel, due to __genpd_dev_pm_attach?
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Len Brown <len.brown@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YuXyKh8Zvr56rR4R@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 5:28 PM Colin Foster
-<colin.foster@in-advantage.com> wrote:
->
-> On Mon, Aug 15, 2022 at 08:23:07PM +0200, Pavel Machek wrote:
-> > Hi!
-> >
-> > > You might have already gotten this report, but I tried running v6.0-rc1
-> > > on my BeagleBone Black and it gets stuck right after "Starting kernel
-> > > ..." from U-Boot.
-> > >
-> > > A bisect pointed me to commit 5a46079a9645 ("PM: domains: Delete usage
-> > > of driver_deferred_probe_check_state()").
-> > >
-> > > I don't have much more detail than that, other than I'm using the
-> > > in-tree am335x-boneblack.dts device tree and I believe I had tested with
-> > > the multi-v7-defconfig for this verification. I'm happy to test anything
-> > > that might offer more information.
-> >
-> > Well, standart next step is reverting 5a46079a9645 on top of v6.0-rc1,
-> > and if it starts working, either you get fix in your inbox, or you ask
-> > Linus to revert :-).
->
-> I was able to revert 5a46079a9645 and 9cbffc7a5956 and successfully boot
-> v6.0-rc1 on the Beaglebone Black.
->
-> I still don't know whether the root cause is the patch, or perhaps an
-> invalid boneblack DTS. I'll try and dig to get more info about what
-> might be failing. But I do think anyone using a Beaglebone will have
-> this issue, and I also think I'm not the only using the BBB.
->
+On Sat, Jul 30, 2022 at 08:08:26PM -0700, Jaegeuk Kim wrote:
+> On 07/25, Eric Biggers wrote:
+> > On Sat, Jul 23, 2022 at 07:01:59PM -0700, Jaegeuk Kim wrote:
+> > > On 07/22, Eric Biggers wrote:
+> > > > From: Eric Biggers <ebiggers@google.com>
+> > > > 
+> > > > Currently, if an f2fs filesystem is mounted with the mode=lfs and
+> > > > io_bits mount options, DIO reads are allowed but DIO writes are not.
+> > > > Allowing DIO reads but not DIO writes is an unusual restriction, which
+> > > > is likely to be surprising to applications, namely any application that
+> > > > both reads and writes from a file (using O_DIRECT).  This behavior is
+> > > > also incompatible with the proposed STATX_DIOALIGN extension to statx.
+> > > > Given this, let's drop the support for DIO reads in this configuration.
+> > > 
+> > > IIRC, we allowed DIO reads since applications complained a lower performance.
+> > > So, I'm afraid this change will make another confusion to users. Could
+> > > you please apply the new bahavior only for STATX_DIOALIGN?
+> > > 
+> > 
+> > Well, the issue is that the proposed STATX_DIOALIGN fields cannot represent this
+> > weird case where DIO reads are allowed but not DIO writes.  So the question is
+> > whether this case actually matters, in which case we should make STATX_DIOALIGN
+> > distinguish between DIO reads and DIO writes, or whether it's some odd edge case
+> > that doesn't really matter, in which case we could just fix it or make
+> > STATX_DIOALIGN report that DIO is unsupported.  I was hoping that you had some
+> > insight here.  What sort of applications want DIO reads but not DIO writes?
+> > Is this common at all?
+> 
+> I think there's no specific application to use the LFS mode at this
+> moment, but I'd like to allow DIO read for zoned device which will be
+> used for Android devices.
+> 
 
-Hi Colin,
+So if the zoned device feature becomes widely adopted, then STATX_DIOALIGN will
+be useless on all Android devices?  That sounds undesirable.  Are you sure that
+supporting DIO reads but not DIO writes actually works?  Does it not cause
+problems for existing applications?
 
-Thanks for the report. There have been other reports like this. This
-commit in question is probably the cause. I have two series going.
+What we need to do is make a decision about whether this means we should build
+in a stx_dio_direction field (indicating no support / readonly support /
+writeonly support / readwrite support) into the API from the beginning.  If we
+don't do that, then I don't think we could simply add such a field later, as the
+statx_dio_*_align fields will have already been assigned their meaning.  I think
+we'd instead have to "duplicate" the API, with STATX_DIOROALIGN and
+statx_dio_ro_*_align fields.  That seems uglier than building a directional
+indicator into the API from the beginning.  On the other hand, requiring all
+programs to check stx_dio_direction would add complexity to using the API.
 
-One [1] is to revert these patches. Probably more suited for 5.19.xxx releases.
+Any thoughts on this?
 
-The other [2] is to actually fix the issues you are seeing without
-reverting these patches (long term we do want to keep the patch that's
-causing the issue for you -- not going into the details here). Can you
-give this series[2] a shot and tell me if it fixes the issue? You
-might need to pull in this additional diff on top of [2] (I'll roll it
-into v2 of the series once I get some tests on this)
-
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 2f012e826986..866755d8ad95 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -2068,7 +2068,11 @@ static int fw_devlink_create_devlink(struct device *con,
-                device_links_write_unlock();
-        }
-
--       sup_dev = get_dev_from_fwnode(sup_handle);
-+       if (sup_handle->flags & FWNODE_FLAG_NOT_DEVICE)
-+               sup_dev = fwnode_get_next_parent_dev(sup_handle);
-+       else
-+               sup_dev = get_dev_from_fwnode(sup_handle);
-+
-        if (sup_dev) {
-                /*
-                 * If it's one of those drivers that don't actually bind to
-
-Thanks,
-Saravana
-
-[1] - https://lore.kernel.org/lkml/20220727185012.3255200-1-saravanak@google.com/
-[2] - https://lore.kernel.org/lkml/20220810060040.321697-1-saravanak@google.com/
+- Eric

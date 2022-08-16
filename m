@@ -2,237 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B213F595F04
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 17:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE638595F08
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 17:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbiHPP1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 11:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42796 "EHLO
+        id S236041AbiHPP3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 11:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiHPP12 (ORCPT
+        with ESMTP id S236117AbiHPP2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 11:27:28 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5BF31DFE
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:27:27 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id n7so1846800wrv.4
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:27:27 -0700 (PDT)
+        Tue, 16 Aug 2022 11:28:47 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49EF491DC
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:28:34 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id k17so5404524wmr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:28:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=2N6dolVsuda2FEMkXY2VEqjJwsDO/erIHXHssLLX2/M=;
-        b=NPCiG0SVlRsvelVrlgwc0sSLcYgg16iGwO4yDVoUl1H77Lb3D3woASv+D9tWIqo/Ix
-         zAdq0E02NAJd4EDjJcwRvIG54jiqUL3xcWJQsUSw5JB4qmgIoBQKwmLFjOIxnsQS2nWm
-         GKjFZ0dXOvTTid/gNebMvj8XxK/6St/MzdBMbSUW8OOKvEOMhcEWOflK+dGOPCSzjgmv
-         CgqDFXOLv6XA2s1gtOHXfsjdTkW8ResDanWPZwCjCgwwVAiGAGbO+E2UrCsETix3NN7s
-         dSeJYxEVNGy30/qvjKaygipqAkfGjmOMYE77VLjNyhlk/wcbYggo22Bmj6X5doyxvteO
-         2QJg==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=Zcsr0zLVwDWpD4aOyB/+mgV1L6ZOxZ62xbZwJRua3jQ=;
+        b=ROmZtQ5AmSReFeGawBFxX0jSVDeLRj3RA08SrAK+TIf/oQNDEU3HuF4udI4pbViIIX
+         MxWh+lDCwPrrNFciPfBRiY6OX9xHhyROCb7QQ46V2hmlpxnzzOt6YGgHSbq9JXBYvjNO
+         01JpW/wLrWCUkEV5Y2GNaQoE8CFy/k2jrb3FgQz3OEqTPCwqI43Zlun2kUVJtWMZfsja
+         TLEug9ZzA7l/KB+61vrebvA0Wq7Jdn6ChQM9hXfSO5uxJ26SJZcdfCxVTlS9uz77Bi+O
+         zMBBaH4O9oXHdBEgSMmeyE/35Refkr8YyxVmZ4fuo2GdkR8lQRgeNsb4nr7G/YzXYcnA
+         ytMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=2N6dolVsuda2FEMkXY2VEqjJwsDO/erIHXHssLLX2/M=;
-        b=qx47yfyg6rYcIwGWrCgesGolUMaz0FvhN2GPdeQbrdbDRcB5DtAJS2YZZ/h8vnGkDK
-         MZ3YVkqPv4Tg/otCWh31LL8kJdFvYmxvQRQ1Emin0OrgduvwqN9ztiwuU/VnhsS8PE7a
-         +/L0Bd//luw0Hd0pa7WQNcC3zeXg4K6l0M7OxhwT5gs4WFpChiJPrthN4GnjrrxYjkJD
-         lcSyFQ/XOFSjvqg6e8r+H+xBB4kVUWLakPG9M8dCetGpXDkRTWY7KTSAgirO49cf4ehg
-         AHYUCp8rtR+NWrPhfmwdo0CANWB6qB3tnqhhHu5VTOL2duoaUf2gzzCkVBXJ4QEIc/sQ
-         LbiA==
-X-Gm-Message-State: ACgBeo09KWoLMjll1VQCdGa9AVQaQyRqzCvdZkSIZDMzKAE+uAsgXDJb
-        WOdJsLwAUbSYL5gh4bhcEu2Isv2nVUHbwaERVt8=
-X-Google-Smtp-Source: AA6agR4lAVOGNmpB44sX26Tc0WCmHzU/uX20PrsIRgBbvk7/d4tG8zCP6zyfnv3Vs3H4daj3X5BxpF3om2kqyqhPKzE=
-X-Received: by 2002:a05:6000:60c:b0:220:757a:54a8 with SMTP id
- bn12-20020a056000060c00b00220757a54a8mr12066182wrb.685.1660663645984; Tue, 16
- Aug 2022 08:27:25 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Zcsr0zLVwDWpD4aOyB/+mgV1L6ZOxZ62xbZwJRua3jQ=;
+        b=FcPtCbYvzESprxIscHONQZ9KLs7iPcWf6a8skSFRt8j9nQIObA4ITaz1yy/agMmjpA
+         hrdkvDk+++uCexFUDYdMkd77j+wLB3NqPR5Itn7fYEvMb3lvPsZypbNlNqATeCfauTDs
+         fLKPoR6pCLFW/ShI2kXK7v6i3s7qJsp0mE0ta5LsnJnoURdhDy062gzcGveE098FiPW9
+         HQCQYiEUxjG6kQUN5GBDkrf0V+LG3cnr/2P6ui/6L3JDZZjcGy3UVr9mGBmeL7LiIpDS
+         IAHIQ3Faj/TLXpLSvsmK+Zn9875iKjMVpx66dJ4az2K+jnptGEcirsgZNeEqM9dLiLOw
+         8jlg==
+X-Gm-Message-State: ACgBeo0iyn9PvUiOo7fU6HAqGZo16o3VkGfki+SJHyfNJx6ftDw/YQnX
+        BInfH4d0WqPbRDkETnsT4wZpew==
+X-Google-Smtp-Source: AA6agR4Kjh7p/2uag3SgXJRuP2YBnKlR3hjZD44R9I/rTpQNgmagnv9LEhpW+5PTiucmvOlYHvb2uA==
+X-Received: by 2002:a05:600c:348d:b0:3a6:b4e:ff6d with SMTP id a13-20020a05600c348d00b003a60b4eff6dmr1682402wmq.95.1660663713289;
+        Tue, 16 Aug 2022 08:28:33 -0700 (PDT)
+Received: from [192.168.1.69] (120.205.87.79.rev.sfr.net. [79.87.205.120])
+        by smtp.gmail.com with ESMTPSA id by6-20020a056000098600b0021e571a99d5sm10707879wrb.17.2022.08.16.08.28.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 08:28:32 -0700 (PDT)
+Message-ID: <21a66361-5180-65e1-f075-2163bf46af08@baylibre.com>
+Date:   Tue, 16 Aug 2022 17:28:32 +0200
 MIME-Version: 1.0
-References: <20220622003140.30365-1-pgwipeout@gmail.com> <88f2de00-32e3-ed74-082f-c0972a81f0f8@fivetechno.de>
- <CAMdYzYoTLjRW1FgwfizUu-+k0R4tCO78qYa7MEpgfz99aj3SvQ@mail.gmail.com> <ec3d2515-b2a2-8441-2e9a-a7fe664e048a@wolfvision.net>
-In-Reply-To: <ec3d2515-b2a2-8441-2e9a-a7fe664e048a@wolfvision.net>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Tue, 16 Aug 2022 17:27:16 +0200
-Message-ID: <CAMdYzYo1nm76ti3PCYk4DYtEnjWD731bybHaQV3ODBZi4SMvRg@mail.gmail.com>
-Subject: Re: [BUG BISECT] phy: rockchip-inno-usb2: Sync initial otg state
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     Markus Reichl <m.reichl@fivetechno.de>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [PATCH v4 3/3] counter: capture-tiecap: capture driver support
+ for ECAP
+Content-Language: en-US
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     vilhelm.gray@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        mranostay@ti.com
+References: <20220810140724.182389-1-jpanis@baylibre.com>
+ <20220810140724.182389-4-jpanis@baylibre.com> <Yvkq9Hy+hxAPQd8J@fedora>
+ <fe0fe04e-5ac2-e8c2-d568-0976ba085d6a@baylibre.com> <Yvuz9NUWXPhXqzeU@fedora>
+From:   Julien Panis <jpanis@baylibre.com>
+In-Reply-To: <Yvuz9NUWXPhXqzeU@fedora>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 11:20 AM Michael Riesch
-<michael.riesch@wolfvision.net> wrote:
->
-> Hi all,
->
-> On 8/4/22 11:49, Peter Geis wrote:
-> > On Tue, Aug 2, 2022 at 2:39 PM Markus Reichl <m.reichl@fivetechno.de> w=
-rote:
-> >>
-> >> Hi,
-> >>
-> >> with linux-next-20220728 rk3399-roc-pc does not boot.
-> >> Bisecting pointed to this commit.
-> >> By reverting this commit the board boots again.
-> >
-> > Thank you for reporting this, someone was kind enough to reproduce the
-> > problem on the rockpro64 and confirmed this is an issue. As I won't
-> > have access to my hardware until next month, we should probably revert
-> > this until the root cause can be identified.
->
-> Just experienced this issue on my ROCK3 Model A board (RK3568) and
-> reverting this commit solved it.
->
-> Having the revert in v6.0-rc2 would be great -- if there is anything I
-> can help to accelerate this please let me know.
 
-If this is now happening on rk356x where I know it works, it now
-cements my theory that it's a symptom and not the actual problem.
-Possibly a race condition with the grf and regmap code where it isn't
-quite ready when called. This code path is called exactly the same way
-later on when the irq fires.
 
-What config are you based on? I'm running a stripped down version of
-the arm64_defconfig, but if you deviate from that it will be helpful
-in reproducing the issue.
+On 16/08/2022 17:12, William Breathitt Gray wrote:
+> On Tue, Aug 16, 2022 at 09:58:10AM +0200, Julien Panis wrote:
+>> On 14/08/2022 19:03, William Breathitt Gray wrote:
+>>> On Wed, Aug 10, 2022 at 04:07:24PM +0200, Julien Panis wrote:
+>>>> +static int ecap_cnt_function_read(struct counter_device *counter,
+>>>> +				  struct counter_count *count,
+>>>> +				  enum counter_function *function)
+>>>> +{
+>>>> +	*function = COUNTER_FUNCTION_INCREASE;
+>>>> +
+>>>> +	return 0;
+>>>> +}
+>>>> +
+>>>> +static int ecap_cnt_action_read(struct counter_device *counter,
+>>>> +				struct counter_count *count,
+>>>> +				struct counter_synapse *synapse,
+>>>> +				enum counter_synapse_action *action)
+>>>> +{
+>>>> +	*action = COUNTER_SYNAPSE_ACTION_BOTH_EDGES;
+>>>> +
+>>>> +	return 0;
+>>>> +}
+>>> Right now you have a Signal defined for the ECAPSIG line, but there is
+>>> at least one more relevant Signal to define: the clock updating ECAPCNT.
+>>> The Synapse action of COUNTER_SYNAPSE_ACTION_BOTH_EDGES is for that
+>>> clock Signal, but for the ECAPSIG Signal you will need to report a
+>>> Synapse action based on the polarity of the next capture (i.e. whether
+>>> high or low).
+>> Just to be sure : by using the word ECAPCNT, I guess that you speak about
+>> the
+>> Mod4 counter (0->1->2->3->0...), don't you ? (2 bits)
+>> Or do you speak about ECAP_TSCNT_REG register content ? (32 bits)
+> Sorry for the confusion, I'm talking about ECAP_TSCNT_REG (32-bit) here.
+> You should rename this Count in your ecap_cnt_counts array from
+> "ECAPCNT" to "Time-Stamp Counter" to make it clearer to users as well;
+> it would be prudent to rename "ECAPSIG" too.
+>
+> I didn't know that there was a register exposing the Mod4 counter value.
+> If that's true, then define a Count for the Mod4 counter in your
+> ecap_cnt_counts array.
 
-We should revert it until it's isolated, as well as the patch setting
-the rk356x to otg since it will again be broken. If someone could
-weigh in here as well (I currently don't have access to my hardware)
-it would be helpful.
+There is no dedicated register for that, but it would be possible to 
+expose this value
+(when interruptions are triggered, we would just need to parse flags 
+1/2/3/4 to determine
+mod4 counter current state). That would not be very useful, though.
 
 >
-> Thanks and best regards,
-> Michael
+>>>> +static struct counter_comp ecap_cnt_count_ext[] = {
+>>>> +	COUNTER_COMP_COUNT_U64("capture1", ecap_cnt_cap1_read, NULL),
+>>>> +	COUNTER_COMP_COUNT_U64("capture2", ecap_cnt_cap2_read, NULL),
+>>>> +	COUNTER_COMP_COUNT_U64("capture3", ecap_cnt_cap3_read, NULL),
+>>>> +	COUNTER_COMP_COUNT_U64("capture4", ecap_cnt_cap4_read, NULL),
+>>>> +	COUNTER_COMP_ENABLE(ecap_cnt_enable_read, ecap_cnt_enable_write),
+>>> I just want to verify: this enable extension should disable the ECAPCNT
+>>> count itself (i.e. no more increasing count value). Is that what's
+>>> happening here, or is this meant to disable just the captures?
+>> Yes, it is what's happening here : no more increasing count value.
+> Okay that's good. By the way, COUNTER_COMP_ENABLE ensures the enable
+> value passed to ecap_cnt_enable_write() is either 0 or 1, so you don't
+> need the enable > 1 check in your callback.
 >
-> >
-> > Very Respectfully,
-> > Peter Geis
-> >
-> >>
-> >> [    2.398700] Unable to handle kernel NULL pointer dereference at vir=
-tual address
-> >> 0000000000000008
-> >> [    2.399517] Mem abort info:
-> >> [    2.399772]   ESR =3D 0x0000000096000004
-> >> [    2.400114]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
-> >> [    2.400594]   SET =3D 0, FnV =3D 0
-> >> [    2.400873]   EA =3D 0, S1PTW =3D 0
-> >> [    2.401161]   FSC =3D 0x04: level 0 translation fault
-> >> [    2.401602] Data abort info:
-> >> [    2.401864]   ISV =3D 0, ISS =3D 0x00000004
-> >> [    2.402212]   CM =3D 0, WnR =3D 0
-> >> [    2.402484] user pgtable: 4k pages, 48-bit VAs, pgdp=3D000000000137=
-6000
-> >> [    2.403071] [0000000000000008] pgd=3D0000000000000000, p4d=3D000000=
-0000000000
-> >> [    2.403687] Internal error: Oops: 96000004 [#1] SMP
-> >> [    2.404130] Modules linked in: ip_tables x_tables ipv6 xhci_plat_hc=
-d xhci_hcd
-> >> dwc3 rockchipdrm drm_cma_helper analogix_dp dw_hdmi realtek drm_displa=
-y_helper
-> >> dwc3_of_simple dw_mipi_dsi ehci_platform ohci_platform ohci_hcd ehci_h=
-cd
-> >> drm_kms_helper dwmac_rk syscopyarea sysfillrect stmmac_platform sysimg=
-blt
-> >> fb_sys_fops usbcore stmmac pcs_xpcs drm phylink drm_panel_orientation_=
-quirks
-> >> [    2.407155] CPU: 4 PID: 71 Comm: kworker/4:6 Not tainted
-> >> 5.19.0-rc8-next-20220728 #437
-> >> [    2.407868] Hardware name: Firefly ROC-RK3399-PC Mezzanine Board (D=
-T)
-> >> [    2.408448] Workqueue: events rockchip_usb2phy_otg_sm_work
-> >> [    2.408958] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS B=
-TYPE=3D--)
-> >> [    2.411634] pc : rockchip_usb2phy_otg_sm_work+0x50/0x330
-> >> [    2.414332] lr : process_one_work+0x1d8/0x380
-> >> [    2.416948] sp : ffff800009373d60
-> >> [    2.419406] x29: ffff800009373d60 x28: 0000000000000000 x27: 000000=
-0000000000
-> >> [    2.422199] x26: ffff0000f779fcb8 x25: ffff0000f77a3a05 x24: 000000=
-000000000c
-> >> [    2.424978] x23: 0000000000000000 x22: ffff0000010c8258 x21: ffff80=
-000888ec10
-> >> [    2.427768] x20: ffff0000010c82f0 x19: 000000000000000c x18: 000000=
-0000000001
-> >> [    2.430604] x17: 000000040044ffff x16: 00400034b5503510 x15: 000000=
-0000000000
-> >> [    2.433390] x14: ffff000000708000 x13: ffff8000eec96000 x12: 000000=
-0034d4d91d
-> >> [    2.436185] x11: 0000000000000000 x10: 0000000000000a10 x9 : ffff00=
-0001aa7a74
-> >> [    2.438958] x8 : fefefefefefefeff x7 : 0000000000000018 x6 : ffff00=
-0001aa7a74
-> >> [    2.441668] x5 : 000073746e657665 x4 : 000000000000002f x3 : ffff00=
-000356c808
-> >> [    2.444407] x2 : ffff800009373da4 x1 : 000000000000e2ac x0 : ffff80=
-000888eb34
-> >> [    2.447190] Call trace:
-> >> [    2.449557]  rockchip_usb2phy_otg_sm_work+0x50/0x330
-> >> [    2.452169]  process_one_work+0x1d8/0x380
-> >> [    2.454684]  worker_thread+0x170/0x4e0
-> >> [    2.457056]  kthread+0xd8/0xdc
-> >> [    2.459354]  ret_from_fork+0x10/0x20
-> >> [    2.461728] Code: 91037015 295be001 f9403c77 b940e413 (f94006e0)
-> >> [    2.464338] ---[ end trace 0000000000000000 ]---
-> >>
-> >> Am 22.06.22 um 02:31 schrieb Peter Geis:
-> >>> The initial otg state for the phy defaults to device mode. The actual
-> >>> state isn't detected until an ID IRQ fires. Fix this by syncing the I=
-D
-> >>> state during initialization.
-> >>>
-> >>> Fixes: 51a9b2c03dd3 ("phy: rockchip-inno-usb2: Handle ID IRQ")
-> >>> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> >>> ---
-> >>>   drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 6 ++++++
-> >>>   1 file changed, 6 insertions(+)
-> >>>
-> >>> diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/=
-phy/rockchip/phy-rockchip-inno-usb2.c
-> >>> index 6711659f727c..6e44069617df 100644
-> >>> --- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-> >>> +++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-> >>> @@ -1162,6 +1162,12 @@ static int rockchip_usb2phy_otg_port_init(stru=
-ct rockchip_usb2phy *rphy,
-> >>>                                       EXTCON_USB_HOST, &rport->event_=
-nb);
-> >>>               if (ret)
-> >>>                       dev_err(rphy->dev, "register USB HOST notifier =
-failed\n");
-> >>> +
-> >>> +             if (!of_property_read_bool(rphy->dev->of_node, "extcon"=
-)) {
-> >>> +                     /* do initial sync of usb state */
-> >>> +                     ret =3D property_enabled(rphy->grf, &rport->por=
-t_cfg->utmi_id);
-> >>> +                     extcon_set_state_sync(rphy->edev, EXTCON_USB_HO=
-ST, !ret);
-> >>> +             }
-> >>>       }
-> >>>
-> >>>   out:
-> >>
-> >> Gru=C3=9F,
-> >> --
-> >> Markus Reichl
-> >
-> > _______________________________________________
-> > Linux-rockchip mailing list
-> > Linux-rockchip@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-rockchip
+>>>> +static irqreturn_t ecap_cnt_isr(int irq, void *dev_id)
+>>>> +{
+>>>> +	struct counter_device *counter_dev = dev_id;
+>>>> +	struct ecap_cnt_dev *ecap_dev = counter_priv(counter_dev);
+>>>> +	unsigned int clr = 0;
+>>>> +	unsigned int flg;
+>>>> +	int i;
+>>>> +	unsigned long flags;
+>>>> +
+>>>> +	regmap_read(ecap_dev->regmap, ECAP_ECINT_EN_FLG_REG, &flg);
+>>>> +
+>>>> +	for (i = ECAP_NB_CAP - 1 ; i < ECAP_NB_CEVT ; i++) {
+>>> Would you walk me through the logic for this loop. Is this for-loop
+>>> intended to loop through all four capture indices? ECAP_NB_CAP and
+>>> ECAP_NB_CEVT are defines, so your for-loop has i=3 and i<5; is this what
+>>> you want?
+>> In previous versions (IIO subsys), this for-loop was intended to loop
+>> through all 4 capture indices
+>> and overflow flag.
+>> In this version, it has been modified to loop only for the last capture
+>> indice (the 4th)
+>> and overflow flag : yes, this is intentional. Only 1 event has to be pushed
+>> so that the user
+>> gets all 4 captured timestamps in a single-reading (using 4 watches).
+>> But if I understand well your previous suggestion, you would like tracking
+>> Mod4 counter value,
+>> don't you ? So, I will change back this for-loop, so that it loops for all
+>> capture indices (and
+>> overflow flag) -> For all 4 capture indices, Mod4 count will be updated. And
+>> event will still be
+>> pushed only for the 4th capture indice.
+> Instead of limiting the event push to just the 4th capture, I'd push
+> COUNTER_EVENT_CAPTURE on every capture but delegate them to their own
+> channels::
+>
+>      counter_push_event(counter_dev, COUNTER_EVENT_CAPTURE, i);
+
+I prefer using only 1 signal if you don't mind. I think it's less 
+confusing for the user.
+
+>
+> The captures operate as a circular buffer, so the user can determine the
+> current capture index based on the watch channel reported and perform a
+> modulo to read the buffers in right sequence. Alternatively, they can
+> watch just channel 3 if they want to process only four captures at a
+> time.
+>
+> William Breathitt Gray
+

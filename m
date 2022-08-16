@@ -2,47 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0230959569D
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 040EC5956B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233742AbiHPJhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
+        id S232346AbiHPJiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233716AbiHPJgo (ORCPT
+        with ESMTP id S233544AbiHPJiH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:36:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6E2BB68B;
-        Tue, 16 Aug 2022 00:59:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6BD2FB81647;
-        Tue, 16 Aug 2022 07:59:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43541C433D6;
-        Tue, 16 Aug 2022 07:59:05 +0000 (UTC)
-Date:   Tue, 16 Aug 2022 08:59:05 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Jeremy Linton <jeremy.linton@arm.com>
-Cc:     Will Deacon <will@kernel.org>, linux-pci@vger.kernel.org,
-        bhelgaas@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lpieralisi@kernel.org,
-        kw@linux.com, mark.rutland@arm.com, sudeep.holla@arm.com,
-        boqun.feng@gmail.com, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maz@kernel.org, jonmasters@google.com
-Subject: Re: [PATCH 0/4] PCI SMC conduit, now with DT support
-Message-ID: <YvtOSedi3SqYngbV@arm.com>
-References: <20220725163905.2024437-1-jeremy.linton@arm.com>
- <20220726114000.GA21450@willie-the-truck>
- <7e4a0b4a-ac2f-5454-9778-e83f651b84a3@arm.com>
+        Tue, 16 Aug 2022 05:38:07 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E592D8E1D
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:59:47 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id ha11so9087834pjb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:59:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=kvxJ31pMs7iubHIwtBMkPHRJw222fpBj25ImczwoxRk=;
+        b=g1OnjbncFfK2BW8/IezCZRmKlCi1L4tXB4x0I02Mld2WTywa9Vf9KiTHGp+NOdhRKH
+         pYy6Ne4MeQnU50Q5KeX6liGhp2EEKXA4x19KhxYZTKKi5kEzzNABlhepnkpBZSIqwsVN
+         k9zLt2SvCwPaDrNmF+QIwsE8sAkTx1bd8otp+6EiuhnsENZzBDLUCgrxB8kbh1AM/KnJ
+         eSmzVO0uLyxnUeYkh1m6kwARgVnqIZcX/KKXXX8e+CdLHbSSYS2i6/8TdAUOrqF+On2y
+         F3F6ONZVP5DRBlbqAyKyu9+rIy88XUBKOHkgFwbI0aibsyTol/tDHrTItrgjgBDxAtdj
+         t+AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=kvxJ31pMs7iubHIwtBMkPHRJw222fpBj25ImczwoxRk=;
+        b=VNYni2d9p4XsckoptithdcGMq5y9sSf8EoPl33pe8CiuK794C3D3XjrVhc7xj0ar8+
+         bh9LqLT42P0beOSz8mzxeEKCz47d7IPeOo73+k51MoYYDodRY+vJOCta+YUvJzcJLd8L
+         8eD/ej06qBTUSlYKXj/qrPxHcKTGltbEjrsjgKExPMciuozSTIj63U3JdoZYFtpzCuI4
+         oXQSqMhxEbJcPy0fs8iETIM4CfIFioPV/LnhdGhsaM6NHE8UY9KJjnS3S0AZOf7e75hx
+         Hn3VXJ1n426UM+Ay59jAl3rnkxOZ0x/r1W/JlVRg69loxH6B43anudi33CJY6U48pKDj
+         gu5g==
+X-Gm-Message-State: ACgBeo2nSl/Hcb1ohW8gOJWzf2lpE5rvH4zj8NK8xpz+3E98T0YH672w
+        GQRs0YOmLdMy0ipj3KbxDkhIzQ==
+X-Google-Smtp-Source: AA6agR6q1iuy02bAx0HwOXInhdES5zIFbm3q7tFNcVwrq2sakYMaYPpShkuoobkVem5XFJBpgs8skQ==
+X-Received: by 2002:a17:90b:164b:b0:1f5:15ae:3206 with SMTP id il11-20020a17090b164b00b001f515ae3206mr21921654pjb.140.1660636786654;
+        Tue, 16 Aug 2022 00:59:46 -0700 (PDT)
+Received: from FVFDK26JP3YV.bytedance.net ([61.120.150.76])
+        by smtp.gmail.com with ESMTPSA id r2-20020a17090a454200b001f280153b4dsm5631276pjm.47.2022.08.16.00.59.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 16 Aug 2022 00:59:46 -0700 (PDT)
+From:   Lei He <helei.sig11@bytedance.com>
+To:     arei.gonglei@huawei.com, herbert@gondor.apana.org.au
+Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pizhenwei@bytedance.com, lei he <helei.sig11@bytedance.com>
+Subject: [PATCH] crypto-virtio: fix memory-leak
+Date:   Tue, 16 Aug 2022 15:59:16 +0800
+Message-Id: <20220816075916.23651-1-helei.sig11@bytedance.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7e4a0b4a-ac2f-5454-9778-e83f651b84a3@arm.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,58 +68,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeremy,
+From: lei he <helei.sig11@bytedance.com>
 
-On Thu, Jul 28, 2022 at 12:20:55PM -0500, Jeremy Linton wrote:
-> On 7/26/22 06:40, Will Deacon wrote:
-> > On Mon, Jul 25, 2022 at 11:39:01AM -0500, Jeremy Linton wrote:
-> > > This is a rebase of the later revisions of [1], but refactored
-> > > slightly to add a DT method as well. It has all the same advantages of
-> > > the ACPI method (putting HW quirks in the firmware rather than the
-> > > kernel) but now applied to a 'pci-host-smc-generic' compatible
-> > > property which extends the pci-host-generic logic to handle cases
-> > > where the PCI Config region isn't ECAM compliant. With this in place,
-> > > and firmware managed clock/phy/etc its possible to run the generic
-> > > driver on hardware that isn't what one would consider standards
-> > > compliant PCI root ports.
-> > 
-> > I still think that hiding the code in firmware because the hardware is
-> > broken is absolutely the wrong way to tackle this problem and I thought
-> > the general idea from last time was that we were going to teach Linux
-> > about the broken hardware instead [1]. I'd rather have the junk where we
-> > can see it, reason about it and modify it.
-[...]
-> Is it the official position of the Linux kernel maintainers that they will
-> refuse to support future Arm standards in order to gate keep specific
-> hardware platforms?
+Fix memory-leak for virtio-crypto akcipher request, this problem is
+introduced by 59ca6c93387d3(virtio-crypto: implement RSA algorithm).
+The leak can be reproduced and tested with the following script
+inside virtual machine:
 
-(just back from holiday; well, briefly, going away for a few days soon)
+#!/bin/bash
 
-We shouldn't generalise what maintainers wwould accept or not. We decide
-on a case by case basis. With speculative execution mitigations, for
-example, we try to do as much as we can in the kernel but sometimes
-that's just not possible, hence an EL3 call and we'd rather have this
-standardised (e.g. custom branch loops to flush the branch predictor if
-possible from the normal world, secure call if not).
+LOOP_TIMES=10000
 
-You mention PSCI but that's not working around broken hardware, it was a
-concious decision from the start to standardise the booting protocol and
-CPU power management.
+# required module: pkcs8_key_parser, virtio_crypto
+modprobe pkcs8_key_parser # if CONFIG_PKCS8_PRIVATE_KEY_PARSER=m
+modprobe virtio_crypto # if CONFIG_CRYPTO_DEV_VIRTIO=m
+rm -rf /tmp/data
+dd if=/dev/random of=/tmp/data count=1 bs=230
 
-Now this PCI SMC protocol was simply created because hardware did not
-comply with another PCI standard that has been around for a long time.
-As with the speculative execution mitigations, we'd rather work around
-broken hardware in the kernel first and, if it's not possible, we can
-look at a firmware interface (and ideally standardised). Do you have an
-example where we cannot work around the PCI hardware bugs in the kernel
-and EL3 firmware involvement is necessary?
+# generate private key and self-signed cert
+openssl req -nodes -x509 -newkey rsa:2048 -keyout key.pem \
+		-outform der -out cert.der  \
+		-subj "/C=CN/ST=GD/L=SZ/O=vihoo/OU=dev/CN=always.com/emailAddress=yy@always.com"
+# convert private key from pem to der
+openssl pkcs8 -in key.pem -topk8 -nocrypt -outform DER -out key.der
 
-So, in summary, Arm Ltd proposing a new standard because hardware
-companies can't be bothered with an existing one is not an argument for
-accepting its support in the Linux kernel. This PCI SMC conduit is not
-presented as a hardware bug workaround interface but rather as an
-alternative to ECAM (and, yes, the kernel maintainers can choose not to
-support specific "standards" in Linux).
+# add key
+PRIV_KEY_ID=`cat key.der | keyctl padd asymmetric test_priv_key @s`
+echo "priv key id = "$PRIV_KEY_ID
+PUB_KEY_ID=`cat cert.der | keyctl padd asymmetric test_pub_key @s`
+echo "pub key id = "$PUB_KEY_ID
 
+# query key
+keyctl pkey_query $PRIV_KEY_ID 0
+keyctl pkey_query $PUB_KEY_ID 0
+
+# here we only run pkey_encrypt becasuse it is the fastest interface
+function bench_pub() {
+	keyctl pkey_encrypt $PUB_KEY_ID 0 /tmp/data enc=pkcs1 >/tmp/enc.pub
+}
+
+# do bench_pub in loop to obtain the memory leak
+for (( i = 0; i < ${LOOP_TIMES}; ++i )); do
+	bench_pub
+done
+
+Signed-off-by: lei he <helei.sig11@bytedance.com>
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be kept; you may remove them yourself if you want to.
+# An empty message aborts the commit.
+#
+# Date:      Tue Aug 16 11:53:30 2022 +0800
+#
+# On branch master
+# Your branch is ahead of 'origin/master' by 1 commit.
+#   (use "git push" to publish your local commits)
+#
+# Changes to be committed:
+#	modified:   drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
+#
+# Untracked files:
+#	cert.der
+#	key.der
+#	key.pem
+#
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be kept; you may remove them yourself if you want to.
+# An empty message aborts the commit.
+#
+# Date:      Tue Aug 16 11:53:30 2022 +0800
+#
+# On branch master
+# Your branch is ahead of 'origin/master' by 1 commit.
+#   (use "git push" to publish your local commits)
+#
+# Changes to be committed:
+#	modified:   drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
+#
+# Untracked files:
+#	cert.der
+#	key.der
+#	key.pem
+#
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be kept; you may remove them yourself if you want to.
+# An empty message aborts the commit.
+#
+# Date:      Tue Aug 16 11:53:30 2022 +0800
+#
+# On branch master
+# Your branch is ahead of 'origin/master' by 1 commit.
+#   (use "git push" to publish your local commits)
+#
+# Changes to be committed:
+#	modified:   drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
+#
+# Untracked files:
+#	cert.der
+#	key.der
+#	key.pem
+#
+---
+ drivers/crypto/virtio/virtio_crypto_akcipher_algs.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
+index 2a60d0525cde..168195672e2e 100644
+--- a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
++++ b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
+@@ -56,6 +56,10 @@ static void virtio_crypto_akcipher_finalize_req(
+ 	struct virtio_crypto_akcipher_request *vc_akcipher_req,
+ 	struct akcipher_request *req, int err)
+ {
++	kfree(vc_akcipher_req->src_buf);
++	kfree(vc_akcipher_req->dst_buf);
++	vc_akcipher_req->src_buf = NULL;
++	vc_akcipher_req->dst_buf = NULL;
+ 	virtcrypto_clear_request(&vc_akcipher_req->base);
+ 
+ 	crypto_finalize_akcipher_request(vc_akcipher_req->base.dataq->engine, req, err);
 -- 
-Catalin
+2.20.1
+

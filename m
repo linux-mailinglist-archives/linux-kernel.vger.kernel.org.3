@@ -2,78 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 521AC595909
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E88C05958FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232486AbiHPKzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51372 "EHLO
+        id S234093AbiHPKv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:51:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231443AbiHPKyt (ORCPT
+        with ESMTP id S233821AbiHPKvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:54:49 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4075A356FD
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:22:35 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id u1so14306082lfq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:22:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=6y2krG3wAEmTknGGh9SWgv5ytZ0gHA2IN3Cns5M9GFw=;
-        b=BtvhQgdITP9SVWq42oqxksbehGD1ih5Kbh9JO7DR9OnzuTHyzSYHB6tux+eSg54c8R
-         /YYmMWImRp4q7iTHdyI5nHBhTJpLt2la8nLT0azQB5jK/LsSjdUnIQoM/3zv3toE+EpI
-         YZ7zs9n4oNjIvf/+FgEx4t1GK4fsgric7tF1bPURpLnWGynjTeaurVY8oNs5Tiv6XpDm
-         dAYw7Vm9fDYyInafZtJFjtfbeoUNRvIrPxMODgXeD/01TQWY3KvDwtzV4cE+Iz+LgdQS
-         1XGyVCCU8wfLF08ObAyR7JD+vAwdJWREjjtaWjuXC1TkqV7+pMrWWfb/pTcvOdF9m+rn
-         knvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=6y2krG3wAEmTknGGh9SWgv5ytZ0gHA2IN3Cns5M9GFw=;
-        b=ivFPzqCE9pC8jVGUKkQmNBrR187yQcq9BquSVISsh5W8BRW1/SdvPmm1CiogQeI892
-         21f466+T6t9aI1ZLGMfiK70dLFQzJYYXBCB+ZXZosx5/1tJcqk51DDIxhF9W4R4TksDQ
-         Xj5B2ugX3xZnSZ8bVFmx097wZM9z4mMc5itXtxLKmfWqC10cXsv/5WvVmbHhfr2gHpJd
-         eBYzdn5CHeMkT/2GF6NGnLCCS1oEcgoGgyTd8waRkh8g/zTbiYAa9RaNtbttUDJtfpAy
-         ErQstNudkTjzEgBpkFDkp94LXs830J1ysdJeRdROY/sTtJHKeokyZK7XSMPrv7I+PKFH
-         04fw==
-X-Gm-Message-State: ACgBeo0rctGTKhWXAoi5VB81+K06981xMXE15s9nOpUKCxGBXlmwvczv
-        cFN69dgnCi1BvpNnMeVx6QtNsQ==
-X-Google-Smtp-Source: AA6agR4DMyXo52/nUb1RZwWnixhPJUeaO3FFQ4Es1RNWx1ag+phFlD/ZNuPsKviV0NRpDtSdDjSUeg==
-X-Received: by 2002:a05:6512:22c3:b0:48b:882d:15b8 with SMTP id g3-20020a05651222c300b0048b882d15b8mr7147821lfu.459.1660645353651;
-        Tue, 16 Aug 2022 03:22:33 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id a24-20020a19ca18000000b0048a7ce3ff84sm1332728lfg.285.2022.08.16.03.22.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 03:22:33 -0700 (PDT)
-Message-ID: <99d7784e-e59f-b4f7-e275-935836e5d406@linaro.org>
-Date:   Tue, 16 Aug 2022 13:22:31 +0300
+        Tue, 16 Aug 2022 06:51:36 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7FC47EFD2;
+        Tue, 16 Aug 2022 03:23:47 -0700 (PDT)
+Received: from pwmachine.localnet (85-170-37-153.rev.numericable.fr [85.170.37.153])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 08AD8210DA5E;
+        Tue, 16 Aug 2022 03:23:43 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 08AD8210DA5E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1660645427;
+        bh=YfkkOGSQxA2OzjWDewpNMpQo+oxj7eu+1OSnrSeEK4Y=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=cmrKoiJeQ8xbvJW9ziVMLBaonuTZpJk6d2MfbsVZv0S9trKuNx1i/J1TAv0fcuPTo
+         C6PRgeNl7F48RhkKDnG/hStuNX33PpJcL1UnY9jIVFShckPYpDhF4TyjCNgbFokBOd
+         yHHrU4m7su454KWkXbuqn2UydG56HtdOEBjcnUUI=
+From:   Francis Laniel <flaniel@linux.microsoft.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Geliang Tang <geliang.tang@suse.com>,
+        Hengqi Chen <hengqi.chen@gmail.com>
+Subject: Re: [RFC PATCH v1 1/3] bpf: Make ring buffer overwritable.
+Date:   Tue, 16 Aug 2022 12:23:41 +0200
+Message-ID: <1735233.VLH7GnMWUR@pwmachine>
+In-Reply-To: <CAEf4BzYex03T7aYjLnbkfHb8vUsCHhj_DiMU6KbK29F+DyhXyA@mail.gmail.com>
+References: <20220810171702.74932-1-flaniel@linux.microsoft.com> <20220810171702.74932-2-flaniel@linux.microsoft.com> <CAEf4BzYex03T7aYjLnbkfHb8vUsCHhj_DiMU6KbK29F+DyhXyA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v6 0/9] Improve MCP3911 driver
-Content-Language: en-US
-To:     Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Kent Gustavsson <kent@minoris.se>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220815061625.35568-1-marcus.folkesson@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220815061625.35568-1-marcus.folkesson@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,20 +61,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/08/2022 09:16, Marcus Folkesson wrote:
-> v5:
-> - Drop remove function
-> - Split tx&rx transfers in mcp3911_trigger_handler()
-> - Moved Kconfig changes to right patch
-> 
-> v6:
-> - Go for devm_clk_get_enabled()
-> - Cosmetic cleanups
-> - Clarify the description of microchip,data-ready-hiz
-> 
+Hi.
 
-Please include the diffstat (format-patch does it for you, but if you
-prefer to use other tools - it's your job).
 
-Best regards,
-Krzysztof
+Le lundi 15 ao=FBt 2022, 23:52:22 CEST Andrii Nakryiko a =E9crit :
+> On Wed, Aug 10, 2022 at 10:18 AM Francis Laniel
+>=20
+> <flaniel@linux.microsoft.com> wrote:
+> > By default, BPF ring buffer are size bounded, when producers already
+> > filled the buffer, they need to wait for the consumer to get those data
+> > before adding new ones.
+> > In terms of API, bpf_ringbuf_reserve() returns NULL if the buffer is fu=
+ll.
+> >=20
+> > This patch permits making BPF ring buffer overwritable.
+> > When producers already wrote as many data as the buffer size, they will
+> > begin to over write existing data, so the oldest will be replaced.
+> > As a result, bpf_ringbuf_reserve() never returns NULL.
+>=20
+> Part of BPF ringbuf record (first 8 bytes) stores information like
+> record size and offset in pages to the beginning of ringbuf map
+> metadata. This is used by consumer to know how much data belongs to
+> data record, but also for making sure that
+> bpf_ringbuf_reserve()/bpf_ringbuf_submit() work correctly and don't
+> corrupt kernel memory.
+>=20
+> If we simply allow overwriting this information (and no, spinlock
+> doesn't protect from that, you can have multiple producers writing to
+> different parts of ringbuf data area in parallel after "reserving"
+> their respective records), it completely breaks any sort of
+> correctness, both for user-space consumer and kernel-side producers.
+
+Thank you for your answer.
+My current implementation is indeed wrong as I based it on the wrong=20
+assumption than BPF ring buffer could only store data of the same size...
+With data of different size, we can have the troubles you described.
+
+I will rework my patches and send a new version once polished but I=20
+cannot give an ETA.
+
+> > Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+> > ---
+> >=20
+> >  include/uapi/linux/bpf.h |  3 +++
+> >  kernel/bpf/ringbuf.c     | 51 +++++++++++++++++++++++++++++++---------
+> >  2 files changed, 43 insertions(+), 11 deletions(-)
+>=20
+> [...]
+
+
+Best regards.
+
+

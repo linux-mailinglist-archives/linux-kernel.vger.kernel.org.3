@@ -2,81 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27A825960CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:05:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7075B5960B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233597AbiHPRFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 13:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42250 "EHLO
+        id S236679AbiHPQ7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 12:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236765AbiHPRFm (ORCPT
+        with ESMTP id S236682AbiHPQ7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 13:05:42 -0400
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F9D72ECC;
-        Tue, 16 Aug 2022 10:05:41 -0700 (PDT)
+        Tue, 16 Aug 2022 12:59:17 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB90796A2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:59:15 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id z2so14303258edc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:59:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1660669542; x=1692205542;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=kea+2lE3x+13PZn61zhLys5N6n4jB/mv9M7i/1Ogtkc=;
-  b=pDlvtZ+soDpTsHkmEoBW1BMJFxuk1YaoEv3ViKxKYg79GykXHnXbjESS
-   /RqQVDJl51bVaz6ika0tMA9mejRPjC/OWa8P8/ey8H0Ca0dQGAk+HimFK
-   YIWU+pkAwfUjWUHTEhH4U7Tlwq7ghKa/bUme+5yao+S/QU5NTuM7ddq5u
-   U=;
-X-IronPort-AV: E=Sophos;i="5.93,241,1654560000"; 
-   d="scan'208";a="119917450"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-10222bbc.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 16:59:02 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-10222bbc.us-east-1.amazon.com (Postfix) with ESMTPS id 7FDC31A20C9;
-        Tue, 16 Aug 2022 16:59:00 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 16 Aug 2022 16:58:58 +0000
-Received: from 88665a182662.ant.amazon.com.com (10.43.160.55) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Tue, 16 Aug 2022 16:58:56 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <kuba@kernel.org>
-CC:     <bpf@vger.kernel.org>, <daniel@iogearbox.net>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuni1840@gmail.com>,
-        <kuniyu@amazon.com>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>
-Subject: Re: [PATCH v1 net 00/15] sysctl: Fix data-races around net.core.XXX (Round 1)
-Date:   Tue, 16 Aug 2022 09:58:48 -0700
-Message-ID: <20220816165848.97512-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220816092703.7fe8cbb6@kernel.org>
-References: <20220816092703.7fe8cbb6@kernel.org>
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=PZiFKHAPInSqLmOQSyV+TmAHEnPDfiBJsJIlSVONBUo=;
+        b=LRCjpJNqVhX8469WWIWi7kwgE6So402iY3NGTnuzSThPccWIrskygornwb3D41OzQ8
+         AUJcD7neOIjJ1r8h+Jp8C9vYMNzRMuvxPNuRcwR+OxVlO2b01+dqO7h3GoedFTyK4/ix
+         FxYRfhKhFY51NZt1Ph4W4hbaBuIKb82elRAmY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=PZiFKHAPInSqLmOQSyV+TmAHEnPDfiBJsJIlSVONBUo=;
+        b=wGZ29Hk42kKOvHk7GbnMYOE2Y+k3iugqNM+s3bbD7BiXQBrqccQDRuXRmjCBI6CpGO
+         mOBy1YF6BKI9kKDGghAWzAw+dcVIEz2KyjTCDX3JXOhYIqBBJnVqIaWSYRVNxeZtZrhn
+         SpEik5juWLNIit1g5dNhoRvQnqwujINQ+O/Kab682/4SaIlfWNKZ4mmcSfKw536SRoxL
+         w/P4WtNlMKqCa37SIrtbw6FjrM+XlFvPIDZPz6mcZDuYHMZvPXLfy8l4vz31f/Z95C6Q
+         FnGuoaQfqcyaBqBRKxRrzIxyhv+W/zcpXxRvksU729nlt6Mv/Ah8D6SXFo2yHEmULRPh
+         e91A==
+X-Gm-Message-State: ACgBeo35B8n24GzMf4DvBRp5O1UHz81yG1kXNw5D+xZ9MrMa6ztVuhil
+        CrC1D4xO+Mk34y1ElDNCDfOvQRAUdRCU9i9iL7M=
+X-Google-Smtp-Source: AA6agR6l+A+8fYyopkCteu+6ArdsBelvP1La7o1l6ILnOc8L2BWLIeqFuJXWCq3dkSaUBxKeA0YHmw==
+X-Received: by 2002:aa7:cb92:0:b0:443:98d6:20da with SMTP id r18-20020aa7cb92000000b0044398d620damr11828873edt.399.1660669153686;
+        Tue, 16 Aug 2022 09:59:13 -0700 (PDT)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
+        by smtp.gmail.com with ESMTPSA id j4-20020aa7ca44000000b0043d1a9f6e4asm8917764edt.9.2022.08.16.09.59.12
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 09:59:13 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id k18-20020a05600c0b5200b003a5dab49d0bso5125029wmr.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:59:12 -0700 (PDT)
+X-Received: by 2002:a05:600c:657:b0:3a5:e4e6:ee24 with SMTP id
+ p23-20020a05600c065700b003a5e4e6ee24mr8635263wmm.68.1660669152579; Tue, 16
+ Aug 2022 09:59:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.160.55]
-X-ClientProxiedBy: EX13D07UWA003.ant.amazon.com (10.43.160.35) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <YvqaK3hxix9AaQBO@slm.duckdns.org> <YvsZ6vObgLaDeSZk@gondor.apana.org.au>
+ <CAHk-=wgSNiT5qJX53RHtWECsUiFq6d6VWYNAvu71ViOEan07yw@mail.gmail.com>
+ <20220816134156.GB11202@willie-the-truck> <YvuvxnfHIRUAuCrD@boqun-archlinux> <74559da4-5cd4-7cc4-0303-ab5f6a8b92ae@marcan.st>
+In-Reply-To: <74559da4-5cd4-7cc4-0303-ab5f6a8b92ae@marcan.st>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 16 Aug 2022 09:58:56 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whn=gkf8kOxVPPeTpcgsFk21P9sk4SZRQ26=Jhqo6ewRA@mail.gmail.com>
+Message-ID: <CAHk-=whn=gkf8kOxVPPeTpcgsFk21P9sk4SZRQ26=Jhqo6ewRA@mail.gmail.com>
+Subject: Re: [PATCH] workqueue: Fix memory ordering race in queue_work*()
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Will Deacon <will@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Tejun Heo <tj@kernel.org>, peterz@infradead.org,
+        jirislaby@kernel.org, maz@kernel.org, mark.rutland@arm.com,
+        catalin.marinas@arm.com, oneukum@suse.com,
+        roman.penyaev@profitbricks.com, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From:   Jakub Kicinski <kuba@kernel.org>
-Date:   Tue, 16 Aug 2022 09:27:03 -0700
-> On Mon, 15 Aug 2022 22:23:32 -0700 Kuniyuki Iwashima wrote:
-> >   bpf: Fix data-races around bpf_jit_enable.
-> >   bpf: Fix data-races around bpf_jit_harden.
-> >   bpf: Fix data-races around bpf_jit_kallsyms.
-> >   bpf: Fix a data-race around bpf_jit_limit.
-> 
-> The BPF stuff needs to go via the BPF tree, or get an ack from the BPF
-> maintainers. I see Daniel is CCed on some of the patches but not all.
+On Tue, Aug 16, 2022 at 9:22 AM Hector Martin <marcan@marcan.st> wrote:
+>
+> It's worth pointing out that the workqueue code does *not* pair
+> test_and_set_bit() with clear_bit(). It does an atomic_long_set()
+> instead
 
-Sorry, I just added the author in CC.
-Thanks for CCing bpf mailing list, I'll wait an ACK from them.
+Yes. That code is much too subtle.
+
+And yes, I think those barriers are
+
+ (a) misleading
+
+ (b) don't work with the "serialize bits using spinlock" model at all
+
+It's a good example of "we need to really have a better model for this".
+
+             Linus

@@ -2,159 +2,941 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F555958B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5CE75959AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234990AbiHPKmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
+        id S234110AbiHPLQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 07:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234904AbiHPKmK (ORCPT
+        with ESMTP id S235380AbiHPLPZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:42:10 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF0AD0236
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:59:42 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id x9so9987340ljj.13
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:59:42 -0700 (PDT)
+        Tue, 16 Aug 2022 07:15:25 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15192DFE2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:59:58 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id j26so2754757wms.0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:59:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=FUFa0tAMMh/TtMA4JL4AeBH252o6vhFi0++29Z10b24=;
-        b=zVE9sjyWG25xLS+qfczRwgEvdChwcxYO9y9ThgToxbiD92NoriI2/CugHb+2TF3ZFF
-         /VXzNtQOnWx3R0kfeyzg8WfW+5EUt9bgy1gW7Yegna+Po6NGdGDJgHl5Nxz6UXRqKqFP
-         fTc++mSbFkWyzCFK0wXmxpUKsuOcNjJgDR39utT/D3NxyGfYnbhTWBdIuj6akm4Bzko7
-         vz8sowWFwXLFNBVl4aaNXSw+3yD83buEjvoUZ2WYEtGbit0Tgtc5xyxrwWGU2kIA2HyZ
-         y/47r3YT6oT3mH6gKYu00BulMGdQcHyDyBVfKhGRcfRG38Zqvj/ELALRHaU37DJ7c1MF
-         Om0A==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc;
+        bh=PnqklWL+RGF1i3CCCLxxKU2hE1X/c3n110YFpI0olb0=;
+        b=RTe1VVb/oV4hrVGJVXm9YA8nwupX2PMGKl+Pg3bUXFbY9jWWbffqHXxE76j8rNRouD
+         sbD96+X2iqcn6AIyC9rV5gIemvlQDVYh+uJ+Ym44t3Va9Qb+OqjZrzZJNKw/4QINWiDd
+         cp/d08ol2Ls5jKAMI1d/+AXvQJpcpyDbYz05Hpvj0qENv9DnlnTWtx3WGMWVmd803aOc
+         ZnQRvdDX/VEjVTSz6vJR2cnkArAMeB8j5Mai5k30GLi5SXDRWi/jZuEJ9mLI/up96aua
+         ZJx4ytUSSbgzGX/TGUKQa4O7tAXjnk4dh992fYzWNowAvk2wbkLrNHQnaPVtPeb4DE5s
+         /X+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=FUFa0tAMMh/TtMA4JL4AeBH252o6vhFi0++29Z10b24=;
-        b=66d6AnttEx2mDnbp3kru8VsX361h9TBAKZ3PTWbOodEhAmkTcH+uyrn/QO24p6QZzS
-         tkFHO6bKMtih2S28xsF0EyKzasVYZGd+VngyALxWQ13DrNoPZqB+GByqsvisCO/7XZQu
-         KqOltmvvYRXilNzIHO4kV+CfJdZ8pXI6j+eioyVxMAN2UKIstzDgOi0DF/+oRUTHl9AT
-         BpdjIA8Ng1VfmmYwfq/kUNh58nF4tX5qcOAX35QxFgSpjNAYcD2+FQfXB3cAGFiSmAqu
-         VLq8jb6fYnm/QG5ZdR6tR+WwomDvaHA9tmhsaJEqHFNTmLypD+l+lk6ikBc1CNaKMg9j
-         ej7Q==
-X-Gm-Message-State: ACgBeo2wPvJG+rqTsEnoCjaCagDncScYyuE5mgYncWlrB6BLG3+RQUbc
-        Ci10UbgEoFLl/70CL1WASJzV/A==
-X-Google-Smtp-Source: AA6agR6vA3wQXqUJnn2nYR4Cb7jBvUzx/9ftdty6xbOM/7CP2StR5ZpMn2Us3AJtLeblD6qmRz2oQg==
-X-Received: by 2002:a2e:b74a:0:b0:25f:3f72:9210 with SMTP id k10-20020a2eb74a000000b0025f3f729210mr6307340ljo.8.1660643981080;
-        Tue, 16 Aug 2022 02:59:41 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id o5-20020a2e9445000000b0025e0396786dsm1741897ljh.93.2022.08.16.02.59.39
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=PnqklWL+RGF1i3CCCLxxKU2hE1X/c3n110YFpI0olb0=;
+        b=BpdSdAN2JG+RHpwUo7oNazhA2RpoH/9zr9JYOnWDeOqy7taSHiIDpYsq+xeuJIoBkn
+         pdZUg2dVH0Dj3cNy5m3GmR9G5FD95r0yp4IskYwlxoMrO+F+F40pdmOl5Kl/c0SeoWiG
+         qnOy3TFPknOXL4vIpj/1tjxYvSRh8lxgI+X7bV5OCtkvjfsaJoI8HRgrZwBKm5WSTbTv
+         2RMZhYwzK9K5Ci5WkqvA41iBQBRAfXvpXegnsOaQ1Lf4slL58RmawyH8ZMND0y7JvMwl
+         FV/Ly11RXwEOJOnBF9f8eDZ3ie0Ymcc9mLoOXpma+Wf+UfeVXU3ksU6UUMHTsKlD7ZLu
+         PLmg==
+X-Gm-Message-State: ACgBeo0a3M8klhS+jg1op2dLhJylipD1sGVCujNciPfLoFDe2NAJdf+U
+        oqHFTVGw76NIKPrM/tFXq9+Q+A==
+X-Google-Smtp-Source: AA6agR42gKbh+SrSoKgSqr3CinU2WRqyL1DxHjFcjbYadmn44fp4m/4ugiMrKyH6xsboL5oVeeQjXw==
+X-Received: by 2002:a7b:cd0f:0:b0:3a5:ec59:daf0 with SMTP id f15-20020a7bcd0f000000b003a5ec59daf0mr6442194wmj.13.1660643996273;
+        Tue, 16 Aug 2022 02:59:56 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:ef0b:d58b:b15c:96e6? ([2a01:e0a:982:cbb0:ef0b:d58b:b15c:96e6])
+        by smtp.gmail.com with ESMTPSA id j11-20020adfe50b000000b00224f67bfc95sm8623511wrm.62.2022.08.16.02.59.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 02:59:40 -0700 (PDT)
-Message-ID: <3e23c288-7065-a3fd-c326-8d66e168ba41@linaro.org>
-Date:   Tue, 16 Aug 2022 12:59:39 +0300
+        Tue, 16 Aug 2022 02:59:55 -0700 (PDT)
+Message-ID: <89777dae-34c5-3cb9-dd54-98230fd260e0@baylibre.com>
+Date:   Tue, 16 Aug 2022 11:59:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 3/4] dt-bindings: sram: sunxi-sram: Add optional
- regulators child
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] arm64: dts: meson-axg: add support for JetHub D1p
+ (j110)
 Content-Language: en-US
-To:     Samuel Holland <samuel@sholland.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
+To:     Vyacheslav Bocharov <adeep@lexina.in>
+Cc:     linux-amlogic@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-References: <20220815043436.20170-1-samuel@sholland.org>
- <20220815043436.20170-4-samuel@sholland.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220815043436.20170-4-samuel@sholland.org>
-Content-Type: text/plain; charset=UTF-8
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+References: <20220811103113.3097868-1-adeep@lexina.in>
+ <20220811103113.3097868-2-adeep@lexina.in>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <20220811103113.3097868-2-adeep@lexina.in>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/08/2022 07:34, Samuel Holland wrote:
-> Some sunxi SoCs have in-package regulators controlled by a register in
-> the system control MMIO block. Allow a child node for these regulators
-> in addition to SRAM child nodes.
+On 11/08/2022 12:31, Vyacheslav Bocharov wrote:
+> - add support for JetHome JetHub D1p (https://jethome.ru/d1p) is a home
+> automation controller with the following features:
+>    - DIN Rail Mounting
+>    - Amlogic A113X (ARM Cortex-A53) quad-core up to 1.5GHz
+>    - no video out
+>    - 1/2/4GB LPDDR4
+>    - 8/16/32GB eMMC flash
+>    - 1 x USB 2.0
+>    - 1 x 10/100Mbps ethernet
+>    - WiFi / Bluetooth Realtek 8822CS or similar IEEE 802.11a/b/g/n/ac
+>    - TI CC2652P1 Zigbee Wireless Module with up to 20dBm output power
+>      and Zigbee 3.0 support.
+>    - 2 x gpio LEDS
+>    - GPIO user Button
+>    - 1 x 1-Wire
+>    - 2 x RS-485
+>    - 4 x dry contact digital GPIO inputs
+>    - 3 x relay GPIO outputs
+>    - DC source with a voltage of 9 to 56 V / Active POE
 > 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> - unify device tree files for JetHub D1/D1p devices
+> 
+> Signed-off-by: Vyacheslav Bocharov <adeep@lexina.in>
 > ---
+>   arch/arm64/boot/dts/amlogic/Makefile          |   2 +
+>   .../amlogic/meson-axg-jethome-jethub-j100.dts | 338 +----------------
+>   .../meson-axg-jethome-jethub-j110-rev-2.dts   |  37 ++
+>   .../meson-axg-jethome-jethub-j110-rev-3.dts   |  27 ++
+>   .../meson-axg-jethome-jethub-j1xx.dtsi        | 351 ++++++++++++++++++
+>   5 files changed, 421 insertions(+), 334 deletions(-)
+>   create mode 100644 arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-2.dts
+>   create mode 100644 arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-3.dts
+>   create mode 100644 arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j1xx.dtsi
 > 
-> Changes in v3:
->  - Require the regulators node to have a unit address
->  - Reference the regulator schema from the SRAM controller schema
->  - Move the system LDOs example to the SRAM controller schema
->  - Reorder the patches so the example passes validation
-> 
-> Changes in v2:
->  - New patch for v2
-> 
->  .../allwinner,sun4i-a10-system-control.yaml   | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml b/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
-> index d64c1b28fb61..915ca85c3f10 100644
-> --- a/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
-> +++ b/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
-> @@ -56,6 +56,10 @@ properties:
->    ranges: true
->  
->  patternProperties:
-> +  "^regulators@[0-9a-f]+$":
-> +    $ref: /schemas/regulator/allwinner,sun20i-d1-system-ldos.yaml#
-> +    unevaluatedProperties: false
-
-unevaluatedProperties is not needed. Your other schema does not allow
-anything else here.
-
+> diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
+> index 8773211df50e..33e9c96af099 100644
+> --- a/arch/arm64/boot/dts/amlogic/Makefile
+> +++ b/arch/arm64/boot/dts/amlogic/Makefile
+> @@ -1,6 +1,8 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   dtb-$(CONFIG_ARCH_MESON) += meson-a1-ad401.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-axg-jethome-jethub-j100.dtb
+> +dtb-$(CONFIG_ARCH_MESON) += meson-axg-jethome-jethub-j110-rev-2.dtb
+> +dtb-$(CONFIG_ARCH_MESON) += meson-axg-jethome-jethub-j110-rev-3.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-axg-s400.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-g12a-radxa-zero.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-g12a-sei510.dtb
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dts b/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dts
+> index 8b0d586aa84e..b2d6ba660914 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dts
+> @@ -1,270 +1,29 @@
+>   // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+>   /*
+> - * Copyright (c) 2021 Vyacheslav Bocharov <adeep@lexina.in>
+> - * Copyright (c) 2020 JetHome
+> - * Author: Aleksandr Kazantsev <ak@tvip.ru>
+> - * Author: Alexey Shevelkin <ash@tvip.ru>
+> + * Copyright (c) 2022 Vyacheslav Bocharov <adeep@lexina.in>
+> + * Copyright (c) 2022 JetHome
+>    * Author: Vyacheslav Bocharov <adeep@lexina.in>
+>    */
+>   
+>   /dts-v1/;
+>   
+> -#include "meson-axg.dtsi"
+> -#include <dt-bindings/input/input.h>
+> -#include <dt-bindings/thermal/thermal.h>
+> +#include "meson-axg-jethome-jethub-j1xx.dtsi"
+>   
+>   / {
+>   	compatible = "jethome,jethub-j100", "amlogic,a113d", "amlogic,meson-axg";
+> -	model = "JetHome JetHub J100";
+> -	aliases {
+> -		serial0 = &uart_AO;   /* Console */
+> -		serial2 = &uart_AO_B; /* External UART (Wireless Module) */
+> -		ethernet0 = &ethmac;
+> -	};
+> -
+> -	chosen {
+> -		stdout-path = "serial0:115200n8";
+> -	};
+> +	model = "JetHome JetHub D1 (J100)";
+>   
+>   	/* 1024MB RAM */
+>   	memory@0 {
+>   		device_type = "memory";
+>   		reg = <0x0 0x0 0x0 0x40000000>;
+>   	};
+> -
+> -	reserved-memory {
+> -		linux,cma {
+> -			size = <0x0 0x400000>;
+> -		};
+> -	};
+> -
+> -	emmc_pwrseq: emmc-pwrseq {
+> -		compatible = "mmc-pwrseq-emmc";
+> -		reset-gpios = <&gpio BOOT_9 GPIO_ACTIVE_LOW>;
+> -	};
+> -
+> -	vcc_3v3: regulator-vcc_3v3 {
+> -		compatible = "regulator-fixed";
+> -		regulator-name = "VCC_3V3";
+> -		regulator-min-microvolt = <3300000>;
+> -		regulator-max-microvolt = <3300000>;
+> -		vin-supply = <&vddao_3v3>;
+> -		regulator-always-on;
+> -	};
+> -
+> -	vcc_5v: regulator-vcc_5v {
+> -		compatible = "regulator-fixed";
+> -		regulator-name = "VCC5V";
+> -		regulator-min-microvolt = <5000000>;
+> -		regulator-max-microvolt = <5000000>;
+> -		regulator-always-on;
+> -	};
+> -
+> -	vddao_3v3: regulator-vddao_3v3 {
+> -		compatible = "regulator-fixed";
+> -		regulator-name = "VDDAO_3V3";
+> -		regulator-min-microvolt = <3300000>;
+> -		regulator-max-microvolt = <3300000>;
+> -		vin-supply = <&vcc_5v>;
+> -		regulator-always-on;
+> -	};
+> -
+> -	vddio_ao18: regulator-vddio_ao18 {
+> -		compatible = "regulator-fixed";
+> -		regulator-name = "VDDIO_AO18";
+> -		regulator-min-microvolt = <1800000>;
+> -		regulator-max-microvolt = <1800000>;
+> -		vin-supply = <&vddao_3v3>;
+> -		regulator-always-on;
+> -	};
+> -
+> -	vddio_boot: regulator-vddio_boot {
+> -		compatible = "regulator-fixed";
+> -		regulator-name = "VDDIO_BOOT";
+> -		regulator-min-microvolt = <3300000>;
+> -		regulator-max-microvolt = <3300000>;
+> -		vin-supply = <&vddao_3v3>;
+> -		regulator-always-on;
+> -	};
+> -
+> -	vccq_1v8: regulator-vccq_1v8 {
+> -		compatible = "regulator-fixed";
+> -		regulator-name = "VCCQ_1V8";
+> -		regulator-min-microvolt = <1800000>;
+> -		regulator-max-microvolt = <1800000>;
+> -		vin-supply = <&vddao_3v3>;
+> -		regulator-always-on;
+> -	};
+> -
+> -	usb_pwr: regulator-usb_pwr {
+> -		compatible = "regulator-fixed";
+> -		regulator-name = "USB_PWR";
+> -		regulator-min-microvolt = <5000000>;
+> -		regulator-max-microvolt = <5000000>;
+> -		vin-supply = <&vcc_5v>;
+> -		regulator-always-on;
+> -	};
+> -
+> -	sdio_pwrseq: sdio-pwrseq {
+> -		compatible = "mmc-pwrseq-simple";
+> -		reset-gpios = <&gpio GPIOX_7 GPIO_ACTIVE_LOW>;
+> -		clocks = <&wifi32k>;
+> -		clock-names = "ext_clock";
+> -	};
+> -
+> -	wifi32k: wifi32k {
+> -		compatible = "pwm-clock";
+> -		#clock-cells = <0>;
+> -		clock-frequency = <32768>;
+> -		pwms = <&pwm_ab 0 30518 0>; /* PWM_A at 32.768KHz */
+> -	};
+> -
+> -	thermal-zones {
+> -		cpu_thermal: cpu-thermal {
+> -			polling-delay-passive = <250>;
+> -			polling-delay = <1000>;
+> -			thermal-sensors = <&scpi_sensors 0>;
+> -			trips {
+> -				cpu_passive: cpu-passive {
+> -					temperature = <70000>; /* millicelsius */
+> -					hysteresis = <2000>; /* millicelsius */
+> -					type = "passive";
+> -				};
+> -
+> -				cpu_hot: cpu-hot {
+> -					temperature = <80000>; /* millicelsius */
+> -					hysteresis = <2000>; /* millicelsius */
+> -					type = "hot";
+> -				};
+> -
+> -				cpu_critical: cpu-critical {
+> -					temperature = <100000>; /* millicelsius */
+> -					hysteresis = <2000>; /* millicelsius */
+> -					type = "critical";
+> -				};
+> -			};
+> -
+> -			cpu_cooling_maps: cooling-maps {
+> -				map0 {
+> -					trip = <&cpu_passive>;
+> -					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> -							<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> -							<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> -							<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> -				};
+> -
+> -				map1 {
+> -					trip = <&cpu_hot>;
+> -					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> -							<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> -							<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> -							<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> -				};
+> -			};
+> -		};
+> -	};
+> -
+> -	onewire {
+> -		compatible = "w1-gpio";
+> -		gpios = <&gpio GPIOA_14 GPIO_ACTIVE_HIGH>;
+> -		#gpio-cells = <1>;
+> -	};
+> -};
+> -
+> -&efuse {
+> -	sn: sn@32 {
+> -		reg = <0x32 0x20>;
+> -	};
+> -
+> -	eth_mac: eth_mac@0 {
+> -		reg = <0x0 0x6>;
+> -	};
+> -
+> -	bt_mac: bt_mac@6 {
+> -		reg = <0x6 0x6>;
+> -	};
+> -
+> -	wifi_mac: wifi_mac@c {
+> -		reg = <0xc 0x6>;
+> -	};
+> -
+> -	bid: bid@12 {
+> -		reg = <0x12 0x20>;
+> -	};
+> -};
+> -
+> -&ethmac {
+> -	status = "okay";
+> -	pinctrl-0 = <&eth_rmii_x_pins>;
+> -	pinctrl-names = "default";
+> -	phy-handle = <&eth_phy0>;
+> -	phy-mode = "rmii";
+> -
+> -	mdio {
+> -		compatible = "snps,dwmac-mdio";
+> -		#address-cells = <1>;
+> -		#size-cells = <0>;
+> -
+> -		/* ICPlus IP101A/G Ethernet PHY (vendor_id=0x0243, model_id=0x0c54) */
+> -		eth_phy0: ethernet-phy@0 {
+> -			/* compatible = "ethernet-phy-id0243.0c54";*/
+> -			max-speed = <100>;
+> -			reg = <0>;
+> -
+> -			reset-assert-us = <10000>;
+> -			reset-deassert-us = <10000>;
+> -			reset-gpios = <&gpio GPIOZ_5 GPIO_ACTIVE_LOW>;
+> -		};
+> -	};
+> -};
+> -
+> -/* Internal I2C bus (on CPU module) */
+> -&i2c1 {
+> -	status = "okay";
+> -	pinctrl-0 = <&i2c1_z_pins>;
+> -	pinctrl-names = "default";
+> -
+> -	/* RTC */
+> -	pcf8563: pcf8563@51 {
+> -		compatible = "nxp,pcf8563";
+> -		reg = <0x51>;
+> -		status = "okay";
+> -	};
+>   };
+>   
+> -/* Peripheral I2C bus (on motherboard) */
+> -&i2c_AO {
+> -	status = "okay";
+> -	pinctrl-0 = <&i2c_ao_sck_10_pins>, <&i2c_ao_sda_11_pins>;
+> -	pinctrl-names = "default";
+> -};
+> -
+> -&pwm_ab {
+> -	status = "okay";
+> -	pinctrl-0 = <&pwm_a_x20_pins>;
+> -	pinctrl-names = "default";
+> -};
+>   
+>   /* wifi module */
+>   &sd_emmc_b {
+> -	status = "okay";
+> -	#address-cells = <1>;
+> -	#size-cells = <0>;
+> -
+> -	pinctrl-0 = <&sdio_pins>;
+> -	pinctrl-1 = <&sdio_clk_gate_pins>;
+> -	pinctrl-names = "default", "clk-gate";
+> -
+> -	bus-width = <4>;
+> -	cap-sd-highspeed;
+> -	max-frequency = <50000000>;
+>   	non-removable;
+> -	disable-wp;
+> -
+> -	mmc-pwrseq = <&sdio_pwrseq>;
+> -
+> -	vmmc-supply = <&vddao_3v3>;
+> -	vqmmc-supply = <&vddio_boot>;
+>   
+>   	brcmf: wifi@1 {
+>   		reg = <1>;
+> @@ -272,99 +31,10 @@ brcmf: wifi@1 {
+>   	};
+>   };
+>   
+> -/* emmc storage */
+> -&sd_emmc_c {
+> -	status = "okay";
+> -	pinctrl-0 = <&emmc_pins>, <&emmc_ds_pins>;
+> -	pinctrl-1 = <&emmc_clk_gate_pins>;
+> -	pinctrl-names = "default", "clk-gate";
+> -
+> -	bus-width = <8>;
+> -	cap-mmc-highspeed;
+> -	max-frequency = <200000000>;
+> -	non-removable;
+> -	disable-wp;
+> -	mmc-ddr-1_8v;
+> -	mmc-hs200-1_8v;
+> -
+> -	mmc-pwrseq = <&emmc_pwrseq>;
+> -
+> -	vmmc-supply = <&vcc_3v3>;
+> -	vqmmc-supply = <&vccq_1v8>;
+> -};
+> -
+>   /* UART Bluetooth */
+>   &uart_B {
+> -	status = "okay";
+> -	pinctrl-0 = <&uart_b_z_pins>, <&uart_b_z_cts_rts_pins>;
+> -	pinctrl-names = "default";
+> -	uart-has-rtscts;
+> -
+>   	bluetooth {
+>   		compatible = "brcm,bcm43438-bt";
+>   		shutdown-gpios = <&gpio GPIOZ_7 GPIO_ACTIVE_HIGH>;
+>   	};
+>   };
+> -
+> -/* UART Console */
+> -&uart_AO {
+> -	status = "okay";
+> -	pinctrl-0 = <&uart_ao_a_pins>;
+> -	pinctrl-names = "default";
+> -};
+> -
+> -/* UART Wireless module */
+> -&uart_AO_B {
+> -	status = "okay";
+> -	pinctrl-0 = <&uart_ao_b_pins>;
+> -	pinctrl-names = "default";
+> -};
+> -
+> -&usb {
+> -	status = "okay";
+> -	phy-supply = <&usb_pwr>;
+> -};
+> -
+> -&spicc1 {
+> -	status = "okay";
+> -	pinctrl-0 = <&spi1_x_pins>, <&spi1_ss0_x_pins>;
+> -	pinctrl-names = "default";
+> -};
+> -
+> -&gpio {
+> -	gpio-line-names =
+> -		"", "", "", "", "", // 0 - 4
+> -		"", "", "", "", "", // 5 - 9
+> -		"UserButton", "", "", "", "", // 10 - 14
+> -		"", "", "", "", "", // 15 - 19
+> -		"", "", "", "", "", // 20 - 24
+> -		"", "LedRed", "LedGreen", "Output3", "Output2", // 25 - 29
+> -		"Output1", "", "", "", "", // 30 - 34
+> -		"", "ZigBeeBOOT", "", "", "", // 35 - 39
+> -		"1Wire", "ZigBeeRESET", "", "Input4", "Input3", // 40 - 44
+> -		"Input2", "Input1", "", "", "", // 45 - 49
+> -		"", "", "", "", "", // 50 - 54
+> -		"", "", "", "", "", // 55 - 59
+> -		"", "", "", "", "", // 60 - 64
+> -		"", "", "", "", "", // 65 - 69
+> -		"", "", "", "", "", // 70 - 74
+> -		"", "", "", "", "", // 75 - 79
+> -		"", "", "", "", "", // 80 - 84
+> -		"", ""; // 85-86
+> -};
+> -
+> -&cpu0 {
+> -	#cooling-cells = <2>;
+> -};
+> -
+> -&cpu1 {
+> -	#cooling-cells = <2>;
+> -};
+> -
+> -&cpu2 {
+> -	#cooling-cells = <2>;
+> -};
+> -
+> -&cpu3 {
+> -	#cooling-cells = <2>;
+> -};
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-2.dts b/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-2.dts
+> new file mode 100644
+> index 000000000000..0062667c4f65
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-2.dts
+> @@ -0,0 +1,37 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2022 Vyacheslav Bocharov <adeep@lexina.in>
+> + * Copyright (c) 2022 JetHome
+> + * Author: Vyacheslav Bocharov <adeep@lexina.in>
+> + */
 > +
->    "^sram@[a-z0-9]+":
->      type: object
->  
-> @@ -130,3 +134,28 @@ examples:
->          };
->        };
->      };
+> +/dts-v1/;
 > +
-> +  - |
-> +    syscon@3000000 {
-> +      compatible = "allwinner,sun20i-d1-system-control";
-
-Your other example uses simple-mfd, syscon... A bit confusing.
-
-> +      reg = <0x3000000 0x1000>;
-> +      ranges;
-> +      #address-cells = <1>;
-> +      #size-cells = <1>;
+> +#include "meson-axg-jethome-jethub-j1xx.dtsi"
 > +
-> +      regulators@3000150 {
-> +        compatible = "allwinner,sun20i-d1-system-ldos";
-> +        reg = <0x3000150 0x4>;
+> +/ {
+> +	compatible = "jethome,jethub-j110", "amlogic,a113d", "amlogic,meson-axg";
+> +	model = "JetHome JetHub D1p (J110) HW rev.2";
 > +
-> +        reg_ldoa: ldoa {
-> +          regulator-min-microvolt = <1800000>;
-> +          regulator-max-microvolt = <1800000>;
-> +        };
+> +	/* 2GiB or 4GiB RAM */
+> +	memory@0 {
+> +		device_type = "memory";
+> +		reg = <0x0 0x0 0x0 0x80000000>;
+> +	};
+> +};
 > +
-> +        reg_ldob: ldob {
-> +          regulator-name = "vcc-dram";
-> +          regulator-min-microvolt = <1500000>;
-> +          regulator-max-microvolt = <1500000>;
-> +        };
-> +      };
-> +    };
+> +
+> +/* wifi module */
+> +&sd_emmc_b {
+> +	broken-cd;/* cd-gpios = <&gpio_ao GPIOAO_3 GPIO_ACTIVE_LOW>;*/
+> +};
+> +
+> +/* UART Bluetooth */
+> +&uart_B {
+> +	bluetooth {
+> +		compatible = "realtek,rtl8822cs-bt";
+> +		enable-gpios  = <&gpio GPIOZ_7 GPIO_ACTIVE_HIGH>;
+> +		host-wake-gpios = <&gpio GPIOZ_8 GPIO_ACTIVE_HIGH>;
+> +		device-wake-gpios = <&gpio GPIOZ_6 GPIO_ACTIVE_HIGH>;
+> +	};
+> +};
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-3.dts b/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-3.dts
+> new file mode 100644
+> index 000000000000..c2d22b00c1cd
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-3.dts
+> @@ -0,0 +1,27 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2022 Vyacheslav Bocharov <adeep@lexina.in>
+> + * Copyright (c) 2022 JetHome
+> + * Author: Vyacheslav Bocharov <adeep@lexina.in>
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "meson-axg-jethome-jethub-j1xx.dtsi"
+> +
+> +/ {
+> +	compatible = "jethome,jethub-j110", "amlogic,a113d", "amlogic,meson-axg";
+> +	model = "JetHome JetHub D1p (J110) Hw rev.3";
+> +
+> +	/* 2GiB or 4GiB RAM */
+> +	memory@0 {
+> +		device_type = "memory";
+> +		reg = <0x0 0x0 0x0 0x80000000>;
+> +	};
+> +};
+> +
+> +
+> +/* wifi module */
+> +&sd_emmc_b {
+> +	broken-cd;/* cd-gpios = <&gpio_ao GPIOAO_3 GPIO_ACTIVE_LOW>;*/
+> +};
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j1xx.dtsi b/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j1xx.dtsi
+> new file mode 100644
+> index 000000000000..5836b0030931
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j1xx.dtsi
+> @@ -0,0 +1,351 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2022 Vyacheslav Bocharov <adeep@lexina.in>
+> + * Copyright (c) 2022 JetHome
+> + * Author: Vyacheslav Bocharov <adeep@lexina.in>
+> + * Author: Aleksandr Kazantsev <ak@tvip.ru>
+> + * Author: Alexey Shevelkin <ash@tvip.ru>
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "meson-axg.dtsi"
+> +#include <dt-bindings/input/input.h>
+> +#include <dt-bindings/thermal/thermal.h>
+> +
+> +/ {
+> +	aliases {
+> +		serial0 = &uart_AO;   /* Console */
+> +		serial2 = &uart_AO_B; /* External UART (Wireless Module) */
+> +		ethernet0 = &ethmac;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0:115200n8";
+> +	};
+> +
+> +	reserved-memory {
+> +		linux,cma {
+> +			size = <0x0 0x400000>;
+> +		};
+> +	};
+> +
+> +	emmc_pwrseq: emmc-pwrseq {
+> +		compatible = "mmc-pwrseq-emmc";
+> +		reset-gpios = <&gpio BOOT_9 GPIO_ACTIVE_LOW>;
+> +	};
+> +
+> +	vcc_3v3: regulator-vcc_3v3 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "VCC_3V3";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		vin-supply = <&vddao_3v3>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	vcc_5v: regulator-vcc_5v {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "VCC5V";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	vddao_3v3: regulator-vddao_3v3 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "VDDAO_3V3";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		vin-supply = <&vcc_5v>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	vddio_ao18: regulator-vddio_ao18 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "VDDIO_AO18";
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +		vin-supply = <&vddao_3v3>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	vddio_boot: regulator-vddio_boot {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "VDDIO_BOOT";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		vin-supply = <&vddao_3v3>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	vccq_1v8: regulator-vccq_1v8 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "VCCQ_1V8";
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +		vin-supply = <&vddao_3v3>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	usb_pwr: regulator-usb_pwr {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "USB_PWR";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		vin-supply = <&vcc_5v>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	sdio_pwrseq: sdio-pwrseq {
+> +		compatible = "mmc-pwrseq-simple";
+> +		reset-gpios = <&gpio GPIOX_7 GPIO_ACTIVE_LOW>;
+> +		clocks = <&wifi32k>;
+> +		clock-names = "ext_clock";
+> +	};
+> +
+> +	wifi32k: wifi32k {
+> +		compatible = "pwm-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <32768>;
+> +		pwms = <&pwm_ab 0 30518 0>; /* PWM_A at 32.768KHz */
+> +	};
+> +
+> +	thermal-zones {
+> +		cpu_thermal: cpu-thermal {
+> +			polling-delay-passive = <250>;
+> +			polling-delay = <1000>;
+> +			thermal-sensors = <&scpi_sensors 0>;
+> +			trips {
+> +				cpu_passive: cpu-passive {
+> +					temperature = <70000>; /* millicelsius */
+> +					hysteresis = <2000>; /* millicelsius */
+> +					type = "passive";
+> +				};
+> +
+> +				cpu_hot: cpu-hot {
+> +					temperature = <80000>; /* millicelsius */
+> +					hysteresis = <2000>; /* millicelsius */
+> +					type = "hot";
+> +				};
+> +
+> +				cpu_critical: cpu-critical {
+> +					temperature = <100000>; /* millicelsius */
+> +					hysteresis = <2000>; /* millicelsius */
+> +					type = "critical";
+> +				};
+> +			};
+> +
+> +			cpu_cooling_maps: cooling-maps {
+> +				map0 {
+> +					trip = <&cpu_passive>;
+> +					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +
+> +				map1 {
+> +					trip = <&cpu_hot>;
+> +					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+> +	onewire {
+> +		compatible = "w1-gpio";
+> +		gpios = <&gpio GPIOA_14 GPIO_ACTIVE_HIGH>;
+> +		#gpio-cells = <1>;
+> +	};
+> +};
+> +
+> +&efuse {
+> +	sn: sn@32 {
+> +		reg = <0x32 0x20>;
+> +	};
+> +
+> +	eth_mac: eth_mac@0 {
+> +		reg = <0x0 0x6>;
+> +	};
+> +
+> +	bt_mac: bt_mac@6 {
+> +		reg = <0x6 0x6>;
+> +	};
+> +
+> +	wifi_mac: wifi_mac@c {
+> +		reg = <0xc 0x6>;
+> +	};
+> +
+> +	bid: bid@12 {
+> +		reg = <0x12 0x20>;
+> +	};
+> +};
+> +
+> +&ethmac {
+> +	status = "okay";
+> +	pinctrl-0 = <&eth_rmii_x_pins>;
+> +	pinctrl-names = "default";
+> +	phy-handle = <&eth_phy0>;
+> +	phy-mode = "rmii";
+> +
+> +	mdio {
+> +		compatible = "snps,dwmac-mdio";
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		/* ICPlus IP101A/G Ethernet PHY (vendor_id=0x0243, model_id=0x0c54) */
+> +		eth_phy0: ethernet-phy@0 {
+> +			/* compatible = "ethernet-phy-id0243.0c54";*/
+> +			max-speed = <100>;
+> +			reg = <0>;
+> +
+> +			reset-assert-us = <10000>;
+> +			reset-deassert-us = <10000>;
+> +			reset-gpios = <&gpio GPIOZ_5 GPIO_ACTIVE_LOW>;
+> +		};
+> +	};
+> +};
+> +
+> +/* Internal I2C bus (on CPU module) */
+> +&i2c1 {
+> +	status = "okay";
+> +	pinctrl-0 = <&i2c1_z_pins>;
+> +	pinctrl-names = "default";
+> +
+> +	/* RTC */
+> +	pcf8563: pcf8563@51 {
+> +		compatible = "nxp,pcf8563";
+> +		reg = <0x51>;
+> +		status = "okay";
+> +	};
+> +};
+> +
+> +/* Peripheral I2C bus (on motherboard) */
+> +&i2c_AO {
+> +	status = "okay";
+> +	pinctrl-0 = <&i2c_ao_sck_10_pins>, <&i2c_ao_sda_11_pins>;
+> +	pinctrl-names = "default";
+> +};
+> +
+> +&pwm_ab {
+> +	status = "okay";
+> +	pinctrl-0 = <&pwm_a_x20_pins>;
+> +	pinctrl-names = "default";
+> +};
+> +
+> +/* wifi module */
+> +&sd_emmc_b {
+> +	status = "okay";
+> +	#address-cells = <1>;
+> +	#size-cells = <0>;
+> +
+> +	pinctrl-0 = <&sdio_pins>;
+> +	pinctrl-1 = <&sdio_clk_gate_pins>;
+> +	pinctrl-names = "default", "clk-gate";
+> +
+> +	bus-width = <4>;
+> +	cap-sd-highspeed;
+> +	max-frequency = <50000000>;
+> +	disable-wp;
+> +
+> +	mmc-pwrseq = <&sdio_pwrseq>;
+> +
+> +	vmmc-supply = <&vddao_3v3>;
+> +	vqmmc-supply = <&vddio_boot>;
+> +};
+> +
+> +/* emmc storage */
+> +&sd_emmc_c {
+> +	status = "okay";
+> +	pinctrl-0 = <&emmc_pins>, <&emmc_ds_pins>;
+> +	pinctrl-1 = <&emmc_clk_gate_pins>;
+> +	pinctrl-names = "default", "clk-gate";
+> +
+> +	bus-width = <8>;
+> +	cap-mmc-highspeed;
+> +	max-frequency = <200000000>;
+> +	non-removable;
+> +	disable-wp;
+> +	mmc-ddr-1_8v;
+> +	mmc-hs200-1_8v;
+> +
+> +	mmc-pwrseq = <&emmc_pwrseq>;
+> +
+> +	vmmc-supply = <&vcc_3v3>;
+> +	vqmmc-supply = <&vccq_1v8>;
+> +};
+> +
+> +/* UART Bluetooth */
+> +&uart_B {
+> +	status = "okay";
+> +	pinctrl-0 = <&uart_b_z_pins>, <&uart_b_z_cts_rts_pins>;
+> +	pinctrl-names = "default";
+> +	uart-has-rtscts;
+> +};
+> +
+> +/* UART Console */
+> +&uart_AO {
+> +	status = "okay";
+> +	pinctrl-0 = <&uart_ao_a_pins>;
+> +	pinctrl-names = "default";
+> +};
+> +
+> +/* UART Wireless module */
+> +&uart_AO_B {
+> +	status = "okay";
+> +	pinctrl-0 = <&uart_ao_b_pins>;
+> +	pinctrl-names = "default";
+> +};
+> +
+> +&usb {
+> +	status = "okay";
+> +	phy-supply = <&usb_pwr>;
+> +};
+> +
+> +&spicc1 {
+> +	status = "okay";
+> +	pinctrl-0 = <&spi1_x_pins>, <&spi1_ss0_x_pins>;
+> +	pinctrl-names = "default";
+> +};
+> +
+> +&gpio {
+> +	gpio-line-names =
+> +		"", "", "", "", "", // 0 - 4
+> +		"", "", "", "", "", // 5 - 9
+> +		"UserButton", "", "", "", "", // 10 - 14
+> +		"", "", "", "", "", // 15 - 19
+> +		"", "", "", "", "", // 20 - 24
+> +		"", "LedRed", "LedGreen", "Output3", "Output2", // 25 - 29
+> +		"Output1", "", "", "", "", // 30 - 34
+> +		"", "ZigBeeBOOT", "", "", "", // 35 - 39
+> +		"1Wire", "ZigBeeRESET", "", "Input4", "Input3", // 40 - 44
+> +		"Input2", "Input1", "", "", "", // 45 - 49
+> +		"", "", "", "", "", // 50 - 54
+> +		"", "", "", "", "", // 55 - 59
+> +		"", "", "", "", "", // 60 - 64
+> +		"", "", "", "", "", // 65 - 69
+> +		"", "", "", "", "", // 70 - 74
+> +		"", "", "", "", "", // 75 - 79
+> +		"", "", "", "", "", // 80 - 84
+> +		"", ""; // 85-86
+> +};
+> +
+> +&cpu0 {
+> +	#cooling-cells = <2>;
+> +};
+> +
+> +&cpu1 {
+> +	#cooling-cells = <2>;
+> +};
+> +
+> +&cpu2 {
+> +	#cooling-cells = <2>;
+> +};
+> +
+> +&cpu3 {
+> +	#cooling-cells = <2>;
+> +};
 
-
-Best regards,
-Krzysztof
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>

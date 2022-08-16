@@ -2,72 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F65596515
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CDE359651E
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237797AbiHPWBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 18:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59728 "EHLO
+        id S235934AbiHPWGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 18:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237762AbiHPWBK (ORCPT
+        with ESMTP id S233253AbiHPWG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 18:01:10 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B408E9B6;
-        Tue, 16 Aug 2022 15:01:09 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id i14so21364116ejg.6;
-        Tue, 16 Aug 2022 15:01:09 -0700 (PDT)
+        Tue, 16 Aug 2022 18:06:28 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536DF72FF8
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 15:06:27 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id s206so10445739pgs.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 15:06:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=glKujlDWTCM7GpUOGv1USv4qrJLx0zvw0SY7KwEzbcM=;
-        b=BzX0UoIIJ/wBB6w3gK0Ts7azlGH31tuckbFfy4pHVqxAAI7M9IAu5PVkBe02OiMifs
-         Ksjfb7+r4G3AcxJpY4weDUk2e+wG+It07UiJqlp48oDuh6QRoo0dw8Wjdy/zbZaetFoe
-         jDxyxNyggVD0XwGNoNLnr05vpRiT6WvpTuCLrkOuEHdBEE24uNq1IQY0EsvzvBw92eLT
-         90Zd/FtMan8Hs0DYtDIeUUtvJsLG5I18UowxgkBw/pcNocIQ+zUUtM9NCJsjMxgFlvSa
-         sq8wv9aQjMOFyqUFzL9n5ycJ7dJP41Ta17nw4q61eJ2XDa+RGCIr4SfeTJ/ISDNx8TFp
-         ga/Q==
+        bh=xsBdI6TSxfWyoZQzEtdTKDjNFKRklp/Qj7KShglt0Qk=;
+        b=hMnUic3qQq0HLIZNOhUZeDw6iBDDbHjQMKshXUA6XQtPWFUXR1pRy1CGLBGDulkZTt
+         jJQMScRHIjExRTDpled6nwJp0I7Fz+e9Cp37Pxni6yVbKuv8ot4lSAvhj60c88kYBi3b
+         U3xvmOupwH00xFmN6UgwXm4GJKN3w7/DaQfrPfaf5N7li637MndH2bJxJALWqB2hy3kT
+         0e8Uu8fXDQyUpj1ko0EBgsd5vjRjPCggF65QC83j9OqH+grhl58WqiAj35XPfpRNpw1u
+         W+rA0vk2SVf8i3NlcOInp6GkfvXLQ3NquCSMzgPZpK8kJU9mFcDloCEkivNoEhDAYDqI
+         idXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=glKujlDWTCM7GpUOGv1USv4qrJLx0zvw0SY7KwEzbcM=;
-        b=hu63z4+3LbwCueYbPcc/il6zaWASMGE0MCLIfQ+qgN+DdvC3M1qFnmJMEgCW6XBlsP
-         HYUcor+affpF8uA6NOJlv/Ngcz3TaLXb3UZIPXYrVIUnPiOcMQA3RzJR2PxIfS4PKr7Q
-         /UzKjNCVmiK6nqCgYClGZ3J2RxU8cOGKZFnIOTcFcGo5b0J1RDtI8PgACnCiJen8JipC
-         Q5t6N919KyB9aZrfQVV+6dWUpDfHRnwU/E9kWAgtouZYrNdzyRDJzZDCqEbj58SVhDuT
-         CZZEn8Kjjc5LHxxy1uM0FH74LWqk+WkcGAwGSQHS7gA1cM5DtfnIHuJP66tc9Pz+HteW
-         vc5w==
-X-Gm-Message-State: ACgBeo3LsruqLuXVfPwVHQRowkzx99IQ6DraEeakn3MOrp5OxqJhw53Q
-        Kv5l2hxvfTq7NVZ93QzXE20N7vx1w2QmDq8EwpK8RN0c
-X-Google-Smtp-Source: AA6agR6JJCUcLQiU+6/yUgoNeN8mRQvnkM9vtqJBRfdcnNy9xM0QfyZ2S1PHTqnAIJ5dVzarBMo1uT9Syb5ByLFffZE=
-X-Received: by 2002:a17:907:3d90:b0:730:a937:fb04 with SMTP id
- he16-20020a1709073d9000b00730a937fb04mr15101754ejc.176.1660687268094; Tue, 16
- Aug 2022 15:01:08 -0700 (PDT)
+        bh=xsBdI6TSxfWyoZQzEtdTKDjNFKRklp/Qj7KShglt0Qk=;
+        b=3gYKm/R5g95YtEYIQtvttU45ocEpzRH1ucqnMyzgRIchtubT8IUjervb5bRgCMljuN
+         G/KQYRPn/3dXCpmvhJvZtbQ1gkmNP6DhCx7ziJ+D8Z0f/Om/WMyum5+r2CoTodzpNapl
+         AqXUDWKG2KI/Y85pDDoYZgaoF4A1pN+ZQyh5F98Cyf0HfwFZnKii/OQwbRpoxSEBY071
+         a1dcjy+f9+84+jcJpCATxbJ4CWV33fUUga+UDAsBgxjhz9OfjQExLKGva6smuytDx43s
+         KdW2hMx1VGYOz2Dmp3eLCsnHy/0T58/D9b8tu/c/7JYRJtUU68O2UCsOq7pu3dvSCc7G
+         Aoig==
+X-Gm-Message-State: ACgBeo2nUFoOC8GdpvkCR2icX9j2XeMLDlmVh5JC3s44S1dbchu4u/Gn
+        hX9rii5i7LgeMWiiF/8tiCnEXh5/G5aY8aRXAbmbNA==
+X-Google-Smtp-Source: AA6agR66Eb2drsgo0xC0IsiAl2PXcMRX7zfibAHC48aSSjgpYKXqJIogSAcpz1yWsdrnwY/vgyl9I5HjpChP7FKsVkY=
+X-Received: by 2002:a65:494b:0:b0:428:d68c:35bf with SMTP id
+ q11-20020a65494b000000b00428d68c35bfmr10005680pgs.509.1660687586695; Tue, 16
+ Aug 2022 15:06:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220816214945.742924-1-haoluo@google.com>
-In-Reply-To: <20220816214945.742924-1-haoluo@google.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 16 Aug 2022 15:00:56 -0700
-Message-ID: <CAEf4Bza1SMFvzofz4RkBF=pByFHp+Z1v16Z+TMAQZ6rD2m9Lxg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] libbpf: allow disabling auto attach
-To:     Hao Luo <haoluo@google.com>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Jiri Olsa <jolsa@kernel.org>
+References: <20220816185801.651091-1-shy828301@gmail.com>
+In-Reply-To: <20220816185801.651091-1-shy828301@gmail.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Tue, 16 Aug 2022 15:06:15 -0700
+Message-ID: <CALvZod5t7Qo1NQ040pRyWco+nJGn3hSrxZyuFQ0UBi31Ni6=_g@mail.gmail.com>
+Subject: Re: [PATCH] mm: memcg: export workingset refault stats for cgroup v1
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Yosry Ahmed <yosryahmed@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,96 +73,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 2:49 PM Hao Luo <haoluo@google.com> wrote:
+On Tue, Aug 16, 2022 at 11:58 AM Yang Shi <shy828301@gmail.com> wrote:
 >
-> Add libbpf APIs for disabling auto-attach for individual functions.
-> This is motivated by the use case of cgroup iter [1]. Some iter
-> types require their parameters to be non-zero, therefore applying
-> auto-attach on them will fail. With these two new APIs, Users who
-> want to use auto-attach and these types of iters can disable
-> auto-attach for them and perform manual attach.
+> Workingset refault stats are important and usefule metrics to measure
+> how well reclaimer and swapping work and how healthy the services are,
+> but they are just available for cgroup v2.  There are still plenty users
+> with cgroup v1, export the stats for cgroup v1.
 >
-> [1] https://lore.kernel.org/bpf/CAEf4BzZ+a2uDo_t6kGBziqdz--m2gh2_EUwkGLDtMd65uwxUjA@mail.gmail.com/
->
-> Signed-off-by: Hao Luo <haoluo@google.com>
+> Signed-off-by: Yang Shi <shy828301@gmail.com>
 > ---
->  tools/lib/bpf/libbpf.c | 16 ++++++++++++++++
->  tools/lib/bpf/libbpf.h |  2 ++
->  2 files changed, 18 insertions(+)
+> I do understand the development of cgroup v1 is actually stalled and
+> the community is reluctant to accept new features for v1.  However
+> the workingset refault stats are really quite useful and exporting
+> two new stats, which have been supported by v2, seems ok IMHO.  So
+> hopefully this patch could be considered.  Thanks.
 >
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index aa05a99b913d..25f654d25b46 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -417,6 +417,7 @@ struct bpf_program {
->
->         int fd;
->         bool autoload;
-> +       bool autoattach;
->         bool mark_btf_static;
->         enum bpf_prog_type type;
->         enum bpf_attach_type expected_attach_type;
-> @@ -755,6 +756,8 @@ bpf_object__init_prog(struct bpf_object *obj, struct bpf_program *prog,
->                 prog->autoload = true;
->         }
->
-> +       prog->autoattach = true;
-> +
->         /* inherit object's log_level */
->         prog->log_level = obj->log_level;
->
-> @@ -8314,6 +8317,16 @@ int bpf_program__set_autoload(struct bpf_program *prog, bool autoload)
->         return 0;
->  }
->
-> +bool bpf_program__autoattach(const struct bpf_program *prog)
-> +{
-> +       return prog->autoattach;
-> +}
-> +
-> +void bpf_program__set_autoattach(struct bpf_program *prog, bool autoattach)
-> +{
-> +       prog->autoattach = autoattach;
-> +}
-> +
->  const struct bpf_insn *bpf_program__insns(const struct bpf_program *prog)
->  {
->         return prog->insns;
-> @@ -12349,6 +12362,9 @@ int bpf_object__attach_skeleton(struct bpf_object_skeleton *s)
->                 if (!prog->autoload)
->                         continue;
->
-> +               if (!prog->autoattach)
-> +                       continue;
-> +
 
-nit: I'd combine as if (!prog->autoload || !prog->autoattach), they
-are very coupled in this sense
-
->                 /* auto-attaching not supported for this program */
->                 if (!prog->sec_def || !prog->sec_def->prog_attach_fn)
->                         continue;
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index 61493c4cddac..88a1ac34b12a 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -260,6 +260,8 @@ LIBBPF_API const char *bpf_program__name(const struct bpf_program *prog);
->  LIBBPF_API const char *bpf_program__section_name(const struct bpf_program *prog);
->  LIBBPF_API bool bpf_program__autoload(const struct bpf_program *prog);
->  LIBBPF_API int bpf_program__set_autoload(struct bpf_program *prog, bool autoload);
-> +LIBBPF_API bool bpf_program__autoattach(const struct bpf_program *prog);
-> +LIBBPF_API void bpf_program__set_autoattach(struct bpf_program *prog, bool autoattach);
-
-please add these APIs to libbpf.map as well
-
-it would be also nice to have a simple test validating that skeleton's
-auto-attach doesn't attach program (no link will be created) if
-bpf_program__set_autoattach(false) is called before. Can you please
-add that as well?
-
->
->  struct bpf_insn;
->
-> --
-> 2.37.1.595.g718a3a8f04-goog
->
+Is just workingset refault good enough for your use-case? What about
+the other workingset stats? I don't have a strong opinion against
+adding these to v1 and I think these specific stats should be fine.
+(There is subtlety in exposing objcg based stats (i.e. reparenting) in
+v1 due to non-hierarchical stats in v1. I remember Yosry and Muchun
+were looking into that.)

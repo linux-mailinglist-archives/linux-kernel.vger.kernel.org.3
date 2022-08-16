@@ -2,88 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95558595525
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3EA9595520
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232640AbiHPIY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 04:24:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55504 "EHLO
+        id S232898AbiHPIYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 04:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232690AbiHPIW0 (ORCPT
+        with ESMTP id S232566AbiHPIW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 16 Aug 2022 04:22:26 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8826B10A743
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 23:01:17 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id u3so13416872lfk.8
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 23:01:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=PAMUhBr06KwCKHsM3sO1lYBEEZWlxVT7ve7Atz0HZas=;
-        b=GM6XplvTYolWK6bpn3JGPwaID/eKHSCcUhxiQAkTWQzIHVnyWLb1bm1jiveDw6OgIc
-         tH9ZEQaiRJ7pgRETWduYR9V9xCCyWzcgPvoFEv95Z3NE1sxBQCmcArSp1a7L0WLeJv1+
-         mpDNv37OLwxrrj5YQVlsin2o6KTfgpUEbz6nhvWHeTpisgWh0TqFnzvX+zJjyCrqCIKp
-         gG8Mmo4u7fzsf+5BOvTQ901Lt7r8fjYs8sndMzJRnPDJXL3IQ1J46xKfTLnJuHdm9xz2
-         U8Q5GQ07SywOJm9nJ2oGb8OcSax0eRNkyOMeUfaMS1kk36XvRLdWvmPsZTaFV1B8Om+l
-         vYRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=PAMUhBr06KwCKHsM3sO1lYBEEZWlxVT7ve7Atz0HZas=;
-        b=6JcCQyAiq7RAtekZvxD+jh7QVT6Zv8NNiHzCpcDWEGRbQmYn1G/39zsm+d5OiTJcPd
-         dcFyVTLZfBiVkufSgCD/PQEe4SzN1NN6EKf1Xdy6y5Xcp5lPFUoM3azUQW25aCFlErvp
-         YE9ZxAL2n9u/WWE1uL4u9tWxNvYCobKoDCHw37/E2s2oGhWyB9heVMlzYNH3YtwiRqu3
-         /uQGseZSQ5TZ90xQwbJlQXVskUwvOudx9nD8IP+leZt0OStpCk0P6fhVSAA+Wurar+Gd
-         mauFDareciywSneG1z4/oavkh5198lTJOlJ+gexSA8uVIYsPGYL3SAblpFFCSBkujwwz
-         x2Kg==
-X-Gm-Message-State: ACgBeo024uiqBI/0cESu3NehTtilgtCVNMQcnSJvBs2gOvTGirhTvqKq
-        leH9bH3rMJaQWJ1U614ZOMXxfQ==
-X-Google-Smtp-Source: AA6agR6bpZbcz037p9eeWUeoTOyZ9uO3sjHuYjc4nklWxeIVjCvwsK+J1RQUjPq0p9CsM64SX9W9wg==
-X-Received: by 2002:ac2:55af:0:b0:48d:3b2c:dd4f with SMTP id y15-20020ac255af000000b0048d3b2cdd4fmr6883004lfg.329.1660629675831;
-        Mon, 15 Aug 2022 23:01:15 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id a10-20020a195f4a000000b0048a891e4d88sm1275440lfj.193.2022.08.15.23.01.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 23:01:15 -0700 (PDT)
-Message-ID: <039566a7-5c65-b2d8-7b45-c616863cb292@linaro.org>
-Date:   Tue, 16 Aug 2022 09:01:13 +0300
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B468053E;
+        Mon, 15 Aug 2022 23:02:18 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27G61i8c026973;
+        Tue, 16 Aug 2022 01:01:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1660629704;
+        bh=iN6675DMmoPE4j92IAkYz9mtJk6FDb7QeD1TWHX9XgM=;
+        h=From:To:CC:Subject:Date;
+        b=nMV3P+6e26UWEIZCK1luov7Gbk0n+PbwAsagvMOWZWgxRHYU+hjOQkoTcNX0wYTFd
+         0TCQnscfmJ82yfPKbwQrFtvkAZ21RwTajZYuwlt+pglIBGhAcbIN4T0+2CZJrcQSVD
+         gQCMc/cS3ibdpbQnUkiz8oDSeu23IKow7h4k0Wpc=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27G61ilk013697
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 16 Aug 2022 01:01:44 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 16
+ Aug 2022 01:01:44 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Tue, 16 Aug 2022 01:01:44 -0500
+Received: from uda0492258.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27G61dq2114915;
+        Tue, 16 Aug 2022 01:01:40 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux@armlinux.org.uk>,
+        <vladimir.oltean@nxp.com>, <grygorii.strashko@ti.com>,
+        <vigneshr@ti.com>, <nsekhar@ti.com>
+CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kishon@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: [PATCH v4 0/3] J7200: CPSW5G: Add support for QSGMII mode to am65-cpsw driver
+Date:   Tue, 16 Aug 2022 11:31:36 +0530
+Message-ID: <20220816060139.111934-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 0/6] i2c-imx-lpi2c: add IPG clock
-Content-Language: en-US
-To:     Peng Fan <peng.fan@nxp.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Clark Wang <xiaoning.wang@nxp.com>
-References: <20220812043424.4078034-1-peng.fan@oss.nxp.com>
- <f1add9c7-fc2e-a600-49a6-a6579f17db1b@linaro.org>
- <DU0PR04MB9417D62230578AC8CA4234F288689@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <DU0PR04MB9417D62230578AC8CA4234F288689@DU0PR04MB9417.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,41 +67,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/08/2022 03:52, Peng Fan wrote:
-> Hi Krzysztof,
-> 
->> Subject: Re: [PATCH 0/6] i2c-imx-lpi2c: add IPG clock
->>
->> On 12/08/2022 07:34, Peng Fan (OSS) wrote:
->>> From: Peng Fan <peng.fan@nxp.com>
->>>
->>> The i.MX LPI2C needs PER and IPG clock, not just PER or IPG clock.
->>> This patch is to enable both PER and IPG clock for imx-i2c-lpi2c.
->>
->> This patchset breaks the ABI and is not bisectable. The justification is very
->> limited (one sentence), so not really enough.
-> 
-> ARM32 i.MX7ULP and ARM64 i.MX8QXP/i.MX8ULP all need to use two
-> clocks, PER and IPG. But current dt-bindings and dts, use one clock.
-> 
-> This patchset includes dts changes patch 4 and patch 5.
-> Patch 6 is to update driver use two clocks.
-> 
-> I think the patch order in this patchset would not break git bisect, it
-> just break ABI. But I not find good way how could not break ABI,
-> because only use one clock is wrong whether in dt-bindings or dtbs.
+Add support for QSGMII mode to am65-cpsw driver.
 
-Driver changes always go via separate branch than DTS, so your patch
-breaks git bisect. I already pointed it out in other patch. This is not
-really acceptable. Breaking ABI is another problem which could be
-justified with your explanation in other cases... but not in this one,
-since it is easy to make it backwards compatible,
+Change log:
 
-> Should I use a fixes tag to dt-bindings, then break ABI is allowed?
+v3 -> v4:
+1. Update bindings to disallow ports based on compatible, instead of
+   adding a new if/then statement for the new compatible.
+2. Add Else-If condition for RMII mode in the set of supported interfaces.
+   Support for RMII mode is already present in the driver and I had
+   missed out adding a condition for RMII mode in the previous patches.
 
-No. For such patch ABI break is also not allowed in that case. Just make
-the driver backwards compatible and both problems - non bisectability
-and ABI break - go away.
+v2 -> v3:
+1. In ti,k3-am654-cpsw-nuss.yaml, restrict if/then statement to port
+   nodes.
 
-Best regards,
-Krzysztof
+v1 -> v2:
+1. Add new compatible for CPSW5G in ti,k3-am654-cpsw-nuss.yaml and extend
+   properties for new compatible.
+2. Add extra_modes member to struct am65_cpsw_pdata to be used for QSGMII
+   mode by new compatible.
+3. Add check for phylink supported modes to ensure that only one phy mode
+   is advertised as supported.
+4. Check if extra_modes supports QSGMII mode in am65_cpsw_nuss_mac_config()
+   for register write.
+5. Add check for assigning port->sgmii_base only when extra_modes is valid.
+
+v3: https://lore.kernel.org/r/20220606110443.30362-1-s-vadapalli@ti.com/
+v2: https://lore.kernel.org/r/20220602114558.6204-1-s-vadapalli@ti.com/
+v1: https://lore.kernel.org/r/20220531113058.23708-1-s-vadapalli@ti.com/
+
+Siddharth Vadapalli (3):
+  dt-bindings: net: ti: k3-am654-cpsw-nuss: Update bindings for J7200
+    CPSW5G
+  net: ethernet: ti: am65-cpsw: Add support for J7200 CPSW5G
+  net: ethernet: ti: am65-cpsw: Move phy_set_mode_ext() to correct
+    location
+
+ .../bindings/net/ti,k3-am654-cpsw-nuss.yaml   | 17 ++++++-
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c      | 44 ++++++++++++++++---
+ drivers/net/ethernet/ti/am65-cpsw-nuss.h      |  2 +
+ 3 files changed, 54 insertions(+), 9 deletions(-)
+
+--
+2.25.1
+

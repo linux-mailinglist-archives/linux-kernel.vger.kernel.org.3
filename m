@@ -2,254 +2,431 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3FA5595B0E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29BFE595B11
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235075AbiHPMAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 08:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39546 "EHLO
+        id S229929AbiHPMBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 08:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232700AbiHPMAA (ORCPT
+        with ESMTP id S235166AbiHPMAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 08:00:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4F7956A8;
-        Tue, 16 Aug 2022 04:45:04 -0700 (PDT)
-Received: from [192.168.2.145] (unknown [109.252.119.13])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B2D9B6600378;
-        Tue, 16 Aug 2022 12:45:01 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1660650302;
-        bh=7Ctnq/1YKCdh79+wpq2cnY9AriN4+pKHbihCdjdYb2E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CeK7rqQy+qimxpsn499aowNiuV+GVsrAHOKU4zmRVmT0A/UMjP1sWHaFyhYu1kqOL
-         wtlGxiyOEMjM48Za7WvvmycLquHoxWUj+R4/2zEFb59h+wEgCCsDtFCfBPmLWM7QBJ
-         R/logZBnPT9KN2RLI3d0covTgP1icGFrvWWGtZo4hlpi4BJoPwuPBNo9FGOZLfRFVy
-         PcYR6uc0M/JwKlDlkt7X8Pn5VNWSFWpN0tLqjVOGNdezuSVZaQpHDHtiquw+Yh6urM
-         sVwrjXDTgLtXQIcK/TdPgMvx3o4ciL+PxPspR+lVjL8kDYAEyjYu9ej/PcARYGXBGp
-         o1h9lriyPED+Q==
-Message-ID: <5f118e10-db7a-a128-1e87-c9dddb65b2ac@collabora.com>
-Date:   Tue, 16 Aug 2022 14:44:56 +0300
+        Tue, 16 Aug 2022 08:00:06 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666D39E2FE;
+        Tue, 16 Aug 2022 04:45:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660650312; x=1692186312;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YYaVHlpaHyRBcwQzFXEeDN8LGKPn0q6F15WctZEI/f0=;
+  b=IfTMtoFo1g0lRs3lhw4wGpWKUgY6m5wVhDW3tyLRMRxduLMJpEiF3oRH
+   cjD7ZZ0slRMM86q3c+C340tOiYA7sbSw7BJkdGIeLmXx9MyQ0Lc6grve2
+   IIaEwjAQXNjWWBSnZth6jsevn+/n6xfCwkfXlgaunGTRoHwiZ+NQsaz+y
+   8P/pCionLLF2hOvDOtY+IzCnLMhQ7LAWMBMiV2RnN0qxcEmWColOJ8GKe
+   qaX2Tfbe/tsG5JX6ohNB/kir1Rq0IhCREWTpFzQHYRubMTOLr3IWj+ktU
+   12vvMs/qxz+TS8F/nVRLbZE90dEc2qh8sOOv1FHkdyTUY2xdeet4jMMh4
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="275250809"
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="275250809"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 04:45:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="610233570"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 16 Aug 2022 04:45:08 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id E5AF1363; Tue, 16 Aug 2022 14:45:21 +0300 (EEST)
+Date:   Tue, 16 Aug 2022 14:45:21 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Szuying Chen <chensiying21@gmail.com>
+Cc:     gregkh@linuxfoundation.org, mario.limonciello@amd.com,
+        andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yd_Tseng@asmedia.com.tw,
+        Chloe_Chen@asmedia.com.tw, Richard_Hsu@asmedia.com.tw
+Subject: Re: [PATCH v4] thunderbolt: thunderbolt: add vendor's NVM formats
+Message-ID: <YvuDUWv6U797j3x0@black.fi.intel.com>
+References: <20220816105502.9059-1-chensiying21@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v8 2/2] drm/gem: Don't map imported GEMs
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        linux-tegra@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
-        kernel@collabora.com, Daniel Vetter <daniel@ffwll.ch>
-References: <20220701090240.1896131-1-dmitry.osipenko@collabora.com>
- <20220701090240.1896131-3-dmitry.osipenko@collabora.com>
- <2bb95e80-b60a-36c0-76c8-a06833032c77@amd.com>
- <CAF6AEGtqPeF1DjmBKgzWK39Yi81YiNjTjDNn85TKx7uwicFTSA@mail.gmail.com>
- <2a646ce4-c2ec-3b11-77a0-cc720afd6fe1@collabora.com>
- <YvOav/vF2awVWIu0@phenom.ffwll.local>
- <CAF6AEGvfAJgwBe4+sK0gAkZ++MwH9x4=698C8XSnmfYNMFZqfA@mail.gmail.com>
- <9674d00e-c0d6-ceba-feab-5dc475bda694@collabora.com>
- <CAF6AEGv1cVC9ZNMwpwFOki5CrwD3kSAHM9EUFZGWY-y5zcQsCg@mail.gmail.com>
- <fc019528-7ec7-9e5b-1b6d-c44da14346cf@collabora.com>
- <CAF6AEGv8zSd0fEYB9hd2QOyTt53gFSQoL8JdZtCvtCdYfMfB2Q@mail.gmail.com>
- <73b51dde-689f-64ce-a1c8-0d7c84a2ed66@collabora.com>
- <CAF6AEGuR1cRQYaQBYGnMBzy=XJUcN2o2gzabZaGO2Dj62Uq1DA@mail.gmail.com>
- <CAF6AEGvvR1NUd_GKP=Bxp3VTDMBYT+OwTkkgOWxgYFijZaVVEQ@mail.gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <CAF6AEGvvR1NUd_GKP=Bxp3VTDMBYT+OwTkkgOWxgYFijZaVVEQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816105502.9059-1-chensiying21@gmail.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/12/22 18:01, Rob Clark wrote:
-> On Fri, Aug 12, 2022 at 7:57 AM Rob Clark <robdclark@gmail.com> wrote:
->>
->> On Fri, Aug 12, 2022 at 4:26 AM Dmitry Osipenko
->> <dmitry.osipenko@collabora.com> wrote:
->>>
->>> On 8/11/22 02:19, Rob Clark wrote:
->>>> On Wed, Aug 10, 2022 at 3:23 PM Dmitry Osipenko
->>>> <dmitry.osipenko@collabora.com> wrote:
->>>>>
->>>>> On 8/11/22 01:03, Rob Clark wrote:
->>>>>> On Wed, Aug 10, 2022 at 12:26 PM Dmitry Osipenko
->>>>>> <dmitry.osipenko@collabora.com> wrote:
->>>>>>>
->>>>>>> On 8/10/22 18:08, Rob Clark wrote:
->>>>>>>> On Wed, Aug 10, 2022 at 4:47 AM Daniel Vetter <daniel@ffwll.ch> wrote:
->>>>>>>>>
->>>>>>>>> On Wed, Jul 06, 2022 at 10:02:07AM +0300, Dmitry Osipenko wrote:
->>>>>>>>>> On 7/6/22 00:48, Rob Clark wrote:
->>>>>>>>>>> On Tue, Jul 5, 2022 at 4:51 AM Christian König <christian.koenig@amd.com> wrote:
->>>>>>>>>>>>
->>>>>>>>>>>> Am 01.07.22 um 11:02 schrieb Dmitry Osipenko:
->>>>>>>>>>>>> Drivers that use drm_gem_mmap() and drm_gem_mmap_obj() helpers don't
->>>>>>>>>>>>> handle imported dma-bufs properly, which results in mapping of something
->>>>>>>>>>>>> else than the imported dma-buf. On NVIDIA Tegra we get a hard lockup when
->>>>>>>>>>>>> userspace writes to the memory mapping of a dma-buf that was imported into
->>>>>>>>>>>>> Tegra's DRM GEM.
->>>>>>>>>>>>>
->>>>>>>>>>>>> Majority of DRM drivers prohibit mapping of the imported GEM objects.
->>>>>>>>>>>>> Mapping of imported GEMs require special care from userspace since it
->>>>>>>>>>>>> should sync dma-buf because mapping coherency of the exporter device may
->>>>>>>>>>>>> not match the DRM device. Let's prohibit the mapping for all DRM drivers
->>>>>>>>>>>>> for consistency.
->>>>>>>>>>>>>
->>>>>>>>>>>>> Suggested-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
->>>>>>>>>>>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
->>>>>>>>>>>>
->>>>>>>>>>>> I'm pretty sure that this is the right approach, but it's certainly more
->>>>>>>>>>>> than possible that somebody abused this already.
->>>>>>>>>>>
->>>>>>>>>>> I suspect that this is abused if you run deqp cts on android.. ie. all
->>>>>>>>>>> winsys buffers are dma-buf imports from gralloc.  And then when you
->>>>>>>>>>> hit readpix...
->>>>>>>>>>>
->>>>>>>>>>> You might only hit this in scenarios with separate gpu and display (or
->>>>>>>>>>> dGPU+iGPU) because self-imports are handled differently in
->>>>>>>>>>> drm_gem_prime_import_dev().. and maybe not in cases where you end up
->>>>>>>>>>> with a blit from tiled/compressed to linear.. maybe that narrows the
->>>>>>>>>>> scope enough to just fix it in userspace?
->>>>>>>>>>
->>>>>>>>>> Given that that only drivers which use DRM-SHMEM potentially could've
->>>>>>>>>> map imported dma-bufs (Panfrost, Lima) and they already don't allow to
->>>>>>>>>> do that, I think we're good.
->>>>>>>>>
->>>>>>>>> So can I have an ack from Rob here or are there still questions that this
->>>>>>>>> might go boom?
->>>>>>>>>
->>>>>>>>> Dmitry, since you have a bunch of patches merged now I think would also be
->>>>>>>>> good to get commit rights so you can drive this more yourself. I've asked
->>>>>>>>> Daniel Stone to help you out with getting that.
->>>>>>>>
->>>>>>>> I *think* we'd be ok with this on msm, mostly just by dumb luck.
->>>>>>>> Because the dma-buf's we import will be self-import.  I'm less sure
->>>>>>>> about panfrost (src/panfrost/lib/pan_bo.c doesn't seem to have a
->>>>>>>> special path for imported dma-bufs either, and in that case they won't
->>>>>>>> be self-imports.. but I guess no one has tried to run android cts on
->>>>>>>> panfrost).
->>>>>>>
->>>>>>> The last time I tried to mmap dma-buf imported to Panfrost didn't work
->>>>>>> because Panfrost didn't implement something needed for that. I'll need
->>>>>>> to take a look again because can't recall what it was.
->>> Upd: I re-checked Panfrost using today's linux-next and mapping of
->>> imported dma-buf works, I mapped imported buf from video decoder.
->>> Apparently previously I had some local kernel change that broke the mapping.
->>>
->>>>>>>> What about something less drastic to start, like (apologies for
->>>>>>>> hand-edited patch):
->>>>>>>>
->>>>>>>> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
->>>>>>>> index 86d670c71286..fc9ec42fa0ab 100644
->>>>>>>> --- a/drivers/gpu/drm/drm_gem.c
->>>>>>>> +++ b/drivers/gpu/drm/drm_gem.c
->>>>>>>> @@ -1034,6 +1034,10 @@ int drm_gem_mmap_obj(struct drm_gem_object
->>>>>>>> *obj, unsigned long obj_size,
->>>>>>>>  {
->>>>>>>>         int ret;
->>>>>>>>
->>>>>>>> +       WARN_ON_ONCE(obj->import_attach);
->>>>>>>
->>>>>>> This will hang NVIDIA Tegra, which is what this patch fixed initially.
->>>>>>> If neither of upstream DRM drivers need to map imported dma-bufs and
->>>>>>> never needed, then why do we need this?
->>>>>>
->>>>>> oh, tegra isn't using shmem helpers?  I assumed it was.  Well my point
->>>>>> was to make a more targeted fail on tegra, and a WARN_ON for everyone
->>>>>> else to make it clear that what they are doing is undefined behavior.
->>>>>> Because so far existing userspace (or well, panfrost and freedreno at
->>>>>> least, those are the two I know or checked) don't make special cases
->>>>>> for mmap'ing against the dmabuf fd against the dmabuf fd instead of
->>>>>> the drm device fd.
->>>>>
->>>>> It's not clear to me what bad Android does form yours comments. Does it
->>>>> export dma-buf from GPU and then import it to GPU? If yes, then DRM core
->>>>> has a check for the self-importing [1].
->>>>>
->>>>> [1]
->>>>> https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_prime.c#L918
->>>>>
->>>>> If you're meaning something else, then please explain in a more details.
->>>>
->>>> So, android/gralloc allocates buffers externally to the driver and
->>>> imports them into driver.  (And that seems to not just be window
->>>> surfaces, but in cases random textures, etc)
->>>>
->>>> In the normal case these should be allocated from drm/msm so it should
->>>> hit [1].. this is the "dumb luck" I mentioned earlier.  But I'm not
->>>> confident enough to say that there is no other case.
->>>>
->>>>>
->>>>>> I *think* it should work out that we don't hit this path with
->>>>>> freedreno but on android I can't really guarantee or prove it.  So
->>>>>> your patch would potentially break existing working userspace.  Maybe
->>>>>> it is userspace that isn't portable (but OTOH it isn't like you are
->>>>>> going to be using freedreno on tegra).  So why don't you go for a more
->>>>>> targeted fix that only returns an error on hw where this is
->>>>>> problematic?
->>>>>
->>>>> That's what the first versions of the patch did and Christian suggested
->>>>> that it's not a good approach. In fact it should be not only Tegra that
->>>>> has a broken dma-buf mapping, but apparently OMAP driver too.
->>>>
->>>> Hmm, I guess I'm a bit more conservative when it comes to potentially
->>>> breaking userspace.
->>>
->>> If such userspace exists, then of course the mapping should continue to
->>> work. Still will be great to know what that userpsace is.
->>
->> Definitely existing mesa does not have a special mmap path for
->> imported dma-bufs (both in the case of panfrost and freedreno, I
->> didn't check any others).  The only question is whether there is a
->> case where some app/test/etc imports a foreign dma-buf fd and then
->> does something that would trigger mmap'ing, like readpix.
+Hi,
+
+On Tue, Aug 16, 2022 at 06:55:02PM +0800, Szuying Chen wrote:
+> From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
 > 
-> The other complication I noticed is that we don't seem to keep around
-> the fd after importing to a GEM handle.  And I could imagine that
-> doing so could cause issues with too many fd's.  So I guess the best
-> thing is to keep the status quo and let drivers that cannot mmap
-> imported buffers just fail mmap?
+> The patch add tb_nvm_validate() contain an array that has functions
+> pointers to asmedia_nvm_validate().
+> And asmedia_nvm_validate() that recognize supported vendor works in one
+> of the following cases:
+> Case NVM_UPGRADE: enable nvm's attribute by setting no_nvm_upgrade
+> flag to create nvm_authenticate file node.
+> Case NVM_ADD: add active/non-active NVM devices.
+> Case NVM_WRITE: update firmware to non-ative NVM device.
+> 
+> Signed-off-by: Szuying Chen <Chloe_Chen@asmedia.com.tw>
+> ---Add enum nvm_validate_ops and modify ASMedia NVM Version format.
+> ---Repair file(switch.c) has existed warning, but have 7 warn not fixed.
+> 
+> Note: The three previous submissions accidentally used the same subject
+> prefix. This changelog is relative to the most recent submission at
+> https://github.com/intel-lab-lkp/linux/commits/Szuying-Chen/thunderbolt-thunderbolt-add-vendor-s-NVM-formats/20220815-121330
+> 
+>  drivers/thunderbolt/nvm.c    | 148 +++++++++++++++++++++++++++++++++++
+>  drivers/thunderbolt/switch.c |  28 ++++++-
+>  drivers/thunderbolt/tb.h     |  23 ++++++
+>  3 files changed, 196 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/thunderbolt/nvm.c b/drivers/thunderbolt/nvm.c
+> index b3f310389378..be8cbcfafb80 100644
+> --- a/drivers/thunderbolt/nvm.c
+> +++ b/drivers/thunderbolt/nvm.c
+> @@ -9,11 +9,159 @@
+>  #include <linux/idr.h>
+>  #include <linux/slab.h>
+>  #include <linux/vmalloc.h>
+> +#include <linux/pm_runtime.h>
+> 
+>  #include "tb.h"
+> 
+>  static DEFINE_IDA(nvm_ida);
+> 
+> +static int tb_switch_nvm_read(void *priv, unsigned int offset, void *val,
+> +			      size_t bytes)
+> +{
+> +	struct tb_nvm *nvm = priv;
+> +	struct tb_switch *sw = tb_to_switch(nvm->dev);
+> +	int ret;
+> +
+> +	pm_runtime_get_sync(&sw->dev);
+> +	if (!mutex_trylock(&sw->tb->lock)) {
+> +		ret = restart_syscall();
+> +		goto out;
+> +	}
+> +	ret = usb4_switch_nvm_read(sw, offset, val, bytes);
+> +	mutex_unlock(&sw->tb->lock);
+> +
+> +out:
+> +	pm_runtime_mark_last_busy(&sw->dev);
+> +	pm_runtime_put_autosuspend(&sw->dev);
+> +
+> +	return ret;
+> +}
+> +
+> +static int tb_switch_nvm_write(void *priv, unsigned int offset, void *val,
+> +			       size_t bytes)
+> +{
+> +	struct tb_nvm *nvm = priv;
+> +	struct tb_switch *sw = tb_to_switch(nvm->dev);
+> +	int ret;
+> +
+> +	if (!mutex_trylock(&sw->tb->lock))
+> +		return restart_syscall();
+> +
+> +	/*
+> +	 * Since writing the NVM image might require some special steps,
+> +	 * for example when CSS headers are written, we cache the image
+> +	 * locally here and handle the special cases when the user asks
+> +	 * us to authenticate the image.
+> +	 */
+> +	ret = tb_nvm_write_buf(nvm, offset, val, bytes);
+> +	mutex_unlock(&sw->tb->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int asmedia_nvm_validate(struct tb_switch *sw, unsigned int mode)
+> +{
+> +	struct tb_nvm *nvm;
+> +	u32 val;
+> +	u32 nvm_size;
+> +	int ret = 0;
+> +	unsigned int image_size;
+> +
+> +	switch (mode) {
+> +	case NVM_UPGRADE:
+> +		if (sw->no_nvm_upgrade)
+> +			sw->no_nvm_upgrade = false;
+> +
+> +		break;
+> +
+> +	case NVM_ADD:
+> +		nvm = tb_nvm_alloc(&sw->dev);
 
-That actually should be all the drivers excluding those that use
-DRM-SHMEM because only DRM-SHMEM uses dma_buf_mmap(), that's why it
-works for Panfrost. I'm pretty sure mmaping of imported GEMs doesn't
-work for the MSM driver, isn't it?
+This function does not only "validate" but it also creates the NVMem
+devices and whatnot.
 
-Intel and AMD drivers don't allow to map the imported dma-bufs. Both
-refuse to do the mapping.
+Do you have some public description of the ASMedia format that I could
+take a look? Perhaps we can find some simpler way of validating the
+thing that works accross different vendors.
 
-Although, AMDGPU "succeeds" to do the mapping using
-AMDGPU_GEM_DOMAIN_GTT, but then touching the mapping causes bus fault,
-hence mapping actually fails. I think it might be the AMDGPU
-driver/libdrm bug, haven't checked yet.
+> +		if (IS_ERR(nvm)) {
+> +			ret = PTR_ERR(nvm);
+> +			break;
+> +		}
+> +
+> +		ret = usb4_switch_nvm_read(sw, ASMEDIA_NVM_VERSION, &val, sizeof(val));
+> +		if (ret)
+> +			break;
+> +
+> +		nvm->nvm_asm.major = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
+> +		ret = usb4_switch_nvm_read(sw, ASMEDIA_NVM_DATE, &val, sizeof(val));
+> +		if (ret)
+> +			break;
+> +
+> +		nvm->nvm_asm.minor = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
+> +		nvm_size = SZ_512K;
+> +		ret = tb_nvm_add_active(nvm, nvm_size, tb_switch_nvm_read);
+> +		if (ret)
+> +			break;
+> +
+> +		ret = tb_nvm_add_non_active(nvm, NVM_MAX_SIZE, tb_switch_nvm_write);
+> +		if (ret)
+> +			break;
+> +
+> +		sw->nvm = nvm;
+> +		break;
+> +
+> +	case NVM_WRITE:
+> +		const u8 *buf = sw->nvm->buf;
+> +
+> +		if (!buf) {
+> +			ret = -EINVAL;
+> +			break;
+> +		}
+> +		image_size = sw->nvm->buf_data_size;
+> +		if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE) {
+> +			ret = -EINVAL;
+> +			break;
+> +		}
+> +		ret = usb4_switch_nvm_write(sw, 0, buf, image_size);
+> +		if (!ret)
+> +			sw->nvm->flushed = true;
+> +
+> +		break;
+> +
+> +	default:
+> +		break;
+> +	}
+> +
+> +	if ((mode == NVM_ADD) && (ret != 0))
+> +		tb_nvm_free(sw->nvm);
+> +
+> +	return ret;
+> +}
+> +
+> +struct tb_nvm_id {
+> +	u16 hw_vendor_id;
+> +	int (*validate)(struct tb_switch *sw, unsigned int mode);
+> +};
+> +
+> +static const struct tb_nvm_id tb_nvm_vendors[] = {
+> +	/* ASMedia software CM firmware upgrade */
+> +	{ 0x174c, asmedia_nvm_validate },
+> +};
+> +
+> +/**
+> + * tb_nvm_vendor_handle() - support vendor's NVM format
+> + * @sw: Thunderbolt switch
+> + * @handle: 0:NvmUpgradeSuppport, 1:NvmAdd, 2:NvmWrite
+> + */
+> +int tb_nvm_validate(struct tb_switch *sw, unsigned int mode)
+> +{
+> +	int i;
+> +	int res = 0;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(tb_nvm_vendors); i++) {
+> +		const struct tb_nvm_id *id = &tb_nvm_vendors[i];
+> +
+> +		if (id->hw_vendor_id && id->hw_vendor_id != sw->config.vendor_id)
+> +			continue;
+> +
+> +		 res = id->validate(sw, mode);
+> +	}
+> +	return res;
+> +}
+> +
+>  /**
+>   * tb_nvm_alloc() - Allocate new NVM structure
+>   * @dev: Device owning the NVM
+> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+> index 244f8cd38b25..de380fb5a166 100644
+> --- a/drivers/thunderbolt/switch.c
+> +++ b/drivers/thunderbolt/switch.c
+> @@ -114,6 +114,14 @@ static int nvm_validate_and_write(struct tb_switch *sw)
+>  	if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE)
+>  		return -EINVAL;
+> 
+> +	/*
+> +	 * Vendor's nvm write. If the image has been flushed to the
+> +	 * storage are, nvm write is complete.
+> +	 */
+> +	ret = tb_nvm_validate(sw, NVM_WRITE);
+> +	if (sw->nvm->flushed)
+> +		return ret;
+> +
+>  	/*
+>  	 * FARB pointer must point inside the image and must at least
+>  	 * contain parts of the digital section we will be reading here.
+> @@ -391,10 +399,14 @@ static int tb_switch_nvm_add(struct tb_switch *sw)
+>  		return 0;
+> 
+>  	/*
+> -	 * The NVM format of non-Intel hardware is not known so
+> -	 * currently restrict NVM upgrade for Intel hardware. We may
+> -	 * relax this in the future when we learn other NVM formats.
+> +	 * The NVM format of Intel and Asmedia hardware are known so
+> +	 * currently restrict NVM upgrade for Intel and Asmedia hardware.
+> +	 * We may relax this in the future when we learn other NVM formats.
+>  	 */
+> +	ret = tb_nvm_validate(sw, NVM_ADD);
+> +	if (ret)
+> +		return ret;
+> +
+>  	if (sw->config.vendor_id != PCI_VENDOR_ID_INTEL &&
+>  	    sw->config.vendor_id != 0x8087) {
+>  		dev_info(&sw->dev,
+> @@ -527,6 +539,7 @@ int tb_port_state(struct tb_port *port)
+>  {
+>  	struct tb_cap_phy phy;
+>  	int res;
+> +
+>  	if (port->cap_phy == 0) {
+>  		tb_port_WARN(port, "does not have a PHY\n");
+>  		return -EINVAL;
+> @@ -556,6 +569,7 @@ int tb_wait_for_port(struct tb_port *port, bool wait_if_unplugged)
+>  {
+>  	int retries = 10;
+>  	int state;
+> +
+>  	if (!port->cap_phy) {
+>  		tb_port_WARN(port, "does not have PHY\n");
+>  		return -EINVAL;
+> @@ -653,6 +667,7 @@ int tb_port_add_nfc_credits(struct tb_port *port, int credits)
+>  int tb_port_clear_counter(struct tb_port *port, int counter)
+>  {
+>  	u32 zero[3] = { 0, 0, 0 };
+> +
+>  	tb_port_dbg(port, "clearing counter %d\n", counter);
+>  	return tb_port_write(port, zero, TB_CFG_COUNTERS, 3 * counter, 3);
+>  }
+> @@ -875,6 +890,7 @@ static inline bool tb_switch_is_reachable(const struct tb_switch *parent,
+>  					  const struct tb_switch *sw)
+>  {
+>  	u64 mask = (1ULL << parent->config.depth * 8) - 1;
+> +
+>  	return (tb_route(parent) & mask) == (tb_route(sw) & mask);
+>  }
+> 
+> @@ -1345,6 +1361,7 @@ bool tb_pci_port_is_enabled(struct tb_port *port)
+>  int tb_pci_port_enable(struct tb_port *port, bool enable)
+>  {
+>  	u32 word = enable ? ADP_PCIE_CS_0_PE : 0x0;
+> +
+>  	if (!port->cap_adap)
+>  		return -ENXIO;
+>  	return tb_port_write(port, &word, TB_CFG_PORT,
+> @@ -1918,6 +1935,7 @@ static ssize_t nvm_authenticate_store(struct device *dev,
+>  	struct device_attribute *attr, const char *buf, size_t count)
+>  {
+>  	int ret = nvm_authenticate_sysfs(dev, buf, false);
+> +
+>  	if (ret)
+>  		return ret;
+>  	return count;
+> @@ -1953,6 +1971,9 @@ static ssize_t nvm_version_show(struct device *dev,
+>  		ret = -ENODATA;
+>  	else if (!sw->nvm)
+>  		ret = -EAGAIN;
+> +	/*ASMedia NVM version show format xxxxxx_xxxxxx */
+> +	else if (sw->config.vendor_id == 0x174C)
+> +		ret = sprintf(buf, "%06x.%06x\n", sw->nvm->nvm_asm.major, sw->nvm->nvm_asm.minor);
 
-So we're back to the point that neither of DRM drivers need to map
-imported dma-bufs and this was never tested. In this case this patch is
-valid, IMO.
+And yes, we can make the nvm->major/minor to be 32-bit integers too for
+both Intel and ASMedia and continue to use the %x.%x formatting.
 
--- 
-Best regards,
-Dmitry
+>  	else
+>  		ret = sprintf(buf, "%x.%x\n", sw->nvm->major, sw->nvm->minor);
+> 
+> @@ -2860,6 +2881,7 @@ int tb_switch_add(struct tb_switch *sw)
+>  		tb_sw_dbg(sw, "uid: %#llx\n", sw->uid);
+> 
+>  		tb_check_quirks(sw);
+> +		tb_nvm_validate(sw, NVM_UPGRADE);
+> 
+>  		ret = tb_switch_set_uuid(sw);
+>  		if (ret) {
+> diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+> index 5db76de40cc1..7f5c8ae731a0 100644
+> --- a/drivers/thunderbolt/tb.h
+> +++ b/drivers/thunderbolt/tb.h
+> @@ -28,6 +28,15 @@
+>  #define NVM_VERSION		0x08
+>  #define NVM_FLASH_SIZE		0x45
+> 
+> +/* ASMedia specific NVM offsets */
+> +#define ASMEDIA_NVM_VERSION	0x28
+> +#define ASMEDIA_NVM_DATE	0x1c
+
+Didn't I already commented about these? Are my emails somehow lost or
+they just get ignored?
+
+> +struct nvm_asmedia {
+> +	u32 major;
+> +	u32 minor;
+> +};
+> +
+>  /**
+>   * struct tb_nvm - Structure holding NVM information
+>   * @dev: Owner of the NVM
+> @@ -57,6 +66,7 @@ struct tb_nvm {
+>  	size_t buf_data_size;
+>  	bool authenticating;
+>  	bool flushed;
+> +	struct nvm_asmedia nvm_asm;
+>  };
+> 
+>  enum tb_nvm_write_ops {
+> @@ -65,6 +75,18 @@ enum tb_nvm_write_ops {
+>  	AUTHENTICATE_ONLY = 3,
+>  };
+> 
+> +/*
+> + * enum nvm_validate_ops - Nvm upgrade for each vendor
+> + * @NVM_UPGRADE: Not prevent NVM upgrade.
+> + * @NVM_ADD: Vendor's NVM device add.
+> + * @NVM_WRITE: Vendor's NVM write.
+> + */
+> +enum nvm_validate_ops {
+> +	NVM_UPGRADE = 0,
+> +	NVM_ADD = 1,
+> +	NVM_WRITE = 2,
+> +};
+> +
+>  #define TB_SWITCH_KEY_SIZE		32
+>  #define TB_SWITCH_MAX_DEPTH		6
+>  #define USB4_SWITCH_MAX_DEPTH		5
+> @@ -736,6 +758,7 @@ static inline void tb_domain_put(struct tb *tb)
+>  	put_device(&tb->dev);
+>  }
+> 
+> +int tb_nvm_validate(struct tb_switch *sw, unsigned int mode);
+>  struct tb_nvm *tb_nvm_alloc(struct device *dev);
+>  int tb_nvm_add_active(struct tb_nvm *nvm, size_t size, nvmem_reg_read_t reg_read);
+>  int tb_nvm_write_buf(struct tb_nvm *nvm, unsigned int offset, void *val,
+> --
+> 2.34.1

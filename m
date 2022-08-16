@@ -2,106 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0075964CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 23:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 236DD5964D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 23:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237659AbiHPVkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 17:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
+        id S237063AbiHPVnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 17:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236666AbiHPVk0 (ORCPT
+        with ESMTP id S231594AbiHPVnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 17:40:26 -0400
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5950674E19;
-        Tue, 16 Aug 2022 14:40:24 -0700 (PDT)
-Received: by mail-qk1-f173.google.com with SMTP id n21so9162981qkk.3;
-        Tue, 16 Aug 2022 14:40:24 -0700 (PDT)
+        Tue, 16 Aug 2022 17:43:13 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AE71C5
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 14:43:11 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id jm11so8151924plb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 14:43:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=fHoaQuQyrNOHA1CxVanqB+3Y6dYUWxDy7qrwrkskMNM=;
+        b=j03HDlXVQVJ9go7wU3LUhqLEtXGqZRIIx4a+gV3xfUzmx9FveQlrGHP0cTzS7hAEtA
+         0AjKIumdLifjWu/ZY/c2QAI61e/LU4mar+fa2w3AODG4eMxptX6kBdFI8h73MyZX6I8g
+         rJgjPVNJEVsU/H9aK8ViD/wvirZ2qf7HdntLAv7f7S0V9YSuVPBZbiDRJZdY4e2oqasO
+         SyFyFfJuGeKSqFv7/fWyEYC/o4XYjiflNKFmwj/fUUkxdY3TpwUBwjiEgov0is4uN1oH
+         Hx3EgJthTnCPgv9hmhQqqeArchhQ2hiGmmnGEJi8QkErohO2PFDJ2+rlAOU/8AHNBiB7
+         V+Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=OFB+vwmFlMkdVZ/s3bOlcrdQ4LPF6bvFIAzYn5YHwNY=;
-        b=EnDfbsKJaP+d1KRnlYL77BU3Zy5ZiFNGu+gvx3abe9Jrh9lJP4Rxztj32WzA/YFbsa
-         ScrGh++vYTDlsti6GcT1zFf7k5YEglO2Hc8EZ0kjBTJ9Ulp1oJGnz4MoSE3oWu7e+qmX
-         7viTkp4izlmp2pxyYcbdX0v3c5k40O5kG4eHCyB+rqvggLgMt8ta3XdnfWaZDb94fefU
-         RE1Cxa5T+7gM69JrXsD9g6QPcVnTGjjkmHxd/Jo6/mLAHcpt9qLVnIw5D2pPmX6fE5kA
-         NKryUQwdotsQOF/lpGbgz8X9AtDVkNQ64i4d2tIIwv3eYhR1+ItSOX0eifLwBG45R6Z9
-         jGSg==
-X-Gm-Message-State: ACgBeo0xjt5E2pa1VjzArhtnh8tFDttttRb8uMsJttuB6J11CuKMV6yW
-        2jwocqanCQBRRAxpwP3C5eQq4dAFKEIFGcOr
-X-Google-Smtp-Source: AA6agR4vvHHI+nXguuQhR5xp//MAHKz9RZ36QS2CX4onFjNpwreJWXlVrI2q6gClSAmuKS+SWLiHNg==
-X-Received: by 2002:a05:620a:4441:b0:6bb:6034:f1d4 with SMTP id w1-20020a05620a444100b006bb6034f1d4mr3791255qkp.451.1660686023322;
-        Tue, 16 Aug 2022 14:40:23 -0700 (PDT)
-Received: from maniforge.DHCP.thefacebook.com ([2620:10d:c091:480::a5ed])
-        by smtp.gmail.com with ESMTPSA id br20-20020a05620a461400b006b8619a67f4sm2454118qkb.34.2022.08.16.14.40.22
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=fHoaQuQyrNOHA1CxVanqB+3Y6dYUWxDy7qrwrkskMNM=;
+        b=HvvITiBj/ubXgcU7WZkoTg5srX7uDmxAIaG79ryrtpNLy/GuWS0tbTnXEyfmAku53P
+         ELcoDyjnNG070NQNAoa6YneU/VhPZl80xOTOusO+hItElsq7mEmHLc6UoXrbHilz1ude
+         HI8mEwOZTAPqiAsQ16RnrzCSE3/R5/HPXZ82z7ELCRd7257BD19xW/YNcnKl3Dxl3G2A
+         R7bk+tr7RhP/N/bsaM3+LWqd0wt+DJrWbIJqefxO8i4JTmrknGtmH6RSc+jeqlDshFQC
+         aJa7SO6qqWBtydcO5FyrHyAhzTp5cuoih+ZPsJ2Iq3S6x4uZp97f0gMNA8EfYkBJPdU7
+         XVFQ==
+X-Gm-Message-State: ACgBeo0oB5L3NXBbLyeEip2z+v8WRS/sK5vP/SYCVnlt/TA/7N3Ecxug
+        H4Yk/uP0qKGmyN3BbbtTQc18qw==
+X-Google-Smtp-Source: AA6agR4aqvIq74t1vyp7m/HiiEbuxiLefbEN5Ecig7re+ePSp2kvKMMY09q7oON6KvCRY2iBzeP+Cw==
+X-Received: by 2002:a17:902:d2d1:b0:16e:eeac:29ab with SMTP id n17-20020a170902d2d100b0016eeeac29abmr24111405plc.125.1660686191203;
+        Tue, 16 Aug 2022 14:43:11 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id m7-20020a1709026bc700b0016bf5557690sm9533377plt.4.2022.08.16.14.43.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 14:40:23 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 16:39:59 -0500
-From:   David Vernet <void@manifault.com>
-To:     Hao Luo <haoluo@google.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        jolsa@kernel.org, tj@kernel.org, joannelkoong@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/5] bpf: Add user-space-publisher ringbuffer map type
-Message-ID: <YvwOr11K4VjNsNzJ@maniforge.DHCP.thefacebook.com>
-References: <20220808155248.2475981-1-void@manifault.com>
- <CA+khW7iuENZHvbyWUkq1T1ieV9Yz+MJyRs=7Kd6N59kPTjz7Rg@mail.gmail.com>
- <20220810011510.c3chrli27e6ebftt@maniforge>
- <CA+khW7iBeAW9tzuZqVaafcAFQZhNwjdEBwE8C-zAaq8gkyujFQ@mail.gmail.com>
- <YvuzNaam90n4AJcm@maniforge.dhcp.thefacebook.com>
- <CA+khW7gXXEtRg-m5NY16PG1hCMJb2-Bnfrp7rkedAz8JHC5HWA@mail.gmail.com>
+        Tue, 16 Aug 2022 14:43:10 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 21:43:07 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+744e173caec2e1627ee0@syzkaller.appspotmail.com,
+        Oliver Upton <oliver.upton@linux.dev>
+Subject: Re: [PATCH 2/3] KVM: Unconditionally get a ref to /dev/kvm module
+ when creating a VM
+Message-ID: <YvwPa5GuR8gjQdpc@google.com>
+References: <20220816053937.2477106-1-seanjc@google.com>
+ <20220816053937.2477106-3-seanjc@google.com>
+ <YvvNfTouc22hiLwo@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+khW7gXXEtRg-m5NY16PG1hCMJb2-Bnfrp7rkedAz8JHC5HWA@mail.gmail.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <YvvNfTouc22hiLwo@google.com>
+X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 10:01:38AM -0700, Hao Luo wrote:
-> On Tue, Aug 16, 2022 at 8:10 AM David Vernet <void@manifault.com> wrote:
-> >
-> > On Mon, Aug 15, 2022 at 02:13:13PM -0700, Hao Luo wrote:
-> > > >
-> > > > Iters allow userspace to kick the kernel, but IMO they're meant to enable
-> > > > data extraction from the kernel, and dumping kernel data into user-space.
-> > >
-> > > Not necessarily extracting data and dumping data. It could be used to
-> > > do operations on a set of objects, the operation could be
-> > > notification. Iterating and notifying are orthogonal IMHO.
-> > >
-> > > > What I'm proposing is a more generalizable way of driving logic in the
-> > > > kernel from user-space.
-> > > > Does that make sense? Looking forward to hearing your thoughts.
-> > >
-> > > Yes, sort of. I see the difference between iter and the proposed
-> > > interface. But I am not clear about the motivation of a new APis for
-> > > kicking callbacks from userspace. I guess maybe it will become clear,
-> > > when you publish a concerte RFC of that interface and integrates with
-> > > your userspace publisher.
-> >
-> > Fair enough -- let me remove this from the cover letter in future
-> > versions of the patch-set. To your point, there's probably little to be
-> > gained in debating the merits of adding such APIs until there's a
-> > concrete use-case.
-> >
+On Tue, Aug 16, 2022, David Matlack wrote:
+> On Tue, Aug 16, 2022 at 05:39:36AM +0000, Sean Christopherson wrote:
+> > Unconditionally get a reference to the /dev/kvm module when creating a VM
+> > instead of using try_get_module(), which will fail if the module is in
+> > the process of being forcefully unloaded.  The error handling when
+> > try_get_module() fails doesn't properly unwind all that has been done,
+> > e.g. doesn't call kvm_arch_pre_destroy_vm() and doesn't remove the VM
+> > from the global list.  Not removing VMs from the global list tends to be
+> > fatal, e.g. leads to use-after-free explosions.
+> > 
+> > The obvious alternative would be to add proper unwinding, but the
+> > justification for using try_get_module(), "rmmod --wait", is completely
+> > bogus as support for "rmmod --wait", i.e. delete_module() without
+> > O_NONBLOCK, was removed by commit 3f2b9c9cdf38 ("module: remove rmmod
+> > --wait option.") nearly a decade ago.
 > 
-> Yep, sounds good. I don't mean to debate :) I would like to help. If
-> we could build on top of existing infra and make improvements, IMHO it
-> would be easier to maintain. Anyway, I'm looking forward to your
-> proposed APIs.
+> Ah! include/linux/module.h may also need a cleanup then. The comment
+> above __module_get() explicitly mentions "rmmod --wait", which is what
+> led me to use try_module_get() for commit 5f6de5cbebee ("KVM: Prevent
+> module exit until all VMs are freed").
 
-Don't worry, I did not take it that you were debating. I very much
-appreciate your thoughts and help. If and when I send out that RFC
-patchset, I'll be sure to cc you (if not reach out beforehand as well to
-discuss).
+Ugh, I didn't see that one.  The whole thing is a mess.  try_module_get() also
+has a comment (just below the "rmmod --wait" comment) saying that it's the one
+true way of doing things, but that's at best misleading for cases like this where
+a module is taking a reference of _itself_.
+
+The man pages are also woefully out of date :-/

@@ -2,188 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B57759637E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2F0596384
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:09:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237166AbiHPUFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 16:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
+        id S237046AbiHPUJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 16:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbiHPUFJ (ORCPT
+        with ESMTP id S232051AbiHPUJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 16:05:09 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63B47B788
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 13:05:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660680302; x=1692216302;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=64cxPXUR1/1yhLA0ois3zXOO/EezC1ZG8tFBRR3t74A=;
-  b=Ps0tUYxNzu1H7NAtYUthZVpYxQluLFFvKRAvTpEXZvaIuKhjW37syKOa
-   EYupzIDHf+7/GAP7nDftF3vqxgZgroPu68qyPLrmVcx6Ky+Mxqfyg/0P7
-   HTeygDWTyDA3JzqUxe1IwasHl8pMZekbL8gz1VwAOc7b13JngHcRG0NKl
-   N4JHLqfWlzC1dT0cMvng/uJEN2Rm0z55FD5z0kAcwyJ6n001rZUdJs4EO
-   wX/wNcc/NOyg7jVu1z7bNsEWJQ8Dd0EuwbbV/XQqAQWlUKKhd8dAOYtOL
-   w0rRqqsB9kIUTnxVe+T/zltiIFf0M3blQr2QZdsm+mCK6p6wNqq2/Pp1v
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="279279069"
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="279279069"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 13:05:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="667275844"
-Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Aug 2022 13:05:01 -0700
-Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oO2o8-0000CW-1Q;
-        Tue, 16 Aug 2022 20:05:00 +0000
-Date:   Wed, 17 Aug 2022 04:04:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/microcode] BUILD SUCCESS
- 764fc2a82fed0a4f0ce7444c34a3683bad06e403
-Message-ID: <62fbf85d.AYGkK8knj6m9KOAw%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 16 Aug 2022 16:09:17 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C877C75C;
+        Tue, 16 Aug 2022 13:09:16 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id p14-20020a17090a74ce00b001f4d04492faso10673254pjl.4;
+        Tue, 16 Aug 2022 13:09:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=7SZ5VenNztRnLFMOBFO6xbar+Rfw+Z2OdJF35tqn830=;
+        b=Sv5fxKlBKbSA8SlxCHfQb1M2em94RKvPRcxL/wwLsjCiAN9/eRlU2+H9PV2e2/jKmD
+         FBkwSe5eyT2dPJlpma0nD6U5hNSdQgrvOMMFC6jGBSn2GAr9ui2aF8fvi2nLhtknnxKE
+         vF0C5HXVsbDGUO/556VYSl6E0FcV19MaVH3gvZsuF5E2u0HMdiTo2Y1nw+aI0hUHIrTw
+         fvpbvoGZHzZa9q4u0qGZ/j6sVHQQB8WbQNH+Lp5Au+zorDBqIYDqLJHT/vo1duT0llkw
+         R7I7c7y0uLpd9mwmev7S3VPT9jz1MSFJT0lBN27Es5G4/kgqezl4EaGzn5edvG3mnMK7
+         T46A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=7SZ5VenNztRnLFMOBFO6xbar+Rfw+Z2OdJF35tqn830=;
+        b=vpuFpOrzcnEJ9pjG8xf+L6MsCBl1NrL/hArxjXl0fzycy2vP4POX03hk+HdzuCiaDf
+         NAAOSPw0/ZW0AjdstduSExPn3Yiu0Nl39QVd/Q4vJpLz2IWruQcHmaBFKnxxpinG6VgC
+         /Lyns/FOXCEWnZ6rWmlNIAwc8zOVthm6vneNKHHlAfFRlBSCh1yH3bHS9hVRMAJP1hIg
+         Q8DDuc/uOX5OisH8OQwi7ToijLkratRZ0dqM/LadnrTgkzULonge9uSjWg1ESKmvZSrd
+         rmOy29+jsKxV9AysGWuCd7bT3S9aLGTusDy7M0Z8UE1rMnd1/aJZpdC0VDZ77d2JFlfw
+         6aow==
+X-Gm-Message-State: ACgBeo3JjZIVe5WKXPCixYBWyodE53IlqCS/vT83RfyM2PPGrpjFHsOa
+        9trRRnV/Eblrza2mgiaUIZo=
+X-Google-Smtp-Source: AA6agR6YCr4etjg++NmjN1lp2khS9VxHoMkwP+8i3D/ZE7Rx+vY/+uxshYzCtOo8mfsuFa6yoCtHsQ==
+X-Received: by 2002:a17:902:d885:b0:172:868f:188c with SMTP id b5-20020a170902d88500b00172868f188cmr3512048plz.78.1660680556322;
+        Tue, 16 Aug 2022 13:09:16 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:7229])
+        by smtp.gmail.com with ESMTPSA id f6-20020aa79686000000b0052e23a5ab74sm8907315pfk.59.2022.08.16.13.09.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 13:09:15 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 16 Aug 2022 10:09:14 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     mkoutny@suse.com, axboe@kernel.dk, ming.lei@redhat.com,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH v7 8/9] blk-throttle: cleanup tg_update_disptime()
+Message-ID: <Yvv5as5BVuqjw6PX@slm.duckdns.org>
+References: <20220802140415.2960284-1-yukuai1@huaweicloud.com>
+ <20220802140415.2960284-9-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20220802140415.2960284-9-yukuai1@huaweicloud.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/microcode
-branch HEAD: 764fc2a82fed0a4f0ce7444c34a3683bad06e403  x86/microcode: Document the whole late loading problem
+On Tue, Aug 02, 2022 at 10:04:14PM +0800, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> tg_update_disptime() only need to adjust postion for 'tg' in
+> 'parent_sq', there is no need to call throtl_enqueue/dequeue_tg().
+> 
+> Save a little overhead in tg_update_disptime() and prepare to cleanup
+> flag 'THROTL_TG_PENDING', there are no functional changes.
 
-elapsed time: 716m
+Does this actually help anything? Given that the heavy part of the operation
+remains the same, this might not be much of an optimization. Is there even a
+microbench that can show the difference?
 
-configs tested: 106
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-alpha                            allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-arc                  randconfig-r043-20220815
-sh                               allmodconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-i386                 randconfig-a003-20220815
-m68k                             allyesconfig
-i386                 randconfig-a004-20220815
-i386                 randconfig-a002-20220815
-i386                 randconfig-a001-20220815
-i386                 randconfig-a005-20220815
-arm                                 defconfig
-m68k                             allmodconfig
-i386                 randconfig-a006-20220815
-arc                              allyesconfig
-i386                                defconfig
-arm64                            allyesconfig
-x86_64                              defconfig
-arm                              allyesconfig
-arc                               allnoconfig
-alpha                             allnoconfig
-csky                              allnoconfig
-riscv                             allnoconfig
-x86_64               randconfig-a001-20220815
-x86_64               randconfig-a003-20220815
-mips                             allyesconfig
-x86_64               randconfig-a002-20220815
-x86_64                               rhel-8.3
-x86_64               randconfig-a004-20220815
-x86_64               randconfig-a006-20220815
-x86_64                           rhel-8.3-kvm
-x86_64               randconfig-a005-20220815
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-i386                             allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-syz
-x86_64                           allyesconfig
-ia64                             allmodconfig
-xtensa                  nommu_kc705_defconfig
-riscv                    nommu_k210_defconfig
-s390                       zfcpdump_defconfig
-powerpc                 mpc8540_ads_defconfig
-i386                 randconfig-c001-20220815
-powerpc              randconfig-c003-20220815
-powerpc                     redwood_defconfig
-powerpc                     sequoia_defconfig
-ia64                      gensparse_defconfig
-arm                           corgi_defconfig
-sh                        sh7785lcr_defconfig
-mips                         bigsur_defconfig
-powerpc                      chrp32_defconfig
-arm                           h3600_defconfig
-arm                      integrator_defconfig
-sh                            shmin_defconfig
-xtensa                              defconfig
-arm                         at91_dt_defconfig
-m68k                        m5307c3_defconfig
-loongarch                           defconfig
-loongarch                         allnoconfig
-powerpc                     stx_gp3_defconfig
-m68k                       m5208evb_defconfig
-m68k                         amcore_defconfig
-arc                           tb10x_defconfig
-arm                          simpad_defconfig
-sh                          r7780mp_defconfig
-arm                             ezx_defconfig
-openrisc                 simple_smp_defconfig
-openrisc                  or1klitex_defconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-arc                        nsimosci_defconfig
-m68k                          atari_defconfig
-sh                        dreamcast_defconfig
-sh                            migor_defconfig
-
-clang tested configs:
-hexagon              randconfig-r045-20220815
-hexagon              randconfig-r041-20220815
-riscv                randconfig-r042-20220815
-s390                 randconfig-r044-20220815
-x86_64               randconfig-a013-20220815
-x86_64               randconfig-a012-20220815
-x86_64               randconfig-a011-20220815
-x86_64               randconfig-a014-20220815
-x86_64               randconfig-a015-20220815
-x86_64               randconfig-a016-20220815
-i386                 randconfig-a012-20220815
-i386                 randconfig-a011-20220815
-i386                 randconfig-a013-20220815
-i386                 randconfig-a014-20220815
-i386                 randconfig-a015-20220815
-i386                 randconfig-a016-20220815
-arm                       versatile_defconfig
-arm                       mainstone_defconfig
-arm                       aspeed_g4_defconfig
-powerpc                 mpc832x_rdb_defconfig
-x86_64               randconfig-k001-20220815
-arm                        multi_v5_defconfig
-powerpc                      ppc64e_defconfig
-powerpc                 mpc832x_mds_defconfig
+Thanks.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+tejun

@@ -2,128 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14460596016
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8351C596024
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236288AbiHPQZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 12:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
+        id S236330AbiHPQZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 12:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236237AbiHPQZl (ORCPT
+        with ESMTP id S236237AbiHPQZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 12:25:41 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CA843E7A
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:25:39 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id e13so14146687edj.12
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:25:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=xZbhJ86qeK0iLd6MKqiB1IUq4Y7ffH3veK//inJpuGw=;
-        b=HzNHJZQijj8JlSfru6AkH1YQh8sNxBD2pCT1ub30EiGUr0dZ23NNVuEaAlcJjV1IvI
-         tn0PLnUb8rx4bgsOqlc8OOR1pWZOGydPdvCj+evhLgKSf/N+XPJWxq7aQ4awMlKkxxjD
-         4PnROEjPsEBlyzR6PN6036HFnI7IfWvcedC3oiom/MVIwvnhdOGDMep6UNhhOXsE92TU
-         qNb5y1D8TUMisu6UriV2L6PJZNyELkyF227cyUsZ0mqKeF1ZAq7lge59LwBgSKxXwMby
-         /DteO3ayYFl/nJUCrPtutk9GpPy4YBcHzpTA1bIqF/boOg9ZxOCKd+HI5ps76Lo0p7Kx
-         zCsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=xZbhJ86qeK0iLd6MKqiB1IUq4Y7ffH3veK//inJpuGw=;
-        b=apTDjrGdk5yBs9Jf1aK2ygX5HHjsX6KPtOXkqybo9dIam26JVoPYfoi+d3f2WwGJWV
-         cqLQiXjH489xKJQYopELlgfsrDTzL+4JPX4WupFWwjnJK/DdDNv5UVr1XHqcwuFUmkUL
-         QWU2JfxqoSvKZQPcrc26DQh4F4ieCgAoBB/fUDe8CNsV+UkXvBWfz6YkRzaIMmWxkGwG
-         TZkjW9iBEv0yFZfpO6vAt0PjJgoo7o/RpKTG0PZRLIZAOgcfTA0wrCo2TsqcSC4/yVkt
-         Ti7xapBsV21ezoW+9o/abkQBZN1i2Vx3DkUl8w4Rzqo2nl3ulp9ae+k9ZVC0rg4ecoK4
-         HjQQ==
-X-Gm-Message-State: ACgBeo2+mSZdI0853Ib+D2KE4kShg72f4ajbuKPEN1Itmue9MD++gQzI
-        V/dkhVHiE9yMl4/SC+6QCI2+wyJ/paP3VSzG4e2haA==
-X-Google-Smtp-Source: AA6agR5NVFdAVohPgwh9aCpwEvDJ61/gn3bBBuGoIDZroPm5V68OkeO32ZjkMjk/zjPc2mpGkdLRzqAUgozWEgN77lc=
-X-Received: by 2002:a05:6402:2387:b0:43d:3e0:4daf with SMTP id
- j7-20020a056402238700b0043d03e04dafmr19547097eda.208.1660667138236; Tue, 16
- Aug 2022 09:25:38 -0700 (PDT)
+        Tue, 16 Aug 2022 12:25:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AD6EE0D
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:25:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4E1B6124E
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 16:25:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 350C4C433D6;
+        Tue, 16 Aug 2022 16:25:52 +0000 (UTC)
+Date:   Tue, 16 Aug 2022 12:25:59 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Krister Johansen <kjlx@templeofstupid.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        David Reaver <me@davidreaver.com>,
+        linux-kernel@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>
+Subject: Re: [PATCH 1/1] tracing: fix a WARN from trace_event_dyn_put_ref
+Message-ID: <20220816122559.17869abc@gandalf.local.home>
+In-Reply-To: <4e43a4eece5f382d1636397fb3c0208f2afe81fc.1660347763.git.kjlx@templeofstupid.com>
+References: <cover.1660347763.git.kjlx@templeofstupid.com>
+        <4e43a4eece5f382d1636397fb3c0208f2afe81fc.1660347763.git.kjlx@templeofstupid.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220816124604.978842485@linuxfoundation.org> <CADVatmPOCPfHQHEuwVmOb5oeN2HfWWMztVok3qvoq7Ndndb14A@mail.gmail.com>
- <YvutIhMRZW/nKOPi@kroah.com>
-In-Reply-To: <YvutIhMRZW/nKOPi@kroah.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 16 Aug 2022 21:55:26 +0530
-Message-ID: <CA+G9fYuW48_0c08iVk9oeHLGse73tuft2ubdkC2Y-fyZdJpr9w@mail.gmail.com>
-Subject: Re: [PATCH 5.18 0000/1094] 5.18.18-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 Aug 2022 at 20:13, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Aug 16, 2022 at 03:34:56PM +0100, Sudip Mukherjee wrote:
-> > Hi Greg,
-> >
-> > On Tue, Aug 16, 2022 at 1:59 PM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > This is the start of the stable review cycle for the 5.18.18 release.
-> > > There are 1094 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > >
-> > > Responses should be made by Thu, 18 Aug 2022 12:43:14 +0000.
-> > > Anything received after that time might be too late.
-> >
-> > The hung task problem I reported for v5.18.18-rc1 is not seen with rc2.
->
-> Nice!
->
-> > The drm warning is still there and a bisect pointed it to:
-> > 4b8701565b59 ("drm/vc4: hdmi: Move HDMI reset to
-> > pm_resume")4b8701565b59 ("drm/vc4: hdmi: Move HDMI reset to
-> > pm_resume")
->
-> What drm warning?
 
-WARNING: CPU: 0 PID: 246 at drivers/gpu/drm/vc4/vc4_hdmi_regs.h:487
-vc5_hdmi_reset+0x1f0/0x240 [vc4]
-https://lore.kernel.org/all/CA+G9fYve16J7=4f+WAVrTUspxkKA+3BonHzGyk8VP=U+D9irOQ@mail.gmail.com/
+[ Added the authors of this code to the Cc ]
 
-This was reported on mainline kernel on June 30th.
+On Fri, 12 Aug 2022 17:02:20 -0700
+Krister Johansen <kjlx@templeofstupid.com> wrote:
 
->
-> > I have not noticed earlier, the warning is there with mainline also. I
-> > will verify tonight and send another mail for mainline.
->
-> Ah, ok, being bug compatible is good :)
->
-> > Also, mips and csky allmodconfig build fails with gcc-12 due to
-> > 85d03e83bbfc ("Bluetooth: L2CAP: Fix l2cap_global_chan_by_psm
-> > regression").
-> > Mainline also has the same build failure reported at
-> > https://lore.kernel.org/lkml/YvY4xdZEWAPosFdJ@debian/
->
-> Looks like they have a fix somewhere for that, any hints on where to
-> find it?
->
-> thanks,
->
-> greg k-h
+> The code in perf_trace_init takes a reference on a trace_event_call that is
+> looked up as part of the function call.  If perf_trace_event_int fails,
+> however, perf_trace_event_unreg can decrement that refcount from underneath
+> perf_trace_init.  This means that in some failure cases, perf_trace_init
+> can trigger the WARN in trace_dynevent.c which attempts to guard against
+> zero reference counts going negative.
+> 
+> The author can reproduce this problem readily by running perf record in a
+> loop against a series of uprobes with no other users.  Killing the record
+> process before it can finish its setup is enough to trigger this warn
+> within a few seconds.
+> 
+> This patch leaves the behavior in perf_trace_event_unreg unchanged, but
+> moves most of the code in that function to perf_trace_event_cleanup.  The
+> unreg function retains the ability to drop the refcount on the tp_event,
+> but cleanup does not.  This modification is based upon the observation that
+> all of the other callers of perf_trace_event_init don't bother with
+> manipulating a reference count on the tp_events that they create.  For
+> those callers, the trace_event_put_ref was already a no-op.
+> 
+> Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
+> Reviewed-by: David Reaver <me@davidreaver.com>
+> Fixes: 1d18538e6a092 "tracing: Have dynamic events have a ref counter"
+> CC: stable@vger.kernel.org # 5.15, 5.18, 5.19
+> ---
+>  kernel/trace/trace_event_perf.c | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_event_perf.c b/kernel/trace/trace_event_perf.c
+> index a114549720d6..7762bfd268cd 100644
+> --- a/kernel/trace/trace_event_perf.c
+> +++ b/kernel/trace/trace_event_perf.c
+> @@ -151,13 +151,13 @@ static int perf_trace_event_reg(struct trace_event_call *tp_event,
+>  	return ret;
+>  }
+>  
+> -static void perf_trace_event_unreg(struct perf_event *p_event)
+> +static void perf_trace_event_cleanup(struct perf_event *p_event)
+>  {
+>  	struct trace_event_call *tp_event = p_event->tp_event;
+>  	int i;
+>  
+>  	if (--tp_event->perf_refcount > 0)
+> -		goto out;
+> +		return;
+>  
+>  	tp_event->class->reg(tp_event, TRACE_REG_PERF_UNREGISTER, NULL);
+>  
+> @@ -176,7 +176,13 @@ static void perf_trace_event_unreg(struct perf_event *p_event)
+>  			perf_trace_buf[i] = NULL;
+>  		}
+>  	}
+> -out:
+> +}
+> +
+> +static void perf_trace_event_unreg(struct perf_event *p_event)
+> +{
+> +	struct trace_event_call *tp_event = p_event->tp_event;
+> +
+> +	perf_trace_event_cleanup(p_event);
+>  	trace_event_put_ref(tp_event);
+>  }
+>  
+> @@ -207,7 +213,7 @@ static int perf_trace_event_init(struct trace_event_call *tp_event,
+>  
+>  	ret = perf_trace_event_open(p_event);
+>  	if (ret) {
+> -		perf_trace_event_unreg(p_event);
+> +		perf_trace_event_cleanup(p_event);
+
+The only problem I have with this patch is the loss of symmetry. Where
+perf_trace_event_reg() returns successful, so unreg() should be the
+function you call on failure.
+
+Since perf_trace_event_reg() is only called from perf_trace_event_init()
+let's move the perf_trace_event_open() into the perf_trace_event_reg() and
+have the unreg still do the clean up on failure.
+
+This way we keep the symmetry between *_reg() and *_unreg().
+
+And then the init function will not have to do any clean up, and can just
+end with:
+
+	return perf_trace_event_reg(tp_event, p_event);
+
+Thanks,
+
+-- Steve
+
+
+>  		return ret;
+>  	}
+>  
+

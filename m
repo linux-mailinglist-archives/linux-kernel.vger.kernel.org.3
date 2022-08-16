@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72370595381
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 09:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3DE595416
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 09:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbiHPHK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 03:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
+        id S232397AbiHPHpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 03:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231735AbiHPHJs (ORCPT
+        with ESMTP id S232344AbiHPHoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 03:09:48 -0400
+        Tue, 16 Aug 2022 03:44:34 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7F338A9BC
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 21:40:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5218138A9BB
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 21:40:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1660624804; x=1692160804;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
   bh=J00K2StCdEs0R/yUirw4VjNAGUKukj1ClH8RInNxsQY=;
-  b=VG8lxkQ4T2WPIZUsiqYAq7VK4bwcp1H6VLukwIQMDXkqIHu5QakTvI0B
-   GRs53vitokLWCwJ7tIVNDrMxCCt5Dc80Ed1coQ0AG6FMD3gXgJZkc83yj
-   qZcLkwO7UvZgFcZQv6oND4ejcT6SKiuQ/SQu539cS0GPSl8yIY/r8TA8D
-   +JWs47ZrE0/krVCLieG540pXuoj/FlolVpVs0s6ZLdeuuz+krGdu2mudB
-   PgqIinlK3RtZK+X+zpaNxDycRFsRRdz16X9LVUrob2azxIlueY992oDVL
-   yv6zYiuzMBSgU6rUibwEv+AMGPrtgmc5ZT83yxcuHR640Z9xgtqSLAOJa
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="293395141"
+  b=IMp3SBoVHj/HAcEd4wb9LycuAh/3LVnEC8CrEqWG7VBf7twfIahlf8Zp
+   y18J+QXSX5cp7g0b0PVymQj6vI7tr0JpV/IVQyxw/CtxxmIdIC2XwHOcd
+   gRl9f8ZEH0Md0yDe1F8uyiWcrLYN+C79R1LtRVKywXey/2bUfMKJiTAcZ
+   gywfmG19E3ElH3vkzHAal2fl3HztyoCahjWK8SiA9X5tsUrDfdkFStbkM
+   syN8v6mbbGDu0ToeF2+d4kxeY0ckt+b2QlKS7ZD6IqZ/m5Y+HUgxRalIY
+   BTPMj3SknjPNS6iWciChPPwk5OtkzpFrVPIzD0l5ilVdgYK0V5ObBfBSz
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="293395142"
 X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="293395141"
+   d="scan'208";a="293395142"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 21:38:19 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 21:38:20 -0700
 X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="675071601"
+   d="scan'208";a="675071604"
 Received: from araj-dh-work.jf.intel.com ([10.165.157.158])
   by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 21:38:19 -0700
 From:   Ashok Raj <ashok.raj@intel.com>
@@ -46,9 +46,9 @@ Cc:     "LKML Mailing List" <linux-kernel@vger.kernel.org>,
         "Ashok Raj" <ashok.raj@intel.com>,
         Dave Hansen <dave.hansen@intel.com>,
         Tony Luck <tony.luck@intel.com>
-Subject: [PATCH v2 4/4] x86/microcode: Handle NMI's during microcode update.
-Date:   Tue, 16 Aug 2022 04:37:53 +0000
-Message-Id: <20220816043754.3258815-5-ashok.raj@intel.com>
+Subject: [PATCH v2 4/4] x86/microcode: Place siblings in NMI loop while update in progress
+Date:   Tue, 16 Aug 2022 04:37:54 +0000
+Message-Id: <20220816043754.3258815-6-ashok.raj@intel.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220816043754.3258815-1-ashok.raj@intel.com>
 References: <20220816043754.3258815-1-ashok.raj@intel.com>

@@ -2,166 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA98595806
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD90595846
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234318AbiHPKVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
+        id S234618AbiHPK3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbiHPKU4 (ORCPT
+        with ESMTP id S234529AbiHPK2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:20:56 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D562052097;
-        Tue, 16 Aug 2022 02:36:08 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 4A308346EC;
-        Tue, 16 Aug 2022 09:34:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1660642463; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iEdYfa1M4GgGzZG+RuOCPAb/W8L0e/bqVBO0WbncbEE=;
-        b=pBpO8XTXlRzfr9XHY2EY5XFEQIVO6s1UiN7LVjuYTNaMxZ1PC+GyuKrmKnORBcGFydH69W
-        CnwM9Nb68o57IONPf+0uX7J958FobhMNbGv/VNAWtKCxykUsWfcMZPwYgZZKLSDI6+2qzn
-        RfQVriyqAxiodJYgcae2V5FcNO57/cQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1660642463;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iEdYfa1M4GgGzZG+RuOCPAb/W8L0e/bqVBO0WbncbEE=;
-        b=34FB+9QK0NXSIgtZkv3faxX4+8s2JgaMoRYkRu/il6P0qmVqGJ2OQE0yPWlt+IeVyDZPd1
-        p2RTyT8AIQphYQDQ==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 16 Aug 2022 06:28:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CD05D5EBD
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:37:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660642485;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+KFOMoWGAyHxHdtORsjFxcSg87BzWtJ/0Drcua3zx9E=;
+        b=deoiUnnlo25A5EVr0HOvRU7zyXa/WZztrE/KUKPxq+IAw1ndC3nn6HsdUigNs+c/B50MYY
+        08vEhn6gPeVEt2fZ+VgL1xRMq9Xo1ucE/tLJmFdVGfl+uuc6IctivVo3/Y/zI/bL1m9OWm
+        CDa+5HiBaCqd2zn7L5aTK7D6hbau8Zc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-168-VWv000_QN42ZqFWb0ChMoQ-1; Tue, 16 Aug 2022 05:34:42 -0400
+X-MC-Unique: VWv000_QN42ZqFWb0ChMoQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 221792C143;
-        Tue, 16 Aug 2022 09:34:23 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id CC041A066C; Tue, 16 Aug 2022 11:34:21 +0200 (CEST)
-Date:   Tue, 16 Aug 2022 11:34:21 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org,
-        Ojaswin Mujoo <ojaswin@linux.ibm.com>,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geetika.Moolchandani1@ibm.com, regressions@lists.linux.dev,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [Regression] ext4: changes to mb_optimize_scan cause issues on
- Raspberry Pi
-Message-ID: <20220816093421.ok26tcyvf6bm3ngy@quack3>
-References: <0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com>
- <20220728100055.efbvaudwp3ofolpi@quack3>
- <64b7899f-d84d-93de-f9c5-49538bd080d0@i2se.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1A6C13C0D195;
+        Tue, 16 Aug 2022 09:34:42 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5A4CE492C3B;
+        Tue, 16 Aug 2022 09:34:41 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH] net: Fix suspicious RCU usage in bpf_sk_reuseport_detach()
+From:   David Howells <dhowells@redhat.com>
+To:     yin31149@gmail.com
+Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        dhowells@redhat.com, linux-kernel@vger.kernel.org
+Date:   Tue, 16 Aug 2022 10:34:40 +0100
+Message-ID: <166064248071.3502205.10036394558814861778.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <64b7899f-d84d-93de-f9c5-49538bd080d0@i2se.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stefan!
+bpf_sk_reuseport_detach() calls __rcu_dereference_sk_user_data_with_flags()
+to obtain the value of sk->sk_user_data, but that function is only usable
+if the RCU read lock is held, and neither that function nor any of its
+callers hold it.
 
-On Sat 06-08-22 11:50:28, Stefan Wahren wrote:
-> Am 28.07.22 um 12:00 schrieb Jan Kara:
-> > Hello!
-> > 
-> > On Mon 18-07-22 15:29:47, Stefan Wahren wrote:
-> > > i noticed that since Linux 5.18 (Linux 5.19-rc6 is still affected) i'm
-> > > unable to run "rpi-update" without massive performance regression on my
-> > > Raspberry Pi 4 (multi_v7_defconfig + CONFIG_ARM_LPAE). Using Linux 5.17 this
-> > > tool successfully downloads the latest firmware (> 100 MB) on my development
-> > > micro SD card (Kingston 16 GB Industrial) with a ext4 filesystem within ~ 1
-> > > min. The same scenario on Linux 5.18 shows the following symptoms:
-> > Thanks for report and the bisection!
-> > > - download takes endlessly much time and leads to an abort by userspace in
-> > > most cases because of the poor performance
-> > > - massive system load during download even after download has been aborted
-> > > (heartbeat LED goes wild)
-> > OK, is it that the CPU is busy or are we waiting on the storage card?
-> > Observing top(1) for a while should be enough to get the idea.  (sorry, I'm
-> > not very familiar with RPi so I'm not sure what heartbeat LED shows).
-> 
-> My description wasn't precise. I mean the green ACT LED, which uses the LED
-> heartbeat trigger:
-> 
-> "This allows LEDs to be controlled by a CPU load average. The flash
-> frequency is a hyperbolic function of the 1-minute load average."
-> 
-> I'm not sure if it's CPU or IO driven load, here the top output in bad case:
-> 
-> top - 08:44:17 up 43 min,  2 users,  load average: 5,02, 5,45, 5,17
-> Tasks: 142 total,   1 running, 141 sleeping,   0 stopped,   0 zombie
-> %Cpu(s):  0,4 us,  0,4 sy,  0,0 ni, 49,0 id, 50,2 wa,  0,0 hi, 0,0 si,  0,0
-> st
-> MiB Mem :   7941,7 total,   4563,1 free,    312,7 used,   3066,0 buff/cache
-> MiB Swap:    100,0 total,    100,0 free,      0,0 used.   7359,6 avail Mem
+Fix this by adding a new helper, __locked_read_sk_user_data_with_flags()
+that checks to see if sk->sk_callback_lock() is held and use that here
+instead.
 
-OK, there's plenty of memory available, CPUs are mostly idle, the load is
-likely created by tasks waiting for IO (which also contribute to load
-despite not consuming CPU). Not much surprising here.
+Alternatively, making __rcu_dereference_sk_user_data_with_flags() use
+rcu_dereference_checked() might suffice.
 
-> > Can you run "iostat -x 1" while the download is running so that we can see
-> > roughly how the IO pattern looks?
-> > 
-> Here the output during download:
-> 
-> Device            r/s     w/s     rkB/s     wkB/s   rrqm/s wrqm/s  %rrqm 
-> %wrqm r_await w_await aqu-sz rareq-sz wareq-sz svctm  %util
-> mmcblk1          0,00    2,00      0,00     36,00     0,00 0,00   0,00  
-> 0,00    0,00 23189,50  46,38     0,00    18,00 500,00 100,00
-> 
-> avg-cpu:  %user   %nice %system %iowait  %steal   %idle
->            0,25    0,00    0,00   49,62    0,00   50,13
-> 
-> Device            r/s     w/s     rkB/s     wkB/s   rrqm/s wrqm/s  %rrqm 
-> %wrqm r_await w_await aqu-sz rareq-sz wareq-sz svctm  %util
-> mmcblk1          0,00    2,00      0,00     76,00     0,00 0,00   0,00  
-> 0,00    0,00 46208,50  92,42     0,00    38,00 500,00 100,00
-> 
-> avg-cpu:  %user   %nice %system %iowait  %steal   %idle
->            0,25    0,00    0,00   49,62    0,00   50,13
-> 
-> Device            r/s     w/s     rkB/s     wkB/s   rrqm/s wrqm/s  %rrqm 
-> %wrqm r_await w_await aqu-sz rareq-sz wareq-sz svctm  %util
-> mmcblk1          0,00    3,00      0,00     76,00     0,00 0,00   0,00  
-> 0,00    0,00 48521,67 145,56     0,00    25,33 333,33 100,00
-> 
-> avg-cpu:  %user   %nice %system %iowait  %steal   %idle
->            0,25    0,00    0,00   49,62    0,00   50,13
+Without this, the following warning can be occasionally observed:
 
-So this is interesting. We can see the card is 100% busy. The IO submitted
-to the card is formed by small requests - 18-38 KB per request - and each
-request takes 0.3-0.5s to complete. So the resulting throughput is horrible
-- only tens of KB/s. Also we can see there are many IOs queued for the
-device in parallel (aqu-sz columnt). This does not look like load I would
-expect to be generated by download of a large file from the web.
+=============================
+WARNING: suspicious RCU usage
+6.0.0-rc1-build2+ #563 Not tainted
+-----------------------------
+include/net/sock.h:592 suspicious rcu_dereference_check() usage!
 
-You have mentioned in previous emails that with dd(1) you can do couple
-MB/s writing to this card which is far more than these tens of KB/s. So the
-file download must be doing something which really destroys the IO pattern
-(and with mb_optimize_scan=0 ext4 happened to be better dealing with it and
-generating better IO pattern). Can you perhaps strace the process doing the
-download (or perhaps strace -f the whole rpi-update process) so that we can
-see how does the load generated on the filesystem look like? Thanks!
+other info that might help us debug this:
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+rcu_scheduler_active = 2, debug_locks = 1
+5 locks held by locktest/29873:
+ #0: ffff88812734b550 (&sb->s_type->i_mutex_key#9){+.+.}-{3:3}, at: __sock_release+0x77/0x121
+ #1: ffff88812f5621b0 (sk_lock-AF_INET){+.+.}-{0:0}, at: tcp_close+0x1c/0x70
+ #2: ffff88810312f5c8 (&h->lhash2[i].lock){+.+.}-{2:2}, at: inet_unhash+0x76/0x1c0
+ #3: ffffffff83768bb8 (reuseport_lock){+...}-{2:2}, at: reuseport_detach_sock+0x18/0xdd
+ #4: ffff88812f562438 (clock-AF_INET){++..}-{2:2}, at: bpf_sk_reuseport_detach+0x24/0xa4
+
+stack backtrace:
+CPU: 1 PID: 29873 Comm: locktest Not tainted 6.0.0-rc1-build2+ #563
+Hardware name: ASUS All Series/H97-PLUS, BIOS 2306 10/09/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x4c/0x5f
+ bpf_sk_reuseport_detach+0x6d/0xa4
+ reuseport_detach_sock+0x75/0xdd
+ inet_unhash+0xa5/0x1c0
+ tcp_set_state+0x169/0x20f
+ ? lockdep_sock_is_held+0x3a/0x3a
+ ? __lock_release.isra.0+0x13e/0x220
+ ? reacquire_held_locks+0x1bb/0x1bb
+ ? hlock_class+0x31/0x96
+ ? mark_lock+0x9e/0x1af
+ __tcp_close+0x50/0x4b6
+ tcp_close+0x28/0x70
+ inet_release+0x8e/0xa7
+ __sock_release+0x95/0x121
+ sock_close+0x14/0x17
+ __fput+0x20f/0x36a
+ task_work_run+0xa3/0xcc
+ exit_to_user_mode_prepare+0x9c/0x14d
+ syscall_exit_to_user_mode+0x18/0x44
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Fixes: cf8c1e967224 ("net: refactor bpf_sk_reuseport_detach()")
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Hawkins Jiawei <yin31149@gmail.com>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: netdev@vger.kernel.org
+---
+
+ include/net/sock.h           |   25 +++++++++++++++++++++++++
+ kernel/bpf/reuseport_array.c |    2 +-
+ 2 files changed, 26 insertions(+), 1 deletion(-)
+
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 05a1bbdf5805..d08cfe190a78 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -577,6 +577,31 @@ static inline bool sk_user_data_is_nocopy(const struct sock *sk)
+ 
+ #define __sk_user_data(sk) ((*((void __rcu **)&(sk)->sk_user_data)))
+ 
++/**
++ * __locked_read_sk_user_data_with_flags - return the pointer
++ * only if argument flags all has been set in sk_user_data. Otherwise
++ * return NULL
++ *
++ * @sk: socket
++ * @flags: flag bits
++ *
++ * The caller must be holding sk->sk_callback_lock.
++ */
++static inline void *
++__locked_read_sk_user_data_with_flags(const struct sock *sk,
++				      uintptr_t flags)
++{
++	uintptr_t sk_user_data =
++		(uintptr_t)rcu_dereference_check(__sk_user_data(sk),
++						 lockdep_is_held(&sk->sk_callback_lock));
++
++	WARN_ON_ONCE(flags & SK_USER_DATA_PTRMASK);
++
++	if ((sk_user_data & flags) == flags)
++		return (void *)(sk_user_data & SK_USER_DATA_PTRMASK);
++	return NULL;
++}
++
+ /**
+  * __rcu_dereference_sk_user_data_with_flags - return the pointer
+  * only if argument flags all has been set in sk_user_data. Otherwise
+diff --git a/kernel/bpf/reuseport_array.c b/kernel/bpf/reuseport_array.c
+index 85fa9dbfa8bf..82c61612f382 100644
+--- a/kernel/bpf/reuseport_array.c
++++ b/kernel/bpf/reuseport_array.c
+@@ -24,7 +24,7 @@ void bpf_sk_reuseport_detach(struct sock *sk)
+ 	struct sock __rcu **socks;
+ 
+ 	write_lock_bh(&sk->sk_callback_lock);
+-	socks = __rcu_dereference_sk_user_data_with_flags(sk, SK_USER_DATA_BPF);
++	socks = __locked_read_sk_user_data_with_flags(sk, SK_USER_DATA_BPF);
+ 	if (socks) {
+ 		WRITE_ONCE(sk->sk_user_data, NULL);
+ 		/*
+
+

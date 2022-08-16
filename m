@@ -2,64 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED42595900
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 775D25958AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234336AbiHPKxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
+        id S234870AbiHPKk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbiHPKxX (ORCPT
+        with ESMTP id S234950AbiHPKkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:53:23 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51444E842
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:55:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660643729; x=1692179729;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Qs5JcP0DyxdDr2M+TfNbeXHgZMZJ7UyRrbaQPUfUtUw=;
-  b=G3syNGWH7XTVsW+Dfbw5P2o85olKoCqDYcF6A7Ro8g7tJyZKWA+Gaoxy
-   D7WibQiKXC5uePe9IwygX3FumpnJuuOjKxPFZgW+20lqGdkDYIVdy33Dt
-   uWbl30VZEIyMgo9yuogCnoU+BPCrVdiZdoFenFWzvgPAiwjLcmuk9W2Bz
-   rif4NN3AIEV9nAnDm43NqVpdq6M7HvKD/PgcoZSMSVgXnUiALMlyATSDD
-   RvySU3LNseJttDjIV+ZLANeRhwop5611RSBcvJ8V8mzFGUZ475Hu9XnOx
-   bV2GWGxt244cwDgHBrZi0iI/UwiICwpD4lg2ctIHCl4yuVglpn6cOE6PN
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="293449978"
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="293449978"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 02:55:29 -0700
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="610208209"
-Received: from kroegerb-mobl1.ger.corp.intel.com (HELO [10.252.51.43]) ([10.252.51.43])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 02:55:24 -0700
-Message-ID: <f6baa98e-af46-7ca8-397a-2e762cd444c6@linux.intel.com>
-Date:   Tue, 16 Aug 2022 11:55:21 +0200
+        Tue, 16 Aug 2022 06:40:16 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62969E1927
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:55:51 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id e15so14268261lfs.0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:55:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=ouC/nNUCrt3P9AuPPNvbcQrm5hP3Vq91u5mO0hzhgiE=;
+        b=M15UJ2gOPRlQBuniCuEzZ1DZQGIvMn6hZQugOgpxtBBpI+dVn7JouVQf2GgunA7fn2
+         JGCezc6VJWURz7ImxJVhUQ1Qz5aMgHzjtlZdj+33GXQ46q1BYMSGq5SkRD4fwJvMqPlP
+         o63wR8dJ9no0B/xph6tdn/7+uc/0sl8zt6epZgRD/qN3z1cKpcLBCKbuyL8WgxuHRK5z
+         j0FEcfQJZS9KCpo0LE3cW5Fl8nR+LfkaOKs9KNfAefMqQWnqobQJ5PH4mP4vTRQ8FGQq
+         V4G8ZzVuA8C3UdrDZMBNP6yZWs69XBpsV8EwXxXiLt4gvD7s6uFhLcmP34FCmvno2tCF
+         rR1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=ouC/nNUCrt3P9AuPPNvbcQrm5hP3Vq91u5mO0hzhgiE=;
+        b=UhELkfuv7BLBSTethP+r2UenqsNy6Sg+oWiRWb6zSHYkWuDKUdLP5E0JSV7+UqOtRf
+         VdmCBhrXamu4hlGsPr1Tb9DS7eEafXjpoRpSDuuJlYtgyns94F/zR1xZwan/OEMkyb/E
+         69WGLUmve3Grk+4gYtu9XYdTnd38RCJnyUeDgkOzg6/UylPkZtvabOvPxppeHauPtroD
+         OgEnNCS7wedhbJHQebzCv/fl5jyi8jHgGpL9i6rd1t41wFVtr1eGPuDGXJFzgeJUmqVz
+         7D30GzKJv3eW/ynqoXbRyBSo+YqDNDhDU+03ErGLgnmUAyTNqytaOXkXJVdXdIKqexk8
+         qMyA==
+X-Gm-Message-State: ACgBeo11xufg56hqzfIgxIm9RKgXwYs/fM5IBFQXgcMqwFgt38db+FPt
+        8ApV6WmAI6o22t7S4vvZlcvJ1Q==
+X-Google-Smtp-Source: AA6agR4ck7myM8UAKNZmScqtxz9CNJgaLd86fBns30J2pD7pFR0A3bi0Rz8iFtZoxIVrvkf43riM/w==
+X-Received: by 2002:a19:3856:0:b0:491:7b45:7617 with SMTP id d22-20020a193856000000b004917b457617mr4301867lfj.47.1660643749373;
+        Tue, 16 Aug 2022 02:55:49 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
+        by smtp.gmail.com with ESMTPSA id v5-20020a2e2f05000000b0025e4dcc48b1sm1724683ljv.19.2022.08.16.02.55.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 02:55:48 -0700 (PDT)
+Message-ID: <c4ec080a-b8b1-e3a9-c9d7-063e138c9bb8@linaro.org>
+Date:   Tue, 16 Aug 2022 12:55:47 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v2] ASoC: Intel: sof_rt5682: Add support for
- jsl_rt5682_rt1019
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 1/4] regulator: dt-bindings: Add Allwinner D1 LDOs
 Content-Language: en-US
-To:     Sean Hong <sean.hong@quanta.corp-partner.google.com>,
-        perex@perex.cz, tiwai@suse.com, brent.lu@intel.com
-Cc:     cezary.rojewski@intel.com, kai.vehmanen@linux.intel.com,
-        peter.ujfalusi@linux.intel.com, ranjani.sridharan@linux.intel.com,
-        linux-kernel@vger.kernel.org, liam.r.girdwood@linux.intel.com,
-        broonie@kernel.org, alsa-devel@alsa-project.org,
-        yung-chuan.liao@linux.intel.com
-References: <20220816075424.1245593-1-sean.hong@quanta.corp-partner.google.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220816075424.1245593-1-sean.hong@quanta.corp-partner.google.com>
+To:     Samuel Holland <samuel@sholland.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+References: <20220815043436.20170-1-samuel@sholland.org>
+ <20220815043436.20170-2-samuel@sholland.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220815043436.20170-2-samuel@sholland.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,72 +82,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/16/22 09:54, Sean Hong wrote:
-> This patch adds the driver data for rt5682 support jsl_rt5682_rt1019.
+On 15/08/2022 07:34, Samuel Holland wrote:
+> The Allwinner D1 SoC contains two pairs of in-package LDOs. One pair is
+> for general purpose use. LDOA generally powers the board's 1.8 V rail.
+> LDOB generally powers the in-package DRAM, where applicable.
 > 
-> Signed-off-by: Sean Hong <sean.hong@quanta.corp-partner.google.com>
+> The other pair of LDOs powers the analog power domains inside the SoC,
+> including the audio codec, thermal sensor, and ADCs. These LDOs require
+> a 0.9 V bandgap voltage reference. The calibration value for the voltage
+> reference is stored in an eFuse, accessed via an NVMEM cell.
+> 
+> Neither LDO control register is in its own MMIO range; instead, each
+> regulator device relies on a regmap/syscon exported by its parent.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 > ---
->  sound/soc/intel/boards/sof_rt5682.c               |  9 +++++++++
->  sound/soc/intel/common/soc-acpi-intel-jsl-match.c | 12 ++++++++++++
->  2 files changed, 21 insertions(+)
 > 
-> diff --git a/sound/soc/intel/boards/sof_rt5682.c b/sound/soc/intel/boards/sof_rt5682.c
-> index 045965312..3a840f3a9 100644
-> --- a/sound/soc/intel/boards/sof_rt5682.c
-> +++ b/sound/soc/intel/boards/sof_rt5682.c
-> @@ -1100,6 +1100,15 @@ static const struct platform_device_id board_ids[] = {
->  					SOF_RT5682_SSP_AMP(1) |
->  					SOF_RT5682_NUM_HDMIDEV(4)),
->  	},
-> +	{
-> +		.name = "jsl_rt5682_rt1019",
-> +		.driver_data = (kernel_ulong_t)(SOF_RT5682_MCLK_EN |
-> +					SOF_RT5682_MCLK_24MHZ |
-
-I see it's the same setting for all JSL devices but I am having doubts
-on this MCLK.  Is this 24MHz value correct for JSL? It's derived from
-ICL so in theory the MCLK should be a multiple of 19.2MHz if the root
-frequency was the oscillator.
-
-Is this intentional?
-
-> +					SOF_RT5682_SSP_CODEC(0) |
-> +					SOF_SPEAKER_AMP_PRESENT |
-> +					SOF_RT1019_SPEAKER_AMP_PRESENT |
-> +					SOF_RT5682_SSP_AMP(1)),
-> +	},
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(platform, board_ids);
-> diff --git a/sound/soc/intel/common/soc-acpi-intel-jsl-match.c b/sound/soc/intel/common/soc-acpi-intel-jsl-match.c
-> index b95c4b2cd..e374bf163 100644
-> --- a/sound/soc/intel/common/soc-acpi-intel-jsl-match.c
-> +++ b/sound/soc/intel/common/soc-acpi-intel-jsl-match.c
-> @@ -29,6 +29,11 @@ static const struct snd_soc_acpi_codecs rt1015p_spk = {
->  	.codecs = {"RTL1015"}
->  };
->  
-> +static struct snd_soc_acpi_codecs rt1019p_spk = {
-> +	.num_codecs = 1,
-> +	.codecs = {"RTL1019"}
-> +};
+> Changes in v3:
+>  - Add "reg" property to bindings
+>  - Add "unevaluatedProperties: true" to regulator nodes
+>  - Minor changes to regulator node name patterns
+>  - Remove system-ldos example (now added in patch 3)
+> 
+> Changes in v2:
+>  - Remove syscon property from bindings
+>  - Update binding examples to fix warnings and provide context
+> 
+>  .../allwinner,sun20i-d1-analog-ldos.yaml      | 74 +++++++++++++++++++
+>  .../allwinner,sun20i-d1-system-ldos.yaml      | 37 ++++++++++
+>  2 files changed, 111 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-analog-ldos.yaml
+>  create mode 100644 Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-system-ldos.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-analog-ldos.yaml b/Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-analog-ldos.yaml
+> new file mode 100644
+> index 000000000000..d6964b44ef21
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-analog-ldos.yaml
+> @@ -0,0 +1,74 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/regulator/allwinner,sun20i-d1-analog-ldos.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  static const struct snd_soc_acpi_codecs mx98360a_spk = {
->  	.num_codecs = 1,
->  	.codecs = {"MX98360A"}
-> @@ -78,6 +83,13 @@ struct snd_soc_acpi_mach snd_soc_acpi_intel_jsl_machines[] = {
->  		.quirk_data = &mx98360a_spk,
->  		.sof_tplg_filename = "sof-jsl-rt5682-mx98360a.tplg",
->  	},
-> +	{
-> +		.comp_ids = &rt5682_rt5682s_hp,
-> +		.drv_name = "jsl_rt5682_rt1019",
-> +		.machine_quirk = snd_soc_acpi_codec_list,
-> +		.quirk_data = &rt1019p_spk,
-> +		.sof_tplg_filename = "sof-jsl-rt5682-rt1019.tplg",
-> +	},
->  	{
->  		.id = "10134242",
->  		.drv_name = "jsl_cs4242_mx98360a",
+> +title: Allwinner D1 Analog LDOs
+> +
+> +description:
+> +  Allwinner D1 contains a set of LDOs which are designed to supply analog power
+> +  inside and outside the SoC. They are controlled by a register within the audio
+> +  codec MMIO space, but which is not part of the audio codec clock/reset domain.
+> +
+> +maintainers:
+> +  - Samuel Holland <samuel@sholland.org>
+
+Please follow the example schema. Order is: title, maintainers, description.
+
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - allwinner,sun20i-d1-analog-ldos
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  nvmem-cells:
+> +    items:
+> +      - description: NVMEM cell for the calibrated bandgap reference trim value
+> +
+> +  nvmem-cell-names:
+> +    items:
+> +      - const: bg_trim
+> +
+> +patternProperties:
+> +  "^(a|hp)ldo$":
+> +    type: object
+> +    $ref: regulator.yaml#
+> +    unevaluatedProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - nvmem-cells
+> +  - nvmem-cell-names
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    audio-codec@2030000 {
+> +        compatible = "simple-mfd", "syscon";
+
+This cannot be on its own. Both require device specific compatible.
+
+> +        reg = <0x2030000 0x1000>;
+> +        ranges;
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +
+> +        regulators@2030348 {
+> +            compatible = "allwinner,sun20i-d1-analog-ldos";
+> +            reg = <0x2030348 0x4>;
+> +            nvmem-cells = <&bg_trim>;
+> +            nvmem-cell-names = "bg_trim";
+> +
+> +            reg_aldo: aldo {
+> +                regulator-min-microvolt = <1800000>;
+> +                regulator-max-microvolt = <1800000>;
+> +            };
+> +
+> +            reg_hpldo: hpldo {
+> +                regulator-min-microvolt = <1800000>;
+> +                regulator-max-microvolt = <1800000>;
+> +            };
+> +        };
+> +    };
+> +
+> +...
+> diff --git a/Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-system-ldos.yaml b/Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-system-ldos.yaml
+> new file mode 100644
+> index 000000000000..e3e2810fb3d7
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-system-ldos.yaml
+> @@ -0,0 +1,37 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/regulator/allwinner,sun20i-d1-system-ldos.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Allwinner D1 System LDOs
+> +
+> +description:
+> +  Allwinner D1 contains a pair of general-purpose LDOs which are designed to
+> +  supply power inside and outside the SoC. They are controlled by a register
+> +  within the system control MMIO space.
+
+Fix order.
+
+
+> +
+> +maintainers:
+> +  - Samuel Holland <samuel@sholland.org>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - allwinner,sun20i-d1-system-ldos
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +patternProperties:
+> +  "^ldo[ab]$":
+> +    type: object
+> +    $ref: regulator.yaml#
+> +    unevaluatedProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +unevaluatedProperties: false
+
+
+Example please.
+
+Best regards,
+Krzysztof

@@ -2,87 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2DA595CAD
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE998595CA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235231AbiHPNCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
+        id S235333AbiHPNCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235288AbiHPNAw (ORCPT
+        with ESMTP id S235347AbiHPNAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 09:00:52 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CBC696C1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:00:15 -0700 (PDT)
-X-QQ-mid: bizesmtp86t1660654807tkv6gq1o
-Received: from localhost.localdomain ( [182.148.12.144])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 16 Aug 2022 21:00:05 +0800 (CST)
-X-QQ-SSF: 01000000002000B0D000B00A0000000
-X-QQ-FEAT: ILHsT53NKPiwfveQKIMlSb8uUNjcT61ZAfBArjaWHDMA2e/AYZKCPLqaoxIaV
-        5zms3kfliKaieI0WWHfpZ+sSDdPowLYuurOdn22sOLGELG1/iwa58Qdo+dqgGIZSyn91qZ9
-        v/DB5RsnAsFYICXOWwnl7/3Z8xDKBfaY1an0wi1pKxu2YbeqaPHrvxfm8Ykxbj0MftC734J
-        bXE4kVWNEdoECTeHSK0+rTHalup8+3DzJ+VNWx7Ok5waUXuqXdxk8kYDsGx+XXmGfMr/DKR
-        yyJxE3A2oG2njxFuYYsqOWFyakR3cb1UkoPJPinVrVG6XV908McHBNE/hS9Q151rd4Opqjs
-        iK01MYPhN/qEaDU3Tr5zCph8CTxJ7g7wdqjo31KmfPAIRXD/pmDL1MUby2L9VRRlu2hhfpy
-        3nAonOYC1zM=
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     mst@redhat.com, jasowang@redhat.com
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] drivers/virtio: fix repeated words in comments
-Date:   Tue, 16 Aug 2022 20:59:59 +0800
-Message-Id: <20220816125959.23737-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Tue, 16 Aug 2022 09:00:53 -0400
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B8423159;
+        Tue, 16 Aug 2022 06:00:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1660654835; x=1692190835;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jHPC2zTw9GX1JcaXvC06Z3Dgu5ahzNZrFzD7f6iBujM=;
+  b=tg3Gq2ZpGakj6zVYWtMKvVx04qbE09BOpm+NfKNLxYn2tkpcLFOLWc3o
+   sABClH9Yx9R+ERCsNYswwzTmInhYmLArb006hLOAYittacA1eyim6ppFJ
+   sBdKF/1WfO4d4rOaLDukVwxxlF8nYA9aUvX2yu/hamBo3R2Pko+Oz/jua
+   U=;
+X-IronPort-AV: E=Sophos;i="5.93,241,1654560000"; 
+   d="scan'208";a="249403253"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-22c2b493.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 13:00:09 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2b-22c2b493.us-west-2.amazon.com (Postfix) with ESMTPS id DE7FC44965;
+        Tue, 16 Aug 2022 13:00:06 +0000 (UTC)
+Received: from EX13D08UEB003.ant.amazon.com (10.43.60.11) by
+ EX13MTAUEB002.ant.amazon.com (10.43.60.12) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 16 Aug 2022 13:00:04 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX13D08UEB003.ant.amazon.com (10.43.60.11) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 16 Aug 2022 13:00:03 +0000
+Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
+ (172.19.116.181) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Tue, 16 Aug 2022 13:00:03
+ +0000
+Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
+        id 4604F4ABE; Tue, 16 Aug 2022 13:00:02 +0000 (UTC)
+From:   Eliav Farber <farbere@amazon.com>
+To:     <brgl@bgdev.pl>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
+        <jonnyc@amazon.com>, <hanochu@amazon.com>, <ronenk@amazon.com>,
+        <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
+        <amitlavi@amazon.com>, <almogbs@amazon.com>, <dwmw@amazon.co.uk>
+Subject: [PATCH 0/2] add enable gpio support for a24 eeprom driver
+Date:   Tue, 16 Aug 2022 13:00:00 +0000
+Message-ID: <20220816130002.41450-1-farbere@amazon.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-14.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'the'.
+First patch describes the new binding property.
+Second patch adds the functionality to the driver.
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/virtio/virtio_mmio.c           | 2 +-
- drivers/virtio/virtio_pci_modern_dev.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Eliav Farber (2):
+  dt-bindings: at24: new optional property - enable-gpios
+  eeprom: at24: add enable gpio support
 
-diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
-index f9a36bc7ac27..f638142654e6 100644
---- a/drivers/virtio/virtio_mmio.c
-+++ b/drivers/virtio/virtio_mmio.c
-@@ -255,7 +255,7 @@ static void vm_set_status(struct virtio_device *vdev, u8 status)
- 
- 	/*
- 	 * Per memory-barriers.txt, wmb() is not needed to guarantee
--	 * that the the cache coherent memory writes have completed
-+	 * that the cache coherent memory writes have completed
- 	 * before writing to the MMIO region.
- 	 */
- 	writel(status, vm_dev->base + VIRTIO_MMIO_STATUS);
-diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
-index a0fa14f28a7f..b790f30b2b56 100644
---- a/drivers/virtio/virtio_pci_modern_dev.c
-+++ b/drivers/virtio/virtio_pci_modern_dev.c
-@@ -469,7 +469,7 @@ void vp_modern_set_status(struct virtio_pci_modern_device *mdev,
- 
- 	/*
- 	 * Per memory-barriers.txt, wmb() is not needed to guarantee
--	 * that the the cache coherent memory writes have completed
-+	 * that the cache coherent memory writes have completed
- 	 * before writing to the MMIO region.
- 	 */
- 	vp_iowrite8(status, &cfg->device_status);
+ Documentation/devicetree/bindings/eeprom/at24.txt | 3 +++
+ drivers/misc/eeprom/at24.c                        | 5 +++++
+ 2 files changed, 8 insertions(+)
+
 -- 
-2.36.1
+2.37.1
 

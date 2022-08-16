@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5285961E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 20:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8E85961F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 20:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236520AbiHPSFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 14:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
+        id S236877AbiHPSGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 14:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236867AbiHPSFb (ORCPT
+        with ESMTP id S236839AbiHPSFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 14:05:31 -0400
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A53F81B26;
-        Tue, 16 Aug 2022 11:05:31 -0700 (PDT)
-Received: by mail-pj1-f48.google.com with SMTP id gp7so10398775pjb.4;
-        Tue, 16 Aug 2022 11:05:31 -0700 (PDT)
+        Tue, 16 Aug 2022 14:05:50 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4844883079
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 11:05:48 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id n7so2346458wrv.4
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 11:05:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=RL8fsLLQfUE109rLkCR+EIbZdF7vKcUJZxwkD6nK564=;
+        b=QMWPtlzAhcHq5DtkCAOaUCATtjJFx4OFebSf+mymX058+AVWjZyKfiMsGLEM8puybp
+         3GutCXlbaMJcsTIHBrqTB8HxBTBdXJRbs1UperaodTjyF4+FkSR3v74pg91eZxgRvgFM
+         81XrDCaI5uhoAg1noX3dgXnzStNv/fmrKy11dTt2UG9LGhEyZpe7xz4NKxPLJunAOaWm
+         cH+BHS4D81WE507E3ppXqupVPz6Dwv1/nbB4LsQyrtilyPbIMmq7qVqjzZ41unZVk84e
+         WuDslOf4YjmRZ9t4Z91WbPHOpoGXmT+t4LbupQNrn4p63xukZP0Ke/VkIHo6wNFkpYlK
+         Wf/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=eKDysHCQjTCqQt/NwtOxjkIdkCjeDt0eSaPWU62kEnE=;
-        b=jI4N179I5a1W5RfKUpfzp9MCYHUA/CK/4IPA4dJlfXgC9BGwlvxHb7g09/WN9p1Xqi
-         k6iLF6fMKBmY6IoS22n/aC5CKEk66M7A2Rcqxr6srVaonyUFCLauDYy3nuX8/wBp5wLJ
-         QwyRtvBYkm3BO1+UKln6GUncy7oZ2b0OzqulViuJd1OFDiipfq5ed1EC7y9SdpvzYcdT
-         syReqPxpBcqIw72RY9zwvF2Tx1WXbeX+3i9f4uYkaJkW0sQ1BY3QlPe7wHVDwxl9W9/f
-         Ho5L/v+HFpeEh1OeOdUODdQ3OAccMK9cZz7hnqwflmLN4N+3DWClfZuHbnsFGoqnWe6g
-         0m3Q==
-X-Gm-Message-State: ACgBeo2D6ohbDnCeAlGjdg0NTUm9vCeFggASVxr3GZeuYePlpMbbDGDH
-        8Zw7PRUvR96o8FCBha+gqug=
-X-Google-Smtp-Source: AA6agR7u1gjzOv8+2GCYfZiH4L1Ti/Qxf//GeJ51maGR8pSRIW0EkW7m8qeMHwyIWeOqGZq/Pow7xw==
-X-Received: by 2002:a17:902:ab41:b0:171:54ae:624c with SMTP id ij1-20020a170902ab4100b0017154ae624cmr22657572plb.157.1660673130341;
-        Tue, 16 Aug 2022 11:05:30 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:ff4b:545d:11c8:da9f? ([2620:15c:211:201:ff4b:545d:11c8:da9f])
-        by smtp.gmail.com with ESMTPSA id i3-20020a626d03000000b0052c0a9234e0sm9066610pfc.11.2022.08.16.11.05.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 11:05:29 -0700 (PDT)
-Message-ID: <b532e50f-7aa0-5ac3-c7a6-6a43ab9c1bc9@acm.org>
-Date:   Tue, 16 Aug 2022 11:05:27 -0700
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=RL8fsLLQfUE109rLkCR+EIbZdF7vKcUJZxwkD6nK564=;
+        b=44nU8lxMTZVtj2wUlsvk8xNL5QjrVknBXYfYX6nwT5ZpvhkOHtFCyybYD+7ZN/jAll
+         VLoMgiXpYs+wOI4Zlun6whK0PtPeTHYB5QPJ0FfQoMZRJ2kS+lXlTMV8rS/f9FsQ2K8Z
+         7q8Pcl9Dx6++NwNv7bIgwTheA+4YECEkzpsxqGUQeEWJDKFnQN5se05HcTmU7UQA2G94
+         gKwnperglDBSuv59AjXtYoyws0/PuCWRbDhsaKYXcaEjr0xSiCQevi3qwEpLLrqjkKm2
+         usrf7BZ6SKXDktT4Ny2APP9FW8f8NM+OOpEgBnK1T1ynri6B7IJzPBuamqk8Fm8rGL14
+         kUig==
+X-Gm-Message-State: ACgBeo2qoargA3n5ufYXMN/4NZVOtKiqXKBPldLcXF8KmjoFOSKk8roT
+        vubo6rX/zUypKuQhSypRsqLNvQ==
+X-Google-Smtp-Source: AA6agR7Ibb/rMvRE8Oi1nzCxuChVSVvPD6wsf1Elogmm+3UAuKauVvs9brefM/1Jd0kU+bm5IPq33w==
+X-Received: by 2002:a05:6000:1102:b0:220:5c10:5cbe with SMTP id z2-20020a056000110200b002205c105cbemr12880958wrw.359.1660673146883;
+        Tue, 16 Aug 2022 11:05:46 -0700 (PDT)
+Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id e14-20020a05600c4e4e00b003a31ca9dfb6sm17510062wmq.32.2022.08.16.11.05.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 11:05:46 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        linus.walleij@linaro.org
+Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, srinivas.kandagatla@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] pinctrl: add support for SC8280XP LPASS LPI pinctrl
+Date:   Tue, 16 Aug 2022 19:05:36 +0100
+Message-Id: <20220816180538.9039-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5.19 0784/1157] scsi: sd: Rework asynchronous resume
- support
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
-        Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>, ericspero@icloud.com,
-        jason600.groome@gmail.com,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-References: <20220815180439.416659447@linuxfoundation.org>
- <20220815180510.851284927@linuxfoundation.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220815180510.851284927@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,35 +71,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/15/22 11:02, Greg Kroah-Hartman wrote:
-> From: Bart Van Assche <bvanassche@acm.org>
-> 
-> [ Upstream commit 88f1669019bd62b3009a3cebf772fbaaa21b9f38 ]
-> 
-> For some technologies, e.g. an ATA bus, resuming can take multiple
-> seconds. Waiting for resume to finish can cause a very noticeable delay.
-> Hence this commit that restores the behavior from before "scsi: core: pm:
-> Rely on the device driver core for async power management" for most SCSI
-> devices.
-> 
-> This commit introduces a behavior change: if the START command fails, do
-> not consider this as a SCSI disk resume failure.
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215880
-> Link: https://lore.kernel.org/r/20220630195703.10155-3-bvanassche@acm.org
-> Fixes: a19a93e4c6a9 ("scsi: core: pm: Rely on the device driver core for async power management")
-
-Hi Greg,
-
-It has been reported that this patch causes a regression, namely disks 
-not coming back after a resume. That issue is worse than the issue fixed 
-by this patch - eliminating a delay. Please drop this patch from the 
-stable tree.
-
-A revert of this patch has been posted on the linux-scsi mailing list. 
-See also 
-https://lore.kernel.org/linux-scsi/8a83665a-1951-a326-f930-8fcbb0c4dd9a@huawei.com/.
+This patchset adds pinctrl driver to support pin configuration for LPASS
+(Low Power Audio SubSystem) LPI (Low Power Island) pinctrl on SC8280XP.
+    
+This IP is an additional pin control block for Audio Pins on top the
+existing SoC Top level pin-controller.
+    
+Tested this on Thinkpad X13s
 
 Thanks,
+Srini
 
-Bart.
+Srinivas Kandagatla (2):
+  dt-bindings: pinctrl: qcom: Add sc8280xp lpass lpi pinctrl bindings
+  pinctrl: qcom: Add sc8280xp lpass lpi pinctrl driver
+
+ .../qcom,sc8280xp-lpass-lpi-pinctrl.yaml      | 134 ++++++++++++
+ drivers/pinctrl/qcom/Kconfig                  |   9 +
+ drivers/pinctrl/qcom/Makefile                 |   1 +
+ .../pinctrl/qcom/pinctrl-sc8280xp-lpass-lpi.c | 207 ++++++++++++++++++
+ 4 files changed, 351 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-lpass-lpi-pinctrl.yaml
+ create mode 100644 drivers/pinctrl/qcom/pinctrl-sc8280xp-lpass-lpi.c
+
+-- 
+2.21.0
+

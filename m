@@ -2,89 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BF3595D80
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE59595D85
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiHPNiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
+        id S232296AbiHPNjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233911AbiHPNiB (ORCPT
+        with ESMTP id S233911AbiHPNjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 09:38:01 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8D66E8B0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:38:00 -0700 (PDT)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4M6XK25PnyzDqB1;
-        Tue, 16 Aug 2022 13:37:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1660657079; bh=e1NAneVpie+FMvLSmWkFYcTAXo3RG8Tqm3ms4ywkUas=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=qoTVEtuiyoWct7y/0DKg619AgFoIX0pL5M1BoKEHf6fdcqr3UXw749SSCV0W2Gbfd
-         toFXFjMHkzmvpK4c6Bwk8o0FxBXBWeVBarnsPpBSkHIpUgmzPKRPWED4IoVt8KL1xI
-         f2yCV430SkTr/w6PO5+pZiJovYG6ETHvuGXiYIkY=
-X-Riseup-User-ID: 1BAFF1A5DB19634CA94E4BD39F28FA2FE8D6237420E2EDDB661A052CFA0F22F9
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4M6XJx2Nzvz1y9N;
-        Tue, 16 Aug 2022 13:37:53 +0000 (UTC)
-Message-ID: <6761eeb7-eedf-c9bb-4f7f-d42e3c6e8ae4@riseup.net>
-Date:   Tue, 16 Aug 2022 10:37:49 -0300
+        Tue, 16 Aug 2022 09:39:18 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F76F641D
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:39:16 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id a9so14939554lfm.12
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:39:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=x/vaRiOOU21IuGmCpE4aZJDprVivgqzk7X8uAzJCMUU=;
+        b=BJKBj6DQsaDvXnmM0pZpihAjMt8H2x4QLtpefnTPys1lYrtR/Orv3IO0Pbd/KvubpS
+         RKa78/a/wFDk++buB22JwvNjkSgp0lqrz1vZjMmfodKSjDbiJyJvOEHE/2GYhhLykuZ6
+         +925tQf7yNTE19yzk7yiFgT5ZY4bsKeJEYCqWFlCspoXZYy4iAEcdKJ8gnlajszlBCqS
+         hv0js/oMtNLTTy9M9hLa3nOF77MtB4pnvVkAI5AKcOUOgnPXD9Lfd+Bd/bbkybhJhUEQ
+         l7p8prVf33U4KZUojLYFo+EO1JCI1pf/zDLJ/BcSr3eGOZL3Ech2igYcsegwreelkpQO
+         hAaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=x/vaRiOOU21IuGmCpE4aZJDprVivgqzk7X8uAzJCMUU=;
+        b=ra7W5EPe8dvaa8m1cVY5iPmoHZHi1Am+HAtgwy2Vi5PHoBoTnOPtjU7qXuSWX7MkWv
+         XUSi8hhfZe7B1AvexM4jZwHtE0m/Ybgh481lQgeB/As8EjFT/sNf3CZWF/45nld1qyUE
+         YSIE3LTEkIqZhYfWVThv/OkxnchXNPPVI6LAhdrsw6d6qaOYuvwasXcYS18LOUi5xadu
+         oe544iT2oFn5noJ50hJfbna7oyMf5VOemiVvHJ4y9vV1ZfWYobFIACVRaXn8qAw8jkiS
+         swIHeu9ncv5k2yZV2ZwlouJ32QIONLhhRUGTmSFzJF/V/Yyq3J0vYYbnftk0azH+TdoK
+         wPOg==
+X-Gm-Message-State: ACgBeo3ArqJTuc/Q34l5vCupt+puWFkHQt1Zgim7lGjMy1BmdxdQrTFa
+        G6TjqxMNY09gMRG7RV2BR9OwXQ==
+X-Google-Smtp-Source: AA6agR5ChdkHEDah1oK10Jh7b4i7HL9FxjhrHX2yx5J31ITpC0HkfuPcYTHax+h64VHOJ4yH418Bfw==
+X-Received: by 2002:a05:6512:230a:b0:48c:2e06:6c74 with SMTP id o10-20020a056512230a00b0048c2e066c74mr7461447lfu.358.1660657154846;
+        Tue, 16 Aug 2022 06:39:14 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
+        by smtp.gmail.com with ESMTPSA id v18-20020ac258f2000000b0048b26d4bb64sm1401791lfo.40.2022.08.16.06.39.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 06:39:14 -0700 (PDT)
+Message-ID: <94d8f4e0-3fc0-0143-4039-4b50c655530e@linaro.org>
+Date:   Tue, 16 Aug 2022 16:39:13 +0300
 MIME-Version: 1.0
-Subject: Re: [PATCH 0/3] KUnit tests for RGB888, XRGB2101010 and grayscale
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v5 2/2] arm64: dts: imx8mp-msc-sm2s: Add device trees for
+ MSC SM2S-IMX8PLUS SoM and carrier board
 Content-Language: en-US
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        javierm@redhat.com
-Cc:     davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
-        mripard@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
-        maarten.lankhorst@linux.intel.com, jani.nikula@linux.intel.com,
-        isabbasso@riseup.net, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, geert@linux-m68k.org,
-        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-References: <20220816102903.276879-1-jose.exposito89@gmail.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20220816102903.276879-1-jose.exposito89@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Martyn Welch <martyn.welch@collabora.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     kernel@collabora.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220816123849.747157-1-martyn.welch@collabora.com>
+ <20220816123849.747157-2-martyn.welch@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220816123849.747157-2-martyn.welch@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi José,
+On 16/08/2022 15:38, Martyn Welch wrote:
+> Add device trees for one of a number of MSC's (parent company, Avnet)
+> variants of the SM2S-IMX8PLUS system on module along with the compatible
+> SM2S-SK-AL-EP1 carrier board. As the name suggests, this family of SoMs use
+> the NXP i.MX8MP SoC and provide the SMARC module interface.
+> 
+> Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
 
-Tested the whole series on UML, x86, i386 and PPC. All looks fine!
+Thank you for your patch. There is something to discuss/improve.
 
-Tested-by: Maíra Canal <mairacanal@riseup.net>
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts
+> new file mode 100644
+> index 000000000000..3ea822d9e58d
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts
+> @@ -0,0 +1,53 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 Avnet Embedded GmbH
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "imx8mp-msc-sm2s-14N0600E.dtsi"
+> +#include <dt-bindings/clock/imx8mp-clock.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +
+> +/ {
+> +	model = "MSC SM2-MB-EP1 Carrier Board with SM2S-IMX8PLUS-QC6-14N0600E SoM";
+> +	compatible = "avnet,sm2s-imx8mp-14N0600E-ep1",
+> +		     "avnet,sm2s-imx8mp-14N0600E", "avnet,sm2s-imx8mp",
+> +		     "fsl,imx8mp";
+> +};
+> +
+> +&flexcan1 {
+> +	status = "okay";
+> +};
+> +
+> +&flexcan2 {
+> +	status = "okay";
+> +};
+> +
+> +&usdhc2 {
+> +	no-1-8-v;
+> +};
+> +
+> +&iomuxc {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_smarc_gpio>;
+> +
+> +	pinctrl_smarc_gpio: smarcgpiosgrp {
+> +		fsl,pins =
+> +			<MX8MP_IOMUXC_GPIO1_IO11__GPIO1_IO11	0x19>, /* GPIO0 */
+> +			<MX8MP_IOMUXC_SAI1_RXC__GPIO4_IO01	0x19>, /* GPIO1 */
+> +			<MX8MP_IOMUXC_SAI1_RXD0__GPIO4_IO02	0x19>, /* GPIO2 */
+> +			<MX8MP_IOMUXC_SAI1_RXD1__GPIO4_IO03	0x19>, /* GPIO3 */
+> +			<MX8MP_IOMUXC_SAI3_RXC__GPIO4_IO29	0x19>, /* GPIO4 */
+> +			<MX8MP_IOMUXC_SAI3_MCLK__GPIO5_IO02	0x19>, /* GPIO5 */
+> +			<MX8MP_IOMUXC_SAI1_TXD6__GPIO4_IO18	0x19>, /* GPIO6 */
+> +			<MX8MP_IOMUXC_GPIO1_IO10__GPIO1_IO10	0x19>, /* GPIO7 */
+> +			<MX8MP_IOMUXC_SAI1_MCLK__GPIO4_IO20	0x19>, /* GPIO8 */
+> +			<MX8MP_IOMUXC_SAI2_RXFS__GPIO4_IO21	0x19>, /* GPIO9 */
+> +			<MX8MP_IOMUXC_SAI2_RXC__GPIO4_IO22	0x19>, /* GPIO10 */
+> +			<MX8MP_IOMUXC_SAI3_RXFS__GPIO4_IO28	0x19>, /* GPIO11 */
+> +			<MX8MP_IOMUXC_SAI1_TXD7__GPIO4_IO19	0x19>, /* GPIO12 */
+> +			<MX8MP_IOMUXC_SAI1_RXFS__GPIO4_IO00	0x19>; /* GPIO13 */
+> +	};
+> +};
+> +
 
-Best Regards,
-- Maíra Canal
+No need for trailing blank line.
 
-On 8/16/22 07:29, José Expósito wrote:
-> Hello everyone,
-> 
-> This series is a follow up on my work adding KUnit test to the XRGB8888
-> conversion functions. This time RGB888, XRGB2101010 and gray8 are added.
-> 
-> Best wishes,
-> Jose
-> 
-> José Expósito (3):
->    drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_rgb888()
->    drm/format-helper: Add KUnit tests for
->      drm_fb_xrgb8888_to_xrgb2101010()
->    drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_gray8()
-> 
->   .../gpu/drm/tests/drm_format_helper_test.c    | 190 ++++++++++++++++++
->   1 file changed, 190 insertions(+)
-> 
+With this fixed:
+
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

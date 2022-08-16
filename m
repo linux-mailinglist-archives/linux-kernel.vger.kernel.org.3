@@ -2,202 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2338859563E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA71859563D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232468AbiHPJ3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32802 "EHLO
+        id S233278AbiHPJ3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232080AbiHPJ23 (ORCPT
+        with ESMTP id S233478AbiHPJ2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:28:29 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F9751A2E;
-        Tue, 16 Aug 2022 00:46:59 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 07:46:56 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1660636017;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=ZeZ6FOu0KetfgxCQsOAIM4uKnYMDJaAixztqrpKo3M0=;
-        b=kTsUFNw9BrdG+I/JPkSTw8VpKm5Z+Il8BmPLHxzdnfovTNPAHnQQ9tztBcb8D4NCPaUaD3
-        x7oZmtNyV6dzs3ZxITsmTqcW0RtzWeFTxyox6IRcncI/F/tu+JwJ/iU14mOz2SC7w8aHbF
-        asMAzrbFiE73Nf6yeGQ5uFqfbfJr/TgkGLmQug/XlhRtRl2wRqr6whTQBIUXEqoaFWgeGl
-        RhBDPSMEQgrqP1f4CpnE2lxJdfhOmkKq6z8R0lPPLhQYHuob27FngJTniXb4zo9X2Hlhrw
-        +twe1nG/O8v4JXX1QlkPpxqH/PZSi1R14t6gyASMMHcn9olPH/7kK7DTh5A06w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1660636017;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=ZeZ6FOu0KetfgxCQsOAIM4uKnYMDJaAixztqrpKo3M0=;
-        b=3Zu9eKW6IF831gTrMEwVGeDWO8aAsafOiCd196CvSG4sdW3OEwHCTMVUxkPlmEgk46tTIg
-        sMnWVe3Iv2LK1JDQ==
-From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/microcode] x86/microcode/AMD: Attempt applying on every
- logical thread
-Cc:     stefantalpalaru@yahoo.com, Borislav Petkov <bp@suse.de>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
+        Tue, 16 Aug 2022 05:28:34 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4C984EC1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:47:08 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id a9so13680342lfm.12
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:47:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:from:user-agent:mime-version:date
+         :message-id:from:to:cc;
+        bh=bfjb0/RfkSEH8cB4ALMY2SGVoeLIuba0qPdHr8FxVDM=;
+        b=JergNskWN39xPnLR5bvGb/rCaV2bCBGy6Rr6807+zCmwbPATiofxQXz31ejofM+fTn
+         /LSroNpUiD8E04wD1HxsOHKUwNGVROS6TugMtPbciWn0guFvovnPChmir67JJnL5kApM
+         EGLksAAooPXuouSUkIiEdtVcN5frHTAexLurasHzVDazNhBDwIje+pJlI7upfUOqmNs+
+         2Ub+ditZVqe2TJuko2iQJzGAtrNIUN8VHjUWNkG4T8Bxa6Y0YucXPTLYA+pDZVjpkMlN
+         /VknpL5iz198nETtdRlkgdBFzv3RpDgHQidhkVtMhs7NCpwZpD3ioUdGQCHmeyeMEMha
+         ti4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=bfjb0/RfkSEH8cB4ALMY2SGVoeLIuba0qPdHr8FxVDM=;
+        b=HeXyJyq7UfpJfMI/PQ1YrhfI8Ur+kRFrg0UQSvQQYGXXHnVZ1/EY8JoyQzMKwmLvMx
+         nH9ACSpkGcaiR9HeCdxXO3sWvO1ERTArLK4b/Tlb6sf4wHlOcr6jra44/puaFj2iAgqW
+         WQoi2/5dBtOj/V4Ac0XW4ihpROpqa3NKi4HMHJDtxWaERsZG2bECOZCFm0Q8CmYErVj3
+         NeOboecL2up3AVAxz939BrG/oz94v9vfGHO59lFqyZliSTSO/bdLmvxt2aeVOgTMLCOR
+         ISSJKDJcJ6eD2CXSkB9GvoD6Lq7l9s4w91e7XOmEtyhsrHCuwK4zis2yB96DdcTX/UE7
+         FDaw==
+X-Gm-Message-State: ACgBeo02I7tlzCr1VuiMHzGx6p+y5xk+JK53prd2vEv1dGJkrlNvy1Pp
+        hIgC/yP8lZEkZ8kM8luszZRoN9SZJB9fPw==
+X-Google-Smtp-Source: AA6agR5vf4p7y8ytFz18vjFkux0n2aXgqMRzh8CVptkCH6zQ+cQScbcS6mdiOHeYVNFjDSCINFcJaA==
+X-Received: by 2002:a05:6512:158b:b0:48b:38:cff8 with SMTP id bp11-20020a056512158b00b0048b0038cff8mr6268892lfb.100.1660636026941;
+        Tue, 16 Aug 2022 00:47:06 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.143])
+        by smtp.gmail.com with ESMTPSA id u19-20020a05651220d300b0048b1f89ce24sm1301726lfr.264.2022.08.16.00.47.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 00:47:06 -0700 (PDT)
+Message-ID: <62188f37-f816-08e9-cdd5-8df23131746d@openvz.org>
+Date:   Tue, 16 Aug 2022 10:47:05 +0300
 MIME-Version: 1.0
-Message-ID: <166063601607.401.15127782241122695343.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Vasily Averin <vvs@openvz.org>
+Subject: Re: [PATCH 0/3] enable memcg accounting for kernfs objects
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-kernel@vger.kernel.org, kernel@openvz.org,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+References: <0414cab3-32d6-c60a-d3c8-96fc72064ba0@openvz.org>
+ <YvKZ8zYJFhhFvRxO@slm.duckdns.org> <20220809174934.GC10478@blackbody.suse.cz>
+ <YvKfxGvg5/J0+QoD@slm.duckdns.org>
+ <b816f58a-ce25-c079-c6b3-a3406df246f9@openvz.org>
+In-Reply-To: <b816f58a-ce25-c079-c6b3-a3406df246f9@openvz.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/microcode branch of tip:
+On 8/11/22 06:19, Vasily Averin wrote:
+> On 8/9/22 20:56, Tejun Heo wrote:
+>> Hello,
+>>
+>> On Tue, Aug 09, 2022 at 07:49:34PM +0200, Michal Koutný wrote:
+>>> On Tue, Aug 09, 2022 at 07:31:31AM -1000, Tejun Heo <tj@kernel.org> wrote:
+>>>> I'm not quite sure whether following the usual "charge it to the allocating
+>>>> task's cgroup" is the best way to go about it. I wonder whether it'd be
+>>>> better to attach it to the new cgroup's nearest ancestor with memcg enabled.
+>>>
+>>> See also 
+>>> https://lore.kernel.org/r/YnBLge4ZQNbbxufc@blackbook/
+>>> and
+>>> https://lore.kernel.org/r/20220511163439.GD24172@blackbody.suse.cz/
+>>
+>> Ah, thanks. Vasily, can you please include some summary of the discussions
+>> and the rationales for the path taken in the commit message?
+> 
+> Dear Tejun,
+> thank you for the feedback, I'll do it in next patch set iteration.
+> 
+> However, I noticed another problem in neighborhood and I planned to
+> add new patches into current patch set. One of the new patches is quite simple,
+> however second one is quite complex and requires some discussion.
 
-Commit-ID:     df76acb227a08b274fe03d8fc51d3240ea5a83f0
-Gitweb:        https://git.kernel.org/tip/df76acb227a08b274fe03d8fc51d3240ea5=
-a83f0
-Author:        Borislav Petkov <bp@suse.de>
-AuthorDate:    Sun, 14 Aug 2022 12:37:49 +02:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Tue, 16 Aug 2022 09:35:36 +02:00
+Summing up a private discussion with Tejun, Michal and Roman:
+I'm going to create few new patches:
 
-x86/microcode/AMD: Attempt applying on every logical thread
+1) adjust active memcg for objects allocated during creation of new cgroup
+  This patch will take memcg from parent cgroup an use it for accounting
+  all objects allocated during creation of new cgroup.
+  For that it moves set_active_memcg() calls from mem_cgroup_css_alloc()
+  to cgroup_mkdir() and creates missing infrastructure.
+  This allows you to predict which memcg should be used for object accounting,
+  and should simplify debugging of possible problems and corner cases.
 
-Currently, the patch application logic checks whether patch application
-is needed on each CPU. Therefore, on SMT designs where the microcode
-engine is shared between the two threads, the application happens only
-on one of them.
+2) memcg: enable kernfs accounting: nodes and iattr
+  Already discussed and approved patches.
+  These objects consumes significant part of memory in various scenarios,
+  including new cgroup creation and new net device creation.
 
-However, there are microcode patches which do per-thread modification,
-see Link tag below.
+3) adjust active memcg for simple_xattr accounting
+  sysfs and tmpfs are in-memory file system, 
+  for extended attributes they uses simple_xattr infrastructure.
+  The patch forces sys_set[f]xattr calls to account xattr object
+  to predictable memcg: for kernfs memcg will be taken from kernfs node,
+  for shmem -- from shmem_info.
+  Like 1) case, this allows to understand which memcg should be used
+  for object accounting and simplify debugging of possible troubles.
 
-Therefore, drop the revision check and try applying on each thread. This
-is what the BIOS does too so this method is very much tested.
+4) memcg: enable accounting for simple_xattr: names and values
+  This patch enables accounting for objects described in previous patch
 
-Reported-by:  =C8=98tefan Talpalaru <stefantalpalaru@yahoo.com>
-Tested-by:  =C8=98tefan Talpalaru <stefantalpalaru@yahoo.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D216211
----
- arch/x86/kernel/cpu/microcode/amd.c | 39 ++++++----------------------
- 1 file changed, 9 insertions(+), 30 deletions(-)
+5) simple_xattrs: replace list to rb-tree
+  This significantly reduces the search time for existing entries.
 
-diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microc=
-ode/amd.c
-index 8b2fcdf..a575dbb 100644
---- a/arch/x86/kernel/cpu/microcode/amd.c
-+++ b/arch/x86/kernel/cpu/microcode/amd.c
-@@ -420,8 +420,8 @@ apply_microcode_early_amd(u32 cpuid_1_eax, void *ucode, s=
-ize_t size, bool save_p
- 	struct cont_desc desc =3D { 0 };
- 	u8 (*patch)[PATCH_MAX_SIZE];
- 	struct microcode_amd *mc;
--	u32 rev, dummy, *new_rev;
- 	bool ret =3D false;
-+	u32 *new_rev;
-=20
- #ifdef CONFIG_X86_32
- 	new_rev =3D (u32 *)__pa_nodebug(&ucode_new_rev);
-@@ -439,10 +439,6 @@ apply_microcode_early_amd(u32 cpuid_1_eax, void *ucode, =
-size_t size, bool save_p
- 	if (!mc)
- 		return ret;
-=20
--	native_rdmsr(MSR_AMD64_PATCH_LEVEL, rev, dummy);
--	if (rev >=3D mc->hdr.patch_id)
--		return ret;
--
- 	if (!__apply_microcode_amd(mc)) {
- 		*new_rev =3D mc->hdr.patch_id;
- 		ret      =3D true;
-@@ -516,7 +512,7 @@ void load_ucode_amd_ap(unsigned int cpuid_1_eax)
- {
- 	struct microcode_amd *mc;
- 	struct cpio_data cp;
--	u32 *new_rev, rev, dummy;
-+	u32 *new_rev;
-=20
- 	if (IS_ENABLED(CONFIG_X86_32)) {
- 		mc	=3D (struct microcode_amd *)__pa_nodebug(amd_ucode_patch);
-@@ -526,10 +522,8 @@ void load_ucode_amd_ap(unsigned int cpuid_1_eax)
- 		new_rev =3D &ucode_new_rev;
- 	}
-=20
--	native_rdmsr(MSR_AMD64_PATCH_LEVEL, rev, dummy);
--
- 	/* Check whether we have saved a new patch already: */
--	if (*new_rev && rev < mc->hdr.patch_id) {
-+	if (*new_rev) {
- 		if (!__apply_microcode_amd(mc)) {
- 			*new_rev =3D mc->hdr.patch_id;
- 			return;
-@@ -571,23 +565,17 @@ int __init save_microcode_in_initrd_amd(unsigned int cp=
-uid_1_eax)
-=20
- void reload_ucode_amd(void)
- {
--	struct microcode_amd *mc;
--	u32 rev, dummy __always_unused;
--
--	mc =3D (struct microcode_amd *)amd_ucode_patch;
-+	struct microcode_amd *mc =3D (struct microcode_amd *)amd_ucode_patch;
-=20
--	rdmsr(MSR_AMD64_PATCH_LEVEL, rev, dummy);
--
--	if (rev < mc->hdr.patch_id) {
--		if (!__apply_microcode_amd(mc)) {
--			ucode_new_rev =3D mc->hdr.patch_id;
--			pr_info("reload patch_level=3D0x%08x\n", ucode_new_rev);
--		}
-+	if (!__apply_microcode_amd(mc)) {
-+		ucode_new_rev =3D mc->hdr.patch_id;
-+		pr_info("reload patch_level=3D0x%08x\n", ucode_new_rev);
- 	}
- }
- static u16 __find_equiv_id(unsigned int cpu)
- {
- 	struct ucode_cpu_info *uci =3D ucode_cpu_info + cpu;
-+
- 	return find_equiv_id(&equiv_table, uci->cpu_sig.sig);
- }
-=20
-@@ -678,7 +666,7 @@ static enum ucode_state apply_microcode_amd(int cpu)
- 	struct ucode_cpu_info *uci;
- 	struct ucode_patch *p;
- 	enum ucode_state ret;
--	u32 rev, dummy __always_unused;
-+	u32 rev;
-=20
- 	BUG_ON(raw_smp_processor_id() !=3D cpu);
-=20
-@@ -691,14 +679,6 @@ static enum ucode_state apply_microcode_amd(int cpu)
- 	mc_amd  =3D p->data;
- 	uci->mc =3D p->data;
-=20
--	rdmsr(MSR_AMD64_PATCH_LEVEL, rev, dummy);
--
--	/* need to apply patch? */
--	if (rev >=3D mc_amd->hdr.patch_id) {
--		ret =3D UCODE_OK;
--		goto out;
--	}
--
- 	if (__apply_microcode_amd(mc_amd)) {
- 		pr_err("CPU%d: update failed for patch_level=3D0x%08x\n",
- 			cpu, mc_amd->hdr.patch_id);
-@@ -710,7 +690,6 @@ static enum ucode_state apply_microcode_amd(int cpu)
-=20
- 	pr_info("CPU%d: new patch_level=3D0x%08x\n", cpu, rev);
-=20
--out:
- 	uci->cpu_sig.rev =3D rev;
- 	c->microcode	 =3D rev;
-=20
+Additionally Roman Gushchin prepares patch
+"`put`ting the kernfs_node reference earlier in the cgroup removal process"
+
+Thank you,
+	Vasily Averin

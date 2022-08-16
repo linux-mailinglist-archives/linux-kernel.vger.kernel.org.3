@@ -2,126 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 867A9596154
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C8B596158
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236277AbiHPRl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 13:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
+        id S236519AbiHPRmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 13:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233537AbiHPRly (ORCPT
+        with ESMTP id S233537AbiHPRmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 13:41:54 -0400
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578E721801;
-        Tue, 16 Aug 2022 10:41:53 -0700 (PDT)
-Received: by mail-io1-f49.google.com with SMTP id p184so5428808iod.6;
-        Tue, 16 Aug 2022 10:41:53 -0700 (PDT)
+        Tue, 16 Aug 2022 13:42:15 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A487F27F;
+        Tue, 16 Aug 2022 10:42:14 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id y11so8390963qvn.3;
+        Tue, 16 Aug 2022 10:42:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=mHfKkxNjbITw4skw37Ngnw7bVj0soW59COm/Sw6u77c=;
+        b=y3xGmeSUZxDqUkyWTVXFfEDhbbeBuwDOCNUZwWnaenxIsbYHqA/ITWdaEnaaSyazcp
+         xn9Ii2y79NbGsYuM6jJHonumMthgbK+MFhWF0SG/gTHdEA8Yb1tWwUbThajEG/+RQKIl
+         zGTDbuAQgBGPUn+ig5uIZBIM/y1SaMJJkPgEjlxuRyFOVkJAcmDjWNaZv33U+6bGhexM
+         n9GMzP4uoBxYNgdNuN7s7+rJBzDN4A6aanmLBh9wsm3GXSwPAcMxyftABOiUEP1NgqfB
+         K8Fq22xcamHwR9l2BBrrEIGAInJWG/QyBZ9dnKzXaAw9SnU/qlcDWeQxMOtC7OAzDSFn
+         tWiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=oUc8/JAVRGYQdzHPekaJ5tKmjToQt+wFD4OM5Ca99TM=;
-        b=X3AvPy77vehfJ1Wgugx4kdpUtsbng2SETIx0TnnkyOLdulpg4318h86frj1kkWPUJG
-         Qpt1O6ZDqqesLUh40lUDsaQuOpa+aifoOWp0A0bTPWQs1aSJ9v61UV7249bm46k0bvwd
-         u0SDcT6scPg+faXqwSu0EsSX0sKHBeyv/m1YrVKb3jUPvB0AseVeEdUdMDMw/qENAMzf
-         oyL1oaGHNVp9s7ykUnZw75+wA8V7scnSQUDiks/3h22eBVy5kzWk+b6wi1CJkameWRmm
-         CTrlT0JxooksjHhl+RR3dYR1vtWjZArhVJP5wtrVcaBJRVaMzW0w2MIu0DUOCfGd6OTM
-         +1hQ==
-X-Gm-Message-State: ACgBeo2xJ7X7NZouWb3YOMZvsYJEymUokxkUMvYbc7+ZwRAgqJVU8/O2
-        uhUII38YESGSV8uqGPGQkQ==
-X-Google-Smtp-Source: AA6agR6cUHUKvVK+LEKfxY4oc/RAmHjZ0PXs5hefNGMfG5jUr6CgsfZBgF8tsvgYxH87jf8z73AF/Q==
-X-Received: by 2002:a05:6638:1409:b0:33f:8472:8f0e with SMTP id k9-20020a056638140900b0033f84728f0emr10469031jad.194.1660671712464;
-        Tue, 16 Aug 2022 10:41:52 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id z3-20020a027a43000000b0034690882489sm2024720jad.171.2022.08.16.10.41.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 10:41:52 -0700 (PDT)
-Received: (nullmailer pid 2435809 invoked by uid 1000);
-        Tue, 16 Aug 2022 17:41:50 -0000
-Date:   Tue, 16 Aug 2022 11:41:50 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH] dt-bindings: soc: renesas: Move renesas.yaml from arm to
- soc
-Message-ID: <20220816174150.GA2428940-robh@kernel.org>
-References: <20220815111708.22302-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=mHfKkxNjbITw4skw37Ngnw7bVj0soW59COm/Sw6u77c=;
+        b=65Wr/Slxgbzktu79merW2A1OEhswFVPZIswBMWpBm1PnZxChipJRIuALfiacqRD1Uj
+         8JjGvgIUwZmxZNs4C1R7xw77yIPwoHZbMFz4cKx6O+ROVLgnBGQmJcWmmmv2k9E4UWGh
+         LhvjV/38jB4TtYY5gxpuahBChnse1WIhDNOoOFK6naTAxxYNYgM2UbFDddge/fJ2GI58
+         nTogllpWNc9XlfA1vMUg2dS5yh4bkBlKwz0vIjSjpyUbiyFBHyw8EVJu5lNPeMmYWTzm
+         U1sT+OVdnMTKFAfVUHUge09JuVMhzDOFyLn3+IYTD4hzV6Pgo80z4DcD+l0K0rEjMo5G
+         dcQA==
+X-Gm-Message-State: ACgBeo2ZS62+r8WVbzc8+Az5Vuhf2JL0caeWDbyjM3JyXjZUMht6al1p
+        HOsB5zsjFI9f89QKGiUhBMEZt9wApaGZ3N35BT4=
+X-Google-Smtp-Source: AA6agR7QnNx6w1nlDNLmCWs2O72rXsie4l2PUkDtlHCQtpflTwqqtV9/XXqd/Tl17j5Fq91jcXe9zzIc0+Wwsds2hz4=
+X-Received: by 2002:a0c:c684:0:b0:494:d65c:f495 with SMTP id
+ d4-20020a0cc684000000b00494d65cf495mr2814466qvj.24.1660671733904; Tue, 16 Aug
+ 2022 10:42:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815111708.22302-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <165791937063.2491387.15277418618265930924.stgit@djiang5-desk3.ch.intel.com>
+ <20220718053039.5whjdcxynukildlo@offworld> <4bedc81d-62fa-7091-029e-a2e56b4f8f7a@intel.com>
+ <20220803183729.00002183@huawei.com> <9f3705e1-de21-0f3c-12af-fd011b6d613d@intel.com>
+ <YvO8pP7NUOdH17MM@FVFF77S0Q05N> <62f40fba338af_3ce6829466@dwillia2-xfh.jf.intel.com.notmuch>
+ <20220815160706.tqd42dv24tgb7x7y@offworld> <Yvtc2u1J/qip8za9@worktop.programming.kicks-ass.net>
+ <62fbcae511ec1_dfbc129453@dwillia2-xfh.jf.intel.com.notmuch> <20220816165301.4m4w6zsse62z4hxz@offworld>
+In-Reply-To: <20220816165301.4m4w6zsse62z4hxz@offworld>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 16 Aug 2022 10:42:03 -0700
+Message-ID: <CAA9_cmfBubQe6EGk5+wjotvofZavfjFud-JMPW13Au0gpAcWog@mail.gmail.com>
+Subject: Re: [PATCH] arch/cacheflush: Introduce flush_all_caches()
+To:     Davidlohr Bueso <dave@stgolabs.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
+        bwidawsk@kernel.org, ira.weiny@intel.com, vishal.l.verma@intel.com,
+        alison.schofield@intel.com, a.manzanares@samsung.com,
+        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, bp@alien8.de, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 12:17:08PM +0100, Lad Prabhakar wrote:
-> renesas.yaml lists out all the Renesas SoC's and the platforms/EVK's which
-> is either ARM32/ARM64. It would rather make sense if we move renesas.yaml
-> to the soc/renesas folder instead. This is in preparation for adding a new
-> SoC (RZ/Five) from Renesas which is based on RISC-V.
+On Tue, Aug 16, 2022 at 10:30 AM Davidlohr Bueso <dave@stgolabs.net> wrote:
+>
+> On Tue, 16 Aug 2022, Dan Williams wrote:
+>
+> >Peter Zijlstra wrote:
+> >> On Mon, Aug 15, 2022 at 09:07:06AM -0700, Davidlohr Bueso wrote:
+> >> > diff --git a/arch/x86/include/asm/cacheflush.h b/arch/x86/include/asm/cacheflush.h
+> >> > index b192d917a6d0..ce2ec9556093 100644
+> >> > --- a/arch/x86/include/asm/cacheflush.h
+> >> > +++ b/arch/x86/include/asm/cacheflush.h
+> >> > @@ -10,4 +10,7 @@
+> >> >
+> >> >  void clflush_cache_range(void *addr, unsigned int size);
+> >> >
+> >> > +#define flush_all_caches() \
+> >> > +  do { wbinvd_on_all_cpus(); } while(0)
+> >> > +
+> >>
+> >> This is horrific... we've done our utmost best to remove all WBINVD
+> >> usage and here you're adding it back in the most horrible form possible
+> >> ?!?
+> >>
+> >> Please don't do this, do *NOT* use WBINVD.
+> >
+> >Unfortunately there are a few good options here, and the changelog did
+> >not make clear that this is continuing legacy [1], not adding new wbinvd
+> >usage.
+>
+> While I was hoping that it was obvious from the intel.c changes that this
+> was not a new wbinvd, I can certainly improve the changelog with the below.
 
-Please post this as part of the above.
-
-bindings/soc/ is just a dumping ground for stuff that doesn't fit 
-anywhere. We've mostly cleaned bindings/arm/ of that, so I don't really 
-want to start that again. I would propose bindings/board/ instead if we 
-move in this direction.
-
-> 
-> While at it drop the old entry for renesas.yaml from MAINTAINERS file and
-> there is no need to update the new file path of renesas.yaml as we already
-> have an entry for Documentation/devicetree/bindings/soc/renesas/ folder.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  .../devicetree/bindings/{arm => soc/renesas}/renesas.yaml       | 2 +-
->  MAINTAINERS                                                     | 1 -
->  2 files changed, 1 insertion(+), 2 deletions(-)
->  rename Documentation/devicetree/bindings/{arm => soc/renesas}/renesas.yaml (99%)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/renesas.yaml b/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
-> similarity index 99%
-> rename from Documentation/devicetree/bindings/arm/renesas.yaml
-> rename to Documentation/devicetree/bindings/soc/renesas/renesas.yaml
-> index ff80152f092f..7aae35c5f6aa 100644
-> --- a/Documentation/devicetree/bindings/arm/renesas.yaml
-> +++ b/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
->  %YAML 1.2
->  ---
-> -$id: http://devicetree.org/schemas/arm/renesas.yaml#
-> +$id: http://devicetree.org/schemas/soc/renesas/renesas.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
->  title: Renesas SH-Mobile, R-Mobile, and R-Car Platform Device Tree Bindings
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e3058091899f..e42a7524e3f1 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2658,7 +2658,6 @@ S:	Supported
->  Q:	http://patchwork.kernel.org/project/linux-renesas-soc/list/
->  C:	irc://irc.libera.chat/renesas-soc
->  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git next
-> -F:	Documentation/devicetree/bindings/arm/renesas.yaml
->  F:	Documentation/devicetree/bindings/hwinfo/renesas,prr.yaml
->  F:	Documentation/devicetree/bindings/soc/renesas/
->  F:	arch/arm64/boot/dts/renesas/
-> -- 
-> 2.17.1
-> 
-> 
+I also think this cache_flush_region() API wants a prominent comment
+clarifying the limited applicability of this API. I.e. that it is not
+for general purpose usage, not for VMs, and only for select bare metal
+scenarios that instantaneously invalidate wide swaths of memory.
+Otherwise, I can now see how this looks like a potentially scary
+expansion of the usage of wbinvd.

@@ -2,224 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3885962D8
+	by mail.lfdr.de (Postfix) with ESMTP id 2422C5962D7
 	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236842AbiHPTIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 15:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59562 "EHLO
+        id S236865AbiHPTJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 15:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232426AbiHPTIn (ORCPT
+        with ESMTP id S232426AbiHPTIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 15:08:43 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F243F53020
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:08:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660676921; x=1692212921;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=kWt7U1fAfBnGGiRGSkV5kreKFRJsy8neCHQUheSflpk=;
-  b=HDtT9cppI4HkBZRU2UbgUbVmAjL0m03a76+edLjbeFaJEWUq7fZU+gCJ
-   EMvrhB7bG8Af0/cQOMXNmiW0pgyhqdv1LJVRJ8h24mCFBJ7E3zNMHUo8j
-   sG8dzsR4ncGE5BKVXnM/ZgISRWR23TfyZpNglvWkeJ+CkgsCPE1Mvjfpz
-   ggGTik3Qwc+CIhBaQU5rDLgNwxp2v+zdEFcQl7iXrSHoRC7jyON396kGs
-   hsJB4azcW6uJPf4s8CB6ZnEpoiTED8qwZdBBQHtwAj4/BZeU6n+A+1bIg
-   h80CYD+D1KIU5PsJoP2NjbhbagxPsu08/3ozmIBRgQzLZXWj/Kb8xb2uT
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="354051700"
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="354051700"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 12:08:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="675344827"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga004.fm.intel.com with ESMTP; 16 Aug 2022 12:08:41 -0700
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Tue, 16 Aug 2022 12:08:40 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28 via Frontend Transport; Tue, 16 Aug 2022 12:08:40 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.48) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.28; Tue, 16 Aug 2022 12:08:40 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xl6ipeJQVsoZzrYGuoA297bXjTg8wie/mVZiE84qi3MqwFMSde7HXjlj8nroEEe7v2UB3uxGvw9mVHS44XmUFkJdFf09Wux1sTz6VnTZlz7HFAIeAUkXHzd7DxTMf9iY6z4y9SZ3ZS4dHQk8RvJmcEy4By0NgVRjHeB7gto3ZSklSJK1dYDMx2J4aSQYdwSJC3LfsZpZnqxA8uboiRPW0Y68expwZVEoDWOmQjv1aO/dAPx+FvXT3zB1LXNjeKsmJX+YWn63NyIjdjEgpP4TieHXa46btsLnZPjIvjNkUlxB61zPh1iXogRZ9wo9v8jnfxAjLeTrpXdMcH8ia5Cg2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LtmLQVIbJPDgZ5TX5qYaOLgbm3d7ZAB4SCJlFh2Lvyk=;
- b=CreMwLfBi5hKZYpMNfBbs78wc6T6LvW4ujS/WXM/2mG4NO8YOLMOJdB4v57FRhUkZ/bJltzoSv6gUwBUZ5GBPenOosRYvnPUAQt2jaHOF/jYuMd1MuzR4HopELLly9s2ZyfO8LPg7VrpmtW6B7MmqVUL2er86+CZBjwimvy2zS8JNe/IoXtTbGGzXTkNOj4cPVof/GnkJQHSudc5L0TrFEgR4u+186nUk70tOj6GaCoACOshjqVQIkaCHtkaagg7chpH5wjLo9w84qjhdPPCSpgiIgSog+BZRNwYejikcxxTTcnXUauVoJSIjx2KyPrYz2nJviWx1CbsMOFrn67lpg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS0PR11MB6375.namprd11.prod.outlook.com (2603:10b6:8:c9::21) by
- BL0PR11MB3089.namprd11.prod.outlook.com (2603:10b6:208:79::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5525.10; Tue, 16 Aug 2022 19:08:38 +0000
-Received: from DS0PR11MB6375.namprd11.prod.outlook.com
- ([fe80::75e3:4009:a5d1:c3ae]) by DS0PR11MB6375.namprd11.prod.outlook.com
- ([fe80::75e3:4009:a5d1:c3ae%5]) with mapi id 15.20.5525.011; Tue, 16 Aug 2022
- 19:08:38 +0000
-Message-ID: <85648922-27df-051d-8ae8-d0e4e810198a@intel.com>
-Date:   Tue, 16 Aug 2022 21:08:31 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.12.0
-Subject: Re: [PATCH 2/2] ASoC: Intel: Skylake: try to get NHLT blob with PCM
- params as fallback
-Content-Language: en-US
-To:     Icenowy Zheng <uwu@icenowy.me>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Jaroslav Kysela" <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-References: <20220725111002.143765-1-uwu@icenowy.me>
- <20220725111002.143765-2-uwu@icenowy.me>
- <4208aece-0aea-ba86-9a00-9e217546e1dd@intel.com>
- <3346b62c3cd7e07766457c9140849a31d6d8775c.camel@icenowy.me>
-From:   Cezary Rojewski <cezary.rojewski@intel.com>
-In-Reply-To: <3346b62c3cd7e07766457c9140849a31d6d8775c.camel@icenowy.me>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR0P281CA0131.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:97::16) To DS0PR11MB6375.namprd11.prod.outlook.com
- (2603:10b6:8:c9::21)
+        Tue, 16 Aug 2022 15:08:50 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9BD53020
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:08:47 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 73so10052984pgb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:08:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=nssVLWGkSozCP2prxT0MLzeStZK7aNTTPyXYDkMAmNY=;
+        b=dTA84z7jwhcwlnw4Kaod43Raw7zJOjVO3Y2P5TI4q6HuZXPkle236cvUxikwrR1IK/
+         U4j4cn24hVd4sl7B/K0bF4vF9rnk1HwMZa3QyrC5mdRETd5IaEDZDcD+pWZOqBpNGeHo
+         59sY34hNBZUfCkaobNGgsdWVMmj10MO0HtGzM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=nssVLWGkSozCP2prxT0MLzeStZK7aNTTPyXYDkMAmNY=;
+        b=DZbU6N2tIpqMQp+JbidtQf6/HK7r3O+KokpWroCVLHUAZGKL7l7NQucGsGhWxAAlcd
+         DlrWt7cm6y3em+3WkFXBzeHFmfM1gXc6UO2VHBMxYW2W/LkGnTcdJsiUuQ5VXTmaFBMj
+         7d3VCj0NvRplNKPccUTjzkmg2eKkt/KWJ+P8Cr3/h9bwu3aDJ7lWUaWG/xYNqgTlvJLd
+         aqlHAPFpfpGJ1Vypvn9/T+m1SYlP/xrn6rkPpD/HFJ1f35R+eKax7ohLfnkc4Wj3giTE
+         GX3xcalPOkoDhWyafAqqjaqVY3j7a/ePzDwOGYDK9KLW6vjcnqYhVGjAOxLQysRjpTiP
+         6aqg==
+X-Gm-Message-State: ACgBeo1pPDzZu8Vb/1itbCbMrEmrv0sXr1s2ysDv4SnL6aeVsD0ALjmv
+        WzvOeoA9VEl0FhUs5ywBwZzOo3TRGZ1yOw==
+X-Google-Smtp-Source: AA6agR4YtXTGF4jQT4B50vbSzKctSMj1hbrPKLGlAvMXXD20DDT7x4n08bEJKh2CHXm2IxfCt+g0tQ==
+X-Received: by 2002:a05:6a00:2192:b0:52f:6541:6819 with SMTP id h18-20020a056a00219200b0052f65416819mr22396569pfi.83.1660676926841;
+        Tue, 16 Aug 2022 12:08:46 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f12-20020a170902684c00b0016c454598b5sm9360527pln.167.2022.08.16.12.08.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 12:08:45 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 12:08:44 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [PATCH v2] fs: Replace kmap{,_atomic}() with kmap_local_page()
+Message-ID: <202208161208.705E007@keescook>
+References: <20220803182856.28246-1-fmdefrancesco@gmail.com>
+ <8143586.NyiUUSuA9g@opensuse>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5f6b7fde-8173-429b-79c9-08da7fbab9d1
-X-MS-TrafficTypeDiagnostic: BL0PR11MB3089:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qIIjliayH+GTOVYR7SX0uAdb2yyJ5YWufrghgi+3pGuu4aLh7p5n7eca2xXxcdoNV1BKR6qi2+6DjKj8KlJpFk/eyQQPJz7z1IvhzCg00cSZjQ02IHmYRwp8GL28dT5wu0c90vgoFaRQHOmmD75HLSmn3vuKMTE6fTEaL8hwHyvIK5CgBYwYUYQxea5aXdMy60KDtDczm6tXCRHCktOghs0+eh7GJ8fYb9bLspRWnHIoWN3ROrq6uybfGnTAQwUnqL1QyVOfogi+yy6x39WkpwtI0MsxoOCsPhQTrBp6e5nlfdRcrJA/UODvkazVaYJkvthrGxnuT1xFmts6zIjSMATiovBMn4z/UPr85Y1r9T1QYArH0axQ/WjrCFMFqA4mm/cMNQTaRApR0YIT+J/2vph17eNa9eaEkKNXO71vjStIAVI1WFPW0n76H/GBoe8l2aEmSeyR9DwwDC300DXoFTJEmJrUmnGTYUVHocaIguo/668DaO9qb76zQnSrNBbu2DXOzyuv33JZCLFE14Xc8sLtWGHorQVAQJJG+4Lkl22YS7WxDQMl8jWRoilf7AY5u8V6gSLx+IP+j3xSeWVB+Zqq+fRrVW26d9pW/BqLb8cNaWQsFhn8d236sb7KjEyiZvE6Cn7wPQ1DyGEN0yiXrOYcFgK4FeUzX3G2+ftcpjJet7pIyGI90mbXqd/kOZoB+RCIdu1a1n0KDfqvrqwv57hQ/JTwj40zmCXevK3WXJEbs3REv7lL80LWJ5tNZX6L5R8ASPTXqgBnnijbSM1mfdoTBSdxfXbvCaDFextLC6TbKepmQTelvYjIx/hc1Sn2Oqfa/41fApqoEMSQVOmMog==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB6375.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(136003)(39860400002)(396003)(346002)(366004)(4326008)(53546011)(316002)(38100700002)(66556008)(8676002)(83380400001)(6916009)(478600001)(36756003)(31686004)(66946007)(54906003)(6486002)(31696002)(44832011)(26005)(2906002)(86362001)(7416002)(5660300002)(8936002)(82960400001)(6512007)(6506007)(2616005)(6666004)(41300700001)(66476007)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VWtOUS9IRzRobDVrSXI0akVNVHVwR3JpUG5Gcmp5TVBGajhJMDhYejBwR2ty?=
- =?utf-8?B?L2JkZS9SbnZoQ2pYRGdqRTc4d1QyVVhrTE5xRS9YZ2trcFlDbkNXQ2YwN09K?=
- =?utf-8?B?MXp3Q3prWG5IMjBDNUk3T3ZGa2ZzNWtwczBhYkRZMGZkbFRwcDlkeVJWdnlk?=
- =?utf-8?B?Y2dGbGRwTUtKanVqY2ozOE1ZR2VBek1KYU5uNEhVamhoNGpSdzRudnV1blJK?=
- =?utf-8?B?VDZDdXlqbVBhRFUrMEtTS2hJR0tjSTgzMVZUMnV6dldXRzVQdjFBUDU4Uktn?=
- =?utf-8?B?dlZzZkh1NVZ5Q0FCc2YrdjF1U05nR3ZzV205T3Z6bDFTWExoNTVZTHU2NEMv?=
- =?utf-8?B?MlFBNjBxVVNYNW5zei9yTytUeit5c0lyaE41M2dHczZ3RDByYmp3QjVjVWdW?=
- =?utf-8?B?Mk9uWHM4MDlQZHVTelkweXRXektrekZ6MnQwM25vT2l0akoyaGhBQWdvR01R?=
- =?utf-8?B?a0tTZE81aExhei9SanFZRGJHQU9EdUloQ3NoWUVUSmE0MURRd042QUg5NjZK?=
- =?utf-8?B?WFNQTC9ZNUR2NE4vN1RVbU9mRzFLdi9BelBpWDBoQnFqWDJ2M2VtaUN3R3l3?=
- =?utf-8?B?Sk5nck5aOGs1Rzkxc1cyUW5uYmZCNFJobHByTGR2cS9kZlBIb3M0azkzMWRj?=
- =?utf-8?B?N29mQS9icmlsRWFlNjFRMFY2MTZMVnN3U3FzNHR3MTdLcXhaVkR0QnZIV1Ir?=
- =?utf-8?B?MHhCY2VtS1BMZEt1TGJSYXEyRDgwZWdiTVhzcW5GSXNiaWMxQ1hMVFRUOGI5?=
- =?utf-8?B?REk2Y1E1OGlmNVVwcjkrZ2MwL2lJOC9hSzhZOTBvUkcvWVplb0Y1Mm1Wczkr?=
- =?utf-8?B?NGYvajJaVEhEblJCU1orWTl2Q3FISkszYlpjeFllaVozZ3AvTjhYa1kxd003?=
- =?utf-8?B?UkgzL1lSQ3pXd0RzOXVZYTJqTmhLdVlIUklWM1JabS9lMFBuaE4rQ3AxbDk0?=
- =?utf-8?B?NWN5dG1QalBWYk1lWVhYWFFZd1V6MWdkRVpXNUZIK0l5RUM0eUFyMTdVRS91?=
- =?utf-8?B?SWFjZ2s4eWlrR0NQdHl4c0JiN1pEUGlIQ2IxTzI0R3NRRmhNV09TUVc3eUl3?=
- =?utf-8?B?MnhlKzhlb1hZZDZValAySlhVL3l6cWRiQnowMFVZR2hjelZ0allaYjUwYWJT?=
- =?utf-8?B?ckJENE13WE1NTzE0OWsxdFN4SWg1UURJMXlsNktxNVJiT2F6TE8yK1RtZWcz?=
- =?utf-8?B?MmJ3QXlSZ250OXhQVlVMODZWaTNMUW1VK3VRSVdsYUZoeWx3SURJaDlsZEtQ?=
- =?utf-8?B?VXp4c3NHTWc5NjFDME1BSi82VGFRU2hBdzNCZnhocEYxZ1hIVEFiTjNMWVR4?=
- =?utf-8?B?UVVPVnFiZjY0VHZ0ZnZHNmVQSEQ1ZS9ucGYyUm9DMXBIbzd5ckVYeWpXdVpF?=
- =?utf-8?B?NWNyOHVZWmE5TFFGUDg1UFhLZlEzelJoL0M1NlNSWng1eCtRbFVDN1FNZERx?=
- =?utf-8?B?K0dvaVRiRGU0WDZpRXBwSE5JWTBZZWh4a2U1TENEaXB4QWlkMytGYVR0ZXZy?=
- =?utf-8?B?cUVEcHBSb0FYZ0RscnFYcDY1c0t6V3BTc1ZFUS81MldUUDg5YmJMZjdLQ0F1?=
- =?utf-8?B?RGcrazQxdmprMjNET3BXakRRUE9lMlBqU01yMklxOFl0L1VKU1hZenB4QStB?=
- =?utf-8?B?S1ZZOW9SOXJCelB3eTMwbmdOQVFNRzJBb1NrTDByRmZmbWtJSkI3bEdQYzYr?=
- =?utf-8?B?ckpnblN5SDVURkpTOEpNMnhuWkdoN2hNMDBDZnVwSGFIdEkySnQrZ3UrU0Ux?=
- =?utf-8?B?dE54SGNQRHoxK1NWWEIzM1NyU1pIQzEvNWpub3d1T01HcW5wcVJGYXdFUlZQ?=
- =?utf-8?B?blRKWGZOOE8vN3BKL0R6SE9Bek4vU3EzdlJ6NnZCZjdWL2pmVSt2djU5a2lR?=
- =?utf-8?B?d0phdkttZXo1V1k1bXAwMElRL09SVFBhTk1HaFVtcjFUS0E5TmlBdVdUQWNN?=
- =?utf-8?B?THJUbjhTRTMxRmlOc1NXOWgwb2NNQ0UrWTdyUWtNZ3FRWG1haUZIUDh5SDdN?=
- =?utf-8?B?R1RrWkhnQzNvVjd0T1dyd2VHUUJxNmFtNjNZSk9WVEswb0gwRDZEMmRDUnNN?=
- =?utf-8?B?ZGdJL25DNnBsajBzSmdQNHppcWFXdUhyaCtCQ2VadXkzYzAvd3BNa0QwcDEx?=
- =?utf-8?B?RDhWQ1NDVEZGeUhkbDRoZGNnV0ZNVzVCbGcyd2FaeDJ2cWk3U0VIVC91clRu?=
- =?utf-8?B?U2c9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f6b7fde-8173-429b-79c9-08da7fbab9d1
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB6375.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2022 19:08:38.5441
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: j3mcLo1lq9dQbEo07hldU9GSl68FAJjJLhPuSv5qGV/u7EZr7d1Y0yW3f6TxzixP9dcz4YuaWSdVYE6dqGUQZnNjRqGMUjY+90UODo/QMuk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR11MB3089
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8143586.NyiUUSuA9g@opensuse>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-07 7:26 PM, Icenowy Zheng wrote:
-> 在 2022-08-02星期二的 12:30 +0200，Cezary Rojewski写道：
->> On 2022-07-25 1:10 PM, Icenowy Zheng wrote:
->>> Switching to use pipeline parameters to get NHLT blob breaks audio
->>> on
->>> HP Chromebook 13 G1 (at least with MrChromeBox firmware).
-
-...
-
->> Could you share the NHLT file from your platform plus the format used
->> by
->> the cras/userspace tool? Did you try playing over simple aplay tool
->> instead?
+On Sat, Aug 13, 2022 at 03:36:53PM +0200, Fabio M. De Francesco wrote:
+> On mercoledì 3 agosto 2022 20:28:56 CEST Fabio M. De Francesco wrote:
+> > The use of kmap() and kmap_atomic() are being deprecated in favor of
+> > kmap_local_page().
+> > 
+> > There are two main problems with kmap(): (1) It comes with an overhead as
+> > mapping space is restricted and protected by a global lock for
+> > synchronization and (2) it also requires global TLB invalidation when the
+> > kmap’s pool wraps and it might block when the mapping space is fully
+> > utilized until a slot becomes available.
+> > 
+> > With kmap_local_page() the mappings are per thread, CPU local, can take
+> > page faults, and can be called from any context (including interrupts).
+> > It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+> > the tasks can be preempted and, when they are scheduled to run again, the
+> > kernel virtual addresses are restored and are still valid.
+> > 
+> > Since the use of kmap_local_page() in exec.c is safe, it should be
+> > preferred everywhere in exec.c.
+> > 
+> > As said, since kmap_local_page() can be also called from atomic context,
+> > and since remove_arg_zero() doesn't (and shouldn't ever) rely on an
+> > implicit preempt_disable(), this function can also safely replace
+> > kmap_atomic().
+> > 
+> > Therefore, replace kmap() and kmap_atomic() with kmap_local_page() in
+> > fs/exec.c.
+> > 
+> > Tested with xfstests on a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel
+> > with HIGHMEM64GB enabled.
+> > 
+> > Cc: Eric W. Biederman <ebiederm@xmission.com>
+> > Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> > Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > ---
+> > 
+> > v1->v2: Added more information to the commit log to address some
+> > objections expressed by Eric W. Biederman[1] in reply to v1. No changes
+> > have been made to the code. Forwarded a tag from Ira Weiny (thanks!).
+> > 
+> > [1]
+> > https://lore.kernel.org/lkml/8735fmqcfz.fsf@email.froward.int.ebiederm.org/
+> >
+> >  fs/exec.c | 14 +++++++-------
+> >  1 file changed, 7 insertions(+), 7 deletions(-)
+> > 
 > 
-> I tried 48000Hz 2ch 32bit with speaker-test.
+> Hi Kees,
 > 
-> Attached is /sys/firmware/acpi/tables/NHLT.
+> After that thread about the report from Syzbot, and the subsequent discussion, 
+> I noticed that you didn't yet take this other patch for exec.c.
+> 
+> I suppose that the two patches would better go out together. So I'm writing 
+> for sending a gentle ping.
+> 
+> As I said, no changes have been made to the code with respect to v1 (which I 
+> submitted in June). However, later I thought that adding more information 
+> might have helped reviewers and maintainers to better understand the why of 
+> this patch.
 
+Oops, thanks for the ping. I'll pull this now.
 
-Thanks for the NHLT dump. Total of five endpoints are part of the 
-description:
-
-id 0, DMIC capture, formats:
-	[0] 2/16/16/48000
-	[1] 2/32/32/48000
-id 1, I2S SSP0 playback, formats:
-	[0] 2/24/32/48000
-id 2, I2S SSP0 capture, formats:
-	[0] 4/32/32/48000
-id 3, I2S SSP1 playback, formats:
-	[0] 2/24/32/48000
-id 4, I2S SSP1 capture, formats:
-	[0] 2/24/32/48000
-
-I know not what "speaker-test" means. Could you specify which endpoint 
-you are speaking of? Providing either alsa info or at least output of 
-'lsmod | grep snd' would help. I'd like to be aware of which machine 
-board are we talking about.
-
-What could be guessed with the current info (and some google query), is 
-that we are dealing with SKL-Y m5-6Y57, codenamed 'Chell' and the 
-speaker-test is playing through an I2S codec connected to SSP0 port. 
-It's probably max98357a. The skylake-driver version you have gets 
-confused with 24/32 format (userspace is probably attempting 32/32). 
-That or topology file is incorrect..
-
-..and at this point I probably know more than enough. We have tested 
-basically all of the KBL and AML configurations when fixing regressions 
-during recent skylake-driver up-revs. But Chell (and Lars for that 
-matter) families were not among them as these are based on SKL. I'll 
-follow up on this with our partners and come back here. I'm almost 
-certain topology files for the two families mentioned were not updated 
-along the way.
-
-
-Regards,
-Czarek
+-- 
+Kees Cook

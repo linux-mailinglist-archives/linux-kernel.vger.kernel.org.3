@@ -2,124 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE25595BB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB855595BC2
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbiHPMWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 08:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
+        id S231776AbiHPM23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 08:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbiHPMWF (ORCPT
+        with ESMTP id S230015AbiHPM20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 08:22:05 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4CA25C68;
-        Tue, 16 Aug 2022 05:22:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660652525; x=1692188525;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=B3uUd/yG6wpuTb/aR5iTfAme30Qm6tQlD5VU32Fh/CI=;
-  b=Tifp/ISUfjpNRaPP/CY94u94leOZ91YRfJkuv3BDszBornbMs5Q6XRQ7
-   Ixcw0xfxSGlJ1Jg0hiYU0p5uFCXRilB6YP1Oef6lmkw0edqQbDB88Z1Zk
-   92hPzlG/ufTn1JT3E+1Bor79jl97sbJHqhdZcxEGuqk0Z1IAVbJxaAgBF
-   8TkLB0HHACBU+bOr/uWseGqjadJawZfkVjkgEF0OV/8Hm9kAqrgBq7FeF
-   TucuT2O8paNDEBJxQExyYRDVCGdFPd1jsimk54wcpS0qKHTZDzhCHAQ47
-   lhhOfV7Q2m5H6OH4cSsSeil9POTww0F/BnV3p9UUmF5ySbm27HvydlkBK
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="289773234"
-X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="289773234"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 05:22:03 -0700
-X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="675194031"
-Received: from damianos-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.40.45])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 05:21:54 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 4FB31104A4E; Tue, 16 Aug 2022 15:24:57 +0300 (+03)
-Date:   Tue, 16 Aug 2022 15:24:57 +0300
-From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
-        "Nikunj A. Dadhania" <nikunj@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, bharata@amd.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <20220816122457.2fjyd4uz5hp5cani@box.shutemov.name>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <b21f41e5-0322-bbfb-b9c2-db102488592d@amd.com>
- <9e86daea-5619-a216-fe02-0562cf14c501@amd.com>
- <9dc91ce8-4cb6-37e6-4c25-27a72dc11dd0@amd.com>
- <422b9f97-fdf5-54bf-6c56-3c45eff5e174@amd.com>
- <1407c70c-0c0b-6955-10bb-d44c5928f2d9@amd.com>
- <1136925c-2e37-6af4-acac-be8bed9f6ed5@amd.com>
- <1b02db9d-f2f1-94dd-6f37-59481525abff@amd.com>
- <20220815130411.GA1073443@chaop.bj.intel.com>
- <f0094f31-9669-47b5-eb52-6754a13ce757@amd.com>
+        Tue, 16 Aug 2022 08:28:26 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E507361B3F;
+        Tue, 16 Aug 2022 05:28:25 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id u3so14683477lfk.8;
+        Tue, 16 Aug 2022 05:28:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=12z+d6LglnQXoKvRDJb4MyEPTMUhYNXf828Z5Uit61g=;
+        b=hjPuWsDrCnwehNj5ojranCW3leCDRP9cbzilnfPqGUuAVlXX5mhdBc89FYhoB0J82k
+         FBbLsi0zKgaeRpIxJ1yDFM74E8VNg0pO4LG7iv9jflzxLWP0fOVra7iPXwoTNJkO0iUI
+         LxyrEjB+MnZegX2IHG26ovhpQmnQNQsDUjk2F45DH5I+wZRQnbTuXSTiiTyUdaGVYf6M
+         NdeQTdlVRclIYh8GnA5RjhGk5cVDBayMm4VxF+cLbcZWNVnoHWKCwNylFwm6xdFPTan/
+         6BXpim/59GH8ywME1CD15/UYalmxKoAJRETTk27d7DMhA3ohqBlrLLG/3O9bJ7JUyeaf
+         gr/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=12z+d6LglnQXoKvRDJb4MyEPTMUhYNXf828Z5Uit61g=;
+        b=yA6JxEU712OJLGuesIj23W2tTNwcmuVfCWWjik9JZyWBUYeFd2WK/L2+73x370POGY
+         Zhi1u/2k7pqsb6xB1Z9pohpl8UyIa8Cm/K1jW2XpXEhTK7wH8b2ZWwJvMpTfjLNnZ2i/
+         RQZrMi1P4quR8lR+H7NS4agOqeLxxnhaxmkIWd6SiFzHO+zBx6m2ErLtFpZg2k61nYkg
+         Poq9Jgd07w/HcVot6jBh0oGfXminp84kV2wgfN44MRcdkLdZMK46K/u6S6I6D7Vft8zF
+         gBEkzsWITfBnXzCji72PwpiRhjPPmcPXasxTjEW1ylaJloyDfsaMYmzgiy26LULVXIUx
+         jOPw==
+X-Gm-Message-State: ACgBeo2SmQEJ4HS5mNL+pkmGpQkfr1ErEQYZUnIlvIwjaldcgKAHzyzt
+        /mWMdAIu/j+BZzT+9efll9v4OJwXB+ktvs7uoTE=
+X-Google-Smtp-Source: AA6agR5DQihesi5g7XyBe94IbJLBvXUHttDycFjD2D6OXmfICK3W9ohOdIJtMO0uujBEahANwZDoYtqpSA+HB6Ic5y4=
+X-Received: by 2002:a05:6512:1149:b0:48c:ddba:b793 with SMTP id
+ m9-20020a056512114900b0048cddbab793mr6842994lfg.280.1660652904038; Tue, 16
+ Aug 2022 05:28:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f0094f31-9669-47b5-eb52-6754a13ce757@amd.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220810171702.74932-1-flaniel@linux.microsoft.com>
+ <20220810171702.74932-2-flaniel@linux.microsoft.com> <CAEf4BzYex03T7aYjLnbkfHb8vUsCHhj_DiMU6KbK29F+DyhXyA@mail.gmail.com>
+In-Reply-To: <CAEf4BzYex03T7aYjLnbkfHb8vUsCHhj_DiMU6KbK29F+DyhXyA@mail.gmail.com>
+From:   Alban Crequy <alban.crequy@gmail.com>
+Date:   Tue, 16 Aug 2022 14:28:12 +0200
+Message-ID: <CAMXgnP5d1qcGFh2d_G_P4MfNHw+iyaC3EQx+Cv0zA43dBT_xsg@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 1/3] bpf: Make ring buffer overwritable.
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Francis Laniel <flaniel@linux.microsoft.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Geliang Tang <geliang.tang@suse.com>,
+        Hengqi Chen <hengqi.chen@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 01:33:00PM +0200, Gupta, Pankaj wrote:
-> Hi Chao,
-> 
-> > 
-> > Actually the current version allows you to delay the allocation to a
-> > later time (e.g. page fault time) if you don't call fallocate() on the
-> > private fd. fallocate() is necessary in previous versions because we
-> > treat the existense in the fd as 'private' but in this version we track
-> > private/shared info in KVM so we don't rely on that fact from memory
-> > backstores.
-> 
-> Does this also mean reservation of guest physical memory with secure
-> processor (both for SEV-SNP & TDX) will also happen at page fault time?
-> 
-> Do we plan to keep it this way?
+On Tue, 16 Aug 2022 at 04:22, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+>
+> On Wed, Aug 10, 2022 at 10:18 AM Francis Laniel
+> <flaniel@linux.microsoft.com> wrote:
+> >
+> > By default, BPF ring buffer are size bounded, when producers already filled the
+> > buffer, they need to wait for the consumer to get those data before adding new
+> > ones.
+> > In terms of API, bpf_ringbuf_reserve() returns NULL if the buffer is full.
+> >
+> > This patch permits making BPF ring buffer overwritable.
+> > When producers already wrote as many data as the buffer size, they will begin to
+> > over write existing data, so the oldest will be replaced.
+> > As a result, bpf_ringbuf_reserve() never returns NULL.
+> >
+>
+> Part of BPF ringbuf record (first 8 bytes) stores information like
+> record size and offset in pages to the beginning of ringbuf map
+> metadata. This is used by consumer to know how much data belongs to
+> data record, but also for making sure that
+> bpf_ringbuf_reserve()/bpf_ringbuf_submit() work correctly and don't
+> corrupt kernel memory.
+>
+> If we simply allow overwriting this information (and no, spinlock
+> doesn't protect from that, you can have multiple producers writing to
+> different parts of ringbuf data area in parallel after "reserving"
+> their respective records), it completely breaks any sort of
+> correctness, both for user-space consumer and kernel-side producers.
 
-If you are talking about accepting memory by the guest, it is initiated by
-the guest and has nothing to do with page fault time vs fallocate()
-allocation of host memory. I mean acceptance happens after host memory
-allocation but they are not in lockstep, acceptance can happen much later.
+The perf ring buffer solved this issue by adding an option to write
+data backward with commit 9ecda41acb97 ("perf/core: Add
+::write_backward attribute to perf event"). I'd like to see the BPF
+ring buffer have a backward option as well to make overwrites work
+without corruption. It's not completely clear to me if that will work
+but I'd like to explore this with Francis. (Francis and I work in the
+same team and we would like to use this for
+https://github.com/kinvolk/traceloop).
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Best regards,
+Alban

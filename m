@@ -2,172 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1AA596340
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0FF4596343
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237208AbiHPThh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 15:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42882 "EHLO
+        id S237226AbiHPTj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 15:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236566AbiHPThe (ORCPT
+        with ESMTP id S237215AbiHPTjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 15:37:34 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A87895CD;
-        Tue, 16 Aug 2022 12:37:33 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id r22so10121031pgm.5;
-        Tue, 16 Aug 2022 12:37:33 -0700 (PDT)
+        Tue, 16 Aug 2022 15:39:54 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470D772FD2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:39:53 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id fy5so20821594ejc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:39:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=l9EfUPaDR5fFqr7tvdGkZgxoolNNscld0M245NvUy6E=;
-        b=nLp/aBgVt6VuoaORbTZKRwiuvBImcBAxXyGu2K+SxaOMk8qEYRA8xkNY3sj70X1RDT
-         zeOOFAq4s20bplLlj+c1ruWj+YW3QsXioDyQ7USvt9SV7SSnIZY32mS7JY5J4qkkoujz
-         MK5NVG81SXWZT8hbQ35Z58bLNbv6+zJujodwgSHgIqQ2rJ3uo23d2MFALWygo2WeoKPD
-         kT1vzc3g9I3YfET7baxKhGGlpekI8gPTtfNNSRlBcxLjzXiYRHJ4COGSQNlMoovNZIzT
-         lGKCU3ZLSBmTCfZPyMy+iofWEtJAxg1cMeU1QUcGbGComtJTA3/fWvaAh2aSPgeiLkbE
-         NlIg==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=eXUe1BR8Hzx0AlRA4j5CpVPQMTfvDQtF6ML2yHdSAeY=;
+        b=rMOmYOZth9TGM6U9CFCVe2uEHgHLhSuKgacv0A6uzAojEQ4P/bQ8XDpipAheGmbVMq
+         iVgttWfO8wGiEAZH/VfCvqW5m6RqZ96PdhdVMRgtCd3U4doFDcJ6e3BpHq7mSE2AYtEB
+         1ogpT76XO0Ed+zAjOtIYinnooim4uhUJKE1Q7+Weh3VnYgyvosI7T6+rFciOU2EGHWCO
+         W3w7ngg7yOIxhDlvOEcws/0RAT7Y2H4Bs1dCN6Mvv3Wn+I7z6kY0ci5TUIZJUL9jueLz
+         Mv853rS1rCwGicV+237WKJmoeM8YMjDmb6/1CX6Mv2V8pKv74wJ/4Tk4kd5He7mMnI/x
+         FNXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=l9EfUPaDR5fFqr7tvdGkZgxoolNNscld0M245NvUy6E=;
-        b=ds3srnHyjNXzffE5smdMyvgubBJn2SDF0JUeshkUP29FmKMSRfmSN0PFmNuYkjFujN
-         urf/k7i3xIEljzySXCHRS874qn0t2wiWtlYYuVrlCoBI8uxMYsI8QJH1Z40lDcPYr5Yh
-         ZkkRAtGTKruqSoByRth8CFYWdw9X4epnstf5rbFhd8aAVHzAG156cgZ/yA8jFJGeUTv1
-         Kia2O1CSPQNpFJyYEe8yTrekfF1uK9pypiRYT8R2pcxzMfp25owrP1/B68yV8tkAhR0q
-         NkxvQJqiFhQI8dPFP1zIctiaBsdHGvWK2ZAgAlIZFpqrQm/0s9AQ2qSJumklV8gV96EE
-         7TrQ==
-X-Gm-Message-State: ACgBeo29MvfRPGQQNpHi6kIyx46tofIT+YsW+zlDfJOHYFzVQzZgQgyo
-        mDPNT1FMhddOt1wCFC96w8nfZLKyG9Q=
-X-Google-Smtp-Source: AA6agR6dr3IbLebLq+uxnEcnRtO6DTz698tN72/G4xvoRmp4q25XYgSr+7lEdkVSQm+j6iPxM9YUWw==
-X-Received: by 2002:a63:fc19:0:b0:428:c216:7561 with SMTP id j25-20020a63fc19000000b00428c2167561mr9537623pgi.505.1660678653311;
-        Tue, 16 Aug 2022 12:37:33 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:7229])
-        by smtp.gmail.com with ESMTPSA id p123-20020a634281000000b00429c5270710sm217656pga.1.2022.08.16.12.37.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 12:37:32 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 16 Aug 2022 09:37:31 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     mkoutny@suse.com, axboe@kernel.dk, ming.lei@redhat.com,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH v7 1/9] blk-throttle: fix that io throttle can only work
- for single bio
-Message-ID: <Yvvx+/d2+OMROUOe@slm.duckdns.org>
-References: <20220802140415.2960284-1-yukuai1@huaweicloud.com>
- <20220802140415.2960284-2-yukuai1@huaweicloud.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=eXUe1BR8Hzx0AlRA4j5CpVPQMTfvDQtF6ML2yHdSAeY=;
+        b=rOu/ziAp2YTWRvZeaLnEFMY5o3J859f74Z9bME+JiV9nJvEm0K8tLzC+LpiWLZSEJy
+         He5m/Qk1yocYqpqupXJC7Oyf6yF+852CbZAJIGH//jWEtxPutUezyKbczBsNK5n6Py8a
+         7Cgc9Ia3X1eDYRT7npg3GfUskFHm8ozKu2Zzuoj21WqPs29h8Bic8JYbC8GWaQmaP2j6
+         HJEtGkXLIt4IRWoaZ+qcFM8gJudBHoXv8j0HjH8EomJpf7ezOSmT5nq27nMD7pa9vidF
+         LHbg9Rj0MX43lXBynuBWCWYWDV7zJoaH0KCdzm8glDyZ14NZKBYtvJflS8BjvQR4jBUG
+         hNTg==
+X-Gm-Message-State: ACgBeo0MdRYYpwioeu/vc3BJA8mjVD4WLf5/242pkCzqq3FaPsnTaJ5B
+        f1YzqR8mVSLTJOMOaPW2ciAPx/K2uJrOJhBABmWPcQ==
+X-Google-Smtp-Source: AA6agR4mgTRNv+qUiCgrq4Ja1fqwFU7qU+XNa2wihjDKL4vHouD+3kpv8h1DZQapKvmYLeYuftltsKJ3ZtBDQwfk7t8=
+X-Received: by 2002:a17:906:228a:b0:731:3a33:326 with SMTP id
+ p10-20020a170906228a00b007313a330326mr14235549eja.253.1660678791658; Tue, 16
+ Aug 2022 12:39:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802140415.2960284-2-yukuai1@huaweicloud.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <CA+G9fYv2Wof_Z4j8wGYapzngei_NjtnGUomb7y34h4VDjrQDBA@mail.gmail.com>
+ <CAHk-=wj=u9+0kitx6Z=efRDrGVu_OSUieenyK4ih=TFjZdyMYQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wj=u9+0kitx6Z=efRDrGVu_OSUieenyK4ih=TFjZdyMYQ@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 17 Aug 2022 01:09:40 +0530
+Message-ID: <CA+G9fYuLvTmVbyEpU3vrw58QaWfN=Eg8VdrdRei_jmu2Y2OzOg@mail.gmail.com>
+Subject: Re: [next] arm64: kernel BUG at fs/inode.c:622 - Internal error: Oops
+ - BUG: 0 - pc : clear_inode
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev,
+        lkft-triage@lists.linaro.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 10:04:07PM +0800, Yu Kuai wrote:
-...
-> commit 9f5ede3c01f9 ("block: throttle split bio in case of iops limit")
-> support to count splited bios for iops limit, thus it adds flaged bio
-                                                             ^
-                                                             flagged
+On Wed, 17 Aug 2022 at 00:40, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Tue, Aug 16, 2022 at 12:00 PM Naresh Kamboju
+> <naresh.kamboju@linaro.org> wrote:
+> >
+> > Following kernel BUG found while booting arm64 Qcom dragonboard 410c with
+> > Linux next-20220816 kernel Image.
+>
+> What kind of environment is this?
+>
+> Havign that inode list corruption makes it smell a *bit* like the
+> crazy memory corruption that we saw with the google cloud instances,
+> but that would only happen wif you actually use VIRTIO for your
+> environment?
 
-> checking in tg_with_in_bps_limit() so that splited bios will only count
-                                             ^
-                                             split
+This is a physical hardware db410c device.
+Following VIRTIO configs enabled.
 
-> once for bps limit, however, it introduce a new problem that io throttle
-> won't work if multiple bios are throttled.
-> 
-> In order to fix the problem, at first, don't skip flaged bio in
-> tg_with_in_bps_limit(), however, this will break that splited bios should
-> only count once for bps limit. And this patch tries to avoid
-> over-accounting by decrementing it first in __blk_throtl_bio(), and
-> then counting it again while dispatching it.
-> 
-> Fixes: 9f5ede3c01f9 ("block: throttle split bio in case of iops limit")
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> Reviewed-by: Ming Lei <ming.lei@redhat.com>
+CONFIG_BLK_MQ_VIRTIO=y
+CONFIG_NET_9P_VIRTIO=y
+CONFIG_VIRTIO_BLK=y
+CONFIG_SCSI_VIRTIO=y
+CONFIG_VIRTIO_NET=y
+CONFIG_VIRTIO_CONSOLE=y
+CONFIG_VIRTIO_ANCHOR=y
+CONFIG_VIRTIO=y
+CONFIG_VIRTIO_PCI_LIB=y
+CONFIG_VIRTIO_PCI_LIB_LEGACY=y
+CONFIG_VIRTIO_MENU=y
+CONFIG_VIRTIO_PCI=y
+CONFIG_VIRTIO_PCI_LEGACY=y
+CONFIG_VIRTIO_BALLOON=y
+CONFIG_VIRTIO_MMIO=y
+CONFIG_CRYPTO_DEV_VIRTIO=y
 
-Please cc stable w/ version tag.
 
-> ---
->  block/blk-throttle.c | 26 ++++++++++++++++++++------
->  1 file changed, 20 insertions(+), 6 deletions(-)
-> 
-> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-> index 9f5fe62afff9..2957e2c643f4 100644
-> --- a/block/blk-throttle.c
-> +++ b/block/blk-throttle.c
-> @@ -811,7 +811,7 @@ static bool tg_with_in_bps_limit(struct throtl_grp *tg, struct bio *bio,
->  	unsigned int bio_size = throtl_bio_data_size(bio);
->  
->  	/* no need to throttle if this bio's bytes have been accounted */
-> -	if (bps_limit == U64_MAX || bio_flagged(bio, BIO_THROTTLED)) {
-> +	if (bps_limit == U64_MAX) {
->  		if (wait)
->  			*wait = 0;
->  		return true;
-> @@ -921,11 +921,8 @@ static void throtl_charge_bio(struct throtl_grp *tg, struct bio *bio)
->  	unsigned int bio_size = throtl_bio_data_size(bio);
->  
->  	/* Charge the bio to the group */
-> -	if (!bio_flagged(bio, BIO_THROTTLED)) {
-> -		tg->bytes_disp[rw] += bio_size;
-> -		tg->last_bytes_disp[rw] += bio_size;
-> -	}
-> -
-> +	tg->bytes_disp[rw] += bio_size;
-> +	tg->last_bytes_disp[rw] += bio_size;
->  	tg->io_disp[rw]++;
->  	tg->last_io_disp[rw]++;
->  
-> @@ -2121,6 +2118,23 @@ bool __blk_throtl_bio(struct bio *bio)
->  			tg->last_low_overflow_time[rw] = jiffies;
->  		throtl_downgrade_check(tg);
->  		throtl_upgrade_check(tg);
-> +
-> +		/*
-> +		 * Splited bios can be re-entered because iops limit should be
-                   ^                ^^^^^^^^^^^^^
-                   Split            re-enter
+>
+> Do you see the same issue with plain v6.0-rc1?
 
-> +		 * counted again, however, bps limit should not. Since bps limit
-> +		 * will be counted again while dispatching it, compensate the
-> +		 * over-accounting here. Noted that compensation can fail if
-> +		 * new slice is started.
+Nope. I do not notice reported BUG on v6.0-rc1.
 
-I can't really follow the comment. Please improve the explanation.
-
-> +		 */
-> +		if (bio_flagged(bio, BIO_THROTTLED)) {
-> +			unsigned int bio_size = throtl_bio_data_size(bio);
-> +
-> +			if (tg->bytes_disp[rw] >= bio_size)
-> +				tg->bytes_disp[rw] -= bio_size;
-> +			if (tg->last_bytes_disp[rw] >= bio_size)
-> +				tg->last_bytes_disp[rw] -= bio_size;
-> +		}
-
-So, as a fix for the immediate problem, I guess this might do but this feels
-really fragile. How can we be certain that re-entering only happens because
-of splitting? What if future core development changes that? It seems to be
-solving the problem in the wrong place. Shouldn't we flag the bio indicating
-that it's split when we're splitting the bio so that we only limit them for
-iops in the first place?
-
-Thanks.
-
--- 
-tejun
+- Naresh

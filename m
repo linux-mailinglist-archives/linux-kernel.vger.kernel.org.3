@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99192596366
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4C5596362
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:57:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237344AbiHPT4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 15:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
+        id S237341AbiHPT4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 15:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236924AbiHPT4G (ORCPT
+        with ESMTP id S236326AbiHPT4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 16 Aug 2022 15:56:06 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FD779604;
-        Tue, 16 Aug 2022 12:56:05 -0700 (PDT)
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693957962E;
+        Tue, 16 Aug 2022 12:56:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660679765; x=1692215765;
+  t=1660679764; x=1692215764;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=yixfxwAxzM7YBQGZsa87NJ7t2jyl79YfbDujqx61tcE=;
-  b=SOuWDChFpfHWPnCZEh5nbGfZBCKvfaEc5YtwisZtcOoRyQZLnu5G1Yx0
-   LiA4hxEBm6rytT6Dj8RA2FshQ02qnY9Od1Oh6dXNBTjofge01+zrWzIXH
-   mwZum6wDhF5xyZXWDbLrtsZNP2Z9NwEbcVdNyjtch2VeExyIqgBVTforY
-   xwHdhOIR8dF8Fb1wBTFANuJCGqOiWSwEF/6/DrlyLyoH273DiiimJAKHP
-   3Qv6924/YU5CFvasicw14xH9vYLCVzFm6O+TflK7GKZmd3zSOSElFtMW/
-   DVtpqtj3wBUpZdtsPnLRKpu/RenA96XCCGZDYev60NGeExberAhCoK5mQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="272708982"
+  bh=0EwQpfJ5on5K89En304TdU706UFm4II21M0QMOuWnIE=;
+  b=ht3MFQU2jjY93X6a3ieZyEAaGAgzlmJ9BX5KOz7tQwCEF0sC+uPfHWey
+   f75ZPLB0VrwuSYzFd4CgbDCFvh/aRpzALyV/S7P0IZvkM364S4nG/hIKD
+   Y/dxg4mSIo5h5QlfluwJV4I9ryI13rNBO77yJdygj1g8x1QA8XZF5s8am
+   I0U4slC+zkRBBw6+S4yyGvhi8FMvQpHddwVpk8r5Y+Yaz42q4LaPaLu3X
+   F/pY98OKetv5PbOlKzhl4+Szx/zTlVBZVyO4QW9igbRi5v5o6A0wXkGMZ
+   M1nFyjp9SxEG4BrXZbpyJpRaLOZUokYUAny4EFdV4mYcPNy2XqVYXDJvO
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="289887554"
 X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="272708982"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 12:56:05 -0700
+   d="scan'208";a="289887554"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 12:56:03 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="935057276"
+   d="scan'208";a="749433429"
 Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Aug 2022 12:56:00 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 16 Aug 2022 12:56:01 -0700
 Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oO2fQ-0000C8-13;
+        id 1oO2fQ-0000CC-19;
         Tue, 16 Aug 2022 19:56:00 +0000
-Date:   Wed, 17 Aug 2022 03:55:15 +0800
+Date:   Wed, 17 Aug 2022 03:55:19 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Eliav Farber <farbere@amazon.com>, jdelvare@suse.com,
-        linux@roeck-us.net, robh+dt@kernel.org, mark.rutland@arm.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+To:     Zhen Lei <thunder.leizhen@huawei.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, farbere@amazon.com, talel@amazon.com,
-        hhhawa@amazon.com, jonnyc@amazon.com, hanochu@amazon.com,
-        ronenk@amazon.com, itamark@amazon.com, shellykz@amazon.com,
-        shorer@amazon.com, amitlavi@amazon.com, almogbs@amazon.com,
-        dwmw@amazon.co.uk, rtanwar@maxlinear.com
-Subject: Re: [PATCH 08/16] hwmon: (mr75203) add VM active channel support
-Message-ID: <202208170350.3yIFIWEk-lkp@intel.com>
-References: <20220816082757.11990-9-farbere@amazon.com>
+Cc:     kbuild-all@lists.01.org, Zhen Lei <thunder.leizhen@huawei.com>
+Subject: Re: [PATCH v3 2/2] rcu: Simplify the code logic of rcu_init_nohz()
+Message-ID: <202208170309.j1yYU9wN-lkp@intel.com>
+References: <20220816124839.1911-3-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220816082757.11990-9-farbere@amazon.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20220816124839.1911-3-thunder.leizhen@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,237 +72,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eliav,
+Hi Zhen,
 
 Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on groeck-staging/hwmon-next]
+[auto build test WARNING on paulmck-rcu/dev]
 [also build test WARNING on linus/master v6.0-rc1 next-20220816]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eliav-Farber/Variety-of-fixes-and-new-features-for-mr75203-driver/20220816-183655
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: microblaze-randconfig-r013-20220815 (https://download.01.org/0day-ci/archive/20220817/202208170350.3yIFIWEk-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 12.1.0
+url:    https://github.com/intel-lab-lkp/linux/commits/Zhen-Lei/rcu-nocb-Delete-local-variable-need_rcu_nocb_mask-in-rcu_init_nohz/20220816-205131
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
+config: x86_64-randconfig-a004-20220815 (https://download.01.org/0day-ci/archive/20220817/202208170309.j1yYU9wN-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/75e49737eb6188733096da72eb4692cfed872101
+        # https://github.com/intel-lab-lkp/linux/commit/a1d5079765918764de3ff6e3e63fa2db7f7c14df
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Eliav-Farber/Variety-of-fixes-and-new-features-for-mr75203-driver/20220816-183655
-        git checkout 75e49737eb6188733096da72eb4692cfed872101
+        git fetch --no-tags linux-review Zhen-Lei/rcu-nocb-Delete-local-variable-need_rcu_nocb_mask-in-rcu_init_nohz/20220816-205131
+        git checkout a1d5079765918764de3ff6e3e63fa2db7f7c14df
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/hwmon/
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/hwmon/mr75203.c: In function 'mr75203_probe':
->> drivers/hwmon/mr75203.c:604:17: warning: ISO C90 forbids variable length array 'vm_idx' [-Wvla]
-     604 |                 u8 vm_idx[vm_num];
-         |                 ^~
->> drivers/hwmon/mr75203.c:605:17: warning: ISO C90 forbids variable length array 'vm_active_ch' [-Wvla]
-     605 |                 u8 vm_active_ch[vm_num];
-         |                 ^~
+   In file included from kernel/rcu/tree.c:4801:
+   kernel/rcu/tree_nocb.h: In function 'rcu_init_nohz':
+>> kernel/rcu/tree_nocb.h:1216:17: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+    1216 |         cpumask = cpu_possible_mask;
+         |                 ^
 
 
-vim +/vm_idx +604 drivers/hwmon/mr75203.c
+vim +/const +1216 kernel/rcu/tree_nocb.h
 
-   514	
-   515	static int mr75203_probe(struct platform_device *pdev)
-   516	{
-   517		const struct hwmon_channel_info **pvt_info;
-   518		u32 ts_num, vm_num, pd_num, ch_num, val, index, i, j, k;
-   519		struct device *dev = &pdev->dev;
-   520		u32 *temp_config, *in_config;
-   521		struct device *hwmon_dev;
-   522		struct pvt_device *pvt;
-   523		int ret;
-   524	
-   525		pvt = devm_kzalloc(dev, sizeof(*pvt), GFP_KERNEL);
-   526		if (!pvt)
-   527			return -ENOMEM;
-   528	
-   529		ret = pvt_get_regmap(pdev, "common", pvt);
-   530		if (ret)
-   531			return ret;
-   532	
-   533		pvt->clk = devm_clk_get(dev, NULL);
-   534		if (IS_ERR(pvt->clk))
-   535			return dev_err_probe(dev, PTR_ERR(pvt->clk), "failed to get clock\n");
-   536	
-   537		ret = pvt_clk_enable(dev, pvt);
-   538		if (ret) {
-   539			dev_err(dev, "failed to enable clock\n");
-   540			return ret;
-   541		}
-   542	
-   543		if (of_property_read_bool(dev->of_node, "reset-control-skip")) {
-   544			dev_info(dev, "skipping reset-control\n");
-   545		} else {
-   546			pvt->rst = devm_reset_control_get_exclusive(dev, NULL);
-   547			if (IS_ERR(pvt->rst))
-   548				return dev_err_probe(dev, PTR_ERR(pvt->rst),
-   549						     "failed to get reset control\n");
-   550	
-   551			ret = pvt_reset_control_deassert(dev, pvt);
-   552			if (ret)
-   553				return dev_err_probe(dev, ret,
-   554						     "cannot deassert reset control\n");
-   555		}
-   556	
-   557		ret = regmap_read(pvt->c_map, PVT_IP_CONFIG, &val);
-   558		if(ret < 0)
-   559			return ret;
-   560	
-   561		ts_num = (val & TS_NUM_MSK) >> TS_NUM_SFT;
-   562		pd_num = (val & PD_NUM_MSK) >> PD_NUM_SFT;
-   563		vm_num = (val & VM_NUM_MSK) >> VM_NUM_SFT;
-   564		ch_num = (val & CH_NUM_MSK) >> CH_NUM_SFT;
-   565		pvt->t_num = ts_num;
-   566		pvt->p_num = pd_num;
-   567		pvt->v_num = vm_num;
-   568		val = 0;
-   569		if (ts_num)
-   570			val++;
-   571		if (vm_num)
-   572			val++;
-   573		if (!val)
-   574			return -ENODEV;
-   575	
-   576		pvt_info = devm_kcalloc(dev, val + 2, sizeof(*pvt_info), GFP_KERNEL);
-   577		if (!pvt_info)
-   578			return -ENOMEM;
-   579		pvt_info[0] = HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ);
-   580		index = 1;
-   581	
-   582		if (ts_num) {
-   583			ret = pvt_get_regmap(pdev, "ts", pvt);
-   584			if (ret)
-   585				return ret;
-   586	
-   587			temp_config = devm_kcalloc(dev, ts_num + 1,
-   588						   sizeof(*temp_config), GFP_KERNEL);
-   589			if (!temp_config)
-   590				return -ENOMEM;
-   591	
-   592			memset32(temp_config, HWMON_T_INPUT, ts_num);
-   593			pvt_temp.config = temp_config;
-   594			pvt_info[index++] = &pvt_temp;
-   595		}
-   596	
-   597		if (pd_num) {
-   598			ret = pvt_get_regmap(pdev, "pd", pvt);
-   599			if (ret)
-   600				return ret;
-   601		}
-   602	
-   603		if (vm_num) {
- > 604			u8 vm_idx[vm_num];
- > 605			u8 vm_active_ch[vm_num];
-   606	
-   607			ret = pvt_get_regmap(pdev, "vm", pvt);
-   608			if (ret)
-   609				return ret;
-   610	
-   611			ret = device_property_read_u8_array(dev, "intel,vm-map", vm_idx,
-   612							    vm_num);
-   613			if (ret) {
-   614				/*
-   615				 * Incase intel,vm-map property is not defined, we
-   616				 * assume incremental channel numbers.
-   617				 */
-   618				for (i = 0; i < vm_num; i++)
-   619					vm_idx[i] = i;
-   620			} else {
-   621				for (i = 0; i < vm_num; i++)
-   622					if (vm_idx[i] >= vm_num || vm_idx[i] == 0xff)
-   623						break;
-   624	
-   625				vm_num = i;
-   626				pvt->v_num = i;
-   627			}
-   628	
-   629			ret = device_property_read_u8_array(dev, "vm-active-channels",
-   630							    vm_active_ch, vm_num);
-   631			if (ret) {
-   632				/*
-   633				 * Incase vm-active-channels property is not defined,
-   634				 * we assume each VM sensor has all of its channels
-   635				 * active.
-   636				 */
-   637				for (i = 0; i < vm_num; i++)
-   638					vm_active_ch[i] = ch_num;
-   639	
-   640				pvt->vm_ch_max = ch_num;
-   641				pvt->vm_ch_total = ch_num * vm_num;
-   642			} else {
-   643				for (i = 0; i < vm_num; i++) {
-   644					if (vm_active_ch[i] > ch_num) {
-   645						dev_err(dev,
-   646							"invalid active channels: %u\n",
-   647							vm_active_ch[i]);
-   648						return -EINVAL;
-   649					}
-   650	
-   651					pvt->vm_ch_total += vm_active_ch[i];
-   652	
-   653					if (vm_active_ch[i] > pvt->vm_ch_max)
-   654						pvt->vm_ch_max = vm_active_ch[i];
-   655				}
-   656			}
-   657	
-   658			/*
-   659			 * Map between the channel-number to VM-index and channel-index.
-   660			 * Example - 3 VMs, vm_active_ch = [05 02 04]:
-   661			 * vm_map = [0 0 0 0 0 1 1 2 2 2 2]
-   662			 * ch_map = [0 1 2 3 4 0 1 0 1 2 3]
-   663			 */
-   664			pvt->vd = devm_kcalloc(dev, pvt->vm_ch_total, sizeof(*pvt->vd),
-   665					       GFP_KERNEL);
-   666			if (!pvt->vd)
-   667				return -ENOMEM;
-   668	
-   669			k = 0;
-   670			for (i = 0; i < vm_num; i++)
-   671				for (j = 0; j < vm_active_ch[i]; j++) {
-   672					pvt->vd[k].vm_map = vm_idx[i];
-   673					pvt->vd[k].ch_map = j;
-   674					k++;
-   675				}
-   676	
-   677			in_config = devm_kcalloc(dev, pvt->vm_ch_total + 1,
-   678						 sizeof(*in_config), GFP_KERNEL);
-   679			if (!in_config)
-   680				return -ENOMEM;
-   681	
-   682			memset32(in_config, HWMON_I_INPUT, pvt->vm_ch_total);
-   683			in_config[pvt->vm_ch_total] = 0;
-   684			pvt_in.config = in_config;
-   685	
-   686			pvt_info[index++] = &pvt_in;
-   687		}
-   688	
-   689		ret = pvt_init(pvt);
-   690		if (ret) {
-   691			dev_err(dev, "failed to init pvt: %d\n", ret);
-   692			return ret;
-   693		}
-   694	
-   695		pvt_chip_info.info = pvt_info;
-   696		hwmon_dev = devm_hwmon_device_register_with_info(dev, "pvt",
-   697								 pvt,
-   698								 &pvt_chip_info,
-   699								 NULL);
-   700	
-   701		return PTR_ERR_OR_ZERO(hwmon_dev);
-   702	}
-   703	
+  1208	
+  1209	void __init rcu_init_nohz(void)
+  1210	{
+  1211		int cpu;
+  1212		struct rcu_data *rdp;
+  1213		struct cpumask *cpumask = NULL;
+  1214	
+  1215	#if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
+> 1216		cpumask = cpu_possible_mask;
+  1217	#elif defined(CONFIG_NO_HZ_FULL)
+  1218		if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
+  1219			cpumask = tick_nohz_full_mask;
+  1220	#endif
+  1221	
+  1222		if (cpumask) {
+  1223			if (!cpumask_available(rcu_nocb_mask)) {
+  1224				if (!zalloc_cpumask_var(&rcu_nocb_mask, GFP_KERNEL)) {
+  1225					pr_info("rcu_nocb_mask allocation failed, callback offloading disabled.\n");
+  1226					return;
+  1227				}
+  1228			}
+  1229	
+  1230			cpumask_or(rcu_nocb_mask, rcu_nocb_mask, cpumask);
+  1231		}
+  1232	
+  1233		if (!cpumask_available(rcu_nocb_mask))
+  1234			return;
+  1235	
+  1236		if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
+  1237			pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
+  1238			cpumask_and(rcu_nocb_mask, cpu_possible_mask,
+  1239				    rcu_nocb_mask);
+  1240		}
+  1241		if (cpumask_empty(rcu_nocb_mask))
+  1242			pr_info("\tOffload RCU callbacks from CPUs: (none).\n");
+  1243		else
+  1244			pr_info("\tOffload RCU callbacks from CPUs: %*pbl.\n",
+  1245				cpumask_pr_args(rcu_nocb_mask));
+  1246		if (rcu_nocb_poll)
+  1247			pr_info("\tPoll for callbacks from no-CBs CPUs.\n");
+  1248	
+  1249		for_each_cpu(cpu, rcu_nocb_mask) {
+  1250			rdp = per_cpu_ptr(&rcu_data, cpu);
+  1251			if (rcu_segcblist_empty(&rdp->cblist))
+  1252				rcu_segcblist_init(&rdp->cblist);
+  1253			rcu_segcblist_offload(&rdp->cblist, true);
+  1254			rcu_segcblist_set_flags(&rdp->cblist, SEGCBLIST_KTHREAD_CB | SEGCBLIST_KTHREAD_GP);
+  1255			rcu_segcblist_clear_flags(&rdp->cblist, SEGCBLIST_RCU_CORE);
+  1256		}
+  1257		rcu_organize_nocb_kthreads();
+  1258	}
+  1259	
 
 -- 
 0-DAY CI Kernel Test Service

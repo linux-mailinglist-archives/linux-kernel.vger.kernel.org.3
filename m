@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F4D59638D
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED27596391
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236744AbiHPUNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 16:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
+        id S237381AbiHPUOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 16:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237217AbiHPUNi (ORCPT
+        with ESMTP id S234140AbiHPUON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 16:13:38 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9729551A20;
-        Tue, 16 Aug 2022 13:13:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=cIS73AGgJyieKU1tG/xZQvCqq8exnfGqB4TcWuZRJMk=; b=FkEUF2DP0ATjqek0UTg5E6KGpT
-        SfZHe9fW2AONVfJAs/8IfzSTsTd9mdeX2lP+zLryIK+TSwQT+1+SxpL5mIvnqGUU7sIH02Ajg7mVy
-        cq1l1k1lYSy/25TQp7wwpcyxMc/YnIrMfrkKANHUcMLPcvZWHteIFmJXOTqw+Xz+452175GKpCp65
-        /o2iXSY0BqlMZDZ7rp14XcPmzP2uND+NNI5OzXGp5sTt1G5pHbYuWtYW1u5NTx0LKMb3euFHrYekU
-        8GMjSivYRkcl6vjcbMV/VqJ5/blLDgs51BUCiyMhb+/tIiagsNphS1KpAJiMWO+NA6QVVx5/mrtdN
-        nWdCvytQ==;
-Received: from [179.232.144.59] (helo=[192.168.0.5])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oO2vr-00AHjX-Kj; Tue, 16 Aug 2022 22:12:59 +0200
-Message-ID: <7181a47b-001c-0588-4102-1cfd8bead0ac@igalia.com>
-Date:   Tue, 16 Aug 2022 17:12:33 -0300
+        Tue, 16 Aug 2022 16:14:13 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AB57A776;
+        Tue, 16 Aug 2022 13:14:13 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id 12so10210957pga.1;
+        Tue, 16 Aug 2022 13:14:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=On1R2Y8AoucYEJFBb7wUMfr4hWcYeJkV168ieP6Z2g4=;
+        b=KCSRHVGOwuHJOs5RySQuX1ydgSX8WoQhwhNOSug+NPzjoTuHqcmpa9cH3RYLlUCMVT
+         +uh87JahRJ4IuLXxnNILjXvjGSyG5KWEd+O4+tB0Nz+Ufx4YOtRwO6+nd7/lmF6SCpyT
+         Q4oYoaelxxzQ4prHEyPmUK9joLJGMgVdmZZhssaZRscUjX9kxZABaACsWyI7ptN8wR+4
+         BpIb4NHASyZdMM1tn9EgkSCQFJv+XuPW04lPWOUw4gZBgzVEPJX3E8jETyiYb1PF0Fkd
+         1zf8OJ2VXIblEtXnpZKTxAKUbnqDt5f7CvSROs/RIvvbEw240Qe2bnbz80aOm5OrGfi/
+         xh3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=On1R2Y8AoucYEJFBb7wUMfr4hWcYeJkV168ieP6Z2g4=;
+        b=xg4OtpJ/wTO2BzTUj9QnuCPO/Vr4tWmLxaP+d95cwlZXc430I8txFeAtBDwESB+8+W
+         rCBEkVSejf6ovBfG6d8Ga74CWhpLgfkONBW9UeGKOygA1MS/mxE1hHTy2zqYIBUZIEJx
+         37fgCdaULor/v04j1huGF8f4jtZ1zYb7EbvUEL9UUZ0S3I1Ah2ytnyOL5Lm6UsbDeGZ3
+         1To8EwnK6a8ftB3Dlh3qEozEKtPpBXUoRLTCZBdD2GR0WJI7E0DNfaqc/viRo1t5f8F3
+         5sQrQJitpi6y2byStHrjMG4cuXEPawG4LP+tTSVUsjaL5eEdaN4cs+nMduWg/dLtJIvA
+         +qng==
+X-Gm-Message-State: ACgBeo071AaUShhMQwApeIOgThMqTDe90N+h+fPfVngnogiuoml64zJO
+        r9dEsAzuTO7IdlSHswVcvrw=
+X-Google-Smtp-Source: AA6agR7kva8c6mpF61p33ryspyUqkCOCRDRFuZxDwca8/V6WyCa5jTLXkzW5ZfI1sVrJR1gCqkoIzA==
+X-Received: by 2002:a05:6a00:2290:b0:52f:9293:afe6 with SMTP id f16-20020a056a00229000b0052f9293afe6mr23031813pfe.17.1660680852274;
+        Tue, 16 Aug 2022 13:14:12 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:7229])
+        by smtp.gmail.com with ESMTPSA id t7-20020a634607000000b0041b5b929664sm7915644pga.24.2022.08.16.13.14.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 13:14:11 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 16 Aug 2022 10:14:10 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     mkoutny@suse.com, axboe@kernel.dk, ming.lei@redhat.com,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH v7 9/9] blk-throttle: clean up flag 'THROTL_TG_PENDING'
+Message-ID: <Yvv6kk/RD5LT+3dk@slm.duckdns.org>
+References: <20220802140415.2960284-1-yukuai1@huaweicloud.com>
+ <20220802140415.2960284-10-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 08/13] tracing: Improve panic/die notifiers
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, senozhatsky@chromium.org,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Sergei Shtylyov <sergei.shtylyov@gmail.com>
-References: <20220719195325.402745-1-gpiccoli@igalia.com>
- <20220719195325.402745-9-gpiccoli@igalia.com>
- <20220816101445.184ebb7c@gandalf.local.home>
- <YvuwUAGi6PvY5kmR@rowland.harvard.edu>
- <20220816115249.66cf8f15@gandalf.local.home>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20220816115249.66cf8f15@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802140415.2960284-10-yukuai1@huaweicloud.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,50 +75,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/08/2022 12:52, Steven Rostedt wrote:
-> On Tue, 16 Aug 2022 10:57:20 -0400
-> Alan Stern <stern@rowland.harvard.edu> wrote:
+On Tue, Aug 02, 2022 at 10:04:15PM +0800, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
 > 
->>> static int trace_die_panic_handler(struct notifier_block *self,
->>> 				unsigned long ev, void *unused)
->>> {
->>> 	if (!ftrace_dump_on_oops)
->>> 		return NOTIFY_DONE;
->>>
->>> 	/* The die notifier requires DIE_OOPS to trigger */
->>> 	if (self == &trace_die_notifier && ev != DIE_OOPS)
->>> 		return NOTIFY_DONE;
->>>
->>> 	ftrace_dump(ftrace_dump_on_oops);
->>>
->>> 	return NOTIFY_DONE;
->>> }  
->>
->> Or better yet:
->>
->> 	if (ftrace_dump_on_oops) {
->>
->> 		/* The die notifier requires DIE_OOPS to trigger */
->> 		if (self != &trace_die_notifier || ev == DIE_OOPS)
->> 			ftrace_dump(ftrace_dump_on_oops);
->> 	}
->> 	return NOTIFY_DONE;
->>
-> 
-> That may be more consolidated but less easy to read and follow. This is far
-> from a fast path.
-> 
-> As I maintain this bike-shed, I prefer the one I suggested ;-)
-> 
-> -- Steve
+> All related operations are inside 'queue_lock', there is no need to use
+> the flag, we only need to make sure throtl_enqueue_tg() is called when
+> the first bio is throttled, and throtl_dequeue_tg() is called when the
+> last throttled bio is dispatched. There are no functional changes in
+> this patch.
 
-Perfect Steve and Alan, appreciate your suggestions!
-I'll submit V3 using your change Steve - honestly, I'm not sure why in
-the heck I put a goto there, yours is basically the same code, modulo
-the goto heheh
+I don't know whether this is better or not. It's minutely less lines of code
+but also makes the code a bit more fragile. I'm ambivalent. At any rate,
+please move these trivial patches to the head of the series or post them
+separately.
 
-A braino from me, for sure!
-Cheers,
+Thanks.
 
-
-Guilherme
+-- 
+tejun

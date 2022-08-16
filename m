@@ -2,176 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10360596083
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD00596080
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236596AbiHPQmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 12:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
+        id S235833AbiHPQmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 12:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235958AbiHPQmN (ORCPT
+        with ESMTP id S236184AbiHPQmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 12:42:13 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD5F8049F
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:42:11 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id e13so14204924edj.12
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:42:11 -0700 (PDT)
+        Tue, 16 Aug 2022 12:42:39 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C0680E85
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:42:35 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id f65so9695345pgc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:42:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=08l0+3c88RLyjBCzBV+yKo0+Z/gNc2HQkPhw2wIPxWM=;
-        b=J3rnkn5EuesoyajpYqKDI9XRMUmQSi5XjRu8ZpAahaIi7B4uy6ChuzK/pLcqUlJPpy
-         mD6ehJVoK8yXUOJolOTet6MchgS5was5NEos4yrbVHlfF7O+oheJohdaD5QbA11k+svC
-         N9dqrvr4CVI59jxgn0u8cGTGEdTNL1G5JURKk=
+        d=dilger-ca.20210112.gappssmtp.com; s=20210112;
+        h=references:to:cc:in-reply-to:date:subject:mime-version:message-id
+         :from:from:to:cc;
+        bh=3UsEcGaqqxu6uaf6V7Db2UUvbrW1qQxZh0X1je5plvs=;
+        b=Zmvs6vXQj1YuzC5CpcL9ZdRSfRMxWuvJuG36+xzxXxSn/FnBKBWixBWCoOKIwrcf55
+         n46G64dAdkeAyCTOhtlwvPzc4Tk73T8CZOzBxW/yv7iUTcD5j+K09Xl78RS6JHAryYsH
+         dpl6GIflzqLKivwt8XMQjnVpsHzQ8A5k8FSijs3OEEXN9w0pRa/0S5IaJNPik48pckp6
+         C5aMtORn54V5bsaXmHvhAa1AZHkQKY6sgAgHPDjgbX8T2hQke1pSCge/sRvDRbpzK3+Q
+         NVCcQskda4YA0R3znKKkgXYcwZ4EYf0ewpN+JcDe6G59HZSOCmXZDesAM6+QGyO3VRhc
+         YGsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=08l0+3c88RLyjBCzBV+yKo0+Z/gNc2HQkPhw2wIPxWM=;
-        b=msCaQvqiohpiFv1RsndatBkY/+85aqmFwUV3HtbNJhV2feDnzxE+YRNGVEvxdpVdCH
-         jGVo1IkpUAoO3gjJFaHzOyOEWQmn7omj5m/0xPOJSgrrKi5BCEgOR0TFQKAlzqrodhNc
-         SKZYFCHDG9hcdFxc3OudLwOyDMlZTGSJR5Z7drjg3hazLs+m7iZIRZj5aGvvX0K41z6i
-         2ylazRHTjVV63dJu+kMQmg2K0c3YmnDcjr3m27JPCxntuhZ9CAE7B8v/ZTFgIDVaipIM
-         QdXDThpMphDM3uc9YYzzn5SXiEyOw/KM15rlSiS5ocTf1bZcnUeTqqHHfVgRCJ3momi7
-         y8lA==
-X-Gm-Message-State: ACgBeo1qL5wGy4F2+vy2K0VSAeMNvEFthc4hOVd/jx9t8pM82DAS/PUo
-        mOlUXy5LFnpI0loBb+LGm4SH8OjZJVQ/sDRBlII=
-X-Google-Smtp-Source: AA6agR7ZCsVcDU6zAZnOe/0U03hB56OQi0LgHv0Qfh5MBI1amPP2JEd8kFd30HsoU24o4IIHvhKR+A==
-X-Received: by 2002:a05:6402:cb7:b0:440:ad7e:5884 with SMTP id cn23-20020a0564020cb700b00440ad7e5884mr20097243edb.382.1660668130226;
-        Tue, 16 Aug 2022 09:42:10 -0700 (PDT)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
-        by smtp.gmail.com with ESMTPSA id k18-20020aa7c052000000b0043bbbaa323dsm8780053edo.0.2022.08.16.09.42.09
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 09:42:09 -0700 (PDT)
-Received: by mail-wm1-f47.google.com with SMTP id k18-20020a05600c0b5200b003a5dab49d0bso5101395wmr.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:42:09 -0700 (PDT)
-X-Received: by 2002:a7b:c399:0:b0:3a5:f3fb:85e0 with SMTP id
- s25-20020a7bc399000000b003a5f3fb85e0mr6857658wmj.38.1660668128792; Tue, 16
- Aug 2022 09:42:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <YvqaK3hxix9AaQBO@slm.duckdns.org> <YvsZ6vObgLaDeSZk@gondor.apana.org.au>
- <CAHk-=wgSNiT5qJX53RHtWECsUiFq6d6VWYNAvu71ViOEan07yw@mail.gmail.com> <20220816134156.GB11202@willie-the-truck>
-In-Reply-To: <20220816134156.GB11202@willie-the-truck>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 16 Aug 2022 09:41:52 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgqvApXmXxk42eZK1u5T60aRWnBMeJOs7JwP-+qqLq6zQ@mail.gmail.com>
-Message-ID: <CAHk-=wgqvApXmXxk42eZK1u5T60aRWnBMeJOs7JwP-+qqLq6zQ@mail.gmail.com>
-Subject: Re: [PATCH] workqueue: Fix memory ordering race in queue_work*()
-To:     Will Deacon <will@kernel.org>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Tejun Heo <tj@kernel.org>, marcan@marcan.st,
-        peterz@infradead.org, jirislaby@kernel.org, maz@kernel.org,
-        mark.rutland@arm.com, boqun.feng@gmail.com,
-        catalin.marinas@arm.com, oneukum@suse.com,
-        roman.penyaev@profitbricks.com, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        h=references:to:cc:in-reply-to:date:subject:mime-version:message-id
+         :from:x-gm-message-state:from:to:cc;
+        bh=3UsEcGaqqxu6uaf6V7Db2UUvbrW1qQxZh0X1je5plvs=;
+        b=0JKdcbq23JkBCb3mgCITt/bq3dpgFOjP4u5Sc/2988FgygPZoQxfdMuMNH4xvUcE9N
+         EAIbw5YQNAxoT/MLSg2B356JAYxax7ElF4pC8ZBIkxbcGiwgDqIHvkumkGESfWq10+mM
+         1p9oUgbd6jXwvDwHFgwzle5BZP2Cv+5w6aS6kfd2LcRoQG44PapPTnD1Au9fnaArx4Mo
+         O2W47MJSfM5ic8+hC7qivY2ZUIlc4Tf40++wywmICCbLVl7V9O39fiteOoWqqe+Pnw1Q
+         BznZVaxrEHgo+jnbTh62JKwS7cbbX4VGGcmcms6p4dxoLewDfPCmxivNZz6/Rs9eoiHL
+         4rVg==
+X-Gm-Message-State: ACgBeo2+YasbyVPXwBPz7p/d/06sXeZUcTVVX7GbpinDGn3TjtkuxOb8
+        2/7L6/phNGCV0ljD7ewQK8LJ4A==
+X-Google-Smtp-Source: AA6agR5MxmTfKKDmbSJw3suGI5oZ/F470+FJjV7/Uj0jVLBbToS4xOkVs5Jg06J4aqmXnDRNRAtD/Q==
+X-Received: by 2002:a65:6d85:0:b0:429:9ce8:6a60 with SMTP id bc5-20020a656d85000000b004299ce86a60mr4399151pgb.352.1660668154762;
+        Tue, 16 Aug 2022 09:42:34 -0700 (PDT)
+Received: from cabot.adilger.int (S01061cabc081bf83.cg.shawcable.net. [70.77.221.9])
+        by smtp.gmail.com with ESMTPSA id z25-20020a656659000000b00419b66846fcsm7761270pgv.91.2022.08.16.09.42.32
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 16 Aug 2022 09:42:33 -0700 (PDT)
+From:   Andreas Dilger <adilger@dilger.ca>
+Message-Id: <D1CDACE3-EC7E-43E4-8F49-EEA2B6E71A41@dilger.ca>
+Content-Type: multipart/signed;
+ boundary="Apple-Mail=_55512B7B-3B73-458E-BB38-6700602A50E9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
+Subject: Re: [PATCH v4 6/9] f2fs: don't allow DIO reads but not DIO writes
+Date:   Tue, 16 Aug 2022 10:42:29 -0600
+In-Reply-To: <20220816090312.GU3600936@dread.disaster.area>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Ext4 Developers List <linux-ext4@vger.kernel.org>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        xfs <linux-xfs@vger.kernel.org>, linux-api@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Keith Busch <kbusch@kernel.org>
+To:     Dave Chinner <david@fromorbit.com>,
+        Eric Biggers <ebiggers@kernel.org>
+References: <20220722071228.146690-1-ebiggers@kernel.org>
+ <20220722071228.146690-7-ebiggers@kernel.org> <YtyoF89iOg8gs7hj@google.com>
+ <Yt7dCcG0ns85QqJe@sol.localdomain> <YuXyKh8Zvr56rR4R@google.com>
+ <YvrrEcw4E+rpDLwM@sol.localdomain>
+ <20220816090312.GU3600936@dread.disaster.area>
+X-Mailer: Apple Mail (2.3273)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 6:42 AM Will Deacon <will@kernel.org> wrote:
->
-> > Will?
->
-> Right, this looks like it's all my fault, so sorry about that.
 
-It's interesting how this bug has existed for basically four years.
+--Apple-Mail=_55512B7B-3B73-458E-BB38-6700602A50E9
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset=us-ascii
 
-I suspect that the thing is fairly hard to hit in practice,
-particularly on the kinds of devices most common (ie limited OoO
-windows on most phone SoCs).
+On Aug 16, 2022, at 3:03 AM, Dave Chinner <david@fromorbit.com> wrote:
+>=20
+> On Mon, Aug 15, 2022 at 05:55:45PM -0700, Eric Biggers wrote:
+>> On Sat, Jul 30, 2022 at 08:08:26PM -0700, Jaegeuk Kim wrote:
+>>> On 07/25, Eric Biggers wrote:
+>>>> On Sat, Jul 23, 2022 at 07:01:59PM -0700, Jaegeuk Kim wrote:
+>>>>> On 07/22, Eric Biggers wrote:
+>>>>>> From: Eric Biggers <ebiggers@google.com>
+>>>>>>=20
+>>>>>> Currently, if an f2fs filesystem is mounted with the mode=3Dlfs =
+and
+>>>>>> io_bits mount options, DIO reads are allowed but DIO writes are =
+not.
+>>>>>> Allowing DIO reads but not DIO writes is an unusual restriction, =
+which
+>>>>>> is likely to be surprising to applications, namely any =
+application that
+>>>>>> both reads and writes from a file (using O_DIRECT).  This =
+behavior is
+>>>>>> also incompatible with the proposed STATX_DIOALIGN extension to =
+statx.
+>>>>>> Given this, let's drop the support for DIO reads in this =
+configuration.
+>>>>>=20
+>>>>> IIRC, we allowed DIO reads since applications complained a lower =
+performance.
+>>>>> So, I'm afraid this change will make another confusion to users. =
+Could
+>>>>> you please apply the new bahavior only for STATX_DIOALIGN?
+>>>>>=20
+>>>>=20
+>>>> Well, the issue is that the proposed STATX_DIOALIGN fields cannot =
+represent this
+>>>> weird case where DIO reads are allowed but not DIO writes.  So the =
+question is
+>>>> whether this case actually matters, in which case we should make =
+STATX_DIOALIGN
+>>>> distinguish between DIO reads and DIO writes, or whether it's some =
+odd edge case
+>>>> that doesn't really matter, in which case we could just fix it or =
+make
+>>>> STATX_DIOALIGN report that DIO is unsupported.  I was hoping that =
+you had some
+>>>> insight here.  What sort of applications want DIO reads but not DIO =
+writes?
+>>>> Is this common at all?
+>>>=20
+>>> I think there's no specific application to use the LFS mode at this
+>>> moment, but I'd like to allow DIO read for zoned device which will =
+be
+>>> used for Android devices.
+>>>=20
+>>=20
+>> So if the zoned device feature becomes widely adopted, then =
+STATX_DIOALIGN will
+>> be useless on all Android devices?  That sounds undesirable.  Are you =
+sure that
+>> supporting DIO reads but not DIO writes actually works?  Does it not =
+cause
+>> problems for existing applications?
+>=20
+> What purpose does DIO in only one direction actually serve? All it
+> means is that we're forcibly mixing buffered and direct IO to the
+> same file and that simply never ends well from a data coherency POV.
+>=20
+> Hence I'd suggest that mixing DIO reads and buffered writes like
+> this ends up exposing uses to the worst of both worlds - all of the
+> problems with none of the benefits...
+>=20
+>> What we need to do is make a decision about whether this means we =
+should
+>> build in a stx_dio_direction field (indicating no support / readonly
+>> support / writeonly support / readwrite support) into the API from =
+the
+>> beginning.  If we don't do that, then I don't think we could simply =
+add
+>> such a field later, as the statx_dio_*_align fields will have already
+>> been assigned their meaning.  I think we'd instead have to =
+"duplicate"
+>> the API, with STATX_DIOROALIGN and statx_dio_ro_*_align fields.  That
+>> seems uglier than building a directional indicator into the API from =
+the
+>> beginning.  On the other hand, requiring all programs to check
+>> stx_dio_direction would add complexity to using the API.
+>>=20
+>> Any thoughts on this?
+>=20
+> Decide whether partial, single direction DIO serves a useful purpose
+> before trying to work out what is needed in the API to indicate that
+> this sort of crazy will be supported....
 
-Together with phone loads probably not generally being all that
-exciting from a kernel standpoint (a lot of driver work, probably not
-a lot of workqueue stuff).
+Using read-only O_DIRECT makes sense for backup and other filesystem
+scanning tools that don't want to pollute the page cache of a system
+(which may be in use by other programs) while reading many files once.
 
->   1. Upgrade test_and_{set,clear}_bit() to have a full memory barrier
->      regardless of the value which is read from memory. The lock/unlock
->      flavours can remain as-is.
+Using interfaces like posix_fadvise(FADV_DONTNEED) to drop file cache
+afterward is both a hassle and problematic when reading very large files
+that would push out more important pages from cache before the large
+file's pages can be dropped.
 
-I've applied Hector's "locking/atomic: Make test_and_*_bit() ordered
-on failure".
 
->   2. Fix the documentation
+IMHO, this whole discussion is putting the cart before the horse.
+Changing existing (and useful) IO behavior to accommodate an API that
+nobody has ever used, and is unlikely to even be widely used, doesn't
+make sense to me.  Most applications won't check or care about the new
+DIO size fields, since they've lived this long without statx() returning
+this info, and will just pick a "large enough" size (4KB, 1MB, whatever)
+that gives them the performance they need.  They *WILL* care if the app
+is suddenly unable to read data from a file in ways that have worked for
+a long time.
 
-That patch had a bit of a fix, but it is probably worth looking at more.
+Even if apps are modified to check these new DIO size fields, and then
+try to DIO write to a file in f2fs that doesn't allow it, then f2fs will
+return an error, which is what it would have done without the statx()
+changes, so no harm done AFAICS.
 
->   3. Figure out what to do about architectures building atomics out of
->      spinlocks (probably ok as lock+unlock == full barrier there?)
+Even with a more-complex DIO status return that handles a "direction"
+field (which IMHO is needlessly complex), there is always the potential
+for a TOCTOU race where a file changes between checking and access, so
+the userspace code would need to handle this.
 
-Yeah, I wonder how we should describe the memory ordering here. We've
-always punted on it, saying it's a "memory barrier", but that has been
-partly a "look, that's the traditional x86 model".
+Cheers, Andreas
 
-And the traditional x86 model really sees the locked RMW operations as
-being one single operation - in ways that most other architectures
-don't.
 
-So on x86, it's more than "this implies a memory barrier" - it's also
-that there is no visible load-modify-store sequence where you can
-start asking "what about the ordering of the _load_ wrt the preceding
-memory operations".
 
-That makes the x86 behavior very easy to think about, but means that
-when you have bitops implemented other ways, you have questions that
-are much harder to answer.
 
-So in a Lock+read+op+write+unlock sequence, you can have preceding
-operations move into the locked region, and mix with the read+op+write
-side.
 
->   4. Accept my sincerest apologies for the mess!
 
-I don't think you were the source of the mess. The *source* of the
-mess is that we've always had very messy rules about the bitops in
-particular.
+--Apple-Mail=_55512B7B-3B73-458E-BB38-6700602A50E9
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename=signature.asc
+Content-Type: application/pgp-signature;
+	name=signature.asc
+Content-Description: Message signed with OpenPGP
 
-I think the *code* is fixed (at least wrt the generic implementation,
-I think the other models are up for discussion), but I think the real
-issue is how we should describe the requirements.
+-----BEGIN PGP SIGNATURE-----
+Comment: GPGTools - http://gpgtools.org
 
-So I think we have at least three cases we need to deal with:
+iQIzBAEBCAAdFiEEDb73u6ZejP5ZMprvcqXauRfMH+AFAmL7yPUACgkQcqXauRfM
+H+C5yA/9G0OeBL/KETzAPM0Gdql84d9VCjortatITeNdwHUMtP26voBr8Q5A85dE
+vey+YGYSY1rcLrN9ORjCqJ9WRD3e77oXPapHyNlqgh+x2fxGgI8Ypb34fT0oB/vu
+YTRE3UgK0IEt2ZB76AnlSOtXzHGQrME4dUNTg9NcwDIEdJL3L4FUrykhozGqkFFu
+/zxI8KCATl2lEyuse7h7DYX187W1H1tSORo4Z7BpW7JcA0F4Bw0NoNET9nhV7PlS
+GW7QqOSt46Wf+w2V6HsUhVAbLJz+3XfQ1hVO+tp3cWfqRQ54DpcqJIL0HD73GQmY
+eR6m67atxsHO2tsgOaMxcaQwTNZrmZoPveHrS5oR2Eo+qWsVn4hp5pikFGp9fyuD
+V9cUm2yFCa/bKxhwTcfSTrEO8/R7rYVX3ppqP1HGO5t9xw0vSe8Mg+wBLFG45/L9
+Bk+vfgnffDluYw546hklgu+KqD0wVkfRKUEZcimT/4Vfyg5d1GPSXTLlnjm6lWq3
+i5Y2yf2PPo+Yx25qt65QC0VkRV1dsdPLuTI9MoyKTHgYc3MlPYJoK+Ohyq8CuHq/
+W6Qpib+UBC07fdA61Qw1yJR1TfIIJ+nNFzuXvAZvINFKRDQ87npdHpuoUul1lJ6p
+eXugihjhNr7Ny2hXArGDjA/lPjTfg6gf0EPZOezgajagFOyerH4=
+=1DeF
+-----END PGP SIGNATURE-----
 
- (a) the people who just want atomics, and don't care about any
-ordering. They are bound to exist.
-
- (b) the people who want "acquire"-like semantics. I think the
-existing test_and_set_bit_lock() is fine
-
- (c) the people who want "release"-like semantics, where the
-"test-and-set-bit" is for announcing "I'm done, was I the first one?".
-
- (d) the full barrier case
-
-I think we currently actively have (b) and (d), but it's possible that
-the workqueue case really is only (c).
-
-And I think the spinlock implementation really most naturally has that
-(c) semantics - you don't necessarily get some theoretical full memory
-barrier, but you *do* get those "handover" semantics.
-
-Maybe we never really want or need (d) at all?
-
-So I get the feeling that we really shouldn't specify
-"test_and_set_bit()" in terms of memory barriers at all. I *think* it
-would be more natural to describe them in terms of "handover" (ie
-acquire/release), and then the spinlock semantics are obviously fine.
-
-So I htink the code problem is easy, I think the real problem here has
-always been bad documentation, and it would be really good to clarify
-that.
-
-Comments?
-
-              Linus
+--Apple-Mail=_55512B7B-3B73-458E-BB38-6700602A50E9--

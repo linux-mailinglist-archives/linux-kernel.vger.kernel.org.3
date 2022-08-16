@@ -2,211 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B734559548E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F275D595558
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbiHPIHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 04:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43052 "EHLO
+        id S233280AbiHPIct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 04:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231970AbiHPIFU (ORCPT
+        with ESMTP id S232934AbiHPIbr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:05:20 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C63E14ECB2;
-        Mon, 15 Aug 2022 22:28:04 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id DA5963200909;
-        Tue, 16 Aug 2022 01:28:00 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 16 Aug 2022 01:28:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1660627680; x=1660714080; bh=M6/1ZM1Ic+
-        C8Vmra2mooIPDUlrEFKSfGzdn/09DQyGU=; b=PEPwSGaKzfS43wRbLHr9thEzoR
-        c1yMU56PmNEljoXrPNVpANyjxB1zQQtvcZb4PQKOEJnR3OAnmB66Doowlc+J4oRm
-        tV8Tsh7Hw5/z6R+FSoJcw8f6jMT1F/PKLWMc0ySgGRrTkLvPbJwwyKgudbc6i5yH
-        wb258FTbfk127RxpJVCe1wHJ4q4h3Z9lUe5bOOCrKw4aQ/Xg5TfzVh9BCXPpGLS1
-        9HZnagUp5WeFF3gSvhrpEIX5JRw4bGyuXFprtmSg8S2F5EMmA0a/ttsOafFN+S+5
-        gAYz8tkY6oRylf7u+/udUlql/rdtjVk9hGJYYMaookdI6vWilvTg3BQopvzQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660627680; x=1660714080; bh=M6/1ZM1Ic+C8Vmra2mooIPDUlrEF
-        KSfGzdn/09DQyGU=; b=GZ9LOO1gR491IzHHo4jzB4zUKDDQnYTBSzl+NlbjoT5s
-        qUCrgD6aGqqWg1HT3gmKMjOkhEnkK6wrsGOfSr1IqNfu726Tn/TAPv7WEqrJJ+1K
-        6J1hmrepCbfgdEIZUGmx8ak3Ce6NrpOeM9dQzGsCcGEMlkYA9RwX+qAjxZsZxf8d
-        0kOeeIAAtSW7QMpRw7jD5ru1sxTrHZO7vzs2zcwWZq8xA/W2QiDOdILepiDY1tqH
-        N89KdH+EpvvfC42WeL2WsQI6BKGjSaM4OT1TNwSYNwof3krzfyyTtTTfcmQEjlus
-        g4H7RMt4E206RjVlflbVrVPcbN+69qHV1W7kSUtqXw==
-X-ME-Sender: <xms:3yr7YrCsYCOHpPk7VxdZCbgiRD6fftdwFjrVKquyXsLsVOKH0At3ww>
-    <xme:3yr7YhjDhQWvhZkcxC52q7Snvu2sBDpmwK0EzDklIVXSxKwduoQs0DFnQNpdg8IJb
-    fimkrYFBwlqyA>
-X-ME-Received: <xmr:3yr7Ymn5uyhVu27fllZsTBTWK4bf-0NpYVf66TNYxJwY0kggYyF55vkJ9teCRoVooSD6utiZCM8WPvXj7Ev4rhCPHWp3mVM4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehfedgleekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:3yr7YtzzzHnNNFsx2i0iMgr5HmAqCTkOYxMmSwojJFfgbNBi0t995Q>
-    <xmx:3yr7YgRBb9JS3ZX2n_ta9gmZx6Gir5QgyNFv_rmJ8mX2JRj6uSpoGg>
-    <xmx:3yr7YgbjXnaaSn9olz8bHfua1C9mUzfBHMLMEORbdRErGBdVHbCj1g>
-    <xmx:4Cr7YlIc-NLsPPnNhVgLPCmwPTtQ-cqv3J-QiWD9GZ2f5jdYPPBZhg>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 16 Aug 2022 01:27:59 -0400 (EDT)
-Date:   Tue, 16 Aug 2022 07:27:56 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tsbogend@alpha.franken.de, linux-api@vger.kernel.org,
-        f.fainelli@gmail.com
-Subject: Re: [PATCH v3] MIPS: Expose prid and globalnumber to sysfs
-Message-ID: <Yvsq3CPf3+ZjYyat@kroah.com>
-References: <20220815165658.11887-1-jiaxun.yang@flygoat.com>
+        Tue, 16 Aug 2022 04:31:47 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2062b.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D099972851
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:47:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VZVa265mmAbfmVm1BKJ67fK96pAe8Iz29qm+cguESZnwHbIBRsiDRQCzPZLB2HGLo6kcNXHkHpbIQI57Cvumwu04x5uT0J9wnCH6kY6xMOhvgnk1bKDTX5UjfZZ+UaG/ES1FoxTgBC1Yxt15HK6xHl+IRmZs8oEMu+EB4A3WLY2iyhUkiHQWxk7C4ulTF6DHXLmGsDLPpMmE/DsOjChsryVtO9XX4zK+mC0mqxXUnjSaX++z6dqAdq1CD6wtmk4sh4ZIprbo9ETuCYRkA9kMocJ5RQmpDcYFkotkQXkQA41hcaUGvNyBzZpbsj3xhGxU//RuWmZgTyUTf4MucY11Ig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wwgnAX8xjj0Dl+X/FD4Twla2GscBG7fvC47Fk5Wp/WY=;
+ b=fNJxXmUBZ8yit5qQpj2vR8cl0p5Hq2x6U+jJpH6PArk8IixpzEms9HhX+yNOlpf+HB4MlFSoE7FKf8ESsgoNX6K0mlkcL5w2m5BoCQt7qZMXdQGRkISDUPy66RoAiu95RHVr1r0e5WHoHWEclYVfLpHPGawepZ51Ii8UmoV0lPb7rVKUFPgUCdgM5z2wlSqSzPOW5zbdhXIY6nSpPS+cQcaSXMMEe0eiCpclHlavOSgzmHjNmFHh21J1NiuzRB+IzHECqTAp+ZB0VOf0jI3tkElNh905cPwHk/20c9tKMK1K04qL9M+Ad7fmk0DJi41BfgXuTrbUBMpUJw/ZlfECrw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wwgnAX8xjj0Dl+X/FD4Twla2GscBG7fvC47Fk5Wp/WY=;
+ b=nvYdTrlsbFTob3D+9DkffijPiVEqvsGxHOe79677kyOsVfv2mwUYHUaP6V/sgIMwPWaTjbnKoNPge3kGOJVo0Vs6SLNsqd07LRznDUhYL7NSTrRmtEYasWpFQiEArNJZb0bEgxmqauStN49foPWMTeigZ0xYHPOBip0d//x+PJFnRWwx42IJMiEWET+WpZiSvGZ3JRhrLFYK0hh9T44lsOuGDz3movVO5H26stkqt4/u5q5ip+jvNDIuXMDfYnvTh4osxuYeB8Nixn7IZwsl4+3wnnOXg04qBTNc0UIp1N6Uf4/V9UxdYb/9J1wBh1Yx7ZEMlLrdeUR4O/fFx3DfmQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by CY4PR12MB1143.namprd12.prod.outlook.com (2603:10b6:903:38::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Tue, 16 Aug
+ 2022 05:47:08 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::eca6:a4a7:e2b2:27e7]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::eca6:a4a7:e2b2:27e7%5]) with mapi id 15.20.5504.027; Tue, 16 Aug 2022
+ 05:47:07 +0000
+References: <487960bf67c7273ff5606c76f73bb51271bc7b90.1660269441.git-series.apopple@nvidia.com>
+ <6b61e9bf7c65f78524db32ba3e65a7eb6b8a76a0.1660269441.git-series.apopple@nvidia.com>
+ <YvpxOyrDBUHagpC6@nvidia.com>
+User-agent: mu4e 1.6.9; emacs 27.1
+From:   Alistair Popple <apopple@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH v4 2/2] mm/gup.c: Refactor
+ check_and_migrate_movable_pages()
+Date:   Tue, 16 Aug 2022 15:29:20 +1000
+In-reply-to: <YvpxOyrDBUHagpC6@nvidia.com>
+Message-ID: <87edxgvixy.fsf@nvdebian.thelocal>
+Content-Type: text/plain
+X-ClientProxiedBy: BY5PR17CA0026.namprd17.prod.outlook.com
+ (2603:10b6:a03:1b8::39) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815165658.11887-1-jiaxun.yang@flygoat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 993b42ed-8ce7-40aa-fed1-08da7f4ac150
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1143:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9M6PbNrVBcg2bXGBlst817elJ/TJu4Rjn5+qTWU8K2woYyAhYHleBbFTjwn9J/JRBQs5hMp+IaAaIB9ipbzKu/MMhpzzyrnxcvw757l4DnhrC07bXm/ezRe+t3lCRWaHv8MaExfub/JXOyHpU9BlEVay/1leIzmzSqR7V1od18unbUvYfk0rC+Lcfn/jt7JvITU1Szo6ovNV4kxZ9KDvoHrdDB5Gkj6+D1Cs/+ToYpeeuLbZxHqZkhR+0GzxaekeyJNdfmAcpGPwNvsEoh/qU9PLhEldQbNqifk65K+VmBgX1yDPv++mpn6GJXYwv/cH316rr+mjJPJDlFCJZr2yX6bS10j4DwW9LidYW8XuBoXb9/t0t1hpqyobiEoCNXUQwP6vF2aOhncdVxUvFnpuUn6Is9TNOQ7dljhqrvHkC/n714JAJJTckIHLgS9MRAGVQO0FdsIecsz//+BllPjfTElWcZdA9H5IrwP+iZeedoVW/B0MaFccG2kTSmCsvWDUS3XsZB+waUH0Q7d4uHhjlpTk4D7WQUaDU8L4GmVyxJ/1Jz8Pi0B5aZ5nj3il8BgjjucMXj5qWA6ABO1WeiUGn+MPJtNNW+vYpMAe7Tzg9NbjvluaRwjVYcUCMGeeWMfm0u40i6+MFdlXvYzvEipqN5wB3ZN1aSf3RJ2AgzflbY8aJvhY2H5OUOjRD8MsSwMxEQFbAZnqs0RG9YO1gB4guSF62suUJG9ulSkbw6/dYM0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(136003)(366004)(396003)(376002)(5660300002)(83380400001)(38100700002)(186003)(41300700001)(6486002)(9686003)(478600001)(316002)(6512007)(26005)(6506007)(54906003)(6666004)(6636002)(66556008)(66476007)(8676002)(66946007)(4326008)(6862004)(7416002)(8936002)(2906002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zsqrawdnXk6YmWZRsgO9I6nrlcuCieCoL5/QMYbNzCTgv9QMX4IerA88/jwR?=
+ =?us-ascii?Q?mXRs7hOSUM4oHBUumeXEOt3+YG8m+sq95EDWhhiqyEfC9Plf/2gZ7s4z7sHs?=
+ =?us-ascii?Q?C34+Va8U1hR7RXJFCbzvgAISgumvbrJ+DVYryikXrOmltqt2SALGrPf7lNip?=
+ =?us-ascii?Q?xbvjn8Ah756p31E2xjPi/JsQT8MivX/8LwmQC3uuqN0byODAKx2SEhJHAF7A?=
+ =?us-ascii?Q?jAElYPMVNcyXTqqfwj/BP3fAMRx3X11/yQsb/XNKLoi+NlkU1Piu50frUeeX?=
+ =?us-ascii?Q?zLFTULaUhH8Lr9DWH5YSA/bDn92/NNPPdi60fMtC946EVc6hwRZReM9OzZ55?=
+ =?us-ascii?Q?9uXcjyuQo3uTENC3oR2Qazr+nAh0DYg97fzEp5ZTBj1feUX5pcCTKm8DV68a?=
+ =?us-ascii?Q?DsFPsWo8x/SfZFr0TYvcWwvMbUpCrVXWy3kxTEYRsxYNq5WzHaNa8kcS1Ifo?=
+ =?us-ascii?Q?NC+bDhsOCn1bPNoVPE3bqIwpzi4bqhtAgAB9POvS4JvgMp8cmV5R57UNrFp8?=
+ =?us-ascii?Q?o9GYqkFbrLB90jzyx6aAKZwVCGwOkLjI3oi/vuiZz9BvjOhsFAQbwJ+7+nas?=
+ =?us-ascii?Q?++1ApoeXzXCNpnJQX0r+SAiHAb1Zwnf8eK9xcifxK6aVdzrsRrluR2HZHcT2?=
+ =?us-ascii?Q?H+f5UvlxEhzaYzJEmeUnA+/H7iTiPvqEBgrZAD0d4fzmIx8zdr/RrFj0//Is?=
+ =?us-ascii?Q?bNWVthFDOcYHM0WOWXv1K5XARTWHTFULtA3ZcHGh2c+3v4rc6Y+VXSVRHQKJ?=
+ =?us-ascii?Q?3TWHhZxeu7t0KRb6/ag/kOy7HvRcYrIysJCDjhrgsvG95q/VlrzGxgvJowx1?=
+ =?us-ascii?Q?Q1xZhHBU1PLugdR2aT/skNLk11WYWWLwOQ6DucQUxnCCRdXzIPTrvpZ51jtr?=
+ =?us-ascii?Q?LvocTA/1HPAKa+enngSkXuAYwRSnO1qcpNAf3pNpiGgfsVyPVaFzvFkUgTd0?=
+ =?us-ascii?Q?OAFuGK7byaO0Sy8tLDu2nQYoQWgl1//zcqBlMC79e315WQJI6I3b5i3q08K8?=
+ =?us-ascii?Q?X616Zd2nojRjtUe8eTjiKCp6bMy0bBLK0Lx8i9MnIHRgwsENFTONDnqXx9r8?=
+ =?us-ascii?Q?+AiUYMJQ2LQWolbckNcdFvFxUndF4RDL3OJ7IwF4an19dv6aoejLRRLRmh7B?=
+ =?us-ascii?Q?S6sdMTahqF1ZWIGTo6ltIAXv1fKpk5AjUa0vxG95CW2MqJF6KAr+3xf+noC8?=
+ =?us-ascii?Q?BAkO7gYRS/oFmnnixsnkh4FoMY9AVfo4sYfm9LoMSHz5quJukYu+3h5O10vD?=
+ =?us-ascii?Q?oEyGk83b+PiyuEHDXj/JNDpvT7oY94QTIp37Qmf0H+fl5eC3vYs8Prv5FzTH?=
+ =?us-ascii?Q?7u9tFZc/e0n9r5cujyyccdmpz4sxW28iHqQORbmUBF+oJKeY6zsXCbX5g+A5?=
+ =?us-ascii?Q?AwUZqAat/XtlErgev9kAOF0bW6gcjfMqy57cvreYdbkKeP+WfAkubA42AEeI?=
+ =?us-ascii?Q?7rosivnp73aDTACQOWMXkTZcSgvFrQra8YwHJDwklxasVY8iMC2jx5mGlwyH?=
+ =?us-ascii?Q?7sch870Igqx0hXBu35AI69vAOYqG6aWhX0N2VaXW8DBeO7fJ5ThGMV2aMskb?=
+ =?us-ascii?Q?He0x4Jux22gdVpnyywiI3pOX5hC1rcPMQ95WYP11?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 993b42ed-8ce7-40aa-fed1-08da7f4ac150
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2022 05:47:07.7089
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AEdcbINCF+/3NQqNbMTu/DTmflL8rYqPcJrExiGcEwfQGn6sCQ1+l4Iul09XAOMs3GfXv/VI1WbHCwsakXMsVQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1143
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 04:56:58PM +0000, Jiaxun Yang wrote:
-> Some application would like to know precise model and rev of processor
-> to do errata workaround or optimization.
-> 
-> Expose them in sysfs as:
-> /sys/devices/system/cpu/cpuX/regs/identification/prid
-> /sys/devices/system/cpu/cpuX/regs/identification/globalnumber
-> 
-> Reusing AArch64 CPU registers directory.
-> 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
-> v2: Drop static qualifier for kobj (gregkh)
-> v3: Use kzalloc to allocate struct cpuregs.
->     note: When Greg mentioned about static I was thinking about
->     static qualifier of percpu variable. After reading documents
->     again it turns out kobjs should be allocated at runtime. Arm64's
->     cpuinfo kobj is also on a percpu variable... I guess that was a
->     intentional use?
-> ---
->  .../ABI/testing/sysfs-devices-system-cpu      |  11 ++
->  arch/mips/kernel/topology.c                   | 103 ++++++++++++++++++
->  2 files changed, 114 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
-> index 5bf61881f012..adf855e7bb9b 100644
-> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-> @@ -512,6 +512,17 @@ Description:	information about CPUs heterogeneity.
->  
->  		cpu_capacity: capacity of cpuX.
->  
-> +What:		/sys/devices/system/cpu/cpuX/regs/
-> +		/sys/devices/system/cpu/cpuX/regs/identification/
-> +		/sys/devices/system/cpu/cpuX/regs/identification/prid
-> +		/sys/devices/system/cpu/cpuX/regs/identification/globalnumber
-> +Date:		Augest 2022
-> +Contact:	Linux MIPS Kernel Mailing list <linux-mips@vger.kernel.org>
-> +Description:	MIPS CPU registers
-> +
-> +		'identification' directory exposes the Processor ID and Global Number
-> +		registers for identifying model and revision of the CPU.
-> +
->  What:		/sys/devices/system/cpu/vulnerabilities
->  		/sys/devices/system/cpu/vulnerabilities/meltdown
->  		/sys/devices/system/cpu/vulnerabilities/spectre_v1
-> diff --git a/arch/mips/kernel/topology.c b/arch/mips/kernel/topology.c
-> index 9429d85a4703..bbb7d4b51ffe 100644
-> --- a/arch/mips/kernel/topology.c
-> +++ b/arch/mips/kernel/topology.c
-> @@ -5,6 +5,8 @@
->  #include <linux/node.h>
->  #include <linux/nodemask.h>
->  #include <linux/percpu.h>
-> +#include <linux/seq_file.h>
-> +#include <linux/smp.h>
->  
->  static DEFINE_PER_CPU(struct cpu, cpu_devices);
->  
-> @@ -26,3 +28,104 @@ static int __init topology_init(void)
->  }
->  
->  subsys_initcall(topology_init);
-> +
-> +static struct kobj_type cpuregs_kobj_type = {
-> +	.sysfs_ops = &kobj_sysfs_ops,
-> +};
-> +
-> +struct cpureg {
-> +	struct kobject kobj;
-> +	struct cpuinfo_mips *info;
-> +};
-> +static DEFINE_PER_CPU(struct cpureg *, cpuregs);
-> +
-> +#define kobj_to_cpureg(kobj)	container_of(kobj, struct cpureg, kobj)
-> +#define CPUREGS_ATTR_RO(_name, _field)						\
-> +	static ssize_t _name##_show(struct kobject *kobj,			\
-> +			struct kobj_attribute *attr, char *buf)			\
-> +	{									\
-> +		struct cpuinfo_mips *info = kobj_to_cpureg(kobj)->info;		\
-> +										\
-> +		return sprintf(buf, "0x%08x\n", info->_field);	\
-> +	}									\
-> +	static struct kobj_attribute cpuregs_attr_##_name = __ATTR_RO(_name)
-> +
-> +CPUREGS_ATTR_RO(prid, processor_id);
-> +CPUREGS_ATTR_RO(globalnumber, globalnumber);
-> +
-> +static struct attribute *cpuregs_id_attrs[] = {
-> +	&cpuregs_attr_prid.attr,
-> +	&cpuregs_attr_globalnumber.attr,
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group cpuregs_attr_group = {
-> +	.attrs = cpuregs_id_attrs,
-> +	.name = "identification"
-> +};
-> +
-> +static int cpuregs_cpu_online(unsigned int cpu)
-> +{
-> +	int rc;
-> +	struct device *dev;
-> +	struct cpureg *reg;
-> +
-> +	dev = get_cpu_device(cpu);
-> +	if (!dev) {
-> +		rc = -ENODEV;
-> +		goto out;
-> +	}
-> +	reg = kzalloc(sizeof(struct cpureg), GFP_KERNEL);
-> +	if (!reg) {
-> +		rc = -ENOMEM;
-> +		goto out;
-> +	}
-> +	rc = kobject_init_and_add(&reg->kobj, &cpuregs_kobj_type,
-> +					&dev->kobj, "regs");
-> +	if (rc)
-> +		goto out_kfree;
 
-No, please read the documentation for kobject_init_and_add() for what to
-properly do in a failure of this function.
+Jason Gunthorpe <jgg@nvidia.com> writes:
 
-thanks,
+> On Fri, Aug 12, 2022 at 12:13:09PM +1000, Alistair Popple wrote:
+>> When pinning pages with FOLL_LONGTERM check_and_migrate_movable_pages()
+>> is called to migrate pages out of zones which should not contain any
+>> longterm pinned pages.
+>>
+>> When migration succeeds all pages will have been unpinned so pinning
+>> needs to be retried. Migration can also fail, in which case the pages
+>> will also have been unpinned but the operation should not be retried. If
+>> all pages are in the correct zone nothing will be unpinned and no retry
+>> is required.
+>>
+>> The logic in check_and_migrate_movable_pages() tracks unnecessary state
+>> and the return codes for each case are difficult to follow. Refactor the
+>> code to clean this up. No behaviour change is intended.
+>>
+>> Signed-off-by: Alistair Popple <apopple@nvidia.com>
+>>
+>> ---
+>
+> This seems like the cleanest version yet!
 
-greg k-h
+Thanks, the feedback from John and yourself has been very useful!
+
+>> +static long check_and_migrate_movable_pages(unsigned long nr_pages,
+>> +					    struct page **pages)
+>> +{
+>> +	int ret;
+>> +	unsigned long collected;
+>> +	LIST_HEAD(movable_page_list);
+>> +
+>> +	collected = collect_longterm_unpinnable_pages(&movable_page_list, nr_pages, pages);
+>> +	if (!collected)
+>> +		return 0;
+>> +
+>> +	ret = migrate_longterm_unpinnable_pages(&movable_page_list, nr_pages, pages);
+>> +	if (!ret)
+>> +		return -EAGAIN;
+>> +	else
+>> +		return ret;
+>
+> I would drop the else path and just return zero
+
+Unless I've misunderstood you I don't think that's correct though.
+check_and_migrate_movable_pages() needs to return one of 3 conditions:
+
+ - 0: All pages are in the correct zone and are still pinned (ie. "success").
+ - -EAGAIN: Some pages were migrated, all pages need re-pinning.
+ - errno: Migration failed, pins were dropped and PUP should fail.
+
+John's suggested comment update spells this out more clearly.
+
+> Arguably migrate_longterm_unpinnable_pages() should do the same?
+
+migrate_longterm_unpinnable_pages() returns 0 for success, errno for
+some kind of "permanent" failure that needs propagating.
+
+>> @@ -2051,10 +2079,10 @@ static long __gup_longterm_locked(struct mm_struct *mm,
+>>  			break;
+>>
+>>  		rc = check_and_migrate_movable_pages(rc, pages);
+>> -	} while (!rc);
+>> +	} while (rc == -EAGAIN);
+>
+> Since the only reader only cares about errno or not errno..
+
+See above. Errors other than -EAGAIN should not be retried.
+
+> But no biggie either way
+
+So will leave this as for now at least.
+
+> Thanks,
+> Jason

@@ -2,103 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B25F59597A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1FA259594E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235262AbiHPLJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 07:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
+        id S235209AbiHPLEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 07:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235232AbiHPLIk (ORCPT
+        with ESMTP id S234931AbiHPLDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 07:08:40 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752DBD398E;
-        Tue, 16 Aug 2022 03:16:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660644997; x=1692180997;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=EtlYtiwteZxWDMzq7m+ATAtdiv2Skwb0e3zLFg2zc58=;
-  b=bMo8Xr+kIfXW+5F6mupDnNVk8P8Wy2KWATOdiKWlvf9r+W+bgzwbtfeV
-   SRDVfv62gmt8MiUPymnvvswcp+1B4eSnzLs4I26JbCrrLrP5n6/xM0k9O
-   fIJyyXmwig+pWbsOdcqPsnvQDSQ2UHSQ08HdS9+01j22Je6XIv1YRCapT
-   dtBZJlR7I9ilczx5aWzUcDzqOLAr9ZWPKSbC5ldAYwISi+7UAUGm5oAin
-   3yJjVgjpHgAHcaODYTIh6Oc1Cppc9/dhF01AarbHDx/MM8fEUFSA0EV3J
-   JbdKt484r6Lz475NFCgbLrKkgKbbRxaBazoSWYVBDeIVCirU1Jrd+9mNe
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="279141302"
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="279141302"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 03:16:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="749260795"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Aug 2022 03:16:31 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Utkarsh Patel <utkarsh.h.patel@intel.com>, rajmohan.mani@intel.com,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH 6/6] usb: typec: intel_pmc_mux: Use the helper acpi_dev_get_memory_resources()
-Date:   Tue, 16 Aug 2022 13:16:29 +0300
-Message-Id: <20220816101629.69054-7-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220816101629.69054-1-heikki.krogerus@linux.intel.com>
-References: <20220816101629.69054-1-heikki.krogerus@linux.intel.com>
+        Tue, 16 Aug 2022 07:03:41 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 81CB7C3F62;
+        Tue, 16 Aug 2022 03:16:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A2785113E;
+        Tue, 16 Aug 2022 03:16:32 -0700 (PDT)
+Received: from [10.57.14.225] (unknown [10.57.14.225])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0785A3F70D;
+        Tue, 16 Aug 2022 03:16:30 -0700 (PDT)
+Message-ID: <04a18937-bb11-736f-2cb3-0cb76a25bcc7@arm.com>
+Date:   Tue, 16 Aug 2022 11:16:29 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] cpufreq: check only freq_table in __resolve_freq()
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org,
+        linux-pm@vger.kernel.org
+References: <20220811165408.23027-1-lukasz.luba@arm.com>
+ <20220812040545.gcmyjjpqfup3bo5u@vireshk-i7>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220812040545.gcmyjjpqfup3bo5u@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It removes the need to check the resource data type
-separately.
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/mux/intel_pmc_mux.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
 
-diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-index a8e273fe204ab..e1f4df7238bf4 100644
---- a/drivers/usb/typec/mux/intel_pmc_mux.c
-+++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-@@ -569,15 +569,6 @@ static int pmc_usb_register_port(struct pmc_usb *pmc, int index,
- 	return ret;
- }
- 
--static int is_memory(struct acpi_resource *res, void *data)
--{
--	struct resource_win win = {};
--	struct resource *r = &win.res;
--
--	return !(acpi_dev_resource_memory(res, r) ||
--		 acpi_dev_resource_address_space(res, &win));
--}
--
- /* IOM ACPI IDs and IOM_PORT_STATUS_OFFSET */
- static const struct acpi_device_id iom_acpi_ids[] = {
- 	/* TigerLake */
-@@ -611,7 +602,7 @@ static int pmc_usb_probe_iom(struct pmc_usb *pmc)
- 		return -ENODEV;
- 
- 	INIT_LIST_HEAD(&resource_list);
--	ret = acpi_dev_get_resources(adev, &resource_list, is_memory, NULL);
-+	ret = acpi_dev_get_memory_resources(adev, &resource_list);
- 	if (ret < 0)
- 		return ret;
- 
--- 
-2.35.1
+On 8/12/22 05:05, Viresh Kumar wrote:
+> On 11-08-22, 17:54, Lukasz Luba wrote:
+>> The there is no need to check if the cpufreq driver implements callback
+> 
+> s/The there/There/
+> 
+>> cpufreq_driver::target_index. The logic in the __resolve_freq uses
+>> the frequency table available in the policy. It doesn't matter if the
+>> driver provides 'target_index' or 'target' callback. It just has to
+>> populate the 'policy->freq_table'.
+>>
+>> Thus, check only frequency table during the frequency resolving call.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   drivers/cpufreq/cpufreq.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+>> index 7820c4e74289..69b3d61852ac 100644
+>> --- a/drivers/cpufreq/cpufreq.c
+>> +++ b/drivers/cpufreq/cpufreq.c
+>> @@ -532,7 +532,7 @@ static unsigned int __resolve_freq(struct cpufreq_policy *policy,
+>>   
+>>   	target_freq = clamp_val(target_freq, policy->min, policy->max);
+>>   
+>> -	if (!cpufreq_driver->target_index)
+>> +	if (!policy->freq_table)
+>>   		return target_freq;
+>>   
+>>   	idx = cpufreq_frequency_table_target(policy, target_freq, relation);
+> 
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> 
 
+Thanks Viresh! I'll resend this patch w/ fixed description and your ACK

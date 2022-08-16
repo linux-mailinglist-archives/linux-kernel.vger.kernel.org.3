@@ -2,44 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8DD59611C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9676E596124
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236332AbiHPR2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 13:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58222 "EHLO
+        id S236609AbiHPR3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 13:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235770AbiHPR2U (ORCPT
+        with ESMTP id S236477AbiHPR2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 13:28:20 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3EB06639B;
-        Tue, 16 Aug 2022 10:28:18 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C8EBE153B;
-        Tue, 16 Aug 2022 10:28:18 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E39B33F67D;
-        Tue, 16 Aug 2022 10:28:15 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     joro@8bytes.org
-Cc:     will@kernel.org, catalin.marinas@arm.com, jean-philippe@linaro.org,
-        inki.dae@samsung.com, sw0312.kim@samsung.com,
-        kyungmin.park@samsung.com, tglx@linutronix.de, maz@kernel.org,
-        alex.williamson@redhat.com, cohuck@redhat.com,
-        iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-acpi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [PATCH 3/3] iommu/dma: Make header private
-Date:   Tue, 16 Aug 2022 18:28:05 +0100
-Message-Id: <b237e06c56a101f77af142a54b629b27aa179d22.1660668998.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.36.1.dirty
-In-Reply-To: <cover.1660668998.git.robin.murphy@arm.com>
-References: <cover.1660668998.git.robin.murphy@arm.com>
+        Tue, 16 Aug 2022 13:28:55 -0400
+Received: from sonic316-54.consmr.mail.gq1.yahoo.com (sonic316-54.consmr.mail.gq1.yahoo.com [98.137.69.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CAD4A10A
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 10:28:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1660670926; bh=KCxALGeHtNmf+3+P8Y4LRK3Lfy1e+K4XtBP8EuNrVm4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=M4nhksOD3u9NZzS/9aLZOPrS6gLu5DR9iCwBT0C8drb4ZlMuS+MFHgE/y3HhwbYtUufLeMsO31b+hYR37uYZSGVnBBH6fDqKcTRT4EIzXc7ueBlfFRunsEQT87PQ5TLV3os5wZbDwUHcRFLzjozujwVLwzPkUZUE4kLwvhzqwwZVNSShfKeXsFjc5r3W85iafy8GOx9Wgf5orhU7Av7jE0dHvpoDBvGHR+JFYO4qhtCc2qQAsQKDUy0B81Zzst1p1hsWpdergS8lwxz0c+8gJOKVZPz3kT8L/bA0N2EhNZuWHThFeSZkIw5qz/AH5+fAdABtazbmwviscGXy78hmmg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660670926; bh=bkF1+RMhS2K5zivCW5WL/yunorG7Ih+jBW05ZZmojUM=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=UPZ2XB8BTTjE3rUkAUIy1MR7E9Ngk3JICAFA8AELE9jVzjnwXfU3S7U/tmvWPd/Rfk+HBAQoZ18ey/H26fG8LPI48G12a4eRYf+UE2I3Queq6q91qjdnB53NJEJrOtKa+z4qVqcytEbsbUnv2576gxCV1AqWTQln09NPY+6xYRBdjtfmXqPn7o05nOP7prZXwD3asNA8D4PXj8mlFJQRVXdqKSsauEQUZ7ajUILRScusnku2gSfAf5IRhuYlngDEukcKeYUEDIJyHhDWite+2CVkyXtnWZ/YxFQ/X36E9gPpZdvx5EAkmZibxjqkAPoFJQl3vsLzMwrBgEf0As+Vhg==
+X-YMail-OSG: eOwkS4MVM1myXdKg7_PGSnkSBeSzvsuUpKD7HJgzqIWkOcngW8.D1i9kBHAfCPh
+ _RwIcAx_fxxLIYYnvtNAPVGk9tKKGSbNnJ6w.EvnEnNjiz5AabaFjIQTpb.nPOxWaVTIU_TtNJnj
+ yoOxs6SGGqBf4vs0MVBswIC1ypaVPSI8jiGEUgcVKMN4QXOa2YRBlQxqm_3YIflnNnLDl6zvc.ZJ
+ BtZ0rN77G8MBmQ6mb4Zvgy.z5oR6CaC4rteXNkibPa3yfZ8guysNECNrfMPoEaPVx1agKJGwPU3Y
+ Xo6uIuq2Ha8s1g9VBoDdLKRgHSVZI_XMGIJtrHS46OQ5XHtuxSGz29yX3evsokvW.LxM3K6qTT62
+ 6vOUlJCKu6yW5WgsaENFeqCH3ASZVzKMgfE4NjFpTNM6NwKxHBYyeFy6GH8TWe74pLkawTz5.OwA
+ qFyUC8Oks2nUYybY20sCfjd01sL3Hj6VUEN8AkJQEH1ufT4wkVDTgfu8kwSA7d5thElsmrvfqppj
+ ut2N5nsxmvEfnm6S5BAGX1d8naDAEh1Kw15JTX4NwOEJp3qB4rEZ0nms9W4ynkPlgQki3ePyHo2n
+ OgH1xWtbHiEjFoBag8ngTuFXZqWUFYPhoFQmnnx.v.aIQfWWx1.jDoJ1T6o21EUrhCMF4qaZfL2p
+ jJyX8QFDyTIZGXHdqRJPW3BEOYUGupQWWW3934M_mmRIH_z4_aTAslk5_mPwCe3opgRqzKOHbmut
+ xkJfvk0FI8M.mIwPRobNEDrLyELGKf51dN4DRtH9qSb8r12Ej.9Nahz7krJ.nXTLvWXCPsE0JpmX
+ e6eIrlwj3pExi38ZlD4iKHwVS.TBikSSvjRhDy.ycw_FCi_evtm.64JSSKObgQPOZvcgSPnpgL2w
+ 0b4JL217wlYu_8ngi.jsOPzKr7Ledlqgj6IvcIn9l6zOs7DbffkdaKTXmfuXtTMHtw7zTWSPdC1v
+ quyNdM_71gqk8HuvM2dMTBE.CjzMlBnEWRNwKLcZjnodkAifgXI3O685vbU6aYu7Ckgy_gDHncHC
+ IkAudF_0yTrG3tu_mrc08Rcw1r7v90mGQLqVWEZ5wr3MQX.iT7i_O5HcPueDz1ECvhnPVT2JPLoZ
+ eb28Eac9z.0y2Nv9cndKScZJhdVBIuV1NkkMPTMERW9AeBoUMRSpDn8kSl3yU0J0oULz3JKC1OQU
+ u46g9cao0q8e56Z1H.up_tlm0DGGLTXaU4NXeFAjSOjs.h0yAhJh4RsQPatclGSUj4Il3eXMkNor
+ cCU4dU5lvNZYJxA.5KBdx_CE21W4mKHpfvYu6xsuawCM3053t027pbXXHtWnHWsK_K1.Zn_4iZRx
+ _Ry79F8PYo1WzQqIvlOx8gGrTaiRkDhdLa_KgwepDFpl5xD8sOhR1cSfyiZs9hTfNLyvvXRNTN4o
+ RWd0N64Cdu0jMGBbQ.pCOsRJa.bT9kPbR5H6JROPnTsCU8mdqNFwbK5M_LgtCwWAqbtkDy8.lgFc
+ sUz1mGrrFJPqq476R0MELwKvKxgn0WgA7tYarBcEJu_H9rjcUX8wmIcdWkeTi_B29JOqv7NDkG.b
+ 3.9qPDAohRnUK7mFgbbXZvFSs9FGmvsbwpgMVxQd2wldCBPo5HmXtO_gOn0TKJKZq8In96CbjWhj
+ 9qHdWQLvLPyYW5VJH1OqU7NcgLMu82w9EPt4INTIDRrOjjduwygCGVp4NO2mbJ0ncGVjhNSOhwGG
+ WzroZwl4kI6EyLdHR_9ByoZPDiX8ZwnndqMvB2AQlH8znUAwSmWknyKxBIxaFwtPEWvYgiR0Jssi
+ 345DCR6mFXP2jlEnOzeLib48xo4psO2yq7Q4I9oSPqzI3VFXYiE6pd.x2uHNzLhKApXYmbj1NT1P
+ FvyEYgKIixMKag0lVIXMfkWg2N.vWl29mwpLks0GSufqDaore2rJxFLT_txsRHR4uB5jhUGLXvSB
+ 479jMtNfcoutSQvFjpMTAqBj12_xK_A66ItvWaNOPs.aghuwijBAuPsPQST9LBur4RiZERTKu.CD
+ _aGZ2ButJUkh3ldMkUY5HelBig.xSGusNci5BNCHrerFW9gxeoYL2MkPZrUJA50ltUV1Khe5I._I
+ doYNLsdtZWuBJwVtolqPq.aVs5Qk0e_Vw9UG4jBT_Vqy3HQJ0yPkhXeBB8efX4Re1Hv88l_ygIfN
+ ZpKi81dSiYCUlbujzMAscqZyj8kmQmT16UDgkJv3y_8eZ18E3DiSUputUK0Tx7hf1d8xrFW1QMj.
+ aK.gbRODmwrBrGAjMqcvS
+X-Sonic-MF: <brchuckz@aim.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.gq1.yahoo.com with HTTP; Tue, 16 Aug 2022 17:28:46 +0000
+Received: by hermes--production-bf1-7586675c46-6jlzf (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID f5181726492e835e0f6b4b78a77ba927;
+          Tue, 16 Aug 2022 17:28:40 +0000 (UTC)
+Message-ID: <5c40a423-f70a-abb8-360c-a601c5b157fe@netscape.net>
+Date:   Tue, 16 Aug 2022 13:28:36 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        regressions@lists.linux.dev, xen-devel@lists.xenproject.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Juergen Gross <jgross@suse.com>
+References: <20220715142549.25223-1-jgross@suse.com>
+ <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
+ <a0ce2f59-b653-fa8b-a016-1335f05c86ae@netscape.net>
+ <32ed59c9-c894-c426-dd27-3602625cf3b1@netscape.net>
+ <c88ea08c-a9d5-ef6a-333a-db9e00c6da6f@suse.com>
+ <bd66b5bc-4d07-d968-f46c-40cf624499a7@netscape.net>
+ <a29a66e0-2075-8084-84ad-8bd3e8a9fd4a@netscape.net>
+ <a7d10605-87e3-c4bd-4a76-f07a04f5751c@leemhuis.info>
+ <8d148826-62a5-95f9-8662-be14f56a6336@netscape.net>
+ <6b40ecc3-a2d3-3efd-4a19-2faf737f098b@leemhuis.info>
+ <be9d077c-ed4d-d5e3-a134-33afff027af4@netscape.net>
+ <6294958a-177a-5c67-47c6-3a95c23ac58e@leemhuis.info>
+Content-Language: en-US
+From:   Chuck Zmudzinski <brchuckz@netscape.net>
+In-Reply-To: <6294958a-177a-5c67-47c6-3a95c23ac58e@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20531 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,264 +99,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that dma-iommu.h only contains internal interfaces, make it
-private to the IOMMU subsytem.
+On 8/16/2022 12:53 PM, Thorsten Leemhuis wrote:
+> On 16.08.22 18:16, Chuck Zmudzinski wrote:
+> > On 8/16/2022 10:41 AM, Thorsten Leemhuis wrote:
+> >> On 15.08.22 20:17, Chuck Zmudzinski wrote:
+> >>> On 8/15/2022 2:00 PM, Thorsten Leemhuis wrote:
+> >>>
+> >>>> And FWIW: I've seen indicators that a solution to resolve this is
+> >>>> hopefully pretty close now.
+> >>> That's good to know. But I must ask, can you provide a link to a public
+> >>> discussion that indicates a fix is close?
+> >> I just searched for the commit id of the culprit yesterday like this:
+> >> https://lore.kernel.org/all/?q=bdd8b6c982*
+> >>
+> >> Which brought me to this message, which looks like Boris applied a
+> >> slightly(?) modified version of Jan's patch to a branch that afaik is
+> >> regularly pushed to Linus:
+> >> https://lore.kernel.org/all/166055884287.401.612271624942869534.tip-bot2@tip-bot2/
+> >>
+> >> So unless problems show up in linux-next I expect this will land in
+> >> master soon (and a bit later be backported to stable due to the CC
+> >> stable tag).
+> > 
+> > OK, that's exactly the kind of thing I am looking for. It would be
+> > nice if regzbot could have found that patch in that tree and
+> > display it in the web interface as a notable patch. Currently,
+> > regzbot is only linking to a dead patch that does not even fix
+> > the regression as a notable patch associated with this regression.
+> > 
+> > If regzbot is not yet smart enough to find it, could you take the
+> > time to manually intervene with a regzbot command so that
+> > patch is displayed as a notable patch for this regression?
+>
+> regzbot will notice when the patch hit's Linux next,
 
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
- drivers/acpi/viot.c                          |  1 -
- drivers/gpu/drm/exynos/exynos_drm_dma.c      |  1 -
- drivers/iommu/amd/iommu.c                    |  2 +-
- drivers/iommu/apple-dart.c                   |  3 ++-
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c  |  2 +-
- drivers/iommu/arm/arm-smmu/arm-smmu.c        |  2 +-
- drivers/iommu/dma-iommu.c                    |  3 ++-
- {include/linux => drivers/iommu}/dma-iommu.h | 17 +----------------
- drivers/iommu/intel/iommu.c                  |  2 +-
- drivers/iommu/iommu.c                        |  3 ++-
- drivers/iommu/virtio-iommu.c                 |  3 ++-
- 11 files changed, 13 insertions(+), 26 deletions(-)
- rename {include/linux => drivers/iommu}/dma-iommu.h (67%)
+IIUC, regzbot might not notice because the patch lacks a Link: tag
+to the original regression report. The Link tag is to Jan's patch
+that was posted sometime in April, I think, which also lacks the
+Link tag to the original report of the regression which did not
+happen until May 4. If regzbot is smart enough to notice that the
+patch also has a Fixes: tag for the commit that was identified as
+bad in the original regression report, then I expect regzbot will
+find it.
 
-diff --git a/drivers/acpi/viot.c b/drivers/acpi/viot.c
-index 6132092dab2a..ed752cbbe636 100644
---- a/drivers/acpi/viot.c
-+++ b/drivers/acpi/viot.c
-@@ -19,7 +19,6 @@
- #define pr_fmt(fmt) "ACPI: VIOT: " fmt
- 
- #include <linux/acpi_viot.h>
--#include <linux/dma-iommu.h>
- #include <linux/fwnode.h>
- #include <linux/iommu.h>
- #include <linux/list.h>
-diff --git a/drivers/gpu/drm/exynos/exynos_drm_dma.c b/drivers/gpu/drm/exynos/exynos_drm_dma.c
-index d819ee69dfb7..7012aa8ed4c6 100644
---- a/drivers/gpu/drm/exynos/exynos_drm_dma.c
-+++ b/drivers/gpu/drm/exynos/exynos_drm_dma.c
-@@ -4,7 +4,6 @@
- // Author: Inki Dae <inki.dae@samsung.com>
- // Author: Andrzej Hajda <a.hajda@samsung.com>
- 
--#include <linux/dma-iommu.h>
- #include <linux/dma-map-ops.h>
- #include <linux/iommu.h>
- #include <linux/platform_device.h>
-diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-index 2df1bfa884e5..b339bf13259d 100644
---- a/drivers/iommu/amd/iommu.c
-+++ b/drivers/iommu/amd/iommu.c
-@@ -18,7 +18,6 @@
- #include <linux/scatterlist.h>
- #include <linux/dma-map-ops.h>
- #include <linux/dma-direct.h>
--#include <linux/dma-iommu.h>
- #include <linux/iommu-helper.h>
- #include <linux/delay.h>
- #include <linux/amd-iommu.h>
-@@ -40,6 +39,7 @@
- #include <asm/dma.h>
- 
- #include "amd_iommu.h"
-+#include "../dma-iommu.h"
- #include "../irq_remapping.h"
- 
- #define CMD_SET_TYPE(cmd, t) ((cmd)->data[1] |= ((t) << 28))
-diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
-index ed6b5fa538af..716f34a768b1 100644
---- a/drivers/iommu/apple-dart.c
-+++ b/drivers/iommu/apple-dart.c
-@@ -15,7 +15,6 @@
- #include <linux/bitfield.h>
- #include <linux/clk.h>
- #include <linux/dev_printk.h>
--#include <linux/dma-iommu.h>
- #include <linux/dma-mapping.h>
- #include <linux/err.h>
- #include <linux/interrupt.h>
-@@ -33,6 +32,8 @@
- #include <linux/swab.h>
- #include <linux/types.h>
- 
-+#include "dma-iommu.h"
-+
- #define DART_MAX_STREAMS 16
- #define DART_MAX_TTBR 4
- #define MAX_DARTS_PER_DEVICE 2
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index c13b46a15dcb..f1785e518a90 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -14,7 +14,6 @@
- #include <linux/bitops.h>
- #include <linux/crash_dump.h>
- #include <linux/delay.h>
--#include <linux/dma-iommu.h>
- #include <linux/err.h>
- #include <linux/interrupt.h>
- #include <linux/io-pgtable.h>
-@@ -29,6 +28,7 @@
- #include <linux/platform_device.h>
- 
- #include "arm-smmu-v3.h"
-+#include "../../dma-iommu.h"
- #include "../../iommu-sva-lib.h"
- 
- static bool disable_bypass = true;
-diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-index 2cece34f4824..c30f82c19240 100644
---- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
-+++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-@@ -21,7 +21,6 @@
- #include <linux/acpi_iort.h>
- #include <linux/bitfield.h>
- #include <linux/delay.h>
--#include <linux/dma-iommu.h>
- #include <linux/dma-mapping.h>
- #include <linux/err.h>
- #include <linux/interrupt.h>
-@@ -40,6 +39,7 @@
- #include <linux/fsl/mc.h>
- 
- #include "arm-smmu.h"
-+#include "../../dma-iommu.h"
- 
- /*
-  * Apparently, some Qualcomm arm64 platforms which appear to expose their SMMU
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index 6809b33ac9df..9297b741f5e8 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -13,7 +13,6 @@
- #include <linux/crash_dump.h>
- #include <linux/device.h>
- #include <linux/dma-direct.h>
--#include <linux/dma-iommu.h>
- #include <linux/dma-map-ops.h>
- #include <linux/gfp.h>
- #include <linux/huge_mm.h>
-@@ -30,6 +29,8 @@
- #include <linux/swiotlb.h>
- #include <linux/vmalloc.h>
- 
-+#include "dma-iommu.h"
-+
- struct iommu_dma_msi_page {
- 	struct list_head	list;
- 	dma_addr_t		iova;
-diff --git a/include/linux/dma-iommu.h b/drivers/iommu/dma-iommu.h
-similarity index 67%
-rename from include/linux/dma-iommu.h
-rename to drivers/iommu/dma-iommu.h
-index e83de4f1f3d6..c6d0235feb6e 100644
---- a/include/linux/dma-iommu.h
-+++ b/drivers/iommu/dma-iommu.h
-@@ -5,15 +5,10 @@
- #ifndef __DMA_IOMMU_H
- #define __DMA_IOMMU_H
- 
--#include <linux/errno.h>
--#include <linux/types.h>
-+#include <linux/iommu.h>
- 
- #ifdef CONFIG_IOMMU_DMA
--#include <linux/dma-mapping.h>
--#include <linux/iommu.h>
--#include <linux/msi.h>
- 
--/* Domain management interface for IOMMU drivers */
- int iommu_get_dma_cookie(struct iommu_domain *domain);
- void iommu_put_dma_cookie(struct iommu_domain *domain);
- 
-@@ -21,16 +16,10 @@ int iommu_dma_init_fq(struct iommu_domain *domain);
- 
- void iommu_dma_get_resv_regions(struct device *dev, struct list_head *list);
- 
--void iommu_dma_free_cpu_cached_iovas(unsigned int cpu,
--		struct iommu_domain *domain);
--
- extern bool iommu_dma_forcedac;
- 
- #else /* CONFIG_IOMMU_DMA */
- 
--struct iommu_domain;
--struct device;
--
- static inline int iommu_dma_init_fq(struct iommu_domain *domain)
- {
- 	return -EINVAL;
-@@ -45,9 +34,5 @@ static inline void iommu_put_dma_cookie(struct iommu_domain *domain)
- {
- }
- 
--static inline void iommu_dma_get_resv_regions(struct device *dev, struct list_head *list)
--{
--}
--
- #endif	/* CONFIG_IOMMU_DMA */
- #endif	/* __DMA_IOMMU_H */
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 9441c070c811..4375d1ee9389 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -15,7 +15,6 @@
- 
- #include <linux/crash_dump.h>
- #include <linux/dma-direct.h>
--#include <linux/dma-iommu.h>
- #include <linux/dmi.h>
- #include <linux/intel-svm.h>
- #include <linux/memory.h>
-@@ -26,6 +25,7 @@
- #include <linux/tboot.h>
- 
- #include "iommu.h"
-+#include "../dma-iommu.h"
- #include "../irq_remapping.h"
- #include "../iommu-sva-lib.h"
- #include "pasid.h"
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index 07eda7c41aee..862d4e73efd2 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -8,7 +8,6 @@
- 
- #include <linux/amba/bus.h>
- #include <linux/device.h>
--#include <linux/dma-iommu.h>
- #include <linux/kernel.h>
- #include <linux/bits.h>
- #include <linux/bug.h>
-@@ -30,6 +29,8 @@
- #include <linux/cc_platform.h>
- #include <trace/events/iommu.h>
- 
-+#include "dma-iommu.h"
-+
- static struct kset *iommu_group_kset;
- static DEFINE_IDA(iommu_group_ida);
- 
-diff --git a/drivers/iommu/virtio-iommu.c b/drivers/iommu/virtio-iommu.c
-index bdae3939260a..e355cb5d1e5b 100644
---- a/drivers/iommu/virtio-iommu.c
-+++ b/drivers/iommu/virtio-iommu.c
-@@ -8,7 +8,6 @@
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/delay.h>
--#include <linux/dma-iommu.h>
- #include <linux/dma-map-ops.h>
- #include <linux/freezer.h>
- #include <linux/interval_tree.h>
-@@ -23,6 +22,8 @@
- 
- #include <uapi/linux/virtio_iommu.h>
- 
-+#include "dma-iommu.h"
-+
- #define MSI_IOVA_BASE			0x8000000
- #define MSI_IOVA_LENGTH			0x100000
- 
--- 
-2.36.1.dirty
+Best regards,
 
+Chuck

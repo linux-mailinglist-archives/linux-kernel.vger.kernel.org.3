@@ -2,64 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B9959562E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2B059563A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232931AbiHPJ00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44570 "EHLO
+        id S232609AbiHPJ2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233023AbiHPJZx (ORCPT
+        with ESMTP id S232344AbiHPJ2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:25:53 -0400
-Received: from mx1.emlix.com (mx1.emlix.com [136.243.223.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5422D12D05;
-        Tue, 16 Aug 2022 00:42:19 -0700 (PDT)
-Received: from mailer.emlix.com (p5098be52.dip0.t-ipconnect.de [80.152.190.82])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.emlix.com (Postfix) with ESMTPS id 3553160763;
-        Tue, 16 Aug 2022 09:42:17 +0200 (CEST)
-Date:   Tue, 16 Aug 2022 09:42:16 +0200
-From:   Daniel =?iso-8859-1?Q?Gl=F6ckner?= <dg@emlix.com>
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>, mdf@kernel.org,
-        hao.wu@intel.com, trix@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        system@metrotek.ru
-Subject: Re: [PATCH v6 1/2] fpga: ecp5-spi: add Lattice ECP5 FPGA manager
-Message-ID: <20220816074216.GA31706@homes.emlix.com>
-References: <20220815132157.8083-1-i.bornyakov@metrotek.ru>
- <20220815132157.8083-2-i.bornyakov@metrotek.ru>
- <Yvr6SY5WGXlYiLig@yilunxu-OptiPlex-7050>
- <20220816045841.irhr5vigemdqknaw@x260>
- <Yvs0jieXsyzhn8q9@yilunxu-OptiPlex-7050>
+        Tue, 16 Aug 2022 05:28:10 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162BF63E3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:46:14 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M6NRf3jXNzlVhj;
+        Tue, 16 Aug 2022 15:43:10 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 16 Aug 2022 15:46:12 +0800
+Received: from huawei.com (10.67.174.169) by dggpemm500001.china.huawei.com
+ (7.185.36.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 16 Aug
+ 2022 15:46:12 +0800
+From:   Chen Lifu <chenlifu@huawei.com>
+To:     <linux@armlinux.org.uk>, <akpm@linux-foundation.org>,
+        <bhe@redhat.com>, <pmladek@suse.com>, <kexec@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <linux-kernel@vger.kernel.org>, <chenlifu@huawei.com>
+Subject: [PATCH -next] ARM: kexec: Make machine_crash_nonpanic_core() static
+Date:   Tue, 16 Aug 2022 15:42:50 +0800
+Message-ID: <20220816074250.3991633-1-chenlifu@huawei.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yvs0jieXsyzhn8q9@yilunxu-OptiPlex-7050>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.169]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 02:09:18PM +0800, Xu Yilun wrote:
-> We don't have to make everything fine, but start with machxo2 and ecp5
-> first. If the change affects machxo2, other people may help.
+This symbol is not used outside of the file, so mark it static.
 
-Programming MachXO* chips uses different sequences of commands. With ECP5
-you put the chip into configuration mode and then upload the bitstream
-into RAM cells. With MachXO chips you write the bitstream to non-volatile
-storage and then tell the chip to go into configuration mode where it
-automatically loads the bitstream from non-volatile storage. There is no
-way to directly write the RAM cells.
+Fixes the following warning:
 
-Best regards,
+arch/arm/kernel/machine_kexec.c:76:6: warning: symbol 'machine_crash_nonpanic_core' was not declared. Should it be static?
 
-  Daniel
+Signed-off-by: Chen Lifu <chenlifu@huawei.com>
+---
+ arch/arm/kernel/machine_kexec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/kernel/machine_kexec.c b/arch/arm/kernel/machine_kexec.c
+index f567032a09c0..a2e9ac763a9f 100644
+--- a/arch/arm/kernel/machine_kexec.c
++++ b/arch/arm/kernel/machine_kexec.c
+@@ -71,11 +71,11 @@ int machine_kexec_prepare(struct kimage *image)
+ 
+ void machine_kexec_cleanup(struct kimage *image)
+ {
+ }
+ 
+-void machine_crash_nonpanic_core(void *unused)
++static void machine_crash_nonpanic_core(void *unused)
+ {
+ 	struct pt_regs regs;
+ 
+ 	crash_setup_regs(&regs, get_irq_regs());
+ 	printk(KERN_DEBUG "CPU %u will stop doing anything useful since another CPU has crashed\n",
+-- 
+2.37.1
+

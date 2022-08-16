@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26BC4596106
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F057596123
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234340AbiHPRXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 13:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
+        id S236203AbiHPR2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 13:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbiHPRXe (ORCPT
+        with ESMTP id S233727AbiHPR2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 13:23:34 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1A36390;
-        Tue, 16 Aug 2022 10:23:31 -0700 (PDT)
-X-QQ-mid: bizesmtp67t1660670602t07ismjf
-Received: from harry-jrlc.. ( [182.148.12.144])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 17 Aug 2022 01:23:11 +0800 (CST)
-X-QQ-SSF: 0100000000200060D000B00A0000020
-X-QQ-FEAT: 7L1V3dHhUFOfrXcLe5fWClKG+8D1dNxLwt1NI5KRaUqLUr7x0f7ef9UW0l2/8
-        dXJin9wACu/JKd1EY4RoPJXQg7WNzCi+uQPl3JkyG6I1mfHi9gQBsxj0u+Sq+1UL9ZqmndH
-        lZNMLYVaL6YOPGGgXTuF1gzYJqv6QXC74rR9CONOZUkvnMk2rGH1fKGi4uOc+ShWDjlHGH1
-        FBZR2p9yD6LGbexuSUV9W0FgnIT1v/ELCeRk5fPVG//i8l40YdAEKy53BLZ9BFnbdL413yR
-        /YKoG4+iq9kjLX9VXgriHyXn7v9KSbKLF0fAuiOZydTrtaLI/4/KvL92AwEgUJggEWVJZjP
-        sk2DfPFopAsTxMznZY2vCxxQS33O/L7EbmQcmh/7Iv5GfOdmONHD5ymLclu1A==
-X-QQ-GoodBg: 0
-From:   Xin Gao <gaoxin@cdjrlc.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com
-Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xin Gao <gaoxin@cdjrlc.com>
-Subject: [PATCH] tools: hv: Fix comment typo
-Date:   Wed, 17 Aug 2022 01:23:09 +0800
-Message-Id: <20220816172309.7072-1-gaoxin@cdjrlc.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 16 Aug 2022 13:28:15 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1310D2BF2;
+        Tue, 16 Aug 2022 10:28:11 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E8497106F;
+        Tue, 16 Aug 2022 10:28:11 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0C37E3F67D;
+        Tue, 16 Aug 2022 10:28:08 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     joro@8bytes.org
+Cc:     will@kernel.org, catalin.marinas@arm.com, jean-philippe@linaro.org,
+        inki.dae@samsung.com, sw0312.kim@samsung.com,
+        kyungmin.park@samsung.com, tglx@linutronix.de, maz@kernel.org,
+        alex.williamson@redhat.com, cohuck@redhat.com,
+        iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-acpi@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [PATCH 0/3] iommu/dma: Some housekeeping
+Date:   Tue, 16 Aug 2022 18:28:02 +0100
+Message-Id: <cover.1660668998.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.36.1.dirty
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,26 +45,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `the' is duplicated in the comment, remove one.
+Hi All,
 
-Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
----
- tools/hv/hv_kvp_daemon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It's been a while now since iommu-dma grew from a library of DMA ops
+helpers for arch code into something more abstracted and closely coupled
+to the IOMMU API core, so it seemed about time to do some housekeeping
+in the more neglected areas to reflect that.
 
-diff --git a/tools/hv/hv_kvp_daemon.c b/tools/hv/hv_kvp_daemon.c
-index 1e6fd6ca513b..d5ddab830b6b 100644
---- a/tools/hv/hv_kvp_daemon.c
-+++ b/tools/hv/hv_kvp_daemon.c
-@@ -43,7 +43,7 @@
- #include <getopt.h>
- 
- /*
-- * KVP protocol: The user mode component first registers with the
-+ * KVP protocol: The user mode component first registers with
-  * the kernel component. Subsequently, the kernel component requests, data
-  * for the specified keys. In response to this message the user mode component
-  * fills in the value corresponding to the specified key. We overload the
+The header reorganisation does touch a range of areas (a couple of which
+seemingly had no reason to be involved anyway), but hopefully these are
+all low-impact changes that nobody minds going through the IOMMU tree.
+
+Now for the build-bots to tell me what I've missed...
+
+Thanks,
+Robin.
+
+
+Robin Murphy (3):
+  iommu/dma: Clean up Kconfig
+  iommu/dma: Move public interfaces to linux/iommu.h
+  iommu/dma: Make header private
+
+ arch/arm64/Kconfig                          |  1 -
+ arch/arm64/mm/dma-mapping.c                 |  2 +-
+ drivers/acpi/viot.c                         |  1 -
+ drivers/gpu/drm/exynos/exynos_drm_dma.c     |  1 -
+ drivers/iommu/Kconfig                       |  3 +-
+ drivers/iommu/amd/Kconfig                   |  1 -
+ drivers/iommu/amd/iommu.c                   |  2 +-
+ drivers/iommu/apple-dart.c                  |  3 +-
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c |  2 +-
+ drivers/iommu/arm/arm-smmu/arm-smmu.c       |  2 +-
+ drivers/iommu/dma-iommu.c                   | 18 +++-
+ drivers/iommu/dma-iommu.h                   | 38 +++++++++
+ drivers/iommu/intel/Kconfig                 |  1 -
+ drivers/iommu/intel/iommu.c                 |  2 +-
+ drivers/iommu/iommu.c                       |  3 +-
+ drivers/iommu/virtio-iommu.c                |  3 +-
+ drivers/irqchip/irq-gic-v2m.c               |  2 +-
+ drivers/irqchip/irq-gic-v3-its.c            |  2 +-
+ drivers/irqchip/irq-gic-v3-mbi.c            |  2 +-
+ drivers/irqchip/irq-ls-scfg-msi.c           |  2 +-
+ drivers/vfio/vfio_iommu_type1.c             |  1 -
+ include/linux/dma-iommu.h                   | 93 ---------------------
+ include/linux/iommu.h                       | 36 ++++++++
+ 23 files changed, 105 insertions(+), 116 deletions(-)
+ create mode 100644 drivers/iommu/dma-iommu.h
+ delete mode 100644 include/linux/dma-iommu.h
+
 -- 
-2.30.2
+2.36.1.dirty
 

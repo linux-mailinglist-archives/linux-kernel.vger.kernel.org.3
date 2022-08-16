@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BEB55963E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D345963E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237179AbiHPUpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 16:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55216 "EHLO
+        id S237241AbiHPUqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 16:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237207AbiHPUol (ORCPT
+        with ESMTP id S229524AbiHPUqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 16:44:41 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C093696EC;
-        Tue, 16 Aug 2022 13:44:36 -0700 (PDT)
-Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M6jgf5VMJz67N4d;
-        Wed, 17 Aug 2022 04:39:42 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 16 Aug 2022 22:44:34 +0200
-Received: from [10.195.244.204] (10.195.244.204) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 16 Aug 2022 21:44:33 +0100
-Message-ID: <c93e529d-b688-9910-50c4-779c2f85fbc3@huawei.com>
-Date:   Tue, 16 Aug 2022 21:44:33 +0100
+        Tue, 16 Aug 2022 16:46:07 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D3A88DEE;
+        Tue, 16 Aug 2022 13:46:04 -0700 (PDT)
+Received: from [192.168.1.138] ([37.4.248.80]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MO9r5-1o0Dxc2Fk9-00OTr7; Tue, 16 Aug 2022 22:45:49 +0200
+Message-ID: <b8a5e43a-4d1e-aede-e0f7-f731fd8acf1d@i2se.com>
+Date:   Tue, 16 Aug 2022 22:45:48 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
- regression
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Oliver Sang <oliver.sang@intel.com>
-CC:     Christoph Hellwig <hch@lst.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Linux Memory Management List" <linux-mm@kvack.org>,
-        <linux-ide@vger.kernel.org>, <lkp@lists.01.org>, <lkp@intel.com>,
-        <ying.huang@intel.com>, <feng.tang@intel.com>,
-        <zhengjun.xing@linux.intel.com>, <fengwei.yin@intel.com>
-References: <YuzPMMnnY739Tnit@xsang-OptiPlex-9020>
- <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
- <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
- <e4106ffa-3842-45c0-9756-5226cfcfa17d@opensource.wdc.com>
- <YvXeuCAK780OuJPz@xsang-OptiPlex-9020>
- <2e9cf5a6-c043-5ccf-e363-097c6c941891@huawei.com>
- <f1c3d717-339d-ba2b-9775-fc0e00f57ae3@huawei.com>
- <Yvs/w93KUkgD9f7/@xsang-OptiPlex-9020>
- <aabf7ed8-8d4d-dc68-1b8b-c91653701def@huawei.com>
- <43eaa104-5b09-072c-56aa-6289569b0015@opensource.wdc.com>
- <28d6e48b-f52f-9467-8260-262504a1a1ff@huawei.com>
- <05a48c68-33ae-10e2-e565-6c124bad93c5@opensource.wdc.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <05a48c68-33ae-10e2-e565-6c124bad93c5@opensource.wdc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [Regression] ext4: changes to mb_optimize_scan cause issues on
+ Raspberry Pi
+Content-Language: en-US
+To:     Jan Kara <jack@suse.cz>
+Cc:     linux-ext4@vger.kernel.org, Ojaswin Mujoo <ojaswin@linux.ibm.com>,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geetika.Moolchandani1@ibm.com, regressions@lists.linux.dev,
+        Florian Fainelli <f.fainelli@gmail.com>
+References: <0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com>
+ <20220728100055.efbvaudwp3ofolpi@quack3>
+ <64b7899f-d84d-93de-f9c5-49538bd080d0@i2se.com>
+ <20220816093421.ok26tcyvf6bm3ngy@quack3>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <20220816093421.ok26tcyvf6bm3ngy@quack3>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.244.204]
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+X-Provags-ID: V03:K1:QATVIxUIzO4XNP67B+8HP4QQNAu7SDUyzpY148ZnYDJfs7tnRBJ
+ P4nHE8TnbMh+WgAS4rs/lgc7XTshocNV1OpZ44YQvy18WcgxRaLBk+kobb43uc74GoOFyUp
+ gR19howWA1OqDL8Aq7YNa5EhexZE8b5NFYrK0PM4hMG49wBDM/sICkgNrOWNn1soXhDp+O8
+ TqJAbNdm7pr3HJsnooNqA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Dra9fYDHkDA=:LvzOC2xL//tX1hAXYwU6nP
+ Xf8alCLDOQOQVZ1lFlSGB67f41WkgrfgssPP1f4+UaS3E3TG4cGF0tsXcRWiFUN4G9iS0FMah
+ PfPmyvrCtS0hTE2PxsxyoA1jZttLzTnGWoDD72bDtMalXNh1BJFx5BL/JHLMMg3C9T2xCgBO+
+ EaeBMnfhvgUCiVIuJC+xJJ19ULU0VIr/x+NclzX0Awh8QgGj0ImzqqW6lPtkTOwcjplQGXpXV
+ qJFD/Nyy9NrT9TcSNnL2urdRZh0Sdt79CcFlGiqyLGHsEPHQly2MOS1R980Pfwz9dk/vwgBx3
+ 8PM0SILNrkSW57E/ebKxgzhzoWcg9e+4CP4PT8gKy0z+owfBgbry7NQLrni4dLDgiRa+/KCGJ
+ S4k8aA9an1czUvCWKOvTghF0ItEE65m3HK7p+9LZn4gYRCzdRwjtlnnfJl/NjzV5dilVZHEip
+ vuNDwZr+qi3FJdRwvayJafSpWBulsOcNVXpxnmQmQFWcYKGue2BSPk6bVefWqWYKTqSQrmybU
+ LSzgd0IRYtVKNnYn7HvQ91MwBCDATC4NMyvdboc0p6smOgcwuixLPz23NBibReFoPTuMfvES0
+ qELwYqY1vOAGwZshxk9S4yHJsC5digby73z7VshICqFAvOEoUuI8C0631KS+oQ8yIKJ69a3ye
+ 8euDAUwAqvZMis6VzjlfpFpuQvvd3DrYyUIV/0ACn9+XcaOSx3E1okAxgw7RrGIVEFDXi+f+x
+ zuITU/bdK06q5H2UVfcfhxbuIaXn960VSqOyEgTHQQwhHBfaLtvHmZZdZoc=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,92 +68,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/08/2022 21:02, Damien Le Moal wrote:
->> ou confirm this? Thanks!
->>
->> On this basis, it appears that max_hw_sectors_kb is getting capped from
->> scsi default @ 1024 sectors by commit 0568e61225. If it were getting
->> capped by swiotlb mapping limit then that would give us 512 sectors -
->> this value is fixed.
->>
->> So for my SHT change proposal I am just trying to revert to previous
->> behaviour in 5.19 - make max_hw_sectors_kb crazy big again.
-> I reread the entire thing and I think I got things reverted here. The perf
-> regression happens with the 512/512 settings, while the original 1280/32767
-> before your patches was OK.
+Hi Jan,
 
-Right, that's as I read it. It would be useful for Oliver to confirm the 
-results.
+Am 16.08.22 um 11:34 schrieb Jan Kara:
+> Hi Stefan!
+> So this is interesting. We can see the card is 100% busy. The IO submitted
+> to the card is formed by small requests - 18-38 KB per request - and each
+> request takes 0.3-0.5s to complete. So the resulting throughput is horrible
+> - only tens of KB/s. Also we can see there are many IOs queued for the
+> device in parallel (aqu-sz columnt). This does not look like load I would
+> expect to be generated by download of a large file from the web.
+>
+> You have mentioned in previous emails that with dd(1) you can do couple
+> MB/s writing to this card which is far more than these tens of KB/s. So the
+> file download must be doing something which really destroys the IO pattern
+> (and with mb_optimize_scan=0 ext4 happened to be better dealing with it and
+> generating better IO pattern). Can you perhaps strace the process doing the
+> download (or perhaps strace -f the whole rpi-update process) so that we can
+> see how does the load generated on the filesystem look like? Thanks!
 
-> So is your patch defining the optimal mapping size
-> cause the reduction to 512/512.
+i didn't create the strace yet, but i looked at the source of 
+rpi-update. At the end the download phase is a curl call to download a 
+tar archive and pipe it directly to tar.
 
-The optimal mapping size only affects specifically sas controllers, so I 
-think that we can ignore that one for now. The reduction to 512/512 
-comes from the change in ata_scsi_dev_config().
+You can find the content list of the tar file here:
 
-> It would mean that for ATA, we need a sane
-> default mapping instead of SCSI default 1024 sectors.
+https://raw.githubusercontent.com/lategoodbye/mb_optimize_scan_regress/main/rpi-firmware-tar-content-list.txt
 
-Right
+Best regards
 
-> Now I understand your
-> proposed change using ATA_MAX_SECTORS_LBA48.
-> 
-> However, that would be correct only for LBA48 capable drives.
-> ata_dev_configure() already sets dev->max_sectors correctly according to the
-> drive type, capabilities and eventual quirks. So the problem comes from the
-> libata-scsi change:
-> 
-> dev->max_sectors = min(dev->max_sectors, sdev->host->max_sectors);
-> 
-> when sdev->host->max_sectors is 0 (not initialized).
-
-That cannot happen. If sht->max_sectors is 0, then we set 
-shost->max_sectors at SCSI default 1024 sectors in scsi_host_alloc()
-
-For my proposed change, dev->max_sectors would still be initialized in 
-ata_dev_configure() according to drive type, etc. And it should be <= 
-LBA48 max sectors (=65535).
-
-So then in ata_scsi_dev_config():
-
-dev->max_sectors = min(dev->max_sectors, sdev->host->max_sectors)
-
-this only has an impact for ahci controllers if sdev->host->max_sectors 
-was capped according to host dma dev max mapping size.
-
-I will admit that this is not ideal. An alt approach is to change 
-ata_scsi_dev_config() to cap the dev max_sectors only according to shost 
-dma dev mapping limit (similar to scsi_add_host_with_dma()), but that 
-would not work for a controller like ipr, which does have a geniune 
-max_sectors limit (which we should respect).
-
-Thanks,
-John
-
-
-> So maybe simply changing
-> this line to:
-> 
-> dev->max_sectors = min_not_zero(dev->max_sectors, sdev->host->max_sectors);
-> 
-> would do the trick ? Any particular adapter driver that needs a mapping cap on
-> the adpter max mapping size can still set sdev->host->max_sectors as needed, and
-> we keep the same defaults as before when it is not set. Thoughts ? Or am I
-> missing something else ?
-> 
-> 
->>> The regression may come not from commands becoming tiny, but from the fact that
->>> after the patch, max_sectors_kb is too large,
->> I don't think it is, but need confirmation.
->>
->>> causing a lot of overhead with
->>> qemu swiotlb mapping and slowing down IO processing.
->>> Above, it can be seen that we ed up with max_sectors_kb being 1280, which is the
->>> default for most scsi disks (including ATA drives). That is normal. But before
->>> that, it was 512, which likely better fits qemu swiotlb and does not generate
->> Again, I don't think this this is the case. Need confirmation.
->>
->>> overhead. So the above fix will not change anything I think...
-
+>
+> 								Honza

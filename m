@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA845962D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F835962D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236805AbiHPTFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 15:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
+        id S236828AbiHPTHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 15:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233407AbiHPTFH (ORCPT
+        with ESMTP id S232426AbiHPTG6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 15:05:07 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373205D11B;
-        Tue, 16 Aug 2022 12:05:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660676706; x=1692212706;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fw20SIT8UosrRyl9DK6OBZL1qLEKx8DhIicuKy/Nujk=;
-  b=SnNSVFEk85LBDnsXbOkaF8x8PpODHWIDJy4HMvCyGD3KUQuW8ubWWXjA
-   LIntEJ5fTonYNRom/cc+Oft1hEiEhVRQF3VlGscnTYKJuai0JdC8/u5un
-   E/9BL6BsZyI+FVWgYxNBusc2ER2uL/32wqE4dN9NZ0B+p9k/FsRtAQEhf
-   Gd++bdbMCa6IUdXOJba3EQAHTqOqLhQqt0dU+tjhYnHpyrl6pYjOY8DxF
-   CYlZHPpJiImiQc4Sk9H0dfQzS8lS4U29MiMAWnEvcIBbG+efhhiyETcMB
-   l0Xms4HvceCog37hBLLvAFpkGPdwwJCH5q0KPjh9VvFMP+j7crfVPPhqQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="292303577"
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="292303577"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 12:05:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="733409002"
-Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 16 Aug 2022 12:04:59 -0700
-Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oO1s3-00009Y-0i;
-        Tue, 16 Aug 2022 19:04:59 +0000
-Date:   Wed, 17 Aug 2022 03:04:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Frank Li <Frank.Li@nxp.com>, maz@kernel.org, tglx@linutronix.de,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kw@linux.com,
-        bhelgaas@google.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        peng.fan@nxp.com, aisheng.dong@nxp.com, jdmason@kudzu.us,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        kishon@ti.com, lorenzo.pieralisi@arm.com, ntb@lists.linux.dev,
-        lznuaa@gmail.com
-Subject: Re: [PATCH v5 2/4] irqchip: Add IMX MU MSI controller driver
-Message-ID: <202208170210.zGxvHnIZ-lkp@intel.com>
-References: <20220815213936.2380439-3-Frank.Li@nxp.com>
+        Tue, 16 Aug 2022 15:06:58 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6915E564
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:06:56 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id w3so14726596edc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:06:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=V2QDhboqj77NKyf66QBCtHxywV+jAWhOSGInRii+7N4=;
+        b=aTywxyO/naqkVaqu6CsWqQ4PPO1CIio2rPyfPGFiE5xXLbboCCP+GlyftE+iVUXVwM
+         xCT4teWH/35wMCxXLGl9VM67w3ZAu7K5K+DZMf6AYxALhnZ3cHcjnHETO/5VY2YIpTYs
+         vyHGr9tS0lFduaUaISt5aB9HoqoqBa0GdIFmvB3t3hPBhaFsKRX249jqHqynZijUICQo
+         Wgxp1bJ+9KPw3TKB+z0A+UGC18WLh/fOvHaNlYMa9w/zliE2rjGA0smTad+/ku4oUtSa
+         YY/YZBCq3sfFPKk0m+pm+MCaDnWAmvdj46sqYIu9SVm5wF9Wns9VC/G9Xc2xsb8FeUKF
+         /9Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=V2QDhboqj77NKyf66QBCtHxywV+jAWhOSGInRii+7N4=;
+        b=qNi0HwkNFbaVBxg/ExA0Z2TyhGww75P3dedQjaiLg6THyyNdv8Ej72PNG5a+qELanq
+         m7dXt/9SjP50MaLZFI0ZOXxa+xmdqJjLP6PzLUTLzTZrH2oEUlbb0F7GK82ez+7YV14v
+         hmzuFalzSZDQuYsAlgl4Z9TMlmew1tdUwjDtNbJXFJ02CELAziZhYnKzEH5Ahl/nEpMB
+         V1zlJjQEZHZdgqsphOOasR+9fGd4hRihUEVCgyw3fnx7HswTyYgHPXePFHhCgmeUnpVP
+         oTGChbZ8u5NVYVkM7yRCcpvksZ96EFDlsGfWgDsQM+COPt9jNLmRcL/8QEKAUuJOg0To
+         OStQ==
+X-Gm-Message-State: ACgBeo24to3QnaxwQ6z5XrnmqhSLs9nXp9cTfphHnJEGGL4UgzuM/fGl
+        +mdJBsbOPYdpo+zSHitjbSUq5oeqa+0OAqm/6JJ0FA==
+X-Google-Smtp-Source: AA6agR5fGmH4oIbpN4madkpDFFRAdm9WfqzBUZxCUTtSorjB1KybIseJG1izt8/W9M5fY7evnKt8ozjCokAmLEmvkQU=
+X-Received: by 2002:a05:6402:447:b0:440:d482:495f with SMTP id
+ p7-20020a056402044700b00440d482495fmr20496006edw.264.1660676815431; Tue, 16
+ Aug 2022 12:06:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815213936.2380439-3-Frank.Li@nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220816124544.577833376@linuxfoundation.org>
+In-Reply-To: <20220816124544.577833376@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 17 Aug 2022 00:36:44 +0530
+Message-ID: <CA+G9fYsCgoqrz0inj2Lx3fPX2SbvPhvvW=s_Qfo1CWS1OrOMBw@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/778] 5.15.61-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,84 +70,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frank,
+On Tue, 16 Aug 2022 at 18:29, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.61 release.
+> There are 778 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 18 Aug 2022 12:43:40 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.61-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-I love your patch! Yet something to improve:
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-[auto build test ERROR on jonmason-ntb/ntb-next]
-[also build test ERROR on robh/for-next linus/master v6.0-rc1 next-20220816]
-[cannot apply to tip/irq/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Li/PCI-EP-driver-support-MSI-doorbell-from-host/20220816-131930
-base:   https://github.com/jonmason/ntb ntb-next
-config: arm-multi_v5_defconfig (https://download.01.org/0day-ci/archive/20220817/202208170210.zGxvHnIZ-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/71296e2ad757d90e870b2ab81f2b06b9c76e7c41
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Frank-Li/PCI-EP-driver-support-MSI-doorbell-from-host/20220816-131930
-        git checkout 71296e2ad757d90e870b2ab81f2b06b9c76e7c41
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+## Build
+* kernel: 5.15.61-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 8c2db2eab58f308a0d28c81153b59bfa5161050d
+* git describe: v5.15.60-779-g8c2db2eab58f
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.60-779-g8c2db2eab58f
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+## No test Regressions (compared to v5.15.59-31-g9c5eacc2ad1f)
 
-All errors (new ones prefixed by >>):
+## No metric Regressions (compared to v5.15.59-31-g9c5eacc2ad1f)
 
->> drivers/irqchip/irq-imx-mu-msi.c:124:13: error: use of undeclared identifier 'irq_chip_ack_parent'
-           .irq_ack = irq_chip_ack_parent,
-                      ^
-   drivers/irqchip/irq-imx-mu-msi.c:127:30: error: variable has incomplete type 'struct msi_domain_ops'
-   static struct msi_domain_ops imx_mu_msi_irq_ops = {
-                                ^
-   drivers/irqchip/irq-imx-mu-msi.c:127:15: note: forward declaration of 'struct msi_domain_ops'
-   static struct msi_domain_ops imx_mu_msi_irq_ops = {
-                 ^
-   drivers/irqchip/irq-imx-mu-msi.c:131:12: error: use of undeclared identifier 'MSI_FLAG_USE_DEF_DOM_OPS'
-           .flags  = (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS),
-                      ^
-   drivers/irqchip/irq-imx-mu-msi.c:131:39: error: use of undeclared identifier 'MSI_FLAG_USE_DEF_CHIP_OPS'
-           .flags  = (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS),
-                                                 ^
-   drivers/irqchip/irq-imx-mu-msi.c:130:31: error: variable has incomplete type 'struct msi_domain_info'
-   static struct msi_domain_info imx_mu_msi_domain_info = {
-                                 ^
-   drivers/irqchip/irq-imx-mu-msi.c:130:15: note: forward declaration of 'struct msi_domain_info'
-   static struct msi_domain_info imx_mu_msi_domain_info = {
-                 ^
-   drivers/irqchip/irq-imx-mu-msi.c:203:3: error: field designator 'alloc' does not refer to any field in type 'const struct irq_domain_ops'
-           .alloc  = imx_mu_msi_domain_irq_alloc,
-            ^
-   drivers/irqchip/irq-imx-mu-msi.c:204:3: error: field designator 'free' does not refer to any field in type 'const struct irq_domain_ops'
-           .free   = imx_mu_msi_domain_irq_free,
-            ^
-   drivers/irqchip/irq-imx-mu-msi.c:241:25: error: call to undeclared function 'platform_msi_create_irq_domain'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           msi_data->msi_domain = platform_msi_create_irq_domain(
-                                  ^
-   drivers/irqchip/irq-imx-mu-msi.c:295:32: warning: variable 'priv' set but not used [-Wunused-but-set-variable]
-           struct imx_mu_msi *msi_data, *priv;
-                                         ^
-   1 warning and 8 errors generated.
+## No test Fixes (compared to v5.15.59-31-g9c5eacc2ad1f)
 
+## No metric Fixes (compared to v5.15.59-31-g9c5eacc2ad1f)
 
-vim +/irq_chip_ack_parent +124 drivers/irqchip/irq-imx-mu-msi.c
+## Test result summary
+total: 114082, pass: 101253, fail: 610, skip: 11565, xfail: 654
 
-   121	
-   122	static struct irq_chip imx_mu_msi_irq_chip = {
-   123		.name = "MU-MSI",
- > 124		.irq_ack = irq_chip_ack_parent,
-   125	};
-   126	
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 306 total, 303 passed, 3 failed
+* arm64: 68 total, 66 passed, 2 failed
+* i386: 57 total, 51 passed, 6 failed
+* mips: 50 total, 47 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 59 total, 56 passed, 3 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 26 total, 23 passed, 3 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x86_64: 61 total, 59 passed, 2 failed
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

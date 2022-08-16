@@ -2,67 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 212BA595CE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4630595CDE
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235641AbiHPNKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
+        id S235537AbiHPNKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:10:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235642AbiHPNKj (ORCPT
+        with ESMTP id S235399AbiHPNJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 09:10:39 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09510B275D
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:10:35 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id f20so14844935lfc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:10:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=rD9PGKkXzgL1KFySy5MozS3RkXjsP+Wc7O/Cyd4VZ/Y=;
-        b=loa31jAHLNp549FJ9N0XJqCD4iy1lIHLdn8pMlMI7Prhl34LAKjjsFr87G2oOVuYyo
-         dJpbuH4wwHcNE7udmp9g/aBeH/9XIfFqGVeiA6XXqfVehsB6VBJ9K4swuuyF/n2XxnOZ
-         JDnAZpGq749q+1g2eHEvjiBnpK4UpXZRNmAi3H1j38zosJSqsenY5ImM5aWlRdexdLBk
-         ncbHrtpYhaIyM8IBKinFqTnz1WqYEdEn209FL3GIsQhuS/693nvnUWYiqwSjSyMLsyoj
-         Xv1TQi1ZA7ObWoa30LtCsO+nbek8tPY6au+tsApFxiETojE3R2voybwoRwc9bO4TCf5a
-         c64A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=rD9PGKkXzgL1KFySy5MozS3RkXjsP+Wc7O/Cyd4VZ/Y=;
-        b=sHAuPvMDwnWG2Y7mCQPBZa/pWSJsscBz20i7zcNzdwEEWXo6nh5Oz5Lkyx5GKpmNb0
-         TN0FUmysV/9M16Ti/+ntLc1S+8bZF9Peic9WF60n8MsZyB8uN7EZ29SWUmNhCMMNoGBg
-         TRBpIIteIPm2wVOSsR7PKKT3pYU9v1+5PXJLkFb2WdXgNglCxOD+mVNAVPZEkbc/zldz
-         Si89g7w17UiKjcYSo+KE3z4mN79BJ0bJvHt0+VrQcZvi2MJ0tGrJy1JlWDN8fbEu+B9t
-         jU3bU4sKygFjyBigZVs1BUjM+IR06tJaBszPCNvMvKjD4IenmI7pnvnB7dOtjBHXeSvd
-         bpSA==
-X-Gm-Message-State: ACgBeo3dXZIlKVWH0glu8T2sS+G2FtQeYOBp+k1hi9LF1b9AATmjB9Q2
-        tvMgewhtfaMwj0Z5nof6My7ViA==
-X-Google-Smtp-Source: AA6agR66f/3V9+gijF2iHMM45MRyzxqnhg1fK8rqTwv1z01+CzCLHGhuJR3/glRMCROuAkDfxVLc1A==
-X-Received: by 2002:a05:6512:3da0:b0:48b:3976:b323 with SMTP id k32-20020a0565123da000b0048b3976b323mr6979289lfv.402.1660655433383;
-        Tue, 16 Aug 2022 06:10:33 -0700 (PDT)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id h25-20020ac24d39000000b0048b2be5320csm1385568lfk.118.2022.08.16.06.10.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 06:10:33 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 2/2 v3] regmap: mmio: Support accelerared noinc operations
-Date:   Tue, 16 Aug 2022 15:08:23 +0200
-Message-Id: <20220816130823.97903-2-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220816130823.97903-1-linus.walleij@linaro.org>
-References: <20220816130823.97903-1-linus.walleij@linaro.org>
+        Tue, 16 Aug 2022 09:09:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C79B274F
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:09:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660655396;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8awJny9/ykLwiE6dZBhJI/2SwPImayCQ0hkEt7cHi1w=;
+        b=gBseYpV7MhL48gp60qum0qMeBqkls399KmMRRxsm94IidlbKD+CYJC2W5UvwgAEkJ4SJKB
+        C9OezqDmzr1hyvfSeTd3A50GMiL+31QVAH8XBYCi+v3YIYW1QlGpACXImkaIDU89tipHKx
+        PD3vf5Td6XkOkPr8i38nSQtxTrnXa78=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-645-CUgRfkWnO82eztXDflM4gA-1; Tue, 16 Aug 2022 09:09:50 -0400
+X-MC-Unique: CUgRfkWnO82eztXDflM4gA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 949E13C1014B;
+        Tue, 16 Aug 2022 13:09:49 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7F7B0C15BA6;
+        Tue, 16 Aug 2022 13:09:47 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20220816103452.479281-1-yin31149@gmail.com>
+References: <20220816103452.479281-1-yin31149@gmail.com> <166064248071.3502205.10036394558814861778.stgit@warthog.procyon.org.uk>
+To:     Hawkins Jiawei <yin31149@gmail.com>
+Cc:     dhowells@redhat.com, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] net: Fix suspicious RCU usage in bpf_sk_reuseport_detach()
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3961604.1660655386.1@warthog.procyon.org.uk>
+Date:   Tue, 16 Aug 2022 14:09:46 +0100
+Message-ID: <3961607.1660655386@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,217 +75,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the newly added callback for accelerated noinc MMIO
-to provide writesb, writesw, writesl, writesq, readsb, readsw,
-readsl and readsq.
+Hawkins Jiawei <yin31149@gmail.com> wrote:
 
-A special quirk is needed to deal with big endian regmaps: there
-are no accelerated operations defined for big endian, so fall
-back to calling the big endian operations itereatively for this
-case.
+>  	if (socks) {
+>  		WRITE_ONCE(sk->sk_user_data, NULL);
 
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-ChangeLog v2->v3:
-- Rebase on kernel v6.0-rc1
-ChangeLog v1->v2:
-- No changes.
----
- drivers/base/regmap/regmap-mmio.c | 153 ++++++++++++++++++++++++++++++
- 1 file changed, 153 insertions(+)
+Btw, shouldn't this be rcu_assign_pointer() or RCU_INIT_POINTER(), not
+WRITE_ONCE()?
 
-diff --git a/drivers/base/regmap/regmap-mmio.c b/drivers/base/regmap/regmap-mmio.c
-index 71f16be7e717..031ee91020e8 100644
---- a/drivers/base/regmap/regmap-mmio.c
-+++ b/drivers/base/regmap/regmap-mmio.c
-@@ -17,6 +17,7 @@ struct regmap_mmio_context {
- 	void __iomem *regs;
- 	unsigned int val_bytes;
- 	bool relaxed_mmio;
-+	bool big_endian;
- 
- 	bool attached_clk;
- 	struct clk *clk;
-@@ -160,6 +161,79 @@ static int regmap_mmio_write(void *context, unsigned int reg, unsigned int val)
- 	return 0;
- }
- 
-+static int regmap_mmio_noinc_write(void *context, unsigned int reg,
-+				   const void *val, size_t val_count)
-+{
-+	struct regmap_mmio_context *ctx = context;
-+	int ret = 0;
-+	int i;
-+
-+	if (!IS_ERR(ctx->clk)) {
-+		ret = clk_enable(ctx->clk);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	/*
-+	 * There are no native, assembly-optimized write single register
-+	 * operations for big endian, so fall back to emulation if this
-+	 * is needed. (Single bytes are fine, they are not affected by
-+	 * endianness.)
-+	 */
-+	if (ctx->big_endian && (ctx->val_bytes > 1)) {
-+		switch (ctx->val_bytes) {
-+		case 2:
-+		{
-+			const u16 *valp = (const u16 *)val;
-+			for (i = 0; i < val_count; i++)
-+				iowrite16be(valp[i], ctx->regs + reg);
-+			break;
-+		}
-+		case 4:
-+		{
-+			const u32 *valp = (const u32 *)val;
-+			for (i = 0; i < val_count; i++)
-+				iowrite32be(valp[i], ctx->regs + reg);
-+			break;
-+		}
-+#ifdef CONFIG_64BIT
-+		case 8:
-+			/* This is just too esoteric */
-+			fallthrough;
-+#endif
-+		default:
-+			ret = -EINVAL;
-+			goto out_clk;
-+		}
-+	}
-+
-+	switch (ctx->val_bytes) {
-+	case 1:
-+		writesb(ctx->regs + reg, (const u8 *)val, val_count);
-+		break;
-+	case 2:
-+		writesw(ctx->regs + reg, (const u16 *)val, val_count);
-+		break;
-+	case 4:
-+		writesl(ctx->regs + reg, (const u32 *)val, val_count);
-+		break;
-+#ifdef CONFIG_64BIT
-+	case 8:
-+		writesq(ctx->regs + reg, (const u64 *)val, val_count);
-+		break;
-+#endif
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+
-+out_clk:
-+	if (!IS_ERR(ctx->clk))
-+		clk_disable(ctx->clk);
-+
-+	return ret;
-+}
-+
- static unsigned int regmap_mmio_read8(struct regmap_mmio_context *ctx,
- 				      unsigned int reg)
- {
-@@ -241,6 +315,82 @@ static int regmap_mmio_read(void *context, unsigned int reg, unsigned int *val)
- 	return 0;
- }
- 
-+static int regmap_mmio_noinc_read(void *context, unsigned int reg,
-+				  void *val, size_t val_count)
-+{
-+	struct regmap_mmio_context *ctx = context;
-+	int ret = 0;
-+	int i;
-+
-+	if (!IS_ERR(ctx->clk)) {
-+		ret = clk_enable(ctx->clk);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	/*
-+	 * There are no native, assembly-optimized write single register
-+	 * operations for big endian, so fall back to emulation if this
-+	 * is needed. (Single bytes are fine, they are not affected by
-+	 * endianness.)
-+	 */
-+	if (ctx->big_endian && (ctx->val_bytes > 1)) {
-+		switch (ctx->val_bytes) {
-+		case 2:
-+		{
-+			u16 *valp = (u16 *)val;
-+			for (i = 0; i < val_count; i++)
-+				valp[i] = ioread16be(ctx->regs + reg);
-+			break;
-+		}
-+		case 4:
-+		{
-+			u32 *valp = (u32 *)val;
-+			for (i = 0; i < val_count; i++)
-+				valp[i] = ioread32be(ctx->regs + reg);
-+			break;
-+		}
-+#ifdef CONFIG_64BIT
-+		case 8:
-+			/* This is just too esoteric */
-+			fallthrough;
-+#endif
-+		default:
-+			ret = -EINVAL;
-+			goto out_clk;
-+		}
-+	}
-+
-+	switch (ctx->val_bytes) {
-+	case 1:
-+		readsb(ctx->regs + reg, (u8 *)val, val_count);
-+		break;
-+	case 2:
-+		readsw(ctx->regs + reg, (u16 *)val, val_count);
-+		break;
-+	case 4:
-+		readsl(ctx->regs + reg, (u32 *)val, val_count);
-+		break;
-+#ifdef CONFIG_64BIT
-+	case 8:
-+		readsq(ctx->regs + reg, (u64 *)val, val_count);
-+		break;
-+#endif
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+
-+out_clk:
-+	if (!IS_ERR(ctx->clk))
-+		clk_disable(ctx->clk);
-+
-+	return ret;
-+
-+	return 0;
-+}
-+
-+
- static void regmap_mmio_free_context(void *context)
- {
- 	struct regmap_mmio_context *ctx = context;
-@@ -257,6 +407,8 @@ static const struct regmap_bus regmap_mmio = {
- 	.fast_io = true,
- 	.reg_write = regmap_mmio_write,
- 	.reg_read = regmap_mmio_read,
-+	.reg_noinc_write = regmap_mmio_noinc_write,
-+	.reg_noinc_read = regmap_mmio_noinc_read,
- 	.free_context = regmap_mmio_free_context,
- 	.val_format_endian_default = REGMAP_ENDIAN_LITTLE,
- };
-@@ -347,6 +499,7 @@ static struct regmap_mmio_context *regmap_mmio_gen_context(struct device *dev,
- #ifdef __BIG_ENDIAN
- 	case REGMAP_ENDIAN_NATIVE:
- #endif
-+		ctx->big_endian = true;
- 		switch (config->val_bits) {
- 		case 8:
- 			ctx->reg_read = regmap_mmio_read8;
--- 
-2.37.2
+David
 

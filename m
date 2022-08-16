@@ -2,58 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9301596309
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E911E59630D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237081AbiHPTVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 15:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40626 "EHLO
+        id S237102AbiHPTWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 15:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237048AbiHPTVT (ORCPT
+        with ESMTP id S237046AbiHPTWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 15:21:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD9781B16
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:21:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AFB761460
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 19:21:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A4378C433C1;
-        Tue, 16 Aug 2022 19:21:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660677676;
-        bh=nfEJ9V2d67YVjzG26yxatjFUI4uCUNTHyX8zW3e854c=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=bB75i6HM6GGT1kBu3Nir38wUbaLLUWitiLp+wv3Dxv9ej7prOkPLnE2QtPrycz2kR
-         3BMfHAkFH1cw5CThI2ZSV3PF7KzgBNTrRiZadCgpXNrj647Zyy0GuEUdrzjlAEwjXD
-         pcjFsiZLKgIJCc6PIKHhFEhL8eJRZlSKrtNw6sivmI4NV1HD0KpuoISevjkpq5877W
-         wpRx77zwdE+Q2hLAlokov44qD1ofLO24wABk2dVatZNhTjBChDpBo43tLVHRK6MNX6
-         6ZK3ez6jv2gVscc+r4RQvu7tjCLcbV63H6STQWQbaiZxVGlmQ+KrP0rzXysvZo4tJc
-         CsbaOvXCrwmAg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 924F4C4166F;
-        Tue, 16 Aug 2022 19:21:16 +0000 (UTC)
-Subject: Re: [GIT PULL] regulator fixes for v6.0-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220816112301.7C3BAC433C1@smtp.kernel.org>
-References: <20220816112301.7C3BAC433C1@smtp.kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220816112301.7C3BAC433C1@smtp.kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-fix-v6.0-rc1
-X-PR-Tracked-Commit-Id: d511e8a7e850db567cd7f633288aa96a19508e5b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 15df6486ae56f259650159340a495406f427b2ea
-Message-Id: <166067767659.31662.16112668333167020586.pr-tracker-bot@kernel.org>
-Date:   Tue, 16 Aug 2022 19:21:16 +0000
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Tue, 16 Aug 2022 15:22:17 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2036844F8
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:22:15 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id s206so10095426pgs.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:22:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=UfXlr/WbEItN9aSdIJX4iaTq/XlXVZMlLqhc7nhIv50=;
+        b=LbBNhh6bXMzkijgu81RzGbZKVTzjiDsuC90Y7Vv43r/5OmxsedMbMtkBNzDnIgXj0n
+         t9Pqj6ZzUoo0cfUx1TtUhRZsYY2okOkn2/FfdlGNySntuZr4gXxY1hJz7HS5327Hs1xN
+         nHUYO+K+b3YcCguUk0nqTPOJ2LUjJc++72OZU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=UfXlr/WbEItN9aSdIJX4iaTq/XlXVZMlLqhc7nhIv50=;
+        b=KClYfj4umGNjaZWpdgQaEHfOcLrTJhFC6Zqivv8NAu3xnrDXB1GHBUrKoXStyYTjR4
+         6MF//5we1PWqMz7aiD5hBq5jIZ6L6j0dxKUVFb1SsXLnuSeyZJFvF3kcsalzTfMWkTrp
+         IGfbrP5Z6kyRE2N/j3xliuuKcwye1ka3LlKpLPwyJhNHqI3PjcMBfsYw81n/PKmRxZas
+         KFtKZoHzU7xZd9JQod1PlUkyPBXyrgyzlCM13t9h0sfUd3bhGKggDfZnvvyysuuXBM39
+         eY6C59c7CUPoGFJjeliV3BTnUGk1XrXqvzZ0yF+kIN9amoZzELg73rEykaOTh0mrReXN
+         /mQg==
+X-Gm-Message-State: ACgBeo176Jark4Agx+A3R40BbNVMKE1g8Y+6XzHM6rGg0VpYbasHokw7
+        PRqUctyL6gXwqk54R0lkaXlqpg==
+X-Google-Smtp-Source: AA6agR4ewDb5KpxqmFL9TANETOsh2CoRoqmxiztBenGS5hMalR/nn6+Vm6Yl9PEjQZ4t1VIf1KGtTw==
+X-Received: by 2002:a63:1a53:0:b0:41f:5298:9b5f with SMTP id a19-20020a631a53000000b0041f52989b5fmr18443389pgm.244.1660677735372;
+        Tue, 16 Aug 2022 12:22:15 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id m13-20020a170902db0d00b0016c46ff9741sm9511951plx.67.2022.08.16.12.22.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 12:22:14 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 12:22:13 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v3 0/6] Replace one-element arrays with flexible-array
+ members
+Message-ID: <202208161220.D225B26C9@keescook>
+References: <cover.1660592640.git.gustavoars@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1660592640.git.gustavoars@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,15 +74,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 16 Aug 2022 12:22:43 +0100:
+On Mon, Aug 15, 2022 at 04:35:19PM -0500, Gustavo A. R. Silva wrote:
+> Hi!
+> 
+> This series aims to replace one-element arrays with flexible-array
+> members in drivers/scsi/megaraid/
+> 
+> I followed the below steps in order to verify the changes don't
+> significally impact the code (.text) section generated by the compiler,
+> for each object file involved:
+> 
+> 1. Prepare the build with the following settings and configurations:
+> 
+>         linux$ KBF="KBUILD_BUILD_TIMESTAMP=1970-01-01 KBUILD_BUILD_USER=user
+>                KBUILD_BUILD_HOST=host KBUILD_BUILD_VERSION=1"
+>         linux$ make $KBF allyesconfig
+>         linux$ ./scripts/config -d GCOV_KERNEL -d KCOV -d GCC_PLUGINS \
+>                          -d IKHEADERS -d KASAN -d UBSAN \
+>                          -d DEBUG_INFO_NONE \
+>                          -e DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+>         linux$ make $KBF olddefconfig
+> 
+> 2. Build drivers/scsi/megaraid/ with the same settings and configurations
+>    as in Step 1, and copy the generated object files in directory before/
+> 
+>         linux$ make -j128 $KBF drivers/scsi/megaraid/
+>         linux$ mkdir -p before
+>         linux$ cp drivers/scsi/megaraid/*.o before/
+> 
+> 3. Implement all the needed changes and create the patch series. In this
+>    case, six patches.
+> 
+>         linux$ vi code.c
+>                ...do the magic :)
+>         linux$ git format-patch ...all the rest
+> 
+> 4. Apply a patch at a time (of the previously created series) and, after
+>    applying EACH patch, build (as in Step 2) drivers/scsi/megaraid/ and
+>    copy the generated object files in directory after/
+> 
+> 5. Compare the code section (.text) of each before/file.o and
+>    after/file.o. I use the following bash script:
+> 
+>    compare.sh:
+>         ARGS="--disassemble --demangle --reloc --no-show-raw-insn --section=.text"
+>         for i in $(cd before && echo *.o); do
+>                 echo $i
+>                 diff -u <(objdump $ARGS before/$i | sed "0,/^Disassembly/d") \
+>                         <(objdump $ARGS after/$i  | sed "0,/^Disassembly/d")
+>         done
+> 
+>    linux$ ./compare.sh > code_comparison.diff
+> 
+> 6. Open the code_comparison.diff file from the example above, look for
+>    any differences that might show up and analyze them in order to
+>    determine their impact, and what (if something) should be changed
+>    or study further.
+> 
+> The above process (code section comparison of object files) is based on
+> this[0] blog post by Kees Cook. The compiler used to build the code was
+> GCC-12.
+> 
+> In this series I only found the following sorts of differences in files
+> megaraid_sas.o and megaraid_sas_base.o:
+> 
+> ...
+> ...@@ -7094,24 +7094,24 @@
+>      6302:      movq   $0x0,0x1e20(%rbx)
+>      630d:      test   %r15,%r15
+>      6310:      je     6316 <megasas_aen_polling+0x56>
+> -                       6312: R_X86_64_PC32     .text.unlikely+0x3ae3
+> +                       6312: R_X86_64_PC32     .text.unlikely+0x3ae0
+>      6316:      mov    0x0(%rip),%eax        # 631c <megasas_aen_polling+0x5c>
+>                         6318: R_X86_64_PC32     event_log_level-0x4
+>      631c:      mov    0xc(%r15),%r14d
+>      6320:      lea    0x2(%rax),%edx
+>      6323:      cmp    $0x6,%edx
+>      6326:      ja     632c <megasas_aen_polling+0x6c>
+> -                       6328: R_X86_64_PC32     .text.unlikely+0x3ac3
+> +                       6328: R_X86_64_PC32     .text.unlikely+0x3ac0
+>      632c:      mov    %r14d,%edx
+>      632f:      sar    $0x18,%edx
+>      6332:      mov    %edx,%ecx
+>      6334:      cmp    %eax,%edx
+>      6336:      jge    633c <megasas_aen_polling+0x7c>
+> -                       6338: R_X86_64_PC32     .text.unlikely+0x399c
+> +                       6338: R_X86_64_PC32     .text.unlikely+0x3999
+> ...
+> 
+> All of them have to do with the relocation of symbols in the
+> .text.unlikely subsection and they don't seem to be of any actual
+> relevance. So, we can safely ignore them.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-fix-v6.0-rc1
+If there's a revision of this series, it might make sense to explicitly
+state "no binary code differences" for these changes. (The location of
+the relocations don't matter, as you say.)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/15df6486ae56f259650159340a495406f427b2ea
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Thank you!
+> Also, notice there is an open issue in bugzilla.kernel.org [1] that's
+> seems could be fixed by this series. :)
+> 
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> routines on memcpy() and help us make progress towards globally
+> enabling -fstrict-flex-arrays [2].
+> 
+> Link: https://en.wikipedia.org/wiki/Flexible_array_member
+> Link: https://www.kernel.org/doc/html/v5.10/process/deprecated.html#zero-length-and-one-element-arrays
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/KSPP/linux/issues/109
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215943 [1]
+> Link: https://reviews.llvm.org/D126864 [2]
+> 
+> Thanks
+> 
+> [0] https://outflux.net/blog/archives/2022/06/24/finding-binary-differences/
+> 
+> Changes in v3:
+>  - Split the struct_size() changes into a couple of separate patches.
+>  - Use objdump to compare the code (.text) sections of the object
+>    files before and after the changes.
+>  - Modify MR_FW_RAID_MAP_ALL and MR_DRV_RAID_MAP_ALL structures. Change
+>    suggested by Kees Cook.
+> 
+> Changes in v2:
+>  - Revert changes in struct MR_FW_RAID_MAP_ALL.
+> 
+> Gustavo A. R. Silva (6):
+>   scsi: megaraid_sas: Replace one-element array with flexible-array
+>     member in MR_FW_RAID_MAP
+>   scsi: megaraid_sas: Replace one-element array with flexible-array
+>     member in MR_FW_RAID_MAP_DYNAMIC
+>   scsi: megaraid_sas: Replace one-element array with flexible-array
+>     member in MR_DRV_RAID_MAP
+>   scsi: megaraid_sas: Replace one-element array with flexible-array
+>     member in MR_PD_CFG_SEQ_NUM_SYNC
+>   scsi: megaraid_sas: Use struct_size() in code related to struct
+>     MR_FW_RAID_MAP
+>   scsi: megaraid_sas: Use struct_size() in code related to struct
+>     MR_PD_CFG_SEQ_NUM_SYNC
+> 
+>  drivers/scsi/megaraid/megaraid_sas_base.c   | 20 ++++++++++----------
+>  drivers/scsi/megaraid/megaraid_sas_fp.c     |  6 +++---
+>  drivers/scsi/megaraid/megaraid_sas_fusion.c |  2 +-
+>  drivers/scsi/megaraid/megaraid_sas_fusion.h | 12 ++++++------
+>  4 files changed, 20 insertions(+), 20 deletions(-)
+> 
+> -- 
+> 2.34.1
+> 
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Kees Cook

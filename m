@@ -2,61 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8995961EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 20:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5285961E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 20:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236904AbiHPSG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 14:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36536 "EHLO
+        id S236520AbiHPSFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 14:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236883AbiHPSGB (ORCPT
+        with ESMTP id S236867AbiHPSFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 14:06:01 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DF18305C
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 11:06:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660673160; x=1692209160;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=49X/CqJK7o6r57TgsFbBXqQA3rnCet0L8eUbTEs6Z7U=;
-  b=cKF5lZceKVOQl/sSkvBa7vr9kU08YUAZRQRY8B4IJyMzXW+G2W5MFgTA
-   RVQfc6Z13wUwRdRsGrZQedP01J6R3dpvLy+7RV4wFoStxpOEqy6olk2JD
-   fx5P/9QsprM+vOWqp2DVgarj0815io36VhfELZXRnhN1HN4i4xsKbYEQR
-   o6lC56wY/1ZtnPo0sEIDiDg7HdiHd3nbX8PlwDavEXnjmpt629NyV3W0e
-   /mklZGJ3VmyQuuxLCAht2Y6JX+flthrNWWLQH+9TusWH69vQ9/E1ePnV1
-   TUqLFhNcFukiiyvPvH+H5tAhrbK2AapdsgIng8fKMeCK5miGQgJ4iSrvI
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="272060926"
-X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="272060926"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 11:06:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="935019876"
-Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Aug 2022 11:05:58 -0700
-Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oO0ww-00007Y-11;
-        Tue, 16 Aug 2022 18:05:58 +0000
-Date:   Wed, 17 Aug 2022 02:05:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [asahilinux:bits/090-spi-hid 17/22]
- drivers/hid/dockchannel-hid/dockchannel-hid.c:303:21: error: call to
- undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202208170255.mWeqUzWX-lkp@intel.com>
+        Tue, 16 Aug 2022 14:05:31 -0400
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A53F81B26;
+        Tue, 16 Aug 2022 11:05:31 -0700 (PDT)
+Received: by mail-pj1-f48.google.com with SMTP id gp7so10398775pjb.4;
+        Tue, 16 Aug 2022 11:05:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=eKDysHCQjTCqQt/NwtOxjkIdkCjeDt0eSaPWU62kEnE=;
+        b=jI4N179I5a1W5RfKUpfzp9MCYHUA/CK/4IPA4dJlfXgC9BGwlvxHb7g09/WN9p1Xqi
+         k6iLF6fMKBmY6IoS22n/aC5CKEk66M7A2Rcqxr6srVaonyUFCLauDYy3nuX8/wBp5wLJ
+         QwyRtvBYkm3BO1+UKln6GUncy7oZ2b0OzqulViuJd1OFDiipfq5ed1EC7y9SdpvzYcdT
+         syReqPxpBcqIw72RY9zwvF2Tx1WXbeX+3i9f4uYkaJkW0sQ1BY3QlPe7wHVDwxl9W9/f
+         Ho5L/v+HFpeEh1OeOdUODdQ3OAccMK9cZz7hnqwflmLN4N+3DWClfZuHbnsFGoqnWe6g
+         0m3Q==
+X-Gm-Message-State: ACgBeo2D6ohbDnCeAlGjdg0NTUm9vCeFggASVxr3GZeuYePlpMbbDGDH
+        8Zw7PRUvR96o8FCBha+gqug=
+X-Google-Smtp-Source: AA6agR7u1gjzOv8+2GCYfZiH4L1Ti/Qxf//GeJ51maGR8pSRIW0EkW7m8qeMHwyIWeOqGZq/Pow7xw==
+X-Received: by 2002:a17:902:ab41:b0:171:54ae:624c with SMTP id ij1-20020a170902ab4100b0017154ae624cmr22657572plb.157.1660673130341;
+        Tue, 16 Aug 2022 11:05:30 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:ff4b:545d:11c8:da9f? ([2620:15c:211:201:ff4b:545d:11c8:da9f])
+        by smtp.gmail.com with ESMTPSA id i3-20020a626d03000000b0052c0a9234e0sm9066610pfc.11.2022.08.16.11.05.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 11:05:29 -0700 (PDT)
+Message-ID: <b532e50f-7aa0-5ac3-c7a6-6a43ab9c1bc9@acm.org>
+Date:   Tue, 16 Aug 2022 11:05:27 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 5.19 0784/1157] scsi: sd: Rework asynchronous resume
+ support
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
+        Hannes Reinecke <hare@suse.de>,
+        John Garry <john.garry@huawei.com>, ericspero@icloud.com,
+        jason600.groome@gmail.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+References: <20220815180439.416659447@linuxfoundation.org>
+ <20220815180510.851284927@linuxfoundation.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220815180510.851284927@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,117 +71,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
-head:   480924e97dddd088c4ed360eb12ecf92a30f19b1
-commit: 1d801ad9c4b08a5675701e82f600d9f462211a79 [17/22] hid: Add Apple DockChannel HID transport driver
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220817/202208170255.mWeqUzWX-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/1d801ad9c4b08a5675701e82f600d9f462211a79
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/090-spi-hid
-        git checkout 1d801ad9c4b08a5675701e82f600d9f462211a79
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/hid/dockchannel-hid/ drivers/platform/
+On 8/15/22 11:02, Greg Kroah-Hartman wrote:
+> From: Bart Van Assche <bvanassche@acm.org>
+> 
+> [ Upstream commit 88f1669019bd62b3009a3cebf772fbaaa21b9f38 ]
+> 
+> For some technologies, e.g. an ATA bus, resuming can take multiple
+> seconds. Waiting for resume to finish can cause a very noticeable delay.
+> Hence this commit that restores the behavior from before "scsi: core: pm:
+> Rely on the device driver core for async power management" for most SCSI
+> devices.
+> 
+> This commit introduces a behavior change: if the START command fails, do
+> not consider this as a SCSI disk resume failure.
+> 
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215880
+> Link: https://lore.kernel.org/r/20220630195703.10155-3-bvanassche@acm.org
+> Fixes: a19a93e4c6a9 ("scsi: core: pm: Rely on the device driver core for async power management")
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Hi Greg,
 
-All error/warnings (new ones prefixed by >>):
+It has been reported that this patch causes a regression, namely disks 
+not coming back after a resume. That issue is worse than the issue fixed 
+by this patch - eliminating a delay. Please drop this patch from the 
+stable tree.
 
->> drivers/hid/dockchannel-hid/dockchannel-hid.c:303:21: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           iface->out_flags = FIELD_PREP(FLAGS_GROUP, type) | FIELD_PREP(FLAGS_REQ, req);
-                              ^
->> drivers/hid/dockchannel-hid/dockchannel-hid.c:569:62: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-                   dev_err(dchid->dev, "Bad length for ready message: %ld\n", length);
-                                                                      ~~~     ^~~~~~
-                                                                      %zu
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
->> drivers/hid/dockchannel-hid/dockchannel-hid.c:825:13: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           int type = FIELD_GET(FLAGS_GROUP, shdr->flags);
-                      ^
->> drivers/hid/dockchannel-hid/dockchannel-hid.c:830:18: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
-                           shdr->length, work->hdr.length - sizeof(*shdr));
-                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:856:18: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
-                           shdr->length, hdr->length - sizeof(*shdr));
-                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:975:7: warning: variable 'defer' set but not used [-Wunused-but-set-variable]
-           bool defer = false;
-                ^
-   4 warnings and 2 errors generated.
+A revert of this patch has been posted on the linux-scsi mailing list. 
+See also 
+https://lore.kernel.org/linux-scsi/8a83665a-1951-a326-f930-8fcbb0c4dd9a@huawei.com/.
 
+Thanks,
 
-vim +/FIELD_PREP +303 drivers/hid/dockchannel-hid/dockchannel-hid.c
-
-   292	
-   293	static int dchid_cmd(struct dchid_iface *iface, u32 type, u32 req,
-   294			     void *data, size_t size, void *resp_buf, size_t resp_size)
-   295	{
-   296		int ret;
-   297		int report_id = *(u8*)data;
-   298	
-   299		mutex_lock(&iface->out_mutex);
-   300	
-   301		WARN_ON(iface->out_report != -1);
-   302		iface->out_report = report_id;
- > 303		iface->out_flags = FIELD_PREP(FLAGS_GROUP, type) | FIELD_PREP(FLAGS_REQ, req);
-   304		iface->resp_buf = resp_buf;
-   305		iface->resp_size = resp_size;
-   306		reinit_completion(&iface->out_complete);
-   307	
-   308		ret = dchid_send(iface, iface->out_flags, data, size);
-   309		if (ret < 0)
-   310			goto done;
-   311	
-   312		if (!wait_for_completion_timeout(&iface->out_complete, msecs_to_jiffies(1000))) {
-   313			dev_err(iface->dchid->dev, "output report 0x%x to iface  %d (%s) timed out\n",
-   314				report_id, iface->index, iface->name);
-   315			ret = -ETIMEDOUT;
-   316			goto done;
-   317		}
-   318	
-   319		ret = iface->resp_size;
-   320		if (iface->retcode) {
-   321			dev_err(iface->dchid->dev,
-   322				"output report 0x%x to iface %d (%s) failed with err 0x%x\n",
-   323				report_id, iface->index, iface->name, iface->retcode);
-   324			ret = -EIO;
-   325		}
-   326	
-   327	done:
-   328		iface->tx_seq++;
-   329		iface->out_report = -1;
-   330		iface->out_flags = 0;
-   331		iface->resp_buf = NULL;
-   332		iface->resp_size = 0;
-   333		mutex_unlock(&iface->out_mutex);
-   334		return ret;
-   335	}
-   336	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Bart.

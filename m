@@ -2,105 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C30595789
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF5C595788
 	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233276AbiHPKHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:07:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
+        id S234284AbiHPKIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232542AbiHPKHN (ORCPT
+        with ESMTP id S234325AbiHPKH1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:07:13 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307A858B5A
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:23:31 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id e15so14117542lfs.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:23:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=xqmZkTjqkBszJr4LKjJt2ehtVUvSW3sFkYgqkkGWDf4=;
-        b=yj+1nFMppjyZXIpFnjKZvFDRpcKZwm+a4RWh+1tgO9xkQqZ5ouieOYtGDdckwPCLkD
-         uFNRzJohXUEtJkdoEMQud0/N66NTYI0UV0uWL9W2sOWN2DPcWtt6PVdBw5MjNIDJIYgz
-         7z1qS3BhvROOXNwNVdMCiNBn+hCwboOkqh+EliX/jOaVubo4IIFegvDhncPRP9id2YSy
-         zJ2KMbORQuM3hcHWwWAxXLHMYeN11+ZOS0NSe132Auln0y3rEuRGL4zv++iOnJSGhjZc
-         kbibfmoOvPb7P4Gyx7pJH4QHOwiW9cdScaGQsSqohEUl4AfB3xEzQnP61EQFQQFRh6Y2
-         8OPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=xqmZkTjqkBszJr4LKjJt2ehtVUvSW3sFkYgqkkGWDf4=;
-        b=2Qgk4RxK1Y3XCHljSiAGlvCZC7kS0l33h4ev6p4jWxQQ2D5jg38lLvjk+Mj1/B8W+0
-         fYLWPBquuC4o8VETxusweLsrgaNkytEcaUT9biG55ZLF6mHIv6JjFwBTwdRABOjrhbxK
-         HycN8vqiShZiSm+TnpVnyxk8BWskdEgNFlBCMpAD5CkDAFzGKKkd/TQB5gx4kOpdZyRg
-         Ox3UajaeV0zqFnHFiqdvFbtfVpYTpf2v9ri8earI1PIgyd6tPhGi8fEBZjuwez0+rYnA
-         KevfuTLnPd9kzNeQ9KZfz2UIjdJswi6/f6RIOOvJ4zGnjpQT8QW0erMG9qBStbabKfKy
-         2tIw==
-X-Gm-Message-State: ACgBeo2vH27nnxM08jhaQXgGIXYCBFMz4vrbhNxnSQ8E55vumv/NNEIW
-        lS+eAmjxeKoq9i5lRHR08qv7Aw==
-X-Google-Smtp-Source: AA6agR5+nNwI8d3IuOAHqLUOx1QI0JR8HQgP2AKO07DOADBkCQC3TdTrDgt0+LLhBk+z2F6rApxi6Q==
-X-Received: by 2002:a19:5e02:0:b0:48b:1870:dc4 with SMTP id s2-20020a195e02000000b0048b18700dc4mr7462376lfb.4.1660641809597;
-        Tue, 16 Aug 2022 02:23:29 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id x25-20020a056512131900b0048a0e948c34sm1325631lfu.195.2022.08.16.02.23.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 02:23:29 -0700 (PDT)
-Message-ID: <b6a515bf-b1a3-02e5-ecda-d11753288fe2@linaro.org>
-Date:   Tue, 16 Aug 2022 12:23:27 +0300
+        Tue, 16 Aug 2022 06:07:27 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9CD7D1C1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:24:10 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M6Qdd3HtRzhYT9;
+        Tue, 16 Aug 2022 17:21:57 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 16 Aug 2022 17:24:08 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 16 Aug 2022 17:24:07 +0800
+Message-ID: <578084e8-bdc3-6e4e-f390-4202a8bc7c1d@huawei.com>
+Date:   Tue, 16 Aug 2022 17:24:07 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1] pinctrl: samsung: Finish initializing the gpios before
- registering them
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH RFC] mm, proc: add PcpFree to meminfo
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Saravana Kannan <saravanak@google.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     kernel-team@android.com, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220727013349.3056826-1-saravanak@google.com>
- <49e4f45a-51da-ec4c-9ebb-dfa022bf8a88@linaro.org>
-In-Reply-To: <49e4f45a-51da-ec4c-9ebb-dfa022bf8a88@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     huang ying <huang.ying.caritas@gmail.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>,
+        "Huang Ying" <ying.huang@intel.com>
+References: <20220816084426.135528-1-wangkefeng.wang@huawei.com>
+ <CAC=cRTN=vbrgOsH7PNNMV+Coyabp=H_XF99MUL00kfET=K-32w@mail.gmail.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <CAC=cRTN=vbrgOsH7PNNMV+Coyabp=H_XF99MUL00kfET=K-32w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/07/2022 11:32, Krzysztof Kozlowski wrote:
-> On 27/07/2022 03:33, Saravana Kannan wrote:
->> As soon as a gpio is registered, it should be usable by a consumer. So,
->> do all the initialization before registering the gpios. Without this
->> change, a consumer can request a GPIO IRQ and have the gpio to IRQ
->> mapping fail.
+
+On 2022/8/16 16:48, huang ying wrote:
+> On Tue, Aug 16, 2022 at 4:38 PM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+>> From: Liu Shixin <liushixin2@huawei.com>
 >>
->> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> 
-> Looks good.
-> 
-> Linus,
-> It's too late for me to pick it up, so make you could grab it directly?
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Otherwise it will wait for merge window to finish.
+>> The page on pcplist could be used, but not counted into memory free or
+>> avaliable, and pcp_free is only showed by show_mem(). Since commit
+>> d8a759b57035 ("mm, page_alloc: double zone's batchsize"), there is a
+>> significant decrease in the display of free memory, with a large number
+>> of cpus and nodes, the number of pages in the percpu list can be very
+>> large, so it is better to let user to know the pcp count.
+> Can you show some data?
 
-Applied.
+80M+ with 72cpus/2node
 
-Best regards,
-Krzysztof
+>
+> Another choice is to count PCP free pages in MemFree.  Is that OK for
+> your use case too?
+
+Yes, the user will make policy according to MemFree, we think count PCP 
+free pages
+
+in MemFree is better, but don't know whether it is right way.
+
+>
+> Best Regards,
+> Huang, Ying
+>
+>> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+>> ---
+>>   drivers/base/node.c | 14 +++++++++++++-
+>>   fs/proc/meminfo.c   |  9 +++++++++
+>>   2 files changed, 22 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/base/node.c b/drivers/base/node.c
+>> index eb0f43784c2b..846864e45db6 100644
+>> --- a/drivers/base/node.c
+>> +++ b/drivers/base/node.c
+>> @@ -375,6 +375,9 @@ static ssize_t node_read_meminfo(struct device *dev,
+>>          struct sysinfo i;
+>>          unsigned long sreclaimable, sunreclaimable;
+>>          unsigned long swapcached = 0;
+>> +       unsigned long free_pcp = 0;
+>> +       struct zone *zone;
+>> +       int cpu;
+>>
+>>          si_meminfo_node(&i, nid);
+>>          sreclaimable = node_page_state_pages(pgdat, NR_SLAB_RECLAIMABLE_B);
+>> @@ -382,9 +385,17 @@ static ssize_t node_read_meminfo(struct device *dev,
+>>   #ifdef CONFIG_SWAP
+>>          swapcached = node_page_state_pages(pgdat, NR_SWAPCACHE);
+>>   #endif
+>> +       for_each_populated_zone(zone) {
+>> +               if (zone_to_nid(zone) != nid)
+>> +                       continue;
+>> +               for_each_online_cpu(cpu)
+>> +                       free_pcp += per_cpu_ptr(zone->per_cpu_pageset, cpu)->count;
+>> +       }
+>> +
+>>          len = sysfs_emit_at(buf, len,
+>>                              "Node %d MemTotal:       %8lu kB\n"
+>>                              "Node %d MemFree:        %8lu kB\n"
+>> +                           "Node %d PcpFree:        %8lu kB\n"
+>>                              "Node %d MemUsed:        %8lu kB\n"
+>>                              "Node %d SwapCached:     %8lu kB\n"
+>>                              "Node %d Active:         %8lu kB\n"
+>> @@ -397,7 +408,8 @@ static ssize_t node_read_meminfo(struct device *dev,
+>>                              "Node %d Mlocked:        %8lu kB\n",
+>>                              nid, K(i.totalram),
+>>                              nid, K(i.freeram),
+>> -                           nid, K(i.totalram - i.freeram),
+>> +                           nid, K(free_pcp),
+>> +                           nid, K(i.totalram - i.freeram - free_pcp),
+>>                              nid, K(swapcached),
+>>                              nid, K(node_page_state(pgdat, NR_ACTIVE_ANON) +
+>>                                     node_page_state(pgdat, NR_ACTIVE_FILE)),
+>> diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
+>> index 6e89f0e2fd20..672c784dfc8a 100644
+>> --- a/fs/proc/meminfo.c
+>> +++ b/fs/proc/meminfo.c
+>> @@ -38,6 +38,9 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
+>>          unsigned long pages[NR_LRU_LISTS];
+>>          unsigned long sreclaimable, sunreclaim;
+>>          int lru;
+>> +       unsigned long free_pcp = 0;
+>> +       struct zone *zone;
+>> +       int cpu;
+>>
+>>          si_meminfo(&i);
+>>          si_swapinfo(&i);
+>> @@ -55,8 +58,14 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
+>>          sreclaimable = global_node_page_state_pages(NR_SLAB_RECLAIMABLE_B);
+>>          sunreclaim = global_node_page_state_pages(NR_SLAB_UNRECLAIMABLE_B);
+>>
+>> +       for_each_populated_zone(zone) {
+>> +               for_each_online_cpu(cpu)
+>> +                       free_pcp += per_cpu_ptr(zone->per_cpu_pageset, cpu)->count;
+>> +       }
+>> +
+>>          show_val_kb(m, "MemTotal:       ", i.totalram);
+>>          show_val_kb(m, "MemFree:        ", i.freeram);
+>> +       show_val_kb(m, "PcpFree:        ", free_pcp);
+>>          show_val_kb(m, "MemAvailable:   ", available);
+>>          show_val_kb(m, "Buffers:        ", i.bufferram);
+>>          show_val_kb(m, "Cached:         ", cached);
+>> --
+>> 2.35.3
+>>
+>>
+> .

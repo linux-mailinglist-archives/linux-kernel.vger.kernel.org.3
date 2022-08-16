@@ -2,129 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 805B9595851
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D795957D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234652AbiHPKbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
+        id S234297AbiHPKP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:15:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234628AbiHPKbU (ORCPT
+        with ESMTP id S233942AbiHPKPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:31:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01490EF9DC;
-        Tue, 16 Aug 2022 01:27:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91E66611EA;
-        Tue, 16 Aug 2022 08:27:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62648C433D7;
-        Tue, 16 Aug 2022 08:27:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660638440;
-        bh=obWd8LHyjUz6HAn1zvUeZVyW4fXbYD54xEC0S6zE2+I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F3a6Lur4sVvnK5fFie94HDOKySHW/PVNBZ913vVTNmSNi1J5Ndl8MC6oViQfkvLxR
-         CC9ncYonSznVX8CiGtrMtm8AUUiL6wmwrSK6XVfIbdf9WbpJNn0UrmY0UuiTmT1DvY
-         6T326dK3KG4bgXqoTaDI+lXhtNuWmX9t01yNuNog=
-Date:   Tue, 16 Aug 2022 09:55:18 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com, Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Subject: Re: [PATCH 5.19 0000/1157] 5.19.2-rc1 review
-Message-ID: <YvtNZuap/oCKVv9O@kroah.com>
-References: <20220815180439.416659447@linuxfoundation.org>
- <CA+G9fYtZP_rYnmRyLbMrxKPGtJuoOw4h412dJXBJnzab41CzUw@mail.gmail.com>
+        Tue, 16 Aug 2022 06:15:02 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E592D8E1D
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:59:47 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id ha11so9087834pjb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:59:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=kvxJ31pMs7iubHIwtBMkPHRJw222fpBj25ImczwoxRk=;
+        b=g1OnjbncFfK2BW8/IezCZRmKlCi1L4tXB4x0I02Mld2WTywa9Vf9KiTHGp+NOdhRKH
+         pYy6Ne4MeQnU50Q5KeX6liGhp2EEKXA4x19KhxYZTKKi5kEzzNABlhepnkpBZSIqwsVN
+         k9zLt2SvCwPaDrNmF+QIwsE8sAkTx1bd8otp+6EiuhnsENZzBDLUCgrxB8kbh1AM/KnJ
+         eSmzVO0uLyxnUeYkh1m6kwARgVnqIZcX/KKXXX8e+CdLHbSSYS2i6/8TdAUOrqF+On2y
+         F3F6ONZVP5DRBlbqAyKyu9+rIy88XUBKOHkgFwbI0aibsyTol/tDHrTItrgjgBDxAtdj
+         t+AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=kvxJ31pMs7iubHIwtBMkPHRJw222fpBj25ImczwoxRk=;
+        b=VNYni2d9p4XsckoptithdcGMq5y9sSf8EoPl33pe8CiuK794C3D3XjrVhc7xj0ar8+
+         bh9LqLT42P0beOSz8mzxeEKCz47d7IPeOo73+k51MoYYDodRY+vJOCta+YUvJzcJLd8L
+         8eD/ej06qBTUSlYKXj/qrPxHcKTGltbEjrsjgKExPMciuozSTIj63U3JdoZYFtpzCuI4
+         oXQSqMhxEbJcPy0fs8iETIM4CfIFioPV/LnhdGhsaM6NHE8UY9KJjnS3S0AZOf7e75hx
+         Hn3VXJ1n426UM+Ay59jAl3rnkxOZ0x/r1W/JlVRg69loxH6B43anudi33CJY6U48pKDj
+         gu5g==
+X-Gm-Message-State: ACgBeo2nSl/Hcb1ohW8gOJWzf2lpE5rvH4zj8NK8xpz+3E98T0YH672w
+        GQRs0YOmLdMy0ipj3KbxDkhIzQ==
+X-Google-Smtp-Source: AA6agR6q1iuy02bAx0HwOXInhdES5zIFbm3q7tFNcVwrq2sakYMaYPpShkuoobkVem5XFJBpgs8skQ==
+X-Received: by 2002:a17:90b:164b:b0:1f5:15ae:3206 with SMTP id il11-20020a17090b164b00b001f515ae3206mr21921654pjb.140.1660636786654;
+        Tue, 16 Aug 2022 00:59:46 -0700 (PDT)
+Received: from FVFDK26JP3YV.bytedance.net ([61.120.150.76])
+        by smtp.gmail.com with ESMTPSA id r2-20020a17090a454200b001f280153b4dsm5631276pjm.47.2022.08.16.00.59.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 16 Aug 2022 00:59:46 -0700 (PDT)
+From:   Lei He <helei.sig11@bytedance.com>
+To:     arei.gonglei@huawei.com, herbert@gondor.apana.org.au
+Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pizhenwei@bytedance.com, lei he <helei.sig11@bytedance.com>
+Subject: [PATCH] crypto-virtio: fix memory-leak
+Date:   Tue, 16 Aug 2022 15:59:16 +0800
+Message-Id: <20220816075916.23651-1-helei.sig11@bytedance.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYtZP_rYnmRyLbMrxKPGtJuoOw4h412dJXBJnzab41CzUw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 01:08:26PM +0530, Naresh Kamboju wrote:
-> On Tue, 16 Aug 2022 at 00:58, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 5.19.2 release.
-> > There are 1157 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Wed, 17 Aug 2022 18:01:29 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.2-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
-> 
-> The arm64 clang-14 allmodconfig failed on stable-rc 5.19.
-> This build failure got fixed on the mainline tree two weeks ago.
-> 
-> * arm64, build
->   - clang-12-allmodconfig
->   - clang-13-allmodconfig
->   - clang-14-allmodconfig
->   - clang-nightly-allmodconfig
-> 
-> 
-> make --silent --keep-going --jobs=8
-> O=/home/tuxbuild/.cache/tuxmake/builds/2/build LLVM=1 LLVM_IAS=1
-> ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- 'HOSTCC=sccache clang'
-> 'CC=sccache clang' allmodconfig
-> make --silent --keep-going --jobs=8
-> O=/home/tuxbuild/.cache/tuxmake/builds/2/build LLVM=1 LLVM_IAS=1
-> ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- 'HOSTCC=sccache clang'
-> 'CC=sccache clang'
-> sound/soc/intel/avs/path.c:815:18: error: stack frame size (2192)
-> exceeds limit (2048) in 'avs_path_create'
-> [-Werror,-Wframe-larger-than]
-> struct avs_path *avs_path_create(struct avs_dev *adev, u32 dma_id,
->                  ^
-> 1 error generated.
-> make[5]: *** [/builds/linux/scripts/Makefile.build:249:
-> sound/soc/intel/avs/path.o] Error 1
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> Steps to reproduce:
-> -------------------------
-> # See https://docs.tuxmake.org/ for complete documentation.
-> # Original tuxmake command with fragments listed below.
-> # tuxmake --runtime podman --target-arch arm64 --toolchain clang-14
-> --kconfig allmodconfig LLVM=1 LLVM_IAS=1
-> 
-> tuxmake --runtime podman --target-arch arm64 --toolchain clang-14
-> --kconfig https://builds.tuxbuild.com/2DPEiUmdALSZq7DeNthZFYoPLaN/config
-> LLVM=1 LLVM_IAS=1
+From: lei he <helei.sig11@bytedance.com>
 
-What is the commit on mainline that resolved this issue?
+Fix memory-leak for virtio-crypto akcipher request, this problem is
+introduced by 59ca6c93387d3(virtio-crypto: implement RSA algorithm).
+The leak can be reproduced and tested with the following script
+inside virtual machine:
 
-thanks,
+#!/bin/bash
 
-greg k-h
+LOOP_TIMES=10000
+
+# required module: pkcs8_key_parser, virtio_crypto
+modprobe pkcs8_key_parser # if CONFIG_PKCS8_PRIVATE_KEY_PARSER=m
+modprobe virtio_crypto # if CONFIG_CRYPTO_DEV_VIRTIO=m
+rm -rf /tmp/data
+dd if=/dev/random of=/tmp/data count=1 bs=230
+
+# generate private key and self-signed cert
+openssl req -nodes -x509 -newkey rsa:2048 -keyout key.pem \
+		-outform der -out cert.der  \
+		-subj "/C=CN/ST=GD/L=SZ/O=vihoo/OU=dev/CN=always.com/emailAddress=yy@always.com"
+# convert private key from pem to der
+openssl pkcs8 -in key.pem -topk8 -nocrypt -outform DER -out key.der
+
+# add key
+PRIV_KEY_ID=`cat key.der | keyctl padd asymmetric test_priv_key @s`
+echo "priv key id = "$PRIV_KEY_ID
+PUB_KEY_ID=`cat cert.der | keyctl padd asymmetric test_pub_key @s`
+echo "pub key id = "$PUB_KEY_ID
+
+# query key
+keyctl pkey_query $PRIV_KEY_ID 0
+keyctl pkey_query $PUB_KEY_ID 0
+
+# here we only run pkey_encrypt becasuse it is the fastest interface
+function bench_pub() {
+	keyctl pkey_encrypt $PUB_KEY_ID 0 /tmp/data enc=pkcs1 >/tmp/enc.pub
+}
+
+# do bench_pub in loop to obtain the memory leak
+for (( i = 0; i < ${LOOP_TIMES}; ++i )); do
+	bench_pub
+done
+
+Signed-off-by: lei he <helei.sig11@bytedance.com>
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be kept; you may remove them yourself if you want to.
+# An empty message aborts the commit.
+#
+# Date:      Tue Aug 16 11:53:30 2022 +0800
+#
+# On branch master
+# Your branch is ahead of 'origin/master' by 1 commit.
+#   (use "git push" to publish your local commits)
+#
+# Changes to be committed:
+#	modified:   drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
+#
+# Untracked files:
+#	cert.der
+#	key.der
+#	key.pem
+#
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be kept; you may remove them yourself if you want to.
+# An empty message aborts the commit.
+#
+# Date:      Tue Aug 16 11:53:30 2022 +0800
+#
+# On branch master
+# Your branch is ahead of 'origin/master' by 1 commit.
+#   (use "git push" to publish your local commits)
+#
+# Changes to be committed:
+#	modified:   drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
+#
+# Untracked files:
+#	cert.der
+#	key.der
+#	key.pem
+#
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be kept; you may remove them yourself if you want to.
+# An empty message aborts the commit.
+#
+# Date:      Tue Aug 16 11:53:30 2022 +0800
+#
+# On branch master
+# Your branch is ahead of 'origin/master' by 1 commit.
+#   (use "git push" to publish your local commits)
+#
+# Changes to be committed:
+#	modified:   drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
+#
+# Untracked files:
+#	cert.der
+#	key.der
+#	key.pem
+#
+---
+ drivers/crypto/virtio/virtio_crypto_akcipher_algs.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
+index 2a60d0525cde..168195672e2e 100644
+--- a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
++++ b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
+@@ -56,6 +56,10 @@ static void virtio_crypto_akcipher_finalize_req(
+ 	struct virtio_crypto_akcipher_request *vc_akcipher_req,
+ 	struct akcipher_request *req, int err)
+ {
++	kfree(vc_akcipher_req->src_buf);
++	kfree(vc_akcipher_req->dst_buf);
++	vc_akcipher_req->src_buf = NULL;
++	vc_akcipher_req->dst_buf = NULL;
+ 	virtcrypto_clear_request(&vc_akcipher_req->base);
+ 
+ 	crypto_finalize_akcipher_request(vc_akcipher_req->base.dataq->engine, req, err);
+-- 
+2.20.1
+

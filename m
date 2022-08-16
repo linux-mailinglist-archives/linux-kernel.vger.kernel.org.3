@@ -2,165 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 479BD595881
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175CC595887
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234895AbiHPKgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
+        id S234863AbiHPKhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234816AbiHPKgY (ORCPT
+        with ESMTP id S234849AbiHPKg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:36:24 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1948E5B79A;
-        Tue, 16 Aug 2022 01:59:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660640398; x=1692176398;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Fsbw9VD64WNebEA9SmUmkH3lTdV9uckYpcgbPhxuwEE=;
-  b=cbXdimhMXhSdqUijOstcJb6n+4pQ9EPwcVRvjT7YR0ShuLOcI+lfMflJ
-   rslMlXVtIQS9VJ4MaKRTIFC98J9Yg9iZZKsCT56qJmrUc6GdHfRtGvoGn
-   DVXaKX6YxAoSfnEQVz0TLq5qZ8rPkc/KaSoeorQrAQ8jhEOknW+FsFn/2
-   rF+0nbDGlcG7V03qEXG78T41J7Xfw2MryiJ5Lo4Q7JaKMjLoXxU0V0p81
-   6uj1q9g64CVt1OV7g9prBctfj0A0Qtt2I0wpcIjk8H2w1oJrN47XDgYax
-   fDOX+Or27oDXN7CGVmYobQUTFBckcA9fRZcuSQm+o/ae0LqjmKY72gyVd
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="292164224"
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="292164224"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 01:59:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="733222124"
-Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 16 Aug 2022 01:59:51 -0700
-Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oNsQR-0001f6-0Z;
-        Tue, 16 Aug 2022 08:59:51 +0000
-Date:   Tue, 16 Aug 2022 16:59:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Cc:     kbuild-all@lists.01.org, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] LoongArch: Add perf events support
-Message-ID: <202208161648.zq48ilEV-lkp@intel.com>
-References: <20220815124702.3330803-1-chenhuacai@loongson.cn>
+        Tue, 16 Aug 2022 06:36:29 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CFF815735
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:00:50 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id c28so9893730lfh.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:00:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=043hWz8b615XDyOIXdxEzBsstB56mnVvGPAwgZ+APrg=;
+        b=ZNsA5ND0kulqzso1yZe07rJLhJJrheK1Y1tL145gnSD8myu6YkhRoukYh42/mX4caY
+         JNL9L3JXWjTSWqPruD/4kGN/FObUaDuDPSIS+N/rX1wD0ZvfNjprVGqltcPjenh8ki+T
+         naMWYCRU2R5+3SdswZnTZCCkH0+Aw3EEp3cEM/Lq198dXdqInZWFYDTixh0rLOmvuGSu
+         nBzu1YPEO8+M5I+gCKvyW9wqOHj9O2X/o7zlbhx7rRAFiATN/aOQVT0/D2Y/U8R+94Hp
+         BMIOcASdRwo510/5QPpbVqbaQjnLVa3dzXY45dthe2kbbA2JI0GQshdby8vJlyNZoSPu
+         k5gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=043hWz8b615XDyOIXdxEzBsstB56mnVvGPAwgZ+APrg=;
+        b=szDXRc1AOlZYtpEo+7HLecvkjypu1edFZXFqtE1lhfv8AewUYgebQzTSaPOiusegLJ
+         V0hllBuhBcwwsvUniqcQZGbEWYK5KHffnmU9QH7roz0Vk1ZZdVvMGokiB8aJKvTq6P1+
+         /MVUTL+sWE5XvKTAF8VAkzv815urjnxDuyaSPcAC7ey+F9oyFIF630KmQbeiLtEK5T3d
+         viaFAHRkLiYdFJaMZSIOLjKf2ygKZ7ixA75JLGOnGelju54riycqCbVdeV7DgQYkrOZJ
+         Cg73euoXBVlP25DCEsH/YOBW5LPCzlWJtrToXv3Yd+hrR0AOJdoHYylIY8Ug/qVv2jP1
+         yiJA==
+X-Gm-Message-State: ACgBeo1NIDRG1Dl2tTUbQZTK3aeIL9mg9UrdTiOXpV3aCmrZ3HEQLGvE
+        DooJz1aq3z6E1paSkx74PZ/vmQ==
+X-Google-Smtp-Source: AA6agR58GGqmd5KxhxWS4m9evkdUo6IfYO5ez03h86oGM7Y+w5L89kpSjzRxzfI/XeBoSG0VVyhsbA==
+X-Received: by 2002:ac2:4562:0:b0:48b:2a91:e59 with SMTP id k2-20020ac24562000000b0048b2a910e59mr6621305lfm.91.1660640448810;
+        Tue, 16 Aug 2022 02:00:48 -0700 (PDT)
+Received: from localhost (h-46-59-89-207.A463.priv.bahnhof.se. [46.59.89.207])
+        by smtp.gmail.com with ESMTPSA id d2-20020a056512368200b0048afbe9d0fasm1329817lfs.45.2022.08.16.02.00.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 02:00:48 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 11:00:47 +0200
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v2 08/26] thermal/drivers/rcar: Use generic
+ thermal_zone_get_trip() function
+Message-ID: <YvtcvzhQwJdtGXYP@oden.dyn.berto.se>
+References: <20220809220436.711020-1-daniel.lezcano@linaro.org>
+ <20220809220436.711020-9-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220815124702.3330803-1-chenhuacai@loongson.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220809220436.711020-9-daniel.lezcano@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Huacai,
+Hi Daniel,
 
-I love your patch! Perhaps something to improve:
+Thanks for your work.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.0-rc1 next-20220816]
-[cannot apply to soc/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On 2022-08-10 00:04:18 +0200, Daniel Lezcano wrote:
+> The thermal framework gives the possibility to register the trip
+> points with the thermal zone. When that is done, no get_trip_* ops are
+> needed and they can be removed.
+> 
+> Convert ops content logic into generic trip points and register them with the
+> thermal zone.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Huacai-Chen/LoongArch-Add-perf-events-support/20220815-204852
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-config: loongarch-randconfig-s051-20220815 (https://download.01.org/0day-ci/archive/20220816/202208161648.zq48ilEV-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/0e6d9490ff3f6129799675b9288135022a0908e2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Huacai-Chen/LoongArch-Add-perf-events-support/20220815-204852
-        git checkout 0e6d9490ff3f6129799675b9288135022a0908e2
-        # save the config file
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' ARCH=loongarch 
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-sparse warnings: (new ones prefixed by >>)
->> arch/loongarch/kernel/perf_event.c:30:50: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned long [noderef] __user *user_frame_tail @@     got unsigned long * @@
-   arch/loongarch/kernel/perf_event.c:30:50: sparse:     expected unsigned long [noderef] __user *user_frame_tail
-   arch/loongarch/kernel/perf_event.c:30:50: sparse:     got unsigned long *
-   arch/loongarch/kernel/perf_event.c: note: in included file (through arch/loongarch/include/asm/cpu-info.h, arch/loongarch/include/asm/processor.h, ...):
-   arch/loongarch/include/asm/loongarch.h:237:16: sparse: sparse: undefined identifier '__builtin_loongarch_csrrd_d'
-   arch/loongarch/include/asm/loongarch.h:237:16: sparse: sparse: cast from unknown type
-   arch/loongarch/include/asm/loongarch.h:237:16: sparse: sparse: cast from unknown type
-   arch/loongarch/include/asm/loongarch.h:237:16: sparse: sparse: cast from unknown type
-   arch/loongarch/include/asm/loongarch.h:237:16: sparse: sparse: cast from unknown type
-   arch/loongarch/include/asm/loongarch.h:247:9: sparse: sparse: undefined identifier '__builtin_loongarch_csrwr_d'
-   arch/loongarch/include/asm/loongarch.h:247:9: sparse: sparse: cast from unknown type
-   arch/loongarch/include/asm/loongarch.h:247:9: sparse: sparse: cast from unknown type
-   arch/loongarch/include/asm/loongarch.h:247:9: sparse: sparse: cast from unknown type
-   arch/loongarch/include/asm/loongarch.h:247:9: sparse: sparse: cast from unknown type
-   arch/loongarch/include/asm/loongarch.h:237:16: sparse: sparse: cast from unknown type
-   arch/loongarch/include/asm/loongarch.h:237:16: sparse: sparse: cast from unknown type
-   arch/loongarch/include/asm/loongarch.h:237:16: sparse: sparse: cast from unknown type
-   arch/loongarch/include/asm/loongarch.h:237:16: sparse: sparse: cast from unknown type
-   arch/loongarch/include/asm/loongarch.h:247:9: sparse: sparse: cast from unknown type
-   arch/loongarch/include/asm/loongarch.h:247:9: sparse: sparse: cast from unknown type
-   arch/loongarch/include/asm/loongarch.h:247:9: sparse: sparse: cast from unknown type
-   arch/loongarch/include/asm/loongarch.h:247:9: sparse: sparse: cast from unknown type
-
-vim +30 arch/loongarch/kernel/perf_event.c
-
-    20	
-    21	/*
-    22	 * Get the return address for a single stackframe and return a pointer to the
-    23	 * next frame tail.
-    24	 */
-    25	static unsigned long
-    26	user_backtrace(struct perf_callchain_entry_ctx *entry, unsigned long fp)
-    27	{
-    28		struct stack_frame buftail;
-    29		unsigned long err;
-  > 30		unsigned long __user *user_frame_tail = (unsigned long *)(fp - sizeof(struct stack_frame));
-    31	
-    32		/* Also check accessibility of one struct frame_tail beyond */
-    33		if (!access_ok(user_frame_tail, sizeof(buftail)))
-    34			return 0;
-    35	
-    36		pagefault_disable();
-    37		err = __copy_from_user_inatomic(&buftail, user_frame_tail, sizeof(buftail));
-    38		pagefault_enable();
-    39	
-    40		if (err || (unsigned long)user_frame_tail >= buftail.fp)
-    41			return 0;
-    42	
-    43		perf_callchain_store(entry, buftail.ra);
-    44	
-    45		return buftail.fp;
-    46	}
-    47	
+> ---
+>  drivers/thermal/rcar_thermal.c | 49 +++++-----------------------------
+>  1 file changed, 6 insertions(+), 43 deletions(-)
+> 
+> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+> index 4df42d70d867..003457810072 100644
+> --- a/drivers/thermal/rcar_thermal.c
+> +++ b/drivers/thermal/rcar_thermal.c
+> @@ -278,52 +278,16 @@ static int rcar_thermal_get_temp(struct thermal_zone_device *zone, int *temp)
+>  	return rcar_thermal_get_current_temp(priv, temp);
+>  }
+>  
+> -static int rcar_thermal_get_trip_type(struct thermal_zone_device *zone,
+> -				      int trip, enum thermal_trip_type *type)
+> -{
+> -	struct rcar_thermal_priv *priv = rcar_zone_to_priv(zone);
+> -	struct device *dev = rcar_priv_to_dev(priv);
+> -
+> -	/* see rcar_thermal_get_temp() */
+> -	switch (trip) {
+> -	case 0: /* +90 <= temp */
+> -		*type = THERMAL_TRIP_CRITICAL;
+> -		break;
+> -	default:
+> -		dev_err(dev, "rcar driver trip error\n");
+> -		return -EINVAL;
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -static int rcar_thermal_get_trip_temp(struct thermal_zone_device *zone,
+> -				      int trip, int *temp)
+> -{
+> -	struct rcar_thermal_priv *priv = rcar_zone_to_priv(zone);
+> -	struct device *dev = rcar_priv_to_dev(priv);
+> -
+> -	/* see rcar_thermal_get_temp() */
+> -	switch (trip) {
+> -	case 0: /* +90 <= temp */
+> -		*temp = MCELSIUS(90);
+> -		break;
+> -	default:
+> -		dev_err(dev, "rcar driver trip error\n");
+> -		return -EINVAL;
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+>  static struct thermal_zone_device_ops rcar_thermal_zone_of_ops = {
+>  	.get_temp	= rcar_thermal_get_temp,
+>  };
+>  
+>  static struct thermal_zone_device_ops rcar_thermal_zone_ops = {
+>  	.get_temp	= rcar_thermal_get_temp,
+> -	.get_trip_type	= rcar_thermal_get_trip_type,
+> -	.get_trip_temp	= rcar_thermal_get_trip_temp,
+> +};
+> +
+> +static struct thermal_trip trips[] = {
+> +	{ .type = THERMAL_TRIP_CRITICAL, .temperature = 90000 }
+>  };
+>  
+>  /*
+> @@ -531,9 +495,8 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+>  						dev, i, priv,
+>  						&rcar_thermal_zone_of_ops);
+>  		} else {
+> -			priv->zone = thermal_zone_device_register(
+> -						"rcar_thermal",
+> -						1, 0, priv,
+> +			priv->zone = thermal_zone_device_register_with_trips(
+> +				"rcar_thermal", trips, ARRAY_SIZE(trips), 0, priv,
+>  						&rcar_thermal_zone_ops, NULL, 0,
+>  						idle);
+>  
+> -- 
+> 2.34.1
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Kind Regards,
+Niklas Söderlund

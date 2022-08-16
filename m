@@ -2,70 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC20595CAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF6E595CAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235270AbiHPNCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35850 "EHLO
+        id S233776AbiHPNCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235303AbiHPNAx (ORCPT
+        with ESMTP id S231383AbiHPNBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 09:00:53 -0400
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29D286C06;
-        Tue, 16 Aug 2022 06:00:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1660654825; x=1692190825;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=OMRMQgwvgYeKotw1UaJE5PsArWxM8zmGn3KgUNZ1AW8=;
-  b=ccDZiMJkaNv8+nonaWcXcZNvXxA37orQyHztYH9es780fzGKUHh9AIt0
-   cSBcvAKNkQ4oyiB7RUuk1Oe1vaFlhkNMyeC+tKK1aWpQBcHQ2TctXkYOS
-   YzfuAq/N/gQXau4HkqqBRIg8jCG57nqgk981lFkL9uUuiw0Lp/t32uhwp
-   I=;
-X-IronPort-AV: E=Sophos;i="5.93,241,1654560000"; 
-   d="scan'208";a="230216051"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-4ba5c7da.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 13:00:14 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1a-4ba5c7da.us-east-1.amazon.com (Postfix) with ESMTPS id E12C23002EE;
-        Tue, 16 Aug 2022 13:00:11 +0000 (UTC)
-Received: from EX13D08UEE001.ant.amazon.com (10.43.62.126) by
- EX13MTAUEE002.ant.amazon.com (10.43.62.24) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 16 Aug 2022 13:00:06 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
- EX13D08UEE001.ant.amazon.com (10.43.62.126) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 16 Aug 2022 13:00:04 +0000
-Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Tue, 16 Aug 2022 13:00:03
- +0000
-Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id 480FC5AA; Tue, 16 Aug 2022 13:00:02 +0000 (UTC)
-From:   Eliav Farber <farbere@amazon.com>
-To:     <brgl@bgdev.pl>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
-        <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
-        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
-        <jonnyc@amazon.com>, <hanochu@amazon.com>, <ronenk@amazon.com>,
-        <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
-        <amitlavi@amazon.com>, <almogbs@amazon.com>, <dwmw@amazon.co.uk>
-Subject: [PATCH 2/2] eeprom: at24: add enable gpio support
-Date:   Tue, 16 Aug 2022 13:00:02 +0000
-Message-ID: <20220816130002.41450-3-farbere@amazon.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220816130002.41450-1-farbere@amazon.com>
-References: <20220816130002.41450-1-farbere@amazon.com>
+        Tue, 16 Aug 2022 09:01:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4980C49B51;
+        Tue, 16 Aug 2022 06:01:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA15B61361;
+        Tue, 16 Aug 2022 13:00:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8E15C433D7;
+        Tue, 16 Aug 2022 13:00:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660654859;
+        bh=acdDLBpXut9yLHqRuyu2ALBHD3iFgQWicla89BdHDe4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hBKbJz4b1yLZKBf8gXwHc/dL5iqGIHsW7JBt+mdjOAtHh3fICXkv4kaMtG9UHrEGi
+         FfFgTrzG4/3/z4kNg9G1sMXkirHFDUaiXQXMXL5WawsERh5PHYPlWC5C+eD74ynDT4
+         F8D5oWXtbW1nifB6EKC5McdPBTz09xtxsq8TqyzVieNtYtE7FrTbmGwsjgqKeYrAmF
+         Dkb/aE9ajcITuzF577LgWnXrdn+kYNQ1uHeB5K4NtlRde2iJmWTJKa0jcfTlugEO8V
+         QQer5lR7aYkNzUmwWuL1dZD9AsHAx6EOapIekW4PXGEwqSj62HFpBx/4rQBjBAJx0P
+         lIUEU6K+IAuGA==
+Date:   Tue, 16 Aug 2022 14:00:50 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Jon Nettleton <jon@solid-run.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Hector Martin <marcan@marcan.st>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>, Tejun Heo <tj@kernel.org>,
+        jirislaby@kernel.org, Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Asahi Linux <asahi@lists.linux.dev>, stable@vger.kernel.org
+Subject: Re: [PATCH] locking/atomic: Make test_and_*_bit() ordered on failure
+Message-ID: <20220816130048.GA11202@willie-the-truck>
+References: <20220816070311.89186-1-marcan@marcan.st>
+ <CAK8P3a03pfrPzjnx1tB5z0HcKnY=JL=y+F8PMQDpc=Bavs3UCA@mail.gmail.com>
+ <CABdtJHvZt=av5YEQvRMtf4-dMFR6JS1jM1Ntj7DMVy5fijvkMw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABdtJHvZt=av5YEQvRMtf4-dMFR6JS1jM1Ntj7DMVy5fijvkMw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,36 +78,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add gpio support to enable the eeprom device as part of probe sequence.
+On Tue, Aug 16, 2022 at 02:29:49PM +0200, Jon Nettleton wrote:
+> On Tue, Aug 16, 2022 at 10:17 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > On Tue, Aug 16, 2022 at 9:03 AM Hector Martin <marcan@marcan.st> wrote:
+> > >
+> > > These operations are documented as always ordered in
+> > > include/asm-generic/bitops/instrumented-atomic.h, and producer-consumer
+> > > type use cases where one side needs to ensure a flag is left pending
+> > > after some shared data was updated rely on this ordering, even in the
+> > > failure case.
+> > >
+> > > This is the case with the workqueue code, which currently suffers from a
+> > > reproducible ordering violation on Apple M1 platforms (which are
+> > > notoriously out-of-order) that ends up causing the TTY layer to fail to
+> > > deliver data to userspace properly under the right conditions. This
+> > > change fixes that bug.
+> > >
+> > > Change the documentation to restrict the "no order on failure" story to
+> > > the _lock() variant (for which it makes sense), and remove the
+> > > early-exit from the generic implementation, which is what causes the
+> > > missing barrier semantics in that case. Without this, the remaining
+> > > atomic op is fully ordered (including on ARM64 LSE, as of recent
+> > > versions of the architecture spec).
+> > >
+> > > Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> > > Cc: stable@vger.kernel.org
+> > > Fixes: e986a0d6cb36 ("locking/atomics, asm-generic/bitops/atomic.h: Rewrite using atomic_*() APIs")
+> > > Fixes: 61e02392d3c7 ("locking/atomic/bitops: Document and clarify ordering semantics for failed test_and_{}_bit()")
+> > > Signed-off-by: Hector Martin <marcan@marcan.st>
+> > > ---
+> > >  Documentation/atomic_bitops.txt     | 2 +-
+> > >  include/asm-generic/bitops/atomic.h | 6 ------
+> >
+> > I double-checked all the architecture specific implementations to ensure
+> > that the asm-generic one is the only one that needs the fix.
+> >
+> > I assume this gets merged through the locking tree or that Linus picks it up
+> > directly, not through my asm-generic tree.
+> >
+> > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> >
+> > _______________________________________________
+> > linux-arm-kernel mailing list
+> > linux-arm-kernel@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> 
+> Testing this patch on pre Armv8.1 specifically Cortex-A72 and
+> Cortex-A53 cores I am seeing
+> a huge performance drop with this patch applied. Perf is showing
+> lock_is_held_type() as the worst offender
 
-Signed-off-by: Eliav Farber <farbere@amazon.com>
----
- drivers/misc/eeprom/at24.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Hmm, that should only exist if LOCKDEP is enabled and performance tends to
+go out of the window if you have that on. Can you reproduce the same
+regression with lockdep disabled?
 
-diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-index dc3537651b80..06535b9e1da5 100644
---- a/drivers/misc/eeprom/at24.c
-+++ b/drivers/misc/eeprom/at24.c
-@@ -623,6 +623,7 @@ static int at24_probe(struct i2c_client *client)
- 	struct device *dev = &client->dev;
- 	bool i2c_fn_i2c, i2c_fn_block;
- 	unsigned int i, num_addresses;
-+	struct gpio_desc *enable_gpio;
- 	struct at24_data *at24;
- 	struct regmap *regmap;
- 	size_t at24_size;
-@@ -630,6 +631,10 @@ static int at24_probe(struct i2c_client *client)
- 	u8 test_byte;
- 	int err;
- 
-+	enable_gpio = devm_gpiod_get_optional(dev, "enable", GPIOD_OUT_HIGH);
-+	if (IS_ERR(enable_gpio))
-+		return PTR_ERR(enable_gpio);
-+
- 	i2c_fn_i2c = i2c_check_functionality(client->adapter, I2C_FUNC_I2C);
- 	i2c_fn_block = i2c_check_functionality(client->adapter,
- 					       I2C_FUNC_SMBUS_WRITE_I2C_BLOCK);
--- 
-2.37.1
-
+Will

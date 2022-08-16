@@ -2,73 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 797245965B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD5F45965B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237717AbiHPWz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 18:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
+        id S237779AbiHPW4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 18:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237506AbiHPWzw (ORCPT
+        with ESMTP id S237406AbiHPWzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 18:55:52 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48CB647EC;
-        Tue, 16 Aug 2022 15:55:51 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a7so21644107ejp.2;
-        Tue, 16 Aug 2022 15:55:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=xaLBKYz/NspcrKgbukvBxgHlffMD/LglZ9aKHRnhLQ8=;
-        b=hWqOro8AZlpQdEaXISXR45I2wiGhkQk2hp6z1USBnkJYFD6ba/1WM//2yKnkXUsnrF
-         7ef3/f59Rr7TgfYKxTHe/vksIFsGaLc7L91YmsvdeS7tnOMEj9HbPsx7zRcRbJ8s+lPy
-         YffV6mqVGMcmuACVanSF2WnOnslVjhINaAS/IYQ0P0gcgAJXP2i79KSDgvXicuTmTEfy
-         wLMXAY6tBc3JNFbNOynEHBM7TS1YnurXEOdsZ0KRiBsjnjCSJJ+jKhCZ+AV6YDR+hvAL
-         yTLwwngmWD0l6bxyJCVL3QS/GPCx/d+OhVSDcjWZ5dkjGdF68h1mZRK7OEU+IA+nyVP9
-         a13w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=xaLBKYz/NspcrKgbukvBxgHlffMD/LglZ9aKHRnhLQ8=;
-        b=oQAkZ6Bx8fzBedFyxYYPaNIAMRkIxiLxDgSBc3kuz+vpMZA3Rt0gBqS0YSE89/Hl0Y
-         AIg3BFJ/A5hJyiVAfgBNVaDUT6g0Sm7F6LTra0R7+fXEFzl6HK7aR1oL8EpJkAC0Qy0U
-         XHVaIMls0BCJYQqwJaleKO203cEqX62pII92H+9pCghHFyD9s7DldY3MN1Oc0/vc+2SZ
-         wlKQ2pbwBd8/eXdnKo/jnNWoTlU1ScFHMJw1HMkyDZJ08Zqunlo8c7/QDPgiRC7B+D2l
-         on0rk3Arc8Kb2jabGRBCb7g5tx/frdxhT/+rZIEQkOXfj1lPpPmmdVG7Nx8FClX1DqQj
-         42bA==
-X-Gm-Message-State: ACgBeo3fYyjMmYItOa1BpKF+QFbnP4uksQ75SlqxjiLovfi6SiC3YRqi
-        hbg3GBGSzghj/N+NZfsTPt70RgyxwfThIcncyVyxAI8Y
-X-Google-Smtp-Source: AA6agR5heqRzrlUztQskbhhE0ThFAjz6hXfg3a4sCRN4LkCKa0L1Zv25uwz68ovMeAWJGquZIv0BM71PQaeJTwLpt9w=
-X-Received: by 2002:a17:907:1361:b0:730:8f59:6434 with SMTP id
- yo1-20020a170907136100b007308f596434mr15116251ejb.745.1660690550251; Tue, 16
- Aug 2022 15:55:50 -0700 (PDT)
+        Tue, 16 Aug 2022 18:55:55 -0400
+X-Greylist: delayed 5711 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 16 Aug 2022 15:55:55 PDT
+Received: from outbound-ss-820.bluehost.com (outbound-ss-820.bluehost.com [69.89.24.241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0474361DB4
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 15:55:54 -0700 (PDT)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway2.mail.pro1.eigbox.com (Postfix) with ESMTP id 6648C10047FB8
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 22:55:44 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id O5TLoMKo0sbE6O5TMoOwlL; Tue, 16 Aug 2022 22:55:44 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=EegN/NqC c=1 sm=1 tr=0 ts=62fc2070
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=biHskzXt2R4A:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=TID-4aolWWKDivYmgJMA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:In-Reply-To:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=/SmYIfUno6x7+bruFeolY8tuTCgFzmseyfetHbvYSmI=; b=RMKNkVPs+aQ77nRfzKN9dKvZoz
+        pVre3uxG0cRNS499amFNG87W4cHsUdbNV3sG0NtEZIR0YM6qv3thkqgV+y760OM4rUv27crO3cl6Y
+        ar4tKMYh+a8NvDvl1ADDHyPVSjsTVEHN+hCNejoVsavwKeizxWURZOt0RMK//ESVp+KwNDtc8Ve+G
+        6bcleB6Nnd2J4gJwkm7vhr8u3kNNZaVl3eyiIlP11QFvP3rKMwsz1MQGuGzl8X5pLh7/wcLlGLt+H
+        jZtm4b5q0AI0DGcr8JXe50oW7a7wqv5W2DHCmHxb5P84TB7gtS5miwJ85G5pSYMExChqVnW1SnHMU
+        mMnw9abQ==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:40366 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oO5TK-000VVe-IQ;
+        Tue, 16 Aug 2022 16:55:42 -0600
+Subject: Re: [PATCH 5.19 0000/1157] 5.19.2-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220816124610.393032991@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+In-Reply-To: <20220816124610.393032991@linuxfoundation.org>
+Message-ID: <3d90ae0d-873a-4794-24e9-50509cb85c77@w6rz.net>
+Date:   Tue, 16 Aug 2022 15:55:39 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220816214945.742924-1-haoluo@google.com> <CAEf4Bza1SMFvzofz4RkBF=pByFHp+Z1v16Z+TMAQZ6rD2m9Lxg@mail.gmail.com>
- <CA+khW7hHGL1DAMSOjbJSj21wJYY=j4VrRJcFB1zv52Db20_MGA@mail.gmail.com>
-In-Reply-To: <CA+khW7hHGL1DAMSOjbJSj21wJYY=j4VrRJcFB1zv52Db20_MGA@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 16 Aug 2022 15:55:38 -0700
-Message-ID: <CAEf4BzbBOrVU+BWySMk_v3w6019+5VpNXZY03JpmiwoQPnV1yA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] libbpf: allow disabling auto attach
-To:     Hao Luo <haoluo@google.com>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oO5TK-000VVe-IQ
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:40366
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,83 +94,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 3:16 PM Hao Luo <haoluo@google.com> wrote:
+On 8/16/22 5:59 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.2 release.
+> There are 1157 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> On Tue, Aug 16, 2022 at 3:01 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Tue, Aug 16, 2022 at 2:49 PM Hao Luo <haoluo@google.com> wrote:
-> > >
-> > > Add libbpf APIs for disabling auto-attach for individual functions.
-> > > This is motivated by the use case of cgroup iter [1]. Some iter
-> > > types require their parameters to be non-zero, therefore applying
-> > > auto-attach on them will fail. With these two new APIs, Users who
-> > > want to use auto-attach and these types of iters can disable
-> > > auto-attach for them and perform manual attach.
-> > >
-> > > [1] https://lore.kernel.org/bpf/CAEf4BzZ+a2uDo_t6kGBziqdz--m2gh2_EUwkGLDtMd65uwxUjA@mail.gmail.com/
-> > >
-> > > Signed-off-by: Hao Luo <haoluo@google.com>
-> > > ---
-> > >  tools/lib/bpf/libbpf.c | 16 ++++++++++++++++
-> > >  tools/lib/bpf/libbpf.h |  2 ++
-> > >  2 files changed, 18 insertions(+)
-> > >
-> > > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > > index aa05a99b913d..25f654d25b46 100644
-> > > --- a/tools/lib/bpf/libbpf.c
-> > > +++ b/tools/lib/bpf/libbpf.c
-> [...]
-> > >  const struct bpf_insn *bpf_program__insns(const struct bpf_program *prog)
-> > >  {
-> > >         return prog->insns;
-> > > @@ -12349,6 +12362,9 @@ int bpf_object__attach_skeleton(struct bpf_object_skeleton *s)
-> > >                 if (!prog->autoload)
-> > >                         continue;
-> > >
-> > > +               if (!prog->autoattach)
-> > > +                       continue;
-> > > +
-> >
-> > nit: I'd combine as if (!prog->autoload || !prog->autoattach), they
-> > are very coupled in this sense
-> >
+> Responses should be made by Thu, 18 Aug 2022 12:43:10 +0000.
+> Anything received after that time might be too late.
 >
-> Sure.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.2-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
 >
-> > >                 /* auto-attaching not supported for this program */
-> > >                 if (!prog->sec_def || !prog->sec_def->prog_attach_fn)
-> > >                         continue;
-> > > diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> > > index 61493c4cddac..88a1ac34b12a 100644
-> > > --- a/tools/lib/bpf/libbpf.h
-> > > +++ b/tools/lib/bpf/libbpf.h
-> > > @@ -260,6 +260,8 @@ LIBBPF_API const char *bpf_program__name(const struct bpf_program *prog);
-> > >  LIBBPF_API const char *bpf_program__section_name(const struct bpf_program *prog);
-> > >  LIBBPF_API bool bpf_program__autoload(const struct bpf_program *prog);
-> > >  LIBBPF_API int bpf_program__set_autoload(struct bpf_program *prog, bool autoload);
-> > > +LIBBPF_API bool bpf_program__autoattach(const struct bpf_program *prog);
-> > > +LIBBPF_API void bpf_program__set_autoattach(struct bpf_program *prog, bool autoattach);
-> >
-> > please add these APIs to libbpf.map as well
-> >
+> thanks,
 >
-> Ok. Which section? LIBBPF_1.0.0? Do the items in each section have a
-> particular order?
+> greg k-h
 
-Yes, 1.0.0 section. All the functions are sorted alphabetically.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-> > it would be also nice to have a simple test validating that skeleton's
-> > auto-attach doesn't attach program (no link will be created) if
-> > bpf_program__set_autoattach(false) is called before. Can you please
-> > add that as well?
-> >
->
-> Ok. Will add a test and send v2.
->
-> > >
-> > >  struct bpf_insn;
-> > >
-> > > --
-> > > 2.37.1.595.g718a3a8f04-goog
-> > >
+Tested-by: Ron Economos <re@w6rz.net>
+

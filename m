@@ -2,79 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3616C59622F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 20:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A143D596236
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 20:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236980AbiHPSNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 14:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47418 "EHLO
+        id S235855AbiHPSOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 14:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236996AbiHPSNL (ORCPT
+        with ESMTP id S233076AbiHPSOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 14:13:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5713196;
-        Tue, 16 Aug 2022 11:13:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BA9560F0E;
-        Tue, 16 Aug 2022 18:13:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38308C433D6;
-        Tue, 16 Aug 2022 18:13:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660673586;
-        bh=XbAc7JtDFaqil7L7oXl65af6y1FHgq7Wjx4yuQUnwHM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KtZ0iolpEQnjcW68XqPt21LF5emDFaAIJyZfIQlqnA47PPWa5U4Pezhwfv6A08k2p
-         AnlnoTD86/pPVn9O+e3A5c/++uolriqnOBXLY3qb9H4y1TMmSSdEVFiaGRoa4mKTqU
-         TFuAqsxIGOSBuYmDw9OEoFokpD6tuWjN+WjGBDKGr3fHLOVDXYzLeCjvZAVi5KOgG7
-         uDOXeOzW2URSliuUpFTnvlf+7ANCFNnkWU5YN0f8dfLBoAZY74CUn948aaIvrs7n/w
-         k78khjKE2A7kohMdmMX1A2+w3j/YPpN2mAsu/cc3fA5JXTmcyDLKrETN7DKtghhbVY
-         RAUXLpB0eooJA==
-Date:   Tue, 16 Aug 2022 11:13:05 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     shaozhengchao <shaozhengchao@huawei.com>
-Cc:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
-        <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>
-Subject: Re: [PATCH net-next,0/3] cleanup of qdisc offload function
-Message-ID: <20220816111305.4851a510@kernel.org>
-In-Reply-To: <694f07e3-d5ad-1bc5-1cdb-ae814b1a12f7@huawei.com>
-References: <20220816020423.323820-1-shaozhengchao@huawei.com>
-        <20220815201038.4321b77e@kernel.org>
-        <694f07e3-d5ad-1bc5-1cdb-ae814b1a12f7@huawei.com>
+        Tue, 16 Aug 2022 14:14:45 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0AD7AC02;
+        Tue, 16 Aug 2022 11:14:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=MySzvGXqRSaBBJhmsw3ulDhggVAysoOKEMJnaszkKsU=; b=YPrEDcLvKjIb0xNBG+Jk/CGOJ6
+        kW006eJ0NtmQgEuIfrtpv18W/AT3E6P4tU5tApVpU7iXAmUuqgW37qBLQwW2Knu5FTIuqME+NNPyp
+        YadFUKbPi+Tq8trcm0xs6iZy0i2DBc3igLK50MYONBYKHxtUkGtlV31WJyX2fPAFh1cO7W3lL6vBo
+        rNXj8n/uobl/HADOp+sc3StKPN9OlbxVN+x6YSldP1qDn+vr9g7EePepooP8GXvGf41FpHgOg9w5Q
+        eUbNbWIvPg7EMgqcJ9XQFTfQntotK8qMPpjXTNgqVHkWILVngJ8OwCDNX5OV/DmArUSafNpj+lANo
+        lPG7MazQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oO153-007DVO-MT; Tue, 16 Aug 2022 18:14:21 +0000
+Date:   Tue, 16 Aug 2022 19:14:21 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Hector Martin <marcan@marcan.st>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>, Tejun Heo <tj@kernel.org>,
+        jirislaby@kernel.org, Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Asahi Linux <asahi@lists.linux.dev>, stable@vger.kernel.org
+Subject: Re: [PATCH] locking/atomic: Make test_and_*_bit() ordered on failure
+Message-ID: <Yvveff1aW/zeYzBo@casper.infradead.org>
+References: <20220816070311.89186-1-marcan@marcan.st>
+ <CAK8P3a03pfrPzjnx1tB5z0HcKnY=JL=y+F8PMQDpc=Bavs3UCA@mail.gmail.com>
+ <20220816140640.GD11202@willie-the-truck>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816140640.GD11202@willie-the-truck>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 Aug 2022 11:32:03 +0800 shaozhengchao wrote:
-> On 2022/8/16 11:10, Jakub Kicinski wrote:
-> > On Tue, 16 Aug 2022 10:04:20 +0800 Zhengchao Shao wrote:  
-> >> Some qdiscs don't care return value of qdisc offload function, so make
-> >> function void.  
+On Tue, Aug 16, 2022 at 03:06:41PM +0100, Will Deacon wrote:
+> On Tue, Aug 16, 2022 at 10:16:04AM +0200, Arnd Bergmann wrote:
+> > On Tue, Aug 16, 2022 at 9:03 AM Hector Martin <marcan@marcan.st> wrote:
+> > >
+> > > These operations are documented as always ordered in
+> > > include/asm-generic/bitops/instrumented-atomic.h, and producer-consumer
+> > > type use cases where one side needs to ensure a flag is left pending
+> > > after some shared data was updated rely on this ordering, even in the
+> > > failure case.
+> > >
+> > > This is the case with the workqueue code, which currently suffers from a
+> > > reproducible ordering violation on Apple M1 platforms (which are
+> > > notoriously out-of-order) that ends up causing the TTY layer to fail to
+> > > deliver data to userspace properly under the right conditions. This
+> > > change fixes that bug.
+> > >
+> > > Change the documentation to restrict the "no order on failure" story to
+> > > the _lock() variant (for which it makes sense), and remove the
+> > > early-exit from the generic implementation, which is what causes the
+> > > missing barrier semantics in that case. Without this, the remaining
+> > > atomic op is fully ordered (including on ARM64 LSE, as of recent
+> > > versions of the architecture spec).
+> > >
+> > > Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> > > Cc: stable@vger.kernel.org
+> > > Fixes: e986a0d6cb36 ("locking/atomics, asm-generic/bitops/atomic.h: Rewrite using atomic_*() APIs")
+> > > Fixes: 61e02392d3c7 ("locking/atomic/bitops: Document and clarify ordering semantics for failed test_and_{}_bit()")
+> > > Signed-off-by: Hector Martin <marcan@marcan.st>
+> > > ---
+> > >  Documentation/atomic_bitops.txt     | 2 +-
+> > >  include/asm-generic/bitops/atomic.h | 6 ------
 > > 
-> > How many of these patches do you have? Is there a goal you're working
-> > towards? I don't think the pure return value removals are worth the
-> > noise. They don't even save LoC:
-> > 
-> >   3 files changed, 9 insertions(+), 9 deletions(-)  
->
-> 	Thank you for your reply. Recently I've been studying the kernel code 
-> related to qdisc, and my goal is to understand how qdisc works. If the 
-> code can be optimized, I do what I can to modify the optimization. Is it 
-> more appropriate to add warning to the offload return value? I look 
-> forward to your reply. Thank you.
+> > I double-checked all the architecture specific implementations to ensure
+> > that the asm-generic one is the only one that needs the fix.
+> 
+> I couldn't figure out parisc -- do you know what ordering their spinlocks
+> provide? They have a comment talking about a release, but I don't know what
+> the ordering guarantees of an "ldcw" are.
 
-Understood. Please stop sending the cleanups removing return values
-unless the patches materially improve the code.
+"The semaphore operation is strongly ordered" (that's from the
+description of the LDCW instruction)

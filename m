@@ -2,267 +2,460 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD849595F1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 17:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CDEB595F21
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 17:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235534AbiHPPdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 11:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49116 "EHLO
+        id S236121AbiHPPd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 11:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234199AbiHPPc5 (ORCPT
+        with ESMTP id S235704AbiHPPdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 11:32:57 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F2B4AD74
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:32:55 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id z12so13052707wrs.9
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:32:55 -0700 (PDT)
+        Tue, 16 Aug 2022 11:33:41 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0208220BDB
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:33:24 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id c11-20020a170902d48b00b0016f093907e0so6853248plg.20
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:33:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=3ladZqrQ7hNXeMbMYQUqvYEHlbnDirnZuxEqx51rn3k=;
-        b=e8vzu7PeBAdXQ6hugx5wz3E3xcqvRq28DlomHp8jfJkPAEpsBgPoXI1xpbFHaQldMI
-         8gFyvKYLgXuDC3xGwdVIeAEWq8l4Hooexm8c1zD3F1S7DhTtCjDcOWr/EzCwF0v07g/o
-         CbaORHWZ6LO0NGLDNh9TPemDhdVcDvmKngMDz9oTjxOYtjIp2yQQbHzra2ueoU85FOB7
-         H+KG0YrLKy3crgf9B7zKgjeDei8hCgC+BMJLi+u7y1cias+4IDektykh7UGMqgcuGF2i
-         2IyS+sqhmTFXR3FHIv4liTLXxFO/MX68nq9yIxfSgW8dD4SNS7evif9dTp/2aw3D1i2j
-         of0g==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=hWy/bky5ij4Fq019kN/Eoim7rgLKUQHE3Pxq9PEt+N4=;
+        b=dZLYGjBsJQEFyvLvwzJi71Lm4aVcp+v9jpcvAepnhj8Mw+nl4m5eOaJk+KmsxT0HEs
+         DtC3QJk33/pn7TT65fsc47N/3WN/cBj6hQUPCtDGzxCs4858QPwc4/p+e7qVyYmPhRwq
+         tm4mIkLudQ7NrUAjE0ocKQKgtMzW6pCqkJdvJwQhIEEw9mLoIhGT+tZQtbaHgZ8pY/gK
+         6UVlQ7kxNjVB7I4o91NUqsO1KNhFARD+dpOk15lsmF26aVAYz9dir4L/b7KsqokdhhPZ
+         xrnPvDQGaJjyLmUp8ymm/WoZfIKcCRko/J/cEixrTk3lOxlDipC9Nodz21HMwAH7guhI
+         J/jQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=3ladZqrQ7hNXeMbMYQUqvYEHlbnDirnZuxEqx51rn3k=;
-        b=VvcB0SEIn2s3/VNnf0sejzrfOd0rmIbVp4ZYWkY/jos4OGcUzjI+hXcE15PtHymZw7
-         H5LsxIXEECP0k6vDp7dMz+K1r7SOw/bM0yihJzpPLcjyKNklUt/60B47OJSY9zwNaCxt
-         SNLTeP6sh6/TgPOMV35QJYVhFkZ1Iaf2217cTmAUKDPygfkzkNXfEUSppTLfGUbbEjXH
-         UCpsKoYo/6FLeNo76z9gSke5craYJHkO1Ly7LzT1dCFfTzXWnQIZ8jBMgw/3epDHlH+3
-         Bu+3hDPSeQyrU0RDmjtYWxGtSzI9a6K/XsPJQQBtf6+qaQbOxwChXgNqvoattlMfeCKH
-         +BoQ==
-X-Gm-Message-State: ACgBeo34NBaxaykzIaVvMYDH+SjYZjuLxYcoCyuonFQKcFvNFadoHayN
-        BPzQUeJhHtUtJl7H/KfgnkfrrQ==
-X-Google-Smtp-Source: AA6agR7WnOpx6lbbKXS0hGEuz9TJ/O7NMQdTx0mIHN6ef6AgzxJdcpTQQRMe8Jkwbuzf6vloQMoz1g==
-X-Received: by 2002:a5d:47a4:0:b0:220:600d:2b0f with SMTP id 4-20020a5d47a4000000b00220600d2b0fmr12148608wrb.407.1660663974377;
-        Tue, 16 Aug 2022 08:32:54 -0700 (PDT)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id m31-20020a05600c3b1f00b003a6077384ecsm2938495wms.31.2022.08.16.08.32.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 08:32:53 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 18:32:51 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Caleb Connolly <caleb.connolly@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/4] arm64: dts: qcom: sdm845: Add the RPMh stats node
-Message-ID: <Yvu4o1bFdKLfvaiL@linaro.org>
-References: <20220812101240.1869605-1-abel.vesa@linaro.org>
- <T2Uz7zs4Ht58lYc5zWg1VBY0ju6bVaSKa9y3RhBQWDDHmPXBHbAxI2J34jSeY0BFQy2y4JtFn3nQS0Lz4xI5jw==@protonmail.internalid>
- <20220812101240.1869605-3-abel.vesa@linaro.org>
- <e6821eef-4fcb-97b1-24be-e2bb62b99039@linaro.org>
- <Yvtx2aK1Uu51hTPM@linaro.org>
- <b34b2fa6-7dbf-e4d3-9833-57efd42f9137@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b34b2fa6-7dbf-e4d3-9833-57efd42f9137@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=hWy/bky5ij4Fq019kN/Eoim7rgLKUQHE3Pxq9PEt+N4=;
+        b=OF3XP1EiPnjY7Tfket0a+B28+jB4MSzNrVIPHOoFBuLqP4H9DfKr34cwshbGk3ARY0
+         9b3GzcsNfIqnKm7STLMp2ImidTj8NElLGM1NS1V37IYFPDC1bPvLb5bXrxgHk88njbgE
+         eh+TVBjGNSGf2BOZ5TyBa9W0rzBHk3kpLS/sSHr5rCSuurdb95Jbgl2BIX6Sg2kHVbEh
+         9IPrrU1jsKNoigIpQ7IivUBHCKjq+7AlJ9bq+eL4oL5GVsznHLpv8W0NsYicG1o/4zGw
+         fNRohTQSH7aCuj86NfWEV3QAuhMK6N6+Qzi8CF12TSy/Ty9Tc2ru7ZQtf8MbjxzQaalG
+         RMSQ==
+X-Gm-Message-State: ACgBeo37MzDvn+NUEjVdmwv8FwZUszAvVNTWD4YWlpxEPgMJa4vtLTNN
+        LEgZlsgjv5AyVfO1D3zEcZmo73OAIoqXMBpxPr+vzA==
+X-Google-Smtp-Source: AA6agR43H1WEzEHDPciCug0nTkf/X0Yq+Oh7uhDDklGKSMamxC7Tb9t/fgB6rbF1dQBaV6phM/wqQAHnPkOJX6M+/fBkMg==
+X-Received: from sagarika.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5714])
+ (user=sharmasagarika job=sendgmr) by 2002:a17:902:d50a:b0:16e:e1c1:dfa7 with
+ SMTP id b10-20020a170902d50a00b0016ee1c1dfa7mr22504683plg.160.1660664004410;
+ Tue, 16 Aug 2022 08:33:24 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 15:33:19 +0000
+Message-Id: <20220816153320.1478209-1-sharmasagarika@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+Subject: [PATCH bpf-next 1/2] Benchmark test added: bench_bpf_htab_batch_ops
+From:   Sagarika Sharma <sharmasagarika@google.com>
+To:     Brian Vazquez <brianvv@google.com>,
+        Sagarika Sharma <sagarikashar@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yonghong Song <yhs@fb.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Luigi Rizzo <lrizzo@google.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Sagarika Sharma <sharmasagarika@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-08-16 14:50:50, Caleb Connolly wrote:
-> 
-> 
-> On 16/08/2022 11:30, Abel Vesa wrote:
-> > On 22-08-15 21:34:07, Caleb Connolly wrote:
-> > > 
-> > > 
-> > > On 12/08/2022 11:12, Abel Vesa wrote:
-> > > > SDM845 is a special case compared to the other platforms that use RPMh
-> > > > stats, since it only has 2 stats (aosd and cxsd), while the others have
-> > > > a 3rd one (ddr).
-> > > > 
-> > > > So lets add the node but with a SDM845 dedicated compatible to make
-> > > > the driver aware of the different stats config.
-> > > Hi,
-> > > 
-> > > I gave this a go on the OnePlus 6, I noticed the driver is also meant to
-> > > read the stats for remote procs via smem, however this seems to fail for me
-> > > - it can't find any of the SMEM items even if I probe the driver manually
-> > > after ensuring remoteprocs have booted. Is this an unsupported feature on
-> > > SDM845?
-> > 
-> > Thanks for giving it a test.
-> > 
-> > Actually, you need to probe the qcom_stats after the remoteprocs have
-> > booted.
-> 
-> Hi, thanks for getting back to me. I did try this as mentioned above but I
-> think I must have been doing something wrong as I get different behaviour
-> now:
-> 
-> 
-> enchilada:/ # cat /sys/class/remoteproc/remoteproc*/state
-> 
-> running
-> 
-> running
-> 
-> running
-> 
-> running
-> 
-> enchilada:/ # ls /d/qcom_stats/
-> aosd  cxsd
-> enchilada:/ # rmmod qcom_stats
-> enchilada:/ # insmod /data/qcom_stats.ko
-> enchilada:/ # ls /d/qcom_stats/
-> adsp  aosd  cdsp  cxsd  modem  slpi
+The benchmark test is a tool to measure the different methods
+of iterating through bpf hashmaps, specifically the function
+bpf_map_lookup_batch() and the combination of the two functions
+bpf_get_next_key()/bpf_map_lookup_elem(). The test will be
+extended to also measure bpf_iter. The shell script
+bench_bpf_htab_batch_ops.sh runs the benchmark test with a range
+of parameters (e.g. the capacity of the hashmap, the number of
+entries put in the map, and the setting of the n_prefetch module
+parameter)
 
-Well, I run on upstream MTP, which has less enabled in devicetree.
+Signed-off-by: Sagarika Sharma <sharmasagarika@google.com>
+---
+ tools/testing/selftests/bpf/Makefile          |   3 +-
+ tools/testing/selftests/bpf/bench.c           |  26 +-
+ .../bpf/benchs/bench_bpf_htab_batch_ops.c     | 237 ++++++++++++++++++
+ .../benchs/run_bench_bpf_htab_batch_ops.sh    |  28 +++
+ 4 files changed, 292 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_htab_batch_ops.c
+ create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bpf_htab_batch_ops.sh
 
-> 
-> 
-> 
-> Weirdly, despite it succeeding it prints the following in dmesg with logging
-> added to qcom_create_subsystem_stat_files() [1]:
-> 
-> [  156.540307] Couldn't get smem object 'wpss' (item: 605, pid: 13): -2
-> [  156.546899] Couldn't get smem object 'gpu' (item: 609, pid: 0): -2
-> [  156.553260] Couldn't get smem object 'display' (item: 610, pid: 0): -2
-> [  156.559957] Couldn't get smem object 'adsp_island' (item: 613, pid: 2): -2
-> [  156.567007] Couldn't get smem object 'slpi_island' (item: 613, pid: 3): -2
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 8d59ec7f4c2d..772d8339c400 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -589,7 +589,8 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
+ 		 $(OUTPUT)/bench_strncmp.o \
+ 		 $(OUTPUT)/bench_bpf_hashmap_full_update.o \
+ 		 $(OUTPUT)/bench_local_storage.o \
+-		 $(OUTPUT)/bench_local_storage_rcu_tasks_trace.o
++		 $(OUTPUT)/bench_local_storage_rcu_tasks_trace.o \
++		 $(OUTPUT)/bench_bpf_htab_batch_ops.o
+ 	$(call msg,BINARY,,$@)
+ 	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
+ 
+diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
+index c1f20a147462..55714e8071c8 100644
+--- a/tools/testing/selftests/bpf/bench.c
++++ b/tools/testing/selftests/bpf/bench.c
+@@ -12,6 +12,8 @@
+ #include "bench.h"
+ #include "testing_helpers.h"
+ 
++#define STK_SIZE (0xfffffff)
++
+ struct env env = {
+ 	.warmup_sec = 1,
+ 	.duration_sec = 5,
+@@ -275,6 +277,7 @@ extern struct argp bench_bpf_loop_argp;
+ extern struct argp bench_local_storage_argp;
+ extern struct argp bench_local_storage_rcu_tasks_trace_argp;
+ extern struct argp bench_strncmp_argp;
++extern struct argp bench_bpf_htab_batch_ops_argp;
+ 
+ static const struct argp_child bench_parsers[] = {
+ 	{ &bench_ringbufs_argp, 0, "Ring buffers benchmark", 0 },
+@@ -284,6 +287,7 @@ static const struct argp_child bench_parsers[] = {
+ 	{ &bench_strncmp_argp, 0, "bpf_strncmp helper benchmark", 0 },
+ 	{ &bench_local_storage_rcu_tasks_trace_argp, 0,
+ 		"local_storage RCU Tasks Trace slowdown benchmark", 0 },
++	{ &bench_bpf_htab_batch_ops_argp, 0, "bpf_htab_ops benchmark", 0},
+ 	{},
+ };
+ 
+@@ -490,6 +494,8 @@ extern const struct bench bench_local_storage_cache_seq_get;
+ extern const struct bench bench_local_storage_cache_interleaved_get;
+ extern const struct bench bench_local_storage_cache_hashmap_control;
+ extern const struct bench bench_local_storage_tasks_trace;
++extern const struct bench bench_bpf_htab_batch_ops;
++extern const struct bench bench_bpf_htab_element_ops;
+ 
+ static const struct bench *benchs[] = {
+ 	&bench_count_global,
+@@ -529,6 +535,8 @@ static const struct bench *benchs[] = {
+ 	&bench_local_storage_cache_interleaved_get,
+ 	&bench_local_storage_cache_hashmap_control,
+ 	&bench_local_storage_tasks_trace,
++	&bench_bpf_htab_batch_ops,
++	&bench_bpf_htab_element_ops,
+ };
+ 
+ static void setup_benchmark()
+@@ -585,7 +593,23 @@ static void setup_benchmark()
+ 		env.prod_cpus.next_cpu = env.cons_cpus.next_cpu;
+ 
+ 	for (i = 0; i < env.producer_cnt; i++) {
+-		err = pthread_create(&state.producers[i], NULL,
++		pthread_attr_t attr_producer;
++
++		err = pthread_attr_init(&attr_producer);
++		if (err) {
++			fprintf(stderr, "failed to initialize pthread attr #%d: %d\n",
++				i, -errno);
++			exit(1);
++		}
++
++		err = pthread_attr_setstacksize(&attr_producer, STK_SIZE);
++		if (err) {
++			fprintf(stderr, "failed to set pthread stacksize #%d: %d\n",
++				i, -errno);
++			exit(1);
++		}
++
++		err = pthread_create(&state.producers[i], &attr_producer,
+ 				     bench->producer_thread, (void *)(long)i);
+ 		if (err) {
+ 			fprintf(stderr, "failed to create producer thread #%d: %d\n",
+diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_htab_batch_ops.c b/tools/testing/selftests/bpf/benchs/bench_bpf_htab_batch_ops.c
+new file mode 100644
+index 000000000000..ea98c2e97bff
+--- /dev/null
++++ b/tools/testing/selftests/bpf/benchs/bench_bpf_htab_batch_ops.c
+@@ -0,0 +1,237 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <errno.h>
++#include <bpf/bpf.h>
++#include <bpf/libbpf.h>
++#include <argp.h>
++#include "bench.h"
++#include <bpf_util.h>
++
++/* A hash table of the size DEFAULT_NUM_ENTRIES
++ * makes evident the effect of optimizing
++ * functions that iterate through the map
++ */
++#define DEFAULT_NUM_ENTRIES 40000
++#define VALUE_SIZE 4
++
++int map_fd, method_flag, hits;
++
++static struct {
++	__u32 capacity;
++	__u32 num_entries;
++} args = {
++	.capacity = DEFAULT_NUM_ENTRIES,
++	.num_entries = DEFAULT_NUM_ENTRIES,
++};
++
++enum {
++	ARG_CAPACITY = 8000,
++	ARG_NUM_ENTRIES = 8001,
++};
++
++static const struct argp_option opts[] = {
++	{ "capacity", ARG_CAPACITY, "capacity", 0,
++		"Set hashtable capacity"},
++	{"num_entries", ARG_NUM_ENTRIES, "num_entries", 0,
++		"Set number of entries in the hashtable"},
++	{}
++};
++
++static error_t parse_arg(int key, char *arg, struct argp_state *state)
++{
++	switch (key) {
++	case ARG_CAPACITY:
++		args.capacity = strtol(arg, NULL, 10);
++		break;
++	case ARG_NUM_ENTRIES:
++		args.num_entries = strtol(arg, NULL, 10);
++		break;
++	default:
++		return ARGP_ERR_UNKNOWN;
++	}
++
++	return 0;
++}
++
++const struct argp bench_bpf_htab_batch_ops_argp = {
++	.options = opts,
++	.parser = parse_arg,
++};
++
++static void validate(void)
++{
++	if (args.num_entries > args.capacity) {
++		fprintf(stderr, "num_entries must be less than hash table capacity");
++		exit(1);
++	}
++
++	if (env.producer_cnt != 1) {
++		fprintf(stderr, "benchmark doesn't support multi-producer!\n");
++		exit(1);
++	}
++
++	if (env.consumer_cnt != 1) {
++		fprintf(stderr, "benchmark doesn't support multi-consumer!\n");
++		exit(1);
++	}
++}
++
++static inline void loop_bpf_map_lookup_batch(void)
++{
++	int num_cpus = bpf_num_possible_cpus();
++	typedef struct { int v[VALUE_SIZE]; /* padding */ } __bpf_percpu_val_align value[num_cpus];
++	int offset = 0, out_batch = 0, in_batch = 0;
++	DECLARE_LIBBPF_OPTS(bpf_map_batch_opts, operts,
++		.elem_flags = 0,
++		.flags = 0,
++	);
++	value pcpu_values[args.num_entries];
++	__u32 count = args.num_entries;
++	double keys[args.num_entries];
++	int *in_batch_ptr = NULL;
++	int err;
++
++	while (true) {
++		err = bpf_map_lookup_batch(map_fd, in_batch_ptr, &out_batch,
++			keys + offset, pcpu_values + offset, &count, &operts);
++
++		if (err && errno != ENOENT) {
++			fprintf(stderr, "Failed to lookup entries using bpf_map_lookup_batch\n");
++			exit(1);
++		}
++
++		hits += count;
++
++		if (count == args.num_entries) {
++			count = args.num_entries;
++			offset = out_batch = 0;
++			in_batch_ptr = NULL;
++		} else {
++			offset = count;
++			count = args.num_entries - count;
++			in_batch = out_batch;
++			in_batch_ptr = &in_batch;
++		}
++	}
++
++}
++
++static inline void loop_bpf_element_lookup(void)
++{
++	int num_cpus = bpf_num_possible_cpus();
++	typedef struct { int v[VALUE_SIZE]; /* padding */ } __bpf_percpu_val_align value[num_cpus];
++	double prev_key = -1, key;
++	value value_of_key;
++	int err;
++
++	while (true) {
++
++		while (bpf_map_get_next_key(map_fd, &prev_key, &key) == 0) {
++			err = bpf_map_lookup_elem(map_fd, &key, &value_of_key);
++			if (err) {
++				fprintf(stderr, "failed to lookup element using bpf_map_lookup_elem\n");
++				exit(1);
++			}
++			hits += 1;
++			prev_key = key;
++		}
++		prev_key = -1;
++
++	}
++
++}
++
++static void *producer(void *input)
++{
++	switch (method_flag) {
++	case 0:
++		loop_bpf_map_lookup_batch();
++		break;
++	case 1:
++		loop_bpf_element_lookup();
++		break;
++	}
++	return NULL;
++}
++
++static void *consumer(void *input)
++{
++	return NULL;
++}
++
++static void measure(struct bench_res *res)
++{
++	res->hits = hits;
++	hits = 0;
++}
++
++
++static void setup(void)
++{
++
++	typedef struct { int v[VALUE_SIZE]; /* padding */ } __bpf_percpu_val_align value[bpf_num_possible_cpus()];
++	DECLARE_LIBBPF_OPTS(bpf_map_batch_opts, operts,
++		.elem_flags = 0,
++		.flags = 0,
++	);
++	value pcpu_values[args.num_entries];
++	__u32 count = args.num_entries;
++	double keys[args.num_entries];
++	int err;
++
++	map_fd = bpf_map_create(BPF_MAP_TYPE_PERCPU_HASH, "hash_map", sizeof(double),
++		(VALUE_SIZE*sizeof(int)), args.capacity, NULL);
++	if (map_fd < 0) {
++		fprintf(stderr, "error creating map using bpf_map_create\n");
++		exit(1);
++	}
++
++	for (double i = 0; i < args.num_entries; i++) {
++		keys[(int)i] = i + 1;
++		for (int j = 0; j < bpf_num_possible_cpus(); j++) {
++			for (int k = 0; k < VALUE_SIZE; k++)
++				bpf_percpu(pcpu_values[(int)i], j)[k] = (int)i + j + k;
++		}
++	}
++
++	err = bpf_map_update_batch(map_fd, keys, pcpu_values, &count, &operts);
++	if (err < 0) {
++		fprintf(stderr, "Failed to populate map using bpf_map_update_batch\n");
++		exit(1);
++	}
++
++}
++
++static void bench_bpf_map_lookup_batch_setup(void)
++{
++	setup();
++	method_flag = 0;
++}
++
++static void bench_element_lookup_setup(void)
++{
++	setup();
++	method_flag = 1;
++}
++
++const struct bench bench_bpf_htab_batch_ops = {
++	.name = "htab-batch-ops",
++	.validate = validate,
++	.setup = bench_bpf_map_lookup_batch_setup,
++	.producer_thread = producer,
++	.consumer_thread = consumer,
++	.measure = measure,
++	.report_progress = ops_report_progress,
++	.report_final = ops_report_final,
++};
++
++const struct bench bench_bpf_htab_element_ops = {
++	.name = "htab-element-ops",
++	.validate = validate,
++	.setup = bench_element_lookup_setup,
++	.producer_thread = producer,
++	.consumer_thread = consumer,
++	.measure = measure,
++	.report_progress = ops_report_progress,
++	.report_final = ops_report_final,
++};
+diff --git a/tools/testing/selftests/bpf/benchs/run_bench_bpf_htab_batch_ops.sh b/tools/testing/selftests/bpf/benchs/run_bench_bpf_htab_batch_ops.sh
+new file mode 100755
+index 000000000000..624f403c1865
+--- /dev/null
++++ b/tools/testing/selftests/bpf/benchs/run_bench_bpf_htab_batch_ops.sh
+@@ -0,0 +1,28 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++source ./benchs/run_common.sh
++
++set -eufo pipefail
++
++map_capacity=40000
++header "bpf_get_next_key & bpf_map_lookup_elem"
++for t in 40000 10000 2500; do
++subtitle "map capacity: $map_capacity, num_entries: $t"
++        summarize_ops "bpf_element_ops: " \
++                "$($RUN_BENCH -p 1 --num_entries $t htab-element-ops)"
++        printf "\n"
++done
++
++header "bpf_map_lookup_batch with prefetch"
++for t in 40000 10000 2500; do
++for n in {0..20}; do
++#this range of n_prefetch shows the speedup and subsequent
++#deterioration as n_prefetch grows larger
++subtitle "map capacity: $map_capacity, num_entries: $t, n_prefetch: $n"
++        echo $n > /sys/module/hashtab/parameters/n_prefetch
++        summarize_ops "bpf_batch_ops: " \
++                "$($RUN_BENCH -p 1 --num_entries $t htab-batch-ops)"
++        printf "\n"
++done
++done
+-- 
+2.37.1.595.g718a3a8f04-goog
 
-See my comment below your related changes.
-
-> > 
-> > Doing so, you'll end up having the following:
-> > adsp  aosd  cdsp  cxsd
-> 
-> I seem to get a few more, I have some out of tree patches enabling the SLPI,
-> and iirc the db845c doesn't have a full modem firmware. If these look good
-> to you I'd appreciate it if you add my Tested-by.
-
-Looks OK to me.
-
-> 
-> enchilada:/ # for x in /d/qcom_stats/*; do echo $x; cat $x; done
-> /d/qcom_stats/adsp
-> Count: 48
-> Last Entered At: 1199663157
-> Last Exited At: 1524359015
-> Accumulated Duration: 793060082
-> /d/qcom_stats/aosd
-> Count: 0
-> Last Entered At: 0
-> Last Exited At: 0
-> Accumulated Duration: 0
-> /d/qcom_stats/cdsp
-> Count: 35
-> Last Entered At: 1194818037
-> Last Exited At: 1194769648
-> Accumulated Duration: 3223580811
-> /d/qcom_stats/cxsd
-> Count: 0
-> Last Entered At: 0
-> Last Exited At: 0
-> Accumulated Duration: 0
-> /d/qcom_stats/modem
-> Count: 49
-> Last Entered At: 3687081003
-> Last Exited At: 3686727026
-> Accumulated Duration: 2915592136
-> /d/qcom_stats/slpi
-> Count: 53
-> Last Entered At: 3120905905
-> Last Exited At: 3120894535
-> Accumulated Duration: 3218969498
-> 
-> Am I right in thinking the aosd and cxsd being all 0 is probably a similar
-> issue to the one reported by Stephen in [2]?
-
-Might be, I'm not sure. I'll have closer a look.
-
-> 
-> 
-> [1]:
-> 
-> diff --git a/drivers/soc/qcom/qcom_stats.c b/drivers/soc/qcom/qcom_stats.c
-> index 121ea409fafc..56cfb20d3683 100644
-> --- a/drivers/soc/qcom/qcom_stats.c
-> +++ b/drivers/soc/qcom/qcom_stats.c
-> @@ -178,8 +178,12 @@ static void qcom_create_subsystem_stat_files(struct dentry *root,
-> 
->         for (i = 0; i < ARRAY_SIZE(subsystems); i++) {
->                 stat = qcom_smem_get(subsystems[i].pid, subsystems[i].smem_item, NULL);
-> -               if (IS_ERR(stat))
-
-Basically, the error here means the subsystem is not available right at
-this moment. We could probably return EPROBE_DEFER here, but it really
-depends on each platform's devicetree what remoteprocs they have
-enabled or not. So I guess the safest thing to to is to just skip
-quietly the ones that haven't probed yet.
-
-> +               if (IS_ERR(stat)) {
-> +                       pr_info("Couldn't get smem object '%s' (item: %d, pid: %d): %ld\n",
-> +                               subsystems[i].name, subsystems[i].smem_item, subsystems[i].pid,
-> +                               PTR_ERR(stat));
->                         continue;
-> +               }
-> 
->                 debugfs_create_file(subsystems[i].name, 0400, root, (void *)&subsystems[i],
->                                     &qcom_subsystem_sleep_stats_fops);
-> 
-> 
-> 
-> [2]: https://lore.kernel.org/linux-arm-msm/20220628201340.3981860-1-swboyd@chromium.org/
-> > 
-> > > > 
-> > > > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> 
-> Tested-by: Caleb Connolly <caleb.connolly@linaro.org>
-> > > > ---
-> > > > 
-> > > > Changed qcom,rpmh-stats-sdm845 to qcom,sdm845-rpmh-stats, as suggested
-> > > > by Krzysztof.
-> > > > 
-> > > >    arch/arm64/boot/dts/qcom/sdm845.dtsi | 5 +++++
-> > > >    1 file changed, 5 insertions(+)
-> > > > 
-> > > > diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > > > index 5bea96a9ce06..67fe08b837be 100644
-> > > > --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > > > +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > > > @@ -4851,6 +4851,11 @@ ebi_cdev: ebi {
-> > > >    			};
-> > > >    		};
-> > > > 
-> > > > +		sram@c3f0000 {
-> > > > +			compatible = "qcom,sdm845-rpmh-stats";
-> > > > +			reg = <0 0x0c3f0000 0 0x400>;
-> > > > +		};
-> > > > +
-> > > >    		spmi_bus: spmi@c440000 {
-> > > >    			compatible = "qcom,spmi-pmic-arb";
-> > > >    			reg = <0 0x0c440000 0 0x1100>,
-> > > > --
-> > > > 2.34.1
-> > > > 
-> > > 
-> > > -- 
-> > > Kind Regards,
-> > > Caleb (they/he)
-> 
-> -- 
-> Kind Regards,
-> Caleb (they/he)

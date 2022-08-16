@@ -2,73 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA59595D15
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B339E595D19
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235681AbiHPNRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
+        id S232353AbiHPNUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235656AbiHPNRO (ORCPT
+        with ESMTP id S235638AbiHPNTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 09:17:14 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9C4B6D0B
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:16:21 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id v2so14878943lfi.6
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:16:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=WpveidhoH5bD/0MSr6APaKClQAGOik9LoKqKj6TsJ5M=;
-        b=wlXhVABb6DuNOKMp2jJfTsQeCgWmlpjO9qhyw6ILpgP6KITF7+3ce6xYpIJ38wjz63
-         DOw07+Ehyxq5EeY/KrbgtM/JfK1iY6Yydfsyjgngx9KFx2KLKOKPDhEjR4izgItAKeW4
-         H5m3M2KjqATWIojX2h9IfMFgV9mV0Vzg2RJ1V6F48oiV50l9pZD+sHRUWZ154e5Yhy9D
-         pESu0aK87HESTVXfXF+H/ZwJLvqz4VuEganMjk1MmiHWT5Ak6dbIWpH6SZurPArwolXI
-         oZrxdh+tN3RqjvUFDT3cZnT2D9j8qu1XlxicqKHI9zYz/B/J6WVdhgJ+4rpIWuEBO/P8
-         RjGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=WpveidhoH5bD/0MSr6APaKClQAGOik9LoKqKj6TsJ5M=;
-        b=CRn92S2Utwuooy9HWjdcsHNZu88kbR6SVMzBdYxZGmKiSmgIXbBjYtCXkN6UvLnikg
-         /ZxSezJyRFuQzn+oXTe+V6t8RKpfv2F37viTojNMPqkUD+jmceHJRNcj94MokpIaRb7V
-         rycQR1iVA7rdOH6MlaaolC9DvWOAf0qeQHJx1KhVuab7wofL5ucZPBvpo+lniMmBX5Xt
-         74q4sfYEMzhHvDG3ox9KCD5ID7agLj/Cpgp91jotJXFdWCYqoUEb79jh0+IO40284gs1
-         h6RzscB7nRC697CuG7rysp9/EZnR2U3eQZfDVIXpOm6/OLPNRCmLfGn2FKqX4IP4wyjg
-         pvPw==
-X-Gm-Message-State: ACgBeo2aHvwbetmyVYzjoTB3elktZPEvc3tUBChMQYygrxjMRQSc4V2L
-        TuIvSN2yMMWdvoRPCKB4BTo66w==
-X-Google-Smtp-Source: AA6agR5tgahZD6sKKJ5xtAu8W6AUYS8nvCvK9dPEE95gFwW8UrWV5Xo6lBCfR/k2wtwRxdZ0rNth2Q==
-X-Received: by 2002:a05:6512:3d25:b0:48b:562:162d with SMTP id d37-20020a0565123d2500b0048b0562162dmr6575622lfv.684.1660655778779;
-        Tue, 16 Aug 2022 06:16:18 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id q27-20020ac25a1b000000b0048bd7136ef3sm1386448lfn.221.2022.08.16.06.16.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 06:16:18 -0700 (PDT)
-Message-ID: <478dc6a0-99b5-a3be-1358-d29fec28b3dd@linaro.org>
-Date:   Tue, 16 Aug 2022 16:16:16 +0300
+        Tue, 16 Aug 2022 09:19:46 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B96B82760
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:18:53 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M6WrS2VlfzmVdX;
+        Tue, 16 Aug 2022 21:16:40 +0800 (CST)
+Received: from dggpeml500002.china.huawei.com (7.185.36.158) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 16 Aug 2022 21:18:51 +0800
+Received: from localhost.localdomain (10.69.192.56) by
+ dggpeml500002.china.huawei.com (7.185.36.158) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 16 Aug 2022 21:18:50 +0800
+From:   Junhao He <hejunhao3@huawei.com>
+To:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>, <leo.yan@linaro.org>
+CC:     <coresight@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>,
+        <liuqi115@huawei.com>, <f.fangjian@huawei.com>,
+        <prime.zeng@hisilicon.com>, <hejunhao3@huawei.com>
+Subject: [PATCH v8 0/2] Add support for UltraSoc System Memory Buffer
+Date:   Tue, 16 Aug 2022 21:16:32 +0800
+Message-ID: <20220816131634.38195-1-hejunhao3@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] dt-bindings: phy: Drop Pratyush Yadav
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>, pratyush@kernel.org
-Cc:     devicetree@vger.kernel.org, kishon@ti.com,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, robh+dt@kernel.org, vkoul@kernel.org
-References: <20220811063840.7670-1-krzysztof.kozlowski@linaro.org>
- <20220816131041.1771872-1-michael@walle.cc>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220816131041.1771872-1-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500002.china.huawei.com (7.185.36.158)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,16 +53,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/08/2022 16:10, Michael Walle wrote:
-> [+ Pratyush ]
-> 
->> Emails to Pratyush Yadav bounce ("550 Invalid recipient").
-> 
-> FWIW, he updated his entry in MAINTAINERS in commit 92714596cdbe
-> ("MAINTAINERS: Use my kernel.org email"). So I'm not sure if this was
-> just an oversight.
+Add support for UltraSoc System Memory Buffer.
 
-Thanks, I'll update the patch to use his @kernel email.
+Change since v7:
+- Use the macros for register bit flags and numbers of resource.
+- Fix punctuation.
+- Update the Date tag and the KernelVersion tag in the document.
+- Link: https://lore.kernel.org/lkml/20220712091353.34540-1-hejunhao3@huawei.com/
 
-Best regards,
-Krzysztof
+Change since v6:
+- Modify the code style and driver description according to Suzuki's comment.
+- Modify configuration of "drvdata->reading", to void problems in open/read
+  concurrency scenario.
+- Rename the macro of "SMB_FLOW_MASK".
+- Use the "handle->head" to determine the page number and offset.
+- Link: https://lore.kernel.org/linux-arm-kernel/20220606130223.57354-1-liuqi115@huawei.com/
+
+Change since v5:
+- Address the comments from Suzuki, add some comments in SMB document, and modify
+  configuration of "drvdata->reading", to void problems in multi-core concurrency scenario
+- Link: https://lore.kernel.org/linux-arm-kernel/20220416083953.52610-1-liuqi115@huawei.com/
+
+Change since v4:
+- Add a simple document of SMB driver according to Suzuki's comment.
+- Address the comments from Suzuki.
+- Link: https://lore.kernel.org/linux-arm-kernel/20220128061755.31909-1-liuqi115@huawei.com/
+
+Change since v3:
+- Modify the file header according to community specifications.
+- Address the comments from Mathieu.
+- Link: https://lore.kernel.org/linux-arm-kernel/20211118110016.40398-1-liuqi115@huawei.com/
+
+Change since v2:
+- Move ultrasoc driver to drivers/hwtracing/coresight.
+- Link: https://lists.linaro.org/pipermail/coresight/2021-November/007310.html
+
+Change since v1:
+- Drop the document of UltraSoc according to Mathieu's comment.
+- Add comments to explain some private hardware settings.
+- Address the comments from Mathieu.
+- Link: https://lists.linaro.org/pipermail/coresight/2021-August/006842.html
+
+Change since RFC:
+- Move driver to drivers/hwtracing/coresight/ultrasoc.
+- Remove ultrasoc-axi-com.c, as AXI-COM doesn't need to be configured in
+  basic tracing function.
+- Remove ultrasoc.c as SMB does not need to register with the ultrasoc core.
+- Address the comments from Mathieu and Suzuki.
+- Link: https://lists.linaro.org/pipermail/coresight/2021-June/006535.html
+
+Qi Liu (2):
+  drivers/coresight: Add UltraSoc System Memory Buffer driver
+  Documentation: Add document for UltraSoc SMB drivers
+
+ .../sysfs-bus-coresight-devices-ultra_smb     |  31 +
+ .../trace/coresight/ultrasoc-smb.rst          |  80 +++
+ drivers/hwtracing/coresight/Kconfig           |  10 +
+ drivers/hwtracing/coresight/Makefile          |   1 +
+ drivers/hwtracing/coresight/ultrasoc-smb.c    | 636 ++++++++++++++++++
+ drivers/hwtracing/coresight/ultrasoc-smb.h    | 115 ++++
+ 6 files changed, 873 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
+ create mode 100644 Documentation/trace/coresight/ultrasoc-smb.rst
+ create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.c
+ create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.h
+
+-- 
+2.33.0
+

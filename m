@@ -2,111 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08893595B76
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3123E595B79
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233492AbiHPMMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 08:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33030 "EHLO
+        id S235201AbiHPMNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 08:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235377AbiHPMLw (ORCPT
+        with ESMTP id S234968AbiHPMMk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 08:11:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D670543E2;
-        Tue, 16 Aug 2022 05:04:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 37CA56123A;
-        Tue, 16 Aug 2022 12:04:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 319EFC433D6;
-        Tue, 16 Aug 2022 12:04:45 +0000 (UTC)
-Date:   Tue, 16 Aug 2022 08:04:52 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.19 0000/1157] 5.19.2-rc1 review
-Message-ID: <20220816080452.400d1adc@gandalf.local.home>
-In-Reply-To: <YvsocKly+n9S4CsB@kroah.com>
-References: <20220815180439.416659447@linuxfoundation.org>
-        <YvruPKI4dCyrXCp5@home.goodmis.org>
-        <YvsocKly+n9S4CsB@kroah.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 16 Aug 2022 08:12:40 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1487823A
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 05:07:07 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id g22-20020a056602249600b0067caba4f24bso5822906ioe.4
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 05:07:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=BfoNF+003bgEMkMGaYc3NGH0AuXwcMTieITtAOOMKTE=;
+        b=dtTZHyKwjbslXRFlEiuGw78ZQ9QqP6VKsUryKP6pBP4T6LZ2M2KuTRp63i2j6i4/aN
+         5V5bH9MkelibXAoLrL3BcftTXadiTHQQpPSNeTIsHD+zwaUu89jtooYYwPzOCHZF8BFD
+         Ozcmjuwf/RbePUw80UcVlhaDkLoDVoTEIpG8Z0uwCJ9nkdXXkeJOAB63ToXtiKArpUmJ
+         bXvI0JCF3t4cvMQBdO2EtfMukr+1QI6nhf6xPwrhznRyTq/NyHdayQTB/0vFrDCaZnpV
+         r1umjNrQVYWVDp3oL4aSgYP2p99u9Gv+UIipV0HABZQb68jbRvVln4HCmXHTAEGP4fzO
+         6qAQ==
+X-Gm-Message-State: ACgBeo3ybI2dhFdrPgRnrJXZqbUblrdskdJvnTQeiOTqp1+F8it0cEZP
+        v5CSNRJaFmmBw7fSeCLgnbd34KP9gtK/o3sudnEB/7KUCMYl
+X-Google-Smtp-Source: AA6agR4MlTO15N9gHgQVIfvM6oGmtJGRSxYQrtlZ2qYNJp6YuAg9FOgrJWZ31rXtaFwKKuuCAYRCzl9zEKjsRTG2TZ3uXpSY8HNF
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,BIGNUM_EMAILS_MANY,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:210d:b0:343:17cb:60a7 with SMTP id
+ n13-20020a056638210d00b0034317cb60a7mr9606899jaj.292.1660651626758; Tue, 16
+ Aug 2022 05:07:06 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 05:07:06 -0700
+In-Reply-To: <20220816105922.966-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004f0e5705e65a96f2@google.com>
+Subject: Re: [syzbot] WARNING: suspicious RCU usage in bpf_sk_reuseport_detach
+From:   syzbot <syzbot+24bcff6e82ce253f23ec@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 Aug 2022 07:17:36 +0200
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> > 
-> > I sent 3 patches to the linux-trace-devel list almost 4 hours ago, and they
-> > still haven't shown up. I was going to point people to it tonight but it's now
-> > going to have to wait till tomorrow.  
-> 
-> Email is async, sometimes it takes longer than others to recieve
-> messages.
+Hello,
 
-The delays always happen when you do these patch bombs. In fact, that's
-how I knew you sent them just now. My patches finally arrived, just under 8
-hours since I sent them!
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> 
-> My "patch bombs" get sent out slow to the mail servers, there is work to
-> fix up vger and move it over to the LF-managed infrastructure, perhaps
-> work with the vger admins to help that effort out?
+Reported-and-tested-by: syzbot+24bcff6e82ce253f23ec@syzkaller.appspotmail.com
 
-I'm not sure what I can do to help out. I'm not a very good email admin.
-(I'm struggling to fix my wife's email now).
+Tested on:
 
-> 
-> > I really do not think LKML needs to see all 1157 patches that are being
-> > backported. There's other places to send them that will not be as disruptive.  
-> 
-> And where would that be?
+commit:         94ce3b64 net/tls: Use RCU API to access tls_ctx->netdev
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=11bf00cb080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=53da55f2bdeb0d4c
+dashboard link: https://syzkaller.appspot.com/bug?extid=24bcff6e82ce253f23ec
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=171d056b080000
 
-You already Cc stable@vger.kernel.org. Does lore track that?
-
-My point is, LKML has what, 10,000 subscribers? Maybe only 5000? Even at
-5000, probably at most 50 subscribers look at the stable patches (and I'm
-being optimistic). That means, these 3000 emails go to 4950 people that
-will never look at them. That's 14,850,000 emails that are wasting disk
-space, CPU cycles and electricity. Think of the environment :-)
-
-> 
-> Getting the patches out for review is good, and necessary.  Patches
-> should never be considered "noise" as it is what we are doing here.  If
-> we have infrastructure issues handling these messages, we should work to
-> resolve them as really, 3000 emails should not be a lot to manage,
-> unless you are being throttled by your email provider?
-
-I'm not saying that they should not be sent out. I'm asking, do they need
-to be sent out to the list with the most subscribers? You already
-(rightfully) Cc the maintainers of the patches. Since they already go to
-the stable list, and if lore archives them, then you could just send a link
-to LKML to the lore patch set. Then people could still review them.
-
-Do those that review these patches really just read LKML to do so?
-
-Or is this the spam approach of sending out to 1000x more than you need to,
-just so that you get a few more eyes?
-
-And the issue I have with this, is that it affects *all* mailing list on
-vger not just LKML. I don't read LKML anymore, but I do read the smaller
-lists. And blocking emails for 8 hours to these lists does have an effect on
-productivity.
-
--- Steve
+Note: testing is done by a robot and is best-effort only.

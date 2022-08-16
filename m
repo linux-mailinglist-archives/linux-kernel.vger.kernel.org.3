@@ -2,103 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD54C5960A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 925165960B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236398AbiHPQyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 12:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
+        id S236492AbiHPQ5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 12:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231383AbiHPQyH (ORCPT
+        with ESMTP id S231383AbiHPQ5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 12:54:07 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05BA76947;
-        Tue, 16 Aug 2022 09:54:05 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oNzp7-0007gN-Qm; Tue, 16 Aug 2022 18:53:49 +0200
-Message-ID: <6294958a-177a-5c67-47c6-3a95c23ac58e@leemhuis.info>
-Date:   Tue, 16 Aug 2022 18:53:48 +0200
+        Tue, 16 Aug 2022 12:57:43 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB9A80E89
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:57:42 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id h78so3530101iof.13
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:57:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=P7J3DKwpdJQSLzw9TsqI+Lj/vSSoU3YjZYr+/erVr98=;
+        b=H1yQv/LVjOxKe3NI51kX91Krb9mhxyyXprm9qj+Aj0yDTp0jTFIjJrx2vcdT6Necx5
+         GmIy25qW/vZvoDQ4WVA+IT09gEYPPbgRE3aIaqUZXX6LKnScgOQmKXKSZ1putqjOaoYO
+         rSVB8y/5QrJXNJd1uR8w9GdAUH8zW5MDvkrG9k6xVwFTy2lgTVQxjcIki6l6ilAyrD4r
+         NZh2aee2THaR6oImlOFbtAjgSzBEbCrFrSyXT40QWWeaQ0ECr3LxZ3oYGchKNRZ8QCQJ
+         xZsqtsXsuo4AfKfE9raGe2vR0RSXMX4fPEhfKocrNKRY7zu3clpX+F0FmKHDDQaJw+1A
+         h10w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=P7J3DKwpdJQSLzw9TsqI+Lj/vSSoU3YjZYr+/erVr98=;
+        b=j6zHJv06BMxsyQz84lKsfjwpZ/mhYYlN6B4aBOM1e4OACPfepxReBS5RjL+2DeXUP9
+         SPjvYrv381rsgn0A9lMrElPxeTKfpro/mnfPtIEujl/E7NJhkmhHUkcyc8W9e/uLcq6J
+         2k/rXJcI2K5uR59oB26Q6C6DqN6LFfcqBObJiD0KJXHP3kMBKVGFsjRkHS02MH34+Y/F
+         zFW8QUvDhpOKWPoUaDV32gF2kTMdq5iI8LYmulFYHKdiyOburR7PHjum9YDWwqSmdDb0
+         obP0/Opke4vSiT9M82RgDmasNIcu4HzSQSR52B9tCyVcjnK4J4FRCL+mMyS23wBA94Lc
+         5NnQ==
+X-Gm-Message-State: ACgBeo03J4Bi/8dfwNIvzT/RsCvBBRRDKiGgmD3mZ5w+I4aF1aGUg8Aw
+        PINiVr+jlOX+cUxcm0ua8QVDfZ0xg/LTdg==
+X-Google-Smtp-Source: AA6agR6uCjKt17c2fhPSjQg6NHiFFMA6kakU/SEBd+msRzj+eLPE+hbwwRRrCXyILrOCHDQww+Dr8w==
+X-Received: by 2002:a02:9714:0:b0:343:5c61:8409 with SMTP id x20-20020a029714000000b003435c618409mr9948266jai.277.1660669060767;
+        Tue, 16 Aug 2022 09:57:40 -0700 (PDT)
+Received: from [192.168.1.172] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id g10-20020a056602072a00b0068844be44d7sm3277830iox.6.2022.08.16.09.57.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 09:57:40 -0700 (PDT)
+Message-ID: <5bf54200-5b12-33b0-8bf3-0d1c6718cfba@kernel.dk>
+Date:   Tue, 16 Aug 2022 10:57:39 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.1
+Subject: Re: KASAN: null-ptr-deref Write in io_file_get_normal
 Content-Language: en-US
-To:     Chuck Zmudzinski <brchuckz@netscape.net>
-Cc:     jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        regressions@lists.linux.dev, xen-devel@lists.xenproject.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Juergen Gross <jgross@suse.com>
-References: <20220715142549.25223-1-jgross@suse.com>
- <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
- <a0ce2f59-b653-fa8b-a016-1335f05c86ae@netscape.net>
- <32ed59c9-c894-c426-dd27-3602625cf3b1@netscape.net>
- <c88ea08c-a9d5-ef6a-333a-db9e00c6da6f@suse.com>
- <bd66b5bc-4d07-d968-f46c-40cf624499a7@netscape.net>
- <a29a66e0-2075-8084-84ad-8bd3e8a9fd4a@netscape.net>
- <a7d10605-87e3-c4bd-4a76-f07a04f5751c@leemhuis.info>
- <8d148826-62a5-95f9-8662-be14f56a6336@netscape.net>
- <6b40ecc3-a2d3-3efd-4a19-2faf737f098b@leemhuis.info>
- <be9d077c-ed4d-d5e3-a134-33afff027af4@netscape.net>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <be9d077c-ed4d-d5e3-a134-33afff027af4@netscape.net>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiacheng Xu <578001344xu@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, asml.silence@gmail.co,
+        io-uring@vger.kernel.org, security@kernel.org
+References: <CAO4S-mdVW5GkODk0+vbQexNAAJZopwzFJ9ACvRCJ989fQ4A6Ow@mail.gmail.com>
+ <YvvD+wB64nBSpM3M@kroah.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <YvvD+wB64nBSpM3M@kroah.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1660668845;474d7408;
-X-HE-SMSGID: 1oNzp7-0007gN-Qm
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.08.22 18:16, Chuck Zmudzinski wrote:
-> On 8/16/2022 10:41 AM, Thorsten Leemhuis wrote:
->> On 15.08.22 20:17, Chuck Zmudzinski wrote:
->>> On 8/15/2022 2:00 PM, Thorsten Leemhuis wrote:
->>>
->>>> And FWIW: I've seen indicators that a solution to resolve this is
->>>> hopefully pretty close now.
->>> That's good to know. But I must ask, can you provide a link to a public
->>> discussion that indicates a fix is close?
->> I just searched for the commit id of the culprit yesterday like this:
->> https://lore.kernel.org/all/?q=bdd8b6c982*
+On 8/16/22 10:21 AM, Greg KH wrote:
+> On Wed, Aug 17, 2022 at 12:10:09AM +0800, Jiacheng Xu wrote:
+>> Hello,
 >>
->> Which brought me to this message, which looks like Boris applied a
->> slightly(?) modified version of Jan's patch to a branch that afaik is
->> regularly pushed to Linus:
->> https://lore.kernel.org/all/166055884287.401.612271624942869534.tip-bot2@tip-bot2/
->>
->> So unless problems show up in linux-next I expect this will land in
->> master soon (and a bit later be backported to stable due to the CC
->> stable tag).
+>> When using modified Syzkaller to fuzz the Linux kernel-5.15.58, the
+>> following crash was triggered.
 > 
-> OK, that's exactly the kind of thing I am looking for. It would be
-> nice if regzbot could have found that patch in that tree and
-> display it in the web interface as a notable patch. Currently,
-> regzbot is only linking to a dead patch that does not even fix
-> the regression as a notable patch associated with this regression.
-> 
-> If regzbot is not yet smart enough to find it, could you take the
-> time to manually intervene with a regzbot command so that
-> patch is displayed as a notable patch for this regression?
+> As you sent this to public lists, there's no need to also cc:
+> security@k.o as there's nothing we can do about this.
 
-regzbot will notice when the patch hit's Linux next, where many changes
-land and hang around for a few days before they hit mainline. Watching
-all the different development trees would be possible and would catch
-this patch earlier, but I'm not sure that's worth the work. Maybe
-regzbot will do that one day, but there are more important missing
-features on my todo list for now.
+Indeed...
 
-Ciao, Thorsten
+> Also, random syzbot submissions are best sent with a fix for them,
+> otherwise it might be a while before they will be looked at.
+
+Greg, can you cherrypick:
+
+commit 386e4fb6962b9f248a80f8870aea0870ca603e89
+Author: Jens Axboe <axboe@kernel.dk>
+Date:   Thu Jun 23 11:06:43 2022 -0600
+
+    io_uring: use original request task for inflight tracking
+
+into 5.15-stable? It should pick cleanly and also fix this issue.
+
+-- 
+Jens Axboe
+
+

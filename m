@@ -2,105 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9EC05956D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B147595722
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233818AbiHPJnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55774 "EHLO
+        id S232498AbiHPJxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233786AbiHPJme (ORCPT
+        with ESMTP id S233380AbiHPJwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:42:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4491BC135;
-        Tue, 16 Aug 2022 01:57:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E3E3611EB;
-        Tue, 16 Aug 2022 08:57:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 599EDC433D6;
-        Tue, 16 Aug 2022 08:57:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660640250;
-        bh=3/vRXYAeMjGp2cIzyMyjGYylVgkaUhI3NpSv+xA0dq4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gqFe9agbbvtCsrWNJWcll49KYAKUy7ea26mAaQYWKRttNVaDZC3PUfrglC9+8CD+3
-         8yrxf/GxjIHZ2nd8CDVAAgSXgqtoTizgsfg6DFiOKHo1LRiQxxnFmqaFlNzwh40zyx
-         ieVcYlvsHcSAoYhQ7oWJDVOF7qkWMkh4x6bLg+fE=
-Date:   Tue, 16 Aug 2022 10:57:27 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ray Chi <raychi@google.com>
-Cc:     mathias.nyman@intel.com, stern@rowland.harvard.edu,
-        badhri@google.com, albertccwang@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: xhci: add check_init_status hook support
-Message-ID: <Yvtb93dhvhTS5xYB@kroah.com>
-References: <20220816083854.1491886-1-raychi@google.com>
- <20220816083854.1491886-3-raychi@google.com>
+        Tue, 16 Aug 2022 05:52:20 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122F12185
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:00:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660640431; x=1692176431;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=U7gAm6W3zbLKaBfCA6cNycbC3qMCev+ce+q8Hivmfs4=;
+  b=BlDfLgJQXvtIYWRd2ij07SPeAUtsVuGQyYWTL+eCNztOryuHwMTkYfLi
+   KDCa4CXMn9GKTMtcAMuch+yV5LPIKfURq3xnUo0/mlY5KpPxPTuN0AOgR
+   8sqgNbyWJbm/YJ0PaWQYCQQW2ZBtrmBD89PA9rl9vlujP6FUxBTrIJwh2
+   Z/1oAITpHRuR3oyUpYKq3eqJZf//cRb8TYJSfuE29AI2qTmUVm7bisqKm
+   8+GaWVAn6zwBlrvx/7VIvOnTwS+ykcZJOzTN24Qy+YpXR3rVaRneaGCm/
+   RmrEryhtsYFHwmkiVmfpuZ0GccKFpax9fhsZukvPRJrzui44kkK/vG2/+
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="293439460"
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="293439460"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 02:00:30 -0700
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="635811415"
+Received: from araj-dh-work.jf.intel.com (HELO araj-dh-work) ([10.165.157.158])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 02:00:30 -0700
+Date:   Tue, 16 Aug 2022 09:00:14 +0000
+From:   Ashok Raj <ashok_raj@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     X86 ML <x86@kernel.org>, Andrew Cooper <amc96@srcf.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        =?utf-8?Q?=C8=98tefan?= Talpalaru <stefantalpalaru@yahoo.com>,
+        Ashok Raj <ashok.raj@intel.com>, ashok_raj@linux.intel.com
+Subject: Re: [PATCH] x86/microcode/AMD: Attempt applying on every logical
+ thread
+Message-ID: <YvtcGEHX8eSFpALX@araj-dh-work>
+References: <20220814120026.16118-1-bp@alien8.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220816083854.1491886-3-raychi@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220814120026.16118-1-bp@alien8.de>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 04:38:54PM +0800, Ray Chi wrote:
-> In general, xHCI didn't do anything for port initialization. However,
-> there are some requirement or limitation on various platforms, so
-> vendors need to do some error handlings if the device connected to a
-> broken USB accessory.
+Hi Boris
+
+Trying to understand if I'm missing something here.
+
+On Sun, Aug 14, 2022 at 02:00:26PM +0200, Borislav Petkov wrote:
+> From: Borislav Petkov <bp@suse.de>
 > 
-> This patch also add the hook to xhci_driver_overrides so that vendors
-> can add their specific protection easily if needed.
+> Currently, the patch application logic checks whether patch application
+> is needed. Therefore, on SMT designs where the microcode engine is
+> shared between the two threads, the application happens only on one of
+> them.
+
+A re-application means, you want to apply even if the cpu_rev <= patch.rev
+
+
+if cpu_rev is > patch_rev, clearly its ahead?. say BIOS has a newer version
+than in the initrd image, do we want to replace the BIOS version since we do
+no revid checks here.
+
 > 
-> Signed-off-by: Ray Chi <raychi@google.com>
+> However, there are microcode patches which do per-thread modification,
+> see Link tag below.
+> 
+> Therefore, drop the revision check and try applying on each thread. This
+> is what the BIOS does too so this method is very much tested.
+> 
+> Reported-by:  Ștefan Talpalaru <stefantalpalaru@yahoo.com>
+> Tested-by:  Ștefan Talpalaru <stefantalpalaru@yahoo.com>
+> Signed-off-by: Borislav Petkov <bp@suse.de>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216211
 > ---
->  drivers/usb/host/xhci.c | 17 +++++++++++++++++
->  drivers/usb/host/xhci.h |  1 +
->  2 files changed, 18 insertions(+)
+>  arch/x86/kernel/cpu/microcode/amd.c | 39 +++++++----------------------
+>  1 file changed, 9 insertions(+), 30 deletions(-)
 > 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 65858f607437..f237af9d6e2e 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -4358,6 +4358,20 @@ static int xhci_enable_device(struct usb_hcd *hcd, struct usb_device *udev)
->  	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ONLY);
+> diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microcode/amd.c
+> index 8b2fcdfa6d31..a575dbb4d80c 100644
+> --- a/arch/x86/kernel/cpu/microcode/amd.c
+> +++ b/arch/x86/kernel/cpu/microcode/amd.c
+> @@ -420,8 +420,8 @@ apply_microcode_early_amd(u32 cpuid_1_eax, void *ucode, size_t size, bool save_p
+>  	struct cont_desc desc = { 0 };
+>  	u8 (*patch)[PATCH_MAX_SIZE];
+>  	struct microcode_amd *mc;
+> -	u32 rev, dummy, *new_rev;
+>  	bool ret = false;
+> +	u32 *new_rev;
+>  
+>  #ifdef CONFIG_X86_32
+>  	new_rev = (u32 *)__pa_nodebug(&ucode_new_rev);
+> @@ -439,10 +439,6 @@ apply_microcode_early_amd(u32 cpuid_1_eax, void *ucode, size_t size, bool save_p
+>  	if (!mc)
+>  		return ret;
+>  
+> -	native_rdmsr(MSR_AMD64_PATCH_LEVEL, rev, dummy);
+> -	if (rev >= mc->hdr.patch_id)
+> -		return ret;
+> -
+
+Instead of just removing the entire rev check, you want to reapply even if
+the rev == patch_rev?
+
+Worried this would allow you to go backwards as well. 
+
+
+        if(rev > mc->hdr.patch_id)
+		return ret;
+
+>  	if (!__apply_microcode_amd(mc)) {
+>  		*new_rev = mc->hdr.patch_id;
+>  		ret      = true;
+> @@ -516,7 +512,7 @@ void load_ucode_amd_ap(unsigned int cpuid_1_eax)
+>  {
+>  	struct microcode_amd *mc;
+>  	struct cpio_data cp;
+> -	u32 *new_rev, rev, dummy;
+> +	u32 *new_rev;
+>  
+>  	if (IS_ENABLED(CONFIG_X86_32)) {
+>  		mc	= (struct microcode_amd *)__pa_nodebug(amd_ucode_patch);
+> @@ -526,10 +522,8 @@ void load_ucode_amd_ap(unsigned int cpuid_1_eax)
+>  		new_rev = &ucode_new_rev;
+>  	}
+>  
+> -	native_rdmsr(MSR_AMD64_PATCH_LEVEL, rev, dummy);
+> -
+>  	/* Check whether we have saved a new patch already: */
+> -	if (*new_rev && rev < mc->hdr.patch_id) {
+> +	if (*new_rev) {
+
+Here cpu_rev < mc->rev, is there a reason to remove this check?
+
+if cpu_rev > mc->rev, the following would go backwards in rev
+
+>  		if (!__apply_microcode_amd(mc)) {
+>  			*new_rev = mc->hdr.patch_id;
+>  			return;
+> @@ -571,23 +565,17 @@ int __init save_microcode_in_initrd_amd(unsigned int cpuid_1_eax)
+>  
+>  void reload_ucode_amd(void)
+>  {
+> -	struct microcode_amd *mc;
+> -	u32 rev, dummy __always_unused;
+> -
+> -	mc = (struct microcode_amd *)amd_ucode_patch;
+> +	struct microcode_amd *mc = (struct microcode_amd *)amd_ucode_patch;
+>  
+> -	rdmsr(MSR_AMD64_PATCH_LEVEL, rev, dummy);
+> -
+> -	if (rev < mc->hdr.patch_id) {
+> -		if (!__apply_microcode_amd(mc)) {
+> -			ucode_new_rev = mc->hdr.patch_id;
+> -			pr_info("reload patch_level=0x%08x\n", ucode_new_rev);
+> -		}
+> +	if (!__apply_microcode_amd(mc)) {
+> +		ucode_new_rev = mc->hdr.patch_id;
+> +		pr_info("reload patch_level=0x%08x\n", ucode_new_rev);
+>  	}
+>  }
+>  static u16 __find_equiv_id(unsigned int cpu)
+>  {
+>  	struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
+> +
+>  	return find_equiv_id(&equiv_table, uci->cpu_sig.sig);
 >  }
 >  
-> +/*
-> + * The function could get the status of port initialization.
-> + */
-> +static int xhci_check_init_status(struct usb_hcd *hcd, struct usb_device *udev, int r)
-> +{
-> +	/*
-> +	 * In general, this function is not necessory. Some platforms may
-> +	 * need doing error handling when the port initialization takes a
-> +	 * long time to do. The device can use the override callback to
-> +	 * do specific handlings.
-> +	 */
-> +	return 0;
-> +}
-
-For obvious technical and legal reasons, we are not allowed to add
-"hooks" to the kernel where there are no in-kernel users.  Nor would you
-want us to do so.
-
-So I really do not understand this patch series at all.
-
-What driver wants to do odd things here?  What needs to happen that the
-in-tree drivers are not doing properly?  Why not get the needed fixes in
-the in-kernel drivers instead of trying to add random hooks that some
-out-of-tree code would use instead.
-
-confused,
-
-greg k-h
+> @@ -678,7 +666,7 @@ static enum ucode_state apply_microcode_amd(int cpu)
+>  	struct ucode_cpu_info *uci;
+>  	struct ucode_patch *p;
+>  	enum ucode_state ret;
+> -	u32 rev, dummy __always_unused;
+> +	u32 rev;
+>  
+>  	BUG_ON(raw_smp_processor_id() != cpu);
+>  
+> @@ -691,14 +679,6 @@ static enum ucode_state apply_microcode_amd(int cpu)
+>  	mc_amd  = p->data;
+>  	uci->mc = p->data;
+>  
+> -	rdmsr(MSR_AMD64_PATCH_LEVEL, rev, dummy);
+> -
+> -	/* need to apply patch? */
+> -	if (rev >= mc_amd->hdr.patch_id) {
+> -		ret = UCODE_OK;
+> -		goto out;
+> -	}
+> -
+>  	if (__apply_microcode_amd(mc_amd)) {
+>  		pr_err("CPU%d: update failed for patch_level=0x%08x\n",
+>  			cpu, mc_amd->hdr.patch_id);
+> @@ -710,7 +690,6 @@ static enum ucode_state apply_microcode_amd(int cpu)
+>  
+>  	pr_info("CPU%d: new patch_level=0x%08x\n", cpu, rev);
+>  
+> -out:
+>  	uci->cpu_sig.rev = rev;
+>  	c->microcode	 = rev;
+>  
+> -- 
+> 2.35.1
+> 

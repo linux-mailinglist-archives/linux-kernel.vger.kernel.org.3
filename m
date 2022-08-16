@@ -2,166 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4C5596362
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:57:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4FF596360
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237341AbiHPT4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 15:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56280 "EHLO
+        id S236227AbiHPT4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 15:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236326AbiHPT4G (ORCPT
+        with ESMTP id S236924AbiHPT4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 15:56:06 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693957962E;
-        Tue, 16 Aug 2022 12:56:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660679764; x=1692215764;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0EwQpfJ5on5K89En304TdU706UFm4II21M0QMOuWnIE=;
-  b=ht3MFQU2jjY93X6a3ieZyEAaGAgzlmJ9BX5KOz7tQwCEF0sC+uPfHWey
-   f75ZPLB0VrwuSYzFd4CgbDCFvh/aRpzALyV/S7P0IZvkM364S4nG/hIKD
-   Y/dxg4mSIo5h5QlfluwJV4I9ryI13rNBO77yJdygj1g8x1QA8XZF5s8am
-   I0U4slC+zkRBBw6+S4yyGvhi8FMvQpHddwVpk8r5Y+Yaz42q4LaPaLu3X
-   F/pY98OKetv5PbOlKzhl4+Szx/zTlVBZVyO4QW9igbRi5v5o6A0wXkGMZ
-   M1nFyjp9SxEG4BrXZbpyJpRaLOZUokYUAny4EFdV4mYcPNy2XqVYXDJvO
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="289887554"
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="289887554"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 12:56:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="749433429"
-Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Aug 2022 12:56:01 -0700
-Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oO2fQ-0000CC-19;
-        Tue, 16 Aug 2022 19:56:00 +0000
-Date:   Wed, 17 Aug 2022 03:55:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Zhen Lei <thunder.leizhen@huawei.com>
-Subject: Re: [PATCH v3 2/2] rcu: Simplify the code logic of rcu_init_nohz()
-Message-ID: <202208170309.j1yYU9wN-lkp@intel.com>
-References: <20220816124839.1911-3-thunder.leizhen@huawei.com>
+        Tue, 16 Aug 2022 15:56:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB6779604;
+        Tue, 16 Aug 2022 12:56:00 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru [109.252.119.13])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2BC5C660037D;
+        Tue, 16 Aug 2022 20:55:57 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1660679758;
+        bh=QUXUXYkhFymxKXOLeAezfOww+02sMdDSnE//u2RiUFM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CVM4id76n+RhaUefcyoNI4yah3kDGdYyN68LKYUcBxQy6kRNp16EuhrcSBTm7BxN/
+         1okQMK8mg83NetPZXjRBPYQr5xe5pPctN7Tj8kWrJ0Ed8Jk6E8SEd1Y9qLJGJg6VMI
+         ANvZj/dqHo84JivmR8Qr0MnboYLog7JlWO+nVEjy9HhMEBIF2XF8frWBlcS//ZuwCq
+         dMbGTF2wy1/70Skx2C9muNyZTNkW95vijAHW4X7/8tzDHWiQj+b71rvCL+p7P/6BdL
+         qNqkAVP0hp6clTF16+kJXWqby9L2e5++00yZavOGTJ8VEiQ383euMrJUgzyhkHSiII
+         SDR3f8LvCxx0Q==
+Message-ID: <cf8cd8da-08d2-5e70-a239-2a67da37c9ea@collabora.com>
+Date:   Tue, 16 Aug 2022 22:55:52 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220816124839.1911-3-thunder.leizhen@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v8 2/2] drm/gem: Don't map imported GEMs
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        Rob Clark <robdclark@gmail.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>,
+        linux-tegra@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
+        kernel@collabora.com, Daniel Vetter <daniel@ffwll.ch>
+References: <20220701090240.1896131-1-dmitry.osipenko@collabora.com>
+ <20220701090240.1896131-3-dmitry.osipenko@collabora.com>
+ <2bb95e80-b60a-36c0-76c8-a06833032c77@amd.com>
+ <CAF6AEGtqPeF1DjmBKgzWK39Yi81YiNjTjDNn85TKx7uwicFTSA@mail.gmail.com>
+ <2a646ce4-c2ec-3b11-77a0-cc720afd6fe1@collabora.com>
+ <YvOav/vF2awVWIu0@phenom.ffwll.local>
+ <CAF6AEGvfAJgwBe4+sK0gAkZ++MwH9x4=698C8XSnmfYNMFZqfA@mail.gmail.com>
+ <9674d00e-c0d6-ceba-feab-5dc475bda694@collabora.com>
+ <CAF6AEGv1cVC9ZNMwpwFOki5CrwD3kSAHM9EUFZGWY-y5zcQsCg@mail.gmail.com>
+ <fc019528-7ec7-9e5b-1b6d-c44da14346cf@collabora.com>
+ <CAF6AEGv8zSd0fEYB9hd2QOyTt53gFSQoL8JdZtCvtCdYfMfB2Q@mail.gmail.com>
+ <73b51dde-689f-64ce-a1c8-0d7c84a2ed66@collabora.com>
+ <CAF6AEGuR1cRQYaQBYGnMBzy=XJUcN2o2gzabZaGO2Dj62Uq1DA@mail.gmail.com>
+ <CAF6AEGvvR1NUd_GKP=Bxp3VTDMBYT+OwTkkgOWxgYFijZaVVEQ@mail.gmail.com>
+ <5f118e10-db7a-a128-1e87-c9dddb65b2ac@collabora.com>
+ <2ce5ff0a-9ab2-d146-04db-487a64714fce@gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <2ce5ff0a-9ab2-d146-04db-487a64714fce@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhen,
+On 8/16/22 15:03, Christian König wrote:
+> Am 16.08.22 um 13:44 schrieb Dmitry Osipenko:
+>> [SNIP]
+>>> The other complication I noticed is that we don't seem to keep around
+>>> the fd after importing to a GEM handle.  And I could imagine that
+>>> doing so could cause issues with too many fd's.  So I guess the best
+>>> thing is to keep the status quo and let drivers that cannot mmap
+>>> imported buffers just fail mmap?
+>> That actually should be all the drivers excluding those that use
+>> DRM-SHMEM because only DRM-SHMEM uses dma_buf_mmap(), that's why it
+>> works for Panfrost. I'm pretty sure mmaping of imported GEMs doesn't
+>> work for the MSM driver, isn't it?
+>>
+>> Intel and AMD drivers don't allow to map the imported dma-bufs. Both
+>> refuse to do the mapping.
+>>
+>> Although, AMDGPU "succeeds" to do the mapping using
+>> AMDGPU_GEM_DOMAIN_GTT, but then touching the mapping causes bus fault,
+>> hence mapping actually fails. I think it might be the AMDGPU
+>> driver/libdrm bug, haven't checked yet.
+> 
+> That's then certainly broken somehow. Amdgpu should nerve ever have
+> allowed to mmap() imported DMA-bufs and the last time I check it didn't.
 
-Thank you for the patch! Perhaps something to improve:
+I'll take a closer look. So far I can only tell that it's a kernel
+driver issue because once I re-applied this "Don't map imported GEMs"
+patch, AMDGPU began to refuse mapping AMDGPU_GEM_DOMAIN_GTT.
 
-[auto build test WARNING on paulmck-rcu/dev]
-[also build test WARNING on linus/master v6.0-rc1 next-20220816]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>> So we're back to the point that neither of DRM drivers need to map
+>> imported dma-bufs and this was never tested. In this case this patch is
+>> valid, IMO.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhen-Lei/rcu-nocb-Delete-local-variable-need_rcu_nocb_mask-in-rcu_init_nohz/20220816-205131
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
-config: x86_64-randconfig-a004-20220815 (https://download.01.org/0day-ci/archive/20220817/202208170309.j1yYU9wN-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/a1d5079765918764de3ff6e3e63fa2db7f7c14df
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zhen-Lei/rcu-nocb-Delete-local-variable-need_rcu_nocb_mask-in-rcu_init_nohz/20220816-205131
-        git checkout a1d5079765918764de3ff6e3e63fa2db7f7c14df
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from kernel/rcu/tree.c:4801:
-   kernel/rcu/tree_nocb.h: In function 'rcu_init_nohz':
->> kernel/rcu/tree_nocb.h:1216:17: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-    1216 |         cpumask = cpu_possible_mask;
-         |                 ^
-
-
-vim +/const +1216 kernel/rcu/tree_nocb.h
-
-  1208	
-  1209	void __init rcu_init_nohz(void)
-  1210	{
-  1211		int cpu;
-  1212		struct rcu_data *rdp;
-  1213		struct cpumask *cpumask = NULL;
-  1214	
-  1215	#if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
-> 1216		cpumask = cpu_possible_mask;
-  1217	#elif defined(CONFIG_NO_HZ_FULL)
-  1218		if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
-  1219			cpumask = tick_nohz_full_mask;
-  1220	#endif
-  1221	
-  1222		if (cpumask) {
-  1223			if (!cpumask_available(rcu_nocb_mask)) {
-  1224				if (!zalloc_cpumask_var(&rcu_nocb_mask, GFP_KERNEL)) {
-  1225					pr_info("rcu_nocb_mask allocation failed, callback offloading disabled.\n");
-  1226					return;
-  1227				}
-  1228			}
-  1229	
-  1230			cpumask_or(rcu_nocb_mask, rcu_nocb_mask, cpumask);
-  1231		}
-  1232	
-  1233		if (!cpumask_available(rcu_nocb_mask))
-  1234			return;
-  1235	
-  1236		if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
-  1237			pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
-  1238			cpumask_and(rcu_nocb_mask, cpu_possible_mask,
-  1239				    rcu_nocb_mask);
-  1240		}
-  1241		if (cpumask_empty(rcu_nocb_mask))
-  1242			pr_info("\tOffload RCU callbacks from CPUs: (none).\n");
-  1243		else
-  1244			pr_info("\tOffload RCU callbacks from CPUs: %*pbl.\n",
-  1245				cpumask_pr_args(rcu_nocb_mask));
-  1246		if (rcu_nocb_poll)
-  1247			pr_info("\tPoll for callbacks from no-CBs CPUs.\n");
-  1248	
-  1249		for_each_cpu(cpu, rcu_nocb_mask) {
-  1250			rdp = per_cpu_ptr(&rcu_data, cpu);
-  1251			if (rcu_segcblist_empty(&rdp->cblist))
-  1252				rcu_segcblist_init(&rdp->cblist);
-  1253			rcu_segcblist_offload(&rdp->cblist, true);
-  1254			rcu_segcblist_set_flags(&rdp->cblist, SEGCBLIST_KTHREAD_CB | SEGCBLIST_KTHREAD_GP);
-  1255			rcu_segcblist_clear_flags(&rdp->cblist, SEGCBLIST_RCU_CORE);
-  1256		}
-  1257		rcu_organize_nocb_kthreads();
-  1258	}
-  1259	
+Actually, I'm now looking at Etnaviv and Nouveau and seems they should
+map imported dma-buf properly. I know that people ran Android on
+Etnaviv. So maybe devices with a separated GPU/display need to map
+imported display BO for Android support. Wish somebody who ran Android
+on one of these devices using upstream drivers could give a definitive
+answer. I may try to test Nouveau later on.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Dmitry

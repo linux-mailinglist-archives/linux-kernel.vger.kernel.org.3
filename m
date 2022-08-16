@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC2D595CD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54323595CCD
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235360AbiHPNGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
+        id S235451AbiHPNGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234306AbiHPNGX (ORCPT
+        with ESMTP id S234359AbiHPNGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 16 Aug 2022 09:06:23 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CDC2608
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D107DD108
         for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:06:22 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M6WZ11d2wzmVXv;
-        Tue, 16 Aug 2022 21:04:09 +0800 (CST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4M6WXh6pW3z1M8ym;
+        Tue, 16 Aug 2022 21:03:00 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 16 Aug
- 2022 21:06:19 +0800
+ 2022 21:06:20 +0800
 From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>, <mike.kravetz@oracle.com>,
         <songmuchun@bytedance.com>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>
-Subject: [PATCH 5/6] mm/hugetlb: fix sysfs group leak in hugetlb_unregister_node()
-Date:   Tue, 16 Aug 2022 21:05:52 +0800
-Message-ID: <20220816130553.31406-6-linmiaohe@huawei.com>
+Subject: [PATCH 6/6] mm/hugetlb: make detecting shared pte more reliable
+Date:   Tue, 16 Aug 2022 21:05:53 +0800
+Message-ID: <20220816130553.31406-7-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220816130553.31406-1-linmiaohe@huawei.com>
 References: <20220816130553.31406-1-linmiaohe@huawei.com>
@@ -49,62 +49,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sysfs group per_node_hstate_attr_group and hstate_demote_attr_group
-when h->demote_order != 0 are created in hugetlb_register_node(). But
-these sysfs groups are not removed when unregister the node, thus sysfs
-group is leaked. Using sysfs_remove_group() to fix this issue.
+If the pagetables are shared, we shouldn't copy or take references. Since
+src could have unshared and dst shares with another vma, huge_pte_none()
+is thus used to determine whether dst_pte is shared. But this check isn't
+reliable. A shared pte could have pte none in pagetable in fact. The page
+count of ptep page should be checked here in order to reliably determine
+whether pte is shared.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- mm/hugetlb.c | 25 ++++++++++++++++++-------
- 1 file changed, 18 insertions(+), 7 deletions(-)
+ mm/hugetlb.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index b69d7808f457..e1356ad57087 100644
+index e1356ad57087..25db6d07479e 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -3850,12 +3850,18 @@ static int hugetlb_sysfs_add_hstate(struct hstate *h, struct kobject *parent,
- 	}
+@@ -4795,15 +4795,13 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
  
- 	if (h->demote_order) {
--		if (sysfs_create_group(hstate_kobjs[hi],
--					&hstate_demote_attr_group))
-+		retval = sysfs_create_group(hstate_kobjs[hi],
-+					    &hstate_demote_attr_group);
-+		if (retval) {
- 			pr_warn("HugeTLB unable to create demote interfaces for %s\n", h->name);
-+			sysfs_remove_group(hstate_kobjs[hi], hstate_attr_group);
-+			kobject_put(hstate_kobjs[hi]);
-+			hstate_kobjs[hi] = NULL;
-+			return retval;
-+		}
- 	}
- 
--	return retval;
-+	return 0;
- }
- 
- static void __init hugetlb_sysfs_init(void)
-@@ -3941,10 +3947,15 @@ static void hugetlb_unregister_node(struct node *node)
- 
- 	for_each_hstate(h) {
- 		int idx = hstate_index(h);
--		if (nhs->hstate_kobjs[idx]) {
--			kobject_put(nhs->hstate_kobjs[idx]);
--			nhs->hstate_kobjs[idx] = NULL;
--		}
-+		struct kobject *hstate_kobj = nhs->hstate_kobjs[idx];
-+
-+		if (!hstate_kobj)
-+			continue;
-+		if (h->demote_order)
-+			sysfs_remove_group(hstate_kobj, &hstate_demote_attr_group);
-+		sysfs_remove_group(hstate_kobj, &per_node_hstate_attr_group);
-+		kobject_put(hstate_kobj);
-+		nhs->hstate_kobjs[idx] = NULL;
- 	}
- 
- 	kobject_put(nhs->hugepages_kobj);
+ 		/*
+ 		 * If the pagetables are shared don't copy or take references.
+-		 * dst_pte == src_pte is the common case of src/dest sharing.
+ 		 *
++		 * dst_pte == src_pte is the common case of src/dest sharing.
+ 		 * However, src could have 'unshared' and dst shares with
+-		 * another vma.  If dst_pte !none, this implies sharing.
+-		 * Check here before taking page table lock, and once again
+-		 * after taking the lock below.
++		 * another vma. So page_count of ptep page is checked instead
++		 * to reliably determine whether pte is shared.
+ 		 */
+-		dst_entry = huge_ptep_get(dst_pte);
+-		if ((dst_pte == src_pte) || !huge_pte_none(dst_entry)) {
++		if (page_count(virt_to_page(dst_pte)) > 1) {
+ 			addr |= last_addr_mask;
+ 			continue;
+ 		}
+@@ -4814,11 +4812,9 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 		entry = huge_ptep_get(src_pte);
+ 		dst_entry = huge_ptep_get(dst_pte);
+ again:
+-		if (huge_pte_none(entry) || !huge_pte_none(dst_entry)) {
++		if (huge_pte_none(entry)) {
+ 			/*
+-			 * Skip if src entry none.  Also, skip in the
+-			 * unlikely case dst entry !none as this implies
+-			 * sharing with another vma.
++			 * Skip if src entry none.
+ 			 */
+ 			;
+ 		} else if (unlikely(is_hugetlb_entry_hwpoisoned(entry))) {
 -- 
 2.23.0
 

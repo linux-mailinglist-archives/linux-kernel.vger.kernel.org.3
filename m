@@ -2,199 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66637595516
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70398595522
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232951AbiHPI0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 04:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
+        id S232926AbiHPIY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 04:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiHPIZa (ORCPT
+        with ESMTP id S232747AbiHPIWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:25:30 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A77118C80;
-        Mon, 15 Aug 2022 22:59:26 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27G5x36g029614;
-        Tue, 16 Aug 2022 00:59:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1660629543;
-        bh=V5Ka5UXfv6A4IhWDBTifW60sQoNxzaXMBT9NUt0YenI=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=WIMlvFkZdBE/dUNN5FLUuOzIFP/j0ZcRWIPlN8STKoF9iZhZYIxHTnxC6bZI9xybn
-         Jl/JCZAbDpFikFZq/EHkrZErfAyRxbmubqdw3PLviSNwaq6spBSMdoUBuX8R0HV/P3
-         3Mo9CL2uyl8iqrht3qUhAH+xqYveRZFrqCXQeTcg=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27G5x397014394
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 16 Aug 2022 00:59:03 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 16
- Aug 2022 00:59:00 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Tue, 16 Aug 2022 00:59:00 -0500
-Received: from uda0492258.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27G5wm3e109354;
-        Tue, 16 Aug 2022 00:58:57 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <robh+dt@kernel.org>, <lee.jones@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <kishon@ti.com>,
-        <vkoul@kernel.org>, <dan.carpenter@oracle.com>,
-        <grygorii.strashko@ti.com>, <rogerq@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <s-vadapalli@ti.com>
-Subject: [PATCH v2 2/2] phy: ti: gmii-sel: Add support for CPSW5G GMII SEL in J7200
-Date:   Tue, 16 Aug 2022 11:28:48 +0530
-Message-ID: <20220816055848.111482-3-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220816055848.111482-1-s-vadapalli@ti.com>
-References: <20220816055848.111482-1-s-vadapalli@ti.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 16 Aug 2022 04:22:54 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07BF914410F
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 23:00:35 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27G4m8cF030863;
+        Tue, 16 Aug 2022 06:00:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=17A5XgzIslLl1w0X8XOBzNYOt3ViA7v3u3+KeLKY6NU=;
+ b=np6p2dpNnUfqpExDsaGH0Bn7FLucHdyOSd78KeApQsPxZu3TYLMFTPN/MELVZGcb8xOn
+ c+QUzOos015kywVNQRkRSPLZccY4EsElCTYwVpAGhz7Zgwr6lo27Pmgfzi6YVR7Apagy
+ 6mBhv8Z4glkDNHzuDk5tqMugZ7iutLhQarCi/DtD0e86l60nH9em4UDAueQSRd7CjyX7
+ cu4x+rXkCc81Qia+gCM0nIHLNpnOEURKyWP0R+ThXeP5GTsbSVjajTrwmh73ETNetnoZ
+ jVX46VEVwwB2TYpUpHW5qNg40V4i3g+VC69KPcyW0mh+G+Vk6nQQ4DisxOqYXEg+StmJ uQ== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j0445rafg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Aug 2022 06:00:25 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 27G60Mwi030772;
+        Tue, 16 Aug 2022 06:00:22 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 3hxnep8jfu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 16 Aug 2022 06:00:22 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27G60Ldr030766;
+        Tue, 16 Aug 2022 06:00:21 GMT
+Received: from hu-maiyas-hyd.qualcomm.com (hu-pbrahma-hyd.qualcomm.com [10.213.107.125])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 27G60LgP030762;
+        Tue, 16 Aug 2022 06:00:21 +0000
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 2370061)
+        id B9C875001D9; Tue, 16 Aug 2022 11:30:20 +0530 (+0530)
+From:   Pratyush Brahma <pbrahma@qti.qualcomm.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        quic_charante@quicinc.com,
+        Pratyush Brahma <quic_pbrahma@quicinc.com>
+Subject: [PATCH v2] mm: oom_kill: add trace logs in process_mrelease() system call
+Date:   Tue, 16 Aug 2022 11:30:17 +0530
+Message-Id: <20220816060017.17996-1-pbrahma@qti.qualcomm.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: PmydXDOiBMMuIpx-8SEodg6JjntJ-xgb
+X-Proofpoint-GUID: PmydXDOiBMMuIpx-8SEodg6JjntJ-xgb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-16_04,2022-08-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=999 clxscore=1011 adultscore=0 spamscore=0 bulkscore=0
+ malwarescore=0 mlxscore=0 phishscore=0 suspectscore=0 priorityscore=1501
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208160022
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Each of the CPSW5G ports in J7200 support additional modes like QSGMII.
-Add a new compatible for J7200 to support the additional modes.
+From: Charan Teja Kalla <quic_charante@quicinc.com>
 
-In TI's J7200, each of the CPSW5G ethernet interfaces can act as a
-QSGMII or QSGMII-SUB port. The QSGMII interface is responsible for
-performing auto-negotiation between the MAC and the PHY while the rest of
-the interfaces are designated as QSGMII-SUB interfaces, indicating that
-they will not be taking part in the auto-negotiation process.
+The process_mrelease() system call[1] is used to release the memory of
+a dying process from the context of the caller, which is similar to and
+uses the functions of the oom reaper logic. There exists trace logs for
+a process when reaped by the oom reaper. Just extend the same to when
+done by the process_mrelease() system call.
 
-To indicate the interface which will serve as the main QSGMII interface,
-add a property "ti,qsgmii-main-ports", whose value indicates the
-port number of the interface which shall serve as the main QSGMII
-interface. The rest of the interfaces are then assigned QSGMII-SUB mode by
-default.
+[1]
+https://lore.kernel.org/linux-mm/20210809185259.405936-1-surenb@google.com/
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+Signed-off-by: Pratyush Brahma <quic_pbrahma@quicinc.com>
 ---
- drivers/phy/ti/phy-gmii-sel.c | 40 ++++++++++++++++++++++++++++++++---
- 1 file changed, 37 insertions(+), 3 deletions(-)
+Changes in v2:
+- Added trace_skip_task_reaping() to cover more cases where we skip
+  reaping.
+- Print debug information in pr_debug instead of pr_info
+- The original author email domain has changed. Update the new email
+  address.
 
-diff --git a/drivers/phy/ti/phy-gmii-sel.c b/drivers/phy/ti/phy-gmii-sel.c
-index d0ab69750c6b..270083606b14 100644
---- a/drivers/phy/ti/phy-gmii-sel.c
-+++ b/drivers/phy/ti/phy-gmii-sel.c
-@@ -22,6 +22,12 @@
- #define AM33XX_GMII_SEL_MODE_RMII	1
- #define AM33XX_GMII_SEL_MODE_RGMII	2
- 
-+/* J72xx SoC specific definitions for the CONTROL port */
-+#define J72XX_GMII_SEL_MODE_QSGMII	4
-+#define J72XX_GMII_SEL_MODE_QSGMII_SUB	6
-+
-+#define PHY_GMII_PORT(n)	BIT((n) - 1)
-+
- enum {
- 	PHY_GMII_SEL_PORT_MODE = 0,
- 	PHY_GMII_SEL_RGMII_ID_MODE,
-@@ -43,6 +49,7 @@ struct phy_gmii_sel_soc_data {
- 	u32 features;
- 	const struct reg_field (*regfields)[PHY_GMII_SEL_LAST];
- 	bool use_of_data;
-+	u64 extra_modes;
- };
- 
- struct phy_gmii_sel_priv {
-@@ -53,6 +60,7 @@ struct phy_gmii_sel_priv {
- 	struct phy_gmii_sel_phy_priv *if_phys;
- 	u32 num_ports;
- 	u32 reg_offset;
-+	u32 qsgmii_main_ports;
- };
- 
- static int phy_gmii_sel_mode(struct phy *phy, enum phy_mode mode, int submode)
-@@ -88,10 +96,17 @@ static int phy_gmii_sel_mode(struct phy *phy, enum phy_mode mode, int submode)
- 		gmii_sel_mode = AM33XX_GMII_SEL_MODE_MII;
- 		break;
- 
-+	case PHY_INTERFACE_MODE_QSGMII:
-+		if (!(soc_data->extra_modes & BIT(PHY_INTERFACE_MODE_QSGMII)))
-+			goto unsupported;
-+		if (if_phy->priv->qsgmii_main_ports & BIT(if_phy->id - 1))
-+			gmii_sel_mode = J72XX_GMII_SEL_MODE_QSGMII;
-+		else
-+			gmii_sel_mode = J72XX_GMII_SEL_MODE_QSGMII_SUB;
-+		break;
-+
- 	default:
--		dev_warn(dev, "port%u: unsupported mode: \"%s\"\n",
--			 if_phy->id, phy_modes(submode));
--		return -EINVAL;
-+		goto unsupported;
- 	}
- 
- 	if_phy->phy_if_mode = submode;
-@@ -123,6 +138,11 @@ static int phy_gmii_sel_mode(struct phy *phy, enum phy_mode mode, int submode)
- 	}
- 
- 	return 0;
-+
-+unsupported:
-+	dev_warn(dev, "port%u: unsupported mode: \"%s\"\n",
-+		 if_phy->id, phy_modes(submode));
-+	return -EINVAL;
+[v1]
+https://patchwork.kernel.org/project/linux-mm/patch/1629106756-20874-1-git-send-email-charante@codeaurora.org/
+
+ mm/oom_kill.c | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
+
+diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+index 3c6cf9e3cd66..51ad5f0b612e 100644
+--- a/mm/oom_kill.c
++++ b/mm/oom_kill.c
+@@ -995,7 +995,6 @@ static void __oom_kill_process(struct task_struct *victim, const char *message)
+ 	mmdrop(mm);
+ 	put_task_struct(victim);
  }
+-#undef K
  
- static const
-@@ -188,6 +208,13 @@ struct phy_gmii_sel_soc_data phy_gmii_sel_soc_am654 = {
- 	.regfields = phy_gmii_sel_fields_am654,
- };
+ /*
+  * Kill provided task unless it's secured by setting
+@@ -1241,17 +1240,33 @@ SYSCALL_DEFINE2(process_mrelease, int, pidfd, unsigned int, flags)
+ 		goto drop_mm;
  
-+static const
-+struct phy_gmii_sel_soc_data phy_gmii_sel_cpsw5g_soc_j7200 = {
-+	.use_of_data = true,
-+	.regfields = phy_gmii_sel_fields_am654,
-+	.extra_modes = BIT(PHY_INTERFACE_MODE_QSGMII),
-+};
+ 	if (mmap_read_lock_killable(mm)) {
++		trace_skip_task_reaping(task->pid);
+ 		ret = -EINTR;
+-		goto drop_mm;
++		goto read_unlock;
+ 	}
+ 	/*
+ 	 * Check MMF_OOM_SKIP again under mmap_read_lock protection to ensure
+ 	 * possible change in exit_mmap is seen
+ 	 */
+-	if (!test_bit(MMF_OOM_SKIP, &mm->flags) && !__oom_reap_task_mm(mm))
++	if (test_bit(MMF_OOM_SKIP, &mm->flags)) {
++		trace_skip_task_reaping(task->pid);
++		goto read_unlock;
++	}
 +
- static const struct of_device_id phy_gmii_sel_id_table[] = {
- 	{
- 		.compatible	= "ti,am3352-phy-gmii-sel",
-@@ -209,6 +236,10 @@ static const struct of_device_id phy_gmii_sel_id_table[] = {
- 		.compatible	= "ti,am654-phy-gmii-sel",
- 		.data		= &phy_gmii_sel_soc_am654,
- 	},
-+	{
-+		.compatible	= "ti,j7200-cpsw5g-phy-gmii-sel",
-+		.data		= &phy_gmii_sel_cpsw5g_soc_j7200,
-+	},
- 	{}
- };
- MODULE_DEVICE_TABLE(of, phy_gmii_sel_id_table);
-@@ -350,6 +381,7 @@ static int phy_gmii_sel_probe(struct platform_device *pdev)
- 	struct device_node *node = dev->of_node;
- 	const struct of_device_id *of_id;
- 	struct phy_gmii_sel_priv *priv;
-+	u32 main_ports = 1;
- 	int ret;
++	trace_start_task_reaping(task->pid);
++
++	if (!__oom_reap_task_mm(mm))
+ 		ret = -EAGAIN;
+-	mmap_read_unlock(mm);
  
- 	of_id = of_match_node(phy_gmii_sel_id_table, pdev->dev.of_node);
-@@ -363,6 +395,8 @@ static int phy_gmii_sel_probe(struct platform_device *pdev)
- 	priv->dev = &pdev->dev;
- 	priv->soc_data = of_id->data;
- 	priv->num_ports = priv->soc_data->num_ports;
-+	of_property_read_u32_array(node, "ti,qsgmii-main-ports", &main_ports, 1);
-+	priv->qsgmii_main_ports = PHY_GMII_PORT(main_ports);
- 
- 	priv->regmap = syscon_node_to_regmap(node->parent);
- 	if (IS_ERR(priv->regmap)) {
++	pr_debug("process_mrelease: reaped process %d (%s), now anon-rss:%lukB, file-rss:%lukB, shmem-rss:%lukB\n",
++						task_pid_nr(task), task->comm,
++						K(get_mm_counter(mm, MM_ANONPAGES)),
++						K(get_mm_counter(mm, MM_FILEPAGES)),
++						K(get_mm_counter(mm, MM_SHMEMPAGES)));
++	trace_finish_task_reaping(task->pid);
++
++read_unlock:
++	mmap_read_unlock(mm);
+ drop_mm:
+ 	mmdrop(mm);
+ put_task:
+@@ -1261,3 +1276,4 @@ SYSCALL_DEFINE2(process_mrelease, int, pidfd, unsigned int, flags)
+ 	return -ENOSYS;
+ #endif /* CONFIG_MMU */
+ }
++#undef K
 -- 
-2.25.1
+2.17.1
 

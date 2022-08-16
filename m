@@ -2,103 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E04155953B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 09:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 220875953CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 09:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232106AbiHPH1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 03:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
+        id S232116AbiHPHaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 03:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231844AbiHPH0z (ORCPT
+        with ESMTP id S231977AbiHPH3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 03:26:55 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BA817DDB8;
-        Mon, 15 Aug 2022 20:56:48 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d16so8087157pll.11;
-        Mon, 15 Aug 2022 20:56:48 -0700 (PDT)
+        Tue, 16 Aug 2022 03:29:46 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B97D31F7;
+        Mon, 15 Aug 2022 21:05:30 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id q9-20020a17090a2dc900b001f58bcaca95so16256949pjm.3;
+        Mon, 15 Aug 2022 21:05:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc;
-        bh=qLSttsMwGgFXnsk5NhFWTdXd+2tQbLUyp0NNDCVHH9A=;
-        b=SZQdxn0LRoB3Sm/BK6myvoUmneF2rPxNoNYW/qkudaijogCTBK8foe9e9swRxqm8am
-         E2R0Q2dQ8sCFI/JHVrsKPlFPz/9U07gEMiKAkhodCIFqd1Y92AONNmo8g1eTQZQN5jWS
-         3/csoDncaFMVRbm4v10In1P48Eo5Kd2YL9uL3whrh18IpZtUfzi8qacl0HOHcAz/CPlP
-         vIdjoRWY2Cvdiu1PFyPlzThZh9rjP1vgiQ0lg5QNvYGyf5u8Ac5BaooXNF4ZuPIzLgdW
-         rJBDG3Eg4at3j9bz/ZSmHsNkng0dd2CDWXfEyYDbn/h15eckZHHq6vz/qnnpdUCV2ynb
-         1gbQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=XXFxUvBcCEQW6aq/xzjSaHd+5yvV496WeWx3Xhu7LQ4=;
+        b=XIVhEq81zbCHt7kzA+a/fmmn4Q6sYPYZs9RFIBiRYHoUh54jOPqD50z5+U61aUGf0u
+         V9ePXU1R7/PQCiMqxoxQ7PjqsEb0D/n8JEHu+Vp+tB0Mcyi8zpTTphTB3hIY9IY2LVM/
+         LTZJAfn5gJkiXK0pdD0jxaAtUkLf2khm+KugO0BCNtg+M6zpjAA7EhLRYfh/eVSX7qrw
+         h05ajRZ1OARHjwYDaMuJ74WLyvgro3hC4/CbGyDQUN8fscFlGmaWslxtOBIloCqEmcVg
+         1YhPsLaMAUx2YKjqzJTXUy96lmKpMvxqzaAE5jB4afUU+23KwbBx/F/bORycui8zZtP2
+         A1nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc;
-        bh=qLSttsMwGgFXnsk5NhFWTdXd+2tQbLUyp0NNDCVHH9A=;
-        b=3Hx7BIkbboe2Vuo1BdnPHMeVta+Uj0plbPVDVN0JAeAQskpo1qlpWOJZOC9F4HB4My
-         XBdlYxgohTsusAIYx8aFy3s+e7Oupj51pWVBuYJook72zZruD00iNp3FEFBeRYG9CeVr
-         itcNVy4nrXP/tFANM3kgydELf7FCXgYXKgXKvaz4Dkib1lMNMryYWFIORhMyXqajtbbg
-         rEVV3mTq/jjT/fHBEOmxAkWcUgLNv3duRrHHl7vS1ZV+MSELns9Ci6pdHxsjJJOPBa/H
-         kpyOtCs8fEslZe1lrvhJ42Ga2zK9lyyxmf3mWtWgc0vcWSzad9yr7mJT+dmt7/eW58kc
-         l86g==
-X-Gm-Message-State: ACgBeo0sa8p9J5nTQ1Z0BvmqMYOpMSWqgq1a0Dvo9EFEC/gDE3Cl8Vqm
-        8NaSeCJSn0OTpJmBqnYVano=
-X-Google-Smtp-Source: AA6agR6ezCfARSKr9teZqM98UWGmox8EuKcG/UykuOWOmBN60SUNF93S9sRfcJtcEICdyPuEUHCqig==
-X-Received: by 2002:a17:90b:4a0a:b0:1f4:e4fc:91d3 with SMTP id kk10-20020a17090b4a0a00b001f4e4fc91d3mr30956594pjb.67.1660622207573;
-        Mon, 15 Aug 2022 20:56:47 -0700 (PDT)
-Received: from localhost.localdomain ([116.75.96.232])
-        by smtp.gmail.com with ESMTPSA id l13-20020a17090ac58d00b001f2fa09786asm5356846pjt.19.2022.08.15.20.56.45
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=XXFxUvBcCEQW6aq/xzjSaHd+5yvV496WeWx3Xhu7LQ4=;
+        b=IqgtDBpeX7aKkHHqwdXIXpi/nZWhQIFuHxjusjihzI28tP3otfB6HJCEy1OZqd4I47
+         DN6voWMBaCzHhy5DofsB7AWuFG+wxjt1zu4+xLQiC0LNpEKR9y7Hu6+FWeOr251vtaEv
+         eBj2vXB5esodqRiFUM76VvyxyjqPJwGyX3pcvfTIrAxf98Hsn8VDdapQ7lFKxYDz5J56
+         0Jv9ej04no7BCfJ0TtlVijwW+ShB12+oG8xwtbhl/e3+UEC5sT/Ohyy05vt5Shp3E0dS
+         JCh1D1B3lzB52f5o7TE6BppsNmS3tty7dBBQhjnp8PN81xFJkzStzlqHmKdv+C1L35vx
+         YD0A==
+X-Gm-Message-State: ACgBeo1a+4jF8aSfI0CtcTU8mOYVrgusVlpEE67eXVuRlQ0flYuUXaV0
+        SEtDqaFo+iLGKzCVbjmtaSc6fRQVqXQ=
+X-Google-Smtp-Source: AA6agR6Gf51589WorFB0MTsn1nnGC1HAgAfVmEvLPxicT5nqTJMQdPocSM4o92aLNGMjG6+CvSK2gA==
+X-Received: by 2002:a17:902:e805:b0:16f:4a25:b5bd with SMTP id u5-20020a170902e80500b0016f4a25b5bdmr19876672plg.85.1660622730176;
+        Mon, 15 Aug 2022 21:05:30 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x17-20020a1709027c1100b00172751a2fa4sm1687195pll.80.2022.08.15.21.05.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 20:56:47 -0700 (PDT)
-From:   Jagath Jog J <jagathjog1996@gmail.com>
-To:     alexandre.belloni@bootlin.com, a.zummo@towertech.it
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jagathjog1996@gmail.com
-Subject: [PATCH 3/3] rtc: rv3028: Alignment to match the open parenthesis
-Date:   Tue, 16 Aug 2022 09:26:36 +0530
-Message-Id: <20220816035636.27226-4-jagathjog1996@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220816035636.27226-1-jagathjog1996@gmail.com>
-References: <20220816035636.27226-1-jagathjog1996@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 15 Aug 2022 21:05:29 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 15 Aug 2022 21:05:27 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v1] usb: typec: tcpm: Return ENOTSUPP for power supply
+ prop writes
+Message-ID: <20220816040527.GA1108868@roeck-us.net>
+References: <20220816033355.1259400-1-badhri@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816033355.1259400-1-badhri@google.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix following checkpatch.pl check by adding space to match the
-open parenthesis and removing unwanted blank line.
-CHECK: Alignment should match open parenthesis.
-CHECK: Blank lines aren't necessary before a close brace '}'.
+On Mon, Aug 15, 2022 at 08:33:55PM -0700, Badhri Jagan Sridharan wrote:
+> When the port does not support USB PD, prevent transition to PD
+> only states when power supply property is written. In this case,
+> TCPM transitions to SNK_NEGOTIATE_CAPABILITIES
+> which should not be the case given that the port is not pd_capable.
+> 
+> [   84.308251] state change SNK_READY -> SNK_NEGOTIATE_CAPABILITIES [rev3 NONE_AMS]
+> [   84.308335] Setting usb_comm capable false
+> [   84.323367] set_auto_vbus_discharge_threshold mode:3 pps_active:n vbus:5000 ret:0
+> [   84.323376] state change SNK_NEGOTIATE_CAPABILITIES -> SNK_WAIT_CAPABILITIES [rev3 NONE_AMS]
+> 
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 
-Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
----
- drivers/rtc/rtc-rv3028.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
-index f7c801c06d00..0da68fd7cedd 100644
---- a/drivers/rtc/rtc-rv3028.c
-+++ b/drivers/rtc/rtc-rv3028.c
-@@ -266,7 +266,7 @@ static irqreturn_t rv3028_handle_irq(int irq, void *dev_id)
- 	u32 status = 0, ctrl = 0;
- 
- 	if (regmap_read(rv3028->regmap, RV3028_STATUS, &status) < 0 ||
--	   status == 0) {
-+	    status == 0) {
- 		return IRQ_NONE;
- 	}
- 
-@@ -514,7 +514,6 @@ static int rv3028_set_offset(struct device *dev, long offset)
- 	rv3028_exit_eerd(rv3028, eerd);
- 
- 	return ret;
--
- }
- 
- static int rv3028_param_get(struct device *dev, struct rtc_param *param)
--- 
-2.17.1
-
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index ea5a917c51b1..904c7b4ce2f0 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -6320,6 +6320,13 @@ static int tcpm_psy_set_prop(struct power_supply *psy,
+>  	struct tcpm_port *port = power_supply_get_drvdata(psy);
+>  	int ret;
+>  
+> +	/*
+> +	 * All the properties below are related to USB PD. The check needs to be
+> +	 * property specific when a non-pd related property is added.
+> +	 */
+> +	if (!port->pd_supported)
+> +		return -EOPNOTSUPP;
+> +
+>  	switch (psp) {
+>  	case POWER_SUPPLY_PROP_ONLINE:
+>  		ret = tcpm_psy_set_online(port, val);
+> -- 
+> 2.37.1.595.g718a3a8f04-goog
+> 

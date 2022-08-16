@@ -2,84 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4D0596620
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 01:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1DA596624
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 01:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237667AbiHPXoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 19:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42088 "EHLO
+        id S237701AbiHPXpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 19:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiHPXoi (ORCPT
+        with ESMTP id S229675AbiHPXpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 19:44:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C578915C2;
-        Tue, 16 Aug 2022 16:44:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EA616134B;
-        Tue, 16 Aug 2022 23:44:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B4F7C433C1;
-        Tue, 16 Aug 2022 23:44:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660693476;
-        bh=OAzkgD5LmFOw0cU+/xIlB9h5Vph5ExEgMh4qFj5H50A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uDEO8H5QZeU9XvjDP5n5ihdX6f32eqoyRUxcYOZ+bvYDd1xTbA2RNWjQB4igljzDh
-         y6IpaJ62pAdBsyCSQvq/RUtbV3aYd422+8gP+ek/eY02kLD5grw6qqazi9T02C1uuP
-         LJ8JdErwQK8O9NDuaB/SaX+Q2Cvp8TyKk6S0AY5OGhvuWr5RNTs/tFOPpNR0M+sbUC
-         pFQmNwlP6KVQmXTdZ0rAOCW/iC7aydW6xumFXJN6vWXAbcKM8oiK/ZEw4V+/Mhil/z
-         AyyuJbTmuNuoUrYr92W8nZ+kZY/ZuGtjoO+1FshsEgJ2Q+wmOEMV/6ICtNI8+7NnyN
-         GgJ52V4PQ2xsw==
-Date:   Tue, 16 Aug 2022 16:44:35 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Hawkins Jiawei <yin31149@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        bpf@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>
-Subject: Re: [PATCH] net: Fix suspicious RCU usage in
- bpf_sk_reuseport_detach()
-Message-ID: <20220816164435.0558ef94@kernel.org>
-In-Reply-To: <804153.1660684606@warthog.procyon.org.uk>
-References: <20220816103452.479281-1-yin31149@gmail.com>
-        <166064248071.3502205.10036394558814861778.stgit@warthog.procyon.org.uk>
-        <804153.1660684606@warthog.procyon.org.uk>
+        Tue, 16 Aug 2022 19:45:15 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00279915FC
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 16:45:14 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id ch17-20020a17090af41100b001fa74771f61so2440499pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 16:45:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=T8Wd5ecB9QDTm6Zwnt9WBgEsFx0O5umnw625jWHrX/M=;
+        b=jumeSEYxVa1d9kq7i5FFS4qyMGOZkNP0043rIjIqRE3Vugi8nADSvyvpmv3f1SvV5Y
+         eIWNRT4/oHQZ8V9HHSEjEBd/Sui40yeXHtlb5JS5tB2nCSB2F6r+pVMiXXXXHulkDarn
+         Z4rsOg7u4h/dG6fFXX9RtjtI40Slm6UulsbB/8Z6IYqv2gNOez8PhJ4G10/WdyrK+7yK
+         25juHiVzZNSBYfzjdikFcVDPhGAaQs/KVum4Rco1DRXvx2x1vj09a1TQfRl6WIMNbznT
+         FrkKJpxO8r+ywD5UC4+KWiYIoqJhc8i1SaN1burCu2r/nCF0IoEq366ud58eY3AueX7l
+         3cug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=T8Wd5ecB9QDTm6Zwnt9WBgEsFx0O5umnw625jWHrX/M=;
+        b=370JwZuN3GnikI4g+9ZaDIXOmT6mQ2hoMc3PmCVCOGmQoRxpCNdgWVfce+cJahBzjC
+         yhghiHZHrjQxqun/SxOSpRX1Ihdy654s39e0/Huc3PKdkCz8nf/7ri8qZl9LQHmuVWP+
+         7KvZK9nzI2UnYUY+kjqMhjSevdXaR85djX6tJ359qpuYiLE+f27HVVAff5UknCBs/WHA
+         XJFh/ztop71k7f5DLkzVTp/5qdqVR/NiQCXMOlJwAv8if8nsDnuWrEqwubZRH4dJfIHk
+         ybk2IOuMsOZOZ3wcuGdwCUCqM4ezoMuEedsa+3pSQFq2ZnFJH66K+MqVtDffBMYpH/OF
+         OHVw==
+X-Gm-Message-State: ACgBeo0UeJYnu6Gi8Wr8/TFuqcHj9gyj21IxcL5jY51aU7b+MGwXyhro
+        poGIp9M7aKAr2EJdZZ/bjLV7Vw==
+X-Google-Smtp-Source: AA6agR76/9iHZUvxlYJRUAl4HHUCIQebjkGRgwgIoQ3QmecE2Cr0/B8jZ0or2nfgmiWsyUzwV3wXNQ==
+X-Received: by 2002:a17:902:f68f:b0:171:55f0:9062 with SMTP id l15-20020a170902f68f00b0017155f09062mr23600649plg.18.1660693512929;
+        Tue, 16 Aug 2022 16:45:12 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id x29-20020aa7941d000000b00525343b5047sm8971175pfo.76.2022.08.16.16.45.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 16:45:12 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 23:45:08 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        mlevitsk@redhat.com, vkuznets@redhat.com
+Subject: Re: [PATCH v2 9/9] KVM: x86: never write to memory from
+ kvm_vcpu_check_block
+Message-ID: <YvwsBC2HqodxaYRJ@google.com>
+References: <20220811210605.402337-1-pbonzini@redhat.com>
+ <20220811210605.402337-10-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220811210605.402337-10-pbonzini@redhat.com>
+X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 Aug 2022 22:16:46 +0100 David Howells wrote:
-> So either __rcu_dereference_sk_user_data_with_flags_check() has to be a macro,
-> or we need to go with something like the first version of my patch where I
-> don't pass the condition through.  Do you have a preference?
+On Thu, Aug 11, 2022, Paolo Bonzini wrote:
+> kvm_vcpu_check_block() is called while not in TASK_RUNNING, and therefore
+> it cannot sleep.  Writing to guest memory is therefore forbidden, but it
+> can happen on AMD processors if kvm_check_nested_events() causes a vmexit.
+> 
+> Fortunately, all events that are caught by kvm_check_nested_events() are
+> also recognized by kvm_vcpu_has_events() through vendor callbacks such as
+> kvm_x86_interrupt_allowed() or kvm_x86_ops.nested_ops->has_events(), so
+> remove the call and postpone the actual processing to vcpu_block().
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/x86.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 5e9358ea112b..9226fd536783 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -10639,6 +10639,17 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
+>  			return 1;
+>  	}
+>  
+> +	if (is_guest_mode(vcpu)) {
+> +		/*
+> +		 * Evaluate nested events before exiting the halted state.
+> +		 * This allows the halt state to be recorded properly in
+> +		 * the VMCS12's activity state field (AMD does not have
+> +		 * a similar field and a vmexit always causes a spurious
+> +		 * wakeup from HLT).
+> +		 */
+> +		kvm_check_nested_events(vcpu);
 
-I like your version because it documents what the lock protecting this
-field is. 
+Formatting nit, I'd prefer the block comment go above the if-statement, that way
+we avoiding debating whether or not the technically-unnecessary braces align with
+kernel/KVM style, and it doesn't have to wrap as aggressively.
 
-In fact should we also add && sock_owned_by_user(). Martin, WDYT? Would
-that work for reuseport? Jakub S is fixing l2tp to hold the socket lock
-while setting this field, yet most places take the callback lock...
+And s/vmexit/VM-Exit while I'm nitpicking.
 
-One the naming - maybe just drop the _with_flags() ? There's no version
-of locked helper which does not take the flags. And not underscores?
+	/*
+	 * Evaluate nested events before exiting the halted state.  This allows
+	 * the halt state to be recorded properly in the VMCS12's activity
+	 * state field (AMD does not have a similar field and a VM-Exit always
+	 * causes a spurious wakeup from HLT).
+	 */
+	if (is_guest_mode(vcpu))
+		kvm_check_nested_events(vcpu);
+
+Side topic, the AMD behavior is a bug report waiting to happen.  I know of at least
+one customer failure that was root caused to a KVM bug where KVM caused a spurious
+wakeup.  To be fair, the guest workload was being stupid (execute HLT on vCPU and
+then effectively unmap its code by doing kexec), but it's still an unpleasant gap :-(

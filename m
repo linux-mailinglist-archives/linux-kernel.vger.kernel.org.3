@@ -2,102 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9960759566E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 561EC595651
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233498AbiHPJbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40024 "EHLO
+        id S233609AbiHPJb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233555AbiHPJaP (ORCPT
+        with ESMTP id S233594AbiHPJa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:30:15 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED5C124202
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:50:58 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id z6so13710923lfu.9
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:50:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=SsFQ1RIKNiJVmQ5p1REhokCaS6zA2xCDkzmoDwE4rX4=;
-        b=C0vovSaBtU3Al/+uuR5jDDnyI0+U1TP282RQhz+GQNbnU36bQz68AnK5kXLHecmF5A
-         axOm3+W83f958RvgYeCKIkNS2glYVCYOrnGKMtcBNOEjCW2uEZGCp/UIoq7k0PGgNCe5
-         IaLDe0R3RR1+G0S1Ta/V8OGoA+zrMQfpq/kxlJLuwZ59Ta0nAWPVpHdpCdi34td8WLod
-         +0DGSh8mHtK0ro69ztI/vT43EY7+SsTZHhb8LaHHU9qoZHW8097OXTkZNeLHKhY9DQnA
-         5xW1kRi7YOtHwZRwFAanL8RrpAUc+Ty/vJstUKxz0zzGyY1L13nix0HgOmjzc9TIGFxx
-         3pmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=SsFQ1RIKNiJVmQ5p1REhokCaS6zA2xCDkzmoDwE4rX4=;
-        b=QJjuaTKfpRzARRwOmVEtDAW7pAT/kzE9bUEE/j6H2cotUBBKQgUenl4IfSoN8F3lcK
-         49RpJZUvm+gBHbRVZCmSmsEnHxZEm4bd6uipGeX/v2i72lhlP2V2CVqYylBtVucbq6hd
-         o6NZn6vQ0xGfoQjNh6YpTihNpdd9hPkzIhBi1z7K571qA77375zFp/lUp85g5ZCNIDAP
-         LGPdTPnpmCKYxIAyuMeTcOUlnBjLDHZJGVCXVBlqAcamarqcUonq4WUah1XwFARAxqmZ
-         +X0U/NVFt4CvK9ToWnF03bwaz3kWCwJ26aN5qMzFqGclBo5tPOzDX9U76IC0ZMtf2hK/
-         iZDg==
-X-Gm-Message-State: ACgBeo2XV6ZEQnD//o/ZqKqLatp2uQVErtekyxtf94o0mI/Ru6B32Ju+
-        Z7K6BMafJuGSR93YSbJSzZkpdQ==
-X-Google-Smtp-Source: AA6agR61EpgIZo4areU1VwiZwwTCgopZu+2bI0uZ3goHpEzDHA9edBrmuCgn1s1AR0GHg0VZ6JjiWA==
-X-Received: by 2002:a05:6512:1050:b0:491:dda4:1e2c with SMTP id c16-20020a056512105000b00491dda41e2cmr3973398lfb.467.1660636256607;
-        Tue, 16 Aug 2022 00:50:56 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id u11-20020ac258cb000000b0048b13d0b896sm1308697lfo.141.2022.08.16.00.50.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 00:50:56 -0700 (PDT)
-Message-ID: <c547ac5f-e4e8-d043-22bf-626cc580a69a@linaro.org>
-Date:   Tue, 16 Aug 2022 10:50:54 +0300
+        Tue, 16 Aug 2022 05:30:28 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC42ABC32
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:51:29 -0700 (PDT)
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1660636287;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=U8zrBlsX24GUIa6NkHshgjy/77P8hZoQ1quBK5XwT24=;
+        b=H77GSPlCvzKbNwiKUqP9jje1hBVeSPgS1XRcUNDxFROuGVNC/3Mc+I+LG4e/DXiVIik00E
+        G3310ysKP/9aSgNMaK2KGsByi7tbIuqaQ+LOmhUiHiBTvARKIxncFf+tyeuUEozNoO2CSb
+        etapm0oyX8Yz6Z14e9yaeIUE7TImlC1ZBF5BmBRK5CtnuFKrihn1D95x51I2dqWHSb7zsv
+        hPcq7ZgcfEQxdDMMgvIdXOZfd+0Nia15C80CbbrSCbuaEOmJvhL7DUYKNsZUF+JSikLf41
+        oTtqhcw1KK+LUS5+TZ50NY+XjPCqXW5rEf7OKwaykElJ+m8riN3Z/0qoaHz7ZQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1660636287;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=U8zrBlsX24GUIa6NkHshgjy/77P8hZoQ1quBK5XwT24=;
+        b=BolLcF6YC+ao0LM8yfsVwJcKoB0BE1Rr2NwIUDLsUCuQ6kIG08QH5+YLVDwe/rVXKuNjPh
+        VVFtGJIeRS7/fZAg==
+To:     linux-kernel@vger.kernel.org
+Cc:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH] checkpatch: Print an error if rwlock.h is included directly.
+Date:   Tue, 16 Aug 2022 09:51:18 +0200
+Message-Id: <20220816075118.173455-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: arm: rockchip: Add PinePhone Pro
- bindings
-Content-Language: en-US
-To:     Tom Fitzhenry <tom@tom-fitzhenry.me.uk>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de
-Cc:     martijn@brixit.nl, ayufan@ayufan.eu, megi@xff.cz,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, phone-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220815123004.252014-1-tom@tom-fitzhenry.me.uk>
- <20220815123004.252014-2-tom@tom-fitzhenry.me.uk>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220815123004.252014-2-tom@tom-fitzhenry.me.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/08/2022 15:30, Tom Fitzhenry wrote:
-> Document board compatible names for Pine64 PinePhonePro.
-> 
-> https://wiki.pine64.org/wiki/PinePhone_Pro
-> 
-> Signed-off-by: Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+rwlock.h shouldn't be included directly in source code. PREEMPT_RT uses
+a different implementation and this rwlock.h include breaks it.
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
+Add an error message if linux/rwlock.h is included.
 
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ scripts/checkpatch.pl | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-If a tag was not added on purpose, please state why and what changed.
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 79e759aac543b..d130db6726414 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -5749,6 +5749,12 @@ sub process {
+ 			}
+ 		}
+=20
++# rwlock.h must not be included directly. It will be included via spinlock=
+.h if needed.
++		if ($rawline =3D~ /\#\s*include.*\<linux\/rwlock\.h/) {
++			ERROR("INCLUDES_BAD_HEADER",
++				"Please don't include rwlock.h directly, use spinlock.h if needed.\n" =
+. $herecurr);
++		}
++
+ # warn if <asm/foo.h> is #included and <linux/foo.h> is available and incl=
+udes
+ # itself <asm/foo.h> (uses RAW line)
+ 		if ($tree && $rawline =3D~ m{^.\s*\#\s*include\s*\<asm\/(.*)\.h\>}) {
+--=20
+2.37.2
 
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof

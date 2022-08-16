@@ -2,52 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97861595B67
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BEA595B6A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:10:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234934AbiHPMIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 08:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
+        id S233968AbiHPMIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 08:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235358AbiHPMHq (ORCPT
+        with ESMTP id S235383AbiHPMHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 08:07:46 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C55052DF9;
-        Tue, 16 Aug 2022 04:58:48 -0700 (PDT)
+        Tue, 16 Aug 2022 08:07:50 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F184954671;
+        Tue, 16 Aug 2022 04:59:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660651128; x=1692187128;
+  t=1660651143; x=1692187143;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=n+5QK8ChqVPwcnYu7FKcYERFrhWb2h1TLXZC0gXgFGc=;
-  b=IcGmS8su1k+FeUxD3YnBKuksbLNhe2z7FOtesPyPeU1IeMg4hcXlO0oa
-   nHBlWbHa78E7nc804y12notANkz0bPr6nQ+0pfevQUslHA4VR8kdPv93h
-   Zo1N7s6omEMlSh0mHfjy8Vj5VDaENLHBcTFqTE/f5Gfp/8WBO4KcgHZf3
-   0PIEoqr/EhDjVXAwC8S63coyFBCK1j3hs1M3tFytpIgZ0zBxkOZWBGAAu
-   HOEN+ySXLmLeD30ykuKiTifVwaH65zMhaYBj33nakdeoM0Vt5pgtdqOKR
-   /4y6Mlm3reFCC/zuRH/TUwYjXMH4YeqVlg0lOwz9KpVF/aZzY7W37QFQd
+  bh=MqS1TPWmulhFayStdCA+5pTfGSaOryIvs97Q0MvHdsY=;
+  b=BKdyeZRtyJZ7iNkoj+1vAY4mbZme3WzQcrqG+w9iqxtE3Qz7/o0IYK+i
+   /Tmw2uy/vo3whcxij5pS0GcaIy5PJvylhSMxewnggk21VFO+obH/3c7hh
+   Pk/tjRMbx/YZOQ8kXAuOUdBpv6y1FDz8egzOCI4X0GNL/cof+JVqOfN3T
+   MCcgt5xqqdW4SjDJaBzG3jMB7aRbSKSUF2t4tz4AGVFaMq3B6fdW8p0KR
+   tn6BUsJ5Hxb/21D1sS4t0Ls2keYMEXKIKoEGU9NX0MLL+agR5Kyz0T1qF
+   IKlbULCJ9jYF/nQRekzN1XNv6vrajl7vWTSPLJf72pspA2Cb4aSa4x/X6
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="353942385"
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="378488900"
 X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="353942385"
+   d="scan'208";a="378488900"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 04:58:48 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 04:59:02 -0700
 X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="667080932"
+   d="scan'208";a="667080943"
 Received: from tturcu-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.51.153])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 04:58:44 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 04:58:50 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-serial@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Arnd Bergmann <arnd@arndb.de>,
+        Samuel Iglesias Gonsalvez <siglesias@igalia.com>,
+        Jens Taprogge <jens.taprogge@taprogge.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        David Lin <dtwlin@gmail.com>, Johan Hovold <johan@kernel.org>,
+        Alex Elder <elder@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-mmc@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-staging@lists.linux.dev, greybus-dev@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-bluetooth@vger.kernel.org
 Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 7/8] usb: serial: Make ->set_termios() old ktermios const
-Date:   Tue, 16 Aug 2022 14:57:38 +0300
-Message-Id: <20220816115739.10928-8-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 8/8] tty: Make ->set_termios() old ktermios const
+Date:   Tue, 16 Aug 2022 14:57:39 +0300
+Message-Id: <20220816115739.10928-9-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220816115739.10928-1-ilpo.jarvinen@linux.intel.com>
 References: <20220816115739.10928-1-ilpo.jarvinen@linux.intel.com>
@@ -69,741 +97,369 @@ discarded anyway.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/usb/serial/ark3116.c          |  2 +-
- drivers/usb/serial/belkin_sa.c        |  6 ++++--
- drivers/usb/serial/ch341.c            |  5 +++--
- drivers/usb/serial/cp210x.c           | 13 ++++++++-----
- drivers/usb/serial/cypress_m8.c       |  6 ++++--
- drivers/usb/serial/digi_acceleport.c  |  6 ++++--
- drivers/usb/serial/f81232.c           |  3 ++-
- drivers/usb/serial/f81534.c           |  4 ++--
- drivers/usb/serial/ftdi_sio.c         |  6 ++++--
- drivers/usb/serial/io_edgeport.c      |  7 ++++---
- drivers/usb/serial/io_ti.c            |  8 +++++---
- drivers/usb/serial/ir-usb.c           |  6 ++++--
- drivers/usb/serial/iuu_phoenix.c      |  3 ++-
- drivers/usb/serial/keyspan.c          |  3 ++-
- drivers/usb/serial/keyspan_pda.c      |  3 ++-
- drivers/usb/serial/kl5kusb105.c       |  5 +++--
- drivers/usb/serial/kobil_sct.c        |  6 ++++--
- drivers/usb/serial/mct_u232.c         |  5 +++--
- drivers/usb/serial/mos7720.c          |  5 +++--
- drivers/usb/serial/mos7840.c          |  5 +++--
- drivers/usb/serial/mxuport.c          |  4 ++--
- drivers/usb/serial/oti6858.c          |  6 ++++--
- drivers/usb/serial/pl2303.c           |  3 ++-
- drivers/usb/serial/quatech2.c         |  4 ++--
- drivers/usb/serial/spcp8x5.c          |  3 ++-
- drivers/usb/serial/ssu100.c           |  4 ++--
- drivers/usb/serial/ti_usb_3410_5052.c |  6 ++++--
- drivers/usb/serial/upd78f0730.c       |  4 ++--
- drivers/usb/serial/whiteheat.c        |  6 ++++--
- drivers/usb/serial/xr_serial.c        | 20 ++++++++++++--------
- include/linux/usb/serial.h            |  4 ++--
- 31 files changed, 105 insertions(+), 66 deletions(-)
+ drivers/char/pcmcia/synclink_cs.c   | 3 ++-
+ drivers/ipack/devices/ipoctal.c     | 2 +-
+ drivers/mmc/core/sdio_uart.c        | 4 ++--
+ drivers/net/usb/hso.c               | 3 ++-
+ drivers/s390/char/tty3270.c         | 2 +-
+ drivers/staging/fwserial/fwserial.c | 3 ++-
+ drivers/staging/greybus/uart.c      | 2 +-
+ drivers/tty/amiserial.c             | 6 +++---
+ drivers/tty/moxa.c                  | 9 +++++----
+ drivers/tty/mxser.c                 | 6 ++++--
+ drivers/tty/n_gsm.c                 | 3 ++-
+ drivers/tty/pty.c                   | 2 +-
+ drivers/tty/serial/serial_core.c    | 6 +++---
+ drivers/tty/synclink_gt.c           | 3 ++-
+ drivers/usb/class/cdc-acm.c         | 4 ++--
+ drivers/usb/serial/usb-serial.c     | 3 ++-
+ include/linux/tty_driver.h          | 4 ++--
+ net/bluetooth/rfcomm/tty.c          | 3 ++-
+ 18 files changed, 39 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/usb/serial/ark3116.c b/drivers/usb/serial/ark3116.c
-index 39eaa7b97c40..9452291f1703 100644
---- a/drivers/usb/serial/ark3116.c
-+++ b/drivers/usb/serial/ark3116.c
-@@ -189,7 +189,7 @@ static void ark3116_port_remove(struct usb_serial_port *port)
+diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
+index 8fc49b038372..b2735be81ab2 100644
+--- a/drivers/char/pcmcia/synclink_cs.c
++++ b/drivers/char/pcmcia/synclink_cs.c
+@@ -2274,7 +2274,8 @@ static int mgslpc_ioctl(struct tty_struct *tty,
+  *	tty		pointer to tty structure
+  *	termios		pointer to buffer to hold returned old termios
+  */
+-static void mgslpc_set_termios(struct tty_struct *tty, struct ktermios *old_termios)
++static void mgslpc_set_termios(struct tty_struct *tty,
++			       const struct ktermios *old_termios)
+ {
+ 	MGSLPC_INFO *info = (MGSLPC_INFO *)tty->driver_data;
+ 	unsigned long flags;
+diff --git a/drivers/ipack/devices/ipoctal.c b/drivers/ipack/devices/ipoctal.c
+index 20d2b9ec1227..fc00274070b6 100644
+--- a/drivers/ipack/devices/ipoctal.c
++++ b/drivers/ipack/devices/ipoctal.c
+@@ -497,7 +497,7 @@ static unsigned int ipoctal_chars_in_buffer(struct tty_struct *tty)
+ }
  
- static void ark3116_set_termios(struct tty_struct *tty,
- 				struct usb_serial_port *port,
+ static void ipoctal_set_termios(struct tty_struct *tty,
 -				struct ktermios *old_termios)
 +				const struct ktermios *old_termios)
  {
- 	struct usb_serial *serial = port->serial;
- 	struct ark3116_private *priv = usb_get_serial_port_data(port);
-diff --git a/drivers/usb/serial/belkin_sa.c b/drivers/usb/serial/belkin_sa.c
-index 8107e4b5b03b..9331a562dac0 100644
---- a/drivers/usb/serial/belkin_sa.c
-+++ b/drivers/usb/serial/belkin_sa.c
-@@ -44,7 +44,8 @@ static void belkin_sa_close(struct usb_serial_port *port);
- static void belkin_sa_read_int_callback(struct urb *urb);
- static void belkin_sa_process_read_urb(struct urb *urb);
- static void belkin_sa_set_termios(struct tty_struct *tty,
--			struct usb_serial_port *port, struct ktermios * old);
-+				  struct usb_serial_port *port,
-+				  const struct ktermios *old_termios);
- static void belkin_sa_break_ctl(struct tty_struct *tty, int break_state);
- static int  belkin_sa_tiocmget(struct tty_struct *tty);
- static int  belkin_sa_tiocmset(struct tty_struct *tty,
-@@ -273,7 +274,8 @@ static void belkin_sa_process_read_urb(struct urb *urb)
+ 	unsigned int cflag;
+ 	unsigned char mr1 = 0;
+diff --git a/drivers/mmc/core/sdio_uart.c b/drivers/mmc/core/sdio_uart.c
+index 414aa82abc39..ae7ef2e038be 100644
+--- a/drivers/mmc/core/sdio_uart.c
++++ b/drivers/mmc/core/sdio_uart.c
+@@ -246,7 +246,7 @@ static inline void sdio_uart_update_mctrl(struct sdio_uart_port *port,
+ 
+ static void sdio_uart_change_speed(struct sdio_uart_port *port,
+ 				   struct ktermios *termios,
+-				   struct ktermios *old)
++				   const struct ktermios *old)
+ {
+ 	unsigned char cval, fcr = 0;
+ 	unsigned int baud, quot;
+@@ -859,7 +859,7 @@ static void sdio_uart_unthrottle(struct tty_struct *tty)
  }
  
- static void belkin_sa_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+				  struct usb_serial_port *port,
+ static void sdio_uart_set_termios(struct tty_struct *tty,
+-						struct ktermios *old_termios)
 +				  const struct ktermios *old_termios)
  {
- 	struct usb_serial *serial = port->serial;
- 	struct belkin_sa_private *priv = usb_get_serial_port_data(port);
-diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-index 2798fca71261..5731d69fcf18 100644
---- a/drivers/usb/serial/ch341.c
-+++ b/drivers/usb/serial/ch341.c
-@@ -103,7 +103,7 @@ struct ch341_private {
+ 	struct sdio_uart_port *port = tty->driver_data;
+ 	unsigned int cflag = tty->termios.c_cflag;
+diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
+index f8221a7acf62..ce1f6081d582 100644
+--- a/drivers/net/usb/hso.c
++++ b/drivers/net/usb/hso.c
+@@ -1380,7 +1380,8 @@ static void hso_serial_cleanup(struct tty_struct *tty)
+ }
  
- static void ch341_set_termios(struct tty_struct *tty,
- 			      struct usb_serial_port *port,
--			      struct ktermios *old_termios);
-+			      const struct ktermios *old_termios);
- 
- static int ch341_control_out(struct usb_device *dev, u8 request,
- 			     u16 value, u16 index)
-@@ -470,7 +470,8 @@ static int ch341_open(struct tty_struct *tty, struct usb_serial_port *port)
-  * tty->termios contains the new setting to be used.
+ /* setup the term */
+-static void hso_serial_set_termios(struct tty_struct *tty, struct ktermios *old)
++static void hso_serial_set_termios(struct tty_struct *tty,
++				   const struct ktermios *old)
+ {
+ 	struct hso_serial *serial = tty->driver_data;
+ 	unsigned long flags;
+diff --git a/drivers/s390/char/tty3270.c b/drivers/s390/char/tty3270.c
+index 5c83f71c1d0e..26e3995ac062 100644
+--- a/drivers/s390/char/tty3270.c
++++ b/drivers/s390/char/tty3270.c
+@@ -1760,7 +1760,7 @@ tty3270_flush_chars(struct tty_struct *tty)
+  * Check for visible/invisible input switches
   */
- static void ch341_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+			      struct usb_serial_port *port,
-+			      const struct ktermios *old_termios)
+ static void
+-tty3270_set_termios(struct tty_struct *tty, struct ktermios *old)
++tty3270_set_termios(struct tty_struct *tty, const struct ktermios *old)
  {
- 	struct ch341_private *priv = usb_get_serial_port_data(port);
- 	unsigned baud_rate;
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index c374620a486f..bb39d40974cf 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -31,9 +31,9 @@
- static int cp210x_open(struct tty_struct *tty, struct usb_serial_port *);
- static void cp210x_close(struct usb_serial_port *);
- static void cp210x_change_speed(struct tty_struct *, struct usb_serial_port *,
--							struct ktermios *);
-+				const struct ktermios *);
- static void cp210x_set_termios(struct tty_struct *, struct usb_serial_port *,
--							struct ktermios*);
-+			       const struct ktermios *);
- static bool cp210x_tx_empty(struct usb_serial_port *port);
- static int cp210x_tiocmget(struct tty_struct *);
- static int cp210x_tiocmset(struct tty_struct *, unsigned int, unsigned int);
-@@ -1039,7 +1039,8 @@ static speed_t cp210x_get_actual_rate(speed_t baud)
-  * otherwise.
-  */
- static void cp210x_change_speed(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+				struct usb_serial_port *port,
-+				const struct ktermios *old_termios)
- {
- 	struct usb_serial *serial = port->serial;
- 	struct cp210x_serial_private *priv = usb_get_serial_data(serial);
-@@ -1121,7 +1122,8 @@ static bool cp210x_termios_change(const struct ktermios *a, const struct ktermio
+ 	struct tty3270 *tp;
+ 	int new;
+diff --git a/drivers/staging/fwserial/fwserial.c b/drivers/staging/fwserial/fwserial.c
+index e8fa7f53cd5e..81b06d88ed0d 100644
+--- a/drivers/staging/fwserial/fwserial.c
++++ b/drivers/staging/fwserial/fwserial.c
+@@ -1267,7 +1267,8 @@ static int fwtty_ioctl(struct tty_struct *tty, unsigned int cmd,
+ 	return err;
  }
  
- static void cp210x_set_flow_control(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+				    struct usb_serial_port *port,
-+				    const struct ktermios *old_termios)
- {
- 	struct cp210x_serial_private *priv = usb_get_serial_data(port->serial);
- 	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
-@@ -1231,7 +1233,8 @@ static void cp210x_set_flow_control(struct tty_struct *tty,
- }
- 
- static void cp210x_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+		               struct usb_serial_port *port,
-+		               const struct ktermios *old_termios)
- {
- 	struct cp210x_serial_private *priv = usb_get_serial_data(port->serial);
- 	u16 bits;
-diff --git a/drivers/usb/serial/cypress_m8.c b/drivers/usb/serial/cypress_m8.c
-index 5fbcc155e8f5..1e0c028c5ec9 100644
---- a/drivers/usb/serial/cypress_m8.c
-+++ b/drivers/usb/serial/cypress_m8.c
-@@ -125,7 +125,8 @@ static void cypress_send(struct usb_serial_port *port);
- static unsigned int cypress_write_room(struct tty_struct *tty);
- static void cypress_earthmate_init_termios(struct tty_struct *tty);
- static void cypress_set_termios(struct tty_struct *tty,
--			struct usb_serial_port *port, struct ktermios *old);
-+				struct usb_serial_port *port,
-+				const struct ktermios *old_termios);
- static int  cypress_tiocmget(struct tty_struct *tty);
- static int  cypress_tiocmset(struct tty_struct *tty,
- 			unsigned int set, unsigned int clear);
-@@ -859,7 +860,8 @@ static void cypress_earthmate_init_termios(struct tty_struct *tty)
- }
- 
- static void cypress_set_termios(struct tty_struct *tty,
--	struct usb_serial_port *port, struct ktermios *old_termios)
-+				struct usb_serial_port *port,
-+				const struct ktermios *old_termios)
- {
- 	struct cypress_private *priv = usb_get_serial_port_data(port);
- 	struct device *dev = &port->dev;
-diff --git a/drivers/usb/serial/digi_acceleport.c b/drivers/usb/serial/digi_acceleport.c
-index af65eb863d70..45d688e9b93f 100644
---- a/drivers/usb/serial/digi_acceleport.c
-+++ b/drivers/usb/serial/digi_acceleport.c
-@@ -215,7 +215,8 @@ static int digi_transmit_idle(struct usb_serial_port *port,
- static void digi_rx_throttle(struct tty_struct *tty);
- static void digi_rx_unthrottle(struct tty_struct *tty);
- static void digi_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios);
-+			     struct usb_serial_port *port,
-+			     const struct ktermios *old_termios);
- static void digi_break_ctl(struct tty_struct *tty, int break_state);
- static int digi_tiocmget(struct tty_struct *tty);
- static int digi_tiocmset(struct tty_struct *tty, unsigned int set,
-@@ -649,7 +650,8 @@ static void digi_rx_unthrottle(struct tty_struct *tty)
- 
- 
- static void digi_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+			     struct usb_serial_port *port,
-+			     const struct ktermios *old_termios)
- {
- 	struct digi_port *priv = usb_get_serial_port_data(port);
- 	struct device *dev = &port->dev;
-diff --git a/drivers/usb/serial/f81232.c b/drivers/usb/serial/f81232.c
-index d9f20256a6a8..2dd58cd9f0cc 100644
---- a/drivers/usb/serial/f81232.c
-+++ b/drivers/usb/serial/f81232.c
-@@ -603,7 +603,8 @@ static int f81232_port_disable(struct usb_serial_port *port)
- }
- 
- static void f81232_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+			       struct usb_serial_port *port,
-+			       const struct ktermios *old_termios)
- {
- 	struct f81232_private *priv = usb_get_serial_port_data(port);
- 	u8 new_lcr = 0;
-diff --git a/drivers/usb/serial/f81534.c b/drivers/usb/serial/f81534.c
-index d789c1ec87b3..ddfcd72eb0ae 100644
---- a/drivers/usb/serial/f81534.c
-+++ b/drivers/usb/serial/f81534.c
-@@ -944,8 +944,8 @@ static int f81534_calc_num_ports(struct usb_serial *serial,
- }
- 
- static void f81534_set_termios(struct tty_struct *tty,
--				struct usb_serial_port *port,
--				struct ktermios *old_termios)
-+			       struct usb_serial_port *port,
-+			       const struct ktermios *old_termios)
- {
- 	u8 new_lcr = 0;
- 	int status;
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index d5a3986dfee7..3173316cb06b 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -1087,7 +1087,8 @@ static void ftdi_process_read_urb(struct urb *urb);
- static int ftdi_prepare_write_buffer(struct usb_serial_port *port,
- 						void *dest, size_t size);
- static void ftdi_set_termios(struct tty_struct *tty,
--			struct usb_serial_port *port, struct ktermios *old);
-+			     struct usb_serial_port *port,
-+			     const struct ktermios *old_termios);
- static int  ftdi_tiocmget(struct tty_struct *tty);
- static int  ftdi_tiocmset(struct tty_struct *tty,
- 			unsigned int set, unsigned int clear);
-@@ -2638,7 +2639,8 @@ static bool ftdi_tx_empty(struct usb_serial_port *port)
-  * WARNING: set_termios calls this with old_termios in kernel space
-  */
- static void ftdi_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+		             struct usb_serial_port *port,
-+		             const struct ktermios *old_termios)
- {
- 	struct usb_device *dev = port->serial->dev;
- 	struct device *ddev = &port->dev;
-diff --git a/drivers/usb/serial/io_edgeport.c b/drivers/usb/serial/io_edgeport.c
-index ffa622539a25..3a4c0febf335 100644
---- a/drivers/usb/serial/io_edgeport.c
-+++ b/drivers/usb/serial/io_edgeport.c
-@@ -281,7 +281,7 @@ static int  send_iosp_ext_cmd(struct edgeport_port *edge_port, __u8 command,
- static int  calc_baud_rate_divisor(struct device *dev, int baud_rate, int *divisor);
- static void change_port_settings(struct tty_struct *tty,
- 				struct edgeport_port *edge_port,
--				struct ktermios *old_termios);
-+				const struct ktermios *old_termios);
- static int  send_cmd_write_uart_register(struct edgeport_port *edge_port,
- 				__u8 regNum, __u8 regValue);
- static int  write_cmd_usb(struct edgeport_port *edge_port,
-@@ -1441,7 +1441,8 @@ static void edge_unthrottle(struct tty_struct *tty)
-  * the termios structure
-  *****************************************************************************/
- static void edge_set_termios(struct tty_struct *tty,
--	struct usb_serial_port *port, struct ktermios *old_termios)
-+			     struct usb_serial_port *port,
-+			     const struct ktermios *old_termios)
- {
- 	struct edgeport_port *edge_port = usb_get_serial_port_data(port);
- 
-@@ -2325,7 +2326,7 @@ static int send_cmd_write_uart_register(struct edgeport_port *edge_port,
-  *****************************************************************************/
- 
- static void change_port_settings(struct tty_struct *tty,
--	struct edgeport_port *edge_port, struct ktermios *old_termios)
-+	struct edgeport_port *edge_port, const struct ktermios *old_termios)
- {
- 	struct device *dev = &edge_port->port->dev;
- 	struct edgeport_serial *edge_serial =
-diff --git a/drivers/usb/serial/io_ti.c b/drivers/usb/serial/io_ti.c
-index feba2a8d1233..bc3c24ea42c1 100644
---- a/drivers/usb/serial/io_ti.c
-+++ b/drivers/usb/serial/io_ti.c
-@@ -221,7 +221,8 @@ static void stop_read(struct edgeport_port *edge_port);
- static int restart_read(struct edgeport_port *edge_port);
- 
- static void edge_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios);
-+			     struct usb_serial_port *port,
-+			     const struct ktermios *old_termios);
- static void edge_send(struct usb_serial_port *port, struct tty_struct *tty);
- 
- static int do_download_mode(struct edgeport_serial *serial,
-@@ -2210,7 +2211,7 @@ static int restart_read(struct edgeport_port *edge_port)
- }
- 
- static void change_port_settings(struct tty_struct *tty,
--		struct edgeport_port *edge_port, struct ktermios *old_termios)
-+		struct edgeport_port *edge_port, const struct ktermios *old_termios)
- {
- 	struct device *dev = &edge_port->port->dev;
- 	struct ump_uart_config *config;
-@@ -2351,7 +2352,8 @@ static void change_port_settings(struct tty_struct *tty,
- }
- 
- static void edge_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+			     struct usb_serial_port *port,
-+			     const struct ktermios *old_termios)
- {
- 	struct edgeport_port *edge_port = usb_get_serial_port_data(port);
- 
-diff --git a/drivers/usb/serial/ir-usb.c b/drivers/usb/serial/ir-usb.c
-index 7b44dbea95cd..82f108134e6f 100644
---- a/drivers/usb/serial/ir-usb.c
-+++ b/drivers/usb/serial/ir-usb.c
-@@ -51,7 +51,8 @@ static unsigned int ir_write_room(struct tty_struct *tty);
- static void ir_write_bulk_callback(struct urb *urb);
- static void ir_process_read_urb(struct urb *urb);
- static void ir_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios);
-+			   struct usb_serial_port *port,
-+			   const struct ktermios *old_termios);
- 
- /* Not that this lot means you can only have one per system */
- static u8 ir_baud;
-@@ -376,7 +377,8 @@ static void ir_process_read_urb(struct urb *urb)
- }
- 
- static void ir_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+			   struct usb_serial_port *port,
-+			   const struct ktermios *old_termios)
- {
- 	struct usb_device *udev = port->serial->dev;
- 	unsigned char *transfer_buffer;
-diff --git a/drivers/usb/serial/iuu_phoenix.c b/drivers/usb/serial/iuu_phoenix.c
-index 0be3b5e1eaf3..77cba71bcccb 100644
---- a/drivers/usb/serial/iuu_phoenix.c
-+++ b/drivers/usb/serial/iuu_phoenix.c
-@@ -879,7 +879,8 @@ static int iuu_uart_baud(struct usb_serial_port *port, u32 baud_base,
- }
- 
- static void iuu_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+			    struct usb_serial_port *port,
-+			    const struct ktermios *old_termios)
- {
- 	const u32 supported_mask = CMSPAR|PARENB|PARODD;
- 	struct iuu_private *priv = usb_get_serial_port_data(port);
-diff --git a/drivers/usb/serial/keyspan.c b/drivers/usb/serial/keyspan.c
-index 1cfcd805f286..2966e0c4941e 100644
---- a/drivers/usb/serial/keyspan.c
-+++ b/drivers/usb/serial/keyspan.c
-@@ -616,7 +616,8 @@ static void keyspan_break_ctl(struct tty_struct *tty, int break_state)
- 
- 
- static void keyspan_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+				struct usb_serial_port *port,
-+				const struct ktermios *old_termios)
- {
- 	int				baud_rate, device_port;
- 	struct keyspan_port_private 	*p_priv;
-diff --git a/drivers/usb/serial/keyspan_pda.c b/drivers/usb/serial/keyspan_pda.c
-index 3e7628becdcd..6fd15cd9e1eb 100644
---- a/drivers/usb/serial/keyspan_pda.c
-+++ b/drivers/usb/serial/keyspan_pda.c
-@@ -321,7 +321,8 @@ static void keyspan_pda_break_ctl(struct tty_struct *tty, int break_state)
- }
- 
- static void keyspan_pda_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+				    struct usb_serial_port *port,
-+				    const struct ktermios *old_termios)
- {
- 	struct usb_serial *serial = port->serial;
- 	speed_t speed;
-diff --git a/drivers/usb/serial/kl5kusb105.c b/drivers/usb/serial/kl5kusb105.c
-index edcc57bd9b5e..394b3189e003 100644
---- a/drivers/usb/serial/kl5kusb105.c
-+++ b/drivers/usb/serial/kl5kusb105.c
-@@ -56,7 +56,8 @@ static void klsi_105_port_remove(struct usb_serial_port *port);
- static int  klsi_105_open(struct tty_struct *tty, struct usb_serial_port *port);
- static void klsi_105_close(struct usb_serial_port *port);
- static void klsi_105_set_termios(struct tty_struct *tty,
--			struct usb_serial_port *port, struct ktermios *old);
-+				 struct usb_serial_port *port,
-+				 const struct ktermios *old_termios);
- static int  klsi_105_tiocmget(struct tty_struct *tty);
- static void klsi_105_process_read_urb(struct urb *urb);
- static int klsi_105_prepare_write_buffer(struct usb_serial_port *port,
-@@ -366,7 +367,7 @@ static void klsi_105_process_read_urb(struct urb *urb)
- 
- static void klsi_105_set_termios(struct tty_struct *tty,
- 				 struct usb_serial_port *port,
--				 struct ktermios *old_termios)
-+				 const struct ktermios *old_termios)
- {
- 	struct klsi_105_private *priv = usb_get_serial_port_data(port);
- 	struct device *dev = &port->dev;
-diff --git a/drivers/usb/serial/kobil_sct.c b/drivers/usb/serial/kobil_sct.c
-index 4ed8b8b0a361..5e775f68fcb8 100644
---- a/drivers/usb/serial/kobil_sct.c
-+++ b/drivers/usb/serial/kobil_sct.c
-@@ -62,7 +62,8 @@ static int  kobil_tiocmset(struct tty_struct *tty,
- static void kobil_read_int_callback(struct urb *urb);
- static void kobil_write_int_callback(struct urb *urb);
- static void kobil_set_termios(struct tty_struct *tty,
--			struct usb_serial_port *port, struct ktermios *old);
-+			      struct usb_serial_port *port,
-+			      const struct ktermios *old);
- static void kobil_init_termios(struct tty_struct *tty);
- 
- static const struct usb_device_id id_table[] = {
-@@ -474,7 +475,8 @@ static int kobil_tiocmset(struct tty_struct *tty,
- }
- 
- static void kobil_set_termios(struct tty_struct *tty,
--			struct usb_serial_port *port, struct ktermios *old)
-+			      struct usb_serial_port *port,
+-static void fwtty_set_termios(struct tty_struct *tty, struct ktermios *old)
++static void fwtty_set_termios(struct tty_struct *tty,
 +			      const struct ktermios *old)
  {
- 	struct kobil_private *priv;
- 	int result;
-diff --git a/drivers/usb/serial/mct_u232.c b/drivers/usb/serial/mct_u232.c
-index ecd5b921e374..d3852feb81a4 100644
---- a/drivers/usb/serial/mct_u232.c
-+++ b/drivers/usb/serial/mct_u232.c
-@@ -45,7 +45,8 @@ static void mct_u232_close(struct usb_serial_port *port);
- static void mct_u232_dtr_rts(struct usb_serial_port *port, int on);
- static void mct_u232_read_int_callback(struct urb *urb);
- static void mct_u232_set_termios(struct tty_struct *tty,
--			struct usb_serial_port *port, struct ktermios *old);
-+				 struct usb_serial_port *port,
-+				 const struct ktermios *old_termios);
- static void mct_u232_break_ctl(struct tty_struct *tty, int break_state);
- static int  mct_u232_tiocmget(struct tty_struct *tty);
- static int  mct_u232_tiocmset(struct tty_struct *tty,
-@@ -593,7 +594,7 @@ static void mct_u232_read_int_callback(struct urb *urb)
- 
- static void mct_u232_set_termios(struct tty_struct *tty,
- 				 struct usb_serial_port *port,
--				 struct ktermios *old_termios)
-+				 const struct ktermios *old_termios)
- {
- 	struct usb_serial *serial = port->serial;
- 	struct mct_u232_private *priv = usb_get_serial_port_data(port);
-diff --git a/drivers/usb/serial/mos7720.c b/drivers/usb/serial/mos7720.c
-index 23ccbba716c7..1d1f85fabc28 100644
---- a/drivers/usb/serial/mos7720.c
-+++ b/drivers/usb/serial/mos7720.c
-@@ -1356,7 +1356,7 @@ static int send_cmd_write_baud_rate(struct moschip_port *mos7720_port,
-  */
- static void change_port_settings(struct tty_struct *tty,
- 				 struct moschip_port *mos7720_port,
--				 struct ktermios *old_termios)
-+				 const struct ktermios *old_termios)
- {
- 	struct usb_serial_port *port;
- 	struct usb_serial *serial;
-@@ -1494,7 +1494,8 @@ static void change_port_settings(struct tty_struct *tty,
-  *	termios structure.
-  */
- static void mos7720_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+				struct usb_serial_port *port,
-+				const struct ktermios *old_termios)
- {
- 	int status;
- 	struct moschip_port *mos7720_port;
-diff --git a/drivers/usb/serial/mos7840.c b/drivers/usb/serial/mos7840.c
-index 925067a7978d..6b12bb4648b8 100644
---- a/drivers/usb/serial/mos7840.c
-+++ b/drivers/usb/serial/mos7840.c
-@@ -1188,7 +1188,8 @@ static int mos7840_send_cmd_write_baud_rate(struct moschip_port *mos7840_port,
-  *****************************************************************************/
- 
- static void mos7840_change_port_settings(struct tty_struct *tty,
--	struct moschip_port *mos7840_port, struct ktermios *old_termios)
-+					 struct moschip_port *mos7840_port,
-+					 const struct ktermios *old_termios)
- {
- 	struct usb_serial_port *port = mos7840_port->port;
- 	int baud;
-@@ -1330,7 +1331,7 @@ static void mos7840_change_port_settings(struct tty_struct *tty,
- 
- static void mos7840_set_termios(struct tty_struct *tty,
- 				struct usb_serial_port *port,
--				struct ktermios *old_termios)
-+				const struct ktermios *old_termios)
- {
- 	struct moschip_port *mos7840_port = usb_get_serial_port_data(port);
- 	int status;
-diff --git a/drivers/usb/serial/mxuport.c b/drivers/usb/serial/mxuport.c
-index eb45a9b0005c..faa0eedfe245 100644
---- a/drivers/usb/serial/mxuport.c
-+++ b/drivers/usb/serial/mxuport.c
-@@ -760,7 +760,7 @@ static int mxuport_tiocmget(struct tty_struct *tty)
+ 	struct fwtty_port *port = tty->driver_data;
+ 	unsigned int baud;
+diff --git a/drivers/staging/greybus/uart.c b/drivers/staging/greybus/uart.c
+index dc4ed0ff1ae2..90ff07f2cbf7 100644
+--- a/drivers/staging/greybus/uart.c
++++ b/drivers/staging/greybus/uart.c
+@@ -480,7 +480,7 @@ static int gb_tty_break_ctl(struct tty_struct *tty, int state)
  }
  
- static int mxuport_set_termios_flow(struct tty_struct *tty,
--				    struct ktermios *old_termios,
-+				    const struct ktermios *old_termios,
- 				    struct usb_serial_port *port,
- 				    struct usb_serial *serial)
+ static void gb_tty_set_termios(struct tty_struct *tty,
+-			       struct ktermios *termios_old)
++			       const struct ktermios *termios_old)
  {
-@@ -834,7 +834,7 @@ static int mxuport_set_termios_flow(struct tty_struct *tty,
+ 	struct gb_uart_set_line_coding_request newline;
+ 	struct gb_tty *gb_tty = tty->driver_data;
+diff --git a/drivers/tty/amiserial.c b/drivers/tty/amiserial.c
+index 81e7f64c1739..f52266766df9 100644
+--- a/drivers/tty/amiserial.c
++++ b/drivers/tty/amiserial.c
+@@ -94,7 +94,7 @@ static struct tty_driver *serial_driver;
+ static unsigned char current_ctl_bits;
  
- static void mxuport_set_termios(struct tty_struct *tty,
- 				struct usb_serial_port *port,
--				struct ktermios *old_termios)
-+				const struct ktermios *old_termios)
+ static void change_speed(struct tty_struct *tty, struct serial_state *info,
+-		struct ktermios *old);
++			 const struct ktermios *old);
+ static void rs_wait_until_sent(struct tty_struct *tty, int timeout);
+ 
+ 
+@@ -566,7 +566,7 @@ static void shutdown(struct tty_struct *tty, struct serial_state *info)
+  * the specified baud rate for a serial port.
+  */
+ static void change_speed(struct tty_struct *tty, struct serial_state *info,
+-			 struct ktermios *old_termios)
++			 const struct ktermios *old_termios)
  {
- 	struct usb_serial *serial = port->serial;
- 	u8 *buf;
-diff --git a/drivers/usb/serial/oti6858.c b/drivers/usb/serial/oti6858.c
-index a5caedbe72e2..6365cfe5402c 100644
---- a/drivers/usb/serial/oti6858.c
-+++ b/drivers/usb/serial/oti6858.c
-@@ -119,7 +119,8 @@ struct oti6858_control_pkt {
- static int oti6858_open(struct tty_struct *tty, struct usb_serial_port *port);
- static void oti6858_close(struct usb_serial_port *port);
- static void oti6858_set_termios(struct tty_struct *tty,
--			struct usb_serial_port *port, struct ktermios *old);
-+				struct usb_serial_port *port,
-+				const struct ktermios *old_termios);
- static void oti6858_init_termios(struct tty_struct *tty);
- static void oti6858_read_int_callback(struct urb *urb);
- static void oti6858_read_bulk_callback(struct urb *urb);
-@@ -395,7 +396,8 @@ static void oti6858_init_termios(struct tty_struct *tty)
+ 	struct tty_port *port = &info->tport;
+ 	int	quot = 0, baud_base, baud;
+@@ -1169,7 +1169,7 @@ static int rs_ioctl(struct tty_struct *tty,
+ 	return 0;
  }
  
- static void oti6858_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+				struct usb_serial_port *port,
-+				const struct ktermios *old_termios)
+-static void rs_set_termios(struct tty_struct *tty, struct ktermios *old_termios)
++static void rs_set_termios(struct tty_struct *tty, const struct ktermios *old_termios)
  {
- 	struct oti6858_private *priv = usb_get_serial_port_data(port);
+ 	struct serial_state *info = tty->driver_data;
  	unsigned long flags;
-diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
-index 40b1ab3d284d..8949c1891164 100644
---- a/drivers/usb/serial/pl2303.c
-+++ b/drivers/usb/serial/pl2303.c
-@@ -789,7 +789,8 @@ static bool pl2303_enable_xonxoff(struct tty_struct *tty, const struct pl2303_ty
+diff --git a/drivers/tty/moxa.c b/drivers/tty/moxa.c
+index f3c72ab1476c..35b6fddf0341 100644
+--- a/drivers/tty/moxa.c
++++ b/drivers/tty/moxa.c
+@@ -491,7 +491,7 @@ static int moxa_write(struct tty_struct *, const unsigned char *, int);
+ static unsigned int moxa_write_room(struct tty_struct *);
+ static void moxa_flush_buffer(struct tty_struct *);
+ static unsigned int moxa_chars_in_buffer(struct tty_struct *);
+-static void moxa_set_termios(struct tty_struct *, struct ktermios *);
++static void moxa_set_termios(struct tty_struct *, const struct ktermios *);
+ static void moxa_stop(struct tty_struct *);
+ static void moxa_start(struct tty_struct *);
+ static void moxa_hangup(struct tty_struct *);
+@@ -499,7 +499,7 @@ static int moxa_tiocmget(struct tty_struct *tty);
+ static int moxa_tiocmset(struct tty_struct *tty,
+ 			 unsigned int set, unsigned int clear);
+ static void moxa_poll(struct timer_list *);
+-static void moxa_set_tty_param(struct tty_struct *, struct ktermios *);
++static void moxa_set_tty_param(struct tty_struct *, const struct ktermios *);
+ static void moxa_shutdown(struct tty_port *);
+ static int moxa_carrier_raised(struct tty_port *);
+ static void moxa_dtr_rts(struct tty_port *, int);
+@@ -1602,7 +1602,7 @@ static int moxa_tiocmset(struct tty_struct *tty,
  }
  
- static void pl2303_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+			       struct usb_serial_port *port,
-+			       const struct ktermios *old_termios)
- {
- 	struct usb_serial *serial = port->serial;
- 	struct pl2303_serial_private *spriv = usb_get_serial_data(serial);
-diff --git a/drivers/usb/serial/quatech2.c b/drivers/usb/serial/quatech2.c
-index 36b1e064e51f..6fca40ace83a 100644
---- a/drivers/usb/serial/quatech2.c
-+++ b/drivers/usb/serial/quatech2.c
-@@ -261,8 +261,8 @@ static int qt2_calc_num_ports(struct usb_serial *serial,
- }
- 
- static void qt2_set_termios(struct tty_struct *tty,
--			    struct usb_serial_port *port,
--			    struct ktermios *old_termios)
-+		            struct usb_serial_port *port,
-+		            const struct ktermios *old_termios)
- {
- 	struct usb_device *dev = port->serial->dev;
- 	struct qt2_port_private *port_priv;
-diff --git a/drivers/usb/serial/spcp8x5.c b/drivers/usb/serial/spcp8x5.c
-index 7039dc918827..09a972a838ee 100644
---- a/drivers/usb/serial/spcp8x5.c
-+++ b/drivers/usb/serial/spcp8x5.c
-@@ -283,7 +283,8 @@ static void spcp8x5_init_termios(struct tty_struct *tty)
- }
- 
- static void spcp8x5_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+				struct usb_serial_port *port,
-+				const struct ktermios *old_termios)
- {
- 	struct usb_serial *serial = port->serial;
- 	struct spcp8x5_private *priv = usb_get_serial_port_data(port);
-diff --git a/drivers/usb/serial/ssu100.c b/drivers/usb/serial/ssu100.c
-index 181e302136a5..1e1888b66305 100644
---- a/drivers/usb/serial/ssu100.c
-+++ b/drivers/usb/serial/ssu100.c
-@@ -214,8 +214,8 @@ out:	kfree(data);
- 
- 
- static void ssu100_set_termios(struct tty_struct *tty,
--			       struct usb_serial_port *port,
--			       struct ktermios *old_termios)
-+		               struct usb_serial_port *port,
-+		               const struct ktermios *old_termios)
- {
- 	struct usb_device *dev = port->serial->dev;
- 	struct ktermios *termios = &tty->termios;
-diff --git a/drivers/usb/serial/ti_usb_3410_5052.c b/drivers/usb/serial/ti_usb_3410_5052.c
-index 18c0bd853392..b99f78224846 100644
---- a/drivers/usb/serial/ti_usb_3410_5052.c
-+++ b/drivers/usb/serial/ti_usb_3410_5052.c
-@@ -314,7 +314,8 @@ static bool ti_tx_empty(struct usb_serial_port *port);
- static void ti_throttle(struct tty_struct *tty);
- static void ti_unthrottle(struct tty_struct *tty);
- static void ti_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios);
-+			   struct usb_serial_port *port,
-+			   const struct ktermios *old_termios);
- static int ti_tiocmget(struct tty_struct *tty);
- static int ti_tiocmset(struct tty_struct *tty,
- 		unsigned int set, unsigned int clear);
-@@ -892,7 +893,8 @@ static void ti_unthrottle(struct tty_struct *tty)
- }
- 
- static void ti_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+			   struct usb_serial_port *port,
-+			   const struct ktermios *old_termios)
- {
- 	struct ti_port *tport = usb_get_serial_port_data(port);
- 	struct ti_uart_config *config;
-diff --git a/drivers/usb/serial/upd78f0730.c b/drivers/usb/serial/upd78f0730.c
-index 63d4a784ae45..c47439bd90fa 100644
---- a/drivers/usb/serial/upd78f0730.c
-+++ b/drivers/usb/serial/upd78f0730.c
-@@ -296,8 +296,8 @@ static speed_t upd78f0730_get_baud_rate(struct tty_struct *tty)
- }
- 
- static void upd78f0730_set_termios(struct tty_struct *tty,
--				struct usb_serial_port *port,
--				struct ktermios *old_termios)
-+				   struct usb_serial_port *port,
-+				   const struct ktermios *old_termios)
- {
- 	struct device *dev = &port->dev;
- 	struct upd78f0730_line_control request;
-diff --git a/drivers/usb/serial/whiteheat.c b/drivers/usb/serial/whiteheat.c
-index 332fb92ae575..7f82d40753ee 100644
---- a/drivers/usb/serial/whiteheat.c
-+++ b/drivers/usb/serial/whiteheat.c
-@@ -82,7 +82,8 @@ static void whiteheat_close(struct usb_serial_port *port);
- static void whiteheat_get_serial(struct tty_struct *tty,
- 			struct serial_struct *ss);
- static void whiteheat_set_termios(struct tty_struct *tty,
--			struct usb_serial_port *port, struct ktermios *old);
-+				  struct usb_serial_port *port,
-+				  const struct ktermios *old_termios);
- static int  whiteheat_tiocmget(struct tty_struct *tty);
- static int  whiteheat_tiocmset(struct tty_struct *tty,
- 			unsigned int set, unsigned int clear);
-@@ -442,7 +443,8 @@ static void whiteheat_get_serial(struct tty_struct *tty, struct serial_struct *s
- 
- 
- static void whiteheat_set_termios(struct tty_struct *tty,
--	struct usb_serial_port *port, struct ktermios *old_termios)
-+				  struct usb_serial_port *port,
-+				  const struct ktermios *old_termios)
- {
- 	firm_setup_port(tty);
- }
-diff --git a/drivers/usb/serial/xr_serial.c b/drivers/usb/serial/xr_serial.c
-index 6853cd56d8dc..f3811e060a44 100644
---- a/drivers/usb/serial/xr_serial.c
-+++ b/drivers/usb/serial/xr_serial.c
-@@ -104,7 +104,8 @@ static int xr21v141x_uart_enable(struct usb_serial_port *port);
- static int xr21v141x_uart_disable(struct usb_serial_port *port);
- static int xr21v141x_fifo_reset(struct usb_serial_port *port);
- static void xr21v141x_set_line_settings(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios);
-+					struct usb_serial_port *port,
-+					const struct ktermios *old_termios);
- 
- struct xr_type {
- 	int reg_width;
-@@ -133,8 +134,8 @@ struct xr_type {
- 	int (*disable)(struct usb_serial_port *port);
- 	int (*fifo_reset)(struct usb_serial_port *port);
- 	void (*set_line_settings)(struct tty_struct *tty,
--			struct usb_serial_port *port,
--			struct ktermios *old_termios);
-+				  struct usb_serial_port *port,
-+				  const struct ktermios *old_termios);
- };
- 
- enum xr_type_id {
-@@ -622,8 +623,8 @@ static int xr21v141x_set_baudrate(struct tty_struct *tty, struct usb_serial_port
- }
- 
- static void xr_set_flow_mode(struct tty_struct *tty,
--			     struct usb_serial_port *port,
--			     struct ktermios *old_termios)
-+		             struct usb_serial_port *port,
+ static void moxa_set_termios(struct tty_struct *tty,
+-		struct ktermios *old_termios)
 +		             const struct ktermios *old_termios)
  {
- 	struct xr_data *data = usb_get_serial_port_data(port);
- 	const struct xr_type *type = data->type;
-@@ -674,7 +675,8 @@ static void xr_set_flow_mode(struct tty_struct *tty,
+ 	struct moxa_port *ch = tty->driver_data;
+ 
+@@ -1761,7 +1761,8 @@ static void moxa_poll(struct timer_list *unused)
+ 
+ /******************************************************************************/
+ 
+-static void moxa_set_tty_param(struct tty_struct *tty, struct ktermios *old_termios)
++static void moxa_set_tty_param(struct tty_struct *tty,
++			       const struct ktermios *old_termios)
+ {
+ 	register struct ktermios *ts = &tty->termios;
+ 	struct moxa_port *ch = tty->driver_data;
+diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
+index 70b982b2c6b2..3413bd77beed 100644
+--- a/drivers/tty/mxser.c
++++ b/drivers/tty/mxser.c
+@@ -571,7 +571,8 @@ static void mxser_handle_cts(struct tty_struct *tty, struct mxser_port *info,
+  * This routine is called to set the UART divisor registers to match
+  * the specified baud rate for a serial port.
+  */
+-static void mxser_change_speed(struct tty_struct *tty, struct ktermios *old_termios)
++static void mxser_change_speed(struct tty_struct *tty,
++			       const struct ktermios *old_termios)
+ {
+ 	struct mxser_port *info = tty->driver_data;
+ 	unsigned cflag, cval;
+@@ -1348,7 +1349,8 @@ static void mxser_start(struct tty_struct *tty)
+ 	spin_unlock_irqrestore(&info->slock, flags);
  }
  
- static void xr21v141x_set_line_settings(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+				        struct usb_serial_port *port,
-+				        const struct ktermios *old_termios)
+-static void mxser_set_termios(struct tty_struct *tty, struct ktermios *old_termios)
++static void mxser_set_termios(struct tty_struct *tty,
++			      const struct ktermios *old_termios)
  {
+ 	struct mxser_port *info = tty->driver_data;
+ 	unsigned long flags;
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index caa5c14ed57f..97cd8d67c866 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -3647,7 +3647,8 @@ static int gsmtty_ioctl(struct tty_struct *tty,
+ 	}
+ }
+ 
+-static void gsmtty_set_termios(struct tty_struct *tty, struct ktermios *old)
++static void gsmtty_set_termios(struct tty_struct *tty,
++			       const struct ktermios *old)
+ {
+ 	struct gsm_dlci *dlci = tty->driver_data;
+ 	if (dlci->state == DLCI_CLOSED)
+diff --git a/drivers/tty/pty.c b/drivers/tty/pty.c
+index 752dab3356d7..07394fdaf522 100644
+--- a/drivers/tty/pty.c
++++ b/drivers/tty/pty.c
+@@ -240,7 +240,7 @@ static int pty_open(struct tty_struct *tty, struct file *filp)
+ }
+ 
+ static void pty_set_termios(struct tty_struct *tty,
+-					struct ktermios *old_termios)
++			    const struct ktermios *old_termios)
+ {
+ 	/* See if packet mode change of state. */
+ 	if (tty->link && tty->link->ctrl.packet) {
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index c8295904b331..a8202b582bcc 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -49,7 +49,7 @@ static struct lock_class_key port_lock_key;
+ #define RS485_MAX_RTS_DELAY	100 /* msecs */
+ 
+ static void uart_change_speed(struct tty_struct *tty, struct uart_state *state,
+-					struct ktermios *old_termios);
++			      const struct ktermios *old_termios);
+ static void uart_wait_until_sent(struct tty_struct *tty, int timeout);
+ static void uart_change_pm(struct uart_state *state,
+ 			   enum uart_pm_state pm_state);
+@@ -492,7 +492,7 @@ EXPORT_SYMBOL(uart_get_divisor);
+ 
+ /* Caller holds port mutex */
+ static void uart_change_speed(struct tty_struct *tty, struct uart_state *state,
+-					struct ktermios *old_termios)
++			      const struct ktermios *old_termios)
+ {
+ 	struct uart_port *uport = uart_port_check(state);
+ 	struct ktermios *termios;
+@@ -1619,7 +1619,7 @@ static void uart_set_ldisc(struct tty_struct *tty)
+ }
+ 
+ static void uart_set_termios(struct tty_struct *tty,
+-						struct ktermios *old_termios)
++			     const struct ktermios *old_termios)
+ {
+ 	struct uart_state *state = tty->driver_data;
+ 	struct uart_port *uport;
+diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
+index 9bc2a9265277..4a003e929776 100644
+--- a/drivers/tty/synclink_gt.c
++++ b/drivers/tty/synclink_gt.c
+@@ -707,7 +707,8 @@ static void hangup(struct tty_struct *tty)
+ 	wake_up_interruptible(&info->port.open_wait);
+ }
+ 
+-static void set_termios(struct tty_struct *tty, struct ktermios *old_termios)
++static void set_termios(struct tty_struct *tty,
++			const struct ktermios *old_termios)
+ {
+ 	struct slgt_info *info = tty->driver_data;
+ 	unsigned long flags;
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 483bcb1213f7..46dbf907e4b5 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -51,7 +51,7 @@ static DEFINE_IDR(acm_minors);
+ static DEFINE_MUTEX(acm_minors_lock);
+ 
+ static void acm_tty_set_termios(struct tty_struct *tty,
+-				struct ktermios *termios_old);
++				const struct ktermios *termios_old);
+ 
+ /*
+  * acm_minors accessors
+@@ -1049,7 +1049,7 @@ static int acm_tty_ioctl(struct tty_struct *tty,
+ }
+ 
+ static void acm_tty_set_termios(struct tty_struct *tty,
+-						struct ktermios *termios_old)
++				const struct ktermios *termios_old)
+ {
+ 	struct acm *acm = tty->driver_data;
  	struct ktermios *termios = &tty->termios;
- 	u8 bits = 0;
-@@ -732,7 +734,8 @@ static void xr21v141x_set_line_settings(struct tty_struct *tty,
+diff --git a/drivers/usb/serial/usb-serial.c b/drivers/usb/serial/usb-serial.c
+index e35bea2235c1..164521ee10c6 100644
+--- a/drivers/usb/serial/usb-serial.c
++++ b/drivers/usb/serial/usb-serial.c
+@@ -519,7 +519,8 @@ static int serial_ioctl(struct tty_struct *tty,
+ 	return retval;
  }
  
- static void xr_cdc_set_line_coding(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+				   struct usb_serial_port *port,
-+				   const struct ktermios *old_termios)
+-static void serial_set_termios(struct tty_struct *tty, struct ktermios *old)
++static void serial_set_termios(struct tty_struct *tty,
++		               const struct ktermios *old)
  {
- 	struct xr_data *data = usb_get_serial_port_data(port);
- 	struct usb_host_interface *alt = port->serial->interface->cur_altsetting;
-@@ -809,7 +812,8 @@ static void xr_cdc_set_line_coding(struct tty_struct *tty,
+ 	struct usb_serial_port *port = tty->driver_data;
+ 
+diff --git a/include/linux/tty_driver.h b/include/linux/tty_driver.h
+index 4841d8069c07..b2456b545ba0 100644
+--- a/include/linux/tty_driver.h
++++ b/include/linux/tty_driver.h
+@@ -141,7 +141,7 @@ struct serial_struct;
+  *
+  *	Optional.
+  *
+- * @set_termios: ``void ()(struct tty_struct *tty, struct ktermios *old)``
++ * @set_termios: ``void ()(struct tty_struct *tty, const struct ktermios *old)``
+  *
+  *	This routine allows the @tty driver to be notified when device's
+  *	termios settings have changed. New settings are in @tty->termios.
+@@ -365,7 +365,7 @@ struct tty_operations {
+ 		    unsigned int cmd, unsigned long arg);
+ 	long (*compat_ioctl)(struct tty_struct *tty,
+ 			     unsigned int cmd, unsigned long arg);
+-	void (*set_termios)(struct tty_struct *tty, struct ktermios * old);
++	void (*set_termios)(struct tty_struct *tty, const struct ktermios *old);
+ 	void (*throttle)(struct tty_struct * tty);
+ 	void (*unthrottle)(struct tty_struct * tty);
+ 	void (*stop)(struct tty_struct *tty);
+diff --git a/net/bluetooth/rfcomm/tty.c b/net/bluetooth/rfcomm/tty.c
+index ebd78fdbd6e8..b9536641161c 100644
+--- a/net/bluetooth/rfcomm/tty.c
++++ b/net/bluetooth/rfcomm/tty.c
+@@ -855,7 +855,8 @@ static int rfcomm_tty_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned l
+ 	return -ENOIOCTLCMD;
  }
  
- static void xr_set_termios(struct tty_struct *tty,
--		struct usb_serial_port *port, struct ktermios *old_termios)
-+			   struct usb_serial_port *port,
-+			   const struct ktermios *old_termios)
+-static void rfcomm_tty_set_termios(struct tty_struct *tty, struct ktermios *old)
++static void rfcomm_tty_set_termios(struct tty_struct *tty,
++				   const struct ktermios *old)
  {
- 	struct xr_data *data = usb_get_serial_port_data(port);
- 
-diff --git a/include/linux/usb/serial.h b/include/linux/usb/serial.h
-index 8ea319f89e1f..f7bfedb740f5 100644
---- a/include/linux/usb/serial.h
-+++ b/include/linux/usb/serial.h
-@@ -276,8 +276,8 @@ struct usb_serial_driver {
- 		      unsigned int cmd, unsigned long arg);
- 	void (*get_serial)(struct tty_struct *tty, struct serial_struct *ss);
- 	int  (*set_serial)(struct tty_struct *tty, struct serial_struct *ss);
--	void (*set_termios)(struct tty_struct *tty,
--			struct usb_serial_port *port, struct ktermios *old);
-+	void (*set_termios)(struct tty_struct *tty, struct usb_serial_port *port,
-+			    const struct ktermios *old);
- 	void (*break_ctl)(struct tty_struct *tty, int break_state);
- 	unsigned int (*chars_in_buffer)(struct tty_struct *tty);
- 	void (*wait_until_sent)(struct tty_struct *tty, long timeout);
+ 	struct ktermios *new = &tty->termios;
+ 	int old_baud_rate = tty_termios_baud_rate(old);
 -- 
 2.30.2
 

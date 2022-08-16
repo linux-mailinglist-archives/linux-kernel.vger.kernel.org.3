@@ -2,149 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9815959B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9FD75959B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234816AbiHPLSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 07:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39576 "EHLO
+        id S231515AbiHPLT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 07:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234466AbiHPLRp (ORCPT
+        with ESMTP id S233544AbiHPLS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 07:17:45 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D446D58DD4
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:42:42 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id d14so14143402lfl.13
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:42:42 -0700 (PDT)
+        Tue, 16 Aug 2022 07:18:57 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC31E0FD0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:43:54 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso962525pjk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:43:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Y58LopX3Xau62EqFhAJuU29XSrAjPOJKcpX9ia/1x/U=;
-        b=vtoZdSOhjarg/GSUa+9qG6BMrKkJOe83PvRmhRhyuCerPbGiIrm8pgH0PekReyxXJ6
-         br5da1shUHmmP98ueTSt3G69sK9FhXyVW3WshnsnkN5Zd9pD4/lLqoMERKRF+w7swXkM
-         AeIbHzMZsV28B9ebYLbsaCZ0jduwrq/sNPO2NVsFmvFtUPUZJWcrl8zjdGivtVPbCski
-         3t3C/SRG3X5doYfn+nTF8cJUl3g/YvK7CVLwOZJws/ZpTvhaiUyGafpkHX0KACEFk68A
-         QHr4Aga2v7Ah2M9FdDI0/vgxJtgzrZnGZ7q/NfLu5futbWVzkQ+nzoQuKEwZv1YoRTFV
-         zsjg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=GTvbctvJNpJ5XFFAVjSyyK1oKWoGjmVgAKwPqHF7qTs=;
+        b=n6yB+De5LjG5J02vO6g0oPWkj3A2U2tkMwkcwVOgupo09upQEcL0TRkdI25JKNKj8n
+         Pnr5oW7kcZ+bsh8CkL+v4FHrwgbQv9zYbjC4eac45qnROLw8+chC/y4ycI2CsyEYGB7f
+         FDwchZJQIAjypZZ1C7XKKktbfWh72dp06/Yh56cBvpO+5jDq4ZLe8huL1FrOJdPibtB7
+         E0VY/CgbKLbIOdDOgSZpvFeIgQXszz4HMxIa9NwKNNd+uJrCDH3xcD7HS47ytEPl4VC5
+         fWZFSML8wxR5joZXGb6oPgAnLjn8M+UwjptMWBtSWGadM5JgzOLWn7bcyGrY88CglbJ2
+         9jfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Y58LopX3Xau62EqFhAJuU29XSrAjPOJKcpX9ia/1x/U=;
-        b=k+wS7pHajNE85Lxzlu53QEpzIkX58DZcYinaXVxRA0SE7hDIYMDNqmPuJvcu5VZZ+6
-         J4JLl/TVl9wMwxgC8uNMJPR9IDgJozOLMMfuUCE705LD9DfMtEhXz23kbuDgF7rXv/vC
-         3+/tW08vkKRL/Hdb3SkOqsBRybxVwuhwYaSlICHPGlAXpZjV9w8zPbU6FVeYZCk/Wq85
-         8H5SqDJxNMfVEtoZLb+2XQdnvXC3CoWuF0yYJdv78ep04B701O+f4Hdt4JdzWhdmofR6
-         KvHqI/Ts7tij71I2XeWUKTNPv+6EDq+JSDpEE+IqBMIezpC8bffGWLA3X/P0BjxxrhfD
-         YFtg==
-X-Gm-Message-State: ACgBeo0udbPbL6US1KiDuv/tdDxZvGklnnR+09Ym11k6NIkkRjcgZ0Ze
-        mpOCiuhUIhjEBL5ccuQ3lUe7sQ==
-X-Google-Smtp-Source: AA6agR5AgFW8i1G8KDg24W4ut+/FzCr3UMJzFdeE8sWqRtObktk+u4BKs7+LO+EgAtH4db4A3D91Jg==
-X-Received: by 2002:a05:6512:1052:b0:491:f371:ad44 with SMTP id c18-20020a056512105200b00491f371ad44mr4099234lfb.416.1660642961195;
-        Tue, 16 Aug 2022 02:42:41 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id k12-20020ac24f0c000000b0048b03b4b018sm1325108lfr.283.2022.08.16.02.42.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 02:42:40 -0700 (PDT)
-Message-ID: <b5401052-e803-9788-64d6-82b2737533ce@linaro.org>
-Date:   Tue, 16 Aug 2022 12:42:39 +0300
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=GTvbctvJNpJ5XFFAVjSyyK1oKWoGjmVgAKwPqHF7qTs=;
+        b=nfQ/531dZEc5+oTjZGEcsrpPCJQbk9l/fyOoP/nw7i33U7dmSoCy6ikzWUBC8YY8bd
+         sWZ/FJQpFv6pW/iCqnagSp9tMP0mJEAuzarNajUH6Itl9DXX6Vq2EkRrsaCoJoJGwabS
+         f05ZB/nfi5ds9HSmCBpaj8P3iXxwdei3ocdoY1DliHMHyQhe79ZLimlwQp3Fz+q+lhpG
+         XIifEYG+LCEfOshfl1t78y7Ej8gJ1BuLR5il3JGXt4NEliIwdHs19CY+LjL5bu+WybNf
+         HcB5feI/+XKH3/KBCaT0mJYyiR69/5yS2eLBerg+GygDLhcfNSYbI49vKHEPvU2pXmIm
+         StUw==
+X-Gm-Message-State: ACgBeo1r+7NT3WO/gLFU6If72KjIXYC2y63cfm71f1jHvJxURS/aMoWj
+        t/pBbOV/x9Cnpa7MRG4qJCWWbPkw6IPn/A==
+X-Google-Smtp-Source: AA6agR6FZQ9i+Tf/3XIz0/damoZoUYQmUBv+ZJ8T1Pk9l/5Np+oxwasrX2uAUzYHFZrxINjaXD6fsA==
+X-Received: by 2002:a17:90b:3e86:b0:1f5:2b4f:7460 with SMTP id rj6-20020a17090b3e8600b001f52b4f7460mr32854131pjb.97.1660643033650;
+        Tue, 16 Aug 2022 02:43:53 -0700 (PDT)
+Received: from FVFDK26JP3YV.bytedance.net ([61.120.150.76])
+        by smtp.gmail.com with ESMTPSA id w12-20020a170902e88c00b0016a6caacaefsm8643350plg.103.2022.08.16.02.43.49
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 16 Aug 2022 02:43:53 -0700 (PDT)
+From:   Lei He <helei.sig11@bytedance.com>
+To:     mst@redhat.com, herbert@gondor.apana.org.au,
+        arei.gonglei@huawei.com
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pizhenwei@bytedance.com, lei he <helei.sig11@bytedance.com>
+Subject: [PATCH v2] virtio-crypto: fix memory-leak
+Date:   Tue, 16 Aug 2022 17:43:36 +0800
+Message-Id: <20220816094336.27806-1-helei.sig11@bytedance.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 06/12] riscv: dts: allwinner: Add the D1 SoC base
- devicetree
-Content-Language: en-US
-To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Chen-Yu Tsai <wens@csie.org>, linux-sunxi@lists.linux.dev,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org,
-        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220815050815.22340-1-samuel@sholland.org>
- <5593349.DvuYhMxLoT@jernej-laptop> <3881930.ZaRXLXkqSa@diego>
- <2249129.ElGaqSPkdT@jernej-laptop>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <2249129.ElGaqSPkdT@jernej-laptop>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/08/2022 12:25, Jernej Škrabec wrote:
-> Dne torek, 16. avgust 2022 ob 11:12:05 CEST je Heiko Stübner napisal(a):
->> Am Dienstag, 16. August 2022, 09:49:58 CEST schrieb Jernej Škrabec:
->>> Dne torek, 16. avgust 2022 ob 09:41:45 CEST je Krzysztof Kozlowski 
-> napisal(a):
->>>> On 15/08/2022 08:08, Samuel Holland wrote:
->>>>> +
->>>>> +	de: display-engine {
->>>>> +		compatible = "allwinner,sun20i-d1-display-engine";
->>>>> +		allwinner,pipelines = <&mixer0>, <&mixer1>;
->>>>> +		status = "disabled";
->>>>> +	};
->>>>> +
->>>>> +	osc24M: osc24M-clk {
->>>>
->>>> lowercase
->>>>
->>>>> +		compatible = "fixed-clock";
->>>>> +		clock-frequency = <24000000>;
->>>>
->>>> This is a property of the board, not SoC.
->>>
->>> SoC needs 24 MHz oscillator for correct operation, so each and every board
->>> has it. Having it here simplifies board DT files.
->>
->> I guess the oscillator is a separate component on each board, right?
-> 
-> Correct.
-> 
->> And DT obvious is meant to describe the hardware - independently from
->> implementation-specific choices.
-> 
-> There is no choice in this case. 24 MHz crystal has to be present.
-> 
-> FWIW, including crystal node in SoC specific DTSI is already common pattern in 
-> Allwinner ARM SoC DTSI files.
-> 
->>
->> Starting to discuss which exceptions to allow then might lead to even more
->> exceptions.
->>
->> Also having to look for a board-component in the soc dtsi also is surprising
->> if one gets to the party later on :-) .
-> 
-> As I said, if one is accustomed to Allwinner ARM DT development, it would be 
-> more surprising to include 24 MHz crystal node in each and every board DT.
+From: lei he <helei.sig11@bytedance.com>
 
-It's same everywhere. Allwinner, Exynos, iMX, Qualcomm. Everywhere this
-is a part of the board, so even if oscillator frequency is fixed (as in
-99% of cases although some SoCs I think might just allow to implement
-one of few), still this is a property of the board. Because:
-1. DTSI describes the SoC part, not board.
-2. So the DTS developer is a bit more conscious about his design.
+Fix memory-leak for virtio-crypto akcipher request, this problem is
+introduced by 59ca6c93387d3(virtio-crypto: implement RSA algorithm).
+The leak can be reproduced and tested with the following script
+inside virtual machine:
 
-Keeping things in SoC DTSI just because it simplifies DTS is not correct
-IMHO. So again - like in several other cases - minimum the frequency is
-property of the board, not the SoC DTSI.
+#!/bin/bash
 
-Everywhere. Allwinner is not special to receive exceptions.
+LOOP_TIMES=10000
 
-Best regards,
-Krzysztof
+# required module: pkcs8_key_parser, virtio_crypto
+modprobe pkcs8_key_parser # if CONFIG_PKCS8_PRIVATE_KEY_PARSER=m
+modprobe virtio_crypto # if CONFIG_CRYPTO_DEV_VIRTIO=m
+rm -rf /tmp/data
+dd if=/dev/random of=/tmp/data count=1 bs=230
+
+# generate private key and self-signed cert
+openssl req -nodes -x509 -newkey rsa:2048 -keyout key.pem \
+		-outform der -out cert.der  \
+		-subj "/C=CN/ST=GD/L=SZ/O=vihoo/OU=dev/CN=always.com/emailAddress=yy@always.com"
+# convert private key from pem to der
+openssl pkcs8 -in key.pem -topk8 -nocrypt -outform DER -out key.der
+
+# add key
+PRIV_KEY_ID=`cat key.der | keyctl padd asymmetric test_priv_key @s`
+echo "priv key id = "$PRIV_KEY_ID
+PUB_KEY_ID=`cat cert.der | keyctl padd asymmetric test_pub_key @s`
+echo "pub key id = "$PUB_KEY_ID
+
+# query key
+keyctl pkey_query $PRIV_KEY_ID 0
+keyctl pkey_query $PUB_KEY_ID 0
+
+# here we only run pkey_encrypt becasuse it is the fastest interface
+function bench_pub() {
+	keyctl pkey_encrypt $PUB_KEY_ID 0 /tmp/data enc=pkcs1 >/tmp/enc.pub
+}
+
+# do bench_pub in loop to obtain the memory leak
+for (( i = 0; i < ${LOOP_TIMES}; ++i )); do
+	bench_pub
+done
+
+Signed-off-by: lei he <helei.sig11@bytedance.com>
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
+Reviewed-by: Gonglei <arei.gonglei@huawei.com>
+---
+ drivers/crypto/virtio/virtio_crypto_akcipher_algs.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
+index 2a60d0525cde..168195672e2e 100644
+--- a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
++++ b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
+@@ -56,6 +56,10 @@ static void virtio_crypto_akcipher_finalize_req(
+ 	struct virtio_crypto_akcipher_request *vc_akcipher_req,
+ 	struct akcipher_request *req, int err)
+ {
++	kfree(vc_akcipher_req->src_buf);
++	kfree(vc_akcipher_req->dst_buf);
++	vc_akcipher_req->src_buf = NULL;
++	vc_akcipher_req->dst_buf = NULL;
+ 	virtcrypto_clear_request(&vc_akcipher_req->base);
+ 
+ 	crypto_finalize_akcipher_request(vc_akcipher_req->base.dataq->engine, req, err);
+
+base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+-- 
+2.20.1
+

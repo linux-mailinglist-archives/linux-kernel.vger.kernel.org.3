@@ -2,113 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC8E595D89
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0750595D8B
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235402AbiHPNkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46266 "EHLO
+        id S233911AbiHPNlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235864AbiHPNkf (ORCPT
+        with ESMTP id S232063AbiHPNlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 09:40:35 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B723574DD3;
-        Tue, 16 Aug 2022 06:40:33 -0700 (PDT)
-Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M6XGN4YHBz67Mkv;
-        Tue, 16 Aug 2022 21:35:40 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Tue, 16 Aug 2022 15:40:31 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 16 Aug
- 2022 14:40:31 +0100
-Date:   Tue, 16 Aug 2022 14:40:29 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     George Mois <george.mois@analog.com>, <jic23@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <lucas.p.stankus@gmail.com>
-Subject: Re: [PATCH 2/2] drivers: iio: accel adxl312 and adxl314 support
-Message-ID: <20220816144029.00006dc3@huawei.com>
-In-Reply-To: <a882c594-564c-7e0c-0ede-aa27fcf8c79d@linaro.org>
-References: <20220816102828.182345-1-george.mois@analog.com>
-        <20220816102828.182345-3-george.mois@analog.com>
-        <8cf4ea9e-89a4-1ab0-334b-9ecc5b1e6f25@linaro.org>
-        <20220816134433.00002900@huawei.com>
-        <a882c594-564c-7e0c-0ede-aa27fcf8c79d@linaro.org>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Tue, 16 Aug 2022 09:41:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8629C75CC3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:41:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660657277;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1UCrYFr0DcB0r8pAF7e2ByinvijBGvEey6g1DDxFix8=;
+        b=CsfEe8vYFB5kHeW9TzU2ewNc6WlP+O5wNSXynJEz9o2HRZhF1/My45Qpplgjlmrhy4WAi5
+        RgkKOaSle8BP87/u6Za6PQ2DAWaF9njLsV+cWzCNuKAzaBoMXRpmzG7A7N1cBuytlBU6Lp
+        PW+FoSkurEkQijWqyzib2dW/ZxKJYWI=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-556-_WRAgBiRMsWx2pfGzWCPUQ-1; Tue, 16 Aug 2022 09:41:16 -0400
+X-MC-Unique: _WRAgBiRMsWx2pfGzWCPUQ-1
+Received: by mail-wr1-f69.google.com with SMTP id d18-20020adf9b92000000b0022503144f4fso1369621wrc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:41:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=1UCrYFr0DcB0r8pAF7e2ByinvijBGvEey6g1DDxFix8=;
+        b=a3ifEpxWznZlx1pob+Os8MDboJr+RxAdioPJpI39/DGlCdtA1dM62TKozm3KHlt+M3
+         Coq41uVbHFqa7IlQNOg4v+4/lU+LKAxgiC5ghNdU1bkCQt1X3WbNSraKr49Yf19VPcUL
+         YVDjEz5PdCd/NsNDmAAlZfUxZktNBFg+89Ab5moqIY89VBuUB0xOrEgTmnJQSm91DnpK
+         pj8SS2gWAtRlqcHp0/FsMmz3N9fK1vzG7CP3Ah0w0LenJp3VBdnXJUhJAs7DTUxebVep
+         uPkR6FWTr1PiF/F4IzbnZbcftrQ4yTQoDo6i99YlVDdwt7KJd+kwG+djLLQVMOxWfoxk
+         rYdw==
+X-Gm-Message-State: ACgBeo2fLIgY7I0ja5l1TKTrsapuXeiu9GFOO5Va5+03EFvNy7m+nmTb
+        fvXGbqR7jGIxJeTWMD8CzHwswfW0vX/Vc6DAeTv3eWTRl4m1ro+S/Gi1iT/73+LA7NeMT1AULib
+        hfDiNcak6k05NtGXLdcsMre/B
+X-Received: by 2002:a5d:5281:0:b0:224:fe40:798f with SMTP id c1-20020a5d5281000000b00224fe40798fmr6859126wrv.90.1660657275095;
+        Tue, 16 Aug 2022 06:41:15 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5ZTvheSv0ssbv5tHt+swIqUffpectLQQ19ywUNmPTvA8oR25a/bCcOt24S9+Qd7ZYoOOBDOA==
+X-Received: by 2002:a5d:5281:0:b0:224:fe40:798f with SMTP id c1-20020a5d5281000000b00224fe40798fmr6859117wrv.90.1660657274871;
+        Tue, 16 Aug 2022 06:41:14 -0700 (PDT)
+Received: from redhat.com ([2.55.43.215])
+        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0ad500b003a53e6c5425sm12677021wmr.8.2022.08.16.06.41.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 06:41:14 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 09:41:11 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>
+Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers/virtio: fix repeated words in comments
+Message-ID: <20220816094100-mutt-send-email-mst@kernel.org>
+References: <20220816125959.23737-1-yuanjilin@cdjrlc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816125959.23737-1-yuanjilin@cdjrlc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 Aug 2022 16:34:59 +0300
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-
-> On 16/08/2022 15:44, Jonathan Cameron wrote:
-> >>>  
-> >>>  MODULE_DEVICE_TABLE(spi, adxl313_spi_id);
-> >>>  
-> >>>  static const struct of_device_id adxl313_of_match[] = {
-> >>> +	{ .compatible = "adi,adxl312" },
-> >>>  	{ .compatible = "adi,adxl313" },
-> >>> +	{ .compatible = "adi,adxl314" },    
-> >>
-> >> You miss here driver data. I don't remember which driver matching takes
-> >> precedence (especially in various cases like DT platforms with device
-> >> instantiated by MFD), but for consistency I think both device id tables
-> >> should have same driver data.  
-> > 
-> > You can set it up to try device_get_match_data() first then fallback
-> > to the adxl313_spi_id[] table but there isn't a nice 'standard' way to
-> > do it.
-> > 
-> > If that isn't done, then IIRC the match is against the compatible with
-> > the vendor ID dropped and the table used is the spi_device_id one.
-> > Which is just annoyingly complex and relies on the strings matching.
-> > 
-> > In the ideal world the spi_device_id table would go away but there are
-> > still a few users (greybus - I think + remaining board files).
-> > So for now something like
-> > 
-> > a = device_get_match_data(dev);
-> > if (!a)
-> > 	a = &adxl31x_spi_regmap_config[id->data];
-> > 
-> > Provides a good way of ensuring the id tables don't need to remain
-> > in sync.
-> >   
+On Tue, Aug 16, 2022 at 08:59:59PM +0800, Jilin Yuan wrote:
+>  Delete the redundant word 'the'.
 > 
-> I guess the only minor issue is that first driver data - ADXL312 - is
-> equal to 0, so above code would make consider ADXL312 as missing data.
-Should have given a type to a.
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 
-struct adxl31x_chip_info *a;
+send this kind of thing to trivial pls.
 
-It would be a pointer not an enum.  Though we might run into some problems
-with that clang issue of whether array lookups are const (I've not really
-gotten my head around that yet). 
-
-Jonathan
-
-
+> ---
+>  drivers/virtio/virtio_mmio.c           | 2 +-
+>  drivers/virtio/virtio_pci_modern_dev.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> Best regards,
-> Krzysztof
+> diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
+> index f9a36bc7ac27..f638142654e6 100644
+> --- a/drivers/virtio/virtio_mmio.c
+> +++ b/drivers/virtio/virtio_mmio.c
+> @@ -255,7 +255,7 @@ static void vm_set_status(struct virtio_device *vdev, u8 status)
+>  
+>  	/*
+>  	 * Per memory-barriers.txt, wmb() is not needed to guarantee
+> -	 * that the the cache coherent memory writes have completed
+> +	 * that the cache coherent memory writes have completed
+>  	 * before writing to the MMIO region.
+>  	 */
+>  	writel(status, vm_dev->base + VIRTIO_MMIO_STATUS);
+> diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
+> index a0fa14f28a7f..b790f30b2b56 100644
+> --- a/drivers/virtio/virtio_pci_modern_dev.c
+> +++ b/drivers/virtio/virtio_pci_modern_dev.c
+> @@ -469,7 +469,7 @@ void vp_modern_set_status(struct virtio_pci_modern_device *mdev,
+>  
+>  	/*
+>  	 * Per memory-barriers.txt, wmb() is not needed to guarantee
+> -	 * that the the cache coherent memory writes have completed
+> +	 * that the cache coherent memory writes have completed
+>  	 * before writing to the MMIO region.
+>  	 */
+>  	vp_iowrite8(status, &cfg->device_status);
+> -- 
+> 2.36.1
 

@@ -2,62 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126F65960F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE0B5960F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236522AbiHPRU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 13:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44204 "EHLO
+        id S236363AbiHPRVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 13:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234836AbiHPRUx (ORCPT
+        with ESMTP id S229541AbiHPRVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 13:20:53 -0400
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B852558DE3;
-        Tue, 16 Aug 2022 10:20:52 -0700 (PDT)
-Received: by mail-il1-f181.google.com with SMTP id p9so5674692ilq.13;
-        Tue, 16 Aug 2022 10:20:52 -0700 (PDT)
+        Tue, 16 Aug 2022 13:21:35 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F301B69F43
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 10:21:33 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id p10so13420596wru.8
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 10:21:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=SU9HU/twTCXcJTd7ck0zrD4m7AIhxImHvNiP9mDJEbM=;
+        b=t2SXXNvgfMAaScr6LFd0QGC84Wrz+OW/1lL+WKuKVWAFPKypvubFq2uZ48weDNwqT4
+         BeBH9NwO8eYLwiCckD5yd+SUR5Bi5x+O2FYtPC4wvSyf7tSFD3zQEZM9RVDerALLxzT2
+         4YnXIRqORbOKjReqDoFlxjUmhDt5bTitaYykQCyMS2QJ0vL+Ssc8Z0iLS6DBZJU0hmXI
+         KPHhJi+po3z9feyB398g6qRRAVywnYEmwJ7a6oy44m9tHZ++073/IlFqWIsEgKjt/F9D
+         jcmwqG23MCXNi+rohMzYWHxjkNZMFfDIGXPksHAk9D1VIKyiM9zf038L0l6rEZUHBRb9
+         p2Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Q4O14z9xwYqtANeX5XgH5CYQKkWWRtuCHaM8jAT6Q3g=;
-        b=Q7qBMnqtSt+xJFqxMToRIPLFWPVd+fk7wB1ufVxmkSUywFNBpozz/aWjtkhxWU4fXP
-         JwA2bO307jIGYDO532rCrrgvQ66Eg+DkjpcV2D29x1ew59lHiglwOErqDGVaTJ3jYizp
-         AJ5hGbIg5Hc8/GC/RWgX5koMv6QQLD1s/3q0ACTTbFzUn8iANqjpfHCCKkeUZvfF9DM4
-         uaBsDzxgFDG9zcf9gjSjhAL2UcSbTSYguMures2Zb0eP85yH6/cr+NMVXxUQPU6ODViN
-         W8FStf/APFfgSM59rA8+OVgHgnv8nFnzYJwof2ZIYyN4Woh9zIbrnVpm9KKxX2HajuxT
-         vEog==
-X-Gm-Message-State: ACgBeo23vDd5CG/BpZQLc8LRWReRE0AMD1uPlmL3FOsowReBX51BevRa
-        Kn7tfMbMSg7pDDbXttb2Jg==
-X-Google-Smtp-Source: AA6agR5ZkcmLOLet1JuEVooD2xVihqqO7zvL7WDWAtwn65oOI8FX2j14zzLHmu4qlu5VGUHiaLdrjg==
-X-Received: by 2002:a05:6e02:194d:b0:2df:8893:90bb with SMTP id x13-20020a056e02194d00b002df889390bbmr9950968ilu.242.1660670451967;
-        Tue, 16 Aug 2022 10:20:51 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id r6-20020a02c6c6000000b0034142dad202sm4009039jan.31.2022.08.16.10.20.50
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=SU9HU/twTCXcJTd7ck0zrD4m7AIhxImHvNiP9mDJEbM=;
+        b=qSxxrmS1fHHwRnwL8gWMB1UQYdYoj5aAbSinVKCfCNN10AjaxIsaCeNbKzRx7YDqpp
+         sPHstsYYnva0sSTmgtnzvs7DXaglwRIvXZ6MPVt8um0vfCrVIJcINZdCgtSAPL4/I9aJ
+         7DrI0Uq73xqAqfeaUb1RqRDsryU9XBZHb4SRljn4yXiZmXqANdGDxJ45j4goz83n8wD2
+         HAsRTPqoetjDt1nMGWVdHksUtzCPkAA3BQx/KK9GlaICA4wj68NR0SJMocRBBMMhy5oV
+         SkK0GlZQ5sXQ3rO1j5oEU4i9CkxZHl9lf+ys060fsvoNWaxoylupvI5PTlIMy20Wfe4X
+         ISHg==
+X-Gm-Message-State: ACgBeo0qVkqtj7d/RhxZNULgIqIK9vTaKwTUE3L4BLZKOssR4gxQJKc/
+        cpjADU0mz5Hj7UaN47JhDjvdtw==
+X-Google-Smtp-Source: AA6agR7qe+cUlpj7gPKezUg2A7pZJcTZrYSFfZWR8+V03GMxZynO/3Qn8X+hHQbowZ8nCwqlampIow==
+X-Received: by 2002:a5d:6690:0:b0:21f:fa6:2962 with SMTP id l16-20020a5d6690000000b0021f0fa62962mr13211810wru.358.1660670492492;
+        Tue, 16 Aug 2022 10:21:32 -0700 (PDT)
+Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id o28-20020a05600c511c00b003a5f812635asm2326190wms.39.2022.08.16.10.21.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 10:20:51 -0700 (PDT)
-Received: (nullmailer pid 2404777 invoked by uid 1000);
-        Tue, 16 Aug 2022 17:20:49 -0000
-Date:   Tue, 16 Aug 2022 11:20:49 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Matt Ranostay <mranostay@ti.com>
-Cc:     nm@ti.com, j-keerthy@ti.com, lee@kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 1/6] Documentation: tps6594x: Add DT bindings for the
- TPS6594x PMIC
-Message-ID: <20220816172049.GA2399563-robh@kernel.org>
-References: <20220812032242.564026-1-mranostay@ti.com>
- <20220812032242.564026-2-mranostay@ti.com>
+        Tue, 16 Aug 2022 10:21:31 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH] ASoC: core: remove setting platform_max in kcontrol macros
+Date:   Tue, 16 Aug 2022 18:21:29 +0100
+Message-Id: <20220816172129.6661-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220812032242.564026-2-mranostay@ti.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,95 +69,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 08:22:37PM -0700, Matt Ranostay wrote:
-> Signed-off-by: Matt Ranostay <mranostay@ti.com>
+platform_max should not be set by the driver, its intended for machine drivers
+or DT to override the max value for platform specific reasons.
 
-Commit message? Use a subject prefix appropriate for the subsystem.
+So remove setting this from Kcontrol macros.
 
-> ---
->  .../devicetree/bindings/mfd/ti,tps6594x.yaml  | 56 +++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/ti,tps6594x.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/ti,tps6594x.yaml b/Documentation/devicetree/bindings/mfd/ti,tps6594x.yaml
-> new file mode 100644
-> index 000000000000..9b5e17f63709
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/ti,tps6594x.yaml
-> @@ -0,0 +1,56 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/ti,tps6594x.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: TPS6594x Power Management Integrated Circuit (PMIC)
-> +
-> +maintainers:
-> +  - Keerthy <j-keerthy@ti.com>
-> +
-> +properties:
-> +  compatible:
-> +    contains:
+Setting this to max in these macros would limit the range when min
+value is less then zero.
 
-No, this means '"foo", "ti,tps6594x", "bar"' is valid.
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
 
-> +      enum:
+This patch is result of disussion at https://www.spinics.net/lists/alsa-devel/msg146134.html
 
-Use 'const' if only 1 entry.
+ include/sound/soc.h | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-> +        - ti,tps6594x
+diff --git a/include/sound/soc.h b/include/sound/soc.h
+index aad24a1d3276..4351d86eedf6 100644
+--- a/include/sound/soc.h
++++ b/include/sound/soc.h
+@@ -31,31 +31,31 @@
+ #define SOC_DOUBLE_VALUE(xreg, shift_left, shift_right, xmax, xinvert, xautodisable) \
+ 	((unsigned long)&(struct soc_mixer_control) \
+ 	{.reg = xreg, .rreg = xreg, .shift = shift_left, \
+-	.rshift = shift_right, .max = xmax, .platform_max = xmax, \
++	.rshift = shift_right, .max = xmax, \
+ 	.invert = xinvert, .autodisable = xautodisable})
+ #define SOC_DOUBLE_S_VALUE(xreg, shift_left, shift_right, xmin, xmax, xsign_bit, xinvert, xautodisable) \
+ 	((unsigned long)&(struct soc_mixer_control) \
+ 	{.reg = xreg, .rreg = xreg, .shift = shift_left, \
+-	.rshift = shift_right, .min = xmin, .max = xmax, .platform_max = xmax, \
++	.rshift = shift_right, .min = xmin, .max = xmax, \
+ 	.sign_bit = xsign_bit, .invert = xinvert, .autodisable = xautodisable})
+ #define SOC_SINGLE_VALUE(xreg, xshift, xmax, xinvert, xautodisable) \
+ 	SOC_DOUBLE_VALUE(xreg, xshift, xshift, xmax, xinvert, xautodisable)
+ #define SOC_SINGLE_VALUE_EXT(xreg, xmax, xinvert) \
+ 	((unsigned long)&(struct soc_mixer_control) \
+-	{.reg = xreg, .max = xmax, .platform_max = xmax, .invert = xinvert})
++	{.reg = xreg, .max = xmax, .invert = xinvert})
+ #define SOC_DOUBLE_R_VALUE(xlreg, xrreg, xshift, xmax, xinvert) \
+ 	((unsigned long)&(struct soc_mixer_control) \
+ 	{.reg = xlreg, .rreg = xrreg, .shift = xshift, .rshift = xshift, \
+-	.max = xmax, .platform_max = xmax, .invert = xinvert})
++	.max = xmax, .invert = xinvert})
+ #define SOC_DOUBLE_R_S_VALUE(xlreg, xrreg, xshift, xmin, xmax, xsign_bit, xinvert) \
+ 	((unsigned long)&(struct soc_mixer_control) \
+ 	{.reg = xlreg, .rreg = xrreg, .shift = xshift, .rshift = xshift, \
+-	.max = xmax, .min = xmin, .platform_max = xmax, .sign_bit = xsign_bit, \
++	.max = xmax, .min = xmin, .sign_bit = xsign_bit, \
+ 	.invert = xinvert})
+ #define SOC_DOUBLE_R_RANGE_VALUE(xlreg, xrreg, xshift, xmin, xmax, xinvert) \
+ 	((unsigned long)&(struct soc_mixer_control) \
+ 	{.reg = xlreg, .rreg = xrreg, .shift = xshift, .rshift = xshift, \
+-	.min = xmin, .max = xmax, .platform_max = xmax, .invert = xinvert})
++	.min = xmin, .max = xmax, .invert = xinvert})
+ #define SOC_SINGLE(xname, reg, shift, max, invert) \
+ {	.iface = SNDRV_CTL_ELEM_IFACE_MIXER, .name = xname, \
+ 	.info = snd_soc_info_volsw, .get = snd_soc_get_volsw,\
+@@ -68,7 +68,7 @@
+ 	.private_value = (unsigned long)&(struct soc_mixer_control) \
+ 		{.reg = xreg, .rreg = xreg, .shift = xshift, \
+ 		 .rshift = xshift,  .min = xmin, .max = xmax, \
+-		 .platform_max = xmax, .invert = xinvert} }
++		 .invert = xinvert} }
+ #define SOC_SINGLE_TLV(xname, reg, shift, max, invert, tlv_array) \
+ {	.iface = SNDRV_CTL_ELEM_IFACE_MIXER, .name = xname, \
+ 	.access = SNDRV_CTL_ELEM_ACCESS_TLV_READ |\
+@@ -99,7 +99,7 @@
+ 	.private_value = (unsigned long)&(struct soc_mixer_control) \
+ 		{.reg = xreg, .rreg = xreg, .shift = xshift, \
+ 		 .rshift = xshift, .min = xmin, .max = xmax, \
+-		 .platform_max = xmax, .invert = xinvert} }
++		 .invert = xinvert} }
+ #define SOC_DOUBLE(xname, reg, shift_left, shift_right, max, invert) \
+ {	.iface = SNDRV_CTL_ELEM_IFACE_MIXER, .name = (xname),\
+ 	.info = snd_soc_info_volsw, .get = snd_soc_get_volsw, \
+@@ -199,7 +199,7 @@
+ 	.put = snd_soc_put_volsw, \
+ 	.private_value = (unsigned long)&(struct soc_mixer_control) \
+ 	{.reg = xreg, .rreg = xreg,  \
+-	 .min = xmin, .max = xmax, .platform_max = xmax, \
++	 .min = xmin, .max = xmax, \
+ 	.sign_bit = 7,} }
+ #define SOC_DOUBLE_S8_TLV(xname, xreg, xmin, xmax, tlv_array) \
+ {	.iface  = SNDRV_CTL_ELEM_IFACE_MIXER, .name = (xname), \
+@@ -273,7 +273,7 @@
+ 	.private_value = (unsigned long)&(struct soc_mixer_control) \
+ 		{.reg = xreg, .rreg = xreg, .shift = xshift, \
+ 		 .rshift = xshift, .min = xmin, .max = xmax, \
+-		 .platform_max = xmax, .invert = xinvert} }
++		 .invert = xinvert} }
+ #define SOC_DOUBLE_EXT_TLV(xname, xreg, shift_left, shift_right, xmax, xinvert,\
+ 	 xhandler_get, xhandler_put, tlv_array) \
+ {	.iface = SNDRV_CTL_ELEM_IFACE_MIXER, .name = (xname), \
+-- 
+2.21.0
 
-Don't use wildcards in compatible strings.
-
-> +
-> +  reg:
-> +    const: 0x48
-> +    description: I2C slave address
-> +
-> +  ti,system-power-controller:
-> +    type: boolean
-> +    description: PMIC is controlling the system power.
-> +
-> +  rtc:
-
-Why do you need a sub-node here? Is the RTC a separate block with its 
-own resources?
-
-> +    type: object
-> +    $ref: /schemas/rtc/rtc.yaml#
-> +    unevaluatedProperties: false
-> +    properties:
-> +      compatible:
-> +        const: ti,tps6594x-rtc
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +examples:
-> +  - |
-> +    i2c0 {
-
-i2c {
-
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        pmic: pmic@48 {
-> +            compatible = "ti,tps6594x";
-> +            reg = <0x48>;
-> +
-> +            rtc {
-> +                compatible = "ti,tps6594x-rtc";
-> +            };
-> +        };
-> +    };
-> +
-> +...
-> -- 
-> 2.36.1
-> 
-> 

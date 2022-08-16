@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2F0596384
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F4D59638D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237046AbiHPUJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 16:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46844 "EHLO
+        id S236744AbiHPUNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 16:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbiHPUJR (ORCPT
+        with ESMTP id S237217AbiHPUNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 16:09:17 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C877C75C;
-        Tue, 16 Aug 2022 13:09:16 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id p14-20020a17090a74ce00b001f4d04492faso10673254pjl.4;
-        Tue, 16 Aug 2022 13:09:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=7SZ5VenNztRnLFMOBFO6xbar+Rfw+Z2OdJF35tqn830=;
-        b=Sv5fxKlBKbSA8SlxCHfQb1M2em94RKvPRcxL/wwLsjCiAN9/eRlU2+H9PV2e2/jKmD
-         FBkwSe5eyT2dPJlpma0nD6U5hNSdQgrvOMMFC6jGBSn2GAr9ui2aF8fvi2nLhtknnxKE
-         vF0C5HXVsbDGUO/556VYSl6E0FcV19MaVH3gvZsuF5E2u0HMdiTo2Y1nw+aI0hUHIrTw
-         fvpbvoGZHzZa9q4u0qGZ/j6sVHQQB8WbQNH+Lp5Au+zorDBqIYDqLJHT/vo1duT0llkw
-         R7I7c7y0uLpd9mwmev7S3VPT9jz1MSFJT0lBN27Es5G4/kgqezl4EaGzn5edvG3mnMK7
-         T46A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=7SZ5VenNztRnLFMOBFO6xbar+Rfw+Z2OdJF35tqn830=;
-        b=vpuFpOrzcnEJ9pjG8xf+L6MsCBl1NrL/hArxjXl0fzycy2vP4POX03hk+HdzuCiaDf
-         NAAOSPw0/ZW0AjdstduSExPn3Yiu0Nl39QVd/Q4vJpLz2IWruQcHmaBFKnxxpinG6VgC
-         /Lyns/FOXCEWnZ6rWmlNIAwc8zOVthm6vneNKHHlAfFRlBSCh1yH3bHS9hVRMAJP1hIg
-         Q8DDuc/uOX5OisH8OQwi7ToijLkratRZ0dqM/LadnrTgkzULonge9uSjWg1ESKmvZSrd
-         rmOy29+jsKxV9AysGWuCd7bT3S9aLGTusDy7M0Z8UE1rMnd1/aJZpdC0VDZ77d2JFlfw
-         6aow==
-X-Gm-Message-State: ACgBeo3JjZIVe5WKXPCixYBWyodE53IlqCS/vT83RfyM2PPGrpjFHsOa
-        9trRRnV/Eblrza2mgiaUIZo=
-X-Google-Smtp-Source: AA6agR6YCr4etjg++NmjN1lp2khS9VxHoMkwP+8i3D/ZE7Rx+vY/+uxshYzCtOo8mfsuFa6yoCtHsQ==
-X-Received: by 2002:a17:902:d885:b0:172:868f:188c with SMTP id b5-20020a170902d88500b00172868f188cmr3512048plz.78.1660680556322;
-        Tue, 16 Aug 2022 13:09:16 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:7229])
-        by smtp.gmail.com with ESMTPSA id f6-20020aa79686000000b0052e23a5ab74sm8907315pfk.59.2022.08.16.13.09.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 13:09:15 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 16 Aug 2022 10:09:14 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     mkoutny@suse.com, axboe@kernel.dk, ming.lei@redhat.com,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH v7 8/9] blk-throttle: cleanup tg_update_disptime()
-Message-ID: <Yvv5as5BVuqjw6PX@slm.duckdns.org>
-References: <20220802140415.2960284-1-yukuai1@huaweicloud.com>
- <20220802140415.2960284-9-yukuai1@huaweicloud.com>
+        Tue, 16 Aug 2022 16:13:38 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9729551A20;
+        Tue, 16 Aug 2022 13:13:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=cIS73AGgJyieKU1tG/xZQvCqq8exnfGqB4TcWuZRJMk=; b=FkEUF2DP0ATjqek0UTg5E6KGpT
+        SfZHe9fW2AONVfJAs/8IfzSTsTd9mdeX2lP+zLryIK+TSwQT+1+SxpL5mIvnqGUU7sIH02Ajg7mVy
+        cq1l1k1lYSy/25TQp7wwpcyxMc/YnIrMfrkKANHUcMLPcvZWHteIFmJXOTqw+Xz+452175GKpCp65
+        /o2iXSY0BqlMZDZ7rp14XcPmzP2uND+NNI5OzXGp5sTt1G5pHbYuWtYW1u5NTx0LKMb3euFHrYekU
+        8GMjSivYRkcl6vjcbMV/VqJ5/blLDgs51BUCiyMhb+/tIiagsNphS1KpAJiMWO+NA6QVVx5/mrtdN
+        nWdCvytQ==;
+Received: from [179.232.144.59] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oO2vr-00AHjX-Kj; Tue, 16 Aug 2022 22:12:59 +0200
+Message-ID: <7181a47b-001c-0588-4102-1cfd8bead0ac@igalia.com>
+Date:   Tue, 16 Aug 2022 17:12:33 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802140415.2960284-9-yukuai1@huaweicloud.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 08/13] tracing: Improve panic/die notifiers
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, senozhatsky@chromium.org,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Sergei Shtylyov <sergei.shtylyov@gmail.com>
+References: <20220719195325.402745-1-gpiccoli@igalia.com>
+ <20220719195325.402745-9-gpiccoli@igalia.com>
+ <20220816101445.184ebb7c@gandalf.local.home>
+ <YvuwUAGi6PvY5kmR@rowland.harvard.edu>
+ <20220816115249.66cf8f15@gandalf.local.home>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20220816115249.66cf8f15@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,20 +74,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 10:04:14PM +0800, Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
+On 16/08/2022 12:52, Steven Rostedt wrote:
+> On Tue, 16 Aug 2022 10:57:20 -0400
+> Alan Stern <stern@rowland.harvard.edu> wrote:
 > 
-> tg_update_disptime() only need to adjust postion for 'tg' in
-> 'parent_sq', there is no need to call throtl_enqueue/dequeue_tg().
+>>> static int trace_die_panic_handler(struct notifier_block *self,
+>>> 				unsigned long ev, void *unused)
+>>> {
+>>> 	if (!ftrace_dump_on_oops)
+>>> 		return NOTIFY_DONE;
+>>>
+>>> 	/* The die notifier requires DIE_OOPS to trigger */
+>>> 	if (self == &trace_die_notifier && ev != DIE_OOPS)
+>>> 		return NOTIFY_DONE;
+>>>
+>>> 	ftrace_dump(ftrace_dump_on_oops);
+>>>
+>>> 	return NOTIFY_DONE;
+>>> }  
+>>
+>> Or better yet:
+>>
+>> 	if (ftrace_dump_on_oops) {
+>>
+>> 		/* The die notifier requires DIE_OOPS to trigger */
+>> 		if (self != &trace_die_notifier || ev == DIE_OOPS)
+>> 			ftrace_dump(ftrace_dump_on_oops);
+>> 	}
+>> 	return NOTIFY_DONE;
+>>
 > 
-> Save a little overhead in tg_update_disptime() and prepare to cleanup
-> flag 'THROTL_TG_PENDING', there are no functional changes.
+> That may be more consolidated but less easy to read and follow. This is far
+> from a fast path.
+> 
+> As I maintain this bike-shed, I prefer the one I suggested ;-)
+> 
+> -- Steve
 
-Does this actually help anything? Given that the heavy part of the operation
-remains the same, this might not be much of an optimization. Is there even a
-microbench that can show the difference?
+Perfect Steve and Alan, appreciate your suggestions!
+I'll submit V3 using your change Steve - honestly, I'm not sure why in
+the heck I put a goto there, yours is basically the same code, modulo
+the goto heheh
 
-Thanks.
+A braino from me, for sure!
+Cheers,
 
--- 
-tejun
+
+Guilherme

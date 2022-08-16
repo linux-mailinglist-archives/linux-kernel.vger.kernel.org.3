@@ -2,63 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D810595D20
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E15B595D24
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235440AbiHPNUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57416 "EHLO
+        id S235657AbiHPNU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235727AbiHPNU2 (ORCPT
+        with ESMTP id S235629AbiHPNUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 09:20:28 -0400
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1DC3342A;
-        Tue, 16 Aug 2022 06:20:25 -0700 (PDT)
-Received: by mail-qt1-f182.google.com with SMTP id a4so8037381qto.10;
-        Tue, 16 Aug 2022 06:20:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=9PgsNxW7umWAoSy6vVUhb0/b4CvO5xxPxUf0Vm3eJZs=;
-        b=13/TSJUh8/2zlHUAWYVKNSwZtKH+OHVuSrBDSz6ilGLi1ONIYoA3ZH2Wbz36vGBoUC
-         delHZ27Ygb/1v0j409qrYXPEeQY+52+hR5CP/eoOqgMaOIMDIJPFSFyU38sk1caZaTJS
-         ZmelAUoEXYpt04YJQ5QWV8dYBHb5UMHvWXhTtKrop8hNUFgHM+hny906/YD0wcIlXGLm
-         TKx9ebQCT6BhXFRsr/5VPO7tGgjXPVWgNiT+x8+ZAlkOEEEwY6Q3vB1QwfmVyeOd16zc
-         S8CIHWZ18SE2se/C/XnoSYZlveCf2tjy7icqKGSTtH+QFenGcwmB833KwoWuufxFMvdV
-         pjKg==
-X-Gm-Message-State: ACgBeo0wfyDJi7DNRxfmZrwcTVOduqqOx8YZQv79EiIg6jzzXjq/+1iC
-        pFD11jMAhRSd1dIvzxiNCsQ=
-X-Google-Smtp-Source: AA6agR4hMKMU1se5WTcUCoIl6XRyYlwfGSNc4NQU7ZgC2TkV1zUgKg+bIXrpWVKeFV5FjeYIEz7dpg==
-X-Received: by 2002:a05:622a:164e:b0:344:5cbe:c0f0 with SMTP id y14-20020a05622a164e00b003445cbec0f0mr8625423qtj.631.1660656023711;
-        Tue, 16 Aug 2022 06:20:23 -0700 (PDT)
-Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::a5ed])
-        by smtp.gmail.com with ESMTPSA id bj25-20020a05620a191900b006b93ef659c3sm5181760qkb.39.2022.08.16.06.20.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 06:20:23 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 08:20:03 -0500
-From:   David Vernet <void@manifault.com>
-To:     Hao Luo <haoluo@google.com>
-Cc:     bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, joannelkoong@gmail.com,
-        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
-        linux-kernel@vger.kernel.org, martin.lau@linux.dev, sdf@google.com,
-        song@kernel.org, yhs@fb.com, kernel-team@fb.com, tj@kernel.org
-Subject: Re: [PATCH v2 2/4] bpf: Add bpf_user_ringbuf_drain() helper
-Message-ID: <YvuZg7F/IVjozlu8@maniforge.dhcp.thefacebook.com>
-References: <20220811234941.887747-1-void@manifault.com>
- <20220811234941.887747-3-void@manifault.com>
- <CA+khW7jW6mgu2+DZyJMSX1beRYk917S=824NLFG7M5D1+2F57w@mail.gmail.com>
+        Tue, 16 Aug 2022 09:20:49 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C9478BEF
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:20:45 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 402C058037D;
+        Tue, 16 Aug 2022 09:20:45 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 16 Aug 2022 09:20:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1660656045; x=1660663245; bh=U+FP9WL6qH
+        xAhIYTKKc2LvJDq7iEJgXc9SQbodiDDXA=; b=kJHgvO1K5X0yS0bXTChkquj0OR
+        RCqHnNc0XBPUm3z7/WQdy5I5PLYVzPHjIdS5OZOIuEfLDyIsD/C1uGYVV4cetvIs
+        NsNprQ8/ltFMmNqACY4L2Jamw1Py44t1jUjVCUbu3ecCRSBcBlyesR77IMVtD3GL
+        SxHtV5HQm3W3GBPzXNqyOEqrCgE2IHdxTFkTqsg7u0lV6SIF76nj4n6KjfHuXVrH
+        x6d5n9FNGnDfaHYc1nVkvD/70S6O6AFqXgmPtrrNJDbBJd29vEGJgEHb0Fse3hFc
+        yxmEYL9ytZDahmeoSvWgVNvlo9jeUIVbP+yYD9iXbfqj8Aca5A8/jhCzZdPQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660656045; x=1660663245; bh=U+FP9WL6qHxAhIYTKKc2LvJDq7iE
+        JgXc9SQbodiDDXA=; b=Tc31jgiKV5ovT3ovNozG+Pnm++oNgJ4zTUPLNWDit1I9
+        Hvxm1aapLTpKhJILH2PqTF0YmOH4MSHwgLDInaTkSjvtt3JFSNw/86LLTGvvRW51
+        3I8JQa9ZdbNlV5G10yeloK2aMT/VfzQuZ7kqiUJAPrVvfpvVCSs3ZaELCQzkIdGC
+        RCJh9y7jbBzlWjE9TD/r/NtpgnNJDGZiidnMkodJVlf41Iw35XEBS+C4H8z1sL6f
+        hjSWjlTnKjEV6X8NnPtcusvXvvMbcLZGOZXeCV4ILTH+fnQdUlqrx2eICkmp4464
+        JVNvn6zDFQMJ1tU5vS+lnIV6tJFYHdUIFzr2g+CO7w==
+X-ME-Sender: <xms:q5n7Yj9umwrX7oVw9UghmxD4i7MGuJvny9AfymC_b-hQUPYCdeX78g>
+    <xme:q5n7YvumRLVde5YnKu_WeSjfYdYqZtjgvT6uWTriXiCFd4xFnkXY8yhIRlz1YB6NT
+    16KkFKUBr2YqO1vSTo>
+X-ME-Received: <xmr:q5n7YhDzBG2aG79HV1UbRHQZVoQwoQbTDeSO_zfoB4AgJmcZveOVY1EGvbc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehgedgieehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
+    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:q5n7YvdJHxWnNwnbPCPdD9m9OiPE6vQw37M5kLxLNBJQ7ClvMEOmEA>
+    <xmx:q5n7YoMsvrihcmnmoa_Ax-aiS1fWIbTnQ9BZ48X3-QIUVWnh0z31HQ>
+    <xmx:q5n7YhlCoaiIGJifTn0HQnb5FLP_E2e8paJHarllCzQBxQTIJxax6Q>
+    <xmx:rZn7Yv-TN8-6TSqsBSP7TZQKK5gZIvDf7lWQFpnazpZNkrC89JOgQg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 16 Aug 2022 09:20:42 -0400 (EDT)
+Date:   Tue, 16 Aug 2022 15:20:40 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>
+Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
+Message-ID: <20220816132040.uwirtjm5yr6rdd3q@houat>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
+ <CAMuHMdWYo7M44uLNhTmJenGDreGALBZ9E48oyBDEeAuL=0h=dw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6ena3yqc72sajvcu"
 Content-Disposition: inline
-In-Reply-To: <CA+khW7jW6mgu2+DZyJMSX1beRYk917S=824NLFG7M5D1+2F57w@mail.gmail.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <CAMuHMdWYo7M44uLNhTmJenGDreGALBZ9E48oyBDEeAuL=0h=dw@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,170 +106,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 02:23:04PM -0700, Hao Luo wrote:
 
-Hi Hao,
+--6ena3yqc72sajvcu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the review.
+Hi Geert,
 
-> On Thu, Aug 11, 2022 at 4:50 PM David Vernet <void@manifault.com> wrote:
-> >
-> > Now that we have a BPF_MAP_TYPE_USER_RINGBUF map type, we need to add a
-> > helper function that allows BPF programs to drain samples from the ring
-> > buffer, and invoke a callback for each. This patch adds a new
-> > bpf_user_ringbuf_drain() helper that provides this abstraction.
-> >
-> > In order to support this, we needed to also add a new PTR_TO_DYNPTR
-> > register type to reflect a dynptr that was allocated by a helper function
-> > and passed to a BPF program. The verifier currently only supports
-> > PTR_TO_DYNPTR registers that are also DYNPTR_TYPE_LOCAL and MEM_ALLOC.
-> >
-> > Signed-off-by: David Vernet <void@manifault.com>
-> > ---
-> [...]
-> > diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
-> > index c0f3bca4bb09..73fa6ed12052 100644
-> > --- a/kernel/bpf/ringbuf.c
-> > +++ b/kernel/bpf/ringbuf.c
-> [...]
-> > +static int __bpf_user_ringbuf_poll(struct bpf_ringbuf *rb, void **sample,
-> > +                                  u32 *size)
-> > +{
-> > +       unsigned long cons_pos, prod_pos;
-> > +       u32 sample_len, total_len;
-> > +       u32 *hdr;
-> > +       int err;
-> > +       int busy = 0;
-> > +
-> > +       /* If another consumer is already consuming a sample, wait for them to
-> > +        * finish.
-> > +        */
-> > +       if (!atomic_try_cmpxchg(&rb->busy, &busy, 1))
-> > +               return -EBUSY;
-> > +
-> > +       /* Synchronizes with smp_store_release() in user-space. */
-> > +       prod_pos = smp_load_acquire(&rb->producer_pos);
-> > +       /* Synchronizes with smp_store_release() in
-> > +        * __bpf_user_ringbuf_sample_release().
-> > +        */
-> > +       cons_pos = smp_load_acquire(&rb->consumer_pos);
-> > +       if (cons_pos >= prod_pos) {
-> > +               atomic_set(&rb->busy, 0);
-> > +               return -ENODATA;
-> > +       }
-> > +
-> > +       hdr = (u32 *)((uintptr_t)rb->data + (uintptr_t)(cons_pos & rb->mask));
-> > +       sample_len = *hdr;
-> > +
->
-> rb->data and rb->mask better be protected by READ_ONCE.
+On Fri, Aug 12, 2022 at 03:25:18PM +0200, Geert Uytterhoeven wrote:
+> > --- a/drivers/gpu/drm/drm_connector.c
+> > +++ b/drivers/gpu/drm/drm_connector.c
+> > @@ -1649,11 +1650,40 @@ EXPORT_SYMBOL(drm_mode_create_tv_margin_propert=
+ies);
+> >   * 0 on success or a negative error code on failure.
+> >   */
+> >  int drm_mode_create_tv_properties(struct drm_device *dev,
+> > +                                 unsigned int supported_tv_norms,
+> >                                   unsigned int num_modes,
+> >                                   const char * const modes[])
+> >  {
+> > +       static const struct drm_prop_enum_list tv_norm_values[] =3D {
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_NTSC_443) - 1, "NTSC-4=
+43" },
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_NTSC_J) - 1, "NTSC-J" =
+},
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_NTSC_M) - 1, "NTSC-M" =
+},
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_60) - 1, "PAL-60" =
+},
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_B) - 1, "PAL-B" },
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_D) - 1, "PAL-D" },
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_G) - 1, "PAL-G" },
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_H) - 1, "PAL-H" },
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_I) - 1, "PAL-I" },
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_M) - 1, "PAL-M" },
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_N) - 1, "PAL-N" },
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_NC) - 1, "PAL-Nc" =
+},
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_60) - 1, "SECAM-=
+60" },
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_B) - 1, "SECAM-B=
+" },
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_D) - 1, "SECAM-D=
+" },
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_G) - 1, "SECAM-G=
+" },
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_K) - 1, "SECAM-K=
+" },
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_K1) - 1, "SECAM-=
+K1" },
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_L) - 1, "SECAM-L=
+" },
+>=20
+> The above are analog standards, with a variable horizontal resolution.
+>=20
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_HD480I) - 1, "hd480i" =
+},
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_HD480P) - 1, "hd480p" =
+},
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_HD576I) - 1, "hd576i" =
+},
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_HD576P) - 1, "hd576p" =
+},
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_HD720P) - 1, "hd720p" =
+},
+> > +               { __builtin_ffs(DRM_MODE_TV_NORM_HD1080I) - 1, "hd1080i=
+" },
+>=20
+> The above are digital standards, with a fixed resolution.
 
-Could you please clarify about the behavior you're protecting against here?
-We're just calculating an offset from rb->data, and both rb->data and
-rb->mask are set only once when the ringbuffer is first created in
-bpf_ringbuf_area_alloc(). I'm not following what we'd be protecting against
-by making these volatile, though I freely admit that I may be missing some
-weird possible behavior in the compiler.
+Are they?
 
-For what it's worth, in a follow-on version of the patch, I've updated this
-read of the sample len to be an smp_load_acquire() to accommodate Andrii's
-suggestion [0] that we should support using the busy bit and discard bit in
-the header from the get-go, as we do with BPF_MAP_TYPE_RINGBUF ringbuffers.
+It's not clear to me from looking at nouveau, but I was under the
+impression that they were modes for a component output, so CEA 770.3. I
+don't have the spec though, so I can't check.
 
-[0]: https://lore.kernel.org/all/CAEf4BzYVLgd=rHaxzZjyv0WJBzBpMqGSStgVhXG9XOHpB7qDRQ@mail.gmail.com/
+> You seem to have missed "hd1080p"?
 
-> > +       /* Check that the sample can fit into a dynptr. */
-> > +       err = bpf_dynptr_check_size(sample_len);
-> > +       if (err) {
-> > +               atomic_set(&rb->busy, 0);
-> > +               return err;
-> > +       }
-> > +
-> > +       /* Check that the sample fits within the region advertised by the
-> > +        * consumer position.
-> > +        */
-> > +       total_len = sample_len + BPF_RINGBUF_HDR_SZ;
-> > +       if (total_len > prod_pos - cons_pos) {
-> > +               atomic_set(&rb->busy, 0);
-> > +               return -E2BIG;
-> > +       }
-> > +
-> > +       /* Check that the sample fits within the data region of the ring buffer.
-> > +        */
-> > +       if (total_len > rb->mask + 1) {
-> > +               atomic_set(&rb->busy, 0);
-> > +               return -E2BIG;
-> > +       }
-> > +
-> > +       /* consumer_pos is updated when the sample is released.
-> > +        */
-> > +
-> > +       *sample = (void *)((uintptr_t)rb->data +
-> > +                          (uintptr_t)((cons_pos + BPF_RINGBUF_HDR_SZ) & rb->mask));
-> > +       *size = sample_len;
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static void
-> > +__bpf_user_ringbuf_sample_release(struct bpf_ringbuf *rb, size_t size,
-> > +                                 u64 flags)
-> > +{
-> > +
-> > +
-> > +       /* To release the ringbuffer, just increment the producer position to
-> > +        * signal that a new sample can be consumed. The busy bit is cleared by
-> > +        * userspace when posting a new sample to the ringbuffer.
-> > +        */
-> > +       smp_store_release(&rb->consumer_pos, rb->consumer_pos + size +
-> > +                         BPF_RINGBUF_HDR_SZ);
-> > +
-> > +       if (flags & BPF_RB_FORCE_WAKEUP || !(flags & BPF_RB_NO_WAKEUP))
-> > +               irq_work_queue(&rb->work);
-> > +
-> > +       atomic_set(&rb->busy, 0);
-> > +}
-> 
-> atomic_set() doesn't imply barrier, so it could be observed before
-> smp_store_release(). So the paired smp_load_acquire could observe
-> rb->busy == 0 while seeing the old consumer_pos. At least, you need
-> smp_mb__before_atomic() as a barrier before atomic_set. Or smp_wmb()
-> to ensure all _writes_ complete when see rb->busy == 0.
+Nobody is using it. If we ever have a driver that uses it I think we can
+add it.
 
-Thanks for catching this. I should have been more careful to not assume the
-semantics of atomic_set(), and I see now that you're of course correct that
-it's just a WRITE_ONCE() and has no implications at all w.r.t. memory or
-compiler barriers. I'll fix this in the follow-on version, and will give
-another closer read over memory-barriers.txt and atomic_t.txt.
+> In addition, "hd720p", "hd080i", and "hd1080p" are available in both 50
+> and 60 (actually 59.94) Hz, while "hd1080p" can also use 24 or 25 Hz.
 
-> Similarly rb->work could be observed before smp_store_release.
+It looks like nouveau only exposes modes for 480p at 59.94Hz, 576p at
+50Hz, 720p at 60Hz, 1080i at 30Hz.
 
-Yes, in the follow-on version I'll move the atomic_set() to before the
-irq_work_queue() invocation (per Andrii's comment in [1], though that
-discussion is still ongoing), and will add the missing
-smp_mb__before_atomic(). Thanks again for catching this.
+> Either you have to add them here (e.g. "hd720p50" and "hd720p60"), or
+> handle them through "@<refresh>".  The latter would impact "[PATCH v1
+> 09/35] drm/modes: Move named modes parsing to a separate function", as
+> currently a named mode and a refresh rate can't be specified both.
 
-[1]: https://lore.kernel.org/all/CAEf4BzZ-m-AUX+1+CGr7nMxMDnT=fjkn8DP9nP21Uts1y7fMyg@mail.gmail.com/
+I think the former would make more sense. It simplifies a bit the
+parser, and we're going to use a named mode anyway.
 
-> Is it possible for __bpf_user_ringbuf_sample_release to be called
-> concurrently? If yes, there are races. Because the load of
-> rb->consumer_pos is not protected by smp_load_acquire, they are not
-> synchronized with this smp_store_release. Concurrently calling
-> __bpf_user_ringbuf_sample_release may cause both threads getting stale
-> consumer_pos values.
+> As "[PATCH v1 34/35] drm/modes: Introduce the tv_mode property as a
+> command-line option" uses a separate "tv_mode" option, and not the main
+> mode name, I think you want to add them here.
 
-If we add smp_mb__before_atomic() per your proposed fix above, I don't
-believe this is an issue. __bpf_user_ringbuf_sample_release() should only
-be invoked when a caller has an unreleased sample, and that can only happen
-in a serial context due to the protection afforded by the atomic busy bit.
+It's a separate story I think, we could have a named mode hd720p50,
+which would be equivalent to 1280x720,tv_mode=3Dhd720p
 
-A single caller will not see a stale value, as they must first invoke
-__bpf_user_ringbuf_peek(), and then invoke
-__bpf_user_ringbuf_sample_release() with the sample they received. The
-consumer pos they read in __bpf_user_ringbuf_sample_release() was already
-smp_load_acquire()'d in __bpf_user_ringbuf_peek(), so they shouldn't see a
-stale value there. We could certainly add another smp_load_acquire() here
-for safety, but it would be redundant.
+Maxime
 
-Thanks,
-David
+--6ena3yqc72sajvcu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYvuZqAAKCRDj7w1vZxhR
+xRpdAQCdHo+W59CWD9zJ3T1LvoCmG3uMcVuRQ9G79/cpqOxH9wEAhPrjIiW5PuV0
+9yKEPpR9rUmMFVvJOYSKOJ0j4md2bQE=
+=XiNC
+-----END PGP SIGNATURE-----
+
+--6ena3yqc72sajvcu--

@@ -2,263 +2,376 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0600F595A88
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABDE0595A8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234455AbiHPLqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 07:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43534 "EHLO
+        id S234373AbiHPLrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 07:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233859AbiHPLpc (ORCPT
+        with ESMTP id S234335AbiHPLrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 07:45:32 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10364DB75
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 04:18:31 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220816111826euoutp022c16fbff213133078be3c18abda5473a~LzzMf6SOC2483924839euoutp02Z
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 11:18:26 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220816111826euoutp022c16fbff213133078be3c18abda5473a~LzzMf6SOC2483924839euoutp02Z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1660648706;
-        bh=8qlHYZTa8T/zZ1lSh3y/2QHWKCL3iVeytbgEsAxm80c=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=NzjwDYdCS61rm0et6eIl4S0Ge4NnTaFevA5OXs8RgOVGdSEbhhwf9jboW49TlfETK
-         xUWn4hnBzzkZj68st5be07M/ocFzftUEhiZ1U7a7/HNum/NPCSjVNamek5PeAFlDdn
-         DmVlgZ/2dW7mGUo/e9syB7y8M1ipv0zbqMkFU0qw=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220816111825eucas1p207711b7d7ce51d639fa19a9cb7500db4~LzzL7Xnpj0314503145eucas1p2v;
-        Tue, 16 Aug 2022 11:18:25 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id D7.BD.09580.10D7BF26; Tue, 16
-        Aug 2022 12:18:25 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220816111824eucas1p2719a48c792ba5676c89378c9090a83c7~LzzLbd6pD2207622076eucas1p2d;
-        Tue, 16 Aug 2022 11:18:24 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220816111824eusmtrp250f9304febf1c81cb400fb113efff106~LzzLaryhw0129801298eusmtrp2Q;
-        Tue, 16 Aug 2022 11:18:24 +0000 (GMT)
-X-AuditID: cbfec7f5-9c3ff7000000256c-3f-62fb7d01ee96
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 87.AE.09038.00D7BF26; Tue, 16
-        Aug 2022 12:18:24 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220816111824eusmtip225842e3588a76ab3b35386956cd4ab63~LzzKvWeKR1128611286eusmtip2C;
-        Tue, 16 Aug 2022 11:18:24 +0000 (GMT)
-Message-ID: <291ed62e-7748-fffc-65c7-98f01e6abcf2@samsung.com>
-Date:   Tue, 16 Aug 2022 13:18:24 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [PATCH net] net: phy: Warn about incorrect
- mdio_bus_phy_resume() state
+        Tue, 16 Aug 2022 07:47:05 -0400
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140088.outbound.protection.outlook.com [40.107.14.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C550CAB042;
+        Tue, 16 Aug 2022 04:20:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fHJAyL70mYTQ/1uLXYJAjGdNp28ovRqNdpFiw20igMcBoR28cA7mRiodj/o/XbhCQuDsg6hmD0fDfmus7C1D7gMKV4EayxgEyXbD1estqrGSW6DHVMNkqA83KhHvsPAKIcDhVFQmhIO73/osJ7RRE9g7QegVf3iJAummEQQf3gZzsFrpF/fSU0YXNFUacjUbFublbJIRoL+nUQDlI22fMh+jizcFzPEDaZGVMVJUww+wVGTWURMmr9ExcHcMO5VRqjT2V/PDRxxg0gT2B4zHDIx2iLOF+ipIYCzd9n+3d8lTUyUhKikz0TBfqyLENqce3OtjlMEHkEC3x90VN3alRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mBbkGqfH4Mc36aohrKz8HsxMmkMC2nqCivIr63yDziU=;
+ b=d6sD6u5pKmOUTBWZaBUf1OTxI7p7B5nFrxCCx4HFRqJNblRhtmUogEMPFkXaFK42FMF0r6Q5OHUaLCpUMdLz3fEABDy+L1MAf2XTECLE8U6F5yxYSJIFZf5ahd6R5afqT9TVcU3AfM+BVoYYx2nK1/KI4spxXxeIv5bKw6jfU19dXXyjIGlG7MYcNx6jLlnKBh0u09y1xPy1Vi5p64GPRbmntNFp4kaheI0o9QqzI4nxx2Fa3FvDzBcg2yV4M4WMmFdyLGHB/a1+Cik4O4V5MufQuMFR9iheDq/KArgwPqb/46XxBimF2jRPLmwD8sUA1/Gggg38UbkpEfs4KRbg5Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mBbkGqfH4Mc36aohrKz8HsxMmkMC2nqCivIr63yDziU=;
+ b=Em4NEFksGAdbQDxQUwCWI+2Lu07sfE0Z7qJaYaY4eIBPMipFpRxnglHXy2vMUOArgmjXi3kheWkddriS8L9d2yuWNgxEFA/ucuvHcfJjGXhnvA0oMbVsN4lEzPsSRvXDe9bpkpOmh78FfDTA3o4ouJWnNnPsR2kCTvmVX/NQ/WY=
+Received: from AM6PR04MB6743.eurprd04.prod.outlook.com (2603:10a6:20b:f1::11)
+ by AM6PR04MB6517.eurprd04.prod.outlook.com (2603:10a6:20b:f5::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.27; Tue, 16 Aug
+ 2022 11:20:50 +0000
+Received: from AM6PR04MB6743.eurprd04.prod.outlook.com
+ ([fe80::c27:3940:d92e:acd6]) by AM6PR04MB6743.eurprd04.prod.outlook.com
+ ([fe80::c27:3940:d92e:acd6%4]) with mapi id 15.20.5525.011; Tue, 16 Aug 2022
+ 11:20:50 +0000
+From:   Olivier Masse <olivier.masse@nxp.com>
+To:     "brian.starkey@arm.com" <brian.starkey@arm.com>
+CC:     "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "nd@arm.com" <nd@arm.com>,
+        =?iso-8859-15?Q?Cl=E9ment_Faure?= <clement.faure@nxp.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "benjamin.gaignard@collabora.com" <benjamin.gaignard@collabora.com>
+Subject: Re: [EXT] Re: [PATCH 1/3] dma-buf: heaps: add Linaro secure dmabuf
+ heap support
+Thread-Topic: [EXT] Re: [PATCH 1/3] dma-buf: heaps: add Linaro secure dmabuf
+ heap support
+Thread-Index: AQHYqNLEB1kEEMDN2EiJXHn7b90D762gcg6AgASkiYCABmvpAIAF7/SA
+Date:   Tue, 16 Aug 2022 11:20:50 +0000
+Message-ID: <de46324d8fa8fb6a8dda4641e531d30842410744.camel@nxp.com>
+References: <20220805135330.970-1-olivier.masse@nxp.com>
+         <20220805135330.970-2-olivier.masse@nxp.com>
+         <20220805154139.2qkqxwklufjpsfdx@000377403353>
+         <7e61668164f8bf02f6c4ee166e85abc42b5ee958.camel@nxp.com>
+         <20220812163922.v7sf3havi5dpgi5u@000377403353>
+In-Reply-To: <20220812163922.v7sf3havi5dpgi5u@000377403353>
+Accept-Language: fr-FR, en-US
 Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>, netdev@vger.kernel.org,
-        Steve Glendinning <steve.glendinning@shawell.net>
-Cc:     opendmb@gmail.com, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <8c21e530-8e8f-ce2a-239e-9d3a354996cf@gmail.com>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrKKsWRmVeSWpSXmKPExsWy7djP87qMtb+TDHZ0SFmcv3uI2WLO+RYW
-        i6fHHrFb/Hp3hN1i0fsZrBYXtvWxWlzeNYfN4tDUvYwWxxaIWXyeNIXR4tvpN4wWzZ9eMTnw
-        eFy+dpHZY8vKm0weO2fdZfdYsKnUY9OqTjaPnTs+M3m833eVzeN/82UWj8+b5AI4o7hsUlJz
-        MstSi/TtErgy+n+dYytYrV1xfOIm5gbGVypdjBwcEgImEs0rHboYuTiEBFYwSvR9msrexcgJ
-        5HxhlPjW6gOR+MwosfdRJytIAqThx88HLBCJ5YwS5xa3M0E4Hxkl1p3pZAOp4hWwk5gw7REz
-        iM0ioCrRsesKO0RcUOLkzCcsILaoQLLEs/+LweLCAqESJ6b1gm1gFhCXuPVkPhOILSJQIXHt
-        6WF2kAXMAoeZJF7fmw5WxCZgKNH1tosN5AdOAVuJBb84IHrlJZq3zmYGqZcQmM8p8XXzPaiz
-        XSSefHzDBmELS7w6voUdwpaR+L8TZBkoLPIl/s4whggD7X29hhnCtpa4c+4X2CpmAU2J9bv0
-        IcKOEstaVkB18knceCsIcQGfxKRt05khwrwSHW1CENVqErOOr4PbefDCJeYJjEqzkMJkFpLf
-        ZyH5ZRbC3gWMLKsYxVNLi3PTU4uN81LL9YoTc4tL89L1kvNzNzECU9rpf8e/7mBc8eqj3iFG
-        Jg7GQ4wSHMxKIryCL34kCfGmJFZWpRblxxeV5qQWH2KU5mBREudNztyQKCSQnliSmp2aWpBa
-        BJNl4uCUamBaUfBwjpX7TLn/m0J+JdUsWsRQnB6vaXjC8+R0RY/kO/ul+u+d4Vq2Y5ZR9rw3
-        u2UCPpecv2z/JkpoXuCT4t+JG0NmPzms3+x5QPPGoZtttY9vzTzNOsnw1DkH+a9/7GLYX958
-        9mQb59VEW1mJprzoTTUb5Ys4rh5LtZovJq08qSL1I4/n47MtAay3qjOUWl6aHl70fNGl0yLZ
-        she+tXgGLtdlz8qYkmXTHLxbhKPdVtmke8rbv3u2fXi8YOK7CTO9j5W8nfDwUlt+8776VTp5
-        exdsjPDVVAx5k+Cwzryeu/Vab6P4k/Xn365KXV2SkpL+aYoWm2hRlBbn2oNmvJYi69N+VXNG
-        MTOFWC2X3hGpxFKckWioxVxUnAgAqZsuNNgDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDIsWRmVeSWpSXmKPExsVy+t/xe7oMtb+TDBrOGlmcv3uI2WLO+RYW
-        i6fHHrFb/Hp3hN1i0fsZrBYXtvWxWlzeNYfN4tDUvYwWxxaIWXyeNIXR4tvpN4wWzZ9eMTnw
-        eFy+dpHZY8vKm0weO2fdZfdYsKnUY9OqTjaPnTs+M3m833eVzeN/82UWj8+b5AI4o/RsivJL
-        S1IVMvKLS2yVog0tjPQMLS30jEws9QyNzWOtjEyV9O1sUlJzMstSi/TtEvQy+n+dYytYrV1x
-        fOIm5gbGVypdjJwcEgImEj9+PmDpYuTiEBJYyihx8dhLNoiEjMTJaQ2sELawxJ9rXWwQRe8Z
-        JW6ffcUOkuAVsJOYMO0RM4jNIqAq0bHrClRcUOLkzCcsILaoQLLEgkNLwWxhgVCJu+dPgNUw
-        C4hL3HoynwnEFhGokLi58wITyAJmgcNMEqeeTWKF2PaNUeLR/ndgJ7EJGEp0vQU5g4ODU8BW
-        YsEvDohBZhJdW7sYIWx5ieats5knMArNQnLHLCT7ZiFpmYWkZQEjyypGkdTS4tz03GIjveLE
-        3OLSvHS95PzcTYzAaN527OeWHYwrX33UO8TIxMF4iFGCg1lJhFfwxY8kId6UxMqq1KL8+KLS
-        nNTiQ4ymwMCYyCwlmpwPTCd5JfGGZgamhiZmlgamlmbGSuK8ngUdiUIC6YklqdmpqQWpRTB9
-        TBycUg1Ms09Ghb9xuHzO4nlJg/HB9DXxR44xuL9p+TXnwcOqPO69/at/mU7b8Tzyyon56c9Z
-        BXrO7L0hNL86SrEuxFScm7ujPjQraH/gqes79jdz77X4PMHT6PJzfoa67RwzXyt+jb4vGj39
-        k/TFmBQusfMCHGJ7n747Fn5qzysGpusfV1rZTK1Y3VS4pt5T64Tj7XzLp+FRondLJQ49N/us
-        +DrLM/i1slVFvWIAx1Kv2OW1fF3sPS7ZivFH2YzmX1uvXL1gxpvXB1dfcilNuLZDYMvE5TL3
-        rxhrpZ1f0S3mLMLGzflJJ+jdy4Xipc+mznj0f92hzvnHXW7Jz3iau+q4AYPj+pzb6t72vLrW
-        vFHJi1N2KrEUZyQaajEXFScCAKFVjIhvAwAA
-X-CMS-MailID: 20220816111824eucas1p2719a48c792ba5676c89378c9090a83c7
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220812111948eucas1p2bf97e7f4558eb024f419346367a87b45
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220812111948eucas1p2bf97e7f4558eb024f419346367a87b45
-References: <20220801233403.258871-1-f.fainelli@gmail.com>
-        <CGME20220812111948eucas1p2bf97e7f4558eb024f419346367a87b45@eucas1p2.samsung.com>
-        <27016cc0-f228-748b-ea03-800dda4e5f0c@samsung.com>
-        <8c21e530-8e8f-ce2a-239e-9d3a354996cf@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fa45d1bc-75f4-498c-43f3-08da7f796013
+x-ms-traffictypediagnostic: AM6PR04MB6517:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: AZ9eVd3e0OHiNOQjzY0Ig1hDDi6/E0BoHSsQTVvTMm+XCmclTHIm5SJfgLt5glkulw8n7fyVS0OrUs1ccc9k+ITDzEgx042wZxYFE8KL42ZpgjKB2jhnxJBS/6pH+nOCuh/FtGr/RLof8vBwod2D844IdVsQhKaEOIYTVYYIjQfMZFCtrxM6ZeO59tfziQnGEMLa364fBRq2mtN0nkPd0dd3ztPgqNt1a8gVULuqxWqkw84g9As1S3AykDtpF32mSoLw2Lkvhfe5a1asDcDjY9WqxQSCUXhZQ2f+/OjkmaSaC1uO7q4/eS9d+vFPFea7lwDp/F3ir1SWxCLTnP2M8XjvwxIbDaJx2ckaytNhHIaTMqM3RXRlr2ottJVQez4stoWl2Wx3ghK9+K1JsLwUjPwXXJ09RBVBTApku2kHTugbyB4neZcnW5HuqPJNrj5a4vphcre8E4krLHnVRDDedZeHsIZz3rz4hu8EUokdzlWL6wATsi+BfLJIIHxYhhuy3j8dZbKHPMA2+aAfGWRT9CPxPIZR6AXrIeZOIwPNBULR7KejiO+ZO3HkZqYem0r2eukMowaz2bmpiL/tMnmFA8/EqmigTBcbFikXp5sLlMTlpXiV0TDum0lLSgF0oTESaS7FyiEpi7wVZGdHglygoF/xjzLa8Gjx1NV0GmHod140bvH60Iqf6uuS2I2o3pswqTJT4GaFelQBq2+r9TpPPLftmajn3npxFefxfqDZa/hINlWUJ/ZFyJHgvh1BQ7YONR+s27WxljuUQhw6E7WfWkHcjgLXCRBEHb8ZfU9McKuRIDqQ1jS/7Upa7bflJOb8cYrdiRqIiW9Vt0StZAjJ2YNgBsIWPHHBmgOIwAyiQcv2YGiN7u0KzQgeBO8vFSka1ICPoFN92uJs1UQIKElLCg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6743.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(136003)(396003)(346002)(366004)(4326008)(45080400002)(54906003)(8676002)(966005)(6486002)(5660300002)(41300700001)(186003)(44832011)(2906002)(6506007)(36756003)(26005)(6512007)(2616005)(6916009)(38070700005)(83380400001)(76116006)(71200400001)(91956017)(66446008)(8936002)(316002)(66476007)(66946007)(86362001)(66556008)(478600001)(38100700002)(64756008)(122000001)(99106002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-15?Q?VY8YLuESmcW8ddzqz4YkagK014TaXTKcgAf5OPZjAdraWDUwJXT4S/x6r?=
+ =?iso-8859-15?Q?vtcrkv8314v86WSDnmB+PYApM034LE8jKe8zeeVG2PqBiaUyn+0fzJPQA?=
+ =?iso-8859-15?Q?kyLm1qQB3cx4m9mxVMiMuAis8f7FD1Xn95cYHGG5d8B0sCOqytb6QDH6y?=
+ =?iso-8859-15?Q?QS49ftKrFhlabLNg772PZNUfbhyQSGLVNgLtxHHN8/sGc/JP1JdgKLGyv?=
+ =?iso-8859-15?Q?yESocqQsFOo9yZORrcjKNN9PVPKj+iIguhf9sIwIkOTnu3KmOr8xTW64S?=
+ =?iso-8859-15?Q?3QULVkJs35L9dLvYK2578ntU79I10u4KWynJc2f5heE9sO4/Tl9oM+yq3?=
+ =?iso-8859-15?Q?MPQuTAWajszYTk5weMhQLwD8vMT4RnG+kg8nGGGglkOy2anbYhbnI9TJq?=
+ =?iso-8859-15?Q?neaH4X2LTE5lUxNeU4EoqgOMouu48TdICx6A/t4IioiMexcwUDRB9uJKv?=
+ =?iso-8859-15?Q?cNzqIPXPqbckrxXlBxfMuQxgh/5TyVsZWUMIqikYcFDShISvZvfr5hdEH?=
+ =?iso-8859-15?Q?2cTn48NQSrQqc6eX40QvySFtHb0oUK3ezHgbRqjmkGQQUNHJ7Xl3oWrPg?=
+ =?iso-8859-15?Q?N7WrqndBX4NfO/gVBl/QBKNTV/Z+TBnFcZvaA069GvBjHt9a82gG+bsNz?=
+ =?iso-8859-15?Q?G7Gtfi67T2278ZnmnkkI38wrTX0wCNTvILTRXnr09s8MRMxL54J0yBdpV?=
+ =?iso-8859-15?Q?EcqzCkwulNf45Vt4Rg0FJ2ufjdSSnmWW7INKENUlf3S1bxa+WHcER8f67?=
+ =?iso-8859-15?Q?7KI/XzhnmKXvslj6pl5oBf+/IFQT1opv0uunRGhX8BTg3Umh3KOHGaT/w?=
+ =?iso-8859-15?Q?lZsvgsYqZ9aFVU8ak0C6G77GCnMAMF/+WZXDy4Wl/6kkVXmcCDbTDI7wO?=
+ =?iso-8859-15?Q?IZxKxMe38YCJiAFlyJ0jZQrrQUR8uhWI6Prs95s6bTzrGeXlFrFIgsXkV?=
+ =?iso-8859-15?Q?XBzwbtvI1vmNN/2Cx1QvI/tHLYuaPNNPKt67h69KMrXJ2P69d4j6jAq/I?=
+ =?iso-8859-15?Q?F7Gcg+fDC6dLkNn8tP/wVV0wDKM7me+hp5s2z/bHAjGrXCJL6xF2LLgOL?=
+ =?iso-8859-15?Q?MWIO7CL/hRkIpmiIrxRGf8qQyO73DbGntGRDxKI0uIz9DCIW+PgD9cnbi?=
+ =?iso-8859-15?Q?vNwQ81zed9Uu/+j3QwHcmKtheudaMWIKq5DSqsiBCE+F+Pdca2udBnnnf?=
+ =?iso-8859-15?Q?TErB7VUk2XOZGfAvGNcfsidOoUlu9Dv0GPny/QE1nrhb/GiPhvNauv7yZ?=
+ =?iso-8859-15?Q?N3S6MwAro8HktT1dJOeIcwIpT/H7K+7UKC3d6wH7D2dalKVrvS2Gpxz4I?=
+ =?iso-8859-15?Q?Pe+i4gY9tOxzX8QZvpokkZfWAD8X3heFcB8Vngc6KLwrpH0STep++Hx56?=
+ =?iso-8859-15?Q?/hcurGcRZv+PUmew2CN7H3HrU6GqZXW4/WTHZdI2LJzJLHfgX/2du6aP2?=
+ =?iso-8859-15?Q?qWHijihuaVI8kJ0YgO0reCwBMWcNHLhq7sLf93zc5m+HxP78MNmYqJdDY?=
+ =?iso-8859-15?Q?5WPraTTsqXwZIztt99+CzbGwFCPi1hAmHf1bLmOrpWXV+W8pDWjPSyWs/?=
+ =?iso-8859-15?Q?vpXMubSAck34v7hgtGu9vIOuOBfw2jGRHVkKy1kENDD5ecFNjhzUEzv9Y?=
+ =?iso-8859-15?Q?JYhFlVK0eAkN4Bcuo/5RqmsUdwY13+yH+amgI/M/09YiqaHL01cc7L0yr?=
+ =?iso-8859-15?Q?JypI?=
+Content-Type: text/plain; charset="iso-8859-15"
+Content-ID: <735FFE6E4F11EF4BAD83CA414469C0D3@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6743.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fa45d1bc-75f4-498c-43f3-08da7f796013
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Aug 2022 11:20:50.5835
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Lry1cBm68VfE46vpR5J7sI3h57cQANr+llcgfSEDrFsh8fV59XuWGrYj2g6Vx9vEpCT6NsLDnUIvDfR+Z/jVqg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB6517
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Brian,
 
-On 12.08.2022 18:32, Florian Fainelli wrote:
-> On 8/12/22 04:19, Marek Szyprowski wrote:
->> Hi All,
->>
->> On 02.08.2022 01:34, Florian Fainelli wrote:
->>> Calling mdio_bus_phy_resume() with neither the PHY state machine set to
->>> PHY_HALTED nor phydev->mac_managed_pm set to true is a good indication
->>> that we can produce a race condition looking like this:
->>>
->>> CPU0                        CPU1
->>> bcmgenet_resume
->>>    -> phy_resume
->>>      -> phy_init_hw
->>>    -> phy_start
->>>      -> phy_resume
->>> phy_start_aneg()
->>> mdio_bus_phy_resume
->>>    -> phy_resume
->>>       -> phy_write(..., BMCR_RESET)
->>>        -> usleep()                                  -> phy_read()
->>>
->>> with the phy_resume() function triggering a PHY behavior that might 
->>> have
->>> to be worked around with (see bf8bfc4336f7 ("net: phy: broadcom: Fix
->>> brcm_fet_config_init()") for instance) that ultimately leads to an 
->>> error
->>> reading from the PHY.
->>>
->>> Fixes: fba863b81604 ("net: phy: make PHY PM ops a no-op if MAC 
->>> driver manages PHY PM")
->>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->>
->> This patch, as probably intended, triggers a warning during system
->> suspend/resume cycle in the SMSC911x driver. I've observed it on ARM
->> Juno R1 board on the kernel compiled from next-202208010:
->>
->>    ------------[ cut here ]------------
->>    WARNING: CPU: 1 PID: 398 at drivers/net/phy/phy_device.c:323
->> mdio_bus_phy_resume+0x34/0xc8
->>    Modules linked in: smsc911x cpufreq_powersave cpufreq_conservative
->> crct10dif_ce ip_tables x_tables ipv6 [last unloaded: smsc911x]
->>    CPU: 1 PID: 398 Comm: rtcwake Not tainted 5.19.0+ #940
->>    Hardware name: ARM Juno development board (r1) (DT)
->>    pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->>    pc : mdio_bus_phy_resume+0x34/0xc8
->>    lr : dpm_run_callback+0x74/0x350
->>    ...
->>    Call trace:
->>     mdio_bus_phy_resume+0x34/0xc8
->>     dpm_run_callback+0x74/0x350
->>     device_resume+0xb8/0x258
->>     dpm_resume+0x120/0x4a8
->>     dpm_resume_end+0x14/0x28
->>     suspend_devices_and_enter+0x164/0xa60
->>     pm_suspend+0x25c/0x3a8
->>     state_store+0x84/0x108
->>     kobj_attr_store+0x14/0x28
->>     sysfs_kf_write+0x60/0x70
->>     kernfs_fop_write_iter+0x124/0x1a8
->>     new_sync_write+0xd0/0x190
->>     vfs_write+0x208/0x478
->>     ksys_write+0x64/0xf0
->>     __arm64_sys_write+0x14/0x20
->>     invoke_syscall+0x40/0xf8
->>     el0_svc_common.constprop.3+0x8c/0x120
->>     do_el0_svc+0x28/0xc8
->>     el0_svc+0x48/0xd0
->>     el0t_64_sync_handler+0x94/0xb8
->>     el0t_64_sync+0x15c/0x160
->>    irq event stamp: 24406
->>    hardirqs last  enabled at (24405): [<ffff8000090c4734>]
->> _raw_spin_unlock_irqrestore+0x8c/0x90
->>    hardirqs last disabled at (24406): [<ffff8000090b3164>] 
->> el1_dbg+0x24/0x88
->>    softirqs last  enabled at (24144): [<ffff800008010488>] 
->> _stext+0x488/0x5cc
->>    softirqs last disabled at (24139): [<ffff80000809bf98>]
->> irq_exit_rcu+0x168/0x1a8
->>    ---[ end trace 0000000000000000 ]---
->>
->> I hope the above information will help fixing the driver.
->
-> Yes this is catching an actual issue in the driver in that the PHY 
-> state machine is still running while the system is trying to suspend. 
-> We could go about fixing it in a different number of ways, though I 
-> believe this one is probably correct enough to work and fix the warning:
 
-Right, this fixes the warning (after fixing the minor compile issue, see 
-below).
+On ven., 2022-08-12 at 17:39 +0100, Brian Starkey wrote:
+> Caution: EXT Email
+>=20
+> Hi,
+>=20
+> On Mon, Aug 08, 2022 at 02:39:53PM +0000, Olivier Masse wrote:
+> > Hi Brian,
+> >=20
+> > On ven., 2022-08-05 at 16:41 +0100, Brian Starkey wrote:
+> > > Caution: EXT Email
+> > >=20
+> > > Hi Olivier,
+> > >=20
+> > > Thanks, I think this is looking much better.
+> > >=20
+> > > I'd like to know how others feel about landing this heap; there's
+> > > been
+> > > push-back in the past about heaps in device-tree and discussions
+> > > around how "custom" heaps should be treated (though IMO this is
+> > > quite
+> > > a generic one).
+> > >=20
+> > > On Fri, Aug 05, 2022 at 03:53:28PM +0200, Olivier Masse wrote:
+> > > > add Linaro secure heap bindings: linaro,secure-heap
+> > > > use genalloc to allocate/free buffer from buffer pool.
+> > > > buffer pool info is from dts.
+> > > > use sg_table instore the allocated memory info, the length of
+> > > > sg_table is 1.
+> > > > implement secure_heap_buf_ops to implement buffer share in
+> > > > difference device:
+> > > > 1. Userspace passes this fd to all drivers it wants this buffer
+> > > > to share with: First the filedescriptor is converted to a
+> > > > &dma_buf
+> > > > using
+> > > > dma_buf_get(). Then the buffer is attached to the device using
+> > > > dma_buf_attach().
+> > > > 2. Once the buffer is attached to all devices userspace can
+> > > > initiate DMA
+> > > > access to the shared buffer. In the kernel this is done by
+> > > > calling
+> > > > dma_buf_map_attachment()
+> > > > 3. get sg_table with dma_buf_map_attachment in difference
+> > > > device.
+> > > >=20
+> > >=20
+> > > I think this commit message could use a little rework. A few
+> > > thoughts:
+> > >=20
+> > > * The bindings are in a separate commit, so seems strange to
+> > > mention
+> > >   here.
+> >=20
+> > what about:
+> > "add Linaro secure heap compatible reserved memory: linaro,secure-
+> > heap"
+> >=20
+>=20
+> I'd say something like:
+>=20
+> Add a dma-buf heap to allocate secure buffers from a reserved-memory
+> region.
+>=20
+> ..snip
 
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+ok right.
 
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+>=20
+> > > > +
+> > > > +static struct sg_table *secure_heap_map_dma_buf(struct
+> > > > dma_buf_attachment *attachment,
+> > > > +                                             enum
+> > > > dma_data_direction direction)
+> > > > +{
+> > > > +     struct secure_heap_attachment *a =3D attachment->priv;
+> > > > +
+> > > > +     return a->table;
+> > >=20
+> > > I think you still need to implement mapping and unmapping using
+> > > the
+> > > DMA APIs. For example devices might be behind IOMMUs and the
+> > > buffer
+> > > will need mapping into the IOMMU.
+> >=20
+> > Devices that will need access to the buffer must be in secure.
+> > The tee driver will only need the scatter-list table to get dma
+> > address
+> > and len. Mapping will be done in the TEE.
+> > Please find tee_shm_register_fd in the following commit
+> >=20
+https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgithub.=
+com%2Flinaro-swg%2Flinux%2Fcommit%2F41e21e5c405530590dc2dd10b2a8dbe64589840=
+f&amp;data=3D05%7C01%7Colivier.masse%40nxp.com%7C6b3d47f1e15c41a8cf7108da7c=
+813ef6%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C1%7C637959191795668899%7CUn=
+known%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJ=
+XVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3DOKZhaNevD5dj7Wjm6zbZlij0mPA9XYyio1N=
+AN3VjTVM%3D&amp;reserved=3D0
+> >=20
+> > This patch need to be up-streamed as well.
+> >=20
+>=20
+> Interesting, that's not how the devices I've worked on operated.
+>=20
+> Are you saying that you have to have a display controller driver
+> running in the TEE to display one of these buffers?
 
->
-> diff --git a/drivers/net/ethernet/smsc/smsc911x.c 
-> b/drivers/net/ethernet/smsc/smsc911x.c
-> index 3bf20211cceb..e9c0668a4dc0 100644
-> --- a/drivers/net/ethernet/smsc/smsc911x.c
-> +++ b/drivers/net/ethernet/smsc/smsc911x.c
-> @@ -1037,6 +1037,8 @@ static int smsc911x_mii_probe(struct net_device 
-> *dev)
->                 return ret;
->         }
->
-> +       /* Indicate that the MAC is responsible for managing PHY PM */
-> +       phydev->mac_managed_pm = true;
->         phy_attached_info(phydev);
->
->         phy_set_max_speed(phydev, SPEED_100);
-> @@ -2587,6 +2589,8 @@ static int smsc911x_suspend(struct device *dev)
->         if (netif_running(ndev)) {
->                 netif_stop_queue(ndev);
->                 netif_device_detach(ndev);
-> +               if (!device_may_wakeup(dev))
-> +                       phy_suspend(dev->phydev);
-                         phy_suspend(ndev->phydev);
-> }
->
->         /* enable wake on LAN, energy detection and the external PME
-> @@ -2628,6 +2632,8 @@ static int smsc911x_resume(struct device *dev)
->         if (netif_running(ndev)) {
->                 netif_device_attach(ndev);
->                 netif_start_queue(ndev);
-> +               if (!device_may_wakeup(dev))
-> +                       phy_resume(dev->phydev);
-                         phy_resume(ndev->phydev);
-> }
->
->         return 0;
->
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+In fact the display controller is managing 3 plans : UI, PiP and
+video. The video plan is protected in secure as you can see on slide
+11:
+https://static.linaro.org/connect/san19/presentations/san19-107.pdf
 
+The DCSS (display controller) is able to read from the protected secure
+heap and composition result is send directly to the HDMI/HDCP port.
+
+
+>  If everything
+> needs to be in the TEE, then why even have these buffers allocated
+> by non-secure Linux at all?
+
+The TEE is only doing decryption using the HW Crypto Accelerator
+(CAAM).
+The CAAM will read from a non protected encrypted buffer to write clear
+content to a secure buffer allocated with DMABUF and mapped in secure
+by OPTEE OS.
+
+>=20
+> I would have expected there to be HW enforcement of buffer access,
+> but for the display driver to be in non-secure Linux. That's how
+> TZMP1 works:=20
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fstati=
+c.linaro.org%2Fconnect%2Fhkg18%2Fpresentations%2Fhkg18-408.pdf&amp;data=3D0=
+5%7C01%7Colivier.masse%40nxp.com%7C6b3d47f1e15c41a8cf7108da7c813ef6%7C686ea=
+1d3bc2b4c6fa92cd99c5c301635%7C0%7C1%7C637959191795668899%7CUnknown%7CTWFpbG=
+Zsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C=
+3000%7C%7C%7C&amp;sdata=3DXVpI93dXYu%2BGswLE8dcYboq%2FAWzSJn9j9LMlngpr238%3=
+D&amp;reserved=3D0
+>=20
+> Looking at this SDP presentation, that also seems to be the case
+> there:=20
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fstati=
+c.linaro.org%2Fconnect%2Fsan19%2Fpresentations%2Fsan19-107.pdf&amp;data=3D0=
+5%7C01%7Colivier.masse%40nxp.com%7C6b3d47f1e15c41a8cf7108da7c813ef6%7C686ea=
+1d3bc2b4c6fa92cd99c5c301635%7C0%7C1%7C637959191795668899%7CUnknown%7CTWFpbG=
+Zsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C=
+3000%7C%7C%7C&amp;sdata=3D5Ec61NC1f0UQU%2F3BEURZQhEBrZ%2FuvJ1vaoSN4ChMn%2Bw=
+%3D&amp;reserved=3D0
+>=20
+
+Indeed, TZMP1 is similar to our implementation.
+
+> Based on those presentations, I think this heap should be
+> implementing
+> map_dma_buf in the "normal" way, using the DMA API to map the buffer
+> to the device. It's up to the TEE and HW firewall to prevent access
+> to those mappings from non-secure devices.
+
+In fact, our devices (VPU and DCSS) do not need any mapping, but only
+the physical address of buffers which need to be contiguous.
+The VPU decoder, run by the CPU, read video meta data from a non
+protected buffer and send physical memory address of encoded buffer to
+the VPU HW.
+As well, the DCSS get physical address of contiguous decoded video
+buffer to do the composition.
+
+>=20
+> My understanding is:
+>=20
+> * The memory region should never be mapped or accessed from the host
+>   CPU. This is not a security requirement - the CPU will be denied
+>   access by whatever hardware is enforcing security - but any CPU
+>   accesses will fail, so there is no point in ever having a CPU
+>   mapping.
+
+agree with that.
+
+> * The allocated buffers _should_ be mapped to devices via
+> map_dma_buf.
+>   Again the HW enforcement will prevent access from devices which
+>   aren't permitted access, but for example a display controller
+>   may be allowed to read the secure buffer, composite it with other
+>   buffers, and display it on the screen.
+
+yes, in could be done for a more generic implementation.
+
+>=20
+> Am I wrong? Even if SDP doesn't work this way, I think we should make
+> the heap as generic as possible so that it can work with different
+> secure video implementations.
+>=20
+> >=20
+> > >=20
+>=20
+> .. snip
+
+alright, I get your point
+
+>=20
+> > > > +
+> > > > +RESERVEDMEM_OF_DECLARE(secure_heap, "linaro,secure-heap",
+> > > > rmem_secure_heap_setup);
+> > >=20
+> > > Is there anything linaro-specific about this? Could it be
+> > > linux,secure-heap?
+> >=20
+> > for now, it's specific to Linaro OPTEE OS.
+> > but in a more generic way, it could be
+> > linux,unmapped-heap ?
+>=20
+> If these buffers can never be mapped, not to the CPU nor to devices,
+> then actually I don't see why it should be a dma-buf heap at all.
+>=20
+> If this is just an interface to associate some identifier (in this
+> case an fd) with a region of physical address space, then why is it
+> useful to pretend that it's a dma-buf, if none of the dma-buf
+> operations actually do anything?
+
+in our previous implementation, we were using unmapped ION buffer to be
+able to send an opaque fd to the TEE driver which could then be mapped
+in secure by OPTEE.
+Transitioning from ION to DMABUF heaps, our retaining option was to
+create a new heap type.
+
+
+Best regards,
+Olivier
+
+>=20
+> Cheers,
+> -Brian
+>=20
+> >=20
+> > >=20
+> > > Thanks,
+> > > -Brian
+> > >=20
+> > > > +
+> > > > +module_init(secure_heap_create);
+> > > > +MODULE_LICENSE("GPL v2");
+> > > > --
+> > > > 2.25.0
+> > > >=20

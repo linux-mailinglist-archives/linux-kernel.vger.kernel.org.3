@@ -2,89 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4410E596527
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3D3596535
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237415AbiHPWJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 18:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42634 "EHLO
+        id S237484AbiHPWKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 18:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237848AbiHPWIz (ORCPT
+        with ESMTP id S237850AbiHPWKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 18:08:55 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925CC4BA55
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 15:08:49 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id s31-20020a17090a2f2200b001faaf9d92easo134065pjd.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 15:08:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=Xy5yxh/I32wlGw5oKAxZXq3yjkNZl4S3110U7/IRHRY=;
-        b=kL9Tid3TvpH+rvEDopq2GJcBPo8qrV7hNo7JG77jrEcvwdGudFYB8+z1TZ81V1TX+j
-         RODXvkYxbAiaWw8s1uwBvSsXfTp4X7kzSkmYtCjZHtVDmJfcKC0RNN/4lZ88tZOxKmfE
-         oWapAVbTPGJ1OtVcFq22cy3xJY/jSQwqNgWLU352COjHBqm50FT7EKABMiRG6ndRMrsB
-         0i4Q+MM5uI7UA2KasjwFXn4qyULzsKEcECxU1BC3kCUP+do8KYF1xh2hs5XjBhTieIrg
-         7+119ejQNEfntNvQxGYWqYDNA9whMwQUPAKyoeo99zWcBZMZZTnSqPJsclEAnjf1JELe
-         /QEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=Xy5yxh/I32wlGw5oKAxZXq3yjkNZl4S3110U7/IRHRY=;
-        b=cffmr7IfxR0WzYRi6KfN1ylJuQ6g0fTabYguyyst7SwR10qWTu07BgRCuVof5UGEUX
-         mK99FlvEYbqp2h7iOfJMpCWKO9+wXq/6DcAjhGrAmgkduvILQFFvF1k5mIwc8BAviIgh
-         bgW3njXgAWfdFybPNRjNjEHuZqbKB/3JFQk5R3kaRZ5Aw3A2LxN73uA2MkusLLOA9DZx
-         jMR4nQi+j3NrUUhxZ6tukPz/ZJsNTqr8WEmKB1szWBiLJUq9ixO7IuBWdVKUpEDMowsM
-         0kZWFaoK85dhlALYjw1OGCLejvhpuRrsc586jbWit8wX35OZgOyEHZfOczR5YbS4mHWx
-         qawQ==
-X-Gm-Message-State: ACgBeo3/SjGhTlMrR2sQ86n2FKwi3CkI0azVu54Q5x7kBV/1zLZbJwXW
-        1eHmQbWE86nY57zVE28zjAIFiHX3tf4=
-X-Google-Smtp-Source: AA6agR5oJ2beRfAmE3GdnMupoip3Pb+4B+NTLasW6h8cXAAHKVCZBAJTbMdE7bJJmeql+qxvPLCp2w==
-X-Received: by 2002:a17:902:d2c8:b0:16e:ea4e:36e0 with SMTP id n8-20020a170902d2c800b0016eea4e36e0mr23994315plc.37.1660687727814;
-        Tue, 16 Aug 2022 15:08:47 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:7229])
-        by smtp.gmail.com with ESMTPSA id fh23-20020a17090b035700b001fab11cbc5esm29469pjb.43.2022.08.16.15.08.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 15:08:46 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 16 Aug 2022 12:08:45 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>
-Subject: Re: [RFC PATCH 7/8] workqueue: Remove the outer loop in
- maybe_create_worker()
-Message-ID: <YvwVbWfoV/bkFb6e@slm.duckdns.org>
-References: <20220804084135.92425-1-jiangshanlai@gmail.com>
- <20220804084135.92425-8-jiangshanlai@gmail.com>
+        Tue, 16 Aug 2022 18:10:02 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF258671A;
+        Tue, 16 Aug 2022 15:10:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1660687764; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=ELwQ/7/+HoV4zxcNv7CHt2Rj8JZBshtx3il1WX1Ei7Gp4pq8lZBjpEnc4jzgtJbQ0H3vPEskap1qBnrr8u1NZ3vwqT7dOT/6nNQ5OuQpcLo6bFut/rUrrgNLWgRd7KNhuo7dmDn2DafD84YiXvypKUpsc3TRc4WFf5C/q5S0hOQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1660687764; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=AhxeiWwAa0F3Ttv9kr0cvGflhoCH/1XjPY7zFl37TcQ=; 
+        b=aHcWpdk4rMypwt2IASMrIIe4kX9LFFwnvhqNA/5LngB9Fn2M0btkGBXWqJ8A2FYVcwL3SgUYPqU48Rx3d8Qv+qs0wUzr2oOJl6T1YOgA3CUTXInu9tNo00Ij59/F3kdKdCAqOOdHbO8BqjKz4g17DVL1e6U14GimY06yeH8VSYU=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1660687764;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=AhxeiWwAa0F3Ttv9kr0cvGflhoCH/1XjPY7zFl37TcQ=;
+        b=j3TicWQ8jpFSqaUr7Yxg4uVFxHP5YUa679t4Hrfn3m4AMwvzXOhTuK01vg5dn9V7
+        lLaXW5j79jUkfKPtIhCP6LRIoApQj/mQ/95BC2bPjDva7qw1omBd46n4fQ8o7pmuttW
+        vxOi0Dyw/YcGj073NBzu6G0LP7it0nmF0+VKruAM=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1660687763403186.45955867302928; Tue, 16 Aug 2022 15:09:23 -0700 (PDT)
+Message-ID: <03852e07-9aee-8e0a-3a96-21a1f4f3bfe3@arinc9.com>
+Date:   Wed, 17 Aug 2022 01:09:16 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220804084135.92425-8-jiangshanlai@gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 6/7] dt-bindings: net: dsa: mediatek,mt7530: define
+ phy-mode for each compatible
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220813154415.349091-1-arinc.unal@arinc9.com>
+ <20220813154415.349091-7-arinc.unal@arinc9.com>
+ <20220816212135.GA2747439-robh@kernel.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20220816212135.GA2747439-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 04:41:34PM +0800, Lai Jiangshan wrote:
-> worker_thread() always does the recheck after getting the manager role,
-> so the recheck in the maybe_create_worker() is unneeded and is removed.
+On 17.08.2022 00:21, Rob Herring wrote:
+> On Sat, Aug 13, 2022 at 06:44:14PM +0300, Arınç ÜNAL wrote:
+>> Define acceptable phy-mode values for CPU port of each compatible device.
+>> Remove relevant information from the description of the binding.
+> 
+> I'm not really sure this is worth the complexity just to check
+> 'phy-mode'...
 
-So, before if multiple workers need to be created, a single manager would
-create them all. After, we'd end up daisy chaining, right? One manager
-creates one worker and goes to process one work item. The new worker wakes
-up and becomes the manager and creates another worker and so on. That
-doesn't seem like a desirable behavior.
+I can describe it on the binding description but it won't be checked on 
+DT bindings. phy-mode values are significantly different between mt7530 
+and mt7531 so I think it's useful to have it.
 
-Thanks.
+> 
+>>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
+>>   .../bindings/net/dsa/mediatek,mt7530.yaml     | 103 ++++++++++++++++--
+>>   1 file changed, 92 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> index a27cb4fa490f..530ef5a75a2f 100644
+>> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> @@ -49,17 +49,6 @@ description: |
+>>     * mt7621: phy-mode = "rgmii-txid";
+>>     * mt7623: phy-mode = "rgmii";
+>>   
+>> -  CPU-Ports need a phy-mode property:
+>> -    Allowed values on mt7530 and mt7621:
+>> -      - "rgmii"
+>> -      - "trgmii"
+>> -    On mt7531:
+>> -      - "1000base-x"
+>> -      - "2500base-x"
+>> -      - "rgmii"
+>> -      - "sgmii"
+>> -
+>> -
+>>   properties:
+>>     compatible:
+>>       oneOf:
+>> @@ -177,6 +166,36 @@ allOf:
+>>                           items:
+>>                             - const: cpu
+>>                     then:
+>> +                    allOf:
+>> +                      - if:
+>> +                          properties:
+>> +                            reg:
+>> +                              const: 5
+>> +                        then:
+>> +                          properties:
+>> +                            phy-mode:
+>> +                              enum:
+>> +                                - gmii
+>> +                                - mii
+>> +                                - rgmii
+>> +
+>> +                      - if:
+>> +                          properties:
+>> +                            reg:
+>> +                              const: 6
+>> +                        then:
+> 
+> You've restricted this to ports 5 or 6 already, so you just need an
+> 'else' here. And you can then drop the 'allOf'.
 
--- 
-tejun
+Good thinking, will do.
+
+> 
+>> +                          properties:
+>> +                            phy-mode:
+>> +                              enum:
+>> +                                - rgmii
+>> +                                - trgmii
+>> +
+>> +                    properties:
+>> +                      reg:
+>> +                        enum:
+>> +                          - 5
+>> +                          - 6
+>> +
+>>                       required:
+>>                         - phy-mode
+>>   
+>> @@ -206,6 +225,38 @@ allOf:
+>>                           items:
+>>                             - const: cpu
+>>                     then:
+>> +                    allOf:
+>> +                      - if:
+>> +                          properties:
+>> +                            reg:
+>> +                              const: 5
+>> +                        then:
+>> +                          properties:
+>> +                            phy-mode:
+>> +                              enum:
+>> +                                - 1000base-x
+>> +                                - 2500base-x
+>> +                                - rgmii
+>> +                                - sgmii
+>> +
+>> +                      - if:
+>> +                          properties:
+>> +                            reg:
+>> +                              const: 6
+>> +                        then:
+>> +                          properties:
+>> +                            phy-mode:
+>> +                              enum:
+>> +                                - 1000base-x
+>> +                                - 2500base-x
+>> +                                - sgmii
+>> +
+>> +                    properties:
+>> +                      reg:
+>> +                        enum:
+>> +                          - 5
+>> +                          - 6
+>> +
+>>                       required:
+>>                         - phy-mode
+>>   
+>> @@ -235,6 +286,36 @@ allOf:
+>>                           items:
+>>                             - const: cpu
+>>                     then:
+>> +                    allOf:
+>> +                      - if:
+>> +                          properties:
+>> +                            reg:
+>> +                              const: 5
+>> +                        then:
+>> +                          properties:
+>> +                            phy-mode:
+>> +                              enum:
+>> +                                - gmii
+>> +                                - mii
+>> +                                - rgmii
+>> +
+>> +                      - if:
+>> +                          properties:
+>> +                            reg:
+>> +                              const: 6
+>> +                        then:
+>> +                          properties:
+>> +                            phy-mode:
+>> +                              enum:
+>> +                                - rgmii
+>> +                                - trgmii
+>> +
+>> +                    properties:
+>> +                      reg:
+>> +                        enum:
+>> +                          - 5
+>> +                          - 6
+>> +
+> 
+> Looks like the same schema duplicated. You can put it under a '$defs'
+> and reference it twice.
+
+Great!
+
+> 
+>>                       required:
+>>                         - phy-mode
+>>   
+>> -- 
+>> 2.34.1
+>>
+>>

@@ -2,65 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B1A5957D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:16:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ADF65957D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232225AbiHPKQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
+        id S233866AbiHPKQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbiHPKO7 (ORCPT
+        with ESMTP id S234482AbiHPKP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:14:59 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181FF5A2C4;
-        Tue, 16 Aug 2022 01:01:49 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 8E23941A42;
-        Tue, 16 Aug 2022 08:01:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1660636907; bh=hdO0VK1BgxthiOSTlr+e1eaO5dfWp+h7FMXRza4Hsq4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=DaLeUy6iahjaMjN9JrVNc57ZozIWEObhc79ETbuWH6F4g2xflaB0R2I9U12Ei7s5z
-         c2ZH7+UHYhXpQJr/ul4lQrS49JpL1YF7DD9LwwdH4J5nC8ZbMlz2YlPqtjkybNBjIs
-         NsSOqPqMrknOup3Ju2HGcGoQYJ2pptLHhZNC0aP439quZj3TRIADaHsix5DBPMXU53
-         ELmGSpq3U830ZMod7U3u/QdZK09aGS4ZGkyip3lnTzJPuVW6UtzLV26E3hyR39MfK1
-         RBnjaozfwBmzm+dzR+FXJ11o1uU1z/E9CG2t1asjvQoCksdVzIj+wetB8Lw79d7aAV
-         eol3iUbS6rPYQ==
-Message-ID: <0c0ba856-a4ba-7133-e751-3a81c82311a9@marcan.st>
-Date:   Tue, 16 Aug 2022 17:01:39 +0900
+        Tue, 16 Aug 2022 06:15:28 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204FFC8769;
+        Tue, 16 Aug 2022 01:02:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UAD+grFnjI9uAdJ1lqhJq8c5aRgDgFp1jWwEAfLYx08=; b=RbSMU36jpIPB1+vgUGgLo+IV+U
+        jgbksXnJtZe3CNEEJBVyLU0HJ0j0+1EDSRJyGvsURo/tdcrSQVkmgtEyd72tDcrnxVZHK3/xBsJnp
+        AMtahZ4MRibWoizJWoakO7y72Ye300qV70TLR972VaAra/HK43dJO9ohKb3SM/YRM2hTbd099AxK7
+        zYTk4ZOFpqRz8NJPjCIQw3fiXkiG0K8hnjwCawWPhmM4MhG1C3yYk9L/HYCho8v3sS9VGiofBPYDz
+        +HHeAUWGGQf08Oo6e3qJ6auN+JJMjxIuUlE4o8YcGeGVal416KseT3v/PSA9vI8CbEuvh2Nmt5j1Z
+        i7nigeAw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oNrWs-002tnu-Lt; Tue, 16 Aug 2022 08:02:27 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1164B980264; Tue, 16 Aug 2022 10:02:25 +0200 (CEST)
+Date:   Tue, 16 Aug 2022 10:02:24 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: Simplify load_unaligned_zeropad() (was Re: [GIT PULL] Ceph
+ updates for 5.20-rc1)
+Message-ID: <YvtPEA/9GV7GthZJ@worktop.programming.kicks-ass.net>
+References: <CAHk-=wh1xHi-WeytuAK1-iSsR0wi=6e4-WgFq6ZPt8Z1mvqoNA@mail.gmail.com>
+ <Yvny9L3tw1EolqQ4@worktop.programming.kicks-ass.net>
+ <CAHk-=whnEN3Apb5gRXSZK7BM+MOby9VCZe3sDcW34Zme_wk3uA@mail.gmail.com>
+ <Yvqn8BqE7FdB6Ccd@worktop.programming.kicks-ass.net>
+ <CAHk-=wj6QaNkoNPA0jrW8F_=RNNb1jCsFF2QngNEQb_C=wMDPQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [PATCH] workqueue: Fix memory ordering race in queue_work*()
-Content-Language: en-US
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Will Deacon <will@kernel.org>, Tejun Heo <tj@kernel.org>,
-        peterz@infradead.org, jirislaby@kernel.org, maz@kernel.org,
-        mark.rutland@arm.com, boqun.feng@gmail.com,
-        catalin.marinas@arm.com, oneukum@suse.com,
-        roman.penyaev@profitbricks.com, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <YvqaK3hxix9AaQBO@slm.duckdns.org>
- <YvsZ6vObgLaDeSZk@gondor.apana.org.au>
- <CAHk-=wgSNiT5qJX53RHtWECsUiFq6d6VWYNAvu71ViOEan07yw@mail.gmail.com>
- <cd51b422-89f3-1856-5d3b-d6e5b0029085@marcan.st>
- <CAHk-=wjfLT7nL8pV8RWATpjgm0zDtUwT8UMtroqnGcXRjN8tgw@mail.gmail.com>
- <24c88c4f-aea5-1fb7-0ead-95c88629d72b@marcan.st>
- <YvtLsNZEUUytdx+i@gondor.apana.org.au>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <YvtLsNZEUUytdx+i@gondor.apana.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wj6QaNkoNPA0jrW8F_=RNNb1jCsFF2QngNEQb_C=wMDPQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,34 +63,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/08/16 16:48, Herbert Xu wrote:
-> On Tue, Aug 16, 2022 at 03:28:50PM +0900, Hector Martin wrote:
->>
->> This is the same reason I argued queue_work() itself needs to have a
->> similar guarantee, even when it doesn't queue work (and I updated the
->> doc to match). If test_and_set_bit() is used in this kind of context
->> often in the kernel, clearly the current implementation/doc clashes with
->> that.
+On Mon, Aug 15, 2022 at 03:49:44PM -0700, Linus Torvalds wrote:
+> On Mon, Aug 15, 2022 at 1:09 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > I'm not at all suggesting we do this; but it might be
+> > insn_get_addr_ref() does what is needed.
 > 
-> Kernel code all over the place rely on the fact that test_and_set_bit
-> provides a memory barrier.  So this bug that you've discovered is
-> not at all isolated to the workqeueue system.  It'll break the kernel
-> in lots of places in exactly the same way.
+> .. you didn't suggest it at all, but I started doing it anyway.
 
-Now I'm surprised this isn't failing all over the place, given that...
-these things are annoyingly subtle.
+> So since I was tricked into writing this patch, and it's even tested
+> (the second attachment has a truly stupid patch with my test-case), I
+> think it's worth doing.
 
-Still would want Will & Peter to chime in, of course.
+Haha, couldn't help yourself eh ;-)
 
->> As I said, I don't have any particular beef in this fight, but this is
->> horribly broken on M1/2 right now, so I'll send a patch to change the
->> bitops instead and you all can fight it out over which way is correct :)
-> 
-> Please do.
+> Comments? I left your "Acked-by" from the previous version of this
+> thing, so holler now if you think this got too ugly in the meantime..
 
-Already did, but I just realized I forgot to Cc you. Sorry about that,
-hope you can pick it up through the MLs:
+That's quite allright, a few nits below, but overall I like it. And yes
+it's a bit over the top, but it's important to have fun..
 
-https://lore.kernel.org/asahi/20220816070311.89186-1-marcan@marcan.st/T/#u
+> diff --git a/arch/x86/include/asm/extable_fixup_types.h b/arch/x86/include/asm/extable_fixup_types.h
+> index 503622627400..b53f1919710b 100644
+> --- a/arch/x86/include/asm/extable_fixup_types.h
+> +++ b/arch/x86/include/asm/extable_fixup_types.h
+> @@ -64,4 +64,6 @@
+>  #define	EX_TYPE_UCOPY_LEN4		(EX_TYPE_UCOPY_LEN | EX_DATA_IMM(4))
+>  #define	EX_TYPE_UCOPY_LEN8		(EX_TYPE_UCOPY_LEN | EX_DATA_IMM(8))
+>  
+> +#define EX_TYPE_ZEROPAD			20 /* load ax from dx zero-padded */
 
-- Hector
+This comment is now woefully incorrect.
+
+> +
+>  #endif
+> diff --git a/arch/x86/include/asm/word-at-a-time.h b/arch/x86/include/asm/word-at-a-time.h
+> index 8338b0432b50..46b4f1f7f354 100644
+> --- a/arch/x86/include/asm/word-at-a-time.h
+> +++ b/arch/x86/include/asm/word-at-a-time.h
+> @@ -77,58 +77,18 @@ static inline unsigned long find_zero(unsigned long mask)
+>   * and the next page not being mapped, take the exception and
+>   * return zeroes in the non-existing part.
+>   */
+>  static inline unsigned long load_unaligned_zeropad(const void *addr)
+>  {
+>  	unsigned long ret;
+>  
+> +	asm volatile(
+>  		"1:	mov %[mem], %[ret]\n"
+>  		"2:\n"
+> +		_ASM_EXTABLE_TYPE(1b, 2b, EX_TYPE_ZEROPAD)
+> +		: [ret] "=r" (ret)
+>  		: [mem] "m" (*(unsigned long *)addr));
+
+That looks delightfully simple :-)
+
+>  
+>  	return ret;
+>  }
+>  
+>  #endif /* _ASM_WORD_AT_A_TIME_H */
+> diff --git a/arch/x86/mm/extable.c b/arch/x86/mm/extable.c
+> index 331310c29349..60814e110a54 100644
+> --- a/arch/x86/mm/extable.c
+> +++ b/arch/x86/mm/extable.c
+> @@ -41,6 +41,59 @@ static bool ex_handler_default(const struct exception_table_entry *e,
+>  	return true;
+>  }
+>  
+> +/*
+> + * This is the *very* rare case where we do a "load_unaligned_zeropad()"
+> + * and it's a page crosser into a non-existent page.
+> + *
+> + * This happens when we optimistically load a pathname a word-at-a-time
+> + * and the name is less than the full word and the  next page is not
+> + * mapped. Typically that only happens for CONFIG_DEBUG_PAGEALLOC.
+> + *
+> + * NOTE! The faulting address is always a 'mov mem,reg' type instruction
+> + * of size 'long', and the exception fixup must always point to right
+> + * after the instruction.
+> + */
+> +static bool ex_handler_zeropad(const struct exception_table_entry *e,
+> +			       struct pt_regs *regs,
+> +			       unsigned long fault_addr)
+> +{
+> +	struct insn insn;
+> +	const unsigned long mask = sizeof(long) - 1;
+> +	unsigned long offset, addr, next_ip, len;
+> +	unsigned long *reg;
+> +
+> +	next_ip = ex_fixup_addr(e);
+> +	len = next_ip - regs->ip;
+> +	if (len > MAX_INSN_SIZE)
+> +		return false;
+> +
+> +	if (insn_decode(&insn, (void *) regs->ip, len, INSN_MODE_KERN))
+> +		return false;
+
+We have insn_decode_kernel() for exactly this (very) common case.
+
+	if (insn_decode_kernel(&insn, (void *)regs->ip))
+		return false;
+
+> +	if (insn.length != len)
+> +		return false;
+> +
+> +	if (insn.opcode.bytes[0] != 0x8b)
+> +		return false;
+
+I was wondering if we want something like MOV_INSN_OPCODE for 0x8b to
+enhance readability, otoh it's currently 0x8b all over the place, so
+whatever. At some point you gotta have the insn tables with you anyway.
+
+> +	if (insn.opnd_bytes != sizeof(long))
+> +		return false;
+> +
+> +	addr = (unsigned long) insn_get_addr_ref(&insn, regs);
+> +	if (addr == ~0ul)
+> +		return false;
+> +
+> +	offset = addr & mask;
+> +	addr = addr & ~mask;
+> +	if (fault_addr != addr + sizeof(long))
+> +		return false;
+> +
+> +	reg = insn_get_modrm_reg_ptr(&insn, regs);
+> +	if (!reg)
+> +		return false;
+> +
+> +	*reg = *(unsigned long *)addr >> (offset * 8);
+> +	return ex_handler_default(e, regs);
+> +}
+
+Yep, that all looks about right.
+
+> +
+>  static bool ex_handler_fault(const struct exception_table_entry *fixup,
+>  			     struct pt_regs *regs, int trapnr)
+>  {
+> @@ -217,6 +270,8 @@ int fixup_exception(struct pt_regs *regs, int trapnr, unsigned long error_code,
+>  		return ex_handler_sgx(e, regs, trapnr);
+>  	case EX_TYPE_UCOPY_LEN:
+>  		return ex_handler_ucopy_len(e, regs, trapnr, reg, imm);
+> +	case EX_TYPE_ZEROPAD:
+> +		return ex_handler_zeropad(e, regs, fault_addr);
+>  	}
+>  	BUG();
+>  }

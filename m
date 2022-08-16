@@ -2,136 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A3E595D38
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1DF595D3B
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235795AbiHPNZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
+        id S235801AbiHPN03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235784AbiHPNZo (ORCPT
+        with ESMTP id S235797AbiHPN00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 09:25:44 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8D787685
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:25:43 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id c187-20020a1c35c4000000b003a30d88fe8eso9378320wma.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:25:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=PblUwHy5mn8FwoYRh4mjjYaylnUC4/ptH+gU2jHD3ZM=;
-        b=l06UJXi0GNQdmRGdCUouJQq/FWDXBbfTCzhaus9QvtDx01UP858Q1+rGbktzjvwXpJ
-         ffQ4cEhYksF3XAnRfqn5txyB0dlnHYRcN1dQM95b4oVfArVtIQceqS1eCxvPWLcpnEKu
-         m5tCP5KDWFQdflTOYL98sUNWU/EwBrstDBNqK0HXsZajGxJ+I+pG+uSvMXpOYRgzSskh
-         42fD/Uzd9f+UFk4reJA1oE4Jh8EzDuBvlnLtimQ5XxtZIU1wgWnkU79NWRe4wpBoGTie
-         10NUOTlzc1i4YFHT+1k9SHZeITsWceJR+7ha/oGCmIVurnPinnNfqAAI3j5AYjc3TJb2
-         TuNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=PblUwHy5mn8FwoYRh4mjjYaylnUC4/ptH+gU2jHD3ZM=;
-        b=ImElbmKYkthhzWAW6VLMFE9Vcdw+HygOjYs6h8rmKXRvsEq4S+4sT1gONsMn79XSZ7
-         PI4Kg7E3OfhlMTDar5u2Lghl8SdXpPK+xutOhu1keZlsF71S4/k+YcDLkBNCFdeakL/l
-         Motl9/Sd9WgKqDx0OPaaFdpjfHixcIz2w/9/ayLxgVog26DahnPtRMPV6ZsLD65yLEl4
-         PQutgJ6wbcpEXWxzoyfy89MHcLbT931nsT8ghxcL+x276++89lXSynY1OtxxMONQGnBG
-         r0lyDfLZtOBMxYCY9UvjoS8QipKnru8UAn8LHOH0Es3chxLqU0vCUBZOcGLe7kn6S2MQ
-         4ZBA==
-X-Gm-Message-State: ACgBeo3cGs4B0p/a25ouZLEbDTeKHJDWLfZmwgj26epTJwmuEhUaApsg
-        fGuLPCwPaH2XWZhIl++lw6dkMHEDf3Ymyk8vdGRpVQ==
-X-Google-Smtp-Source: AA6agR7gqSpC9S713yep8IGPS4LS21XT520fYnxOl41VWm6yamI7CxxP4jp6z4g8Z7fIRcQZ7kofpdY5mpw+oIazdy8=
-X-Received: by 2002:a05:600c:25ce:b0:3a5:a3b7:bbfe with SMTP id
- 14-20020a05600c25ce00b003a5a3b7bbfemr20298781wml.115.1660656341549; Tue, 16
- Aug 2022 06:25:41 -0700 (PDT)
+        Tue, 16 Aug 2022 09:26:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F02F876AA
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:26:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660656384;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zxJ1v8+cjZ+tYJe90RAlV6rz4Psbcq8JkXLwBn2PQcI=;
+        b=OV7V+A/xyxVPzRSZU9luhC2ajrvt8zQLXqiT/V934Z0kTxVpleA57qOcEtV8KLLOsu07F6
+        N0B3XP2gKbgdT8gPfeq64EY21XyvCKdFdYhjJghxLP3LsJeq4xr7nPtBP5BHQR71dELlLP
+        FhgcnUoNxQEqFll2Y8ZXOYyI4oplc14=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-373-JOp7kY0TNAutV_QSqaFoVA-1; Tue, 16 Aug 2022 09:26:21 -0400
+X-MC-Unique: JOp7kY0TNAutV_QSqaFoVA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F123B2999B28;
+        Tue, 16 Aug 2022 13:26:20 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4263E492C3B;
+        Tue, 16 Aug 2022 13:26:20 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH net v2] net: Fix suspicious RCU usage in
+ bpf_sk_reuseport_detach()
+From:   David Howells <dhowells@redhat.com>
+To:     yin31149@gmail.com
+Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        dhowells@redhat.com, linux-kernel@vger.kernel.org
+Date:   Tue, 16 Aug 2022 14:26:19 +0100
+Message-ID: <166065637961.4008018.10420960640773607710.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-References: <cecae74c-6bb2-d7da-bce3-35772b6e3f8c@intel.com>
- <CAP-5=fXJtRVKuPA_xpa=jBzq66y5JMv+jmr1GFNzh-zQ-7j5QA@mail.gmail.com>
- <CAM9d7cgWXP2s25XUM90=b5Eaojutxi=LobkqrUkRoF5gek4DPQ@mail.gmail.com> <edd637d1-e85c-bc18-a8a2-8aa63d02146f@intel.com>
-In-Reply-To: <edd637d1-e85c-bc18-a8a2-8aa63d02146f@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 16 Aug 2022 06:25:28 -0700
-Message-ID: <CAP-5=fWRNO+dmrnq_3a-L6Vdfd2i3oEB8y2+7F2ik7Lc35s5Pg@mail.gmail.com>
-Subject: Re: perf tools man pages on the web
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 11:05 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> On 16/08/22 08:07, Namhyung Kim wrote:
-> > Hi Ian and Adrian,
-> >
-> > On Mon, Aug 15, 2022 at 7:56 AM Ian Rogers <irogers@google.com> wrote:
-> >>
-> >> On Mon, Aug 15, 2022 at 5:05 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >>>
-> >>> Hi
-> >>>
-> >>> I notice man pages on man7.org e.g.
-> >>>
-> >>>         https://www.man7.org/linux/man-pages/man1/perf.1.html
-> >>>
-> >>> do not get updated every release, and I wondered if the perf tools
-> >>> man pages should also be under:
-> >>>
-> >>>         https://docs.kernel.org/tools/index.html
-> >>>
-> >>> Thoughts?
-> >>
-> >> Sounds good to me. I'm assuming it would be some kind of build step
-> >> that would take the man pages and add them to what linux-doc needs?
-> >
-> > I guess it's the RST format.  I'm not sure if there's a converter
-> > from asciidoc to RST.
->
-> Could use the html files that are already generated by:
->
->         make -C perf/tools html
+bpf_sk_reuseport_detach() calls __rcu_dereference_sk_user_data_with_flags()
+to obtain the value of sk->sk_user_data, but that function is only usable
+if the RCU read lock is held, and neither that function nor any of its
+callers hold it.
 
-A lot of the man page makefile code comes from git and wasn't in great
-shape the last I looked [1]. I believe that would be true for the HTML
-output. As there are existing dependencies on rst2man for BPF [2], I
-think it'd be cleaner to migrate all the man pages to rst format with
-new man page build rules using rst2man. Wdyt?
+Fix this by adding a new helper,
+__rcu_dereference_sk_user_data_with_flags_check() that checks to see if
+sk->sk_callback_lock() is held and use that here instead.
 
-Thanks,
-Ian
+__rcu_dereference_sk_user_data_with_flags() then calls that, supplying false
+as condition indicating only the RCU read lock should be checked.
 
-[1] https://lore.kernel.org/all/20210715013343.2286699-1-irogers@google.com/
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/include/uapi/linux/bpf.h#n1538
+Without this, the following warning can be occasionally observed:
 
-> >                        Anyway having the perf man pages in the
-> > tools section looks good.
-> >
-> >>
-> >> Fwiw, there has been some effort to try to improve the wiki:
-> >> https://perf.wiki.kernel.org/index.php/Main_Page
-> >> For example, the useful links are now broken apart and have more
-> >> links, there is a work-in-progress glossary. Perhaps there can be some
-> >> guidance on what to capture and where.
-> >
-> > Thanks for working on this.  I really need to take a look...
-> >
-> > Thanks,
-> > Namhyung
->
+=============================
+WARNING: suspicious RCU usage
+6.0.0-rc1-build2+ #563 Not tainted
+-----------------------------
+include/net/sock.h:592 suspicious rcu_dereference_check() usage!
+
+other info that might help us debug this:
+
+rcu_scheduler_active = 2, debug_locks = 1
+5 locks held by locktest/29873:
+ #0: ffff88812734b550 (&sb->s_type->i_mutex_key#9){+.+.}-{3:3}, at: __sock_release+0x77/0x121
+ #1: ffff88812f5621b0 (sk_lock-AF_INET){+.+.}-{0:0}, at: tcp_close+0x1c/0x70
+ #2: ffff88810312f5c8 (&h->lhash2[i].lock){+.+.}-{2:2}, at: inet_unhash+0x76/0x1c0
+ #3: ffffffff83768bb8 (reuseport_lock){+...}-{2:2}, at: reuseport_detach_sock+0x18/0xdd
+ #4: ffff88812f562438 (clock-AF_INET){++..}-{2:2}, at: bpf_sk_reuseport_detach+0x24/0xa4
+
+stack backtrace:
+CPU: 1 PID: 29873 Comm: locktest Not tainted 6.0.0-rc1-build2+ #563
+Hardware name: ASUS All Series/H97-PLUS, BIOS 2306 10/09/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x4c/0x5f
+ bpf_sk_reuseport_detach+0x6d/0xa4
+ reuseport_detach_sock+0x75/0xdd
+ inet_unhash+0xa5/0x1c0
+ tcp_set_state+0x169/0x20f
+ ? lockdep_sock_is_held+0x3a/0x3a
+ ? __lock_release.isra.0+0x13e/0x220
+ ? reacquire_held_locks+0x1bb/0x1bb
+ ? hlock_class+0x31/0x96
+ ? mark_lock+0x9e/0x1af
+ __tcp_close+0x50/0x4b6
+ tcp_close+0x28/0x70
+ inet_release+0x8e/0xa7
+ __sock_release+0x95/0x121
+ sock_close+0x14/0x17
+ __fput+0x20f/0x36a
+ task_work_run+0xa3/0xcc
+ exit_to_user_mode_prepare+0x9c/0x14d
+ syscall_exit_to_user_mode+0x18/0x44
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Changes
+=======
+ver #2)
+ - Changed to suggestion from Hawkins Jiawei to have a ..._check() function
+   and make the original a special case of that.
+
+Fixes: cf8c1e967224 ("net: refactor bpf_sk_reuseport_detach()")
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Hawkins Jiawei <yin31149@gmail.com>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: netdev@vger.kernel.org
+Link: https://lore.kernel.org/r/166064248071.3502205.10036394558814861778.stgit@warthog.procyon.org.uk # v1
+---
+
+ include/net/sock.h           |   18 ++++++++++++++----
+ kernel/bpf/reuseport_array.c |    3 ++-
+ 2 files changed, 16 insertions(+), 5 deletions(-)
+
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 05a1bbdf5805..6464da28e842 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -578,18 +578,22 @@ static inline bool sk_user_data_is_nocopy(const struct sock *sk)
+ #define __sk_user_data(sk) ((*((void __rcu **)&(sk)->sk_user_data)))
+ 
+ /**
+- * __rcu_dereference_sk_user_data_with_flags - return the pointer
++ * __rcu_dereference_sk_user_data_with_flags_check - return the pointer
+  * only if argument flags all has been set in sk_user_data. Otherwise
+  * return NULL
+  *
+  * @sk: socket
+  * @flags: flag bits
++ * @condition: Condition under which non-RCU access may take place
++ *
++ * The caller must be holding the RCU read lock 
+  */
+ static inline void *
+-__rcu_dereference_sk_user_data_with_flags(const struct sock *sk,
+-					  uintptr_t flags)
++__rcu_dereference_sk_user_data_with_flags_check(const struct sock *sk,
++						uintptr_t flags, bool condition)
+ {
+-	uintptr_t sk_user_data = (uintptr_t)rcu_dereference(__sk_user_data(sk));
++	uintptr_t sk_user_data =
++		(uintptr_t)rcu_dereference_check(__sk_user_data(sk), condition);
+ 
+ 	WARN_ON_ONCE(flags & SK_USER_DATA_PTRMASK);
+ 
+@@ -598,6 +602,12 @@ __rcu_dereference_sk_user_data_with_flags(const struct sock *sk,
+ 	return NULL;
+ }
+ 
++static inline void *
++__rcu_dereference_sk_user_data_with_flags(const struct sock *sk, uintptr_t flags)
++{
++	return __rcu_dereference_sk_user_data_with_flags_check(sk, flags, false);
++}
++
+ #define rcu_dereference_sk_user_data(sk)				\
+ 	__rcu_dereference_sk_user_data_with_flags(sk, 0)
+ #define __rcu_assign_sk_user_data_with_flags(sk, ptr, flags)		\
+diff --git a/kernel/bpf/reuseport_array.c b/kernel/bpf/reuseport_array.c
+index 85fa9dbfa8bf..856c360a591d 100644
+--- a/kernel/bpf/reuseport_array.c
++++ b/kernel/bpf/reuseport_array.c
+@@ -24,7 +24,8 @@ void bpf_sk_reuseport_detach(struct sock *sk)
+ 	struct sock __rcu **socks;
+ 
+ 	write_lock_bh(&sk->sk_callback_lock);
+-	socks = __rcu_dereference_sk_user_data_with_flags(sk, SK_USER_DATA_BPF);
++	socks = __rcu_dereference_sk_user_data_with_flags_check(
++		sk, SK_USER_DATA_BPF, lockdep_is_held(&sk->sk_callback_lock));
+ 	if (socks) {
+ 		WRITE_ONCE(sk->sk_user_data, NULL);
+ 		/*
+
+

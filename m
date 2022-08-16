@@ -2,51 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 505D6595A0F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 183E4595A1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233896AbiHPL03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 07:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
+        id S233873AbiHPL2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 07:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231234AbiHPLZt (ORCPT
+        with ESMTP id S234125AbiHPL2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 07:25:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2366FDAA31;
-        Tue, 16 Aug 2022 03:40:55 -0700 (PDT)
+        Tue, 16 Aug 2022 07:28:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADAA2CDF7;
+        Tue, 16 Aug 2022 03:43:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4187B60FD8;
-        Tue, 16 Aug 2022 10:40:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35338C433C1;
-        Tue, 16 Aug 2022 10:40:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660646453;
-        bh=gSjVtTMHmcCP+F+et6XLqR45DdAYSPHlIjBiEp42ecI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Trfn+xNeaMhBVprN8l/8VMDwytSHq5zftykSUZpB6TRpC0mn86ATen1rnJOWQ2Cou
-         6wZz15kUEz4AvoSspVJ7y9x1md6yb/jNvGAFYztfx3cjG3BdZgio6qC07tguaEh0cp
-         q3auma6NXE5b6m/r+8YaKxEYLng55jtfEbnhf9uU=
-Date:   Tue, 16 Aug 2022 12:40:50 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.19 0191/1157] hwmon: (sht15) Fix wrong assumptions in
- device remove callback
-Message-ID: <Yvt0Ms9ur2aSj2Zz@kroah.com>
-References: <20220815180439.416659447@linuxfoundation.org>
- <20220815180447.391756473@linuxfoundation.org>
- <20220815214911.wy7p5sqbog6r6tcg@pengutronix.de>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 03D99B8165D;
+        Tue, 16 Aug 2022 10:43:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86EA3C433C1;
+        Tue, 16 Aug 2022 10:43:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660646614;
+        bh=yqe/EMQmD3VLnGHghypui0+k7E1d1JAMjbBdNpJp/Ac=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=WmDtk6Cf5S1czeeVK0DAKEntmyWn/ucxbgRUOJ7EvCnJ+hlnMmXKs7d2LzLusOWjG
+         P9BZUnyFCygTSaBGyI+/ZMRsimDcw4lKZrmIl00p7YDKYDDZRS07+VkGYYjkDQNVZE
+         /NHOq/5udUF8/K0YgcGNQGgSV+Ea36YQkWf7qRPhQgneFDWP9m6nB5Vly8RrTfkWTj
+         Gx54EcrUu0WWbaHKs8uubbJDflr8MXwUMFtLvri3hNPrkYfanr9K/Ae48SXOeGfelg
+         0y7pVw8dF2stIh5VXYLv1fnS+4FQo+ZvQ2DKZC+sGfyc7TYLSt7uY6amkS3OtqU5wE
+         xT3sWq5r6idFg==
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 0ED1D55F5FC; Tue, 16 Aug 2022 12:43:32 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Florian Westphal <fw@strlen.de>
+Cc:     Daniel Xu <dxu@dxuuu.xyz>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        netfilter-devel <netfilter-devel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 2/3] bpf: Add support for writing to nf_conn:mark
+In-Reply-To: <CAADnVQLB1SQoYAYEzU_VuJ=q3azeyhBiK-NkU5OZC7rrumi0xQ@mail.gmail.com>
+References: <CAADnVQLB1SQoYAYEzU_VuJ=q3azeyhBiK-NkU5OZC7rrumi0xQ@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Tue, 16 Aug 2022 12:43:32 +0200
+Message-ID: <87v8qswjsb.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220815214911.wy7p5sqbog6r6tcg@pengutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,44 +65,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 11:49:11PM +0200, Uwe Kleine-König wrote:
-> Hello,
-> 
-> On Mon, Aug 15, 2022 at 07:52:27PM +0200, Greg Kroah-Hartman wrote:
-> > From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> > 
-> > [ Upstream commit 7d4edccc9bbfe1dcdff641343f7b0c6763fbe774 ]
-> > 
-> > Taking a lock at the beginning of .remove() doesn't prevent new readers.
-> > With the existing approach it can happen, that a read occurs just when
-> > the lock was taken blocking the reader until the lock is released at the
-> > end of the remove callback which then accessed *data that is already
-> > freed then.
-> > 
-> > To actually fix this problem the hwmon core needs some adaption. Until
-> > this is implemented take the optimistic approach of assuming that all
-> > readers are gone after hwmon_device_unregister() and
-> > sysfs_remove_group() as most other drivers do. (And once the core
-> > implements that, taking the lock would deadlock.)
-> > 
-> > So drop the lock, move the reset to after device unregistration to keep
-> > the device in a workable state until it's deregistered. Also add a error
-> > message in case the reset fails and return 0 anyhow. (Returning an error
-> > code, doesn't stop the platform device unregistration and only results
-> > in a little helpful error message before the devm cleanup handlers are
-> > called.)
-> > 
-> > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> > Link: https://lore.kernel.org/r/20220725194344.150098-1-u.kleine-koenig@pengutronix.de
-> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> > Signed-off-by: Sasha Levin <sashal@kernel.org>
-> 
-> Does this mean my concerns I expressed in the mail with Message-Id:
-> 20220814155638.idxnihylofsxqlql@pengutronix.de were not taken into
-> consideration?
+Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 
-I can't find that message-id on lore.kernel.org, do you have a link?
+> On Mon, Aug 15, 2022 at 3:40 PM Florian Westphal <fw@strlen.de> wrote:
+>>
+>> Toke H=C3=B8iland-J=C3=B8rgensen <toke@kernel.org> wrote:
+>> > > Support direct writes to nf_conn:mark from TC and XDP prog types. Th=
+is
+>> > > is useful when applications want to store per-connection metadata. T=
+his
+>> > > is also particularly useful for applications that run both bpf and
+>> > > iptables/nftables because the latter can trivially access this metad=
+ata.
+>> > >
+>> > > One example use case would be if a bpf prog is responsible for advan=
+ced
+>> > > packet classification and iptables/nftables is later used for routing
+>> > > due to pre-existing/legacy code.
+>> > >
+>> > > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+>> >
+>> > Didn't we agree the last time around that all field access should be
+>> > using helper kfuncs instead of allowing direct writes to struct nf_con=
+n?
+>>
+>> I don't see why ct->mark needs special handling.
+>>
+>> It might be possible we need to change accesses on nf/tc side to use
+>> READ/WRITE_ONCE though.
+>
+> +1
+> I don't think we need to have a hard rule.
+> If fields is safe to access directly than it's faster
+> to let bpf prog read/write it.
+> There are no backward compat concerns. If conntrack side decides
+> to make that field special we can disallow direct writes in
+> the same kernel version.
 
-thanks,
+Right, I was under the impression we wanted all fields to be wrapper by
+helpers so that the struct owner could change their semantics without
+affecting users (and solve the performance issue by figuring out a
+generic way to inline those helpers). I guess there could also be an API
+consistency argument for doing this.
 
-greg k-h
+However, I don't have a strong opinion on this, so if y'all prefer
+keeping these as direct field writes, that's OK with me.
+
+> These accesses, just like kfuncs, are unstable.
+
+Well, it will be interesting to see how that plays out the first time
+an application relying on one of these breaks on a kernel upgrade :)
+
+-Toke

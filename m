@@ -2,208 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71873596603
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 01:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8098159660B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 01:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237416AbiHPXb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 19:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58746 "EHLO
+        id S237456AbiHPXeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 19:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233550AbiHPXbZ (ORCPT
+        with ESMTP id S229453AbiHPXeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 19:31:25 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B600690835
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 16:31:23 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27GN0LQU032471;
-        Tue, 16 Aug 2022 23:31:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=mBf8Dyf/X+j0+eIdzzOK6gbl93SgyY1qJl2fnc9sa5Q=;
- b=VTg2ANAag66FPU2O5sg4JnvfQtd7hhhMk3OgJlUaIs86t2uQwaK/okI1kvOSkPpqxUKx
- 7ddrMg4SxcNvdrOyLL7KlOa+B35I7zYX92G2FmEKwbYOGHqbzAxu/9m0ePkyhqIMWxnv
- fIEhZYKKcwPbL6Czl4SN3wjHQy9W9Yjz7O2pnmV8AJGTQZw7F5LlqgPVaZXjd+bJPcws
- akku8azxt0vNcOLLPDeG3EGl+Wi0am3des4z/RxYn8RAPdrpSz1emBQ6msy9fYMI16Pq
- UUAvKBJ4HMtFFhXw0NmzvehdYl4tC50aKEFPYZ6i4ri6tz4U0V4EVuQWicUpdpDn/rb4 7Q== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hx3js7j9k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Aug 2022 23:31:14 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27GKg8Qs004258;
-        Tue, 16 Aug 2022 23:31:14 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2107.outbound.protection.outlook.com [104.47.58.107])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3j0c478sua-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Aug 2022 23:31:14 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NpeIyswse52sJkFuwtGRWnL1JOGkHURDB5nw+EnyZ1NVs6oNPIVf4WXJWV1XF1+HWOxxZHrMGi8J4RJXoIMgJZjE64nT16B9a9XUDhLJVUWICtKYfWTXSLXcbeXHh8qIHEx46gA+3KjOS3rQPTD5IOm20XxAItqO4D9oAkTf5MasN8j1s+hG0p5VkHPzGZFeKsMiE9ronWOqeSBYNnmSOZ0X8MvEGYq2sVoQQjz9lOepa/z0HnhQyh0jGIHRHsOAyNKEoSL4BQtBQETw8I43oGNwrpfb5T6WnI9hNTrvP6COOAp/+sQDUK7Us3QA0/DhMp6VwOeHHc1PdXg5IqQ/GQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mBf8Dyf/X+j0+eIdzzOK6gbl93SgyY1qJl2fnc9sa5Q=;
- b=nSKvTL2o7nAV8ct0g9Y4SthIiOLHWX6XBdH2+Gk7rLhic8ku6OMFFPzE3IpqC6XblbLSbY8bMZun6DikWkQCZp2BJ1LDIKiqy8nbKYHBobKAie9C4uV5fU9iPauP3MJTYaL/WvAyAP07eGQYFDE9NqB8A7NbayJx+wyA8X358tRK0uC1Aefh7koQ22z7O/ioFcn9AaIRu2hNaZHgSX2k7J6i4b5PLd2lBiZRAspif71HYqkqS2hfcAtR7mDy0hi0BdMD9JXUVzftyCoS4PW8QAHoEV+gXHvBzrXCmQRF7ywx8Tcx/7FUipUPeRoLMqSM7LGnpZtAfxVVenDCYXWVcw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mBf8Dyf/X+j0+eIdzzOK6gbl93SgyY1qJl2fnc9sa5Q=;
- b=Qro/8B2zCfvOqbLIrm7kQk2gMLJfl5mMk3cUnhIEqsjh1deoaTZ4qmj+qGxxIf3EmdsPCQ5opwbs+CIoqHhp0TOXMHJSEEZWKiDlmX6NlEs453NqVgdo2z01ah5zU0wy04jXFi606gphspwWOoPfP8hiSYtQE2qc5Vn+Zl5gg4Q=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by DM6PR10MB2426.namprd10.prod.outlook.com (2603:10b6:5:b4::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Tue, 16 Aug
- 2022 23:31:11 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::c1ba:c197:f81f:ec0]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::c1ba:c197:f81f:ec0%5]) with mapi id 15.20.5504.028; Tue, 16 Aug 2022
- 23:31:11 +0000
-Date:   Tue, 16 Aug 2022 16:31:08 -0700
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/6] mm/hugetlb: fix missing call to
- restore_reserve_on_error()
-Message-ID: <YvwovBboCJBOJ1Wm@monkey>
-References: <20220816130553.31406-1-linmiaohe@huawei.com>
- <20220816130553.31406-4-linmiaohe@huawei.com>
+        Tue, 16 Aug 2022 19:34:00 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A763D78BE9;
+        Tue, 16 Aug 2022 16:33:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E1EE9CE19CE;
+        Tue, 16 Aug 2022 23:33:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5FD7C433C1;
+        Tue, 16 Aug 2022 23:33:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660692835;
+        bh=oHzxZ2EXfa2N1hFTn43a/QgE9SopWYv6Cd4+leuEYRg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o9qFEuFVeegSnvU0Kvq9CFkPHsYrA4P6hMPMTCHqQIESjRPM99synG9A/qIvETkFZ
+         NBUNcZKy1/F8xj3Xr6MolYbPw8uG+KcydXV+VocYT81K0hX3nMnScO9KCJXEIIyv8D
+         JW7QvMBjLbWeaZkMySOKikLB9yKX/8NvxcCnSNnpR+18VEnMJueaP9UThDocsa2MK8
+         gkWZ8VYRxMnVlyb2OtqiCNSHf2543p3+2NVftTVLQAaZSG5FolNDNp+ebIhCf0kgTI
+         PaDmI6o9wj5HV/BoKjwQlatbE9Qah7samXi9RtFjbdU/mQEWiIR4USMGvblwYjZPem
+         fluOqV3owe94w==
+Date:   Wed, 17 Aug 2022 02:33:51 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-sgx@vger.kernel.org, Vijay Dhanraj <vijay.dhanraj@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] selftests/sgx: Add SGX selftest
+ augment_via_eaccept_long
+Message-ID: <YvwpX7pYOW3Jv+vJ@kernel.org>
+References: <20220815233900.11225-1-jarkko@kernel.org>
+ <20220815233900.11225-2-jarkko@kernel.org>
+ <6b304bb4-01cc-c88a-7299-19217a7a692b@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220816130553.31406-4-linmiaohe@huawei.com>
-X-ClientProxiedBy: MW4PR02CA0012.namprd02.prod.outlook.com
- (2603:10b6:303:16d::35) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: be6cea6e-4677-494f-19c8-08da7fdf6719
-X-MS-TrafficTypeDiagnostic: DM6PR10MB2426:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9dDkebZLJiK60bnKq06y0jHl9RkDWGPu/U8dpq/diP+1749XLMoOZmvDbaCwa2vFZ8DNr9pAWF62uSxQwV7L3SN6Fipx2ah/0JgD4VIp2aYXzvokk+ywzG/krwc8qt7Ps1qXCFdb2AZLD6YiY2Diyspwu/EadTRaz5ei/sekvnTb/vvx6sg1+RBGKIuLKpoZxM8cNh6gSZDs2RfgDhz3re0BDLEiJfL1aOqO5vKVaP1xPOgMWICbHsQOUkyLK+QIR/ZdOBybrER4hn8e3QtLoKfyooGQVkESxPaG6Vkpqlggs6ArF+ImYvjamUmRzZAbQz61D9jxifgFuKojj3gpwhtCmQtrAty/E7hG3c60rinhqIJYDp8tzU5DAI+kBJwgsY8ApB8vULStrcTlcJn9cg/1FC5OvHaf1KOBd/DEMidB3XbzIU4C31lgZTJdrnT4bXodTAqeLlTgyw2kk7lTDDMU08TLZIph6z21Oeh6OBJrN2InURlm6yVajzup3fxUsMKwva96bV3Kx4Heg4OCPLpRawIkEdhV28cCefZ50UgcaYwnQiaZq6PUA51TOCKmEUXCguncLp6MXgdGWvreCijmF/QWaQbCcqn6b9M/XxqjTsQ2SlqtIqxefAZ6JVJ56B2ns69rMo9OYf/sxZIad1FKFyvxB5NrqAJf+8Xaz6aKw0zuS8jSAHHsTrTKmf946gi5u04P9JdfKt0tZNFWnk9GQHb3vauu/lQGblF+OFUROkH99mw8W5PPeDJdj97h
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(376002)(366004)(346002)(136003)(39860400002)(38100700002)(86362001)(66476007)(66946007)(66556008)(4326008)(8676002)(2906002)(6916009)(44832011)(316002)(5660300002)(8936002)(26005)(6512007)(9686003)(53546011)(6506007)(83380400001)(186003)(6666004)(478600001)(33716001)(41300700001)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/YIfm0UPChabL3kfU0dMdwb6RPh52CebSptvK8m4w+obD4t7OywzYvHtuyot?=
- =?us-ascii?Q?q/JQYF0JnuirunY/x3IYd9u4djVkWZNvWzEnHHUHBmcEDxNnepxBmqNxJin3?=
- =?us-ascii?Q?aAHVDApOmRJAPFXnTiXTDpkWjgH6M4a6N1UM60XWlylDx5itIkxqWYUzSQRs?=
- =?us-ascii?Q?+5SavMKcoZcR/3z5CYIx9dyFQm2nJPHuzeFkCqq9/vxwmNboERChcVgBblE9?=
- =?us-ascii?Q?9EOFWR8Oc/u7Rs9W7zu4OvW/ADuV+1Tmg0awPi2t/DbZZ/ErqEZ5fR0oUoqc?=
- =?us-ascii?Q?wHUHgMQUUrfbmkqCBc5LmuUIY/LaCRIuA2mpChXekTd7e2ardxMXqmbQ3nfP?=
- =?us-ascii?Q?CKPqgDt2dZQHcS7eQgLhjTLXMaBP1q3jbZY2c+LGH3hqXm47yE2111ZZy6ot?=
- =?us-ascii?Q?Bt918wA3vKAoLpBZWbkuIG6KlgTQlGg9NTK+MY49fq68oSbap794H2WQdVZs?=
- =?us-ascii?Q?nK9gG5x1rLy3dM9ZIb07GwbM9y+yXdU9aSvkn/QwD75B+Ad+X3O136NhDLj1?=
- =?us-ascii?Q?vErMBcYQB/PNcW5WXRtLReZvmkpsOiA/qphSC5uDy+Z06N3Bacmh1HWHdVjZ?=
- =?us-ascii?Q?aGg2NMZWMK6Ltk4wFjdXlWtMf/wBzH6h2WxoEJdEyYiQrJIm/gO+1v2BR0xW?=
- =?us-ascii?Q?4UcNt3uWlzHG8GWXU8J5dDxCafOCC97K/KE8cgsu8odYoyHsVlpEDDcdANke?=
- =?us-ascii?Q?FQ1hIj83Lnchbk7vvQ4lnbBokvRtky00BfjX/nBskhd9c68aER2pDHbxwv5p?=
- =?us-ascii?Q?bfs6SwhPTLB4BvK4qyBvlUxAnxB8j/HJSJzWAXueBPzHDoyomoLbiZu5tvTG?=
- =?us-ascii?Q?zj0yQlk4SxsV7oQglyCUgv9nokcG5D+PThLO52jYCDUk838v0RN0hy2HLlcD?=
- =?us-ascii?Q?7xuDLqkMySg9mjoddL0bjW+JMf8jHhjhxm9bBTsip1y/fSWvgFTIKmvLEdkT?=
- =?us-ascii?Q?h94Aisb58FJK0GMcY2oqIo5NE94xGoLzpBBQuH/r+XJJaeSxYYVhIUH3GkIC?=
- =?us-ascii?Q?lWQgk8Y0g5os1muBVboHlNM0bq9CRNuOZSSrtWo0UinDOS7MMpry5AnwBob+?=
- =?us-ascii?Q?5fyschHUp4lT4gZyJK5GBJhoH4gYF1BXWSoMjmgrIBPeQtHT8AxdI23VvaU+?=
- =?us-ascii?Q?cNG3aUeGEcDqUdW+IoUyD+JJ5gDUo3KK97wk7y40VFxN0D9Zruh+Zp1Q7VNp?=
- =?us-ascii?Q?xzRcjWnhBZNbBqXDt0CKooeZveP3FTHQeqz6t/xVqNyyzcfd9BMiH9tAqWBk?=
- =?us-ascii?Q?XmOnBZImjJPTCkOfGx/1PFIm6hJrfznEQbBfifudu9mHpS/QKtmgROo675Fc?=
- =?us-ascii?Q?mydF99uC9FIQfDS4C0srntdtyFJXirLfWjko6C7GUwLtOqXQgaIFQpUe3JWR?=
- =?us-ascii?Q?qkkeg1EdnkDhLSU+5eq9R16WpZgK0EYBIyA2eEB5zO4XXwXKlm5Nabu7bqTD?=
- =?us-ascii?Q?WZk1JDr3Deu1BCELixGChwfnjsdWbeR5GRwl2pAW5BMgqxcLcm+BNNXcZRlX?=
- =?us-ascii?Q?RKQGYsODKcJG+ZzygRv1+GraXhIs1l1L0/WMPbm81nrvFse/cfF/fHnJ3G0j?=
- =?us-ascii?Q?AK9ykfA6WK5R0XRSoRcBmXDrVGU1O5XGPoySiNZAQrooJ7/B3YOxT0GFlrQx?=
- =?us-ascii?Q?Fg=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?i2vEF8EA24yJrZqqHWWji7YOPK3kHnvtHIntK3gep16p07WsDx86U6XUt/Kw?=
- =?us-ascii?Q?O+PhqrQFlTCKei+m3gTYpVOn5v74eeUXovpt7yxYCI0mm3MGw1v7s/C9eP7w?=
- =?us-ascii?Q?qTBPp8V3lcWoeHi6hyYoST7zsXCimF6aXch9Mg0O8pkoJ8gV4G0s8HrNn1v9?=
- =?us-ascii?Q?PajJj0q0gXRKlXTO+ReYMFaTzjq+qxXXpb39/j0JWvhKpoFXJKQgCs49hjcr?=
- =?us-ascii?Q?LdnrFzKMxjc/BUn9lKQHkH346p5GzBNyBfCuzCcYOpxXbFKoVAs4X7NpGWxy?=
- =?us-ascii?Q?3wEgo4GKxrAIKLNzO51nFSqQKGaXxz0uUbnGciu3ZLWYi99q1E4hw/ofoVl2?=
- =?us-ascii?Q?n+Q7BFNv6xKdOtbx6qxrPQCCc4w+HzcuvqQrBme0jFkluiA1dxgdJweTujAK?=
- =?us-ascii?Q?QRpRhCbRrOSsZfDnNLp+352qPo0fScO7mA8kGIvBXDEvq6tYVLtAuxhjF9qX?=
- =?us-ascii?Q?LXpb8q0osRXlYrgchiL/rCzUQMoDZhynhH34eu/kMHV9bhN57m1+6DKdwA7H?=
- =?us-ascii?Q?jetMMJcs9lH1qc2GpAE3esluU3AatoCiq7//UJxd0fsFnmKu7TgLqs5/WCDS?=
- =?us-ascii?Q?bdaepODmhfLXLWuZWOHXFKdwYMJBtVNOmqzApYA/BO2OF5tSwHy6zd3sUHVt?=
- =?us-ascii?Q?YtzI6FYPp96Mm+d+ZlPolVnbklure+CnhuGYIUxy8zXfvMX59mZM4h7+GqbH?=
- =?us-ascii?Q?kTZGhDMiRzMvc3yJkrVScAwxtqgdc4UN764MyR7FXmzeRWo0xEwIXg9gLfmd?=
- =?us-ascii?Q?I0J1uLAFpxGl9/rCzddkmrBq62hLKSdlXU+JpKTt27mIukf1Wq5jKJMBfWzx?=
- =?us-ascii?Q?rdS3PmGynLKl09wp9+BlP4J3Y0pgzeQ5MMrSyN2DaAhwQQpnDyiIfRqTRMy0?=
- =?us-ascii?Q?adpboXMvpXbMyLI6lQp0lwozI/sBzLOjadt5Q9YQKmm3IlUZSl4gcuIfHi5F?=
- =?us-ascii?Q?YvHl2GEPC+9fZAnUQgJjYw=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: be6cea6e-4677-494f-19c8-08da7fdf6719
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2022 23:31:11.2510
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BNFtkOZA0GLSeI5HzZnDpMmAOe4tfa/4CRXGpvN6/JPQfUnMEsqc/2JHkPt48CzbHSv7O2pcuXQHKvOEFpDn1A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB2426
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-16_08,2022-08-16_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
- adultscore=0 suspectscore=0 spamscore=0 mlxlogscore=999 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208160084
-X-Proofpoint-GUID: PsLgeyMBJz_DACqHDElzSxoDrJBlchxF
-X-Proofpoint-ORIG-GUID: PsLgeyMBJz_DACqHDElzSxoDrJBlchxF
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <6b304bb4-01cc-c88a-7299-19217a7a692b@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/16/22 21:05, Miaohe Lin wrote:
-> When huge_add_to_page_cache() fails, the page is freed directly without
-> calling restore_reserve_on_error() to restore reserve for newly allocated
-> pages not in page cache. Fix this by calling restore_reserve_on_error()
-> when huge_add_to_page_cache fails.
+On Tue, Aug 16, 2022 at 09:26:40AM -0700, Reinette Chatre wrote:
+> Hi Vijay,
 > 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  mm/hugetlb.c | 1 +
->  1 file changed, 1 insertion(+)
+> Thank you very much for digging into this. A few comments below.
 > 
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index ff991e5bdf1f..b69d7808f457 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -5603,6 +5603,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
->  		if (vma->vm_flags & VM_MAYSHARE) {
->  			int err = huge_add_to_page_cache(page, mapping, idx);
->  			if (err) {
-> +				restore_reserve_on_error(h, vma, haddr, page);
-
-Hmmmm.  I was going to comment that restore_reserve_on_error would not handle
-the situation where 'err == -EEXIST' below.  This is because it implies we
-raced with someone else that added the page to the cache.  And, that other
-allocation, not this one, consumed the reservation.  However, I am not sure
-how that could be possible?  The hugetlb fault mutex (which we hold)
-must be held to add a page to the page cache.
-
-Searching git history I see that code was added (or at least existed) before
-the hugetlb fault mutex was introduced.  So, I believe that check for -EEXIST
-and retry can go.
-
-With that said, restore_reserve_on_error can be called here.  But, let's
-look into removing that err == -EEXIST check to avoid confusion.
--- 
-Mike Kravetz
-
->  				put_page(page);
->  				if (err == -EEXIST)
->  					goto retry;
-> -- 
-> 2.23.0
+> On 8/15/2022 4:39 PM, Jarkko Sakkinen wrote:
+> > From: Vijay Dhanraj <vijay.dhanraj@intel.com>
+> > 
+> > Add a new test case which is same as augment_via_eaccept but adds a
+> > larger number of EPC pages to stress test EAUG via EACCEPT.
+> > 
+> > Signed-off-by: Vijay Dhanraj <vijay.dhanraj@intel.com>
+> > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> > I removed Githubisms (hyphens), added missing subsystem tag, and
+> > cleaned up the commit message a bit.
+> >  tools/testing/selftests/sgx/load.c      |   5 +-
+> >  tools/testing/selftests/sgx/main.c      | 120 +++++++++++++++++++++++-
+> >  tools/testing/selftests/sgx/main.h      |   3 +-
+> >  tools/testing/selftests/sgx/sigstruct.c |   2 +-
+> >  4 files changed, 125 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/sgx/load.c b/tools/testing/selftests/sgx/load.c
+> > index 94bdeac1cf04..7de1b15c90b1 100644
+> > --- a/tools/testing/selftests/sgx/load.c
+> > +++ b/tools/testing/selftests/sgx/load.c
+> > @@ -171,7 +171,8 @@ uint64_t encl_get_entry(struct encl *encl, const char *symbol)
+> >  	return 0;
+> >  }
+> >  
+> > -bool encl_load(const char *path, struct encl *encl, unsigned long heap_size)
+> > +bool encl_load(const char *path, struct encl *encl, unsigned long heap_size,
+> > +			   unsigned long edmm_size)
+> >  {
+> >  	const char device_path[] = "/dev/sgx_enclave";
+> >  	struct encl_segment *seg;
+> > @@ -300,7 +301,7 @@ bool encl_load(const char *path, struct encl *encl, unsigned long heap_size)
+> >  
+> >  	encl->src_size = encl->segment_tbl[j].offset + encl->segment_tbl[j].size;
+> >  
+> > -	for (encl->encl_size = 4096; encl->encl_size < encl->src_size; )
+> > +	for (encl->encl_size = 4096; encl->encl_size < encl->src_size + edmm_size;)
+> >  		encl->encl_size <<= 1;
+> >  
 > 
+> This seems to create the hardcoded 8GB larger enclave for all (SGX1 and SGX2) tests,
+> not just the test introduced with this commit (and the only user of this extra space).
+> Is this intended? This can be done without impacting all the other tests.
+
+It's a valid point. I can adjust the patch.
+
+> 
+> >  	return true;
+> > diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
+> > index 9820b3809c69..65e79682f75e 100644
+> > --- a/tools/testing/selftests/sgx/main.c
+> > +++ b/tools/testing/selftests/sgx/main.c
+> > @@ -25,6 +25,8 @@ static const uint64_t MAGIC = 0x1122334455667788ULL;
+> >  static const uint64_t MAGIC2 = 0x8877665544332211ULL;
+> >  vdso_sgx_enter_enclave_t vdso_sgx_enter_enclave;
+> >  
+> > +static const unsigned long edmm_size = 8589934592; //8G
+> > +
+> 
+> Could you please elaborate how this constant was chosen? I understand that this test helped
+> to uncover a bug and it is useful to add to the kernel. When doing so this test will be
+> run on systems with a variety of SGX memory sizes, could you please elaborate (and add a
+> snippet) how 8GB is the right value for all systems?
+
+It is the only constant I know for sure that some people
+(Vijay and Haitao) have been able to reproduce the bug.
+
+Unless someone can show that the same bug reproduces
+with a smaller constant, changing it would make the
+whole test irrelevant.
+
+> 
+> /on page to be added/on every page to be added/ ?
+> 
+> > + */
+> > +#define TIMEOUT_LONG 900 /* seconds */
+> > +TEST_F_TIMEOUT(enclave, augment_via_eaccept_long, TIMEOUT_LONG)
+> > +{
+> > +	struct encl_op_get_from_addr get_addr_op;
+> > +	struct encl_op_put_to_addr put_addr_op;
+> > +	struct encl_op_eaccept eaccept_op;
+> > +	size_t total_size = 0;
+> > +	void *addr;
+> > +	unsigned long i;
+> 
+> (reverse fir tree order)
+
+I would just change this to "int i" instead.
+
+> 
+> > +
+> > +	if (!sgx2_supported())
+> > +		SKIP(return, "SGX2 not supported");
+> > +
+> > +	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
+> > +
+> > +	memset(&self->run, 0, sizeof(self->run));
+> > +	self->run.tcs = self->encl.encl_base;
+> > +
+> > +	for (i = 0; i < self->encl.nr_segments; i++) {
+> > +		struct encl_segment *seg = &self->encl.segment_tbl[i];
+> > +
+> > +		total_size += seg->size;
+> > +		TH_LOG("test enclave: total_size = %ld, seg->size = %ld", total_size, seg->size);
+> > +	}
+> > +
+> > +	/*
+> > +	 * Actual enclave size is expected to be larger than the loaded
+> > +	 * test enclave since enclave size must be a power of 2 in bytes while
+> > +	 * test_encl does not consume it all.
+> > +	 */
+> > +	EXPECT_LT(total_size + edmm_size, self->encl.encl_size);
+> 
+> Will this test ever fail?
+
+With a *quick* look: no.
+
+Vijay, what was the point of this check?
+
+> > +
+> > +	/*
+> > +	 * mmap() a page at end of existing enclave to be used for dynamic
+> > +	 * EPC page.
+> 
+> copy&paste line still refers to single page
+> 
+> > +	 *
+> > +	 * Kernel will allow new mapping using any permissions if it
+> > +	 * falls into the enclave's address range but not backed
+> > +	 * by existing enclave pages.
+> > +	 */
+> > +	TH_LOG("mmaping pages at end of enclave...");
+> > +	addr = mmap((void *)self->encl.encl_base + total_size, edmm_size,
+> > +			PROT_READ | PROT_WRITE | PROT_EXEC, MAP_SHARED | MAP_FIXED,
+> > +			self->encl.fd, 0);
+> > +	EXPECT_NE(addr, MAP_FAILED);
+> > +
+> > +	self->run.exception_vector = 0;
+> > +	self->run.exception_error_code = 0;
+> > +	self->run.exception_addr = 0;
+> > +
+> > +	/*
+> > +	 * Run EACCEPT on new page to trigger the #PF->EAUG->EACCEPT(again
+> > +	 * without a #PF). All should be transparent to userspace.
+> > +	 */
+> 
+> copy&paste from single page test referring to one page
+> 
+> > +	TH_LOG("Entering enclave to run EACCEPT for each page of %zd bytes may take a while ...",
+> > +			edmm_size);
+> > +	eaccept_op.flags = SGX_SECINFO_R | SGX_SECINFO_W | SGX_SECINFO_REG | SGX_SECINFO_PENDING;
+> > +	eaccept_op.ret = 0;
+> > +	eaccept_op.header.type = ENCL_OP_EACCEPT;
+> > +
+> > +	for (i = 0; i < edmm_size; i += 4096) {
+> > +		eaccept_op.epc_addr = (uint64_t)(addr + i);
+> > +
+> > +		EXPECT_EQ(ENCL_CALL(&eaccept_op, &self->run, true), 0);
+> > +		if (self->run.exception_vector == 14 &&
+> > +			self->run.exception_error_code == 4 &&
+> > +			self->run.exception_addr == self->encl.encl_base) {
+> > +			munmap(addr, edmm_size);
+> > +			SKIP(return, "Kernel does not support adding pages to initialized enclave");
+> > +		}
+> > +
+> > +		EXPECT_EQ(self->run.exception_vector, 0);
+> > +		EXPECT_EQ(self->run.exception_error_code, 0);
+> > +		EXPECT_EQ(self->run.exception_addr, 0);
+> > +		ASSERT_EQ(eaccept_op.ret, 0);
+> > +		ASSERT_EQ(self->run.function, EEXIT);
+> > +	}
+> > +
+> > +	/*
+> > +	 * New page should be accessible from within enclave - attempt to
+> > +	 * write to it.
+> > +	 */
+> 
+> This portion below was also copied from previous test and by only testing
+> a write to the first page of the range the purpose is not clear. Could you
+> please elaborate if the intention is to only test accessibility of the first
+> page and why that is sufficient?
+
+It is sufficient because the test reproduces the bug. It would
+have to be rather elaborated why you would possibly want to do
+more than that.
+
+> > +	put_addr_op.value = MAGIC;
+> > +	put_addr_op.addr = (unsigned long)addr;
+> > +	put_addr_op.header.type = ENCL_OP_PUT_TO_ADDRESS;
+> > +
+> > +	EXPECT_EQ(ENCL_CALL(&put_addr_op, &self->run, true), 0);
+> > +
+> > +	EXPECT_EEXIT(&self->run);
+> > +	EXPECT_EQ(self->run.exception_vector, 0);
+> > +	EXPECT_EQ(self->run.exception_error_code, 0);
+> > +	EXPECT_EQ(self->run.exception_addr, 0);
+> > +
+> > +	/*
+> > +	 * Read memory from newly added page that was just written to,
+> > +	 * confirming that data previously written (MAGIC) is present.
+> > +	 */
+> > +	get_addr_op.value = 0;
+> > +	get_addr_op.addr = (unsigned long)addr;
+> > +	get_addr_op.header.type = ENCL_OP_GET_FROM_ADDRESS;
+> > +
+> > +	EXPECT_EQ(ENCL_CALL(&get_addr_op, &self->run, true), 0);
+> > +
+> > +	EXPECT_EQ(get_addr_op.value, MAGIC);
+> > +	EXPECT_EEXIT(&self->run);
+> > +	EXPECT_EQ(self->run.exception_vector, 0);
+> > +	EXPECT_EQ(self->run.exception_error_code, 0);
+> > +	EXPECT_EQ(self->run.exception_addr, 0);
+> > +
+> > +	munmap(addr, edmm_size);
+> > +}
+> > +
+> >  /*
+> >   * SGX2 page type modification test in two phases:
+> >   * Phase 1:
+> > diff --git a/tools/testing/selftests/sgx/main.h b/tools/testing/selftests/sgx/main.h
+> > index fc585be97e2f..fe5d39ac0e1e 100644
+> > --- a/tools/testing/selftests/sgx/main.h
+> > +++ b/tools/testing/selftests/sgx/main.h
+> > @@ -35,7 +35,8 @@ extern unsigned char sign_key[];
+> >  extern unsigned char sign_key_end[];
+> >  
+> >  void encl_delete(struct encl *ctx);
+> > -bool encl_load(const char *path, struct encl *encl, unsigned long heap_size);
+> > +bool encl_load(const char *path, struct encl *encl, unsigned long heap_size,
+> > +			   unsigned long edmm_size);
+> >  bool encl_measure(struct encl *encl);
+> >  bool encl_build(struct encl *encl);
+> >  uint64_t encl_get_entry(struct encl *encl, const char *symbol);
+> > diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
+> > index 50c5ab1aa6fa..6000cf0e4975 100644
+> > --- a/tools/testing/selftests/sgx/sigstruct.c
+> > +++ b/tools/testing/selftests/sgx/sigstruct.c
+> > @@ -343,7 +343,7 @@ bool encl_measure(struct encl *encl)
+> >  	if (!ctx)
+> >  		goto err;
+> >  
+> > -	if (!mrenclave_ecreate(ctx, encl->src_size))
+> > +	if (!mrenclave_ecreate(ctx, encl->encl_size))
+> >  		goto err;
+> >  
+> >  	for (i = 0; i < encl->nr_segments; i++) {
+> 
+> 
+> Looking at mrenclave_ecreate() the above snippet seems separate from this test and incomplete
+> since it now obtains encl->encl_size but continues to compute it again internally. Should
+> this be a separate fix?
+
+I would remove this part completely but this also needs
+comment from Vijay.
+
+> Reinette
+
+
+BR, Jarkko

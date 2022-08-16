@@ -2,68 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50E7E595A3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F29D1595A41
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234300AbiHPLen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 07:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
+        id S234594AbiHPLe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 07:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234622AbiHPLd6 (ORCPT
+        with ESMTP id S234573AbiHPLdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 07:33:58 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE7A66A53
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:55:49 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id l4so12122882wrm.13
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:55:48 -0700 (PDT)
+        Tue, 16 Aug 2022 07:33:55 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358B4F3B
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:55:43 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id v10so10121607ljh.9
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:55:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=UwGclAPKpRElqSb0slB3YI1UbidqkoclQLHrUzSqvlg=;
-        b=l/hcMAVKaPG6eBpWzxcJ+D86RTu1F1RNf1z1FDxlWs52NFbQP78T5n2830h/+N96dw
-         rtTdIPTYo6N/902CMQLhwYGKpo7c2qhfPOPc0aTMyVcwk2T+XCKBFIuuG5coJiZW9qFF
-         8+R05ypD4TX2lz0gcnosZTsZmSP2fU2/GE5BYN6T45Ja019z2tBMuNba+cm0a+6cruLV
-         j2+kcbTzCPHkLOKshZaT1cDHabbz9AGW04mdroXDxwxchbTrSsJWpcaVoh8YzHJQ3y0S
-         8ideVfspHwWwqN8E25VX+m3E5Ge4qUTBDtR05n/9FbfveAho27nIQlg8yZIHK2sB8Ldd
-         S2eA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=CBKTj5rqOn3nvVZvcReemvDBMrFOZ0r/iVEgRvVlj7w=;
+        b=Svwnc6Ps2mgT9rljkrmJhSM3ngCsPTTHBKJzpTazCrTqpdidG8FwIHPuGIgyAoVs8a
+         HQf+fS7Z8nY+INAGOTIma8iZTmjlJQI6M1kimeObK88koD6bClhAhI3AA+jdy7lAUVjG
+         /UzHgVuP1lc+egFn6Tj6VjKaIDM85G1ccfHfakvvt7QDc20ARPnoV91A8nTk8SlcKdvY
+         q+1uL/sXiTezwoEdVtr3ENmibRF/kVtU5AHCoz5bvmo2xDCz4H3WhJKBOvFhwIoRt/L9
+         ewgVblpBi4+u/eSvyR0Mf1rDOoUV8sYQQfyh00MJD3Ps1jU/IwqksR70UzMOkYqSWLzA
+         FoUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=UwGclAPKpRElqSb0slB3YI1UbidqkoclQLHrUzSqvlg=;
-        b=cVy2//kirj3yQb34YfVvWH1xhBJy+ttKmw+81IQ3Zy9R1HfQtva5Vj9yaYsmlGOY+0
-         wyBViSM7DvdzdKJBASQLTNUkI8HFsFhe1r3QFLj7NVP6bladK3mzFQr4XymWiDK6ghKA
-         CVukIn0Vj8jINJbl/m+UJqDnD9te1ZmoEuIXKpXNpU3Q/1Q3OnD4pCgyBcFZKzMgDWQU
-         aICATCXFt+vTCJjLjflAjCy6UknqfPN9nBTs4zvVIW0rYqdMW6vwe2stKq9CfTlWPvIT
-         TzKre79DHgFOpEhWgdR/xMmQknOSGyGfMOkiv9+IJf9DNPAl4HyAgBzPd9anw9w0LPBf
-         tjag==
-X-Gm-Message-State: ACgBeo0DsWSep1WYKehgQ7Tyx/PPTNYpi0YDdJ9fQtECkBZqtpmCYW08
-        z0qL3qLpbwSK6+hzBfZlkp6ewQ==
-X-Google-Smtp-Source: AA6agR7ORNMHdMKLRnaII7L2dXayQffVP+aZiQzPFLcwMcmQl3BOgRIrdp/Bqn4+pG6d67LysnHONQ==
-X-Received: by 2002:a5d:638b:0:b0:220:6e1a:8794 with SMTP id p11-20020a5d638b000000b002206e1a8794mr11440308wru.193.1660647347544;
-        Tue, 16 Aug 2022 03:55:47 -0700 (PDT)
-Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id k2-20020a7bc402000000b003a32297598csm12362799wmi.43.2022.08.16.03.55.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 03:55:46 -0700 (PDT)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH] misc: fastrpc: Use USER_PD define in fastrpc_get_info_from_dsp
-Date:   Tue, 16 Aug 2022 13:55:28 +0300
-Message-Id: <20220816105528.3222763-1-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=CBKTj5rqOn3nvVZvcReemvDBMrFOZ0r/iVEgRvVlj7w=;
+        b=XZyEUnZhkfBuH6ayPN/D4LZoZxb4Uec2GhNz1HzTwnJejtzVnRIu/Vi6GhOA3cIBPT
+         8iKpdZD4mHvdxWLyalqPNgT2mYd/t9LiOk0Rr8f1T5a4XynOUSPJ3AB4k+wvAfXcLct8
+         zpt4RwkHVRP6TxT9BkhB7+k2XQVADVRGWgnQsZsSPc3ahZa1WpypAhKyingZmJKdzJnL
+         HobmFoNmL5p8CXO9BG2iqYsthbDfCRINJFmXR1ZFn33tFzi+MpbF5PgMGnjPZE9AfNp9
+         fMF4q6BVzbEe/IwO3eSwxJX+NXQRvbNZ78sRp2X0sfZKY6YxEDYOeJBXqYm+XOZ1K+DT
+         Ws4A==
+X-Gm-Message-State: ACgBeo0q+dNvX2antZ2QL7ExeNdEDTkOqzy419roUbtRFSEJlSS4nHdY
+        uvO6rvoUJ+Lxzrxou7SQ45pc3g==
+X-Google-Smtp-Source: AA6agR7vC+j/ek79i+GD6KzISBYbeOBbqXj7aSllLfYBky7D81Wi0pnmae4dvqzohY1PwIPgyMwKyA==
+X-Received: by 2002:a2e:a410:0:b0:25e:4bca:6287 with SMTP id p16-20020a2ea410000000b0025e4bca6287mr6589533ljn.31.1660647341625;
+        Tue, 16 Aug 2022 03:55:41 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
+        by smtp.gmail.com with ESMTPSA id s27-20020a056512203b00b0048b4690c78esm1345283lfs.288.2022.08.16.03.55.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 03:55:40 -0700 (PDT)
+Message-ID: <a9c71f3b-0c7b-ee8f-d350-0ab453018558@linaro.org>
+Date:   Tue, 16 Aug 2022 13:55:39 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [RFC PATCH 01/14] drm/qaic: Add documentation for AIC100
+ accelerator driver
+Content-Language: en-US
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>, airlied@linux.ie,
+        daniel@ffwll.ch, maarten.lankhorst@linux.intel.com,
+        mripard@kernel.org, tzimmermann@suse.de
+Cc:     quic_carlv@quicinc.com, quic_ajitpals@quicinc.com,
+        quic_pkanojiy@quicinc.com, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1660588956-24027-1-git-send-email-quic_jhugo@quicinc.com>
+ <1660588956-24027-2-git-send-email-quic_jhugo@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1660588956-24027-2-git-send-email-quic_jhugo@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,29 +80,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are defines for each type of protection domain now.
-Use the USER_PD instead of magic value in fastrpc_get_info_from_dsp.
+On 15/08/2022 21:42, Jeffrey Hugo wrote:
+> Add documentation covering both the QAIC driver, and the device that it
+> drives.
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: Amol Maheshwari <amahesh@qti.qualcomm.com>
----
- drivers/misc/fastrpc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thank you for your patch. There is something to discuss/improve.
 
-diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-index 93ebd174d848..8895ca593911 100644
---- a/drivers/misc/fastrpc.c
-+++ b/drivers/misc/fastrpc.c
-@@ -1515,7 +1515,7 @@ static int fastrpc_get_info_from_dsp(struct fastrpc_user *fl, uint32_t *dsp_attr
- 	args[1].ptr = (u64)(uintptr_t)&dsp_attr_buf[1];
- 	args[1].length = dsp_attr_buf_len;
- 	args[1].fd = -1;
--	fl->pd = 1;
-+	fl->pd = USER_PD;
- 
- 	return fastrpc_internal_invoke(fl, true, FASTRPC_DSP_UTILITIES_HANDLE,
- 				       FASTRPC_SCALARS(0, 1, 1), args);
--- 
-2.34.1
 
+> 
+> Change-Id: Iee519cc0a276249c4e8684507d27ae2c33e29aeb
+
+You need to drop all such non-standard tags. Please run
+scripts/checkpatch and fix all the warnings.
+
+Best regards,
+Krzysztof

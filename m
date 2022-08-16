@@ -2,223 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E15B595D24
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72767595D26
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235657AbiHPNU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
+        id S233926AbiHPNVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235629AbiHPNUt (ORCPT
+        with ESMTP id S231131AbiHPNVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 09:20:49 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C9478BEF
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:20:45 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 402C058037D;
-        Tue, 16 Aug 2022 09:20:45 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 16 Aug 2022 09:20:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1660656045; x=1660663245; bh=U+FP9WL6qH
-        xAhIYTKKc2LvJDq7iEJgXc9SQbodiDDXA=; b=kJHgvO1K5X0yS0bXTChkquj0OR
-        RCqHnNc0XBPUm3z7/WQdy5I5PLYVzPHjIdS5OZOIuEfLDyIsD/C1uGYVV4cetvIs
-        NsNprQ8/ltFMmNqACY4L2Jamw1Py44t1jUjVCUbu3ecCRSBcBlyesR77IMVtD3GL
-        SxHtV5HQm3W3GBPzXNqyOEqrCgE2IHdxTFkTqsg7u0lV6SIF76nj4n6KjfHuXVrH
-        x6d5n9FNGnDfaHYc1nVkvD/70S6O6AFqXgmPtrrNJDbBJd29vEGJgEHb0Fse3hFc
-        yxmEYL9ytZDahmeoSvWgVNvlo9jeUIVbP+yYD9iXbfqj8Aca5A8/jhCzZdPQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660656045; x=1660663245; bh=U+FP9WL6qHxAhIYTKKc2LvJDq7iE
-        JgXc9SQbodiDDXA=; b=Tc31jgiKV5ovT3ovNozG+Pnm++oNgJ4zTUPLNWDit1I9
-        Hvxm1aapLTpKhJILH2PqTF0YmOH4MSHwgLDInaTkSjvtt3JFSNw/86LLTGvvRW51
-        3I8JQa9ZdbNlV5G10yeloK2aMT/VfzQuZ7kqiUJAPrVvfpvVCSs3ZaELCQzkIdGC
-        RCJh9y7jbBzlWjE9TD/r/NtpgnNJDGZiidnMkodJVlf41Iw35XEBS+C4H8z1sL6f
-        hjSWjlTnKjEV6X8NnPtcusvXvvMbcLZGOZXeCV4ILTH+fnQdUlqrx2eICkmp4464
-        JVNvn6zDFQMJ1tU5vS+lnIV6tJFYHdUIFzr2g+CO7w==
-X-ME-Sender: <xms:q5n7Yj9umwrX7oVw9UghmxD4i7MGuJvny9AfymC_b-hQUPYCdeX78g>
-    <xme:q5n7YvumRLVde5YnKu_WeSjfYdYqZtjgvT6uWTriXiCFd4xFnkXY8yhIRlz1YB6NT
-    16KkFKUBr2YqO1vSTo>
-X-ME-Received: <xmr:q5n7YhDzBG2aG79HV1UbRHQZVoQwoQbTDeSO_zfoB4AgJmcZveOVY1EGvbc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehgedgieehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
-    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:q5n7YvdJHxWnNwnbPCPdD9m9OiPE6vQw37M5kLxLNBJQ7ClvMEOmEA>
-    <xmx:q5n7YoMsvrihcmnmoa_Ax-aiS1fWIbTnQ9BZ48X3-QIUVWnh0z31HQ>
-    <xmx:q5n7YhlCoaiIGJifTn0HQnb5FLP_E2e8paJHarllCzQBxQTIJxax6Q>
-    <xmx:rZn7Yv-TN8-6TSqsBSP7TZQKK5gZIvDf7lWQFpnazpZNkrC89JOgQg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 16 Aug 2022 09:20:42 -0400 (EDT)
-Date:   Tue, 16 Aug 2022 15:20:40 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Dom Cobley <dom@raspberrypi.com>
-Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
-Message-ID: <20220816132040.uwirtjm5yr6rdd3q@houat>
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
- <CAMuHMdWYo7M44uLNhTmJenGDreGALBZ9E48oyBDEeAuL=0h=dw@mail.gmail.com>
+        Tue, 16 Aug 2022 09:21:44 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89FAE73911
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:21:43 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id v2so14900508lfi.6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:21:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=yE7zn3+63TAoBI4QapAvwqAkJrBFU8gy8jfI0uwa9Io=;
+        b=MDzvxydaTkVDEjoHMlvPvOnwvlr7ONZ2+VmBXkidWml+0GhHByNN6EWuo39IFC8yZ4
+         4CbvNwRQuYmzzuwIB0kqA6keBCbjCiZg59ROuHLbpcXGUyVOn6GwQgA+dSn3f9kGCVrj
+         +iWgLCl5YeyTgXVm0yzI89zqlenbzT/mODrQZon8JM1W/XtNcUj0eKf7JKBqzKY4NDtq
+         N8PKaTLB1cNJqgDJkCnAtqQV9NYHQsqVWn6QyuEZU0egFpKBIA9yaWsAcGDIjJQTXPQ6
+         6JtHdJ9wy8/vfI6svnRYpghzayyrCwMeNXciOKiV4MZ7AsAPEHBmDDqPoIAd59/bcDzI
+         2vkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=yE7zn3+63TAoBI4QapAvwqAkJrBFU8gy8jfI0uwa9Io=;
+        b=LzXUdNPWLacVOXdcrlohJ6n05wfRXXhLimp7kTfTjd/Wloj2uNdmIfOm+SV5GSCAgG
+         4mfnM3xsEihSKdEsXwlYVQhvFq8PzIJyVtnO629Ml2Qv8ugbeBIFTgEc7BEakv9BZJRz
+         k20XJW9RKvgPrJtjOjoAWnTaOp28yRd4Rq/AdZFNuNMoFcuIudUMws4lG1QvPzXxq0Oe
+         6e/kaVWQAPJXhnCmM5jD/AvtD5Ys3lCAmTMqHMNF71rOJTufKFmKAzRVK60zKBXBpyzK
+         IJVjuy+USJZqChGHGqwuVw4Z/RyDVjA8X2JRQ6sg+9HjPgwJ9PGl+7OLj+2UBQwkclFy
+         KF1g==
+X-Gm-Message-State: ACgBeo2NXGnrREg4bTmc3h/VbrsazThFECUL4Jx+8ozxmnLctVChf1n0
+        L0vvG153f/lIZ1UxafqlG0za9NfZ6SLqHGAe
+X-Google-Smtp-Source: AA6agR6XKqcse24maA6Z7f54Nlx/n9AiCKXjXCJKSey1kamKIawSJ0X2wWxzj59gOcgEC27vgTh/uQ==
+X-Received: by 2002:a19:d611:0:b0:492:8e15:ba18 with SMTP id n17-20020a19d611000000b004928e15ba18mr2700922lfg.524.1660656101921;
+        Tue, 16 Aug 2022 06:21:41 -0700 (PDT)
+Received: from krzk-bin.. (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
+        by smtp.gmail.com with ESMTPSA id m17-20020a056512015100b0048ae518364dsm1387442lfo.148.2022.08.16.06.21.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 06:21:41 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v2] dt-bindings: phy: Update Pratyush Yadav's email
+Date:   Tue, 16 Aug 2022 16:21:31 +0300
+Message-Id: <20220816132131.75591-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6ena3yqc72sajvcu"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdWYo7M44uLNhTmJenGDreGALBZ9E48oyBDEeAuL=0h=dw@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Emails to Pratyush Yadav bounce ("550 Invalid recipient"), so update to
+match one in commit 92714596cdbe ("MAINTAINERS: Use my kernel.org
+email").
 
---6ena3yqc72sajvcu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Rob Herring <robh@kernel.org>
 
-Hi Geert,
+---
 
-On Fri, Aug 12, 2022 at 03:25:18PM +0200, Geert Uytterhoeven wrote:
-> > --- a/drivers/gpu/drm/drm_connector.c
-> > +++ b/drivers/gpu/drm/drm_connector.c
-> > @@ -1649,11 +1650,40 @@ EXPORT_SYMBOL(drm_mode_create_tv_margin_propert=
-ies);
-> >   * 0 on success or a negative error code on failure.
-> >   */
-> >  int drm_mode_create_tv_properties(struct drm_device *dev,
-> > +                                 unsigned int supported_tv_norms,
-> >                                   unsigned int num_modes,
-> >                                   const char * const modes[])
-> >  {
-> > +       static const struct drm_prop_enum_list tv_norm_values[] =3D {
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_NTSC_443) - 1, "NTSC-4=
-43" },
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_NTSC_J) - 1, "NTSC-J" =
-},
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_NTSC_M) - 1, "NTSC-M" =
-},
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_60) - 1, "PAL-60" =
-},
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_B) - 1, "PAL-B" },
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_D) - 1, "PAL-D" },
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_G) - 1, "PAL-G" },
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_H) - 1, "PAL-H" },
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_I) - 1, "PAL-I" },
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_M) - 1, "PAL-M" },
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_N) - 1, "PAL-N" },
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_PAL_NC) - 1, "PAL-Nc" =
-},
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_60) - 1, "SECAM-=
-60" },
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_B) - 1, "SECAM-B=
-" },
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_D) - 1, "SECAM-D=
-" },
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_G) - 1, "SECAM-G=
-" },
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_K) - 1, "SECAM-K=
-" },
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_K1) - 1, "SECAM-=
-K1" },
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_SECAM_L) - 1, "SECAM-L=
-" },
->=20
-> The above are analog standards, with a variable horizontal resolution.
->=20
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_HD480I) - 1, "hd480i" =
-},
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_HD480P) - 1, "hd480p" =
-},
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_HD576I) - 1, "hd576i" =
-},
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_HD576P) - 1, "hd576p" =
-},
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_HD720P) - 1, "hd720p" =
-},
-> > +               { __builtin_ffs(DRM_MODE_TV_NORM_HD1080I) - 1, "hd1080i=
-" },
->=20
-> The above are digital standards, with a fixed resolution.
+Changes since v1:
+1. Update email instead of dropping.
+---
+ Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml | 2 +-
+ Documentation/devicetree/bindings/phy/cdns,dphy.yaml    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Are they?
+diff --git a/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml b/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
+index 07be031d82e6..d24ec47c038e 100644
+--- a/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
++++ b/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Cadence DPHY Rx Device Tree Bindings
+ 
+ maintainers:
+-  - Pratyush Yadav <p.yadav@ti.com>
++  - Pratyush Yadav <pratyush@kernel.org>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/phy/cdns,dphy.yaml b/Documentation/devicetree/bindings/phy/cdns,dphy.yaml
+index f0e9ca8427bb..649e0b953df0 100644
+--- a/Documentation/devicetree/bindings/phy/cdns,dphy.yaml
++++ b/Documentation/devicetree/bindings/phy/cdns,dphy.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Cadence DPHY Device Tree Bindings
+ 
+ maintainers:
+-  - Pratyush Yadav <p.yadav@ti.com>
++  - Pratyush Yadav <pratyush@kernel.org>
+ 
+ properties:
+   compatible:
+-- 
+2.34.1
 
-It's not clear to me from looking at nouveau, but I was under the
-impression that they were modes for a component output, so CEA 770.3. I
-don't have the spec though, so I can't check.
-
-> You seem to have missed "hd1080p"?
-
-Nobody is using it. If we ever have a driver that uses it I think we can
-add it.
-
-> In addition, "hd720p", "hd080i", and "hd1080p" are available in both 50
-> and 60 (actually 59.94) Hz, while "hd1080p" can also use 24 or 25 Hz.
-
-It looks like nouveau only exposes modes for 480p at 59.94Hz, 576p at
-50Hz, 720p at 60Hz, 1080i at 30Hz.
-
-> Either you have to add them here (e.g. "hd720p50" and "hd720p60"), or
-> handle them through "@<refresh>".  The latter would impact "[PATCH v1
-> 09/35] drm/modes: Move named modes parsing to a separate function", as
-> currently a named mode and a refresh rate can't be specified both.
-
-I think the former would make more sense. It simplifies a bit the
-parser, and we're going to use a named mode anyway.
-
-> As "[PATCH v1 34/35] drm/modes: Introduce the tv_mode property as a
-> command-line option" uses a separate "tv_mode" option, and not the main
-> mode name, I think you want to add them here.
-
-It's a separate story I think, we could have a named mode hd720p50,
-which would be equivalent to 1280x720,tv_mode=3Dhd720p
-
-Maxime
-
---6ena3yqc72sajvcu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYvuZqAAKCRDj7w1vZxhR
-xRpdAQCdHo+W59CWD9zJ3T1LvoCmG3uMcVuRQ9G79/cpqOxH9wEAhPrjIiW5PuV0
-9yKEPpR9rUmMFVvJOYSKOJ0j4md2bQE=
-=XiNC
------END PGP SIGNATURE-----
-
---6ena3yqc72sajvcu--

@@ -2,57 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDDF759582F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 972E85957B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234544AbiHPK2J convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 16 Aug 2022 06:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43750 "EHLO
+        id S233660AbiHPKL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234451AbiHPK11 (ORCPT
+        with ESMTP id S233759AbiHPKK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:27:27 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F5A4C605;
-        Tue, 16 Aug 2022 02:15:47 -0700 (PDT)
-Received: from kwepemi500011.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4M6QQd51zkz1M8yg;
-        Tue, 16 Aug 2022 17:12:25 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- kwepemi500011.china.huawei.com (7.221.188.124) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 16 Aug 2022 17:15:44 +0800
-Received: from dggpemm500006.china.huawei.com ([7.185.36.236]) by
- dggpemm500006.china.huawei.com ([7.185.36.236]) with mapi id 15.01.2375.024;
- Tue, 16 Aug 2022 17:15:44 +0800
-From:   "Gonglei (Arei)" <arei.gonglei@huawei.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Lei He <helei.sig11@bytedance.com>
-CC:     "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "pizhenwei@bytedance.com" <pizhenwei@bytedance.com>
-Subject: RE: [PATCH] crypto-virtio: fix memory-leak
-Thread-Topic: [PATCH] crypto-virtio: fix memory-leak
-Thread-Index: AQHYsUY0nKlBM3YWoEWBnWo9iL/j1q2wr84AgACNxNA=
-Date:   Tue, 16 Aug 2022 09:15:44 +0000
-Message-ID: <0a675c21c1dc4e699d542c2f4f92f729@huawei.com>
-References: <20220816075916.23651-1-helei.sig11@bytedance.com>
- <20220816044118-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220816044118-mutt-send-email-mst@kernel.org>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.149.11]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Tue, 16 Aug 2022 06:10:58 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7DDB84;
+        Tue, 16 Aug 2022 02:17:32 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oNshO-0002qi-Pk; Tue, 16 Aug 2022 11:17:22 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     samuel@sholland.org, wens@csie.org, jernej.skrabec@gmail.com,
+        linux-sunxi@lists.linux.dev, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        linux-riscv@lists.infradead.org
+Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        Conor.Dooley@microchip.com
+Subject: Re: [PATCH 05/12] riscv: Add the Allwinner SoC family Kconfig option
+Date:   Tue, 16 Aug 2022 11:17:22 +0200
+Message-ID: <10785313.BaYr0rKQ5T@diego>
+In-Reply-To: <a70e34b9-7106-ad2a-16e1-5f115e34ff1e@microchip.com>
+References: <20220815050815.22340-1-samuel@sholland.org> <20220815050815.22340-6-samuel@sholland.org> <a70e34b9-7106-ad2a-16e1-5f115e34ff1e@microchip.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,158 +45,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Michael S. Tsirkin [mailto:mst@redhat.com]
-> Sent: Tuesday, August 16, 2022 4:43 PM
-> To: Lei He <helei.sig11@bytedance.com>
-> Cc: Gonglei (Arei) <arei.gonglei@huawei.com>;
-> herbert@gondor.apana.org.au; virtualization@lists.linux-foundation.org;
-> linux-crypto@vger.kernel.org; linux-kernel@vger.kernel.org;
-> pizhenwei@bytedance.com
-> Subject: Re: [PATCH] crypto-virtio: fix memory-leak
+Am Montag, 15. August 2022, 18:56:23 CEST schrieb Conor.Dooley@microchip.com:
+> On 15/08/2022 06:08, Samuel Holland wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > Allwinner manufactures the sunxi family of application processors. This
+> > includes the "sun8i" series of ARMv7 SoCs, the "sun50i" series of ARMv8
+> > SoCs, and now the "sun20i" series of 64-bit RISC-V SoCs.
+> > 
+> > The first SoC in the sun20i series is D1, containing a single T-HEAD
+> > C906 core. D1s is a low-pin-count variant of D1 with co-packaged DRAM.
+> > 
+> > Most peripherals are shared across the entire chip family. In fact, the
+> > ARMv7 T113 SoC is pin-compatible and almost entirely register-compatible
+> > with the D1s.
+> > 
+> > This means many existing device drivers can be reused. To facilitate
+> > this reuse, name the symbol ARCH_SUNXI, since that is what the existing
+> > drivers have as their dependency.
 > 
+> Hey Samuel,
+> I think this and patch 12/12 with the defconfig changes should be
+> deferred until post LPC (which still leaves plenty of time for
+> making the 6.1 merge window). We already have like 4 different
+> approaches between the existing SOC_FOO symbols & two more when
+> D1 stuff and the Renesas stuff is considered.
 
-Pls 's/crypto-virtio/virtio-crypto' in order to keep consistency.
+On the other hand, I don't really think it's that hard to change things
+after the fact? I.e. ARCH_SUNXI is pretty much set in stone anyway,
+so there isn't very much that _could_ change without affecting most
+driver subsystems in the kernel.
 
-Reviewed-by: Gonglei <arei.gonglei@huawei.com>
+So I don't think we'd actually need to wait with the Allwinner symbol.
 
-Regards,
--Gonglei
 
-> On Tue, Aug 16, 2022 at 03:59:16PM +0800, Lei He wrote:
-> > From: lei he <helei.sig11@bytedance.com>
-> >
-> > Fix memory-leak for virtio-crypto akcipher request, this problem is
-> > introduced by 59ca6c93387d3(virtio-crypto: implement RSA algorithm).
-> > The leak can be reproduced and tested with the following script inside
-> > virtual machine:
-> >
-> > #!/bin/bash
-> >
-> > LOOP_TIMES=10000
-> >
-> > # required module: pkcs8_key_parser, virtio_crypto modprobe
-> > pkcs8_key_parser # if CONFIG_PKCS8_PRIVATE_KEY_PARSER=m modprobe
-> > virtio_crypto # if CONFIG_CRYPTO_DEV_VIRTIO=m rm -rf /tmp/data dd
-> > if=/dev/random of=/tmp/data count=1 bs=230
-> >
-> > # generate private key and self-signed cert openssl req -nodes -x509
-> > -newkey rsa:2048 -keyout key.pem \
-> > 		-outform der -out cert.der  \
-> > 		-subj
-> "/C=CN/ST=GD/L=SZ/O=vihoo/OU=dev/CN=always.com/emailAddress=yy@
-> always.com"
-> > # convert private key from pem to der
-> > openssl pkcs8 -in key.pem -topk8 -nocrypt -outform DER -out key.der
-> >
-> > # add key
-> > PRIV_KEY_ID=`cat key.der | keyctl padd asymmetric test_priv_key @s`
-> > echo "priv key id = "$PRIV_KEY_ID PUB_KEY_ID=`cat cert.der | keyctl
-> > padd asymmetric test_pub_key @s` echo "pub key id = "$PUB_KEY_ID
-> >
-> > # query key
-> > keyctl pkey_query $PRIV_KEY_ID 0
-> > keyctl pkey_query $PUB_KEY_ID 0
-> >
-> > # here we only run pkey_encrypt becasuse it is the fastest interface
-> > function bench_pub() {
-> > 	keyctl pkey_encrypt $PUB_KEY_ID 0 /tmp/data
-> enc=pkcs1 >/tmp/enc.pub }
-> >
-> > # do bench_pub in loop to obtain the memory leak for (( i = 0; i <
-> > ${LOOP_TIMES}; ++i )); do
-> > 	bench_pub
-> > done
-> >
-> > Signed-off-by: lei he <helei.sig11@bytedance.com>
+Heiko
+
+> Plan is to decide at LPC on one approach for what to do with
+> Kconfig.socs & to me it seems like a good idea to do what's being
+> done here - it's likely that further arm vendors will move and
+> keeping the common symbols makes a lot of sense to me...
 > 
-> trash below pls drop.
+> Thanks,
+> Conor.
 > 
-> 
-> > # Please enter the commit message for your changes. Lines starting #
-> > with '#' will be kept; you may remove them yourself if you want to.
-> > # An empty message aborts the commit.
-> > #
-> > # Date:      Tue Aug 16 11:53:30 2022 +0800
-> > #
-> > # On branch master
-> > # Your branch is ahead of 'origin/master' by 1 commit.
-> > #   (use "git push" to publish your local commits)
-> > #
-> > # Changes to be committed:
-> > #	modified:   drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-> > #
-> > # Untracked files:
-> > #	cert.der
-> > #	key.der
-> > #	key.pem
-> > #
-> >
-> > # Please enter the commit message for your changes. Lines starting #
-> > with '#' will be kept; you may remove them yourself if you want to.
-> > # An empty message aborts the commit.
-> > #
-> > # Date:      Tue Aug 16 11:53:30 2022 +0800
-> > #
-> > # On branch master
-> > # Your branch is ahead of 'origin/master' by 1 commit.
-> > #   (use "git push" to publish your local commits)
-> > #
-> > # Changes to be committed:
-> > #	modified:   drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-> > #
-> > # Untracked files:
-> > #	cert.der
-> > #	key.der
-> > #	key.pem
-> > #
-> >
-> > # Please enter the commit message for your changes. Lines starting #
-> > with '#' will be kept; you may remove them yourself if you want to.
-> > # An empty message aborts the commit.
-> > #
-> > # Date:      Tue Aug 16 11:53:30 2022 +0800
-> > #
-> > # On branch master
-> > # Your branch is ahead of 'origin/master' by 1 commit.
-> > #   (use "git push" to publish your local commits)
-> > #
-> > # Changes to be committed:
-> > #	modified:   drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-> > #
-> > # Untracked files:
-> > #	cert.der
-> > #	key.der
-> > #	key.pem
-> > #
+> > 
+> > Signed-off-by: Samuel Holland <samuel@sholland.org>
 > > ---
-> 
-> with commit log fixed:
-> 
-> Acked-by: Michael S. Tsirkin <mst@redhat.com>
-> 
-> >  drivers/crypto/virtio/virtio_crypto_akcipher_algs.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-> > b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-> > index 2a60d0525cde..168195672e2e 100644
-> > --- a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-> > +++ b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-> > @@ -56,6 +56,10 @@ static void virtio_crypto_akcipher_finalize_req(
-> >  	struct virtio_crypto_akcipher_request *vc_akcipher_req,
-> >  	struct akcipher_request *req, int err)  {
-> > +	kfree(vc_akcipher_req->src_buf);
-> > +	kfree(vc_akcipher_req->dst_buf);
-> > +	vc_akcipher_req->src_buf = NULL;
-> > +	vc_akcipher_req->dst_buf = NULL;
-> >  	virtcrypto_clear_request(&vc_akcipher_req->base);
-> >
-> >
-> > crypto_finalize_akcipher_request(vc_akcipher_req->base.dataq->engine,
-> > req, err);
+> > 
+> >  arch/riscv/Kconfig.socs | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> > 
+> > diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
+> > index 69774bb362d6..1caacbfac1a5 100644
+> > --- a/arch/riscv/Kconfig.socs
+> > +++ b/arch/riscv/Kconfig.socs
+> > @@ -1,5 +1,14 @@
+> >  menu "SoC selection"
+> > 
+> > +config ARCH_SUNXI
+> > +       bool "Allwinner sun20i SoCs"
+> > +       select ERRATA_THEAD if MMU && !XIP_KERNEL
+> > +       select SIFIVE_PLIC
+> > +       select SUN4I_TIMER
+> > +       help
+> > +         This enables support for Allwinner sun20i platform hardware,
+> > +         including boards based on the D1 and D1s SoCs.
+> > +
+> >  config SOC_MICROCHIP_POLARFIRE
+> >         bool "Microchip PolarFire SoCs"
+> >         select MCHP_CLK_MPFS
 > > --
-> > 2.20.1
+> > 2.35.1
+> > 
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> 
+
+
+
 

@@ -2,345 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A758595EE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 17:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C83A3595EE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 17:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236071AbiHPPUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 11:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34684 "EHLO
+        id S236006AbiHPPUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 11:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236100AbiHPPUb (ORCPT
+        with ESMTP id S235857AbiHPPUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 11:20:31 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7070EE06;
-        Tue, 16 Aug 2022 08:20:29 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id 130so9347499pfy.6;
-        Tue, 16 Aug 2022 08:20:29 -0700 (PDT)
+        Tue, 16 Aug 2022 11:20:20 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2098.outbound.protection.outlook.com [40.107.244.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0273BC;
+        Tue, 16 Aug 2022 08:20:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GEkpcMhSWtP21mJmyT+drCw3HI6MHdHpTtgon/2+tXIT1/VKyf8u19GW0XTMIDIU1Qi4X+irJl5wHdfvx1r5HxEqqKT7TlwiC3v4PfN0z6gYbAN+kpUItLjCcVEFecpmAcQXwozq+IUhPyoDGofpVzTPqBwq53KTpzgS7fQbA9mQ1L979JdekhM1va5+ISYYfY1DS2qg+91k7q22MngVkDwZ8DD60999MZnN2deBP/Mhs09C7Sn9l7uJOMqITJaeZSkoZcQCdk1BfN9e3aVfwMosAOovoVdu7283IUBEL2t/eU8fVl8l9vtoXAXjDAZJKoFLpzXJuXleAecO7ghHZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cn2hjlKSvNOv6PQq5KWRuzMwaO44AFNNd9ytEJxi0kI=;
+ b=A9vT6L5/Q29EE6H+on7aGAZsq3K5ldCQtQ6ynABfPtv1MqytoCDoyY3CdOPul1UC/RxDM/EoSFfU+0smXJQHzpf7X5yN7+YShQPRRAuZivArhcM2jhEEkcTz559hKTyXhhJ7CVpDo/U9X+Fq83a96pQxEbzs5dkhyE/yI9e4OReWjy/8nxFrOPD+i/56npSOQShBMwrCEkbrV1INQGFlDBz6lSbHyhCXg8ecBNqYhIZNzcmIiRybRaDWwpJ4pvNh8hLuvPMdTCT7C+DioUY23erYy+O6UuZT+UToHFF/wo4ahheUTSUqlXgsXskGp6V+J+eKdD6AXLzuxzibHynblA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc;
-        bh=W6AwwHguP3HCu6me+Nsv+t0aByDpfUwp4LB3fd/P/BE=;
-        b=Q+acnFqb878GMNRirOWHs6xGA+XPF7A6k9YGOmtrtE/raqptQCkAoQ/HaOlmid8rep
-         GoPJePpgs1aUJi9aH/wHtnXKaL4rP9T/Opey7Mq7hCsAvWctIJjdonB9iYp2NO3G4nna
-         oQLRXBcf4p4E0zUhAmLgJwOKOd6QUAzCUcc4V1xPWnfVMNrROWDWvJ5H3GMDLKQt9GWj
-         LzgMOX5VtbdFRLFoK/KmwhEUVw/O9WxsUHU3Kje+o04Nn0pIvcGsLGa8H9DbpAo53vv6
-         C1TZ4gHl6Ad+ungu9FXiWVdH7Ov529wp9AsBg+533I/Y3v/yrw3N/j6pShCEA7vHI3tu
-         X3Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc;
-        bh=W6AwwHguP3HCu6me+Nsv+t0aByDpfUwp4LB3fd/P/BE=;
-        b=vD0VZPOFbse4ALbRLPB4fI+NugiKgFlONwjXuW0qApzVNaCOy3CxyD4I1qsKZiU9ZH
-         1f49183f/38BgooUEX5dguZYvYv3rPPGNEFjO2ZqJbmU0RCnxVLaSks529u0en39FjY7
-         6l47xVW0ypzI4cxuS4kqEOlx1p6eP1+jsH0wdnrph/9vEa1zLhV8J3WKFf2n4Co1YZyH
-         Ta1v0gbdc19WAzvHL2LTQAR0AiksDzQo0sLLW+l5E/L7qdoJwc5sXvsn2e9Ewbkh/PpC
-         Nzu0fZgC7ijoVRD/ZJ0PChkV1pysknG4STM7p0vxWa/XrcmgjQnwIflbgsnInRAlXdgR
-         HZsA==
-X-Gm-Message-State: ACgBeo3amzlg5F8129etd7i1m5g2p9xpPqSvRKGVjQLCqNoSn+rOXJmh
-        IXpxyQFloOPOXdhDe7AqNvA=
-X-Google-Smtp-Source: AA6agR7g5Y/kGc1dKbNQ61SXFKkzbrTB4vJsdO948F1hV+wF/7T8FxF7mivRdCZnWbDW5LbVQNoHWA==
-X-Received: by 2002:a62:1d86:0:b0:52d:9df0:2151 with SMTP id d128-20020a621d86000000b0052d9df02151mr21320211pfd.33.1660663229054;
-        Tue, 16 Aug 2022 08:20:29 -0700 (PDT)
-Received: from [0.0.0.0] ([192.109.233.222])
-        by smtp.gmail.com with ESMTPSA id q19-20020aa79613000000b0052e78582aa2sm8562255pfg.181.2022.08.16.08.20.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 08:20:28 -0700 (PDT)
-Message-ID: <5c642a7d-85d5-2a6c-7455-a0585590a7fb@gmail.com>
-Date:   Tue, 16 Aug 2022 23:20:09 +0800
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cn2hjlKSvNOv6PQq5KWRuzMwaO44AFNNd9ytEJxi0kI=;
+ b=nM6f/JDDg1pCtYeyRyCVQJUB1y3WrOR/dgh9x8j++cETwdP0bpgwxbcl5CkDSb9Q9cGl6k3gyv0llqE3EmQfSovRcdcspq5yN2sM20Fawof10MmvO4T54vmn3caZShLkzfdsGoetco62nT0dnjn+0NYx1qWqJH0wO333yJndxv0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by BLAPR10MB4994.namprd10.prod.outlook.com
+ (2603:10b6:208:30d::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Tue, 16 Aug
+ 2022 15:20:15 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::b869:6c52:7a8d:ddee]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::b869:6c52:7a8d:ddee%4]) with mapi id 15.20.5504.027; Tue, 16 Aug 2022
+ 15:20:15 +0000
+Date:   Tue, 16 Aug 2022 08:20:10 -0700
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Ido Schimmel <idosch@idosch.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@debian.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Terry Bowman <terry.bowman@amd.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        katie.morris@in-advantage.com,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Lee Jones <lee@kernel.org>
+Subject: Re: [PATCH v16 mfd 8/8] mfd: ocelot: add support for the vsc7512
+ chip via spi
+Message-ID: <Yvu1qvslHI9HIqKh@colin-ia-desktop>
+References: <20220815005553.1450359-1-colin.foster@in-advantage.com>
+ <20220815005553.1450359-9-colin.foster@in-advantage.com>
+ <YvpV4cvwE0IQOax7@euler>
+ <YvpZoIN+5htY9Z1o@shredder>
+ <CAHp75VeH_Gx4t+FSqH4LrTHNcwqGxDxRUF26kj3A=CopS=XkgQ@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75VeH_Gx4t+FSqH4LrTHNcwqGxDxRUF26kj3A=CopS=XkgQ@mail.gmail.com>
+X-ClientProxiedBy: SJ0PR05CA0036.namprd05.prod.outlook.com
+ (2603:10b6:a03:33f::11) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH] drivers/perf: Change WARN_ON() to dev_err() on
- irq_set_affinity() failure
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     yangyicong@hisilicon.com, will@kernel.org, Frank.li@nxp.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, zhangshaokun@hisilicon.com,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, khuong@os.amperecomputing.com,
-        john.garry@huawei.com, jonathan.cameron@huawei.com,
-        gregkh@linuxfoundation.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Yicong Yang <yangyicong@huawei.com>
-References: <20220815092815.11597-1-yangyicong@huawei.com>
- <YvotEZigh0+I/RIb@FVFF77S0Q05N>
- <2e0c3a14-d308-dfd2-debe-8a52a3db47cc@huawei.com>
- <Yvtw1DAhYBgsuTTV@FVFF77S0Q05N>
-From:   Yicong Yang <yangyccccc@gmail.com>
-In-Reply-To: <Yvtw1DAhYBgsuTTV@FVFF77S0Q05N>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b999a858-1869-45c1-e125-08da7f9ad1ee
+X-MS-TrafficTypeDiagnostic: BLAPR10MB4994:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tKxCloctvN9ejTXR7yRvQ0YICAMZ5UbmJlleJptUhqQIZt7qWlv9uShAbuxpHq++91I6Due5Fy8Hs3YMQUPEwvxjV3yGGzqArP9Lj0caXjv+XQxeASOLMRPCF7Nz9apTVA5nA9CDtSIdy3GNJCZwJ7CP7/oQyFhEIw/0VZ+GkgOvjCrztRbdotSkzck+u3KPDGaiLSPcKnk88EEZsZVNN8EvTSgr4lHOj1fofDP8f+ioG3moYirkQR8iIr5VfimuBw97XWUl+mpG9Mj9XVrzp8uoMDSZKc3Dk7NIPsmUcprXNJU+snbN5es458s/274DB3NBhv73hFp/7/wlFdxqsrb1qOEGd3EzhvthNaFI/+4FnwzhAgOPWibl5jtqp1PG6qPD8O25Oj1KtOXZ0TVEuf0al1GibTZthMXgjYBMWI7sahsU5Yr2dthLQMVhGoIqxHVJ3iwkNnH6CJlz0zOf/uE2RCpIlU/pDKZTisr+grVisuRVAcyYOPSM9uhtBbPA3bVYhW7thDF7p6E4QDwCukrYwy71t0w1+WmVN4G/1MhMTUCRsdhKEDxiHWykJT6jYokgQO3TXjCoJB2R+BulI5PyDIKhc/cPrbeoJZiSURROJOX62fYKxV63p3vYZp5VkgHC7/CKtxisja2PuqpA+3tG6lO7806VFtK3YU7eSFEzTqn6IY2SW1f+xjtuMVxU/jkcNyD76zmodj4Vb/2HOYW/1+FnBXPayHxJFMV5aLK0PAKkpOp1e9UBktQhJaNzhj5AuBzzp6jtN6jfkwxZKA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(39830400003)(366004)(346002)(396003)(136003)(376002)(9686003)(38100700002)(26005)(7416002)(966005)(5660300002)(66476007)(6512007)(86362001)(6506007)(478600001)(8936002)(6486002)(53546011)(41300700001)(6666004)(8676002)(83380400001)(2906002)(4326008)(6916009)(44832011)(66946007)(66556008)(316002)(54906003)(186003)(33716001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8j6Vl7MTgiJcE46O+rrkmIo2lCEUl3ykKT9N7MqJHWF6UrodMuVQfDhR0sxE?=
+ =?us-ascii?Q?i6c/75XVb3whfMtz9WwP2agf5/bbrgNKDseDuWnLoHZhVYFQxwf4gUOd/GIL?=
+ =?us-ascii?Q?Fytr6LMiAdVQf9bS90NDU4bLi9dTOtG1De/CAsOItlNfUyEvz6RNSw4oHVAo?=
+ =?us-ascii?Q?/ejFBgl+61cCd3BTIm5n0XKukWOEQPxfhkuxioJA/Qtrw1Yc3H6ClvGF3DLG?=
+ =?us-ascii?Q?AGh+LRxLlxC6WkRTPrfGW7lf4TnupCdSSHrZ5Ps0DH6Wl7Ef89eaNj/i+KCh?=
+ =?us-ascii?Q?Zux8InMT1yqZdf4GvuZBHOePf3/joKC+5AG9okJKXERAKwvY4MLcFbAc2vQR?=
+ =?us-ascii?Q?kQ13GmID4iXWZc+0pEbaudwLxE8XBvqbKQq5GUjvpShAwg+4BiDhSOcGPS5U?=
+ =?us-ascii?Q?lC1ESFpWV+j45EKy6bMXIO7Q/pEvEKon5iRbUULmsNpMysW1zx9z1zwMV22v?=
+ =?us-ascii?Q?sssNiSBEw8S5yA+DVVWGheP83nlggpclcSm7Q8QOlye4+G77gicmHp/j8bOr?=
+ =?us-ascii?Q?rs4PfqYaMt/6M7GvfKRpZlDAAx8NUpF2OM7Cg7KQislYWkLPoXSgR1w1h433?=
+ =?us-ascii?Q?nwC4yjj5QtEta7i0lGJG8AdHAquXXWMSAoe5Nfu4aBoIRjp+uT9G8FY4+Mx/?=
+ =?us-ascii?Q?iNrGBmBWB7qv9335sMznrglJ1jEXWorGSuUXNsuHMpo52Suc8UqaQK9Lxa7D?=
+ =?us-ascii?Q?KcYWaXviuTP+pDz7EOBn8PZYbG50HCV4Y31gNrbGwgkKbt6mbpVBguK1Lmeu?=
+ =?us-ascii?Q?dXcueYVJk5JpCQ8jBJctQSdh1m9oqslBNBsOBU3MUFyfYxqi/9wOPH5ad8JX?=
+ =?us-ascii?Q?kzGbXVGbcjyzSmfbPiqpHV6MWMmel/Uh+eLHuW+cWh2erwQigBoNWOSRXaOY?=
+ =?us-ascii?Q?sJMsMN/J2KQlOsU9RgApEOWBtjzKJa8oltZKWdPpu+KnkAmhA75/J2AHIXSO?=
+ =?us-ascii?Q?C31f0mC3xvd187XD+fRarG4sTSwwDfhRhZdcPVI3nzJ5WMKXk8NvRLeHFvaV?=
+ =?us-ascii?Q?KSEDHD/d8HtMMFA4MGlL2dBO6Bpc0SBjUsx7LaDvR4A5uMnHOgnQVYCpGSN8?=
+ =?us-ascii?Q?GQWlKrWC+C4Q4yeOSwicl0LMTjNVBayjvemQKRbBP/6U9u1h93tFLo3BmMF9?=
+ =?us-ascii?Q?UGTiYtx9CKOQAHTF4rNDacVhkjYY0TKpaobQqNOvaOokszjhBQLj8JM1PsZ2?=
+ =?us-ascii?Q?aCiBkMIf+tyOvApjgGhBToIWhQ5NAM1qCVxh8a/O9JS1PW5fZH0ed7nDQLd+?=
+ =?us-ascii?Q?vRpnh+bEPX+7PHeWqIZh/A86A4QpPhty0m3c4ZAELDi1s1Jj2rvz5bY9oKtw?=
+ =?us-ascii?Q?DdX5zdy3nS04QXnDkaeOrFcgs2aZYiX8pMr2G8GrFD/OexWYjsw0jv7SwOXE?=
+ =?us-ascii?Q?So1ymR7KIYR8pO8IJDF1Fqr6paIDOjst/apZmovPKz/C1HDux+eF8cB0+ma9?=
+ =?us-ascii?Q?o9ufQC/f48Lgu14E62NYituxKLxFu4Iml7raWeqNHTNBN4+3ZuhWpdSyw8xO?=
+ =?us-ascii?Q?2/3dOvCgcFArYEBc17/9c4Orc96VDenWEjWh/8gRh5d4cWxf8cldg/uzDUPg?=
+ =?us-ascii?Q?WF92ECO4ZeJOfAjhFiiDzbjkDdljJUxRF1qX9ya7VB90JgtMhwbl5SC0qc7q?=
+ =?us-ascii?Q?/A=3D=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b999a858-1869-45c1-e125-08da7f9ad1ee
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2022 15:20:15.4349
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: osholmrSZhtng+YIJdykvXMpAABkld8RpJD4L6B5Y1O2f7b/onlSuewPKxjj5AY6wFWDB2LAPmLu9AYVv2dDXfhAsf2gkUQ7cSGW6tZ/sbc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB4994
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/16/2022 6:26 PM, Mark Rutland wrote:
-> On Tue, Aug 16, 2022 at 03:37:29PM +0800, Yicong Yang wrote:
->> On 2022/8/15 19:25, Mark Rutland wrote:
->>> On Mon, Aug 15, 2022 at 05:28:15PM +0800, Yicong Yang wrote:
->>>> From: Yicong Yang <yangyicong@hisilicon.com>
->>>>
->>>> The WARN_ON() on irq_set_affinity() failure is misused according to the [1]
->>>> and may crash people's box unintentionally. This may also be redundant since
->>>> in the failure case we may also trigger the WARN and dump the stack in the
->>>> perf core[2] for a second time.
->>>
->>> In what way do you think are these misused? I can't immediately see what you
->>> think applies from [1].
->>
->> As commented by irq_set_affinity() it "Fails if cpumask does not contain an online
->>  CPU" 
+On Tue, Aug 16, 2022 at 11:52:53AM +0300, Andy Shevchenko wrote:
+> On Mon, Aug 15, 2022 at 5:35 PM Ido Schimmel <idosch@idosch.org> wrote:
+> >
+> > On Mon, Aug 15, 2022 at 07:19:13AM -0700, Colin Foster wrote:
+> > > Something is going on that I don't fully understand with <asm/byteorder.h>.
+> > > I don't quite see how ocelot-core is throwing all sorts of errors in x86
+> > > builds now:
+> > >
+> > > https://patchwork.hopto.org/static/nipa/667471/12942993/build_allmodconfig_warn/stderr
+> > >
+> > > Snippet from there:
+> > >
+> > > /home/nipa/nipa/tests/patch/build_32bit/build_32bit.sh: line 21: ccache gcc: command not found
+> > > ../drivers/mfd/ocelot-spi.c: note: in included file (through ../include/linux/bitops.h, ../include/linux/kernel.h, ../arch/x86/include/asm/percpu.h, ../arch/x86/include/asm/current.h, ../include/linux/sched.h, ...):
+> > > ../arch/x86/include/asm/bitops.h:66:1: warning: unreplaced symbol 'return'
+> > > ../drivers/mfd/ocelot-spi.c: note: in included file (through ../include/linux/bitops.h, ../include/linux/kernel.h, ../arch/x86/include/asm/percpu.h, ../arch/x86/include/asm/current.h, ../include/linux/sched.h, ...):
+> > > ../include/asm-generic/bitops/generic-non-atomic.h:29:9: warning: unreplaced symbol 'mask'
+> > > ../include/asm-generic/bitops/generic-non-atomic.h:30:9: warning: unreplaced symbol 'p'
+> > > ../include/asm-generic/bitops/generic-non-atomic.h:32:10: warning: unreplaced symbol 'p'
+> > > ../include/asm-generic/bitops/generic-non-atomic.h:32:16: warning: unreplaced symbol 'mask'
+> > > ../include/asm-generic/bitops/generic-non-atomic.h:27:1: warning: unreplaced symbol 'return'
+> > > ../drivers/mfd/ocelot-spi.c: note: in included file (through ../arch/x86/include/asm/bitops.h, ../include/linux/bitops.h, ../include/linux/kernel.h, ../arch/x86/include/asm/percpu.h, ../arch/x86/include/asm/current.h, ...):
+> > > ../include/asm-generic/bitops/instrumented-non-atomic.h:26:1: warning: unreplaced symbol 'return'
+> > >
+> > >
+> > > <asm/byteorder.h> was included in both drivers/mfd/ocelot-spi.c and
+> > > drivers/mfd/ocelot.h previously, though Andy pointed out there didn't
+> > > seem to be any users... and I didn't either. I'm sure there's something
+> > > I must be missing.
+> >
+> > I got similar errors in our internal CI yesterday. Fixed by compiling
+> > sparse from git:
+> > https://git.kernel.org/pub/scm/devel/sparse/sparse.git/commit/?id=0e1aae55e49cad7ea43848af5b58ff0f57e7af99
+> >
+> > The update is also available in the "testing" repo in case you are
+> > running Fedora 35 / 36:
+> > https://bodhi.fedoraproject.org/updates/FEDORA-2022-c58b53730f
+> > https://bodhi.fedoraproject.org/updates/FEDORA-2022-2bc333ccac
 > 
-> In all of the cases below we've chosen an online CPU. So the only way this can
-> happen is if there is a bug in the code, in which case a WARN_ON() is
-> appropriate. Also, there are *other* reasons irq_set_affinity() can fail.
-> 
->> which means we passed an invalid input, I think which violiates the "Do not
->> use these macros when checking for invalid external inputs".
-> 
-> There is no external input here. The chosen CPU didn't come from userspace or
-> an external source; we chose it ourselves based on kernel internal data (e.g.
-> cpu_online_mask).
-> 
-> So that does not apply here.
-> 
->>> In perf we rely upon interrupt affinity to enforce serialization in a few
->>> places, so if we fail to set the interrupt affinity there are a number of
->>> things which could go wrong (e.g. memory corruption, and all the fun that could
->>> result from that). We use WARN_ON() to catch that early.
->>
->> If we'd like to catch this failure information early maybe a dev_err() should be
->> enough to indicate this.
-> 
-> I don't see why it is necessary to change to dev_err().
-> 
->>> I can't immediately see how [2] is relevant, since that's in the context of an
->>> IPI handler, and this patch affects the affinity of the PMU HW IRQ handler.
->>
->> I think it's relevant (please correct me) as when I debug another pmu driver using
->> MSI interrupt[*], I found I'll trigger the WARN() in [2] if the interrupt is not
->> bind to the CPU which start trace. So I think it's required to handle the interrupt
->> on the same CPU start the trace otherwise the "context" is mismatched.
-> 
-> Sorry, I had confused event_function_local() with event_function().
-> 
-> I still think we want to keep the WARN_ON() here since before we get to
-> event_function_local() we may do other things in the IRQ handler.
-> 
+> Debian still produces the same errors which makes sparse useless.
 
-ok. Another point of this patch is to avoid panic and reboot on WARN() (pointed by Greg
-to not crash people's box), is it intended here? If not but we still want a callstack in
-these places, does it make sense to use dev_err() + dump_stack() instead?
+I haven't jumped into this one yet. But everything seems to be compiling
+and running in ARM.
 
-Thanks.
+Do you think this is a false positive / unrelated to this patch? Or do
+you think this is a true error that I did wrong? I haven't been around
+for too many releases, so I'm not sure if this is common after an -rc1.
 
 > 
->>
->> [*] https://lore.kernel.org/lkml/20220721130116.43366-3-yangyicong@huawei.com/
->>
->> Thanks.
->>
->>> Thanks,
->>> Mark.
->>>
->>>>
->>>> So change the WARN_ON() to dev_err() to just print the failure message.
->>>>
->>>> [1] https://github.com/torvalds/linux/blob/master/include/asm-generic/bug.h#L74
->>>> [2] https://github.com/torvalds/linux/blob/master/kernel/events/core.c#L313
->>>>
->>>> Suggested-by: Greg KH <gregkh@linuxfoundation.org>
->>>> [https://lore.kernel.org/lkml/YuOi3i0XHV++z1YI@kroah.com/]
->>>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
->>>> ---
->>>>  drivers/perf/arm-ccn.c                   | 5 +++--
->>>>  drivers/perf/arm_dmc620_pmu.c            | 3 ++-
->>>>  drivers/perf/arm_smmuv3_pmu.c            | 6 ++++--
->>>>  drivers/perf/fsl_imx8_ddr_perf.c         | 3 ++-
->>>>  drivers/perf/hisilicon/hisi_pcie_pmu.c   | 6 ++++--
->>>>  drivers/perf/hisilicon/hisi_uncore_pmu.c | 6 ++++--
->>>>  drivers/perf/qcom_l2_pmu.c               | 8 ++++++--
->>>>  drivers/perf/xgene_pmu.c                 | 6 ++++--
->>>>  8 files changed, 29 insertions(+), 14 deletions(-)
->>>>
->>>> diff --git a/drivers/perf/arm-ccn.c b/drivers/perf/arm-ccn.c
->>>> index 728d13d8e98a..83abd909ba49 100644
->>>> --- a/drivers/perf/arm-ccn.c
->>>> +++ b/drivers/perf/arm-ccn.c
->>>> @@ -1210,8 +1210,9 @@ static int arm_ccn_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
->>>>  		return 0;
->>>>  	perf_pmu_migrate_context(&dt->pmu, cpu, target);
->>>>  	dt->cpu = target;
->>>> -	if (ccn->irq)
->>>> -		WARN_ON(irq_set_affinity(ccn->irq, cpumask_of(dt->cpu)));
->>>> +	if (ccn->irq && irq_set_affinity(ccn->irq, cpumask_of(dt->cpu)))
->>>> +		dev_err(ccn->dev, "Failed to set interrupt affinity\n");
->>>> +
->>>>  	return 0;
->>>>  }
->>>>  
->>>> diff --git a/drivers/perf/arm_dmc620_pmu.c b/drivers/perf/arm_dmc620_pmu.c
->>>> index 280a6ae3e27c..b59d3d9eb779 100644
->>>> --- a/drivers/perf/arm_dmc620_pmu.c
->>>> +++ b/drivers/perf/arm_dmc620_pmu.c
->>>> @@ -621,7 +621,8 @@ static int dmc620_pmu_cpu_teardown(unsigned int cpu,
->>>>  		perf_pmu_migrate_context(&dmc620_pmu->pmu, irq->cpu, target);
->>>>  	mutex_unlock(&dmc620_pmu_irqs_lock);
->>>>  
->>>> -	WARN_ON(irq_set_affinity(irq->irq_num, cpumask_of(target)));
->>>> +	if (irq_set_affinity(irq->irq_num, cpumask_of(target)))
->>>> +		dev_err(dmc620_pmu->pmu.dev, "Failed to set interrupt affinity\n");
->>>>  	irq->cpu = target;
->>>>  
->>>>  	return 0;
->>>> diff --git a/drivers/perf/arm_smmuv3_pmu.c b/drivers/perf/arm_smmuv3_pmu.c
->>>> index 00d4c45a8017..05e1b3e274d7 100644
->>>> --- a/drivers/perf/arm_smmuv3_pmu.c
->>>> +++ b/drivers/perf/arm_smmuv3_pmu.c
->>>> @@ -646,7 +646,8 @@ static int smmu_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
->>>>  
->>>>  	perf_pmu_migrate_context(&smmu_pmu->pmu, cpu, target);
->>>>  	smmu_pmu->on_cpu = target;
->>>> -	WARN_ON(irq_set_affinity(smmu_pmu->irq, cpumask_of(target)));
->>>> +	if (irq_set_affinity(smmu_pmu->irq, cpumask_of(target)))
->>>> +		dev_err(smmu_pmu->dev, "Failed to set interrupt affinity\n");
->>>>  
->>>>  	return 0;
->>>>  }
->>>> @@ -892,7 +893,8 @@ static int smmu_pmu_probe(struct platform_device *pdev)
->>>>  
->>>>  	/* Pick one CPU to be the preferred one to use */
->>>>  	smmu_pmu->on_cpu = raw_smp_processor_id();
->>>> -	WARN_ON(irq_set_affinity(smmu_pmu->irq, cpumask_of(smmu_pmu->on_cpu)));
->>>> +	if (irq_set_affinity(smmu_pmu->irq, cpumask_of(smmu_pmu->on_cpu)))
->>>> +		dev_err(dev, "Failed to set interrupt affinity\n");
->>>>  
->>>>  	err = cpuhp_state_add_instance_nocalls(cpuhp_state_num,
->>>>  					       &smmu_pmu->node);
->>>> diff --git a/drivers/perf/fsl_imx8_ddr_perf.c b/drivers/perf/fsl_imx8_ddr_perf.c
->>>> index 8e058e08fe81..c44192e2d9db 100644
->>>> --- a/drivers/perf/fsl_imx8_ddr_perf.c
->>>> +++ b/drivers/perf/fsl_imx8_ddr_perf.c
->>>> @@ -671,7 +671,8 @@ static int ddr_perf_offline_cpu(unsigned int cpu, struct hlist_node *node)
->>>>  	perf_pmu_migrate_context(&pmu->pmu, cpu, target);
->>>>  	pmu->cpu = target;
->>>>  
->>>> -	WARN_ON(irq_set_affinity(pmu->irq, cpumask_of(pmu->cpu)));
->>>> +	if (irq_set_affinity(pmu->irq, cpumask_of(pmu->cpu)))
->>>> +		dev_err(pmu->dev, "Failed to set interrupt affinity\n");
->>>>  
->>>>  	return 0;
->>>>  }
->>>> diff --git a/drivers/perf/hisilicon/hisi_pcie_pmu.c b/drivers/perf/hisilicon/hisi_pcie_pmu.c
->>>> index 21771708597d..90aed9e51396 100644
->>>> --- a/drivers/perf/hisilicon/hisi_pcie_pmu.c
->>>> +++ b/drivers/perf/hisilicon/hisi_pcie_pmu.c
->>>> @@ -655,7 +655,8 @@ static int hisi_pcie_pmu_online_cpu(unsigned int cpu, struct hlist_node *node)
->>>>  
->>>>  	if (pcie_pmu->on_cpu == -1) {
->>>>  		pcie_pmu->on_cpu = cpu;
->>>> -		WARN_ON(irq_set_affinity(pcie_pmu->irq, cpumask_of(cpu)));
->>>> +		if (irq_set_affinity(pcie_pmu->irq, cpumask_of(cpu)))
->>>> +			pci_err(pcie_pmu->pdev, "Failed to set interrupt affinity\n");
->>>>  	}
->>>>  
->>>>  	return 0;
->>>> @@ -681,7 +682,8 @@ static int hisi_pcie_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
->>>>  	perf_pmu_migrate_context(&pcie_pmu->pmu, cpu, target);
->>>>  	/* Use this CPU for event counting */
->>>>  	pcie_pmu->on_cpu = target;
->>>> -	WARN_ON(irq_set_affinity(pcie_pmu->irq, cpumask_of(target)));
->>>> +	if (irq_set_affinity(pcie_pmu->irq, cpumask_of(target)))
->>>> +		pci_err(pcie_pmu->pdev, "Failed to set interrupt affinity\n");
->>>>  
->>>>  	return 0;
->>>>  }
->>>> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pmu.c
->>>> index fbc8a93d5eac..74397b5ec889 100644
->>>> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.c
->>>> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.c
->>>> @@ -492,7 +492,8 @@ int hisi_uncore_pmu_online_cpu(unsigned int cpu, struct hlist_node *node)
->>>>  	hisi_pmu->on_cpu = cpu;
->>>>  
->>>>  	/* Overflow interrupt also should use the same CPU */
->>>> -	WARN_ON(irq_set_affinity(hisi_pmu->irq, cpumask_of(cpu)));
->>>> +	if (irq_set_affinity(hisi_pmu->irq, cpumask_of(cpu)))
->>>> +		dev_err(hisi_pmu->dev, "Failed to set interrupt affinity\n");
->>>>  
->>>>  	return 0;
->>>>  }
->>>> @@ -525,7 +526,8 @@ int hisi_uncore_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
->>>>  	perf_pmu_migrate_context(&hisi_pmu->pmu, cpu, target);
->>>>  	/* Use this CPU for event counting */
->>>>  	hisi_pmu->on_cpu = target;
->>>> -	WARN_ON(irq_set_affinity(hisi_pmu->irq, cpumask_of(target)));
->>>> +	if (irq_set_affinity(hisi_pmu->irq, cpumask_of(target)))
->>>> +		dev_err(hisi_pmu->dev, "Failed to set interrupt affinity\n");
->>>>  
->>>>  	return 0;
->>>>  }
->>>> diff --git a/drivers/perf/qcom_l2_pmu.c b/drivers/perf/qcom_l2_pmu.c
->>>> index 30234c261b05..c6fe01c7e637 100644
->>>> --- a/drivers/perf/qcom_l2_pmu.c
->>>> +++ b/drivers/perf/qcom_l2_pmu.c
->>>> @@ -793,7 +793,9 @@ static int l2cache_pmu_online_cpu(unsigned int cpu, struct hlist_node *node)
->>>>  	cpumask_set_cpu(cpu, &l2cache_pmu->cpumask);
->>>>  	cluster_pmu_reset();
->>>>  
->>>> -	WARN_ON(irq_set_affinity(cluster->irq, cpumask_of(cpu)));
->>>> +	if (irq_set_affinity(cluster->irq, cpumask_of(cpu)))
->>>> +		dev_err(&l2cache_pmu->pdev->dev,
->>>> +			"Failed to set interrupt affinity\n");
->>>>  	enable_irq(cluster->irq);
->>>>  
->>>>  	return 0;
->>>> @@ -831,7 +833,9 @@ static int l2cache_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
->>>>  	perf_pmu_migrate_context(&l2cache_pmu->pmu, cpu, target);
->>>>  	cluster->on_cpu = target;
->>>>  	cpumask_set_cpu(target, &l2cache_pmu->cpumask);
->>>> -	WARN_ON(irq_set_affinity(cluster->irq, cpumask_of(target)));
->>>> +	if (irq_set_affinity(cluster->irq, cpumask_of(target)))
->>>> +		dev_err(&l2cache_pmu->pdev->dev,
->>>> +			"Failed to set interrupt affinity\n");
->>>>  
->>>>  	return 0;
->>>>  }
->>>> diff --git a/drivers/perf/xgene_pmu.c b/drivers/perf/xgene_pmu.c
->>>> index 0c32dffc7ede..f31e678fdb69 100644
->>>> --- a/drivers/perf/xgene_pmu.c
->>>> +++ b/drivers/perf/xgene_pmu.c
->>>> @@ -1790,7 +1790,8 @@ static int xgene_pmu_online_cpu(unsigned int cpu, struct hlist_node *node)
->>>>  		cpumask_set_cpu(cpu, &xgene_pmu->cpu);
->>>>  
->>>>  	/* Overflow interrupt also should use the same CPU */
->>>> -	WARN_ON(irq_set_affinity(xgene_pmu->irq, &xgene_pmu->cpu));
->>>> +	if (irq_set_affinity(xgene_pmu->irq, &xgene_pmu->cpu))
->>>> +		dev_err(xgene_pmu->dev, "Failed to set interrupt affinity\n");
->>>>  
->>>>  	return 0;
->>>>  }
->>>> @@ -1823,7 +1824,8 @@ static int xgene_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
->>>>  
->>>>  	cpumask_set_cpu(target, &xgene_pmu->cpu);
->>>>  	/* Overflow interrupt also should use the same CPU */
->>>> -	WARN_ON(irq_set_affinity(xgene_pmu->irq, &xgene_pmu->cpu));
->>>> +	if (irq_set_affinity(xgene_pmu->irq, &xgene_pmu->cpu))
->>>> +		dev_err(xgene_pmu->dev, "Failed to set interrupt affinity\n");
->>>>  
->>>>  	return 0;
->>>>  }
->>>> -- 
->>>> 2.24.0
->>>>
->>> .
->>>
+> -- 
+> With Best Regards,
+> Andy Shevchenko

@@ -2,180 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92861596066
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F33CE59606A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236515AbiHPQhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 12:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
+        id S236533AbiHPQiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 12:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236501AbiHPQhT (ORCPT
+        with ESMTP id S231737AbiHPQis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 12:37:19 -0400
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150080.outbound.protection.outlook.com [40.107.15.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9071780B51;
-        Tue, 16 Aug 2022 09:37:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gAK7a+d/SQv7PJniARy8O1kJkCCjd9aXc2wZIeI1vXgC8Q7twv7r05fTtQYMcdSk8g9bw4KhnESvr09uYfUGVbsgbrJJx5qgIxi0me0ATxzaX225K8gVPThmOjlCbiwxKBqzPykaXwAFI8uB8W2Cr8jN3AVaGAFHOSBXd2nLipt4VgJNj0+zvjvktps8WvzmgeErKc0SmkiBOLZZZCDVDtUAMzJJUQmRp5uUiibCEpj80PDZE0qy0pwVKv4bfdxpSsI/tOIaAEOYt/Y3mXljlgileX9X5MmvpD8s/wwtVGXwapI117DNod7lxkmjy4NPZ0pcK1/w/EcM1G6jLn5N4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7eA01Fxk1yEmtTWc14VxM5mRczbXp92HhdZMlJhkfp0=;
- b=jbQBCLvJX84FQcJ5xe3ef3mEweT9sPoK49UbTlqCUdEmd5YuPHPyG7LfUfDZ1H/NLVvVm3vbZUNiRMGG5rkyErqifAGLwROJE0At2zvAysmYjQOl99XXpuiKBOKa7Xg4BTfYIJ+kYN42xZnnZpeuY50AAowmSPXSMxysT0nJVWqHILiKcRFZifX+3WUigQAbW7P0ZXZsoBi5WLEnJZkIBxmiF3c/MbzFofXRJHkQEnNNp2H87me80ezHstBp2084rJKtgFy6YO7sP+xBQujjUEN2Lv90nwstV0KaIN1PP/PjaH4KwxGaMbYmDMB5HBijet23BTrdPgS6lZ39bNILVg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7eA01Fxk1yEmtTWc14VxM5mRczbXp92HhdZMlJhkfp0=;
- b=yXBcJLNd3vdZHd+5hFJhcONP17zmxsgHkLoXDDGkRxsjo48k/pJgpvpGZRaRf9loHbyWY5ryDkxnKAJdltpEKYDWPjol09l6JCkZV095mOwhEDdsdQDuE3LpxNFnpv9jylal9PUtD+0X9gNXbk0bCsCge0OgSmPLVk0rgHOW0z/0iL5zGVUxKpQ6+aiq2QmcASSywAFUVXcAGz6JE7UYbqOSVJZZ9TlvWj8RoYKOp3tDFwkKbjtZaHhH2Yu+Xuy0i8G8QCNQ7V7a0weZhlQAPMtZQxzF8AUWKO3wLBYNIJpZ31i/y5dvtR3JJJfWESnCkwGo99DsHDQ4nR/Z2DiPDw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
- by AM6PR0302MB3288.eurprd03.prod.outlook.com (2603:10a6:209:22::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Tue, 16 Aug
- 2022 16:37:14 +0000
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::ecaa:a5a9:f0d5:27a2]) by DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::ecaa:a5a9:f0d5:27a2%4]) with mapi id 15.20.5504.019; Tue, 16 Aug 2022
- 16:37:14 +0000
-From:   Sean Anderson <sean.anderson@seco.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org
-Cc:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Sean Anderson <sean.anderson@seco.com>
-Subject: [PATCH net] net: phy: Warn if phy is attached when removing
-Date:   Tue, 16 Aug 2022 12:37:01 -0400
-Message-Id: <20220816163701.1578850-1-sean.anderson@seco.com>
-X-Mailer: git-send-email 2.35.1.1320.gc452695387.dirty
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: CH2PR11CA0018.namprd11.prod.outlook.com
- (2603:10b6:610:54::28) To DB7PR03MB4972.eurprd03.prod.outlook.com
- (2603:10a6:10:7d::22)
+        Tue, 16 Aug 2022 12:38:48 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B0F77EB8;
+        Tue, 16 Aug 2022 09:38:45 -0700 (PDT)
+Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M6cD02PJ1z67lT9;
+        Wed, 17 Aug 2022 00:33:52 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Tue, 16 Aug 2022 18:38:43 +0200
+Received: from [10.48.154.245] (10.48.154.245) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 16 Aug 2022 17:38:42 +0100
+Message-ID: <28d6e48b-f52f-9467-8260-262504a1a1ff@huawei.com>
+Date:   Tue, 16 Aug 2022 17:38:43 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e725b9ae-452a-4202-a585-08da7fa59327
-X-MS-TrafficTypeDiagnostic: AM6PR0302MB3288:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Z6klGkI0AMmq/DAyKvWPOfq4rbRso75UIt4RLi3e2XaG0FV2HhwO8QgckvLW+qP/RfM1e4FE2gswlfQcFBkLkK/M1+a3NpIYfBvwwG37UjU61nXbQIZijZrdOVrumqPxXSZz5Sexe3k7lybCL6vUAz8kcPQnczCCqrMY9uWEqtcLG4bZVqcPZmPEq/GrufHEGZVTBD24WLOZvMTzvU/yPoIsIpJ4PflPnsrp+fZ+l5cpKlmeey3yJW238KxB7CyyCgjQuUcrAN9GXfAa8P1U/kerxnrsoDNc9C6uzwbMZ9iErXtF+v/JjjG0cXRUk5h1DicLAD4LSVet/cC2wRLABq9FRN9Go6XmjvjEz/kuiXvoc7xrZesHBMEsYw8djDgiGc+GJqP5EYREP/zNg4ESSqmNsHBtTshI+1lkmc2ORJKQB7nFjSenvp5MSBmsufdrEBxx3gL8JFU7N13Z4GUx+iiJeBOqjpeSZi4DijoYh3PzTLf4yZ6P0DsD7se1nTsAykPU5YdKRF24rST9JpFKSZtSWhJeNRIINZlNwksRngj97SnTaY0DU41aSrUFrflQX3tMDo4cBJNgb3Jon+tDg+6JrHYj305vwdtwlHjFwyzvQicK7BgVJSivcHCj6/IDgmH3TaGz64oQFB9St2rEHIO/43AHHrc6WMckHYxx8qltRkFYiaagEgnRhLDjNCdF9D80/J9MPl6BIOHLJ3r49ttmF5XT0KY9Eoqbp4DIqM5lSsrYXy/i79xmJ26j73KUtnDAeFQVJgbLObd7d18u8gQGBAjmlDDuYs1ecU+txMA0IsEDBfmbXp9dB7AXr5VmMQRujGCcdpsnktyNOD35Ew==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(366004)(136003)(396003)(346002)(39850400004)(86362001)(186003)(36756003)(107886003)(2616005)(52116002)(83380400001)(6512007)(1076003)(6506007)(6666004)(316002)(54906003)(478600001)(38350700002)(966005)(41300700001)(44832011)(8936002)(66946007)(110136005)(7416002)(8676002)(2906002)(26005)(5660300002)(66476007)(66556008)(38100700002)(4326008)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FymRWuW5RoJ9jttvNcDnhuzU4JWxXJ13o+ochrgIe6CTjeGo5B1Tf6BIte5J?=
- =?us-ascii?Q?GNt1s37T+40LC+aAm6/jy1WCuwTWmowzgql0X7WsJAuqIe6kVBJvxeL1/lBv?=
- =?us-ascii?Q?/+usCcwjJ8PO2Vm17KmIQzyUoJ9B43GB3F1qRxWJZySTBBKidwaFe1U6J+iB?=
- =?us-ascii?Q?AM8wKrQsvkg5DGfqwJVeoAPULnOAAvAHk2fvSO4XBVYe69AJVvK5EOEWvFMC?=
- =?us-ascii?Q?bjwKlGlK8wrZel+8Lbyqbr6iII6NQKClXu4gm7pM/DbEBfsuNxXLZbiGPb6S?=
- =?us-ascii?Q?Kmqf4GFGuKz2WOZiYELXXXyA+rJcLyFtS1hVY7g17o5EwhHR9sAECwpLSMBL?=
- =?us-ascii?Q?IglN0bW/OYGrEu2PxQcTxzpuTn+PcyHYM1NFZ2/7IV2q2aOCb3+gC8CXfyoL?=
- =?us-ascii?Q?pstJNcrf58gbx6axjXFKrs+FKtesQqOCL9k1/M+HnXS3TNc72iDa22apVks0?=
- =?us-ascii?Q?xQjWIA+cyK9OnQK9M14YTZHu7AieA/sqM0mez6RB3BD1+37LIuB566YDcTnj?=
- =?us-ascii?Q?hXVd27ugj6vQhyuPTzRYFKTkXj4AjVWbBf3vfXxV8N6OIhX4NGdf4MJ98dsv?=
- =?us-ascii?Q?xHFbKq0iAJZPHU+CkKMQsFaxq2Th8tSC58N1OjpCg8yf2N8RHAqPyHNFdBe4?=
- =?us-ascii?Q?gWKcGPnUKXtTH7r47nBx24TrMh3JB5Gq8WzkuRI9REso077W4EtxmTspJntP?=
- =?us-ascii?Q?Rlicno16hIQjP2x3+aXur01Whhd+ZjlognC78WXreX0rJEduB+ksef3zDaoU?=
- =?us-ascii?Q?becULEQyeu2LMsO2Y8h4py8FhABd40/C8FT4ZH8gwTxqXyyVgWu0Rc17VQun?=
- =?us-ascii?Q?GayDs7QFdyquCFiXhwwT0VTvX3gPReMXPC7UrOxCjSCH4e9Q/HJ2rZz14sYZ?=
- =?us-ascii?Q?LNKdOofOmtnc5k1fUzfygf3+D5mBcx1rhYY1+NB5gLm+z2nevB/77RyuSj8L?=
- =?us-ascii?Q?NoJ/T2zhPBpPVZXbhd+++B4+BHK0puRkUlk6tly/eK70Z4rsMb5ak9//a8pV?=
- =?us-ascii?Q?s1q0IrCNqu07DvdSOG0QMPVWjPbhTSt0x2FRD4xzsmT4CpBBQhWo9JUdpIhj?=
- =?us-ascii?Q?F1uZxTGgaiUHmbo01n/wTWd8UrM4Bm0x5/KpQwmHIM13E0yB08vtmynkeXDn?=
- =?us-ascii?Q?atF5L7hw4scb85+/6TnO8we52g1Xq+45FTrI2rtnWi3NYJCuXvtVFAy1n0Q8?=
- =?us-ascii?Q?xWFEd2qzG7Tfknxz/C8+808AfBafqaJOU2Wmmykc4gH6C3eE+MIG4q41mk1R?=
- =?us-ascii?Q?n8PNdLgnUvF1UukRHxRNGaCe2G4p83FMuMSoIGIZMklBNNG0y+pXINIjlIU8?=
- =?us-ascii?Q?U2KadPiUghiuTVrTug3e9YOZd7fDvlsb/g3u2E22kv0t1ZAJO98z1wDXMJag?=
- =?us-ascii?Q?aPPuqkC2hL9vPOiGPKNyML8OeeaaRVzfHqVla55v+IxhSgkcJV0r8knKEDRB?=
- =?us-ascii?Q?VuoVaHR9hCDboJ1Fx8PZkQ7bzzKIcK992ca0V4kMUUtlgLTfFFIcHi8rlRyo?=
- =?us-ascii?Q?gIxhV55aTRypU74bKnTgvv3sBRYgzQAxFTixyCxESc0CPIZVEhQt6wF88rfY?=
- =?us-ascii?Q?g7yztm14ciJVcqatb83lLXJG7siU3EcgMaFYX7UCXGus0IBcc/vpDKHZSIWO?=
- =?us-ascii?Q?/g=3D=3D?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e725b9ae-452a-4202-a585-08da7fa59327
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2022 16:37:14.6839
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rbbpYox9+uu8/VjkAAKlAf9uJoMERocNFvexG35boa8WETwF8sywG4gvLcGlNatwIrmxMXnDTiMxwq7j/pKX1w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0302MB3288
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
+ regression
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Oliver Sang <oliver.sang@intel.com>
+CC:     Christoph Hellwig <hch@lst.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Linux Memory Management List" <linux-mm@kvack.org>,
+        <linux-ide@vger.kernel.org>, <lkp@lists.01.org>, <lkp@intel.com>,
+        <ying.huang@intel.com>, <feng.tang@intel.com>,
+        <zhengjun.xing@linux.intel.com>, <fengwei.yin@intel.com>
+References: <YuzPMMnnY739Tnit@xsang-OptiPlex-9020>
+ <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
+ <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
+ <e4106ffa-3842-45c0-9756-5226cfcfa17d@opensource.wdc.com>
+ <YvXeuCAK780OuJPz@xsang-OptiPlex-9020>
+ <2e9cf5a6-c043-5ccf-e363-097c6c941891@huawei.com>
+ <f1c3d717-339d-ba2b-9775-fc0e00f57ae3@huawei.com>
+ <Yvs/w93KUkgD9f7/@xsang-OptiPlex-9020>
+ <aabf7ed8-8d4d-dc68-1b8b-c91653701def@huawei.com>
+ <43eaa104-5b09-072c-56aa-6289569b0015@opensource.wdc.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <43eaa104-5b09-072c-56aa-6289569b0015@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.48.154.245]
+X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-netdevs using phylib can be oopsed from userspace in the following
-manner:
+On 16/08/2022 16:42, Damien Le Moal wrote:
+> On 2022/08/16 3:35, John Garry wrote:
+>> On 16/08/2022 07:57, Oliver Sang wrote:
+>>>>> For me, a complete kernel log may help.
+>>>> and since only 1HDD, the output of the following would be helpful:
+>>>>
+>>>> /sys/block/sda/queue/max_sectors_kb
+>>>> /sys/block/sda/queue/max_hw_sectors_kb
+>>>>
+>>>> And for 5.19, if possible.
+>>> for commit
+>>> 0568e61225 ("ata: libata-scsi: cap ata_device->max_sectors according to shost->max_sectors")
+>>>
+>>> root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_sectors_kb
+>>> 512
+>>> root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_hw_sectors_kb
+>>> 512
+>>>
+>>> for both commit
+>>> 4cbfca5f77 ("scsi: scsi_transport_sas: cap shost opt_sectors according to DMA optimal limit")
+>>> and v5.19
+>>>
+>>> root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_sectors_kb
+>>> 1280
+>>> root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_hw_sectors_kb
+>>> 32767
+>>>
+>>
+>> thanks, I appreciate this.
+>>
+>>   From the dmesg, I see 2x SATA disks - I was under the impression that
+>> the system only has 1x.
+>>
+>> Anyway, both drives show LBA48, which means the large max hw sectors at
+>> 32767KB:
+>> [   31.129629][ T1146] ata6.00: 1562824368 sectors, multi 1: LBA48 NCQ
+>> (depth 32)
+>>
+>> So this is what I suspected: we are capped from the default shost max
+>> sectors (1024 sectors).
+>>
+>> This seems like the simplest fix for you:
+>>
+>> --- a/include/linux/libata.h
+>> +++ b/include/linux/libata.h
+>> @@ -1382,7 +1382,8 @@ extern const struct attribute_group
+>> *ata_common_sdev_groups[];
+>>          .proc_name              = drv_name,                     \
+>>          .slave_destroy          = ata_scsi_slave_destroy,       \
+>>          .bios_param             = ata_std_bios_param,           \
+>> -       .unlock_native_capacity = ata_scsi_unlock_native_capacity
+>> +       .unlock_native_capacity = ata_scsi_unlock_native_capacity,\
+>> +       .max_sectors = ATA_MAX_SECTORS_LBA48
+> 
+> This is crazy large (65535 x 512 B sectors) and never result in that being
+> exposed as the actual max_sectors_kb since other limits will apply first
+> (mapping size).
 
-$ ip link set $iface up
-$ echo $(basename $(readlink /sys/class/net/$iface/phydev)) > \
-      /sys/class/net/$iface/phydev/driver/unbind
-$ ip link set $iface down
+Here is how I read values from above for max_sectors_kb and 
+max_hw_sectors_kb:
 
-However, the traceback provided is a bit too late, since it does not
-capture the root of the problem (unbinding the driver). It's also
-possible that the memory has been reallocated if sufficient time passes
-between when the phy is detached and when the netdev touches the phy
-(which could result in silent memory corruption). Add a warning at the
-source of the problem. A future patch could make this more robust by
-calling dev_close.
+v5.19 + 0568e61225 : 512/512
+v5.19 + 0568e61225 + 4cbfca5f77 : 512/512
+v5.19: 1280/32767
 
-Signed-off-by: Sean Anderson <sean.anderson@seco.com>
----
-This is a result of discussion around my attempt to make PCS devices
-proper devices [1]. Russell pointed out [2] that someone could unbind
-the PCS at any time. However, the same issue applies to ethernet phys,
-as well as serdes phys. Both of these can be unbound at any time, yet
-no precautions are taken to avoid dereferencing a stale pointer.
+They are want makes sense to me, at least.
 
-As I discussed [3], we have (in general) four ways to approach this
+Oliver, can you confirm this? Thanks!
 
-- Just warn and accept that we are going to oops later on
-- Create devlinks between the consumer/supplier
-- Create a composite device composed of the consumer and its suppliers
-- Add a callback (such as dev_close) and call it when the consumer goes
-  away
+On this basis, it appears that max_hw_sectors_kb is getting capped from 
+scsi default @ 1024 sectors by commit 0568e61225. If it were getting 
+capped by swiotlb mapping limit then that would give us 512 sectors - 
+this value is fixed.
 
-It is (of course) also possible to rewrite phylib so that devices are
-not used (preventing the phy from being unbound). However, I suspect
-that this is quite undesirable.
+So for my SHT change proposal I am just trying to revert to previous 
+behaviour in 5.19 - make max_hw_sectors_kb crazy big again.
 
-This patch implements the first option, which, while fixing nothing, at
-least provides some better debug information.
+> 
+> The regression may come not from commands becoming tiny, but from the fact that
+> after the patch, max_sectors_kb is too large, 
 
-[1] https://lore.kernel.org/netdev/20220711160519.741990-1-sean.anderson@seco.com/
-[2] https://lore.kernel.org/netdev/YsyPGMOiIGktUlqD@shell.armlinux.org.uk/
-[3] https://lore.kernel.org/netdev/9747f8ef-66b3-0870-cbc0-c1783896b30d@seco.com/
+I don't think it is, but need confirmation.
 
- drivers/net/phy/phy_device.c | 2 ++
- 1 file changed, 2 insertions(+)
+>causing a lot of overhead with
+> qemu swiotlb mapping and slowing down IO processing.
 
-diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index 0c6efd792690..d75ca97f74d4 100644
---- a/drivers/net/phy/phy_device.c
-+++ b/drivers/net/phy/phy_device.c
-@@ -3119,6 +3119,8 @@ static int phy_remove(struct device *dev)
- 
- 	cancel_delayed_work_sync(&phydev->state_queue);
- 
-+	WARN_ON(phydev->attached_dev);
-+
- 	mutex_lock(&phydev->lock);
- 	phydev->state = PHY_DOWN;
- 	mutex_unlock(&phydev->lock);
--- 
-2.35.1.1320.gc452695387.dirty
+> 
+> Above, it can be seen that we ed up with max_sectors_kb being 1280, which is the
+> default for most scsi disks (including ATA drives). That is normal. But before
+> that, it was 512, which likely better fits qemu swiotlb and does not generate
 
+Again, I don't think this this is the case. Need confirmation.
+
+> overhead. So the above fix will not change anything I think...
+
+
+Thanks,
+John

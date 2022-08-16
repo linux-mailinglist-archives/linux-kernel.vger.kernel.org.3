@@ -2,87 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34FBB595C83
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C96C7595C7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbiHPM51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 08:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
+        id S233697AbiHPM5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 08:57:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232550AbiHPM5C (ORCPT
+        with ESMTP id S232939AbiHPM5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 08:57:02 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA838979E3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 05:56:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660654589; x=1692190589;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9dmsjCXBkUH6EeoqDGUhnKaCzPvSWsgnyLBDIcgCWsU=;
-  b=TAg/SUxNr8WXB7luDmAqP7atoTWoTzewEFD5JGrNIt5QM0H9JSAla5wM
-   TYdDMFWg1hHjEC8fHQ3SBE9uTuq+f1xEf8h3LhMISzUoIlPwnimtodOLA
-   cwmfp9pRQf826iA4wfAT+MFwjo7IxW/RSO4LNyn694Ef5lZrNWV47pPV8
-   Uxaozlh1jDxXvIAk0RTfafZTrz/HyqXJOtSbNr1LI+hz2ijoauyUOkeOO
-   uK8zqj6yf22cL5x23L2lXrQznduxcybXcbgE4Wq13m6gGbRe8STnPDyHw
-   TBqmIZQzLaJCTFVAHfqTtu5T0A5CpwGAmkPQqztTk4XVTxy1zdaGMIxc/
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="293004107"
-X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="293004107"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 05:56:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="557686020"
-Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by orsmga003.jf.intel.com with ESMTP; 16 Aug 2022 05:56:27 -0700
-From:   kan.liang@linux.intel.com
-To:     peterz@infradead.org, acme@redhat.com, linux-kernel@vger.kernel.org
-Cc:     eranian@google.com, ak@linux.intel.com, namhyung@kernel.org,
-        irogers@google.com, Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH 2/2] perf docs: Update the documentation for the save_type filter
-Date:   Tue, 16 Aug 2022 05:56:12 -0700
-Message-Id: <20220816125612.2042397-2-kan.liang@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220816125612.2042397-1-kan.liang@linux.intel.com>
-References: <20220816125612.2042397-1-kan.liang@linux.intel.com>
+        Tue, 16 Aug 2022 08:57:13 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3B91EAFA
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 05:57:06 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id a9so14771632lfm.12
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 05:57:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=u6vsO210HbSOzl+ApBtKdfKeKIVufqnfwmwO0kmWyvI=;
+        b=ryshPL7gSJngeT8mVWdgphUp3NPNc5/8T07ioXmLOYFE+RM9kMFox6j/QSmMx+MRjW
+         IF5Tvsu+eUNa/PURaluKXcxsPoKwTU0v6obcpVNF6S4E2WUJQwfcMoAedizNNTEJVzIN
+         qApkaeQsH9W4FBpYE2y4cHYlnaFnoj9yBLWWtHAiDyYD2WSMopnYkuWFR3AZvGXe9orE
+         W7mL52SexG3h2NyytiRZEwQPnlFxYDDwyJbFKcIuCS7pw5DDoUXAJcdrv+Qc4tTN48CC
+         ofihlq8KHD75r9tNZ+KV2KtQWXkZp55mGCW7DPJAuyRkCANnLDWg9JgV8nXF25DqpsEo
+         /E1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=u6vsO210HbSOzl+ApBtKdfKeKIVufqnfwmwO0kmWyvI=;
+        b=I9IzU9zmvCON3RYo13rpi6m+4eXo/WIEpqHvpgDmlUUW9bWY9rKLhSeL+UbdQL5Ukd
+         rohGN5b7Ue/y2ADV1Z2Wtcvi5WSTIN38E8WCppUQQ9bTv6ZjVk5jRY/ZPpx0AAoBeqrV
+         3y90yC8BwwlolMsQTNJb4GFQIhdcSajGT9d3WtrmObEIHLOYt3TJTBAOYNwDFsT+lHsc
+         oUtR/Dnl22NReetyBQb1xwt8g5Lq2OzrpoT4c0vutx83ujXWUs6k0A6k7pxmsIOvFNG8
+         JsX1Grz7uySQGvoj8oTSQu3E0X36thSuhh1gm1tI/Qykn7xKqbP9vThrlhsFnTl2rB+X
+         b6Uw==
+X-Gm-Message-State: ACgBeo3v0jlOgNe6c6g5tpqBAbYvnZcEFnLxs9egaz3WWpkEMyd/I1+Q
+        Sl98xCSrNzWUkEhfuSaYbwTXZw==
+X-Google-Smtp-Source: AA6agR60sMxOHtIXk2hcNdYq73fYG6QiAiIF8W4tR5L6Ra08qXNqi9BEiQFyK2ct4uvflrrmAZRnVQ==
+X-Received: by 2002:a05:6512:b03:b0:492:88d3:8369 with SMTP id w3-20020a0565120b0300b0049288d38369mr3820559lfu.552.1660654625046;
+        Tue, 16 Aug 2022 05:57:05 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
+        by smtp.gmail.com with ESMTPSA id b26-20020ac2411a000000b0048af9d2d119sm1379707lfi.130.2022.08.16.05.57.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 05:57:04 -0700 (PDT)
+Message-ID: <1349b271-796b-c9d2-a568-f9be84926ed4@linaro.org>
+Date:   Tue, 16 Aug 2022 15:57:02 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 1/1] regulator: dt-bindings: mediatek: add mt6366
+Content-Language: en-US
+To:     "zhiyong.tao" <zhiyong.tao@mediatek.com>
+Cc:     lee.jones@linaro.org, robh+dt@kernel.org, matthias.bgg@gmail.com,
+        lgirdwood@gmail.com, broonie@kernel.org, eddie.huang@mediatek.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        fshao@chromium.org, sen.chu@mediatek.com, hui.liu@mediatek.com,
+        allen-kh.cheng@mediatek.com, hsin-hsiung.wang@mediatek.com,
+        sean.wang@mediatek.com, macpaul.lin@mediatek.com,
+        wen.su@mediatek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220812092901.6429-1-zhiyong.tao@mediatek.com>
+ <20220812092901.6429-2-zhiyong.tao@mediatek.com>
+ <cbe761af-5011-83a2-0509-2b3c4fe0a79c@linaro.org>
+ <4a49b619deb5453749a47874377cad6a36a9a054.camel@mediatek.com>
+ <CAGE=qrohYZ6f9bbEuYfF=2Rz21nbW_8ho3rBQmHt1D+kQG2-jA@mail.gmail.com>
+ <9bc148119fc36c34f404091ca0f5a2e37727c285.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9bc148119fc36c34f404091ca0f5a2e37727c285.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+On 16/08/2022 15:54, zhiyong.tao wrote:
+> On Fri, 2022-08-12 at 15:55 +0300, Krzysztof Kozlowski wrote:
+>> On Fri, 12 Aug 2022 at 15:52, zhiyong.tao <zhiyong.tao@mediatek.com>
+>> wrote:
+>>>
+>>> On Fri, 2022-08-12 at 13:55 +0300, Krzysztof Kozlowski wrote:
+>>>> On 12/08/2022 12:29, Zhiyong Tao wrote:
+>>>>> Add mt6366 regulator document
+>>>>>
+>>>>> +
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    const: mediatek,mt6366-regulator
+>>>>> +
+>>>>> +  regulators:
+>>>>> +    type: object
+>>>>> +    description: List of regulators and its properties
+>>>>> +
+>>>>> +    patternProperties:
+>>>>> +      "^buck-
+>>>>> v(dram1|core|coresshub|proc11|proc12|gpu|s2|modem|s1)$":
+>>>>> +        type: object
+>>>>> +        $ref: regulator.yaml#
+>>>>> +        unevaluatedProperties: false
+>>>>> +
+>>>>> +      "^ldo-v(dram2|sim1|ibr|rf12|usb|camio|camd|cn18|fe28)$":
+>>>>> +        type: object
+>>>>> +        $ref: regulator.yaml#
+>>>>
+>>>> You miss unevaluatedProperties in most of the places.
+>>>
+>>> Hi Krzysztof,
+>>>    Thanks for your suggestion,
+>>>    Do you mean that all places should have the
+>>> unevaluatedProperties
+>>> Properties ?
+>>
+>> Yes. You put it in some of the places which does not really make
+>> sense...
+> 
+> Hi Krzysztof,
+>    Thanks for your suggestion,
+>    We find that if there is a properties "compatible = "regulator-
+> fixed";" in ldo-vrf12, we should set unevaluatedProperties as true.
+> or it will check yaml warning "Unevaluated Properties are not
+> allowed('compatible' was unexpected)". is it right?
+>    There is a properties "compatible = "regulator-fixed";"in ldo-vrf12.
+> It will cause the checking yaml error "ldo-vrf12: 'regulator-name' is a
+> required property". Can you help to give a suggestion to fix the
+> warning? Add regulator-name for ldo-vrf12 or other suggestion?
+> 
 
-Update the documentation to reflect the kernel changes.
+And how this regulator is supposed to work? Are you populating DT
+children in your driver?
 
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
----
- tools/perf/Documentation/perf-record.txt | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
-index 099817ef5150..d5c57ac1ee0a 100644
---- a/tools/perf/Documentation/perf-record.txt
-+++ b/tools/perf/Documentation/perf-record.txt
-@@ -397,6 +397,9 @@ following filters are defined:
- 	- abort_tx: only when the target is a hardware transaction abort
- 	- cond: conditional branches
- 	- save_type: save branch type during sampling in case binary is not available later
-+		     For the platforms with Intel Arch LBR support (12th-Gen+ client or
-+		     4th-Gen Xeon+ server), the save branch type is unconditionally enabled
-+		     when the taken branch stack sampling is enabled.
- 
- +
- The option requires at least one branch type among any, any_call, any_ret, ind_call, cond.
--- 
-2.35.1
-
+Best regards,
+Krzysztof

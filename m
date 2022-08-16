@@ -2,43 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B97555955EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 135145955F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbiHPJI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47142 "EHLO
+        id S233414AbiHPJJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232891AbiHPJHx (ORCPT
+        with ESMTP id S231173AbiHPJIi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:07:53 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC4BA7DF7F
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:25:20 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 59D021DB5;
-        Tue, 16 Aug 2022 00:25:20 -0700 (PDT)
-Received: from e120937-lin.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BDD443F70D;
-        Tue, 16 Aug 2022 00:25:17 -0700 (PDT)
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
-        souvik.chakravarty@arm.com, wleavitt@marvell.com,
-        peter.hilber@opensynergy.com, nicola.mazzucato@arm.com,
-        tarek.el-sherbiny@arm.com, cristian.marussi@arm.com
-Subject: [RFC PATCH 6/6] firmware: arm_scmi: Call Raw mode hooks from the core stack
-Date:   Tue, 16 Aug 2022 08:24:50 +0100
-Message-Id: <20220816072450.3120959-7-cristian.marussi@arm.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220816072450.3120959-1-cristian.marussi@arm.com>
-References: <20220816072450.3120959-1-cristian.marussi@arm.com>
+        Tue, 16 Aug 2022 05:08:38 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BEED11F8
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:25:30 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id o2so13675141lfb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:25:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=ooE16zehdw/Qev5T+ZmUnjytAB9yy5ywmdc6ijRB7DU=;
+        b=vsbEHpL2RqIY2QslVwDqFfp3XtMgHpHexPeU7C7kkWJq9Vq0XI2sRGSqgt5nWsO1hm
+         +T5H7I3m0VVO7Yygf/ziEdb826My+optK01l52i8aQPhSGBi+y4MkCZ2dLgcR1et5mGa
+         N9m32uGyTjvej0rn9DPJiXTvSL4HY4BlnKWuP+YkgjAYdqUuvC3cB1YIF4vX7rQQ4kf5
+         JWH7/zpvE4X1qvrDhyPss0d3EBSVe46JZkl5u145kQLkNV+KKV8J9E3p+uIvAcBNng/2
+         Cn2LYpunvdGkkOwInxwuCuHNobZOTstauY/+ZLjaJBZb+IKB1BisMwJKdL00sRrOkDyr
+         0Ivw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=ooE16zehdw/Qev5T+ZmUnjytAB9yy5ywmdc6ijRB7DU=;
+        b=H/YOwyMqcGGT2LlDl36rG/G9CUWOKcp35jHV+KN/QZE9notg+MVkOHeS0hx8+F4W4j
+         ke8RkZx5lv0LQVbTciFZhGE7DrpIW3lvXRlUe/4RQCdHn9F78BwWtWrCAdQhulHBFziC
+         VKp4OxjozbQwQjrY6VGDp1Lf/NARQic70ilyM4aXMk00yZ7ycpLOiRBoIeuHc32zTK2m
+         0avjwe+1r0Gdhqe6nt5ERjomaNEuh4d7z5CHRLimHCMpyq8DuqCgRiz8ed2SnC2kb0Hm
+         Cots9d74c6iQA4ZtpbXGsx5rAw0yLKJQB42n9sbx5rvbky+c1m7rsqha3egAryXEI+gp
+         s8lQ==
+X-Gm-Message-State: ACgBeo39V4wD3USBhD5M6eqbUKvlkzWzuf/U5a4DqFvStoZFPR/gpl9L
+        0TOsfxsL7JAq7wBGX/dcsfheJA==
+X-Google-Smtp-Source: AA6agR4AvhM4cDhXvQ1UTG+En6e9pMhUjfadNQTORfvzlu9ebxyZUTSlog8Wr6qGvgUaMN87z3ocDA==
+X-Received: by 2002:a19:d611:0:b0:492:8e15:ba18 with SMTP id n17-20020a19d611000000b004928e15ba18mr2268836lfg.524.1660634728747;
+        Tue, 16 Aug 2022 00:25:28 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
+        by smtp.gmail.com with ESMTPSA id bd18-20020a05651c169200b0025e5b5474a4sm1706639ljb.85.2022.08.16.00.25.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 00:25:28 -0700 (PDT)
+Message-ID: <febf654a-66ad-48e2-072c-7e1f4b521964@linaro.org>
+Date:   Tue, 16 Aug 2022 10:25:26 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 2/4] dt-bindings: PCI: microchip,pcie-host: fix missing
+ clocks properties
+Content-Language: en-US
+To:     Conor.Dooley@microchip.com, mail@conchuod.ie,
+        Daire.McNamara@microchip.com, bhelgaas@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        paul.walmsley@sifive.com, greentime.hu@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, lpieralisi@kernel.org
+Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20220811203306.179744-1-mail@conchuod.ie>
+ <20220811203306.179744-3-mail@conchuod.ie>
+ <99b5bddb-4a09-a3ac-e01b-d0ae624ad2f8@linaro.org>
+ <d25f8901-b9d7-ae8e-0061-2a033af16693@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <d25f8901-b9d7-ae8e-0061-2a033af16693@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,117 +83,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a few call sites where, if SCMI Raw mode access had been enabled in
-Kconfig, the needed SCMI Raw initialization and hooks are called.
+On 14/08/2022 16:47, Conor.Dooley@microchip.com wrote:
+> On 12/08/2022 08:35, Krzysztof Kozlowski wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>
+>> On 11/08/2022 23:33, Conor Dooley wrote:
+>>> From: Conor Dooley <conor.dooley@microchip.com>
+>>>
+>>> Upgrading dt-schema to v2022.08 reveals unevaluatedProperties issues
+>>> that were not previously visible, such as the missing clocks and
+>>> clock-names properties for PolarFire SoC's PCI controller:
+>>> arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dtb: pcie@2000000000: Unevaluated properties are not allowed ('clock-names', 'clocks', 'legacy-interrupt-controller', 'microchip,axi-m-atr0' were unexpected)
+>>>         From schema: Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+>>>
+>>> The clocks are required to enable interfaces between the FPGA fabric
+>>> and the core complex, so add them to the binding.
+>>>
+>>> Fixes: 6ee6c89aac35 ("dt-bindings: PCI: microchip: Add Microchip PolarFire host binding")
+>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>>> ---
+>>>  .../bindings/pci/microchip,pcie-host.yaml     | 25 +++++++++++++++++++
+>>>  1 file changed, 25 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+>>> index edb4f81253c8..2a2166f09e2c 100644
+>>> --- a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+>>> +++ b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+>>> @@ -25,6 +25,31 @@ properties:
+>>>        - const: cfg
+>>>        - const: apb
+>>>
+>>> +  clocks:
+>>> +    description:
+>>> +      Fabric Interface Controllers, FICs, are the interface between the FPGA
+>>> +      fabric and the core complex on PolarFire SoC. The FICs require two clocks,
+>>> +      one from each side of the interface. The "FIC clocks" described by this
+>>> +      property are on the core complex side & communication through a FIC is not
+>>> +      possible unless it's corresponding clock is enabled. A clock must be
+>>> +      enabled for each of the interfaces the root port is connected through.
+>>> +    minItems: 1
+>>> +    items:
+>>> +      - description: FIC0's clock
+>>> +      - description: FIC1's clock
+>>> +      - description: FIC2's clock
+>>> +      - description: FIC3's clock
+>>> +
+>>> +  clock-names:
+>>> +    items:
+>>> +      enum:
+>>> +        - fic0
+>>> +        - fic1
+>>> +        - fic2
+>>> +        - fic3
+>>> +    minItems: 1
+>>> +    maxItems: 4
+>>
+>> No need for maxItems.
+> 
+> I brought this up on IRC, but transferring it here since it's been
+> an (understandable!!) few days & just didn't want things to get lost
+> if my net died. Cutting out the back & forth, in summary:
+> "
+> I'm trying to remove the maxItems from the clock-names array you
+> didn't like - but I can't figure out what to do instead that doesn't
+> trigger errors. All 4 clocks are optional, the only requirement is
+> that any one of them is present. Either I seem to get complaints that
+> my property is not an array (simply removing the maxItems) or complaints
+> that because I have clock0,1,3 and not 2 that clock3 is unexpected.
 
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
----
- drivers/firmware/arm_scmi/driver.c | 32 ++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+Eh, I misread the code and thought that you list the items, but you just
+enumerate the schema for each item. My advice was wrong, you need maxItems.
 
-diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
-index 141a140792a5..0068a2ec3b4d 100644
---- a/drivers/firmware/arm_scmi/driver.c
-+++ b/drivers/firmware/arm_scmi/driver.c
-@@ -23,10 +23,12 @@
- #include <linux/kernel.h>
- #include <linux/ktime.h>
- #include <linux/hashtable.h>
-+#include <linux/fs.h>
- #include <linux/list.h>
- #include <linux/module.h>
- #include <linux/of_address.h>
- #include <linux/of_device.h>
-+#include <linux/poll.h>
- #include <linux/processor.h>
- #include <linux/refcount.h>
- #include <linux/slab.h>
-@@ -34,6 +36,8 @@
- #include "common.h"
- #include "notify.h"
- 
-+#include "raw_mode.h"
-+
- #define CREATE_TRACE_POINTS
- #include <trace/events/scmi.h>
- 
-@@ -133,6 +137,7 @@ struct scmi_protocol_instance {
-  * @notify_priv: Pointer to private data structure specific to notifications.
-  * @node: List head
-  * @users: Number of users of this instance
-+ * @raw: An opaque reference handle used by SCMI Raw mode.
-  */
- struct scmi_info {
- 	struct device *dev;
-@@ -152,6 +157,7 @@ struct scmi_info {
- 	void *notify_priv;
- 	struct list_head node;
- 	int users;
-+	void *raw;
- };
- 
- #define handle_to_scmi_info(h)	container_of(h, struct scmi_info, handle)
-@@ -678,6 +684,9 @@ scmi_xfer_command_acquire(struct scmi_chan_info *cinfo, u32 msg_hdr)
- static inline void scmi_xfer_command_release(struct scmi_info *info,
- 					     struct scmi_xfer *xfer)
- {
-+	if (IS_ENABLED(CONFIG_ARM_SCMI_RAW_MODE_SUPPORT))
-+		scmi_raw_message_report(info->raw, xfer, SCMI_RAW_REPLY_QUEUE);
-+
- 	atomic_set(&xfer->busy, SCMI_XFER_FREE);
- 	__scmi_xfer_put(&info->tx_minfo, xfer);
- }
-@@ -744,6 +753,11 @@ static void scmi_handle_notification(struct scmi_chan_info *cinfo,
- 			   xfer->hdr.protocol_id, xfer->hdr.seq,
- 			   MSG_TYPE_NOTIFICATION);
- 
-+	if (IS_ENABLED(CONFIG_ARM_SCMI_RAW_MODE_SUPPORT)) {
-+		xfer->hdr.seq = MSG_XTRACT_TOKEN(msg_hdr);
-+		scmi_raw_message_report(info->raw, xfer, SCMI_RAW_NOTIF_QUEUE);
-+	}
-+
- 	__scmi_xfer_put(minfo, xfer);
- 
- 	scmi_clear_channel(info, cinfo);
-@@ -757,6 +771,9 @@ static void scmi_handle_response(struct scmi_chan_info *cinfo,
- 
- 	xfer = scmi_xfer_command_acquire(cinfo, msg_hdr);
- 	if (IS_ERR(xfer)) {
-+		if (IS_ENABLED(CONFIG_ARM_SCMI_RAW_MODE_SUPPORT))
-+			scmi_raw_error_report(info->raw, msg_hdr, priv);
-+
- 		if (MSG_XTRACT_TYPE(msg_hdr) == MSG_TYPE_DELAYED_RESP)
- 			scmi_clear_channel(info, cinfo);
- 		return;
-@@ -2486,6 +2503,18 @@ static int scmi_probe(struct platform_device *pdev)
- 		dev_err(dev,
- 			"Transport is not polling capable. Atomic mode not supported.\n");
- 
-+	if (IS_ENABLED(CONFIG_ARM_SCMI_RAW_MODE_SUPPORT)) {
-+		struct scmi_chan_info *cinfo;
-+
-+		cinfo = idr_find(&info->tx_idr, SCMI_PROTOCOL_BASE);
-+		info->raw = scmi_raw_mode_init(cinfo, info->desc,
-+					       info->tx_minfo.max_msg);
-+		if (IS_ERR(info->raw)) {
-+			dev_err(dev, "Failed to initialize SCMI RAW Mode !\n");
-+			info->raw = NULL;
-+		}
-+	}
-+
- 	/*
- 	 * Trigger SCMI Base protocol initialization.
- 	 * It's mandatory and won't be ever released/deinit until the
-@@ -2552,6 +2581,9 @@ static int scmi_remove(struct platform_device *pdev)
- 	struct scmi_info *info = platform_get_drvdata(pdev);
- 	struct device_node *child;
- 
-+	if (IS_ENABLED(CONFIG_ARM_SCMI_RAW_MODE_SUPPORT))
-+		scmi_raw_mode_cleanup(info->raw);
-+
- 	mutex_lock(&scmi_list_mutex);
- 	if (info->users)
- 		ret = -EBUSY;
--- 
-2.32.0
+> The root port is physically on the opposite side of the FPGA to the cpus
+> & the AXI connection is through the FPGA fabric. There are 4 AXI
+> interconnects to the fabric  which the PCI controller could in theory be
+> connected to all 4, but it only needs to be connected to one.. I had
+> done done minItems and maxItems a la:
+> devicetree/bindings/watchdog/st,stm32-iwdg.yaml
+> b/c that seems to have two clocks that it doesnt care about the order of
+> "
+> 
+> Rob then suggested:
+> "
+> I would remove the 'items' list in 'clocks' and make the description
+> clear that any of clocks is possible. It's not ideal, but it's a case of
+> that's what is already there.
+> "
+> 
+> I'd then have something along the lines of:
+>   clocks:
+>     description:
+>       Fabric Interface Controllers, FICs, are the interface between the FPGA
+>       fabric and the core complex on PolarFire SoC. The FICs require two clocks,
+>       one from each side of the interface. The "FIC clocks" described by this
+>       property are on the core complex side & communication through a FIC is not
+>       possible unless it's corresponding clock is enabled. A clock must be
+>       enabled for each of the interfaces the root port is connected through.
+>       This could in theory be all 4 interfaces, one interface or any combination
+>       in between.
+>     minItems: 1
+>     maxItems: 4
+> 
+>   clock-names:
+>     items:
+>       enum:
+>         - fic0
+>         - fic1
+>         - fic2
+>         - fic3
+>     minItems: 1
+>     maxItems: 4
+> 
+> Does that seem reasonable to you?
 
+
+Yes.
+
+Best regards,
+Krzysztof

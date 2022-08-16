@@ -2,140 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7465952F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 08:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 653F65952E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 08:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbiHPGtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 02:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
+        id S230154AbiHPGqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 02:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbiHPGtN (ORCPT
+        with ESMTP id S230230AbiHPGpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 02:49:13 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828AE4AD48
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 18:56:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660615005; x=1692151005;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IQGWVtZVGNHTSSRPBnh+eqzTn1r9EIxOkjywjWhv9IA=;
-  b=ShSUgjYQEZV+ess+pobMR6ytvE9iL2HGizUSAPrLV54Yv/80ToFB7HHJ
-   L5E5NaWsm9QJUUNXmEwBKquOUteNKzAkMRYifV1WyJ16zHu2+VB9DEbBe
-   r4n5MnwIrR1zguvCZRM4UNmtJtJMyQHGjPdYUKM2mrVo7l8HMn9cpVGy8
-   C8jf+p8BZUESaEEZDiED3jMn+nNKmO3i+Pt9vZZVlvr7dkkoD5VnHXq0H
-   JkbYQ3mTPLP1+MKHV4It44xblxB68qQ0ljxIS+8oJLsL8Uoq+A+zzcu0S
-   HLF2ASMO+t94MNCLA2Bg1FFd0vYOaS7J2X5gzPrtHyxbWB+DP3rjFM+Wd
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="271872228"
-X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
-   d="scan'208";a="271872228"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 18:56:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
-   d="scan'208";a="557514555"
-Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 15 Aug 2022 18:56:43 -0700
-Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oNlow-0001M4-1a;
-        Tue, 16 Aug 2022 01:56:42 +0000
-Date:   Tue, 16 Aug 2022 09:56:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kuogee Hsieh <khsieh@codeaurora.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [linux-stable-rc:linux-5.10.y 6780/7990]
- drivers/gpu/drm/msm/dp/dp_display.c:523:26: warning: variable 'hpd' set but
- not used
-Message-ID: <202208160913.aFS2WTCD-lkp@intel.com>
+        Tue, 16 Aug 2022 02:45:45 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20484FF200;
+        Mon, 15 Aug 2022 18:44:54 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4M6DSX23GTzKQ5v;
+        Tue, 16 Aug 2022 09:43:24 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP4 (Coremail) with SMTP id gCh0CgBnu_iS9vpicjqdAQ--.63281S4;
+        Tue, 16 Aug 2022 09:44:52 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     jack@suse.cz, axboe@kernel.dk, paolo.valente@linaro.org
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yukuai1@huaweicloud.com, yi.zhang@huawei.com
+Subject: [PATCH -next 0/3] bfq simple cleanups
+Date:   Tue, 16 Aug 2022 09:56:28 +0800
+Message-Id: <20220816015631.1323948-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBnu_iS9vpicjqdAQ--.63281S4
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUU5_7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-head:   71f2154ac93f2d6cf536292c7c72b410e05c8041
-commit: acf76125bb2b247d27cb4ca57fda772c8a691fe9 [6780/7990] drm/msm/dp: fix connect/disconnect handled at irq_hpd
-config: arm64-buildonly-randconfig-r006-20220815 (https://download.01.org/0day-ci/archive/20220816/202208160913.aFS2WTCD-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=acf76125bb2b247d27cb4ca57fda772c8a691fe9
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.10.y
-        git checkout acf76125bb2b247d27cb4ca57fda772c8a691fe9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/msm/
+From: Yu Kuai <yukuai3@huawei.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Yu Kuai (3):
+  block: bfq: remove unused functions
+  block, bfq: remove useless checking in bfq_put_queue()
+  block, bfq: remove useless parameter for bfq_add/del_bfqq_busy()
 
-All warnings (new ones prefixed by >>):
-
-   drivers/gpu/drm/msm/dp/dp_display.c: In function 'dp_display_usbpd_attention_cb':
->> drivers/gpu/drm/msm/dp/dp_display.c:523:26: warning: variable 'hpd' set but not used [-Wunused-but-set-variable]
-     523 |         struct dp_usbpd *hpd;
-         |                          ^~~
-
-
-vim +/hpd +523 drivers/gpu/drm/msm/dp/dp_display.c
-
-c943b4948b5848 Chandan Uddaraju 2020-08-27  517  
-c943b4948b5848 Chandan Uddaraju 2020-08-27  518  static int dp_display_usbpd_attention_cb(struct device *dev)
-c943b4948b5848 Chandan Uddaraju 2020-08-27  519  {
-c943b4948b5848 Chandan Uddaraju 2020-08-27  520  	int rc = 0;
-61f8f4034c0423 Kuogee Hsieh     2020-11-03  521  	u32 sink_request;
-c943b4948b5848 Chandan Uddaraju 2020-08-27  522  	struct dp_display_private *dp;
-61f8f4034c0423 Kuogee Hsieh     2020-11-03 @523  	struct dp_usbpd *hpd;
-c943b4948b5848 Chandan Uddaraju 2020-08-27  524  
-c943b4948b5848 Chandan Uddaraju 2020-08-27  525  	if (!dev) {
-c943b4948b5848 Chandan Uddaraju 2020-08-27  526  		DRM_ERROR("invalid dev\n");
-c943b4948b5848 Chandan Uddaraju 2020-08-27  527  		return -EINVAL;
-c943b4948b5848 Chandan Uddaraju 2020-08-27  528  	}
-c943b4948b5848 Chandan Uddaraju 2020-08-27  529  
-061eb621fc2780 Abhinav Kumar    2020-09-12  530  	dp = container_of(g_dp_display,
-061eb621fc2780 Abhinav Kumar    2020-09-12  531  			struct dp_display_private, dp_display);
-c943b4948b5848 Chandan Uddaraju 2020-08-27  532  	if (!dp) {
-c943b4948b5848 Chandan Uddaraju 2020-08-27  533  		DRM_ERROR("no driver data found\n");
-c943b4948b5848 Chandan Uddaraju 2020-08-27  534  		return -ENODEV;
-c943b4948b5848 Chandan Uddaraju 2020-08-27  535  	}
-c943b4948b5848 Chandan Uddaraju 2020-08-27  536  
-61f8f4034c0423 Kuogee Hsieh     2020-11-03  537  	hpd = dp->usbpd;
-61f8f4034c0423 Kuogee Hsieh     2020-11-03  538  
-c943b4948b5848 Chandan Uddaraju 2020-08-27  539  	/* check for any test request issued by sink */
-8ede2ecc3e5ee3 Kuogee Hsieh     2020-09-11  540  	rc = dp_link_process_request(dp->link);
-61f8f4034c0423 Kuogee Hsieh     2020-11-03  541  	if (!rc) {
-61f8f4034c0423 Kuogee Hsieh     2020-11-03  542  		sink_request = dp->link->sink_request;
-acf76125bb2b24 Kuogee Hsieh     2020-11-18  543  		if (sink_request & DS_PORT_STATUS_CHANGED)
-acf76125bb2b24 Kuogee Hsieh     2020-11-18  544  			rc = dp_display_handle_port_ststus_changed(dp);
-acf76125bb2b24 Kuogee Hsieh     2020-11-18  545  		else
-61f8f4034c0423 Kuogee Hsieh     2020-11-03  546  			rc = dp_display_handle_irq_hpd(dp);
-61f8f4034c0423 Kuogee Hsieh     2020-11-03  547  	}
-c943b4948b5848 Chandan Uddaraju 2020-08-27  548  
-8ede2ecc3e5ee3 Kuogee Hsieh     2020-09-11  549  	return rc;
-c943b4948b5848 Chandan Uddaraju 2020-08-27  550  }
-c943b4948b5848 Chandan Uddaraju 2020-08-27  551  
-
-:::::: The code at line 523 was first introduced by commit
-:::::: 61f8f4034c04231148e7580ae51a2a74171c04a0 drm/msm/dp: promote irq_hpd handle to handle link training correctly
-
-:::::: TO: Kuogee Hsieh <khsieh@codeaurora.org>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+ block/bfq-cgroup.c  |  5 -----
+ block/bfq-iosched.c | 14 ++++++--------
+ block/bfq-iosched.h | 18 ++++++++++--------
+ block/bfq-wf2q.c    |  9 ++++++---
+ 4 files changed, 22 insertions(+), 24 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.31.1
+

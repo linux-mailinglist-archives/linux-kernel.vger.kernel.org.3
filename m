@@ -2,111 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 871F959554B
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4857C595550
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233001AbiHPIbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 04:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53926 "EHLO
+        id S233038AbiHPIbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 04:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbiHPIaC (ORCPT
+        with ESMTP id S232934AbiHPIaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:30:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF261135444
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:52:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660629164;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fJw+5XXpYtdUBNAptmDWquCOSql4etovIcYYOct0Agg=;
-        b=JCIrvkSvm/CHhP+OrDGDjhyLi5YBRtOmttihNaLWCN2QtfZ9Sc9rmxl3q5T+RHMzgqd5eL
-        wQf3wFEY1Bt/Jd/C7M3/rjH8AlS6ZDjc80cVC+rjd12TQKGHZTcxIA87PbJImraXrJGIgm
-        wD4iv88m3yEL4kvIu5VNopgdvSdKf8I=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-436-5z1zJE7hPFmH_v6gqPr1XA-1; Tue, 16 Aug 2022 01:52:40 -0400
-X-MC-Unique: 5z1zJE7hPFmH_v6gqPr1XA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 123D0811E75;
-        Tue, 16 Aug 2022 05:52:40 +0000 (UTC)
-Received: from shodan.usersys.redhat.com (unknown [10.43.17.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E2F8340CF8EA;
-        Tue, 16 Aug 2022 05:52:39 +0000 (UTC)
-Received: by shodan.usersys.redhat.com (Postfix, from userid 1000)
-        id C30E91C029C; Tue, 16 Aug 2022 07:52:38 +0200 (CEST)
-From:   Artem Savkov <asavkov@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Artem Savkov <asavkov@redhat.com>
-Subject: [PATCH bpf-next v2] selftests/bpf: fix attach point for non-x86 arches in test_progs/lsm
-Date:   Tue, 16 Aug 2022 07:52:31 +0200
-Message-Id: <20220816055231.717006-1-asavkov@redhat.com>
-In-Reply-To: <376f20c5-4b1c-efec-4dde-43d91b3d4308@iogearbox.net>
-References: <376f20c5-4b1c-efec-4dde-43d91b3d4308@iogearbox.net>
+        Tue, 16 Aug 2022 04:30:03 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4A3135AFE
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:53:08 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id tl27so17036307ejc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:53:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=WBv3h3wgQyY1EiVeiutsnqi3DPEWUTFH2e+SxIIu+SI=;
+        b=HMgDCIXlUYJ6kJuRhk+eXtuR9vuZC+EQUek1ea7s4szj5UjzZ0duIpqooXHBusQSn3
+         2C1m8fobBSmp7OoimIVuJSe5viRJfsH3IXM7JVm4shRAKMJvp9GtGyRvl5HJ4S4/A7CS
+         8yKVcomowZtnMK4E6sYXaCaspJq0LI7wL44x0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=WBv3h3wgQyY1EiVeiutsnqi3DPEWUTFH2e+SxIIu+SI=;
+        b=JvOLX0Yp6I/UmD6wNB1JDH34JjP3cToY7dGJscb7jgNjMsnKu1xCMyp+E54d/jPIDr
+         TkL5mF8x2WZjMPysymlWNXN6s3tyP/IM8ac6YDCvhv0oXIClIssVZ2bTAjAgdexU/jnp
+         C5/FbmQYpYeKCIu12PZkOLYf2nHNdQMLVA48Me9qwkCVTvbsD5rW7t5h2epnKSjkM+qS
+         NPaXqoSQ7DHCpU0xscwgohLNBMqZEBRhLXTY43N5CsdseAvmcErXRk2cKlFWeWOdNNeY
+         AgfdM89B1Luyh8CEv+jJgkpeXn3A5o1WlSci2R922eaMfciezYHUw0M+Kg2oXTPDlrJy
+         hcKQ==
+X-Gm-Message-State: ACgBeo2ViWhaw80xC0m2jstJCqbJMPpdVF3cq8Ez7loC9FHdn4ZPUcOY
+        /fUTJ/6GFv/J/GL3Ym2cDUO27w4vDZqG3Y9v/FI=
+X-Google-Smtp-Source: AA6agR6ycOgTWzvkxxc8ZJAHtOyNYp2mAAm4rM+pZ9mFqRiJHWGsS0iFFZn95x+HCDuHDunSfbYMSQ==
+X-Received: by 2002:a17:907:2722:b0:731:23a3:be78 with SMTP id d2-20020a170907272200b0073123a3be78mr12607950ejl.330.1660629186550;
+        Mon, 15 Aug 2022 22:53:06 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id e8-20020a170906844800b0072af102e65csm4893180ejy.152.2022.08.15.22.53.05
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Aug 2022 22:53:05 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id j1so11345407wrw.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:53:05 -0700 (PDT)
+X-Received: by 2002:adf:b343:0:b0:225:1a75:2a9a with SMTP id
+ k3-20020adfb343000000b002251a752a9amr270998wrd.281.1660629185303; Mon, 15 Aug
+ 2022 22:53:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <YvqaK3hxix9AaQBO@slm.duckdns.org> <YvsZ6vObgLaDeSZk@gondor.apana.org.au>
+ <CAHk-=wgSNiT5qJX53RHtWECsUiFq6d6VWYNAvu71ViOEan07yw@mail.gmail.com> <cd51b422-89f3-1856-5d3b-d6e5b0029085@marcan.st>
+In-Reply-To: <cd51b422-89f3-1856-5d3b-d6e5b0029085@marcan.st>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 15 Aug 2022 22:52:49 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjfLT7nL8pV8RWATpjgm0zDtUwT8UMtroqnGcXRjN8tgw@mail.gmail.com>
+Message-ID: <CAHk-=wjfLT7nL8pV8RWATpjgm0zDtUwT8UMtroqnGcXRjN8tgw@mail.gmail.com>
+Subject: Re: [PATCH] workqueue: Fix memory ordering race in queue_work*()
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Will Deacon <will@kernel.org>, Tejun Heo <tj@kernel.org>,
+        peterz@infradead.org, jirislaby@kernel.org, maz@kernel.org,
+        mark.rutland@arm.com, boqun.feng@gmail.com,
+        catalin.marinas@arm.com, oneukum@suse.com,
+        roman.penyaev@profitbricks.com, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use SYS_PREFIX macro from bpf_misc.h instead of hard-coded '__x64_'
-prefix for sys_setdomainname attach point in lsm test.
+On Mon, Aug 15, 2022 at 10:36 PM Hector Martin <marcan@marcan.st> wrote:
+>
+> These ops are documented in Documentation/atomic_bitops.txt as being
+> unordered in the failure ("bit was already set" case), and that matches
+> the generic implementation (which arm64 uses).
 
-Signed-off-by: Artem Savkov <asavkov@redhat.com>
----
- tools/testing/selftests/bpf/DENYLIST.s390x | 2 +-
- tools/testing/selftests/bpf/progs/lsm.c    | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Yeah, that documentation is pure garbage. We need to fix it.
 
-diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
-index e33cab34d22f..9d8de15e725e 100644
---- a/tools/testing/selftests/bpf/DENYLIST.s390x
-+++ b/tools/testing/selftests/bpf/DENYLIST.s390x
-@@ -43,7 +43,7 @@ test_bpffs                               # bpffs test  failed 255
- test_bprm_opts                           # failed to auto-attach program 'secure_exec': -524                           (trampoline)
- test_ima                                 # failed to auto-attach program 'ima': -524                                   (trampoline)
- test_local_storage                       # failed to auto-attach program 'unlink_hook': -524                           (trampoline)
--test_lsm                                 # failed to find kernel BTF type ID of '__x64_sys_setdomainname': -3          (?)
-+test_lsm                                 # attach unexpected error: -524                                               (trampoline)
- test_overhead                            # attach_fentry unexpected error: -524                                        (trampoline)
- test_profiler                            # unknown func bpf_probe_read_str#45                                          (overlapping)
- timer                                    # failed to auto-attach program 'test1': -524                                 (trampoline)
-diff --git a/tools/testing/selftests/bpf/progs/lsm.c b/tools/testing/selftests/bpf/progs/lsm.c
-index 33694ef8acfa..d8d8af623bc2 100644
---- a/tools/testing/selftests/bpf/progs/lsm.c
-+++ b/tools/testing/selftests/bpf/progs/lsm.c
-@@ -4,6 +4,7 @@
-  * Copyright 2020 Google LLC.
-  */
- 
-+#include "bpf_misc.h"
- #include "vmlinux.h"
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
-@@ -160,7 +161,7 @@ int BPF_PROG(test_task_free, struct task_struct *task)
- 
- int copy_test = 0;
- 
--SEC("fentry.s/__x64_sys_setdomainname")
-+SEC("fentry.s/" SYS_PREFIX "sys_setdomainname")
- int BPF_PROG(test_sys_setdomainname, struct pt_regs *regs)
- {
- 	void *ptr = (void *)PT_REGS_PARM1(regs);
--- 
-2.37.1
+I think that "unordered on failure" was added at the same time that
+the generic implementation was rewritten.
 
+IOW, the documentation was changed to match that broken
+implementation, but it's clearly completely broken.
+
+I think I understand *why* it's broken - it looks like a "harmless"
+optimization. After all, if the bitop doesn't do anything, there's
+nothing to order it with.
+
+It makes a certain amount of sense - as long as you don't think about
+it too hard.
+
+The reason it is completely and utterly broken is that it's not
+actually just "the bitop doesn't do anything". Even when it doesn't
+change the bit value, just the ordering of the read of the old bit
+value can be meaningful, exactly for that case of "I added more work
+to the queue, I need to set the bit to tell the consumers, and if I'm
+the first person to set the bit I may need to wake the consumer up".
+
+
+> On the other hand, Twitter just pointed out that contradicting
+> documentation exists (I believe this was the source of the third party
+> doc I found that claimed it's always a barrier):
+
+It's not just that other documentation exists - it's literally that
+the unordered semantics don't even make sense, and don't match reality
+and history.
+
+And nobody thought about it or caught it at the time.
+
+The Xen people seem to have noticed at some point, and tried to
+introduce a "sync_set_set()"
+
+> So either one doc and the implementation are wrong, or the other doc is
+> wrong.
+
+That doc and the generic implementation is clearly wrong.
+
+              Linus

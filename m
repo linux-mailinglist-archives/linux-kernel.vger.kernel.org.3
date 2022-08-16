@@ -2,295 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A48A59634C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F16596350
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237262AbiHPTlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 15:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
+        id S237267AbiHPTmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 15:42:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236885AbiHPTlL (ORCPT
+        with ESMTP id S237303AbiHPTm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 15:41:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D04F883EE
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:41:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660678868;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iy9C67BR9Y8mzLSmrgLV3EkX5N4BTVdAX1TDUnMFU5U=;
-        b=JS2MRAOHJywQWwCt9TOi4bovthqVRuuPDjqk+F8FBjRjD+pOtkY99m+A4kpoNhlkpoo9y/
-        wX1pgFlUv/hveYnLj6MyN32Qcig0DDdpjmygjJzdBENXzK0SkN8PHO/jo8HhUkcqop7shL
-        0S6MtIF08P4psjWFw01g85Jk1Z+MtTA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-213-uHBhXavFMo26heGh2Sk8OQ-1; Tue, 16 Aug 2022 15:41:05 -0400
-X-MC-Unique: uHBhXavFMo26heGh2Sk8OQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1FA0D3C0D19D;
-        Tue, 16 Aug 2022 19:41:05 +0000 (UTC)
-Received: from [172.30.41.16] (unknown [10.22.18.188])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7DD612026D4C;
-        Tue, 16 Aug 2022 19:41:04 +0000 (UTC)
-Subject: [RFC PATCH 3/3] PCI: Expose PCIe Resizable BAR support via sysfs
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     linux-pci@vger.kernel.org, bhelgaas@google.com
-Cc:     =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 16 Aug 2022 13:41:04 -0600
-Message-ID: <166067883598.1885802.7663904087127986133.stgit@omen>
-In-Reply-To: <166067824399.1885802.12557332818208187324.stgit@omen>
-References: <166067824399.1885802.12557332818208187324.stgit@omen>
-User-Agent: StGit/1.5.dev2+g9ce680a52bd9
+        Tue, 16 Aug 2022 15:42:28 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE18889818
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:42:27 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id a89so14815369edf.5
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:42:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=j6C9lf7JhzlxE1F6ouy9UeQqCIuaLiW4edqmr70l3os=;
+        b=gy/irX4iIF4tgnkELB1IcuP4tGk8YBjcODGsbsYD7RqExJGVHo0bL8amAC7w81Itx8
+         OpF7//aWC3ven/odaxRytaZW3ncs7O1Yu47hkFJEsxNY5Z4kL04QnQ89seNTpfsiSHIy
+         USuzpUUCp1KxFjMUb6L17sYt1B4yXRFEatTC0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=j6C9lf7JhzlxE1F6ouy9UeQqCIuaLiW4edqmr70l3os=;
+        b=SjTo9gZ2BhnKHwuWudY5cc72zbId70tfLfYDZlpgFxykmx9eBZ/VeZ+PMnDAuZtqFa
+         zihJ4GBWvrbQ0TWmbgjSwIe+b7oYn7jxlsXFYhjIe/OqeVpoA39NIGeMaQa50H/Gy7Ps
+         34tSAHK415IvCP9JnTgedAapKw/l5IGVni4YdcrKBa9ErkeQRYbC5XkvriaVgqWFqed7
+         KpH6SZN6yxerpI3C9SI2jG1ubXRlQWYif+OvXgjS2tQ2Fh6jUPQ+TTjNDEwNgzi/17zk
+         40CXG+Gbat9UM8NOvKGgOMy4xg2kAkb3tVqpa/n6fH3aqfQQ1RvTamCLG0mc31xCA0ba
+         MZUw==
+X-Gm-Message-State: ACgBeo3NznWuYn+inJL8gn8Hy7rxIK3TfAsfW32Up33+Bw+0UHwLwUfA
+        EbD/xs8V5y5uEZDgAEWJKX4sT+ig9Sv9YmZHaqY=
+X-Google-Smtp-Source: AA6agR6dZLgnQXNLPq9YcgKaXiRlUF5e1ugRzQwFnybwmCSjyP5U76gg/U0T9EBktH9QGK7uaHPYJA==
+X-Received: by 2002:a05:6402:430e:b0:43d:1cf6:61ec with SMTP id m14-20020a056402430e00b0043d1cf661ecmr19784826edc.194.1660678946101;
+        Tue, 16 Aug 2022 12:42:26 -0700 (PDT)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
+        by smtp.gmail.com with ESMTPSA id j5-20020a50ed05000000b0043ccd4d15eesm8987575eds.64.2022.08.16.12.42.25
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 12:42:25 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id d5so3423690wms.5
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:42:25 -0700 (PDT)
+X-Received: by 2002:a05:600c:657:b0:3a5:e4e6:ee24 with SMTP id
+ p23-20020a05600c065700b003a5e4e6ee24mr71425wmm.68.1660678944697; Tue, 16 Aug
+ 2022 12:42:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CA+G9fYv2Wof_Z4j8wGYapzngei_NjtnGUomb7y34h4VDjrQDBA@mail.gmail.com>
+ <CAHk-=wj=u9+0kitx6Z=efRDrGVu_OSUieenyK4ih=TFjZdyMYQ@mail.gmail.com> <CA+G9fYuLvTmVbyEpU3vrw58QaWfN=Eg8VdrdRei_jmu2Y2OzOg@mail.gmail.com>
+In-Reply-To: <CA+G9fYuLvTmVbyEpU3vrw58QaWfN=Eg8VdrdRei_jmu2Y2OzOg@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 16 Aug 2022 12:42:08 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whxpMiMj0M7rvz-zsd4G+LB=kcUrM-3VPTt5EauER4iyA@mail.gmail.com>
+Message-ID: <CAHk-=whxpMiMj0M7rvz-zsd4G+LB=kcUrM-3VPTt5EauER4iyA@mail.gmail.com>
+Subject: Re: [next] arm64: kernel BUG at fs/inode.c:622 - Internal error: Oops
+ - BUG: 0 - pc : clear_inode
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev,
+        lkft-triage@lists.linaro.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This proposes a simple sysfs interface to Resizable BAR support,
-largely for the purposes of assigning such devices to a VM through
-VFIO.  Resizable BARs present a difficult feature to expose to a VM
-through emulation, as resizing a BAR is done on the host.  It can
-fail, and often does, but we have no means via emulation of a PCIe
-REBAR capability to handle the error cases.
+On Tue, Aug 16, 2022 at 12:39 PM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
+>
+> This is a physical hardware db410c device.
+> Following VIRTIO configs enabled.
 
-A vfio-pci specific ioctl interface is also cumbersome as there are
-often multiple devices within the same bridge aperture and handling
-them is a challenge.  In the interface proposed here, expanding a
-BAR potentially requires such devices to be soft-removed during the
-resize operation and rescanned after, in order for all the necessary
-resources to be released.  A pci-sysfs interface is also more
-universal than a vfio specific interface.
+Yeah, it's not enough to just enable the VIRTIO support, it actually
+needs to run in a virt environment, and with a hypervisor that gets
+confused by the virtio changes.
 
-Please see the ABI documentation update for usage.
+Plus:
 
-Cc: Christian König <christian.koenig@amd.com>
-Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
----
+> > Do you see the same issue with plain v6.0-rc1?
+>
+> Nope. I do not notice reported BUG on v6.0-rc1.
 
-NB, I realize the read value of the syfs attribute provides two values,
-the bitmap of possible sizes and the current size.  There are a number
-of ways to determine the current size, including stat(1) on the
-resourceN file, but I found this output to be useful while developing
-the interface and provides consistency with the store value to the
-attribute.  Suggestions welcome for better semantics.
+Ok, so definitely not related to the google cloud issue we had in rc1.
 
- Documentation/ABI/testing/sysfs-bus-pci |   27 +++++++
- drivers/pci/pci-sysfs.c                 |  118 +++++++++++++++++++++++++++++++
- include/linux/pci.h                     |    1 
- 3 files changed, 146 insertions(+)
-
-diff --git a/Documentation/ABI/testing/sysfs-bus-pci b/Documentation/ABI/testing/sysfs-bus-pci
-index 6fc2c2efe8ab..5eea5d89c9f2 100644
---- a/Documentation/ABI/testing/sysfs-bus-pci
-+++ b/Documentation/ABI/testing/sysfs-bus-pci
-@@ -457,3 +457,30 @@ Description:
- 
- 		The file is writable if the PF is bound to a driver that
- 		implements ->sriov_set_msix_vec_count().
-+
-+What:		/sys/bus/pci/devices/.../resourceN_resize
-+Date:		August 2022
-+Contact:	Alex Williamson <alex.williamson@redhat.com>
-+Description:
-+		These files provide an interface to PCIe Resizable BAR support.
-+		A file is created for each BAR resource (N) supported by the
-+		PCIe Resizable BAR extended capability of the device.  Reading
-+		each file exposes the capability and current setting for the
-+		device, ex.
-+
-+		# cat resource1_resize
-+		00000000000001c0:6
-+
-+		The first field provides the supported sizes bitmap, where
-+		bit0 = 1MB, bit1 = 2MB, bit2 = 4MB, etc.  In the above example
-+		the devices supports 64MB, 128MB, and 256MB BAR sizes.  The
-+		second field provides the current setting, the value 6
-+		indicates bit6 is set, which corresponds to 64MB.
-+
-+		When writing the file, only the latter is used, ex.
-+
-+		# echo 7 > resource1_resize
-+
-+		This indicates to set the size value corresponding to bit 7,
-+		which is 128MB.  The resulting size is 2 ^ (bit# + 20).  This
-+		definition matches the PCIe specification of this capability.
-diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-index 9ac92e6a2397..aa59a2de508f 100644
---- a/drivers/pci/pci-sysfs.c
-+++ b/drivers/pci/pci-sysfs.c
-@@ -1143,6 +1143,7 @@ static void pci_remove_resource_files(struct pci_dev *pdev)
- 
- 	for (i = 0; i < PCI_STD_NUM_BARS; i++) {
- 		struct bin_attribute *res_attr;
-+		struct dev_ext_attribute *resize_attr;
- 
- 		res_attr = pdev->res_attr[i];
- 		if (res_attr) {
-@@ -1155,6 +1156,13 @@ static void pci_remove_resource_files(struct pci_dev *pdev)
- 			sysfs_remove_bin_file(&pdev->dev.kobj, res_attr);
- 			kfree(res_attr);
- 		}
-+
-+		resize_attr = pdev->res_attr_resize[i];
-+		if (resize_attr) {
-+			sysfs_remove_file(&pdev->dev.kobj,
-+					  &resize_attr->attr.attr);
-+			kfree(resize_attr);
-+		}
- 	}
- }
- 
-@@ -1208,6 +1216,108 @@ static int pci_create_attr(struct pci_dev *pdev, int num, int write_combine)
- 	return retval;
- }
- 
-+static ssize_t pci_bar_resize_show(struct device *dev,
-+				   struct device_attribute *attr, char *buf)
-+{
-+	struct pci_dev *pdev = to_pci_dev(dev);
-+	struct dev_ext_attribute *resize_attr =
-+			container_of(attr, struct dev_ext_attribute, attr);
-+	int bar = (int)(long)resize_attr->var;
-+	ssize_t ret;
-+
-+	pci_config_pm_runtime_get(pdev);
-+
-+	/*
-+	 * pci_rebar_get_possible_sizes() only currently reads supported sizes
-+	 * from the capability register and therefore returns a u32.  The spec
-+	 * allows additional supported bits in the control register, which
-+	 * then exceeds 32bit.  Expose a u64 to userspace for future compat.
-+	 */
-+	ret = sysfs_emit(buf, "%016llx:%d\n",
-+			(u64)pci_rebar_get_possible_sizes(pdev, bar),
-+			pci_rebar_get_current_size(pdev, bar));
-+
-+	pci_config_pm_runtime_put(pdev);
-+
-+	return ret;
-+}
-+
-+static ssize_t pci_bar_resize_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	struct pci_dev *pdev = to_pci_dev(dev);
-+	struct dev_ext_attribute *resize_attr =
-+			container_of(attr, struct dev_ext_attribute, attr);
-+	int ret, i, bar = (int)(long)resize_attr->var;
-+	unsigned long size, flags;
-+	u16 cmd;
-+
-+	if (kstrtoul(buf, 0, &size) < 0)
-+		return -EINVAL;
-+
-+	device_lock(dev);
-+	if (dev->driver) {
-+		ret = -EBUSY;
-+		goto unlock;
-+	}
-+
-+	pci_config_pm_runtime_get(pdev);
-+
-+	pci_read_config_word(pdev, PCI_COMMAND, &cmd);
-+	pci_write_config_word(pdev, PCI_COMMAND, cmd & ~PCI_COMMAND_MEMORY);
-+
-+	flags = pci_resource_flags(pdev, bar);
-+
-+	for (i = 0; i < PCI_STD_NUM_BARS; i++) {
-+		if (pci_resource_len(pdev, i) &&
-+		    pci_resource_flags(pdev, i) == flags)
-+			pci_release_resource(pdev, i);
-+	}
-+
-+	ret = pci_resize_resource(pdev, bar, size);
-+
-+	pci_assign_unassigned_bus_resources(pdev->bus);
-+
-+	pci_write_config_word(pdev, PCI_COMMAND, cmd);
-+
-+	pci_config_pm_runtime_put(pdev);
-+unlock:
-+	device_unlock(dev);
-+
-+	return ret ? ret : count;
-+}
-+
-+static int pci_create_resize_attr(struct pci_dev *pdev, int num)
-+{
-+	struct dev_ext_attribute *resize_attr;
-+	char *resize_attr_name;
-+	int retval;
-+
-+	resize_attr = kzalloc(sizeof(*resize_attr) + 17, GFP_ATOMIC);
-+	if (!resize_attr)
-+		return -ENOMEM;
-+
-+	resize_attr_name = (char *)(resize_attr + 1);
-+
-+	sysfs_attr_init(&resize_attr->attr.attr);
-+	sprintf(resize_attr_name, "resource%d_resize", num);
-+	resize_attr->attr.attr.name = resize_attr_name;
-+	resize_attr->attr.attr.mode = 0600;
-+	resize_attr->attr.show = pci_bar_resize_show;
-+	resize_attr->attr.store = pci_bar_resize_store;
-+	resize_attr->var = (void *)(long)num;
-+
-+	retval = sysfs_create_file(&pdev->dev.kobj, &resize_attr->attr.attr);
-+	if (retval) {
-+		kfree(resize_attr);
-+		return retval;
-+	}
-+
-+	pdev->res_attr_resize[num] = resize_attr;
-+	return 0;
-+}
-+
- /**
-  * pci_create_resource_files - create resource files in sysfs for @dev
-  * @pdev: dev in question
-@@ -1235,6 +1345,14 @@ static int pci_create_resource_files(struct pci_dev *pdev)
- 			pci_remove_resource_files(pdev);
- 			return retval;
- 		}
-+
-+		if (pci_rebar_get_current_size(pdev, i) >= 0) {
-+			retval = pci_create_resize_attr(pdev, i);
-+			if (retval) {
-+				pci_remove_resource_files(pdev);
-+				return retval;
-+			}
-+		}
- 	}
- 	return 0;
- }
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 060af91bafcd..9c4db0c5f215 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -470,6 +470,7 @@ struct pci_dev {
- 	int		rom_attr_enabled;	/* Display of ROM attribute enabled? */
- 	struct bin_attribute *res_attr[DEVICE_COUNT_RESOURCE]; /* sysfs file for resources */
- 	struct bin_attribute *res_attr_wc[DEVICE_COUNT_RESOURCE]; /* sysfs file for WC mapping of resources */
-+	struct dev_ext_attribute *res_attr_resize[DEVICE_COUNT_RESOURCE]; /* sysfs file for resizing BAR resources */
- 
- #ifdef CONFIG_HOTPLUG_PCI_PCIE
- 	unsigned int	broken_cmd_compl:1;	/* No compl for some cmds */
-
-
+               Linus

@@ -2,115 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 426545955F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7AB25955F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbiHPJLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47866 "EHLO
+        id S231665AbiHPJNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233508AbiHPJKd (ORCPT
+        with ESMTP id S231509AbiHPJMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:10:33 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7233CDAEDC
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:27:18 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id u6so9806196ljk.8
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:27:18 -0700 (PDT)
+        Tue, 16 Aug 2022 05:12:20 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5B4E832A
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:28:22 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 12so8563069pga.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:28:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=jgkKAq27nalp4xFLW3mk73yjlH+iPel54g7OBjDZ1oI=;
-        b=Mq7r6vRNCChXlYPF+zT+4Ept2VrTSrrP38C87uSqO8mXR/YVOX0bc2McxNSYlkkJTO
-         e+yH0rOVHqI0INUR/tSCYNXQU+p5/vwbT6u6aPRBaxQ6rMZpSy5k/VWsBL9Xp6vvIR8X
-         0PA3lUFcXPoMfb260xJiszNnXlRH9NvLF1m2hpHFs9gT4V8lV0SsJpmw9BR4vZ1gHH1j
-         c9kr3Vsajkbe22PtuANvdRgPeaUZ8sSt9fVW+ovyMLUS7440oFkcHs1atjIug+i2nGDx
-         WK6smRGXOaT1y5GxG6ZvcY5C348l7BHW39G0lV6+iqdC754xonpL8n7jbkfhynuZP2bv
-         sBig==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=QSsvuBZDO6bQt7jMT8PKkHwExip9fgIO0FXnSkmtOLk=;
+        b=RzaFy7uxM7dLXAC9uTuCwFu9xZdylyuHTcQY5sXMgf0qcUR6F80o4FSfYUl6LsKb18
+         eKKaEDcBFEj8KEE25R4eiQicNoE0nvyA3uPLEGN99i4S/biwNeKT0tSs5OPdGvNRFRMf
+         mdlNRYmF1cJ8IPEjPhj9GRA00wL4UX6cChiP1CF2ym3e0aRyvi+gjWODjd4/ADB+8Dfa
+         mDu2BnrGYmPOX/rPV8H1oKf36tM839ayW4AmRUr802rWpP44jEsGUfDGqU+Tp0BUq8qc
+         V2+u2gSlgj1xW5lGb9yD766+99jRW6GV8siW5uZvhoOYmf3Fhm83/IQEBQtGitVBSGD0
+         qLgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=jgkKAq27nalp4xFLW3mk73yjlH+iPel54g7OBjDZ1oI=;
-        b=V0vXXT4ANFvUAVXDxnw6tyhlzg3QpZvbmMKHzEI3TWLvXRK4MjMRZD9O/7ItZ5YzrD
-         06OlrrEIFKmQ8+SkHOF4UEASV2MGALZRqQDurg5GJpH5o2m2zKZkn6BVdM5su13OKxPL
-         Go1bX55BV+e6BCIu6mKUn03IVZ4vveTYjDCymiJ02GO/XyfvoQ2yv4Nq5UzRF2bK3Dfh
-         wdeD2qKgLsf8oNtGCRT7TLRlVVtrxpxI2YUPL9fHOj+FwnEle5MdEffnsb9R3yKPppD3
-         J4iYG7TrKrJnqp561ZqZdjpWSsYT2WbB+HG0zIRNa86VN5Vkq2mgwVdd6vi2l8VnZi/r
-         t4yw==
-X-Gm-Message-State: ACgBeo2AwFExSvXM+jSrRf3R0oP/dTapyXACowRgwvdSZz+YLEmLvmLd
-        Z5mzDVHr7yVaDxAEV8TRwoGquQ==
-X-Google-Smtp-Source: AA6agR4jEHWzEqPmD1v9ED+1vw84vjsvdHwzpp1nZoCUPf9WX8jWoeSl8sl+A2IWC5wW16bz/hCrFg==
-X-Received: by 2002:a2e:a311:0:b0:25f:d95a:9c66 with SMTP id l17-20020a2ea311000000b0025fd95a9c66mr6273478lje.208.1660634836806;
-        Tue, 16 Aug 2022 00:27:16 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id q22-20020a056512211600b00491dda41e4bsm794337lfr.172.2022.08.16.00.27.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 00:27:16 -0700 (PDT)
-Message-ID: <343268e1-0c11-ae5f-c99a-62617e23f396@linaro.org>
-Date:   Tue, 16 Aug 2022 10:27:14 +0300
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=QSsvuBZDO6bQt7jMT8PKkHwExip9fgIO0FXnSkmtOLk=;
+        b=YAe0erkWaUdg8iD6vXUboH0sly+9zBtIVdueA6mJmjpVJGFU0yF8THeMdCC84wZAj9
+         h+9Xr/q9JbhtS7uQ3ZmLUxyOj7u1NFDvBbK8VOJRuqc3yP42TWGXDGwUYEOOqI8LWrty
+         3eNB/GwDtACHxAeyf1eiIjOFMe/L1TgnY/G4PPZaLXaQ/Q7YKdc7Lq0F+T4guc+MaJjo
+         V5p98VfbmEoFt2/Q5eJ0vOtCa66zXW4yJY1moN2Ow25IocF3v6LluVRFl/m/8NoCW4yV
+         Q3xC9q0xhc6axNoBjCZCR7uduRnYPBTM7GF9GR4lcAmzKLl2hnhv2OPXP+pZwOTSLk7r
+         4OuA==
+X-Gm-Message-State: ACgBeo0MlJNXbxtenUmP7xZdy0YIYIyxfpx0cvznbqQAs1sQCfwS+yeq
+        IsG5gZBiMygab8ylUY8wI9h1M2PJvzG6gIqDuKk=
+X-Google-Smtp-Source: AA6agR5wV0PU2vDVLQdX/PykJTt0lAPchfJeZlpJSA2oyYNGfI8UR1V2chbA+AUAkd867MAAwENWmLXSJRl7W/vUKhE=
+X-Received: by 2002:a63:505a:0:b0:421:a16a:d286 with SMTP id
+ q26-20020a63505a000000b00421a16ad286mr16819349pgl.441.1660634901715; Tue, 16
+ Aug 2022 00:28:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/2] dt-bindings: power: supply: Add Richtek RT9471
- battery charger
-Content-Language: en-US
-To:     ChiYuan Huang <u0084500@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        =?UTF-8?B?5ri45a2Q6aao?= <alina_yu@richtek.com>,
-        cy_huang <cy_huang@richtek.com>, alinayu829@gmail.com,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
-References: <1660225318-4063-1-git-send-email-u0084500@gmail.com>
- <1660225318-4063-2-git-send-email-u0084500@gmail.com>
- <3cae9d60-4012-1dfd-abd9-4d0b9379e6bb@linaro.org>
- <CADiBU3_depGDZtiyizU3MB939A3oH1uTWzTMyruUy0z=u6BZkQ@mail.gmail.com>
- <40261b95-637a-1304-2e06-8c8ff7fc377b@linaro.org>
- <CADiBU38+9sR1r20=YWt-9s2+u7maHH+1VudCnV1-0+F4jYKdQQ@mail.gmail.com>
- <CADiBU3_Jt6n6tm=oVvjk5vsoEAneH7t-37S6skepA6v6bVVYUw@mail.gmail.com>
- <f2a664be-71e9-7a26-2f0c-5f654d9cb3cb@linaro.org>
- <CADiBU3-bKGhW2Yy13svNUykqW+WN3VS6LftWMU0rMeCc+fMySg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CADiBU3-bKGhW2Yy13svNUykqW+WN3VS6LftWMU0rMeCc+fMySg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220812055710.357820-1-aneesh.kumar@linux.ibm.com>
+ <20220812055710.357820-5-aneesh.kumar@linux.ibm.com> <87wnbacjsh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <cd1c13ee-6fc3-bde8-96f9-8c3c93441275@linux.ibm.com>
+In-Reply-To: <cd1c13ee-6fc3-bde8-96f9-8c3c93441275@linux.ibm.com>
+From:   huang ying <huang.ying.caritas@gmail.com>
+Date:   Tue, 16 Aug 2022 15:28:08 +0800
+Message-ID: <CAC=cRTMZZ9bqyC7pnxD1zUWqfBiQ9U7im+8EYa_8GVK8iA7HXQ@mail.gmail.com>
+Subject: Re: [PATCH v14 04/10] mm/demotion/dax/kmem: Set node's abstract
+ distance to MEMTIER_DEFAULT_DAX_ADISTANCE
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+Cc:     "Huang, Ying" <ying.huang@intel.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org, Wei Xu <weixugc@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
+        Bharata B Rao <bharata@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/08/2022 17:52, ChiYuan Huang wrote:
->>> Some gauge HW needs this information to enhance the battery capacity accuracy.
->>
->> Other supply stack pieces do it via supplies (supplied to/from in
->> include/linux/power_supply.h) and reporting power_supply_changed().
->>
->> With such explanation, your device is an interrupt source, but it is not
->> an interrupt controller. If your device is interrupt controller, it
->> means someone routes the interrupt line to your device. Physical line.
->>
-> Yap, sure. And so on, just use the SW power supply chain to do this
-> kind of event notification.
-> To remove it, it doesn't affect the internal interrupt request inside
-> the driver.
-> Just cannot be used for the outer driver to request the events directly.
-> 
-> If so, I think 'interrupt-controller' and even '#interrupt-cells' need
-> to be removed.
-> OK?
+On Tue, Aug 16, 2022 at 1:10 PM Aneesh Kumar K V
+<aneesh.kumar@linux.ibm.com> wrote:
+>
+> On 8/15/22 8:09 AM, Huang, Ying wrote:
+> > "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+> >
 
-Yes, both should be removed. Your device is not an interrupt controller...
+[snip]
 
-Best regards,
-Krzysztof
+> >>
+> >> +/*
+> >> + * Default abstract distance assigned to the NUMA node onlined
+> >> + * by DAX/kmem if the low level platform driver didn't initialize
+> >> + * one for this NUMA node.
+> >> + */
+> >> +#define MEMTIER_DEFAULT_DAX_ADISTANCE       (MEMTIER_ADISTANCE_DRAM * 2)
+> >
+> > If my understanding were correct, this is targeting Optane DCPMM for
+> > now.  The measured results in the following paper is,
+> >
+> > https://arxiv.org/pdf/2002.06018.pdf
+> >
+> > Section: 2.1 Read/Write Latencies
+> >
+> > "
+> > For read access, the latency of DCPMM was 400.1% higher than that of
+> > DRAM. For write access, it was 407.1% higher.
+> > "
+> >
+> > Section: 2.2 Read/Write Bandwidths
+> >
+> > "
+> > For read access, the throughput of DCPMM was 37.1% of DRAM. For write
+> > access, it was 7.8%
+> > "
+> >
+> > According to the above data, I think the MEMTIER_DEFAULT_DAX_ADISTANCE
+> > can be "5 * MEMTIER_ADISTANCE_DRAM".
+> >
+>
+> If we look at mapping every 100% increase in latency as a memory tier, we essentially
+> will have 4 memory tier here. Each memory tier is covering a range of abstract distance 128.
+> which makes a total adistance increase from MEMTIER_ADISTANCE_DRAM by 512. This puts
+> DEFAULT_DAX_DISTANCE at 1024 or  MEMTIER_ADISTANCE_DRAM * 2
+
+If my understanding were correct, you are suggesting to use a kind of
+logarithmic mapping from latency to abstract distance?  That is,
+
+  abstract_distance = log2(latency)
+
+While I am suggesting to use a kind of linear mapping from latency to
+abstract distance.  That is,
+
+  abstract_distance = C * latency
+
+I think that linear mapping is easy to understand.
+
+Are there some good reasons to use logarithmic mapping?
+
+Best Regards,
+Huang, Ying

@@ -2,85 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C4859552B
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A02595527
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232972AbiHPI0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 04:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50168 "EHLO
+        id S232989AbiHPI04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 04:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232752AbiHPIZ5 (ORCPT
+        with ESMTP id S232840AbiHPI0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:25:57 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0394B1403AE
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:58:00 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id f20so13406289lfc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:57:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=fG6ebq+esaR04I5xSnC4xD/7QUDUFnAnjiwTJZuzpTU=;
-        b=HbRzk/VSqzFdbWnSmSJYeONLMiDIX4eolFhsG+ovtUIrYQaEt4fOkjoEJEklJPfWAB
-         hCtkii2R/7FvDwsdApsi3VZBEdLZne1ZnDTzCRqDftnrYKUD52HjeIOx//p0e8J5jS/G
-         +0BsgvCxCyLK5ILdUXZdVnnYzzfd4HzpH4nuMgS9jiScfrd0v5sTuOmjgyl4sP4ls2Fj
-         LJzCTUrSbBmEF//F3bcwugnym76jL/d6xod76SEqG4tpMyPReYWiOb9c1bPCh80CKUUt
-         RotrAblPLD/bJQnlvo8zkzY3hH8+Nn1YP/OqkdB7xDZx9hkL0n0Z/3sFwEKwSyiWZxtl
-         4cKQ==
+        Tue, 16 Aug 2022 04:26:00 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420F41405DB
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:58:09 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id q10-20020a056e020c2a00b002dedb497c7fso6491178ilg.16
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:58:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc;
-        bh=fG6ebq+esaR04I5xSnC4xD/7QUDUFnAnjiwTJZuzpTU=;
-        b=iR3y+qi9BSzLbgYI4qiaiUTvDSakW2b306+A6Z76JAD/vZZ/Jsvmmm2/KkTxwQ073V
-         IvcX/zMkB/PptU2m5zlwP7j/sldjFydmNuduI1gVFmSPkxS5LgU+4vtaBqyhfMvPxjm/
-         GqW9E40IOLctiKWA4cobd2meXGirOB91hv3iXVLJpvRXyLcQEVBaFZJfC9GS/IOUMYPR
-         uAV2gVHQvISEwTadxK4AkkuYNmxj5G4YJs7BlOScaNhOH2lXPMuWAbv+Ni8s5vhqjUNB
-         mpUl51r1AMXKg4mMb+5/nshCyOgPKFZGBzPhfhfXpTZijL7+p6p7PrKvNX0fJKcpGeNM
-         s9eQ==
-X-Gm-Message-State: ACgBeo2n46xs3eD2xXGxI+0yFK+durgY6C7WRv4z/8fW5kPR8d88wSm/
-        4GHLG31D1RvbKlyUvG38z5Q1gQ==
-X-Google-Smtp-Source: AA6agR6nWRLeZKfkfbcHhmb0twzixrU6OVenWmTfNeYj4Zbsb7EQ2O2nQhUNQ/z+EXIsHXvCkdP56w==
-X-Received: by 2002:a05:6512:3d8f:b0:48f:a80b:1872 with SMTP id k15-20020a0565123d8f00b0048fa80b1872mr5975131lfv.21.1660629478374;
-        Mon, 15 Aug 2022 22:57:58 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id h6-20020a2ea486000000b0025e57b40009sm1675557lji.89.2022.08.15.22.57.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 22:57:57 -0700 (PDT)
-Message-ID: <96e4a9f2-96a0-764e-8060-58f2c1b23a5b@linaro.org>
-Date:   Tue, 16 Aug 2022 08:57:56 +0300
+        bh=lUHutYvTWkC02k1JHzLmqGKDgiRolEQq5obnJ8zZPao=;
+        b=aR0EAEQ5XnN3O5tuXiiOr7Q6LWISdpQhJ6FHS5oKdA8tgWdZ0SHYulotTbBK8EvTZ1
+         UIJg+h3XPNUnLR0HEMNiFJkfARDwqbKHIKm68Q0S0H3MHzP4ldE0YZasE2X6IY7OdsFB
+         Wzo6O0wAVU2tSYOIlYsXRqT1f7kfiaNSv1O2we0/7ANCeb5K2AVol0ZwdL4Uqkdq3jMx
+         m4yo7gX/b5HRaLLKszJpC9XV8OB0Ht42dRQCxVB5HYJY958C7FqHIOFOU3jfjN80ahVI
+         RWgqF9mZE3SRJ31dBjkctbPrRY7yS3dKCdrZdWw1CbQLvHT7FUt4cTLqwuFcmhvvSFUp
+         076Q==
+X-Gm-Message-State: ACgBeo1UiMH5YuCCjCpizqDk6AXhZNAwISk4EdeBYxc9UfwClRUqHldU
+        tonR7Xu2RUVVqPHVYZVn8FwoojK2cnQnr2jsXttLoQwrRp8i
+X-Google-Smtp-Source: AA6agR5xlqIUCDW7/LHVLDMOCEAifJLoInIbGB8XrCdW2sWYNDqAtG4CM3T91W0o7i7Os/k2xLXXOpNa8DlLGy4FJj8FrzXAZVhs
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v4 4/4] dt-binding: perf: Add Amlogic DDR PMU
-Content-Language: en-US
-To:     Jiucheng Xu <jiucheng.xu@amlogic.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chris Healy <cphealy@gmail.com>
-References: <20220805071426.2598818-1-jiucheng.xu@amlogic.com>
- <20220805071426.2598818-4-jiucheng.xu@amlogic.com>
- <a3cd55ad-cec2-9570-2078-6724ab1d7300@linaro.org>
- <880842a1-a769-f228-7c91-5402e6d9391e@amlogic.com>
- <c57044ca-3742-37c1-b8ad-14806cbc05ea@amlogic.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c57044ca-3742-37c1-b8ad-14806cbc05ea@amlogic.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6e02:194d:b0:2de:a54b:2e51 with SMTP id
+ x13-20020a056e02194d00b002dea54b2e51mr8736771ilu.257.1660629488569; Mon, 15
+ Aug 2022 22:58:08 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 22:58:08 -0700
+In-Reply-To: <000000000000aaac8505dc135b07@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c518d505e6556ed8@google.com>
+Subject: Re: BUG: corrupted list in insert_work
+From:   syzbot <syzbot+e42ae441c3b10acf9e9d@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        brauner@kernel.org, cgroups@vger.kernel.org, daniel@iogearbox.net,
+        dvyukov@google.com, hannes@cmpxchg.org, hdanton@sina.com,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        lizefan.x@bytedance.com, lkp@intel.com, lkp@lists.01.org,
+        mkoutny@suse.com, netdev@vger.kernel.org, oliver.sang@intel.com,
+        songliubraving@fb.com, stable@vger.kernel.org,
+        syzkaller-android-bugs@googlegroups.com,
+        syzkaller-bugs@googlegroups.com, tadeusz.struk@linaro.org,
+        tj@kernel.org, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,26 +64,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/08/2022 12:04, Jiucheng Xu wrote:
->>>> +properties:
->>>> +  compatible:
->>>> +    items:
->>> You have only one item, so remove "items".
-> 
-> Hi Krzysztof,
-> 
-> I have tried to remove "items", but error comes.
-> 
-> properties:
->    compatible:
->      - enum:
->        - amlogic,g12a-ddr-pmu
->        - amlogic,g12b-ddr-pmu
->        - amlogic,sm1-ddr-pmu
-> 
-> Do I get misunderstand? I think the "item" is necessary.
+syzbot suspects this issue was fixed by commit:
 
-And how other bindings are doing it?
+commit d007f49ab789bee8ed76021830b49745d5feaf61
+Author: Al Viro <viro@zeniv.linux.org.uk>
+Date:   Wed May 18 06:13:40 2022 +0000
 
-Best regards,
-Krzysztof
+    percpu_ref_init(): clean ->percpu_count_ref on failure
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10c66b6b080000
+start commit:   ebc9fb07d294 ANDROID: random: fix CRC issues with the merge
+git tree:       android12-5.10-lts
+kernel config:  https://syzkaller.appspot.com/x/.config?x=32c952ff4a8ff8c1
+dashboard link: https://syzkaller.appspot.com/bug?extid=e42ae441c3b10acf9e9d
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=172a9074080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10456caa080000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: percpu_ref_init(): clean ->percpu_count_ref on failure
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

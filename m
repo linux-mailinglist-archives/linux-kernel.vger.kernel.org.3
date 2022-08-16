@@ -2,67 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738125960A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E277759607A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 18:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236656AbiHPQ4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 12:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
+        id S236589AbiHPQmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 12:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbiHPQ4C (ORCPT
+        with ESMTP id S236581AbiHPQmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 12:56:02 -0400
-X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 16 Aug 2022 09:56:01 PDT
-Received: from mail.toke.dk (mail.toke.dk [IPv6:2a0c:4d80:42:2001::664])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D90F7C52E;
-        Tue, 16 Aug 2022 09:56:01 -0700 (PDT)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
-        t=1660668017; bh=YXaNHGMYKcjnJgddXdsTHTKJZxjmymYUBGBhAxB3I4o=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=DXfoS0miGmxKBA8B2KiiSBadXfu6qRGg+xljltxxTrQPrbTHAakuf4QR+TQvkn7vB
-         Y2GLQQHjCapNS7IUT9wfOkb0I/4RHmnuFIKaETruLe+ryJNv5WrDcHS47PZtIoaXq4
-         DOdDbdrukydiRLSsiBPGOzKxPIEWhzedQsLvG/uUFzgZhj5Y+EuUs9Pc9FIQQVTvPS
-         hrag/niyLG3+nXfzk7mHGo01m+3qpgYSp0oA/uIMbRnVAaW/a+tDwnM3rU1rKhypNM
-         JMnhCGlo2xPbAE91QARGMYQv1iRbkswK/Ympepn+JGj8x+F9exI9nsGEnTprtKn3Zr
-         oETRD+T/vUMwg==
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>, kvalo@kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: Re: [PATCH] wifi: ath9k: fix repeated words in comments
-In-Reply-To: <87y1vouoqs.fsf@toke.dk>
-References: <20220709123724.46525-1-yuanjilin@cdjrlc.com>
- <87y1vouoqs.fsf@toke.dk>
-Date:   Tue, 16 Aug 2022 18:40:17 +0200
-X-Clacks-Overhead: GNU Terry Pratchett
-Message-ID: <87v8qsuopa.fsf@toke.dk>
+        Tue, 16 Aug 2022 12:42:00 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417A580B6D;
+        Tue, 16 Aug 2022 09:42:00 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-324ec5a9e97so166060327b3.7;
+        Tue, 16 Aug 2022 09:42:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=xeI0TzK7TK0zOEsbG6w8WUZfEt+fMLx/8nyM8dycqjI=;
+        b=Ftkf1ROMDdlV3/9K7TB2tg6pY2hQKbTPyf/EpRiny7tAw/SRAjDCB74od/ghS9ARPm
+         Bw1xjiZY5YpqBcbvi4x7SFjMDOiFH6sFiPqVbG77G4OKbCwv4Ly9poSQf2Oa7uzrFhXd
+         v4v2unVqZNPFJBUJJb3TTr7OinVM3ZGETHBIOJ/KvZ93UEklsH8gX4tlwlU+wn4TGr5Q
+         fEu6fXtP+pJ57P2wUt5kHXHHVlbg8BOILerOwtQNEqsfODLn1b1GU/weIvjGt9M1kiNJ
+         B0dgYK3WP7Guccld77BPPS86+T+qoM9IfrBG/3uh+l3F7o75x1a8B7o9hUF3h4/hvDju
+         /RZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=xeI0TzK7TK0zOEsbG6w8WUZfEt+fMLx/8nyM8dycqjI=;
+        b=ckt0UajRJUGJrHqnv5tFPjmYc1OVA18mItxh9/vhQMje6pQoAQ3G3GxjbHLS9M3fq9
+         ZadZjqfUq/CgyN03vKZkG8i1S7jMFc0vNKU/yuudpA1he/cCg6L0RbYiYuqxqMpXSzGm
+         y+OkIesGhAerKr8/TlGF3Hd3WwoKPkjW6Mn0g2xvCRlJ3QHSAdy/+ADJvetPB/uEEmaF
+         WUadBZi+QDC7LSC6TawuSRf7386t8pm/XoR+9oJkv3sO1yu4OBWIsLgXweB2lhiDl3C3
+         w1x+sMwM2xGHDr88I4vojHSPI8ygAfFJtAbmVsZuOPSkYnJjmuZeEnfPp5XwXO0oxCVb
+         Vnxg==
+X-Gm-Message-State: ACgBeo1sthbUfqqT5CjCDAZHmXWUVv5uY7ezFJ9YQDStGzSw28R1RwqX
+        2aIwP+thmepACEbp2lcuUMlsn+jX4Bf9XDugDGGxZf+ghocGxQ==
+X-Google-Smtp-Source: AA6agR4cAOtB/f5xqyWkMsEsljYa28EwSVdxAj5FkYgOXffRCMEssEVMFvEd7JGtQnZCYa/zML47222vuaQfRehsM74=
+X-Received: by 2002:a0d:ca09:0:b0:333:dd2c:8ba3 with SMTP id
+ m9-20020a0dca09000000b00333dd2c8ba3mr2421408ywd.488.1660668119463; Tue, 16
+ Aug 2022 09:41:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220816124604.978842485@linuxfoundation.org> <CADVatmPOCPfHQHEuwVmOb5oeN2HfWWMztVok3qvoq7Ndndb14A@mail.gmail.com>
+ <YvutIhMRZW/nKOPi@kroah.com>
+In-Reply-To: <YvutIhMRZW/nKOPi@kroah.com>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Tue, 16 Aug 2022 17:41:23 +0100
+Message-ID: <CADVatmM4ZH0PvPiFrdwqXg5y-w4Z3=7YqLz9SW54ygScoODPmQ@mail.gmail.com>
+Subject: Re: [PATCH 5.18 0000/1094] 5.18.18-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk> writes:
-
-> Jilin Yuan <yuanjilin@cdjrlc.com> writes:
+On Tue, Aug 16, 2022 at 3:43 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
->>  Delete the redundant word 'the'.
->>  Delete the redundant word 'to'.
->>
->> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+> On Tue, Aug 16, 2022 at 03:34:56PM +0100, Sudip Mukherjee wrote:
+> > Hi Greg,
+> >
+> > On Tue, Aug 16, 2022 at 1:59 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > This is the start of the stable review cycle for the 5.18.18 release.
+> > > There are 1094 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > >
+> > > Responses should be made by Thu, 18 Aug 2022 12:43:14 +0000.
+> > > Anything received after that time might be too late.
+> >
+> > The hung task problem I reported for v5.18.18-rc1 is not seen with rc2.
 >
-> Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk>
+> Nice!
+>
+> > The drm warning is still there and a bisect pointed it to:
+> > 4b8701565b59 ("drm/vc4: hdmi: Move HDMI reset to
+> > pm_resume")4b8701565b59 ("drm/vc4: hdmi: Move HDMI reset to
+> > pm_resume")
+>
+> What drm warning?
 
-However, the patch does not apply cleanly to the ath-next tree. Please
-fix that and resubmit, retaining my ACK...
+Reported for mainline now, at
+https://lore.kernel.org/lkml/YvvHK2zb1lbm2baU@debian/
 
--Toke
+>
+> > I have not noticed earlier, the warning is there with mainline also. I
+> > will verify tonight and send another mail for mainline.
+>
+> Ah, ok, being bug compatible is good :)
+>
+> > Also, mips and csky allmodconfig build fails with gcc-12 due to
+> > 85d03e83bbfc ("Bluetooth: L2CAP: Fix l2cap_global_chan_by_psm
+> > regression").
+> > Mainline also has the same build failure reported at
+> > https://lore.kernel.org/lkml/YvY4xdZEWAPosFdJ@debian/
+>
+> Looks like they have a fix somewhere for that, any hints on where to
+> find it?
+
+There is a fix in the bluetooth tree master branch but it has not
+reached mainline yet. I will check which commit has fixed the failure
+and ping the bluetooth maintainers.
+
+
+-- 
+Regards
+Sudip

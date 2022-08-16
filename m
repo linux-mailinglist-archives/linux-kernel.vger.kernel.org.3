@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C56595540
+	by mail.lfdr.de (Postfix) with ESMTP id 8825C59553F
 	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233094AbiHPI3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 04:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
+        id S233103AbiHPI3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 04:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232955AbiHPI2Y (ORCPT
+        with ESMTP id S233017AbiHPI21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:28:24 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490FFB5A49
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:39:43 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id z32-20020a631920000000b0042903cb8dfcso1808509pgl.5
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:39:43 -0700 (PDT)
+        Tue, 16 Aug 2022 04:28:27 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DCCB5A54
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:39:45 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id h12-20020a170902f54c00b0016f8858ce9bso6053919plf.9
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:39:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:reply-to:from:to:cc;
-        bh=P0QIT2XK77Oto7YfWYKIYTTpEvk6YfjHVC+uFLOR+IA=;
-        b=NzY/qYDCAX1OabbgRWx0wtYEA2CUeMf6owA3/r4PfaVjeUKIL4hZExtdsfzmywIg9n
-         Cw5b9ckoW4An4P6wAJmV25rn0F3XONKUZZR/xYB5qSFE9hMMsGpmZAXFlnNsveQq2TLZ
-         zlgma0LVwLU7GAG0uov2lR3M2iJ+ua45SuAjfBT1Xnn/2RMSIfMPfyafgJNmXX2F1kLp
-         HE/JFHdOofKBsIiTrrfaK+wffTLBDWBEJFgBGspl6+cdZ6xhDrstzQmHTg57fJke+zV3
-         6W6Ef2kzuFMAp/Py8Nj6SKzJOLxYVwfFh/8B6mYojTj6tTjwKaKHitQSSFkAJovYn6t4
-         MGBg==
+        bh=/mb/4kA68DuEk+etiSxItbDhS1o312Y9/FSzPon3SwU=;
+        b=E/qmMTDg2mnLIRqmZ/h0BV2xJPkV0YxMHFVoLTvK/m0l5eKcjvYe7Zs4cjq3foQ8DG
+         XcXMqto2Rrn733cK+JUdoPaHanFJx4f8VMzwOJpE/N9fgyhTZK+y5sIbR6ieG9QOOL37
+         RW6GJwft95tp/9Bs9OQrOQ0z95G6TVpIyueG0TfruZQabzNGWUa6bqAEET4qItWN3XsO
+         ingzWu6BKh2Ndo7UBJshY/BIRkdfcw0/C0mLSdqDlYhbJZX+VGJIkxs245ImtKPCkNHs
+         kIddymjEooD8ywYCmBhhdT/cwcNipE9ZDjxD1O+xSnKLKwBMf2HEUfiaPgsyRkoOXDnP
+         E6hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc;
-        bh=P0QIT2XK77Oto7YfWYKIYTTpEvk6YfjHVC+uFLOR+IA=;
-        b=myqUQpuSakZAUcvZwRBmRPiG6q/jTZ60ta5RNMAlrnfLp6j0hhmJqwuN3D6SLrmLYS
-         1II6GVLIuRc+fEoAc6zydtFcQzaaSPzb17+OheAZ9DWNFp9XmJU84/XoEmQY+i05UiM8
-         CYvgdtxPFHV+Mk4xHbfVUBuDNXl9qs14fwtzAa6FyIHquhXckNRRQaNcWbio/YXcTkst
-         0PKbwKkG4QOkgb4KNd3E/OXiAkrN6wIFvSDS45hJJaieDz1VkNhXY0Xko/95rsoETHnx
-         r57yBY7C4WQ5ncX2SX/aiveS3po9cHb9gPttDRCL2lR2IaNYy8Aw86JSLhHadRQVqww0
-         zHSQ==
-X-Gm-Message-State: ACgBeo3qSvM6wjRQMctvWJsyMxddmmF1zq5igmk6ebIcAM+1/GzYZrOA
-        /LAn5V8cUV20h2nGtPLEe/1uHAfSg5k=
-X-Google-Smtp-Source: AA6agR7m2l1CO8dy3dV9yhEXh1qMXWAWmdxxK8NBRv7niQaxroUaXjWUgUW5OKoKHJrpvfiU9kteOBnCPb0=
+        bh=/mb/4kA68DuEk+etiSxItbDhS1o312Y9/FSzPon3SwU=;
+        b=yiPJYf1nLh7Ft7/z4gEb6I1ZmcYG18S0GJLiGPl+NjIM8tyH3psmPu8U/Gb9qkESsX
+         JDxnx6C3IU3LiA1AW7nkVkWOZRy4uR4t4Z7fRXHcE6VMrp/lEIy888ZvG70H71YyrqSV
+         dJsYaG5C8Jrzlq9WpQuv3l6WyL/VY/pWEvgnZZkAtZbLhohaFAiVvMTpIkJFxJSmykxQ
+         2zap2YDZ4jO6HKolpA29g8NJi0r9D20gdYxiDpRcbqnGcrloiHMWuY54yZ3JtQQgPEy+
+         LC+MyIPNee3hEHBXFG5UXoLkjUeWQIAOFhOCdY4CawZ7EYuEBll2eQMVR8SEeltBTURm
+         QviA==
+X-Gm-Message-State: ACgBeo2wK6KfAluWE6o2JaWhYEsnTPsaSqvsb6itCd0L11Xrdr67Uumm
+        VwqwkDbw7HdFXN8eWk1usTVVregK++4=
+X-Google-Smtp-Source: AA6agR70sGsTjN7dC8+jZ09qVGsPAvplulRvw7CVOG4hsyKlS270660wcNWG8ynhv46MwbzLr4dE907QsxU=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90b:1bc7:b0:1f5:37a6:e473 with SMTP id
- oa7-20020a17090b1bc700b001f537a6e473mr21624786pjb.87.1660628382882; Mon, 15
- Aug 2022 22:39:42 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:4147:b0:52e:2d56:17c8 with SMTP id
+ bv7-20020a056a00414700b0052e2d5617c8mr19678854pfb.51.1660628384621; Mon, 15
+ Aug 2022 22:39:44 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 16 Aug 2022 05:39:35 +0000
+Date:   Tue, 16 Aug 2022 05:39:36 +0000
 In-Reply-To: <20220816053937.2477106-1-seanjc@google.com>
-Message-Id: <20220816053937.2477106-2-seanjc@google.com>
+Message-Id: <20220816053937.2477106-3-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220816053937.2477106-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH 1/3] KVM: Properly unwind VM creation if creating debugfs fails
+Subject: [PATCH 2/3] KVM: Unconditionally get a ref to /dev/kvm module when
+ creating a VM
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -72,73 +73,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Properly unwind VM creation if kvm_create_vm_debugfs() fails.  A recent
-change to invoke kvm_create_vm_debug() in kvm_create_vm() was led astray
-by buggy try_get_module() handling adding by commit 5f6de5cbebee ("KVM:
-Prevent module exit until all VMs are freed").  The debugfs error path
-effectively inherits the bad error path of try_module_get(), e.g. KVM
-leaves the to-be-free VM on vm_list even though KVM appears to do the
-right thing by calling module_put() and falling through.
+Unconditionally get a reference to the /dev/kvm module when creating a VM
+instead of using try_get_module(), which will fail if the module is in
+the process of being forcefully unloaded.  The error handling when
+try_get_module() fails doesn't properly unwind all that has been done,
+e.g. doesn't call kvm_arch_pre_destroy_vm() and doesn't remove the VM
+from the global list.  Not removing VMs from the global list tends to be
+fatal, e.g. leads to use-after-free explosions.
 
-Opportunistically hoist kvm_create_vm_debugfs() above the call to
-kvm_arch_post_init_vm() so that the "post-init" arch hook is actually
-invoked after the VM is initialized (ignoring kvm_coalesced_mmio_init()
-for the moment).  x86 is the only non-nop implementation of the post-init
-hook, and it doesn't allocate/initialize any objects that are reachable
-via debugfs code (spawns a kthread worker for the NX huge page mitigation).
+The obvious alternative would be to add proper unwinding, but the
+justification for using try_get_module(), "rmmod --wait", is completely
+bogus as support for "rmmod --wait", i.e. delete_module() without
+O_NONBLOCK, was removed by commit 3f2b9c9cdf38 ("module: remove rmmod
+--wait option.") nearly a decade ago.
 
-Leave the buggy try_get_module() alone for now, it will be fixed in a
-separate commit.
+It's still possible for try_get_module() to fail due to the module dying
+(more like being killed), as the module will be tagged MODULE_STATE_GOING
+by "rmmod --force", i.e. delete_module(..., O_TRUNC), but playing nice
+with forced unloading is an exercise in futility and gives a falsea sense
+of security.  Using try_get_module() only prevents acquiring _new_
+references, it doesn't magically put the references held by other VMs,
+and forced unloading doesn't wait, i.e. "rmmod --force" on KVM is all but
+guaranteed to cause spectacular fireworks; the window where KVM will fail
+try_get_module() is tiny compared to the window where KVM is building and
+running the VM with an elevated module refcount.
 
-Fixes: b74ed7a68ec1 ("KVM: Actually create debugfs in kvm_create_vm()")
-Reported-by: syzbot+744e173caec2e1627ee0@syzkaller.appspotmail.com
-Cc: Oliver Upton <oliver.upton@linux.dev>
+Addressing KVM's inability to play nice with "rmmod --force" is firmly
+out-of-scope.  Forcefully unloading any module taints kernel (for obvious
+reasons)  _and_ requires the kernel to be built with
+CONFIG_MODULE_FORCE_UNLOAD=y, which is off by default and comes with the
+amusing disclaimer that it's "mainly for kernel developers and desperate
+users".  In other words, KVM is free to scoff at bug reports due to using
+"rmmod --force" while VMs may be running.
+
+Fixes: 5f6de5cbebee ("KVM: Prevent module exit until all VMs are freed")
+Cc: stable@vger.kernel.org
+Cc: David Matlack <dmatlack@google.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- virt/kvm/kvm_main.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ virt/kvm/kvm_main.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
 diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 515dfe9d3bcf..ee5f48cc100b 100644
+index ee5f48cc100b..15e304e059d4 100644
 --- a/virt/kvm/kvm_main.c
 +++ b/virt/kvm/kvm_main.c
-@@ -1211,9 +1211,13 @@ static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
- 	if (r)
- 		goto out_err_no_mmu_notifier;
+@@ -1134,6 +1134,9 @@ static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
+ 	if (!kvm)
+ 		return ERR_PTR(-ENOMEM);
  
-+	r = kvm_create_vm_debugfs(kvm, fdname);
-+	if (r)
-+		goto out_err_no_debugfs;
++	/* KVM is pinned via open("/dev/kvm"), the fd passed to this ioctl(). */
++	__module_get(kvm_chardev_ops.owner);
 +
- 	r = kvm_arch_post_init_vm(kvm);
- 	if (r)
--		goto out_err_mmu_notifier;
-+		goto out_err;
+ 	KVM_MMU_LOCK_INIT(kvm);
+ 	mmgrab(current->mm);
+ 	kvm->mm = current->mm;
+@@ -1226,16 +1229,6 @@ static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
+ 	preempt_notifier_inc();
+ 	kvm_init_pm_notifier(kvm);
  
- 	mutex_lock(&kvm_lock);
- 	list_add(&kvm->vm_list, &vm_list);
-@@ -1229,18 +1233,14 @@ static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
- 	 */
- 	if (!try_module_get(kvm_chardev_ops.owner)) {
- 		r = -ENODEV;
--		goto out_err_mmu_notifier;
+-	/*
+-	 * When the fd passed to this ioctl() is opened it pins the module,
+-	 * but try_module_get() also prevents getting a reference if the module
+-	 * is in MODULE_STATE_GOING (e.g. if someone ran "rmmod --wait").
+-	 */
+-	if (!try_module_get(kvm_chardev_ops.owner)) {
+-		r = -ENODEV;
+-		goto out_err;
 -	}
 -
--	r = kvm_create_vm_debugfs(kvm, fdname);
--	if (r)
- 		goto out_err;
-+	}
- 
  	return kvm;
  
  out_err:
--	module_put(kvm_chardev_ops.owner);
--out_err_mmu_notifier:
-+	kvm_destroy_vm_debugfs(kvm);
-+out_err_no_debugfs:
- #if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
- 	if (kvm->mmu_notifier.ops)
- 		mmu_notifier_unregister(&kvm->mmu_notifier, current->mm);
+@@ -1259,6 +1252,7 @@ static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
+ out_err_no_srcu:
+ 	kvm_arch_free_vm(kvm);
+ 	mmdrop(current->mm);
++	module_put(kvm_chardev_ops.owner);
+ 	return ERR_PTR(r);
+ }
+ 
 -- 
 2.37.1.595.g718a3a8f04-goog
 

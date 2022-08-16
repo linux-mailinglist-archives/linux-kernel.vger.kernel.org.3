@@ -2,164 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E6A5963D0
+	by mail.lfdr.de (Postfix) with ESMTP id EEFB05963D1
 	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237057AbiHPUkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 16:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
+        id S237253AbiHPUkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 16:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233510AbiHPUkD (ORCPT
+        with ESMTP id S237251AbiHPUk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 16:40:03 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5CB75CE6;
-        Tue, 16 Aug 2022 13:40:01 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27GKQWsO001199;
-        Tue, 16 Aug 2022 20:39:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : to : cc : from : subject : content-type :
- content-transfer-encoding; s=qcppdkim1;
- bh=fxPvanH4qeBVh2aZXacr3twnFRomdbTwosccx73kWus=;
- b=GAxzEeB9Je887taMm/C3Y6+mEPelnEBsZTdS5ir79sWaEeKsKifbbefniv/ZVwUSEqVm
- mbHAwhC/Yeueym6aKukGgOOiP1MBUDpM04UcnuLLYYgvXDE031CTL8YOmU4E4IW7o+x7
- hAYV1P6tAsVyLrHKim8W6rFQjx6L+dY3mjyRYYUlOBAUvjDKTHGsPEQi1As4LnjWdie5
- d4CslhXzh8ligvnZygwBwEOgaHHxm0K8M0DcWrCEPLVhuos8ciUPTJjjM3buY2giTdDs
- Eb1w0RTStllQ6+BfwnbGfx9v9y82+rlKk8aupKe1w+K45xkE+IIm4lsD2Tl/KVy8SNGH sg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j06c0tn60-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Aug 2022 20:39:55 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27GKdsOk012363
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Aug 2022 20:39:54 GMT
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 16 Aug 2022 13:39:54 -0700
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 16 Aug
- 2022 13:39:53 -0700
-Message-ID: <7e047ee0-0243-d9d4-f0bc-7ed19ed33c19@quicinc.com>
-Date:   Tue, 16 Aug 2022 14:39:52 -0600
+        Tue, 16 Aug 2022 16:40:28 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6718F78BEF;
+        Tue, 16 Aug 2022 13:40:27 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id d1so8765978qvs.0;
+        Tue, 16 Aug 2022 13:40:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc;
+        bh=zVz88dPG3SS5bq8mIZmcCFkcMATpyXDqFd/31Ajfy40=;
+        b=ggQIrIccsV+1lpm/KhcCBgwF0bYNbdtZMwgVN//PJn0nk9pgsiDyN2/2Ktm9m+K7SJ
+         D0Ak9ohGg/P+UhiCmsxgIOum7CuxbSXJE76nqG9oCLVt/uLaDNBjo4ZgPE8F9fFgnOfM
+         LkuW80PHBzZ7E/qjmxC6gnCecjaSPHv42y09dbAO8XsBYpLSRyTc5hodFKSWDxqTU7Z9
+         fVQx5YjRI1bwJvXa8tvIAEALgRToYjjiA56la2zc7ns6xf1fBbiViYiB5Jilvjx9DT/P
+         L0G0JsHsRhgruuDEnpi90I2dro/iyMrQZJr14+oJO3ywmjxC707jhoZ5H4Lanthhl6Xt
+         KjZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc;
+        bh=zVz88dPG3SS5bq8mIZmcCFkcMATpyXDqFd/31Ajfy40=;
+        b=eF8g7eWSkY3yO4+Mgn8yLTnDOa5iOooccy+8RStLjTkW5yCnUqda+S6xzObxYyh1Ta
+         wvlYaPRcVQMbfXx82TE0UPuB31zCWPicMqqJTeJBnSnzOTbC/8UpyJmEI0jxGbekYnCc
+         5ExJd2zRcm3452y6WY6ecnR7SPbfnnOvr6R8fnOAEwIF5GWqzQO2vsgjDWcr3eTurZIc
+         bKIVN5XL7ldfR4kAURop5E1ruRgWEruF3/lkDTWIKp0FMvRL63uPJ1+VJqZhUor0umzk
+         zRiZHZJKppYLBrZ/RMPqUu/AFMh3Yh7YCuMx/Vlzihfes+pGqveSAnyzVxzEZjmH1byO
+         v0bg==
+X-Gm-Message-State: ACgBeo1ub/KnHVIYArwvuPB8RyhAuQdnYrqkwznZzghm8C54vsVqMUmh
+        L0gyoay2N1vNrw5rngN767Bh6hWODLc=
+X-Google-Smtp-Source: AA6agR7Q0NEmHVJRSIDwJrsBTNmweil8tt9OTVSy93/WYc/2Nl+EKhIjSVW1zXDZbszDONuv2bGyIQ==
+X-Received: by 2002:ad4:5c85:0:b0:474:7ce3:5fb with SMTP id o5-20020ad45c85000000b004747ce305fbmr19606157qvh.76.1660682426308;
+        Tue, 16 Aug 2022 13:40:26 -0700 (PDT)
+Received: from fionn.redhat.com ([142.189.102.90])
+        by smtp.gmail.com with ESMTPSA id h5-20020a05620a400500b006b615cd8c13sm12703014qko.106.2022.08.16.13.40.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 13:40:25 -0700 (PDT)
+Sender: John Kacur <jkacur@gmail.com>
+From:   John Kacur <jkacur@redhat.com>
+To:     RT <linux-rt-users@vger.kernel.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia Poulin <kcarcia@redhat.com>,
+        Leah Leshchinsky <lleshchi@redhat.com>,
+        Manasi Godse <gmanasi13@gmail.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        John Kacur <jkacur@redhat.com>
+Subject: [ANNOUNCE] rteval-v3.5
+Date:   Tue, 16 Aug 2022 16:40:05 -0400
+Message-Id: <20220816204005.271589-1-jkacur@redhat.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Content-Language: en-US
-To:     <tj@kernel.org>, <lizefan.x@bytedance.com>,
-        <cgroups@vger.kernel.org>, <hannes@cmpxchg.org>
-CC:     <tjmercier@google.com>, <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Carl Vanderlip <quic_carlv@quicinc.com>,
-        <quic_ajitpals@quicinc.com>, <quic_pkanojiy@quicinc.com>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-Subject: GPU device resource reservations with cgroups?
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: F6JGtFf7UBmS0kSYJwVIEAQK6aGvdabZ
-X-Proofpoint-GUID: F6JGtFf7UBmS0kSYJwVIEAQK6aGvdabZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-16_08,2022-08-16_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- priorityscore=1501 mlxlogscore=999 impostorscore=0 clxscore=1011
- suspectscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208160076
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello cgroup experts,
+I am pleased to announce the release of v3.5 of rteval
 
-I have a GPU device [1] that supports organizing its resources for the 
-purposes of supporting containers.  I am attempting to determine how to 
-represent this in the upstream kernel, and I wonder if it fits in cgroups.
+With this release we have removed misc.py and consolidated this
+functionality in systopology.py There have been improvements to
+systopology that take into account whether cpus are offline.
 
-The device itself has a number of resource types – compute cores, 
-memory, bus replicators, semaphores, and dma channels.  Any particular 
-workload may consume some set of these resources.  For example, a 
-workload may consume two compute cores, 1GB of memory, one dma channel, 
-but no semaphores and no bus replicators.
+Using this interface there are changes that allow the user to input
+cpulists in short form, ie, 0-4 instead of 0,1,2,3,4
 
-By default all of the resources are in a global pool.  This global pool 
-is managed by the device firmware.  Linux makes a request to the 
-firmware to load a workload.  The firmware reads the resource 
-requirements from the workload itself, and then checks the global pool. 
-If the global pool contains sufficient resources to satisfy the needs of 
-the workload, the firmware assigns the required resources from the 
-global pool to the workload.  If there are insufficient resources, the 
-workload request from Linux is rejected.
+Using these interfaces, reporting has been fixed so that offline cpus are considered in early reporting.
 
-Some users may want to share the device between multiple containers, but 
-provide device level isolation between those containers.  For example, a 
-user may have 4 workloads to run, one per container, and each workload 
-takes 1/4th of the set of compute cores.  The user would like to reserve 
-sets of compute cores for each container so that container X always has 
-the expected set of resources available, and if container Y 
-malfunctions, it cannot “steal” resources from container X.
+Leah added a patch that adds measurement and load cpus information to
+the final report.
 
-To support this, the firmware supports a concept of partitioning.  A 
-partition is a pool of resources which are removed from the global pool, 
-and pre-assigned to the partition’s pool.  A workload can then be run 
-from within a partition, and it consumes resources from that partition’s 
-pool instead of from the global pool.  The firmware manages creating 
-partitions and assigning resources to them.
+Valentin fixed a problem he uncovered testing on arm where the list of
+load cpus was empty. This problem was caused by some of the above changes 
+where an older interface produced a cpulist in string format but
+the newer ones produce python lists.
 
-Partitions do not nest.
+Finally, we have a number of changes from Manasi. She made it possible
+to download a kernel from kernel.org to the correct location for rteval whether you are running from git or from an rpm. This is used by kcompile in rteval which compiles a kernel as a load. She also made the interface more flexible for the user when specifying an alternative kernel to compile from the default.
+(Look at the following command line options for this)
+-S KERNEL_VERSION, --source-download=KERNEL_VERSION
+                        download a source kernel from kernel.org and exit
+--kcompile-source=TARBALL
 
-In the above user example, the user can create 4 partitions, and divide 
-up the compute cores among them.  Then the user can assign each 
-individual container their own individual partition.  Each container 
-would be limited to the resources within it’s assigned partition, but 
-also that container would have exclusive access to those resources. 
-This essentially provides isolation, and some Quality of Service (QoS).
+These changes are especially useful for developers who may need to test
+newer kernels with rteval, but also for rt-developers who are using
+rteval directly from git and need to set it up before using.
 
-How this is currently implemented (in downstream), is perhaps not ideal. 
-  A privileged daemon process reads a configuration file which defines 
-the number of partitions, and the set of resources assigned to each. 
-That daemon makes requests to the firmware to create the partitions, and 
-gets a unique ID for each.  Then the daemon makes a request to the 
-driver to create a “shadow device”, which is a child dev node.  The 
-driver verifies with the firmware that the partition ID is valid, and 
-then creates the dev node.  Internally the driver associates this shadow 
-device with the partition ID so that each request to the firmware is 
-tagged with the partition ID by the driver.  This tagging allows the 
-firmware to determine that a request is targeted for a specific 
-partition.  Finally, the shadow device is passed into the container, 
-instead of the normal dev node.  The userspace within the container 
-operates the shadow device normally.
+Enjoy!
 
-One concern with the current implementation is that it is possible to 
-create a large number of partitions.  Since each partition is 
-represented by a shadow device dev node, this can create a large number 
-of dev nodes and exhaust the minor number space.
+John
 
-I wonder if this functionality is better represented by a cgroup. 
-Instead of creating a dev node for the partition, we can just run the 
-container process within the cgroup.  However it doesn’t look like 
-cgroups have a concept of resource reservation.  It is just a limit.  If 
-that impression is accurate, then I struggle to see how to provide the 
-desired isolation as some entity not under the cgroup could consume all 
-of the device resources, leaving the containers unable to perform their 
-tasks.
+To fetch
 
-So, cgroup experts, does this sound like something that should be 
-represented by a cgroup, or is cgroup the wrong mechanism for this usecase?
+Clone
+git://git.kernel.org/pub/scm/utils/rteval/rteval.git
 
-[1] - 
-https://lore.kernel.org/all/1660588956-24027-1-git-send-email-quic_jhugo@quicinc.com/
+Branch: main
+Tag: v3.5
+
+Tarballs available here:
+https://kernel.org/pub/linux/utils/rteval
+
+Older version tarballs are available here:
+https://kernel.org/pub/linux/utils/rteval/older
+
+John Kacur (11):
+  rteval: Create common  functions in CpuList and SysTopology
+  rteval: Make use of systopology instead of misc in rteval-cmd
+  rteval: Make use of systopology instead of misc in hackbench
+  rteval: Make use of systopology instead of misc in kcompile
+  rteval: Make use of systopology instead of misc in stressng module
+  rteval: Make use of systopology instead of misc in cyclictest
+  rteval: cyclictest: Reset cpulist from newly calculated cpus
+  rteval: Allow user to enter compressed cpu-lists, fix reporting
+  rteval: Move cpuinfo to systopology.py and delete misc.py
+  rteval: Use "with" for open of loadavg
+  rteval: Update version number to v3.5
+
+Leah Leshchinsky (1):
+  rteval: Add measurement and load location to run report
+
+Manasi Godse (5):
+  rteval: Add option for downloading kernel
+  rteval: Add man page entry for -S, --source-download option
+  rteval: restrict kernel source download with invalid file extensions
+  rteval: fix regex in kcompile to calculate patch number for kernel
+    prefix
+  rteval: enhancement to --kcompile-source option for kernel tarball
+
+Valentin Schneider (1):
+  rteval: Fix loads cpulist restriction
+
+ doc/rteval.8                             |   4 +
+ rteval-cmd                               | 137 ++++++++++++++++++-----
+ rteval.spec                              |   2 +-
+ rteval/misc.py                           | 116 -------------------
+ rteval/modules/loads/__init__.py         |  15 ++-
+ rteval/modules/loads/hackbench.py        |  32 +++---
+ rteval/modules/loads/kcompile.py         | 113 +++++++++++--------
+ rteval/modules/loads/stressng.py         |  17 +--
+ rteval/modules/measurement/__init__.py   |  10 +-
+ rteval/modules/measurement/cyclictest.py |  69 +++++++-----
+ rteval/rtevalConfig.py                   |   1 +
+ rteval/rteval_text.xsl                   |   8 ++
+ rteval/systopology.py                    | 134 +++++++++++++++++++---
+ rteval/version.py                        |   2 +-
+ 14 files changed, 393 insertions(+), 267 deletions(-)
+ delete mode 100755 rteval/misc.py
+
+-- 
+

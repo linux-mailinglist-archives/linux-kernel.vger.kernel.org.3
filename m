@@ -2,84 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BBDF5963F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D40775963FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237269AbiHPUtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 16:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
+        id S236943AbiHPUuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 16:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237097AbiHPUtP (ORCPT
+        with ESMTP id S237285AbiHPUun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 16:49:15 -0400
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550AD5E67A;
-        Tue, 16 Aug 2022 13:49:13 -0700 (PDT)
-Received: by mail-io1-f50.google.com with SMTP id b142so6287683iof.10;
-        Tue, 16 Aug 2022 13:49:13 -0700 (PDT)
+        Tue, 16 Aug 2022 16:50:43 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD65089901
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 13:50:41 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id gk3so21104510ejb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 13:50:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=RO5o1zeDBrbGGgJvigCNf9N1FTIpLD7LsdR8FYAUFCA=;
+        b=mbX6DctOgYFtFo87NIsVH6sCTW5XCGD7g/WUQ50Jx9DEGnIygGgzlyAhWZDWVsI6M8
+         smAAFtMa3exakMnltpq8T7dxRMzBG2pwz9164F9LalzD4IbgieCepjXRrXPhfWWoae4z
+         o+G4TZzVamOcu9v9ovcbWbd/AV7nQbuKQHsRBqo/GFzMEdPG2pgfbrRdaf22EdH2ZQ/9
+         1vrjYAjg+18lO17dFBMcUc20I9huOs5sk0CdN4zjoLOQ0l57P5ylIX3coxFr6Ijfkr/m
+         UQfCsdy1IGBqrnqLjeG/ybPyxTV0Wt4XpJV5NijX32crbQJN54oIv1EmOvsngHXl9U+T
+         pDNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=Igzpe2dfFh072dG7M9af7EwnEZkHHQlF9Pf46jZtejY=;
-        b=PqEGG3q64rKWeyKsEbJNiL3pY5X5LW7lCo1WACA46+Oe5m6JfwodqHOwqvsbtsoYPZ
-         JoZ1eU58aEm0crqWqRvxdlYlE3ddcz13NQxDM65t04ESBuHa7XmyDupBejzEB+800hct
-         BYYsK+bbxexiW0xU0i6S4BeYoJZjrKnvsCMT4DilH59YzLLbJbwqDfmxofGlnbyf7DXQ
-         1n9VcSoBMsmEmPrdDWDONthBL2xq7kW0NyQde3eP7yLCDYVFKm6xrg/bByGKGSXeQ7wi
-         iOV7rpiyjXgIPCGjabzbgJPb4cxZ+ZRKXhX6Ahi17VfQci4vEbES4eImgGLL4eEbsVoA
-         n6yw==
-X-Gm-Message-State: ACgBeo0y0bHH5a5QvS25JVX+WokbLaCQg82dlVJ25haRKOMvcM7+SiIL
-        Y0W5Xuy9GMWsPEe1h3MW3w==
-X-Google-Smtp-Source: AA6agR4JUMnAxe73i4k/USANa7oT8A2bvPIyHs4SYiN3MfNVQoRaN9YqHKUNH74CBK0dcaCnelKJeg==
-X-Received: by 2002:a5d:94d6:0:b0:67c:55f9:f355 with SMTP id y22-20020a5d94d6000000b0067c55f9f355mr9749658ior.133.1660682952543;
-        Tue, 16 Aug 2022 13:49:12 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id z25-20020a056602081900b00688b30a7812sm1312208iow.42.2022.08.16.13.49.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 13:49:12 -0700 (PDT)
-Received: (nullmailer pid 2709183 invoked by uid 1000);
-        Tue, 16 Aug 2022 20:49:08 -0000
-Date:   Tue, 16 Aug 2022 14:49:08 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?Q?Ren=C3=A9_van_Dorst?= <opensource@vdorst.com>,
-        linux-mediatek@lists.infradead.org, Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        devicetree@vger.kernel.org, erkin.bozoglu@xeront.com,
-        Eric Dumazet <edumazet@google.com>,
-        DENG Qingfang <dqfext@gmail.com>
-Subject: Re: [PATCH v2 1/7] dt-bindings: net: dsa: mediatek,mt7530: make
- trivial changes
-Message-ID: <20220816204908.GA2709132-robh@kernel.org>
-References: <20220813154415.349091-1-arinc.unal@arinc9.com>
- <20220813154415.349091-2-arinc.unal@arinc9.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=RO5o1zeDBrbGGgJvigCNf9N1FTIpLD7LsdR8FYAUFCA=;
+        b=oQhLY7gNbuc5TdkRKcR1zugezz/A2f/0yoF++TKZ03Cuf149/yfI6ib+hv/WIGkp0f
+         m1ihR9WAShfDd+qMUlGP3CVNGRgJFGcTl545mK27l/Aww3i9bZf7fZwz2bbsSRagNaqp
+         zK+UwV/kEe+wkELrr1iDYMbhxYK1izMl3CWK73AYil74SpUj62WQiz/oB2RqmgQtoM9j
+         ZlKb6NrVG9geFc8RQLMz08tr9tdiOV0KCAhmmCDKEfWwg8ki47H0kBx0pVeIEUTsjNCI
+         hl53S724i+ia4tnbePjA8LFD3MjNk/dQ1F9c8YpYQa+jJdTpf2ZXodggrdAeWh0zFYAN
+         3kUg==
+X-Gm-Message-State: ACgBeo3yOE7j5eCMbNE/IZxC/0A5fmHMOCDjsBg2RiNrF87UP6BXIuBT
+        b6qOfwY5ZTvyJJfaW7BaVYvFIj6L0tOqakN0NuXB+aXkGWY=
+X-Google-Smtp-Source: AA6agR5xeSAOjjzSY3u1UNusAfZ85+ssmMsNDrZIKPKiBG6aJaZr+H1+HfTdBJX+iAMFcv/AhR8JfftZ91By+JjVnV8=
+X-Received: by 2002:a17:907:9628:b0:731:1e3:b168 with SMTP id
+ gb40-20020a170907962800b0073101e3b168mr15076465ejc.526.1660683040495; Tue, 16
+ Aug 2022 13:50:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220813154415.349091-2-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220816130823.97903-2-linus.walleij@linaro.org> <202208170316.UKonQfhi-lkp@intel.com>
+In-Reply-To: <202208170316.UKonQfhi-lkp@intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 16 Aug 2022 22:50:29 +0200
+Message-ID: <CACRpkdbHvQm-_X4cpRRfeRSNUpTQbeyyQpBPD6TfeomY0nzSsg@mail.gmail.com>
+Subject: Re: [PATCH 2/2 v3] regmap: mmio: Support accelerared noinc operations
+To:     kernel test robot <lkp@intel.com>
+Cc:     Mark Brown <broonie@kernel.org>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-hexagon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,20 +67,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 13 Aug 2022 18:44:09 +0300, Arınç ÜNAL wrote:
-> Make trivial changes on the binding.
-> 
-> - Update title to include MT7531 switch.
-> - Add me as a maintainer. List maintainers in alphabetical order by first
-> name.
-> - Add description to compatible strings.
-> - Stretch descriptions up to the 80 character limit.
-> - Remove quotes from $ref: "dsa.yaml#".
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
->  .../bindings/net/dsa/mediatek,mt7530.yaml     | 36 ++++++++++++-------
->  1 file changed, 24 insertions(+), 12 deletions(-)
-> 
+On Tue, Aug 16, 2022 at 9:45 PM kernel test robot <lkp@intel.com> wrote:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> >> drivers/base/regmap/regmap-mmio.c:212:3: error: call to undeclared function 'writesb'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>                    writesb(ctx->regs + reg, (const u8 *)val, val_count);
+>                    ^
+>    drivers/base/regmap/regmap-mmio.c:212:3: note: did you mean 'writeb'?
+>    arch/hexagon/include/asm/io.h:122:20: note: 'writeb' declared here
+>    static inline void writeb(u8 data, volatile void __iomem *addr)
+>                       ^
+> >> drivers/base/regmap/regmap-mmio.c:366:3: error: call to undeclared function 'readsb'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>                    readsb(ctx->regs + reg, (u8 *)val, val_count);
+>                    ^
+>    drivers/base/regmap/regmap-mmio.c:366:3: note: did you mean 'readb'?
+>    arch/hexagon/include/asm/io.h:83:18: note: 'readb' declared here
+>    static inline u8 readb(const volatile void __iomem *addr)
+>                     ^
+>    2 errors generated.
+
+Yeah Hexagon breaks the <asm/io.h> contract and does not provide
+readsb/writesb.
+
+OK I just fix Hexagon as part of patch 2, I hope.
+
+Yours,
+Linus Walleij

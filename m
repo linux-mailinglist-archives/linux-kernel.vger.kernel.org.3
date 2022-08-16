@@ -2,180 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183CB5963BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175435963BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237110AbiHPUbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 16:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
+        id S237131AbiHPUfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 16:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232740AbiHPUbD (ORCPT
+        with ESMTP id S232740AbiHPUfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 16:31:03 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C7967C8A
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 13:31:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660681863; x=1692217863;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=I7JnDK/RCQESjZRvOfO5uG5qH2chE5spoIiXK9YDFXY=;
-  b=jwJb3dLSuVxZntV8zX6exTO2NJtfdTQ928wjHONaOn0ol73672t2SHEl
-   I8xPELtUFyYBQtoNFWNyFOTaqhaCfZzMuEXtFWQOpIvozZwlzCm1rriss
-   imb1KTpBmCEhrq4k9B4hrjmlfmR2k9O7/T8C+WDgQlPKWqb2XmSPANI+k
-   3OcWXOunpkUO5SP3PUnkUpBLBmO5XnCU3lYBrNRqtkrvKNoekIS2q+6bb
-   jSrSybrgvwEbmnr92bxEtdsXsJVXUV94adOnbN1fNlP13KJacJMZjOkWC
-   QdH9at+iZP/Vqsoql/6r8S2h4rD19gyGP4RL+3dbJYiVEbISpHKp/KnTL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="293118436"
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="293118436"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 13:31:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="733432231"
-Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 16 Aug 2022 13:31:01 -0700
-Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oO3DI-0000DR-2j;
-        Tue, 16 Aug 2022 20:31:00 +0000
-Date:   Wed, 17 Aug 2022 04:30:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- 5b9f0c4df1c1152403c738373fb063e9ffdac0a1
-Message-ID: <62fbfe55.LXyDP67JoO9vWuUP%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 16 Aug 2022 16:35:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401786A4AB
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 13:35:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660682108;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8qNWq56WcsAjV+d0DPWCWS43jEIePhWAAvwxxzNI+Yo=;
+        b=PWUm55nNMex+zZxNub8oYd4hNMtzeQlNKTqQ1YjiwanSyO4hGdn5lKRA1ornHk/FsGXZBk
+        kzRa2+2LZaz6Bb3Pssjnk6pxQaqf/1jM96Inrx+Hd4bdQXaBmyH8w3E2nzSa/owEWSVW2m
+        swhjEbwVNDSA1eaPiHw7EBj0HY3cYUw=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-260-VWnQoaQyOwO5gilPd29tFg-1; Tue, 16 Aug 2022 16:35:07 -0400
+X-MC-Unique: VWnQoaQyOwO5gilPd29tFg-1
+Received: by mail-qk1-f199.google.com with SMTP id w22-20020a05620a445600b006bb7f43d1cfso1214592qkp.16
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 13:35:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=8qNWq56WcsAjV+d0DPWCWS43jEIePhWAAvwxxzNI+Yo=;
+        b=2rxsiknOEe37HhI2CFw2MAQUf8jAKGeZpSdMVNvEQSVkomkL7arXM0LWSdKTrY+D+G
+         iX1kiLDt9MeCHO4SPQpgz/HfKXbk9ESdT8SWUPK0jnv1PjlDl+DhFBMupjhj94iWX4Ah
+         HEuuhkOchXZ132bdKvv99jNA8SmgZzZFb4yLotGMn/rqEplvZrL8JpX1QvV9JLh9EHGc
+         bBADlucXVF52RfLzvhjFfzDEvulYaVnsJu+mC1DV60K7eGbkUpZSCmYiwWjMH+ZLBpoO
+         Yu6Eo0u1VEzTXu19lJdVgD5j0HeU6qePQpdLSmxDOH4RQOvWNGdsmUIDiOp9Hz9LFjzF
+         HBaA==
+X-Gm-Message-State: ACgBeo05erCORoeFjWpOjfXQjydAq7+Jh66mxbaxBDF6MoRl7cHE2j4h
+        58QoxuHOquke/um8uQXQqU6Q0fE5mTTH8h7TQ1pUOW8ttU3FMAYmN5/kdHSVEKO/SG1uDNQ5Bck
+        3+SUsJ2J+rxYqQyhJnlsLL5PL
+X-Received: by 2002:a05:6214:2aa2:b0:477:1882:3dc with SMTP id js2-20020a0562142aa200b00477188203dcmr19064873qvb.11.1660682106683;
+        Tue, 16 Aug 2022 13:35:06 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6sxNDlfRThn/rIz3JOnzmI+jYq7VbHmqoYMTVRKckqHUaSQxZWhXW5hA43Dz2DbrziOS2X+w==
+X-Received: by 2002:a05:6214:2aa2:b0:477:1882:3dc with SMTP id js2-20020a0562142aa200b00477188203dcmr19064852qvb.11.1660682106470;
+        Tue, 16 Aug 2022 13:35:06 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id l1-20020a05620a28c100b006b958c34bf1sm3222130qkp.10.2022.08.16.13.35.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 13:35:05 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 16:35:04 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     huang ying <huang.ying.caritas@gmail.com>
+Cc:     Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
+        linuxppc-dev@lists.ozlabs.org, Huang Ying <ying.huang@intel.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] mm/migrate_device.c: Copy pte dirty bit to page
+Message-ID: <Yvv/eGfi3LW8WxPZ@xz-m1.local>
+References: <6e77914685ede036c419fa65b6adc27f25a6c3e9.1660635033.git-series.apopple@nvidia.com>
+ <CAC=cRTPGiXWjk=CYnCrhJnLx3mdkGDXZpvApo6yTbeW7+ZGajA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAC=cRTPGiXWjk=CYnCrhJnLx3mdkGDXZpvApo6yTbeW7+ZGajA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: 5b9f0c4df1c1152403c738373fb063e9ffdac0a1  x86/entry: Fix entry_INT80_compat for Xen PV guests
+On Tue, Aug 16, 2022 at 04:10:29PM +0800, huang ying wrote:
+> > @@ -193,11 +194,10 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
+> >                         bool anon_exclusive;
+> >                         pte_t swp_pte;
+> >
+> > +                       flush_cache_page(vma, addr, pte_pfn(*ptep));
+> > +                       pte = ptep_clear_flush(vma, addr, ptep);
+> 
+> Although I think it's possible to batch the TLB flushing just before
+> unlocking PTL.  The current code looks correct.
 
-elapsed time: 713m
+If we're with unconditionally ptep_clear_flush(), does it mean we should
+probably drop the "unmapped" and the last flush_tlb_range() already since
+they'll be redundant?
 
-configs tested: 98
-configs skipped: 68
+If that'll need to be dropped, it looks indeed better to still keep the
+batch to me but just move it earlier (before unlock iiuc then it'll be
+safe), then we can keep using ptep_get_and_clear() afaiu but keep "pte"
+updated.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-i386                                defconfig
-x86_64                              defconfig
-i386                             allyesconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-x86_64               randconfig-a006-20220815
-x86_64               randconfig-a003-20220815
-x86_64               randconfig-a005-20220815
-x86_64               randconfig-a004-20220815
-x86_64               randconfig-a001-20220815
-x86_64               randconfig-a002-20220815
-i386                 randconfig-a001-20220815
-i386                 randconfig-a005-20220815
-i386                 randconfig-a004-20220815
-i386                 randconfig-a006-20220815
-i386                 randconfig-a003-20220815
-i386                 randconfig-a002-20220815
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-x86_64                           rhel-8.3-kvm
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-powerpc              randconfig-c003-20220815
-i386                 randconfig-c001-20220815
-powerpc                     redwood_defconfig
-powerpc                     sequoia_defconfig
-ia64                      gensparse_defconfig
-arm                           corgi_defconfig
-sh                        sh7785lcr_defconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-mips                         bigsur_defconfig
-powerpc                      chrp32_defconfig
-sh                            shmin_defconfig
-xtensa                              defconfig
-m68k                        m5307c3_defconfig
-powerpc                     stx_gp3_defconfig
-m68k                       m5208evb_defconfig
-m68k                         amcore_defconfig
-arc                           tb10x_defconfig
-arm                          simpad_defconfig
-sh                          r7780mp_defconfig
-arm                             ezx_defconfig
-openrisc                 simple_smp_defconfig
-openrisc                  or1klitex_defconfig
-arm                         at91_dt_defconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-xtensa                  nommu_kc705_defconfig
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-arc                        nsimosci_defconfig
-m68k                          atari_defconfig
-sh                        dreamcast_defconfig
-sh                            migor_defconfig
-
-clang tested configs:
-riscv                randconfig-r042-20220815
-s390                 randconfig-r044-20220815
-hexagon              randconfig-r045-20220815
-arm                       versatile_defconfig
-x86_64               randconfig-a011-20220815
-x86_64               randconfig-a016-20220815
-x86_64               randconfig-a013-20220815
-x86_64               randconfig-a015-20220815
-x86_64               randconfig-a014-20220815
-x86_64               randconfig-a012-20220815
-arm                       mainstone_defconfig
-arm                       aspeed_g4_defconfig
-powerpc                 mpc832x_rdb_defconfig
-i386                 randconfig-a011-20220815
-i386                 randconfig-a012-20220815
-i386                 randconfig-a014-20220815
-i386                 randconfig-a016-20220815
-i386                 randconfig-a015-20220815
-i386                 randconfig-a013-20220815
-hexagon              randconfig-r041-20220815
-x86_64               randconfig-k001-20220815
-arm                        multi_v5_defconfig
-powerpc                      ppc64e_defconfig
-powerpc                 mpc832x_mds_defconfig
+Thanks,
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Peter Xu
+

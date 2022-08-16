@@ -2,150 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA89659649C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 23:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B71F59649D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 23:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237684AbiHPV0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 17:26:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38848 "EHLO
+        id S237188AbiHPV0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 17:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237643AbiHPV0B (ORCPT
+        with ESMTP id S237668AbiHPV0D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 17:26:01 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E252D8C440
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 14:26:00 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so66811pjf.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 14:26:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=YW4gaI9bZ79ZEbN8yGf5ro64E62Sovy61NVVdY7Og44=;
-        b=rqynHNggd2YUR1hHqfnY4kHE6q4l06wUxgKol2uk3AXZAkPKJ6GCA6i6JKCKU3TyOd
-         ixAB1qYGxjp0hRNUKRyzKAl9Ybt4yVzKbU/GYN3+m1M0vFU6E6jup7BlUVby6RSLgn7S
-         tX8hPasgNQXkoqLrBc/wIMRSt6hi5d5nkw3j5YPnRPJZlrq9JDfMw+f3ffMg5X5801D8
-         jcBi0FeF/UDIZB1pn16sq9vu6AoNH/wucRvm03C58lmNVFdmxXj3AbIKS8Dlc3/keCFy
-         hpiaVnAJI/9L17u9HdlQsLRZJ/bNVmmNR9b6pDQuWptQrBLIv7LlzVea72VXPpNhH2RA
-         ZIVg==
+        Tue, 16 Aug 2022 17:26:03 -0400
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181AC8C034;
+        Tue, 16 Aug 2022 14:26:02 -0700 (PDT)
+Received: by mail-il1-f175.google.com with SMTP id m9so1269303ili.1;
+        Tue, 16 Aug 2022 14:26:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=YW4gaI9bZ79ZEbN8yGf5ro64E62Sovy61NVVdY7Og44=;
-        b=owXMPfyn+HusjazLp09W1d2Yag2m8sCs1zBzzQpDXELNvRas3U3AmZWqi4yA/C45vE
-         yR/Vl8+oSu8aOrHmcy8n2wwyY4//BPaCGRreOuMK+pVRsz/stuuuG/O7Oj9b9mnT6u92
-         HWV/MYdy59x1qHGKZege9Kg381LaRip7v7Ta7KH51U91szSOW5DHCONs0KDKQBatG330
-         4Zuaj0PnL0siUmE4RmkjYrhO8QyJawecUIZvvl2KikxustiLKL2s4UkezxJsy4QQxdHI
-         3U+MkPnPm5F/y6Rcn6I2crsQs3Gv7iPoIzsksXcXqYqUMu+anKSATyiHyYfXAohswefX
-         ituA==
-X-Gm-Message-State: ACgBeo2s+DqwphImaGJeZ0axkHZftrCJzaMSej5H1ZtuDI4/8X4BT7xV
-        HrTMQC1cnlhQ6Qy9vvpZG47Kbw==
-X-Google-Smtp-Source: AA6agR5kWMjTJaLkP3cwLt1KNseoukitW2UCq4gW5ygNgbaN7LjIcqnHCzUwWtcp4JPm4ZCa19c0aQ==
-X-Received: by 2002:a17:902:b948:b0:172:800a:cda8 with SMTP id h8-20020a170902b94800b00172800acda8mr4297396pls.90.1660685160253;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=e+8oYnnpdIhRIEGZGcK4qOgJpnQIoppLCcEyPpOxTNw=;
+        b=zk8cyVKw5/chXs2vEwNpTkeyx4uYRulcaSfHf7VMgbKgf4tDDkfb1ptCvEXvrWXFZv
+         E2DXOJ7WqdAEFBTshTBQNAsqa0W/5B6JlOjDviwLyP6k7X4xOrnE+xW6SsD3/lmT5OJP
+         4KDrrc1UMQRnfAmllEVuI+PcAtZCshRkOmGsMsftdyfwr/Lrv0koX1Cvt4Wp4dMSO9KD
+         Kmr9Div/78ewIuh/kCrkwQXOafW7ZJCm4Ztr8dKsXM/BO1NelssMsUiSeZKIuhNgPuyf
+         cTWA/hpuFZSgTgUQX+Z/+CCzdgemgBNFghT+V5/9PekmlqvMGHs1rbhFDWXdbTfm6v2m
+         e/mw==
+X-Gm-Message-State: ACgBeo2XMKThqJ7M+235V+Osq1tCUex24bPib0mLew3AvLLj6/SqlKzq
+        9jqNCT63qiai3dRIX09avA==
+X-Google-Smtp-Source: AA6agR6EOf2Li1pE1BhUBeQSyQnTZ1kOYEa6pQmULPPxxdADWpIbayo6/yuBU0FUP3tf2Muj0m+AeA==
+X-Received: by 2002:a05:6e02:1645:b0:2df:1f18:3d7f with SMTP id v5-20020a056e02164500b002df1f183d7fmr10479186ilu.281.1660685160920;
         Tue, 16 Aug 2022 14:26:00 -0700 (PDT)
-Received: from google.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
-        by smtp.gmail.com with ESMTPSA id f9-20020a655509000000b0041d5001f0ecsm8194202pgr.43.2022.08.16.14.25.59
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id r27-20020a02aa1b000000b0034686e29f8dsm2821613jam.134.2022.08.16.14.25.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 14:25:59 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 21:25:56 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Sean Christopherson <seanjc@google.com>, y@google.com
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Yan Zhao <yan.y.zhao@intel.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v3 4/8] KVM: x86/mmu: Properly account NX huge page
- workaround for nonpaging MMUs
-Message-ID: <YvwLZJsCdqgDa18/@google.com>
-References: <20220805230513.148869-1-seanjc@google.com>
- <20220805230513.148869-5-seanjc@google.com>
+        Tue, 16 Aug 2022 14:26:00 -0700 (PDT)
+Received: (nullmailer pid 2761345 invoked by uid 1000);
+        Tue, 16 Aug 2022 21:25:58 -0000
+Date:   Tue, 16 Aug 2022 15:25:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        =?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 7/7] dt-bindings: net: dsa: mediatek,mt7530: update
+ binding description
+Message-ID: <20220816212558.GA2754986-robh@kernel.org>
+References: <20220813154415.349091-1-arinc.unal@arinc9.com>
+ <20220813154415.349091-8-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220805230513.148869-5-seanjc@google.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220813154415.349091-8-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022, Sean Christopherson wrote:
-> Account and track NX huge pages for nonpaging MMUs so that a future
-> enhancement to precisely check if a shadow page can't be replaced by a NX
-> huge page doesn't get false positives.  Without correct tracking, KVM can
-> get stuck in a loop if an instruction is fetching and writing data on the
-> same huge page, e.g. KVM installs a small executable page on the fetch
-> fault, replaces it with an NX huge page on the write fault, and faults
-> again on the fetch.
+On Sat, Aug 13, 2022 at 06:44:15PM +0300, Arınç ÜNAL wrote:
+> Update the description of the binding.
 > 
-> Alternatively, and perhaps ideally, KVM would simply not enforce the
-> workaround for nonpaging MMUs.  The guest has no page tables to abuse
-> and KVM is guaranteed to switch to a different MMU on CR0.PG being
-> toggled so there's no security or performance concerns.  However, getting
-> make_spte() to play nice now and in the future is unnecessarily complex.
+> - Describe the switches, which SoCs they are in, or if they are standalone.
+> - Explain the various ways of configuring MT7530's port 5.
+> - Remove phy-mode = "rgmii-txid" from description. Same code path is
+> followed for delayed rgmii and rgmii phy-mode on mtk_eth_soc.c.
 > 
-> In the current code base, make_spte() can enforce the mitigation if TDP
-> is enabled or the MMU is indirect, but make_spte() may not always have a
-> vCPU/MMU to work with, e.g. if KVM were to support in-line huge page
-> promotion when disabling dirty logging.
-> 
-> Without a vCPU/MMU, KVM could either pass in the correct information
-> and/or derive it from the shadow page, but the former is ugly and the
-> latter subtly non-trivial due to the possibility of direct shadow pages
-> in indirect MMUs.  Given that using shadow paging with an unpaged guest
-> is far from top priority _and_ has been subjected to the workaround since
-> its inception, keep it simple and just fix the accounting glitch.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Reviewed-by: David Matlack <dmatlack@google.com>
-Reviewed-by: Mingwei Zhang <mizhang@google.com>
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 > ---
->  arch/x86/kvm/mmu/mmu.c  |  2 +-
->  arch/x86/kvm/mmu/spte.c | 12 ++++++++++++
->  2 files changed, 13 insertions(+), 1 deletion(-)
+>  .../bindings/net/dsa/mediatek,mt7530.yaml     | 97 ++++++++++++-------
+>  1 file changed, 62 insertions(+), 35 deletions(-)
 > 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 53d0dafa68ff..345b6b22ab68 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -3123,7 +3123,7 @@ static int __direct_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->  			continue;
+> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> index 530ef5a75a2f..cf6340d072df 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> @@ -13,41 +13,68 @@ maintainers:
+>    - Sean Wang <sean.wang@mediatek.com>
 >  
->  		link_shadow_page(vcpu, it.sptep, sp);
-> -		if (fault->is_tdp && fault->huge_page_disallowed)
-> +		if (fault->huge_page_disallowed)
->  			account_nx_huge_page(vcpu->kvm, sp,
->  					     fault->req_level >= it.level);
->  	}
-> diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-> index 7314d27d57a4..52186b795bce 100644
-> --- a/arch/x86/kvm/mmu/spte.c
-> +++ b/arch/x86/kvm/mmu/spte.c
-> @@ -147,6 +147,18 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
->  	if (!prefetch)
->  		spte |= spte_shadow_accessed_mask(spte);
+>  description: |
+> -  Port 5 of mt7530 and mt7621 switch is muxed between:
+> -  1. GMAC5: GMAC5 can interface with another external MAC or PHY.
+> -  2. PHY of port 0 or port 4: PHY interfaces with an external MAC like 2nd GMAC
+> -     of the SOC. Used in many setups where port 0/4 becomes the WAN port.
+> -     Note: On a MT7621 SOC with integrated switch: 2nd GMAC can only connected to
+> -       GMAC5 when the gpios for RGMII2 (GPIO 22-33) are not used and not
+> -       connected to external component!
+> -
+> -  Port 5 modes/configurations:
+> -  1. Port 5 is disabled and isolated: An external phy can interface to the 2nd
+> -     GMAC of the SOC.
+> -     In the case of a build-in MT7530 switch, port 5 shares the RGMII bus with 2nd
+> -     GMAC and an optional external phy. Mind the GPIO/pinctl settings of the SOC!
+> -  2. Port 5 is muxed to PHY of port 0/4: Port 0/4 interfaces with 2nd GMAC.
+> -     It is a simple MAC to PHY interface, port 5 needs to be setup for xMII mode
+> -     and RGMII delay.
+> -  3. Port 5 is muxed to GMAC5 and can interface to an external phy.
+> -     Port 5 becomes an extra switch port.
+> -     Only works on platform where external phy TX<->RX lines are swapped.
+> -     Like in the Ubiquiti ER-X-SFP.
+> -  4. Port 5 is muxed to GMAC5 and interfaces with the 2nd GAMC as 2nd CPU port.
+> -     Currently a 2nd CPU port is not supported by DSA code.
+> -
+> -  Depending on how the external PHY is wired:
+> -  1. normal: The PHY can only connect to 2nd GMAC but not to the switch
+> -  2. swapped: RGMII TX, RX are swapped; external phy interface with the switch as
+> -     a ethernet port. But can't interface to the 2nd GMAC.
+> -
+> -    Based on the DT the port 5 mode is configured.
+> -
+> -  Driver tries to lookup the phy-handle of the 2nd GMAC of the master device.
+> -  When phy-handle matches PHY of port 0 or 4 then port 5 set-up as mode 2.
+> -  phy-mode must be set, see also example 2 below!
+> -  * mt7621: phy-mode = "rgmii-txid";
+> -  * mt7623: phy-mode = "rgmii";
+> +  There are two versions of MT7530, standalone and in a multi-chip module.
+> +
+> +  MT7530 is a part of the multi-chip module in MT7620AN, MT7620DA, MT7620DAN,
+> +  MT7620NN, MT7621AT, MT7621DAT, MT7621ST and MT7623AI SoCs.
+> +
+> +  MT7530 in MT7620AN, MT7620DA, MT7620DAN and MT7620NN SoCs has got 10/100 PHYs
+
+s/got //
+
+> +  and the switch registers are directly mapped into SoC's memory map rather than
+> +  using MDIO. There is currently no support for this.
+
+No support in the binding or driver? Driver capabilities are relevant to 
+the binding.
+
+> +
+> +  There is only the standalone version of MT7531.
+> +
+> +  Port 5 on MT7530 has got various ways of configuration.
+
+s/got //
+
+> +
+> +  For standalone MT7530:
+> +
+> +    - Port 5 can be used as a CPU port.
+> +
+> +    - PHY 0 or 4 of the switch can be muxed to connect to the gmac of the SoC
+> +      which port 5 is wired to. Usually used for connecting the wan port
+> +      directly to the CPU to achieve 2 Gbps routing in total.
+> +
+> +      The driver looks up the reg on the ethernet-phy node which the phy-handle
+> +      property refers to on the gmac node to mux the specified phy.
+> +
+> +      The driver requires the gmac of the SoC to have "mediatek,eth-mac" as the
+> +      compatible string and the reg must be 1. So, for now, only gmac1 of an
+> +      MediaTek SoC can benefit this. Banana Pi BPI-R2 suits this.
+> +      Check out example 5 for a similar configuration.
+> +
+> +    - Port 5 can be wired to an external phy. Port 5 becomes a DSA slave.
+> +      Check out example 7 for a similar configuration.
+> +
+> +  For multi-chip module MT7530:
+> +
+> +    - Port 5 can be used as a CPU port.
+> +
+> +    - PHY 0 or 4 of the switch can be muxed to connect to gmac1 of the SoC.
+> +      Usually used for connecting the wan port directly to the CPU to achieve 2
+> +      Gbps routing in total.
+> +
+> +      The driver looks up the reg on the ethernet-phy node which the phy-handle
+> +      property refers to on the gmac node to mux the specified phy.
+> +
+> +      For the MT7621 SoCs, rgmii2 group must be claimed with rgmii2 function.
+> +      Check out example 5.
+> +
+> +    - In case of an external phy wired to gmac1 of the SoC, port 5 must not be
+> +      enabled.
+> +
+> +      In case of muxing PHY 0 or 4, the external phy must not be enabled.
+> +
+> +      For the MT7621 SoCs, rgmii2 group must be claimed with rgmii2 function.
+> +      Check out example 6.
+> +
+> +    - Port 5 can be muxed to an external phy. Port 5 becomes a DSA slave.
+> +      The external phy must be wired TX to TX to gmac1 of the SoC for this to
+> +      work. Ubiquiti EdgeRouter X SFP is wired this way.
+> +
+> +      Muxing PHY 0 or 4 won't work when the external phy is connected TX to TX.
+> +
+> +      For the MT7621 SoCs, rgmii2 group must be claimed with gpio function.
+> +      Check out example 7.
 >  
-> +	/*
-> +	 * For simplicity, enforce the NX huge page mitigation even if not
-> +	 * strictly necessary.  KVM could ignore the mitigation if paging is
-> +	 * disabled in the guest, as the guest doesn't have an page tables to
-> +	 * abuse.  But to safely ignore the mitigation, KVM would have to
-> +	 * ensure a new MMU is loaded (or all shadow pages zapped) when CR0.PG
-> +	 * is toggled on, and that's a net negative for performance when TDP is
-> +	 * enabled.  When TDP is disabled, KVM will always switch to a new MMU
-> +	 * when CR0.PG is toggled, but leveraging that to ignore the mitigation
-> +	 * would tie make_spte() further to vCPU/MMU state, and add complexity
-> +	 * just to optimize a mode that is anything but performance critical.
-> +	 */
->  	if (level > PG_LEVEL_4K && (pte_access & ACC_EXEC_MASK) &&
->  	    is_nx_huge_page_enabled(vcpu->kvm)) {
->  		pte_access &= ~ACC_EXEC_MASK;
+>  properties:
+>    compatible:
 > -- 
-> 2.37.1.559.g78731f0fdb-goog
+> 2.34.1
+> 
 > 

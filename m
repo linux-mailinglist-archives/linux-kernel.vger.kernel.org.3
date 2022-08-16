@@ -2,163 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AABDA5960CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF535960D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 19:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235958AbiHPRGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 13:06:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
+        id S236231AbiHPRNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 13:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231916AbiHPRGJ (ORCPT
+        with ESMTP id S236160AbiHPRNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 13:06:09 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACEA79609
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 10:06:07 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27GGiLUQ005227;
-        Tue, 16 Aug 2022 17:05:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=GjjxBkmOT7kfjjNUvdcUnZZdNAdgE5EWLferPMUXAnA=;
- b=YL3OJlfJ14C/KPkJRH8fKhPKtxIOlqOJCCgFbLlBfYmMkMVlPwl1iHQEcGvVjiGMJsXo
- yO9JGi5Mip9t30SQtzLm7bG2lseHrj967Kdgd5+z0DoVUkLuqBmERm+owzOgze1gPTci
- bUn1XWIJ9+3/wtPDjt2/OWXJvXD9bqeKpK6XqSYRKn9RYfPr+FHHd9GtLEj0/1pnHNdW
- ml8JmcSALUfRyXMglrSbQtCMj56n2OeR9UImqhMG3DmpdYe8g0/D75pGT7LWK1sOYczT
- pUwR1/hJD7YS1iTDHzA1y/2gDaQ+rWpgipepo4Qcf1UO35BDDeUoiK/tMe4XbTh9Bd7J Ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j0f0y0kd0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Aug 2022 17:05:41 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27GGjE2Q008425;
-        Tue, 16 Aug 2022 17:05:41 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j0f0y0kc1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Aug 2022 17:05:40 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27GH5LZN002388;
-        Tue, 16 Aug 2022 17:05:38 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3hx37jbgk9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Aug 2022 17:05:38 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27GH5a8b26608022
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Aug 2022 17:05:36 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5780611C04A;
-        Tue, 16 Aug 2022 17:05:36 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E38E011C04C;
-        Tue, 16 Aug 2022 17:05:35 +0000 (GMT)
-Received: from localhost (unknown [9.43.58.12])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 16 Aug 2022 17:05:35 +0000 (GMT)
-Date:   Tue, 16 Aug 2022 22:35:34 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH 0/2] ftrace/recordmcount: Handle object files without
- section symbols
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        llvm@lists.linux.dev, Michael Ellerman <mpe@ellerman.id.au>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-References: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-        <20220816100423.5ee2e17c@gandalf.local.home>
-In-Reply-To: <20220816100423.5ee2e17c@gandalf.local.home>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1660668823.oegvwl2214.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: OzR97rxPfkN_j2hNnQzGXDMJE-1aixqM
-X-Proofpoint-ORIG-GUID: PYoTJVUk2zunDwCz72cxwia_qgxH99mO
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 16 Aug 2022 13:13:38 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789D7FD3A
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 10:13:34 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id o3so9791481ple.5
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 10:13:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=nCnzPY6Zh9VdSsRKwhjox/WjI1k8bZC9jPf83kIBEEk=;
+        b=HTfIRePpzriHYdTea6DPwsWvn5y7QXMY8OVfQqwJlLpcZ+tVonA1BaB3HbImWENSah
+         reUGQ3FY4VDi/URRoQFsKIJYDFXa7LtbZKpLNEMks8xGJ+BdmWV94LfdJ/9q9aCFR1EZ
+         VDkGtT6lwdjDVih7UFgGzSCOzZORYGs0DgvhwXa2zLSXz4J1PccV8OcenqD6PSPsF0nd
+         zTO/Q3gmzfQz6U576HV6fOyurzdW4TMSx7r6cDpJpNmW3+JcO2pYtkoGR+3Q4KSzGH+y
+         1J4rISS3nLnG5Y6eKv7HRSVhzDYiZj+8YkeKB4D3s8jdh1VS2r7QDkWQotQAptmi8cKn
+         V5lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=nCnzPY6Zh9VdSsRKwhjox/WjI1k8bZC9jPf83kIBEEk=;
+        b=Nly+EDsmZfX2X93NCXlE1c4Yen4/Hj4WvkFe0AzJjti2dSar0QYCzXXjUNRkpttHf2
+         Aqkbyd4eLKVx239eKynuDp7e2C8dFUJsbEL6jqb4ei+TvrfY8v/jBDL6I09knyo4/z/6
+         goiCP95qMZPUgJD52FIMUsu9O3qkeQl3toQSeduQiVbGD+07KDpTwgsoRQAT3CclOjTE
+         p2UTSLDVhttKlnP7q+013ZjW/oQIez4VpxnvDuk5OtW1WYvqQAybsAPv8aLv6VK1a4l4
+         Dik5dOe1mWcTSWZCvtJU5SrP8cuYEBkD5JPCo02RX5j3mvyd7oauTTpjvKSvT5XCqKVU
+         zBVQ==
+X-Gm-Message-State: ACgBeo0UKhzAMZp43y0vionLqqVzktEfih3mWnpzHMNic49Duvq8zuLM
+        VLEU6tI9IlT//Bf4DDPvvHqGFQ==
+X-Google-Smtp-Source: AA6agR5L/kCG6++/8HFb3cejkYGUqynoOmOraywNSR1IjQL8jDmOhtSQz5ZOi6O2lTVdIfpucPzXww==
+X-Received: by 2002:a17:90a:4801:b0:1fa:98ec:fa2 with SMTP id a1-20020a17090a480100b001fa98ec0fa2mr3521502pjh.41.1660670013710;
+        Tue, 16 Aug 2022 10:13:33 -0700 (PDT)
+Received: from google.com ([2620:15c:2d:3:df29:644b:8119:e30a])
+        by smtp.gmail.com with ESMTPSA id n11-20020a170902d2cb00b0016e808dbe55sm9401312plc.96.2022.08.16.10.13.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 10:13:33 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 10:13:28 -0700
+From:   Isaac Manjarres <isaacmanjarres@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Saravana Kannan <saravanak@google.com>, stable@kernel.org,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] driver core: Fix bus_type.match() error handling
+Message-ID: <YvvQOBk9T3J1uX8k@google.com>
+References: <20220815211919.2028890-1-isaacmanjarres@google.com>
+ <20220816042507.GB1108868@roeck-us.net>
+ <YvsoYzIhOtX9DOi2@google.com>
+ <20220816111311.GC1108868@roeck-us.net>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-16_08,2022-08-16_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 phishscore=0 mlxlogscore=999 clxscore=1015
- priorityscore=1501 malwarescore=0 spamscore=0 mlxscore=0 impostorscore=0
- adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208160065
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816111311.GC1108868@roeck-us.net>
+X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steven,
+On Tue, Aug 16, 2022 at 04:13:11AM -0700, Guenter Roeck wrote:
+> On Mon, Aug 15, 2022 at 10:17:23PM -0700, Isaac Manjarres wrote:
+> > On Mon, Aug 15, 2022 at 09:25:07PM -0700, Guenter Roeck wrote:
+> > > > v1 -> v2:
+> > > > - Fixed the logic in __driver_attach() to allow a driver to continue
+> > > >   attempting to match and bind with devices in case of any error, not
+> > > >   just probe deferral.
+> > > > 
+> > > > Guenter,
+> > > > 
+> > > > Can you please give test this patch to make sure it still works for you?
+> > > > 
+> > > 
+> > > Not as well as v1. I still see the clk crash with versatileab, and imx25-pdk
+> > > emulations now stall during boot when trying to boot from usb.
+> > > 
+> > > Guenter
+> > Thanks for trying the patch out. This patch isn't meant to fix the clk
+> > crash that you mentioned on another thread. I had made the following patch for
+> > that: https://lore.kernel.org/lkml/YvqTvuqSll30Rv2k@google.com/. Have
+> > you been able to give that a shot yet? If not can you please test with the
+> > patch in this e-mail and that patch?
+> > 
+> 
+> No, sorry, I missed that one. It does not apply, though - it is whitespace
+> corrupted. I tried to fix it up, but that failed.
 
-Steven Rostedt wrote:
-> On Wed, 27 Apr 2022 15:01:20 +0530
-> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
->=20
->> This solves a build issue on powerpc with binutils v2.36 and newer [1].
->> Since commit d1bcae833b32f1 ("ELF: Don't generate unused section
->> symbols") [2], binutils started dropping section symbols that it thought
->> were unused. Due to this, in certain scenarios, recordmcount is unable=20
->> to find a non-weak symbol to generate a relocation record against.
->>=20
->> Clang integrated assembler is also aggressive in dropping section=20
->> symbols [3].
->>=20
->> In the past, there have been various workarounds to address this. See=20
->> commits 55d5b7dd6451b5 ("initramfs: fix clang build failure") and=20
->> 6e7b64b9dd6d96 ("elfcore: fix building with clang") and a recent patch:
->> https://lore.kernel.org/linuxppc-dev/20220425174128.11455-1-naveen.n.rao=
-@linux.vnet.ibm.com/T/#u
->>=20
->> Fix this issue by using the weak symbol in the relocation record. This=20
->> can result in duplicate locations in the mcount table if those weak=20
->> functions are overridden, so have ftrace skip dupicate entries.
->>=20
->> Objtool already follows this approach, so patch 2 updates recordmcount=20
->> to do the same. Patch 1 updates ftrace to skip duplicate entries.
->>=20
->> - Naveen
->>=20
->>=20
->> [1] https://github.com/linuxppc/issues/issues/388
->> [2] https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3Dd1bc=
-ae833b32f1
->> [3] https://github.com/ClangBuiltLinux/linux/issues/981
->>=20
->>
->=20
-> There's been work to handle weak functions, but I'm not sure that work
-> handled the issues here. Are these patches still needed, or was there
-> another workaround to handle the problems this addressed?
+When applying the patch, can you please try with
+git apply --ignore-whitespace ? That worked for me.
+> 
+> > Did you test imx25-pdk emulations with just v1 of this patch previously?
+> > 
+> 
+> I am quite sure I did because it is a single setup.
+> 
+That's odd. Is this something that I can try out on qemu? If so, can you
+please share the qemu commandline so I can take a look?
 
-I'm afraid these patches are still needed to address issues in=20
-recordmcount.
-
-I submitted patches to remove use of weak functions in the kexec=20
-subsystem, but those have only enabled building ppc64le defconfig=20
-without errors:
-https://lore.kernel.org/all/20220519091237.676736-1-naveen.n.rao@linux.vnet=
-.ibm.com/
-https://lore.kernel.org/all/cover.1656659357.git.naveen.n.rao@linux.vnet.ib=
-m.com/
-
-The patch adding support for FTRACE_MCOUNT_MAX_OFFSET to powerpc only=20
-helps ignore weak functions during runtime:
-https://lore.kernel.org/all/20220809105425.424045-1-naveen.n.rao@linux.vnet=
-.ibm.com/
-
-We still see errors from recordmcount when trying to build certain=20
-powerpc configs.
-
-We are pursuing support for objtool, which doesn't have the same issues:
-https://lore.kernel.org/all/20220808114908.240813-1-sv@linux.ibm.com/
-
-
-- Naveen
+Thanks,
+Isaac

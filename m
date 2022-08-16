@@ -2,81 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 622C2595623
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE2759562A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232750AbiHPJZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56116 "EHLO
+        id S232008AbiHPJ0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233483AbiHPJZW (ORCPT
+        with ESMTP id S232535AbiHPJZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:25:22 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A6D6C134;
-        Tue, 16 Aug 2022 00:40:43 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b988d329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:988d:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6FE091EC01D4;
-        Tue, 16 Aug 2022 09:40:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660635637;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Ny96WAKfmGME+j1529xm2HCsQgz3HkjChhPV3xICU6o=;
-        b=MPi4jGegmp/7rvudHSup1Uh5yjPtAXGC3i0opcZsM/PJ8U4ROWTK+1fYwWxPnqzNu1J/iM
-        XG2KZIRAOpUvD+cMJjODFubR/4q2FTfrQYmQsxe3EGEACLmcrQeTKeEHMyMsnd+NgiqUXb
-        4hKkR1vkPlAUXOHDRALElcjoyaxNAEw=
-Date:   Tue, 16 Aug 2022 09:40:33 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ashok Raj <ashok.raj@intel.com>, Ingo Molnar <mingo@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [tip: x86/microcode] x86/microcode: Document the whole late
- loading problem
-Message-ID: <YvtJ8UvhnG+ph6qu@zn.tnic>
-References: <20220813223825.3164861-2-ashok.raj@intel.com>
- <166059240569.401.7221163581479146132.tip-bot2@tip-bot2>
- <YvsNJ5Nk8xkt0MKn@araj-dh-work>
+        Tue, 16 Aug 2022 05:25:46 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E52B4F657
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:41:48 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id d14so13671432lfl.13
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:41:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=Z4YfB/AJeb982Xz2QYWpjFSws7upX3bELQnOSH90aGQ=;
+        b=XNiAZ2MhGZde1OxcLeMx6rt6sGhm0MIYRYttklKEzARCVhtOjGTS0I5VuPCcpOoZq4
+         AazIXWhkMfjWgm8AzXKS5TOFgz5lSEPLZzZ/BEUT+8Lm5H80GyoGLmJs0BSb4GWCZgoS
+         JCqkF8hGO/4+8FfYNJ9xcdWEeGg7O7tBBr24kUBYSb/BPEDblFxPKfK5Gw96lxzkFEzt
+         ER3UACt0W0pzppQyL+RJMr5S6YAkykB6raCdrkeY6SWQR/Sers/mv4s67CwuCykj4Tzi
+         Mvx2YvrL1HS2p5yB8blMpvmxW38bgtOdagu886tBN0axwkfs/RY5+yT77lu2oY8h6x/u
+         AWDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Z4YfB/AJeb982Xz2QYWpjFSws7upX3bELQnOSH90aGQ=;
+        b=Ip+cEnUu9D4ImL7mDTSvmETbfIFpK2+Vk8rXnASjR3bFfTaFvRRqVJOc9bxRoXd2fC
+         Jn69A7a8B3y0AIBZrDckWiJWsAscfwcegiESwVVGKNsKVR4Ipr4AkJvDMzEIMJ4qvaC0
+         6CNRpfChrqblL6IsYyRzoBp2a4KmFg4g+D8wevBZ3dzS2ZN+Vr35UamUmNWl4Q+4y5Ny
+         GDpVM55+UFnc2EAHJQBZzUBf0jizdFLFzYWlpsMllWfM8lJHeu1g8j8ma9tx8/VaGnW1
+         O7T8sWML0+6c0fFpKzWWEwhPhCvxV7IejxFajMBO1Ese+0rZxgk8TdyOlT1rtIx9AxgV
+         m9Rg==
+X-Gm-Message-State: ACgBeo3t+O9EJZ0wx/h+duW0wZf/DoyrvjSFA0t0uLtfBnSmyE2QJeVY
+        z0PEWgvElFHOuO6Nyj3BYw9UFQ==
+X-Google-Smtp-Source: AA6agR7yvXIG3FQUMlg6GW8tRa6cjzG0FZZbYwcSTqvWyjhEU2eExfEr5GNYE/fJJDjnTXq1o1QwNw==
+X-Received: by 2002:a05:6512:6d3:b0:48a:e68c:15c9 with SMTP id u19-20020a05651206d300b0048ae68c15c9mr7099789lff.488.1660635706920;
+        Tue, 16 Aug 2022 00:41:46 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
+        by smtp.gmail.com with ESMTPSA id 15-20020a2eb94f000000b0025d53cbba2bsm1704014ljs.45.2022.08.16.00.41.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 00:41:46 -0700 (PDT)
+Message-ID: <149eee7b-a9e9-94ad-1ab2-13812b541a8c@linaro.org>
+Date:   Tue, 16 Aug 2022 10:41:45 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YvsNJ5Nk8xkt0MKn@araj-dh-work>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 06/12] riscv: dts: allwinner: Add the D1 SoC base
+ devicetree
+Content-Language: en-US
+To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev, Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20220815050815.22340-1-samuel@sholland.org>
+ <20220815050815.22340-7-samuel@sholland.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220815050815.22340-7-samuel@sholland.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 03:21:11AM +0000, Ashok Raj wrote:
-> Seems like there is an extraneous 'e' at the start of a line. Think this
-> existed in my patch patch, I noticed internally due to the 0day report that
-> a newline was missing.
+On 15/08/2022 08:08, Samuel Holland wrote:
+> +
+> +	de: display-engine {
+> +		compatible = "allwinner,sun20i-d1-display-engine";
+> +		allwinner,pipelines = <&mixer0>, <&mixer1>;
+> +		status = "disabled";
+> +	};
+> +
+> +	osc24M: osc24M-clk {
 
-Yeah, I saw it and then forgot about it. Fixed.
+lowercase
 
-On Tue, Aug 16, 2022 at 08:51:12AM +0200, Ingo Molnar wrote:
-> Small nit: this capitalization change is spurious. The 'so' is a 
-> continuation of the sentence, not a separate sentence - now that paragraph 
-> is actively weird & grammatically incorrect, starting with a 'So'.
-> 
-> Maybe:
-> 
->    ... so that the build system can find those files and integrate them into
+> +		compatible = "fixed-clock";
+> +		clock-frequency = <24000000>;
 
-Yeah, fixed.
+This is a property of the board, not SoC.
 
-This change was really spurious and had nothing to do there.
+> +		clock-output-names = "osc24M";
+> +		#clock-cells = <0>;
+> +	};
+> +
 
-Thx.
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Best regards,
+Krzysztof

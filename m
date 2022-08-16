@@ -2,105 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D32E159630F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C6D596314
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233871AbiHPTXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 15:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
+        id S237114AbiHPTYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 15:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237041AbiHPTXJ (ORCPT
+        with ESMTP id S237109AbiHPTYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 15:23:09 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA42325
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:23:07 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id q7-20020a17090a7a8700b001f300db8677so10552494pjf.5
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:23:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=/IC0HnZmVrkoH3nvGfIyhZkes4sS84DBqU1XHr/AIAY=;
-        b=N1cUoRaeDy5uzXUXUPkEjxLp/Fpa/P2h7JZmGiv4lZH3ufQNFSB5FmeRsupLY3TmGD
-         0rwqVQ+2bCj6jDClbfXOeQ79PQta/n52qMBrzYoJuyqvvnouSwhu/J4KV6NynMh7B4LG
-         udiQIvlFpVasDmPiKCLc/cIlh3zywruGDZtOCqRIFhDxNsb5y39OEJuliFwp1a43LpkA
-         yHNXwDye3+dxHn7UO2UzNhpxnZxZfA3tw3EzJthKOdtyjgE6CxmwXoZWcdjavJ4QgxhR
-         GJpV19gk+0P199H89gvQecShykwJ5wJ2H6722vpfQQ6a+eL745KeDyGinoZ2dzG+9s+5
-         jrXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=/IC0HnZmVrkoH3nvGfIyhZkes4sS84DBqU1XHr/AIAY=;
-        b=i5tle5dJx4W91NU4QXPt1aUjC/8vyFRVMgD/+XUD8UKOQiVObJyP5ezdID4QSkIIiC
-         EdwQmcT/dD0PWSY2aNU/2TNIcL0NbwnAF28angWcoHCNmV+4/UfcLiHaKkj5r1p5RX4j
-         7II0brWdbDp2ZrytCvbuDknXSTxXz/Bn3y2CdTdFeQKn1w4kH6oHf1TyB4uV+aCKPwqe
-         oNQmjGoxCItZR4TBZoIe0kmoCwA189FKAcvs+zH4Lzii//a059jbQ7ljJwKkNIky/I3v
-         yN8nkyea52b+pdsNHm4ifD+SabBZmNYD94YsjYkbec7R3a0YBfOu7cDhWGp941uDsPur
-         wtcA==
-X-Gm-Message-State: ACgBeo0145NA8TxW4EiASKTHPDkzOH8RvcHbw62YcaTd1C2gHhiGwLIh
-        sLieaP0WtPOPHNUhWq5CJnc9Vg==
-X-Google-Smtp-Source: AA6agR7LoGM80ZQ//JrY4LqKyhGoHTJ/FPLU9ixn/x/glsQzgNd4oauMrFObJ/HMvt8QwD2ZkMY5WQ==
-X-Received: by 2002:a17:902:f641:b0:172:9642:1bf1 with SMTP id m1-20020a170902f64100b0017296421bf1mr826786plg.36.1660677786991;
-        Tue, 16 Aug 2022 12:23:06 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id g23-20020a63e617000000b0041cd2417c66sm7832661pgh.18.2022.08.16.12.23.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 12:23:06 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 19:23:02 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+744e173caec2e1627ee0@syzkaller.appspotmail.com,
-        David Matlack <dmatlack@google.com>
-Subject: Re: [PATCH 3/3] KVM: Move coalesced MMIO initialization (back) into
- kvm_create_vm()
-Message-ID: <YvvulrnUbFYTOUAd@google.com>
-References: <20220816053937.2477106-1-seanjc@google.com>
- <20220816053937.2477106-4-seanjc@google.com>
- <YvvcHitVaf2EDAj0@google.com>
+        Tue, 16 Aug 2022 15:24:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7926BCF4
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:24:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04C67B816A4
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 19:24:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEABBC433C1;
+        Tue, 16 Aug 2022 19:24:03 +0000 (UTC)
+Date:   Tue, 16 Aug 2022 15:24:11 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Krister Johansen <kjlx@templeofstupid.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        David Reaver <me@davidreaver.com>,
+        linux-kernel@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>
+Subject: Re: [PATCH 1/1] tracing: fix a WARN from trace_event_dyn_put_ref
+Message-ID: <20220816152411.086ce631@gandalf.local.home>
+In-Reply-To: <20220816185418.GA2004@templeofstupid.com>
+References: <cover.1660347763.git.kjlx@templeofstupid.com>
+        <4e43a4eece5f382d1636397fb3c0208f2afe81fc.1660347763.git.kjlx@templeofstupid.com>
+        <20220816122559.17869abc@gandalf.local.home>
+        <20220816185418.GA2004@templeofstupid.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvvcHitVaf2EDAj0@google.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022, Oliver Upton wrote:
-> On Tue, Aug 16, 2022 at 05:39:37AM +0000, Sean Christopherson wrote:
-> > Invoke kvm_coalesced_mmio_init() from kvm_create_vm() now that allocating
-> > and initializing coalesced MMIO objects is separate from registering any
-> > associated devices.  Moving coalesced MMIO cleans up the last oddity
-> > where KVM does VM creation/initialization after kvm_create_vm(), and more
-> > importantly after kvm_arch_post_init_vm() is called and the VM is added
-> > to the global vm_list, i.e. after the VM is fully created as far as KVM
-> > is concerned.
-> > 
-> > Originally, kvm_coalesced_mmio_init() was called by kvm_create_vm(), but
-> > the original implementation was completely devoid of error handling.
-> > Commit 6ce5a090a9a0 ("KVM: coalesced_mmio: fix kvm_coalesced_mmio_init()'s
-> > error handling" fixed the various bugs, and in doing so rightly moved the
-> > call to after kvm_create_vm() because kvm_coalesced_mmio_init() also
-> > registered the coalesced MMIO device.  Commit 2b3c246a682c ("KVM: Make
-> > coalesced mmio use a device per zone") cleaned up that mess by having
-> > each zone register a separate device, i.e. moved device registration to
-> > its logical home in kvm_vm_ioctl_register_coalesced_mmio().  As a result,
-> > kvm_coalesced_mmio_init() is now a "pure" initialization helper and can
-> > be safely called from kvm_create_vm().
-> > 
-> > Opportunstically drop the #ifdef, KVM provides stubs for
-> > kvm_coalesced_mmio_{init,free}() when CONFIG_KVM_MMIO=n (arm).
-> 							   ^^^
-> We have CONFIG_KVM_MMIO=y on arm64. Is it actually s390?
+On Tue, 16 Aug 2022 11:54:18 -0700
+Krister Johansen <kjlx@templeofstupid.com> wrote:
 
-Yes, I apparently can't read.
+> What do you think, would either of these be a solution that you would
+> find acceptable?
+
+Actually, I think the issue is that the unreg() calls trace_event_put_ref()
+but the reg() does not do the try_get_ref(), but the perf_trace_init()
+does. Which is the broken symmetry.
+
+I think if we pull out the trace_event_put_ref() from the unreg() function,
+we fix the bug and also put back the symmetry.
+
+Does this patch work?
+
+[ Untested, and not even compiled ]
+
+-- Steve
+
+diff --git a/kernel/trace/trace_event_perf.c b/kernel/trace/trace_event_perf.c
+index a114549720d6..61e3a2620fa3 100644
+--- a/kernel/trace/trace_event_perf.c
++++ b/kernel/trace/trace_event_perf.c
+@@ -157,7 +157,7 @@ static void perf_trace_event_unreg(struct perf_event *p_event)
+ 	int i;
+ 
+ 	if (--tp_event->perf_refcount > 0)
+-		goto out;
++		return;
+ 
+ 	tp_event->class->reg(tp_event, TRACE_REG_PERF_UNREGISTER, NULL);
+ 
+@@ -176,8 +176,6 @@ static void perf_trace_event_unreg(struct perf_event *p_event)
+ 			perf_trace_buf[i] = NULL;
+ 		}
+ 	}
+-out:
+-	trace_event_put_ref(tp_event);
+ }
+ 
+ static int perf_trace_event_open(struct perf_event *p_event)
+@@ -241,6 +239,7 @@ void perf_trace_destroy(struct perf_event *p_event)
+ 	mutex_lock(&event_mutex);
+ 	perf_trace_event_close(p_event);
+ 	perf_trace_event_unreg(p_event);
++	trace_event_put_ref(p_event->tp_event);
+ 	mutex_unlock(&event_mutex);
+ }
+ 
+@@ -292,6 +291,7 @@ void perf_kprobe_destroy(struct perf_event *p_event)
+ 	mutex_lock(&event_mutex);
+ 	perf_trace_event_close(p_event);
+ 	perf_trace_event_unreg(p_event);
++	trace_event_put_ref(p_event->tp_event);
+ 	mutex_unlock(&event_mutex);
+ 
+ 	destroy_local_trace_kprobe(p_event->tp_event);
+@@ -347,6 +347,7 @@ void perf_uprobe_destroy(struct perf_event *p_event)
+ 	mutex_lock(&event_mutex);
+ 	perf_trace_event_close(p_event);
+ 	perf_trace_event_unreg(p_event);
++	trace_event_put_ref(p_event->tp_event);
+ 	mutex_unlock(&event_mutex);
+ 	destroy_local_trace_uprobe(p_event->tp_event);
+ }

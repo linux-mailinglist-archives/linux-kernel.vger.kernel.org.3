@@ -2,296 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4715963AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F2F95963B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236490AbiHPUXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 16:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
+        id S237014AbiHPUYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 16:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbiHPUXg (ORCPT
+        with ESMTP id S229887AbiHPUYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 16:23:36 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF692AC3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 13:23:31 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 202so10210818pgc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 13:23:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=T8rJsBvfTP/Wpqm4oI8sng03cm19nt45RRAG3AmLcOQ=;
-        b=ky2j9+briAWYQADcgmep84eATgxml94jk+9c60bznCgnrbJ4kNmB0LgXQIfuKIAW+B
-         32J7drpX4rUjRm37buUPoSUjB5adLp43GknpVa3w7euv1HNPlq0SEqjkMvwBlDdc2NKy
-         0BPnp6p6SG5Il8zqK63IUh7u0jMllQIXVlees=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=T8rJsBvfTP/Wpqm4oI8sng03cm19nt45RRAG3AmLcOQ=;
-        b=zryEshGRVuUJfrkQfkcTbUgmDt+GiNUpeoTvjq4WaEhFrWphzeARJ0r+CwKOQRqIX+
-         GXW7RwZyobkPiT32ajqPQ9cNralJJZ/h72KVaVT309oFQGihumaQCbxuLRGjPNZJH9fi
-         pyuC4xnoKBkDux0n4F1C82/0lIXTN09OY3i/xsuBPYEwcgHIWcDgEl0Y2mcIFIAgpafA
-         SqCHemrnm/z3LEkSCQ32VhWpqtmcMfhjMCD8jTiPq64kljffJm70dX1Ai3VruwXgexnf
-         ful/YljaYXBAXmL2L3BQwhqG3SVkPRcc19C/ysN6uoD9/7QCIhMTkQL64Vg49W7VzxXe
-         lV4w==
-X-Gm-Message-State: ACgBeo1q1dF8EzlKe8sZMpAcvYb5fBb4E66VjK8D2n8bBMdM2flws/Y1
-        TZqLDZ6pLx2UzBLKUcOZ5DdsYw==
-X-Google-Smtp-Source: AA6agR6vTDSZD60KlqgBoRNUSGhq7xB0JD3tVpZcPCcs0640D0VoxFLZ0/llfkBdw5vPHZz7if0h9w==
-X-Received: by 2002:a63:d55:0:b0:41c:86b0:59b5 with SMTP id 21-20020a630d55000000b0041c86b059b5mr19262583pgn.351.1660681410475;
-        Tue, 16 Aug 2022 13:23:30 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 5-20020a630405000000b0041d628dde58sm8097745pge.30.2022.08.16.13.23.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 13:23:29 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 13:23:28 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        gregkh@linuxfoundation.org, tglx@linutronix.de, sboyd@kernel.org,
-        rafael@kernel.org, lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5] devcoredump : Serialize devcd_del work
-Message-ID: <202208161322.B842DFC4E@keescook>
-References: <1653660220-19197-1-git-send-email-quic_mojha@quicinc.com>
- <425df8db-d358-c1d7-820c-fc0485aa2721@quicinc.com>
+        Tue, 16 Aug 2022 16:24:02 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207274BD30;
+        Tue, 16 Aug 2022 13:24:01 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27GKH2FP004357;
+        Tue, 16 Aug 2022 20:23:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=EvcBurXOXaiaLUlkvNdLUiPP49PF3Z+Z73Ky8mIwjVg=;
+ b=I7lJVvj1sZTB7ItlNu9zCE29ABRkh/YydyM5WyN8PURfWptfh+LgS43xVWylYyV5JZq+
+ WbHUcxdYtgWge7w+L8S2BSt/TkyT0w8QSEXz6ZMTN9cHHEIic5fUN5VKBJDTUFw4Pjr/
+ OeZQTRefVPo0d6LMqEY0bSKhxx0sdgyAIJ6CWLnof4KT4ah06+kZzlBgMyxX8kX3wpH6
+ 7klTt4zwUKDqt5eXdX4/+HIqTX0WDFfnxdMJ2SacgEq4Vu7nwO2R9zd60sUNbytmfCxR
+ f8Ku/TDX807K0iV0J2Y4K0C527EnBjEZ1yhXpqtiNMDI7XsfT/K7h+0zB7uygmJDV3WA JQ== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j0j4w841y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Aug 2022 20:23:55 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27GKKNr3009498;
+        Tue, 16 Aug 2022 20:23:54 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 3hx3k8umc0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Aug 2022 20:23:53 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27GKNo4e33816864
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 Aug 2022 20:23:50 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 92E1B42041;
+        Tue, 16 Aug 2022 20:23:50 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2923C4203F;
+        Tue, 16 Aug 2022 20:23:50 +0000 (GMT)
+Received: from li-c6ac47cc-293c-11b2-a85c-d421c8e4747b.ibm.com.com (unknown [9.171.18.167])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 16 Aug 2022 20:23:50 +0000 (GMT)
+From:   Pierre Morel <pmorel@linux.ibm.com>
+To:     mjrosato@linux.ibm.com
+Cc:     rdunlap@infradead.org, linux-kernel@vger.kernel.org, lkp@intel.com,
+        borntraeger@linux.ibm.com, farman@linux.ibm.com,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org
+Subject: [PATCH] KVM: s390: pci: VFIO_PCI ZDEV configuration fix
+Date:   Tue, 16 Aug 2022 22:28:55 +0200
+Message-Id: <20220816202855.189410-1-pmorel@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <1f2dd65e-b79b-44df-cc6a-8b3aa8fd61af@linux.ibm.com>
+References: <1f2dd65e-b79b-44df-cc6a-8b3aa8fd61af@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <425df8db-d358-c1d7-820c-fc0485aa2721@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 4rhapsDdV8JAp6gwFhmUDKkeNpJFiEmQ
+X-Proofpoint-GUID: 4rhapsDdV8JAp6gwFhmUDKkeNpJFiEmQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-16_08,2022-08-16_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 bulkscore=0 priorityscore=1501 adultscore=0 impostorscore=0
+ mlxscore=0 mlxlogscore=890 phishscore=0 spamscore=0 clxscore=1015
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208160074
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 09:43:48PM +0530, Mukesh Ojha wrote:
-> Hi Johannes/Kees,
+Fixing configuration for VFIO PCI interpretation.
 
-Hi!
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
+Fixes: 09340b2fca007 ("KVM: s390: pci: add routines to start/stop inter..")
+Fixes: c435c54639aa5 ("vfio/pci: introduce CONFIG_VFIO_PCI_ZDEV_KVM..")
+Cc: <stable@vger.kernel.org>
+---
+ arch/s390/include/asm/kvm_host.h | 9 ---------
+ arch/s390/kvm/Makefile           | 2 +-
+ arch/s390/kvm/pci.c              | 4 ++--
+ drivers/vfio/pci/Kconfig         | 4 ++--
+ include/linux/vfio_pci_core.h    | 2 +-
+ 5 files changed, 6 insertions(+), 15 deletions(-)
 
-> 
-> Sorry for reminding on it again.
-> Any hope of this one to get into devcoredump ?
-
-I don't know this code well enough to comment on the solution, but it
-seems designed and justified correctly, at least. :)
-
-I'll leave it to Johannes for review.
-
--Kees
-
-> 
-> -Mukesh
-> 
-> 
-> On 5/27/2022 7:33 PM, Mukesh Ojha wrote:
-> > In following scenario(diagram), when one thread X running dev_coredumpm()
-> > adds devcd device to the framework which sends uevent notification to
-> > userspace and another thread Y reads this uevent and call to
-> > devcd_data_write() which eventually try to delete the queued timer that
-> > is not initialized/queued yet.
-> > 
-> > So, debug object reports some warning and in the meantime, timer is
-> > initialized and queued from X path. and from Y path, it gets reinitialized
-> > again and timer->entry.pprev=NULL and try_to_grab_pending() stucks.
-> > 
-> > To fix this, introduce mutex and a boolean flag to serialize the behaviour.
-> > 
-> >   	cpu0(X)			                cpu1(Y)
-> > 
-> >      dev_coredump() uevent sent to user space
-> >      device_add()  ======================> user space process Y reads the
-> >                                            uevents writes to devcd fd
-> >                                            which results into writes to
-> > 
-> >                                           devcd_data_write()
-> >                                             mod_delayed_work()
-> >                                               try_to_grab_pending()
-> >                                                 del_timer()
-> >                                                   debug_assert_init()
-> >     INIT_DELAYED_WORK()
-> >     schedule_delayed_work()
-> >                                                     debug_object_fixup()
-> >                                                       timer_fixup_assert_init()
-> >                                                         timer_setup()
-> >                                                           do_init_timer()
-> >                                                         /*
-> >                                                          Above call reinitializes
-> >                                                          the timer to
-> >                                                          timer->entry.pprev=NULL
-> >                                                          and this will be checked
-> >                                                          later in timer_pending() call.
-> >                                                         */
-> >                                                   timer_pending()
-> >                                                    !hlist_unhashed_lockless(&timer->entry)
-> >                                                      !h->pprev
-> >                                                  /*
-> >                                                    del_timer() checks h->pprev and finds
-> >                                                    it to be NULL due to which
-> >                                                    try_to_grab_pending() stucks.
-> >                                                  */
-> > 
-> > Link: https://lore.kernel.org/lkml/2e1f81e2-428c-f11f-ce92-eb11048cb271@quicinc.com/
-> > Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> > ---
-> > v4->v5:
-> >   - Rebased it.
-> > 
-> > v3->v4:
-> >   - flg variable renamed to delete_work.
-> > 
-> > v2->v3:
-> >   Addressed comments from gregkh
-> >   - Wrapped the commit text and corrected the alignment.
-> >   - Described the reason to introduce new variables.
-> >   - Restored the blank line.
-> >   - rename the del_wk_queued to flg.
-> >   Addressed comments from tglx
-> >   - Added a comment which explains the race which looks obvious however
-> >     would not occur between disabled_store and devcd_del work.
-> > 
-> > 
-> > v1->v2:
-> >   - Added del_wk_queued flag to serialize the race between devcd_data_write()
-> >     and disabled_store() => devcd_free().
-> >   drivers/base/devcoredump.c | 83 ++++++++++++++++++++++++++++++++++++++++++++--
-> >   1 file changed, 81 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/base/devcoredump.c b/drivers/base/devcoredump.c
-> > index f4d794d..1c06781 100644
-> > --- a/drivers/base/devcoredump.c
-> > +++ b/drivers/base/devcoredump.c
-> > @@ -25,6 +25,47 @@ struct devcd_entry {
-> >   	struct device devcd_dev;
-> >   	void *data;
-> >   	size_t datalen;
-> > +	/*
-> > +	 * Here, mutex is required to serialize the calls to del_wk work between
-> > +	 * user/kernel space which happens when devcd is added with device_add()
-> > +	 * and that sends uevent to user space. User space reads the uevents,
-> > +	 * and calls to devcd_data_write() which try to modify the work which is
-> > +	 * not even initialized/queued from devcoredump.
-> > +	 *
-> > +	 *
-> > +	 *
-> > +	 *        cpu0(X)                                 cpu1(Y)
-> > +	 *
-> > +	 *        dev_coredump() uevent sent to user space
-> > +	 *        device_add()  ======================> user space process Y reads the
-> > +	 *                                              uevents writes to devcd fd
-> > +	 *                                              which results into writes to
-> > +	 *
-> > +	 *                                             devcd_data_write()
-> > +	 *                                               mod_delayed_work()
-> > +	 *                                                 try_to_grab_pending()
-> > +	 *                                                   del_timer()
-> > +	 *                                                     debug_assert_init()
-> > +	 *       INIT_DELAYED_WORK()
-> > +	 *       schedule_delayed_work()
-> > +	 *
-> > +	 *
-> > +	 * Also, mutex alone would not be enough to avoid scheduling of
-> > +	 * del_wk work after it get flush from a call to devcd_free()
-> > +	 * mentioned as below.
-> > +	 *
-> > +	 *	disabled_store()
-> > +	 *        devcd_free()
-> > +	 *          mutex_lock()             devcd_data_write()
-> > +	 *          flush_delayed_work()
-> > +	 *          mutex_unlock()
-> > +	 *                                   mutex_lock()
-> > +	 *                                   mod_delayed_work()
-> > +	 *                                   mutex_unlock()
-> > +	 * So, delete_work flag is required.
-> > +	 */
-> > +	struct mutex mutex;
-> > +	bool delete_work;
-> >   	struct module *owner;
-> >   	ssize_t (*read)(char *buffer, loff_t offset, size_t count,
-> >   			void *data, size_t datalen);
-> > @@ -84,7 +125,12 @@ static ssize_t devcd_data_write(struct file *filp, struct kobject *kobj,
-> >   	struct device *dev = kobj_to_dev(kobj);
-> >   	struct devcd_entry *devcd = dev_to_devcd(dev);
-> > -	mod_delayed_work(system_wq, &devcd->del_wk, 0);
-> > +	mutex_lock(&devcd->mutex);
-> > +	if (!devcd->delete_work) {
-> > +		devcd->delete_work = true;
-> > +		mod_delayed_work(system_wq, &devcd->del_wk, 0);
-> > +	}
-> > +	mutex_unlock(&devcd->mutex);
-> >   	return count;
-> >   }
-> > @@ -112,7 +158,12 @@ static int devcd_free(struct device *dev, void *data)
-> >   {
-> >   	struct devcd_entry *devcd = dev_to_devcd(dev);
-> > +	mutex_lock(&devcd->mutex);
-> > +	if (!devcd->delete_work)
-> > +		devcd->delete_work = true;
-> > +
-> >   	flush_delayed_work(&devcd->del_wk);
-> > +	mutex_unlock(&devcd->mutex);
-> >   	return 0;
-> >   }
-> > @@ -122,6 +173,30 @@ static ssize_t disabled_show(struct class *class, struct class_attribute *attr,
-> >   	return sysfs_emit(buf, "%d\n", devcd_disabled);
-> >   }
-> > +/*
-> > + *
-> > + *	disabled_store()                                	worker()
-> > + *	 class_for_each_device(&devcd_class,
-> > + *		NULL, NULL, devcd_free)
-> > + *         ...
-> > + *         ...
-> > + *	   while ((dev = class_dev_iter_next(&iter))
-> > + *                                                             devcd_del()
-> > + *                                                               device_del()
-> > + *                                                                 put_device() <- last reference
-> > + *             error = fn(dev, data)                           devcd_dev_release()
-> > + *             devcd_free(dev, data)                           kfree(devcd)
-> > + *             mutex_lock(&devcd->mutex);
-> > + *
-> > + *
-> > + * In the above diagram, It looks like disabled_store() would be racing with parallely
-> > + * running devcd_del() and result in memory abort while acquiring devcd->mutex which
-> > + * is called after kfree of devcd memory  after dropping its last reference with
-> > + * put_device(). However, this will not happens as fn(dev, data) runs
-> > + * with its own reference to device via klist_node so it is not its last reference.
-> > + * so, above situation would not occur.
-> > + */
-> > +
-> >   static ssize_t disabled_store(struct class *class, struct class_attribute *attr,
-> >   			      const char *buf, size_t count)
-> >   {
-> > @@ -278,13 +353,16 @@ void dev_coredumpm(struct device *dev, struct module *owner,
-> >   	devcd->read = read;
-> >   	devcd->free = free;
-> >   	devcd->failing_dev = get_device(dev);
-> > +	devcd->delete_work = false;
-> > +	mutex_init(&devcd->mutex);
-> >   	device_initialize(&devcd->devcd_dev);
-> >   	dev_set_name(&devcd->devcd_dev, "devcd%d",
-> >   		     atomic_inc_return(&devcd_count));
-> >   	devcd->devcd_dev.class = &devcd_class;
-> > +	mutex_lock(&devcd->mutex);
-> >   	if (device_add(&devcd->devcd_dev))
-> >   		goto put_device;
-> > @@ -301,10 +379,11 @@ void dev_coredumpm(struct device *dev, struct module *owner,
-> >   	INIT_DELAYED_WORK(&devcd->del_wk, devcd_del);
-> >   	schedule_delayed_work(&devcd->del_wk, DEVCD_TIMEOUT);
-> > -
-> > +	mutex_unlock(&devcd->mutex);
-> >   	return;
-> >    put_device:
-> >   	put_device(&devcd->devcd_dev);
-> > +	mutex_unlock(&devcd->mutex);
-> >    put_module:
-> >   	module_put(owner);
-> >    free:
-
+diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
+index f39092e0ceaa..f6cf961731af 100644
+--- a/arch/s390/include/asm/kvm_host.h
++++ b/arch/s390/include/asm/kvm_host.h
+@@ -1038,16 +1038,7 @@ static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
+ #define __KVM_HAVE_ARCH_VM_FREE
+ void kvm_arch_free_vm(struct kvm *kvm);
+ 
+-#ifdef CONFIG_VFIO_PCI_ZDEV_KVM
+ int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm);
+ void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev);
+-#else
+-static inline int kvm_s390_pci_register_kvm(struct zpci_dev *dev,
+-					    struct kvm *kvm)
+-{
+-	return -EPERM;
+-}
+-static inline void kvm_s390_pci_unregister_kvm(struct zpci_dev *dev) {}
+-#endif
+ 
+ #endif
+diff --git a/arch/s390/kvm/Makefile b/arch/s390/kvm/Makefile
+index 02217fb4ae10..be36afcfd6ff 100644
+--- a/arch/s390/kvm/Makefile
++++ b/arch/s390/kvm/Makefile
+@@ -9,6 +9,6 @@ ccflags-y := -Ivirt/kvm -Iarch/s390/kvm
+ 
+ kvm-y += kvm-s390.o intercept.o interrupt.o priv.o sigp.o
+ kvm-y += diag.o gaccess.o guestdbg.o vsie.o pv.o
++kvm-y += pci.o
+ 
+-kvm-$(CONFIG_VFIO_PCI_ZDEV_KVM) += pci.o
+ obj-$(CONFIG_KVM) += kvm.o
+diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
+index 4946fb7757d6..cf8ab72a2109 100644
+--- a/arch/s390/kvm/pci.c
++++ b/arch/s390/kvm/pci.c
+@@ -435,7 +435,7 @@ int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm)
+ {
+ 	int rc;
+ 
+-	if (!zdev)
++	if (!IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM) || !zdev)
+ 		return -EINVAL;
+ 
+ 	mutex_lock(&zdev->kzdev_lock);
+@@ -516,7 +516,7 @@ void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev)
+ {
+ 	struct kvm *kvm;
+ 
+-	if (!zdev)
++	if (!IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM) || !zdev)
+ 		return;
+ 
+ 	mutex_lock(&zdev->kzdev_lock);
+diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
+index f9d0c908e738..bbc375b028ef 100644
+--- a/drivers/vfio/pci/Kconfig
++++ b/drivers/vfio/pci/Kconfig
+@@ -45,9 +45,9 @@ config VFIO_PCI_IGD
+ endif
+ 
+ config VFIO_PCI_ZDEV_KVM
+-	bool "VFIO PCI extensions for s390x KVM passthrough"
++	def_tristate y
++	prompt "VFIO PCI extensions for s390x KVM passthrough"
+ 	depends on S390 && KVM
+-	default y
+ 	help
+ 	  Support s390x-specific extensions to enable support for enhancements
+ 	  to KVM passthrough capabilities, such as interpretive execution of
+diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
+index 5579ece4347b..7db3bb8129b1 100644
+--- a/include/linux/vfio_pci_core.h
++++ b/include/linux/vfio_pci_core.h
+@@ -205,7 +205,7 @@ static inline int vfio_pci_igd_init(struct vfio_pci_core_device *vdev)
+ }
+ #endif
+ 
+-#ifdef CONFIG_VFIO_PCI_ZDEV_KVM
++#if IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM)
+ int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
+ 				struct vfio_info_cap *caps);
+ int vfio_pci_zdev_open_device(struct vfio_pci_core_device *vdev);
 -- 
-Kees Cook
+2.31.1
+

@@ -2,109 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8CF5956EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8756259574E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233517AbiHPJrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37470 "EHLO
+        id S232310AbiHPJ57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233985AbiHPJqk (ORCPT
+        with ESMTP id S233984AbiHPJ5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:46:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C7BB81FB
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:16:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B7EDAB81676
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 09:16:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05D37C433D6;
-        Tue, 16 Aug 2022 09:16:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660641412;
-        bh=RCNCXlx7jOfPAXdgaKKdD1Ixni46vQe72pncfwQwk4I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BYM/KPVcKBlfC0RZP2E1ThUWz2FAq7nhixhlQIgpBXSHYhmg5kRYc8/6vL1U5EG0u
-         GM2F99Xwxi/GRJgsF5auG1EmgSmJy46L6781nVIR5y2hAlMlsWQT2iDRR5lF1XDIKb
-         Zd4SCD5Ph79kq6IuXqxeusnXRolJf0rUwYwbZ5/8=
-Date:   Tue, 16 Aug 2022 11:16:49 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Liu Shixin <liushixin2@huawei.com>
-Subject: Re: [PATCH RFC] mm, proc: add PcpFree to meminfo
-Message-ID: <YvtggZeUF9+xQu7D@kroah.com>
-References: <20220816084426.135528-1-wangkefeng.wang@huawei.com>
+        Tue, 16 Aug 2022 05:57:19 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD20194;
+        Tue, 16 Aug 2022 02:18:37 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id v2so14042036lfi.6;
+        Tue, 16 Aug 2022 02:18:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Kk2g2IEl/Ua+BBCBiaozArRy7OGG11VduF5q3BhTDG0=;
+        b=KcBiWrctfetchJMsY/eFWVoCsx3SblR9qr6NI6BPQ60NgilShdjZlJUj4AiV5t0Yz1
+         QLi+cwFAww1Sh0xZjHgdFm2wXeNc1qu+yYPcoCpbHeauU5+BHlq8vB3ETrA+3wNlMNAq
+         YfbF3VYWZjWcHbXYEqnmKbHbidsO/eQQGJjM3gLluTqbtBegGjkkFls9VZZOLZYpzsB/
+         kt2bO+DyeinL1VidVfznhy9aVsAasdL03No67OrGbIRpxJ9O733KT4e2UUBk18Sg6RIE
+         BvRr9ja784eIHZZDWo5KueuM0LZCwwgjFh7PRZkYjhHV500L74V1q7n0lwlIANYOoPvV
+         fvBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Kk2g2IEl/Ua+BBCBiaozArRy7OGG11VduF5q3BhTDG0=;
+        b=GZVhmcHyprqs3B5Z9jKNl0dcyq41VPIwmEkZZLmFWh+YgL+xFCjZTBrpOfxPUezfO+
+         Inrwlb/5IywmbNkERF2mxrffqbXFhKdhS2ggb4GoTASsUm6akD/+TTeBbPo8zDHjIWhO
+         ict1jbDHwMf/FAOCuwTX7Qxy+/11uUu9ly3nAMYuGqf38ZoJhmYP3OasmTbTyjN2Hlxf
+         lQt98I+VEIyiXSmPUQvp+ygsET4D1unYSdKR4omOdHik7lsITT7bRljriQQ7FAd2wkVw
+         9of+w/u/Ya01ni7oxnNUsScYDdHMPcxmhI4bRfF7kecWWgOYxincSnfLYCI17K3DmHP9
+         51xA==
+X-Gm-Message-State: ACgBeo1D+F8lS/ln7U8nwO0jNVpk0EVrSZnO1KCfx0oOMy2LCO+HOX/m
+        T5nxWXKFWZ4B01CHzfyeAU3WLe6vKxm1WNcIN/Sdb3RF7EcEOg==
+X-Google-Smtp-Source: AA6agR7PDcg9fUP4aVag2k2cXXyHGw1wbNV0WesqmcGnmlmXEndYbcZ7+VdLCCjesog4PO6/2bAL/31vc+5aUkDs4mU=
+X-Received: by 2002:a2e:b88c:0:b0:25f:eae4:74ff with SMTP id
+ r12-20020a2eb88c000000b0025feae474ffmr6545964ljp.48.1660641515791; Tue, 16
+ Aug 2022 02:18:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220816084426.135528-1-wangkefeng.wang@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220815175114.23576-1-konishi.ryusuke@gmail.com>
+ <YvqP/f2P2YgIIO9U@ZenIV> <CAKFNMomyjXpsz-=BtG+G3q1J7CFUBMEfP13FfxwhWB==9qb++w@mail.gmail.com>
+ <YvrQ8xO9Lx7rdKq8@ZenIV> <CAKFNMoniwM5x0w03cezGTFDWt=apNmGWpur83+vjghg3zcawpQ@mail.gmail.com>
+ <CAD-N9QW5-kVR85t1canTqrF9RMkOjC1Z2q8BSQKxLwaay97Mgg@mail.gmail.com>
+In-Reply-To: <CAD-N9QW5-kVR85t1canTqrF9RMkOjC1Z2q8BSQKxLwaay97Mgg@mail.gmail.com>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Tue, 16 Aug 2022 18:18:18 +0900
+Message-ID: <CAKFNMonVb6s3Cey5riXFwd+C3wy87fHbMUtnq3SXooXgsSD5yA@mail.gmail.com>
+Subject: Re: [PATCH] nilfs2: fix use-after-free bug in nilfs_mdt_destroy()
+To:     Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-nilfs <linux-nilfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jiacheng Xu <stitch@zju.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 04:44:26PM +0800, Kefeng Wang wrote:
-> From: Liu Shixin <liushixin2@huawei.com>
-> 
-> The page on pcplist could be used, but not counted into memory free or
-> avaliable, and pcp_free is only showed by show_mem(). Since commit
-> d8a759b57035 ("mm, page_alloc: double zone's batchsize"), there is a
-> significant decrease in the display of free memory, with a large number
-> of cpus and nodes, the number of pages in the percpu list can be very
-> large, so it is better to let user to know the pcp count.
-> 
-> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
->  drivers/base/node.c | 14 +++++++++++++-
->  fs/proc/meminfo.c   |  9 +++++++++
->  2 files changed, 22 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/node.c b/drivers/base/node.c
-> index eb0f43784c2b..846864e45db6 100644
-> --- a/drivers/base/node.c
-> +++ b/drivers/base/node.c
-> @@ -375,6 +375,9 @@ static ssize_t node_read_meminfo(struct device *dev,
->  	struct sysinfo i;
->  	unsigned long sreclaimable, sunreclaimable;
->  	unsigned long swapcached = 0;
-> +	unsigned long free_pcp = 0;
-> +	struct zone *zone;
-> +	int cpu;
->  
->  	si_meminfo_node(&i, nid);
->  	sreclaimable = node_page_state_pages(pgdat, NR_SLAB_RECLAIMABLE_B);
-> @@ -382,9 +385,17 @@ static ssize_t node_read_meminfo(struct device *dev,
->  #ifdef CONFIG_SWAP
->  	swapcached = node_page_state_pages(pgdat, NR_SWAPCACHE);
->  #endif
-> +	for_each_populated_zone(zone) {
-> +		if (zone_to_nid(zone) != nid)
-> +			continue;
-> +		for_each_online_cpu(cpu)
-> +			free_pcp += per_cpu_ptr(zone->per_cpu_pageset, cpu)->count;
-> +	}
-> +
->  	len = sysfs_emit_at(buf, len,
->  			    "Node %d MemTotal:       %8lu kB\n"
->  			    "Node %d MemFree:        %8lu kB\n"
-> +			    "Node %d PcpFree:        %8lu kB\n"
+On Tue, Aug 16, 2022 at 12:25 PM Dongliang Mu wrote:
+> > Dongliang (or Jiacheng?), would it be possible for you to post a revised patch
+> > against inode_init_always() that moves the call of security_inode_alloc()
+> > instead of i_private initialization (as Al Viro said in a nearby thread [1]) ?
+> > If you have time, I would like to leave it to you since you wrote the
+> > original patch for inode_init_always().
+>
+> Sure, I will post a v2 patch that moves security_inode_alloc to the
+> location just prior to
+>         this_cpu_inc(nr_inodes);
+> with proper commit message.
+>
 
-First off, this sysfs file is a huge violation of the normal sysfs
-rules, so I will not allow any new entries to be added.  In fact, the
-whole thing should just be removed and multiple files created in its
-place.
+I saw you already sent the v2 patch on linux-fsdevel, etc.
+Just thank you for your quick follow.
 
-Can you send a patch to do that instead please?
+Regards,
+Ryusuke Konishi
 
-thanks,
-
-greg k-h
+> >
+> > [1] https://lkml.kernel.org/r/CAO4S-mficMz1mQW06EuCF+o11+mRDiCpufqVfoHkcRbQbs8kVw@mail.gmail.com
+> >
+> > Thanks,
+> > Ryusuke Konishi

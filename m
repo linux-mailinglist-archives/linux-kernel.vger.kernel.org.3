@@ -2,191 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E99595F35
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 17:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA80F595F39
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 17:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235193AbiHPPgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 11:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
+        id S236176AbiHPPh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 11:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235818AbiHPPgA (ORCPT
+        with ESMTP id S236108AbiHPPhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 11:36:00 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BEBC7FE6B
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:34:57 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id 92-20020a17090a09e500b001d917022847so4266899pjo.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:34:57 -0700 (PDT)
+        Tue, 16 Aug 2022 11:37:08 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51915491E5
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:35:31 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id u22so1273260plq.12
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 08:35:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:mime-version
-         :message-id:date:from:to:cc;
-        bh=L+xobS5y5Ec7VAq1FxaOkxSFabwHd5aQYcMyJajK4oo=;
-        b=Zq/zzA4FtSl6ULJysM43vn8cKKIlXu+inY1vRHHMg1a7HOQN56N0NBOpvKhjdPtGwK
-         URjBEUVePYFZuk/gmNfDxawiJk/yh8WqRe0t2/nxEdhUN4Vi3cYXoYKtHF4A/q2BjbpN
-         fxnFVwjQJrAiC5tYE2KtezVieyFf18wC5N4Pzwf9q/WdMz3XBTuKj6iPc/2RBH/xoY/7
-         lKPjZeF2+M9CCs3R6xnaIowgDCwP8A2/Ys37YbxTicfU+Azb+V97YYkE08VDqlu34ktn
-         11dfLZaVQ7ciOAwp4zkofofSokExrd4GS+ol6WDuvmsx8dWTOttbLqxsZdAH3jsN8Duy
-         /Ucw==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=IMfgxaR3aIPhLUAX0j5T+D/oB82QAPyvY6Oa11PC6KI=;
+        b=pftyEX3cEdK6hGGrEoVpQZ1IC+2Uu9Q3/0fhK7nrI94lX8rf+RiM3dErTgu9a0dhsw
+         QF9ifBXW7YCDH9H+7GA7h0xuI4S3IDnDc0EZBvzIzQuVZb3UjtDK6DRw8SBeXE8KLfST
+         +q/5wq5LiTeImc70ih8l414MPrTVtA97loUqSJjdQ7tIMN0WRSXB63L+h5eEpafhsrIT
+         RWbGYmmAl7jaUPI6kICv7MfX2GpS37ctDg8/MqxUux8cbxLdnCg3QdvfDcLCCsa75xKs
+         DS0IlQu+30VpbQHlBlRmEMf5jrrRB1bQ3JshebSKoIocxTiO5snulr4Vi0g1rhbRIuPB
+         Zn5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:mime-version
-         :message-id:date:x-gm-message-state:from:to:cc;
-        bh=L+xobS5y5Ec7VAq1FxaOkxSFabwHd5aQYcMyJajK4oo=;
-        b=zkiD3CENz43sb6oTy0TWeizgh7DKvSkPGpcBTztPBgFnCTMQaymdpQBOeBg6LPrnUQ
-         JUBkwDsBx+VbGEvG3PJL8fuc72k2sNrBGFvOlV1VqI4gHXtxXoIRU0iiytWxit8aFEt3
-         qV1KJ/QGEYOo17yqdeQRiiSBznRL1mETqp75MHK1e0YzlEs6R7NBTG8kR1Zln5JMg/OT
-         2OOSA3yoSMsP9oWx9bOkbXo6EyWwM8WH+5scplDdD6MOlB3DgzDUIIXAA4sZWMHKCGu1
-         syBgukksL1ssGm5XaykfjO4yvpq4hD78PE2l2MSQaYiqa8YT2/INrx59BuNt/cl5kWSP
-         8Y9Q==
-X-Gm-Message-State: ACgBeo0w6KP6+p/Gtj9PCpa2rlTA74dX8xHnH8E5ytNMgOYqwc3t7Pwl
-        8fltetU4VgOzlPzolE+pAohDrGAg+yjh3KyvNVbqNQ==
-X-Google-Smtp-Source: AA6agR7PcAiX5mlJ0MbRBRpZYKtYWPIflsN2NzjzOR29+X1HAiUm9BblVn9n/I8ODS22EQxQT3PGpnKvdh/06rRPRzGSdw==
-X-Received: from sagarika.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5714])
- (user=sharmasagarika job=sendgmr) by 2002:a65:41ca:0:b0:41d:17df:1d0e with
- SMTP id b10-20020a6541ca000000b0041d17df1d0emr18846473pgq.112.1660664096796;
- Tue, 16 Aug 2022 08:34:56 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 15:34:31 +0000
-Message-Id: <20220816153431.1479265-2-sharmasagarika@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH bpf-next 2/2] use prefetch function in bpf_map_lookup_batch()
-From:   Sagarika Sharma <sharmasagarika@google.com>
-To:     Brian Vazquez <brianvv@google.com>,
-        Sagarika Sharma <sagarikashar@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@fb.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Luigi Rizzo <lrizzo@google.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Sagarika Sharma <sharmasagarika@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=IMfgxaR3aIPhLUAX0j5T+D/oB82QAPyvY6Oa11PC6KI=;
+        b=h/rLV7NAvKNOeTAbJ9Z94W+tCHllRDWO+bMyCmurlapKB5asGrmpUZu5JVNmXI6dkL
+         RZpEeDVDnj+7s5aMdTNWBJU9Rjnqqzo8+uwe4pdshtUdCd18tFAFDUrsL6HjoMlqh+3W
+         hiEZuiDeRyEUpdWYo+d/hzRaQwCgIivIrLqos4VW7dy3ilEz/7BEMLN3x6t5YgaA8dc4
+         mX8dpw1Qjetm+vlYB78Sb7zMjs6EYqF9kcSQTY6o9SjMG6XqNmip6tYHg0iL6fx8muUH
+         beiRyqncNYrWUJhNOWkeYfj7JXTFIPE2sPDBAjQWmzZstRTolq8IW/tOTqJcpt3lAkGU
+         Wu1w==
+X-Gm-Message-State: ACgBeo0uOYQV6MtlGJ9eWXy9XiFDMryYpRexD267OXJ4UTsx/LeWDVv5
+        7KCUR7W93uMg8hm/td8F5elABQ==
+X-Google-Smtp-Source: AA6agR7CVQbEvb6O0TLi/Xd3wpoDyTZHB19s6hbbOTh/AgAbOWqP8s/m6yX3W+n+e+9mu1mFAcRuiw==
+X-Received: by 2002:a17:902:b68e:b0:172:8674:c6c1 with SMTP id c14-20020a170902b68e00b001728674c6c1mr2584320pls.62.1660664130654;
+        Tue, 16 Aug 2022 08:35:30 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id x28-20020aa7941c000000b0052d63fb109asm8605166pfo.20.2022.08.16.08.35.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 08:35:30 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 15:35:26 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sagi Shahar <sagis@google.com>
+Subject: Re: [PATCH v8 053/103] KVM: TDX: TDP MMU TDX support
+Message-ID: <Yvu5PsAndEbWKTHc@google.com>
+References: <cover.1659854790.git.isaku.yamahata@intel.com>
+ <2b51971467ab7c8e60ea1e17ba09f607db444935.1659854790.git.isaku.yamahata@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2b51971467ab7c8e60ea1e17ba09f607db444935.1659854790.git.isaku.yamahata@intel.com>
+X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch introduces the use of a module parameter n_prefetch
-which enables prefetching within the bpf_map_lookup_batch function
-for a faster lookup. Benefits depend on the platform, relative
-density of the map, and the setting of the module parameter as
-described below.
+On Sun, Aug 07, 2022, isaku.yamahata@intel.com wrote:
+> +static void tdx_unpin_pfn(struct kvm *kvm, kvm_pfn_t pfn)
 
-For multiprocessor machines, for a particular key in a bpf map,
-each cpu has a value associated with that key. This patch=E2=80=99s
-change is as follows: when copying each of these values to
-userspace in bpf_map_lookup_batch, the value for a cpu
-n_prefetch ahead is prefetched.
+Why does this helper exist?  KVM should not be pinning private pages, that should
+be the purview of the private backing fd.
 
-MEASUREMENTS:
-The benchmark test added in this patch series was used to
-measure the effect of prefetching as well as determine the
-optimal setting of n_prefetch given the different parameters:
-the test was run on many different platforms (with varying
-number of cpus), with a range of settings of n_prefetch, and with
-saturated, dense, and sparse maps (num_entries/capacity_of_map).
-The benchmark test measures the average time for a single entry
-lookup (t =3D num_entries_looked_up/total_time) given the varied
-factors as mentioned above. The overhead of the
-bpf_map_lookup_batch syscall introduces some error.
+> +{
+> +	struct page *page = pfn_to_page(pfn);
+> +
+> +	put_page(page);
+> +	WARN_ON(!page_count(page) && to_kvm_tdx(kvm)->hkid > 0);
 
-Here are the experimental results:
+For all patches, please use the ONCE variant or KVM_BUG_ON() where appropriate.
+An unlimited WARN/WARN_ON() is all but guaranteed to spam the kernel log and bring
+the host to its knees if it fires.
 
-amd machine with 256 cores (rome zen 2)
-Density of map	n_prefetch	single entry lookup time (ns/op)
---------------------------------------------------------------------
-40k / 40k	0		16176.471
-		1		13095.238
-		5		7432.432
-		12		5188.679
-		20		9482.759
+> +}
+> +
+> +static void __tdx_sept_set_private_spte(struct kvm *kvm, gfn_t gfn,
+> +					enum pg_level level, kvm_pfn_t pfn)
+> +{
+> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
+> +	hpa_t hpa = pfn_to_hpa(pfn);
+> +	gpa_t gpa = gfn_to_gpa(gfn);
+> +	struct tdx_module_output out;
+> +	u64 err;
+> +
+> +	if (WARN_ON_ONCE(is_error_noslot_pfn(pfn) ||
+> +			 !kvm_pfn_to_refcounted_page(pfn)))
 
-10k / 40k	0		13253.012
-		5		7482.993
-		12		5164.319
-		20		9649.123
+I'm terribly confused.  The cover letter says:
 
-2.5k / 40k	0		7394.958
-		5		7201.309
-		13		4721.030
-		20		8118.081
+  - fd-based private page v7 is integrated. This is mostly same to Chao's patches.
 
-For denser maps, the experiments suggest that as n_prefetch
-increases, there is a significant time benefit (~66% decrease)
-until a certain point after which the time benefit begins to
-decrease. For sparser maps, there is a less pronounced speedup
-from prefetching. Additionally, this experiment seems to suggest
-the optimal n_prefetch range on this particular machine is 12-13,
-but a setting of n_prefetch =3D 5 can still improve the single
-entry lookup time.
+which I interpreted as meaning this series relies on UPM.  But if that's the case,
+why is KVM manually requiring private memory to be backed by "struct page" and then
+manually pinning pages?
 
-intel-skylake (with 112 cores)
-Density of map	n_prefetch	single entry lookup time (ns/op)
-------------------------------------------------------------------
-40k / 40k	0		5729.167
-		1		5092.593
-		5		3395.062
-		20		6875.000
+> +		return;
+> +
+> +	/* TODO: handle large pages. */
+> +	if (KVM_BUG_ON(level != PG_LEVEL_4K, kvm))
+> +		return;
+> +
+> +	/* To prevent page migration, do nothing on mmu notifier. */
+> +	get_page(pfn_to_page(pfn));
 
-10k / 40k	0		2029.520
-		5		2989.130
-		20		5820.106
+Again, what's going on here?
 
-2.5k / 40k	0		1598.256
-		5		2935.290
-		20		4867.257
+> +
+> +	if (likely(is_td_finalized(kvm_tdx))) {
+> +		err = tdh_mem_page_aug(kvm_tdx->tdr.pa, gpa, hpa, &out);
+> +		if (KVM_BUG_ON(err, kvm)) {
+> +			pr_tdx_error(TDH_MEM_PAGE_AUG, err, &out);
+> +			put_page(pfn_to_page(pfn));
+> +		}
+> +		return;
 
-For this particular machine, the experimental results suggest that
-there is only a significant benefit in prefetching with denser maps.
-Prefetching within bpf_map_lookup_batch can provide significant
-benefit depending on the use case. Across the many different
-platforms experiments were performed on, a setting of n_prefetch =3D 5,
-although not the optimal setting, significantly decreased the single
-entry lookup time for denser maps.
+This return is pointless.
 
-Signed-off-by: Sagarika Sharma <sharmasagarika@google.com>
----
- kernel/bpf/hashtab.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+> +	}
+> +}
+> +
+> +static void tdx_sept_set_private_spte(struct kvm *kvm, gfn_t gfn,
+> +				      enum pg_level level, kvm_pfn_t pfn)
+> +{
+> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
+> +
+> +	spin_lock(&kvm_tdx->seamcall_lock);
+> +	__tdx_sept_set_private_spte(kvm, gfn, level, pfn);
+> +	spin_unlock(&kvm_tdx->seamcall_lock);
+> +}
+> +
+> +static void tdx_sept_drop_private_spte(
 
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 8392f7f8a8ac..eb70c4bbe246 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -15,6 +15,9 @@
- #include "bpf_lru_list.h"
- #include "map_in_map.h"
-=20
-+static uint n_prefetch;
-+module_param(n_prefetch, uint, 0644);
-+
- #define HTAB_CREATE_FLAG_MASK						\
- 	(BPF_F_NO_PREALLOC | BPF_F_NO_COMMON_LRU | BPF_F_NUMA_NODE |	\
- 	 BPF_F_ACCESS_MASK | BPF_F_ZERO_SEED)
-@@ -1743,9 +1746,13 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *m=
-ap,
- 		if (is_percpu) {
- 			int off =3D 0, cpu;
- 			void __percpu *pptr;
-+			int num_cpus =3D num_possible_cpus();
-=20
- 			pptr =3D htab_elem_get_ptr(l, map->key_size);
- 			for_each_possible_cpu(cpu) {
-+				if (n_prefetch > 0 && (cpu + n_prefetch) <=3D num_cpus)
-+					prefetch(per_cpu_ptr(pptr, cpu + n_prefetch));
-+
- 				bpf_long_memcpy(dst_val + off,
- 						per_cpu_ptr(pptr, cpu), size);
- 				off +=3D size;
---=20
-2.37.1.595.g718a3a8f04-goog
+Please fix this style for all patches.  And not just in function prototypes, but
+also in function calls and probably several other places as well.  The _strongly_
+preferred style is:
 
+static void tdx_sept_drop_private_spte(struct kvm *kvm, gfn_t gfn,
+				       enum pg_level level, kvm_pfn_t pfn)
+
+> +	struct kvm *kvm, gfn_t gfn, enum pg_level level, kvm_pfn_t pfn)
+> +{
+> +	int tdx_level = pg_level_to_tdx_sept_level(level);
+> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
+> +	gpa_t gpa = gfn_to_gpa(gfn);
+> +	hpa_t hpa = pfn_to_hpa(pfn);
+> +	hpa_t hpa_with_hkid;
+> +	struct tdx_module_output out;
+> +	u64 err = 0;
+> +
+> +	/* TODO: handle large pages. */
+> +	if (KVM_BUG_ON(level != PG_LEVEL_4K, kvm))
+> +		return;
+> +
+> +	spin_lock(&kvm_tdx->seamcall_lock);
+
+Taking a spinlock completely defeats the purpose of taking mmu_lock for read.  This
+is definitely not an acceptable approach long term, and even for initial upstreaming
+I'm hesitant to punt on adding proper retry logic.
+
+> +	if (is_hkid_assigned(kvm_tdx)) {
+> +		err = tdh_mem_page_remove(kvm_tdx->tdr.pa, gpa, tdx_level, &out);
+> +		if (KVM_BUG_ON(err, kvm)) {
+> +			pr_tdx_error(TDH_MEM_PAGE_REMOVE, err, &out);
+> +			goto unlock;
+> +		}
+> +
+> +		hpa_with_hkid = set_hkid_to_hpa(hpa, (u16)kvm_tdx->hkid);
+> +		err = tdh_phymem_page_wbinvd(hpa_with_hkid);
+> +		if (WARN_ON_ONCE(err)) {
+
+Why is the above a KVM_BUG_ON() but this one is not?
+
+> +			pr_tdx_error(TDH_PHYMEM_PAGE_WBINVD, err, NULL);
+> +			goto unlock;
+> +		}
+> +	} else
+> +		/*
+> +		 * The HKID assigned to this TD was already freed and cache
+> +		 * was already flushed. We don't have to flush again.
+> +		 */
+> +		err = tdx_reclaim_page((unsigned long)__va(hpa), hpa, false, 0);
+> +
+> +unlock:
+> +	spin_unlock(&kvm_tdx->seamcall_lock);
+> +
+> +	if (!err)
+> +		tdx_unpin_pfn(kvm, pfn);
+> +}
+> +
+
+...
+
+> +static void tdx_handle_changed_private_spte(
+> +	struct kvm *kvm, const struct kvm_spte_change *change)
+
+I haven't look at this in detail, and probably won't for a few weeks, but my initial
+reaction is that I really, really don't like funnelling both insertion and deletion
+into a single helper.  E.g. it should be trivial to pass the source_pa for PAGE.ADD
+via kvm_page_fault instead of shoving it into the struct kvm_tdx (or struct vcpu_tdx).
+But smushing the two things together makes that painfully difficult.

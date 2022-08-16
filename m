@@ -2,244 +2,501 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0D3596546
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F28EC59654C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 00:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237630AbiHPWPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 18:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36002 "EHLO
+        id S237938AbiHPWQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 18:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237022AbiHPWOv (ORCPT
+        with ESMTP id S237976AbiHPWQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 18:14:51 -0400
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605E674CF7;
-        Tue, 16 Aug 2022 15:14:48 -0700 (PDT)
-Received: by mail-qt1-f169.google.com with SMTP id h21so9241634qta.3;
-        Tue, 16 Aug 2022 15:14:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=7obAM8meavf6BYbGi/c73pnbUPl8fQroK2k8DT1JisI=;
-        b=I+uW8kb1MRJUW8d0J5Y2ABTYxF73ucbhtjvhUWQsR7cCGqK7HmY6G5OSKDd1CZX+o3
-         izJLHJu2ANo2+pIkWlXFtpMO/wxcSuwZWNzWXjHRjLN8uA9Rti2rpdsJqGa00pCjwA8d
-         Ratint9ouPbHb/mcMerbROFH65W6htZf8qrHNVH5kh9SKoggLoxbY3EIzJI5DSL5F8V1
-         aX9WwQfBslw307I8wkR7Ow7QsBw+m323hp2gqz+QAqCcYGdwjowu4+op1Isswb8YFr1t
-         zfXgOVjIaVazR4rmBOVqc9MwS2dnNcDfwlO0P1XhJLRAVY8KxVGtsPiqMCuGEVmjg5vL
-         E1Sg==
-X-Gm-Message-State: ACgBeo1V7CeVOBhBGT0iHcNrraQecY3lOjdgYqRkF/8r5GzXrfVCE5bD
-        GTAR1KvzObgfDj1FxGoR891+y1iWL03eUWc0
-X-Google-Smtp-Source: AA6agR4rzFtMY+kygnC3c/63m0QBiV0I9sYWMJvipKKnaSCrJOMgwFaT/SbdNQJJDA6yG+yp7ok5hA==
-X-Received: by 2002:ac8:5856:0:b0:342:f8bf:3582 with SMTP id h22-20020ac85856000000b00342f8bf3582mr19997011qth.573.1660688085957;
-        Tue, 16 Aug 2022 15:14:45 -0700 (PDT)
-Received: from maniforge.DHCP.thefacebook.com ([2620:10d:c091:480::a5ed])
-        by smtp.gmail.com with ESMTPSA id w18-20020a05620a445200b006bb83e2e65fsm1119148qkp.42.2022.08.16.15.14.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 15:14:45 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 17:14:21 -0500
-From:   David Vernet <void@manifault.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
-        joannelkoong@gmail.com, linux-kernel@vger.kernel.org,
-        Kernel-team@fb.com
-Subject: Re: [PATCH 3/5] bpf: Add bpf_user_ringbuf_drain() helper
-Message-ID: <YvwWvVDN11Wb6j2l@maniforge.DHCP.thefacebook.com>
-References: <20220808155341.2479054-1-void@manifault.com>
- <20220808155341.2479054-3-void@manifault.com>
- <CAEf4BzZ-m-AUX+1+CGr7nMxMDnT=fjkn8DP9nP21Uts1y7fMyg@mail.gmail.com>
- <YvWi4f1hz/v72Fpc@maniforge.dhcp.thefacebook.com>
- <CAEf4BzZ6aaFqF0DvhEeKaMfSZiFdMjr3=YzX6oEmz8rCRuSFaA@mail.gmail.com>
+        Tue, 16 Aug 2022 18:16:18 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1946678BCE;
+        Tue, 16 Aug 2022 15:16:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1660688137; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=bPMcKkRyVZfUCCU335HWN3m6zTrsaHlK3Btl7KbRFeYjBT3CNQxVK+IZhowIVhi5NKsxEvyKxR7fUGhzGbjZvY9gwbkQWGOxSSJsi7RB6UXThgDtGs0FayAilNjdCnyNhUih1SSDZX8rJcJexsL5aEsJ5fkGN4Z1MVCOHbi28l0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1660688137; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=SxBVhVumfgFXAdQqW2kPOpPPhvJtnmmOvTBSGY8R4R8=; 
+        b=L8JpVq9FoaMKGbicq99QYbsitH2gBv6Ibi0xo3ohhJosM+GLbRtNBVP0lOAn3DZPJllsf+BqLYmkjEkMj54WLoYUIbjspNq3jMZRvXuR5TAe/sBjviKXfFVpZzJg3/4besBpSW9fEbkj6G2RvaZccKrIJikvHnbnfHheX/6fIac=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1660688137;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:From:From:Subject:Subject:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=SxBVhVumfgFXAdQqW2kPOpPPhvJtnmmOvTBSGY8R4R8=;
+        b=DmlpJKR3MvTM0N0qcTqT15C4TRmCQy6JO34GQgyjW9ua1VCRx/LlWQXuv431kc08
+        cn8fT4hYxyO9jcyDbdW1l5XYbgT1Ek/UTcgvSrEWhp2SmH2LZiaqq+GaK2MQKQ4anYw
+        He0lWbDSj9IgtZuI5uHzE8LoN6LbCanwXcpGbm30=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1660688134449648.2828314113265; Tue, 16 Aug 2022 15:15:34 -0700 (PDT)
+Message-ID: <53672ace-ad26-efdf-b3e5-bc8e4163c567@arinc9.com>
+Date:   Wed, 17 Aug 2022 01:15:16 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZ6aaFqF0DvhEeKaMfSZiFdMjr3=YzX6oEmz8rCRuSFaA@mail.gmail.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Subject: Re: [PATCH v2 3/7] dt-bindings: net: dsa: mediatek,mt7530: update
+ examples
+To:     Rob Herring <robh@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220813154415.349091-1-arinc.unal@arinc9.com>
+ <20220813154415.349091-4-arinc.unal@arinc9.com>
+ <20220816210223.GA2714004-robh@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20220816210223.GA2714004-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 11:57:10AM -0700, Andrii Nakryiko wrote:
-
-[...]
-
-> > > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > > > index a341f877b230..ca125648d7fd 100644
-> > > > --- a/include/uapi/linux/bpf.h
-> > > > +++ b/include/uapi/linux/bpf.h
-> > > > @@ -5332,6 +5332,13 @@ union bpf_attr {
-> > > >   *             **-EACCES** if the SYN cookie is not valid.
-> > > >   *
-> > > >   *             **-EPROTONOSUPPORT** if CONFIG_IPV6 is not builtin.
-> > > > + *
-> > > > + * long bpf_user_ringbuf_drain(struct bpf_map *map, void *callback_fn, void *ctx, u64 flags)
-> > > > + *     Description
-> > > > + *             Drain samples from the specified user ringbuffer, and invoke the
-> > > > + *             provided callback for each such sample.
-> > >
-> > > please specify what's the expected signature of callback_fn
-> >
-> > Will do, unfortunatley we're inconsistent in doing this in other helper
-> > functions, so it wasn't clear from context.
+On 17.08.2022 00:02, Rob Herring wrote:
+> On Sat, Aug 13, 2022 at 06:44:11PM +0300, Arınç ÜNAL wrote:
+>> Update the examples on the binding.
+>>
+>> - Add examples which include a wide variation of configurations.
+>> - Make example comments YAML comment instead of DT binding comment.
+>> - Define examples from platform to make the bindings clearer.
+>> - Add interrupt controller to the examples. Include header file for
+>> interrupt.
+>> - Change reset line for MT7621 examples.
+>> - Pretty formatting for the examples.
+>> - Change switch reg to 0.
+>> - Change port labels to fit the example, change port 4 label to wan.
+>> - Change ethernet-ports to ports.
 > 
-> That means we missed it for other helpers. The idea was to always
-> specify expected signature in UAPI comment, ideally we fix all the
-> missing cases.
+> Again, why?
 
-Agreed -- I'll take care of that as a follow-on patch-set.
+For wrong reasons as it seems. Will revert that one.
 
-> > Agreed, I'll add a check and selftest for this.
 > 
-> Yep, consider also adding few tests where user-space intentionally
-> breaks the contract to make sure that kernel stays intact (if you
-> already did that, apologies, I haven't looked at selftests much).
-
-The only negative tests I currently have from user-space are verifying
-that mapping permissions are correctly enforced. Happy to add some more
-that tests boundaries for other parts of the API -- I agree that's both
-useful and prudent.
-
-> > > > +       /* Synchronizes with smp_store_release() in
-> > > > +        * __bpf_user_ringbuf_sample_release().
-> > > > +        */
-> > > > +       cons_pos = smp_load_acquire(&rb->consumer_pos);
-> > > > +       if (cons_pos >= prod_pos) {
-> > > > +               atomic_set(&rb->busy, 0);
-> > > > +               return -ENODATA;
-> > > > +       }
-> > > > +
-> > > > +       hdr = (u32 *)((uintptr_t)rb->data + (cons_pos & rb->mask));
-> > > > +       sample_len = *hdr;
-> > >
-> > > do we need smp_load_acquire() here? libbpf's ring_buffer
-> > > implementation uses load_acquire here
-> >
-> > I thought about this when I was first adding the logic, but I can't
-> > convince myself that it's necessary and wasn't able to figure out why we
-> > did a load acquire on the len in libbpf. The kernel doesn't do a store
-> > release on the header, so I'm not sure what the load acquire in libbpf
-> > actually accomplishes. I could certainly be missing something, but I
-> > _think_ the important thing is that we have load-acquire / store-release
-> > pairs for the consumer and producer positions.
+>>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
+>>   .../bindings/net/dsa/mediatek,mt7530.yaml     | 663 +++++++++++++-----
+>>   1 file changed, 502 insertions(+), 161 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> index 4c99266ce82a..cc87f48d4d07 100644
+>> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> @@ -210,144 +210,374 @@ allOf:
+>>   unevaluatedProperties: false
+>>   
+>>   examples:
+>> +  # Example 1: Standalone MT7530
+>>     - |
+>>       #include <dt-bindings/gpio/gpio.h>
+>> -    mdio {
+>> -        #address-cells = <1>;
+>> -        #size-cells = <0>;
+>> -        switch@0 {
+>> -            compatible = "mediatek,mt7530";
+>> -            reg = <0>;
+>> -
+>> -            core-supply = <&mt6323_vpa_reg>;
+>> -            io-supply = <&mt6323_vemc3v3_reg>;
+>> -            reset-gpios = <&pio 33 GPIO_ACTIVE_HIGH>;
+>> -
+>> -            ethernet-ports {
+>> +
+>> +    platform {
+>> +        ethernet {
 > 
-> kernel does xchg on len on the kernel side, which is stronger than
-> smp_store_release (I think it was Paul's suggestion instead of doing
-> explicit memory barrier, but my memories are hazy for exact reasons).
+> Don't need these nodes.
 
-Hmmm, yeah, for the kernel-producer ringbuffer, I believe the explicit
-memory barrier is unnecessary because:
+Will remove.
 
-o The smp_store_release() on producer_pos provides ordering w.r.t.
-  producer_pos, and the write to hdr->len which includes the busy-bit
-  should therefore be visibile in libbpf, which does an
-  smp_load_acquire().
-o The xchg() when the sample is committed provides full barriers before
-  and after, so the consumer is guaranteed to read the written contents of
-  the sample IFF it also sees the BPF_RINGBUF_BUSY_BIT as unset.
-
-I can't see any scenario in which a barrier would add synchronization not
-already provided, though this stuff is tricky so I may have missed
-something.
-
-> Right now this might not be necessary, but if we add support for busy
-> bit in a sample header, it will be closer to what BPF ringbuf is doing
-> right now, with producer position being a reservation pointer, but
-> sample itself won't be "readable" until sample header is updated and
-> its busy bit is unset.
-
-Regarding this patch, after thinking about this more I _think_ I do need
-an xchg() (or equivalent operation with full barrier semantics) in
-userspace when updating the producer_pos when committing the sample.
-Which, after applying your suggestion (which I agree with) of supporting
-BPF_RINGBUF_BUSY_BIT and BPF_RINGBUF_DISCARD_BIT from the get-go, would
-similarly be an xchg() when setting the header, paired with an
-smp_load_acquire() when reading the header in the kernel.
-
-> > Yeah, I thought about this. I don't think there's any problem with clearing
-> > busy before we schedule the irq_work_queue(). I elected to do this to err
-> > on the side of simpler logic until we observed contention, but yeah, let me
-> > just do the more performant thing here.
 > 
-> busy is like a global lock, so freeing it ASAP is good, so yeah,
-> unless there are some bad implications, let's do it early
-
-Ack.
-
-[...]
-
-> > > > +                       ret = callback((u64)&dynptr,
-> > > > +                                       (u64)(uintptr_t)callback_ctx, 0, 0, 0);
-> > > > +
-> > > > +                       __bpf_user_ringbuf_sample_release(rb, size, flags);
-> > > > +                       num_samples++;
-> > > > +               }
-> > > > +       } while (err == 0 && num_samples < 4096 && ret == 0);
-> > > > +
-> > >
-> > > 4096 is pretty arbitrary. Definitely worth noting it somewhere and it
-> > > seems somewhat low, tbh...
-> > >
-> > > ideally we'd cond_resched() from time to time, but that would require
-> > > BPF program to be sleepable, so we can't do that :(
-> >
-> > Yeah, I knew this would come up in discussion. I would love to do
-> > cond_resched() here, but as you said, I don't think it's an option :-/ And
-> > given the fact that we're calling back into the BPF program, we have to be
-> > cognizant of things taking a while and clogging up the CPU. What do you
-> > think is a more reasonable number than 4096?
+>> +            mdio {
+>>                   #address-cells = <1>;
+>>                   #size-cells = <0>;
+>> -                port@0 {
+>> +
+>> +                switch@0 {
+>> +                    compatible = "mediatek,mt7530";
+>>                       reg = <0>;
+>> -                    label = "lan0";
+>> -                };
+>>   
+>> -                port@1 {
+>> -                    reg = <1>;
+>> -                    label = "lan1";
+>> -                };
+>> +                    reset-gpios = <&pio 33 0>;
+>>   
+>> -                port@2 {
+>> -                    reg = <2>;
+>> -                    label = "lan2";
+>> -                };
+>> +                    core-supply = <&mt6323_vpa_reg>;
+>> +                    io-supply = <&mt6323_vemc3v3_reg>;
+>> +
+>> +                    ports {
 > 
-> I don't know, tbh, but 4096 seems pretty low. For bpf_loop() we allow
-> up to 2mln iterations. I'd bump it up to 64-128K range, probably. But
-> also please move it into some internal #define'd constant, not some
-> integer literal buried in a code
+> 'ports' is for the DT graph binding. 'ethernet-ports' is for DSA
+> binding. The former is allowed due to existing users. Don't add more.
 
-Sounds good to me. Maybe at some point we can make this configurable, or
-something. If bpf_loop() allows a hard-coded number of iterations, I think
-it's more forgivable to do the same here. I'll bump it up to 128k and move
-it into a constant so it's not a magic number.
+Will fix.
 
-> >
-> > [...]
-> >
-> > > >         case ARG_PTR_TO_DYNPTR:
-> > > > +               /* We only need to check for initialized / uninitialized helper
-> > > > +                * dynptr args if the dynptr is not MEM_ALLOC, as the assumption
-> > > > +                * is that if it is, that a helper function initialized the
-> > > > +                * dynptr on behalf of the BPF program.
-> > > > +                */
-> > > > +               if (reg->type & MEM_ALLOC)
-> > >
-> > > Isn't PTR_TO_DYNPTR enough indication? Do we need MEM_ALLOC modifier?
-> > > Normal dynptr created and used inside BPF program on the stack are
-> > > actually PTR_TO_STACK, so that should be enough distinction? Or am I
-> > > missing something?
-> >
-> > I think this would also work in the current state of the codebase, but IIUC
-> > it relies on PTR_TO_STACK being the only way that a BPF program could ever
-> > allocate a dynptr. I was trying to guard against the case of a helper being
-> > added in the future that e.g. returned a dynamically allocated dynptr that
-> > the caller would eventually need to release in another helper call.
-> > MEM_ALLOC seems like the correct modifier to more generally denote that the
-> > dynptr was externally allocated.  If you think this is overkill I'm totally
-> > fine with removing MEM_ALLOC. We can always add it down the road if we add
-> > a new helper that requires it.
-> >
 > 
-> Hm.. I don't see a huge need for more flags for this, so I'd keep it
-> simple for now and if in the future we do have such a use case, we'll
-> address it at that time?
+>> +                        #address-cells = <1>;
+>> +                        #size-cells = <0>;
+>>   
+>> -                port@3 {
+>> -                    reg = <3>;
+>> -                    label = "lan3";
+>> +                        port@0 {
+>> +                            reg = <0>;
+>> +                            label = "lan1";
+>> +                        };
+>> +
+>> +                        port@1 {
+>> +                            reg = <1>;
+>> +                            label = "lan2";
+>> +                        };
+>> +
+>> +                        port@2 {
+>> +                            reg = <2>;
+>> +                            label = "lan3";
+>> +                        };
+>> +
+>> +                        port@3 {
+>> +                            reg = <3>;
+>> +                            label = "lan4";
+>> +                        };
+>> +
+>> +                        port@4 {
+>> +                            reg = <4>;
+>> +                            label = "wan";
+>> +                        };
+>> +
+>> +                        port@6 {
+>> +                            reg = <6>;
+>> +                            label = "cpu";
+>> +                            ethernet = <&gmac0>;
+>> +                            phy-mode = "rgmii";
+>> +
+>> +                            fixed-link {
+>> +                                speed = <1000>;
+>> +                                full-duplex;
+>> +                                pause;
+>> +                            };
+>> +                        };
+>> +                    };
+>>                   };
+>> +            };
+>> +        };
+>> +    };
+>>   
+>> -                port@4 {
+>> -                    reg = <4>;
+>> -                    label = "wan";
+>> +  # Example 2: MT7530 in MT7623AI SoC
+> 
+> Looks almost the same as example 1. Examples are not an enumeration of
+> every possible DT. Limit them to cases which are significantly
+> different.
 
-Sounds good to me.
+It seemed to me it would be useful to reference the reset line for the 
+MT7623AI SoC. Using mediatek,mcm and especially MT2701_ETHSYS_MCM_RST in 
+dt-bindings/reset/mt2701-resets.h.
 
-Thanks,
-David
+Should I remove anyway?
+
+> 
+>> +  - |
+>> +    #include <dt-bindings/reset/mt2701-resets.h>
+>> +
+>> +    platform {
+>> +        ethernet {
+>> +            mdio {
+>> +                #address-cells = <1>;
+>> +                #size-cells = <0>;
+>> +
+>> +                switch@0 {
+>> +                    compatible = "mediatek,mt7530";
+>> +                    reg = <0>;
+>> +
+>> +                    mediatek,mcm;
+>> +                    resets = <&ethsys MT2701_ETHSYS_MCM_RST>;
+>> +                    reset-names = "mcm";
+>> +
+>> +                    core-supply = <&mt6323_vpa_reg>;
+>> +                    io-supply = <&mt6323_vemc3v3_reg>;
+>> +
+>> +                    ports {
+>> +                        #address-cells = <1>;
+>> +                        #size-cells = <0>;
+>> +
+>> +                        port@0 {
+>> +                            reg = <0>;
+>> +                            label = "lan1";
+>> +                        };
+>> +
+>> +                        port@1 {
+>> +                            reg = <1>;
+>> +                            label = "lan2";
+>> +                        };
+>> +
+>> +                        port@2 {
+>> +                            reg = <2>;
+>> +                            label = "lan3";
+>> +                        };
+>> +
+>> +                        port@3 {
+>> +                            reg = <3>;
+>> +                            label = "lan4";
+>> +                        };
+>> +
+>> +                        port@4 {
+>> +                            reg = <4>;
+>> +                            label = "wan";
+>> +                        };
+>> +
+>> +                        port@6 {
+>> +                            reg = <6>;
+>> +                            label = "cpu";
+>> +                            ethernet = <&gmac0>;
+>> +                            phy-mode = "trgmii";
+>> +
+>> +                            fixed-link {
+>> +                                speed = <1000>;
+>> +                                full-duplex;
+>> +                                pause;
+>> +                            };
+>> +                        };
+>> +                    };
+>>                   };
+>> +            };
+>> +        };
+>> +    };
+>> +
+>> +  # Example 3: Standalone MT7531
+>> +  - |
+>> +    #include <dt-bindings/gpio/gpio.h>
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +
+>> +    platform {
+>> +        ethernet {
+>> +            mdio {
+>> +                #address-cells = <1>;
+>> +                #size-cells = <0>;
+>> +
+>> +                switch@0 {
+>> +                    compatible = "mediatek,mt7531";
+>> +                    reg = <0>;
+>> +
+>> +                    reset-gpios = <&pio 54 0>;
+>> +
+>> +                    interrupt-controller;
+>> +                    #interrupt-cells = <1>;
+>> +                    interrupt-parent = <&pio>;
+>> +                    interrupts = <53 IRQ_TYPE_LEVEL_HIGH>;
+>> +
+>> +                    ports {
+>> +                        #address-cells = <1>;
+>> +                        #size-cells = <0>;
+>> +
+>> +                        port@0 {
+>> +                            reg = <0>;
+>> +                            label = "lan1";
+>> +                        };
+>> +
+>> +                        port@1 {
+>> +                            reg = <1>;
+>> +                            label = "lan2";
+>> +                        };
+>> +
+>> +                        port@2 {
+>> +                            reg = <2>;
+>> +                            label = "lan3";
+>> +                        };
+>> +
+>> +                        port@3 {
+>> +                            reg = <3>;
+>> +                            label = "lan4";
+>> +                        };
+>>   
+>> -                port@6 {
+>> -                    reg = <6>;
+>> -                    label = "cpu";
+>> -                    ethernet = <&gmac0>;
+>> -                    phy-mode = "trgmii";
+>> -                    fixed-link {
+>> -                        speed = <1000>;
+>> -                        full-duplex;
+>> +                        port@4 {
+>> +                            reg = <4>;
+>> +                            label = "wan";
+>> +                        };
+>> +
+>> +                        port@6 {
+>> +                            reg = <6>;
+>> +                            label = "cpu";
+>> +                            ethernet = <&gmac0>;
+>> +                            phy-mode = "2500base-x";
+>> +
+>> +                            fixed-link {
+>> +                                speed = <2500>;
+>> +                                full-duplex;
+>> +                                pause;
+>> +                            };
+>> +                        };
+>>                       };
+>>                   };
+>>               };
+>>           };
+>>       };
+>>   
+>> +  # Example 4: MT7530 in MT7621AT, MT7621DAT and MT7621ST SoCs
+>>     - |
+>> -    //Example 2: MT7621: Port 4 is WAN port: 2nd GMAC -> Port 5 -> PHY port 4.
+>> -
+>> -    ethernet {
+>> -        #address-cells = <1>;
+>> -        #size-cells = <0>;
+>> -        gmac0: mac@0 {
+>> -            compatible = "mediatek,eth-mac";
+>> -            reg = <0>;
+>> -            phy-mode = "rgmii";
+>> -
+>> -            fixed-link {
+>> -                speed = <1000>;
+>> -                full-duplex;
+>> -                pause;
+>> +    #include <dt-bindings/interrupt-controller/mips-gic.h>
+>> +    #include <dt-bindings/reset/mt7621-reset.h>
+>> +
+>> +    platform {
+>> +        ethernet {
+>> +            mdio {
+>> +                #address-cells = <1>;
+>> +                #size-cells = <0>;
+>> +
+>> +                switch@0 {
+>> +                    compatible = "mediatek,mt7621";
+>> +                    reg = <0>;
+>> +
+>> +                    mediatek,mcm;
+>> +                    resets = <&sysc MT7621_RST_MCM>;
+>> +                    reset-names = "mcm";
+>> +
+>> +                    interrupt-controller;
+>> +                    #interrupt-cells = <1>;
+>> +                    interrupt-parent = <&gic>;
+>> +                    interrupts = <GIC_SHARED 23 IRQ_TYPE_LEVEL_HIGH>;
+>> +
+>> +                    ports {
+>> +                        #address-cells = <1>;
+>> +                        #size-cells = <0>;
+>> +
+>> +                        port@0 {
+>> +                            reg = <0>;
+>> +                            label = "lan1";
+>> +                        };
+>> +
+>> +                        port@1 {
+>> +                            reg = <1>;
+>> +                            label = "lan2";
+>> +                        };
+>> +
+>> +                        port@2 {
+>> +                            reg = <2>;
+>> +                            label = "lan3";
+>> +                        };
+>> +
+>> +                        port@3 {
+>> +                            reg = <3>;
+>> +                            label = "lan4";
+>> +                        };
+>> +
+>> +                        port@4 {
+>> +                            reg = <4>;
+>> +                            label = "wan";
+>> +                        };
+>> +
+>> +                        port@6 {
+>> +                            reg = <6>;
+>> +                            label = "cpu";
+>> +                            ethernet = <&gmac0>;
+>> +                            phy-mode = "trgmii";
+>> +
+>> +                            fixed-link {
+>> +                                speed = <1000>;
+>> +                                full-duplex;
+>> +                                pause;
+>> +                            };
+>> +                        };
+>> +                    };
+>> +                };
+>>               };
+>>           };
+>> +    };
+>>   
+>> -        gmac1: mac@1 {
+>> -            compatible = "mediatek,eth-mac";
+>> -            reg = <1>;
+>> -            phy-mode = "rgmii-txid";
+>> -            phy-handle = <&phy4>;
+>> +  # Example 5: MT7621: mux MT7530's phy4 to SoC's gmac1
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/mips-gic.h>
+>> +    #include <dt-bindings/reset/mt7621-reset.h>
+>> +
+>> +    platform {
+>> +        pinctrl {
+>> +            example5_rgmii2_pins: rgmii2-pins {
+>> +                pinmux {
+>> +                    groups = "rgmii2";
+>> +                    function = "rgmii2";
+>> +                };
+>> +            };
+> 
+> No need to put this in the example. We don't put provide nodes in
+> the examples of the consumers. It's also incomplete and can't be
+> validated.
+
+Will remove.
+
+> 
+>>           };
+>>   
+>> -        mdio: mdio-bus {
+>> +        ethernet {
+>>               #address-cells = <1>;
+>>               #size-cells = <0>;

@@ -2,43 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7BEF595A94
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF4D595A97
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234714AbiHPLtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 07:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57228 "EHLO
+        id S232817AbiHPLtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 07:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbiHPLsy (ORCPT
+        with ESMTP id S230371AbiHPLtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 07:48:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7D1D51EB;
-        Tue, 16 Aug 2022 04:23:18 -0700 (PDT)
+        Tue, 16 Aug 2022 07:49:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E357125DD;
+        Tue, 16 Aug 2022 04:23:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41F56611DB;
-        Tue, 16 Aug 2022 11:23:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47721C433C1;
-        Tue, 16 Aug 2022 11:23:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660648997;
-        bh=tP+ANVAUbFVllTzIr8hC0M9LLYPiJXs4zx3jfrfx2UU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GDW98Ayqyaty3Q2pI5fw85snOpnwr8+YMCMuZAYhoMPidh2gW0pnKo6egIeCMrG7X
-         uoIk1HFsSR3/6xxBWM8ZQ8H36svnHz2aNJr1v2nKZXxl1/vkVbxcTBVAVvv/Ql1Nb7
-         if/Sj88Trwg1JU5CEi294Yq95wXJZ6p+iVrWwatlliR9QQ3YDTb98nEsnaySd9invX
-         X1s7Rov4R4XfvyGtU3PUidYxny0ib7uGso77WP/F2o73vz/818R7qaSf6s7JBk3U9E
-         Ze6zZ8BeartfkQvSbXD6ER0t5Woq3Jy1tKBE31MwlaA7rZq+VgW77+alqZlyzGyh/X
-         JNlyi2rxNCE4g==
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v6.0-rc1
-Date:   Tue, 16 Aug 2022 12:23:07 +0100
-Message-Id: <20220816112317.47721C433C1@smtp.kernel.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4878FB81665;
+        Tue, 16 Aug 2022 11:23:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6526BC433D6;
+        Tue, 16 Aug 2022 11:23:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660649023;
+        bh=/20kKX71ZpfVF9rw5LOSwmFXtujowJ7PjoE2wdNJC20=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MNXbG/Z2FgZSh8Rj+XTRdK48LAJCQ8xFwRAfYmHWIg2UQRdOGjemwXuapTGjDrdLL
+         hPX3Li+cnvtAvIgm7osgUqAxvaZyBEZKIlIaEgZHVT3yxfAX+LL+gz6Nf+A6t8XrJZ
+         oxHQ/TlFh22R5sUeRX9KHCM61uPIGb5M95bZxiP8=
+Date:   Tue, 16 Aug 2022 13:23:39 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Szuying Chen <chensiying21@gmail.com>
+Cc:     mario.limonciello@amd.com, mika.westerberg@linux.intel.com,
+        andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yd_Tseng@asmedia.com.tw,
+        Chloe_Chen@asmedia.com.tw, Richard_Hsu@asmedia.com.tw
+Subject: Re: [PATCH v4] thunderbolt: thunderbolt: add vendor's NVM formats
+Message-ID: <Yvt+O8P9dDHcFH3T@kroah.com>
+References: <20220816105502.9059-1-chensiying21@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816105502.9059-1-chensiying21@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -49,44 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 69243df953e70c134c6735b31ba0e658c53d3cda:
+On Tue, Aug 16, 2022 at 06:55:02PM +0800, Szuying Chen wrote:
+> From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
+> 
+> The patch add tb_nvm_validate() contain an array that has functions
+> pointers to asmedia_nvm_validate().
+> And asmedia_nvm_validate() that recognize supported vendor works in one
+> of the following cases:
+> Case NVM_UPGRADE: enable nvm's attribute by setting no_nvm_upgrade
+> flag to create nvm_authenticate file node.
+> Case NVM_ADD: add active/non-active NVM devices.
+> Case NVM_WRITE: update firmware to non-ative NVM device.
+> 
+> Signed-off-by: Szuying Chen <Chloe_Chen@asmedia.com.tw>
+> ---Add enum nvm_validate_ops and modify ASMedia NVM Version format.
+> ---Repair file(switch.c) has existed warning, but have 7 warn not fixed.
+> 
+> Note: The three previous submissions accidentally used the same subject
+> prefix. This changelog is relative to the most recent submission at
+> https://github.com/intel-lab-lkp/linux/commits/Szuying-Chen/thunderbolt-thunderbolt-add-vendor-s-NVM-formats/20220815-121330
 
-  Add SPI Driver to HPE GXP Architecture (2022-07-29 20:22:22 +0100)
+This needs to be below a line that _only_ has "---" on it.
 
-are available in the Git repository at:
+See the documentation for examples, or one of the many commits on this
+mailing list.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.0-rc1
+Please fix up and resend a v5.
 
-for you to fetch changes up to 2fd92c7b8fe2cfc634613dc093d0f507c7389ea8:
+Also be sure to fix up all the issues the kernel test robot found in
+your previous submissions.
 
-  spi: dt-bindings: Drop Pratyush Yadav (2022-08-11 18:41:45 +0100)
+thanks,
 
-----------------------------------------------------------------
-spi: Fixes for v6.0
-
-A few fixes that came in since my pull request, the Meson fix is a
-little large since it's fixing all possible cases of the problem that
-was observed with the driver and clock API trying to share configuration
-by integrating the device clocking fully with the clock API rather than
-spot fixing the one instance that was observed.
-
-----------------------------------------------------------------
-David Jander (1):
-      spi: spi.c: Add missing __percpu annotations in users of spi_statistics
-
-Krzysztof Kozlowski (1):
-      spi: dt-bindings: Drop Pratyush Yadav
-
-Lukas Bulwahn (1):
-      MAINTAINERS: rectify entry for ARM/HPE GXP ARCHITECTURE
-
-Neil Armstrong (1):
-      spi: meson-spicc: add local pow2 clock ops to preserve rate between messages
-
- .../spi/cdns,qspi-nor-peripheral-props.yaml        |   2 +-
- .../devicetree/bindings/spi/cdns,qspi-nor.yaml     |   2 +-
- .../bindings/spi/spi-peripheral-props.yaml         |   2 +-
- MAINTAINERS                                        |   2 +-
- drivers/spi/spi-meson-spicc.c                      | 129 ++++++++++++++++-----
- drivers/spi/spi.c                                  |  14 +--
- 6 files changed, 112 insertions(+), 39 deletions(-)
+greg k-h

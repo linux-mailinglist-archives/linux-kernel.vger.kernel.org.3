@@ -2,160 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D49459527C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 08:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A56595287
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 08:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229480AbiHPGZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 02:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
+        id S229893AbiHPG3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 02:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiHPGZg (ORCPT
+        with ESMTP id S229941AbiHPG3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 02:25:36 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8967F13674B
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 17:31:20 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-10ea30a098bso10004592fac.8
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 17:31:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=sjHa9icqRlJ0JksO3F6ZvE7i15gfikQ5o3Vy7JFxppE=;
-        b=h0YbD3es2uiuXm+iZMywYsWMiom4/q54qBleqHYw3O9z1DwQ1PDlGF7Oyud718lg1x
-         v39v3Ab3qyz/iA8AwkK9PidS3HjQqrJLfMvtJobFOkfLKkYQp8LgYozNCFwKGTgWzHV6
-         AU4FLhPWOZnSok4kEb/PWbb9inD8DI/xUupOvz+CO+iQMAQsqVvdyLd58vbCGY2aHGGl
-         ijXXD3GpqM2Z7MgXjowUbLaAvK8lhnjeEBWxfx/MYLlQnYEJNqEw9wqhzl9S7bEvgjXa
-         AdfC04QQAFuTXNxf5uQWCVF4h8ix74FubFDHSZ5Q7SHRJ6mqpL+dnF17CUYYUn8Gs5zG
-         fskg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=sjHa9icqRlJ0JksO3F6ZvE7i15gfikQ5o3Vy7JFxppE=;
-        b=E1CrYT0OAQWcwEEMlRisWKLgOEQ5UgrrmUoEATBbNEhyNVy0GiZmnUrlkIcS7Ot5mx
-         c7GWVz5cqVBTKrQi5hZBtDw658lrnink9wBcxmM0GrJ/P/n5njDL/hFUDrKk3ppgf/cH
-         4IfNz2ER500fJiT/wwCtdgjhOV4v+Grir1DgDbfMGhjLzbUZOo3kViJlfUo6whNt5fJb
-         +EKr/wNDcETML80+XUuu4UeAsLPk20WiKKxe6H4WtQOl5UY4HrHAYBsIBZgmuPIgte1j
-         X80UXEfIVyl/nLxJDNC/HUc00SjBCH/LR0NnxiPGXvf2sV7cnFu6D1BuR1W2adXPSCa6
-         2viQ==
-X-Gm-Message-State: ACgBeo00I/ELMP1oGnwr/tUU+70AkntvimE0IT+syZ8y3Lspt0BQKiTk
-        hC4Fyd8jNhmscoOcd/CyIqfEgXczJ2eAWACVtlgE
-X-Google-Smtp-Source: AA6agR41whzPOTaUXB+gAEEw9HlVd4Fqc0u91wOZVxmy2wI70Rmkkyj4tbRzAUD7nn3ppYKyaYWLu9psp1gGsRe7Mvo=
-X-Received: by 2002:a05:6870:b41e:b0:116:5dc7:192a with SMTP id
- x30-20020a056870b41e00b001165dc7192amr8115012oap.136.1660609879901; Mon, 15
- Aug 2022 17:31:19 -0700 (PDT)
+        Tue, 16 Aug 2022 02:29:01 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7582635E765;
+        Mon, 15 Aug 2022 17:43:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1660610581;
+        bh=qtWTAgDws3/A2ECwdJu8VQ1RYUmPGuwFTdeUQDBCQ4o=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=eA5r6LBYcnE9vXbJR3xVIeuYpPjO06S6KxQ9yer4sbAzWVjglSbjxcKeXTI7ttKM1
+         46wQUIAl925/n0siDMPxJmKACK58U5RtXtu93HFXRgaFJXz0S+gpBdJSh8zXMMlMXj
+         AximEJvWx9faOdRJ97YXihoFwCfWU71y7JI4y3YI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.35.47]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MacOW-1nlf270pqc-00cDkm; Tue, 16
+ Aug 2022 02:43:01 +0200
+Message-ID: <a2c029db-a689-08e3-e34c-d02819858084@gmx.de>
+Date:   Tue, 16 Aug 2022 02:43:00 +0200
 MIME-Version: 1.0
-References: <cover.1659996830.git.rgb@redhat.com> <2d8159cec4392029dabfc39b55ac5fbd0faa9fbd.1659996830.git.rgb@redhat.com>
-In-Reply-To: <2d8159cec4392029dabfc39b55ac5fbd0faa9fbd.1659996830.git.rgb@redhat.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 15 Aug 2022 20:31:09 -0400
-Message-ID: <CAHC9VhQYDsjx2QVRqU8NUr2p4MsWi7DKEFXMk4MvVyEbv4niHQ@mail.gmail.com>
-Subject: Re: [PATCH v4 4/4] fanotify,audit: deliver fan_info as a hex-encoded string
-To:     Richard Guy Briggs <rgb@redhat.com>
-Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Subject: Re: [PATCH 5.19 0000/1157] 5.19.2-rc1 review
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:LhZqGFrKTHhEMIjOgweyyu9zw2iOL8yYivL9rHbEUBCZRURL8Kn
+ ZYPiKH59z9dj7Rfa+PlEXYzHJxwtbycJcDyCyF3KVRV0rH1keDLOQXFbtoAbI4gYpmOIK9Q
+ DNf5lgChrU9JJNZiKRVS/4AbG0wuXmhWFyq/k7wakzi9BBju1Rkayo4K6ubfml8qrSq7TXU
+ 3mjZfBgUrb6ouy2KuRm8w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wy6m6B0cjX4=:nr5HCHMOXg6dspu3pkdhKl
+ TiJ4Q8CUeRS6Ahwznyc9RPMp2oBZ7o7W0xwH8T0DXVAKk4aRhBZfadP2MkR7M51LhAAk8mKjJ
+ QnKdkdPVZHeGqBc0Lcf7hFNEtMSRbgG1NVXga5HYbwwGWqV1I/2Ua4OOKJRW2moF7oXbjd+02
+ VHNBKq5avjUOmUQ94F6+lTLp6zovy+V2foyA3YGwfp6XBDhDiKog5fIsajsyUljha19unYIok
+ BZSuSc+rFhQproyOrxw1Erat+TJ6NT8aa/Ix6WmTy++RAP4vCzebESu3u90hSQj8XdaK2+sq6
+ UL5QJ0+ydtVB3fmQZVDVvagBc7sk7jy3M8GOiA2UfczXyXD89dnhrt8s7swEFerR+SynAWq7f
+ T45W5+NpAJntt7OmA/T8SDr2AoIc5BIXxw26dDkiIOoR/QgQmZjCxXfyJSZbR0+H+r1F3r2AL
+ qTbkJB9BHyuPmX/G6IaEOyzGXcqLtp+KK+ZfAms2Y/K7yXbY2UJR20KcAQ9ZdE+wCsoo6CWCu
+ AbwAaQNFm1UEvrfGBHY9LGRFTqhRQYc9aMLU5EzCN8X0Z5w6lCFYj+TmbI4AEcJpPhWnRn4Kp
+ HD4KQTWUMzuilzv06/0HLuo3NSGXwNWqjanmEHsEEemCP4jC0KnapnhTHFNshPKetsAhLBz+Q
+ 80l1HV2DdVbBLfK4ehLby/GYMgEiVhTUZ994pPGL79nwsxSEot1rZ98xjYposVXlu/Ow7masz
+ I1qb+UaBpMNf1eAcz1jLZ25pTcQA0blxY0ighwdCC8bzvWMCSyVpfGbs98BthHaguIC3XkmoN
+ iy7q5eQX4HHxGVorGU0z5s/ay3FYk8iMnRtg+DPv28ajt9XOBFj2OPa/chuiCw44gZMxbCwEF
+ KdTZdahmbv8eNvcgKfTeKAz31bVM+/zyZ9ZZedqdVFo6XMcRWyi3WicGENRy5KyxqiRmTdKNv
+ NL7/4F5tbbFuS9I6Bw5CgwUcF1LZexWpPCm2JLxsM/RGEJmiVQVBraak4PCrpyNPUfWhfIchD
+ 6lVQUTUHCfMt9dkidyLfbKDC/gVyjCuDwbDOvkL60PFexXf+0jK4nDf8lvZRfB9bhL28+Mjxm
+ yYuXKdbbwUhVdOZNs0Nme/hBEFDIMw2usRw
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 1:23 PM Richard Guy Briggs <rgb@redhat.com> wrote:
->
-> Currently the only type of fanotify info that is defined is an audit
-> rule number, but convert it to hex encoding to future-proof the field.
->
-> Sample record:
->   type=FANOTIFY msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=3F
->
-> Suggested-by: Paul Moore <paul@paul-moore.com>
-> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> ---
->  kernel/auditsc.c | 28 +++++++++++++++++++++-------
->  1 file changed, 21 insertions(+), 7 deletions(-)
+hallo Greg
 
-This needs to be squashed with patch 3/4; it's a user visible change
-so we don't want someone backporting 3/4 without 4/4, especially when
-it is part of the same patchset.
+5.19.2-rc1
 
-> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> index f000fec52360..0f747015c577 100644
-> --- a/kernel/auditsc.c
-> +++ b/kernel/auditsc.c
-> @@ -2908,22 +2908,36 @@ void __audit_fanotify(u32 response, size_t len, char *buf)
->
->         if (!(len && buf)) {
->                 audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-> -                         "resp=%u fan_type=0 fan_info=?", response);
-> +                         "resp=%u fan_type=0 fan_info=3F", response); /* "?" */
+compiles, boots and runs here on x86_64
+(Intel i5-11400, Fedora 36)
 
-Please drop the trailing comment, it's not necessary and it makes the
-code messier.
+Thanks
 
->                 return;
->         }
->         while (c >= sizeof(struct fanotify_response_info_header)) {
-> +               struct audit_context *ctx = audit_context();
-> +               struct audit_buffer *ab;
-> +
->                 friar = (struct fanotify_response_info_audit_rule *)buf;
->                 switch (friar->hdr.type) {
->                 case FAN_RESPONSE_INFO_AUDIT_RULE:
->                         if (friar->hdr.len < sizeof(*friar)) {
-> -                               audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-> -                                         "resp=%u fan_type=%u fan_info=(incomplete)",
-> -                                         response, friar->hdr.type);
-> +                               ab = audit_log_start(ctx, GFP_KERNEL, AUDIT_FANOTIFY);
-> +                               if (ab) {
-> +                                       audit_log_format(ab, "resp=%u fan_type=%u fan_info=",
-> +                                                        response, friar->hdr.type);
-> +#define INCOMPLETE "(incomplete)"
-> +                                       audit_log_n_hex(ab, INCOMPLETE, sizeof(INCOMPLETE));
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
 
-Is the distinction between "?" and "(incomplete)" really that
-important?  I'm not going to go digging through all of the
-audit_log_format() callers to check, but I believe there is precedence
-for using "?" not only for when a value is missing, but when it is
-bogus as well.
-
-If we are really going to use "(incomplete)" here, let's do a better
-job than defining a macro mid-function and only using it in one other
-place - the line immediately below the definition.  This is both ugly
-and a little silly (especially when one considers that the macro name
-is almost exactly the same as the string it replaces.  If we must use
-"(incomplete)" here, just ditch the macro; any conceptual arguments
-about macros vs literals is largely rendered moot since there is only
-one user.
-
-> +                                       audit_log_end(ab);
-> +                               }
->                                 return;
->                         }
-> -                       audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-> -                                 "resp=%u fan_type=%u fan_info=%u",
-> -                                 response, friar->hdr.type, friar->audit_rule);
-> +                       ab = audit_log_start(ctx, GFP_KERNEL, AUDIT_FANOTIFY);
-> +                       if (ab) {
-> +                               audit_log_format(ab, "resp=%u fan_type=%u fan_info=",
-> +                                                response, friar->hdr.type);
-> +                               audit_log_n_hex(ab, (char *)&friar->audit_rule,
-> +                                               sizeof(friar->audit_rule));
-> +                               audit_log_end(ab);
-> +
-> +                       }
->                 }
->                 c -= friar->hdr.len;
->                 ib += friar->hdr.len;
-> --
-> 2.27.0
-
--- 
-paul-moore.com

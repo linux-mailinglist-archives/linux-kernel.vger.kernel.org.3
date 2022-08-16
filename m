@@ -2,97 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254C159570A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A715956E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233836AbiHPJuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47480 "EHLO
+        id S233957AbiHPJpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:45:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbiHPJtd (ORCPT
+        with ESMTP id S233926AbiHPJoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:49:33 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E377BD76E
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:22:04 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id a9so14030139lfm.12
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:22:04 -0700 (PDT)
+        Tue, 16 Aug 2022 05:44:18 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B35C2F9F;
+        Tue, 16 Aug 2022 02:25:56 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id t5so12685122edc.11;
+        Tue, 16 Aug 2022 02:25:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=Cc5a/Z1OZQ/Sp4oex9dmkDkQnrPr8Y8hlCBI2uCYHzA=;
-        b=fiDRi2HZhnLH0aZUZxx5zMFYg+kRxqfZ8b/gbzXvdbEOMUSsLkKCvcNynL4hySDQxA
-         m1GK8w5qxNUXZbhnbUOAb/RWoVguEnK7mq6wmLTVFwGDw++AVwE97trf0cZJGRUKHk4B
-         ugdqIQgEN/iEh8C4L4b5JRrnQ/26tifMaIyc4O7HpNoSyICCI3YfXHi6BEJAVxkwfsoC
-         4dXDHxU+eadTKBUHD1fgqE6Zq3Hmseu0E10W0cwd/dRDKo7b7wWBN7zhjkCK4R6N9lSf
-         qRZ/bk+TKFGA2FewRcrhJcWB7mn/MYynRQCArUicMErP3l3KcqAYTACWZ1/r4jHH8EoE
-         HRLA==
+        bh=p2IAoMXBFUx3gxWp+4ICwtPEKeo+wvYA575xG1H6jVI=;
+        b=WLvFZu2KS+q7THGZo9rHUDk4wDTyZ4zqLbQUR0lnef4x6El+rrsbBeFOSf0fg+5FFE
+         +5KdbCM9VHFcQlUrRnxbKlpfmYyKz1NSKx0uwDunbyOdRi1iQbIFtzIQx5C+zT4g8oe4
+         Yg6ejIKdWFY/BoB1cv2pfomkAO2W41Ansn4cb7c85y/kRaZOVFPLpA46gMhtn3LG387u
+         0+mUg9xYw/8DxVT+zo3hhsZucpjCEKyWvEbSDqyxdYRRSvwv2tvkTjZ0cmSYo2bxxCOh
+         7pCETWJ02xnPN8vxu19rPFljUNDiBOkHY5o/3K4N5Wz6qJGdYIZP5+ApBVBYt/8TefxM
+         pF0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=Cc5a/Z1OZQ/Sp4oex9dmkDkQnrPr8Y8hlCBI2uCYHzA=;
-        b=chCKCB97ZMUYCdTIrWLTPwySSK/BeuoYo/eD97UJl7e0qPqCahLZxe9jtPGqo4M/gp
-         rXXL6bCNc8/K+mQzuadV+GFwG3FBIrmU4ZmwaZGLW9kvCn8iWKdF8Mf4YipPtKxjQNWC
-         i423yHCmpFhrEcK7RtAuxoO0cQLTdFuS36ghpwXnVy4vUQPWC0v5JN54fBGYe4vQbR1d
-         Hid8g3KzbySQBFWweMyBu0AhukC0Ag2QrT1yTEK22S/3sLPpPlM1/8JbVw7hYRZItPFQ
-         Dk2DcLNuA0lSy+zRUMMIi10tKlLq8cgpFZY9Hkf77iyo1v6xsNrPc/Amgysqe4MHGSVI
-         Ai2g==
-X-Gm-Message-State: ACgBeo3Ovhilq7quVJv/PIb0TuhogLFX2MbNSNFuvrPFOVUFKsWM+/C3
-        aOfBm7hHQCES2SknaKgC39jr4A==
-X-Google-Smtp-Source: AA6agR7LFK/9gYrW8u+lnQRIAyItIlW8HzneqHrf3znVQXnPj5MscIKAG/LghM5wSDnWni05dkHGvg==
-X-Received: by 2002:a2e:80da:0:b0:25e:6d34:6169 with SMTP id r26-20020a2e80da000000b0025e6d346169mr6447417ljg.531.1660641722837;
-        Tue, 16 Aug 2022 02:22:02 -0700 (PDT)
-Received: from krzk-bin.. (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id s17-20020a056512215100b0048aea84fa80sm1335691lfr.87.2022.08.16.02.22.01
+        bh=p2IAoMXBFUx3gxWp+4ICwtPEKeo+wvYA575xG1H6jVI=;
+        b=LuTlxnCbUZe8hMO09Q5EpPTRWjRiBjrSzeIECLYco4eINoI8k/yDOCfMQQvUg/rFDX
+         K34UUxt9r7+3a3yXtAm+R4zRw/21GrwnKiq0xb2lljXLzHqBkOS7qZeP7AB+nfDRGYFN
+         PfTvuDWHd0FYI6hyo/XQ5/7cY9vvnvL90zqLb3b1IM5ic6X/4CHHNpaYDGukL5KjBlKE
+         U/Fc7zj6OfuqRxG1HxjG2PXFwuwYib5QxRfqBQzOzmpfhYw1lW6CG6uHsEoAxPO6Y66v
+         TUhj9w2b8djbKQ0T7mPoG/feszaBtzl3UpNWqNssqOFrs5bIJKHzixLxBeIgeU60g866
+         djcw==
+X-Gm-Message-State: ACgBeo26n/JNtybh/Us6CVfssR7TbAXoovctyzHW8US56YuKQNxRDnde
+        E1uRmHLI81PVxo6cRH58mHY=
+X-Google-Smtp-Source: AA6agR41CmKxbTEYoP/DOpTKRPVPg8STgzbCPzshr17hiEzC27VkjvA7+xRqBIA+VNOKDchJNuruHw==
+X-Received: by 2002:a05:6402:1f87:b0:43b:b88d:1d93 with SMTP id c7-20020a0564021f8700b0043bb88d1d93mr17792300edc.314.1660641955004;
+        Tue, 16 Aug 2022 02:25:55 -0700 (PDT)
+Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
+        by smtp.gmail.com with ESMTPSA id cn19-20020a0564020cb300b0043bdc47803csm8142604edb.30.2022.08.16.02.25.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 02:22:02 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     yong.wu@mediatek.com, robin.murphy@arm.com, lee@kernel.org,
-        angelogioacchino.delregno@collabora.com, robh+dt@kernel.org,
-        tinghan.shen@mediatek.com, mandyjh.liu@mediatek.com,
-        will@kernel.org, joro@8bytes.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Tue, 16 Aug 2022 02:25:54 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        linux-sunxi@lists.linux.dev, Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: (subset) [PATCH v4 02/20] dt-bindings: memory: mediatek: Update condition for mt8195 smi node
-Date:   Tue, 16 Aug 2022 12:21:59 +0300
-Message-Id: <166064169630.37858.3837655509098916044.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220729063208.16799-3-tinghan.shen@mediatek.com>
-References: <20220729063208.16799-1-tinghan.shen@mediatek.com> <20220729063208.16799-3-tinghan.shen@mediatek.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH 06/12] riscv: dts: allwinner: Add the D1 SoC base devicetree
+Date:   Tue, 16 Aug 2022 11:25:53 +0200
+Message-ID: <2249129.ElGaqSPkdT@jernej-laptop>
+In-Reply-To: <3881930.ZaRXLXkqSa@diego>
+References: <20220815050815.22340-1-samuel@sholland.org> <5593349.DvuYhMxLoT@jernej-laptop> <3881930.ZaRXLXkqSa@diego>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Jul 2022 14:31:50 +0800, Tinghan Shen wrote:
-> The max clock items for the dts node with compatible
-> 'mediatek,mt8195-smi-sub-common' should be 3.
-> 
-> However, the dtbs_check of such node will get following message,
-> arch/arm64/boot/dts/mediatek/mt8195-evb.dtb: smi@14010000: clock-names: ['apb', 'smi', 'gals0'] is too long
->          From schema: Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
-> 
-> [...]
+Dne torek, 16. avgust 2022 ob 11:12:05 CEST je Heiko St=C3=BCbner napisal(a=
+):
+> Am Dienstag, 16. August 2022, 09:49:58 CEST schrieb Jernej =C5=A0krabec:
+> > Dne torek, 16. avgust 2022 ob 09:41:45 CEST je Krzysztof Kozlowski=20
+napisal(a):
+> > > On 15/08/2022 08:08, Samuel Holland wrote:
+> > > > +
+> > > > +	de: display-engine {
+> > > > +		compatible =3D "allwinner,sun20i-d1-display-engine";
+> > > > +		allwinner,pipelines =3D <&mixer0>, <&mixer1>;
+> > > > +		status =3D "disabled";
+> > > > +	};
+> > > > +
+> > > > +	osc24M: osc24M-clk {
+> > >=20
+> > > lowercase
+> > >=20
+> > > > +		compatible =3D "fixed-clock";
+> > > > +		clock-frequency =3D <24000000>;
+> > >=20
+> > > This is a property of the board, not SoC.
+> >=20
+> > SoC needs 24 MHz oscillator for correct operation, so each and every bo=
+ard
+> > has it. Having it here simplifies board DT files.
+>=20
+> I guess the oscillator is a separate component on each board, right?
 
-Applied, thanks!
+Correct.
 
-[02/20] dt-bindings: memory: mediatek: Update condition for mt8195 smi node
-        https://git.kernel.org/krzk/linux-mem-ctrl/c/9f8fb8032febf594914999c33493c682eaf138cb
+> And DT obvious is meant to describe the hardware - independently from
+> implementation-specific choices.
+
+There is no choice in this case. 24 MHz crystal has to be present.
+
+=46WIW, including crystal node in SoC specific DTSI is already common patte=
+rn in=20
+Allwinner ARM SoC DTSI files.
+
+>=20
+> Starting to discuss which exceptions to allow then might lead to even more
+> exceptions.
+>=20
+> Also having to look for a board-component in the soc dtsi also is surpris=
+ing
+> if one gets to the party later on :-) .
+
+As I said, if one is accustomed to Allwinner ARM DT development, it would b=
+e=20
+more surprising to include 24 MHz crystal node in each and every board DT.
 
 Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Jernej
+
+

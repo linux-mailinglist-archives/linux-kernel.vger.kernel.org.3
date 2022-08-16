@@ -2,218 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7557259599C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A97D9595A40
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234054AbiHPLNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 07:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56820 "EHLO
+        id S234790AbiHPLej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 07:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235339AbiHPLMj (ORCPT
+        with ESMTP id S234087AbiHPLd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 07:12:39 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA092A413;
-        Tue, 16 Aug 2022 02:34:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1660642445; x=1692178445;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=cvl7F2wg5OwirEutbUrVs3ANWA+39erQI1g0eloiahs=;
-  b=EGkZsuTmwlrdhZfAZzZ2F2MtqHTUUNN9hhVxlsh8180+V18agBp31IUj
-   0RSCaTairhjg4AhxPlZuRQ4ckUCjnGYNH1qsn+uYdpa6MFNvaD5v3rasR
-   R4G91nvosQarIjA6Rio+5vn0noT1cYlU4kOqwatHVEaeyeQ+0/dfTs7MQ
-   d+9uYGn6eU9Zmm30RKTpCZmk0He9hLtE0/SOJhIZhDEPFNoVDv4wJ3Vcy
-   GXsZUCQv7q9XG9Tf4ov3yDrdK+c8/Jk6jbszK9QoIEiC3oqcDGPWexweX
-   CwH+1BvHmuHQrfcXWMVMRysyTcbmp+1+4d098PR+6fpTu+Ht8jDMN2QxF
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="172638935"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Aug 2022 02:31:30 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 16 Aug 2022 02:31:29 -0700
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12 via Frontend Transport; Tue, 16 Aug 2022 02:31:28 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q1v0PJ3u7owO9YwmoXt8yFLNx94q9SwEXlOGp7RECxtMHXxAS2hj3rj4e1z8/XCWCdSiRHB3xDyKegIv4Cn1RIBZCVvg1S3eFZJ/2G+cb+FL15MFP+222iKJbjgs+diqQxsnpk3HL1+4nzAnsbDeY4QTkQobsU3B7qsObCKjrzIJxTAkI6QHZ7otMEly9pehKGvHZmgGBJZX6nzztEchBk3jSGzzBrHqv6nsX+tYvz8IhrzoKwH/odebpqyA2yoe37P8jOv8gnFJp/9r8RsmD5W84XttRiGDnlUHxgISlgewKNUeqkbHfDt/KCaH3MZ1S9Rk/Uy9H7XrrWkZ0o/jhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cvl7F2wg5OwirEutbUrVs3ANWA+39erQI1g0eloiahs=;
- b=WDPn4wfuvvLAMVxCI/Kh1JmBCAYAARw0JJfOJp3z3eoKxy4+mA0X2BG5XQyAiq9ufGqrxvpIb2hsUuusJz2a9eW3LSGfGTcsgnAQulXkDNgtVNxNv4pOWJQ3J9p+klalHg01yO1j/9Fal/vZP5qns0Uc6/oZjWc35daj52F4LxBY+UNxtaYZYmVQTlgxEw/L2vuOxcLCnZuHUVTFFaXC3sZI1x3tjudw1OMokl4IxU9+ewCv+TTN7t9nz1/LO6JaenLCBLslyzVZ+HbQXqi7NZwRFKAxHQl0tHKPfFptOKvcXyCLDp1z7QdTOXsYtkRwzLmhnChsk3xp49LbnXZqPw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cvl7F2wg5OwirEutbUrVs3ANWA+39erQI1g0eloiahs=;
- b=S/hzsPnhQI0lITsm/mdA8jG6boHhKPvc5Nn7k+ccunhm0mXA4PT7J0sE887csMS7MIusNobtEiKRbnvzvXW8OGznqFY/KDbCvEFrWaCO5nn3mQXE8fowTsUqGRtw3meBkslihpqoyNhMWGL6mG+U+eAdB6cXOPKDdUMvFjGU+JU=
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
- by DM4PR11MB6455.namprd11.prod.outlook.com (2603:10b6:8:ba::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Tue, 16 Aug
- 2022 09:31:23 +0000
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::ac89:75cd:26e0:51c3]) by CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::ac89:75cd:26e0:51c3%8]) with mapi id 15.20.5525.011; Tue, 16 Aug 2022
- 09:31:23 +0000
-From:   <Conor.Dooley@microchip.com>
-To:     <krzysztof.kozlowski@linaro.org>, <mail@conchuod.ie>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <thierry.reding@gmail.com>,
-        <sam@ravnborg.org>, <Eugeniy.Paltsev@synopsys.com>,
-        <vkoul@kernel.org>, <fancer.lancer@gmail.com>,
-        <daniel.lezcano@linaro.org>, <palmer@dabbelt.com>,
-        <palmer@rivosinc.com>
-CC:     <paul.walmsley@sifive.com>, <aou@eecs.berkeley.edu>,
-        <masahiroy@kernel.org>, <damien.lemoal@opensource.wdc.com>,
-        <geert@linux-m68k.org>, <niklas.cassel@wdc.com>,
-        <dillon.minfei@gmail.com>, <dri-devel@lists.freedesktop.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dmaengine@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v5 04/13] dt-bindings: memory-controllers: add canaan k210
- sram controller
-Thread-Topic: [PATCH v5 04/13] dt-bindings: memory-controllers: add canaan
- k210 sram controller
-Thread-Index: AQHYkLmpMN95aImTj0GtIyfn+RYzcq2xgzyAgAABI4A=
-Date:   Tue, 16 Aug 2022 09:31:23 +0000
-Message-ID: <d1c1e2bd-39cb-4927-ac0b-22583ac7a420@microchip.com>
-References: <20220705215213.1802496-1-mail@conchuod.ie>
- <20220705215213.1802496-5-mail@conchuod.ie>
- <d6acd450-a3bc-d5bd-eda9-9664e6beadf9@linaro.org>
-In-Reply-To: <d6acd450-a3bc-d5bd-eda9-9664e6beadf9@linaro.org>
-Accept-Language: en-IE, en-US
-Content-Language: en-IE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d46bb0f5-6465-40b1-35db-08da7f6a15f8
-x-ms-traffictypediagnostic: DM4PR11MB6455:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: =?utf-8?B?NXJiVmY3NWs0OUNBOUxoOVlXYzdYOU9CRElFNjZYeHFmMjdITXY1TFZlM05H?=
- =?utf-8?B?SGplUkR5NEZrdVdUb3FabWtIOFgxMG9Pd0kralVIcGZqb0JLNktLRCttS243?=
- =?utf-8?B?Sm9VQlA0UFlINDM2blQwamN1Mld3aVErRFZKNytZZk9uUGxUKzBGYlVjQklY?=
- =?utf-8?B?a3czZWJlSXI2SWxyM3FXTVRQZWJmV1hIOHdENnRsSlZlYXhua3JheFQyTE5a?=
- =?utf-8?B?TDFzS1JzNVZJU2R6aWlpeWd5MjMwdG9mUFFhVmVGYVBxYUhvajV5bWlSak9C?=
- =?utf-8?B?eFpMcjVXZmZqN3NFaTl4WGRMRm1kOFFNQTN2QjkrVjVob2t2L29ZdjkxTTdq?=
- =?utf-8?B?Y21XT3Q1Q3FjbHN0cFJVY21qYkxuTG9ZdHJPR2VydXgvNjVKbjUxQU1vT0J6?=
- =?utf-8?B?d2VJRFpjYVdGVWZpSDR4RTBra2p0RE85SHNlR2pRUy9zQklPUlk4RkVrVFUz?=
- =?utf-8?B?SnV3WHR5WFhhUTk1b2ZieVhxQXpWdDQ3eDFGcXNLQlVSZG02THh6YWRJUVJM?=
- =?utf-8?B?Z2NiK0tJQ0o0RHVUUFd2NFR0R01hNGtWZDVmdGVZTVdhSDc1c2FHQkQ0YVFj?=
- =?utf-8?B?S2tjdDUrV2tJbElJQVlTZXMvZXF4V1UyaUZYMEw2YXFJbEwzY2lSWUw1Mklv?=
- =?utf-8?B?UDMrMUd1S3NiV1pRQlBmNHNOUzg2VVprV3VCZkg3ZktXTGp1Y1RxZXNwZG1K?=
- =?utf-8?B?RFZjdklXYlVqV29yTVcyMTUxdjZoNmg4c085Zkk0REJaOEZ5WWkrcjNMUkZl?=
- =?utf-8?B?T1E1bU83Q1dHQUwxMXEzbkltdlVTaUFrbjhQUmhqdndGTURPdkIzbTRGU1c3?=
- =?utf-8?B?SEMya1hwWjBwaWowMWZqZkdTNDRCRStHRmJCTWtKWEZ6RCt3L2M4UlJaQWhD?=
- =?utf-8?B?UGs4SzVEcHgrTEZ2RFNJblZkMFJORTBESjd6VHRtdjhpaVhHdTU3aG5meWYr?=
- =?utf-8?B?VVJ0RDcrMXpxT05ZOWhmZURtUEU0czgvNmNUSjk1WjRXaFZMYXhqMnUzRTlJ?=
- =?utf-8?B?dTFPdDNvRHZNZ3JOT2hVUVEzZzR4NWhubjduOFc1TWthVU5yYStmb2hSOGZn?=
- =?utf-8?B?ZUdzY3lUcDhwcmt1UzRkN2NUK1hoVkM1N1kxeFlaSHRINWwrZWtnWHhSNkkv?=
- =?utf-8?B?RjA2ejZxSHlsU0hsSUk0R2t6TU1iOFRMZWIyb3lITXVYcVcxRnA3QmI3OUdn?=
- =?utf-8?B?U0hScGVTaUFhWlZkU2czellOTHMxY1IwZWpjdTc1Z2ZGM2E5QmxaVFpJTmZ6?=
- =?utf-8?B?KzV5a1Vmc2VpNjFyMGVHc3VRWFhERHlKZVZlUTN0VDRUM0J1UT09?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(136003)(346002)(376002)(366004)(396003)(71200400001)(4326008)(31696002)(66946007)(122000001)(6486002)(86362001)(2906002)(64756008)(966005)(5660300002)(8676002)(66556008)(38100700002)(91956017)(8936002)(66476007)(66446008)(76116006)(316002)(110136005)(54906003)(921005)(53546011)(38070700005)(6506007)(36756003)(7416002)(41300700001)(186003)(26005)(31686004)(478600001)(83380400001)(2616005)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MHJ1Ni9DV0x6ckpXS1FOOWhYbHArQ1B6bVIwVWp5WjlTUTk0bjZhYithQ3Jh?=
- =?utf-8?B?MTJ2UHdCYXdOWW1tZTkvb0pESFR2M2E5QnhzNk1BeUNFVnNrV2xiaUdmZGpn?=
- =?utf-8?B?cEU2UjVTaVRLMUhRQ250Z1cyZE1YanhOT0lsaU9NVGJlaEdiOHFKdWprTG95?=
- =?utf-8?B?a2loZ2ZWNWhya0Ryd2NnMkY4TGhsT0tyOWl2VENvMDNKTmQ5OGtvVmVSVE12?=
- =?utf-8?B?bFZ3bEo1OE05YjZ4b0U2bDd3YUd5RTNvSWY2ajFQZ0hHQmdTcmIzYjgwWkJR?=
- =?utf-8?B?dUxCTW50dStpd0hNclB0cTlFWmFmMFNXVncxVDBVOHd2b2k5dktCMlFhZFZZ?=
- =?utf-8?B?TkJQaTYzVzFYMzVyRnU5TWlDTXVQY0oxbEEwUTBMd1RXL3E1K05mcU1IeWN5?=
- =?utf-8?B?ZW56VWo1NGlRbWVxOGFTaXdrNzdqYkxwd2ozZjVvM2pUeDU4YkZOSXlwNmQx?=
- =?utf-8?B?aDUyZzVmeFBlMFRHaXcySklRRTg3UTFHeWV5Z2xxbWh1TlBNc3BCcjh1c25M?=
- =?utf-8?B?d0NJaGR5V0wzeVJMMzd5Q1Y0ODF2SHVaU0FKZzYzR2txNFdMV1I4VjQzVjlH?=
- =?utf-8?B?QU5CVDhKVkVtZ05KQlNpeHdpSjBLbDYxckswV2pkVlAyR0ZBYnkvOXkvMENW?=
- =?utf-8?B?TEg2UWVwTVRWSkFUSTUycUdhNHdUd0o4aWVZbTU3ZGYrNkNEQVcvZXg4YS9D?=
- =?utf-8?B?cmllc0VFK2RxY2FwUFA1dnk2ZldsWnErQ0VxbEZMZ1p1K1IvZ0NPZEgrVUpH?=
- =?utf-8?B?Q3FJY0M0ZC9RZXlWWWp1Z1d5aFloTnZiM3lrenJ0Qldyd0VvaWxydmRicTNh?=
- =?utf-8?B?VEkxVzhjUTJUdFJocDNaMWJZTDVpSWpiNUIxbllJaGk0YlpCeFM0TFpBME9a?=
- =?utf-8?B?eVFIdmp6YWhuV1VmaU9xVU0xWWZWNUNGczF0MmVsUVYzN0NFZm5PZU56S3Qx?=
- =?utf-8?B?Z29jdmdXc1NGSUNtVnMrczhqWFVrUFhBemZPVkI2dnJyUzRWb3c4OFlyYzBG?=
- =?utf-8?B?ZVpPcFlUSTg2WEp3d0paSXBFL0RxZVd1TTh5SUVobndHaE1UbklUc0U0Wmdo?=
- =?utf-8?B?bkJYbzNLOWV6bGQ3NWVFb2MyQmhNRXF3M3hReisvb3RtcUN3NW5vSEF6OW90?=
- =?utf-8?B?MmdXNzZZM3JKR3dFakxzTkUyMml6b0QzTWRJQnM1cW51cUlEVEM0bXF3RjBL?=
- =?utf-8?B?ZHV1MVI0bmJMSzhrc3JXcThxM210SVdtY2UzRUNyUDlwbTdaeFNIaDRYK2Q0?=
- =?utf-8?B?YWdCejU5SEwySWNsS3AzN3E0M3RDZVdkV0NuYWRtMVNObUhJQlJ0KzI0WDhr?=
- =?utf-8?B?RnFGZm1SazlVVWkvYVBxWUtSTW8yWnlZbkRCMDlDZ1g3Uk90MDNkNTN6bmtx?=
- =?utf-8?B?R01GU25SZC9XbFRCOGFZU1ErUlFjcGF2a1JReU5PZlRMNm1aTmpRZlpVQXJX?=
- =?utf-8?B?Mk1TUEtnOW81Nzd3amZiaStoT2pWclNmaWorQXdMRTNWdWJ1bWpRcmVkM21E?=
- =?utf-8?B?ZDVEWXhiSXFxWE1uek50THRLSW50ZGdHeXZ0cVljL2FjbE9vZXhhdStFQnJO?=
- =?utf-8?B?Y2toQnNyTHM0NzkrRkpqdngxVDhnSXRRNktrVnkyN2NwdFJzd2NtcVpIZUtr?=
- =?utf-8?B?N056MzZlU1lSRFB2c2pOUm1VakJnWHJLcTVvWG54L2dkaGVkUU5IUGRDTE0z?=
- =?utf-8?B?ZFE0WFY3bFZGTkhKenFEd0dSU0hhaWJiMGgxUkd2T0VkTlVsSVJoaks3di91?=
- =?utf-8?B?MFBVUFdDdkhDVmlmZytScDMydWhLYkF4emlTNUUrOVRiYys3L2wwd3FUS2dI?=
- =?utf-8?B?c0poOGc2UTdRTnZpcGtNZ1J2OWxIUXZxWW5neTJrWUVFMXdBVmFyMFQxak5s?=
- =?utf-8?B?b2RqeEJaWmluOUptb2V5OFRYYVRXZDlxa3NIblVpS254UEhOdktpS3YvMktQ?=
- =?utf-8?B?RHZ0S04zZ0thRitWUklEc0VSTVF5UjJQa0hDaE5UN21WUm1EREtuTzI5d0dy?=
- =?utf-8?B?WjhuNzZvNlhJWVZNZndhQTNvOE5LOTExRjlXSFZnQjFxT1RrQ2psLzM2emNV?=
- =?utf-8?B?bDZvSysrSUtPT3ZzU0RsdzdHb1JYQ01zNnhTc2hwb3o4d2xzSWJBQlhXWDQ3?=
- =?utf-8?Q?Zg7KHUuqP4YKw/heX6WxA3+RF?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <AFD0A215B29FA340AD1ED976E0028589@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 16 Aug 2022 07:33:56 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A5E13D7F;
+        Tue, 16 Aug 2022 03:55:45 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27G8rmEx027122;
+        Tue, 16 Aug 2022 09:34:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=geYC7pxhsrOmPGNgdDMXz4UoEgum44IJZcXvb3/Q1u8=;
+ b=erIOhpF/ysrLzRUp2IKU/u1HlQhAYLGDNCNsvDcKVAyows0TZEK8ddJwz8BuRnH+grt8
+ NxVvHTeVzd8Ib+q0KzTibMROXNZd/PSXH5AiQlQNpJRWVVY0yw+TGifPnALofXWE7Cx+
+ hhNvFXUKzhdWKPS/5zgAJSUt3liwNTyghVwwjZ1CQc/lceldzU7kYFaE5oYEB95bN/vy
+ XeSM4pQAugSSNjOGeSviuTcE80tNjSHi2+zhFrqSzJ01Fa9ruXh5HtiLIWL9EJiTrkv+
+ hC43ogKFFS9cDoMQUPJNT29Bhc6beVvoM82RTUCbaze/UmEE/Y7MvYwYwakgS0BuaLb/ Kw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j084ph1ua-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Aug 2022 09:34:08 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27G8tcQh001763;
+        Tue, 16 Aug 2022 09:34:07 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j084ph1tb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Aug 2022 09:34:07 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27G9Khoc028515;
+        Tue, 16 Aug 2022 09:34:05 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3hx37jb121-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Aug 2022 09:34:05 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27G9Y11H30671192
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 Aug 2022 09:34:02 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E15B942045;
+        Tue, 16 Aug 2022 09:34:01 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7D52942042;
+        Tue, 16 Aug 2022 09:34:01 +0000 (GMT)
+Received: from thinkpad (unknown [9.171.21.247])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Tue, 16 Aug 2022 09:34:01 +0000 (GMT)
+Date:   Tue, 16 Aug 2022 11:33:59 +0200
+From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>, stable <stable@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: Re: [PATCH v2 2/2] mm/hugetlb: support write-faults in shared
+ mappings
+Message-ID: <20220816113359.33843f54@thinkpad>
+In-Reply-To: <Yvq99MmpaGJBhlt4@monkey>
+References: <20220811103435.188481-1-david@redhat.com>
+        <20220811103435.188481-3-david@redhat.com>
+        <YvVRfSYsPOraTo6o@monkey>
+        <20220815153549.0288a9c6@thinkpad>
+        <CADFyXm7-0zXDG+ZHjft95aAAiSZh_RyAqgJw1nGsALwEL1XKiw@mail.gmail.com>
+        <20220815175929.303774fd@thinkpad>
+        <CADFyXm40iiz-xFpLK4qGgHGh5Qp+98G9qxnqC20c8qtRiKt9_A@mail.gmail.com>
+        <20220815203844.43b74fd1@thinkpad>
+        <Yvq99MmpaGJBhlt4@monkey>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d46bb0f5-6465-40b1-35db-08da7f6a15f8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Aug 2022 09:31:23.7726
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VBAjfImDD+83rb3G5xlCAtowaH154LPgcCfNQrBa0QaBK2wnK8qgKQpL7x/R6yi6tgF8JeTpOZSp3gTnHxuiI4eUyq8yO8PXmTtXHkggOBQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6455
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 5C9jKUvD9aBXwVnKWZ0IDTmmZ3F3W8KU
+X-Proofpoint-GUID: 5VabGubG1R3NgE0IFFioonvvL7qXenOy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-16_07,2022-08-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 priorityscore=1501 clxscore=1015 impostorscore=0
+ spamscore=0 suspectscore=0 bulkscore=0 mlxscore=0 malwarescore=0
+ adultscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2207270000 definitions=main-2208160037
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTYvMDgvMjAyMiAxMDoyNywgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4gRVhURVJO
-QUwgRU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5
-b3Uga25vdyB0aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBPbiAwNi8wNy8yMDIyIDAwOjUyLCBD
-b25vciBEb29sZXkgd3JvdGU6DQo+PiBGcm9tOiBDb25vciBEb29sZXkgPGNvbm9yLmRvb2xleUBt
-aWNyb2NoaXAuY29tPg0KPj4NCj4+IFRoZSBrMjEwIFUtQm9vdCBwb3J0IGhhcyBiZWVuIHVzaW5n
-IHRoZSBjbG9ja3MgZGVmaW5lZCBpbiB0aGUNCj4+IGRldmljZXRyZWUgdG8gYnJpbmcgdXAgdGhl
-IGJvYXJkJ3MgU1JBTSwgYnV0IHRoaXMgdmlvbGF0ZXMgdGhlDQo+PiBkdC1zY2hlbWEuIEFzIHN1
-Y2gsIG1vdmUgdGhlIGNsb2NrcyB0byBhIGRlZGljYXRlZCBub2RlIHdpdGgNCj4+IHRoZSBzYW1l
-IGNvbXBhdGlibGUgc3RyaW5nICYgZG9jdW1lbnQgaXQuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTog
-Q29ub3IgRG9vbGV5IDxjb25vci5kb29sZXlAbWljcm9jaGlwLmNvbT4NCj4+IC0tLQ0KPiANCj4g
-RG9lcyBub3QgYXBwbHkgdG8gbXkgdHJlZS4gUGxlYXNlIHJlYmFzZSBhbmQgcmVzZW5kLg0KDQpQ
-YWxtZXIgdG9vayBpdCB3aXRoIHRoZSByZXN0IG9mIHRoZSBjYW5hYW4gc3R1ZmYgYXMgcGVyOg0K
-aHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsL2VlZWQ0M2NmLTdiZDYtOWQ3Ny05ZTFmLWUwMThh
-MjM2YTA1OEBsaW5hcm8ub3JnLw0KDQpJdCBpcyBub3cgaW4gdjYuMC1yYzE6DQpjb21taXQgNzI3
-YjA1ZTQ2Y2ZmZDc0YWRjYTk2Y2ExM2U1NzM1MjMzOTg3NTU4Ng0KQXV0aG9yOiBDb25vciBEb29s
-ZXkgPGNvbm9yLmRvb2xleUBtaWNyb2NoaXAuY29tPg0KRGF0ZTogICBUdWUgSnVsIDUgMjI6NTI6
-MDUgMjAyMiArMDEwMA0KDQogICAgIGR0LWJpbmRpbmdzOiBtZW1vcnktY29udHJvbGxlcnM6IGFk
-ZCBjYW5hYW4gazIxMCBzcmFtIGNvbnRyb2xsZXINCiAgICAgDQogICAgIFRoZSBrMjEwIFUtQm9v
-dCBwb3J0IGhhcyBiZWVuIHVzaW5nIHRoZSBjbG9ja3MgZGVmaW5lZCBpbiB0aGUNCiAgICAgZGV2
-aWNldHJlZSB0byBicmluZyB1cCB0aGUgYm9hcmQncyBTUkFNLCBidXQgdGhpcyB2aW9sYXRlcyB0
-aGUNCiAgICAgZHQtc2NoZW1hLiBBcyBzdWNoLCBtb3ZlIHRoZSBjbG9ja3MgdG8gYSBkZWRpY2F0
-ZWQgbm9kZSB3aXRoDQogICAgIHRoZSBzYW1lIGNvbXBhdGlibGUgc3RyaW5nICYgZG9jdW1lbnQg
-aXQuDQogICAgIA0KICAgICBTaWduZWQtb2ZmLWJ5OiBDb25vciBEb29sZXkgPGNvbm9yLmRvb2xl
-eUBtaWNyb2NoaXAuY29tPg0KICAgICBSZXZpZXdlZC1ieTogUm9iIEhlcnJpbmcgPHJvYmhAa2Vy
-bmVsLm9yZz4NCiAgICAgUmV2aWV3ZWQtYnk6IEtyenlzenRvZiBLb3psb3dza2kgPGtyenlzenRv
-Zi5rb3psb3dza2lAbGluYXJvLm9yZz4NCiAgICAgTGluazogaHR0cHM6Ly9sb3JlLmtlcm5lbC5v
-cmcvci8yMDIyMDcwNTIxNTIxMy4xODAyNDk2LTUtbWFpbEBjb25jaHVvZC5pZQ0KICAgICBTaWdu
-ZWQtb2ZmLWJ5OiBQYWxtZXIgRGFiYmVsdCA8cGFsbWVyQHJpdm9zaW5jLmNvbT4NCg0K
+On Mon, 15 Aug 2022 14:43:16 -0700
+Mike Kravetz <mike.kravetz@oracle.com> wrote:
+
+> On 08/15/22 20:38, Gerald Schaefer wrote:
+> > On Mon, 15 Aug 2022 20:03:20 +0200
+> > David Hildenbrand <david@redhat.com> wrote:
+> > > On Mon, Aug 15, 2022 at 5:59 PM Gerald Schaefer
+> > > <gerald.schaefer@linux.ibm.com> wrote:
+> > > > On Mon, 15 Aug 2022 17:07:32 +0200
+> > > > David Hildenbrand <david@redhat.com> wrote:
+> > > > > On Mon, Aug 15, 2022 at 3:36 PM Gerald Schaefer
+> > > > > <gerald.schaefer@linux.ibm.com> wrote:
+> > > > > > On Thu, 11 Aug 2022 11:59:09 -0700
+> > > > > > Mike Kravetz <mike.kravetz@oracle.com> wrote:
+> > > > > >
+> > > > Sure, forgot to send it with initial reply...
+> > > >
+> > > > [   82.574749] ------------[ cut here ]------------
+> > > > [   82.574751] WARNING: CPU: 9 PID: 1674 at mm/hugetlb.c:5264 hugetlb_wp+0x3be/0x818
+> > > > [   82.574759] Modules linked in: nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip_set nf_tables nfnetlink sunrpc uvdevice s390_trng vfio_ccw mdev vfio_iommu_type1 eadm_sch vfio zcrypt_cex4 sch_fq_codel configfs ghash_s390 prng chacha_s390 libchacha aes_s390 des_s390 libdes sha3_512_s390 sha3_256_s390 sha512_s390 sha256_s390 sha1_s390 sha_common pkey zcrypt rng_core autofs4
+> > > > [   82.574785] CPU: 9 PID: 1674 Comm: linkhuge_rw Kdump: loaded Not tainted 5.19.0-next-20220815 #36
+> > > > [   82.574787] Hardware name: IBM 3931 A01 704 (LPAR)
+> > > > [   82.574788] Krnl PSW : 0704c00180000000 00000006c9d4bc6a (hugetlb_wp+0x3c2/0x818)
+> > > > [   82.574791]            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:0 PM:0 RI:0 EA:3
+> > > > [   82.574794] Krnl GPRS: 000000000227c000 0000000008640071 0000000000000000 0000000001200000
+> > > > [   82.574796]            0000000001200000 00000000b5a98090 0000000000000255 00000000adb2c898
+> > > > [   82.574797]            0000000000000000 00000000adb2c898 0000000001200000 00000000b5a98090
+> > > > [   82.574799]            000000008c408000 0000000092fd7300 000003800339bc10 000003800339baf8
+> > > > [   82.574803] Krnl Code: 00000006c9d4bc5c: f160000407fe        mvo     4(7,%r0),2046(1,%r0)
+> > > >            00000006c9d4bc62: 47000700           bc      0,1792
+> > > >           #00000006c9d4bc66: af000000           mc      0,0
+> > > >           >00000006c9d4bc6a: a7a80040           lhi     %r10,64
+> > > >            00000006c9d4bc6e: b916002a           llgfr   %r2,%r10
+> > > >            00000006c9d4bc72: eb6ff1600004       lmg     %r6,%r15,352(%r15)
+> > > >            00000006c9d4bc78: 07fe               bcr     15,%r14
+> > > >            00000006c9d4bc7a: 47000700           bc      0,1792
+> > > > [   82.574814] Call Trace:
+> > > > [   82.574842]  [<00000006c9d4bc6a>] hugetlb_wp+0x3c2/0x818
+> > > > [   82.574846]  [<00000006c9d4c62e>] hugetlb_no_page+0x56e/0x5a8
+> > > > [   82.574848]  [<00000006c9d4cac2>] hugetlb_fault+0x45a/0x590
+> > > > [   82.574850]  [<00000006c9d06d4a>] handle_mm_fault+0x182/0x220
+> > > > [   82.574855]  [<00000006c9a9d70e>] do_exception+0x19e/0x470
+> > > > [   82.574858]  [<00000006c9a9dff2>] do_dat_exception+0x2a/0x50
+> > > > [   82.574861]  [<00000006ca668a18>] __do_pgm_check+0xf0/0x1b0
+> > > > [   82.574866]  [<00000006ca677b3c>] pgm_check_handler+0x11c/0x170
+> > > > [   82.574870] Last Breaking-Event-Address:
+> > > > [   82.574871]  [<00000006c9d4b926>] hugetlb_wp+0x7e/0x818
+> > > > [   82.574873] Kernel panic - not syncing: panic_on_warn set ...
+> > > > [   82.574875] CPU: 9 PID: 1674 Comm: linkhuge_rw Kdump: loaded Not tainted 5.19.0-next-20220815 #36
+> > > > [   82.574877] Hardware name: IBM 3931 A01 704 (LPAR)
+> > > > [   82.574878] Call Trace:
+> > > > [   82.574879]  [<00000006ca664f22>] dump_stack_lvl+0x62/0x80
+> > > > [   82.574881]  [<00000006ca657af8>] panic+0x118/0x300
+> > > > [   82.574884]  [<00000006c9ac3da6>] __warn+0xb6/0x160
+> > > > [   82.574887]  [<00000006ca29b1ea>] report_bug+0xba/0x140
+> > > > [   82.574890]  [<00000006c9a75194>] monitor_event_exception+0x44/0x80
+> > > > [   82.574892]  [<00000006ca668a18>] __do_pgm_check+0xf0/0x1b0
+> > > > [   82.574894]  [<00000006ca677b3c>] pgm_check_handler+0x11c/0x170
+> > > > [   82.574897]  [<00000006c9d4bc6a>] hugetlb_wp+0x3c2/0x818
+> > > > [   82.574899]  [<00000006c9d4c62e>] hugetlb_no_page+0x56e/0x5a8
+> > > > [   82.574901]  [<00000006c9d4cac2>] hugetlb_fault+0x45a/0x590
+> > > > [   82.574903]  [<00000006c9d06d4a>] handle_mm_fault+0x182/0x220
+> > > > [   82.574906]  [<00000006c9a9d70e>] do_exception+0x19e/0x470
+> > > > [   82.574907]  [<00000006c9a9dff2>] do_dat_exception+0x2a/0x50
+> > > > [   82.574909]  [<00000006ca668a18>] __do_pgm_check+0xf0/0x1b0
+> > > > [   82.574912]  [<00000006ca677b3c>] pgm_check_handler+0x11c/0x170
+> > > 
+> > > 
+> > > do_dat_exception() sets
+> > >   access = VM_ACCESS_FLAGS;
+> > > 
+> > > do_exception() sets
+> > >   is_write = (trans_exc_code & store_indication) == 0x400;
+> > > 
+> > > and FAULT_FLAG_WRITE
+> > >    if (access == VM_WRITE || is_write)
+> > >           flags |= FAULT_FLAG_WRITE;
+> > > 
+> > > however, for VMA permission checks it only checks
+> > >   if (unlikely(!(vma->vm_flags & access)))
+> > >           goto out_up;
+> > > 
+> > > as VM_ACCESS_FLAGS includes VM_WRITE | VM_READ ...
+> > > 
+> > > We end up triggering a write fault (FAULT_FLAG_WRITE), even though the
+> > > VMA does not allow for writes.
+> > > 
+> > > I assume that's what happens and that it's a bug in s390x code.
+> > > 
+> > 
+> > Hmm, that looks weird, but that doesn't mean it has to be broken.
+> > We are talking about a pte_none() fault, not a protection exception
+> > (do_dat_exception vs. do_protection_exception). Not sure if we get
+> > any proper store indication in that case, but yes, this looks weird,
+> > will have a closer look. Thanks for pointing out!
+> > 
+> > FWIW, meanwhile, I added a check to hugetlb_wp() in v5.19, for
+> > (!unshare && !(vma->vm_flags & VM_WRITE)). This did not trigger,
+> > however, it did trigger already before your commit. So something
+> > already changed before your commit, and after v5.19.
+> > 
+> > Further bisecting showed that the check started to trigger
+> > after commit bcd51a3c679d ("hugetlb: lazy page table copies in fork()"),
+> > and after that the "HUGETLB_ELFMAP=R linkhuge_rw" testcase also
+> > started segfaulting (not sure why we did not notice earlier...).
+> > 
+> > Anyway, I guess this means that your commit only made that change
+> > in behavior more obvious, by adding the WARN_ON_ONCE, but it really
+> > was introduced by that other commit.
+> > 
+> > Not sure if this gives any more insight to anyone, still confused
+> > by your comments on do_exception(), which also sound like a possible
+> > root cause for ending up in hugetlb_wp() w/o VM_WRITE (but why only
+> > after commit bcd51a3c679d?).
+> 
+> I know it doesn't mean much, but I did not/do not see these issues on x86.
+
+Thanks, we were also trying to reproduce on x86, w/o success so far. But
+I guess that matches David latest observations wrt to our exception handling
+code on s390.
+
+Good news is that the problem goes away when I add this simple patch, which
+should result in proper VM_WRITE check for vma flags, before triggering a
+FAULT_FLAG_WRITE fault:
+
+--- a/arch/s390/mm/fault.c
++++ b/arch/s390/mm/fault.c
+@@ -379,7 +379,9 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
+        flags = FAULT_FLAG_DEFAULT;
+        if (user_mode(regs))
+                flags |= FAULT_FLAG_USER;
+-       if (access == VM_WRITE || is_write)
++       if (is_write)
++               access = VM_WRITE;
++       if (access == VM_WRITE)
+                flags |= FAULT_FLAG_WRITE;
+        mmap_read_lock(mm);
+ 
+Still find it a bit hard to believe that this > 10 years old logic really
+is/was broken all the time. I guess it simply did not matter for normal
+PTE faults, probably because the common fault handling code later would
+check itself via maybe_mkwrite(). And for hugetlb PTEs, it might not have
+mattered before commit bcd51a3c679d.
+
+> 
+> bcd51a3c679d eliminates the copying of page tables at fork for non-anon
+> hugetlb vmas.  So, in these tests you would likely see more pte_none()
+> faults.
+
+Yes, makes sense, assuming now that it actually is related to s390
+exception handling code, not checking for VM_WRITE before triggering a
+write fault for pte_none().
+
+Thanks for checking! And Thanks a lot to David for finding that issue
+in s390 exception handling code!

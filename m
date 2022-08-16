@@ -2,84 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16486595CCF
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CCBE595CCA
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 15:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235141AbiHPNGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 09:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
+        id S235507AbiHPNGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 09:06:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234759AbiHPNGc (ORCPT
+        with ESMTP id S235008AbiHPNGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 09:06:32 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09BDE60C9
+        Tue, 16 Aug 2022 09:06:34 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1571639D
         for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:06:32 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id b142so5224610iof.10
+Received: by mail-pj1-x102b.google.com with SMTP id e8-20020a17090a280800b001f2fef7886eso9540675pjd.3
         for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 06:06:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=solid-run-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=jYFy/Ap+uf26Gcpe/I0MSisZFVmPhCJtSmEvqbaImns=;
-        b=TPm7sp/EC7y75Bb9Hebx9wUeTQofUP3E8N5rnoRewYyUMY2eWw6qAfh2vaf06LqTso
-         YjKjRjDFQEcsxNlFOM1iFupmE5nz6Q3XbtcBGZh25VL1dE4iLkyEx+d2OdQkCDQV4F1I
-         Q3Gws5+w1yGxQXqr1/i3xdwfJnmv+szNLKS5kWYlfZBsfM5RmI/eB+NWZWPry33NMS3K
-         7KUwALiD/FTal89vHgf+W/bQjMhZ1WW4azMae9jdTw2nbZknuM1sk1Pi3+wD/VsqnjMN
-         lZ7NcixEG9dmbkdfKcDkCLc/FtxPozmizq5rTPPr/72lRhKJj6KYyso7a0aS6JqLGCVp
-         xn8g==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=+6Yo80pVz7R1wbuugd0h39oHv4cQk8t0dTgRXP4VwBI=;
+        b=Bm1NhmX8UPNf1PtLuZHAgWfhESmLqjvmDF7oLG7Sjrob5ZBRioBQbZD8IbmfhUAuPy
+         26Pg0XP9e55a3u5kuQ5ryXTN1eqIwUYiGNTjeFnhmdbLM55bc0FxevMk8+WBBXcBYJT5
+         CC+fEv2AnVaO1iGODXOqJPnAoaTxd2O8NqgXkv2mZ6mBh9kYG0x+9EMHXgGOCIk3qAR1
+         n1LKoZW0wxTfg0Fcd1tVZGBrJarWd6ATeB6MjzrMVXM8Uq9zR3Tc0GPRV7NUamgreV0Y
+         sIsQn/MuuGInwkkJosYPYxp8cPCoQUm4kieEJnct/L+ITnY3CRyDKA7UUzqyiZWg54Tf
+         3LGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=jYFy/Ap+uf26Gcpe/I0MSisZFVmPhCJtSmEvqbaImns=;
-        b=GhX+2/exqQHMqenHZseXZrAyqq1cSeSSBkrUGSqDENMRYXuzwSPlesm5AC6puya5kM
-         Ueo4ul5abNpA342XXQPDDsFSSpnvfTq/bdke3oBHs3YjeiEwdzvD8/z73tEb261VfjVl
-         y4Vq8QHkcvYLAzf8nC4oN22LeZKjPCIAs6V0hm/7v3cbTWuLzC43EJ7926rgneDyMYEo
-         Zbg1xvjvhD22ELuB3dC+HWEfgLJh9sLwDlL6JUF3SDL4aR89z5ruMHV7gYsSw8iPgvfA
-         N+DA/G669D/7spGjwjGGS431EpYj2l4kyc0/1DRJFb/8+N3JaYuPpAQhYe2SHOkrDtiq
-         qEPg==
-X-Gm-Message-State: ACgBeo09+ojrOZ6071DaAmdv7t99bUr6kBWQrBWFdJ4UE/wTAxfak+sa
-        TqSVaie83p9gHL+NsC12VgMigyVFxPdWX0Z5WVKBAQ==
-X-Google-Smtp-Source: AA6agR4LYPGyytQ7zXtN6CVNQG0RmLGJHMQuUxL8SF2Np6jEPA1mTRDJD83cAn/zEamlnjrEgjfTpWUAWi1BuGTNAGw=
-X-Received: by 2002:a05:6638:d45:b0:343:2ae6:e39a with SMTP id
- d5-20020a0566380d4500b003432ae6e39amr9740158jak.139.1660655191422; Tue, 16
- Aug 2022 06:06:31 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=+6Yo80pVz7R1wbuugd0h39oHv4cQk8t0dTgRXP4VwBI=;
+        b=ETwr582AViLDMQRSErtR3tsW1NdwKvTXztnljnpOq1Dmkml2eiH0tubQ+IJAIuRqTY
+         OnLoBJ6Wr21dWn0x25P7hKv5CNWse9NaFIppNSTCbd2HtBF9UNkXGosgcys/eBM4/Rlg
+         l6W9GdperpLti4/axQ+esPoJv9rpHRocIZqNlJ3O2b2YIocYqW7ctxFtSdm3JI6tOoUZ
+         XPMkiDuDtL8hlG9NSkBwp5IBfNp/d8S8XS7dCO3vDN699X55L0GOiyIETf5T6fAOKEb7
+         HoEKY45YHgtCv0KHVHlosFU0ymhCK3InIaF0oroMv3+oWz5HK8MaAknaZGZawX21YBxf
+         77Rw==
+X-Gm-Message-State: ACgBeo1uUDxT8NTyO5FqUGqfPn/MoZ2FA0iwhYjk08fCt63/Q3Nq/Lv2
+        /1Rl6sLNEMnUROp5C299TBsmeeYBuEZNqg==
+X-Google-Smtp-Source: AA6agR4lbXmDGaUrZOxRP8v3XjSrsDCXexABCnHXUmst8ZdJDP5gNcl6/P2X/+cQ8AFP4EeEZ46udg==
+X-Received: by 2002:a17:902:d58d:b0:171:5880:3287 with SMTP id k13-20020a170902d58d00b0017158803287mr20604260plh.9.1660655192117;
+        Tue, 16 Aug 2022 06:06:32 -0700 (PDT)
+Received: from [10.4.196.37] ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id j15-20020a170902da8f00b0016f04c098ddsm9039093plx.226.2022.08.16.06.06.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 06:06:31 -0700 (PDT)
+Message-ID: <904851a7-7b01-8689-3ec1-2a61f8244841@bytedance.com>
+Date:   Tue, 16 Aug 2022 21:06:21 +0800
 MIME-Version: 1.0
-References: <20220816070311.89186-1-marcan@marcan.st> <CAK8P3a03pfrPzjnx1tB5z0HcKnY=JL=y+F8PMQDpc=Bavs3UCA@mail.gmail.com>
- <CABdtJHvZt=av5YEQvRMtf4-dMFR6JS1jM1Ntj7DMVy5fijvkMw@mail.gmail.com> <20220816130048.GA11202@willie-the-truck>
-In-Reply-To: <20220816130048.GA11202@willie-the-truck>
-From:   Jon Nettleton <jon@solid-run.com>
-Date:   Tue, 16 Aug 2022 15:05:54 +0200
-Message-ID: <CABdtJHuRGaod9iGCYXq1ivNPZGw=1cszE024WGmzXMQ4S_9AQw@mail.gmail.com>
-Subject: Re: [PATCH] locking/atomic: Make test_and_*_bit() ordered on failure
-To:     Will Deacon <will@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Hector Martin <marcan@marcan.st>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>, Tejun Heo <tj@kernel.org>,
-        jirislaby@kernel.org, Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Asahi Linux <asahi@lists.linux.dev>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.2
+Subject: Re: [PATCH v2 09/10] sched/psi: per-cgroup PSI stats
+ disable/re-enable interface
+Content-Language: en-US
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     tj@kernel.org, corbet@lwn.net, surenb@google.com, mingo@redhat.com,
+        peterz@infradead.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, songmuchun@bytedance.com
+References: <20220808110341.15799-1-zhouchengming@bytedance.com>
+ <20220808110341.15799-10-zhouchengming@bytedance.com>
+ <YvprI6ZL8dVWGyBO@cmpxchg.org>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <YvprI6ZL8dVWGyBO@cmpxchg.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,70 +80,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 3:01 PM Will Deacon <will@kernel.org> wrote:
->
-> On Tue, Aug 16, 2022 at 02:29:49PM +0200, Jon Nettleton wrote:
-> > On Tue, Aug 16, 2022 at 10:17 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> > >
-> > > On Tue, Aug 16, 2022 at 9:03 AM Hector Martin <marcan@marcan.st> wrote:
-> > > >
-> > > > These operations are documented as always ordered in
-> > > > include/asm-generic/bitops/instrumented-atomic.h, and producer-consumer
-> > > > type use cases where one side needs to ensure a flag is left pending
-> > > > after some shared data was updated rely on this ordering, even in the
-> > > > failure case.
-> > > >
-> > > > This is the case with the workqueue code, which currently suffers from a
-> > > > reproducible ordering violation on Apple M1 platforms (which are
-> > > > notoriously out-of-order) that ends up causing the TTY layer to fail to
-> > > > deliver data to userspace properly under the right conditions. This
-> > > > change fixes that bug.
-> > > >
-> > > > Change the documentation to restrict the "no order on failure" story to
-> > > > the _lock() variant (for which it makes sense), and remove the
-> > > > early-exit from the generic implementation, which is what causes the
-> > > > missing barrier semantics in that case. Without this, the remaining
-> > > > atomic op is fully ordered (including on ARM64 LSE, as of recent
-> > > > versions of the architecture spec).
-> > > >
-> > > > Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> > > > Cc: stable@vger.kernel.org
-> > > > Fixes: e986a0d6cb36 ("locking/atomics, asm-generic/bitops/atomic.h: Rewrite using atomic_*() APIs")
-> > > > Fixes: 61e02392d3c7 ("locking/atomic/bitops: Document and clarify ordering semantics for failed test_and_{}_bit()")
-> > > > Signed-off-by: Hector Martin <marcan@marcan.st>
-> > > > ---
-> > > >  Documentation/atomic_bitops.txt     | 2 +-
-> > > >  include/asm-generic/bitops/atomic.h | 6 ------
-> > >
-> > > I double-checked all the architecture specific implementations to ensure
-> > > that the asm-generic one is the only one that needs the fix.
-> > >
-> > > I assume this gets merged through the locking tree or that Linus picks it up
-> > > directly, not through my asm-generic tree.
-> > >
-> > > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> > >
-> > > _______________________________________________
-> > > linux-arm-kernel mailing list
-> > > linux-arm-kernel@lists.infradead.org
-> > > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> >
-> > Testing this patch on pre Armv8.1 specifically Cortex-A72 and
-> > Cortex-A53 cores I am seeing
-> > a huge performance drop with this patch applied. Perf is showing
-> > lock_is_held_type() as the worst offender
->
-> Hmm, that should only exist if LOCKDEP is enabled and performance tends to
-> go out of the window if you have that on. Can you reproduce the same
-> regression with lockdep disabled?
->
-> Will
+On 2022/8/15 23:49, Johannes Weiner wrote:
+> On Mon, Aug 08, 2022 at 07:03:40PM +0800, Chengming Zhou wrote:
+>> +static ssize_t cgroup_psi_write(struct kernfs_open_file *of,
+>> +				char *buf, size_t nbytes, loff_t off)
+>> +{
+>> +	ssize_t ret;
+>> +	int enable;
+>> +	struct cgroup *cgrp;
+>> +	struct psi_group *psi;
+>> +
+>> +	ret = kstrtoint(strstrip(buf), 0, &enable);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	if (enable < 0 || enable > 1)
+>> +		return -ERANGE;
+>> +
+>> +	cgrp = cgroup_kn_lock_live(of->kn, false);
+>> +	if (!cgrp)
+>> +		return -ENOENT;
+>> +
+>> +	psi = cgroup_ino(cgrp) == 1 ? &psi_system : &cgrp->psi;
+>> +	psi_cgroup_enable(psi, enable);
+> 
+> I think it should also add/remove the pressure files when enabling and
+> disabling the aggregation, since their contents would be stale and
+> misleading.
+> 
+> Take a look at cgroup_add_dfl_cftypes() and cgroup_rm_cftypes()
 
-Yep I am working on it.  We should note that
+Ok, I will look.
 
-config LOCKDEP_SUPPORT
-        def_bool y
+> 
+>> @@ -5115,6 +5152,12 @@ static struct cftype cgroup_base_files[] = {
+>>  		.release = cgroup_pressure_release,
+>>  	},
+>>  #endif
+>> +	{
+>> +		.name = "cgroup.psi",
+>> +		.flags = CFTYPE_PRESSURE,
+>> +		.seq_show = cgroup_psi_show,
+>> +		.write = cgroup_psi_write,
+>> +	},
+>>  #endif /* CONFIG_PSI */
+>>  	{ }	/* terminate */
+>>  };
+>> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+>> index 58f8092c938f..9df1686ee02d 100644
+>> --- a/kernel/sched/psi.c
+>> +++ b/kernel/sched/psi.c
+>> @@ -181,6 +181,7 @@ static void group_init(struct psi_group *group)
+>>  {
+>>  	int cpu;
+>>  
+>> +	group->enabled = true;
+>>  	for_each_possible_cpu(cpu)
+>>  		seqcount_init(&per_cpu_ptr(group->pcpu, cpu)->seq);
+>>  	group->avg_last_update = sched_clock();
+>> @@ -700,17 +701,16 @@ static void psi_group_change(struct psi_group *group, int cpu,
+>>  	groupc = per_cpu_ptr(group->pcpu, cpu);
+>>  
+>>  	/*
+>> -	 * First we assess the aggregate resource states this CPU's
+>> -	 * tasks have been in since the last change, and account any
+>> -	 * SOME and FULL time these may have resulted in.
+>> -	 *
+>> -	 * Then we update the task counts according to the state
+>> +	 * First we update the task counts according to the state
+>>  	 * change requested through the @clear and @set bits.
+>> +	 *
+>> +	 * Then if the cgroup PSI stats accounting enabled, we
+>> +	 * assess the aggregate resource states this CPU's tasks
+>> +	 * have been in since the last change, and account any
+>> +	 * SOME and FULL time these may have resulted in.
+>>  	 */
+>>  	write_seqcount_begin(&groupc->seq);
+>>  
+>> -	record_times(groupc, now);
+>> -
+>>  	/*
+>>  	 * Start with TSK_ONCPU, which doesn't have a corresponding
+>>  	 * task count - it's just a boolean flag directly encoded in
+>> @@ -750,6 +750,14 @@ static void psi_group_change(struct psi_group *group, int cpu,
+>>  		if (set & (1 << t))
+>>  			groupc->tasks[t]++;
+>>  
+>> +	if (!group->enabled) {
+>> +		if (groupc->state_mask & (1 << PSI_NONIDLE))
+>> +			record_times(groupc, now);
+> 
+> Why record the nonidle time? It's only used for aggregation, which is
+> stopped as well.
 
-is the default for arm64
+I'm considering of this situation: disable at t2 and re-enable at t3
 
--Jon
+state1(t1) --> state2(t2) --> state3(t3)
+
+If aggregator has get_recent_times() in [t1, t2], groupc->times_prev[aggregator]
+will include that delta of (t - t1).
+
+Then re-enable at t3, the delta of (t3-t1) is discarded, may make that aggregator
+see times < groupc->times_prev[aggregator] ?
+
+Maybe I missed something, not sure whether this is a problem.
+
+
+> 
+>> @@ -1088,6 +1097,23 @@ void cgroup_move_task(struct task_struct *task, struct css_set *to)
+>>  
+>>  	task_rq_unlock(rq, task, &rf);
+>>  }
+>> +
+>> +void psi_cgroup_enable(struct psi_group *group, bool enable)
+>> +{
+>> +	struct psi_group_cpu *groupc;
+>> +	int cpu;
+>> +	u64 now;
+>> +
+>> +	if (group->enabled == enable)
+>> +		return;
+>> +	group->enabled = enable;
+>> +
+>> +	for_each_possible_cpu(cpu) {
+>> +		groupc = per_cpu_ptr(group->pcpu, cpu);
+>> +		now = cpu_clock(cpu);
+>> +		psi_group_change(group, cpu, 0, 0, now, true);
+> 
+> This loop deserves a comment, IMO.
+
+I add some comments as below, could you help take a look?
+
++
++void psi_cgroup_enable(struct psi_group *group, bool enable)
++{
++       int cpu;
++       u64 now;
++
++       if (group->enabled == enable)
++               return;
++       group->enabled = enable;
++
++       /*
++        * We use psi_group_change() to disable or re-enable the
++        * record_times(), test_state() loop and averaging worker
++        * in each psi_group_cpu of the psi_group, use .clear = 0
++        * and .set = 0 here since no task status really changed.
++        */
++       for_each_possible_cpu(cpu) {
++               now = cpu_clock(cpu);
++               psi_group_change(group, cpu, 0, 0, now, true);
++       }
++}
+
+Thanks!
+

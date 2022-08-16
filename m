@@ -2,120 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73EAE595DF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 16:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B32595E0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 16:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235750AbiHPODK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 10:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
+        id S235861AbiHPOFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 10:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235789AbiHPODH (ORCPT
+        with ESMTP id S230111AbiHPOEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 10:03:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEAE7F0B0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 07:03:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18F2260FB5
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 14:03:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED2FBC433D6;
-        Tue, 16 Aug 2022 14:03:01 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="e+bGvBnb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1660658580;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UlxUyVT2PDOeWDZxuI8fYc7rJW5gk6gfvHPINj1OvPk=;
-        b=e+bGvBnbPzoQdVSrnCA5bkLfOnBHLjLowxqeABj14NaPXWFX9yrJeEjGwTRvhusYVMXh/N
-        L1cIQuJNCXHdES63lN0XTYfuiussjFEoHzTCByU3YvU/Fy/D3MrIjTSkECwn6D03s5rIXV
-        K4y5KEFfDYwiBEAO7sTZnmKN2K1/Xx0=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 301312b6 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 16 Aug 2022 14:02:59 +0000 (UTC)
-Date:   Tue, 16 Aug 2022 16:02:55 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de
-Subject: Re: [PATCH] random: use raw spinlocks for use on RT
-Message-ID: <YvujjzfkJL2+1+9d@zx2c4.com>
-References: <20220801142530.133007-1-Jason@zx2c4.com>
- <YufkZU9kGkHHUhAK@linutronix.de>
- <YvRKm/IpbUID18FK@zx2c4.com>
- <YvSsf5uds7zGgWPX@linutronix.de>
- <YvUQJTDREXSAA9J6@zx2c4.com>
+        Tue, 16 Aug 2022 10:04:40 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D761B6BD50
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 07:04:22 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 202so9306297pgc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 07:04:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=1GWQeJ3mO/AwsS1RxKEoiTmjiFwoCENhO2G+S4wDDKU=;
+        b=MXLWq8Ly9rTmRDyZNuNR3g8mJjeH9dgKfanuaq5Dl7nKAuhvDg5Di203a1rl6HAb+T
+         YlWob7XvmiC+vEXV5h0DLNEKpm3HCbMOLbktEzqOagm4T+BV29L94RAjxQy+JAhR7ZpC
+         LXT06avUI68wlEHazjn12U/Uhs1ARBLVUwM/Ql4kDcht82pw7Dcmi+ztzDW4iCaytcUV
+         nVZN4x8VXjiTgZp/viODvNKL35oVvxR7cBnmX/FXo/Kc+B+gBvP3J6LLMu0IgbS4JlHA
+         HyxKdVLgtKE+SHCJdGluZH6jwewFbU10TpkYWSJbkph9tS3ZkEjiLPhQXQk1FrRxB6G5
+         Z0mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=1GWQeJ3mO/AwsS1RxKEoiTmjiFwoCENhO2G+S4wDDKU=;
+        b=69Zh50ZtadAbt3kFTr9msZy/mk9Px7E8r8kXTfzkzgo+bUK+NGIfzp1kf7RRvpnhoU
+         /SlItZl088vV/euKjV00D/JoA3IQ4EH3bb6EFNTqGSfNd3HcfGO5ePp12KfSKEe9/DJI
+         yKBFE5sE6865n+sUSqzqTHDCTFv2MgBlAeL473Nc9/+rVw4C4KCddCr3Ewv/JcwADSiS
+         6aFQOQdKwybLmLfXfP1j3yRxXm1R0eklmY9f7Pi3cowr85TRFVLqdvdae3BICmU/Q9Se
+         XzYdfrnLKCHXGe+Rphhkz4uh1USv8VbgN4ddPjqVd6PWXgCQrVIWd26adB31o1ykcVKH
+         KyVg==
+X-Gm-Message-State: ACgBeo1Nb1AMuhxwWlOdRX28HL5syZoQtzJnQEoHS4gVwdY6Dj1M/6j8
+        jG9HFpmlW6tigiJrlMOP0aM/5A==
+X-Google-Smtp-Source: AA6agR7kLxy5v183YsULCWmOt3IC2ihIF8QYtRU7rFOfEhilKXIu3tcncvsozFV2ULPP1Ik7IBGQUQ==
+X-Received: by 2002:a05:6a00:13a7:b0:52e:3139:f895 with SMTP id t39-20020a056a0013a700b0052e3139f895mr20812990pfg.43.1660658662199;
+        Tue, 16 Aug 2022 07:04:22 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id e15-20020a170902784f00b0016f1c1f50f4sm9109452pln.235.2022.08.16.07.04.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 07:04:21 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 14:04:18 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     syzbot <syzbot+4f6eb69074ff62a1a33b@syzkaller.appspotmail.com>
+Cc:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        jarkko@kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        mingo@redhat.com, pbonzini@redhat.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
+Subject: Re: [syzbot] BUG: unable to handle kernel paging request in
+ kvm_arch_hardware_enable
+Message-ID: <Yvuj4ugWYpthUwhj@google.com>
+References: <0000000000009700a805e657c8fa@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YvUQJTDREXSAA9J6@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <0000000000009700a805e657c8fa@google.com>
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Sebastian,
+On Tue, Aug 16, 2022, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    7ebfc85e2cd7 Merge tag 'net-6.0-rc1' of git://git.kernel.o..
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=13d10985080000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=20bc0b329895d963
+> dashboard link: https://syzkaller.appspot.com/bug?extid=4f6eb69074ff62a1a33b
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1538e0b5080000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=112756f3080000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+4f6eb69074ff62a1a33b@syzkaller.appspotmail.com
 
-On Thu, Aug 11, 2022 at 04:20:21PM +0200, Jason A. Donenfeld wrote:
-> Hi Sebastian,
-> 
-> On Thu, Aug 11, 2022 at 09:15:11AM +0200, Sebastian Andrzej Siewior wrote:
-> > On 2022-08-11 02:17:31 [+0200], Jason A. Donenfeld wrote:
-> > > Hey Sebastian,
-> > Hi Jason,
-> > 
-> > > > > Sebastian - I won't move forward with this without your Ack, obviously.
-> > > > > What do you think of this general approach? -Jason
-> > > > 
-> > > > I would need to do worst-case measurements and I've been looking at this
-> > > > just before writting the other email and there was a local_lock_t
-> > > > somewhere which needs also change…
-> > > 
-> > > Did you ever come up some measurements here? It sure would be nice if I
-> > > could apply this, but obviously that's contingent on you saying it's
-> > > okay latency-wise on RT.
-> > 
-> > No, I did not. But I've been thinking a little about it. The worst case
-> > latency is important now and later.
-> > Looking at it, all we need is one init in vsprintf at boot time and we
-> > are done. That is the third fallout that I am aware of since the rework
-> > of get_random_*().
-> > We managed to get rid of all memory allocations (including GFP_ATOMIC)
-> > from preempt/IRQ-off section on PREEMPT_RT. Therefore I am not convinced
-> > to make all locks in random core a raw_spinlock_t just to make things
-> > work here as of now.
-> 
-> By grouping everything into "the rework of get_random_*()", you miss
-> important subtleties, as I mentioned before. Importantly, in this case,
-> the issue we're facing has absolutely nothing at all to do with that,
-> but is rather entirely the result of removing the async notifier
-> mechanism in favor of doing things more directly, more straight
-> forwardly. So let's not muddle what we're discussing here.
-> 
-> But more generally, the RNG is supposed to be usable from any context.
-> And adding wild workarounds, or worse, adding back complex async
-> notifier stuff, seems bad. So far your proposals for the printk issue
-> haven't been acceptable at all.
-> 
-> So why don't we actually fix this, so we don't have to keep coming up
-> with hacks? The question is: does using raw spinlocks over this code
-> result in any real issue for RT latency? If so, I'd like to know where,
-> and maybe I can do something about that (or maybe I can't). If not, then
-> this is a non problem and I'll apply this patch with your blessing.
-> 
-> If you don't want to spend time doing latency measurements, could you
-> instead share a document or similar to the type of methodology you
-> usually use for that, so I can do the same? And at the very least, I am
-> simply curious and want to know more about the RT world.
+Fix posted[*], apparently the sybot id changes when bugs get forwarded upstream.
 
-Thought I'd ping you about this again...
-
-Jason
+[*] https://lore.kernel.org/all/20220816053937.2477106-2-seanjc@google.com

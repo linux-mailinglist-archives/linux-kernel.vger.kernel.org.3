@@ -2,55 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A585962A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 20:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC51C5962A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 20:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236371AbiHPSp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 14:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
+        id S236237AbiHPSsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 14:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231820AbiHPSp4 (ORCPT
+        with ESMTP id S236114AbiHPSsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 14:45:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BFA74DFC;
-        Tue, 16 Aug 2022 11:45:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7BCE1B81AA9;
-        Tue, 16 Aug 2022 18:45:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE8E8C433D6;
-        Tue, 16 Aug 2022 18:45:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660675553;
-        bh=os2c9vPg3OgzC/dA3TJzMLoc1HojWYTnA3bWiznJ10s=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=r2R4qO+ei+prrcXJ+uHhlv3nxcRSDBmyN5TGAFtL+R5mxvNUg9YW7MoOFKlm9QIj2
-         Ba6ReofMAfUDhRzb+RtFbNBeDtviCe3HHnshXJRyen8Yuxcg1ehhXr2ZIVCvuA++Ig
-         GwdoN2HL4Ezhx91Nzr6aH7T0UMKy60YWokfDrvsNhPPq44bYkcBShm1fogsBtQxUmu
-         co4kcRaQCM7ez/xOg6AWhGMxu05b5uOeJ3PTuNSgFqs3M9oX4vWjNBiKPoBTVVET48
-         aLx2jBWpIb0KcF8PMtYWWTP6NSx2CT7bKbF2ZDi/HXbQOjHP6sMUrh7x+SIXrB0lqU
-         OjWiq4qp1zJcw==
-Message-ID: <3339f4d2-a79f-9894-1c86-9b160c6a2751@kernel.org>
-Date:   Tue, 16 Aug 2022 13:45:50 -0500
+        Tue, 16 Aug 2022 14:48:40 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6E558DCE;
+        Tue, 16 Aug 2022 11:48:38 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id b96so14685031edf.0;
+        Tue, 16 Aug 2022 11:48:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=TbsInd+1Z+79pFOrHY4RWxlzLqkfeDMvhb4MGLvms5E=;
+        b=RgH05S6Hr/GhFaHQWT9VxZfhk3Er4HVs9A0WGEhyspRpqqvXImH1mDNoVQmgCnKQ2Y
+         UFnYgFOnla2LaMff9tGzoFRZVVuWJtRWdWFaj+OpRa4z206hwRs71dpcbfMtpVVlla3O
+         8sX8CWvwTHbBLbSXxVZAe9VBX/QKY2IbHFSYH+NYlTgZ9VIUg1FroWiJyXJa0sR/YlVH
+         dzuoD3g+P4JUeu+2/YGu21asCXF0xPTAVC1tVnUpbsjOL+c9Ik2sEE3QCQeF2Hr4arKK
+         66hzxvlkUqYqPYvQAjJN26X2s/ABSnGIEaoPNVnmH0BXhFPIVgWjaBxkwQZ0rV6dmes7
+         S7Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=TbsInd+1Z+79pFOrHY4RWxlzLqkfeDMvhb4MGLvms5E=;
+        b=bQIxu+pBw+t87i4UJqojS3IcaQQkkG4Xn1LG7NldN6Wnz07Py429mj/Gia9L6dFaIg
+         LhKxGHm+NrVhBZ9WWhPiTOrdMIrnWbDD7TC2ufG4MQompYSQSPegkUdYh4L3rUCmHp8x
+         bvaNMax5KQdn4lRjtqfv7AzkxhY4Zg7koLIUs95pei+RzlUvoiDIZ4LVhOhb5dDXjewA
+         dPPVRkKPwESypGFvbS3isQB75OHR/izbIRBENTkipooQLMFFwSB+57l5qtL8hSwQ34Nt
+         gYid7NujiTbREWef/YT3xk2mO/f5h51kA0kUiNpR0+bOCEbkHMSUd51ChJK9C4465PSb
+         fXCg==
+X-Gm-Message-State: ACgBeo0s1HWnxP3PgpobHgxOYgOtlrg/+YH1WSMloPLzwiw8vKQ1e7j7
+        FP2TxZ7GHq4JTJdXBxTqq6g=
+X-Google-Smtp-Source: AA6agR6rnbGkqugM+WccdAYIVJEjuRVIf/1Sh0Z2u6BMqpsZoc2/y9oOsi7VuLfOmBrexvxCimUOcg==
+X-Received: by 2002:a05:6402:20b:b0:440:cb9f:c469 with SMTP id t11-20020a056402020b00b00440cb9fc469mr20484549edv.420.1660675716752;
+        Tue, 16 Aug 2022 11:48:36 -0700 (PDT)
+Received: from skbuf ([188.26.184.170])
+        by smtp.gmail.com with ESMTPSA id n24-20020a17090625d800b0072ee7b51d9asm5631450ejb.39.2022.08.16.11.48.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 11:48:35 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 21:48:33 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Tristram Ha <Tristram.Ha@microchip.com>
+Subject: Re: [patch net v3] net: dsa: microchip: ksz9477: fix fdb_dump last
+ invalid entry
+Message-ID: <20220816184833.ak2cawbycws7mdzf@skbuf>
+References: <20220816105516.18350-1-arun.ramadoss@microchip.com>
+ <20220816105516.18350-1-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] EDAC/altera: Fix comment typo
-Content-Language: en-US
-To:     Jason Wang <wangborong@cdjrlc.com>
-Cc:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
-        james.morse@arm.com, rric@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220811120822.16832-1-wangborong@cdjrlc.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20220811120822.16832-1-wangborong@cdjrlc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816105516.18350-1-arun.ramadoss@microchip.com>
+ <20220816105516.18350-1-arun.ramadoss@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,28 +82,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/11/22 07:08, Jason Wang wrote:
-> The double `the' is duplicated in the comment, remove one.
+On Tue, Aug 16, 2022 at 04:25:16PM +0530, Arun Ramadoss wrote:
+> In the ksz9477_fdb_dump function it reads the ALU control register and
+> exit from the timeout loop if there is valid entry or search is
+> complete. After exiting the loop, it reads the alu entry and report to
+> the user space irrespective of entry is valid. It works till the valid
+> entry. If the loop exited when search is complete, it reads the alu
+> table. The table returns all ones and it is reported to user space. So
+> bridge fdb show gives ff:ff:ff:ff:ff:ff as last entry for every port.
+> To fix it, after exiting the loop the entry is reported only if it is
+> valid one.
 > 
-> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+> Fixes: b987e98e50ab ("dsa: add DSA switch driver for Microchip KSZ9477")
+> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
 > ---
->   drivers/edac/altera_edac.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-> index e7e8e624a436..940f8149172c 100644
-> --- a/drivers/edac/altera_edac.c
-> +++ b/drivers/edac/altera_edac.c
-> @@ -168,7 +168,7 @@ static ssize_t altr_sdr_mc_err_inject_write(struct file *file,
->   	/*
->   	 * To trigger the error, we need to read the data back
->   	 * (the data was written with errors above).
-> -	 * The READ_ONCE macros and printk are used to prevent the
-> +	 * The READ_ONCE macros and printk are used to prevent
->   	 * the compiler optimizing these reads out.
->   	 */
->   	reg = READ_ONCE(ptemp[0]);
 
-Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>

@@ -2,246 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92822596374
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE8959648D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 23:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237390AbiHPUCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 16:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
+        id S237576AbiHPVVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 17:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237356AbiHPUCJ (ORCPT
+        with ESMTP id S232601AbiHPVVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 16:02:09 -0400
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383D37EFD9
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 13:02:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1660680127; x=1692216127;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=GW2FhXTQRa9w1jg97NyRwrL/BtMEvGXmVvkBoETYrKM=;
-  b=I6nIWTHky3s8htL7xHANdUUw7NwoRvxHo6/9Drvdb1Sa7vMtplfk1R3r
-   kBzH6pL8LMvNoTnIGpecPe3qHsbhoeVw09HkUBnlNHOCOWIXA0YCvGDox
-   r0uA/P4NAKhzJchma/JtSYfCjrrz7b4Y/aR05DSBTox8+GQImHcP/Nfib
-   iBbqf/jOMPfKoRLMSI20S3EtAItlcz2HH9v/kjXEwYNAR/TvEXa9b3UIO
-   WtOjt/fdf9ESJ/lbZ6xncyHI0CSxK11OfuhqTeZ48pgt1X2kRyCxxyZP+
-   uZhMpaZ3LIacFwNijbB6/DMf6NjoqZSnRdrvTOmUWBBEVsLAytD+jd1fG
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,242,1654531200"; 
-   d="scan'208";a="320962698"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 17 Aug 2022 04:02:06 +0800
-IronPort-SDR: fu3wVnoBDLI+ic5NJVMmI1Xdgf5hdYWb14j/q8iRL9N7M+4RcUcpIC0Ex3R9ZVWE34H2jBRi6q
- l8L3+XKz63BxHEnuGWTnVng5hFB0hxE1dnUHavTxlPZy35KVdGLaVVhev0nZjOtwkADu9cfWAQ
- LsxkE7Vy5+pkrsVmYx/+kIM4kokKgNxOVb6ki5cxDfYXMsKRJyIDLz7aQ/I+R7aOJVpMSKNmFF
- TCNhh6Q1Sd5/8Xt3fx/AkQ/26uYlgsB5kiwM4D/lP8CeXvl36TsQMYJzNwRSxvjY3dbykXzh0J
- 1P3G2YqBW7JS9PMmMIRqzXRx
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Aug 2022 12:17:34 -0700
-IronPort-SDR: kfeoD9B8CGDcorANtRiZZ6qLplIUo+LRRBFRjYq0zU7Y3mOV3wXyfs7dRmYSrcojeQFXpDLXHm
- RLQnLXKTQxq3mcyf84nIrVtiIXDuYcJrF8jwA6i7iHpoDwslIuWcp2CYuryxesG0v7EeVizu5o
- Ul6c0NYqxNFNGiN5t8HiHVw+dw1b2FG9Zgpc2lytWvtshIhZbvSJT96BvMIpT4IQAsKT0D+FjC
- 7/++BREH+i6u1C6KIywLCSeo7Vwy7e29/2gMKBDQgwj5B5rE6NZIK9tIrsBrG0hwTCVanDg+Y5
- 3Ao=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Aug 2022 13:02:06 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4M6hrF5hRhz1Rwry
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 13:02:05 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1660680124; x=1663272125; bh=GW2FhXTQRa9w1jg97NyRwrL/BtMEvGXmVvk
-        BoETYrKM=; b=dLhQm9YOHTo9H6EkyC125YIp/Tqx9Ugdc+NMMOHd4S55KV0065z
-        x9HCyQsPuihy+mUrei3Z8I2n7gHuEkLcCHHRuiOGBxQYMjrcM6ucFh890EQg2lt4
-        g2UzFMuyMuklcaZN6Dd/1NXO20VNUa8xlX3N418aMdogoNyiuFYEWV8RiNRQay7t
-        Br/Yr7B9kzaOVMugvtP9s0UY+Uf0EHe24KC8ndU/WJRD8EA08TfOepty2yb8dLGO
-        GrxAB6pVHSDZ/bMn7c2MfwS16l7BGzE4Vjvd1s2QumeOyG0uhpDu4UR58JzUgGOL
-        YOiBDmC//TAGlMOTkfMXnvi1R2HRpqui2sA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id vZ0q73isxLW3 for <linux-kernel@vger.kernel.org>;
-        Tue, 16 Aug 2022 13:02:04 -0700 (PDT)
-Received: from [10.111.64.29] (c02drav6md6t.sdcorp.global.sandisk.com [10.111.64.29])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4M6hrC497jz1RtVk;
-        Tue, 16 Aug 2022 13:02:03 -0700 (PDT)
-Message-ID: <05a48c68-33ae-10e2-e565-6c124bad93c5@opensource.wdc.com>
-Date:   Tue, 16 Aug 2022 13:02:03 -0700
+        Tue, 16 Aug 2022 17:21:03 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD54A8A1FE;
+        Tue, 16 Aug 2022 14:21:02 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id f30so10419494pfq.4;
+        Tue, 16 Aug 2022 14:21:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=rZz8bTF2NcPtmVJ0WP5KDpOKcOl43ZBJ+1AR/XSbYLg=;
+        b=bV+k5Bi7aHC7OQ5MMSqyosvgyjzXZiK+iNX2RNdes6NMjMk7SbtPl5oivBva1PkcL8
+         rKwBzUVoOLc4QHdIN2suICc/baLJjosEkTBtp3cm11v+mqIyGwtNAiDUK0Su9i9YaSxi
+         SzTHPlzRpkPnDozzpDpTwXi0pZaxr+B2ne8tM3A6KrOkKJnYgF94ocw14WYt1gZYmJvg
+         S3i9JiB0F78nLKgq/HDabD7tBcDNDHeDrN2YllPbw/JIgJMEVYDojsAGALR1S9QtrUza
+         EfAtaXRi/oI90POA/6DJM94mGMJiqLkfqiaePIGR0tLCQI9DZFNfObPZGG4kYolPgXsa
+         Bk1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=rZz8bTF2NcPtmVJ0WP5KDpOKcOl43ZBJ+1AR/XSbYLg=;
+        b=nCfNsV8vzNEUZv1KbXePRDu1u6eMpDo1SeiPiDu5u22FXxvqykDI7moLNigAUVLFbI
+         /XPdHBJOtNBvvbiWG60w1pZF9v5+GPjc489ok2POoJNL3ti899D/5OFzDQePUKh6HB+S
+         F6PFmC8q/RgQ1zuFOBb9n2Zaa13A80TtvO6QnqqOQEIrfGXaTl9t5wpDBok77j1pV40u
+         DC9YEW3s1yativIapq1Zrm5sdqHwR9tzMQOSGnLTdd3xzYroIZRqcch3jDr347z5p0sA
+         UvO4YAaqootraofL9g5YB3sooo3iv3IlkbqBr3fdGjWux3Xrxvi8x4QCnQ1go4ZWT3mw
+         D80w==
+X-Gm-Message-State: ACgBeo1NZ4KlvpuO0BJzZZlDrw2+VqTStvfU1wqcy95JsG57FIGpKsil
+        sm3sEpend1hZGxjsrUl2820=
+X-Google-Smtp-Source: AA6agR4YLR5lA1zKDCby2mqX+HJq2T8wb9mbU/S5aW4j2gvI5lNQI5i6E+T0F3z/J2jFYlIAzGfMOw==
+X-Received: by 2002:a63:284:0:b0:41d:9b60:497c with SMTP id 126-20020a630284000000b0041d9b60497cmr18960653pgc.29.1660684862179;
+        Tue, 16 Aug 2022 14:21:02 -0700 (PDT)
+Received: from localhost (c-73-164-155-12.hsd1.wa.comcast.net. [73.164.155.12])
+        by smtp.gmail.com with ESMTPSA id h10-20020a170902680a00b00172913c0e44sm951851plk.28.2022.08.16.14.21.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 14:21:01 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 06:18:54 +0000
+From:   Bobby Eshleman <bobbyeshleman@gmail.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Bobby Eshleman <bobby.eshleman@gmail.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/6] vsock: add netdev to vhost/virtio vsock
+Message-ID: <Yvs2qqx/sG0C3zvz@bullseye>
+References: <cover.1660362668.git.bobby.eshleman@bytedance.com>
+ <5a93c5aad99d79f028d349cb7e3c128c65d5d7e2.1660362668.git.bobby.eshleman@bytedance.com>
+ <20220816123701-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
- regression
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>,
-        Oliver Sang <oliver.sang@intel.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-ide@vger.kernel.org, lkp@lists.01.org, lkp@intel.com,
-        ying.huang@intel.com, feng.tang@intel.com,
-        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
-References: <YuzPMMnnY739Tnit@xsang-OptiPlex-9020>
- <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
- <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
- <e4106ffa-3842-45c0-9756-5226cfcfa17d@opensource.wdc.com>
- <YvXeuCAK780OuJPz@xsang-OptiPlex-9020>
- <2e9cf5a6-c043-5ccf-e363-097c6c941891@huawei.com>
- <f1c3d717-339d-ba2b-9775-fc0e00f57ae3@huawei.com>
- <Yvs/w93KUkgD9f7/@xsang-OptiPlex-9020>
- <aabf7ed8-8d4d-dc68-1b8b-c91653701def@huawei.com>
- <43eaa104-5b09-072c-56aa-6289569b0015@opensource.wdc.com>
- <28d6e48b-f52f-9467-8260-262504a1a1ff@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <28d6e48b-f52f-9467-8260-262504a1a1ff@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816123701-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/08/16 9:38, John Garry wrote:
-> On 16/08/2022 16:42, Damien Le Moal wrote:
->> On 2022/08/16 3:35, John Garry wrote:
->>> On 16/08/2022 07:57, Oliver Sang wrote:
->>>>>> For me, a complete kernel log may help.
->>>>> and since only 1HDD, the output of the following would be helpful:
->>>>>
->>>>> /sys/block/sda/queue/max_sectors_kb
->>>>> /sys/block/sda/queue/max_hw_sectors_kb
->>>>>
->>>>> And for 5.19, if possible.
->>>> for commit
->>>> 0568e61225 ("ata: libata-scsi: cap ata_device->max_sectors according to shost->max_sectors")
->>>>
->>>> root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_sectors_kb
->>>> 512
->>>> root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_hw_sectors_kb
->>>> 512
->>>>
->>>> for both commit
->>>> 4cbfca5f77 ("scsi: scsi_transport_sas: cap shost opt_sectors according to DMA optimal limit")
->>>> and v5.19
->>>>
->>>> root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_sectors_kb
->>>> 1280
->>>> root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_hw_sectors_kb
->>>> 32767
->>>>
->>>
->>> thanks, I appreciate this.
->>>
->>>   From the dmesg, I see 2x SATA disks - I was under the impression that
->>> the system only has 1x.
->>>
->>> Anyway, both drives show LBA48, which means the large max hw sectors at
->>> 32767KB:
->>> [   31.129629][ T1146] ata6.00: 1562824368 sectors, multi 1: LBA48 NCQ
->>> (depth 32)
->>>
->>> So this is what I suspected: we are capped from the default shost max
->>> sectors (1024 sectors).
->>>
->>> This seems like the simplest fix for you:
->>>
->>> --- a/include/linux/libata.h
->>> +++ b/include/linux/libata.h
->>> @@ -1382,7 +1382,8 @@ extern const struct attribute_group
->>> *ata_common_sdev_groups[];
->>>          .proc_name              = drv_name,                     \
->>>          .slave_destroy          = ata_scsi_slave_destroy,       \
->>>          .bios_param             = ata_std_bios_param,           \
->>> -       .unlock_native_capacity = ata_scsi_unlock_native_capacity
->>> +       .unlock_native_capacity = ata_scsi_unlock_native_capacity,\
->>> +       .max_sectors = ATA_MAX_SECTORS_LBA48
->>
->> This is crazy large (65535 x 512 B sectors) and never result in that being
->> exposed as the actual max_sectors_kb since other limits will apply first
->> (mapping size).
+On Tue, Aug 16, 2022 at 12:38:52PM -0400, Michael S. Tsirkin wrote:
+> On Mon, Aug 15, 2022 at 10:56:06AM -0700, Bobby Eshleman wrote:
+> > In order to support usage of qdisc on vsock traffic, this commit
+> > introduces a struct net_device to vhost and virtio vsock.
+> > 
+> > Two new devices are created, vhost-vsock for vhost and virtio-vsock
+> > for virtio. The devices are attached to the respective transports.
+> > 
+> > To bypass the usage of the device, the user may "down" the associated
+> > network interface using common tools. For example, "ip link set dev
+> > virtio-vsock down" lets vsock bypass the net_device and qdisc entirely,
+> > simply using the FIFO logic of the prior implementation.
 > 
-> Here is how I read values from above for max_sectors_kb and 
-> max_hw_sectors_kb:
+> Ugh. That's quite a hack. Mark my words, at some point we will decide to
+> have down mean "down".  Besides, multiple net devices with link up tend
+> to confuse userspace. So might want to keep it down at all times
+> even short term.
 > 
-> v5.19 + 0568e61225 : 512/512
-> v5.19 + 0568e61225 + 4cbfca5f77 : 512/512
-> v5.19: 1280/32767
-> 
-> They are want makes sense to me, at least.
-> 
-> Oliver, can you confirm this? Thanks!
-> 
-> On this basis, it appears that max_hw_sectors_kb is getting capped from 
-> scsi default @ 1024 sectors by commit 0568e61225. If it were getting 
-> capped by swiotlb mapping limit then that would give us 512 sectors - 
-> this value is fixed.
-> 
-> So for my SHT change proposal I am just trying to revert to previous 
-> behaviour in 5.19 - make max_hw_sectors_kb crazy big again.
 
-I reread the entire thing and I think I got things reverted here. The perf
-regression happens with the 512/512 settings, while the original 1280/32767
-before your patches was OK. So is your patch defining the optimal mapping size
-cause the reduction to 512/512. It would mean that for ATA, we need a sane
-default mapping instead of SCSI default 1024 sectors. Now I understand your
-proposed change using ATA_MAX_SECTORS_LBA48.
+I have to admit, this choice was born more of perceived necessity than
+of a love for the design... but I can explain the pain points that led
+to the current state, which I hope sparks some discussion.
 
-However, that would be correct only for LBA48 capable drives.
-ata_dev_configure() already sets dev->max_sectors correctly according to the
-drive type, capabilities and eventual quirks. So the problem comes from the
-libata-scsi change:
+When the state is down, dev_queue_xmit() will fail. To avoid this and
+preserve the "zero-configuration" guarantee of vsock, I chose to make
+transmission work regardless of device state by implementing this
+"ignore up/down state" hack.
 
-dev->max_sectors = min(dev->max_sectors, sdev->host->max_sectors);
+This is unfortunate because what we are really after here is just packet
+scheduling, i.e., qdisc. We don't really need the rest of the
+net_device, and I don't think up/down buys us anything of value. The
+relationship between qdisc and net_device is so tightly knit together
+though, that using qdisc without a net_device doesn't look very
+practical (and maybe impossible).
 
-when sdev->host->max_sectors is 0 (not initialized). So maybe simply changing
-this line to:
+Some alternative routes might be:
 
-dev->max_sectors = min_not_zero(dev->max_sectors, sdev->host->max_sectors);
+1) Default the state to up, and let users disable vsock by downing the
+   device if they'd like. It still works out-of-the-box, but if users
+   really want to disable vsock they may.
 
-would do the trick ? Any particular adapter driver that needs a mapping cap on
-the adpter max mapping size can still set sdev->host->max_sectors as needed, and
-we keep the same defaults as before when it is not set. Thoughts ? Or am I
-missing something else ?
+2) vsock may simply turn the device to state up when a socket is first
+   used. For instance, the HCI device in net/bluetooth/hci_* uses a
+   technique where the net_device is turned to up when bind() is called on
+   any HCI socket (BTPROTO_HCI). It can also be turned up/down via
+   ioctl().
 
+3) Modify net_device registration to allow us to have an invisible
+   device that is only known by the kernel. It may default to up and remain
+   unchanged. The qdisc controls alone may be exposed to userspace,
+   hopefully via netlink to still work with tc. This is not
+   currently supported by register_netdevice(), but a series from 2007 was
+   sent to the ML, tentatively approved in concept, but was never merged[1].
 
-> 
->>
->> The regression may come not from commands becoming tiny, but from the fact that
->> after the patch, max_sectors_kb is too large, 
-> 
-> I don't think it is, but need confirmation.
-> 
->> causing a lot of overhead with
->> qemu swiotlb mapping and slowing down IO processing.
-> 
->>
->> Above, it can be seen that we ed up with max_sectors_kb being 1280, which is the
->> default for most scsi disks (including ATA drives). That is normal. But before
->> that, it was 512, which likely better fits qemu swiotlb and does not generate
-> 
-> Again, I don't think this this is the case. Need confirmation.
-> 
->> overhead. So the above fix will not change anything I think...
-> 
-> 
-> Thanks,
-> John
+4) Currently NETDEV_UP/NETDEV_DOWN commands can't be vetoed.
+   NETDEV_PRE_UP, however, is used to effectively veto NETDEV_UP
+   commands[2]. We could introduce NETDEV_PRE_DOWN to support vetoing of
+   NETDEV_DOWN. This would allow us to install a hook to determine if
+   we actually want to allow the device to be downed.
 
+In an ideal world, we could simply pass a set of netdev queues, a
+packet, and maybe a blob of state to qdisc and let it work its
+scheduling magic...
 
--- 
-Damien Le Moal
-Western Digital Research
+Any thoughts?
+
+[1]: https://lore.kernel.org/netdev/20070129140958.0cf6880f@freekitty/
+[2]: https://lore.kernel.org/all/20090529.220906.243061042.davem@davemloft.net/
+
+Thanks,
+Bobby

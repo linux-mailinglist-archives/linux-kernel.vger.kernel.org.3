@@ -2,202 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6034959637C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B57759637E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 22:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237368AbiHPUDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 16:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
+        id S237166AbiHPUFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 16:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237356AbiHPUDV (ORCPT
+        with ESMTP id S232051AbiHPUFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 16:03:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCAE61726;
-        Tue, 16 Aug 2022 13:03:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 008A960D30;
-        Tue, 16 Aug 2022 20:03:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3612BC433C1;
-        Tue, 16 Aug 2022 20:03:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660680199;
-        bh=LQFoXT2HLF1Tpycwucq2SVhDf8r7squq8N/cdxF+OzE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qeUWW+EdntwkNJ5LDynz5RjWctc37bpL3sPbHOjUPhiBLuWhPojbArR2/NquDlxHM
-         IIEfgV4xDptjF9fnwK9NRqJUxHVZHqo8VhDvxMoN7CdMAJZsqagdPYH8S5sgik+BA9
-         8CL7k0sOOlraYs4A3BoNL81ReVOijASYM6sqvz1Q7Vf1zsTcvXH1Pn9D2843s9+sp0
-         cmsyNcZ6XafIx0KWH+ouoK6n8KIijR/CDyv52ywJRJNsFuWsKuuKtJermuDLG8wAK4
-         MgDjYwumuTtYcMFwl2qDx1lhwnCUqXFlLgMDshj43ALTTL8kamnYz+P3EJ2MEZ6Xun
-         om3dr7W4lb3+Q==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id ABBF04035A; Tue, 16 Aug 2022 17:03:16 -0300 (-03)
-Date:   Tue, 16 Aug 2022 17:03:16 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH 2/4] tools lib perf: Handle read format in
- perf_evsel__read()
-Message-ID: <Yvv4BBZhxpLfaMs7@kernel.org>
-References: <20220815190106.1293082-1-namhyung@kernel.org>
- <20220815190106.1293082-3-namhyung@kernel.org>
- <YvuZWAzsBVo/l9sf@krava>
+        Tue, 16 Aug 2022 16:05:09 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63B47B788
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 13:05:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660680302; x=1692216302;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=64cxPXUR1/1yhLA0ois3zXOO/EezC1ZG8tFBRR3t74A=;
+  b=Ps0tUYxNzu1H7NAtYUthZVpYxQluLFFvKRAvTpEXZvaIuKhjW37syKOa
+   EYupzIDHf+7/GAP7nDftF3vqxgZgroPu68qyPLrmVcx6Ky+Mxqfyg/0P7
+   HTeygDWTyDA3JzqUxe1IwasHl8pMZekbL8gz1VwAOc7b13JngHcRG0NKl
+   N4JHLqfWlzC1dT0cMvng/uJEN2Rm0z55FD5z0kAcwyJ6n001rZUdJs4EO
+   wX/wNcc/NOyg7jVu1z7bNsEWJQ8Dd0EuwbbV/XQqAQWlUKKhd8dAOYtOL
+   w0rRqqsB9kIUTnxVe+T/zltiIFf0M3blQr2QZdsm+mCK6p6wNqq2/Pp1v
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="279279069"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="279279069"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 13:05:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="667275844"
+Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 16 Aug 2022 13:05:01 -0700
+Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oO2o8-0000CW-1Q;
+        Tue, 16 Aug 2022 20:05:00 +0000
+Date:   Wed, 17 Aug 2022 04:04:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/microcode] BUILD SUCCESS
+ 764fc2a82fed0a4f0ce7444c34a3683bad06e403
+Message-ID: <62fbf85d.AYGkK8knj6m9KOAw%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvuZWAzsBVo/l9sf@krava>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Aug 16, 2022 at 03:19:20PM +0200, Jiri Olsa escreveu:
-> On Mon, Aug 15, 2022 at 12:01:04PM -0700, Namhyung Kim wrote:
-> > The perf_counts_values should be increased to read the new lost data.
-> > Also adjust values after read according the read format.
-> > 
-> > This supports PERF_FORMAT_GROUP which has a different data format but
-> > it's only available for leader events.  Currently it doesn't have an API
-> > to read sibling (member) events in the group.  But users may read the
-> > sibling event directly.
-> > 
-> > Also reading from mmap would be disabled when the read format has ID or
-> > LOST bit as it's not exposed via mmap.
-> > 
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> >  tools/lib/perf/evsel.c              | 72 +++++++++++++++++++++++++++++
-> >  tools/lib/perf/include/perf/event.h |  3 +-
-> >  tools/lib/perf/include/perf/evsel.h |  4 +-
-> >  3 files changed, 77 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/tools/lib/perf/evsel.c b/tools/lib/perf/evsel.c
-> > index 952f3520d5c2..fc23670231cb 100644
-> > --- a/tools/lib/perf/evsel.c
-> > +++ b/tools/lib/perf/evsel.c
-> > @@ -305,6 +305,9 @@ int perf_evsel__read_size(struct perf_evsel *evsel)
-> >  	if (read_format & PERF_FORMAT_ID)
-> >  		entry += sizeof(u64);
-> >  
-> > +	if (read_format & PERF_FORMAT_LOST)
-> > +		entry += sizeof(u64);
-> > +
-> >  	if (read_format & PERF_FORMAT_GROUP) {
-> >  		nr = evsel->nr_members;
-> >  		size += sizeof(u64);
-> > @@ -314,24 +317,93 @@ int perf_evsel__read_size(struct perf_evsel *evsel)
-> >  	return size;
-> >  }
-> >  
-> > +/* This only reads values for the leader */
-> > +static int perf_evsel__read_group(struct perf_evsel *evsel, int cpu_map_idx,
-> > +				  int thread, struct perf_counts_values *count)
-> > +{
-> > +	size_t size = perf_evsel__read_size(evsel);
-> > +	int *fd = FD(evsel, cpu_map_idx, thread);
-> > +	u64 read_format = evsel->attr.read_format;
-> > +	u64 *data;
-> > +	int idx = 1;
-> > +
-> > +	if (fd == NULL || *fd < 0)
-> > +		return -EINVAL;
-> > +
-> > +	data = calloc(1, size);
-> > +	if (data == NULL)
-> > +		return -ENOMEM;
-> > +
-> > +	if (readn(*fd, data, size) <= 0) {
-> > +		free(data);
-> > +		return -errno;
-> > +	}
-> 
-> could you please put in here some comment that this is intentionaly
-> reading only the leader or better yet rename the function? I was lost
-> before I got to read the changelog ;-)
-> 
-> > +
-> > +	if (read_format & PERF_FORMAT_TOTAL_TIME_ENABLED)
-> > +		count->ena = data[idx++];
-> > +	if (read_format & PERF_FORMAT_TOTAL_TIME_RUNNING)
-> > +		count->run = data[idx++];
-> > +
-> > +	/* value is always available */
-> > +	count->val = data[idx++];
-> > +	if (read_format & PERF_FORMAT_ID)
-> > +		count->id = data[idx++];
-> > +	if (read_format & PERF_FORMAT_LOST)
-> > +		count->lost = data[idx++];
-> > +
-> > +	free(data);
-> > +	return 0;
-> > +}
-> > +
-> > +/*
-> > + * The perf read format is very flexible.  It needs to set the proper
-> > + * values according to the read format.
-> > + */
-> > +static void perf_evsel__adjust_values(struct perf_evsel *evsel,
-> > +				      struct perf_counts_values *count)
-> > +{
-> > +	u64 read_format = evsel->attr.read_format;
-> > +
-> > +	if (!(read_format & PERF_FORMAT_TOTAL_TIME_ENABLED)) {
-> > +		memmove(&count->values[2], &count->values[1], 24);
-> > +		count->ena = 0;
-> > +	}
-> > +
-> > +	if (!(read_format & PERF_FORMAT_TOTAL_TIME_RUNNING)) {
-> > +		memmove(&count->values[3], &count->values[2], 16);
-> > +		count->run = 0;
-> > +	}
-> > +
-> > +	if (!(read_format & PERF_FORMAT_ID)) {
-> > +		memmove(&count->values[4], &count->values[3], 8);
-> > +		count->id = 0;
-> > +	}
-> > +}
-> 
-> 
-> could we do this the same way we read group counters.. like make read
-> into local buffer and initialize perf_counts_values values based on
-> format, something like:
-> 
->         readn(fd, data ...
-> 
->         if (read_format & PERF_FORMAT_TOTAL_TIME_ENABLED)
->                 count->ena = data[idx++];
->         if (read_format & PERF_FORMAT_TOTAL_TIME_RUNNING)
->                 count->run = data[idx++];
-> 
->         /* value is always available */
->         count->val = data[idx++];
->         if (read_format & PERF_FORMAT_ID)
->                 count->id = data[idx++];
->         if (read_format & PERF_FORMAT_LOST)
->                 count->lost = data[idx++];
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/microcode
+branch HEAD: 764fc2a82fed0a4f0ce7444c34a3683bad06e403  x86/microcode: Document the whole late loading problem
 
-I see this now, so I'll wait for Namhyung to react to your comments,
-while keeping it in my local tree just to have it build tested.
+elapsed time: 716m
 
-- Arnaldo
- 
-> 
-> and perhaps we should cancel that perf_counts_values's union and keep
-> only 'val/ena/run...' fields?
-> 
-> jirka
+configs tested: 106
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+alpha                            allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+arc                  randconfig-r043-20220815
+sh                               allmodconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+i386                 randconfig-a003-20220815
+m68k                             allyesconfig
+i386                 randconfig-a004-20220815
+i386                 randconfig-a002-20220815
+i386                 randconfig-a001-20220815
+i386                 randconfig-a005-20220815
+arm                                 defconfig
+m68k                             allmodconfig
+i386                 randconfig-a006-20220815
+arc                              allyesconfig
+i386                                defconfig
+arm64                            allyesconfig
+x86_64                              defconfig
+arm                              allyesconfig
+arc                               allnoconfig
+alpha                             allnoconfig
+csky                              allnoconfig
+riscv                             allnoconfig
+x86_64               randconfig-a001-20220815
+x86_64               randconfig-a003-20220815
+mips                             allyesconfig
+x86_64               randconfig-a002-20220815
+x86_64                               rhel-8.3
+x86_64               randconfig-a004-20220815
+x86_64               randconfig-a006-20220815
+x86_64                           rhel-8.3-kvm
+x86_64               randconfig-a005-20220815
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+i386                             allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-syz
+x86_64                           allyesconfig
+ia64                             allmodconfig
+xtensa                  nommu_kc705_defconfig
+riscv                    nommu_k210_defconfig
+s390                       zfcpdump_defconfig
+powerpc                 mpc8540_ads_defconfig
+i386                 randconfig-c001-20220815
+powerpc              randconfig-c003-20220815
+powerpc                     redwood_defconfig
+powerpc                     sequoia_defconfig
+ia64                      gensparse_defconfig
+arm                           corgi_defconfig
+sh                        sh7785lcr_defconfig
+mips                         bigsur_defconfig
+powerpc                      chrp32_defconfig
+arm                           h3600_defconfig
+arm                      integrator_defconfig
+sh                            shmin_defconfig
+xtensa                              defconfig
+arm                         at91_dt_defconfig
+m68k                        m5307c3_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+powerpc                     stx_gp3_defconfig
+m68k                       m5208evb_defconfig
+m68k                         amcore_defconfig
+arc                           tb10x_defconfig
+arm                          simpad_defconfig
+sh                          r7780mp_defconfig
+arm                             ezx_defconfig
+openrisc                 simple_smp_defconfig
+openrisc                  or1klitex_defconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+arc                        nsimosci_defconfig
+m68k                          atari_defconfig
+sh                        dreamcast_defconfig
+sh                            migor_defconfig
+
+clang tested configs:
+hexagon              randconfig-r045-20220815
+hexagon              randconfig-r041-20220815
+riscv                randconfig-r042-20220815
+s390                 randconfig-r044-20220815
+x86_64               randconfig-a013-20220815
+x86_64               randconfig-a012-20220815
+x86_64               randconfig-a011-20220815
+x86_64               randconfig-a014-20220815
+x86_64               randconfig-a015-20220815
+x86_64               randconfig-a016-20220815
+i386                 randconfig-a012-20220815
+i386                 randconfig-a011-20220815
+i386                 randconfig-a013-20220815
+i386                 randconfig-a014-20220815
+i386                 randconfig-a015-20220815
+i386                 randconfig-a016-20220815
+arm                       versatile_defconfig
+arm                       mainstone_defconfig
+arm                       aspeed_g4_defconfig
+powerpc                 mpc832x_rdb_defconfig
+x86_64               randconfig-k001-20220815
+arm                        multi_v5_defconfig
+powerpc                      ppc64e_defconfig
+powerpc                 mpc832x_mds_defconfig
 
 -- 
-
-- Arnaldo
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,123 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1320B595979
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B92595902
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235207AbiHPLJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 07:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44134 "EHLO
+        id S234368AbiHPKyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235293AbiHPLId (ORCPT
+        with ESMTP id S232298AbiHPKyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 07:08:33 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73685A8311
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:18:27 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id x25so10052147ljm.5
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 03:18:26 -0700 (PDT)
+        Tue, 16 Aug 2022 06:54:05 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678C233356;
+        Tue, 16 Aug 2022 03:21:37 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id q19so8959480pfg.8;
+        Tue, 16 Aug 2022 03:21:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=3TSQJ+ajQb7oi0SISNRrwjgay+bQ0YpimkdDJopO6Zw=;
-        b=xjjTCVqjAVU4Lr5HgNJZklHzY+wpNtU8v8mBhm7o2HhzogdL4vRU0XJ5fmJngd0tx6
-         XUIqZRhJNKcv5N0ShN0JyVq4DwxmiBYBzQ2D9SWNJ6eBdsYwRiPwhCdcLy6xHgtnPuAb
-         yIAzq3JRL3olX9nF6shP/M+zDzdv7jKNFT6B2vJ+cD05EXOJIyfY987amxAjAjb8ujvP
-         9iG3K2/BBp1lbWYwfvxaHS5t56ZO7+sRxXWEtYU8qGOfkuWsyD4ROUkWO/iMf13WRH9+
-         Jft38ypd0UnUyRKrnUnNihg9qT9Pu2PK4ZH9rkbsL1i0BvqSiTg1Zil7aMKBokMKyTVI
-         ZsWw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=gk5spmMleYDB5E6yzSXkYXDq0W9ZxoMNmm79ibU/KLs=;
+        b=ooUezOaJ7bL3Vrcz7k/onDIrSEwngP/K2dpLWayA1Y4TePLMi14ak10c89vlV6R4CP
+         dtKM4IdLCu2oot4iEbtUF1d8hzXt5uTYtzcN2zCoRpYZ3oOeFiIffuquuLSPI7JVhwu9
+         TX2NPbW9Tjak+H77euKPhwAffRszTQZ/4xZVUOR1PnqQs5AaMWu1AKZWE555ddu+SdHh
+         naS9ShgvLtR2wQ2Pi4iA6r3p2BgIAVLxUdfixg0mkY7dAKhLOHkGEM6ygG6EPHLnr3n5
+         jMU/J7k5w2hv71mywkRjwEEqiL/GkgpiMnzFHVZMm6MxneXLZCg+Ih0sVSJ1wXC7iQdU
+         Ob8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=3TSQJ+ajQb7oi0SISNRrwjgay+bQ0YpimkdDJopO6Zw=;
-        b=5nhsVdz3UJwIlpTYJwqCRLPJBO4vzmuf59+XLJJVfgU/a2/x1Xe+je+aSvLvumzGe2
-         1VogwSQi8MpKXfaVfUCm50W4ksaIqUCPtx+jUo2ZWLNlqOVA/cyop1maxI2i/vSnrhjd
-         Os+v5r1uP1wM+REIsVPOtMwhXwwwMi4aQajefNjMi4qKmYQgCjrSDAvLJjLOMMi+Pdbw
-         klZMexmsZX9YB+6DChQJU7ISOFuBaeuCxfRemzcNcOk2FzdOY3T1EO72UDZxZqM/s9qD
-         Vvq5kwtoe8Mx7BHFeQEC+BlXTA3h/erMbYzzN8KivmLtBJc2hnI+po0+NrSAwM7eQehJ
-         aITw==
-X-Gm-Message-State: ACgBeo0+bl1EokcnG6Eah2v4NX7pcA/4PzNowuzqTJ++5z35LUwYVog5
-        +ajnGHUYA0+ZHfty396ZTBn5tw==
-X-Google-Smtp-Source: AA6agR4zLM19yV8AIxJngm1cQTBt04mcHmIAWaf59FHTXRvmruyL3ih96C0EcgpAUCdxQ8T6G7uvdA==
-X-Received: by 2002:a2e:8096:0:b0:25e:4024:5fb6 with SMTP id i22-20020a2e8096000000b0025e40245fb6mr5956281ljg.332.1660645105391;
-        Tue, 16 Aug 2022 03:18:25 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id w13-20020a05651c118d00b0025fe2049beesm1677215ljo.60.2022.08.16.03.18.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 03:18:24 -0700 (PDT)
-Message-ID: <3e897c2c-c2a0-b815-e6b4-374bd80b98e0@linaro.org>
-Date:   Tue, 16 Aug 2022 13:18:23 +0300
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=gk5spmMleYDB5E6yzSXkYXDq0W9ZxoMNmm79ibU/KLs=;
+        b=e+x8vCtnKMIC7MYmAgTdAdHDB1eneWoawrZgr6f0vwVIzNzawpChqKsN/y26DtNYHs
+         h0YtfMLa+vhosVjLcFoXDuNQrMEwaKctCWiqnL2VIU0FEVNYpM2ldtHm+Z+xMCrQ8GaD
+         qlkn4Pi0iDnTefNMo+oCA+z2nBFHtQClIM0JM8+S6Mw3eP/vMnR/BixCFoTxqkjZnYfU
+         ICfdgjcQpzfn4pQCohsOsLMnRLj00uupPgr31QFBRWKiPfce1p+8CG1+LRuH8lZAgOkj
+         BpQMJJIthMJRmuE/Bsp0sEGsneGn839tCgA/ZfcxFsKGE048oT+50xA/dgg4TY4uC1rx
+         wTiQ==
+X-Gm-Message-State: ACgBeo05+iSYjDgbuY6Mc71yQnpqRoQ+fT3Yy9EGBtm+KbcnYhs9YuvE
+        XydNwcQNyKFXUPru+l8Bx5w=
+X-Google-Smtp-Source: AA6agR7uyINHbIv1zyIDimnsWbzI1puM5XJvr2Ubu7kDjkIgc56i296ZU2t2ADuN3Fdkx2wZ0ObygQ==
+X-Received: by 2002:a63:80c8:0:b0:41c:62c7:abd7 with SMTP id j191-20020a6380c8000000b0041c62c7abd7mr17611213pgd.570.1660645296906;
+        Tue, 16 Aug 2022 03:21:36 -0700 (PDT)
+Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
+        by smtp.gmail.com with ESMTPSA id 22-20020a621516000000b0052ceaba7411sm8065181pfv.125.2022.08.16.03.21.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 03:21:36 -0700 (PDT)
+From:   Akihiko Odaki <akihiko.odaki@gmail.com>
+Cc:     Basavaraj Natikar <basavaraj.natikar@amd.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Akihiko Odaki <akihiko.odaki@gmail.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v3] AMD_SFH: Add a DMI quirk entry for Chromebooks
+Date:   Tue, 16 Aug 2022 19:21:20 +0900
+Message-Id: <20220816102120.6131-1-akihiko.odaki@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/8] dt-bindings: sun6i-a31-mipi-dphy: Add the interrupts
- property
-Content-Language: en-US
-To:     Samuel Holland <samuel@sholland.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-sunxi@lists.linux.dev
-References: <20220812075603.59375-1-samuel@sholland.org>
- <20220812075603.59375-2-samuel@sholland.org>
- <c85ec3a3-fa6e-aa71-a847-22062b9683e9@linaro.org>
- <0d2bf232-8aa6-2dc1-121d-f0439bfd7b54@sholland.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <0d2bf232-8aa6-2dc1-121d-f0439bfd7b54@sholland.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/08/2022 01:19, Samuel Holland wrote:
-> On 8/12/22 5:45 AM, Krzysztof Kozlowski wrote:
->> On 12/08/2022 10:55, Samuel Holland wrote:
->>> The sun6i DPHY can generate several interrupts, mostly for reporting
->>> error conditions, but also for detecting BTA and UPLS sequences.
->>> Document this capability in order to accurately describe the hardware.
->>>
->>> The DPHY has no interrupt number provided in the vendor documentation
->>> because its interrupt line is shared with the DSI controller.
->>>
->>> Fixes: c25b84c00826 ("dt-bindings: display: Convert Allwinner DSI to a schema")
->>
->> I don't understand what is being fixed in that commit. That commit did
->> not have interrupts in D-PHY, so what was broken by it?
->>
->> The Fixes tag annotates the commit which introduced a bug.
-> 
-> The binding had a bug because it did not accurately describe the hardware. If
-> you don't think this warrants a Fixes tag, I can remove it. Or are you
-> suggesting that the Fixes tag should instead reference the commit adding the
-> original .txt binding?
+Google Chromebooks use Chrome OS Embedded Controller Sensor Hub instead
+of Sensor Hub Fusion and leaves MP2 uninitialized, which disables all
+functionalities, even including the registers necessary for feature
+detections.
 
-Yes, the latter. If original binding were not complete (although just
-"incompleteness" is not really a bug, unless it is something
-serious/obvious etc), then TXT commit should be the fixed one.
+The behavior was observed with Lenovo ThinkPad C13 Yoga.
 
-The backports of course will not go that deep, but Fixes tag is used
-also for statistics which kernel release actually brought the bug.
-Therefore adjusting Fixes just for sake of backporting is not good -
-messes up with statistics.
+Signed-off-by: Akihiko Odaki <akihiko.odaki@gmail.com>
+Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+ drivers/hid/amd-sfh-hid/amd_sfh_pcie.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
+diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
+index 4b90c86ee5f8..47774b9ab3de 100644
+--- a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
++++ b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
+@@ -288,11 +288,29 @@ int amd_sfh_irq_init(struct amd_mp2_dev *privdata)
+ 	return 0;
+ }
+ 
++static const struct dmi_system_id dmi_nodevs[] = {
++	{
++		/*
++		 * Google Chromebooks use Chrome OS Embedded Controller Sensor
++		 * Hub instead of Sensor Hub Fusion and leaves MP2
++		 * uninitialized, which disables all functionalities, even
++		 * including the registers necessary for feature detections.
++		 */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Google"),
++		},
++	},
++	{ }
++};
++
+ static int amd_mp2_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ {
+ 	struct amd_mp2_dev *privdata;
+ 	int rc;
+ 
++	if (dmi_first_match(dmi_nodevs))
++		return -ENODEV;
++
+ 	privdata = devm_kzalloc(&pdev->dev, sizeof(*privdata), GFP_KERNEL);
+ 	if (!privdata)
+ 		return -ENOMEM;
+-- 
+2.37.2
 
-Best regards,
-Krzysztof

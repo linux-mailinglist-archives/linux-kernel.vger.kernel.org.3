@@ -2,61 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CDB0596238
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 20:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E51159623E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 20:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236927AbiHPSOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 14:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
+        id S233076AbiHPSPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 14:15:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiHPSOk (ORCPT
+        with ESMTP id S232099AbiHPSPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 14:14:40 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C111830F63;
-        Tue, 16 Aug 2022 11:14:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NQKadt4IGOnVF9gAUaxkJtHM05nptXAHtJbvAVHhV6c=; b=R9JhU6r4tJm3iGfQfHYFx51MS/
-        e3gej3Ta7IBKe12/T8m0kPZ2LGTRqULTcn6KiqgbQYtCs//laj7TfaP8cxaTZhIkrRUUtOPfUN4Is
-        19aFaSpZtjF+H3YGoUfjKDbFaGnM1IEVyakJkqjy2sMSt0RhO1D2J1Q43EH5X+aeqvQ5hRjAvRGwg
-        yf9WuY+qP11DFLFUiGo6LmNnUO3qK+5mJzOY9cVZ6z8cgWJUfXD92A2fLWTZNXYfvAsQjVdQAy6eh
-        lYZq82PVhU/w9dNMeeCL0F4ZRczJcTilnD/GTc27RP9GgRxyhStmFF1x58zUi4YCe2ptk+kGTvtgh
-        8MxrCw3w==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oO155-0058cr-Pv;
-        Tue, 16 Aug 2022 18:14:24 +0000
-Date:   Tue, 16 Aug 2022 19:14:23 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Xin Gao <gaoxin@cdjrlc.com>
-Cc:     dhowells@redhat.com, jarkko@kernel.org, jmorris@namei.org,
-        serge@hallyn.com, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KEYS: Variable type completion
-Message-ID: <Yvvef4vCFaYhMjMq@ZenIV>
-References: <20220816180110.8625-1-gaoxin@cdjrlc.com>
+        Tue, 16 Aug 2022 14:15:06 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCB583F0F
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 11:14:59 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id 0B2B35FD08;
+        Tue, 16 Aug 2022 21:14:56 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1660673696;
+        bh=xfHTkxXrCHnztOzjD8Yip06Xh0zVLSOu698v7fo46eA=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=RMpLcbL27d3JmoB54Z+M+LCcHJ2ikq+kjPtQzydBOBF+giLGZnKEpuxXIHhv0IatC
+         HmyW9+IH0WNaZNYbi7A4ZW/kigY2diKEl+hEIBH5fOzm0bx8o1eCwKZE2AKdQjgOrz
+         bmVlslO3bOpD9ymXjZ999IRneQ0EJXY6b0VEKWjjEWtyQec4Srr1o29MucjfO2G8jT
+         gj6lrRgjtwrnrXOucZIDVlMW/G2OdXNLanCGNcngJq5SSmC0wP2Z8dOOshxWEVN6BS
+         oIIy8FjSUAegzs9a5d7Bz5jVm4rDkdGi0e12vxwevCDrMVpcPfxkcI8rKeZmmrSbKc
+         bDzDD6RS82Jyw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 16 Aug 2022 21:14:55 +0300 (MSK)
+From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
+To:     "broonie@kernel.org" <broonie@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>
+CC:     kernel <kernel@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Dmitry Rokosov <DDRokosov@sberdevices.ru>
+Subject: [PATCH v1] regmap: introduce value tracing for regmap bulk operations
+Thread-Topic: [PATCH v1] regmap: introduce value tracing for regmap bulk
+ operations
+Thread-Index: AQHYsZwRTOzZdLxKvkqpBNcAgWIdzg==
+Date:   Tue, 16 Aug 2022 18:14:48 +0000
+Message-ID: <20220816181451.5628-1-ddrokosov@sberdevices.ru>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220816180110.8625-1-gaoxin@cdjrlc.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/16 16:01:00 #20126973
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 02:01:10AM +0800, Xin Gao wrote:
-> 'unsigned int' is better than 'unsigned'.
+Currently, only one-register io operations support tracepoints with
+value logging. For the regmap bulk operations developer can view
+hw_start/hw_done tracepoints with starting reg number and registers
+count to be reading or writing. This patch injects tracepoints with
+dumping registers values in the hex format to regmap bulk reading
+and writing.
 
-Explain.
+Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+---
+ drivers/base/regmap/regmap.c |  7 ++++++
+ drivers/base/regmap/trace.h  | 43 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 50 insertions(+)
 
-You keep sending rather pointless patches with declarative
-commit messages instead of explanations.  Why is 'unsigned
-int' better than 'unsigned'?  Demonstrate understanding -
-simple reference to checkpatch.pl does *NOT* count.
+diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
+index c3517ccc3159..673ad37df11f 100644
+--- a/drivers/base/regmap/regmap.c
++++ b/drivers/base/regmap/regmap.c
+@@ -2323,6 +2323,10 @@ int regmap_bulk_write(struct regmap *map, unsigned i=
+nt reg, const void *val,
+=20
+ 		kfree(wval);
+ 	}
++
++	if (!ret)
++		trace_regmap_bulk_write(map, reg, val, val_bytes * val_count);
++
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(regmap_bulk_write);
+@@ -3068,6 +3072,9 @@ int regmap_bulk_read(struct regmap *map, unsigned int=
+ reg, void *val,
+ 		map->unlock(map->lock_arg);
+ 	}
+=20
++	if (!ret)
++		trace_regmap_bulk_read(map, reg, val, val_bytes * val_count);
++
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(regmap_bulk_read);
+diff --git a/drivers/base/regmap/trace.h b/drivers/base/regmap/trace.h
+index 9abee14df9ee..04329ba68ec5 100644
+--- a/drivers/base/regmap/trace.h
++++ b/drivers/base/regmap/trace.h
+@@ -64,6 +64,49 @@ DEFINE_EVENT(regmap_reg, regmap_reg_read_cache,
+=20
+ );
+=20
++DECLARE_EVENT_CLASS(regmap_bulk,
++
++	TP_PROTO(struct regmap *map, unsigned int reg,
++		 const void *val, int val_len),
++
++	TP_ARGS(map, reg, val, val_len),
++
++	TP_STRUCT__entry(
++		__string(name, regmap_name(map))
++		__field(unsigned int, reg)
++		__dynamic_array(char, buf, val_len)
++		__field(int, val_len)
++	),
++
++	TP_fast_assign(
++		__assign_str(name, regmap_name(map));
++		__entry->reg =3D reg;
++		__entry->val_len =3D val_len;
++		if (val)
++			memcpy(__get_dynamic_array(buf), val, val_len);
++	),
++
++	TP_printk("%s reg=3D%x val=3D%s", __get_str(name),
++		  (unsigned int)__entry->reg,
++		  __print_hex(__get_dynamic_array(buf), __entry->val_len))
++);
++
++DEFINE_EVENT(regmap_bulk, regmap_bulk_write,
++
++	TP_PROTO(struct regmap *map, unsigned int reg,
++		 const void *val, int val_len),
++
++	TP_ARGS(map, reg, val, val_len)
++);
++
++DEFINE_EVENT(regmap_bulk, regmap_bulk_read,
++
++	TP_PROTO(struct regmap *map, unsigned int reg,
++		 const void *val, int val_len),
++
++	TP_ARGS(map, reg, val, val_len)
++);
++
+ DECLARE_EVENT_CLASS(regmap_block,
+=20
+ 	TP_PROTO(struct regmap *map, unsigned int reg, int count),
+--=20
+2.36.0

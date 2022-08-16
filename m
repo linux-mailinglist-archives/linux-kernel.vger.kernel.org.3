@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BC9B5955ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048A45955EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232779AbiHPJJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47868 "EHLO
+        id S232408AbiHPJIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233448AbiHPJH5 (ORCPT
+        with ESMTP id S231703AbiHPJHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:07:57 -0400
+        Tue, 16 Aug 2022 05:07:44 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCBC0C6537
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:25:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B404C889D
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:25:15 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2064C1D6F;
-        Tue, 16 Aug 2022 00:25:14 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 20A201D70;
+        Tue, 16 Aug 2022 00:25:16 -0700 (PDT)
 Received: from e120937-lin.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8382B3F70D;
-        Tue, 16 Aug 2022 00:25:11 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 83B323F70D;
+        Tue, 16 Aug 2022 00:25:13 -0700 (PDT)
 From:   Cristian Marussi <cristian.marussi@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
@@ -29,9 +29,9 @@ Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
         souvik.chakravarty@arm.com, wleavitt@marvell.com,
         peter.hilber@opensynergy.com, nicola.mazzucato@arm.com,
         tarek.el-sherbiny@arm.com, cristian.marussi@arm.com
-Subject: [RFC PATCH 3/6] firmware: arm_scmi: Add xfer raw helpers
-Date:   Tue, 16 Aug 2022 08:24:47 +0100
-Message-Id: <20220816072450.3120959-4-cristian.marussi@arm.com>
+Subject: [RFC PATCH 4/6] firmware: arm_scmi: Move errors defs and code to common.h
+Date:   Tue, 16 Aug 2022 08:24:48 +0100
+Message-Id: <20220816072450.3120959-5-cristian.marussi@arm.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220816072450.3120959-1-cristian.marussi@arm.com>
 References: <20220816072450.3120959-1-cristian.marussi@arm.com>
@@ -46,136 +46,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a few SCMI helpers useful to implement SCMI Raw access support.
+Move SCMI error codes definitions and helper to the common.h header
+together with the delayed response timeout define.
+
+No functional change.
 
 Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 ---
- drivers/firmware/arm_scmi/common.h |  7 +++
- drivers/firmware/arm_scmi/driver.c | 79 ++++++++++++++++++++++++++++++
- 2 files changed, 86 insertions(+)
+ drivers/firmware/arm_scmi/common.h | 40 ++++++++++++++++++++++++++++++
+ drivers/firmware/arm_scmi/driver.c | 40 ------------------------------
+ 2 files changed, 40 insertions(+), 40 deletions(-)
 
 diff --git a/drivers/firmware/arm_scmi/common.h b/drivers/firmware/arm_scmi/common.h
-index bbaac20544a5..3316bf9eb98a 100644
+index 3316bf9eb98a..5ed64bfe9054 100644
 --- a/drivers/firmware/arm_scmi/common.h
 +++ b/drivers/firmware/arm_scmi/common.h
-@@ -214,6 +214,13 @@ struct scmi_desc {
- 	const bool atomic_enabled;
- };
+@@ -27,6 +27,46 @@
+ #include "protocols.h"
+ #include "notify.h"
  
-+void scmi_xfer_raw_put(const struct scmi_handle *handle,
-+		       struct scmi_xfer *xfer);
-+struct scmi_xfer *scmi_xfer_raw_get(const struct scmi_handle *handle);
++#define SCMI_MAX_RESPONSE_TIMEOUT	(2 * MSEC_PER_SEC)
 +
-+int scmi_xfer_raw_inflight_register(const struct scmi_handle *handle,
-+				    struct scmi_xfer *xfer);
++enum scmi_error_codes {
++	SCMI_SUCCESS = 0,	/* Success */
++	SCMI_ERR_SUPPORT = -1,	/* Not supported */
++	SCMI_ERR_PARAMS = -2,	/* Invalid Parameters */
++	SCMI_ERR_ACCESS = -3,	/* Invalid access/permission denied */
++	SCMI_ERR_ENTRY = -4,	/* Not found */
++	SCMI_ERR_RANGE = -5,	/* Value out of range */
++	SCMI_ERR_BUSY = -6,	/* Device busy */
++	SCMI_ERR_COMMS = -7,	/* Communication Error */
++	SCMI_ERR_GENERIC = -8,	/* Generic Error */
++	SCMI_ERR_HARDWARE = -9,	/* Hardware Error */
++	SCMI_ERR_PROTOCOL = -10,/* Protocol Error */
++};
 +
- #ifdef CONFIG_ARM_SCMI_TRANSPORT_MAILBOX
- extern const struct scmi_desc scmi_mailbox_desc;
- #endif
++static const int scmi_linux_errmap[] = {
++	/* better than switch case as long as return value is continuous */
++	0,			/* SCMI_SUCCESS */
++	-EOPNOTSUPP,		/* SCMI_ERR_SUPPORT */
++	-EINVAL,		/* SCMI_ERR_PARAM */
++	-EACCES,		/* SCMI_ERR_ACCESS */
++	-ENOENT,		/* SCMI_ERR_ENTRY */
++	-ERANGE,		/* SCMI_ERR_RANGE */
++	-EBUSY,			/* SCMI_ERR_BUSY */
++	-ECOMM,			/* SCMI_ERR_COMMS */
++	-EIO,			/* SCMI_ERR_GENERIC */
++	-EREMOTEIO,		/* SCMI_ERR_HARDWARE */
++	-EPROTO,		/* SCMI_ERR_PROTOCOL */
++};
++
++static inline int scmi_to_linux_errno(int errno)
++{
++	int err_idx = -errno;
++
++	if (err_idx >= SCMI_SUCCESS && err_idx < ARRAY_SIZE(scmi_linux_errmap))
++		return scmi_linux_errmap[err_idx];
++	return -EIO;
++}
++
+ #define MSG_ID_MASK		GENMASK(7, 0)
+ #define MSG_XTRACT_ID(hdr)	FIELD_GET(MSG_ID_MASK, (hdr))
+ #define MSG_TYPE_MASK		GENMASK(9, 8)
 diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
-index e5193da2ce09..797826237776 100644
+index 797826237776..141a140792a5 100644
 --- a/drivers/firmware/arm_scmi/driver.c
 +++ b/drivers/firmware/arm_scmi/driver.c
-@@ -350,6 +350,53 @@ scmi_xfer_inflight_register_unlocked(struct scmi_xfer *xfer,
- 	xfer->pending = true;
+@@ -37,20 +37,6 @@
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/scmi.h>
+ 
+-enum scmi_error_codes {
+-	SCMI_SUCCESS = 0,	/* Success */
+-	SCMI_ERR_SUPPORT = -1,	/* Not supported */
+-	SCMI_ERR_PARAMS = -2,	/* Invalid Parameters */
+-	SCMI_ERR_ACCESS = -3,	/* Invalid access/permission denied */
+-	SCMI_ERR_ENTRY = -4,	/* Not found */
+-	SCMI_ERR_RANGE = -5,	/* Value out of range */
+-	SCMI_ERR_BUSY = -6,	/* Device busy */
+-	SCMI_ERR_COMMS = -7,	/* Communication Error */
+-	SCMI_ERR_GENERIC = -8,	/* Generic Error */
+-	SCMI_ERR_HARDWARE = -9,	/* Hardware Error */
+-	SCMI_ERR_PROTOCOL = -10,/* Protocol Error */
+-};
+-
+ /* List of all SCMI devices active in system */
+ static LIST_HEAD(scmi_list);
+ /* Protection for the entire list */
+@@ -170,30 +156,6 @@ struct scmi_info {
+ 
+ #define handle_to_scmi_info(h)	container_of(h, struct scmi_info, handle)
+ 
+-static const int scmi_linux_errmap[] = {
+-	/* better than switch case as long as return value is continuous */
+-	0,			/* SCMI_SUCCESS */
+-	-EOPNOTSUPP,		/* SCMI_ERR_SUPPORT */
+-	-EINVAL,		/* SCMI_ERR_PARAM */
+-	-EACCES,		/* SCMI_ERR_ACCESS */
+-	-ENOENT,		/* SCMI_ERR_ENTRY */
+-	-ERANGE,		/* SCMI_ERR_RANGE */
+-	-EBUSY,			/* SCMI_ERR_BUSY */
+-	-ECOMM,			/* SCMI_ERR_COMMS */
+-	-EIO,			/* SCMI_ERR_GENERIC */
+-	-EREMOTEIO,		/* SCMI_ERR_HARDWARE */
+-	-EPROTO,		/* SCMI_ERR_PROTOCOL */
+-};
+-
+-static inline int scmi_to_linux_errno(int errno)
+-{
+-	int err_idx = -errno;
+-
+-	if (err_idx >= SCMI_SUCCESS && err_idx < ARRAY_SIZE(scmi_linux_errmap))
+-		return scmi_linux_errmap[err_idx];
+-	return -EIO;
+-}
+-
+ void scmi_notification_instance_data_set(const struct scmi_handle *handle,
+ 					 void *priv)
+ {
+@@ -1056,8 +1018,6 @@ static void reset_rx_to_maxsz(const struct scmi_protocol_handle *ph,
+ 	xfer->rx.len = info->desc->max_msg_size;
  }
  
-+/**
-+ * scmi_xfer_inflight_register  - Try to register an xfer as in-flight
-+ *
-+ * @xfer: The xfer to register
-+ * @minfo: Pointer to Tx/Rx Message management info based on channel type
-+ *
-+ * Note that this helper does NOT assume anything about the sequence number
-+ * that was baked into the provided xfer, so it checks at first if it can
-+ * be mapped to a free slot and fails with an error if another xfer with the
-+ * same sequence number is currently still registered as in-flight.
-+ *
-+ * Return: 0 on Success or -EBUSY if sequence number embedded in the xfer
-+ *	   could not rbe mapped to a free slot in the xfer_alloc_table.
-+ */
-+static int scmi_xfer_inflight_register(struct scmi_xfer *xfer,
-+				       struct scmi_xfers_info *minfo)
-+{
-+	int ret = 0;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&minfo->xfer_lock, flags);
-+	if (!test_bit(xfer->hdr.seq, minfo->xfer_alloc_table))
-+		scmi_xfer_inflight_register_unlocked(xfer, minfo);
-+	else
-+		ret = -EBUSY;
-+	spin_unlock_irqrestore(&minfo->xfer_lock, flags);
-+
-+	return ret;
-+}
-+
-+/**
-+ * scmi_xfer_raw_inflight_register  - An helper to register the given xfer as in
-+ * flight on the TX channe, if possible.
-+ *
-+ * @handle: Pointer to SCMI entity handle
-+ * @xfer: The xfer to register
-+ *
-+ * Return: 0 on Success, error otherwise
-+ */
-+int scmi_xfer_raw_inflight_register(const struct scmi_handle *handle,
-+				    struct scmi_xfer *xfer)
-+{
-+	struct scmi_info *info = handle_to_scmi_info(handle);
-+
-+	return scmi_xfer_inflight_register(xfer, &info->tx_minfo);
-+}
-+
+-#define SCMI_MAX_RESPONSE_TIMEOUT	(2 * MSEC_PER_SEC)
+-
  /**
-  * scmi_xfer_pending_set  - Pick a proper sequence number and mark the xfer
-  * as pending in-flight
-@@ -425,6 +472,22 @@ static struct scmi_xfer *scmi_xfer_get(const struct scmi_handle *handle,
- 	return xfer;
- }
- 
-+/**
-+ * scmi_xfer_raw_get  - Helper to get a bare free xfer from the TX channel
-+ *
-+ * @handle: Pointer to SCMI entity handle
-+ *
-+ * Note that xfer is taken from the TX channel structures.
-+ *
-+ * Return: A valid xfer on Success, or an error-pointer otherwise
-+ */
-+struct scmi_xfer *scmi_xfer_raw_get(const struct scmi_handle *handle)
-+{
-+	struct scmi_info *info = handle_to_scmi_info(handle);
-+
-+	return scmi_xfer_get(handle, &info->tx_minfo);
-+}
-+
- /**
-  * __scmi_xfer_put() - Release a message
-  *
-@@ -453,6 +516,22 @@ __scmi_xfer_put(struct scmi_xfers_info *minfo, struct scmi_xfer *xfer)
- 	spin_unlock_irqrestore(&minfo->xfer_lock, flags);
- }
- 
-+/**
-+ * scmi_xfer_raw_put  - Release an xfer that was taken by @scmi_xfer_raw_get
-+ *
-+ * @handle: Pointer to SCMI entity handle
-+ * @xfer: A reference to the xfer to put
-+ *
-+ * Note that as with other xfer_put() handlers the xfer is really effectively
-+ * released only if there are no more users on the system.
-+ */
-+void scmi_xfer_raw_put(const struct scmi_handle *handle, struct scmi_xfer *xfer)
-+{
-+	struct scmi_info *info = handle_to_scmi_info(handle);
-+
-+	return __scmi_xfer_put(&info->tx_minfo, xfer);
-+}
-+
- /**
-  * scmi_xfer_lookup_unlocked  -  Helper to lookup an xfer_id
-  *
+  * do_xfer_with_response() - Do one transfer and wait until the delayed
+  *	response is received
 -- 
 2.32.0
 

@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF767596618
+	by mail.lfdr.de (Postfix) with ESMTP id 2F70E596616
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 01:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237369AbiHPXkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 19:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38606 "EHLO
+        id S237482AbiHPXkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 19:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiHPXkR (ORCPT
+        with ESMTP id S237354AbiHPXkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 19:40:17 -0400
+        Tue, 16 Aug 2022 19:40:20 -0400
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6024975CDD
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 16:40:16 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3328a211611so76795917b3.5
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 16:40:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA35A75FE1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 16:40:18 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-329a474c437so128202477b3.18
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 16:40:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=UNi3nY4e74LKnS5YZ6ZQXRLBLNXdoKR2Gl4hi8aAWbs=;
-        b=Xmee1qyOOONHqAhhrJGYFvgUBhm3gCjCEV5vgj3L9ZM1NyG4ELIV/0YWtfNoQzJc3k
-         nzNypeYlgJGUpxYl2Q1stqtMwxIcN3nPj7v3JW2cDRnTceyzza8Dc+yR+jO4KkeXIF6V
-         WW/PSazQCY8bbJFqkbz0KS4Sg2sL25EuTtyPvwXEyVneM1LNiQSPoxgmJLVu7l7BzQeg
-         RARedZ7NT8BDlr54gOToUf0PPTCSqAmELKUlN2kX6NcpgOjpjZh1fHH5Ho9FzS9VEHTs
-         HVkUYOlO2zrgg6y69bWlOhXswdGeYdm6wR1CJL/+gG//5JqiIJKrnBTiqkaIK46Uc5Oz
-         AhHw==
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:from:to:cc;
+        bh=D08oWd4LjFqivxR059JhoCieMYjNYb3QgJK4ULKJads=;
+        b=Zd3BC7tgcxZnVGrjx21FVrnzY80tCScyV8zDCKSI+7F3gEaY56vZZcgjbaX+ZcwRQc
+         HZ/Wu390bK80ivlifGXr9LF9OjpnJgcHdlAN6/+kQsh4fnm02aO3v518wNfWMO7vEsh8
+         6FlZgcS14qYwXC7gGmtTXj4JyINBIh4mtFkaeh8icfL1r/HMSvGijpysXJSL2af8/b44
+         9lUKgKYKSDrJ8tlmc184899jxmmsb07fOYenHKZHSRRIHhcNHz+vDjGZXeccPEBaBV5t
+         UpkzDmgLfBcTysKw2hwq81ayyaXRVrZFObFAFssMbKqUipJndVhEPOAp3NVCLDwglk8T
+         J8Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=UNi3nY4e74LKnS5YZ6ZQXRLBLNXdoKR2Gl4hi8aAWbs=;
-        b=3cxukzbeyFOTM4SxlMoX+JgubXTUIKT8a/SeO50b6vFmBf9I1LxL0eXOrpIbRgXq9M
-         bheCO2CJXo+4u3j5T2Tne3aN+byp9UaRu0MsOEq0DAQWzGGZmTnVy747TjFlBIOsUAoj
-         /bH6qYnMy/M6AtvJ9SqRlrROxRCan9DuhSFa33UeXxWUeFU0jQW2XAULEjm8TUCME8/U
-         aP9iFQZOBnmDg3fvMz6aMrpjsHAtFlg3tdciZZIlCbK0kx1W++oVWcSTVJxMeNgwA4tt
-         fedIKgVsO8K/OIkpwlVDhXSQVEQ7Zp2FPbuK8t7I/wDgkF2CUljbtRynFbtXOllMwQ9I
-         uzeA==
-X-Gm-Message-State: ACgBeo0CV6dF1nr3l7dbC4mvocn3q6krtWuvEY78NtNqWeRh2vb7gzc9
-        Zfk+OziO1OYTUInZuVDHrkEU6X70dpbnyhJJD5P4hWQ5pL82lVEFJcqx0aaQu2mX3uesTN6OgA8
-        9jQPUy9E8EXrRFqE9wmtf3NjMP3Ei42XHcSH+H8TpTYYhjTywxfO0joDc5cubJbjG+HUSGg==
-X-Google-Smtp-Source: AA6agR7nLWQJjytbdBXE8SR1wADUvUrjNlZbAQtIn1LNmfCYCa89XbJSlbCkY6bFv4sjNu0fO32SQfPBdMo=
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:x-gm-message-state:from:to:cc;
+        bh=D08oWd4LjFqivxR059JhoCieMYjNYb3QgJK4ULKJads=;
+        b=ymVc/oX9GhCV6KlpbG19zH1ISCE+x2jRmvF77GUNsr8lTBIn5Xa4CupKbSQnfn49V2
+         PTKbof7rznZxmB0D4nvwbKLgN+7GZTCYkmh5ZX+nLHr5TSAYAVdtqnjx3l72+o1T33pG
+         pZr8n0JRl4NixwsN46QLkXqZAWAMqsTrN5w4kLPzegWC3bh0LMYXd2Lf8KPCblSmoMjq
+         qaYiuWXrsru8wtY3pcGXq9q2jNPTBqJZpIA2vtwoIfZBD0WlGzS58zX9DNF+cMBT6zZa
+         Lf8fPjULniEEDX4svewK8Hw4TLJRyngpKs+fd3IE+yEzwJY1QWWJQyZ27yHRLxdD9UXg
+         l6zg==
+X-Gm-Message-State: ACgBeo1Dar6M29WvRrxQGqXvJYXbLF9cZmpAeus0MPoM4uaz77TYoobt
+        DlH46b623qVNC+vig7069rnzbjK4OKMxGk7mkz5Xu9oj9LznKRigX/bifhOwiTGv9PPWrgZ/123
+        Xdof1ng5eNHrMRdkKWn90n9jk4YXv+wfadfHV/m9xw2B3g0FH3zBarXyNozrFQYF68tvEpQ==
+X-Google-Smtp-Source: AA6agR6agp/FjD0u3wYPK2e4qb7uNMXZOBvd/d4O6snkHxKspfot09Y1KmGgtlJ6DmBU+Qib6xRCaQngUhE=
 X-Received: from haoluo.svl.corp.google.com ([2620:15c:2d4:203:7e6e:c287:3dc6:d4d8])
- (user=haoluo job=sendgmr) by 2002:a25:404c:0:b0:68f:d76a:4a59 with SMTP id
- n73-20020a25404c000000b0068fd76a4a59mr1256750yba.410.1660693215606; Tue, 16
- Aug 2022 16:40:15 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 16:40:11 -0700
-Message-Id: <20220816234012.910255-1-haoluo@google.com>
+ (user=haoluo job=sendgmr) by 2002:a05:6902:72c:b0:676:d795:d6f8 with SMTP id
+ l12-20020a056902072c00b00676d795d6f8mr17854320ybt.406.1660693218147; Tue, 16
+ Aug 2022 16:40:18 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 16:40:12 -0700
+In-Reply-To: <20220816234012.910255-1-haoluo@google.com>
+Message-Id: <20220816234012.910255-2-haoluo@google.com>
 Mime-Version: 1.0
+References: <20220816234012.910255-1-haoluo@google.com>
 X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH bpf-next v2 1/2] libbpf: Allows disabling auto attach
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Tests libbpf autoattach APIs
 From:   Hao Luo <haoluo@google.com>
 To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -67,102 +70,88 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds libbpf APIs for disabling auto-attach for individual functions.
-This is motivated by the use case of cgroup iter [1]. Some iter
-types require their parameters to be non-zero, therefore applying
-auto-attach on them will fail. With these two new APIs, users who
-want to use auto-attach and these types of iters can disable
-auto-attach on the program and perform manual attach.
-
-[1] https://lore.kernel.org/bpf/CAEf4BzZ+a2uDo_t6kGBziqdz--m2gh2_EUwkGLDtMd65uwxUjA@mail.gmail.com/
+Adds test for libbpf APIs that toggle bpf program auto-attaching.
 
 Signed-off-by: Hao Luo <haoluo@google.com>
 ---
- tools/lib/bpf/libbpf.c   | 15 ++++++++++++++-
- tools/lib/bpf/libbpf.h   |  2 ++
- tools/lib/bpf/libbpf.map |  2 ++
- 3 files changed, 18 insertions(+), 1 deletion(-)
+ .../selftests/bpf/prog_tests/autoattach.c     | 30 +++++++++++++++++++
+ .../selftests/bpf/progs/test_autoattach.c     | 23 ++++++++++++++
+ 2 files changed, 53 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/autoattach.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_autoattach.c
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index aa05a99b913d..0159a43c7efd 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -417,6 +417,7 @@ struct bpf_program {
- 
- 	int fd;
- 	bool autoload;
-+	bool autoattach;
- 	bool mark_btf_static;
- 	enum bpf_prog_type type;
- 	enum bpf_attach_type expected_attach_type;
-@@ -755,6 +756,8 @@ bpf_object__init_prog(struct bpf_object *obj, struct bpf_program *prog,
- 		prog->autoload = true;
- 	}
- 
-+	prog->autoattach = true;
+diff --git a/tools/testing/selftests/bpf/prog_tests/autoattach.c b/tools/testing/selftests/bpf/prog_tests/autoattach.c
+new file mode 100644
+index 000000000000..b34b5945d297
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/autoattach.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Google */
 +
- 	/* inherit object's log_level */
- 	prog->log_level = obj->log_level;
- 
-@@ -8314,6 +8317,16 @@ int bpf_program__set_autoload(struct bpf_program *prog, bool autoload)
- 	return 0;
- }
- 
-+bool bpf_program__autoattach(const struct bpf_program *prog)
++#include <test_progs.h>
++#include "test_autoattach.skel.h"
++
++void test_autoattach(void)
 +{
-+	return prog->autoattach;
++	struct test_autoattach* skel;
++
++	skel = test_autoattach__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
++		goto cleanup;
++
++	/* disable auto-attach for prog2 */
++	bpf_program__set_autoattach(skel->progs.prog2, false);
++	ASSERT_TRUE(bpf_program__autoattach(skel->progs.prog1), "autoattach_prog1");
++	ASSERT_FALSE(bpf_program__autoattach(skel->progs.prog2), "autoattach_prog2");
++	if (!ASSERT_OK(test_autoattach__attach(skel), "skel_attach"))
++		goto cleanup;
++
++	usleep(1);
++
++	ASSERT_TRUE(skel->bss->prog1_called, "attached_prog1");
++	ASSERT_FALSE(skel->bss->prog2_called, "attached_prog2");
++
++cleanup:
++	test_autoattach__destroy(skel);
 +}
 +
-+void bpf_program__set_autoattach(struct bpf_program *prog, bool autoattach)
+diff --git a/tools/testing/selftests/bpf/progs/test_autoattach.c b/tools/testing/selftests/bpf/progs/test_autoattach.c
+new file mode 100644
+index 000000000000..11a44493ebce
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_autoattach.c
+@@ -0,0 +1,23 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Google */
++
++#include "vmlinux.h"
++#include <bpf/bpf_tracing.h>
++
++bool prog1_called = false;
++bool prog2_called = false;
++
++SEC("raw_tp/sys_enter")
++int prog1(const void *ctx)
 +{
-+	prog->autoattach = autoattach;
++	prog1_called = true;
++	return 0;
 +}
 +
- const struct bpf_insn *bpf_program__insns(const struct bpf_program *prog)
- {
- 	return prog->insns;
-@@ -12346,7 +12359,7 @@ int bpf_object__attach_skeleton(struct bpf_object_skeleton *s)
- 		struct bpf_program *prog = *s->progs[i].prog;
- 		struct bpf_link **link = s->progs[i].link;
- 
--		if (!prog->autoload)
-+		if (!prog->autoload || !prog->autoattach)
- 			continue;
- 
- 		/* auto-attaching not supported for this program */
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 61493c4cddac..88a1ac34b12a 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -260,6 +260,8 @@ LIBBPF_API const char *bpf_program__name(const struct bpf_program *prog);
- LIBBPF_API const char *bpf_program__section_name(const struct bpf_program *prog);
- LIBBPF_API bool bpf_program__autoload(const struct bpf_program *prog);
- LIBBPF_API int bpf_program__set_autoload(struct bpf_program *prog, bool autoload);
-+LIBBPF_API bool bpf_program__autoattach(const struct bpf_program *prog);
-+LIBBPF_API void bpf_program__set_autoattach(struct bpf_program *prog, bool autoattach);
- 
- struct bpf_insn;
- 
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 119e6e1ea7f1..2b928dc21af0 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -358,6 +358,8 @@ LIBBPF_1.0.0 {
- 		bpf_obj_get_opts;
- 		bpf_prog_query_opts;
- 		bpf_program__attach_ksyscall;
-+		bpf_program__autoattach;
-+		bpf_program__set_autoattach;
- 		btf__add_enum64;
- 		btf__add_enum64_value;
- 		libbpf_bpf_attach_type_str;
++SEC("raw_tp/sys_exit")
++int prog2(const void *ctx)
++{
++	prog2_called = true;
++	return 0;
++}
++
 -- 
 2.37.1.595.g718a3a8f04-goog
 

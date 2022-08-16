@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 683AB596275
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 20:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F77596273
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 20:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236832AbiHPS0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 14:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
+        id S236664AbiHPS0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 14:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236559AbiHPS0F (ORCPT
+        with ESMTP id S237071AbiHPS0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 14:26:05 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16871868B9
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 11:25:58 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id n4so13574967wrp.10
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 11:25:57 -0700 (PDT)
+        Tue, 16 Aug 2022 14:26:06 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327CB79620
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 11:25:59 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id v7-20020a1cac07000000b003a6062a4f81so1053363wme.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 11:25:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=conchuod.ie; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=d9TppbXdiWPs+48x7U6F2RLRbtXIB7UvU4Wm4rVvtl0=;
-        b=f2AlxGScpJunozXwr3OLri+tVAp8DP91ryrotY2//J2fi1OUCt1LNagskuDqphhkZT
-         YrquLa/5e3kZ0mNDTpe8BZPCqsenNm2Iz6veDpmpJ2eS1/XvlY9RG0X5z1/PE71xJM/z
-         T89NIgNPpq6E+d39MQKxfD7TWO20cghUHmkysLjgO3lWV5s7Rl+R6uqjodyd8Uo9Phd8
-         3Jpqpdld6ng03AVC6cciJzWfKieF0XVANREG8RAcZlM+uEsFPf0miZbDNl9GDQcXyNWL
-         1Gy9OFXRx+voQGCrcVvklEEfQh2gOjJjjJeoID3OXAAvB/6mk0/QFGfKnDLEXI1kcD03
-         MiRw==
+        bh=FMkAjTRxFynoKfy/JBCi5zISG1GRJIQTYNHeDvaDnhc=;
+        b=edWE/8Om/5nhi4bDasv/LIbOVfF6WqJ+jyLjdV2U57/KWwkiAZLjuSgliTEtKV3eDm
+         2Ib2XEp6RLOwpim0ssuftuMa6c6upQpytEDq0mFmszL6W3YVjVEPD1R/hNMvKUef16id
+         hxV655Qk8bLCNbcVyuJIgjbIMupSeJe8pcOU3EM8Ia1PoJd31xFM8MY+1qviVmLIk0hJ
+         ub5tfTuqSHLH2meS7KyNVIA0QPr6gv9/xIVaRZj2P4CiDOnfovYMg8VUp6PtTF9sYRbA
+         AEqW8lHeTMVn4k0kEyt7trr4QxLSHIS6ShpD3Nu/yRwub/Ip6BbP6ZmISwP/IYQJnODt
+         JmrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=d9TppbXdiWPs+48x7U6F2RLRbtXIB7UvU4Wm4rVvtl0=;
-        b=g4NsrOota8Bn580kkwVyYdh9n+n7v2tO8VGYcx+klllr7FCmQQ9eURakiiubjlCMIg
-         Kacp1oT019Pf6VVNim6eplTuQJrc1jhgOrCq1lLa8VIY3R4o/LxkZOAn/sUPr1eaYCcL
-         wyEnE4tdQUecU9K+oMx300sWmR2ylWndVs1GbKq++ojPeGQd8HSC8QGXxCU1m12ENGPv
-         L43DxlPYTx8TxHb2ZPRfhQysJF1bW1OdZjNxSpleDv6d7zVkuxwqee2gn8CA+H+ieFVB
-         oCz0mLfp00fxm+iWYS4GNpq3J61pN3MyV/hQ5EbJHWC/wK+TrmdfNNI0gd+e4wlCLryT
-         eB+Q==
-X-Gm-Message-State: ACgBeo36Dgy2BaS5f/Rn1Rl8nB2dxvj+S+oR+iavp7utMY6vlwx7IFlU
-        91B/Ny1VGPpifVRKdZ0bIWBWUoRZn3ln+Iym
-X-Google-Smtp-Source: AA6agR5I+KbBV3e/0Gh9/t5/+sRspQ2mbNFQlQO0aX1NckIqMfw5q/VrA8Cv5/N3BXLfG6j4FPECGg==
-X-Received: by 2002:a05:6000:1152:b0:220:6421:ccdc with SMTP id d18-20020a056000115200b002206421ccdcmr12322712wrx.61.1660674356514;
-        Tue, 16 Aug 2022 11:25:56 -0700 (PDT)
+        bh=FMkAjTRxFynoKfy/JBCi5zISG1GRJIQTYNHeDvaDnhc=;
+        b=Q0rus6jJTkf4pi2cw6xffk4IWCHwtxpFPnHYO1Mw58aY2eq/7OwF36if9+UZohPYM8
+         KP5NP7cQF5PzArNTJAa2Jg8m3oubqKrfpcU3UzqUuOrGo+r0BDDxmaY3w4IjZYfaNxyQ
+         veWMX9qMdcah3e0gHkxl4SxX900CCjJ2BrmwRjTP1KLXDHr1ROojrUXEhUr6ENn/7SG9
+         18VZZtYPWqSJ+nZDC99l3CnDdCu6bC09+2Bc/vl0U+vuudDyVgrOanEndZMWboKj3EHt
+         TIv7dhaWQSe6y0mddcboFJm23ROA/AheYsr3Vu89fb/SwMU4nKdwS+a3KJI58d6YP/En
+         k2Fw==
+X-Gm-Message-State: ACgBeo26BqKQz++X8WLkkAY0QWhzEaVrTtEKt2x99adnIn8aLTGUf/kT
+        udweHHwXpE7kZf/snAzaw6Gf1Q==
+X-Google-Smtp-Source: AA6agR5KC3j+XouQHP1FxiS6VJD6PbM4GQLhS+ON8+YKaVfbQ51bYX6+5FkVajNHT2pNc6KNfsSAjw==
+X-Received: by 2002:a05:600c:1898:b0:3a5:b467:c3ef with SMTP id x24-20020a05600c189800b003a5b467c3efmr19356925wmp.178.1660674357641;
+        Tue, 16 Aug 2022 11:25:57 -0700 (PDT)
 Received: from henark71.. ([109.76.58.63])
-        by smtp.gmail.com with ESMTPSA id s17-20020a1cf211000000b003a603fbad5bsm4015482wmc.45.2022.08.16.11.25.55
+        by smtp.gmail.com with ESMTPSA id s17-20020a1cf211000000b003a603fbad5bsm4015482wmc.45.2022.08.16.11.25.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 11:25:55 -0700 (PDT)
+        Tue, 16 Aug 2022 11:25:57 -0700 (PDT)
 From:   Conor Dooley <mail@conchuod.ie>
 To:     Daire McNamara <daire.mcnamara@microchip.com>,
         Bjorn Helgaas <bhelgaas@google.com>,
@@ -61,9 +61,9 @@ To:     Daire McNamara <daire.mcnamara@microchip.com>,
         Conor Dooley <conor.dooley@microchip.com>
 Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH v2 1/6] dt-bindings: PCI: fu740-pci: fix missing clock-names
-Date:   Tue, 16 Aug 2022 19:25:43 +0100
-Message-Id: <20220816182547.3454843-2-mail@conchuod.ie>
+Subject: [PATCH v2 2/6] dt-bindings: PCI: microchip,pcie-host: fix missing clocks properties
+Date:   Tue, 16 Aug 2022 19:25:44 +0100
+Message-Id: <20220816182547.3454843-3-mail@conchuod.ie>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220816182547.3454843-1-mail@conchuod.ie>
 References: <20220816182547.3454843-1-mail@conchuod.ie>
@@ -81,46 +81,57 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-The commit b92225b034c0 ("dt-bindings: PCI: designware: Fix
-'unevaluatedProperties' warnings") removed the clock-names property as
-a requirement and from the example as it triggered unevaluatedProperty
-warnings. dtbs_check was not able to pick up on this at the time, but
-now can:
+Recent versions of dt-schema warn about unevaluatedProperties:
+arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dtb: pcie@2000000000: Unevaluated properties are not allowed ('clock-names', 'clocks', 'legacy-interrupt-controller', 'microchip,axi-m-atr0' were unexpected)
+        From schema: Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
 
-arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dtb: pcie@e00000000: Unevaluated properties are not allowed ('clock-names' was unexpected)
-        From schema: linux/Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
+The clocks are required to enable interfaces between the FPGA fabric
+and the core complex, so add them to the binding.
 
-The property was already in use by the FU740 DTS and the clock must be
-enabled. The Linux driver does not use this property, but outside of
-the kernel this property may have users. Re-add the property and its
-"clocks" dependency.
-
-Fixes: b92225b034c0 ("dt-bindings: PCI: designware: Fix 'unevaluatedProperties' warnings")
-Fixes: 43cea116be0b ("dt-bindings: PCI: Add SiFive FU740 PCIe host controller")
+Fixes: 6ee6c89aac35 ("dt-bindings: PCI: microchip: Add Microchip PolarFire host binding")
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
-v2022.08 of dt-schema is required.
+dt-schema v2022.08 is required to replicate
 ---
- .../devicetree/bindings/pci/sifive,fu740-pcie.yaml          | 6 ++++++
- 1 file changed, 6 insertions(+)
+ .../bindings/pci/microchip,pcie-host.yaml     | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml b/Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
-index 195e6afeb169..c7a9a2dc0fa6 100644
---- a/Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
-+++ b/Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
-@@ -51,6 +51,12 @@ properties:
-     description: A phandle to the PCIe power up reset line.
-     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+index edb4f81253c8..6bbde8693ef8 100644
+--- a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
++++ b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+@@ -25,6 +25,31 @@ properties:
+       - const: cfg
+       - const: apb
  
 +  clocks:
-+    maxItems: 1
++    description:
++      Fabric Interface Controllers, FICs, are the interface between the FPGA
++      fabric and the core complex on PolarFire SoC. The FICs require two clocks,
++      one from each side of the interface. The "FIC clocks" described by this
++      property are on the core complex side & communication through a FIC is not
++      possible unless it's corresponding clock is enabled. A clock must be
++      enabled for each of the interfaces the root port is connected through.
++      This could in theory be all 4 interfaces, one interface or any combination
++      in between.
++    minItems: 1
++    items:
++      - description: FIC0's clock
++      - description: FIC1's clock
++      - description: FIC2's clock
++      - description: FIC3's clock
 +
 +  clock-names:
-+    const: pcie_aux
++    description:
++      As any FIC connection combination is possible, the names should match the
++      order in the clocks property and take the form "ficN" where N is a number
++      0-3
++    minItems: 1
++    maxItems: 4
 +
-   pwren-gpios:
-     description: Should specify the GPIO for controlling the PCI bus device power on.
-     maxItems: 1
+   interrupts:
+     minItems: 1
+     items:
 -- 
 2.37.1
 

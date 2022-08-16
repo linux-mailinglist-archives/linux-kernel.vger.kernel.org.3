@@ -2,282 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2E6595820
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:26:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B89325957C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234481AbiHPK0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
+        id S234344AbiHPKOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234652AbiHPKZp (ORCPT
+        with ESMTP id S233841AbiHPKNb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:25:45 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2077.outbound.protection.outlook.com [40.107.102.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A574119853;
-        Tue, 16 Aug 2022 01:24:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OefniQ8ogXYc+3g17+UZ4XKmpJl7W+kItUpyuvph5LDx8GXyEgK1aj0aafoBd9lYnc+s9BzqTOBsD34PI7UDk9P3rEb04RUNl+lD1mPOi2By5yXJ7KVItLlhZ3mACPfeEF/hWCxgv34tu2dzqDTMv4JfelOfvs0S4vyYJl9bGaCPNH8ktY8uYFyJcqqT8GXlSh7snKiskd6WrSuzH/iqYDZyk4uJlRxUW9OxMhfJFP5yv9BcyqQwZgRI6l+uhM/jSs54MRyVO+0qx/9QnCblnjvoexYFcql9cCLxbUuv3QZdEkWJ/GGX1qGsD2zm/zH8xtqUuFg4UCtY6nYSvvmX4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RxGHuh/DMTItO7XZn0UiWcvHfQdVQmVOiacOK6UDZw4=;
- b=asqvnxtBGgQO03+U1RZkGDr6aZWSL9yMAgjkT2XzUEW0DI8l48aBhsyUA2a9pWc7pXh32ZSqPaSx5bDrB6Ue3FWbX4/474XS9BDMCNnRyAJ1s/BRQN6J2Bw3ftGAkxCVc1Po01gQIpOGlYE89OZX0WSFgWC1/1RhlxxRAigJo1TNMQY7DcvhdAdB9Tm55JIEydaoytGBlkpqqPJkGppHdiEqlHbRQRk6EahmsBVBNrZV2MZ28LO4CA7UA6Dv17qKz5pJ1U+ZOgtcyi9UQjesuARWDVx3ikqZfMoqQ1ROEJBnMm6vyZdty+HJuNBmv/Wz2TE38noFoyshTGyhCWOZ5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RxGHuh/DMTItO7XZn0UiWcvHfQdVQmVOiacOK6UDZw4=;
- b=laEwcZHiTONQqltc+8lrk+OjSf9arEqM8EOb9DUun48qowkku4pY2IfrNCCNFnpEZZD636jQ3CKrEwPKfP6wLpYS4UGiJEw8uNsWWwO0Z0E8JKJTqTPA1EeXCWRLKTj+RyOL5JK48vkiXRSQEE+25ESomSDni6cTsS+YKtVSii2MIakdga9lrfHpbtvVwIaNqFwuny8ccJHLg+aNaNFJXmFJVncyYnSQcplMqKPvGMIDAlmrf7anDOFA18BfPWed1yxQiE7CVq34WBGr1HR3jhSN1rZBQROi0gWu+w3XyN0CNCRf8t8gwToYNPCeMnG0oaHPV0LgBsnzZembcV3b+Q==
-Received: from MW3PR05CA0026.namprd05.prod.outlook.com (2603:10b6:303:2b::31)
- by BYAPR12MB3528.namprd12.prod.outlook.com (2603:10b6:a03:138::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Tue, 16 Aug
- 2022 08:24:03 +0000
-Received: from CO1NAM11FT085.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:2b:cafe::f) by MW3PR05CA0026.outlook.office365.com
- (2603:10b6:303:2b::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14 via Frontend
- Transport; Tue, 16 Aug 2022 08:24:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.235; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.235) by
- CO1NAM11FT085.mail.protection.outlook.com (10.13.174.137) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5546.7 via Frontend Transport; Tue, 16 Aug 2022 08:24:03 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Tue, 16 Aug
- 2022 08:24:02 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 16 Aug
- 2022 01:24:01 -0700
-Received: from jilin-desktop.nvidia.com (10.127.8.12) by mail.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server id 15.2.986.29 via Frontend
- Transport; Tue, 16 Aug 2022 01:23:59 -0700
-From:   Jim Lin <jilin@nvidia.com>
-To:     <jckuo@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>
-CC:     <vkoul@kernel.org>, <balbi@kernel.org>,
-        <gregkh@linuxfoundation.org>, <jilin@nvidia.com>,
-        <bhsieh@nvidia.com>, <linux-phy@lists.infradead.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-Subject: [PATCH v2 1/2] phy: tegra: xusb: add utmi pad power on/down ops
-Date:   Tue, 16 Aug 2022 16:23:52 +0800
-Message-ID: <20220816082353.13390-2-jilin@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220816082353.13390-1-jilin@nvidia.com>
-References: <20220816082353.13390-1-jilin@nvidia.com>
-X-NVConfidentiality: public
+        Tue, 16 Aug 2022 06:13:31 -0400
+X-Greylist: delayed 568 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 16 Aug 2022 01:35:50 PDT
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2D0D2EB7
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:35:50 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.west.internal (Postfix) with ESMTP id A6B992B059FC;
+        Tue, 16 Aug 2022 04:26:16 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 16 Aug 2022 04:26:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1660638376; x=1660645576; bh=xTCEULyzlO
+        wE/UY9fk17qyZAhuhH6B/PGBqSBiSepwQ=; b=rbwsGfchGHfn7nqA489Zik6UDL
+        7XNwiAvlu1sOBim9tyjtigNpwTCuUJDZBO0SPVG1qIKarjSzpE+ekMl8i3b8MZpS
+        JfVeAScG0BcSqSdCpLYjLGkCCXasZj0QNw5yjDxwTjtV9/LDwnZGUemEiIMXp6GD
+        rSQ8Ht0GD63o6uQBGIo2R3y7Kj6jUwC2zp9uFkiJA0SbBiBlFhC8rAnATSFjdz4G
+        k1dETmyQAubjJWrl6vgLNcX0KRVhmEY0QfffbtM5gD7oCnpD/R8Nt6cmgORdyZHw
+        GMWmFL7020pjPLlR9NVevrsbfYr0NX0sNvWzIt0qTCUnKRC/zFA89Of4eHBQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660638376; x=1660645576; bh=xTCEULyzlOwE/UY9fk17qyZAhuhH
+        6B/PGBqSBiSepwQ=; b=osAXLH/Tri7LA6lBH8aa3aw8L8fxoOxibcLtQTkGg6uk
+        WbOkxnSfhKfZ9OoNLe7B3Eu0BB1n8F3EsvP88YzyK3XVW1aC0S/ShkqzIOr8EYUs
+        O5nMfICZD9HooaDPpC1i2l6ZFOz0ekPV66yyii+oRMy9PQnSqPPX5QCygHe6pUyJ
+        d3STzuVumZB7Hpz0QuV775ji7vDreR2KWLpWaKiXu4y3QodwccAQnjWDiUf5I5S1
+        +zWyKvI2W9/HeVuEjH+nk5KlN158b+V38GXaw99ctYHc91MOWbuFguWKnmR7sTwA
+        BvlDqYxfIGwWci48CYytMQnShso4/nbteMYCicwfJQ==
+X-ME-Sender: <xms:plT7YnVjVuZknf2kcyMAJN20f7GBzyjdOPlUZOQDtwfbDq7XDUfxPw>
+    <xme:plT7YvmS9R3CJClAGoemEPbvnNVuVkwcjhL_qjz3m3aiTCyFliQnS5QRdQqUNaTwl
+    Pz7JNQsMZ4-1LAsGtY>
+X-ME-Received: <xmr:plT7Yjaih8YTdQ26ggw3GOU0Vjx0rbPiGZOcEPO_WwfuQw6hdeQKCtbhqZs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehgedgtdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeejveefheefkeeiffegveelveetgffffeektdefuefhtedtgeejhefggedu
+    ffffudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:plT7YiUBKAZ9Z3FSVAVOFqhHxHWriY2vRa7L6cyWOsPg7tzkq8zK1A>
+    <xmx:plT7Yhl_b_C-XQsmq6wI9iZhjjDw5G-jUyjMZf4fflb3ZNaBAap4IA>
+    <xmx:plT7YvcvnOXo3v2b0bOAQJavstFCR5oeIdXzO7U77d8dMA29zHXhLA>
+    <xmx:qFT7YjVck8Ijurlme8u4oZU-wZ64Vk4qtklFMCg7SdGtv4nI05WtDzscqjM>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 16 Aug 2022 04:26:14 -0400 (EDT)
+Date:   Tue, 16 Aug 2022 10:26:12 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        Dom Cobley <dom@raspberrypi.com>
+Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
+Message-ID: <20220816082612.grebxql5ynnfnvfd@houat>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
+ <9fdecae2-80ad-6212-0522-7dccf9fb57be@tronnes.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5f74c9d9-587d-45a6-2e5e-08da7f60add2
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3528:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WaTPDdz3SFCy41aJriWpdLMkhTOGws45KaFuhMBsmgE0x6eWP5KL7xv2cfm+MN0jSgaj5a9/2bNibSraEfBcKXBkMTFP34AhWnEKTd+wxFZIEUw764NtKnYx72spcrmiTxzltAg9OLzl68vGclykJEzzOphKPrrlCeFoLJr5QSzB3w+DWp85GepGTPE4ZdMz2p5MWw5zKMlUkpksE0glC3cKKjHbusz8bWo/P+8uAiJ1e/ESJ7OdrXc2qIMG4sojwoa7yV0fawXY+SckTfY4M33Bc+h7gV3ePEZE4C2WAVQYiVh07rz/gdZWHx6SQG3meMd+pHNukYYWWSn4sxQG9wsdi2P7Hjo255PizybKlo/BvDW1dzDtNu0jhbPgwFW/79aRKePNUw9YJUt9d1oqCQtLyoq8tBNRv8DzrU+Ng2u05x0kSVX9NevPY16yPg2/GOpYMHmW1XevlGUUsF3OEIKqwnBjLbxM0702DqE1nfs7jYCM5oFMRcBqY8Zz1KPbYm5f7YqnuVTzQsvnYC3D1341vl1LESMWka1i+7++/2t3LXbIMFYSkxDrEj+/WgFRLsiTSeC6wHSSVct0BkFko2c6ciUgPecG/IsgVhrre8rZd3KTO0mjCEREufAclgcSV4UVnV/0r+aLutM395qriTjjg2d1qZ9gSh65QJKcKPtelIYoAOPpnnRP5WHu+Fmub434ZhgtTRdpsgykZhmbG3+8UGkQoEwqkGn9I29BU0yFmOkRbxDgostUAD4htJUOBxwsZNOqupz9Nmau/mtUWmZUsnKNLgzoZyQCCH/8D00DsDUFiQwsgfqE+c89zIeWU47wg0dJ2qtxMnDwxiNxfg==
-X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(376002)(396003)(39860400002)(40470700004)(36840700001)(46966006)(186003)(81166007)(336012)(1076003)(426003)(356005)(2616005)(82740400003)(47076005)(5660300002)(36860700001)(8936002)(70586007)(4326008)(70206006)(8676002)(40480700001)(82310400005)(478600001)(83380400001)(7696005)(40460700003)(6666004)(26005)(2906002)(41300700001)(6636002)(86362001)(54906003)(316002)(110136005)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2022 08:24:03.4917
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f74c9d9-587d-45a6-2e5e-08da7f60add2
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT085.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3528
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3hhom4iyskwekp7q"
+Content-Disposition: inline
+In-Reply-To: <9fdecae2-80ad-6212-0522-7dccf9fb57be@tronnes.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add utmi_pad_power_on/down ops for each SOC instead of exporting
-tegra_phy_xusb_utmi_pad_power_on/down directly for Tegra186 chip.
 
-Signed-off-by: BH Hsieh <bhsieh@nvidia.com>
-Signed-off-by: Jim Lin <jilin@nvidia.com>
----
-v2: update copyright year 
+--3hhom4iyskwekp7q
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- drivers/phy/tegra/xusb-tegra186.c | 19 ++++++++++++-------
- drivers/phy/tegra/xusb.c          | 22 +++++++++++++++++++++-
- drivers/phy/tegra/xusb.h          |  4 +++-
- include/linux/phy/tegra/xusb.h    |  4 +++-
- 4 files changed, 39 insertions(+), 10 deletions(-)
+Hi,
 
-diff --git a/drivers/phy/tegra/xusb-tegra186.c b/drivers/phy/tegra/xusb-tegra186.c
-index ae3915ed9fef..5abdf81aa143 100644
---- a/drivers/phy/tegra/xusb-tegra186.c
-+++ b/drivers/phy/tegra/xusb-tegra186.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Copyright (c) 2016-2020, NVIDIA CORPORATION.  All rights reserved.
-+ * Copyright (c) 2016-2022, NVIDIA CORPORATION.  All rights reserved.
-  */
- 
- #include <linux/delay.h>
-@@ -638,7 +638,7 @@ static void tegra186_utmi_bias_pad_power_off(struct tegra_xusb_padctl *padctl)
- 	mutex_unlock(&padctl->lock);
- }
- 
--static void tegra_phy_xusb_utmi_pad_power_on(struct phy *phy)
-+static void tegra186_utmi_pad_power_on(struct phy *phy)
- {
- 	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
- 	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
-@@ -656,6 +656,8 @@ static void tegra_phy_xusb_utmi_pad_power_on(struct phy *phy)
- 		return;
- 	}
- 
-+	dev_dbg(dev, "power on UTMI pad %u\n", index);
-+
- 	tegra186_utmi_bias_pad_power_on(padctl);
- 
- 	udelay(2);
-@@ -669,7 +671,7 @@ static void tegra_phy_xusb_utmi_pad_power_on(struct phy *phy)
- 	padctl_writel(padctl, value, XUSB_PADCTL_USB2_OTG_PADX_CTL1(index));
- }
- 
--static void tegra_phy_xusb_utmi_pad_power_down(struct phy *phy)
-+static void tegra186_utmi_pad_power_down(struct phy *phy)
- {
- 	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
- 	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
-@@ -679,6 +681,8 @@ static void tegra_phy_xusb_utmi_pad_power_down(struct phy *phy)
- 	if (!phy)
- 		return;
- 
-+	dev_dbg(padctl->dev, "power down UTMI pad %u\n", index);
-+
- 	value = padctl_readl(padctl, XUSB_PADCTL_USB2_OTG_PADX_CTL0(index));
- 	value |= USB2_OTG_PD;
- 	padctl_writel(padctl, value, XUSB_PADCTL_USB2_OTG_PADX_CTL0(index));
-@@ -849,15 +853,14 @@ static int tegra186_utmi_phy_power_on(struct phy *phy)
- 	value |= RPD_CTRL(priv->calib.rpd_ctrl);
- 	padctl_writel(padctl, value, XUSB_PADCTL_USB2_OTG_PADX_CTL1(index));
- 
--	/* TODO: pad power saving */
--	tegra_phy_xusb_utmi_pad_power_on(phy);
-+	tegra186_utmi_pad_power_on(phy);
-+
- 	return 0;
- }
- 
- static int tegra186_utmi_phy_power_off(struct phy *phy)
- {
--	/* TODO: pad power saving */
--	tegra_phy_xusb_utmi_pad_power_down(phy);
-+	tegra186_utmi_pad_power_down(phy);
- 
- 	return 0;
- }
-@@ -1486,6 +1489,8 @@ static const struct tegra_xusb_padctl_ops tegra186_xusb_padctl_ops = {
- 	.suspend_noirq = tegra186_xusb_padctl_suspend_noirq,
- 	.resume_noirq = tegra186_xusb_padctl_resume_noirq,
- 	.vbus_override = tegra186_xusb_padctl_vbus_override,
-+	.utmi_pad_power_on = tegra186_utmi_pad_power_on,
-+	.utmi_pad_power_down = tegra186_utmi_pad_power_down,
- };
- 
- #if IS_ENABLED(CONFIG_ARCH_TEGRA_186_SOC)
-diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
-index 963de5913e50..49873718d54a 100644
---- a/drivers/phy/tegra/xusb.c
-+++ b/drivers/phy/tegra/xusb.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (c) 2014-2020, NVIDIA CORPORATION.  All rights reserved.
-+ * Copyright (c) 2014-2022, NVIDIA CORPORATION.  All rights reserved.
-  */
- 
- #include <linux/delay.h>
-@@ -1458,6 +1458,26 @@ int tegra_phy_xusb_utmi_port_reset(struct phy *phy)
- }
- EXPORT_SYMBOL_GPL(tegra_phy_xusb_utmi_port_reset);
- 
-+void tegra_phy_xusb_utmi_pad_power_on(struct phy *phy)
-+{
-+	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
-+	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
-+
-+	if (padctl->soc->ops->utmi_pad_power_on)
-+		padctl->soc->ops->utmi_pad_power_on(phy);
-+}
-+EXPORT_SYMBOL_GPL(tegra_phy_xusb_utmi_pad_power_on);
-+
-+void tegra_phy_xusb_utmi_pad_power_down(struct phy *phy)
-+{
-+	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
-+	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
-+
-+	if (padctl->soc->ops->utmi_pad_power_down)
-+		padctl->soc->ops->utmi_pad_power_down(phy);
-+}
-+EXPORT_SYMBOL_GPL(tegra_phy_xusb_utmi_pad_power_down);
-+
- int tegra_xusb_padctl_get_usb3_companion(struct tegra_xusb_padctl *padctl,
- 				    unsigned int port)
- {
-diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
-index 034f7a2c28d6..8cfbbdbd6e0c 100644
---- a/drivers/phy/tegra/xusb.h
-+++ b/drivers/phy/tegra/xusb.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- /*
-- * Copyright (c) 2014-2020, NVIDIA CORPORATION.  All rights reserved.
-+ * Copyright (c) 2014-2022, NVIDIA CORPORATION.  All rights reserved.
-  * Copyright (c) 2015, Google Inc.
-  */
- 
-@@ -412,6 +412,8 @@ struct tegra_xusb_padctl_ops {
- 				    unsigned int index, bool enable);
- 	int (*vbus_override)(struct tegra_xusb_padctl *padctl, bool set);
- 	int (*utmi_port_reset)(struct phy *phy);
-+	void (*utmi_pad_power_on)(struct phy *phy);
-+	void (*utmi_pad_power_down)(struct phy *phy);
- };
- 
- struct tegra_xusb_padctl_soc {
-diff --git a/include/linux/phy/tegra/xusb.h b/include/linux/phy/tegra/xusb.h
-index 3a35e74cdc61..70998e6dd6fd 100644
---- a/include/linux/phy/tegra/xusb.h
-+++ b/include/linux/phy/tegra/xusb.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- /*
-- * Copyright (c) 2016-2020, NVIDIA CORPORATION.  All rights reserved.
-+ * Copyright (c) 2016-2022, NVIDIA CORPORATION.  All rights reserved.
-  */
- 
- #ifndef PHY_TEGRA_XUSB_H
-@@ -21,6 +21,8 @@ int tegra_xusb_padctl_usb3_set_lfps_detect(struct tegra_xusb_padctl *padctl,
- 					   unsigned int port, bool enable);
- int tegra_xusb_padctl_set_vbus_override(struct tegra_xusb_padctl *padctl,
- 					bool val);
-+void tegra_phy_xusb_utmi_pad_power_on(struct phy *phy);
-+void tegra_phy_xusb_utmi_pad_power_down(struct phy *phy);
- int tegra_phy_xusb_utmi_port_reset(struct phy *phy);
- int tegra_xusb_padctl_get_usb3_companion(struct tegra_xusb_padctl *padctl,
- 					 unsigned int port);
--- 
-2.17.1
+On Mon, Aug 08, 2022 at 02:44:56PM +0200, Noralf Tr=F8nnes wrote:
+> Den 29.07.2022 18.34, skrev Maxime Ripard:
+> > The TV mode property has been around for a while now to select and get =
+the
+> > current TV mode output on an analog TV connector.
+> >=20
+> > Despite that property name being generic, its content isn't and has been
+> > driver-specific which makes it hard to build any generic behaviour on t=
+op
+> > of it, both in kernel and user-space.
+> >=20
+> > Let's create a new bitmask tv norm property, that can contain any of the
+> > analog TV standards currently supported by kernel drivers. Each driver =
+can
+> > then pass in a bitmask of the modes it supports.
+> >=20
+> > We'll then be able to phase out the older tv mode property.
+> >=20
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> >=20
+>=20
+> Please also update Documentation/gpu/kms-properties.csv
+>=20
+> Requirements for adding a new property is found in
+> Documentation/gpu/drm-kms.rst
 
+I knew this was going to be raised at some point, so I'm glad it's that
+early :)
+
+I really don't know what to do there. If we stick by our usual rules,
+then we can't have any of that work merged.
+
+However, I think the status quo is not really satisfactory either.
+Indeed, we have a property, that doesn't follow those requirements
+either, with a driver-specific content, and that stands in the way of
+fixes and further improvements at both the core framework and driver
+levels.
+
+So having that new property still seems like a net improvement at the
+driver, framework and uAPI levels, even if it's not entirely following
+the requirements we have in place.
+
+Even more so since, realistically, those kind of interfaces will never
+get any new development on the user-space side of things, it's
+considered by everyone as legacy.
+
+This also is something we need to support at some point if we want to
+completely deprecate the fbdev drivers and provide decent alternatives
+in KMS.
+
+So yeah, strictly speaking, we would not qualify for our requirements
+there. I still think we have a strong case for an exception though.
+
+> > diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_at=
+omic_uapi.c
+> > index c06d0639d552..d7ff6c644c2f 100644
+> > --- a/drivers/gpu/drm/drm_atomic_uapi.c
+> > +++ b/drivers/gpu/drm/drm_atomic_uapi.c
+> > @@ -700,6 +700,8 @@ static int drm_atomic_connector_set_property(struct=
+ drm_connector *connector,
+> >  		state->tv.margins.bottom =3D val;
+> >  	} else if (property =3D=3D config->tv_mode_property) {
+> >  		state->tv.mode =3D val;
+> > +	} else if (property =3D=3D config->tv_norm_property) {
+> > +		state->tv.norm =3D val;
+> >  	} else if (property =3D=3D config->tv_brightness_property) {
+> >  		state->tv.brightness =3D val;
+> >  	} else if (property =3D=3D config->tv_contrast_property) {
+> > @@ -810,6 +812,8 @@ drm_atomic_connector_get_property(struct drm_connec=
+tor *connector,
+> >  		*val =3D state->tv.margins.bottom;
+> >  	} else if (property =3D=3D config->tv_mode_property) {
+> >  		*val =3D state->tv.mode;
+> > +	} else if (property =3D=3D config->tv_norm_property) {
+> > +		*val =3D state->tv.norm;
+> >  	} else if (property =3D=3D config->tv_brightness_property) {
+> >  		*val =3D state->tv.brightness;
+> >  	} else if (property =3D=3D config->tv_contrast_property) {
+> > diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_conn=
+ector.c
+> > index e3142c8142b3..68a4e47f85a9 100644
+> > --- a/drivers/gpu/drm/drm_connector.c
+> > +++ b/drivers/gpu/drm/drm_connector.c
+> > @@ -1637,6 +1637,7 @@ EXPORT_SYMBOL(drm_mode_create_tv_margin_propertie=
+s);
+> >  /**
+> >   * drm_mode_create_tv_properties - create TV specific connector proper=
+ties
+> >   * @dev: DRM device
+> > + * @supported_tv_norms: Bitmask of TV norms supported (See DRM_MODE_TV=
+_NORM_*)
+> >   * @num_modes: number of different TV formats (modes) supported
+> >   * @modes: array of pointers to strings containing name of each format
+> >   *
+> > @@ -1649,11 +1650,40 @@ EXPORT_SYMBOL(drm_mode_create_tv_margin_propert=
+ies);
+> >   * 0 on success or a negative error code on failure.
+> >   */
+> >  int drm_mode_create_tv_properties(struct drm_device *dev,
+> > +				  unsigned int supported_tv_norms,
+> >  				  unsigned int num_modes,
+> >  				  const char * const modes[])
+> >  {
+> > +	static const struct drm_prop_enum_list tv_norm_values[] =3D {
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_NTSC_443) - 1, "NTSC-443" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_NTSC_J) - 1, "NTSC-J" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_NTSC_M) - 1, "NTSC-M" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_60) - 1, "PAL-60" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_B) - 1, "PAL-B" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_D) - 1, "PAL-D" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_G) - 1, "PAL-G" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_H) - 1, "PAL-H" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_I) - 1, "PAL-I" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_M) - 1, "PAL-M" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_N) - 1, "PAL-N" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_NC) - 1, "PAL-Nc" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_60) - 1, "SECAM-60" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_B) - 1, "SECAM-B" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_D) - 1, "SECAM-D" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_G) - 1, "SECAM-G" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_K) - 1, "SECAM-K" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_K1) - 1, "SECAM-K1" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_L) - 1, "SECAM-L" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD480I) - 1, "hd480i" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD480P) - 1, "hd480p" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD576I) - 1, "hd576i" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD576P) - 1, "hd576p" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD720P) - 1, "hd720p" },
+> > +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD1080I) - 1, "hd1080i" },
+> > +	};
+> >  	struct drm_property *tv_selector;
+> >  	struct drm_property *tv_subconnector;
+> > +	struct drm_property *tv_norm;
+> >  	unsigned int i;
+> > =20
+> >  	if (dev->mode_config.tv_select_subconnector_property)
+> > @@ -1686,6 +1716,13 @@ int drm_mode_create_tv_properties(struct drm_dev=
+ice *dev,
+> >  	if (drm_mode_create_tv_margin_properties(dev))
+> >  		goto nomem;
+> > =20
+> > +	tv_norm =3D drm_property_create_bitmask(dev, 0, "tv norm",
+> > +					   tv_norm_values, ARRAY_SIZE(tv_norm_values),
+> > +					   supported_tv_norms);
+>=20
+> I expected this to be an enum, why a bitmask? Userspace can set multiple
+> bits in a bitmask.
+
+I went for a bitmask since it allowed to report the capabilities of a
+driver, but I just realised that you can do that with an enum too, like
+we do for color encodings.
+
+I'll switch for an enum, thanks!
+Maxime
+
+--3hhom4iyskwekp7q
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYvtUpAAKCRDj7w1vZxhR
+xZfoAQC88sDanQdYkKbOW7CFB7CVfnGcKpWIJXqulm0ThhwhLAD+Ow27epX78Lu3
+zhK/iVL50Tvq00zxu4GIvhL7L791JQA=
+=cQh2
+-----END PGP SIGNATURE-----
+
+--3hhom4iyskwekp7q--

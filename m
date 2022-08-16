@@ -2,247 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9E959648F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 23:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76BA7596494
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 23:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237382AbiHPVVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 17:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
+        id S237601AbiHPVZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 17:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237584AbiHPVVk (ORCPT
+        with ESMTP id S237323AbiHPVZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 17:21:40 -0400
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D0D8A7FA;
-        Tue, 16 Aug 2022 14:21:39 -0700 (PDT)
-Received: by mail-io1-f48.google.com with SMTP id i77so5759986ioa.7;
-        Tue, 16 Aug 2022 14:21:39 -0700 (PDT)
+        Tue, 16 Aug 2022 17:25:05 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF2A8C02F
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 14:25:04 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id v4so6011207pgi.10
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 14:25:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc;
+        bh=8Amng6YoiqozAIVij2nRbBRsRD4os4wIizhXtq1ZhIM=;
+        b=JU5YKOF8ST+7lmXSaIGl2xmKFlMp4aIjqYnjhq/pm1YVkGHRnofmnfMs6jRIjV91Sg
+         pcA2s1mBlmC6ZnUNIo1HvahT2eZCT3sLTZBEAuRkKpOAeVXQp/a9PgwCB45Ij6cqPlqZ
+         lJvyiZlKJsunotsNYkxpbeBgRcCjvkicAJ2JNwgnjSzso9tH8+TN9qjE/hg24N7i0VlJ
+         TKCoY/Fc4tR+dps8a8jgtxQXk7ps8n0pc/eeOChy94oNJ3XPS2HCnzGw63D/+g32wC4/
+         0cOeH7275Eqjvy7LNQ/KDy14DuahLDkjDO30efP0dPl5ftYuzXq33/BQNLSn6rjmyQQf
+         LhYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=tuSisoMkl6+60tdPaffN493peiy7o2wWR1+PZsK1WiE=;
-        b=RxD83V9DmSk55jw9KQ3wJkm7sOXYE1JYuu4W7TaV5s/jLDNWdsoBpAl6BI0gPzWttC
-         nA4pD/xThlb65n0Vn/2bHMYl/XI+gTmy9Kd8+xaw1QpGOz4JkdwLskXAmEf+AAWF/vXQ
-         P3b+x4rtLjTngRBiQL43j+8ady4kpasu4Db0NQm2m89BC5wOOTLDfysCtTAqPOLRiU9X
-         wHRh72AJNydud5VGN+7X5i4WOPfvMx8iydevPj59Vv8IYJvZdjqpXLEzHKhJgfOM4S8R
-         zDMWv2OP6yZpsvP2jeB+OooDV7Miv628bNTcA34mgbJkAEl0zZr4ttysrIEZYRmFMeSW
-         ny6g==
-X-Gm-Message-State: ACgBeo1AQMDFgq9qGVocCbzNfiqCJZ9ZEo9iLEzLtf4TB2oYiv02iq6p
-        fzDgNc24UyD6GK9aQoneJA==
-X-Google-Smtp-Source: AA6agR44tAdtZC5+EJ1JbGySmbewN0vjdw3exH0tsi8qEIiGjppZgzRv1p3JPHSpnXbJNvAZX/sl8A==
-X-Received: by 2002:a02:a144:0:b0:343:5da5:f424 with SMTP id m4-20020a02a144000000b003435da5f424mr10161530jah.150.1660684898739;
-        Tue, 16 Aug 2022 14:21:38 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id h12-20020a056e021d8c00b002e127d59f63sm5198039ila.74.2022.08.16.14.21.36
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc;
+        bh=8Amng6YoiqozAIVij2nRbBRsRD4os4wIizhXtq1ZhIM=;
+        b=fn8/KGvDsFu3gTEzFW+da0ItKZBPbbC9/rdWeBbqaYJSTFoT7aiqEBUFTBwgOqAM4f
+         eh9qNoEV/p/LWgD+c/LWJxyhfswL9m0qe9iKuRgbEdVcXvNe8HmEPwF34shOZdVoHWAo
+         An67sxRQ0dnVe9bunDDb9JGTNbXovtLRKsk2YaJuiJ91Aj7OlwSKQ1TrOw/JTxdY9tNz
+         HxbciMDf0WFJXm1CBV5QngtwJ9kBzhQEPGjhlB6wPxidOwhGXq8uugrEe8XyJ9jhgvLk
+         WDJNrivFxPRzqj23lR93JgzpDgLwmwX2ptP8obA+v6P2YzhjWwPlEwpBKtmCZaSeIvg+
+         oX2Q==
+X-Gm-Message-State: ACgBeo1+Kv1n73rKVy26cnjK6SDmPQIcPBmg/HY+wBOJ0+AqewPGtOmS
+        Sblw0nQ5eNglzaWTJ3+WtswSiA==
+X-Google-Smtp-Source: AA6agR5R5Kj3uVfXAFoRFlCQgud1WTbEFfP3qJ63IkGvDH4uKnWa2djCyKmFA5pUUw+fuOaC6bQy3Q==
+X-Received: by 2002:a05:6a00:ac6:b0:530:3197:48b6 with SMTP id c6-20020a056a000ac600b00530319748b6mr22661088pfl.80.1660685103947;
+        Tue, 16 Aug 2022 14:25:03 -0700 (PDT)
+Received: from [2620:15c:29:203:9a1b:5709:54ba:ae28] ([2620:15c:29:203:9a1b:5709:54ba:ae28])
+        by smtp.gmail.com with ESMTPSA id f7-20020a623807000000b0052acb753b8bsm8826938pfa.158.2022.08.16.14.25.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 14:21:38 -0700 (PDT)
-Received: (nullmailer pid 2754798 invoked by uid 1000);
-        Tue, 16 Aug 2022 21:21:35 -0000
-Date:   Tue, 16 Aug 2022 15:21:35 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        =?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>,
-        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/7] dt-bindings: net: dsa: mediatek,mt7530: define
- phy-mode for each compatible
-Message-ID: <20220816212135.GA2747439-robh@kernel.org>
-References: <20220813154415.349091-1-arinc.unal@arinc9.com>
- <20220813154415.349091-7-arinc.unal@arinc9.com>
+        Tue, 16 Aug 2022 14:25:03 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 14:25:02 -0700 (PDT)
+From:   David Rientjes <rientjes@google.com>
+To:     Jacky Li <jackyli@google.com>
+cc:     Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        John Allen <john.allen@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Marc Orr <marcorr@google.com>, Alper Gun <alpergun@google.com>,
+        Peter Gonda <pgonda@google.com>, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] crypto: ccp - Initialize PSP when reading psp
+ data file failed
+In-Reply-To: <20220816193209.4057566-2-jackyli@google.com>
+Message-ID: <8feee515-8d60-dc84-4c9f-6723481e8dac@google.com>
+References: <20220816193209.4057566-1-jackyli@google.com> <20220816193209.4057566-2-jackyli@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220813154415.349091-7-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 13, 2022 at 06:44:14PM +0300, Arınç ÜNAL wrote:
-> Define acceptable phy-mode values for CPU port of each compatible device.
-> Remove relevant information from the description of the binding.
+On Tue, 16 Aug 2022, Jacky Li wrote:
 
-I'm not really sure this is worth the complexity just to check 
-'phy-mode'...
-
+> Currently the OS fails the PSP initialization when the file specified at
+> 'init_ex_path' does not exist or has invalid content. However the SEV
+> spec just requires users to allocate 32KB of 0xFF in the file, which can
+> be taken care of by the OS easily.
 > 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
->  .../bindings/net/dsa/mediatek,mt7530.yaml     | 103 ++++++++++++++++--
->  1 file changed, 92 insertions(+), 11 deletions(-)
+> To improve the robustness during the PSP init, leverage the retry
+> mechanism and continue the init process:
 > 
-> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> index a27cb4fa490f..530ef5a75a2f 100644
-> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> @@ -49,17 +49,6 @@ description: |
->    * mt7621: phy-mode = "rgmii-txid";
->    * mt7623: phy-mode = "rgmii";
->  
-> -  CPU-Ports need a phy-mode property:
-> -    Allowed values on mt7530 and mt7621:
-> -      - "rgmii"
-> -      - "trgmii"
-> -    On mt7531:
-> -      - "1000base-x"
-> -      - "2500base-x"
-> -      - "rgmii"
-> -      - "sgmii"
-> -
-> -
->  properties:
->    compatible:
->      oneOf:
-> @@ -177,6 +166,36 @@ allOf:
->                          items:
->                            - const: cpu
->                    then:
-> +                    allOf:
-> +                      - if:
-> +                          properties:
-> +                            reg:
-> +                              const: 5
-> +                        then:
-> +                          properties:
-> +                            phy-mode:
-> +                              enum:
-> +                                - gmii
-> +                                - mii
-> +                                - rgmii
-> +
-> +                      - if:
-> +                          properties:
-> +                            reg:
-> +                              const: 6
-> +                        then:
-
-You've restricted this to ports 5 or 6 already, so you just need an 
-'else' here. And you can then drop the 'allOf'.
-
-> +                          properties:
-> +                            phy-mode:
-> +                              enum:
-> +                                - rgmii
-> +                                - trgmii
-> +
-> +                    properties:
-> +                      reg:
-> +                        enum:
-> +                          - 5
-> +                          - 6
-> +
->                      required:
->                        - phy-mode
->  
-> @@ -206,6 +225,38 @@ allOf:
->                          items:
->                            - const: cpu
->                    then:
-> +                    allOf:
-> +                      - if:
-> +                          properties:
-> +                            reg:
-> +                              const: 5
-> +                        then:
-> +                          properties:
-> +                            phy-mode:
-> +                              enum:
-> +                                - 1000base-x
-> +                                - 2500base-x
-> +                                - rgmii
-> +                                - sgmii
-> +
-> +                      - if:
-> +                          properties:
-> +                            reg:
-> +                              const: 6
-> +                        then:
-> +                          properties:
-> +                            phy-mode:
-> +                              enum:
-> +                                - 1000base-x
-> +                                - 2500base-x
-> +                                - sgmii
-> +
-> +                    properties:
-> +                      reg:
-> +                        enum:
-> +                          - 5
-> +                          - 6
-> +
->                      required:
->                        - phy-mode
->  
-> @@ -235,6 +286,36 @@ allOf:
->                          items:
->                            - const: cpu
->                    then:
-> +                    allOf:
-> +                      - if:
-> +                          properties:
-> +                            reg:
-> +                              const: 5
-> +                        then:
-> +                          properties:
-> +                            phy-mode:
-> +                              enum:
-> +                                - gmii
-> +                                - mii
-> +                                - rgmii
-> +
-> +                      - if:
-> +                          properties:
-> +                            reg:
-> +                              const: 6
-> +                        then:
-> +                          properties:
-> +                            phy-mode:
-> +                              enum:
-> +                                - rgmii
-> +                                - trgmii
-> +
-> +                    properties:
-> +                      reg:
-> +                        enum:
-> +                          - 5
-> +                          - 6
-> +
-
-Looks like the same schema duplicated. You can put it under a '$defs' 
-and reference it twice.
-
->                      required:
->                        - phy-mode
->  
-> -- 
-> 2.34.1
+> Before the first INIT_EX call, if the content is invalid or missing,
+> continue the process by feeding those contents into PSP instead of
+> aborting. PSP will then override it with 32KB 0xFF and return
+> SEV_RET_SECURE_DATA_INVALID status code. In the second INIT_EX call,
+> this 32KB 0xFF content will then be fed and PSP will write the valid
+> data to the file.
 > 
+> In order to do this, sev_read_init_ex_file should only be called once
+> for the first INIT_EX call. Calling it again for the second INIT_EX call
+> will cause the invalid file content overwriting the valid 32KB 0xFF data
+> provided by PSP in the first INIT_EX call.
 > 
+> Co-developed-by: Peter Gonda <pgonda@google.com>
+> Signed-off-by: Peter Gonda <pgonda@google.com>
+> Signed-off-by: Jacky Li <jackyli@google.com>
+> Reported-by: Alper Gun <alpergun@google.com>
+
+Acked-by: David Rientjes <rientjes@google.com>

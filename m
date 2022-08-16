@@ -2,256 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B1F5956E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 195AC5956D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233937AbiHPJoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
+        id S233673AbiHPJnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:43:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233920AbiHPJn4 (ORCPT
+        with ESMTP id S233882AbiHPJm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:43:56 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CA927CFD
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:08:25 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id f16-20020a6b6210000000b006889725d748so1586174iog.8
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:08:25 -0700 (PDT)
+        Tue, 16 Aug 2022 05:42:28 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FE912AD7;
+        Tue, 16 Aug 2022 01:10:43 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id jl18so727923plb.1;
+        Tue, 16 Aug 2022 01:10:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=npv9I4bKA8ZgPtTOpLA+17ug9RBYn0uNyctxT/S2BXk=;
+        b=Gk7z9Pyooee/z7neyc5X3qWBvOiS7QqIZqEuR0pcH01M3Jh5/T8r344Avch+ETYrjn
+         d5twJgTyXpSMgFIiugl6+uz4rJzalG70JsjUdavzPbPEMO6nm7lGSyovYppJpsyzvyH7
+         tjJK5MQUXiXiNUw1ObEfWGtcMFSx7x4uFiEOACiUJ/dhwNTtNAekVYSZWxbrxIm0X87r
+         wQoQgE3J2rPISgJ8kRwZmo36ybCeQIqoE6AwFKJW6mC5I3ZeQUGrDSLwrv2iJ6e5Jkq3
+         qMuVnOQwgjC0mR6Y1/kr2RjV1r1FZ3IO8hg1iWmIJMbPwcfV3LY62647LEzIa2rL3wtz
+         GFjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=FHXDhJvY2IkHhUd4tFK8q9dv+Fm/vXITFi2l3j4+4MY=;
-        b=QJ98yAg7XMYPoT1Hk08P/r0qSx0q9Xka7SPIl1VZq5KdJdB+b174Q/193k0MBnXT+t
-         cRqXzvNv9J1UFOTgJjdK3J2l6zl58lvC097ZscA1dGD3AdYv/S2fXKfl8CsTVDevO8No
-         lO773IwMkZW1+S1K7bnwOHzu9MW4x3QPh4ZXY/BC1OzDYkR0/Fy/EBuDbOy4USf70OZ6
-         G+uk7XyLkHGsUwy4pdktatABy0q3dAj0kHlaMbWAy1X8Nd+OKP5WUPyN8K44wuQ0bdQz
-         nAnxaLAqiEb/Z/rAPk/aj/G3p4OCeiqgp2EvL5xLS9gzoY4C/aM5MeZjDWucSeUz3Bp7
-         6TPA==
-X-Gm-Message-State: ACgBeo0cs2P16C8vCYqcID4KWehvUxFOmwSVWkFMLew3NRkePV/fugh+
-        vUYrZlUMFx+q6Ff7bQoQSx8/O2Wr++qMXBN2T2O5m8jlN5aK
-X-Google-Smtp-Source: AA6agR4HGiUDpWQJy4g/los7oIZ8kAAX3mo604F5RTbiJQf/LLkvWpUdyDJZjfmzMrSzApizVJ/qlQWvT2+i4cbCt4+mlkO56fn/
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=npv9I4bKA8ZgPtTOpLA+17ug9RBYn0uNyctxT/S2BXk=;
+        b=OslLoWrBc84z1bSs95uqIvTlZD9PfNSQsBAKfH08LiHeRE40zZ4JW+l9TY6pXeeZQN
+         cJi399n9dj5ozrm/+Ba+qTq6SoJZT5AAQlXHu/cV5ESnrFmE40DYgzaZh71SIAtWkMGu
+         8BYRrxxX9nsKAh2neYU8jAWZE/FkcelMuFPnc09Db0LutGyw/O+5F/Rtg8TJLSFNe7rf
+         WLuOQ88CN4HtRf7c4/XDQewiWYjElf04A6m3swGjuLScrgsSHS+eBZ0t/NrctgqJsSoT
+         2WV4Olq/1d70AkFs0woEY1YmkSlm90AGz4zwqtGWWybaWBZvfehZd5cMJmQEqe1j4h2b
+         hx0g==
+X-Gm-Message-State: ACgBeo25kF0Vm/XN2arhJaQ4J6xH6J7cvgdwNMR1Qv7fYJWa1S36yRjl
+        Fkk6s86hmnlMiIPSSdLRUfRi8ppTXuSV4J60jfo=
+X-Google-Smtp-Source: AA6agR4Mn4n64eyX8+OYcOJtDGTGKX2uMWMH1ncKXJXQwJuHWqMtGHGxuO2sGHP21TECYnZ4sssysqqJZ1+o3D8RbUE=
+X-Received: by 2002:a17:90b:3147:b0:1f5:2cbb:9c5 with SMTP id
+ ip7-20020a17090b314700b001f52cbb09c5mr32868353pjb.96.1660637442515; Tue, 16
+ Aug 2022 01:10:42 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a6b:6906:0:b0:688:b23c:7891 with SMTP id
- e6-20020a6b6906000000b00688b23c7891mr954400ioc.95.1660637304989; Tue, 16 Aug
- 2022 01:08:24 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 01:08:24 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000aa2db405e657403f@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in f2fs_write_end_io
-From:   syzbot <syzbot+1a52906c5f8683d9c085@syzkaller.appspotmail.com>
-To:     chao@kernel.org, jaegeuk@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <6e77914685ede036c419fa65b6adc27f25a6c3e9.1660635033.git-series.apopple@nvidia.com>
+In-Reply-To: <6e77914685ede036c419fa65b6adc27f25a6c3e9.1660635033.git-series.apopple@nvidia.com>
+From:   huang ying <huang.ying.caritas@gmail.com>
+Date:   Tue, 16 Aug 2022 16:10:29 +0800
+Message-ID: <CAC=cRTPGiXWjk=CYnCrhJnLx3mdkGDXZpvApo6yTbeW7+ZGajA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] mm/migrate_device.c: Copy pte dirty bit to page
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
+        Peter Xu <peterx@redhat.com>, linuxppc-dev@lists.ozlabs.org,
+        Huang Ying <ying.huang@intel.com>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Aug 16, 2022 at 3:39 PM Alistair Popple <apopple@nvidia.com> wrote:
+>
+> migrate_vma_setup() has a fast path in migrate_vma_collect_pmd() that
+> installs migration entries directly if it can lock the migrating page.
+> When removing a dirty pte the dirty bit is supposed to be carried over
+> to the underlying page to prevent it being lost.
+>
+> Currently migrate_vma_*() can only be used for private anonymous
+> mappings. That means loss of the dirty bit usually doesn't result in
+> data loss because these pages are typically not file-backed. However
+> pages may be backed by swap storage which can result in data loss if an
+> attempt is made to migrate a dirty page that doesn't yet have the
+> PageDirty flag set.
+>
+> In this case migration will fail due to unexpected references but the
+> dirty pte bit will be lost. If the page is subsequently reclaimed data
+> won't be written back to swap storage as it is considered uptodate,
+> resulting in data loss if the page is subsequently accessed.
+>
+> Prevent this by copying the dirty bit to the page when removing the pte
+> to match what try_to_migrate_one() does.
+>
+> Signed-off-by: Alistair Popple <apopple@nvidia.com>
+> Acked-by: Peter Xu <peterx@redhat.com>
+> Reported-by: Huang Ying <ying.huang@intel.com>
+> Fixes: 8c3328f1f36a ("mm/migrate: migrate_vma() unmap page from vma while collecting pages")
+> Cc: stable@vger.kernel.org
+>
+> ---
+>
+> Changes for v2:
+>
+>  - Fixed up Reported-by tag.
+>  - Added Peter's Acked-by.
+>  - Atomically read and clear the pte to prevent the dirty bit getting
+>    set after reading it.
+>  - Added fixes tag
+> ---
+>  mm/migrate_device.c | 21 ++++++++-------------
+>  1 file changed, 8 insertions(+), 13 deletions(-)
+>
+> diff --git a/mm/migrate_device.c b/mm/migrate_device.c
+> index 27fb37d..e2d09e5 100644
+> --- a/mm/migrate_device.c
+> +++ b/mm/migrate_device.c
+> @@ -7,6 +7,7 @@
+>  #include <linux/export.h>
+>  #include <linux/memremap.h>
+>  #include <linux/migrate.h>
+> +#include <linux/mm.h>
+>  #include <linux/mm_inline.h>
+>  #include <linux/mmu_notifier.h>
+>  #include <linux/oom.h>
+> @@ -61,7 +62,7 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
+>         struct migrate_vma *migrate = walk->private;
+>         struct vm_area_struct *vma = walk->vma;
+>         struct mm_struct *mm = vma->vm_mm;
+> -       unsigned long addr = start, unmapped = 0;
+> +       unsigned long addr = start;
+>         spinlock_t *ptl;
+>         pte_t *ptep;
+>
+> @@ -193,11 +194,10 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
+>                         bool anon_exclusive;
+>                         pte_t swp_pte;
+>
+> +                       flush_cache_page(vma, addr, pte_pfn(*ptep));
+> +                       pte = ptep_clear_flush(vma, addr, ptep);
 
-syzbot found the following issue on:
+Although I think it's possible to batch the TLB flushing just before
+unlocking PTL.  The current code looks correct.
 
-HEAD commit:    200e340f2196 Merge tag 'pull-work.dcache' of git://git.ker..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1184fa3e080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a3f4d6985d3164cd
-dashboard link: https://syzkaller.appspot.com/bug?extid=1a52906c5f8683d9c085
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
+Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Best Regards,
+Huang, Ying
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1a52906c5f8683d9c085@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: use-after-free in instrument_atomic_read include/linux/instrumented.h:71 [inline]
-BUG: KASAN: use-after-free in atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
-BUG: KASAN: use-after-free in get_pages fs/f2fs/f2fs.h:2423 [inline]
-BUG: KASAN: use-after-free in f2fs_write_end_io+0x141/0x12a0 fs/f2fs/data.c:348
-Read of size 4 at addr ffff8880752b4e58 by task ksoftirqd/1/23
-
-CPU: 1 PID: 23 Comm: ksoftirqd/1 Not tainted 5.19.0-syzkaller-02972-g200e340f2196 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read include/linux/instrumented.h:71 [inline]
- atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
- get_pages fs/f2fs/f2fs.h:2423 [inline]
- f2fs_write_end_io+0x141/0x12a0 fs/f2fs/data.c:348
- bio_endio+0x5fe/0x780 block/bio.c:1562
- req_bio_endio block/blk-mq.c:695 [inline]
- blk_update_request+0x401/0x1310 block/blk-mq.c:825
- blk_mq_end_request+0x4b/0x80 block/blk-mq.c:951
- blk_flush_complete_seq+0x561/0xfd0 block/blk-flush.c:211
- flush_end_io+0x77a/0xc60 block/blk-flush.c:268
- __blk_mq_end_request+0x123/0x580 block/blk-mq.c:942
- lo_complete_rq+0x1c2/0x280 drivers/block/loop.c:370
- blk_complete_reqs+0xad/0xe0 block/blk-mq.c:1022
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:571
- run_ksoftirqd kernel/softirq.c:934 [inline]
- run_ksoftirqd+0x2d/0x60 kernel/softirq.c:926
- smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-
-Allocated by task 16300:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:437 [inline]
- ____kasan_kmalloc mm/kasan/common.c:516 [inline]
- ____kasan_kmalloc mm/kasan/common.c:475 [inline]
- __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:525
- kmalloc include/linux/slab.h:600 [inline]
- kzalloc include/linux/slab.h:733 [inline]
- f2fs_fill_super+0xf9/0x75d0 fs/f2fs/super.c:3999
- mount_bdev+0x34d/0x410 fs/super.c:1367
- legacy_get_tree+0x105/0x220 fs/fs_context.c:610
- vfs_get_tree+0x89/0x2f0 fs/super.c:1497
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1320/0x1fa0 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __ia32_sys_mount+0x27e/0x300 fs/namespace.c:3568
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
- entry_SYSENTER_compat_after_hwframe+0x70/0x82
-
-Freed by task 3896:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:367 [inline]
- ____kasan_slab_free+0x166/0x1a0 mm/kasan/common.c:329
- kasan_slab_free include/linux/kasan.h:200 [inline]
- slab_free_hook mm/slub.c:1754 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1780
- slab_free mm/slub.c:3534 [inline]
- kfree+0xe2/0x4d0 mm/slub.c:4562
- f2fs_put_super+0x7d4/0xc10 fs/f2fs/super.c:1603
- generic_shutdown_super+0x14c/0x400 fs/super.c:462
- kill_block_super+0x97/0xf0 fs/super.c:1394
- kill_f2fs_super+0x2b3/0x3c0 fs/f2fs/super.c:4516
- deactivate_locked_super+0x94/0x160 fs/super.c:332
- deactivate_super+0xad/0xd0 fs/super.c:363
- cleanup_mnt+0x3a2/0x540 fs/namespace.c:1186
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
- exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
- __do_fast_syscall_32+0x72/0xf0 arch/x86/entry/common.c:181
- do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
- entry_SYSENTER_compat_after_hwframe+0x70/0x82
-
-The buggy address belongs to the object at ffff8880752b4000
- which belongs to the cache kmalloc-8k of size 8192
-The buggy address is located 3672 bytes inside of
- 8192-byte region [ffff8880752b4000, ffff8880752b6000)
-
-The buggy address belongs to the physical page:
-page:ffffea0001d4ac00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x752b0
-head:ffffea0001d4ac00 order:3 compound_mapcount:0 compound_pincount:0
-flags: 0x4fff00000010200(slab|head|node=1|zone=1|lastcpupid=0x7ff)
-raw: 04fff00000010200 ffffea0000864200 dead000000000002 ffff888011843180
-raw: 0000000000000000 0000000080020002 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0x1d20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 15655, tgid 15654 (syz-executor.0), ts 723661245241, free_ts 723629165352
- prep_new_page mm/page_alloc.c:2457 [inline]
- get_page_from_freelist+0x1298/0x3b80 mm/page_alloc.c:4203
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5431
- alloc_pages+0x1aa/0x310 mm/mempolicy.c:2272
- alloc_slab_page mm/slub.c:1824 [inline]
- allocate_slab+0x26c/0x3c0 mm/slub.c:1969
- new_slab mm/slub.c:2029 [inline]
- ___slab_alloc+0x99f/0xe10 mm/slub.c:3031
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3118
- slab_alloc_node mm/slub.c:3209 [inline]
- slab_alloc mm/slub.c:3251 [inline]
- __kmalloc_track_caller+0x36f/0x450 mm/slub.c:4924
- copy_array+0xc5/0xe0 kernel/bpf/verifier.c:991
- copy_stack_state kernel/bpf/verifier.c:1037 [inline]
- copy_func_state kernel/bpf/verifier.c:1154 [inline]
- copy_verifier_state+0x71e/0xb80 kernel/bpf/verifier.c:1190
- is_state_visited kernel/bpf/verifier.c:11876 [inline]
- do_check kernel/bpf/verifier.c:11991 [inline]
- do_check_common+0x19f5/0xd010 kernel/bpf/verifier.c:14371
- do_check_main kernel/bpf/verifier.c:14434 [inline]
- bpf_check+0x8538/0xb680 kernel/bpf/verifier.c:15003
- bpf_prog_load+0xfb2/0x2250 kernel/bpf/syscall.c:2575
- __sys_bpf+0x11a1/0x5700 kernel/bpf/syscall.c:4917
- __do_sys_bpf kernel/bpf/syscall.c:5021 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5019 [inline]
- __ia32_sys_bpf+0x74/0xc0 kernel/bpf/syscall.c:5019
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1371 [inline]
- free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1421
- free_unref_page_prepare mm/page_alloc.c:3344 [inline]
- free_unref_page+0x19/0x6a0 mm/page_alloc.c:3439
- __unfreeze_partials+0x17c/0x1a0 mm/slub.c:2548
- qlink_free mm/kasan/quarantine.c:168 [inline]
- qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0xa2/0xc0 mm/kasan/common.c:447
- kasan_slab_alloc include/linux/kasan.h:224 [inline]
- slab_post_alloc_hook mm/slab.h:727 [inline]
- slab_alloc_node mm/slub.c:3243 [inline]
- slab_alloc mm/slub.c:3251 [inline]
- kmem_cache_alloc_trace+0x271/0x3f0 mm/slub.c:3282
- kmalloc include/linux/slab.h:600 [inline]
- kzalloc include/linux/slab.h:733 [inline]
- kernfs_fop_open+0x317/0xda0 fs/kernfs/file.c:621
- do_dentry_open+0x4a1/0x12d0 fs/open.c:878
- do_open fs/namei.c:3499 [inline]
- path_openat+0x1c92/0x28f0 fs/namei.c:3632
- do_filp_open+0x1b6/0x400 fs/namei.c:3659
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_openat fs/open.c:1342 [inline]
- __se_sys_openat fs/open.c:1337 [inline]
- __x64_sys_openat+0x13f/0x1f0 fs/open.c:1337
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffff8880752b4d00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff8880752b4d80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff8880752b4e00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                                    ^
- ffff8880752b4e80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff8880752b4f00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>                         anon_exclusive = PageAnon(page) && PageAnonExclusive(page);
+>                         if (anon_exclusive) {
+> -                               flush_cache_page(vma, addr, pte_pfn(*ptep));
+> -                               ptep_clear_flush(vma, addr, ptep);
+> -
+>                                 if (page_try_share_anon_rmap(page)) {
+>                                         set_pte_at(mm, addr, ptep, pte);
+>                                         unlock_page(page);
+> @@ -205,12 +205,14 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
+>                                         mpfn = 0;
+>                                         goto next;
+>                                 }
+> -                       } else {
+> -                               ptep_get_and_clear(mm, addr, ptep);
+>                         }
+>
+>                         migrate->cpages++;
+>
+> +                       /* Set the dirty flag on the folio now the pte is gone. */
+> +                       if (pte_dirty(pte))
+> +                               folio_mark_dirty(page_folio(page));
+> +
+>                         /* Setup special migration page table entry */
+>                         if (mpfn & MIGRATE_PFN_WRITE)
+>                                 entry = make_writable_migration_entry(
+> @@ -242,9 +244,6 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
+>                          */
+>                         page_remove_rmap(page, vma, false);
+>                         put_page(page);
+> -
+> -                       if (pte_present(pte))
+> -                               unmapped++;
+>                 } else {
+>                         put_page(page);
+>                         mpfn = 0;
+> @@ -257,10 +256,6 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
+>         arch_leave_lazy_mmu_mode();
+>         pte_unmap_unlock(ptep - 1, ptl);
+>
+> -       /* Only flush the TLB if we actually modified any entries */
+> -       if (unmapped)
+> -               flush_tlb_range(walk->vma, start, end);
+> -
+>         return 0;
+>  }
+>
+>
+> base-commit: ffcf9c5700e49c0aee42dcba9a12ba21338e8136
+> --
+> git-series 0.9.1
+>

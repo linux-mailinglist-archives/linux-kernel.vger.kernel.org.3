@@ -2,102 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A9D59585C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0CF595767
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234706AbiHPKcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36772 "EHLO
+        id S234218AbiHPKC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234436AbiHPKcX (ORCPT
+        with ESMTP id S234206AbiHPKCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:32:23 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C968D7
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:18:07 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id f28so8757833pfk.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 01:18:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=yiBicl/xtck+sUvDa6HbwVr3KCpBiQ3kP9sWsGd0v+M=;
-        b=uT3jiYPYFRn7lq9viYTDzroDVdXL8pYjwBzK6ZhdPWJ3ales5ct7XINz7ercxdfD7Y
-         rvax/AK/RPxyH9Qyvj6cKGyu5Z9eSVcZeTL3ghWM02DMNeRTu1dNZ7beU/wveqK5kb+b
-         cgTDsiraqeHQID8d9ZRhhEi710zRj0h9tNoJIy/ZIZdDiEU/5Tq3uSnDDCMR184RYyCg
-         LVWxI+KwzGdKQ6ji/qPZRP+nel4pcCCfqXweiR63F69BqC+Nt+6QIM31Ab1sSdW2FTPk
-         LjcGqOsRMi5qhAbnOjRjnE/4ICeEvzLIfRc/1JoVKPEsJ2GoYjX+SmVkYwcf+ocJax8W
-         K0eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=yiBicl/xtck+sUvDa6HbwVr3KCpBiQ3kP9sWsGd0v+M=;
-        b=O6xrXrosaMHwekpKfjk1UFG6dqDzveWZZdzW5DBwFjwDPOfzFwZY0fZtUn+dOI6LnY
-         9U7D9H5NaxIsYfLtLiLaswkWCdInwQ0ltJ6PlC0k0WjessvWlTvbRGUpMs50CZRduPeg
-         yJKhb+2Lv7e8tDLOSi7TonVxBFQCAOk7mz+7WgLhMMgdMhpkjMutL5CnflXsKcDp935d
-         OpFg419WsZPpB9ojj0SMccgyEMffrUAnfvnk6GWk6sFKrn8+1LJuXF0N+2SMz3wOAIWV
-         LnWXlnKGm3zznJjEorkvRTxAd/88anmFDySgFIkbTQEqP/nbF+p5IHBHaRBdZRGFTOsI
-         Aw9Q==
-X-Gm-Message-State: ACgBeo3MIvJdSoxx5N3lcLbSRCB0TXDGjxts4Nm3QVKkBk/XGNNmw0j6
-        aEQ6EKWFVSgBeRWG5lkqmzcjN40CQhYuYSmlmeVXBEmzjeDkBg==
-X-Google-Smtp-Source: AA6agR7a2co2/3EHjLJWWfyl0Y9FC9Qup8Vvr947CQmLmaKAXgb15xFZYz1xNiLfRaHjV9zeEjmoSBme+mzy7PUZf/A=
-X-Received: by 2002:a63:e217:0:b0:41a:69b1:a68e with SMTP id
- q23-20020a63e217000000b0041a69b1a68emr16488504pgh.428.1660637887011; Tue, 16
- Aug 2022 01:18:07 -0700 (PDT)
+        Tue, 16 Aug 2022 06:02:12 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFC097D4D;
+        Tue, 16 Aug 2022 01:21:20 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 08:21:17 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1660638078;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1Y1v2IK8+LOJMwik9pqNv5XiNJf0jxVXzKJnsprp5tU=;
+        b=vTH6ldSS/xARxGEdfDvF0G19q14tquMuzr35bAR8PpAqWIOUObp9bshs05iNsC9VCCTTrI
+        nkPem8jEHUNaCtgZJUajAA2ik3ohKPvDHBEt6Easu9FbPzBZFU38wft0SRTe5czBmFdS4X
+        RrWFnbxc+mOpIrb1sgG1iBLd5KSg+utkhM4kRLLPGMxJrlT556BDyQwzhVnCwn8WwMu8YV
+        sU9kik8mXQbVUhbgFhS6G3Caw4kJPiPokNcwaKC6JeMfFi8z3TqppManDbhrWIMjeVVL5d
+        j5YiptesoXSKN5C11pPcfiKy1qmC26bLzN7A9JqDn+18viTXOncMAtaI+RWSpQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1660638078;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1Y1v2IK8+LOJMwik9pqNv5XiNJf0jxVXzKJnsprp5tU=;
+        b=W8+W82bpnAiXRMuyyQP3S3y3C19BQ9xo7m+yuVVvLCo1L2OIsKkClPO/UmEWmTUXCxXJ3+
+        t7BEZQYzSm98pMBg==
+From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/entry: Fix entry_INT80_compat for Xen PV guests
+Cc:     Juergen Gross <jgross@suse.com>, Borislav Petkov <bp@suse.de>,
+        Jan Beulich <jbeulich@suse.com>, <stable@vger.kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220816071137.4893-1-jgross@suse.com>
+References: <20220816071137.4893-1-jgross@suse.com>
 MIME-Version: 1.0
-References: <20220812143055.12938-1-olivier.masse@nxp.com>
-In-Reply-To: <20220812143055.12938-1-olivier.masse@nxp.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Tue, 16 Aug 2022 10:17:56 +0200
-Message-ID: <CAHUa44EgA1btRyj2ByooyLr9Q+8AmW=9EfjtQFxyr7DuCXASvA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/1] tee: Add tee_shm_register_fd
-To:     Olivier Masse <olivier.masse@nxp.com>
-Cc:     etienne.carriere@linaro.org, sumit.garg@linaro.org,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        op-tee@lists.trustedfirmware.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, clement.faure@nxp.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <166063807735.401.8176366519215058221.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Olivier,
+The following commit has been merged into the x86/urgent branch of tip:
 
-On Fri, Aug 12, 2022 at 4:31 PM Olivier Masse <olivier.masse@nxp.com> wrote:
->
-> Add a new ioctl called TEE_IOC_SHM_REGISTER_FD to register a
-> shared memory from a dmabuf file descriptor.
-> This new ioctl will allow the Linux Kernel to register a buffer
-> to be used by the Secure Data Path OPTEE OS feature.
->
-> Please find more information here:
-> https://static.linaro.org/connect/san19/presentations/san19-107.pdf
->
-> Patch tested on Hikey 6220.
+Commit-ID:     5b9f0c4df1c1152403c738373fb063e9ffdac0a1
+Gitweb:        https://git.kernel.org/tip/5b9f0c4df1c1152403c738373fb063e9ffdac0a1
+Author:        Juergen Gross <jgross@suse.com>
+AuthorDate:    Tue, 16 Aug 2022 09:11:37 +02:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Tue, 16 Aug 2022 10:02:52 +02:00
 
-What's new in this V2?
+x86/entry: Fix entry_INT80_compat for Xen PV guests
 
-Thanks,
-Jens
+Commit
 
->
-> Etienne Carriere (1):
->   tee: new ioctl to a register tee_shm from a dmabuf file descriptor
->
->  drivers/tee/tee_core.c   | 38 +++++++++++++++
->  drivers/tee/tee_shm.c    | 99 +++++++++++++++++++++++++++++++++++++++-
->  include/linux/tee_drv.h  | 11 +++++
->  include/uapi/linux/tee.h | 29 ++++++++++++
->  4 files changed, 175 insertions(+), 2 deletions(-)
->
-> --
-> 2.25.0
->
+  c89191ce67ef ("x86/entry: Convert SWAPGS to swapgs and remove the definition of SWAPGS")
+
+missed one use case of SWAPGS in entry_INT80_compat(). Removing of
+the SWAPGS macro led to asm just using "swapgs", as it is accepting
+instructions in capital letters, too.
+
+This in turn leads to splats in Xen PV guests like:
+
+  [   36.145223] general protection fault, maybe for address 0x2d: 0000 [#1] PREEMPT SMP NOPTI
+  [   36.145794] CPU: 2 PID: 1847 Comm: ld-linux.so.2 Not tainted 5.19.1-1-default #1 \
+	  openSUSE Tumbleweed f3b44bfb672cdb9f235aff53b57724eba8b9411b
+  [   36.146608] Hardware name: HP ProLiant ML350p Gen8, BIOS P72 11/14/2013
+  [   36.148126] RIP: e030:entry_INT80_compat+0x3/0xa3
+
+Fix that by open coding this single instance of the SWAPGS macro.
+
+Fixes: c89191ce67ef ("x86/entry: Convert SWAPGS to swapgs and remove the definition of SWAPGS")
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Cc: <stable@vger.kernel.org> # 5.19
+Link: https://lore.kernel.org/r/20220816071137.4893-1-jgross@suse.com
+---
+ arch/x86/entry/entry_64_compat.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/entry/entry_64_compat.S b/arch/x86/entry/entry_64_compat.S
+index 682338e..4dd1981 100644
+--- a/arch/x86/entry/entry_64_compat.S
++++ b/arch/x86/entry/entry_64_compat.S
+@@ -311,7 +311,7 @@ SYM_CODE_START(entry_INT80_compat)
+ 	 * Interrupts are off on entry.
+ 	 */
+ 	ASM_CLAC			/* Do this early to minimize exposure */
+-	SWAPGS
++	ALTERNATIVE "swapgs", "", X86_FEATURE_XENPV
+ 
+ 	/*
+ 	 * User tracing code (ptrace or signal handlers) might assume that

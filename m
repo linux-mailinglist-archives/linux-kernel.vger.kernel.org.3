@@ -2,58 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6413C5955BD
+	by mail.lfdr.de (Postfix) with ESMTP id AC5AA5955BE
 	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232829AbiHPJCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 05:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
+        id S232920AbiHPJCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231878AbiHPJBZ (ORCPT
+        with ESMTP id S232891AbiHPJBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:01:25 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784ABD020D;
-        Tue, 16 Aug 2022 00:11:41 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0BE7534BCC;
-        Tue, 16 Aug 2022 07:11:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1660633900; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=h6M793SMY2ynvWE6o2wfHm041bnCM3HfZCKa0vLCTLw=;
-        b=Mnw1d5F8tJcd+2r4BZoh0xSWKXDiI7+4lg4EXt0O0JeuEibB9/ttLcmvqnCvzkQjQlsIfq
-        cPQBqndN4J06ZB89+uOr1tOMexHZu+bnr/pcckpzdReiYrI3/3W8a1mPM1ePMASQ73nmRN
-        4hOH/RWI+ptWU2HuqYTQwWApTd3Hm34=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AD685139B7;
-        Tue, 16 Aug 2022 07:11:39 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id TFETKStD+2IqPQAAMHmgww
-        (envelope-from <jgross@suse.com>); Tue, 16 Aug 2022 07:11:39 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, stable@vger.kernel.org
-Subject: [PATCH] x86/entry: fix entry_INT80_compat for Xen PV guests
-Date:   Tue, 16 Aug 2022 09:11:37 +0200
-Message-Id: <20220816071137.4893-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Tue, 16 Aug 2022 05:01:30 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8580E46216
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 00:11:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1660633905;
+  x=1692169905;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wr/E2w/JPcT8FmjOXhcd8N+UutLMOAifnscUPZC1iUg=;
+  b=kpO6rLOfLeRFRLEg8NFwXO7MYwdXb7XHjUFaqrhouTq9Z0luI9u29bId
+   XyGwb5Vm+Z9xMIR8eh1gGWp+9KsV5hjL+cCxIq8yDiK5dkyMokIdShb7j
+   R4rywSCEKcFEVoTjDXYAJqGvI5SQq1L72lSG6MXtwkwzgTn6UdC+iPcoa
+   aDL/e3Xl6tQojIDG4frFSmGFjQbR/yRPW43k3qTYuiTmhAazzAcWPebaG
+   7WDZTBP4nUrqCDmFXpWcgCO1tVBYc4JuFQclgYUPlEGYa3AKmXkYM12YM
+   XrbwlUvnHMJ0rPwRd/PHl1Fadk+6CX+MwyswR2jqiiiZJAw2PIWwjnA+1
+   A==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+CC:     <kernel@axis.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] tty: Fix lookahead_buf crash with serdev
+Date:   Tue, 16 Aug 2022 09:11:41 +0200
+Message-ID: <20220816071142.1128001-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,41 +53,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c89191ce67ef ("x86/entry: Convert SWAPGS to swapgs and remove
-the definition of SWAPGS") missed one use case of SWAPGS in
-entry_INT80_compat. Removing of the SWAPGS macro led to asm just
-using "swapgs", as it is accepting instructions in capital letters,
-too.
+Do not follow a NULL pointer if the tty_port_client_operations does not
+implement the ->lookahead_buf() callback, which is the case with
+serdev's ttyport.
 
-This in turn leads to splats in Xen PV guests like:
-
-[   36.145223] general protection fault, maybe for address 0x2d: 0000 [#1] PREEMPT SMP NOPTI
-[   36.145794] CPU: 2 PID: 1847 Comm: ld-linux.so.2 Not tainted 5.19.1-1-default #1 openSUSE Tumbleweed f3b44bfb672cdb9f235aff53b57724eba8b9411b
-[   36.146608] Hardware name: HP ProLiant ML350p Gen8, BIOS P72 11/14/2013
-[   36.148126] RIP: e030:entry_INT80_compat+0x3/0xa3
-
-Fix that by open coding this single instance of the SWAPGS macro.
-
-Cc: <stable@vger.kernel.org> # 5.19
-Fixes: c89191ce67ef ("x86/entry: Convert SWAPGS to swapgs and remove the definition of SWAPGS")
-Signed-off-by: Juergen Gross <jgross@suse.com>
+Fixes: 6bb6fa6908ebd3 ("tty: Implement lookahead to process XON/XOFF timely")
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 ---
- arch/x86/entry/entry_64_compat.S | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/tty_buffer.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/entry/entry_64_compat.S b/arch/x86/entry/entry_64_compat.S
-index 682338e7e2a3..4dd19819053a 100644
---- a/arch/x86/entry/entry_64_compat.S
-+++ b/arch/x86/entry/entry_64_compat.S
-@@ -311,7 +311,7 @@ SYM_CODE_START(entry_INT80_compat)
- 	 * Interrupts are off on entry.
- 	 */
- 	ASM_CLAC			/* Do this early to minimize exposure */
--	SWAPGS
-+	ALTERNATIVE "swapgs", "", X86_FEATURE_XENPV
+diff --git a/drivers/tty/tty_buffer.c b/drivers/tty/tty_buffer.c
+index 9fdecc795b6b..a1c97d4a45fb 100644
+--- a/drivers/tty/tty_buffer.c
++++ b/drivers/tty/tty_buffer.c
+@@ -493,7 +493,8 @@ static void lookahead_bufs(struct tty_port *port, struct tty_buffer *head)
+ 		if (~head->flags & TTYB_NORMAL)
+ 			f = flag_buf_ptr(head, head->lookahead);
  
- 	/*
- 	 * User tracing code (ptrace or signal handlers) might assume that
+-		port->client_ops->lookahead_buf(port, p, f, count);
++		if (port->client_ops->lookahead_buf)
++			port->client_ops->lookahead_buf(port, p, f, count);
+ 		head->lookahead += count;
+ 	}
+ }
 -- 
-2.35.3
+2.34.1
 

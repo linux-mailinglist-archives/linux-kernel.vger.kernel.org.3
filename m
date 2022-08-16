@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD90595846
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DB6A5957CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 12:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234618AbiHPK3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 06:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
+        id S230263AbiHPKPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 06:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234529AbiHPK2z (ORCPT
+        with ESMTP id S234415AbiHPKOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:28:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CD05D5EBD
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:37:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660642485;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=+KFOMoWGAyHxHdtORsjFxcSg87BzWtJ/0Drcua3zx9E=;
-        b=deoiUnnlo25A5EVr0HOvRU7zyXa/WZztrE/KUKPxq+IAw1ndC3nn6HsdUigNs+c/B50MYY
-        08vEhn6gPeVEt2fZ+VgL1xRMq9Xo1ucE/tLJmFdVGfl+uuc6IctivVo3/Y/zI/bL1m9OWm
-        CDa+5HiBaCqd2zn7L5aTK7D6hbau8Zc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-168-VWv000_QN42ZqFWb0ChMoQ-1; Tue, 16 Aug 2022 05:34:42 -0400
-X-MC-Unique: VWv000_QN42ZqFWb0ChMoQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1A6C13C0D195;
-        Tue, 16 Aug 2022 09:34:42 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5A4CE492C3B;
-        Tue, 16 Aug 2022 09:34:41 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH] net: Fix suspicious RCU usage in bpf_sk_reuseport_detach()
-From:   David Howells <dhowells@redhat.com>
-To:     yin31149@gmail.com
-Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        dhowells@redhat.com, linux-kernel@vger.kernel.org
-Date:   Tue, 16 Aug 2022 10:34:40 +0100
-Message-ID: <166064248071.3502205.10036394558814861778.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        Tue, 16 Aug 2022 06:14:19 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17346D6318
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 02:37:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660642658; x=1692178658;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=I+l1Yy0Jsg/6z3gHEU6yDZymdLIl3LFJwl5JDwIrv3I=;
+  b=criNiMvr4Fkj2YQEqigrO3iuFlq3f8e6oKWKZwEIti7l0XdymUTO0ADF
+   1/zigUu/cfKb86MFP+u/R3LQ6WG6xNT/KEruinCaDjJyKzK6ihlzJCs/d
+   DVMDqrLx31/MBLdItTpSOVnNxbHGSom8Sel35BoMfL45GoJMaT/pYo6fs
+   NTPxx/THNaibPv+6QVkj8wXq1Gp60eg224DarbQRa3+qHbAZR4tMprxdI
+   D09lQzdVlGDj1vtNXjI+au6Wn5CI4SUrbKa96ROO4HXYqJUtEOuh4/Biy
+   Uy6a0A5dmEE69AmkOiTBfH1K26YhRlRYma7vEhvDXEjpasgzpxYfqm/RZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="293446786"
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="293446786"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 02:35:43 -0700
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="733231012"
+Received: from clbarnes-mobl.amr.corp.intel.com (HELO paris.amr.corp.intel.com) ([10.254.7.166])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 02:35:40 -0700
+From:   Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+To:     intel-gfx@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        mchehab@kernel.org, chris@chris-wilson.co.uk,
+        matthew.auld@intel.com, thomas.hellstrom@linux.intel.com,
+        jani.nikula@intel.com, nirmoy.das@intel.com, airlied@linux.ie,
+        daniel@ffwll.ch, andi.shyti@linux.intel.com,
+        andrzej.hajda@intel.com
+Subject: [PATCH v7 0/8] Fixes integer overflow or integer truncation issues in page lookups, ttm place configuration and scatterlist creation
+Date:   Tue, 16 Aug 2022 18:35:17 +0900
+Message-Id: <20220816093525.184940-1-gwan-gyeong.mun@intel.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,121 +62,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bpf_sk_reuseport_detach() calls __rcu_dereference_sk_user_data_with_flags()
-to obtain the value of sk->sk_user_data, but that function is only usable
-if the RCU read lock is held, and neither that function nor any of its
-callers hold it.
+This patch series fixes integer overflow or integer truncation issues in
+page lookups, ttm place configuration and scatterlist creation, etc.
+We need to check that we avoid integer overflows when looking up a page,
+and so fix all the instances where we have mistakenly used a plain integer
+instead of a more suitable long.
+And there is an impedance mismatch between the scatterlist API using
+unsigned int and our memory/page accounting in unsigned long. That is we
+may try to create a scatterlist for a large object that overflows returning
+a small table into which we try to fit very many pages. As the object size
+is under the control of userspace, we have to be prudent and catch the
+conversion errors. To catch the implicit truncation as we switch from
+unsigned long into the scatterlist's unsigned int, we use our overflows_type
+check and report E2BIG prior to the operation. This is already used in
+our create ioctls to indicate if the uABI request is simply too large for
+the backing store. 
+And ttm place also has the same problem with scatterlist creation,
+and we fix the integer truncation problem with the way approached by
+scatterlist creation.
+And It corrects the error code to return -E2BIG when creating gem objects
+using ttm or shmem, if the size is too large in each case.
+In order to provide a common macro, it moves and adds a few utility macros
+into overflow/util_macros header
 
-Fix this by adding a new helper, __locked_read_sk_user_data_with_flags()
-that checks to see if sk->sk_callback_lock() is held and use that here
-instead.
+v7: Fix to use WARN_ON() macro where GEM_BUG_ON() macro was used. (Jani)
+v6: Move macro addition location so that it can be used by other than drm subsystem (Jani, Mauro, Andi)
+    Fix to follow general use case for GEM_BUG_ON(). (Jani)
+v5: Fix an alignment to match open parenthesis
+    Fix macros to be enclosed in parentheses for complex values
+    Fix too long line warning
+v4: Fix build warnins that reported by kernel test robot. (kernel test robot <lkp@intel.com>)
+    Add kernel-doc markups to the kAPI functions and macros (Mauoro)
+v3: Modify overflows_type() macro to consider signed data types and
+	add is_type_unsigned() macro (Mauro)
+    Make not use the same macro name on a function. (Mauro)
+    For kernel-doc, macros and functions are handled in the same namespace,
+    the same macro name on a function prevents ever adding documentation for it.
+    Not to change execution inside a macro. (Mauro)
+    Fix the problem that safe_conversion() macro always returns true (G.G)
+    Add safe_conversion_gem_bug_on() macro and remove temporal SAFE_CONVERSION() macro. (G.G.)
 
-Alternatively, making __rcu_dereference_sk_user_data_with_flags() use
-rcu_dereference_checked() might suffice.
+Chris Wilson (3):
+  drm/i915/gem: Typecheck page lookups
+  drm/i915: Check for integer truncation on scatterlist creation
+  drm/i915: Remove truncation warning for large objects
 
-Without this, the following warning can be occasionally observed:
+Gwan-gyeong Mun (5):
+  overflow: Move and add few utility macros into overflow
+  util_macros: Add exact_type macro to catch type mis-match while
+    compiling
+  drm/i915: Check for integer truncation on the configuration of ttm
+    place
+  drm/i915: Check if the size is too big while creating shmem file
+  drm/i915: Use error code as -E2BIG when the size of gem ttm object is
+    too large
 
-=============================
-WARNING: suspicious RCU usage
-6.0.0-rc1-build2+ #563 Not tainted
------------------------------
-include/net/sock.h:592 suspicious rcu_dereference_check() usage!
+ drivers/gpu/drm/i915/gem/i915_gem_internal.c  |   6 +-
+ drivers/gpu/drm/i915/gem/i915_gem_object.c    |   7 +-
+ drivers/gpu/drm/i915/gem/i915_gem_object.h    | 303 +++++++++++++++---
+ drivers/gpu/drm/i915/gem/i915_gem_pages.c     |  27 +-
+ drivers/gpu/drm/i915/gem/i915_gem_phys.c      |   4 +
+ drivers/gpu/drm/i915/gem/i915_gem_shmem.c     |  19 +-
+ drivers/gpu/drm/i915/gem/i915_gem_ttm.c       |  23 +-
+ drivers/gpu/drm/i915/gem/i915_gem_userptr.c   |   5 +-
+ .../drm/i915/gem/selftests/i915_gem_context.c |  12 +-
+ .../drm/i915/gem/selftests/i915_gem_mman.c    |   8 +-
+ .../drm/i915/gem/selftests/i915_gem_object.c  |   8 +-
+ drivers/gpu/drm/i915/gvt/dmabuf.c             |   9 +-
+ drivers/gpu/drm/i915/i915_gem.c               |  18 +-
+ drivers/gpu/drm/i915/i915_scatterlist.h       |  11 +
+ drivers/gpu/drm/i915/i915_utils.h             |   6 +-
+ drivers/gpu/drm/i915/i915_vma.c               |   8 +-
+ drivers/gpu/drm/i915/intel_region_ttm.c       |  17 +-
+ include/linux/overflow.h                      |  54 ++++
+ include/linux/util_macros.h                   |  25 ++
+ 19 files changed, 477 insertions(+), 93 deletions(-)
 
-other info that might help us debug this:
-
-rcu_scheduler_active = 2, debug_locks = 1
-5 locks held by locktest/29873:
- #0: ffff88812734b550 (&sb->s_type->i_mutex_key#9){+.+.}-{3:3}, at: __sock_release+0x77/0x121
- #1: ffff88812f5621b0 (sk_lock-AF_INET){+.+.}-{0:0}, at: tcp_close+0x1c/0x70
- #2: ffff88810312f5c8 (&h->lhash2[i].lock){+.+.}-{2:2}, at: inet_unhash+0x76/0x1c0
- #3: ffffffff83768bb8 (reuseport_lock){+...}-{2:2}, at: reuseport_detach_sock+0x18/0xdd
- #4: ffff88812f562438 (clock-AF_INET){++..}-{2:2}, at: bpf_sk_reuseport_detach+0x24/0xa4
-
-stack backtrace:
-CPU: 1 PID: 29873 Comm: locktest Not tainted 6.0.0-rc1-build2+ #563
-Hardware name: ASUS All Series/H97-PLUS, BIOS 2306 10/09/2014
-Call Trace:
- <TASK>
- dump_stack_lvl+0x4c/0x5f
- bpf_sk_reuseport_detach+0x6d/0xa4
- reuseport_detach_sock+0x75/0xdd
- inet_unhash+0xa5/0x1c0
- tcp_set_state+0x169/0x20f
- ? lockdep_sock_is_held+0x3a/0x3a
- ? __lock_release.isra.0+0x13e/0x220
- ? reacquire_held_locks+0x1bb/0x1bb
- ? hlock_class+0x31/0x96
- ? mark_lock+0x9e/0x1af
- __tcp_close+0x50/0x4b6
- tcp_close+0x28/0x70
- inet_release+0x8e/0xa7
- __sock_release+0x95/0x121
- sock_close+0x14/0x17
- __fput+0x20f/0x36a
- task_work_run+0xa3/0xcc
- exit_to_user_mode_prepare+0x9c/0x14d
- syscall_exit_to_user_mode+0x18/0x44
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Fixes: cf8c1e967224 ("net: refactor bpf_sk_reuseport_detach()")
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Hawkins Jiawei <yin31149@gmail.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: netdev@vger.kernel.org
----
-
- include/net/sock.h           |   25 +++++++++++++++++++++++++
- kernel/bpf/reuseport_array.c |    2 +-
- 2 files changed, 26 insertions(+), 1 deletion(-)
-
-diff --git a/include/net/sock.h b/include/net/sock.h
-index 05a1bbdf5805..d08cfe190a78 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -577,6 +577,31 @@ static inline bool sk_user_data_is_nocopy(const struct sock *sk)
- 
- #define __sk_user_data(sk) ((*((void __rcu **)&(sk)->sk_user_data)))
- 
-+/**
-+ * __locked_read_sk_user_data_with_flags - return the pointer
-+ * only if argument flags all has been set in sk_user_data. Otherwise
-+ * return NULL
-+ *
-+ * @sk: socket
-+ * @flags: flag bits
-+ *
-+ * The caller must be holding sk->sk_callback_lock.
-+ */
-+static inline void *
-+__locked_read_sk_user_data_with_flags(const struct sock *sk,
-+				      uintptr_t flags)
-+{
-+	uintptr_t sk_user_data =
-+		(uintptr_t)rcu_dereference_check(__sk_user_data(sk),
-+						 lockdep_is_held(&sk->sk_callback_lock));
-+
-+	WARN_ON_ONCE(flags & SK_USER_DATA_PTRMASK);
-+
-+	if ((sk_user_data & flags) == flags)
-+		return (void *)(sk_user_data & SK_USER_DATA_PTRMASK);
-+	return NULL;
-+}
-+
- /**
-  * __rcu_dereference_sk_user_data_with_flags - return the pointer
-  * only if argument flags all has been set in sk_user_data. Otherwise
-diff --git a/kernel/bpf/reuseport_array.c b/kernel/bpf/reuseport_array.c
-index 85fa9dbfa8bf..82c61612f382 100644
---- a/kernel/bpf/reuseport_array.c
-+++ b/kernel/bpf/reuseport_array.c
-@@ -24,7 +24,7 @@ void bpf_sk_reuseport_detach(struct sock *sk)
- 	struct sock __rcu **socks;
- 
- 	write_lock_bh(&sk->sk_callback_lock);
--	socks = __rcu_dereference_sk_user_data_with_flags(sk, SK_USER_DATA_BPF);
-+	socks = __locked_read_sk_user_data_with_flags(sk, SK_USER_DATA_BPF);
- 	if (socks) {
- 		WRITE_ONCE(sk->sk_user_data, NULL);
- 		/*
-
+-- 
+2.37.1
 

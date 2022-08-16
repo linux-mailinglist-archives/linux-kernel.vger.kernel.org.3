@@ -2,210 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 821EA59633C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1AA596340
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236660AbiHPTfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 15:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
+        id S237208AbiHPThh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 15:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237232AbiHPTfg (ORCPT
+        with ESMTP id S236566AbiHPThe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 15:35:36 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E74895C3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:35:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=N6mMsJ2BCoZ712tXYE1aSGPGNeJ3vya4PzRd0XZ/7z4=; b=mkdC9S+GC1GHSWx19K+4TdMmER
-        +j47uiu8lrqvMS5wURYrQe1KY/jjKtcogGtFftBAgONXOmNAHUEtcdni2lmlHFhBJdQgzfLotEXha
-        RzXlBd/j7Q4WkgCnDT+shmx64gOtYKWUW11GsVSizEDMn9k6FtAFz/KCbeRIlSQAypwwb26/zvrzw
-        iDpciw7w/M/mda8dsgDl4CyavM3ZIvj3a+oesW8ZNNe0PDIF8EYWx+Rz6B5VmqJcyqPtWSD1KfoHs
-        8Cb6a4zY6MlPYr5xGh7o7XQSDPTI3GUBIZ2DTdPlWWbASB/a1lz43G96gEpqdNVlRytGBDMguuINE
-        oaftHmJQ==;
-Received: from [2a01:799:961:d200:cca0:57ac:c55d:a485] (port=58447)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oO2Lb-00029A-Be; Tue, 16 Aug 2022 21:35:31 +0200
-Message-ID: <be9b6b71-fa2a-3290-2bce-901342e01981@tronnes.org>
-Date:   Tue, 16 Aug 2022 21:35:24 +0200
+        Tue, 16 Aug 2022 15:37:34 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A87895CD;
+        Tue, 16 Aug 2022 12:37:33 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id r22so10121031pgm.5;
+        Tue, 16 Aug 2022 12:37:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=l9EfUPaDR5fFqr7tvdGkZgxoolNNscld0M245NvUy6E=;
+        b=nLp/aBgVt6VuoaORbTZKRwiuvBImcBAxXyGu2K+SxaOMk8qEYRA8xkNY3sj70X1RDT
+         zeOOFAq4s20bplLlj+c1ruWj+YW3QsXioDyQ7USvt9SV7SSnIZY32mS7JY5J4qkkoujz
+         MK5NVG81SXWZT8hbQ35Z58bLNbv6+zJujodwgSHgIqQ2rJ3uo23d2MFALWygo2WeoKPD
+         kT1vzc3g9I3YfET7baxKhGGlpekI8gPTtfNNSRlBcxLjzXiYRHJ4COGSQNlMoovNZIzT
+         lGKCU3ZLSBmTCfZPyMy+iofWEtJAxg1cMeU1QUcGbGComtJTA3/fWvaAh2aSPgeiLkbE
+         NlIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=l9EfUPaDR5fFqr7tvdGkZgxoolNNscld0M245NvUy6E=;
+        b=ds3srnHyjNXzffE5smdMyvgubBJn2SDF0JUeshkUP29FmKMSRfmSN0PFmNuYkjFujN
+         urf/k7i3xIEljzySXCHRS874qn0t2wiWtlYYuVrlCoBI8uxMYsI8QJH1Z40lDcPYr5Yh
+         ZkkRAtGTKruqSoByRth8CFYWdw9X4epnstf5rbFhd8aAVHzAG156cgZ/yA8jFJGeUTv1
+         Kia2O1CSPQNpFJyYEe8yTrekfF1uK9pypiRYT8R2pcxzMfp25owrP1/B68yV8tkAhR0q
+         NkxvQJqiFhQI8dPFP1zIctiaBsdHGvWK2ZAgAlIZFpqrQm/0s9AQ2qSJumklV8gV96EE
+         7TrQ==
+X-Gm-Message-State: ACgBeo29MvfRPGQQNpHi6kIyx46tofIT+YsW+zlDfJOHYFzVQzZgQgyo
+        mDPNT1FMhddOt1wCFC96w8nfZLKyG9Q=
+X-Google-Smtp-Source: AA6agR6dr3IbLebLq+uxnEcnRtO6DTz698tN72/G4xvoRmp4q25XYgSr+7lEdkVSQm+j6iPxM9YUWw==
+X-Received: by 2002:a63:fc19:0:b0:428:c216:7561 with SMTP id j25-20020a63fc19000000b00428c2167561mr9537623pgi.505.1660678653311;
+        Tue, 16 Aug 2022 12:37:33 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:7229])
+        by smtp.gmail.com with ESMTPSA id p123-20020a634281000000b00429c5270710sm217656pga.1.2022.08.16.12.37.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 12:37:32 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 16 Aug 2022 09:37:31 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     mkoutny@suse.com, axboe@kernel.dk, ming.lei@redhat.com,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH v7 1/9] blk-throttle: fix that io throttle can only work
+ for single bio
+Message-ID: <Yvvx+/d2+OMROUOe@slm.duckdns.org>
+References: <20220802140415.2960284-1-yukuai1@huaweicloud.com>
+ <20220802140415.2960284-2-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        Dom Cobley <dom@raspberrypi.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
- <9fdecae2-80ad-6212-0522-7dccf9fb57be@tronnes.org>
- <20220816082612.grebxql5ynnfnvfd@houat>
- <ea6ebdda-f779-78af-1ffd-bd86d715077f@tronnes.org>
- <20220816094922.oqhrhefv327zo2ou@houat>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20220816094922.oqhrhefv327zo2ou@houat>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802140415.2960284-2-yukuai1@huaweicloud.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Aug 02, 2022 at 10:04:07PM +0800, Yu Kuai wrote:
+...
+> commit 9f5ede3c01f9 ("block: throttle split bio in case of iops limit")
+> support to count splited bios for iops limit, thus it adds flaged bio
+                                                             ^
+                                                             flagged
 
+> checking in tg_with_in_bps_limit() so that splited bios will only count
+                                             ^
+                                             split
 
-Den 16.08.2022 11.49, skrev Maxime Ripard:
-> On Tue, Aug 16, 2022 at 11:42:20AM +0200, Noralf Trønnes wrote:
->>
->>
->> Den 16.08.2022 10.26, skrev Maxime Ripard:
->>> Hi,
->>>
->>> On Mon, Aug 08, 2022 at 02:44:56PM +0200, Noralf Trønnes wrote:
->>>> Den 29.07.2022 18.34, skrev Maxime Ripard:
->>>>> The TV mode property has been around for a while now to select and get the
->>>>> current TV mode output on an analog TV connector.
->>>>>
->>>>> Despite that property name being generic, its content isn't and has been
->>>>> driver-specific which makes it hard to build any generic behaviour on top
->>>>> of it, both in kernel and user-space.
->>>>>
->>>>> Let's create a new bitmask tv norm property, that can contain any of the
->>>>> analog TV standards currently supported by kernel drivers. Each driver can
->>>>> then pass in a bitmask of the modes it supports.
->>>>>
->>>>> We'll then be able to phase out the older tv mode property.
->>>>>
->>>>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
->>>>>
->>>>
->>>> Please also update Documentation/gpu/kms-properties.csv
->>>>
->>>> Requirements for adding a new property is found in
->>>> Documentation/gpu/drm-kms.rst
->>>
->>> I knew this was going to be raised at some point, so I'm glad it's that
->>> early :)
->>>
->>> I really don't know what to do there. If we stick by our usual rules,
->>> then we can't have any of that work merged.
->>>
->>> However, I think the status quo is not really satisfactory either.
->>> Indeed, we have a property, that doesn't follow those requirements
->>> either, with a driver-specific content, and that stands in the way of
->>> fixes and further improvements at both the core framework and driver
->>> levels.
->>>
->>> So having that new property still seems like a net improvement at the
->>> driver, framework and uAPI levels, even if it's not entirely following
->>> the requirements we have in place.
->>>
->>> Even more so since, realistically, those kind of interfaces will never
->>> get any new development on the user-space side of things, it's
->>> considered by everyone as legacy.
->>>
->>> This also is something we need to support at some point if we want to
->>> completely deprecate the fbdev drivers and provide decent alternatives
->>> in KMS.
->>>
->>> So yeah, strictly speaking, we would not qualify for our requirements
->>> there. I still think we have a strong case for an exception though.
->>
->> Which requirements would that be? The only one I can see is the
->> documentation and maybe an IGT test.
+> once for bps limit, however, it introduce a new problem that io throttle
+> won't work if multiple bios are throttled.
 > 
-> This is the one I had in mind
-> https://dri.freedesktop.org/docs/drm/gpu/drm-uapi.html#open-source-userspace-requirements
+> In order to fix the problem, at first, don't skip flaged bio in
+> tg_with_in_bps_limit(), however, this will break that splited bios should
+> only count once for bps limit. And this patch tries to avoid
+> over-accounting by decrementing it first in __blk_throtl_bio(), and
+> then counting it again while dispatching it.
 > 
+> Fixes: 9f5ede3c01f9 ("block: throttle split bio in case of iops limit")
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> Reviewed-by: Ming Lei <ming.lei@redhat.com>
 
-Oh right, I had forgotten about that one.
+Please cc stable w/ version tag.
 
-One benefit of having a userspace implementation is that it increases
-the chance of widespread adoption having a working implementation to
-look at. I don't think the reason tv.mode is not used anywhere (that I
-know of) is because the driver picks the enum values resulting in no
-standard names. It's a niche thing and way down on the todo list.
-nouveau and ch7006 has a tv_norm module parameter which certainly
-doesn't help in moving people/projects over to the DRM property
-(downstream rpi also has it now).
+> ---
+>  block/blk-throttle.c | 26 ++++++++++++++++++++------
+>  1 file changed, 20 insertions(+), 6 deletions(-)
+> 
+> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+> index 9f5fe62afff9..2957e2c643f4 100644
+> --- a/block/blk-throttle.c
+> +++ b/block/blk-throttle.c
+> @@ -811,7 +811,7 @@ static bool tg_with_in_bps_limit(struct throtl_grp *tg, struct bio *bio,
+>  	unsigned int bio_size = throtl_bio_data_size(bio);
+>  
+>  	/* no need to throttle if this bio's bytes have been accounted */
+> -	if (bps_limit == U64_MAX || bio_flagged(bio, BIO_THROTTLED)) {
+> +	if (bps_limit == U64_MAX) {
+>  		if (wait)
+>  			*wait = 0;
+>  		return true;
+> @@ -921,11 +921,8 @@ static void throtl_charge_bio(struct throtl_grp *tg, struct bio *bio)
+>  	unsigned int bio_size = throtl_bio_data_size(bio);
+>  
+>  	/* Charge the bio to the group */
+> -	if (!bio_flagged(bio, BIO_THROTTLED)) {
+> -		tg->bytes_disp[rw] += bio_size;
+> -		tg->last_bytes_disp[rw] += bio_size;
+> -	}
+> -
+> +	tg->bytes_disp[rw] += bio_size;
+> +	tg->last_bytes_disp[rw] += bio_size;
+>  	tg->io_disp[rw]++;
+>  	tg->last_io_disp[rw]++;
+>  
+> @@ -2121,6 +2118,23 @@ bool __blk_throtl_bio(struct bio *bio)
+>  			tg->last_low_overflow_time[rw] = jiffies;
+>  		throtl_downgrade_check(tg);
+>  		throtl_upgrade_check(tg);
+> +
+> +		/*
+> +		 * Splited bios can be re-entered because iops limit should be
+                   ^                ^^^^^^^^^^^^^
+                   Split            re-enter
 
-mpv[1] is a commandline media player that after a quick look might be a
-candidate for implementing the property without too much effort.
+> +		 * counted again, however, bps limit should not. Since bps limit
+> +		 * will be counted again while dispatching it, compensate the
+> +		 * over-accounting here. Noted that compensation can fail if
+> +		 * new slice is started.
 
-How do you test the property? I've used modetest but I can only change
-to a tv.mode that matches the current display mode. I can't switch from
-ntsc to pal for instance.
+I can't really follow the comment. Please improve the explanation.
 
-I have tried changing mode on rpi-5.15 (which I will switch to for the
-gud gadget), but I always end up with flip timeouts when changing the value:
+> +		 */
+> +		if (bio_flagged(bio, BIO_THROTTLED)) {
+> +			unsigned int bio_size = throtl_bio_data_size(bio);
+> +
+> +			if (tg->bytes_disp[rw] >= bio_size)
+> +				tg->bytes_disp[rw] -= bio_size;
+> +			if (tg->last_bytes_disp[rw] >= bio_size)
+> +				tg->last_bytes_disp[rw] -= bio_size;
+> +		}
 
-$ cat /proc/cpuinfo | grep Model
-Model           : Raspberry Pi 4 Model B Rev 1.1
-$ uname -a
-Linux pi4t 5.15.56-v7l+ #1575 SMP Fri Jul 22 20:29:46 BST 2022 armv7l
-GNU/Linux
-$ sudo dmesg -C
-$ modetest -M vc4 -s 45:720x480i -w 45:mode:1
-setting mode 720x480i-29.97Hz on connectors 45, crtc 73
-failed to set gamma: Function not implemented
+So, as a fix for the immediate problem, I guess this might do but this feels
+really fragile. How can we be certain that re-entering only happens because
+of splitting? What if future core development changes that? It seems to be
+solving the problem in the wrong place. Shouldn't we flag the bio indicating
+that it's split when we're splitting the bio so that we only limit them for
+iops in the first place?
 
-$ dmesg
-$ modetest -M vc4 -s 45:720x480i -w 45:mode:0
-setting mode 720x480i-29.97Hz on connectors 45, crtc 73
-failed to set gamma: Function not implemented
+Thanks.
 
-$ dmesg
-[   95.193059] [drm:drm_atomic_helper_wait_for_flip_done
-[drm_kms_helper]] *ERROR* [CRTC:73:crtc-1] flip_done timed out
-[  105.433112] [drm:drm_crtc_commit_wait [drm]] *ERROR* flip_done timed out
-[  105.433519] [drm:drm_atomic_helper_wait_for_dependencies
-[drm_kms_helper]] *ERROR* [CRTC:73:crtc-1] commit wait timed out
-[  115.673095] [drm:drm_crtc_commit_wait [drm]] *ERROR* flip_done timed out
-[  115.673498] [drm:drm_atomic_helper_wait_for_dependencies
-[drm_kms_helper]] *ERROR* [PLANE:63:plane-1] commit wait timed out
-[  125.913106] [drm:drm_crtc_commit_wait [drm]] *ERROR* flip_done timed out
-[  125.913510] vc4-drm gpu: [drm] *ERROR* Timed out waiting for commit
-[  136.153411] [drm:drm_atomic_helper_wait_for_flip_done
-[drm_kms_helper]] *ERROR* [CRTC:73:crtc-1] flip_done timed out
-
-I doesn't help to reload vc4, I have to reboot to get it working again.
-I get this when reloading:
-[  776.799784] vc4_vec fec13000.vec: Unbalanced pm_runtime_enable!
-
-I know this was working in rpi-5.10 on the Pi Zero (Pi4 tvout using vc4
-did not work at all when I tried).
-
-
-Noralf.
-
-[1] https://mpv.io/
-    https://github.com/mpv-player/mpv/blob/master/video/out/drm_common.c
-    https://github.com/mpv-player/mpv/blob/master/video/out/drm_atomic.c
+-- 
+tejun

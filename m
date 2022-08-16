@@ -2,96 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B32595E0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 16:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BD75595E0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 16:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235861AbiHPOFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 10:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60066 "EHLO
+        id S235901AbiHPOFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 10:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbiHPOEk (ORCPT
+        with ESMTP id S235952AbiHPOEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 10:04:40 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D761B6BD50
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 07:04:22 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 202so9306297pgc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 07:04:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=1GWQeJ3mO/AwsS1RxKEoiTmjiFwoCENhO2G+S4wDDKU=;
-        b=MXLWq8Ly9rTmRDyZNuNR3g8mJjeH9dgKfanuaq5Dl7nKAuhvDg5Di203a1rl6HAb+T
-         YlWob7XvmiC+vEXV5h0DLNEKpm3HCbMOLbktEzqOagm4T+BV29L94RAjxQy+JAhR7ZpC
-         LXT06avUI68wlEHazjn12U/Uhs1ARBLVUwM/Ql4kDcht82pw7Dcmi+ztzDW4iCaytcUV
-         nVZN4x8VXjiTgZp/viODvNKL35oVvxR7cBnmX/FXo/Kc+B+gBvP3J6LLMu0IgbS4JlHA
-         HyxKdVLgtKE+SHCJdGluZH6jwewFbU10TpkYWSJbkph9tS3ZkEjiLPhQXQk1FrRxB6G5
-         Z0mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=1GWQeJ3mO/AwsS1RxKEoiTmjiFwoCENhO2G+S4wDDKU=;
-        b=69Zh50ZtadAbt3kFTr9msZy/mk9Px7E8r8kXTfzkzgo+bUK+NGIfzp1kf7RRvpnhoU
-         /SlItZl088vV/euKjV00D/JoA3IQ4EH3bb6EFNTqGSfNd3HcfGO5ePp12KfSKEe9/DJI
-         yKBFE5sE6865n+sUSqzqTHDCTFv2MgBlAeL473Nc9/+rVw4C4KCddCr3Ewv/JcwADSiS
-         6aFQOQdKwybLmLfXfP1j3yRxXm1R0eklmY9f7Pi3cowr85TRFVLqdvdae3BICmU/Q9Se
-         XzYdfrnLKCHXGe+Rphhkz4uh1USv8VbgN4ddPjqVd6PWXgCQrVIWd26adB31o1ykcVKH
-         KyVg==
-X-Gm-Message-State: ACgBeo1Nb1AMuhxwWlOdRX28HL5syZoQtzJnQEoHS4gVwdY6Dj1M/6j8
-        jG9HFpmlW6tigiJrlMOP0aM/5A==
-X-Google-Smtp-Source: AA6agR7kLxy5v183YsULCWmOt3IC2ihIF8QYtRU7rFOfEhilKXIu3tcncvsozFV2ULPP1Ik7IBGQUQ==
-X-Received: by 2002:a05:6a00:13a7:b0:52e:3139:f895 with SMTP id t39-20020a056a0013a700b0052e3139f895mr20812990pfg.43.1660658662199;
-        Tue, 16 Aug 2022 07:04:22 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id e15-20020a170902784f00b0016f1c1f50f4sm9109452pln.235.2022.08.16.07.04.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 07:04:21 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 14:04:18 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     syzbot <syzbot+4f6eb69074ff62a1a33b@syzkaller.appspotmail.com>
-Cc:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        jarkko@kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        mingo@redhat.com, pbonzini@redhat.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
-Subject: Re: [syzbot] BUG: unable to handle kernel paging request in
- kvm_arch_hardware_enable
-Message-ID: <Yvuj4ugWYpthUwhj@google.com>
-References: <0000000000009700a805e657c8fa@google.com>
+        Tue, 16 Aug 2022 10:04:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76B86610C
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 07:04:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B88A5B819C9
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 14:04:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACAB4C433C1;
+        Tue, 16 Aug 2022 14:04:15 +0000 (UTC)
+Date:   Tue, 16 Aug 2022 10:04:23 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH 0/2] ftrace/recordmcount: Handle object files without
+ section symbols
+Message-ID: <20220816100423.5ee2e17c@gandalf.local.home>
+In-Reply-To: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
+References: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000009700a805e657c8fa@google.com>
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    7ebfc85e2cd7 Merge tag 'net-6.0-rc1' of git://git.kernel.o..
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=13d10985080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=20bc0b329895d963
-> dashboard link: https://syzkaller.appspot.com/bug?extid=4f6eb69074ff62a1a33b
-> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1538e0b5080000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=112756f3080000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+4f6eb69074ff62a1a33b@syzkaller.appspotmail.com
+On Wed, 27 Apr 2022 15:01:20 +0530
+"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
 
-Fix posted[*], apparently the sybot id changes when bugs get forwarded upstream.
+> This solves a build issue on powerpc with binutils v2.36 and newer [1].
+> Since commit d1bcae833b32f1 ("ELF: Don't generate unused section
+> symbols") [2], binutils started dropping section symbols that it thought
+> were unused. Due to this, in certain scenarios, recordmcount is unable 
+> to find a non-weak symbol to generate a relocation record against.
+> 
+> Clang integrated assembler is also aggressive in dropping section 
+> symbols [3].
+> 
+> In the past, there have been various workarounds to address this. See 
+> commits 55d5b7dd6451b5 ("initramfs: fix clang build failure") and 
+> 6e7b64b9dd6d96 ("elfcore: fix building with clang") and a recent patch:
+> https://lore.kernel.org/linuxppc-dev/20220425174128.11455-1-naveen.n.rao@linux.vnet.ibm.com/T/#u
+> 
+> Fix this issue by using the weak symbol in the relocation record. This 
+> can result in duplicate locations in the mcount table if those weak 
+> functions are overridden, so have ftrace skip dupicate entries.
+> 
+> Objtool already follows this approach, so patch 2 updates recordmcount 
+> to do the same. Patch 1 updates ftrace to skip duplicate entries.
+> 
+> - Naveen
+> 
+> 
+> [1] https://github.com/linuxppc/issues/issues/388
+> [2] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=d1bcae833b32f1
+> [3] https://github.com/ClangBuiltLinux/linux/issues/981
+> 
+>
 
-[*] https://lore.kernel.org/all/20220816053937.2477106-2-seanjc@google.com
+There's been work to handle weak functions, but I'm not sure that work
+handled the issues here. Are these patches still needed, or was there
+another workaround to handle the problems this addressed?
+
+-- Steve

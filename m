@@ -2,174 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E03596322
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E17FE596328
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 21:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237191AbiHPT2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 15:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48000 "EHLO
+        id S236044AbiHPTaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 15:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237175AbiHPT1t (ORCPT
+        with ESMTP id S229472AbiHPTaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 15:27:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A727D7BF
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:27:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660678068;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5UzYem8u6o5YL1t0vuymkKlCZe7qLh/XnY007elL440=;
-        b=CjORCpl4c3ZlNZk0rZkJ3tqeb3Q2QN6OBZTIMp29imINI5CJ1EoG8pZBghhkA88PqqBfOz
-        EUPBAycrdE5rdHVV7q+TXcBbGFXQXk6YBQJMWqV6ts79rYfjOnEJ4N7dDDdXEMLvRbnZjH
-        0J8VawCCWFfVHdre0JvBKJ9IcZIrLZM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-423-YhntvkmPO_CSumbl_u0yhQ-1; Tue, 16 Aug 2022 15:27:47 -0400
-X-MC-Unique: YhntvkmPO_CSumbl_u0yhQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2DDC985A585;
-        Tue, 16 Aug 2022 19:27:46 +0000 (UTC)
-Received: from llong.com (unknown [10.22.10.201])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7F7E81121314;
-        Tue, 16 Aug 2022 19:27:45 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v5 3/3] cgroup/cpuset: Keep user set cpus affinity
-Date:   Tue, 16 Aug 2022 15:27:34 -0400
-Message-Id: <20220816192734.67115-4-longman@redhat.com>
-In-Reply-To: <20220816192734.67115-1-longman@redhat.com>
-References: <20220816192734.67115-1-longman@redhat.com>
+        Tue, 16 Aug 2022 15:30:52 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E01086C06
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:30:51 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-333a4a5d495so67854877b3.10
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 12:30:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Kl58oIVw+b/FQzIKoDxlVtYHvxPN7SoeBGR5DHsWFi8=;
+        b=ccA1aqFa/Slrf+EHGuY4jRJf1eDbmsl6+BowsTbKHZ9JwnvfDH9nMdBdtaxJoN6rD7
+         8LGhcTb4aFMVtvcuO9LhXudkyQOQCGiGSNMH9j4/v5oP/XdyUvuD8RnqQakRvFqFA7is
+         gpwS7f3RHIke69w39Eqa5lyhyWZeuvZrtk4WQ0pFUMMmYyeAZbIvAC1ZoNoiNAeGU61I
+         1C1sPfKhdLplcoAueLcGDuY7IMG7ukAtJ1uA/RaZsCjbMBeF/2dY+o2DiAVMET+YiYVE
+         rrvfRBxStOypa6jbCQx7nfPrnDpSCbyV1IFKeC9UHO80BcTyNV3tecWavKCb+PrtY/Sq
+         78Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Kl58oIVw+b/FQzIKoDxlVtYHvxPN7SoeBGR5DHsWFi8=;
+        b=yF8JA3jaC8U/tLoKH8N4+K3mmAtmfIY+z/67ipYdLj8X9zZaxf7LtPbvGwvQiMJ6VJ
+         zF88LRWTovLNxMNut4KOQfTXEOpBjqVxOTk0+ul3nhYQJ5svx0l2uuRX4wv/89uefm5x
+         3BFU3NLr0jQR4qOsfY9NiBTHz24d7uBXmrdDXx/mQj7+Firbmncy8Xc5kA97zXx5hId7
+         58XBDBl1MdWnqPYfRUq2HkrB0bXSkjhRdF6tyvKVk6MNeAdaAQwIRpCRdL8ca0IppwN9
+         rWWK/L+DCVpNUPo38blIkgx9qrb+pe8Af/jmlirfqg0kjQ56M6v8lX/mEyoX3NPabd2l
+         ILJg==
+X-Gm-Message-State: ACgBeo1YgANgtH8BlsgEdNQ+lVcxjktJGGBA/YRQ2Ly024p87OIt7OOk
+        gFWfn9t1a4abv9AiEXBrEUwOqvzcsrX9fPoN5Ujw
+X-Google-Smtp-Source: AA6agR4Ob3wrFXNq0lbi4ZBKorbO96qfBYhxpq6MCQSqPYh19KoZvSFY8C8je4fdv+xVXZ0Za8MlHnQo/W3vk8xsKCY=
+X-Received: by 2002:a81:1147:0:b0:32f:d4a5:1ab0 with SMTP id
+ 68-20020a811147000000b0032fd4a51ab0mr13787505ywr.438.1660678250326; Tue, 16
+ Aug 2022 12:30:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220802185534.735338-1-jackyli@google.com> <20220802185534.735338-3-jackyli@google.com>
+ <5f52ffe6-03a4-a5bf-9c57-2c3951922a35@amd.com>
+In-Reply-To: <5f52ffe6-03a4-a5bf-9c57-2c3951922a35@amd.com>
+From:   Jacky Li <jackyli@google.com>
+Date:   Tue, 16 Aug 2022 12:30:39 -0700
+Message-ID: <CAJxe5cu=gB3-urLEVShDH_-2vmB2Q=FDAtBdcTVn=oaxTAjykg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] crypto: ccp - Fail the PSP initialization when
+ writing psp data file failed
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Brijesh Singh <brijesh.singh@amd.com>,
+        John Allen <john.allen@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Marc Orr <marcorr@google.com>, Alper Gun <alpergun@google.com>,
+        Peter Gonda <pgonda@google.com>, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It was found that any change to the current cpuset hierarchy may reset
-the cpumask of the tasks in the affected cpusets to the default cpuset
-value even if those tasks have cpus affinity explicitly set by the users
-before. That is especially easy to trigger under a cgroup v2 environment
-where writing "+cpuset" to the root cgroup's cgroup.subtree_control
-file will reset the cpus affinity of all the processes in the system.
+On Wed, Aug 10, 2022 at 1:37 PM Tom Lendacky <thomas.lendacky@amd.com> wrote:
+>
+> On 8/2/22 13:55, Jacky Li wrote:
+> > Currently the OS continues the PSP initialization when there is a write
+> > failure to the init_ex_file. Therefore, the userspace would be told that
+> > SEV is properly INIT'd even though the psp data file is not updated.
+> > This is problematic because later when asked for the SEV data, the OS
+> > won't be able to provide it.
+> >
+> > Fixes: 3d725965f836 ("crypto: ccp - Add SEV_INIT_EX support")
+> > Reported-by: Peter Gonda <pgonda@google.com>
+> > Signed-off-by: Jacky Li <jackyli@google.com>
+> > ---
+> >   drivers/crypto/ccp/sev-dev.c | 23 +++++++++++++----------
+> >   1 file changed, 13 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+> > index 5bb2ae250d38..fd6bb01eb198 100644
+> > --- a/drivers/crypto/ccp/sev-dev.c
+> > +++ b/drivers/crypto/ccp/sev-dev.c
+> > @@ -233,7 +233,7 @@ static int sev_read_init_ex_file(void)
+> >       return 0;
+> >   }
+> >
+> > -static void sev_write_init_ex_file(void)
+> > +static int sev_write_init_ex_file(void)
+> >   {
+> >       struct sev_device *sev = psp_master->sev_data;
+> >       struct file *fp;
+> > @@ -243,14 +243,15 @@ static void sev_write_init_ex_file(void)
+> >       lockdep_assert_held(&sev_cmd_mutex);
+> >
+> >       if (!sev_init_ex_buffer)
+> > -             return;
+> > +             return 0;
+> >
+> >       fp = open_file_as_root(init_ex_path, O_CREAT | O_WRONLY, 0600);
+> >       if (IS_ERR(fp)) {
+> > +             int ret = PTR_ERR(fp);
+>
+> Please put a blank line after the variable declaration.
+>
 
-That is problematic in a nohz_full environment where the tasks running
-in the nohz_full CPUs usually have their cpus affinity explicitly set
-and will behave incorrectly if cpus affinity changes.
+Will do in the v2. Thanks for the reminder!
 
-Fix this problem by looking at user_cpus_ptr which will be set if
-cpus affinity have been explicitly set before and use it to restrcit
-the given cpumask unless there is no overlap. In that case, it will
-fallback to the given one.
+> >               dev_err(sev->dev,
+> >                       "SEV: could not open file for write, error %ld\n",
+> > -                     PTR_ERR(fp));
+> > -             return;
+> > +                     ret);
+>
+> You'll need to fix the kernel test robot report here.
+>
+> Thanks,
+> Tom
+>
 
-To handle possible racing with concurrent sched_setaffinity() call, the
-user_cpus_ptr is rechecked again after a successful set_cpus_allowed_ptr()
-call. If the user_cpus_ptr status changes, the operation is retried
-again with the newly assigned user_cpus_ptr.
+Will change %ld to %d in v2. Thanks!
 
-With that change in place, it was verified that tasks that have its
-cpus affinity explicitly set will not be affected by changes made to
-the v2 cgroup.subtree_control files.
+Thanks,
+Jacky
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/cgroup/cpuset.c | 42 ++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 40 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 58aadfda9b8b..a663848d0459 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -704,6 +704,44 @@ static int validate_change(struct cpuset *cur, struct cpuset *trial)
- 	return ret;
- }
- 
-+/*
-+ * Preserve user provided cpumask (if set) as much as possible unless there
-+ * is no overlap with the given mask.
-+ */
-+static int cpuset_set_cpus_allowed_ptr(struct task_struct *p,
-+				       const struct cpumask *mask)
-+{
-+	cpumask_var_t new_mask;
-+	int ret;
-+
-+	if (!READ_ONCE(p->user_cpus_ptr)) {
-+		ret = set_cpus_allowed_ptr(p, mask);
-+		/*
-+		 * If user_cpus_ptr becomes set now, we are racing with
-+		 * a concurrent sched_setaffinity(). So use the newly
-+		 * set user_cpus_ptr and retry again.
-+		 *
-+		 * TODO: We cannot detect change in the cpumask pointed to
-+		 * by user_cpus_ptr. We will have to add a sequence number
-+		 * if such a race needs to be addressed.
-+		 */
-+		if (ret || !READ_ONCE(p->user_cpus_ptr))
-+			return ret;
-+	}
-+
-+	if (!alloc_cpumask_var(&new_mask, GFP_KERNEL))
-+		return -ENOMEM;
-+
-+	if (copy_user_cpus_mask(p, new_mask) &&
-+	    cpumask_and(new_mask, new_mask, mask))
-+		ret = set_cpus_allowed_ptr(p, new_mask);
-+	else
-+		ret = set_cpus_allowed_ptr(p, mask);
-+
-+	free_cpumask_var(new_mask);
-+	return ret;
-+}
-+
- #ifdef CONFIG_SMP
- /*
-  * Helper routine for generate_sched_domains().
-@@ -1130,7 +1168,7 @@ static void update_tasks_cpumask(struct cpuset *cs)
- 
- 	css_task_iter_start(&cs->css, 0, &it);
- 	while ((task = css_task_iter_next(&it)))
--		set_cpus_allowed_ptr(task, cs->effective_cpus);
-+		cpuset_set_cpus_allowed_ptr(task, cs->effective_cpus);
- 	css_task_iter_end(&it);
- }
- 
-@@ -2303,7 +2341,7 @@ static void cpuset_attach(struct cgroup_taskset *tset)
- 		 * can_attach beforehand should guarantee that this doesn't
- 		 * fail.  TODO: have a better way to handle failure here
- 		 */
--		WARN_ON_ONCE(set_cpus_allowed_ptr(task, cpus_attach));
-+		WARN_ON_ONCE(cpuset_set_cpus_allowed_ptr(task, cpus_attach));
- 
- 		cpuset_change_task_nodemask(task, &cpuset_attach_nodemask_to);
- 		cpuset_update_task_spread_flag(cs, task);
--- 
-2.31.1
 
+
+> > +             return ret;
+> >       }
+> >
+> >       nwrite = kernel_write(fp, sev_init_ex_buffer, NV_LENGTH, &offset);
+> > @@ -261,18 +262,20 @@ static void sev_write_init_ex_file(void)
+> >               dev_err(sev->dev,
+> >                       "SEV: failed to write %u bytes to non volatile memory area, ret %ld\n",
+> >                       NV_LENGTH, nwrite);
+> > -             return;
+> > +             return -EIO;
+> >       }
+> >
+> >       dev_dbg(sev->dev, "SEV: write successful to NV file\n");
+> > +
+> > +     return 0;
+> >   }
+> >
+> > -static void sev_write_init_ex_file_if_required(int cmd_id)
+> > +static int sev_write_init_ex_file_if_required(int cmd_id)
+> >   {
+> >       lockdep_assert_held(&sev_cmd_mutex);
+> >
+> >       if (!sev_init_ex_buffer)
+> > -             return;
+> > +             return 0;
+> >
+> >       /*
+> >        * Only a few platform commands modify the SPI/NV area, but none of the
+> > @@ -287,10 +290,10 @@ static void sev_write_init_ex_file_if_required(int cmd_id)
+> >       case SEV_CMD_PEK_GEN:
+> >               break;
+> >       default:
+> > -             return;
+> > +             return 0;
+> >       }
+> >
+> > -     sev_write_init_ex_file();
+> > +     return sev_write_init_ex_file();
+> >   }
+> >
+> >   static int __sev_do_cmd_locked(int cmd, void *data, int *psp_ret)
+> > @@ -363,7 +366,7 @@ static int __sev_do_cmd_locked(int cmd, void *data, int *psp_ret)
+> >                       cmd, reg & PSP_CMDRESP_ERR_MASK);
+> >               ret = -EIO;
+> >       } else {
+> > -             sev_write_init_ex_file_if_required(cmd);
+> > +             ret = sev_write_init_ex_file_if_required(cmd);
+> >       }
+> >
+> >       print_hex_dump_debug("(out): ", DUMP_PREFIX_OFFSET, 16, 2, data,

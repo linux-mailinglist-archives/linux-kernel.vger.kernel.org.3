@@ -2,80 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8E7595BA9
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB40C595BAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235369AbiHPMUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 08:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
+        id S232305AbiHPMVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 08:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235485AbiHPMTs (ORCPT
+        with ESMTP id S233446AbiHPMVF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 08:19:48 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0B76C1C;
-        Tue, 16 Aug 2022 05:19:41 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9225C113E;
-        Tue, 16 Aug 2022 05:19:42 -0700 (PDT)
-Received: from e123648.arm.com (unknown [10.57.14.225])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 550183F66F;
-        Tue, 16 Aug 2022 05:19:40 -0700 (PDT)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Cc:     lukasz.luba@arm.com, siyanteng@loongson.cn, alexs@kernel.org,
-        corbet@lwn.net, peterz@infradead.org
-Subject: [PATCH] docs: scheduler: Update new path for the sysctl knobs
-Date:   Tue, 16 Aug 2022 13:19:07 +0100
-Message-Id: <20220816121907.841-1-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 16 Aug 2022 08:21:05 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C41BF4D
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 05:21:03 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 1CB1158040B;
+        Tue, 16 Aug 2022 08:21:01 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 16 Aug 2022 08:21:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1660652461; x=1660659661; bh=6XLImf6D+u
+        ceaDHdtwK+6f06L2Vn5a6E/RxhQgeCM3Q=; b=kexpck3CQZ0ElJThDTOQn44AzH
+        8rR9jah9MWJU/TxAjZD3W5IdNrro8d3oe92deiJXvqX7ccuj0Zhl9rzStuw4KB/J
+        1WzDxddqdMma54Ujb/j4ldVoBl1tmqWrtu/dOS2orS6opeEIlWc+4a3Fpzc2J4eN
+        hzUV9oHihVAuMbIDL/bTMMCKIF9GKt9BD+G0vbzXnTV5msk2B0C4k7j+uvfy1G/f
+        3ljZdqa0RXOVJYfuget5K31tpi1j/KokQBB4mLJkY5R4iTwu/6BZBzSPx5teuViE
+        pUjiz2b+YukKvsNwW0lLgw7RZ59NIlZSQAvTvbz5EzR6JhopVseT581SnF3Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660652461; x=1660659661; bh=6XLImf6D+uceaDHdtwK+6f06L2Vn
+        5a6E/RxhQgeCM3Q=; b=RiG9AYB4Rh8oJH8nXRdnWyg1t8YNWMwRp+sCCYFHS43e
+        ovLwo+W+rX2GTLM5PHUx+FmfE7VuI9padh5Clhf1WdBo+fYi/umQpjTQ3bOBK8lL
+        zMKx75aSgPmoyPma/+DHD9V4RFym0Kne8Uzju3PvL1eeGz35Pp1H9/XBInor30U5
+        1GnHyEyIzjSoBVZc6XaYj+1GOA4gH5LBY31eTfABPb/MlPCoKptGssDwnBDTx1qs
+        UJzE2gjPGjQtU6gAHBmhz2vZ16JreGBOKXFGlCdwHiuldjyTYj3UyP1ER+7+C29P
+        LEY/PxqQoAyNF9yS/jZqos+H8NzqEqFXg443pSa4lw==
+X-ME-Sender: <xms:q4v7Ys6aP__5QCMFUO25bBV2G7JDvWby3ENM_fIs5yF_kPK9wOtDXg>
+    <xme:q4v7Yt4ZCHVfcY9dhK9TP4oIWwsvVjjLwfmUabehVA02DQWzJdIz7w7FWwmDH6Cia
+    wx9LmJ-Qzm1wV-Y97A>
+X-ME-Received: <xmr:q4v7YrfPuG8yHdsiV1zoE1Cx1HGVTxHTLUMpAs_M2HK4GKdLjxyjjuyL7Bc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehgedgheduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
+    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:q4v7YhJH5g-sSvIY6rkOl6DMIxeVtuoI_NjXdVZgmDrD7-sigy8lmQ>
+    <xmx:q4v7YgIzwgWlPkY9C_SPaURJ0GIWUFAtE4lG8X88Gldi0kiFa06BRQ>
+    <xmx:q4v7YiwgQjDuZo7g0n86ZxM797iVdPO59xB_iMSMrZbI16_rCP4cAw>
+    <xmx:rYv7Yg400P-RBy5vHEPL_kEqm8A33uMzt14unJ6sJkk-EylfjyC3xA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 16 Aug 2022 08:20:59 -0400 (EDT)
+Date:   Tue, 16 Aug 2022 14:20:56 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>
+Subject: Re: [PATCH v1 07/35] drm/modes: Only consider bpp and refresh before
+ options
+Message-ID: <20220816122056.w6suecaizdoss2sv@houat>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v1-7-3d53ae722097@cerno.tech>
+ <CAMuHMdWa9soLHSvmxWqjKAO93WhViww6GZiC9qh0RccVENPRYw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_50,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="d5ua5726mqkqg3lm"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWa9soLHSvmxWqjKAO93WhViww6GZiC9qh0RccVENPRYw@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing update for the documentation bit of some scheduler knob.
-The knobs have been moved to /debug/sched/ location (with adjusted names).
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
- Documentation/scheduler/sched-design-CFS.rst                    | 2 +-
- Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+--d5ua5726mqkqg3lm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/scheduler/sched-design-CFS.rst b/Documentation/scheduler/sched-design-CFS.rst
-index 59b2d1fb4dc4..03db55504515 100644
---- a/Documentation/scheduler/sched-design-CFS.rst
-+++ b/Documentation/scheduler/sched-design-CFS.rst
-@@ -94,7 +94,7 @@ other HZ detail.  Thus the CFS scheduler has no notion of "timeslices" in the
- way the previous scheduler had, and has no heuristics whatsoever.  There is
- only one central tunable (you have to switch on CONFIG_SCHED_DEBUG):
- 
--   /proc/sys/kernel/sched_min_granularity_ns
-+   /sys/kernel/debug/sched/min_granularity_ns
- 
- which can be used to tune the scheduler from "desktop" (i.e., low latencies) to
- "server" (i.e., good batching) workloads.  It defaults to a setting suitable
-diff --git a/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst b/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst
-index 26b0f36f793d..3076402406c4 100644
---- a/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst
-+++ b/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst
-@@ -80,7 +80,7 @@ p->se.vruntime。一旦p->se.vruntime变得足够大，其它的任务将成为
- CFS使用纳秒粒度的计时，不依赖于任何jiffies或HZ的细节。因此CFS并不像之前的调度器那样
- 有“时间片”的概念，也没有任何启发式的设计。唯一可调的参数（你需要打开CONFIG_SCHED_DEBUG）是：
- 
--   /proc/sys/kernel/sched_min_granularity_ns
-+   /sys/kernel/debug/sched/min_granularity_ns
- 
- 它可以用来将调度器从“桌面”模式（也就是低时延）调节为“服务器”（也就是高批处理）模式。
- 它的默认设置是适合桌面的工作负载。SCHED_BATCH也被CFS调度器模块处理。
--- 
-2.17.1
+Hi Geert,
 
+Thanks for your review
+
+On Fri, Aug 12, 2022 at 03:25:39PM +0200, Geert Uytterhoeven wrote:
+> Hi Maxime,
+>=20
+> On Fri, Jul 29, 2022 at 6:35 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> > Some video=3D options might have a value that contains a dash. However,=
+ the
+> > command line parsing mode considers all dashes as the separator between=
+ the
+> > mode and the bpp count.
+> >
+> > Let's rework the parsing code a bit to only consider a dash as the bpp
+> > separator if it before a comma, the options separator.
+> >
+> > A follow-up patch will add a unit-test for this once such an option is
+> > introduced.
+> >
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+>=20
+> Thanks for your patch!
+>=20
+> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>=20
+> > --- a/drivers/gpu/drm/drm_modes.c
+> > +++ b/drivers/gpu/drm/drm_modes.c
+> > @@ -1819,20 +1819,22 @@ bool drm_mode_parse_command_line_for_connector(=
+const char *mode_option,
+> >
+> >         name =3D mode_option;
+> >
+> > +       /* Locate the start of named options */
+> > +       options_ptr =3D strchr(name, ',');
+> > +       if (options_ptr)
+> > +               options_off =3D options_ptr - name;
+> > +       else
+> > +               options_off =3D strlen(name);
+> > +
+> >         /* Try to locate the bpp and refresh specifiers, if any */
+> > -       bpp_ptr =3D strchr(name, '-');
+> > +       bpp_ptr =3D strnchr(name, options_off, '-');
+>=20
+> Probably you still want to add a check that the next character
+> is actually a digit, cfr. my "[PATCH v2 5/5] drm/modes:
+> parse_cmdline: Add support for named modes containing dashes"
+> (https://lore.kernel.org/dri-devel/2eb205da88c3cb19ddf04d167ece4e16a33094=
+8b.1657788997.git.geert@linux-m68k.org)?
+
+I think your patch is orthogonal, and we should merge it anyway.
+
+As a matter of fact, I initially wanted to do something similar but
+bailed out to deal with PAL-M and so on. If there's such modes already,
+then we should totally support it
+
+Maxime
+
+--d5ua5726mqkqg3lm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYvuLqAAKCRDj7w1vZxhR
+xS46AQCDoo68eNI5t/JZrITdAKWMGUwSBfFFuOU+V38x2GFqwQEA7EsamAC81DFp
+NHD21FgHcTvgUUUJaJo5pResSbjL5g0=
+=dh0z
+-----END PGP SIGNATURE-----
+
+--d5ua5726mqkqg3lm--

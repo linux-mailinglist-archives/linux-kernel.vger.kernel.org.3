@@ -2,339 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89FD659661A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 01:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF767596618
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 01:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237198AbiHPXhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 19:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
+        id S237369AbiHPXkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 19:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiHPXhh (ORCPT
+        with ESMTP id S229472AbiHPXkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 19:37:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F51E90C5C;
-        Tue, 16 Aug 2022 16:37:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3426B81AB3;
-        Tue, 16 Aug 2022 23:37:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C266C433D6;
-        Tue, 16 Aug 2022 23:37:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660693053;
-        bh=9EB/lj+iK8bR1znjPuV7tcbBvyDFdDdbGQc0A81N08o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aqojIHzbDNAIpuETB+uzcCTNleuFyVXxvHIFoJNPzuUXZjEfsRpgPri/A6Iu1HI8D
-         sKnUNvqKsvDoFIpvd80xWjA+7FJ6fNquhIAMfCIytgjkTKZ+UEkxKSk0wpk9GqXnIU
-         XJyRgGxiSx1YMimhdPOgClP/2thMvJpOIiPmoMGTodd/CSsOw/0f6awcdBSsa4hV2W
-         47CuNl8uRImYAtU+Tnqi211wvnDcYEqLt9wJWjD+Ch6H4SF3eLWXpzUYlBl5ob2SuO
-         oEXJHGlFmZYximIr3JrH//E7VNvVQofwtFOpQP1is8QkXdcQn2ejqScU3MqKCyQvWi
-         smGqUQonKd6bw==
-Date:   Wed, 17 Aug 2022 02:37:29 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-sgx@vger.kernel.org, Vijay Dhanraj <vijay.dhanraj@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] selftests/sgx: Add SGX selftest
- augment_via_eaccept_long
-Message-ID: <YvwqOfGozKVk5SY9@kernel.org>
-References: <20220815233900.11225-1-jarkko@kernel.org>
- <20220815233900.11225-2-jarkko@kernel.org>
- <6b304bb4-01cc-c88a-7299-19217a7a692b@intel.com>
- <YvwpX7pYOW3Jv+vJ@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvwpX7pYOW3Jv+vJ@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 16 Aug 2022 19:40:17 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6024975CDD
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 16:40:16 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3328a211611so76795917b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 16:40:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=UNi3nY4e74LKnS5YZ6ZQXRLBLNXdoKR2Gl4hi8aAWbs=;
+        b=Xmee1qyOOONHqAhhrJGYFvgUBhm3gCjCEV5vgj3L9ZM1NyG4ELIV/0YWtfNoQzJc3k
+         nzNypeYlgJGUpxYl2Q1stqtMwxIcN3nPj7v3JW2cDRnTceyzza8Dc+yR+jO4KkeXIF6V
+         WW/PSazQCY8bbJFqkbz0KS4Sg2sL25EuTtyPvwXEyVneM1LNiQSPoxgmJLVu7l7BzQeg
+         RARedZ7NT8BDlr54gOToUf0PPTCSqAmELKUlN2kX6NcpgOjpjZh1fHH5Ho9FzS9VEHTs
+         HVkUYOlO2zrgg6y69bWlOhXswdGeYdm6wR1CJL/+gG//5JqiIJKrnBTiqkaIK46Uc5Oz
+         AhHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=UNi3nY4e74LKnS5YZ6ZQXRLBLNXdoKR2Gl4hi8aAWbs=;
+        b=3cxukzbeyFOTM4SxlMoX+JgubXTUIKT8a/SeO50b6vFmBf9I1LxL0eXOrpIbRgXq9M
+         bheCO2CJXo+4u3j5T2Tne3aN+byp9UaRu0MsOEq0DAQWzGGZmTnVy747TjFlBIOsUAoj
+         /bH6qYnMy/M6AtvJ9SqRlrROxRCan9DuhSFa33UeXxWUeFU0jQW2XAULEjm8TUCME8/U
+         aP9iFQZOBnmDg3fvMz6aMrpjsHAtFlg3tdciZZIlCbK0kx1W++oVWcSTVJxMeNgwA4tt
+         fedIKgVsO8K/OIkpwlVDhXSQVEQ7Zp2FPbuK8t7I/wDgkF2CUljbtRynFbtXOllMwQ9I
+         uzeA==
+X-Gm-Message-State: ACgBeo0CV6dF1nr3l7dbC4mvocn3q6krtWuvEY78NtNqWeRh2vb7gzc9
+        Zfk+OziO1OYTUInZuVDHrkEU6X70dpbnyhJJD5P4hWQ5pL82lVEFJcqx0aaQu2mX3uesTN6OgA8
+        9jQPUy9E8EXrRFqE9wmtf3NjMP3Ei42XHcSH+H8TpTYYhjTywxfO0joDc5cubJbjG+HUSGg==
+X-Google-Smtp-Source: AA6agR7nLWQJjytbdBXE8SR1wADUvUrjNlZbAQtIn1LNmfCYCa89XbJSlbCkY6bFv4sjNu0fO32SQfPBdMo=
+X-Received: from haoluo.svl.corp.google.com ([2620:15c:2d4:203:7e6e:c287:3dc6:d4d8])
+ (user=haoluo job=sendgmr) by 2002:a25:404c:0:b0:68f:d76a:4a59 with SMTP id
+ n73-20020a25404c000000b0068fd76a4a59mr1256750yba.410.1660693215606; Tue, 16
+ Aug 2022 16:40:15 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 16:40:11 -0700
+Message-Id: <20220816234012.910255-1-haoluo@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+Subject: [PATCH bpf-next v2 1/2] libbpf: Allows disabling auto attach
+From:   Hao Luo <haoluo@google.com>
+To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Hao Luo <haoluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 02:33:54AM +0300, Jarkko Sakkinen wrote:
-> On Tue, Aug 16, 2022 at 09:26:40AM -0700, Reinette Chatre wrote:
-> > Hi Vijay,
-> > 
-> > Thank you very much for digging into this. A few comments below.
-> > 
-> > On 8/15/2022 4:39 PM, Jarkko Sakkinen wrote:
-> > > From: Vijay Dhanraj <vijay.dhanraj@intel.com>
-> > > 
-> > > Add a new test case which is same as augment_via_eaccept but adds a
-> > > larger number of EPC pages to stress test EAUG via EACCEPT.
-> > > 
-> > > Signed-off-by: Vijay Dhanraj <vijay.dhanraj@intel.com>
-> > > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > > ---
-> > > I removed Githubisms (hyphens), added missing subsystem tag, and
-> > > cleaned up the commit message a bit.
-> > >  tools/testing/selftests/sgx/load.c      |   5 +-
-> > >  tools/testing/selftests/sgx/main.c      | 120 +++++++++++++++++++++++-
-> > >  tools/testing/selftests/sgx/main.h      |   3 +-
-> > >  tools/testing/selftests/sgx/sigstruct.c |   2 +-
-> > >  4 files changed, 125 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/tools/testing/selftests/sgx/load.c b/tools/testing/selftests/sgx/load.c
-> > > index 94bdeac1cf04..7de1b15c90b1 100644
-> > > --- a/tools/testing/selftests/sgx/load.c
-> > > +++ b/tools/testing/selftests/sgx/load.c
-> > > @@ -171,7 +171,8 @@ uint64_t encl_get_entry(struct encl *encl, const char *symbol)
-> > >  	return 0;
-> > >  }
-> > >  
-> > > -bool encl_load(const char *path, struct encl *encl, unsigned long heap_size)
-> > > +bool encl_load(const char *path, struct encl *encl, unsigned long heap_size,
-> > > +			   unsigned long edmm_size)
-> > >  {
-> > >  	const char device_path[] = "/dev/sgx_enclave";
-> > >  	struct encl_segment *seg;
-> > > @@ -300,7 +301,7 @@ bool encl_load(const char *path, struct encl *encl, unsigned long heap_size)
-> > >  
-> > >  	encl->src_size = encl->segment_tbl[j].offset + encl->segment_tbl[j].size;
-> > >  
-> > > -	for (encl->encl_size = 4096; encl->encl_size < encl->src_size; )
-> > > +	for (encl->encl_size = 4096; encl->encl_size < encl->src_size + edmm_size;)
-> > >  		encl->encl_size <<= 1;
-> > >  
-> > 
-> > This seems to create the hardcoded 8GB larger enclave for all (SGX1 and SGX2) tests,
-> > not just the test introduced with this commit (and the only user of this extra space).
-> > Is this intended? This can be done without impacting all the other tests.
-> 
-> It's a valid point. I can adjust the patch.
-> 
-> > 
-> > >  	return true;
-> > > diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-> > > index 9820b3809c69..65e79682f75e 100644
-> > > --- a/tools/testing/selftests/sgx/main.c
-> > > +++ b/tools/testing/selftests/sgx/main.c
-> > > @@ -25,6 +25,8 @@ static const uint64_t MAGIC = 0x1122334455667788ULL;
-> > >  static const uint64_t MAGIC2 = 0x8877665544332211ULL;
-> > >  vdso_sgx_enter_enclave_t vdso_sgx_enter_enclave;
-> > >  
-> > > +static const unsigned long edmm_size = 8589934592; //8G
-> > > +
-> > 
-> > Could you please elaborate how this constant was chosen? I understand that this test helped
-> > to uncover a bug and it is useful to add to the kernel. When doing so this test will be
-> > run on systems with a variety of SGX memory sizes, could you please elaborate (and add a
-> > snippet) how 8GB is the right value for all systems?
-> 
-> It is the only constant I know for sure that some people
-> (Vijay and Haitao) have been able to reproduce the bug.
-> 
-> Unless someone can show that the same bug reproduces
-> with a smaller constant, changing it would make the
-> whole test irrelevant.
-> 
-> > 
-> > /on page to be added/on every page to be added/ ?
-> > 
-> > > + */
-> > > +#define TIMEOUT_LONG 900 /* seconds */
-> > > +TEST_F_TIMEOUT(enclave, augment_via_eaccept_long, TIMEOUT_LONG)
-> > > +{
-> > > +	struct encl_op_get_from_addr get_addr_op;
-> > > +	struct encl_op_put_to_addr put_addr_op;
-> > > +	struct encl_op_eaccept eaccept_op;
-> > > +	size_t total_size = 0;
-> > > +	void *addr;
-> > > +	unsigned long i;
-> > 
-> > (reverse fir tree order)
-> 
-> I would just change this to "int i" instead.
-> 
-> > 
-> > > +
-> > > +	if (!sgx2_supported())
-> > > +		SKIP(return, "SGX2 not supported");
-> > > +
-> > > +	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
-> > > +
-> > > +	memset(&self->run, 0, sizeof(self->run));
-> > > +	self->run.tcs = self->encl.encl_base;
-> > > +
-> > > +	for (i = 0; i < self->encl.nr_segments; i++) {
-> > > +		struct encl_segment *seg = &self->encl.segment_tbl[i];
-> > > +
-> > > +		total_size += seg->size;
-> > > +		TH_LOG("test enclave: total_size = %ld, seg->size = %ld", total_size, seg->size);
-> > > +	}
-> > > +
-> > > +	/*
-> > > +	 * Actual enclave size is expected to be larger than the loaded
-> > > +	 * test enclave since enclave size must be a power of 2 in bytes while
-> > > +	 * test_encl does not consume it all.
-> > > +	 */
-> > > +	EXPECT_LT(total_size + edmm_size, self->encl.encl_size);
-> > 
-> > Will this test ever fail?
-> 
-> With a *quick* look: no.
-> 
-> Vijay, what was the point of this check?
-> 
-> > > +
-> > > +	/*
-> > > +	 * mmap() a page at end of existing enclave to be used for dynamic
-> > > +	 * EPC page.
-> > 
-> > copy&paste line still refers to single page
-> > 
-> > > +	 *
-> > > +	 * Kernel will allow new mapping using any permissions if it
-> > > +	 * falls into the enclave's address range but not backed
-> > > +	 * by existing enclave pages.
-> > > +	 */
-> > > +	TH_LOG("mmaping pages at end of enclave...");
-> > > +	addr = mmap((void *)self->encl.encl_base + total_size, edmm_size,
-> > > +			PROT_READ | PROT_WRITE | PROT_EXEC, MAP_SHARED | MAP_FIXED,
-> > > +			self->encl.fd, 0);
-> > > +	EXPECT_NE(addr, MAP_FAILED);
-> > > +
-> > > +	self->run.exception_vector = 0;
-> > > +	self->run.exception_error_code = 0;
-> > > +	self->run.exception_addr = 0;
-> > > +
-> > > +	/*
-> > > +	 * Run EACCEPT on new page to trigger the #PF->EAUG->EACCEPT(again
-> > > +	 * without a #PF). All should be transparent to userspace.
-> > > +	 */
-> > 
-> > copy&paste from single page test referring to one page
-> > 
-> > > +	TH_LOG("Entering enclave to run EACCEPT for each page of %zd bytes may take a while ...",
-> > > +			edmm_size);
-> > > +	eaccept_op.flags = SGX_SECINFO_R | SGX_SECINFO_W | SGX_SECINFO_REG | SGX_SECINFO_PENDING;
-> > > +	eaccept_op.ret = 0;
-> > > +	eaccept_op.header.type = ENCL_OP_EACCEPT;
-> > > +
-> > > +	for (i = 0; i < edmm_size; i += 4096) {
-> > > +		eaccept_op.epc_addr = (uint64_t)(addr + i);
-> > > +
-> > > +		EXPECT_EQ(ENCL_CALL(&eaccept_op, &self->run, true), 0);
-> > > +		if (self->run.exception_vector == 14 &&
-> > > +			self->run.exception_error_code == 4 &&
-> > > +			self->run.exception_addr == self->encl.encl_base) {
-> > > +			munmap(addr, edmm_size);
-> > > +			SKIP(return, "Kernel does not support adding pages to initialized enclave");
-> > > +		}
-> > > +
-> > > +		EXPECT_EQ(self->run.exception_vector, 0);
-> > > +		EXPECT_EQ(self->run.exception_error_code, 0);
-> > > +		EXPECT_EQ(self->run.exception_addr, 0);
-> > > +		ASSERT_EQ(eaccept_op.ret, 0);
-> > > +		ASSERT_EQ(self->run.function, EEXIT);
-> > > +	}
-> > > +
-> > > +	/*
-> > > +	 * New page should be accessible from within enclave - attempt to
-> > > +	 * write to it.
-> > > +	 */
-> > 
-> > This portion below was also copied from previous test and by only testing
-> > a write to the first page of the range the purpose is not clear. Could you
-> > please elaborate if the intention is to only test accessibility of the first
-> > page and why that is sufficient?
-> 
-> It is sufficient because the test reproduces the bug. It would
-> have to be rather elaborated why you would possibly want to do
-> more than that.
-> 
-> > > +	put_addr_op.value = MAGIC;
-> > > +	put_addr_op.addr = (unsigned long)addr;
-> > > +	put_addr_op.header.type = ENCL_OP_PUT_TO_ADDRESS;
-> > > +
-> > > +	EXPECT_EQ(ENCL_CALL(&put_addr_op, &self->run, true), 0);
-> > > +
-> > > +	EXPECT_EEXIT(&self->run);
-> > > +	EXPECT_EQ(self->run.exception_vector, 0);
-> > > +	EXPECT_EQ(self->run.exception_error_code, 0);
-> > > +	EXPECT_EQ(self->run.exception_addr, 0);
-> > > +
-> > > +	/*
-> > > +	 * Read memory from newly added page that was just written to,
-> > > +	 * confirming that data previously written (MAGIC) is present.
-> > > +	 */
-> > > +	get_addr_op.value = 0;
-> > > +	get_addr_op.addr = (unsigned long)addr;
-> > > +	get_addr_op.header.type = ENCL_OP_GET_FROM_ADDRESS;
-> > > +
-> > > +	EXPECT_EQ(ENCL_CALL(&get_addr_op, &self->run, true), 0);
-> > > +
-> > > +	EXPECT_EQ(get_addr_op.value, MAGIC);
-> > > +	EXPECT_EEXIT(&self->run);
-> > > +	EXPECT_EQ(self->run.exception_vector, 0);
-> > > +	EXPECT_EQ(self->run.exception_error_code, 0);
-> > > +	EXPECT_EQ(self->run.exception_addr, 0);
-> > > +
-> > > +	munmap(addr, edmm_size);
-> > > +}
-> > > +
-> > >  /*
-> > >   * SGX2 page type modification test in two phases:
-> > >   * Phase 1:
-> > > diff --git a/tools/testing/selftests/sgx/main.h b/tools/testing/selftests/sgx/main.h
-> > > index fc585be97e2f..fe5d39ac0e1e 100644
-> > > --- a/tools/testing/selftests/sgx/main.h
-> > > +++ b/tools/testing/selftests/sgx/main.h
-> > > @@ -35,7 +35,8 @@ extern unsigned char sign_key[];
-> > >  extern unsigned char sign_key_end[];
-> > >  
-> > >  void encl_delete(struct encl *ctx);
-> > > -bool encl_load(const char *path, struct encl *encl, unsigned long heap_size);
-> > > +bool encl_load(const char *path, struct encl *encl, unsigned long heap_size,
-> > > +			   unsigned long edmm_size);
-> > >  bool encl_measure(struct encl *encl);
-> > >  bool encl_build(struct encl *encl);
-> > >  uint64_t encl_get_entry(struct encl *encl, const char *symbol);
-> > > diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
-> > > index 50c5ab1aa6fa..6000cf0e4975 100644
-> > > --- a/tools/testing/selftests/sgx/sigstruct.c
-> > > +++ b/tools/testing/selftests/sgx/sigstruct.c
-> > > @@ -343,7 +343,7 @@ bool encl_measure(struct encl *encl)
-> > >  	if (!ctx)
-> > >  		goto err;
-> > >  
-> > > -	if (!mrenclave_ecreate(ctx, encl->src_size))
-> > > +	if (!mrenclave_ecreate(ctx, encl->encl_size))
-> > >  		goto err;
-> > >  
-> > >  	for (i = 0; i < encl->nr_segments; i++) {
-> > 
-> > 
-> > Looking at mrenclave_ecreate() the above snippet seems separate from this test and incomplete
-> > since it now obtains encl->encl_size but continues to compute it again internally. Should
-> > this be a separate fix?
-> 
-> I would remove this part completely but this also needs
-> comment from Vijay.
-> 
-> > Reinette
+Adds libbpf APIs for disabling auto-attach for individual functions.
+This is motivated by the use case of cgroup iter [1]. Some iter
+types require their parameters to be non-zero, therefore applying
+auto-attach on them will fail. With these two new APIs, users who
+want to use auto-attach and these types of iters can disable
+auto-attach on the program and perform manual attach.
 
-Related:
+[1] https://lore.kernel.org/bpf/CAEf4BzZ+a2uDo_t6kGBziqdz--m2gh2_EUwkGLDtMd65uwxUjA@mail.gmail.com/
 
-https://github.com/jarkkojs/bpftrace-sgx/blob/main/sgx-alloc-error.bt
+Signed-off-by: Hao Luo <haoluo@google.com>
+---
+ tools/lib/bpf/libbpf.c   | 15 ++++++++++++++-
+ tools/lib/bpf/libbpf.h   |  2 ++
+ tools/lib/bpf/libbpf.map |  2 ++
+ 3 files changed, 18 insertions(+), 1 deletion(-)
 
-Thought that this might be useful, if there is still some
-need to discuss about the bug, e.g. to compare the results.
-Can be run with bpftrace.
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index aa05a99b913d..0159a43c7efd 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -417,6 +417,7 @@ struct bpf_program {
+ 
+ 	int fd;
+ 	bool autoload;
++	bool autoattach;
+ 	bool mark_btf_static;
+ 	enum bpf_prog_type type;
+ 	enum bpf_attach_type expected_attach_type;
+@@ -755,6 +756,8 @@ bpf_object__init_prog(struct bpf_object *obj, struct bpf_program *prog,
+ 		prog->autoload = true;
+ 	}
+ 
++	prog->autoattach = true;
++
+ 	/* inherit object's log_level */
+ 	prog->log_level = obj->log_level;
+ 
+@@ -8314,6 +8317,16 @@ int bpf_program__set_autoload(struct bpf_program *prog, bool autoload)
+ 	return 0;
+ }
+ 
++bool bpf_program__autoattach(const struct bpf_program *prog)
++{
++	return prog->autoattach;
++}
++
++void bpf_program__set_autoattach(struct bpf_program *prog, bool autoattach)
++{
++	prog->autoattach = autoattach;
++}
++
+ const struct bpf_insn *bpf_program__insns(const struct bpf_program *prog)
+ {
+ 	return prog->insns;
+@@ -12346,7 +12359,7 @@ int bpf_object__attach_skeleton(struct bpf_object_skeleton *s)
+ 		struct bpf_program *prog = *s->progs[i].prog;
+ 		struct bpf_link **link = s->progs[i].link;
+ 
+-		if (!prog->autoload)
++		if (!prog->autoload || !prog->autoattach)
+ 			continue;
+ 
+ 		/* auto-attaching not supported for this program */
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 61493c4cddac..88a1ac34b12a 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -260,6 +260,8 @@ LIBBPF_API const char *bpf_program__name(const struct bpf_program *prog);
+ LIBBPF_API const char *bpf_program__section_name(const struct bpf_program *prog);
+ LIBBPF_API bool bpf_program__autoload(const struct bpf_program *prog);
+ LIBBPF_API int bpf_program__set_autoload(struct bpf_program *prog, bool autoload);
++LIBBPF_API bool bpf_program__autoattach(const struct bpf_program *prog);
++LIBBPF_API void bpf_program__set_autoattach(struct bpf_program *prog, bool autoattach);
+ 
+ struct bpf_insn;
+ 
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 119e6e1ea7f1..2b928dc21af0 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -358,6 +358,8 @@ LIBBPF_1.0.0 {
+ 		bpf_obj_get_opts;
+ 		bpf_prog_query_opts;
+ 		bpf_program__attach_ksyscall;
++		bpf_program__autoattach;
++		bpf_program__set_autoattach;
+ 		btf__add_enum64;
+ 		btf__add_enum64_value;
+ 		libbpf_bpf_attach_type_str;
+-- 
+2.37.1.595.g718a3a8f04-goog
 
-The bug did not reproduce in my side, even after changing
-to the 2GB PRMRR configuration.
-
-BR, Jarkko

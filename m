@@ -2,58 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB17596767
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C34A59676C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237934AbiHQCXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 22:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
+        id S237734AbiHQC2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 22:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiHQCXn (ORCPT
+        with ESMTP id S229453AbiHQC2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 22:23:43 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4549A3E758;
-        Tue, 16 Aug 2022 19:23:41 -0700 (PDT)
-Received: from [192.168.100.8] (unknown [112.20.110.237])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxvmslUfxizwQDAA--.3916S3;
-        Wed, 17 Aug 2022 10:23:34 +0800 (CST)
-Message-ID: <325e126b-14e7-79fa-1348-53d71fd98728@loongson.cn>
-Date:   Wed, 17 Aug 2022 10:23:34 +0800
+        Tue, 16 Aug 2022 22:28:34 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2596A2BB13;
+        Tue, 16 Aug 2022 19:28:31 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id e8-20020a17090a280800b001f2fef7886eso596709pjd.3;
+        Tue, 16 Aug 2022 19:28:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=/88LFCybNpQT4FoBaHAzf79kXBntghACH0Sm9eDs1ug=;
+        b=SQISoJpmrNlyVIQV4qSAQeJYpFi3VufCETLC2aEtJQ7ll7Audzo6RNVtBqjT1yxra4
+         wW2P5j3v9WZS5I8flykM15x01276Oh0fvAWNG/zLaWgkEk7STKkf3e2hVsN0O12qJhZt
+         cNxbIT+35UxEKuT4KBFKTZQZSDRle9ftym8Xdyv1a0vJ3e6gxa2242C5MBosKveJ3ZcL
+         4bwceLM2VgGCv60Gfn8pGx9GQV4nJSoBIsWAkw7R+2+3lcR3gOnWZVS7JKympyO8UxHw
+         82rOyGFIW1fNhV5zA72p52k6QEJN50CbZpHdbH//rjBpBFoV2RpYITduHMItcS1VFtqn
+         uNqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=/88LFCybNpQT4FoBaHAzf79kXBntghACH0Sm9eDs1ug=;
+        b=qO6fXgteLYkPpk3pRz7DpMcKXBs1VEh3GnqXEZnVWIElYcL87eveNi3eiXxNcYUVCa
+         ltRV15L740vUc9biaRHxD50e86GQiGzemi4pcBdtpph6rJAU56pNLEYpaw14P4Ncmtgu
+         vjaPAzhExVZG87NP50HklJYMkHpWmD2DSrd0VAppy4TLIBWiGVJRcTD13GARVSP3VAMQ
+         Lcq5+P5zoW5lj7B3DFEnOPYR0fkf+rlm6H6KlHGDsRhZk0i7VHc0Ch20CCH8z5QFsRWi
+         7m+9fY04I3YNlKlmWAnW5N6BMnavxPx2M9RCmAm58ssOZxXuC9yykGz5sprZSeVmo3pt
+         eaGw==
+X-Gm-Message-State: ACgBeo2u+bpnT5HHDO2yMGK7giNGxwH99i2s5GciFhJpr8gLM2C6wRFZ
+        0OuBGQdhhJ8F5OV52N04pOii8l4QJFHZ3Q==
+X-Google-Smtp-Source: AA6agR7lAjMOAYeqI28CLQ3hUbdkZbsUT9+81biUmjDnnYhy2UuUbj4kZEXGJvdv79d/5mCul5/hCA==
+X-Received: by 2002:a17:902:ab13:b0:172:63bf:4e39 with SMTP id ik19-20020a170902ab1300b0017263bf4e39mr16505805plb.173.1660703310492;
+        Tue, 16 Aug 2022 19:28:30 -0700 (PDT)
+Received: from ?IPV6:2600:8802:b00:4a48:c1a6:4b60:fa53:d7ab? ([2600:8802:b00:4a48:c1a6:4b60:fa53:d7ab])
+        by smtp.gmail.com with ESMTPSA id w4-20020a170902ca0400b001728ecd2277sm97770pld.113.2022.08.16.19.28.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 19:28:29 -0700 (PDT)
+Message-ID: <c1301f39-9202-5eee-a0f6-9c0b66f2dccf@gmail.com>
+Date:   Tue, 16 Aug 2022 19:28:28 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] docs: scheduler: Update new path for the sysctl knobs
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Cc:     alexs@kernel.org, corbet@lwn.net, peterz@infradead.org,
-        Tang Yizhou <yizhou.tang@shopee.com>
-References: <20220816121907.841-1-lukasz.luba@arm.com>
-From:   YanTeng Si <siyanteng@loongson.cn>
-In-Reply-To: <20220816121907.841-1-lukasz.luba@arm.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH net] net: phy: Warn about incorrect mdio_bus_phy_resume()
+ state
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        netdev <netdev@vger.kernel.org>,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        Doug Berger <opendmb@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>
+References: <20220801233403.258871-1-f.fainelli@gmail.com>
+ <CGME20220812111948eucas1p2bf97e7f4558eb024f419346367a87b45@eucas1p2.samsung.com>
+ <27016cc0-f228-748b-ea03-800dda4e5f0c@samsung.com>
+ <8c21e530-8e8f-ce2a-239e-9d3a354996cf@gmail.com>
+ <CAMuHMdV8vsbFx+nikAwn1po1-PeZVhzotMaLLk+wXNquZceaRQ@mail.gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <CAMuHMdV8vsbFx+nikAwn1po1-PeZVhzotMaLLk+wXNquZceaRQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxvmslUfxizwQDAA--.3916S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxXr1fGr1kGrWDCw45JFykGrg_yoW5JFWDpa
-        4qgr4xA3ZrAr90kw18Cw1rGFWrWFW7C3y3Gr1qk3W8WFyvqaySyr1Ut3y3WF4qqry0yFW5
-        XFZag343Zw1jvaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvSb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
-        vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
-        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxv
-        r21lc2xSY4AK67AK6r4UMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI
-        8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
-        xVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI
-        8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280
-        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43
-        ZEXa7IU8xWrJUUUUU==
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-0.0 required=5.0 tests=BAYES_40,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,51 +92,90 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-在 2022/8/16 20:19, Lukasz Luba 写道:
-> Add missing update for the documentation bit of some scheduler knob.
-> The knobs have been moved to /debug/sched/ location (with adjusted names).
->
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 
-Tested-by: Yanteng Si <siyanteng@loongson.cn>
+On 8/16/2022 6:20 AM, Geert Uytterhoeven wrote:
+> Hi Florian,
+> 
+> On Fri, Aug 12, 2022 at 6:39 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>> On 8/12/22 04:19, Marek Szyprowski wrote:
+>>> On 02.08.2022 01:34, Florian Fainelli wrote:
+>>>> Calling mdio_bus_phy_resume() with neither the PHY state machine set to
+>>>> PHY_HALTED nor phydev->mac_managed_pm set to true is a good indication
+>>>> that we can produce a race condition looking like this:
+>>>>
+>>>> CPU0                                         CPU1
+>>>> bcmgenet_resume
+>>>>     -> phy_resume
+>>>>       -> phy_init_hw
+>>>>     -> phy_start
+>>>>       -> phy_resume
+>>>>                                                    phy_start_aneg()
+>>>> mdio_bus_phy_resume
+>>>>     -> phy_resume
+>>>>        -> phy_write(..., BMCR_RESET)
+>>>>         -> usleep()                                  -> phy_read()
+>>>>
+>>>> with the phy_resume() function triggering a PHY behavior that might have
+>>>> to be worked around with (see bf8bfc4336f7 ("net: phy: broadcom: Fix
+>>>> brcm_fet_config_init()") for instance) that ultimately leads to an error
+>>>> reading from the PHY.
+>>>>
+>>>> Fixes: fba863b81604 ("net: phy: make PHY PM ops a no-op if MAC driver manages PHY PM")
+>>>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>>>
+>>> This patch, as probably intended, triggers a warning during system
+>>> suspend/resume cycle in the SMSC911x driver. I've observed it on ARM
+>>> Juno R1 board on the kernel compiled from next-202208010:
+>>>
+>>>     ------------[ cut here ]------------
+>>>     WARNING: CPU: 1 PID: 398 at drivers/net/phy/phy_device.c:323
+>>> mdio_bus_phy_resume+0x34/0xc8
+> 
+> I am seeing the same on the ape6evm and kzm9g development
+> boards with smsc911x Ethernet, and on various boards with Renesas
+> Ethernet (sh_eth or ravb) if Wake-on-LAN is disabled.
+> 
+>> Yes this is catching an actual issue in the driver in that the PHY state
+>> machine is still running while the system is trying to suspend. We could
+>> go about fixing it in a different number of ways, though I believe this
+>> one is probably correct enough to work and fix the warning:
+> 
+>> --- a/drivers/net/ethernet/smsc/smsc911x.c
+>> +++ b/drivers/net/ethernet/smsc/smsc911x.c
+>> @@ -1037,6 +1037,8 @@ static int smsc911x_mii_probe(struct net_device *dev)
+>>                   return ret;
+>>           }
+>>
+>> +       /* Indicate that the MAC is responsible for managing PHY PM */
+>> +       phydev->mac_managed_pm = true;
+>>           phy_attached_info(phydev);
+>>
+>>           phy_set_max_speed(phydev, SPEED_100);
+>> @@ -2587,6 +2589,8 @@ static int smsc911x_suspend(struct device *dev)
+>>           if (netif_running(ndev)) {
+>>                   netif_stop_queue(ndev);
+>>                   netif_device_detach(ndev);
+>> +               if (!device_may_wakeup(dev))
+>> +                       phy_suspend(dev->phydev);
+>>           }
+>>
+>>           /* enable wake on LAN, energy detection and the external PME
+>> @@ -2628,6 +2632,8 @@ static int smsc911x_resume(struct device *dev)
+>>           if (netif_running(ndev)) {
+>>                   netif_device_attach(ndev);
+>>                   netif_start_queue(ndev);
+>> +               if (!device_may_wakeup(dev))
+>> +                       phy_resume(dev->phydev);
+>>           }
+>>
+>>           return 0;
+> 
+> Thanks for your patch, but unfortunately this does not work on ape6evm
+> and kzm9g, where the smsc911x device is connected to a power-managed
+> bus.  It looks like the PHY registers are accessed while the device
+> is already suspended, causing a crash during system suspend:
 
-
-CC Yizhou
-
-
-Thanks,
-
-Yanteng
-
-> ---
->   Documentation/scheduler/sched-design-CFS.rst                    | 2 +-
->   Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/Documentation/scheduler/sched-design-CFS.rst b/Documentation/scheduler/sched-design-CFS.rst
-> index 59b2d1fb4dc4..03db55504515 100644
-> --- a/Documentation/scheduler/sched-design-CFS.rst
-> +++ b/Documentation/scheduler/sched-design-CFS.rst
-> @@ -94,7 +94,7 @@ other HZ detail.  Thus the CFS scheduler has no notion of "timeslices" in the
->   way the previous scheduler had, and has no heuristics whatsoever.  There is
->   only one central tunable (you have to switch on CONFIG_SCHED_DEBUG):
->   
-> -   /proc/sys/kernel/sched_min_granularity_ns
-> +   /sys/kernel/debug/sched/min_granularity_ns
->   
->   which can be used to tune the scheduler from "desktop" (i.e., low latencies) to
->   "server" (i.e., good batching) workloads.  It defaults to a setting suitable
-> diff --git a/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst b/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst
-> index 26b0f36f793d..3076402406c4 100644
-> --- a/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst
-> +++ b/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst
-> @@ -80,7 +80,7 @@ p->se.vruntime。一旦p->se.vruntime变得足够大，其它的任务将成为
->   CFS使用纳秒粒度的计时，不依赖于任何jiffies或HZ的细节。因此CFS并不像之前的调度器那样
->   有“时间片”的概念，也没有任何启发式的设计。唯一可调的参数（你需要打开CONFIG_SCHED_DEBUG）是：
->   
-> -   /proc/sys/kernel/sched_min_granularity_ns
-> +   /sys/kernel/debug/sched/min_granularity_ns
->   
->   它可以用来将调度器从“桌面”模式（也就是低时延）调节为“服务器”（也就是高批处理）模式。
->   它的默认设置是适合桌面的工作负载。SCHED_BATCH也被CFS调度器模块处理。
-
+Does it work better if you replace phy_suspend() with phy_stop() and 
+phy_resume() with phy_start()?
+-- 
+Florian

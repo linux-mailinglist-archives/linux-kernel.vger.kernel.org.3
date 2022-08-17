@@ -2,72 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D9F5968AB
+	by mail.lfdr.de (Postfix) with ESMTP id 709AA5968AC
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 07:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238334AbiHQFiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 01:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
+        id S238375AbiHQFjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 01:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbiHQFiu (ORCPT
+        with ESMTP id S230221AbiHQFi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 01:38:50 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880414CA31
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 22:38:47 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id z16so14910968wrh.12
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 22:38:47 -0700 (PDT)
+        Wed, 17 Aug 2022 01:38:58 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CAF4DF3E
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 22:38:55 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id l21so12572064ljj.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 22:38:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=9BSWw6C7dasI4dQkCLgmz9qR7KfaoynjBECx1WdQL6Y=;
-        b=fh3dIJJP0PwGt3mqHNzGrpg5iWB+nVY8s3yNAyZ8+cOTuVUSYEmaqHPvKyxd2U8jSg
-         bwbhdVeBDs5ocVZLkoaYKD909yU1+plfBQs9YiiE46Tr4CtoO7fsS/lkjsiISap3nyiC
-         3zNFBR4wwtjDq33w4TnMZA2fUx5arweYrf+MuMynWvtdvVxJtNBWATp+wpPYYSdxF6C8
-         9UuISQ/r2Eh8TYdNq0BYGR7XwvUicXrfckxjiFfP4TprcOeQve0sxkBbHlbOgK5F3mOj
-         TIkcukevMB3xW2pIoOLg45zBOEx6+bithxdEwMUcHAYb7O7sBfk+F0N92A3f36tBJ2QK
-         yraQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=hJQ+G2q+PJJ817bdNue0It6aaQL/wDQ9FFpmsAzXz+Q=;
+        b=uZy1DBbbXN5ca20xZqyHR2gSmBrAxZIVSQ7csB8vRh27lanpLSsTLO/mUURLSIXyNY
+         9UeZxHZ4UJUIA13jkjfMHxAPuN5TacXJHUEWCxFqzffVOEvxuoZnNO8jk3j70lifjLKW
+         HHHpCwkK1E/ncIUJGib/X0NDr8oKhQl+JTnZ6/x18GHovyT6ROv7pMJGmFa3ejbunUud
+         IMPmzRrDQNLxYoFySnCkMSF/x7eqsL02j+ncSUXkUwT2auKbFqD8VBqASbFNC+ROcI3g
+         uCNkMrXXMEY3iLskRwJ7aGVAMzrbBourAt8gRJlzFcCq2dIMSqVDoZADbrJhA3C/jX5r
+         BKdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=9BSWw6C7dasI4dQkCLgmz9qR7KfaoynjBECx1WdQL6Y=;
-        b=bsUzWlPku9AUi91Dj6t9aY/t7pN5Fm38sa1SmmusINWeehB7JuEvYAvUhDa4bGFMII
-         Puw4kNNTuI8fxO3LFNJx9Wbt09xmhOvfOmlESwXg45bE7pkoa5kiYTpjGlSjPYLrJyy1
-         s1ko8+lisCCuPJJdFQlla+9xDiewvOgNr1n8FCWf2mlv9hbS5xiHFaGQ2GXfzv3Gf3Wm
-         Wjda1pGKbuS6+lju9mU+cWewi0y9tNHzuVouRZVzQq0ppb6VIoqyuhx6+NzH7HpybKEO
-         c9aix5nRgH7kftO2+9liK4x7okQMRYJ9FSb5GkS1Z1EMbI9G8SFKkTPFGlU2GgXW/sIG
-         +XAg==
-X-Gm-Message-State: ACgBeo2JiWtwpJpqZZxtJ3kx+VyFgBeU5wMSddBtbvEGAdm5/YaIefUc
-        zDBHeYy6J7u+ppabN/2U8Tb552pWjA7931SaSve97Q==
-X-Google-Smtp-Source: AA6agR6GmEj9vYzmsG2VKo1ANoF63KHItjlegZC0vUUzNCddh2am/awMdXkDploI/YxeX55K2+s5p0YUc884SaNx95w=
-X-Received: by 2002:a5d:6705:0:b0:21f:1520:5095 with SMTP id
- o5-20020a5d6705000000b0021f15205095mr13057960wru.240.1660714725812; Tue, 16
- Aug 2022 22:38:45 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=hJQ+G2q+PJJ817bdNue0It6aaQL/wDQ9FFpmsAzXz+Q=;
+        b=lJT3yywbaJiWVCd//ucoi0n1HRPcQKEc2WL1uh2CrxUei7OPmxy3B7Suflc87TPC0w
+         4Au9dwWzdtovDGd1KCgT5n2bfnU65rwS9HiLuuy2J3L80Oo/5L58xvPGKzPfFWWvZxIW
+         +3CiHmM9pSQnjy5xvTA/XDIzyI2EvDxX3SbRL/ilhQqvG71WDC/JYfemuHV997Ejtv3L
+         8/dUFrqYAI8o3NCSWnJ9a5i2C4PQCZzAtxqL4pw6OF/s/+Xt7UeJBQbCk6fNf/4exT+u
+         SPBmmmoe3AunAmhsShx3go37HKivoZEeYcBLAsSwlk8qWkioLAiUd0T/Q0b6iha09sgU
+         NHQg==
+X-Gm-Message-State: ACgBeo2hRuN/XU4fC8X67Z/ExP12km4+iQjJQaMXyIFZ5HdRXqRg/Soa
+        q/TZXeko29Z9YDTyVjH+f5pJbA==
+X-Google-Smtp-Source: AA6agR5kleeXG5u5qS+dHTDKcUqrs/ENiHZgNcFjVkFeGy1twEIyQXzvp6EXjBPPCOGBlEkn2Iue6g==
+X-Received: by 2002:a2e:8181:0:b0:25f:e028:a67 with SMTP id e1-20020a2e8181000000b0025fe0280a67mr7713765ljg.89.1660714733871;
+        Tue, 16 Aug 2022 22:38:53 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:1b1c:14b7:109b:ed76? (d15l54h48cw7vbh-qr4-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1b1c:14b7:109b:ed76])
+        by smtp.gmail.com with ESMTPSA id v4-20020a05651203a400b0048b17ecee71sm1562918lfp.302.2022.08.16.22.38.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 22:38:53 -0700 (PDT)
+Message-ID: <8d0c0326-c0df-efa4-5962-cd1282b33f43@linaro.org>
+Date:   Wed, 17 Aug 2022 08:38:51 +0300
 MIME-Version: 1.0
-References: <20220805214734.1937451-1-eugenis@google.com> <875yj1x0k0.wl-maz@kernel.org>
- <CAFKCwrjVaOdrGktxVHLCDPyJSRjZ0B3FHTGsb3PXMULL=dw9rA@mail.gmail.com>
- <87v8r1uztz.wl-maz@kernel.org> <CAFKCwriq-Vh+fhxso=xqtKzkL95QkYOOkMR8XwTOJfeg1M-2qQ@mail.gmail.com>
- <CAMn1gO5Va0eVFqzoOLLLJ+C+x-5=cc4qXDTw0e9J7v0RpYWusA@mail.gmail.com> <YvtMk2cNDrrzVX3g@arm.com>
-In-Reply-To: <YvtMk2cNDrrzVX3g@arm.com>
-From:   Peter Collingbourne <pcc@google.com>
-Date:   Tue, 16 Aug 2022 22:38:34 -0700
-Message-ID: <CAMn1gO4t1hGSTKE0fLCcJXmHGvH_zuzjqiBKp4G=SmKyx=R_-A@mail.gmail.com>
-Subject: Re: [PATCH] mte: Follow arm64.nomte override in MMU setup.
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Evgenii Stepanov <eugenis@google.com>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [RFC PATCH 02/14] drm/qaic: Add uapi and core driver file
+Content-Language: en-US
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>, airlied@linux.ie,
+        daniel@ffwll.ch, maarten.lankhorst@linux.intel.com,
+        mripard@kernel.org, tzimmermann@suse.de
+Cc:     quic_carlv@quicinc.com, quic_ajitpals@quicinc.com,
+        quic_pkanojiy@quicinc.com, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1660588956-24027-1-git-send-email-quic_jhugo@quicinc.com>
+ <1660588956-24027-3-git-send-email-quic_jhugo@quicinc.com>
+ <10ad6023-703d-65cf-6b00-2caa658c49e9@linaro.org>
+ <e9786447-edd4-90e0-25a9-b35e96adbfc2@quicinc.com>
+ <3f755d24-969b-1804-7979-880a9fe10cba@linaro.org>
+ <9eba0937-b4cb-4c62-e339-8ff33aebdbde@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9eba0937-b4cb-4c62-e339-8ff33aebdbde@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,64 +83,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 12:51 AM Catalin Marinas
-<catalin.marinas@arm.com> wrote:
->
-> On Tue, Aug 09, 2022 at 06:24:23PM -0700, Peter Collingbourne wrote:
-> > On Tue, Aug 9, 2022 at 10:29 AM Evgenii Stepanov <eugenis@google.com> wrote:
-> > > On Tue, Aug 9, 2022 at 9:49 AM Marc Zyngier <maz@kernel.org> wrote:
-> > > > In which case what is the tag memory doing in the linear map?
-> > > > Shouldn't it be marked as reserved, not mapped, and in general
-> > > > completely ignored by the NS OS?
-> > >
-> > > That would be wasteful. The idea is to only reserve the parts of the
-> > > tag memory that correspond to the TZ carveout and release the rest to
-> > > the NS OS.
-> >
-> > More generally, one can imagine a system where *any* tagged memory
-> > transaction can result in an SError because the MTE implementation was
-> > not configured by an earlier bootloader phase, e.g. because the
-> > bootloader was configured to disable MTE at runtime. On such systems,
-> > the kernel must refrain from causing tagged memory transactions to be
-> > issued via the linear map, and that's exactly what this patch does.
->
-> The problem is that it doesn't. The 8.5 architecture allows any Normal
-> Cacheable (even non-tagged) mapping to fetch tags. It may happen that on
-> certain implementations setting MAIR to non-tagged works but that's not
-> guaranteed and with the Linux kernel we tend to stick to the architected
-> behaviour (with a few exceptions like PMU counters and errata).
->
-> There is an ongoing discussion with the architects and partners on
-> whether we can tighten the architecture as not to cause visible
-> side-effects like SError but not sure whether that has been closed yet
-> (just back from holiday).
->
-> Until that's sorted, tag storage cannot be reused in an arm64-generic
-> way in the kernel.
+On 16/08/2022 21:22, Jeffrey Hugo wrote:
+>>>>> +	if (datapath_polling) {
+>>>>> +		poll_datapath = true;
+>>>>> +		pr_info("qaic: driver initializing in datapath polling mode\n");
+>>>>
+>>>> No pr() in normal path of init/exit.
+>>>
+>>> This is not the normal path.  datapath_polling is a module parameter.
+>>> This is something the user can enable, and so it would be good to have
+>>> the user informed that the option took effect.
+>>
+>> No, not really. User always can check via sysfs and there is no point in
+>> polluting dmesg on module load. It might be printed (if someone has such
+>> modprobe setting) on every system, even without the actual device.
+> 
+> So, I guess this is limited to platform devices?
+> I see GIC, IOMMU, and PCI doing the same
+> I guess, will remove.
 
-We can see how that discussion turns out, but let me take a shot at
-persuading you that this is the right thing to do in any case.
+None of regular drivers should print anything during init/exit. If one
+is printing, I think a patch removing it will be accepted.
 
-Again, this isn't necessarily about reusing tag storage. It's about
-whether the accesses via the linear map are expected to work at all.
-As defined, the architecture gives EL2 the role of controlling whether
-the system is deemed to implement, among other features, FEAT_MTE2, as
-there is no capability for EL3 to trap accesses to the relevant ID
-register. On the other hand, EL3 does to a large extent control
-whether FEAT_MTE2 is implemented on a particular system, regardless of
-whether the CPUs are capable of supporting it. Therefore, the kernel
-has pragmatically defined arm64.nomte, together with other command
-line arguments like arm64.nopauth, arm64.nobti and arm64.nosve, as
-non-architectured means of overriding ID register bits. If the
-relevant ID register bits for MTE as filtered through the command line
-arguments are 0, this implies that FEAT_MTE2 is not implemented.
+However you mention platform devices, so a "device" implies probe, not
+init. This is a different case.
 
-At this point we rejoin what is architected. Among the features
-implied by FEAT_MTE2 is the ability to assign the Tagged Normal
-attribute to pages via the MAIR. If the kernel were to use the Tagged
-Normal attribute anyway, the behavior is defined to be UNPREDICTABLE.
-Therefore, the kernel must not use this attribute in order to avoid
-UNPREDICTABLE behavior. It is simply a bug that we are failing to
-respect arm64.nomte when computing the MAIR.
-
-Peter
+Best regards,
+Krzysztof

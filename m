@@ -2,122 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65CA596849
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC1A596848
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 06:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231982AbiHQEph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 00:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32912 "EHLO
+        id S232029AbiHQErE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 00:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiHQEpe (ORCPT
+        with ESMTP id S229816AbiHQErD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 00:45:34 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F0B5A173
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 21:45:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660711532; x=1692247532;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=UjD+HW5PoXnqMGFz9/0Nw0PbBXNXL6BNrwD8PcumuWo=;
-  b=i+0MgeuAwlq4DjQHP0cwU1pS7C5jpy8W6kbFaBOt9fnhSfwnxSszAVvw
-   ZTCm+WLSe1guexTG0s8swIZ0cbH6y2oC8oxqxYBwmoCOSorBD55cC6hSg
-   EC+Ocfp3n5v4VcO5fideCRNCBQ+whLF7Q2x/g5mcrNauasDmTueH+ZjDU
-   ID2IASZ+lH72RnKz4JR55787GUk++IQoUibjSfUoCh9QrO/u4RLCEjKoA
-   4yG0/m4Kce0jKgG6tWxU+MHcj4y9gr+3VQfcESlkpSFHQYmfv33YpQgWz
-   7jNLYaAiN1gpTAREhicgWk7J7ZFieRcyZUOa6fkBCMAuB0uVIiOHA6M5j
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="354143135"
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="354143135"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 21:45:32 -0700
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="667434920"
-Received: from jzhan60-mobl1.ccr.corp.intel.com (HELO [10.254.209.228]) ([10.254.209.228])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 21:45:28 -0700
-Message-ID: <5f734387-9757-0670-3eef-b565116af541@linux.intel.com>
-Date:   Wed, 17 Aug 2022 12:45:26 +0800
+        Wed, 17 Aug 2022 00:47:03 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44785C349
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 21:47:00 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id E6AB4C1F27
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 04:46:59 +0000 (UTC)
+Received: from pdx1-sub0-mail-a305.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 888FFC1A4A
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 04:46:59 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1660711619; a=rsa-sha256;
+        cv=none;
+        b=iMgtFW/aXKgzgfYTooe4lZfgFPOGwmb/g5cmycK+N044xSNGJ3BxecHjZgLg0/EHOCwjeG
+        4EK1SfTV0an+l5/JzmIdCQNX9ios3jdf98ygVCcq57vIGyY270/K3AXnvhxxOUJLZ5CGg3
+        gQQJhb6QLMGqW9lfydH1sYo3McAUlpyWmB976Nxk5YsgcEbyiSzNTScWSmIdxMNdMd1DdU
+        i8yauCz1wKhd2DExZ/X8PyGEP6uk7e7WxlzRwLsegWGwsCUt/lWE3LB1EJS9kxfUa5/h/V
+        T/Z1GFCyj5VzHZw09SBzUEIf+Uf7Ns1hXATqekrMSOS/6SpDIfl4htsxajYRGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1660711619;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=mroE+KXsWSEmzORe3MDtjQJYsSqbIB+AhsZ+mOVQ1dQ=;
+        b=qVF4hc9wBHlxfjIzE223ZIdj8Vnw4wrIqBGekLJIgw0Mw/CcWo3Rt+i0v/+wQipsDvFQGL
+        Kx8a6MPosWib8izSrSS5YgYWyemTHzdxu0INDfJk9fPN6sVtW5K0OVWoPxp2sDtwiLvld1
+        BFBnchzb+hkIwv1UiB4PyecTthAlCrSa02AErVnnzemM+ov67v+IvxjuuSbd36lMcFEYF6
+        K6XffE1hIXkCPq+k3/YZNUq8RfVwOUxYUNNQKj2Hm4R9aaz19YCcRYrBZY4GE753J8JpeZ
+        e55fHtJaIVnpoc7bJst2SbbywaM+X2lzwRS3iiiWr+LC1B10lEOp6DXsnd4KXg==
+ARC-Authentication-Results: i=1;
+        rspamd-79b898d947-59cmw;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MailChannels-Auth-Id: dreamhost
+X-Shoe-Interest: 26af97ec75100d53_1660711619815_4134617977
+X-MC-Loop-Signature: 1660711619814:1159361956
+X-MC-Ingress-Time: 1660711619814
+Received: from pdx1-sub0-mail-a305.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.115.45.17 (trex/6.7.1);
+        Wed, 17 Aug 2022 04:46:59 +0000
+Received: from kmjvbox (unknown [98.42.138.125])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kjlx@templeofstupid.com)
+        by pdx1-sub0-mail-a305.dreamhost.com (Postfix) with ESMTPSA id 4M6wTv1sN6zLr
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 21:46:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
+        s=dreamhost; t=1660711619;
+        bh=mroE+KXsWSEmzORe3MDtjQJYsSqbIB+AhsZ+mOVQ1dQ=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=SksjyNnNQiP2sb2Fkga6qaFUEQzyVmtoLipyT12uCbSv1kmtundT6Vwiq6MX8CMaA
+         XXhzu2z/S6/w+eUJEm4AjqqNegO+BNirb0AK8W3hOFWXRLxweQikD6YSKPIOk8ZT4v
+         b8SmaVt/nZ1SDTD4uscoby5r1bSfMmdal9z7YmPE=
+Received: from johansen (uid 1000)
+        (envelope-from kjlx@templeofstupid.com)
+        id e01ce
+        by kmjvbox (DragonFly Mail Agent v0.12);
+        Tue, 16 Aug 2022 21:46:56 -0700
+Date:   Tue, 16 Aug 2022 21:46:56 -0700
+From:   Krister Johansen <kjlx@templeofstupid.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        David Reaver <me@davidreaver.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Krister Johansen <kjlx@templeofstupid.com>
+Subject: Re: [PATCH] tracing/perf: Fix double put of trace event when init
+ fails
+Message-ID: <20220817044656.GA1941@templeofstupid.com>
+References: <20220816192817.43d5e17f@gandalf.local.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Scarlett Gourley <scarlett@arista.com>,
-        James Sewart <jamessewart@arista.com>,
-        Jack O'Sullivan <jack@arista.com>
-Subject: Re: lockdep splat due to klist iteration from atomic context in Intel
- IOMMU driver
-Content-Language: en-US
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Lennert Buytenhek <buytenh@wantstofly.org>,
-        Sasha Levin <sashal@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Joerg Roedel <joro@8bytes.org>, iommu@lists.linux.dev
-References: <Yvo2dfpEh/WC+Wrr@wantstofly.org>
- <ab15191c-d79f-b5de-7568-d15b8f8a8aa8@acm.org>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <ab15191c-d79f-b5de-7568-d15b8f8a8aa8@acm.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816192817.43d5e17f@gandalf.local.home>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/15 21:32, Bart Van Assche wrote:
-> On 8/15/22 05:05, Lennert Buytenhek wrote:
->> On a build of 7ebfc85e2cd7 ("Merge tag 'net-6.0-rc1' of
->> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net"), with
->> CONFIG_INTEL_IOMMU_DEBUGFS enabled, I am seeing the lockdep splat
->> below when an I/O page fault occurs on a machine with an Intel
->> IOMMU in it.
->>
->> The issue seems to be the klist iterator functions using
->> spin_*lock_irq*() but the klist insertion functions using
->> spin_*lock(), combined with the Intel DMAR IOMMU driver iterating
->> over klists from atomic (hardirq) context as of commit 8ac0b64b9735
->> ("iommu/vt-d: Use pci_get_domain_bus_and_slot() in pgtable_walk()")
->> when CONFIG_INTEL_IOMMU_DEBUGFS is enabled, where
->> pci_get_domain_bus_and_slot() calls into bus_find_device() which
->> iterates over klists.
->>
->> I found this commit from 2018:
->>
->>     commit 624fa7790f80575a4ec28fbdb2034097dc18d051
->>     Author: Bart Van Assche <bvanassche@acm.org>
->>     Date:   Fri Jun 22 14:54:49 2018 -0700
->>
->>         scsi: klist: Make it safe to use klists in atomic context
->>
->> This commit switched lib/klist.c:klist_{prev,next} from
->> spin_{,un}lock() to spin_{lock_irqsave,unlock_irqrestore}(), but left
->> the spin_{,un}lock() calls in add_{head,tail}() untouched.
->>
->> The simplest fix for this would be to switch 
->> lib/klist.c:add_{head,tail}()
->> over to use the IRQ-safe spinlock variants as well?
+On Tue, Aug 16, 2022 at 07:28:17PM -0400, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 > 
-> Another possibility would be to evaluate whether it is safe to revert 
-> commit 624fa7790f80 ("scsi: klist: Make it safe to use klists in atomic 
-> context"). That commit is no longer needed by the SRP transport driver 
-> since the legacy block layer has been removed from the kernel.
+> If in perf_trace_event_init(), the perf_trace_event_open() fails, then it
+> will call perf_trace_event_unreg() which will not only unregister the perf
+> trace event, but will also call the put() function of the tp_event.
+> 
+> The problem here is that the trace_event_try_get_ref() is called by the
+> caller of perf_trace_event_init() and if perf_trace_event_init() returns a
+> failure, it will then call trace_event_put(). But since the
+> perf_trace_event_unreg() already called the trace_event_put() function, it
+> triggers a WARN_ON().
+> 
+>  WARNING: CPU: 1 PID: 30309 at kernel/trace/trace_dynevent.c:46 trace_event_dyn_put_ref+0x15/0x20
+> 
+> If perf_trace_event_reg() does not call the trace_event_try_get_ref() then
+> the perf_trace_event_unreg() should not be calling trace_event_put(). This
+> breaks symmetry and causes bugs like these.
+> 
+> Pull out the trace_event_put() from perf_trace_event_unreg() and call it
+> in the locations that perf_trace_event_unreg() is called. This not only
+> fixes this bug, but also brings back the proper symmetry of the reg/unreg
+> vs get/put logic.
+> 
+> Link: https://lore.kernel.org/all/cover.1660347763.git.kjlx@templeofstupid.com/
+> 
+> Reported-by: Krister Johansen <kjlx@templeofstupid.com>
+> Reviewed-by: Krister Johansen <kjlx@templeofstupid.com>
+> Tested-by: Krister Johansen <kjlx@templeofstupid.com>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-If so, pci_get_domain_bus_and_slot() can not be used in this interrupt
-context, right?
+Thanks again, Steven.  Is this one that you would consider tagging for a
+backport to stable at the appropriate time? I believe this one showed up
+in 5.15, if it's any help.
 
-Best regards,
-baolu
+-K
+
+> ---
+>  kernel/trace/trace_event_perf.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_event_perf.c b/kernel/trace/trace_event_perf.c
+> index a114549720d6..61e3a2620fa3 100644
+> --- a/kernel/trace/trace_event_perf.c
+> +++ b/kernel/trace/trace_event_perf.c
+> @@ -157,7 +157,7 @@ static void perf_trace_event_unreg(struct perf_event *p_event)
+>  	int i;
+>  
+>  	if (--tp_event->perf_refcount > 0)
+> -		goto out;
+> +		return;
+>  
+>  	tp_event->class->reg(tp_event, TRACE_REG_PERF_UNREGISTER, NULL);
+>  
+> @@ -176,8 +176,6 @@ static void perf_trace_event_unreg(struct perf_event *p_event)
+>  			perf_trace_buf[i] = NULL;
+>  		}
+>  	}
+> -out:
+> -	trace_event_put_ref(tp_event);
+>  }
+>  
+>  static int perf_trace_event_open(struct perf_event *p_event)
+> @@ -241,6 +239,7 @@ void perf_trace_destroy(struct perf_event *p_event)
+>  	mutex_lock(&event_mutex);
+>  	perf_trace_event_close(p_event);
+>  	perf_trace_event_unreg(p_event);
+> +	trace_event_put_ref(p_event->tp_event);
+>  	mutex_unlock(&event_mutex);
+>  }
+>  
+> @@ -292,6 +291,7 @@ void perf_kprobe_destroy(struct perf_event *p_event)
+>  	mutex_lock(&event_mutex);
+>  	perf_trace_event_close(p_event);
+>  	perf_trace_event_unreg(p_event);
+> +	trace_event_put_ref(p_event->tp_event);
+>  	mutex_unlock(&event_mutex);
+>  
+>  	destroy_local_trace_kprobe(p_event->tp_event);
+> @@ -347,6 +347,7 @@ void perf_uprobe_destroy(struct perf_event *p_event)
+>  	mutex_lock(&event_mutex);
+>  	perf_trace_event_close(p_event);
+>  	perf_trace_event_unreg(p_event);
+> +	trace_event_put_ref(p_event->tp_event);
+>  	mutex_unlock(&event_mutex);
+>  	destroy_local_trace_uprobe(p_event->tp_event);
+>  }
+> -- 
+> 2.35.1
+> 

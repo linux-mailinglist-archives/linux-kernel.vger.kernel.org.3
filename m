@@ -2,84 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF2D59753B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD53259753A
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240677AbiHQRkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
+        id S240869AbiHQRlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238083AbiHQRkf (ORCPT
+        with ESMTP id S241249AbiHQRkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:40:35 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0BFA1D62;
-        Wed, 17 Aug 2022 10:40:34 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id q16so12558513pgq.6;
-        Wed, 17 Aug 2022 10:40:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=T2VfnDiJkdhY/17kNIzqsKCO/jg0LojKsxYaZr+7Rkg=;
-        b=KusRphF5DTFe7mhRnFmNMOI7jOlvj2TNyhLSCDAfuKCkSZkVyILc9k4eWlCXBjo/D8
-         2J2lHM41jl4/+729s5SBzsqUMEvrC57GMo+IgkG1gNUzbCt9r3jDVrQTcIU+h/Ltg40v
-         /WBy0rO5O4U24ET4N/ABS9JvMy0TJRmIIIOBHh0kT93W1Mw5dEnTfEkSHdViKcuks9vK
-         iLbVHtjFTztE53D3sBOZqsmTce3BHEOgwhyvwKl3adB3ENzkvc4mRxl8MlYYm94htLUG
-         +Ztsng8Hqv8SEzQRYgLzU9Iy35ACCmGVIWJS/G/haSnqrp2BafNL88aZARskAu+SuQJ8
-         4EMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=T2VfnDiJkdhY/17kNIzqsKCO/jg0LojKsxYaZr+7Rkg=;
-        b=WTM2Gwlxty95rhFveUzMKw+sukHm4RdFhDXGQ4BRriuLI7HgUyDloR70XHPdsCgb0N
-         0PSkKmGcgga5I33J9al4ggeu2UYLWYksPYnc3OtvAc/mJy09z6VQRhC61U8DAsTnxdgR
-         /9BVCVZmW9qiwqtQSiIEQ0qbQGmU0chynCyFdFy96xOKuBEuy1/peZjny7Tj8BuW4McN
-         ZmE2XFYu8PVTi8nmOl8BldyxLmQcLlP0UzHhQsr70GFcalrAJJlUMyt0Vw67KH9nZDjN
-         nNNgDMfJgLQdDZhiCccC2YZfRbkSZKihFmYEi8SMW1jdx7JVlGsapujUwVqh4fkelTlk
-         Ry1A==
-X-Gm-Message-State: ACgBeo3AWMfwJp8cJezvTcRneU8yPODpcHbXg8rmv2G+sPkgGgDqJ/Fo
-        J7GDyU1AQot5rh25iAopxIQ=
-X-Google-Smtp-Source: AA6agR6+7z7osmZv0Xqd5YkMvSapXLzjYDM02hv/ytXpbZkfU+WfpooBrrnWGc43yI1lf8QcdP+Cag==
-X-Received: by 2002:a63:80c7:0:b0:41c:62dc:7d10 with SMTP id j190-20020a6380c7000000b0041c62dc7d10mr23382200pgd.313.1660758034134;
-        Wed, 17 Aug 2022 10:40:34 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id r21-20020a170902e3d500b0016f1319d2a7sm160185ple.297.2022.08.17.10.40.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 10:40:33 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 17 Aug 2022 07:40:32 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Xuewen Yan <xuewen.yan94@gmail.com>,
-        Imran Khan <imran.f.khan@oracle.com>, lizefan.x@bytedance.com,
-        hannes@cmpxchg.org, tglx@linutronix.de, steven.price@arm.com,
-        peterz@infradead.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zhao Gongyi <zhaogongyi@huawei.com>,
-        Zhang Qiao <zhangqiao22@huawei.com>
-Subject: Re: [PATCH cgroup/for-6.0-fixes] cgroup: Fix threadgroup_rwsem <->
- cpus_read_lock() deadlock
-Message-ID: <Yv0oEOXddKp+Xo1U@slm.duckdns.org>
-References: <ba48eac5-8ef7-251b-11fe-8163bb7a2d54@quicinc.com>
- <224b19f3-912d-b858-7af4-185b8e55bc66@quicinc.com>
- <YthDz4BnfYHce1od@slm.duckdns.org>
- <YuGTBLkFerUboctl@slm.duckdns.org>
- <dc0cff0e-b744-9d5d-e727-70d1c31b2a74@quicinc.com>
- <20220815090556.GB27407@blackbody.suse.cz>
- <CAB8ipk90LxNNbq5OKamd-ArkqhEZjxS1fFZJXtnbQwGzyyJ3wQ@mail.gmail.com>
- <20220815093934.GA29323@blackbody.suse.cz>
- <f584fecd-6ca4-4ab0-763d-2ed219009c61@quicinc.com>
- <YvrWaml3F+x9Dk+T@slm.duckdns.org>
-MIME-Version: 1.0
+        Wed, 17 Aug 2022 13:40:52 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2043.outbound.protection.outlook.com [40.107.94.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B843A222B;
+        Wed, 17 Aug 2022 10:40:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NTwMe+6adBDSX4+9C52nt6hpkY8N+HA60Ny9hgNJHkWj6JTmcLKPesceGdEQwmF/Dkf29sOs/ycaFW31Bkt6nGISM9OcZptTTC8iPFgklqeFmJP8G/B3KFU555FQyVSS3Vz6oqp3lmDKYVBjdpDKrXr1x7dfucTqvTzcn4V3HxEdU1bfqE9jwG9oqxGmTFrhz2xOdixWiq9YAjfNIlRmeK19SebBRkX1uh97CBZ2ket7V5bCc4JU7FJz6n0ht01Vgow7Yrv504bektRPVr47KKzBYt5UNI20tF52cQjMs3qcifyrrt8zXObL5+AxlWB6P2TKSW1/h7e+0Koa+PbCqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Im7GAjEaAOT7RfPBvhasbZ7Q4Ny9qtaU5Ev2KwBZjO0=;
+ b=RPuotByx0J96p379oiv/yKfOHM8rXvQmtZbMROMcij94M5XqdHvYqPkvep4XVqgtJIlh2liWcEjZdi8UwyXMQKsmekOaclluSrKSa//C3kjnBbMOqlf4MvVukSAhs1Vn9OUk0B1+8ghoa3YJf8pY5U8vpg6kxiWHPQ+7EmTZTSGL5/36LFfKo2TStXE/+c7GEZf9yow7WAUAH0jqZ4dhwMTBV9QHZvuZBmZ/rYPW9ghEBto9alNcD4nDqdSo4duXko2iikPkC8gepaIG6DP1na4/yYA9POzsbj9bYDCaoOq5qFIGqmXEMh/m2DiyAbWwoj5Kti6zAt+9gFxpqthKlQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Im7GAjEaAOT7RfPBvhasbZ7Q4Ny9qtaU5Ev2KwBZjO0=;
+ b=DhrfYF3Gov1B8JjzjA9lYpb8P37YIwQluo+ZmBR1o7xXi0NkFZnw8NlfMAGGuEjfBial90sItUEjLCMHwBmP/5s+cf0JAhsKtqQvY5R86lUm06xPu+XCV82gX1LEzgQa+mRGQd7MlZQmXE9A2blrVQPP9u+va7gD42fM+oa7gGcb0Ntk/U7l/P67VYI6tFSpJ5aY1wFAe9nNIVXXOrNo8Cd/NJPT86krqcgzp8lHxLMDxXATRGWmCShH/jkZW+GqsJ4gC5g0/DQNIlaQFh7DsvIA9sG8D7rAPuRZ4u9Vrz15SdoSdid1+bitxOLX+v9+52Gx9akqNTU47GvNlrj1EA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by DM6PR12MB3690.namprd12.prod.outlook.com (2603:10b6:5:149::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Wed, 17 Aug
+ 2022 17:40:49 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5%6]) with mapi id 15.20.5525.019; Wed, 17 Aug 2022
+ 17:40:49 +0000
+Date:   Wed, 17 Aug 2022 14:40:47 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Abhishek Sahu <abhsahu@nvidia.com>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v6 5/5] vfio/pci: Implement
+ VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP
+Message-ID: <Yv0oH23UYbI/LI+X@nvidia.com>
+References: <20220817051323.20091-1-abhsahu@nvidia.com>
+ <20220817051323.20091-6-abhsahu@nvidia.com>
+ <Yvzy0VOfKkKod0OV@nvidia.com>
+ <5363303b-30bb-3c4a-bf42-426dd7f8138d@nvidia.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YvrWaml3F+x9Dk+T@slm.duckdns.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <5363303b-30bb-3c4a-bf42-426dd7f8138d@nvidia.com>
+X-ClientProxiedBy: SA9PR13CA0088.namprd13.prod.outlook.com
+ (2603:10b6:806:23::33) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ba82f4e3-7925-4993-677e-08da80779f4c
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3690:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: N2soas64CUrOBeGs9+J2pOeaPogmOm9b2ZW6yVB0ATY9VtyqvnXU7fiAyNec4+Z7srdUvz/WKrHYV5xHPpem6TREfIHEbfI19Pq6cdErzplMeeyFaToML1yCaykHEC6oWsvg8uXU81XRR2OFBaEcZRL5NP8mXhcmgdOeN8sZ9MNZqgU0Q0S1kjBb8cXJ+8TJqo3GHUE7OLHW+ZWIzFWy9DozVeyQecef8jQ0LSf6Y2ObQ2mAUrxQqUzXI7F2t2iTfz26EDN9AaMCXNcMJmdxuAA156B1ZlQmykeje009yVMBHxuG9JbybkoTalQgiZDkI1uBdGpzzyGDTtcLI1JkieKr9FD75DhsCHO0zXetQNgmHmIKawIalg+pW476F55VP7enWSOyDiv3zMPEeLJo+GreFTcKrr4dVl3f6AAq0zq5yudZrLfMU8QU/py3CL+BMM/Qf/SRGVcRzh7eviCMotGzZ3eesVj8j+ZOxh1d8BWIxeI/COIpkvuuptLu/s4T/y1LHxjdQQ/oBYTeN2CWHStwPzVZlmq8Z8v61Pl4LMtrsDqPCNVZyFGq0f0mTi9rFvy033LZw7/DUv5XC+NdbjE5h+N8TQatVIGuKDMWN/I7r0Lju/cGfAIMW5i7EWmxKpoPUq4p+I3lX6qRaEcp7FtWf1qRzVyiyTkT1MYAm3ooZxYR4L0IxAy1fQYw7KRlFxaAn7A46r927IpyibfnWDPrNg7fl6ca/0K2+uS6NeM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(366004)(376002)(346002)(136003)(83380400001)(186003)(2616005)(6486002)(478600001)(38100700002)(316002)(41300700001)(66556008)(54906003)(6506007)(6636002)(5660300002)(7416002)(2906002)(37006003)(8936002)(66946007)(26005)(66476007)(6512007)(8676002)(4326008)(4744005)(36756003)(6862004)(53546011)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aeFGS29bZU5IMbuEelVu27UQnLlRtN9j8oW0HQGzW2X0sutN0x4sW4Dr4/4o?=
+ =?us-ascii?Q?S6df6vmq9s4z2bfYoTUP6l65R1xr7XVyGVe6fp9vDastliC/iw+IuqXFrhos?=
+ =?us-ascii?Q?tNLbrLqOh891/0Pq1tHAlcRc6mU+P6q6VQBRwqtUAKFlIN+XJTPxhUhapI0q?=
+ =?us-ascii?Q?vrszjzeYyfjRt2fDEu09yeUZ8jghbDpb8qcFXOFZyONPXxsHHGfi+1bw8hKQ?=
+ =?us-ascii?Q?MSfNItZGvL7v7PDPes51OZPGAw9YmNpCQt+UQJA20iQMFlvLRE/rAwjsnfHk?=
+ =?us-ascii?Q?KdSW3GDGPSclZho3wropWP2ygZwvbW1ACEHq+NsC8vfo/0ITCOhcDoQZyqNo?=
+ =?us-ascii?Q?ZGJKc5Xuf4a5ovWrDcEhlSK9eyz8n4fpDJiSB5HV6hHpA0wRPI5ZF/Gt1S3p?=
+ =?us-ascii?Q?CjdSTB3uHa5+2s1SCVwFffC9dSDZEwOmyGYgb+ptPwn4OrDC3Qerw9frp5bC?=
+ =?us-ascii?Q?bzUCEeKZIFvUk4/55iYN/cB412L9IfSC+XsjHYmB1X+ZOSsnbW81yrf3VEWK?=
+ =?us-ascii?Q?ZGREi9LdFK16Wy0mTqUqA6AkwpYHmWKyz8N+/+VRxjbKpsFxqhNKluVQ4yeI?=
+ =?us-ascii?Q?KOvFwDKaQ9r78Bzg6XaUr28dC3hzS5H29WW0AXM4WkDJ/eiJbWIrzEmaIBXS?=
+ =?us-ascii?Q?zYhDGkyWOZE9+jVScjBi1bjGCzkulvNBTAB6yQ8fKAyrVX2M0RDbQy7BGDgE?=
+ =?us-ascii?Q?k48xGLDya1ShHmEty+Gnm0/nC1bCxjYVCb6XULE5nM+/u3gmEGJOlBY+hkVr?=
+ =?us-ascii?Q?BDPdIZbOjBNYrKaj9avSvNILGItrt4/iaIE17x+bMMWqUhuazCgpoOSuvt9D?=
+ =?us-ascii?Q?6EEBgnrR3CbYN6r/NinkVvqmAuY7v4cyjiHMJtmfzaVSodRjbNOSxcrE4yte?=
+ =?us-ascii?Q?W0AI1tIrEgnojJ9RIr/kJwLERRpFcNRPKUiR8EUzwytAjzwRtjR7w4JwKH23?=
+ =?us-ascii?Q?InclgZiZ2ZygKhmQEy4KESrNvcWV7gbhkScf+sZpDI3O0J7ktK333rwutkwf?=
+ =?us-ascii?Q?p96W6nJmXan5uSVlFp0srKUot/ALCoX9o9/Wvd0xWjegUsnyK06qcx5zCZP/?=
+ =?us-ascii?Q?AVaS7+53Ae2GwAm+K0rOsGEVMXHqEUGutaLltwkQ3y8Z0VbOcQjyWzdxAIyD?=
+ =?us-ascii?Q?n1GzGESYZ8R5SkdtXtDd8KqSU9vC7a+9D+3dMXsZW4mZhjl5dc5KfIGG2Gtw?=
+ =?us-ascii?Q?notOnBIW8OuBZxVPABI4EDG/lb6cDiheBicuej8MSM0odSgPImuz6Nc6cqkq?=
+ =?us-ascii?Q?iGkXGs/XhkC5+YSvBIIF4Du11N6CEsKrp8Fnu10RRbKjNROPb5+HgLjrgq1g?=
+ =?us-ascii?Q?bNkCTQODgDh7isTSBRY8d3cHcAdvd3auDDXkY9dXjj6yjXCtXj0SIsSG2IDz?=
+ =?us-ascii?Q?28iOSfFT46qU6mNXFIlS+DZaMQnLwbTdVR9xByUzhImxh71QmR0dtqlOE9h7?=
+ =?us-ascii?Q?/rOtYJR07BQTuqU3vORJde7ZXvZfYMdPUa45G6KEjXlKSE2VO/qPRPp+cJ6w?=
+ =?us-ascii?Q?ZydE1oaghIbxXvFj65KpXRaw0e4IxmhRFCiIgIyJFH5p/49Qibi3gQ9+G/96?=
+ =?us-ascii?Q?/Ex3ESOh3HniLjLkfSJjGUsuLqC5dWFCkAJluRuq?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba82f4e3-7925-4993-677e-08da80779f4c
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2022 17:40:49.0249
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zlMGPwn91Dk7ZjMVDozgAhO/KHzfpm5lq25KcbN2pCskGtydgcyQIpiwiKU4VovK
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3690
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,22 +126,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 01:27:38PM -1000, Tejun Heo wrote:
-> Bringing up a CPU may involve creating new tasks which requires read-locking
-> threadgroup_rwsem, so threadgroup_rwsem nests inside cpus_read_lock().
-> However, cpuset's ->attach(), which may be called with thredagroup_rwsem
-> write-locked, also wants to disable CPU hotplug and acquires
-> cpus_read_lock(), leading to a deadlock.
+On Wed, Aug 17, 2022 at 09:34:30PM +0530, Abhishek Sahu wrote:
+> On 8/17/2022 7:23 PM, Jason Gunthorpe wrote:
+> > On Wed, Aug 17, 2022 at 10:43:23AM +0530, Abhishek Sahu wrote:
+> > 
+> >> +static int
+> >> +vfio_pci_core_pm_entry_with_wakeup(struct vfio_device *device, u32 flags,
+> >> +				   void __user *arg, size_t argsz)
+> > 
+> > This should be
+> >   struct vfio_device_low_power_entry_with_wakeup __user *arg
+> > 
 > 
-> Fix it by guaranteeing that ->attach() is always called with CPU hotplug
-> disabled and removing cpus_read_lock() call from cpuset_attach().
+>  Thanks Jason.
 > 
-> Signed-off-by: Tejun Heo <tj@kernel.org>
+>  I can update this.
+> 
+>  But if we look the existing code, for example
+>  (vfio_ioctl_device_feature_mig_device_state()), then there it still uses
+>  'void __user *arg' only. Is this a new guideline which we need to take
+>  care ?
 
-Applied to cgroup/for-6.0-fixes w/ commit message and comment update
-suggested by Xuewen and Fixes / stable tags added.
+I just sent a patch that fixes that too
 
-Thanks.
+>  Do we need to keep the IOCTL name alphabetically sorted in the case list.
+>  Currently, I have added in the order of IOCTL numbers.
 
--- 
-tejun
+It is generally a good practice to sort lists of things.
+
+Jason

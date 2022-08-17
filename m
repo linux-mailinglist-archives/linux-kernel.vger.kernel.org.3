@@ -2,101 +2,887 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90096596F83
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 741A2596F96
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239537AbiHQNS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 09:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49602 "EHLO
+        id S239782AbiHQNSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 09:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239661AbiHQNSE (ORCPT
+        with ESMTP id S237006AbiHQNST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 09:18:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC24295AF6
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:16:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79098B81DC8
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:16:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CEC3C433C1;
-        Wed, 17 Aug 2022 13:16:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660742193;
-        bh=aDRIqa8eaijPVXqeqJfGk+sLeJDArCHTw/EZrUOXu+U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S1RygQVWbvBT+13SzBAlXWjGZQnpI8KQWcpnYrKeJCN/5uLVfnBrrEImG75kqvjrM
-         e0W7Q5WM9rfIeSFsOuhW3Ny/iV/v43ptQ6jPULmhuZnRWuW9GRzbc0y+o9aEQycStE
-         zV9IzyrOAO4nYemVhGInEm3+M5I50MTrFirT6znOqj2Jy3oYcxe+QWd6pnon2EQRqa
-         XhhbeZ9/0wYYz/7S5XYw25LE8L/hBFw6eguFxZmglHqLIqlw/MbFVYh91cl0NP/SNv
-         +MrLBZj6RgD7fqfdXJbxvK72oSol/z7KkbyQPXMj0IgXL7MkENvHCmnz7756iQY+ti
-         8LbCJszxKVdrw==
-Date:   Wed, 17 Aug 2022 14:16:28 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andrea Righi <andrea.righi@canonical.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: head: rely on CONFIG_RANDOM_TRUST_CPU
-Message-ID: <YvzqLFDuXtDRxilZ@sirena.org.uk>
-References: <20220817094618.67063-1-andrea.righi@canonical.com>
+        Wed, 17 Aug 2022 09:18:19 -0400
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00BA979C5
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:16:48 -0700 (PDT)
+Received: by mail-vs1-xe2c.google.com with SMTP id j2so13128495vsp.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:16:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=qNu7mlZc8sk80K5X2wSH2u/PhvlXl2bwjsN3IwYsPbk=;
+        b=jGW7lslTUZt9ripaCMmBqUdrQES81YxrgQDZ6/nXrefeyHYmbwBS5Z2ek+4hYxC8NP
+         D8Xw+Fq6So6C8oOgvqVoxzqS3f00TK+1lArcyC27s9rDZdFXnoBousL+vMHDCngMrkMq
+         e8/gYhiTLRFvd3BVCEzJPX6XyikyiO+LsLOjdviqqnaPwHTkLdh3MQfIkg/aNmLuW35s
+         M/z2E8seqOX6hCNvMEvdKwqg5UceZoSi9Nf1SFM8nJnGkAdNalzgm0ODnJXU3zaiX6lG
+         QS+N9tENFWSRcCy99UkpaHQqwjxAYQzwG/rfY1WqlsFX9hmGX4CN5nLy0oJjPrpDClfK
+         jaVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=qNu7mlZc8sk80K5X2wSH2u/PhvlXl2bwjsN3IwYsPbk=;
+        b=xAlN8uYDq/6NxVgo9ElR8ltzwmubEnSrftdhdeCVxGi5ZQAc5OGntSpjcW2rSy1aJh
+         /qJTzfrIqG9pDhV+eGoLgah8qen2PKhl1XbSFvLYB24ZkZL1E7BrRmmw07j0XbT229wV
+         YbSSnesaS6OVhc2NCL48RynmpmwStwfCES4j8Vg7bxxRkpgzsxeQYRThFpRkjdX3aBKK
+         iystX+0OsfD12WNEOi5MavvZ/j3nUAi9n/UvEdoayMb7W+TKxl3rynI7/v7tB7+rNfrl
+         mh2T9Lkyzu+oHtvw9giccHx2YEnqpBm1yoqZuoIhauPMXCbm0JOg604Gj7MfM587653t
+         9d+Q==
+X-Gm-Message-State: ACgBeo2lMiu4a1XWIyk3NtwNJ5v37gYPK2wHWoninn9j0Z4FTC7D7muo
+        fOIcPXjuiNJzfj0VV7f26iRD8GK8H5qxwf2hpYOPdQ==
+X-Google-Smtp-Source: AA6agR5XBkIWCMrjIv6nte0ceU+y9E75EVvFI836pt88NIVja3eZhdnIWMEreLkb9pyMgGsw6UEtuU5dq0gc3BVsS3E=
+X-Received: by 2002:a67:ca98:0:b0:386:2789:bf91 with SMTP id
+ a24-20020a67ca98000000b003862789bf91mr11016798vsl.46.1660742202803; Wed, 17
+ Aug 2022 06:16:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8H8XdsxnlYFybTHf"
-Content-Disposition: inline
-In-Reply-To: <20220817094618.67063-1-andrea.righi@canonical.com>
-X-Cookie: Use extra care when cleaning on stairs.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220817053930.769840-1-irogers@google.com> <20220817053930.769840-3-irogers@google.com>
+ <YvzW7FMpjg04bbQy@kernel.org>
+In-Reply-To: <YvzW7FMpjg04bbQy@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 17 Aug 2022 06:16:31 -0700
+Message-ID: <CAP-5=fW66XGfBAW7UCzYFG-5R1vF2DBPoxyg0h-qjErtuG9TcQ@mail.gmail.com>
+Subject: Re: [PATCH v1 2/6] perf mutex: Update use of pthread mutex/cond
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Weiguo Li <liwg06@foxmail.com>,
+        Pavithra Gurushankar <gpavithrasha@gmail.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Dario Petrillo <dario.pk1@gmail.com>,
+        Wenyu Liu <liuwenyu7@huawei.com>,
+        Hewenliang <hewenliang4@huawei.com>,
+        yaowenbin <yaowenbin1@huawei.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexandre Truong <alexandre.truong@arm.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        William Cohen <wcohen@redhat.com>,
+        Andres Freund <andres@anarazel.de>,
+        Song Liu <songliubraving@fb.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
+        Colin Ian King <colin.king@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Fangrui Song <maskray@google.com>,
+        Stephane Eranian <eranian@google.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Zechuan Chen <chenzechuan1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>,
+        Lexi Shao <shaolexi@huawei.com>,
+        Remi Bernon <rbernon@codeweavers.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Aug 17, 2022 at 4:54 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Tue, Aug 16, 2022 at 10:39:26PM -0700, Ian Rogers escreveu:
+> > From: Pavithra Gurushankar <gpavithrasha@gmail.com>
+> >
+> > pthread_mutex_t and pthread_cond_t were replaced with the new wrapped
+> > struct/functions. To avoid default initialization values, use of
+> > PTHREAD_MUTEX_INITIALIZER was replaced with mutex_init/destroy. This
+> > wasn't done for dso__data_open_lock due to no clear early initialization
+> > code.
+> >
+> > Signed-off-by: Pavithra Gurushankar <gpavithrasha@gmail.com>
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+>
+> <SNIP>
+>
+> > index 90828ae03ef5..f3275be83a33 100644
+> > --- a/tools/perf/tests/openat-syscall-all-cpus.c
+> > +++ b/tools/perf/tests/openat-syscall-all-cpus.c
+> > @@ -2,7 +2,7 @@
+> >  #include <errno.h>
+> >  #include <inttypes.h>
+> >  /* For the CPU_* macros */
+> > -#include <pthread.h>
+> > +#include <sched.h>
+> >
+> >  #include <sys/types.h>
+> >  #include <sys/stat.h>
+> > diff --git a/tools/perf/tests/perf-record.c b/tools/perf/tests/perf-record.c
+> > index 6a001fcfed68..b386ade9ed06 100644
+> > --- a/tools/perf/tests/perf-record.c
+> > +++ b/tools/perf/tests/perf-record.c
+> > @@ -2,8 +2,6 @@
+> >  #include <errno.h>
+> >  #include <inttypes.h>
+> >  #include <linux/string.h>
+> > -/* For the CLR_() macros */
+> > -#include <pthread.h>
+>
+> why are removing these headers when the CLR_() macros are still in use
+> in this (and other) files?
 
---8H8XdsxnlYFybTHf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If a file isn't using any pthread_ functions:
 
-On Wed, Aug 17, 2022 at 11:46:18AM +0200, Andrea Righi wrote:
-> The CONFIG_ARCH_RANDOM .config option has been removed by
-> commit 9592eef7c16e ("random: remove CONFIG_ARCH_RANDOM").
->=20
-> Depend on CONFIG_RANDOM_TRUST_CPU to determine whether we can rely on
-> __arm64_rndr() to initialize the seed for kaslr.
->=20
-> Fixes: 9592eef7c16e ("random: remove CONFIG_ARCH_RANDOM")
+$ grep pthread tools/perf/tests/perf-record.c|wc -l
+0
 
-> -#ifdef CONFIG_ARCH_RANDOM
-> +#ifdef CONFIG_RANDOM_TRUST_CPU
->  		 if (!__early_cpu_has_rndr() ||
->  		     !__arm64_rndr((unsigned long *)&seed))
->  #endif
+and only using mutex_ functions. I was trying to remove unnecessary
+header file #includes.
 
-I think the sense here would be more that we should just unconditionally
-use RNDR if it's present - previously we'd use the result even if we
-didn't have strong trust in the CPU implementation and I don't see why
-we'd want to change that.
+The comment says the #include is necessary for CLR_ macros:
 
---8H8XdsxnlYFybTHf
-Content-Type: application/pgp-signature; name="signature.asc"
+$ grep CLR_ tools/perf/tests/perf-record.c|wc -l
+0
 
------BEGIN PGP SIGNATURE-----
+There is a however a CPU_CLR macro used. CPU_CLR is defined in sched.h
+which is #included immediately below. In any case this is unlikely to
+break anything as there is always the transitive #include of
+<pthread.h> via "mutex.h".
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL86isACgkQJNaLcl1U
-h9Df7wgAhn45rtL5BTafxsbRFNuND0n6Pq7ioAq/s35QXOWV1WRw4gRfDAaGRS3R
-090kZUquUoRAHIf8IroKI3ZQmI1QG9GcZeOU7jCj4RsDcoWpWru3OUG1gogU3VDd
-w44LtXw6ymbWROWPa5O3bS+/4isQpori6p7FTze1zL2KDrET9iKFKNQcgImVU014
-0gQIkyqy+HmypLsu4MkPO/qXanmTEbQkQyCMnHX8cQgJXkAMaFhFj1EeYzwleHIS
-wTuJsGZ1dzgYjS+p1XCBUYtZpL+sICn1g4BfTsOVDqqKEosg511NM98wLS7883+z
-Rg2ajzZZarO9svnhv1hOIP6pqN3rqA==
-=kiFb
------END PGP SIGNATURE-----
+> These whould be best done in a separate patch with an explanation as to
+> why it is not needed, is it being obtained from some other header that
+> is more appropriate than pthread.h? etc.
 
---8H8XdsxnlYFybTHf--
+The old code used pthread_mutex_lock and so needs pthread.h, the new
+code uses mutex_lock and so doesn't.
+
+> In general we prefer more granular patches, so that we help in bisecting
+> problems, so please break this patch into multiple pieces, say one for
+> the 'perf bench' codebase, other for 'perf test', etc.
+
+Agreed. I was trying to maintain Pavithra's authorship where their
+change was monolithic. Here are the stats:
+
+$ git show 1694c66ea8d3720ec8a55ca3ac10ace61e319644|diffstat
+bench/epoll-ctl.c               |   33 ++++++++++++-------------
+bench/epoll-wait.c              |   33 ++++++++++++-------------
+bench/futex-hash.c              |   33 ++++++++++++-------------
+bench/futex-lock-pi.c           |   33 ++++++++++++-------------
+bench/futex-requeue.c           |   33 ++++++++++++-------------
+bench/futex-wake-parallel.c     |   33 ++++++++++++-------------
+bench/futex-wake.c              |   33 ++++++++++++-------------
+bench/numa.c                    |   93
++++++++++++++++++++++++++----------------------------------------------
+builtin-lock.c                  |    1
+builtin-record.c                |   13 ++++++---
+builtin-sched.c                 |   67
+++++++++++++++++++++++++---------------------------
+builtin-top.c                   |   40 +++++++++++++++---------------
+tests/mmap-basic.c              |    2 -
+tests/openat-syscall-all-cpus.c |    2 -
+tests/perf-record.c             |    2 -
+ui/browser.c                    |   20 +++++++--------
+ui/browsers/annotate.c          |   12 ++++-----
+ui/setup.c                      |    5 ++-
+ui/tui/helpline.c               |    5 +--
+ui/tui/progress.c               |    8 +++---
+ui/tui/setup.c                  |    8 +++---
+ui/tui/util.c                   |   18 ++++++-------
+ui/ui.h                         |    4 +--
+util/annotate.c                 |   13 ++++-----
+util/annotate.h                 |    4 +--
+util/bpf-event.h                |    1
+util/dso.c                      |   12 ++++-----
+util/dso.h                      |    4 +--
+util/hist.c                     |    6 ++--
+util/hist.h                     |    4 +--
+util/mmap.h                     |    1
+util/symbol.c                   |    4 +--
+util/top.h                      |    5 ++-
+ 33 files changed, 281 insertions(+), 304 deletions(-)
+
+Some locks like dso->lock are used in a lot of places so untangling
+this would be easiest as a rewrite. I was trying to avoid the rewrite
+to give Pavithra the author's tag.
+
+Thanks,
+Ian
+
+> - Arnaldo
+>
+> >
+> >  #include <sched.h>
+> >  #include <perf/mmap.h>
+> > diff --git a/tools/perf/ui/browser.c b/tools/perf/ui/browser.c
+> > index fa5bd5c20e96..78fb01d6ad63 100644
+> > --- a/tools/perf/ui/browser.c
+> > +++ b/tools/perf/ui/browser.c
+> > @@ -268,9 +268,9 @@ void __ui_browser__show_title(struct ui_browser *browser, const char *title)
+> >
+> >  void ui_browser__show_title(struct ui_browser *browser, const char *title)
+> >  {
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       __ui_browser__show_title(browser, title);
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >  }
+> >
+> >  int ui_browser__show(struct ui_browser *browser, const char *title,
+> > @@ -284,7 +284,7 @@ int ui_browser__show(struct ui_browser *browser, const char *title,
+> >
+> >       browser->refresh_dimensions(browser);
+> >
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       __ui_browser__show_title(browser, title);
+> >
+> >       browser->title = title;
+> > @@ -295,16 +295,16 @@ int ui_browser__show(struct ui_browser *browser, const char *title,
+> >       va_end(ap);
+> >       if (err > 0)
+> >               ui_helpline__push(browser->helpline);
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >       return err ? 0 : -1;
+> >  }
+> >
+> >  void ui_browser__hide(struct ui_browser *browser)
+> >  {
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       ui_helpline__pop();
+> >       zfree(&browser->helpline);
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >  }
+> >
+> >  static void ui_browser__scrollbar_set(struct ui_browser *browser)
+> > @@ -352,9 +352,9 @@ static int __ui_browser__refresh(struct ui_browser *browser)
+> >
+> >  int ui_browser__refresh(struct ui_browser *browser)
+> >  {
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       __ui_browser__refresh(browser);
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >
+> >       return 0;
+> >  }
+> > @@ -390,10 +390,10 @@ int ui_browser__run(struct ui_browser *browser, int delay_secs)
+> >       while (1) {
+> >               off_t offset;
+> >
+> > -             pthread_mutex_lock(&ui__lock);
+> > +             mutex_lock(&ui__lock);
+> >               err = __ui_browser__refresh(browser);
+> >               SLsmg_refresh();
+> > -             pthread_mutex_unlock(&ui__lock);
+> > +             mutex_unlock(&ui__lock);
+> >               if (err < 0)
+> >                       break;
+> >
+> > diff --git a/tools/perf/ui/browsers/annotate.c b/tools/perf/ui/browsers/annotate.c
+> > index 44ba900828f6..9bc1076374ff 100644
+> > --- a/tools/perf/ui/browsers/annotate.c
+> > +++ b/tools/perf/ui/browsers/annotate.c
+> > @@ -8,11 +8,11 @@
+> >  #include "../../util/hist.h"
+> >  #include "../../util/sort.h"
+> >  #include "../../util/map.h"
+> > +#include "../../util/mutex.h"
+> >  #include "../../util/symbol.h"
+> >  #include "../../util/evsel.h"
+> >  #include "../../util/evlist.h"
+> >  #include <inttypes.h>
+> > -#include <pthread.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/string.h>
+> >  #include <linux/zalloc.h>
+> > @@ -319,7 +319,7 @@ static void annotate_browser__calc_percent(struct annotate_browser *browser,
+> >
+> >       browser->entries = RB_ROOT;
+> >
+> > -     pthread_mutex_lock(&notes->lock);
+> > +     mutex_lock(&notes->lock);
+> >
+> >       symbol__calc_percent(sym, evsel);
+> >
+> > @@ -348,7 +348,7 @@ static void annotate_browser__calc_percent(struct annotate_browser *browser,
+> >               }
+> >               disasm_rb_tree__insert(browser, &pos->al);
+> >       }
+> > -     pthread_mutex_unlock(&notes->lock);
+> > +     mutex_unlock(&notes->lock);
+> >
+> >       browser->curr_hot = rb_last(&browser->entries);
+> >  }
+> > @@ -474,10 +474,10 @@ static bool annotate_browser__callq(struct annotate_browser *browser,
+> >       }
+> >
+> >       notes = symbol__annotation(dl->ops.target.sym);
+> > -     pthread_mutex_lock(&notes->lock);
+> > +     mutex_lock(&notes->lock);
+> >
+> >       if (!symbol__hists(dl->ops.target.sym, evsel->evlist->core.nr_entries)) {
+> > -             pthread_mutex_unlock(&notes->lock);
+> > +             mutex_unlock(&notes->lock);
+> >               ui__warning("Not enough memory for annotating '%s' symbol!\n",
+> >                           dl->ops.target.sym->name);
+> >               return true;
+> > @@ -486,7 +486,7 @@ static bool annotate_browser__callq(struct annotate_browser *browser,
+> >       target_ms.maps = ms->maps;
+> >       target_ms.map = ms->map;
+> >       target_ms.sym = dl->ops.target.sym;
+> > -     pthread_mutex_unlock(&notes->lock);
+> > +     mutex_unlock(&notes->lock);
+> >       symbol__tui_annotate(&target_ms, evsel, hbt, browser->opts);
+> >       sym_title(ms->sym, ms->map, title, sizeof(title), browser->opts->percent_type);
+> >       ui_browser__show_title(&browser->b, title);
+> > diff --git a/tools/perf/ui/setup.c b/tools/perf/ui/setup.c
+> > index 700335cde618..fd10dc6baf07 100644
+> > --- a/tools/perf/ui/setup.c
+> > +++ b/tools/perf/ui/setup.c
+> > @@ -1,5 +1,4 @@
+> >  // SPDX-License-Identifier: GPL-2.0
+> > -#include <pthread.h>
+> >  #include <dlfcn.h>
+> >  #include <unistd.h>
+> >
+> > @@ -8,7 +7,7 @@
+> >  #include "../util/hist.h"
+> >  #include "ui.h"
+> >
+> > -pthread_mutex_t ui__lock = PTHREAD_MUTEX_INITIALIZER;
+> > +struct mutex ui__lock;
+> >  void *perf_gtk_handle;
+> >  int use_browser = -1;
+> >
+> > @@ -76,6 +75,7 @@ int stdio__config_color(const struct option *opt __maybe_unused,
+> >
+> >  void setup_browser(bool fallback_to_pager)
+> >  {
+> > +     mutex_init(&ui__lock, /*pshared=*/false);
+> >       if (use_browser < 2 && (!isatty(1) || dump_trace))
+> >               use_browser = 0;
+> >
+> > @@ -118,4 +118,5 @@ void exit_browser(bool wait_for_ok)
+> >       default:
+> >               break;
+> >       }
+> > +     mutex_destroy(&ui__lock);
+> >  }
+> > diff --git a/tools/perf/ui/tui/helpline.c b/tools/perf/ui/tui/helpline.c
+> > index 298d6af82fdd..db4952f5990b 100644
+> > --- a/tools/perf/ui/tui/helpline.c
+> > +++ b/tools/perf/ui/tui/helpline.c
+> > @@ -2,7 +2,6 @@
+> >  #include <stdio.h>
+> >  #include <stdlib.h>
+> >  #include <string.h>
+> > -#include <pthread.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/string.h>
+> >
+> > @@ -33,7 +32,7 @@ static int tui_helpline__show(const char *format, va_list ap)
+> >       int ret;
+> >       static int backlog;
+> >
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       ret = vscnprintf(ui_helpline__last_msg + backlog,
+> >                       sizeof(ui_helpline__last_msg) - backlog, format, ap);
+> >       backlog += ret;
+> > @@ -45,7 +44,7 @@ static int tui_helpline__show(const char *format, va_list ap)
+> >               SLsmg_refresh();
+> >               backlog = 0;
+> >       }
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >
+> >       return ret;
+> >  }
+> > diff --git a/tools/perf/ui/tui/progress.c b/tools/perf/ui/tui/progress.c
+> > index 3d74af5a7ece..71b6c8d9474f 100644
+> > --- a/tools/perf/ui/tui/progress.c
+> > +++ b/tools/perf/ui/tui/progress.c
+> > @@ -45,7 +45,7 @@ static void tui_progress__update(struct ui_progress *p)
+> >       }
+> >
+> >       ui__refresh_dimensions(false);
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       y = SLtt_Screen_Rows / 2 - 2;
+> >       SLsmg_set_color(0);
+> >       SLsmg_draw_box(y, 0, 3, SLtt_Screen_Cols);
+> > @@ -56,7 +56,7 @@ static void tui_progress__update(struct ui_progress *p)
+> >       bar = ((SLtt_Screen_Cols - 2) * p->curr) / p->total;
+> >       SLsmg_fill_region(y, 1, 1, bar, ' ');
+> >       SLsmg_refresh();
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >  }
+> >
+> >  static void tui_progress__finish(void)
+> > @@ -67,12 +67,12 @@ static void tui_progress__finish(void)
+> >               return;
+> >
+> >       ui__refresh_dimensions(false);
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       y = SLtt_Screen_Rows / 2 - 2;
+> >       SLsmg_set_color(0);
+> >       SLsmg_fill_region(y, 0, 3, SLtt_Screen_Cols, ' ');
+> >       SLsmg_refresh();
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >  }
+> >
+> >  static struct ui_progress_ops tui_progress__ops = {
+> > diff --git a/tools/perf/ui/tui/setup.c b/tools/perf/ui/tui/setup.c
+> > index b1be59b4e2a4..a3b8c397c24d 100644
+> > --- a/tools/perf/ui/tui/setup.c
+> > +++ b/tools/perf/ui/tui/setup.c
+> > @@ -29,10 +29,10 @@ void ui__refresh_dimensions(bool force)
+> >  {
+> >       if (force || ui__need_resize) {
+> >               ui__need_resize = 0;
+> > -             pthread_mutex_lock(&ui__lock);
+> > +             mutex_lock(&ui__lock);
+> >               SLtt_get_screen_size();
+> >               SLsmg_reinit_smg();
+> > -             pthread_mutex_unlock(&ui__lock);
+> > +             mutex_unlock(&ui__lock);
+> >       }
+> >  }
+> >
+> > @@ -170,10 +170,10 @@ void ui__exit(bool wait_for_ok)
+> >                                   "Press any key...", 0);
+> >
+> >       SLtt_set_cursor_visibility(1);
+> > -     if (!pthread_mutex_trylock(&ui__lock)) {
+> > +     if (mutex_trylock(&ui__lock)) {
+> >               SLsmg_refresh();
+> >               SLsmg_reset_smg();
+> > -             pthread_mutex_unlock(&ui__lock);
+> > +             mutex_unlock(&ui__lock);
+> >       }
+> >       SLang_reset_tty();
+> >       perf_error__unregister(&perf_tui_eops);
+> > diff --git a/tools/perf/ui/tui/util.c b/tools/perf/ui/tui/util.c
+> > index 0f562e2cb1e8..3c5174854ac8 100644
+> > --- a/tools/perf/ui/tui/util.c
+> > +++ b/tools/perf/ui/tui/util.c
+> > @@ -95,7 +95,7 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
+> >               t = sep + 1;
+> >       }
+> >
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >
+> >       max_len += 2;
+> >       nr_lines += 8;
+> > @@ -125,17 +125,17 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
+> >       SLsmg_write_nstring((char *)exit_msg, max_len);
+> >       SLsmg_refresh();
+> >
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >
+> >       x += 2;
+> >       len = 0;
+> >       key = ui__getch(delay_secs);
+> >       while (key != K_TIMER && key != K_ENTER && key != K_ESC) {
+> > -             pthread_mutex_lock(&ui__lock);
+> > +             mutex_lock(&ui__lock);
+> >
+> >               if (key == K_BKSPC) {
+> >                       if (len == 0) {
+> > -                             pthread_mutex_unlock(&ui__lock);
+> > +                             mutex_unlock(&ui__lock);
+> >                               goto next_key;
+> >                       }
+> >                       SLsmg_gotorc(y, x + --len);
+> > @@ -147,7 +147,7 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
+> >               }
+> >               SLsmg_refresh();
+> >
+> > -             pthread_mutex_unlock(&ui__lock);
+> > +             mutex_unlock(&ui__lock);
+> >
+> >               /* XXX more graceful overflow handling needed */
+> >               if (len == sizeof(buf) - 1) {
+> > @@ -215,19 +215,19 @@ void __ui__info_window(const char *title, const char *text, const char *exit_msg
+> >
+> >  void ui__info_window(const char *title, const char *text)
+> >  {
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       __ui__info_window(title, text, NULL);
+> >       SLsmg_refresh();
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >  }
+> >
+> >  int ui__question_window(const char *title, const char *text,
+> >                       const char *exit_msg, int delay_secs)
+> >  {
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       __ui__info_window(title, text, exit_msg);
+> >       SLsmg_refresh();
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >       return ui__getch(delay_secs);
+> >  }
+> >
+> > diff --git a/tools/perf/ui/ui.h b/tools/perf/ui/ui.h
+> > index 9b6fdf06e1d2..99f8d2fe9bc5 100644
+> > --- a/tools/perf/ui/ui.h
+> > +++ b/tools/perf/ui/ui.h
+> > @@ -2,11 +2,11 @@
+> >  #ifndef _PERF_UI_H_
+> >  #define _PERF_UI_H_ 1
+> >
+> > -#include <pthread.h>
+> > +#include "../util/mutex.h"
+> >  #include <stdbool.h>
+> >  #include <linux/compiler.h>
+> >
+> > -extern pthread_mutex_t ui__lock;
+> > +extern struct mutex ui__lock;
+> >  extern void *perf_gtk_handle;
+> >
+> >  extern int use_browser;
+> > diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+> > index 2c6a485c3de5..29d804d76145 100644
+> > --- a/tools/perf/util/annotate.c
+> > +++ b/tools/perf/util/annotate.c
+> > @@ -35,7 +35,6 @@
+> >  #include "arch/common.h"
+> >  #include "namespaces.h"
+> >  #include <regex.h>
+> > -#include <pthread.h>
+> >  #include <linux/bitops.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/string.h>
+> > @@ -821,7 +820,7 @@ void symbol__annotate_zero_histograms(struct symbol *sym)
+> >  {
+> >       struct annotation *notes = symbol__annotation(sym);
+> >
+> > -     pthread_mutex_lock(&notes->lock);
+> > +     mutex_lock(&notes->lock);
+> >       if (notes->src != NULL) {
+> >               memset(notes->src->histograms, 0,
+> >                      notes->src->nr_histograms * notes->src->sizeof_sym_hist);
+> > @@ -829,7 +828,7 @@ void symbol__annotate_zero_histograms(struct symbol *sym)
+> >                       memset(notes->src->cycles_hist, 0,
+> >                               symbol__size(sym) * sizeof(struct cyc_hist));
+> >       }
+> > -     pthread_mutex_unlock(&notes->lock);
+> > +     mutex_unlock(&notes->lock);
+> >  }
+> >
+> >  static int __symbol__account_cycles(struct cyc_hist *ch,
+> > @@ -1086,7 +1085,7 @@ void annotation__compute_ipc(struct annotation *notes, size_t size)
+> >       notes->hit_insn = 0;
+> >       notes->cover_insn = 0;
+> >
+> > -     pthread_mutex_lock(&notes->lock);
+> > +     mutex_lock(&notes->lock);
+> >       for (offset = size - 1; offset >= 0; --offset) {
+> >               struct cyc_hist *ch;
+> >
+> > @@ -1105,7 +1104,7 @@ void annotation__compute_ipc(struct annotation *notes, size_t size)
+> >                       notes->have_cycles = true;
+> >               }
+> >       }
+> > -     pthread_mutex_unlock(&notes->lock);
+> > +     mutex_unlock(&notes->lock);
+> >  }
+> >
+> >  int addr_map_symbol__inc_samples(struct addr_map_symbol *ams, struct perf_sample *sample,
+> > @@ -1258,13 +1257,13 @@ int disasm_line__scnprintf(struct disasm_line *dl, char *bf, size_t size, bool r
+> >
+> >  void annotation__init(struct annotation *notes)
+> >  {
+> > -     pthread_mutex_init(&notes->lock, NULL);
+> > +     mutex_init(&notes->lock, /*pshared=*/false);
+> >  }
+> >
+> >  void annotation__exit(struct annotation *notes)
+> >  {
+> >       annotated_source__delete(notes->src);
+> > -     pthread_mutex_destroy(&notes->lock);
+> > +     mutex_destroy(&notes->lock);
+> >  }
+> >
+> >  static void annotation_line__add(struct annotation_line *al, struct list_head *head)
+> > diff --git a/tools/perf/util/annotate.h b/tools/perf/util/annotate.h
+> > index 986f2bbe4870..3cbd883e4d7a 100644
+> > --- a/tools/perf/util/annotate.h
+> > +++ b/tools/perf/util/annotate.h
+> > @@ -8,9 +8,9 @@
+> >  #include <linux/types.h>
+> >  #include <linux/list.h>
+> >  #include <linux/rbtree.h>
+> > -#include <pthread.h>
+> >  #include <asm/bug.h>
+> >  #include "symbol_conf.h"
+> > +#include "mutex.h"
+> >  #include "spark.h"
+> >
+> >  struct hist_browser_timer;
+> > @@ -273,7 +273,7 @@ struct annotated_source {
+> >  };
+> >
+> >  struct annotation {
+> > -     pthread_mutex_t         lock;
+> > +     struct mutex lock;
+> >       u64                     max_coverage;
+> >       u64                     start;
+> >       u64                     hit_cycles;
+> > diff --git a/tools/perf/util/bpf-event.h b/tools/perf/util/bpf-event.h
+> > index 144a8a24cc69..1bcbd4fb6c66 100644
+> > --- a/tools/perf/util/bpf-event.h
+> > +++ b/tools/perf/util/bpf-event.h
+> > @@ -4,7 +4,6 @@
+> >
+> >  #include <linux/compiler.h>
+> >  #include <linux/rbtree.h>
+> > -#include <pthread.h>
+> >  #include <api/fd/array.h>
+> >  #include <stdio.h>
+> >
+> > diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
+> > index 5ac13958d1bd..c7a5b42d1311 100644
+> > --- a/tools/perf/util/dso.c
+> > +++ b/tools/perf/util/dso.c
+> > @@ -795,7 +795,7 @@ dso_cache__free(struct dso *dso)
+> >       struct rb_root *root = &dso->data.cache;
+> >       struct rb_node *next = rb_first(root);
+> >
+> > -     pthread_mutex_lock(&dso->lock);
+> > +     mutex_lock(&dso->lock);
+> >       while (next) {
+> >               struct dso_cache *cache;
+> >
+> > @@ -804,7 +804,7 @@ dso_cache__free(struct dso *dso)
+> >               rb_erase(&cache->rb_node, root);
+> >               free(cache);
+> >       }
+> > -     pthread_mutex_unlock(&dso->lock);
+> > +     mutex_unlock(&dso->lock);
+> >  }
+> >
+> >  static struct dso_cache *__dso_cache__find(struct dso *dso, u64 offset)
+> > @@ -841,7 +841,7 @@ dso_cache__insert(struct dso *dso, struct dso_cache *new)
+> >       struct dso_cache *cache;
+> >       u64 offset = new->offset;
+> >
+> > -     pthread_mutex_lock(&dso->lock);
+> > +     mutex_lock(&dso->lock);
+> >       while (*p != NULL) {
+> >               u64 end;
+> >
+> > @@ -862,7 +862,7 @@ dso_cache__insert(struct dso *dso, struct dso_cache *new)
+> >
+> >       cache = NULL;
+> >  out:
+> > -     pthread_mutex_unlock(&dso->lock);
+> > +     mutex_unlock(&dso->lock);
+> >       return cache;
+> >  }
+> >
+> > @@ -1297,7 +1297,7 @@ struct dso *dso__new_id(const char *name, struct dso_id *id)
+> >               dso->root = NULL;
+> >               INIT_LIST_HEAD(&dso->node);
+> >               INIT_LIST_HEAD(&dso->data.open_entry);
+> > -             pthread_mutex_init(&dso->lock, NULL);
+> > +             mutex_init(&dso->lock, /*pshared=*/false);
+> >               refcount_set(&dso->refcnt, 1);
+> >       }
+> >
+> > @@ -1336,7 +1336,7 @@ void dso__delete(struct dso *dso)
+> >       dso__free_a2l(dso);
+> >       zfree(&dso->symsrc_filename);
+> >       nsinfo__zput(dso->nsinfo);
+> > -     pthread_mutex_destroy(&dso->lock);
+> > +     mutex_destroy(&dso->lock);
+> >       free(dso);
+> >  }
+> >
+> > diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+> > index 66981c7a9a18..58d94175e714 100644
+> > --- a/tools/perf/util/dso.h
+> > +++ b/tools/perf/util/dso.h
+> > @@ -2,7 +2,6 @@
+> >  #ifndef __PERF_DSO
+> >  #define __PERF_DSO
+> >
+> > -#include <pthread.h>
+> >  #include <linux/refcount.h>
+> >  #include <linux/types.h>
+> >  #include <linux/rbtree.h>
+> > @@ -11,6 +10,7 @@
+> >  #include <stdio.h>
+> >  #include <linux/bitops.h>
+> >  #include "build-id.h"
+> > +#include "mutex.h"
+> >
+> >  struct machine;
+> >  struct map;
+> > @@ -145,7 +145,7 @@ struct dso_cache {
+> >  struct auxtrace_cache;
+> >
+> >  struct dso {
+> > -     pthread_mutex_t  lock;
+> > +     struct mutex     lock;
+> >       struct list_head node;
+> >       struct rb_node   rb_node;       /* rbtree node sorted by long name */
+> >       struct rb_root   *root;         /* root of rbtree that rb_node is in */
+> > diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
+> > index 1c085ab56534..bfce88e5eb0d 100644
+> > --- a/tools/perf/util/hist.c
+> > +++ b/tools/perf/util/hist.c
+> > @@ -1622,13 +1622,13 @@ struct rb_root_cached *hists__get_rotate_entries_in(struct hists *hists)
+> >  {
+> >       struct rb_root_cached *root;
+> >
+> > -     pthread_mutex_lock(&hists->lock);
+> > +     mutex_lock(&hists->lock);
+> >
+> >       root = hists->entries_in;
+> >       if (++hists->entries_in > &hists->entries_in_array[1])
+> >               hists->entries_in = &hists->entries_in_array[0];
+> >
+> > -     pthread_mutex_unlock(&hists->lock);
+> > +     mutex_unlock(&hists->lock);
+> >
+> >       return root;
+> >  }
+> > @@ -2805,7 +2805,7 @@ int __hists__init(struct hists *hists, struct perf_hpp_list *hpp_list)
+> >       hists->entries_in = &hists->entries_in_array[0];
+> >       hists->entries_collapsed = RB_ROOT_CACHED;
+> >       hists->entries = RB_ROOT_CACHED;
+> > -     pthread_mutex_init(&hists->lock, NULL);
+> > +     mutex_init(&hists->lock, /*pshared=*/false);
+> >       hists->socket_filter = -1;
+> >       hists->hpp_list = hpp_list;
+> >       INIT_LIST_HEAD(&hists->hpp_formats);
+> > diff --git a/tools/perf/util/hist.h b/tools/perf/util/hist.h
+> > index 7ed4648d2fc2..508428b2c1b2 100644
+> > --- a/tools/perf/util/hist.h
+> > +++ b/tools/perf/util/hist.h
+> > @@ -4,10 +4,10 @@
+> >
+> >  #include <linux/rbtree.h>
+> >  #include <linux/types.h>
+> > -#include <pthread.h>
+> >  #include "evsel.h"
+> >  #include "color.h"
+> >  #include "events_stats.h"
+> > +#include "mutex.h"
+> >
+> >  struct hist_entry;
+> >  struct hist_entry_ops;
+> > @@ -98,7 +98,7 @@ struct hists {
+> >       const struct dso        *dso_filter;
+> >       const char              *uid_filter_str;
+> >       const char              *symbol_filter_str;
+> > -     pthread_mutex_t         lock;
+> > +     struct mutex            lock;
+> >       struct hists_stats      stats;
+> >       u64                     event_stream;
+> >       u16                     col_len[HISTC_NR_COLS];
+> > diff --git a/tools/perf/util/mmap.h b/tools/perf/util/mmap.h
+> > index cd8b0777473b..cd4ccec7f361 100644
+> > --- a/tools/perf/util/mmap.h
+> > +++ b/tools/perf/util/mmap.h
+> > @@ -9,7 +9,6 @@
+> >  #include <linux/bitops.h>
+> >  #include <perf/cpumap.h>
+> >  #include <stdbool.h>
+> > -#include <pthread.h> // for cpu_set_t
+> >  #ifdef HAVE_AIO_SUPPORT
+> >  #include <aio.h>
+> >  #endif
+> > diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+> > index a4b22caa7c24..656d9b4dd456 100644
+> > --- a/tools/perf/util/symbol.c
+> > +++ b/tools/perf/util/symbol.c
+> > @@ -1800,7 +1800,7 @@ int dso__load(struct dso *dso, struct map *map)
+> >       }
+> >
+> >       nsinfo__mountns_enter(dso->nsinfo, &nsc);
+> > -     pthread_mutex_lock(&dso->lock);
+> > +     mutex_lock(&dso->lock);
+> >
+> >       /* check again under the dso->lock */
+> >       if (dso__loaded(dso)) {
+> > @@ -1964,7 +1964,7 @@ int dso__load(struct dso *dso, struct map *map)
+> >               ret = 0;
+> >  out:
+> >       dso__set_loaded(dso);
+> > -     pthread_mutex_unlock(&dso->lock);
+> > +     mutex_unlock(&dso->lock);
+> >       nsinfo__mountns_exit(&nsc);
+> >
+> >       return ret;
+> > diff --git a/tools/perf/util/top.h b/tools/perf/util/top.h
+> > index 1c2c0a838430..a8b0d79bd96c 100644
+> > --- a/tools/perf/util/top.h
+> > +++ b/tools/perf/util/top.h
+> > @@ -5,6 +5,7 @@
+> >  #include "tool.h"
+> >  #include "evswitch.h"
+> >  #include "annotate.h"
+> > +#include "mutex.h"
+> >  #include "ordered-events.h"
+> >  #include "record.h"
+> >  #include <linux/types.h>
+> > @@ -53,8 +54,8 @@ struct perf_top {
+> >               struct ordered_events   *in;
+> >               struct ordered_events    data[2];
+> >               bool                     rotate;
+> > -             pthread_mutex_t          mutex;
+> > -             pthread_cond_t           cond;
+> > +             struct mutex mutex;
+> > +             struct cond cond;
+> >       } qe;
+> >  };
+> >
+> > --
+> > 2.37.1.595.g718a3a8f04-goog
+>
+> --
+>
+> - Arnaldo

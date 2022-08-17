@@ -2,88 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 051FB5974DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A77975974E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239912AbiHQRMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57374 "EHLO
+        id S241045AbiHQRMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:12:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237040AbiHQRMi (ORCPT
+        with ESMTP id S237040AbiHQRMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:12:38 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97595FF59
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:12:37 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z2so18368723edc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:12:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=7Qt1OiwB1NvpNvFAmXsbXFbwMMwlOW1GJ6U3awjsLBM=;
-        b=Ig5NGpyXAu/IiC7pCn5pEUlHynCDqQeLrI/1G6lRj478JvxU1k2wD3ooAop+hJfYmi
-         OOI0+r3W9gc2AYDypHGRs4fNjfjkIlZ7pUFFbQlD9s9MzRWu95upt5/CxroPCYaXfJ58
-         vZQ6AK+XEBahQKS63orPE2QpsqNHwgypllJCo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=7Qt1OiwB1NvpNvFAmXsbXFbwMMwlOW1GJ6U3awjsLBM=;
-        b=ULrdqGL1XFzpBzFsZIb0zd6gPxRr37oeHJrunJEM9QY735XEnYdrblm2mhcc3xDHGl
-         yjwe/j8w7y/UYN4J0yFhkVxxJvJsHx4CDsOI3vKrmIBF5PtrdLbX0BrRs7+n92AsnOgv
-         dLZPEYJTN8678X/hNJYByJxnV2LnXYLC9lcJZHPo7PG8aN/YRUlUBouT3+JjqTO+9XCO
-         gLS0qp/CNz0Dm+NIQhN3Sjn3es8q7keW0swZai4sZQm3pShHYmYhbE2wFcfgfcJFj8MH
-         p6z1E9PXCQsMaM2ZWh7/7e9rQaQ9+o2FcYw6n+tFY5JEsAI4hZxbJEn/SrFTEGQ5rvoH
-         ChRw==
-X-Gm-Message-State: ACgBeo0It+7AEDEWzbSsod1tCOlPCChNdjfp84+c+qhrRa3C6Cl2q+62
-        vhk3Ijso0ki+yM6mUhpzWZ5NTrXTqpSYc5+v/Dw=
-X-Google-Smtp-Source: AA6agR401ll8BGgGbDHvP6FEvI+gxePboaakdjWuMfIbF4aryLV4aV+pS05p4cuCQoMx4hGb9DhZ1w==
-X-Received: by 2002:a05:6402:278d:b0:43d:cf90:c91a with SMTP id b13-20020a056402278d00b0043dcf90c91amr24147247ede.186.1660756356140;
-        Wed, 17 Aug 2022 10:12:36 -0700 (PDT)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id 18-20020a170906319200b007304d084c5esm6824676ejy.166.2022.08.17.10.12.35
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 10:12:35 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id n7so5748823wrv.4
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:12:35 -0700 (PDT)
-X-Received: by 2002:a05:6000:1888:b0:222:ca41:dc26 with SMTP id
- a8-20020a056000188800b00222ca41dc26mr14146052wri.442.1660756355255; Wed, 17
- Aug 2022 10:12:35 -0700 (PDT)
+        Wed, 17 Aug 2022 13:12:44 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729216B174;
+        Wed, 17 Aug 2022 10:12:43 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oOMau-0002nC-Tu; Wed, 17 Aug 2022 19:12:41 +0200
+Message-ID: <f1a68bf1-2fc3-48f9-520f-2343e20c9bfc@leemhuis.info>
+Date:   Wed, 17 Aug 2022 19:12:37 +0200
 MIME-Version: 1.0
-References: <20220814212610.GA3690074@roeck-us.net>
-In-Reply-To: <20220814212610.GA3690074@roeck-us.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 17 Aug 2022 10:12:18 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgsnBpMfUDgD=mxzEWhA6=ff3D3qssva0DFkE_55DXkLA@mail.gmail.com>
-Message-ID: <CAHk-=wgsnBpMfUDgD=mxzEWhA6=ff3D3qssva0DFkE_55DXkLA@mail.gmail.com>
-Subject: Re: upstream kernel crashes
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Andres Freund <andres@anarazel.de>
-Cc:     linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: Bug 216320 - KSZ8794 operation broken
+Content-Language: en-US
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev <netdev@vger.kernel.org>, craig@mcqueen.id.au,
+        UNGLinuxDriver@microchip.com,
+        Arun Ramadoss <arun.ramadoss@microchip.com>
+References: <967ef480-2fac-9724-61c7-2d5e69c26ec3@leemhuis.info>
+ <20220817140406.jqv72rkpro5gmgvu@skbuf>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20220817140406.jqv72rkpro5gmgvu@skbuf>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1660756363;e0f7c7db;
+X-HE-SMSGID: 1oOMau-0002nC-Tu
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 14, 2022 at 2:26 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> syscaller reports lots of crashes with the mainline kernel. The latest
-> I have seen, based on the current ToT, is attached. Backtraces are not
-> always the same, but this one is typical.
+On 17.08.22 16:04, Vladimir Oltean wrote:
+> On Wed, Aug 17, 2022 at 03:36:44PM +0200, Thorsten Leemhuis wrote:
+>> I noticed a regression report in bugzilla.kernel.org that afaics nobody
+>> acted upon since it was reported. That's why I decided to forward it by
+>> mail to those that afaics should handle this.
+> 
+> Thanks. I don't track bugzilla,
 
-Ok, I just pushed out the pull of the virtio fixes, so hopefully this
-is all behind us.
+No worries, that's not unusual (or I guess: pretty common).
 
-Looking forward to (not really ;^) seeing what the google cloud
-automation reports with this fixed.
+> but I will respond to this ticket.
+> Is there a way to get automatically notified of DSA related issues?
 
-Thanks,
-                Linus
+I assume in theory it would be possible to create a product for this
+case in bugzilla.kernel.org and then you could directly (if you become
+the default assignee) or indirectly (virtual user you could then could
+start to watch) be notified.
+
+In practice that is rarely done afaik.
+
+My plan is to discuss bugzilla.kernel.org handling next month on
+kernel/maintainers summit. Maybe we decide something there to improve
+things. I'd say: wait for it and continue to no track bugzilla for now,
+as https://docs.kernel.org/admin-guide/reporting-issues.html clearly
+tells people to not file bugs there, unless MAINTAINERS tells them to
+(which is not the case here afaik).
+
+Ciao, Thorsten

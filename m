@@ -2,84 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556B25967A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 05:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0B25967AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 05:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237673AbiHQDFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 23:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44568 "EHLO
+        id S238525AbiHQDOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 23:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238496AbiHQDEv (ORCPT
+        with ESMTP id S229569AbiHQDOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 23:04:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528FB9A9B8;
-        Tue, 16 Aug 2022 20:04:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E52086149B;
-        Wed, 17 Aug 2022 03:04:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C692FC433C1;
-        Wed, 17 Aug 2022 03:04:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660705489;
-        bh=hoCcUCDekBnv7uptRjLsaq3Oa8ABTbxOy7tabbuoeEQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uxt5FAkslwdPocR18ObNyzePZxlC25vZ/FVvm7uSkQPBkd48TkOAyGCVpyhnN+IVm
-         CaZYsqCqh9K0jpJK1gf0s7JKdwqzQXi4xi1PCYfS8IYfsMMlMuzt96EpT7gXydSMce
-         2buYLdZLbEe4O6kRqEr39L1BLWwAv1FPBOGJzp35Xm6IeDZLuTAAegMmgHpuY9iCta
-         jtx7dRmIg/SmuBAdMW2K4nR69Re5Hulmv0MY2E+wmvffPsPUG+Q1yi4cWuSMQS3R3l
-         h9od2mLOSp95Tca3Ex/PogKiM8Bhi89gOI5knkaY52+PKjwanEWKZwmdSqVa40YfH6
-         d/JrPq23N8iTQ==
-Date:   Tue, 16 Aug 2022 20:04:47 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Frank <Frank.Sae@motor-comm.com>
-Cc:     Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, yinghong.zhang@motor-comm.com,
-        fei.zhang@motor-comm.com, hua.sun@motor-comm.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4.3] net: phy: Add driver for Motorcomm yt8521 gigabit
- ethernet phy
-Message-ID: <20220816200447.0f9ebb7b@kernel.org>
-In-Reply-To: <20220816111703.216-1-Frank.Sae@motor-comm.com>
-References: <20220816111703.216-1-Frank.Sae@motor-comm.com>
+        Tue, 16 Aug 2022 23:14:00 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7629D5D113;
+        Tue, 16 Aug 2022 20:13:52 -0700 (PDT)
+X-UUID: f38c1a2bf4f148fe9c7f0f10077d1e83-20220817
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=DxniUy+/X99gAlGwCbWLlenlcjZNB+qTT48tMczTJeM=;
+        b=jSsti5YQoBF3UZa4UiISJl+jMVgBi1Nu/koitx69bT3MU9bD2KFMui9Z6TwxDxAcxhmXBf5j1eY0GLvl1sRRc0bKS8JzQV1UpAddojxyvr85cEDGjKpZOVEb9J9XhJpZwVCKaRVB0UJobEB3SAfb67KP4N1PZsecC2DrdxPgnvg=;
+X-CID-UNFAMILIAR: 1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:e91c9c94-4efe-4b2a-9d01-d22d81e4bf30,OB:10,
+        LOB:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:2,SF:54,FILE:0,BULK:0,RULE:Relea
+        se_Ham,ACTION:release,TS:56
+X-CID-INFO: VERSION:1.1.10,REQID:e91c9c94-4efe-4b2a-9d01-d22d81e4bf30,OB:10,LO
+        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:2,SF:54,FILE:0,BULK:0,RULE:Release
+        _HamU,ACTION:release,TS:56
+X-CID-META: VersionHash:84eae18,CLOUDID:d1a3e29c-da39-4e3b-a854-56c7d2111b46,C
+        OID:0dbe88b70084,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0
+X-UUID: f38c1a2bf4f148fe9c7f0f10077d1e83-20220817
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <jianjun.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 588178327; Wed, 17 Aug 2022 11:13:48 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 17 Aug 2022 11:13:47 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Wed, 17 Aug 2022 11:13:46 +0800
+Message-ID: <e330820facd95af02e491bffd41aa9f468d8751e.camel@mediatek.com>
+Subject: Re: [PATCH v4] dt-bindings: PCI: mediatek-gen3: Add support for
+ MT8188 and MT8195
+From:   Jianjun Wang <jianjun.wang@mediatek.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-pci@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Ryder Lee <ryder.lee@mediatek.com>, <Rex-BC.Chen@mediatek.com>,
+        <TingHan.Shen@mediatek.com>, <Liju-clr.Chen@mediatek.com>,
+        <Jian.Yang@mediatek.com>
+Date:   Wed, 17 Aug 2022 11:13:46 +0800
+In-Reply-To: <20220802120624.19258-1-jianjun.wang@mediatek.com>
+References: <20220802120624.19258-1-jianjun.wang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 Aug 2022 19:17:03 +0800 Frank wrote:
->  Add a driver for the motorcomm yt8521 gigabit ethernet phy. We have verified
->  the driver on StarFive VisionFive development board, which is developed by
->  Shanghai StarFive Technology Co., Ltd.. On the board, yt8521 gigabit ethernet
->  phy works in utp mode, RGMII interface, supports 1000M/100M/10M speeds, and
->  wol(magic package).
+Hi Maintainers,
 
-Clang reports:
+Gentle ping for this patch, if there is anything I need to modify,
+please kindly let me know.
 
-drivers/net/phy/motorcomm.c:1121:6: warning: variable 'changed' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-        if (err > 0)
-            ^~~~~~~
-drivers/net/phy/motorcomm.c:1124:47: note: uninitialized use occurs here
-        return genphy_check_and_restart_aneg(phydev, changed);
-                                                     ^~~~~~~
-drivers/net/phy/motorcomm.c:1121:2: note: remove the 'if' if its condition is always true
-        if (err > 0)
-        ^~~~~~~~~~~~
-drivers/net/phy/motorcomm.c:1095:18: note: initialize the variable 'changed' to silence this warning
-        int err, changed;
-                        ^
-                         = 0
+Thanks.
+
+On Tue, 2022-08-02 at 20:06 +0800, Jianjun Wang wrote:
+> MT8188 and MT8195 are ARM platform SoCs with the same PCIe IP as
+> MT8192.
+> 
+> Also add new clock name "peri_mem" since the MT8188 and MT8195 use
+> clock
+> "peri_mem" instead of "top_133m".
+> 
+> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
+> ---
+> Changes in v4:
+> Remove "items" for "mediatek,mt8192-pcie" since it only have one
+> item.
+> 
+> Changes in v3:
+> Use enum property to add the new clock name.
+> 
+> Changes in v2:
+> Merge two patches into one.
+> ---
+>  .../devicetree/bindings/pci/mediatek-pcie-gen3.yaml | 13
+> +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/mediatek-pcie-
+> gen3.yaml b/Documentation/devicetree/bindings/pci/mediatek-pcie-
+> gen3.yaml
+> index 0499b94627ae..c00be39af64e 100644
+> --- a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
+> +++ b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
+> @@ -48,7 +48,13 @@ allOf:
+>  
+>  properties:
+>    compatible:
+> -    const: mediatek,mt8192-pcie
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt8188-pcie
+> +              - mediatek,mt8195-pcie
+> +          - const: mediatek,mt8192-pcie
+> +      - const: mediatek,mt8192-pcie
+>  
+>    reg:
+>      maxItems: 1
+> @@ -84,7 +90,9 @@ properties:
+>        - const: tl_96m
+>        - const: tl_32k
+>        - const: peri_26m
+> -      - const: top_133m
+> +      - enum:
+> +          - top_133m        # for MT8192
+> +          - peri_mem        # for MT8188/MT8195
+>  
+>    assigned-clocks:
+>      maxItems: 1
+> @@ -126,6 +134,7 @@ required:
+>    - interrupts
+>    - ranges
+>    - clocks
+> +  - clock-names
+>    - '#interrupt-cells'
+>    - interrupt-controller
+>  
+

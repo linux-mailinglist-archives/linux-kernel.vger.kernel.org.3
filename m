@@ -2,95 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574DE596B61
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDADA596B68
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231910AbiHQIbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 04:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
+        id S232336AbiHQIeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 04:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiHQIbd (ORCPT
+        with ESMTP id S229951AbiHQIeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 04:31:33 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79917D7B6
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:31:31 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4M71R84n7czGpdx;
-        Wed, 17 Aug 2022 16:29:56 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 17 Aug 2022 16:31:28 +0800
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        <mike.kravetz@oracle.com>, Muchun Song <songmuchun@bytedance.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Subject: [bug report] mm/hugetlb: various bugs with avoid_reserve case in
- alloc_huge_page()
-Message-ID: <d449c6d1-314f-5b90-6d68-3773e2722d7f@huawei.com>
-Date:   Wed, 17 Aug 2022 16:31:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Wed, 17 Aug 2022 04:34:22 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696AA4D274;
+        Wed, 17 Aug 2022 01:34:20 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id r16so6147749wrm.6;
+        Wed, 17 Aug 2022 01:34:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=P8ZUO6V2KNOkYdxLtrlQAlfU03xMErqXxjLAC+qSY1k=;
+        b=LvGtIr23u6IOczpxEdJkuDvtZWJFg2EiyPw2Kof+Vk7jDEXAozxeSlH9UW/3DEsFRQ
+         sKmtO1ZRSuTBvQvCZn/gFM1V2A+MXWJoE5rCuMwdyxCcOm/6yGQUtdxr2nlVyY1L/nnO
+         Hc1mfcDDIWK3qHs/Fp9ojMc03Os1A0WM2/HbXVMmrBsCDTCFv9ZH8uaCHTPCt4kVd44e
+         6nzibmRRLnW/NPzaoOikOv2qYFig9IXiSoz4FCzAb3Ov6ciCrqLKrUcCyz2biI/dJpg0
+         WQMp3iYlVqr5JCD0UbwrnCuyyO0VAunwttotVQ5Yr2T7bIWhjg6PhvqEhril9Z7eGcwl
+         7azA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=P8ZUO6V2KNOkYdxLtrlQAlfU03xMErqXxjLAC+qSY1k=;
+        b=cYM9pXrI8YlodbWgZAALQk+kENHUSdm9YYSzl5zVZXRQQw0UP7yKuY0hVcwjjdnqqZ
+         UcDskh/8FGBHBFA10nSCLndM/KPiZVH5TTMw1HWXbG9GoyRrgpV+s7fVRHqzGV0nbRrg
+         hIGisp0a9YLIlskXnDloeHl/eAPXlvzIf6SipA6w9/FK35fczrp/xOMiqcx6TFKRizXc
+         xSruhseAgncjz70osqMLYe0HJDM079cQwYsljrnxhl/zPTKZ4XnuKWmuZSTRCGMkbkgI
+         GYGhtKj8RjwC+xWD3E/8PkvfeRComK/biEMbFL70CQGW+8VfZC4L8ELelM40DB1+xxkh
+         QfrA==
+X-Gm-Message-State: ACgBeo3uXkHB9PYPL4r+wYsOEKo7dV+z+GsUSzSigo0s7cb4OmF4fa3T
+        79DFCbskggM3wXh+GPyPlHw=
+X-Google-Smtp-Source: AA6agR6hZ9mpFa3dqJCDYX3Y0+uFAo+ADFuKqcLC3sOqv47exRzKdQm7lXD0AiRDV6YyCBSMHc1SRg==
+X-Received: by 2002:adf:f905:0:b0:224:f876:c001 with SMTP id b5-20020adff905000000b00224f876c001mr8961785wrr.201.1660725258966;
+        Wed, 17 Aug 2022 01:34:18 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id ay39-20020a05600c1e2700b003a5fcae64d4sm1487241wmb.29.2022.08.17.01.34.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 01:34:18 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] selftests/bpf: Fix spelling mistake "succesful" -> "successful"
+Date:   Wed, 17 Aug 2022 09:34:17 +0100
+Message-Id: <20220817083417.50884-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all:
-    When I investigate the mm/hugetlb.c code again, I found there are a few possible issues
-with avoid_reserve case. (It's really hard to follow the relevant code for me.) Please take
-a look at the below analysis:
+There is a spelling mistake in an ASSERT_OK literal string. Fix it.
 
-1.avoid_reserve issue with h->resv_huge_pages in alloc_huge_page.
-    Assume:
-	h->free_huge_pages 60
-	h->resv_huge_pages 30
-	spool->rsv_hpages  30
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/kfunc_call.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-    When avoid_reserve is true, after alloc_huge_page(), we will have:
-	spool->rsv_hpages  29 /* hugepage_subpool_get_pages decreases it. */
-	h->free_huge_pages 59
-	h->resv_huge_pages 30 /* rsv_hpages is used, but *h->resv_huge_pages is not modified accordingly*. */
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+index 351fafa006fb..eede7c304f86 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
++++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+@@ -109,7 +109,7 @@ static void test_destructive(void)
+ {
+ 	__u64 save_caps = 0;
+ 
+-	ASSERT_OK(test_destructive_open_and_load(), "succesful_load");
++	ASSERT_OK(test_destructive_open_and_load(), "successful_load");
+ 
+ 	if (!ASSERT_OK(cap_disable_effective(1ULL << CAP_SYS_BOOT, &save_caps), "drop_caps"))
+ 		return;
+-- 
+2.37.1
 
-    If the hugetlb page is freed later, we will have:
-	spool->rsv_hpages  30 /* hugepage_subpool_put_pages increases it. */
-	h->free_huge_pages 60
-	h->resv_huge_pages 31 /* *increased wrongly* due to hugepage_subpool_put_pages(spool, 1) == 0. */
-			   ^^
-
-2.avoid_reserve issue with hugetlb rsvd cgroup charge for private mappings in alloc_huge_page.
-
-    In general, if hugetlb pages are reserved, corresponding rsvd counters are charged in resv_maps
-for private mappings. Otherwise they're charged in individual hugetlb pages. When alloc_huge_page()
-is called with avoid_reserve == true, hugetlb_cgroup_charge_cgroup_rsvd() will be called to charge
-the newly allocated hugetlb page even if there has a reservation for this page in resv_maps. Then
-vma_commit_reservation() is called to indicate that the reservation is consumed. So the reservation
-*can not be used, thus leaking* from now on because vma_needs_reservation always return 1 for it.
-
-3.avoid_reserve issue with restore_reserve_on_error
-
-    There's a assumption in restore_reserve_on_error(): If HPageRestoreReserve is not set, this indicates
-there is an entry in the reserve map added by alloc_huge_page or HPageRestoreReserve would be set on the
-page. But this assumption *does not hold for avoid_reserve*. HPageRestoreReserve won't be set even if there
-is already an entry in the reserve map for avoid_reserve case. So avoid_reserve should be considered in this
-function, i.e. we need *a reliable way* to determine whether the entry is added by the alloc_huge_page().
-
-Are above issues possible? Or am I miss something? These possible issues seem not easy to fix for me.
-Any thoughts? Any response would be appreciated!
-
-Thanks!
-Miaohe Lin

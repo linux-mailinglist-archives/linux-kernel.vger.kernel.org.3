@@ -2,106 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA22E596B93
+	by mail.lfdr.de (Postfix) with ESMTP id 809EB596B92
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232440AbiHQIph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 04:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41538 "EHLO
+        id S233296AbiHQIqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 04:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238283AbiHQIpX (ORCPT
+        with ESMTP id S229509AbiHQIql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 04:45:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4BF74DC0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:45:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660725921;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=p/gDo76UwTmViEx13ZIEnXWDsVcvV6S3aUwfWuW0178=;
-        b=ZDrsgY75BHyYvhC8kIYHQiEXAM/pqDF4mTxiqUqRLkqrdzp8+oIUU+XV6Y4CykYCNggnaS
-        wcIS4+I2a3uNA/E+m2+Yz9oKnF5VUx4vv362J0G2g5zIPokdJIdB37lON5fjvCMPs/rZUE
-        Xg5QLCOytwIjgkkN0Ou4u4DbUwDqySE=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-615-R3kbIPctObOdu1vMgoBeUg-1; Wed, 17 Aug 2022 04:45:19 -0400
-X-MC-Unique: R3kbIPctObOdu1vMgoBeUg-1
-Received: by mail-ej1-f69.google.com with SMTP id sc31-20020a1709078a1f00b0073096c2b4e1so2727972ejc.22
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:45:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=p/gDo76UwTmViEx13ZIEnXWDsVcvV6S3aUwfWuW0178=;
-        b=4RLt8igO/3+ZtxLuW0FcJj+hKe3ITnEyf0EMGSfy6ZJBOqpGFp6R5RRe9FNpJMwsFA
-         hPMw28zv5T34p5jYkw3zE6+HF3uz+vJVTef8BiNPmlFs88oaFwyG+1DOcqS8JZlxjcYo
-         RH1ykH47WO+B5ZBqORAkrRusTvBjJRjlGY+fA3N+k+ofryFa7OXa9/eThEegCzXEyrxM
-         zH6eW6A0Odg/U3VGIPZsOgZorA0rowog7lnJy2AfUVPwB/1RFofoyElQ2af6u60Wa7jE
-         tV8UxZBfc/+T+WBZciROueX5kP9+r9wl8b/dm2kjk3qTsNOQQhiG/ac9x027S6AIDJyQ
-         2Ygw==
-X-Gm-Message-State: ACgBeo384ijYP6Zm7zuiupiO8Txc1zs3gbkHnqWJCh2yr1lVkCZRsQSh
-        leIKKGLSbbDvUD0wsMNuhruvydq7c/+Hcff5Ix9y7mgrwuccMJfqoQFmieoBzotSoQYrlfbyMTl
-        rLLjdehcXFL7x3aWVWqI9Y5nw
-X-Received: by 2002:a05:6402:35c:b0:43c:8f51:130 with SMTP id r28-20020a056402035c00b0043c8f510130mr22069657edw.393.1660725918837;
-        Wed, 17 Aug 2022 01:45:18 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5AMm80dBw8wUUUR+UqHcBujLtUvJk4USLHFXwkNf0tAYNyaMXZlXOZmkAx/1CzOJRTLVTo1A==
-X-Received: by 2002:a05:6402:35c:b0:43c:8f51:130 with SMTP id r28-20020a056402035c00b0043c8f510130mr22069645edw.393.1660725918646;
-        Wed, 17 Aug 2022 01:45:18 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id o2-20020a170906358200b00730979f568fsm6393950ejb.150.2022.08.17.01.45.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 01:45:18 -0700 (PDT)
-Message-ID: <a76066e2-af2c-1be2-5e3e-1f42557523e6@redhat.com>
-Date:   Wed, 17 Aug 2022 10:45:14 +0200
+        Wed, 17 Aug 2022 04:46:41 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14DF74E0D;
+        Wed, 17 Aug 2022 01:46:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CKeCiigKMtOdgr4YLuQq0s6tHiN60WT8O1gsyf1py6Y=; b=OYd1O3mEkB+wAABrc+5g7lt0dm
+        S+0AdbaoEm8UtVjwn+dC5BXqtsgv3oynpOR8By0PJCSCNJvzHZ5h940eGMSrNDeKiEukda2HZhArL
+        ze3zylI40u7KNiWAI161EbKzjOYT0kuCvfTd2aaVvxaqn91cFB5B9L4+bW7iNVxkAZ6pBlDDJG7I0
+        WV2+66RpxVyfHz/+acnMp4WoS0kV8qnsyhZ9vmZ4GQW4Wr4OL+jvPu8pWPu7/h/67pKyamyymVBSq
+        zvqfZCQIW6HxCFZQ3/Ma9XqACtBoXlNb43JuULRrCn6X3bXUU+6OTceIBiTR5FJQSz1Wl77gPBJi2
+        vtQYWo9Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oOEh3-007wZq-28; Wed, 17 Aug 2022 08:46:29 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 25743980089; Wed, 17 Aug 2022 10:46:28 +0200 (CEST)
+Date:   Wed, 17 Aug 2022 10:46:28 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Will Deacon <will@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v5 1/3] sched: Use user_cpus_ptr for saving user provided
+ cpumask in sched_setaffinity()
+Message-ID: <Yvyq5GBtU+XxLSaP@worktop.programming.kicks-ass.net>
+References: <20220816192734.67115-1-longman@redhat.com>
+ <20220816192734.67115-2-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     =?UTF-8?Q?Leonardo_Br=c3=a1s?= <leobras@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "Dr. David Alan Gilbert (git)" <dgilbert@redhat.com>
-Cc:     kvm@vger.kernel.org, tglx@linutronix.de,
-        linux-kernel@vger.kernel.org, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org
-References: <20220816175936.23238-1-dgilbert@redhat.com>
- <YvwODUu/rdzjzDjk@google.com>
- <e9b456cee5032c62cab6b9a3ab1411196d4d1c3c.camel@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH] KVM: x86: Always enable legacy fp/sse
-In-Reply-To: <e9b456cee5032c62cab6b9a3ab1411196d4d1c3c.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816192734.67115-2-longman@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/17/22 05:29, Leonardo Brás wrote:
->>> QEMU always calls kvm_put_xsave, even on this combination because
->>> KVM_CAP_CHECK_EXTENSION_VM always returns true for KVM_CAP_XSAVE.
-> Any particular reason why it always returns true for KVM_CAP_XSAVE, even when
-> the CPU does not support it?
-> 
-> IIUC, if it returns false to this capability, kvm_put_xsave() should never be
-> called, and thus it can avoid bug reproduction.
+On Tue, Aug 16, 2022 at 03:27:32PM -0400, Waiman Long wrote:
+> @@ -8079,10 +8056,11 @@ int dl_task_check_affinity(struct task_struct *p, const struct cpumask *mask)
+>  #endif
+>  
+>  static int
+> -__sched_setaffinity(struct task_struct *p, const struct cpumask *mask)
+> +__sched_setaffinity(struct task_struct *p, const struct cpumask *mask, bool save_mask)
+>  {
+>  	int retval;
+>  	cpumask_var_t cpus_allowed, new_mask;
+> +	struct cpumask *user_mask = NULL;
+>  
+>  	if (!alloc_cpumask_var(&cpus_allowed, GFP_KERNEL))
+>  		return -ENOMEM;
 
-Because it allows userspace to have a single path for saving/restoring 
-FPU state.  See for example the "migration" code in 
-tools/testing/selftests/kvm/lib/x86_64/processor.c (the vcpu_save_state 
-and vcpu_load_state functions).
+Please move that retval down so the variable declarations are properly
+ordered again.
 
-In fact, the QEMU code that uses KVM_GET_FPU/KVM_SET_FPU in x86 is 
-obsolete, because it's not been used since Linux 2.6.36.
+> @@ -8098,8 +8076,33 @@ __sched_setaffinity(struct task_struct *p, const struct cpumask *mask)
+>  	retval = dl_task_check_affinity(p, new_mask);
+>  	if (retval)
+>  		goto out_free_new_mask;
+> +
+> +	/*
+> +	 * Save the user requested mask into user_cpus_ptr if save_mask set.
+> +	 * pi_lock is used for protecting user_cpus_ptr.
+> +	 */
+> +	if (save_mask && !p->user_cpus_ptr) {
+> +		user_mask = kmalloc(cpumask_size(), GFP_KERNEL);
+> +
+> +		if (!user_mask) {
+> +			retval = -ENOMEM;
+> +			goto out_free_new_mask;
+> +		}
+> +	}
+> +	if (save_mask) {
+> +		unsigned long flags;
+> +
+> +		raw_spin_lock_irqsave(&p->pi_lock, flags);
+> +		if (!p->user_cpus_ptr) {
+> +			p->user_cpus_ptr = user_mask;
+> +			user_mask = NULL;
+> +		}
+> +
+> +		cpumask_copy(p->user_cpus_ptr, mask);
+> +		raw_spin_unlock_irqrestore(&p->pi_lock, flags);
+> +	}
 
-Paolo
+How about:
 
+	if (save_mask) {
+		if (!p->user_cpus_ptr) {
+			...
+		}
+		...
+	}
+
+?

@@ -2,117 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A052A597318
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F24A7597322
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236380AbiHQPdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 11:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45836 "EHLO
+        id S239879AbiHQPfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 11:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240393AbiHQPdY (ORCPT
+        with ESMTP id S239714AbiHQPfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 11:33:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8709B65CA
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:33:20 -0700 (PDT)
+        Wed, 17 Aug 2022 11:35:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61DE647C3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:35:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660750400;
+        s=mimecast20190719; t=1660750504;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=iuF9WwZZgfyEZm95G/FWguHp30Ml1XgQgRW5a9g0ZoM=;
-        b=iG7rbaioYPsy3R3OxJKHuprtGDBq0jdrYkYzNiNSNmQ6yR3IH2l4lpEiWUaj60p8XJngEh
-        WHAM9maKoP+1ErVAd9arvcuT9+CEzpmlB77bMfdzuOEfpIKJcASnAXYHwW0s35xhnE9udk
-        4y9k1tKqkxyvFi3N+WdQA0We9nVslBk=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-300-e87EY1dUMzKKPkuW5pG19A-1; Wed, 17 Aug 2022 11:33:18 -0400
-X-MC-Unique: e87EY1dUMzKKPkuW5pG19A-1
-Received: by mail-ed1-f71.google.com with SMTP id y14-20020a056402440e00b0044301c7ccd9so8950376eda.19
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:33:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=iuF9WwZZgfyEZm95G/FWguHp30Ml1XgQgRW5a9g0ZoM=;
-        b=WJ0S4yooEx6+z7fB1x4H5ObUqbna8ELnWqTnGZ2oxaK4pzLj2tMfYAxk02XURCQlRu
-         dPrYuENKWmKzU1aplJ1lk9vScnavPJ1wYQiZFI+Zun7KY0NB7aXWHyt0yLghBKDdBPbx
-         5m395HshwwroZQUe5VdS5itlj9yBgi44pCWj3VALDxiZ1GIQHzzRydXrt2EGxrZJdVvT
-         YWeO1TCi+Xet86SvPN+lhJSYBb8oroHmKeSiJhjubESnYBjU6p5KUgqRepPEhphaHtKr
-         AreRrNb9ymNfBGh1g2QZ3cLrXlgCQ+OWbeD1jVsi9qFGwu3GFI9MYwMsbxwQwq4CKm2U
-         FykA==
-X-Gm-Message-State: ACgBeo1JDQVN/zKknORdKNCG5wLcMhgV9BfFWLNfiYqi7YTgNYOO/GDO
-        5I6+7Ua+l6bv2LPd3LNfY4eqTYMBjtxZoc81q07p7RvN/SCtGHvKwIZJh4IOzmyKygIKifRtfgv
-        uQRxlzMIZqdKm46a7krOn7aHV
-X-Received: by 2002:a05:6402:2384:b0:43c:fb7d:82a1 with SMTP id j4-20020a056402238400b0043cfb7d82a1mr23077310eda.82.1660750397450;
-        Wed, 17 Aug 2022 08:33:17 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7aVKqN6utP4Sf93dSgCom2XulCnRuSNi5wYhTmLr8QlpKCywaQKjCxT7d9LxItWJolYFWBRQ==
-X-Received: by 2002:a05:6402:2384:b0:43c:fb7d:82a1 with SMTP id j4-20020a056402238400b0043cfb7d82a1mr23077294eda.82.1660750397292;
-        Wed, 17 Aug 2022 08:33:17 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id t7-20020a170906948700b0072b32de7794sm6874346ejx.70.2022.08.17.08.33.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 08:33:16 -0700 (PDT)
-Message-ID: <20a1384f-3e05-15a0-1f27-ae7488e5d34f@redhat.com>
-Date:   Wed, 17 Aug 2022 17:33:16 +0200
+        bh=3aBejiWlmL7KTluGGks2ap2v6Rw6S2N1hayNB2ffhKI=;
+        b=dfKSBps9EewaVTfup5KrKNDubofXU83xHJx3/AxgYoG1c1EKY0GMtYWfFE82UzQ5vIBjS/
+        iThJcqJq357fQX4DslOfRFfSMqFxYOmKyVvf4JFglOgJnarBeQ1/+1QZQN8IMxUZ4ikKvn
+        NVP5jJqQM2HAE4INkFaDB/0wg/lScRU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-599-P4u9hwP0OzSmE5K0jvDrUA-1; Wed, 17 Aug 2022 11:35:01 -0400
+X-MC-Unique: P4u9hwP0OzSmE5K0jvDrUA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DDCA8802D2C;
+        Wed, 17 Aug 2022 15:35:00 +0000 (UTC)
+Received: from T590 (ovpn-8-20.pek2.redhat.com [10.72.8.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9C2EC14583C0;
+        Wed, 17 Aug 2022 15:34:54 +0000 (UTC)
+Date:   Wed, 17 Aug 2022 23:34:49 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Chris Murphy <lists@colorremedies.com>
+Cc:     Nikolay Borisov <nborisov@suse.com>, Jens Axboe <axboe@kernel.dk>,
+        Jan Kara <jack@suse.cz>,
+        Paolo Valente <paolo.valente@linaro.org>,
+        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
+        Linux-RAID <linux-raid@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>
+Subject: Re: stalling IO regression since linux 5.12, through 5.18
+Message-ID: <Yv0KmT8UYos2/4SX@T590>
+References: <CAEzrpqe3rRTvH=s+-aXTtupn-XaCxe0=KUe_iQfEyHWp-pXb5w@mail.gmail.com>
+ <d48c7e95-e21e-dcdc-a776-8ae7bed566cb@kernel.dk>
+ <61e5ccda-a527-4fea-9850-91095ffa91c4@www.fastmail.com>
+ <4995baed-c561-421d-ba3e-3a75d6a738a3@www.fastmail.com>
+ <dcd8beea-d2d9-e692-6e5d-c96b2d29dfd1@suse.com>
+ <2b8a38fa-f15f-45e8-8caa-61c5f8cd52de@www.fastmail.com>
+ <CAFj5m9+6Vj3NdSg_n3nw1icscY1qr9f9SOvkWYyqpEtFBb_-1g@mail.gmail.com>
+ <b236ca6e-2e69-4faf-9c95-642339d04543@www.fastmail.com>
+ <Yv0A6UhioH3rbi0E@T590>
+ <f633c476-bdc9-40e2-a93f-29601979f833@www.fastmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 8/9] KVM: x86: lapic does not have to process INIT if
- it is blocked
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        vkuznets@redhat.com
-References: <20220811210605.402337-1-pbonzini@redhat.com>
- <20220811210605.402337-9-pbonzini@redhat.com> <YvwxJzHC5xYnc7CJ@google.com>
- <226aca0a2cc95f57364f330793a2f13446fcf7a0.camel@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <226aca0a2cc95f57364f330793a2f13446fcf7a0.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f633c476-bdc9-40e2-a93f-29601979f833@www.fastmail.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/17/22 16:11, Maxim Levitsky wrote:
-> 
-> While reviwing this, I noticed that we have this code:
+On Wed, Aug 17, 2022 at 11:02:25AM -0400, Chris Murphy wrote:
 > 
 > 
-> static bool svm_apic_init_signal_blocked(struct kvm_vcpu *vcpu)
-> {
->   struct vcpu_svm *svm = to_svm(vcpu);
+> On Wed, Aug 17, 2022, at 10:53 AM, Ming Lei wrote:
+> > On Wed, Aug 17, 2022 at 10:34:38AM -0400, Chris Murphy wrote:
+> >> 
+> >> 
+> >> On Wed, Aug 17, 2022, at 8:06 AM, Ming Lei wrote:
+> >> 
+> >> > blk-mq debugfs log is usually helpful for io stall issue, care to post
+> >> > the blk-mq debugfs log:
+> >> >
+> >> > (cd /sys/kernel/debug/block/$disk && find . -type f -exec grep -aH . {} \;)
+> >> 
+> >> This is only sda
+> >> https://drive.google.com/file/d/1aAld-kXb3RUiv_ShAvD_AGAFDRS03Lr0/view?usp=sharing
+> >
+> > From the log, there isn't any in-flight IO request.
+> >
+> > So please confirm that it is collected after the IO stall is triggered.
 > 
->   /*
->   * TODO: Last condition latch INIT signals on vCPU when
->   * vCPU is in guest-mode and vmcb12 defines intercept on INIT.
->   * To properly emulate the INIT intercept,
->   * svm_check_nested_events() should call nested_svm_vmexit()
->   * if an INIT signal is pending.
->   */
->   return !gif_set(svm) ||
->   (vmcb_is_intercept(&svm->vmcb->control, INTERCEPT_INIT));
-> }
+> Yes, iotop reports no reads or writes at the time of collection. IO pressure 99% for auditd, systemd-journald, rsyslogd, and postgresql, with increasing pressure from all the qemu processes.
 > 
-> Is this workaround still needed? svm_check_nested_events does check
-> the apic's INIT/SIPI status.
+> Keep in mind this is a raid10, so maybe it's enough for just one block device IO to stall and the whole thing stops? That's why I included all block devices.
 > 
-> Currently the '.apic_init_signal_blocked' is called from
-> kvm_vcpu_latch_init which itself is currently called from
-> kvm_vcpu_latch_init which happens after we would vmexit if INIT is
-> intercepted by nested hypervisor.
-No, it shouldn't be needed anymore.
 
-Paolo
+From the 2nd log of blockdebugfs-all.txt, still not see any in-flight IO on
+request based block devices, but sda is _not_ included in this log, and
+only sdi, sdg and sdf are collected, is that expected?
+
+BTW, all request based block devices should be observed in blk-mq debugfs.
+
+
+
+thanks,
+Ming
 

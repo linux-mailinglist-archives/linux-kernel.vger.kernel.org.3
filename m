@@ -2,140 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118965973B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:11:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E33C45973AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240841AbiHQQLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 12:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54554 "EHLO
+        id S240607AbiHQQK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 12:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241020AbiHQQKi (ORCPT
+        with ESMTP id S241013AbiHQQKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 12:10:38 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120E99C22F
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:10:37 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id v12-20020a9d7d0c000000b00638e210c995so1474271otn.13
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:10:37 -0700 (PDT)
+        Wed, 17 Aug 2022 12:10:37 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7318A7F0A1;
+        Wed, 17 Aug 2022 09:10:36 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id x19so1302790plc.5;
+        Wed, 17 Aug 2022 09:10:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=BaWHsWTr1OobN9zZcMtlpkKkIKQywBqe+CFVwSFeHqY=;
-        b=eRiLLz7igQjPx0JfYU8PprZO3DUuncdUb7Tmo9iIYCYI+dN3Mb88vbr7mMmOqEoI9q
-         V2xWtfyfn4pLjjCSnsdRdW0UgmXWRJjLodEmXleglMWoLXvrMcgu7nf1/qbfr92RQjau
-         ozNy8u7Jf3k2Xo3rUlZEDr/LYZC5sPGnLXykRG5ptTl0KmS4eJnGbHduTKQfDhC32+TK
-         4yShcnI/yVwlATurSSk/wAYIJt6Vlg3cHeoUqPO4xbn1CzYdtYEaXnbaIvZ2/AVnpmZD
-         +vuNmhpsMagPEXW16q6VZZHO7gnyu6hbN/eCO0l94Z1+JaCbeoRbF4dpjn59CfcFBybA
-         xqkw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=0w5leDnB9oITFRG2hBeGs/cY0LqF9F4f5ngXhRmBvoA=;
+        b=b1IeAz0squDe+6l615WdkACq4EioqEHcrmbzFC8D4MNW5e68Ip3Dy8d05YiN/kUeTB
+         kinEPW2ff5WzBQV39M2JOikWSmSBxOQNUB4Dabzc5h3d3dCFfsEejtCTE1Fr/IVALdDh
+         xoMbF/J9Egn0X3Ew/hueK/z8Qvu2wrwI2rTmgGlXSdGupbwgwBK+Hzd+6SvPFgry3Iy3
+         rA9G7Xl9K7i1llEA0b/2hcFvwrAHpFnB9enms3gdIDJSTvaIYnep8nZuZnNcb6wLlyQ3
+         Ul1wjpN3Uz6zW9IUtvgcwTFHbPRd0doMQMyedsaY/NVohq5dk5+VBSI6w5ZVxMAnh4q6
+         cazg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=BaWHsWTr1OobN9zZcMtlpkKkIKQywBqe+CFVwSFeHqY=;
-        b=plydDISOkXU9nJM4VNj9KOo5HqND/IvJqvc/ThM/SnicJq3By7S5iEeN7wVYQWRSKc
-         N23F//jxBj+Do5E1pX8RupFkjUox9lufmioZ+qZSvi6E1qRt7IoJ3XpEOjgbdSgYKQgt
-         uIh/0jcljTonrloGiDlnFHjs3kfrjHn/NM5BuSQMqj+L+ulODv6qvKrnYS96mufzlOqL
-         ZA1jjdjq7jCljp+QmA35ahe+xRcalocb/tB6xUAbkI/91WqF4biQq1HLcTvFAPMLJXlO
-         uO9wBwHdyVZ22IPAfhQ/6javvEYZP0abOCXBrSlNqTJaZq/1gdcSLwO2XKpIS4HhGVpg
-         WXTg==
-X-Gm-Message-State: ACgBeo1KI4moJTWxsqSaD/XgUzCY4jBCEpXdOIUTIE2f87ww2dPr7v1Z
-        tulCgFLh49svIk6t7Jbq6v1i+/d4KvODgikC3ltp
-X-Google-Smtp-Source: AA6agR4guGUn+QZf7mZb1RCMpp4j6JVXXiQZ0eZ2IgE1A3BOC2yeXgx7CL2eOB5cx4+WzLPUD0gqxUDN0g6skinQzwk=
-X-Received: by 2002:a05:6830:449e:b0:638:c72b:68ff with SMTP id
- r30-20020a056830449e00b00638c72b68ffmr3556247otv.26.1660752636346; Wed, 17
- Aug 2022 09:10:36 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=0w5leDnB9oITFRG2hBeGs/cY0LqF9F4f5ngXhRmBvoA=;
+        b=cZPbCIP41g1lz5Abgcd6UmGe7FLgTAV+uCxS4ezHav6eSi+A8lyOr9N+R+TsSfwcug
+         hnbHmLqMs7OeJJUET7Dmj1nqXlyplZBxWzfFLKnEklRbsnovFAlTPewvqF+5LtGZF5sd
+         sUcaYpClWLYvW861Pmjkib5JNnEiB5JIJQl5ss22upTpwd21BzZPi8d+rOSY6tDl/zvO
+         Am35jQxfqUrS69vPnTQviXvavUwftPSeVwnSdhCffa+0+A+tgbrMGbDhSuqXkgPtKt3v
+         Us19p0izydYvyndMsCYaWt1nXknzpUkpDEiDlbUVxB/2ge4vcop0Zqt9yzbMn5lwkkRW
+         ga4A==
+X-Gm-Message-State: ACgBeo3Jbl9wyA8gKzM1Mz6B5Km3gj8CjeCuYaglShpYyHODkGj3KVHh
+        Y1G/WBXXEdMUz3SlBz9VW3w=
+X-Google-Smtp-Source: AA6agR7bLWJiCbr8SemRp/uA9NkzN4Nflo8rWCbGERFDYp+GuS6IK92hxYHxzM4TJSkt20/AYt0m8w==
+X-Received: by 2002:a17:90a:c58e:b0:1f3:1ab5:22ae with SMTP id l14-20020a17090ac58e00b001f31ab522aemr4501736pjt.45.1660752635824;
+        Wed, 17 Aug 2022 09:10:35 -0700 (PDT)
+Received: from localhost ([36.112.203.167])
+        by smtp.gmail.com with ESMTPSA id a15-20020aa795af000000b0052d5e93fcb7sm10658618pfk.191.2022.08.17.09.10.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 09:10:35 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     syzbot+ffe24b1afbc4cb5ae8fb@syzkaller.appspotmail.com
+Cc:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, 18801353760@163.com,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        paskripkin@gmail.com, skhan@linuxfoundation.org,
+        Hawkins Jiawei <yin31149@gmail.com>
+Subject: [PATCH v2] reiserfs: add check in bin_search_in_dir_item()
+Date:   Thu, 18 Aug 2022 00:10:28 +0800
+Message-Id: <20220817161028.8027-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <000000000000bcbb0205e13dc53a@google.com>
+References: <000000000000bcbb0205e13dc53a@google.com>
 MIME-Version: 1.0
-References: <20220725124123.12975-1-flaniel@linux.microsoft.com>
- <CAHC9VhTmgMfzc+QY8kr+BYQyd_5nEis0Y632w4S2_PGudTRT7g@mail.gmail.com>
- <4420381.LvFx2qVVIh@pwmachine> <CAHC9VhSMeefG5W_uuTNQYmUUZ1xcuqArxYs5sL9KOzUO_skCZw@mail.gmail.com>
- <ab1bbd48-c48d-5f5a-f090-428ffd54c07e@schaufler-ca.com>
-In-Reply-To: <ab1bbd48-c48d-5f5a-f090-428ffd54c07e@schaufler-ca.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 17 Aug 2022 12:10:25 -0400
-Message-ID: <CAHC9VhTxYaLXFbS6JnpskOkADNbL8BA5614VuK3sDTHW6DE3uQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v4 0/2] Add capabilities file to securityfs
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Francis Laniel <flaniel@linux.microsoft.com>,
-        linux-security-module@vger.kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        James Morris <jmorris@namei.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:BPF [MISC]" <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 11:50 AM Casey Schaufler <casey@schaufler-ca.com> w=
-rote:
-> On 8/17/2022 7:52 AM, Paul Moore wrote:
-> > On Wed, Aug 17, 2022 at 7:53 AM Francis Laniel
-> > <flaniel@linux.microsoft.com> wrote:
-> >> Le mardi 16 ao=C3=BBt 2022, 23:59:41 CEST Paul Moore a =C3=A9crit :
-> >>> On Mon, Jul 25, 2022 at 8:42 AM Francis Laniel
-> >>>
-> >>> <flaniel@linux.microsoft.com> wrote:
-> >>>> Hi.
-> >>>>
-> >>>> First, I hope you are fine and the same for your relatives.
-> >>> Hi Francis :)
-> >>>
-> >>>> A solution to this problem could be to add a way for the userspace t=
-o ask
-> >>>> the kernel about the capabilities it offers.
-> >>>> So, in this series, I added a new file to securityfs:
-> >>>> /sys/kernel/security/capabilities.
-> >>>> The goal of this file is to be used by "container world" software to=
- know
-> >>>> kernel capabilities at run time instead of compile time.
-> >>> ...
-> >>>
-> >>>> The kernel already exposes the last capability number under:
-> >>>> /proc/sys/kernel/cap_last_cap
-> >>> I'm not clear on why this patchset is needed, why can't the
-> >>> application simply read from "cap_last_cap" to determine what
-> >>> capabilities the kernel supports?
-> >> When you capabilities with, for example, docker, you will fill capabil=
-ities
-> >> like this:
-> >> docker run --rm --cap-add SYS_ADMIN debian:latest echo foo
-> >> As a consequence, the "echo foo" will be run with CAP_SYS_ADMIN set.
-> >>
-> >> Sadly, each time a new capability is added to the kernel, it means "co=
-ntainer
-> >> stack" software should add a new string corresponding to the number of=
- the
-> >> capabilities [1].
-> > Thanks for clarifying things, I thought you were more concerned about
-> > detecting what capabilities the running kernel supported, I didn't
-> > realize it was getting a string literal for each supported capability.
-> > Unless there is a significant show of support for this
->
-> I believe this could be a significant help in encouraging the use of
-> capabilities. An application that has to know the list of capabilities
-> at compile time but is expected to run unmodified for decades isn't
-> going to be satisfied with cap_last_cap. The best it can do with that
-> is abort, not being able to ask an admin what to do in the presence of
-> a capability that wasn't around before because the name isn't known.
+Syzkaller reports use-after-free Read as follows:
+------------[ cut here ]------------
+BUG: KASAN: use-after-free in bin_search_in_dir_item fs/reiserfs/namei.c:40 [inline]
+BUG: KASAN: use-after-free in search_by_entry_key+0x81f/0x960 fs/reiserfs/namei.c:165
+Read of size 4 at addr ffff8880715ee014 by task syz-executor352/3611
 
-An application isn't going to be able to deduce the semantic value of
-a capability based solely on a string value, an integer is just as
-meaningful in that regard.  What might be useful is if the application
-simply accepts a set of capabilities from the user and then checks
-those against the maximum supported by the kernel, but once again that
-doesn't require a string value, it just requires the application
-taking a set of integers and passing those into the kernel when a
-capability set is required.  I still don't see how adding the
-capability string names to the kernel is useful here.
+CPU: 0 PID: 3611 Comm: syz-executor352 Not tainted 5.19.0-rc1-syzkaller-00263-g1c27f1fc1549 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ bin_search_in_dir_item fs/reiserfs/namei.c:40 [inline]
+ search_by_entry_key+0x81f/0x960 fs/reiserfs/namei.c:165
+ reiserfs_find_entry.part.0+0x139/0xdf0 fs/reiserfs/namei.c:322
+ reiserfs_find_entry fs/reiserfs/namei.c:368 [inline]
+ reiserfs_lookup+0x24a/0x490 fs/reiserfs/namei.c:368
+ __lookup_slow+0x24c/0x480 fs/namei.c:1701
+ lookup_one_len+0x16a/0x1a0 fs/namei.c:2730
+ reiserfs_lookup_privroot+0x92/0x280 fs/reiserfs/xattr.c:980
+ reiserfs_fill_super+0x21bb/0x2fb0 fs/reiserfs/super.c:2176
+ mount_bdev+0x34d/0x410 fs/super.c:1367
+ legacy_get_tree+0x105/0x220 fs/fs_context.c:610
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1497
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1320/0x1fa0 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+ </TASK>
 
---=20
-paul-moore.com
+The buggy address belongs to the physical page:
+page:ffffea0001c57b80 refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x715ee
+flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000000 ffffea0001c57bc8 ffff8880b9a403c0 0000000000000000
+raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as freed
+
+Memory state around the buggy address:
+ ffff8880715edf00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff8880715edf80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff8880715ee000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                         ^
+ ffff8880715ee080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff8880715ee100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
+
+The cause is that the value of rbound in bin_search_in_dir_item()
+is out of bounds.
+
+To be more specific, struct buffer_head's b_data field
+contains the entry headers array, according to
+set_de_item_location(). So the array's length should be less
+than the size of b_data, or it may access the invalid memory.
+
+This patch solves it by checking the array's size with b_data's size.
+
+Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
+---
+v2:
+  - rename subject from search_by_entry_key() to bin_search_in_dir_item()
+
+ fs/reiserfs/namei.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/fs/reiserfs/namei.c b/fs/reiserfs/namei.c
+index 3d7a35d6a18b..c4c056ffafde 100644
+--- a/fs/reiserfs/namei.c
++++ b/fs/reiserfs/namei.c
+@@ -33,7 +33,11 @@ static int bin_search_in_dir_item(struct reiserfs_dir_entry *de, loff_t off)
+ 	int rbound, lbound, j;
+ 
+ 	lbound = 0;
+-	rbound = ih_entry_count(ih) - 1;
++	if (ih_location(ih) + ih_entry_count(ih) * IH_SIZE >=
++	    de->de_bh->b_size)
++		rbound = (de->de_bh->b_size - ih_location(ih)) / IH_SIZE - 1;
++	else
++		rbound = ih_entry_count(ih) - 1;
+ 
+ 	for (j = (rbound + lbound) / 2; lbound <= rbound;
+ 	     j = (rbound + lbound) / 2) {
+-- 
+2.25.1
+

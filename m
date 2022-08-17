@@ -2,145 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 938CE5974F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D3EB5974ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:22:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240293AbiHQRUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38838 "EHLO
+        id S234805AbiHQRUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236907AbiHQRUB (ORCPT
+        with ESMTP id S241175AbiHQRUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:20:01 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0816A9D123
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:20:00 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-11c59785966so2186951fac.11
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:20:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=J3VPAc5hc1beoFQlEY8UmpcylWVa8Cg5xRcsnWIJYsU=;
-        b=SCfTwXbWYFitH2mVeMfBTd8oUH/KXZXgT8BIHGPDHUz6Dh2NBNFER7vPRljNHOMTFo
-         KXtqFlvPL4lL17cgNJvrWIL+oBZBL3hfA/4TF/6agOW/b0NEbp1HDA65CyIc4aI0Hg4O
-         9QrN64jfHSs2gwNJ6GG6Moo1MesbpkxU5f5zMP9wBarJTL4boyoERBQqemFIZS8kZ7sq
-         fYCsSrGuWP1ZKJPDDW1ZXKSMmIYtQKUqVlrehGPAX1JkUdATUfmohOtCPObMo0gcVykX
-         EIK5RsltW8fLfHbazgsMlFWQRFdlFS9An0Zq+IChTVai5fJHiFS7XsnFqGx3Ls8l9FJ0
-         go0g==
+        Wed, 17 Aug 2022 13:20:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B359C53D
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:20:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660756827;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=E1x5LNrRWuvWgMZzul66wIPkfRn59vrBUCTEKqLPjoU=;
+        b=e/wEZ4bSPTeqfDwVfvMOo0Fcl6vCUj65YM9CWMM0ssLpQdqcgWQL4dJvIF2FYHZ+oJb6cj
+        7ZEts7Z8x9QrOWCulah5BojSmIc23ukXOm3vR6UPZxlsj3xaIIz43LoKJiCezREgjhSFER
+        B+xRLQFZILrMgtVMaf+A8yta1GfzzUw=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-541-g-35-EmzOm22nb8lkTAWVg-1; Wed, 17 Aug 2022 13:20:26 -0400
+X-MC-Unique: g-35-EmzOm22nb8lkTAWVg-1
+Received: by mail-wm1-f70.google.com with SMTP id c66-20020a1c3545000000b003a5f6dd6a25so1354699wma.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:20:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=J3VPAc5hc1beoFQlEY8UmpcylWVa8Cg5xRcsnWIJYsU=;
-        b=llc4oLw2clqls74Pzxl/fYFZUJPIn508oSWKaJHWPKB1u0P3ZPMcC4dbLi/PrvEVr2
-         Ahyzqw/uiH1JX4ZazrRJCn3wcoaeRS3gIjp9pkcDfNGFpAI/TV+z7NLumLgFqbEC+hjd
-         s6yz46ipfUh/49i3p6St6FVdd0RrbhmkVRQcg/bUDwaslKhko0hWNqhm2NEptqjaDxgE
-         uqH0MVJ6Ax50iSR5jeIl79LBvIWoiMagj0caKznXs4UMraaGXScaquckv1yaBu+EF5Im
-         3PkM1OCxVhzA6laiyrsK7ulzsGNT21FBWzcP3lUCLAP7qgu0pvtUixu8yaEMo3B5s+2I
-         lf4Q==
-X-Gm-Message-State: ACgBeo3XELm4MPQQV8sCPa0icKgkjGMZ2ioK48qKS4ELfdQmDk6l/oOB
-        o9OpUiPoSxyvh6lD5UOVtPxzpWKn8NlrzdqDbjPd
-X-Google-Smtp-Source: AA6agR4mv9lGti64tQ+RWhXl/XpvBG3lv2fsN8uSnflhqV/wjKZTydMt1AJ/vsLoMQnvVJvZroCrD9DZ9AMStnXqZ4c=
-X-Received: by 2002:a05:6870:a78d:b0:11c:437b:ec70 with SMTP id
- x13-20020a056870a78d00b0011c437bec70mr2325509oao.136.1660756799347; Wed, 17
- Aug 2022 10:19:59 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=E1x5LNrRWuvWgMZzul66wIPkfRn59vrBUCTEKqLPjoU=;
+        b=2Uoyn3MIeQmtQR5b0JGiTJCjiYBjh39yjX4/jiFWspg4OkP3iFchcpDhEXK59hPivK
+         eF3PIsqjyzggSksbw7g2OQjrpPJjshoQwXuQ6MpPc6dt7GSS79up5do3D4V+e68fKLqG
+         0V+owdxYlyE3U8XeBaaDfoBfH6shZyJkxUCrBF0Nuyl7WKBO3Zdm802sVyHc+MlJy/kC
+         6NlVJp5j+0MvvL/pris+IyR3oqHG53FUlgG3xoU4tWfT4s8EZ9bbrwEgguxLPLiLI0/U
+         ctq3/feIbSFLnN93iR7oFikeWcETDKQ5d5QJbA9Eq48u2fl6pJ2iS3/xq0rOv3Ca14W4
+         3FJA==
+X-Gm-Message-State: ACgBeo2Je3F3azG58pSG38AJZs2b/3hoRRnd4bjZyewau3Cw0mSDdZBW
+        xD2W7u1Sn1kNAaXgTjba02cC7RqQXF8X322pXNXj/YP+L19orArs14euNOAOiO8a0mev0f0sNkr
+        4FcUDr+ArufUxYqESZddSgXCL
+X-Received: by 2002:a1c:19c2:0:b0:3a5:168e:a918 with SMTP id 185-20020a1c19c2000000b003a5168ea918mr2792762wmz.31.1660756825528;
+        Wed, 17 Aug 2022 10:20:25 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4cDOhH9gb57ZgsmemV6RwBgg2yGkmkUplYW2gdzH3YejzjL5WNaW6YF8Ruh007bts4KbJ2Bw==
+X-Received: by 2002:a1c:19c2:0:b0:3a5:168e:a918 with SMTP id 185-20020a1c19c2000000b003a5168ea918mr2792746wmz.31.1660756825315;
+        Wed, 17 Aug 2022 10:20:25 -0700 (PDT)
+Received: from redhat.com ([2.55.4.37])
+        by smtp.gmail.com with ESMTPSA id h82-20020a1c2155000000b003a319bd3278sm2862407wmh.40.2022.08.17.10.20.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 10:20:24 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 13:20:19 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Bobby Eshleman <bobby.eshleman@gmail.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@toke.dk>
+Subject: Re: [PATCH 3/6] vsock: add netdev to vhost/virtio vsock
+Message-ID: <20220817131437-mutt-send-email-mst@kernel.org>
+References: <cover.1660362668.git.bobby.eshleman@bytedance.com>
+ <5a93c5aad99d79f028d349cb7e3c128c65d5d7e2.1660362668.git.bobby.eshleman@bytedance.com>
+ <20220816123701-mutt-send-email-mst@kernel.org>
+ <20220816110717.5422e976@kernel.org>
+ <YvtAktdB09tM0Ykr@bullseye>
+ <20220816160755.7eb11d2e@kernel.org>
+ <YvtVN195TS1xpEN7@bullseye>
+ <20220816181528.5128bc06@kernel.org>
+ <Yvt2f5i5R9NNNYUL@bullseye>
 MIME-Version: 1.0
-References: <20220725124123.12975-1-flaniel@linux.microsoft.com>
- <CAHC9VhTmgMfzc+QY8kr+BYQyd_5nEis0Y632w4S2_PGudTRT7g@mail.gmail.com>
- <4420381.LvFx2qVVIh@pwmachine> <CAHC9VhSMeefG5W_uuTNQYmUUZ1xcuqArxYs5sL9KOzUO_skCZw@mail.gmail.com>
- <ab1bbd48-c48d-5f5a-f090-428ffd54c07e@schaufler-ca.com> <CAHC9VhTxYaLXFbS6JnpskOkADNbL8BA5614VuK3sDTHW6DE3uQ@mail.gmail.com>
- <664f29c3-77a6-2ed9-5c55-f181397b09a2@schaufler-ca.com>
-In-Reply-To: <664f29c3-77a6-2ed9-5c55-f181397b09a2@schaufler-ca.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 17 Aug 2022 13:19:48 -0400
-Message-ID: <CAHC9VhTkkhgmj8R6fmuoffLUU+UnYqxOi-kDWmJQ9F9jtwuLxg@mail.gmail.com>
-Subject: Re: [RFC PATCH v4 0/2] Add capabilities file to securityfs
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Francis Laniel <flaniel@linux.microsoft.com>,
-        linux-security-module@vger.kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        James Morris <jmorris@namei.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:BPF [MISC]" <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yvt2f5i5R9NNNYUL@bullseye>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 12:49 PM Casey Schaufler <casey@schaufler-ca.com> w=
-rote:
-> On 8/17/2022 9:10 AM, Paul Moore wrote:
-> > On Wed, Aug 17, 2022 at 11:50 AM Casey Schaufler <casey@schaufler-ca.co=
-m> wrote:
-> >> On 8/17/2022 7:52 AM, Paul Moore wrote:
-> >>> On Wed, Aug 17, 2022 at 7:53 AM Francis Laniel
-> >>> <flaniel@linux.microsoft.com> wrote:
-> >>>> Le mardi 16 ao=C3=BBt 2022, 23:59:41 CEST Paul Moore a =C3=A9crit :
-> >>>>> On Mon, Jul 25, 2022 at 8:42 AM Francis Laniel
-> >>>>>
-> >>>>> <flaniel@linux.microsoft.com> wrote:
-> >>>>>> Hi.
-> >>>>>>
-> >>>>>> First, I hope you are fine and the same for your relatives.
-> >>>>> Hi Francis :)
-> >>>>>
-> >>>>>> A solution to this problem could be to add a way for the userspace=
- to ask
-> >>>>>> the kernel about the capabilities it offers.
-> >>>>>> So, in this series, I added a new file to securityfs:
-> >>>>>> /sys/kernel/security/capabilities.
-> >>>>>> The goal of this file is to be used by "container world" software =
-to know
-> >>>>>> kernel capabilities at run time instead of compile time.
-> >>>>> ...
-> >>>>>
-> >>>>>> The kernel already exposes the last capability number under:
-> >>>>>> /proc/sys/kernel/cap_last_cap
-> >>>>> I'm not clear on why this patchset is needed, why can't the
-> >>>>> application simply read from "cap_last_cap" to determine what
-> >>>>> capabilities the kernel supports?
-> >>>> When you capabilities with, for example, docker, you will fill capab=
-ilities
-> >>>> like this:
-> >>>> docker run --rm --cap-add SYS_ADMIN debian:latest echo foo
-> >>>> As a consequence, the "echo foo" will be run with CAP_SYS_ADMIN set.
-> >>>>
-> >>>> Sadly, each time a new capability is added to the kernel, it means "=
-container
-> >>>> stack" software should add a new string corresponding to the number =
-of the
-> >>>> capabilities [1].
-> >>> Thanks for clarifying things, I thought you were more concerned about
-> >>> detecting what capabilities the running kernel supported, I didn't
-> >>> realize it was getting a string literal for each supported capability=
-.
-> >>> Unless there is a significant show of support for this
-> >> I believe this could be a significant help in encouraging the use of
-> >> capabilities. An application that has to know the list of capabilities
-> >> at compile time but is expected to run unmodified for decades isn't
-> >> going to be satisfied with cap_last_cap. The best it can do with that
-> >> is abort, not being able to ask an admin what to do in the presence of
-> >> a capability that wasn't around before because the name isn't known.
-> > An application isn't going to be able to deduce the semantic value of
-> > a capability based solely on a string value,
->
-> True, but it can ask someone what to do, and in that case a string is
-> much better than a number ...
+On Tue, Aug 16, 2022 at 10:50:55AM +0000, Bobby Eshleman wrote:
+> > > > Eh, I was hoping it was a side channel of an existing virtio_net 
+> > > > which is not the case. Given the zero-config requirement IDK if 
+> > > > we'll be able to fit this into netdev semantics :(  
+> > > 
+> > > It's certainly possible that it may not fit :/ I feel that it partially
+> > > depends on what we mean by zero-config. Is it "no config required to
+> > > have a working socket" or is it "no config required, but also no
+> > > tuning/policy/etc... supported"?
+> > 
+> > The value of tuning vs confusion of a strange netdev floating around
+> > in the system is hard to estimate upfront. 
+> 
+> I think "a strange netdev floating around" is a total
+> mischaracterization... vsock is a networking device and it supports
+> vsock networks. Sure, it is a virtual device and the routing is done in
+> host software, but the same is true for virtio-net and VM-to-VM vlan.
+> 
+> This patch actually uses netdev for its intended purpose: to support and
+> manage the transmission of packets via a network device to a network.
+> 
+> Furthermore, it actually prepares vsock to eliminate a "strange" use of
+> a netdev. The netdev in vsockmon isn't even used to transmit
+> packets, it's "floating around" for no other reason than it is needed to
+> support packet capture, which vsock couldn't support because it didn't
+> have a netdev.
+> 
+> Something smells when we are required to build workaround kernel modules
+> that use netdev for ciphoning packets off to userspace, when we could
+> instead be using netdev for its intended purpose and get the same and
+> more benefit.
 
-If you are asking a user what to do, that user can just as easily look
-up the capability list to translate numbers to intent.  If your
-security approach requires a user knowing all of the subtle details
-around a capability based on 10~15 character string, I wish you the
-best of luck :)
+So what happens when userspace inevitably attempts to bind a raw
+packet socket to this device? Assign it an IP? Set up some firewall
+rules?
 
---=20
-paul-moore.com
+These things all need to be addressed before merging since they affect UAPI.
+
+
+> > 
+> > The nice thing about using a built-in fq with no user visible knobs is
+> > that there's no extra uAPI. We can always rip it out and replace later.
+> > And it shouldn't be controversial, making the path to upstream smoother.
+> 
+> The issue is that after pulling in fq for one kind of flow management,
+> then as users observe other flow issues, we will need to re-implement
+> pfifo, and then TBF, and then we need to build an interface to let users
+> select one, and to choose queue sizes... and then after awhile we've
+> needlessly re-implemented huge chunks of the tc system.
+> 
+> I don't see any good reason to restrict vsock users to using suboptimal
+> and rigid queuing.
+> 
+> Thanks.
+

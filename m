@@ -2,68 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F55597992
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 00:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 797C659798D
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 00:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241938AbiHQWQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 18:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
+        id S241700AbiHQWRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 18:17:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233381AbiHQWQs (ORCPT
+        with ESMTP id S231167AbiHQWRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 18:16:48 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B769A99FC;
-        Wed, 17 Aug 2022 15:16:47 -0700 (PDT)
+        Wed, 17 Aug 2022 18:17:00 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF5FAB057
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 15:16:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660774607; x=1692310607;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/P92gqk+BeZiy3uuyTljauK8Mls5EZ+vGEZqMfpHoKc=;
-  b=XLcSWtE2RGWFxAh/Qo4dtip5ACon1iWwBlUUxUo//hvq7drGDnGjrvx5
-   qr9MoF8TaUiiT/8Xrpg1bmXWx5cyGuASlYtwyjzyDeLvMGfnkWNBS24JO
-   58fwzc2uuXf9Dtj6YTVRgz+EON4lXZsbtXs8PAOIx+NuptR8IKEGkywjc
-   osvCQS5RxU/5AMe6QEg46OxvH5n6Z8wrihAsu4QuvlIovq4W6YuMUKojo
-   Mo28EnsBpUxzVeokc/hPTrQxyArzpuIseAcmgQpcQXkLqSvb3l7z+GVeU
-   X98NmM27NeR6ouq3TqqPQb+G2edkfr1WESlC+DHADWY26Ollw0kH52Cjv
+  t=1660774619; x=1692310619;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DdQixe7lPEWevE5VDFa/PRDsX4sunYOWGd2MMjbo8v8=;
+  b=PfsXXwFdRfs3TrKIttuxIGxWXia5h4limPIl3hhPqzobW0GzQrpSy6P3
+   cBGRvhXd0UafKs85/3mtcBK7vA2yY3L52iaNH4IJ0c2uJBH47XsJ11YT1
+   93HLkA92l5/Nwb7PpUIH5MQk36OHUIG1pknOT9zjqiEuyLphUn0kMlXpO
+   Ecr90cBpzRm/GLkygnqtoBxzGZ65iNRslgIVbBEUs1Qst1Essjzb/Z52K
+   I3lDXdrIpq+yz6wGsDh2NbpfCi+a/6//+9Ge+TdtkUklTOBdQWot9TzXQ
+   AhbPvQDnkcyh6GERATyuTiiS30UXuxSQKpp4mehrPU8donaH82YN4zrDk
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="356607496"
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="292610910"
 X-IronPort-AV: E=Sophos;i="5.93,244,1654585200"; 
-   d="scan'208";a="356607496"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 15:16:40 -0700
+   d="scan'208";a="292610910"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 15:16:39 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,244,1654585200"; 
-   d="scan'208";a="675811988"
+   d="scan'208";a="696941486"
 Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Aug 2022 15:16:37 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 17 Aug 2022 15:16:38 -0700
 Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oORL3-0001Or-10;
+        id 1oORL3-0001Ot-18;
         Wed, 17 Aug 2022 22:16:37 +0000
-Date:   Thu, 18 Aug 2022 06:16:14 +0800
+Date:   Thu, 18 Aug 2022 06:16:16 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Zhen Lei <thunder.leizhen@huawei.com>
-Subject: Re: [PATCH v3 2/2] rcu: Simplify the code logic of rcu_init_nohz()
-Message-ID: <202208180612.UVvfRJSR-lkp@intel.com>
-References: <20220816124839.1911-3-thunder.leizhen@huawei.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [ammarfaizi2-block:stable/linux-stable-rc/queue/5.10 460/539]
+ drivers/mtd/nand/raw/nand_timings.c:295:43: warning: 'onfi_nvddr_timings'
+ defined but not used
+Message-ID: <202208180635.x7J8xnj6-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220816124839.1911-3-thunder.leizhen@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,122 +64,288 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhen,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on paulmck-rcu/dev]
-[also build test WARNING on linus/master v6.0-rc1 next-20220817]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhen-Lei/rcu-nocb-Delete-local-variable-need_rcu_nocb_mask-in-rcu_init_nohz/20220816-205131
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
-config: s390-randconfig-s052-20220818 (https://download.01.org/0day-ci/archive/20220818/202208180612.UVvfRJSR-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/a1d5079765918764de3ff6e3e63fa2db7f7c14df
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zhen-Lei/rcu-nocb-Delete-local-variable-need_rcu_nocb_mask-in-rcu_init_nohz/20220816-205131
-        git checkout a1d5079765918764de3ff6e3e63fa2db7f7c14df
+tree:   https://github.com/ammarfaizi2/linux-block stable/linux-stable-rc/queue/5.10
+head:   a70e361f9a0a781e38da56942a68184c8240f409
+commit: 40fb2a4945bc14fe18ddb9563c14f0bb78d1fee0 [460/539] mtd: rawnand: Add NV-DDR timings
+config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220818/202208180635.x7J8xnj6-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/40fb2a4945bc14fe18ddb9563c14f0bb78d1fee0
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block stable/linux-stable-rc/queue/5.10
+        git checkout 40fb2a4945bc14fe18ddb9563c14f0bb78d1fee0
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/mtd/nand/raw/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-sparse warnings: (new ones prefixed by >>)
-   kernel/rcu/tree.c: note: in included file:
->> kernel/rcu/tree_nocb.h:1216:17: sparse: sparse: incorrect type in assignment (different modifiers) @@     expected struct cpumask *cpumask @@     got struct cpumask const * @@
-   kernel/rcu/tree_nocb.h:1216:17: sparse:     expected struct cpumask *cpumask
-   kernel/rcu/tree_nocb.h:1216:17: sparse:     got struct cpumask const *
-   kernel/rcu/tree.c:1032:9: sparse: sparse: context imbalance in 'rcu_start_this_gp' - different lock contexts for basic block
-   kernel/rcu/tree.c:1413:9: sparse: sparse: context imbalance in 'rcu_poll_gp_seq_start_unlocked' - different lock contexts for basic block
-   kernel/rcu/tree.c:1428:9: sparse: sparse: context imbalance in 'rcu_poll_gp_seq_end_unlocked' - different lock contexts for basic block
-   kernel/rcu/tree.c:1544:9: sparse: sparse: context imbalance in 'rcu_gp_init' - different lock contexts for basic block
-   kernel/rcu/tree.c:2004:1: sparse: sparse: context imbalance in 'rcu_report_qs_rdp' - different lock contexts for basic block
-   kernel/rcu/tree.c:2186:13: sparse: sparse: context imbalance in 'rcu_do_batch' - wrong count at exit
-   kernel/rcu/tree.c:2371:9: sparse: sparse: context imbalance in 'force_qs_rnp' - different lock contexts for basic block
-   kernel/rcu/tree.c:2424:25: sparse: sparse: context imbalance in 'rcu_force_quiescent_state' - unexpected unlock
-   kernel/rcu/tree.c:2454:30: sparse: sparse: context imbalance in 'rcu_core' - different lock contexts for basic block
-   kernel/rcu/tree.c: note: in included file:
-   kernel/rcu/tree_exp.h:191:9: sparse: sparse: context imbalance in '__rcu_report_exp_rnp' - different lock contexts for basic block
-   kernel/rcu/tree_exp.h:1032:9: sparse: sparse: context imbalance in 'start_poll_synchronize_rcu_expedited' - different lock contexts for basic block
-   kernel/rcu/tree.c: note: in included file:
-   kernel/rcu/tree_nocb.h:134:16: sparse: sparse: context imbalance in 'rcu_nocb_bypass_trylock' - wrong count at exit
-   kernel/rcu/tree_nocb.h:151:13: sparse: sparse: context imbalance in 'rcu_nocb_lock' - wrong count at exit
-   kernel/rcu/tree_nocb.h:167:17: sparse: sparse: context imbalance in 'rcu_nocb_unlock' - unexpected unlock
-   kernel/rcu/tree_nocb.h:180:17: sparse: sparse: context imbalance in 'rcu_nocb_unlock_irqrestore' - unexpected unlock
-   kernel/rcu/tree_nocb.h:312:9: sparse: sparse: context imbalance in 'rcu_nocb_do_flush_bypass' - unexpected unlock
-   kernel/rcu/tree_nocb.h:327:13: sparse: sparse: context imbalance in 'rcu_nocb_flush_bypass' - wrong count at exit
-   kernel/rcu/tree_nocb.h:489:13: sparse: sparse: context imbalance in '__call_rcu_nocb_wake' - wrong count at exit
-   kernel/rcu/tree_nocb.h:581:9: sparse: sparse: context imbalance in 'nocb_gp_toggle_rdp' - wrong count at exit
-   kernel/rcu/tree_nocb.h:635:9: sparse: sparse: context imbalance in 'nocb_gp_wait' - different lock contexts for basic block
-   kernel/rcu/tree_nocb.h:888:9: sparse: sparse: context imbalance in 'nocb_cb_wait' - wrong count at exit
-   kernel/rcu/tree_nocb.h:1002:9: sparse: sparse: context imbalance in 'rdp_offload_toggle' - wrong count at exit
-   kernel/rcu/tree_nocb.h:1086:34: sparse: sparse: context imbalance in 'rcu_nocb_rdp_deoffload' - different lock contexts for basic block
-   kernel/rcu/tree_nocb.h:1124:13: sparse: sparse: context imbalance in 'rcu_nocb_rdp_offload' - different lock contexts for basic block
+All warnings (new ones prefixed by >>):
 
-vim +1216 kernel/rcu/tree_nocb.h
+>> drivers/mtd/nand/raw/nand_timings.c:295:43: warning: 'onfi_nvddr_timings' defined but not used [-Wunused-const-variable=]
+     295 | static const struct nand_interface_config onfi_nvddr_timings[] = {
+         |                                           ^~~~~~~~~~~~~~~~~~
 
-  1208	
-  1209	void __init rcu_init_nohz(void)
-  1210	{
-  1211		int cpu;
-  1212		struct rcu_data *rdp;
-  1213		struct cpumask *cpumask = NULL;
-  1214	
-  1215	#if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
-> 1216		cpumask = cpu_possible_mask;
-  1217	#elif defined(CONFIG_NO_HZ_FULL)
-  1218		if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
-  1219			cpumask = tick_nohz_full_mask;
-  1220	#endif
-  1221	
-  1222		if (cpumask) {
-  1223			if (!cpumask_available(rcu_nocb_mask)) {
-  1224				if (!zalloc_cpumask_var(&rcu_nocb_mask, GFP_KERNEL)) {
-  1225					pr_info("rcu_nocb_mask allocation failed, callback offloading disabled.\n");
-  1226					return;
-  1227				}
-  1228			}
-  1229	
-  1230			cpumask_or(rcu_nocb_mask, rcu_nocb_mask, cpumask);
-  1231		}
-  1232	
-  1233		if (!cpumask_available(rcu_nocb_mask))
-  1234			return;
-  1235	
-  1236		if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
-  1237			pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
-  1238			cpumask_and(rcu_nocb_mask, cpu_possible_mask,
-  1239				    rcu_nocb_mask);
-  1240		}
-  1241		if (cpumask_empty(rcu_nocb_mask))
-  1242			pr_info("\tOffload RCU callbacks from CPUs: (none).\n");
-  1243		else
-  1244			pr_info("\tOffload RCU callbacks from CPUs: %*pbl.\n",
-  1245				cpumask_pr_args(rcu_nocb_mask));
-  1246		if (rcu_nocb_poll)
-  1247			pr_info("\tPoll for callbacks from no-CBs CPUs.\n");
-  1248	
-  1249		for_each_cpu(cpu, rcu_nocb_mask) {
-  1250			rdp = per_cpu_ptr(&rcu_data, cpu);
-  1251			if (rcu_segcblist_empty(&rdp->cblist))
-  1252				rcu_segcblist_init(&rdp->cblist);
-  1253			rcu_segcblist_offload(&rdp->cblist, true);
-  1254			rcu_segcblist_set_flags(&rdp->cblist, SEGCBLIST_KTHREAD_CB | SEGCBLIST_KTHREAD_GP);
-  1255			rcu_segcblist_clear_flags(&rdp->cblist, SEGCBLIST_RCU_CORE);
-  1256		}
-  1257		rcu_organize_nocb_kthreads();
-  1258	}
-  1259	
+
+vim +/onfi_nvddr_timings +295 drivers/mtd/nand/raw/nand_timings.c
+
+   294	
+ > 295	static const struct nand_interface_config onfi_nvddr_timings[] = {
+   296		/* Mode 0 */
+   297		{
+   298			.type = NAND_NVDDR_IFACE,
+   299			.timings.mode = 0,
+   300			.timings.nvddr = {
+   301				.tCCS_min = 500000,
+   302				.tR_max = 200000000,
+   303				.tPROG_max = 1000000ULL * ONFI_DYN_TIMING_MAX,
+   304				.tBERS_max = 1000000ULL * ONFI_DYN_TIMING_MAX,
+   305				.tAC_min = 3000,
+   306				.tAC_max = 25000,
+   307				.tADL_min = 400000,
+   308				.tCAD_min = 45000,
+   309				.tCAH_min = 10000,
+   310				.tCALH_min = 10000,
+   311				.tCALS_min = 10000,
+   312				.tCAS_min = 10000,
+   313				.tCEH_min = 20000,
+   314				.tCH_min = 10000,
+   315				.tCK_min = 50000,
+   316				.tCS_min = 35000,
+   317				.tDH_min = 5000,
+   318				.tDQSCK_min = 3000,
+   319				.tDQSCK_max = 25000,
+   320				.tDQSD_min = 0,
+   321				.tDQSD_max = 18000,
+   322				.tDQSHZ_max = 20000,
+   323				.tDQSQ_max = 5000,
+   324				.tDS_min = 5000,
+   325				.tDSC_min = 50000,
+   326				.tFEAT_max = 1000000,
+   327				.tITC_max = 1000000,
+   328				.tQHS_max = 6000,
+   329				.tRHW_min = 100000,
+   330				.tRR_min = 20000,
+   331				.tRST_max = 500000000,
+   332				.tWB_max = 100000,
+   333				.tWHR_min = 80000,
+   334				.tWRCK_min = 20000,
+   335				.tWW_min = 100000,
+   336			},
+   337		},
+   338		/* Mode 1 */
+   339		{
+   340			.type = NAND_NVDDR_IFACE,
+   341			.timings.mode = 1,
+   342			.timings.nvddr = {
+   343				.tCCS_min = 500000,
+   344				.tR_max = 200000000,
+   345				.tPROG_max = 1000000ULL * ONFI_DYN_TIMING_MAX,
+   346				.tBERS_max = 1000000ULL * ONFI_DYN_TIMING_MAX,
+   347				.tAC_min = 3000,
+   348				.tAC_max = 25000,
+   349				.tADL_min = 400000,
+   350				.tCAD_min = 45000,
+   351				.tCAH_min = 5000,
+   352				.tCALH_min = 5000,
+   353				.tCALS_min = 5000,
+   354				.tCAS_min = 5000,
+   355				.tCEH_min = 20000,
+   356				.tCH_min = 5000,
+   357				.tCK_min = 30000,
+   358				.tCS_min = 25000,
+   359				.tDH_min = 2500,
+   360				.tDQSCK_min = 3000,
+   361				.tDQSCK_max = 25000,
+   362				.tDQSD_min = 0,
+   363				.tDQSD_max = 18000,
+   364				.tDQSHZ_max = 20000,
+   365				.tDQSQ_max = 2500,
+   366				.tDS_min = 3000,
+   367				.tDSC_min = 30000,
+   368				.tFEAT_max = 1000000,
+   369				.tITC_max = 1000000,
+   370				.tQHS_max = 3000,
+   371				.tRHW_min = 100000,
+   372				.tRR_min = 20000,
+   373				.tRST_max = 500000000,
+   374				.tWB_max = 100000,
+   375				.tWHR_min = 80000,
+   376				.tWRCK_min = 20000,
+   377				.tWW_min = 100000,
+   378			},
+   379		},
+   380		/* Mode 2 */
+   381		{
+   382			.type = NAND_NVDDR_IFACE,
+   383			.timings.mode = 2,
+   384			.timings.nvddr = {
+   385				.tCCS_min = 500000,
+   386				.tR_max = 200000000,
+   387				.tPROG_max = 1000000ULL * ONFI_DYN_TIMING_MAX,
+   388				.tBERS_max = 1000000ULL * ONFI_DYN_TIMING_MAX,
+   389				.tAC_min = 3000,
+   390				.tAC_max = 25000,
+   391				.tADL_min = 400000,
+   392				.tCAD_min = 45000,
+   393				.tCAH_min = 4000,
+   394				.tCALH_min = 4000,
+   395				.tCALS_min = 4000,
+   396				.tCAS_min = 4000,
+   397				.tCEH_min = 20000,
+   398				.tCH_min = 4000,
+   399				.tCK_min = 20000,
+   400				.tCS_min = 15000,
+   401				.tDH_min = 1700,
+   402				.tDQSCK_min = 3000,
+   403				.tDQSCK_max = 25000,
+   404				.tDQSD_min = 0,
+   405				.tDQSD_max = 18000,
+   406				.tDQSHZ_max = 20000,
+   407				.tDQSQ_max = 1700,
+   408				.tDS_min = 2000,
+   409				.tDSC_min = 20000,
+   410				.tFEAT_max = 1000000,
+   411				.tITC_max = 1000000,
+   412				.tQHS_max = 2000,
+   413				.tRHW_min = 100000,
+   414				.tRR_min = 20000,
+   415				.tRST_max = 500000000,
+   416				.tWB_max = 100000,
+   417				.tWHR_min = 80000,
+   418				.tWRCK_min = 20000,
+   419				.tWW_min = 100000,
+   420			},
+   421		},
+   422		/* Mode 3 */
+   423		{
+   424			.type = NAND_NVDDR_IFACE,
+   425			.timings.mode = 3,
+   426			.timings.nvddr = {
+   427				.tCCS_min = 500000,
+   428				.tR_max = 200000000,
+   429				.tPROG_max = 1000000ULL * ONFI_DYN_TIMING_MAX,
+   430				.tBERS_max = 1000000ULL * ONFI_DYN_TIMING_MAX,
+   431				.tAC_min = 3000,
+   432				.tAC_max = 25000,
+   433				.tADL_min = 400000,
+   434				.tCAD_min = 45000,
+   435				.tCAH_min = 3000,
+   436				.tCALH_min = 3000,
+   437				.tCALS_min = 3000,
+   438				.tCAS_min = 3000,
+   439				.tCEH_min = 20000,
+   440				.tCH_min = 3000,
+   441				.tCK_min = 15000,
+   442				.tCS_min = 15000,
+   443				.tDH_min = 1300,
+   444				.tDQSCK_min = 3000,
+   445				.tDQSCK_max = 25000,
+   446				.tDQSD_min = 0,
+   447				.tDQSD_max = 18000,
+   448				.tDQSHZ_max = 20000,
+   449				.tDQSQ_max = 1300,
+   450				.tDS_min = 1500,
+   451				.tDSC_min = 15000,
+   452				.tFEAT_max = 1000000,
+   453				.tITC_max = 1000000,
+   454				.tQHS_max = 1500,
+   455				.tRHW_min = 100000,
+   456				.tRR_min = 20000,
+   457				.tRST_max = 500000000,
+   458				.tWB_max = 100000,
+   459				.tWHR_min = 80000,
+   460				.tWRCK_min = 20000,
+   461				.tWW_min = 100000,
+   462			},
+   463		},
+   464		/* Mode 4 */
+   465		{
+   466			.type = NAND_NVDDR_IFACE,
+   467			.timings.mode = 4,
+   468			.timings.nvddr = {
+   469				.tCCS_min = 500000,
+   470				.tR_max = 200000000,
+   471				.tPROG_max = 1000000ULL * ONFI_DYN_TIMING_MAX,
+   472				.tBERS_max = 1000000ULL * ONFI_DYN_TIMING_MAX,
+   473				.tAC_min = 3000,
+   474				.tAC_max = 25000,
+   475				.tADL_min = 400000,
+   476				.tCAD_min = 45000,
+   477				.tCAH_min = 2500,
+   478				.tCALH_min = 2500,
+   479				.tCALS_min = 2500,
+   480				.tCAS_min = 2500,
+   481				.tCEH_min = 20000,
+   482				.tCH_min = 2500,
+   483				.tCK_min = 12000,
+   484				.tCS_min = 15000,
+   485				.tDH_min = 1100,
+   486				.tDQSCK_min = 3000,
+   487				.tDQSCK_max = 25000,
+   488				.tDQSD_min = 0,
+   489				.tDQSD_max = 18000,
+   490				.tDQSHZ_max = 20000,
+   491				.tDQSQ_max = 1000,
+   492				.tDS_min = 1100,
+   493				.tDSC_min = 12000,
+   494				.tFEAT_max = 1000000,
+   495				.tITC_max = 1000000,
+   496				.tQHS_max = 1200,
+   497				.tRHW_min = 100000,
+   498				.tRR_min = 20000,
+   499				.tRST_max = 500000000,
+   500				.tWB_max = 100000,
+   501				.tWHR_min = 80000,
+   502				.tWRCK_min = 20000,
+   503				.tWW_min = 100000,
+   504			},
+   505		},
+   506		/* Mode 5 */
+   507		{
+   508			.type = NAND_NVDDR_IFACE,
+   509			.timings.mode = 5,
+   510			.timings.nvddr = {
+   511				.tCCS_min = 500000,
+   512				.tR_max = 200000000,
+   513				.tPROG_max = 1000000ULL * ONFI_DYN_TIMING_MAX,
+   514				.tBERS_max = 1000000ULL * ONFI_DYN_TIMING_MAX,
+   515				.tAC_min = 3000,
+   516				.tAC_max = 25000,
+   517				.tADL_min = 400000,
+   518				.tCAD_min = 45000,
+   519				.tCAH_min = 2000,
+   520				.tCALH_min = 2000,
+   521				.tCALS_min = 2000,
+   522				.tCAS_min = 2000,
+   523				.tCEH_min = 20000,
+   524				.tCH_min = 2000,
+   525				.tCK_min = 10000,
+   526				.tCS_min = 15000,
+   527				.tDH_min = 900,
+   528				.tDQSCK_min = 3000,
+   529				.tDQSCK_max = 25000,
+   530				.tDQSD_min = 0,
+   531				.tDQSD_max = 18000,
+   532				.tDQSHZ_max = 20000,
+   533				.tDQSQ_max = 850,
+   534				.tDS_min = 900,
+   535				.tDSC_min = 10000,
+   536				.tFEAT_max = 1000000,
+   537				.tITC_max = 1000000,
+   538				.tQHS_max = 1000,
+   539				.tRHW_min = 100000,
+   540				.tRR_min = 20000,
+   541				.tRST_max = 500000000,
+   542				.tWB_max = 100000,
+   543				.tWHR_min = 80000,
+   544				.tWRCK_min = 20000,
+   545				.tWW_min = 100000,
+   546			},
+   547		},
+   548	};
+   549	
 
 -- 
 0-DAY CI Kernel Test Service

@@ -2,148 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E8A596B80
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 506E7596B82
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233889AbiHQIjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 04:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
+        id S233571AbiHQIkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 04:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233571AbiHQIj2 (ORCPT
+        with ESMTP id S229781AbiHQIku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 04:39:28 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91051474ED;
-        Wed, 17 Aug 2022 01:39:27 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id F40A85C015C;
-        Wed, 17 Aug 2022 04:39:26 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 17 Aug 2022 04:39:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1660725566; x=
-        1660811966; bh=1XgksyqqOpjmG5LRrLM6xA1+iwp2OMLWZWBQsySSgeI=; b=s
-        Xx2BlpjDk+EXCp1fpwwAcWPw0H6ob4T8XOP1COeMB7VEi4LH30S7gj6lxZn69oHo
-        p88YfKLxTYFU+S+bogQUDV0Ko/efYev4g1RnuDXwY0rdC1ubkgb0zTKihwnFMdw5
-        7prlhqwTbRooLsksUfZpXU44jjJdq63EhwSRE6psISFn2fIsJFlfe8cd51J9rO2G
-        NNHICZNlSwlAadCjOYDKz8nFLJIM3hnuWgiCcDCoIVxDIO+y2ATaHnmPXGL01Lv5
-        0D8pKJNzAdTAiHwpNkVuEbYA1q1ojf5qJqH5PdrLZU1yLJlN4B/m0vgNTcs2Zkhr
-        nvBnrIWIfi3YWujqwG2WA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660725566; x=
-        1660811966; bh=1XgksyqqOpjmG5LRrLM6xA1+iwp2OMLWZWBQsySSgeI=; b=b
-        ntu4LsVEXqMEwtw6BIeHooL5R5nY/EuiUxc5IUfzHyYkMq0S+mdvIUl4cvdadMqx
-        +YNdCx7eQOHidWKUdu1brtHqZSyjgbXmGm600L3qUXkrqORV0owMLYXgCgc4C9GY
-        v/WxZAQ0PUi657cS3ACtxO0McTKvPq4pB2u+qRV4FQ8+r/+51gq5/YvcUN4ynNkT
-        yoODzCvigK1yktb/6/OcvRwLRQm2ZeB0sH8+CzY7Nx1K7446ianxY7PQrsklCmlD
-        9oEdvnuewbN9qqp1Dr1X8TXZw4S4/Xrm7nsoaVqZMi7TFK+JGb8XOQC+jmIV5stw
-        w9ul19O4NQVfs2NnvfsQg==
-X-ME-Sender: <xms:Pqn8YjaP96pYv6lFuj9BxBI42QgQdoy8t1P3Ajsetz7I5FeG55jz4w>
-    <xme:Pqn8Yiaa0Feayn7fYyfbm44esgJv65Qt_bzqV6bDVAadu_6g2gNOKqXncnIflyXDx
-    cw2lG8TkUpzSMYHhA>
-X-ME-Received: <xmr:Pqn8Yl8euNQV8Mm6x3iNhB5bgtt6Hw7mfUNnvDRAPp6h2Cy_gS9gB4H3kagD1qCBuvfPaDiKsK7XRd0eW1NjS4a3iCMi8LF3FcceovT_U40Juvyrab4w_qyWcA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehiedgtdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
-    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:Pqn8Ypq0JaRWQt_ZEKVTpbp-vyoxI60yQ9r3sKWwF3ZhMrZk9bqu3w>
-    <xmx:Pqn8YuoFjAqb_Vtlr96lPWRIlxkjaA1ZISMN7kkWYdc4k2xoPht84w>
-    <xmx:Pqn8YvRcjSsA8TKNFHXSGLhLBJjqtanS7dAYy5Y39ppKBjW-a_c1Kw>
-    <xmx:Pqn8YrjmB8RTyj2eyz-VsORgR-Y3KH8x54IISIIt9Eh2T6OlkqTmKA>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 17 Aug 2022 04:39:25 -0400 (EDT)
-Subject: Re: [PATCH v3 1/4] regulator: dt-bindings: Add Allwinner D1 LDOs
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-References: <20220815043436.20170-1-samuel@sholland.org>
- <20220815043436.20170-2-samuel@sholland.org>
- <c4ec080a-b8b1-e3a9-c9d7-063e138c9bb8@linaro.org>
- <03de0f7b-9251-a5c0-91a1-5f2b5d41d8a0@sholland.org>
- <29e6a293-29c4-a9ab-0767-9adfa982226b@linaro.org>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <8f133166-dff8-e376-3ac4-a464724d5421@sholland.org>
-Date:   Wed, 17 Aug 2022 03:39:25 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Wed, 17 Aug 2022 04:40:50 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0D0D7A518
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:40:49 -0700 (PDT)
+Received: from jpiotrowski-Surface-Book-3 (ip-095-223-044-032.um35.pools.vodafone-ip.de [95.223.44.32])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 26DF1213B636;
+        Wed, 17 Aug 2022 01:40:47 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 26DF1213B636
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1660725649;
+        bh=iWYAsgG06kUoC+Wz3E9PT0caGnweixu9+1XX4a4kmPI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dGAyksiDBQhNZlC36Y6mqlaYKQjrsUbEuTcdrfGURQ4er8H5iyJPB/g/rV+ieb4oY
+         DAsroz+TlPKNFsEz10Lu5IrahmVY655MVUYzJcLEXG/C4oMYM3BD1ALhAl3FDv4Pbg
+         AGsPVx3Uk1QekqMXm8shmk02AzsLyxhUt/IDrcG8=
+Date:   Wed, 17 Aug 2022 10:40:40 +0200
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     NOMURA =?utf-8?B?SlVOSUNISSjph47mnZHjgIDmt7PkuIAp?= 
+        <junichi.nomura@nec.com>, LKML <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>, "bp@suse.de" <bp@suse.de>
+Subject: Re: [Regression v5.19-rc1] kernel fails to boot, no console output
+ (Re: [PATCH v12 38/46] x86/sev: Add SEV-SNP feature detection/setup)
+Message-ID: <YvypiOgn94y21nru@jpiotrowski-Surface-Book-3>
+References: <TYCPR01MB694815CD815E98945F63C99183B49@TYCPR01MB6948.jpnprd01.prod.outlook.com>
+ <Yvuo2rtootBSlpfQ@jpiotrowski-Surface-Book-3>
+ <20220816150637.lyfeirdebb7eetgf@amd.com>
 MIME-Version: 1.0
-In-Reply-To: <29e6a293-29c4-a9ab-0767-9adfa982226b@linaro.org>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220816150637.lyfeirdebb7eetgf@amd.com>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/17/22 3:27 AM, Krzysztof Kozlowski wrote:
-> On 17/08/2022 11:15, Samuel Holland wrote:
->>>> +examples:
->>>> +  - |
->>>> +    audio-codec@2030000 {
->>>> +        compatible = "simple-mfd", "syscon";
->>>
->>> This cannot be on its own. Both require device specific compatible.
->>
->> Again, the device-specific compatible does not exist, because the binding for
->> the audio codec has not been written (and it will be quite nontrivial).
->>
->> So I can:
->>   1) Leave the example as-is until the audio codec binding gets written,
->>      and fill in the specific compatible at that time.
->>   2) Remove the example, with the reasoning that the example really
->>      belongs with the MFD parent (like for the other regulator). Then
->>      there will be no example until the audio codec binding is written.
->>   3) Drop the analog LDOs from this series entirely, and some parts
->>      of the SoC (like thermal monitoring) cannot be added to the DTSI
->>      until the audio codec binding is written.
->>
->> What do you think?
+On Tue, Aug 16, 2022 at 10:06:37AM -0500, Michael Roth wrote:
+> On Tue, Aug 16, 2022 at 04:25:30PM +0200, Jeremi Piotrowski wrote:
+> > On Fri, Jun 24, 2022 at 12:44:52AM +0000, NOMURA JUNICHI(野村 淳一) wrote:
+> > > I found crash kexec fails to boot the 2nd kernel since v5.19-rc1 and
+> > > git bisect points to this as a bad commit:
+> > > 
+> > >   commit b190a043c49af4587f5e157053f909192820522a
+> > >   Author: Michael Roth <michael.roth@amd.com>
+> > >   Date:   Thu Feb 24 10:56:18 2022 -0600
+> > > 
+> > >     x86/sev: Add SEV-SNP feature detection/setup
+> > > 
+> > >     Initial/preliminary detection of SEV-SNP is done via the Confidential
+> > >     Computing blob. Check for it prior to the normal SEV/SME feature
+> > >     initialization, and add some sanity checks to confirm it agrees with
+> > >     SEV-SNP CPUID/MSR bits.
+> > > 
+> > 
+> > Hi Michael,
+> > 
+> > I too have bisected an issue to this commit and my issue is not fixed by
+> > b57feed2cc2622ae14b2fa62f19e973e5e0a60cf. I have a Dell R6515 with AMD EPYC
+> > 7513 that is supposed to act as an SNP host, but after v5.19-rc1 I don't get
+> > any console output and the machine resets shortly after grub loads the
+> > kernel.
+> > 
+> > The bisect was done on 5.18+SNP patches that were merged into 5.19-rc1, this
+> > is the full patch list:
+> > 
+> >   git log --oneline v5.18-rc1..eb39e37d5cebdf0f63ee2a315fc23b035d81b4b0^2
+> > 
+> > If I comment out the following lines, the machine boots correctly and if I also
+> > have the SNP host patches applied SNP guests work correctly. Applying
 > 
-> How about just removing the audio-codec node? The schema is about
-> regulators, not audio-codec.
-
-That works for me. I put the extra node there to signify that this is a MFD
-child and requires some parent node to work, but I suppose it is not that
-helpful to have.
-
-> OTOH, if you have parent device schema, you could put the example only
-> there. But as I understand, you don't have, right?
-
-Right.
-
->> The same question applies for the D1 SoC DTSI, where I use this same construct.
+> Hi Jeremi,
 > 
-> This is not correct and should be fixed. Either you add the schema with
-> compatible or please drop the device node from the DTSI.
+> Can you retry with earlyprintk enabled via kernel cmdline? I'm trying to see
+> if you're getting these messages and making it past the boot/compressed kernel
+> (which has its own snp_init()):
+> 
+>   EFI stub: Loaded initrd from LINUX_EFI_INITRD_MEDIA_GUID device path^M
+>   early console in extract_kernel^M
+>   input_data: 0x00000000352fd4cc^M
+>   input_len: 0x0000000000c5adcb^M
+>   output: 0x0000000033000000^M
+>   output_len: 0x0000000002f07ec4^M
+>   kernel_total_size: 0x000000000242c000^M
+>   needed_size: 0x0000000003000000^M
+>   trampoline_32bit: 0x000000000009d000^M
+>   Physical KASLR using RDRAND RDTSC...^M
+>   Virtual KASLR using RDRAND RDTSC...^M
+>   ^M
+>   Decompressing Linux... Parsing ELF... Performing relocations... done.^M
+>   Booting the kernel.
+>   [    0.000000] Linux version ...
+> 
 
-That's what I was afraid of.
+Ok, I was missing CONFIG_X86_VERBOSE_BOOTUP=y. With that added, when the kernel
+doesn't boot this is the output:
 
-Regards,
-Samuel
+  Loading Linux 5.18.0-snp-host-dev+ ...
+  Loading initial ramdisk ...
+  early console in extract_kernel
+  input_data: 0x00000000068824cc
+  input_len: 0x000000000092cb45
+  output: 0x0000000004200000
+  output_len: 0x0000000002f5eff4
+  kernel_total_size: 0x0000000002430000
+  needed_size: 0x0000000003000000
+  trampoline_32bit: 0x000000000009d000
+  Physical KASLR using RDRAND RDTSC...
+  Virtual KASLR using RDRAND RDTSC...
+  
+  Decompressing Linux... Parsing ELF... Performing relocations... done.
+  Booting the kernel.
 
->> (And technically this does validate with the current schema.)
+> Also, instead of commenting out snp_init() below, can you retry with this
+> change instead?
+> 
+>   diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+>   index 7b668f91c9ab..e9e55a99d60f 100644
+>   --- a/arch/x86/kernel/sev.c
+>   +++ b/arch/x86/kernel/sev.c
+>   @@ -2083,9 +2083,12 @@ static __init struct cc_blob_sev_info *find_cc_blob(struct boot_params *bp)
+>            * boot/decompression kernel, the CC blob may have been passed via
+>            * setup_data instead.
+>            */
+>   +#if 0
+>           cc_info = find_cc_blob_setup_data(bp);
+>           if (!cc_info)
+>                   return NULL;
+>   +#endif
+>   +       return NULL;
+>   
+>    found_cc_info:
+>           if (cc_info->magic != CC_BLOB_SEV_HDR_MAGIC)
+> 
+
+This version does not boot.
+
+> And if that does not avoid the issue, can you retry with the below change
+> (without the above change in place)?
+> 
+>   diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+>   index 7b668f91c9ab..0b430f98e053 100644
+>   --- a/arch/x86/kernel/sev.c
+>   +++ b/arch/x86/kernel/sev.c
+>   @@ -2073,10 +2073,12 @@ static __init struct cc_blob_sev_info *find_cc_blob(struct boot_params *bp)
+>           struct cc_blob_sev_info *cc_info;
+>   
+>           /* Boot kernel would have passed the CC blob via boot_params. */
+>   +#if 0
+>           if (bp->cc_blob_address) {
+>                   cc_info = (struct cc_blob_sev_info *)(unsigned long)bp->cc_blob_address;
+>                   goto found_cc_info;
+>           }
+>   +#endif
+>   
+>           /*
+>            * If kernel was booted directly, without the use of the
+>   @@ -2087,7 +2089,7 @@ static __init struct cc_blob_sev_info *find_cc_blob(struct boot_params *bp)
+>           if (!cc_info)
+>                   return NULL;
+>   
+>   -found_cc_info:
+>   +//found_cc_info:
+>           if (cc_info->magic != CC_BLOB_SEV_HDR_MAGIC)
+>                   snp_abort();
+> 
+> Trying to see if you're hitting a separate issue or not.
+
+This version boots correctly.
+
+> 
+> Thanks,
+> 
+> Mike
+> 
+> 

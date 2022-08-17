@@ -2,87 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 893FC5975E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC1C5975E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240919AbiHQSkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 14:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
+        id S237097AbiHQSkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 14:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237097AbiHQSkR (ORCPT
+        with ESMTP id S241006AbiHQSko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 14:40:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2359F1B6;
-        Wed, 17 Aug 2022 11:40:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 263E96135E;
-        Wed, 17 Aug 2022 18:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 74B48C433D7;
-        Wed, 17 Aug 2022 18:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660761615;
-        bh=FC+hyB7LK/o5a60oWBKYC1LMF2qYGY7HqJf5s3BH7tE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=NXIqrL8Da/kUrB6TH/Lirt2DLmp3EwieNg3/aKm5wQZOB9pjcFBhGnTdb3xhc2DDg
-         A8XbgJxi3h7e/aOoGziO54vRk64iGxAG4GzgwkOo/Qg+sk32ZEOUJAYfygD6aVzUDn
-         BFegnnpJKDpp6knp/PdjL6khNAd53gCjPcIKlbOo6XlSZWp0F6XZKqKntYuL5HGymQ
-         KXgznn4MYAz7P8+DWJKLTsvWpY2vg0OSOvMXnM+gpKMRUDxxny344hWCqtumPBTrIE
-         6/hFhii3+FBl98BnZjTms7kR02szDn4ohwcjiZcKEVvAo65VauUluYKtV1xKcIPdrW
-         nlx18TgFpHGfw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 574FFE2A04C;
-        Wed, 17 Aug 2022 18:40:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/2] net: dsa: bcm_sf2: Utilize PHYLINK for all ports
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166076161535.20898.1055751517702359437.git-patchwork-notify@kernel.org>
-Date:   Wed, 17 Aug 2022 18:40:15 +0000
-References: <20220815175009.2681932-1-f.fainelli@gmail.com>
-In-Reply-To: <20220815175009.2681932-1-f.fainelli@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     netdev@vger.kernel.org, andrew@lunn.ch, vivien.didelot@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 17 Aug 2022 14:40:44 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBB5A00EE
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 11:40:40 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d3-20020a170902cec300b0016f04e2e730so8595349plg.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 11:40:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=ZYTlBBFnaZ0P/8h1RW7JgkzBP7Qz3/ENWA74waVFHsk=;
+        b=rEKzgG4kB4gJbvdPUY9H+lfnRgqahefKDR5Jl73nA4WKGW5kwuqnE88uTY3v00RzaR
+         P1XqUhHs+w6cV8koRkvS9gXHlJMZFkJO0Bj5DiMro7jSn6MbktfS4XD+brKZjtIQlDvb
+         oF6nNCpMSlQJz8fcZfBUd8ryCNywZ6t4+gIMJS/wasIo4COpmd00eLTiu9rkzKnLBiyj
+         jZPGnBjgNjAqfK+18xRawhoR/RLoAcl5bAavj+iTn+QzSSJGMAzogpo0nyPY7URheaJZ
+         MLzzf2V3uR8cfruliPSKCDP2Qt73gUn9gGO7Y8hp82RFjbgulhTxsLFZyJSWboAG7dMI
+         6FIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=ZYTlBBFnaZ0P/8h1RW7JgkzBP7Qz3/ENWA74waVFHsk=;
+        b=4DEc/FPpEpJtBVm6bYszy1nwW9He2md+d2JrxIlg65btQrxiWs9fUVmfnVih/HnKDc
+         F+xKbdyR/8T6EeXHni8lz2KUdpvnTBscttYJEMhNkTA4Zh/oi2Ty/t7MXhTyFnMd3IVt
+         RMW22JSAuVCZJ+3BfSrHUoUAnNY/XPogLrmOj6o9nQCsyh4IJ9HyC4yiJwl3GDRRu7Mm
+         8bOWf3YvPQX1hhCQyat3ZzA7D4z+WasCraF6mRcoL1LJKzVef6k8cOnIhIcF/jkPWlES
+         MMdGLSq86hgACcQVUIBSVFs7IAZFzvowVMUZ8ioxCLN8eI/n6z2DvOS+nVERuougrNLZ
+         wD2A==
+X-Gm-Message-State: ACgBeo3QswZia55bcIDNiSg7s3J03Mj/m/jxkaBJ2c/5+QsCYWrUTTSr
+        kp8DMuauavvVFvj9Emt46CJDsS/YaaXqhYFZhXGU2w==
+X-Google-Smtp-Source: AA6agR6CY7WhInmP29tG9He+JFpqE/zTM3C8nWq8t4Z4fQTePSj6YMvMB7iBjRaZ4xlxokQyxFxrdpVFfQgF/p2WMWMGoA==
+X-Received: from isaacmanjarres.irv.corp.google.com ([2620:15c:2d:3:6c6d:d00:f0dd:6ddf])
+ (user=isaacmanjarres job=sendgmr) by 2002:a17:90a:bf0a:b0:1fa:b53c:3f3a with
+ SMTP id c10-20020a17090abf0a00b001fab53c3f3amr4095338pjs.126.1660761640140;
+ Wed, 17 Aug 2022 11:40:40 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 11:40:26 -0700
+Message-Id: <20220817184026.3468620-1-isaacmanjarres@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+Subject: [PATCH v3] driver core: Don't probe devices after bus_type.match()
+ probe deferral
+From:   "Isaac J. Manjarres" <isaacmanjarres@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Cc:     "Isaac J. Manjarres" <isaacmanjarres@google.com>,
+        stable@vger.kernel.org, Saravana Kannan <saravanak@google.com>,
+        Guenter Roeck <linux@roeck-us.net>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Both __device_attach_driver() and __driver_attach() check the return
+code of the bus_type.match() function to see if the device needs to be
+added to the deferred probe list. After adding the device to the list,
+the logic attempts to bind the device to the driver anyway, as if the
+device had matched with the driver, which is not correct.
 
-This series was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+If __device_attach_driver() detects that the device in question is not
+ready to match with a driver on the bus, then it doesn't make sense for
+the device to attempt to bind with the current driver or continue
+attempting to match with any of the other drivers on the bus. So, update
+the logic in __device_attach_driver() to reflect this.
 
-On Mon, 15 Aug 2022 10:50:07 -0700 you wrote:
-> Hi all,
-> 
-> This patch series has the bcm_sf2 driver utilize PHYLINK to configure
-> the CPU port link parameters to unify the configuration and pave the way
-> for DSA to utilize PHYLINK for all ports in the future.
-> 
-> Tested on BCM7445 and BCM7278
-> 
-> [...]
+If __driver_attach() detects that a driver tried to match with a device
+that is not ready to match yet, then the driver should not attempt to bind
+with the device. However, the driver can still attempt to match and bind
+with other devices on the bus, as drivers can be bound to multiple
+devices. So, update the logic in __driver_attach() to reflect this.
 
-Here is the summary with links:
-  - [net-next,1/2] net: dsa: bcm_sf2: Introduce helper for port override offset
-    https://git.kernel.org/netdev/net-next/c/1ed26ce4850a
-  - [net-next,2/2] net: dsa: bcm_sf2: Have PHYLINK configure CPU/IMP port(s)
-    https://git.kernel.org/netdev/net-next/c/4d2f6dde4daa
+Cc: stable@vger.kernel.org
+Cc: Saravana Kannan <saravanak@google.com>
+Fixes: 656b8035b0ee ("ARM: 8524/1: driver cohandle -EPROBE_DEFER from bus_type.match()")
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Saravana Kannan <saravanak@google.com>
+---
+ drivers/base/dd.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-You are awesome, thank you!
+v1 -> v2:
+- Fixed the logic in __driver_attach() to allow a driver to continue
+  attempting to match and bind with devices in case of any error, not
+  just probe deferral.
+
+v2 -> v3:
+- Restored the patch back to v1.
+- Added Guenter's Tested-by tag.
+- Added Saravana's Reviewed-by tag.
+- Cc'd stable@vger.kernel.org
+
+Greg,
+
+This is the final version of this patch. Can you please pick this up?
+
+Thanks,
+Isaac
+
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index 70f79fc71539..90b31fb141a5 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -881,6 +881,11 @@ static int __device_attach_driver(struct device_driver *drv, void *_data)
+ 		dev_dbg(dev, "Device match requests probe deferral\n");
+ 		dev->can_match = true;
+ 		driver_deferred_probe_add(dev);
++		/*
++		 * Device can't match with a driver right now, so don't attempt
++		 * to match or bind with other drivers on the bus.
++		 */
++		return ret;
+ 	} else if (ret < 0) {
+ 		dev_dbg(dev, "Bus failed to match device: %d\n", ret);
+ 		return ret;
+@@ -1120,6 +1125,11 @@ static int __driver_attach(struct device *dev, void *data)
+ 		dev_dbg(dev, "Device match requests probe deferral\n");
+ 		dev->can_match = true;
+ 		driver_deferred_probe_add(dev);
++		/*
++		 * Driver could not match with device, but may match with
++		 * another device on the bus.
++		 */
++		return 0;
+ 	} else if (ret < 0) {
+ 		dev_dbg(dev, "Bus failed to match device: %d\n", ret);
+ 		return ret;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.37.1.595.g718a3a8f04-goog
 

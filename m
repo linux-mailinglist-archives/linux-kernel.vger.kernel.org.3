@@ -2,125 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723EB5975D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A775975FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240942AbiHQSnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 14:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46172 "EHLO
+        id S241258AbiHQSnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 14:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239643AbiHQSnB (ORCPT
+        with ESMTP id S240974AbiHQSnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 14:43:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C27A00E5;
-        Wed, 17 Aug 2022 11:43:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F08CC6138B;
-        Wed, 17 Aug 2022 18:42:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5665C433D6;
-        Wed, 17 Aug 2022 18:42:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660761779;
-        bh=mZlL2HyXzYY0uChXc/V3+qQzkCuusK5P5PJx7zGmsH8=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=m2hF+lr71XxxwoN9szdS3g6zeud9f/3jjfq8Qvgq5GRTR7U5Ho7resONzKNOtmHvs
-         xJ7ulDj1xLhwqxexs8GE6tOMaykayDoff2GvSUaqI2WzWIeXEnLImXRl6ZpIan6lrE
-         mugM5xO9aHj9epx8UW5nTNDHBkm58T9FUYXxWxxV1sdI6acLFlx+tfqM5zpJrJjYaQ
-         FpLgLuxV3RrKg6fXetCnwscitVMamBDbKHcjyEeBz6xh7bTXgCiQjqESvs9im0hqlU
-         MULEpGLaMmGW2ObdV91Bqq3sE9El9umcoyehOQ28C42lg7o4KEjHSrem8GsSyqRUMb
-         4wGjF7jEx6L3g==
-Message-ID: <e3952386b70e9bf07e676c47a5a9fa63df93bacf.camel@kernel.org>
-Subject: Re: [PATCH v2] locks: Fix dropped call to ->fl_release_private()
-From:   Jeff Layton <jlayton@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 17 Aug 2022 14:42:57 -0400
-In-Reply-To: <166076168742.3677624.2936950729624462101.stgit@warthog.procyon.org.uk>
-References: <166076168742.3677624.2936950729624462101.stgit@warthog.procyon.org.uk>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Wed, 17 Aug 2022 14:43:31 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33185FEE;
+        Wed, 17 Aug 2022 11:43:17 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 355555C0180;
+        Wed, 17 Aug 2022 14:43:16 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 17 Aug 2022 14:43:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1660761796; x=1660848196; bh=jdo+e+0Bg4eiX19+TskCBEv6l
+        gk9aqZm7MX54jqJxcU=; b=tpkSLIwCX8n2WaO9TdHjNYfChpm/5FcyKvBJLWrm9
+        A1ok251C65D1UDZDAVKLprAivuBc+jp321ezOGQhPzw7ohTLEi3lkFOySIGydPIC
+        54OGirmUv5Zoguy3+99R2wfc5ud8sHClCqwKRx+D+OUSQfaSoElAlp3CZp4XzzlQ
+        TcSTQPvdwMrmIu7L6FuHFZlDTE44ltFq3CfrlKrCyBjgzi+WO2jJaNJuxC+vE+2f
+        LqN2f4lqy6wTifiPNXFAnlsUt40m8cuw0IlbJtKZRjtjW126QUP1uMJ/tzfmUooh
+        IigDOSJiufsN2c3bryiI6ty7TI5ov5XSAPd87hiRlf4gQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1660761796; x=1660848196; bh=jdo+e+0Bg4eiX19+TskCBEv6lgk9aqZm7MX
+        54jqJxcU=; b=RmC27Scg7eEXx3KQVry4BBq/20JQXG2jPpodn7kWim6PRGCy+dm
+        L+LmirRDyPLNAQLCjB6fn/WGTMfq7S32LmYXx8Shz9++8GCd/nNvNc/Hc2oEfwk5
+        Ujze5DhvnE2uErGuHOAriRJst9zFihf/h0xAMlczFDSCBvslJPxT2YGPd+TzrzmI
+        3M0MXeQwb8GjrN3wVu1kb+k+Pb4lgLWwWG1Ph9GeWFz1Xl+KBIevVMTfovdjcquK
+        /t4bRE9h8KCRGCryEanGf8x6nNV76MaOEC+GrkzZT3Pl4zNKrdPHu028JKdt9cIh
+        83Qc8CvY3nV8jRZHgqbUTTIr5fGO/uS78iA==
+X-ME-Sender: <xms:xDb9YvhRecJHIja9Wj-GnD507BftfBaYRXEKVDVYoCjAU6DOztgONA>
+    <xme:xDb9YsDS4rU1MwBEwsgyrJZzq889XUaWk4urwvtYkrNOH-5gnsIzZ9tD0mzyDSq87
+    rWiJDL-IrsTrnl8rQ>
+X-ME-Received: <xmr:xDb9YvGTTPs88huJ_PwU_odZdWwXcemYilyU7UiNprDhTcQ0zow3fzMiH-0yDD3HmbG6pkxCvrIJgkVe-ylIaaX3fhgY3LXve0KO>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehiedgudeftdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdefhedmnecujfgurhephf
+    fvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
+    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeetueektdeuhfefvefggf
+    evgeffgfekfefhkeekteffheevtddvhedukeehffeltdenucffohhmrghinhepkhgvrhhn
+    vghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:xDb9YsTvlHEKGW9KGsJEsmCjvIwRQVTQ6q0wtxCMg60oCZX8aNdPzA>
+    <xmx:xDb9Yszyx2ihUaO3DR0UrrJVqupxJryPwqDzOFpOZnxB53lJZg_pSg>
+    <xmx:xDb9Yi5FPH6eX-djY7xwB_IUMJqWTy1BpALmyuCHK0_W6ozXK2NWWw>
+    <xmx:xDb9YhrQgD_rOhBj__CFlNou_aGDFoMTLDThljcRjgtGZWqbbZ655Q>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 17 Aug 2022 14:43:15 -0400 (EDT)
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, memxor@gmail.com
+Cc:     Daniel Xu <dxu@dxuuu.xyz>, pablo@netfilter.org, fw@strlen.de,
+        toke@kernel.org, netfilter-devel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 0/4] Support direct writes to nf_conn:mark
+Date:   Wed, 17 Aug 2022 12:42:58 -0600
+Message-Id: <cover.1660761035.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-08-17 at 19:41 +0100, David Howells wrote:
-> Prior to commit 4149be7bda7e, sys_flock() would allocate the file_lock
-> struct it was going to use to pass parameters, call ->flock() and then ca=
-ll
-> locks_free_lock() to get rid of it - which had the side effect of calling
-> locks_release_private() and thus ->fl_release_private().
->=20
-> With commit 4149be7bda7e, however, this is no longer the case: the struct
-> is now allocated on the stack, and locks_free_lock() is no longer called =
--
-> and thus any remaining private data doesn't get cleaned up either.
->=20
-> This causes afs flock to cause oops.  Kasan catches this as a UAF by the
-> list_del_init() in afs_fl_release_private() for the file_lock record
-> produced by afs_fl_copy_lock() as the original record didn't get delisted=
-.
-> It can be reproduced using the generic/504 xfstest.
->=20
-> Fix this by reinstating the locks_release_private() call in sys_flock().
-> I'm not sure if this would affect any other filesystems.  If not, then th=
-e
-> release could be done in afs_flock() instead.
->=20
-> Changes
-> =3D=3D=3D=3D=3D=3D=3D
-> ver #2)
->  - Don't need to call ->fl_release_private() after calling the security
->    hook, only after calling ->flock().
->=20
-> Fixes: 4149be7bda7e ("fs/lock: Don't allocate file_lock in flock_make_loc=
-k().")
-> cc: Kuniyuki Iwashima <kuniyu@amazon.com>
-> cc: Chuck Lever <chuck.lever@oracle.com>
-> cc: Jeff Layton <jlayton@kernel.org>
-> cc: Marc Dionne <marc.dionne@auristor.com>
-> cc: linux-afs@lists.infradead.org
-> cc: linux-fsdevel@vger.kernel.org
-> Link: https://lore.kernel.org/r/166075758809.3532462.13307935588777587536=
-.stgit@warthog.procyon.org.uk/ # v1
-> ---
->=20
->  fs/locks.c |    1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/fs/locks.c b/fs/locks.c
-> index c266cfdc3291..607f94a0e789 100644
-> --- a/fs/locks.c
-> +++ b/fs/locks.c
-> @@ -2129,6 +2129,7 @@ SYSCALL_DEFINE2(flock, unsigned int, fd, unsigned i=
-nt, cmd)
->  	else
->  		error =3D locks_lock_file_wait(f.file, &fl);
-> =20
-> +	locks_release_private(&fl);
->   out_putf:
->  	fdput(f);
-> =20
->=20
->=20
+Support direct writes to nf_conn:mark from TC and XDP prog types. This
+is useful when applications want to store per-connection metadata. This
+is also particularly useful for applications that run both bpf and
+iptables/nftables because the latter can trivially access this metadata.
 
-Looks good. I'll get this into -next and plan to get it up to Linus
-soon.
+One example use case would be if a bpf prog is responsible for advanced
+packet classification and iptables/nftables is later used for routing
+due to pre-existing/legacy code.
 
-Thanks!
---=20
-Jeff Layton <jlayton@kernel.org>
+Past discussion:
+- v1: https://lore.kernel.org/bpf/cover.1660592020.git.dxu@dxuuu.xyz/
+
+Changes since v1:
+- Add unimplemented stub for when !CONFIG_BPF_SYSCALL
+
+Daniel Xu (4):
+  bpf: Remove duplicate PTR_TO_BTF_ID RO check
+  bpf: Add stub for btf_struct_access()
+  bpf: Add support for writing to nf_conn:mark
+  selftests/bpf: Add tests for writing to nf_conn:mark
+
+ include/linux/bpf.h                           |  9 ++++
+ include/net/netfilter/nf_conntrack_bpf.h      | 18 +++++++
+ kernel/bpf/verifier.c                         |  3 --
+ net/core/filter.c                             | 34 +++++++++++++
+ net/netfilter/nf_conntrack_bpf.c              | 50 +++++++++++++++++++
+ .../testing/selftests/bpf/prog_tests/bpf_nf.c |  1 +
+ .../testing/selftests/bpf/progs/test_bpf_nf.c |  6 ++-
+ .../selftests/bpf/progs/test_bpf_nf_fail.c    | 14 ++++++
+ 8 files changed, 130 insertions(+), 5 deletions(-)
+
+-- 
+2.37.1
+

@@ -2,174 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F28F9596C0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 11:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 174FA596C16
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 11:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbiHQJ3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 05:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56108 "EHLO
+        id S234727AbiHQJam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 05:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiHQJ3S (ORCPT
+        with ESMTP id S234589AbiHQJai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 05:29:18 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C2F27CF2;
-        Wed, 17 Aug 2022 02:29:16 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id y13so23444376ejp.13;
-        Wed, 17 Aug 2022 02:29:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=jljdedi6DAkIAYkCnbgj5IjVnTulkRPsvXaOGGTQHjk=;
-        b=CYrdM5leNid3d5aUornHuKlAPIq/tg/zwug8RUJg3j5tU/mlmvLw4iO09HoO9rewuy
-         ZfZoPfjf6lbjcmxsPH2HthMiXmtB9kaov+wNSxDX9sVPHwh2voBdySWIS13yeFYWGhGv
-         VuXrxQDvTZyoOcaQGoNZw0JY4xESY7jzNlcvSKiGY6jkPCSYTK44HiO/TBOpsD9kc1DH
-         gyhUiZgvUj7hgFtc2cdUzVKn03eBN7k9xnLrV/e4XrQkQ+sA7eE3CVkvaOP783Yi2kgY
-         QPS8wG9CEG8uvXxGGWJ2rt7M8t9TDxcHOlxS2CYHim6oUSSAcjr/4GN0l4mosF+nAisk
-         VI5w==
+        Wed, 17 Aug 2022 05:30:38 -0400
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54315A824;
+        Wed, 17 Aug 2022 02:30:37 -0700 (PDT)
+Received: by mail-qt1-f174.google.com with SMTP id cr9so9956458qtb.13;
+        Wed, 17 Aug 2022 02:30:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=jljdedi6DAkIAYkCnbgj5IjVnTulkRPsvXaOGGTQHjk=;
-        b=g9aWi0295dK1aWLTjxqlFEzpqaTCWo8amRV9Q0bzyQEmS3d3jQeKKzRZiBO0wKBB77
-         QpLjZ4sP9RKv6lK7KtTn/2yUNYO1kAkzD8PWD3qO0yNsf6f0wn9Y8g2FDTOm3+ysEmI0
-         4a2ajxNfaoC387gY2oNR2j6KdLnxo+j8ChozW+rLaEw1/b9Rc0JLIlhSNk0jay7r7Wno
-         51GpJSMp2LZbQOZdQWjkxCEejvxLbGqkU6DQ5cU3dmwI2Xodg6bhzpXpEJf2yqLfnpq5
-         RCXauokeOuiSOo+SrjjwEHMeY+hShhhkhElp2G/cm1kmRJhyYhUnjhFBT2SIXQNPZoHR
-         9Exw==
-X-Gm-Message-State: ACgBeo3Zx60mg14oyNAI4O0Lq8c/bqfrxPU/1VFxhECi/ALn7OzH5YmZ
-        PhwAgL3bxb7ZomrG3IvENeM=
-X-Google-Smtp-Source: AA6agR4MiAdMay67Au4I3uD3+4DBq5nNX1gACXdguiQjG+H8gS8v9LqNb0OxRpTdm2KNehcwOikG5A==
-X-Received: by 2002:a17:907:7d8c:b0:731:65f6:1f28 with SMTP id oz12-20020a1709077d8c00b0073165f61f28mr15361798ejc.91.1660728555133;
-        Wed, 17 Aug 2022 02:29:15 -0700 (PDT)
-Received: from krava ([83.240.61.33])
-        by smtp.gmail.com with ESMTPSA id p26-20020aa7cc9a000000b0043cc66d7accsm10210626edt.36.2022.08.17.02.29.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 02:29:14 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Wed, 17 Aug 2022 11:29:12 +0200
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
-Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
-Message-ID: <Yvy06GPn45D0rD7n@krava>
-References: <Yvo+EpO9dN30G0XE@worktop.programming.kicks-ass.net>
- <CAADnVQJfvn2RYydqgO-nS_K+C8WJL7BdCnR44MiMF4rnAwWM5A@mail.gmail.com>
- <YvpZJQGQdVaa2Oh4@worktop.programming.kicks-ass.net>
- <CAADnVQKyfrFTZOM9F77i0NbaXLZZ7KbvKBvu7p6kgdnRgG+2=Q@mail.gmail.com>
- <Yvpf67eCerqaDmlE@worktop.programming.kicks-ass.net>
- <CAADnVQKX5xJz5N_mVyf7wg4BT8Q2cNh8ze-SxTRfk6KtcFQ0=Q@mail.gmail.com>
- <YvpmAnFldR0iwAFC@worktop.programming.kicks-ass.net>
- <CAADnVQJuDS22o7fi9wPZx9siAWgu1grQXXB02KfasxZ-RPdRSw@mail.gmail.com>
- <Yvpq3JDk8fTgdMv8@worktop.programming.kicks-ass.net>
- <Yvs/oey1NUlkI30d@krava>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=5akdc5q8OTZh41BRXQ6ueXN+MBAsEQyZP/YjElcO8FE=;
+        b=Ao7etct2jPsOO6PHSHBf0/De4GNGHNC1bzQ5nRNc2NcckuB8eHOjbjOn106RFG4n0e
+         sr/3OiQ0K1aP2/yqq+KAw3MuK+5GJWK5YLCjS2tNxPFx8TTKo9w33snG1KliXjzLOHBK
+         V8xKGtQrCO6K8NYB53liZKyFaZnk+jFkjvrA3CvezN91/gq/IRktigfYeenszRxFGAuv
+         avONSN2ogjDNgrCzpUEAFj1V49hd+nYQZVDAK3/T/qCJn3erNw3fcjZXyXB+MdUSYmHR
+         cK6D6/zYxtQLvunaRRRA0OExkWj5uwLIhtyRnsjcfg6l1ptLgU2V+bumJwopRj02S+4R
+         ynSw==
+X-Gm-Message-State: ACgBeo0XGvpPEqk+BpYRCERozo9LPRlSI3XOMXQkR4N94UE+Su1GUvN5
+        +LO/YW1xj6MLet7lEjYF7d3P6zOiPyOQ7A==
+X-Google-Smtp-Source: AA6agR75wkMzjymVQi/umHde2bRdVhNH/oEzu2yj9HscihiWd4t6QmZZ1rv75XG2KZ6mQ4kPLbYj1Q==
+X-Received: by 2002:a05:622a:1116:b0:31e:d8e4:ac30 with SMTP id e22-20020a05622a111600b0031ed8e4ac30mr21796777qty.660.1660728636684;
+        Wed, 17 Aug 2022 02:30:36 -0700 (PDT)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id l23-20020a37f917000000b006b97151d2b3sm14056322qkj.67.2022.08.17.02.30.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Aug 2022 02:30:36 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-32fd97c199fso191646627b3.6;
+        Wed, 17 Aug 2022 02:30:36 -0700 (PDT)
+X-Received: by 2002:a5b:6c1:0:b0:669:a7c3:4c33 with SMTP id
+ r1-20020a5b06c1000000b00669a7c34c33mr18433198ybq.543.1660728636000; Wed, 17
+ Aug 2022 02:30:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yvs/oey1NUlkI30d@krava>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220815111708.22302-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220816174150.GA2428940-robh@kernel.org>
+In-Reply-To: <20220816174150.GA2428940-robh@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 17 Aug 2022 11:30:23 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWgfGgNGmj88z=Md5RAL8CHxTKj6ywsGwS2HN-vHKMq+w@mail.gmail.com>
+Message-ID: <CAMuHMdWgfGgNGmj88z=Md5RAL8CHxTKj6ywsGwS2HN-vHKMq+w@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: soc: renesas: Move renesas.yaml from arm to soc
+To:     Rob Herring <robh@kernel.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 08:56:33AM +0200, Jiri Olsa wrote:
-> On Mon, Aug 15, 2022 at 05:48:44PM +0200, Peter Zijlstra wrote:
-> > On Mon, Aug 15, 2022 at 08:35:53AM -0700, Alexei Starovoitov wrote:
-> > > On Mon, Aug 15, 2022 at 8:28 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > > >
-> > > > On Mon, Aug 15, 2022 at 08:17:42AM -0700, Alexei Starovoitov wrote:
-> > > > > It's hiding a fake function from ftrace, since it's not a function
-> > > > > and ftrace infra shouldn't show it tracing logs.
-> > > > > In other words it's a _notrace_ function with nop5.
-> > > >
-> > > > Then make it a notrace function with a nop5 in it. That isn't hard.
-> > > 
-> > > That's exactly what we're trying to do.
-> > 
-> > All the while claiming ftrace is broken while it is not.
-> > 
-> > > Jiri's patch is one way to achieve that.
-> > 
-> > Fairly horrible way.
-> > 
-> > > What is your suggestion?
-> > 
-> > Mailed it already.
-> > 
-> > > Move it from C to asm ?
-> > 
-> > Would be much better than proposed IMO.
-> 
-> nice, that would be independent of the compiler atributes
-> and config checking..  will check on this one ;-)
+Hi Rob,
 
-how about something like below?
+On Tue, Aug 16, 2022 at 7:41 PM Rob Herring <robh@kernel.org> wrote:
+> On Mon, Aug 15, 2022 at 12:17:08PM +0100, Lad Prabhakar wrote:
+> > renesas.yaml lists out all the Renesas SoC's and the platforms/EVK's which
+> > is either ARM32/ARM64. It would rather make sense if we move renesas.yaml
+> > to the soc/renesas folder instead. This is in preparation for adding a new
+> > SoC (RZ/Five) from Renesas which is based on RISC-V.
+>
+> Please post this as part of the above.
+>
+> bindings/soc/ is just a dumping ground for stuff that doesn't fit
+> anywhere. We've mostly cleaned bindings/arm/ of that, so I don't really
 
-dispatcher code is generated only for x86_64, so that will be covered
-by the assembly version (free of ftrace table) other archs stay same
+Note that the target of this move is not .../bindings/soc/, but
+.../bindings/soc/renesas/, so it's a bit less of a dumping ground.
+Perhaps this is also a good opportunity to split renesas.yaml per
+family or product group
+(renesas,{rmobile,rcar-gen[1234],rza,rzg,rzn,...}.yaml?
+A fine-grained split may cause headaches with RZ/G2UL and RZ/Five
+sharing the same SoC Base, but a coarse-grained split keeping all RZ/G
+(after all RZ/Five is part of RZ/G) or even all RZ series together should work.
 
-jirka
+> want to start that again. I would propose bindings/board/ instead if we
+> move in this direction.
 
+.../bindings/board has the issue with the same boards used with
+multiple pin-compatible SoCs, SiPs, and SoMs.
 
-----
-diff --git a/arch/x86/net/Makefile b/arch/x86/net/Makefile
-index 383c87300b0d..94964002eaae 100644
---- a/arch/x86/net/Makefile
-+++ b/arch/x86/net/Makefile
-@@ -7,4 +7,5 @@ ifeq ($(CONFIG_X86_32),y)
-         obj-$(CONFIG_BPF_JIT) += bpf_jit_comp32.o
- else
-         obj-$(CONFIG_BPF_JIT) += bpf_jit_comp.o
-+        obj-$(CONFIG_BPF_JIT) += bpf_dispatcher.o
- endif
-diff --git a/arch/x86/net/bpf_dispatcher.S b/arch/x86/net/bpf_dispatcher.S
-new file mode 100644
-index 000000000000..65790a1286e8
---- /dev/null
-+++ b/arch/x86/net/bpf_dispatcher.S
-@@ -0,0 +1,10 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#include <linux/linkage.h>
-+#include <asm/nops.h>
-+#include <asm/nospec-branch.h>
-+
-+	.text
-+SYM_FUNC_START(bpf_dispatcher_xdp_func)
-+	ASM_NOP5
-+	JMP_NOSPEC rdx
-+SYM_FUNC_END(bpf_dispatcher_xdp_func)
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index a627a02cf8ab..03b54c820b95 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -924,7 +924,7 @@ int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs);
- }
- 
- #define DEFINE_BPF_DISPATCHER(name)					\
--	noinline __nocfi unsigned int bpf_dispatcher_##name##_func(	\
-+	noinline __nocfi unsigned int __weak bpf_dispatcher_##name##_func(\
- 		const void *ctx,					\
- 		const struct bpf_insn *insnsi,				\
- 		bpf_func_t bpf_func)					\
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

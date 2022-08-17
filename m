@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9EB597698
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18CBC597694
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241575AbiHQTdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 15:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
+        id S241504AbiHQTcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 15:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241545AbiHQTcf (ORCPT
+        with ESMTP id S241522AbiHQTcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 15:32:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9DBA5709
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:31:46 -0700 (PDT)
+        Wed, 17 Aug 2022 15:32:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B1DA5981
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:31:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0C8EDB81F4B
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 19:31:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F712C433D6;
-        Wed, 17 Aug 2022 19:31:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26E316148E
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 19:31:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2734CC433C1;
+        Wed, 17 Aug 2022 19:31:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660764690;
-        bh=h9jJLisusQCTKq1uyl3xtKgwVeHl5sOQ3o5Kt7G3JHw=;
+        s=k20201202; t=1660764693;
+        bh=nMFKYdKcFqlI5rRLQUTyDNkHZ32B8MXSLFMlY2NXf2Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=prJLdY+J42uJNxFqSFVxhzLN8b2mQBv+PDtw2hJIQ2jxq67UW/dEu7wgUkL2dOsMo
-         sMSHoCd5e1ge/LpjF+55NnoNqT+CANvLc42aZ3QrMSE8vJUWUq/Zu6Y/xyoTJ/cXAI
-         ympXraJSWCzcnRU/qtWns0le0MbcaHNi4+4gezZoXs1gO3RQWtY/o9pKJhJJoGRFcN
-         EG4+oTTQEDnLGQLRJhVvNtW+LjvKkOXMdOd8qMRpCMIqjcipdRy5zciYYPdMEaJxqy
-         4OXbXnvQsTYQI/ke4pstH+C7s417rl8pYiJUD5kcSZG0JoEstgskKVWxYNe8Z1RK69
-         Xb+ANStIxFaTw==
+        b=EP7x9I8fOusChGcyWH7hLRzOerdOM989UciS0FBtbq4foOrT7PZwFB5gmVkht7USF
+         E/SfKEAb9Ieyrr4pd7oUeHv6TkX2JelJuzyMQJTNgyvwrdr1SYrtjOSKTDxRbfOm4s
+         h/zpPwmhns5b3RpnlwxALoIfiSSi1GjjnqyCaLqKNzJnmMgKmXiYpVblLHM7vmT63F
+         xouA6ENx2vscuR7vc4PLVv74UcycEraRJ1tQVx1e5BX0cns8+T4awGNHJFjtIz6pE/
+         36mGgyf4m4eaUb55zxcHHClhb1Nb/Enst2Dd1TYZrAy3gzUE3un2j9jyFZOwS/Lr9K
+         9UGCxpI3tt4bg==
 From:   =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>,
         Kishon Vijay Abraham I <kishon@ti.com>,
-        Linux Phy <linux-phy@lists.infradead.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux Phy <linux-phy@lists.infradead.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Daniel Scally <djrscally@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Gregory Clement <gregory.clement@bootlin.com>,
         Kees Cook <keescook@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-kernel@vger.kernel.org, pali@kernel.org,
         josef.schlehofer@nic.cz,
         =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH linux-phy 2/4] device property: Add {fwnode/device}_get_tx_p2p_amplitude()
-Date:   Wed, 17 Aug 2022 21:31:17 +0200
-Message-Id: <20220817193119.4463-3-kabel@kernel.org>
+Subject: [PATCH linux-phy 3/4] phy: marvell: phy-mvebu-a3700-comphy: Support changing tx amplitude for ethernet
+Date:   Wed, 17 Aug 2022 21:31:18 +0200
+Message-Id: <20220817193119.4463-4-kabel@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220817193119.4463-1-kabel@kernel.org>
 References: <20220817193119.4463-1-kabel@kernel.org>
@@ -64,188 +64,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add functions fwnode_get_tx_p2p_amplitude() and
-device_get_tx_p2p_amplitude() that parse the 'tx-p2p-microvolt' and
-'tx-p2p-microvolt-names' properties and return peak to peak transmit
-amplitude in microvolts for given PHY mode.
+Add support to set SerDes transmit amplitude if specified via the
+'tx-p2p-microvolt' and 'tx-p2p-microvolt-names' device-tree properties.
 
-The functions search for mode name in 'tx-p2p-microvolt-names' property,
-and return amplitude at the corresponding index in the 'tx-p2p-microvolt'
-property.
-
-If given mode is not matched in 'tx-p2p-microvolt-names' array, the mode
-name is generalized (for example "pcie3" -> "pcie" -> "default", or
-"usb-ss" -> "usb" -> "default").
-
-If the 'tx-p2p-microvolt-names' is not present, the 'tx-p2p-microvolt'
-property is expected to contain only one value, which is considered
-default, and will be returned for any mode.
+This support is currently only for ethernet mode.
 
 Signed-off-by: Marek Behún <kabel@kernel.org>
 ---
-Andy et al. can I get Ack for this if this is okay?
----
- drivers/base/property.c  | 130 +++++++++++++++++++++++++++++++++++++++
- include/linux/property.h |   5 ++
- 2 files changed, 135 insertions(+)
+ drivers/phy/marvell/phy-mvebu-a3700-comphy.c | 109 ++++++++++++++++++-
+ 1 file changed, 108 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/base/property.c b/drivers/base/property.c
-index ed6f449f8e5c..34b763436c30 100644
---- a/drivers/base/property.c
-+++ b/drivers/base/property.c
-@@ -921,6 +921,136 @@ int device_get_phy_mode(struct device *dev)
- }
- EXPORT_SYMBOL_GPL(device_get_phy_mode);
+diff --git a/drivers/phy/marvell/phy-mvebu-a3700-comphy.c b/drivers/phy/marvell/phy-mvebu-a3700-comphy.c
+index a4d7d9bd100d..7fabd959ae0f 100644
+--- a/drivers/phy/marvell/phy-mvebu-a3700-comphy.c
++++ b/drivers/phy/marvell/phy-mvebu-a3700-comphy.c
+@@ -68,6 +68,16 @@
+ #define SPEED_PLL_MASK			GENMASK(7, 2)
+ #define SPEED_PLL_VALUE_16		FIELD_PREP(SPEED_PLL_MASK, 0x10)
  
-+/**
-+ * fwnode_get_tx_p2p_amplitude - Get peak to peak transmit amplitude for given
-+ *				 PHY mode
-+ * @fwnode:	Pointer to the given node
-+ * @mode:	Name of the PHY mode, or "default" / NULL
-+ * @amplitude:	Pointer where to store the amplitude
-+ *
-+ * Gets the peak to peak transmit amplitude in microvolts for a given PHY mode
-+ * by parsing the 'tx-p2p-microvolt' and 'tx-p2p-microvolt-names' properties.
-+ * If amplitude is not specified for @mode exactly, tries a more generic mode,
-+ * and if that isn't specified, tries "default".
-+ *
-+ * For example if @mode is "pcie3", we first try searching for value
-+ * corresponding to "pcie3", then to "pcie", and finally to "default".
-+ *
-+ * Return: %0 if the amplitude was read (success),
-+ *	   %-EINVAL if given arguments are not valid,
-+ *	   %-ENODATA if the required properties do not have a value,
-+ *	   %-EPROTO if the property is not an array of strings,
-+ *	   %-ENXIO if no suitable firmware interface is present,
-+ *	   %-ENOMEM if out of memory.
-+ */
-+int fwnode_get_tx_p2p_amplitude(struct fwnode_handle *fwnode, const char *mode,
-+				u32 *amplitude)
++#define COMPHY_GEN1_SET0		0x0d
++#define COMPHY_GEN2_SET0		0x0f
++#define COMPHY_GEN3_SET0		0x11
++#define COMPHY_GEN4_SET0		0x13
++#define COMPHY_GENx_SET0(x)		(0x0d + (((x) & 3) - 1) * 2)
++#define Gx_TX_AMP_MASK			GENMASK(5, 1)
++#define Gx_TX_AMP_VALUE(x)		FIELD_PREP(Gx_TX_AMP_MASK, x)
++#define Gx_TX_AMP_ADJ			BIT(6)
++#define Gx_TX_AMP_1025MV		(Gx_TX_AMP_VALUE(0x12) | Gx_TX_AMP_ADJ)
++
+ #define COMPHY_DIG_LOOPBACK_EN		0x23
+ #define SEL_DATA_WIDTH_MASK		GENMASK(11, 10)
+ #define DATA_WIDTH_10BIT		FIELD_PREP(SEL_DATA_WIDTH_MASK, 0x0)
+@@ -269,6 +279,7 @@ struct mvebu_a3700_comphy_priv {
+ struct mvebu_a3700_comphy_lane {
+ 	struct mvebu_a3700_comphy_priv *priv;
+ 	struct device *dev;
++	struct phy *phy;
+ 	unsigned int id;
+ 	enum phy_mode mode;
+ 	int submode;
+@@ -385,6 +396,15 @@ static inline void comphy_reg_set16(void __iomem *addr, u16 data, u16 mask)
+ }
+ 
+ /* Used for accessing lane 2 registers (SATA/USB3 PHY) */
++static u16 comphy_get_indirect(struct mvebu_a3700_comphy_priv *priv, u32 offset)
 +{
-+	static const char *names_prop = "tx-p2p-microvolt-names",
-+			  *vals_prop = "tx-p2p-microvolt";
-+	const char **names;
-+	int cnt, idx, ret;
-+	u32 *vals;
++	writel(offset,
++	       priv->lane2_phy_indirect + COMPHY_LANE2_INDIR_ADDR);
 +
-+	cnt = fwnode_property_string_array_count(fwnode, names_prop);
-+	if (!cnt || cnt == -EINVAL)
-+		/*
-+		 * If the names property does not exist or is empty, we expect
-+		 * the values property to contain only one, default value.
-+		 */
-+		return fwnode_property_read_u32(fwnode, vals_prop, amplitude);
-+	else if (cnt < 0)
-+		return cnt;
++	/* We need to read the register with 32-bit read */
++	return readl(priv->lane2_phy_indirect + COMPHY_LANE2_INDIR_DATA);
++}
 +
-+	names = kcalloc(cnt, sizeof(*names), GFP_KERNEL);
-+	if (!names)
-+		return -ENOMEM;
+ static void comphy_set_indirect(struct mvebu_a3700_comphy_priv *priv,
+ 				u32 offset, u16 data, u16 mask)
+ {
+@@ -394,6 +414,21 @@ static void comphy_set_indirect(struct mvebu_a3700_comphy_priv *priv,
+ 		       data, mask);
+ }
+ 
++static u16 comphy_lane_reg_get(struct mvebu_a3700_comphy_lane *lane, u16 reg)
++{
++	if (lane->id == 2) {
++		/* lane 2 PHY registers are accessed indirectly */
++		return comphy_get_indirect(lane->priv,
++					   reg + COMPHY_LANE2_REGS_BASE);
++	} else {
++		void __iomem *base = lane->id == 1 ?
++				     lane->priv->lane1_phy_regs :
++				     lane->priv->lane0_phy_regs;
 +
-+	ret = fwnode_property_read_string_array(fwnode, names_prop, names, cnt);
-+	if (ret < 0) {
-+		kfree(names);
-+		return ret;
++		return readw(base + COMPHY_LANE_REG_DIRECT(reg));
++	}
++}
++
+ static void comphy_lane_reg_set(struct mvebu_a3700_comphy_lane *lane,
+ 				u16 reg, u16 data, u16 mask)
+ {
+@@ -624,10 +659,53 @@ static void comphy_gbe_phy_init(struct mvebu_a3700_comphy_lane *lane,
+ 	}
+ }
+ 
++static u8 comphy_find_best_tx_amp(bool full_swing, u32 amp, u32 *true_amp)
++{
++	static const u32 half_swing_table[32] = {
++		250, 270, 290, 310, 330, 345, 365, 380,
++		400, 420, 435, 455, 470, 490, 505, 525,
++		485, 520, 555, 590, 625, 660, 695, 730,
++		765, 800, 830, 865, 900, 930, 965, 1000,
++	};
++	static const u32 full_swing_table[22] = {
++		470, 505, 540, 575, 610, 645, 680, 715,
++		750, 785, 820, 850, 885, 915, 950, 980,
++		900, 965, 1025, 1095, 1160, 1220,
++	};
++	u32 diff, min_diff;
++	const u32 *table;
++	size_t len;
++	u8 res;
++
++	if (full_swing) {
++		table = full_swing_table;
++		len = ARRAY_SIZE(full_swing_table);
++	} else {
++		table = half_swing_table;
++		len = ARRAY_SIZE(half_swing_table);
 +	}
 +
-+	if (!mode)
-+		mode = "default";
++	res = 0;
++	min_diff = abs(amp - table[0]);
 +
-+	do {
-+		static const char *gen_table[] = {
-+			"pcie", "usb", "ufs-hs", "dp", "mipi-dphy",
-+		};
-+		size_t i;
-+
-+		idx = match_string(names, cnt, mode);
-+		if (idx >= 0)
-+			break;
-+
-+		/* If mode was not matched, try more generic mode */
-+		for (i = 0; i < ARRAY_SIZE(gen_table); ++i) {
-+			if (str_has_proper_prefix(mode, gen_table[i])) {
-+				mode = gen_table[i];
-+				break;
-+			}
++	for (size_t i = 1; i < len; ++i) {
++		diff = abs(amp - table[i]);
++		if (diff < min_diff) {
++			min_diff = diff;
++			res = i;
 +		}
++	}
 +
-+		/* Or "default" */
-+		if (i == ARRAY_SIZE(gen_table)) {
-+			if (strcmp(mode, "default"))
-+				mode = "default";
-+			else
-+				mode = NULL;
-+		}
-+	} while (mode);
++	if (true_amp)
++		*true_amp = table[res];
 +
-+	kfree(names);
-+
-+	if (idx < 0)
-+		return -ENODATA;
-+
-+	vals = kcalloc(cnt, sizeof(*vals), GFP_KERNEL);
-+	if (!vals)
-+		return -ENOMEM;
-+
-+	ret = fwnode_property_read_u32_array(fwnode, vals_prop, vals, cnt);
-+	if (ret)
-+		goto out;
-+
-+	*amplitude = vals[idx];
-+out:
-+	kfree(vals);
-+	return ret;
++	return res;
 +}
-+EXPORT_SYMBOL_GPL(fwnode_get_tx_p2p_amplitude);
 +
-+/**
-+ * device_get_tx_p2p_amplitude - Get peak to peak transmit amplitude for given
-+ *				 PHY mode
-+ * @dev:	Pointer to the given device
-+ * @mode:	Name of the PHY mode, or "default" / NULL
-+ * @amplitude:	Pointer where to store the amplitude
-+ *
-+ * Gets the peak to peak transmit amplitude in microvolts for a given PHY mode
-+ * by parsing the 'tx-p2p-microvolt' and 'tx-p2p-microvolt-names' properties.
-+ * If amplitude is not specified for @mode exactly, tries a more generic mode,
-+ * and if that isn't specified, tries "default".
-+ *
-+ * For example if @mode is "pcie3", we first try searching for value
-+ * corresponding to "pcie3", then to "pcie", and finally to "default".
-+ *
-+ * Return: %0 if the amplitude was read (success),
-+ *	   %-EINVAL if given arguments are not valid,
-+ *	   %-ENODATA if the required properties do not have a value,
-+ *	   %-EPROTO if the property is not an array of strings,
-+ *	   %-ENXIO if no suitable firmware interface is present,
-+ *	   %-ENOMEM if out of memory.
-+ */
-+int device_get_tx_p2p_amplitude(struct device *dev, const char *mode,
-+				u32 *amplitude)
-+{
-+	return fwnode_get_tx_p2p_amplitude(dev_fwnode(dev), mode, amplitude);
-+}
-+EXPORT_SYMBOL_GPL(device_get_tx_p2p_amplitude);
-+
- /**
-  * fwnode_iomap - Maps the memory mapped IO for a given fwnode
-  * @fwnode:	Pointer to the firmware node
-diff --git a/include/linux/property.h b/include/linux/property.h
-index a5b429d623f6..91b12a79e245 100644
---- a/include/linux/property.h
-+++ b/include/linux/property.h
-@@ -392,6 +392,11 @@ const void *device_get_match_data(struct device *dev);
- int device_get_phy_mode(struct device *dev);
- int fwnode_get_phy_mode(struct fwnode_handle *fwnode);
+ static int
+ mvebu_a3700_comphy_ethernet_power_on(struct mvebu_a3700_comphy_lane *lane)
+ {
+-	u32 mask, data, speed_sel;
++	u32 mask, data, speed_sel, tx_amp_uv;
+ 	int ret;
  
-+int fwnode_get_tx_p2p_amplitude(struct fwnode_handle *fwnode, const char *mode,
-+				u32 *amplitude);
-+int device_get_tx_p2p_amplitude(struct device *dev, const char *mode,
-+				u32 *amplitude);
-+
- void __iomem *fwnode_iomap(struct fwnode_handle *fwnode, int index);
+ 	/* Set selector */
+@@ -746,6 +824,34 @@ mvebu_a3700_comphy_ethernet_power_on(struct mvebu_a3700_comphy_lane *lane)
+ 		comphy_gbe_phy_init(lane,
+ 				    lane->submode != PHY_INTERFACE_MODE_2500BASEX);
  
- struct fwnode_handle *fwnode_graph_get_next_endpoint(
++	/*
++	 * Change transmit amplitude if specified in device-tree.
++	 */
++	if (!device_get_tx_p2p_amplitude(&lane->phy->dev,
++					 phy_modes(lane->submode),
++					 &tx_amp_uv)) {
++		u32 tx_amp_mv, true_tx_amp_mv;
++		bool full_swing;
++		u8 tx_amp;
++		u16 reg;
++
++		reg = COMPHY_GENx_SET0(speed_sel + 1);
++
++		data = comphy_lane_reg_get(lane, reg);
++		full_swing = data & Gx_TX_AMP_ADJ;
++		tx_amp_mv = DIV_ROUND_CLOSEST(tx_amp_uv, 1000);
++		tx_amp = comphy_find_best_tx_amp(tx_amp_mv, full_swing,
++						 &true_tx_amp_mv);
++
++		data = Gx_TX_AMP_VALUE(tx_amp);
++		mask = Gx_TX_AMP_MASK;
++		comphy_lane_reg_set(lane, reg, data, mask);
++
++		dev_dbg(lane->dev,
++			"changed tx amplitude to %u mV (requested %u mV) on lane %d\n",
++			true_tx_amp_mv, tx_amp_mv, lane->id);
++	}
++
+ 	/*
+ 	 * 14. Check the PHY Polarity invert bit
+ 	 */
+@@ -1382,6 +1488,7 @@ static int mvebu_a3700_comphy_probe(struct platform_device *pdev)
+ 
+ 		lane->priv = priv;
+ 		lane->dev = &pdev->dev;
++		lane->phy = phy;
+ 		lane->mode = PHY_MODE_INVALID;
+ 		lane->submode = PHY_INTERFACE_MODE_NA;
+ 		lane->id = lane_id;
 -- 
 2.35.1
 

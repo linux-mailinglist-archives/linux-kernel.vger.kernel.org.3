@@ -2,111 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C01AC59730D
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3399059731C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240866AbiHQPbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 11:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42562 "EHLO
+        id S239941AbiHQPbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 11:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240840AbiHQPbO (ORCPT
+        with ESMTP id S239257AbiHQPbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 11:31:14 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB25D9926E;
-        Wed, 17 Aug 2022 08:31:13 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id f65so12236815pgc.12;
-        Wed, 17 Aug 2022 08:31:13 -0700 (PDT)
+        Wed, 17 Aug 2022 11:31:32 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0E897527;
+        Wed, 17 Aug 2022 08:31:30 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id gk3so25169276ejb.8;
+        Wed, 17 Aug 2022 08:31:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=oKzPScXM6OjwBLoPDXjdugzEKQj4ZD8Vn9KIxJ4y7IA=;
-        b=hbka5dkjg8rkSbSyeI54ZJETf23SZG8GuxIvflGwBLK34hMlbpEFApPkKI5Kw9yFHr
-         3aV/P+uEEQroh+34+EuBbsum7n29zfob0bcC6av6RBGa6RQC/I+xW+7Qq580cL3PDQd/
-         Fp8fcSNDyteKSrtby3Ca6qpAsGUaue+DeUcm/Cu1qsPUtBQq50DixqLmh7nS6pRgnwLC
-         fqKJqVGB9bH315ps2R3/BPObv+hQSYt2FEWCSvvi+NUSg5m/XI6nVsz139GNQ6BEMIVK
-         w3iOoiYxCgRy5BHgTKT+JT0CMBHCMSbEdzjuMoLUGMA9bdobdlrEMM1rpLd2TQHK3B+V
-         tBKQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc;
+        bh=z1aJBy61pKsmi7DsBWXmsHxdHZaFFcBnXJYk4XAypGg=;
+        b=cmQBMvKoe+hWgLi7Mzf7f7yDn/weXp4UrP8rxdelGiYcgaagrrhowYSbp2U09qsMie
+         Wubhh+nawXcGx+FExyyVYGKJQhQb28bia0sc5QIMhkmCDbUKTGMAkZ8LNdWTmfy580Vf
+         EquC9QuSaYO1SJJnx9uK0O0gHvbobDfMPQ9RUuwmtNI8o6XZJzIoqQNmDNNhYd7ylpDX
+         vVI/fo/5P+/2IuRfzBVDv5PuxasHMuM+9/nDI3mEds3pTGyT9pZpLwnJnxC7AN/JLjMf
+         JWdHgVh7bfSbfW78U0yKRptkwbwEHo5Oiit18z5P5Y8oZFcBDBVCTwZru7GEuwgwghvb
+         TVJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=oKzPScXM6OjwBLoPDXjdugzEKQj4ZD8Vn9KIxJ4y7IA=;
-        b=nqv8tQySMTVpADVQeVABn5aJtmDI28cLs2dVvIc04BT4f1EtD/z9zINaSqEPsVBN4r
-         0l+XGrwaEl8sekqdK0yUTJhbEs/UExnykVusQ/xhIj0OaYAjU9uDJQB051j33zd3Jouk
-         +o/MjZaZgMFPA2Dka3r45OBpO+iZ8gy1kpKltwxFOtYmXn0YZKA+4XY8OSB7m7jln33L
-         eFhUcD6yNgfHtkCzBPqA4996s/CbE2OIGmail1Rmw5Av6EJmpcohgN3oYSeoPCW3JyJk
-         GEDdBX1E+xZrUhHw4qQVvMWRibfmcOxlDQXtR7f05XtWKHS04iRrULM+pJipoWuKsjxF
-         ltbg==
-X-Gm-Message-State: ACgBeo0UZfQkeophIEai5O+dqk1p7P6CP3l7KuutIrSMANKmD/V8FA61
-        enIPEO9xXfXJqJ57pMEtrSI=
-X-Google-Smtp-Source: AA6agR41iXoCj3uxN9u9K6zpVYayiQ48GBRaWNbVS2Out6kHHqGz3aytlODtJiPVzYW2cpn6ykmAew==
-X-Received: by 2002:a63:684a:0:b0:421:904f:d38c with SMTP id d71-20020a63684a000000b00421904fd38cmr21894799pgc.238.1660750273269;
-        Wed, 17 Aug 2022 08:31:13 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bi2-20020a170902bf0200b0017128185043sm41094plb.191.2022.08.17.08.31.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 08:31:11 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 17 Aug 2022 08:31:10 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (pmbus) Use dev_err_probe() to filter
- -EPROBE_DEFER error messages
-Message-ID: <20220817153110.GA1333586@roeck-us.net>
-References: <3adf1cea6e32e54c0f71f4604b4e98d992beaa71.1660741419.git.christophe.jaillet@wanadoo.fr>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc;
+        bh=z1aJBy61pKsmi7DsBWXmsHxdHZaFFcBnXJYk4XAypGg=;
+        b=LQF0lvBQSVEbXIMGxydmXPFCovLEy2e+etzCLvQxX8MC/5vks1ztfS1ex3WIpCX6v/
+         nQGyeUZ1waFss3IpWDpzuTIQBu/BUMjufMNm8+ZiGC6LqemRWtqGN3aB20OZ+99mXJfK
+         qesGbWuwkf888uQFglKycwcFlGdpq+tanjd77VmHR2Je21UAFNxYkSJ9zMk/hNGm+xLG
+         MDgtgl6EGFeU8UjdruGWeXjtbulOH/XJQKT0UmORg48WzKekqkO3DSfrAkV/ZW51pgG7
+         uHUScNchMMZybLJId8Wjo7Fpkb70KrSmvco+y1JccChzb4DCrT564Z9Zj7cEgqwroIGH
+         ViVw==
+X-Gm-Message-State: ACgBeo2s3BZjROobhVC680e2TasulGnBbiLqJtbhUSWrjB9QzBb3qc8Z
+        DcK2rFZPRSK2Z2Kq0ubmVT32KD7GjVQ=
+X-Google-Smtp-Source: AA6agR7+8fHm3wLN3RFBtwSunNJjGZ5BTF5U5j/Hgd07GODYjFWUA+Hha5jLHqEhDqwGQv+FeJkBFA==
+X-Received: by 2002:a17:907:8317:b0:731:2189:7f4d with SMTP id mq23-20020a170907831700b0073121897f4dmr16595667ejc.468.1660750288851;
+        Wed, 17 Aug 2022 08:31:28 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id t16-20020a056402021000b0043be16f5f4csm10896850edv.52.2022.08.17.08.31.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Aug 2022 08:31:28 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <78616cf8-2693-72cc-c2cc-5a849116ffc7@redhat.com>
+Date:   Wed, 17 Aug 2022 17:31:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3adf1cea6e32e54c0f71f4604b4e98d992beaa71.1660741419.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 2/9] KVM: x86: remove return value of kvm_vcpu_block
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        mlevitsk@redhat.com, vkuznets@redhat.com
+References: <20220811210605.402337-1-pbonzini@redhat.com>
+ <20220811210605.402337-3-pbonzini@redhat.com> <Yvwpb6ofD1S+Rqk1@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yvwpb6ofD1S+Rqk1@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 03:04:00PM +0200, Christophe JAILLET wrote:
-> devm_regulator_register() can return -EPROBE_DEFER, so better use
-> dev_err_probe() instead of dev_err(), it is less verbose in such a case.
+On 8/17/22 01:34, Sean Christopherson wrote:
+> Isn't freeing up the return from kvm_vcpu_check_block() unnecessary?  Can't we
+> just do:
 > 
-> It is also more informative, which can't hurt.
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 9f11b505cbee..ccb9f8bdeb18 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -10633,7 +10633,7 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
+>                  if (hv_timer)
+>                          kvm_lapic_switch_to_hv_timer(vcpu);
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-
-Applied
-
-Thanks,
-Guenter
-
-> ---
->  drivers/hwmon/pmbus/pmbus_core.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+> -               if (!kvm_check_request(KVM_REQ_UNHALT, vcpu))
+> +               if (!kvm_arch_vcpu_runnable(vcpu))
+>                          return 1;
+>          }
 > 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 5541d26e8623..e000674d50df 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -3016,11 +3016,10 @@ static int pmbus_regulator_register(struct pmbus_data *data)
->  
->  		rdev = devm_regulator_register(dev, &info->reg_desc[i],
->  					       &config);
-> -		if (IS_ERR(rdev)) {
-> -			dev_err(dev, "Failed to register %s regulator\n",
-> -				info->reg_desc[i].name);
-> -			return PTR_ERR(rdev);
-> -		}
-> +		if (IS_ERR(rdev))
-> +			return dev_err_probe(dev, PTR_ERR(rdev),
-> +					     "Failed to register %s regulator\n",
-> +					     info->reg_desc[i].name);
->  	}
->  
->  	return 0;
+> 
+> which IMO is more intuitive and doesn't require reworking halt-polling (again).
+
+This was my first idea indeed.  However I didn't like calling 
+kvm_arch_vcpu_runnable() again and "did it schedule()" seemed to be a 
+less interesting result from kvm_vcpu_block() (and in fact 
+kvm_vcpu_halt() does not bother passing it up the return chain).
+
+Paolo

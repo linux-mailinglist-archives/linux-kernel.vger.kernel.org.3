@@ -2,139 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7BA597734
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66293597752
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241290AbiHQT6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 15:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
+        id S241440AbiHQT6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 15:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238328AbiHQT6O (ORCPT
+        with ESMTP id S241364AbiHQT63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 15:58:14 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1B2EB3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:58:10 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id j8so26360782ejx.9
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:58:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=H8RqMJpz3gpVJV4o2tIE2vyCb5Bbg07Gt0ZIJQfJ7eg=;
-        b=N483dwnSlNlIj5QQoI3T+GQ6c9rb7Nz8l//rbtlK3VMCFUfb7BDg2jezE7VXKYIsnR
-         HzCewBDWy3a0o6AJuh2I2d72CA6zMtiOssENMLZabUudnEGNfbJfD2R4cHfg3mBjxf7j
-         ploY4w0dOb3Op/F2uUxeJYu1vMnzbCtmVDy55sWSuLQycgZzrdQNQEFOgBA3ZQpuKbrQ
-         g9yn3hQGXa307Qt7Q50IvaBZtn4Kmxw2SM97JYoQ/qNJ2FfgTwoZm9Pky3DcQhgy1/W5
-         KrI7UEgEWsdXrv+/zNDeBV1QvofwIl6lYQsa/4Mm1B51lPiPRX1fFDgJUqqQk5TuUjfE
-         QLeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=H8RqMJpz3gpVJV4o2tIE2vyCb5Bbg07Gt0ZIJQfJ7eg=;
-        b=4YRorlJc9CQKrBe6io4Gmow2YEmxonVcvxaNdJr18mU95TPqp42NP+PwIAXB6nUHZh
-         7x3m1fBJnAZj0N7SC5e8JLUwvjPWWPeIRNIxgeaI8x2lblZ4gxViR66b4DGPGsMeyaoH
-         VflyjwqROZKy7afu0bYsXDqaxV5LZQ8yt4Zc4Aj+P4oasM/sKf3U5hFad09o5eu2aNWb
-         ofiwF16Ient9xTycv0YUXzTSv+VQGxEnSu1iSvYE56rF92jg3SgR2/dL8rIaXCe36qie
-         03VF441kgE/i8qsWpom94Xxi2ZoBkp1GPXJH0cvW4G3CGlyCrnY7bO+JsZwwDw4/AbZp
-         8F5w==
-X-Gm-Message-State: ACgBeo3w+F7lCNZDwVmtdKMJYdl8UvQBXQZhfPPm6udeido1D6rJX81P
-        A2FbEsOZhoWBIGA8IBE9XLE=
-X-Google-Smtp-Source: AA6agR640mEDqJ4rtTRIJ24ohzCzH0cDMNuXNS19JwBALVLnYNkCY9sWu6MXFQL1FpJfIGDLyuaWFw==
-X-Received: by 2002:a17:907:1361:b0:730:8f59:6434 with SMTP id yo1-20020a170907136100b007308f596434mr17909658ejb.745.1660766288991;
-        Wed, 17 Aug 2022 12:58:08 -0700 (PDT)
-Received: from ?IPV6:2003:c7:8f2e:6948:e090:6ae6:365f:722? (p200300c78f2e6948e0906ae6365f0722.dip0.t-ipconnect.de. [2003:c7:8f2e:6948:e090:6ae6:365f:722])
-        by smtp.gmail.com with ESMTPSA id j9-20020a17090623e900b007304bdf18cfsm7146005ejg.136.2022.08.17.12.58.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 12:58:08 -0700 (PDT)
-Message-ID: <2678f750-34a2-f0fa-4783-143c3fc88924@gmail.com>
-Date:   Wed, 17 Aug 2022 21:58:03 +0200
+        Wed, 17 Aug 2022 15:58:29 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B30B4AA;
+        Wed, 17 Aug 2022 12:58:18 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:36312)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oOPB9-004XQI-B8; Wed, 17 Aug 2022 13:58:15 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:46360 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oOPB8-00F3nh-DV; Wed, 17 Aug 2022 13:58:14 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com, tixxdz@gmail.com
+References: <20220815162028.926858-1-fred@cloudflare.com>
+        <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
+        <8735dux60p.fsf@email.froward.int.ebiederm.org>
+        <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
+Date:   Wed, 17 Aug 2022 14:57:40 -0500
+In-Reply-To: <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
+        (Paul Moore's message of "Wed, 17 Aug 2022 12:01:39 -0400")
+Message-ID: <871qte8wy3.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] staging: r8188eu: remove rtw_endofpktfile()
-Content-Language: en-US
-To:     Michael Straube <straube.linux@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220817063223.8140-1-straube.linux@gmail.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20220817063223.8140-1-straube.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1oOPB8-00F3nh-DV;;;mid=<871qte8wy3.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1/Z6TDdGlJ2fmDTXjd+QwmHz1uEXKk+3OY=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Virus: No
+X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Paul Moore <paul@paul-moore.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 379 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 4.7 (1.2%), b_tie_ro: 3.2 (0.8%), parse: 1.06
+        (0.3%), extract_message_metadata: 10 (2.7%), get_uri_detail_list: 1.36
+        (0.4%), tests_pri_-1000: 6 (1.7%), tests_pri_-950: 1.05 (0.3%),
+        tests_pri_-900: 0.82 (0.2%), tests_pri_-90: 71 (18.6%), check_bayes:
+        69 (18.3%), b_tokenize: 5 (1.4%), b_tok_get_all: 8 (2.0%),
+        b_comp_prob: 1.60 (0.4%), b_tok_touch_all: 52 (13.6%), b_finish: 0.79
+        (0.2%), tests_pri_0: 222 (58.5%), check_dkim_signature: 0.36 (0.1%),
+        check_dkim_adsp: 1.70 (0.4%), poll_dns_idle: 46 (12.1%), tests_pri_10:
+        2.5 (0.7%), tests_pri_500: 57 (15.1%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/17/22 08:32, Michael Straube wrote:
-> The function rtw_endofpktfile() just checks for pkt_len == 0.
-> Remove rtw_endofpktfile() and merge the check into the caller to
-> improve readability and simplify the driver code.
-> 
-> Signed-off-by: Michael Straube <straube.linux@gmail.com>
-> ---
->   drivers/staging/r8188eu/core/rtw_xmit.c      |  2 +-
->   drivers/staging/r8188eu/include/xmit_osdep.h |  1 -
->   drivers/staging/r8188eu/os_dep/xmit_linux.c  | 11 -----------
->   3 files changed, 1 insertion(+), 13 deletions(-)
-> 
-> diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-> index 24401f3ae2a0..48631ef56114 100644
-> --- a/drivers/staging/r8188eu/core/rtw_xmit.c
-> +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-> @@ -970,7 +970,7 @@ s32 rtw_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, struct
->   
->   		frg_inx++;
->   
-> -		if (bmcst || rtw_endofpktfile(&pktfile)) {
-> +		if (bmcst || pktfile.pkt_len == 0) {
->   			pattrib->nr_frags = frg_inx;
->   
->   			pattrib->last_txcmdsz = pattrib->hdrlen + pattrib->iv_len + ((pattrib->nr_frags == 1) ? llc_sz : 0) +
-> diff --git a/drivers/staging/r8188eu/include/xmit_osdep.h b/drivers/staging/r8188eu/include/xmit_osdep.h
-> index 00658681fef9..130dc06efe73 100644
-> --- a/drivers/staging/r8188eu/include/xmit_osdep.h
-> +++ b/drivers/staging/r8188eu/include/xmit_osdep.h
-> @@ -40,7 +40,6 @@ void rtw_os_xmit_resource_free(struct adapter *padapter,
->   uint rtw_remainder_len(struct pkt_file *pfile);
->   void _rtw_open_pktfile(struct sk_buff *pkt, struct pkt_file *pfile);
->   uint _rtw_pktfile_read(struct pkt_file *pfile, u8 *rmem, uint rlen);
-> -bool rtw_endofpktfile(struct pkt_file *pfile);
->   
->   void rtw_os_pkt_complete(struct adapter *padapter, struct sk_buff *pkt);
->   void rtw_os_xmit_complete(struct adapter *padapter,
-> diff --git a/drivers/staging/r8188eu/os_dep/xmit_linux.c b/drivers/staging/r8188eu/os_dep/xmit_linux.c
-> index 91a1e4e3219a..85ef27735b88 100644
-> --- a/drivers/staging/r8188eu/os_dep/xmit_linux.c
-> +++ b/drivers/staging/r8188eu/os_dep/xmit_linux.c
-> @@ -54,17 +54,6 @@ uint _rtw_pktfile_read(struct pkt_file *pfile, u8 *rmem, uint rlen)
->   	return len;
->   }
->   
-> -bool rtw_endofpktfile(struct pkt_file *pfile)
-> -{
-> -
-> -	if (pfile->pkt_len == 0) {
-> -
-> -		return true;
-> -	}
-> -
-> -	return false;
-> -}
-> -
->   int rtw_os_xmit_resource_alloc(struct adapter *padapter, struct xmit_buf *pxmitbuf, u32 alloc_sz)
->   {
->   	pxmitbuf->pallocated_buf = kzalloc(alloc_sz, GFP_KERNEL);
+Paul Moore <paul@paul-moore.com> writes:
 
-Tested with Edimax N150 and
-Reviewed-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+> At the end of the v4 patchset I suggested merging this into lsm/next
+> so it could get a full -rc cycle in linux-next, assuming no issues
+> were uncovered during testing
+
+What in the world can be uncovered in linux-next for code that has no in
+tree users.
+
+That is one of my largest problems.  I want to talk about the users and
+the use cases and I don't get dialog.  Nor do I get hey look back there
+you missed it.
+
+Since you don't want to rehash this.  I will just repeat my conclusion
+that the patchset appears to introduce an ineffective defense that will
+achieve nothing in the defense of the kernel, and so all it will achieve
+a code maintenance burden and to occasionally break legitimate users of
+the user namespace.
+
+Further the process is broken.  You are changing the semantics of an
+operation with the introduction of a security hook.  That needs a
+man-page and discussion on linux-abi.  In general of the scrutiny we
+give to new systems and changed system calls.  As this change
+fundamentally changes the semantics of creating a user namespace.
+
+Skipping that part of the process is not simply disagree that is being
+irresponsible.
+
+Eric

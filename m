@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6410E596AFA
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E6F596B14
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbiHQIGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 04:06:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55550 "EHLO
+        id S233057AbiHQIGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 04:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiHQIFz (ORCPT
+        with ESMTP id S231670AbiHQIF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 04:05:55 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60060.outbound.protection.outlook.com [40.107.6.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FD72F39F
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:05:55 -0700 (PDT)
+        Wed, 17 Aug 2022 04:05:59 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60050.outbound.protection.outlook.com [40.107.6.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3912339B85
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:05:58 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UtrniIcLMtfC9GuHc7o2d6rSkea9eyevxUzToOs3b4+WgGVHJN5bxYjh+aizdVkNiIDNf/qOi38TWSO63z6MZ/OCB4jQAaDqUURZMlmsbWepo6GdlNv8d/3gPmOMTCva9T/4FUqxzjYI2N66HvKQ+xBHXAFVky2tGBq7t/AZoUyR7r/E4hkPAnL5miOyjtb/QGtqKgQp0JpKq8fYi9QE3dhDSu7p195q5OAEE4LEW74KBLh4gDQ0TKd0F2C5+FFVSNcQDfE4TKmrQGKOLAODM1bWrHiZzOxh040ZeVVjTo/TVg9cDkDoSZoHZshWDTLy7rZ9psrsF29R0shhp9AHJA==
+ b=LSu+smIPt4fOlab3FBh83cVckRX8KyJbsNwOqgUGeeEGg1oTgLzYsqBktKRl3bTPBKE9e+z7ES4Oh+pbicbP6Vig11GIRnCIgh2qkq2Bv4leaRRXxO84XezH9525KFFgS8EiwCWMhyKRVE1VwdxdPkVrxRiG5qa4azdfh1EcMK+Z9HwPDl8fQYTD+7APt62Lt8cH/oOW3j07hBOVm/knQKrOFuPaHPH01w2eYYPBV4RTZJ39g+SZLrfSjUJhoiFn1JMhrEeqO9mcTGj4qKdqOFSskqOE91/DiVJww17hWcgIxnUrdJvsHBBNtbQao2nnkXBdOFlRhBIkABSkaPZ1hg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+29B8g6FWmsRTmm8MhWkeccZoIlYvU93XqkN5sZP7EA=;
- b=ER1tVGIE4Yi+jGYEcpjvj6L1Pin0g5A2uZi1yoOzqqRfPdzOiHDC2NBTMwSKIpL+3uopePWhcYzyqmBpebUJUJkMgsNzKn2YcKk+tBaNIjNZ3gk5KwW1nkmoOMG8NrlqEgvLPMebry1Jm5aU0pcMU96t8lgQhzlGLAbufzga/bnCwk4ndkc0dF+78N6qa18763pB17b6ASYLs8tJ/AN0oAsZphpwuf9Awow9V+a66ItOguNHOPFoIOHmCLSq3pkzVf5Ks1nQpEvhBvTuJTr2QxRUXcQwUQWOMWoEANT0ZD1g3spNu/kM5sQbyoLHmNk7hRtAz0IGEpuI3DxwQJCwqw==
+ bh=kWWVJMpPl/MqDcxHnpDFV3ubvAG0DGhWmip0gI/eHxs=;
+ b=EOsCQhHPBLHnIsoDTxZbb0yV2ompsX0B2wX0iHX2JzmXYLIyHECqbu3Isvji+e0HJlLbO2m+hpJm29RMDjB/GGFhZ+2RRou7teXPn06V9jPIeATSNoRd0jOAvpr88T4fKGBGAURWQaBitGjXR0sd98YLnBSGN67lMOnaGdZtq3BMW6tfn39Te11jOBzpY3ZIo+T0f4DCCBPEYIqt5eH8CwoVJM+4vdUa38o9QMCT88bPm1EOpgkX2IOrN21uJLxwSw7AGUw9iDCS/TqdQJCi671FEiAxFAfS3EMVVXvywQ+jJS4CVLDvOIJ4ZdYh8jT3cb3pPR/0t2eFCpUD4E1eUQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+29B8g6FWmsRTmm8MhWkeccZoIlYvU93XqkN5sZP7EA=;
- b=G2+VU3FG2gQuCSS0JaEl2l6TfCQNzmnu2iUqqHvDZET0/d97Sa1q8LQZk9bB439X3GC1MWSCI3tIcGt263t9Vxeo7/+nbTLYCGdwelqzaHNTQauZo/NRrcGHsNgCCIF+Gw3CqatgVYB8lMfxNrPQ4cebRJQqART8vKVFF/rf6n4=
+ bh=kWWVJMpPl/MqDcxHnpDFV3ubvAG0DGhWmip0gI/eHxs=;
+ b=PtnVrJWle60FbbI+OOHN3CbmRIkiAYYOoTbjum8I1hWzgIMw1dgeo4pj/ZV9+wLi3F+d7Hq0CEwLe0qrD/p0QPa2TfT8xa6zYkczF3+UTwVof4iqcsdA02aDP8dExjE+ulseoxJlGf7oVzrWQ2KE/gArGzxVaG/12r9Qjn9BLxM=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from VI1PR04MB5151.eurprd04.prod.outlook.com (2603:10a6:803:61::28)
  by AM9PR04MB7617.eurprd04.prod.outlook.com (2603:10a6:20b:286::6) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Wed, 17 Aug
- 2022 08:05:53 +0000
+ 2022 08:05:55 +0000
 Received: from VI1PR04MB5151.eurprd04.prod.outlook.com
  ([fe80::68e3:e10a:8232:10e5]) by VI1PR04MB5151.eurprd04.prod.outlook.com
  ([fe80::68e3:e10a:8232:10e5%5]) with mapi id 15.20.5525.019; Wed, 17 Aug 2022
- 08:05:53 +0000
+ 08:05:55 +0000
 From:   Daniel Baluta <daniel.baluta@oss.nxp.com>
 To:     broonie@kernel.org, alsa-devel@alsa-project.org
 Cc:     linux-kernel@vger.kernel.org, peter.ujfalusi@linux.intel.com,
@@ -49,9 +49,9 @@ Cc:     linux-kernel@vger.kernel.org, peter.ujfalusi@linux.intel.com,
         pierre-louis.bossart@linux.intel.com, daniel.baluta@gmail.com,
         laurentiu.mihalcea@nxp.com, Daniel Baluta <daniel.baluta@nxp.com>,
         Paul Olaru <paul.olaru@oss.nxp.com>
-Subject: [PATCH 1/4] ASoC: SOF: compress: Remove byte offset computation
-Date:   Wed, 17 Aug 2022 11:05:26 +0300
-Message-Id: <20220817080529.10864-2-daniel.baluta@oss.nxp.com>
+Subject: [PATCH 2/4] ASoC: SOF: compress: Introduce sof_compr_stream
+Date:   Wed, 17 Aug 2022 11:05:27 +0300
+Message-Id: <20220817080529.10864-3-daniel.baluta@oss.nxp.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220817080529.10864-1-daniel.baluta@oss.nxp.com>
 References: <20220817080529.10864-1-daniel.baluta@oss.nxp.com>
@@ -63,52 +63,52 @@ X-ClientProxiedBy: FR0P281CA0145.DEUP281.PROD.OUTLOOK.COM
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 698d4801-70c9-4ae5-44fe-08da80274e67
+X-MS-Office365-Filtering-Correlation-Id: 4946b95f-c1d6-4209-4770-08da80274f72
 X-MS-TrafficTypeDiagnostic: AM9PR04MB7617:EE_
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: v7EkhFj6AT3/9t9zJJw9bZr71baUQAfHVmBsAXVt9U2qsNRuB6Qy+x2DSM68Z28cPvLpOZ1uauVSvD3edU6+Bxw9cde0sqjvfkf0lA219crt3avDFj8FD6w1DrOrejX/VnRfpToqlcNSdvRUwAL0/GS7TI4S7/xMqMLUP1nz/wX42djg/ULrhioUcKk3fTa4xSGGtN9bYIGK6x5CbI7IzGuiWZG4obDFiLWosdjB9OKuixptykYaRdqj60j6hp1dIUdnEB4BTWtZsJ3zoOUamiVUgFxXkZv2kpBFEl9CKjcXQpsrrDyYu9T9Ma126JfHw9Si6GRO/hyF5KMlfAwLyoWSU3gpmJwZQQCEMu9yU7BdZIWe1h3VVxBhiiFo7dvvKG5mIiyctKCl1KizEf/q3Ts6vtSUrzDXaJoAsPlljRh6lFX5Q1YPHJgXE2Rte34ehFD70Mm2aTXwnhBX8uG68bg73BIyK86A5pyq+MhEfi1MphBM1xDi1aFFIffgrtxslIk/uqMUfxKcDYBJX5QyDXLyhpDB49v4bErqx3hXxWHCC26ZsZVtSOze0B/ZR+WLdpDAz20LN3WJfxxTEnmIEvIukAs/vUkSzw9FPiDKitnbYMo+uFvLOSnT81Mj6Xj0zMdmq5M8bPtvPDbGsB6aHpUyssSYlOgnB2fNWavyh3D7VXEtypz4O74jTv0UwT3FPLgD0NhtPoOkpFYw9OWn80g2kO++OIiE+8263YZLjJl4U6FpQyLwCa6Q5ErJhG+HisK3/0LkevvhB0KEmTFwSaakunQ5WPZsEYPpbveAfgL6hzYLW415AZaULOL/Jy15
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5151.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(346002)(396003)(376002)(366004)(8676002)(316002)(4326008)(66476007)(54906003)(4744005)(66556008)(66946007)(2906002)(44832011)(7416002)(8936002)(38100700002)(5660300002)(38350700002)(86362001)(186003)(41300700001)(6486002)(6506007)(52116002)(6666004)(26005)(6512007)(1076003)(83380400001)(478600001)(2616005);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: eRqA4ruhUBKYDghQL/Hxq8fUn2m3atDYtiARPYnEL2xR20mdj6/u+B1WT9cq0V5yDX+lFIbjTZrdoS4TQLQwRE4x3WhYbHpnJB/NlEuJx+jdayMXN+mMU9rwnlBOBlX7Wn5sDtDNcQc3g0VaNQ42t9ygmAiUnirBHCwhzpKlQI/vOEGhxWmYG2/OR/pTvAleSzvVHz4jD8a3OaqUd5K0xM3Vsz93mFzY9NXgNFZwyMscGB0KMbW/PVbu/zwNNwjuG8u/qIY0uYvNMUpKYrwX+4J/AZ+F2yWAYmnIImxZyu6g65r7tI1GintKVfDCpJASSd036iaw3bYEVCdxgoW6YW82Lb8kOo7PNQhOVr+U0BovVfcDstMt/Mcy7HqpkTbAWqS5ekRsxwg4UxoJyUlh30vsfDb9RLt91k8Nh/oC6s/ks52yf02jMl1avyI817n+su6yeJbSPHR/UCLi3t4NRLGE7jg3B45MK1ex7OM6d/urutdCnjNiMATrSUvxPnaUlfaEUOZE4Lne1Vw6B8x+zlcJPcvlnzbWdbNjsFC2ATTVP97cK9n83RYHW0Kvv8emChzGb+yHW8RWe19MwQOP+NkUf4MCmE4duAIf/xe5gtSFjJWD8nomyskk3A3CEm3ty2+ZxdhqvXiLswb0O8QuTwXUkcahRvW4ZIPSwUGyUf0wazvSVLhNXg4IW703E1xBWGEZSQd8cw03b6Vsoy5iYL2LAUW1YxRgrPAPqNo2CoDWw0X6zImekr5Y19TVDxmWkloO/kNWbb49Lgc/mIJhhY7WPx4EIQYFEqpwP4OcRgBxfTRCG7bnPImOBBw+HBDW
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5151.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(346002)(396003)(376002)(366004)(8676002)(316002)(4326008)(66476007)(54906003)(66556008)(66946007)(2906002)(44832011)(7416002)(8936002)(38100700002)(5660300002)(38350700002)(86362001)(186003)(41300700001)(6486002)(6506007)(52116002)(6666004)(26005)(6512007)(1076003)(83380400001)(478600001)(2616005);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RUtGX8t3clGgr+Jwk2dQ+iAK0JlLUUEf4Qo1OxYuW+D50bjt0YfxfGGukHuS?=
- =?us-ascii?Q?3nG3Fi/Ef4j3BYAbuPjpa5CWF60ymdrYfI2Cbr+9LUR/yTglSbHgRIK1hWC6?=
- =?us-ascii?Q?v5UoOxZFJ6SG5LmbsMrgtKLqOCFXh7rpzK1za1LAhwPWSKYV7Bc9FlZ/2whg?=
- =?us-ascii?Q?nPpEurzVWh65629XEenAPwOKBjWN2o+7yyn3Sal+wV6tWjLvd3gC4stpzHd8?=
- =?us-ascii?Q?nm+Hm2LyPU48Fv8Noh0blfym7QNONloj12GMLMFFRZD7d1KMhgLsRHQqjcVz?=
- =?us-ascii?Q?Q9aGqgFpUgAu4ta3Lwndqd8VEGQj3v3END40jp7hthXsLDKIuPsU54Y1PVyY?=
- =?us-ascii?Q?qruBi9KC9OgqxuT1eIazffbY8//l+iM8D45eUXmp6Xc/Xmsa6pwkquBhfWbv?=
- =?us-ascii?Q?ST8nP0Ipb4vgM+XcA5e53bPR4pWJ8MtHD4tmBNa7z3ocODPMEXMBbpZ0jEVm?=
- =?us-ascii?Q?TUUhZC4gW2a4PmNJbDzL8Me05e1EdlJZErr+uvsuwcu/A6o4g56aKnCiHo6Q?=
- =?us-ascii?Q?KWYJiUjSYQBFMst1xvlW3XAgmGj6lqYf9eH3cqZ3ehgY/UpXgz7C9M3PoP/d?=
- =?us-ascii?Q?qi+xof+CeOA2gVq8fSEyBbeC/c67rCW0hAmTVu4weqNVSV/574Hy3JEUDnYc?=
- =?us-ascii?Q?9zBcfe5aRzGi65bO/1PikXhTu3djj6oTeB4iy+MzSRndamRedmD8GPVhuNml?=
- =?us-ascii?Q?hJgPZjojyVOHp+6Fq0b9/DLbFUsaIb4kUKexc9Cg3zqhcR0IQfnP6TN2Capg?=
- =?us-ascii?Q?11p2OddCQhhd0qpEeaD805IyymvpDgg146wj18wSZFgztYcFtN6sqCQ8GrRV?=
- =?us-ascii?Q?T4mFUrKrhk/QKBGgMUh39ICfl6M054Hg2s2NdQAr51j4I5TjQRM0xZUWMzir?=
- =?us-ascii?Q?61vYVp2fvqBcl6RclqRZHU+ssSLjBJOTyT34aEk+DZ0OvD2/1mJPCBT0iwUZ?=
- =?us-ascii?Q?WwwlgkVpjSzaqQ8Kt7fWfkkCli77YW/Xl9ZUhU6yBkNH9YH+AlGMdToXWLC7?=
- =?us-ascii?Q?5zekpjNBFoWqb7S1Th9ia+DBLIE6PtwrC8nea9pNUG54N6pBPRC4CMRgTcBb?=
- =?us-ascii?Q?CdOf89FmYpGHV9i6MMVvFFZmrgrsVmIjPKXEXKXprwiwV39X3ho3saDUvMjV?=
- =?us-ascii?Q?CVlR0USBnvgsMBGNI3FuHUGDNRfuLJysS89kUrG9rG0uT8w6sdVBtrPP5t9/?=
- =?us-ascii?Q?35/xjfHdrCeUvVAXaW+hEEjvsM0rFk+2E6vX3FXM1vPOljzSuO3OhJpdOJ5e?=
- =?us-ascii?Q?92xFX07f64dOWN4f9DqgLQXPz33GuHwrq6irSgqDrxzsIa9FexJoiVKYp1Eu?=
- =?us-ascii?Q?8j7pQMAJqf/vhLWyl9+U3qJZmIMEoH+JXo9izPy6QHkUT9KDSsYhri1pXxJJ?=
- =?us-ascii?Q?tSGi9RnR406Semsv8lk8sw8xp2XDfi1yVJkAI4/TtShpwp0GLvumDsxKiiM0?=
- =?us-ascii?Q?7eiIKleAKzTWHMtkcLe864VlFyb8JWNGREEnPfYUk8gzWCvK20NZsz+42ume?=
- =?us-ascii?Q?JXd8bEzgA8oCHj5cTxr7Lj1zxrLLxSk3tbdlTqD8KKzUzXgcCdgtWHTMobhh?=
- =?us-ascii?Q?ZuiOUn9WzjSlCq1hn+Qg+LSosmK7T79oAdHGKF8L?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?j4blRDoqvfSHaRtRVO3EGCMm/vZVPv4+d1IUHps2Wb6AGwtDJzHXDhWiKKuw?=
+ =?us-ascii?Q?Luoq32cdu5vz27koG9KHjXMNSvnbeCPCGL62lGE4cs9jkvqRuzTCaY03SJRy?=
+ =?us-ascii?Q?n+XW0zmKN8Gy0Wfn5nbCxPC2TEbRvBgqgPShURgKvxyyPQc3kFftaiMleaz+?=
+ =?us-ascii?Q?+jEmujMKJCqn+25zY2x6x0pyL6Xekt6v6WgM9yObpu+TrqFsC0jWW78fIwzN?=
+ =?us-ascii?Q?ju8ylIgIe+vIOz2+aWQBA2oz1tqPmq+qb/PJ96iYQSJc6CbwqJBzl60G+0KA?=
+ =?us-ascii?Q?vvcem94ogotruxhdiINyBPDw8Dfn/+MQ21Lm2NmjA4dJ/k2esIGwAkrHJ3ee?=
+ =?us-ascii?Q?kwker6JIDaJMZJ9anVv9UPH+yGK5KrQILHkIFF0VpLPN1vsX7CB+XZQiU92t?=
+ =?us-ascii?Q?EVDY4z4Qc6atsouzv6qf/MQQvro61RKzwjXc2gKNazt3KGo93Vs6eZQr5r28?=
+ =?us-ascii?Q?a6N3DXFWWz1sMO9KmRtAUKTjIfK96pK9meBVajZ9QtD1Kjy7O5VXu/TpLwEY?=
+ =?us-ascii?Q?jCaP3MFrt88OPz28sy3Ca9HCbiCtn7c1orUkeYE6hSDSl8fqeL6uCOcuJlT4?=
+ =?us-ascii?Q?Taa429oSpr44krTwEhEFu0SPGGclPGJk6eZ4fQbBdJZ1SlCsN98BBWCpqpxU?=
+ =?us-ascii?Q?bjx4/eJwsgAQpKbgNd7Hb0C8beUOvLSJoSoFV/9FOz0wli4AjJ8yuusmBBdd?=
+ =?us-ascii?Q?4JV61R1EHDm1veV5jdVWNf7DRshXWC4gyH6uZ6k9rApeglzfPXZfui2YLFhP?=
+ =?us-ascii?Q?sN/ViGv1APnDkPMru/lUsgC9oxiS55xAbOYIKzq2W6dboF/uOi/aUqhE+Kdo?=
+ =?us-ascii?Q?WlFPcr2HsNL48l5gPVEc8LmI9gcEmtev3W6HcYtcLCNya8tZ7GT/94lmScwk?=
+ =?us-ascii?Q?3zzya/ORLgsSeCN5eKjmYFTbqMrDbmd5XA2ircdIrKR+mgxXOOvDVlPfx5BD?=
+ =?us-ascii?Q?5CmBvGZ7Pwzk20o556jbe+lPsafRvRQK4CDKl3GbLS9Eiyju36JtlVXThb2U?=
+ =?us-ascii?Q?0/o4AJIKkGANwF+uw6np7MpBBktocb5mcsI3eGWVKyFDXb/IjqoS5exkCE/V?=
+ =?us-ascii?Q?L67huIdVlaEzMmGBd2JjXwwN7QuhD6UPsfL/zV2knbOgROj62W+zvxFlLDun?=
+ =?us-ascii?Q?qgyD6YBk6m1KSCqVmPLgN+tdzMu6F/3FkliqcMdBTh0Ipp7/J0sKqSxAvU0e?=
+ =?us-ascii?Q?E5EZkM5BNp9h3ZXTcTW9VAAULbVrOxjllI+YSU5/TH/OAXGsCduwc944yyQ3?=
+ =?us-ascii?Q?tINdeK223uUwwYNozK+kgfHaGsV0fU8jr+LXvngqMQ2EFk35ZL2NEfyqifCL?=
+ =?us-ascii?Q?utju47GUAeJlyH0z0bNsU7sDGEbJLzs9HQL2wFeLx6wVCjog7nV1taTMl1EV?=
+ =?us-ascii?Q?/hxrhkhUaJc7usO9qVAsN3LUq9ArhxT8ftakgr2eNd8/nsiKEfXHn/C871ym?=
+ =?us-ascii?Q?/l0zEHjHw6AUlHKGZIOaKrei/Wh8RMfTRCzAUWBIXLoocnNJxBb9lfqIXOPj?=
+ =?us-ascii?Q?A7MoscBZEyeww0FEoTMIxjiOQapSZHfK57hsiv1Kkci1ae4F/Du443koEpFx?=
+ =?us-ascii?Q?pOCKd+1lAQ2/dXzMuKx+4947AnltGX1MSje3utev?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 698d4801-70c9-4ae5-44fe-08da80274e67
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4946b95f-c1d6-4209-4770-08da80274f72
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5151.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2022 08:05:53.7879
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2022 08:05:55.6003
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Pmtk9pDi9GuFZAZ1fYfVUW+xjFDxaDY2fXGlNO/LFR+iDNwa2iESngPfvDKPubXtKL3jWU6Oz5f3vPeYEa54Rg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: sNzvAl+Ho6tkXDlTYvL4MJZlHauXsodwJ3N2zrOrf1dj5xcmzkHYZwhUXe6BuLK80alE2DoFkgZhNfIpvQJnKQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB7617
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
@@ -121,29 +121,188 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Daniel Baluta <daniel.baluta@nxp.com>
 
-Byte offset is the offset in the ring buffer to the DSP
-while posn_offset is an offset inside the stream_box where
-we keep position information.
+This will keep SOF compress stream private data. So far
+we used snd_compr_tstamp to hold the private data but this
+is no longer enough as we need to hold other info like
+number of channels or sample bytes.
 
 Reviewed-by: Paul Olaru <paul.olaru@oss.nxp.com>
 Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 Signed-off-by: Daniel Baluta <daniel.baluta@nxp.com>
 ---
- sound/soc/sof/compress.c | 1 -
- 1 file changed, 1 deletion(-)
+ sound/soc/sof/compress.c | 40 ++++++++++++++++++++--------------------
+ sound/soc/sof/sof-priv.h |  5 +++++
+ 2 files changed, 25 insertions(+), 20 deletions(-)
 
 diff --git a/sound/soc/sof/compress.c b/sound/soc/sof/compress.c
-index 67139e15f862..760d6a4a5253 100644
+index 760d6a4a5253..e990fa093bb5 100644
 --- a/sound/soc/sof/compress.c
 +++ b/sound/soc/sof/compress.c
-@@ -237,7 +237,6 @@ static int sof_compr_set_params(struct snd_soc_component *component,
+@@ -11,20 +11,20 @@
+ #include "sof-priv.h"
+ #include "sof-utils.h"
+ 
+-static void sof_set_transferred_bytes(struct snd_compr_tstamp *tstamp,
++static void sof_set_transferred_bytes(struct sof_compr_stream *sstream,
+ 				      u64 host_pos, u64 buffer_size)
+ {
+ 	u64 prev_pos;
+ 	unsigned int copied;
+ 
+-	div64_u64_rem(tstamp->copied_total, buffer_size, &prev_pos);
++	div64_u64_rem(sstream->copied_total, buffer_size, &prev_pos);
+ 
+ 	if (host_pos < prev_pos)
+ 		copied = (buffer_size - prev_pos) + host_pos;
+ 	else
+ 		copied = host_pos - prev_pos;
+ 
+-	tstamp->copied_total += copied;
++	sstream->copied_total += copied;
+ }
+ 
+ static void snd_sof_compr_fragment_elapsed_work(struct work_struct *work)
+@@ -49,7 +49,7 @@ void snd_sof_compr_fragment_elapsed(struct snd_compr_stream *cstream)
+ 	struct snd_soc_pcm_runtime *rtd;
+ 	struct snd_compr_runtime *crtd;
+ 	struct snd_soc_component *component;
+-	struct snd_compr_tstamp *tstamp;
++	struct sof_compr_stream *sstream;
+ 	struct snd_sof_pcm *spcm;
+ 
+ 	if (!cstream)
+@@ -57,7 +57,7 @@ void snd_sof_compr_fragment_elapsed(struct snd_compr_stream *cstream)
+ 
+ 	rtd = cstream->private_data;
+ 	crtd = cstream->runtime;
+-	tstamp = crtd->private_data;
++	sstream = crtd->private_data;
+ 	component = snd_soc_rtdcom_lookup(rtd, SOF_AUDIO_PCM_DRV_NAME);
+ 
+ 	spcm = snd_sof_find_spcm_dai(component, rtd);
+@@ -67,7 +67,7 @@ void snd_sof_compr_fragment_elapsed(struct snd_compr_stream *cstream)
+ 		return;
+ 	}
+ 
+-	sof_set_transferred_bytes(tstamp, spcm->stream[cstream->direction].posn.host_posn,
++	sof_set_transferred_bytes(sstream, spcm->stream[cstream->direction].posn.host_posn,
+ 				  crtd->buffer_size);
+ 
+ 	/* use the same workqueue-based solution as for PCM, cf. snd_sof_pcm_elapsed */
+@@ -96,24 +96,24 @@ static int sof_compr_open(struct snd_soc_component *component,
+ {
+ 	struct snd_soc_pcm_runtime *rtd = cstream->private_data;
+ 	struct snd_compr_runtime *crtd = cstream->runtime;
+-	struct snd_compr_tstamp *tstamp;
++	struct sof_compr_stream *sstream;
+ 	struct snd_sof_pcm *spcm;
+ 	int dir;
+ 
+-	tstamp = kzalloc(sizeof(*tstamp), GFP_KERNEL);
+-	if (!tstamp)
++	sstream = kzalloc(sizeof(*sstream), GFP_KERNEL);
++	if (!sstream)
+ 		return -ENOMEM;
+ 
+ 	spcm = snd_sof_find_spcm_dai(component, rtd);
+ 	if (!spcm) {
+-		kfree(tstamp);
++		kfree(sstream);
+ 		return -EINVAL;
+ 	}
+ 
+ 	dir = cstream->direction;
+ 
+ 	if (spcm->stream[dir].cstream) {
+-		kfree(tstamp);
++		kfree(sstream);
+ 		return -EBUSY;
+ 	}
+ 
+@@ -122,7 +122,7 @@ static int sof_compr_open(struct snd_soc_component *component,
+ 	spcm->stream[dir].posn.dai_posn = 0;
+ 	spcm->prepared[dir] = false;
+ 
+-	crtd->private_data = tstamp;
++	crtd->private_data = sstream;
+ 
+ 	return 0;
+ }
+@@ -131,7 +131,7 @@ static int sof_compr_free(struct snd_soc_component *component,
+ 			  struct snd_compr_stream *cstream)
+ {
+ 	struct snd_sof_dev *sdev = snd_soc_component_get_drvdata(component);
+-	struct snd_compr_tstamp *tstamp = cstream->runtime->private_data;
++	struct sof_compr_stream *sstream = cstream->runtime->private_data;
+ 	struct snd_soc_pcm_runtime *rtd = cstream->private_data;
+ 	struct sof_ipc_stream stream;
+ 	struct sof_ipc_reply reply;
+@@ -155,7 +155,7 @@ static int sof_compr_free(struct snd_soc_component *component,
+ 
+ 	cancel_work_sync(&spcm->stream[cstream->direction].period_elapsed_work);
+ 	spcm->stream[cstream->direction].cstream = NULL;
+-	kfree(tstamp);
++	kfree(sstream);
+ 
+ 	return ret;
+ }
+@@ -169,7 +169,7 @@ static int sof_compr_set_params(struct snd_soc_component *component,
+ 	struct sof_ipc_pcm_params_reply ipc_params_reply;
+ 	struct sof_ipc_fw_ready *ready = &sdev->fw_ready;
+ 	struct sof_ipc_fw_version *v = &ready->version;
+-	struct snd_compr_tstamp *tstamp;
++	struct sof_compr_stream *sstream;
+ 	struct sof_ipc_pcm_params *pcm;
+ 	struct snd_sof_pcm *spcm;
+ 	size_t ext_data_size;
+@@ -184,7 +184,7 @@ static int sof_compr_set_params(struct snd_soc_component *component,
+ 		return -EINVAL;
+ 	}
+ 
+-	tstamp = crtd->private_data;
++	sstream = crtd->private_data;
+ 
+ 	spcm = snd_sof_find_spcm_dai(component, rtd);
+ 
+@@ -237,7 +237,7 @@ static int sof_compr_set_params(struct snd_soc_component *component,
  		goto out;
  	}
  
--	tstamp->byte_offset = sdev->stream_box.offset + ipc_params_reply.posn_offset;
- 	tstamp->sampling_rate = params->codec.sample_rate;
+-	tstamp->sampling_rate = params->codec.sample_rate;
++	sstream->sampling_rate = params->codec.sample_rate;
  
  	spcm->prepared[cstream->direction] = true;
+ 
+@@ -325,10 +325,10 @@ static int sof_compr_pointer(struct snd_soc_component *component,
+ 			     struct snd_compr_stream *cstream,
+ 			     struct snd_compr_tstamp *tstamp)
+ {
+-	struct snd_compr_tstamp *pstamp = cstream->runtime->private_data;
++	struct sof_compr_stream *sstream = cstream->runtime->private_data;
+ 
+-	tstamp->sampling_rate = pstamp->sampling_rate;
+-	tstamp->copied_total = pstamp->copied_total;
++	tstamp->sampling_rate = sstream->sampling_rate;
++	tstamp->copied_total = sstream->copied_total;
+ 
+ 	return 0;
+ }
+diff --git a/sound/soc/sof/sof-priv.h b/sound/soc/sof/sof-priv.h
+index 823583086279..42f112030fb8 100644
+--- a/sound/soc/sof/sof-priv.h
++++ b/sound/soc/sof/sof-priv.h
+@@ -105,6 +105,11 @@ enum sof_debugfs_access_type {
+ 	SOF_DEBUGFS_ACCESS_D0_ONLY,
+ };
+ 
++struct sof_compr_stream {
++	u64 copied_total;
++	u32 sampling_rate;
++};
++
+ struct snd_sof_dev;
+ struct snd_sof_ipc_msg;
+ struct snd_sof_ipc;
 -- 
 2.27.0
 

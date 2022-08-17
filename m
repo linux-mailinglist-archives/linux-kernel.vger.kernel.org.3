@@ -2,61 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5265975E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E67597613
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241047AbiHQSnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 14:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46638 "EHLO
+        id S241293AbiHQSny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 14:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240996AbiHQSnL (ORCPT
+        with ESMTP id S241074AbiHQSnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 14:43:11 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C62A1D7C
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 11:43:07 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4M7H2f3dTnzDqNy;
-        Wed, 17 Aug 2022 18:43:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1660761786; bh=pybABoossopvyk5GCmIybMdFUdJj94XeORKmXmsyBkA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=eWqxU8J9ICiUUIl9vGm2Y3qok3XUsEQbxMFbBPn4fbBPgkLwD5DxaEeU/gI2KiT6G
-         6LLrlqzWb0pX4pLF+03bTaRAMS8lpUpqB0HoSWGzdGYX+IIpspnbpLOwiupiGLLkf8
-         DhLr7oSeiPcN6V9tFjhwb2z9/KX9CT4k6coU5H+c=
-X-Riseup-User-ID: 174D87B460C20107E9EA535CD40FAE534F423A2963B4AE97779D65618A1E54BC
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4M7H2c1rhwz5vRK;
-        Wed, 17 Aug 2022 18:43:04 +0000 (UTC)
-Message-ID: <dd2ee57a-2ab2-db94-36d9-8faced18fe61@riseup.net>
-Date:   Wed, 17 Aug 2022 15:43:00 -0300
+        Wed, 17 Aug 2022 14:43:33 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54554BF6C;
+        Wed, 17 Aug 2022 11:43:20 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 3BADD5C017F;
+        Wed, 17 Aug 2022 14:43:19 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Wed, 17 Aug 2022 14:43:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1660761799; x=1660848199; bh=ba
+        v66PMTSC/VY8B9jYgWNMdcK75gc9L0KS6MRDdO0Fo=; b=Ckx9KIq+O0QtkgDiW0
+        aaZWqZSbHBb3jxg4p5CymV9WpVKqnw8VWP+muH6SiOlc7D8ezJZrkT8+Skffkt1K
+        k55TQdoM1INwG+C4ERmJ9CMSWv0WYRhRxt0ReDo/ZwmcLRwdIGUGOTBR05T742Z/
+        3Ee1uGjU8PNNxog0HsjleVmJ7sMQqidwrxA483gzf/GrFVoppK/J1CTfmwhJTd49
+        sn3cdqjGUqt7M1t/llBI0xvPktAIDpZf4jWGBso2xR6BIu/J4Ikjwoj00Uk0VWfk
+        TezRK4TryNX32yV9gEZ6ndWh0WXfVHIfUDPFEYiKPaphQF1cl+wDSGn5Wv9S8w8x
+        BwEA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1660761799; x=1660848199; bh=bav66PMTSC/VY
+        8B9jYgWNMdcK75gc9L0KS6MRDdO0Fo=; b=w2evElmi+YbnGcfU5hpbo1Q7hg7Xw
+        hllTc17ojp+F3kHxClJCUG1580MVViRiWyqEuYetFwnX3zxpdhQK3StZOtIUM9D5
+        hNQMJEOl6hjWDTQYx2UKsWfJbjGi85KTyk09b8x6ESNaAqPs3dq0DNL3T7umoo0K
+        pfUSDgd5Qe1rUY4Qh6Iras5JQ8s2mI4/AsjBkG8yIRespKvPxeDqJYpdD105oZjM
+        MY782qqmyNM1Q95/WitI3PzBcbxYcQEgauyQkOwiHt5sZo5mGaaLqctPwQ8qinZZ
+        T9unT9DtEoXci9B1eqozLUqsWSKz8epop2UoJPeqB9wEDLVqhrFX6/YhA==
+X-ME-Sender: <xms:xzb9YndnLEAmAS1FReE0YnzeRq2I5Hntb-rLSNjcBHjdst7qcOfyOA>
+    <xme:xzb9YtMThxOfKvHaHCahuD4XgL22XZ5j-cPPikJH0mhp2HDX58O98zswhCyUT9Mud
+    lM9QF5lU4rR-IzQCA>
+X-ME-Received: <xmr:xzb9YghbN-SNTk_ydr5bXzQFUyer_Gpo0MZ860kQ6QWgwzSz2Aldlu2KyIeBsFOnpCSYWgcg0P80-1ASo_rsDbSZvPJMde5_M0ru>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehiedguddvlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhephf
+    fvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcu
+    oegugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpefgfefggeejhfduie
+    ekvdeuteffleeifeeuvdfhheejleejjeekgfffgefhtddtteenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:xzb9Yo9engdzsislxcyXqxmQoR10VIPnArzOJtS1iNzFe1UMc-EA7A>
+    <xmx:xzb9YjuBevFWHe70YvDUMTQvWm5cEl28w0nQC_Q7_dkjFU3SdL5URw>
+    <xmx:xzb9YnGkjq6i7KD92ZOSHw3OaE3uikDywh4KxQzKrhEcZu196pm5oQ>
+    <xmx:xzb9YknYP4SIJ0PUSjuOKppQqg-kR-WjgSn7-VPhOycr82DolUdtwQ>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 17 Aug 2022 14:43:18 -0400 (EDT)
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, memxor@gmail.com
+Cc:     Daniel Xu <dxu@dxuuu.xyz>, pablo@netfilter.org, fw@strlen.de,
+        toke@kernel.org, netfilter-devel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 3/4] bpf: Add support for writing to nf_conn:mark
+Date:   Wed, 17 Aug 2022 12:43:01 -0600
+Message-Id: <edbca42217a73161903a50ba07ec63c5fa5fde00.1660761470.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <cover.1660761470.git.dxu@dxuuu.xyz>
+References: <cover.1660761470.git.dxu@dxuuu.xyz>
 MIME-Version: 1.0
-Subject: Re: [BUG][5.20] refcount_t: underflow; use-after-free
-Content-Language: en-US
-To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
-        Melissa Wen <mwen@igalia.com>
-Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-References: <CABXGCsM58-8fxVKAVkwsshg+33B_1_t_WesG160AtVBe1ZvKiw@mail.gmail.com>
- <be6f1ce4-46b1-7a80-230c-b99f203ce8ad@riseup.net>
- <CABXGCsMFYnE+Wn2EAWuC8DSVj=TVprj6ABZwRK-hXcw-1hnMyw@mail.gmail.com>
- <CABXGCsMpGabZ32j_ObEHa_har2W8M8RWuqnx3d=yJT2NX_ztNg@mail.gmail.com>
- <20220817160751.moqhebkiuiydraka@mail.igalia.com>
- <CABXGCsOM9An-+EeaGWm0OA1FN2p94=BF210Lhy0tiO6ye9onWQ@mail.gmail.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <CABXGCsOM9An-+EeaGWm0OA1FN2p94=BF210Lhy0tiO6ye9onWQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,121 +86,220 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Support direct writes to nf_conn:mark from TC and XDP prog types. This
+is useful when applications want to store per-connection metadata. This
+is also particularly useful for applications that run both bpf and
+iptables/nftables because the latter can trivially access this metadata.
 
+One example use case would be if a bpf prog is responsible for advanced
+packet classification and iptables/nftables is later used for routing
+due to pre-existing/legacy code.
 
-On 8/17/22 14:44, Mikhail Gavrilov wrote:
-> On Wed, Aug 17, 2022 at 9:08 PM Melissa Wen <mwen@igalia.com> wrote:
->>
->> Hi Mikhail,
->>
->> IIUC, you got this second user-after-free by applying the first version
->> of Maíra's patch, right? So, that version was adding another unbalanced
->> unlock to the cs ioctl flow, but it was solved in the latest version,
->> that you can find here: https://patchwork.freedesktop.org/patch/497680/
->> If this is the situation, can you check this last version?
->>
->> Thanks,
->>
->> Melissa
-> 
-> With the last version warning "bad unlock balance detected!" was gone,
-> but the user-after-free issue remains.
-> And again "Workqueue: events drm_sched_entity_kill_jobs_work [gpu_sched]".
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+---
+ include/net/netfilter/nf_conntrack_bpf.h | 18 +++++++++
+ net/core/filter.c                        | 34 ++++++++++++++++
+ net/netfilter/nf_conntrack_bpf.c         | 50 ++++++++++++++++++++++++
+ 3 files changed, 102 insertions(+)
 
-Hi Mikhail,
+diff --git a/include/net/netfilter/nf_conntrack_bpf.h b/include/net/netfilter/nf_conntrack_bpf.h
+index a473b56842c5..0f584c2bd475 100644
+--- a/include/net/netfilter/nf_conntrack_bpf.h
++++ b/include/net/netfilter/nf_conntrack_bpf.h
+@@ -3,6 +3,7 @@
+ #ifndef _NF_CONNTRACK_BPF_H
+ #define _NF_CONNTRACK_BPF_H
+ 
++#include <linux/bpf.h>
+ #include <linux/btf.h>
+ #include <linux/kconfig.h>
+ 
+@@ -10,6 +11,12 @@
+     (IS_MODULE(CONFIG_NF_CONNTRACK) && IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES))
+ 
+ extern int register_nf_conntrack_bpf(void);
++extern int nf_conntrack_btf_struct_access(struct bpf_verifier_log *log,
++					  const struct btf *btf,
++					  const struct btf_type *t, int off,
++					  int size, enum bpf_access_type atype,
++					  u32 *next_btf_id,
++					  enum bpf_type_flag *flag);
+ 
+ #else
+ 
+@@ -18,6 +25,17 @@ static inline int register_nf_conntrack_bpf(void)
+ 	return 0;
+ }
+ 
++static inline int
++nf_conntrack_btf_struct_access(struct bpf_verifier_log *log,
++			       const struct btf *btf,
++			       const struct btf_type *t, int off,
++			       int size, enum bpf_access_type atype,
++			       u32 *next_btf_id,
++			       enum bpf_type_flag *flag)
++{
++	return -EACCES;
++}
++
+ #endif
+ 
+ #endif /* _NF_CONNTRACK_BPF_H */
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 5669248aff25..d7b768fe9de7 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -18,6 +18,7 @@
+  */
+ 
+ #include <linux/atomic.h>
++#include <linux/bpf_verifier.h>
+ #include <linux/module.h>
+ #include <linux/types.h>
+ #include <linux/mm.h>
+@@ -55,6 +56,7 @@
+ #include <net/sock_reuseport.h>
+ #include <net/busy_poll.h>
+ #include <net/tcp.h>
++#include <net/netfilter/nf_conntrack_bpf.h>
+ #include <net/xfrm.h>
+ #include <net/udp.h>
+ #include <linux/bpf_trace.h>
+@@ -8710,6 +8712,21 @@ static bool tc_cls_act_is_valid_access(int off, int size,
+ 	return bpf_skb_is_valid_access(off, size, type, prog, info);
+ }
+ 
++static int tc_cls_act_btf_struct_access(struct bpf_verifier_log *log,
++					const struct btf *btf,
++					const struct btf_type *t, int off,
++					int size, enum bpf_access_type atype,
++					u32 *next_btf_id,
++					enum bpf_type_flag *flag)
++{
++	if (atype == BPF_READ)
++		return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
++					 flag);
++
++	return nf_conntrack_btf_struct_access(log, btf, t, off, size, atype,
++					      next_btf_id, flag);
++}
++
+ static bool __is_valid_xdp_access(int off, int size)
+ {
+ 	if (off < 0 || off >= sizeof(struct xdp_md))
+@@ -8769,6 +8786,21 @@ void bpf_warn_invalid_xdp_action(struct net_device *dev, struct bpf_prog *prog,
+ }
+ EXPORT_SYMBOL_GPL(bpf_warn_invalid_xdp_action);
+ 
++static int xdp_btf_struct_access(struct bpf_verifier_log *log,
++				 const struct btf *btf,
++				 const struct btf_type *t, int off,
++				 int size, enum bpf_access_type atype,
++				 u32 *next_btf_id,
++				 enum bpf_type_flag *flag)
++{
++	if (atype == BPF_READ)
++		return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
++					 flag);
++
++	return nf_conntrack_btf_struct_access(log, btf, t, off, size, atype,
++					      next_btf_id, flag);
++}
++
+ static bool sock_addr_is_valid_access(int off, int size,
+ 				      enum bpf_access_type type,
+ 				      const struct bpf_prog *prog,
+@@ -10663,6 +10695,7 @@ const struct bpf_verifier_ops tc_cls_act_verifier_ops = {
+ 	.convert_ctx_access	= tc_cls_act_convert_ctx_access,
+ 	.gen_prologue		= tc_cls_act_prologue,
+ 	.gen_ld_abs		= bpf_gen_ld_abs,
++	.btf_struct_access	= tc_cls_act_btf_struct_access,
+ };
+ 
+ const struct bpf_prog_ops tc_cls_act_prog_ops = {
+@@ -10674,6 +10707,7 @@ const struct bpf_verifier_ops xdp_verifier_ops = {
+ 	.is_valid_access	= xdp_is_valid_access,
+ 	.convert_ctx_access	= xdp_convert_ctx_access,
+ 	.gen_prologue		= bpf_noop_prologue,
++	.btf_struct_access	= xdp_btf_struct_access,
+ };
+ 
+ const struct bpf_prog_ops xdp_prog_ops = {
+diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrack_bpf.c
+index 1cd87b28c9b0..8010cc542d17 100644
+--- a/net/netfilter/nf_conntrack_bpf.c
++++ b/net/netfilter/nf_conntrack_bpf.c
+@@ -6,6 +6,7 @@
+  * are exposed through to BPF programs is explicitly unstable.
+  */
+ 
++#include <linux/bpf_verifier.h>
+ #include <linux/bpf.h>
+ #include <linux/btf.h>
+ #include <linux/types.h>
+@@ -15,6 +16,8 @@
+ #include <net/netfilter/nf_conntrack_bpf.h>
+ #include <net/netfilter/nf_conntrack_core.h>
+ 
++static const struct btf_type *nf_conn_type;
++
+ /* bpf_ct_opts - Options for CT lookup helpers
+  *
+  * Members:
+@@ -184,6 +187,53 @@ static struct nf_conn *__bpf_nf_ct_lookup(struct net *net,
+ 	return ct;
+ }
+ 
++/* Check writes into `struct nf_conn` */
++int nf_conntrack_btf_struct_access(struct bpf_verifier_log *log,
++				   const struct btf *btf,
++				   const struct btf_type *t, int off,
++				   int size, enum bpf_access_type atype,
++				   u32 *next_btf_id,
++				   enum bpf_type_flag *flag)
++{
++	const struct btf_type *nct = READ_ONCE(nf_conn_type);
++	s32 type_id;
++	size_t end;
++
++	if (!nct) {
++		type_id = btf_find_by_name_kind(btf, "nf_conn", BTF_KIND_STRUCT);
++		if (type_id < 0)
++			return -EINVAL;
++
++		nct = btf_type_by_id(btf, type_id);
++		WRITE_ONCE(nf_conn_type, nct);
++	}
++
++	if (t != nct) {
++		bpf_log(log, "only read is supported\n");
++		return -EACCES;
++	}
++
++	switch (off) {
++#if defined(CONFIG_NF_CONNTRACK_MARK)
++	case offsetof(struct nf_conn, mark):
++		end = offsetofend(struct nf_conn, mark);
++		break;
++#endif
++	default:
++		bpf_log(log, "no write support to nf_conn at off %d\n", off);
++		return -EACCES;
++	}
++
++	if (off + size > end) {
++		bpf_log(log,
++			"write access at off %d with size %d beyond the member of nf_conn ended at %zu\n",
++			off, size, end);
++		return -EACCES;
++	}
++
++	return NOT_INIT;
++}
++
+ __diag_push();
+ __diag_ignore_all("-Wmissing-prototypes",
+ 		  "Global functions as their definitions will be in nf_conntrack BTF");
+-- 
+2.37.1
 
-Looks like 45ecaea738830b9d521c93520c8f201359dcbd95 ("drm/sched: Partial 
-revert of 'drm/sched: Keep s_fence->parent pointer'") introduced the 
-error. Try reverting it and check if the use-after-free still happens.
-
-Best Regards,
-- Maíra Canal
-
-> 
-> [  297.834779] ------------[ cut here ]------------
-> [  297.834818] refcount_t: underflow; use-after-free.
-> [  297.834831] WARNING: CPU: 30 PID: 2377 at lib/refcount.c:28
-> refcount_warn_saturate+0xba/0x110
-> [  297.834838] Modules linked in: uinput rfcomm snd_seq_dummy
-> snd_hrtimer nft_objref nf_conntrack_netbios_ns nf_conntrack_broadcast
-> nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet
-> nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat
-> nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip_set nf_tables nfnetlink
-> qrtr bnep sunrpc binfmt_misc snd_seq_midi snd_seq_midi_event mt76x2u
-> mt76x2_common mt76x02_usb mt76_usb mt76x02_lib snd_hda_codec_realtek
-> iwlmvm intel_rapl_msr snd_hda_codec_generic snd_hda_codec_hdmi mt76
-> vfat fat snd_hda_intel intel_rapl_common mac80211 snd_intel_dspcfg
-> snd_intel_sdw_acpi snd_usb_audio snd_hda_codec snd_usbmidi_lib btusb
-> edac_mce_amd iwlwifi libarc4 uvcvideo snd_hda_core btrtl snd_rawmidi
-> snd_hwdep videobuf2_vmalloc btbcm kvm_amd videobuf2_memops snd_seq
-> iwlmei btintel videobuf2_v4l2 eeepc_wmi snd_seq_device
-> videobuf2_common btmtk kvm xpad videodev joydev irqbypass snd_pcm
-> asus_wmi hid_logitech_hidpp ff_memless cfg80211 bluetooth rapl mc
-> [  297.834932]  ledtrig_audio snd_timer sparse_keymap platform_profile
-> wmi_bmof snd video pcspkr k10temp i2c_piix4 rfkill soundcore mei
-> asus_ec_sensors acpi_cpufreq zram amdgpu drm_ttm_helper ttm
-> crct10dif_pclmul crc32_pclmul crc32c_intel iommu_v2 ucsi_ccg gpu_sched
-> typec_ucsi drm_buddy ghash_clmulni_intel drm_display_helper ccp igb
-> typec sp5100_tco nvme cec nvme_core dca wmi ip6_tables ip_tables fuse
-> [  297.834978] Unloaded tainted modules: amd64_edac():1 amd64_edac():1
-> amd64_edac():1 amd64_edac():1 amd64_edac():1 amd64_edac():1
-> amd64_edac():1 amd64_edac():1 pcc_cpufreq():1 amd64_edac():1
-> pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1
-> amd64_edac():1 amd64_edac():1 pcc_cpufreq():1 amd64_edac():1
-> pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1 amd64_edac():1
-> pcc_cpufreq():1 pcc_cpufreq():1 amd64_edac():1 amd64_edac():1
-> pcc_cpufreq():1 pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1
-> pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1 amd64_edac():1
-> pcc_cpufreq():1 pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1
-> amd64_edac():1 amd64_edac():1 pcc_cpufreq():1 amd64_edac():1
-> pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1
-> amd64_edac():1 amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1
-> amd64_edac():1 pcc_cpufreq():1 amd64_edac():1 amd64_edac():1
-> pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1 amd64_edac():1
-> pcc_cpufreq():1 pcc_cpufreq():1 pcc_cpufreq():1 fjes():1
-> [  297.835055]  pcc_cpufreq():1 fjes():1 pcc_cpufreq():1 fjes():1
-> pcc_cpufreq():1 fjes():1 fjes():1 fjes():1 fjes():1 fjes():1
-> [  297.835071] CPU: 30 PID: 2377 Comm: kworker/30:6 Tainted: G
-> W    L    -------  ---
-> 6.0.0-0.rc1.20220817git3cc40a443a04.14.fc38.x86_64 #1
-> [  297.835075] Hardware name: System manufacturer System Product
-> Name/ROG STRIX X570-I GAMING, BIOS 4403 04/27/2022
-> [  297.835078] Workqueue: events drm_sched_entity_kill_jobs_work [gpu_sched]
-> [  297.835085] RIP: 0010:refcount_warn_saturate+0xba/0x110
-> [  297.835088] Code: 01 01 e8 59 59 6f 00 0f 0b e9 22 46 a5 00 80 3d
-> be 7d be 01 00 75 85 48 c7 c7 c0 99 8e aa c6 05 ae 7d be 01 01 e8 36
-> 59 6f 00 <0f> 0b e9 ff 45 a5 00 80 3d 99 7d be 01 00 0f 85 5e ff ff ff
-> 48 c7
-> [  297.835091] RSP: 0018:ffffbd3506df7e60 EFLAGS: 00010286
-> [  297.835095] RAX: 0000000000000026 RBX: ffff961b250cbc28 RCX: 0000000000000000
-> [  297.835097] RDX: 0000000000000001 RSI: ffffffffaa8d07a4 RDI: 00000000ffffffff
-> [  297.835100] RBP: ffff96276a3f5600 R08: 0000000000000000 R09: ffffbd3506df7d10
-> [  297.835102] R10: 0000000000000003 R11: ffff9627ae2fffe8 R12: ffff96276a3fc800
-> [  297.835105] R13: ffff9618c03e6600 R14: ffff96276a3fc805 R15: ffff961b250cbc30
-> [  297.835108] FS:  0000000000000000(0000) GS:ffff96276a200000(0000)
-> knlGS:0000000000000000
-> [  297.835110] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  297.835113] CR2: 0000621001e4a000 CR3: 000000018d958000 CR4: 0000000000350ee0
-> [  297.835116] Call Trace:
-> [  297.835118]  <TASK>
-> [  297.835121]  process_one_work+0x2a0/0x600
-> [  297.835133]  worker_thread+0x4f/0x3a0
-> [  297.835139]  ? process_one_work+0x600/0x600
-> [  297.835142]  kthread+0xf5/0x120
-> [  297.835145]  ? kthread_complete_and_exit+0x20/0x20
-> [  297.835151]  ret_from_fork+0x22/0x30
-> [  297.835166]  </TASK>
-> [  297.835168] irq event stamp: 198245
-> [  297.835171] hardirqs last  enabled at (198253):
-> [<ffffffffa918ce7e>] __up_console_sem+0x5e/0x70
-> [  297.835175] hardirqs last disabled at (198260):
-> [<ffffffffa918ce63>] __up_console_sem+0x43/0x70
-> [  297.835177] softirqs last  enabled at (196454):
-> [<ffffffffa9de3a4e>] addrconf_verify_rtnl+0x23e/0x920
-> [  297.835182] softirqs last disabled at (196448):
-> [<ffffffffa9de3835>] addrconf_verify_rtnl+0x25/0x920
-> [  297.835185] ---[ end trace 0000000000000000 ]---
-> 
-> 
-> Fill kernel log: https://pastebin.com/zbbY2zDU
-> 

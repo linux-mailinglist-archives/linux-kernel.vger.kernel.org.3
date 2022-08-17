@@ -2,96 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 074C6596EA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 14:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5697596EB0
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 14:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235450AbiHQMni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 08:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42640 "EHLO
+        id S239054AbiHQMqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 08:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbiHQMnd (ORCPT
+        with ESMTP id S236380AbiHQMqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 08:43:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E0F6E898;
-        Wed, 17 Aug 2022 05:43:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7F2960B78;
-        Wed, 17 Aug 2022 12:43:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C2BCC433C1;
-        Wed, 17 Aug 2022 12:43:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660740212;
-        bh=P8dzIB6z9ULz5JdX7NsNy556/nb7bdo5QwU2w5AaOdY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Eh5UOsm3JKInvaIdzkcuPePBtvl3iaFrl+McsEBiFesgxM08TS4cg2yaraXsDxY1K
-         m2mAuiTki4RDuH+hftVvzEqfIR0EjIifVKgrvppAS9CmVON6HJFnhkKS88B8FbfjNX
-         DMKc2ubd+LQ8ARqvJlchkNDcDUexCv8JKjB/gXzs=
-Date:   Wed, 17 Aug 2022 14:43:29 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Duoming Zhou <duoming@zju.edu.cn>
-Cc:     linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        briannorris@chromium.org, amitkarwar@gmail.com,
-        ganapathi017@gmail.com, sharvari.harisangam@nxp.com,
-        huxinming820@gmail.com, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, johannes@sipsolutions.net,
-        rafael@kernel.org
-Subject: Re: [PATCH v7 1/2] devcoredump: remove the useless gfp_t parameter
- in dev_coredumpv and dev_coredumpm
-Message-ID: <YvzicURy8t2JdQke@kroah.com>
-References: <cover.1660739276.git.duoming@zju.edu.cn>
- <b861ce56ba555109a67f85a146a785a69f0a3c95.1660739276.git.duoming@zju.edu.cn>
+        Wed, 17 Aug 2022 08:46:10 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109758A6DB
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 05:46:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660740369; x=1692276369;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kYOYATKAKktz41sDaZZq1GXiosh7ennmO+42v74MCX0=;
+  b=BmFzNif2BqWreUkOOUtX5E9gtVH8H9Dsb+aki42myU77KoVdwOmeS+4o
+   Q/cqpI//50i3NqOLqLwOQAuFPVXL8qaZWSDj95JbcBLWzF5tsQpCXR5AB
+   nzcdRYfHnN3NwodGBTIytpI3IbWD2eHvs3zF5U0XsfoTNjhKoifqjyxEi
+   wm1hBmSQR/t68UglNCnIZx0xbUdf6B2FXIlb7wN4ZHCctyf77ryC8LTCL
+   Z770vZ1G8MRJk8YffLCxbvG8j3Ib0vx7UO+8KjyqCkFETe65lb6p8Ned9
+   oG86/VgxhNb9Ak9P95UJI4XSknTjZ+WjGwzlOttj8BeXEqOdeh5enKjo6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="293758726"
+X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
+   d="scan'208";a="293758726"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 05:46:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
+   d="scan'208";a="935344769"
+Received: from dev2 (HELO DEV2.igk.intel.com) ([10.237.148.94])
+  by fmsmga005.fm.intel.com with ESMTP; 17 Aug 2022 05:46:07 -0700
+From:   =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+To:     Takashi@vger.kernel.org, Iwai@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Cc:     linux-kernel@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Subject: [PATCH] ALSA: info: Fix llseek return value when using callback
+Date:   Wed, 17 Aug 2022 14:46:42 +0200
+Message-Id: <20220817124642.3974015-1-amadeuszx.slawinski@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b861ce56ba555109a67f85a146a785a69f0a3c95.1660739276.git.duoming@zju.edu.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 08:39:12PM +0800, Duoming Zhou wrote:
-> The dev_coredumpv() and dev_coredumpm() could not be used in atomic
-> context, because they call kvasprintf_const() and kstrdup() with
-> GFP_KERNEL parameter. The process is shown below:
-> 
-> dev_coredumpv(.., gfp_t gfp)
->   dev_coredumpm(.., gfp_t gfp)
->     dev_set_name
->       kobject_set_name_vargs
->         kvasprintf_const(GFP_KERNEL, ...); //may sleep
->           kstrdup(s, GFP_KERNEL); //may sleep
-> 
-> This patch removes gfp_t parameter of dev_coredumpv() and dev_coredumpm()
-> and changes the gfp_t parameter of kzalloc() in dev_coredumpm() to
-> GFP_KERNEL in order to show they could not be used in atomic context.
-> 
-> Fixes: 833c95456a70 ("device coredump: add new device coredump class")
-> Reviewed-by: Brian Norris <briannorris@chromium.org>
-> Reviewed-by: Johannes Berg <johannes@sipsolutions.net>
-> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-> ---
-> Changes in v7:
->   - Remove gfp_t flag in amdgpu device.
+When using callback there was a flow of
 
-Again, this creates a "flag day" where we have to be sure we hit all
-users of this api at the exact same time.  This will prevent any new
-driver that comes into a maintainer tree during the next 3 months from
-ever being able to use this api without cauing build breakages in the
-linux-next tree.
+	ret = -EINVAL
+	if (callback) {
+		offset = callback();
+		goto out;
+	}
+	...
+	offset = some other value in case of no callback;
+	ret = offset;
+out:
+	return ret;
 
-Please evolve this api to work properly for everyone at the same time,
-like was previously asked for so that we can take this change.  It will
-take 2 releases, but that's fine.
+which causes the snd_info_entry_llseek() to return -EINVAL when there is
+callback handler. Fix this by setting "ret" directly to callback return
+value before jumping to "out".
 
-thanks,
+73029e0ff18d ("ALSA: info - Implement common llseek for binary mode")
+Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+---
+ sound/core/info.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-greg k-h
+diff --git a/sound/core/info.c b/sound/core/info.c
+index b8058b341178..0b2f04dcb589 100644
+--- a/sound/core/info.c
++++ b/sound/core/info.c
+@@ -111,9 +111,9 @@ static loff_t snd_info_entry_llseek(struct file *file, loff_t offset, int orig)
+ 	entry = data->entry;
+ 	mutex_lock(&entry->access);
+ 	if (entry->c.ops->llseek) {
+-		offset = entry->c.ops->llseek(entry,
+-					      data->file_private_data,
+-					      file, offset, orig);
++		ret = entry->c.ops->llseek(entry,
++					   data->file_private_data,
++					   file, offset, orig);
+ 		goto out;
+ 	}
+ 
+-- 
+2.25.1
+

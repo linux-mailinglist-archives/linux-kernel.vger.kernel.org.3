@@ -2,172 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C934559701A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A11597015
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236994AbiHQNnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 09:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
+        id S239495AbiHQNoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 09:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233443AbiHQNnj (ORCPT
+        with ESMTP id S239276AbiHQNny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 09:43:39 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584F23CBED;
-        Wed, 17 Aug 2022 06:43:38 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso1894967pjk.0;
-        Wed, 17 Aug 2022 06:43:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=ltEvwlF7Mc7Jfl+CVYXmu3T8hQuVRPkB5nZQ2bzNo40=;
-        b=dEU0EguborkBx81g9hWug55t3YIcKqs5J0/FrnUJGlrgBQUGhlcAMRJlx3aknSQDTV
-         0YgD2F1LyeajruuaTOflPNvR8gvmUK23gfA0tPhWESXkDqdWlzjk8+J9pocDc6w+xYGh
-         XCqOHmYse/viFAaGggf8mLxG9UytxejRWc+iDuzT0alTWeSsFMBgxTqKb21tsj5ynI6R
-         8NlJL2W6+cE3Z+QXgD82G24uYbJXufyei78rG2IQlsBXPilLF7MauCDvy+OSDmz58ypf
-         PejwCi+zUMaM2JblPAMX+iP3KJR+Vpt5Ei8w4o/iL2y7Ki+z6RcFzP6eoprkUTupcIIV
-         rAHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=ltEvwlF7Mc7Jfl+CVYXmu3T8hQuVRPkB5nZQ2bzNo40=;
-        b=nXEqs1I1vmEm1MVfQ+Dk2VSgI28MkGsK2Q4fV+v4RGuSGcD2iytMW3E8S5+9pMPEAa
-         V5r3+tm6sXy7L33xe+ScXLKgBIQqhH6hqbo6dpFYk+hZQu2oOK2mGg8F/8uvtkNdYkzV
-         ERChr61tj+AKuUvwe0X7sezT5klfd4DKPBm9SfDxKC5TSVdfcnWD2KyQ6Q4u4PvSUUiE
-         PXPOXrdq1Y3zLFinxi2P4+RZBZ3Kaej8XklemoN7mCUXwRv1GsUMOcEij41fhWuchKxO
-         yAakM4q2byhEvtSyY5msYyWupFfV9QjYkgGNNyqGn3vgvS0QMFNY5nops7MXRW02Rc5k
-         UXdg==
-X-Gm-Message-State: ACgBeo3M48shWwm2ThDwmfuJmqSbA3EmC5wczyi/+juDQTeBW9o6tCpW
-        bAc2l10vLwiwTuczAg8fw1M=
-X-Google-Smtp-Source: AA6agR7IzL4j/fNNZG2fIpkkOy57Eo5eqFLkF5ehsNbgWZvLivG8647a4lQWujNb/umEnPl7LacACg==
-X-Received: by 2002:a17:902:7883:b0:172:935c:7712 with SMTP id q3-20020a170902788300b00172935c7712mr4999396pll.7.1660743817579;
-        Wed, 17 Aug 2022 06:43:37 -0700 (PDT)
-Received: from instance-20220713-1412.vcn09202155.oraclevcn.com ([168.138.217.33])
-        by smtp.gmail.com with ESMTPSA id w1-20020a631601000000b004129741dd9dsm9480651pgl.51.2022.08.17.06.43.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 06:43:36 -0700 (PDT)
-From:   tcwzxx <tcwzxx@gmail.com>
-To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tcwzxx <tcwzxx@gmail.com>
-Subject: [PATCH] perf tool: add skip_not_exec_file_map_events option
-Date:   Wed, 17 Aug 2022 13:43:24 +0000
-Message-Id: <20220817134324.702278-1-tcwzxx@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 17 Aug 2022 09:43:54 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A8213AB19;
+        Wed, 17 Aug 2022 06:43:51 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 59AC4113E;
+        Wed, 17 Aug 2022 06:43:52 -0700 (PDT)
+Received: from [10.57.13.141] (unknown [10.57.13.141])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A136F3F67D;
+        Wed, 17 Aug 2022 06:43:49 -0700 (PDT)
+Message-ID: <94888b3b-8f54-367d-c6b4-5ebfeeafe4c4@arm.com>
+Date:   Wed, 17 Aug 2022 14:43:46 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] mmc: sdhci-xenon: Fix 2G limitation on AC5 SoC
+Content-Language: en-GB
+To:     Vadym Kochan <vadym.kochan@plvision.eu>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Hu Ziji <huziji@marvell.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Elad Nachman <enachman@marvell.com>, iommu@lists.linux.dev
+References: <20220726170711.30324-1-vadym.kochan@plvision.eu>
+ <139317dc-15e2-ac63-0e04-295e715a7747@gmail.com>
+ <20220727164532.GA19351@plvision.eu> <20220801093044.GA22721@plvision.eu>
+ <9a248303-7a27-e90e-76b3-c01a00be4e3d@intel.com>
+ <20220808095237.GA15939@plvision.eu>
+ <6c94411c-4847-526c-d929-c9523aa65c11@intel.com>
+ <20220808122652.GA6599@plvision.eu>
+ <3f96b382-aede-1f52-33cb-5f95715bdf59@intel.com>
+ <3d16ebad-ea6c-555e-2481-ca5fb08a6c66@arm.com>
+ <20220816205129.GA6438@plvision.eu>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220816205129.GA6438@plvision.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When generate the flame graph, the perf-script subcommand will
-process all mmap event and add them to the rbtree. The 240,000
-mmap region takes about 5 minutes, which is not useful for flame
-graph. So add the skip-not-exec-file-map-events option to skip
-not PROT_EXEC flag memory regions.
+On 2022-08-16 21:51, Vadym Kochan wrote:
+[...]
+>> The one thing to watch out for is that SWIOTLB doesn't necessarily interact
+>> very well with DMA offsets. Given the intent of
+>> of_dma_get_max_cpu_address(), I think it ought to work out OK now for
+>> current kernels on DT systems if everything is described correctly, but
+>> otherwise it's likely that you end up with ZONE_DMA either being empty or
+>> containing all memory, so the SWIOTLB buffer ends up being allocated
+>> anywhere such that it might not actually work as expected.
+>>
+>> Robin.
+> 
+> Hi Robin,
+> 
+> Thank you for the reply.
+> 
+> My understanding is that swiotlb is allocated (in case of arm64)
+> in the following cases:
+> 
+>     #1 when it is forced from the kernel cmdline
+> 
+>     #2 when max_pfn is greater than arm64_dma_phys_limit (and this is used
+>        as the end from which to allocate the swiotlb pool in the
+>        top-botom direction via memblock API).
+> 
+>     #3 using restricted dma-pool
+> 
+> Of course option #3 works fine because swiotlb is kind of forced to use
+> particulary this range of memory.
+> 
+> Both options #1 & #2 causes to use full memory mask even if to specify
+> dma-ranges in the DT:
+> 
+>      dma-ranges = <0x0 0x0 0x2 0x0 0x0 0x80000000>;
+> 
+> or if to specify the opposite:
+> 
+>      dma-ranges = <0x2 0x0 0x0 0x0 0x0 0x80000000>;
+> 
+>      just to make it lower than U32 to pass
+> 
+>          zone_dma_bits = min3(32U, dt_zone_dma_bits, acpi_zone_dma_bits)
+> 
+>      condition, but then it will be re-set in max_zone_phys() by:
+> 
+>       
+> 	if (phys_start > U32_MAX)
+> 		zone_mask = PHYS_ADDR_MAX;
+> 	else if (phys_start > zone_mask)
+> 		zone_mask = U32_MAX;
 
-Signed-off-by: tcwzxx <tcwzxx@gmail.com>
----
- tools/perf/builtin-report.c | 2 ++
- tools/perf/builtin-script.c | 3 +++
- tools/perf/util/machine.c   | 3 +++
- tools/perf/util/map.c       | 5 +++++
- tools/perf/util/map.h       | 2 ++
- 5 files changed, 15 insertions(+)
+Ah, indeed I missed that, sorry. It seems that that change to stop 
+assuming an offset kind of crossed over with the introduction of 
+*_dma_get_max_cpu_address(), but now that that firmware property parsing 
+*is* implemented, in principle it should be equally possible to evaluate 
+the actual offsets as well, and decide whether an offset ZONE_DMA is 
+appropriate or not. Either way, this is definitely the area which needs 
+work if we want to to able to support topologies like this properly.
 
-diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
-index 91ed41cc7d88..c28eb9450a66 100644
---- a/tools/perf/builtin-report.c
-+++ b/tools/perf/builtin-report.c
-@@ -1364,6 +1364,8 @@ int cmd_report(int argc, const char **argv)
- 		    "Disable raw trace ordering"),
- 	OPT_BOOLEAN(0, "skip-empty", &report.skip_empty,
- 		    "Do not display empty (or dummy) events in the output"),
-+	OPT_BOOLEAN(0, "skip-not-exec-file-map_events", &skip_not_exec_file_map_events,
-+		    "skip not exec map events"),
- 	OPT_END()
- 	};
- 	struct perf_data data = {
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index 13580a9c50b8..e3f4e5e654c9 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -32,6 +32,7 @@
- #include "util/time-utils.h"
- #include "util/path.h"
- #include "util/event.h"
-+#include "util/map.h"
- #include "ui/ui.h"
- #include "print_binary.h"
- #include "archinsn.h"
-@@ -3936,6 +3937,8 @@ int cmd_script(int argc, const char **argv)
- 		    "Guest code can be found in hypervisor process"),
- 	OPT_BOOLEAN('\0', "stitch-lbr", &script.stitch_lbr,
- 		    "Enable LBR callgraph stitching approach"),
-+	OPT_BOOLEAN(0, "skip-not-exec-map_events", &skip_not_exec_file_map_events,
-+		    "skip not exec map events"),
- 	OPTS_EVSWITCH(&script.evswitch),
- 	OPT_END()
- 	};
-diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-index 2a16cae28407..21dde9f9935c 100644
---- a/tools/perf/util/machine.c
-+++ b/tools/perf/util/machine.c
-@@ -1904,6 +1904,9 @@ int machine__process_mmap2_event(struct machine *machine,
- 	if (thread == NULL)
- 		goto out_problem;
- 
-+	if (skip_not_exec_file_map_events && !(event->mmap2.prot & PROT_EXEC))
-+		goto out_problem;
-+
- 	map = map__new(machine, event->mmap2.start,
- 			event->mmap2.len, event->mmap2.pgoff,
- 			&dso_id, event->mmap2.prot,
-diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
-index e0aa4a254583..2b51ca012c91 100644
---- a/tools/perf/util/map.c
-+++ b/tools/perf/util/map.c
-@@ -16,6 +16,8 @@
- #include "thread.h"
- #include "vdso.h"
- 
-+bool skip_not_exec_file_map_events;
-+
- static inline int is_android_lib(const char *filename)
- {
- 	return strstarts(filename, "/data/app-lib/") ||
-@@ -168,6 +170,9 @@ struct map *map__new(struct machine *machine, u64 start, u64 len,
- 		if (dso == NULL)
- 			goto out_delete;
- 
-+		if (skip_not_exec_file_map_events && dso__type(dso, machine) == DSO__TYPE_UNKNOWN)
-+			goto out_delete;
-+
- 		map__init(map, start, start + len, pgoff, dso);
- 
- 		if (anon || no_dso) {
-diff --git a/tools/perf/util/map.h b/tools/perf/util/map.h
-index 3dcfe06db6b3..67b0e0f9f0ae 100644
---- a/tools/perf/util/map.h
-+++ b/tools/perf/util/map.h
-@@ -11,6 +11,8 @@
- #include <stdbool.h>
- #include <linux/types.h>
- 
-+extern bool skip_not_exec_file_map_events;
-+
- struct dso;
- struct maps;
- struct machine;
--- 
-2.34.1
+> So, currently I dont see how to pin swiotlb (I see it as a main problem) to some specific range of physical
+> memory (particulary to the first 2G of RAM).
 
+Indeed, if ZONE_DMA and/or ZONE_DMA32 can't be set appropriately, then 
+there's no way to guarantee correct allocation of any DMA buffers, short 
+of hacking it with explicitly placed reserved-memory carveouts.
+
+Thanks,
+Robin.

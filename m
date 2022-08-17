@@ -2,132 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C43C0597486
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:52:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F206597481
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241172AbiHQQt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 12:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
+        id S241157AbiHQQuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 12:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241181AbiHQQth (ORCPT
+        with ESMTP id S241165AbiHQQtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 12:49:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D6259274
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:49:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660754974;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/1ipQ5oQZFUN9YfGsBUkFyNrn9BZ6I7shHodgrk8s0Y=;
-        b=Yv/wf5iwER4NXZKqycipmy1JG1mDoh7OhYbihIPASOuTqeqsh9ZfEoZ8ksSRMIT5TiDJRT
-        KfCFAypos07DfrymDaDj3L+NfxHUJ8Vut6QbfOUicp5xPJjc9lq+TSZvmsKoaem20PAeqG
-        hvBya1EmshfgMzWY8U+Fc0gHh1tIqE4=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-413-tn3FEFwyPpqW1VBJvEn96A-1; Wed, 17 Aug 2022 12:49:31 -0400
-X-MC-Unique: tn3FEFwyPpqW1VBJvEn96A-1
-Received: by mail-ej1-f71.google.com with SMTP id js11-20020a17090797cb00b00730d73eac83so3141100ejc.19
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:49:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=/1ipQ5oQZFUN9YfGsBUkFyNrn9BZ6I7shHodgrk8s0Y=;
-        b=ufXt33laSmVzrUnliQ6Yj9TPiFPcrTX+nYOeos0q+rtOLBdONUuoGdRfL3esiCTC+O
-         jglMlOqUmeDTJc9mbaU+3V3NX/a50TEYwzSaPc8KVTdfEuFWxye6mN7mLXFtmzNrbuBv
-         XLL4LyRKelNXrey/bv6I5rFq0JgBO7DTzmTfE5OoaKZpXVTvTLjNncD5spA9yaEhJ0dF
-         A+T+Tp5xMVkdcj9J6pgEqaOOmmdZAiTKj+wassjJwl63z8arpsOK5qf3JcIabOk1zqsz
-         J1JcOtB4pxeLF/Q1fUWVMyQPYs9lmCnRNAn3HbRk29g9c0xptDNgs3gtJIteJY4ziZfa
-         KIaw==
-X-Gm-Message-State: ACgBeo37/Y2vmqVYdhIRGZmPJYWyGiQpkUMGA+JiLRZ0qNSSJt2MB/7A
-        yEr+Yd4Grt8xwY/De53iLXLg0y4Wlas8Ap8ESoietRbrJuQUaSX3U1qBUw58mntzUTLKaEj/5Ck
-        MmQd0X2JLw8qqXaNr7AuevBCc
-X-Received: by 2002:a17:907:28d6:b0:731:100c:8999 with SMTP id en22-20020a17090728d600b00731100c8999mr17172348ejc.210.1660754970462;
-        Wed, 17 Aug 2022 09:49:30 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7MrOYH1NnxHco479ZJzy2zL+mc4tH6RAgfWX0tYEUKApZKrUDtPkzquVyBCD6/hlYsBWXJmw==
-X-Received: by 2002:a17:907:28d6:b0:731:100c:8999 with SMTP id en22-20020a17090728d600b00731100c8999mr17172340ejc.210.1660754970221;
-        Wed, 17 Aug 2022 09:49:30 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id u4-20020a50eac4000000b0043ba7df7a42sm11094531edp.26.2022.08.17.09.49.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 09:49:29 -0700 (PDT)
-Message-ID: <69d0b2c3-0c14-83c8-0913-4ee163f9c1df@redhat.com>
-Date:   Wed, 17 Aug 2022 18:49:21 +0200
+        Wed, 17 Aug 2022 12:49:50 -0400
+Received: from sonic304-27.consmr.mail.ne1.yahoo.com (sonic304-27.consmr.mail.ne1.yahoo.com [66.163.191.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9313D4C62B
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:49:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660754985; bh=Ny9gKY0wd/5ZfGgioSP7TsK+27gqEMxkOBVNAODpUC8=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=PVm7RwcUroWU78cMoAJNQvwYWonhla2/OPYto/Y7sGTaZd0v57YCckfNtMGsyKlOqn5jo/nLFbH0QgLZ+dCRhgB95V69TWjjqdCZGskoZWr5x3e2tGRqT5eqH/5GJdAoG9baXzZhhYx40kchDNAp5uLv4ooVsFrGranILyqD4gjDZxxVhWzXqM8oQWPZv/Oq75H4sOLtbyGsjVUJqidx5zlwtTH/2f3jTUetAJAQS8ZgOePjbAjOwIKPDyqY9kzFD7BwlDMw/zlfJ5R4ybjgVkqMCwwsv7Q65T+AfE4XtnLFbFccby7+ZDeT+jAhOYGzI9MWQOz6E0W6eLUJvPuCLg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660754985; bh=nItPm8YWg465I0hPRwZl9/cWkmh+DRwj2wGVa5ZiSEW=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=WW1XusOYXJtoZhUKV+ccRD2mdq2lTNNlqm0QYkekGxvGuGtZHqSOMNqe63xftW/P8WLnPDJwwvESK1NPR7ZNeGDkn7RJGUQjzvhsWjBoPQRWtbUh/j2+CWp163piFRfrDL/Da+uxFcw4ULVrxSYtHXXs5WgFzTU8rUnEKHJzGPdEYbtLykjcd6H2PTGhNS4kvI1zRjmDBsFvoa08VIy2l2SV9rYLUmK+7l0LddREFMSwaQweTjdyBv5EkyuPRPl+YQ8xZenUNllag+cKi1hWH3tQKFVGKD3HFzPtNxJRwd6Nd+SWTjzVV32wjlzGXWByblJvsGkEsbDNxbDPzWeekg==
+X-YMail-OSG: nQyc35AVM1ljY_NZDq1WiI9xnOazY7sjROJ8UOVmXimny823KsFHkEAN8BnWT8E
+ RdDggBn4ct_jw4vNUJ1Ur1DezOANqpTMamvP5ocTQwfbFYu2Igymui5X9M6FSPCJKuQ5uoAVnV2f
+ vNN0K2qtUcwC4ofiRT8uTkMbc4cBJEwLL1Rj9gAIybANozNF.Vq2hOQ1VNkyVqxbUyiMc4i.Lfa_
+ e0vsfqB2BB8jc3lUhP95NegnCGwznqLkjMcHFuthFU8eNOw7Gtcj3BZkXjE7r6u_.6BR7wi.R.Le
+ Zw3VfjtwVLAcnGqeHC3YKrBkxxsnGmDK5PRuZRhhc5LbY_iuYdlkmus5F6Z6qOjZGZO9s3lpCr9Q
+ nBfd2t8KpRFUa.GxiAkc80.ai7MF_8mNcqXwAUwojzzZuoPNFT4XK1CYMAfrviFx3zTDlWFoOcfc
+ vpt.P8gXA60ql6QovZ3oM5KjfpYGtTeWKQHhcMU8UmMyUKlRYQ3LZ7YM0kI0ibljGY2Qs.3XNtxV
+ 0V6_fV_PC3c0Ku8kD7nK7ag08BXr2QxyJHrtZLhiJ.8UdCfFC7D427cpVRMI0telU.CbZlZoLF.0
+ BYjRbWnvaKY_ZgeDx.zxPbwDBHoou6ovhUGjeBYRi4BivzS5GrDMtwz4hN8VwLhH1tCu7_bUeoQK
+ Z9UkT_1baRS1g7U6XNZzNnUyzDxLOKJgdIa_62CyfxOX9EvwomBCCQLk94wak3.QyYR50SqQy1i7
+ FulHgHFKnoQ0ZqNZ8qHrvslW.nSlG6VeF6wUgb2FUq9vo4A7ILdJjvGm.AZFibgyY0Ox.BE5XWKU
+ d83JTiVKa0P282A2Yd5GycKvOZMt72n0C3Vce9thMs1vVobCY4VH2QNdtIUDZS_JXEP3cd4OuQYD
+ IT7mJZdcXHroUsKQ9G7UulZzBddKwkXhr8cgZ4ZygciosbZ51MWBB0mO61tmAK8gO3i8q58rlux1
+ j8veunrU_.ljR4SDZFEVzXZ_EVATn42WxsqUW_hhBWvPLK0vBBy5RYmRAQMD8DBddIi8dlFHlU8f
+ pA7K2Q6E.sDPrzWrINCazwRp05rcU2tZrrrYbK2Cscp5whBcsm0ZwG..IdGYJqptagw4QNmfwMwq
+ 88NRo.wLglvJydBVo_qwLNOvBlAlk78MNvCa2z4naUTJMjVstq4UNlcZmqfgy5Wzf1y3tCSSpVbS
+ jXCqNfhoD0Th146MGdSabheiXX1Bb..eNbJme6niEIdCdSkCOgG6nfRCxssHM1CSjePkAZXyS1Zh
+ QufHzsbDuhyLrBeo9nu4YDLYLKxMQ34ART7b8Bqp9D2.wvqP27PT4fTVTeoNFSr3v9E86k6u7__X
+ 7G5Rp.fF4GdtV_GP.WIjl0wOiWH2m8Gk7Hdm7udDrgSQd3mVn_BIbqyevYgZbwe5q1Dp5Sm5hbeX
+ qq8xcr96Q1MAIsCbWy0r6kppgqku0OtqzkHagxGlZdyyxeupMRkYcLZZBYwbUD9rZqwO7hS0ASYL
+ EKkyBSzQ6cqlXrs78IbEJbgf91HWuOERaHjd1dS6DjbugfDnQOxpMikidSSIOgqizxWYej0kCA7.
+ y5IhgBN02UV21F5dVeLqOm2RrhFxTkjysw1IG_P7Q4wFzhx71KTUNRH74Khgq5nO61DUBOb_SEgD
+ f5a2A4mUgvK9tkqC3kQ_kXhPtfq5hqBPbR6i14YmxybLmycK.bYiSPWYxMCej6Hwto4MkAbgImd5
+ rVVnmZ73O4jrV0oMPx4WzLtw4tKZMK4jcTy9kFDj9Eb1hXl_4nLH_zzUkhWH.FnvxnIGSpCYX_Uc
+ d1TwFyb4hjxwgE9EbWbJHcpHfkNJ7kFLBPUL.oZLMRkiiOSftzioQkeNqIon1v98NnkhRM_rk8nk
+ FZoadhNMs4XYaIHnXXLmNWQgEJAx1DE03viw.OCUpa1Zu2fNzJw0rHNj3I7BID2Hs7myEvJ2Q3J_
+ ipIGAbzC5d7Vyg71xDWZxQB8OUksKvyaJh6OT5NHIVtkpwn.5a4ES_3JSEhcIJ3CXdXVCYfZ27k4
+ ikcOW_hg5AOsyxT9g4MI_7rjlOOhBQmNX4HLeW1PKoAdaPBbtFY34SmaqBNTDqYYzlVw9lX7oO1s
+ 46KBwN1qdHTQ6iinlWCdU1s.KkymrcRpnKCMZk.69gSofX6MxSm1N5K.Z8awJEcVCR07dBhFngGK
+ HlJf9FeaF2QWssoyZP5513O8osrkVW40b0eAnc1Um7ch1.DgldQ4NlwHOv4ghkPhF3U4CZ6vafRs
+ tUC4mZWWQFEYTF4QrDZzybVCt44TiA4pvajBWoqa1uU9U5QwRqXh7R3uw8PhTS13RKRehD3E048p
+ oz5UNlY64EiXS
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic304.consmr.mail.ne1.yahoo.com with HTTP; Wed, 17 Aug 2022 16:49:45 +0000
+Received: by hermes--production-bf1-7586675c46-7c7p2 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 64aab401d4f89b4fef5c137bccf625b3;
+          Wed, 17 Aug 2022 16:49:44 +0000 (UTC)
+Message-ID: <664f29c3-77a6-2ed9-5c55-f181397b09a2@schaufler-ca.com>
+Date:   Wed, 17 Aug 2022 09:49:40 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH v2 2/9] KVM: x86: remove return value of kvm_vcpu_block
+Subject: Re: [RFC PATCH v4 0/2] Add capabilities file to securityfs
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        mlevitsk@redhat.com, vkuznets@redhat.com
-References: <20220811210605.402337-1-pbonzini@redhat.com>
- <20220811210605.402337-3-pbonzini@redhat.com> <Yvwpb6ofD1S+Rqk1@google.com>
- <78616cf8-2693-72cc-c2cc-5a849116ffc7@redhat.com>
- <Yv0aHXcmuivyJDXw@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Yv0aHXcmuivyJDXw@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Francis Laniel <flaniel@linux.microsoft.com>,
+        linux-security-module@vger.kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        James Morris <jmorris@namei.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:BPF [MISC]" <bpf@vger.kernel.org>,
+        casey@schaufler-ca.com
+References: <20220725124123.12975-1-flaniel@linux.microsoft.com>
+ <CAHC9VhTmgMfzc+QY8kr+BYQyd_5nEis0Y632w4S2_PGudTRT7g@mail.gmail.com>
+ <4420381.LvFx2qVVIh@pwmachine>
+ <CAHC9VhSMeefG5W_uuTNQYmUUZ1xcuqArxYs5sL9KOzUO_skCZw@mail.gmail.com>
+ <ab1bbd48-c48d-5f5a-f090-428ffd54c07e@schaufler-ca.com>
+ <CAHC9VhTxYaLXFbS6JnpskOkADNbL8BA5614VuK3sDTHW6DE3uQ@mail.gmail.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <CAHC9VhTxYaLXFbS6JnpskOkADNbL8BA5614VuK3sDTHW6DE3uQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.20560 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/17/22 18:41, Sean Christopherson wrote:
-> On Wed, Aug 17, 2022, Paolo Bonzini wrote:
->> On 8/17/22 01:34, Sean Christopherson wrote:
->>> Isn't freeing up the return from kvm_vcpu_check_block() unnecessary?  Can't we
->>> just do:
->>>
->>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
->>> index 9f11b505cbee..ccb9f8bdeb18 100644
->>> --- a/arch/x86/kvm/x86.c
->>> +++ b/arch/x86/kvm/x86.c
->>> @@ -10633,7 +10633,7 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
->>>                   if (hv_timer)
->>>                           kvm_lapic_switch_to_hv_timer(vcpu);
->>>
->>> -               if (!kvm_check_request(KVM_REQ_UNHALT, vcpu))
->>> +               if (!kvm_arch_vcpu_runnable(vcpu))
->>>                           return 1;
->>>           }
->>>
->>>
->>> which IMO is more intuitive and doesn't require reworking halt-polling (again).
->>
->> This was my first idea indeed.  However I didn't like calling
->> kvm_arch_vcpu_runnable() again and "did it schedule()" seemed to be a less
->> interesting result from kvm_vcpu_block() (and in fact kvm_vcpu_halt() does
->> not bother passing it up the return chain).
-> 
-> The flip side of calling kvm_arch_vcpu_runnable() again is that KVM will immediately
-> wake the vCPU if it becomes runnable after kvm_vcpu_check_block().  The edge cases
-> where the vCPU becomes runnable late are unlikely to truly matter in practice, but
-> on the other hand manually re-checking kvm_arch_vcpu_runnable() means KVM gets both
-> cases "right" (waited=true iff vCPU actually waited, vCPU awakened ASAP), whereas
-> squishing the information into the return of kvm_vcpu_check_block() means KVM gets
-> both cases "wrong" (waited=true even if schedule() was never called, vCPU left in
-> a non-running state even though it's runnable).
-> 
-> My only hesitation with calling kvm_arch_vcpu_runnable() again is that it could be
-> problematic if KVM somehow managed to consume the event that caused kvm_vcpu_has_events()
-> to return true, but I don't see how that could happen without it being a KVM bug.
+On 8/17/2022 9:10 AM, Paul Moore wrote:
+> On Wed, Aug 17, 2022 at 11:50 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>> On 8/17/2022 7:52 AM, Paul Moore wrote:
+>>> On Wed, Aug 17, 2022 at 7:53 AM Francis Laniel
+>>> <flaniel@linux.microsoft.com> wrote:
+>>>> Le mardi 16 août 2022, 23:59:41 CEST Paul Moore a écrit :
+>>>>> On Mon, Jul 25, 2022 at 8:42 AM Francis Laniel
+>>>>>
+>>>>> <flaniel@linux.microsoft.com> wrote:
+>>>>>> Hi.
+>>>>>>
+>>>>>> First, I hope you are fine and the same for your relatives.
+>>>>> Hi Francis :)
+>>>>>
+>>>>>> A solution to this problem could be to add a way for the userspace to ask
+>>>>>> the kernel about the capabilities it offers.
+>>>>>> So, in this series, I added a new file to securityfs:
+>>>>>> /sys/kernel/security/capabilities.
+>>>>>> The goal of this file is to be used by "container world" software to know
+>>>>>> kernel capabilities at run time instead of compile time.
+>>>>> ...
+>>>>>
+>>>>>> The kernel already exposes the last capability number under:
+>>>>>> /proc/sys/kernel/cap_last_cap
+>>>>> I'm not clear on why this patchset is needed, why can't the
+>>>>> application simply read from "cap_last_cap" to determine what
+>>>>> capabilities the kernel supports?
+>>>> When you capabilities with, for example, docker, you will fill capabilities
+>>>> like this:
+>>>> docker run --rm --cap-add SYS_ADMIN debian:latest echo foo
+>>>> As a consequence, the "echo foo" will be run with CAP_SYS_ADMIN set.
+>>>>
+>>>> Sadly, each time a new capability is added to the kernel, it means "container
+>>>> stack" software should add a new string corresponding to the number of the
+>>>> capabilities [1].
+>>> Thanks for clarifying things, I thought you were more concerned about
+>>> detecting what capabilities the running kernel supported, I didn't
+>>> realize it was getting a string literal for each supported capability.
+>>> Unless there is a significant show of support for this
+>> I believe this could be a significant help in encouraging the use of
+>> capabilities. An application that has to know the list of capabilities
+>> at compile time but is expected to run unmodified for decades isn't
+>> going to be satisfied with cap_last_cap. The best it can do with that
+>> is abort, not being able to ask an admin what to do in the presence of
+>> a capability that wasn't around before because the name isn't known.
+> An application isn't going to be able to deduce the semantic value of
+> a capability based solely on a string value,
 
-No, I agree that it cannot happen, and especially so after getting rid 
-of the kvm_check_nested_events() call in kvm_arch_vcpu_runnable().
+True, but it can ask someone what to do, and in that case a string is
+much better than a number:
 
-I'll reorder the patches and apply your suggestion.
+  thwonkd: Unknown capability 42 - update thwonkd.conf policy section
+  thwonkd: Unknown capability butter_toast - update thwonkd.conf policy section
 
-Paolo
+The thwonkd configuration could be updated to use that capability correctly.
+Yes, you could look capability 42 up in the system header files, but only
+if they're installed and there's no guarantee that the header files match
+the running kernel. That said, I can't think of a case where this would be
+useful in real life except for systemd and chcap. I can't speak to the
+container manager proposed, as I don't see containers being deployed with
+finer granularity than "privileged" or "unprivileged".
 
+>  an integer is just as
+> meaningful in that regard.  What might be useful is if the application
+> simply accepts a set of capabilities from the user and then checks
+> those against the maximum supported by the kernel, but once again that
+> doesn't require a string value, it just requires the application
+> taking a set of integers and passing those into the kernel when a
+> capability set is required.  I still don't see how adding the
+> capability string names to the kernel is useful here.
+>

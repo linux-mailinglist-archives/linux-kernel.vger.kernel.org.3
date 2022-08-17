@@ -2,39 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E446596E4C
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 14:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8F2596E44
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 14:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239389AbiHQMQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 08:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41000 "EHLO
+        id S239384AbiHQMQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 08:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235951AbiHQMQG (ORCPT
+        with ESMTP id S234942AbiHQMQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 08:16:06 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A04F2861CC
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 05:16:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 247A2113E;
-        Wed, 17 Aug 2022 05:16:05 -0700 (PDT)
-Received: from e108754-lin.cambridge.arm.com (e108754-lin.cambridge.arm.com [10.1.195.34])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6EA793F67D;
-        Wed, 17 Aug 2022 05:16:03 -0700 (PDT)
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        James Morse <james.morse@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Ionela Voinescu <ionela.voinescu@arm.com>
-Subject: [RESEND PATCH v2] arm64: errata: add detection for AMEVCNTR01 incrementing incorrectly
-Date:   Wed, 17 Aug 2022 13:15:51 +0100
-Message-Id: <20220817121551.21790-1-ionela.voinescu@arm.com>
-X-Mailer: git-send-email 2.29.2.dirty
+        Wed, 17 Aug 2022 08:16:15 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B9086B55
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 05:16:14 -0700 (PDT)
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com [209.85.160.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0A85E3F46F
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:16:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1660738572;
+        bh=DSb7iQYDJqXj92ygGsNtJZCJ5hZY67yzyY/MzoJmNKE=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=KRDNs4DlZy0naxAqTyeX1AwWIBsGndM/pZCct6xxhGDhtruewwNGbnLNqFtR/+xVu
+         Vi8uMkkLwuBExQqEHSKegzN52m4KQ1oFmF59s6ZWAMrczktLTAduHMxS+LN4ecn2vr
+         W1vVAiAJIfkn0zqMMsVKsNM2PX0D/MTbcBtm+j6q+Ra7CjjFvDvmNjyMPot7/680H8
+         XHwnHVTDywMfU4SXcTj/eoRcqqCH2iKJsf/Ksh11S07ebk7mNJJ7mmBtqR63NMAiH8
+         5p0oTwOe1UyY4X7UHyizoP7XRdGKPBpRwvgPWNr1Jb8gLGbgHMf5VKauPZobUO7RE6
+         +oyiLh7AqG5Xg==
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-117b96393f3so3893028fac.9
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 05:16:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=DSb7iQYDJqXj92ygGsNtJZCJ5hZY67yzyY/MzoJmNKE=;
+        b=DAQH3p7cemVS2QWRcBi49mgouQG4Krkk3b1GB1ZnQhaQChuxS+OMWxVlQRT8r8KL30
+         A5YZ22H6ZO5DpELH6oTzIfGv/QZONW4E29PrD2TOZa0KmTxkgSIrTcIgekElwWy2db1g
+         F8dyGEHFgEUGaXCtrEyRVAES5NByLjBo0YMoNKbvfzkoQosN+R5xdKGq7Vs8XwFs9mfN
+         WVZ9JfXIbOppD6MFbEA8xV0BRPYQNZyNKgP1uKgVkyRZBLsY84rJ2n9jJwnnlhOF7xu+
+         XqhJ+cHea9Dwbunn/AmkzO0aDncwA/YKCcqJ0z6CF7jDbrGTCRHP+4sUNjP6vXv82ie/
+         un7w==
+X-Gm-Message-State: ACgBeo0TyMctxxxAynyBYkMRpYVs+wuuJ1MnY4OYrZ8wjzKdNS2saghT
+        nwif/nsaPwmCEriJJVNbB0cySydZUyfiEgKldk6BGSudS4LUQFH7mJgO/aHbW/tJOodCw6E6r6N
+        TKkd8zV0cdQQRphkhZFjdZmHc5mgOFnfMcFZqazMGNrbL7i37Nhgzz+DK9Q==
+X-Received: by 2002:a9d:f05:0:b0:637:1068:1081 with SMTP id 5-20020a9d0f05000000b0063710681081mr8767017ott.224.1660738570900;
+        Wed, 17 Aug 2022 05:16:10 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6Z5e/K5f+romlAexEX5pnAcJ6x32GsOIarjF+40/jrQPnGq70CyhTWg+eQG6ziTT55YrNeb9nZ9rmgCxcOdlo=
+X-Received: by 2002:a9d:f05:0:b0:637:1068:1081 with SMTP id
+ 5-20020a9d0f05000000b0063710681081mr8767013ott.224.1660738570591; Wed, 17 Aug
+ 2022 05:16:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220816025217.618181-1-kai.heng.feng@canonical.com>
+ <CACO55tt=Op=0E94kK+1M8cDXNCk5Tkc=FMR8=OQFc5ohehjwaw@mail.gmail.com>
+ <CAAd53p49X95MKrTDUq92LuHw3y2i09fUA2HEPzM1EcO8xO97Eg@mail.gmail.com>
+ <CACO55tvgmb4Vog701idDYGuh125S9mjWPXhftxDMZ7hg-nQXBw@mail.gmail.com>
+ <CAAd53p4W9rjmVJcUasy9hb1Yam+846+Oomvc2r9RMNmWeh_=0w@mail.gmail.com> <YvzYGGXils/Gf44d@intel.com>
+In-Reply-To: <YvzYGGXils/Gf44d@intel.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Wed, 17 Aug 2022 20:15:58 +0800
+Message-ID: <CAAd53p49zc2G1KutPMUcUBM3_rbCh9_40e0mdtcZKb+C69QL_Q@mail.gmail.com>
+Subject: Re: [Intel-gfx] [PATCH] drm/i915: Switch TGL-H DP-IN to dGFX when
+ it's supported
+To:     =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
+Cc:     Karol Herbst <kherbst@redhat.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rodrigo.vivi@intel.com,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Imre Deak <imre.deak@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,190 +86,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AMU counter AMEVCNTR01 (constant counter) should increment at the same
-rate as the system counter. On affected Cortex-A510 cores, AMEVCNTR01
-increments incorrectly giving a significantly higher output value. This
-results in inaccurate task scheduler utilization tracking and incorrect
-feedback on CPU frequency.
+On Wed, Aug 17, 2022 at 7:59 PM Ville Syrj=C3=A4l=C3=A4
+<ville.syrjala@linux.intel.com> wrote:
 
-Work around this problem by returning 0 when reading the affected counter
-in key locations that results in disabling all users of this counter from
-using it either for frequency invariance or as FFH reference counter. This
-effect is the same to firmware disabling affected counters.
+[snipped]
 
-Details on how the two features are affected by this erratum:
+> I had a quick trawl through some Windows stuff for this and
+> it does seem to do a few extra checks:
+> - platform must be TGL-H (nothing else has the DPin stuff I guess)
+> - OpRegion header must indicate dGPU presence
 
- - AMU counters will not be used for frequency invariance for affected
-   CPUs and CPUs in the same cpufreq policy. AMUs can still be used for
-   frequency invariance for unaffected CPUs in the system. Although
-   unlikely, if no alternative method can be found to support frequency
-   invariance for affected CPUs (cpufreq based or solution based on
-   platform counters) frequency invariance will be disabled. Please check
-   the chapter on frequency invariance at
-   Documentation/scheduler/sched-capacity.rst for details of its effect.
+Is the dGPU presence denoted by the return bitmask of
+INTEL_DSM_FN_GET_BIOS_DATA_FUNCS_SUPPORTED?
 
- - Given that FFH can be used to fetch either the core or constant counter
-   values, restrictions are lifted regarding any of these counters
-   returning a valid (!0) value. Therefore FFH is considered supported
-   if there is a least one CPU that support AMUs, independent of any
-   counters being enabled or affected by this erratum.
+IIUC the mask 20 won't be set when dGPU is not present.
 
-The above is achieved through adding a new erratum: ARM64_ERRATUM_2457168.
+>
+> Otherwise it does call this DSM uncoditionally on boot/S4 resume
+> so seems like that is the only really validated configuration.
+> Although it does seem to explicitly turn off displays prior to
+> the DSM so that does perhaps indicate that those ports might have
+> also been enabled via the iGPU by the BIOS. Not sure if disabling
+> the ports would work correctly after the DSM or not. If not then
+> the DSM call would need to happen after state readout/sanitization
+> so that we can shut things down gracefully.
+>
+> Additionally after the DSM call it scans the FIA TC live state
+> bits to check for DPin usage. Looks like its trying to make sure
+> the driver stops poking at the relevant power wells once in DPin
+> mode. i915 doesn't check that stuff atm so we might end up
+> mangling something while the dGPU is driving the port.
 
-Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: James Morse <james.morse@arm.com>
----
+Thanks for investigating this. I am not really familiar with other
+stuffs you mentioned, but I am happy to test any follow-up patch.
 
-Hi,
+Kai-Heng
 
-This patch is based on the information in the A510 Errata Notice,
-version 13.0 at [1] and applies on v5.19-rc5.
-
-v2 RESEND: v2 rebased on 6.0-rc1
-
-v1 -> v2:
- - v1 at [2]
- - Move detection of erratum in cpu_errata.c
- - Limit checking for affected CPUs to the init phase for FIE (Frequency
-   Invariance Engine). For FFH we'll still check for affected CPUs at each
-   read of the constant counter, but reads happen less often (driven by
-   sysfs reads) compared to FIE (on the tick).
-
-[1] https://developer.arm.com/documentation/SDEN2397589/1300/?lang=en
-[2] https://lore.kernel.org/lkml/20220607125340.13635-1-ionela.voinescu@arm.com/
-
-Thanks,
-Ionela.
-
-
- Documentation/arm64/silicon-errata.rst |  2 ++
- arch/arm64/Kconfig                     | 17 +++++++++++++++++
- arch/arm64/kernel/cpu_errata.c         | 10 ++++++++++
- arch/arm64/kernel/cpufeature.c         |  5 ++++-
- arch/arm64/kernel/topology.c           | 10 ++++++++--
- arch/arm64/tools/cpucaps               |  1 +
- 6 files changed, 42 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
-index 33b04db8408f..fda97b3fcf01 100644
---- a/Documentation/arm64/silicon-errata.rst
-+++ b/Documentation/arm64/silicon-errata.rst
-@@ -52,6 +52,8 @@ stable kernels.
- | Allwinner      | A64/R18         | UNKNOWN1        | SUN50I_ERRATUM_UNKNOWN1     |
- +----------------+-----------------+-----------------+-----------------------------+
- +----------------+-----------------+-----------------+-----------------------------+
-+| ARM            | Cortex-A510     | #2457168        | ARM64_ERRATUM_2457168       |
-++----------------+-----------------+-----------------+-----------------------------+
- | ARM            | Cortex-A510     | #2064142        | ARM64_ERRATUM_2064142       |
- +----------------+-----------------+-----------------+-----------------------------+
- | ARM            | Cortex-A510     | #2038923        | ARM64_ERRATUM_2038923       |
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 571cc234d0b3..9fb9fff08c94 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -917,6 +917,23 @@ config ARM64_ERRATUM_1902691
- 
- 	  If unsure, say Y.
- 
-+config ARM64_ERRATUM_2457168
-+	bool "Cortex-A510: 2457168: workaround for AMEVCNTR01 incrementing incorrectly"
-+	depends on ARM64_AMU_EXTN
-+	default y
-+	help
-+	  This option adds the workaround for ARM Cortex-A510 erratum 2457168.
-+
-+	  The AMU counter AMEVCNTR01 (constant counter) should increment at the same rate
-+	  as the system counter. On affected Cortex-A510 cores AMEVCNTR01 increments
-+	  incorrectly giving a significantly higher output value.
-+
-+	  Work around this problem by returning 0 when reading the affected counter in
-+	  key locations that results in disabling all users of this counter. This effect
-+	  is the same to firmware disabling affected counters.
-+
-+	  If unsure, say Y.
-+
- config CAVIUM_ERRATUM_22375
- 	bool "Cavium erratum 22375, 24313"
- 	default y
-diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
-index 7e6289e709fc..810dd3c39882 100644
---- a/arch/arm64/kernel/cpu_errata.c
-+++ b/arch/arm64/kernel/cpu_errata.c
-@@ -654,6 +654,16 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
- 		ERRATA_MIDR_REV_RANGE(MIDR_CORTEX_A510, 0, 0, 2)
- 	},
- #endif
-+#ifdef CONFIG_ARM64_ERRATUM_2457168
-+	{
-+		.desc = "ARM erratum 2457168",
-+		.capability = ARM64_WORKAROUND_2457168,
-+		.type = ARM64_CPUCAP_WEAK_LOCAL_CPU_FEATURE,
-+
-+		/* Cortex-A510 r0p0-r1p1 */
-+		CAP_MIDR_RANGE(MIDR_CORTEX_A510, 0, 0, 1, 1)
-+	},
-+#endif
- #ifdef CONFIG_ARM64_ERRATUM_2038923
- 	{
- 		.desc = "ARM erratum 2038923",
-diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index 907401e4fffb..af4de817d712 100644
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -1870,7 +1870,10 @@ static void cpu_amu_enable(struct arm64_cpu_capabilities const *cap)
- 		pr_info("detected CPU%d: Activity Monitors Unit (AMU)\n",
- 			smp_processor_id());
- 		cpumask_set_cpu(smp_processor_id(), &amu_cpus);
--		update_freq_counters_refs();
-+
-+		/* 0 reference values signal broken/disabled counters */
-+		if (!this_cpu_has_cap(ARM64_WORKAROUND_2457168))
-+			update_freq_counters_refs();
- 	}
- }
- 
-diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-index 869ffc4d4484..5d7efb15f7cf 100644
---- a/arch/arm64/kernel/topology.c
-+++ b/arch/arm64/kernel/topology.c
-@@ -301,7 +301,8 @@ static void cpu_read_corecnt(void *val)
- 
- static void cpu_read_constcnt(void *val)
- {
--	*(u64 *)val = read_constcnt();
-+	*(u64 *)val = this_cpu_has_cap(ARM64_WORKAROUND_2457168) ?
-+		      0UL : read_constcnt();
- }
- 
- static inline
-@@ -328,7 +329,12 @@ int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
-  */
- bool cpc_ffh_supported(void)
- {
--	return freq_counters_valid(get_cpu_with_amu_feat());
-+	int cpu = get_cpu_with_amu_feat();
-+
-+	if ((cpu >= nr_cpu_ids) || !cpumask_test_cpu(cpu, cpu_present_mask))
-+		return false;
-+
-+	return true;
- }
- 
- int cpc_read_ffh(int cpu, struct cpc_reg *reg, u64 *val)
-diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
-index 779653771507..63b2484ce6c3 100644
---- a/arch/arm64/tools/cpucaps
-+++ b/arch/arm64/tools/cpucaps
-@@ -67,6 +67,7 @@ WORKAROUND_1902691
- WORKAROUND_2038923
- WORKAROUND_2064142
- WORKAROUND_2077057
-+WORKAROUND_2457168
- WORKAROUND_TRBE_OVERWRITE_FILL_MODE
- WORKAROUND_TSB_FLUSH_FAILURE
- WORKAROUND_TRBE_WRITE_OUT_OF_RANGE
--- 
-2.25.1
-
+>
+> --
+> Ville Syrj=C3=A4l=C3=A4
+> Intel

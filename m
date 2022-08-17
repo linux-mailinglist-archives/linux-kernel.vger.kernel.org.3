@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5145974C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6775974C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241039AbiHQRFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
+        id S241058AbiHQRF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:05:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237189AbiHQRFu (ORCPT
+        with ESMTP id S240979AbiHQRFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:05:50 -0400
+        Wed, 17 Aug 2022 13:05:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A80901A1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:05:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2C08F958
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:05:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DB9A6111F
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 17:05:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF0DDC433D6;
-        Wed, 17 Aug 2022 17:05:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92EF661222
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 17:05:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2272CC433D7;
+        Wed, 17 Aug 2022 17:05:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660755948;
-        bh=Xg5LiDPzkPQzU8ExdTp8O5VM1GoQ2K7H+Z2oHuhkWD0=;
+        s=k20201202; t=1660755950;
+        bh=Yn4G40jkutTkprAgt1jA1gv9HiNNbx0FrohF6j9SElE=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=IshtAORFEenqWgi/fygyaLiAXU1G80EdkzNJm8s7dH6Q9hYeay2N+lCl5JZt7grlr
-         eMIS1yEUieQL2xQ/p08CXsU2eF9j1lCVIuaKROKeEyg18zYkAemyVMLF3/+5jwqlR2
-         qLVw+nAZPl7eFwI3It3JZDED7WM0CECUKxD8CvBk6tCHtwtR5hi5h0fjjqllGR8xQU
-         EcrgdJ86kYdeSV+kk44v/hdlJPxrjFWzYM68Hhmk/+qFOpYGDKlmAbVnGh7RlpuMn/
-         7nGAvy+ZQsGdKV5RPYjwwN04IHRqMep3U2GFPahCgPPKfqTHY92uOdnDiJiRF7Ef6+
-         2UtyAB1pkvyqQ==
+        b=JHMiiRftde4ztyr+xYc/KByPBkP/hAf2Be2S6ME3hvu5Ci9CsJ7Fy9MF/r5RLyYlv
+         KjcuiIj/+S+bzm8ZE9XnX9VLomegsXPQYC/RaruLK6qbram82CO8poNvxWv7bhh0Ym
+         BsHzz3EgQ/F2MKgOiZlvoNGsWaLyzHRSOQXRH+2SiNNj6xb0HcXo/aOlSwxqpqTPGh
+         hdzVQA5RYrhCcpc87CwV1vEM1TMWt5ccnW/FaI92eRVdjDBAtMvjblvBxPUBVmMQ3q
+         IvqBXrbDxirVEq3Fy/JlDrQpNisdQqto+uOGLhU5dJIxmkzPSCDvqPRPHBQNQfwzLf
+         sFuQhBqWTJsww==
 From:   Mark Brown <broonie@kernel.org>
 To:     Richard Fitzgerald <rf@opensource.cirrus.com>
 Cc:     linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
         alsa-devel@alsa-project.org
-In-Reply-To: <20220817122347.1356773-1-rf@opensource.cirrus.com>
-References: <20220817122347.1356773-1-rf@opensource.cirrus.com>
-Subject: Re: [PATCH 0/5] ASoC: cs42l42: Some small code improvements
-Message-Id: <166075594756.566556.10171156201538682053.b4-ty@kernel.org>
-Date:   Wed, 17 Aug 2022 18:05:47 +0100
+In-Reply-To: <20220817125508.1406651-1-rf@opensource.cirrus.com>
+References: <20220817125508.1406651-1-rf@opensource.cirrus.com>
+Subject: Re: [PATCH] ASoC: soc-utils-test: Add test for snd_soc_params_to_bclk()
+Message-Id: <166075594887.566556.11485960261417126250.b4-ty@kernel.org>
+Date:   Wed, 17 Aug 2022 18:05:48 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,17 +55,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 Aug 2022 13:23:42 +0100, Richard Fitzgerald wrote:
-> This is a collection of minor improvements to the code or comments.
+On Wed, 17 Aug 2022 13:55:08 +0100, Richard Fitzgerald wrote:
+> snd_soc_params_to_bclk() calculates the BCLK from only the information in
+> snd_pcm_hw_params. It is therefore a subset of the functionality of
+> snd_soc_tdm_params_to_bclk() so can use a subset of the test case table.
 > 
-> Richard Fitzgerald (5):
->   ASoC: cs42l42: Don't include kernel.h
->   ASoC: cs42l42: Add include dependencies to cs42l42.h
->   ASoC: cs42l42: Move cs42l42_supply_names to .c file
->   ASoC: cs42l42: Fix comment typo in cs42l42_slow_start_put()
->   ASoC: cs42l42: Use snd_soc_tdm_params_to_bclk()
 > 
-> [...]
 
 Applied to
 
@@ -73,16 +68,8 @@ Applied to
 
 Thanks!
 
-[1/5] ASoC: cs42l42: Don't include kernel.h
-      commit: 8ccaa7eb76742579864ddf834a8ea9c036c2cc5a
-[2/5] ASoC: cs42l42: Add include dependencies to cs42l42.h
-      commit: b48d1da00fc8f32f7f75b8a34eb484f08b39ffaa
-[3/5] ASoC: cs42l42: Move cs42l42_supply_names to .c file
-      commit: dbd231732c99e336c2ece4a70896139e7f5a51a7
-[4/5] ASoC: cs42l42: Fix comment typo in cs42l42_slow_start_put()
-      commit: db568aab37c1af80057c12c97e6af049495c3e4a
-[5/5] ASoC: cs42l42: Use snd_soc_tdm_params_to_bclk()
-      commit: c2683ecfd1850cc99829691b2e1d90f1a6d75b8b
+[1/1] ASoC: soc-utils-test: Add test for snd_soc_params_to_bclk()
+      commit: e32e23a2b588424aec0c4c4435530f8022318b8f
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

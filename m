@@ -2,120 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57106596AAF
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 935B9596AB5
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233525AbiHQHzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 03:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
+        id S233551AbiHQH4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 03:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233471AbiHQHzT (ORCPT
+        with ESMTP id S233471AbiHQH4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 03:55:19 -0400
-Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56317B1C7
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:55:18 -0700 (PDT)
-Received: from gproxy1-pub.mail.unifiedlayer.com (gproxy1-pub.mail.unifiedlayer.com [69.89.25.95])
-        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id 73C5F8026B0F
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:55:07 +0000 (UTC)
-Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
-        by progateway3.mail.pro1.eigbox.com (Postfix) with ESMTP id A8C081003F24C
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:54:36 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id ODsqoPvwOsbE6ODsqoSUtt; Wed, 17 Aug 2022 07:54:36 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=EegN/NqC c=1 sm=1 tr=0 ts=62fc9ebc
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=biHskzXt2R4A:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=IAkFCxurSS7jjyJAaRIA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=XvAJ6wK9cpRDCknKVsz42A3AaLEeFcDBb2RRbB3KMYo=; b=lNqjKtKzaE+qvnpn9SJM/DFLA/
-        CaDNQaOSxgVhBZkhSaw3HDGCRVrYExt7k54SA5T8L3556OdvUwPRWxLBV3ajOKIhSSZl8yYq7EZis
-        WFj6NLBXIm+6nPjzYBZIZg2MOXG59B56srP8xV1rPfDC7rcifnlCtO28oeqWv8CW87l3DpZCUq46c
-        uOrmgfNGV1TLlG6FdOOdYO5DGeK0Kmh9cI2sa9GTCOHilIsV2yWAnLBGrnia/pKRJFJuoqC2e1XWe
-        BqvqB/aCl9b6t6bwst9Phgxq9SPcKZS5/6MWxWqhjikUoIYXsaUPSEgn7+WRgMMw1pGUY51Xe5L1E
-        q2UD+SPA==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:40432 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1oODso-003ShS-VA;
-        Wed, 17 Aug 2022 01:54:35 -0600
-Subject: Re: [PATCH 5.15 000/778] 5.15.61-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220816124544.577833376@linuxfoundation.org>
-In-Reply-To: <20220816124544.577833376@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <12c48cf8-cab0-10ef-1e38-f6fdf01e08b5@w6rz.net>
-Date:   Wed, 17 Aug 2022 00:54:33 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 17 Aug 2022 03:56:34 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20C77A771
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:56:32 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id s23so6310935wmj.4
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:56:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=CcRETYtN4fhauMaZGbGwCRZe38WMqLheltJ1uKiMAEM=;
+        b=Tb6VTYbA/7axkgPLKP48Ab3RJm5sF55AwVA7gqX1Azxjc7zsVLnQmKILWa9/3Fnw5q
+         OT59iy6UEhNpD/in+jnRA1wKfkTFvepGUjGUzCULHNHiaxDZ/pjCaTFROuUQ8X/6a/Z9
+         c3AXpDq51d9kS0l1BDd2qR0lSbWXJ+pp8FHTkE+ugFabfu8+MGw1L8xe/xGbulfPBLnp
+         UIHPwSxLTUdcn+o3nALmchARxus1doIWYQs3tEECSTQ0alfoUXSAAFkQf7iTrQSmEtXn
+         05wl2RJusYrCzzbgosOGpu2hgDm5Pyoq1HIREqFWMNZq2acvTXfniHNbSb3QqTtDtADH
+         KvDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=CcRETYtN4fhauMaZGbGwCRZe38WMqLheltJ1uKiMAEM=;
+        b=O95i9pG/esxM7XsK2uH17DnxmlpvMLZb/oZDUb1qf2UOfjP8VWObK+i5hU8v8ZpQis
+         4BUCKWh/zOz87N2TVo7PcwhC8avEkb85iVAokhR7oJZ5Plv5SMyXYj9ObTY2DmSP+wEL
+         Mu/+qfDL0MNQescjbTvvlgeC+2gyiGoK7mqxrYGmSmn8CMTIoMmloBOoZfDDQpHhVYPb
+         D90W8351Kibz+lf2Js1PTGNYQBddEoL9WVXZu8hep1+aqc8TByizQBHnCYdr2TAZjMjl
+         Gh8Wd/zporqtzEzeep5/+g2QlkI+bF7WivBWwVGVVpw29QjG9Tca7xqPQx7XaW7Qr/bf
+         urVw==
+X-Gm-Message-State: ACgBeo05jrj3gsK+n6rsBiaJzhQtSi7T3+ROLzaaB8vepIoJ8gY4hcjJ
+        xmdA696KGPHK5NCQncn7WlbARA==
+X-Google-Smtp-Source: AA6agR7cylNCBdJrLWk6b3MPoS6xKKceqNxmNadV5AstoXwgDEqMaxLlNUU/A1ScQUcMAQs6N8XLPg==
+X-Received: by 2002:a1c:2944:0:b0:3a5:ead6:3e48 with SMTP id p65-20020a1c2944000000b003a5ead63e48mr1241903wmp.100.1660722991407;
+        Wed, 17 Aug 2022 00:56:31 -0700 (PDT)
+Received: from [10.35.5.6] ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id n13-20020a05600c4f8d00b003a5f3f5883dsm1302212wmq.17.2022.08.17.00.56.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Aug 2022 00:56:31 -0700 (PDT)
+Message-ID: <a51c48a1-8d42-eb10-2350-6962bac8ffdd@sifive.com>
+Date:   Wed, 17 Aug 2022 08:56:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1oODso-003ShS-VA
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:40432
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.1
+Subject: Re: [PATCH 6/8] pwm: dwc: add timer clock
+Content-Language: en-GB
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        jarkko.nikula@linux.intel.com,
+        William Salmon <william.salmon@sifive.com>,
+        Jude Onyenegecha --subject-prefix=PATCH v3 
+        <jude.onyenegecha@sifive.com>
+References: <20220805165033.140958-1-ben.dooks@sifive.com>
+ <20220805165033.140958-7-ben.dooks@sifive.com>
+ <20220806100703.uxnf2i4pne2kwk63@pengutronix.de>
+From:   Ben Dooks <ben.dooks@sifive.com>
+In-Reply-To: <20220806100703.uxnf2i4pne2kwk63@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/16/22 5:59 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.61 release.
-> There are 778 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 18 Aug 2022 12:43:40 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.61-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 06/08/2022 11:07, Uwe Kleine-König wrote:
+> Hello Ben,
+> 
+> On Fri, Aug 05, 2022 at 05:50:31PM +0100, Ben Dooks wrote:
+>> Add a configurable clock base rate for the pwm as when being built
+>> for non-PCI the block may be sourced from an internal clock.
+>>
+>> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+>> ---
+>> v2:
+>>    - removed the ifdef and merged the other clock patch in here
+>> ---
+>>   drivers/pwm/pwm-dwc.c | 22 +++++++++++++++++-----
+>>   1 file changed, 17 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/pwm/pwm-dwc.c b/drivers/pwm/pwm-dwc.c
+>> index d5f2df6fee62..5c319d0e3d52 100644
+>> --- a/drivers/pwm/pwm-dwc.c
+>> +++ b/drivers/pwm/pwm-dwc.c
+>> @@ -18,6 +18,7 @@
+>>   #include <linux/kernel.h>
+>>   #include <linux/module.h>
+>>   #include <linux/pci.h>
+>> +#include <linux/clk.h>
+>>   #include <linux/platform_device.h>
+>>   #include <linux/pm_runtime.h>
+>>   #include <linux/pwm.h>
+>> @@ -35,7 +36,6 @@
+>>   #define DWC_TIMERS_COMP_VERSION	0xac
+>>   
+>>   #define DWC_TIMERS_TOTAL	8
+>> -#define DWC_CLK_PERIOD_NS	10
+>>   
+>>   /* Timer Control Register */
+>>   #define DWC_TIM_CTRL_EN		BIT(0)
+>> @@ -54,6 +54,8 @@ struct dwc_pwm_ctx {
+>>   struct dwc_pwm {
+>>   	struct pwm_chip chip;
+>>   	void __iomem *base;
+>> +	struct clk *clk;
+>> +	unsigned int clk_ns;
+>>   	struct dwc_pwm_ctx ctx[DWC_TIMERS_TOTAL];
+>>   };
+>>   #define to_dwc_pwm(p)	(container_of((p), struct dwc_pwm, chip))
+>> @@ -96,13 +98,13 @@ static int __dwc_pwm_configure_timer(struct dwc_pwm *dwc,
+>>   	 * periods and check are the result within HW limits between 1 and
+>>   	 * 2^32 periods.
+>>   	 */
+>> -	tmp = DIV_ROUND_CLOSEST_ULL(state->duty_cycle, DWC_CLK_PERIOD_NS);
+>> +	tmp = DIV_ROUND_CLOSEST_ULL(state->duty_cycle, dwc->clk_ns);
+>>   	if (tmp < 1 || tmp > (1ULL << 32))
+>>   		return -ERANGE;
+>>   	low = tmp - 1;
+>>   
+>>   	tmp = DIV_ROUND_CLOSEST_ULL(state->period - state->duty_cycle,
+>> -				    DWC_CLK_PERIOD_NS);
+>> +				    dwc->clk_ns);
+> 
+> You're loosing precision here as clk_ns is already the result of a
+> division. We're having
+> 
+> 	dwc->clk_ns = 1000000000 / clk_get_rate(dwc->clk);
+> 
+> from dwc_pwm_plat_probe() (in the platform case).
+> 
+> Consider clk_rate = 285714285 and state->period - state->duty_cycle =
+> 300000. Then you get tmp = 100000 while the exact result would be:
+> 
+> 	300000 * 285714285 / 1000000000 = 85714.2855
+> 
+> Note that even doing
+> 
+> 	dwc->clk_ns = DIV_ROUND_CLOSEST(1000000000, clk_get_rate(dwc->clk))
+> 
+> only somewhat weakens the problem, with the above numbers you then get
+> 75000.
+> 
+> Also note that rounding closest is also wrong in the calculation of tmp
+> because the driver is supposed to implement the biggest period not
+> bigger than the requested period and for that period implement the
+> biggest duty cycle not bigger than the requested duty cycle.
+> 
+> Can the hardware emit 0% relative duty cycle (e.g. by disabling)?
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Not sure, we do have an IP build option to look at for 0/100% but
+this is not enabled for the PCI case.
 
-Tested-by: Ron Economos <re@w6rz.net>
+Given everything else, I would rather fix the division and accuracy
+issues once we've got the changes under review sorted.
+
+> 
+>>   	if (tmp < 1 || tmp > (1ULL << 32))
+>>   		return -ERANGE;
+>>   	high = tmp - 1;
+>> @@ -177,12 +179,12 @@ static void dwc_pwm_get_state(struct pwm_chip *chip, struct pwm_device *pwm,
+>>   
+>>   	duty = dwc_pwm_readl(dwc, DWC_TIM_LD_CNT(pwm->hwpwm));
+>>   	duty += 1;
+>> -	duty *= DWC_CLK_PERIOD_NS;
+>> +	duty *= dwc->clk_ns;
+>>   	state->duty_cycle = duty;
+>>   
+>>   	period = dwc_pwm_readl(dwc, DWC_TIM_LD_CNT2(pwm->hwpwm));
+>>   	period += 1;
+>> -	period *= DWC_CLK_PERIOD_NS;
+>> +	period *= dwc->clk_ns;
+>>   	period += duty;
+>>   	state->period = period;
+>>   
+>> @@ -205,6 +207,7 @@ static struct dwc_pwm *dwc_pwm_alloc(struct device *dev)
+>>   	if (!dwc)
+>>   		return NULL;
+>>   
+>> +	dwc->clk_ns = 10;
+>>   	dwc->chip.dev = dev;
+>>   	dwc->chip.ops = &dwc_pwm_ops;
+>>   	dwc->chip.npwm = DWC_TIMERS_TOTAL;
+>> @@ -336,6 +339,14 @@ static int dwc_pwm_plat_probe(struct platform_device *pdev)
+>>   		return dev_err_probe(dev, PTR_ERR(dwc->base),
+>>   				     "failed to map IO\n");
+>>   
+>> +	dwc->clk = devm_clk_get(dev, "timer");
+>> +	if (IS_ERR(dwc->clk))
+>> +		return dev_err_probe(dev, PTR_ERR(dwc->clk),
+>> +				     "failed to get timer clock\n");
+>> +
+>> +	clk_prepare_enable(dwc->clk);
+> 
+> If you used devm_clk_get_enabled() you wouldn't need to care separately
+> for enabling. (If you stick to separate calls, please add error checking
+> for clk_prepare_enable().)
+
+ok, will use.
+
+>> +	dwc->clk_ns = 1000000000 / clk_get_rate(dwc->clk);
+> 
+> s/1000000000/NSEC_PER_SEC/
+
+ok, fixed.
+
+>> +
+>>   	ret = pwmchip_add(&dwc->chip);
+>>   	if (ret)
+>>   		return ret;
+>> @@ -347,6 +358,7 @@ static int dwc_pwm_plat_remove(struct platform_device *pdev)
+>>   {
+>>   	struct dwc_pwm *dwc = platform_get_drvdata(pdev);
+>>   
+>> +	clk_disable_unprepare(dwc->clk);
+>>   	pwmchip_remove(&dwc->chip);
+> 
+> This is wrong, you must not disable the clock before calling
+> pwmchip_remove() as the PWM is supposed to stay functional until
+> pwmchip_remove() returns.
+
+I've moved to devm_clk_get_enabled and devm_pwmchip_add()
+
+> 
+>>   	return 0;
+>>   }
+> 
 

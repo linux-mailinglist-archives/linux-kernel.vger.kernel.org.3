@@ -2,92 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE93359674C
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B01C5596751
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238457AbiHQCMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 22:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46030 "EHLO
+        id S238483AbiHQCSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 22:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237952AbiHQCMU (ORCPT
+        with ESMTP id S238261AbiHQCSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 22:12:20 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8E999247
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 19:12:19 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M6s0t1R5czmVqw;
-        Wed, 17 Aug 2022 10:10:06 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 17 Aug 2022 10:12:17 +0800
-Subject: Re: [PATCH v6 1/2] mm: migration: fix the FOLL_GET failure on
- following huge page
-To:     Haiyue Wang <haiyue.wang@intel.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <akpm@linux-foundation.org>, <david@redhat.com>,
-        <apopple@nvidia.com>, <ying.huang@intel.com>,
-        <songmuchun@bytedance.com>, <naoya.horiguchi@linux.dev>,
-        <alex.sierra@amd.com>
-References: <20220812084921.409142-1-haiyue.wang@intel.com>
- <20220816022102.582865-1-haiyue.wang@intel.com>
- <20220816022102.582865-2-haiyue.wang@intel.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <5392ee32-e814-3f7c-a360-722ff5656cc7@huawei.com>
-Date:   Wed, 17 Aug 2022 10:12:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Tue, 16 Aug 2022 22:18:09 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34137DBC
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 19:18:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xCvAW61AQkpGVIzO/D+eoNaokcqxII5Zta5+47Ywhf0=; b=SUqjN4Pd2VKsmgqB3VmO7l1Tr8
+        AKOn3HJKax6AdIGABPutg9F7tecdl1DJDLTRh2nYlt2ABfRyMVdRYIA/rAsn/lj5szzgyJ2OTiIN3
+        2Rx1IOsykfeSfXbXdkHJtiyj6mWhIuMEBw24uz5mrHwzo8q2cKLZqOOzHUC7lYbCFFd9W1fUK70cN
+        j03Zjpe0BTof6w/qghpezZPsvHbU2az5wZYKtxQzezreOn0pIGhXitLQeG6q+Smz7a9Qa8ZYPetRX
+        cL6rB8xOspk1G5yKjrf5tOY9oti5fDciS6IWL0689DHcS8IX3frd/Pb2i8RPpiRiFwhv0d4pOG3iL
+        X3AB5m6A==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oO8dA-005ETy-Ok;
+        Wed, 17 Aug 2022 02:18:04 +0000
+Date:   Wed, 17 Aug 2022 03:18:04 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Paul Lemmermann <thepaulodoom@thepaulodoom.com>
+Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] improve the kernel quality and reduce the amount of BS
+ patches
+Message-ID: <YvxP3LrvHLhFClBd@ZenIV>
+References: <YvxF0yn07ztg9r4A@gus-fring.localdomain>
+ <YvxNvpF7n1VqNnbD@ZenIV>
 MIME-Version: 1.0
-In-Reply-To: <20220816022102.582865-2-haiyue.wang@intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvxNvpF7n1VqNnbD@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/16 10:21, Haiyue Wang wrote:
-> Not all huge page APIs support FOLL_GET option, so move_pages() syscall
-> will fail to get the page node information for some huge pages.
+On Wed, Aug 17, 2022 at 03:09:02AM +0100, Al Viro wrote:
+> this idiocy has gone too far    
 > 
-> Like x86 on linux 5.19 with 1GB huge page API follow_huge_pud(), it will
-> return NULL page for FOLL_GET when calling move_pages() syscall with the
-> NULL 'nodes' parameter, the 'status' parameter has '-2' error in array.
-> 
-> Note: follow_huge_pud() now supports FOLL_GET in linux 6.0.
->       Link: https://lore.kernel.org/all/20220714042420.1847125-3-naoya.horiguchi@linux.dev
-> 
-> But these huge page APIs don't support FOLL_GET:
->   1. follow_huge_pud() in arch/s390/mm/hugetlbpage.c
->   2. follow_huge_addr() in arch/ia64/mm/hugetlbpage.c
->      It will cause WARN_ON_ONCE for FOLL_GET.
->   3. follow_huge_pgd() in mm/hugetlb.c
-> 
-> This is an temporary solution to mitigate the side effect of the race
-> condition fix by calling follow_page() with FOLL_GET set for huge pages.
-> 
-> After supporting follow huge page by FOLL_GET is done, this fix can be
-> reverted safely.
-> 
-> Fixes: 4cd614841c06 ("mm: migration: fix possible do_pages_stat_array racing with memory offline")
-> Signed-off-by: Haiyue Wang <haiyue.wang@intel.com>
-> Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
+> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 
-LGTM. Many thanks for fixing this.
+	Seriously, folks - the stream of patches with no better
+explanations than "The Most Holy checkpatch.pl Says So, Must Appease
+The Spirits" ought to stop.
 
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-
-Thanks,
-Miaohe Lin
-
-
+	If you are changing something, take care to explain _why_
+is the change made.  Reference to a tool that has pointed you
+towards the location you are changing does not replace that.
+checkpatch.pl is a script.  A dumb one.  It's a bunch of heuristics
+that correlate with code being potentially fishy and worth looking
+into; those are occasionally useful, but it's not an oracle.

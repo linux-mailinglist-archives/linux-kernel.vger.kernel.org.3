@@ -2,55 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0EA1597504
+	by mail.lfdr.de (Postfix) with ESMTP id A8419597503
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235677AbiHQRYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:24:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
+        id S240902AbiHQRZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237745AbiHQRY1 (ORCPT
+        with ESMTP id S237342AbiHQRZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:24:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8162FA026F;
-        Wed, 17 Aug 2022 10:24:26 -0700 (PDT)
+        Wed, 17 Aug 2022 13:25:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227EFA027A;
+        Wed, 17 Aug 2022 10:25:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CA556126D;
-        Wed, 17 Aug 2022 17:24:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED61DC433C1;
-        Wed, 17 Aug 2022 17:24:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660757065;
-        bh=8IUBrB+1MZ1RU6K14HLmH1UWa9YswW4BC8mMkpv1lg8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Uk33DHdVpYc32yAuX/v119SAuWyEhZ/UhCkJmtLyVwn0wOQmDQAPfOoKi/WQLv2jA
-         d90/Oy5TvrcV1xqClFFFO1TbwdT4d49QyZgc26VZctcc+F85OKE9RqAzzmINKhgB69
-         qNHaSdwIMwurET7dX5JJtzryvhpLyR7N3UBdbEgU=
-Date:   Wed, 17 Aug 2022 19:24:23 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Marco Elver <elver@google.com>
-Cc:     stable@vger.kernel.org, Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Yee Lee <yee.lee@mediatek.com>,
-        Max Schulze <max.schulze@online.de>
-Subject: Re: [PATCH 5.19.y] Revert "mm: kfence: apply kmemleak_ignore_phys on
- early allocated pool"
-Message-ID: <Yv0kRz2AmDX8jmBW@kroah.com>
-References: <20220816163641.2359996-1-elver@google.com>
- <CANpmjNP0TMenugBVCqCYLT4AGCTH80RafcmgQRN7X8SzGjoQ6g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNP0TMenugBVCqCYLT4AGCTH80RafcmgQRN7X8SzGjoQ6g@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B24B2612AB;
+        Wed, 17 Aug 2022 17:25:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F1E2C433D6;
+        Wed, 17 Aug 2022 17:25:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1660757102;
+        bh=ZTD0yTCE3YoAij/5K0t2/ZUlwJCWY5Buw6REabl/WR8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SC2J5w+BXqr7lkuRfY2QM2puWBjyj5GOP6h+wLPgx64dkkM+tCRVdWsIQbGiRCiIP
+         HS1DIM/JFDsLiNWXImyXnJAEql4l81hy1lSRe9YMugF7RDL9vmprjJPiL2ngIQK74F
+         NEO2ZMkx/eaYaCUlkqbMXLYhbvkPgc997CnqKEYY=
+Date:   Wed, 17 Aug 2022 10:25:00 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Oliver Upton <oupton@google.com>, Huang@google.com,
+        Shaoqin <shaoqin.huang@intel.com>,
+        Cgroups <cgroups@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
+Subject: Re: [PATCH v6 1/4] mm: add NR_SECONDARY_PAGETABLE to count
+ secondary page table uses.
+Message-Id: <20220817102500.440c6d0a3fce296fdf91bea6@linux-foundation.org>
+In-Reply-To: <CAJD7tkYJcsSvCUCkNgcWvi2Xoa3GDZk81p5GUptZzkOkrhrTWQ@mail.gmail.com>
+References: <20220628220938.3657876-1-yosryahmed@google.com>
+        <20220628220938.3657876-2-yosryahmed@google.com>
+        <YsdJPeVOqlj4cf2a@google.com>
+        <CAJD7tkYE+pZdk=-psEP_Rq_1CmDjY7Go+s1LXm-ctryWvUdgLA@mail.gmail.com>
+        <Ys3+UTTC4Qgbm7pQ@google.com>
+        <CAJD7tkY91oiDWTj5FY2Upc5vabsjLk+CBMNzAepXLUdF_GS11w@mail.gmail.com>
+        <CAJD7tkbc+E7f+ENRazf0SO7C3gR2bHiN4B0F1oPn8Pa6juAVfg@mail.gmail.com>
+        <Yvpir0nWuTsXz322@cmpxchg.org>
+        <CAJD7tkYJcsSvCUCkNgcWvi2Xoa3GDZk81p5GUptZzkOkrhrTWQ@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,108 +80,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 06:42:46PM +0200, Marco Elver wrote:
-> On Tue, 16 Aug 2022 at 18:37, Marco Elver <elver@google.com> wrote:
-> >
-> > This reverts commit 07313a2b29ed1079eaa7722624544b97b3ead84b.
-> >
-> > Commit 0c24e061196c21d5 ("mm: kmemleak: add rbtree and store physical
-> > address for objects allocated with PA") is not yet in 5.19 (but appears
-> > in 6.0). Without 0c24e061196c21d5, kmemleak still stores phys objects
-> > and non-phys objects in the same tree, and ignoring (instead of freeing)
-> > will cause insertions into the kmemleak object tree by the slab
-> > post-alloc hook to conflict with the pool object (see comment).
-> >
-> > Reports such as the following would appear on boot, and effectively
-> > disable kmemleak:
-> >
-> >  | kmemleak: Cannot insert 0xffffff806e24f000 into the object search tree (overlaps existing)
-> >  | CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.19.0-v8-0815+ #5
-> >  | Hardware name: Raspberry Pi Compute Module 4 Rev 1.0 (DT)
-> >  | Call trace:
-> >  |  dump_backtrace.part.0+0x1dc/0x1ec
-> >  |  show_stack+0x24/0x80
-> >  |  dump_stack_lvl+0x8c/0xb8
-> >  |  dump_stack+0x1c/0x38
-> >  |  create_object.isra.0+0x490/0x4b0
-> >  |  kmemleak_alloc+0x3c/0x50
-> >  |  kmem_cache_alloc+0x2f8/0x450
-> >  |  __proc_create+0x18c/0x400
-> >  |  proc_create_reg+0x54/0xd0
-> >  |  proc_create_seq_private+0x94/0x120
-> >  |  init_mm_internals+0x1d8/0x248
-> >  |  kernel_init_freeable+0x188/0x388
-> >  |  kernel_init+0x30/0x150
-> >  |  ret_from_fork+0x10/0x20
-> >  | kmemleak: Kernel memory leak detector disabled
-> >  | kmemleak: Object 0xffffff806e24d000 (size 2097152):
-> >  | kmemleak:   comm "swapper", pid 0, jiffies 4294892296
-> >  | kmemleak:   min_count = -1
-> >  | kmemleak:   count = 0
-> >  | kmemleak:   flags = 0x5
-> >  | kmemleak:   checksum = 0
-> >  | kmemleak:   backtrace:
-> >  |      kmemleak_alloc_phys+0x94/0xb0
-> >  |      memblock_alloc_range_nid+0x1c0/0x20c
-> >  |      memblock_alloc_internal+0x88/0x100
-> >  |      memblock_alloc_try_nid+0x148/0x1ac
-> >  |      kfence_alloc_pool+0x44/0x6c
-> >  |      mm_init+0x28/0x98
-> >  |      start_kernel+0x178/0x3e8
-> >  |      __primary_switched+0xc4/0xcc
-> >
-> > Reported-by: Max Schulze <max.schulze@online.de>
-> > Signed-off-by: Marco Elver <elver@google.com>
-> 
-> The discussion is:
-> 
-> Link: https://lore.kernel.org/all/b33b33bc-2d06-1bcd-2df7-43678962b728@online.de/
-> 
-> > ---
-> >  mm/kfence/core.c | 18 +++++++++---------
-> >  1 file changed, 9 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-> > index 6aff49f6b79e..4b5e5a3d3a63 100644
-> > --- a/mm/kfence/core.c
-> > +++ b/mm/kfence/core.c
-> > @@ -603,6 +603,14 @@ static unsigned long kfence_init_pool(void)
-> >                 addr += 2 * PAGE_SIZE;
-> >         }
-> >
-> > +       /*
-> > +        * The pool is live and will never be deallocated from this point on.
-> > +        * Remove the pool object from the kmemleak object tree, as it would
-> > +        * otherwise overlap with allocations returned by kfence_alloc(), which
-> > +        * are registered with kmemleak through the slab post-alloc hook.
-> > +        */
-> > +       kmemleak_free(__kfence_pool);
-> > +
-> >         return 0;
-> >  }
-> >
-> > @@ -615,16 +623,8 @@ static bool __init kfence_init_pool_early(void)
-> >
-> >         addr = kfence_init_pool();
-> >
-> > -       if (!addr) {
-> > -               /*
-> > -                * The pool is live and will never be deallocated from this point on.
-> > -                * Ignore the pool object from the kmemleak phys object tree, as it would
-> > -                * otherwise overlap with allocations returned by kfence_alloc(), which
-> > -                * are registered with kmemleak through the slab post-alloc hook.
-> > -                */
-> > -               kmemleak_ignore_phys(__pa(__kfence_pool));
-> > +       if (!addr)
-> >                 return true;
-> > -       }
-> >
-> >         /*
-> >          * Only release unprotected pages, and do not try to go back and change
-> > --
-> > 2.37.1.595.g718a3a8f04-goog
-> >
+On Mon, 15 Aug 2022 08:39:23 -0700 Yosry Ahmed <yosryahmed@google.com> wrote:
 
-Now queued up, thanks.
+> Thanks a lot, Johannes! I haven't ifdeffed it yet so I'll send a v7
+> with a few nits and collect ACKs. Andrew, would you prefer me to
+> rebase on top of mm-unstable? Or will this go in through the kvm tree?
+> (currently it's based on an old-ish kvm/queue).
 
-greg k-h
+Through KVM is OK by me, assuming there'll be ongoing work which is
+dependent on this.

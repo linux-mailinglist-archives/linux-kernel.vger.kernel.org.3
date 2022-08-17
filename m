@@ -2,170 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0815977A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A915977CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241802AbiHQUQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 16:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45144 "EHLO
+        id S241817AbiHQUSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 16:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiHQUQg (ORCPT
+        with ESMTP id S241813AbiHQUSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 16:16:36 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4813751A00
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:16:35 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a7so26503423ejp.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:16:35 -0700 (PDT)
+        Wed, 17 Aug 2022 16:18:41 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4834E237E8
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:18:38 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id u22so4651904plq.12
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:18:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
+        d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=Q8l7owka14u7MGvMmnutbIDuZcppj3Zne6ItQTkKbfM=;
-        b=H0fEhAQn4l5fNZh5PguleIFVYcgHWRiXQ4CHZKQ7sAvGgIAyPNZkHREO0i7ao8NEjn
-         UI+0aY7DylpRGLdXVDkbb99XKNt9510ituuTMbWCV8q5M4u5Vpyqrgr4tis3sPdP1KcQ
-         mLdscN0u+DG4jQudxuaGyzyxIFmjoO0O85sVudWrxONwpKgv20A+QDf/pEYEHHg2K42W
-         ZmiPCpXBKZs2pBxPvaCRHaaL9HuQkOn651g0dzdtYuJ1LOb1o9GquYxou1W4NMvdga4v
-         IFWRO8gGoeLn7CgLqo1w6Vc/xsKHeYoLyMGwVvrhS+ZARHLcWlklUGJna4I5kolbpJRs
-         Oxbw==
+        bh=5Hp9E1q+IjAobUFj58w2iM0vbcOi4aEUuherVgXAHmM=;
+        b=OmfuRjv+bwYcFtUJRfkCb5ZlmuYVDwEYUSRFS6rAT/u3RCA1oGRDezN1bG2WgU8RiH
+         Ywa8ONAlXZ1YD56w8MwU80+GOgEmxGM2i3UNq0bb9rT6xHISScJaAcmvBuLzEcTXzNdN
+         XVBUUhupHDCvYb4hpNZCqpaM3No0Zxq5zxIiU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Q8l7owka14u7MGvMmnutbIDuZcppj3Zne6ItQTkKbfM=;
-        b=x1BlT2BqYPJ09gigKL+M8AZ8d+TqHfcyvIY03MwArePBka3F3CpnURiW7WMP2IS1Ai
-         wIxdFyOTyfjYGKk29AXpkMRRfS6SLF+6n/rg9abs7kVhoSBYO5JzzlM+TXD5HSBD5IWM
-         LlN8RwCF1gvvZZyuc4fkoVLljvE0t8HG8NT0u3LJyGlytPPmR2LGVMVVjY3/37BoMCid
-         PB0eo+MaeUfk/9cFw6Uw2oR2vZAhuUMHey9B649dpCekhl+QXwbziIRl0sSPqGHE1sGJ
-         Bh+M6Sl7YcDmAJCpPwPWw0n6mryMtqv4oiU/5MSrf553PiTAP5D2wUq2fbwPPC19m1xW
-         lIAA==
-X-Gm-Message-State: ACgBeo13E9JZFlE6b5xNS2I4/QUmai51Y8NtmTvrMllspDbKXI/LpOfT
-        MSV3zJBmsj98XhyEBInyXRwF7w==
-X-Google-Smtp-Source: AA6agR7w7ynxTh5+3YZVnkSQkUG2igBkJmtypLwGJKdI8yT/kcScIXzf9Y0o98gC2OAY5JjeOiiprQ==
-X-Received: by 2002:a17:907:1c1f:b0:739:17e2:209a with SMTP id nc31-20020a1709071c1f00b0073917e2209amr5606669ejc.320.1660767393763;
-        Wed, 17 Aug 2022 13:16:33 -0700 (PDT)
-Received: from localhost (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
-        by smtp.gmail.com with ESMTPSA id k18-20020aa7c052000000b0043bbbaa323dsm11338908edo.0.2022.08.17.13.16.32
+        bh=5Hp9E1q+IjAobUFj58w2iM0vbcOi4aEUuherVgXAHmM=;
+        b=JFW6xr9m0piQ6oPicDNr0Ef5SGQ7PpV3NQBYgtyaZg1zA/v6zrHiCgbbrY8Fx6oqvF
+         ADEvP+k9Wd41TAcv2JcJaN2YyErNivZPOmlxfjDO36rcbU4v2TuqeR1ND81h7MRDo8oI
+         iEe4uVp2K90Se/gPnKU6wKbuQq3u2u0bsKNil4g4NRFdNmpK9u96uMvdpm0XNbphwi9q
+         PvQaKHYaVVnWEEIU9tCuJQYgyCLRl2gHHue3XdQQvuA7hhkKwVynTu9twerifg7K2o1i
+         X+NjgZNIGwL4DBBN57WHdKkEiReu2Sf9xN1hcG85F3R7cdO7eXmpye3Rv5Zthxaqy9Z0
+         qHuQ==
+X-Gm-Message-State: ACgBeo01vXR72XqkQCSCrQzROeNb8WA8fsPqvYJgL4jG4GFjqBRIyXfr
+        8jyH4XZdrFHb21m5MpkFGsmzDw==
+X-Google-Smtp-Source: AA6agR7kpGsY32jz/OEhGyiuSqAoWNhaRI6RiaxLztDBXSjLkvNbNTkMQQZ17Gao952Y2adGHz7Iyg==
+X-Received: by 2002:a17:902:bd08:b0:16e:e00c:dd48 with SMTP id p8-20020a170902bd0800b0016ee00cdd48mr28116310pls.93.1660767517687;
+        Wed, 17 Aug 2022 13:18:37 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a3-20020aa79703000000b0052d4cb47339sm10852950pfg.151.2022.08.17.13.18.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 13:16:33 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 22:16:32 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Anup Patel <anup@brainfault.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, qemu-riscv@nongnu.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH 3/4] dt-bindings: riscv: add new riscv,isa strings for
- emulators
-Message-ID: <20220817201632.orjcqwu6bihgnnqd@kamzik>
-References: <20220817200531.988850-1-mail@conchuod.ie>
- <20220817200531.988850-4-mail@conchuod.ie>
+        Wed, 17 Aug 2022 13:18:37 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 13:18:36 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Finn Behrens <me@kloenk.de>, Miguel Cano <macanroj@gmail.com>,
+        Tiago Lam <tiagolam@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>
+Subject: Re: [PATCH v9 20/27] scripts: add `rust_is_available.sh`
+Message-ID: <202208171317.F5D57135@keescook>
+References: <20220805154231.31257-1-ojeda@kernel.org>
+ <20220805154231.31257-21-ojeda@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220817200531.988850-4-mail@conchuod.ie>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20220805154231.31257-21-ojeda@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 09:05:22PM +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On Fri, Aug 05, 2022 at 05:42:05PM +0200, Miguel Ojeda wrote:
+> This script tests whether the Rust toolchain requirements are in place
+> to enable Rust support.
 > 
-> The QEMU virt and spike machines currently export a riscv,isa string of
-> "rv64imafdcsuh",
+> The build system will call it to set `CONFIG_RUST_IS_AVAILABLE` in
+> a later patch.
 > 
-> While the RISC-V foundation has been ratifying a bunch of extenstions
-> etc, the kernel has remained relatively static with what hardware is
-> supported - but the same is not true of QEMU. Using the virt machine
-> and running dt-validate on the dumped dtb fails, partly due to the
-> unexpected isa string.
+> It also has an option (`-v`) to explain what is missing, which is
+> useful to set up the development environment. This is used via
+> the `make rustavailable` target added in a later patch.
 > 
-> Rather than enumerate the many many possbilities, change the pattern
-> to a regex, with the following assumptions:
-> - the single letter order is fixed & we don't care about things that
->   can't even do "ima"
-> - the standard multi letter extensions are all in a "_z<foo>" format
->   where the first letter of <foo> is a valid single letter extension
-> - _s & _h are used for supervisor and hyper visor extensions.
-> - after the first two chars, a standard multi letter extension name
->   could be an english   word (ifencei anyone?) so it's not worth
->   restricting the charset
-> - vendor ISA extensions begind with _x and have no charset restrictions
-> - we don't care about an e extension from an OS pov
-> - that attempting to validate the contents of the multiletter extensions
->   with dt-validate beyond the formatting is a futile, massively verbose
->   or unwieldy exercise at best.
-> - ima are required
-> 
-> The following limitations also apply:
-> - multi letter extension ordering is not enforced. dt-schema does not
->   appear to allow for named match groups, so the resulting regex would
->   be even more of a headache.
-> - ditto for the numbered extensions.
-> 
-> Finally, add me as a maintainer of the binding so that when it breaks
-> in the future, I can be held responsible!
-> 
-> Reported-by: Rob Herring <robh@kernel.org>
-> Link: https://lore.kernel.org/linux-riscv/20220803170552.GA2250266-robh@kernel.org/
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Co-developed-by: Finn Behrens <me@kloenk.de>
+> Signed-off-by: Finn Behrens <me@kloenk.de>
+> Co-developed-by: Miguel Cano <macanroj@gmail.com>
+> Signed-off-by: Miguel Cano <macanroj@gmail.com>
+> Co-developed-by: Tiago Lam <tiagolam@gmail.com>
+> Signed-off-by: Tiago Lam <tiagolam@gmail.com>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 > ---
-> Palmer, feel free to drop the maintainer addition. I just mostly want
-> to clean up my own mess on this when they decide to ratify more
-> extensions & this comes back up again.
-> ---
->  Documentation/devicetree/bindings/riscv/cpus.yaml | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>  scripts/rust_is_available.sh                 | 160 +++++++++++++++++++
+>  scripts/rust_is_available_bindgen_libclang.h |   2 +
+>  2 files changed, 162 insertions(+)
+>  create mode 100755 scripts/rust_is_available.sh
+>  create mode 100644 scripts/rust_is_available_bindgen_libclang.h
 > 
-> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> index 873dd12f6e89..c0e0bc5dce04 100644
-> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> @@ -9,6 +9,7 @@ title: RISC-V bindings for 'cpus' DT nodes
->  maintainers:
->    - Paul Walmsley <paul.walmsley@sifive.com>
->    - Palmer Dabbelt <palmer@sifive.com>
-> +  - Conor Dooley <conor@kernel.org>
->  
->  description: |
->    This document uses some terminology common to the RISC-V community
-> @@ -79,9 +80,7 @@ properties:
->        insensitive, letters in the riscv,isa string must be all
->        lowercase to simplify parsing.
->      $ref: "/schemas/types.yaml#/definitions/string"
-> -    enum:
-> -      - rv64imac
-> -      - rv64imafdc
-> +    pattern: ^rv(?:64|32)imaf?d?q?c?b?v?k?h?(?:(?:_[zsh][imafdqcbvksh]|_x)(?:[a-z])+)*$
->  
->    # RISC-V requires 'timebase-frequency' in /cpus, so disallow it here
->    timebase-frequency: false
+> diff --git a/scripts/rust_is_available.sh b/scripts/rust_is_available.sh
+> new file mode 100755
+> index 000000000000..aebbf1913970
+> --- /dev/null
+> +++ b/scripts/rust_is_available.sh
+> @@ -0,0 +1,160 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Tests whether a suitable Rust toolchain is available.
+> +#
+> +# Pass `-v` for human output and more checks (as warnings).
+> +
+> +set -e
+> +
+> +min_tool_version=$(dirname $0)/min-tool-version.sh
+> +
+> +# Convert the version string x.y.z to a canonical up-to-7-digits form.
+> +#
+> +# Note that this function uses one more digit (compared to other
+> +# instances in other version scripts) to give a bit more space to
+> +# `rustc` since it will reach 1.100.0 in late 2026.
+> +get_canonical_version()
+> +{
+> +	IFS=.
+> +	set -- $1
+> +	echo $((100000 * $1 + 100 * $2 + $3))
+> +}
+> +
+> +# Check that the Rust compiler exists.
+> +if ! command -v "$RUSTC" >/dev/null; then
+> +	if [ "$1" = -v ]; then
+> +		echo >&2 "***"
+> +		echo >&2 "*** Rust compiler '$RUSTC' could not be found."
+> +		echo >&2 "***"
+> +	fi
+> +	exit 1
+> +fi
+> +
+> +# Check that the Rust bindings generator exists.
+> +if ! command -v "$BINDGEN" >/dev/null; then
+> +	if [ "$1" = -v ]; then
+> +		echo >&2 "***"
+> +		echo >&2 "*** Rust bindings generator '$BINDGEN' could not be found."
+> +		echo >&2 "***"
+> +	fi
+> +	exit 1
+> +fi
+> +
+> +# Check that the Rust compiler version is suitable.
+> +#
+> +# Non-stable and distributions' versions may have a version suffix, e.g. `-dev`.
+> +rust_compiler_version=$( \
+> +	LC_ALL=C "$RUSTC" --version 2>/dev/null \
+> +		| head -n 1 \
+> +		| grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
+> +)
+> +rust_compiler_min_version=$($min_tool_version rustc)
+
+I think the min-tool-version.sh changes from patch 23 should be moved
+into this patch.
+
+With that:
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-Kees
+
+> +rust_compiler_cversion=$(get_canonical_version $rust_compiler_version)
+> +rust_compiler_min_cversion=$(get_canonical_version $rust_compiler_min_version)
+> +if [ "$rust_compiler_cversion" -lt "$rust_compiler_min_cversion" ]; then
+> +	if [ "$1" = -v ]; then
+> +		echo >&2 "***"
+> +		echo >&2 "*** Rust compiler '$RUSTC' is too old."
+> +		echo >&2 "***   Your version:    $rust_compiler_version"
+> +		echo >&2 "***   Minimum version: $rust_compiler_min_version"
+> +		echo >&2 "***"
+> +	fi
+> +	exit 1
+> +fi
+> +if [ "$1" = -v ] && [ "$rust_compiler_cversion" -gt "$rust_compiler_min_cversion" ]; then
+> +	echo >&2 "***"
+> +	echo >&2 "*** Rust compiler '$RUSTC' is too new. This may or may not work."
+> +	echo >&2 "***   Your version:     $rust_compiler_version"
+> +	echo >&2 "***   Expected version: $rust_compiler_min_version"
+> +	echo >&2 "***"
+> +fi
+> +
+> +# Check that the Rust bindings generator is suitable.
+> +#
+> +# Non-stable and distributions' versions may have a version suffix, e.g. `-dev`.
+> +rust_bindings_generator_version=$( \
+> +	LC_ALL=C "$BINDGEN" --version 2>/dev/null \
+> +		| head -n 1 \
+> +		| grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
+> +)
+> +rust_bindings_generator_min_version=$($min_tool_version bindgen)
+> +rust_bindings_generator_cversion=$(get_canonical_version $rust_bindings_generator_version)
+> +rust_bindings_generator_min_cversion=$(get_canonical_version $rust_bindings_generator_min_version)
+> +if [ "$rust_bindings_generator_cversion" -lt "$rust_bindings_generator_min_cversion" ]; then
+> +	if [ "$1" = -v ]; then
+> +		echo >&2 "***"
+> +		echo >&2 "*** Rust bindings generator '$BINDGEN' is too old."
+> +		echo >&2 "***   Your version:    $rust_bindings_generator_version"
+> +		echo >&2 "***   Minimum version: $rust_bindings_generator_min_version"
+> +		echo >&2 "***"
+> +	fi
+> +	exit 1
+> +fi
+> +if [ "$1" = -v ] && [ "$rust_bindings_generator_cversion" -gt "$rust_bindings_generator_min_cversion" ]; then
+> +	echo >&2 "***"
+> +	echo >&2 "*** Rust bindings generator '$BINDGEN' is too new. This may or may not work."
+> +	echo >&2 "***   Your version:     $rust_bindings_generator_version"
+> +	echo >&2 "***   Expected version: $rust_bindings_generator_min_version"
+> +	echo >&2 "***"
+> +fi
+> +
+> +# Check that the `libclang` used by the Rust bindings generator is suitable.
+> +bindgen_libclang_version=$( \
+> +	LC_ALL=C "$BINDGEN" $(dirname $0)/rust_is_available_bindgen_libclang.h 2>&1 >/dev/null \
+> +		| grep -F 'clang version ' \
+> +		| grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
+> +		| head -n 1 \
+> +)
+> +bindgen_libclang_min_version=$($min_tool_version llvm)
+> +bindgen_libclang_cversion=$(get_canonical_version $bindgen_libclang_version)
+> +bindgen_libclang_min_cversion=$(get_canonical_version $bindgen_libclang_min_version)
+> +if [ "$bindgen_libclang_cversion" -lt "$bindgen_libclang_min_cversion" ]; then
+> +	if [ "$1" = -v ]; then
+> +		echo >&2 "***"
+> +		echo >&2 "*** libclang (used by the Rust bindings generator '$BINDGEN') is too old."
+> +		echo >&2 "***   Your version:    $bindgen_libclang_version"
+> +		echo >&2 "***   Minimum version: $bindgen_libclang_min_version"
+> +		echo >&2 "***"
+> +	fi
+> +	exit 1
+> +fi
+> +
+> +# If the C compiler is Clang, then we can also check whether its version
+> +# matches the `libclang` version used by the Rust bindings generator.
+> +#
+> +# In the future, we might be able to perform a full version check, see
+> +# https://github.com/rust-lang/rust-bindgen/issues/2138.
+> +if [ "$1" = -v ]; then
+> +	cc_name=$($(dirname $0)/cc-version.sh "$CC" | cut -f1 -d' ')
+> +	if [ "$cc_name" = Clang ]; then
+> +		clang_version=$( \
+> +			LC_ALL=C "$CC" --version 2>/dev/null \
+> +				| sed -nE '1s:.*version ([0-9]+\.[0-9]+\.[0-9]+).*:\1:p'
+> +		)
+> +		if [ "$clang_version" != "$bindgen_libclang_version" ]; then
+> +			echo >&2 "***"
+> +			echo >&2 "*** libclang (used by the Rust bindings generator '$BINDGEN')"
+> +			echo >&2 "*** version does not match Clang's. This may be a problem."
+> +			echo >&2 "***   libclang version: $bindgen_libclang_version"
+> +			echo >&2 "***   Clang version:    $clang_version"
+> +			echo >&2 "***"
+> +		fi
+> +	fi
+> +fi
+> +
+> +# Check that the source code for the `core` standard library exists.
+> +#
+> +# `$KRUSTFLAGS` is passed in case the user added `--sysroot`.
+> +rustc_sysroot=$("$RUSTC" $KRUSTFLAGS --print sysroot)
+> +rustc_src=${RUST_LIB_SRC:-"$rustc_sysroot/lib/rustlib/src/rust/library"}
+> +rustc_src_core="$rustc_src/core/src/lib.rs"
+> +if [ ! -e "$rustc_src_core" ]; then
+> +	if [ "$1" = -v ]; then
+> +		echo >&2 "***"
+> +		echo >&2 "*** Source code for the 'core' standard library could not be found"
+> +		echo >&2 "*** at '$rustc_src_core'."
+> +		echo >&2 "***"
+> +	fi
+> +	exit 1
+> +fi
+> diff --git a/scripts/rust_is_available_bindgen_libclang.h b/scripts/rust_is_available_bindgen_libclang.h
+> new file mode 100644
+> index 000000000000..0ef6db10d674
+> --- /dev/null
+> +++ b/scripts/rust_is_available_bindgen_libclang.h
+> @@ -0,0 +1,2 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#pragma message("clang version " __clang_version__)
 > -- 
 > 2.37.1
->
+> 
 
-I'd say "looks good to me", but it's a regex, so "good" is a strong word.
-Instead, here's a [somewhat tentative]
-
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
-Thanks,
-drew
+-- 
+Kees Cook

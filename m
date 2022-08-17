@@ -2,177 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE086596A04
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6BB596A0F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbiHQHCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 03:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40096 "EHLO
+        id S238156AbiHQHIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 03:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238639AbiHQHCc (ORCPT
+        with ESMTP id S238672AbiHQHIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 03:02:32 -0400
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150048.outbound.protection.outlook.com [40.107.15.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158AA79606;
-        Wed, 17 Aug 2022 00:02:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=guPWU0aN+oekTuJD6CLpbR0drlZJshxYyHP/yaCJN2Zb1Fl3vLVCNiAZ7erMVwI4mZv3PTys7Jqoli3G5n/8vTIGyvNM0u2bBRV9ToIl4Xm54m38KuveysAL1cWIzgq0cwXW9VG7Cd3fcs0qtDXTnuYl8lg5jDMz+gjBFKi4UIgfpUkdAww7wi8Ryiluj9x3uyJZbeZxEpzxjbbs+alxFbEFEBmhvPXUZae/n1jgt4gGhaRB40LboV3jfzkz3ZuFmF2IpfaMDHFi+tQX+kxsPcUfBgYRKFTRLZuKx3BqM7iF+P/fm9B6iVLjZS+Dy/tEHNG8vqiGF7DZrevqAhRhbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=w46TRHu2lu9y6i/ubx2OUN0oaddbEmKKRbaUwjROBbQ=;
- b=aylX6Z/4NQVmDR8r1QGKLs27A2patXXvdqvrvNmY4NOG8jRfIzudgRTk1pQpFRYSdWHgK2WcjydVluL/GfbFqOwU0jnj3pJAPZkgeXDHNXGeMUY8/u/BgtxEcqa5cTKZjUkzcvvhHUoItdSeVAKta0gd971Io3kiwxw/+qGwpyz6LxBg+V3n0CcxqYIzGoxTEdjVqm9ZdqHv2PVg2hotZ9bb3FvL/y5XOILGYj5jwXHMRc/epdWOmzcTyfmF5c1tsID0IubmOjgmf6WRdEQYLziMq2SYHX7ISNitdBGXs68JSEuzT88BoCl1P+5mvVSPJMg53QArfFX8dyEVmWJUtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w46TRHu2lu9y6i/ubx2OUN0oaddbEmKKRbaUwjROBbQ=;
- b=c27oeputOs2pFafv/jJJh+jTJHMDQ5kD8t2RGVB7XZwnAcvkisxSiBExGJIwXzk36bsGVxJeqJauIAV3GOYIGO5FT2mEp1juO7tiGeKET37hmUekTwell+bOtbQr0g+zlvo4O9g9YXwmvUIsnnSluEYT5InbeyniJEk6uxpAd/w=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AM6PR04MB4839.eurprd04.prod.outlook.com (2603:10a6:20b:10::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Wed, 17 Aug
- 2022 07:02:29 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::3c6c:b7e6:a93d:d442]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::3c6c:b7e6:a93d:d442%4]) with mapi id 15.20.5525.011; Wed, 17 Aug 2022
- 07:02:29 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 2/2] dt-bindings: memory-controllers: fsl,imx8m-ddrc: drop
- Leonard Crestez
-Thread-Topic: [PATCH 2/2] dt-bindings: memory-controllers: fsl,imx8m-ddrc:
- drop Leonard Crestez
-Thread-Index: AQHYsgb1sHZEtPDgZ0mK0q/DY4A6L62yqnHw
-Date:   Wed, 17 Aug 2022 07:02:28 +0000
-Message-ID: <DU0PR04MB9417C2A5495EC2E009A1B3ED886A9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20220817065946.24303-1-krzysztof.kozlowski@linaro.org>
- <20220817065946.24303-2-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220817065946.24303-2-krzysztof.kozlowski@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 00ca187f-9f0f-4b16-3cf8-08da801e72d9
-x-ms-traffictypediagnostic: AM6PR04MB4839:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wyvMD1B5v2rTXdhcRgnZim7Wp9ZlibutCNtlXbpjChJ7dzof70UT2Wc2IYVJl1WKIW4hzJUd1OZzF+SxMXsT5bmh4hhlLooyZnVbI4RQ2il5M9/be9W5DyXa7RPEdCzaeIcx4dEzzPmMxhC34Kx93AFqXdESckp+N3zWRd09jtJNBmZIb+rjDayRHnweZ6YPEnFTCKOmwZA+Zn5UWO4x7QnLnVIyXxHPkyVUFcrYNP39opIPKM2Q/ZXLZwxIFpWiY+uIuBpAecNzMcpQyhC3J9oFQRxAWNIK0t20YPCaFx+4iDwu8rE5w7bKmU/o8HEyYmatZOwIJ055CYD2HgpZ21pnbOMSsqXiq54l0fG1vWQAiaX8h2jEdoFO1SELIS8L+oDLO2HfDeprRohmy9tBSir3zQEyAyyu09wZJ95VYVahzhRN7pGjtgbJ0VLgemO9r8kZ0kupQ/wnIus86LFQwcHRQ4ibtZ9/d04o9OWstd19KKA2RF3w4tWBLyW12nt2frizVa8n6Wq4r+wUTKNRwti25bWlNp3sZJ4gtX7FSfHWbKSw9MSGPODj5MHK6rBXC9pZyUE19x0WFlyj43rzxTg1Q0PahFjxhTAjD5xI4D8TfTI5E1JkPG8+He8E8yUnvq9Rruh2bqoxJdN/iTin/V2kmyOQv3NrDtwS/l/rPPlWzf5oVRIIVcMvxVmZxDj0tW5i1M9xL2Wkz7jtzE3FPNDT8GrDyczaA/am/nqmwTvVSMTnutW1V1cO6QG5Iygx6NiDqN3SLFJt3wUR68OmbN2zuqz/nVBhhSh+zuW+wVZA1Hae2e1CvYiMQNtjaJwQvqMFR205tWmu9doIFUxWcFXTPyWMawVo2zQ/GxcUBC8=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(39860400002)(346002)(366004)(376002)(26005)(122000001)(71200400001)(316002)(38070700005)(41300700001)(7416002)(921005)(33656002)(44832011)(66446008)(2906002)(66476007)(9686003)(66946007)(7696005)(76116006)(8676002)(38100700002)(66556008)(186003)(5660300002)(64756008)(478600001)(966005)(83380400001)(8936002)(45080400002)(110136005)(86362001)(52536014)(6506007)(55016003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?sr+h3a6v4BGxQQhopXzoxqD9DuQkjVO2VvGwvAmkvfCMKO2lTAVX3ky4CvMB?=
- =?us-ascii?Q?L2ieZQKj24cwsd3ZODNG5zmcCfQrarT0z1E8rw2KsyC59ERMOaGlsdMeuwCC?=
- =?us-ascii?Q?WVHJwLBuWDGh3209tf3pGbbHwpd5kRYtMfmUCek5XlzfklVSFdJu/Pv+a48s?=
- =?us-ascii?Q?YSH2xVUHqKPRmWcHpSuZZ8SuUa0kN7z/AyFFRw/hjmdWCkHhMSNoL+mPgbAf?=
- =?us-ascii?Q?KmZXdKPynJ2HiMOLwdQRnpykvdZz1j/qx2gGSu1+BJe9vZBntq+BTwQeh+6F?=
- =?us-ascii?Q?Bq85vgHPskKZeJlfMtAET0lXv6BXyIK7pA+PxIQaE0NY8byIVNCCphLIFkVW?=
- =?us-ascii?Q?DMv2fXt76d57Z8k9oLK8la4j5PiA5cDa+krhejHy8XW4Cu4LP4dH5syQQU3L?=
- =?us-ascii?Q?zbeoaE2yD+Mb8kFYqFsoybC/ZTwCJY96a6zH4OtuundmYOizuEVxXvcFkmQz?=
- =?us-ascii?Q?eyGZojcs2WtYZ+FILE/PoEYyVxpeUfgFOfwy8z1XuBjz3ViFpLB0jNeICkuZ?=
- =?us-ascii?Q?PNM1ARM/INZmqXijBjXy2Vz7gg/l7VpblGPKay9Y5ZArh8vwi2HQIAlplhWL?=
- =?us-ascii?Q?TJP3B3RwaH2CdkgipS1ocptS6Y4+qBMSauCs678Iy4e0yVxJzpZyUm45zKVc?=
- =?us-ascii?Q?nXEtkHho1eQtizU95dGrs9GW++8N2RZWFvRk0vE0R1K/hyyqZ6BWiTK/rmWC?=
- =?us-ascii?Q?fZffuTLZpPh0loZ4BH/FH8+jrCYed+LuVI+ViB2rN8s9gT+CNkMVQ9b6uk7J?=
- =?us-ascii?Q?llufu3hanTTmlhK6+wqBU4bC23dvqU/zp3KSy2wWXy7hZFb8d/bxkQxa+uwy?=
- =?us-ascii?Q?f+IQod7TKKFfganEAZ8othdrByOT/JUpaxmRX9/9QL/4p1No9jQWYabjOmnW?=
- =?us-ascii?Q?nD7MsY81U/uIjGveDqz6VHl1fgShHXgH7wUw9acylCWvcly32QVKkFv80FVb?=
- =?us-ascii?Q?yIl+96sqZxkGOhPYZ1ErBLEMSLqjuxU8iPPk85i+mq4CIL9gvOo6NZNavXey?=
- =?us-ascii?Q?NE1Er2FUFKx4VB1GlhRv2Z1oV6Rn1Bxl33dUDMThfxiMLg2EdB8MVmBYNZZD?=
- =?us-ascii?Q?j5rFZK108nAWZ7ceSzA1OnJ2t5fcnF6iGhF4WaSJoeg2p8zpFaPb5NxhNT1k?=
- =?us-ascii?Q?xUAMdJzYNcB1X3Q58OQYdHYy+8/FvcEMdq0D0qUj6biM5D2wg3b6mBVeDYDd?=
- =?us-ascii?Q?2rXyvObrMcscqZDdYCFUcloj9vUTFh00xunP2SesGDgv5O4oEenluAgT8bPv?=
- =?us-ascii?Q?/QulwlDiV6PIXX0Qj9UnREZReGEbns68sTSYATMc8umQapB/mwg8rFPV9wSI?=
- =?us-ascii?Q?/Z5nN44nTZWlPoFv7uR/FwzbMeNbjZ6ccjCtZ8HcrbPp7nStyWbqu+P8ETQz?=
- =?us-ascii?Q?p3yYkQ8w0AKhjlXyfhKhkkyirFMh/AX0vhaGWf/VxZ/KIxV9TLn1EgqC3v5K?=
- =?us-ascii?Q?JRhmxw21WaaxOsDfnO8xkk1Hm0yf7n8e/oSNqNRK5NY0ragXXLPD4ZLS+6H0?=
- =?us-ascii?Q?8hbSx8JeHCFXstZBVCDRiS0jLEW3TDbQyq5gGGBDoaPIB7yoLsuze6t+lzTm?=
- =?us-ascii?Q?xzK6PER0U66ImgMjpZduBQIyakFzDYN4nxlwf+MS?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 17 Aug 2022 03:08:19 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5875465DB;
+        Wed, 17 Aug 2022 00:08:16 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4M6zb90tcqzKwq8;
+        Wed, 17 Aug 2022 15:06:45 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+        by APP3 (Coremail) with SMTP id _Ch0CgDHoDnXk_xiOOiuAQ--.23666S2;
+        Wed, 17 Aug 2022 15:08:11 +0800 (CST)
+Subject: Re: KASAN: slab-out-of-bounds Read in
+ __htab_map_lookup_and_delete_batch
+To:     Hao Sun <sunhao.th@gmail.com>, bpf@vger.kernel.org
+References: <CACkBjsbuxaR6cv0kXJoVnBfL9ZJXjjoUcMpw_Ogc313jSrg14A@mail.gmail.com>
+From:   Hou Tao <houtao@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+        andrii@kernel.org, yhs@fb.com, song@kernel.org,
+        john.fastabend@gmail.com, sdf@google.com, jolsa@kernel.org,
+        kpsingh@kernel.org, haoluo@google.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Message-ID: <54b435bf-c710-a6b9-4855-9a29e099eab8@huaweicloud.com>
+Date:   Wed, 17 Aug 2022 15:08:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00ca187f-9f0f-4b16-3cf8-08da801e72d9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Aug 2022 07:02:28.9935
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vEOAJZe8YtxVVUvgaUtWhzcRBfWl1XQEuS9ldCrdU9A7WZvav++Hqc3itVdKMeA5PTHnKoukT3ktY6ZRWutp1Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4839
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CACkBjsbuxaR6cv0kXJoVnBfL9ZJXjjoUcMpw_Ogc313jSrg14A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: _Ch0CgDHoDnXk_xiOOiuAQ--.23666S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Aw1UJrWfAr15Gr18Gr1fXrb_yoW3ZFW5pF
+        n5GrWxWr40qrykA3yxJr1kAryxZF43A3WUGr97WFyrZ3Wftw1jqr1vqr9Fgr1akr4FyF13
+        ArnrtrWFvw1UJaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
+        6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+        9x07UWE__UUUUU=
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: [PATCH 2/2] dt-bindings: memory-controllers: fsl,imx8m-ddrc: dro=
-p
-> Leonard Crestez
->=20
-> Emails to Leonard Crestez bounce ("550 5.4.1 Recipient address rejected:
-> Access denied:), so change maintainer to Peng Fan from NXP.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hi,
 
-Thanks. Acked-by: Peng Fan <peng.fan@nxp.com>
+On 8/16/2022 8:13 AM, Hao Sun wrote:
+> Hello,
+>
+> Last email was not formatted correctly, resend it here. The following
+> crash can be triggered on:
+>
+> HEAD commit: ffcf9c5700e4  x86: link vdso and boot
+> git tree: upstream
+> console output: https://pastebin.com/raw/ngeVmgpK
+> kernel config: https://pastebin.com/raw/3JYdi5mp
+> C reproducer: https://paste.ubuntu.com/p/D2sz87PQ4k/
+>
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in instrument_copy_to_user
+> include/linux/instrumented.h:118 [inline]
+> BUG: KASAN: slab-out-of-bounds in _copy_to_user lib/usercopy.c:32 [inline]
+> BUG: KASAN: slab-out-of-bounds in _copy_to_user+0x9c/0xc0 lib/usercopy.c:26
+> Read of size 54 at addr ffff8881055c0100 by task syz-executor382/8357
+Have not run the reproducer yet (due to network access restriction of our
+company), just skim through __htab_map_lookup_and_delete_batch() and found that
+the following code snippet is suspicious:
 
-Thanks,
-Peng.=20
+        /* do not grab the lock unless need it (bucket_cnt > 0). */
+        if (locked) {
+                ret = htab_lock_bucket(htab, b, batch, &flags);
+                if (ret)
+                        goto next_batch;
+        }
 
-> ---
->  .../devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml  | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/memory-
-> controllers/fsl/imx8m-ddrc.yaml
-> b/Documentation/devicetree/bindings/memory-controllers/fsl/imx8m-
-> ddrc.yaml
-> index fc2e7de10331..519b123116dc 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/fsl/imx8m-
-> ddrc.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/fsl/imx8m-
-> ddrc.yaml
-> @@ -7,7 +7,7 @@ $schema:
-> https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fdevice
-> tree.org%2Fmeta-
-> schemas%2Fcore.yaml%23&amp;data=3D05%7C01%7Cpeng.fan%40nxp.com%
-> 7Cbc4ca1b3eb7f4ea37a6f08da801e15ac%7C686ea1d3bc2b4c6fa92cd99c5c3
-> 01635%7C0%7C0%7C637963163958140691%7CUnknown%7CTWFpbGZsb3d
-> 8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%
-> 3D%7C3000%7C%7C%7C&amp;sdata=3DaRsRxhGmrmdagEf8lKIZYpYMaW1E87
-> 7GWn4j%2BW9e2Gw%3D&amp;reserved=3D0
->  title: i.MX8M DDR Controller
->=20
->  maintainers:
-> -  - Leonard Crestez <leonard.crestez@nxp.com>
-> +  - Peng Fan <peng.fan@nxp.com>
->=20
->  description:
->    The DDRC block is integrated in i.MX8M for interfacing with DDR based
-> --
-> 2.34.1
+If htab_lock_bucket() fails, it should reset bucket_cnt to zero, else next_batch
+will try to read key_size * bucket_cnt bytes from keys and may lead to
+out-of-bound read. Will try to get the reproducer and to ensure or pinpoint the
+root cause.
+
+> CPU: 1 PID: 8357 Comm: syz-executor382 Not tainted
+> 5.19.0-13666-gffcf9c5700e4-dirty #15
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+> 1.13.0-1ubuntu1.1 04/01/2014
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0x57/0x7d lib/dump_stack.c:106
+>  print_address_description mm/kasan/report.c:317 [inline]
+>  print_report.cold+0xe5/0x66d mm/kasan/report.c:433
+>  kasan_report+0x8a/0x1b0 mm/kasan/report.c:495
+>  check_region_inline mm/kasan/generic.c:183 [inline]
+>  kasan_check_range+0x13b/0x190 mm/kasan/generic.c:189
+>  instrument_copy_to_user include/linux/instrumented.h:118 [inline]
+>  _copy_to_user lib/usercopy.c:32 [inline]
+>  _copy_to_user+0x9c/0xc0 lib/usercopy.c:26
+>  copy_to_user include/linux/uaccess.h:160 [inline]
+>  __htab_map_lookup_and_delete_batch+0x1169/0x1cf0 kernel/bpf/hashtab.c:1809
+>  bpf_map_do_batch+0x2d6/0x590 kernel/bpf/syscall.c:4498
+>  __sys_bpf+0x1193/0x48b0 kernel/bpf/syscall.c:5014
+>  __do_sys_bpf kernel/bpf/syscall.c:5058 [inline]
+>  __se_sys_bpf kernel/bpf/syscall.c:5056 [inline]
+>  __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5056
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7f797e7e5b9d
+> Code: c3 e8 97 2a 00 00 0f 1f 80 00 00 00 00 f3 0f 1e fa 48 89 f8 48
+> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+> 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007f797e76ad78 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+> RAX: ffffffffffffffda RBX: 00007f797e87a2d0 RCX: 00007f797e7e5b9d
+> RDX: 0000000000000038 RSI: 0000000020000680 RDI: 0000000000000019
+> RBP: 00007f797e84700c R08: 00007f797e76b700 R09: 0000000000000000
+> R10: 00007f797e76b700 R11: 0000000000000246 R12: 00007f797e87a2d8
+> R13: 00007f797e87a2dc R14: 00000000200014c0 R15: 00007f797e846008
+>  </TASK>
+>
+> Allocated by task 8357:
+>  kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+>  kasan_set_track mm/kasan/common.c:45 [inline]
+>  set_alloc_info mm/kasan/common.c:437 [inline]
+>  ____kasan_kmalloc mm/kasan/common.c:516 [inline]
+>  ____kasan_kmalloc mm/kasan/common.c:475 [inline]
+>  __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:525
+>  kasan_kmalloc include/linux/kasan.h:234 [inline]
+>  __kmalloc_node+0x1e9/0x360 mm/slub.c:4472
+>  kvmalloc include/linux/slab.h:750 [inline]
+>  kvmalloc_array include/linux/slab.h:768 [inline]
+>  __htab_map_lookup_and_delete_batch+0x538/0x1cf0 kernel/bpf/hashtab.c:1680
+>  bpf_map_do_batch+0x2d6/0x590 kernel/bpf/syscall.c:4498
+>  __sys_bpf+0x1193/0x48b0 kernel/bpf/syscall.c:5014
+>  __do_sys_bpf kernel/bpf/syscall.c:5058 [inline]
+>  __se_sys_bpf kernel/bpf/syscall.c:5056 [inline]
+>  __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5056
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> The buggy address belongs to the object at ffff8881055c0100
+>  which belongs to the cache kmalloc-64 of size 64
+> The buggy address is located 0 bytes inside of
+>  64-byte region [ffff8881055c0100, ffff8881055c0140)
+>
+> The buggy address belongs to the physical page:
+> page:ffffea0004157000 refcount:1 mapcount:0 mapping:0000000000000000
+> index:0x0 pfn:0x1055c0
+> flags: 0x57ff00000000200(slab|node=1|zone=2|lastcpupid=0x7ff)
+> raw: 057ff00000000200 0000000000000000 dead000000000122 ffff888010c42640
+> raw: 0000000000000000 0000000080200020 00000001ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+> page_owner tracks the page as allocated
+> page last allocated via order 0, migratetype Unmovable, gfp_mask
+> 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 6756, tgid 6756
+> (syz-executor382), ts 131529364832, free_ts 131498233118
+>  set_page_owner include/linux/page_owner.h:31 [inline]
+>  post_alloc_hook mm/page_alloc.c:2525 [inline]
+>  prep_new_page+0x2c6/0x350 mm/page_alloc.c:2532
+>  get_page_from_freelist+0xae9/0x3a80 mm/page_alloc.c:4283
+>  __alloc_pages+0x321/0x710 mm/page_alloc.c:5515
+>  alloc_slab_page mm/slub.c:1824 [inline]
+>  allocate_slab mm/slub.c:1969 [inline]
+>  new_slab+0x246/0x3a0 mm/slub.c:2029
+>  ___slab_alloc+0xa50/0x1060 mm/slub.c:3031
+>  __slab_alloc.isra.0+0x4d/0xa0 mm/slub.c:3118
+>  slab_alloc_node mm/slub.c:3209 [inline]
+>  __kmalloc_node+0x2ed/0x360 mm/slub.c:4468
+>  kmalloc_node include/linux/slab.h:623 [inline]
+>  __vmalloc_area_node mm/vmalloc.c:3012 [inline]
+>  __vmalloc_node_range+0x30a/0xf70 mm/vmalloc.c:3196
+>  alloc_thread_stack_node kernel/fork.c:312 [inline]
+>  dup_task_struct kernel/fork.c:977 [inline]
+>  copy_process+0x4069/0x6660 kernel/fork.c:2087
+>  kernel_clone+0xba/0xba0 kernel/fork.c:2673
+>  __do_sys_clone+0xa1/0xe0 kernel/fork.c:2807
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> page last free stack trace:
+>  reset_page_owner include/linux/page_owner.h:24 [inline]
+>  free_pages_prepare mm/page_alloc.c:1449 [inline]
+>  free_pcp_prepare+0x5ab/0xd00 mm/page_alloc.c:1499
+>  free_unref_page_prepare mm/page_alloc.c:3380 [inline]
+>  free_unref_page+0x19/0x410 mm/page_alloc.c:3476
+>  __tlb_remove_table arch/x86/include/asm/tlb.h:34 [inline]
+>  __tlb_remove_table_free mm/mmu_gather.c:114 [inline]
+>  tlb_remove_table_rcu+0x6e/0xb0 mm/mmu_gather.c:169
+>  rcu_do_batch kernel/rcu/tree.c:2245 [inline]
+>  rcu_core+0x785/0x1720 kernel/rcu/tree.c:2505
+>  __do_softirq+0x1d0/0x908 kernel/softirq.c:571
+>
+> Memory state around the buggy address:
+>  ffff8881055c0000: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
+>  ffff8881055c0080: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
+>> ffff8881055c0100: 00 00 00 00 00 05 fc fc fc fc fc fc fc fc fc fc
+>                                   ^
+>  ffff8881055c0180: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>  ffff8881055c0200: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> ==================================================================
+> .
 

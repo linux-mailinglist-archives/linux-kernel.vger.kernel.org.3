@@ -2,74 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A42F5975D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 723EB5975D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:43:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240251AbiHQSmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 14:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45740 "EHLO
+        id S240942AbiHQSnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 14:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbiHQSmL (ORCPT
+        with ESMTP id S239643AbiHQSnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 14:42:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594CFA00C6
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 11:42:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660761729;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zGxwI/HJK8YvsL38NfBt47qZQNhHEBbbdeHKaJUV0vE=;
-        b=L2LPWzrGerol0IQHBxA5dmJZJKHFZeAY/jDYzTuxhFqf3ewmrjvxbNel50IU0QCDqEBb+F
-        KvN5T7VhMe2WNf/Y4pJalJdLmfQhueLQ93fTulK0P9uX3n3gR5DWRQu2+cxJn/9/6lnyS2
-        vu0Pk85E66QIfgM/0dVYVaBiE6MHuBA=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-347-IhJ676m1OGGgI4p6W7EdZA-1; Wed, 17 Aug 2022 14:42:05 -0400
-X-MC-Unique: IhJ676m1OGGgI4p6W7EdZA-1
-Received: by mail-qv1-f69.google.com with SMTP id ly9-20020a0562145c0900b00495bcb17d9cso2790049qvb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 11:42:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=zGxwI/HJK8YvsL38NfBt47qZQNhHEBbbdeHKaJUV0vE=;
-        b=toWEWoYa2qtya6VLk53z8kvD8IDWO/AXxRlV8e10F8R4ZhdU5gkbDVo5zTXzlzOziQ
-         01vEv0mqomk20GZ0b7EYhQZNs+tcAG5O/Jv3mJcy4lVGVlrEol6Xx3IA1VUAdeZ/bCtC
-         e1KKmUg3eUtY7IRyc4sfgt4Ts+HjAy40OOxnvFlSdSEqgstuICFQ84JIj832N9zVVr+/
-         OzEheFUL4gd0rusF0hDmmVRTfTnPsepI7fQoKhK93QvGlfZZu4p/QlMHJei3iPobI99V
-         AbM4OcnJ7vpvty0uWGQaWUFgNbHvc3G3O8BYEvBWuXZl4HRbyXpZeH6NRFxcMz3cqSYs
-         YKXA==
-X-Gm-Message-State: ACgBeo025lLlG+aHndX9bd9LMcHMp/w5tmYgg5Zs2ZpB+/U6RLHITW93
-        gUI/66DF2JrgsKxb1eTR6CmyFBJAHExQWZNVsBu3axmKafuV8RNk5fDU7uo/m5fBhvQ1wYB2lwQ
-        9can1GtgLX9a68MgsKFUmTmPB
-X-Received: by 2002:ad4:4a73:0:b0:474:6e80:e1cb with SMTP id cn19-20020ad44a73000000b004746e80e1cbmr22951892qvb.127.1660761724871;
-        Wed, 17 Aug 2022 11:42:04 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6glVEO9fSvKAq1HJGMpFnpPZlbXHRAm3M0HzZs/KuTWZEFuL9lo4h5V4gSz7ZZrHoWpJppyw==
-X-Received: by 2002:ad4:4a73:0:b0:474:6e80:e1cb with SMTP id cn19-20020ad44a73000000b004746e80e1cbmr22951879qvb.127.1660761724629;
-        Wed, 17 Aug 2022 11:42:04 -0700 (PDT)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id b21-20020ae9eb15000000b006bb6c63114fsm3797780qkg.110.2022.08.17.11.42.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 11:42:04 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 14:42:02 -0400
-From:   Brian Foster <bfoster@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] proc: save LOC in vsyscall test
-Message-ID: <Yv02eoqPehWoDEVM@bfoster>
-References: <YvoWzAn5dlhF75xa@localhost.localdomain>
- <YvuDMGHcNtjhhMuq@bfoster>
- <20220817112802.29b92729e25313eeec2d44d3@linux-foundation.org>
+        Wed, 17 Aug 2022 14:43:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C27A00E5;
+        Wed, 17 Aug 2022 11:43:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F08CC6138B;
+        Wed, 17 Aug 2022 18:42:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5665C433D6;
+        Wed, 17 Aug 2022 18:42:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660761779;
+        bh=mZlL2HyXzYY0uChXc/V3+qQzkCuusK5P5PJx7zGmsH8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=m2hF+lr71XxxwoN9szdS3g6zeud9f/3jjfq8Qvgq5GRTR7U5Ho7resONzKNOtmHvs
+         xJ7ulDj1xLhwqxexs8GE6tOMaykayDoff2GvSUaqI2WzWIeXEnLImXRl6ZpIan6lrE
+         mugM5xO9aHj9epx8UW5nTNDHBkm58T9FUYXxWxxV1sdI6acLFlx+tfqM5zpJrJjYaQ
+         FpLgLuxV3RrKg6fXetCnwscitVMamBDbKHcjyEeBz6xh7bTXgCiQjqESvs9im0hqlU
+         MULEpGLaMmGW2ObdV91Bqq3sE9El9umcoyehOQ28C42lg7o4KEjHSrem8GsSyqRUMb
+         4wGjF7jEx6L3g==
+Message-ID: <e3952386b70e9bf07e676c47a5a9fa63df93bacf.camel@kernel.org>
+Subject: Re: [PATCH v2] locks: Fix dropped call to ->fl_release_private()
+From:   Jeff Layton <jlayton@kernel.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 17 Aug 2022 14:42:57 -0400
+In-Reply-To: <166076168742.3677624.2936950729624462101.stgit@warthog.procyon.org.uk>
+References: <166076168742.3677624.2936950729624462101.stgit@warthog.procyon.org.uk>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220817112802.29b92729e25313eeec2d44d3@linux-foundation.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,36 +58,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 11:28:02AM -0700, Andrew Morton wrote:
-> On Tue, 16 Aug 2022 07:44:48 -0400 Brian Foster <bfoster@redhat.com> wrote:
-> 
-> > On Mon, Aug 15, 2022 at 12:50:04PM +0300, Alexey Dobriyan wrote:
-> > > From: Brian Foster <bfoster@redhat.com>
-> > > 
-> > > Do one fork in vsyscall detection code and let SIGSEGV handler exit and
-> > > carry information to the parent saving LOC.
-> > > 
-> > > 	[
-> > > 		redo original patch,
-> > > 		delete unnecessary variables,
-> > > 		minimise code changes.
-> > > 					--adobriyan
-> > > 	]
-> > > 
-> > > Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
-> > > ---
-> > 
-> > LGTM and passes my quick tests, thanks!
-> > 
-> > FWIW:
-> > 
-> > Reviewed-by: Brian Foster <bfoster@redhat.com>
-> 
-> It would be appropriate for us to include your Signed-off-by.  Please
-> send one along?
-> 
+On Wed, 2022-08-17 at 19:41 +0100, David Howells wrote:
+> Prior to commit 4149be7bda7e, sys_flock() would allocate the file_lock
+> struct it was going to use to pass parameters, call ->flock() and then ca=
+ll
+> locks_free_lock() to get rid of it - which had the side effect of calling
+> locks_release_private() and thus ->fl_release_private().
+>=20
+> With commit 4149be7bda7e, however, this is no longer the case: the struct
+> is now allocated on the stack, and locks_free_lock() is no longer called =
+-
+> and thus any remaining private data doesn't get cleaned up either.
+>=20
+> This causes afs flock to cause oops.  Kasan catches this as a UAF by the
+> list_del_init() in afs_fl_release_private() for the file_lock record
+> produced by afs_fl_copy_lock() as the original record didn't get delisted=
+.
+> It can be reproduced using the generic/504 xfstest.
+>=20
+> Fix this by reinstating the locks_release_private() call in sys_flock().
+> I'm not sure if this would affect any other filesystems.  If not, then th=
+e
+> release could be done in afs_flock() instead.
+>=20
+> Changes
+> =3D=3D=3D=3D=3D=3D=3D
+> ver #2)
+>  - Don't need to call ->fl_release_private() after calling the security
+>    hook, only after calling ->flock().
+>=20
+> Fixes: 4149be7bda7e ("fs/lock: Don't allocate file_lock in flock_make_loc=
+k().")
+> cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+> cc: Chuck Lever <chuck.lever@oracle.com>
+> cc: Jeff Layton <jlayton@kernel.org>
+> cc: Marc Dionne <marc.dionne@auristor.com>
+> cc: linux-afs@lists.infradead.org
+> cc: linux-fsdevel@vger.kernel.org
+> Link: https://lore.kernel.org/r/166075758809.3532462.13307935588777587536=
+.stgit@warthog.procyon.org.uk/ # v1
+> ---
+>=20
+>  fs/locks.c |    1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/fs/locks.c b/fs/locks.c
+> index c266cfdc3291..607f94a0e789 100644
+> --- a/fs/locks.c
+> +++ b/fs/locks.c
+> @@ -2129,6 +2129,7 @@ SYSCALL_DEFINE2(flock, unsigned int, fd, unsigned i=
+nt, cmd)
+>  	else
+>  		error =3D locks_lock_file_wait(f.file, &fl);
+> =20
+> +	locks_release_private(&fl);
+>   out_putf:
+>  	fdput(f);
+> =20
+>=20
+>=20
 
-Sure, feel free to use whichever tags make the most sense:
+Looks good. I'll get this into -next and plan to get it up to Linus
+soon.
 
-Signed-off-by: Brian Foster <bfoster@redhat.com>
-
+Thanks!
+--=20
+Jeff Layton <jlayton@kernel.org>

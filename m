@@ -2,162 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89EE5967EA
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9D55967E9
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 06:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbiHQEEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 00:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55726 "EHLO
+        id S229544AbiHQEE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 00:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiHQEED (ORCPT
+        with ESMTP id S230036AbiHQEEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 00:04:03 -0400
-Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674585AA11
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 21:04:00 -0700 (PDT)
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by box.trvn.ru (Postfix) with ESMTPSA id E9FD84014F;
-        Wed, 17 Aug 2022 09:03:53 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-        t=1660709034; bh=vEUeKsVSsYoxf7ROoW/Jp/R4kHXxb6KHdnCvItudHtw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ptdJlb5UTK/Eq6xpMDV4UTnkrQKd4RFRiraygK5Q4BdRcxJqZzqRfq2rOo64ohKQg
-         zFD7cZgbD/bugcb7ZAOysPcqohRFLmWRhyVt+OwX/1tYTkyp/VYRbuxrLGrbCALuXJ
-         QMrookeH8cTiEjHu6zATWCWVQa2YVJ+If4xi/qI5tcuY0HqKGoqnujCiKypLHOQq0B
-         aMnyOJQfS5GgB3auoAIVDrUL3xAhA/JFRycgoYAeHECqU98/07O9LB9JXskAXTQ4vh
-         oXIvRh7pF6Ml3yZKUf6cjswnZzxorZa8IpRe1hmZiZ4IYY7L9cKhBmsjFFAjoqwKWB
-         umqNugMRn82Ag==
+        Wed, 17 Aug 2022 00:04:22 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A649D61706
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 21:04:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660709057; x=1692245057;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=qr/uVPz9Ez1SSFYscSTjud74KmT0zmeQz0XtoF8vSMs=;
+  b=BozqZpnrHE5Q0KmzemKL5En8eSblkpmNNqwYp5j1JX2RJHSbOW8cVZwe
+   Qoa+wJYeTezcQqOWYijtxZ+P6ArsZRbUJI5zmDSJqtXXdWFu6BMGNHWQB
+   SFyeJ+6WhAn9s8E4uMTRUfXNJTm/yd0W7AFYx44WIZ44kFQEbXCJU36dt
+   6Xz1E0p2oHFgzLtiwTIk7mM77qqSPUTgC84YwBp8Rws46nbb83iSjJJwb
+   ZwyFjG3byDE/3I8hTY1oVOoAXh5MegLnNs/+TpjbwSgcJ6vZdWXLxqF0Z
+   GZ97g5oSlNk0YNhnREzQOi0qwjecK8BRQcJaoSp87dL4PGP/rUrWJbmGU
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="354138994"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="354138994"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 21:04:16 -0700
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="667425578"
+Received: from jzhan60-mobl1.ccr.corp.intel.com (HELO [10.254.209.228]) ([10.254.209.228])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 21:04:12 -0700
+Message-ID: <94921c7a-778c-911d-4d72-d7815d95c46b@linux.intel.com>
+Date:   Wed, 17 Aug 2022 12:04:10 +0800
 MIME-Version: 1.0
-Date:   Wed, 17 Aug 2022 09:03:52 +0500
-From:   Nikita Travkin <nikita@trvn.ru>
-To:     Nikita Travkin <nikita@trvn.ru>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        speakup@linux-speakup.org
-Subject: Re: [PATCHv4] speakup: Generate speakupmap.h automatically
-In-Reply-To: <20220816183310.uvmcojucjdhcb4vk@begin>
-References: <20220612172244.il3siyq7ueqnvah5@begin>
- <20220816072843.1699317-1-nikita@trvn.ru>
- <20220816183310.uvmcojucjdhcb4vk@begin>
-Message-ID: <c48cdee9ec664ea765cc41b41786df1e@trvn.ru>
-X-Sender: nikita@trvn.ru
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Cc:     baolu.lu@linux.intel.com, Sasha Levin <sashal@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Joerg Roedel <joro@8bytes.org>, iommu@lists.linux.dev,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Scarlett Gourley <scarlett@arista.com>,
+        James Sewart <jamessewart@arista.com>,
+        Jack O'Sullivan <jack@arista.com>
+Subject: Re: lockdep splat due to klist iteration from atomic context in Intel
+ IOMMU driver
+Content-Language: en-US
+To:     Lennert Buytenhek <buytenh@wantstofly.org>,
+        Bart Van Assche <bvanassche@acm.org>
+References: <Yvo2dfpEh/WC+Wrr@wantstofly.org>
+ <ab15191c-d79f-b5de-7568-d15b8f8a8aa8@acm.org>
+ <YvpQ5M7//AlrpJGP@wantstofly.org>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <YvpQ5M7//AlrpJGP@wantstofly.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Samuel Thibault писал(а) 16.08.2022 23:33:
-> Hello,
+On 2022/8/15 21:57, Lennert Buytenhek wrote:
+> On Mon, Aug 15, 2022 at 06:32:24AM -0700, Bart Van Assche wrote:
 > 
-> Nikita Travkin, le mar. 16 août 2022 12:28:43 +0500, a ecrit:
->> After that I also had some weird issues of the build system trying to
->> write speakupmap.h into the source dir and not the output dir (the
->> source is read only due to the tooling I use) but this seems to have
->> been resolved by cleanly rebuilding the speakup dir.
+>>> On a build of 7ebfc85e2cd7 ("Merge tag 'net-6.0-rc1' of
+>>> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net"), with
+>>> CONFIG_INTEL_IOMMU_DEBUGFS enabled, I am seeing the lockdep splat
+>>> below when an I/O page fault occurs on a machine with an Intel
+>>> IOMMU in it.
+>>>
+>>> The issue seems to be the klist iterator functions using
+>>> spin_*lock_irq*() but the klist insertion functions using
+>>> spin_*lock(), combined with the Intel DMAR IOMMU driver iterating
+>>> over klists from atomic (hardirq) context as of commit 8ac0b64b9735
+>>> ("iommu/vt-d: Use pci_get_domain_bus_and_slot() in pgtable_walk()")
+>>> when CONFIG_INTEL_IOMMU_DEBUGFS is enabled, where
+>>> pci_get_domain_bus_and_slot() calls into bus_find_device() which
+>>> iterates over klists.
+>>>
+>>> I found this commit from 2018:
+>>>
+>>> 	commit 624fa7790f80575a4ec28fbdb2034097dc18d051
+>>> 	Author: Bart Van Assche<bvanassche@acm.org>
+>>> 	Date:   Fri Jun 22 14:54:49 2018 -0700
+>>>
+>>> 	    scsi: klist: Make it safe to use klists in atomic context
+>>>
+>>> This commit switched lib/klist.c:klist_{prev,next} from
+>>> spin_{,un}lock() to spin_{lock_irqsave,unlock_irqrestore}(), but left
+>>> the spin_{,un}lock() calls in add_{head,tail}() untouched.
+>>>
+>>> The simplest fix for this would be to switch lib/klist.c:add_{head,tail}()
+>>> over to use the IRQ-safe spinlock variants as well?
+>> Another possibility would be to evaluate whether it is safe to revert commit
+>> 624fa7790f80 ("scsi: klist: Make it safe to use klists in atomic context").
+>> That commit is no longer needed by the SRP transport driver since the legacy
+>> block layer has been removed from the kernel.
+> And then to fix the 6.0-rc1 iommu/vt-d lockdep splat with
+> CONFIG_INTEL_IOMMU_DEBUGFS enabled, we could convert the Intel DMAR
+> IRQ handler to a threaded IRQ handler.  We (Arista) carry the patch
+> below in our kernel tree, and the last two hunks of the patch do
+> exactly that, for the same reason (having to call
+> pci_get_domain_bus_and_slot() from the IRQ handler) but this is
+> probably too big of a change for 6.0-rc.
 > 
-> Mmm, how did you get/update your source dir? The latest version of the
-> patchset does generate it in the build tree.
 > 
+> 
+> commit 90a8e7da0facf198692a641fcfe6f89c478608e0
+> Author: Lennert Buytenhek<buytenh@wantstofly.org>
+> Date:   Wed Jul 13 15:34:30 2022 +0300
+> 
+>      iommu/vt-d: Use report_iommu_fault()
+>      
+>      This patch makes iommu/vt-d call report_iommu_fault() when an I/O
+>      page fault occurs, which has two effects:
+>      
+>      1) It allows device drivers to register a callback to be notified
+>         of I/O page faults, via the iommu_set_fault_handler() API.
+>      
+>      2) It triggers the io_page_fault tracepoint in report_iommu_fault()
+>         when an I/O page fault occurs.
+>      
+>      The latter point is the main aim of this patch, as it allows
+>      rasdaemon-like daemons to be notified of I/O page faults, and to
+>      possibly initiate corrective action in response.
 
-It's just a git tree for Linux in which I've checked-out the
-v6.0-rc1 tag and applied few unrelated patches on top.
+The IOMMU subsystem already has a framework to handle I/O page faults:
 
-The thing confused me a bit as all other artifacts were properly
-placed in the output dir with an exception of the speakupmap.h.
+     commit fc36479db74e9 "iommu: Add a page fault handler"
 
-My guess would be that I had some cache left over in the build dir
-from before this patch, when the file was hardcoded so it tried to
-recreate it as it was. This seems reproducible:
+And below series,
 
-(Please note that the build tooling I use handles the output dir in
-the output below)
+https://lore.kernel.org/linux-iommu/20220817012024.3251276-1-baolu.lu@linux.intel.com/
 
-$ sudo rm -rf .output/drivers/accessibility/speakup/
-$ git checkout v5.19
-$ make -j12 allnoconfig
-$ make -j12 menuconfig # Enable speakup
-$ make -j12
-(... Builds correctly)
+is trying to make it more generic. It seems to be more suitable for your
+case.
 
-$ git checkout v6.0-rc1
-$ git cherry-pick bc239d8740f9
-[отделённый HEAD c32cda0a1b44] speakup: Fix compilation in some build environments
- Date: Tue Aug 16 11:39:52 2022 +0500
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The report_iommu_fault() probably will be replaced by
+iommu_register_device_fault_handler() eventually. So I don't encourage
+its usage in the VT-d driver.
 
-$ make -j12 allnoconfig
-$ make -j12 menuconfig # Enable speakup the same way
-$ make -j12
-*** pmbootstrap envkernel.sh active for /home/travler/devel/pmos/linux! ***
-make: Entering directory '/mnt/linux'
-make[1]: Entering directory '/mnt/linux/.output'
-  SYNC    include/config/auto.conf.cmd
-
-(...)
-
-  CC      drivers/accessibility/speakup/buffers.o
-  CC      drivers/accessibility/speakup/devsynth.o
-  CC      drivers/accessibility/speakup/i18n.o
-  AR      kernel/built-in.a
-  CC      drivers/accessibility/speakup/fakekey.o
-  HOSTCC  drivers/accessibility/speakup/makemapdata.o
-  CC      drivers/accessibility/speakup/keyhelp.o
-  CC      drivers/accessibility/speakup/kobjects.o
-  CC      drivers/accessibility/speakup/selection.o
-  CC      drivers/accessibility/speakup/spk_ttyio.o
-  CC      drivers/accessibility/speakup/synth.o
-  CC      drivers/accessibility/speakup/thread.o
-  CC      drivers/accessibility/speakup/varhandlers.o
-  CC      drivers/of/device.o
-  HOSTLD  drivers/accessibility/speakup/makemapdata
-  MKMAP   drivers/accessibility/speakup/mapdata.h
-  HOSTCC  drivers/accessibility/speakup/genmap.o
-  HOSTLD  drivers/accessibility/speakup/genmap
-  GENMAP  ../drivers/accessibility/speakup/speakupmap.h
-/bin/sh: can't create ../drivers/accessibility/speakup/speakupmap.h: Permission denied
-make[4]: *** [../drivers/accessibility/speakup/Makefile:58: ../drivers/accessibility/speakup/speakupmap.h] Error 1
-make[4]: *** Waiting for unfinished jobs....
-  CC      drivers/of/platform.o
-  CC      drivers/of/property.o
-  CC      drivers/of/kobj.o
-  CC      drivers/of/fdt.o
-  CC      drivers/of/fdt_address.o
-  CC      drivers/of/address.o
-  CC      drivers/of/irq.o
-  CC      drivers/of/of_reserved_mem.o
-make[3]: *** [../scripts/Makefile.build:465: drivers/accessibility/speakup] Error 2
-make[2]: *** [../scripts/Makefile.build:465: drivers/accessibility] Error 2
-make[2]: *** Waiting for unfinished jobs....
-  AR      drivers/of/built-in.a
-make[1]: *** [/mnt/linux/Makefile:1855: drivers] Error 2
-make[1]: Leaving directory '/mnt/linux/.output'
-make: *** [Makefile:222: __sub-make] Error 2
-make: Leaving directory '/mnt/linux'
-Run 'pmbootstrap log' for details.
-
-$ sudo rm -rf .output/drivers/accessibility/speakup/
-$ make -j12
-(...)
-  HOSTLD  drivers/accessibility/speakup/makemapdata
-  MKMAP   drivers/accessibility/speakup/mapdata.h
-  HOSTCC  drivers/accessibility/speakup/genmap.o
-  HOSTLD  drivers/accessibility/speakup/genmap
-  GENMAP  drivers/accessibility/speakup/speakupmap.h
-  CC      drivers/accessibility/speakup/main.o
-  AR      drivers/accessibility/speakup/built-in.a
-(... Builds correctly again)
-
-
-Nikita
-
-> Samuel
+Best regards,
+baolu

@@ -2,79 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A355978AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0255597892
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242186AbiHQVBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 17:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54736 "EHLO
+        id S242212AbiHQVCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 17:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242159AbiHQVBu (ORCPT
+        with ESMTP id S242159AbiHQVCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 17:01:50 -0400
-Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBA4AB1A5
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 14:01:49 -0700 (PDT)
-Received: from [192.168.1.101] (abxi168.neoplus.adsl.tpnet.pl [83.9.2.168])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 3852B1F425;
-        Wed, 17 Aug 2022 23:01:47 +0200 (CEST)
-Message-ID: <83a6fc6a-7fc4-1372-d141-be25ccf645ed@somainline.org>
-Date:   Wed, 17 Aug 2022 23:01:45 +0200
+        Wed, 17 Aug 2022 17:02:14 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4B6AB429;
+        Wed, 17 Aug 2022 14:02:13 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id h78so6365641iof.13;
+        Wed, 17 Aug 2022 14:02:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=p3kmNNco7c5N9PybUED/NbqPmlZIv5vlXMEqlV8OmdQ=;
+        b=C7kohQheIdzIJnlgySCXNEt6bVBDKy83LAC7rreH4sxDFVRECxS6/TsYYeNbWZtesr
+         mwXTw/MpURGTNBNibQcNIeJyuD68cTxvE7qcHjxbyLObfmmaeItob6P9/9/FIOVoJQFN
+         P4Xmsb/pw8PP7j025oQycBMxP8wqrLAGuBTi7HLJEDFz+RW2Y0c+PGZTH8Wn/t23R+BR
+         /PkxN4dHikGFN3Qo5Z5empcUB+7lzxnZuef9EG+LrMZlKRbeXP7RfZohANNfeGc3AUmX
+         0uGRcACxIsMT+N01dCQeUkL8driuuyuAngkQpo5sLK8AyzcDQr4IiWAZLqy1k7JCsszg
+         E4sQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=p3kmNNco7c5N9PybUED/NbqPmlZIv5vlXMEqlV8OmdQ=;
+        b=ruX+iSCy+6+kr87qWSx4iKA06PnHs6NJrxGwmx0V5vQ5jdK3z1Ew+ETcjbVUrk3fBP
+         hPuStHYUgoqW3k1K5I7ZH8ct2oesBzh9CB3MQrIDiZ9OiG0xc7zo/qn6tFRu7jrN7bg7
+         0FJksgHUkSRadjnlNPoI0Fi8zpaxTdtAU0g5gOqK3nhaRw6wHqRnY49EZfQ8+E+28l3V
+         nipbomsODbEpLSG/39ges5IWtJDVVhhmTnihqAiz0absW6rohnzlGtDpa3uBqwmwohL3
+         HmhLBOGhFFpu+ekCaFTHk4zgkprwDhb+94/NUzXnBOWHtrZowHwYwFPxZBkJu7w3Dd3U
+         Rt8Q==
+X-Gm-Message-State: ACgBeo3fiZQfTopP++1OZdo1EbO/UIFaaxccOpME7JPA0AC1oG8QkXlb
+        WYoBHK8IEo3bT/tdMaWoxAYARk7PGXcdYxCilt8=
+X-Google-Smtp-Source: AA6agR65LjBBgIfnMKzM25ANX/JHE6PHDf9A7mmgpChiz+NhwUHhbZcTvCT1HrVeT3DfvlnuKEXI17eEpsbYn5AqYJA=
+X-Received: by 2002:a05:6638:4117:b0:346:b5e1:383a with SMTP id
+ ay23-20020a056638411700b00346b5e1383amr33201jab.264.1660770132624; Wed, 17
+ Aug 2022 14:02:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFT PATCH v2 06/14] arm64: dts: qcom: sc7180: add missing TCSR
- syscon compatible
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220817130342.568396-1-krzysztof.kozlowski@linaro.org>
- <20220817130342.568396-7-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220817130342.568396-7-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220805154231.31257-27-ojeda@kernel.org> <Yu5pUp5mfngAU7da@yadro.com>
+In-Reply-To: <Yu5pUp5mfngAU7da@yadro.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 17 Aug 2022 23:02:01 +0200
+Message-ID: <CANiq72n029==Oc5wbG9pHGrRawRNzYxqZMBK6_S5gMjny5SoQg@mail.gmail.com>
+Subject: Re: [PATCH v9 26/27] samples: add first Rust examples
+To:     Konstantin Shelekhin <k.shelekhin@yadro.com>
+Cc:     ojeda@kernel.org, alex.gaynor@gmail.com, bjorn3_gh@protonmail.com,
+        boqun.feng@gmail.com, gary@garyguo.net, gregkh@linuxfoundation.org,
+        jarkko@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, me@kloenk.de, milan@mdaverde.com,
+        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
+        torvalds@linux-foundation.org, wedsonaf@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Aug 6, 2022 at 3:15 PM Konstantin Shelekhin
+<k.shelekhin@yadro.com> wrote:
+>
+> I wonder if it would make more sense to implement exit() in
+> kernel::Module, just for the sake of uniformity.
 
+Do you mean uniformity with respect to the C side?
 
-On 17.08.2022 15:03, Krzysztof Kozlowski wrote:
-> TCSR syscon node should come with dedicated compatible.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
+Thanks for taking a look!
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-
-Konrad
->  arch/arm64/boot/dts/qcom/sc7180.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> index b82c335c25af..49f28cb531f6 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> @@ -1468,7 +1468,7 @@ tcsr_mutex_regs: syscon@1f40000 {
->  		};
->  
->  		tcsr_regs: syscon@1fc0000 {
-> -			compatible = "syscon";
-> +			compatible = "qcom,sc7180-tcsr", "syscon";
->  			reg = <0 0x01fc0000 0 0x40000>;
->  		};
->  
+Cheers,
+Miguel

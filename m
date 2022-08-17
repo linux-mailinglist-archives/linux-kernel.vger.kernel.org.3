@@ -2,113 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99C9596900
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 07:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 791C1596905
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 07:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234019AbiHQFtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 01:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
+        id S230034AbiHQFut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 01:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbiHQFto (ORCPT
+        with ESMTP id S238794AbiHQFuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 01:49:44 -0400
-Received: from mail.wantstofly.org (hmm.wantstofly.org [213.239.204.108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145077C51D
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 22:49:43 -0700 (PDT)
-Received: by mail.wantstofly.org (Postfix, from userid 1000)
-        id 3A1E97F54A; Wed, 17 Aug 2022 08:49:40 +0300 (EEST)
-Date:   Wed, 17 Aug 2022 08:49:40 +0300
-From:   Lennert Buytenhek <buytenh@wantstofly.org>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Sasha Levin <sashal@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Joerg Roedel <joro@8bytes.org>, iommu@lists.linux.dev,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Scarlett Gourley <scarlett@arista.com>,
-        James Sewart <jamessewart@arista.com>,
-        Jack O'Sullivan <jack@arista.com>
-Subject: Re: lockdep splat due to klist iteration from atomic context in
- Intel IOMMU driver
-Message-ID: <YvyBdPwrTuHHbn5X@wantstofly.org>
-References: <Yvo2dfpEh/WC+Wrr@wantstofly.org>
- <ab15191c-d79f-b5de-7568-d15b8f8a8aa8@acm.org>
- <5f734387-9757-0670-3eef-b565116af541@linux.intel.com>
+        Wed, 17 Aug 2022 01:50:32 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795707C53C
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 22:50:31 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id d14so17691794lfl.13
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 22:50:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=7axt1sg0+BERbIoi6l8zBsfKL7pIMpF85l/HPXUT3Qs=;
+        b=kzcwKcUMsWLN2TJs6vbxvZWrP0W+d+JD66BJ/Wcl7J++ISXPqdXHnVn2N+c7aMl3J9
+         CCIcMLDn/AalOgnPc2+kexOQqTYWhoK6TXgoKnT281NhIVagd9EDRbikW+Bte9b6x58a
+         SE3z3cnpCRHa5/ibnBD0MbJKfbfkcjVo1TeKWtkLwAu9RUP2KIxEaatTJX/z4znDsPKN
+         MRLzvW2GDxRtUxomKlr3YqPqZGnsKoW0ELG19Bq8n693cHdFarae4vvWJzKu0Eq3OiFq
+         imr5zj5ILO8rn0px+ybpZ34TmFhvybZdxFew0nncNm5MSgNh4HYfaA95LJdqaCg9FY5o
+         nN7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=7axt1sg0+BERbIoi6l8zBsfKL7pIMpF85l/HPXUT3Qs=;
+        b=AlAeMq3p6ZC+bphdwZ9j2N/04bDLFsVqqKq4DV8OSS0uWziqHl39prZdAtbjvPUqVE
+         sWRByI/44JVAeNqrp5HGOvJVAx2oXPquIlkaqWLvmghPz5uJu0RQhL0OWsdf8ENtWreD
+         0DNOETuXqnTHxRygoAwCJ7VhgOyK+dW2jTqux75TXclZowKD/uN8iozZtiTfTzDZmgqL
+         c+AA7lNoFGCzDuHkn3kt/YGMLvTmxfcqFv6BGO3QNsRusOuw2JohOmOpQgyx0qKn/nSy
+         bNXks4vnPOVDp6FAddlff7FZqVsFo2A9+YobmeGgXZxP2ph9BMagCQ1LhIBP80T0cvZ0
+         6LyA==
+X-Gm-Message-State: ACgBeo0FnkAypmMtK3VeMBsYe6j3drvR3Nl302Bg4HUWi695C0i5noKN
+        Y0yQ9vcszR+swh0vpdH7DE3e7Q==
+X-Google-Smtp-Source: AA6agR7Ilk9IEC0d+v6/FsaxUTEgsVYB2Nsu2MwH+4y520DbtFacfApXYjQTDQJsBT/KZb/3MhemIg==
+X-Received: by 2002:a05:6512:3f14:b0:47d:e011:f19b with SMTP id y20-20020a0565123f1400b0047de011f19bmr7765361lfa.427.1660715429296;
+        Tue, 16 Aug 2022 22:50:29 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:1b1c:14b7:109b:ed76? (d15l54h48cw7vbh-qr4-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1b1c:14b7:109b:ed76])
+        by smtp.gmail.com with ESMTPSA id w14-20020ac2598e000000b0048b037fb5d6sm1577168lfn.85.2022.08.16.22.50.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 22:50:28 -0700 (PDT)
+Message-ID: <9c331cdc-e34a-1146-fb83-84c2107b2e2a@linaro.org>
+Date:   Wed, 17 Aug 2022 08:50:26 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5f734387-9757-0670-3eef-b565116af541@linux.intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v4 1/3] dt-bindings: net: ti: k3-am654-cpsw-nuss: Update
+ bindings for J7200 CPSW5G
+Content-Language: en-US
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org, linux@armlinux.org.uk,
+        vladimir.oltean@nxp.com, grygorii.strashko@ti.com, vigneshr@ti.com,
+        nsekhar@ti.com, netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kishon@ti.com
+References: <20220816060139.111934-1-s-vadapalli@ti.com>
+ <20220816060139.111934-2-s-vadapalli@ti.com>
+ <79e58157-f8f2-6ca8-1aa6-b5cf6c83d9e6@linaro.org>
+ <31c3a5b0-17cc-ad7b-6561-5834cac62d3e@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <31c3a5b0-17cc-ad7b-6561-5834cac62d3e@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 12:45:26PM +0800, Baolu Lu wrote:
+On 17/08/2022 08:14, Siddharth Vadapalli wrote:
 
-> > > On a build of 7ebfc85e2cd7 ("Merge tag 'net-6.0-rc1' of
-> > > git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net"), with
-> > > CONFIG_INTEL_IOMMU_DEBUGFS enabled, I am seeing the lockdep splat
-> > > below when an I/O page fault occurs on a machine with an Intel
-> > > IOMMU in it.
-> > > 
-> > > The issue seems to be the klist iterator functions using
-> > > spin_*lock_irq*() but the klist insertion functions using
-> > > spin_*lock(), combined with the Intel DMAR IOMMU driver iterating
-> > > over klists from atomic (hardirq) context as of commit 8ac0b64b9735
-> > > ("iommu/vt-d: Use pci_get_domain_bus_and_slot() in pgtable_walk()")
-> > > when CONFIG_INTEL_IOMMU_DEBUGFS is enabled, where
-> > > pci_get_domain_bus_and_slot() calls into bus_find_device() which
-> > > iterates over klists.
-> > > 
-> > > I found this commit from 2018:
-> > > 
-> > >     commit 624fa7790f80575a4ec28fbdb2034097dc18d051
-> > >     Author: Bart Van Assche <bvanassche@acm.org>
-> > >     Date:   Fri Jun 22 14:54:49 2018 -0700
-> > > 
-> > >         scsi: klist: Make it safe to use klists in atomic context
-> > > 
-> > > This commit switched lib/klist.c:klist_{prev,next} from
-> > > spin_{,un}lock() to spin_{lock_irqsave,unlock_irqrestore}(), but left
-> > > the spin_{,un}lock() calls in add_{head,tail}() untouched.
-> > > 
-> > > The simplest fix for this would be to switch
-> > > lib/klist.c:add_{head,tail}()
-> > > over to use the IRQ-safe spinlock variants as well?
-> > 
-> > Another possibility would be to evaluate whether it is safe to revert
-> > commit 624fa7790f80 ("scsi: klist: Make it safe to use klists in atomic
-> > context"). That commit is no longer needed by the SRP transport driver
-> > since the legacy block layer has been removed from the kernel.
+>>> -      port@[1-2]:
+>>> +      "^port@[1-4]$":
+>>>          type: object
+>>>          description: CPSWxG NUSS external ports
+>>>  
+>>> @@ -119,7 +120,7 @@ properties:
+>>>          properties:
+>>>            reg:
+>>>              minimum: 1
+>>> -            maximum: 2
+>>> +            maximum: 4
+>>>              description: CPSW port number
+>>>  
+>>>            phys:
+>>> @@ -151,6 +152,18 @@ properties:
+>>>  
+>>>      additionalProperties: false
+>>>  
+>>> +if:
+>>
+>> This goes under allOf just before unevaluated/additionalProperties:false
 > 
-> If so, pci_get_domain_bus_and_slot() can not be used in this interrupt
-> context, right?
+> allOf was added by me in v3 series patch and it is not present in the
+> file. I removed it in v4 after Rob Herring's suggestion. Please let me
+> know if simply moving the if-then statements to the line above
+> additionalProperties:false would be fine.
 
-The 624fa7790f80 commit from 2018 tried to make klist use safe from
-atomic context, but since it missed a few of the klist accessors, it
-didn't actually manage to make it safe, so it's already not safe to use
-pci_get_domain_bus_and_slot() from interrupt context right now, even
-without reverting this commit.  Reverting the commit would just be a
-declaration that klist use from atomic context isn't safe and never was.
+I think Rob's comment was focusing not on using or not-using allOf, but
+on format of your entire if-then-else. Your v3 was huge and included
+allOf in wrong place).
 
-A quick check doesn't turn up any other cases where people have run
-into this issue with code in mainline, so it would seem that the
-newly-added use of pci_get_domain_bus_and_slot() to the iommu/vt-d
-fault reporting interrupt handler is one of very few (if not only)
-cases of mainline code wanting to access klists from atomic context.
+Now you add if-then in proper place, but it is still advisable to put it
+with allOf, so if ever you grow the if-then by new entry, you do not
+have to change the indentation.
 
-Kind regards,
-Lennert
+Anyway the location is not correct. Regardless if this is if-then or
+allOf-if-then, put it just like example schema is suggesting.
+
+Best regards,
+Krzysztof

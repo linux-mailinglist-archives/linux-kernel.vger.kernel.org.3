@@ -2,243 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC9045970CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 788DE5970D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:18:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240082AbiHQOMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 10:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
+        id S240065AbiHQOQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 10:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240069AbiHQOMG (ORCPT
+        with ESMTP id S237258AbiHQOQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 10:12:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34DFC4D146
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:12:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660745519;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XqkeW1ALrZo+zcwi/VmVo+lezZAqkHWmVwQoquKFh0Q=;
-        b=JN1cSmVt3yi5P/LuXLu4Da6lmbg3VLWmMxHtOkWq41jrDYLRxkVuU9QCeqlc1tqStv0ASb
-        w+BvFHULcfyDYqOHx4JLDxOfAW60Tkw83EcqOKCrZKP4epTU+NQE8Dh4z3Ir7GR/YNg32D
-        Wbq67LzkCWRKOdiCSxkqVUds0PVCMek=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-269-WNlfrFIhMK24ZoAjTcKzFA-1; Wed, 17 Aug 2022 10:11:55 -0400
-X-MC-Unique: WNlfrFIhMK24ZoAjTcKzFA-1
-Received: by mail-ed1-f71.google.com with SMTP id w5-20020a05640234c500b0043dda025648so8821451edc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:11:54 -0700 (PDT)
+        Wed, 17 Aug 2022 10:16:36 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966965F135
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:16:32 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id ay12so6762087wmb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:16:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=P5r4ekCJrYr4Y+g8V8poSTNr9XUYMCVSh5pQ+9u9UXU=;
+        b=IXRJoVP1bBS+nD45/LRGKhOElxU+l/CChkL+FQ/dov+x3awC1TLAhWinmmYBlYgIo2
+         ldtRaTHN5hgAp1O8M20wQj2gBtD8yp5+D3CTGthOlEirZk5uh+lR0FIPhP2ex4Wsrf7n
+         n53YVfX44+nNExBsF7r+OrgQ+dO4gFscMR3pUcN9RR2rONd11+6B8Cv3ilFhC6waUbif
+         7kGRCXgHBn820wBX9dLQgChLwK6AZ7GJygphgim8y3RvWE/rwJPjj1+srT+DlAW1gwBb
+         G1dlJh5VxG6Bzj4ZRwx586E93xX0Jmej7O2NuTWwO8/hWZyHj6LaFUMqqfg3JWU8dG4/
+         WRPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=XqkeW1ALrZo+zcwi/VmVo+lezZAqkHWmVwQoquKFh0Q=;
-        b=nfmvczoiRnwWm0khPMxzccvSNcWwZ8LSg88IKhuHrCyJHgtCBXbo7tjWTvjcOZqRMo
-         Rxu1vVSb5/f/bBBemyv1sYuYqfbnecsgpz4avNDRkvEkRYspwX6D1EvD3/IqSQilgMT1
-         TDgUUQ8Jxtv63cggN5ibl1pBzBhB9/+Xxpg2kKYaT6zZWEWU5l3g3A0mbMrKt1ZEJ8dQ
-         Bh1A8ufrr0Cc4z59Ye7QRCQobVYBPN7h5Oy8WdlQuRJswVf1K0Z4Y0mDtfLUNy19QOKZ
-         KMU6Mc5TLMX08Gkv6PIQgn1VlEbegQB6M0ikFOSqxEdn6NCpOip0Hlx4TIf8RGT8Lll+
-         f+IA==
-X-Gm-Message-State: ACgBeo385qspYtyoeK6LmmfaxNUR6GFNlOPW/l4Cjo2/91vocxi1X7au
-        0sRg+Qjs/kFPDWKCRo4ntrQTZ2tmnqhRvRXg6vF7g/k9HR6Q8MYHj84hNoAQKxlS1Bn0iQmsYop
-        d3LCWLQoGzmn/R2bqFnDDHI/1
-X-Received: by 2002:a05:6402:270c:b0:43d:efd3:883e with SMTP id y12-20020a056402270c00b0043defd3883emr24322845edd.221.1660745513474;
-        Wed, 17 Aug 2022 07:11:53 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4W/cVcry9BxMteRtuuSnqe/Sl1kcfew9TRDzLjgxGqKvpSmoTrV1wuP2mWPooajKMt7Az4Gg==
-X-Received: by 2002:a05:6402:270c:b0:43d:efd3:883e with SMTP id y12-20020a056402270c00b0043defd3883emr24322819edd.221.1660745513176;
-        Wed, 17 Aug 2022 07:11:53 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id ek6-20020a056402370600b0043a61f6c389sm10770528edb.4.2022.08.17.07.11.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 07:11:52 -0700 (PDT)
-Message-ID: <7900c762-db8b-7c76-76eb-2b8d7e07459e@redhat.com>
-Date:   Wed, 17 Aug 2022 16:11:51 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=P5r4ekCJrYr4Y+g8V8poSTNr9XUYMCVSh5pQ+9u9UXU=;
+        b=sr51RqvOjCfKiGPtUxC1QlesYUtrPgmZTYdcQ9uGzgN82o4BSs5sT+2Zjs6NePqQya
+         x7kHMPNxBfXbwjEen9Cf9rMdfzVufYUyxigHPIL5+Gf3MnW5nE9gqFEqAjCMIq84v029
+         1vmeVcpK+JkRzT7NiBuK/PKE53QEnS05eYz8dtC3Ut4ylpmcT6PYPmYr+s3tOR4KIIqI
+         Ov/gyY0LDQ2sHRV12H1nKQ07NvGn5nFr94XEW+UomAGyCX+h1CW1FFO5xcjbZkB5B3sv
+         L8ictiu9ZJE5l4l5QLODVC/YX1uWhNNnx/xGtj2h3Pyflb1az3IpoV8rApaZhTyxcgtu
+         q68w==
+X-Gm-Message-State: ACgBeo14E25NJH/M1ZGaMEuRlqhbuogttebHsroFk6nJAosv7NF7+eXl
+        Vr1vsuqfJH5+sy9YnxX3jy2ZPGSXQybddw==
+X-Google-Smtp-Source: AA6agR4lqd0J1oLsz4TNR7Opw4ENQK3FZq4B4qebkgtvcb1kfkl+lnlFhgUELK+zAxwQGz99duatWA==
+X-Received: by 2002:a1c:4c11:0:b0:3a5:4d01:54be with SMTP id z17-20020a1c4c11000000b003a54d0154bemr2398339wmf.32.1660745791222;
+        Wed, 17 Aug 2022 07:16:31 -0700 (PDT)
+Received: from localhost.localdomain (120.205.87.79.rev.sfr.net. [79.87.205.120])
+        by smtp.gmail.com with ESMTPSA id k40-20020a05600c1ca800b003a5f3de6fddsm2416533wms.25.2022.08.17.07.16.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 07:16:30 -0700 (PDT)
+From:   Julien Panis <jpanis@baylibre.com>
+To:     william.gray@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, mranostay@ti.com,
+        Julien Panis <jpanis@baylibre.com>
+Subject: [PATCH v5 0/3] ECAP support on TI AM62x SoC
+Date:   Wed, 17 Aug 2022 16:16:17 +0200
+Message-Id: <20220817141620.256481-1-jpanis@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH V4] Input: synaptics-rmi4 - filter incomplete relative
- packet.
-Content-Language: en-US
-To:     margeyang <marge.yang@synaptics.corp-partner.google.com>,
-        dmitry.torokhov@gmail.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benjamin.tissoires@redhat.com
-Cc:     marge.yang@tw.synaptics.com, derek.cheng@tw.synaptics.com,
-        vincent.huang@tw.synaptics.com
-References: <1660641649-11929-1-git-send-email-marge.yang@synaptics.corp-partner.google.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <1660641649-11929-1-git-send-email-marge.yang@synaptics.corp-partner.google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The Enhanced Capture (ECAP) module can be used to timestamp events
+detected on signal input pin. It can be used for time measurements
+of pulse train signals.
 
-On 8/16/22 11:20, margeyang wrote:
-> From: Marge Yang <marge.yang@synaptics.corp-partner.google.com>
-> 
-> RMI4 F03 supports the Stick function,
-> it's designed to support relative packet.
-> This patch supports the following case.
-> When relative packet can't be reported completely,
-> it may miss one byte or two byte.
-> New Synaptics firmware will report PARITY error.
-> When timeout error or parity error happens,
-> RMI4 driver will sends 0xFE command and
-> ask FW to Re-send stick packet again.
-> 
-> Signed-off-by: Marge Yang<marge.yang@synaptics.corp-partner.google.com>
+ECAP module includes 4 timestamp capture registers. For all 4 sequenced
+timestamp capture events (1->2->3->4->1->...), edge polarity (falling/rising
+edge) can be selected.
 
-Thanks, patch looks good to me:
+This driver leverages counter subsystem to :
+- select edge polarity for all 4 capture events (event mode)
+- log timestamps for each capture event
+Event polarity, and CAP1/2/3/4 timestamps give all the information
+about the input pulse train. Further information can easily be computed :
+period and/or duty cycle if frequency is constant, elapsed time between
+pulses, etc...
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Modifications since v4:
+	- Modify yaml commit message prefix (dt-bindings)
+	- Modify driver file name & Makefile (ti-ecap-capture)
+	- Modify compilation flag name in Kconfig (TI_ECAP_CAPTURE)
+	- Select REGMAP_MMIO in Kconfig
+	- Add capture items to sysfs-bus-counter ABI documentation
+	- Cleanup probe function (dev_err_probe & devm_clk_get_enabled & devm_add_action_or_reset for PM)
+	- Enable/Disable device clock in suspend/resume functions
+	- Add PM explanations
+	- Add ECAP clock signal & 'frequency' sysfs entry
+	- Replace elapsed_time & spinlock by nb_ovf (atomic_t) & 'count_cumul' sysfs entry
+	- Add counter overflow event
+	- Modify 'name' sysfs entry for signal0 & signal1 & count0
+	- Modify watch_validate function
+	- Add macros for callbacks related to cap1/2/3/4
 
-note I see that Dmitry still has questions about this, so my
-Reviewed-by is in no way a guarantee that this will get merged.
+Userspace commands :
+	### SIGNAL INPUT ###
+	cd /sys/bus/counter/devices/counter0/signal0
 
-Please make sure to answer Dmitry's questions about this.
+	# Get available polarities for each capture event
+	cat polarity1_available
+	cat polarity2_available
+	cat polarity3_available
+	cat polarity4_available
 
+	# Get polarity for each capture event
+	cat polarity1
+	cat polarity2
+	cat polarity3
+	cat polarity4
 
-Regards,
+	# Set polarity for each capture event
+	echo rising edge > polarity1
+	echo falling edge > polarity2
+	echo rising edge > polarity3
+	echo falling edge > polarity4
 
-Hans
+	### SIGNAL CLOCK ###
+	cd /sys/bus/counter/devices/counter0/signal1
 
-> ---
->  drivers/input/rmi4/rmi_f03.c | 74 +++++++++++++++++++++++++++++++++++-
->  1 file changed, 73 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/input/rmi4/rmi_f03.c b/drivers/input/rmi4/rmi_f03.c
-> index c194b1664b10..563b40c2dc06 100644
-> --- a/drivers/input/rmi4/rmi_f03.c
-> +++ b/drivers/input/rmi4/rmi_f03.c
-> @@ -23,8 +23,12 @@
->  #define RMI_F03_BYTES_PER_DEVICE_SHIFT	4
->  #define RMI_F03_QUEUE_LENGTH		0x0F
->  
-> +#define RMI_F03_RESET_STYK		0xFE
-> +
->  #define PSMOUSE_OOB_EXTRA_BTNS		0x01
->  
-> +#define RELATIVE_PACKET_SIZE		3
-> +
->  struct f03_data {
->  	struct rmi_function *fn;
->  
-> @@ -33,6 +37,11 @@ struct f03_data {
->  
->  	unsigned int overwrite_buttons;
->  
-> +	int iwritecommandcounter;
-> +	unsigned int ipacketindex;
-> +	unsigned int serio_flagsArry[RELATIVE_PACKET_SIZE];
-> +	u8 ob_dataArry[RELATIVE_PACKET_SIZE];
-> +
->  	u8 device_count;
->  	u8 rx_queue_length;
->  };
-> @@ -88,6 +97,7 @@ static int rmi_f03_pt_write(struct serio *id, unsigned char val)
->  		return error;
->  	}
->  
-> +	f03->iwritecommandcounter++;
->  	return 0;
->  }
->  
-> @@ -107,6 +117,8 @@ static int rmi_f03_initialize(struct f03_data *f03)
->  		return error;
->  	}
->  
-> +	f03->iwritecommandcounter = 0;
-> +	f03->ipacketindex = 0;
->  	f03->device_count = query1 & RMI_F03_DEVICE_COUNT;
->  	bytes_per_device = (query1 >> RMI_F03_BYTES_PER_DEVICE_SHIFT) &
->  				RMI_F03_BYTES_PER_DEVICE;
-> @@ -284,6 +296,22 @@ static irqreturn_t rmi_f03_attention(int irq, void *ctx)
->  		ob_data = obs[i + RMI_F03_OB_DATA_OFFSET];
->  		serio_flags = 0;
->  
-> +		if (ob_status & (RMI_F03_OB_FLAG_TIMEOUT | RMI_F03_OB_FLAG_PARITY)) {
-> +			//  Send resend command to stick when timeout or parity error.
-> +			//  Driver can receive the last stick packet.
-> +			unsigned char val = RMI_F03_RESET_STYK;
-> +
-> +			error = rmi_write(f03->fn->rmi_dev, f03->fn->fd.data_base_addr, val);
-> +			if (error) {
-> +				dev_err(&f03->fn->dev,
-> +					"%s: Failed to rmi_write to F03 TX register (%d).\n",
-> +					__func__, error);
-> +				return error;
-> +			}
-> +			f03->ipacketindex = 0;
-> +			break;
-> +		}
-> +
->  		if (!(ob_status & RMI_F03_RX_DATA_OFB))
->  			continue;
->  
-> @@ -298,7 +326,51 @@ static irqreturn_t rmi_f03_attention(int irq, void *ctx)
->  			serio_flags & SERIO_TIMEOUT ?  'Y' : 'N',
->  			serio_flags & SERIO_PARITY ? 'Y' : 'N');
->  
-> -		serio_interrupt(f03->serio, ob_data, serio_flags);
-> +		if (f03->iwritecommandcounter > 0) {
-> +			// Read Acknowledge Byte after writing the PS2 command.
-> +			// It is not trackpoint data.
-> +			serio_interrupt(f03->serio, ob_data, serio_flags);
-> +		} else {
-> +			//   The relative-mode PS/2 packet format is as follows:
-> +			//
-> +			//              bit position            position (as array of bytes)
-> +			//     7   6   5   4   3   2   1   0
-> +			//   =================================+
-> +			//    Yov Xov DY8 DX8  1   M   R   L  | DATA[0]
-> +			//                DX[7:0]             | DATA[1]
-> +			//                DY[7:0]             | DATA[2]
-> +			//   =================================+
-> +			//		Yov: Y overflow
-> +			//    Xov: X overflow
-> +			if ((f03->ipacketindex == 0) && (ob_data & ((BIT(7)|BIT(6))))) {
-> +				dev_err(&f03->fn->dev,
-> +				"%s: X or Y is overflow. (%x)\n",
-> +				__func__, ob_data);
-> +				break;
-> +			} else if ((f03->ipacketindex == 0) && !(ob_data & BIT(3))) {
-> +				dev_err(&f03->fn->dev,
-> +				"%s: New BIT 3 is not 1 for the first byte\n",
-> +				__func__);
-> +				break;
-> +			}
-> +			f03->ob_dataArry[f03->ipacketindex] = ob_data;
-> +			f03->serio_flagsArry[f03->ipacketindex] = serio_flags;
-> +			f03->ipacketindex++;
-> +
-> +			if (f03->ipacketindex == RELATIVE_PACKET_SIZE)	{
-> +				serio_interrupt(f03->serio, f03->ob_dataArry[0],
-> +				 f03->serio_flagsArry[0]);
-> +				serio_interrupt(f03->serio, f03->ob_dataArry[1],
-> +				 f03->serio_flagsArry[1]);
-> +				serio_interrupt(f03->serio, f03->ob_dataArry[2],
-> +				 f03->serio_flagsArry[2]);
-> +				f03->ipacketindex = 0;
-> +			}
-> +		}
-> +	}
-> +	if (f03->iwritecommandcounter > 0) {
-> +		f03->ipacketindex = 0;
-> +		f03->iwritecommandcounter = f03->iwritecommandcounter - 1;
->  	}
->  
->  	return IRQ_HANDLED;
+	# Get clock rate
+	cat frequency
+
+	### COUNT ###
+	cd /sys/bus/counter/devices/counter0/count0
+
+	# Run ECAP
+	echo 1 > enable
+
+	# Get current timebase counter value
+	cat count
+
+	# Get cumulated counter value
+	cat count_cumul
+
+	# Get captured timestamps
+	cat capture1
+	cat capture2
+	cat capture3
+	cat capture4
+
+	# Note that counter watches can also be used to get
+	# data from userspace application
+	# -> see tools/counter/counter_example.c
+
+	# Stop ECAP
+	echo 0 > enable
+
+Julien Panis (3):
+  dt-bindings: counter: add ti,am62-ecap-capture.yaml
+  Documentation: ABI: sysfs-bus-counter: add capture items
+  counter: ti-ecap-capture: capture driver support for ECAP
+
+ Documentation/ABI/testing/sysfs-bus-counter   |  49 ++
+ .../counter/ti,am62-ecap-capture.yaml         |  61 ++
+ drivers/counter/Kconfig                       |  15 +
+ drivers/counter/Makefile                      |   1 +
+ drivers/counter/ti-ecap-capture.c             | 624 ++++++++++++++++++
+ include/uapi/linux/counter.h                  |   2 +
+ 6 files changed, 752 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/counter/ti,am62-ecap-capture.yaml
+ create mode 100644 drivers/counter/ti-ecap-capture.c
+
+-- 
+2.25.1
 

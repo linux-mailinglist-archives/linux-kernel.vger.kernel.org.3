@@ -2,80 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E09597150
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 001B3597169
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240195AbiHQOgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 10:36:50 -0400
+        id S240185AbiHQOhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 10:37:11 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240110AbiHQOgU (ORCPT
+        with ESMTP id S239941AbiHQOgo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 10:36:20 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FA8F9BB53;
-        Wed, 17 Aug 2022 07:36:06 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 49568113E;
-        Wed, 17 Aug 2022 07:36:06 -0700 (PDT)
-Received: from entos-ampere-02.shanghai.arm.com (entos-ampere-02.shanghai.arm.com [10.169.212.212])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7591E3F70D;
-        Wed, 17 Aug 2022 07:35:59 -0700 (PDT)
-From:   Jia He <justin.he@arm.com>
-To:     Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org, devel@acpica.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
-        toshi.kani@hpe.com, nd@arm.com, Jia He <justin.he@arm.com>
-Subject: [PATCH v2 7/7] EDAC/igen6: Keep returned errno consistent when edac mc has been enabled
-Date:   Wed, 17 Aug 2022 14:34:58 +0000
-Message-Id: <20220817143458.335938-8-justin.he@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220817143458.335938-1-justin.he@arm.com>
-References: <20220817143458.335938-1-justin.he@arm.com>
+        Wed, 17 Aug 2022 10:36:44 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9D79C218
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:36:23 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id tl27so24911255ejc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:36:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=v2QQ7Uff4GoH2848IKCxUQX2XDpeKAuPtOB6PZeLpak=;
+        b=BUBqid1m+LsLr2gz85xHUy+sqUiJRXFfzq8DQbh9692q8D5hYkQR/AXZMx2yNvg2BF
+         kpYK78ofw8qiX49x58to7+p26d/YmXLzidby5943Y2BYBEZVdBAkkDu1k1+81Xgpiz2L
+         a/EI5qETsF1LBhveYT/3UZCqwVmWXcJoNCoMg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=v2QQ7Uff4GoH2848IKCxUQX2XDpeKAuPtOB6PZeLpak=;
+        b=Cp87xPEazEsxU4+Si6S7hLO4xkmIeSUyJUJ4QX8eVhoq05hEePfptAK62JtzMUkRwF
+         suzjSiSdwCm6s2LfUrOIPKEVWviwnMOZbHShFrVaB8Mfwb9rlA7qYuFDY8DCm+PR5GqL
+         8px6jCukkG8++/bCl8s8ZGiG0Ob1rtBQmMXXvXeodz0+AzrY8It+cZ2xeirqqoRhcFIJ
+         3AmbZfkqq8FiTTjzDlY/eCxcx99a5AUEvBmBKVHlQNK2MeWiq0fL9Ca2cpTpNwwF1qPa
+         gO7mHh9c4ErTI7/p2KH0hvfcL/UR1mO6wsrZP8bPpadel0/7wcLLItZarJJQXgO5K9gj
+         F7Wg==
+X-Gm-Message-State: ACgBeo2zNFgbp4s27FS+IOGL78xIQMEwKOZJ03dUO1zJM45NtIPHS5+O
+        eUrMu4GtYMNnSQ+7zGWbQtJayITPt/ve2Q==
+X-Google-Smtp-Source: AA6agR5YUv4QupDUzNnqnMMjKDP7wWxVCPQSvpHYL5+qDVNTthgT+NTs0hhCQiAsRsgJXzTy1/nXVQ==
+X-Received: by 2002:a17:907:7609:b0:730:d70a:1efc with SMTP id jx9-20020a170907760900b00730d70a1efcmr16930699ejc.766.1660746980935;
+        Wed, 17 Aug 2022 07:36:20 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-79-31-31-9.retail.telecomitalia.it. [79.31.31.9])
+        by smtp.gmail.com with ESMTPSA id o9-20020aa7c7c9000000b0043cab10f702sm10711982eds.90.2022.08.17.07.36.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 07:36:20 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+Subject: [RFC PATCH 0/4] can: bxcan: add support for ST bxCAN controller
+Date:   Wed, 17 Aug 2022 16:35:25 +0200
+Message-Id: <20220817143529.257908-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Only a single edac driver can be enabled for EDAC MC. The igen6_init()
-should be returned with EBUSY instead of ENODEV, which is consistent with
-other edac drivers.
+The series adds support for the basic extended CAN controller (bxCAN)
+found in many low- to middle-end STM32 SoCs.
 
-Signed-off-by: Jia He <justin.he@arm.com>
----
- drivers/edac/igen6_edac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The driver has been tested on the stm32f469i-discovery board with a
+kernel version 5.19.0-rc2 in loopback + silent mode:
 
-diff --git a/drivers/edac/igen6_edac.c b/drivers/edac/igen6_edac.c
-index a07bbfd075d0..41503b80347c 100644
---- a/drivers/edac/igen6_edac.c
-+++ b/drivers/edac/igen6_edac.c
-@@ -1273,7 +1273,7 @@ static int __init igen6_init(void)
- 
- 	owner = edac_get_owner();
- 	if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR)))
--		return -ENODEV;
-+		return -EBUSY;
- 
- 	edac_op_state = EDAC_OPSTATE_NMI;
- 
+ip link set can0 type can bitrate 125000 loopback on listen-only on
+ip link set up can0
+candump can0 -L &
+cansend can0 300#AC.AB.AD.AE.75.49.AD.D1
+
+For uboot and kernel compilation, as well as for rootfs creation I used
+buildroot:
+
+make stm32f469_disco_sd_defconfig
+make
+
+but I had to patch can-utils and busybox as can-utils and iproute are
+not compiled for MMU-less microcotrollers. In the case of can-utils,
+replacing the calls to fork() with vfork(), I was able to compile the
+package with working candump and cansend applications, while in the
+case of iproute, I ran into more than one problem and finally I decided
+to extend busybox's ip link command for CAN-type devices. I'm still
+wondering if it was really necessary, but this way I was able to test
+the driver.
+
+
+Dario Binacchi (4):
+  dt-bindings: net: can: add STM32 bxcan DT bindings
+  ARM: dts: stm32: add CAN support on stm32f429
+  ARM: dts: stm32: add pin map for CAN controller on stm32f4
+  can: bxcan: add support for ST bxCAN controller
+
+ .../devicetree/bindings/net/can/st,bxcan.yaml | 139 +++
+ arch/arm/boot/dts/stm32f4-pinctrl.dtsi        |  32 +
+ arch/arm/boot/dts/stm32f429.dtsi              |  30 +
+ drivers/net/can/Kconfig                       |   1 +
+ drivers/net/can/Makefile                      |   1 +
+ drivers/net/can/bxcan/Kconfig                 |  34 +
+ drivers/net/can/bxcan/Makefile                |   4 +
+ drivers/net/can/bxcan/bxcan-core.c            | 201 ++++
+ drivers/net/can/bxcan/bxcan-core.h            |  33 +
+ drivers/net/can/bxcan/bxcan-drv.c             | 980 ++++++++++++++++++
+ 10 files changed, 1455 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/can/st,bxcan.yaml
+ create mode 100644 drivers/net/can/bxcan/Kconfig
+ create mode 100644 drivers/net/can/bxcan/Makefile
+ create mode 100644 drivers/net/can/bxcan/bxcan-core.c
+ create mode 100644 drivers/net/can/bxcan/bxcan-core.h
+ create mode 100644 drivers/net/can/bxcan/bxcan-drv.c
+
 -- 
-2.25.1
+2.32.0
 

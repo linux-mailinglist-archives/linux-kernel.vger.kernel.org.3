@@ -2,118 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5723596FD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90914596FE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236983AbiHQNVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 09:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
+        id S239355AbiHQNVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 09:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239999AbiHQNUr (ORCPT
+        with ESMTP id S240000AbiHQNUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 17 Aug 2022 09:20:47 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03989646F
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:20:46 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-332fc508d88so160781637b3.3
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95102616B
         for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:20:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=1v5neMWckuuShK6mxvtzPriWYlr3sXVhkVDSWSsmeJw=;
-        b=LDBMjmyDy8+FDV3nm9ieFIcEOzftkGrbLw3qls7qDOg57uj5JOl8BBzSFCjY8jOKOS
-         2PE+eweJ3KSdpM4J1jB90d65QSuMaBKUMizxx8nk4jvDILIROvgNKriJVB3YeaFlMbqG
-         F3C4vnGDHVPdALDJBwXoKoGuotIJqPNzFEhcJFY2JS5GWbMPLpDDvjB66Lcij2GU5sc1
-         SV3COkXpVGgaae1stBGSPY0Com8ch3WfcBdkqfJU0bnN+xsEqXzRZ/IwQ4SJMoi2KtEp
-         ODa0Z4O6ARQhdVNbtQ3a6JgZD+hRIpaAwAvAlKwph8YGc3t3zKqkmE8l9IpaTzWyTWyT
-         xROg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=1v5neMWckuuShK6mxvtzPriWYlr3sXVhkVDSWSsmeJw=;
-        b=p5mrGZx2WVow8tlbQcXHX/wCvLSs3fPXI0Kyu+IEPYx+RE4iOiJwFHBSuz3rLkePv3
-         x1M2lN1jhieRT9iCVE2N6FXSWr/DTZLJuz8zyE4YIxmFx/7NY0QZgs6q8yaqvelPdur0
-         pZRVfwI+5g6EyDcXGWGvZPSmWZKrRqeziYe+QUjrPyLUSq/GL0mClWYQp4a99QOOkGGJ
-         eSo3njkYodlog5WvlYNSpdyzJzizWiUydbDJrlpkDWnmTqR9ttT1j/ag06FxT+wKGyTl
-         DBxwVxH9275y6jHD+Fmqix0/8O4UujypEFjFvtTXLunGuKJzuI0irv40j8Uu6VpvouTV
-         UKVQ==
-X-Gm-Message-State: ACgBeo1Umbc/LhGRtT5pxqkjAIIQf75ob3GEJBLMSyTRfmlBiLnLjSOD
-        pIWagiG9z7QcYNLkY7nSoDQiZjH6anTSGlhfF+6QPQ==
-X-Google-Smtp-Source: AA6agR41027N8+w0s3t18+phUECcORfggPJy1vgEmFCd4QZxvaD9usy4ZgRDHS6MOKVmOMHBmjGVzRmwLyC59ZbNSBA=
-X-Received: by 2002:a25:2fca:0:b0:68f:aa4f:4a41 with SMTP id
- v193-20020a252fca000000b0068faa4f4a41mr4182720ybv.403.1660742445179; Wed, 17
- Aug 2022 06:20:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660742445; x=1692278445;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4tTqwnbMV60vIGCw59Sd7GtuA5stS91mwE9n0lEKMgU=;
+  b=BJGdRAxutNUCr44l7haQlqyw9GgFx2idCLp7Vv8I9gWmm8UggH+IXQQz
+   1rWukIwghDoiyIMcFYjDNEwAkQe9Z+BUcmzWjPgfrz37yOODe5ALi6WXl
+   8NnM0H5SitRg87vczB4KuJQhRKa7ItUWd5Ve8zcT/cuQ0cjW45ffCP6QH
+   I+8B9UarJYFw8OhqTuW8PzbQZstDO/GH36ZatzvXNrFQAgDUCw/FbbkOk
+   8Iw22HPNsCrX4LchJ590P5miMxIAH0BukQDhw80eiY5VewrqhiM3uAjF6
+   liWKejNCEKJFrGDSaJ50JGlf8HxwV6lQ9IIfeQTkI0uKXljpClwOcNdwB
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="275541170"
+X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
+   d="scan'208";a="275541170"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 06:20:45 -0700
+X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
+   d="scan'208";a="749703691"
+Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.249.169]) ([10.99.249.169])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 06:20:43 -0700
+Message-ID: <2888a74f-eb9c-cfef-1b1f-8bd81ab4bd1a@linux.intel.com>
+Date:   Wed, 17 Aug 2022 15:20:41 +0200
 MIME-Version: 1.0
-References: <20220810223313.386614-1-libo.chen@oracle.com> <YvonlUOgMbla6dSh@worktop.programming.kicks-ass.net>
- <aac4a43d-4999-1da5-a617-b512ae0b3982@oracle.com>
-In-Reply-To: <aac4a43d-4999-1da5-a617-b512ae0b3982@oracle.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 17 Aug 2022 15:20:33 +0200
-Message-ID: <CAKfTPtA3UTrsc3qZf_GB-QA7O7DJvoFqEk-VuWeFVRp8G_iUkg@mail.gmail.com>
-Subject: Re: [PATCH 1/1] sched/fair: Fix inaccurate tally of ttwu_move_affine
-To:     Libo Chen <libo.chen@oracle.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com,
-        juri.lelli@redhat.com, dietmar.eggemann@arm.com, mgorman@suse.de,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/4] ALSA: hda: Rework snd_hdac_stream_reset() to use
+ macros
+Content-Language: en-US
+To:     Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
+Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
         linux-kernel@vger.kernel.org,
-        Daniel Jordan <daniel.m.jordan@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+References: <20220817131137.3978523-1-amadeuszx.slawinski@linux.intel.com>
+ <20220817131137.3978523-3-amadeuszx.slawinski@linux.intel.com>
+From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <20220817131137.3978523-3-amadeuszx.slawinski@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 Aug 2022 at 21:19, Libo Chen <libo.chen@oracle.com> wrote:
->
->
->
-> On 8/15/22 04:01, Peter Zijlstra wrote:
-> > On Wed, Aug 10, 2022 at 03:33:13PM -0700, Libo Chen wrote:
-> >> There are scenarios where non-affine wakeups are incorrectly counted as
-> >> affine wakeups by schedstats.
-> >>
-> >> When wake_affine_idle() returns prev_cpu which doesn't equal to
-> >> nr_cpumask_bits, it will slip through the check: target == nr_cpumask_bits
-> >> in wake_affine() and be counted as if target == this_cpu in schedstats.
-> >>
-> >> Replace target == nr_cpumask_bits with target != this_cpu to make sure
-> >> affine wakeups are accurately tallied.
-> >>
-> >> Fixes: 806486c377e33 (sched/fair: Do not migrate if the prev_cpu is idle)
-> >> Suggested-by: Daniel Jordan <daniel.m.jordan@oracle.com>
-> >> Signed-off-by: Libo Chen <libo.chen@oracle.com>
-> >> ---
-> >>   kernel/sched/fair.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> >> index da388657d5ac..b179da4f8105 100644
-> >> --- a/kernel/sched/fair.c
-> >> +++ b/kernel/sched/fair.c
-> >> @@ -6114,7 +6114,7 @@ static int wake_affine(struct sched_domain *sd, struct task_struct *p,
-> >>              target = wake_affine_weight(sd, p, this_cpu, prev_cpu, sync);
-> >>
-> >>      schedstat_inc(p->stats.nr_wakeups_affine_attempts);
-> >> -    if (target == nr_cpumask_bits)
-> >> +    if (target != this_cpu)
-> >>              return prev_cpu;
-> >>
-> >>      schedstat_inc(sd->ttwu_move_affine);
-> > This not only changes the accounting but also the placement, no?
-> No, it should only change the accounting. wake_affine() still returns
-> prev_cpu if target equals to prev_cpu or nr_cpumask_bits, the same
-> behavior as before.
+On 8/17/2022 3:11 PM, Amadeusz Sławiński wrote:
+> We can use existing macros to poll and update register values instead of
+> open coding the functionality.
+> 
+> Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+> ---
+>   sound/hda/hdac_stream.c | 27 +++++++--------------------
+>   1 file changed, 7 insertions(+), 20 deletions(-)
+> 
+> diff --git a/sound/hda/hdac_stream.c b/sound/hda/hdac_stream.c
+> index f3582012d22f..ce6a2f270445 100644
+> --- a/sound/hda/hdac_stream.c
+> +++ b/sound/hda/hdac_stream.c
+> @@ -10,6 +10,7 @@
+>   #include <sound/core.h>
+>   #include <sound/pcm.h>
+>   #include <sound/hdaudio.h>
+> +#include <sound/hdaudio_ext.h>
 
-Looks good to me
+Eh... and this include addition should not be necessary after I moved 
+macros in previous patch. I will wait if there are any other comments 
+and send v2 tomorrow.
 
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+>   #include <sound/hda_register.h>
+>   #include "trace.h"
+>   
+> @@ -165,7 +166,6 @@ EXPORT_SYMBOL_GPL(snd_hdac_stop_streams_and_chip);
+>   void snd_hdac_stream_reset(struct hdac_stream *azx_dev)
+>   {
+>   	unsigned char val;
+> -	int timeout;
+>   	int dma_run_state;
+>   
+>   	snd_hdac_stream_clear(azx_dev);
+> @@ -173,30 +173,17 @@ void snd_hdac_stream_reset(struct hdac_stream *azx_dev)
+>   	dma_run_state = snd_hdac_stream_readb(azx_dev, SD_CTL) & SD_CTL_DMA_START;
+>   
+>   	snd_hdac_stream_updateb(azx_dev, SD_CTL, 0, SD_CTL_STREAM_RESET);
+> -	udelay(3);
+> -	timeout = 300;
+> -	do {
+> -		val = snd_hdac_stream_readb(azx_dev, SD_CTL) &
+> -			SD_CTL_STREAM_RESET;
+> -		if (val)
+> -			break;
+> -	} while (--timeout);
+> +
+> +	/* wait for hardware to report that the stream entered reset */
+> +	snd_hdac_stream_readb_poll(azx_dev, SD_CTL, val, (val & SD_CTL_STREAM_RESET), 3, 300);
+>   
+>   	if (azx_dev->bus->dma_stop_delay && dma_run_state)
+>   		udelay(azx_dev->bus->dma_stop_delay);
+>   
+> -	val &= ~SD_CTL_STREAM_RESET;
+> -	snd_hdac_stream_writeb(azx_dev, SD_CTL, val);
+> -	udelay(3);
+> +	snd_hdac_stream_updateb(azx_dev, SD_CTL, SD_CTL_STREAM_RESET, 0);
+>   
+> -	timeout = 300;
+> -	/* waiting for hardware to report that the stream is out of reset */
+> -	do {
+> -		val = snd_hdac_stream_readb(azx_dev, SD_CTL) &
+> -			SD_CTL_STREAM_RESET;
+> -		if (!val)
+> -			break;
+> -	} while (--timeout);
+> +	/* wait for hardware to report that the stream is out of reset */
+> +	snd_hdac_stream_readb_poll(azx_dev, SD_CTL, val, !(val & SD_CTL_STREAM_RESET), 3, 300);
+>   
+>   	/* reset first position - may not be synced with hw at this time */
+>   	if (azx_dev->posbuf)
 
->
->
-> Libo

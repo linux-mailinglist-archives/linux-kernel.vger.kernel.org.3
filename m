@@ -2,68 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C936159747A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C43C0597486
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241104AbiHQQtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 12:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
+        id S241172AbiHQQt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 12:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240713AbiHQQtI (ORCPT
+        with ESMTP id S241181AbiHQQth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 12:49:08 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467BA326C4
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:49:04 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id k9-20020aa79729000000b0052d4dd3e2aeso5223761pfg.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:49:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=V3NBUo76d+nSkiXzGrnX3CxBe6y+rnd620DH//raoE8=;
-        b=hvogyBn0sSM54fuD8N0P/mxmPgFGNdUD6dNtW+ddHvFycjAhLdzROp4c1SZIpbo00z
-         Kz6clBm2pqns1I1DKHD+KMSjjsDxKCTd/E7a9Pp9VTs40VWfCBroMPJWfiY5R4nx+ZNR
-         JBFWQeHXTVZDKgX2gTYjMG3D8HevTocU0/AY7hun/hd3JNdXm/RAsTtOJK3PvvGparZ8
-         mWBhyd+S11HN3qwTyjJNWS8kfhBfifgjx7KOVyZeT7gW1lMgH6lq9p2SLkl6WjVJEu+j
-         SniOzJ60Oj9hXd16HZffDezHHroI1UR7TA8rGTDpQaUmmzK1PoUb4Mr2yky0NwPzIs6f
-         GnTQ==
+        Wed, 17 Aug 2022 12:49:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D6259274
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:49:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660754974;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/1ipQ5oQZFUN9YfGsBUkFyNrn9BZ6I7shHodgrk8s0Y=;
+        b=Yv/wf5iwER4NXZKqycipmy1JG1mDoh7OhYbihIPASOuTqeqsh9ZfEoZ8ksSRMIT5TiDJRT
+        KfCFAypos07DfrymDaDj3L+NfxHUJ8Vut6QbfOUicp5xPJjc9lq+TSZvmsKoaem20PAeqG
+        hvBya1EmshfgMzWY8U+Fc0gHh1tIqE4=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-413-tn3FEFwyPpqW1VBJvEn96A-1; Wed, 17 Aug 2022 12:49:31 -0400
+X-MC-Unique: tn3FEFwyPpqW1VBJvEn96A-1
+Received: by mail-ej1-f71.google.com with SMTP id js11-20020a17090797cb00b00730d73eac83so3141100ejc.19
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:49:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=V3NBUo76d+nSkiXzGrnX3CxBe6y+rnd620DH//raoE8=;
-        b=A7Dzs6EM1ol3qL5sXVaeHgHG2tJ/dsGcL6oql4PpgWPkfkLnawoSJuO1D4bBDYXVTJ
-         dILwoSMts5d/eROOhTUGJea03SzImH37vedWQNPRHhnF8wqy3vl3pec4vstAjUIt1Y9J
-         nf9OVf5wBRPZF5aroD2/QYRsX+yoM4a0osJlWJfCHm3OJ69uAla73Yg1VkiCEBj8gPRb
-         eT8HuP5yUfjEISvW4Ie7EJ8wFwye1MniVjeWRx11SKw5WIl3MlfD693efy/0Ki72flc3
-         BH6S5a2kasd8ugYybPpE+KRwokq+DxRmPl4AtvM7rCWwbR7N18YbxLpTUbOvibW4BY9e
-         wBQg==
-X-Gm-Message-State: ACgBeo1Ol4ykLbaswaj22cPM+GQUKzZvyogRtO/lsPgOuZYBypcSLvDP
-        pmEkIP4tGIH/Em4BrSr9cX3G/zuEkW/7LXU=
-X-Google-Smtp-Source: AA6agR5Bxevt9UGS9B1lT/22JmsWAqFZG0tVJOO5Kx0X0PD4ZUtiOiYSH2h2a/pzbdQu5l4BVzdSh+aGx1IMECdm
-X-Received: from joefradley-custom-96.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:831])
- (user=joefradley job=sendgmr) by 2002:aa7:9f02:0:b0:52d:6ae1:d631 with SMTP
- id g2-20020aa79f02000000b0052d6ae1d631mr26893608pfr.41.1660754943688; Wed, 17
- Aug 2022 09:49:03 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 09:48:50 -0700
-In-Reply-To: <20220817164851.3574140-1-joefradley@google.com>
-Message-Id: <20220817164851.3574140-3-joefradley@google.com>
-Mime-Version: 1.0
-References: <20220817164851.3574140-1-joefradley@google.com>
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH 2/2] kunit: no longer call module_info(test, "Y") for kunit modules
-From:   Joe Fradley <joefradley@google.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>
-Cc:     Joe Fradley <joefradley@google.com>, kernel-team@android.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=/1ipQ5oQZFUN9YfGsBUkFyNrn9BZ6I7shHodgrk8s0Y=;
+        b=ufXt33laSmVzrUnliQ6Yj9TPiFPcrTX+nYOeos0q+rtOLBdONUuoGdRfL3esiCTC+O
+         jglMlOqUmeDTJc9mbaU+3V3NX/a50TEYwzSaPc8KVTdfEuFWxye6mN7mLXFtmzNrbuBv
+         XLL4LyRKelNXrey/bv6I5rFq0JgBO7DTzmTfE5OoaKZpXVTvTLjNncD5spA9yaEhJ0dF
+         A+T+Tp5xMVkdcj9J6pgEqaOOmmdZAiTKj+wassjJwl63z8arpsOK5qf3JcIabOk1zqsz
+         J1JcOtB4pxeLF/Q1fUWVMyQPYs9lmCnRNAn3HbRk29g9c0xptDNgs3gtJIteJY4ziZfa
+         KIaw==
+X-Gm-Message-State: ACgBeo37/Y2vmqVYdhIRGZmPJYWyGiQpkUMGA+JiLRZ0qNSSJt2MB/7A
+        yEr+Yd4Grt8xwY/De53iLXLg0y4Wlas8Ap8ESoietRbrJuQUaSX3U1qBUw58mntzUTLKaEj/5Ck
+        MmQd0X2JLw8qqXaNr7AuevBCc
+X-Received: by 2002:a17:907:28d6:b0:731:100c:8999 with SMTP id en22-20020a17090728d600b00731100c8999mr17172348ejc.210.1660754970462;
+        Wed, 17 Aug 2022 09:49:30 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7MrOYH1NnxHco479ZJzy2zL+mc4tH6RAgfWX0tYEUKApZKrUDtPkzquVyBCD6/hlYsBWXJmw==
+X-Received: by 2002:a17:907:28d6:b0:731:100c:8999 with SMTP id en22-20020a17090728d600b00731100c8999mr17172340ejc.210.1660754970221;
+        Wed, 17 Aug 2022 09:49:30 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id u4-20020a50eac4000000b0043ba7df7a42sm11094531edp.26.2022.08.17.09.49.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Aug 2022 09:49:29 -0700 (PDT)
+Message-ID: <69d0b2c3-0c14-83c8-0913-4ee163f9c1df@redhat.com>
+Date:   Wed, 17 Aug 2022 18:49:21 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 2/9] KVM: x86: remove return value of kvm_vcpu_block
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        mlevitsk@redhat.com, vkuznets@redhat.com
+References: <20220811210605.402337-1-pbonzini@redhat.com>
+ <20220811210605.402337-3-pbonzini@redhat.com> <Yvwpb6ofD1S+Rqk1@google.com>
+ <78616cf8-2693-72cc-c2cc-5a849116ffc7@redhat.com>
+ <Yv0aHXcmuivyJDXw@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yv0aHXcmuivyJDXw@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,30 +84,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because KUnit test execution is not a guarantee with the kunit.enable
-parameter we want to be careful to only taint the kernel only if an
-actual test runs. Calling module_info(test, "Y") for every KUnit module
-automatically causes the kernel to be tainted upon module load. Therefore,
-we're removing this call and relying on the KUnit framework to taint the
-kernel or not.
+On 8/17/22 18:41, Sean Christopherson wrote:
+> On Wed, Aug 17, 2022, Paolo Bonzini wrote:
+>> On 8/17/22 01:34, Sean Christopherson wrote:
+>>> Isn't freeing up the return from kvm_vcpu_check_block() unnecessary?  Can't we
+>>> just do:
+>>>
+>>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>>> index 9f11b505cbee..ccb9f8bdeb18 100644
+>>> --- a/arch/x86/kvm/x86.c
+>>> +++ b/arch/x86/kvm/x86.c
+>>> @@ -10633,7 +10633,7 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
+>>>                   if (hv_timer)
+>>>                           kvm_lapic_switch_to_hv_timer(vcpu);
+>>>
+>>> -               if (!kvm_check_request(KVM_REQ_UNHALT, vcpu))
+>>> +               if (!kvm_arch_vcpu_runnable(vcpu))
+>>>                           return 1;
+>>>           }
+>>>
+>>>
+>>> which IMO is more intuitive and doesn't require reworking halt-polling (again).
+>>
+>> This was my first idea indeed.  However I didn't like calling
+>> kvm_arch_vcpu_runnable() again and "did it schedule()" seemed to be a less
+>> interesting result from kvm_vcpu_block() (and in fact kvm_vcpu_halt() does
+>> not bother passing it up the return chain).
+> 
+> The flip side of calling kvm_arch_vcpu_runnable() again is that KVM will immediately
+> wake the vCPU if it becomes runnable after kvm_vcpu_check_block().  The edge cases
+> where the vCPU becomes runnable late are unlikely to truly matter in practice, but
+> on the other hand manually re-checking kvm_arch_vcpu_runnable() means KVM gets both
+> cases "right" (waited=true iff vCPU actually waited, vCPU awakened ASAP), whereas
+> squishing the information into the return of kvm_vcpu_check_block() means KVM gets
+> both cases "wrong" (waited=true even if schedule() was never called, vCPU left in
+> a non-running state even though it's runnable).
+> 
+> My only hesitation with calling kvm_arch_vcpu_runnable() again is that it could be
+> problematic if KVM somehow managed to consume the event that caused kvm_vcpu_has_events()
+> to return true, but I don't see how that could happen without it being a KVM bug.
 
-Signed-off-by: Joe Fradley <joefradley@google.com>
----
- include/kunit/test.h | 1 -
- 1 file changed, 1 deletion(-)
+No, I agree that it cannot happen, and especially so after getting rid 
+of the kvm_check_nested_events() call in kvm_arch_vcpu_runnable().
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index c958855681cc..f23d3954aa17 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -251,7 +251,6 @@ static inline int kunit_run_all_tests(void)
- #endif /* IS_BUILTIN(CONFIG_KUNIT) */
- 
- #define __kunit_test_suites(unique_array, ...)				       \
--	MODULE_INFO(test, "Y");						       \
- 	static struct kunit_suite *unique_array[]			       \
- 	__aligned(sizeof(struct kunit_suite *))				       \
- 	__used __section(".kunit_test_suites") = { __VA_ARGS__ }
--- 
-2.37.1.595.g718a3a8f04-goog
+I'll reorder the patches and apply your suggestion.
+
+Paolo
 

@@ -2,111 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5675596DB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 13:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FCCF596DBF
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 13:41:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239125AbiHQLkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 07:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
+        id S239178AbiHQLk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 07:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239174AbiHQLjq (ORCPT
+        with ESMTP id S239164AbiHQLkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 07:39:46 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2936283BD4
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 04:39:36 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ba1so5309211wrb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 04:39:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc;
-        bh=A8ZUWcf2H4coRkYM3YJ09Cp6IZsz/6g0Idxt2WH37r4=;
-        b=X1JqjluQIOGSLd8osUM8ZAeX/CMO+5Iuvjao0NiTxu4/D8DSl3v0ve6VYqZ7Qw29WQ
-         omF012Pg4ojCTiQ5MdjueSt2ER0Ai2RvIjyHcP6A36/mR/qesfyVusrcKpsuive28eVX
-         bzegCx/Hgx8WbJqOYPiiMCcLXmjN5U5j1FNwqXj3d8rgrTwIbqfxgr/jcS6ZzGUfMB4w
-         c6tJKmOZuyLYE2baaOLmFynvnq3i+fOeidvplgvB5Kvx5VcxlZafneL/FL6UBazC7qZa
-         xRraDkYpz0rFgpOWxuhZ0eytXA2u/82XZBaz5oU3jcBNoZ+gN+JxDclPhxxm+AmgbHcW
-         VVVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc;
-        bh=A8ZUWcf2H4coRkYM3YJ09Cp6IZsz/6g0Idxt2WH37r4=;
-        b=qqFCf7ahl4V+HVQtFV9WpBtMcDn9dGYD9Cn1CKe1Mu4EG++Lq+nWGO7fbMTPgYqH4m
-         Zkxn3zCnVwhMmEfErPJUvzsJN+xexTDMKFzg6bG1zSh4LjimYTUBhyBtywALoO6kbK6V
-         c3gDHaXaDRXPMsJvQVT4uux7FybYPDALxjerI0/f4xpJkiQjd90zghNuPxHQ2CkBhej/
-         Da8i7kJVux9URcXTZ8CKAJ3EQp/8djSJ/7vlaxPg4oInMQkRHg3lQ+nEb9iyZYLgyp6t
-         sy6xDemqQl77DMpPPiJhwzfvEqUsfRQpXW4kn76F6n3rc2CVnJx6iAE1qX4fWGLztVQP
-         yOCQ==
-X-Gm-Message-State: ACgBeo0RU5Uu82xDfsg1MdQOzTTgk5ehmD3XG+lULVJOEfBZMo2+3UT1
-        xbrHppADIflNZB7sDaB7xQjkYA==
-X-Google-Smtp-Source: AA6agR5JKUWVW1vY8hKzruWPyQCab9OHhOohXYTdnmU1ZsiLnLRoJjwgNE+w1Dbkk5QvwJjiavL9MQ==
-X-Received: by 2002:a5d:5887:0:b0:220:81ca:ec4f with SMTP id n7-20020a5d5887000000b0022081caec4fmr13609103wrf.263.1660736374599;
-        Wed, 17 Aug 2022 04:39:34 -0700 (PDT)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id r17-20020a05600c425100b003a5bd9448e5sm1512508wmm.28.2022.08.17.04.39.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 04:39:34 -0700 (PDT)
-Message-ID: <dbd20ef2-f109-0675-6fbe-8d08da5cc5a3@linaro.org>
-Date:   Wed, 17 Aug 2022 13:39:28 +0200
+        Wed, 17 Aug 2022 07:40:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3451983BE6
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 04:40:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17D35614CD
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 11:40:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B0B1C433D6;
+        Wed, 17 Aug 2022 11:40:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660736406;
+        bh=tAxziLgNC85rss5KjanACgubW2VS9uSuhJ+/ML74THM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T3/KpFtv7iQZzL5njKxRzaLCeNS0h0F8QbbeFHdB76IWFap4SuB6RJ6+95NgoGCtT
+         nWzhlj/TKBLcLHowUnIGscBFxs4B2DelluDdqjOpdqkAWDiVEVlqLCoyRz2HTgiqTA
+         NSo0RJMVk37dyrAr/SQcxfq6O9BmhbUVB+DRG1ToQMgd1SEZfckt+4xZuUAn2drCD/
+         sHf0rYN/Z+d40QQe5Gx3H1cUQNEcEy4LiQeeT2nC+PLq6tX5IMNzAQB5LPJMvwtLl1
+         SRhExETaUY9G2LH0oZ4LICLBXIM85XESWzCO4EUneFt6Wmt7Ja1iMPN+JqoBV4Mstj
+         BcT3VpSuWJYgA==
+Date:   Wed, 17 Aug 2022 12:40:01 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Liao, Bard" <bard.liao@intel.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tiwai@suse.de" <tiwai@suse.de>,
+        "pierre-louis.bossart@linux.intel.com" 
+        <pierre-louis.bossart@linux.intel.com>
+Subject: Re: [PATCH 0/4] ASoC/soundwire: log actual PING status on resume
+ issues
+Message-ID: <YvzTkQ7fkQlecTVe@sirena.org.uk>
+References: <20220714011043.46059-1-yung-chuan.liao@linux.intel.com>
+ <YtTzZ4iA0xt68euH@matsya>
+ <DM6PR11MB40745C1283CFCC3F5D41FAC9FF6A9@DM6PR11MB4074.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] thermal fixes for v6.0-rc1
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="q+ljVR5GQz+Wtprg"
+Content-Disposition: inline
+In-Reply-To: <DM6PR11MB40745C1283CFCC3F5D41FAC9FF6A9@DM6PR11MB4074.namprd11.prod.outlook.com>
+X-Cookie: Use extra care when cleaning on stairs.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-   Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+--q+ljVR5GQz+Wtprg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-are available in the Git repository at:
+On Wed, Aug 17, 2022 at 06:48:56AM +0000, Liao, Bard wrote:
 
- 
-ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
-tags/thermal-v6.0-rc2
+> > > This series just adds a basic read directly from the PING frames to help
+> > > confirm if yes/no the device regain sync.
 
-for you to fetch changes up to 8c596324232d22e19f8df59ba03410b9b5b0f3d7:
+> > > The change is mainly on soundwire. @Mark, Could you ack the ASoC patch
+> > > if it looks good to you?
 
-   dt-bindings: thermal: Fix missing required property (2022-08-15 
-20:38:40 +0200)
+> > The series lgtm, feel free to merge thru ASoC tree with:
 
-----------------------------------------------------------------
-- Fix missing required property for thermal zone description (Daniel
-   Lezcano)
+> > Acked-By: Vinod Koul <vkoul@kernel.org>
 
-- Add missing export symbol for
-   thermal_zone_device_register_with_trips() (Daniel Lezcano)
+> Both of you are acked.
+> Can this series be merged now?
 
-----------------------------------------------------------------
-Daniel Lezcano (2):
-       thermal/core: Add missing EXPORT_SYMBOL_GPL
-       dt-bindings: thermal: Fix missing required property
+I guess I'll apply it - given that it's mainly a Soundwire change I
+would have expected it to go via Soundwire as you'd suggested.
 
-  Documentation/devicetree/bindings/thermal/thermal-zones.yaml | 1 +
-  drivers/thermal/thermal_core.c                               | 1 +
-  2 files changed, 2 insertions(+)
+--q+ljVR5GQz+Wtprg
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL805AACgkQJNaLcl1U
+h9AiSgf/XBVdYlzcxr231NjGvtIDApKXvygvvaqq/W1JkjymmWieaaDh7HP26Iy/
+BZLvAxyC7e7zRVScXKeAtyghwzMeqKIFUH1hVazY4hKPUoiD8wD2QKstxnmpiicU
+m0b5McQwRGvqmk2dmK9XPlCr9j9zERI4wsepRY2z6YrfFOfPbz6z+84aMVN5/j/p
+fs9XVcafVEo9v6lbp2t7y138TFjPL2Wkh3ODPHRKFRupT5ZBAF0R25gePvwD8g9/
+RVmFWTwyUgyoiuDuXAmcJkonHVaaewyBx4GEE5lSIFP+W0YbtLkgxme02gaGgMve
+hNY1iDBUTORh9H92CGKFNKMGZny4iQ==
+=GC7F
+-----END PGP SIGNATURE-----
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+--q+ljVR5GQz+Wtprg--

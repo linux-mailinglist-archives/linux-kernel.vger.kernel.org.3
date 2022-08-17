@@ -2,73 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE1959741D
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:26:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1D8597427
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240970AbiHQQXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 12:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
+        id S239978AbiHQQ0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 12:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237770AbiHQQXE (ORCPT
+        with ESMTP id S240251AbiHQQ0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 12:23:04 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7E89D8C9
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:23:01 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id c185so15886645oia.7
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:23:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=UVFUNCqPRpisdlSVRU+tLvNHfgHjwvastlgvyU/I+ug=;
-        b=nhD+LomYohgAaMtQcxIoxV4+vU0oMCpwBU85S4CbJpWNUKtrOHMu96fL8IGGB9i7cw
-         FNxyZ6ErfmSrX8Yjx7DJa7BfR/bOMY7rG80bdYrOvc0TBQdWfsCyw5PjJYDICr6XKe+H
-         JK3MHzzpfJoiBFlNfEtLwxaJnHksXBBcOFgkYQyoUf3mhDxovH/WHeOyApy39dRcRbIQ
-         fcxTkUgqfab5tVzG1DNRoypYdqSxaxz4/7zjslkpqhcWYI3keTaRIl+SBo37PltiKNpL
-         NAd4uWTOTjI1QLYBuCHvcDwPay7mfA0nxGkY2Qg9BvzND3mU7WGHhnkXAU1YWGsIIF6T
-         KwRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=UVFUNCqPRpisdlSVRU+tLvNHfgHjwvastlgvyU/I+ug=;
-        b=XQnGJyI5SaESKua7EsgVRT7E39BXpz/caRYlrPTGQN4TGPebnNNpDF/wKgZRjh8jV/
-         Jkqe7EgsEjTledcfUhbzka3orSclIE6+cdG/enANw5nBlf0vM1dgY5RIBlWbg55J3KuL
-         ca4bpJKLEMPkIJWmxB1LBJTXyU9sL1usUZSrF3sWgBMNydAsGiGO1q8pL7APf7LZyjjT
-         6zYUBdDR2KIoxbKJAodDvV3UkktTLBHhbG2qrJLW3UE48iDvn9wqZZW0K8ed3WuIdhwV
-         exVZZyZYyj37RsMVNKS9VRcqhhRW5XePVTg0k8l3ElN7qRukvbn5quBKf87F7xZSgnAm
-         JiPQ==
-X-Gm-Message-State: ACgBeo1V7OIHsCyQNESXzh/X4/BhQNzxLydlbMnpZaCBaGW9aiw/COLQ
-        DMppx5FR+9iMSI855lPw6K5dJ47O40Yvi0UL9oAb
-X-Google-Smtp-Source: AA6agR4q+35QdLDJNp6askIHnce/pTF3ccKGnAJyDAjR93UP09IwkfdsM9vuHIzqMk/HyB//otwciZ/io87A9c4W3cA=
-X-Received: by 2002:a05:6808:3a9:b0:343:4b14:ccce with SMTP id
- n9-20020a05680803a900b003434b14cccemr1872909oie.41.1660753380093; Wed, 17 Aug
- 2022 09:23:00 -0700 (PDT)
+        Wed, 17 Aug 2022 12:26:44 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2249F75E;
+        Wed, 17 Aug 2022 09:26:43 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 16:26:39 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1660753601;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=t+3L7Pb6Y+lCWRputOBViKsnAsaMw41yLztGJF9Jl5Q=;
+        b=1jLe+s8drkWD5HETRok4I4A7zalnqH4kvW6M4KUFeDLYI7FcR9uj3HP8XNuLMKrjFSjAki
+        +YO5ZKCsI3aqyTd8IpwgcYN27BiCZuiw4pY7fTWaOJKt4AYXNJp7rK2h0lN0y9ivdz5Fjd
+        G/6Nk+ny1jHXKFI7AWDTEBF1YBNc4QUOAAKJ7uZe3717gYkHsmQDiVCDKHrTE8nVj8kOep
+        w2Nuc/j2AeN+rH2TRc2MuJQEKNaEZJiaamf6aEZkIxlvrC6dVFt7FX/zJa8M6JTb9xODy0
+        OgoXMRzIoSOUhk4IvAeGvW+uUIzhmWYjBj4+QkO9mBmEqca2bDotWUI9STd78Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1660753601;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=t+3L7Pb6Y+lCWRputOBViKsnAsaMw41yLztGJF9Jl5Q=;
+        b=UWUjPxreEzl8V2dzuW15acdNvYK3RrLCv9FOf+38RRHw8HlLP3pPoaikVnb+R3BcxZtB36
+        ZJ7voDrLbzeCVDAg==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: core/urgent] x86/kvm, objtool: Avoid fastop ENDBR from being sealed
+Cc:     "Xu, Pengfei" <pengfei.xu@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <YvzJTxOwmikAlZ6j@worktop.programming.kicks-ass.net>
+References: <YvzJTxOwmikAlZ6j@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20220725124123.12975-1-flaniel@linux.microsoft.com>
- <CAHC9VhTmgMfzc+QY8kr+BYQyd_5nEis0Y632w4S2_PGudTRT7g@mail.gmail.com>
- <4420381.LvFx2qVVIh@pwmachine> <CAHC9VhSMeefG5W_uuTNQYmUUZ1xcuqArxYs5sL9KOzUO_skCZw@mail.gmail.com>
- <ab1bbd48-c48d-5f5a-f090-428ffd54c07e@schaufler-ca.com> <CAHC9VhTxYaLXFbS6JnpskOkADNbL8BA5614VuK3sDTHW6DE3uQ@mail.gmail.com>
- <20220817161924.GA20337@mail.hallyn.com>
-In-Reply-To: <20220817161924.GA20337@mail.hallyn.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 17 Aug 2022 12:22:49 -0400
-Message-ID: <CAHC9VhTUid5i8C+W93Zfc_bWMoo7DsvruJ_85Ty0wWsV7xbb4g@mail.gmail.com>
-Subject: Re: [RFC PATCH v4 0/2] Add capabilities file to securityfs
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        Francis Laniel <flaniel@linux.microsoft.com>,
-        linux-security-module@vger.kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        James Morris <jmorris@namei.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:BPF [MISC]" <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+Message-ID: <166075359990.401.7301726902977346879.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,78 +66,226 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 12:19 PM Serge E. Hallyn <serge@hallyn.com> wrote:
-> On Wed, Aug 17, 2022 at 12:10:25PM -0400, Paul Moore wrote:
-> > On Wed, Aug 17, 2022 at 11:50 AM Casey Schaufler <casey@schaufler-ca.co=
-m> wrote:
-> > > On 8/17/2022 7:52 AM, Paul Moore wrote:
-> > > > On Wed, Aug 17, 2022 at 7:53 AM Francis Laniel
-> > > > <flaniel@linux.microsoft.com> wrote:
-> > > >> Le mardi 16 ao=C3=BBt 2022, 23:59:41 CEST Paul Moore a =C3=A9crit =
-:
-> > > >>> On Mon, Jul 25, 2022 at 8:42 AM Francis Laniel
-> > > >>>
-> > > >>> <flaniel@linux.microsoft.com> wrote:
-> > > >>>> Hi.
-> > > >>>>
-> > > >>>> First, I hope you are fine and the same for your relatives.
-> > > >>> Hi Francis :)
-> > > >>>
-> > > >>>> A solution to this problem could be to add a way for the userspa=
-ce to ask
-> > > >>>> the kernel about the capabilities it offers.
-> > > >>>> So, in this series, I added a new file to securityfs:
-> > > >>>> /sys/kernel/security/capabilities.
-> > > >>>> The goal of this file is to be used by "container world" softwar=
-e to know
-> > > >>>> kernel capabilities at run time instead of compile time.
-> > > >>> ...
-> > > >>>
-> > > >>>> The kernel already exposes the last capability number under:
-> > > >>>> /proc/sys/kernel/cap_last_cap
-> > > >>> I'm not clear on why this patchset is needed, why can't the
-> > > >>> application simply read from "cap_last_cap" to determine what
-> > > >>> capabilities the kernel supports?
-> > > >> When you capabilities with, for example, docker, you will fill cap=
-abilities
-> > > >> like this:
-> > > >> docker run --rm --cap-add SYS_ADMIN debian:latest echo foo
-> > > >> As a consequence, the "echo foo" will be run with CAP_SYS_ADMIN se=
-t.
-> > > >>
-> > > >> Sadly, each time a new capability is added to the kernel, it means=
- "container
-> > > >> stack" software should add a new string corresponding to the numbe=
-r of the
-> > > >> capabilities [1].
-> > > > Thanks for clarifying things, I thought you were more concerned abo=
-ut
-> > > > detecting what capabilities the running kernel supported, I didn't
-> > > > realize it was getting a string literal for each supported capabili=
-ty.
-> > > > Unless there is a significant show of support for this
-> > >
-> > > I believe this could be a significant help in encouraging the use of
-> > > capabilities. An application that has to know the list of capabilitie=
-s
-> > > at compile time but is expected to run unmodified for decades isn't
-> > > going to be satisfied with cap_last_cap. The best it can do with that
-> > > is abort, not being able to ask an admin what to do in the presence o=
-f
-> > > a capability that wasn't around before because the name isn't known.
-> >
-> > An application isn't going to be able to deduce the semantic value of
-> > a capability based solely on a string value, an integer is just as
-> > meaningful in that regard.  What might be useful is if the application
->
-> Maybe it's important to point out that an integer value capability in
-> kernel will NEVER change its string value (or semantic meaning).
->
-> The libcap tools like capsh accept integer capabilities, other tools
-> probably should as well.  (see man 3 cap_from_text)
+The following commit has been merged into the core/urgent branch of tip:
 
-Seems like a reasonable thing to me, I would much prefer that than the
-approach in this patchset.
+Commit-ID:     52ad1c24d213f176a2424552dfd0db2f870d96bd
+Gitweb:        https://git.kernel.org/tip/52ad1c24d213f176a2424552dfd0db2f870d96bd
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Wed, 17 Aug 2022 12:56:15 +02:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Wed, 17 Aug 2022 18:05:51 +02:00
 
---=20
-paul-moore.com
+x86/kvm, objtool: Avoid fastop ENDBR from being sealed
+
+Subject: x86/kvm, objtool: Avoid fastop ENDBR from being sealed
+
+Xu reported a number of "Missing ENDBR" triggers for the KVM fastop
+emulation code. It turns out that because of how the fastops are set up,
+only the first of a series -- the 8-byte variants that overlap with the
+em_ symbols -- is found referenced.
+
+Specifically:
+
+        .pushsection .text, "ax"
+        .global em_and
+        .align 16
+        em_and:
+        .align 16
+        .type andb_al_dl, @function
+        andb_al_dl:
+        endbr64
+        andb %dl, %al
+        11: jmp __x86_return_thunk
+        .size andb_al_dl, .-andb_al_dl
+        .align 16
+        .type andw_ax_dx, @function
+        andw_ax_dx:
+        endbr64
+        andw %dx, %ax
+        11: jmp __x86_return_thunk
+        .size andw_ax_dx, .-andw_ax_dx
+        .align 16
+        .type andl_eax_edx, @function
+        andl_eax_edx:
+        endbr64
+        andl %edx, %eax
+        11: jmp __x86_return_thunk
+        .size andl_eax_edx, .-andl_eax_edx
+        .align 16
+        .type andq_rax_rdx, @function
+        andq_rax_rdx:
+        endbr64
+        andq %rdx, %rax
+        11: jmp __x86_return_thunk
+        .size andq_rax_rdx, .-andq_rax_rdx
+        .popsection
+
+Only has the em_and symbol referenced, resulting in and{w,l,q}_* getting
+sealed.
+
+Add (yet another) annotation to inhibit objtool from sealing a specific
+ENDBR instance.
+
+[ mingo: Sync up tools/include/linux/objtool.h to include/linux/objtool.h. ]
+
+Fixes: 6649fa876da4 ("x86/ibt,kvm: Add ENDBR to fastops")
+Reported-by: "Xu, Pengfei" <pengfei.xu@intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/r/YvzJTxOwmikAlZ6j@worktop.programming.kicks-ass.net
+---
+ arch/x86/include/asm/ibt.h    |  5 ++++-
+ arch/x86/kvm/emulate.c        |  4 +--
+ include/linux/objtool.h       |  6 +++++-
+ tools/include/linux/objtool.h |  6 +++++-
+ tools/objtool/check.c         | 44 +++++++++++++++++++++++++++++-----
+ 5 files changed, 57 insertions(+), 8 deletions(-)
+
+diff --git a/arch/x86/include/asm/ibt.h b/arch/x86/include/asm/ibt.h
+index 689880e..f32ba1c 100644
+--- a/arch/x86/include/asm/ibt.h
++++ b/arch/x86/include/asm/ibt.h
+@@ -29,6 +29,10 @@
+ #define ASM_ENDBR	"endbr32\n\t"
+ #endif
+ 
++#define ASM_ENDBR_NOSEAL	\
++	ANNOTATE_NOSEAL		\
++	ASM_ENDBR
++
+ #define __noendbr	__attribute__((nocf_check))
+ 
+ static inline __attribute_const__ u32 gen_endbr(void)
+@@ -84,6 +88,7 @@ extern __noendbr void ibt_restore(u64 save);
+ #ifndef __ASSEMBLY__
+ 
+ #define ASM_ENDBR
++#define ASM_ENDBR_NOSEAL
+ 
+ #define __noendbr
+ 
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index b4eeb7c..d51ee8a 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -326,7 +326,7 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
+ 	".align " __stringify(FASTOP_SIZE) " \n\t" \
+ 	".type " name ", @function \n\t" \
+ 	name ":\n\t" \
+-	ASM_ENDBR
++	ASM_ENDBR_NOSEAL
+ 
+ #define FOP_FUNC(name) \
+ 	__FOP_FUNC(#name)
+@@ -461,7 +461,7 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
+ 	".align " __stringify(SETCC_ALIGN) " \n\t" \
+ 	".type " #op ", @function \n\t" \
+ 	#op ": \n\t" \
+-	ASM_ENDBR \
++	ASM_ENDBR_NOSEAL \
+ 	#op " %al \n\t" \
+ 	__FOP_RET(#op) \
+ 	".skip " __stringify(SETCC_ALIGN) " - (.-" #op "), 0xcc \n\t"
+diff --git a/include/linux/objtool.h b/include/linux/objtool.h
+index 62c54ff..ad752f8 100644
+--- a/include/linux/objtool.h
++++ b/include/linux/objtool.h
+@@ -90,6 +90,12 @@ struct unwind_hint {
+ 	_ASM_PTR " 986b\n\t"					\
+ 	".popsection\n\t"
+ 
++#define ANNOTATE_NOSEAL						\
++	"986: \n\t"						\
++	".pushsection .discard.noseal\n\t"			\
++	_ASM_PTR " 986b\n\t"					\
++	".popsection\n\t"
++
+ #define ASM_REACHABLE							\
+ 	"998:\n\t"							\
+ 	".pushsection .discard.reachable\n\t"				\
+diff --git a/tools/include/linux/objtool.h b/tools/include/linux/objtool.h
+index 62c54ff..ad752f8 100644
+--- a/tools/include/linux/objtool.h
++++ b/tools/include/linux/objtool.h
+@@ -90,6 +90,12 @@ struct unwind_hint {
+ 	_ASM_PTR " 986b\n\t"					\
+ 	".popsection\n\t"
+ 
++#define ANNOTATE_NOSEAL						\
++	"986: \n\t"						\
++	".pushsection .discard.noseal\n\t"			\
++	_ASM_PTR " 986b\n\t"					\
++	".popsection\n\t"
++
+ #define ASM_REACHABLE							\
+ 	"998:\n\t"							\
+ 	".pushsection .discard.reachable\n\t"				\
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 0cec74d..0d04d0a 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -2111,6 +2111,40 @@ static int read_noendbr_hints(struct objtool_file *file)
+ 	return 0;
+ }
+ 
++static void mark_endbr_used(struct instruction *insn)
++{
++	if (!list_empty(&insn->call_node))
++		list_del_init(&insn->call_node);
++}
++
++static int read_noseal_hints(struct objtool_file *file)
++{
++	struct section *sec;
++	struct instruction *insn;
++	struct reloc *reloc;
++
++	sec = find_section_by_name(file->elf, ".rela.discard.noseal");
++	if (!sec)
++		return 0;
++
++	list_for_each_entry(reloc, &sec->reloc_list, list) {
++		insn = find_insn(file, reloc->sym->sec, reloc->sym->offset + reloc->addend);
++		if (!insn) {
++			WARN("bad .discard.noseal entry");
++			return -1;
++		}
++
++		if (insn->type != INSN_ENDBR) {
++			WARN_FUNC("ANNOTATE_NOSEAL not on ENDBR", insn->sec, insn->offset);
++			continue;
++		}
++
++		mark_endbr_used(insn);
++	}
++
++	return 0;
++}
++
+ static int read_retpoline_hints(struct objtool_file *file)
+ {
+ 	struct section *sec;
+@@ -2356,6 +2390,10 @@ static int decode_sections(struct objtool_file *file)
+ 	if (ret)
+ 		return ret;
+ 
++	ret = read_noseal_hints(file);
++	if (ret)
++		return ret;
++
+ 	/*
+ 	 * Must be before add_{jump_call}_destination.
+ 	 */
+@@ -3952,12 +3990,6 @@ static int validate_functions(struct objtool_file *file)
+ 	return warnings;
+ }
+ 
+-static void mark_endbr_used(struct instruction *insn)
+-{
+-	if (!list_empty(&insn->call_node))
+-		list_del_init(&insn->call_node);
+-}
+-
+ static int validate_ibt_insn(struct objtool_file *file, struct instruction *insn)
+ {
+ 	struct instruction *dest;

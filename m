@@ -2,187 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7539C597599
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC12597596
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240374AbiHQSRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 14:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
+        id S240338AbiHQSRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 14:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240795AbiHQSRS (ORCPT
+        with ESMTP id S240315AbiHQSRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 14:17:18 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330C998CA5
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 11:17:17 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id bx38so14292648ljb.10
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 11:17:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=0Mv5jQ8hRqokFuTzuLGQ2+4HMm4gXf4KWrwhyD1wz0c=;
-        b=o8RUy/jSIMwh4sAkv2mej0jQFwK5rKnhv/VJzW+EIi6nn/iKf8ijgOH1HwiIYsCnPj
-         qiD0yjs8OOsiqMjg7Tz+Fzjcqfev/69am+6UAE1nmdDRcRQkUB5t1gbVmOfh7t6MOaFM
-         xCAic4M5ANXNdecfH74Y2ngj5M6FPihUWCPn621rIfuQbz444WN+JyQ7I4uSyeG52uNn
-         ms1WC+zXAxDU8uF5RaSxeTp4hUyBKlvzQZoqCNh6Gw2rJbpv6peVHa9iUuuRQtTAKJ1+
-         KZKbErsHDGAANOpEGaMwGM2wM4+36GUmd5z2LVFfx0GR2B+KfEdAXnpV+hYDSifqCVHG
-         aoBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=0Mv5jQ8hRqokFuTzuLGQ2+4HMm4gXf4KWrwhyD1wz0c=;
-        b=IMqFKz1by2he0Zt9cppttKP1PSXlA09Dmy5PtGD/fvanHvYS8d8SB+JC7gDlUpT1Yq
-         BC5KbSuO9HQwx9AjQ2erC9WdXUC2rVrFuhu/3t2iW+nO/6sQjNU7hj0asfHUKN/x379A
-         GIJ3fVR9Q48dU2+4nfpVoqmPNiePkNskAD9w2QcYC/NP7Lnm+OUEfOMxGKKpYw6uvQI7
-         Nvfda27JVKG6FiVGkydUo8ray7VhYscmk/XmjTMXZY/u3mT48TqXeDJsUAB/LJh8x2uE
-         SUrqT6+S9jTCRPjiRvyImCv0gP2RXE8Xigx+XeAUK+shngeK3sbCNq8WKhnNSmtQYW2N
-         rJFA==
-X-Gm-Message-State: ACgBeo0UZFeEBE6J7DFzC4Ixcg9S7xvOVrV+dMSrjXxVKiPdroz57jlB
-        3kc3//hIpxK9rLuiuOuvXwJaV6nU0CTE/cr2NgarEg==
-X-Google-Smtp-Source: AA6agR5KIO8bHZ8lbPtaNNKPJwuv1GQFMl4w/Fu5FDzI/yobfzH9duSxiXQQ+ANJhp08iVUWx5o9GKseHPMLTTC8agE=
-X-Received: by 2002:a2e:8606:0:b0:25e:51c1:4cfe with SMTP id
- a6-20020a2e8606000000b0025e51c14cfemr8677689lji.33.1660760235102; Wed, 17 Aug
- 2022 11:17:15 -0700 (PDT)
+        Wed, 17 Aug 2022 14:17:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE238E0D5;
+        Wed, 17 Aug 2022 11:16:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7159961365;
+        Wed, 17 Aug 2022 18:16:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A3F1C433C1;
+        Wed, 17 Aug 2022 18:16:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660760217;
+        bh=2AU+aXr4gpTlrYogH+hMCzUzgzTMhcv+G9mn9jrpKrU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hLWcXxEtFJM498cjzzLPqnrP02B1XN/pCmuCJ7qyv6p8ujY2ptstVTWCfFrvh/EXs
+         uGlKJbEC7PN767lZ7/I7CEOCpZpNYot6QJ3TNJAFDeeXnlgWQz9QlA7SN286bPQ2+d
+         zIrcRZbxNrgAB6+8XyDqP5qbD0QHXb/DJKiZLlvec0nBO4PFbzQh6mibmI5YeZMsrf
+         UQCKYfYagOG349IUY8hiYekVziHmmwktf5yWZGeb4MrQ4CbBufocIiDp7rl43ldDLA
+         USC6ztqtuxfEQJiA4hbmXV1uJLLd2iKZ6l4mrUK6Sd7G8joUm5H9zFbDm3EcTdX3ye
+         OWdhyUC2FMHeQ==
+Date:   Wed, 17 Aug 2022 11:16:56 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Guangbin Huang <huangguangbin2@huawei.com>
+Cc:     <davem@davemloft.net>, <idosch@nvidia.com>,
+        <linux@rempel-privat.de>, <mkubecek@suse.cz>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lipeng321@huawei.com>, <shenjian15@huawei.com>
+Subject: Re: [PATCH net-next 0/2] net: ethtool add VxLAN to the NFC API
+Message-ID: <20220817111656.7f4afaf3@kernel.org>
+In-Reply-To: <20220817143538.43717-1-huangguangbin2@huawei.com>
+References: <20220817143538.43717-1-huangguangbin2@huawei.com>
 MIME-Version: 1.0
-References: <20220817152956.4056410-1-vipinsh@google.com> <Yv0kRhSjSqz0i0lG@google.com>
-In-Reply-To: <Yv0kRhSjSqz0i0lG@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Wed, 17 Aug 2022 11:16:37 -0700
-Message-ID: <CAHVum0fT7zJ0qj39xG7OnAObBqeBiz_kAp+chsh9nFytosf9Yg@mail.gmail.com>
-Subject: Re: [PATCH] KVM: selftests: Run dirty_log_perf_test on specific cpus
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     dmatlack@google.com, pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 10:25 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> > +static int parse_num(const char *num_str)
-> > +{
-> > +     int num;
-> > +     char *end_ptr;
-> > +
-> > +     errno = 0;
-> > +     num = (int)strtol(num_str, &end_ptr, 10);
-> > +     TEST_ASSERT(num_str != end_ptr && *end_ptr == '\0',
-> > +                 "Invalid number string.\n");
-> > +     TEST_ASSERT(errno == 0, "Conversion error: %d\n", errno);
->
-> Is the paranoia truly necessary?  What happens if parse_cpu_list() simply uses
-> atoi() and is passed garbage?
+On Wed, 17 Aug 2022 22:35:36 +0800 Guangbin Huang wrote:
+> This series adds support for steering VxLAN flows using the ethtool NFC
+> interface, and implements it for hns3 devices.
 
-On error atoi() returns 0, which is also a valid logical cpu number.
-We need error checking here to make sure that the user really wants
-cpu 0 and it was not a mistake in typing.
-I was thinking of using parse_num API for other places as well instead
-of atoi() in dirty_log_perf_test.
-
-> > +
-> > +     cpu = strtok(cpu_list, delim);
-> > +     while (cpu) {
-> > +             cpu_num = parse_num(cpu);
-> > +             TEST_ASSERT(cpu_num >= 0, "Invalid cpu number: %d\n", cpu_num);
-> > +             vcpu_to_lcpu_map[i++] = cpu_num;
-> > +             cpu = strtok(NULL, delim);
-> > +     }
-> > +
-> > +     free(cpu_list);
->
-> The tokenization and parsing is nearly identical between parse_cpu_list() and
-> assign_dirty_log_perf_test_cpu().  The code can be made into a common helper by
-> passing in the destination, e.g.
->
-> static int parse_cpu_list(const char *arg, cpu_set_t *cpuset, int *vcpu_map)
-> {
->         const char delim[] = ",";
->         char *cpustr, *cpu_list;
->         int i = 0, cpu;
->
->         TEST_ASSERT(!!cpuset ^ !!vcpu_map);
->
->         cpu_list = strdup(arg);
->         TEST_ASSERT(cpu_list, "Low memory\n");
->
->         cpustr = strtok(cpu_list, delim);
->         while (cpustr) {
->                 cpu = atoi(cpustr);
->                 TEST_ASSERT(cpu >= 0, "Invalid cpu number: %d\n", cpu);
->                 if (vcpu_map)
->                         vcpu_to_lcpu_map[i++] = cpu_num;
->                 else
->                         CPU_SET(cpu_num, cpuset);
->                 cpu = strtok(NULL, delim);
->         }
->
->         free(cpu_list);
->
->         return i;
-> }
->
-
-Yeah, it was either my almost duplicate functions or have the one
-function do two things via if-else.  I am not happy with both
-approaches.
-
-I think I will pass an integer array which this parsing function will
-fill up and return an int denoting how many elements were filled. The
-caller then can use the array as they wish, to copy it in
-vcpu_to_lcpu_map or cpuset.
-
-> > @@ -383,6 +450,26 @@ static void help(char *name)
-> >       backing_src_help("-s");
-> >       printf(" -x: Split the memory region into this number of memslots.\n"
-> >              "     (default: 1)\n");
-> > +     printf(" -c: Comma separated values of the logical CPUs which will run\n"
-> > +            "     the vCPUs. Number of values should be equal to the number\n"
-> > +            "     of vCPUs.\n\n"
-> > +            "     Example: ./dirty_log_perf_test -v 3 -c 22,43,1\n"
-> > +            "     This means that the vcpu 0 will run on the logical cpu 22,\n"
-> > +            "     vcpu 1 on the logical cpu 43 and vcpu 2 on the logical cpu 1.\n"
-> > +            "     (default: No cpu mapping)\n\n");
-> > +     printf(" -d: Comma separated values of the logical CPUs on which\n"
-> > +            "     dirty_log_perf_test will run. Without -c option, all of\n"
-> > +            "     the vcpus and main process will run on the cpus provided here.\n"
-> > +            "     This option also accepts a single cpu. (default: No cpu mapping)\n\n"
-> > +            "     Example 1: ./dirty_log_perf_test -v 3 -c 22,43,1 -d 101\n"
-> > +            "     Main application thread will run on logical cpu 101 and\n"
-> > +            "     vcpus will run on the logical cpus 22, 43 and 1\n\n"
-> > +            "     Example 2: ./dirty_log_perf_test -v 3 -d 101\n"
-> > +            "     Main application thread and vcpus will run on the logical\n"
-> > +            "     cpu 101\n\n"
-> > +            "     Example 3: ./dirty_log_perf_test -v 3 -d 101,23,53\n"
-> > +            "     Main application thread and vcpus will run on logical cpus\n"
-> > +            "     101, 23 and 53.\n");
-> >       puts("");
-> >       exit(0);
-> >  }
->
-> > @@ -455,6 +550,13 @@ int main(int argc, char *argv[])
-> >               }
-> >       }
-> >
->
-> I wonder if we should make -c and -d mutually exclusive.  Tweak -c to include the
-> application thread, i.e. TEST_ASSERT(nr_lcpus == nr_vcpus+1) and require 1:1 pinning
-> for all tasks.  E.g. allowing "-c ..., -d 0,1,22" seems unnecessary.
->
-
-One downside I can think of will be if we add some worker threads
-which are not vcpus then all of those threads will end up running on a
-single cpu unless we edit this parsing logic again.
-
-Current implementation gives vcpus special treatment via -c and for
-the whole application via -d. This gives good separation of concerns
-via flags.
+Why can't TC be used for this? Let's not duplicate the same
+functionality in two places, TC flower can already match on 
+tunnel headers.

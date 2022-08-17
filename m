@@ -2,164 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0216659669E
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 03:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D535966A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 03:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237548AbiHQBWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 21:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
+        id S238108AbiHQBXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 21:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiHQBWb (ORCPT
+        with ESMTP id S237673AbiHQBXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 21:22:31 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9768B98D;
-        Tue, 16 Aug 2022 18:22:30 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M6qvN5fCszmVm6;
-        Wed, 17 Aug 2022 09:20:16 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 17 Aug 2022 09:22:28 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 17 Aug 2022 09:22:27 +0800
-Subject: Re: [PATCH v3 2/2] rcu: Simplify the code logic of rcu_init_nohz()
-To:     kernel test robot <lkp@intel.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Neeraj Upadhyay" <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <kbuild-all@lists.01.org>
-References: <20220816124839.1911-3-thunder.leizhen@huawei.com>
- <202208170309.j1yYU9wN-lkp@intel.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <1d0fdfb2-a134-546a-9159-8392d99f25c4@huawei.com>
-Date:   Wed, 17 Aug 2022 09:22:26 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Tue, 16 Aug 2022 21:23:23 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668C31081
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 18:23:21 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id cd25so4669491uab.8
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 18:23:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Misl/B06841rsdf51Aa+ttnbhsZR7d3YzAIKfH1afCM=;
+        b=MG0YgAX5i1o7sBUDQM1NCnFgnxkQaaQm8ZOK13l79EOrXwG3hxCVCuxw53YmF/GPmG
+         BotdAEanspQc99c8od7et+xJJfH666g+PKM2nqgz3aozMVwIaZpREipg9SXYXgriDnmG
+         gd/gkMlKOf8PYpghcO3mkXIF7SKNqJjlKBYT913vJf9YESWgf8pX2vYoNDz1IqpbTxV3
+         ey8qpYsAzqcukQgw/XSXbpnh4iqMa5QXp6N0QLpAN0eT/f7DTXgLZh1huFFG57VyQyzn
+         6HWrAgsd8srbQ2yyjWgBYeijyKZyB2lbk+DexhRKJ/HbmCuh55PZoJ2SmQL/CWZeRD8m
+         GOyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Misl/B06841rsdf51Aa+ttnbhsZR7d3YzAIKfH1afCM=;
+        b=GP8PR72sqUQeR2OAMVjYCZahWeeYUb+oW7szLy3pzVjQiiG84x7tL6cdB82SPyTqIU
+         D168TMTD/cDhU2pzSHV/17GYPILowCKkU1L0YMfEGjgmoglPqy2YNdzIyNBuUKk2YK6w
+         8JTFlnGjSR8rGMPQgBNNUaYr7ItE4ClVLMiZ7A3+vw230B5E1XlSK8hwMtZpDeLlhiIJ
+         TF62bL1Hrejeo2IE5CpV3DbclE64FkXnyCAaYxpyrjmk1ra9+02ZFq6hZQWbABtKX4P/
+         Uu/uwJoT8Ctz1NJCPQ+VpdS+iReS9jDkONCeFbcJPHqfQ2tHtFZI3wFcPI4kn7efJBK0
+         niQw==
+X-Gm-Message-State: ACgBeo3uIXgY3PXmn+uiLUevg3vyLf0LJQowtEPMKoZ+la52Co/F6PCf
+        K/1SVNb4bck1yMAMObcUZwGl0qdw5xEivm55cwOl8A==
+X-Google-Smtp-Source: AA6agR5ITNWjhKzMRt/O1Pao4VfpXIG2uEaU2CaLxbF3VzOqtgaIZ/UWesq0hyAy6dBXihAeRHYyLPGpOXaXwPHw0oU=
+X-Received: by 2002:ab0:785a:0:b0:386:d33c:d636 with SMTP id
+ y26-20020ab0785a000000b00386d33cd636mr10128457uaq.87.1660699400464; Tue, 16
+ Aug 2022 18:23:20 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <202208170309.j1yYU9wN-lkp@intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1660362668.git.bobby.eshleman@bytedance.com>
+ <5a93c5aad99d79f028d349cb7e3c128c65d5d7e2.1660362668.git.bobby.eshleman@bytedance.com>
+ <20220816123701-mutt-send-email-mst@kernel.org> <20220816110717.5422e976@kernel.org>
+ <YvtAktdB09tM0Ykr@bullseye> <20220816160755.7eb11d2e@kernel.org>
+In-Reply-To: <20220816160755.7eb11d2e@kernel.org>
+From:   "Cong Wang ." <cong.wang@bytedance.com>
+Date:   Tue, 16 Aug 2022 18:23:09 -0700
+Message-ID: <CAA68J_Z4voVS=UnY9Rg_dj2oUnEueWn82Q_qT328avdTtaASjA@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH 3/6] vsock: add netdev to vhost/virtio vsock
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Bobby Eshleman <bobbyeshleman@gmail.com>,
+        Bobby Eshleman <bobby.eshleman@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Aug 16, 2022 at 4:07 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Tue, 16 Aug 2022 07:02:33 +0000 Bobby Eshleman wrote:
+> > > From a cursory look (and Documentation/ would be nice..) it feels
+> > > very wrong to me. Do you know of any uses of a netdev which would
+> > > be semantically similar to what you're doing? Treating netdevs as
+> > > buildings blocks for arbitrary message passing solutions is something
+> > > I dislike quite strongly.
+> >
+> > The big difference between vsock and "arbitrary message passing" is that
+> > vsock is actually constrained by the virtio device that backs it (made
+> > up of virtqueues and the underlying protocol). That virtqueue pair is
+> > acting like the queues on a physical NIC, so it actually makes sense to
+> > manage the queuing of vsock's device like we would manage the queueing
+> > of a real device.
+> >
+> > Still, I concede that ignoring the netdev state is a probably bad idea.
+> >
+> > That said, I also think that using packet scheduling in vsock is a good
+> > idea, and that ideally we can reuse Linux's already robust library of
+> > packet scheduling algorithms by introducing qdisc somehow.
+>
+> We've been burnt in the past by people doing the "let me just pick
+> these useful pieces out of netdev" thing. Makes life hard both for
+> maintainers and users trying to make sense of the interfaces.
 
+I interpret this in a different way: we just believe "one size does
+not fit all",
+as most Linux kernel developers do. I am very surprised you don't.
 
-On 2022/8/17 3:55, kernel test robot wrote:
-> Hi Zhen,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on paulmck-rcu/dev]
-> [also build test WARNING on linus/master v6.0-rc1 next-20220816]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Zhen-Lei/rcu-nocb-Delete-local-variable-need_rcu_nocb_mask-in-rcu_init_nohz/20220816-205131
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
-> config: x86_64-randconfig-a004-20220815 (https://download.01.org/0day-ci/archive/20220817/202208170309.j1yYU9wN-lkp@intel.com/config)
-> compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-> reproduce (this is a W=1 build):
->         # https://github.com/intel-lab-lkp/linux/commit/a1d5079765918764de3ff6e3e63fa2db7f7c14df
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Zhen-Lei/rcu-nocb-Delete-local-variable-need_rcu_nocb_mask-in-rcu_init_nohz/20220816-205131
->         git checkout a1d5079765918764de3ff6e3e63fa2db7f7c14df
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    In file included from kernel/rcu/tree.c:4801:
->    kernel/rcu/tree_nocb.h: In function 'rcu_init_nohz':
->>> kernel/rcu/tree_nocb.h:1216:17: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
->     1216 |         cpumask = cpu_possible_mask;
->          |                 ^
-> 
-> 
-> vim +/const +1216 kernel/rcu/tree_nocb.h
+Feel free to suggest any other ways, eventually you will need to
+reimplement TC one way or the other.
 
-It's a shame. Sorry, I forgot to check "> error.txt".
+If you think about it in another way, vsock is networking too, its name
+contains a "sock", do I need to say more? :)
 
-> 
->   1208	
->   1209	void __init rcu_init_nohz(void)
->   1210	{
->   1211		int cpu;
->   1212		struct rcu_data *rdp;
->   1213		struct cpumask *cpumask = NULL;
->   1214	
->   1215	#if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
->> 1216		cpumask = cpu_possible_mask;
->   1217	#elif defined(CONFIG_NO_HZ_FULL)
->   1218		if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
->   1219			cpumask = tick_nohz_full_mask;
->   1220	#endif
->   1221	
->   1222		if (cpumask) {
->   1223			if (!cpumask_available(rcu_nocb_mask)) {
->   1224				if (!zalloc_cpumask_var(&rcu_nocb_mask, GFP_KERNEL)) {
->   1225					pr_info("rcu_nocb_mask allocation failed, callback offloading disabled.\n");
->   1226					return;
->   1227				}
->   1228			}
->   1229	
->   1230			cpumask_or(rcu_nocb_mask, rcu_nocb_mask, cpumask);
->   1231		}
->   1232	
->   1233		if (!cpumask_available(rcu_nocb_mask))
->   1234			return;
->   1235	
->   1236		if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
->   1237			pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
->   1238			cpumask_and(rcu_nocb_mask, cpu_possible_mask,
->   1239				    rcu_nocb_mask);
->   1240		}
->   1241		if (cpumask_empty(rcu_nocb_mask))
->   1242			pr_info("\tOffload RCU callbacks from CPUs: (none).\n");
->   1243		else
->   1244			pr_info("\tOffload RCU callbacks from CPUs: %*pbl.\n",
->   1245				cpumask_pr_args(rcu_nocb_mask));
->   1246		if (rcu_nocb_poll)
->   1247			pr_info("\tPoll for callbacks from no-CBs CPUs.\n");
->   1248	
->   1249		for_each_cpu(cpu, rcu_nocb_mask) {
->   1250			rdp = per_cpu_ptr(&rcu_data, cpu);
->   1251			if (rcu_segcblist_empty(&rdp->cblist))
->   1252				rcu_segcblist_init(&rdp->cblist);
->   1253			rcu_segcblist_offload(&rdp->cblist, true);
->   1254			rcu_segcblist_set_flags(&rdp->cblist, SEGCBLIST_KTHREAD_CB | SEGCBLIST_KTHREAD_GP);
->   1255			rcu_segcblist_clear_flags(&rdp->cblist, SEGCBLIST_RCU_CORE);
->   1256		}
->   1257		rcu_organize_nocb_kthreads();
->   1258	}
->   1259	
-> 
+>
+> What comes to mind if you're just after queuing is that we already
+> bastardized the CoDel implementation (include/net/codel_impl.h).
+> If CoDel is good enough for you maybe that's the easiest way?
+> Although I suspect that you're after fairness not early drops.
+> Wireless folks use CoDel as a second layer queuing. (CC: Toke)
 
--- 
-Regards,
-  Zhen Lei
+What makes you believe CoDel fits all cases? If it really does, you
+probably have to convince Toke to give up his idea on XDP map
+as it would no longer make any sense. I don't see you raise such
+an argument there... What makes you treat this differently with XDP
+map? I am very curious about your thought process here. ;-)
+
+Thanks.

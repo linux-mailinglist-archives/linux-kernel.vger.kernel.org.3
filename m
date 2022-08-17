@@ -2,176 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6064E596A99
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72356596AA4
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232963AbiHQHrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 03:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
+        id S231565AbiHQHtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 03:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232952AbiHQHrV (ORCPT
+        with ESMTP id S229637AbiHQHtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 03:47:21 -0400
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A967A763
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:47:20 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.west.internal (Postfix) with ESMTP id 5BF862B0645B;
-        Wed, 17 Aug 2022 03:47:14 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 17 Aug 2022 03:47:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1660722433; x=1660729633; bh=c10x6DPPH/
-        zyhRLNi3d5jZ8ntKycPsFvNbbCBkCZ6Wg=; b=ZTdpXVPLY+Eom76PVAvHzJ9qgy
-        wdAtZOnJHHp/TWy2k7Ss/kPsJwaq3mPMIp6LgJ6qk/hK+igzaiYy3CnfkbP37Td1
-        SBGA0Hx3i+bo1jkW979K77o2HD6PGJRzo8fWxlNYTAgm7jflKHILXVkdAtFubj3V
-        UQY8jOqPgP4oVAcL9ocxkagUbMtw4Thzc6OdvRW/d2IOe9XladHFPu+FB3a9elZW
-        Q3A1TsclMmsVzWngkiTiwi05a4S/P26neuZg5ThqOTLepL4fh60tPRHNI6NzvIFX
-        sMMZVjY0zQQn5UEpfb0wbUtjfkl5CZotikTLvslaPKxWT09qjDFl7ztk5h+g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660722433; x=1660729633; bh=c10x6DPPH/zyhRLNi3d5jZ8ntKyc
-        PsFvNbbCBkCZ6Wg=; b=h6EBQs+anDCv314V5tPWR40hOWF/0dR5pskwb4J0Q4Ry
-        FOlXHuSuBPAsFJu+Hiu1Jh4OHWDvJO2MsmoOikLYzJDtPsABIDAfQgvAwbe5l+5F
-        CRwFv6NbKKviE5A/AsVyXr2rcINCTQlAA0TBcWQ+Xrpx0U+9lzopC2cFFDSTD9VJ
-        07hYP907H0CO78oPa/p7nunsH5KsGKUSt0U9Fx+zzyjPnjXqnYhA3Wl6DkYYL4kF
-        HmH+PfX1DMT45ZfQ0F/TJtOYAX/8eFzz/OTc9nzOOmJWV0gizOgcnMcF9gBx0mdt
-        z1x8Jj0da9F6x+ymAUp4f5G2IXlCCJHV400yJVKHog==
-X-ME-Sender: <xms:AJ38YiblzUP1RWksJLh4aZLuT0u2fEpF06LoPEGy4evFNwNRYRsFAg>
-    <xme:AJ38YlbRiFWHfKPgmzIDi-4ahTYrlOOKBj7xSixixrgXIgSxzqQGxqRJwxGw5tMXe
-    NupYaY7cfWJdh2ahlM>
-X-ME-Received: <xmr:AJ38Ys-9_N0PDd1te12W0rhoZwWWRoZrT6DYZd6VlIyMLsEZSwiW6cH_cA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehhedguddvhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheeh
-    fffhvedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:AJ38Yko33FgNJg2jsSaEZPwMB-XBjwWSRZnwZWGryB0dm-SA5qnpgg>
-    <xmx:AJ38YtrK6w-U1n8XcoqyT_gn3BYeAwO6UOINBRQRK-j9rDT7vkA2Fg>
-    <xmx:AJ38YiTXgy2fUErJVSR2T4zL-AOszZ_5-GfStWhXkDLH9d4ywIUKEA>
-    <xmx:AZ38YmaKyuzgAxnIT_vbv7qFyOAwgX10VclP6NGlisLXOje2OeSiSjcNenM>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 17 Aug 2022 03:47:12 -0400 (EDT)
-Date:   Wed, 17 Aug 2022 09:47:10 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Dom Cobley <dom@raspberrypi.com>
-Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
-Message-ID: <20220817074710.w4c4xwj7edly2b5p@houat>
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
- <CAMuHMdWYo7M44uLNhTmJenGDreGALBZ9E48oyBDEeAuL=0h=dw@mail.gmail.com>
- <20220816132040.uwirtjm5yr6rdd3q@houat>
- <CAMuHMdWevP=3af=NneAJEDfOR+sz1thrQEhAQPNGrgitBtLjGA@mail.gmail.com>
- <20220816141116.5nuszmilqv2exdb3@houat>
- <CAMuHMdXq_xGPx46bdnUFGDiG4kcgdxtXaRGTucFd3TRq8353dg@mail.gmail.com>
- <20220816154956.pkdpxmmw27mia5ix@houat>
- <CAMuHMdX0L6cO_jYXKZTv0sm9V39Eiy_STiknSkdRQG4k-9GJeg@mail.gmail.com>
+        Wed, 17 Aug 2022 03:49:10 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E8167C89
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:49:10 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 73so11332634pgb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:49:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=DNiQd09UafzK11FBkwcs+iSGy+8QGplgYWkm+nS++S0=;
+        b=fj7UGrTDJkbe4FoWiYArk+SAIZwBIpOJ3w5z2iz5JNOUtWcHb2r3IvrOOq338ytPo4
+         mL9IX54+RP2R5Yrq0rHXROHF39LMDOtiWAx3vrEgr+q8R+Vd7ctvJgALho5IoPZ/PQ6a
+         /1bQIoUFBmlFR/5RKc/xOfICfR2SYgfJBw2hFk0qBAU1B2BR6DywKDtUK3zkIjsf6TxK
+         G0+JOE1ux1SC+iqIof0qxj+SxF6vafmOVvllp98ElKt/z3eilm9+dGeiAnkkzSIymD2R
+         T2icDVH+2Q9u17KY2yi5QZbN0pkGaaTAkz4QOb2upf1r19YyEdz91stc1zCJe1hZj4kQ
+         cK8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=DNiQd09UafzK11FBkwcs+iSGy+8QGplgYWkm+nS++S0=;
+        b=Lru8S7cvQvvSx2LxQKDD+3j0mZgyCvau38tVO1YoaRWZeafyPlwtUw+wI0sojrOFlt
+         EzgVvRhou3sK6Smq9NlVcOUScg+nz9PIEZ0tEGneIabpSUkaAVewxxM96AaQvYXgq/g+
+         6/jlPnA3TTMrmhLviaTUzwyn82jA79AYSZYPc2BiNcUG2lQ+NbqFk0IbKjjG5c/g4aVL
+         Ofn5wEqYO147m3oo4BgNcmYOX/EsCAXsXEX/G4rw8p1pKQEgjCSvdWXmP6DQSnVOp4yn
+         ejaTf8Qd+BULwhsisEND8lGzFxd6CawBrHY4LZTjUil/eTteLtRCQufr2bXvSpJPtTwy
+         AuGA==
+X-Gm-Message-State: ACgBeo1trIt7l0wAG0HWvwVgaGtu41eI4WrOOEYz9SZCg967p/NLU60o
+        OY5FS+StAQKDYNkytixi6lk=
+X-Google-Smtp-Source: AA6agR4vHtGkmizUZ/tTkNHmlQg+RREpiDotcib74icakxpdWZ1be5OldVWCoVxw1rPgpIsSgCXIvg==
+X-Received: by 2002:a63:8b43:0:b0:41c:cb91:2c47 with SMTP id j64-20020a638b43000000b0041ccb912c47mr20548848pge.609.1660722549845;
+        Wed, 17 Aug 2022 00:49:09 -0700 (PDT)
+Received: from fedora.. ([103.230.104.51])
+        by smtp.gmail.com with ESMTPSA id b14-20020a170902650e00b00172a2a41064sm427208plk.298.2022.08.17.00.49.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 00:49:09 -0700 (PDT)
+From:   Khalid Masum <khalid.masum.92@gmail.com>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Khalid Masum <khalid.masum.92@gmail.com>
+Subject: [PATCH v3 linux-next] soundwire: intel: Remove unnecessary TODO
+Date:   Wed, 17 Aug 2022 13:48:59 +0600
+Message-Id: <20220817074859.4759-1-khalid.masum.92@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="j4epzi7aeysknnpu"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdX0L6cO_jYXKZTv0sm9V39Eiy_STiknSkdRQG4k-9GJeg@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The capabilities enabled for multi-link are required as part of the
+programming sequences, even when a stream uses a single link we still
+use the syncArm/syncGo sequences. Therefore the TODO is no longer
+necessary.
 
---j4epzi7aeysknnpu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Suggested-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+---
+Previous discussions:
+- v2 Link: https://lore.kernel.org/lkml/20220816175954.5259-1-khalid.masum.92@gmail.com/
+- v1 Link: https://lore.kernel.org/lkml/20220814080416.7531-1-khalid.masum.92@gmail.com/
 
-On Wed, Aug 17, 2022 at 09:31:18AM +0200, Geert Uytterhoeven wrote:
-> Hi Maxime,
->=20
-> On Tue, Aug 16, 2022 at 5:50 PM Maxime Ripard <maxime@cerno.tech> wrote:
-> > On Tue, Aug 16, 2022 at 04:43:44PM +0200, Geert Uytterhoeven wrote:
-> > > > > > > Either you have to add them here (e.g. "hd720p50" and "hd720p=
-60"), or
-> > > > > > > handle them through "@<refresh>".  The latter would impact "[=
-PATCH v1
-> > > > > > > 09/35] drm/modes: Move named modes parsing to a separate func=
-tion", as
-> > > > > > > currently a named mode and a refresh rate can't be specified =
-both.
-> > > > > >
-> > > > > > I think the former would make more sense. It simplifies a bit t=
-he
-> > > > > > parser, and we're going to use a named mode anyway.
-> > > > > >
-> > > > > > > As "[PATCH v1 34/35] drm/modes: Introduce the tv_mode propert=
-y as a
-> > > > > > > command-line option" uses a separate "tv_mode" option, and no=
-t the main
-> > > > > > > mode name, I think you want to add them here.
-> > > > > >
-> > > > > > It's a separate story I think, we could have a named mode hd720=
-p50,
-> > > > > > which would be equivalent to 1280x720,tv_mode=3Dhd720p
-> > > > >
-> > > > > So where's the field rate in "1280x720,tv_mode=3Dhd720p"?
-> > > >
-> > > > Yeah, sorry I meant 1280x720@50,tv_mode=3Dhd720p
-> > >
-> > > Above you said "I think the former would make more sense", so that
-> > > should be "1280x720,tv_mode=3Dhd720p50"?
-> >
-> > No, 720p at 50Hz would be either hd720p50 or 1280x720@50,tv_mode=3Dhd72=
-0p
-> > and 60Hz would be hd720p60 or 1280x720@60,tv_mode=3Dhd720p
->=20
-> I disagree: hd720p50 and hd720p60 are different TV modes.
+Changes since v2:
+- Update commit title.
 
-I agree, and I don't see how that command-line doesn't express that?
+Changes since v1:
+- Remove the todo, leave rest of the code as is.
+- Update commit message.
 
-Maxime
+ drivers/soundwire/bus.c | 1 -
+ 1 file changed, 1 deletion(-)
 
---j4epzi7aeysknnpu
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
+index 8d4000664fa3..18158825a6d8 100644
+--- a/drivers/soundwire/bus.c
++++ b/drivers/soundwire/bus.c
+@@ -75,7 +75,6 @@ int sdw_bus_master_add(struct sdw_bus *bus, struct device *parent,
+ 
+ 	/*
+ 	 * Initialize multi_link flag
+-	 * TODO: populate this flag by reading property from FW node
+ 	 */
+ 	bus->multi_link = false;
+ 	if (bus->ops->read_prop) {
+-- 
+2.37.1
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYvyc/gAKCRDj7w1vZxhR
-xbYJAP4lo6uMsFFPTrsZHvEPpQ07NeUAWTRQuIXy05w+861pgAD/caEkBK1BcdYO
-Ivf5+QCpwXLo3HITMUo8nRREVgKEiwc=
-=haso
------END PGP SIGNATURE-----
-
---j4epzi7aeysknnpu--

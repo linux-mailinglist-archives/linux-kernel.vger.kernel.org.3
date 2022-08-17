@@ -2,104 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0269C5969A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 08:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B355969AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 08:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233366AbiHQGhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 02:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
+        id S238567AbiHQGlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 02:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiHQGhO (ORCPT
+        with ESMTP id S229488AbiHQGlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 02:37:14 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA46E792F2;
-        Tue, 16 Aug 2022 23:37:13 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M6ywr2Fflz4x3w;
-        Wed, 17 Aug 2022 16:36:59 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1660718232;
-        bh=5lvMCowArwqyA9jSE0Pt5Ze40kYbuyRJPhxadHGIwKI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=V5KRJdowJmJQRJnS7vKpdn3ZRXD54gk+olJ2P9NPfjmi7kMUASVQ2UXCdDQyrJ2l4
-         iCeFUua0EzB2yY0V/Z2I6yNQvrzfQPnJW1W5hxs27Vmfkv+k2UjzPlcs8lpiwhfw0s
-         rXEgyRzix9FElmstXFR+laxsxOuSRDwwsndo9tYxJEmh/ZBPqWv8VEb8et3MiTTUHN
-         x10j5udzl/wNVZu2HvSBSJ+AMCucLU+aGNDpNcmlYlO+lqwPbmi66mdTVNq3+seiCv
-         ALvJpMs3moLPQf8qL2I07gi/1+uKcpDS0UK8SnIKfeX71p9KEinWWl/Ojv6Y5XtZQh
-         hNA8dcj2NpgRA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Zi Yan <zi.yan@sent.com>, linux-mm@kvack.org
-Cc:     Zi Yan <ziy@nvidia.com>, David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        David Rientjes <rientjes@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Qin Jian <qinjian@cqplus1.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Guo Ren <guoren@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>, Arnd Bergmann <arnd@arndb.de>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH] arch: mm: rename FORCE_MAX_ZONEORDER to
- ARCH_FORCE_MAX_ORDER
-In-Reply-To: <20220815143959.1511278-1-zi.yan@sent.com>
-References: <20220815143959.1511278-1-zi.yan@sent.com>
-Date:   Wed, 17 Aug 2022 16:36:57 +1000
-Message-ID: <87tu6bv0ja.fsf@mpe.ellerman.id.au>
+        Wed, 17 Aug 2022 02:41:37 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D75B4D4C4
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 23:41:27 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id d14so17811329lfl.13
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 23:41:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=gyS63QYVOSXbJbkCMWQTHJu+HMhf9dFWV5AbgmswWB4=;
+        b=DlPzpQDdQkyHxNy6Qvs+2JB1BekXQva0JhudLKDBrHIbcqN/KJVVb9QIO5bSgk4YiO
+         ob9bkoN55Idu77b3pPG0B9NTrZU7NPRxTHUwKTdxWaDsoJLAvD/eay9gF/oM5nfVJ2Qo
+         ioo4H/PfTDyVzhN+eCwjz1jEN08EFrGUCSpCreLG+6DGWqrBzOOE30qySvXSQFGb1Q1+
+         tdtzfhSUP1Y8fwJEeCWSU2bf+pE8Xs2OFGKHFU63vj83MMc85t5+UvfGascVsoh261Ca
+         wyYQxuYHwyAN50q2K4/JHBKopKKWxy9flXLhvkBeeGv9mLg+ZSf4gHRYe4SM6yyWpC8P
+         uVdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=gyS63QYVOSXbJbkCMWQTHJu+HMhf9dFWV5AbgmswWB4=;
+        b=ro4OjPV6dgUxEDCcyJwmOmNbpiV3Pw7l7rwVQLEYkVE2eJkYZ3+soSguCeeztohPTM
+         F6oJmnZZUKRTCIM5VJM6/VTjJ9MUccHz0kZSOAmzel8LbIpioss2KPTveE6fj6jcz6GV
+         bc0Qk6PaKe3nQWe/8fmpT8hX0U8j622H/n+2GFr/t9QPqKyM5ZluX+X47v3NFD6ILTK+
+         WxhvE7QzuItzzfKIE5Ssrg09SLBZGe3A8wVhZxyq/j1pmipXHUerluJOhuve2j/E0DGv
+         WkHeJ00S67gACVbFWrm7gzMnSBZ7DgvYcVGBu8jvxbym77LzNQ05jDtHPUUDM4mAkrgH
+         juUw==
+X-Gm-Message-State: ACgBeo2TyEIhy2hpYqtTKktnAd1sMNtPTDm2B7A7QWSIgCKcMOCjTZTi
+        35Yh9Z8Ift5KBSqAFJ5qj4hm3ViUQ0rPLgukOj9AlQ==
+X-Google-Smtp-Source: AA6agR7DzH0SNfTXEpTGFS6iRsNRKEgPo7aS1SYAHQNpx4oKojr45DjrvgjaSgSr/F9/wc5OUA9G51WplGI/KFJdVlA=
+X-Received: by 2002:a05:6512:1190:b0:48c:bf4e:b64 with SMTP id
+ g16-20020a056512119000b0048cbf4e0b64mr8659854lfr.239.1660718485398; Tue, 16
+ Aug 2022 23:41:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220813042055.136832-1-tales.aparecida@gmail.com> <20220813042055.136832-2-tales.aparecida@gmail.com>
+In-Reply-To: <20220813042055.136832-2-tales.aparecida@gmail.com>
+From:   Sadiya Kazi <sadiyakazi@google.com>
+Date:   Wed, 17 Aug 2022 12:11:13 +0530
+Message-ID: <CAO2JNKWjX9UxsjOjEpZ5RM_yq1R2R_BE1Wg8rkt0g-tMiD_vkg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] Documentation: kunit: fix trivial typo
+To:     Tales Aparecida <tales.aparecida@gmail.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>, corbet@lwn.net,
+        Trevor Woerner <twoerner@gmail.com>, siqueirajordao@riseup.net,
+        mwen@igalia.com, andrealmeid@riseup.net, mairacanal@riseup.net,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zi Yan <zi.yan@sent.com> writes:
-> From: Zi Yan <ziy@nvidia.com>
+On Sat, Aug 13, 2022 at 9:51 AM Tales Aparecida
+<tales.aparecida@gmail.com> wrote:
 >
-> This Kconfig option is used by individual arch to set its desired
-> MAX_ORDER. Rename it to reflect its actual use.
+> Missing closing block-quote
 >
-> Acked-by: Mike Rapoport <rppt@linux.ibm.com>
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
-...
->  arch/powerpc/Kconfig                         | 2 +-
->  arch/powerpc/configs/85xx/ge_imp3a_defconfig | 2 +-
->  arch/powerpc/configs/fsl-emb-nonhw.config    | 2 +-
+> Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
+> ---
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
-cheers
+Hi,
+I do agree with David on a more descriptive commit message to be
+addressed in future patches. Otherwise, it looks good to me.
+
+Reviewed-by: Sadiya Kazi <sadiyakazi@google.com>
+
+Best Regards,
+Sadiya
+
+
+
+
+>  Documentation/dev-tools/kunit/run_wrapper.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
+> index cce203138fb7..db1e867820e7 100644
+> --- a/Documentation/dev-tools/kunit/run_wrapper.rst
+> +++ b/Documentation/dev-tools/kunit/run_wrapper.rst
+> @@ -30,7 +30,7 @@ We may want to use the following options:
+>
+>  .. code-block::
+>
+> -       ./tools/testing/kunit/kunit.py run --timeout=30 --jobs=`nproc --all
+> +       ./tools/testing/kunit/kunit.py run --timeout=30 --jobs=`nproc --all`
+>
+>  - ``--timeout`` sets a maximum amount of time for tests to run.
+>  - ``--jobs`` sets the number of threads to build the kernel.
+> --
+> 2.37.1
+>

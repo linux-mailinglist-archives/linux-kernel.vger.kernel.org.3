@@ -2,169 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8022A5978E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B2D5978E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241922AbiHQVZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 17:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
+        id S241549AbiHQVZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 17:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242045AbiHQVY6 (ORCPT
+        with ESMTP id S235717AbiHQVZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 17:24:58 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2057.outbound.protection.outlook.com [40.107.20.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8A7606B9;
-        Wed, 17 Aug 2022 14:24:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aNQq0X8liHdvPgGMUnYiCELE0rjZo1dnMWclWjgc4jeOk5PRmLrhDHZd756/JTQpGgNJvF5t9CcQWWOBIcXwgfFie5GJnn7M3AlInW6ueM0ohLfKtcwSykOgAA3jIMMHbA2M7CFxeB1SdQxeKVByIIDNlh7HAEoTUAN1bEpGdiarqxIgUFz6GXDAihflHMZbb8KmkcW4L9+uRkCRHpPCezEkU6eW5pKIjsmhzdwd0wu2EjqE3tFiDg+WBfNZt67tlFkLz87ysSS6CvH5NRK8kiNwxL7BLovJEzXUm3/rhJ9W/ROJ+Q0k2p3YFcVEO7J9HxQMC2qJepSDh4jftN72SQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3ri04zVLJ/96vi8XyPvfVqsE4g4845XK8ih8b/yd52M=;
- b=SVrWDDH5o8NqbNJNbR5V76FIm7sJEG0o2DJ/Jfp3dmQXEhlukrtTW7xRBDKScKk34Bsq1nYv6Xuvt+ZK1vua/fnmWKuq2+ObunFd/H33GVlvgugfVHqp0D3fmwKb/su8HvnZ2VjARremcN8kaRHeF/34u9JEBw1pus3le3sGtJ/vF3fuUtETqSNNqmbGCQLMgluixoryGq8Koz7FO6d4IDGVLkkyGubm2667NETVFEwpINyLNjyEl8yys12vpnVVfRMp8J+PUyPPdOQaJsdxAn0Be0JAbAkcDwhzW3jkP32+sx709vAHjDl9EyCOJhijTd8GjtGDNWpU68rBHDkUyw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3ri04zVLJ/96vi8XyPvfVqsE4g4845XK8ih8b/yd52M=;
- b=jNO+OjRvDX4ZZyO6IEfiObm45hMR8DztWV2g/7xP1ciQw6P28bXOB5umUcz7Hjx8eF7cgZw3ufIqRnuCXw0VeYu1f3fA3CdvvMvP1oMn6WolvcBQZ2x+R7MvCp1jtLBQwzOx25oggPWtcq/YpiahqoF1wlg3cUv7zU/Ij+QQ7W0=
-Received: from AS4PR04MB9244.eurprd04.prod.outlook.com (2603:10a6:20b:4e3::9)
- by DB6PR0401MB2373.eurprd04.prod.outlook.com (2603:10a6:4:4b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.19; Wed, 17 Aug
- 2022 21:24:52 +0000
-Received: from AS4PR04MB9244.eurprd04.prod.outlook.com
- ([fe80::4c93:c881:970:4315]) by AS4PR04MB9244.eurprd04.prod.outlook.com
- ([fe80::4c93:c881:970:4315%3]) with mapi id 15.20.5546.016; Wed, 17 Aug 2022
- 21:24:52 +0000
-From:   Mirela Rabulea <mirela.rabulea@nxp.com>
-To:     "mchehab@kernel.org" <mchehab@kernel.org>,
-        Ming Qian <ming.qian@nxp.com>,
-        "Mirela Rabulea (OSS)" <mirela.rabulea@oss.nxp.com>,
-        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>
-CC:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "X.H. Bao" <xiahong.bao@nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH] media: imx-jpeg: Disable useless interrupt to avoid
- kernel panic
-Thread-Topic: [PATCH] media: imx-jpeg: Disable useless interrupt to avoid
- kernel panic
-Thread-Index: AQHYp+YIZQuPM54Zmka+l+SxAcLKd62zr8WA
-Date:   Wed, 17 Aug 2022 21:24:52 +0000
-Message-ID: <a231331f2b78b907e7f1fd678828ad64fe48e17b.camel@nxp.com>
-References: <20220804093841.31337-1-ming.qian@nxp.com>
-In-Reply-To: <20220804093841.31337-1-ming.qian@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.5-0ubuntu1 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 563ea4ed-a7f4-42cb-1111-08da8096ec74
-x-ms-traffictypediagnostic: DB6PR0401MB2373:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: rIzpeusMRvL07YpZN1RECn5OkV3x8uE1Ou73dwngSy+Kaq/cHuHNbZ+DqejP4yxn+xmSrrUz13xjdwzPuGMmr/S1+SMRZpWM3OP6j3Y0zOOLMauCYyaRcsdaePAauz2TElDGOB54T3enIHG6QT1g3B8jBx4zxOBkguPkr56BDYEW5RgCmPYXuC+DFkA0ME9fjso3I+u3+uvR4GWs8a+PrRoLEVKCxdshvP5Lpkokgf8l+aKxmQP1kM3CrU9QN0bezBuWkA+uW5L8qU2HN3o75BzON5qroWm0dMQj2iNMKJi7fa0f4YqAETEOLNPk9FosVXV/jfJ1Ean1Qii7rW+5f6q5L8wEOoI8yS16IgGXazEb8b4ASOyEmxwxJQaLwGEp2f0y9nyWX8Q7GeOS1uWnGbuPC6zi/Jvf/cXrb1dMkXmy8CaHIHoykS4gBOOCYpbMal7mfygnoRubD8xGHGf/tyBdj520KjL5pVRNZuR+ud/WA3HasiGqtTAbfdnbQUainuv66rjrqmwO0mnldb2zhjuJ/7dEzEKalC60m8587SnQrKfm0LZRhNZ0Vjvcw1qXiTcDLQJpOJ/f528oD9hX/yKtUe8+x5z3tTHQIBELKqbTjw9ReMbegqKoMyIY//fq1hOzqOryIJagwT5nG2XPy25d2ccbqKB0cz2ZA2FPadVgiaRoTc1ZVLZg8IpygVw/TTuSyVlzgpxxsZHbPA/1hJXD9xS/ZLCGkgLs0s6sjccxy2JvL8QfCGfrBrzdJEH8DY7o/Ov53yMr8hkjc0WBVg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR04MB9244.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(366004)(396003)(39860400002)(136003)(346002)(66556008)(66446008)(66476007)(66946007)(91956017)(8676002)(4326008)(6512007)(83380400001)(64756008)(26005)(41300700001)(76116006)(8936002)(5660300002)(7416002)(86362001)(44832011)(6506007)(478600001)(2906002)(38100700002)(186003)(6486002)(110136005)(54906003)(122000001)(2616005)(36756003)(38070700005)(71200400001)(316002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eUcxTU9ENDVwdjR1enhFMlppaFB4QlQzMVFZdmRzcm1DOEpFODRwVDZ0Rkpr?=
- =?utf-8?B?T21XQUgvaHRRMlg4Q1VOdEltMHp3OHZXRStRV3lwM3FoMUJpeUxUREtwOHRK?=
- =?utf-8?B?ZFdJM2ZUUjFYc1EvS29ienJQcXF3b2JRMHd4T0NJRkJpaDlBRngrZTNPOXFW?=
- =?utf-8?B?R3pueCtiVXA1RFArcEJ2SDhtbmZ5K1ZTVjhMZDRZL3ZjUHdmVXI2V2xTRWly?=
- =?utf-8?B?SWUwa2NFMVVUUzVYV09SMnRjYWNNWjhIRDV1MWxFQ0lJUFVsWUZwQ2YrOUdW?=
- =?utf-8?B?ak42anBMdTQ3VWVMUGYwV1Jmd1FIc2ZiZnp1d2w3YTh0NGdJT0d1R3hhTzVh?=
- =?utf-8?B?VGcvSVJZdTFZd0MvTGpWQm5TUjNwTWJqNlQ0QVAzMElUeURwYjYvbjNud3J0?=
- =?utf-8?B?Y0RTc2E0QmJGaE12NUpJZG5HZlE3MVBURWc4K1RhNFJ3VDl0NElHbDJ4SjlK?=
- =?utf-8?B?d0x5Wmdzbm0zQW5jR0lFbVJGUHl5VjllUUZudUFrWDdTdEJadnJmU1hxQ210?=
- =?utf-8?B?V0ZQVHczblJ2emcyQlVWM2RtdmltTWJhRENmd25JRXM5M2FDSkFwcHdUc3Qr?=
- =?utf-8?B?QXZheUduR0FXNlRCNUs1TThRQm1WdjZ0a1V4ZW84R1pBZWtuU2NhV0xuWlRy?=
- =?utf-8?B?dGsrMnBkTWU5bld4ZzNqUTdldnAwTVFKV1pIcEZFd0Q5STE1MWkwWnJkVXRX?=
- =?utf-8?B?VVRDbjBLcUhRZW9tSmk2TWVDamcrby9US2F5MWJQQTM2Vi9lQmlnekVUc2Jp?=
- =?utf-8?B?d2RvQXUzVlgzdVNkSDFGbktQVENDOXcwRk53aGpONmZHTGRBNlBrUXVxTDI0?=
- =?utf-8?B?U0Urd3IxVCtLbFlmN0xpdEd6NkVkTkxqbFdOUVY1dUVvbHlsaVRjcVFhanZD?=
- =?utf-8?B?RWM3cE9jUi9Lay96ZWpMRXRPcWR5S3krWkxXLzRaSnp4QldTQzEveU93eUJq?=
- =?utf-8?B?MHlva0lBYlZrTHpzWlE2Y3dtMXpwcHpwL2R3SllDYzcxUHY0S282aXFNQjY2?=
- =?utf-8?B?dHJkaXBIeUh6ZkEveWs1VFNhL3djTmNKaXpyRXl4Yk1XU3B2YWZZUnJ1RnJt?=
- =?utf-8?B?SU14c3R0dk16QU9YTi94elpUemhpR05HQnVGc2xJMkMra3E0VktnMEhIRFhB?=
- =?utf-8?B?OHBhNWtvcktFdC9JdStGY2Uwck9VSW5TRnUvVW5uaG5HKzdPcW0rYnFWaThS?=
- =?utf-8?B?UllUZkl2Ni9PbjhFaUJTOVVSY0hwTjZSMUIrOE5wUHZFczdIeFg3eEkrK3gy?=
- =?utf-8?B?R0RyMjlTMmw5TG9VQmFZSExEVHpTRzE2UFpMbkJDbkxoK21qVlFlTkZFTGVh?=
- =?utf-8?B?L0tadUFHQWlwRkVOM25DT1ZZUmh1Mm13bmp6THJFdlZFRFk5Y0ZpOE5BSkdH?=
- =?utf-8?B?RzZHTWVHUHp6MWVxWmxBeXBsTzlMSmg0YzFKQU5qbTdTUXVVZGlCS1pPTFFK?=
- =?utf-8?B?K1c4cUcvbklrOGFYWG5qMCt3NVNOcms1SXhIQjREeGZ5YURYa0NMZ2FZeDVs?=
- =?utf-8?B?bEVpZ1VEdC9tOTNKa24xdXdvUHhsa0M3NnU3K0hoaDgrTTNzbEhWb3Z4aE1v?=
- =?utf-8?B?Y1FmT05PYlVra1pDaXJnekg5UDdjNUZiM0ZhbjZ0SDJyaEx3ZC9aWDVnWTJ5?=
- =?utf-8?B?R2w0YlM0QjhBMXZ2WFpCZ3pWQmtmSHFRc2lSbXRnUjZXVzBIZ3phRi9XYzJP?=
- =?utf-8?B?L3Y1eDFCdjRVVXZ1OTJGbnQybHowMWx2bGlQMWJSelFJUVJ1Vm5yZ2tFNSt1?=
- =?utf-8?B?ZTFrL1RqMDJWK2RwckQ0S2hwNjFUMlpCTTFlckVvQWlPYThhcy8xOHYrVUg1?=
- =?utf-8?B?R3lob0RUY3pINW9SMWd5dG5Wc2VKdkVEV3BrQ3dXU3dZbmNBeGxhZDlDRFlm?=
- =?utf-8?B?cFVzUTlORFJLWDdtRUNjNlB3ZW5rVE51d0M3RWloLzNtZmtpWkptQUVXQ0ZE?=
- =?utf-8?B?YWF2SG9KT2JpZEpKNU1Bamlmd3lkSVJMZ1hkSmRJbTFtaFJ6R1BCczBlaEQv?=
- =?utf-8?B?WEp0NkxLc1N2VXd4c0JpSnA1SHJxSGRBSkQ4YlBJeWtYQXFveXp6eDRBbHlq?=
- =?utf-8?B?MkNEV0JCVnV0OWpCSEVKa3pOK1JTbE5HelhJdDV2R1NjVmphS3JwRWJFOTlk?=
- =?utf-8?B?RzNZT0U0QVU3NE1aZGprTFd5c3BwZ3luemlQUmZzZ1J5UmxXL05qd1JaRVFQ?=
- =?utf-8?B?dVE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <75825C36A2B9DF41B1C1173E6B4868E5@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 17 Aug 2022 17:25:38 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2BAA897F
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 14:25:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660771537; x=1692307537;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Za5f+rOBaAXKSAVWrMtXSt6WjrODXFIZWDYX7cdYxb0=;
+  b=cHSrslUadBSKTiVQWkyrEB4efomd5g3WGH76/EVB2w57+tkdOvWnZgiE
+   9YAAuGePq9KA3AWtrT6awG0GH+d6j/D+8oZ40iyTlDPB7yWPvfv2paxqf
+   3YKFY+TT/lYlwsUPq6LcuVh/7W24wh7c9UwdTSgCn2opC3NNyPrG8QoDo
+   +ziaN/O8Lkn5AjN5WHfCCa+OnUWsDqcN7ivkAy6gddk5889PjbAmhTCgd
+   Je+nAR+bdyXpil6XtuvdXGht3AvQQbF6tUPbex67GumEmWmj8UlITAysJ
+   NaaoxpFoCRkFw5eHK6q7nmF48qAvDK0RNO/Gc92vWKLs5G7pHdAZ6+kML
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="291359218"
+X-IronPort-AV: E=Sophos;i="5.93,244,1654585200"; 
+   d="scan'208";a="291359218"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 14:25:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,244,1654585200"; 
+   d="scan'208";a="558280050"
+Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 17 Aug 2022 14:25:36 -0700
+Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oOQXf-0001M4-21;
+        Wed, 17 Aug 2022 21:25:35 +0000
+Date:   Thu, 18 Aug 2022 05:25:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jeff Layton <jlayton@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jlayton:iversion 1/7] samples/vfs/test-statx.c:111:38: warning:
+ format '%llx' expects a matching 'long long unsigned int' argument
+Message-ID: <202208180532.qEm90USm-lkp@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS4PR04MB9244.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 563ea4ed-a7f4-42cb-1111-08da8096ec74
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Aug 2022 21:24:52.6200
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aF7Xe7wHR6KO2SaReKXnVB98AKXkZ57ZO/ag1jg6xDPDnuvYc81+7BIAt9hSg9ns0jMjrPRXD+58VEre8/TQLg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0401MB2373
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIyLTA4LTA0IGF0IDE3OjM4ICswODAwLCBNaW5nIFFpYW4gd3JvdGU6DQo+IFRo
-ZXJlIGlzIGEgaGFyZHdhcmUgYnVnIHRoYXQgdGhlIGludGVycnVwdCBTVE1CVUZfSEFMRiBtYXkg
-YmUNCj4gdHJpZ2dlcmVkDQo+IGFmdGVyIG9yIHdoZW4gZGlzYWJsZSBpbnRlcnJ1cHQuDQo+IEl0
-IG1heSBsZWQgdG8gdW5leHBlY3RlZCBrZXJuZWwgcGFuaWMuDQo+IEFuZCBpbnRlcnJ1cHQgU1RN
-QlVGX0hBTEYgYW5kIFNUTUJVRl9SVE5EIGhhdmUgbm8gb3RoZXIgZWZmZWN0Lg0KPiBTbyBkaXNh
-YmxlIHRoZW0gYW5kIHRoZSB1bnVzZWQgaW50ZXJydXB0cy4NCj4gDQo+IG1lYW53aGlsZSBjbGVh
-ciB0aGUgaW50ZXJydXB0IHN0YXR1cyB3aGVuIGRpc2FibGUgaW50ZXJydXB0Lg0KPiANCj4gU2ln
-bmVkLW9mZi1ieTogTWluZyBRaWFuIDxtaW5nLnFpYW5AbnhwLmNvbT4NCg0KUmV2aWV3ZWQtYnk6
-IE1pcmVsYSBSYWJ1bGVhIDxtaXJlbGEucmFidWxlYUBueHAuY29tPg0KDQo+IC0tLQ0KPiAgZHJp
-dmVycy9tZWRpYS9wbGF0Zm9ybS9ueHAvaW14LWpwZWcvbXhjLWpwZWctaHcuYyB8IDQgKysrLQ0K
-PiAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4g
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vbnhwL2lteC1qcGVnL214Yy1qcGVn
-LWh3LmMNCj4gYi9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL254cC9pbXgtanBlZy9teGMtanBlZy1o
-dy5jDQo+IGluZGV4IDk0MThmY2Y3NDBhOC4uZWYyODEyMmE1ZWQ0IDEwMDY0NA0KPiAtLS0gYS9k
-cml2ZXJzL21lZGlhL3BsYXRmb3JtL254cC9pbXgtanBlZy9teGMtanBlZy1ody5jDQo+ICsrKyBi
-L2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vbnhwL2lteC1qcGVnL214Yy1qcGVnLWh3LmMNCj4gQEAg
-LTc2LDEyICs3NiwxNCBAQCB2b2lkIHByaW50X3dyYXBwZXJfaW5mbyhzdHJ1Y3QgZGV2aWNlICpk
-ZXYsIHZvaWQNCj4gX19pb21lbSAqcmVnKQ0KPiAgDQo+ICB2b2lkIG14Y19qcGVnX2VuYWJsZV9p
-cnEodm9pZCBfX2lvbWVtICpyZWcsIGludCBzbG90KQ0KPiAgew0KPiAtCXdyaXRlbCgweEZGRkZG
-RkZGLCByZWcgKyBNWENfU0xPVF9PRkZTRVQoc2xvdCwgU0xPVF9JUlFfRU4pKTsNCj4gKwl3cml0
-ZWwoMHhGRkZGRkZGRiwgcmVnICsgTVhDX1NMT1RfT0ZGU0VUKHNsb3QsIFNMT1RfU1RBVFVTKSk7
-DQo+ICsJd3JpdGVsKDB4RjBDLCByZWcgKyBNWENfU0xPVF9PRkZTRVQoc2xvdCwgU0xPVF9JUlFf
-RU4pKTsNCj4gIH0NCj4gIA0KPiAgdm9pZCBteGNfanBlZ19kaXNhYmxlX2lycSh2b2lkIF9faW9t
-ZW0gKnJlZywgaW50IHNsb3QpDQo+ICB7DQo+ICAJd3JpdGVsKDB4MCwgcmVnICsgTVhDX1NMT1Rf
-T0ZGU0VUKHNsb3QsIFNMT1RfSVJRX0VOKSk7DQo+ICsJd3JpdGVsKDB4RkZGRkZGRkYsIHJlZyAr
-IE1YQ19TTE9UX09GRlNFVChzbG90LCBTTE9UX1NUQVRVUykpOw0KPiAgfQ0KPiAgDQo+ICB2b2lk
-IG14Y19qcGVnX3N3X3Jlc2V0KHZvaWQgX19pb21lbSAqcmVnKQ0K
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git iversion
+head:   f4cbc6a71997effae6392d95c1a68884142d9d21
+commit: ab87f1864e9838a40a28f93e64b87a5ce9bfd3a7 [1/7] vfs: report change attribute in statx for IS_I_VERSION inodes
+config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220818/202208180532.qEm90USm-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=ab87f1864e9838a40a28f93e64b87a5ce9bfd3a7
+        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
+        git fetch --no-tags jlayton iversion
+        git checkout ab87f1864e9838a40a28f93e64b87a5ce9bfd3a7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash samples/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   samples/vfs/test-statx.c: In function 'dump_statx':
+>> samples/vfs/test-statx.c:111:38: warning: format '%llx' expects a matching 'long long unsigned int' argument [-Wformat=]
+     111 |                 printf(" MountId: %llx"), stx->stx_mnt_id;
+         |                                   ~~~^
+         |                                      |
+         |                                      long long unsigned int
+>> samples/vfs/test-statx.c:111:41: warning: right-hand operand of comma expression has no effect [-Wunused-value]
+     111 |                 printf(" MountId: %llx"), stx->stx_mnt_id;
+         |                                         ^
+
+
+vim +111 samples/vfs/test-statx.c
+
+    76	
+    77	static void dump_statx(struct statx *stx)
+    78	{
+    79		char buffer[256], ft = '?';
+    80	
+    81		printf("results=%x\n", stx->stx_mask);
+    82	
+    83		printf(" ");
+    84		if (stx->stx_mask & STATX_SIZE)
+    85			printf(" Size: %-15llu", (unsigned long long)stx->stx_size);
+    86		if (stx->stx_mask & STATX_BLOCKS)
+    87			printf(" Blocks: %-10llu", (unsigned long long)stx->stx_blocks);
+    88		printf(" IO Block: %-6llu", (unsigned long long)stx->stx_blksize);
+    89		if (stx->stx_mask & STATX_TYPE) {
+    90			switch (stx->stx_mode & S_IFMT) {
+    91			case S_IFIFO:	printf("  FIFO\n");			ft = 'p'; break;
+    92			case S_IFCHR:	printf("  character special file\n");	ft = 'c'; break;
+    93			case S_IFDIR:	printf("  directory\n");		ft = 'd'; break;
+    94			case S_IFBLK:	printf("  block special file\n");	ft = 'b'; break;
+    95			case S_IFREG:	printf("  regular file\n");		ft = '-'; break;
+    96			case S_IFLNK:	printf("  symbolic link\n");		ft = 'l'; break;
+    97			case S_IFSOCK:	printf("  socket\n");			ft = 's'; break;
+    98			default:
+    99				printf(" unknown type (%o)\n", stx->stx_mode & S_IFMT);
+   100				break;
+   101			}
+   102		} else {
+   103			printf(" no type\n");
+   104		}
+   105	
+   106		sprintf(buffer, "%02x:%02x", stx->stx_dev_major, stx->stx_dev_minor);
+   107		printf("Device: %-15s", buffer);
+   108		if (stx->stx_mask & STATX_INO)
+   109			printf(" Inode: %-11llu", (unsigned long long) stx->stx_ino);
+   110		if (stx->stx_mask & STATX_MNT_ID)
+ > 111			printf(" MountId: %llx"), stx->stx_mnt_id;
+   112		if (stx->stx_mask & STATX_NLINK)
+   113			printf(" Links: %-5u", stx->stx_nlink);
+   114		if (stx->stx_mask & STATX_TYPE) {
+   115			switch (stx->stx_mode & S_IFMT) {
+   116			case S_IFBLK:
+   117			case S_IFCHR:
+   118				printf(" Device type: %u,%u",
+   119				       stx->stx_rdev_major, stx->stx_rdev_minor);
+   120				break;
+   121			}
+   122		}
+   123		printf("\n");
+   124	
+   125		if (stx->stx_mask & STATX_MODE)
+   126			printf("Access: (%04o/%c%c%c%c%c%c%c%c%c%c)  ",
+   127			       stx->stx_mode & 07777,
+   128			       ft,
+   129			       stx->stx_mode & S_IRUSR ? 'r' : '-',
+   130			       stx->stx_mode & S_IWUSR ? 'w' : '-',
+   131			       stx->stx_mode & S_IXUSR ? 'x' : '-',
+   132			       stx->stx_mode & S_IRGRP ? 'r' : '-',
+   133			       stx->stx_mode & S_IWGRP ? 'w' : '-',
+   134			       stx->stx_mode & S_IXGRP ? 'x' : '-',
+   135			       stx->stx_mode & S_IROTH ? 'r' : '-',
+   136			       stx->stx_mode & S_IWOTH ? 'w' : '-',
+   137			       stx->stx_mode & S_IXOTH ? 'x' : '-');
+   138		if (stx->stx_mask & STATX_UID)
+   139			printf("Uid: %5d   ", stx->stx_uid);
+   140		if (stx->stx_mask & STATX_GID)
+   141			printf("Gid: %5d\n", stx->stx_gid);
+   142	
+   143		if (stx->stx_mask & STATX_ATIME)
+   144			print_time("Access: ", &stx->stx_atime);
+   145		if (stx->stx_mask & STATX_MTIME)
+   146			print_time("Modify: ", &stx->stx_mtime);
+   147		if (stx->stx_mask & STATX_CTIME)
+   148			print_time("Change: ", &stx->stx_ctime);
+   149		if (stx->stx_mask & STATX_BTIME)
+   150			print_time("Birth: ", &stx->stx_btime);
+   151		if (stx->stx_mask & STATX_CHANGE_ATTR)
+   152			printf("Change Attr: 0x%llx\n", stx->stx_change_attr);
+   153	
+   154		if (stx->stx_attributes_mask) {
+   155			unsigned char bits, mbits;
+   156			int loop, byte;
+   157	
+   158			static char attr_representation[64 + 1] =
+   159				/* STATX_ATTR_ flags: */
+   160				"????????"	/* 63-56 */
+   161				"????????"	/* 55-48 */
+   162				"????????"	/* 47-40 */
+   163				"????????"	/* 39-32 */
+   164				"????????"	/* 31-24	0x00000000-ff000000 */
+   165				"????????"	/* 23-16	0x00000000-00ff0000 */
+   166				"???me???"	/* 15- 8	0x00000000-0000ff00 */
+   167				"?dai?c??"	/*  7- 0	0x00000000-000000ff */
+   168				;
+   169	
+   170			printf("Attributes: %016llx (",
+   171			       (unsigned long long)stx->stx_attributes);
+   172			for (byte = 64 - 8; byte >= 0; byte -= 8) {
+   173				bits = stx->stx_attributes >> byte;
+   174				mbits = stx->stx_attributes_mask >> byte;
+   175				for (loop = 7; loop >= 0; loop--) {
+   176					int bit = byte + loop;
+   177	
+   178					if (!(mbits & 0x80))
+   179						putchar('.');	/* Not supported */
+   180					else if (bits & 0x80)
+   181						putchar(attr_representation[63 - bit]);
+   182					else
+   183						putchar('-');	/* Not set */
+   184					bits <<= 1;
+   185					mbits <<= 1;
+   186				}
+   187				if (byte)
+   188					putchar(' ');
+   189			}
+   190			printf(")\n");
+   191		}
+   192	}
+   193	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,77 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4E5597782
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1A1597786
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241758AbiHQUJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 16:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51920 "EHLO
+        id S238278AbiHQUJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 16:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241590AbiHQUIU (ORCPT
+        with ESMTP id S241519AbiHQUIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 16:08:20 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FBE1025;
-        Wed, 17 Aug 2022 13:08:19 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id q74so7380686iod.9;
-        Wed, 17 Aug 2022 13:08:19 -0700 (PDT)
+        Wed, 17 Aug 2022 16:08:50 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3485D119
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:08:42 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id o14-20020a17090a0a0e00b001fabfd3369cso1612323pjo.5
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:08:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=JCgNCnBmoMTmDvvCiS4lXyw582xnOmRe3hBk8pGv54A=;
-        b=Jw3DxXzUB1rR7pOYgySvosGI70W3Z4JpmQOZUAIlOMR2rfMjlBBAT9xnsrQus8QDCy
-         hK6SCOF8Ki+W1NDTasXIFK1Jtp0xOfSTpnxpfLtNePSjMgmBUTHFeNZqo6rGAjMKpEv5
-         T2DN0lvCgmWG9YxPuEyOkSUs5Oj9/eMsdUSZWW2fpCWmDBGrwM/TrRH6JQtHyLsejUzl
-         2CQnXHIWutGaeP2TyqfMbPjlhxMs6FOOwDGxgcXKEBj/ccRrVcFv77rMOpzBTtsCjpD7
-         qSn8SzOTtCbMsnlET3H9dDgnli69SBpxNqhghAnfgqokaQyypoR4dx4mFzNh8rw4mtnN
-         baZg==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=Brs/W4+fSTjZc3XGeUQqrjHBcxapIUBaWsMZSunKKfc=;
+        b=YPNhOtLwlDb4HPD9RTZwy4oTOEH6iqB1SNfZ97TmEKQIH5TTutZ/SSFNGRDCBbP5Of
+         Bh6ZHZ/KjIPj4nnturarCUbcM5TZ/vLn3xh/zw+KAx+Z3q8pIrH+Ursc7X87Eb0jJkpL
+         98eh82JWIMNnm7/j4obeXbcQ3GNu9oC/WfZaA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=JCgNCnBmoMTmDvvCiS4lXyw582xnOmRe3hBk8pGv54A=;
-        b=sNGeACltLTtiqw9uL2s8aCOdsVcwcfC7WS/W/GnpwtLOIg1WMSeziy0OrOcyu/xddd
-         XCpYh5iCWbnzidyaQk+CcNgVeR2s81FojVilRWYn36sMzvBmUQOXhz25d+3zDISyUiXy
-         StlXXbs7sCNdymwLIAb4WM0O0JFuHNBKBnwD1Czr4MZLZkm+2G8/g4GBdIl3oyEohZk2
-         iHrxwI7EsLmjV+v5nb/6XJtk2n53/WIGJfgnkVJXUjFbWbWXmtOLy89ghec0iXjxesrf
-         LUBq20YWhxIr9KP1bUgOmsWBZhNIHHUozlOQSwIjjdPE+fMFzj2+OTLrTcwrJXEnnDTX
-         fIMg==
-X-Gm-Message-State: ACgBeo3DAglrqwg8OFrO6hffTuedU84SqAzzW3I7tP3AUnFacjqvSu2+
-        lb/Ku1ec2lvTaD5hYHct2kazewswgMcsPrAz9QI=
-X-Google-Smtp-Source: AA6agR4Z9yJ9LvneZHFRhrCvN4J6stu2Qk3WYhEcKR4FDLl5XM5VN3tFVf4DBBjoVdEEMKKhv/6zN3seiz3wtZMGCcM=
-X-Received: by 2002:a05:6602:150c:b0:67c:149b:a349 with SMTP id
- g12-20020a056602150c00b0067c149ba349mr11920881iow.168.1660766899208; Wed, 17
- Aug 2022 13:08:19 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=Brs/W4+fSTjZc3XGeUQqrjHBcxapIUBaWsMZSunKKfc=;
+        b=h6vLunqCygjeTOSEvEbdXB2EpTHXAln7jaJKvJAZX+H1f0vVIE7IAYTp6Qd73TQjin
+         ICSjL0516fCRk4PT88/ptYbJ3eM34B4nCf9fBgIkmho8HsWhjiV78ADrOmBcGsS4aO8H
+         0DTWFqtDkMsbLcpryTP5mr3zZLA9e46ABmXEeDqKI+S46wp7nHGeFuBvqSHXGqICpcGv
+         3p/WOBXmrMO+oQnZIOCsYjNllzF28OpLO+sYwCoKHUt6aTfl/qPnrsKTE2PskMwq6rbZ
+         UTHdW+Mzp/Wym9iz0AKLcw852jWpM9FOO4CKa0a12PAYzH2wXJpX8axKnxIIy6z8ls3v
+         8t/A==
+X-Gm-Message-State: ACgBeo2n5Y8pvtxgM2AntlSECWBmN+BDd8gt6Z3DVhJ3ZIrARcORNvGK
+        /LyV36g6jRvHAZHmQWuiihHJHg==
+X-Google-Smtp-Source: AA6agR5SxPib9LetocQRNIM3FEcdqnApbWc6q3KkvlCH2okTt3qzIUM/nSw2U1GR+l5CPPgg4k9fMQ==
+X-Received: by 2002:a17:902:f70a:b0:170:c5e7:874c with SMTP id h10-20020a170902f70a00b00170c5e7874cmr27577177plo.109.1660766921931;
+        Wed, 17 Aug 2022 13:08:41 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b7-20020a17090a12c700b001fa9f86f20csm1943898pjg.49.2022.08.17.13.08.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 13:08:41 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 13:08:40 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>
+Subject: Re: [PATCH v9 09/27] rust: add `compiler_builtins` crate
+Message-ID: <202208171308.B9F3832496@keescook>
+References: <20220805154231.31257-1-ojeda@kernel.org>
+ <20220805154231.31257-10-ojeda@kernel.org>
 MIME-Version: 1.0
-References: <cover.1660761470.git.dxu@dxuuu.xyz> <3a707dd1ec4a2441425a8882072c69ffb774ed4d.1660761470.git.dxu@dxuuu.xyz>
-In-Reply-To: <3a707dd1ec4a2441425a8882072c69ffb774ed4d.1660761470.git.dxu@dxuuu.xyz>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Wed, 17 Aug 2022 22:07:43 +0200
-Message-ID: <CAP01T76-nocaXY9B28a6cvwLY_3irFyOTF8xgoV9ZdcChj4T+A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/4] bpf: Add stub for btf_struct_access()
-To:     Daniel Xu <dxu@dxuuu.xyz>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, pablo@netfilter.org, fw@strlen.de,
-        toke@kernel.org, netfilter-devel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220805154231.31257-10-ojeda@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 Aug 2022 at 20:43, Daniel Xu <dxu@dxuuu.xyz> wrote:
->
-> Add corresponding unimplemented stub for when CONFIG_BPF_SYSCALL=n
->
-> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> ---
+On Fri, Aug 05, 2022 at 05:41:54PM +0200, Miguel Ojeda wrote:
+> Rust provides `compiler_builtins` as a port of LLVM's `compiler-rt`.
+> Since we do not need the vast majority of them, we avoid the
+> dependency by providing our own crate.
+> 
+> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-- 
+Kees Cook

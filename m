@@ -2,309 +2,409 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED7B597292
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E21C25972AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236218AbiHQPIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 11:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32790 "EHLO
+        id S240521AbiHQPIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 11:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240479AbiHQPIZ (ORCPT
+        with ESMTP id S240866AbiHQPIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 11:08:25 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AE59D65D
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:08:23 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-335624d1e26so39846457b3.4
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:08:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=RptizGALOcGDZUaMSejU1Y48xlCDOc6zbnU/3jqvVSU=;
-        b=i5vVDoAdUT1wNEh6TTFJmIvzcPK8JyoFGBTSTAjRCy6PmTl0oUfurtrjsgLVVZUUuC
-         HIqeMgKN+Zzrys4bzn50422vz1YipmDJwolIqatz5fa1flvlAFVrNlqM7imjNblbuw6/
-         LuqeQXemUTOKtKL1E91HyDlo3QnyDwCpnjxUnMI3U3uoeWMqDFjdE3ySYEMFgdMonj9j
-         gvCLTSTYW2RRHn77dDwiwEiAdbxRlV/yPKmQkgBLNn2fhGoI0IkC+eTOzt05jbfAtYfo
-         ZTGbWEq+Nbz/buQvtTDOIoTVhqnwM2fet/GWp4PW8b0RMktLI/ovXmmNfuuAL+c7m9Pv
-         4yFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=RptizGALOcGDZUaMSejU1Y48xlCDOc6zbnU/3jqvVSU=;
-        b=U+3rHSoAN/o99QD6uWqRwguG9lRYjTRuxKHVyAm7uqN60Jh9L8qupTbHccRdwavo/k
-         dZKy2VFp/61Vs4IjNwPc6OH2Dvxuu7xllAI2xPM4oRUGBmZBof9PJ3ehcX3oGYaNJDOH
-         X946Tv6rCyJtTStBa8ETqxY31pgRUac/DTHrpHrFqEeDy9ASBAfttdE3JywYSljx3MnG
-         9MZs4P6kuvJb9/XrWaiBL7o02HOBVmIl+8QyZk0YJzqOkr/TKc0TkSHGOWh9clnCYpa7
-         LYowoHXHcSTJ/tFhn64PQuLzJaamBBzvTUpkDGPlVpo77wxVBP6JRj53p1ff+oBxbaqX
-         DrMw==
-X-Gm-Message-State: ACgBeo0nd0RXMnhhzaie/ZPoxf1yKeXcdCW7xPq37LKhV0fAIpX8QW8d
-        PULWyGmBjNtN/uAWkpsfH/Nf66x3DKuwealI9PT3mA==
-X-Google-Smtp-Source: AA6agR4Kh7XKd42YFRE4fLJZ24Hk1ziFruRUTG9ZTc8GZG07Pj+S6jz8YvWE+qjBYTWcTREH6SFqAnVAy2AWF2tqUjk=
-X-Received: by 2002:a0d:cb02:0:b0:334:e16c:8d36 with SMTP id
- n2-20020a0dcb02000000b00334e16c8d36mr3713665ywd.86.1660748901817; Wed, 17 Aug
- 2022 08:08:21 -0700 (PDT)
+        Wed, 17 Aug 2022 11:08:21 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD40E32054;
+        Wed, 17 Aug 2022 08:08:13 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id E1A831BF206;
+        Wed, 17 Aug 2022 15:08:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1660748892;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RhUc/lTeRxJ9KymSIiaGmRrKWiZiIn2Gjl430W9tDkE=;
+        b=QVfMiyGdUSQBbEji2NYqZVkX4GNqCaxOfENMd/i2dgE/NP/81jso3ab2svBG1bGAfQbzXG
+        6UpWO/XDDPSjBYQHWQawSey72+5xJBhwjoi5nPkCz1PjDITLu9T1VRYD6QH/bGNbC/0v6c
+        WIaNKVhwZV1fgFbr5ANWsokCnDGQ18ROFY2jeohZBRjlEgT6IGEQ898fBFVnEv/InfwriD
+        Lh1AL0lL3TZbb2oF/AxVillcpDoxOavALMX1t4Kbj23lgFf4QNIOfksxg9ngrB5kUlGr4e
+        7aUwSbSNxaV3FLZB8VDiQPVIaCN9yV65TrqZmTVvVBRPAHXIl+rtI/M5z0PKsA==
+Date:   Wed, 17 Aug 2022 17:08:11 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Jerry Ray <jerry.ray@microchip.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [linux][PATCH] dts: arm: at91: Add SAMA5D3-EDS Board
+Message-ID: <Yv0EW5ujFG0IX+mp@mail.local>
+References: <20220817145645.32327-1-jerry.ray@microchip.com>
 MIME-Version: 1.0
-References: <20220808125745.22566-1-zhouchengming@bytedance.com>
- <20220808125745.22566-7-zhouchengming@bytedance.com> <CAKfTPtBbKoJ0r=tE+9E9KxHkCy1ucev_DxLRqeQrx39ZzizqGA@mail.gmail.com>
- <fa2e11fc-5a49-b88a-1daa-ad6e5f5dea51@bytedance.com>
-In-Reply-To: <fa2e11fc-5a49-b88a-1daa-ad6e5f5dea51@bytedance.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 17 Aug 2022 17:08:10 +0200
-Message-ID: <CAKfTPtC=zfd6SekH--_jrZQg-YPkCD4-W0S2WgVTZ_RqY_NdGw@mail.gmail.com>
-Subject: Re: [PATCH v4 6/9] sched/fair: fix another detach on unattached task
- corner case
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220817145645.32327-1-jerry.ray@microchip.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 Aug 2022 at 17:04, Chengming Zhou
-<zhouchengming@bytedance.com> wrote:
->
-> On 2022/8/17 23:01, Vincent Guittot wrote:
-> > On Mon, 8 Aug 2022 at 14:58, Chengming Zhou <zhouchengming@bytedance.com> wrote:
-> >>
-> >> commit 7dc603c9028e ("sched/fair: Fix PELT integrity for new tasks")
-> >> fixed two load tracking problems for new task, including detach on
-> >> unattached new task problem.
-> >>
-> >> There still left another detach on unattached task problem for the task
-> >> which has been woken up by try_to_wake_up() and waiting for actually
-> >> being woken up by sched_ttwu_pending().
-> >>
-> >> try_to_wake_up(p)
-> >>   cpu = select_task_rq(p)
-> >>   if (task_cpu(p) != cpu)
-> >>     set_task_cpu(p, cpu)
-> >>       migrate_task_rq_fair()
-> >>         remove_entity_load_avg()       --> unattached
-> >>         se->avg.last_update_time = 0;
-> >>       __set_task_cpu()
-> >>   ttwu_queue(p, cpu)
-> >>     ttwu_queue_wakelist()
-> >>       __ttwu_queue_wakelist()
-> >>
-> >> task_change_group_fair()
-> >>   detach_task_cfs_rq()
-> >>     detach_entity_cfs_rq()
-> >>       detach_entity_load_avg()   --> detach on unattached task
-> >>   set_task_rq()
-> >>   attach_task_cfs_rq()
-> >>     attach_entity_cfs_rq()
-> >>       attach_entity_load_avg()
-> >>
-> >> The reason of this problem is similar, we should check in detach_entity_cfs_rq()
-> >> that se->avg.last_update_time != 0, before do detach_entity_load_avg().
-> >>
-> >> This patch move detach/attach_entity_cfs_rq() functions up to be together
-> >> with other load tracking functions to avoid to use another #ifdef CONFIG_SMP.
-> >>
-> >> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> >> ---
-> >>  kernel/sched/fair.c | 132 +++++++++++++++++++++++---------------------
-> >>  1 file changed, 68 insertions(+), 64 deletions(-)
-> >>
-> >> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> >> index f52e7dc7f22d..4bc76d95a99d 100644
-> >> --- a/kernel/sched/fair.c
-> >> +++ b/kernel/sched/fair.c
-> >> @@ -874,9 +874,6 @@ void init_entity_runnable_average(struct sched_entity *se)
-> >>  void post_init_entity_util_avg(struct task_struct *p)
-> >>  {
-> >>  }
-> >> -static void update_tg_load_avg(struct cfs_rq *cfs_rq)
-> >> -{
-> >> -}
-> >>  #endif /* CONFIG_SMP */
-> >>
-> >>  /*
-> >> @@ -3176,6 +3173,7 @@ void reweight_task(struct task_struct *p, int prio)
-> >>         load->inv_weight = sched_prio_to_wmult[prio];
-> >>  }
-> >>
-> >> +static inline int cfs_rq_throttled(struct cfs_rq *cfs_rq);
-> >>  static inline int throttled_hierarchy(struct cfs_rq *cfs_rq);
-> >>
-> >>  #ifdef CONFIG_FAIR_GROUP_SCHED
-> >> @@ -4086,6 +4084,71 @@ static void remove_entity_load_avg(struct sched_entity *se)
-> >>         raw_spin_unlock_irqrestore(&cfs_rq->removed.lock, flags);
-> >>  }
-> >>
-> >> +#ifdef CONFIG_FAIR_GROUP_SCHED
-> >> +/*
-> >> + * Propagate the changes of the sched_entity across the tg tree to make it
-> >> + * visible to the root
-> >> + */
-> >> +static void propagate_entity_cfs_rq(struct sched_entity *se)
-> >> +{
-> >> +       struct cfs_rq *cfs_rq = cfs_rq_of(se);
-> >> +
-> >> +       if (cfs_rq_throttled(cfs_rq))
-> >> +               return;
-> >> +
-> >> +       if (!throttled_hierarchy(cfs_rq))
-> >> +               list_add_leaf_cfs_rq(cfs_rq);
-> >> +
-> >> +       /* Start to propagate at parent */
-> >> +       se = se->parent;
-> >> +
-> >> +       for_each_sched_entity(se) {
-> >> +               cfs_rq = cfs_rq_of(se);
-> >> +
-> >> +               update_load_avg(cfs_rq, se, UPDATE_TG);
-> >> +
-> >> +               if (cfs_rq_throttled(cfs_rq))
-> >> +                       break;
-> >> +
-> >> +               if (!throttled_hierarchy(cfs_rq))
-> >> +                       list_add_leaf_cfs_rq(cfs_rq);
-> >> +       }
-> >> +}
-> >> +#else
-> >> +static void propagate_entity_cfs_rq(struct sched_entity *se) { }
-> >> +#endif
-> >> +
-> >> +static void detach_entity_cfs_rq(struct sched_entity *se)
-> >> +{
-> >> +       struct cfs_rq *cfs_rq = cfs_rq_of(se);
-> >> +
-> >> +       /*
-> >> +        * In case the task sched_avg hasn't been attached:
-> >> +        * - A forked task which hasn't been woken up by wake_up_new_task().
-> >> +        * - A task which has been woken up by try_to_wake_up() but is
-> >> +        *   waiting for actually being woken up by sched_ttwu_pending().
-> >> +        */
-> >> +       if (!se->avg.last_update_time)
-> >> +               return;
-> >
-> > The 2 lines above and the associated comment are the only relevant
-> > part of the patch, aren't they ?
-> > Is everything else just code moving from one place to another one
-> > without change ?
->
-> Yes, everything else is just code movement.
+Hello,
 
-Could you remove such code movement ? It doesn't add any value to the
-patch, does it ? But It makes the patch quite difficult to review and
-I wasted a lot of time looking for what really changed in the code
+On 17/08/2022 09:56:45-0500, Jerry Ray wrote:
+> This patch adds 1 file - base device tree for SAMA5D3-EDS board.
+> 
+> The SAMA5D3-EDS board is an Ethernet Development Platform allowing for
+> evaluating many Microchip ethernet switch and PHY products.  Various
+> daughter cards can connect up via an RGMII connector or an RMII connector.
+> 
+> The EDS board is not intended for stand-alone use and has no ethernet
+> capabilities when no daughter board is connected.  As such, this device
+> tree is intended to be used with a DT overlay defining the add-on board.
+> To better ensure consistency, some items are defined here as a form of
+> documentation so that all add-on overlays will use the same terms.
+> 
+> Google search keywords: "Microchip SAMA5D3-EDS"
+> 
+> Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
+> ---
+>  arch/arm/boot/dts/at91-sama5d3_eds.dts | 314 +++++++++++++++++++++++++
+>  1 file changed, 314 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/at91-sama5d3_eds.dts
+> 
+> diff --git a/arch/arm/boot/dts/at91-sama5d3_eds.dts b/arch/arm/boot/dts/at91-sama5d3_eds.dts
+> new file mode 100644
+> index 000000000000..b7f0e200f7cb
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/at91-sama5d3_eds.dts
+> @@ -0,0 +1,314 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * at91-sama5d3_eds.dts - Device Tree file for the SAMA5D3 Ethernet
+> + *    Development System board.
+> + *
+> + *  Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
+> + *		  2022 Jerry Ray <jerry.ray@microchip.com>
+> + */
+> +/dts-v1/;
+> +#include "sama5d36.dtsi"
+> +
+> +/ {
+> +	model = "SAMA5D3 Ethernet Development System";
+> +	compatible = "atmel,sama5d3-xplained", "atmel,sama5d3", "atmel,sama5";
 
-Thanks
+You probably want a compatible string other than "atmel,sama5d3-xplained". Don't forget to document it.
 
->
-> Thanks!
->
-> >
-> >> +
-> >> +       /* Catch up with the cfs_rq and remove our load when we leave */
-> >> +       update_load_avg(cfs_rq, se, 0);
-> >> +       detach_entity_load_avg(cfs_rq, se);
-> >> +       update_tg_load_avg(cfs_rq);
-> >> +       propagate_entity_cfs_rq(se);
-> >> +}
-> >> +
-> >> +static void attach_entity_cfs_rq(struct sched_entity *se)
-> >> +{
-> >> +       struct cfs_rq *cfs_rq = cfs_rq_of(se);
-> >> +
-> >> +       /* Synchronize entity with its cfs_rq */
-> >> +       update_load_avg(cfs_rq, se, sched_feat(ATTACH_AGE_LOAD) ? 0 : SKIP_AGE_LOAD);
-> >> +       attach_entity_load_avg(cfs_rq, se);
-> >> +       update_tg_load_avg(cfs_rq);
-> >> +       propagate_entity_cfs_rq(se);
-> >> +}
-> >> +
-> >>  static inline unsigned long cfs_rq_runnable_avg(struct cfs_rq *cfs_rq)
-> >>  {
-> >>         return cfs_rq->avg.runnable_avg;
-> >> @@ -4308,11 +4371,8 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
-> >>  }
-> >>
-> >>  static inline void remove_entity_load_avg(struct sched_entity *se) {}
-> >> -
-> >> -static inline void
-> >> -attach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se) {}
-> >> -static inline void
-> >> -detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se) {}
-> >> +static inline void detach_entity_cfs_rq(struct sched_entity *se) {}
-> >> +static inline void attach_entity_cfs_rq(struct sched_entity *se) {}
-> >>
-> >>  static inline int newidle_balance(struct rq *rq, struct rq_flags *rf)
-> >>  {
-> >> @@ -11519,62 +11579,6 @@ static inline bool vruntime_normalized(struct task_struct *p)
-> >>         return false;
-> >>  }
-> >>
-> >> -#ifdef CONFIG_FAIR_GROUP_SCHED
-> >> -/*
-> >> - * Propagate the changes of the sched_entity across the tg tree to make it
-> >> - * visible to the root
-> >> - */
-> >> -static void propagate_entity_cfs_rq(struct sched_entity *se)
-> >> -{
-> >> -       struct cfs_rq *cfs_rq = cfs_rq_of(se);
-> >> -
-> >> -       if (cfs_rq_throttled(cfs_rq))
-> >> -               return;
-> >> -
-> >> -       if (!throttled_hierarchy(cfs_rq))
-> >> -               list_add_leaf_cfs_rq(cfs_rq);
-> >> -
-> >> -       /* Start to propagate at parent */
-> >> -       se = se->parent;
-> >> -
-> >> -       for_each_sched_entity(se) {
-> >> -               cfs_rq = cfs_rq_of(se);
-> >> -
-> >> -               update_load_avg(cfs_rq, se, UPDATE_TG);
-> >> -
-> >> -               if (cfs_rq_throttled(cfs_rq))
-> >> -                       break;
-> >> -
-> >> -               if (!throttled_hierarchy(cfs_rq))
-> >> -                       list_add_leaf_cfs_rq(cfs_rq);
-> >> -       }
-> >> -}
-> >> -#else
-> >> -static void propagate_entity_cfs_rq(struct sched_entity *se) { }
-> >> -#endif
-> >> -
-> >> -static void detach_entity_cfs_rq(struct sched_entity *se)
-> >> -{
-> >> -       struct cfs_rq *cfs_rq = cfs_rq_of(se);
-> >> -
-> >> -       /* Catch up with the cfs_rq and remove our load when we leave */
-> >> -       update_load_avg(cfs_rq, se, 0);
-> >> -       detach_entity_load_avg(cfs_rq, se);
-> >> -       update_tg_load_avg(cfs_rq);
-> >> -       propagate_entity_cfs_rq(se);
-> >> -}
-> >> -
-> >> -static void attach_entity_cfs_rq(struct sched_entity *se)
-> >> -{
-> >> -       struct cfs_rq *cfs_rq = cfs_rq_of(se);
-> >> -
-> >> -       /* Synchronize entity with its cfs_rq */
-> >> -       update_load_avg(cfs_rq, se, sched_feat(ATTACH_AGE_LOAD) ? 0 : SKIP_AGE_LOAD);
-> >> -       attach_entity_load_avg(cfs_rq, se);
-> >> -       update_tg_load_avg(cfs_rq);
-> >> -       propagate_entity_cfs_rq(se);
-> >> -}
-> >> -
-> >>  static void detach_task_cfs_rq(struct task_struct *p)
-> >>  {
-> >>         struct sched_entity *se = &p->se;
-> >> --
-> >> 2.36.1
-> >>
+> +
+> +	chosen {
+> +		stdout-path = "serial0:115200n8";
+> +	};
+> +
+> +	clocks {
+> +		slow_xtal {
+> +			clock-frequency = <32768>;
+> +		};
+> +
+> +		main_xtal {
+> +			clock-frequency = <12000000>;
+> +		};
+> +	};
+> +
+> +	gpio_keys {
+> +		compatible = "gpio-keys";
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_key_gpio>;
+> +
+> +		button-3 {
+> +			label = "PB_USER";
+> +			gpios = <&pioE 29 GPIO_ACTIVE_LOW>;
+> +			linux,code = <0x104>;
+> +			wakeup-source;
+> +		};
+> +	};
+> +
+> +	memory@20000000 {
+> +		reg = <0x20000000 0x10000000>;
+> +	};
+> +
+> +	regulators: regulators {
+> +		compatible = "simple-bus";
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		vcc_3v3_reg: BUCK_REG1 {
+> +			compatible = "regulator-fixed";
+> +			regulator-name = "VCC_3V3";
+> +			regulator-min-microvolt = <3300000>;
+> +			regulator-max-microvolt = <3300000>;
+> +			regulator-always-on;
+> +		};
+> +
+> +		vcc_2v5_reg: LDO_REG2 {
+> +			compatible = "regulator-fixed";
+> +			regulator-name = "VCC_2V5";
+> +			regulator-min-microvolt = <2500000>;
+> +			regulator-max-microvolt = <2500000>;
+> +			regulator-always-on;
+> +			vin-supply = <&vcc_3v3_reg>;
+> +		};
+> +
+> +		vcc_1v8_reg: LDO_REG3 {
+> +			compatible = "regulator-fixed";
+> +			regulator-name = "VCC_1V8";
+> +			regulator-min-microvolt = <1800000>;
+> +			regulator-max-microvolt = <1800000>;
+> +			regulator-always-on;
+> +			vin-supply = <&vcc_3v3_reg>;
+> +		};
+> +
+> +		vcc_1v2_reg: BUCK_REG4 {
+> +			compatible = "regulator-fixed";
+> +			regulator-name = "VCC_1V2";
+> +			regulator-min-microvolt = <1200000>;
+> +			regulator-max-microvolt = <1200000>;
+> +			regulator-always-on;
+> +		};
+> +
+> +		vcc_mmc0_reg: fixedregulator_mmc0 {
+> +			compatible = "regulator-fixed";
+> +			regulator-name = "mmc0-card-supply";
+> +			regulator-min-microvolt = <3300000>;
+> +			regulator-max-microvolt = <3300000>;
+> +			regulator-always-on;
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&pinctrl_vcc_mmc0_reg_gpio>;
+> +			gpio = <&pioE 2 GPIO_ACTIVE_LOW>;
+> +		};
+> +	};
+> +};
+> +
+> +&can0 {
+> +	status = "okay";
+> +};
+> +
+> +&dbgu {
+> +	status = "okay";
+> +};
+> +
+> +&ebi {
+> +	pinctrl-0 = <&pinctrl_ebi_nand_addr>;
+> +	pinctrl-names = "default";
+> +	status = "okay";
+> +
+> +	nand_controller: nand-controller {
+> +		status = "okay";
+> +
+> +		nand@3 {
+> +			reg = <0x3 0x0 0x2>;
+> +			atmel,rb = <0>;
+> +			nand-bus-width = <8>;
+> +			nand-ecc-mode = "hw";
+> +			nand-ecc-strength = <4>;
+> +			nand-ecc-step-size = <512>;
+> +			nand-on-flash-bbt;
+> +			label = "atmel_nand";
+> +
+> +			partitions {
+> +				compatible = "fixed-partitions";
+> +				#address-cells = <1>;
+> +				#size-cells = <1>;
+> +
+> +				at91bootstrap@0 {
+> +					label = "at91bootstrap";
+> +					reg = <0x0 0x40000>;
+> +				};
+> +
+> +				bootloader@40000 {
+> +					label = "bootloader";
+> +					reg = <0x40000 0xc0000>;
+> +				};
+> +
+> +				bootloaderenvred@100000 {
+> +					label = "bootloader env redundant";
+> +					reg = <0x100000 0x40000>;
+> +				};
+> +
+> +				bootloaderenv@140000 {
+> +					label = "bootloader env";
+> +					reg = <0x140000 0x40000>;
+> +				};
+> +
+> +				dtb@180000 {
+> +					label = "device tree";
+> +					reg = <0x180000 0x80000>;
+> +				};
+> +
+> +				kernel@200000 {
+> +					label = "kernel";
+> +					reg = <0x200000 0x600000>;
+> +				};
+> +
+> +				rootfs@800000 {
+> +					label = "rootfs";
+> +					reg = <0x800000 0x0f800000>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&i2c0 {
+> +	pinctrl-0 = <&pinctrl_i2c0_pu>;
+> +	status = "okay";
+> +};
+> +
+> +&i2c1 {
+> +	status = "okay";
+> +};
+> +
+> +&i2c2 {
+> +	dmas = <0>, <0>;	/* Do not use DMA for i2c2 */
+> +	pinctrl-0 = <&pinctrl_i2c2_pu>;
+> +	status = "okay";
+> +};
+> +
+> +&mmc0 {
+> +	pinctrl-0 = <&pinctrl_mmc0_clk_cmd_dat0 &pinctrl_mmc0_dat1_3
+> +			&pinctrl_mmc0_dat4_7 &pinctrl_mmc0_cd>;
+> +	vmmc-supply = <&vcc_mmc0_reg>;
+> +	vqmmc-supply = <&vcc_3v3_reg>;
+> +	status = "okay";
+> +	slot@0 {
+> +		reg = <0>;
+> +		bus-width = <8>;
+> +		cd-gpios = <&pioE 0 GPIO_ACTIVE_LOW>;
+> +	};
+> +};
+> +
+> +&pinctrl {
+> +	board {
+> +		pinctrl_i2c0_pu: i2c0_pu {
+> +			atmel,pins =
+> +				<AT91_PIOA 30 AT91_PERIPH_A AT91_PINCTRL_PULL_UP>,
+> +				<AT91_PIOA 31 AT91_PERIPH_A AT91_PINCTRL_PULL_UP>;
+> +		};
+> +
+> +		pinctrl_i2c2_pu: i2c2_pu {
+> +			atmel,pins =
+> +				<AT91_PIOA 18 AT91_PERIPH_B AT91_PINCTRL_PULL_UP>,
+> +				<AT91_PIOA 19 AT91_PERIPH_B AT91_PINCTRL_PULL_UP>;
+> +		};
+> +
+> +		pinctrl_key_gpio: key_gpio_0 {
+> +			atmel,pins =
+> +				<AT91_PIOE 29 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>;
+> +		};
+> +
+> +		pinctrl_mmc0_cd: mmc0_cd {
+> +			atmel,pins =
+> +				<AT91_PIOE 0 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>;
+> +		};
+> +
+> +		pinctrl_spi0_cs: spi0_cs_default {
+> +			atmel,pins =
+> +				<AT91_PIOD 13 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
+> +				 AT91_PIOD 16 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
+> +		};
+> +
+> +		pinctrl_spi1_cs: spi1_cs_default {
+> +			atmel,pins = <AT91_PIOC 25 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
+> +				      AT91_PIOC 28 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
+> +		};
+> +
+> +		pinctrl_usba_vbus: usba_vbus {
+> +			atmel,pins =
+> +				<AT91_PIOE 9 AT91_PERIPH_GPIO AT91_PINCTRL_DEGLITCH>;
+> +		};
+> +
+> +		pinctrl_usb_default: usb_default {
+> +			atmel,pins =
+> +				<AT91_PIOE 3 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
+> +				 AT91_PIOE 4 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
+> +		};
+> +
+> +		pinctrl_vcc_mmc0_reg_gpio: vcc_mmc0_reg_gpio_default {
+> +			atmel,pins = <AT91_PIOE 2 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP>;
+> +		};
+> +
+> +		/* Reserved for reset signal to the RGMII connector. */
+> +		pinctrl_rgmii_rstn: rgmii_rstn {
+> +			atmel,pins =
+> +				<AT91_PIOD 18 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>;
+> +		};
+> +
+> +		/* Reserved for an interrupt line from the RMII and RGMII connectors. */
+> +		pinctrl_spi_irqn: spi_irqn {
+> +			atmel,pins =
+> +				<AT91_PIOB 28 AT91_PERIPH_GPIO AT91_PINCTRL_DEGLITCH>;
+> +		};
+> +
+> +		/* Reserved for VBUS fault interrupt. */
+> +		pinctrl_vbusfault_irqn: vbusfault_irqn {
+> +			atmel,pins =
+> +				<AT91_PIOE 5 AT91_PERIPH_GPIO AT91_PINCTRL_DEGLITCH>;
+> +		};
+> +	};
+> +};
+> +
+> +&spi0 {
+> +	pinctrl-names = "default", "cs";
+> +	pinctrl-1 = <&pinctrl_spi0_cs>;
+> +	cs-gpios = <&pioD 13 0>, <0>, <0>, <&pioD 16 0>;
+> +	status = "okay";
+> +};
+> +
+> +&spi1 {
+> +	pinctrl-names = "default", "cs";
+> +	pinctrl-1 = <&pinctrl_spi1_cs>;
+> +	cs-gpios = <&pioC 25 0>, <0>, <0>, <&pioC 28 0>;
+> +	status = "okay";
+> +};
+> +
+> +&tcb0 {
+> +	timer0: timer@0 {
+> +		compatible = "atmel,tcb-timer";
+> +		reg = <0>;
+> +	};
+> +
+> +	timer1: timer@1 {
+> +		compatible = "atmel,tcb-timer";
+> +		reg = <1>;
+> +	};
+> +};
+> +
+> +&usb0 {
+> +	atmel,vbus-gpio = <&pioE 9 GPIO_ACTIVE_HIGH>;
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_usba_vbus>;
+> +	status = "okay";
+> +};
+> +
+> +&usb1 {
+> +	atmel,vbus-gpio = <0
+> +			   &pioE 3 GPIO_ACTIVE_HIGH
+> +			   &pioE 4 GPIO_ACTIVE_HIGH
+> +			  >;
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_usb_default>;
+> +	num-ports = <3>;
+> +	status = "okay";
+> +};
+> +
+> +&usb2 {
+> +	status = "okay";
+> +};
+> -- 
+> 2.17.1
+> 
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

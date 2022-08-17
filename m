@@ -2,210 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E43065967BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 05:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2705A5967BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 05:32:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235322AbiHQD33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 23:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57872 "EHLO
+        id S238145AbiHQDbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 23:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiHQD31 (ORCPT
+        with ESMTP id S229984AbiHQDbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 23:29:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F027FE77
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 20:29:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660706964;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RR5bzl/FFsvb9EIwHBGZXkpeL0zuQN7q9Hui9bCl8JY=;
-        b=JAoq37S9iXJHlFwhDXXmbAmhiEdOnhMLvjzKYofDRXjRLF6z/yTgLUOaENx9IAyJoqRFuq
-        vFnBRwAb5bwCRG9yRURSVwn1SrQTdeFErlnZOP54Fyjmx60Rl2Z9WT3qUxY0qIRYjbEBKk
-        lP6jf6ssBaXRf1bjJKVTWimJQ02PAkI=
-Received: from mail-vk1-f200.google.com (mail-vk1-f200.google.com
- [209.85.221.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-167-7a4pa-_TM4ONjiTeLeDoWQ-1; Tue, 16 Aug 2022 23:29:23 -0400
-X-MC-Unique: 7a4pa-_TM4ONjiTeLeDoWQ-1
-Received: by mail-vk1-f200.google.com with SMTP id r5-20020a1fa805000000b00378dce47c06so2538579vke.17
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 20:29:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc;
-        bh=RR5bzl/FFsvb9EIwHBGZXkpeL0zuQN7q9Hui9bCl8JY=;
-        b=avs3fRIcBxyWtV+VqBt1qLftTBvP/6ufr6cge3d5oNaNDFQj9m2M7DPBXycwkVXyty
-         NPeZkkKNlzK+oCitZE/YZ+do4Du6781I8usrTudD6CJOHki4JtoFDuaFkxWZD09PvBOr
-         IWmjV681YIMNRtCI02yJmVi0d8esT4qsODEl17iV+N/lhKWRCuEUD9qqko8BNlLpGUty
-         M9kMF0QUW8vRQbl+cECsJVy/95ExMgyoH3XrbuJfzBd8zKbbZcEHyKjSSK5CnRjwLwAH
-         iWDWnLIJ8IGMH484hq23pfJjcURntT91CiUyYZ8IKQi5+zYBhDGJ/PftvKNcYpBOznSM
-         995g==
-X-Gm-Message-State: ACgBeo3qvIQK2RzY8ZVnOgRxV4ZrC2V9hmjNGquirGsmRMNUyr9MEBU9
-        xElPIXQ+937ow8ALD1jNOrxtuClyEV/OYYmolkZMGGlOVpwUSU4YC6XE/Ro59A04ls9ELkiZFxU
-        S1InZ6BSa15H8OHbgbB9tXqb0
-X-Received: by 2002:a9f:358c:0:b0:387:9de3:6c8a with SMTP id t12-20020a9f358c000000b003879de36c8amr9875407uad.94.1660706962883;
-        Tue, 16 Aug 2022 20:29:22 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4fcp7kFFEeySED5iDFA+pzHhLU8J+5uKUdwRJl7tWznWLtKxiDNgfeB3BylX7kqYieWkBxzg==
-X-Received: by 2002:a9f:358c:0:b0:387:9de3:6c8a with SMTP id t12-20020a9f358c000000b003879de36c8amr9875398uad.94.1660706962518;
-        Tue, 16 Aug 2022 20:29:22 -0700 (PDT)
-Received: from ?IPv6:2804:1b3:a800:7e7a:dbd2:b312:9b9c:dcb7? ([2804:1b3:a800:7e7a:dbd2:b312:9b9c:dcb7])
-        by smtp.gmail.com with ESMTPSA id n65-20020a1f5944000000b00378fe8518dcsm9828486vkb.51.2022.08.16.20.29.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 20:29:21 -0700 (PDT)
-Message-ID: <e9b456cee5032c62cab6b9a3ab1411196d4d1c3c.camel@redhat.com>
-Subject: Re: [PATCH] KVM: x86: Always enable legacy fp/sse
-From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        "Dr. David Alan Gilbert (git)" <dgilbert@redhat.com>
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, tglx@linutronix.de,
-        linux-kernel@vger.kernel.org, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org
-Date:   Wed, 17 Aug 2022 00:29:17 -0300
-In-Reply-To: <YvwODUu/rdzjzDjk@google.com>
-References: <20220816175936.23238-1-dgilbert@redhat.com>
-         <YvwODUu/rdzjzDjk@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 16 Aug 2022 23:31:42 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FB480F6F
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 20:31:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660707101; x=1692243101;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=SIpas9hHBynXoDmmiy4TB+YPp+HKO5kfY+djQtt2IBQ=;
+  b=aEW3euQ67mBflJ9sQgnfP9pg3d6/WCEw3dh54d06N439LrfDsw/h8CE7
+   d/SMcCk1WX5MNY1XgBgFxrH9Zd3+e7ms8OPFGgKtq7Qb+RvS1scIbXMdJ
+   tW0iTMTXXHoStQvB0SiivFRa2+KL2sbWnrHs3mHkMXEsyOgQx+FTNMY4N
+   Tq15DrUG2E/ChWGZ34kFkbuGM5fRI63+c5nsHkrJzFWfTJG63xjgX8Tvm
+   PBqcwYz2WPQVK+kjbOk8xz08xi/tIstozqPwnOgb6Pgz+taaLFJs2VJW2
+   Lr56oMnqdWvHnDiRWcUEPFJdHRMFed7iI0XPu7mUV9vzplUL4toaW1MHg
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="291142718"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="291142718"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 20:31:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="667416368"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga008.fm.intel.com with ESMTP; 16 Aug 2022 20:31:40 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Tue, 16 Aug 2022 20:31:40 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Tue, 16 Aug 2022 20:31:39 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28 via Frontend Transport; Tue, 16 Aug 2022 20:31:39 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.100)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.28; Tue, 16 Aug 2022 20:31:39 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hj/Za1La7G8PjSyfbaL0MEf529Msspd2/M1O/84ElNK22xCpZCPa3odfXSFIGCOTpZavJ3teV5cTPMvCY5Y9f06Zz4GP6Y+ZOZletJU4qV1ZR4nlW1MyBcZVSsnqj5+dWs7qeEmAmXAtififRa/QiwvgMAyVyHV0qYBXP3B2h/Eh3q+REXeJgtspNEkbJv69zWoDi3jlXly0PY+khY0WY8dGeWu20D40VvPCXUWL44Ue/TjcHg6jFHH92RbBgGDCJUcgPHk5N9rYemFo95h2oiXXYMMrlHDTqQWgnWyt9VNBrm/O9M8FDdgwIr+k9XSzFzjKVDBQdpasj30vS5ev6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=x4NahZRuX+752zHGXVIAQXP+gWv2q3YnBixLblDQXFs=;
+ b=TK6csR8Yb8B/rSCzwdBOjsGMWL6ZZsv7UQA57KGMngIY/VbKVikdzSPew03SATIQ8ZagH3rlWlntJpiCf4cKK0JSef2qYfKTxW1z8JCuE8FPQEiAYLZHMu0RxsGySa4p7P7h3OWFm1L66Mf41E304hxV109ro752g/W8oxQPYTX7IjAUwLdFgYL6qmsiB73L24Z9rD6yW65oqm4lAQ5DfFyCwHQJgLrKtB2uDet/dbVD/EwEJ7Z0fizsAemhN+pxSUt0fkRzqexvcisitBR1pUL0cdvu3G+N538Eicjttu9zyf1Iw70U3NeTtcdajakV/eNB4N6x0oFCZuKp+jrkMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BYAPR11MB3495.namprd11.prod.outlook.com (2603:10b6:a03:8a::14)
+ by DM6PR11MB4028.namprd11.prod.outlook.com (2603:10b6:5:195::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.23; Wed, 17 Aug
+ 2022 03:31:37 +0000
+Received: from BYAPR11MB3495.namprd11.prod.outlook.com
+ ([fe80::6133:d318:f357:48d7]) by BYAPR11MB3495.namprd11.prod.outlook.com
+ ([fe80::6133:d318:f357:48d7%7]) with mapi id 15.20.5525.011; Wed, 17 Aug 2022
+ 03:31:37 +0000
+From:   "Wang, Haiyue" <haiyue.wang@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "david@redhat.com" <david@redhat.com>,
+        "apopple@nvidia.com" <apopple@nvidia.com>,
+        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "naoya.horiguchi@linux.dev" <naoya.horiguchi@linux.dev>,
+        "alex.sierra@amd.com" <alex.sierra@amd.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Subject: RE: [PATCH v6 1/2] mm: migration: fix the FOLL_GET failure on
+ following huge page
+Thread-Topic: [PATCH v6 1/2] mm: migration: fix the FOLL_GET failure on
+ following huge page
+Thread-Index: AQHYsRbS1IjgnpM1/EaZo6nPqIEeuq2yRsoAgAAoZ1A=
+Date:   Wed, 17 Aug 2022 03:31:37 +0000
+Message-ID: <BYAPR11MB3495F747CBF95E079E8FC8A5F76A9@BYAPR11MB3495.namprd11.prod.outlook.com>
+References: <20220812084921.409142-1-haiyue.wang@intel.com>
+        <20220816022102.582865-1-haiyue.wang@intel.com>
+        <20220816022102.582865-2-haiyue.wang@intel.com>
+ <20220816175838.211a1b1e85bc68c439101995@linux-foundation.org>
+In-Reply-To: <20220816175838.211a1b1e85bc68c439101995@linux-foundation.org>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.500.17
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 61c5980b-a690-41b6-9ea0-08da8000fdc4
+x-ms-traffictypediagnostic: DM6PR11MB4028:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: G/K7Smlf352Idcp9V+pbu9iTe+MAfUNFewqypZKzPMSLcGa7cjKW4TTPvM+nG2rwLUUw936kpLOk03tRfR9LEZcL7hMHtoQABsdXl/6+QOQGiQKd6lBjgwKwAUuOlDQCi/qp00DxJgk3wv84EdVNXyv66/bZvOBGoR8SjT/+Fnp0+epR00vpHRlJf0YV3CAwH3EprWKtDahzOAoRqaPF4Yl4YzNkkI/iajT/g0+O2r3inK7bq5DXQiMMyWDjJRMc2sx09KTeHErXPV/xhsGt71PTBzp8iZ4u45wfhfTD8uz7ke4J9pMUSxW086YZiJ2N4v48cVHnnBhru3Nkd2O1dR9+/ipseDntHFJIjvNoT0Pj1x/8LtUWjC7J4YzjcVD7qJnM22vPQUdQmLbF7ga7LnGFb80As5+xK2WOTCcd3+1OYRdegtMVtG8wLxun6BKuhbq2c2zw6RbQvZHo1Rz71q0dVZMvwtUz1HDnFcV+F81/79lXnjCgqlBvm9gvTpVQjLoMjyJESvwkkZC+le2ocdbkHvzryjdc6DdDsTxHfvi3JCKqv3qBv+KYjJMBuJI5y9gLmLzkKAAvTk0q5PqpWAT9ERMLGE3iKHePfUiur+AHMv3f0xUWzKtRMfUytesb1HgVObb6TzWTPRXoqsSmMS1AUgW7/IJUn8384Rv5MgaNNMYIatpkF/qRYo3zyeRXtheIygNBGVTpK67itDGU4yF3Lxv1pSHy4pnbpzVUQz+/ZuWWyqdoLUO9yUyRfu5GuFk4NdzNBcSMK2CFPiZrDumr99aLofxDnAum+5hL3o0S6pUFouFBv6CEIgk61dZ8OJHQpVKkRowkMi/hoC2/cPmLVdMBbWYgg2MJpihlOzgZIXu1MKnN/8gR8pqPa+z5pTTj4osAJIq7POsTZPuFZQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3495.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(39860400002)(136003)(366004)(396003)(346002)(64756008)(66946007)(54906003)(71200400001)(66556008)(76116006)(8676002)(478600001)(966005)(316002)(38070700005)(7416002)(4326008)(8936002)(66446008)(82960400001)(5660300002)(66476007)(6916009)(41300700001)(33656002)(53546011)(122000001)(55016003)(2906002)(7696005)(26005)(6506007)(9686003)(86362001)(52536014)(38100700002)(186003)(83380400001)(14583001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?UaupdEkgDaSsvpuBthPAQGu8nYjWX5WK16swD2Lt24h7sg3pYWiS+10ehdam?=
+ =?us-ascii?Q?wwTbv/BUe03zd5cpKkOgQk7U7q5Mmiei4B4YtmCYveEnYV1G6DaSnSK3Iv/G?=
+ =?us-ascii?Q?OIRtAXm/Me3ezuWfU9qNkm8RQ/mr4UbkYk0rypGeol5669ulm8+HKhkgfcSa?=
+ =?us-ascii?Q?DkqYIc+MEKHWib0L+NcGHUH5vzZZQmcXUIxEhhcShYTpzA4yXsnUZ+wMSbh4?=
+ =?us-ascii?Q?158OagvXkKxktO6I/vwnPtwM8meuwNQstM4sFIxoQOBZzl9JBPrBxCrA4tuz?=
+ =?us-ascii?Q?MMwHlfGZB/WTa0CG01OWIdWP9wq8peVsemayrzEQd7UjVYoIT9yfCrwecQzR?=
+ =?us-ascii?Q?vnb38EYZArF+8Tq7FUifuDcXm9TKeUR7oilOYjyicKXYUb/kpyLvl53vA05B?=
+ =?us-ascii?Q?o2imBw9zQJ+rXyZoeJC5fXnqYHqmLgNIGyYmN/THcNKywjcrEhwtoccjr93u?=
+ =?us-ascii?Q?k+pCUtcgjIjORahk1djtm+PJp/z/D781Q9nqox3A28fygw8N1W/HLcj9F+lN?=
+ =?us-ascii?Q?+azOHYjHkiSk06PmeiN5xrINNY9AgM2HU+90Y+R6VPv7/5zvWRnKima2YNgr?=
+ =?us-ascii?Q?Xbq0TdPMOvkwhphpAPiid4IH+Gj7l5iu/Fc81nUY9166LPTRtnHpuoPD9OkU?=
+ =?us-ascii?Q?o4lWowUtY8Ww3WIiQ4jqt2wJIGG0AH+Dy1IY2Y8R0mAppVRZCU8zUneCwUzj?=
+ =?us-ascii?Q?uOkXEMpHq7pAQFCrqAb4HMI3BInInKdM4okv/OhI1gcuQeHVF07C5YXe9bl2?=
+ =?us-ascii?Q?VhP3Wl/Zx285iy/O4UxmfiJQBKYrj0146djSXCAErZ42lFmrPnJRo6IUQqzs?=
+ =?us-ascii?Q?6xofHfiNiZfoQRaLfBTq1AL+QNzHuWAfwVvwf8AEqairhVuExoWHVC6OJ6H8?=
+ =?us-ascii?Q?5p4QSA/FXwZk5ggXeYlzBvjJrNZJWsfXwdlO/W3La6ADMNaI2z78+pEm8Ijz?=
+ =?us-ascii?Q?1faavciivBDVZoahIzGD5tMo0YPatJnVxuqMdI5fsA70KQA+88y1q8oOoapx?=
+ =?us-ascii?Q?4FFEI28/S1mqYLXXgBs1UJPKlLPY9ou8x7kZK7QljuRXlsg/crs0kVYCtyK2?=
+ =?us-ascii?Q?XQSOKM66MoNUltqfVhkJFMeey2XPJjxdeg9ldjnQuWFFRbwai95g9C+9yEkK?=
+ =?us-ascii?Q?yKla44MLqv1WAT/X6A7/b+KiD2ozzceURGILfKsH/gbHWZABBkxlgVW0KBtS?=
+ =?us-ascii?Q?xGOt4R7o68HLjeYeHcnUFd8kFwGczjIW9rSrdd/EXGhHNYNHL2Gu45Y+SJTa?=
+ =?us-ascii?Q?V/GkhcWxHnT3fhzk38Fz9ME+MbK0d9Au515o9FzaWziTWI3He4ceDBFHfILf?=
+ =?us-ascii?Q?oyl0ReOJLVYD6aqOMpivbHCxBY0bYFjZ1LdK7VxUZg+kELVsrEyJXoopRub/?=
+ =?us-ascii?Q?hZW0eIN6i+GjOJAQmgDL+pt03PpTvlSgA8TXaAlVsvcXl8Ok3YUM4YY7T9I8?=
+ =?us-ascii?Q?m8apKJVdY4iQGVW8fFVpX904++ruFK1dlNHi2BXxwxZf6Cm4pKLlqH2jYzWG?=
+ =?us-ascii?Q?6Hd7crE9LIwOqg6bAcXOI4Q7EozsV60enTaci7pWtQhzPb8eBUiw+mqzW0bc?=
+ =?us-ascii?Q?4XHNW9y1qgU92N2RWZR/eCFcigGFkinauCtm/1/B?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3495.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 61c5980b-a690-41b6-9ea0-08da8000fdc4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Aug 2022 03:31:37.1910
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QmWwxhCFLVNK+/P23JC2nmDHmZEDOU3ERymCLPfE72JhTc8Gmd7WwO2XgBtFSdaP36I4/FCrVV7qe91QGKqFbA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4028
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-08-16 at 21:37 +0000, Sean Christopherson wrote:
-> On Tue, Aug 16, 2022, Dr. David Alan Gilbert (git) wrote:
-> > From: "Dr. David Alan Gilbert" <dgilbert@redhat.com>
-> >=20
-> > A live migration under qemu is currently failing when the source
-> > host is ~Nehalem era (pre-xsave) and the destination is much newer,
-> > (configured with a guest CPU type of Nehalem).
-> > QEMU always calls kvm_put_xsave, even on this combination because
-> > KVM_CAP_CHECK_EXTENSION_VM always returns true for KVM_CAP_XSAVE.
-> >=20
-> > When QEMU calls kvm_put_xsave it's rejected by
-> >    fpu_copy_uabi_to_guest_fpstate->
-> >      copy_uabi_to_xstate->
-> >        validate_user_xstate_header
-> >=20
-> > when the validate checks the loaded xfeatures against
-> > user_xfeatures, which it finds to be 0.
-> >=20
-> > I think our initialisation of user_xfeatures is being
-> > too strict here, and we should always allow the base FP/SSE.
-> >=20
-> > Fixes: ad856280ddea ("x86/kvm/fpu: Limit guest user_xfeatures to suppor=
-ted bits of XCR0")
-
-Thanks for fixing this, Dave!
-
-> > bz: https://bugzilla.redhat.com/show_bug.cgi?id=3D2079311
-> >=20
-> > Signed-off-by: Dr. David Alan Gilbert <dgilbert@redhat.com>
-> > ---
-> >  arch/x86/kvm/cpuid.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> > index de6d44e07e34..3b2319cecfd1 100644
-> > --- a/arch/x86/kvm/cpuid.c
-> > +++ b/arch/x86/kvm/cpuid.c
-> > @@ -298,7 +298,8 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcp=
-u *vcpu)
-> >  	guest_supported_xcr0 =3D
-> >  		cpuid_get_supported_xcr0(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_=
-nent);
-> > =20
-> > -	vcpu->arch.guest_fpu.fpstate->user_xfeatures =3D guest_supported_xcr0=
-;
-> > +	vcpu->arch.guest_fpu.fpstate->user_xfeatures =3D guest_supported_xcr0=
- |
-> > +		XFEATURE_MASK_FPSSE;
+> -----Original Message-----
+> From: Andrew Morton <akpm@linux-foundation.org>
+> Sent: Wednesday, August 17, 2022 08:59
+> To: Wang, Haiyue <haiyue.wang@intel.com>
+> Cc: linux-mm@kvack.org; linux-kernel@vger.kernel.org; david@redhat.com; a=
+popple@nvidia.com;
+> linmiaohe@huawei.com; Huang, Ying <ying.huang@intel.com>; songmuchun@byte=
+dance.com;
+> naoya.horiguchi@linux.dev; alex.sierra@amd.com; Heiko Carstens <hca@linux=
+.ibm.com>; Vasily Gorbik
+> <gor@linux.ibm.com>; Alexander Gordeev <agordeev@linux.ibm.com>; Christia=
+n Borntraeger
+> <borntraeger@linux.ibm.com>; Sven Schnelle <svens@linux.ibm.com>; Mike Kr=
+avetz
+> <mike.kravetz@oracle.com>
+> Subject: Re: [PATCH v6 1/2] mm: migration: fix the FOLL_GET failure on fo=
+llowing huge page
 >=20
-> I don't think this is correct.  This will allow the guest to set the SSE =
-bit
-> even when XSAVE isn't supported due to kvm_guest_supported_xcr0() returni=
-ng
-> user_xfeatures.
+> On Tue, 16 Aug 2022 10:21:00 +0800 Haiyue Wang <haiyue.wang@intel.com> wr=
+ote:
 >=20
->   static inline u64 kvm_guest_supported_xcr0(struct kvm_vcpu *vcpu)
->   {
-> 	return vcpu->arch.guest_fpu.fpstate->user_xfeatures;
->   }
+> > Not all huge page APIs support FOLL_GET option, so move_pages() syscall
+> > will fail to get the page node information for some huge pages.
+> >
+> > Like x86 on linux 5.19 with 1GB huge page API follow_huge_pud(), it wil=
+l
+> > return NULL page for FOLL_GET when calling move_pages() syscall with th=
+e
+> > NULL 'nodes' parameter, the 'status' parameter has '-2' error in array.
+> >
+> > Note: follow_huge_pud() now supports FOLL_GET in linux 6.0.
+> >       Link: https://lore.kernel.org/all/20220714042420.1847125-3-naoya.=
+horiguchi@linux.dev
+> >
+> > But these huge page APIs don't support FOLL_GET:
+> >   1. follow_huge_pud() in arch/s390/mm/hugetlbpage.c
 >=20
-> I believe the right place to fix this is in validate_user_xstate_header()=
-.  It's
-> reachable if and only if XSAVE is supported in the host, and when XSAVE i=
-s _not_
-> supported, the kernel unconditionally allows FP+SSE.  So it follows that =
-the kernel
-> should also allow FP+SSE when using XSAVE too.  That would also align the=
- logic
-> with fpu_copy_guest_fpstate_to_uabi(), which fordces the FPSSE flags.  Di=
-tto for
-> the non-KVM save_xstate_epilog().
+> Let's tell the s390 maintainers.
 >=20
-> Aha!  And fpu__init_system_xstate() ensure the host supports FP+SSE when =
-XSAVE
-> is enabled (knew their had to be a sanity check somewhere).
+> >   2. follow_huge_addr() in arch/ia64/mm/hugetlbpage.c
+> >      It will cause WARN_ON_ONCE for FOLL_GET.
+>=20
+> ia64 doesn't have maintainers :( Can we come up with something local to
+> arch/ia64 for this?
 
-Thanks for the feedback Sean!
+The 'follow_huge_addr' itself just has interest on "FOLL_WRITE"
+struct page *
+follow_huge_addr(struct mm_struct *mm, unsigned long address,
+			      int write)
 
-I have near to no experience in this code, and I hope you can help me with =
-a
-question I have, based in Dave's commit message:
+And arch/ia64 defines this function 17 years ago ...
 
-> > QEMU always calls kvm_put_xsave, even on this combination because
-> > KVM_CAP_CHECK_EXTENSION_VM always returns true for KVM_CAP_XSAVE.
+But I found that "WARN_ON_ONCE for FOLL_GET" was introduced on 2005-10-29
+by commit:
 
-Any particular reason why it always returns true for KVM_CAP_XSAVE, even wh=
-en
-the CPU does not support it?=20
+[PATCH] mm: follow_page with inner ptlock
 
-IIUC, if it returns false to this capability, kvm_put_xsave() should never =
-be
-called, and thus it can avoid bug reproduction.=20
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
+id=3Ddeceb6cd17e6dfafe4c4f81b1b4153bc41b2cb70
 
-Thanks in advance,
-
-Leo
+-	page =3D follow_huge_addr(mm, address, write);
+-	if (! IS_ERR(page))
+-		return page;
++	page =3D follow_huge_addr(mm, address, flags & FOLL_WRITE);
++	if (!IS_ERR(page)) {
++		BUG_ON(flags & FOLL_GET);
++		goto out;
++	}
 
 >=20
-> ---
->  arch/x86/kernel/fpu/xstate.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
+> >   3. follow_huge_pgd() in mm/hugetlb.c
 >=20
-> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-> index c8340156bfd2..83b9a9653d47 100644
-> --- a/arch/x86/kernel/fpu/xstate.c
-> +++ b/arch/x86/kernel/fpu/xstate.c
-> @@ -399,8 +399,13 @@ int xfeature_size(int xfeature_nr)
->  static int validate_user_xstate_header(const struct xstate_header *hdr,
->  				       struct fpstate *fpstate)
->  {
-> -	/* No unknown or supervisor features may be set */
-> -	if (hdr->xfeatures & ~fpstate->user_xfeatures)
-> +	/*
-> +	 * No unknown or supervisor features may be set.  Userspace is always
-> +	 * allowed to restore FP+SSE state (XSAVE/XRSTOR are used by the kernel
-> +	 * if and only if FP+SSE are supported in xstate).
-> +	 */
-> +	if (hdr->xfeatures & ~fpstate->user_xfeatures &
-> +	    ~(XFEATURE_MASK_FP | XFEATURE_MASK_SSE))
->  		return -EINVAL;
->=20
->  	/* Userspace must use the uncompacted format */
->=20
-> base-commit: de3d415edca23831c5d1f24f10c74a715af7efdb
-> --
+> Hi, Mike.
 >=20
 
+
+> >  		}
+>=20
+> I would be better to fix this for real at those three client code sites?
+
+Then 5.19 will break for a while to wait for the final BIG patch ?

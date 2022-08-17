@@ -2,212 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37A859733D
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A559059733F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240685AbiHQPks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 11:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
+        id S237909AbiHQPlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 11:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240696AbiHQPkg (ORCPT
+        with ESMTP id S237637AbiHQPlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 11:40:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66D0A30F56
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:40:34 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E5A52113E;
-        Wed, 17 Aug 2022 08:40:34 -0700 (PDT)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B62F53F70D;
-        Wed, 17 Aug 2022 08:40:32 -0700 (PDT)
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     andy.shevchenko@gmail.com, ardb@kernel.org,
-        catalin.marinas@arm.com, jvgediya@linux.ibm.com,
-        mark.rutland@arm.com, rdunlap@infradead.org, will@kernel.org,
-        willy@infradead.org
-Subject: [PATCH] arm64: fix rodata=full
-Date:   Wed, 17 Aug 2022 16:40:22 +0100
-Message-Id: <20220817154022.3974645-1-mark.rutland@arm.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 17 Aug 2022 11:41:12 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEBA883E5;
+        Wed, 17 Aug 2022 08:41:11 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id c2so3951689plo.3;
+        Wed, 17 Aug 2022 08:41:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=//hM187uU1jIsnzsJQUuCUh/1TSYrgFOX6cDWgG4Ji4=;
+        b=QfZK2LMzqz+Op9YY+CHw+q2ARD4vwF8goGqGFtNGzRCU0FIQ/mubstB/m5PPm4zoUD
+         HVSFZo40bjk9yqJqvFHKkuqW/gi2onEz6JFHpV+NOoTDMAEO0bTKjWsLXxU8nu9TXGDa
+         G4diSfYUAJMfAvFQCRiN8I5fagaSe6GetJ0uEGEfA9BEsF+dyrNNacVfTX8JWMOLYQnX
+         b0c9mdtU81yeLnvf3n5hoa/EyzLHWIO/RaM0a7tVYldwt0/vEccU8cSG8jOewqGkcnhw
+         8k/wFobjDR2fCn8Bl7XP6tW2jjbQdbaBM/EZQluAS8tYm+mpjxjpv04t5WXrMoDMqLbs
+         hJSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=//hM187uU1jIsnzsJQUuCUh/1TSYrgFOX6cDWgG4Ji4=;
+        b=pMn7+L2ppT049rczBHFxAB70UwsKF1GqV9AKGvoIY9zJ8Ti01ZMCEfkEfWH4mbfiU/
+         YfbtGqnAR7y2E6Py8OSgvKeXP8BVpa/SGKhD7Ca8SrLfcedSBKJG0YHK+KRSyclU0l4K
+         J0EG2u++1Toj/9MMHSUQU4JjgB6vZ0OZ4PbdGpc+bhkiDbTKZKMe3oj3y2rc0qdLZns5
+         yle4pRsjniOwyCQqCjisVyG/lAzAAWYG14LqUUzpERzL9nLIRFUxOg7JQ0rNnddW7DE3
+         D+jWnsLdg4hRtvZpXVnREc36HrJQe4l0iz4rAO/4WweduUh9+v8VuS6s475ksIfUcVa6
+         mTPg==
+X-Gm-Message-State: ACgBeo1vDJ2Yr+KzRO5Yo86rSeKCh+IUo06BOGu7zTH1B2I7q0RDmNP7
+        PSld2Z6WixO4H7CVAADYSe38WA3XY4A=
+X-Google-Smtp-Source: AA6agR6xJov5jyp1OYE8dRNM1g8gUNraX8zrEgGOpNqh5gxHlP6ZyQVKLkipVKg+OO8wmSvUUAJ3/A==
+X-Received: by 2002:a17:902:ce8e:b0:16f:8f2b:b16f with SMTP id f14-20020a170902ce8e00b0016f8f2bb16fmr26618976plg.167.1660750870779;
+        Wed, 17 Aug 2022 08:41:10 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id mi4-20020a17090b4b4400b001f52fa1704csm6519779pjb.3.2022.08.17.08.41.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 08:41:09 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 17 Aug 2022 08:41:08 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v3] hwmon: corsair-psu: add reporting of rail mode via
+ debugfs
+Message-ID: <20220817154108.GA1409194@roeck-us.net>
+References: <YvS9PZKr0xqFqJny@monster.localdomain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvS9PZKr0xqFqJny@monster.localdomain>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On arm64, "rodata=full" has been suppored (but not documented) since
-commit:
+On Thu, Aug 11, 2022 at 08:26:37AM +0000, Wilken Gottwalt wrote:
+> Add reporting if the PSU is running in single or multi rail mode via
+> ocpmode debugfs entry. Also update the documentation and driver comments
+> accordingly.
+> 
+> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
 
-  c55191e96caa9d78 ("arm64: mm: apply r/o permissions of VM areas to its linear alias as well")
+Applied to hwmon-next.
 
-As it's necessary to determine the rodata configuration early during
-boot, arm64 has an early_param() handler for this, whereas init/main.c
-has a __setup() handler which is run later.
+Thanks,
+Guenter
 
-Unfortunately, this split meant that since commit:
-
-  f9a40b0890658330 ("init/main.c: return 1 from handled __setup() functions")
-
-... passing "rodata=full" would result in a spurious warning from the
-__setup() handler (though RO permissions would be configured
-appropriately).
-
-Further, "rodata=full" has been broken since commit:
-
-  0d6ea3ac94ca77c5 ("lib/kstrtox.c: add "false"/"true" support to kstrtobool()")
-
-... which caused strtobool() to parse "full" as false (in addition to
-many other values not documented for the "rodata=" kernel parameter.
-
-This patch fixes this breakage by:
-
-* Moving the core parameter parser to an __early_param(), such that it
-  is available early.
-
-* Adding an (optional) arch hook which arm64 can use to parse "full".
-
-* Updating the documentation to mention that "full" is valid for arm64.
-
-* Having the core parameter parser handle "on" and "off" explicitly,
-  such that any undocumented values (e.g. typos such as "ful") are
-  reported as errors rather than being silently accepted.
-
-Note that __setup() and early_param() have opposite conventions for
-their return values, where __setup() uses 1 to indicate a parameter was
-handled and early_param() uses 0 to indicate a parameter was handled.
-
-Fixes: f9a40b0890658330 ("init/main.c: return 1 from handled __setup() functions")
-Fixes: 0d6ea3ac94ca77c5 ("lib/kstrtox.c: add "false"/"true" support to kstrtobool()")
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Jagdish Gediya <jvgediya@linux.ibm.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: Will Deacon <will@kernel.org>
----
- .../admin-guide/kernel-parameters.txt          |  2 ++
- arch/arm64/include/asm/setup.h                 | 17 +++++++++++++++++
- arch/arm64/mm/mmu.c                            | 18 ------------------
- init/main.c                                    | 18 +++++++++++++++---
- 4 files changed, 34 insertions(+), 21 deletions(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index d7f30902fda02..426fa892d311a 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5331,6 +5331,8 @@
- 	rodata=		[KNL]
- 		on	Mark read-only kernel memory as read-only (default).
- 		off	Leave read-only kernel memory writable for debugging.
-+		full	Mark read-only kernel memory and aliases as read-only
-+		        [arm64]
- 
- 	rockchip.usb_uart
- 			Enable the uart passthrough on the designated usb port
-diff --git a/arch/arm64/include/asm/setup.h b/arch/arm64/include/asm/setup.h
-index 6437df6617009..f4af547ef54ca 100644
---- a/arch/arm64/include/asm/setup.h
-+++ b/arch/arm64/include/asm/setup.h
-@@ -3,6 +3,8 @@
- #ifndef __ARM64_ASM_SETUP_H
- #define __ARM64_ASM_SETUP_H
- 
-+#include <linux/string.h>
-+
- #include <uapi/asm/setup.h>
- 
- void *get_early_fdt_ptr(void);
-@@ -14,4 +16,19 @@ void early_fdt_map(u64 dt_phys);
- extern phys_addr_t __fdt_pointer __initdata;
- extern u64 __cacheline_aligned boot_args[4];
- 
-+static inline bool arch_parse_debug_rodata(char *arg)
-+{
-+	extern bool rodata_enabled;
-+	extern bool rodata_full;
-+
-+	if (arg && !strcmp(arg, "full")) {
-+		rodata_enabled = true;
-+		rodata_full = true;
-+		return true;
-+	}
-+
-+	return false;
-+}
-+#define arch_parse_debug_rodata arch_parse_debug_rodata
-+
- #endif
-diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index db7c4e6ae57bb..e7ad44585f40a 100644
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -642,24 +642,6 @@ static void __init map_kernel_segment(pgd_t *pgdp, void *va_start, void *va_end,
- 	vm_area_add_early(vma);
- }
- 
--static int __init parse_rodata(char *arg)
--{
--	int ret = strtobool(arg, &rodata_enabled);
--	if (!ret) {
--		rodata_full = false;
--		return 0;
--	}
--
--	/* permit 'full' in addition to boolean options */
--	if (strcmp(arg, "full"))
--		return -EINVAL;
--
--	rodata_enabled = true;
--	rodata_full = true;
--	return 0;
--}
--early_param("rodata", parse_rodata);
--
- #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
- static int __init map_entry_trampoline(void)
- {
-diff --git a/init/main.c b/init/main.c
-index 91642a4e69be6..1fe7942f5d4a8 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -1446,13 +1446,25 @@ static noinline void __init kernel_init_freeable(void);
- 
- #if defined(CONFIG_STRICT_KERNEL_RWX) || defined(CONFIG_STRICT_MODULE_RWX)
- bool rodata_enabled __ro_after_init = true;
-+
-+#ifndef arch_parse_debug_rodata
-+static inline bool arch_parse_debug_rodata(char *str) { return false; }
-+#endif
-+
- static int __init set_debug_rodata(char *str)
- {
--	if (strtobool(str, &rodata_enabled))
-+	if (arch_parse_debug_rodata(str))
-+		return 0;
-+
-+	if (str && !strcmp(str, "on"))
-+		rodata_enabled = true;
-+	else if (str && !strcmp(str, "off"))
-+		rodata_enabled = false;
-+	else
- 		pr_warn("Invalid option string for rodata: '%s'\n", str);
--	return 1;
-+	return 0;
- }
--__setup("rodata=", set_debug_rodata);
-+early_param("rodata", set_debug_rodata);
- #endif
- 
- #ifdef CONFIG_STRICT_KERNEL_RWX
--- 
-2.30.2
-
+> ---
+> Changes in v3:
+>   - added more explanations in the driver
+> 
+> Changes in v2:
+>   - fixed spelling issues in commit message
+> ---
+>  Documentation/hwmon/corsair-psu.rst |  5 +++--
+>  drivers/hwmon/corsair-psu.c         | 29 ++++++++++++++++++++++++++++-
+>  2 files changed, 31 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
+> index e8378e7a1d8c..c3a76305c587 100644
+> --- a/Documentation/hwmon/corsair-psu.rst
+> +++ b/Documentation/hwmon/corsair-psu.rst
+> @@ -86,8 +86,9 @@ Debugfs entries
+>  ---------------
+>  
+>  =======================	========================================================
+> -uptime			Current uptime of the psu
+> +ocpmode                 Single or multi rail mode of the PCIe power connectors
+> +product                 Product name of the psu
+> +uptime			Session uptime of the psu
+>  uptime_total		Total uptime of the psu
+>  vendor			Vendor name of the psu
+> -product			Product name of the psu
+>  =======================	========================================================
+> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+> index 14389fd7afb8..c99e4c6afc2d 100644
+> --- a/drivers/hwmon/corsair-psu.c
+> +++ b/drivers/hwmon/corsair-psu.c
+> @@ -55,6 +55,7 @@
+>  #define SECONDS_PER_DAY		(SECONDS_PER_HOUR * 24)
+>  #define RAIL_COUNT		3 /* 3v3 + 5v + 12v */
+>  #define TEMP_COUNT		2
+> +#define OCP_MULTI_RAIL		0x02
+>  
+>  #define PSU_CMD_SELECT_RAIL	0x00 /* expects length 2 */
+>  #define PSU_CMD_RAIL_VOLTS_HCRIT 0x40 /* the rest of the commands expect length 3 */
+> @@ -71,9 +72,10 @@
+>  #define PSU_CMD_RAIL_WATTS	0x96
+>  #define PSU_CMD_VEND_STR	0x99
+>  #define PSU_CMD_PROD_STR	0x9A
+> -#define PSU_CMD_TOTAL_WATTS	0xEE
+>  #define PSU_CMD_TOTAL_UPTIME	0xD1
+>  #define PSU_CMD_UPTIME		0xD2
+> +#define PSU_CMD_OCPMODE		0xD8
+> +#define PSU_CMD_TOTAL_WATTS	0xEE
+>  #define PSU_CMD_INIT		0xFE
+>  
+>  #define L_IN_VOLTS		"v_in"
+> @@ -268,6 +270,7 @@ static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8 rail, l
+>  		break;
+>  	case PSU_CMD_TOTAL_UPTIME:
+>  	case PSU_CMD_UPTIME:
+> +	case PSU_CMD_OCPMODE:
+>  		*val = tmp;
+>  		break;
+>  	default:
+> @@ -660,6 +663,29 @@ static int product_show(struct seq_file *seqf, void *unused)
+>  }
+>  DEFINE_SHOW_ATTRIBUTE(product);
+>  
+> +static int ocpmode_show(struct seq_file *seqf, void *unused)
+> +{
+> +	struct corsairpsu_data *priv = seqf->private;
+> +	long val;
+> +	int ret;
+> +
+> +	/*
+> +	 * The rail mode is switchable on the fly. The RAW interface can be used for this. But it
+> +	 * will not be included here, because I consider it somewhat dangerous for the health of the
+> +	 * PSU. The returned value can be a bogus one, if the PSU is in the process of switching and
+> +	 * getting of the value itself can also fail during this. Because of this every other value
+> +	 * than OCP_MULTI_RAIL can be considered as "single rail".
+> +	 */
+> +	ret = corsairpsu_get_value(priv, PSU_CMD_OCPMODE, 0, &val);
+> +	if (ret < 0)
+> +		seq_puts(seqf, "N/A\n");
+> +	else
+> +		seq_printf(seqf, "%s\n", (val == OCP_MULTI_RAIL) ? "multi rail" : "single rail");
+> +
+> +	return 0;
+> +}
+> +DEFINE_SHOW_ATTRIBUTE(ocpmode);
+> +
+>  static void corsairpsu_debugfs_init(struct corsairpsu_data *priv)
+>  {
+>  	char name[32];
+> @@ -671,6 +697,7 @@ static void corsairpsu_debugfs_init(struct corsairpsu_data *priv)
+>  	debugfs_create_file("uptime_total", 0444, priv->debugfs, priv, &uptime_total_fops);
+>  	debugfs_create_file("vendor", 0444, priv->debugfs, priv, &vendor_fops);
+>  	debugfs_create_file("product", 0444, priv->debugfs, priv, &product_fops);
+> +	debugfs_create_file("ocpmode", 0444, priv->debugfs, priv, &ocpmode_fops);
+>  }
+>  
+>  #else

@@ -2,90 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EEFB597966
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 00:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C185059796B
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 00:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234720AbiHQWBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 18:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
+        id S242145AbiHQWCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 18:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiHQWBF (ORCPT
+        with ESMTP id S236007AbiHQWCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 18:01:05 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9999F3B963;
-        Wed, 17 Aug 2022 15:01:04 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b98b0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98b0:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F29291EC059D;
-        Thu, 18 Aug 2022 00:00:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660773659;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=nNsL/+Bz+9jQP2JY5PHReXF2fQeFbrG3QS9oS4053lY=;
-        b=EcytJ926HTqKY6iSYbZ9VBuyvlaElspGvROa+w6sC6qpg+gnuk202m0ev0QQX3VcwPLvhz
-        3Kh0yX5o0h3cnAPNrzvrJxUx85twc3K6ijGAFSHHorOfWLAGu5lBjGvRP5JOpjp547FvaI
-        WU+KSM6AbjGnX8o7CObtOrsWcTR5bi4=
-Date:   Thu, 18 Aug 2022 00:00:58 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     pmladek@suse.com, Dinh Nguyen <dinguyen@kernel.org>,
-        Tony Luck <tony.luck@intel.com>, akpm@linux-foundation.org,
-        bhe@redhat.com, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, linux-edac@vger.kernel.org
-Subject: Re: [PATCH v2 10/13] EDAC/altera: Skip the panic notifier if kdump
- is loaded
-Message-ID: <Yv1lGpisQVFpUOGP@zn.tnic>
-References: <20220719195325.402745-1-gpiccoli@igalia.com>
- <20220719195325.402745-11-gpiccoli@igalia.com>
- <Yv0mCY04heUXsGiC@zn.tnic>
- <46137c67-25b4-6657-33b7-cffdc7afc0d7@igalia.com>
- <Yv1C0Y25u2IB7PCs@zn.tnic>
- <7f016d7f-a546-a45d-c65c-bc35269b4faa@igalia.com>
- <Yv1XVRmTXHLhOkER@zn.tnic>
- <c0250075-ec87-189f-52c5-e0520325a015@igalia.com>
- <Yv1hn2ayPoyKBAj8@zn.tnic>
- <1ee275b3-97e8-4c2b-be88-d50898d17e23@igalia.com>
+        Wed, 17 Aug 2022 18:02:40 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E403B98CB2;
+        Wed, 17 Aug 2022 15:02:38 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id k9so467436wri.0;
+        Wed, 17 Aug 2022 15:02:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc;
+        bh=+rVwhS/v1efZjV9JaiQiNDDadLmE+6Njk1w34Ca9k3s=;
+        b=XC0F6SDky0pcb1VFOdnxjJvPeVSDKqiNxcXX088bL9G9xhMK1RUTYCqAdWvq8uuuUY
+         qYkeK9LRsDtuzj5t4FY+QSB+qq8qJ9XUEgRXU8MjsnJwAJo7M31TvvIeDkPDMjLpwyTr
+         VLXnUD5T2htBN8gJPoLRHTzm5lVliCxJEKXY+K3E1oKsx/UzO/6kO1oD7DvAk8Rpmx5I
+         jrrTHZI0lAo0s/iLg5hs5GnG1hFaWe0mQ59DkZFNQCQ6gYGgS/nj6liT8LGHSNitNQnL
+         /6Ueqdr6iYCTreaneR32mEgIh+nLmdXMHoU1Zz2ZG2fCcESArQhPQVhVuYOCH6QGwmi+
+         6ZWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=+rVwhS/v1efZjV9JaiQiNDDadLmE+6Njk1w34Ca9k3s=;
+        b=7ccnjW1ExX12VLrAevTuQ/S6JEGhkfyYAsZhRx28dJEhewpsOGeVzc5TtmSYyeszu0
+         SsVO83mGtMSY64K6Nv381c8rSAbnqR86HTZ25NRUUsiVVrJ/r9ZrVH3aOo58bDe5GQTW
+         eE8YxWcOGeVnVPIdLEkK0jD2BGVcQIZilUXctHDVRPHbq3yYvjFVz0cNbmRNbBp+Slmc
+         XyI+P4qJnOgZbkv/rfVMdkVbnQvqW7MsUHjkwzUBbqsIetSP2KzYXGSvItuWJcYehzdz
+         5f2aSMMcPxMawXfmtLpBYvm5muiUy/SrlJY4VlLtaO1/X076M1oDy1OOcQDbus+YGSZH
+         jKSA==
+X-Gm-Message-State: ACgBeo0VMtEsf9CobZckxduZLsIab4L7AQgpzfpC5PJ0V8prwTDDAADa
+        sgph3stN7hTQ+blhK1PnxYMIn52HHKkrNNq3
+X-Google-Smtp-Source: AA6agR5cCdcYKHWI60JmXEIFfCQFOyocwmx57gVltGNwUl1UoanmElTicNY+iUpwS8YjycA/T/nesA==
+X-Received: by 2002:a5d:4752:0:b0:225:1fb1:862f with SMTP id o18-20020a5d4752000000b002251fb1862fmr40442wrs.458.1660773757262;
+        Wed, 17 Aug 2022 15:02:37 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id n189-20020a1ca4c6000000b003a540fef440sm3666767wme.1.2022.08.17.15.02.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 15:02:36 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 23:02:34 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: build failure of next-20220817 for amdgpu
+Message-ID: <Yv1lepjhg/6QKyQl@debian>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1ee275b3-97e8-4c2b-be88-d50898d17e23@igalia.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 06:56:11PM -0300, Guilherme G. Piccoli wrote:
-> But do you agree that currently, in case of a kdump, that information
-> *is not collected*, with our without my patch?
+Hi All,
 
-If for some reason that panic notifier does not get run before kdump,
-then that's a bug and that driver should not use a panic notifier to log
-hw errors in the first place.
+Not sure if it has been reported, build of next-20220817 fails with the
+error:
 
--- 
-Regards/Gruss,
-    Boris.
+ERROR: modpost: "cpu_smallcore_map" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Trying to do a git bisect to find out the offending commit.
+
+I will be happy to test any patch or provide any extra log if needed.
+
+
+--
+Regards
+Sudip

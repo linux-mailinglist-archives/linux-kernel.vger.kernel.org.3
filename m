@@ -2,97 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2390B597004
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C2D597002
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238904AbiHQNgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 09:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56734 "EHLO
+        id S239532AbiHQNhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 09:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234215AbiHQNgv (ORCPT
+        with ESMTP id S239415AbiHQNhH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 09:36:51 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2A271987;
-        Wed, 17 Aug 2022 06:36:50 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oOJDz-00041R-AG; Wed, 17 Aug 2022 15:36:47 +0200
-Message-ID: <967ef480-2fac-9724-61c7-2d5e69c26ec3@leemhuis.info>
-Date:   Wed, 17 Aug 2022 15:36:44 +0200
+        Wed, 17 Aug 2022 09:37:07 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071C15FC4
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:37:06 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id x10so13587656ljq.4
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:37:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=7wB3WWnOJH5yuxAoHFYLtWoRmPg9G9xcBhK/2UoVZfI=;
+        b=xXejSYFkVQQPaT21jQcaiaCEYyx8NLJIlNPkmEacpQZItRPOOuhAC7ymN0WR1vkz3P
+         lRga27OItHaG3lyvIsO+lrU4eAMw0xoOYtusP5jECJjh5k1sX60F2fJvlsf/3IASU+a2
+         R6OTNJTpyBN1adJiqxOz0KI21UMK7Sxbh34aLk62kiSwvruhGSoTseUrBWANqCAlLfPb
+         Z96dxbYk/Mp/R6gcyaEWn/DrKWeokkZWJYI2HY7qs4iml4d5/TMqnzeose0WXZFOcwqU
+         agX6FYRVdbeQnrt26S06ZCbVOlmxVhoNUv8iZ59L/kUxF7WjVV1zSRWXhHjU2BbGRARN
+         B56A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=7wB3WWnOJH5yuxAoHFYLtWoRmPg9G9xcBhK/2UoVZfI=;
+        b=rSC/ALNzm1pizVc6aPSmK0RSEUnmhlFwpiXvcvX+mEAL9IxtaOPzFBTZWeBhtijluc
+         6M4OD/itRcWiJG/9uQQdfXbpei6atfE/aaT5L4SLHl7gO1VgNaRVlQbjcGcI1ya3S/7n
+         8SJA8OMQQS+sOXk5YK+vMFoLV8P5eFJM7E4SCt71kohczqLpNgJppzWnlsteZKntY44B
+         8ZOlZjqtzcb/Re9Ndxhrwurx4a1baOHE7muj/yoqh+3ZjRf/rqyTEh6QFuwD37EKyAEO
+         lq/XXhokBekPqFJh1NyC88Uo0OrcjpLvHud/1aVdM1sK95GYdR/d7wv3eEl4Sq5QseUP
+         TIXQ==
+X-Gm-Message-State: ACgBeo0pmgBLvYIXIifGjbxAx46K2jnm6krCe5y9yI7dXrOtDEju/E8Y
+        RigFI1F0y8z3hK1T3uzTbJx1Tw==
+X-Google-Smtp-Source: AA6agR7Rhj0IHgbG6Qt6mM337jJUY3soy+LsdDxzQJ+Udmh/ha83Sbwdt7PpyntTLEzl1YRGEA87VA==
+X-Received: by 2002:a2e:a28d:0:b0:25e:66ea:637b with SMTP id k13-20020a2ea28d000000b0025e66ea637bmr7561623lja.24.1660743424389;
+        Wed, 17 Aug 2022 06:37:04 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:1b1c:14b7:109b:ed76? (d15l54h48cw7vbh-qr4-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1b1c:14b7:109b:ed76])
+        by smtp.gmail.com with ESMTPSA id u10-20020a05651220ca00b0048b0bf9f4bfsm1692055lfr.140.2022.08.17.06.37.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Aug 2022 06:37:03 -0700 (PDT)
+Message-ID: <1069b35f-c6a2-47a7-f8fe-c4b720685844@linaro.org>
+Date:   Wed, 17 Aug 2022 16:37:02 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [RFT PATCH 03/12] dt-bindings: mfd: qcom,tcsr: add MSM8974
 Content-Language: en-US
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev <netdev@vger.kernel.org>, craig@mcqueen.id.au
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Bug 216320 - KSZ8794 operation broken
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220817131415.714340-1-krzysztof.kozlowski@linaro.org>
+ <20220817131415.714340-4-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220817131415.714340-4-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1660743410;4d681711;
-X-HE-SMSGID: 1oOJDz-00041R-AG
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
-
-I noticed a regression report in bugzilla.kernel.org that afaics nobody
-acted upon since it was reported. That's why I decided to forward it by
-mail to those that afaics should handle this.
-
-To quote from https://bugzilla.kernel.org/show_bug.cgi?id=216320 :
-
-> After upgrading a Yocto build system from kernel 5.4 to 5.15, I found KSZ8794 switch operation was no longer functional. I got errors such as:
+On 17/08/2022 16:14, Krzysztof Kozlowski wrote:
+> Document new MSM8974 TCSR compatible.
 > 
-> Aug  1 22:23:17 tv999996 kern.err kernel: [   10.770912] ksz8795-switch spi2.0: Unsupported interface: gmii, port: 0
-> Aug  1 22:23:17 tv999996 kern.warn kernel: [   10.777562] ksz8795-switch spi2.0 wan (uninitialized): validation of gmii with support 0000000,00000000,000062cf and advertisement 0000000,00000000,000062cf failed: -22
-> Aug  1 22:23:17 tv999996 kern.err kernel: [   10.792874] ksz8795-switch spi2.0 wan (uninitialized): failed to connect to PHY: -EINVAL
-> Aug  1 22:23:17 tv999996 kern.err kernel: [   10.800978] ksz8795-switch spi2.0 wan (uninitialized): error -22 setting up PHY for tree 0, switch 0, port 0
-> Aug  1 22:23:17 tv999996 kern.err kernel: [   10.829188] ksz8795-switch spi2.0: Unsupported interface: gmii, port: 1
-> Aug  1 22:23:17 tv999996 kern.warn kernel: [   10.835821] ksz8795-switch spi2.0 lan2 (uninitialized): validation of gmii with support 0000000,00000000,000062cf and advertisement 0000000,00000000,000062cf failed: -22
-> Aug  1 22:23:17 tv999996 kern.err kernel: [   10.851156] ksz8795-switch spi2.0 lan2 (uninitialized): failed to connect to PHY: -EINVAL
-> Aug  1 22:23:17 tv999996 kern.err kernel: [   10.859358] ksz8795-switch spi2.0 lan2 (uninitialized): error -22 setting up PHY for tree 0, switch 0, port 1
-> Aug  1 22:23:17 tv999996 kern.err kernel: [   10.892821] ksz8795-switch spi2.0: Unsupported interface: gmii, port: 2
-> Aug  1 22:23:17 tv999996 kern.warn kernel: [   10.899466] ksz8795-switch spi2.0 lan1 (uninitialized): validation of gmii with support 0000000,00000000,000062cf and advertisement 0000000,00000000,000062cf failed: -22
-> Aug  1 22:23:17 tv999996 kern.err kernel: [   10.914845] ksz8795-switch spi2.0 lan1 (uninitialized): failed to connect to PHY: -EINVAL
-> Aug  1 22:23:17 tv999996 kern.err kernel: [   10.923052] ksz8795-switch spi2.0 lan1 (uninitialized): error -22 setting up PHY for tree 0, switch 0, port 2
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> I found that if I reverted commit 2c709e0bdad4d996ec8925b9ee6d5b97458708f1, "net: dsa: microchip: ksz8795: add phylink support", then it worked properly again. The errors I saw were due to the checks in ksz8_validate() that were added in the above commit.
-Could somebody please take a look, especially if you're among the main
-recipients of this mail and not just CCed?
+> diff --git a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
+> index e1c4936a0352..e7383dcad83b 100644
+> --- a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
+> @@ -18,6 +18,7 @@ properties:
+>      oneOf:
+>        - items:
+>            - enum:
+> +              - qcom,msm8974-tcsr
 
-Anyway, to ensure this is not forgotten I'll add it to the Linux kernel
-regression tracking bot:
+There is already qcom,tcsr-msm8974 so the patch can be dropped.
 
-#regzbot introduced: 2c709e0bdad4d996ec8925b9ee6d5b97458708f1
-https://bugzilla.kernel.org/show_bug.cgi?id=216320
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply -- ideally with also
-telling regzbot about it, as explained here:
-https://linux-regtracking.leemhuis.info/tracked-regression/
-
-Reminder for developers: When fixing the issue, add 'Link:' tags
-pointing to the report in bugzilla, as the kernel's documentation calls
-for; above page explains why this is important for tracked regressions.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+Best regards,
+Krzysztof

@@ -2,106 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0A059774C
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F26D59777B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241697AbiHQUED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 16:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
+        id S241696AbiHQUFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 16:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241680AbiHQUDy (ORCPT
+        with ESMTP id S230051AbiHQUFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 16:03:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA1C27B05
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:03:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68DB56151E
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 20:03:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6340CC43470;
-        Wed, 17 Aug 2022 20:03:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660766631;
-        bh=SNZ70vt4bNjbtH48RRhcFsT0HkyKYDhAfV/NNF8Sj9I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=taN9Qch78MvSeXbDyWhIPR+suwZFNPzyZmAzLyaR8NSXf4mh7CdyLT7HVxlXTnPNq
-         T/i1I8SetYLuOCZkc2llJ3tcbeIPqTr0ehmxYsJOjjVvF0c8+a7ajJ3QjE+b/9e+7f
-         r9k6dPFiBV9QJP6TypHRyedePbioXwEtckP3Qdz+fIShsVIIW2fr3W2CxSGN7stVLq
-         5BRjY4Te5NT9sd8GO5i4YGbKHiZc/pOGu19BP1yEHJMFNT1LcwPOX82Or3HscGafKt
-         bbMEGjFAPBlHqKea0D5eQu6L5hWRWQ1D1nfxltwTKwJPmDm9xuV6BlO/ijoCjxnYzR
-         mRB3pVzkAtsrw==
-From:   =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linux Phy <linux-phy@lists.infradead.org>,
-        Gregory Clement <gregory.clement@bootlin.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, pali@kernel.org,
-        josef.schlehofer@nic.cz,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH linux-phy v2 4/4] arm64: dts: armada-3720-turris-mox: Change comphy tx amplitude for 2500base-x mode
-Date:   Wed, 17 Aug 2022 22:03:35 +0200
-Message-Id: <20220817200335.911-5-kabel@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220817200335.911-1-kabel@kernel.org>
-References: <20220817200335.911-1-kabel@kernel.org>
+        Wed, 17 Aug 2022 16:05:51 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F8F5A2CA
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:05:50 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id a4so5671977wrq.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:05:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=G88Wg8efx4vUqMWMZ62OXKazA2toNV7pxgmBvPS4y7g=;
+        b=UjMVkMOhH0QDp6O/pCgKkjwAgoTr7VLaEZvWBQ+tjcd31e0GYx2VQdEmdGYONFZlBV
+         JXSoVTKAwZz2v4YW/Uizoa99V8t3dHzfTeno0mWPMNhh4igom0Bmr6ijGRVDHpyMGd7K
+         RD33fy8KrpjEF9DtfgDokOP/K0xkdEBYEZgLbmuvpjzpJ77YnXuGes8IGqUhqOEtcuTz
+         1EtmXbFWHbm8sgCgqbfJwoywVRFVNGycJiPJnMqkXnaxVeGp5CUmEstg4+UHY5j1Wvvc
+         OYe7bnF33uDXEY5dt1xkYnKlxySlYViNcOylr1RCwj3UfknSZbnUPfMlStx4kPmCFh6a
+         AtQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=G88Wg8efx4vUqMWMZ62OXKazA2toNV7pxgmBvPS4y7g=;
+        b=723NwJcd0FMX7EX2BG3FJKE4SmIiU4WcL5fGjwrsVIRl661RyeUfWq6klw6OEfa60/
+         TtNcdw3/UBO7/KB/Aw2d2S1VcziVyS/Hp1URnA/pgVCMiXACkc43mZ+Wvtjd5cGSDnnM
+         WgNynxLfq6OzOEU9ZdwZdN+Fqruat/f/COv6qs8XRoT+EJOoM+dm0Saecuo0f4lFdXnz
+         /3i4Aq47if8GU5/IUKYl2JvhCTi+W9TBVwTxUTpVCE53SAl6zWIs+nWAonhcftfy6hZW
+         RXlCleV99TCdQnyq3pZYwE5Mw+lxslTOGczLvD7t3botqfTZDQHqZLSZQ/v3O+dBCTcF
+         Iwxg==
+X-Gm-Message-State: ACgBeo3NzEB81CGLhAxfxwUxCC7BmwuqkxTiCC3kU9aaepvPP1r5QqeI
+        d1HdMjfOmcgWQCU0vnuPoProrg==
+X-Google-Smtp-Source: AA6agR5IgGfJqwk47mOqzOms5cJpBLn149vtKJEQDmN0sxHazUEu1rNO09FeTJ5nbKwwA4+D0l30ow==
+X-Received: by 2002:a05:6000:617:b0:225:1d23:467a with SMTP id bn23-20020a056000061700b002251d23467amr4681470wrb.692.1660766749119;
+        Wed, 17 Aug 2022 13:05:49 -0700 (PDT)
+Received: from henark71.. ([109.76.58.63])
+        by smtp.gmail.com with ESMTPSA id i133-20020a1c3b8b000000b003a531c7aa66sm3400883wma.1.2022.08.17.13.05.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 13:05:47 -0700 (PDT)
+From:   Conor Dooley <mail@conchuod.ie>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Anup Patel <anup@brainfault.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Jessica Clarke <jrtc27@jrtc27.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, qemu-riscv@nongnu.org
+Subject: [PATCH 0/4] Fix dt-validate issues on qemu dtbdumps due to dt-bindings
+Date:   Wed, 17 Aug 2022 21:05:19 +0100
+Message-Id: <20220817200531.988850-1-mail@conchuod.ie>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change comphy transmit amplitude to 1025 mV for 2500base-x mode on
-comphy connected to Topaz.
+From: Conor Dooley <conor.dooley@microchip.com>
 
-This fixes issue wherein if the 8b/10b encoded packet contains a long
-enough alternating sequence of bits (010101... or 101010...), which
-happens if the packet contains a sequence of 'J' or '\xb5' bytes, the
-packet may be lost when sent from A3720 to Topaz due to FCS error. The
-probability of loss grows with the number of 'J's with default transmit
-amplitude setting - with 114 'J's the probability is about 50%, with 125
-'J's almost 100% of packets  are lost.
+The device trees produced automatically for the virt and spike machines
+fail dt-validate on several grounds. Some of these need to be fixed in
+the linux kernel's dt-bindings, but others are caused by bugs in QEMU.
 
-Fixes: 7109d817db2e ("arm64: dts: marvell: add DTS for Turris Mox")
-Signed-off-by: Marek Behún <kabel@kernel.org>
----
- arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Patches been sent that fix the QEMU issues [0], but a couple of them
+need to be fixed in the kernel's dt-bindings. The first patches add
+compatibles for "riscv,{clint,plic}0" which are present in drivers and
+the auto generated QEMU dtbs. The final patch should be ignored for all
+serious purposes unless you want to wash your eyes out afterwards, but
+JIC the versioned extensions ever come up, it's there.
 
-diff --git a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-index ada164d423f3..74a7ac1f8ecb 100644
---- a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-+++ b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-@@ -181,6 +181,16 @@ &eth1 {
- 	phys = <&comphy0 1>;
- };
- 
-+&comphy0 {
-+	/*
-+	 * Set peak to peak transmit amplitude to 1025 mV to fix issue wherein
-+	 * a packet may be lost if it contains a long enough sequence of 'J'
-+	 * or '\xb5' bytes.
-+	 */
-+	tx-p2p-microvolt = <1025000>;
-+	tx-p2p-microvolt-names = "2500base-x";
-+};
-+
- &sdhci0 {
- 	wp-inverted;
- 	bus-width = <4>;
+Thanks to Rob Herring for reporting these issues [1],
+Conor.
+
+To reproduce the errors:
+./build/qemu-system-riscv64 -nographic -machine virt,dumpdtb=qemu.dtb
+dt-validate -p /path/to/linux/kernel/Documentation/devicetree/bindings/processed-schema.json qemu.dtb
+(The processed schema needs to be generated first)
+
+0 - https://lore.kernel.org/linux-riscv/20220810184612.157317-1-mail@conchuod.ie/
+1 - https://lore.kernel.org/linux-riscv/20220803170552.GA2250266-robh@kernel.org/
+
+Changes since v1:
+- drop the "legacy systems" bit from the binding descriptions
+- convert to a regex for the isa string
+
+Conor Dooley (4):
+  dt-bindings: timer: sifive,clint: add legacy riscv compatible
+  dt-bindings: interrupt-controller: sifive,plic: add legacy riscv
+    compatible
+  dt-bindings: riscv: add new riscv,isa strings for emulators
+  dt-bindings: riscv: isa string bonus content
+
+ .../sifive,plic-1.0.0.yaml                     |  5 +++++
+ .../devicetree/bindings/riscv/cpus.yaml        |  9 ++++++---
+ .../bindings/timer/sifive,clint.yaml           | 18 ++++++++++++------
+ 3 files changed, 23 insertions(+), 9 deletions(-)
+
+
+base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
 -- 
-2.35.1
+2.37.1
 

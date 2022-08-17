@@ -2,152 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC1C5975E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29EBC5975D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237097AbiHQSkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 14:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
+        id S240932AbiHQSlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 14:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241006AbiHQSko (ORCPT
+        with ESMTP id S237435AbiHQSle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 14:40:44 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBB5A00EE
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 11:40:40 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id d3-20020a170902cec300b0016f04e2e730so8595349plg.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 11:40:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=ZYTlBBFnaZ0P/8h1RW7JgkzBP7Qz3/ENWA74waVFHsk=;
-        b=rEKzgG4kB4gJbvdPUY9H+lfnRgqahefKDR5Jl73nA4WKGW5kwuqnE88uTY3v00RzaR
-         P1XqUhHs+w6cV8koRkvS9gXHlJMZFkJO0Bj5DiMro7jSn6MbktfS4XD+brKZjtIQlDvb
-         oF6nNCpMSlQJz8fcZfBUd8ryCNywZ6t4+gIMJS/wasIo4COpmd00eLTiu9rkzKnLBiyj
-         jZPGnBjgNjAqfK+18xRawhoR/RLoAcl5bAavj+iTn+QzSSJGMAzogpo0nyPY7URheaJZ
-         MLzzf2V3uR8cfruliPSKCDP2Qt73gUn9gGO7Y8hp82RFjbgulhTxsLFZyJSWboAG7dMI
-         6FIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=ZYTlBBFnaZ0P/8h1RW7JgkzBP7Qz3/ENWA74waVFHsk=;
-        b=4DEc/FPpEpJtBVm6bYszy1nwW9He2md+d2JrxIlg65btQrxiWs9fUVmfnVih/HnKDc
-         F+xKbdyR/8T6EeXHni8lz2KUdpvnTBscttYJEMhNkTA4Zh/oi2Ty/t7MXhTyFnMd3IVt
-         RMW22JSAuVCZJ+3BfSrHUoUAnNY/XPogLrmOj6o9nQCsyh4IJ9HyC4yiJwl3GDRRu7Mm
-         8bOWf3YvPQX1hhCQyat3ZzA7D4z+WasCraF6mRcoL1LJKzVef6k8cOnIhIcF/jkPWlES
-         MMdGLSq86hgACcQVUIBSVFs7IAZFzvowVMUZ8ioxCLN8eI/n6z2DvOS+nVERuougrNLZ
-         wD2A==
-X-Gm-Message-State: ACgBeo3QswZia55bcIDNiSg7s3J03Mj/m/jxkaBJ2c/5+QsCYWrUTTSr
-        kp8DMuauavvVFvj9Emt46CJDsS/YaaXqhYFZhXGU2w==
-X-Google-Smtp-Source: AA6agR6CY7WhInmP29tG9He+JFpqE/zTM3C8nWq8t4Z4fQTePSj6YMvMB7iBjRaZ4xlxokQyxFxrdpVFfQgF/p2WMWMGoA==
-X-Received: from isaacmanjarres.irv.corp.google.com ([2620:15c:2d:3:6c6d:d00:f0dd:6ddf])
- (user=isaacmanjarres job=sendgmr) by 2002:a17:90a:bf0a:b0:1fa:b53c:3f3a with
- SMTP id c10-20020a17090abf0a00b001fab53c3f3amr4095338pjs.126.1660761640140;
- Wed, 17 Aug 2022 11:40:40 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 11:40:26 -0700
-Message-Id: <20220817184026.3468620-1-isaacmanjarres@google.com>
+        Wed, 17 Aug 2022 14:41:34 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875249FAB8;
+        Wed, 17 Aug 2022 11:41:33 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id E96C55C0055;
+        Wed, 17 Aug 2022 14:41:32 -0400 (EDT)
+Received: from imap42 ([10.202.2.92])
+  by compute2.internal (MEProxy); Wed, 17 Aug 2022 14:41:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1660761692; x=
+        1660848092; bh=KBkAVrFUWUiLnYz1HgB/kktwNXCcCNFrJP92tOCbhDk=; b=i
+        kSCWfDhzh9hREGc9NnjtCI/XLmrpunPU3M5N8WxiUoMsnKo0cUDYKCcUIFKOTgtF
+        +6TFAc1M/ixDcswGt0aKJ9BSLoT1dKD4+ow6CxfhKhJ7nlC4o3I3PY/QYRMhy3+j
+        Lt03MeQ52D9lQpUfNbSjAeHh9+UbPXZxySSP2kFJM7ynMzbKUiE9qnrPcDB2vvTX
+        +BbhwhbMRuBoFiWU0npqrL0DCJVpGyTJ4956cIX8AxJ7IEkMResR4POpQ4Y1Zgt0
+        0gTLlz3Cf8ezcyPX7FUQ6ixRwFgGgkXeGwcEbQbxlBDuosZe0NX8CeRV4RIST2Z1
+        lFmBvg+71tN/LxHUMLuEA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660761692; x=
+        1660848092; bh=KBkAVrFUWUiLnYz1HgB/kktwNXCcCNFrJP92tOCbhDk=; b=U
+        Dy6EGmSK7gzMimqN2Np815myw8KzJqgcF72m++jcMXieKMudfuKtm4o4pIthssx1
+        jJzVD6Yc2FOrUaOe3zW/5cHKGqJLSLAMd4UksqbU6tjF2/11FDlL2GmqL6NQICYf
+        HQf7kdvQg5h01FPOw57CsTicUHiA8E+egEGCtA5cPqo9BatnyuL+zsOGziXAn2EZ
+        b/9N6bW7bXJM+l1vM5vMh7EFOtWs5vTu5GY5lz1P8DXI+2qNAcrf6OO9WmIE0bJy
+        RpcdZa6wUlwvTUl4HPNHLI3Ys6WGTnySymfYcKBaVG4I2dIomm4iQDFBO5DLRIEK
+        7eSzQdx0Xr0P+90lPHfdQ==
+X-ME-Sender: <xms:XDb9YnFIagB7A2cBaaQ9vILES5qUY8hgnO2VQhhYng81is1f3NxtKQ>
+    <xme:XDb9YkV6eLgxdJ0xqtrcFHxCIAGsWTc-K38ygMoLkemAoHyfBQQvIpjATGxsIH_zJ
+    SpE9gyB3yfAaj03rA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehiedguddvlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enfghrlhcuvffnffculddvfedmnecujfgurhepofgfggfkjghffffhvfevufgtgfesthhq
+    redtreerjeenucfhrhhomhepfdffrghnihgvlhcuighufdcuoegugihusegugihuuhhurd
+    ighiiiqeenucggtffrrghtthgvrhhnpeffheffhfdvfefgjeehfedviedvfeehgeefgeeu
+    jedvheeuteelkeevvdduvdeludenucffohhmrghinheplhhotghkrdhrvggrugenucevlh
+    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihu
+    uhhurdighiii
+X-ME-Proxy: <xmx:XDb9YpJlIk5i-V5nCszbe21XnXqF-pO9TMHo9Nw8cXdqfBlWoNl2nw>
+    <xmx:XDb9YlHXYa8YJJP43LNqim97aNApWqDSToNK0K1TjcFnMEeeSfZUNQ>
+    <xmx:XDb9YtU3C4346XXEp4OB1tOcRRXLxP952bpCHiZ0SSkOisQqX4-72Q>
+    <xmx:XDb9YprWXRms0hWDnATlbCgWhPHNu29K7_MI2QvQkq_MkujLAU0zdQ>
+Feedback-ID: i6a694271:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 90270BC0075; Wed, 17 Aug 2022 14:41:32 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
 Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH v3] driver core: Don't probe devices after bus_type.match()
- probe deferral
-From:   "Isaac J. Manjarres" <isaacmanjarres@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Cc:     "Isaac J. Manjarres" <isaacmanjarres@google.com>,
-        stable@vger.kernel.org, Saravana Kannan <saravanak@google.com>,
-        Guenter Roeck <linux@roeck-us.net>, kernel-team@android.com,
+Message-Id: <668406b9-714f-4ade-889d-051cf42ceefc@www.fastmail.com>
+In-Reply-To: <20220817183453.GA24008@breakpoint.cc>
+References: <cover.1660592020.git.dxu@dxuuu.xyz>
+ <f850bb7e20950736d9175c61d7e0691098e06182.1660592020.git.dxu@dxuuu.xyz>
+ <871qth87r1.fsf@toke.dk> <20220815224011.GA9821@breakpoint.cc>
+ <5c7ac2ab-942f-4ee7-8a9c-39948a40681c@www.fastmail.com>
+ <20220817183453.GA24008@breakpoint.cc>
+Date:   Wed, 17 Aug 2022 12:41:12 -0600
+From:   "Daniel Xu" <dxu@dxuuu.xyz>
+To:     "Florian Westphal" <fw@strlen.de>
+Cc:     =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "Alexei Starovoitov" <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        "Andrii Nakryiko" <andrii@kernel.org>,
+        "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, pablo@netfilter.org,
+        netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH bpf-next 2/3] bpf: Add support for writing to nf_conn:mark
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both __device_attach_driver() and __driver_attach() check the return
-code of the bus_type.match() function to see if the device needs to be
-added to the deferred probe list. After adding the device to the list,
-the logic attempts to bind the device to the driver anyway, as if the
-device had matched with the driver, which is not correct.
+On Wed, Aug 17, 2022, at 12:34 PM, Florian Westphal wrote:
+> Daniel Xu <dxu@dxuuu.xyz> wrote:
+>> On Mon, Aug 15, 2022, at 4:40 PM, Florian Westphal wrote:
+>> > Toke H=C3=B8iland-J=C3=B8rgensen <toke@kernel.org> wrote:
+>> >> > Support direct writes to nf_conn:mark from TC and XDP prog types=
+. This
+>> >> > is useful when applications want to store per-connection metadat=
+a. This
+>> >> > is also particularly useful for applications that run both bpf a=
+nd
+>> >> > iptables/nftables because the latter can trivially access this m=
+etadata.
+>> >> >
+>> >> > One example use case would be if a bpf prog is responsible for a=
+dvanced
+>> >> > packet classification and iptables/nftables is later used for ro=
+uting
+>> >> > due to pre-existing/legacy code.
+>> >> >
+>> >> > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+>> >>=20
+>> >> Didn't we agree the last time around that all field access should =
+be
+>> >> using helper kfuncs instead of allowing direct writes to struct nf=
+_conn?
+>> >
+>> > I don't see why ct->mark needs special handling.
+>> >
+>> > It might be possible we need to change accesses on nf/tc side to use
+>> > READ/WRITE_ONCE though.
+>>=20
+>> I reviewed some of the LKMM literature and I would concur that
+>> READ/WRITE_ONCE() is necessary. Especially after this patchset.
+>>=20
+>> However, it's unclear to me if this is a latent issue. IOW: is reading
+>> ct->mark protected by a lock? I only briefly looked but it doesn't
+>> seem like it.
+>
+> No, its not protected by a lock.  READ/WRITE_ONCE is unrelated to your
+> patchset, this is a pre-existing "bug".
 
-If __device_attach_driver() detects that the device in question is not
-ready to match with a driver on the bus, then it doesn't make sense for
-the device to attempt to bind with the current driver or continue
-attempting to match with any of the other drivers on the bus. So, update
-the logic in __device_attach_driver() to reflect this.
-
-If __driver_attach() detects that a driver tried to match with a device
-that is not ready to match yet, then the driver should not attempt to bind
-with the device. However, the driver can still attempt to match and bind
-with other devices on the bus, as drivers can be bound to multiple
-devices. So, update the logic in __driver_attach() to reflect this.
-
-Cc: stable@vger.kernel.org
-Cc: Saravana Kannan <saravanak@google.com>
-Fixes: 656b8035b0ee ("ARM: 8524/1: driver cohandle -EPROBE_DEFER from bus_type.match()")
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Saravana Kannan <saravanak@google.com>
----
- drivers/base/dd.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-v1 -> v2:
-- Fixed the logic in __driver_attach() to allow a driver to continue
-  attempting to match and bind with devices in case of any error, not
-  just probe deferral.
-
-v2 -> v3:
-- Restored the patch back to v1.
-- Added Guenter's Tested-by tag.
-- Added Saravana's Reviewed-by tag.
-- Cc'd stable@vger.kernel.org
-
-Greg,
-
-This is the final version of this patch. Can you please pick this up?
+Thanks for confirming. Since it's pre-existing I will send out a followup
+patchset then.
 
 Thanks,
-Isaac
-
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index 70f79fc71539..90b31fb141a5 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -881,6 +881,11 @@ static int __device_attach_driver(struct device_driver *drv, void *_data)
- 		dev_dbg(dev, "Device match requests probe deferral\n");
- 		dev->can_match = true;
- 		driver_deferred_probe_add(dev);
-+		/*
-+		 * Device can't match with a driver right now, so don't attempt
-+		 * to match or bind with other drivers on the bus.
-+		 */
-+		return ret;
- 	} else if (ret < 0) {
- 		dev_dbg(dev, "Bus failed to match device: %d\n", ret);
- 		return ret;
-@@ -1120,6 +1125,11 @@ static int __driver_attach(struct device *dev, void *data)
- 		dev_dbg(dev, "Device match requests probe deferral\n");
- 		dev->can_match = true;
- 		driver_deferred_probe_add(dev);
-+		/*
-+		 * Driver could not match with device, but may match with
-+		 * another device on the bus.
-+		 */
-+		return 0;
- 	} else if (ret < 0) {
- 		dev_dbg(dev, "Bus failed to match device: %d\n", ret);
- 		return ret;
--- 
-2.37.1.595.g718a3a8f04-goog
-
+Daniel

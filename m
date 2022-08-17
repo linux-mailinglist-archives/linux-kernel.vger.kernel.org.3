@@ -2,92 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 575C2597526
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83738597530
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241231AbiHQRdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
+        id S239317AbiHQRew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241187AbiHQRdn (ORCPT
+        with ESMTP id S236240AbiHQRer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:33:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7775E13F0A
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:33:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660757616;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Rmwej3v878+xzOGk7t4M6m20uPBVhfID+7XwEFRh3lI=;
-        b=WMrrg5KepM7UkroljXb0b8P5zglBMxacVAp0+ChQ0Sbd7xdrfWJwCPP+Qm9HB5aUXeLnoI
-        J9WSMWma4GCkkFBMTq/1OxEWCRUDLQfOAt2fPuH1ajg7zmoaKGKqqGP+b8gef+YNkLr2Ay
-        mNWRaCKeyss43mZDrt6RYJFhmWI8lJw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-528-sKUEwOHkPKypKIjwWDhqmA-1; Wed, 17 Aug 2022 13:33:34 -0400
-X-MC-Unique: sKUEwOHkPKypKIjwWDhqmA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 768A1380673E;
-        Wed, 17 Aug 2022 17:33:34 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E97BA2026D4C;
-        Wed, 17 Aug 2022 17:33:33 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH] afs: Return -EAGAIN, not -EREMOTEIO,
- when a file already locked
-From:   David Howells <dhowells@redhat.com>
-To:     marc.dionne@auristor.com
-Cc:     linux-afs@lists.infradead.org, dhowells@redhat.com,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 17 Aug 2022 18:33:33 +0100
-Message-ID: <166075761334.3533338.2591992675160918098.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        Wed, 17 Aug 2022 13:34:47 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED419F0E5;
+        Wed, 17 Aug 2022 10:34:46 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id gp7so13087473pjb.4;
+        Wed, 17 Aug 2022 10:34:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=284A91xJpS6nwRvx67VF7YSoP83e6JuEnTUJYB3raPg=;
+        b=bYb4QUNP3jcTW6w5gDojVQgeXieFUswJifAM9vhjd5FVyK6aT/pZ1TVAJ5dVh0bdGC
+         aXbTIhrFz+1A2lDCIfmBaGWPy8SxJvhCvjNoezyYG4Mxudr+RR03FBD6SfcLo2zT+jxd
+         bOzysazjUG8D7hoyV8Wfb3h+0ZUi+pi/+pb3NqUns1qH2tYAbaoUi/xMg2KnOaV6HIwl
+         wF7ggN2pke5cdFaWc1/ty05TbtcDMG4kSYFLdAWr9uCNaZNKf3y65ww6hZPkZvMVi5Rx
+         2cuBoB1OrziAclyREuyqHWWBhEsrhutWB0p7R6xLN54BMQf6fnHp5yV3xuzvmyCEhqwh
+         0GRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=284A91xJpS6nwRvx67VF7YSoP83e6JuEnTUJYB3raPg=;
+        b=30oH6tvq8eCxVXJirTuaQYp7WLN0zMOtRadKL5F2ztr8Ye9fZjoxKQrfkxdFuvej+Y
+         FMlE5U0Zl5OX2/R6oOrghZItLLIhtBJ53D8jfUwPKONo/r5G4MIX4L0GOHa+s+RkK+Jk
+         zUBY3huinCGJjAO5KrwOAzQl+XTz8nJ6zXBlDANMk6I+nkaOnXNIGHV5LZ4FNn9t/mvg
+         HG1TzTB/BV1unCqwqDoSJfM5S3VPgNiUWuyQdYRUrsHrTqAGLAAQRQKmQEAjxkKGC4hA
+         SFjw7fst5O3Bt5GNXEv6a6F2V/BBuoyVoetGXhDNm6QeC/iyZX5yDL+x4sh609HcYnDZ
+         oi3A==
+X-Gm-Message-State: ACgBeo3xqpqLXsK2QOVMeiuMMV1KKI3KramEiO3A838AsNVWKo3R7pDL
+        oEZ4DedyvtYksNXM5Iz3rMohYxSQGZo=
+X-Google-Smtp-Source: AA6agR77E6Bi90PS6CwHLsHj14t+4aZgUalGnRDUpaOb2EZ4IhtQuUC4Pu11YPiVtnY2Q5XTCJifMg==
+X-Received: by 2002:a17:90a:5517:b0:1f8:a7ce:ac33 with SMTP id b23-20020a17090a551700b001f8a7ceac33mr4870074pji.83.1660757686216;
+        Wed, 17 Aug 2022 10:34:46 -0700 (PDT)
+Received: from biggie ([103.230.148.189])
+        by smtp.gmail.com with ESMTPSA id i190-20020a6254c7000000b0052d4f2e2f6asm10696208pfb.119.2022.08.17.10.34.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 10:34:45 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 23:04:39 +0530
+From:   Gautam Menghani <gautammenghani201@gmail.com>
+To:     chenxiang66@hisilicon.com, shuah@kernel.org, liaoyu15@huawei.com
+Cc:     song.bao.hua@hisilicon.com, tiantao6@hisilicon.com,
+        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH] selftests/dma: Add a .gitignore file containing name of
+ executable
+Message-ID: <Yv0mr+vGANGYcxio@biggie>
+References: <20220724145931.32556-1-gautammenghani201@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220724145931.32556-1-gautammenghani201@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When trying to get a file lock on an AFS file, the server may return
-UAEAGAIN to indicate that the lock is already held.  This is currently
-translated by the default path to -EREMOTEIO.  Translate it instead to
--EAGAIN so that we know we can retry it.
+On Sun, Jul 24, 2022 at 08:29:31PM +0530, Gautam Menghani wrote:
+> The dma tests in kselftests are missing a .gitignore file, which leads
+> to the dma_map_benchmark executable file showing up in "git status".
+> This patch adds a .gitignore file containing the executable name.
+> 
+> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+> ---
+>  tools/testing/selftests/dma/.gitignore | 1 +
+>  1 file changed, 1 insertion(+)
+>  create mode 100644 tools/testing/selftests/dma/.gitignore
+> 
+> diff --git a/tools/testing/selftests/dma/.gitignore b/tools/testing/selftests/dma/.gitignore
+> new file mode 100644
+> index 000000000000..668e2f8be2f7
+> --- /dev/null
+> +++ b/tools/testing/selftests/dma/.gitignore
+> @@ -0,0 +1 @@
+> +dma_map_benchmark
+> -- 
+> 2.34.1
+> 
+Hi,
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
----
+Please review the above patch and let me know if any changes are required.
 
- fs/afs/misc.c |    1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/fs/afs/misc.c b/fs/afs/misc.c
-index 933e67fcdab1..805328ca5428 100644
---- a/fs/afs/misc.c
-+++ b/fs/afs/misc.c
-@@ -69,6 +69,7 @@ int afs_abort_to_error(u32 abort_code)
- 		/* Unified AFS error table */
- 	case UAEPERM:			return -EPERM;
- 	case UAENOENT:			return -ENOENT;
-+	case UAEAGAIN:			return -EAGAIN;
- 	case UAEACCES:			return -EACCES;
- 	case UAEBUSY:			return -EBUSY;
- 	case UAEEXIST:			return -EEXIST;
-
-
+Thanks,
+Gautam

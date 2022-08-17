@@ -2,203 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5CD9596F6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C446596FAD
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239710AbiHQNIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 09:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44986 "EHLO
+        id S239654AbiHQNIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 09:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239702AbiHQNHc (ORCPT
+        with ESMTP id S239726AbiHQNIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 09:07:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6485093507
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:05:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E30E46124E
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:05:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4EEFC433D6;
-        Wed, 17 Aug 2022 13:05:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660741533;
-        bh=yUTsEOEpDjYqB8eP56ze5KpCleJPryhAozKnZQO0bZA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=aZMEYADMHgCEKaoJ9DwfYc4dSl1DnGfV444vpUWmlTr71temCiTXh5oiygU8rVsKg
-         drA2K+CO9zwPgSj27CIMKEkp41KsKgZMSKB2l3Fr3ieO4VZ+rbelzWSeSQ+3ikqkqJ
-         NwBbkd6R97hnk485uoVfsZraupm/RY0W78dX8/O7eHW+4HtmSO5/8GFpSMviJp3Dg4
-         cedW+tRCyNvmz1pDnCvoDYPak5yKf4Jc5oVjCFiIZoR0vo+G+9zDtRUHDVlKgBu9/Y
-         a7y8R0nMOYGy3iELp8ejAHVXlgs9vTt7aP9VZHDzSOUh/GfYCa/ExwQZMqvlBYOC2X
-         gHVw3Y0GPOmXQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 625724035A; Wed, 17 Aug 2022 10:05:30 -0300 (-03)
-Date:   Wed, 17 Aug 2022 10:05:30 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Alexandre Chartre <alexandre.chartre@oracle.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Borislav Petkov <bp@suse.de>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Wyes Karny <wyes.karny@amd.com>
-Subject: [PATCH FYI 1/1] tools headers cpufeatures: Sync with the kernel
- sources
-Message-ID: <Yvznmu5oHv0ZDN2w@kernel.org>
+        Wed, 17 Aug 2022 09:08:24 -0400
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061729677F
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:06:07 -0700 (PDT)
+Received: by mail-qt1-f182.google.com with SMTP id h21so10289079qta.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:06:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=wT+w/e1pir6od65k8fW73wcIBpWHrOcKqnuAFp6tc4E=;
+        b=n8XRE76JvvAIouDx6x746plNd5MtzBj9qOBFDMQvbQzmcg7bbBscetGNpsqi8biuVp
+         OBEeNx5IVFI75/t9WkxPdZEhuTJnbfw6Kgb/07+8Wf8yp6wq8gxNR6DntLhoWX4TNGHg
+         Uk5sCdFWcrk0OV57zZjn3BDsMnUNoh+CafjCZTSPKDDFvuUE3L6ysxsd/q0WCBQ7h6ey
+         6bWcDLiM5w2Fvgo8FwWp+HezmGJMHhop9QE9coTUpGlIolW0TpiUPQRKXvo93ChU2KdB
+         3vw0WkrHe0+CCVNwbAwsLhcpurPKe3glo7Ja+3+fAjSYkYGTKKJp9Zc2KBPKoBjKuRlo
+         zk/Q==
+X-Gm-Message-State: ACgBeo3o2v2QQ47Y5o5xiGhBfCbbiTFdDyiglESJYc4yqs4zehoJ7P9i
+        huJFuf4Z6bYVky+qGC4KnuSFKxohyKM3Bg==
+X-Google-Smtp-Source: AA6agR7ZEWfL1o7H7FKdtRLkzNe+fnQBB3x6ZRXqnuLGqnEfcjWp+5xrU1Fy3JUM1uxm/l8GjnYsfw==
+X-Received: by 2002:ac8:7dcd:0:b0:344:5abb:afeb with SMTP id c13-20020ac87dcd000000b003445abbafebmr12983062qte.133.1660741565635;
+        Wed, 17 Aug 2022 06:06:05 -0700 (PDT)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id t201-20020a37aad2000000b006b9264191b5sm14872846qke.32.2022.08.17.06.06.04
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Aug 2022 06:06:05 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-332fc508d88so159680747b3.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:06:04 -0700 (PDT)
+X-Received: by 2002:a81:502:0:b0:32f:dcc4:146e with SMTP id
+ 2-20020a810502000000b0032fdcc4146emr14565309ywf.316.1660741564697; Wed, 17
+ Aug 2022 06:06:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
+ <CAMuHMdWYo7M44uLNhTmJenGDreGALBZ9E48oyBDEeAuL=0h=dw@mail.gmail.com>
+ <20220816132040.uwirtjm5yr6rdd3q@houat> <CAMuHMdWevP=3af=NneAJEDfOR+sz1thrQEhAQPNGrgitBtLjGA@mail.gmail.com>
+ <20220816141116.5nuszmilqv2exdb3@houat> <CAMuHMdXq_xGPx46bdnUFGDiG4kcgdxtXaRGTucFd3TRq8353dg@mail.gmail.com>
+ <20220816154956.pkdpxmmw27mia5ix@houat> <CAMuHMdX0L6cO_jYXKZTv0sm9V39Eiy_STiknSkdRQG4k-9GJeg@mail.gmail.com>
+ <20220817074710.w4c4xwj7edly2b5p@houat> <CAMuHMdXeBakWr6geOWGxnjQYaU9Pi4tRvVFFtubyMJZTT2nPnw@mail.gmail.com>
+ <20220817111454.pn2iltvyo2drebq7@houat>
+In-Reply-To: <20220817111454.pn2iltvyo2drebq7@houat>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 17 Aug 2022 15:05:52 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU57g1rNoLo65jhLK8mk4YkNEbMz1E7XKWk2dnCxTr=gg@mail.gmail.com>
+Message-ID: <CAMuHMdU57g1rNoLo65jhLK8mk4YkNEbMz1E7XKWk2dnCxTr=gg@mail.gmail.com>
+Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tldr; Just FYI, I'm carrying this on the perf tools tree.
+Hi Maxime,
 
-- Arnaldo
+On Wed, Aug 17, 2022 at 1:15 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> On Wed, Aug 17, 2022 at 10:35:07AM +0200, Geert Uytterhoeven wrote:
+> > On Wed, Aug 17, 2022 at 9:47 AM Maxime Ripard <maxime@cerno.tech> wrote:
+> > > On Wed, Aug 17, 2022 at 09:31:18AM +0200, Geert Uytterhoeven wrote:
+> > > > On Tue, Aug 16, 2022 at 5:50 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> > > > > On Tue, Aug 16, 2022 at 04:43:44PM +0200, Geert Uytterhoeven wrote:
+> > > > > > > > > > Either you have to add them here (e.g. "hd720p50" and "hd720p60"), or
+> > > > > > > > > > handle them through "@<refresh>".  The latter would impact "[PATCH v1
+> > > > > > > > > > 09/35] drm/modes: Move named modes parsing to a separate function", as
+> > > > > > > > > > currently a named mode and a refresh rate can't be specified both.
+> > > > > > > > >
+> > > > > > > > > I think the former would make more sense. It simplifies a bit the
+> > > > > > > > > parser, and we're going to use a named mode anyway.
+> > > > > > > > >
+> > > > > > > > > > As "[PATCH v1 34/35] drm/modes: Introduce the tv_mode property as a
+> > > > > > > > > > command-line option" uses a separate "tv_mode" option, and not the main
+> > > > > > > > > > mode name, I think you want to add them here.
+> > > > > > > > >
+> > > > > > > > > It's a separate story I think, we could have a named mode hd720p50,
+> > > > > > > > > which would be equivalent to 1280x720,tv_mode=hd720p
+> > > > > > > >
+> > > > > > > > So where's the field rate in "1280x720,tv_mode=hd720p"?
+> > > > > > >
+> > > > > > > Yeah, sorry I meant 1280x720@50,tv_mode=hd720p
+> > > > > >
+> > > > > > Above you said "I think the former would make more sense", so that
+> > > > > > should be "1280x720,tv_mode=hd720p50"?
+> > > > >
+> > > > > No, 720p at 50Hz would be either hd720p50 or 1280x720@50,tv_mode=hd720p
+> > > > > and 60Hz would be hd720p60 or 1280x720@60,tv_mode=hd720p
+> > > >
+> > > > I disagree: hd720p50 and hd720p60 are different TV modes.
+> > >
+> > > I agree, and I don't see how that command-line doesn't express that?
+> >
+> > Oh, I see what you mean: yes, it expresses that.
+> > But it is inconsistent with the NTSC/PAL/SECAM/hd{480,576}[ip] modes,
+> > where the TV mode specifies both number of lines and frame rate.
+>
+> Only if we're using a named mode, and naming is hard :)
 
-Full explanation:
+That's not true: "640x480,tv_mode=PAL-N" would give me a mode with
+625 lines and 25 frames/s, "640x480,tv_mode=PAL-M" would give me a
+mode with 525 lines and 30 frames/s.
 
-There used to be no copies, with tools/ code using kernel headers
-directly. From time to time tools/perf/ broke due to legitimate kernel
-hacking. At some point Linus complained about such direct usage. Then we
-adopted the current model.
+> Honestly, I'd be inclined to drop the hd* for now from this series. I
+> don't have a hardware to test it with, for some we don't even have
+> drivers that could implement these modes, we don't have a spec to work
+> from, it looks like a recipe for failure :)
 
-The way these headers are used in perf are not restricted to just
-including them to compile something.
+OK.
 
-There are sometimes used in scripts that convert defines into string
-tables, etc, so some change may break one of these scripts, or new MSRs
-may use some different #define pattern, etc.
+Gr{oetje,eeting}s,
 
-E.g.:
+                        Geert
 
-  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
-  tools/perf/trace/beauty/arch_errno_names.sh
-  tools/perf/trace/beauty/drm_ioctl.sh
-  tools/perf/trace/beauty/fadvise.sh
-  tools/perf/trace/beauty/fsconfig.sh
-  tools/perf/trace/beauty/fsmount.sh
-  $
-  $ tools/perf/trace/beauty/fadvise.sh
-  static const char *fadvise_advices[] = {
-  	[0] = "NORMAL",
-  	[1] = "RANDOM",
-  	[2] = "SEQUENTIAL",
-  	[3] = "WILLNEED",
-  	[4] = "DONTNEED",
-  	[5] = "NOREUSE",
-  };
-  $
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-The tools/perf/check-headers.sh script, part of the tools/ build
-process, points out changes in the original files.
-
-So its important not to touch the copies in tools/ when doing changes in
-the original kernel headers, that will be done later, when
-check-headers.sh inform about the change to the perf tools hackers.
-
----
-
-To pick the changes from:
-
-  2b1299322016731d ("x86/speculation: Add RSB VM Exit protections")
-  28a99e95f55c6185 ("x86/amd: Use IBPB for firmware calls")
-  4ad3278df6fe2b08 ("x86/speculation: Disable RRSBA behavior")
-  26aae8ccbc197223 ("x86/cpu/amd: Enumerate BTC_NO")
-  9756bba28470722d ("x86/speculation: Fill RSB on vmexit for IBRS")
-  3ebc170068885b6f ("x86/bugs: Add retbleed=ibpb")
-  2dbb887e875b1de3 ("x86/entry: Add kernel IBRS implementation")
-  6b80b59b35557065 ("x86/bugs: Report AMD retbleed vulnerability")
-  a149180fbcf336e9 ("x86: Add magic AMD return-thunk")
-  15e67227c49a5783 ("x86: Undo return-thunk damage")
-  a883d624aed463c8 ("x86/cpufeatures: Move RETPOLINE flags to word 11")
-  aae99a7c9ab371b2 ("x86/cpufeatures: Introduce x2AVIC CPUID bit")
-  6f33a9daff9f0790 ("x86: Fix comment for X86_FEATURE_ZEN")
-  51802186158c74a0 ("x86/speculation/mmio: Enumerate Processor MMIO Stale Data bug")
-
-This only causes these perf files to be rebuilt:
-
-  CC       /tmp/build/perf/bench/mem-memcpy-x86-64-asm.o
-  CC       /tmp/build/perf/bench/mem-memset-x86-64-asm.o
-
-And addresses this perf build warning:
-
-  Warning: Kernel ABI header at 'tools/arch/x86/include/asm/cpufeatures.h' differs from latest version at 'arch/x86/include/asm/cpufeatures.h'
-  diff -u tools/arch/x86/include/asm/cpufeatures.h arch/x86/include/asm/cpufeatures.h
-
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Alexandre Chartre <alexandre.chartre@oracle.com>
-Cc: Andrew Cooper <andrew.cooper3@citrix.com>
-Cc: Borislav Petkov <bp@suse.de>
-Cc: Daniel Sneddon <daniel.sneddon@linux.intel.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Cc: Wyes Karny <wyes.karny@amd.com>
-Link: https://lore.kernel.org/lkml/
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/arch/x86/include/asm/cpufeatures.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/tools/arch/x86/include/asm/cpufeatures.h b/tools/arch/x86/include/asm/cpufeatures.h
-index 8323ac5b7eee5172..235dc85c91c3e372 100644
---- a/tools/arch/x86/include/asm/cpufeatures.h
-+++ b/tools/arch/x86/include/asm/cpufeatures.h
-@@ -219,7 +219,7 @@
- #define X86_FEATURE_IBRS		( 7*32+25) /* Indirect Branch Restricted Speculation */
- #define X86_FEATURE_IBPB		( 7*32+26) /* Indirect Branch Prediction Barrier */
- #define X86_FEATURE_STIBP		( 7*32+27) /* Single Thread Indirect Branch Predictors */
--#define X86_FEATURE_ZEN			( 7*32+28) /* "" CPU is AMD family 0x17 or above (Zen) */
-+#define X86_FEATURE_ZEN			(7*32+28) /* "" CPU based on Zen microarchitecture */
- #define X86_FEATURE_L1TF_PTEINV		( 7*32+29) /* "" L1TF workaround PTE inversion */
- #define X86_FEATURE_IBRS_ENHANCED	( 7*32+30) /* Enhanced IBRS */
- #define X86_FEATURE_MSR_IA32_FEAT_CTL	( 7*32+31) /* "" MSR IA32_FEAT_CTL configured */
-@@ -303,7 +303,7 @@
- #define X86_FEATURE_RETHUNK		(11*32+14) /* "" Use REturn THUNK */
- #define X86_FEATURE_UNRET		(11*32+15) /* "" AMD BTB untrain return */
- #define X86_FEATURE_USE_IBPB_FW		(11*32+16) /* "" Use IBPB during runtime firmware calls */
--#define X86_FEATURE_RSB_VMEXIT_LITE	(11*32+17) /* "" Fill RSB on VM-Exit when EIBRS is enabled */
-+#define X86_FEATURE_RSB_VMEXIT_LITE	(11*32+17) /* "" Fill RSB on VM exit when EIBRS is enabled */
- 
- /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
- #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
-@@ -354,6 +354,7 @@
- #define X86_FEATURE_AVIC		(15*32+13) /* Virtual Interrupt Controller */
- #define X86_FEATURE_V_VMSAVE_VMLOAD	(15*32+15) /* Virtual VMSAVE VMLOAD */
- #define X86_FEATURE_VGIF		(15*32+16) /* Virtual GIF */
-+#define X86_FEATURE_X2AVIC		(15*32+18) /* Virtual x2apic */
- #define X86_FEATURE_V_SPEC_CTRL		(15*32+20) /* Virtual SPEC_CTRL */
- #define X86_FEATURE_SVME_ADDR_CHK	(15*32+28) /* "" SVME addr check */
- 
-@@ -457,5 +458,6 @@
- #define X86_BUG_SRBDS			X86_BUG(24) /* CPU may leak RNG bits if not mitigated */
- #define X86_BUG_MMIO_STALE_DATA		X86_BUG(25) /* CPU is affected by Processor MMIO Stale Data vulnerabilities */
- #define X86_BUG_RETBLEED		X86_BUG(26) /* CPU is affected by RETBleed */
-+#define X86_BUG_EIBRS_PBRSB		X86_BUG(27) /* EIBRS is vulnerable to Post Barrier RSB Predictions */
- 
- #endif /* _ASM_X86_CPUFEATURES_H */
--- 
-2.37.1
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

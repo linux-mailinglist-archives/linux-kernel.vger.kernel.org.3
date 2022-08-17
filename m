@@ -2,123 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3139F596E12
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 14:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A02596E29
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 14:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239358AbiHQMFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 08:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
+        id S239189AbiHQMES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 08:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239285AbiHQMEs (ORCPT
+        with ESMTP id S236580AbiHQMEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 08:04:48 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2174B58099
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 05:04:36 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id s9so13343336ljs.6
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 05:04:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=GGC6/FAtFLtsPec3v0Z//ulLsaLmio7LVXcsIKWCfDM=;
-        b=miMj+avNVe2LIWr1HvJA4rGseGDIOeygunPdCMBN6CSnZr4fZvx1MS7rw6GUgMhxyg
-         nSN1YKLeXmDvVX8VfYcgxDVCZNdAmWzyqwCfgEtSYumifD1B2mrenI0UyZJNw09CXFEk
-         5SzgDvS6O5xTedd1yXhWCDDr4y6LLmMmvYYEZ/MpUCubbVcM911wrnIicI/IWgI7FO4q
-         7VaEcQiKliQ6RyNkAcm5vDWX3vwAjSHG8dW5QPjlDOQwvcJTUk4njD+QpsWG2qwo26pA
-         id3OXB7qggMKuwKb57RbdptQkVxbBZwBxHOBbpqEh9wW8kIEpVrmv0FY5kNYa4rvdS+Y
-         oiIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=GGC6/FAtFLtsPec3v0Z//ulLsaLmio7LVXcsIKWCfDM=;
-        b=0rMygVD2VdWWnBxRlgHiIFdrjxSQbFaku9Nnj0OJXgcPkg4LeTkgH8ioiNW/v9iHNF
-         kSITDSCAG+RwG+mfUiST8F2Zm7/crGDFeCmfZQyvKbpog3ZNIxgpjpz5DYDCUARB87TW
-         Dg0OfdSvON5NR+YRdz3zJexZhJJjQjdSs/2x936CLEROaHftQd48ZwUbRfBWR+xiV/SR
-         cYZl3joka6eDwjfx+9uffWuwXZEE8/TVtvihiv4MZmucUKCRemI5rAfW4WGW70QD57VD
-         cjJgy6q876Wx9FeNHSXYxLP2igT4gw1Q0FrJoGfiHMtx8wr6oPMCeSY9/ZpLCW54NSUB
-         k8tw==
-X-Gm-Message-State: ACgBeo1GNqQfF8k1grG+X7ImiIdl3OP+qqeByU1jekVklL6r0sU0Y/KH
-        6O8+Q4UeA4G8KwvjN3dVjMwH4A==
-X-Google-Smtp-Source: AA6agR7gyE2mBf2oCkQu9AfMIjk25LfntH6SuRYtq8dw+mhllXqptMMvleWmyxNwiDl4Z/Wens5vAA==
-X-Received: by 2002:a2e:bea8:0:b0:25f:e9ab:5a1b with SMTP id a40-20020a2ebea8000000b0025fe9ab5a1bmr7549871ljr.448.1660737874403;
-        Wed, 17 Aug 2022 05:04:34 -0700 (PDT)
-Received: from krzk-bin.. (d15l54h48cw7vbh-qr4-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1b1c:14b7:109b:ed76])
-        by smtp.gmail.com with ESMTPSA id d15-20020a05651221cf00b0048a97042251sm1670496lft.22.2022.08.17.05.04.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 05:04:33 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RFT PATCH 14/14] arm64: dts: qcom: sm8150: switch TCSR mutex to MMIO
-Date:   Wed, 17 Aug 2022 15:04:03 +0300
-Message-Id: <20220817120403.458000-16-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220817120403.458000-1-krzysztof.kozlowski@linaro.org>
-References: <20220817120403.458000-1-krzysztof.kozlowski@linaro.org>
+        Wed, 17 Aug 2022 08:04:15 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461844C62A;
+        Wed, 17 Aug 2022 05:04:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660737854; x=1692273854;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Sw03qyNAB0MNEYgJP3KDR/9fx3+F8UT/HeVmqYUt2GE=;
+  b=Wip09kIPrY9+dtHdJJ1xkDqJ88AoZCotBUpwVJ1cbc7lXwkHwEStLNWl
+   nA66f1taTPDa/jQk4A2v4piCtZ+MLBFAKWCWfiLlDkvZAjrqeFgA76d7f
+   tiy0r+f0MSK+Qwxb8GO6U258dCYiN5I/tLZpD2q7hjf3fKDZk0c+iaz76
+   yNxgdRD3gkOdCD8jv0rQ/txx0/Bq4dZkoAcShncBn4J9wm5LRmOfoaFP7
+   b7WTS7bthyNuduy+HdmvhRZ0UtvJdNI9gnagQmw53uTriL/lUn2rTXuas
+   ID85G38SR9ScRPX1uUO8aLn4tyxxWULYLOC5c1d0HCycvHZvnf9LttnQA
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="356471447"
+X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
+   d="scan'208";a="356471447"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 05:04:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
+   d="scan'208";a="583742759"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 17 Aug 2022 05:04:09 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 0BF04235; Wed, 17 Aug 2022 15:04:22 +0300 (EEST)
+Date:   Wed, 17 Aug 2022 15:04:22 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Szuying Chen <chensiying21@gmail.com>
+Cc:     mario.limonciello@amd.com, gregkh@linuxfoundation.org,
+        andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yd_Tseng@asmedia.com.tw,
+        Chloe_Chen@asmedia.com.tw, Richard_Hsu@asmedia.com.tw
+Subject: Re: RE: [PATCH v4] thunderbolt: thunderbolt: add vendor's NVM formats
+Message-ID: <YvzZRsyGR/hakhIo@black.fi.intel.com>
+References: <20220817102450.63514-1-chensiying21@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220817102450.63514-1-chensiying21@gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The TCSR mutex bindings allow device to be described only with address
-space (so it uses MMIO, not syscon regmap).  This seems reasonable as
-TCSR mutex is actually a dedicated IO address space and it also fixes DT
-schema checks:
+Hi,
 
-  qcom/sm8150-mtp.dtb: hwlock: 'reg' is a required property
-  qcom/sm8150-mtp.dtb: hwlock: 'syscon' does not match any of the regexes: 'pinctrl-[0-9]+'
+On Wed, Aug 17, 2022 at 06:24:50PM +0800, Szuying Chen wrote:
+> From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
+> 
+> Signed-off-by: Szuying Chen <Chloe_Chen@asmedia.com.tw>
+> ---
+> Hi,
+> 
+> >> From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
+> >>
+> 
+> >> +static int asmedia_nvm_validate(struct tb_switch *sw, unsigned int mode)
+> >> +{
+> >> +	struct tb_nvm *nvm;
+> >> +	u32 val;
+> >> +	u32 nvm_size;
+> >> +	int ret = 0;
+> >> +	unsigned int image_size;
+> >> +
+> >> +	switch (mode) {
+> >> +	case NVM_UPGRADE:
+> >> +		if (sw->no_nvm_upgrade)
+> >> +			sw->no_nvm_upgrade = false;
+> >> +
+> >> +		break;
+> >> +
+> >> +	case NVM_ADD:
+> >> +		nvm = tb_nvm_alloc(&sw->dev);
+> >
+> >This function does not only "validate" but it also creates the NVMem
+> >devices and whatnot.
+> >
+> >Do you have some public description of the ASMedia format that I could
+> >take a look? Perhaps we can find some simpler way of validating the
+> >thing that works accross different vendors.
+> >
+> 
+> ASMedia NVM format include rom file, firmware and security
+> configuration information. And active firmware depend on this
+> information for processing. We don't need to do any validation during
+> firmware upgrade, so we haven't public description of the ASMedia
+> format.
+> 
+> I think I use "validate" is not fit. This function mainly to create
+> the NVMem devices and write. I will rename in the next patch.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8150.dtsi | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+So instead what you now do, I suggest that we move all the vendor
+support out to nvm.c, that includes Intel too. What I mean by this is
+that the tb_switch_nvm_add() would then look something like this:
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-index 7d509ecd44da..dc6770391813 100644
---- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-@@ -585,12 +585,6 @@ scm: scm {
- 		};
- 	};
- 
--	tcsr_mutex: hwlock {
--		compatible = "qcom,tcsr-mutex";
--		syscon = <&tcsr_mutex_regs 0 0x1000>;
--		#hwlock-cells = <1>;
--	};
--
- 	memory@80000000 {
- 		device_type = "memory";
- 		/* We expect the bootloader to fill in the size */
-@@ -2054,9 +2048,10 @@ ipa_virt: interconnect@1e00000 {
- 			qcom,bcm-voters = <&apps_bcm_voter>;
- 		};
- 
--		tcsr_mutex_regs: syscon@1f40000 {
--			compatible = "syscon";
--			reg = <0x0 0x01f40000 0x0 0x40000>;
-+		tcsr_mutex: hwlock@1f40000 {
-+			compatible = "qcom,tcsr-mutex";
-+			reg = <0 0x01f40000 0 0x20000>;
-+			#hwlock-cells = <1>;
- 		};
- 
- 		remoteproc_slpi: remoteproc@2400000 {
--- 
-2.34.1
+tb_switch_nvm_add(sw)
+{
+	if (!nvm_readable(sw))
+		return 0;
 
+	nvm = tb_switch_nvm_alloc(sw);
+	if (IS_ERR(nvm)) {
+		if (PTR_ERR(nvm) == -EOPNOTSUPP) {
+			dev_info(&sw->dev,
+				"NVM format of vendor %#x is not known, disabling NVM upgrade\n",
+				sw->config.vendor_id);
+			return 0;
+		}
+
+		return PTR_ERR(nvm);
+	}
+
+	ret = tb_nvm_add_active(nvm, nvm->size, tb_switch_nvm_read);
+	if (ret)
+		...
+
+	if (!sw->no_nvm_upgrade) {
+		ret = tb_nvm_add_non_active(nvm, NVM_MAX_SIZE, tb_switch_nvm_write);
+		if (ret)
+			...
+	}
+
+	sw->nvm = nvm;
+	...
+}
+
+And the tb_switch_nvm_alloc() resides in nvm.c and that one goes over an
+array of supported vendors matching sw->config.vendor_id and if it finds
+the match it will set nvm->vops to point the vendor specific operations
+and in addition it will will populate rest of the nvm fields like this:
+
+static const struct {
+	u16 vendor;
+	const struct tb_nvm_vendor_ops *vops;
+} switch_nvm_vendors[] = {
+	{ 0x8086, &intel_switch_nvm_ops },
+	{ 0x8087, &intel_switch_nvm_ops },
+	{ 0x174c, &asmedia_switch_nvm_ops },
+};
+
+tb_switch_nvm_alloc(sw)
+{
+	struct tb_nvm_vendor_ops *ops = NULL;
+	int i;
+
+	for (i = 0; i < ARRAY_SIZE(switch_nvm_vendors); i++) {
+		if (switch_nvm_vendors[i].vendor == sw->config.vendor_id)
+			vops = &switch_nvm_vendors[i].vops;
+			break;
+	}
+
+	if (!vops)
+		return ERR_PTR(-EOPNOTSUPP);
+
+	nvm = tb_nvm_alloc(&sw->dev);
+	if (IS_ERR(nvm))
+		...
+
+	nvm->vops = vops;
+	ret = vops->populate(nvm);
+	if (ret)
+		...
+
+	...
+}
+
+Then we would have all the vendor specific things in
+intel_switch_nvm_ops and asmedia_switch_nvm_ops accordingly and the rest
+of the code is generic USB4 stuff. We need to do the same for retimers
+too at some point.

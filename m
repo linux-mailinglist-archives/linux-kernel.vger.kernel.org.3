@@ -2,102 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7815F59685F
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 07:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB60596869
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 07:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbiHQFGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 01:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37966 "EHLO
+        id S229727AbiHQFKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 01:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiHQFGj (ORCPT
+        with ESMTP id S229807AbiHQFKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 01:06:39 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5C26CF74;
-        Tue, 16 Aug 2022 22:06:34 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1oOBFW-00BuOh-ON; Wed, 17 Aug 2022 15:05:51 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Wed, 17 Aug 2022 13:05:50 +0800
-Date:   Wed, 17 Aug 2022 13:05:50 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>, Tejun Heo <tj@kernel.org>,
-        marcan@marcan.st, peterz@infradead.org, jirislaby@kernel.org,
-        maz@kernel.org, mark.rutland@arm.com, boqun.feng@gmail.com,
-        catalin.marinas@arm.com, oneukum@suse.com,
-        roman.penyaev@profitbricks.com, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH] workqueue: Fix memory ordering race in queue_work*()
-Message-ID: <Yvx3LpyqWwZ0Mawc@gondor.apana.org.au>
-References: <YvqaK3hxix9AaQBO@slm.duckdns.org>
- <YvsZ6vObgLaDeSZk@gondor.apana.org.au>
- <CAHk-=wgSNiT5qJX53RHtWECsUiFq6d6VWYNAvu71ViOEan07yw@mail.gmail.com>
- <20220816134156.GB11202@willie-the-truck>
- <CAHk-=wgqvApXmXxk42eZK1u5T60aRWnBMeJOs7JwP-+qqLq6zQ@mail.gmail.com>
+        Wed, 17 Aug 2022 01:10:15 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AEB6D9C6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 22:10:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660713014; x=1692249014;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AvafYqkxq3og1b2wyCNF9KJ/y92RWHvhMeHMG1bWo50=;
+  b=gwKMnaSmWHsbF4FXK81eEIxk09lTJMszglVWCF94PygYGWVGvwG6iIU6
+   3X83EmA4mGFxalS4nP6ti5IcGo7f88yhKHK3w2SDdach0ZZ4+n8R9aH6q
+   MnkAPzMQznSDLpp8eZVHDQlc3UnVaLeuV2FjtQOX5vhCs5OPJz2XjNNxo
+   K9lLF3LkvSupLmDMvDgh3UZGqKrIjF/Z9zrmOj8tNYthHf13h5+gSLE2j
+   5vt/tYm3oJ5USXuar8viU53oBc5ifB2sjblqrfgyVPk/btPulUI6+qRLR
+   /0iLHAeqeRcU9WOnXwAbH6l+xLY8AgqkKnImbvHBpimAsEqlCsgSkEwOX
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="289972251"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="289972251"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 22:10:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="557976200"
+Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 16 Aug 2022 22:10:11 -0700
+Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oOBJj-0000bM-07;
+        Wed, 17 Aug 2022 05:10:11 +0000
+Date:   Wed, 17 Aug 2022 13:09:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Wang <jasowang@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, kernel@openvz.org,
+        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] drivers: virtio: balloon - update inflated memory
+Message-ID: <202208171338.xAU3O9KJ-lkp@intel.com>
+References: <20220816094117.3144881-5-alexander.atanasov@virtuozzo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wgqvApXmXxk42eZK1u5T60aRWnBMeJOs7JwP-+qqLq6zQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220816094117.3144881-5-alexander.atanasov@virtuozzo.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 09:41:52AM -0700, Linus Torvalds wrote:
-.
-> So I htink the code problem is easy, I think the real problem here has
-> always been bad documentation, and it would be really good to clarify
-> that.
-> 
-> Comments?
+Hi Alexander,
 
-The problem is that test_and_set_bit has been unambiguously
-documented to have memory barriers since 2005:
+Thank you for the patch! Yet something to improve:
 
-commit 3085f02b869d980c5588f3e8fb136b0b465a2759
-Author: David S. Miller <davem@nuts.davemloft.net>
-Date:   Fri Feb 4 23:39:15 2005 -0800
+[auto build test ERROR on powerpc/next]
+[also build test ERROR on char-misc/char-misc-testing linus/master v6.0-rc1 next-20220816]
+[cannot apply to soc/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-    [DOC]: Add asm/atomic.h asm/bitops.h implementation specification.
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Atanasov/Make-place-for-common-balloon-code/20220816-184943
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220817/202208171338.xAU3O9KJ-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d37f8ca37c57eb9e68b55ef33ecfce719f98bfe7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Alexander-Atanasov/Make-place-for-common-balloon-code/20220816-184943
+        git checkout d37f8ca37c57eb9e68b55ef33ecfce719f98bfe7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-And this is what it says:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-+       int test_and_set_bit(unsigned long nr, volatils unsigned long *addr);
-+       int test_and_clear_bit(unsigned long nr, volatils unsigned long *addr);
-+       int test_and_change_bit(unsigned long nr, volatils unsigned long *addr);
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-	...snip...
+>> ERROR: modpost: "balloon_set_inflated_total" [drivers/virtio/virtio_balloon.ko] undefined!
+>> ERROR: modpost: "balloon_set_inflated_free" [drivers/virtio/virtio_balloon.ko] undefined!
 
-+These routines, like the atomic_t counter operations returning values,
-+require explicit memory barrier semantics around their execution.  All
-+memory operations before the atomic bit operation call must be made
-+visible globally before the atomic bit operation is made visible.
-+Likewise, the atomic bit operation must be visible globally before any
-+subsequent memory operation is made visible.  For example:
-+
-+       obj->dead = 1;
-+       if (test_and_set_bit(0, &obj->flags))
-+               /* ... */;
-+       obj->killed = 1;
-
-This file wasn't removed until 16/11/2020 by f0400a77ebdc.
-
-In that time people who wrote code using test_and_set_bit could have
-legitimately relied on the memory barrier as documented.  Changing
-this restrospectively is dangerous.
-
-I'm fine with introducing new primitives that have different
-properties, and then converting the existing users of test_and_set_bit
-over on a case-by-case basis.
-
-Cheers,
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+0-DAY CI Kernel Test Service
+https://01.org/lkp

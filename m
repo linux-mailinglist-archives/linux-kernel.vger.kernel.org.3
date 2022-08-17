@@ -2,128 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 879CC596D38
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 13:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1216E596D25
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 13:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239122AbiHQK5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 06:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
+        id S239129AbiHQK55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 06:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239085AbiHQK50 (ORCPT
+        with ESMTP id S239108AbiHQK5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 06:57:26 -0400
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56439647E8;
-        Wed, 17 Aug 2022 03:57:25 -0700 (PDT)
-Received: (Authenticated sender: contact@artur-rojek.eu)
-        by mail.gandi.net (Postfix) with ESMTPSA id 9002B200009;
-        Wed, 17 Aug 2022 10:57:22 +0000 (UTC)
-From:   Artur Rojek <contact@artur-rojek.eu>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>
-Cc:     linux-mips@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        Artur Rojek <contact@artur-rojek.eu>
-Subject: [PATCH 4/4] input: joystick: Fix buffer data parsing
-Date:   Wed, 17 Aug 2022 12:56:43 +0200
-Message-Id: <20220817105643.95710-5-contact@artur-rojek.eu>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220817105643.95710-1-contact@artur-rojek.eu>
-References: <20220817105643.95710-1-contact@artur-rojek.eu>
+        Wed, 17 Aug 2022 06:57:40 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A75647E8;
+        Wed, 17 Aug 2022 03:57:38 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 14D1934113;
+        Wed, 17 Aug 2022 10:57:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1660733857; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4BWyW9gcSvWB0CW6rgM7MC0oPUmiDldw9c6waIBSQio=;
+        b=On9Oyz228ESgBHAU1IIcMJoE6XpeW8mVpZCkcbTHvIVSBzuW2BXspYa19nlWJvh6AC+rzG
+        oxdq2eG26etvUrSiOF6KniDS2Xe9podZAuOcOjmE/9AI7KK2WJp0Yh6/49UVW2lpf25abJ
+        ZvVZKijU7Kp2VzpXKi3aKFridGIoJQQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1660733857;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4BWyW9gcSvWB0CW6rgM7MC0oPUmiDldw9c6waIBSQio=;
+        b=YaPu5KAD4LQMXb64ACd6xRMVsd9ZnvCGjFxhIOH8jxIA/rEG//RILtQ5TqYMyo6Et+KVDB
+        6/9dyfX8ykQuy4Bg==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id C429E2C178;
+        Wed, 17 Aug 2022 10:57:36 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 13D2AA066B; Wed, 17 Aug 2022 12:57:36 +0200 (CEST)
+Date:   Wed, 17 Aug 2022 12:57:36 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org,
+        Ojaswin Mujoo <ojaswin@linux.ibm.com>,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geetika.Moolchandani1@ibm.com, regressions@lists.linux.dev,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [Regression] ext4: changes to mb_optimize_scan cause issues on
+ Raspberry Pi
+Message-ID: <20220817105736.n22yopqcq7badhe7@quack3>
+References: <0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com>
+ <20220728100055.efbvaudwp3ofolpi@quack3>
+ <64b7899f-d84d-93de-f9c5-49538bd080d0@i2se.com>
+ <20220816093421.ok26tcyvf6bm3ngy@quack3>
+ <b8a5e43a-4d1e-aede-e0f7-f731fd8acf1d@i2se.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b8a5e43a-4d1e-aede-e0f7-f731fd8acf1d@i2se.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't try to access buffer data of a channel by its scan index. Instead,
-use the newly introduced `iio_find_channel_offset_in_buffer` to get the
-correct data offset.
+Hi Stefan!
 
-The scan index of a channel does not represent its position in a buffer,
-as the buffer will contain data for enabled channels only, affecting
-data offsets and alignment.
+On Tue 16-08-22 22:45:48, Stefan Wahren wrote:
+> Am 16.08.22 um 11:34 schrieb Jan Kara:
+> > Hi Stefan!
+> > So this is interesting. We can see the card is 100% busy. The IO submitted
+> > to the card is formed by small requests - 18-38 KB per request - and each
+> > request takes 0.3-0.5s to complete. So the resulting throughput is horrible
+> > - only tens of KB/s. Also we can see there are many IOs queued for the
+> > device in parallel (aqu-sz columnt). This does not look like load I would
+> > expect to be generated by download of a large file from the web.
+> > 
+> > You have mentioned in previous emails that with dd(1) you can do couple
+> > MB/s writing to this card which is far more than these tens of KB/s. So the
+> > file download must be doing something which really destroys the IO pattern
+> > (and with mb_optimize_scan=0 ext4 happened to be better dealing with it and
+> > generating better IO pattern). Can you perhaps strace the process doing the
+> > download (or perhaps strace -f the whole rpi-update process) so that we can
+> > see how does the load generated on the filesystem look like? Thanks!
+> 
+> i didn't create the strace yet, but i looked at the source of rpi-update. At
+> the end the download phase is a curl call to download a tar archive and pipe
+> it directly to tar.
+> 
+> You can find the content list of the tar file here:
+> 
+> https://raw.githubusercontent.com/lategoodbye/mb_optimize_scan_regress/main/rpi-firmware-tar-content-list.txt
 
-Fixes: 2c2b364fddd5 ("Input: joystick - add ADC attached joystick driver.")
-Reported-by: Chris Morgan <macromorgan@hotmail.com>
-Tested-by: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
----
- drivers/input/joystick/adc-joystick.c | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
+Thanks for the details! This is indeed even better. Looking at the tar
+archive I can see it consists of a lot of small files big part of them
+is even below 10k. So this very much matches the workload I was examining
+with reaim where I saw regression (although only ~8%) even on normal
+rotating drive on x86 machine. In that case I have pretty much confirmed
+that the problem is due to mb_optimize_scan=1 spreading small allocated
+files more which is likely also harmful for the SD card because it requires
+touching more erase blocks.
 
-diff --git a/drivers/input/joystick/adc-joystick.c b/drivers/input/joystick/adc-joystick.c
-index c0deff5d4282..aed853ebe1d1 100644
---- a/drivers/input/joystick/adc-joystick.c
-+++ b/drivers/input/joystick/adc-joystick.c
-@@ -6,6 +6,7 @@
- #include <linux/ctype.h>
- #include <linux/input.h>
- #include <linux/iio/iio.h>
-+#include <linux/iio/buffer.h>
- #include <linux/iio/consumer.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
-@@ -46,36 +47,43 @@ static void adc_joystick_poll(struct input_dev *input)
- static int adc_joystick_handle(const void *data, void *private)
- {
- 	struct adc_joystick *joy = private;
-+	struct iio_buffer *buffer;
- 	enum iio_endian endianness;
--	int bytes, msb, val, idx, i;
--	const u16 *data_u16;
-+	int bytes, msb, val, off;
-+	const u8 *chan_data;
-+	unsigned int i;
- 	bool sign;
- 
- 	bytes = joy->chans[0].channel->scan_type.storagebits >> 3;
- 
- 	for (i = 0; i < joy->num_chans; ++i) {
--		idx = joy->chans[i].channel->scan_index;
- 		endianness = joy->chans[i].channel->scan_type.endianness;
- 		msb = joy->chans[i].channel->scan_type.realbits - 1;
- 		sign = tolower(joy->chans[i].channel->scan_type.sign) == 's';
-+		buffer = iio_channel_cb_get_iio_buffer(joy->buffer);
-+		off = iio_find_channel_offset_in_buffer(joy->chans[i].indio_dev,
-+							joy->chans[i].channel,
-+							buffer);
-+		if (off < 0)
-+			return off;
-+
-+		chan_data = (const u8 *)data + off;
- 
- 		switch (bytes) {
- 		case 1:
--			val = ((const u8 *)data)[idx];
-+			val = *chan_data;
- 			break;
- 		case 2:
--			data_u16 = (const u16 *)data + idx;
--
- 			/*
- 			 * Data is aligned to the sample size by IIO core.
- 			 * Call `get_unaligned_xe16` to hide type casting.
- 			 */
- 			if (endianness == IIO_BE)
--				val = get_unaligned_be16(data_u16);
-+				val = get_unaligned_be16(chan_data);
- 			else if (endianness == IIO_LE)
--				val = get_unaligned_le16(data_u16);
-+				val = get_unaligned_le16(chan_data);
- 			else /* IIO_CPU */
--				val = *data_u16;
-+				val = *(const u16 *)chan_data;
- 			break;
- 		default:
- 			return -EINVAL;
+Thanks for help with debugging this, I will implement some of the
+heuristics we discussed with other ext4 developers to avoid this behavior
+and will send you patch for testing.
+
+								Honza
 -- 
-2.37.2
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

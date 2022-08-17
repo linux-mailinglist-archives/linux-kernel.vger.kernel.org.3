@@ -2,142 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326245979DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 01:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB065979DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 01:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241903AbiHQW56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 18:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58070 "EHLO
+        id S241959AbiHQXAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 19:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbiHQW54 (ORCPT
+        with ESMTP id S239234AbiHQXAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 18:57:56 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037E5A8326;
-        Wed, 17 Aug 2022 15:57:53 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru [109.252.119.13])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D8A3B6601A13;
-        Wed, 17 Aug 2022 23:57:50 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1660777071;
-        bh=TxAbi6e312VFgURSiMw/SYGlkhUqLRcFFtpaFQ+YP6c=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=bVhJ/k51+xGX/7nvmFj9Ku+ALaJV+LAmu2Bewec3le1Rz852ioLPvOSQZjvUUzVDY
-         skjSNQfCe4YwezLyU+7KXqp15kUUZG1/j3RH61+VGYWSV5Kk5vQqb4yRCMuHfFD/QP
-         BrQSvwPsbb5kDx8m6EViKnJjPv6jOXGVZa6x4WlQBlLUBHX9NmtAYpAaEhZkc+YILu
-         +oOctra9txmzzu/PmRtKRMFsn/ZynZBqg09pfanq72QADeKrWPl6W8Ef8DMFPy+py3
-         lwvDrCTwzkMCz3Jh/uRc47RGL4ble5AI773heECnaAfoq+nyYfbyjx52ayk6OK2xmZ
-         Ewz1pZXJAuR5Q==
-Message-ID: <ff28e1b4-cda2-14b8-b9bf-10706ae52cac@collabora.com>
-Date:   Thu, 18 Aug 2022 01:57:48 +0300
+        Wed, 17 Aug 2022 19:00:12 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46235AB07D
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 16:00:10 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id c20so270qtw.8
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 16:00:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=KmcDPCTn5Uzlzd24cj71xEvkhoV/UHar1ZZ8d/hlYtw=;
+        b=UXGJYiIfxhnj/i4hpUL58NerxcbgE4DPs09FN2Bp1xIgmF7zfmwl6sp0oBJ6i9tRXR
+         apjEyQ33bUqxLV7phYZCuNREmUTAtNpbDir3oWp5HE8X4cZRcXVvHlukIAU8NUFppWP7
+         k4hX9AEB7gxfRIIa+efvFdUxTzRMfMO2PyQ7G+4c4SK5SvaI6/oMKboQbIMM9cmxUIYs
+         b+1gmyLLc/MuVTSTQ07PPn39NPzbQdk2Usuv64g4pcXXshP7X2TMAeS6ZMfhcTjsPV2t
+         ahu5m+NtFUaiCgtN2NOTamEZIyIHhHixKdynuMDcJ5kvLS89882lYBN7hrisv1/mzsiE
+         NPhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=KmcDPCTn5Uzlzd24cj71xEvkhoV/UHar1ZZ8d/hlYtw=;
+        b=PcUSOBYh+oKD58rL+SWdwAqp0Bx1ULQpWd4OUjlKljkJUNdn9SBDoeO2B8ch7PRA34
+         CXgL1o/1r1RQYtDXoObXXKiXqld00DitOCaHYH2cRnFw9fgSVvl1x+K61KgWyW2tJZHQ
+         JKP+D9qev7pmhv5uEuJ0yTtRyY8N08SkOshdDfnvlzoWVORGbv9zb6jo+thpfRbNc+Pf
+         8w0J8SFBRvcVBLA+Lqp6mo1bNR1cCdSxtbi0W2O+abcSeQRhIwrEbMYouNdYXpww6QRQ
+         Eh0msE30eNXHNB6PX2PGJgWHu0XfB2yg8x3QK04ptGJG5/d3CHGpcDWFMrNgixDOGn8W
+         bPeQ==
+X-Gm-Message-State: ACgBeo0zYmqnzBAITppQ3gbKQvdQ4cc6JO21LMQLSZHg62QCZyT/JV4j
+        SQvykbLFrZC7CpWxu+codfeN0A==
+X-Google-Smtp-Source: AA6agR7zkcNjo5wCvzg1zEw4M2g5sH48XKxof4jlgqH5nSn6g2uQsUSOv+Ai5LsMqinWj19C6hDm+A==
+X-Received: by 2002:a05:622a:447:b0:31e:ea5d:34c2 with SMTP id o7-20020a05622a044700b0031eea5d34c2mr441099qtx.604.1660777209319;
+        Wed, 17 Aug 2022 16:00:09 -0700 (PDT)
+Received: from baldur ([2600:380:7852:c2c2:200:ff:fe00:0])
+        by smtp.gmail.com with ESMTPSA id u7-20020a37ab07000000b006b9bf03d9c6sm78625qke.104.2022.08.17.16.00.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 16:00:08 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 18:00:05 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Prashant Malani <pmalani@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Pin-yen Lin <treapking@chromium.org>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: Introduce GPIO-based SBU mux
+Message-ID: <Yv1y9Wjp16CstJvK@baldur>
+References: <20220810204750.3672362-1-bjorn.andersson@linaro.org>
+ <20220810204750.3672362-2-bjorn.andersson@linaro.org>
+ <a13bce60-25b4-d075-d56a-d1283e91e3ba@linaro.org>
+ <20220814210104.GA690892-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1] drm/ttm: Refcount allocated tail pages
-Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        David Airlie <airlied@linux.ie>, Huang Rui <ray.huang@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Trigger Huang <Trigger.Huang@gmail.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Antonio Caggiano <antonio.caggiano@collabora.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>, kvm@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-References: <20220815095423.11131-1-dmitry.osipenko@collabora.com>
- <8230a356-be38-f228-4a8e-95124e8e8db6@amd.com>
- <134bce02-58d6-8553-bb73-42dfda18a595@collabora.com>
- <8caf3008-dcf3-985a-631e-e019b277c6f0@amd.com>
- <4fcc4739-2da9-1b89-209c-876129604d7d@amd.com>
- <14be3b22-1d60-732b-c695-ddacc6b21055@collabora.com>
- <2df57a30-2afb-23dc-c7f5-f61c113dd5b4@collabora.com>
- <57562db8-bacf-e82d-8417-ab6343c1d2fa@amd.com>
- <86a87de8-24a9-3c53-3ac7-612ca97e41df@collabora.com>
- <8f749cd0-9a04-7c72-6a4f-a42d501e1489@amd.com>
- <5340d876-62b8-8a64-aa6d-7736c2c8710f@collabora.com>
- <594f1013-b925-3c75-be61-2d649f5ca54e@amd.com>
- <6893d5e9-4b60-0efb-2a87-698b1bcda63e@collabora.com>
- <73e5ed8d-0d25-7d44-8fa2-e1d61b1f5a04@amd.com>
- <c9d89644-409e-0363-69f0-a3b8f2ef0ae4@collabora.com>
- <6effcd33-8cc3-a4e0-3608-b9cef7a76da7@collabora.com>
-In-Reply-To: <6effcd33-8cc3-a4e0-3608-b9cef7a76da7@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220814210104.GA690892-robh@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/15/22 18:54, Dmitry Osipenko wrote:
-> On 8/15/22 17:57, Dmitry Osipenko wrote:
->> On 8/15/22 16:53, Christian König wrote:
->>> Am 15.08.22 um 15:45 schrieb Dmitry Osipenko:
->>>> [SNIP]
->>>>> Well that comment sounds like KVM is doing the right thing, so I'm
->>>>> wondering what exactly is going on here.
->>>> KVM actually doesn't hold the page reference, it takes the temporal
->>>> reference during page fault and then drops the reference once page is
->>>> mapped, IIUC. Is it still illegal for TTM? Or there is a possibility for
->>>> a race condition here?
->>>>
->>>
->>> Well the question is why does KVM grab the page reference in the first
->>> place?
->>>
->>> If that is to prevent the mapping from changing then yes that's illegal
->>> and won't work. It can always happen that you grab the address, solve
->>> the fault and then immediately fault again because the address you just
->>> grabbed is invalidated.
->>>
->>> If it's for some other reason than we should probably investigate if we
->>> shouldn't stop doing this.
->>
->> CC: +Paolo Bonzini who introduced this code
->>
->> commit add6a0cd1c5ba51b201e1361b05a5df817083618
->> Author: Paolo Bonzini <pbonzini@redhat.com>
->> Date:   Tue Jun 7 17:51:18 2016 +0200
->>
->>     KVM: MMU: try to fix up page faults before giving up
->>
->>     The vGPU folks would like to trap the first access to a BAR by setting
->>     vm_ops on the VMAs produced by mmap-ing a VFIO device.  The fault
->> handler
->>     then can use remap_pfn_range to place some non-reserved pages in the
->> VMA.
->>
->>     This kind of VM_PFNMAP mapping is not handled by KVM, but follow_pfn
->>     and fixup_user_fault together help supporting it.  The patch also
->> supports
->>     VM_MIXEDMAP vmas where the pfns are not reserved and thus subject to
->>     reference counting.
->>
->> @Paolo,
->> https://lore.kernel.org/dri-devel/73e5ed8d-0d25-7d44-8fa2-e1d61b1f5a04@amd.com/T/#m7647ce5f8c4749599d2c6bc15a2b45f8d8cf8154
->>
+On Sun 14 Aug 16:01 CDT 2022, Rob Herring wrote:
+
+> On Thu, Aug 11, 2022 at 12:14:48PM +0300, Krzysztof Kozlowski wrote:
+> > On 10/08/2022 23:47, Bjorn Andersson wrote:
+> > > Introduce a binding for GPIO-based mux hardware used for connecting,
+> > > disconnecting and switching orientation of the SBU lines in USB Type-C
+> > > applications.
+> > > 
+> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > > ---
+> > >  .../devicetree/bindings/usb/gpio-sbu-mux.yaml | 77 +++++++++++++++++++
+> > >  1 file changed, 77 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
+> > > new file mode 100644
+> > > index 000000000000..7d8aca40c7ca
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
+> > > @@ -0,0 +1,77 @@
+> > > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: "http://devicetree.org/schemas/usb/gpio-sbu-mux.yaml#"
+> > > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> > > +
+> > > +title: GPIO-based SBU mux
+> > > +
+> > > +maintainers:
+> > > +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+> > > +
+> > > +description:
+> > > +  In USB Type-C applications the SBU lines needs to be connected, disconnected
+> > > +  and swapped depending on the altmode and orientation. This binding describes
+> > > +  a family of hardware which perform this based on GPIO controls.
+> > 
+> > +Cc few folks.
+> > 
+> > This looks familiar to:
+> > 
+> > https://lore.kernel.org/linux-devicetree/eaf2fda8-0cd6-b518-10cb-4e21b5f8c909@linaro.org/T/#m39254b7f8970b3e1264f9d1a979557bb46ab162c
+> > 
+> > Rob and Stephen had several concerns about that approach.
 > 
-> If we need to bump the refcount only for VM_MIXEDMAP and not for
-> VM_PFNMAP, then perhaps we could add a flag for that to the kvm_main
-> code that will denote to kvm_release_page_clean whether it needs to put
-> the page?
+> My overall concern is a bunch of one-off bindings with no one thinking 
+> about a variety of USB-C h/w. I need h/w diagrams and corresponding 
+> bindings. The key part being more than 1. I'm not all that familiar with 
+> the former to help on the bindings.
+> 
 
-The other variant that kind of works is to mark TTM pages reserved using
-SetPageReserved/ClearPageReserved, telling KVM not to mess with the page
-struct. But the potential consequences of doing this are unclear to me.
+This is the setup that we're dealing with:
 
-Christian, do you think we can do it?
+                     +------------- - -
+ USB connector       | SoC
+ +-+                 |
+ | |                 |   +-----+
+ |*|<------- HS -----|-->| HS  |
+ |*|<------- HS -----|-->| phy |<-+   +--------+
+ | |                 |   +-----+   \->|        |
+ | |                 |                |  dwc3  |
+ | |                 |   +-----+   /->|        |
+ |*|<------- SS -----|-->|     |<-+   +--------+
+ |*|<------- SS -----|-->| QMP |
+ |*|<------- SS -----|-->| phy |
+ |*|<------- SS -----|-->|     |<-\   +------------+
+ | |                 |   +-----+   \->|            |
+ | |                 |                |     DP     |
+ | |    +-----+      |                | controller |
+ |*|<-->| SBU |<-----|--------------->|            |
+ |*|<-->| mux |<-----|--------------->|            |
+ | |    +----+       |                +------------+
+ +-+                 |
+                     +------------- - -
 
--- 
-Best regards,
-Dmitry
+The dwc3 controller is connected to the HS phy for HighSpeed signals and
+QMP phy to be muxed out on 0, 2 or 4 of the SuperSpeed pins (for
+DP-only, USB/DP combo or USB-only mode).
+
+The DisplayPort controller is connected to the same QMP phy, for and is
+muxed onto the same 0, 2 or 4 of the SuperSpeed pins (for USB-only,
+USB/DP combo or DP-only mode).
+
+The SuperSpeed pins can be switched around within the QMP phy, to handle
+the case where the USB Type-C cable is flipped around.
+
+
+The AUX pins of the DP controller are connected to the SBU pins in the
+connector. These signals needs to be disconnected while DP mode is not
+negotiated with the remote. The DP controller does not support swapping
+the two lines.
+The disconnecting and swapping thereby needs to be performed by an
+external entity. For which we have a few examples already, such as
+fcs,fsa4480.
+
+Lastly, in USB Power Delivery, the hot-plug signal found in a physical
+DisplayPort or HDMI cable is communicated as a message. So the USB
+Type-C controller must be able to pass this onto the DP controller.
+
+
+I model the usb-c-connector as a child of the USB Type-C controller,
+with the following representation of the connections:
+
+connector {
+  compatible = "usb-c-connector";
+
+  ports {
+    port@0 {
+      reg = <0>;
+      endpoint {
+        remote-endpoint = <&dwc3>;
+      };
+    };
+
+    port@1 {
+      reg = <1>;
+      endpoint@0 {
+        reg = <0>;
+        remote-endpoint = <&qmp_phy>;
+      };
+      endpoint@1 {
+        reg = <1>;
+        remote-endpoint = <&dp_controller>;
+    };
+
+    port@2 {
+      reg = <2>;
+      endpoint {
+        remote-endpoint = <&sbu_mux>;
+      };
+    };
+  };
+};
+
+This allows the USB Type-C controller to:
+1) Perform USB role switching in the dwc3 on port@0
+2) Orientation and muxing of the SuperSpeed lines in the QMP phy on
+   port@1:0, implement a drm_bridge for signalling HPD back to the DP
+   controller on port@1:1
+3) Orientation and muxing (connecting/disconnecting) the SBU/AUX lines
+   in the SBU mux on port@2.
+
+The SBU mux in several of these designs is a component that takes a
+power supply and two GPIOs, for enabling/disabling the connection and
+flip the switch (which is used to swap the lines).
+
+I hope this helps with the bigger picture.
+
+Regards,
+Bjorn

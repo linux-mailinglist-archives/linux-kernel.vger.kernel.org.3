@@ -2,172 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8061B5976CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C28A85976BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241277AbiHQTjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 15:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38170 "EHLO
+        id S241495AbiHQTkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 15:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238528AbiHQTjl (ORCPT
+        with ESMTP id S241307AbiHQTj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 15:39:41 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0DA98D3A;
-        Wed, 17 Aug 2022 12:39:39 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id w19so26317144ejc.7;
-        Wed, 17 Aug 2022 12:39:39 -0700 (PDT)
+        Wed, 17 Aug 2022 15:39:59 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0797A4B08
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:39:50 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id s31-20020a17090a2f2200b001faaf9d92easo2743379pjd.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:39:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=EuNyPRJfq+eeFKDGgW9jPrQ9YAIsMyHr4aBhbhS+A4s=;
-        b=Q63m1AbpALxx+9Y4vjkVG40gDhEIjsP7Yo8Bu7O8/nYIF0bvVlaYqLFGBVFyAk6u2w
-         byz+tISo/V2bL0RHknT3uc4aFIHPTTMu3mL5B86HHJcmKdmjBSbIODow4inSy2/P1QkT
-         2KkQtE1au7DQj/RPDzus9O8GqTmmuv/PNApctAxKuib3DnnZTl3LyYd9ACfp4KfoGfeq
-         XZK0tBpnnIyHDaIJqGnz/b7tlfUDuWShBXqtlvwD437MnT7In5ArFGdQTqEvx8fxgzWC
-         atic+bEJZ8sB3o2C1rWNL2Zpnw0sx8XG4wN8FPl0mFwd7coNKds37mbYcpHa53CqP+dL
-         75qg==
+         :subject:cc:to:from:date:from:to:cc;
+        bh=r68vuNb5uh5ONaquxzxTqZ7ONll565ksnKh3ylI2Qso=;
+        b=fMHE08mTNGtgJz5Oy07EEtIpqqdqolGc17nEd8gVvKUw5CdSjv/rRzxqaLb78IHB67
+         dldRsPtd4wwFvOhdDwQV4bqau/Eu1sfiQ9hhO6/lGkKw/IpZWigxnU2oPUBD+pZqQKEO
+         7bul/7sfTougSEqU7vjXZAS4IeQZPRusWPFiU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=EuNyPRJfq+eeFKDGgW9jPrQ9YAIsMyHr4aBhbhS+A4s=;
-        b=7lIUqXAfCLqtq1le331NYmuj8U++hMAK0Cjt3Lpvkp7pOtLcwfsOCLOvCPvo3fZg1H
-         nZgL7VKVxM24bWlOjynSeYln6b9n6hnHcWiITq37BSnjAqufIbyc3lF6GE9klQqQQMMb
-         ci8+L3OODLDt0bRZHO33Fg2kVQo0h+xBfuDyfE5vHRQRTVheDpIoYZT1hJ+1exMWYsfw
-         BUMAYIeKvEzUMRgpzVfJMWms1+q8fa86bADi2BHLICYh2y5X5cs2nGz/0QrYI7b/du3B
-         Vhvi+4mHx2slRfmZW+vXro3KixLchD080qZAQkBs1hgcK6GXT2/5iZrQd5cuuOXRlrqJ
-         vc4w==
-X-Gm-Message-State: ACgBeo2f7qIgJL9GrvuwCO/Qg9jutqt5SYp0e02tudDRhMQWJkrrFtGf
-        nkCSX8J33pOfntIYRtPEP28=
-X-Google-Smtp-Source: AA6agR7JLNM2W/egU8UqbmSaeU/ggp7D9sGrC73lkUQhDIgNs4EvJriugcZd8cHPG9HgPWsfKXnFng==
-X-Received: by 2002:a17:907:28d6:b0:731:100c:8999 with SMTP id en22-20020a17090728d600b00731100c8999mr17535301ejc.210.1660765178394;
-        Wed, 17 Aug 2022 12:39:38 -0700 (PDT)
-Received: from krava ([83.240.62.131])
-        by smtp.gmail.com with ESMTPSA id cq10-20020a056402220a00b00445d85bd754sm2211227edb.79.2022.08.17.12.39.37
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=r68vuNb5uh5ONaquxzxTqZ7ONll565ksnKh3ylI2Qso=;
+        b=x9iUMe6HSK2nK2+QfHmiREQSdsu7l/+pz5eQ8eHcqA70IPbE7p231rnX0WYyo8gEDN
+         Vpe+sWyuQDwTam/csa/fubGZNzTkpLwOSyVI/nJpQHJHx/tJ2Okv0GoSV4T946h75Xgi
+         UyJmMlEy0oBCnY7GxaN+Hnb4NsojnOjfWUOKJjtKQYoIByqEH0mQUWgASNatHKP6MA6N
+         15zV+H2RinYQQXQUks8e/9NlvnzhUW3W+wjeLHBsByndE31ZXfFhOJRHFtKKBdSywZaW
+         +X//kwdh5kC+jnYFQsoYTyqdFv4EEd76+TFoNgfzY5nuiOpbup7xpWfVae3eBPgjlHeM
+         fbqg==
+X-Gm-Message-State: ACgBeo3oRdyZaFfuTyR2wJ0ZKCXasEiRGO9UzM4y0QCZrUJBhSI7LkPS
+        lSNZwJQLOAd8Ktkco0YCwUe3DQ==
+X-Google-Smtp-Source: AA6agR4QLUE1Ptr9L6/5prtoBq9XWGwAqLKFX6+0rTRLhg6Qq0It1iuQEECu3eQaVfLVc7g9ixBe/A==
+X-Received: by 2002:a17:902:ccd1:b0:172:5c49:34be with SMTP id z17-20020a170902ccd100b001725c4934bemr21344292ple.23.1660765189710;
+        Wed, 17 Aug 2022 12:39:49 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q7-20020aa79607000000b0052d0a93f6d5sm10845922pfg.116.2022.08.17.12.39.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 12:39:37 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Wed, 17 Aug 2022 21:39:36 +0200
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
-Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
-Message-ID: <Yv1D+D2mJtPR236L@krava>
-References: <YvpZJQGQdVaa2Oh4@worktop.programming.kicks-ass.net>
- <CAADnVQKyfrFTZOM9F77i0NbaXLZZ7KbvKBvu7p6kgdnRgG+2=Q@mail.gmail.com>
- <Yvpf67eCerqaDmlE@worktop.programming.kicks-ass.net>
- <CAADnVQKX5xJz5N_mVyf7wg4BT8Q2cNh8ze-SxTRfk6KtcFQ0=Q@mail.gmail.com>
- <YvpmAnFldR0iwAFC@worktop.programming.kicks-ass.net>
- <CAADnVQJuDS22o7fi9wPZx9siAWgu1grQXXB02KfasxZ-RPdRSw@mail.gmail.com>
- <Yvpq3JDk8fTgdMv8@worktop.programming.kicks-ass.net>
- <Yvs/oey1NUlkI30d@krava>
- <Yvy06GPn45D0rD7n@krava>
- <CAADnVQ+SJ7VjeXgz-wcN9OGPpfTaJVKhoyKDm895Q60C8T4-QA@mail.gmail.com>
+        Wed, 17 Aug 2022 12:39:49 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 12:39:48 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH v9 03/27] kallsyms: add static relationship between
+ `KSYM_NAME_LEN{,_BUFFER}`
+Message-ID: <202208171238.80053F8C@keescook>
+References: <20220805154231.31257-1-ojeda@kernel.org>
+ <20220805154231.31257-4-ojeda@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAADnVQ+SJ7VjeXgz-wcN9OGPpfTaJVKhoyKDm895Q60C8T4-QA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220805154231.31257-4-ojeda@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 09:57:45AM -0700, Alexei Starovoitov wrote:
-> On Wed, Aug 17, 2022 at 2:29 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Tue, Aug 16, 2022 at 08:56:33AM +0200, Jiri Olsa wrote:
-> > > On Mon, Aug 15, 2022 at 05:48:44PM +0200, Peter Zijlstra wrote:
-> > > > On Mon, Aug 15, 2022 at 08:35:53AM -0700, Alexei Starovoitov wrote:
-> > > > > On Mon, Aug 15, 2022 at 8:28 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > > > > >
-> > > > > > On Mon, Aug 15, 2022 at 08:17:42AM -0700, Alexei Starovoitov wrote:
-> > > > > > > It's hiding a fake function from ftrace, since it's not a function
-> > > > > > > and ftrace infra shouldn't show it tracing logs.
-> > > > > > > In other words it's a _notrace_ function with nop5.
-> > > > > >
-> > > > > > Then make it a notrace function with a nop5 in it. That isn't hard.
-> > > > >
-> > > > > That's exactly what we're trying to do.
-> > > >
-> > > > All the while claiming ftrace is broken while it is not.
-> > > >
-> > > > > Jiri's patch is one way to achieve that.
-> > > >
-> > > > Fairly horrible way.
-> > > >
-> > > > > What is your suggestion?
-> > > >
-> > > > Mailed it already.
-> > > >
-> > > > > Move it from C to asm ?
-> > > >
-> > > > Would be much better than proposed IMO.
-> > >
-> > > nice, that would be independent of the compiler atributes
-> > > and config checking..  will check on this one ;-)
-> >
-> > how about something like below?
-> >
-> > dispatcher code is generated only for x86_64, so that will be covered
-> > by the assembly version (free of ftrace table) other archs stay same
-> >
-> > jirka
-> >
-> >
-> > ----
-> > diff --git a/arch/x86/net/Makefile b/arch/x86/net/Makefile
-> > index 383c87300b0d..94964002eaae 100644
-> > --- a/arch/x86/net/Makefile
-> > +++ b/arch/x86/net/Makefile
-> > @@ -7,4 +7,5 @@ ifeq ($(CONFIG_X86_32),y)
-> >          obj-$(CONFIG_BPF_JIT) += bpf_jit_comp32.o
-> >  else
-> >          obj-$(CONFIG_BPF_JIT) += bpf_jit_comp.o
-> > +        obj-$(CONFIG_BPF_JIT) += bpf_dispatcher.o
-> >  endif
-> > diff --git a/arch/x86/net/bpf_dispatcher.S b/arch/x86/net/bpf_dispatcher.S
-> > new file mode 100644
-> > index 000000000000..65790a1286e8
-> > --- /dev/null
-> > +++ b/arch/x86/net/bpf_dispatcher.S
-> > @@ -0,0 +1,10 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +#include <linux/linkage.h>
-> > +#include <asm/nops.h>
-> > +#include <asm/nospec-branch.h>
-> > +
-> > +       .text
-> > +SYM_FUNC_START(bpf_dispatcher_xdp_func)
-> > +       ASM_NOP5
-> > +       JMP_NOSPEC rdx
-> > +SYM_FUNC_END(bpf_dispatcher_xdp_func)
+On Fri, Aug 05, 2022 at 05:41:48PM +0200, Miguel Ojeda wrote:
+> This adds a static assert to ensure `KSYM_NAME_LEN_BUFFER`
+> gets updated when `KSYM_NAME_LEN` changes.
 > 
-> Wait. Why asm ? Did you try Peter's suggestion:
-> __attribute__((__no_instrument_function__))
-> __attribute__((patchable_function_entry(5)))
+> The relationship used is one that keeps the new size (512+1)
+> close to the original buffer size (500).
+> 
+> Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> ---
+>  scripts/kallsyms.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index f3c5a2623f71..f543b1c4f99f 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -33,7 +33,11 @@
+>  #define KSYM_NAME_LEN		128
+>  
+>  /* A substantially bigger size than the current maximum. */
+> -#define KSYM_NAME_LEN_BUFFER	499
+> +#define KSYM_NAME_LEN_BUFFER	512
+> +_Static_assert(
+> +	KSYM_NAME_LEN_BUFFER == KSYM_NAME_LEN * 4,
+> +	"Please keep KSYM_NAME_LEN_BUFFER in sync with KSYM_NAME_LEN"
+> +);
 
-ah so this suggestion came in the other thread after the asm one.. ok, will check
+Why not just make this define:
 
-jirka
+#define KSYM_NAME_LEN_BUFFER (KSYM_NAME_LEN * 4)
+
+? If there's a good reason not it, please put it in the commit log.
+
+-Kees
+
+-- 
+Kees Cook

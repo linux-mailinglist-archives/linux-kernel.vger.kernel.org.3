@@ -2,162 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D0B597600
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 687535975ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240995AbiHQSpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 14:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52634 "EHLO
+        id S241029AbiHQSpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 14:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238759AbiHQSpR (ORCPT
+        with ESMTP id S241003AbiHQSpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 14:45:17 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2074.outbound.protection.outlook.com [40.107.94.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5801E3E6;
-        Wed, 17 Aug 2022 11:45:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Gl+I1jbj1ed5x9IyG39bftfnr99vQWiQhkElNJC+6uhACsBK+kPGpo+AY+z1sQxvYof9gQcLp1pdgD9TTRIfd0YSn0gAWS2I0vh4bTT4AFJF8/l3Xjh+zwIzSZNvsKSBPOxBRnd51aV/5AVGAYzwlmbF6N12M/zSN3zWOCggYo1lzJqfv/3pOhj0H4VFOkC5NZJPPBd3uTUoaUI5aQGYfQAipmZr8e/L1/u1DgpLCq5Hqi47cNRs+pY9DCibe2TPBHi7jIgIcL/6+C6UwXgkwHaPDUxC3+y8a4vDCav6d29CeHaubl7tdC1HgluKYe02NNKJegiNcCXl8BW8sxxgFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BdyyRl3AmhjpcMUvtFRUBu+NU/QPTgz7zXa1cOu7/q0=;
- b=m1I3suzHTrQET1R9SCadfv699XbntYiYF9VldfiZn3QB1fwaHi9yGh0M/z/yMPIHWWlIp3UrncgxXZxXuBZaJXvug8lAj2NhtLfUkTCPdEFVRhV6f9jeKN4w+BBnwB6SUSN8ksWUiL1HtFcqQcjdQYsWZxRy5BAF3Une9FWXXAZXuxr0Kf4OhovbJ4C+d+3yeBH5KKYN6mnOsMFw63v+bfPYFZQpC4LaSH0IlGIgx9s4EWW4LiKlOvMmBMJUxdjYweA+5AjcIZ7eXiAaBokh+60Mb6A2Xy6TrwuCR2IdiAOC/mltoR3/j0GJ9nE1wgMPk2ltKePr5227SlsD1YitXQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=linux.dev smtp.mailfrom=nvidia.com; dmarc=pass
- (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
- (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BdyyRl3AmhjpcMUvtFRUBu+NU/QPTgz7zXa1cOu7/q0=;
- b=QR1lY799s6IOs2RR1oS0kZ5fkmUwfuhf3RJh7unxx6E+lLCgD4p+3I7e2BgY08J671Y5SwpCTvooCkW1c6ePMZTjqYhAJfvKuq6RrIEO7GFcrMddTKBSGjQ1ZrNzZZJFqdFvDGkOcDfYTZSZrtAYn7X7Ai27Y7s7PAAOl+JcQdGTFticIFTie+E18pG7FHeCScFeNkA+W6l334ZMvOMYNa6lqxv76SRAQvmvQy3sqMOSfK4oZzI/cgwcQcQGsMDUCwwi9c31yvg2wyM1GcKc3NjXsFxhP7fgSP1d1S5vg1/kDl83DR5U4i4IWsHlHREFBqdTCvokJa9uN57uIgYBUQ==
-Received: from BN9PR03CA0059.namprd03.prod.outlook.com (2603:10b6:408:fb::34)
- by IA1PR12MB6484.namprd12.prod.outlook.com (2603:10b6:208:3a7::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Wed, 17 Aug
- 2022 18:45:15 +0000
-Received: from BN8NAM11FT093.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:fb:cafe::d1) by BN9PR03CA0059.outlook.office365.com
- (2603:10b6:408:fb::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.17 via Frontend
- Transport; Wed, 17 Aug 2022 18:45:15 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.234) by
- BN8NAM11FT093.mail.protection.outlook.com (10.13.177.22) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5546.7 via Frontend Transport; Wed, 17 Aug 2022 18:45:14 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Wed, 17 Aug
- 2022 18:45:13 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 17 Aug
- 2022 11:45:12 -0700
-Received: from build-petlozup-20220627T000321362.nvidia.com (10.127.8.12) by
- mail.nvidia.com (10.129.68.8) with Microsoft SMTP Server id 15.2.986.29 via
- Frontend Transport; Wed, 17 Aug 2022 11:45:12 -0700
-From:   Petlozu Pravareshwar <petlozup@nvidia.com>
-To:     <jonathanh@nvidia.com>, <thierry.reding@gmail.com>,
-        <p.zabel@pengutronix.de>, <dmitry.osipenko@collabora.com>,
-        <ulf.hansson@linaro.org>, <kkartik@nvidia.com>,
-        <cai.huoqing@linux.dev>, <spatra@nvidia.com>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <petlozup@nvidia.com>
-Subject: [PATCH] soc/tegra: pmc: Print reset info during probe
-Date:   Wed, 17 Aug 2022 18:44:56 +0000
-Message-ID: <20220817184456.1184459-1-petlozup@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-X-NVConfidentiality: public
+        Wed, 17 Aug 2022 14:45:30 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845021C90C
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 11:45:28 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id x21so18662843edd.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 11:45:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=xGU9QalusRdz0W9hKf9EB+6UjNuyQWtvR/GW+P/WHUw=;
+        b=UFDIuYFY1k8+fk1hDuKvDWb2fyjxcvEPEJdw2+VK5IwzA3fGcWVBtydYoCc9Jz0qgH
+         wf/Ivhl/hMejcR+6haJyBF+jAl6tORW7jX97VGmaOgVAAS9T8Q1WMNtwxVzlw+sqV0DM
+         3xs1FkAt6tB3/0gNIn+5Y/rLSHozCz0Jjrn7kVlnI41wP0s7ZI+TAj9upAr55PRrerCU
+         Qd3KGIL0mIv8uFQhhzwgSrp4W2hoUMt0H6QOm97b3yHxdWBxjYW14VTfKu1rgjUaLdYH
+         AuRMDRShgIkhuNClu8q2lvnHHvl/tRsM1uEadix1ZSdGMyW4l0zFipkNPbSXOVKajq4k
+         6ipA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=xGU9QalusRdz0W9hKf9EB+6UjNuyQWtvR/GW+P/WHUw=;
+        b=fWQQl9YkIQ64GP6oGciJnjs2i+Ya/65OYd6NwC1uD8FP8/DusCE9y8woYvg7XzrTXy
+         IfmvA/76r3xYb2E+sW/1X6958v3k2Yv87tEzK6FVkYJiFbkf7dG7nx9dxKV1p9/eTk5y
+         WURHuV+zJroQ9oZW45KtATDGYQ+2LjGy/LpORkwDOZejCsZoGNraL/QPgO4pxN0fXZFf
+         oSn4gtaMQIRYqGK3cjnXCjJ6YJtwY+C0rvPtaSDMR6RziUZ/LaU7W7ZCr/+4nVKW20+N
+         tWbVgh1msO7CKxCAkFx+JofQUsJEKJUtwc+LCLILIUbocvqKEwkX/m5IL0tMBQbXPl8w
+         6eCQ==
+X-Gm-Message-State: ACgBeo3JAe1AOEZcMF/LiZtAl+VvW6WP2RYV9nQ7lCyRadlstL0PiDm0
+        BwcPJJpnOQnBJ20DlgmYnXM=
+X-Google-Smtp-Source: AA6agR5zgDfueJg8rk7ZyXHB/d3TWt3aCmNp/ioebSxEicV6/TaYp4vTbgxI/8z/q1nGKBfvTKd5WQ==
+X-Received: by 2002:a05:6402:3881:b0:445:f8bf:5a1c with SMTP id fd1-20020a056402388100b00445f8bf5a1cmr1127787edb.13.1660761926704;
+        Wed, 17 Aug 2022 11:45:26 -0700 (PDT)
+Received: from localhost.localdomain (host-87-17-106-94.retail.telecomitalia.it. [87.17.106.94])
+        by smtp.gmail.com with ESMTPSA id fq15-20020a1709069d8f00b007306a4ecc9dsm7211975ejc.18.2022.08.17.11.45.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 11:45:24 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH v2] nvmet-tcp: Don't kmap() pages which can't come from HIGHMEM
+Date:   Wed, 17 Aug 2022 20:45:19 +0200
+Message-Id: <20220817184519.25141-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c23b8c7f-11cb-46be-7691-08da80809fc5
-X-MS-TrafficTypeDiagnostic: IA1PR12MB6484:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XFM67JEKdNFUXwSimV1L6nHgxDLjUdias6D4i2rPtiCN4Q9nFKrLq790GDnzOBdQhbnioSvYXDe5RIzMB/7s2ptyMCrAIijFng9DleUq/Ee7x92u8fAf9fN3N5pJ7QN0HoWLpTVbFmm32zCXceGkV2FVSvAbE/0wQMIFvkqtpKn2RtTsUy5HSSB5qrBT1KFvtrHZMdxGUmGd8HwAmENOxZ0OMa5g7zbXmp6HDWtgMWmrG84JwLm+abNlMc24kuTlGuFRKtVbRAG0HlYVWTRJulrSrb1g7FxgQVAQqEjCQvudLcf/2TFoSq45NfzGmnoqXo7N+wkDXFV2AfmO00tiBD2GXA72XaTQpXeEG/2l+JPJ7RzyoUdjwp3FwVA6yC0poej8XhbdtB46y9k+kun8XNpwMaLJbZ6/jZ3Z+gdR9Gt2R8xAvus6gRERiNjsVfH1oXHyuNpvHk7bCfJMU7gw/dU3Y6Z9DGc0oXK9i5EJxaeHh93NRngc+zEhDEPlNI51NroBJBI2NkZxaH2Cf/rBJ9Zdonf0OT7DJK4Z9brnj38dB+K4haiKa5e942MgLh5AvK5TrQaqUOkdE+R3q69B7X/BEIZEXMu2YHgIRVdUaoJjfnQ0FfVt8Q6DD7gJu2nn5jdP+Bfd5DXSHk5QHdDmsPf709EgVhsziXJarJVHsfRAZGZMclmCfVV8xfOORp1U9l2/6kZ+ZhVisghfGpmtKHY2sZlYxMcMuXpnvSEtYO6R6SR1MBPzPbZ/1DJH2SX3F0vnppEZhIimFCeCGoN6/HzNqihBwYOBRscbGdK3vNXSD8HIxT0aJH7JiXs327NO
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(346002)(39860400002)(376002)(40470700004)(36840700001)(46966006)(6666004)(4326008)(2906002)(26005)(82310400005)(2616005)(7696005)(86362001)(41300700001)(40480700001)(36860700001)(8936002)(40460700003)(107886003)(36756003)(478600001)(110136005)(81166007)(921005)(356005)(82740400003)(336012)(47076005)(426003)(1076003)(186003)(8676002)(70586007)(5660300002)(316002)(70206006)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2022 18:45:14.9159
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c23b8c7f-11cb-46be-7691-08da80809fc5
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT093.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6484
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During PMC probe, print previous reset related info
-such as reset reason and reset level.
+kmap() is being deprecated in favor of kmap_local_page().[1]
 
-Signed-off-by: Petlozu Pravareshwar <petlozup@nvidia.com>
+There are two main problems with kmap(): (1) It comes with an overhead as
+mapping space is restricted and protected by a global lock for
+synchronization and (2) it also requires global TLB invalidation when the
+kmap’s pool wraps and it might block when the mapping space is fully
+utilized until a slot becomes available.
+
+The pages which will be mapped are allocated in nvmet_tcp_map_data(),
+using the GFP_KERNEL flag. This assures that they cannot come from
+HIGHMEM. This imply that a straight page_address() can replace the kmap()
+of sg_page(sg) in nvmet_tcp_map_pdu_iovec(). As a side effect, we might
+also delete the field "nr_mapped" from struct "nvmet_tcp_cmd" because,
+after removing the kmap() calls, there would be no longer any need of it.
+
+Therefore, replace the kmap() of sg_page(sg) with a page_address() and
+delete the "nr_mapped" field from "nvmet_tcp_cmd" and instead pass a
+local variable to iov_iter_kvec() from the call site in
+nvmet_tcp_map_pdu_iovec().
+
+[1] "[PATCH] checkpatch: Add kmap and kmap_atomic to the deprecated
+list" https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com/
+
+Cc: Chaitanya Kulkarni <chaitanyak@nvidia.com>
+Cc: Keith Busch <kbusch@kernel.org>
+Cc: Sagi Grimberg <sagi@grimberg.me>
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 ---
- drivers/soc/tegra/pmc.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
 
-diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
-index 34d36a28f7d6..dd98ea034149 100644
---- a/drivers/soc/tegra/pmc.c
-+++ b/drivers/soc/tegra/pmc.c
-@@ -2177,6 +2177,31 @@ static int tegra_pmc_pinctrl_init(struct tegra_pmc *pmc)
- 	return 0;
+v1->v2: Use a local variable as argument of iov_iter_kvec() instead of
+the removed "nr_mapped" field from struct "nvmet_tcp_cmd". Thanks to
+Sagi and Keith who noticed my mistake.
+
+Many thanks to Chaitanya, Keith, Sagi, for the answers and the comments on
+the RFC which led to this patch. The RFC is at:
+https://lore.kernel.org/all/20220816091808.23236-1-fmdefrancesco@gmail.com/
+
+ drivers/nvme/target/tcp.c | 28 ++++------------------------
+ 1 file changed, 4 insertions(+), 24 deletions(-)
+
+diff --git a/drivers/nvme/target/tcp.c b/drivers/nvme/target/tcp.c
+index dc3b4dc8fe08..5b839f842623 100644
+--- a/drivers/nvme/target/tcp.c
++++ b/drivers/nvme/target/tcp.c
+@@ -77,7 +77,6 @@ struct nvmet_tcp_cmd {
+ 	u32				pdu_len;
+ 	u32				pdu_recv;
+ 	int				sg_idx;
+-	int				nr_mapped;
+ 	struct msghdr			recv_msg;
+ 	struct kvec			*iov;
+ 	u32				flags;
+@@ -167,7 +166,6 @@ static const struct nvmet_fabrics_ops nvmet_tcp_ops;
+ static void nvmet_tcp_free_cmd(struct nvmet_tcp_cmd *c);
+ static void nvmet_tcp_finish_cmd(struct nvmet_tcp_cmd *cmd);
+ static void nvmet_tcp_free_cmd_buffers(struct nvmet_tcp_cmd *cmd);
+-static void nvmet_tcp_unmap_pdu_iovec(struct nvmet_tcp_cmd *cmd);
+ 
+ static inline u16 nvmet_tcp_cmd_tag(struct nvmet_tcp_queue *queue,
+ 		struct nvmet_tcp_cmd *cmd)
+@@ -301,35 +299,21 @@ static int nvmet_tcp_check_ddgst(struct nvmet_tcp_queue *queue, void *pdu)
+ 
+ static void nvmet_tcp_free_cmd_buffers(struct nvmet_tcp_cmd *cmd)
+ {
+-	WARN_ON(unlikely(cmd->nr_mapped > 0));
+-
+ 	kfree(cmd->iov);
+ 	sgl_free(cmd->req.sg);
+ 	cmd->iov = NULL;
+ 	cmd->req.sg = NULL;
  }
  
-+static void tegra_pmc_show_reset_status(void)
-+{
-+	u32 val, rst_src, rst_lvl;
-+
-+	val = tegra_pmc_readl(pmc, pmc->soc->regs->rst_status);
-+	rst_src = (val & pmc->soc->regs->rst_source_mask) >>
-+		pmc->soc->regs->rst_source_shift;
-+	rst_lvl = (val & pmc->soc->regs->rst_level_mask) >>
-+		pmc->soc->regs->rst_level_shift;
-+
-+	if (rst_src >= pmc->soc->num_reset_sources)
-+		dev_warn(pmc->dev, "reset source: UNKNOWN\n");
-+	else if (pmc->soc->reset_sources[rst_src] == NULL)
-+		dev_warn(pmc->dev, "reset source: UNUSED\n");
-+	else
-+		dev_info(pmc->dev, "reset source: %s\n",
-+			pmc->soc->reset_sources[rst_src]);
-+
-+	if (rst_lvl >= pmc->soc->num_reset_levels)
-+		dev_warn(pmc->dev, "reset level: UNKNOWN\n");
-+	else
-+		dev_info(pmc->dev, "reset level: %s\n",
-+			pmc->soc->reset_levels[rst_lvl]);
-+}
-+
- static ssize_t reset_reason_show(struct device *dev,
- 				 struct device_attribute *attr, char *buf)
+-static void nvmet_tcp_unmap_pdu_iovec(struct nvmet_tcp_cmd *cmd)
+-{
+-	struct scatterlist *sg;
+-	int i;
+-
+-	sg = &cmd->req.sg[cmd->sg_idx];
+-
+-	for (i = 0; i < cmd->nr_mapped; i++)
+-		kunmap(sg_page(&sg[i]));
+-
+-	cmd->nr_mapped = 0;
+-}
+-
+ static void nvmet_tcp_map_pdu_iovec(struct nvmet_tcp_cmd *cmd)
  {
-@@ -2979,6 +3004,8 @@ static int tegra_pmc_probe(struct platform_device *pdev)
+ 	struct kvec *iov = cmd->iov;
+ 	struct scatterlist *sg;
+ 	u32 length, offset, sg_offset;
++	int nr_mapped;
  
- 	tegra_pmc_init_tsense_reset(pmc);
+ 	length = cmd->pdu_len;
+-	cmd->nr_mapped = DIV_ROUND_UP(length, PAGE_SIZE);
++	nr_mapped = DIV_ROUND_UP(length, PAGE_SIZE);
+ 	offset = cmd->rbytes_done;
+ 	cmd->sg_idx = offset / PAGE_SIZE;
+ 	sg_offset = offset % PAGE_SIZE;
+@@ -338,7 +322,7 @@ static void nvmet_tcp_map_pdu_iovec(struct nvmet_tcp_cmd *cmd)
+ 	while (length) {
+ 		u32 iov_len = min_t(u32, length, sg->length - sg_offset);
  
-+	tegra_pmc_show_reset_status();
-+
- 	tegra_pmc_reset_sysfs_init(pmc);
+-		iov->iov_base = kmap(sg_page(sg)) + sg->offset + sg_offset;
++		iov->iov_base = page_address(sg_page(sg)) + sg->offset + sg_offset;
+ 		iov->iov_len = iov_len;
  
- 	if (IS_ENABLED(CONFIG_DEBUG_FS)) {
+ 		length -= iov_len;
+@@ -347,8 +331,7 @@ static void nvmet_tcp_map_pdu_iovec(struct nvmet_tcp_cmd *cmd)
+ 		sg_offset = 0;
+ 	}
+ 
+-	iov_iter_kvec(&cmd->recv_msg.msg_iter, READ, cmd->iov,
+-		cmd->nr_mapped, cmd->pdu_len);
++	iov_iter_kvec(&cmd->recv_msg.msg_iter, READ, cmd->iov, nr_mapped, cmd->pdu_len);
+ }
+ 
+ static void nvmet_tcp_fatal_error(struct nvmet_tcp_queue *queue)
+@@ -1141,7 +1124,6 @@ static int nvmet_tcp_try_recv_data(struct nvmet_tcp_queue *queue)
+ 		cmd->rbytes_done += ret;
+ 	}
+ 
+-	nvmet_tcp_unmap_pdu_iovec(cmd);
+ 	if (queue->data_digest) {
+ 		nvmet_tcp_prep_recv_ddgst(cmd);
+ 		return 0;
+@@ -1411,7 +1393,6 @@ static void nvmet_tcp_restore_socket_callbacks(struct nvmet_tcp_queue *queue)
+ static void nvmet_tcp_finish_cmd(struct nvmet_tcp_cmd *cmd)
+ {
+ 	nvmet_req_uninit(&cmd->req);
+-	nvmet_tcp_unmap_pdu_iovec(cmd);
+ 	nvmet_tcp_free_cmd_buffers(cmd);
+ }
+ 
+@@ -1424,7 +1405,6 @@ static void nvmet_tcp_uninit_data_in_cmds(struct nvmet_tcp_queue *queue)
+ 		if (nvmet_tcp_need_data_in(cmd))
+ 			nvmet_req_uninit(&cmd->req);
+ 
+-		nvmet_tcp_unmap_pdu_iovec(cmd);
+ 		nvmet_tcp_free_cmd_buffers(cmd);
+ 	}
+ 
 -- 
-2.17.1
+2.37.1
 

@@ -2,138 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8C45976C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1DD5976BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240834AbiHQThp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 15:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
+        id S238653AbiHQTj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 15:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232153AbiHQThn (ORCPT
+        with ESMTP id S231939AbiHQTjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 15:37:43 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CE71158
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:37:42 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 73so12803957pgb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:37:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=VkFb2gmnPJh2DD1NwRLdwKWVCBSGP9OxCe1ZkFaX8Fw=;
-        b=AUVwyR7T7c7LluQYD30dZSGSzo/Eycc90zAFFEuet1uMsbv5KnvP7VYTTe4PpcmjXu
-         N9VKziWiTK2yadkGsvq2WojWbC3dRJnmMUOJbIlpVOVCEYN/lF2xkwlzL/JBsjzFCzRK
-         /klZxgOKHQh/76lrnhKriLJ7ZfrxK28K1f0cg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=VkFb2gmnPJh2DD1NwRLdwKWVCBSGP9OxCe1ZkFaX8Fw=;
-        b=w0EaygSdzoTpESHkL15apnyoPReX7Gq2FASutCi83E2jUB+K1ybXhSmFHwf56ggBHU
-         Iw3D5UInRD3oUr9lKnWUTwbfV9FIasfUVMjFe0GFpBOgjw9ImzwixRMfPpcECE3zcVUw
-         XCqosB/sTbZRK4M/OpwvLN1MlQpNhqvlSUOCk3gNDwbP7Uf4NYLwKTmby/oGf/yoNwbF
-         e+jg40UIKzMrKrJDTjqQYh0pqLqgkNT1KAX+SurGOOZB2DZdq0tT3ErAeetMbj3QSdZO
-         8JX8Y4nKrFK+LKZ/mzheK+KlWYYaVOQ5k8C7wm+FYX8yoTbfGupLrIPVvSSsJrnR58dH
-         lv5g==
-X-Gm-Message-State: ACgBeo2bXUbqCFxGZNiEipx0MqwqpJPN1mkWemaM9MPqxaQry8e7vval
-        Q5A1zLxiOCElZX74BQQ3qZizPg==
-X-Google-Smtp-Source: AA6agR7V68uSa1wYB6yzkPNJOAf7DHUj6X4X5IvV1s+gIVOck89U0OwaFrfhP6SCIjgKS9MupRYLhg==
-X-Received: by 2002:a05:6a00:b82:b0:52f:518f:fe6c with SMTP id g2-20020a056a000b8200b0052f518ffe6cmr27121499pfj.80.1660765061670;
-        Wed, 17 Aug 2022 12:37:41 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o11-20020a170902d4cb00b0016bd8fb1fafsm261758plg.307.2022.08.17.12.37.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 12:37:40 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 12:37:40 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH v9 02/27] kallsyms: avoid hardcoding buffer size
-Message-ID: <202208171236.9CA3B9D579@keescook>
-References: <20220805154231.31257-1-ojeda@kernel.org>
- <20220805154231.31257-3-ojeda@kernel.org>
+        Wed, 17 Aug 2022 15:39:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA9C98D3A
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:39:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660765158;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fYOgf+nym4/Pj7sSYUYK9NZR7cCZXRMoFwQ8QFqYGQA=;
+        b=eZpMKZ9DVCcmEyd3Py0/LtaQiniguXrkaamI/jBDcFmGqLde7bq+NTXtqkA8LoyON93VHe
+        SwWkUb/guyJAggE+znvTg61WomQffCbzHqsNX7ZqB9CUN+Zrrd5G9gqbOuoEpfjV5qVp4T
+        mZ7IZpv3qbcas1QBU+sVmschgRvcEPw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-198-SqZpRkzgOkuRNHX8tsPDzg-1; Wed, 17 Aug 2022 15:39:14 -0400
+X-MC-Unique: SqZpRkzgOkuRNHX8tsPDzg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 14797811E84;
+        Wed, 17 Aug 2022 19:39:13 +0000 (UTC)
+Received: from emerald.redhat.com (unknown [10.22.18.168])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DE2A6492CA4;
+        Wed, 17 Aug 2022 19:39:10 +0000 (UTC)
+From:   Lyude Paul <lyude@redhat.com>
+To:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org
+Cc:     Wayne Lin <Wayne.Lin@amd.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
+        Claudio Suarez <cssk@net-c.es>, Roman Li <Roman.Li@amd.com>,
+        Ian Chen <ian.chen@amd.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Wenjing Liu <wenjing.liu@amd.com>, Jun Lei <Jun.Lei@amd.com>,
+        Jimmy Kizito <Jimmy.Kizito@amd.com>,
+        Meenakshikumar Somasundaram <meenakshikumar.somasundaram@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        jinzh <jinzh@github.amd.com>, Alex Hung <alex.hung@amd.com>,
+        Eric Yang <Eric.Yang2@amd.com>,
+        Michael Strauss <michael.strauss@amd.com>,
+        "Shen, George" <George.Shen@amd.com>,
+        "Leo (Hanghong) Ma" <hanghong.ma@amd.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [RFC v4 01/17] drm/amdgpu/dc/mst: Rename dp_mst_stream_allocation(_table)
+Date:   Wed, 17 Aug 2022 15:38:30 -0400
+Message-Id: <20220817193847.557945-2-lyude@redhat.com>
+In-Reply-To: <20220817193847.557945-1-lyude@redhat.com>
+References: <20220817193847.557945-1-lyude@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220805154231.31257-3-ojeda@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 05:41:47PM +0200, Miguel Ojeda wrote:
-> From: Boqun Feng <boqun.feng@gmail.com>
-> 
-> This introduces `KSYM_NAME_LEN_BUFFER` in place of the previously
-> hardcoded size of the input buffer.
-> 
-> It will also make it easier to update the size in a single place
-> in a later patch.
-> 
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+Just to make this more clear to outside contributors that these are
+DC-specific structs, as this also threw me into a loop a number of times
+before I figured out the purpose of this.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Cc: Wayne Lin <Wayne.Lin@amd.com>
+Cc: Fangzhi Zuo <Jerry.Zuo@amd.com>
+Acked-by: Jani Nikula <jani.nikula@intel.com>
+---
+ .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c |  9 ++++-----
+ drivers/gpu/drm/amd/display/dc/core/dc_link.c         | 10 +++++-----
+ drivers/gpu/drm/amd/display/dc/dm_helpers.h           |  4 ++--
+ .../gpu/drm/amd/display/include/link_service_types.h  | 11 ++++++++---
+ 4 files changed, 19 insertions(+), 15 deletions(-)
 
-Does someone want to commit to taking these "prereq" patches? These
-clean-ups are nice even without adding Rust.
-
--Kees
-
-> ---
->  scripts/kallsyms.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> index 52f5488c61bc..f3c5a2623f71 100644
-> --- a/scripts/kallsyms.c
-> +++ b/scripts/kallsyms.c
-> @@ -27,8 +27,14 @@
->  
->  #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
->  
-> +#define _stringify_1(x)	#x
-> +#define _stringify(x)	_stringify_1(x)
-> +
->  #define KSYM_NAME_LEN		128
->  
-> +/* A substantially bigger size than the current maximum. */
-> +#define KSYM_NAME_LEN_BUFFER	499
-> +
->  struct sym_entry {
->  	unsigned long long addr;
->  	unsigned int len;
-> @@ -198,13 +204,13 @@ static void check_symbol_range(const char *sym, unsigned long long addr,
->  
->  static struct sym_entry *read_symbol(FILE *in)
->  {
-> -	char name[500], type;
-> +	char name[KSYM_NAME_LEN_BUFFER+1], type;
->  	unsigned long long addr;
->  	unsigned int len;
->  	struct sym_entry *sym;
->  	int rc;
->  
-> -	rc = fscanf(in, "%llx %c %499s\n", &addr, &type, name);
-> +	rc = fscanf(in, "%llx %c %" _stringify(KSYM_NAME_LEN_BUFFER) "s\n", &addr, &type, name);
->  	if (rc != 3) {
->  		if (rc != EOF && fgets(name, sizeof(name), in) == NULL)
->  			fprintf(stderr, "Read error or end of file.\n");
-> -- 
-> 2.37.1
-> 
-
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+index a0154a5f7183..3aa385860eea 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+@@ -153,9 +153,8 @@ enum dc_edid_status dm_helpers_parse_edid_caps(
+ 	return result;
+ }
+ 
+-static void get_payload_table(
+-		struct amdgpu_dm_connector *aconnector,
+-		struct dp_mst_stream_allocation_table *proposed_table)
++static void get_payload_table(struct amdgpu_dm_connector *aconnector,
++			      struct dc_dp_mst_stream_allocation_table *proposed_table)
+ {
+ 	int i;
+ 	struct drm_dp_mst_topology_mgr *mst_mgr =
+@@ -177,7 +176,7 @@ static void get_payload_table(
+ 			mst_mgr->payloads[i].payload_state ==
+ 					DP_PAYLOAD_REMOTE) {
+ 
+-			struct dp_mst_stream_allocation *sa =
++			struct dc_dp_mst_stream_allocation *sa =
+ 					&proposed_table->stream_allocations[
+ 						proposed_table->stream_count];
+ 
+@@ -201,7 +200,7 @@ void dm_helpers_dp_update_branch_info(
+ bool dm_helpers_dp_mst_write_payload_allocation_table(
+ 		struct dc_context *ctx,
+ 		const struct dc_stream_state *stream,
+-		struct dp_mst_stream_allocation_table *proposed_table,
++		struct dc_dp_mst_stream_allocation_table *proposed_table,
+ 		bool enable)
+ {
+ 	struct amdgpu_dm_connector *aconnector;
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link.c b/drivers/gpu/drm/amd/display/dc/core/dc_link.c
+index 9e51338441d0..e01424fb02ba 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc_link.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc_link.c
+@@ -3516,7 +3516,7 @@ static void update_mst_stream_alloc_table(
+ 	struct dc_link *link,
+ 	struct stream_encoder *stream_enc,
+ 	struct hpo_dp_stream_encoder *hpo_dp_stream_enc, // TODO: Rename stream_enc to dio_stream_enc?
+-	const struct dp_mst_stream_allocation_table *proposed_table)
++	const struct dc_dp_mst_stream_allocation_table *proposed_table)
+ {
+ 	struct link_mst_stream_allocation work_table[MAX_CONTROLLER_NUM] = { 0 };
+ 	struct link_mst_stream_allocation *dc_alloc;
+@@ -3679,7 +3679,7 @@ enum dc_status dc_link_allocate_mst_payload(struct pipe_ctx *pipe_ctx)
+ {
+ 	struct dc_stream_state *stream = pipe_ctx->stream;
+ 	struct dc_link *link = stream->link;
+-	struct dp_mst_stream_allocation_table proposed_table = {0};
++	struct dc_dp_mst_stream_allocation_table proposed_table = {0};
+ 	struct fixed31_32 avg_time_slots_per_mtp;
+ 	struct fixed31_32 pbn;
+ 	struct fixed31_32 pbn_per_slot;
+@@ -3784,7 +3784,7 @@ enum dc_status dc_link_reduce_mst_payload(struct pipe_ctx *pipe_ctx, uint32_t bw
+ 	struct fixed31_32 avg_time_slots_per_mtp;
+ 	struct fixed31_32 pbn;
+ 	struct fixed31_32 pbn_per_slot;
+-	struct dp_mst_stream_allocation_table proposed_table = {0};
++	struct dc_dp_mst_stream_allocation_table proposed_table = {0};
+ 	uint8_t i;
+ 	const struct link_hwss *link_hwss = get_link_hwss(link, &pipe_ctx->link_res);
+ 	DC_LOGGER_INIT(link->ctx->logger);
+@@ -3873,7 +3873,7 @@ enum dc_status dc_link_increase_mst_payload(struct pipe_ctx *pipe_ctx, uint32_t
+ 	struct fixed31_32 avg_time_slots_per_mtp;
+ 	struct fixed31_32 pbn;
+ 	struct fixed31_32 pbn_per_slot;
+-	struct dp_mst_stream_allocation_table proposed_table = {0};
++	struct dc_dp_mst_stream_allocation_table proposed_table = {0};
+ 	uint8_t i;
+ 	enum act_return_status ret;
+ 	const struct link_hwss *link_hwss = get_link_hwss(link, &pipe_ctx->link_res);
+@@ -3957,7 +3957,7 @@ static enum dc_status deallocate_mst_payload(struct pipe_ctx *pipe_ctx)
+ {
+ 	struct dc_stream_state *stream = pipe_ctx->stream;
+ 	struct dc_link *link = stream->link;
+-	struct dp_mst_stream_allocation_table proposed_table = {0};
++	struct dc_dp_mst_stream_allocation_table proposed_table = {0};
+ 	struct fixed31_32 avg_time_slots_per_mtp = dc_fixpt_from_int(0);
+ 	int i;
+ 	bool mst_mode = (link->type == dc_connection_mst_branch);
+diff --git a/drivers/gpu/drm/amd/display/dc/dm_helpers.h b/drivers/gpu/drm/amd/display/dc/dm_helpers.h
+index fb6a2d7b6470..8173f4b80424 100644
+--- a/drivers/gpu/drm/amd/display/dc/dm_helpers.h
++++ b/drivers/gpu/drm/amd/display/dc/dm_helpers.h
+@@ -33,7 +33,7 @@
+ #include "dc_types.h"
+ #include "dc.h"
+ 
+-struct dp_mst_stream_allocation_table;
++struct dc_dp_mst_stream_allocation_table;
+ struct aux_payload;
+ enum aux_return_code_type;
+ 
+@@ -77,7 +77,7 @@ void dm_helpers_dp_update_branch_info(
+ bool dm_helpers_dp_mst_write_payload_allocation_table(
+ 		struct dc_context *ctx,
+ 		const struct dc_stream_state *stream,
+-		struct dp_mst_stream_allocation_table *proposed_table,
++		struct dc_dp_mst_stream_allocation_table *proposed_table,
+ 		bool enable);
+ 
+ /*
+diff --git a/drivers/gpu/drm/amd/display/include/link_service_types.h b/drivers/gpu/drm/amd/display/include/link_service_types.h
+index 79fabc51c991..f75ed6f8fcb8 100644
+--- a/drivers/gpu/drm/amd/display/include/link_service_types.h
++++ b/drivers/gpu/drm/amd/display/include/link_service_types.h
+@@ -246,8 +246,13 @@ union dpcd_training_lane_set {
+ };
+ 
+ 
++/* AMD's copy of various payload data for MST. We have two copies of the payload table (one in DRM,
++ * one in DC) since DRM's MST helpers can't be accessed here. This stream allocation table should
++ * _ONLY_ be filled out from DM and then passed to DC, do NOT use these for _any_ kind of atomic
++ * state calculations in DM, or you will break something.
++ */
+ /* DP MST stream allocation (payload bandwidth number) */
+-struct dp_mst_stream_allocation {
++struct dc_dp_mst_stream_allocation {
+ 	uint8_t vcp_id;
+ 	/* number of slots required for the DP stream in
+ 	 * transport packet */
+@@ -255,11 +260,11 @@ struct dp_mst_stream_allocation {
+ };
+ 
+ /* DP MST stream allocation table */
+-struct dp_mst_stream_allocation_table {
++struct dc_dp_mst_stream_allocation_table {
+ 	/* number of DP video streams */
+ 	int stream_count;
+ 	/* array of stream allocations */
+-	struct dp_mst_stream_allocation stream_allocations[MAX_CONTROLLER_NUM];
++	struct dc_dp_mst_stream_allocation stream_allocations[MAX_CONTROLLER_NUM];
+ };
+ 
+ #endif /*__DAL_LINK_SERVICE_TYPES_H__*/
 -- 
-Kees Cook
+2.37.1
+

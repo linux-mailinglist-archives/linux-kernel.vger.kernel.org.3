@@ -2,102 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69C3D597987
+	by mail.lfdr.de (Postfix) with ESMTP id B5F00597988
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 00:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235981AbiHQWK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 18:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
+        id S241442AbiHQWLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 18:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242202AbiHQWKn (ORCPT
+        with ESMTP id S235858AbiHQWLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 18:10:43 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A5E9F777;
-        Wed, 17 Aug 2022 15:10:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=S/5eXt6qxPOjrifOXrTAqDLvDo7S1RMnGh1w0oxBNRY=; b=LuyJGMy9jrbLt9nYppeNddgYWU
-        D/BfJy4BBV8fYYFviGZU4XVL/QzXZPDbrkVGEDaAqgWdY+l4F6rDBMTYMIxabfCBvNerOk1eEaDUZ
-        moCxBNac2IOqmQnsvQoD3HPI4Vw8tWBZg3rB1tJmJqzoYQYtr9dDZ4usgITC9y9+OZgvUlzUwb7yy
-        8X3q/mtluoXia0VGjRR9uSR4jN0UYUHw4VGCgA+HCrJytPNQkdeyITxLZSVcXH0WuO39MGZ+LjC8O
-        BHwntmREeJLccSE+kvCKiOqQaFNx1V1uuOKqDiUBOKSAJ67vcQCsz0udizEBpAhokvUi5fP0/9AVG
-        G3ZOi+3w==;
-Received: from [179.232.144.59] (helo=[192.168.0.5])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oOREw-00Aycc-0j; Thu, 18 Aug 2022 00:10:18 +0200
-Message-ID: <2f21b91c-4fb0-42f8-0820-a6036405cb29@igalia.com>
-Date:   Wed, 17 Aug 2022 19:09:26 -0300
+        Wed, 17 Aug 2022 18:11:32 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F3BA723E;
+        Wed, 17 Aug 2022 15:11:30 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M7Mg3364yz4x3w;
+        Thu, 18 Aug 2022 08:11:27 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1660774288;
+        bh=F66RbYXiYyVuI/3tkkg221uAGbsIY1Cnm1yFM4222QU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cUaYwjSbYhgfG7JnQcyDVoJNz3jd1HmaPmKvMDl6rJVkWJj/5MZ7OoOs2OWLk24tG
+         OVUHwjyRKI72kEGqeHd4Qy2MMYcYNF8u5Xn/4TrNT2OD8ZVLfj+fcGQzT10Dt+GaSf
+         GzVAEnSsBRRKQlwitnW+nBeukoOZl1+zFiy+VRS3RPxKrnBKxyhtH+0gmtaQW4CWQU
+         h9HZWgFmn3flvalEzornOdqumgKK5x57UKkomgMKkGUwCHDXJUozu1VEjOwPX/DnoU
+         QhTBYkXQmEgWIBnoAUzlW/cWbaRSBe7dAMQzsY+QF9tcZLI2lRxo7buDXT0SUBSgav
+         jIcHHYSrEBt/w==
+Date:   Thu, 18 Aug 2022 08:11:26 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>
+Subject: Re: build failure of next-20220811 due to b1a63a0b48ad
+ ("drm/amd/display: consider DSC pass-through during mode validation")
+Message-ID: <20220818081126.4421bb3e@canb.auug.org.au>
+In-Reply-To: <CADVatmO-kc93dQc9TPy7ZjGuLUUut7or1VLGYkLWTw803mkWiQ@mail.gmail.com>
+References: <YvU4GD8HtZ1A4dhI@debian>
+        <20220812090731.31da7d85@oak.ozlabs.ibm.com>
+        <20220817094309.140c346e@canb.auug.org.au>
+        <CADVatmO-kc93dQc9TPy7ZjGuLUUut7or1VLGYkLWTw803mkWiQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 10/13] EDAC/altera: Skip the panic notifier if kdump is
- loaded
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     pmladek@suse.com, Dinh Nguyen <dinguyen@kernel.org>,
-        Tony Luck <tony.luck@intel.com>, akpm@linux-foundation.org,
-        bhe@redhat.com, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, linux-edac@vger.kernel.org
-References: <20220719195325.402745-1-gpiccoli@igalia.com>
- <20220719195325.402745-11-gpiccoli@igalia.com> <Yv0mCY04heUXsGiC@zn.tnic>
- <46137c67-25b4-6657-33b7-cffdc7afc0d7@igalia.com> <Yv1C0Y25u2IB7PCs@zn.tnic>
- <7f016d7f-a546-a45d-c65c-bc35269b4faa@igalia.com> <Yv1XVRmTXHLhOkER@zn.tnic>
- <c0250075-ec87-189f-52c5-e0520325a015@igalia.com> <Yv1hn2ayPoyKBAj8@zn.tnic>
- <1ee275b3-97e8-4c2b-be88-d50898d17e23@igalia.com> <Yv1lGpisQVFpUOGP@zn.tnic>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <Yv1lGpisQVFpUOGP@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/y_P4uE_RmhYMsSeHGlsEA4e";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/08/2022 19:00, Borislav Petkov wrote:
-> On Wed, Aug 17, 2022 at 06:56:11PM -0300, Guilherme G. Piccoli wrote:
->> But do you agree that currently, in case of a kdump, that information
->> *is not collected*, with our without my patch?
-> 
-> If for some reason that panic notifier does not get run before kdump,
-> then that's a bug and that driver should not use a panic notifier to log
-> hw errors in the first place.
-> 
+--Sig_/y_P4uE_RmhYMsSeHGlsEA4e
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Indeed, the notifiers don't run before kdump by default, in a conscious
-decision of the kdump maintainers.
+Hi Sudip,
 
-You might be right, in the sense that maybe the edac error handler
-shouldn't run as a panic notifier. Let's see if Tony / Dinh can chime in
-on that discussion - we could move it to run in the kexec event as well,
-so it'd always run before a kdump, but maybe the risk it offers during
-panic time is not worth.
+On Wed, 17 Aug 2022 21:39:17 +0100 Sudip Mukherjee <sudipm.mukherjee@gmail.=
+com> wrote:
+>
+> On Wed, Aug 17, 2022 at 12:43 AM Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+> >
+> > On Fri, 12 Aug 2022 09:07:31 +1000 Stephen Rothwell <sfr@rothwell.id.au=
+> wrote: =20
+> > >
+> > > On Thu, 11 Aug 2022 18:10:48 +0100 "Sudip Mukherjee (Codethink)" <sud=
+ipm.mukherjee@gmail.com> wrote: =20
+> > > >
+> > > > Not sure if it has been reported, builds of riscv, alpha, s390, arm,
+> > > > arm64, xtensa, mips, csky allmodconfig have failed to build next-20=
+220811
+> > > > with the error:
+> > > >
+> > > > ERROR: modpost: "dc_dsc_compute_bandwidth_range" [drivers/gpu/drm/a=
+md/amdgpu/amdgpu.ko] undefined!
+> > > > ERROR: modpost: "dc_dsc_get_policy_for_timing" [drivers/gpu/drm/amd=
+/amdgpu/amdgpu.ko] undefined!
+> > > >
+> > > > git bisect pointed to b1a63a0b48ad ("drm/amd/display: consider DSC =
+pass-through during mode validation")
+> > > > And, reverting that commit has fixed the build failure.
+> > > >
+> > > > I will be happy to test any patch or provide any extra log if neede=
+d. =20
+> > >
+> > > I have reverted that commit in today's linux-next. =20
+> >
+> > I have removed that revert.  Sudip, can you recheck when linux-next is
+> > released, please? =20
+>=20
+> The build failure is not seen with next-20220817.
 
-Again - a matter of a trade-off, a good compromise must be agreed by all
-parties (kdump maintainers are usually extremely afraid of taking risks
-to not break kdump).
+Excellent, thanks.
 
-Cheers!
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/y_P4uE_RmhYMsSeHGlsEA4e
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL9Z44ACgkQAVBC80lX
+0Gxx+gf+KDLvy87g7b1sZVfaG9pEljZ5Ynr/9YvGBEjJWYYs/rxOvYAmYyXRmWt5
+oO3+wj0BOXGBmvnvXDcsW5L3wkigUfI0rloJGGHKuXKssmQTi7lqmt1S9/jeH6cD
+hOkUaXTJj1TTApBLUCImG3jfC5TmetOLXkruU5aoQQ/YZBV4ljBvwiuJ3FXi0gRK
+hJO0EYBu7pZtetLL/yEbG3oiipzyPhLYt+wv4Mm9b8Hrk+JBZ77gs7qgk2hCqlpX
+rNsNDf+ePiJOqWPlDWd3AK5m9AhJm1g9CIr+kjAmUGP24+yuiMNvEDc0E1zxdlk1
+EcbrLOvEmtSU7giPmQxfSME6fl8/1g==
+=01UZ
+-----END PGP SIGNATURE-----
+
+--Sig_/y_P4uE_RmhYMsSeHGlsEA4e--

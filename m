@@ -2,166 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B785967F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 06:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C335967F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 06:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbiHQEKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 00:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
+        id S230036AbiHQEWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 00:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiHQEKT (ORCPT
+        with ESMTP id S229639AbiHQEWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 00:10:19 -0400
-Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF08694103
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 21:10:17 -0700 (PDT)
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by box.trvn.ru (Postfix) with ESMTPSA id F0126497AE;
-        Wed, 17 Aug 2022 09:10:12 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-        t=1660709414; bh=ifOwka4j6M6CtsklufOlPonnoUPOChEvOQn/zmqbUNc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jcByZkmflTgvtc+k7rrDmBTZ6L1eXQZaKBH+3NFarsoYuVcZdgooWXPiqJZyXrmAy
-         8lrqfq0tsBAOVBd5h2mJfU4ED4xBPg95OFDSsLAYZUFBdGQR5jbwvaMsrImQPwYcI4
-         Eac9qn5kPY6b2cRagcDIp28CtFF+mvcDYHsaSyOqq0y6OJM2xg82l7KCLB8F/TytDQ
-         ODzkPVLsTjQpXe/OP6SV44qNdlIMPdwmd5WeBPCkI/cvzlXuBcDUZcAHu9LYYfWLdG
-         4griSM3gPcGsU6LoasQ2XE0k3PO4jTXXMF/cCbNoNZO7XTP0F4kgj47m3x+bHBU+s3
-         8S+qCuIn9pVfA==
+        Wed, 17 Aug 2022 00:22:12 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E685509B;
+        Tue, 16 Aug 2022 21:22:11 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d20so11085345pfq.5;
+        Tue, 16 Aug 2022 21:22:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=O6yNOAbHBLpssrKCW0NoIyJexCKifbpgBmT7LgwEDZc=;
+        b=SZr+gTlO/bbqf1dbTsH4BQ9wOOs/vGE80oGhUE2I2tmA4FAfkk7Cnieg6UwrRFanbO
+         Yjup/csjGk2AQICazcgAYlZmEhgaYTL9gfLK7D3QMqyY5Ba+odGC29MNgX97IbqAT+MT
+         Y0sLIWC+A7E9S+mB1Nk5jl4LHoT0kwn3zrGKCtRarGOmbGL3vzZ3gevldrR56YH+lDqp
+         z5rE2/83k108DOt247YcZv7jIFUCWs9/VwFDwYmOffnKUbUiMkSYg2XUrJXXliEA9hB7
+         sC/mpbL9WbIHFnJ1iWNHEGXQEhb1DneE9TBly6mOID1BGmqFpUW0UWvwIIZL/F3I9Oy0
+         qAPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=O6yNOAbHBLpssrKCW0NoIyJexCKifbpgBmT7LgwEDZc=;
+        b=cJsEQ07DpzdVdstH5mYCuBI3zbVH+vCDmgMvthDKWmVVTSwuJRud1bBCcAchNhD77z
+         R4+ahvONXI0wMNDu0CZNR0cxrnoTLJ39z7xl4Al+qclQssRj0IPa/eB+Y54kiuX+K2YM
+         0qPAnBom9blvlcuzxhS+7vEjCOrJ/hartheJv/DVp2IjdiQxAXyli5W//n23xrcGDeqx
+         SH0L6+m6SoVT0/+KMaOecXfReZ8GKg+9jf457qrToE+fzCXHwVmwfbPD8CCKrn07WYga
+         ULp/E3B7Mx4iMkvV3OZ3ro/cNAWUE+ysmSvqlmpQmIEKEkzxF9QP3ClyI7HzoM9Omb/y
+         ztHw==
+X-Gm-Message-State: ACgBeo2Q573q00DDXvuqutSyco2AMch4h3UyjwtRs0EL1EVuJS61WDGE
+        /t+JjNAY+3pvL1CVAE2q6rc=
+X-Google-Smtp-Source: AA6agR4I0pOlZA4fp4KU4G4CPAd5yDgBY8p45tpYFXbQTwK4YJdulMC/GBDG80L7ALX9f9PyR7p/TQ==
+X-Received: by 2002:a63:1e10:0:b0:41d:f6f6:49cc with SMTP id e16-20020a631e10000000b0041df6f649ccmr19894063pge.223.1660710131082;
+        Tue, 16 Aug 2022 21:22:11 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id je22-20020a170903265600b0016cd74e5f87sm229566plb.240.2022.08.16.21.22.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 21:22:09 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 16 Aug 2022 21:22:07 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 000/778] 5.15.61-rc2 review
+Message-ID: <20220817042207.GB1880847@roeck-us.net>
+References: <20220816124544.577833376@linuxfoundation.org>
 MIME-Version: 1.0
-Date:   Wed, 17 Aug 2022 09:10:11 +0500
-From:   Nikita Travkin <nikita@trvn.ru>
-To:     samuel.thibault@ens-lyon.org
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        speakup@linux-speakup.org
-Subject: Re: [PATCHv4] speakup: Generate speakupmap.h automatically
-In-Reply-To: <20220816183310.uvmcojucjdhcb4vk@begin>
-References: <20220612172244.il3siyq7ueqnvah5@begin>
- <20220816072843.1699317-1-nikita@trvn.ru>
- <20220816183310.uvmcojucjdhcb4vk@begin>
-Message-ID: <05ba7ae1d3065b32b6b206f7939b4433@trvn.ru>
-X-Sender: nikita@trvn.ru
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816124544.577833376@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-(For some reason my mail client decided to put me as To: and
-drop Samuel... so this is a resend. Sorry for the spam)
-
-Samuel Thibault писал(а) 16.08.2022 23:33:
-> Hello,
+On Tue, Aug 16, 2022 at 02:59:11PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.61 release.
+> There are 778 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Nikita Travkin, le mar. 16 août 2022 12:28:43 +0500, a ecrit:
->> After that I also had some weird issues of the build system trying to
->> write speakupmap.h into the source dir and not the output dir (the
->> source is read only due to the tooling I use) but this seems to have
->> been resolved by cleanly rebuilding the speakup dir.
-> 
-> Mmm, how did you get/update your source dir? The latest version of the
-> patchset does generate it in the build tree.
+> Responses should be made by Thu, 18 Aug 2022 12:43:40 +0000.
+> Anything received after that time might be too late.
 > 
 
-It's just a git tree for Linux in which I've checked-out the
-v6.0-rc1 tag and applied few unrelated patches on top.
+Build results:
+	total: 159 pass: 159 fail: 0
+Qemu test results:
+	total: 479 pass: 479 fail: 0
 
-The thing confused me a bit as all other artifacts were properly
-placed in the output dir with an exception of the speakupmap.h.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-My guess would be that I had some cache left over in the build dir
-from before this patch, when the file was hardcoded so it tried to
-recreate it as it was. This seems reproducible:
-
-(Please note that the build tooling I use handles the output dir in
-the output below)
-
-$ sudo rm -rf .output/drivers/accessibility/speakup/
-$ git checkout v5.19
-$ make -j12 allnoconfig
-$ make -j12 menuconfig # Enable speakup
-$ make -j12
-(... Builds correctly)
-
-$ git checkout v6.0-rc1
-$ git cherry-pick bc239d8740f9
-[отделённый HEAD c32cda0a1b44] speakup: Fix compilation in some build environments
- Date: Tue Aug 16 11:39:52 2022 +0500
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-$ make -j12 allnoconfig
-$ make -j12 menuconfig # Enable speakup the same way
-$ make -j12
-*** pmbootstrap envkernel.sh active for /home/travler/devel/pmos/linux! ***
-make: Entering directory '/mnt/linux'
-make[1]: Entering directory '/mnt/linux/.output'
-  SYNC    include/config/auto.conf.cmd
-
-(...)
-
-  CC      drivers/accessibility/speakup/buffers.o
-  CC      drivers/accessibility/speakup/devsynth.o
-  CC      drivers/accessibility/speakup/i18n.o
-  AR      kernel/built-in.a
-  CC      drivers/accessibility/speakup/fakekey.o
-  HOSTCC  drivers/accessibility/speakup/makemapdata.o
-  CC      drivers/accessibility/speakup/keyhelp.o
-  CC      drivers/accessibility/speakup/kobjects.o
-  CC      drivers/accessibility/speakup/selection.o
-  CC      drivers/accessibility/speakup/spk_ttyio.o
-  CC      drivers/accessibility/speakup/synth.o
-  CC      drivers/accessibility/speakup/thread.o
-  CC      drivers/accessibility/speakup/varhandlers.o
-  CC      drivers/of/device.o
-  HOSTLD  drivers/accessibility/speakup/makemapdata
-  MKMAP   drivers/accessibility/speakup/mapdata.h
-  HOSTCC  drivers/accessibility/speakup/genmap.o
-  HOSTLD  drivers/accessibility/speakup/genmap
-  GENMAP  ../drivers/accessibility/speakup/speakupmap.h
-/bin/sh: can't create ../drivers/accessibility/speakup/speakupmap.h: Permission denied
-make[4]: *** [../drivers/accessibility/speakup/Makefile:58: ../drivers/accessibility/speakup/speakupmap.h] Error 1
-make[4]: *** Waiting for unfinished jobs....
-  CC      drivers/of/platform.o
-  CC      drivers/of/property.o
-  CC      drivers/of/kobj.o
-  CC      drivers/of/fdt.o
-  CC      drivers/of/fdt_address.o
-  CC      drivers/of/address.o
-  CC      drivers/of/irq.o
-  CC      drivers/of/of_reserved_mem.o
-make[3]: *** [../scripts/Makefile.build:465: drivers/accessibility/speakup] Error 2
-make[2]: *** [../scripts/Makefile.build:465: drivers/accessibility] Error 2
-make[2]: *** Waiting for unfinished jobs....
-  AR      drivers/of/built-in.a
-make[1]: *** [/mnt/linux/Makefile:1855: drivers] Error 2
-make[1]: Leaving directory '/mnt/linux/.output'
-make: *** [Makefile:222: __sub-make] Error 2
-make: Leaving directory '/mnt/linux'
-Run 'pmbootstrap log' for details.
-
-$ sudo rm -rf .output/drivers/accessibility/speakup/
-$ make -j12
-(...)
-  HOSTLD  drivers/accessibility/speakup/makemapdata
-  MKMAP   drivers/accessibility/speakup/mapdata.h
-  HOSTCC  drivers/accessibility/speakup/genmap.o
-  HOSTLD  drivers/accessibility/speakup/genmap
-  GENMAP  drivers/accessibility/speakup/speakupmap.h
-  CC      drivers/accessibility/speakup/main.o
-  AR      drivers/accessibility/speakup/built-in.a
-(... Builds correctly again)
-
-
-Nikita
-
-> Samuel
-
+Guenter

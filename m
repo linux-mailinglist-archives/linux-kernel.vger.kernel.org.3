@@ -2,133 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3185D597270
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6D159724D
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240761AbiHQPEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 11:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47558 "EHLO
+        id S240764AbiHQPET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 11:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240749AbiHQPDz (ORCPT
+        with ESMTP id S240753AbiHQPDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 17 Aug 2022 11:03:55 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4D89DFB0;
-        Wed, 17 Aug 2022 08:02:59 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 87523580A19;
-        Wed, 17 Aug 2022 11:02:47 -0400 (EDT)
-Received: from imap50 ([10.202.2.100])
-  by compute3.internal (MEProxy); Wed, 17 Aug 2022 11:02:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        colorremedies.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1660748567; x=
-        1660752167; bh=XuAuMZJGsQZ1NsfHlxjT4d04G2KbCrSJAFw2yyq2vRA=; b=P
-        FbRKcnX1q4OWjL9ew45cds15G9s+rSwCTdBjWgzxK6Whq4At+oqyf4l0S6wyXNHp
-        Tx83jSgmSLEOEzHNxtmfUThxjONB5em/fHBxq9OoGOfdeb9oDKlIAXG+6jbSudN3
-        p0qN/vJXkUdA4PFjqCMMvaVwh3stYV/f3sMjc3LKstq61I81oatyAeYMSMSk8CJs
-        FQFuPGHo9NXBmtBgyfM1LQ5KNcbiHgZ74LnRbBAfzS5ENsaF0IwQl/ZKZ43g70Q9
-        dycwLYQYZnJvQqlGe/huns80Ly6QUocduKcdwQ2gO1XL1GfswVvW73hbnIvQJ2zF
-        fddl73oUU9ZUoxguwB8eQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660748567; x=1660752167; bh=XuAuMZJGsQZ1NsfHlxjT4d04G2Kb
-        CrSJAFw2yyq2vRA=; b=k8N276/Fcz7+YiYL7vg1qm6LiskF7S7WB8GJxuw93uQ4
-        t3Nq43ONuP/RXSwp42dHj1Rg5dQ2KOUCSoZ5xKKFdOGORYw4BErCe8i9T2j9+Xai
-        wXbm/X8QfGyJ7OE8Q12q/hnZCbBnYw3jRnfue/c7hUY5hppnEf5DpKJ+e54A91Yw
-        TTw1ICfwu5eh0RJ/lYci9JcrIi5C2VOk0iFzjB9xgWr88GbZecnU9Qshpt00YcCl
-        JYNrqfpw+f9HVN1SZVkVHN2lvULgzpg60zYBIs6z9VABgD9pwIt4C39Ml+7T2+IZ
-        SeiC/i/sN0GhAjW2EC+lp3Xh9q1RHWtRF1BmD8kujg==
-X-ME-Sender: <xms:FgP9Ypx03P47G8vAyWngwArPSuk9h_dJMItI_KaXa4dbwkrdKFrB7w>
-    <xme:FgP9YpTqZ6TvCBaF4--zpBCeASsC5wc05gZ0Q2ETyUHOCBdnN2z25JitKQMH12MaG
-    na_aON8HJnh_AaY4XE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehiedgkeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    goufhushhpvggtthffohhmrghinhculdegledmnecujfgurhepofgfggfkjghffffhvfev
-    ufgtsehttdertderredtnecuhfhrohhmpedfvehhrhhishcuofhurhhphhihfdcuoehlih
-    hsthhssegtohhlohhrrhgvmhgvughivghsrdgtohhmqeenucggtffrrghtthgvrhhnpeef
-    heeliedugeeuleetffeuheegkeetgfdtveevudffgfejvdegveeljefhvdefhfenucffoh
-    hmrghinhepghhoohhglhgvrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghr
-    rghmpehmrghilhhfrhhomheplhhishhtshestgholhhorhhrvghmvgguihgvshdrtghomh
-X-ME-Proxy: <xmx:FgP9YjUx0Ow-p-CQ3n6tUd0L5zgiGd46Xbaoj9bAXOGUV6w5anuDUQ>
-    <xmx:FgP9Yrj9mXgH1uEC_J-_GRtqafc18c2QNR20pVoLDRRcKbolj31GZw>
-    <xmx:FgP9YrAbaGUWjWNU7vNnVVHm4fUZZ1nNlpSdOgmr7FcDj-e0Toh-RQ>
-    <xmx:FwP9YtBBsUv4yps0uSjILU23lh-o2DksbsZqHIMNPHf5X1cuD72Olw>
-Feedback-ID: i06494636:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C90A51700082; Wed, 17 Aug 2022 11:02:46 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
-Mime-Version: 1.0
-Message-Id: <f633c476-bdc9-40e2-a93f-29601979f833@www.fastmail.com>
-In-Reply-To: <Yv0A6UhioH3rbi0E@T590>
-References: <ad78a32c-7790-4e21-be9f-81c5848a4953@www.fastmail.com>
- <e36fe80f-a33b-4750-b593-3108ba169611@www.fastmail.com>
- <CAEzrpqe3rRTvH=s+-aXTtupn-XaCxe0=KUe_iQfEyHWp-pXb5w@mail.gmail.com>
- <d48c7e95-e21e-dcdc-a776-8ae7bed566cb@kernel.dk>
- <61e5ccda-a527-4fea-9850-91095ffa91c4@www.fastmail.com>
- <4995baed-c561-421d-ba3e-3a75d6a738a3@www.fastmail.com>
- <dcd8beea-d2d9-e692-6e5d-c96b2d29dfd1@suse.com>
- <2b8a38fa-f15f-45e8-8caa-61c5f8cd52de@www.fastmail.com>
- <CAFj5m9+6Vj3NdSg_n3nw1icscY1qr9f9SOvkWYyqpEtFBb_-1g@mail.gmail.com>
- <b236ca6e-2e69-4faf-9c95-642339d04543@www.fastmail.com>
- <Yv0A6UhioH3rbi0E@T590>
-Date:   Wed, 17 Aug 2022 11:02:25 -0400
-From:   "Chris Murphy" <lists@colorremedies.com>
-To:     "Ming Lei" <ming.lei@redhat.com>
-Cc:     "Nikolay Borisov" <nborisov@suse.com>,
-        "Jens Axboe" <axboe@kernel.dk>, "Jan Kara" <jack@suse.cz>,
-        "Paolo Valente" <paolo.valente@linaro.org>,
-        "Btrfs BTRFS" <linux-btrfs@vger.kernel.org>,
-        Linux-RAID <linux-raid@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "Josef Bacik" <josef@toxicpanda.com>
-Subject: Re: stalling IO regression since linux 5.12, through 5.18
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01F99F18B
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:03:00 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id l21so13834698ljj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:03:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=9SGSUQ251L49DEW5Gu8QCKtcNKe7pydvuZtzLIVhia0=;
+        b=xeNWp2vXm4Z0cRNiYj00l46jraXiPR+4nfVnYkVGI1QJ4UhlDPCZRmQliccyeYiqOf
+         nMfzkvngpIP+WYOAxKt2wsME3SvfQ4KueQv9XfFuWRXHGv2Tzqx1aT5i1yCI0B/XTkLm
+         JQ6cPDEheS0M1D5dIZNb3w0wSCcvmYjV11qvtcY6vpA5OldQMLlOa5oGbcpPaJyA9B9V
+         5vafFBteAkq8jMOcv7JmKAhzomR4oRdXu5awUIGlo9OQIVTOJvpAU+Lpt+ftRIW9gCUj
+         2BF+r6tbooSgyj6Ok2sjbqEHh/9/3A1ziCg3uVOJOWkEaUvC9jZvAl5V4XLFNVzKLYrF
+         oRMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=9SGSUQ251L49DEW5Gu8QCKtcNKe7pydvuZtzLIVhia0=;
+        b=3v8WuwVc+JzGsKqtCiQUCrsOdINFoJyIvgLk2G61wl8f7d4y1Wlv2OcvxFxWz03W2z
+         5HIjj1m+tDMm3k2bLDg/TL9a30bxwaqeG/xCLTCay+SblIr22sOBTt+te5gZaj3p5Y9S
+         Xn8KcMq18ajb0cAKvgtkedL94nlhILueNNi/lM0zmNjJjiwPLuXY+Hezq5fE67mY2CdQ
+         enmo18p6mKexTq6OlZSIkpg3nzOg/dVwIleMQI+g/oEMLq4QtOSGmXQlhA6ifkk6CJ37
+         M2GUgnk8unBdRKUEnlSlTv6FLAH6SGwWiZFsjSxRapKW6x1zs9sNlyroY8hSejBU5or2
+         mkHg==
+X-Gm-Message-State: ACgBeo0EQUlbMQ6g7De27P2gaqbGTAKSPqwvUfLm0xMRMvG/793evn9Y
+        H7mil1qxARF8R4O/FI4P+q5Yw4DvPwNvuQ==
+X-Google-Smtp-Source: AA6agR7ewoevd/SDgyJy2daDnQcW0k0kvHm6uHcwsUmHZP+fcLBI2RXAeToRhLYezvApSWAfqEaJ1A==
+X-Received: by 2002:a05:651c:1988:b0:25e:c619:adb3 with SMTP id bx8-20020a05651c198800b0025ec619adb3mr8890843ljb.231.1660748577342;
+        Wed, 17 Aug 2022 08:02:57 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.143])
+        by smtp.gmail.com with ESMTPSA id u16-20020a05651c131000b0025fdf9eec1dsm2251969lja.111.2022.08.17.08.02.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Aug 2022 08:02:56 -0700 (PDT)
+Message-ID: <b2498436-13dd-43d6-4b7b-d4d650d1d5b9@openvz.org>
+Date:   Wed, 17 Aug 2022 18:02:55 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH] memcg: adjust memcg for new cgroup allocations
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>, tj@kernel.org,
+        gregkh@linuxfoundation.org, hannes@cmpxchg.org, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, mhocko@suse.com, shakeelb@google.com,
+        songmuchun@bytedance.com, viro@zeniv.linux.org.uk
+References: <62188f37-f816-08e9-cdd5-8df23131746d@openvz.org>
+ <45a04b75-d61b-4c7a-7169-c971995a6049@openvz.org>
+ <20220817091728.GA23229@blackbody.suse.cz>
+From:   Vasily Averin <vvs@openvz.org>
+In-Reply-To: <20220817091728.GA23229@blackbody.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 8/17/22 12:17, Michal Koutný wrote:
+>> +static inline struct mem_cgroup *mem_cgroup_from_cgroup(struct cgroup *cgroup)
+> [...]
+>> +	css = cgroup_get_e_css(cgroup, &memory_cgrp_subsys);
+>> +
+>> +	if (css)
+>> +		memcg = container_of(css, struct mem_cgroup, css);
+> Nit: mem_cgroup_from_css
 
+Yes, my fault, you are right.
+it was planned initially, but then I lost it somehow.
 
-On Wed, Aug 17, 2022, at 10:53 AM, Ming Lei wrote:
-> On Wed, Aug 17, 2022 at 10:34:38AM -0400, Chris Murphy wrote:
->> 
->> 
->> On Wed, Aug 17, 2022, at 8:06 AM, Ming Lei wrote:
->> 
->> > blk-mq debugfs log is usually helpful for io stall issue, care to post
->> > the blk-mq debugfs log:
->> >
->> > (cd /sys/kernel/debug/block/$disk && find . -type f -exec grep -aH . {} \;)
->> 
->> This is only sda
->> https://drive.google.com/file/d/1aAld-kXb3RUiv_ShAvD_AGAFDRS03Lr0/view?usp=sharing
->
-> From the log, there isn't any in-flight IO request.
->
-> So please confirm that it is collected after the IO stall is triggered.
-
-Yes, iotop reports no reads or writes at the time of collection. IO pressure 99% for auditd, systemd-journald, rsyslogd, and postgresql, with increasing pressure from all the qemu processes.
-
-Keep in mind this is a raid10, so maybe it's enough for just one block device IO to stall and the whole thing stops? That's why I included all block devices.
-
-> If yes, the issue may not be related with BFQ, and should be related
-> with blk-cgroup code.
-
-Problem happens with cgroup.disable=io, does this setting affect blk-cgroup?
-
--- 
-Chris Murphy
+Thank you very much!
+	Vasily Averin

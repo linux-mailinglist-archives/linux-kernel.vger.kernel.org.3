@@ -2,191 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D201A59771A
+	by mail.lfdr.de (Postfix) with ESMTP id 866FD597719
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241580AbiHQTt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 15:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51512 "EHLO
+        id S241582AbiHQTvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 15:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiHQTty (ORCPT
+        with ESMTP id S229572AbiHQTvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 15:49:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3056AA4B09;
-        Wed, 17 Aug 2022 12:49:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 92D2461348;
-        Wed, 17 Aug 2022 19:49:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C41C4C433C1;
-        Wed, 17 Aug 2022 19:49:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660765789;
-        bh=a6yNCOlCXbSKLl7iQsjrIR9DzIi926gIXfQwrRDpQGo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=O3oMA+E7HqBocJBYV4nczlTt3vsMY7qQyv2Ubf0Pi47TQX2tiefVv+rEGg0DBNu/R
-         S4lwfhjIMAkQlHCVDFsLc2A/JdpAY5vMDQK0aSolJAyA4vwT0N6L3wYHMI58oR5KKH
-         CVefl1SJvIP6CNNLpUxvighGhgzQh2MqGVA4gDrYCXZiZw2n3Iav896BgrI6ybFkN7
-         sPtcZjTMEx/kKvyMp4dfSD9lisu4vEq5SJoX1FYMo4L6L2Po3LJPk49Z2C4nhoGE3B
-         imn97+k3ke4nWlD5iaue7YBTCLm7gfLSOXizk6ZAl6ToOE49dAkhZB5TTXCm7rKZNh
-         I5MH2G5NdBmPQ==
-Date:   Wed, 17 Aug 2022 14:49:47 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Zhoujian (jay)" <jianjay.zhou@huawei.com>
-Cc:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "Gonglei (Arei)" <arei.gonglei@huawei.com>,
-        zhuangshengen <zhuangshengen@huawei.com>
-Subject: Re: [Question] Any plan to support enable PCI SRIOV concurrently in
- kernel side?
-Message-ID: <20220817194947.GA2270629@bhelgaas>
+        Wed, 17 Aug 2022 15:51:13 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD3A33372;
+        Wed, 17 Aug 2022 12:51:13 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id g16so8967116qkl.11;
+        Wed, 17 Aug 2022 12:51:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc;
+        bh=v60uqYnukgjgZARXe5JJGms8uUUgUv8wpc53hUaJ67A=;
+        b=JpefC9piThWn37ij83JUtU+fue08Tl6ykry7XnZ14DBKoDxePAQOK80AdrWAJ279px
+         kcgkEXwRKcLiaoyNzJ+EI8n/tRYjvAaM9OA7ppJ7pFSusEicOlrDJYE3QaNMH8MqGMvR
+         CWn5MzWzsDJ2Dxxk7lgkhTfQgInX9V3QLa6O79NTCAJjFXUFZQ0sMrsDc7E4fMJXjUDq
+         WlAoyYbgC0IwfQBba7Lm7EukhyIjpr69eObpAhLbBvLWU1D5n6EBBus9KJmVX+aUmzFc
+         +cP1U8QaRpaFqJEb4LRC7qIqK8SklFDGaEWG0AtZ2Jo3D7A18NK3Go4b1h7/xMs89cKr
+         o/tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc;
+        bh=v60uqYnukgjgZARXe5JJGms8uUUgUv8wpc53hUaJ67A=;
+        b=ISpvETzHxxVIsLoeHRMBpoxAYlmNAJzmXZ5TrxrZBFGt9/ahtgbcb6nVjP9Jgfr2fn
+         9ed65MmJl8eiHnWOsc1h55uz5RN4+pL4vi8OffOTUxqKM68TsmL54do4m4L5E/CtiWJV
+         6ZZfQT2aIKfN2p7LbG1BFuWYoz/ooqbnyzDhiTrbqIQW69FZDxWLHqwHDa4S70cevP+M
+         9VKt48UDZVYkbKTQHXFdvGIlB9MhSVm8+WHnNEosgkFlGWAFf1ZuqnJ8uvo0KzCDmHKh
+         FkGRSPYY40A6Htk4R9gzPC5ZPE6uTJ61UckmmJGcu8in1JWyaZn9PrAgqdnzfdPmMjQV
+         YRFQ==
+X-Gm-Message-State: ACgBeo325+r1gvaKoCg7gN91V6mrtNc+77f9L17E/UEb0MvZRu2pAIaQ
+        j3SPzykYwesj0qSLCUIIFCo=
+X-Google-Smtp-Source: AA6agR4wb0hTyertW8x0U44XlUWC9UESZJzGxucrMzv60iW2eQI+SjAZa4eaPq87PCkVEUq6UypKmw==
+X-Received: by 2002:a05:620a:1a9a:b0:69c:4a99:ea50 with SMTP id bl26-20020a05620a1a9a00b0069c4a99ea50mr20031342qkb.632.1660765871901;
+        Wed, 17 Aug 2022 12:51:11 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id b8-20020ae9eb08000000b006b8f4ade2c9sm13759099qkg.19.2022.08.17.12.51.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 12:51:11 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 9E9A927C0054;
+        Wed, 17 Aug 2022 15:51:10 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Wed, 17 Aug 2022 15:51:10 -0400
+X-ME-Sender: <xms:rUb9YsjrhBwDWi1UcrlAJOSkZoFWbWs6Wdyq53p-l3svLt4Dz3MJOg>
+    <xme:rUb9YlAwxKSMQtAbCkoqL17OQVtDsxn4hUE3TCkIIXBk51zOdJqH6vyLX7CB_i9bj
+    qs7DmA59stT6eK2IA>
+X-ME-Received: <xmr:rUb9YkHKEExDeF-dyv87VUyFyglJNclBfoaZqBtFoE7LzDhOVbXTkXzS7qRGgg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehiedgudegfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
+    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:rUb9YtTvq4_U7rRBDZGD4vov0GhVMjm2hdDkcfaE3JuV_ojE4i1hbw>
+    <xmx:rUb9YpxZYdET6Anm_xf7p8yk0S_-KxS3CQS2Ouu871PFBPYVw-csxw>
+    <xmx:rUb9Yr7rqwGEm3ttZTIYuBBl_eIwK6JjFF_lJ4X-FpeKbm1GWzwghw>
+    <xmx:rkb9YgnF-q5Xcc8LmyDfUczZkU66iqh3omlThgZCPB8wDNsRqegbzA>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 17 Aug 2022 15:51:09 -0400 (EDT)
+Date:   Wed, 17 Aug 2022 12:50:50 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Subject: Re: [PATCH v9 03/27] kallsyms: add static relationship between
+ `KSYM_NAME_LEN{,_BUFFER}`
+Message-ID: <Yv1GmvZlpMopwZTi@boqun-archlinux>
+References: <20220805154231.31257-1-ojeda@kernel.org>
+ <20220805154231.31257-4-ojeda@kernel.org>
+ <202208171238.80053F8C@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0a8ce5714e2d4eed909cb096d4832036@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <202208171238.80053F8C@keescook>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 07:43:34AM +0000, Zhoujian (jay) wrote:
-> Hi,
+On Wed, Aug 17, 2022 at 12:39:48PM -0700, Kees Cook wrote:
+> On Fri, Aug 05, 2022 at 05:41:48PM +0200, Miguel Ojeda wrote:
+> > This adds a static assert to ensure `KSYM_NAME_LEN_BUFFER`
+> > gets updated when `KSYM_NAME_LEN` changes.
+> > 
+> > The relationship used is one that keeps the new size (512+1)
+> > close to the original buffer size (500).
+> > 
+> > Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
+> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> > ---
+> >  scripts/kallsyms.c | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> > index f3c5a2623f71..f543b1c4f99f 100644
+> > --- a/scripts/kallsyms.c
+> > +++ b/scripts/kallsyms.c
+> > @@ -33,7 +33,11 @@
+> >  #define KSYM_NAME_LEN		128
+> >  
+> >  /* A substantially bigger size than the current maximum. */
+> > -#define KSYM_NAME_LEN_BUFFER	499
+> > +#define KSYM_NAME_LEN_BUFFER	512
+> > +_Static_assert(
+> > +	KSYM_NAME_LEN_BUFFER == KSYM_NAME_LEN * 4,
+> > +	"Please keep KSYM_NAME_LEN_BUFFER in sync with KSYM_NAME_LEN"
+> > +);
 > 
-> Enable SRIOV concurrently with many different PFs in userspace seems workable.
-> I'm trying to do it with 8 PFs(each one with 240+ VFs), but get some warnings,
-> here is the backtrace:
+> Why not just make this define:
+> 
+> #define KSYM_NAME_LEN_BUFFER (KSYM_NAME_LEN * 4)
+> 
+> ? If there's a good reason not it, please put it in the commit log.
+> 
 
-This definitely seems like a problem that should be fixed.  If you
-have a script that can reproduce it, that might help people work on
-it.  If you can reproduce it in qemu, that would be even better.
+Because KSYM_NAME_LEN_BUFFER is used as a string by stringify() in
+fscanf(), defining it as (KSYM_NAME_LEN * 4) will produce a string
 
-Some comments on the patch below.
+	"128 * 4"
 
-> Warning 1:
-> ---
-> sysfs: cannot create duplicate filename '/devices/pci0000:30/0000:30:02.0/pci_bus/0000:32'
-> Call Trace:
->  dump_stack+0x6f/0xab
->  sysfs_warn_dup+0x56/0x70
->  sysfs_create_dir_ns+0x80/0x90
->  kobject_add_internal+0xa0/0x2b0
->  kobject_add+0x71/0xd0
->  device_add+0x126/0x630
->  pci_add_new_bus+0x17c/0x4b0
->  pci_iov_add_virtfn+0x336/0x390
->  sriov_enable+0x26e/0x450
->  virtio_pci_sriov_configure+0x61/0xc0 [virtio_pci]
-> ---
-> The reason is that different VFs may create the same pci bus number
-> and try to add new bus concurrently in virtfn_add_bus.
-> 
-> Warning 2:
-> ---
-> proc_dir_entry 'pci/33' already registered
-> WARNING: CPU: 71 PID: 893 at fs/proc/generic.c:360 proc_register+0xf8/0x130
-> Call Trace:
->  proc_mkdir_data+0x5d/0x80
->  pci_proc_attach_device+0xe9/0x120
->  pci_bus_add_device+0x33/0x90
->  pci_iov_add_virtfn+0x375/0x390
->  sriov_enable+0x26e/0x450
->  virtio_pci_sriov_configure+0x61/0xc0 [virtio_pci]
-> ---
-> The reason is that different VFs may create '/proc/bus/pci/bus_number'
-> directory using the same bus number in pci_proc_attach_device concurrently.
-> 
-> Mutex lock can avoid potential conflict. With the patch below the warnings above
-> are no longer appear.
-> 
-> My question is that any plan to support enable PCI SRIOV concurrently in kernel side?
-> 
-> Thanks
-> 
-> ---
-> drivers/pci/iov.c | 29 +++++++++++++++++++++++++++--
->  1 file changed, 27 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
-> index 952217572113..6a8a849298c4 100644
-> --- a/drivers/pci/iov.c
-> +++ b/drivers/pci/iov.c
-> @@ -16,6 +16,12 @@
->  
->  #define VIRTFN_ID_LEN    16
->  
-> +static struct mutex add_bus_mutex;
-> +static int add_bus_mutex_initialized;
-> +
-> +static struct mutex add_device_mutex;
-> +static int add_device_mutex_initialized;
-> +
->  int pci_iov_virtfn_bus(struct pci_dev *dev, int vf_id)
->  {
->      if (!dev->is_physfn)
-> @@ -127,13 +133,24 @@ static struct pci_bus *virtfn_add_bus(struct pci_bus *bus, int busnr)
->      if (bus->number == busnr)
->          return bus;
->  
-> +    if (!add_bus_mutex_initialized) {
-> +        mutex_init(&add_bus_mutex);
-> +        add_bus_mutex_initialized = 1;
-> +    }
+after stringify() and that doesn't work with fscanf().
 
-I assume this patch works around the warning.  I see the intent here,
-but I think would need some rework before merging it.  These locks
-protect pci_add_new_bus() and pci_bus_add_device(), but only for the
-callers in iov.c.  These interfaces are both called from places other
-than iov.c, and any mutual exclusion should cover all of them.
+Miguel, maybe we can add something below in the commit log?
 
-I'm actually not sure how the other callers are protected.  I assume
-we're holding a device_lock for some device farther up the chain.  Or,
-I see that acpi_pci_root_add() and rescan_store() hold
-pci_rescan_remove_lock while calling these.  We don't seem to hold
-that uniformly though, which bothers me, because I think there are
-many other paths, e.g., pci_host_probe() and its callers.
+`KSYM_NAME_LEN_BUFFER` cannot be defined as an expression, because it
+gets stringified in the fscanf() format. Therefore a _Static_assert() is
+needed.
 
-> +    mutex_lock(&add_bus_mutex);
-> +
->      child = pci_find_bus(pci_domain_nr(bus), busnr);
-> -    if (child)
-> +    if (child) {
-> +        mutex_unlock(&add_bus_mutex);
->          return child;
-> +    }
->  
->      child = pci_add_new_bus(bus, NULL, busnr);
-> -    if (!child)
-> +    if (!child) {
-> +        mutex_unlock(&add_bus_mutex);
->          return NULL;
-> +    }
-> +    mutex_unlock(&add_bus_mutex);
->  
->      pci_bus_insert_busn_res(child, busnr, busnr);
->  
-> @@ -339,8 +356,16 @@ int pci_iov_add_virtfn(struct pci_dev *dev, int id)
->      if (rc)
->          goto failed1;
->  
-> +    if (!add_device_mutex_initialized) {
-> +        mutex_init(&add_device_mutex);
-> +        add_device_mutex_initialized = 1;
-> +    }
-> +    mutex_lock(&add_device_mutex);
-> +
->      pci_bus_add_device(virtfn);
->  
-> +    mutex_unlock(&add_device_mutex);
-> +
->      return 0;
->  
->  failed1:
-> ---
+Thoughts?
+
+Regards,
+Boqun
+
+> -Kees
+> 
+> -- 
+> Kees Cook

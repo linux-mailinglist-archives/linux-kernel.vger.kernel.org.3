@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE3059688C
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 07:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F49A596895
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 07:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232252AbiHQFT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 01:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
+        id S233297AbiHQFYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 01:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbiHQFTx (ORCPT
+        with ESMTP id S229758AbiHQFYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 01:19:53 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD27A7696F;
-        Tue, 16 Aug 2022 22:19:51 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 6AA8C1F96A;
-        Wed, 17 Aug 2022 05:19:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1660713590; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7Z5wEP8VAEzV6UkDlLBrrTabuWsVrs64COBmC0C+x6k=;
-        b=s0SZzxjtkm7unaF27LIpLcMRv4jxiryu88AIwFM+taI3fa7iqNQrMpe19SXF2ubDrTbfIh
-        YxuPAKcViMa+usrRBTHB3Png5Dpx22/NQAiQmuHHqEa3lJxWsinEmBDZUk03Xt81mBSFPU
-        Dng8X38qG6cotjFGYXEbYKtDFxAywN8=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DE96D13A8E;
-        Wed, 17 Aug 2022 05:19:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id VwTnNHV6/GKwFgAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 17 Aug 2022 05:19:49 +0000
-Message-ID: <bd52e275-fba1-b3cb-181a-bb1fdd45854f@suse.com>
-Date:   Wed, 17 Aug 2022 07:19:49 +0200
+        Wed, 17 Aug 2022 01:24:20 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C3E5FAC;
+        Tue, 16 Aug 2022 22:24:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660713858; x=1692249858;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=RuOw0a+zfDrSKH3bQpTCct6nUD3o/er6utR/T/sgNW4=;
+  b=i44bWr4SYMqooJj+0tczklLNYGRvSyLPkORK4eLX6Sxk/1WAw9ykYDAB
+   zZyjeaTgn9kftaDVQSPyba4i8NuSUX7ic+vfoOFdhfdV0d2BtA4l12h1Z
+   CMKj6pG6X9zXhlKo0BIj9y49nzQTbS2YzyMqHFkc2mx6cROdTdqlwUSOV
+   GAE06eN2O9grMke0mjodTqN6SPocxPFogIXKra7QKY8Tha2r0Di37icoy
+   dndiZqN6yHZQpyzLVZtyVL1VkmoNZTDzbHdoNG/unQRLg5Xn9rMGUwMuN
+   GlTjt47ppSmV3UUYVsp4+skqH3Wz+GM5A5yopTmKbq9+ZiY7NmHsSYz79
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="318408352"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="318408352"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 22:24:18 -0700
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="667445041"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.49.3])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 22:24:14 -0700
+Message-ID: <53428314-9dfc-288d-d109-79240fba82ac@intel.com>
+Date:   Wed, 17 Aug 2022 08:24:08 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] xen: x86: remove setting the obsolete config
- XEN_MAX_DOMAIN_MEMORY
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: perf tools man pages on the web
 Content-Language: en-US
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        xen-devel@lists.xenproject.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220817044333.22310-1-lukas.bulwahn@gmail.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20220817044333.22310-1-lukas.bulwahn@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------0LGanhjDaE0CkL8duYwQD0lM"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+To:     Ian Rogers <irogers@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <cecae74c-6bb2-d7da-bce3-35772b6e3f8c@intel.com>
+ <CAP-5=fXJtRVKuPA_xpa=jBzq66y5JMv+jmr1GFNzh-zQ-7j5QA@mail.gmail.com>
+ <CAM9d7cgWXP2s25XUM90=b5Eaojutxi=LobkqrUkRoF5gek4DPQ@mail.gmail.com>
+ <edd637d1-e85c-bc18-a8a2-8aa63d02146f@intel.com>
+ <CAP-5=fWRNO+dmrnq_3a-L6Vdfd2i3oEB8y2+7F2ik7Lc35s5Pg@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAP-5=fWRNO+dmrnq_3a-L6Vdfd2i3oEB8y2+7F2ik7Lc35s5Pg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,120 +77,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------0LGanhjDaE0CkL8duYwQD0lM
-Content-Type: multipart/mixed; boundary="------------c7NZ2Jf1Y0QZ0QrKtSsixZQv";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Lukas Bulwahn <lukas.bulwahn@gmail.com>,
- Boris Ostrovsky <boris.ostrovsky@oracle.com>,
- Stefano Stabellini <sstabellini@kernel.org>,
- Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
- xen-devel@lists.xenproject.org
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
- kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <bd52e275-fba1-b3cb-181a-bb1fdd45854f@suse.com>
-Subject: Re: [PATCH v2] xen: x86: remove setting the obsolete config
- XEN_MAX_DOMAIN_MEMORY
-References: <20220817044333.22310-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20220817044333.22310-1-lukas.bulwahn@gmail.com>
+On 16/08/22 16:25, Ian Rogers wrote:
+> On Mon, Aug 15, 2022 at 11:05 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>
+>> On 16/08/22 08:07, Namhyung Kim wrote:
+>>> Hi Ian and Adrian,
+>>>
+>>> On Mon, Aug 15, 2022 at 7:56 AM Ian Rogers <irogers@google.com> wrote:
+>>>>
+>>>> On Mon, Aug 15, 2022 at 5:05 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>>>
+>>>>> Hi
+>>>>>
+>>>>> I notice man pages on man7.org e.g.
+>>>>>
+>>>>>         https://www.man7.org/linux/man-pages/man1/perf.1.html
+>>>>>
+>>>>> do not get updated every release, and I wondered if the perf tools
+>>>>> man pages should also be under:
+>>>>>
+>>>>>         https://docs.kernel.org/tools/index.html
+>>>>>
+>>>>> Thoughts?
+>>>>
+>>>> Sounds good to me. I'm assuming it would be some kind of build step
+>>>> that would take the man pages and add them to what linux-doc needs?
+>>>
+>>> I guess it's the RST format.  I'm not sure if there's a converter
+>>> from asciidoc to RST.
+>>
+>> Could use the html files that are already generated by:
+>>
+>>         make -C perf/tools html
+> 
+> A lot of the man page makefile code comes from git and wasn't in great
+> shape the last I looked [1]. I believe that would be true for the HTML
+> output. As there are existing dependencies on rst2man for BPF [2], I
+> think it'd be cleaner to migrate all the man pages to rst format with
+> new man page build rules using rst2man. Wdyt?
 
---------------c7NZ2Jf1Y0QZ0QrKtSsixZQv
-Content-Type: multipart/mixed; boundary="------------N72J3N7vGWdAuOwcvDnwj6jl"
+That seems like a larger job.  For now, I am just suggesting copying the
+html files onto kernel.org.
 
---------------N72J3N7vGWdAuOwcvDnwj6jl
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
++ Mauro
 
-T24gMTcuMDguMjIgMDY6NDMsIEx1a2FzIEJ1bHdhaG4gd3JvdGU6DQo+IENvbW1pdCBjNzA3
-MjdhNWJjMTggKCJ4ZW46IGFsbG93IG1vcmUgdGhhbiA1MTIgR0Igb2YgUkFNIGZvciA2NCBi
-aXQNCj4gcHYtZG9tYWlucyIpIGZyb20gSnVseSAyMDE1IHJlcGxhY2VzIHRoZSBjb25maWcg
-WEVOX01BWF9ET01BSU5fTUVNT1JZIHdpdGgNCj4gYSBuZXcgY29uZmlnIFhFTl81MTJHQiwg
-YnV0IG1pc3NlcyB0byBhZGp1c3QgYXJjaC94ODYvY29uZmlncy94ZW4uY29uZmlnLg0KPiBB
-cyBYRU5fNTEyR0IgZGVmYXVsdHMgdG8geWVzLCB0aGVyZSBpcyBubyBuZWVkIHRvIGV4cGxp
-Y2l0bHkgc2V0IGFueSBjb25maWcNCj4gaW4geGVuLmNvbmZpZy4NCj4gDQo+IEp1c3QgcmVt
-b3ZlIHNldHRpbmcgdGhlIG9ic29sZXRlIGNvbmZpZyBYRU5fTUFYX0RPTUFJTl9NRU1PUlku
-DQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBMdWthcyBCdWx3YWhuIDxsdWthcy5idWx3YWhuQGdt
-YWlsLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNv
-bT4NCg0KDQpKdWVyZ2VuDQo=
---------------N72J3N7vGWdAuOwcvDnwj6jl
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Mauro, do you know if that is feasible?
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+> 
+> Thanks,
+> Ian
+> 
+> [1] https://lore.kernel.org/all/20210715013343.2286699-1-irogers@google.com/
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/include/uapi/linux/bpf.h#n1538
+> 
+>>>                        Anyway having the perf man pages in the
+>>> tools section looks good.
+>>>
+>>>>
+>>>> Fwiw, there has been some effort to try to improve the wiki:
+>>>> https://perf.wiki.kernel.org/index.php/Main_Page
+>>>> For example, the useful links are now broken apart and have more
+>>>> links, there is a work-in-progress glossary. Perhaps there can be some
+>>>> guidance on what to capture and where.
+>>>
+>>> Thanks for working on this.  I really need to take a look...
+>>>
+>>> Thanks,
+>>> Namhyung
+>>
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------N72J3N7vGWdAuOwcvDnwj6jl--
-
---------------c7NZ2Jf1Y0QZ0QrKtSsixZQv--
-
---------------0LGanhjDaE0CkL8duYwQD0lM
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmL8enUFAwAAAAAACgkQsN6d1ii/Ey8J
-6gf/eEtaWTzI/xL+owp0LYE/5a9sWiFeaHDKgyWvH+rGCeToo9sRUl3mZFSbtt/XCkWxb67VjGxo
-BPJwGFldfypg0l9nR4EmK3QZ9yP9IgeXiu/YumAkmYMWduCYLP3RLDNkMCQX+oxqujsNQUtzol0b
-jcz2ojiilLQyeX/hDea7Hv6LF2/fhAYkZkIE2JH+T6gQWBiRA3/RRviEyzBadKHGwlr8XUQzGe42
-Qsw5ZEOo/xrDM3hBVWtjHDNhTpEFrdQ2s/l8F0EY3Seb5hbetO0G6SmXdX+qqLtodEML1Rhoc1dD
-bsIepGO24FLZAAFsvQiMv0VllAFrTC6/dQ12Xd7ksg==
-=OYRZ
------END PGP SIGNATURE-----
-
---------------0LGanhjDaE0CkL8duYwQD0lM--

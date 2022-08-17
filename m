@@ -2,58 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D49597508
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3144B597502
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240561AbiHQRXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
+        id S240618AbiHQRYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:24:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238084AbiHQRXM (ORCPT
+        with ESMTP id S237745AbiHQRYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:23:12 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73B382980C;
-        Wed, 17 Aug 2022 10:23:10 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E53801063;
-        Wed, 17 Aug 2022 10:23:10 -0700 (PDT)
-Received: from [10.57.13.141] (unknown [10.57.13.141])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5B1863F66F;
-        Wed, 17 Aug 2022 10:23:08 -0700 (PDT)
-Message-ID: <80d2538c-bac4-cc4f-85ae-352fcf86321d@arm.com>
-Date:   Wed, 17 Aug 2022 18:23:02 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] mmc: sdhci-xenon: Fix 2G limitation on AC5 SoC
-Content-Language: en-GB
-To:     Vadym Kochan <vadym.kochan@plvision.eu>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Hu Ziji <huziji@marvell.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Elad Nachman <enachman@marvell.com>, iommu@lists.linux.dev,
-        Mickey Rachamim <mickeyr@marvell.com>
-References: <20220727164532.GA19351@plvision.eu>
- <20220801093044.GA22721@plvision.eu>
- <9a248303-7a27-e90e-76b3-c01a00be4e3d@intel.com>
- <20220808095237.GA15939@plvision.eu>
- <6c94411c-4847-526c-d929-c9523aa65c11@intel.com>
- <20220808122652.GA6599@plvision.eu>
- <3f96b382-aede-1f52-33cb-5f95715bdf59@intel.com>
- <3d16ebad-ea6c-555e-2481-ca5fb08a6c66@arm.com>
- <20220816205129.GA6438@plvision.eu>
- <94888b3b-8f54-367d-c6b4-5ebfeeafe4c4@arm.com>
- <20220817160730.GA17202@plvision.eu>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220817160730.GA17202@plvision.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Wed, 17 Aug 2022 13:24:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3F4A0250;
+        Wed, 17 Aug 2022 10:24:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 920A6B81E81;
+        Wed, 17 Aug 2022 17:24:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 684EFC433B5;
+        Wed, 17 Aug 2022 17:24:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1660757050;
+        bh=h7rloNmTPwUDXGSYX5u3jVl/NrdFIyTwfIZuYDpyc+s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SCu1HHR6yDn0wowMIHnbsEbhjw3fO1TLcBcRSyKUXhWF/dl/GDPzQvg9LYQvU2YWP
+         jBgUTXdC1VHSy6asKtLxxa4w4uLsVNSoZ57fahkuaNnkeeBRwR6GmBa/lfF6BHegwJ
+         BaN4hOiavyPxE2PiZVXnb/b8vqfCGE1FVzDXR9rk=
+Date:   Wed, 17 Aug 2022 10:24:08 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Oliver Upton <oupton@google.com>, Huang@google.com,
+        Shaoqin <shaoqin.huang@intel.com>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v6 1/4] mm: add NR_SECONDARY_PAGETABLE to count
+ secondary page table uses.
+Message-Id: <20220817102408.7b048f198a736f053ced2862@linux-foundation.org>
+In-Reply-To: <20220628220938.3657876-2-yosryahmed@google.com>
+References: <20220628220938.3657876-1-yosryahmed@google.com>
+        <20220628220938.3657876-2-yosryahmed@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,112 +72,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-17 17:07, Vadym Kochan wrote:
-> Hi Robin, Adrian,
-> 
-> On Wed, Aug 17, 2022 at 02:43:46PM +0100, Robin Murphy wrote:
->> On 2022-08-16 21:51, Vadym Kochan wrote:
->> [...]
->>>> The one thing to watch out for is that SWIOTLB doesn't necessarily interact
->>>> very well with DMA offsets. Given the intent of
->>>> of_dma_get_max_cpu_address(), I think it ought to work out OK now for
->>>> current kernels on DT systems if everything is described correctly, but
->>>> otherwise it's likely that you end up with ZONE_DMA either being empty or
->>>> containing all memory, so the SWIOTLB buffer ends up being allocated
->>>> anywhere such that it might not actually work as expected.
->>>>
->>>> Robin.
->>>
->>> Hi Robin,
->>>
->>> Thank you for the reply.
->>>
->>> My understanding is that swiotlb is allocated (in case of arm64)
->>> in the following cases:
->>>
->>>      #1 when it is forced from the kernel cmdline
->>>
->>>      #2 when max_pfn is greater than arm64_dma_phys_limit (and this is used
->>>         as the end from which to allocate the swiotlb pool in the
->>>         top-botom direction via memblock API).
->>>
->>>      #3 using restricted dma-pool
->>>
->>> Of course option #3 works fine because swiotlb is kind of forced to use
->>> particulary this range of memory.
->>>
->>> Both options #1 & #2 causes to use full memory mask even if to specify
->>> dma-ranges in the DT:
->>>
->>>       dma-ranges = <0x0 0x0 0x2 0x0 0x0 0x80000000>;
->>>
->>> or if to specify the opposite:
->>>
->>>       dma-ranges = <0x2 0x0 0x0 0x0 0x0 0x80000000>;
->>>
->>>       just to make it lower than U32 to pass
->>>
->>>           zone_dma_bits = min3(32U, dt_zone_dma_bits, acpi_zone_dma_bits)
->>>
->>>       condition, but then it will be re-set in max_zone_phys() by:
->>>
->>> 	if (phys_start > U32_MAX)
->>> 		zone_mask = PHYS_ADDR_MAX;
->>> 	else if (phys_start > zone_mask)
->>> 		zone_mask = U32_MAX;
->>
->> Ah, indeed I missed that, sorry. It seems that that change to stop assuming
->> an offset kind of crossed over with the introduction of
->> *_dma_get_max_cpu_address(), but now that that firmware property parsing
->> *is* implemented, in principle it should be equally possible to evaluate the
->> actual offsets as well, and decide whether an offset ZONE_DMA is appropriate
->> or not. Either way, this is definitely the area which needs work if we want
->> to to able to support topologies like this properly.
->>
->>> So, currently I dont see how to pin swiotlb (I see it as a main problem) to some specific range of physical
->>> memory (particulary to the first 2G of RAM).
->>
->> Indeed, if ZONE_DMA and/or ZONE_DMA32 can't be set appropriately, then
->> there's no way to guarantee correct allocation of any DMA buffers, short of
->> hacking it with explicitly placed reserved-memory carveouts.
->>
-> 
-> I have sent some time ago a solution which binds restricted-dma pool to
-> the eMMC device, so Adrian, Robin do you think this can be acceptable as
-> a temporary solution (at least conceptually) ?
-> 
-> I was also thinking would it be OK to introduce something like
-> bounced-dma pool (similar to the restricted one) which will reserve
-> memory for the bounced buffers only ? It should not be hard as looks
-> like it will re-use existing interface between dma and swiotlb ? In that
-> case it would allow to map first 2G of memory to eMMC controller.
+On Tue, 28 Jun 2022 22:09:35 +0000 Yosry Ahmed <yosryahmed@google.com> wrote:
 
-TBH I'd prefer to fix it (or at least work around it) more generally.
-Putting made-up things in devicetree to work around shortcomings in
-kernel code tends to be a hole that's hard to dig yourself back out of.
-As a bodge that would be just about justifiable in its own terms, does
-the diff below help at all?
+> We keep track of several kernel memory stats (total kernel memory, page
+> tables, stack, vmalloc, etc) on multiple levels (global, per-node,
+> per-memcg, etc). These stats give insights to users to how much memory
+> is used by the kernel and for what purposes.
+> 
+> Currently, memory used by kvm mmu is not accounted in any of those
+> kernel memory stats. This patch series accounts the memory pages
+> used by KVM for page tables in those stats in a new
+> NR_SECONDARY_PAGETABLE stat. This stat can be later extended to account
+> for other types of secondary pages tables (e.g. iommu page tables).
+> 
+> KVM has a decent number of large allocations that aren't for page
+> tables, but for most of them, the number/size of those allocations
+> scales linearly with either the number of vCPUs or the amount of memory
+> assigned to the VM. KVM's secondary page table allocations do not scale
+> linearly, especially when nested virtualization is in use.
+> 
+> >From a KVM perspective, NR_SECONDARY_PAGETABLE will scale with KVM's
+> per-VM pages_{4k,2m,1g} stats unless the guest is doing something
+> bizarre (e.g. accessing only 4kb chunks of 2mb pages so that KVM is
+> forced to allocate a large number of page tables even though the guest
+> isn't accessing that much memory). However, someone would need to either
+> understand how KVM works to make that connection, or know (or be told) to
+> go look at KVM's stats if they're running VMs to better decipher the stats.
+> 
+> Furthermore, having NR_PAGETABLE side-by-side with NR_SECONDARY_PAGETABLE
+> is informative. For example, when backing a VM with THP vs. HugeTLB,
+> NR_SECONDARY_PAGETABLE is roughly the same, but NR_PAGETABLE is an order
+> of magnitude higher with THP. So having this stat will at the very least
+> prove to be useful for understanding tradeoffs between VM backing types,
+> and likely even steer folks towards potential optimizations.
+> 
+> The original discussion with more details about the rationale:
+> https://lore.kernel.org/all/87ilqoi77b.wl-maz@kernel.org
+> 
+> This stat will be used by subsequent patches to count KVM mmu
+> memory usage.
 
-Thanks,
-Robin.
+Nits and triviata:
 
------>8-----
-diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-index b9af30be813e..88f7b26f49db 100644
---- a/arch/arm64/mm/init.c
-+++ b/arch/arm64/mm/init.c
-@@ -451,7 +451,14 @@ void __init bootmem_init(void)
-   */
-  void __init mem_init(void)
-  {
-+	/*
-+	 * Some platforms still manage to elude our attempt to calculate
-+	 * ZONE_DMA appropriately, so encourage the SWIOTLB allocation to go
-+	 * as low as it can anyway for the best chance of being usable.
-+	 */
-+	memblock_set_bottom_up(true);
-  	swiotlb_init(max_pfn > PFN_DOWN(arm64_dma_phys_limit), SWIOTLB_VERBOSE);
-+	memblock_set_bottom_up(false);
-  
-  	/* this will put all unused low memory onto the freelists */
-  	memblock_free_all();
+> --- a/Documentation/filesystems/proc.rst
+> +++ b/Documentation/filesystems/proc.rst
+> @@ -977,6 +977,7 @@ Example output. You may not have all of these fields.
+>      SUnreclaim:       142336 kB
+>      KernelStack:       11168 kB
+>      PageTables:        20540 kB
+> +    SecPageTables:         0 kB
+>      NFS_Unstable:          0 kB
+>      Bounce:                0 kB
+>      WritebackTmp:          0 kB
+> @@ -1085,6 +1086,9 @@ KernelStack
+>                Memory consumed by the kernel stacks of all tasks
+>  PageTables
+>                Memory consumed by userspace page tables
+> +SecPageTables
+> +              Memory consumed by secondary page tables, this currently
+> +	      currently includes KVM mmu allocations on x86 and arm64.
+
+Something happened to the whitespace there.
+
+> +			     "Node %d SecPageTables:  %8lu kB\n"
+> ...
+> +			     nid, K(node_page_state(pgdat, NR_SECONDARY_PAGETABLE)),
+
+The use of "sec" in the user-facing changes and "secondary" in the
+programmer-facing changes is irksome.  Can we be consistent?  I'd
+prefer "secondary" throughout.
+

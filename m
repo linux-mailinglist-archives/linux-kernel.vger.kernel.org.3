@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6EE597748
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9365859774A
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241668AbiHQUDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 16:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44242 "EHLO
+        id S241677AbiHQUDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 16:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232057AbiHQUDm (ORCPT
+        with ESMTP id S232057AbiHQUDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 16:03:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E34918340
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:03:41 -0700 (PDT)
+        Wed, 17 Aug 2022 16:03:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD5B1F623
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:03:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FE386151C
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 20:03:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED50CC433D6;
-        Wed, 17 Aug 2022 20:03:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5C65B81F61
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 20:03:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBB2FC4347C;
+        Wed, 17 Aug 2022 20:03:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660766620;
-        bh=0ZcQMibMEVZJPOojqwq2yBUXq0LRnX3KICwqnQfqKLw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Hi3P8xdLSdIRaXdyCEilVUGu31fLrjs2H8b1VQ217qL7JEa/6KPFRJjRrTfnYihB9
-         r6z6ImlHAgBnf5vzPQmxudqvNiNTt+wJdzYdTFJHFUmelT3UPf8pknlXJF2fCI/Gwk
-         GlkfyAQqNTIseRoLdVpeuyHIePIpiFXEJaYpR4In96sECKk/hIXdMtq84B+si8N1OE
-         JGlQK9IC17FvHsR4zyLxanoPRP65aASolOouBG3AjZViAPdf0HgytjuKb8veoe5mLZ
-         w8dZI6DMsc0SdE1XBag55q5WXk0/ezTcHOkq90rFHqwGdq6EdywXREM9FX0vYm3UkL
-         ls2NOUwaWC3wg==
+        s=k20201202; t=1660766623;
+        bh=wv0Zebl3/M8/sl1p7uqmjBF5ITW2e0LsrTBPWFRbNuA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=IybX3rRa0kAATdNa9CEutWHHd6nJNB/y5T4vkHUm4SCBxsG8J6o2lnKb5ITB9GZwT
+         WOunqvHZDReF98jHFUrT4omATeTvB3UCsg/rZDPxcxrrDrtzAcum1B8j4gTkqj0NLe
+         en9O7rOnvqqyggowmKPE4BeGmXuDlKMcTntGHaJ3PwQamtksLtjybpR/aPxmhpwVMg
+         pA2qJizPk36y4j50+h95mxHjC0e9BVblhawKMwatNS0D4RpoUMf6u6kUMoXnrzZfTH
+         6NXMp7SKRpNPotFkq14UcIQPtJFT6KTkDsDWLgb0zPPUVkbS/L4c+4E5yToxy65t3j
+         CT26aaydcxB2A==
 From:   =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>,
         Kishon Vijay Abraham I <kishon@ti.com>,
         Linux Phy <linux-phy@lists.infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Daniel Scally <djrscally@gmail.com>,
         Gregory Clement <gregory.clement@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
-        pali@kernel.org, josef.schlehofer@nic.cz,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, pali@kernel.org,
+        josef.schlehofer@nic.cz,
         =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH linux-phy v2 0/4] mvebu a3720 comphy: Fix serdes transmit amplitude
-Date:   Wed, 17 Aug 2022 22:03:31 +0200
-Message-Id: <20220817200335.911-1-kabel@kernel.org>
+Subject: [PATCH linux-phy v2 1/4] string.h: Add str_has_proper_prefix()
+Date:   Wed, 17 Aug 2022 22:03:32 +0200
+Message-Id: <20220817200335.911-2-kabel@kernel.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220817200335.911-1-kabel@kernel.org>
+References: <20220817200335.911-1-kabel@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -61,56 +64,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes since v1:
-- fix
-    static const char * array should probably be static const char * const
-  warning in patch 2
-- fix wrong parameter order to function comphy_find_best_tx_amp()
-  in patch 3
+Add str_has_proper_prefix(), similar to str_has_prefix(), but requires
+that the prefix is proper: the string itself must be longer than the
+prefix.
 
-Original cover letter:
+Signed-off-by: Marek Behún <kabel@kernel.org>
+---
+Andy, Kees, could you ack this if it is ok?
+---
+ include/linux/string.h | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-This series adds support for setting serdes transmit amplitude for
-ethernet modes (sgmii, 1000base-x, 2500base-x) in the Marvell A3720
-comphy driver.
-
-The amplitude is set according to setting in device tree.
-
-Finally the Turris MOX device tree is changed to set the 2500base-x
-mode tx amplitude to 1025 mV.
-
-This is needed to fix a weird issue wherein when A3720 sends a packet
-to Topaz, and the packet contains a long sequence of 'J's or '\xb5'
-bytes (these translate to '010101010101'... in 8b/10b encoding), the
-packet may be lost on Topaz due to FCS error. The probability of
-loss grows with number of 'J's:
-
-  loss
-                         ______
-  100%                .-^
-                     /
-                    /
-   50%             /
-                  /
-                 /
-    0%  ______.-^
-            90    114    125     number of consecutive 'J's
-
-Marek Behún (4):
-  string.h: Add str_has_proper_prefix()
-  device property: Add {fwnode/device}_get_tx_p2p_amplitude()
-  phy: marvell: phy-mvebu-a3700-comphy: Support changing tx amplitude
-    for ethernet
-  arm64: dts: armada-3720-turris-mox: Change comphy tx amplitude for
-    2500base-x mode
-
- .../dts/marvell/armada-3720-turris-mox.dts    |  10 ++
- drivers/base/property.c                       | 130 ++++++++++++++++++
- drivers/phy/marvell/phy-mvebu-a3700-comphy.c  | 109 ++++++++++++++-
- include/linux/property.h                      |   5 +
- include/linux/string.h                        |  18 +++
- 5 files changed, 271 insertions(+), 1 deletion(-)
-
+diff --git a/include/linux/string.h b/include/linux/string.h
+index 61ec7e4f6311..375f51b9182c 100644
+--- a/include/linux/string.h
++++ b/include/linux/string.h
+@@ -316,4 +316,22 @@ static __always_inline size_t str_has_prefix(const char *str, const char *prefix
+ 	return strncmp(str, prefix, len) == 0 ? len : 0;
+ }
+ 
++/**
++ * str_has_proper_prefix - Test if a string has a proper prefix
++ * @str: The string to test
++ * @prefix: The string to see if @str starts with
++ *
++ * This is like str_has_prefix(), but fails if the strings are equal.
++ *
++ * Returns:
++ * * strlen(@prefix) if @str starts with @prefix and they aren't equal
++ * * 0 otherwise
++ */
++static __always_inline size_t str_has_proper_prefix(const char *str,
++						    const char *prefix)
++{
++	size_t len = strlen(prefix);
++	return strncmp(str, prefix, len) == 0 && len != strlen(str) ? len : 0;
++}
++
+ #endif /* _LINUX_STRING_H_ */
 -- 
 2.35.1
 

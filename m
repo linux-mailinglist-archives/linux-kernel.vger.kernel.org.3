@@ -2,100 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E3F5971D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE1C5971FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240095AbiHQOxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 10:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41072 "EHLO
+        id S240325AbiHQOxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 10:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236390AbiHQOxe (ORCPT
+        with ESMTP id S240124AbiHQOxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 10:53:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC3B402C8;
-        Wed, 17 Aug 2022 07:53:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 17 Aug 2022 10:53:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A9F5B798
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:53:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660748027;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SqR01pq9tq6qm7V2NPRinZ2qHQbpsqAKxq332tGf5Q4=;
+        b=D3f4L18CvLe41VBaHYbpzvv4vdUuTI6QGQsi8gZS3wIistfdYbnyyQK2APv490Bq8yH5yX
+        0MaTzzhRBDeAP+ybCINiIwDx3q/MGvCJxbKWg9cHIThrPJRZs8FH1G/+FWyrlp1HrdgYoc
+        /DI/fw1IseLunx4vprsXEnZHN697Y1k=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-588-DvkFF6R-PC-vl_GTPJvKdA-1; Wed, 17 Aug 2022 10:53:41 -0400
+X-MC-Unique: DvkFF6R-PC-vl_GTPJvKdA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E33486142E;
-        Wed, 17 Aug 2022 14:53:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF458C433C1;
-        Wed, 17 Aug 2022 14:53:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660748010;
-        bh=Pa5i8IC5TrT2DHQTMupGT4J67/zODUCPCOA2f64JMvQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t2h4leWkcnaYK4uW9V8k69ic9pVYJy6XNjyxbZb1AKoanqf9Q/4Yk4a7mBoVGN2Xj
-         ZB69fHM8iYGoZcwPtvZrScXkKDjiaKK023eo3b3f/JhsYCjXN8ErHuG++uoAQE+CiD
-         kyvKTgU0oO3lwxFFDz/C+JHs+7dryidAHuUQOSG5EoJ87eRwBpPRVRbEyGtosB00j4
-         AH1rWtDIqZ6MxquUu2fjcPHs3NJIEJGVQ0Ah3wfeouFrR88tOWrn6+ODGpiB37OwcR
-         G6tqhKiX1/Czb2fO6XEL+JzFYN1RIKSzglH9c88ic8OmyoASX7K5uz7uyara+e9iuN
-         cWciwXOAiojIw==
-Date:   Wed, 17 Aug 2022 17:53:26 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] selftests/sgx: Add SGX selftest
- augment_via_eaccept_long
-Message-ID: <Yv0A5vjd0OIfxxfT@kernel.org>
-References: <20220815233900.11225-1-jarkko@kernel.org>
- <20220815233900.11225-2-jarkko@kernel.org>
- <6b304bb4-01cc-c88a-7299-19217a7a692b@intel.com>
- <YvwpX7pYOW3Jv+vJ@kernel.org>
- <DM8PR11MB55913534E8CE66F63460E707F66A9@DM8PR11MB5591.namprd11.prod.outlook.com>
- <24bd8e42-ff4e-0090-d9e1-cd81e4807f21@intel.com>
- <Yvz+yxnxp8G6KzHi@kernel.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2A316185A7B2;
+        Wed, 17 Aug 2022 14:53:41 +0000 (UTC)
+Received: from T590 (ovpn-8-20.pek2.redhat.com [10.72.8.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3C9D9C15BB3;
+        Wed, 17 Aug 2022 14:53:34 +0000 (UTC)
+Date:   Wed, 17 Aug 2022 22:53:29 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Chris Murphy <lists@colorremedies.com>
+Cc:     Nikolay Borisov <nborisov@suse.com>, Jens Axboe <axboe@kernel.dk>,
+        Jan Kara <jack@suse.cz>,
+        Paolo Valente <paolo.valente@linaro.org>,
+        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
+        Linux-RAID <linux-raid@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>
+Subject: Re: stalling IO regression since linux 5.12, through 5.18
+Message-ID: <Yv0A6UhioH3rbi0E@T590>
+References: <ad78a32c-7790-4e21-be9f-81c5848a4953@www.fastmail.com>
+ <e36fe80f-a33b-4750-b593-3108ba169611@www.fastmail.com>
+ <CAEzrpqe3rRTvH=s+-aXTtupn-XaCxe0=KUe_iQfEyHWp-pXb5w@mail.gmail.com>
+ <d48c7e95-e21e-dcdc-a776-8ae7bed566cb@kernel.dk>
+ <61e5ccda-a527-4fea-9850-91095ffa91c4@www.fastmail.com>
+ <4995baed-c561-421d-ba3e-3a75d6a738a3@www.fastmail.com>
+ <dcd8beea-d2d9-e692-6e5d-c96b2d29dfd1@suse.com>
+ <2b8a38fa-f15f-45e8-8caa-61c5f8cd52de@www.fastmail.com>
+ <CAFj5m9+6Vj3NdSg_n3nw1icscY1qr9f9SOvkWYyqpEtFBb_-1g@mail.gmail.com>
+ <b236ca6e-2e69-4faf-9c95-642339d04543@www.fastmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yvz+yxnxp8G6KzHi@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b236ca6e-2e69-4faf-9c95-642339d04543@www.fastmail.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 05:44:31PM +0300, Jarkko Sakkinen wrote:
-> On Tue, Aug 16, 2022 at 09:35:27PM -0700, Reinette Chatre wrote:
-> > >>> This portion below was also copied from previous test and by only
-> > >>> testing a write to the first page of the range the purpose is not
-> > >>> clear. Could you please elaborate if the intention is to only test
-> > >>> accessibility of the first page and why that is sufficient?
-> > >>
-> > >> It is sufficient because the test reproduces the bug. It would have to be
-> > >> rather elaborated why you would possibly want to do more than that.
-> > 
-> > That is fair. An accurate comment (currently an inaccurate copy&paste) would
-> > help to explain this part of the test.
+On Wed, Aug 17, 2022 at 10:34:38AM -0400, Chris Murphy wrote:
 > 
-> I would simply add something like:
 > 
-> /* 
->  * Define memory pool size big enough to trigger the reclaimer in the EAUG
->  * path of the page reclaimer.
->  */
+> On Wed, Aug 17, 2022, at 8:06 AM, Ming Lei wrote:
 > 
-> Suggestions/edits obviously welcome for the comment.
+> > blk-mq debugfs log is usually helpful for io stall issue, care to post
+> > the blk-mq debugfs log:
+> >
+> > (cd /sys/kernel/debug/block/$disk && find . -type f -exec grep -aH . {} \;)
+> 
+> This is only sda
+> https://drive.google.com/file/d/1aAld-kXb3RUiv_ShAvD_AGAFDRS03Lr0/view?usp=sharing
 
-I wonder if we could put .bt files somewhere to make them available. In
-root causing this bug bpftrace scripting was the key so it would nice to
-have them available along with kselftest.
+From the log, there isn't any in-flight IO request.
 
-I could imagine that we end up also in future to bugs allocation so
-it would have the script when you clone the kernel tree, and possibly
-more scripts in future.
+So please confirm that it is collected after the IO stall is triggered.
 
-E.g. add bt/alloc-error.bt under tools/testing/selftests/sgx.
+If yes, the issue may not be related with BFQ, and should be related
+with blk-cgroup code.
 
-BR, Jarkko
+
+Thanks,
+Ming
+

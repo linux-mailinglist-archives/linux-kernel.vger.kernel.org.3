@@ -2,134 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B643F59667B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 03:00:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CC159667C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 03:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237895AbiHQA6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 20:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
+        id S237942AbiHQA7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 20:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiHQA6m (ORCPT
+        with ESMTP id S229911AbiHQA7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 20:58:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382DD77565
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 17:58:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF0FE6136A
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:58:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98865C433C1;
-        Wed, 17 Aug 2022 00:58:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1660697920;
-        bh=C0i0XgffdxbeAl7rnM2KOYPEoBGyXv3zh50EUmQ1DY0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=wDEQ1GWAkUGkZNgxdRt0VUV+SJr7mHVKyZJv7BpUPCugTFKwQI4ri2qMxJ/BGBARM
-         7WyalY1ZT9FpyQMVmqAXtSQ42YBRlwG7JBfJI6ipiq5F9oQEHKw5hSkOmFNj7JRyYV
-         QdbTCXTsdcbs5oMDwBFAhQaEUNGr8y/GF6sAUGsc=
-Date:   Tue, 16 Aug 2022 17:58:38 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Haiyue Wang <haiyue.wang@intel.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, david@redhat.com,
-        apopple@nvidia.com, linmiaohe@huawei.com, ying.huang@intel.com,
-        songmuchun@bytedance.com, naoya.horiguchi@linux.dev,
-        alex.sierra@amd.com, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: Re: [PATCH v6 1/2] mm: migration: fix the FOLL_GET failure on
- following huge page
-Message-Id: <20220816175838.211a1b1e85bc68c439101995@linux-foundation.org>
-In-Reply-To: <20220816022102.582865-2-haiyue.wang@intel.com>
-References: <20220812084921.409142-1-haiyue.wang@intel.com>
-        <20220816022102.582865-1-haiyue.wang@intel.com>
-        <20220816022102.582865-2-haiyue.wang@intel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Tue, 16 Aug 2022 20:59:31 -0400
+Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505B28A7C4
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 17:59:30 -0700 (PDT)
+Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
+        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id AC7AE1003ED1B
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:59:19 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id O7Oxou1l0CokGO7OxouuWx; Wed, 17 Aug 2022 00:59:19 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=c8Nu/Txl c=1 sm=1 tr=0 ts=62fc3d67
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=biHskzXt2R4A:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=Gt2NV6OgVI9NVibrqNAA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=PU3RNHSg6eYArFqcI4VIhC4m3cfUF75i2dszWuA3lWA=; b=pwHisq3xp2UR04Vt1gtswF6z8d
+        SBBNu15RdercLbQMx9Jl4HDKixjz1Rdqd9IXKzfnFid3KsPtAcg/T1VJWXn6felgvU7SedhKIOdb4
+        xN5Q9Czlwz4QXp5UI1IDExiWiVYWAbCkA93BVkv5tuqopkge17uLAJ3W7pXODZRqt/+gsPGMLFyFS
+        pByVndQXrxFS+04CB5Y5I08uXO0drDYSUYP4prwq67jZcdOG+7sz3emT0ywuO7ni2eh9bt+jk7ll+
+        ZwzbK2ou6JevgzpshNdbyjO9CbTvgBksPW+1V7KUrVKa1hv4y2snqr2tSJNHviTHhTiHowyOxmROv
+        vFFGRMMQ==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:40388 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oO7Ow-001B6U-4L;
+        Tue, 16 Aug 2022 18:59:18 -0600
+Subject: Re: [PATCH 5.18 0000/1094] 5.18.18-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220816124604.978842485@linuxfoundation.org>
+In-Reply-To: <20220816124604.978842485@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <d0dcbb2f-80fc-3eca-5b85-086eaefdd1e9@w6rz.net>
+Date:   Tue, 16 Aug 2022 17:59:15 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oO7Ow-001B6U-4L
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:40388
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 Aug 2022 10:21:00 +0800 Haiyue Wang <haiyue.wang@intel.com> wrote:
-
-> Not all huge page APIs support FOLL_GET option, so move_pages() syscall
-> will fail to get the page node information for some huge pages.
-> 
-> Like x86 on linux 5.19 with 1GB huge page API follow_huge_pud(), it will
-> return NULL page for FOLL_GET when calling move_pages() syscall with the
-> NULL 'nodes' parameter, the 'status' parameter has '-2' error in array.
-> 
-> Note: follow_huge_pud() now supports FOLL_GET in linux 6.0.
->       Link: https://lore.kernel.org/all/20220714042420.1847125-3-naoya.horiguchi@linux.dev
-> 
-> But these huge page APIs don't support FOLL_GET:
->   1. follow_huge_pud() in arch/s390/mm/hugetlbpage.c
-
-Let's tell the s390 maintainers.
-
->   2. follow_huge_addr() in arch/ia64/mm/hugetlbpage.c
->      It will cause WARN_ON_ONCE for FOLL_GET.
-
-ia64 doesn't have maintainers :( Can we come up with something local to
-arch/ia64 for this?
-
->   3. follow_huge_pgd() in mm/hugetlb.c
-
-Hi, Mike.
-
-> This is an temporary solution to mitigate the side effect of the race
-> condition fix by calling follow_page() with FOLL_GET set for huge pages.
-> 
-> After supporting follow huge page by FOLL_GET is done, this fix can be
-> reverted safely.
-> 
-> ...
+On 8/16/22 5:59 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.18 release.
+> There are 1094 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1848,6 +1848,7 @@ static void do_pages_stat_array(struct mm_struct *mm, unsigned long nr_pages,
->  
->  	for (i = 0; i < nr_pages; i++) {
->  		unsigned long addr = (unsigned long)(*pages);
-> +		unsigned int foll_flags = FOLL_DUMP;
->  		struct vm_area_struct *vma;
->  		struct page *page;
->  		int err = -EFAULT;
-> @@ -1856,8 +1857,12 @@ static void do_pages_stat_array(struct mm_struct *mm, unsigned long nr_pages,
->  		if (!vma)
->  			goto set_status;
->  
-> +		/* Not all huge page follow APIs support 'FOLL_GET' */
-> +		if (!is_vm_hugetlb_page(vma))
-> +			foll_flags |= FOLL_GET;
-> +
->  		/* FOLL_DUMP to ignore special (like zero) pages */
-> -		page = follow_page(vma, addr, FOLL_GET | FOLL_DUMP);
-> +		page = follow_page(vma, addr, foll_flags);
->  
->  		err = PTR_ERR(page);
->  		if (IS_ERR(page))
-> @@ -1865,7 +1870,8 @@ static void do_pages_stat_array(struct mm_struct *mm, unsigned long nr_pages,
->  
->  		if (page && !is_zone_device_page(page)) {
->  			err = page_to_nid(page);
-> -			put_page(page);
-> +			if (foll_flags & FOLL_GET)
-> +				put_page(page);
->  		} else {
->  			err = -ENOENT;
->  		}
+> Responses should be made by Thu, 18 Aug 2022 12:43:14 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.18-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-I would be better to fix this for real at those three client code sites?
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+
+Tested-by: Ron Economos <re@w6rz.net>
+

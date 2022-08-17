@@ -2,105 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40366596EA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 14:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76016596E96
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 14:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239490AbiHQMi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 08:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37624 "EHLO
+        id S239500AbiHQMju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 08:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbiHQMi5 (ORCPT
+        with ESMTP id S230452AbiHQMjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 08:38:57 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659F229CB1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 05:38:55 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id o2so18869194lfb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 05:38:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=G7C+uP4vsY5z6nSOlzdUyPyVwCYsWGzimxMi3pHMeVM=;
-        b=KkF6mjlHbtt61VHdcRD3fymGK0+19LzU2thK1AXf4H9hrjnRyIgS2mBu1KRwjz/trz
-         FUM1EX3j1D7Zg2nrY2hKU4T9ng/UaoqTsFxlsPEQcIDZG0tdYmr2lOMAckQNK1XblqeY
-         1MaorgtZ+otVAFPiGhWvH2jPu3JOqYgqHKEf/mXL4IkfW+J5ukl3g83Zut5AFOho7lyW
-         RhxRQGlpL0WhaNYHQH5qorN+Lm3r9d5k5+ItItOumNFG/jU6CkiCCLBz/DwzMofF8OkR
-         W9SpDGtNeLJSDHX2zYkARPIiLLyEJUUx9PNCM7D3maqJVqcJS5mzg56//9cyyAd2nO6h
-         Ka5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=G7C+uP4vsY5z6nSOlzdUyPyVwCYsWGzimxMi3pHMeVM=;
-        b=nVNdq3rdzWrpDU1mvbqxV5555qBJbQ4QzSXBcRHJbPm4ZupdfK8GGytSUB6/OQk397
-         GWvJxByTK7cU0krH/DS0MZWD7dIvXSK1NjMlkWXY4YuSzUn8OOkLAf4LVZPTbhTKDUa8
-         Ti0WrIIuVjG7BAcPQavtmJxfrg6+MF3Vi286qK2wkYbqjlJDJx1I23YJvcPIuinL5Eqr
-         /UOi6ISusD3LWi4SkbD5jjjK5tmPLlBL6nkHakY8FnuttqO52WZ3OdT7HtK+s3pQgbjs
-         vUtPoH6raKY7Tbj9oSwfXjzmBVVAtdoKzaoYxHRZi22kIp0voPXyQTm4z5F2IY81NtS0
-         kCsw==
-X-Gm-Message-State: ACgBeo36EoSSjIYgJZnSJVNDqiHwlEzrXQ60xWrQ4riplpblhO8rRjbf
-        hPjzvLe9PX5JQ8u2FNmTWGY94LF783dhIvr3
-X-Google-Smtp-Source: AA6agR6BCAevMUm6IC/vnumrG7Tse0F+RngB8s2G6Y6Ye/0UH9PSGLwdoCLthKjOfIpbqD0cfa03PQ==
-X-Received: by 2002:ac2:43d4:0:b0:48a:f6bf:1185 with SMTP id u20-20020ac243d4000000b0048af6bf1185mr8631932lfl.197.1660739933626;
-        Wed, 17 Aug 2022 05:38:53 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:1b1c:14b7:109b:ed76? (d15l54h48cw7vbh-qr4-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1b1c:14b7:109b:ed76])
-        by smtp.gmail.com with ESMTPSA id 6-20020ac25f06000000b0048a9b197863sm1671644lfq.235.2022.08.17.05.38.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 05:38:53 -0700 (PDT)
-Message-ID: <e7c29e37-3ff8-775f-292f-a87e419ac3ee@linaro.org>
-Date:   Wed, 17 Aug 2022 15:38:51 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFT PATCH 06/14] arm64: dts: qcom: sc7180: add missing TCSR
- syscon compatible
-Content-Language: en-US
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220817120403.458000-1-krzysztof.kozlowski@linaro.org>
- <20220817120403.458000-8-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220817120403.458000-8-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 17 Aug 2022 08:39:46 -0400
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2BDC05E64C;
+        Wed, 17 Aug 2022 05:39:43 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [106.117.76.235])
+        by mail-app2 (Coremail) with SMTP id by_KCgBnbvZx4fxiKwT3Ag--.45860S2;
+        Wed, 17 Aug 2022 20:39:23 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org
+Cc:     briannorris@chromium.org, amitkarwar@gmail.com,
+        ganapathi017@gmail.com, sharvari.harisangam@nxp.com,
+        huxinming820@gmail.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, johannes@sipsolutions.net,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH v7 0/2] Remove useless param of devcoredump functions and fix bugs
+Date:   Wed, 17 Aug 2022 20:39:11 +0800
+Message-Id: <cover.1660739276.git.duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgBnbvZx4fxiKwT3Ag--.45860S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZFW8JFyDtw18XFyDXrW3trb_yoW8CFyfpF
+        48Kas7ZrySkrsxuayxJF1xCF98J3WxWa43Kr9Fv3s5W3WfAFyrJr15uFyFkryDXFW8ta43
+        tF13Jw13GF9aqFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1lc2xSY4AK67AK6ryUMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
+        nxnUUI43ZEXa7VUjNtx3UUUUU==
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgwFAVZdtbEgdgAbsI
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/08/2022 15:03, Krzysztof Kozlowski wrote:
-> TCSR syscon node should come with dedicated compatible.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sc7180.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> index b82c335c25af..49f28cb531f6 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> @@ -1468,7 +1468,7 @@ tcsr_mutex_regs: syscon@1f40000 {
->  		};
->  
->  		tcsr_regs: syscon@1fc0000 {
-> -			compatible = "syscon";
-> +			compatible = "qcom,sc7180-tcsr", "syscon";
+The first patch removes the extra gfp_t param of dev_coredumpv()
+and dev_coredumpm().
 
-Compatible is wrong here. I will send a v2 tomorrow.
+The second patch fix sleep in atomic context bugs of mwifiex
+caused by dev_coredumpv().
 
-Best regards,
-Krzysztof
+Duoming Zhou (2):
+  devcoredump: remove the useless gfp_t parameter in dev_coredumpv and
+    dev_coredumpm
+  mwifiex: fix sleep in atomic context bugs caused by dev_coredumpv
+
+ drivers/base/devcoredump.c                       | 16 ++++++----------
+ drivers/bluetooth/btmrvl_sdio.c                  |  2 +-
+ drivers/bluetooth/hci_qca.c                      |  2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c       |  2 +-
+ drivers/gpu/drm/etnaviv/etnaviv_dump.c           |  2 +-
+ drivers/gpu/drm/msm/disp/msm_disp_snapshot.c     |  4 ++--
+ drivers/gpu/drm/msm/msm_gpu.c                    |  4 ++--
+ drivers/media/platform/qcom/venus/core.c         |  2 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-dump.c   |  2 +-
+ drivers/net/wireless/ath/ath10k/coredump.c       |  2 +-
+ .../net/wireless/ath/wil6210/wil_crash_dump.c    |  2 +-
+ .../wireless/broadcom/brcm80211/brcmfmac/debug.c |  2 +-
+ drivers/net/wireless/intel/iwlwifi/fw/dbg.c      |  6 ++----
+ drivers/net/wireless/marvell/mwifiex/init.c      |  9 +++++----
+ drivers/net/wireless/marvell/mwifiex/main.c      |  3 +--
+ drivers/net/wireless/marvell/mwifiex/main.h      |  3 ++-
+ drivers/net/wireless/marvell/mwifiex/sta_event.c |  6 +++---
+ drivers/net/wireless/mediatek/mt76/mt7615/mac.c  |  3 +--
+ drivers/net/wireless/mediatek/mt76/mt7921/mac.c  |  3 +--
+ drivers/net/wireless/realtek/rtw88/main.c        |  2 +-
+ drivers/net/wireless/realtek/rtw89/ser.c         |  2 +-
+ drivers/remoteproc/qcom_q6v5_mss.c               |  2 +-
+ drivers/remoteproc/remoteproc_coredump.c         |  8 ++++----
+ include/drm/drm_print.h                          |  2 +-
+ include/linux/devcoredump.h                      | 13 ++++++-------
+ sound/soc/intel/avs/apl.c                        |  2 +-
+ sound/soc/intel/avs/skl.c                        |  2 +-
+ sound/soc/intel/catpt/dsp.c                      |  2 +-
+ 28 files changed, 51 insertions(+), 59 deletions(-)
+
+-- 
+2.17.1
+

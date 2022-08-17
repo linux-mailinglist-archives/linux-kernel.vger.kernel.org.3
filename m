@@ -2,55 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80CCA597A05
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 01:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA08597A0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 01:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242213AbiHQXMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 19:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40350 "EHLO
+        id S242221AbiHQXMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 19:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbiHQXMN (ORCPT
+        with ESMTP id S233622AbiHQXMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 19:12:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5AFACA0A;
-        Wed, 17 Aug 2022 16:12:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 670D061135;
-        Wed, 17 Aug 2022 23:12:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3A9CC433C1;
-        Wed, 17 Aug 2022 23:12:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660777931;
-        bh=ZSSUC+qtjCm/TAcrRhIh+enUapw+ThiKrZKpHspjssE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jNu0FLRyq1xMrL6EdqangxdsJ8+7bApla2HekUUzxfUpnMs2oOij5qSzOK0C1hAvb
-         tbBzKpZ4KAgBsRJgczsDViYGNzhiUMs2uJVtTqug5DUXFSu84awb6qXR8sJpHE2fE6
-         RLCoIup4erPAH1VvfjHHoBScvMTh3LUfVc5LbxTw26lKe7EAKq3x/0MY2kJZ7p0vXb
-         zvSE60yYn6vZmwLhMroyL2bQR07ngOiXh9VjbCHqbkiitVrvCY+5bIevJztIfEwf8q
-         w+6bwlHwk8PyMuvUyFzRcs4G/NSHnmSbZQ9PLinZS58O9Ns49gYS3/mzEtplQt04p1
-         MZ152tmTr415A==
-Received: by pali.im (Postfix)
-        id EE03F77A; Thu, 18 Aug 2022 01:12:08 +0200 (CEST)
-Date:   Thu, 18 Aug 2022 01:12:08 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Mauri Sandberg <maukka@ext.kapsi.fi>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Documentation: arm: marvell: Add Orion codenames and
- archive homepage
-Message-ID: <20220817231208.42emdluzead2hweg@pali>
-References: <20220719080807.16729-1-pali@kernel.org>
+        Wed, 17 Aug 2022 19:12:51 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154B5ACA14
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 16:12:46 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id u14so16944775oie.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 16:12:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kali.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=LxMzn+ge/kAscik4k/Skya/rcppy5TB3UPJbRHjbmNw=;
+        b=ZMSivDnXniEMASu3EBBX5BtUdFu4EVPmkeRJ3ee78RxKEGYOeUwGbBAy6U3fZ7z8sD
+         dCkQpMha8IsiWTvB7Rl4yB6DRBQ6FvXLbGCjsi4LpRSmj7P9X6AvKdeSBJDqAOORhyYA
+         CDWGHTW+8SbGHp5llGjo8P1prJ0z77XOhbjkE4aqahu+Dszq19ujEa9z/oIzL2p1cgRc
+         NtJ49iUae0YiYX+wEIwWAO/lCXUWgeV5VACFMu07v8lTam+5u/fcQhrePmNd4L0CuE5F
+         1axW9WWzIcIcD2SUcdUVDp7iMhJY4Nck4VEQqs9gPD9GGTj7aYFdz+2GNjuXXVbtSib8
+         zkig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=LxMzn+ge/kAscik4k/Skya/rcppy5TB3UPJbRHjbmNw=;
+        b=zKQQQ+yfcL9GSnyWOFR6N1hkebfl/WDhEbNmixZh4PT7IwHma0oxROzMN/zC3tE5aP
+         o3biNmahmN0TJtg9R8PiDgqA2dH/UIzE/M5TbfuwfLO3jAeByDREIq5OM/PsizMypwyL
+         lKk1H37YylpUIIq4KD29jjw6qvy2IE42pBteA8BzTOucUSlWElWZLPx18i949tPMi/En
+         cEDg4zrznnEXg8/WpOA273TF7PaIEw8Zp0AeHO/Pr93rBKFw46rzDpWxCwN6CS90xAYj
+         E3Jj9Ip3YstQIjO5U8JBaNeUjdy0fvoKniq7BEEsF5Rz09hLZo+t5auzXjDCYKLpCnC6
+         Ra5Q==
+X-Gm-Message-State: ACgBeo3lPejyGBEuVNCIwzImsTy1IyAPBJqPBlmckiehiUFsi9gJK5Le
+        nSC93ItzmmeXtAt/ML5bCFxVdg==
+X-Google-Smtp-Source: AA6agR4RjZMSD+HLFmCEXKwPeOCg2lasV4sKuV5KudXbS/qHB1uOaK5nsyrZUGjNTa/U1Egwg+auWA==
+X-Received: by 2002:aca:1b13:0:b0:344:d3f5:4df0 with SMTP id b19-20020aca1b13000000b00344d3f54df0mr159322oib.209.1660777965456;
+        Wed, 17 Aug 2022 16:12:45 -0700 (PDT)
+Received: from localhost (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
+        by smtp.gmail.com with ESMTPSA id t2-20020a9d7f82000000b00637032a39a3sm18537otp.6.2022.08.17.16.12.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 16:12:44 -0700 (PDT)
+From:   Steev Klimaszewski <steev@kali.org>
+To:     steev@kali.org
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: thinkpad-x13s: Fix firmware location
+Date:   Wed, 17 Aug 2022 18:12:36 -0500
+Message-Id: <20220817231236.3971-1-steev@kali.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220719080807.16729-1-pali@kernel.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,52 +73,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 19 July 2022 10:08:07 Pali Rohár wrote:
-> Orion codenames are extracted from menuconfig ARCH_ORION5X and
-> old Orion homepage with 88F5182/88F5281 was found in web archive.
-> 
-> Signed-off-by: Pali Rohár <pali@kernel.org>
+The firmware for the Lenovo Thinkpad X13s has been submitted, accepted
+and merged upstream, so update to the correct path.
 
-PING?
+Signed-off-by: Steev Klimaszewski <steev@kali.org>
+---
+ arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> ---
-> In archived homepage are also links to erratas and other Orion documents
-> but apparently webarchive does not have backup copy of it :-( and Marvell
-> already removed all documentation from their web sites :-(
-> ---
->  Documentation/arm/marvell.rst | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/arm/marvell.rst b/Documentation/arm/marvell.rst
-> index 2f41caa0096c..8540437f6a79 100644
-> --- a/Documentation/arm/marvell.rst
-> +++ b/Documentation/arm/marvell.rst
-> @@ -14,18 +14,20 @@ Orion family
->  
->    Flavors:
->          - 88F5082
-> -        - 88F5181
-> -        - 88F5181L
-> -        - 88F5182
-> +        - 88F5181  a.k.a Orion-1
-> +        - 88F5181L a.k.a Orion-VoIP
-> +        - 88F5182  a.k.a Orion-NAS
->  
->                 - Datasheet: https://web.archive.org/web/20210124231420/http://csclub.uwaterloo.ca/~board/ts7800/MV88F5182-datasheet.pdf
->                 - Programmer's User Guide: https://web.archive.org/web/20210124231536/http://csclub.uwaterloo.ca/~board/ts7800/MV88F5182-opensource-manual.pdf
->                 - User Manual: https://web.archive.org/web/20210124231631/http://csclub.uwaterloo.ca/~board/ts7800/MV88F5182-usermanual.pdf
->                 - Functional Errata: https://web.archive.org/web/20210704165540/https://www.digriz.org.uk/ts78xx/88F5182_Functional_Errata.pdf
-> -        - 88F5281
-> +        - 88F5281  a.k.a Orion-2
->  
->                 - Datasheet: https://web.archive.org/web/20131028144728/http://www.ocmodshop.com/images/reviews/networking/qnap_ts409u/marvel_88f5281_data_sheet.pdf
-> -        - 88F6183
-> +        - 88F6183  a.k.a Orion-1-90
-> +  Homepage:
-> +        https://web.archive.org/web/20080607215437/http://www.marvell.com/products/media/index.jsp
->    Core:
->  	Feroceon 88fr331 (88f51xx) or 88fr531-vd (88f52xx) ARMv5 compatible
->    Linux kernel mach directory:
-> -- 
-> 2.20.1
-> 
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+index 84dc92dda0b8..e07cc9d1ff27 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
++++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+@@ -235,13 +235,13 @@ keyboard@68 {
+ };
+ 
+ &remoteproc_adsp {
+-	firmware-name = "qcom/sc8280xp/qcadsp8280.mbn";
++	firmware-name = "qcom/LENOVO/21BX/qcadsp8280.mbn";
+ 
+ 	status = "okay";
+ };
+ 
+ &remoteproc_nsp0 {
+-	firmware-name = "qcom/sc8280xp/qccdsp8280.mbn";
++	firmware-name = "qcom/LENOVO/21BX/qccdsp8280.mbn";
+ 
+ 	status = "okay";
+ };
+-- 
+2.34.1
+

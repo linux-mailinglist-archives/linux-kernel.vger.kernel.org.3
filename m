@@ -2,121 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B98596630
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 01:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE519596633
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 02:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237852AbiHPX65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 19:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
+        id S237877AbiHQAAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 20:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237810AbiHPX6z (ORCPT
+        with ESMTP id S237137AbiHQAAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 19:58:55 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717A690C51
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 16:58:54 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id 130so10451357pfy.6
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 16:58:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=zcVcSBUYWoFWjcfEXcoAiD7y86Ff1CMvGHRV3ofuKE8=;
-        b=oYPogaVIhlWq1V0gz8+5Wzm9ZHEqqbefaHWf0sUHjVAvzPfG6cop6Y0bujJ1uZ3po/
-         bRT28HyO5U2+6gQFUx6IqHO+ONhxGemJoEO18KdVHOvNDbC8FLzEwf74Ax8Msep2JYgX
-         oTOeFv2cGB9mBZ2jDO2kW5CWBcjj0l+0s6ffk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=zcVcSBUYWoFWjcfEXcoAiD7y86Ff1CMvGHRV3ofuKE8=;
-        b=MdQXQuzKee8H5pmUKNwodHbI1stM94paNG4egk/KRE55CVRpsbqUniJ08BTabsYGdF
-         JJDH/UUBQKpzpi+S6mFJfM4/Z1sujD+hPvb8Ve0W1TSkspi8+4NLI1Kt7oCfXueTIiM3
-         C+ADc8zzh3/PWHumJs6i7N/IQpdk6nB4xcg4uDC7RFlzPZHXkE/iP732tyss2GWF4FYh
-         CTDVkyYUZ2LQrVRsndExqMW08dZ0FBCxyEZuVpzzqK/p6zv5NE8hdbj1H8Ru7Sh2veYY
-         oFrWuY1s6p0yw3P3zGTvCTnQeaLvK+qakyDwLqA09hH/VY+P8f0JLh8MDuNFGr2meGEj
-         pwcg==
-X-Gm-Message-State: ACgBeo1jyrpPqnL/2zpWbwu/8K5pk8FUbeRvcPKamQ38Pbxx2HDegM1P
-        /lDIEMajHMqWNqh7zYh1IezLoA==
-X-Google-Smtp-Source: AA6agR5vBDpmlJG43ZGfk02juh52ek5LdtdS1/UQe4X2qPAuGW1mGzkq1W3VmRCCtO8GuSQCOtl3Aw==
-X-Received: by 2002:aa7:96d5:0:b0:52e:e2a:9c79 with SMTP id h21-20020aa796d5000000b0052e0e2a9c79mr23395515pfq.55.1660694333888;
-        Tue, 16 Aug 2022 16:58:53 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:f730:6f91:6154:bee4])
-        by smtp.gmail.com with UTF8SMTPSA id l7-20020a170903120700b001709e3c750dsm9712094plh.194.2022.08.16.16.58.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 16:58:53 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 16:58:51 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     William McVicker <willmcvicker@google.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
-        Sajid Dalvi <sdalvi@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] PCI/PM: Switch D3Hot delay to use usleep_range
-Message-ID: <YvwvOyB38aCGitpk@google.com>
-References: <20220811184001.2512121-1-willmcvicker@google.com>
- <YvwGvmWPrIQ557C+@google.com>
- <YvwXe1k6uRSTFuKR@google.com>
+        Tue, 16 Aug 2022 20:00:11 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1524E92F52;
+        Tue, 16 Aug 2022 17:00:10 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M6p6w0nC9z4x1N;
+        Wed, 17 Aug 2022 10:00:08 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1660694408;
+        bh=o7nfJCUbCDgKqfrYEc24OxV82lJ1rSI15PYwGv+3BAQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Ku3iI3GSn7/QgiAlR0Vnj75bbKpb+FbHu/nYWwJ2Mw01O/vE7QJNPqiOOT6KOS4J5
+         G8j+zZPmoQ+a4SaGf5TS6Ty4NTzlMR3UbAngKBVu3GCB5wUv2se+v6us8e2wHjhyF8
+         TKWf529mahGVOfTxdspjtp1BSFTJjPQl+CF6wyc0xuFveKKS9pxEOlLR6WBIKSk94v
+         10LcoMoRuYPFipe84i3FEVwlQaXbCrDZuFstLAbDB7nr+PeKVJo7znUyQ3s7Wx7FXD
+         Pjs/hJYgBqtfFpN44FHbJT6unVb7WwD/tnvSWxJr9EehBw/HbLpsSpW/wwhw/7qOle
+         wm2LjVNvsXShA==
+Date:   Wed, 17 Aug 2022 10:00:07 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Eddie James <eajames@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>, Wolfram Sang <wsa@kernel.org>
+Subject: linux-next: build failure after merge of the input tree
+Message-ID: <20220817100007.2827652a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YvwXe1k6uRSTFuKR@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/iZ5Mw3rLKR8TPHOWY2DaPOQ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 10:17:31PM +0000, William McVicker wrote:
-> On 08/16/2022, Matthias Kaehlcke wrote:
-> > On Thu, Aug 11, 2022 at 06:40:01PM +0000, Will McVicker wrote:
-> > > From: Sajid Dalvi <sdalvi@google.com>
-> > > 
-> > > Since the PCI spec requires a 10ms D3Hot delay (defined by
-> > > PCI_PM_D3HOT_WAIT) and a few of the PCI quirks update the D3Hot delay up
-> > > to 20ms, let's switch from msleep to usleep_range to improve the delay
-> > > accuracy.
-> > > 
-> > > This patch came from Sajid Dalvi <sdalvi@google.com> in the Pixel 6
-> > > kernel tree [1]. Testing on a Pixel 6, found that the 10ms delay for
-> > > the Exynos PCIe device was on average delaying for 19ms when the spec
-> > > requires 10ms. Switching from msleep to uslseep_delay therefore
-> > > decreases the resume time on a Pixel 6 on average by 9ms.
-> > > 
-> > > [1] https://android.googlesource.com/kernel/gs/+/18a8cad68d8e6d50f339a716a18295e6d987cee3
-> > > 
-> > > Signed-off-by: Sajid Dalvi <sdalvi@google.com>
-> > > Signed-off-by: Will McVicker <willmcvicker@google.com>
-> > > ---
-> > >  drivers/pci/pci.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> > > index 95bc329e74c0..5ae5b3c4dc9b 100644
-> > > --- a/drivers/pci/pci.c
-> > > +++ b/drivers/pci/pci.c
-> > > @@ -72,7 +72,8 @@ static void pci_dev_d3_sleep(struct pci_dev *dev)
-> > >  		delay = pci_pm_d3hot_delay;
-> > >  
-> > >  	if (delay)
-> > > -		msleep(delay);
-> > > +		usleep_range(delay * USEC_PER_MSEC,
-> > > +			     (delay + 2) * USEC_PER_MSEC);
-> > 
-> > You could also use fsleep(), which ends up calling usleep_range()
-> > for (usecs > 10 && usecs <= 20000).
-> 
-> Thanks for the suggestion. I see fsleep() uses 2 * usec for the upper range
-> which I think is a bit much for this optimization. The documentation says
-> in the worse case an interrupt will be triggered for the upper bound, but
-> I'm not entirely sure how often that'd be. Thoughts?
+--Sig_/iZ5Mw3rLKR8TPHOWY2DaPOQ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Ah, I misread 'delay + 2' in your patch as 'delay * 2', which would result in
-the same. Agreed, in the spirit of your optimization it probably doesn't make
-sense to use fsleep().
+Hi all,
 
-The range of 2us is really narroy, you could consider making it something
-like 10 or 20% of 'delay'.
+After merging the input tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
+
+drivers/input/misc/ibm-panel.c:195:19: error: initialization of 'void (*)(s=
+truct i2c_client *)' from incompatible pointer type 'int (*)(struct i2c_cli=
+ent *)' [-Werror=3Dincompatible-pointer-types]
+  195 |         .remove =3D ibm_panel_remove,
+      |                   ^~~~~~~~~~~~~~~~
+drivers/input/misc/ibm-panel.c:195:19: note: (near initialization for 'ibm_=
+panel_driver.remove')
+
+Caused by commit
+
+  95331e91e9da ("Input: Add IBM Operation Panel driver")
+
+interacting with commit
+
+  ed5c2f5fd10d ("i2c: Make remove callback return void")
+
+from v6.0-rc1.
+
+I have applied the following merge fix patch for today:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 17 Aug 2022 09:54:11 +1000
+Subject: [PATCH] Input: fix up for "i2c: Make remove callback return void"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/input/misc/ibm-panel.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/input/misc/ibm-panel.c b/drivers/input/misc/ibm-panel.c
+index 54c657cd7809..094bcdb568f1 100644
+--- a/drivers/input/misc/ibm-panel.c
++++ b/drivers/input/misc/ibm-panel.c
+@@ -174,11 +174,9 @@ static int ibm_panel_probe(struct i2c_client *client,
+ 	return 0;
+ }
+=20
+-static int ibm_panel_remove(struct i2c_client *client)
++static void ibm_panel_remove(struct i2c_client *client)
+ {
+ 	i2c_slave_unregister(client);
+-
+-	return 0;
+ }
+=20
+ static const struct of_device_id ibm_panel_match[] =3D {
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/iZ5Mw3rLKR8TPHOWY2DaPOQ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL8L4cACgkQAVBC80lX
+0Gz+tQf/QcSV9ow+tD/z+OEozAvtm7HBkbXdWERWqXwOcVuQHObSXD1HvOsVBrBx
+D5j6LY+AR0tBvNpBcWc3zTmz4ZtVOrf4vEdywNvsmVP8xTbGCftsPf9PRUhzem99
+yNFF1PIw0aTdiBy8lfMcgccgKBVELWjOmPywssyY03GhzYaFwa2H37n0cxSyAto7
+NpWfHV236+4tqIyu6Ft4jNHvzSUeBNvrqwYzfmG3aW7+AOUU8UqG90H056OFF2mL
+Z8p3L60MUloZOYqKtcXVQ5Zkd5XwOkxUAKGBhfZHzdkt5ZSMTcGUu1cBdAE2nm3Y
+7o5swplBma6zyPVvdFM9nw/a/rxqlA==
+=uOxh
+-----END PGP SIGNATURE-----
+
+--Sig_/iZ5Mw3rLKR8TPHOWY2DaPOQ--

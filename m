@@ -2,203 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF274596D88
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 13:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4869C596D8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 13:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238724AbiHQL2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 07:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
+        id S238888AbiHQLcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 07:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbiHQL2t (ORCPT
+        with ESMTP id S230098AbiHQLct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 07:28:49 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DFF3ECE1;
-        Wed, 17 Aug 2022 04:28:47 -0700 (PDT)
-Received: from pan.home (unknown [IPv6:2a00:23c6:c311:3401:60d6:460b:e0dc:41ba])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: martyn)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9DBDD66016B7;
-        Wed, 17 Aug 2022 12:28:45 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1660735725;
-        bh=UeD9LKoISKrO+nXV/BN1UsrQ0MC+VColES2tNfzcAwc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=XG7/FagfRvq8yNoHni9iiKw2u8OlWaxRIrFWKENKLC3k5XplbMWUpUtvWjrMqYYEY
-         5MDOELZIQnwc6JvpvKouRxlcueoCSZAoFl+85wFlmOzGGd/3x1o2s0Emyt1l48W7XX
-         NJovL/7zI8IH7ah+RsLVGH3Kbc/HsEbgKeCHXpgA41X5pGelcLySknCqd1GHzXy9VX
-         jyJSnP9ELpvtvNwP3uvbvw29fvg6FkljnqKf167DH5EWPzl1419gv7ynPOBDCC5X8G
-         2Xi9dIluM9QtpaOrsDFlWsBUo9n10agkJargKMIUTrs3C/xUZONNd/9ryi1WPlNmZ/
-         c/XY3DlG1VVrw==
-From:   Martyn Welch <martyn.welch@collabora.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     kernel@collabora.com, Martyn Welch <martyn.welch@collabora.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] gpio: pca953x: Support for pcal6534
-Date:   Wed, 17 Aug 2022 12:28:17 +0100
-Message-Id: <20220817112818.787771-1-martyn.welch@collabora.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 17 Aug 2022 07:32:49 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52ED659F0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 04:32:40 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220817113235euoutp01d4970a44ee7969c82132ca34ce27565c~MHo2MZyB53119631196euoutp01f
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 11:32:35 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220817113235euoutp01d4970a44ee7969c82132ca34ce27565c~MHo2MZyB53119631196euoutp01f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1660735955;
+        bh=S3bzVlsCBjK72dYdHPRLrShfY7TzZgFl1ogmAT3SI24=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=HbK8GqoGH427LX3qm07kT8N1Mb+b9+RhJfBaHA+69mrnB+OI6HuZWbcAKsa5v1dY/
+         1nwSTKp/LlZJKsMpJe3BqXxIcdTdj3ixh861ZukfQHk8guvvKlq94/Zeh2mgtYLYoR
+         u0rEHiLdIjxjdMtFJ8dmDy1FQEsDxGOMYkEebjqw=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220817113235eucas1p1c4b4ec10d7246f24f52e22d72b60efde~MHo1zZUuM0205002050eucas1p1a;
+        Wed, 17 Aug 2022 11:32:35 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 09.D8.09580.3D1DCF26; Wed, 17
+        Aug 2022 12:32:35 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220817113234eucas1p1c936c1548099113f5eab529cf37c9c61~MHo1Twnx00207502075eucas1p1q;
+        Wed, 17 Aug 2022 11:32:34 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220817113234eusmtrp29a82e04a30d8ee0a0c529ea333a2d636~MHo1S56PV1344513445eusmtrp2V;
+        Wed, 17 Aug 2022 11:32:34 +0000 (GMT)
+X-AuditID: cbfec7f5-9adff7000000256c-b0-62fcd1d391ed
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 8B.38.09095.2D1DCF26; Wed, 17
+        Aug 2022 12:32:34 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220817113234eusmtip1a857f22b521212ae48991c0120b5fbf5~MHo0eOQlY0797307973eusmtip1M;
+        Wed, 17 Aug 2022 11:32:33 +0000 (GMT)
+Message-ID: <af9f0842-5cdc-3ad3-fe97-193e6a96172c@samsung.com>
+Date:   Wed, 17 Aug 2022 13:32:33 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH net] net: phy: Warn about incorrect
+ mdio_bus_phy_resume() state
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     netdev <netdev@vger.kernel.org>,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        Doug Berger <opendmb@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <CAMuHMdXiawCULreUKZsBD0LNc3FTqMxpfM11N46OqppChT91Kw@mail.gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrLKsWRmVeSWpSXmKPExsWy7djP87qXL/5JMvizU8Li/N1DzBZzzrew
+        WDw99ojd4te7I+wWz27tZbJY9H4Gq8WFbX2sFpd3zWGz2PryHZPFoal7GS2OLRCz+DxpCqPF
+        t9NvGC22tPxlsmj+9IrJgd/j8rWLzB5bVt5k8tg56y67x4JNpR6bVnWyeRw63MHosXPHZyaP
+        HbdtPN7vu8rm8b/5MovH501yAdxRXDYpqTmZZalF+nYJXBlfHsxgKjikWLFz1VnmBsYGyS5G
+        Tg4JAROJ41ufsnQxcnEICaxglFi65QcrhPOFUaLh1yRmCOczo8SXed9YYFp+3t8ElVjOKLHr
+        4D2o/o+MEj+PrGcDqeIVsJP48fMtkM3BwSKgKrFthypEWFDi5MwnYINEBZIlnv1fzA5iCwuE
+        SpyY1ssKYjMLiEvcejKfCaRVRCBCYuqqZJDxzAKNLBLTHtxmBKlhEzCU6HrbBbaKUyBQ4u60
+        RcwQvfIS29/OYYY49DCnRFefJYTtIjH50j2oB4QlXh3fwg5hy0j83wmxS0IgX+LvDGOIcIXE
+        tddroMZYS9w59wvsE2YBTYn1u/Qhwo4Sy1pWQHXySdx4KwhxAJ/EpG3TmSHCvBIdbUIQ1WoS
+        s46vg9t58MIl5gmMSrOQgmQWktdnIXllFsLeBYwsqxjFU0uLc9NTi43zUsv1ihNzi0vz0vWS
+        83M3MQJT4Ol/x7/uYFzx6qPeIUYmDsZDjBIczEoivIIvfiQJ8aYkVlalFuXHF5XmpBYfYpTm
+        YFES503O3JAoJJCeWJKanZpakFoEk2Xi4JRqYJrNsd1yfzm/0JIbaZ7u0tlld5L82tXfRr68
+        Z7IvxmK20qLz3Xb675vnH8vbqPmn9/q1mcun9Kk9K8otYShd/7p6dfHXsilfNqTW6m/Uesq5
+        jytNuDOy92u/XWLoJwPFf1/vMJtILl1eEVSxKLpyYcn8FmXpvRssNgleuaTX8WTFBW63vpWl
+        jG4//J5fNF8gIqw2aeXOtDnX+v0fv86/uWVR+WuDj698mgRT94ZbnL/YIXNAwdwi9Phq3WVi
+        VpEL+lcmvf2p0nLS+C+zZDnjlYqZ8zbuvOTSIq1zgvFvV8msHZd0U29UMPH8je4X3yw255fj
+        usaC7nty6p4JzLwvF6jfulYgv9P0Oddf5hfe85RYijMSDbWYi4oTAShYMhvwAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrMIsWRmVeSWpSXmKPExsVy+t/xu7qXLv5JMnh3Qd/i/N1DzBZzzrew
+        WDw99ojd4te7I+wWz27tZbJY9H4Gq8WFbX2sFpd3zWGz2PryHZPFoal7GS2OLRCz+DxpCqPF
+        t9NvGC22tPxlsmj+9IrJgd/j8rWLzB5bVt5k8tg56y67x4JNpR6bVnWyeRw63MHosXPHZyaP
+        HbdtPN7vu8rm8b/5MovH501yAdxRejZF+aUlqQoZ+cUltkrRhhZGeoaWFnpGJpZ6hsbmsVZG
+        pkr6djYpqTmZZalF+nYJehlfHsxgKjikWLFz1VnmBsYGyS5GTg4JAROJn/c3MXcxcnEICSxl
+        lNh29TobREJG4uS0BlYIW1jiz7UusLiQwHtGiceNkSA2r4CdxI+fb4HiHBwsAqoS23aoQoQF
+        JU7OfMICYosKJEssOLQUzBYWCJW4e/4EO4jNLCAucevJfCYQW0QgQuJiyzsWkBuYBVpZJCat
+        f8wIcdB2Zom+h1/BOtgEDCW63kIcwSkQKHF32iJmiElmEl1buxghbHmJ7W/nME9gFJqF5JBZ
+        SBbOQtIyC0nLAkaWVYwiqaXFuem5xYZ6xYm5xaV56XrJ+bmbGIGxv+3Yz807GOe9+qh3iJGJ
+        g/EQowQHs5IIr+CLH0lCvCmJlVWpRfnxRaU5qcWHGE2BgTGRWUo0OR+YfPJK4g3NDEwNTcws
+        DUwtzYyVxHk9CzoShQTSE0tSs1NTC1KLYPqYODilGpg2rpuscU3kfmCpzCfeGfLnCvc3TjS7
+        1rfom25+1Y4lpia3Jj/3fWQeKnzwVKBrQB6nw+cWUx/LnkOtH5M2blveEqjF1yejpbxdssBg
+        js5tpvtVM+XWtS+ZtUQ6eZbJG47fJSe4mrWKpt2wmcPQXSMQvcAsfFVy3TrpR8+Mfwq4/Z0x
+        S1jTSbJhhZhdxap1S2YUcfGwvZrcu7EptXHZvk9CjauyHVfU8q6Rnrd+QmWN4hbVxVu9BJ9M
+        lo0vesPw7pl5Tbnkg+czHv5X9M29uTBd/efimNT/Pu+q8tJS9I/P2Drpf6fLwguv5xQ/5lTg
+        3/VvUQ7Pl0//zU946ggum+8t9v7bVwtP2eL/jteTudmUWIozEg21mIuKEwEPJRYFhgMAAA==
+X-CMS-MailID: 20220817113234eucas1p1c936c1548099113f5eab529cf37c9c61
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220812111948eucas1p2bf97e7f4558eb024f419346367a87b45
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220812111948eucas1p2bf97e7f4558eb024f419346367a87b45
+References: <20220801233403.258871-1-f.fainelli@gmail.com>
+        <CGME20220812111948eucas1p2bf97e7f4558eb024f419346367a87b45@eucas1p2.samsung.com>
+        <27016cc0-f228-748b-ea03-800dda4e5f0c@samsung.com>
+        <8c21e530-8e8f-ce2a-239e-9d3a354996cf@gmail.com>
+        <CAMuHMdV8vsbFx+nikAwn1po1-PeZVhzotMaLLk+wXNquZceaRQ@mail.gmail.com>
+        <c1301f39-9202-5eee-a0f6-9c0b66f2dccf@gmail.com>
+        <CAMuHMdXiawCULreUKZsBD0LNc3FTqMxpfM11N46OqppChT91Kw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pcal6534[1] is a 34-bit I/O expander with more than a passing
-resemblance to the pcal6524[2] currently supported by the gpio-pca953x
-driver, however whilst the registers seem to functionally match
-perfectly, the alignment of the register banks in the chips address
-space do not follow the pattern expected by the existing driver. For
-instance, as the chip provides 34 I/O, which requires bannks of 5 8-bit
-registers to provide input state, output state, etc. as do the 40 I/O
-variants, however the 40 I/O variants layout the banks of registers on
-8-byte boundaries, whilst the pcal6534 does not space out the banks at
-all. Additionally the extended functionality starts at 30h rather than
-40h and I suspect there will be other similar differences that I've not
-yet discovered.
+On 17.08.2022 11:18, Geert Uytterhoeven wrote:
+> On Wed, Aug 17, 2022 at 4:28 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>> On 8/16/2022 6:20 AM, Geert Uytterhoeven wrote:
+>>> On Fri, Aug 12, 2022 at 6:39 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>>>> On 8/12/22 04:19, Marek Szyprowski wrote:
+>>>>> On 02.08.2022 01:34, Florian Fainelli wrote:
+>>>>>> Calling mdio_bus_phy_resume() with neither the PHY state machine set to
+>>>>>> PHY_HALTED nor phydev->mac_managed_pm set to true is a good indication
+>>>>>> that we can produce a race condition looking like this:
+>>>>>>
+>>>>>> CPU0                                         CPU1
+>>>>>> bcmgenet_resume
+>>>>>>      -> phy_resume
+>>>>>>        -> phy_init_hw
+>>>>>>      -> phy_start
+>>>>>>        -> phy_resume
+>>>>>>                                                     phy_start_aneg()
+>>>>>> mdio_bus_phy_resume
+>>>>>>      -> phy_resume
+>>>>>>         -> phy_write(..., BMCR_RESET)
+>>>>>>          -> usleep()                                  -> phy_read()
+>>>>>>
+>>>>>> with the phy_resume() function triggering a PHY behavior that might have
+>>>>>> to be worked around with (see bf8bfc4336f7 ("net: phy: broadcom: Fix
+>>>>>> brcm_fet_config_init()") for instance) that ultimately leads to an error
+>>>>>> reading from the PHY.
+>>>>>>
+>>>>>> Fixes: fba863b81604 ("net: phy: make PHY PM ops a no-op if MAC driver manages PHY PM")
+>>>>>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>>>>> This patch, as probably intended, triggers a warning during system
+>>>>> suspend/resume cycle in the SMSC911x driver. I've observed it on ARM
+>>>>> Juno R1 board on the kernel compiled from next-202208010:
+>>>>>
+>>>>>      ------------[ cut here ]------------
+>>>>>      WARNING: CPU: 1 PID: 398 at drivers/net/phy/phy_device.c:323
+>>>>> mdio_bus_phy_resume+0x34/0xc8
+>>> I am seeing the same on the ape6evm and kzm9g development
+>>> boards with smsc911x Ethernet, and on various boards with Renesas
+>>> Ethernet (sh_eth or ravb) if Wake-on-LAN is disabled.
+>>>
+>>>> Yes this is catching an actual issue in the driver in that the PHY state
+>>>> machine is still running while the system is trying to suspend. We could
+>>>> go about fixing it in a different number of ways, though I believe this
+>>>> one is probably correct enough to work and fix the warning:
+>>>> --- a/drivers/net/ethernet/smsc/smsc911x.c
+>>>> +++ b/drivers/net/ethernet/smsc/smsc911x.c
+>>>> @@ -1037,6 +1037,8 @@ static int smsc911x_mii_probe(struct net_device *dev)
+>>>>                    return ret;
+>>>>            }
+>>>>
+>>>> +       /* Indicate that the MAC is responsible for managing PHY PM */
+>>>> +       phydev->mac_managed_pm = true;
+>>>>            phy_attached_info(phydev);
+>>>>
+>>>>            phy_set_max_speed(phydev, SPEED_100);
+>>>> @@ -2587,6 +2589,8 @@ static int smsc911x_suspend(struct device *dev)
+>>>>            if (netif_running(ndev)) {
+>>>>                    netif_stop_queue(ndev);
+>>>>                    netif_device_detach(ndev);
+>>>> +               if (!device_may_wakeup(dev))
+>>>> +                       phy_suspend(dev->phydev);
+>>>>            }
+>>>>
+>>>>            /* enable wake on LAN, energy detection and the external PME
+>>>> @@ -2628,6 +2632,8 @@ static int smsc911x_resume(struct device *dev)
+>>>>            if (netif_running(ndev)) {
+>>>>                    netif_device_attach(ndev);
+>>>>                    netif_start_queue(ndev);
+>>>> +               if (!device_may_wakeup(dev))
+>>>> +                       phy_resume(dev->phydev);
+>>>>            }
+>>>>
+>>>>            return 0;
+>>> Thanks for your patch, but unfortunately this does not work on ape6evm
+>>> and kzm9g, where the smsc911x device is connected to a power-managed
+>>> bus.  It looks like the PHY registers are accessed while the device
+>>> is already suspended, causing a crash during system suspend:
+>> Does it work better if you replace phy_suspend() with phy_stop() and
+>> phy_resume() with phy_start()?
+> Thank you, much better!
+> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-I suspect that this may add some additional complexity to the driver and
-I'm not sure whether this will be welcome. I've done a few cursory
-searches to see if there are other chips which follow the pattern of the
-pcal6534 and have so far only found the pi4ioe5v6534q[3], which appears
-to be funcitonaly identical to the pcal6534.
+It also works for me.
 
-I'm currently wondering whether a submission to extend the pcal6534
-is likely to be deemed acceptable. If so whether something like the
-attached approach would be OK, or whether anyone has better ideas on how
-to achieve this. Alternatively I'd be happy to create a new driver to
-support the pcal6534 if that's deemed more appropriate.
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
-[1] https://www.nxp.com/docs/en/data-sheet/PCAL6534.pdf
-[2] https://www.nxp.com/docs/en/data-sheet/PCAL6524.pdf
-[3] https://www.diodes.com/assets/Datasheets/PI4IOE5V6534Q.pdf
-
-Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
----
-
-Just to note that I'm currently awaiting delivery if hardware, so the
-below patch is not just incomplete, it also untested.
-
- drivers/gpio/gpio-pca953x.c | 46 ++++++++++++++++++++++++++++++-------
- 1 file changed, 38 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
-index ecd7d169470b..413bcda68935 100644
---- a/drivers/gpio/gpio-pca953x.c
-+++ b/drivers/gpio/gpio-pca953x.c
-@@ -68,6 +68,8 @@
- #define PCA957X_TYPE		BIT(13)
- #define PCA_TYPE_MASK		GENMASK(15, 12)
- 
-+#define PCAL6534_ALIGN		BIT(16)
-+
- #define PCA_CHIP_TYPE(x)	((x) & PCA_TYPE_MASK)
- 
- static const struct i2c_device_id pca953x_id[] = {
-@@ -91,6 +93,7 @@ static const struct i2c_device_id pca953x_id[] = {
- 
- 	{ "pcal6416", 16 | PCA953X_TYPE | PCA_LATCH_INT, },
- 	{ "pcal6524", 24 | PCA953X_TYPE | PCA_LATCH_INT, },
-+	{ "pcal6534", 34 | PCA953X_TYPE | PCA_LATCH_INT | PCAL6534_ALIGN, },
- 	{ "pcal9535", 16 | PCA953X_TYPE | PCA_LATCH_INT, },
- 	{ "pcal9554b", 8  | PCA953X_TYPE | PCA_LATCH_INT, },
- 	{ "pcal9555a", 16 | PCA953X_TYPE | PCA_LATCH_INT, },
-@@ -107,6 +110,8 @@ static const struct i2c_device_id pca953x_id[] = {
- 	{ "tca9539", 16 | PCA953X_TYPE | PCA_INT, },
- 	{ "tca9554", 8  | PCA953X_TYPE | PCA_INT, },
- 	{ "xra1202", 8  | PCA953X_TYPE },
-+
-+	{ "pi4ioe5v6534q", 34 | PCA953X_TYPE | PCA_LATCH_INT | PCAL6534_ALIGN, },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, pca953x_id);
-@@ -266,10 +271,19 @@ static int pca953x_bank_shift(struct pca953x_chip *chip)
- static bool pca953x_check_register(struct pca953x_chip *chip, unsigned int reg,
- 				   u32 checkbank)
- {
--	int bank_shift = pca953x_bank_shift(chip);
--	int bank = (reg & REG_ADDR_MASK) >> bank_shift;
--	int offset = reg & (BIT(bank_shift) - 1);
-+	int bank;
-+	int offset;
-+
-+	if (chip->driver_data & PCAL6534_ALIGN) {
-+		bank = (reg & REG_ADDR_MASK) / NBANK(chip);
-+		offset = reg - (bank * NBANK(chip));
-+	} else {
-+		int bank_shift = pca953x_bank_shift(chip);
-+		bank = (reg & REG_ADDR_MASK) >> bank_shift;
-+		offset = reg & (BIT(bank_shift) - 1);
-+	}
- 
-+	/* TODO: This needs looking at for PCAL6534 */
- 	/* Special PCAL extended register check. */
- 	if (reg & REG_ADDR_EXT) {
- 		if (!(chip->driver_data & PCA_PCAL))
-@@ -381,10 +395,20 @@ static const struct regmap_config pca953x_ai_i2c_regmap = {
- 
- static u8 pca953x_recalc_addr(struct pca953x_chip *chip, int reg, int off)
- {
--	int bank_shift = pca953x_bank_shift(chip);
--	int addr = (reg & PCAL_GPIO_MASK) << bank_shift;
--	int pinctrl = (reg & PCAL_PINCTRL_MASK) << 1;
--	u8 regaddr = pinctrl | addr | (off / BANK_SZ);
-+	int bank_shift;
-+	int addr;
-+	int pinctrl;
-+	u8 regaddr;
-+
-+	if (chip->driver_data & PCAL6534_ALIGN) {
-+		addr = (reg & PCAL_GPIO_MASK) * NBANK(chip);
-+	} else {
-+		bank_shift = pca953x_bank_shift(chip);
-+		addr = (reg & PCAL_GPIO_MASK) << bank_shift;
-+	}
-+	/* TODO: Do we need to handle the pinctrl offset differently for pcal6534? */
-+	pinctrl = (reg & PCAL_PINCTRL_MASK) << 1;
-+	regaddr = pinctrl | addr | (off / BANK_SZ);
- 
- 	return regaddr;
- }
-@@ -395,8 +419,11 @@ static int pca953x_write_regs(struct pca953x_chip *chip, int reg, unsigned long
- 	u8 value[MAX_BANK];
- 	int i, ret;
- 
--	for (i = 0; i < NBANK(chip); i++)
-+	for (i = 0; i < NBANK(chip); i++) {
- 		value[i] = bitmap_get_value8(val, i * BANK_SZ);
-+		dev_err(&chip->client->dev, "value[%d] = %x\n", i, value[i]);
-+	}
-+	dev_err(&chip->client->dev, "regaddr: %x\n", regaddr);
- 
- 	ret = regmap_bulk_write(chip->regmap, regaddr, value, NBANK(chip));
- 	if (ret < 0) {
-@@ -1239,6 +1266,7 @@ static const struct of_device_id pca953x_dt_ids[] = {
- 
- 	{ .compatible = "nxp,pcal6416", .data = OF_953X(16, PCA_LATCH_INT), },
- 	{ .compatible = "nxp,pcal6524", .data = OF_953X(24, PCA_LATCH_INT), },
-+	{ .compatible = "nxp,pcal6534", .data = OF_953X(34, PCA_LATCH_INT | PCAL6534_ALIGN), },
- 	{ .compatible = "nxp,pcal9535", .data = OF_953X(16, PCA_LATCH_INT), },
- 	{ .compatible = "nxp,pcal9554b", .data = OF_953X( 8, PCA_LATCH_INT), },
- 	{ .compatible = "nxp,pcal9555a", .data = OF_953X(16, PCA_LATCH_INT), },
-@@ -1261,6 +1289,8 @@ static const struct of_device_id pca953x_dt_ids[] = {
- 	{ .compatible = "onnn,pca9655", .data = OF_953X(16, PCA_INT), },
- 
- 	{ .compatible = "exar,xra1202", .data = OF_953X( 8, 0), },
-+
-+	{ .compatible = "diodes,pi4ioe5v6534q", .data = OF_953X(34, PCA_LATCH_INT | PCAL6534_ALIGN), },
- 	{ }
- };
- 
+Best regards
 -- 
-2.35.1
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 

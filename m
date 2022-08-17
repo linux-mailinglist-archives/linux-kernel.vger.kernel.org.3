@@ -2,70 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C50597934
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5108597937
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242027AbiHQVqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 17:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48068 "EHLO
+        id S242065AbiHQVqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 17:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241722AbiHQVqR (ORCPT
+        with ESMTP id S242045AbiHQVqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 17:46:17 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCEBA8CD1;
-        Wed, 17 Aug 2022 14:46:16 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b98b0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98b0:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 17 Aug 2022 17:46:40 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A306AB063;
+        Wed, 17 Aug 2022 14:46:37 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4E56E1EC058B;
-        Wed, 17 Aug 2022 23:46:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660772771;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=t2fxF578BtmxUg3x9OTOyiD8pEVJYcWl0c4xff75WMw=;
-        b=byLAhfAupeoCRhGwdiBwltXwycmk2gglMeDJEyPXcAFAsOEG7lmhxD53xgKvgwt1y3marN
-        JrFD35s9cj8KbZbzZN08JqQIJDT8ZkYjZI0xmrwP+D4bntN/E2LHya8pVEi5sVO1L1FE2s
-        9M58lEddvYzGD2l0SFRY2wwbHYjeYFY=
-Date:   Wed, 17 Aug 2022 23:46:07 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     pmladek@suse.com, Dinh Nguyen <dinguyen@kernel.org>,
-        Tony Luck <tony.luck@intel.com>, akpm@linux-foundation.org,
-        bhe@redhat.com, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, linux-edac@vger.kernel.org
-Subject: Re: [PATCH v2 10/13] EDAC/altera: Skip the panic notifier if kdump
- is loaded
-Message-ID: <Yv1hn2ayPoyKBAj8@zn.tnic>
-References: <20220719195325.402745-1-gpiccoli@igalia.com>
- <20220719195325.402745-11-gpiccoli@igalia.com>
- <Yv0mCY04heUXsGiC@zn.tnic>
- <46137c67-25b4-6657-33b7-cffdc7afc0d7@igalia.com>
- <Yv1C0Y25u2IB7PCs@zn.tnic>
- <7f016d7f-a546-a45d-c65c-bc35269b4faa@igalia.com>
- <Yv1XVRmTXHLhOkER@zn.tnic>
- <c0250075-ec87-189f-52c5-e0520325a015@igalia.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M7M6H726Xz4x3w;
+        Thu, 18 Aug 2022 07:46:31 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1660772792;
+        bh=u/F2KPLWFmyNWZkM3jhYdD+8B08Z2J7Qu4O6UZvmGN4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=oGyDiC0F2NNKGJ3YvqxYD5qZsZ8w+Pstsz4NRxIwE1+pCWnHnYvlzsIHKBqZTstiS
+         LlHGc+V5JQzE3tv3gAlVdEJiUSwHSq/QmJz06d2dVvzU7YyTEBZZ/Yzi2emQGJT5/1
+         Cj9I7DaGR+FxPxXUc5tx7xIXmJkAtxO5ALYEbWXsXo4Hhhd2y/6AWgcJxO/xKeVqud
+         sFapHDbaLe3N3y9rP5jaYXin8aLPagyFeWBd5A4mqVfTCdo11kStXy2pS2uYUQxtWG
+         D03pBwR1lh/DY4eK3+mKsdBz6RLWSGKx8xXBQkigCWCc68YQXICoz3Irx0TTzsfNqw
+         570VBHIKq0/AA==
+Date:   Thu, 18 Aug 2022 07:46:15 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the mm-hotfixes
+ tree
+Message-ID: <20220818074615.55c693a1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c0250075-ec87-189f-52c5-e0520325a015@igalia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: multipart/signed; boundary="Sig_/A.O7fhxODIkBkKT6q1ZMtok";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,26 +52,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 06:39:07PM -0300, Guilherme G. Piccoli wrote:
-> Sorry for the confusion, let me try to be a bit more clear:
+--Sig_/A.O7fhxODIkBkKT6q1ZMtok
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I think you're missing the point. Lemme try again:
+Hi all,
 
-You *absolutely* must log those errors because they're important. It
-doesn't matter if this is done in a panic notifier and you're changing
-that whole shebang or through some other magic.
+Commit
 
-If you do, then this driver needs to *still* *log* those fatal errors -
-regardless through a panic notifier or some novel contraption it wants
-to use.
+  71443ad8d694 ("ocfs2: fix freeing uninitialized resource on ocfs2_dlm_shu=
+tdown")
 
-So if you want to change the panic notifiers, you *must* make sure those
-errors still do get logged.
+is missing a Signed-off-by from its author.
 
-Better?
+This is just another case of the author being rewritten by the ocfs2
+mailing list.
 
--- 
-Regards/Gruss,
-    Boris.
+--=20
+Cheers,
+Stephen Rothwell
 
-https://people.kernel.org/tglx/notes-about-netiquette
+--Sig_/A.O7fhxODIkBkKT6q1ZMtok
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL9YacACgkQAVBC80lX
+0GxbaAf/SzFPdPuAPK525Hi9g8wCxbScFFIJZXoLFk+wkzVZE7G9VRQa9LbofEe5
+YHEu4qLksbCu10Bs+qANAzum/jLWV+xgUGY4qyplDvqyvjfdC+IzUDGaY6gPcviv
+GjE6jf17qEiQqKtsL9S57COgiyuHwn//ovrbxNuK1/aNBUTKk8oDHIpj0MfYp5Y7
+ubvT1r+LVKWOdN49Gh6sVzxfbt2u2kXOGNO1psW/Z4Zide3mABZ1rdPfBDZTd4dU
+P+8zeMLS/nQyOZbuosoWQnkTuIcccJZjN6Y6FtncsZwUX2U2+Mse1K6LD5oRlSKa
+6ngKlzwlctTx3INompCeb59AeR8EiA==
+=Qbvo
+-----END PGP SIGNATURE-----
+
+--Sig_/A.O7fhxODIkBkKT6q1ZMtok--

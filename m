@@ -2,201 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE1D596FBF
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD16596FC3
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239842AbiHQNUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 09:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
+        id S239904AbiHQNUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 09:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239789AbiHQNTl (ORCPT
+        with ESMTP id S230452AbiHQNTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 09:19:41 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3AC45F9A9
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:19:02 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.west.internal (Postfix) with ESMTP id EB4E02B059AF;
-        Wed, 17 Aug 2022 09:18:58 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 17 Aug 2022 09:19:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1660742338; x=1660749538; bh=l9nnSULWeK
-        Q3XggL/zqDG46qTFmpp//Ck12PCcxE0C4=; b=pF/7j9Cm7g40yrOScl4skNreL2
-        ccqXhCjvRZznSRSF8iv3BsajgJqsSxeejMYry/aJir12Cq0cDvoWOHMKSqK+hrHV
-        /a27Uah7wwi9OZ7JdFLS7io3iwHSZhBkcRbqLKcFYW0VKdkH3qp7RyiNwZl94f1E
-        zUKVdX0Co++619zrN85L7jZYtou5/rFWIReG9TxjiSrtRfHMVALZK0a2dIAiNPey
-        k5xnYjBQ3midyovFl94hMcQQQnartAKyINKT1f2u5iiYyJQebKsLIWShk3lNd5zG
-        iekKZZiB/p9w/dHaCx4QUo+QmNkBoWYG2huX0B7rx5qHpjlU+GQZnHln1NxQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660742338; x=1660749538; bh=l9nnSULWeKQ3XggL/zqDG46qTFmp
-        p//Ck12PCcxE0C4=; b=0yq+TQb2k0Ge8C7gWLSDZxUbaft3Y7NQ2c9RLH0PWcT2
-        PiTwPZj2vykG414dYWHWPehc5NXyFhrx3qTMKgDlx50h/Eu1NPTeQS4J/i0EBC9H
-        766vhkSIScDQvoKRkaqRMENnynoZCLR3D9h5DdZD+n40FTRjKuWenUtAJbtZe4fU
-        oO89K0GrZnhFZ107Ch6BFcgp8mVf5U43254oG8WVsCnSXzedtRo8f5LGWaViy1dW
-        F7W+bIb0hNWZMipRiW9UaIRKzNU5ffBRgnHRZj9R6Nd5RGbwMPcStxkuQrKAv5uS
-        IJOmBt7TDmIRVxsyjLN2TIPOE1t6rTNFwJyi5emdkg==
-X-ME-Sender: <xms:wer8YnbbrLd39px3c8-wsLjK179EcEwMQQhEiu6HjxxNJUOarWEPPw>
-    <xme:wer8YmaRg24-lqp6fTE9m-uwMwtqC10YlWNZ_39X2C8Rxsh6v-fh1gjShzfpwmXUC
-    rP5d0z91KpP4jWVpJI>
-X-ME-Received: <xmr:wer8Yp_kDrgVTos-fv8w0E9iNoNwBk0yHcrZ5lzCWpl0RajwJAbrkO7Vsw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehiedgieefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
-    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:wer8YtqdNamwIkeQpl6RDY9VlFq4ChZh4cTgFhI5ay_1mkURX8oJtA>
-    <xmx:wer8YirW4QTJSrqhg96beQy_yHD2Y5kSTvJAHmIGBx83zAVCiSNOhA>
-    <xmx:wer8YjSIMFaX9hU7t1obQrk2WAo2e5DTtnuHUfoKqMTTB6u5v6s1sA>
-    <xmx:wur8YrbocuObCBuPv2KR9L1HKdRIijNGO56ppPQRu5g4IlXgKq4Qh52Cgts>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 17 Aug 2022 09:18:56 -0400 (EDT)
-Date:   Wed, 17 Aug 2022 15:18:54 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Dom Cobley <dom@raspberrypi.com>
-Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
-Message-ID: <20220817131854.jwmhqvhfhp77bbr3@houat>
-References: <20220816132040.uwirtjm5yr6rdd3q@houat>
- <CAMuHMdWevP=3af=NneAJEDfOR+sz1thrQEhAQPNGrgitBtLjGA@mail.gmail.com>
- <20220816141116.5nuszmilqv2exdb3@houat>
- <CAMuHMdXq_xGPx46bdnUFGDiG4kcgdxtXaRGTucFd3TRq8353dg@mail.gmail.com>
- <20220816154956.pkdpxmmw27mia5ix@houat>
- <CAMuHMdX0L6cO_jYXKZTv0sm9V39Eiy_STiknSkdRQG4k-9GJeg@mail.gmail.com>
- <20220817074710.w4c4xwj7edly2b5p@houat>
- <CAMuHMdXeBakWr6geOWGxnjQYaU9Pi4tRvVFFtubyMJZTT2nPnw@mail.gmail.com>
- <20220817111454.pn2iltvyo2drebq7@houat>
- <CAMuHMdU57g1rNoLo65jhLK8mk4YkNEbMz1E7XKWk2dnCxTr=gg@mail.gmail.com>
+        Wed, 17 Aug 2022 09:19:48 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACDA80B66
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:19:16 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id w197so15350997oie.5
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:19:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=dUoIS1mdB9GBw/ZLFYLwzDX1Mo+0WQ2EGSC5YGDqW7g=;
+        b=fZWmBcOSgJBzrVmHoPZFx1mA/LJ+dLkAt4yaMyZb6S7bX5jo128RdCKAYBSr0ajcwp
+         sb0bKXYD6EfYAsM5enNs7mHIPSR2ek67PLB1QaTnpBIpqRt8AS+Nxx8BFbxnqd+rXR6c
+         ioPV720gY2YxAE1vSQPrq8j5CaV9WKIdRHqo6oohs4lo7mvmPpDoc1H8h6fdvSk7U0NO
+         vcYLllNVePMfQjowT8XYtuP9ZT+z5aGIEOe/IQfV+4XwEO2pgLGAXGTb51UVJd6mjHOi
+         uXAGus9T/F7StM9xGnkFIRiEOQ1JzZA+fT7b8H4upXJ5tdzdTM9DM8RTvPehc9/UDea2
+         hV1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=dUoIS1mdB9GBw/ZLFYLwzDX1Mo+0WQ2EGSC5YGDqW7g=;
+        b=B7rIkSjOWLywXQ70UBwonklXryvd19Vq7qpEDC9k33HpSIezMgvrvBqx0hqOdfiDn3
+         qzAf/2dVl2jUt3aJU8g19Nr0lZylJ69FeLPDTCdH5LJjmQYhDQB1P4AUKhZGFFVXsozP
+         khyY4LmXv+TvvAqurM30BPPWk5P86MCcM1ua2X4m0ne7Dbj29bCZ4ZlUFWLnTIX3X4lw
+         dYpaPaxMtGFlrkngVu7fxNowijrznhvp1Nie+hXo+gU6isy8adKlBFf2ygJpD9j5ZOnM
+         81Qr5DG/Wdm4PKvDlXMwROqlVxbn4WJ5jpMmABHcVCxe95zXLap5D06zl6NaMFZzrSV8
+         oBdQ==
+X-Gm-Message-State: ACgBeo2Y+rxlvzYXO0DtCy0LMD9n7enLk6p90M6SLtFpiF3EyKZa5Wo9
+        IBM+JAoM0Ozu6RzfOBwPkdXZUHAcEyL3rCl8Il61jw==
+X-Google-Smtp-Source: AA6agR5CG0lvkM1VCXUjoacKsulh2GXq9RRCuleqhHVKvQ6hx5QH5M4s5yKqbr/gC52VCvpGdkkVZTDWRDWUgOyx54s=
+X-Received: by 2002:a05:6808:1d6:b0:344:93c6:ec88 with SMTP id
+ x22-20020a05680801d600b0034493c6ec88mr1388766oic.2.1660742354628; Wed, 17 Aug
+ 2022 06:19:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pwhi6bupdwzq7ldy"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdU57g1rNoLo65jhLK8mk4YkNEbMz1E7XKWk2dnCxTr=gg@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220816020423.323820-1-shaozhengchao@huawei.com>
+ <20220815201038.4321b77e@kernel.org> <694f07e3-d5ad-1bc5-1cdb-ae814b1a12f7@huawei.com>
+ <20220816111305.4851a510@kernel.org>
+In-Reply-To: <20220816111305.4851a510@kernel.org>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+Date:   Wed, 17 Aug 2022 09:19:03 -0400
+Message-ID: <CAM0EoMkcOXNfd0dyoGeqGVqN1EQ5jHr_2BuWQoLUAyudsLwdRg@mail.gmail.com>
+Subject: Re: [PATCH net-next,0/3] cleanup of qdisc offload function
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     shaozhengchao <shaozhengchao@huawei.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xiyou.wangcong@gmail.com,
+        jiri@resnulli.us, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, weiyongjun1@huawei.com, yuehaibing@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---pwhi6bupdwzq7ldy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Aug 17, 2022 at 03:05:52PM +0200, Geert Uytterhoeven wrote:
-> Hi Maxime,
->=20
-> On Wed, Aug 17, 2022 at 1:15 PM Maxime Ripard <maxime@cerno.tech> wrote:
-> > On Wed, Aug 17, 2022 at 10:35:07AM +0200, Geert Uytterhoeven wrote:
-> > > On Wed, Aug 17, 2022 at 9:47 AM Maxime Ripard <maxime@cerno.tech> wro=
-te:
-> > > > On Wed, Aug 17, 2022 at 09:31:18AM +0200, Geert Uytterhoeven wrote:
-> > > > > On Tue, Aug 16, 2022 at 5:50 PM Maxime Ripard <maxime@cerno.tech>=
- wrote:
-> > > > > > On Tue, Aug 16, 2022 at 04:43:44PM +0200, Geert Uytterhoeven wr=
-ote:
-> > > > > > > > > > > Either you have to add them here (e.g. "hd720p50" and=
- "hd720p60"), or
-> > > > > > > > > > > handle them through "@<refresh>".  The latter would i=
-mpact "[PATCH v1
-> > > > > > > > > > > 09/35] drm/modes: Move named modes parsing to a separ=
-ate function", as
-> > > > > > > > > > > currently a named mode and a refresh rate can't be sp=
-ecified both.
-> > > > > > > > > >
-> > > > > > > > > > I think the former would make more sense. It simplifies=
- a bit the
-> > > > > > > > > > parser, and we're going to use a named mode anyway.
-> > > > > > > > > >
-> > > > > > > > > > > As "[PATCH v1 34/35] drm/modes: Introduce the tv_mode=
- property as a
-> > > > > > > > > > > command-line option" uses a separate "tv_mode" option=
-, and not the main
-> > > > > > > > > > > mode name, I think you want to add them here.
-> > > > > > > > > >
-> > > > > > > > > > It's a separate story I think, we could have a named mo=
-de hd720p50,
-> > > > > > > > > > which would be equivalent to 1280x720,tv_mode=3Dhd720p
-> > > > > > > > >
-> > > > > > > > > So where's the field rate in "1280x720,tv_mode=3Dhd720p"?
-> > > > > > > >
-> > > > > > > > Yeah, sorry I meant 1280x720@50,tv_mode=3Dhd720p
-> > > > > > >
-> > > > > > > Above you said "I think the former would make more sense", so=
- that
-> > > > > > > should be "1280x720,tv_mode=3Dhd720p50"?
-> > > > > >
-> > > > > > No, 720p at 50Hz would be either hd720p50 or 1280x720@50,tv_mod=
-e=3Dhd720p
-> > > > > > and 60Hz would be hd720p60 or 1280x720@60,tv_mode=3Dhd720p
-> > > > >
-> > > > > I disagree: hd720p50 and hd720p60 are different TV modes.
-> > > >
-> > > > I agree, and I don't see how that command-line doesn't express that?
+On Tue, Aug 16, 2022 at 2:13 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Tue, 16 Aug 2022 11:32:03 +0800 shaozhengchao wrote:
+> > On 2022/8/16 11:10, Jakub Kicinski wrote:
+> > > On Tue, 16 Aug 2022 10:04:20 +0800 Zhengchao Shao wrote:
+> > >> Some qdiscs don't care return value of qdisc offload function, so make
+> > >> function void.
 > > >
-> > > Oh, I see what you mean: yes, it expresses that.
-> > > But it is inconsistent with the NTSC/PAL/SECAM/hd{480,576}[ip] modes,
-> > > where the TV mode specifies both number of lines and frame rate.
+> > > How many of these patches do you have? Is there a goal you're working
+> > > towards? I don't think the pure return value removals are worth the
+> > > noise. They don't even save LoC:
+> > >
+> > >   3 files changed, 9 insertions(+), 9 deletions(-)
 > >
-> > Only if we're using a named mode, and naming is hard :)
->=20
-> That's not true: "640x480,tv_mode=3DPAL-N" would give me a mode with
-> 625 lines and 25 frames/s, "640x480,tv_mode=3DPAL-M" would give me a
-> mode with 525 lines and 30 frames/s.
+> >       Thank you for your reply. Recently I've been studying the kernel code
+> > related to qdisc, and my goal is to understand how qdisc works. If the
+> > code can be optimized, I do what I can to modify the optimization. Is it
+> > more appropriate to add warning to the offload return value? I look
+> > forward to your reply. Thank you.
+>
+> Understood. Please stop sending the cleanups removing return values
+> unless the patches materially improve the code.
 
-In that series, "640x480,tv_mode=3DPAL-N" would be rejected as invalid:
+Quoting appropriate here.
++1
 
-https://lore.kernel.org/dri-devel/20220728-rpi-analog-tv-properties-v1-14-3=
-d53ae722097@cerno.tech/
-
-Maxime
-
---pwhi6bupdwzq7ldy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYvzqvgAKCRDj7w1vZxhR
-xevAAQDN39buWD69Y1UeITS4YCga5URhBHuCskbyb0E4+dbIUQD7BdiRmRfU6P3f
-TcmNW67KPvbwkbPIv57K49HlmhcZ6AQ=
-=egIl
------END PGP SIGNATURE-----
-
---pwhi6bupdwzq7ldy--
+cheers,
+jamal

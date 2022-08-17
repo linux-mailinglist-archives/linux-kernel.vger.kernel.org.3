@@ -2,205 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18827597986
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 00:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1103597991
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 00:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238732AbiHQWNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 18:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43830 "EHLO
+        id S241939AbiHQWPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 18:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235858AbiHQWNU (ORCPT
+        with ESMTP id S242179AbiHQWP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 18:13:20 -0400
-Received: from sonic316-55.consmr.mail.gq1.yahoo.com (sonic316-55.consmr.mail.gq1.yahoo.com [98.137.69.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154CC2DA
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 15:13:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1660774389; bh=Ya3ixTHK6s4uo7ZSMA4MXCZMMPXyKlfwDOMQpejuekQ=; h=Date:Subject:From:To:Cc:References:In-Reply-To:From:Subject:Reply-To; b=tkfuTuNchfeVQ023lJaRH1hm/J5pCN3KQiWfXzotdltYVXf12If0zTavRhbw3meiGnieDJKMC8hFZQrKBS06R4d6e047i6bfZQHEkhBOlBMIWUPIUso9Pg6dkttCkO9J+9yxxtSKGuHw1sERRfceMNHTzHcDpNR1ifYLyL3bhD9ojXU+F0912z9t+o09t80JC1YNVBuf5yt6W4V3Nd5uwSedb0TJUNepNvfj/vV7NVqvMazCpWqEj2xLlFHqYRqaBIEK7l+bxwULSRtiBk48pvvFWwnyVuKKMKSV/701vCATx7dKdwqOavxaRbZ5lOYhd2Hz3ALBus9yfwDPh0ENTQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660774389; bh=OG+giEXQA/ebWGbk2Hy3i/H1aRj65/6Ai/kzb+21EPS=; h=X-Sonic-MF:Date:Subject:From:To:From:Subject; b=My+hPwuWcFMV2euyRvdETZMSAf7RpPZI0RGv0lr8xGA59nqCua50k+VNJIxICWiadLmC3/T09pAkOBgBK8nNyIMvI7uKuzGqxCEB0iUdo/y4pd2uJcQ+J+k3UNP8ojzaYkt9UXBVn6/8KjefYml4g5VnNjbaAeAqwwbLLr9DWjjF3QPRa4V6iHTw/iRbxyR1Imp7WXUY91bFllRu2v6mXfQsdjVNWKn5INFSB5pLcOPsa0QTlQwnimD7PTmDcc/Xs1EmX3fuy8LGPt8yO1q64hTUn+hf7u4QQ57oRYrVYJ5vARVh9rCg5WvLVR1q9hVclbIIomADV1AEiNvThFt0cQ==
-X-YMail-OSG: z6P62F4VM1mcBmqHekAHTfeE4IvJIl5u4zlTEVO6q0FmkAmXk3pRMuldpAcEfKt
- 8GPSrzwrDzDhf5NR30UBDr21I4tppCFvhJvF9hHX8AlwI_SHogSJ4XyR6mMsYa2tn.siiTJ026po
- Vt61Ho2sQxyP8rk.rJsNVCto0f_f5kcIKJsu.ecy1JdjuChgHlxW14awP9MDDEfvJnApuqZdvOcg
- KfPlfmIYc0jefd8qcZPRsckUGULTa08YKIA7y.rgIkI0i55bQk4CZBmPIzUleGbKGJUA5125ff.Z
- TTOb7seHAW8RD08huySaYmS6SSygEwBgBGqT_GF7qHcoommN1M2r8UN_hUiM8KaalBsaxQwIKXpp
- KmxeAe8CSH7o.KcX58koU6rXxvPpLZ6dRVwf4Ko1aAluwxZsn4eNJ3hy2o7y.hAg7Okf1vWbffAu
- FMfAWHLCZMs3gZgBeqM4FMxAR_CoNlZQpt3yrs8QH7IgYaoJMSbFxKfX_TLOnqRv5CO.SYgspTe7
- emk97jfNdPN5xDj0VP_Ng0MDM0xnnBUda9Ix8824XNvJuxFBjilVJTQRBcmz6Teu870glpBC3p8r
- 5n9Hf.aI6op5yvI3ogLnfiLeN08niK.dX30Xaq1PWKLWzCdQtrBudDGs3pxQO4qIaX.lnpUHQ.qu
- NYq6XOlI.bUqAueb.46ObeYKYIOpm5PYPm4g0jWmEauqwmxMK6yiV7BzNf6tZuMpn0VsaFzBvmsr
- kR6qsrstguGiu.jaFpCJxyozCUSxhGARNztGYLKyCtpnM_CZ7hkxM02Wtf54cIPHXxoFHBhxLeXN
- .FDPstgwPz6bOHJ46pB6AsGLub4_kRcY_ncJQSd5TXVOXoBLLB7poCTCy5VwqPmJ8WbydEYIFnAj
- hhDqqEoT9HirB50NC1vjkVDEkfP93EXASW2W1GtZniWDfzPJtiPk_QAfihIcYrp1mW7Ny8cwbsip
- ywVEUl3Dl2pqSonSYeb3xpBd9qv6IP7ow.qrfRvwpQ3.g_j3LFzapwKwZH_KVJ0d78w04jPfKKFk
- p5LTOjN3Jguj9PoKALkpk7CmR_wXMNHgsZDzKG111Rs264_QGyZPD5a8xxiKcTx9rKch67yBVzdE
- ywJW1rbpL5YDpBIbIX2M2nBGuiiYHBBbAxaCJMbdJy0f2F32GqO3mpu3qB3eEP4qtBcUv0stzIAC
- R5Co2Ci.xRWJxXFkaPm5HvM1au7eRT0raYb1pNHNhFw0Xs5pYaBh9_e7ASZQfswj3H7PrMZUBK4h
- apb4lZ89qHBdqRXZa606GfkbBcrRD1EJJjMxzGc68IALAKynEVsbpOKt19sC.lsC_8Zr7J75S0kt
- F7LocKrFjVtCLHfmAWW3XwQgxOtwS4.08IRveKk0uywG_OPTxmh.KM6JCf59xN3jM032PBr546wE
- hpatRb2hKcHFotdu6QLSqmMbuIBSokHml.2.LSrwp5hCoZ86mlHWoiuzqUGwNcdB2SIEOOIUltPz
- aXDJIJLY4wouWWaCs5CDwkZeUiIyIEzJSxtSneCSHwBA5rX8ZGLeKu_IgXRcXiRylhljSH11LLnf
- rS7Wot.EornloPLUbmmBorf_Yk.7tDUQ5xTweMmB3jAAio1NF8yZEi7my48NWns2CFP8duonIsJs
- PojuDq5iuuvAWCsO1z908C7cKjUplRLPMffjE.D.uCT8rkkPxjCjNrW7ZqUvGA0ghtCpc8ZoMrz0
- 8nHd97lZMcwgKrLQmVNjnDrFenVkpIGUvTkfDAjgtwnDJZwdEF_.J5uF4oJEESIh7YTmXEAdNNaC
- LDMgv2jobQnKuqzToBC0ObLPNDzVfZ2o9xweNzUlGI6B4iRiHyz0LAyNEBbiT_CDMu.vpfuLd8GC
- 1aJF6BqZKRQWW9Q..YKjaJRLQdbkBgmVaUVwY1aXIW0gLWv3dYUbNPwnnxIFs0WuacnIqraQCDVa
- gvNaQBmjMwLXKhgHoA6BQO5bAlk29UCEaR3KDydDGe9Ik5pxKrj83rF.5wRZh_gQOVpQxCAWZZbR
- OJ4VTx7ZUCMzcHZ7EmHTdCBFbq7U6SBtcs4cPeqmGWs12DLxNikxLJgswXHocP2s5DnJv5rSLSNR
- viAhfjUz0e.aWcG_YRKD3E2qlbyStd2ZW6Q1BAmHKFQcHVrCtMeKwrndIqKaeoBGBxrWXIRePZR3
- pSWT.PbBMayaUoXD9bzk_DPH2L.vmyGtUtkYujtP43OIExerooRZ5VUeYSiVGBgugVJQxyjsTyFK
- WVgrwCvYxYqHAWEEurDneCQPxOsn4
-X-Sonic-MF: <brchuckz@aim.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.gq1.yahoo.com with HTTP; Wed, 17 Aug 2022 22:13:09 +0000
-Received: by hermes--production-ne1-6649c47445-kh29z (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 1df4e63e39d2d83da836396c40c3d921;
-          Wed, 17 Aug 2022 22:13:05 +0000 (UTC)
-Message-ID: <16cb5f73-ac85-5094-3cd1-ec91cb47fb99@netscape.net>
-Date:   Wed, 17 Aug 2022 18:13:01 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH] perf scripts python: Let script to be python2 compliant
-From:   Chuck Zmudzinski <brchuckz@netscape.net>
-To:     Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Alan Bartlett <ajb@elrepo.org>, Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-perf-users@vger.kernel.org, ElRepo <contact@elrepo.org>,
-        Akemi Yagi <toracat@elrepo.org>, Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org
-References: <20220725104220.1106663-1-leo.yan@linaro.org>
- <Yt68AZA2VV9d02xZ@kernel.org>
- <CA+_WhHyZZC=3gtzetEAQQrjtGujHmY5azwtQNZEc90gyOAwUDg@mail.gmail.com>
- <CAP-5=fWiNdnEawdj_3ExCrcwRSnRxeV8=8RhA6pwbw_bJdPJFg@mail.gmail.com>
- <YuBDw/+7McESS05X@kernel.org>
- <CAP-5=fV4+KeGcyyODTNjS01dw1iTXpFyaLXwZ8nBkek+NHL37w@mail.gmail.com>
- <11781d7e-d9de-f889-ff57-9d26d92ada44@netscape.net>
+        Wed, 17 Aug 2022 18:15:26 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB2AA98D5;
+        Wed, 17 Aug 2022 15:15:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WLbtjsSSnhFhQ+gIo20W9kBqg5pHBJ5270ZnXIFpRsujJeu6XKyQDqE5kweirJBIslmywEDmvagCTWmCSbQZllaWlEZJ6Nd6jo+KsOnBQb9wLPnz3Bg/nWCcuCwCqR8oq6DK3VKy5+kHnj4iFXdxIxd2MjTcVWQ/Uq9P/UwQcodXjh28l9vtbRNkGx1ltF3jpc57Khj96WVKIOeScuxXZnmBK0hpJXzz+FNklzIEWgQUzaQo1rvqnVaB7dSyIHhDQNnKZsDongAwxvIk+OYsyNR+TIqj3YTkASzz/sXlLqEG7w2VREHyiZ0tH0y+U/dhd2Kuzyt5K0Z02HcwEanHMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dqRyi/vCUC+sRPTFSSX0a1p+jvtjzQL/ztKZPCKdHRQ=;
+ b=WiPQ+dL5Oajzz/is8zOilBduKov8JHEOLjJ08r8l/MSl/JuTeFCgD9JM4Vhep31Y8D0+ddYd6k+iGYf1PSlpvWh2f6xeNmGPP5tvEoDBdD/NLCmh3+LHzeMCGBh9axCVpZcAiKi5dG005YInrVJAN9CRbUqqagTFPCqoDqq6NOw7uW9AI5ylsSNPIpNqvk3CeeVPX1y7QbY/SQ4tt2BgSYOrNhpwK+tVFfHXcoDGEUQx+oDsuoM3OjDdER1L3EKnQvoKr3qCVEznucC3vOvsECWqW5Pz8R+4mPzCgHI7QrKOVbutDCTu6TkrcxJ1FEHQ8eStox2jItxHswfb2hNMuQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dqRyi/vCUC+sRPTFSSX0a1p+jvtjzQL/ztKZPCKdHRQ=;
+ b=FLBrDX1rj1jkAqnJbr6PmKN3UP97Ath9CMLAQbW7p+OBZaCurKO/B9WJIGTiJg1NOHJPoyv0dmq6vDfXLegGTX8Xg9/8swbu48t8Blx34EjhaIn51B9BgCrMvGhXHdwyy67MwOhAQulCuqdiR3vhM2kE31GewAkkSoVQEMY2LDXLNi3LVahIEFUK2eptWAh2j32rMWW9QGXkp5AshhRLV2vn34SZS9F26iUl3uRCiJdnj21zAL5MFxmJmt5pTXiTbjbATkoz+sNxJ/CLnGd698QDdmTlXFCBHjo7eAhrOs8IAuxOvD82U2Zh6YTy6MrwrJMOWm1wDvijK4rIzgXCvg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by MW4PR12MB5644.namprd12.prod.outlook.com (2603:10b6:303:189::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Wed, 17 Aug
+ 2022 22:15:22 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::508d:221c:9c9e:e1a5]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::508d:221c:9c9e:e1a5%9]) with mapi id 15.20.5525.011; Wed, 17 Aug 2022
+ 22:15:22 +0000
+Message-ID: <190edda8-1f37-0fa5-1cc1-ada97518698a@nvidia.com>
+Date:   Wed, 17 Aug 2022 15:15:20 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] selftests/vm: fix inability to build any vm tests
 Content-Language: en-US
-In-Reply-To: <11781d7e-d9de-f889-ff57-9d26d92ada44@netscape.net>
-Content-Type: text/plain; charset=UTF-8
+To:     Axel Rasmussen <axelrasmussen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220817211356.273019-1-axelrasmussen@google.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20220817211356.273019-1-axelrasmussen@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20531 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-ClientProxiedBy: BY5PR13CA0034.namprd13.prod.outlook.com
+ (2603:10b6:a03:180::47) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0b1f6373-6bbd-4489-12eb-08da809dfa78
+X-MS-TrafficTypeDiagnostic: MW4PR12MB5644:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: G0ZaT5eIvbPYDj9HXO6L7USxjyhdaiwh6h66qRV6DeY0APBs+noP0oAM/WvsjAgBM6ctkcTbMuL7xcr89ySPf20a/2wYBHzpM3S2ZLO231MtXnYMiyP6zypNjl7p8Y22cO4oSs3/83QMMeSqxFjIlL0lyhg89aLVSjXFlS4WMWs+Vlu6cC9OtRVagrDrIw6kqBX8IlpG4DUtYyXoUCEu1T5XLYGi9NYDBj0urd3NalFKgQMXM5Qw2eeqGds8nz1Fh2I+XapDp1lX41MP+6A0XeZC2p+v+N3b+4NJhjvnRq+71cpvPbdeTJj2CEzTJroFrACCw03MaF3Ms6VMsoZseYIxIIRMHFWT1FxTh6E2nPoUTECFZcVfM0XcoNIONY928cGpi9XdPxKzFfWFOVMvlVoR2yOjyQpNpCRsBXV059OJuIuAY4dhOSxiTJn4hT6hNjaG+avlid0aP3P+4N8MMu5XAG96Ax/hryJ3T69/17OhQiKQZb+pCdK4Z2a96chE87wm7x1VmK9tzhukRuX4d+gwRVFlHXpllVjhsqM9uR/bTqvqDjCLJBYYxUiliHih6hFUYf7Y6BUKa35S8fByrBybX1pSyhY6uMmaEzMtpGOhTsun6Efk2L/C3xhVOhvwvO91BKhTbqfmgtl9VIRxAU2VmccUR9KwSyz1uW7gXN25NIDhudbNaCQGoRG9oUu6zJWVAEZu214J1DctWvp5mcNwBrPv7WBLzYKRtgJDB8JA8B/8rp0gfcUiViaZ1sVtKgnqLXk2P4qmPsjlDHfCCaPi8Q3Y1UDcE+672/wWqio=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(346002)(396003)(376002)(39860400002)(136003)(53546011)(478600001)(41300700001)(2906002)(86362001)(6506007)(5660300002)(186003)(2616005)(31696002)(26005)(6512007)(38100700002)(8676002)(8936002)(6486002)(36756003)(31686004)(83380400001)(110136005)(66946007)(66556008)(4326008)(66476007)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OFMzYmJrM1g3a3hSOWY5ckJSVGxnVnJmUjFCSVFJOXg0d2Y5MXFxOGc0ZDgv?=
+ =?utf-8?B?Qm5HY0ZDMU5WbGhqbFgzQmF6RG5pUzZtSWZEWTMvK2M3QTREN2xneWFNejUw?=
+ =?utf-8?B?OFNnU0VIS1g4L3QvaHVNS3V1bVRFN3JkL0xWUkM0TzJxTzlqQUo0c2lnSlZW?=
+ =?utf-8?B?bEJUNDh6S0xPSUhUWmdWSVdrclN1Myt4Qlp4ak9JdTR1WFoyYU9DSXVDV2RW?=
+ =?utf-8?B?SXRCd3BMaThGNGk3OXZ3Wkd6YVFZaEhpMjB0eTlDYVdZUzJhbHlwMXJBNGxZ?=
+ =?utf-8?B?OS9uZFNQNDM2RGtiU2IyYndPNjBtYmYwVUd2d05mYkg5Q1h3MkFIQUkyK3k3?=
+ =?utf-8?B?NXhaY3NtM20rVHQyK3ZsK2NjZnhGenZEaG9oZTNPd0R0VGlEYmRXOFd5Q3Vy?=
+ =?utf-8?B?MWY5RWZheWJuYkpVMERSamFvbDRseFlmUnMvdUZQL3RYYmdiWVVqa1JXVG53?=
+ =?utf-8?B?L01NazVZZWJPMkdrWFNRSVh1bC9IUEM2RGNzaVhXSjRzVUVlNTRmaTNKcDdL?=
+ =?utf-8?B?VXdaTUhoSHd0N1RsN3N1VU1KL3NUMHRVYWRjTnM2VlM3eGJrQWplN0REREZn?=
+ =?utf-8?B?VXNkYkFSMnIwV0V3Q3MyOGtXdU51bGFtMW9hZ0ZVMVVKbGZlblI1K05nTzBj?=
+ =?utf-8?B?c2NiWjAxcEI5WHlOdEp5M2xMOG5PSDF2c3J3NFBwWlVMdDE0dWpCS2VUTzYz?=
+ =?utf-8?B?REJrcFZTanhCQWVmbjJITmtSSVRoRzFDMEpKNE9XRmc5dmJtYlc4QzVacVhS?=
+ =?utf-8?B?VUNZaHFtR3lNSWZ5blczaGlJSU9BcTEyL0J5U25rZVp4Y0N1cUNFeHFySGxM?=
+ =?utf-8?B?VlFjT1Q2a3hrT0dYdzJUNE80b0tmZEl6ZWhnaWRhNWlWemNqL2hnMzhMc3B2?=
+ =?utf-8?B?eWZiWmlNSkYwU3NHUGJzSFR4SmhLK3dKOTJmSHlaamwwMWpYUnRaZGErNXlk?=
+ =?utf-8?B?U2F6Z3A1NUVyTXdDemVXWDJ2ZmNidzNTSUYxY1pkZ0Vlb3lVUDRRTFJiblly?=
+ =?utf-8?B?VURvTlorNDd4bXcxNnNheVA0OEIxa2YxY0Z3Z21tZ1ZrN005Mk84L05rc1JZ?=
+ =?utf-8?B?T2xJS094cTEyR3pFMnhhb25RcXhzU052R2tFZnE0UytwWmtJUGNtY1N5eVNZ?=
+ =?utf-8?B?YWN2WmdRRDRCT2REMzBSY1oreVl1KzB4NkE2NHFOSnJUTHY0R0VIZlpVTlpF?=
+ =?utf-8?B?Qml0bjRUS2EyT1lmZHBGdm9VdWFYZGROZTRDM3phRUVVNmZVMmlkbDlXTFYy?=
+ =?utf-8?B?THdYVUJVNjNXbDE3VTcxNzJZU2RLZy9PRXZxK1Q1Um8ydWNKYVRkNFRZRlVF?=
+ =?utf-8?B?TGxBalN1WEJsWE9wbjlIVlkwRWl1bGhCMGVQc1lWbVIxWjI2d3dKWHNLSkxX?=
+ =?utf-8?B?ajNWdy8xWHluRHUxdEV4d04zbFlWemp3Vk5SRXdWVzBTOFgvbFhLQ29vQU83?=
+ =?utf-8?B?VVZEV3FIUng3L0FmdkRQSTJ4Z2hmU2k5N3dwN2t2ZXV4OWhDWEtSOU9QTmJS?=
+ =?utf-8?B?d0kxNlQ2eXFzV0ZKcFV2ZG9nSCtxZ2diMjA4WFRMUGtDdXJnVHZldG1YY2xp?=
+ =?utf-8?B?NUpqRGwzN044S0dlRll6dHlWdWJEVGJBK0dMM01HNGxkeVE0dHZFQ3pxY09M?=
+ =?utf-8?B?RjE3RnVuUHlUWGF3aThpVkliZTdrUG51TFdTck1qL2s3ZGgxOTZ5NmhOU2Zt?=
+ =?utf-8?B?SUthUVdOOTVlZTJhNHRWZkdPQksvZFhVVHI5eXBhSHllOGpmcGJteWJBUElL?=
+ =?utf-8?B?QUc2bFdjLy9LS3d1aFd5YjlhbnhkblpzLzhhcW55WVpPaGJkcWVtZlRLQ0sx?=
+ =?utf-8?B?TTZzUEFBZmhWbE81UytoVllPSTJQR1JyRmxNaWRHVm54Rmhxa3JPSW5pMC9Q?=
+ =?utf-8?B?aWFkYTg3YXNLVGc5bGRkQ09BeUhHdEt0dnNRTDdZYlN6Myt1K1FOU1ZGUkhJ?=
+ =?utf-8?B?RjZiVkZZOGJKcHZsZDZ3a2RBNGNVeXdINjk2ZEErRHVRMFhGeGUxYk1QY3dI?=
+ =?utf-8?B?N3drb0ZMWVdUZ0xacllqYUJPdHV5KzVOc2dRTHg1Vk5WWlRpMWNJdkgxTU83?=
+ =?utf-8?B?MXJlbmpDQWNiYmZ1VmVMNitmRk1heTlqd0JoSVdVQVhINUJLYjJrbE9YUmU0?=
+ =?utf-8?Q?FWqWQN8+ggTa8vdFZyoK7WD6x?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0b1f6373-6bbd-4489-12eb-08da809dfa78
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2022 22:15:22.8458
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KiC+pYUh92vAbC6yYSJ+7lIVamvVIgxXPwJWs5TZ8IaPdL+5x1YXQ//xtZKNESwKlSpcp/Oca2bdEsRpUwDHpg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB5644
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/17/2022 3:52 PM, Chuck Zmudzinski wrote:
-> On 7/26/22 4:43 PM, Ian Rogers wrote:
-> > On Tue, Jul 26, 2022 at 12:43 PM Arnaldo Carvalho de Melo
-> > <acme@kernel.org> wrote:
-> > >
-> > > Em Tue, Jul 26, 2022 at 10:52:31AM -0700, Ian Rogers escreveu:
-> > > > On Tue, Jul 26, 2022 at 9:57 AM Alan Bartlett <ajb@elrepo.org> wrote:
-> > > > >
-> > > > > On Mon, 25 Jul 2022 at 16:51, Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > > > > >
-> > > > > > Em Mon, Jul 25, 2022 at 06:42:20PM +0800, Leo Yan escreveu:
-> > > > > > > The mainline kernel can be used for relative old distros, e.g. RHEL 7.
-> > > > > > > The distro doesn't upgrade from python2 to python3, this causes the
-> > > > > > > building error that the python script is not python2 compliant.
-> > > > > > >
-> > > > > > > To fix the building failure, this patch changes from the python f-string
-> > > > > > > format to traditional string format.
-> > > > > >
-> > > > > > Thanks, applied.
-> > > > > >
-> > > > > > - Arnaldo
-> > > > >
-> > > > > Leo / Arnaldo,
-> > > > >
-> > > > > Applying the patch on top of -5.19-rc8 fixes the problem that we (the
-> > > > > ELRepo Project) experienced when attempting to build on RHEL7.
-> > > > >
-> > > > > So --
-> > > > >
-> > > > > Tested-by: Alan Bartlett <ajb@elrepo.org>
-> > > > >
-> > > > > Hopefully you will get it to Linus in time for -5.19 GA.
-> > >
-> > > > So I'm somewhat concerned about perf supporting unsupported
-> > > > distributions and this holding the code base back. RHEL7 was launched
-> > > > 8 years ago (June 10, 2014) and full support ended 3 years ago (August
-> > > > 6, 2019) [1]. Currently RHEL7 is in "Maintenance Support or
-> > > > Maintenance Support 2" phase which is defined to mean [2]:
-> > > >
-> > > > ```
-> > > > During the Maintenance Support Phase for Red Hat Enterprise Linux
-> > > > Version 8 & 9, and Maintenance Support 2 Phase for Red Hat Enterprise
-> > > > Linux version 7, Red Hat defined Critical and Important impact
-> > > > Security Advisories (RHSAs) and selected (at Red Hat discretion)
-> > > > Urgent Priority Bug Fix Advisories (RHBAs) may be released as they
-> > > > become available. Other errata advisories may be delivered as
-> > > > appropriate.
-> > > >
-> > > > New functionality and new hardware enablement are not planned for
-> > > > availability in the Maintenance Support (RHEL 8 & 9) Phase and
-> > > > Maintenance Support 2 (RHEL 7) Phase.
-> > > > ```
-> > > >
-> > > > >From this definition, why would RHEL7 pick up a new perf tool? I don't
-> > > > think they would and as such we don't need to worry about supporting
-> > > > it. RHEL8 defaults to python 3 and full support ends for it next year.
-> > > > Let's set the bar at RHEL8 and not worry about RHEL7 breakages like
-> > > > this in future. I think the bar for caring should be "will the distro
-> > > > pick up our code", if we don't do this then we're signing up to not
-> > > > allowing tools to update for 10 years! If someone is building a kernel
-> > > > and perf tool on RHEL7 then they should be signing up to also deal
-> > > > with tool chain issues, which in this case can mean installing
-> > > > python3.
-> > >
-> > > In this specific supporting things that people report using, like was
-> > > done in this case, isn't such a big problem.
-> >
-> > So there are linters will fire for this code and say it is not
-> > pythonic. It is only a linter warning vs asking to support an 8 year
-> > old out of support distribution. There are other cases, such as
-> > improving the C code structure, where we've failed to land changes
-> > because of build errors on old distributions. This could indicate perf
-> > code is wrong or the distribution is wrong. I'm saying that if we
-> > believe in the perf code being correct and the distribution is out of
-> > support, then we should keep the perf code as-is and the issue is one
-> > for user of the out-of-support distribution.
-> >
-> > > Someone reported a problem in a system they used, the author of the code
-> > > in question posted a patch allowing perf to be used in such old systems,
-> > > doesn't get in the way of newer systems, small patch, merged, life goes
-> > > on.
->
-> Considering the proposed patch, can you be sure that replacing the
-> f-string format with the legacy format won't cause a regression for
-> some python3 user somewhere when this hits the real world? Even
-> if it does not cause a regression today, as new versions and features
-> are added to python3, can you be sure none of those new features
-> will depend on the upgrade from the legacy format to the f-string
-> format here to work properly? So many regressions happen because
-> the people who write patches cannot possibly foresee how their
-> patch is going to affect the millions of Linux users out there, but still
-> they are certain it will not cause a regression somewhere. So how
-> can the chances that this patch will cause a regression be minimized?
->
-> It seems to me for this to be suitable for the Linux kernel, the
-> default should be to use the modern python3 format and only
-> enable python2 compatibility via a sysctl setting and/or kernel boot
-> option for those who are still using python2. There should be no
-> change to the behavior of the kernel for users who have upgraded
-> to python3. But I don't see any such consideration for python3
-> users in this patch.
+On 8/17/22 14:13, Axel Rasmussen wrote:
+> Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> ---
+>   tools/testing/selftests/vm/Makefile | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+> index d9fa6a9ea584..f2a12494f2d8 100644
+> --- a/tools/testing/selftests/vm/Makefile
+> +++ b/tools/testing/selftests/vm/Makefile
+> @@ -1,7 +1,7 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   # Makefile for vm selftests
+>   
+> -LOCAL_HDRS += $(selfdir)/vm/local_config.h $(top_srcdir)/mm/gup_test.h
+> +LOCAL_HDRS += $(selfdir)/vm/local_config.h $(selfdir)/../../../mm/gup_test.h
 
-Sorry, I didn't see this is a script, LOL! So obviously a sysctl or boot option
-does not apply. But can't the script implement this simple logic:
+Hi Alex,
 
-If python version = 3 use f-string format
-if python version = 2 use traditional string format
+Thanks for fixing up this build, it's always frustrating to finally
+finish working on something, only to find that the selftests build is
+broken!
 
-Best regards,
+This looks correct, and also I've tested it locally, and it works. So
+please feel free to add:
 
-Chuck
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+
+
+A couple of follow-up thoughts:
+
+1) I recalled that hmm-tests.c in the same directory also needs
+gup_test.h, and wondered if that was covered. And it turns out the the
+relative "up and over" include path is done in hmm-tests.c itself,
+instead of in the Makefile, like this:
+
+/*
+  * This is a private UAPI to the kernel test module so it isn't exported
+  * in the usual include/uapi/... directory.
+  */
+#include "../../../../lib/test_hmm_uapi.h"
+#include "../../../../mm/gup_test.h"
+
+It would be nice (maybe follow-up polishing for someone) if this were
+done once, instead of twice (or more?) via different (source code vs.
+Makefile) mechanisms.
+
+2) Commit f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
+claims that it is now required to "make headers_install" before building
+the selftests. However, after applying your fix (not to imply that there
+is anything wrong with the fix; it's fine), I am still able to build
+vm/selftests, directly after a top-level "make clean".
+
+I believe that this is because the selftests are directly including
+gup_test.h, via relative up-and-over paths. And I recall (and also did a
+quick dry run, to be sure) that this internal gup_test.h header is not
+part of the headers_install list. So that seems to be all working as
+intended. But I wanted to say all of this out loud, in order to be sure
+I fully understand these build steps.
+
+
+thanks,
+-- 
+John Hubbard
+NVIDIA

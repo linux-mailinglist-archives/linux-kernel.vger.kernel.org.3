@@ -2,181 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3600E59738E
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1AE5973A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237871AbiHQQFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 12:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
+        id S240409AbiHQQHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 12:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240590AbiHQQFB (ORCPT
+        with ESMTP id S237222AbiHQQHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 12:05:01 -0400
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0466E9FAAF
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:04:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1660752283; x=1692288283;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=iJMTfVOI37QeGt217N6kQJxWbagpJ4mWzHbxwog8cvQ=;
-  b=d0isv/EiF4tjHksOfY5NFVuVcBNhuTDBNEPkckCmsbOSZVxDGFxrJX4F
-   F02+fMR+rU3WT3mTzndFiqsI2CeUDfoqXYps62qN9yBAVV/zysLXn4CgK
-   N9PHfX5jRqo/K3aOCIQTLX1wPjf4wL/EdNwVBZjjZHph22w8CPAzLAKL2
-   sdGaw/2qVmAoTKCeVZ3KinvNo2m7hpsy+BmabG5d1xAS7HKfBJoUYNzqI
-   vgVGlFwIDvtlRgYdwZPIr9iLQV7Fd7UFwLAZmG3zKYAGMhep0AjmdaZK3
-   m9zky4s6M97cPaAHFj675IRmLsqEEAKhE3CdKWumhWApgmWzQHRPXrNQy
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,243,1654531200"; 
-   d="scan'208";a="209482552"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 18 Aug 2022 00:04:40 +0800
-IronPort-SDR: 0uqDd2a+whNR98uv5OwVcBNXQxl/O7Gilu2wuiREh/Kr8hW3x8L6JTXNHc3eigj8lDctOUTWEY
- TjVrCyqfG2Yx0MMM9+MPL8G2ZLdJJX0lKKCW/8mIDdm4eQV9+aLpbOMSGxvygZMjtaxGlmKa7j
- 0yIifcZrpLadmY4iWRhk++xYdhVrVsEW1/WuXtyiUSPnUncJD9kZAhKthn/6BAwV2sqoQWmdpd
- 34ptLJ+tFEoqFaZ+G2n4cWI4zlvH5y0nRXx3YEkV3MgCQ05pcxm7r4CvfWdItAdWrYUJAfuh6w
- g6ncERCk88tZF4Vz2ob1mAbM
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Aug 2022 08:25:27 -0700
-IronPort-SDR: d1ZLhkWgR+V2KKYNPQDfc6umA30Z0HLg1+gnQbBIgQUDb3udre8PwgxMX2JVs9pXLL7ta6vx9+
- TCgDAPC4ksGRPytoRW2VsPv2bEsnD0RGNSVVfZnjGUmCfYOWUZ7BBk/awU1Oo1Y1bfY8pa2OQ3
- Yf/nenF8KanmqE3IODMI/4nmly18YW+UVOWX5U8ODMx5q8bI+5x8BjJrGFErxC+SOzymFe7Nze
- Q10WmD/wMVIVhoVk3+oh9p9WxGNh10NjH5ArFsECsZ6BWIkmpc1qJvv6hxGr5hg/CY2A606lkW
- B58=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Aug 2022 09:04:41 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4M7CWr0Vmdz1Rwqy
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:04:40 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1660752279; x=1663344280; bh=iJMTfVOI37QeGt217N6kQJxWbagpJ4mWzHb
-        xwog8cvQ=; b=qi8FG0mPWVIX9IRJzPDmyU3xdHzA/2NqlR5ANkBx1nkpNlhq50I
-        FzNmNbqyeYfLZvKVfEhTif54p0VtMHo+2SFBWlFY08r5BGG/l/HaA1S8kk4Wz5nX
-        De6Ked4aMt1JLX2y85n1aS68z+OV72iBMBX8XiJ1Mus/lXYPuGpxpBAUeBBQ4cf2
-        1xy8gkou0Z+N19zHuiNdmSD4b+3XeLuk3vlrdTt6202QmnIzgnQnOAtWPQC15WJp
-        GQGuCGKZ8pLm9AuwYJh+c3vL0CpxSGYaZXRdlLXRgGUKa0AXrE1CXilglF28P75f
-        Dmsf4MpqR1W9r97lJPf7nuG5Xbh4kU1xODQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 6WSo00NI7OEQ for <linux-kernel@vger.kernel.org>;
-        Wed, 17 Aug 2022 09:04:39 -0700 (PDT)
-Received: from [10.11.46.122] (unknown [10.11.46.122])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4M7CWp6SkRz1RtVk;
-        Wed, 17 Aug 2022 09:04:38 -0700 (PDT)
-Message-ID: <0bb6b134-7bad-7c39-ad6d-25d57bd343eb@opensource.wdc.com>
-Date:   Wed, 17 Aug 2022 09:04:38 -0700
+        Wed, 17 Aug 2022 12:07:12 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5243B26F7
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:07:11 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oOLZS-0001EA-FB; Wed, 17 Aug 2022 18:07:06 +0200
+Message-ID: <61698d9d-088d-a878-2b23-f5423045c00e@leemhuis.info>
+Date:   Wed, 17 Aug 2022 18:07:05 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [PATCH v2 2/6] scsi: libsas: Add sas_ata_device_link_abort()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [Intel-wired-lan] ice: Error setting promisc mode on VSI 6
+ (rc=-17) @ 5.18.x
 Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, jinpu.wang@cloud.ionos.com,
-        yangxingui@huawei.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com, hare@suse.de
-References: <1660747934-60059-1-git-send-email-john.garry@huawei.com>
- <1660747934-60059-3-git-send-email-john.garry@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <1660747934-60059-3-git-send-email-john.garry@huawei.com>
+To:     Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "Wilczynski, Michal" <michal.wilczynski@intel.com>,
+        Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>,
+        "Siwik, Grzegorz" <grzegorz.siwik@intel.com>,
+        "Kitszel, Przemyslaw" <przemyslaw.kitszel@intel.com>
+Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        intel-wired-lan@lists.osuosl.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <CAK8fFZ7m-KR57M_rYX6xZN39K89O=LGooYkKsu6HKt0Bs+x6xQ@mail.gmail.com>
+ <2596b2c6-71e4-543f-799f-b4b174c21f31@leemhuis.info>
+ <CAK8fFZ6hS69JMtnvFnLVt9aiWEivZ9-izNgMHtB+KeAWAfaXaQ@mail.gmail.com>
+ <6f52ccd2-8411-0c53-2deb-885bb1234ce5@leemhuis.info>
+ <c89c993e-7a7a-15df-85ef-8d9b7be16b71@intel.com>
+ <35814f70-26ad-8007-9381-e8edf4a6d77f@leemhuis.info>
+ <2151f504-5244-5680-1d70-1fcd8ecd7022@intel.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <2151f504-5244-5680-1d70-1fcd8ecd7022@intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1660752431;c9e8f6c7;
+X-HE-SMSGID: 1oOLZS-0001EA-FB
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/08/17 7:52, John Garry wrote:
-> Similar to how AHCI handles NCQ errors in ahci_error_intr() ->
-> ata_port_abort() -> ata_do_link_abort(), add an NCQ error handler for LLDDs
-> to call to initiate a link abort.
+On 17.08.22 17:59, Tony Nguyen wrote:
+> On 8/17/2022 2:08 AM, Thorsten Leemhuis wrote:
+>> On 05.07.22 15:51, Wilczynski, Michal wrote:
+>>>
+>>> Adding Grzegorz Siwik,  since he is working on similar issue and already
+>>> has a patch that is being tested/reviewed internally at the moment.
+>>>
+>>> He can you a send patch tomorrow so you can test if it also fixes your
+>>> problem.
+>>
+>> Tony, Jesse, I have to wonder: why is it taken so long to get this
+>> regression fixed? The regression was reported 69 days ago and the first
+>> patches to fix this went out 40 days ago. That's far from ideal.
 > 
-> This will mark all outstanding QCs as failed and kick-off EH.
+> Our validation found issues when testing the original fix which caused
+> the delays as the new issues were being worked out.
+
+Yeah, that happens, still I wish it wouldn't taken *that* much longer
+then what's outlined in the docs.
+
+Side note: this and a similar issue I had today made me wonder if we
+need a tag to make "this is a regression fix" more obvious to reviewers
+and maintainers. But I guess that overblown; should be enough if
+developers make it obvious in their cover letter or description that
+this fixes a regression.
+
+>> Reminder: this regression ideally should have been fixed within two
+>> weeks after the report, as explained here:
+>> https://docs.kernel.org/process/handling-regressions.html
+>>
+>> FWIW, in case anyone wonders: the latest patch-series to fix this can be
+>> found here:
+>> https://lore.kernel.org/intel-wired-lan/1660310750-290943-1-git-send-email-grzegorz.siwik@intel.com/
 > 
-> Note:
-> The ATA_EH_RESET flag is set for following reasons:
-> - For hisi_sas, SATA device resources during error handling will only be
->   released during reset for ATA EH.
->   ATA EH could decide during autopsy that EH would not be required, so
->   ensure that it happens (by setting the flag).
-> - Similar to hisi_sas, pm8001 NCQ error handling requires a hardreset to
->   ensure necessary recovery commands are sent (so again we require flag
->   ATA_EH_RESET to be set as an insurance policy).
-> 
-> Suggested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> ---
->  drivers/scsi/libsas/sas_ata.c | 11 +++++++++++
->  include/scsi/sas_ata.h        |  5 +++++
->  2 files changed, 16 insertions(+)
-> 
-> diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
-> index d35c9296f738..9daae64be37e 100644
-> --- a/drivers/scsi/libsas/sas_ata.c
-> +++ b/drivers/scsi/libsas/sas_ata.c
-> @@ -861,6 +861,17 @@ void sas_ata_wait_eh(struct domain_device *dev)
->  	ata_port_wait_eh(ap);
->  }
->  
-> +void sas_ata_device_link_abort(struct domain_device *device)
-> +{
-> +	struct ata_port *ap = device->sata_dev.ap;
-> +	struct ata_link *link = &ap->link;
-> +
-> +	link->eh_info.err_mask |= AC_ERR_DEV;
-> +	link->eh_info.action |= ATA_EH_RESET;
+> I was going to point you to the newest patches, but you located them.
+> Our validation finished testing them yesterday so the pull request for
+> these will be going out to netdev today.
 
-I am still not convinced that we should set this here. ata_eh_link_autopsy() and
-ata_eh_analyze_serror() are supposed to set the action based on the error. Can't
-you reuse the link autopsy function ?
+Great, many thx.
 
-> +	ata_link_abort(link);
-> +}
-> +EXPORT_SYMBOL_GPL(sas_ata_device_link_abort);
-> +
->  int sas_execute_ata_cmd(struct domain_device *device, u8 *fis, int force_phy_id)
->  {
->  	struct sas_tmf_task tmf_task = {};
-> diff --git a/include/scsi/sas_ata.h b/include/scsi/sas_ata.h
-> index a1df4f9d57a3..cad0b33064a5 100644
-> --- a/include/scsi/sas_ata.h
-> +++ b/include/scsi/sas_ata.h
-> @@ -32,6 +32,7 @@ void sas_probe_sata(struct asd_sas_port *port);
->  void sas_suspend_sata(struct asd_sas_port *port);
->  void sas_resume_sata(struct asd_sas_port *port);
->  void sas_ata_end_eh(struct ata_port *ap);
-> +void sas_ata_device_link_abort(struct domain_device *dev);
->  int sas_execute_ata_cmd(struct domain_device *device, u8 *fis,
->  			int force_phy_id);
->  int sas_ata_wait_after_reset(struct domain_device *dev, unsigned long deadline);
-> @@ -87,6 +88,10 @@ static inline void sas_ata_end_eh(struct ata_port *ap)
->  {
->  }
->  
-> +static inline void sas_ata_device_link_abort(struct domain_device *dev)
-> +{
-> +}
-> +
->  static inline int sas_execute_ata_cmd(struct domain_device *device, u8 *fis,
->  				      int force_phy_id)
->  {
-
-
--- 
-Damien Le Moal
-Western Digital Research
+Ciao, Thorsten

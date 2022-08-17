@@ -2,159 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 959025974A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C40E55974A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240498AbiHQQ6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 12:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
+        id S240103AbiHQQ7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 12:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236230AbiHQQ57 (ORCPT
+        with ESMTP id S236230AbiHQQ7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 12:57:59 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1B296741;
-        Wed, 17 Aug 2022 09:57:58 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a7so25638955ejp.2;
-        Wed, 17 Aug 2022 09:57:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=hLP+S6kLRjuwIdqWwvBk1ZHMXAyy6jMYUeclPfetyb4=;
-        b=CABvHkYbt6HHL0PGpdkXgPFufbFV/cofEg85u1v0buP7XK0lICkl7kUZlTxcHZegJj
-         cZW+tKjiPbAjRhaQGOFrNm9FwB/gxp5OijPbB3udxyQau6MB60fjbweWg7oDKTEo89Dd
-         CEfS6/k5W6G9zLHbbFf7Xw917G9w1aRcdUkh9T4NO9GUtZ6XwHspod1bEXbZdozHzkJT
-         G8JcvnwJlFs6zmTN9y0npRmA28pFv7S6zVuboX79RFMNGAwUTKaela0GfWbqCfgl3FpD
-         4qGsu20V4+SyyjUuNhrzZnGw/LmXZPO6nCeu2CuQNjjkvhLSo8l0uGo4hrdkiapePfGP
-         uyaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=hLP+S6kLRjuwIdqWwvBk1ZHMXAyy6jMYUeclPfetyb4=;
-        b=7/JnLB83h+igf62hk+Y0LZfBB16X6dX4nB5ZOP5OffRljt2eQSDy5C90wG3ohMI5L1
-         0BWcz599RQuhbIudfidBfzm5PuHFYoK/gm/dZizEzhcBzj/U7rIenZm8hzNIiX3Du5ng
-         VhW9vCXrD6Int03nmmebots4wNoRenUqwdmp3yzJyqUkm84lrVKQrh+MwV+ZuosNz4+V
-         xTM+04l0n9/4se2uzWupR8c77emKJZW+AzGA6cdcPRAURstRRr8ORFAGTdtzJ8NTtlsp
-         oqUJBmpcknv+PYuAgLn7ZFjsKvb6rQsKhev7sKTSXsUj0ore05stma1j5VI4GkFPzAcV
-         9+3A==
-X-Gm-Message-State: ACgBeo0fKmDPRvergaOMVhXCXtFkcL1e4rdlrg/BXx5+/cx+Ag8+7+tZ
-        GZCX6a0uMEJ+WcYmzBCW4o7bT5p9t5X7BHo94Ro=
-X-Google-Smtp-Source: AA6agR5ieMUt/MmXkjYZqJwZ521wXlpUeKLFoOdOl83nnnlV172csCWd7y557vyYHMDmXtjCAVg6XgLdrh1G22S6oVo=
-X-Received: by 2002:a17:907:7612:b0:738:5087:9a65 with SMTP id
- jx18-20020a170907761200b0073850879a65mr10009582ejc.327.1660755476560; Wed, 17
- Aug 2022 09:57:56 -0700 (PDT)
+        Wed, 17 Aug 2022 12:59:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5FB61DA0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:59:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5F88B81E57
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 16:59:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61137C433D6;
+        Wed, 17 Aug 2022 16:59:05 +0000 (UTC)
+Date:   Wed, 17 Aug 2022 17:59:01 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Will Deacon <will@kernel.org>, James Morse <james.morse@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH v2] arm64: errata: add detection for AMEVCNTR01
+ incrementing incorrectly
+Message-ID: <Yv0eVVmrnPp7fjaB@arm.com>
+References: <20220817121551.21790-1-ionela.voinescu@arm.com>
 MIME-Version: 1.0
-References: <Yvo+EpO9dN30G0XE@worktop.programming.kicks-ass.net>
- <CAADnVQJfvn2RYydqgO-nS_K+C8WJL7BdCnR44MiMF4rnAwWM5A@mail.gmail.com>
- <YvpZJQGQdVaa2Oh4@worktop.programming.kicks-ass.net> <CAADnVQKyfrFTZOM9F77i0NbaXLZZ7KbvKBvu7p6kgdnRgG+2=Q@mail.gmail.com>
- <Yvpf67eCerqaDmlE@worktop.programming.kicks-ass.net> <CAADnVQKX5xJz5N_mVyf7wg4BT8Q2cNh8ze-SxTRfk6KtcFQ0=Q@mail.gmail.com>
- <YvpmAnFldR0iwAFC@worktop.programming.kicks-ass.net> <CAADnVQJuDS22o7fi9wPZx9siAWgu1grQXXB02KfasxZ-RPdRSw@mail.gmail.com>
- <Yvpq3JDk8fTgdMv8@worktop.programming.kicks-ass.net> <Yvs/oey1NUlkI30d@krava> <Yvy06GPn45D0rD7n@krava>
-In-Reply-To: <Yvy06GPn45D0rD7n@krava>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 17 Aug 2022 09:57:45 -0700
-Message-ID: <CAADnVQ+SJ7VjeXgz-wcN9OGPpfTaJVKhoyKDm895Q60C8T4-QA@mail.gmail.com>
-Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220817121551.21790-1-ionela.voinescu@arm.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 2:29 AM Jiri Olsa <olsajiri@gmail.com> wrote:
->
-> On Tue, Aug 16, 2022 at 08:56:33AM +0200, Jiri Olsa wrote:
-> > On Mon, Aug 15, 2022 at 05:48:44PM +0200, Peter Zijlstra wrote:
-> > > On Mon, Aug 15, 2022 at 08:35:53AM -0700, Alexei Starovoitov wrote:
-> > > > On Mon, Aug 15, 2022 at 8:28 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > > > >
-> > > > > On Mon, Aug 15, 2022 at 08:17:42AM -0700, Alexei Starovoitov wrote:
-> > > > > > It's hiding a fake function from ftrace, since it's not a function
-> > > > > > and ftrace infra shouldn't show it tracing logs.
-> > > > > > In other words it's a _notrace_ function with nop5.
-> > > > >
-> > > > > Then make it a notrace function with a nop5 in it. That isn't hard.
-> > > >
-> > > > That's exactly what we're trying to do.
-> > >
-> > > All the while claiming ftrace is broken while it is not.
-> > >
-> > > > Jiri's patch is one way to achieve that.
-> > >
-> > > Fairly horrible way.
-> > >
-> > > > What is your suggestion?
-> > >
-> > > Mailed it already.
-> > >
-> > > > Move it from C to asm ?
-> > >
-> > > Would be much better than proposed IMO.
-> >
-> > nice, that would be independent of the compiler atributes
-> > and config checking..  will check on this one ;-)
->
-> how about something like below?
->
-> dispatcher code is generated only for x86_64, so that will be covered
-> by the assembly version (free of ftrace table) other archs stay same
->
-> jirka
->
->
-> ----
-> diff --git a/arch/x86/net/Makefile b/arch/x86/net/Makefile
-> index 383c87300b0d..94964002eaae 100644
-> --- a/arch/x86/net/Makefile
-> +++ b/arch/x86/net/Makefile
-> @@ -7,4 +7,5 @@ ifeq ($(CONFIG_X86_32),y)
->          obj-$(CONFIG_BPF_JIT) += bpf_jit_comp32.o
->  else
->          obj-$(CONFIG_BPF_JIT) += bpf_jit_comp.o
-> +        obj-$(CONFIG_BPF_JIT) += bpf_dispatcher.o
->  endif
-> diff --git a/arch/x86/net/bpf_dispatcher.S b/arch/x86/net/bpf_dispatcher.S
-> new file mode 100644
-> index 000000000000..65790a1286e8
-> --- /dev/null
-> +++ b/arch/x86/net/bpf_dispatcher.S
-> @@ -0,0 +1,10 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#include <linux/linkage.h>
-> +#include <asm/nops.h>
-> +#include <asm/nospec-branch.h>
+Hi Ionela,
+
+On Wed, Aug 17, 2022 at 01:15:51PM +0100, Ionela Voinescu wrote:
+> diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
+> index 7e6289e709fc..810dd3c39882 100644
+> --- a/arch/arm64/kernel/cpu_errata.c
+> +++ b/arch/arm64/kernel/cpu_errata.c
+> @@ -654,6 +654,16 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
+>  		ERRATA_MIDR_REV_RANGE(MIDR_CORTEX_A510, 0, 0, 2)
+>  	},
+>  #endif
+> +#ifdef CONFIG_ARM64_ERRATUM_2457168
+> +	{
+> +		.desc = "ARM erratum 2457168",
+> +		.capability = ARM64_WORKAROUND_2457168,
+> +		.type = ARM64_CPUCAP_WEAK_LOCAL_CPU_FEATURE,
 > +
-> +       .text
-> +SYM_FUNC_START(bpf_dispatcher_xdp_func)
-> +       ASM_NOP5
-> +       JMP_NOSPEC rdx
-> +SYM_FUNC_END(bpf_dispatcher_xdp_func)
+> +		/* Cortex-A510 r0p0-r1p1 */
+> +		CAP_MIDR_RANGE(MIDR_CORTEX_A510, 0, 0, 1, 1)
+> +	},
+> +#endif
+>  #ifdef CONFIG_ARM64_ERRATUM_2038923
+>  	{
+>  		.desc = "ARM erratum 2038923",
+> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> index 907401e4fffb..af4de817d712 100644
+> --- a/arch/arm64/kernel/cpufeature.c
+> +++ b/arch/arm64/kernel/cpufeature.c
+> @@ -1870,7 +1870,10 @@ static void cpu_amu_enable(struct arm64_cpu_capabilities const *cap)
+>  		pr_info("detected CPU%d: Activity Monitors Unit (AMU)\n",
+>  			smp_processor_id());
+>  		cpumask_set_cpu(smp_processor_id(), &amu_cpus);
+> -		update_freq_counters_refs();
+> +
+> +		/* 0 reference values signal broken/disabled counters */
+> +		if (!this_cpu_has_cap(ARM64_WORKAROUND_2457168))
+> +			update_freq_counters_refs();
+>  	}
+>  }
 
-Wait. Why asm ? Did you try Peter's suggestion:
-__attribute__((__no_instrument_function__))
-__attribute__((patchable_function_entry(5)))
+From a CPU errata workaround, this part looks fine to me.
 
-?
+>  
+> diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+> index 869ffc4d4484..5d7efb15f7cf 100644
+> --- a/arch/arm64/kernel/topology.c
+> +++ b/arch/arm64/kernel/topology.c
+> @@ -301,7 +301,8 @@ static void cpu_read_corecnt(void *val)
+>  
+>  static void cpu_read_constcnt(void *val)
+>  {
+> -	*(u64 *)val = read_constcnt();
+> +	*(u64 *)val = this_cpu_has_cap(ARM64_WORKAROUND_2457168) ?
+> +		      0UL : read_constcnt();
+>  }
+>  
+>  static inline
+> @@ -328,7 +329,12 @@ int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
+>   */
+>  bool cpc_ffh_supported(void)
+>  {
+> -	return freq_counters_valid(get_cpu_with_amu_feat());
+> +	int cpu = get_cpu_with_amu_feat();
+> +
+> +	if ((cpu >= nr_cpu_ids) || !cpumask_test_cpu(cpu, cpu_present_mask))
+> +		return false;
+> +
+> +	return true;
+>  }
+
+So here we tell the core code that FFH is supported but always return 0
+via cpc_read_ffh() if the const counter is requested. I assume the core
+code figures this out and doesn't use the value on the affected CPUs. I
+was hoping cpc_ffh_supported() would be per-CPU and the core code simply
+skips calling cpc_read() on the broken cores. Is the other register read
+by cpc_read_ffh() still useful without the const one?
+
+While the Kconfig entry describes the behaviour, I'd rather have a
+comment in cpc_ffh_supported() and maybe cpu_read_constcnt() on why we
+do these tricks.
+
+Thanks.
+
+-- 
+Catalin

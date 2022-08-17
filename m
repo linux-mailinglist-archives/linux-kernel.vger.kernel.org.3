@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4973E596844
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 06:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B65CA596849
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 06:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231937AbiHQEn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 00:43:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
+        id S231982AbiHQEph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 00:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231901AbiHQEnz (ORCPT
+        with ESMTP id S230006AbiHQEpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 00:43:55 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7718B4D834;
-        Tue, 16 Aug 2022 21:43:54 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id r16so5624991wrm.6;
-        Tue, 16 Aug 2022 21:43:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc;
-        bh=UACsgzg4zvHRWZAiY2XTwdGkhFZ7nkJOvMvp+H83efU=;
-        b=LxqfgrQRxH9cVxBmy6mNpakfLl7UYj9+tXLCNREcdEntLd0pdXuOO3BbgYC3UKVYlp
-         Aqg0rsH3md+ygovnda3zH2j0KA8RKTQNF6MAObW85HYTx3mB2byTk62ZOWkI8Hm+edNU
-         ZCu9SgkqMRskKZ6weJ2ZwcMulfOBk6f2q7cfCrJSeTLOOTEmKjySI7xec7gQFbdiLSHi
-         0fWObg+Wybl3M5AMhn+rAWXaAEoAe2BFIVOmNz+j4O3oa3TsXAhi9tzJdtrhO4i/yxHU
-         gK5WljdrHM+Dw20qNI3tnouNv1eh7+PaGywVliEGMyOVhHhYyYkoamHWA09Ozshl43bD
-         g5zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=UACsgzg4zvHRWZAiY2XTwdGkhFZ7nkJOvMvp+H83efU=;
-        b=YuqOm/nCKEQKQTNYQTqbgXdERJ3hfun1vpk186xEL4haaeTjJy/cmtIHgykCpOAy9f
-         4KLxwfCjqeq3Yi+ZFLateoiunFVOwhtBB1v9NUz+7Cjc43QaQ+oJJx8S9pS74TuxtOJx
-         VD13bigfIL14ty41qQdZDPMoeWUnNKtMuFkr2yUaboU4raoURV3UMAqY6W31YP4sPtJ/
-         yCWr6y4z5t0eb2yVVbYuReFA3pq7Xw4zz17yGiWSmb9OZXfIf92FQwzu5gw1f2IaW6Nq
-         OE1pXV/g/23QSUf9DuYSyxT+K/CVY537QfibdR2fCZxf5oNuMUY4ikc0YunUnNugiRau
-         t67w==
-X-Gm-Message-State: ACgBeo0Fz1RSf3SqrduKE86yVxlnzu66Q4EY/8TaaQWbPFhYQYWDulKD
-        Axq5Pq++QBVT7D0iwa55Zrc=
-X-Google-Smtp-Source: AA6agR5q4ITliuREdqBZMGN+ngSPk5+CneCGqoC3bxyecQ+Oy/RJSsdqRjd7lrglFQLV9L2r1hKpvg==
-X-Received: by 2002:a05:6000:1a88:b0:222:ca4d:f0d2 with SMTP id f8-20020a0560001a8800b00222ca4df0d2mr13922194wry.610.1660711432645;
-        Tue, 16 Aug 2022 21:43:52 -0700 (PDT)
-Received: from felia.fritz.box (200116b82633f20060f31b3eb0891b8b.dip.versatel-1u1.de. [2001:16b8:2633:f200:60f3:1b3e:b089:1b8b])
-        by smtp.gmail.com with ESMTPSA id bd22-20020a05600c1f1600b003a2f6367049sm735112wmb.48.2022.08.16.21.43.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 21:43:52 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        xen-devel@lists.xenproject.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, kernel-janitors@vger.kernel.org,
+        Wed, 17 Aug 2022 00:45:34 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F0B5A173
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 21:45:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660711532; x=1692247532;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=UjD+HW5PoXnqMGFz9/0Nw0PbBXNXL6BNrwD8PcumuWo=;
+  b=i+0MgeuAwlq4DjQHP0cwU1pS7C5jpy8W6kbFaBOt9fnhSfwnxSszAVvw
+   ZTCm+WLSe1guexTG0s8swIZ0cbH6y2oC8oxqxYBwmoCOSorBD55cC6hSg
+   EC+Ocfp3n5v4VcO5fideCRNCBQ+whLF7Q2x/g5mcrNauasDmTueH+ZjDU
+   ID2IASZ+lH72RnKz4JR55787GUk++IQoUibjSfUoCh9QrO/u4RLCEjKoA
+   4yG0/m4Kce0jKgG6tWxU+MHcj4y9gr+3VQfcESlkpSFHQYmfv33YpQgWz
+   7jNLYaAiN1gpTAREhicgWk7J7ZFieRcyZUOa6fkBCMAuB0uVIiOHA6M5j
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="354143135"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="354143135"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 21:45:32 -0700
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="667434920"
+Received: from jzhan60-mobl1.ccr.corp.intel.com (HELO [10.254.209.228]) ([10.254.209.228])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 21:45:28 -0700
+Message-ID: <5f734387-9757-0670-3eef-b565116af541@linux.intel.com>
+Date:   Wed, 17 Aug 2022 12:45:26 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
         linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH v2] xen: x86: remove setting the obsolete config XEN_MAX_DOMAIN_MEMORY
-Date:   Wed, 17 Aug 2022 06:43:33 +0200
-Message-Id: <20220817044333.22310-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Scarlett Gourley <scarlett@arista.com>,
+        James Sewart <jamessewart@arista.com>,
+        Jack O'Sullivan <jack@arista.com>
+Subject: Re: lockdep splat due to klist iteration from atomic context in Intel
+ IOMMU driver
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Lennert Buytenhek <buytenh@wantstofly.org>,
+        Sasha Levin <sashal@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Joerg Roedel <joro@8bytes.org>, iommu@lists.linux.dev
+References: <Yvo2dfpEh/WC+Wrr@wantstofly.org>
+ <ab15191c-d79f-b5de-7568-d15b8f8a8aa8@acm.org>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <ab15191c-d79f-b5de-7568-d15b8f8a8aa8@acm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,31 +78,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c70727a5bc18 ("xen: allow more than 512 GB of RAM for 64 bit
-pv-domains") from July 2015 replaces the config XEN_MAX_DOMAIN_MEMORY with
-a new config XEN_512GB, but misses to adjust arch/x86/configs/xen.config.
-As XEN_512GB defaults to yes, there is no need to explicitly set any config
-in xen.config.
+On 2022/8/15 21:32, Bart Van Assche wrote:
+> On 8/15/22 05:05, Lennert Buytenhek wrote:
+>> On a build of 7ebfc85e2cd7 ("Merge tag 'net-6.0-rc1' of
+>> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net"), with
+>> CONFIG_INTEL_IOMMU_DEBUGFS enabled, I am seeing the lockdep splat
+>> below when an I/O page fault occurs on a machine with an Intel
+>> IOMMU in it.
+>>
+>> The issue seems to be the klist iterator functions using
+>> spin_*lock_irq*() but the klist insertion functions using
+>> spin_*lock(), combined with the Intel DMAR IOMMU driver iterating
+>> over klists from atomic (hardirq) context as of commit 8ac0b64b9735
+>> ("iommu/vt-d: Use pci_get_domain_bus_and_slot() in pgtable_walk()")
+>> when CONFIG_INTEL_IOMMU_DEBUGFS is enabled, where
+>> pci_get_domain_bus_and_slot() calls into bus_find_device() which
+>> iterates over klists.
+>>
+>> I found this commit from 2018:
+>>
+>>     commit 624fa7790f80575a4ec28fbdb2034097dc18d051
+>>     Author: Bart Van Assche <bvanassche@acm.org>
+>>     Date:   Fri Jun 22 14:54:49 2018 -0700
+>>
+>>         scsi: klist: Make it safe to use klists in atomic context
+>>
+>> This commit switched lib/klist.c:klist_{prev,next} from
+>> spin_{,un}lock() to spin_{lock_irqsave,unlock_irqrestore}(), but left
+>> the spin_{,un}lock() calls in add_{head,tail}() untouched.
+>>
+>> The simplest fix for this would be to switch 
+>> lib/klist.c:add_{head,tail}()
+>> over to use the IRQ-safe spinlock variants as well?
+> 
+> Another possibility would be to evaluate whether it is safe to revert 
+> commit 624fa7790f80 ("scsi: klist: Make it safe to use klists in atomic 
+> context"). That commit is no longer needed by the SRP transport driver 
+> since the legacy block layer has been removed from the kernel.
 
-Just remove setting the obsolete config XEN_MAX_DOMAIN_MEMORY.
+If so, pci_get_domain_bus_and_slot() can not be used in this interrupt
+context, right?
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- arch/x86/configs/xen.config | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/x86/configs/xen.config b/arch/x86/configs/xen.config
-index d9fc7139fd46..581296255b39 100644
---- a/arch/x86/configs/xen.config
-+++ b/arch/x86/configs/xen.config
-@@ -14,7 +14,6 @@ CONFIG_CPU_FREQ=y
- 
- # x86 xen specific config options
- CONFIG_XEN_PVH=y
--CONFIG_XEN_MAX_DOMAIN_MEMORY=500
- CONFIG_XEN_SAVE_RESTORE=y
- # CONFIG_XEN_DEBUG_FS is not set
- CONFIG_XEN_MCE_LOG=y
--- 
-2.17.1
-
+Best regards,
+baolu

@@ -2,106 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64489596C43
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 11:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5141596C4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 11:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233431AbiHQJqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 05:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59100 "EHLO
+        id S234875AbiHQJrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 05:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbiHQJqZ (ORCPT
+        with ESMTP id S229980AbiHQJrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 05:46:25 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D086E69F49
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 02:46:23 -0700 (PDT)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 17 Aug 2022 05:47:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13AD6B161;
+        Wed, 17 Aug 2022 02:47:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id BB3B83F1A1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:46:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1660729581;
-        bh=zWk9eESY3hoq2s8dqa8GbXA1GpkjD42C4QlCGio8uuU=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=Of6y1LGtLSRo/z/UOqdLieVSWh6iis9UM14n3dH6gHifPNgSH4mRge65lcW21iNKM
-         ofsRckN7430PvOzre4lbWkUTayWXZ8BTae/x2eRAoF1ra1+IakstbVu1qxc8KvQGiq
-         70EeX+Trp2TTDS44oXY7OO29K56U3sqjqstw0D+owO5S9o6SPvVArzEqKKPJKg7v57
-         6zRcHwfu5EpBKwnyQsBuZqLdZVixdERpaybq/WLetdIFCKvtcSx09YEfd3m+Zyek8V
-         OHU17+PxKZ/86kGOVeClNF7fOOj3uhA12evp7Nv+0BQ2Qquiymq8e/NtwWqZIbLk6d
-         L6W2vzT4u39iA==
-Received: by mail-ed1-f72.google.com with SMTP id r12-20020a05640251cc00b00440647ec649so8555027edd.21
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 02:46:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=zWk9eESY3hoq2s8dqa8GbXA1GpkjD42C4QlCGio8uuU=;
-        b=Zw81e5MFsp39kgXSZzj+Q+f5W/xBJzgK4LkFACkL9P1O/InzACmiSiYht6SBTCixc/
-         pwBheRZ7GFx0NSu207CjceP0yyYduDOG2SeXehD4flslHrN76kSWgWlKrqbLP/4KNVC/
-         RlFtvqwwHN8t0ZCJtFZhrrXr9YXehMWrraE6o0LP/j/I9obE3ghZn5a8fZlmh/6u3y2W
-         d0Xy9wON03JSjnxsenIJ5ky98LD0H0SNqhOhfCYJNX1NnhSqS+7y/NWF99Mu0u4GJDxo
-         4fzC20+NFk0kkG5MBJzcQXydqQ2h5Y5qUbGdP2VJYIbpuIKE5VBM+hLhsCA05oKpPQXV
-         +5Og==
-X-Gm-Message-State: ACgBeo2HJYdXWQdNPIIRbv9WWFbBnuyXBCErRyT0PIUmEViFbpMedlYw
-        ok+DRJ7sYXAPKY91wbBkYmmGG25geNnv5II3vwPM5Q+ZWPOZrmWagsHxYQCMeUg5mKLqUYhmUup
-        LeLH+xtO5YEDe29MI1gYIeFoVeVB/Vm99WvY3cj5+Dg==
-X-Received: by 2002:a17:907:16ab:b0:731:55c0:e7a1 with SMTP id hc43-20020a17090716ab00b0073155c0e7a1mr16272427ejc.154.1660729581472;
-        Wed, 17 Aug 2022 02:46:21 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4DfMZFHDMrpKNWCsqeIPxkCdcSUM6u88VTs4Jyu8uGmM8Gri7CTeefNWkn88XWIY0fP9pr+w==
-X-Received: by 2002:a17:907:16ab:b0:731:55c0:e7a1 with SMTP id hc43-20020a17090716ab00b0073155c0e7a1mr16272409ejc.154.1660729581274;
-        Wed, 17 Aug 2022 02:46:21 -0700 (PDT)
-Received: from arighi-desktop.homenet.telecomitalia.it ([2001:67c:1560:8007::aac:c1b6])
-        by smtp.gmail.com with ESMTPSA id el13-20020a056402360d00b00443d657d8a4sm4778826edb.61.2022.08.17.02.46.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 02:46:20 -0700 (PDT)
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: head: rely on CONFIG_RANDOM_TRUST_CPU
-Date:   Wed, 17 Aug 2022 11:46:18 +0200
-Message-Id: <20220817094618.67063-1-andrea.righi@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9F399B81BAB;
+        Wed, 17 Aug 2022 09:47:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3BF1C433D7;
+        Wed, 17 Aug 2022 09:47:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660729636;
+        bh=Qcruij7g38NyR2lHzkGqFZ8XU8XPZecu7Higao6ZkKE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RDSDvSPOpWDQ0dJ0qNKhdgc29+ejPMevlBuXxi4pal5VBqNzkzGygWNAWZ6PSIQBi
+         NGRY/+Hg3BxKPrHBoIu7lyWzA3iJyQtjaq1+p0pkzr7QD+5ucwPvSqY3xP3b7z1rzl
+         Ufq5FrRwEV4s1+chv28Er16uLSIIl/YYzFSwi4VJWsXkE1GJPP6qKN/iLyg3pLEtRP
+         6ToyiBs2JNB/QkfQ8/a9WXcrpqmSaLhVj5/eeFYjgWd2t+4zZUahPWkSG+rl4nJMv+
+         6Wa34mfh2rIvPSxy8LAxblKCHUvQT2lsTHiX9KaB+37clhVu/R5ksJ2XlRjvhtFmZ0
+         3hemODx1pPL8w==
+Date:   Wed, 17 Aug 2022 17:47:08 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     wei.fang@nxp.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, s.hauer@pengutronix.de,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, peng.fan@nxp.com,
+        ping.bai@nxp.com, sudeep.holla@arm.com,
+        linux-arm-kernel@lists.infradead.org, aisheng.dong@nxp.com
+Subject: Re: [PATCH V4 2/3] arm64: dts: imx8ulp: Add the fec support
+Message-ID: <20220817094708.GC149610@dragon>
+References: <20220726143853.23709-1-wei.fang@nxp.com>
+ <20220726143853.23709-3-wei.fang@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220726143853.23709-3-wei.fang@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CONFIG_ARCH_RANDOM .config option has been removed by
-commit 9592eef7c16e ("random: remove CONFIG_ARCH_RANDOM").
+On Wed, Jul 27, 2022 at 12:38:52AM +1000, wei.fang@nxp.com wrote:
+> From: Wei Fang <wei.fang@nxp.com>
+> 
+> Add the fec support on i.MX8ULP platforms.
+> 
+> Signed-off-by: Wei Fang <wei.fang@nxp.com>
+> Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+> ---
+> V2 change:
+> Remove the external clocks which is related to specific board.
+> V3 change:
+> No change.
+> V4 Change:
+> Add Reviewed-by tag.
+> ---
+>  arch/arm64/boot/dts/freescale/imx8ulp.dtsi | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8ulp.dtsi b/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
+> index 60c1b018bf03..3e8a1e4f0fc2 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
+> @@ -16,6 +16,7 @@ / {
+>  	#size-cells = <2>;
+>  
+>  	aliases {
+> +		ethernet0 = &fec;
+>  		gpio0 = &gpiod;
+>  		gpio1 = &gpioe;
+>  		gpio2 = &gpiof;
+> @@ -365,6 +366,16 @@ usdhc2: mmc@298f0000 {
+>  				bus-width = <4>;
+>  				status = "disabled";
+>  			};
+> +
+> +			fec: ethernet@29950000 {
+> +				compatible = "fsl,imx8ulp-fec", "fsl,imx6ul-fec", "fsl,imx6q-fec";
 
-Depend on CONFIG_RANDOM_TRUST_CPU to determine whether we can rely on
-__arm64_rndr() to initialize the seed for kaslr.
+Since imx8ulp-fec is compatible with imx6ul-fec, what's the point of
+having imx6q-fec in there?  It can be dropped, I guess?
 
-Fixes: 9592eef7c16e ("random: remove CONFIG_ARCH_RANDOM")
-Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
----
- arch/arm64/kernel/pi/kaslr_early.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Shawn
 
-diff --git a/arch/arm64/kernel/pi/kaslr_early.c b/arch/arm64/kernel/pi/kaslr_early.c
-index 6c3855e69395..a1e6f90cb6e2 100644
---- a/arch/arm64/kernel/pi/kaslr_early.c
-+++ b/arch/arm64/kernel/pi/kaslr_early.c
-@@ -94,7 +94,7 @@ asmlinkage u64 kaslr_early_init(void *fdt)
- 
- 	seed = get_kaslr_seed(fdt);
- 	if (!seed) {
--#ifdef CONFIG_ARCH_RANDOM
-+#ifdef CONFIG_RANDOM_TRUST_CPU
- 		 if (!__early_cpu_has_rndr() ||
- 		     !__arm64_rndr((unsigned long *)&seed))
- #endif
--- 
-2.34.1
-
+> +				reg = <0x29950000 0x10000>;
+> +				interrupts = <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>;
+> +				interrupt-names = "int0";
+> +				fsl,num-tx-queues = <1>;
+> +				fsl,num-rx-queues = <1>;
+> +				status = "disabled";
+> +			};
+>  		};
+>  
+>  		gpioe: gpio@2d000080 {
+> -- 
+> 2.25.1
+> 

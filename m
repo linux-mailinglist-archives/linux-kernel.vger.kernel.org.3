@@ -2,77 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7145974CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E99A5974D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240951AbiHQRKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:10:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
+        id S240907AbiHQRKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237342AbiHQRKL (ORCPT
+        with ESMTP id S237222AbiHQRKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:10:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95025FF59;
-        Wed, 17 Aug 2022 10:10:10 -0700 (PDT)
+        Wed, 17 Aug 2022 13:10:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A526053D
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:10:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EDC161207;
-        Wed, 17 Aug 2022 17:10:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D0C8FC433D6;
-        Wed, 17 Aug 2022 17:10:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660756209;
-        bh=PRkPy6/BboxVIV4svm9kZjB5MPhqvOyWk7k0yChUSEg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=lh2NLK6BXqd3jz9ktIz9fK0BvVEdSVXL/eTMZnDmDa3j4ezjftH9YXoz6VO7jC5tp
-         /rdF41HsFHgBaekQrr5/wDLIbtmJ1ZEPQxV7JQcxC0wwEvab955lPIDERfCnGJ5E4b
-         V3Sst53simH3O1dfYehQaS6cBmy7LqUVQRCc465srhSNCpE87NHO0kEpsQVPAerG1E
-         javztSvqXVHLrGjlvvLxAclEtXrVpgqIJ8YPtRpI5dIkI4UYmhjWcUc2gs6NjFfbBt
-         xECBWetJK9BPtiTxtBNQd+TyktaaQN+Fr4W2D/18ZyVdz3vxm9cZ61AIUEfotJrXyu
-         LEGh5rutQgjig==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B5F6DC43142;
-        Wed, 17 Aug 2022 17:10:09 +0000 (UTC)
-Subject: Re: [GIT PULL] virtio: fixes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220817063842-mutt-send-email-mst@kernel.org>
-References: <20220817063842-mutt-send-email-mst@kernel.org>
-X-PR-Tracked-List-Id: Linux virtualization <virtualization.lists.linux-foundation.org>
-X-PR-Tracked-Message-Id: <20220817063842-mutt-send-email-mst@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
-X-PR-Tracked-Commit-Id: 5c669c4a4c6aa0489848093c93b8029f5c5c75ec
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 274a2eebf80c60246f9edd6ef8e9a095ad121264
-Message-Id: <166075620968.6865.11130017018985824267.pr-tracker-bot@kernel.org>
-Date:   Wed, 17 Aug 2022 17:10:09 +0000
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        kvm@vger.kernel.org, mst@redhat.com, netdev@vger.kernel.org,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D56261222
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 17:10:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FA73C433D6;
+        Wed, 17 Aug 2022 17:10:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1660756246;
+        bh=p2NKXCx6Gscl2EjobX5+YFwoNxczqPBGjK2p1lckArQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tv4GZKzSRl5TUaDsS9lzLULWc2NPFHVoTn+jOfjPz1Aaf6fa/8Z5XTlRNk6xpts2G
+         4mjWxwS07vbmrGp2qGjNLt3NHRZAq2/STQUv3w98d3kUKMjgGShigIYTPGJKlc62Kw
+         KGuAEEIkYVt2+t9k+GSqe5nhPx6jylDumR4EVxus=
+Date:   Wed, 17 Aug 2022 10:10:45 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Kalesh Singh <kaleshsingh@google.com>, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, andres@anarazel.de,
-        linux@roeck-us.net
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [akpm-mm:mm-unstable 26/98] fs/libfs.c:1231:47: warning: Local
+ variable 'anon_aops' shadows outer variable [shadowVariable]
+Message-Id: <20220817101045.3aaa1525eaf0dfb81287cdeb@linux-foundation.org>
+In-Reply-To: <202208152329.qv11tHmt-lkp@intel.com>
+References: <202208152329.qv11tHmt-lkp@intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 17 Aug 2022 06:38:42 -0400:
+On Mon, 15 Aug 2022 23:36:43 +0800 kernel test robot <lkp@intel.com> wrote:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+> head:   d2af7b221349ff6241e25fa8c67bcfae2b360700
+> commit: e4ab315810850b93cac381d6f4efd532f45a790e [26/98] procfs: add 'path' to /proc/<pid>/fdinfo/
+> compiler: or1k-linux-gcc (GCC) 12.1.0
+> reproduce (cppcheck warning):
+>         # apt-get install cppcheck
+>         git checkout e4ab315810850b93cac381d6f4efd532f45a790e
+>         cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> cppcheck warnings: (new ones prefixed by >>)
+> >> init/main.c:333:18: warning: Pointer addition with NULL pointer. [nullPointerArithmetic]
+>     char *end = buf + size;
+>                     ^
+>    init/main.c:376:28: note: Calling function 'xbc_snprint_cmdline', 1st argument 'NULL' value is 0
+>     len = xbc_snprint_cmdline(NULL, 0, root);
+>                               ^
+>    init/main.c:333:18: note: Null pointer addition
+>     char *end = buf + size;
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/274a2eebf80c60246f9edd6ef8e9a095ad121264
+That's a pretty useless warning.
 
-Thank you!
+> >> fs/libfs.c:1231:47: warning: Local variable 'anon_aops' shadows outer variable [shadowVariable]
+>     static const struct address_space_operations anon_aops = {
+>                                                  ^
+>    fs/libfs.c:1220:46: note: Shadowed declaration
+>    static const struct address_space_operations anon_aops = {
+>                                                 ^
+>    fs/libfs.c:1231:47: note: Shadow variable
+>     static const struct address_space_operations anon_aops = {
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+That's worth addressing.
+
+--- a/fs/libfs.c~procfs-add-path-to-proc-pid-fdinfo-fix
++++ a/fs/libfs.c
+@@ -1228,7 +1228,7 @@ bool is_anon_inode(struct inode *inode)
+ 
+ struct inode *alloc_anon_inode(struct super_block *s)
+ {
+-	static const struct address_space_operations anon_aops = {
++	static const struct address_space_operations aops = {
+ 		.dirty_folio	= noop_dirty_folio,
+ 	};
+ 	struct inode *inode = new_inode_pseudo(s);
+@@ -1237,7 +1237,7 @@ struct inode *alloc_anon_inode(struct su
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	inode->i_ino = get_next_ino();
+-	inode->i_mapping->a_ops = &anon_aops;
++	inode->i_mapping->a_ops = &aops;
+ 
+ 	/*
+ 	 * Mark the inode dirty from the very beginning,
+_
+

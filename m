@@ -2,193 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81E7596B5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A7E596B60
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233827AbiHQI36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 04:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
+        id S232841AbiHQIao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 04:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiHQI3v (ORCPT
+        with ESMTP id S233295AbiHQIam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 04:29:51 -0400
-Received: from mx07-0057a101.pphosted.com (mx07-0057a101.pphosted.com [205.220.184.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F5F70E41;
-        Wed, 17 Aug 2022 01:29:49 -0700 (PDT)
-Received: from pps.filterd (m0214197.ppops.net [127.0.0.1])
-        by mx07-0057a101.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27H6U8LI006869;
-        Wed, 17 Aug 2022 10:29:44 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=westermo.com; h=message-id : date :
- to : from : subject : content-type : mime-version; s=12052020;
- bh=VdbJezXqG48GaI/UIfvYlnHs8UAyaSMHVoJxjxvnpAQ=;
- b=kfIiBy2vYHNKD2i3woLssdaMmlLoVocssnEWS4Qwq69FjT0ZaVPlbNMgcBi80P7sbF7D
- u4zKEN3NZxkoSjuANnTocLW4CMtPYIGVdkB2zg7eNmzl5gV2cMUgAV6VZwIbBlVe1m9i
- PqwfNlWlD/SGlvaY5x0SiZxm5hUafRxYff0jnPfLLnTRvc/AJrU67fOTMSKQdzkF5c56
- 3cWDojjul4NZJCqE9FWvLuGCJTUNXnjKGN9KUfx4PH3gPyvdRo41HHQaeHm1in94f1r+
- NhsaQWToSYbhR1Wt+5cbsncpGaPnX8EfG5Db/W5wU51RT6Ci3WBfdVUdtGfYSW/4ksWJ oA== 
-Received: from mail.beijerelectronics.com ([195.67.87.132])
-        by mx07-0057a101.pphosted.com (PPS) with ESMTPS id 3hx0abv09g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 17 Aug 2022 10:29:43 +0200
-Received: from EX01GLOBAL.beijerelectronics.com (10.101.10.25) by
- EX02GLOBAL.beijerelectronics.com (10.101.10.26) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.2375.17; Wed, 17 Aug 2022 10:29:42 +0200
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (104.47.18.112)
- by EX01GLOBAL.beijerelectronics.com (10.101.10.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.2375.17 via Frontend Transport; Wed, 17 Aug 2022 10:29:43 +0200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CRK2IdxoGHggG0TfSwKBKUc+I3K6vSZQpFaqzP/t/MYE2NUOGPGWvMTQWqpXIkzwNinqiybc2IMIOTYp1Wa/KyhcOxUlJcdsa7fAouk6XebDPzD+OdKmhTcymnpaZt6rg72bFUX7tzqGbj2peRk4uLGBH1SlpogqrG+yDlDEznLuPevcNRZwh7wrYKkpICh58cQF6fiM5GlK7b3fKj/aW2sknyZ8aamCz8iETNrxWfIszmlEr362bsDy43uRH7hZsmXvbhGZlYQBOBaktFJTqlUVTS5L3tJzNJcHtuHZFUA+Jjva7MpdYbg1JtUz55SgF3kdBsLsUwRayd3fcb3fEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VdbJezXqG48GaI/UIfvYlnHs8UAyaSMHVoJxjxvnpAQ=;
- b=Vn4pzOohmLxaadPQFn0paZDxYg63kru2klDHd8EDzQTwTstNMkO9n/sbe86wKIvvNn2F85VOAU9/rd81JPW6karRp3rcDisXK3z4CD0LihDDNvzgIZVldfyTmSWSF6rQzDgse59rKI5akY08QpTXfMR6SKyYBtLDkkyNKr8EXsCwwvGG83IllM/0cncGU0d2Dfs7Ljl5rbQ3mzr11/OU/2gYG7mw/Ybrtd5ZOBt7VeOuVuBy7VKbunBrqG7T8O8rFlUmed9Uiid0xHBDC5F12tmwMoVft3/qad82vj/Frc3URNi22xbyp58Y99DjdY0Yj7L2/mCq1kf7qEsfliIODg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=westermo.com; dmarc=pass action=none header.from=westermo.com;
- dkim=pass header.d=westermo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=beijerelectronicsab.onmicrosoft.com;
- s=selector1-beijerelectronicsab-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VdbJezXqG48GaI/UIfvYlnHs8UAyaSMHVoJxjxvnpAQ=;
- b=XUX4lGYGx0BWY1IeuwnjsmZSe6nPhL6WxaU1RUQ18/Hat/d8tHBlhI4D8mTattCNWsBg9mbmGNmpgFwpEOONGy71ByPbvaF/8xIaIa6apBP1Dz9F3nX1tPRR3Z/pnCOY/0Y1RORn0gnsEumtuaxR25jhfl80ECQWaXaYk4Qpds0=
-Received: from DB9P192MB1388.EURP192.PROD.OUTLOOK.COM (2603:10a6:10:296::18)
- by VI1P192MB0510.EURP192.PROD.OUTLOOK.COM (2603:10a6:803:30::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.19; Wed, 17 Aug
- 2022 08:29:41 +0000
-Received: from DB9P192MB1388.EURP192.PROD.OUTLOOK.COM
- ([fe80::ed47:388a:7a7d:8a1c]) by DB9P192MB1388.EURP192.PROD.OUTLOOK.COM
- ([fe80::ed47:388a:7a7d:8a1c%4]) with mapi id 15.20.5525.010; Wed, 17 Aug 2022
- 08:29:41 +0000
-Message-ID: <5c9edecd-762a-221b-7aa0-f5c2025d32d4@westermo.com>
-Date:   Wed, 17 Aug 2022 10:29:38 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.1
-Content-Language: en-US
-To:     <apw@canonical.com>, <joe@perches.com>, <dwaipayanray1@gmail.com>,
-        <lukas.bulwahn@gmail.com>, <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>
-From:   Matthias May <matthias.may@westermo.com>
-Subject: False-positive in Checkpatch
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------2sG0uO03ii6ftAyQSOESdpk0"
-X-ClientProxiedBy: GV3P280CA0005.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:150:b::19) To DB9P192MB1388.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:10:296::18)
+        Wed, 17 Aug 2022 04:30:42 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1717D1EF
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:30:40 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27H8FC1M000844;
+        Wed, 17 Aug 2022 08:30:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : from : subject : content-type :
+ content-transfer-encoding; s=pp1;
+ bh=7ysuBdFEmYms22UqszBVWWsW/BOt+YuzTKdNrP5Aofs=;
+ b=M3zTrCT2ZE49Jwhe5iE5teinKUyjGi14M/1lvQZpw3Tv79/Qr/3cBXbcO6byMSB5UKNH
+ DY+VSuOtqnAaQLOoUP7aP9qAzkBD75blJU1UeCg1gr8VziXVPjFTyIB/iguD+4aPGNmq
+ 3A9fSM5y5R/1bmISVTCkqpTP9vcI5kHMLGcdIX5IRRRI8lFwFfjMIcdBOGNz2LdrnB0g
+ JgUthaevNjmIspSeDI/x3I6U/NFOZHYHZeCPOxo7HZxgF6R2VL/CpIsHhrUcSV0YzolP
+ /wx268ZqNUwKHPvmZjiioPFPp5XTs7HkPp+QGIx/FR+qDM8g2ZY24IQwrwio0FAMXN1s vQ== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j0vn98cwg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 Aug 2022 08:30:34 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27H8M3OI008092;
+        Wed, 17 Aug 2022 08:30:33 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma01dal.us.ibm.com with ESMTP id 3hx3kan2kr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 Aug 2022 08:30:33 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27H8UW3G15270540
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 17 Aug 2022 08:30:32 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7369EC6055;
+        Wed, 17 Aug 2022 08:30:32 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B408EC605B;
+        Wed, 17 Aug 2022 08:30:29 +0000 (GMT)
+Received: from [9.43.68.94] (unknown [9.43.68.94])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 17 Aug 2022 08:30:29 +0000 (GMT)
+Message-ID: <f65d7074-48f4-a25e-0dfc-424910f0b48d@linux.vnet.ibm.com>
+Date:   Wed, 17 Aug 2022 14:00:27 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8460815a-da48-462d-ef53-08da802aa14e
-X-MS-TrafficTypeDiagnostic: VI1P192MB0510:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XL30mFC7X81/Hmmic/7e/u72l9d6q+QAC36aF4dlOWPk4+tdFfgstzFozA0W87rg+eO15bMAzMWhVfXsPmOCHyOjNXz+Yde0th16mm528rxBbUiZh8Jfz+mqsm1xxWg73PHoYzBSGk80V/HhT/aDcMY+ka3D1P1KHaVOYjlWZ+JnRRGgcgi3+Qfh41LO5ifzVfK7pXcplTEnFSiw51SEgYIplZ7vLh6h5CUGmbU3zTjTyk53M5d6KsCz1aCXDJHTOM3OQKvOv8Ko+IRYKzTzsIxNIz3RGLVrVukXcHWVl/zXXxqiPGceq5e/2kguOJ9TqfvkgqSIKXi2Wy34QV4zAMnGJpaK2g1837ojI3tcxgbJqdQqsOvL5NqDPV31QU5VjqdicpA98mrRILkhpTW1gbJJ9x9wQkvwOQ+KeaV1T+VheMzD5z5Cea4QyzWLvBzONumGT6tHsm/8Zn/THfS5nVZyqKIycHUADidk+i/AMpOIdLs4s+/ZrOzFypyNxFdL++YNrnI8+1ZjAYIxYq5uq2Q4Z6Oz0LY3bR7QZwMa8ZDZxUuqHE3FEQNUPEe5rDC7WGIkgs2wuX8bGmQVTqpeLRdVMLJVwUAvvDumgUajCSWzZs+dqlt3OVmi9DnQxW6VaIwE5iSM09lFHt6BHfbqh32YZIDTVF4cHFo6c63snky/g0dP8hvTOsF/L/a9hAA0QOGkvNckvehNlz87ctKexjfn3SUyowAFJ0SVoo2nTDC4s4XdmhrMkrHCDB4GAfRtJWjVIVzmyo+LVHIpZKyv+y3wa2QaF+5H9LcUyOdTOI8Gvm3miIP1GwVGeXaDfoormQfDn4e3s5bwQ4FlhZtP0X2bTCISnwU8QilEAjuzPc6ER8nHsZ52gSiDL2+l/6qXJkWnH8W5WgQMkBtu9FnJxw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9P192MB1388.EURP192.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(396003)(366004)(346002)(136003)(39840400004)(5660300002)(235185007)(478600001)(44832011)(36756003)(316002)(6916009)(6666004)(41300700001)(66946007)(6486002)(966005)(66556008)(2906002)(31686004)(8936002)(66476007)(8676002)(31696002)(186003)(26005)(33964004)(52116002)(6512007)(2616005)(6506007)(86362001)(21480400003)(83380400001)(3480700007)(38100700002)(38350700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M1NhMm85Mit6eVA1N1NuVWYwZHpCeDFmVUtrSDMrV2lwYzJ2TEswa1BTVzhk?=
- =?utf-8?B?OUpBYkNsRFk1QVRhNk95c2pUMVFFOE9TME1SL05KbHpVOEtSb3lDOWt1OEhK?=
- =?utf-8?B?RWdWazN5d3dsYnhReGg1ekM5a2xmYktMQlVwZ0pLK3JoTk9VMGhKMVF0ZW1U?=
- =?utf-8?B?elNvYm1ia1A2MSt3MmkxdjVGZWhRN1NrQmFGS21iajB5VU5qZUJSVFFWYll2?=
- =?utf-8?B?T2Z1cFYwRWFnZVhLU291b2pZUEczbEdzUHVlTGFRZDh2cno5UWdTM3k5MUJH?=
- =?utf-8?B?Mnk3ak1MdEliUE5wa2R0Y1N5U3R6UzR2ODdraGVrQlRZMk1nTkF2ZStzZXNq?=
- =?utf-8?B?ek9nKzVQWjJtSUMrUktNWnJHME5GWUpqaTFzbVhuWFVwZy9xVVRJZE1DdnVJ?=
- =?utf-8?B?T21Ibkw1WFhjZEhkOG5OMmZxcnVQNXpGWnZKTkNrTlBlK3VaazFYcHZLNkhG?=
- =?utf-8?B?YTlBZGgwcFhXTitHckh6aWpSWjErODJMQjAwVmFJNERWYUc5SW44MStKT3p6?=
- =?utf-8?B?QWl6ZHZ3UUorZnpYWnpwQ28yL3BnUjArb0huaU0xcTBWNFgxN2tKMkwzMFAw?=
- =?utf-8?B?bnJyV3RuL2Nvd2FhUFlsbW9rWTR6TEpUeDVySUdzamxDNE0yKzQ2TmNTOEtV?=
- =?utf-8?B?dWwvbTNWT2pIOXpLaFVlbE9TLysvbkMwczdvN1RVS052dXo0UGZjY2hSZHpr?=
- =?utf-8?B?Y2VBU05lNzl6U05BTTlmWG5CMm9PRmZjRXJ1MVRuRERtN094R3dkTlBoeDV0?=
- =?utf-8?B?SXF5djBJM2FVRnFWZDI1cXlJZU1zOG9iSXlsR1p2N1pJYkpwa0NRdTVjSWZV?=
- =?utf-8?B?aW9zQ3VMNGJyb0NjaEpLajhGc1pkSTdxZVVTUjZQc3dObTlCS0dzU0pHZTU0?=
- =?utf-8?B?L1dENThmSmJ0QlF1UTE4UzRraVp0TzFoMmJqSE92aHFFTzFPUmg0dFZjV1FK?=
- =?utf-8?B?Q3F5bVhyZFI3VlVUeGNLcGZNZ2R5cmFOSnluUWcvUXEwQkNubDZuTXg3dTh1?=
- =?utf-8?B?R3piUEQrN1NVSVhtb0hJUDZLbDVKbjhuVTdrK2FNSTdMeWdQclJLNW1Cekts?=
- =?utf-8?B?S3VhTDl5aTQrUGVER3ZhV01DYm9TaXBqTnNsRnFuKy8zdE4rVzdQOVUraEx0?=
- =?utf-8?B?ZmJtejlUaTlhZTRPb3UwR1A1amhaUjExcmlwMFFCa0Fub1JRZjNCLzRHY2RP?=
- =?utf-8?B?OEVpaGQrREFyNnByYkhldXZTVEoxaHhVWXR4andZSnUxc1o5TUdRYk9vc0lR?=
- =?utf-8?B?ZWJ1b2ZDL1M0QlBWOHEybVpIOFJOYjUvY2VZbHZzMXlyRCtYRGZ5VmdUWmtG?=
- =?utf-8?B?N3JoZk5xaTRzdDRMZ2t2Z2oreFQzdTEvb0xjbXY0V3h3YVMyRHNKZWhpY2dD?=
- =?utf-8?B?QXVNVXVneVVUemVzRVNMNXJCY3A1NjR4TmN2eWNnOHgzZW0xc1d6TWE3WU9o?=
- =?utf-8?B?YjR6RnBxbjcwMitFekxTcGhrdFdsTVNtN3ZiWmdnVWJNcnlJUFBPdWJnWE85?=
- =?utf-8?B?N2wxZnBqM1JQTTY5RUZhTjQrOVI2V2RrQWl2NE1hY3EyeGgvcDhtZzEwTXlG?=
- =?utf-8?B?SXlZSTFTaVRkcnJtTWh4K2JUZW9HRHVDY21VYVpIaFFxc205MzdSaDlaNVhB?=
- =?utf-8?B?WUpoSmhsbW1sYlNDbEh5Q2cyc2cySFVaNjZFS0c0WnlKV28rZmRQZG9hTEJN?=
- =?utf-8?B?MmlldW01Qk5EUTlNS2svTEtpL083VkRkSmFXcU56UERveElpQU1kN0dIN0Zh?=
- =?utf-8?B?N0ZtMXFpN0drRlpDVlFxTlpUcTc4Vk1FcjJMcTd2VVNLcjlIOVo0NDhHSk5r?=
- =?utf-8?B?VExxdnJwS0Z6VnNkWm1rdE1rOENsTnAvSkJsWnVNSmFRNmM1SnVwNlNMUzNI?=
- =?utf-8?B?WlJicHBKa1NGdG54ZkxpcEREUHJTZDJhQ0J3VGJXZ2NuYmpoeDNrOVBmN1dI?=
- =?utf-8?B?aStLSkJnc3lFYlNPcUEzQk9SOTE4TXY1NlZFVzRqMlA5eTZFVnZqZHcwSU5O?=
- =?utf-8?B?aHlrMUFxS0s3QlVLU0tkTVhhWjRZVm9qOXpvakV3cUpJRjFrUUo0UDZnekcw?=
- =?utf-8?B?UExtTFMwOVFuZnRrOW1HRDNPOTN0T3didFB3L1FVSjJQUm9WckwzMUt5WWJH?=
- =?utf-8?Q?vD/oY40mkHkLDqYjHDQovUJoH?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8460815a-da48-462d-ef53-08da802aa14e
-X-MS-Exchange-CrossTenant-AuthSource: DB9P192MB1388.EURP192.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2022 08:29:41.1351
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4b2e9b91-de77-4ca7-8130-c80faee67059
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: v601UiQsdF/CS+65sLKOcE0fQSt+KfQ3MeSMlxOwxXlc//4uejGDwlprS3/Vb7cCbu205MgTqnSHZ1NmslFVXg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1P192MB0510
-X-OrganizationHeadersPreserved: VI1P192MB0510.EURP192.PROD.OUTLOOK.COM
-X-CrossPremisesHeadersPromoted: EX01GLOBAL.beijerelectronics.com
-X-CrossPremisesHeadersFiltered: EX01GLOBAL.beijerelectronics.com
-X-OriginatorOrg: westermo.com
-X-Proofpoint-GUID: I0HwHRwTeRONuam77LPBcYO_hFbgMtrj
-X-Proofpoint-ORIG-GUID: I0HwHRwTeRONuam77LPBcYO_hFbgMtrj
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To:     aik@ozlabs.ru, mpe@ellerman.id.au, linux-kernel@vger.kernel.org
+Cc:     abdhalee@linux.vnet.ibm.com, mputtash@linux.vnet.com,
+        sachinp@linux.vnet.com
+From:   Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>
+Subject: [linux][5.19.0][SRIOV/HNV] WARNING: CPU: 3 PID: 3873 at
+ arch/powerpc/kernel/iommu.c:830 iommu_tce_table_put+0x20/0x170
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: PCOIdjLKVMeyaHg4pmyeI97vhaQ0VRvp
+X-Proofpoint-GUID: PCOIdjLKVMeyaHg4pmyeI97vhaQ0VRvp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-17_05,2022-08-16_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=671
+ lowpriorityscore=0 adultscore=0 mlxscore=0 phishscore=0 malwarescore=0
+ priorityscore=1501 spamscore=0 suspectscore=0 bulkscore=0 impostorscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208170031
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---------------2sG0uO03ii6ftAyQSOESdpk0
-Content-Type: multipart/mixed; boundary="------------7QUxA6WQnEtJhGCqUQgkhZi7";
- protected-headers="v1"
-From: Matthias May <matthias.may@westermo.com>
-To: apw@canonical.com, joe@perches.com, dwaipayanray1@gmail.com,
- lukas.bulwahn@gmail.com, linux-kernel@vger.kernel.org,
- bpf <bpf@vger.kernel.org>
-Message-ID: <5c9edecd-762a-221b-7aa0-f5c2025d32d4@westermo.com>
-Subject: False-positive in Checkpatch
+Greetings,
 
---------------7QUxA6WQnEtJhGCqUQgkhZi7
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+[linux][5.19.0][SRIOV/HNV] WARNING: CPU: 3 PID: 3873 at 
+arch/powerpc/kernel/iommu.c:830 iommu_tce_table_put+0x20/0x170
 
-SGkgQ2hlY2twYXRjaCBNYWludGFpbmVycw0KDQpUaGUgc2VsZnRlc3QgcGF0Y2ggYXQNCmh0
-dHBzOi8vbG9yZS5rZXJuZWwub3JnL25ldGRldi8yMDIyMDgxNzA3MzY0OS4yNjExNy0xLW1h
-dHRoaWFzLm1heUB3ZXN0ZXJtby5jb20vVC8jdQ0KY2xhaW1zIHRvbyBsb25nIGxpbmVzLg0K
-SG93ZXZlciB0aGlzIHNlZW1zIHRvIGJlIGEgbWlzaW50ZXJwcmV0YXRpb24gb2YgdGhlIGlu
-ZGVudGlvbiBiZWZvcmUgdGhlIHByaW50ZiBzcGxpdCBvdmVyIDINCmxpbmVzIHRvIGV4YWN0
-bHkgbm90IGhhdmUgdG9vIGxvbmcgbGluZXMuDQpUaGUgZmFsc2UgcG9zaXRpdmUgY2hlY2tw
-YXRjaCByZXN1bHRzIGFyZSBhbHNvIG9uIHRoZSBuZXRkZXYgcGF0Y2h3b3JrOg0KaHR0cHM6
-Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9wcm9qZWN0L25ldGRldmJwZi9wYXRjaC8yMDIyMDgx
-NzA3MzY0OS4yNjExNy0xLW1hdHRoaWFzLm1heUB3ZXN0ZXJtby5jb20vDQoNCkJSDQpNYXR0
-aGlhcw0K
+Continuous WARN_ONs are seen when SRIOV device remove operation is 
+performed after adding the SRIOV device
 
---------------7QUxA6WQnEtJhGCqUQgkhZi7--
+--- Call Traces ---
+[  645.034242] ------------[ cut here ]------------
+[  645.034247] WARNING: CPU: 3 PID: 3873 at 
+arch/powerpc/kernel/iommu.c:830 iommu_tce_table_put+0x20/0x170
+[  645.034258] Modules linked in: rpcrdma sunrpc rdma_ucm ib_srpt 
+ib_isert iscsi_target_mod target_core_mod ib_iser ib_umad rdma_cm 
+ib_ipoib iw_cm libiscsi ib_cm scsi_transport_iscsi mlx5_ib ib_uverbs 
+ib_core mlx5_core mlxfw psample ptp pps_core rpadlpar_io rpaphp tcp_diag 
+udp_diag inet_diag unix_diag af_packet_diag netlink_diag bonding rfkill 
+xts vmx_crypto pseries_rng sch_fq_codel binfmt_misc ip_tables ext4 
+mbcache jbd2 dm_service_time sd_mod t10_pi crc64_rocksoft crc64 sg 
+ibmvfc scsi_transport_fc ibmveth dm_multipath dm_mirror dm_region_hash 
+dm_log dm_mod fuse
+[  645.034301] CPU: 3 PID: 3873 Comm: drmgr Not tainted 
+5.19.0-autotest-geb555cb5b794 #1
+[  645.034305] NIP:  c000000000062380 LR: c0000000000fd9e8 CTR: 
+c000000000060720
+[  645.034307] REGS: c000000053d87790 TRAP: 0700   Not tainted 
+(5.19.0-autotest-geb555cb5b794)
+[  645.034311] MSR:  8000000000029033 <SF,EE,ME,IR,DR,RI,LE>  CR: 
+24002244  XER: 20040000
+[  645.034320] CFAR: c0000000000fd9e4 IRQMASK: 0
+[  645.034320] GPR00: c0000000000fd9e8 c000000053d87a30 c000000002a10700 
+0000000000000000
+[  645.034320] GPR04: c00c000000036ac0 c00000000dab0830 c00000000dab0830 
+0000000000000001
+[  645.034320] GPR08: 027ffff000000201 0000000000000001 0000000000000001 
+fffffffffffffffd
+[  645.034320] GPR12: 0000000000002000 c00000077fff8e80 0000000000000000 
+0000000000000000
+[  645.034320] GPR16: 0000000000000000 0000000000000000 0000000000000000 
+0000000000000000
+[  645.034320] GPR20: 0000000000000000 0000000136dc20f8 0000000136dbee08 
+0000000000000006
+[  645.034320] GPR24: 0000000000000000 00000001749423fd c000000002970418 
+c000000053d87b50
+[  645.034320] GPR28: 0000000000000002 0000000000000000 c000000009781500 
+c000000054f1a2c0
+[  645.034363] NIP [c000000000062380] iommu_tce_table_put+0x20/0x170
+[  645.034366] LR [c0000000000fd9e8] iommu_reconfig_notifier+0x98/0x220
+[  645.034370] Call Trace:
+[  645.034372] [c000000053d87a30] [c0000000659eec00] 0xc0000000659eec00 
+(unreliable)
+[  645.034376] [c000000053d87aa0] [c0000000000fd9d4] 
+iommu_reconfig_notifier+0x84/0x220
+[  645.034381] [c000000053d87ae0] [c00000000018e174] 
+blocking_notifier_call_chain+0xa4/0x110
+[  645.034385] [c000000053d87b30] [c000000000a76f6c] 
+of_detach_node+0xbc/0x100
+[  645.034389] [c000000053d87b90] [c0000000000f9fc8] ofdt_write+0x898/0x1050
+[  645.034393] [c000000053d87c60] [c0000000005656dc] 
+proc_reg_write+0x10c/0x1b0
+[  645.034398] [c000000053d87c90] [c000000000493cc4] vfs_write+0x104/0x460
+[  645.034402] [c000000053d87d50] [c0000000004941fc] ksys_write+0x7c/0x140
+[  645.034406] [c000000053d87da0] [c000000000033b88] 
+system_call_exception+0x198/0x430
+[  645.034410] [c000000053d87e10] [c00000000000c63c] 
+system_call_common+0xec/0x250
+[  645.034414] --- interrupt: c00 at 0x20002a31bd74
+[  645.034417] NIP:  000020002a31bd74 LR: 0000000136da3804 CTR: 
+0000000000000000
+[  645.034419] REGS: c000000053d87e80 TRAP: 0c00   Not tainted 
+(5.19.0-autotest-geb555cb5b794)
+[  645.034423] MSR:  800000000200d033 <SF,VEC,EE,PR,ME,IR,DR,RI,LE>  CR: 
+24002402  XER: 00000000
+[  645.034430] IRQMASK: 0
+[  645.034430] GPR00: 0000000000000004 00007ffff4a44ec0 000020002a417100 
+0000000000000006
+[  645.034430] GPR04: 00007ffff4a44f68 0000000000000020 0000000000000000 
+00000001749423fd
+[  645.034430] GPR08: 0000000000000000 0000000000000000 0000000000000000 
+0000000000000000
+[  645.034430] GPR12: 0000000000000000 0000200029f5b520 0000000000000000 
+0000000000000000
+[  645.034430] GPR16: 0000000000000000 0000000000000000 0000000000000000 
+0000000000000000
+[  645.034430] GPR20: 0000000000000000 0000000136dc20f8 0000000136dbee08 
+0000000136dbcfd0
+[  645.034430] GPR24: 0000000136dc1dc8 0000000136dc20c8 0000000136dbcfd0 
+0000000136dbd038
+[  645.034430] GPR28: 0000000000000020 0000000000000006 00000001749423d8 
+00007ffff4a44f68
+[  645.034463] NIP [000020002a31bd74] 0x20002a31bd74
+[  645.034465] LR [0000000136da3804] 0x136da3804
+[  645.034467] --- interrupt: c00
+[  645.034469] Instruction dump:
+[  645.034471] 4e800020 60000000 60000000 60000000 3c4c029b 3842e3a0 
+7c0802a6 60000000
+[  645.034477] 7c690074 fbc1fff0 f821ff91 7929d182 <0b090000> fbe10068 
+7c7f1b78 38630330
+[  645.034483] ---[ end trace 0000000000000000 ]---
 
---------------2sG0uO03ii6ftAyQSOESdpk0
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wnsEABYIACMWIQR34wKNh4Jxr+4dJ/3fdrYEUzwNvgUCYvym8gUDAAAAAAAKCRDfdrYEUzwNvpLB
-AP4kVw9/L8HQ9fwTpGEbbodhE/1a6voEj4mk0jmmy4vCWgEAtfqZU46kwn1TsmLoN7QgEJUoJ4hx
-ia5pPMsDU2Pu6QU=
-=7sxL
------END PGP SIGNATURE-----
-
---------------2sG0uO03ii6ftAyQSOESdpk0--
+-- 
+Regards,
+Tasmiya Nalatwad
+IBM Linux Technology Center

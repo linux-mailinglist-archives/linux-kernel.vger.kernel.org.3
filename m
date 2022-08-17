@@ -2,73 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C721595B1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 14:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E025B595A25
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 13:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235132AbiHPMBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 08:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36590 "EHLO
+        id S233952AbiHPLaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 07:30:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235494AbiHPMAq (ORCPT
+        with ESMTP id S234748AbiHPLaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 08:00:46 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0957B7A7
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 04:46:07 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id u5-20020a6b4905000000b00681e48dbd92so5838735iob.21
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 04:46:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=wzeIiQ9mwpwIUmhJcR2Ov1nD29260pv02saoYmpgAuA=;
-        b=hjXqP879ja2+CPkwfkfb2OMCBk3I0Oi/i7F4TvGdDbfDSO6Zael3m7wBNxOyh4I118
-         6tICOPQJR7KTICUUdiVRw6KF3EQafECjPx+tZ9fYwmyuFzb711KiB/FwGTTljj018Un0
-         H7YZEukQhkyAG3u1cxqSvROFFN6jIDap6KjqKSx8corQpZ4NFbHur8D6+rAH1HTo6HxC
-         zCvEpf24ML9e/YPK4vTkPRvdcDsl8cfg3QlDPi0CNz/gbcDBBGJlLpeSOuPaXaPwpAfN
-         jN3m/HSC/bRv5dWVcRi4POyphURPaHR6SJsImfOIA1zTQdSkGUyHEJMapsOZTjRQaKsH
-         U0DQ==
-X-Gm-Message-State: ACgBeo0HOSJ9YpBQQ0AhuXGGpAcBuJplfU7icrsqtDSzpqj8Iod8kRGD
-        mpabVfzkCykCFYAkJQYlr7ThNFJyddPeDgmDjyAlcUlAciEu
-X-Google-Smtp-Source: AA6agR6GqZD8Afq8+hbY6Jp+6jHd6Izx19F8tkgWrJu85pzdN253VEWOHg5iQIQ2PMoshJbmGSJGBD2Xptt1AghWUhdlTYUj9yQR
+        Tue, 16 Aug 2022 07:30:01 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD2F12080;
+        Tue, 16 Aug 2022 03:47:39 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M6SRf31mKzXdRB;
+        Tue, 16 Aug 2022 18:43:26 +0800 (CST)
+Received: from huawei.com (10.67.174.191) by canpemm500009.china.huawei.com
+ (7.192.105.203) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 16 Aug
+ 2022 18:47:37 +0800
+From:   Li Hua <hucool.lihua@huawei.com>
+To:     <peterz@infradead.org>
+CC:     <bristot@redhat.com>, <bsegall@google.com>,
+        <dietmar.eggemann@arm.com>, <hucool.lihua@huawei.com>,
+        <juri.lelli@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <mgorman@suse.de>, <mingo@redhat.com>, <rostedt@goodmis.org>,
+        <stable@vger.kernel.org>, <vincent.guittot@linaro.org>,
+        <vschneid@redhat.com>
+Subject: Re: [PATCH -next] sched/cputime: Fix the bug of reading time backward from /proc/stat
+Date:   Wed, 17 Aug 2022 08:44:45 +0800
+Message-ID: <20220817004445.43216-1-hucool.lihua@huawei.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <YvoAk1pnU4gZcFJ1@worktop.programming.kicks-ass.net>
+References: <YvoAk1pnU4gZcFJ1@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1d8a:b0:2de:aa0d:b99e with SMTP id
- h10-20020a056e021d8a00b002deaa0db99emr9383562ila.138.1660650366959; Tue, 16
- Aug 2022 04:46:06 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 04:46:06 -0700
-In-Reply-To: <20220816112228.1024-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003809f605e65a4b5f@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in send_packet
-From:   syzbot <syzbot+f1a69784f6efe748c3bf@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.191]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+It's unreadable, I'm sorry about that.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+The CPU statistics time read from /proc/stat should only be incremented. The bug
+I found is that the value read latest is smaller than the former.
 
-Reported-and-tested-by: syzbot+f1a69784f6efe748c3bf@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         568035b0 Linux 6.0-rc1
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=1552c1f3080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e706e91b2a433db
-dashboard link: https://syzkaller.appspot.com/bug?extid=f1a69784f6efe748c3bf
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1452c1f3080000
-
-Note: testing is done by a robot and is best-effort only.
+The root cause of the problem is that the "vtime->utime" and "delta" are temporarily
+added to the stack and show to the user. The value of 'vtime->utime + delta' depends
+on which task the CPU is executing. As bellow:
+show_stat -> kcpustat_cpu_fetch -> kcpustat_cpu_fetch_vtime -> cpustat[CPUTIME_USER] += vtime->utime + delta

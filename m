@@ -2,140 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14278596BAC
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F17596BB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbiHQIxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 04:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55256 "EHLO
+        id S233851AbiHQIzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 04:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiHQIxm (ORCPT
+        with ESMTP id S234827AbiHQIzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 04:53:42 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C236745F;
-        Wed, 17 Aug 2022 01:53:39 -0700 (PDT)
-Received: from [192.168.1.103] (178.176.73.252) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Wed, 17 Aug
- 2022 11:53:30 +0300
-Subject: Re: [PATCH v2 2/2] scsi: sd: Rework asynchronous resume support
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        scsi <linux-scsi@vger.kernel.org>,
-        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>, <ericspero@icloud.com>,
-        <jason600.groome@gmail.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-References: <20220630195703.10155-1-bvanassche@acm.org>
- <db19ed29-e7f9-e5b0-3a6c-f2812078a07d@acm.org>
- <CAMuHMdVzsgSYtbJQnaigNax_JbxPsQfU+gHcteS-ojWbxUdMfw@mail.gmail.com>
- <CAMuHMdWtxBj8ug7AHTqentF8UD4jpO2sgoWWcQCOvEKLJtdq8A@mail.gmail.com>
- <506ca1a6-1122-5755-fc74-60f7c7bfbd0d@acm.org>
- <CAMuHMdVQ2K2v8jpsFfOMk99DG_sBB4_ioiQRroC7K_Ov1wvp9w@mail.gmail.com>
- <6f70e742-9d8a-f389-0482-0ba9696bf445@acm.org>
- <CAMuHMdVc+ATGV-=R3uV6RyF0-mZiuKv7HpmogRBgqGVyO-MKWg@mail.gmail.com>
- <54e20a27-a10b-b77a-e950-1d3398e2e907@acm.org>
- <CAMuHMdURQpAEGgv4cY7v0rqzs12v2TT=Amt26Y0OoBSW7YAoaw@mail.gmail.com>
- <084e7c5a-f98d-d61e-de81-83525851ecf9@acm.org>
- <CAMuHMdW2vOC8ZsE_XF8TbSNoF9zCrwq7UkGZ5jXen1E1mTZe+g@mail.gmail.com>
- <14ec47f3-f3b8-61c7-2c64-d96d00dd7076@acm.org>
- <CAMuHMdW7nGxV_3Z2JV_TCM+WtTdYv5P+0cE6Tw=6krcseNCdAw@mail.gmail.com>
- <40700595-8c83-1b61-ea93-ea9554bfb2db@acm.org>
- <CAMuHMdV_hzvd2YkJfRqXm8SmKuibWiUy-c7XpGCnEr86HMx=_Q@mail.gmail.com>
- <3c7e338e-332e-fe80-e419-b360535533c5@acm.org>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <56cf0251-159c-3f83-78d2-859048625633@omp.ru>
-Date:   Wed, 17 Aug 2022 11:53:30 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Wed, 17 Aug 2022 04:55:33 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB81078BCD;
+        Wed, 17 Aug 2022 01:55:32 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id 2so260988pll.0;
+        Wed, 17 Aug 2022 01:55:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=QMW64EnUhAM3fb/FOLJApJo2idS3sY65uejC0k2Z3qs=;
+        b=LQ2AFKVyFma74B+9htyjmznvbfRPRnZLlV/vJ/foDCuBbipC/NLRNHJ23ZQTSer6X4
+         o9M4ZYKS6kwdvQ86BhGBEWIluCEEK21Z4UPzw/qDfRApKMBKiZ8eSCrAKvrmfH8GSA9t
+         tOJDTIuXcFqUS9yFM57ySvdGjzCpIAXXFZJVj2yPeyLNDcEZiwFY8tvvflUnL1AzhvX6
+         TGd+BRvon3Dnn8Yawepllh+7mhuRvHlB1l+O3WC7H5gJsgSkpuSAfFa7jYVlx1iUDNsD
+         bjGOchBVY1pbO9+e+gmYhjPvCazqKIHx/ArtUwzge1aG3UnZ9+qPKv6+yLNeYvWbTg1m
+         xpZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=QMW64EnUhAM3fb/FOLJApJo2idS3sY65uejC0k2Z3qs=;
+        b=dMerLhKmNoy4+KvEFWq5Md9bdnGOy2u7OYpJWgg7UKAtES2gmHVVQnUBTgFOVP4LNc
+         Pkz686n9lCB4W6G4NJQ4HSeUvRjqFzbk1VCAraEs96JZgcyl+drl5mSZ6UmbFaiTjv5D
+         5cWaCO/1HZ8lPGk5b40Z23wdbI38cWW0TikK9h0L/RDhEGOF/d7Cw/rhlTgAALiipdhy
+         fXnsFmsKU386C0M3KSN19qvPF02+iN5KTmjP72zjOWc9/uk5+cdyiXLzkAppMtnmVX7X
+         VRDZuP+qb+JGdGNn2HhAuqj9IhcuaYlwMprK2HES33wWY5sX//QFGN1Bc+rwTlS82ynW
+         FX5Q==
+X-Gm-Message-State: ACgBeo2Tx8wV4kHHlz6HMU4FholC7CPnJTLudOiCYigtjdoU4kn0Pmwq
+        knwOx2NV23OAThUfBUMLz0U=
+X-Google-Smtp-Source: AA6agR4b2hPRJE7HpZslHS98/W1cBrlQnEt1QfHEHV9DuQXzbwcnHh7xLYHsYR5KfdYpnG1L5uY+hA==
+X-Received: by 2002:a17:902:7d86:b0:170:a752:cbd1 with SMTP id a6-20020a1709027d8600b00170a752cbd1mr25696348plm.17.1660726532284;
+        Wed, 17 Aug 2022 01:55:32 -0700 (PDT)
+Received: from localhost ([36.112.86.8])
+        by smtp.gmail.com with ESMTPSA id bj7-20020a17090b088700b001fabc3da687sm389347pjb.51.2022.08.17.01.55.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 01:55:31 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     syzbot+ffe24b1afbc4cb5ae8fb@syzkaller.appspotmail.com
+Cc:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        linux-kernel-mentees@lists.linuxfoundation.org, yin31149@gmail.com,
+        18801353760@163.com, paskripkin@gmail.com,
+        skhan@linuxfoundation.org
+Subject: [PATCH] reiserfs: add check in search_by_entry_key()
+Date:   Wed, 17 Aug 2022 16:55:11 +0800
+Message-Id: <20220817085512.75936-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <000000000000bcbb0205e13dc53a@google.com>
+References: <000000000000bcbb0205e13dc53a@google.com>
 MIME-Version: 1.0
-In-Reply-To: <3c7e338e-332e-fe80-e419-b360535533c5@acm.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [178.176.73.252]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 08/17/2022 08:36:57
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 172266 [Aug 17 2022]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 495 495 bb4e71e2e9e23696ab912b286436360a94c9b107
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.252 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.73.252
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 08/17/2022 08:39:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 8/17/2022 6:00:00 AM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+Syzkaller reports use-after-free Read as follows:
+------------[ cut here ]------------
+BUG: KASAN: use-after-free in bin_search_in_dir_item fs/reiserfs/namei.c:40 [inline]
+BUG: KASAN: use-after-free in search_by_entry_key+0x81f/0x960 fs/reiserfs/namei.c:165
+Read of size 4 at addr ffff8880715ee014 by task syz-executor352/3611
 
-On 8/16/22 11:21 PM, Bart Van Assche wrote:
+CPU: 0 PID: 3611 Comm: syz-executor352 Not tainted 5.19.0-rc1-syzkaller-00263-g1c27f1fc1549 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ bin_search_in_dir_item fs/reiserfs/namei.c:40 [inline]
+ search_by_entry_key+0x81f/0x960 fs/reiserfs/namei.c:165
+ reiserfs_find_entry.part.0+0x139/0xdf0 fs/reiserfs/namei.c:322
+ reiserfs_find_entry fs/reiserfs/namei.c:368 [inline]
+ reiserfs_lookup+0x24a/0x490 fs/reiserfs/namei.c:368
+ __lookup_slow+0x24c/0x480 fs/namei.c:1701
+ lookup_one_len+0x16a/0x1a0 fs/namei.c:2730
+ reiserfs_lookup_privroot+0x92/0x280 fs/reiserfs/xattr.c:980
+ reiserfs_fill_super+0x21bb/0x2fb0 fs/reiserfs/super.c:2176
+ mount_bdev+0x34d/0x410 fs/super.c:1367
+ legacy_get_tree+0x105/0x220 fs/fs_context.c:610
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1497
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1320/0x1fa0 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+ </TASK>
 
->> On Mon, Aug 15, 2022 at 3:49 PM Bart Van Assche <bvanassche@acm.org> wrote:
->>> Would it be possible to share the output of the command below? That
->>> should reveal which ATA driver is active on the test setup.
->>>
->>> find /sys -name proc_name | xargs grep -aH .
->>
->> /sys/devices/platform/soc/ee300000.sata/ata1/host0/scsi_host/host0/proc_name:sata_rcar
-> 
-> Thanks Geert for the help. Although I already posted a revert, I'm still trying to
-> root-cause this issue. Do you perhaps know whether sata_rcar controllers support NCQ
+The buggy address belongs to the physical page:
+page:ffffea0001c57b80 refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x715ee
+flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000000 ffffea0001c57bc8 ffff8880b9a403c0 0000000000000000
+raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as freed
 
-   They don't. :-)
+Memory state around the buggy address:
+ ffff8880715edf00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff8880715edf80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff8880715ee000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                         ^
+ ffff8880715ee080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff8880715ee100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
 
-> and if so, what queue depth these controllers support? I think that information is available in sysfs. Here is an example for a VM:
-> 
-> # (cd /sys/class/scsi_device && for a in */device/*/*/ncq_prio_enable; do p=${a%/ncq_prio_enable}; grep -qi ata $p/inquiry || continue; grep -aH . $p/{queue_depth,ncq*}; done)
-> 2:0:0:0/device/driver/2:0:0:0/queue_depth:32
-> 2:0:0:0/device/driver/2:0:0:0/ncq_prio_enable:0
-> 2:0:0:0/device/driver/2:0:0:0/ncq_prio_supported:0
-> 2:0:0:0/device/generic/device/queue_depth:32
-> 2:0:0:0/device/generic/device/ncq_prio_enable:0
-> 2:0:0:0/device/generic/device/ncq_prio_supported:0
-> 6:0:0:1/device/driver/2:0:0:0/queue_depth:32
-> 6:0:0:1/device/driver/2:0:0:0/ncq_prio_enable:0
-> 6:0:0:1/device/driver/2:0:0:0/ncq_prio_supported:0
-> 
-> Thanks,
-> 
-> Bart.
+The root cause is that the value of rbound in bin_search_in_dir_item()
+is out of bounds.
 
-MBR, Sergey
+To be more specific, struct buffer_head's b_data field
+contains the directory entry headers array, according to
+set_de_item_location(). So the array's length should be less
+than the size of b_data, or it may access the invalid memory.  
+This patch solves it by comparing the array's size with b_data's size.
+
+Reported-by: syzbot+ffe24b1afbc4cb5ae8fb@syzkaller.appspotmail.com
+Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
+---
+ fs/reiserfs/namei.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/fs/reiserfs/namei.c b/fs/reiserfs/namei.c
+index 3d7a35d6a18b..c4c056ffafde 100644
+--- a/fs/reiserfs/namei.c
++++ b/fs/reiserfs/namei.c
+@@ -33,7 +33,11 @@ static int bin_search_in_dir_item(struct reiserfs_dir_entry *de, loff_t off)
+ 	int rbound, lbound, j;
+ 
+ 	lbound = 0;
+-	rbound = ih_entry_count(ih) - 1;
++	if (ih_location(ih) + ih_entry_count(ih) * IH_SIZE >=
++	    de->de_bh->b_size)
++		rbound = (de->de_bh->b_size - ih_location(ih)) / IH_SIZE - 1;
++	else
++		rbound = ih_entry_count(ih) - 1;
+ 
+ 	for (j = (rbound + lbound) / 2; lbound <= rbound;
+ 	     j = (rbound + lbound) / 2) {
+-- 
+2.25.1
+

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41508596B02
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AD6D596B0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234115AbiHQIJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 04:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
+        id S233979AbiHQII5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 04:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbiHQIIp (ORCPT
+        with ESMTP id S230201AbiHQIIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 17 Aug 2022 04:08:45 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413594E63F
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:08:39 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id n4so15266125wrp.10
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:08:39 -0700 (PDT)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7AD4F6A4
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:08:40 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id v3so15336250wrp.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:08:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=VWXG1e9/DRSLvY5QEUtPtlLQfPC+KRrU45gKoV7pXAc=;
-        b=NmM9L1PaffPpCsm/C4/QFhphpWYhLPEMeeIXMsHVx+Gx6cwHyUbPB+W5EQHS5EJ82y
-         X/wINA6ev0mpTwDayZwDE6yvvRlTgM1lbaWx8aHtMnHbFEKSMDWQ0ReaD4GMoRNh4naT
-         3WNlCO7ZqEOehjoUs2RHdyj/jHRF/5wCPuOum7W8n+mwDwGQTsAYo/4WyPgBN1DlHohP
-         JPqcaJ+/Gt3ntySPDCiXHkJiMCsSwaoblu88SOG4VmJn4Kgr/ZXn0XOoMCS3p60ogBnl
-         D5LL0QVWUWn/cKMzPW/Oj+PqUtsyrgBgf/fqpBOSX783sp9tUInUxHELxusOUgt7etgL
-         BoYQ==
+        bh=LWK95oP5oKx5jLZsARdUZBbefoGwp+gOvhma7vrlCpI=;
+        b=f0o8HbL81Cbajn0LlWxCI23dsDL/AOMSWSwK9bLg3BtFqxuu0TQnlZgMI7NIfD1j/x
+         VONDXYw5T42+UTm7ljFx6jHpNiDCK6bfieHRhCGZ6WLnonO8sStKp2ASsUwYgTMEbiNl
+         Afs4hhndKZkov9gggCnJYANns2YJByAxPRFXqkaQAfmPPCIyJ75jKKAqkRf6seXuFgjW
+         Fp9w8Ia4eHjbHEAmhlmX9U/S2WHlRxof7+BEYGG4KB9UmHBZLCXv9vIRysONaywC7MlD
+         UcNpYySrxUFzJQkidtCvuy3ozSDwb8ItzxUKCL4YwZuXP4v3fVyig5DM+bB2M2y694sQ
+         XAcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=VWXG1e9/DRSLvY5QEUtPtlLQfPC+KRrU45gKoV7pXAc=;
-        b=TukhulMCE9/CeM+8QqiEfgUEOrmUUV+r+ok2pKVMAAi0UFFBWO2YEa2PIWurRPyrMM
-         i0/0EUbt6qep3QVPWNoSf3EfhvOI/Il8Z0En2mn+kOt6ZshOTqMlJliNu7ixJ2bH9XGd
-         IfL2FYmXm9iPahniK4Bh3tay6RWn+qLP3dnfjzycUb8A6kihbOB8Cni+35QsKzTcZvCr
-         /bmLXInCky2ozqcBjIs2hafX0pXiVso+jezYrQuEDYtjMih9xbNYBmXb+eUXPjV3d+lN
-         krEucJSUP/U08BbwpPTE+y/NjtNMDhZEmXrFgNUtHvAcDnBXgmUtWh4MmjE35bCLFzte
-         ja6g==
-X-Gm-Message-State: ACgBeo2GUx2oCcyRQLWrkjv8RZnjSLwOySmt+C9Lh9CeuQCZ76KbTS5L
-        WIcDU9IPFVyOQMHlMCh4zFUYJw==
-X-Google-Smtp-Source: AA6agR7KY4TOelp2cDbEEwT9aNbQBHNA36aSrdAhKK+734vr4aWgVXADl++KkjH3cOTyGim9KWp26Q==
-X-Received: by 2002:adf:e44b:0:b0:220:5bc5:e942 with SMTP id t11-20020adfe44b000000b002205bc5e942mr13366911wrm.179.1660723717790;
-        Wed, 17 Aug 2022 01:08:37 -0700 (PDT)
+        bh=LWK95oP5oKx5jLZsARdUZBbefoGwp+gOvhma7vrlCpI=;
+        b=HoQj6YkExbCmJizSzGl2jkvWP+G211KL+vLkJ51I5hlHtPcKGO50kyTfTCQ6BstMEz
+         etgC9mluqza92A3R/QTfLqO7tTuZtCdmfsV+wBkENQjNmtEZzwk0SuO3wGMsQZYvSLds
+         HWh3GkRt4GUQqs9ioIxdjz+3iyRqF3rrR/G2jpHl17Y9fWZ1a5rA0KkLEQKC/Eoel2DV
+         ixw7603cQmOCCm4YzuZX+gSJJY+thzsl6bqc7qtLbRqeN9ganmv1otVU6d14gbOQcGnW
+         uNW6ql81GfazL+4veobBN4OgrtRsRkoOH+mQzmUFrbSSiqTnzSP1fV0jySSXYlh5XiBS
+         ELnA==
+X-Gm-Message-State: ACgBeo2ilipbhkr7hNJEwVN3zi4VmuddcgIe0Apnr5tCxZfAc5/8J1iH
+        5xlrIyP9ClpSa1IwI1aE26XsNw==
+X-Google-Smtp-Source: AA6agR4nxG9zqxTof6Y+siXBdw1kqtlHb/D0yV1+6gVF3PSI/A35+NZWfSjXcxpiP1+cNMMLqFn9kQ==
+X-Received: by 2002:adf:de91:0:b0:225:2609:27c5 with SMTP id w17-20020adfde91000000b00225260927c5mr808023wrl.252.1660723719447;
+        Wed, 17 Aug 2022 01:08:39 -0700 (PDT)
 Received: from Balsam-ThinkPad-T480.civfrance.com (58.188.158.77.rev.sfr.net. [77.158.188.58])
-        by smtp.gmail.com with ESMTPSA id u15-20020a05600c19cf00b003a54d610e5fsm1391992wmq.26.2022.08.17.01.08.36
+        by smtp.gmail.com with ESMTPSA id u15-20020a05600c19cf00b003a54d610e5fsm1391992wmq.26.2022.08.17.01.08.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 01:08:37 -0700 (PDT)
+        Wed, 17 Aug 2022 01:08:39 -0700 (PDT)
 From:   bchihi@baylibre.com
 To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
         amitk@kernel.org
@@ -58,9 +58,9 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
         fan.chen@mediatek.com, louis.yu@mediatek.com,
         rex-bc.chen@mediatek.com, abailon@baylibre.com
-Subject: [PATCH v9,2/7] dt-bindings: thermal: Add dt-binding document for LVTS thermal controllers
-Date:   Wed, 17 Aug 2022 10:07:52 +0200
-Message-Id: <20220817080757.352021-3-bchihi@baylibre.com>
+Subject: [PATCH v9,3/7] arm64: dts: mt8192: Add thermal zones and thermal nodes
+Date:   Wed, 17 Aug 2022 10:07:53 +0200
+Message-Id: <20220817080757.352021-4-bchihi@baylibre.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220817080757.352021-1-bchihi@baylibre.com>
 References: <20220817080757.352021-1-bchihi@baylibre.com>
@@ -68,184 +68,156 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandre Bailon <abailon@baylibre.com>
+From: Balsam CHIHI <bchihi@baylibre.com>
 
-Add dt-binding document for mt8192 and mt8195 LVTS thermal controllers.
+Add thermal zones and thermal nodes for the mt8192.
 
-Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-Co-developed-by: Balsam CHIHI <bchihi@baylibre.com>
 Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
 ---
- .../thermal/mediatek,lvts-thermal.yaml        | 152 ++++++++++++++++++
- 1 file changed, 152 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi | 111 +++++++++++++++++++++++
+ 1 file changed, 111 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-new file mode 100644
-index 000000000000..31d9e220513a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-@@ -0,0 +1,152 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/mediatek,lvts-thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+index cbae5a5ee4a0..59ef4da06a70 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+@@ -12,6 +12,7 @@
+ #include <dt-bindings/pinctrl/mt8192-pinfunc.h>
+ #include <dt-bindings/phy/phy.h>
+ #include <dt-bindings/power/mt8192-power.h>
++#include <dt-bindings/reset/mt8192-resets.h>
+ 
+ / {
+ 	compatible = "mediatek,mt8192";
+@@ -599,6 +600,28 @@ spi0: spi@1100a000 {
+ 			status = "disabled";
+ 		};
+ 
++		lvts_ap: thermal-sensor@1100b000 {
++			compatible = "mediatek,mt8192-lvts-ap";
++			#thermal-sensor-cells = <1>;
++			reg = <0 0x1100b000 0 0x1000>;
++			interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&infracfg CLK_INFRA_THERM>;
++			resets = <&infracfg MT8192_INFRA_RST0_THERM_CTRL_SWRST>;
++			nvmem-cells = <&lvts_e_data1>;
++			nvmem-cell-names = "lvts_calib_data1";
++		};
 +
-+title: MediaTek SoC LVTS thermal controller
++		lvts_mcu: thermal-sensor@11278000 {
++			compatible = "mediatek,mt8192-lvts-mcu";
++			#thermal-sensor-cells = <1>;
++			reg = <0 0x11278000 0 0x1000>;
++			interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&infracfg CLK_INFRA_THERM>;
++			resets = <&infracfg MT8192_INFRA_RST4_THERM_CTRL_MCU_SWRST>;
++			nvmem-cells = <&lvts_e_data1>;
++			nvmem-cell-names = "lvts_calib_data1";
++		};
 +
-+maintainers:
-+  - Yu-Chia Chang <ethan.chang@mediatek.com>
-+  - Ben Tseng <ben.tseng@mediatek.com>
+ 		spi1: spi@11010000 {
+ 			compatible = "mediatek,mt8192-spi",
+ 				     "mediatek,mt6765-spi";
+@@ -1457,4 +1480,92 @@ larb2: larb@1f002000 {
+ 			power-domains = <&spm MT8192_POWER_DOMAIN_MDP>;
+ 		};
+ 	};
 +
-+description: |
-+  LVTS (Low Voltage Thermal Sensor).
-+  The architecture will be first used on mt8192 and mt8195.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt8192-lvts-ap
-+      - mediatek,mt8192-lvts-mcu
-+      - mediatek,mt8195-lvts-ap
-+      - mediatek,mt8195-lvts-mcu
-+
-+  "#thermal-sensor-cells":
-+    const: 1
-+
-+  reg:
-+    maxItems: 1
-+    description: LVTS instance registers.
-+
-+  interrupts:
-+    maxItems: 1
-+    description: LVTS instance interrupts.
-+
-+  clocks:
-+    maxItems: 1
-+    description: LVTS instance clock.
-+
-+  resets:
-+    maxItems: 1
-+    description: |
-+      LVTS instance SW reset for HW AP/MCU domain to clean temporary data
-+      on HW initialization/resume.
-+
-+  nvmem-cells:
-+    minItems: 1
-+    maxItems: 2
-+    description: Calibration efuse data for LVTS
-+
-+  nvmem-cell-names:
-+    minItems: 1
-+    maxItems: 2
-+    description: Calibration efuse cell names for LVTS
-+
-+allOf:
-+  - $ref: thermal-sensor.yaml#
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - mediatek,mt8192-lvts-ap
-+              - mediatek,mt8192-lvts-mcu
-+    then:
-+      properties:
-+        nvmem-cells:
-+          items:
-+            - description: Calibration efuse data for LVTS
-+
-+        nvmem-cell-names:
-+          items:
-+            - const: lvts_calib_data1
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - mediatek,mt8195-lvts-ap
-+              - mediatek,mt8195-lvts-mcu
-+    then:
-+      properties:
-+        nvmem-cells:
-+          items:
-+            - description: Calibration efuse data 1 for LVTS
-+            - description: Calibration efuse data 2 for LVTS
-+
-+        nvmem-cell-names:
-+          items:
-+            - const: lvts_calib_data1
-+            - const: lvts_calib_data2
-+
-+required:
-+  - compatible
-+  - '#thermal-sensor-cells'
-+  - reg
-+  - interrupts
-+  - clocks
-+  - resets
-+  - nvmem-cells
-+  - nvmem-cell-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/mt8192-clk.h>
-+    #include <dt-bindings/reset/mt8192-resets.h>
-+
-+    soc {
-+      #address-cells = <2>;
-+      #size-cells = <2>;
-+
-+      lvts_ap: thermal-sensor@1100b000 {
-+        compatible = "mediatek,mt8192-lvts-ap";
-+        #thermal-sensor-cells = <1>;
-+        reg = <0 0x1100b000 0 0x1000>;
-+        interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH 0>;
-+        clocks = <&infracfg CLK_INFRA_THERM>;
-+        resets = <&infracfg MT8192_INFRA_RST0_THERM_CTRL_SWRST>;
-+        nvmem-cells = <&lvts_e_data1>;
-+        nvmem-cell-names = "lvts_calib_data1";
-+      };
-+
-+      lvts_mcu: thermal-sensor@11278000 {
-+        compatible = "mediatek,mt8192-lvts-mcu";
-+        #thermal-sensor-cells = <1>;
-+        reg = <0 0x11278000 0 0x1000>;
-+        interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH 0>;
-+        clocks = <&infracfg CLK_INFRA_THERM>;
-+        resets = <&infracfg MT8192_INFRA_RST4_THERM_CTRL_MCU_SWRST>;
-+        nvmem-cells = <&lvts_e_data1>;
-+        nvmem-cell-names = "lvts_calib_data1";
-+      };
-+    };
-+
-+    thermal_zones: thermal-zones {
-+      cpu0-thermal {
-+        polling-delay = <0>;
-+        polling-delay-passive = <0>;
-+        thermal-sensors = <&lvts_mcu 0>;
-+      };
-+
-+      vpu1-thermal {
-+        polling-delay = <0>;
-+        polling-delay-passive = <0>;
-+        thermal-sensors = <&lvts_ap 0>;
-+      };
-+    };
++	thermal_zones: thermal-zones {
++		cpu0-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_mcu 0>;
++		};
++		cpu1-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_mcu 1>;
++		};
++		cpu2-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_mcu 2>;
++		};
++		cpu3-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_mcu 3>;
++		};
++		cpu4-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_mcu 4>;
++		};
++		cpu5-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_mcu 5>;
++		};
++		cpu6-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_mcu 6>;
++		};
++		cpu7-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_mcu 7>;
++		};
++		vpu1-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap 0>;
++		};
++		vpu2-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap 1>;
++		};
++		gpu1-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap 2>;
++		};
++		gpu2-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap 3>;
++		};
++		infra-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap 4>;
++		};
++		cam-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap 5>;
++		};
++		md1-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap 6>;
++		};
++		md2-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap 7>;
++		};
++		md3-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap 8>;
++		};
++	};
+ };
 -- 
 2.34.1
 

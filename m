@@ -2,58 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4585973C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD208597384
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:07:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240846AbiHQQIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 12:08:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
+        id S240558AbiHQQEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 12:04:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240575AbiHQQIY (ORCPT
+        with ESMTP id S240618AbiHQQD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 12:08:24 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4A9E1A
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:08:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=g7S+HCgUkbcyvwHaNgnlGuCfzudds+2a5baU/BUjvXE=; b=BNuPf0oQ3o0H+lnGwaMvy8m9Va
-        2U8gn4ZOFRSSvGl/JQMPcmSG4sHav0SU4ier4en8tWzqkQ85QYPJPD69jToqQ0q4NgDEHEfMgtF29
-        011wCLAEr/gAZgbdmtxlrhepPDBD0PWAXt9cWbXF5a0TuyD2y9aRh4jJSEQC3CjRLxOBm3ZAv6OLS
-        MqwA6PsUMUMvKYEzqqzsOFoVbWw6vGPgoCugUcy1L5m74Q7LlzJ4nrd31vCQ92Jjd1/Jvd21BLInv
-        v48ZGk8DoxOAUltroqvpfEDJx3L0QPX7o1yvqg/GBFWahCQOjsaj/dMjYDskinEoet+YKJUtRvS+t
-        r5TohaCA==;
-Received: from [165.90.126.25] (helo=mail.igalia.com)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oOLaO-00AoqH-Bu; Wed, 17 Aug 2022 18:08:04 +0200
-Date:   Wed, 17 Aug 2022 15:07:51 -0100
-From:   Melissa Wen <mwen@igalia.com>
-To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Cc:     =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>,
-        Christian =?utf-8?B?S8O2bmln?= <ckoenig.leichtzumerken@gmail.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG][5.20] refcount_t: underflow; use-after-free
-Message-ID: <20220817160751.moqhebkiuiydraka@mail.igalia.com>
-References: <CABXGCsM58-8fxVKAVkwsshg+33B_1_t_WesG160AtVBe1ZvKiw@mail.gmail.com>
- <be6f1ce4-46b1-7a80-230c-b99f203ce8ad@riseup.net>
- <CABXGCsMFYnE+Wn2EAWuC8DSVj=TVprj6ABZwRK-hXcw-1hnMyw@mail.gmail.com>
- <CABXGCsMpGabZ32j_ObEHa_har2W8M8RWuqnx3d=yJT2NX_ztNg@mail.gmail.com>
+        Wed, 17 Aug 2022 12:03:58 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F97131EC3;
+        Wed, 17 Aug 2022 09:03:13 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id c28so15529306lfh.3;
+        Wed, 17 Aug 2022 09:03:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=jVtXdyIgujEW9yCQqJi5T2OfpGkjooy3feMVnemJH3U=;
+        b=oPv17D58CBHupLx32DQ1PHSFijpvfIr+xBgBSG6ogNOD6KohOmMk5sLkkt+OMj+cGv
+         bkzkZTkJG94qz37+RqLKbo7nga7PTtMmvuIB8H6JcT8AtYsoWlEQq8hbAVE6B1DkOw6i
+         I1x0H7gTONtP5KaX8doFoW5pmgAkf1YyXoNnre1c4Z0/wXXR6apGvYnwHjV0evbfF1uK
+         walVrQ785N7fLJO+O8G2vjUA8p82yp5cgBSiU5wYlzuU98lEVFAr4xYlNKs1wr/izTl7
+         O3YBqlQsA/+Gsst3EYzSMioutsN6IWgb7qfBVvZBTLXMBu5Wmzo8RMc1w60W8nFBxKUu
+         mjZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=jVtXdyIgujEW9yCQqJi5T2OfpGkjooy3feMVnemJH3U=;
+        b=wUtSfrIRGYKuceRziew1eB2or5QHnN6uXazOdw98XoXAJ+THMiofOSszANUMijhRol
+         KbEb4OgVpRLBg6sBqOXVXMYvFHHTGiEKn+snk1pCCfBOKS/RnXEvQoyh58SgpO4WIi5O
+         8yA16j+0XFLCPQmPvSfcd5xT3FaVwYQ7kzdp8bM5o6QJDn/QwYsQf/cTsisObJe7oFJ4
+         8qWatf1Tw/BB1s7gPNpgDgCV+Wu3r4zQvoZueZc6wx/UmdiTvQec0PfDCNtu+sGDBOB+
+         FwtNUK6NVoTc3Ij1qoH1odGaPNM/g6rCXNRku//AyX82BdGNOoY85f8b1dK75x2RZ88i
+         Hi4A==
+X-Gm-Message-State: ACgBeo1eQw3R21Lilz4VPMtus4dATR1zh9mVgDIRUeLaprrBvaFyuHmA
+        RG2yXotuPilWkXKutHhr1X8=
+X-Google-Smtp-Source: AA6agR5BahLaInyCk5qBo4MT6CcZ/iPJ7DXGEc/Dm1fWRm51euvuBkasFGHzXiVRIOJA5tDmUBURzQ==
+X-Received: by 2002:ac2:549a:0:b0:492:adc8:106c with SMTP id t26-20020ac2549a000000b00492adc8106cmr423608lfk.90.1660752191037;
+        Wed, 17 Aug 2022 09:03:11 -0700 (PDT)
+Received: from gmail.com (82-209-154-112.cust.bredband2.com. [82.209.154.112])
+        by smtp.gmail.com with ESMTPSA id u21-20020a05651206d500b0048b0a5293ccsm1729891lff.78.2022.08.17.09.03.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 09:03:10 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 18:08:04 +0200
+From:   Marcus Folkesson <marcus.folkesson@gmail.com>
+To:     Kent Gustavsson <kent@minoris.se>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/9] Improve MCP3911 driver
+Message-ID: <Yv0SZG8vMIz7oF64@gmail.com>
+References: <20220815061625.35568-1-marcus.folkesson@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3lobgvkimgp7exii"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="VE85pcEAIHvs5F5g"
 Content-Disposition: inline
-In-Reply-To: <CABXGCsMpGabZ32j_ObEHa_har2W8M8RWuqnx3d=yJT2NX_ztNg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220815061625.35568-1-marcus.folkesson@gmail.com>
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,149 +78,96 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---3lobgvkimgp7exii
-Content-Type: text/plain; charset=iso-8859-1
+--VE85pcEAIHvs5F5g
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 08/17, Mikhail Gavrilov wrote:
-> On Mon, Aug 15, 2022 at 3:37 PM Mikhail Gavrilov
-> <mikhail.v.gavrilov@gmail.com> wrote:
-> >
-> > Thanks, I tested this patch.
-> > But with this patch use-after-free problem happening in another place:
+On Mon, Aug 15, 2022 at 08:16:16AM +0200, Marcus Folkesson wrote:
+> This patch series intend to fix bugs and improve functionality of the MCP=
+3911 driver.
+> The main features added are
+> - Support for buffers
+> - Interrupt driven readings
+> - Support for oversampling ratio
+> - Support for set scale values (Gain)
 >=20
-> Does anyone have an idea why the second use-after-free happened?
-> From the trace I don't understand which code is related.
-> I don't quite understand what the "Workqueue" entry in the trace means.
+> Among the bug fixes, there are changes in the formula for calculate raw v=
+alue and a fix for mismatch in the devicetree property.
+>=20
+> Another general improvement for the driver is to use managed resources fo=
+r all allocated resources.
+>=20
+> See patch notes for more specific changes.
+>=20
+> General changes for the series:
+>=20
+> v3:
+> - Drop Phase patch
+> - Add Fixes tags for those patches that are fixes
+> - Move Fixes patches to the beginning of the patchset
+>=20
+> v4:
+> - Split up devm-cleanup functions=20
+> - Cosmetic cleanups
+> - Add
+> 	select IIO_BUFFER
+> 	select IIO_TRIGGERED_BUFFER
+>     To Kconfig
+> - Add .endianness =3D IIO_BE
+>=20
+> v5:
+> - Drop remove function
+> - Split tx&rx transfers in mcp3911_trigger_handler()
+> - Moved Kconfig changes to right patch
+>=20
+> v6:
+> - Go for devm_clk_get_enabled()
+> - Cosmetic cleanups
+> - Clarify the description of microchip,data-ready-hiz
+>=20
 
-Hi Mikhail,
+Marcus Folkesson (9):
+  iio: adc: mcp3911: make use of the sign bit
+  iio: adc: mcp3911: correct "microchip,device-addr" property
+  iio: adc: mcp3911: use correct formula for AD conversion
+  iio: adc: mcp3911: use resource-managed version of iio_device_register
+  iio: adc: mcp3911: add support for buffers
+  iio: adc: mcp3911: add support for interrupts
+  dt-bindings: iio: adc: mcp3911: add microchip,data-ready-hiz entry
+  iio: adc: mcp3911: add support for oversampling ratio
+  iio: adc: mcp3911: add support to set PGA
 
-IIUC, you got this second user-after-free by applying the first version
-of Ma=EDra's patch, right? So, that version was adding another unbalanced
-unlock to the cs ioctl flow, but it was solved in the latest version,
-that you can find here: https://patchwork.freedesktop.org/patch/497680/
-If this is the situation, can you check this last version?
-
-Thanks,
-
-Melissa
+ .../bindings/iio/adc/microchip,mcp3911.yaml   |   7 +
+ drivers/iio/adc/Kconfig                       |   2 +
+ drivers/iio/adc/mcp3911.c                     | 372 +++++++++++++++---
+ 3 files changed, 321 insertions(+), 60 deletions(-)
 
 >=20
-> [ 408.358737] ------------[ cut here ]------------
-> [ 408.358743] refcount_t: underflow; use-after-free.
-> [ 408.358760] WARNING: CPU: 9 PID: 62 at lib/refcount.c:28
-> refcount_warn_saturate+0xba/0x110
-> [ 408.358769] Modules linked in: uinput snd_seq_dummy rfcomm
-> snd_hrtimer nft_objref nf_conntrack_netbios_ns nf_conntrack_broadcast
-> nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet
-> nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat
-> nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip_set nf_tables nfnetlink
-> qrtr bnep sunrpc binfmt_misc snd_seq_midi snd_seq_midi_event mt76x2u
-> mt76x2_common snd_hda_codec_realtek mt76x02_usb snd_hda_codec_generic
-> iwlmvm snd_hda_codec_hdmi mt76_usb intel_rapl_msr snd_hda_intel
-> mt76x02_lib intel_rapl_common snd_intel_dspcfg snd_intel_sdw_acpi mt76
-> snd_hda_codec vfat fat snd_usb_audio snd_hda_core edac_mce_amd
-> mac80211 snd_usbmidi_lib snd_hwdep snd_rawmidi mc snd_seq btusb
-> kvm_amd iwlwifi snd_seq_device btrtl btbcm libarc4 btintel eeepc_wmi
-> snd_pcm iwlmei kvm btmtk asus_wmi ledtrig_audio irqbypass joydev
-> snd_timer sparse_keymap bluetooth platform_profile rapl cfg80211 snd
-> video wmi_bmof soundcore i2c_piix4 k10temp rfkill mei
-> [ 408.358853] asus_ec_sensors acpi_cpufreq zram hid_logitech_hidpp
-> amdgpu igb dca drm_ttm_helper ttm iommu_v2 crct10dif_pclmul gpu_sched
-> crc32_pclmul ucsi_ccg crc32c_intel drm_buddy nvme typec_ucsi
-> drm_display_helper ghash_clmulni_intel ccp typec nvme_core sp5100_tco
-> cec wmi ip6_tables ip_tables fuse
-> [ 408.358880] Unloaded tainted modules: amd64_edac():1 amd64_edac():1
-> amd64_edac():1 amd64_edac():1 amd64_edac():1 amd64_edac():1
-> amd64_edac():1 amd64_edac():1 amd64_edac():1 amd64_edac():1
-> pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1
-> amd64_edac():1 amd64_edac():1 pcc_cpufreq():1 amd64_edac():1
-> pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1 amd64_edac():1
-> pcc_cpufreq():1 pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1
-> amd64_edac():1 pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1
-> pcc_cpufreq():1 amd64_edac():1 amd64_edac():1 pcc_cpufreq():1
-> pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1 amd64_edac():1
-> pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1
-> amd64_edac():1 pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1
-> amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1 amd64_edac():1
-> pcc_cpufreq():1 amd64_edac():1 amd64_edac():1 pcc_cpufreq():1
-> amd64_edac():1 pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1
-> pcc_cpufreq():1 pcc_cpufreq():1 fjes():1 pcc_cpufreq():1 fjes():1
-> [ 408.358953] pcc_cpufreq():1 pcc_cpufreq():1 fjes():1 pcc_cpufreq():1
-> fjes():1 fjes():1 fjes():1 fjes():1 fjes():1
-> [ 408.358967] CPU: 9 PID: 62 Comm: kworker/9:0 Tainted: G W L -------
-> --- 6.0.0-0.rc1.13.fc38.x86_64+debug #1
-> [ 408.358971] Hardware name: System manufacturer System Product
-> Name/ROG STRIX X570-I GAMING, BIOS 4403 04/27/2022
-> [ 408.358974] Workqueue: events drm_sched_entity_kill_jobs_work [gpu_sche=
-d]
-> [ 408.358982] RIP: 0010:refcount_warn_saturate+0xba/0x110
-> [ 408.358987] Code: 01 01 e8 d9 59 6f 00 0f 0b e9 a2 46 a5 00 80 3d 3e
-> 7e be 01 00 75 85 48 c7 c7 70 99 8e 92 c6 05 2e 7e be 01 01 e8 b6 59
-> 6f 00 <0f> 0b e9 7f 46 a5 00 80 3d 19 7e be 01 00 0f 85 5e ff ff ff 48
-> c7
-> [ 408.358990] RSP: 0018:ffffb124003efe60 EFLAGS: 00010286
-> [ 408.358994] RAX: 0000000000000026 RBX: ffff9987a025d428 RCX: 0000000000=
-000000
-> [ 408.358997] RDX: 0000000000000001 RSI: ffffffff928d0754 RDI: 00000000ff=
-ffffff
-> [ 408.358999] RBP: ffff9994e4ff5600 R08: 0000000000000000 R09: ffffb12400=
-3efd10
-> [ 408.359001] R10: 0000000000000003 R11: ffff99952e2fffe8 R12: ffff9994e4=
-ffc800
-> [ 408.359004] R13: ffff998600228cc0 R14: ffff9994e4ffc805 R15: ffff9987a0=
-25d430
-> [ 408.359006] FS: 0000000000000000(0000) GS:ffff9994e4e00000(0000)
-> knlGS:0000000000000000
-> [ 408.359009] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [ 408.359012] CR2: 000027ac39e78000 CR3: 00000001a66d8000 CR4: 0000000000=
-350ee0
-> [ 408.359015] Call Trace:
-> [ 408.359017] <TASK>
-> [ 408.359020] process_one_work+0x2a0/0x600
-> [ 408.359032] worker_thread+0x4f/0x3a0
-> [ 408.359036] ? process_one_work+0x600/0x600
-> [ 408.359039] kthread+0xf5/0x120
-> [ 408.359044] ? kthread_complete_and_exit+0x20/0x20
-> [ 408.359049] ret_from_fork+0x22/0x30
-> [ 408.359061] </TASK>
-> [ 408.359063] irq event stamp: 5468
-> [ 408.359064] hardirqs last enabled at (5467): [<ffffffff91f2b9e4>]
-> _raw_spin_unlock_irq+0x24/0x50
-> [ 408.359071] hardirqs last disabled at (5468): [<ffffffff91f22d8c>]
-> __schedule+0xe2c/0x16d0
-> [ 408.359076] softirqs last enabled at (2482): [<ffffffff917acc28>]
-> rht_deferred_worker+0x708/0xc00
-> [ 408.359079] softirqs last disabled at (2480): [<ffffffff917ac717>]
-> rht_deferred_worker+0x1f7/0xc00
-> [ 408.359082] ---[ end trace 0000000000000000 ]---
+> Best regards,
+> Marcus Folkesson
 >=20
 >=20
-> Full kernel log is here: https://pastebin.com/Lam9CRLV
->=20
-> --=20
-> Best Regards,
-> Mike Gavrilov.
 
---3lobgvkimgp7exii
+
+--VE85pcEAIHvs5F5g
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmL9EkoACgkQwqF3j0dL
-ehzaHxAAqo/62RNz61uxfjszCUvA/LL0HSMy87gyhU/hBwcv2v+CwtCAF1bU/340
-KVTFygFbB41+rOUz+0bCvyf5uAhkwYI3K1EKrijk6xjH4MSM5FesdJ5o1tNHrqLM
-COFqOKJDfAtb6I83zVJvqtYQnTVGSevmRkUe0ZZ3LU/47PK/hOow3qAJiD2K0BT/
-mvKBFzlh/2hUXUaj3qCmzEwDx8n7tGP8+qhiuTuIPEH2nZOd5fwtraMCdUpoxMvJ
-1xl3RUkTTdCy8VXBCOU/EFcZFG15wpdo8xIc4NaD/x3mMw7hcEKmNgLNldUXYREQ
-Tx0uXZMDr1+Df18QnPIsqNYFtXEFC0Oz5hJmKtblyblgQNSGjWl+VeALIN0TMEOv
-W3mqvJf1BN8kdRUUANqTpYgk4W7uyzgE+Nk/I8UTsbLsd9ujxvUHCVP5N2Fh9Qmh
-qE1rKZl8Sfl8fsj7fgHyJp4VHbKwWv6PDf5oZqbbHVYV83mGZ2SmfS5NjKVy1NpI
-YqEGnNeiF0TaBXhs9ZHoklMHmAO0qTk4p6iCaTiCFK5DKHXJm31MTOmempqACFD0
-bS90gH4DFHEk8Jz6Mw7sCmm+ssNTyGEGBZWD39PzgeroglRTIg0L/NuRmyPAnPl2
-WmbYSRZemuAiJ1Hdl1gMbCoD4UHMyj8EWyhBuujIpTtN0kaJD9U=
-=lGGo
+iQIzBAEBCAAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmL9EmAACgkQiIBOb1ld
+UjIUog//TMw7AQhWvpdobTQEqL39MmUf8RHo9kPnosQykuIyfQ/NTe0kftmWM9II
++pCslZDN4ag29bN2c13ZAqwiiIAr+xOmKNQBzVoC1fI4cJQJAA3v4bsvvfWJTXhg
+gHsRlPp+6vcn2BCtyGJWZuD0bkLr2Gdx1hXmgJrh+SCNtNr4/bBFInVQ6ufYx5Ur
+d+UWG6hNvmKJSpPwxRqUkGogbaWa7gd6BTx463olRPmXmxSp3MBLloGPa9MGxNir
+9S2D49VSpQSRDKBiiKTnao9mX0CgP7fM0Tq+xEuXtue2hnSpHwKUe+IjJJBp1m5v
+qAJmKYt5HJeOAHpjgGS6n/IpZL+3yaALPxW/dOzhBmBRNv7qP5oJCFaTamAWN0gl
+KSvtqKzo87SoGPpW5/Wr5l6p0eMA94ruPziHdbWQgggboV47wX21VCyGg32m7h/J
+IRKIDv9QbzegTZv8nDYWC1oxL5xcd8qT5uNqxWH/Q4xAdfcMs9k33hQKILr1TZRC
+KoNJa3/3HaVq/Q1RpygFtvhBoAWTT3z3QzIeNBHxNc1JyEc/xomxhXuk0V5OSxh1
++XyvXhpqR4CpMLHJeleW8fez3Elw8W+jipB7QyPFSHilZUEeQZMQjfxtJVxu2r22
+DO+sHrHm0KrfW7K6q9Rhhr62WcKgioSWSy5llNKPKie7rC9Z0CU=
+=uBb4
 -----END PGP SIGNATURE-----
 
---3lobgvkimgp7exii--
+--VE85pcEAIHvs5F5g--

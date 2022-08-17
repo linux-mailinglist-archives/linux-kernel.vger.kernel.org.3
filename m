@@ -2,91 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A6A7597861
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2319B59786F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241555AbiHQU4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 16:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
+        id S241859AbiHQU4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 16:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233797AbiHQU4A (ORCPT
+        with ESMTP id S241761AbiHQU4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 16:56:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D2FA7231
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:55:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660769758;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UCPQMtqG0VB+k5U8mjKK0NLp4lpMVU6Bz0wA0P8dEHU=;
-        b=eY3BJdf2qBFDcCwQ8UpRrpOhitEvmBmjiCNtAX46l4lCKvZSYG/h0rnjEtRuJR5TSKprA/
-        FajRB4zkMBzRsPtQoVVS84B0DcMCGHlCWcL7szlSO98rCIwp6oZerK2OrTkxs55jVvdLVk
-        D+c0jnezGhGyLoyazW1u7WNnTWszRQo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-483-bPj_UI21ODiyJxAyER130Q-1; Wed, 17 Aug 2022 16:55:53 -0400
-X-MC-Unique: bPj_UI21ODiyJxAyER130Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B45B6802E5D;
-        Wed, 17 Aug 2022 20:55:52 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A05EAC15BB3;
-        Wed, 17 Aug 2022 20:55:50 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220816164435.0558ef94@kernel.org>
-References: <20220816164435.0558ef94@kernel.org> <20220816103452.479281-1-yin31149@gmail.com> <166064248071.3502205.10036394558814861778.stgit@warthog.procyon.org.uk> <804153.1660684606@warthog.procyon.org.uk>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     dhowells@redhat.com, Hawkins Jiawei <yin31149@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        bpf@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>
-Subject: Re: [PATCH] net: Fix suspicious RCU usage in bpf_sk_reuseport_detach()
+        Wed, 17 Aug 2022 16:56:34 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DACA927F;
+        Wed, 17 Aug 2022 13:56:33 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id z72so2766129iof.12;
+        Wed, 17 Aug 2022 13:56:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=2F8UapFM6fvTc5fGCMprtfZuN5LHlZVrraMyXumfVqE=;
+        b=LbgMGsGKphl7X2/Jn0u5eMcUeY0mew1lHqKEqfLaBcD42X17Re8z5rpOQYmW5Vtdo9
+         tsbQAaIFqFo5BvaBx68dsfnuUwQq92cWSEI/zxlhcsjD+kx3hydeBmsw4hEX1VPxHNvw
+         tKWoDZfnYemoNlsbZC7T5Vg/Y7CgUmUyqnX6JuDfQU0jfZ/7c2KoYLaCTzWOhZsNLkVP
+         vqeWW/J4WU3sDEN/7KdViU1V3Y9L/UKbFfVhaY7IJ3DWdEMKtg8uJdqyaFYcyhIYcwBa
+         fVXnH6CAm8WsCTJgnXY6K1pGRxlZiwyjtMG1yPSDD/ZtE6bHaFuxIcURQjWPG9D+DslS
+         ipSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=2F8UapFM6fvTc5fGCMprtfZuN5LHlZVrraMyXumfVqE=;
+        b=mX/m7Rk10kWwjaZUStBjmmTzu9xYgrTmgaYkbXjiXyMTiSB2DTDb2kS1hDSRWqrH4G
+         9JKcGtO/axXs21B7rBpxw6N7rXv7EF1jOYful0wl09lAh8DNqozhEwuMbl05d4V7es2+
+         3SsEJy7F5qJR4pkfptXWsV0tA7siOXjam/WshiZdeq+kjhDOmaXYi4Q/FC2GI6xMN2Ti
+         oHo5Fg0FpOsTHGneaK6Mc7IKMmo4nzSxfpAEzh3JHu03oQdbSCXqvS+WOplVxvlv8LMs
+         WCusQkNXbpT+5viiYV8j0RWAzPVLo7p3xkDt6dY9lx1BpfNJ98om5JcpNluerZDQOFJV
+         oS9g==
+X-Gm-Message-State: ACgBeo0R1EOoZuYZI2iTEz2/CngqZXnat7lGtVu0meSTWN7+aT2CV3g0
+        QZlmXpA4XOuArOXeHnm6VlSCjbrBlVrZQtyIgoU=
+X-Google-Smtp-Source: AA6agR7W0/vJMmLEu2GKK6hHojDe0NnOQN0sm9gqWwqOLGfYNe/j8D+Y8j9wEt1Kx9LD5aIinElIOM+NZfs9EfUUXfw=
+X-Received: by 2002:a5d:8618:0:b0:684:6469:596b with SMTP id
+ f24-20020a5d8618000000b006846469596bmr10939iol.177.1660769793009; Wed, 17 Aug
+ 2022 13:56:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3974012.1660769749.1@warthog.procyon.org.uk>
-Date:   Wed, 17 Aug 2022 21:55:49 +0100
-Message-ID: <3974013.1660769749@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220805154231.31257-1-ojeda@kernel.org> <20220805154231.31257-24-ojeda@kernel.org>
+ <202208171324.FB04837@keescook>
+In-Reply-To: <202208171324.FB04837@keescook>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 17 Aug 2022 22:56:21 +0200
+Message-ID: <CANiq72=E9c0YNvww6r=Zj1SHNV9OjvNMUFPD_w8_yJNTX-7-eQ@mail.gmail.com>
+Subject: Re: [PATCH v9 23/27] Kbuild: add Rust support
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Finn Behrens <me@kloenk.de>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Douglas Su <d0u9.su@outlook.com>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        Daniel Xu <dxu@dxuuu.xyz>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jakub Kicinski <kuba@kernel.org> wrote:
+On Wed, Aug 17, 2022 at 10:26 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> It'd be nice to split this up into maybe per-target patches, but given
+> how long this has been getting developed, I'd prefer to avoid blocking
+> on that, and just get this series landed so we can move to incremental
+> fixes/additions.
 
-> I like your version because it documents what the lock protecting this
-> field is. 
-> 
-> In fact should we also add && sock_owned_by_user(). Martin, WDYT? Would
-> that work for reuseport? Jakub S is fixing l2tp to hold the socket lock
-> while setting this field, yet most places take the callback lock...
+When I started the series, I considered several approaches, and in the
+end opted for "setup as much as possible before the flag-patch that
+enables the Kbuild support", which was simple, though indeed the
+Kbuild patch remained fairly big.
 
-So how do you want to proceed?  My first version of the patch with
-sock_owned_by_user()?
+Then some people commented on that patch over several versions, so I
+kept the simple strategy :)
 
-David
+What I can look into is moving the optional targets out of this patch,
+putting them after the "flag-patch", since they may be considered
+"additional features" anyway. In fact, for the trimming down in v9, I
+thought about removing them entirely. It will not change things too
+much, since they are small, but it may help.
 
+For v9 I nevertheless attempted to simplify this patch by doing the
+"move all new, big files to their own patch" (see my reply at [1]), so
+it is fairly smaller than in previous versions.
+
+[1] https://lore.kernel.org/lkml/CANiq72nzOQSd2vsh2_=0YpGNpY=7agokbgi_vBc5_GF4-02rsA@mail.gmail.com/
+
+Cheers,
+Miguel

@@ -2,178 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E2F596AA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FD1596AB0
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233046AbiHQHwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 03:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
+        id S233189AbiHQHyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 03:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiHQHwM (ORCPT
+        with ESMTP id S230114AbiHQHx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 03:52:12 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478147AC1D
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:52:11 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id qn6so23067334ejc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:52:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=9xnYZhI92vOXcy2182GQb2h4xwg4jFW98roz/a4SU/A=;
-        b=OVPwHYg3PU3Z1vHpdZlisRprs3ZQd23oZMt25zzQvA4883qfh+RBwDVN4uFxDpTaUv
-         C9qsgkYCkWb0MfWTlcBpvQFweh7783eLF5y3zqqy81zNnQTdg4Cab25HiRYJmiN6C6ok
-         JGnbhrPNb7Rg6OqyjPSmWSpM0iWYPIO3pKTEYLdd0fcrh7bStP+8bYmsafeTgBBepmlr
-         H+Xeclbhy9XWP3C+xEhX7ZVAh34Wn5RE8jEtmpe1EggGde3g5dh6XgxQW90RspH42+2X
-         FqOEorEJUsZDPS3rn2nxh7PsEHKXv0SS/v2kcPOlBx/wI4mItc5nbxw4HB8lek5nkRG4
-         3Yjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=9xnYZhI92vOXcy2182GQb2h4xwg4jFW98roz/a4SU/A=;
-        b=wumyrQ+l9qfac4NfBm5Sg6duISVPQwkGcVPYnc4/AfO9Dm3DpLc4ADY/7ROKltnqDs
-         6q3EJ8TAKj4aLDNZemHa+FBolad/lbKraPFe1jb/RrZwLdbqHj4ATRLe4ivtm3LYG/n+
-         fRuqu/vM2wY9XtR6x5oEsmjfomFOIRkF/SsP3TscDvgJ86T66TS5jYLIGVzFLjbIphID
-         +BNJajh/9/s5lR0eVLGwS4QwblzuXTM+CDp+jDAWjseJsIwqRT1yXVDwnzY0XzUGI8hb
-         sYwy0+dYCGzcbHxm4SOb/XO5FS7Aqf3oxPZNqLVoSCrlkF3Cmgtwl8lqD+rKxC1MD1JL
-         8VoA==
-X-Gm-Message-State: ACgBeo3EV8KcvLBfEQUmuf9ooHR7Iz+qihYY4ORJu0PitvMlu2E2nSDN
-        ojstKBHFR5y4DPr9XSJ/aYMk5g==
-X-Google-Smtp-Source: AA6agR4ZX88kMxjHrS7fizpdk5LNncHR+I8re7ouM/1AQdHMVm8e+M7j2Vx1kRtOIyRqd7OBX7nsKA==
-X-Received: by 2002:a17:907:b590:b0:730:9e0f:e9a3 with SMTP id qx16-20020a170907b59000b007309e0fe9a3mr15396358ejc.112.1660722729843;
-        Wed, 17 Aug 2022 00:52:09 -0700 (PDT)
-Received: from localhost (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
-        by smtp.gmail.com with ESMTPSA id o6-20020aa7c506000000b0043e8334f762sm10030717edq.65.2022.08.17.00.52.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 00:52:08 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 09:52:07 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Conor.Dooley@microchip.com
-Cc:     jrtc27@jrtc27.com, palmer@dabbelt.com, robh@kernel.org,
-        tglx@linutronix.de, maz@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, daniel.lezcano@linaro.org,
-        anup@brainfault.org, guoren@kernel.org, sagar.kadam@sifive.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, qemu-riscv@nongnu.org
-Subject: Re: [PATCH 0/3] Fix dt-validate issues on qemu dtbdumps due to
- dt-bindings
-Message-ID: <20220817075207.dvylesvqaoc7ga4r@kamzik>
-References: <20220805162844.1554247-1-mail@conchuod.ie>
- <YvGBYKZyW0B2/wSr@Jessicas-MacBook-Pro>
- <94fe7e46-6156-1cc5-a4dc-1eee78e99bc4@microchip.com>
- <20220809141436.GA1706120-robh@kernel.org>
- <61829ccd-20d7-e2f0-0a6b-bcd0e076b9ea@microchip.com>
- <1d94e18d-7f51-0619-95a9-6ca5fa7d9671@microchip.com>
- <20220816140633.pkjws7n3qxsescjh@kamzik>
- <5abe9b30-274a-8f36-0797-cc0e981c3f70@microchip.com>
+        Wed, 17 Aug 2022 03:53:58 -0400
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2831E19283
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:53:58 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id 75D7F2B0647A;
+        Wed, 17 Aug 2022 03:53:55 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 17 Aug 2022 03:53:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1660722834; x=1660730034; bh=H7AMF4kZE2
+        hOLEr28TVkQrVEDPRpXPajEymRGpT0zuY=; b=VekMXPHqujdEVZpBIpN79E+lff
+        1H4NFvjSrep9AFQbJUTuRXgh+NaV8q1zMs/5fTBGWFQG/nhnGjgxCZpTLcbaO2qk
+        yVKq5W21fIJ9S0XmxRG1PwTEGV2zqCSbfuaiKrwDA8pZYKlXFxqbI033TvlvMnjl
+        H4bqWQwFR4UD33MEt0/0htul9s0JX1UilhvUiJu+xr+sECciKyrjwITasOapHnkE
+        t/oC9LFiNxRcylIgLbETNXkRy+xdOO6cATUoD3/J9M2TMDIvJYGZ7CSP/Zg9V81l
+        X1yD9HhnGOU2lvRbVZhSUIjMteOIMlH7yR4KA7Pqf62rp6KvBAnvIUDWYbUA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660722834; x=1660730034; bh=H7AMF4kZE2hOLEr28TVkQrVEDPRp
+        XPajEymRGpT0zuY=; b=fM8BqqoCCmnHUEEV4QhP1Xvmbfp/msYYVT77ftKhx5IR
+        29ftNAgDXPWu67vBjBfmHJqlUPQm0psZpTW41ELXNNaeApmxA46qI6EzN7NwGngn
+        /OLMWHMeMYWIoW7BbhjcqECv9h4HWSks1q03kjR22NHiIIJOlD4y+OWv3HARgqQs
+        w/kIz6HscEPj3PD944TsbMktD7Nbu9ZdLdSJVV7AtyFiIUorX2RZuyrCnYuQlypU
+        7Fhz5gTgemp4FqiSIBcmVWy0Zr3veReOCjC0AxbsGRejUQcy436aC4pY0lv0m7Pu
+        4s+SgpUdF/3g0q5BkxKzCfEl0HAD/34vZfmtuZq8Cw==
+X-ME-Sender: <xms:kZ78YmU8KAGJLFcYMDQSS8pgZqxptw9N-PgMq1JOHfWOC4-oVrMGrQ>
+    <xme:kZ78YimRdi_yVT8NngQEvi90JqKCrgtAk4XVX9oiLCsK9bFsWA1T1cCqkHIVSxMIE
+    889tniyxK8bGRiulZY>
+X-ME-Received: <xmr:kZ78Yqb8EhO8iXCsixF6nzx98hxId96DRgIqIl34ojgGbEtV8gL5lqbYmg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehhedguddvjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheeh
+    fffhvedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:kZ78YtUi_k-2n9qOML_KW-3BlyEf4zMTK8RPeLiYT8uvG94O6XLbDw>
+    <xmx:kZ78Ygn3H3Fvzsbm3dQjc-U_RwYV1eqiO3X4OhcNtuOeUd5zc_r2sQ>
+    <xmx:kZ78YifhwO143SUZ4cb2EPKMWXAQGmcJyNz9H_4sL21a2s80E4CSKA>
+    <xmx:kp78YiVtdOHOoRRJiJOWnhBAJaV6sekXMscUNymMrAa9IAOesMH7WB3c7rA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 17 Aug 2022 03:53:53 -0400 (EDT)
+Date:   Wed, 17 Aug 2022 09:53:51 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>
+Subject: Re: [PATCH v1 04/35] drm/modes: Introduce 480i and 576i modes
+Message-ID: <20220817075351.4xpsqdngjgtiqvob@houat>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v1-4-3d53ae722097@cerno.tech>
+ <CAMuHMdUrwzPYjA0wdR7ADj5Ov6+m03JbnY8fBYzRYyWDuNm5=g@mail.gmail.com>
+ <20220816132636.3tmwqmrox64pu3lt@houat>
+ <CAMuHMdUNLPbjs=usYQBim5FxsrC1oJLuF+3JB7auzHHRoOqavQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ctmqbrja2753ufff"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5abe9b30-274a-8f36-0797-cc0e981c3f70@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CAMuHMdUNLPbjs=usYQBim5FxsrC1oJLuF+3JB7auzHHRoOqavQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 10:53:45PM +0000, Conor.Dooley@microchip.com wrote:
-> Hey Drew,
-> Thanks for piping up.
-> 
-> On 16/08/2022 15:06, Andrew Jones wrote:
-> > [You don't often get email from ajones@ventanamicro.com. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
-> > 
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > On Mon, Aug 15, 2022 at 07:18:02PM +0000, Conor.Dooley@microchip.com wrote:
-> >> Any takers on trashing my regex? Otherwise I'll just submit
-> >> a v2 with the regex and it can be shat on there instead :)
-> >>
-> >> On 09/08/2022 19:36, Conor Dooley wrote:
-> >>> On 09/08/2022 15:14, Rob Herring wrote:
-> >>>> On Mon, Aug 08, 2022 at 10:01:11PM +0000, Conor.Dooley@microchip.com wrote:
-> >>>>> On 08/08/2022 22:34, Jessica Clarke wrote:
-> >>>>>> On Fri, Aug 05, 2022 at 05:28:42PM +0100, Conor Dooley wrote:
-> >>>>>>> From: Conor Dooley <conor.dooley@microchip.com>
-> >>>>>>> The final patch adds some new ISA strings
-> >>>>>>> which needs scruitiny from someone with more knowledge about what ISA
-> >>>>>>> extension strings should be reported in a dt than I have.
-> >>>>>>
-> >>>>>> Listing every possible ISA string supported by the Linux kernel really
-> >>>>>> is not going to scale...
-> >>>>
-> >>>> How does the kernel scale? (No need to answer)
-> >>>>
-> >>>>> Yeah, totally correct there. Case for adding a regex I suppose, but I
-> >>>>> am not sure how to go about handling the multi-letter extensions or
-> >>>>> if parsing them is required from a binding compliance point of view.
-> >>>>> Hoping for some input from Palmer really.
-> >>>>
-> >>>> Yeah, looks like a regex pattern is needed.
-> >>>
-> >>> I started pottering away at this but I have arrived at:
-> >>> rv64imaf?d?c?h?(_z[imafdqcbvkh]([a-z])*)*$
-> > 
-> > Don't forget the ^ at the start.
-> > 
-> > Do we need to worry about optional major and minor version numbers?
-> > Or check that Z names have at least one character following the category
-> > character? Actually, the first letter after Z being a category is only a
-> > convention. Maybe we don't want to enforce that. What about X extensions?
-> 
-> For the character after Z, I think we could operate on the assumption
-> that that's a convention until things change. The regex isnt set in
-> stone forever.
-> With x, it becomes - which to me makes bad worse:
-> ^rv64imaf?d?q?c?b?v?k?h?(?:(?:_z[imafdqcbvkh]|_x)(?:[a-z])*)*$
 
-I think we should change the ([a-z]*) to ([a-z]+).
+--ctmqbrja2753ufff
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> and then for the version numbers it becomes completely awful.
-> I'd argue that if we are going to support those, then we should
-> do that as another regex. We are already forcing lower case in
-> these ISA strings - is there an actual benefit in adding the
-> numbers, or might we want to "encourage" removing those too?
-> 
-> I hope I am missing something, as my regex foo isn't that good, to
-> enforce the ordering & the numbers - even for the simple case of the
-> major number only, we'd need to convert "f?" to "(?:f\d+)?" and so
-> on for every single extension. I don't think we reduce that either
-> as we want to enforce the ordering.
-> 
-> For the minor versions it goes to "(?:f\d+p\d+)?". At that point I
-> don't think we are adding any value but w/e, who am I to decide.
-> That ballooned out to 194 characters for me. I then decided to have
-> a bit of fun, and just do both number sets as a oneliner, using
-> some named match groups. That was about 255 characters. 😍
-> Anyway, dt-schema had a panic attack at something I was doing
-> so I think that /may/ be a bad idea.
+On Tue, Aug 16, 2022 at 05:00:38PM +0200, Geert Uytterhoeven wrote:
+> Hi Maxime,
+>=20
+> On Tue, Aug 16, 2022 at 3:26 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> > On Fri, Aug 12, 2022 at 03:18:58PM +0200, Geert Uytterhoeven wrote:
+> > > On Fri, Jul 29, 2022 at 6:35 PM Maxime Ripard <maxime@cerno.tech> wro=
+te:
+> > > > Multiple drivers (meson, vc4) define the analog TV 525-lines and 62=
+5-lines
+> > > > modes in the drivers.
+> > >
+> > > Nit: strictly speaking these are not analog modes, but the digital
+> > > variants (ITU-R BT.656 and DVD-Video D1) of NTSC and PAL, using a
+> > > 13.5 MHz sampling frequency for pixels.
+> > >
+> > > In analog modes, the only discrete values are the number of lines, and
+> > > the frame/field rate (fixing the horizontal sync rate when combined).
+> > >
+> > > The number of (in)visible pixels per line depends on the available
+> > > bandwidth.  In a digital variant (which is anything generated by a
+> > > digital computer system), the latter depends on the pixel clock, which
+> > > can wildly differ from the 13.5 MHz used in the BT.656 standard. (e.g.
+> > > Amiga uses 7.09/14.19/28.38 MHz (PAL) or 7.16/14.32/28.64 MHz (NTSC)).
+> > >
+> > > So I think we probably need some way to generate a PAL/NTSC-compatible
+> > > mode based not only on resolution, but also on pixel clock.
+> >
+> > This would also fix the comments made by Jani and Thomas, so I quite
+> > like the idea of it.
+> >
+> > I'm struggling a bit to find how would could implement this though.
+> >
+> > From what you were saying, I guess the prototype would be something like
+> >
+> > struct drm_display_mode *drm_create_analog_mode(unsigned int pixel_cloc=
+k,
+> >                                                 unsigned int lines,
+> >                                                 unsigned int frame_rate)
+> >
+> > But I have zero idea on what the implementation would be. Do you have
+> > some resources for this you could point me to?
+>=20
+> Horizontally, I think you should calculate left/right margins and
+> hsync length to yield timings that match those for the BT.656 PAL/NTSC
+> modes.  I.e. when a 640x512 mode with a pixel clock of 14 MHz is
+> requested, you want to calculate left', right', and hslen' for
+>=20
+> | <---- left' ---> | <- 640 pixels -> | <---- right' ---> | <--- hslen' -=
+-> |
+>                         @ 14 MHz
+>=20
+> so they match the timings for left, right, and hslen for
+>=20
+> | <--- left ---> | <--- 720 pixels ---> | <--- right ---> | <--- hslen --=
+-> |
+>                         @ 13.5 MHz
+>=20
+> As 640 pixels @ 14 MHz are less wide than 720 pixels @ 13.5 MHz,
+> you want to make sure to align the center of the visible part.
 
-I presume if a version is used it means one cannot rely on the default
-version. So we can't always encourage them to be removed. To simplify
-things we can always require minor numbers. We can also always require
-underscores. Something like
+So I guess in that example if we want to center it, left =3D=3D right and
+left' =3D=3D right'? What about the sync length?
 
-^rv64_i(\d+p\d+)?_m\1?_a\1?(_f\1?)?(_d\1?)? ... ((_z[imafdqcbvkh]|_x)[a-z]+\1?)*$
+> Vertically, it's simpler, as the number of lines is discrete.
+> You do have to take into account interlace and doublescan, and
+> progressive modes with 262/312 lines.
 
-> 
-> I vote for allow the x extensions, keep the convention for standard
-> extensions & revisit this in the future if needed...
+So we only have to deal with 525 and 625 lines total (without taking
+interlace and doublescan into account), right?
 
-Sounds good. We can also easily add _s|_h|_zxm to the OR if we want. But,
-there is a problem with the OR. By using it we don't enforce order. To be
-pedantic we should ensure _z comes before _s, then _h, then _zxm, then _x.
+I guess we still have the same question, we probably want to center it,
+so top =3D=3D bottom, but what about the vsync length?
 
-Thanks,
-drew
+Maxime
+
+--ctmqbrja2753ufff
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYvyejwAKCRDj7w1vZxhR
+xcu6AP93cHMTNRRfPsacynbiMt5NcO8eI/W3VyqQnewI23mFIQEA2IRU57HVlr7Q
+XOvH5VN6C7Xaplea0Zs4gC+zyOmyLwo=
+=MlUC
+-----END PGP SIGNATURE-----
+
+--ctmqbrja2753ufff--

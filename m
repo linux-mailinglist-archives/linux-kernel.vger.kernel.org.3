@@ -2,182 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B47B259735B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D2D597363
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239561AbiHQPzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 11:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35718 "EHLO
+        id S239652AbiHQPzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 11:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239066AbiHQPzC (ORCPT
+        with ESMTP id S239581AbiHQPzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 11:55:02 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AA598A6F
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:55:00 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id l21so13975063ljj.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:55:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=ozn+S1pTAHnt4MIbe0EOjsoOdiS7sDbU2zMN4FKTa90=;
-        b=UWt/yJz/MYKNe5t7CV8M2TbodbwAY3LVJCR1FDZulb4GlH9kltdhlRv21r/gNeqMTm
-         uLlAij2opRCx5vA86ZGHOvtwovTW+DhPjHUIkdcvLH9ByT+Z6paRRFEQuJlDLOsTQDgN
-         HaMTRsLZGJZI/SQI26cJi6a2T5E2UKhoNgChQbmx7dZLf3SFS8C5o3LXVLgNuFY8rNEq
-         JEWo0S777lIANC1QVb7UMfa0edCSc6Vt3GXEdLCxYADzJiidXynnrWFCgGsj9wGKTdzg
-         VxC/NzHM+o+ZFcII/pOS6nnNZB95T54Kt+TH8kAewYo1+YSYgOx5+vxpHWB1Z2WqLMWH
-         ZiNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ozn+S1pTAHnt4MIbe0EOjsoOdiS7sDbU2zMN4FKTa90=;
-        b=qk/spU5KsVgFNAe48T2+E2+3PcrxXAaaBCw6wpF/YP7BGn9EG8BKQya2zoJOuDyShu
-         S31b8QFJ1NJrCmFUFFlGyCSWqAyRuqshs1KKToJgokk0qi3f1da+w8E2V403cANOpobG
-         yyEA/m1jc4BIrtN80z++zuVCwgrmfkYfyYcokrBMzHaJTw6ARNAPQJ17eYkC9ThN/7Y7
-         24jk4hExEzm/IBtEr+YtaqkChz8E9nclZjuxqEqEWI+SzH5HWEOKt7CA53lLRFGlAuZ0
-         UplsdgVRbdX3JnYf4sA7cqx+oFsnCJExSyxbW6JdrTi6umubMVM8z03AwNJ32bRDoWUS
-         SRuA==
-X-Gm-Message-State: ACgBeo28uL6eHDLecZ6Cgawm5OvUkGgpgADcYghnOhhsn+z5F3nJcoPL
-        FHIfYKYdfYcISOKVmqekEXrSAcWzpozjGagyFP/kog==
-X-Google-Smtp-Source: AA6agR6czP9tLGH15CFY/TCd1TyBpWJmTBTsNb0gf9dSIXnUALf2qPw43A1a2ax4OFjF9mt5QFwvjMGzFHnxAuYXvFk=
-X-Received: by 2002:a2e:9dc5:0:b0:25e:6fa0:1243 with SMTP id
- x5-20020a2e9dc5000000b0025e6fa01243mr8638554ljj.513.1660751698380; Wed, 17
- Aug 2022 08:54:58 -0700 (PDT)
+        Wed, 17 Aug 2022 11:55:06 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8CA9AFF1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:55:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1660751705; x=1692287705;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Da4nMJ1F9CkVDkvWNzoxhW66X+iNWqedHoEO8QVLg1M=;
+  b=GQS90URI10L6O5lMYeeAJYTNJ6s2MBTHfaNpFnOjEaDx1Wvb6rmIhAut
+   Duzv/ItZvD+nKSYoT3KyP1fhTI0MVgXXibB1K08lLirfYwNlPyAn4uLV7
+   8LQP0PiMtRGGmIo6NjleMsEQKZylUpgCJi/bYwMOIOwiHtQt12GWCCa62
+   1YrcpTFDo8/fIV+wPZavb31G9aog1gAk5j9aj1L9vuDAB7piCr2G4HWJc
+   jitvaK2GwmiIDhjriJkV5VgrjcZW4TuiyFgoxJTaDc7UXZQXIv4C/XzO6
+   CgncBxMjBgja5RKk2nERbOjL0MHdMXd6zbG1YEc5yikFFj1Bjru4zHrTv
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,243,1654531200"; 
+   d="scan'208";a="208953481"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 17 Aug 2022 23:55:02 +0800
+IronPort-SDR: f0JiwR5w70KhPFD1ZT9KbiIcMuQLgqrVWiCs1mzbXif0PPVzCW9+9cWjKqE2P7dJm4kJY4uBk1
+ jO0KQPX8jA92DwoweVwW4lD+4iXwS3Yf6ZNjV6RXs2tesoM9pLdHe4+e7wtqUdLvJ2vtqHV8dV
+ vQwXb0TL3Y2gyCD+KU3cizxM+iM505EACvohyDxom++YzPcrGtksYbwr9+mb+Pta5wNDtqb2eD
+ GXW2Yh1nLdlC5Ayfa2cazPzNm+WU1UbK8+I9ABVKRRe3MxLOZrfh/B+xutWvq76oKwCUcASC5b
+ 4V8/FSpSVfa5hk91VvUbOqwz
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Aug 2022 08:15:50 -0700
+IronPort-SDR: FywJWHRpbEU8eE6XoDX6STeCuQFjJPKSITpYNmNZLOX8YIYw08Ka90oxJRgxdEjcsOMSY9X6c/
+ XSK1uYAmX/tJuJ0v5DFkJDp3NDLffbzaD5KmSOwkV+hRFMRcWQlR7sY41PlRuxQ8F5SJvM/wmI
+ WrItPN15lDL0D3UOyB0fFIwcBWH9ddnzEdHMEXXxlrq+D7C3wQVgVpdt/1dAY1Pa5GVKcdRRJF
+ nePh2BNskW9lIXaOP82nS/7Po7GCouY1xHWpxG4uikzuPzVUFlGy5iPs71MydTI7RTw7fjCv72
+ cc4=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Aug 2022 08:55:04 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4M7CJk69Vkz1Rwqy
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:55:02 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1660751701; x=1663343702; bh=Da4nMJ1F9CkVDkvWNzoxhW66X+iNWqedHoE
+        O8QVLg1M=; b=a8E4b6TYglEZqemoz/IvureRzXS2h0BxBVr6myCFT2djYIy2Q8a
+        uOrg4utMi2iF33DWYAUjZqOmQaw1UBg+6PgpvdnUc0iK3eCJPYfDxFwhTf6dfmTY
+        JHnFaA/ID4knX74B60BkhAOSskHkaZkiSU6f38w2oHAMtukmu3yxxD/Xs5Lru4Zp
+        sxx4mUhPpPhdUoL3KQ6NLjyBu2lS0QUZIsOdWFD7Pl5qXlud0P12cRKB95aXshh1
+        QMDX19qWOf/gEkJY/DXJihU7aS22PvfgMk07HAt18C2uG2m0ArHlQOxCAS74EytQ
+        p1z4ZW1/Gu7LXGJqpKytFjoPi5uNgNzKd6g==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id qnASGpzl5dYo for <linux-kernel@vger.kernel.org>;
+        Wed, 17 Aug 2022 08:55:01 -0700 (PDT)
+Received: from [10.11.46.122] (unknown [10.11.46.122])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4M7CJh5Fs8z1RtVk;
+        Wed, 17 Aug 2022 08:55:00 -0700 (PDT)
+Message-ID: <e46c8627-3444-1dd1-8fd9-a10b7f3f3851@opensource.wdc.com>
+Date:   Wed, 17 Aug 2022 08:55:00 -0700
 MIME-Version: 1.0
-References: <20220816032846.2579217-1-imagedong@tencent.com>
-In-Reply-To: <20220816032846.2579217-1-imagedong@tencent.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 17 Aug 2022 08:54:44 -0700
-Message-ID: <CAKwvOd=accNK7t_SOmybo3e4UcBKoZ6TBPjCHT3eSSpSUouzEA@mail.gmail.com>
-Subject: Re: [PATCH net-next v4] net: skb: prevent the split of
- kfree_skb_reason() by gcc
-To:     menglong8.dong@gmail.com
-Cc:     kuba@kernel.org, miguel.ojeda.sandonis@gmail.com, ojeda@kernel.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        asml.silence@gmail.com, imagedong@tencent.com,
-        luiz.von.dentz@intel.com, vasily.averin@linux.dev,
-        jk@codeconstruct.com.au, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
+ regression
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>,
+        Oliver Sang <oliver.sang@intel.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-ide@vger.kernel.org, lkp@lists.01.org, lkp@intel.com,
+        ying.huang@intel.com, feng.tang@intel.com,
+        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
+References: <YuzPMMnnY739Tnit@xsang-OptiPlex-9020>
+ <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
+ <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
+ <e4106ffa-3842-45c0-9756-5226cfcfa17d@opensource.wdc.com>
+ <YvXeuCAK780OuJPz@xsang-OptiPlex-9020>
+ <2e9cf5a6-c043-5ccf-e363-097c6c941891@huawei.com>
+ <f1c3d717-339d-ba2b-9775-fc0e00f57ae3@huawei.com>
+ <Yvs/w93KUkgD9f7/@xsang-OptiPlex-9020>
+ <aabf7ed8-8d4d-dc68-1b8b-c91653701def@huawei.com>
+ <43eaa104-5b09-072c-56aa-6289569b0015@opensource.wdc.com>
+ <28d6e48b-f52f-9467-8260-262504a1a1ff@huawei.com>
+ <05a48c68-33ae-10e2-e565-6c124bad93c5@opensource.wdc.com>
+ <c93e529d-b688-9910-50c4-779c2f85fbc3@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <c93e529d-b688-9910-50c4-779c2f85fbc3@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 8:29 PM <menglong8.dong@gmail.com> wrote:
->
-> From: Menglong Dong <imagedong@tencent.com>
->
-> Sometimes, gcc will optimize the function by spliting it to two or
-> more functions. In this case, kfree_skb_reason() is splited to
-> kfree_skb_reason and kfree_skb_reason.part.0. However, the
-> function/tracepoint trace_kfree_skb() in it needs the return address
-> of kfree_skb_reason().
+On 2022/08/16 13:44, John Garry wrote:
+> On 16/08/2022 21:02, Damien Le Moal wrote:
+>>> ou confirm this? Thanks!
+>>>
+>>> On this basis, it appears that max_hw_sectors_kb is getting capped from
+>>> scsi default @ 1024 sectors by commit 0568e61225. If it were getting
+>>> capped by swiotlb mapping limit then that would give us 512 sectors -
+>>> this value is fixed.
+>>>
+>>> So for my SHT change proposal I am just trying to revert to previous
+>>> behaviour in 5.19 - make max_hw_sectors_kb crazy big again.
+>> I reread the entire thing and I think I got things reverted here. The perf
+>> regression happens with the 512/512 settings, while the original 1280/32767
+>> before your patches was OK.
+> 
+> Right, that's as I read it. It would be useful for Oliver to confirm the 
+> results.
+> 
+>> So is your patch defining the optimal mapping size
+>> cause the reduction to 512/512.
+> 
+> The optimal mapping size only affects specifically sas controllers, so I 
+> think that we can ignore that one for now. The reduction to 512/512 
+> comes from the change in ata_scsi_dev_config().
+> 
+>> It would mean that for ATA, we need a sane
+>> default mapping instead of SCSI default 1024 sectors.
+> 
+> Right
+> 
+>> Now I understand your
+>> proposed change using ATA_MAX_SECTORS_LBA48.
+>>
+>> However, that would be correct only for LBA48 capable drives.
+>> ata_dev_configure() already sets dev->max_sectors correctly according to the
+>> drive type, capabilities and eventual quirks. So the problem comes from the
+>> libata-scsi change:
+>>
+>> dev->max_sectors = min(dev->max_sectors, sdev->host->max_sectors);
+>>
+>> when sdev->host->max_sectors is 0 (not initialized).
+> 
+> That cannot happen. If sht->max_sectors is 0, then we set 
+> shost->max_sectors at SCSI default 1024 sectors in scsi_host_alloc()
+> 
+> For my proposed change, dev->max_sectors would still be initialized in 
+> ata_dev_configure() according to drive type, etc. And it should be <= 
+> LBA48 max sectors (=65535).
+> 
+> So then in ata_scsi_dev_config():
+> 
+> dev->max_sectors = min(dev->max_sectors, sdev->host->max_sectors)
+> 
+> this only has an impact for ahci controllers if sdev->host->max_sectors 
+> was capped according to host dma dev max mapping size.
 
-Does the existing __noclone function attribute help at all here?
+Got it. I think your fix is fine then. It brings everything the defaults to what
+they were before the dma max mapping patches.
 
-If not, surely there's an attribute that's more precise than "disable
-most optimization outright."
-
-https://unix.stackexchange.com/questions/223013/function-symbol-gets-part-suffix-after-compilation
-https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-noclone-function-attribute
-
-Perhaps noipa might also work here?
-
->
-> This split makes the call chains becomes:
->   kfree_skb_reason() -> kfree_skb_reason.part.0 -> trace_kfree_skb()
->
-> which makes the return address that passed to trace_kfree_skb() be
-> kfree_skb().
->
-> Therefore, prevent this kind of optimization to kfree_skb_reason() by
-> making the optimize level to "O1". I think these should be better
-> method instead of this "O1", but I can't figure it out......
->
-> This optimization CAN happen, which depend on the behavior of gcc.
-> I'm not able to reproduce it in the latest kernel code, but it happens
-> in my kernel of version 5.4.119. Maybe the latest code already do someting
-> that prevent this happen?
->
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-> ---
-> v4:
-> - move the definition of __nofnsplit to compiler_attributes.h
->
-> v3:
-> - define __nofnsplit only for GCC
-> - add some document
->
-> v2:
-> - replace 'optimize' with '__optimize__' in __nofnsplit, as Miguel Ojeda
->   advised.
-> ---
->  include/linux/compiler_attributes.h | 19 +++++++++++++++++++
->  net/core/skbuff.c                   |  3 ++-
->  2 files changed, 21 insertions(+), 1 deletion(-)
->
-> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
-> index 445e80517cab..968cbafa2421 100644
-> --- a/include/linux/compiler_attributes.h
-> +++ b/include/linux/compiler_attributes.h
-> @@ -270,6 +270,25 @@
->   */
->  #define __noreturn                      __attribute__((__noreturn__))
->
-> +/*
-> + * Optional: not supported by clang.
-> + * Optional: not supported by icc.
-> + *
-> + * Prevent function from being splited to multiple part. As what the
-> + * document says in gcc/ipa-split.cc, single function will be splited
-> + * when necessary:
-> + *
-> + *   https://github.com/gcc-mirror/gcc/blob/master/gcc/ipa-split.cc
-> + *
-> + * This optimization seems only take effect on O2 and O3 optimize level.
-> + * Therefore, make the optimize level to O1 to prevent this optimization.
-> + */
-> +#if __has_attribute(__optimize__)
-> +# define __nofnsplit                   __attribute__((__optimize__("O1")))
-> +#else
-> +# define __nofnsplit
-> +#endif
-> +
->  /*
->   * Optional: not supported by gcc.
->   * Optional: not supported by icc.
-> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index 974bbbbe7138..ff9ccbc032b9 100644
-> --- a/net/core/skbuff.c
-> +++ b/net/core/skbuff.c
-> @@ -777,7 +777,8 @@ EXPORT_SYMBOL(__kfree_skb);
->   *     hit zero. Meanwhile, pass the drop reason to 'kfree_skb'
->   *     tracepoint.
->   */
-> -void kfree_skb_reason(struct sk_buff *skb, enum skb_drop_reason reason)
-> +void __nofnsplit
-> +kfree_skb_reason(struct sk_buff *skb, enum skb_drop_reason reason)
->  {
->         if (!skb_unref(skb))
->                 return;
-> --
-> 2.36.1
->
+> 
+> I will admit that this is not ideal. An alt approach is to change 
+> ata_scsi_dev_config() to cap the dev max_sectors only according to shost 
+> dma dev mapping limit (similar to scsi_add_host_with_dma()), but that 
+> would not work for a controller like ipr, which does have a geniune 
+> max_sectors limit (which we should respect).
+> 
+> Thanks,
+> John
+> 
+> 
+>> So maybe simply changing
+>> this line to:
+>>
+>> dev->max_sectors = min_not_zero(dev->max_sectors, sdev->host->max_sectors);
+>>
+>> would do the trick ? Any particular adapter driver that needs a mapping cap on
+>> the adpter max mapping size can still set sdev->host->max_sectors as needed, and
+>> we keep the same defaults as before when it is not set. Thoughts ? Or am I
+>> missing something else ?
+>>
+>>
+>>>> The regression may come not from commands becoming tiny, but from the fact that
+>>>> after the patch, max_sectors_kb is too large,
+>>> I don't think it is, but need confirmation.
+>>>
+>>>> causing a lot of overhead with
+>>>> qemu swiotlb mapping and slowing down IO processing.
+>>>> Above, it can be seen that we ed up with max_sectors_kb being 1280, which is the
+>>>> default for most scsi disks (including ATA drives). That is normal. But before
+>>>> that, it was 512, which likely better fits qemu swiotlb and does not generate
+>>> Again, I don't think this this is the case. Need confirmation.
+>>>
+>>>> overhead. So the above fix will not change anything I think...
+> 
 
 
 -- 
-Thanks,
-~Nick Desaulniers
+Damien Le Moal
+Western Digital Research

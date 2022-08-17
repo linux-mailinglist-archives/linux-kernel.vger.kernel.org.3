@@ -2,190 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1EE45973CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5DE5973E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241041AbiHQQMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 12:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59320 "EHLO
+        id S240916AbiHQQME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 12:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240960AbiHQQL0 (ORCPT
+        with ESMTP id S240969AbiHQQL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 17 Aug 2022 12:11:26 -0400
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29D655A8;
-        Wed, 17 Aug 2022 09:11:17 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 16:11:02 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1660752671; x=1661011871;
-        bh=D7wmN5qV4emk+fg1faj1v+A7IXjv09X2AsHUIrsCn0k=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=IsDoc4npeWk0r72wVIlqVnw1Z7A9wz2QzGggjZ0LMDtOAWxh+wgWqOxMimKAoNGPA
-         yQN4hx+K4ji7Zo2YxqmLF+UAutLDoxVMcJ5EiOksPgBWJNSTfvRP01jcLdgn+U/IHR
-         lXnXYbDak+b9zfyGitx64bR07jPvJyYjob9QCO1BPGcMIKqF9J+JjWjsL3zFXa06e8
-         N9wayJKKpjGwuTW5ohs6cw9SrMhUNZU/zi/Ag4HZHPPprbH7yJA/VSPu9aTVjB/7Os
-         cou5MU5UT4+ZoTjhexXmeuzWC0G1mjkOuHMhvDsrU4XPDLebMxpzFTvKSYtr/3IUaN
-         pv0TUeeu7un9Q==
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-From:   =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Miguel Cano <macanroj@gmail.com>,
-        Paul Mackerras <paulus@samba.org>, Gary Guo <gary@garyguo.net>,
-        Douglas Su <d0u9.su@outlook.com>,
-        Borislav Petkov <bp@alien8.de>,
-        linux-riscv@lists.infradead.org, Will Deacon <will@kernel.org>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Masahiro Yamada <masahiroy@kernel.org>, x86@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-um@lists.infradead.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Daniel Xu <dxu@dxuuu.xyz>, David Gow <davidgow@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        linux-arm-kernel@lists.infradead.org,
-        Tiago Lam <tiagolam@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Richard Weinberger <richard@nod.at>,
-        Finn Behrens <me@kloenk.de>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linuxppc-dev@lists.ozlabs.org,
-        Philip Herron <philip.herron@embecosm.com>,
-        Arthur Cohen <arthur.cohen@embecosm.com>
-Reply-To: =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Subject: Re: [PATCH v8 27/31] Kbuild: add Rust support
-Message-ID: <rYTolA_zKqIX3oCL_i-vlIqKS99s0bYQmRKAdcScDq0mcyxti3imzP7AvJzBpiI6RAuH5RU5BpU4xuEY1Vzq57CuY5v47tO3SuUNAMd7seM=@protonmail.com>
-In-Reply-To: <CANiq72nNucEhXAXkXSujnGkpQrkv3-Pcn7ua8N=2XB-suAjs9w@mail.gmail.com>
-References: <20220802015052.10452-1-ojeda@kernel.org> <20220802015052.10452-28-ojeda@kernel.org> <CAK8P3a0jqhGY9E85VC9gNem5q6-dWeq0H6-7bhJopinMnLtOKQ@mail.gmail.com> <CANiq72nNucEhXAXkXSujnGkpQrkv3-Pcn7ua8N=2XB-suAjs9w@mail.gmail.com>
-Feedback-ID: 27884398:user:proton
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2049.outbound.protection.outlook.com [40.107.237.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8EDB4DF1B;
+        Wed, 17 Aug 2022 09:11:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lnNjrfZApijrC6wzuRUhJjfV693GX8eHE1NginJ622F3CUHPaszqkncuLIueepyJNa3UO6JZtcGKu9NRB0f+xbsn8iOpW7AvLbuL2poGO5WibGyyLFQhmuyvj83ghLDjTNhkxzR4jL23Ib0i6xkAmdCXIVXxmqqR4q3IdM27qDiDupqyuxTOwAj0BDx95mjGjh41XvlzWZ9tHcnawE5KPA9bQZ8VsL8hAoWvtk+gn0sSYMNDdmkdR5p3/CffoBelcHqwmhFPXoYEKm+We2x8IX7tlM6sEa50pzVzsANt5dDDKaS47X9BsU2hhmDJIH2D8O7W34+br5Y+KYk+tUK5nw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=p0SEeXgUE5N1X4kR0NMLSQ0GDyajbT54Mz0wrHg4Ndw=;
+ b=dtzxrPatm+28vVcfWpS/HeycKtFduotaRAYsrqLfKzUpuFwp5BXBiDBxKoSsSdriDH9GF277wxzPjRS0g9wWhJv+Ym/8GS6h2/zhDBTwx1gxwPPTnruW2uoNbwOM7L8Melu5LiaYr09qrI01yTR8fIKJ1tDx1W1GwN9Reo9mt7HBGftkREtIu0JrTMISU9vFJbD5koJM5aPeXPoBhic1XbLsQTGgxa2wBr+c8kWXlmxYqW6vGs7UAmbippp0WEuS4t6bzVpv+0cUv0v/1rahqoB0wkXBJFj6RSUy08lK0i7DC+Ya0Lup+yatEYlpoOHCz6BL1E+/4BegJ51Y6oWl6g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p0SEeXgUE5N1X4kR0NMLSQ0GDyajbT54Mz0wrHg4Ndw=;
+ b=WXH8F1bPezUk5uMXZ+syrP8Qw8xMeoCuseKnOjlM5nkQn2zE2wjb7hrrPZE0TZRDKSlkxZKHq+3DhrstFzpOz9w/JJdqgYB12wAXCWW0yvItsL+6HiP0tlA+TIr4KcCv0cZwH2HEa91nsqXViliZ5k96Pw4YCeUnfv62PpI6Y0z0TWSqNtsZZlgzHh4F2reZyfd2AKZPP/17dJR+RdUXSrIiLAEV2BJacwM86riaN9Eaj85VMfdx47fokyFGfpduld/+4Xme/NWf6EqkFFqcfz3/S9TYq05HAM7fu/BoTtNXtoftVWvKxc9ccC0Fofo8+p9kJESxGGUS5DYIwNlfUw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from IA1PR12MB6163.namprd12.prod.outlook.com (2603:10b6:208:3e9::22)
+ by PH7PR12MB6491.namprd12.prod.outlook.com (2603:10b6:510:1f4::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.28; Wed, 17 Aug
+ 2022 16:11:18 +0000
+Received: from IA1PR12MB6163.namprd12.prod.outlook.com
+ ([fe80::a52c:c6f5:f9f4:59cc]) by IA1PR12MB6163.namprd12.prod.outlook.com
+ ([fe80::a52c:c6f5:f9f4:59cc%5]) with mapi id 15.20.5504.027; Wed, 17 Aug 2022
+ 16:11:18 +0000
+Date:   Wed, 17 Aug 2022 19:11:12 +0300
+From:   Ido Schimmel <idosch@nvidia.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, kuba@kernel.org
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org, vadimp@mellanox.com,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, vadimp@nvidia.com, petrm@nvidia.com,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Subject: Re: [PATCH v4] Revert "mlxsw: core: Add the hottest thermal zone
+ detection"
+Message-ID: <Yv0TIH0LsjFJwV0L@shredder>
+References: <20220817153040.2464245-1-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220817153040.2464245-1-daniel.lezcano@linaro.org>
+X-ClientProxiedBy: VI1PR08CA0175.eurprd08.prod.outlook.com
+ (2603:10a6:800:d1::29) To IA1PR12MB6163.namprd12.prod.outlook.com
+ (2603:10b6:208:3e9::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 440bf2ed-f120-4d4d-0480-08da806b1deb
+X-MS-TrafficTypeDiagnostic: PH7PR12MB6491:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wIEp6xRRzmWMCg8y3Q5rfarpWWsx1D06csLFhuS+1FN9gwUdidQsw7PwLO1gE1mAPwTxaCllQYeqL2G/0Hv7U3NFWkbUMSSfAJi/zNDYcIzYKF4eBeRPIvVBsQuJFOOYHyzZIbE5rjzGfcDLQw+h0vQwp8/4K07RGn8N+nMk0bsxLS21bXYVbcFXsqOq9LEm8uzr/U+X7CmrL6jT7Q5d+cB/D0Drk3fDOfgYO8Fd1ind58CvIXMXhAsz369Ph6ZEDsP61agWeDk7vY2wad0sU2rqsPVYPRI+Ql8IJ5nY3MNU+YIq7piGeiWrpdhzM8JY7hD0/UVGH3xDqVOlMSeGXjJUFgr2VsP06Wpuw9EvtMrezD+qRtJFDEE954PKrGgGKZC6rI2lyG+7N07/JFuR5faE18s9QjT3RwnXWtixGu5UHthDyQ3uo50cJUwSGkvEc+oaDy1TItJy4Wvb7OTmt+aljCJuzchyKlani5iN6WA5JIkZ1jhvPlIO64Ue7myHv9Na1SvqRKtYAHdacbvEfYQ8opf24xN9iZu/0gTpBHF8M7rGuAClen2Ws/ToCCUWKwLC1xJMTCZPA+3cW/PST3CT0SlmkKb4ALmvsK0GnWgcaJNXx7mLz1ze2tXvNm/K6nKXXzkSwfWiZwdE4+w/Wsl/dKF/4Ky81S6lJu0Cyo7raR+XZtsJsWpmcoXsSeqJPm9qhKkjFtalu0aZoKvinxYihBBBzh4pbg96zkGkc9u16mPx7E7L62mzxR2E742rPVdtjtlUv5kFKCO5MTSzEe1DQbxwbO7pYQi1frd+ot3xW5Y1ilEdz2uyqmfjQ+m1XGWTArx/uiRFcfmPTaBh8/93mwdeQ1AbLpBOEN5jUQc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6163.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(396003)(39860400002)(136003)(376002)(366004)(346002)(83380400001)(186003)(38100700002)(5660300002)(66946007)(8936002)(6486002)(8676002)(33716001)(66476007)(478600001)(4326008)(966005)(2906002)(41300700001)(6512007)(9686003)(6666004)(26005)(66556008)(316002)(6506007)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eueegQdT8561w8aU9ZTwiwosDh2Ns42Dol4UGNVSZHmnMYV6y3Wwdy6tPcXx?=
+ =?us-ascii?Q?9uDsc1mPUVZfvS1xQQQ2MKdaFvonmbwHEZpe56nKjv5bqSfcy34IG/hmu8l1?=
+ =?us-ascii?Q?MAdys1kUxawgjlz3HmUjdNm7ujbl0BGpy7muY+ILVJ25z0yHS3V+JjUjgPm4?=
+ =?us-ascii?Q?3n1y6nYQ5FH9212jXO2xZ6uHxUwcGlYYFxaxMloLdBol5FaJ3LMU4V2+/L1k?=
+ =?us-ascii?Q?Ys4R1AnMAt2CktP3fZtQo/bF5md2YPuFoKMrBIAaSOoeU7PunaRe+nBUPB0f?=
+ =?us-ascii?Q?Y+FFMBHVx+SrbKuhgQ8Z2ub6nWy8rXLK5NZe0XRPN3ym5SmHz62pjJFuYk4b?=
+ =?us-ascii?Q?3FuVOU71hbD8Hv5c1847DOIsIzcbX5SL+V3zHBg3q9go5nnwkZVrqUDtNdyS?=
+ =?us-ascii?Q?Avi5yb8pXN8+clTG/9Gv1P//58chG0W6MvR0v55dkOM6RSFeidXWOIhRigM6?=
+ =?us-ascii?Q?fUhI9FGyaKQc/MkQdp4ohUX7xBQQQcKuw+wIjwMGvVUwb+9Q1tDZz17eIQWa?=
+ =?us-ascii?Q?E3uPqiew7xliKymnsdjGzUQHasic+s6L13MiRvKJeTwhSp5Hx1ztJ8XHPEU0?=
+ =?us-ascii?Q?UXOE81G7SREV/N39ORyFDse/DivRglBpgxrjODGaJ5SMtV92ZFY7KBsBYqyi?=
+ =?us-ascii?Q?1gHJ8ruRECamoqqWmJs7qSL3H2piHtvHWu9muWOErvaWTTvwffKa4T2Z+opp?=
+ =?us-ascii?Q?Fz8Fk0Bd+446UvGbkmfTWnr8xUInr9Plp5ftrRY/dbEgp5iWKD2LQUDAt+QT?=
+ =?us-ascii?Q?8eFqoybwSIhRhLXTPQC5+avYS7LL14jqeTD6MJ2d8xRdRC2ASYKrpY1StCvt?=
+ =?us-ascii?Q?C7R0o/y6THI3qmLR98E+SGe68GxCAeMMiAkyPgkH+6ldaIIRIvNAOi+1Dp3U?=
+ =?us-ascii?Q?6GW5y4FDFJNYZ53O55ty9zAYnJcRWoVQhSUa/hMu/7+YNOl6JVINDB6xu+ex?=
+ =?us-ascii?Q?Th0aljebwpKrxuKJZy51ZjIB242vY41rNVXKYkx0mM5uoQy/LI9/Lr3IcmJm?=
+ =?us-ascii?Q?2YfgSpZw9WpKYakisVJ6CSTTC9fUgAFOcoprSXmGTXmP0qXqPFPVK3rq1o7m?=
+ =?us-ascii?Q?10WcXn5pkDDB88ImlB+3lQ/URGkA0lia4QwnuVmKhMri+w7mKgaFlbeeL+lY?=
+ =?us-ascii?Q?rabMYnXRvzeeBiec8YaZInVkRpZ3HifSmfwxPdC+5/08ppiOge3pZ2FY8IxY?=
+ =?us-ascii?Q?HXJ+kTr0x8MMmO4CnMpKEspJ3zesyNKeYS0dS7VIPZI51nXUpkHJJDCETiNL?=
+ =?us-ascii?Q?TlDtcqteSmwBYmyGoZikTCZUFlSPnTRhZ1MDU/GMt4UWyp0RjPTZ0fJLRGWu?=
+ =?us-ascii?Q?MPe4nQ35sXhYgoWA7Xynl0kdWoltx1t3T1YU6zicvePUDfQI//r/fj4dc6t4?=
+ =?us-ascii?Q?btjeqzP4QNan2ybmz/Qb8aUG+M5xh7mGA8kWJ+OzjCsb7teVAmvU10isRF7w?=
+ =?us-ascii?Q?QfYlb8W9TmihJX2aaxsiBgAdUPMmm204fV6H3UhPkionuQn0UWaLrkYN6sJy?=
+ =?us-ascii?Q?RnOp8lzbQzyasF4oGSabSICH7/AhfsAPSmk3huQ2t8EfBcpXmlLyThdVsrmR?=
+ =?us-ascii?Q?vgQd8THdoOCAYQNgvWDTVYYXxUrQHHKU/60h4IaG?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 440bf2ed-f120-4d4d-0480-08da806b1deb
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6163.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2022 16:11:18.0018
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: t2uw3bwqRnQ01LK8FAWOvwk0TTNdAtBL5RxKWPqfx13F0DnjbXYlI0usPAUKePthfqnIH1IiYDbMQcHd2zIm8g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6491
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday, August 17th, 2022 at 17:13, Miguel Ojeda <miguel.ojeda.sandon=
-is@gmail.com> wrote:
+On Wed, Aug 17, 2022 at 05:30:40PM +0200, Daniel Lezcano wrote:
+> This reverts commit 2dc2f760052da4925482ecdcdc5c94d4a599153c and
+> commit 6f73862fabd93213de157d9cc6ef76084311c628.
+> 
+> As discussed in the thread:
+> 
+> https://lore.kernel.org/all/f3c62ebe-7d59-c537-a010-bff366c8aeba@linaro.org/
+> 
+> the feature provided by commits 2dc2f760052da and 6f73862fabd93 is
+> actually already handled by the thermal framework via the cooling
+> device state aggregation, thus all this code is pointless.
+> 
+> The revert conflicts with the following changes:
+>  - 7f4957be0d5b8: thermal: Use mode helpers in drivers
+>  - 6a79507cfe94c: mlxsw: core: Extend thermal module with per QSFP module thermal zones
+> 
+> These conflicts were fixed and the resulting changes are in this patch.
+> 
+> Both reverts are in the same change as requested by Ido Schimmel:
+> 
+> https://lore.kernel.org/all/Yvz7+RUsmVco3Xpj@shredder/
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Tested-by: Vadim Pasternak <vadimp@nvidia.com>
 
-> Hi Arnd,
->=20
-> On Wed, Aug 17, 2022 at 4:40 PM Arnd Bergmann arnd@arndb.de wrote:
->=20
-> > Hi Miguel,
-> >=20
-> > I tried enabling rust support in the gcc builds I provide at
-> > https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/arm64/12.=
-1.0/
->=20
->=20
-> Thanks for giving it a go!
->=20
-> > to make this more accessible, but it appears that the command line
-> > options here are not portable:
-> >=20
-> > /home/arnd/cross/x86_64/gcc-12.1.0+rust-nolibc/x86_64-linux/bin/x86_64-=
-linux-gccrs
->=20
->=20
-> So you mean with GCC Rust, right? (i.e. we have "GCC builds" working,
-> via compiling the Rust side with LLVM and linking with the GCC C side,
-> but it is not intended for production or to be supported, even if we
-> cover it in our CI, test it boots and loads modules etc.).
->=20
-> Indeed, `gccrs` does not support `rustc` flags yet. I am not sure if
-> the GCC Rust team will eventually provide a driver for those like
-> clang does for e.g. `cl` -- I would hope they do, since many projects
-> would benefit from it, but maybe they plan to start simply by
-> modifying Cargo to call them as they need instead.
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
 
-There is already a prototype of such a driver. It can be found at https://g=
-ithub.com/Rust-GCC/cargo-gccrs. Unlike what the name suggests it is not car=
-go specific. It consists of two binaries. The first calls cargo, but tells =
-it to use the second binary instead of a real rustc. This second part then =
-translates all arguments to what gccrs expects. It is possible to directly =
-invoke this second binary. For now it probably won't work for rust-for-linu=
-x though as it doesn't have all arguments that are used by rust-for-linux i=
-mplemented.
+Jakub, Daniel wants to route this patch via his tree. Do you mind?
+I spoke with Vadim earlier this week and we do not expect changes to
+this file during the current cycle.
 
->=20
-> If they don't support it, we will have to map the flags on our side --
-> it should not be a big problem. However, see below...
->=20
-> > I guess nobody has tried this so far. Would you think that fixing this =
-is only
-> > a matter for fixing the build system to pass the correct flags dependin=
-g on the
-> > compiler, or is this broken in a more fundamental way?
->=20
->=20
-> If you meant GCC Rust, then it is a bit too early for the compiler. As
-> far as I now, they are working on compiling the `core` crate and
-> supporting more stable language features. They are also researching
-> the integration of the borrow checker, though we wouldn't need that
-> for "only" compiling the kernel.
->=20
-> Now, if they decided to focus on supporting Rust for Linux early on
-> (which would be great), they would still need to work on the delta
-> between what what they target now and what we use (which includes both
-> stable and some unstable features), plus I assume infrastructure bits
-> like the platform (target spec) support, the flags / `rustc` driver
-> (though I would be happy to do as much as possible on our side to
-> help), etc.
->=20
-> (We privately talked about possible timelines for all that if they
-> were to focus on Rust for Linux etc., but I let them comment or not on
-> that... Cc'ing them! :)
->=20
-> Cheers,
-> Miguel
-
-As alternative to GCC Rust there is also github.com/rust-lang/rustc_codegen=
-_gcc/ which uses libgccjit as backend for the official rust compiler rather=
- than writing a full Rust frontend for GCC from scratch. With a bit of patc=
-hing to force it to be used, I was able to compile all Rust samples with GC=
-C using rustc_codegen_gcc. However it gives warnings of the following kind:
-
-    ld.lld: warning: rust/built-in.a(core.o):(.data.rel.local) is being pla=
-ced in '.data.rel.local'
-
-And hangs very early in the boot process. If I enable early logging, it pri=
-nts up to "Booting the kernel." and then does nothing. This is probably bec=
-ause support for setting a different relocation model is not yet implemente=
-d. I opened https://github.com/rust-lang/rustc_codegen_gcc/issues/205 for t=
-his.
-
-There may be other issues, but rustc_codegen_gcc is probably going to be th=
-e easiest route towards a LLVM free rust-for-linux build. By the way note t=
-hat rust-bindgen which we use for generating rust bindings from C headers d=
-epends on LLVM. See https://github.com/rust-lang/rust-bindgen/issues/1949.
-
-Cheers,
-Bjorn
+Thanks

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 082B9596977
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 08:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A04059697B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 08:23:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232070AbiHQGVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 02:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47900 "EHLO
+        id S233964AbiHQGV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 02:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238604AbiHQGVK (ORCPT
+        with ESMTP id S238895AbiHQGVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 02:21:10 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA416F559
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 23:21:09 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id u1so17792938lfq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 23:21:09 -0700 (PDT)
+        Wed, 17 Aug 2022 02:21:12 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2746F6DF8D
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 23:21:11 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id v10so12612888ljh.9
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 23:21:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=f0ZUWiwp6O3VLep1SF30rju7EymJyHwt3q8Tihejmps=;
-        b=JBiUhecfwE0OJ5ewX6RIWr8A6Aj/1U+4+9dQ/Cur4oCcoobtA5xAc1vnP9CiOi/r0l
-         NzUjhyhUlqGpxoVqv1VR78+xCp/G4UErNTvMuxYFDaGi3gdgc29wz1VsKNVNBn+/QsNo
-         Ycmy28yVzhYPi3s6tvEnMyHkPQHVTM7foiC9SwJheBEQN1rpeEfsT8KwUe1lHScdgKOF
-         xcR10TnOpkO3lVdZjBgzWa1fsuY6ZOumd4yJvWZih4RzQpbSb/tiazD9vSZ6cuwATx0E
-         Lo9BmPXFXwGUfQrGsPwclsoa1pwS63h4xODCN4MB4Y7yVcwFGksQDV0x4eIuq/xtSPMP
-         1rtA==
+        bh=wA2XrQK8GobP+7+mFahAbX5R2GUCpHyA1dRW5wEOdPI=;
+        b=hK/Rozp88H4rhDeZ+hY4Vhv7WUHpdiV8VqtypguCgSMbfbOG39z4PlqBBfIwqmytdA
+         XRdn2S19b163p0zAowdILn0FyCka6+CzvCB9P4y00XRgjZTzeq4q3Zb/6Ez5mT8eWXAw
+         H+JmiXtq6zcoRUFsPvfh9jSuXPXovPrHlqrjHrz1Lt+3aLdwJLk5HCGeQsxwxfA02kmC
+         qpc7SGbfj3nx5zuuBUm7Norcpxzhqs9lDSiDeKyY1cCm56Ee0Dn86tNwa1r1EtiCoUxL
+         T6kZK8IU/vESioX5i3/NUSmxOBDoYAbNwDjSJEaDCnWN9kWqsrZAVrsEhsdk4g/ZlTSz
+         9pRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=f0ZUWiwp6O3VLep1SF30rju7EymJyHwt3q8Tihejmps=;
-        b=QyFtJ9bRATyCKlkzVf7TAtTSYCR3zgsGN3jTa5sEVtrIfBWcfI0J1CJmn96H7L6F92
-         MJeDjc6OQXWJycLARTi86XdxecDPRH/kuhyEKH9sBSya7wKO3q8YMvY02MxqOgsBCiPI
-         SRgh9Op4Z5hSb1nPFxT8w0D7N5wVznbS9/zfJGi3vfzhvooypgWszHWvPsiH4d1mY5VT
-         FxZvvjbr0Sq4YRPHRi25Jd0q7QU/CFd1SPbsZyeurqACUk/h5Z5+8PpKG5aLc0B2cXJY
-         vVuv0AT2vOK7bNmv396V+4Jp+IFFClQysils3DQCqDcaa6NXq+tCIypVMWb6Iu/lPICs
-         1ZTQ==
-X-Gm-Message-State: ACgBeo2Vw59DE9cRNg2lhxdSMBGeVXZOLOAQLqDF+jilDwjSchRjEA+N
-        DQaRZSRmup+UCaue2t7z+JNovw==
-X-Google-Smtp-Source: AA6agR7RhKLKTQRZcU2x4wPCfXEW3wfDR1kV3FqCuQgTvWFpQZM9cI2Jn3frwZjThfxYfhxQZFOhGQ==
-X-Received: by 2002:a19:490b:0:b0:48a:f60f:aaaa with SMTP id w11-20020a19490b000000b0048af60faaaamr7890889lfa.364.1660717267536;
-        Tue, 16 Aug 2022 23:21:07 -0700 (PDT)
+        bh=wA2XrQK8GobP+7+mFahAbX5R2GUCpHyA1dRW5wEOdPI=;
+        b=ba4X+uWkh1DJQcCVV8T8LsVsKkKY4mTSWheZim2gELa4rx1PQI4YRW1L2NS6oSxAKA
+         1n2fkhQAn3DM4ZmOCzRrmalJQ0iDn2y5AVQg1uUQ0z3wmgnOHbZ5syzHIow2yF7OK3rU
+         8vNUAQHXOaZlaeKmsD9yVTbdsBmWlVhAlaCaDFDiZzggCQjlx9g0kshHqIH9rQ+eNO7S
+         P4woDkmZteGN+E5mnB1exS6yVuwiKZf2telfGofQYooI29hNXofoc8qjXgj8WJekzdlp
+         KCpUTaULSfYLv9tgDVdrX3elV+gE44B61zQr9v+HtlqWc8UMGssa+rGGdbmkR1qtkE03
+         9UyQ==
+X-Gm-Message-State: ACgBeo2hQDvleR6mLknUqZ0jSX3ES8ZuZNx6WbhsDdSRqvx5USpP5Szq
+        Awab6goBQvgB/l+p5iw4U0i26A==
+X-Google-Smtp-Source: AA6agR7EPsSNDenvWlk7mQ7+9HvJl9nFBJ+rv42B4kn2sy7EgcmK0pK6X2fIUsdKLahQuueV9Ndwug==
+X-Received: by 2002:a2e:b894:0:b0:25e:cb1f:365d with SMTP id r20-20020a2eb894000000b0025ecb1f365dmr7440471ljp.285.1660717269206;
+        Tue, 16 Aug 2022 23:21:09 -0700 (PDT)
 Received: from krzk-bin.. (d15l54h48cw7vbh-qr4-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1b1c:14b7:109b:ed76])
-        by smtp.gmail.com with ESMTPSA id u27-20020ac258db000000b0048b0062a14fsm1581002lfo.144.2022.08.16.23.21.05
+        by smtp.gmail.com with ESMTPSA id u27-20020ac258db000000b0048b0062a14fsm1581002lfo.144.2022.08.16.23.21.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 23:21:07 -0700 (PDT)
+        Tue, 16 Aug 2022 23:21:08 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Rob Clark <robdclark@gmail.com>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
@@ -66,9 +66,9 @@ To:     Rob Clark <robdclark@gmail.com>,
         freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 3/5] dt-bindings: display/msm: dpu-sc7180: add missing DPU opp-table
-Date:   Wed, 17 Aug 2022 09:20:57 +0300
-Message-Id: <20220817062059.18640-4-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 4/5] dt-bindings: display/msm: dpu-sc7280: add missing DPU opp-table
+Date:   Wed, 17 Aug 2022 09:20:58 +0300
+Message-Id: <20220817062059.18640-5-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220817062059.18640-1-krzysztof.kozlowski@linaro.org>
 References: <20220817062059.18640-1-krzysztof.kozlowski@linaro.org>
@@ -88,7 +88,7 @@ The 'display-controller' child (DPU) of Display SubSystem (MDSS) uses
 opp-table, so reference it which allows restricting DPU schema to fixed
 list of properties.
 
-Fixes: 3d7a0dd8f39b ("dt-bindings: msm: disp: add yaml schemas for DPU bindings")
+Fixes: 57fd4f34ddac ("dt-bindings: msm: add DT bindings for sc7280")
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 ---
@@ -98,14 +98,14 @@ Cc: Rob Clark <robdclark@gmail.com>
 Cc: Sean Paul <sean@poorly.run>
 Cc: Abhinav Kumar <quic_abhinavk@quicinc.com>
 ---
- Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml | 3 +++
+ Documentation/devicetree/bindings/display/msm/dpu-sc7280.yaml | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml b/Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml
-index d3c3e4b07897..4890bc25f3fd 100644
---- a/Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml
-+++ b/Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml
-@@ -73,6 +73,7 @@ patternProperties:
+diff --git a/Documentation/devicetree/bindings/display/msm/dpu-sc7280.yaml b/Documentation/devicetree/bindings/display/msm/dpu-sc7280.yaml
+index f427eec3d3a4..584d646021d5 100644
+--- a/Documentation/devicetree/bindings/display/msm/dpu-sc7280.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dpu-sc7280.yaml
+@@ -72,6 +72,7 @@ patternProperties:
    "^display-controller@[0-9a-f]+$":
      type: object
      description: Node containing the properties of DPU.
@@ -113,7 +113,7 @@ index d3c3e4b07897..4890bc25f3fd 100644
  
      properties:
        compatible:
-@@ -114,6 +115,8 @@ patternProperties:
+@@ -112,6 +113,8 @@ patternProperties:
          maxItems: 1
  
        operating-points-v2: true

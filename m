@@ -2,148 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9DE25977E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 076A25977EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241874AbiHQUZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 16:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38348 "EHLO
+        id S241863AbiHQUYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 16:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241317AbiHQUZU (ORCPT
+        with ESMTP id S241849AbiHQUYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 16:25:20 -0400
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF417A0629;
-        Wed, 17 Aug 2022 13:25:18 -0700 (PDT)
-Received: by mail-qk1-f178.google.com with SMTP id f4so9253743qkl.7;
-        Wed, 17 Aug 2022 13:25:18 -0700 (PDT)
+        Wed, 17 Aug 2022 16:24:45 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AC96CF58
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:24:43 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id h8-20020a6bfb08000000b00684f0587d0cso8446607iog.14
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:24:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=+MFJJBSD4zsutzL+0OV59YomrO0P4hyIyaiqDayAvmQ=;
-        b=CMEnnqrZD9QomIlP2Sapk2r67Z3QZ+QRq61NI0yPCyny0ARGX2o/PIDmBkehVlcn+t
-         AtFW8Y7PAo03Xf9Obae1Ggu4SfXEJBXtTyr/xs7TnlYr2dZQnyJuguA8QO8TjgbkqLuc
-         Rsg1fYZ5u8bK2AmKt2gJ/QiVbS0SMbg7wPPg/j4Bwni/bDolrscJHJhcUgZGOxA/FbTb
-         m6JsFqDPYc8mvvc0r2cT4XDltwlRIEBZxlwqZcoMvtLHLxda4TgnTUWsBsT2a2q7WKJK
-         EU3UjpDy4aJLxqUGSOVS0q194PBs8JrPgCpcb95HBoJ9Q1JErE16yhnzeK2xCFLT3rA1
-         dkxg==
-X-Gm-Message-State: ACgBeo2rR17O1vFal3G5nAqZUF0b1ADridztXl3g7S2q2EtJP+nI9mlj
-        0mw1kO/ArQ0e/msCRbyULrk=
-X-Google-Smtp-Source: AA6agR4t4P7nvUCA+lM7EGpU954ugvBc/eek69E5yooLN1+SQRvg1GVOufIBH8GxCpStThjjI65u8A==
-X-Received: by 2002:a05:620a:40c3:b0:6b9:bfdf:7633 with SMTP id g3-20020a05620a40c300b006b9bfdf7633mr20235018qko.702.1660767917384;
-        Wed, 17 Aug 2022 13:25:17 -0700 (PDT)
-Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::a5ed])
-        by smtp.gmail.com with ESMTPSA id 20-20020a370914000000b006b8d1914504sm13607294qkj.22.2022.08.17.13.25.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 13:25:17 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 15:24:40 -0500
-From:   David Vernet <void@manifault.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
-        joannelkoong@gmail.com, linux-kernel@vger.kernel.org,
-        Kernel-team@fb.com
-Subject: Re: [PATCH 3/5] bpf: Add bpf_user_ringbuf_drain() helper
-Message-ID: <Yv1OiCYmQhkvRyWS@maniforge.dhcp.thefacebook.com>
-References: <20220808155341.2479054-1-void@manifault.com>
- <20220808155341.2479054-3-void@manifault.com>
- <CAEf4BzZ-m-AUX+1+CGr7nMxMDnT=fjkn8DP9nP21Uts1y7fMyg@mail.gmail.com>
- <YvWi4f1hz/v72Fpc@maniforge.dhcp.thefacebook.com>
- <CAEf4BzZ6aaFqF0DvhEeKaMfSZiFdMjr3=YzX6oEmz8rCRuSFaA@mail.gmail.com>
- <YvwWvVDN11Wb6j2l@maniforge.DHCP.thefacebook.com>
- <CAEf4BzahEq=Ke7yzc8eMvp17avZ8Br-XQKRMe-WdkgoEcy9oVA@mail.gmail.com>
+        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=0Lb7DBMimZHfZugIsXOodK3jQi78nO6eM2SzszBZKUg=;
+        b=RuRYnnGvGM38HnJQyZKbR/AE42deSNduQ9peTwBZ0+cYXx+twugGvuZLUxN+4w5xA1
+         BqW9rS+GjQjqoxzjMErIhz6FDy1oqFXIx2CrLJVV2c7yc+AR7hGEekCU51uzq3yuiWRM
+         FLWU9aDmmGCyeK55+Kn/TbrcgxhdSHJwJFkgZLPLKb1pwG0FTlJQjELW1jWGlqyyczT3
+         ZLgJ0L7V4123x3eqJOvLlfLRQ3g1VIU+pcuOq87CYhntoftRz3Cm8mq7Fwjtulhf1iaL
+         Jhqu7apoVO0jbfcysNRDyEnNVOuPiKx7WMX3AtRUmNdjLVSio87F7AZVx8HpghrOHhzh
+         p2qQ==
+X-Gm-Message-State: ACgBeo0YgyoHDwA/AzrvIWdwKhZWTeYdYo6cfjCKpdPezxV16XV28m7z
+        +M/JUXtIGat8uX71Cn5u1wMXT+RypkM9PYyUjRtRjJ+pV4Nj
+X-Google-Smtp-Source: AA6agR5U4fcA4nq15MO9T9Ai/5u+IfY47/Oa+2QeUn1EQvVF4BKD0hLYmrolaIdLcMpP9n5A+f1dNfWKHFhLN3pS++qo71Zfl8yi
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzahEq=Ke7yzc8eMvp17avZ8Br-XQKRMe-WdkgoEcy9oVA@mail.gmail.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:264b:b0:343:3ad4:9d7 with SMTP id
+ n11-20020a056638264b00b003433ad409d7mr12093778jat.314.1660767882759; Wed, 17
+ Aug 2022 13:24:42 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 13:24:42 -0700
+In-Reply-To: <bb50f7ae-0670-fe7d-c7d7-10036aba13f4@redhat.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b4d88605e675a71c@google.com>
+Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Read in kvm_dev_ioctl
+From:   syzbot <syzbot+8d24abd02cd4eb911bbd@syzkaller.appspotmail.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 03:59:54PM -0700, Andrii Nakryiko wrote:
+> On 8/17/22 16:30, syzbot wrote:
+>> Hello,
+>> 
+>> syzbot found the following issue on:
+>> 
+>> HEAD commit:    7ebfc85e2cd7 Merge tag 'net-6.0-rc1' of git://git.kernel.o..
+>> git tree:       upstream
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=10b66b6b080000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=c15de4ee7650fb42
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=8d24abd02cd4eb911bbd
+>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>> 
+>> Unfortunately, I don't have any reproducer for this issue yet.
+>> 
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+8d24abd02cd4eb911bbd@syzkaller.appspotmail.com
+>> 
+>> ==================================================================
+>> BUG: KASAN: vmalloc-out-of-bounds in __list_add_valid+0x93/0xb0 lib/list_debug.c:27
+>> Read of size 8 at addr ffffc90006b7a348 by task syz-executor.4/20901
+>> 
+>> CPU: 1 PID: 20901 Comm: syz-executor.4 Not tainted 5.19.0-syzkaller-13930-g7ebfc85e2cd7 #0
+>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+>> Call Trace:
+>>   <TASK>
+>>   __dump_stack lib/dump_stack.c:88 [inline]
+>>   dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>>   print_address_description mm/kasan/report.c:317 [inline]
+>>   print_report.cold+0x59/0x6e9 mm/kasan/report.c:433
+>>   kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
+>>   __list_add_valid+0x93/0xb0 lib/list_debug.c:27
+>>   __list_add include/linux/list.h:69 [inline]
+>>   list_add include/linux/list.h:88 [inline]
+>>   kvm_create_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1219 [inline]
+>>   kvm_dev_ioctl_create_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:4910 [inline]
+>>   kvm_dev_ioctl+0xf44/0x1ce0 arch/x86/kvm/../../../virt/kvm/kvm_main.c:4957
+>>   vfs_ioctl fs/ioctl.c:51 [inline]
+>>   __do_sys_ioctl fs/ioctl.c:870 [inline]
+>>   __se_sys_ioctl fs/ioctl.c:856 [inline]
+>>   __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+>>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> RIP: 0033:0x7fb1fba89279
+>> Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+>> RSP: 002b:00007fb1fcc1e168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+>> RAX: ffffffffffffffda RBX: 00007fb1fbb9bf80 RCX: 00007fb1fba89279
+>> RDX: 0000000000000000 RSI: 000000000000ae01 RDI: 0000000000000004
+>> RBP: 00007fb1fbae3189 R08: 0000000000000000 R09: 0000000000000000
+>> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+>> R13: 00007ffea48aadbf R14: 00007fb1fcc1e300 R15: 0000000000022000
+>>   </TASK>
+>> 
+>> Memory state around the buggy address:
+>>   ffffc90006b7a200: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>>   ffffc90006b7a280: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>>> ffffc90006b7a300: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>>                                                ^
+>>   ffffc90006b7a380: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>>   ffffc90006b7a400: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>> ==================================================================
+>> 
+>> 
+>> ---
+>> This report is generated by a bot. It may contain errors.
+>> See https://goo.gl/tpsmEJ for more information about syzbot.
+>> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>> 
+>> syzbot will keep track of this issue. See:
+>> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>> 
+>
+> #syz dup: BUG: unable to handle kernel paging request in 
 
-[...]
+can't find the dup bug
 
-> > > > > > +       /* Synchronizes with smp_store_release() in
-> > > > > > +        * __bpf_user_ringbuf_sample_release().
-> > > > > > +        */
-> > > > > > +       cons_pos = smp_load_acquire(&rb->consumer_pos);
-> > > > > > +       if (cons_pos >= prod_pos) {
-> > > > > > +               atomic_set(&rb->busy, 0);
-> > > > > > +               return -ENODATA;
-> > > > > > +       }
-> > > > > > +
-> > > > > > +       hdr = (u32 *)((uintptr_t)rb->data + (cons_pos & rb->mask));
-> > > > > > +       sample_len = *hdr;
-> > > > >
-> > > > > do we need smp_load_acquire() here? libbpf's ring_buffer
-> > > > > implementation uses load_acquire here
-> > > >
-> > > > I thought about this when I was first adding the logic, but I can't
-> > > > convince myself that it's necessary and wasn't able to figure out why we
-> > > > did a load acquire on the len in libbpf. The kernel doesn't do a store
-> > > > release on the header, so I'm not sure what the load acquire in libbpf
-> > > > actually accomplishes. I could certainly be missing something, but I
-> > > > _think_ the important thing is that we have load-acquire / store-release
-> > > > pairs for the consumer and producer positions.
-> > >
-> > > kernel does xchg on len on the kernel side, which is stronger than
-> > > smp_store_release (I think it was Paul's suggestion instead of doing
-> > > explicit memory barrier, but my memories are hazy for exact reasons).
-> >
-> > Hmmm, yeah, for the kernel-producer ringbuffer, I believe the explicit
-> > memory barrier is unnecessary because:
-> >
-> > o The smp_store_release() on producer_pos provides ordering w.r.t.
-> >   producer_pos, and the write to hdr->len which includes the busy-bit
-> >   should therefore be visibile in libbpf, which does an
-> >   smp_load_acquire().
-> > o The xchg() when the sample is committed provides full barriers before
-> >   and after, so the consumer is guaranteed to read the written contents of
-> >   the sample IFF it also sees the BPF_RINGBUF_BUSY_BIT as unset.
-> >
-> > I can't see any scenario in which a barrier would add synchronization not
-> > already provided, though this stuff is tricky so I may have missed
-> > something.
-> >
-> > > Right now this might not be necessary, but if we add support for busy
-> > > bit in a sample header, it will be closer to what BPF ringbuf is doing
-> > > right now, with producer position being a reservation pointer, but
-> > > sample itself won't be "readable" until sample header is updated and
-> > > its busy bit is unset.
-> >
-> > Regarding this patch, after thinking about this more I _think_ I do need
-> > an xchg() (or equivalent operation with full barrier semantics) in
-> > userspace when updating the producer_pos when committing the sample.
-> > Which, after applying your suggestion (which I agree with) of supporting
-> > BPF_RINGBUF_BUSY_BIT and BPF_RINGBUF_DISCARD_BIT from the get-go, would
-> > similarly be an xchg() when setting the header, paired with an
-> > smp_load_acquire() when reading the header in the kernel.
-> 
-> 
-> right, I think __atomic_store_n() can be used in libbpf for this with
-> seq_cst ordering
-
-__atomic_store_n(__ATOMIC_SEQ_CST) will do the correct thing on x86, but it
-is not guaranteed to provide a full acq/rel barrier according to the C
-standard. __atomic_store_n(__ATOMIC_SEQ_CST) means "store-release, and also
-participates in the sequentially-consistent global ordering".
-
-I believe we actually need an __atomic_store_n(__ATOMIC_ACQ_REL) here. I
-don't _think_ __ATOMIC_SEQ_CST is necessary because we're not reliant on
-any type of global, SC ordering. We just need to ensure that the sample is
-only visible after the busy bit has been removed (or discard bit added) to
-the header.
-
-Thanks,
-David
+> kvm_arch_hardware_enable
+>

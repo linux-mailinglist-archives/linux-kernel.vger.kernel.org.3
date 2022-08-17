@@ -2,70 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1AC596705
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 03:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C66659670B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 03:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238395AbiHQBt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 21:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53778 "EHLO
+        id S238068AbiHQBxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 21:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237848AbiHQBtz (ORCPT
+        with ESMTP id S238321AbiHQBxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 21:49:55 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0A297D61
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 18:49:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660700994; x=1692236994;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=5Qr/rtXTqV1K9DI6syOE1soqcbcEFdZjo5/Won08Vm0=;
-  b=LoB1B7WWAjO4esVh5PuMfjvoVcuBlFoTkUy2E7akwzRZQW1wOJqzYnLt
-   ZRjTpMhp6xgSbIaDAy1YA9FkhGmDZ9jm8VGsjpXoWsZqNoUkyp4ODe2hF
-   0Sl4saL4WY+Ggj3d6ZJSaE7BPLho9HMmOtiajlszX57QwZEpaTvfPT+c6
-   zQ01xs+9/V5i/TTdVp+47nK11fEXjBj9bjR5JhAMMNRrz66tK+1bSfymh
-   ySVfqyBnxx1KuxEfOVJHQFDhCZhHllBOgU56uyMPg7MuNPNYAelTL/3xj
-   A6lfy3wyUklrek15KBxoE0bOrZBJHOwGpDos3jtFYuFYnsq1yAsj+YZCm
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="293652290"
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="293652290"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 18:49:53 -0700
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="935153839"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 18:49:50 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Minchan Kim <minchan@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andi Kleen <andi.kleen@intel.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Alistair Popple <apopple@nvidia.com>
-Subject: Re: [PATCH v3 5/7] mm: Remember young/dirty bit for page migrations
-References: <20220809220100.20033-1-peterx@redhat.com>
-        <20220809220100.20033-6-peterx@redhat.com>
-        <YvUeB0jc6clz59z5@xz-m1.local>
-        <87pmh6dwdr.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <YvqcGq44oonHNyCO@xz-m1.local>
-        <5B21352C-2BE6-4070-BB6B-C1B7A5D4D225@gmail.com>
-Date:   Wed, 17 Aug 2022 09:49:48 +0800
-In-Reply-To: <5B21352C-2BE6-4070-BB6B-C1B7A5D4D225@gmail.com> (Nadav Amit's
-        message of "Mon, 15 Aug 2022 13:52:49 -0700")
-Message-ID: <8735dvd4g3.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 16 Aug 2022 21:53:51 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D83B5756E
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 18:53:50 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M6rZC4SzczkWRb;
+        Wed, 17 Aug 2022 09:50:27 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 17 Aug 2022 09:53:47 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Subject: Re: [PATCH 1/6] mm/hugetlb: fix incorrect update of max_huge_pages
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     <songmuchun@bytedance.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220816130553.31406-1-linmiaohe@huawei.com>
+ <20220816130553.31406-2-linmiaohe@huawei.com> <YvwfvxXewnZpHQcz@monkey>
+ <20220816162024.60087b143995d9e21413fc52@linux-foundation.org>
+ <Yvwpl/RD9tLr6HJE@monkey>
+Message-ID: <5eebaeff-c002-2a1e-b5bb-fffe7e987ca0@huawei.com>
+Date:   Wed, 17 Aug 2022 09:53:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <Yvwpl/RD9tLr6HJE@monkey>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,69 +54,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nadav Amit <nadav.amit@gmail.com> writes:
+On 2022/8/17 7:34, Mike Kravetz wrote:
+> On 08/16/22 16:20, Andrew Morton wrote:
+>> On Tue, 16 Aug 2022 15:52:47 -0700 Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>>
+>>> On 08/16/22 21:05, Miaohe Lin wrote:
+>>>> There should be pages_per_huge_page(h) / pages_per_huge_page(target_hstate)
+>>>> pages incremented for target_hstate->max_huge_pages when page is demoted.
+>>>> Update max_huge_pages accordingly for consistency.
+>>>>
+>>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>>> ---
+>>>>  mm/hugetlb.c | 3 ++-
+>>>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>>>> index ea1c7bfa1cc3..e72052964fb5 100644
+>>>> --- a/mm/hugetlb.c
+>>>> +++ b/mm/hugetlb.c
+>>>> @@ -3472,7 +3472,8 @@ static int demote_free_huge_page(struct hstate *h, struct page *page)
+>>>>  	 * based on pool changes for the demoted page.
+>>>>  	 */
+>>>>  	h->max_huge_pages--;
+>>>> -	target_hstate->max_huge_pages += pages_per_huge_page(h);
+>>>> +	target_hstate->max_huge_pages +=
+>>>> +		pages_per_huge_page(h) / pages_per_huge_page(target_hstate);
+>>>
+>>> Thanks!
+>>>
+>>> That is indeed incorrect.  However the miscalculation should not have any 
+>>> consequences.  Correct?  The value is used when initially populating the
+>>> pools.  It is never read and used again.  It is written to in
+>>> set_max_huge_pages if someone changes the number of hugetlb pages.
+>>>
+>>> I guess that is a long way of saying I am not sure why we care about trying
+>>> to keep max_huge_pages up to date?  I do not think it matters.
+>>>
+>>> I also thought, if we are going to adjust max_huge_pages here we may
+>>> also want to adjust the node specific value: h->max_huge_pages_node[node].
+>>> There are a few other places where the global max_huge_pages is adjusted
+>>> without adjusting the node specific value.
+>>>
+>>> The more I think about it, the more I think we should explore just
+>>> eliminating any adjustment of this/these values after initially
+>>> populating the pools.
+>>
+>> I'm thinking we should fix something that is "indeed incorrect" before
+>> going on to more extensive things?
+> 
+> Sure, I am good with that.
+> 
+> Just wanted to point out that the incorrect calculation does not have
+> any negative consequences.  Maybe prompting Miaohe to look into the more
+> extensive cleanup.
 
-> On Aug 15, 2022, at 12:18 PM, Peter Xu <peterx@redhat.com> wrote:
->
->> On Fri, Aug 12, 2022 at 10:32:48AM +0800, Huang, Ying wrote:
->>> Peter Xu <peterx@redhat.com> writes:
->>> 
->>>> On Tue, Aug 09, 2022 at 06:00:58PM -0400, Peter Xu wrote:
->>>>> diff --git a/mm/migrate_device.c b/mm/migrate_device.c
->>>>> index 27fb37d65476..699f821b8443 100644
->>>>> --- a/mm/migrate_device.c
->>>>> +++ b/mm/migrate_device.c
->>>>> @@ -221,6 +221,10 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
->>>>> 			else
->>>>> 				entry = make_readable_migration_entry(
->>>>> 							page_to_pfn(page));
->>>>> +			if (pte_young(pte))
->>>>> +				entry = make_migration_entry_young(entry);
->>>>> +			if (pte_dirty(pte))
->>>>> +				entry = make_migration_entry_dirty(entry);
->>>>> 			swp_pte = swp_entry_to_pte(entry);
->>>>> 			if (pte_present(pte)) {
->>>>> 				if (pte_soft_dirty(pte))
->>>> 
->>>> This change needs to be wrapped with pte_present() at least..
->>>> 
->>>> I also just noticed that this change probably won't help anyway because:
->>>> 
->>>>  (1) When ram->device, the pte will finally be replaced with a device
->>>>      private entry, and device private entry does not yet support A/D, it
->>>>      means A/D will be dropped again,
->>>> 
->>>>  (2) When device->ram, we are missing information on either A/D bits, or
->>>>      even if device private entries start to suport A/D, it's still not
->>>>      clear whether we should take device read/write into considerations
->>>>      too on the page A/D bits to be accurate.
->>>> 
->>>> I think I'll probably keep the code there for completeness, but I think it
->>>> won't really help much until more things are done.
->>> 
->>> It appears that there are more issues.  Between "pte = *ptep" and pte
->>> clear, CPU may set A/D bit in PTE, so we may need to update pte when
->>> clearing PTE.
->> 
->> Agreed, I didn't see it a huge problem with current code, but it should be
->> better in that way.
->> 
->>> And I don't find the TLB is flushed in some cases after PTE is cleared.
->> 
->> I think it's okay to not flush tlb if pte not present.  But maybe you're
->> talking about something else?
->
-> I think Huang refers to situation in which the PTE is cleared, still not
-> flushed, and then A/D is being set by the hardware.
+Many thanks both. I will try to do this "more extensive cleanup" after pending work is done.
 
-No.  The situation in my mind is PTE with A/D set is cleared, not
-flushed.  Then a parallel mprotect or munmap may cause race conditions.
-As Alistair pointed out in another thread [1], there is TLB flushing
-after PTL unlocked.  But I think we need to flush TLB before unlock.
-This has been fixed in Alistair's latest version [2].
+Thanks,
+Miaohe Lin
 
-[1] https://lore.kernel.org/lkml/87r11gvrx6.fsf@nvdebian.thelocal/
-[2] https://lore.kernel.org/lkml/6e77914685ede036c419fa65b6adc27f25a6c3e9.1660635033.git-series.apopple@nvidia.com/
 
-Best Regards,
-Huang, Ying

@@ -2,98 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9466C59756E
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC3E597576
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240881AbiHQR52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
+        id S241089AbiHQR6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbiHQR5Z (ORCPT
+        with ESMTP id S240967AbiHQR6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:57:25 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C928E47E;
-        Wed, 17 Aug 2022 10:57:24 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id DDBB7580D8B;
-        Wed, 17 Aug 2022 13:57:21 -0400 (EDT)
-Received: from imap50 ([10.202.2.100])
-  by compute3.internal (MEProxy); Wed, 17 Aug 2022 13:57:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        colorremedies.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1660759041; x=
-        1660762641; bh=6KjITppIDlmj3qAAJAmkZAm9wDlh00j0GBP4rkiftaE=; b=B
-        +D3Uk/5wBHDunpIxtqE3nhhYM//NqC6r9EV3BARDWxhBVCVaTUzOVguxR0YElOVl
-        EuzZkmFIEc1pwXVH60ovuZbRXJwiUOoGbmx6zNc1UsC9oFZIG6CAfHRqkvVQWbbt
-        NCZhfz7erIoSDf2I9JfULsckh7a6bI49KV6+mLS/c12y4dgKN8oshTST2Q68oATE
-        lgu9dPGfavGX9SJ42MHNxGcS2TlN8jT/EmAKKuQU7aOBQwCMQd6JbYSqQ2Tqo1qN
-        dmtbxDuNxOtimxpu0fq7ipcLa0aI93dfxkXL8AkZ5qVcfNqT4KjPgtYX+7EEAvQG
-        oZnipc1QNzahkgJ3YdVVQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660759041; x=1660762641; bh=6KjITppIDlmj3qAAJAmkZAm9wDlh
-        00j0GBP4rkiftaE=; b=NCRY6jDAg6sxgBnaBeaBWxcX+bWFbW0bnnt+OkZ6nBAT
-        ESowbJCaMOQ5mb4F+dAb0NlEJJiVvGi9gMycAeNGa9i1iL6kk9y5P3z1vLrNvr55
-        IMfyEd+EsfI2Lm2AtyYlaBB5nx/PXNfioFJUFUhYZPqwLXPkhGuttkkP1bHg6QTJ
-        GPneq2pJHHDQJWHPC2aUfSSMXq8yNbRaYajQJyK3T0XGGArI9qYGh/CT69sD0KGU
-        T/p9vUacpbmlzsgYXIFYul2DRfPmtRKGVrORxaobKwQ3j4Gh7CnZqHOUY9MXw77I
-        MuiB7+jnqcBv6Xg/a8QLwfTNe+B9ar92X4+J5gUd7g==
-X-ME-Sender: <xms:ASz9YkIuc-q3RxBjCBqsxfNCkAshUBPqJE1mjq4mofv9JJ78dv0pSA>
-    <xme:ASz9YkIaaHfByyKOj-XFEYLWPvfuI5DbVF2UNbV_HYuOFaQjr0-LYWaj8MV7qSBqw
-    XoxMs0JSwDYgE10LJo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehiedguddulecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdev
-    hhhrihhsucfouhhrphhhhidfuceolhhishhtshestgholhhorhhrvghmvgguihgvshdrtg
-    homheqnecuggftrfgrthhtvghrnhepgfdvueektdefgfefgfdtleffvdeileetgfefuddt
-    ffelueeiveeiveekhedtheeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheplhhishhtshestgholhhorhhrvghmvgguihgvshdrtghomh
-X-ME-Proxy: <xmx:ASz9YkvSIsd4emdq2hdbiYrllRSsxSI-kIKQh-g0_AzrMLxtOYvTlw>
-    <xmx:ASz9YhZYyj5rMu6Ibrc0_4E4LGPmo-jTQs3UrxFSA65ANhpSSbD2NA>
-    <xmx:ASz9YrYJ1wuOZF5uOpbDfz8as0108VtsE2we72MI_BIr4WZqXAyixQ>
-    <xmx:ASz9YgOo8M5jUx_kSVtZaFZNerJw9ujo_1U5mB7m5EWFuzbWHmtBmg>
-Feedback-ID: i06494636:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1A6C01700082; Wed, 17 Aug 2022 13:57:20 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
-Mime-Version: 1.0
-Message-Id: <51cd43f9-ab6b-4dd6-814f-e0c1ace3143c@www.fastmail.com>
-In-Reply-To: <f6f899a5-97e2-460f-ad73-73d4b5e38eb6@www.fastmail.com>
-References: <e36fe80f-a33b-4750-b593-3108ba169611@www.fastmail.com>
- <CAEzrpqe3rRTvH=s+-aXTtupn-XaCxe0=KUe_iQfEyHWp-pXb5w@mail.gmail.com>
- <d48c7e95-e21e-dcdc-a776-8ae7bed566cb@kernel.dk>
- <61e5ccda-a527-4fea-9850-91095ffa91c4@www.fastmail.com>
- <4995baed-c561-421d-ba3e-3a75d6a738a3@www.fastmail.com>
- <dcd8beea-d2d9-e692-6e5d-c96b2d29dfd1@suse.com>
- <2b8a38fa-f15f-45e8-8caa-61c5f8cd52de@www.fastmail.com>
- <7c830487-95a6-b008-920b-8bc4a318f10a@applied-asynchrony.com>
- <20220817114933.66c4g4xjsi4df2tg@quack3>
- <85a141ae-56a7-4dcd-b75a-04be4b276b3a@www.fastmail.com>
- <20220817163059.kigrvdfmxfswmhls@quack3>
- <f6f899a5-97e2-460f-ad73-73d4b5e38eb6@www.fastmail.com>
-Date:   Wed, 17 Aug 2022 13:57:00 -0400
-From:   "Chris Murphy" <lists@colorremedies.com>
-To:     "Jan Kara" <jack@suse.cz>
-Cc:     =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        "Nikolay Borisov" <nborisov@suse.com>,
-        "Jens Axboe" <axboe@kernel.dk>,
-        "Paolo Valente" <paolo.valente@linaro.org>,
-        Linux-RAID <linux-raid@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "Josef Bacik" <josef@toxicpanda.com>
-Subject: Re: stalling IO regression since linux 5.12, through 5.18
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Wed, 17 Aug 2022 13:58:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB5522531
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:58:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660759104;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=q8k/4HCcN/UGunNvTL0b69uKxOR1f4+pdK/Be6AO1Sw=;
+        b=jVMQ7dm7vM5e9JNyTsYhsfLpzxaaRw7ZQLjECJXqBWYMoC7MDMnF1zLHk53UuhA9AbOS6s
+        Dq3yvqVqnPsMQADYxY/aRUQyHkXzQ4oS86e/UaieTLAo6diYea0akYERwk5klip/gOsbBB
+        CdLRiJ4rb5TbBJ9u7zeFZKLvCwXSI/g=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-111-k_CRi1ftMO6Rfb4ubfH-6g-1; Wed, 17 Aug 2022 13:58:23 -0400
+X-MC-Unique: k_CRi1ftMO6Rfb4ubfH-6g-1
+Received: by mail-wm1-f72.google.com with SMTP id b16-20020a05600c4e1000b003a5a47762c3so6579562wmq.9
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:58:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=q8k/4HCcN/UGunNvTL0b69uKxOR1f4+pdK/Be6AO1Sw=;
+        b=2+tWIDAAdwc1rqZYyydvAYTn+CjJ9q94XoJj8fI6t0YR59QD1+7M1hdjlDPPu1ImSb
+         VGe8gSC/1ZVeqsIPmYK62Yjw5dcD7VchLkUgrtm3TixrA1PbG3CzKdJsogxmZjBoEhOu
+         kQnVqAL+w017zMHB3EjbGnIeDfPic9Q4z5CyKg47KzxgGY+8KOUSY7vyHKcptd/n1oYd
+         vt6CT0f2KUJFoEmY2pQjRnWGOXEiMMTHKFXDfp2Yrew+khqAAv9KQMqRusFhnBsKTTx0
+         W15jBEABGMLWL8NzNp1ZbusFbV6xADKKwhzbXF/l9kSJEULMdUhCbytPQnQUD8zzh48/
+         yZVg==
+X-Gm-Message-State: ACgBeo08HpKNNdRB77NhUPMy2YWhRF8j4sKEFZofkJamTUbnZzhJqi26
+        8BHtZdsJ1W40luD1nHxDbzdEv7ihnj9lHmAUcjpKR5kqRi8yusxdDs5NUUME5qfvo+laSn17zli
+        Zozjemedn6UrixChFRSj7ON7n
+X-Received: by 2002:a05:6000:1188:b0:220:6c20:fbf6 with SMTP id g8-20020a056000118800b002206c20fbf6mr15410585wrx.372.1660759102411;
+        Wed, 17 Aug 2022 10:58:22 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4g2Wjhx+/wnYjBzzOdcggBFY0lr0AV5E1fHOH4siQgevqHOcomt3rIJVSRvYt6p93UbxGJJQ==
+X-Received: by 2002:a05:6000:1188:b0:220:6c20:fbf6 with SMTP id g8-20020a056000118800b002206c20fbf6mr15410561wrx.372.1660759102173;
+        Wed, 17 Aug 2022 10:58:22 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id u8-20020a05600c19c800b003a541d893desm2809009wmq.38.2022.08.17.10.58.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 10:58:21 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Gal Pressman <gal@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>
+Subject: [PATCH v2 0/5] sched, net: NUMA-aware CPU spreading interface
+Date:   Wed, 17 Aug 2022 18:58:07 +0100
+Message-Id: <20220817175812.671843-1-vschneid@redhat.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,49 +94,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi folks,
 
+Tariq pointed out in [1] that drivers allocating IRQ vectors would benefit
+from having smarter NUMA-awareness (cpumask_local_spread() doesn't quite cut
+it).
 
-On Wed, Aug 17, 2022, at 12:47 PM, Chris Murphy wrote:
-Can you boot with
->> "megaraid_sas.host_tagset_enable = 0" kernel option and see whether the
->> issue reproduces?
+The proposed interface involved an array of CPUs and a temporary cpumask, and
+being my difficult self what I'm proposing here is an interface that doesn't
+require any temporary storage other than some stack variables (at the cost of
+one wild macro).
 
-This has been running an hour without symptoms. It's strongly suggestive, but needs to run overnight to be sure. Anecdotally, the max write IO is less than what I'm used to seeing.
+Patch 5/5 is just there to showcase how the thing would be used. If this doesn't
+get hated on, I'll let Tariq pick this up and push it with his networking driver
+changes (with actual changelogs).
 
-[    0.583121] Kernel command line: BOOT_IMAGE=(md/0)/vmlinuz-5.12.5-300.fc34.x86_64 root=UUID=04f1fb7f-5cc4-4dfb-a7cf-b6b6925bf895 ro rootflags=subvol=root rd.md.uuid=e7782150:092e161a:68395862:31375bca biosdevname=1 net.ifnames=0 log_buf_len=8M plymouth.enable=0 megaraid_sas.host_tagset_enable=0
-...
-[    6.745964] megasas: 07.714.04.00-rc1
-[    6.758472] megaraid_sas 0000:02:00.0: BAR:0x1  BAR's base_addr(phys):0x0000000092000000  mapped virt_addr:0x00000000c54554ff
-[    6.758477] megaraid_sas 0000:02:00.0: FW now in Ready state
-[    6.770658] megaraid_sas 0000:02:00.0: 63 bit DMA mask and 32 bit consistent mask
-[    6.795060] megaraid_sas 0000:02:00.0: firmware supports msix	: (96)
-[    6.807537] megaraid_sas 0000:02:00.0: requested/available msix 49/49
-[    6.819259] megaraid_sas 0000:02:00.0: current msix/online cpus	: (49/48)
-[    6.830800] megaraid_sas 0000:02:00.0: RDPQ mode	: (disabled)
-[    6.842031] megaraid_sas 0000:02:00.0: Current firmware supports maximum commands: 928	 LDIO threshold: 0
-[    6.871246] megaraid_sas 0000:02:00.0: Performance mode :Latency (latency index = 1)
-[    6.882265] megaraid_sas 0000:02:00.0: FW supports sync cache	: No
-[    6.893034] megaraid_sas 0000:02:00.0: megasas_disable_intr_fusion is called outbound_intr_mask:0x40000009
-[    6.988550] megaraid_sas 0000:02:00.0: FW provided supportMaxExtLDs: 1	max_lds: 64
-[    6.988554] megaraid_sas 0000:02:00.0: controller type	: MR(2048MB)
-[    6.988555] megaraid_sas 0000:02:00.0: Online Controller Reset(OCR)	: Enabled
-[    6.988556] megaraid_sas 0000:02:00.0: Secure JBOD support	: No
-[    6.988557] megaraid_sas 0000:02:00.0: NVMe passthru support	: No
-[    6.988558] megaraid_sas 0000:02:00.0: FW provided TM TaskAbort/Reset timeout	: 0 secs/0 secs
-[    6.988559] megaraid_sas 0000:02:00.0: JBOD sequence map support	: No
-[    6.988560] megaraid_sas 0000:02:00.0: PCI Lane Margining support	: No
-[    7.025160] megaraid_sas 0000:02:00.0: megasas_enable_intr_fusion is called outbound_intr_mask:0x40000000
-[    7.025162] megaraid_sas 0000:02:00.0: INIT adapter done
-[    7.025164] megaraid_sas 0000:02:00.0: JBOD sequence map is disabled megasas_setup_jbod_map 5707
-[    7.029878] megaraid_sas 0000:02:00.0: pci id		: (0x1000)/(0x005d)/(0x1028)/(0x1f47)
-[    7.029881] megaraid_sas 0000:02:00.0: unevenspan support	: yes
-[    7.029882] megaraid_sas 0000:02:00.0: firmware crash dump	: no
-[    7.029883] megaraid_sas 0000:02:00.0: JBOD sequence map	: disabled
-[    7.029915] megaraid_sas 0000:02:00.0: Max firmware commands: 927 shared with nr_hw_queues = 1
-[    7.029918] scsi host11: Avago SAS based MegaRAID driver
+[1]: https://lore.kernel.org/all/20220728191203.4055-1-tariqt@nvidia.com/
 
+Revisions
+=========
 
+v1 -> v2
+++++++++
 
+o Split _find_next_bit() @invert into @invert1 and @invert2 (Yury)
+o Rebase onto v6.0-rc1
 
--- 
-Chris Murphy
+Cheers,
+Valentin
+
+Valentin Schneider (5):
+  bitops: Introduce find_next_andnot_bit()
+  cpumask: Introduce for_each_cpu_andnot()
+  sched/topology: Introduce sched_numa_hop_mask()
+  sched/topology: Introduce for_each_numa_hop_cpu()
+  SHOWCASE: net/mlx5e: Leverage for_each_numa_hop_cpu()
+
+ drivers/net/ethernet/mellanox/mlx5/core/eq.c | 12 ++++-
+ include/linux/cpumask.h                      | 38 ++++++++++++++++
+ include/linux/find.h                         | 44 ++++++++++++++++---
+ include/linux/topology.h                     | 46 ++++++++++++++++++++
+ kernel/sched/topology.c                      | 28 ++++++++++++
+ lib/find_bit.c                               | 23 +++++-----
+ 6 files changed, 172 insertions(+), 19 deletions(-)
+
+--
+2.31.1
+

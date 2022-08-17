@@ -2,90 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85885596EA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 14:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 074C6596EA4
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 14:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239553AbiHQMl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 08:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39676 "EHLO
+        id S235450AbiHQMni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 08:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235580AbiHQMlO (ORCPT
+        with ESMTP id S229694AbiHQMnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 08:41:14 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062828A7E1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 05:41:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660740068; x=1692276068;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=WLP1n8kDuTWFlfVABXbMCll3pTSAJ7VVuuXMV+2OYuw=;
-  b=GxHbZCGFed7wupX4ORqUEBpQilQ7mRrIyMYGlVxtVo4YemMdOMfSfMsa
-   IZFSfC11hX7TIJ8zHJ7Mzx1zIUs+tWe7BpanYt6FdgtatBq1IzB4lP34s
-   W3nSs1u5/subi4y9HxhTY2W3KF0bGRweJ6xkQMnFuijnYNFAoEiCCeTlH
-   MwgNeAsJV+8ekhpceyKRBMqXi8KC/AKrcahRlaSQHhGDkBevgLpmSchi+
-   Z/IKtqaXBPm3rV2m4O/g6aRUxxmywakii62hwQRjmDeiFYicLJyAQl/I/
-   0UrDAPgv0IlnSAUj3hcAR5XFveQzUmU1R4jryRCs+qzkoqmKPwYaSWXfT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="378772736"
-X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
-   d="scan'208";a="378772736"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 05:41:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
-   d="scan'208";a="640445156"
-Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by orsmga001.jf.intel.com with ESMTP; 17 Aug 2022 05:41:06 -0700
-From:   kan.liang@linux.intel.com
-To:     acme@redhat.com, linux-kernel@vger.kernel.org
-Cc:     eranian@google.com, ak@linux.intel.com, namhyung@kernel.org,
-        irogers@google.com, Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH] perf evsel: Update the hint for the usage of the load latency event
-Date:   Wed, 17 Aug 2022 05:40:50 -0700
-Message-Id: <20220817124050.2351268-1-kan.liang@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 17 Aug 2022 08:43:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E0F6E898;
+        Wed, 17 Aug 2022 05:43:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7F2960B78;
+        Wed, 17 Aug 2022 12:43:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C2BCC433C1;
+        Wed, 17 Aug 2022 12:43:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660740212;
+        bh=P8dzIB6z9ULz5JdX7NsNy556/nb7bdo5QwU2w5AaOdY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Eh5UOsm3JKInvaIdzkcuPePBtvl3iaFrl+McsEBiFesgxM08TS4cg2yaraXsDxY1K
+         m2mAuiTki4RDuH+hftVvzEqfIR0EjIifVKgrvppAS9CmVON6HJFnhkKS88B8FbfjNX
+         DMKc2ubd+LQ8ARqvJlchkNDcDUexCv8JKjB/gXzs=
+Date:   Wed, 17 Aug 2022 14:43:29 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        briannorris@chromium.org, amitkarwar@gmail.com,
+        ganapathi017@gmail.com, sharvari.harisangam@nxp.com,
+        huxinming820@gmail.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, johannes@sipsolutions.net,
+        rafael@kernel.org
+Subject: Re: [PATCH v7 1/2] devcoredump: remove the useless gfp_t parameter
+ in dev_coredumpv and dev_coredumpm
+Message-ID: <YvzicURy8t2JdQke@kroah.com>
+References: <cover.1660739276.git.duoming@zju.edu.cn>
+ <b861ce56ba555109a67f85a146a785a69f0a3c95.1660739276.git.duoming@zju.edu.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b861ce56ba555109a67f85a146a785a69f0a3c95.1660739276.git.duoming@zju.edu.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+On Wed, Aug 17, 2022 at 08:39:12PM +0800, Duoming Zhou wrote:
+> The dev_coredumpv() and dev_coredumpm() could not be used in atomic
+> context, because they call kvasprintf_const() and kstrdup() with
+> GFP_KERNEL parameter. The process is shown below:
+> 
+> dev_coredumpv(.., gfp_t gfp)
+>   dev_coredumpm(.., gfp_t gfp)
+>     dev_set_name
+>       kobject_set_name_vargs
+>         kvasprintf_const(GFP_KERNEL, ...); //may sleep
+>           kstrdup(s, GFP_KERNEL); //may sleep
+> 
+> This patch removes gfp_t parameter of dev_coredumpv() and dev_coredumpm()
+> and changes the gfp_t parameter of kzalloc() in dev_coredumpm() to
+> GFP_KERNEL in order to show they could not be used in atomic context.
+> 
+> Fixes: 833c95456a70 ("device coredump: add new device coredump class")
+> Reviewed-by: Brian Norris <briannorris@chromium.org>
+> Reviewed-by: Johannes Berg <johannes@sipsolutions.net>
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> ---
+> Changes in v7:
+>   - Remove gfp_t flag in amdgpu device.
 
-The current message is not providing enough information. It's hard for
-a user to figure out what's the auxiliary event.
+Again, this creates a "flag day" where we have to be sure we hit all
+users of this api at the exact same time.  This will prevent any new
+driver that comes into a maintainer tree during the next 3 months from
+ever being able to use this api without cauing build breakages in the
+linux-next tree.
 
-Adding the event name of the auxiliary event in the hint. The user can
-simply cut & paste.
+Please evolve this api to work properly for everyone at the same time,
+like was previously asked for so that we can take this change.  It will
+take 2 releases, but that's fine.
 
-Suggested-by: Stephane Eranian <eranian@google.com>
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
----
- tools/perf/util/evsel.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+thanks,
 
-diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index 4852089e1d79..0d1bb5c723e9 100644
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@ -3056,7 +3056,8 @@ int evsel__open_strerror(struct evsel *evsel, struct target *target,
- 		break;
- 	case ENODATA:
- 		return scnprintf(msg, size, "Cannot collect data source with the load latency event alone. "
--				 "Please add an auxiliary event in front of the load latency event.");
-+				 "Please add an auxiliary event in front of the load latency event. "
-+				 "For example, -e {mem-loads-aux,%s}.", evsel__name(evsel));
- 	default:
- 		break;
- 	}
--- 
-2.35.1
-
+greg k-h

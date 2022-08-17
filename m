@@ -2,214 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1DB5978E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:29:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BED5978EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241470AbiHQV3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 17:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46462 "EHLO
+        id S242053AbiHQVaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 17:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231396AbiHQV3a (ORCPT
+        with ESMTP id S241766AbiHQVaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 17:29:30 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC6973926
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 14:29:28 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id a22so12529244pfg.3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 14:29:28 -0700 (PDT)
+        Wed, 17 Aug 2022 17:30:16 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C764390C56;
+        Wed, 17 Aug 2022 14:30:14 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a7so26797366ejp.2;
+        Wed, 17 Aug 2022 14:30:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=cPU4dRqFcGLGHlWaSnt+2sRfRDdQ3EovXHQZSZPWVsk=;
-        b=lmJuIYeaK5Jx8571q/wUIC5hX+p+4As4fmvOWOVmsq4MfgL1swQtC7EbMMp8btYH24
-         hd8FgWsq0cIMnn+V7GdJ9cAlX7f6pF/j/vXZlwHENel3eAfdGRpp3kJHIOwLPittUMr1
-         kanMMxPenC+jn/AHh9x+p7Tt3LTX3BmNVpIGgvi/Ys5NxV08CstJQ0CXWxj/cDdL2vRh
-         hr9Wsc39eDv/9kKoKPIBh14CfCGNvTM90vslJHkKL/pPLOtmLfQ550DceM5KdEWMipJw
-         sogyau/0k/e9jOu20IagaUltk58FUqGWd1Ba1Y/YWealYqqkCK3q1vGxR6Yh3sE5eV5o
-         FLow==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=1WahhERX691CESd1ffbJud3Y+oZ8wMt9XQmOZisGAO4=;
+        b=Qe9HJqjJVkpt9ngOfi1SC4JuyFO279d6GmPGr+m7JUf5xARUiAYC82F8IYAoMRWUuH
+         Ick6Mncg5vhH1GPIkrgWo0M3oeah3nV7VGow9GlBeWAwGf+ptHvRze9Viu7DtJLqzEyq
+         CdbFGYMxHNVCCc3G2N/Xi6DssMJwvB5vrLa4dGm6j/oitdez+dT5fwD6PZxMXsvMObTS
+         gJHBo4eqg3dVCiio9YPKDBRvAe3YEttVP3X0KAJ1jA06JCwWql7+8EuLhq3JuX/N5w0O
+         +Tz9RP5geRhjqgeApy/HhGtteAUCvkF7Rob7w9WBr/ymI91naRV0C5rMz3Bjw1i+UiTE
+         yvLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=cPU4dRqFcGLGHlWaSnt+2sRfRDdQ3EovXHQZSZPWVsk=;
-        b=7fcrGNj9l7xpm2QU0lM9iCZ82bnkwAtoMek2OAgzc8xWYVBzAgFIF7zT2hzbvrc/iQ
-         k/d7STJZ+wPPon71wFC44ay/Yrwjx5g/P0eHQfxVL1XEgx9EKFsenhB7txXCi+aI3F8/
-         57B8o75269wkIP/E99AmG4RsYbJdjjKuWgvQQysh0Zr9R20WhQqPQSAaIIy7fkec7RmM
-         vF4NNhF4HWeMh1lSeIqWshT1xdCMpj2wg2JespRGmSlNiQ0bxSxno1vzyut4QOq8HCen
-         Jcc+ssXxU3LxDqREqzwAkEhE2/zSyyfN+cQ+nrUK8zxMinrcSjoOrdJeDqTTAYuRJNxj
-         kdMg==
-X-Gm-Message-State: ACgBeo3b+jGX04/rGT2G1mvU4zk7rhktoCy82AKQeHejlOvXM1KBrFrc
-        gam86EiG1/6WGryI6YDziiZu0aUfO520RA==
-X-Google-Smtp-Source: AA6agR7RQ30onTB55I37VwkITQAO/eEJNoS8djMIj8di7s7qwfh/vkq9GnOmlBJM6+d+MTpj1RjyPA==
-X-Received: by 2002:a63:6b02:0:b0:422:7cf8:4bf with SMTP id g2-20020a636b02000000b004227cf804bfmr141648pgc.92.1660771768366;
-        Wed, 17 Aug 2022 14:29:28 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id f196-20020a6238cd000000b00535c4dfc810sm39577pfa.82.2022.08.17.14.29.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 14:29:27 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 21:29:23 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     dmatlack@google.com, pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: selftests: Run dirty_log_perf_test on specific cpus
-Message-ID: <Yv1ds4zVCt6hbxC4@google.com>
-References: <20220817152956.4056410-1-vipinsh@google.com>
- <Yv0kRhSjSqz0i0lG@google.com>
- <CAHVum0fT7zJ0qj39xG7OnAObBqeBiz_kAp+chsh9nFytosf9Yg@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=1WahhERX691CESd1ffbJud3Y+oZ8wMt9XQmOZisGAO4=;
+        b=Ku0H0BW1ly9Ul5dyGBXjn1SFfNu4t3imCAqcu6umXyZ0ToXgHrMLN7bnrNr0chUyJw
+         cTKxqMOXbJupBisn2gLi5QQg8p521LC7Jx+CI8uFPESY69l+EHzywrOdUObYdYiEgLEe
+         l25J/X8r30smy2n6y+9Ei4mo+NjX8/XFBKAfZxibIhBj5AAgcXTLjgM4BAVsn4FaGhsO
+         UWyikRPDRq8OaAp888WAtIOawmKGKW9VH8IvgxN8hp9o15p07V67piFKdJxlFREH49Tp
+         Mf9EadQ13ttVNRuGw0M+sicnhPTx+Akb7ZKaDEQdure26IDZ1XutAPrXWa2O8VV2r+tS
+         YiEg==
+X-Gm-Message-State: ACgBeo3Gf2oE9kw4lgD+k9UadN7z05F+0AULaaK8l+bInIgDVxfMvLc0
+        cTGpb0gyxP85RNPk3Qskv8rEVkUOQWgzr/rka3o=
+X-Google-Smtp-Source: AA6agR4CMlusqqwkMYPqZBWzDqnHs10L6iaVvsd1N80IUKEqJWg8pd0K6sV2lnzisB10uvUvY41yjFw1xWJS629TJC4=
+X-Received: by 2002:a17:907:272a:b0:731:4699:b375 with SMTP id
+ d10-20020a170907272a00b007314699b375mr17814804ejl.633.1660771813165; Wed, 17
+ Aug 2022 14:30:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHVum0fT7zJ0qj39xG7OnAObBqeBiz_kAp+chsh9nFytosf9Yg@mail.gmail.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+References: <cover.1660761470.git.dxu@dxuuu.xyz> <edbca42217a73161903a50ba07ec63c5fa5fde00.1660761470.git.dxu@dxuuu.xyz>
+In-Reply-To: <edbca42217a73161903a50ba07ec63c5fa5fde00.1660761470.git.dxu@dxuuu.xyz>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 17 Aug 2022 14:30:01 -0700
+Message-ID: <CAADnVQ+G0Hju-OeN6e=JLPQzODxGXCsP7OuVbex1y-EYr6Z5Yw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/4] bpf: Add support for writing to nf_conn:mark
+To:     Daniel Xu <dxu@dxuuu.xyz>, Martin KaFai Lau <martin.lau@linux.dev>,
+        Martin KaFai Lau <kafai@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@kernel.org>,
+        netfilter-devel <netfilter-devel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022, Vipin Sharma wrote:
-> On Wed, Aug 17, 2022 at 10:25 AM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > > +static int parse_num(const char *num_str)
-> > > +{
-> > > +     int num;
-> > > +     char *end_ptr;
-> > > +
-> > > +     errno = 0;
-> > > +     num = (int)strtol(num_str, &end_ptr, 10);
-> > > +     TEST_ASSERT(num_str != end_ptr && *end_ptr == '\0',
-> > > +                 "Invalid number string.\n");
-> > > +     TEST_ASSERT(errno == 0, "Conversion error: %d\n", errno);
-> >
-> > Is the paranoia truly necessary?  What happens if parse_cpu_list() simply uses
-> > atoi() and is passed garbage?
-> 
-> On error atoi() returns 0, which is also a valid logical cpu number.
+On Wed, Aug 17, 2022 at 11:43 AM Daniel Xu <dxu@dxuuu.xyz> wrote:
+>
+> +/* Check writes into `struct nf_conn` */
+> +int nf_conntrack_btf_struct_access(struct bpf_verifier_log *log,
+> +                                  const struct btf *btf,
+> +                                  const struct btf_type *t, int off,
+> +                                  int size, enum bpf_access_type atype,
+> +                                  u32 *next_btf_id,
+> +                                  enum bpf_type_flag *flag)
+> +{
+> +       const struct btf_type *nct = READ_ONCE(nf_conn_type);
+> +       s32 type_id;
+> +       size_t end;
+> +
+> +       if (!nct) {
+> +               type_id = btf_find_by_name_kind(btf, "nf_conn", BTF_KIND_STRUCT);
+> +               if (type_id < 0)
+> +                       return -EINVAL;
+> +
+> +               nct = btf_type_by_id(btf, type_id);
+> +               WRITE_ONCE(nf_conn_type, nct);
+> +       }
+> +
+> +       if (t != nct) {
+> +               bpf_log(log, "only read is supported\n");
+> +               return -EACCES;
+> +       }
+> +
+> +       switch (off) {
+> +#if defined(CONFIG_NF_CONNTRACK_MARK)
+> +       case offsetof(struct nf_conn, mark):
+> +               end = offsetofend(struct nf_conn, mark);
+> +               break;
+> +#endif
+> +       default:
+> +               bpf_log(log, "no write support to nf_conn at off %d\n", off);
+> +               return -EACCES;
+> +       }
+> +
+> +       if (off + size > end) {
+> +               bpf_log(log,
+> +                       "write access at off %d with size %d beyond the member of nf_conn ended at %zu\n",
+> +                       off, size, end);
+> +               return -EACCES;
+> +       }
+> +
+> +       return NOT_INIT;
 
-Lame.
+Took me a long time to realize that this is a copy-paste
+from net/ipv4/bpf_tcp_ca.c.
+It's not wrong, but misleading.
+When atype == BPF_READ the return value from
+btf_struct_access should only be error<0, SCALAR_VALUE, PTR_TO_BTF_ID.
+For atype == BPF_WRITE we should probably standardize on
+error<0, or 0.
 
-> We need error checking here to make sure that the user really wants
-> cpu 0 and it was not a mistake in typing.
-> I was thinking of using parse_num API for other places as well instead
-> of atoi() in dirty_log_perf_test.
+The NOT_INIT happens to be zero, but explicit 0
+is cleaner to avoid confusion that this is somehow enum bpf_reg_type.
 
-Yes, definitely.  And maybe give it a name like atoi_paranoid()?
-
-> Yeah, it was either my almost duplicate functions or have the one
-> function do two things via if-else.  I am not happy with both
-> approaches.
-> 
-> I think I will pass an integer array which this parsing function will
-> fill up and return an int denoting how many elements were filled. The
-> caller then can use the array as they wish, to copy it in
-> vcpu_to_lcpu_map or cpuset.
-
-Eh, I doubt that'll be a net improvement, e.g. the CPUSET case will then need to
-re-loop, which seems silly.  If the exclusive cpuset vs. array is undesirable, we
-could have the API require at least one instead of exactly one, i.e.
-
-	TEST_ASSERT(cpuset || vcpu_map);
-
-	...
-
-                cpu = atoi(cpustr);
-                TEST_ASSERT(cpu >= 0, "Invalid cpu number: %d\n", cpu);
-                if (vcpu_map)
-                        vcpu_map[i++] = cpu;
-                if (cpuset)
-                        CPU_SET(cpu, cpuset);
- 
-If we somehow end up with a third type of destination, then we can revisit this,
-but that seems unlikely at this point.
-
-> > > @@ -383,6 +450,26 @@ static void help(char *name)
-> > >       backing_src_help("-s");
-> > >       printf(" -x: Split the memory region into this number of memslots.\n"
-> > >              "     (default: 1)\n");
-> > > +     printf(" -c: Comma separated values of the logical CPUs which will run\n"
-> > > +            "     the vCPUs. Number of values should be equal to the number\n"
-> > > +            "     of vCPUs.\n\n"
-> > > +            "     Example: ./dirty_log_perf_test -v 3 -c 22,43,1\n"
-> > > +            "     This means that the vcpu 0 will run on the logical cpu 22,\n"
-> > > +            "     vcpu 1 on the logical cpu 43 and vcpu 2 on the logical cpu 1.\n"
-> > > +            "     (default: No cpu mapping)\n\n");
-> > > +     printf(" -d: Comma separated values of the logical CPUs on which\n"
-> > > +            "     dirty_log_perf_test will run. Without -c option, all of\n"
-> > > +            "     the vcpus and main process will run on the cpus provided here.\n"
-> > > +            "     This option also accepts a single cpu. (default: No cpu mapping)\n\n"
-> > > +            "     Example 1: ./dirty_log_perf_test -v 3 -c 22,43,1 -d 101\n"
-> > > +            "     Main application thread will run on logical cpu 101 and\n"
-> > > +            "     vcpus will run on the logical cpus 22, 43 and 1\n\n"
-> > > +            "     Example 2: ./dirty_log_perf_test -v 3 -d 101\n"
-> > > +            "     Main application thread and vcpus will run on the logical\n"
-> > > +            "     cpu 101\n\n"
-> > > +            "     Example 3: ./dirty_log_perf_test -v 3 -d 101,23,53\n"
-> > > +            "     Main application thread and vcpus will run on logical cpus\n"
-> > > +            "     101, 23 and 53.\n");
-> > >       puts("");
-> > >       exit(0);
-> > >  }
-> >
-> > > @@ -455,6 +550,13 @@ int main(int argc, char *argv[])
-> > >               }
-> > >       }
-> > >
-> >
-> > I wonder if we should make -c and -d mutually exclusive.  Tweak -c to include the
-> > application thread, i.e. TEST_ASSERT(nr_lcpus == nr_vcpus+1) and require 1:1 pinning
-> > for all tasks.  E.g. allowing "-c ..., -d 0,1,22" seems unnecessary.
-> >
-> 
-> One downside I can think of will be if we add some worker threads
-> which are not vcpus then all of those threads will end up running on a
-> single cpu unless we edit this parsing logic again.
-
-But adding worker threads also requires a code change, i.e. it won't require a
-separate commit/churn.  And if we get to the point where we want multiple workers,
-it should be relatively straightforward to support pinning an arbitrary number of
-workers, e.g.
-
-	enum memtest_worker_type {
-		MAIN_WORKER,
-		MINION_1,
-		MINION_2,
-		NR_MEMTEST_WORKERS,
-	}
-
-
-	TEST_ASSERT(nr_lcpus == nr_vcpus + NR_MEMTEST_WORKERS);
-
-void spawn_worker(enum memtest_worker_type type, <function pointer>)
-{
-	cpu_set_t cpuset;
-
-	CPU_ZERO(&cpuset);
-	CPU_SET(task_map[nr_vcpus + type], &cpuset);
-
-	<set affinity and spawn>
-}
-
-> Current implementation gives vcpus special treatment via -c and for
-> the whole application via -d. This gives good separation of concerns
-> via flags.
-
-But they aren't separated, e.g. using -d without -c means vCPUs are thrown into
-the same pool as worker threads.  And if we ever do add more workers, -d doesn't
-allow the user to pin workers 1:1 with logical CPUs.
-
-Actually, if -c is extended to pin workers, then adding -d is unnecessary.  If the
-user wants to affine tasks to CPUs but not pin 1:1, it can do that with e.g. taskset.
-What the user can't do is pin 1:1.
-
-If we don't want to _require_ the caller to pin the main worker, then we could do
-
-	TEST_ASSERT(nr_lcpus >= nr_vcpus &&
-		    nr_lcpus <= nr_vcpus + NR_MEMTEST_WORKERS);
-
-to _require_ pinning all vCPUs, and allow but not require pinning non-vCPU tasks.
+Martin,
+since you've added this code in bpf_tcp_ca, wdyt?

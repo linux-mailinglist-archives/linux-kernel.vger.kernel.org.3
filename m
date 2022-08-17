@@ -2,204 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC44596A11
+	by mail.lfdr.de (Postfix) with ESMTP id 9852A596A12
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbiHQHLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 03:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
+        id S238795AbiHQHLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 03:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238210AbiHQHK6 (ORCPT
+        with ESMTP id S238755AbiHQHK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 17 Aug 2022 03:10:58 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA615F12E
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:10:57 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id D6AC632009E5;
-        Wed, 17 Aug 2022 03:10:53 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 17 Aug 2022 03:10:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1660720253; x=1660806653; bh=laRdnBlp/A
-        KdzXhxZ6ikA/I/fj0TfNOX8Qq0MpgtGA4=; b=mkHrcLQv9kwRzaSTMeCrq3a2gc
-        zwRnZ+BzFe2ZJejAQp7kgTim0+5rfwdVNfBdcYPa382/hUGAn0Hi+Cj/MFgWrCg7
-        zp7oLvMI0yX/1rHQdaZijL+p7cDQ5eXXpyACwlz5jVsJyg/wiBxX8JeX3AjuTxiL
-        elLXQBZKDjwsEMYJyU2gr5/XM1/FEodcUV4LW6vam9HziLNNjpBmNsYNjyYCUOZE
-        Efh3FkzkO0nBGuiim3sNxIe5FJ/Qo/suO/vBWFfwcuqmGppIing3wOn/KK98w1bv
-        3PyVxapBYzLCclLA6Wx+3velUavLK/QBu4Xhjc+0i4xNrdgLcUWO3fwJYVgA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660720253; x=1660806653; bh=laRdnBlp/AKdzXhxZ6ikA/I/fj0T
-        fNOX8Qq0MpgtGA4=; b=REGd6+Nh+vADaA77lZaf1ehl8LPCoUZ94b+VXb5aFyOg
-        8BoL+5Fg0qeqOeHZuOcv6t0ZOupkyh4+0uUU9kUbsFYn7W6i10gQmCtOYLVD7M3o
-        03gB1ltTI/0IoMparfxNOEA5XnqB49VOTCsfxHDlywOLciuDR3SYBtEGsHi7+gBJ
-        QO55+NFyH3kOoH8Agdas6P0XTRL6kctcVg+UD4cIIOlIkgPMBWZO3OVqSNM+Uclj
-        Z0PhcZ/rsT0N4O2RUSu3OOOqbR2tKkmsrNNlGc1C66KQ3euGRlS2Nugr7Y4LQ/H7
-        /8YD9nnBPmS2N+DNG9yrRrql7qAVwXR8MBdrVa8u2Q==
-X-ME-Sender: <xms:fJT8YsunaTRk4PVQUaYfxHWfxr_ltZZh8bMlHXGNws9lVtptOJOdTA>
-    <xme:fJT8Ypfv1j6oM92DRjlpoQlpYb0IlL4iaxR8jkOQyjQ6wJ302sSgO92AqfsmmXA85
-    A4mXF9Ih2on5If6VW8>
-X-ME-Received: <xmr:fJT8YnwFWqVGX5ZEaj0rWWdvrvNTnT46X2UTztsVCCwytXoEd4VYgb9tBg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehhedguddukecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnheptdelkeejiedufedvhfeiffetlefhiedvleeigfeiuefghfdvleeiffej
-    ieegteejnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
-    tghh
-X-ME-Proxy: <xmx:fJT8YvMpdSMhrP0nHzpvuWGNiSSI60AT9XrlUOlJd8jPda4dBbq5NA>
-    <xmx:fJT8Ys_y2v4uctcwKCCF0MGnn67HhMseMwJtXvqlSV3Mwmts2GA2hw>
-    <xmx:fJT8YnX4GRPyTjVAYp3N8VHN6gwM2R4QV7jWpCZrxBdx3Wbjg440LA>
-    <xmx:fZT8YpONR8VrSPSNxff-555AVHGxHHP5Nafx0XPheEFevfFUt9RocA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 17 Aug 2022 03:10:52 -0400 (EDT)
-Date:   Wed, 17 Aug 2022 09:10:48 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Emma Anholt <emma@anholt.net>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org
-Subject: Re: drm warning with mainline due to 467e30171b5b ("drm/vc4: hdmi:
- Move HDMI reset to pm_resume")
-Message-ID: <20220817071048.4v66zky5qysn45wq@houat>
-References: <YvvHK2zb1lbm2baU@debian>
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087AF5A2C1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:10:55 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id bx38so12691091ljb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:10:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc;
+        bh=q7tkxx+DUUraSTlhCRRT4SEypAZAFfcWmABbJjMeSto=;
+        b=w+IjjjnaWbr4KDTiqOKCh2dte4F/4plsBTePdKB/zGCW24OvuFhgSHD1GuzJXicma4
+         CRoZCeDAYR3+OP2+y3TPOQ7DMYKvmPxHsjFeiRxbQnAY3rjTx+60yqRsIJSIjE19kOFt
+         vVPpU/nKG/X93S9/gwQInV+GYcl/gM/f3bos9ykkt3Y2+3MTmp53q+6+AnFtc8CEId3V
+         YGttiaaTQzg4W3G6GZLJWwV4Lj2F3gX3ual30SQA+YKnsN2/U47xj2QrpzTc3IVxBl3+
+         OpEhs7nOZ/6UIhzbaFhNEYMmcARytUC0oDVEacXyVcbINvFGwoOsz7HCwHgh0iOaaBHa
+         Mo+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc;
+        bh=q7tkxx+DUUraSTlhCRRT4SEypAZAFfcWmABbJjMeSto=;
+        b=Io0FJ7ffW9Xk/f62UJCi5ZDzFchaV+B/jOdQ4/7BNjOIsYyYucG0KSKatsMBrkDQqj
+         IXEYUiBbbn8iaZYvK9yiTB+aKv8UixRPHFZU6HxW/r256o1NFLW2YJZ8JOyBEQw+Jimq
+         4Fc3kwBH9Fx8tSHm/lTnQ4P1SAmVWQd1coVYe5VDWDaN+RmO5w4RUQrBhfyPO5Ar5oqV
+         nvTQlSN0co8wZXk+W2CsxHdeD7j4wV/sO1gLrf39U/ZZi7TRdRjRrYbU9hvKh7T/WLRZ
+         ufWVibnI9uP0dgPu4ZHdKYUY6UnPK0Jw32vh73flIzW/7QEMOQjCs3keXk2mNXz6qlKK
+         8aaQ==
+X-Gm-Message-State: ACgBeo0/dtb/KJ3Fy2kVWEwKvB3mNxFFjlO/TbUoPhDcyHJITftucMd2
+        sxPgoc39BY8+tMueqrokFPuWyQ==
+X-Google-Smtp-Source: AA6agR7BR/z/SF/R4XqAD0ZR6LO6EpJAoXYZP64KXpPy68DbhG30cNDfVks4FyJFtI3rmjKhaANx4Q==
+X-Received: by 2002:a2e:a593:0:b0:25f:e6ac:c28e with SMTP id m19-20020a2ea593000000b0025fe6acc28emr7955177ljp.485.1660720254197;
+        Wed, 17 Aug 2022 00:10:54 -0700 (PDT)
+Received: from krzk-bin.. (d15l54h48cw7vbh-qr4-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1b1c:14b7:109b:ed76])
+        by smtp.gmail.com with ESMTPSA id z18-20020ac25df2000000b0048ad3d1a058sm1595034lfq.52.2022.08.17.00.10.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 00:10:52 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2] dt-bindings: memory-controllers: fsl,imx8m-ddrc: restrict opp-table to objects
+Date:   Wed, 17 Aug 2022 10:10:50 +0300
+Message-Id: <20220817071050.26149-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="syrev3cbrffj2yu7"
-Content-Disposition: inline
-In-Reply-To: <YvvHK2zb1lbm2baU@debian>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Simple 'opp-table:true' accepts a boolean property as opp-table, so
+restrict it to object to properly enfoerce real OPP table nodes.
 
---syrev3cbrffj2yu7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Hi,
+---
 
-On Tue, Aug 16, 2022 at 05:34:51PM +0100, Sudip Mukherjee (Codethink) wrote:
-> Not sure if it has been reported but the mainline kernel shows a drm warn=
-ing
-> on RPI4B.
->=20
-> [   14.821276] WARNING: CPU: 3 PID: 187 at drivers/gpu/drm/vc4/vc4_hdmi_r=
-egs.h:487 vc5_hdmi_reset+0x1f8/0x240 [vc4]
-> [   14.837288] Modules linked in: hci_uart btqca btrtl btbcm btintel btsd=
-io(+) bluetooth bcm2835_v4l2(C) bcm2835_mmal_vchiq(C) videobuf2_vmalloc vid=
-eobuf2_memops videobuf2_v4l2 videobuf2_common brcmfmac videodev brcmutil vc=
-4(+) ecdh_generic ecc drm_display_helper mc raspberrypi_hwmon cec crct10dif=
-_ce drm_cma_helper cfg80211 dwc2 udc_core i2c_brcmstb roles snd_bcm2835(C) =
-drm_kms_helper pwm_bcm2835 drm xhci_pci xhci_pci_renesas snd_soc_core phy_g=
-eneric ac97_bus snd_pcm_dmaengine snd_pcm snd_timer snd fb_sys_fops syscopy=
-area sysfillrect sysimgblt uio_pdrv_genirq uio aes_neon_bs aes_neon_blk
-> [   14.889917] CPU: 3 PID: 187 Comm: systemd-udevd Tainted: G         C  =
-       6.0.0-rc1-568035b01cfb #1
-> [   14.899355] Hardware name: Raspberry Pi 4 Model B (DT)
-> [   14.904561] pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYP=
-E=3D--)
-> [   14.911620] pc : vc5_hdmi_reset+0x1f8/0x240 [vc4]
-> [   14.916433] lr : vc5_hdmi_reset+0x38/0x240 [vc4]
-> [   14.921151] sp : ffff80000a85b640
-> [   14.923079] uart-pl011 fe201000.serial: no DMA platform data
-> [   14.924504] x29: ffff80000a85b640 x28: 0000000000000000 x27: ffff00005=
-6626080
-> [   14.937472] x26: ffff80000128e2d8 x25: ffff80000128e988 x24: 000000000=
-0000000
-> [   14.944708] x23: ffff000040a58000 x22: ffff0000fb832978 x21: ffff00005=
-6626c90
-> [   14.951944] x20: 0000000000000000 x19: ffff000056626080 x18: 000000000=
-0000014
-> [   14.959180] x17: 00000000e6b317d8 x16: 00000000c03e2fab x15: 000000000=
-02ffc4a
-> [   14.966416] x14: 0000000000000000 x13: 0000000000000010 x12: 010101010=
-1010101
-> [   14.973650] x11: ff7f7f7f7f7f7f7f x10: ffff840003584d5b x9 : ffff80000=
-1276518
-> [   14.980886] x8 : 0101010101010101 x7 : 0000000000000000 x6 : ffff00004=
-0e5d140
-> [   14.988120] x5 : 0000000000000000 x4 : ffff80000a85b580 x3 : 000000000=
-0000000
-> [   14.995355] x2 : 0000000000000001 x1 : 0000000000000002 x0 : ffff80000=
-12901c0
-> [   15.002591] Call trace:
-> [   15.005063]  vc5_hdmi_reset+0x1f8/0x240 [vc4]
-> [   15.009514]  vc4_hdmi_runtime_resume+0x74/0x2dc [vc4]
-> [   15.014671]  vc4_hdmi_bind+0x22c/0xa40 [vc4]
-> [   15.019038]  component_bind_all+0x114/0x264
-> [   15.023293]  vc4_drm_bind+0x160/0x2a4 [vc4]
-> [   15.027565]  try_to_bring_up_aggregate_device+0x1e4/0x2d0
-> [   15.033044]  component_master_add_with_match+0xcc/0x110
-> [   15.038340]  vc4_platform_drm_probe+0xc4/0xfc [vc4]
-> [   15.043327]  platform_probe+0x74/0xd0
-> [   15.047037]  really_probe+0xc8/0x3ec
-> [   15.050662]  __driver_probe_device+0x84/0x190
-> [   15.055079]  driver_probe_device+0x44/0x100
-> [   15.059318]  __driver_attach+0xd8/0x1d0
-> [   15.063206]  bus_for_each_dev+0x7c/0xe0
-> [   15.067090]  driver_attach+0x30/0x3c
-> [   15.070711]  bus_add_driver+0x188/0x244
-> [   15.074595]  driver_register+0x84/0x140
-> [   15.078482]  __platform_driver_register+0x34/0x40
-> [   15.083247]  vc4_drm_register+0x5c/0x1000 [vc4]
-> [   15.087881]  do_one_initcall+0x50/0x2bc
-> [   15.091770]  do_init_module+0x50/0x1f0
-> [   15.095569]  load_module+0x1a28/0x1fa0
-> [   15.099366]  __do_sys_finit_module+0xac/0x12c
-> [   15.103779]  __arm64_sys_finit_module+0x2c/0x40
-> [   15.108368]  invoke_syscall+0x50/0x120
-> [   15.112166]  el0_svc_common.constprop.0+0x6c/0x1b4
-> [   15.117021]  do_el0_svc+0x38/0xcc
-> [   15.120378]  el0_svc+0x30/0xd0
-> [   15.123472]  el0t_64_sync_handler+0x11c/0x150
-> [   15.127886]  el0t_64_sync+0x1a0/0x1a4
-> [   15.131595] ---[ end trace 0000000000000000 ]---
->=20
-> git bisect pointed to 467e30171b5b ("drm/vc4: hdmi: Move HDMI reset to pm=
-_resume")
-> and reverting this commit has fixed the warning.
->=20
-> I will be happy to test any patch or provide any extra log if needed.
+Changes since v1:
+1. Correct typo in subject.
+---
+ .../devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-We have fixes for this in drm-misc-next that have missed the cut for the
-merge window:
+diff --git a/Documentation/devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml b/Documentation/devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml
+index 445e46feda69..fc2e7de10331 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml
+@@ -47,7 +47,8 @@ properties:
+       - const: apb
+ 
+   operating-points-v2: true
+-  opp-table: true
++  opp-table:
++    type: object
+ 
+ required:
+   - reg
+-- 
+2.34.1
 
-https://lore.kernel.org/all/20220629123510.1915022-38-maxime@cerno.tech/
-https://lore.kernel.org/all/20220629123510.1915022-39-maxime@cerno.tech/
-
-If it fixes it for you, I'll apply it to drm-misc-fixes
-
-Maxime
-
---syrev3cbrffj2yu7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYvyUeAAKCRDj7w1vZxhR
-xVljAPwIUirFXxRRs/16RZ5KPNnH+unroKvCpl+RZ0WfiZW4PwEAssoQDV4JHtEX
-j6GdyVRYCPay+w7bVerJiu88EbUGIQY=
-=EjE/
------END PGP SIGNATURE-----
-
---syrev3cbrffj2yu7--

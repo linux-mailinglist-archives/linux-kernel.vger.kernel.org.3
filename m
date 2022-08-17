@@ -2,189 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F97596665
+	by mail.lfdr.de (Postfix) with ESMTP id 3C660596663
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 02:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbiHQAlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 20:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37930 "EHLO
+        id S237989AbiHQAnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 20:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233069AbiHQAlK (ORCPT
+        with ESMTP id S233069AbiHQAnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 20:41:10 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A8190810;
-        Tue, 16 Aug 2022 17:41:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660696869; x=1692232869;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=S4BQg3ffuAC6DjQBXUYCKsfem8RO0ADyHIESWLOL+0s=;
-  b=FVB2gJvoGXw+cFq/5pqjVpCKeiChfSXln9+SKR+gPDatEN3Xjvt5MerF
-   gi/dZw5xajaFGJ5ex6YRIt9f09x573cd3ez2iusWArd3LKR5rCa7f7EVc
-   HcJHXQ9lPZ44UCLQqo0oLa+4sZ3gjEecY37mDHnMCOd8RpEYE6TfVblb+
-   5rzIVSXjTbglvay1J+mEyjc1HAJU2fvul/DhMKbVENKNjhTIKCLajA6wQ
-   aUjpFTO2eF3DgcBFNBBrCdLxyyhkDT353OrbauO2egQU0oolsRqCt2sSX
-   p1H/uvco0ce33xWTuvgrTh+lTo7g6FYASVJAwN9PlzFXV2uZnl1+Ys204
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="272757133"
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="272757133"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 17:41:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="749511181"
-Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Aug 2022 17:41:05 -0700
-Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oO77J-0000OC-04;
-        Wed, 17 Aug 2022 00:41:05 +0000
-Date:   Wed, 17 Aug 2022 08:41:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     kbuild-all@lists.01.org, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] LoongArch: Use TLB for ioremap()
-Message-ID: <202208170818.SWTJWEdB-lkp@intel.com>
-References: <20220815124612.3328670-1-chenhuacai@loongson.cn>
-MIME-Version: 1.0
+        Tue, 16 Aug 2022 20:43:45 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8824CA16;
+        Tue, 16 Aug 2022 17:43:43 -0700 (PDT)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27H0JEvU008328;
+        Tue, 16 Aug 2022 17:43:23 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=m1kKGyDnL9lWww8aOhgCdIZE3YpH0PCURSV5H6hv7l4=;
+ b=IYjYDynTrKnKoiuwJ4afczw14H7rWDtI5SH3uOdk65a51ny2plLwOn661Nk5LHhv2soa
+ j7O/FpCMUb7GLzdD/5U5BgxIs471ts+01UUJ1UD+r7iYISX5bQHITgDHYoqYzhZuzs8V
+ TaBxqqRtVBry+/VPwC6+A5c7N1MNw6w8VNQ= 
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2172.outbound.protection.outlook.com [104.47.55.172])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j0np583je-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Aug 2022 17:43:23 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Qu3mQUQRdSPSmPPZylxAG6IgD7bY9D/dKjekxRuyg7EvbOR+8z5r4yzok+aq5sZ3LhpYGpGyTg/0+a9L8ALUuwBK9Bt3sxexB2BDiNpARRLWALC5WtyUdRRdi9CBbW6y/flsFJohGi+biCjcrzrN4JtiQ1H+9bOvoGeRWxWBNxV9gp0J+cvbEA9s6dVUnnDFg/ohA4PG7kyZzEopJC/ss4MU+kihJhDTKZGGsXl8EkHV7zACc7J8/9ks5/jtR3x0b4VspZOBACZ6KlyPw7/1cSWocsjl49tnAANXwt08OIAVipHiPdUh/m3yHLvRn1FXweXqXr+WdJOWxUh07OA16w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=m1kKGyDnL9lWww8aOhgCdIZE3YpH0PCURSV5H6hv7l4=;
+ b=TDyvhmQJLhTSDMjqaV5XDXyLcX6rgFGTfXjmqUwhyIYV7FoAR1Hr7fevks2mjvDTSMbnRpVHbEDQDFlvdBJnMwc8mYXyscTHjxcJa000wLU/wGGGWAJ3jpqnx9A/YOfh8pUZzMnv6HjL2ROpY9XqDsF0gLL2MhQaZG5pDNqA0f7dJIm8j+L4qMSK0ofQ3sk6cjiQzy1uYY+8GK7J7E2mlGlJ9SOtxHTWPKDOw9Whd3QLGyTTXXKJHGiPPGSHucgNhDzIapsV0NYS0byVbMdgqzocwDUx2DTjKp+Ig87Olgt4odPRW2dkZ27kb4dluWMyi5eTKE/jR0aSgMZWSJD4Jg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from MW4PR15MB4475.namprd15.prod.outlook.com (2603:10b6:303:104::16)
+ by SJ0PR15MB4520.namprd15.prod.outlook.com (2603:10b6:a03:379::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.19; Wed, 17 Aug
+ 2022 00:43:21 +0000
+Received: from MW4PR15MB4475.namprd15.prod.outlook.com
+ ([fe80::5455:4e3f:a5a2:6a9e]) by MW4PR15MB4475.namprd15.prod.outlook.com
+ ([fe80::5455:4e3f:a5a2:6a9e%4]) with mapi id 15.20.5525.011; Wed, 17 Aug 2022
+ 00:43:21 +0000
+Date:   Tue, 16 Aug 2022 17:43:19 -0700
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Hawkins Jiawei <yin31149@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        bpf@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>
+Subject: Re: [PATCH] net: Fix suspicious RCU usage in
+ bpf_sk_reuseport_detach()
+Message-ID: <20220817004319.fd7dekpqeumbvmsh@kafai-mbp>
+References: <20220816103452.479281-1-yin31149@gmail.com>
+ <166064248071.3502205.10036394558814861778.stgit@warthog.procyon.org.uk>
+ <804153.1660684606@warthog.procyon.org.uk>
+ <20220816164435.0558ef94@kernel.org>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220815124612.3328670-1-chenhuacai@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220816164435.0558ef94@kernel.org>
+X-ClientProxiedBy: BY5PR04CA0027.namprd04.prod.outlook.com
+ (2603:10b6:a03:1d0::37) To MW4PR15MB4475.namprd15.prod.outlook.com
+ (2603:10b6:303:104::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5f2d51a2-aec4-4f00-1dc1-08da7fe97c56
+X-MS-TrafficTypeDiagnostic: SJ0PR15MB4520:EE_
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: r7gZVY+qFPJWL2dXPdX/sRtkeb0Aoot9dqKcQIkS0GfHPtagkNjr69SBDCDRPGEBcMqGxzwk24HCvorFi4gPCGnOBjDx7fZlY6CDX8PJ+f4zlSXB86wqk0HEwqCZZ+prwtxnG70QPqAQqaB6JaMCK4VqLTSOzCCk1ELaeGkxFhmQdjpAqUVNfGdWM9IEV/ukhUJlKxVb8bsFY7sWrn/Hn2dBASvsUU0RP+q5w8044G3PVF16O0i6HWIsi/iQ34lSqR7LJZ9CnsEPukdwHle/EnF4lYXcl/qMpVoISKhDxf0NY//HdUDIhFW+hOT6SfKq5df479Y95QSiheyZ1C6MLCOe2w8QsHIaUpaYPNLCRTWDX7nkn6MeWDU07DijSiP4pijPoy7AWKeqJMj9P84WU92ygXDeD+KxRZp9VS0DLmwoancKb7xJ0ug/3xHwnhXDiPoBW5aIKPluJltszo+biOqPRtBHFvNW+mPEMhjEOTQ1p4ttUHvbKJFSx4j0bLtKZSxFrJPFSeOZJJul5MDVbsArhL+p5BmazkGb4SPcEVuE5uVQ+eETJUKm9i7q95OU19o/jXOHg51KKuhq46VXYM3K898z13N4OFVsR5EsB1hOxRADvju2aESp3UaASD9FJ/5q0NByboUN34/BhmQQ2YOxezLY0LKO34HTKatfROezm/5xQRs8wx0NNY3Lp6DgVHPON1A4kTq4yhEKlrrtm4Yu0ZtGgEk/ouMoKvKqRj8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR15MB4475.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(366004)(396003)(376002)(39860400002)(136003)(346002)(52116002)(6506007)(41300700001)(478600001)(6512007)(6486002)(83380400001)(9686003)(186003)(1076003)(2906002)(7416002)(54906003)(33716001)(5660300002)(6916009)(316002)(8936002)(66476007)(66556008)(8676002)(66946007)(38100700002)(4326008)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zTgPRFla0xL3Ow6uCADnAlBNTbBo3QmAuji+C0qwaF6aFVjqmSKkB9IVaHaf?=
+ =?us-ascii?Q?6gjFpIlUqSw50J6oEySAM0PRaHz2N31gSFqC2d9bC9bA0QW36k4J6J7FdHXy?=
+ =?us-ascii?Q?47HerSJzxbbMMOP2Y+u89tWTe7P0DiEbjooKCuUGjxsxME+CbkL7k7+CdNSn?=
+ =?us-ascii?Q?X2veQcoTBeFCe8juCsIAQGN6cCWzfnfec0Ky1ZDk7OkbG77seukPE2ZkQiny?=
+ =?us-ascii?Q?j6PGX1TTdK0HHytLm2qWHd60wqwrRaY8gmT7gwm/x7Swq/+z+74gLOx8dKwU?=
+ =?us-ascii?Q?kp5+K+j3JduGQi3M2yy3OCM9apMpw40HWVZA864N58SkxYCuep/AR5z29BK6?=
+ =?us-ascii?Q?KSI3BMrAyL5MqCbF4B7EtVo7Y9v7UoqzOgeORxQhthbiKIK86dNRhn1zcPqk?=
+ =?us-ascii?Q?/JkijTLGyr1o+8DFTgAsKRyZ+Mvh25dVbFDsRK+y9ovFLgj6Q/uNHE0x2lr4?=
+ =?us-ascii?Q?l0KWWiFrETI4InS/bkYdiBYM/CZmPNhGT3jf3LKfrtFDN/vAj3JsNpCuNptv?=
+ =?us-ascii?Q?6bI+cgDm3ea/juAO1anOP1EEk0CjaMpSEeyMPCJ+74BO0Bw32wAjWZP5s0It?=
+ =?us-ascii?Q?8NfzVuaX7Jom+8qopS7iTrJ3j0NQV8EdVbcpsodVZx2rqZ2GL/97yU1dUBSf?=
+ =?us-ascii?Q?Yo12xCyxtJ3apj3enD0AUv00xIHR2YUCa5IqgojVOu6AB4yT9pcc0QqmlNF3?=
+ =?us-ascii?Q?MJ1Xp82izPOe9SYCtC5M8wHsNiclvefvpPX3eV8YDBLbjGUIVGHhiUWalrxt?=
+ =?us-ascii?Q?WAw7/Hc4zbefhIjIP5eEzCLIND2x1y8U5WNlfhpEMSJbcoJqIBDY3jdH/63l?=
+ =?us-ascii?Q?OW5q6GrhGbn41yMDsIHdvrqgv2mB8pfG8T3vi3j2ELOy0CW/obrVZnXCB8QR?=
+ =?us-ascii?Q?o2YZ8jiCMokcemlabjcvi0jDTkAtzSWQWrQPQ+O2KKU5CDqoKjaVjztPcxPH?=
+ =?us-ascii?Q?WelmvLTC1lfkVV3hWUdJcIBbwQuQL0rvmlg0WNrJAK8IKf9OJlBgLTQrxA5/?=
+ =?us-ascii?Q?N/f3ODDsLmoi2H/2LeT5wIskUo6z2V5lk/jW6WK1RoEZ1cF3JnVC2IgOQqeA?=
+ =?us-ascii?Q?fF01H4WqY0Vi1HfhfBm9J1kGf504nUxnOWUppxhXOjn2m0hYsZ9teN5nO3zK?=
+ =?us-ascii?Q?VwfLwcKFS7hkfo5/xezB1Cqw5+jUVDL1dXeAhbkro6ZcYfNDWu5e3sHkykik?=
+ =?us-ascii?Q?L4w6R8UtJnlFt6k/K9uX9yrCFveGb/blGUaeMYeD72+1C6pYlrNJB1cmNzFk?=
+ =?us-ascii?Q?fIvP/zYsTL5SnIq7Pb2okJr3t298VTGFPN2QLO9IvHtLj8dkoSUNZT/7QdM6?=
+ =?us-ascii?Q?azoFoscnVJhiYaN1E0C2Ojkr0q53Zvk20GRazRSeDKBntraBOanP6/t8IXdd?=
+ =?us-ascii?Q?4YS8JwIgQ/MFgWx0Nu3Qbr/3UZRX7IQjPxbJ7AGiDmBzvM+3CCaGpiQVtfkc?=
+ =?us-ascii?Q?CWJKVfJjHUeJOpTuiqzPd5pbF1ISjP46NWNp6UUeKoPy/2CcLMtXI541Yd9d?=
+ =?us-ascii?Q?t16fC7qaHAhpqLwyIgXcGgspgcGlU0bYTpS4ispjhfsVggSfyjY+Zz7MsBdj?=
+ =?us-ascii?Q?XJhct7o/KYwKTGEEyYPW9dt2ifAU0+PBg6ZyYref?=
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f2d51a2-aec4-4f00-1dc1-08da7fe97c56
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR15MB4475.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2022 00:43:21.8347
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5rQnRaKBp4ZsvATWbA5QrNiUGtLp7jHVEw9SlBJ8awLtOdZ1bsHwaH8/G9x37yTJ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR15MB4520
+X-Proofpoint-GUID: WHJOkSY9WWWm6BJ2kXO2JpPO-MAcCl1c
+X-Proofpoint-ORIG-GUID: WHJOkSY9WWWm6BJ2kXO2JpPO-MAcCl1c
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-16_08,2022-08-16_02,2022-06-22_01
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Huacai,
+On Tue, Aug 16, 2022 at 04:44:35PM -0700, Jakub Kicinski wrote:
+> On Tue, 16 Aug 2022 22:16:46 +0100 David Howells wrote:
+> > So either __rcu_dereference_sk_user_data_with_flags_check() has to be a macro,
+> > or we need to go with something like the first version of my patch where I
+> > don't pass the condition through.  Do you have a preference?
+> 
+> I like your version because it documents what the lock protecting this
+> field is.
+> 
+> In fact should we also add && sock_owned_by_user(). Martin, WDYT? Would
+> that work for reuseport? Jakub S is fixing l2tp to hold the socket lock
+> while setting this field, yet most places take the callback lock...
+It needs to take a closer look at where the lock_sock() has already
+been acquired and also need to consider the lock ordering with reuseport_lock.
+It probably should work but may need a separate patch to discuss those
+considerations ?
 
-I love your patch! Yet something to improve:
+> 
+> One the naming - maybe just drop the _with_flags() ? There's no version
+> of locked helper which does not take the flags. And not underscores?
+I am also good with a shorter name.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.0-rc1 next-20220816]
-[cannot apply to soc/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Huacai-Chen/LoongArch-Use-TLB-for-ioremap/20220815-204842
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-config: loongarch-randconfig-r015-20220815 (https://download.01.org/0day-ci/archive/20220817/202208170818.SWTJWEdB-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0cdab71896d6b3b3b3f540f80d6f041a0c592e7a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Huacai-Chen/LoongArch-Use-TLB-for-ioremap/20220815-204842
-        git checkout 0cdab71896d6b3b3b3f540f80d6f041a0c592e7a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   arch/loongarch/mm/init.c:47:6: warning: no previous prototype for 'setup_zero_pages' [-Wmissing-prototypes]
-      47 | void setup_zero_pages(void)
-         |      ^~~~~~~~~~~~~~~~
-   arch/loongarch/mm/init.c: In function 'fixmap_pte':
-   arch/loongarch/mm/init.c:176:26: warning: passing argument 1 of 'pud_init' makes integer from pointer without a cast [-Wint-conversion]
-     176 |                 pud_init(new);
-         |                          ^~~
-         |                          |
-         |                          pud_t *
-   In file included from include/linux/pgtable.h:6,
-                    from include/linux/mm.h:29,
-                    from include/linux/pagemap.h:8,
-                    from arch/loongarch/mm/init.c:14:
-   arch/loongarch/include/asm/pgtable.h:244:36: note: expected 'long unsigned int' but argument is of type 'pud_t *'
-     244 | extern void pud_init(unsigned long page, unsigned long pagetable);
-         |                      ~~~~~~~~~~~~~~^~~~
->> arch/loongarch/mm/init.c:176:17: error: too few arguments to function 'pud_init'
-     176 |                 pud_init(new);
-         |                 ^~~~~~~~
-   arch/loongarch/include/asm/pgtable.h:244:13: note: declared here
-     244 | extern void pud_init(unsigned long page, unsigned long pagetable);
-         |             ^~~~~~~~
-   arch/loongarch/mm/init.c:187:26: warning: passing argument 1 of 'pmd_init' makes integer from pointer without a cast [-Wint-conversion]
-     187 |                 pmd_init(new);
-         |                          ^~~
-         |                          |
-         |                          pmd_t *
-   arch/loongarch/include/asm/pgtable.h:245:36: note: expected 'long unsigned int' but argument is of type 'pmd_t *'
-     245 | extern void pmd_init(unsigned long page, unsigned long pagetable);
-         |                      ~~~~~~~~~~~~~~^~~~
-   arch/loongarch/mm/init.c:187:17: error: too few arguments to function 'pmd_init'
-     187 |                 pmd_init(new);
-         |                 ^~~~~~~~
-   In file included from arch/loongarch/mm/init.c:35:
-   arch/loongarch/include/asm/pgalloc.h:48:13: note: declared here
-      48 | extern void pmd_init(unsigned long page, unsigned long pagetable);
-         |             ^~~~~~~~
-
-
-vim +/pud_init +176 arch/loongarch/mm/init.c
-
-   159	
-   160	static pte_t *fixmap_pte(unsigned long addr)
-   161	{
-   162		pgd_t *pgd;
-   163		p4d_t *p4d;
-   164		pud_t *pud;
-   165		pmd_t *pmd;
-   166	
-   167		pgd = pgd_offset_k(addr);
-   168		p4d = p4d_offset(pgd, addr);
-   169	
-   170		if (pgd_none(*pgd)) {
-   171			pud_t *new;
-   172	
-   173			new = memblock_alloc_low(PAGE_SIZE, PAGE_SIZE);
-   174			pgd_populate(&init_mm, pgd, new);
-   175	#ifndef __PAGETABLE_PUD_FOLDED
- > 176			pud_init(new);
-   177	#endif
-   178		}
-   179	
-   180		pud = pud_offset(p4d, addr);
-   181		if (pud_none(*pud)) {
-   182			pmd_t *new;
-   183	
-   184			new = memblock_alloc_low(PAGE_SIZE, PAGE_SIZE);
-   185			pud_populate(&init_mm, pud, new);
-   186	#ifndef __PAGETABLE_PMD_FOLDED
-   187			pmd_init(new);
-   188	#endif
-   189		}
-   190	
-   191		pmd = pmd_offset(pud, addr);
-   192		if (pmd_none(*pmd)) {
-   193			pte_t *new;
-   194	
-   195			new = memblock_alloc_low(PAGE_SIZE, PAGE_SIZE);
-   196			pmd_populate_kernel(&init_mm, pmd, new);
-   197		}
-   198	
-   199		return pte_offset_kernel(pmd, addr);
-   200	}
-   201	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Could a comment be added to bpf_sk_reuseport_detach() mentioning
+sk_user_data access is protected by the sk_callback_lock alone (or the lock
+sock in the future) while reusing __locked_read_sk_user_data() with
+a rcu_dereference().  It will be easier to understand if there is
+actually any rcu reader in the future code reading.

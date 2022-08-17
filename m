@@ -2,145 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29EBC5975D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10BA45975DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240932AbiHQSlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 14:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
+        id S240405AbiHQSlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 14:41:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237435AbiHQSle (ORCPT
+        with ESMTP id S237461AbiHQSle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 17 Aug 2022 14:41:34 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875249FAB8;
-        Wed, 17 Aug 2022 11:41:33 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id E96C55C0055;
-        Wed, 17 Aug 2022 14:41:32 -0400 (EDT)
-Received: from imap42 ([10.202.2.92])
-  by compute2.internal (MEProxy); Wed, 17 Aug 2022 14:41:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1660761692; x=
-        1660848092; bh=KBkAVrFUWUiLnYz1HgB/kktwNXCcCNFrJP92tOCbhDk=; b=i
-        kSCWfDhzh9hREGc9NnjtCI/XLmrpunPU3M5N8WxiUoMsnKo0cUDYKCcUIFKOTgtF
-        +6TFAc1M/ixDcswGt0aKJ9BSLoT1dKD4+ow6CxfhKhJ7nlC4o3I3PY/QYRMhy3+j
-        Lt03MeQ52D9lQpUfNbSjAeHh9+UbPXZxySSP2kFJM7ynMzbKUiE9qnrPcDB2vvTX
-        +BbhwhbMRuBoFiWU0npqrL0DCJVpGyTJ4956cIX8AxJ7IEkMResR4POpQ4Y1Zgt0
-        0gTLlz3Cf8ezcyPX7FUQ6ixRwFgGgkXeGwcEbQbxlBDuosZe0NX8CeRV4RIST2Z1
-        lFmBvg+71tN/LxHUMLuEA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660761692; x=
-        1660848092; bh=KBkAVrFUWUiLnYz1HgB/kktwNXCcCNFrJP92tOCbhDk=; b=U
-        Dy6EGmSK7gzMimqN2Np815myw8KzJqgcF72m++jcMXieKMudfuKtm4o4pIthssx1
-        jJzVD6Yc2FOrUaOe3zW/5cHKGqJLSLAMd4UksqbU6tjF2/11FDlL2GmqL6NQICYf
-        HQf7kdvQg5h01FPOw57CsTicUHiA8E+egEGCtA5cPqo9BatnyuL+zsOGziXAn2EZ
-        b/9N6bW7bXJM+l1vM5vMh7EFOtWs5vTu5GY5lz1P8DXI+2qNAcrf6OO9WmIE0bJy
-        RpcdZa6wUlwvTUl4HPNHLI3Ys6WGTnySymfYcKBaVG4I2dIomm4iQDFBO5DLRIEK
-        7eSzQdx0Xr0P+90lPHfdQ==
-X-ME-Sender: <xms:XDb9YnFIagB7A2cBaaQ9vILES5qUY8hgnO2VQhhYng81is1f3NxtKQ>
-    <xme:XDb9YkV6eLgxdJ0xqtrcFHxCIAGsWTc-K38ygMoLkemAoHyfBQQvIpjATGxsIH_zJ
-    SpE9gyB3yfAaj03rA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehiedguddvlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enfghrlhcuvffnffculddvfedmnecujfgurhepofgfggfkjghffffhvfevufgtgfesthhq
-    redtreerjeenucfhrhhomhepfdffrghnihgvlhcuighufdcuoegugihusegugihuuhhurd
-    ighiiiqeenucggtffrrghtthgvrhhnpeffheffhfdvfefgjeehfedviedvfeehgeefgeeu
-    jedvheeuteelkeevvdduvdeludenucffohhmrghinheplhhotghkrdhrvggrugenucevlh
-    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihu
-    uhhurdighiii
-X-ME-Proxy: <xmx:XDb9YpJlIk5i-V5nCszbe21XnXqF-pO9TMHo9Nw8cXdqfBlWoNl2nw>
-    <xmx:XDb9YlHXYa8YJJP43LNqim97aNApWqDSToNK0K1TjcFnMEeeSfZUNQ>
-    <xmx:XDb9YtU3C4346XXEp4OB1tOcRRXLxP952bpCHiZ0SSkOisQqX4-72Q>
-    <xmx:XDb9YprWXRms0hWDnATlbCgWhPHNu29K7_MI2QvQkq_MkujLAU0zdQ>
-Feedback-ID: i6a694271:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 90270BC0075; Wed, 17 Aug 2022 14:41:32 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
-Mime-Version: 1.0
-Message-Id: <668406b9-714f-4ade-889d-051cf42ceefc@www.fastmail.com>
-In-Reply-To: <20220817183453.GA24008@breakpoint.cc>
-References: <cover.1660592020.git.dxu@dxuuu.xyz>
- <f850bb7e20950736d9175c61d7e0691098e06182.1660592020.git.dxu@dxuuu.xyz>
- <871qth87r1.fsf@toke.dk> <20220815224011.GA9821@breakpoint.cc>
- <5c7ac2ab-942f-4ee7-8a9c-39948a40681c@www.fastmail.com>
- <20220817183453.GA24008@breakpoint.cc>
-Date:   Wed, 17 Aug 2022 12:41:12 -0600
-From:   "Daniel Xu" <dxu@dxuuu.xyz>
-To:     "Florian Westphal" <fw@strlen.de>
-Cc:     =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "Alexei Starovoitov" <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>,
-        "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, pablo@netfilter.org,
-        netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 2/3] bpf: Add support for writing to nf_conn:mark
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEE7A00C9
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 11:41:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660761692;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=KrNH++9OSLFu7Ijopj+il7JOfOGrBfah2cWjWaVWpUk=;
+        b=fqLtaUIqLdGseRaXkwE8kWubtDEkzz5R595LWZh8NK2PCzv2xaWA8PoqDnjTTMwfjhBAuO
+        rUE+UeDTWv8D4TKq1SnXtyjRV4cGIgyPoyNC03FabtTRSC8+5sBqOidKRiM/M/5jQStQJo
+        6/Jm9GDmGuJWZgyAhz2XHf+BVavwrUs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-346-32larb_kPq-ypeLxP7hJuQ-1; Wed, 17 Aug 2022 14:41:29 -0400
+X-MC-Unique: 32larb_kPq-ypeLxP7hJuQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 105481C01B43;
+        Wed, 17 Aug 2022 18:41:29 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 13FFB1121315;
+        Wed, 17 Aug 2022 18:41:27 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH v2] locks: Fix dropped call to ->fl_release_private()
+From:   David Howells <dhowells@redhat.com>
+To:     jlayton@kernel.org
+Cc:     Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        dhowells@redhat.com, linux-kernel@vger.kernel.org
+Date:   Wed, 17 Aug 2022 19:41:27 +0100
+Message-ID: <166076168742.3677624.2936950729624462101.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022, at 12:34 PM, Florian Westphal wrote:
-> Daniel Xu <dxu@dxuuu.xyz> wrote:
->> On Mon, Aug 15, 2022, at 4:40 PM, Florian Westphal wrote:
->> > Toke H=C3=B8iland-J=C3=B8rgensen <toke@kernel.org> wrote:
->> >> > Support direct writes to nf_conn:mark from TC and XDP prog types=
-. This
->> >> > is useful when applications want to store per-connection metadat=
-a. This
->> >> > is also particularly useful for applications that run both bpf a=
-nd
->> >> > iptables/nftables because the latter can trivially access this m=
-etadata.
->> >> >
->> >> > One example use case would be if a bpf prog is responsible for a=
-dvanced
->> >> > packet classification and iptables/nftables is later used for ro=
-uting
->> >> > due to pre-existing/legacy code.
->> >> >
->> >> > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
->> >>=20
->> >> Didn't we agree the last time around that all field access should =
-be
->> >> using helper kfuncs instead of allowing direct writes to struct nf=
-_conn?
->> >
->> > I don't see why ct->mark needs special handling.
->> >
->> > It might be possible we need to change accesses on nf/tc side to use
->> > READ/WRITE_ONCE though.
->>=20
->> I reviewed some of the LKMM literature and I would concur that
->> READ/WRITE_ONCE() is necessary. Especially after this patchset.
->>=20
->> However, it's unclear to me if this is a latent issue. IOW: is reading
->> ct->mark protected by a lock? I only briefly looked but it doesn't
->> seem like it.
->
-> No, its not protected by a lock.  READ/WRITE_ONCE is unrelated to your
-> patchset, this is a pre-existing "bug".
+Prior to commit 4149be7bda7e, sys_flock() would allocate the file_lock
+struct it was going to use to pass parameters, call ->flock() and then call
+locks_free_lock() to get rid of it - which had the side effect of calling
+locks_release_private() and thus ->fl_release_private().
 
-Thanks for confirming. Since it's pre-existing I will send out a followup
-patchset then.
+With commit 4149be7bda7e, however, this is no longer the case: the struct
+is now allocated on the stack, and locks_free_lock() is no longer called -
+and thus any remaining private data doesn't get cleaned up either.
 
-Thanks,
-Daniel
+This causes afs flock to cause oops.  Kasan catches this as a UAF by the
+list_del_init() in afs_fl_release_private() for the file_lock record
+produced by afs_fl_copy_lock() as the original record didn't get delisted.
+It can be reproduced using the generic/504 xfstest.
+
+Fix this by reinstating the locks_release_private() call in sys_flock().
+I'm not sure if this would affect any other filesystems.  If not, then the
+release could be done in afs_flock() instead.
+
+Changes
+=======
+ver #2)
+ - Don't need to call ->fl_release_private() after calling the security
+   hook, only after calling ->flock().
+
+Fixes: 4149be7bda7e ("fs/lock: Don't allocate file_lock in flock_make_lock().")
+cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+cc: Chuck Lever <chuck.lever@oracle.com>
+cc: Jeff Layton <jlayton@kernel.org>
+cc: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+cc: linux-fsdevel@vger.kernel.org
+Link: https://lore.kernel.org/r/166075758809.3532462.13307935588777587536.stgit@warthog.procyon.org.uk/ # v1
+---
+
+ fs/locks.c |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/fs/locks.c b/fs/locks.c
+index c266cfdc3291..607f94a0e789 100644
+--- a/fs/locks.c
++++ b/fs/locks.c
+@@ -2129,6 +2129,7 @@ SYSCALL_DEFINE2(flock, unsigned int, fd, unsigned int, cmd)
+ 	else
+ 		error = locks_lock_file_wait(f.file, &fl);
+ 
++	locks_release_private(&fl);
+  out_putf:
+ 	fdput(f);
+ 
+
+

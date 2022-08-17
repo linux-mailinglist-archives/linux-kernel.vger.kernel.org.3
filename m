@@ -2,95 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48F6759755F
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AED1659755B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240783AbiHQRvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58562 "EHLO
+        id S238326AbiHQRwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238326AbiHQRvm (ORCPT
+        with ESMTP id S237632AbiHQRws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:51:42 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A3596FED
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:51:41 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id o14-20020a17090a0a0e00b001fabfd3369cso1297283pjo.5
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:51:41 -0700 (PDT)
+        Wed, 17 Aug 2022 13:52:48 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F607DF4A;
+        Wed, 17 Aug 2022 10:52:47 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id o14-20020a17090a0a0e00b001fabfd3369cso1300238pjo.5;
+        Wed, 17 Aug 2022 10:52:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=yocom-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=Wm0tHJqofpxXwdDseHL/uJ/+OrgW8gnJ90ltIhdcZZ0=;
-        b=RWQZoIk7J8VvXclA1u1mR1aNYk0pV40udcWTXfL+88lFOmAsZcVOO2nDhTc/1h7dIy
-         M5gb7K+jQ80pdHhsaxS52T04c9wN5cOSWNu7J6BQqpsWJzav+Zeg4F9fzWL63p0Tv02D
-         XCFJF4NBZnPgplNiBMQx19sDsa54kJUV2e3Xw8IWgq4RKPQOWLE6v4N6Qbqb5AFT2zje
-         Se+vQMtcMPYT7Z5gqTnDPPMS7USyxh3XR4MzMvCSzzScHtAs7HUwEyhrSdIim8LQvRak
-         9LliQnQ2tLI+tLZg39yFFNwsTmpcHpz6NfzztyVCRLZNtrL9L1S9rZV/z/TPrlkmlQJT
-         SLCQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=OSADlFbIj2e9HqyRVtp14PL1Xr6rNvJVCrKar0E+Zk8=;
+        b=Zo40/TjPDHiWeNSjJknVi5F5cx4JHD2EGWguUAk4iAmlDsu/4A7LpbnUsr/85DnZrg
+         cNVsm3cOlYXqTW8jVChsuOr7xhFKyi+9lk2ZNwU09JWHWHIb/oKc0DoVmlV0NZvYUHnm
+         Qymufs9T4X3vDGdiuoeLG0Bo/vBqVPBJ607NDNvmv90r2CrohZAKj2yfXaB39sDXC7q4
+         YKNIfKMkeu/DQx5fq4gB+ou1zizz/7DxAYUADn+38nUmQvvl1SZx7VJCseh6RNsRoYY+
+         jr0SD74JXBFmuez17lcEPwJZTwYvN4rq++uouH/sBEsaA0sYYyZ7xD7gAIhOAm89OD7w
+         hoYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=Wm0tHJqofpxXwdDseHL/uJ/+OrgW8gnJ90ltIhdcZZ0=;
-        b=Of2L9B0sw/t2ekd58lb63kCqKKERHuanRB7zTs3pyu8tyc5GTi+MgCO83BeiGz9YQ8
-         Yqjms6zLpVxoLmKhCQPmWrQqcq4rsPuTCHsW0iLHuWI0DNFYF3catzRoNWEGUdDpN+oL
-         u9fwrf+ZPmV2osOXSqfOGv3cglkelvIN7wWS4T7qr9vmTwiEDEOA9clDYIqDSkhGW9UX
-         jYOlTbVRHSph1mw6DSlRNhV4WRiogegmfVfHJO3zaPuiSX0NRsn1OyLFEPWyLvqFM0ei
-         Y43K2tTWJemAhVAZgRjAD+4iiSMUFmCDf4OHIYMWf6X80L9KNKnIxxIT3U/3XKHmAG7p
-         UFaQ==
-X-Gm-Message-State: ACgBeo2LFxU63iPXgiqjWleZM/a60wyB8E23/QjtUktaVpQetJxAu01p
-        IqMxVCHitxIEmgB0RAP93Twr7+PM/CdUFAU8
-X-Google-Smtp-Source: AA6agR63v1wAt+8uIVJ71lOT9FWq5Tr4DTfCyM176tZv1KzizQ6Zb+GE2LCVdurejoOxm6ddtV/LKw==
-X-Received: by 2002:a17:902:8d8a:b0:16f:21fb:b97a with SMTP id v10-20020a1709028d8a00b0016f21fbb97amr27396985plo.160.1660758700773;
-        Wed, 17 Aug 2022 10:51:40 -0700 (PDT)
-Received: from localhost.localdomain ([2601:600:8f80:973::5f])
-        by smtp.gmail.com with ESMTPSA id z29-20020aa7991d000000b0052f0a616a87sm10734127pff.168.2022.08.17.10.51.39
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=OSADlFbIj2e9HqyRVtp14PL1Xr6rNvJVCrKar0E+Zk8=;
+        b=bO2tjmVbyg4KIhxCKjwoEN0P1JHISLmiwfLQMqSH0yK2ThJBuZT45p4RoW67Vqaw9b
+         OAS9ALkwajGVMYD7jSZjC5f/4Cmh6MoqieXK8+zYgbUZFqNn3axxIjAqFswTpoCbrfTS
+         DQlC4nDuly0b1ibkt94egqlmZtzu6CPqi3CW53abuI3X+Dsr17jL08kxQ7kx8D7rOatz
+         ZpZMYgRF8nGySaPJgehERhIwDqLmmij/BP0EuJoGnYBRQhM+rCTxNeh1E446IXOzXIbb
+         L2ESlLkD8MjFIYGkBGKCz33LMKGJ7I//aXp0u4aqbWLCkX154Zh9RrCBsKyrtZxaWr4C
+         qAGg==
+X-Gm-Message-State: ACgBeo35QY0FVcKxCJUnaTb3NxP9Bv8u3dwGpiuCFQtpb5ZjMHG9oSFi
+        kMrzKOfVUylnGSFHhrD0+Lg=
+X-Google-Smtp-Source: AA6agR6o7+VXireczEoNvcJf5BC9qxlMA/b1TDhfVukLZvA2R+1sU4T83EW4L6XIWp8y2ygsndmwEA==
+X-Received: by 2002:a17:90b:38c9:b0:1f7:28bb:aa16 with SMTP id nn9-20020a17090b38c900b001f728bbaa16mr4832078pjb.201.1660758766791;
+        Wed, 17 Aug 2022 10:52:46 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id a8-20020aa79708000000b0052e6c058bccsm10695677pfg.61.2022.08.17.10.52.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 10:51:40 -0700 (PDT)
-From:   Nate Yocom <nate@yocom.org>
-To:     dmitry.torokhov@gmail.com
-Cc:     nate@yocom.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hadess@hadess.net
-Subject: [PATCH v4 3/3] Input: joystick: xpad: Add X-Box Adaptive Controller XBox button
-Date:   Wed, 17 Aug 2022 10:51:34 -0700
-Message-Id: <20220817175134.15084-4-nate@yocom.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220817175134.15084-1-nate@yocom.org>
-References: <20220817175134.15084-1-nate@yocom.org>
+        Wed, 17 Aug 2022 10:52:46 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 17 Aug 2022 07:52:45 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     mkoutny@suse.com, axboe@kernel.dk, ming.lei@redhat.com,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: [PATCH v7 4/9] blk-throttle: fix io hung due to configuration
+ updates
+Message-ID: <Yv0q7T5Eg6MzOIuU@slm.duckdns.org>
+References: <20220802140415.2960284-1-yukuai1@huaweicloud.com>
+ <20220802140415.2960284-5-yukuai1@huaweicloud.com>
+ <Yvv3jcycOguuEbA3@slm.duckdns.org>
+ <215b4842-c09f-d622-7127-c8b1d9ce3aa9@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <215b4842-c09f-d622-7127-c8b1d9ce3aa9@huaweicloud.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adaptive controller sets 0x02 bit for this button, all others set 0x01
-so presence of either is used for BTN_MODE.
+On Wed, Aug 17, 2022 at 09:30:30AM +0800, Yu Kuai wrote:
+> > Would it be easier if the fields were signed? It's fragile and odd to
+> > explain "these are unsigned but if they underflow they behave just like
+> > signed when added" when they can just be signed. Also, I have a hard time
+> > understand what "preempt" means above.
+> 
+> I think preempt shound never happen based on current FIFO
+> implementation, perhaps
 
-Signed-off-by: Nate Yocom <nate@yocom.org>
-Tested-by: Bastien Nocera <hadess@hadess.net>
----
- drivers/input/joystick/xpad.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Can you elaborate what "preempt" is?
 
-diff --git a/drivers/input/joystick/xpad.c b/drivers/input/joystick/xpad.c
-index 561e097396fb..f65e8b1d46e2 100644
---- a/drivers/input/joystick/xpad.c
-+++ b/drivers/input/joystick/xpad.c
-@@ -859,7 +859,7 @@ static void xpadone_process_packet(struct usb_xpad *xpad, u16 cmd, unsigned char
- 		if (data[1] == 0x30)
- 			xpadone_ack_mode_report(xpad, data[2]);
- 
--		input_report_key(dev, BTN_MODE, data[4] & 0x01);
-+		input_report_key(dev, BTN_MODE, data[4] & 0x03);
- 		input_sync(dev);
- 		return;
- 	}
+> > > +	if (bps_limit != U64_MAX)
+> > > +		tg->bytes_skipped[rw] +=
+> > > +			calculate_bytes_allowed(bps_limit, jiffy_elapsed) -
+> > > +			tg->bytes_disp[rw];
+> > > +	if (iops_limit != UINT_MAX)
+> > > +		tg->io_skipped[rw] +=
+> > > +			calculate_io_allowed(iops_limit, jiffy_elapsed) -
+> > > +			tg->io_disp[rw];
+> > 
+> > So, this is calculating the budgets to carry over. Can we name them
+> > accordingly? I don't know what "skipped" means.
+> 
+> Yeah, thanks for you advice, art of naming is a little hard for me...
+> How do you think about these name: extended_bytes/io_budget?
+
+How about carryover_{ios|bytes}?
+
+Thanks.
+
 -- 
-2.30.2
-
+tejun

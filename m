@@ -2,85 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86BE59691F
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 08:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD4D596921
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 08:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238721AbiHQGCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 02:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
+        id S229996AbiHQGGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 02:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232083AbiHQGCR (ORCPT
+        with ESMTP id S232670AbiHQGF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 02:02:17 -0400
-Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502037F268;
-        Tue, 16 Aug 2022 23:02:09 -0700 (PDT)
-X-QQ-mid: bizesmtp82t1660715993tzs4omjz
-Received: from localhost.localdomain ( [123.114.60.34])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 17 Aug 2022 13:59:51 +0800 (CST)
-X-QQ-SSF: 01400000002000D0T000B00A0000000
-X-QQ-FEAT: aBJFcW+uBGYgmAL01Z5YK4fA139v7xj8q5YXUdXTQfe5/gq6ZjqhbWvJspXrS
-        DGsosptREEMgLgZlT2veTkCeVQQVY1iX0VGXc1TkKP77zkq63Cu9jg6812chrv7D4InATU0
-        //Vur3QoO2W9AohXnC0cxUVK9Ak0TsD1j3VnG6STBa/HpXyFquJ3a801llRzX/spGDlBNyV
-        KUYqBVQbZI0VN7J0z0YwXNpi64pO8SxBFAmx0U6UK2AfGGhZ+gSNZZHcSzW826fqZWXQwuU
-        wHpaUqmaE8S2yooAa+SDRUVQndHPI1z5wG1S3DGQxGTtx6aJ51ONiFDWyApPFNJ9q29VTJc
-        EzET7f1qu0AWJb0cJvNzBFOeocACGjsZnIPZeRZi4gTCD1Ft/M=
-X-QQ-GoodBg: 2
-From:   zhaoxiao <zhaoxiao@uniontech.com>
-To:     thierry.reding@gmail.com, heiko@sntech.de
-Cc:     u.kleine-koenig@pengutronix.de, linux-pwm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        zhaoxiao <zhaoxiao@uniontech.com>
-Subject: [PATCH] pwm: rockchip: Convert to use dev_err_probe()
-Date:   Wed, 17 Aug 2022 13:59:49 +0800
-Message-Id: <20220817055949.20497-1-zhaoxiao@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Wed, 17 Aug 2022 02:05:56 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A916D9F3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 23:05:55 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id v2so17750106lfi.6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 23:05:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=bWmFMUxl6d2LitE+dvs3csdd/mu6oD0O1Ta/ZIMPt5w=;
+        b=tUX+4Hn3giE4YCkx/E3r8WWiuH4JZ1Wtyi1OYFyuJr+HpDyj75d4mrEc9RGv24TJPD
+         7/xHAQxEaG78rkZfxDSsi7n2MbrA1BeZRnXpeOsj8p/ktLEywHd3XSKb8icMd6pp8P7Y
+         Dvb9NX1AndP6YK0u/jwt4yoGfChP9OeD3r9SDGVYHeJyk5K4WRMAO522TaRFrAP1q4OC
+         k9pXXlo6Z2AuR6XkDU8wPxapHkn127FwerVGL6xZdhs5hDtkvS4oLjxxBauPMgfImLjT
+         vw5gyq1xwvOyn2S7VdpUIu6N9tBsdEYBaXAORdTlSni+axra1J7vAMoYYRecqndYq6DQ
+         VRFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=bWmFMUxl6d2LitE+dvs3csdd/mu6oD0O1Ta/ZIMPt5w=;
+        b=sGnw8BIU6G0fKJP1gTNFN4jRhAY5X+7bIR/R/197LylnhITZL4Efnk9pfeI6/7U3EH
+         6V3goGQUYP/ZiRvpOtDwAk4Y4E4WRbDcgpCcznVXhxW2V38aax7TckWCm+w6O+lFD1kk
+         1lSwy1d9s0S1LxXoD7exSzHz8lQTZCf7XIcBd/OZ/if4nFSy+3VLp0JO4ll5KyhPwSnL
+         5lV7KzHcIxqNIPEd00T3U2smABas4WWT3pnwg1rTaKUcvqVkAWwHDvVeWeOCKHaY8yZk
+         0a44GczcHlXmxN8yU9YJ+FyyiyglKeh9RV3R9O5KajKX1RPzgw/HgmkNmNeJ+ClZC3it
+         S1Ug==
+X-Gm-Message-State: ACgBeo38oeItDoo0SPzpNGB9uGqZZRkkgakVdRPzCKCsjDAM6euObAoh
+        Byv0XBph7Zay5x33gkq7UOuNsg==
+X-Google-Smtp-Source: AA6agR5FDOl7BpD8mpkedePKEvYHg/Ukn8SXEztT/Q4GBFCOxeYKw7YzAc45ZNJO7bt2jX3eC2Z7TQ==
+X-Received: by 2002:a05:6512:304c:b0:48c:ed09:1e95 with SMTP id b12-20020a056512304c00b0048ced091e95mr9059939lfb.642.1660716353479;
+        Tue, 16 Aug 2022 23:05:53 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:1b1c:14b7:109b:ed76? (d15l54h48cw7vbh-qr4-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1b1c:14b7:109b:ed76])
+        by smtp.gmail.com with ESMTPSA id h25-20020ac24d39000000b0048b2be5320csm1576801lfk.118.2022.08.16.23.05.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 23:05:52 -0700 (PDT)
+Message-ID: <6c283634-70b3-200f-a346-28eb4c428d39@linaro.org>
+Date:   Wed, 17 Aug 2022 09:05:51 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: qcom: Add sc8280xp lpass lpi
+ pinctrl bindings
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        linus.walleij@linaro.org
+Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220816180538.9039-1-srinivas.kandagatla@linaro.org>
+ <20220816180538.9039-2-srinivas.kandagatla@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220816180538.9039-2-srinivas.kandagatla@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's fine to call dev_err_probe() in ->probe() when error code is known.
-Convert the driver to use dev_err_probe().
+On 16/08/2022 21:05, Srinivas Kandagatla wrote:
+> Add device tree binding Documentation details for Qualcomm SC8280XP
+> LPASS(Low Power Audio Sub System) LPI(Low Power Island) pinctrl driver.
+> 
+> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
-Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
----
- drivers/pwm/pwm-rockchip.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+Thank you for your patch. There is something to discuss/improve.
 
-diff --git a/drivers/pwm/pwm-rockchip.c b/drivers/pwm/pwm-rockchip.c
-index f3647b317152..bd7ab37aaf88 100644
---- a/drivers/pwm/pwm-rockchip.c
-+++ b/drivers/pwm/pwm-rockchip.c
-@@ -331,15 +331,12 @@ static int rockchip_pwm_probe(struct platform_device *pdev)
- 	if (IS_ERR(pc->pclk)) {
- 		ret = PTR_ERR(pc->pclk);
- 		if (ret != -EPROBE_DEFER)
--			dev_err(&pdev->dev, "Can't get APB clk: %d\n", ret);
--		return ret;
-+			return dev_err_probe(&pdev->dev, ret, "Can't get APB clk: %d\n");
- 	}
- 
- 	ret = clk_prepare_enable(pc->clk);
--	if (ret) {
--		dev_err(&pdev->dev, "Can't prepare enable PWM clk: %d\n", ret);
--		return ret;
--	}
-+	if (ret)
-+		dev_err_probe(&pdev->dev, ret, "Can't prepare enable PWM clk: %d\n");
- 
- 	ret = clk_prepare_enable(pc->pclk);
- 	if (ret) {
--- 
-2.20.1
+> +  gpio-ranges:
+> +    maxItems: 1
+> +
+> +#PIN CONFIGURATION NODES
+> +patternProperties:
+> +  '-pins$':
+> +    type: object
+> +    description:
+> +      Pinctrl node's client devices use subnodes for desired pin configuration.
+> +      Client device subnodes use below standard properties.
+> +    $ref: "/schemas/pinctrl/pincfg-node.yaml"
 
+Drop the quotes.
+
+> +
+> +    properties:
+> +      pins:
+> +        description:
+> +          List of gpio pins affected by the properties specified in this
+> +          subnode.
+> +        items:
+> +          pattern: "^gpio([0-1]|[0-8]])$"
+
+error in pattern - double ]. If you have 19 GPIOs, this should be
+probably: ^gpio([0-9]|1[0-8])$
+
+> +
+> +      function:
+> +        enum: [ swr_tx_clk, swr_tx_data, swr_rx_clk, swr_rx_data,
+> +                dmic1_clk, dmic1_data, dmic2_clk, dmic2_data, dmic4_clk,
+> +                dmic4_data, i2s2_clk, i2s2_ws, dmic3_clk, dmic3_data,
+> +                qua_mi2s_sclk, qua_mi2s_ws, qua_mi2s_data, i2s1_clk, i2s1_ws,
+> +                i2s1_data, wsa_swr_clk, wsa_swr_data, wsa2_swr_clk,
+> +                wsa2_swr_data, i2s2_data, i2s3_clk, i2s3_ws, i2s3_data,
+> +                ext_mclk1_c, ext_mclk1_b, ext_mclk1_a ]
+> +
+
+Skip blank line (confuses with a new property).
+
+> +        description:
+> +          Specify the alternative function to be configured for the specified
+> +          pins.
+> +
+> +      drive-strength:
+> +        enum: [2, 4, 6, 8, 10, 12, 14, 16]
+> +        default: 2
+> +        description:
+> +          Selects the drive strength for the specified pins, in mA.
+> +
+> +      slew-rate:
+> +        enum: [0, 1, 2, 3]
+> +        default: 0
+> +        description: |
+> +          0: No adjustments
+> +          1: Higher Slew rate (faster edges)
+> +          2: Lower Slew rate (slower edges)
+> +          3: Reserved (No adjustments)
+> +
+> +      bias-pull-down: true
+> +
+> +      bias-pull-up: true
+> +
+> +      bias-disable: true
+> +
+> +      output-high: true
+> +
+> +      output-low: true
+> +
+> +    required:
+> +      - pins
+> +      - function
+> +
+> +    additionalProperties: false
+> +
+> +allOf:
+> +  - $ref: "pinctrl.yaml#"
+
+Drop the quotes.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - gpio-controller
+> +  - '#gpio-cells'
+> +  - gpio-ranges
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/sound/qcom,q6afe.h>
+> +    lpi_tlmm: pinctrl@33c0000 {
+
+Drop the label, not used anywhere here.
+
+> +        compatible = "qcom,sc8280xp-lpass-lpi-pinctrl";
+> +        reg = <0x33c0000 0x20000>,
+> +              <0x3550000 0x10000>;
+> +        clocks = <&q6afecc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
+> +                 <&q6afecc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
+> +        clock-names = "core", "audio";
+> +        gpio-controller;
+> +        #gpio-cells = <2>;
+> +        gpio-ranges = <&lpi_tlmm 0 0 18>;
+> +    };
+
+
+Best regards,
+Krzysztof

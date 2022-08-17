@@ -2,152 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BAA659663D
+	by mail.lfdr.de (Postfix) with ESMTP id 231B359663C
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 02:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237933AbiHQAHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 20:07:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
+        id S237916AbiHQAHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 20:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237931AbiHQAHK (ORCPT
+        with ESMTP id S237348AbiHQAHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 20:07:10 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C6F5F216
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 17:07:08 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id a22so10157647pfg.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 17:07:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=DnaRmL+U+YfuPBRbML9hLskPCbcaMs+gfoPDre5bUhM=;
-        b=UDjqHvY5V3lgNcChRgEXtBr8rGjAib3ZD98iy0ySLgzjY4lZN2dkLPvH1EUcXg79+1
-         xyLQeV8OiF6H4AzZbXCRSoTJaifNPVOHu9mTFS+XEyzmj9UsYg13wgoC67/t/s3nOyHu
-         YOQVTKl+FhSHM+dIl2jbyrHHWGIImApnWL5aAQ+OO7nkw3d1Dexx1MoQrp5Sih9wjIXt
-         tm2eAuJ5+N0dM/e8hXtTOcfJyNrxKjmQcoQTqc7EJRVWf9NKn4wPI00n0lgnYVkfjpbP
-         lzVLPM70iW0MzJxmrlfwPQ+IDMw7XdwnbFCj6jirb4+mTgESuC7TwMpA/6kJsKYIiyf0
-         JOQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=DnaRmL+U+YfuPBRbML9hLskPCbcaMs+gfoPDre5bUhM=;
-        b=mOtDGWXIweSjz0Nqc3ZY3YXi2HoE25svDPCMIcUQ3UobqeRoOpWEiOlsHMd8Lf/7xD
-         ANN9vGRbN28C6wQDfRBLVNrXzstR4lr+Q8Q6TWPN+bD+blrnwELKeqZLittGyuEaAMBH
-         wOKfVrVbu0yTfPhj2e8bMykuaD9OiZY2OydM7SjP9/VUhxWcpldQ0f2Ht9U3w38T30g9
-         0uFMi3yFUHHem4PCP8jFOepf9bgQaBIAT4h352P2WSr0eHSIvzOo+ROYg4M91TsZylt6
-         rhSIyi+PglnEjTOO/s6xSE0zw3qv6jBW7UEtKe64kBNOvIs0NcBmTZG2lm93VOc4NJlx
-         QfQQ==
-X-Gm-Message-State: ACgBeo0W/5mL2mpSi1Tt25TvcqbS6jYjPYiczKYnv1u6EgJsvTQ9iqgI
-        7rZ099PsDHF4i36KwkkpchVwIA==
-X-Google-Smtp-Source: AA6agR7GxRSAFz0PCpFM8GtA24cRoZ34N2x1WIOZ9aAo/rP+sai0986WsVkMk5ITzti52Gm/xnY72g==
-X-Received: by 2002:a63:cf0b:0:b0:419:f140:2876 with SMTP id j11-20020a63cf0b000000b00419f1402876mr19553366pgg.303.1660694827780;
-        Tue, 16 Aug 2022 17:07:07 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id a5-20020aa78e85000000b00518e1251197sm9286836pfr.148.2022.08.16.17.07.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 17:07:07 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 00:07:03 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        mlevitsk@redhat.com, vkuznets@redhat.com
-Subject: Re: [PATCH v2 8/9] KVM: x86: lapic does not have to process INIT if
- it is blocked
-Message-ID: <YvwxJzHC5xYnc7CJ@google.com>
-References: <20220811210605.402337-1-pbonzini@redhat.com>
- <20220811210605.402337-9-pbonzini@redhat.com>
+        Tue, 16 Aug 2022 20:07:31 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A093E5E568;
+        Tue, 16 Aug 2022 17:07:29 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M6pHM4qH4z4x7X;
+        Wed, 17 Aug 2022 10:07:27 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1660694848;
+        bh=X7mST+yYyaoOV2wp5pw01+Z72H1f0M1ZT6KDi1Gsk+4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=D8vw3PMWxcNrIZ0hDSf7zSbcfCdTwG8rXV5DDqW9WrthJaO7+7qu6HoCJ2FNIhqFs
+         UpoaQRKxRtJZr3Cg9fjVoVPLk4iS18yaYZjp3Z6QhL8nnZORbOJxzKJl556ls4l9SX
+         lHoQd51bgoWSCebo6uw64tRr5Uvk/JD1Dnoj1651OYq4Z8Gq+/nxx6F7CuaERuENXR
+         BmZPlWaogu4C3u1+gq87DNXTibZ6feVkHyQ+mkj6Hj5nZDZijmx+p1+U8MR9qDOqE0
+         6Dt6hK4ZIP8UMpzBbnOypLSgLWfl6/jdc64/rIynaF8MwYPege84JZZRtWgqqHV17D
+         FFBw+VYL/huag==
+Date:   Wed, 17 Aug 2022 10:07:26 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Eddie James <eajames@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>, Wolfram Sang <wsa@kernel.org>
+Subject: Re: linux-next: build failure after merge of the input tree
+Message-ID: <20220817100726.1aaf04cb@canb.auug.org.au>
+In-Reply-To: <20220817100007.2827652a@canb.auug.org.au>
+References: <20220817100007.2827652a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220811210605.402337-9-pbonzini@redhat.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ZPRvAi7L5s4_.nvCduDQ1rQ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022, Paolo Bonzini wrote:
-> Do not return true from kvm_apic_has_events, and consequently from
-> kvm_vcpu_has_events, if the vCPU is not going to process an INIT.
-> 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/include/asm/kvm_host.h | 1 +
->  arch/x86/kvm/i8259.c            | 2 +-
->  arch/x86/kvm/lapic.h            | 2 +-
->  arch/x86/kvm/x86.c              | 5 +++++
->  arch/x86/kvm/x86.h              | 5 -----
->  5 files changed, 8 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 293ff678fff5..1ce4ebc41118 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -2042,6 +2042,7 @@ void __user *__x86_set_memory_region(struct kvm *kvm, int id, gpa_t gpa,
->  				     u32 size);
->  bool kvm_vcpu_is_reset_bsp(struct kvm_vcpu *vcpu);
->  bool kvm_vcpu_is_bsp(struct kvm_vcpu *vcpu);
-> +bool kvm_vcpu_latch_init(struct kvm_vcpu *vcpu);
->  
->  bool kvm_intr_is_single_vcpu(struct kvm *kvm, struct kvm_lapic_irq *irq,
->  			     struct kvm_vcpu **dest_vcpu);
-> diff --git a/arch/x86/kvm/i8259.c b/arch/x86/kvm/i8259.c
-> index e1bb6218bb96..177555eea54e 100644
-> --- a/arch/x86/kvm/i8259.c
-> +++ b/arch/x86/kvm/i8259.c
-> @@ -29,9 +29,9 @@
->  #include <linux/mm.h>
->  #include <linux/slab.h>
->  #include <linux/bitops.h>
-> -#include "irq.h"
-> +#include <linux/kvm_host.h>
->  
-> -#include <linux/kvm_host.h>
-> +#include "irq.h"
->  #include "trace.h"
->  
->  #define pr_pic_unimpl(fmt, ...)	\
-> diff --git a/arch/x86/kvm/lapic.h b/arch/x86/kvm/lapic.h
-> index 117a46df5cc1..12577ddccdfc 100644
-> --- a/arch/x86/kvm/lapic.h
-> +++ b/arch/x86/kvm/lapic.h
-> @@ -225,7 +225,7 @@ static inline bool kvm_vcpu_apicv_active(struct kvm_vcpu *vcpu)
->  
->  static inline bool kvm_apic_has_events(struct kvm_vcpu *vcpu)
->  {
-> -	return lapic_in_kernel(vcpu) && vcpu->arch.apic->pending_events;
-> +	return lapic_in_kernel(vcpu) && vcpu->arch.apic->pending_events && !kvm_vcpu_latch_init(vcpu);
+--Sig_/ZPRvAi7L5s4_.nvCduDQ1rQ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Blech, the kvm_apic_has_events() name is awful (as is pending_events), e.g. it
-really should be kvm_apic_has_pending_sipi_or_init().
+Hi all,
 
-To avoid the odd kvm_vcpu_latch_init() declaration and the long line above, what
-if we open code this in kvm_vcpu_has_events() like we do for NMI, SMI, etc...?
+On Wed, 17 Aug 2022 10:00:07 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the input tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> drivers/input/misc/ibm-panel.c:195:19: error: initialization of 'void (*)=
+(struct i2c_client *)' from incompatible pointer type 'int (*)(struct i2c_c=
+lient *)' [-Werror=3Dincompatible-pointer-types]
+>   195 |         .remove =3D ibm_panel_remove,
+>       |                   ^~~~~~~~~~~~~~~~
+> drivers/input/misc/ibm-panel.c:195:19: note: (near initialization for 'ib=
+m_panel_driver.remove')
+>=20
+> Caused by commit
+>=20
+>   95331e91e9da ("Input: Add IBM Operation Panel driver")
+>=20
+> interacting with commit
+>=20
+>   ed5c2f5fd10d ("i2c: Make remove callback return void")
+>=20
+> from v6.0-rc1.
 
-And as follow-up, I would love to rename kvm_vcpu_latch_init() => kvm_vcpu_init_blocked(),
-kvm_apic_has_events(), and pending_events.
+Actually it is from the i2c tree and not in Linus' tree.  Sorry about
+that.
 
-E.g. for this patch just do:
+--=20
+Cheers,
+Stephen Rothwell
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 9f11b505cbee..559900736a71 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -12533,7 +12533,8 @@ static inline bool kvm_vcpu_has_events(struct kvm_vcpu *vcpu)
-        if (!list_empty_careful(&vcpu->async_pf.done))
-                return true;
+--Sig_/ZPRvAi7L5s4_.nvCduDQ1rQ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--       if (kvm_apic_has_events(vcpu))
-+       /* comment explaning that SIPIs are dropped in this case. */
-+       if (kvm_apic_has_events(vcpu) && !kvm_vcpu_latch_init(vcpu))
-                return true;
+-----BEGIN PGP SIGNATURE-----
 
-        if (vcpu->arch.pv.pv_unhalted)
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL8MT4ACgkQAVBC80lX
+0GzW4Qf7BYSzHMlldxky1SKMNf6zwlW+iYEeq77+3SWATLgo6+/WZu0SOBXprry6
+DPw6uLUGFdU5pjCW317Vi00d9O2AixdUgpA/Zg5jK55qZBs/B5p4tf/lg+hYIa0B
++/Np27qmEjDI+Y7/g6fTNVVh8CMZnY8/m1uOgurS3nNjNIBGKUZ8CTWmAJ5+4lyF
+JwtSKlkufnN332LGt06s9Ecw+bZTL0AE4vRFYbCou1bxdxRDYKfUHH6VrDD6JI+T
+uU/+QSWKqj3g8ULuKjUbRmX8KIjO22SspzYsEW0O34PZ+VUU4Dl8Xqmn7lLc3J4f
+EEHHXuwhS+AUiNCmVN030xlz2wwSlQ==
+=P3As
+-----END PGP SIGNATURE-----
 
+--Sig_/ZPRvAi7L5s4_.nvCduDQ1rQ--

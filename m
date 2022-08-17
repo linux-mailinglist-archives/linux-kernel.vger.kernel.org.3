@@ -2,150 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4CD5974F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D49597508
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240731AbiHQRWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40936 "EHLO
+        id S240561AbiHQRXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240812AbiHQRWL (ORCPT
+        with ESMTP id S238084AbiHQRXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:22:11 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E117C9DFA7
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:22:09 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-334ab1f0247so52682487b3.7
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:22:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=dSzSreqSgeWTr7IT3H9o9mfUnYWShCnFurU/IX78wck=;
-        b=dTD3RFmREPolvh67EVgPCaiqfPyrzjLIQk3j7COquerAm7hUK1GISZwu7LhnAsS8rx
-         9pHHdZosMxN0Q3SK3B5q37DPVuCJNtYYzBL6nVkLxz21xZhJitWg0GXoCxrcnTgN8Jwc
-         Cr5luIxno/kD6ed4ki0W2eh7XGjQc8VFXxqH3HJvH6A2OuDxGL/lXQ3owGk29+tpha+2
-         ZvsP4zzvlWLcA3uxDoxEtMWgbPdjTjufGW0fS4h0583eJL0YVXB6neXzbAJP86uUXlIq
-         9xzV/+A/HP2bIMAMWJIsATEziLl0Gk+d/FJLCiZColNnBniWGGmvtH2DhvD94kXfi14T
-         PTyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=dSzSreqSgeWTr7IT3H9o9mfUnYWShCnFurU/IX78wck=;
-        b=oxyj7SJ/AvFcOR52RzEzxpS6xAO/bP4PRiauPt5m3aeNs+Zv+OA4wVyDX35hFheb7C
-         7S4RSKKpgZWozDCUpuTQ7YwgPwZvjkiFCqSuWKOCn13I8mlOZcbMWCULmPkdLfvsZ05E
-         rc7EDTUirBjEiqaPx9kX6N/m5UhxhvhW2l5K0I/jJa5T1W5JiP9QRDJaDc6KsswcvtcE
-         Tnb/EjHN2KC2aTYuPJxCanr29CT1v+MEKyrK3MklOuks0k/1YHutD7xeKXg/kn0W2QJQ
-         lFP9zizXjO1sFzRkKXR/BXOJWlNqXyNzvbkUruES2KQz82ppD9Z4vX9IX5ua5BEcCIzn
-         r+Kg==
-X-Gm-Message-State: ACgBeo2VeNesVSTXsMRp06z6i91XGG5Gt069BTfiOd9WKgh+HzYe4EXg
-        Ykb44Vvcuvx+1RGW6GLW9X5fMv5CkX65IQ==
-X-Google-Smtp-Source: AA6agR7jpqI5gHh0L3BshFzAgkpfAr7thcx3wVGMnmFl2krsRkYhz8IM1V25L53py8VgBd9yt3hx4SPwZCczSg==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:28b])
- (user=shakeelb job=sendgmr) by 2002:a5b:ac9:0:b0:67b:4ba1:cde7 with SMTP id
- a9-20020a5b0ac9000000b0067b4ba1cde7mr21506046ybr.70.1660756929175; Wed, 17
- Aug 2022 10:22:09 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 17:21:39 +0000
-Message-Id: <20220817172139.3141101-1-shakeelb@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH] Revert "memcg: cleanup racy sum avoidance code"
-From:   Shakeel Butt <shakeelb@google.com>
-To:     "=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Greg Thelen <gthelen@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Shakeel Butt <shakeelb@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 17 Aug 2022 13:23:12 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73B382980C;
+        Wed, 17 Aug 2022 10:23:10 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E53801063;
+        Wed, 17 Aug 2022 10:23:10 -0700 (PDT)
+Received: from [10.57.13.141] (unknown [10.57.13.141])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5B1863F66F;
+        Wed, 17 Aug 2022 10:23:08 -0700 (PDT)
+Message-ID: <80d2538c-bac4-cc4f-85ae-352fcf86321d@arm.com>
+Date:   Wed, 17 Aug 2022 18:23:02 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] mmc: sdhci-xenon: Fix 2G limitation on AC5 SoC
+Content-Language: en-GB
+To:     Vadym Kochan <vadym.kochan@plvision.eu>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Hu Ziji <huziji@marvell.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Elad Nachman <enachman@marvell.com>, iommu@lists.linux.dev,
+        Mickey Rachamim <mickeyr@marvell.com>
+References: <20220727164532.GA19351@plvision.eu>
+ <20220801093044.GA22721@plvision.eu>
+ <9a248303-7a27-e90e-76b3-c01a00be4e3d@intel.com>
+ <20220808095237.GA15939@plvision.eu>
+ <6c94411c-4847-526c-d929-c9523aa65c11@intel.com>
+ <20220808122652.GA6599@plvision.eu>
+ <3f96b382-aede-1f52-33cb-5f95715bdf59@intel.com>
+ <3d16ebad-ea6c-555e-2481-ca5fb08a6c66@arm.com>
+ <20220816205129.GA6438@plvision.eu>
+ <94888b3b-8f54-367d-c6b4-5ebfeeafe4c4@arm.com>
+ <20220817160730.GA17202@plvision.eu>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220817160730.GA17202@plvision.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 96e51ccf1af33e82f429a0d6baebba29c6448d0f.
+On 2022-08-17 17:07, Vadym Kochan wrote:
+> Hi Robin, Adrian,
+> 
+> On Wed, Aug 17, 2022 at 02:43:46PM +0100, Robin Murphy wrote:
+>> On 2022-08-16 21:51, Vadym Kochan wrote:
+>> [...]
+>>>> The one thing to watch out for is that SWIOTLB doesn't necessarily interact
+>>>> very well with DMA offsets. Given the intent of
+>>>> of_dma_get_max_cpu_address(), I think it ought to work out OK now for
+>>>> current kernels on DT systems if everything is described correctly, but
+>>>> otherwise it's likely that you end up with ZONE_DMA either being empty or
+>>>> containing all memory, so the SWIOTLB buffer ends up being allocated
+>>>> anywhere such that it might not actually work as expected.
+>>>>
+>>>> Robin.
+>>>
+>>> Hi Robin,
+>>>
+>>> Thank you for the reply.
+>>>
+>>> My understanding is that swiotlb is allocated (in case of arm64)
+>>> in the following cases:
+>>>
+>>>      #1 when it is forced from the kernel cmdline
+>>>
+>>>      #2 when max_pfn is greater than arm64_dma_phys_limit (and this is used
+>>>         as the end from which to allocate the swiotlb pool in the
+>>>         top-botom direction via memblock API).
+>>>
+>>>      #3 using restricted dma-pool
+>>>
+>>> Of course option #3 works fine because swiotlb is kind of forced to use
+>>> particulary this range of memory.
+>>>
+>>> Both options #1 & #2 causes to use full memory mask even if to specify
+>>> dma-ranges in the DT:
+>>>
+>>>       dma-ranges = <0x0 0x0 0x2 0x0 0x0 0x80000000>;
+>>>
+>>> or if to specify the opposite:
+>>>
+>>>       dma-ranges = <0x2 0x0 0x0 0x0 0x0 0x80000000>;
+>>>
+>>>       just to make it lower than U32 to pass
+>>>
+>>>           zone_dma_bits = min3(32U, dt_zone_dma_bits, acpi_zone_dma_bits)
+>>>
+>>>       condition, but then it will be re-set in max_zone_phys() by:
+>>>
+>>> 	if (phys_start > U32_MAX)
+>>> 		zone_mask = PHYS_ADDR_MAX;
+>>> 	else if (phys_start > zone_mask)
+>>> 		zone_mask = U32_MAX;
+>>
+>> Ah, indeed I missed that, sorry. It seems that that change to stop assuming
+>> an offset kind of crossed over with the introduction of
+>> *_dma_get_max_cpu_address(), but now that that firmware property parsing
+>> *is* implemented, in principle it should be equally possible to evaluate the
+>> actual offsets as well, and decide whether an offset ZONE_DMA is appropriate
+>> or not. Either way, this is definitely the area which needs work if we want
+>> to to able to support topologies like this properly.
+>>
+>>> So, currently I dont see how to pin swiotlb (I see it as a main problem) to some specific range of physical
+>>> memory (particulary to the first 2G of RAM).
+>>
+>> Indeed, if ZONE_DMA and/or ZONE_DMA32 can't be set appropriately, then
+>> there's no way to guarantee correct allocation of any DMA buffers, short of
+>> hacking it with explicitly placed reserved-memory carveouts.
+>>
+> 
+> I have sent some time ago a solution which binds restricted-dma pool to
+> the eMMC device, so Adrian, Robin do you think this can be acceptable as
+> a temporary solution (at least conceptually) ?
+> 
+> I was also thinking would it be OK to introduce something like
+> bounced-dma pool (similar to the restricted one) which will reserve
+> memory for the bounced buffers only ? It should not be hard as looks
+> like it will re-use existing interface between dma and swiotlb ? In that
+> case it would allow to map first 2G of memory to eMMC controller.
 
-Recently we started running the kernel with rstat infrastructure on
-production traffic and begin to see negative memcg stats values.
-Particularly the 'sock' stat is the one which we observed having
-negative value.
+TBH I'd prefer to fix it (or at least work around it) more generally.
+Putting made-up things in devicetree to work around shortcomings in
+kernel code tends to be a hole that's hard to dig yourself back out of.
+As a bodge that would be just about justifiable in its own terms, does
+the diff below help at all?
 
-$ grep "sock " /mnt/memory/job/memory.stat
-sock 253952
-total_sock 18446744073708724224
+Thanks,
+Robin.
 
-Re-run after couple of seconds
-
-$ grep "sock " /mnt/memory/job/memory.stat
-sock 253952
-total_sock 53248
-
-For now we are only seeing this issue on large machines (256 CPUs) and
-only with 'sock' stat. I think the networking stack increase the stat on
-one cpu and decrease it on another cpu much more often. So, this
-negative sock is due to rstat flusher flushing the stats on the CPU that
-has seen the decrement of sock but missed the CPU that has increments. A
-typical race condition.
-
-For easy stable backport, revert is the most simple solution. For long
-term solution, I am thinking of two directions. First is just reduce the
-race window by optimizing the rstat flusher. Second is if the reader
-sees a negative stat value, force flush and restart the stat collection.
-Basically retry but limited.
-
-Signed-off-by: Shakeel Butt <shakeelb@google.com>
-Cc: stable@vger.kernel.org # 5.15
----
- include/linux/memcontrol.h | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 4d31ce55b1c0..6257867fbf95 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -987,19 +987,30 @@ static inline void mod_memcg_page_state(struct page *page,
- 
- static inline unsigned long memcg_page_state(struct mem_cgroup *memcg, int idx)
- {
--	return READ_ONCE(memcg->vmstats.state[idx]);
-+	long x = READ_ONCE(memcg->vmstats.state[idx]);
-+#ifdef CONFIG_SMP
-+	if (x < 0)
-+		x = 0;
-+#endif
-+	return x;
- }
- 
- static inline unsigned long lruvec_page_state(struct lruvec *lruvec,
- 					      enum node_stat_item idx)
- {
- 	struct mem_cgroup_per_node *pn;
-+	long x;
- 
- 	if (mem_cgroup_disabled())
- 		return node_page_state(lruvec_pgdat(lruvec), idx);
- 
- 	pn = container_of(lruvec, struct mem_cgroup_per_node, lruvec);
--	return READ_ONCE(pn->lruvec_stats.state[idx]);
-+	x = READ_ONCE(pn->lruvec_stats.state[idx]);
-+#ifdef CONFIG_SMP
-+	if (x < 0)
-+		x = 0;
-+#endif
-+	return x;
- }
- 
- static inline unsigned long lruvec_page_state_local(struct lruvec *lruvec,
--- 
-2.37.1.595.g718a3a8f04-goog
-
+----->8-----
+diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+index b9af30be813e..88f7b26f49db 100644
+--- a/arch/arm64/mm/init.c
++++ b/arch/arm64/mm/init.c
+@@ -451,7 +451,14 @@ void __init bootmem_init(void)
+   */
+  void __init mem_init(void)
+  {
++	/*
++	 * Some platforms still manage to elude our attempt to calculate
++	 * ZONE_DMA appropriately, so encourage the SWIOTLB allocation to go
++	 * as low as it can anyway for the best chance of being usable.
++	 */
++	memblock_set_bottom_up(true);
+  	swiotlb_init(max_pfn > PFN_DOWN(arm64_dma_phys_limit), SWIOTLB_VERBOSE);
++	memblock_set_bottom_up(false);
+  
+  	/* this will put all unused low memory onto the freelists */
+  	memblock_free_all();

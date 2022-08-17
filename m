@@ -2,96 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46EBE596EE2
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBFE596EE3
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239463AbiHQM5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 08:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
+        id S239505AbiHQM7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 08:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236727AbiHQM5O (ORCPT
+        with ESMTP id S239276AbiHQM7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 08:57:14 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9274BD0F
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 05:57:13 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id c185so15260774oia.7
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 05:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=kYVMcc70nCFaHFOhzZqmhFFWh6V1ggsN7VZR4hDDDj8=;
-        b=ZuGKm62ZEMuX/I+GI5JIejpRdQvxnRqDlEhzcTdwfo4Pi98S9j2gO08DSKFqj2Yz83
-         yGSshjBBMHD2Au58bOv85JIUOli+x+ooP2wLNfAM/OZFfbza8kNnjYxkvPbuSkSMMFIt
-         6EnAOMI84eHV6skjZBR/P6k204A7bnrTrfbA4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=kYVMcc70nCFaHFOhzZqmhFFWh6V1ggsN7VZR4hDDDj8=;
-        b=gRXwtdo4Qt/2VLmOM0taoNN9kcifEjwkIhA1Vny6O8iU2YgsFA2b8rnt9jKXx863uK
-         /uKUPIWpfMJablWim0QNzKr3McUmF7031d5YT2loI0G136IoH2mmloWyunQxi9TPYO1x
-         IKlUrulm8lDsGHeA3ZGYGi7DwKepq427KiGPC+MEFXD8Yjh8qS0FmGT1yxrKqaagPc7U
-         lCPlW+sJutnOto+cN3xO+ggnfiIc//1wLUY/1J8oLd0fnHLaXkMF7P6++lfDR36mfUWn
-         WDDgtXuWa8CxH93zR6Y6L+8cG+7SxUtCKmGdWFkGtIW0pG1hc0obeyI+qvIrs08i/5Hn
-         kXWw==
-X-Gm-Message-State: ACgBeo0kO5U0H268IV7CZKx/CBd9xTh654PNHKWHGCf9F3c3Hg6v/KCt
-        Yz3Yxb227Cz8H4Tr0eW8QCiE7g==
-X-Google-Smtp-Source: AA6agR4rAgEDOG/KauWkVFYjNGuS6fuYUzstIMmZICv2eMW37+NrJJEbxBGmlr2+MKDG/qFt+wW/zw==
-X-Received: by 2002:a05:6808:1706:b0:335:1715:f33e with SMTP id bc6-20020a056808170600b003351715f33emr1370823oib.174.1660741032698;
-        Wed, 17 Aug 2022 05:57:12 -0700 (PDT)
-Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
-        by smtp.gmail.com with ESMTPSA id f38-20020a9d2c29000000b0063736db0ae9sm3325163otb.15.2022.08.17.05.57.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 05:57:12 -0700 (PDT)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Wed, 17 Aug 2022 07:57:10 -0500
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.18 0000/1094] 5.18.18-rc2 review
-Message-ID: <YvzlphC02BmJZ74F@fedora64.linuxtx.org>
-References: <20220816124604.978842485@linuxfoundation.org>
+        Wed, 17 Aug 2022 08:59:05 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103D617057
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 05:59:02 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27HCYcdS007849;
+        Wed, 17 Aug 2022 14:58:24 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=selector1;
+ bh=KNZl0X08yaVQSxf6OQMI9RKfqIUKh/weq3c89Z5IdgY=;
+ b=23XUq7dghBYzUh+of21349Uk3dkMDdnW6WZrdP1Dr639I2ADKo8lhZ0ZC3qLzTmscP2t
+ UV0uIPPQwh10ZXtjtDhRG+WkuMaBr39UGSWVHNUTzTLPgVycOWLpOrKJfSrLcQv2WmB2
+ ALhkAcLoZeYWMiFXOzLevPMK5vuPzissS9HBRHaYqLSP1gIMDNLLDR+tjTumNgCwCyKZ
+ QY9BJkDpqqrSAqvqKyZgGJ2IkbHERK6HG7QG4rTYLK8vk9rp+QxYdxsAI/CKwSy92+sQ
+ K5ZWBP03NwCA8jE+weti9dKMTie/kYMRiDPKKzH+RT7U2jX49rrF18HPzeFGB0tLxAYs AA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3hx2uhn37p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 Aug 2022 14:58:24 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0872E10002A;
+        Wed, 17 Aug 2022 14:58:23 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 02977231533;
+        Wed, 17 Aug 2022 14:58:23 +0200 (CEST)
+Received: from localhost (10.75.127.50) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 17 Aug
+ 2022 14:58:22 +0200
+From:   Antonio Borneo <antonio.borneo@foss.st.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     Antonio Borneo <antonio.borneo@foss.st.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] irqchip/stm32-exti: Remove check on always false condition
+Date:   Wed, 17 Aug 2022 14:57:58 +0200
+Message-ID: <20220817125758.5975-1-antonio.borneo@foss.st.com>
+X-Mailer: git-send-email 2.37.0
+In-Reply-To: <202208131739.gJvcs9ls-lkp@intel.com>
+References: <202208131739.gJvcs9ls-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220816124604.978842485@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-17_08,2022-08-16_02,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 02:59:27PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.18 release.
-> There are 1094 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 18 Aug 2022 12:43:14 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.18-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+The field drv_data is assigned during driver's probe, where it's
+already checked to be not NULL.
 
-Tested rc2 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+Remove the always false check '!host_data->drv_data'.
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+This fixes a warning "variable dereferenced before check" detected
+by '0-DAY CI Kernel Test Service'.
+
+Fixes: c297493336b7 ("irqchip/stm32-exti: Simplify irq description table")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/lkml/202208131739.gJvcs9ls-lkp@intel.com/
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+---
+ drivers/irqchip/irq-stm32-exti.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/irqchip/irq-stm32-exti.c b/drivers/irqchip/irq-stm32-exti.c
+index a73763d475f0..6a3f7498ea8e 100644
+--- a/drivers/irqchip/irq-stm32-exti.c
++++ b/drivers/irqchip/irq-stm32-exti.c
+@@ -716,7 +716,7 @@ static int stm32_exti_h_domain_alloc(struct irq_domain *dm,
+ 
+ 	irq_domain_set_hwirq_and_chip(dm, virq, hwirq, chip, chip_data);
+ 
+-	if (!host_data->drv_data || !host_data->drv_data->desc_irqs)
++	if (!host_data->drv_data->desc_irqs)
+ 		return -EINVAL;
+ 
+ 	desc_irq = host_data->drv_data->desc_irqs[hwirq];
+
+base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+-- 
+2.25.1
+

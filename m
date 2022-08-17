@@ -2,64 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA51596777
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA5A59677A
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238226AbiHQCgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 22:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
+        id S238217AbiHQCjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 22:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238055AbiHQCgl (ORCPT
+        with ESMTP id S238055AbiHQCju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 22:36:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1041073937;
-        Tue, 16 Aug 2022 19:36:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D24161484;
-        Wed, 17 Aug 2022 02:36:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F09C433C1;
-        Wed, 17 Aug 2022 02:36:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660703799;
-        bh=rC6nEgbK0M0wRDxyTi7pIfC7J1t7mM91s18n4Tr2kdU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=oJdARAMALbRbkSIWY6pARxQ6ZvJBXB6UP2pyxEziKTuxEKAHKy/M7cNHo4PjSWF6c
-         71MXHFWxQl4c3kpY+gnAOk1YIigU3BBOzDZVPNN/32k6YsW1gGSSPYzWAkE/4fWTVw
-         ChV8wt2tyq0ReBFObynm0aoGCTt1Z+C/LxDun/Dta1f/gLkbUdN9O3hRDC5EKpuozi
-         E+T5hiGO9VGDA6Lw6JiBYdr/mdszZ+lzDbmehLmMX+fjdx+m6Z+uw3OST/koXhfg0h
-         R3VfhvQTnhN5kRbTBP2E4J/y7rJedKoIe1iMNpNamJtCteK4ufZUlgbyxY36FycNbB
-         6vcECDvwx4hpA==
-Date:   Tue, 16 Aug 2022 19:36:38 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>
-Cc:     paulus@samba.org, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, linux-ppp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net/ppp: fix repeated words in comments
-Message-ID: <20220816193638.31791cb1@kernel.org>
-In-Reply-To: <20220814092255.53629-1-yuanjilin@cdjrlc.com>
-References: <20220814092255.53629-1-yuanjilin@cdjrlc.com>
+        Tue, 16 Aug 2022 22:39:50 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776DB92F4A
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 19:39:49 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M6sbH0kpzzkWM9;
+        Wed, 17 Aug 2022 10:36:27 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 17 Aug 2022 10:39:47 +0800
+Subject: Re: [PATCH 2/6] mm/hugetlb: fix WARN_ON(!kobj) in
+ sysfs_create_group()
+To:     Muchun Song <muchun.song@linux.dev>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        <mike.kravetz@oracle.com>, Muchun Song <songmuchun@bytedance.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220816130553.31406-1-linmiaohe@huawei.com>
+ <20220816130553.31406-3-linmiaohe@huawei.com>
+ <AA374889-2C8B-4D8B-9542-A760267F00E4@linux.dev>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <a9dead65-0b68-e373-1785-7324b1378e24@huawei.com>
+Date:   Wed, 17 Aug 2022 10:39:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <AA374889-2C8B-4D8B-9542-A760267F00E4@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 14 Aug 2022 17:22:55 +0800 Jilin Yuan wrote:
->  	 * This ensures that we have returned from any calls into the
-> -	 * the channel's start_xmit or ioctl routine before we proceed.
-> +	 * channel's start_xmit or ioctl routine before we proceed.
+On 2022/8/17 10:31, Muchun Song wrote:
+> 
+> 
+>> On Aug 16, 2022, at 21:05, Miaohe Lin <linmiaohe@huawei.com> wrote:
+>>
+>> If sysfs_create_group() fails with hstate_attr_group, hstate_kobjs[hi]
+>> will be set to NULL. Then it will be passed to sysfs_create_group() if
+>> h->demote_order != 0 thus triggering WARN_ON(!kobj) check. Fix this by
+>> making sure hstate_kobjs[hi] != NULL when calling sysfs_create_group.
+>>
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> 
+> It’s better to add a Fixes tag here.
 
-It's better to remove the 'the' at the end of the line.
-Generally accepted typography rules are that the articles 
-(a, an, the) should not be followed by a line break.
+Will add it in next version. Thanks for your review and comment.
+
+Thanks,
+Miaohe Lin
+
+> 
+> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+> 
+> Thanks.
+> 
+> .
+> 
+

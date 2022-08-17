@@ -2,96 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE7F5969C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 08:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0269C5969A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 08:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233975AbiHQGrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 02:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55554 "EHLO
+        id S233366AbiHQGhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 02:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231931AbiHQGrd (ORCPT
+        with ESMTP id S229689AbiHQGhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 02:47:33 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730425A2CE;
-        Tue, 16 Aug 2022 23:47:31 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0VMUSyp1_1660718846;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VMUSyp1_1660718846)
-          by smtp.aliyun-inc.com;
-          Wed, 17 Aug 2022 14:47:27 +0800
-Message-ID: <1660718191.3631961-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: upstream kernel crashes
-Date:   Wed, 17 Aug 2022 14:36:31 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     James.Bottomley@hansenpartnership.com, andres@anarazel.de,
-        axboe@kernel.dk, c@redhat.com, davem@davemloft.net,
-        edumazet@google.com, gregkh@linuxfoundation.org,
-        jasowang@redhat.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux@roeck-us.net, martin.petersen@oracle.com,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        torvalds@linux-foundation.org,
-        virtualization@lists.linux-foundation.org,
-        kasan-dev@googlegroups.com, mst@redhat.com
-References: <20220815113729-mutt-send-email-mst@kernel.org>
- <20220815164503.jsoezxcm6q4u2b6j@awork3.anarazel.de>
- <20220815124748-mutt-send-email-mst@kernel.org>
- <20220815174617.z4chnftzcbv6frqr@awork3.anarazel.de>
- <20220815161423-mutt-send-email-mst@kernel.org>
- <20220815205330.m54g7vcs77r6owd6@awork3.anarazel.de>
- <20220815170444-mutt-send-email-mst@kernel.org>
- <20220817061359.200970-1-dvyukov@google.com>
-In-Reply-To: <20220817061359.200970-1-dvyukov@google.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 17 Aug 2022 02:37:14 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA46E792F2;
+        Tue, 16 Aug 2022 23:37:13 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M6ywr2Fflz4x3w;
+        Wed, 17 Aug 2022 16:36:59 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1660718232;
+        bh=5lvMCowArwqyA9jSE0Pt5Ze40kYbuyRJPhxadHGIwKI=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=V5KRJdowJmJQRJnS7vKpdn3ZRXD54gk+olJ2P9NPfjmi7kMUASVQ2UXCdDQyrJ2l4
+         iCeFUua0EzB2yY0V/Z2I6yNQvrzfQPnJW1W5hxs27Vmfkv+k2UjzPlcs8lpiwhfw0s
+         rXEgyRzix9FElmstXFR+laxsxOuSRDwwsndo9tYxJEmh/ZBPqWv8VEb8et3MiTTUHN
+         x10j5udzl/wNVZu2HvSBSJ+AMCucLU+aGNDpNcmlYlO+lqwPbmi66mdTVNq3+seiCv
+         ALvJpMs3moLPQf8qL2I07gi/1+uKcpDS0UK8SnIKfeX71p9KEinWWl/Ojv6Y5XtZQh
+         hNA8dcj2NpgRA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Zi Yan <zi.yan@sent.com>, linux-mm@kvack.org
+Cc:     Zi Yan <ziy@nvidia.com>, David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        David Rientjes <rientjes@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Qin Jian <qinjian@cqplus1.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Guo Ren <guoren@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>, Arnd Bergmann <arnd@arndb.de>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH] arch: mm: rename FORCE_MAX_ZONEORDER to
+ ARCH_FORCE_MAX_ORDER
+In-Reply-To: <20220815143959.1511278-1-zi.yan@sent.com>
+References: <20220815143959.1511278-1-zi.yan@sent.com>
+Date:   Wed, 17 Aug 2022 16:36:57 +1000
+Message-ID: <87tu6bv0ja.fsf@mpe.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 Aug 2022 08:13:59 +0200, Dmitry Vyukov <dvyukov@google.com> wrote:
-> On Mon, 15 Aug 2022 17:32:06 -0400, Michael wrote:
-> > So if you pass the size parameter for a legacy device it will
-> > try to make the ring smaller and that is not legal with
-> > legacy at all. But the driver treats legacy and modern
-> > the same, it allocates a smaller queue anyway.
-> >
-> > Lo and behold, I pass disable-modern=on to qemu and it happily
-> > corrupts memory exactly the same as GCP does.
+Zi Yan <zi.yan@sent.com> writes:
+> From: Zi Yan <ziy@nvidia.com>
 >
-> Ouch!
+> This Kconfig option is used by individual arch to set its desired
+> MAX_ORDER. Rename it to reflect its actual use.
 >
-> I understand that the host does the actual corruption,
-> but could you think of any additional debug checking in the guest
-> that would caught this in future? Potentially only when KASAN
-> is enabled which can verify validity of memory ranges.
-> Some kind of additional layer of sanity checking.
->
-> This caused a bit of a havoc for syzbot with almost 100 unique
-> crash signatures, so would be useful to catch such issues more
-> reliably in future.
+> Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+...
+>  arch/powerpc/Kconfig                         | 2 +-
+>  arch/powerpc/configs/85xx/ge_imp3a_defconfig | 2 +-
+>  arch/powerpc/configs/fsl-emb-nonhw.config    | 2 +-
 
-We can add a check to vring size before calling vp_legacy_set_queue_address().
-Checking the memory range directly is a bit cumbersome.
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
-Thanks.
-
-diff --git a/drivers/virtio/virtio_pci_legacy.c b/drivers/virtio/virtio_pci_legacy.c
-index 2257f1b3d8ae..0673831f45b6 100644
---- a/drivers/virtio/virtio_pci_legacy.c
-+++ b/drivers/virtio/virtio_pci_legacy.c
-@@ -146,6 +146,8 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
-                goto out_del_vq;
-        }
-
-+       BUG_ON(num != virtqueue_get_vring_size(vq));
-+
-        /* activate the queue */
-        vp_legacy_set_queue_address(&vp_dev->ldev, index, q_pfn);
-
-
->
-> Thanks
+cheers

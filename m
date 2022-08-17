@@ -2,76 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C445973E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E57DF5973F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241075AbiHQQNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 12:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
+        id S240946AbiHQQOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 12:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241025AbiHQQMx (ORCPT
+        with ESMTP id S240995AbiHQQN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 12:12:53 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12C6A031F;
-        Wed, 17 Aug 2022 09:12:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=jcyKtAvjzBE4ZZ5pqDnp+JRBc0tSPSvpfYXhFfk/wyo=; b=GN+BHdb0gO/9ZOENwaDYHnsxwa
-        7KMg6eHgxlMLtUQB/NyeTF+Tm3QEmXwtFvlFW9jyzBxW8DPfbN7Z5xEG81MLd0YLlHm+VOWp1V/Gx
-        u0Fc9w8YzwOLdvST3xN6fXXtB1sfKpn6Q2aiFw0nI9UIAiav6XeLggIiNEGnuymx4JnorUFlqD2Lj
-        vJYt38c/MXlNifsRBCpzXraFDp4lmZrYh1blPt3LTvS+iRGAZuR9YQnnmeq7D7aJHQvEfMMMMBh7O
-        +Ugcgm03PzOldd1hakaV9REnsQKJZiyxr0BZpj9JM/uRpUY2sgZqxJ5f6/7W7NeZ4ps+EIEFYO1MI
-        FzIq6SiQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33826)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oOLec-0005b4-7x; Wed, 17 Aug 2022 17:12:26 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oOLea-0005yf-3y; Wed, 17 Aug 2022 17:12:24 +0100
-Date:   Wed, 17 Aug 2022 17:12:24 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Beniamin Sandu <beniaminsandu@gmail.com>, andrew@lunn.ch,
-        hkallweit1@gmail.com, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: sfp: use simplified HWMON_CHANNEL_INFO macro
-Message-ID: <Yv0TaF+So0euV0DR@shell.armlinux.org.uk>
-References: <20220813204658.848372-1-beniaminsandu@gmail.com>
- <20220817085429.4f7e4aac@kernel.org>
+        Wed, 17 Aug 2022 12:13:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F1CA0317;
+        Wed, 17 Aug 2022 09:13:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F116DB81E35;
+        Wed, 17 Aug 2022 16:13:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8B8AC433D6;
+        Wed, 17 Aug 2022 16:13:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660752799;
+        bh=kXQNLS4CwMPiKcaeiXiEF6+1NRLEt3k8IA9vim983Jk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JneOmSwu4MkndSGmEfBm3JLuf37aATz+WYX+zZsypRYYknRqAJ4SwUBJvm8MkDAZt
+         asHwG4f/EkA3SkrE6HqOooxFTzSZ7XBq+76dkp+GdcLGETSAqGRE9F14gk5IjU0qm1
+         C6MVy5Bw+GIaSlNoEbg+/INn01IpTXb4gWJcTOBweniK6YkExd1EHIAeqPJY3aw7Ju
+         wu38BHQawUkfJbpggxqxYzgMQzmlXQvChYrPyBqQiSGnzEcBrZJk2j6gg1xfeWiz5y
+         xldRSPkjfV16eSB2gWrLQqi+fHxVkPRv0Q6BH1yU3tdtPsugFqR3/BZuos3bK9I+2J
+         nHlJ4M7fGLOhA==
+From:   guoren@kernel.org
+To:     xianting.tian@linux.alibaba.com, palmer@dabbelt.com,
+        heiko@sntech.de, guoren@kernel.org, conor.dooley@microchip.com
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, liaochang1@huawei.com,
+        mick@ics.forth.gr, jszhang@kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH V2 0/2] riscv: kexec: Fixup crash_save percpu and machine_kexec_mask_interrupts
+Date:   Wed, 17 Aug 2022 12:12:56 -0400
+Message-Id: <20220817161258.748836-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220817085429.4f7e4aac@kernel.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 08:54:29AM -0700, Jakub Kicinski wrote:
-> On Sat, 13 Aug 2022 23:46:58 +0300 Beniamin Sandu wrote:
-> > This makes the code look cleaner and easier to read.
-> 
-> Last call for reviews..
+From: Guo Ren <guoren@linux.alibaba.com>
 
-I had a quick look and couldn't see anything obviously wrong, but then
-I'm no expert with the hwmon code. I build-tested it, and I'm not likely
-to any time soon. I think Andrew added the hwmon code for this PHY
-originally.
+Current riscv kexec can't crash_save percpu states and disable
+interrupts properly. The patch series fix them, make kexec work correct.
+
+Changes in v2:
+ - Add Fixes tags
+ - Remove extern from bool smp_crash_stop_failed(void)
+
+v1: https://lore.kernel.org/linux-riscv/20220816012701.561435-1-guoren@kernel.org/
+
+Guo Ren (2):
+  riscv: kexec: Disable all interrupts in kexec crash path
+  riscv: kexec: Fixup crash_smp_send_stop with percpu crash_save_cpu
+
+ arch/riscv/include/asm/smp.h      |  6 +++
+ arch/riscv/kernel/machine_kexec.c | 44 +++++++++++----
+ arch/riscv/kernel/smp.c           | 89 ++++++++++++++++++++++++++++++-
+ 3 files changed, 126 insertions(+), 13 deletions(-)
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.36.1
+

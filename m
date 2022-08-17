@@ -2,402 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B525972F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C91597317
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240456AbiHQPaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 11:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
+        id S237072AbiHQPbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 11:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237258AbiHQPaI (ORCPT
+        with ESMTP id S240319AbiHQPbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 11:30:08 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF778E0CB
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:30:07 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id m5-20020a170902f64500b0016d313f3ce7so8518326plg.23
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:30:07 -0700 (PDT)
+        Wed, 17 Aug 2022 11:31:43 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF789D667
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:31:41 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id m3-20020a05600c3b0300b003a5e0557150so1986785wms.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:31:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=Qkmccm/z1P8KkL3+STm3aMUEd1Pe32aPYrZdxb0HPrk=;
-        b=Pxvb+ZGChsqiwkr49DHWgMfeYtE2fVHPO36oj7Mj0yUC8eUwQdp7IjUqkfT1BNZ1UB
-         M4sIWk9NkTVEvEOiC0iKLTNnbm3rzh2hMATrXGt7PwnFFbsK8+8ZGq4jj/wi8I0KMbQD
-         sjncZTQ/G6xgxuv+qHsD++IiDXwEVPNHcCLy1VmWSZZHaBKO27XELIirIAl/V1Mq1L8L
-         b0fNNUJ2Jfb7bl6m13muowxadQcJh3BUKLCzYOgRFn93RajEKKsnSpX1t4MXm16EGfIf
-         2kg6bEX843eHdN+bkC5AXPBYt4l6iBCCtJ7Is/ZvSBgj+CijmVAqDgINAPFNNRSD5Bq3
-         cASg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=x/8xM9ld9yrSaRR9pDeYKmRNvDsAFYo8/I49PiB0Ceo=;
+        b=ccOl9EvZk+s+6ZxGWVd80a/mQypWz20imbB4Q0Hv2rztkoFOKCvGXBegixRftkpheM
+         MqgQz/9PcTRh1mG+mfw56lmXtCXESaWgufZ+CMdvWb1GBujZzp8CKq+rQmObr93k6G39
+         cYYNFfphmlBvADyQ6J8/nPLjl/xDpNtPWMBtjjEAj4xGKqrywn9Q+RhU9q3/hbpo5+Cp
+         oFmRXqbyWcPHnYhhjkVeNzvZKUVMMPfBP+e8wcjZ/tMiVgvdT9Eyn3mjN2evlM7gr2WL
+         b39zwKebTo/1sI5apvAcudpfA1kPvP9BxxIPcWHuw5j9FcgE+EgheOS5B9RaX9+wXUbt
+         SxtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=Qkmccm/z1P8KkL3+STm3aMUEd1Pe32aPYrZdxb0HPrk=;
-        b=uKGUlUYbfnLENWYH8VycQ31InGCMzXbKkHld6UHhLJvIt9TphhRTPtCqUMZTUrl9XU
-         XaoMhUx+8qj8DKRxsiEaFvTOTGgPcc13Gf8lO0+833R/kXlXlY6pG1865s4Fcm5HtC9X
-         NWjL65h1k8mTok1QKNGCLQwU0Cs0YrSvnZKm3t8tFr7lr3WvJo8/EUf4MeSOZIkTSFlm
-         J88s+uaweIRNlx8K3ejDSVpi+RnvptwICY8QaDGmN07u/b4ax7yKZU0ZvMK6GhaRVcBo
-         Fwi7CcCvThpWSAhSlsHyOOGE/cRDUJ2KQ0idlKZ+sA7ljPt0afDzicRrCUiodRZ9ZBeD
-         CeHA==
-X-Gm-Message-State: ACgBeo0eNU7LyXT0t3aKo94/kbr6IrxizMC3M2z88oqaEhmyN5dKnoki
-        SalV00oL9esg7YFVyJzYosyVbVqdVZDy
-X-Google-Smtp-Source: AA6agR4Vl9pQRf7lXoJiti0d08utPaH3IyHkVgCjs20FK59QowdbfkNojkBF45P/JBKh88yoYDfDR9Q2WAB9
-X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:a17:902:788f:b0:170:8b18:8812 with SMTP id
- q15-20020a170902788f00b001708b188812mr26741589pll.1.1660750206813; Wed, 17
- Aug 2022 08:30:06 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 08:29:56 -0700
-Message-Id: <20220817152956.4056410-1-vipinsh@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH] KVM: selftests: Run dirty_log_perf_test on specific cpus
-From:   Vipin Sharma <vipinsh@google.com>
-To:     seanjc@google.com, dmatlack@google.com, pbonzini@redhat.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vipin Sharma <vipinsh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=x/8xM9ld9yrSaRR9pDeYKmRNvDsAFYo8/I49PiB0Ceo=;
+        b=geidQ/lOD8Yg+yxpERw2iuCYp4WE/xe2HfVRj9/egOL75cKygdCm2awR+01G81zHuc
+         Vpg4OAqsvG0upbn0qwRn943JBdHbOpWJLM56ZZArZ3VREsy8VStrFuKJYoo4QVefCBbx
+         YVeBVceoiy3dJKBHGiQzWrkSt9m0cTo0hxA0cTbQYcIDtS/BOcTeesZDIgQ2HMgFnTKv
+         dYiXoEhdHSEZ8brPdiBjnzXWeRP2EkLYinvgCUEA5imy28V8Gdh8I7NEt/xoui7fJA5y
+         BNAJqP54dyMj5tJwbyn437/VknHlnw9FWwIfjPsHAfQ9vSyyif92gaWrkrJQN9WipJNK
+         2zhQ==
+X-Gm-Message-State: ACgBeo33yzPt7F5r5TIZB1zFKC3j3/gUhAnKdEadAr86cqv1K+uUX+wd
+        RXMiSv9+DJEg8J4/9UgRwarW9g==
+X-Google-Smtp-Source: AA6agR4cNmGCf8XKin9xGyp8cT0b0iQPYD3hPoSzK7Lcas7XgCjIkGJwabbksuMGV19Oi3gnr2sccA==
+X-Received: by 2002:a7b:c848:0:b0:3a5:41f6:4d37 with SMTP id c8-20020a7bc848000000b003a541f64d37mr2634311wml.23.1660750299682;
+        Wed, 17 Aug 2022 08:31:39 -0700 (PDT)
+Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id t5-20020adfeb85000000b002216d6f8ad6sm13229633wrn.2.2022.08.17.08.31.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 08:31:38 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org, vadimp@mellanox.com,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, vadimp@nvidia.com, petrm@nvidia.com,
+        edumazet@google.com, kuba@kernel.org, idosch@nvidia.com,
+        pabeni@redhat.com
+Subject: [PATCH v4] Revert "mlxsw: core: Add the hottest thermal zone detection"
+Date:   Wed, 17 Aug 2022 17:30:40 +0200
+Message-Id: <20220817153040.2464245-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add command line options to run the vcpus and the main process on the
-specific cpus on a host machine. This is useful as it provides
-options to analyze performance based on the vcpus and dirty log worker
-locations, like on the different numa nodes or on the same numa nodes.
+This reverts commit 2dc2f760052da4925482ecdcdc5c94d4a599153c and
+commit 6f73862fabd93213de157d9cc6ef76084311c628.
 
-Signed-off-by: Vipin Sharma <vipinsh@google.com>
-Suggested-by: David Matlack <dmatlack@google.com>
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
+As discussed in the thread:
+
+https://lore.kernel.org/all/f3c62ebe-7d59-c537-a010-bff366c8aeba@linaro.org/
+
+the feature provided by commits 2dc2f760052da and 6f73862fabd93 is
+actually already handled by the thermal framework via the cooling
+device state aggregation, thus all this code is pointless.
+
+The revert conflicts with the following changes:
+ - 7f4957be0d5b8: thermal: Use mode helpers in drivers
+ - 6a79507cfe94c: mlxsw: core: Extend thermal module with per QSFP module thermal zones
+
+These conflicts were fixed and the resulting changes are in this patch.
+
+Both reverts are in the same change as requested by Ido Schimmel:
+
+https://lore.kernel.org/all/Yvz7+RUsmVco3Xpj@shredder/
+
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Tested-by: Vadim Pasternak <vadimp@nvidia.com>
 ---
+  -v4:
+   - Squash patch #1 and #2 as requested by Ido Schimmel
+   - Remove blank lines
+  -v3:
+   - Respin against v6.0-rc1
+  -v2
+   - Fix 'err' not used as reported by kbuild test:
+   https://lore.kernel.org/all/202208150708.fk6sfd8u-lkp@intel.com/
 
-This is based on the discussion at
-https://lore.kernel.org/lkml/20220801151928.270380-1-vipinsh@google.com/
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ .../ethernet/mellanox/mlxsw/core_thermal.c    | 77 +------------------
+ 1 file changed, 2 insertions(+), 75 deletions(-)
 
- .../selftests/kvm/access_tracking_perf_test.c |   2 +-
- .../selftests/kvm/demand_paging_test.c        |   2 +-
- .../selftests/kvm/dirty_log_perf_test.c       | 108 +++++++++++++++++-
- .../selftests/kvm/include/perf_test_util.h    |   3 +-
- .../selftests/kvm/lib/perf_test_util.c        |  32 +++++-
- .../kvm/memslot_modification_stress_test.c    |   2 +-
- 6 files changed, 139 insertions(+), 10 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-index 1c2749b1481ac..9659462f47478 100644
---- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
-+++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-@@ -299,7 +299,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	vm = perf_test_create_vm(mode, nr_vcpus, params->vcpu_memory_bytes, 1,
- 				 params->backing_src, !overlap_memory_access);
- 
--	perf_test_start_vcpu_threads(nr_vcpus, vcpu_thread_main);
-+	perf_test_start_vcpu_threads(nr_vcpus, NULL, vcpu_thread_main);
- 
- 	pr_info("\n");
- 	access_memory(vm, nr_vcpus, ACCESS_WRITE, "Populating memory");
-diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-index 779ae54f89c40..b9848174d6e7c 100644
---- a/tools/testing/selftests/kvm/demand_paging_test.c
-+++ b/tools/testing/selftests/kvm/demand_paging_test.c
-@@ -336,7 +336,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	pr_info("Finished creating vCPUs and starting uffd threads\n");
- 
- 	clock_gettime(CLOCK_MONOTONIC, &start);
--	perf_test_start_vcpu_threads(nr_vcpus, vcpu_worker);
-+	perf_test_start_vcpu_threads(nr_vcpus, NULL, vcpu_worker);
- 	pr_info("Started all vCPUs\n");
- 
- 	perf_test_join_vcpu_threads(nr_vcpus);
-diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-index f99e39a672d3f..68a1d7262f21b 100644
---- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-@@ -8,10 +8,12 @@
-  * Copyright (C) 2020, Google, Inc.
-  */
- 
-+#define _GNU_SOURCE
- #include <stdio.h>
- #include <stdlib.h>
- #include <time.h>
- #include <pthread.h>
-+#include <sched.h>
- #include <linux/bitmap.h>
- 
- #include "kvm_util.h"
-@@ -66,6 +68,8 @@ static u64 dirty_log_manual_caps;
- static bool host_quit;
- static int iteration;
- static int vcpu_last_completed_iteration[KVM_MAX_VCPUS];
-+/* Map vcpus to logical cpus on host. */
-+static int vcpu_to_lcpu_map[KVM_MAX_VCPUS];
- 
- static void vcpu_worker(struct perf_test_vcpu_args *vcpu_args)
- {
-@@ -132,6 +136,7 @@ struct test_params {
- 	bool partition_vcpu_memory_access;
- 	enum vm_mem_backing_src_type backing_src;
- 	int slots;
-+	int *vcpu_to_lcpu;
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+index 3548fe1df7c8..987fe5c9d5a3 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+@@ -21,7 +21,6 @@
+ #define MLXSW_THERMAL_ASIC_TEMP_HOT	105000	/* 105C */
+ #define MLXSW_THERMAL_HYSTERESIS_TEMP	5000	/* 5C */
+ #define MLXSW_THERMAL_MODULE_TEMP_SHIFT	(MLXSW_THERMAL_HYSTERESIS_TEMP * 2)
+-#define MLXSW_THERMAL_TEMP_SCORE_MAX	GENMASK(31, 0)
+ #define MLXSW_THERMAL_MAX_STATE	10
+ #define MLXSW_THERMAL_MIN_STATE	2
+ #define MLXSW_THERMAL_MAX_DUTY	255
+@@ -101,8 +100,6 @@ struct mlxsw_thermal {
+ 	struct thermal_cooling_device *cdevs[MLXSW_MFCR_PWMS_MAX];
+ 	u8 cooling_levels[MLXSW_THERMAL_MAX_STATE + 1];
+ 	struct mlxsw_thermal_trip trips[MLXSW_THERMAL_NUM_TRIPS];
+-	unsigned int tz_highest_score;
+-	struct thermal_zone_device *tz_highest_dev;
+ 	struct mlxsw_thermal_area line_cards[];
  };
  
- static void toggle_dirty_logging(struct kvm_vm *vm, int slots, bool enable)
-@@ -248,7 +253,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	for (i = 0; i < nr_vcpus; i++)
- 		vcpu_last_completed_iteration[i] = -1;
- 
--	perf_test_start_vcpu_threads(nr_vcpus, vcpu_worker);
-+	perf_test_start_vcpu_threads(nr_vcpus, p->vcpu_to_lcpu, vcpu_worker);
- 
- 	/* Allow the vCPUs to populate memory */
- 	pr_debug("Starting iteration %d - Populating\n", iteration);
-@@ -348,12 +353,74 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	perf_test_destroy_vm(vm);
+@@ -193,34 +190,6 @@ mlxsw_thermal_module_trips_update(struct device *dev, struct mlxsw_core *core,
+ 	return 0;
  }
  
-+static int parse_num(const char *num_str)
-+{
-+	int num;
-+	char *end_ptr;
-+
-+	errno = 0;
-+	num = (int)strtol(num_str, &end_ptr, 10);
-+	TEST_ASSERT(num_str != end_ptr && *end_ptr == '\0',
-+		    "Invalid number string.\n");
-+	TEST_ASSERT(errno == 0, "Conversion error: %d\n", errno);
-+
-+	return num;
-+}
-+
-+static int parse_cpu_list(const char *arg)
-+{
-+	char delim[2] = ",";
-+	char *cpu, *cpu_list;
-+	int i = 0, cpu_num;
-+
-+	cpu_list = strdup(arg);
-+	TEST_ASSERT(cpu_list, "Low memory\n");
-+
-+	cpu = strtok(cpu_list, delim);
-+	while (cpu) {
-+		cpu_num = parse_num(cpu);
-+		TEST_ASSERT(cpu_num >= 0, "Invalid cpu number: %d\n", cpu_num);
-+		vcpu_to_lcpu_map[i++] = cpu_num;
-+		cpu = strtok(NULL, delim);
-+	}
-+
-+	free(cpu_list);
-+
-+	return i;
-+}
-+
-+static void assign_dirty_log_perf_test_cpu(const char *arg)
-+{
-+	char delim[2] = ",";
-+	char *cpu, *cpu_list;
-+	cpu_set_t cpuset;
-+	int cpu_num, err;
-+
-+	cpu_list = strdup(arg);
-+	TEST_ASSERT(cpu_list, "Low memory\n");
-+
-+	CPU_ZERO(&cpuset);
-+	cpu = strtok(cpu_list, delim);
-+	while (cpu) {
-+		cpu_num = parse_num(cpu);
-+		TEST_ASSERT(cpu_num >= 0, "Invalid cpu number: %d\n", cpu_num);
-+		CPU_SET(cpu_num, &cpuset);
-+		cpu = strtok(NULL, delim);
-+	}
-+
-+	err = sched_setaffinity(0, sizeof(cpu_set_t), &cpuset);
-+	TEST_ASSERT(err == 0, "Error in setting dirty log perf test cpu\n");
-+
-+	free(cpu_list);
-+}
-+
- static void help(char *name)
+-static void mlxsw_thermal_tz_score_update(struct mlxsw_thermal *thermal,
+-					  struct thermal_zone_device *tzdev,
+-					  struct mlxsw_thermal_trip *trips,
+-					  int temp)
+-{
+-	struct mlxsw_thermal_trip *trip = trips;
+-	unsigned int score, delta, i, shift = 1;
+-
+-	/* Calculate thermal zone score, if temperature is above the hot
+-	 * threshold score is set to MLXSW_THERMAL_TEMP_SCORE_MAX.
+-	 */
+-	score = MLXSW_THERMAL_TEMP_SCORE_MAX;
+-	for (i = MLXSW_THERMAL_TEMP_TRIP_NORM; i < MLXSW_THERMAL_NUM_TRIPS;
+-	     i++, trip++) {
+-		if (temp < trip->temp) {
+-			delta = DIV_ROUND_CLOSEST(temp, trip->temp - temp);
+-			score = delta * shift;
+-			break;
+-		}
+-		shift *= 256;
+-	}
+-
+-	if (score > thermal->tz_highest_score) {
+-		thermal->tz_highest_score = score;
+-		thermal->tz_highest_dev = tzdev;
+-	}
+-}
+-
+ static int mlxsw_thermal_bind(struct thermal_zone_device *tzdev,
+ 			      struct thermal_cooling_device *cdev)
  {
- 	puts("");
- 	printf("usage: %s [-h] [-i iterations] [-p offset] [-g] "
- 	       "[-m mode] [-n] [-b vcpu bytes] [-v vcpus] [-o] [-s mem type]"
--	       "[-x memslots]\n", name);
-+	       "[-x memslots] [-c logical cpus for vcpus]"
-+	       "[-d cpus to run dirty_log_perf_test]\n", name);
- 	puts("");
- 	printf(" -i: specify iteration counts (default: %"PRIu64")\n",
- 	       TEST_HOST_LOOP_N);
-@@ -383,6 +450,26 @@ static void help(char *name)
- 	backing_src_help("-s");
- 	printf(" -x: Split the memory region into this number of memslots.\n"
- 	       "     (default: 1)\n");
-+	printf(" -c: Comma separated values of the logical CPUs which will run\n"
-+	       "     the vCPUs. Number of values should be equal to the number\n"
-+	       "     of vCPUs.\n\n"
-+	       "     Example: ./dirty_log_perf_test -v 3 -c 22,43,1\n"
-+	       "     This means that the vcpu 0 will run on the logical cpu 22,\n"
-+	       "     vcpu 1 on the logical cpu 43 and vcpu 2 on the logical cpu 1.\n"
-+	       "     (default: No cpu mapping)\n\n");
-+	printf(" -d: Comma separated values of the logical CPUs on which\n"
-+	       "     dirty_log_perf_test will run. Without -c option, all of\n"
-+	       "     the vcpus and main process will run on the cpus provided here.\n"
-+	       "     This option also accepts a single cpu. (default: No cpu mapping)\n\n"
-+	       "     Example 1: ./dirty_log_perf_test -v 3 -c 22,43,1 -d 101\n"
-+	       "     Main application thread will run on logical cpu 101 and\n"
-+	       "     vcpus will run on the logical cpus 22, 43 and 1\n\n"
-+	       "     Example 2: ./dirty_log_perf_test -v 3 -d 101\n"
-+	       "     Main application thread and vcpus will run on the logical\n"
-+	       "     cpu 101\n\n"
-+	       "     Example 3: ./dirty_log_perf_test -v 3 -d 101,23,53\n"
-+	       "     Main application thread and vcpus will run on logical cpus\n"
-+	       "     101, 23 and 53.\n");
- 	puts("");
- 	exit(0);
- }
-@@ -396,8 +483,10 @@ int main(int argc, char *argv[])
- 		.partition_vcpu_memory_access = true,
- 		.backing_src = DEFAULT_VM_MEM_SRC,
- 		.slots = 1,
-+		.vcpu_to_lcpu = NULL,
- 	};
- 	int opt;
-+	int nr_lcpus = -1;
- 
- 	dirty_log_manual_caps =
- 		kvm_check_cap(KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2);
-@@ -406,8 +495,14 @@ int main(int argc, char *argv[])
- 
- 	guest_modes_append_default();
- 
--	while ((opt = getopt(argc, argv, "eghi:p:m:nb:f:v:os:x:")) != -1) {
-+	while ((opt = getopt(argc, argv, "c:d:eghi:p:m:nb:f:v:os:x:")) != -1) {
- 		switch (opt) {
-+		case 'c':
-+			nr_lcpus = parse_cpu_list(optarg);
-+			break;
-+		case 'd':
-+			assign_dirty_log_perf_test_cpu(optarg);
-+			break;
- 		case 'e':
- 			/* 'e' is for evil. */
- 			run_vcpus_while_disabling_dirty_logging = true;
-@@ -455,6 +550,13 @@ int main(int argc, char *argv[])
- 		}
+@@ -286,9 +255,6 @@ static int mlxsw_thermal_get_temp(struct thermal_zone_device *tzdev,
+ 		return err;
  	}
+ 	mlxsw_reg_mtmp_unpack(mtmp_pl, &temp, NULL, NULL, NULL, NULL);
+-	if (temp > 0)
+-		mlxsw_thermal_tz_score_update(thermal, tzdev, thermal->trips,
+-					      temp);
  
-+	if (nr_lcpus != -1) {
-+		TEST_ASSERT(nr_lcpus == nr_vcpus,
-+			    "Number of vCPUs (%d) are not equal to number of logical cpus provided (%d).",
-+			    nr_vcpus, nr_lcpus);
-+		p.vcpu_to_lcpu = vcpu_to_lcpu_map;
-+	}
-+
- 	TEST_ASSERT(p.iterations >= 2, "The test should have at least two iterations");
- 
- 	pr_info("Test iterations: %"PRIu64"\n",	p.iterations);
-diff --git a/tools/testing/selftests/kvm/include/perf_test_util.h b/tools/testing/selftests/kvm/include/perf_test_util.h
-index eaa88df0555a8..bd6c566cfc92e 100644
---- a/tools/testing/selftests/kvm/include/perf_test_util.h
-+++ b/tools/testing/selftests/kvm/include/perf_test_util.h
-@@ -53,7 +53,8 @@ void perf_test_destroy_vm(struct kvm_vm *vm);
- 
- void perf_test_set_wr_fract(struct kvm_vm *vm, int wr_fract);
- 
--void perf_test_start_vcpu_threads(int vcpus, void (*vcpu_fn)(struct perf_test_vcpu_args *));
-+void perf_test_start_vcpu_threads(int vcpus, int *vcpus_to_lcpu,
-+				  void (*vcpu_fn)(struct perf_test_vcpu_args *));
- void perf_test_join_vcpu_threads(int vcpus);
- void perf_test_guest_code(uint32_t vcpu_id);
- 
-diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/selftests/kvm/lib/perf_test_util.c
-index 9618b37c66f7e..771fbdf3d2c22 100644
---- a/tools/testing/selftests/kvm/lib/perf_test_util.c
-+++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
-@@ -2,11 +2,14 @@
- /*
-  * Copyright (C) 2020, Google LLC.
-  */
-+#define _GNU_SOURCE
- #include <inttypes.h>
- 
- #include "kvm_util.h"
- #include "perf_test_util.h"
- #include "processor.h"
-+#include <pthread.h>
-+#include <sched.h>
- 
- struct perf_test_args perf_test_args;
- 
-@@ -260,10 +263,15 @@ static void *vcpu_thread_main(void *data)
- 	return NULL;
+ 	*p_temp = temp;
+ 	return 0;
+@@ -349,21 +315,6 @@ static int mlxsw_thermal_set_trip_hyst(struct thermal_zone_device *tzdev,
+ 	return 0;
  }
  
--void perf_test_start_vcpu_threads(int nr_vcpus,
-+void perf_test_start_vcpu_threads(int nr_vcpus, int *vcpu_to_lcpu,
- 				  void (*vcpu_fn)(struct perf_test_vcpu_args *))
- {
--	int i;
-+	int i, err = 0;
-+	pthread_attr_t attr;
-+	cpu_set_t cpuset;
-+
-+	pthread_attr_init(&attr);
-+	CPU_ZERO(&cpuset);
+-static int mlxsw_thermal_trend_get(struct thermal_zone_device *tzdev,
+-				   int trip, enum thermal_trend *trend)
+-{
+-	struct mlxsw_thermal *thermal = tzdev->devdata;
+-
+-	if (trip < 0 || trip >= MLXSW_THERMAL_NUM_TRIPS)
+-		return -EINVAL;
+-
+-	if (tzdev == thermal->tz_highest_dev)
+-		return 1;
+-
+-	*trend = THERMAL_TREND_STABLE;
+-	return 0;
+-}
+-
+ static struct thermal_zone_params mlxsw_thermal_params = {
+ 	.no_hwmon = true,
+ };
+@@ -377,7 +328,6 @@ static struct thermal_zone_device_ops mlxsw_thermal_ops = {
+ 	.set_trip_temp	= mlxsw_thermal_set_trip_temp,
+ 	.get_trip_hyst	= mlxsw_thermal_get_trip_hyst,
+ 	.set_trip_hyst	= mlxsw_thermal_set_trip_hyst,
+-	.get_trend	= mlxsw_thermal_trend_get,
+ };
  
- 	vcpu_thread_fn = vcpu_fn;
- 	WRITE_ONCE(all_vcpu_threads_running, false);
-@@ -274,7 +282,24 @@ void perf_test_start_vcpu_threads(int nr_vcpus,
- 		vcpu->vcpu_idx = i;
- 		WRITE_ONCE(vcpu->running, false);
+ static int mlxsw_thermal_module_bind(struct thermal_zone_device *tzdev,
+@@ -463,7 +413,6 @@ static int mlxsw_thermal_module_temp_get(struct thermal_zone_device *tzdev,
+ 	int temp, crit_temp, emerg_temp;
+ 	struct device *dev;
+ 	u16 sensor_index;
+-	int err;
  
--		pthread_create(&vcpu->thread, NULL, vcpu_thread_main, vcpu);
-+		if (vcpu_to_lcpu) {
-+			CPU_SET(vcpu_to_lcpu[i], &cpuset);
-+
-+			err = pthread_attr_setaffinity_np(&attr,
-+							  sizeof(cpu_set_t),
-+							  &cpuset);
-+			TEST_ASSERT(err == 0,
-+				    "vCPU %d could not be mapped to logical cpu %d, error returned: %d\n",
-+				    i, vcpu_to_lcpu[i], err);
-+
-+			CPU_CLR(vcpu_to_lcpu[i], &cpuset);
-+		}
-+
-+		err = pthread_create(&vcpu->thread, &attr, vcpu_thread_main,
-+				     vcpu);
-+		TEST_ASSERT(err == 0,
-+			    "error in creating vcpu %d thread, error returned: %d\n",
-+			    i, err);
- 	}
+ 	dev = thermal->bus_info->dev;
+ 	sensor_index = MLXSW_REG_MTMP_MODULE_INDEX_MIN + tz->module;
+@@ -479,10 +428,8 @@ static int mlxsw_thermal_module_temp_get(struct thermal_zone_device *tzdev,
+ 		return 0;
  
- 	for (i = 0; i < nr_vcpus; i++) {
-@@ -283,6 +308,7 @@ void perf_test_start_vcpu_threads(int nr_vcpus,
- 	}
+ 	/* Update trip points. */
+-	err = mlxsw_thermal_module_trips_update(dev, thermal->core, tz,
+-						crit_temp, emerg_temp);
+-	if (!err && temp > 0)
+-		mlxsw_thermal_tz_score_update(thermal, tzdev, tz->trips, temp);
++	mlxsw_thermal_module_trips_update(dev, thermal->core, tz,
++					  crit_temp, emerg_temp);
  
- 	WRITE_ONCE(all_vcpu_threads_running, true);
-+	pthread_attr_destroy(&attr);
+ 	return 0;
+ }
+@@ -546,22 +493,6 @@ mlxsw_thermal_module_trip_hyst_set(struct thermal_zone_device *tzdev, int trip,
+ 	return 0;
  }
  
- void perf_test_join_vcpu_threads(int nr_vcpus)
-diff --git a/tools/testing/selftests/kvm/memslot_modification_stress_test.c b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-index 6ee7e1dde4043..246f8cc7bb2b1 100644
---- a/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-+++ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-@@ -103,7 +103,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+-static int mlxsw_thermal_module_trend_get(struct thermal_zone_device *tzdev,
+-					  int trip, enum thermal_trend *trend)
+-{
+-	struct mlxsw_thermal_module *tz = tzdev->devdata;
+-	struct mlxsw_thermal *thermal = tz->parent;
+-
+-	if (trip < 0 || trip >= MLXSW_THERMAL_NUM_TRIPS)
+-		return -EINVAL;
+-
+-	if (tzdev == thermal->tz_highest_dev)
+-		return 1;
+-
+-	*trend = THERMAL_TREND_STABLE;
+-	return 0;
+-}
+-
+ static struct thermal_zone_device_ops mlxsw_thermal_module_ops = {
+ 	.bind		= mlxsw_thermal_module_bind,
+ 	.unbind		= mlxsw_thermal_module_unbind,
+@@ -571,7 +502,6 @@ static struct thermal_zone_device_ops mlxsw_thermal_module_ops = {
+ 	.set_trip_temp	= mlxsw_thermal_module_trip_temp_set,
+ 	.get_trip_hyst	= mlxsw_thermal_module_trip_hyst_get,
+ 	.set_trip_hyst	= mlxsw_thermal_module_trip_hyst_set,
+-	.get_trend	= mlxsw_thermal_module_trend_get,
+ };
  
- 	pr_info("Finished creating vCPUs\n");
+ static int mlxsw_thermal_gearbox_temp_get(struct thermal_zone_device *tzdev,
+@@ -592,8 +522,6 @@ static int mlxsw_thermal_gearbox_temp_get(struct thermal_zone_device *tzdev,
+ 		return err;
  
--	perf_test_start_vcpu_threads(nr_vcpus, vcpu_worker);
-+	perf_test_start_vcpu_threads(nr_vcpus, NULL, vcpu_worker);
+ 	mlxsw_reg_mtmp_unpack(mtmp_pl, &temp, NULL, NULL, NULL, NULL);
+-	if (temp > 0)
+-		mlxsw_thermal_tz_score_update(thermal, tzdev, tz->trips, temp);
  
- 	pr_info("Started all vCPUs\n");
+ 	*p_temp = temp;
+ 	return 0;
+@@ -608,7 +536,6 @@ static struct thermal_zone_device_ops mlxsw_thermal_gearbox_ops = {
+ 	.set_trip_temp	= mlxsw_thermal_module_trip_temp_set,
+ 	.get_trip_hyst	= mlxsw_thermal_module_trip_hyst_get,
+ 	.set_trip_hyst	= mlxsw_thermal_module_trip_hyst_set,
+-	.get_trend	= mlxsw_thermal_module_trend_get,
+ };
  
+ static int mlxsw_thermal_get_max_state(struct thermal_cooling_device *cdev,
 -- 
-2.37.1.595.g718a3a8f04-goog
+2.34.1
 

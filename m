@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C70659775F
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 477D959776D
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241760AbiHQUG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 16:06:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51686 "EHLO
+        id S238528AbiHQUHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 16:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241758AbiHQUGp (ORCPT
+        with ESMTP id S241772AbiHQUHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 16:06:45 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB93A7A82
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:06:37 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id k9so211492wri.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:06:37 -0700 (PDT)
+        Wed, 17 Aug 2022 16:07:08 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C4AA6C11
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:07:06 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id bs25so17434347wrb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:07:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=conchuod.ie; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=UZTpqupSKgkBpic1kmmbE38yTznkCK+owr7ALBSIpuo=;
-        b=ONnvtXExatPGAC8/eknlabIqwuQUJitqFeDU6iyKVknhYq9mRJVUgaW2s/7WFWlzn3
-         4I6bO7BksmXFUVOTQo+3EgPrXJ1lC68V8OUxM9/0Le5LasHeV74Ro+BAK0z6yqUH3qOh
-         OGjdiUMOpNCZIbN0TFs3JxCRuWhZyPiuau7oARVBknRBZVZwveudnn/hhBflTdlfwJp0
-         zqRdtz4HOAEoctXS5iQSbg7kxevpTwPaVWymxqfPoCEqyegAyKI9KFrcg7pFAndgC119
-         hZjazVmD1acGyLfeqZ9w7H37fQt5bDzqX+p2MWPJsdllwftjSVTbRklc2TSA5JFPeOTb
-         NWvQ==
+        bh=B62d/4sJXmri44gHYwQ72W46oaIsl+XdBEnlOkM1PHU=;
+        b=JCGzxJkhrzEuo9lQLIBPfriafnUTtMKhcXyomBG1zeRPPUlTkwDKY5JRBY+EDYavmF
+         BsdQGNi8C55VRRp77LZ8wlt4703ixan9kmNazqozc+kwPgnT8zB4aPQ051E6JW9XP2RI
+         NHUCTUehoNye9Lg8oIapURtqtL5zok3j3zJ5bip5b5e7iW8FXqtoXRwoi7cwkJkMEDl8
+         /aBf00PGTBcXpy0j6P8J1vs//QIOKYOSMSfBM1qxzYvJP9xzTg0Opow4VDXIRmeHgDNB
+         7ZQ5Hrr5PmhpnYcZBqHOh3nkar8K4lT548wgQS5ScJd1/z0T8tFiNSDIUoEYgf6o9+5O
+         udIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=UZTpqupSKgkBpic1kmmbE38yTznkCK+owr7ALBSIpuo=;
-        b=VObCYjPE3pGC9VyX8d1ovlDJ1hchDf5rNQQcf74ecrbOJvXdtu4QbCo5Gv7GgrcDn2
-         6jObmlnxQR/s3JEQhX8cj6zeya0YHUhj425emXnpSP3FGA+RbbL5YImhPGvnCj9pfXsT
-         ytG/Lsu7J5OF5cGo6nDfs7ZWWyYKyH1FeWe8ypVVRtV1LHauW4mFKvgAWNQQaQEqF39V
-         LjMJPI5CU4jekFO6evT5/4Wm4rrXZldSoQ6YiTqMWT2T1AdWATtewD8tRClCdSzXSHOg
-         qMPifXyFw6O+H2lVJAv9JzxwAy6CDxvUYPvmAVNTXyrwE1EmFE0ZETDaDH72KJNRLqv8
-         tDYA==
-X-Gm-Message-State: ACgBeo0UaR8g1S3cO/AfSowQzvHhazTYVbuLKAkuiMF3TkoBGV6fdxnQ
-        tzF+ceMUnb+AGpwy9XVAMMHGzQ==
-X-Google-Smtp-Source: AA6agR7BOt9pNzRcWHTxtpR3HtOvdldpTzvhVKO4AviCyWyAqHC7IF3syom/zJ4M5uYixXaWEpe8vA==
-X-Received: by 2002:a5d:64e9:0:b0:220:7dd7:63eb with SMTP id g9-20020a5d64e9000000b002207dd763ebmr15274129wri.590.1660766796102;
-        Wed, 17 Aug 2022 13:06:36 -0700 (PDT)
+        bh=B62d/4sJXmri44gHYwQ72W46oaIsl+XdBEnlOkM1PHU=;
+        b=wz++lYsssTe6OZEfrh4qzjoHQNSkhrzqO/aX2PGNhHleVKjVApAjI27u7GTDiKEZTu
+         A5nBYa/ZnxuvzMAoFZyRaigqALEY8KR0sx8ZPS/vVp2INSMbBZ64Zu9AUKMG3WKAR1kG
+         CmOLLPBIPvWWL2tFFyMldEebQY7z5ec8LB7IVBi/jGuvS6ATme348w0NEaL1MnG4K8lZ
+         94vn05QCN4WP0lzcQxkEqTN0LwnSkcDWgy9Cu5UlbkosRzFb41I0YKOoszJZ2viY5Twz
+         6YcF29q7t7Lwk3P45FG17xuyrecX5ys+EEbSUtYYtt+TAyOpHNVOc816Zp07wFFPdoZ1
+         uCOA==
+X-Gm-Message-State: ACgBeo2XjpvU4pczZXF4Q0GKYvYDK8d8CoFLy6s+W1DMDAdedWexZvGk
+        j6y09WYB1gchJwxr+p7N9XRHiw==
+X-Google-Smtp-Source: AA6agR7qoZmJnmLkrdfATQ1ZiPYo4Z3sqFiUIuZIK+EsCYgIyc4Zluwktxa718RJyfLz+JhYNmY+1Q==
+X-Received: by 2002:a5d:47c6:0:b0:225:fd3:f0c0 with SMTP id o6-20020a5d47c6000000b002250fd3f0c0mr6828257wrc.308.1660766824704;
+        Wed, 17 Aug 2022 13:07:04 -0700 (PDT)
 Received: from [192.168.2.222] ([109.76.58.63])
-        by smtp.gmail.com with ESMTPSA id x9-20020a05600c178900b003a4efb794d7sm3065988wmo.36.2022.08.17.13.06.34
+        by smtp.gmail.com with ESMTPSA id q6-20020a1ce906000000b003a342933727sm3106958wmc.3.2022.08.17.13.07.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 13:06:35 -0700 (PDT)
-Message-ID: <0046d59c-6736-09c2-199d-3661e58c2928@conchuod.ie>
-Date:   Wed, 17 Aug 2022 21:06:33 +0100
+        Wed, 17 Aug 2022 13:07:04 -0700 (PDT)
+Message-ID: <9a4eabe8-6fcf-f146-7803-3f8e0fcb29e9@conchuod.ie>
+Date:   Wed, 17 Aug 2022 21:07:03 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 0/4] Fix dt-validate issues on qemu dtbdumps due to
+Subject: Re: [PATCH v2 0/4] Fix dt-validate issues on qemu dtbdumps due to
  dt-bindings
 Content-Language: en-US
 To:     Thomas Gleixner <tglx@linutronix.de>,
@@ -75,21 +75,22 @@ Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-riscv@lists.infradead.org, qemu-riscv@nongnu.org
 References: <20220817200531.988850-1-mail@conchuod.ie>
+ <20220817200531.988850-6-mail@conchuod.ie>
 From:   Conor Dooley <mail@conchuod.ie>
-In-Reply-To: <20220817200531.988850-1-mail@conchuod.ie>
+In-Reply-To: <20220817200531.988850-6-mail@conchuod.ie>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please ignore this series, I accidentally had too much in the folder.
+Please also ignore this series, I accidentally had too much in the folder.
 
 On 17/08/2022 21:05, Conor Dooley wrote:
 > From: Conor Dooley <conor.dooley@microchip.com>

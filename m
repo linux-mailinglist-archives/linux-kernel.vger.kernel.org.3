@@ -2,85 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED7659664F
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 02:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA391596651
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 02:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237710AbiHQAb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 20:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
+        id S237918AbiHQAdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 20:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232601AbiHQAbY (ORCPT
+        with ESMTP id S237719AbiHQAdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 20:31:24 -0400
+        Tue, 16 Aug 2022 20:33:35 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1E0786C7
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 17:31:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CBA40E29
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 17:33:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660696282;
+        s=mimecast20190719; t=1660696412;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=EuI50tpNraRR40jMmrfH90NbS+qrzYBwLBwfeWEmRwI=;
-        b=dSNeIng6SYb5KN5ZTwoorvJVOvRCaFff0x2pg4jvlz94jYu9xXl/DQHH9fPbiCrAsryQ40
-        4T7AKs9Xi4K50vAdDWefB8Pveg2jbylaSHLbsCKQBofRXo/brEnygs80ve50f5J3YBf2Bp
-        /JVwjJ5oQYRoPcBOeqovjwZ/j3MphEY=
+        bh=Gu3f8Uog699HPKySkkdEJkGI/KU5n2mtK1CidLAiQ1I=;
+        b=ZnEXm80Ui/M7csMFXTZaYOL3s/2znmIo46d/g5xvNZlO4viLrRGuy6o3e/ilQtSZ2ncUTu
+        5ZLZIoIvwWScNsD6V0IY6l00KTBgbHCJtMbbpc48fEp5El1+t1QeUws9SR/gYFd3xHKa7o
+        2gfncGBm46GpQwNGshxZw7Lo4PcOqoA=
 Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
  [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-401-PNzYZiiGOPeSKVyzaU9TnQ-1; Tue, 16 Aug 2022 20:31:21 -0400
-X-MC-Unique: PNzYZiiGOPeSKVyzaU9TnQ-1
-Received: by mail-qk1-f198.google.com with SMTP id bl27-20020a05620a1a9b00b0069994eeb30cso10455145qkb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 17:31:21 -0700 (PDT)
+ us-mta-573-Ez0etgs2OE-rWZzsuhkYEA-1; Tue, 16 Aug 2022 20:33:31 -0400
+X-MC-Unique: Ez0etgs2OE-rWZzsuhkYEA-1
+Received: by mail-qk1-f198.google.com with SMTP id w17-20020a05620a425100b006b97978c693so10522867qko.19
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 17:33:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=EuI50tpNraRR40jMmrfH90NbS+qrzYBwLBwfeWEmRwI=;
-        b=eLNpgRRqHfLlQwUBIrUcACcGIq2W3KhKqZFjj4LiXjaY0DLB4FP8KGMDPbjjj1lcU1
-         KyPuXxyOuyXjhQbc+/pzSSiQeREsDQ2F5ezL0F5IbXEokuVUZGoSxfoEeO08qTDVpzUB
-         QczG6X0KakZcgw23r16EdRdq8sRuRO4TmL2+iRByhelr61kokTbjkAjq7TDvatnPi7cN
-         cTLoraDB2k+TNpDJolTxI0AM2vCt940sf57ZgjGNTRXhfKG1lLygLH+UzoIj1YPszjzu
-         8c8b9NTf93zsMWUCvStYsqb/sTwt4Mn3rrKegX/sZdjg2So6QJsnXznZZ9TNNzcPyfDk
-         iU0w==
-X-Gm-Message-State: ACgBeo3stKGjmrV7N96h8UeTtE9+LlDR62NnXSz4xDLI07MuksmbKfiv
-        FnMDn2iomSZg/wa+RXyeKHuE0idD+hlD7yQSC9bTzMe0t7WwP6LLSFKGZl/wIWieCD3+Upm5Jau
-        scbEo6DJ+Gp5YegmslbqxRNTN
-X-Received: by 2002:a05:622a:178c:b0:31e:f628:f4ab with SMTP id s12-20020a05622a178c00b0031ef628f4abmr21278830qtk.82.1660696280716;
-        Tue, 16 Aug 2022 17:31:20 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5ovI7vWCAOjaXmB/+1IJM/6+VevOElHyLda9cMiC8rUUPGz1pprMfvMwqBOuvxuKgPgQtH6w==
-X-Received: by 2002:a05:622a:178c:b0:31e:f628:f4ab with SMTP id s12-20020a05622a178c00b0031ef628f4abmr21278810qtk.82.1660696280478;
-        Tue, 16 Aug 2022 17:31:20 -0700 (PDT)
+        bh=Gu3f8Uog699HPKySkkdEJkGI/KU5n2mtK1CidLAiQ1I=;
+        b=nUDOgtGsE9gJT2WghMGc5WvKUm2uuDXMEXmHKpB2Q0WTwVCS+pstvsSldhlxOPhLj6
+         yF+UsXt3moy2G/t6NNVYj1A9buvYWIrKR4SZnaf5EH6KDHQV6CIgCflvabm3Ou2f7NAj
+         SOLBoq2dG4vSt2Y0D9AKRyTMNBKxc+fJL49TNChMFYy5LxaxeJhEWH6XPLNNSgEDH1+x
+         c9gF1RqKpkWNt3fUD7TD2Nq7ZdRWcqkGKeoSDecPXDFbqCgIVA6HeeKe3h45GbSfXda9
+         iqf0mz/rQattLrqgw/70VvrvdaIIkxKaoC7Bp5feJOj42JzZnk5epToMJQFxIrKdmNMX
+         hbMQ==
+X-Gm-Message-State: ACgBeo2ldC8317d80rbo2LiJFdAirEfZHJBTcPNPO/4iksYa+7GIvHle
+        /N/oLCajyTL5vKYG4hPUIIJaxd9KbjGTFoFwNzFZzfytdg2WLsDb3rF2Qz+1sBhhrKdUE2PVCkQ
+        c+32HbWbxzf/BvqR0DvZXPjmmAklhJi3Nndm8yrBupj/54kPCXv60cEJgomKvpecGZM6HHbJLyg
+        ==
+X-Received: by 2002:ad4:5b87:0:b0:476:c32f:f4e9 with SMTP id 7-20020ad45b87000000b00476c32ff4e9mr20327670qvp.50.1660696410737;
+        Tue, 16 Aug 2022 17:33:30 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7hsaDXTV7yehyf9x57wNQJi2qIp6fce0pdtvbetwzxpFYY8PTY98DcketWQKuDgxU7Kpm0VQ==
+X-Received: by 2002:ad4:5b87:0:b0:476:c32f:f4e9 with SMTP id 7-20020ad45b87000000b00476c32ff4e9mr20327651qvp.50.1660696410501;
+        Tue, 16 Aug 2022 17:33:30 -0700 (PDT)
 Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id bs19-20020a05620a471300b006bb9381aee4sm19425qkb.30.2022.08.16.17.31.18
+        by smtp.gmail.com with ESMTPSA id e3-20020ac86703000000b00341a807ed21sm11455951qtp.72.2022.08.16.17.33.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 17:31:19 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 20:31:18 -0400
+        Tue, 16 Aug 2022 17:33:30 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 20:33:28 -0400
 From:   Peter Xu <peterx@redhat.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        David Hildenbrand <david@redhat.com>,
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     David Hildenbrand <david@redhat.com>,
         "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
         John Hubbard <jhubbard@nvidia.com>,
+        Sean Christopherson <seanjc@google.com>,
         Linux MM Mailing List <linux-mm@kvack.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Subject: Re: [PATCH v2 3/3] kvm/x86: Allow to respond to generic signals
- during slow page faults
-Message-ID: <Yvw21nf+Mkn6evVw@xz-m1.local>
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Subject: Re: [PATCH v2 1/3] mm/gup: Add FOLL_INTERRUPTIBLE
+Message-ID: <Yvw3WJQhLQ0cuQ9G@xz-m1.local>
 References: <20220721000318.93522-1-peterx@redhat.com>
- <20220721000318.93522-4-peterx@redhat.com>
- <YvVitqmmj7Y0eggY@google.com>
- <YvVtX+rosTLxFPe3@xz-m1.local>
- <Yvq6DSu4wmPfXO5/@google.com>
- <YvwCZsHxZV9kPn6I@xz-m1.local>
- <CALzav=faMEU63-7-k-CMT=R-KbBPrZmSVsD3Ef0QNP7gm68wAA@mail.gmail.com>
+ <20220721000318.93522-2-peterx@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CALzav=faMEU63-7-k-CMT=R-KbBPrZmSVsD3Ef0QNP7gm68wAA@mail.gmail.com>
+In-Reply-To: <20220721000318.93522-2-peterx@redhat.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -91,49 +85,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 03:51:16PM -0700, David Matlack wrote:
-> On Tue, Aug 16, 2022 at 1:48 PM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > On Mon, Aug 15, 2022 at 09:26:37PM +0000, Sean Christopherson wrote:
-> > > On Thu, Aug 11, 2022, Peter Xu wrote:
-> > > > On Thu, Aug 11, 2022 at 08:12:38PM +0000, Sean Christopherson wrote:
-> > > > > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > > > > > index 17252f39bd7c..aeafe0e9cfbf 100644
-> > > > > > --- a/arch/x86/kvm/mmu/mmu.c
-> > > > > > +++ b/arch/x86/kvm/mmu/mmu.c
-> > > > > > @@ -3012,6 +3012,13 @@ static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
-> > > > > >  static int handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
-> > > > > >                                unsigned int access)
-> > > > > >  {
-> > > > > > +       /* NOTE: not all error pfn is fatal; handle sigpending pfn first */
-> > > > > > +       if (unlikely(is_sigpending_pfn(fault->pfn))) {
-> > > > >
-> > > > > Move this into kvm_handle_bad_page(), then there's no need for a comment to call
-> > > > > out that this needs to come before the is_error_pfn() check.  This _is_ a "bad"
-> > > > > PFN, it just so happens that userspace might be able to resolve the "bad" PFN.
-> > > >
-> > > > It's a pity it needs to be in "bad pfn" category since that's the only
-> > > > thing we can easily use, but true it is now.
-> > >
-> > > Would renaming that to kvm_handle_error_pfn() help?  I agree that "bad" is poor
-> > > terminology now that it handles a variety of errors, hence the quotes.
-> >
-> > It could be slightly helpful I think, at least it starts to match with how
-> > we name KVM_PFN_ERR_*.  Will squash the renaming into the same patch.
+On Wed, Jul 20, 2022 at 08:03:16PM -0400, Peter Xu wrote:
+> We have had FAULT_FLAG_INTERRUPTIBLE but it was never applied to GUPs.  One
+> issue with it is that not all GUP paths are able to handle signal delivers
+> besides SIGKILL.
 > 
-> +1 to kvm_handle_error_pfn(). Weirdly I proposed the same as part of
-> another series  yesterday [1]. That being said I'm probably going to
-> drop my cleanup patch (specifically patches 7-9) since it conflicts
-> with your changes and there is a bug in the last patch.
+> That's not ideal for the GUP users who are actually able to handle these
+> cases, like KVM.
 > 
-> [1] https://lore.kernel.org/kvm/20220815230110.2266741-8-dmatlack@google.com/
+> KVM uses GUP extensively on faulting guest pages, during which we've got
+> existing infrastructures to retry a page fault at a later time.  Allowing
+> the GUP to be interrupted by generic signals can make KVM related threads
+> to be more responsive.  For examples:
+> 
+>   (1) SIGUSR1: which QEMU/KVM uses to deliver an inter-process IPI,
+>       e.g. when the admin issues a vm_stop QMP command, SIGUSR1 can be
+>       generated to kick the vcpus out of kernel context immediately,
+> 
+>   (2) SIGINT: which can be used with interactive hypervisor users to stop a
+>       virtual machine with Ctrl-C without any delays/hangs,
+> 
+>   (3) SIGTRAP: which grants GDB capability even during page faults that are
+>       stuck for a long time.
+> 
+> Normally hypervisor will be able to receive these signals properly, but not
+> if we're stuck in a GUP for a long time for whatever reason.  It happens
+> easily with a stucked postcopy migration when e.g. a network temp failure
+> happens, then some vcpu threads can hang death waiting for the pages.  With
+> the new FOLL_INTERRUPTIBLE, we can allow GUP users like KVM to selectively
+> enable the ability to trap these signals.
+> 
+> Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
 
-Thanks for the heads-up.
+Will squash the hugetlb support too altogether, which is a one-liner
+anyway:
 
-Please still feel free to keep working on new versions since I'm still not
-sure which one will land earlier.  I'll repost very soon on this one (I
-just added hugetlb support which I overlooked; it's a touch up in patch 1
-only though).  I can always rebase on top too.
+---8<---
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index a57e1be41401..4025a305d573 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -6176,9 +6176,12 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+                                fault_flags |= FAULT_FLAG_WRITE;
+                        else if (unshare)
+                                fault_flags |= FAULT_FLAG_UNSHARE;
+-                       if (locked)
++                       if (locked) {
+                                fault_flags |= FAULT_FLAG_ALLOW_RETRY |
+                                        FAULT_FLAG_KILLABLE;
++                               if (flags & FOLL_INTERRUPTIBLE)
++                                       fault_flags |= FAULT_FLAG_INTERRUPTIBLE;
++                       }
+                        if (flags & FOLL_NOWAIT)
+                                fault_flags |= FAULT_FLAG_ALLOW_RETRY |
+                                        FAULT_FLAG_RETRY_NOWAIT;
+---8<---
+
+I'll still keep R-b for John and DavidH.
+
+Thanks,
 
 -- 
 Peter Xu

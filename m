@@ -2,101 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D4F596FA6
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1A4596F95
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239716AbiHQNLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 09:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35160 "EHLO
+        id S239586AbiHQNMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 09:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239979AbiHQNLQ (ORCPT
+        with ESMTP id S239771AbiHQNMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 09:11:16 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC847232
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660741875; x=1692277875;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=jN4kHoRUJSHbesemixiddrBAK3WzhEvbf8eObKfKwbU=;
-  b=f+bf6pEnc1+Tv1CibrBMBqJm7YCvYQuPxq0QuxI7qkfw5gbBN0lG5022
-   G9/Fct9NXxrF4wA/jDysJv4ENeYV3bAtv2/bCSV3suUg1D0MI8ikFRpvw
-   3ws1JisQ683ZazMEH50Nkk+7a1QBpvP77LuFMPpd25yxXzG4KiqFfUPvN
-   aFSSnhuRTP3T5Fba1UD4t62wfVXKuvIevpLA4djlg/uJC3OhVnFcu5XS0
-   MDDDZ/gZE4C3113MpVdafgFwxITvKwyxvrGb+elkCCS1p9otshvmGN5pz
-   FgkQ2Z1LnVtvK7BrdJzaJMhlUiRbPNIz+wXRabe2G93cLwASKWHgIh5vx
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="378779146"
-X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
-   d="scan'208";a="378779146"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 06:11:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
-   d="scan'208";a="667609981"
-Received: from dev2 (HELO DEV2.igk.intel.com) ([10.237.148.94])
-  by fmsmga008.fm.intel.com with ESMTP; 17 Aug 2022 06:11:14 -0700
-From:   =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-To:     Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
-Cc:     linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Subject: [PATCH 4/4] ALSA: hda: Remove unused defines
-Date:   Wed, 17 Aug 2022 15:11:37 +0200
-Message-Id: <20220817131137.3978523-5-amadeuszx.slawinski@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220817131137.3978523-1-amadeuszx.slawinski@linux.intel.com>
-References: <20220817131137.3978523-1-amadeuszx.slawinski@linux.intel.com>
+        Wed, 17 Aug 2022 09:12:15 -0400
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B5C60F6
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:12:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=pDCos68B5fYwu0J1jHvoBMN3b2H9PzkwSjTTD6oc4Dw=; b=oVNxVfBIagqBVB/GeyTV+RhXYd
+        S8ASJh3xQZDwqE6gAnoLqjXC9bWw93kEfTEAefgEu81WQzDL2nznsNJ4qNahSV8kmR2RxpfQc+07l
+        1yRaxTwA5ko/aV0cNqLd/cz9NIrf9PAq0q7s7/1k3Yy+qS4zzo+9/rstZMPWMeehQ1U8tWBo/AqIS
+        DcjahO0y3Yl75jQVKAn1QEtCUqEn4zW9UDhNrfck3LAXPee8SdrmCoWlAJdM9mbdH2MZpUMyYz7/V
+        y1qCPpU0USakhogU+uY999Au6Tz/Y5yIF3GollJ6UicsaWsXbW1b+uwOptqGmYZmVDQ8up7XUhys6
+        wwHeH59A==;
+Received: from [2a01:799:961:d200:cca0:57ac:c55d:a485] (port=62332)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1oOIq4-0007wI-6A; Wed, 17 Aug 2022 15:12:04 +0200
+Message-ID: <30f3005d-0acc-e5af-10ca-cf46f18b3478@tronnes.org>
+Date:   Wed, 17 Aug 2022 15:11:56 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        Dom Cobley <dom@raspberrypi.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
+ <9fdecae2-80ad-6212-0522-7dccf9fb57be@tronnes.org>
+ <20220816082612.grebxql5ynnfnvfd@houat>
+ <ea6ebdda-f779-78af-1ffd-bd86d715077f@tronnes.org>
+ <20220816094922.oqhrhefv327zo2ou@houat>
+ <be9b6b71-fa2a-3290-2bce-901342e01981@tronnes.org>
+ <20220817114605.jpb3tlnoseyvf65d@houat>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <20220817114605.jpb3tlnoseyvf65d@houat>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to keep unused defines in file.
 
-Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
----
- sound/pci/hda/hda_intel.c | 7 -------
- 1 file changed, 7 deletions(-)
 
-diff --git a/sound/pci/hda/hda_intel.c b/sound/pci/hda/hda_intel.c
-index a77165bd92a9..7720978dc132 100644
---- a/sound/pci/hda/hda_intel.c
-+++ b/sound/pci/hda/hda_intel.c
-@@ -86,9 +86,6 @@ enum {
- #define INTEL_SCH_HDA_DEVC      0x78
- #define INTEL_SCH_HDA_DEVC_NOSNOOP       (0x1<<11)
- 
--/* Define VIA HD Audio Device ID*/
--#define VIA_HDAC_DEVICE_ID		0x3288
--
- /* max number of SDs */
- /* ICH, ATI and VIA have 4 playback and 4 capture */
- #define ICH6_NUM_CAPTURE	4
-@@ -102,10 +99,6 @@ enum {
- #define ATIHDMI_NUM_CAPTURE	0
- #define ATIHDMI_NUM_PLAYBACK	8
- 
--/* TERA has 4 playback and 3 capture */
--#define TERA_NUM_CAPTURE	3
--#define TERA_NUM_PLAYBACK	4
--
- 
- static int index[SNDRV_CARDS] = SNDRV_DEFAULT_IDX;
- static char *id[SNDRV_CARDS] = SNDRV_DEFAULT_STR;
--- 
-2.25.1
+Den 17.08.2022 13.46, skrev Maxime Ripard:
+> On Tue, Aug 16, 2022 at 09:35:24PM +0200, Noralf Trønnes wrote:
+>> Den 16.08.2022 11.49, skrev Maxime Ripard:
+>>> On Tue, Aug 16, 2022 at 11:42:20AM +0200, Noralf Trønnes wrote:
+>>>> Den 16.08.2022 10.26, skrev Maxime Ripard:
+>>>>> Hi,
+>>>>>
+>>>>> On Mon, Aug 08, 2022 at 02:44:56PM +0200, Noralf Trønnes wrote:
+>>>>>> Den 29.07.2022 18.34, skrev Maxime Ripard:
+>>>>>>> The TV mode property has been around for a while now to select and get the
+>>>>>>> current TV mode output on an analog TV connector.
+>>>>>>>
+>>>>>>> Despite that property name being generic, its content isn't and has been
+>>>>>>> driver-specific which makes it hard to build any generic behaviour on top
+>>>>>>> of it, both in kernel and user-space.
+>>>>>>>
+>>>>>>> Let's create a new bitmask tv norm property, that can contain any of the
+>>>>>>> analog TV standards currently supported by kernel drivers. Each driver can
+>>>>>>> then pass in a bitmask of the modes it supports.
+>>>>>>>
+>>>>>>> We'll then be able to phase out the older tv mode property.
+>>>>>>>
+>>>>>>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+>>>>>>>
+>>>>>>
+>>>>>> Please also update Documentation/gpu/kms-properties.csv
+>>>>>>
+>>>>>> Requirements for adding a new property is found in
+>>>>>> Documentation/gpu/drm-kms.rst
+>>>>>
+>>>>> I knew this was going to be raised at some point, so I'm glad it's that
+>>>>> early :)
+>>>>>
+>>>>> I really don't know what to do there. If we stick by our usual rules,
+>>>>> then we can't have any of that work merged.
+>>>>>
+>>>>> However, I think the status quo is not really satisfactory either.
+>>>>> Indeed, we have a property, that doesn't follow those requirements
+>>>>> either, with a driver-specific content, and that stands in the way of
+>>>>> fixes and further improvements at both the core framework and driver
+>>>>> levels.
+>>>>>
+>>>>> So having that new property still seems like a net improvement at the
+>>>>> driver, framework and uAPI levels, even if it's not entirely following
+>>>>> the requirements we have in place.
+>>>>>
+>>>>> Even more so since, realistically, those kind of interfaces will never
+>>>>> get any new development on the user-space side of things, it's
+>>>>> considered by everyone as legacy.
+>>>>>
+>>>>> This also is something we need to support at some point if we want to
+>>>>> completely deprecate the fbdev drivers and provide decent alternatives
+>>>>> in KMS.
+>>>>>
+>>>>> So yeah, strictly speaking, we would not qualify for our requirements
+>>>>> there. I still think we have a strong case for an exception though.
+>>>>
+>>>> Which requirements would that be? The only one I can see is the
+>>>> documentation and maybe an IGT test.
+>>>
+>>> This is the one I had in mind
+>>> https://dri.freedesktop.org/docs/drm/gpu/drm-uapi.html#open-source-userspace-requirements
+>>>
+>>
+>> Oh right, I had forgotten about that one.
+>>
+>> One benefit of having a userspace implementation is that it increases
+>> the chance of widespread adoption having a working implementation to
+>> look at. I don't think the reason tv.mode is not used anywhere (that I
+>> know of) is because the driver picks the enum values resulting in no
+>> standard names.
+> 
+> It probably doesn't help, but it's not what I was implying.
+> 
+>> It's a niche thing and way down on the todo list. nouveau and ch7006
+>> has a tv_norm module parameter which certainly doesn't help in moving
+>> people/projects over to the DRM property (downstream rpi also has it
+>> now).
+> 
+> Yeah, the RPi version is part of the reason I started working on this.
+> We should also consider the named modes used by vc4 and sun4i. All these
+> ad-hoc solutions are limited and (I think) come from the fact that we
+> don't have a solution easy enough to use for drivers (and to discover).
+> 
+> nouveau, ch7006, i915 and vc4 are using the tv.mode property for
+> example, but sun4i and meson don't.
+> 
+> sun4i relies on named modes to reimplement TV modes, but meson doesn't
+> at all.
+> 
+> And then nouveau has that extra command line parameter to set it up at
+> boot time.
+> 
+> It doesn't really make much sense to me, when all drivers have very
+> similar needs, that none of them behave in the same way. And I think the
+> non-standard property is partly to blame for this, since without some
+> generic content we can't share code.
+> 
+> This is what this series is about: every driver having similar
+> capabilities and as trivially as possible.
+> 
+>> mpv[1] is a commandline media player that after a quick look might be a
+>> candidate for implementing the property without too much effort.
+> 
+> Kodi might be another one. I can try to hack something around, but I'm
+> really skeptical about whether a PR would be merged or not.
+> 
 
+You can ask first before wasting time ofc.
+
+But this baffles me, if you don't think projects like Kodi which is TV
+centered want this, what kind of projects do you think want to use this
+property?
+
+>> How do you test the property? I've used modetest but I can only change
+>> to a tv.mode that matches the current display mode. I can't switch from
+>> ntsc to pal for instance.
+> 
+> Yep, if you want to change from PAL to NTSC, it will require a new mode.
+> 
+
+So userspace has to check tv.mode first and then create a display mode
+the driver will accept if switching to a different display mode is
+necessary? In other words, userspace can't discover from the kernel
+which display modes a certain tv.mode/norm provides before it is
+selected? If so, maybe libdrm should have some function(s) to deal with
+switching between modes that require a different display mode since
+knowledge about which display modes a tv.mode supports is needed before
+hand.
+
+Noralf.

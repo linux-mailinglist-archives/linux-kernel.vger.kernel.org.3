@@ -2,902 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8588597030
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA125597035
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239605AbiHQNvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 09:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41224 "EHLO
+        id S239607AbiHQNwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 09:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235623AbiHQNvL (ORCPT
+        with ESMTP id S236307AbiHQNvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 09:51:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413A783046;
-        Wed, 17 Aug 2022 06:51:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB763B81DE1;
-        Wed, 17 Aug 2022 13:51:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4DBDC433C1;
-        Wed, 17 Aug 2022 13:51:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660744262;
-        bh=64PvHA8mb/gtFbzb3kmMKzb8wPbjAR0CXgYlwVz3vOQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RujrfgIS1ajP3G0PsL0eXQxfsdPO4RT9/WraNovsbVlwYM8oCSiQu4LC6eXPktXQF
-         H7l0JEwi0l2zSGUfounBCX91rtr/5i8s7H2nkdtfy1HZiInIjG+mNU+5ckAQGozLjf
-         0ONWPGkdNT9bSCnmIcvvyY81FmgnwaiVT6NGh9X+LglFGFBrbK+UUArKZ2cSQJX0MA
-         nU47+lUCUj38v1zKoV6lltZbkaLvSj6FpeJ2ojrMgdDP65ZE3DelfQV61EbUfX/iRg
-         ZAHxF+wr9qkGQ3Ojv5+dY6J7/uS2u5thENd6s80WBknTtD/2rtQSXsn2sSVp9MrW70
-         yLxB91p8+IutQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 255B14035A; Wed, 17 Aug 2022 10:50:59 -0300 (-03)
-Date:   Wed, 17 Aug 2022 10:50:59 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Weiguo Li <liwg06@foxmail.com>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Dario Petrillo <dario.pk1@gmail.com>,
-        Wenyu Liu <liuwenyu7@huawei.com>,
-        Hewenliang <hewenliang4@huawei.com>,
-        yaowenbin <yaowenbin1@huawei.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        William Cohen <wcohen@redhat.com>,
-        Andres Freund <andres@anarazel.de>,
-        Song Liu <songliubraving@fb.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>,
-        Colin Ian King <colin.king@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Fangrui Song <maskray@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zechuan Chen <chenzechuan1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        Lexi Shao <shaolexi@huawei.com>,
-        Remi Bernon <rbernon@codeweavers.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v1 2/6] perf mutex: Update use of pthread mutex/cond
-Message-ID: <YvzyQ7oJREobud2A@kernel.org>
-References: <20220817053930.769840-1-irogers@google.com>
- <20220817053930.769840-3-irogers@google.com>
- <YvzW7FMpjg04bbQy@kernel.org>
- <CAP-5=fW66XGfBAW7UCzYFG-5R1vF2DBPoxyg0h-qjErtuG9TcQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Wed, 17 Aug 2022 09:51:54 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772F38E99D;
+        Wed, 17 Aug 2022 06:51:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660744311; x=1692280311;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=WU7eX6e3UJ/hqQkHWXZsv9Mjil/XhKvPXBu6YGKbrGg=;
+  b=BXJo5i7Ilf/R8Df9ymYxGhXLzfL3cxpFGy7S/srY4EfnjN0RW3w9Sy9G
+   8oo32LvnQYh5ToGlBMCN9dL1iOjCO49LvDn5FYgy4YH7DrGVTzguirOAU
+   YvjLlk5a6x6mPdAQuvjC5rIsKlxZumSMXcA04SDHaNhh8kvyt66YcjQ+L
+   aSJfNawEsvV1dgoRcniYhesakZGfoxleL10cYCDxP6XzHIAnFstnXSggL
+   W61UyHH42esf9Hc+LLG2xbdaf+HZZvM0/79HWZE7bvGexLEwx2FDsRYUC
+   Fe8UhkU7w30416ik4dyarBkKlU5rrYiqHFepgKdDfkNrsmKIZd5axgOBo
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="293771902"
+X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
+   d="scan'208";a="293771902"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 06:51:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
+   d="scan'208";a="935363183"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga005.fm.intel.com with ESMTP; 17 Aug 2022 06:51:44 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Wed, 17 Aug 2022 06:51:43 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28 via Frontend Transport; Wed, 17 Aug 2022 06:51:43 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.106)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.28; Wed, 17 Aug 2022 06:51:43 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jj2uZ0F9mH8Qc3azrZDj7pbrY2paiHxYjnCCbMkK25/Ucc4PFwln/M/Y1iAR9RnocsS/ricJqvkH1SMuuLCkm2hIYsRqlwIPFh2wvy6kohbrDAh67DopGD07zo97HcNsm1avpdl4DaNpACor4ZPt+NEfXANovgIjiO7wMx9ElnGEL2EBr8okNb4u0Iufo8KS7rXlxOhiFk0cCDdQEHRjEzCQ7qk7eIQSm/xnNA9gdzJ8V343rBgl8C6wgwbXLAx+g8+RYfzyaMX3XuDgJcXKlxC25EOJYC284camjCsR0UdQ4DH2JvSYUYVKZMUjaV5aLt1+iXWUoCDCLjaTqZVX/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VmlATT04zCffZ5pPtrVDW4QnKSnrwlA2PwtDKvlHhwQ=;
+ b=POTNshv6gGelQZBoS08KCGHaOStV3AnXB4XU9SVWDpTgiK+bti5S8Vu+cBAnf4cRBzd5pFoc8hldA/FDiDjpEQNqSBzXuQEg+9M03wZvPHnZVZk/tVvyTVJc7Ir0TJBxRUOYkxoWxMvbUmNCuwrS/Tor6R75KyHxwOiR3RqPqn1EgTaQAEmyeZPQxXzHO1siRIsYIbQ33v5JPhbFokIoHAN1C7t84IgStlwkKke9UvKJ8MrJS+ZF64+9a3HUVoLDrQ9SmdM/6MDFgogTMVT8C0W8RIzJNuSyaRG5YTIzY2D2zqx0eRdcNVaMHdGdId8Evhwjd0Fo/UUSQhydxR1J5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ1PR11MB6297.namprd11.prod.outlook.com (2603:10b6:a03:458::8)
+ by BYAPR11MB3286.namprd11.prod.outlook.com (2603:10b6:a03:79::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Wed, 17 Aug
+ 2022 13:51:42 +0000
+Received: from SJ1PR11MB6297.namprd11.prod.outlook.com
+ ([fe80::f906:b045:d73e:8e49]) by SJ1PR11MB6297.namprd11.prod.outlook.com
+ ([fe80::f906:b045:d73e:8e49%9]) with mapi id 15.20.5525.010; Wed, 17 Aug 2022
+ 13:51:42 +0000
+Date:   Wed, 17 Aug 2022 21:51:32 +0800
+From:   Oliver Sang <oliver.sang@intel.com>
+To:     John Garry <john.garry@huawei.com>
+CC:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        <linux-ide@vger.kernel.org>, <lkp@lists.01.org>, <lkp@intel.com>,
+        <ying.huang@intel.com>, <feng.tang@intel.com>,
+        <zhengjun.xing@linux.intel.com>, <fengwei.yin@intel.com>
+Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
+ regression
+Message-ID: <YvzyZJUblfqN6Xj3@xsang-OptiPlex-9020>
+References: <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
+ <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
+ <e4106ffa-3842-45c0-9756-5226cfcfa17d@opensource.wdc.com>
+ <YvXeuCAK780OuJPz@xsang-OptiPlex-9020>
+ <2e9cf5a6-c043-5ccf-e363-097c6c941891@huawei.com>
+ <f1c3d717-339d-ba2b-9775-fc0e00f57ae3@huawei.com>
+ <Yvs/w93KUkgD9f7/@xsang-OptiPlex-9020>
+ <aabf7ed8-8d4d-dc68-1b8b-c91653701def@huawei.com>
+ <43eaa104-5b09-072c-56aa-6289569b0015@opensource.wdc.com>
+ <28d6e48b-f52f-9467-8260-262504a1a1ff@huawei.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fW66XGfBAW7UCzYFG-5R1vF2DBPoxyg0h-qjErtuG9TcQ@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <28d6e48b-f52f-9467-8260-262504a1a1ff@huawei.com>
+X-ClientProxiedBy: SG2PR02CA0109.apcprd02.prod.outlook.com
+ (2603:1096:4:92::25) To SJ1PR11MB6297.namprd11.prod.outlook.com
+ (2603:10b6:a03:458::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8bb3a2d5-2d03-49be-2b8f-08da80579d4d
+X-MS-TrafficTypeDiagnostic: BYAPR11MB3286:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ALA69c3HGRjtp9j+3UmFKW/APRS0Ygd1Sms+e+gR97cq3it6gtyQpsXxMJ/r5PG8Tbj5WIEjvLkzOSyeP0UOvbraBvZQYvNbbzO9/VwEMI02P3ET26arMdMyPzZeEv3L1aKXVrcmWTPrEjZBwf1DiusnzzVmBIUDj7w0/Qk6RupRh2Hce1iltPi/U2Hw3urkK7jLmarTFSL4OddjSk+lskUhzUr85Asyn3FTmxe2Lpp3vA09jisJSJYTqwbcR4iScvGKFwLfgHEJV2VE/RTbdX8mEnLA5osyDkDp8WBnLc5ADoY7BTjg8TvrsHUEA2v1GZuK52zvOJMBbnQt7GtjNCa1GUcLOt2dZrwJ8fSzMju15Uc0+2+NMPInJDBpCp0KOjsbDsh/Hxa7SerNIvRw7S+h4E6Zc8XBcv48Ff855cRvDbvO303fAx6ZwSaKOV+h6QdjKUm70tcsgdWBZDFzkpRUCxq/FmJCVVvB228nqCkzIvCBGrJmoI17cNweNz8i6ow4FTNSpg+ZKyh+ahLKyUEdObBhtdzN+FeZjcnXkZPlJMQr/+jioODa4EnLZxYXta6kl5wgFICmaxCNbX494K01bgU47TBuJmEVW+ANxGFCo4vm27Su0Uct3TWvdLTRuvo/CpiCukwp80BNru1zAITvToIXmUVHVE8pMEH32kDNpIxbbEiwImQIoCucfvy7sbW8iSPX1k2aypnMfr/XaIEoPJnCeVqTV6GpF4Tl0rv8ZtH4DESUBzrhUIjsWhl4
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6297.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(366004)(376002)(346002)(39860400002)(136003)(2906002)(8936002)(5660300002)(33716001)(44832011)(86362001)(26005)(66476007)(41300700001)(186003)(6666004)(9686003)(6506007)(6512007)(82960400001)(6916009)(478600001)(83380400001)(53546011)(38100700002)(316002)(8676002)(66556008)(4326008)(54906003)(6486002)(66946007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rXPl3MJ2nOkxTmE9PE4/LIF4Aoe61LGpsP9JN6zIYfnTwA5Y3wHicvAgMVsl?=
+ =?us-ascii?Q?I9cXFhjWxIoxuW30vC8owSLDGpd6WIZ878yUHuidBjbbfObCoqSVvETxOqCy?=
+ =?us-ascii?Q?UyDGRkzreZfEyVEmxnEw2CG/wnDW32VCsBhSKOT7osGBZWdwXCgGxZxbZ0sb?=
+ =?us-ascii?Q?UKS3vePmsaoXcg/oG0CjNEdYrYtB3wKJQjN8idKIcfMr34ceH599fRaUt+YU?=
+ =?us-ascii?Q?T0KwhC3NAXo270AZMhkxVRUQSdvQ1Uqx85nLhJxTfaOocv78dMJaAqLww8ce?=
+ =?us-ascii?Q?gRDdPMazRudVswZIzfs43DmH1sPmYPrS2vAO7J/F9zYZW6c0fNddXOPNmn+T?=
+ =?us-ascii?Q?LgQp0J4+OT3t+zYo5PT1KCVGd2a5+trjlqeAv6fDFvgPagq2WkeLMV2o1Say?=
+ =?us-ascii?Q?8maP+1UwgqEAVH7DOt+e9IlwErfennKuzBO6mhT4jKnjd8Z8y8srV8wQG5fk?=
+ =?us-ascii?Q?4f+ayEXpyTFslz0UV2lT14AHRV69wqjiDxEcnpsXeAz1je0PRy9rnRF3Dhcl?=
+ =?us-ascii?Q?J8NmD74hszLdrHy0IYS7PdHtTBnMQHl3Qtg8Y/AgE9AA0aK4TG/XEGRBnQdc?=
+ =?us-ascii?Q?ncJ4RxwL5VFGMdNIAreat7MxAx1gMERfVvqyiikNrVOIGHKQXYsEhkv91X60?=
+ =?us-ascii?Q?61FONphOtKAy3YRJU9Qqa8ZX/ildOxQhqM7qNksdT193TWTEX2SOBVDEDxKE?=
+ =?us-ascii?Q?UgdZoAXbP/q7MxKJMfjFJkyAkeyUlAwqDiM336Mj/VMAJS5uP1TAHKpTYfnz?=
+ =?us-ascii?Q?+Io+SpqAZHQOjlS9VCUFL4SUHfdgzHhBp9pBzF+kjCyqtDIgCckUzFGvreSg?=
+ =?us-ascii?Q?0e6xXWQWjTGt8Z6v6iADqeXoJHt27orqWSwz4BFO1vTKO4HBcFqwHkjZUGGG?=
+ =?us-ascii?Q?bHB5hOBru3kzCuI8NEVCdRKvJenr/orYGnxcXZtUcXFaoMhacQG5DGU0oM23?=
+ =?us-ascii?Q?lTs6VtFoI3Mk+yWm71UCCO24hLP0M0MRgSurF8xenGqvWWzI9zA4+w2hac0z?=
+ =?us-ascii?Q?nBO2hThF4yq60Gd+ZyY6vLKIQWz1dj0FLwD1RZVScqskTzE3yHPYkwFgurNf?=
+ =?us-ascii?Q?vTwZUkphpOTkacr8VfiGW4tkYsgYU9BCCue05y90xt7Y/q1famupTRvmF7nQ?=
+ =?us-ascii?Q?OeYzY2yZaOVpP2EGBBG+dC4EUuQu9zpKox0E7dLw18FAeJ/GJGOYp6qcGn6i?=
+ =?us-ascii?Q?w/om95XZDfQ91JVHKO8MsV52O0qIpPuYqpwBi4AEmRN8ss/eY+jNOdK0Z/Gh?=
+ =?us-ascii?Q?DLpRqWat65GI1itZngkq5UxKSLhftKniCiWkOUeS2YZuktRQ0J54ij69iIyl?=
+ =?us-ascii?Q?L+0r2N2RW15pcBxogOaAmCQ9jjcpUuw7dFaLS88sfGDCfNWaplzpS8JnatQr?=
+ =?us-ascii?Q?OwaMZHoC8MdaMWwB9VnmeZMVt+dYLvyTwJkdFcjouD4ZS4c8lK1g3Eg8JL7O?=
+ =?us-ascii?Q?+a0gCMjsJVsj1IdyPbJqhhtmm2Q6Y+CDJ8pN4COw5FmiPmbq7W88Q209uerG?=
+ =?us-ascii?Q?sN1U7kAiNt7oW7a/ATRbvTUy0fO3a/J2yJSerzYwIrrOm/RRfiK7/1KP8hw9?=
+ =?us-ascii?Q?DEwadgNrKW87vJLb47iO0r3yiVFkUS1nEq1k4TB1fxjcn1uiX+T5ZYqz/+1Q?=
+ =?us-ascii?Q?UA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8bb3a2d5-2d03-49be-2b8f-08da80579d4d
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6297.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2022 13:51:41.9998
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0weT8HtcTNtvPkHniuU5PSbCluEfE0BAOqYsYMoA+JwF971B+4sPRDe4Nrb3qTCGIaoScIT6uFSCD5tD6Ovnyw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3286
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Aug 17, 2022 at 06:16:31AM -0700, Ian Rogers escreveu:
-> On Wed, Aug 17, 2022 at 4:54 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > Em Tue, Aug 16, 2022 at 10:39:26PM -0700, Ian Rogers escreveu:
-> > > From: Pavithra Gurushankar <gpavithrasha@gmail.com>
-> > >
-> > > pthread_mutex_t and pthread_cond_t were replaced with the new wrapped
-> > > struct/functions. To avoid default initialization values, use of
-> > > PTHREAD_MUTEX_INITIALIZER was replaced with mutex_init/destroy. This
-> > > wasn't done for dso__data_open_lock due to no clear early initialization
-> > > code.
-> > >
-> > > Signed-off-by: Pavithra Gurushankar <gpavithrasha@gmail.com>
-> > > Signed-off-by: Ian Rogers <irogers@google.com>
-> >
-> > <SNIP>
-> >
-> > > index 90828ae03ef5..f3275be83a33 100644
-> > > --- a/tools/perf/tests/openat-syscall-all-cpus.c
-> > > +++ b/tools/perf/tests/openat-syscall-all-cpus.c
-> > > @@ -2,7 +2,7 @@
-> > >  #include <errno.h>
-> > >  #include <inttypes.h>
-> > >  /* For the CPU_* macros */
-> > > -#include <pthread.h>
-> > > +#include <sched.h>
-> > >
-> > >  #include <sys/types.h>
-> > >  #include <sys/stat.h>
-> > > diff --git a/tools/perf/tests/perf-record.c b/tools/perf/tests/perf-record.c
-> > > index 6a001fcfed68..b386ade9ed06 100644
-> > > --- a/tools/perf/tests/perf-record.c
-> > > +++ b/tools/perf/tests/perf-record.c
-> > > @@ -2,8 +2,6 @@
-> > >  #include <errno.h>
-> > >  #include <inttypes.h>
-> > >  #include <linux/string.h>
-> > > -/* For the CLR_() macros */
-> > > -#include <pthread.h>
-> >
-> > why are removing these headers when the CLR_() macros are still in use
-> > in this (and other) files?
-> 
-> If a file isn't using any pthread_ functions:
-> 
-> $ grep pthread tools/perf/tests/perf-record.c|wc -l
-> 0
-> 
-> and only using mutex_ functions. I was trying to remove unnecessary
-> header file #includes.
-> 
-> The comment says the #include is necessary for CLR_ macros:
-> 
-> $ grep CLR_ tools/perf/tests/perf-record.c|wc -l
-> 0
+hi John,
 
-Not at that point, right?
-
-⬢[acme@toolbox perf-urgent]$ grep CLR_ tools/perf/tests/perf-record.c|wc -l
-1
-
-So maybe at the end of the patchkit it doesn't have a CLR_ use?
- 
-> There is a however a CPU_CLR macro used. CPU_CLR is defined in sched.h
-> which is #included immediately below. In any case this is unlikely to
-
-I'm unsure now if there is one of the tested systems/libc where this
-isn't so, but anyway, it seems out of place.
-
-I'll see what I can do to get this moving.
-
-Thanks,
-
-- Arnaldo
-
-> break anything as there is always the transitive #include of
-> <pthread.h> via "mutex.h".
+On Tue, Aug 16, 2022 at 05:38:43PM +0100, John Garry wrote:
+> On 16/08/2022 16:42, Damien Le Moal wrote:
+> > On 2022/08/16 3:35, John Garry wrote:
+> > > On 16/08/2022 07:57, Oliver Sang wrote:
+> > > > > > For me, a complete kernel log may help.
+> > > > > and since only 1HDD, the output of the following would be helpful:
+> > > > > 
+> > > > > /sys/block/sda/queue/max_sectors_kb
+> > > > > /sys/block/sda/queue/max_hw_sectors_kb
+> > > > > 
+> > > > > And for 5.19, if possible.
+> > > > for commit
+> > > > 0568e61225 ("ata: libata-scsi: cap ata_device->max_sectors according to shost->max_sectors")
+> > > > 
+> > > > root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_sectors_kb
+> > > > 512
+> > > > root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_hw_sectors_kb
+> > > > 512
+> > > > 
+> > > > for both commit
+> > > > 4cbfca5f77 ("scsi: scsi_transport_sas: cap shost opt_sectors according to DMA optimal limit")
+> > > > and v5.19
+> > > > 
+> > > > root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_sectors_kb
+> > > > 1280
+> > > > root@lkp-icl-2sp1 ~# cat /sys/block/sda/queue/max_hw_sectors_kb
+> > > > 32767
+> > > > 
+> > > 
+> > > thanks, I appreciate this.
+> > > 
+> > >   From the dmesg, I see 2x SATA disks - I was under the impression that
+> > > the system only has 1x.
+> > > 
+> > > Anyway, both drives show LBA48, which means the large max hw sectors at
+> > > 32767KB:
+> > > [   31.129629][ T1146] ata6.00: 1562824368 sectors, multi 1: LBA48 NCQ
+> > > (depth 32)
+> > > 
+> > > So this is what I suspected: we are capped from the default shost max
+> > > sectors (1024 sectors).
+> > > 
+> > > This seems like the simplest fix for you:
+> > > 
+> > > --- a/include/linux/libata.h
+> > > +++ b/include/linux/libata.h
+> > > @@ -1382,7 +1382,8 @@ extern const struct attribute_group
+> > > *ata_common_sdev_groups[];
+> > >          .proc_name              = drv_name,                     \
+> > >          .slave_destroy          = ata_scsi_slave_destroy,       \
+> > >          .bios_param             = ata_std_bios_param,           \
+> > > -       .unlock_native_capacity = ata_scsi_unlock_native_capacity
+> > > +       .unlock_native_capacity = ata_scsi_unlock_native_capacity,\
+> > > +       .max_sectors = ATA_MAX_SECTORS_LBA48
+> > 
+> > This is crazy large (65535 x 512 B sectors) and never result in that being
+> > exposed as the actual max_sectors_kb since other limits will apply first
+> > (mapping size).
 > 
-> > These whould be best done in a separate patch with an explanation as to
-> > why it is not needed, is it being obtained from some other header that
-> > is more appropriate than pthread.h? etc.
+> Here is how I read values from above for max_sectors_kb and
+> max_hw_sectors_kb:
 > 
-> The old code used pthread_mutex_lock and so needs pthread.h, the new
-> code uses mutex_lock and so doesn't.
+> v5.19 + 0568e61225 : 512/512
+> v5.19 + 0568e61225 + 4cbfca5f77 : 512/512
+> v5.19: 1280/32767
 > 
-> > In general we prefer more granular patches, so that we help in bisecting
-> > problems, so please break this patch into multiple pieces, say one for
-> > the 'perf bench' codebase, other for 'perf test', etc.
+> They are want makes sense to me, at least.
 > 
-> Agreed. I was trying to maintain Pavithra's authorship where their
-> change was monolithic. Here are the stats:
+> Oliver, can you confirm this? Thanks!
+
+I confirm below two:
+v5.19 + 0568e61225 : 512/512
+v5.19: 1280/32767 (as last already reported)
+
+but below failed to build:
+v5.19 + 0568e61225 + 4cbfca5f77
+
+build_errors:
+  - "drivers/scsi/scsi_transport_sas.c:242:33: error: implicit declaration of function 'dma_opt_mapping_size'; did you mean 'dma_max_mapping_size'? [-Werror=implicit-function-declaration]"
+  - "drivers/scsi/scsi_transport_sas.c:241:24: error: 'struct Scsi_Host' has no member named 'opt_sectors'; did you mean 'max_sectors'?"
+
+not sure if I understand this correctly?
+for this, I just cherry-pick 0568e61225 upon v5.19,
+then cherry-pick 4cbfca5f77 again.
+so my branch looks like:
+
+a11d8b97c3ecb8 v5.19 + 0568e61225 + 4cbfca5f77
+1b59440cf71f99 v5.19 + 0568e61225
+3d7cb6b04c3f31 (tag: v5.19,
+
+did I do the right thing?
+
+
 > 
-> $ git show 1694c66ea8d3720ec8a55ca3ac10ace61e319644|diffstat
-> bench/epoll-ctl.c               |   33 ++++++++++++-------------
-> bench/epoll-wait.c              |   33 ++++++++++++-------------
-> bench/futex-hash.c              |   33 ++++++++++++-------------
-> bench/futex-lock-pi.c           |   33 ++++++++++++-------------
-> bench/futex-requeue.c           |   33 ++++++++++++-------------
-> bench/futex-wake-parallel.c     |   33 ++++++++++++-------------
-> bench/futex-wake.c              |   33 ++++++++++++-------------
-> bench/numa.c                    |   93
-> +++++++++++++++++++++++++----------------------------------------------
-> builtin-lock.c                  |    1
-> builtin-record.c                |   13 ++++++---
-> builtin-sched.c                 |   67
-> ++++++++++++++++++++++++---------------------------
-> builtin-top.c                   |   40 +++++++++++++++---------------
-> tests/mmap-basic.c              |    2 -
-> tests/openat-syscall-all-cpus.c |    2 -
-> tests/perf-record.c             |    2 -
-> ui/browser.c                    |   20 +++++++--------
-> ui/browsers/annotate.c          |   12 ++++-----
-> ui/setup.c                      |    5 ++-
-> ui/tui/helpline.c               |    5 +--
-> ui/tui/progress.c               |    8 +++---
-> ui/tui/setup.c                  |    8 +++---
-> ui/tui/util.c                   |   18 ++++++-------
-> ui/ui.h                         |    4 +--
-> util/annotate.c                 |   13 ++++-----
-> util/annotate.h                 |    4 +--
-> util/bpf-event.h                |    1
-> util/dso.c                      |   12 ++++-----
-> util/dso.h                      |    4 +--
-> util/hist.c                     |    6 ++--
-> util/hist.h                     |    4 +--
-> util/mmap.h                     |    1
-> util/symbol.c                   |    4 +--
-> util/top.h                      |    5 ++-
->  33 files changed, 281 insertions(+), 304 deletions(-)
+> On this basis, it appears that max_hw_sectors_kb is getting capped from scsi
+> default @ 1024 sectors by commit 0568e61225. If it were getting capped by
+> swiotlb mapping limit then that would give us 512 sectors - this value is
+> fixed.
 > 
-> Some locks like dso->lock are used in a lot of places so untangling
-> this would be easiest as a rewrite. I was trying to avoid the rewrite
-> to give Pavithra the author's tag.
- 
+> So for my SHT change proposal I am just trying to revert to previous
+> behaviour in 5.19 - make max_hw_sectors_kb crazy big again.
+> 
+> > 
+> > The regression may come not from commands becoming tiny, but from the fact that
+> > after the patch, max_sectors_kb is too large,
+> 
+> I don't think it is, but need confirmation.
+> 
+> > causing a lot of overhead with
+> > qemu swiotlb mapping and slowing down IO processing.
+> 
+> > 
+> > Above, it can be seen that we ed up with max_sectors_kb being 1280, which is the
+> > default for most scsi disks (including ATA drives). That is normal. But before
+> > that, it was 512, which likely better fits qemu swiotlb and does not generate
+> 
+> Again, I don't think this this is the case. Need confirmation.
+> 
+> > overhead. So the above fix will not change anything I think...
+> 
+> 
 > Thanks,
-> Ian
-> 
-> > - Arnaldo
-> >
-> > >
-> > >  #include <sched.h>
-> > >  #include <perf/mmap.h>
-> > > diff --git a/tools/perf/ui/browser.c b/tools/perf/ui/browser.c
-> > > index fa5bd5c20e96..78fb01d6ad63 100644
-> > > --- a/tools/perf/ui/browser.c
-> > > +++ b/tools/perf/ui/browser.c
-> > > @@ -268,9 +268,9 @@ void __ui_browser__show_title(struct ui_browser *browser, const char *title)
-> > >
-> > >  void ui_browser__show_title(struct ui_browser *browser, const char *title)
-> > >  {
-> > > -     pthread_mutex_lock(&ui__lock);
-> > > +     mutex_lock(&ui__lock);
-> > >       __ui_browser__show_title(browser, title);
-> > > -     pthread_mutex_unlock(&ui__lock);
-> > > +     mutex_unlock(&ui__lock);
-> > >  }
-> > >
-> > >  int ui_browser__show(struct ui_browser *browser, const char *title,
-> > > @@ -284,7 +284,7 @@ int ui_browser__show(struct ui_browser *browser, const char *title,
-> > >
-> > >       browser->refresh_dimensions(browser);
-> > >
-> > > -     pthread_mutex_lock(&ui__lock);
-> > > +     mutex_lock(&ui__lock);
-> > >       __ui_browser__show_title(browser, title);
-> > >
-> > >       browser->title = title;
-> > > @@ -295,16 +295,16 @@ int ui_browser__show(struct ui_browser *browser, const char *title,
-> > >       va_end(ap);
-> > >       if (err > 0)
-> > >               ui_helpline__push(browser->helpline);
-> > > -     pthread_mutex_unlock(&ui__lock);
-> > > +     mutex_unlock(&ui__lock);
-> > >       return err ? 0 : -1;
-> > >  }
-> > >
-> > >  void ui_browser__hide(struct ui_browser *browser)
-> > >  {
-> > > -     pthread_mutex_lock(&ui__lock);
-> > > +     mutex_lock(&ui__lock);
-> > >       ui_helpline__pop();
-> > >       zfree(&browser->helpline);
-> > > -     pthread_mutex_unlock(&ui__lock);
-> > > +     mutex_unlock(&ui__lock);
-> > >  }
-> > >
-> > >  static void ui_browser__scrollbar_set(struct ui_browser *browser)
-> > > @@ -352,9 +352,9 @@ static int __ui_browser__refresh(struct ui_browser *browser)
-> > >
-> > >  int ui_browser__refresh(struct ui_browser *browser)
-> > >  {
-> > > -     pthread_mutex_lock(&ui__lock);
-> > > +     mutex_lock(&ui__lock);
-> > >       __ui_browser__refresh(browser);
-> > > -     pthread_mutex_unlock(&ui__lock);
-> > > +     mutex_unlock(&ui__lock);
-> > >
-> > >       return 0;
-> > >  }
-> > > @@ -390,10 +390,10 @@ int ui_browser__run(struct ui_browser *browser, int delay_secs)
-> > >       while (1) {
-> > >               off_t offset;
-> > >
-> > > -             pthread_mutex_lock(&ui__lock);
-> > > +             mutex_lock(&ui__lock);
-> > >               err = __ui_browser__refresh(browser);
-> > >               SLsmg_refresh();
-> > > -             pthread_mutex_unlock(&ui__lock);
-> > > +             mutex_unlock(&ui__lock);
-> > >               if (err < 0)
-> > >                       break;
-> > >
-> > > diff --git a/tools/perf/ui/browsers/annotate.c b/tools/perf/ui/browsers/annotate.c
-> > > index 44ba900828f6..9bc1076374ff 100644
-> > > --- a/tools/perf/ui/browsers/annotate.c
-> > > +++ b/tools/perf/ui/browsers/annotate.c
-> > > @@ -8,11 +8,11 @@
-> > >  #include "../../util/hist.h"
-> > >  #include "../../util/sort.h"
-> > >  #include "../../util/map.h"
-> > > +#include "../../util/mutex.h"
-> > >  #include "../../util/symbol.h"
-> > >  #include "../../util/evsel.h"
-> > >  #include "../../util/evlist.h"
-> > >  #include <inttypes.h>
-> > > -#include <pthread.h>
-> > >  #include <linux/kernel.h>
-> > >  #include <linux/string.h>
-> > >  #include <linux/zalloc.h>
-> > > @@ -319,7 +319,7 @@ static void annotate_browser__calc_percent(struct annotate_browser *browser,
-> > >
-> > >       browser->entries = RB_ROOT;
-> > >
-> > > -     pthread_mutex_lock(&notes->lock);
-> > > +     mutex_lock(&notes->lock);
-> > >
-> > >       symbol__calc_percent(sym, evsel);
-> > >
-> > > @@ -348,7 +348,7 @@ static void annotate_browser__calc_percent(struct annotate_browser *browser,
-> > >               }
-> > >               disasm_rb_tree__insert(browser, &pos->al);
-> > >       }
-> > > -     pthread_mutex_unlock(&notes->lock);
-> > > +     mutex_unlock(&notes->lock);
-> > >
-> > >       browser->curr_hot = rb_last(&browser->entries);
-> > >  }
-> > > @@ -474,10 +474,10 @@ static bool annotate_browser__callq(struct annotate_browser *browser,
-> > >       }
-> > >
-> > >       notes = symbol__annotation(dl->ops.target.sym);
-> > > -     pthread_mutex_lock(&notes->lock);
-> > > +     mutex_lock(&notes->lock);
-> > >
-> > >       if (!symbol__hists(dl->ops.target.sym, evsel->evlist->core.nr_entries)) {
-> > > -             pthread_mutex_unlock(&notes->lock);
-> > > +             mutex_unlock(&notes->lock);
-> > >               ui__warning("Not enough memory for annotating '%s' symbol!\n",
-> > >                           dl->ops.target.sym->name);
-> > >               return true;
-> > > @@ -486,7 +486,7 @@ static bool annotate_browser__callq(struct annotate_browser *browser,
-> > >       target_ms.maps = ms->maps;
-> > >       target_ms.map = ms->map;
-> > >       target_ms.sym = dl->ops.target.sym;
-> > > -     pthread_mutex_unlock(&notes->lock);
-> > > +     mutex_unlock(&notes->lock);
-> > >       symbol__tui_annotate(&target_ms, evsel, hbt, browser->opts);
-> > >       sym_title(ms->sym, ms->map, title, sizeof(title), browser->opts->percent_type);
-> > >       ui_browser__show_title(&browser->b, title);
-> > > diff --git a/tools/perf/ui/setup.c b/tools/perf/ui/setup.c
-> > > index 700335cde618..fd10dc6baf07 100644
-> > > --- a/tools/perf/ui/setup.c
-> > > +++ b/tools/perf/ui/setup.c
-> > > @@ -1,5 +1,4 @@
-> > >  // SPDX-License-Identifier: GPL-2.0
-> > > -#include <pthread.h>
-> > >  #include <dlfcn.h>
-> > >  #include <unistd.h>
-> > >
-> > > @@ -8,7 +7,7 @@
-> > >  #include "../util/hist.h"
-> > >  #include "ui.h"
-> > >
-> > > -pthread_mutex_t ui__lock = PTHREAD_MUTEX_INITIALIZER;
-> > > +struct mutex ui__lock;
-> > >  void *perf_gtk_handle;
-> > >  int use_browser = -1;
-> > >
-> > > @@ -76,6 +75,7 @@ int stdio__config_color(const struct option *opt __maybe_unused,
-> > >
-> > >  void setup_browser(bool fallback_to_pager)
-> > >  {
-> > > +     mutex_init(&ui__lock, /*pshared=*/false);
-> > >       if (use_browser < 2 && (!isatty(1) || dump_trace))
-> > >               use_browser = 0;
-> > >
-> > > @@ -118,4 +118,5 @@ void exit_browser(bool wait_for_ok)
-> > >       default:
-> > >               break;
-> > >       }
-> > > +     mutex_destroy(&ui__lock);
-> > >  }
-> > > diff --git a/tools/perf/ui/tui/helpline.c b/tools/perf/ui/tui/helpline.c
-> > > index 298d6af82fdd..db4952f5990b 100644
-> > > --- a/tools/perf/ui/tui/helpline.c
-> > > +++ b/tools/perf/ui/tui/helpline.c
-> > > @@ -2,7 +2,6 @@
-> > >  #include <stdio.h>
-> > >  #include <stdlib.h>
-> > >  #include <string.h>
-> > > -#include <pthread.h>
-> > >  #include <linux/kernel.h>
-> > >  #include <linux/string.h>
-> > >
-> > > @@ -33,7 +32,7 @@ static int tui_helpline__show(const char *format, va_list ap)
-> > >       int ret;
-> > >       static int backlog;
-> > >
-> > > -     pthread_mutex_lock(&ui__lock);
-> > > +     mutex_lock(&ui__lock);
-> > >       ret = vscnprintf(ui_helpline__last_msg + backlog,
-> > >                       sizeof(ui_helpline__last_msg) - backlog, format, ap);
-> > >       backlog += ret;
-> > > @@ -45,7 +44,7 @@ static int tui_helpline__show(const char *format, va_list ap)
-> > >               SLsmg_refresh();
-> > >               backlog = 0;
-> > >       }
-> > > -     pthread_mutex_unlock(&ui__lock);
-> > > +     mutex_unlock(&ui__lock);
-> > >
-> > >       return ret;
-> > >  }
-> > > diff --git a/tools/perf/ui/tui/progress.c b/tools/perf/ui/tui/progress.c
-> > > index 3d74af5a7ece..71b6c8d9474f 100644
-> > > --- a/tools/perf/ui/tui/progress.c
-> > > +++ b/tools/perf/ui/tui/progress.c
-> > > @@ -45,7 +45,7 @@ static void tui_progress__update(struct ui_progress *p)
-> > >       }
-> > >
-> > >       ui__refresh_dimensions(false);
-> > > -     pthread_mutex_lock(&ui__lock);
-> > > +     mutex_lock(&ui__lock);
-> > >       y = SLtt_Screen_Rows / 2 - 2;
-> > >       SLsmg_set_color(0);
-> > >       SLsmg_draw_box(y, 0, 3, SLtt_Screen_Cols);
-> > > @@ -56,7 +56,7 @@ static void tui_progress__update(struct ui_progress *p)
-> > >       bar = ((SLtt_Screen_Cols - 2) * p->curr) / p->total;
-> > >       SLsmg_fill_region(y, 1, 1, bar, ' ');
-> > >       SLsmg_refresh();
-> > > -     pthread_mutex_unlock(&ui__lock);
-> > > +     mutex_unlock(&ui__lock);
-> > >  }
-> > >
-> > >  static void tui_progress__finish(void)
-> > > @@ -67,12 +67,12 @@ static void tui_progress__finish(void)
-> > >               return;
-> > >
-> > >       ui__refresh_dimensions(false);
-> > > -     pthread_mutex_lock(&ui__lock);
-> > > +     mutex_lock(&ui__lock);
-> > >       y = SLtt_Screen_Rows / 2 - 2;
-> > >       SLsmg_set_color(0);
-> > >       SLsmg_fill_region(y, 0, 3, SLtt_Screen_Cols, ' ');
-> > >       SLsmg_refresh();
-> > > -     pthread_mutex_unlock(&ui__lock);
-> > > +     mutex_unlock(&ui__lock);
-> > >  }
-> > >
-> > >  static struct ui_progress_ops tui_progress__ops = {
-> > > diff --git a/tools/perf/ui/tui/setup.c b/tools/perf/ui/tui/setup.c
-> > > index b1be59b4e2a4..a3b8c397c24d 100644
-> > > --- a/tools/perf/ui/tui/setup.c
-> > > +++ b/tools/perf/ui/tui/setup.c
-> > > @@ -29,10 +29,10 @@ void ui__refresh_dimensions(bool force)
-> > >  {
-> > >       if (force || ui__need_resize) {
-> > >               ui__need_resize = 0;
-> > > -             pthread_mutex_lock(&ui__lock);
-> > > +             mutex_lock(&ui__lock);
-> > >               SLtt_get_screen_size();
-> > >               SLsmg_reinit_smg();
-> > > -             pthread_mutex_unlock(&ui__lock);
-> > > +             mutex_unlock(&ui__lock);
-> > >       }
-> > >  }
-> > >
-> > > @@ -170,10 +170,10 @@ void ui__exit(bool wait_for_ok)
-> > >                                   "Press any key...", 0);
-> > >
-> > >       SLtt_set_cursor_visibility(1);
-> > > -     if (!pthread_mutex_trylock(&ui__lock)) {
-> > > +     if (mutex_trylock(&ui__lock)) {
-> > >               SLsmg_refresh();
-> > >               SLsmg_reset_smg();
-> > > -             pthread_mutex_unlock(&ui__lock);
-> > > +             mutex_unlock(&ui__lock);
-> > >       }
-> > >       SLang_reset_tty();
-> > >       perf_error__unregister(&perf_tui_eops);
-> > > diff --git a/tools/perf/ui/tui/util.c b/tools/perf/ui/tui/util.c
-> > > index 0f562e2cb1e8..3c5174854ac8 100644
-> > > --- a/tools/perf/ui/tui/util.c
-> > > +++ b/tools/perf/ui/tui/util.c
-> > > @@ -95,7 +95,7 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
-> > >               t = sep + 1;
-> > >       }
-> > >
-> > > -     pthread_mutex_lock(&ui__lock);
-> > > +     mutex_lock(&ui__lock);
-> > >
-> > >       max_len += 2;
-> > >       nr_lines += 8;
-> > > @@ -125,17 +125,17 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
-> > >       SLsmg_write_nstring((char *)exit_msg, max_len);
-> > >       SLsmg_refresh();
-> > >
-> > > -     pthread_mutex_unlock(&ui__lock);
-> > > +     mutex_unlock(&ui__lock);
-> > >
-> > >       x += 2;
-> > >       len = 0;
-> > >       key = ui__getch(delay_secs);
-> > >       while (key != K_TIMER && key != K_ENTER && key != K_ESC) {
-> > > -             pthread_mutex_lock(&ui__lock);
-> > > +             mutex_lock(&ui__lock);
-> > >
-> > >               if (key == K_BKSPC) {
-> > >                       if (len == 0) {
-> > > -                             pthread_mutex_unlock(&ui__lock);
-> > > +                             mutex_unlock(&ui__lock);
-> > >                               goto next_key;
-> > >                       }
-> > >                       SLsmg_gotorc(y, x + --len);
-> > > @@ -147,7 +147,7 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
-> > >               }
-> > >               SLsmg_refresh();
-> > >
-> > > -             pthread_mutex_unlock(&ui__lock);
-> > > +             mutex_unlock(&ui__lock);
-> > >
-> > >               /* XXX more graceful overflow handling needed */
-> > >               if (len == sizeof(buf) - 1) {
-> > > @@ -215,19 +215,19 @@ void __ui__info_window(const char *title, const char *text, const char *exit_msg
-> > >
-> > >  void ui__info_window(const char *title, const char *text)
-> > >  {
-> > > -     pthread_mutex_lock(&ui__lock);
-> > > +     mutex_lock(&ui__lock);
-> > >       __ui__info_window(title, text, NULL);
-> > >       SLsmg_refresh();
-> > > -     pthread_mutex_unlock(&ui__lock);
-> > > +     mutex_unlock(&ui__lock);
-> > >  }
-> > >
-> > >  int ui__question_window(const char *title, const char *text,
-> > >                       const char *exit_msg, int delay_secs)
-> > >  {
-> > > -     pthread_mutex_lock(&ui__lock);
-> > > +     mutex_lock(&ui__lock);
-> > >       __ui__info_window(title, text, exit_msg);
-> > >       SLsmg_refresh();
-> > > -     pthread_mutex_unlock(&ui__lock);
-> > > +     mutex_unlock(&ui__lock);
-> > >       return ui__getch(delay_secs);
-> > >  }
-> > >
-> > > diff --git a/tools/perf/ui/ui.h b/tools/perf/ui/ui.h
-> > > index 9b6fdf06e1d2..99f8d2fe9bc5 100644
-> > > --- a/tools/perf/ui/ui.h
-> > > +++ b/tools/perf/ui/ui.h
-> > > @@ -2,11 +2,11 @@
-> > >  #ifndef _PERF_UI_H_
-> > >  #define _PERF_UI_H_ 1
-> > >
-> > > -#include <pthread.h>
-> > > +#include "../util/mutex.h"
-> > >  #include <stdbool.h>
-> > >  #include <linux/compiler.h>
-> > >
-> > > -extern pthread_mutex_t ui__lock;
-> > > +extern struct mutex ui__lock;
-> > >  extern void *perf_gtk_handle;
-> > >
-> > >  extern int use_browser;
-> > > diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
-> > > index 2c6a485c3de5..29d804d76145 100644
-> > > --- a/tools/perf/util/annotate.c
-> > > +++ b/tools/perf/util/annotate.c
-> > > @@ -35,7 +35,6 @@
-> > >  #include "arch/common.h"
-> > >  #include "namespaces.h"
-> > >  #include <regex.h>
-> > > -#include <pthread.h>
-> > >  #include <linux/bitops.h>
-> > >  #include <linux/kernel.h>
-> > >  #include <linux/string.h>
-> > > @@ -821,7 +820,7 @@ void symbol__annotate_zero_histograms(struct symbol *sym)
-> > >  {
-> > >       struct annotation *notes = symbol__annotation(sym);
-> > >
-> > > -     pthread_mutex_lock(&notes->lock);
-> > > +     mutex_lock(&notes->lock);
-> > >       if (notes->src != NULL) {
-> > >               memset(notes->src->histograms, 0,
-> > >                      notes->src->nr_histograms * notes->src->sizeof_sym_hist);
-> > > @@ -829,7 +828,7 @@ void symbol__annotate_zero_histograms(struct symbol *sym)
-> > >                       memset(notes->src->cycles_hist, 0,
-> > >                               symbol__size(sym) * sizeof(struct cyc_hist));
-> > >       }
-> > > -     pthread_mutex_unlock(&notes->lock);
-> > > +     mutex_unlock(&notes->lock);
-> > >  }
-> > >
-> > >  static int __symbol__account_cycles(struct cyc_hist *ch,
-> > > @@ -1086,7 +1085,7 @@ void annotation__compute_ipc(struct annotation *notes, size_t size)
-> > >       notes->hit_insn = 0;
-> > >       notes->cover_insn = 0;
-> > >
-> > > -     pthread_mutex_lock(&notes->lock);
-> > > +     mutex_lock(&notes->lock);
-> > >       for (offset = size - 1; offset >= 0; --offset) {
-> > >               struct cyc_hist *ch;
-> > >
-> > > @@ -1105,7 +1104,7 @@ void annotation__compute_ipc(struct annotation *notes, size_t size)
-> > >                       notes->have_cycles = true;
-> > >               }
-> > >       }
-> > > -     pthread_mutex_unlock(&notes->lock);
-> > > +     mutex_unlock(&notes->lock);
-> > >  }
-> > >
-> > >  int addr_map_symbol__inc_samples(struct addr_map_symbol *ams, struct perf_sample *sample,
-> > > @@ -1258,13 +1257,13 @@ int disasm_line__scnprintf(struct disasm_line *dl, char *bf, size_t size, bool r
-> > >
-> > >  void annotation__init(struct annotation *notes)
-> > >  {
-> > > -     pthread_mutex_init(&notes->lock, NULL);
-> > > +     mutex_init(&notes->lock, /*pshared=*/false);
-> > >  }
-> > >
-> > >  void annotation__exit(struct annotation *notes)
-> > >  {
-> > >       annotated_source__delete(notes->src);
-> > > -     pthread_mutex_destroy(&notes->lock);
-> > > +     mutex_destroy(&notes->lock);
-> > >  }
-> > >
-> > >  static void annotation_line__add(struct annotation_line *al, struct list_head *head)
-> > > diff --git a/tools/perf/util/annotate.h b/tools/perf/util/annotate.h
-> > > index 986f2bbe4870..3cbd883e4d7a 100644
-> > > --- a/tools/perf/util/annotate.h
-> > > +++ b/tools/perf/util/annotate.h
-> > > @@ -8,9 +8,9 @@
-> > >  #include <linux/types.h>
-> > >  #include <linux/list.h>
-> > >  #include <linux/rbtree.h>
-> > > -#include <pthread.h>
-> > >  #include <asm/bug.h>
-> > >  #include "symbol_conf.h"
-> > > +#include "mutex.h"
-> > >  #include "spark.h"
-> > >
-> > >  struct hist_browser_timer;
-> > > @@ -273,7 +273,7 @@ struct annotated_source {
-> > >  };
-> > >
-> > >  struct annotation {
-> > > -     pthread_mutex_t         lock;
-> > > +     struct mutex lock;
-> > >       u64                     max_coverage;
-> > >       u64                     start;
-> > >       u64                     hit_cycles;
-> > > diff --git a/tools/perf/util/bpf-event.h b/tools/perf/util/bpf-event.h
-> > > index 144a8a24cc69..1bcbd4fb6c66 100644
-> > > --- a/tools/perf/util/bpf-event.h
-> > > +++ b/tools/perf/util/bpf-event.h
-> > > @@ -4,7 +4,6 @@
-> > >
-> > >  #include <linux/compiler.h>
-> > >  #include <linux/rbtree.h>
-> > > -#include <pthread.h>
-> > >  #include <api/fd/array.h>
-> > >  #include <stdio.h>
-> > >
-> > > diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
-> > > index 5ac13958d1bd..c7a5b42d1311 100644
-> > > --- a/tools/perf/util/dso.c
-> > > +++ b/tools/perf/util/dso.c
-> > > @@ -795,7 +795,7 @@ dso_cache__free(struct dso *dso)
-> > >       struct rb_root *root = &dso->data.cache;
-> > >       struct rb_node *next = rb_first(root);
-> > >
-> > > -     pthread_mutex_lock(&dso->lock);
-> > > +     mutex_lock(&dso->lock);
-> > >       while (next) {
-> > >               struct dso_cache *cache;
-> > >
-> > > @@ -804,7 +804,7 @@ dso_cache__free(struct dso *dso)
-> > >               rb_erase(&cache->rb_node, root);
-> > >               free(cache);
-> > >       }
-> > > -     pthread_mutex_unlock(&dso->lock);
-> > > +     mutex_unlock(&dso->lock);
-> > >  }
-> > >
-> > >  static struct dso_cache *__dso_cache__find(struct dso *dso, u64 offset)
-> > > @@ -841,7 +841,7 @@ dso_cache__insert(struct dso *dso, struct dso_cache *new)
-> > >       struct dso_cache *cache;
-> > >       u64 offset = new->offset;
-> > >
-> > > -     pthread_mutex_lock(&dso->lock);
-> > > +     mutex_lock(&dso->lock);
-> > >       while (*p != NULL) {
-> > >               u64 end;
-> > >
-> > > @@ -862,7 +862,7 @@ dso_cache__insert(struct dso *dso, struct dso_cache *new)
-> > >
-> > >       cache = NULL;
-> > >  out:
-> > > -     pthread_mutex_unlock(&dso->lock);
-> > > +     mutex_unlock(&dso->lock);
-> > >       return cache;
-> > >  }
-> > >
-> > > @@ -1297,7 +1297,7 @@ struct dso *dso__new_id(const char *name, struct dso_id *id)
-> > >               dso->root = NULL;
-> > >               INIT_LIST_HEAD(&dso->node);
-> > >               INIT_LIST_HEAD(&dso->data.open_entry);
-> > > -             pthread_mutex_init(&dso->lock, NULL);
-> > > +             mutex_init(&dso->lock, /*pshared=*/false);
-> > >               refcount_set(&dso->refcnt, 1);
-> > >       }
-> > >
-> > > @@ -1336,7 +1336,7 @@ void dso__delete(struct dso *dso)
-> > >       dso__free_a2l(dso);
-> > >       zfree(&dso->symsrc_filename);
-> > >       nsinfo__zput(dso->nsinfo);
-> > > -     pthread_mutex_destroy(&dso->lock);
-> > > +     mutex_destroy(&dso->lock);
-> > >       free(dso);
-> > >  }
-> > >
-> > > diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
-> > > index 66981c7a9a18..58d94175e714 100644
-> > > --- a/tools/perf/util/dso.h
-> > > +++ b/tools/perf/util/dso.h
-> > > @@ -2,7 +2,6 @@
-> > >  #ifndef __PERF_DSO
-> > >  #define __PERF_DSO
-> > >
-> > > -#include <pthread.h>
-> > >  #include <linux/refcount.h>
-> > >  #include <linux/types.h>
-> > >  #include <linux/rbtree.h>
-> > > @@ -11,6 +10,7 @@
-> > >  #include <stdio.h>
-> > >  #include <linux/bitops.h>
-> > >  #include "build-id.h"
-> > > +#include "mutex.h"
-> > >
-> > >  struct machine;
-> > >  struct map;
-> > > @@ -145,7 +145,7 @@ struct dso_cache {
-> > >  struct auxtrace_cache;
-> > >
-> > >  struct dso {
-> > > -     pthread_mutex_t  lock;
-> > > +     struct mutex     lock;
-> > >       struct list_head node;
-> > >       struct rb_node   rb_node;       /* rbtree node sorted by long name */
-> > >       struct rb_root   *root;         /* root of rbtree that rb_node is in */
-> > > diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
-> > > index 1c085ab56534..bfce88e5eb0d 100644
-> > > --- a/tools/perf/util/hist.c
-> > > +++ b/tools/perf/util/hist.c
-> > > @@ -1622,13 +1622,13 @@ struct rb_root_cached *hists__get_rotate_entries_in(struct hists *hists)
-> > >  {
-> > >       struct rb_root_cached *root;
-> > >
-> > > -     pthread_mutex_lock(&hists->lock);
-> > > +     mutex_lock(&hists->lock);
-> > >
-> > >       root = hists->entries_in;
-> > >       if (++hists->entries_in > &hists->entries_in_array[1])
-> > >               hists->entries_in = &hists->entries_in_array[0];
-> > >
-> > > -     pthread_mutex_unlock(&hists->lock);
-> > > +     mutex_unlock(&hists->lock);
-> > >
-> > >       return root;
-> > >  }
-> > > @@ -2805,7 +2805,7 @@ int __hists__init(struct hists *hists, struct perf_hpp_list *hpp_list)
-> > >       hists->entries_in = &hists->entries_in_array[0];
-> > >       hists->entries_collapsed = RB_ROOT_CACHED;
-> > >       hists->entries = RB_ROOT_CACHED;
-> > > -     pthread_mutex_init(&hists->lock, NULL);
-> > > +     mutex_init(&hists->lock, /*pshared=*/false);
-> > >       hists->socket_filter = -1;
-> > >       hists->hpp_list = hpp_list;
-> > >       INIT_LIST_HEAD(&hists->hpp_formats);
-> > > diff --git a/tools/perf/util/hist.h b/tools/perf/util/hist.h
-> > > index 7ed4648d2fc2..508428b2c1b2 100644
-> > > --- a/tools/perf/util/hist.h
-> > > +++ b/tools/perf/util/hist.h
-> > > @@ -4,10 +4,10 @@
-> > >
-> > >  #include <linux/rbtree.h>
-> > >  #include <linux/types.h>
-> > > -#include <pthread.h>
-> > >  #include "evsel.h"
-> > >  #include "color.h"
-> > >  #include "events_stats.h"
-> > > +#include "mutex.h"
-> > >
-> > >  struct hist_entry;
-> > >  struct hist_entry_ops;
-> > > @@ -98,7 +98,7 @@ struct hists {
-> > >       const struct dso        *dso_filter;
-> > >       const char              *uid_filter_str;
-> > >       const char              *symbol_filter_str;
-> > > -     pthread_mutex_t         lock;
-> > > +     struct mutex            lock;
-> > >       struct hists_stats      stats;
-> > >       u64                     event_stream;
-> > >       u16                     col_len[HISTC_NR_COLS];
-> > > diff --git a/tools/perf/util/mmap.h b/tools/perf/util/mmap.h
-> > > index cd8b0777473b..cd4ccec7f361 100644
-> > > --- a/tools/perf/util/mmap.h
-> > > +++ b/tools/perf/util/mmap.h
-> > > @@ -9,7 +9,6 @@
-> > >  #include <linux/bitops.h>
-> > >  #include <perf/cpumap.h>
-> > >  #include <stdbool.h>
-> > > -#include <pthread.h> // for cpu_set_t
-> > >  #ifdef HAVE_AIO_SUPPORT
-> > >  #include <aio.h>
-> > >  #endif
-> > > diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-> > > index a4b22caa7c24..656d9b4dd456 100644
-> > > --- a/tools/perf/util/symbol.c
-> > > +++ b/tools/perf/util/symbol.c
-> > > @@ -1800,7 +1800,7 @@ int dso__load(struct dso *dso, struct map *map)
-> > >       }
-> > >
-> > >       nsinfo__mountns_enter(dso->nsinfo, &nsc);
-> > > -     pthread_mutex_lock(&dso->lock);
-> > > +     mutex_lock(&dso->lock);
-> > >
-> > >       /* check again under the dso->lock */
-> > >       if (dso__loaded(dso)) {
-> > > @@ -1964,7 +1964,7 @@ int dso__load(struct dso *dso, struct map *map)
-> > >               ret = 0;
-> > >  out:
-> > >       dso__set_loaded(dso);
-> > > -     pthread_mutex_unlock(&dso->lock);
-> > > +     mutex_unlock(&dso->lock);
-> > >       nsinfo__mountns_exit(&nsc);
-> > >
-> > >       return ret;
-> > > diff --git a/tools/perf/util/top.h b/tools/perf/util/top.h
-> > > index 1c2c0a838430..a8b0d79bd96c 100644
-> > > --- a/tools/perf/util/top.h
-> > > +++ b/tools/perf/util/top.h
-> > > @@ -5,6 +5,7 @@
-> > >  #include "tool.h"
-> > >  #include "evswitch.h"
-> > >  #include "annotate.h"
-> > > +#include "mutex.h"
-> > >  #include "ordered-events.h"
-> > >  #include "record.h"
-> > >  #include <linux/types.h>
-> > > @@ -53,8 +54,8 @@ struct perf_top {
-> > >               struct ordered_events   *in;
-> > >               struct ordered_events    data[2];
-> > >               bool                     rotate;
-> > > -             pthread_mutex_t          mutex;
-> > > -             pthread_cond_t           cond;
-> > > +             struct mutex mutex;
-> > > +             struct cond cond;
-> > >       } qe;
-> > >  };
-> > >
-> > > --
-> > > 2.37.1.595.g718a3a8f04-goog
-> >
-> > --
-> >
-> > - Arnaldo
-
--- 
-
-- Arnaldo
+> John

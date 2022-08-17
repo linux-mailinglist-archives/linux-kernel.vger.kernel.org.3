@@ -2,96 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2289B596CE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 12:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BFA596CED
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 12:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235296AbiHQKj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 06:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48908 "EHLO
+        id S234833AbiHQKmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 06:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233736AbiHQKjY (ORCPT
+        with ESMTP id S229475AbiHQKl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 06:39:24 -0400
-Received: from sonic304-23.consmr.mail.ne1.yahoo.com (sonic304-23.consmr.mail.ne1.yahoo.com [66.163.191.149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238802A736
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 03:39:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=att.net; s=s1024; t=1660732763; bh=OgPrHThNWBuXwsdxCrrp2vWXxxgoK2qPwBix26o3c88=; h=Date:From:Subject:To:References:From:Subject:Reply-To; b=elliI7h+N4Zz3ArwywwdZXSY+5hrNG0iVzr9w3OaXT0JFWACP1VcKujg7attqjExZrUehd+VzsnUvQ7nfiQoBth8YbxL11Y8788WoTXnjQnpPGJb2+e6TCvPWTc2CoREJC6/pWALRuGy63iJNmlphxj0JJG4RuCHk9ZD3jm6bvU=
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660732763; bh=9HHAEnozu/vVuF4O0LZteMJnyV52V38TfbxqQtQPZDZ=; h=X-Sonic-MF:Date:From:Subject:To:From:Subject; b=EvNObzDPJbJqQjenmBZZK2odOAdnieNL3GMTbt/wD2WG6BLyQFbd6j/tSpuwoUXTAyxmvFNjKvfiCz9ew7knqNTaKQYBRtsOGvjEtJXjQcNJcIxDzoqs8OuyTkYE8IlabHT1oxmhQSU5XxzLNO9eWoP14q0zjcUB39UVK5hUV9Y1CRDg/VvjlILyhAA5BvM5zD9fXG6tmw8npqXifh2yz33OiA2Y5xyEpKLYLUIKPrgRON+NodvLuUnnR1Vvf10t8H4ZqX2dXSTRdbsUrVTz2YWe7w/7/XIssWSaRGy9PrUdXRo8abE86UvNeeiYyKw6/+o9fTPR3VpkKvGOW2y4dw==
-X-YMail-OSG: QF5noUQVM1lbehG1iSvUsZ8ZMbEojFSp5PayKIR5iWr45t_EWAjaSGodR0UBAfL
- vynPVyVWzfgYrmQfMMKpNT0Z2Gp..lLWV54AGeK.eTE6dIx7N_1IX9kmwKVzP4RhfjCfliLUC7IC
- u7B044BmFdRZK9Bisu8UlsId160IesDtl7NUvbn_oFkDgnrPWv774mSKaRk6lsUoHpX0vcadWJx.
- r0YqhsPUl9bihTPuRlrcT9eRVgttlvZKQQihsxBBJfE3H966rPTSPrtfhYHoZeDjyDwgDtqxN4ch
- Ds3R.UZapk6_4t480imPA0iVUNaxLTPiSrvgXK2BSvDSIuyOSiklzTunwFAUyaDUYus13Y6etAQi
- YgkKUbb0tE6_oLVWTzg.D.UZYTf.ltHS9M7TukpF_95SxSvsLG.o.fvcwjhqY7FVQtb7Kzf9OweN
- dbmmykHo_MYpjf6ZV0wkwoUj3dTvl9QKSCLOs4trPqA7Ofmn0zznFtUKMajmKS7hB8MJyi3V8tI0
- cngyDSlUe1mTYQitL_CChRDMJsslPpxU.T_jXk4hl3kGFvALSnkwlIH9cS0CT8qz._7BjZ14fbId
- ACjNeavMxGpfpH_TV.LReKeUifJTd7kn1vZacgGRGB8Ym4erS_CzHI5W0tWugWLyJG3DT9MDtQer
- .zbk6LUuSMQGkO9SVzkq5SHFqZPgWYzAciNENbQNSDQ3wv_4OCou7OTiwIDfzqdEqNM7XNOhBidd
- d5RDbduJLP.9VwtS1BnQ5UVLXaQVbA8w49AWC78os3ceqE3vG2RHjSLuKWucxFRhpKFyAtcFf5TJ
- valskMMC_Sfzr5Tm5I17J8aTeFmLW0sklfFGnnhgVjsY1GearzbsGXtxWpGFGka.5tg_P.aSNO2n
- GTD7M45vuSzn8IGdTf0kv0YjtkYnnUsKtZLWwnLQcVqHHlre84TmkTMxhwfrrjSn6XWqRbZFvcey
- mgHJM8PoAJfoqX5PSJuwYjM7bHKIKMiW_r.OIhcPVUMBJIWbdsTnTZf0hDXKELoFvff7ZUyQXewK
- GrJICDL3lr5AdeOuIRty4sSM2IlEvPoiQnRRWwSH8pq_oD5EsxxJp6Fw0HIgUNJBrgPOeqn3G.oy
- HEcBVaABvbqOR2Ynr9y9m9V3lvnekuQnFHhfmhvsCmUHhX78VsvYvwy2ehN9x5CHPm7ies4CDmwO
- vC654pPb9KzoF9Hz80pBgxEm29w.HloKuwem_W_zZuiB9lDsrsrkNQEmU71d9yoyiuTGVfTsrfqj
- qbqq681ByDsjf0RUafbF_5DpSkZFecXfS633c3ZuypyHWNNkv.HEpOKUaL8eD7.5RxQ7RxtBMnOU
- afdJKalfOLTocFfi.SpzoGAp3uXPR.wWr.xB5k4EnsQiAAOGbIkBQAR9EvEpTcp2zY8Px3CEg5w2
- v7.hzkkfKNLHEOnqtJTCI7JZjPLIP3RLNOR151Ps6HjdpVEo3cxG8K311hSizH3Jf8aJ4PcFE5Wl
- cqoVcCgYUCqmx7A1BPWA8x8UQRuG53n1L.tqXQmLQ6oCZk9ScinNpv3lxn_fzUOePvFQQEs55PNm
- aOIFHty0pOa1iR_fhVneb5STCTgHcQV6Cm3b8voro3sGPpEJ5_2HdRoC0Rx67YtfFEz93INLSEcl
- 5CZfva.7crudG5_5bZtCtls96vAVv6_LIL17rPkQugQ8gEK584hNNky5yWgfcceRuKU1y.lTeOwC
- uScnjVqyP6Kf77YVvxmnlKCQ3NewQqiA5_0V.TPutJHe3nUcwkQ7oqq55GeZN3JPmAg2iCbD1bmN
- fPjQSlpTh6oONWj4vCdFfrey2VchTYSmp5Ne_.gLn7HnBFI_2TO4M9YhrpNJ188.QCMTF1oeT1a8
- iDTFdnt2mbBEbYJmNsnqpK8Ty6JbfywKT9UuPV2xfNI9XL7UZJ.4CMIXq.aCGAh.LDtlEI9RSbfC
- QmunwK_nVI3an.q1T_S_39DdhZgjvfIGp4kHmQ43L8W0U8vih2gGHdb7cvP0_oOwGKx1VNKlM00O
- npI4xmn0bx2bqvMoe7sXmkDVhe4cUw0D95ySPWBSEJJbCqev.HetIJvT.m6qg003Gr.mYWJ8NLRv
- 6LD5NG_T86JxzN0SRxhezDJApDcwbHq1KIBeSEocb3cWv79tskuSirDXtEDhq0wADCLhxmUc3PwO
- GXjcgvurdJAnE1T7H1Zxp2QwE1rOKbaei3Ipz5NbgZAh2oUoSJfoMmIrEr1.PnIHp4hzUghU3b1O
- MxFs-
-X-Sonic-MF: <pheonix.sja@att.net>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic304.consmr.mail.ne1.yahoo.com with HTTP; Wed, 17 Aug 2022 10:39:23 +0000
-Received: by hermes--production-gq1-686964ccb6-f284v (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 74d72f97b16493d706572a2f98830e11;
-          Wed, 17 Aug 2022 10:39:21 +0000 (UTC)
-Date:   Wed, 17 Aug 2022 06:39:13 -0400
-From:   Steven J Abner <pheonix.sja@att.net>
-Subject: thermal driver patch
-To:     linux-kernel@vger.kernel.org
-Message-Id: <DL9RGR.8W3XFSCFFYXI2@att.net>
-X-Mailer: geary/3.36.1
+        Wed, 17 Aug 2022 06:41:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2715924A;
+        Wed, 17 Aug 2022 03:41:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3098AB81CC7;
+        Wed, 17 Aug 2022 10:41:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CD8CC433C1;
+        Wed, 17 Aug 2022 10:41:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660732914;
+        bh=jSwzVf5c/jELVgW/bVGmMIh+NBm1nJk4nPTUCH5zvMk=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Zg9RFhuBsHJI2Q3BgJr0bMTVCwbXLiAkpq2Ndm8f6D6KyXcA55Uf0SJ1gabl6iEXQ
+         Oa+K0Q5eNAVaJqmc1sswqwpkPGlhMULEfBgXURVZnp+KnShfJgo8GfFPCmEpuAjpJf
+         WqGTLS/1BPyNPqEyAQQHY2Bz4PFHhMDZPLbd6Mee6ZPtNSfrrfMQARROxhXoaBdNkn
+         8GioXlPDA0Jh1xGV3OEPPI04Q7SRrgRiwKaTaH1IVj7mWJ5hAxemKENCcP0Ame0e2P
+         5LmtApRvnF4IHjPCpwjzx1KrC7Bg8J9tXfBXJ0esdyKjk/N5w0O3Nb/ZIG3tzPorbd
+         f1wnpQgIkRSQw==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <ALSI@bang-olufsen.dk>
+Cc:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wright Feng <wright.feng@cypress.com>,
+        Chi-hsien Lin <chi-hsien.lin@cypress.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        "linux-wireless\@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "brcm80211-dev-list.pdl\@broadcom.com" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        "SHA-cyfmac-dev-list\@infineon.com" 
+        <SHA-cyfmac-dev-list@infineon.com>,
+        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [1/6] wifi: brcmfmac: fix continuous 802.1x tx pending timeout error
+In-Reply-To: <20220817083432.wgkhhtihtv7wdwoq@bang-olufsen.dk> ("Alvin
+        \=\?utf-8\?Q\?\=C5\=A0ipraga\=22's\?\= message of "Wed, 17 Aug 2022 08:34:32 +0000")
+References: <20220722115632.620681-2-alvin@pqrs.dk>
+        <166011047689.24475.5790257380580454361.kvalo@kernel.org>
+        <20220817083432.wgkhhtihtv7wdwoq@bang-olufsen.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Date:   Wed, 17 Aug 2022 13:41:47 +0300
+Message-ID: <871qtfm9sk.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-References: <DL9RGR.8W3XFSCFFYXI2.ref@att.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Didn't actually create patch, for you to do and review:
+Alvin =C5=A0ipraga <ALSI@bang-olufsen.dk> writes:
 
-for drivers/thermal/thermal_core.c:397 :
+> Hi Kalle,
+>
+> On Wed, Aug 10, 2022 at 05:48:01AM +0000, Kalle Valo wrote:
+>> Alvin =C5=A0ipraga <alvin@pqrs.dk> wrote:
+>>=20
+>> > From: Wright Feng <wright.feng@cypress.com>
+>> >=20
+>> > The race condition in brcmf_msgbuf_txflow and brcmf_msgbuf_delete_flow=
+ring
+>> > makes tx_msghdr writing after brcmf_msgbuf_remove_flowring. Host
+>> > driver should delete flowring after txflow complete and all txstatus b=
+ack,
+>> > or pend_8021x_cnt will never be zero and cause every connection 950
+>> > milliseconds(MAX_WAIT_FOR_8021X_TX) delay.
+>> >=20
+>> > Signed-off-by: Wright Feng <wright.feng@cypress.com>
+>> > Signed-off-by: Chi-hsien Lin <chi-hsien.lin@cypress.com>
+>> > Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+>> > Signed-off-by: Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
+>>=20
+>> 5 patches applied to wireless-next.git, thanks.
+>>=20
+>> 0fa24196e425 wifi: brcmfmac: fix continuous 802.1x tx pending timeout er=
+ror
+>> 09be7546a602 wifi: brcmfmac: fix scheduling while atomic issue when
+>> deleting flowring
+>> aa666b68e73f wifi: brcmfmac: fix invalid address access when enabling SC=
+AN log level
+>> 5606aeaad01e wifi: brcmfmac: Fix to add brcmf_clear_assoc_ies when rmmod
+>> 2eee3db784a0 wifi: brcmfmac: Fix to add skb free for TIM update info
+>> when tx is completed
+>
+> Thanks. Do you mind elaborating on why the 6th patch:
+>
+>     brcmfmac: Update SSID of hidden AP while informing its bss to cfg8021=
+1 layer
+>
+> was not applied?
 
-static void update_temperature(struct thermal_zone_device *tz)
-{
-  (void)tz;
-}
+Because of mismatch between From and s-o-b. I will look at that in
+detail after my vacation.
 
-stops kernel dmesg of unused function,
-from include/linux/thermal.h:429 :
+--=20
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-static inline int thermal_zone_get_temp(
-  struct thermal_zone_device *tz, int *temp)
-{ return -ENODEV; }
-
-If this is a bother, sorry I troubled you.
-Per 'Do I have to be subscribed to post to the list?':
-I wish to be personally CC'ed the answers/comments posted to the list
-in response to your posting, please.
-Steve
-
-
-
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
+hes

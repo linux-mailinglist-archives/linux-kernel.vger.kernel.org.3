@@ -2,69 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326EC596A95
+	by mail.lfdr.de (Postfix) with ESMTP id C3AAA596A97
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232938AbiHQHpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 03:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38162 "EHLO
+        id S233324AbiHQHqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 03:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232841AbiHQHpO (ORCPT
+        with ESMTP id S233329AbiHQHqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 03:45:14 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9FA79A64
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:45:12 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id gb36so23048296ejc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:45:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=BITzr7eaqZDWN9J3zA+mBc+Jo1kRZ2EMV6/Z9lL2EMQ=;
-        b=bNlWuLBs8GCE+7ka7N/s08dLf07u3ZpgF6mQfe5nOAgCOzRYF1JRf9t54QNz2jqsqn
-         KwuyRypgQVtxQTG/gnPjXua7x5Zmtj4DkrRHPB+W3Ruouj8crgEyFAWKU/UFYHZrevqA
-         Tu9pda1MWmQ/eDmBcbEHzDgTJNQp0c84vsVXvHmJ6Y9t+YFnFN+lAr13Urjn2JWDf8Gy
-         s8Xx4rsCIkByg5O+cw/L4opxTjI1b2Rktbx4jPzNk2P1vCEjlTQbZNJOtJY1WeBlLvRE
-         dzzFGq8BsrEKf+tTrAezQTWoo9LEHzXzTc0YMcKI8FmV00ECzItPEy22A3C/idOhp5o3
-         2oQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=BITzr7eaqZDWN9J3zA+mBc+Jo1kRZ2EMV6/Z9lL2EMQ=;
-        b=51Q24hjSTo4IGrs5cb1d1CXIVnowW+zryoVqNXb1Mgjj4Xm9CyFzG6AzC1i6nDtaqM
-         iTAFqHwBYF31uosU6iQVKpgHp6uyW692IkwAQkpttAodSLAADoNzA2pE+OF4LLnFFOJO
-         9Axv76n1T6Nrt88x6uNi7sWatXYUMV54Rv1DhdSfu+PvT6bzaraJEZ9WZIzGdRtBv+C2
-         RrWn9UdymWySgUvRrt2pEXzOWv8a1VHEG0VhlL1641mOBq3pEMuzAScF1KA/MjmsAdVV
-         1/+emXwfuI+jmn8FUdpYrRU3VfqTAktqyoeaYmS+LhBApViSlmeEkJlR11j/d2E8R/yr
-         QlRQ==
-X-Gm-Message-State: ACgBeo3gQcrUHoeI7IQ+6JVayH8rGutRYRc7xdD10nArn44KeS54WAPn
-        ffLqdw0DdvYpvu6KSHCN+iydplYyl1Q=
-X-Google-Smtp-Source: AA6agR6E+6b2jXdoxvTMntgNL9Lk462Bgvhl6B0xPBHN/SLGgjJO8H2pdr8kZsJxlsyjUGCcZGDeig==
-X-Received: by 2002:a17:907:b590:b0:730:9e03:95a8 with SMTP id qx16-20020a170907b59000b007309e0395a8mr15776875ejc.384.1660722311547;
-        Wed, 17 Aug 2022 00:45:11 -0700 (PDT)
-Received: from agape.jhs ([5.171.72.69])
-        by smtp.gmail.com with ESMTPSA id o10-20020a056402038a00b0043a7134b381sm10052533edv.11.2022.08.17.00.45.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 00:45:10 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 09:45:07 +0200
-From:   Fabio Aiuto <fabioaiuto83@gmail.com>
-To:     Simone Serra <serrazimone@gmail.com>
-Cc:     gregkh@linuxfoundation.org, soumya.negi97@gmail.com,
-        hdegoede@redhat.com, straube.linux@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Fixes compilation errors after checkpatch warnings
-Message-ID: <YvycgyjCwKlsp318@agape.jhs>
-References: <20220809143743.742636-1-serrazimone@gmail.com>
+        Wed, 17 Aug 2022 03:46:02 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529957C1F4;
+        Wed, 17 Aug 2022 00:45:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=45RsTvvQpAn/sSf9KQMAsIEwdB3TRL9b7yAQ8edqZtc=; b=rQtLOXCrBQhDRm/70fh1y3S2/5
+        Zvjv3iR9bXRxOX13MCcEc+zLzE1ul+eO189lBhcYzwcTX+W1j/mi2IgUa+iUyMVGaK8aYo36zJjSY
+        NkCmlQy650FpaTgpiFwTVE4INDiafqOmRl68kXZHmAHqlDDBq0ErZdxHYP6lyJAeElBUCv6Vt8FIY
+        bf/z+K5QWA5XTj32dh1I+lB8Kzy9/+y9UNrjbghtVzObo1Si4ugnWoJA85F98bM8STwICsN6Huv2z
+        pdHljpDabBsJ59lxHnBBhfJFWRny5gkRtg3Z4buBCxMiC6dFPr7tF7TLfLLlH38venKpOxQl61ZM/
+        T7NlV8ng==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oODkH-003CgF-VP; Wed, 17 Aug 2022 07:45:46 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4881A98007A; Wed, 17 Aug 2022 09:45:45 +0200 (CEST)
+Date:   Wed, 17 Aug 2022 09:45:45 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: Simplify load_unaligned_zeropad() (was Re: [GIT PULL] Ceph
+ updates for 5.20-rc1)
+Message-ID: <YvycqWVs5JbBR1D+@worktop.programming.kicks-ass.net>
+References: <CAHk-=wh1xHi-WeytuAK1-iSsR0wi=6e4-WgFq6ZPt8Z1mvqoNA@mail.gmail.com>
+ <Yvny9L3tw1EolqQ4@worktop.programming.kicks-ass.net>
+ <CAHk-=whnEN3Apb5gRXSZK7BM+MOby9VCZe3sDcW34Zme_wk3uA@mail.gmail.com>
+ <Yvqn8BqE7FdB6Ccd@worktop.programming.kicks-ass.net>
+ <CAHk-=wj6QaNkoNPA0jrW8F_=RNNb1jCsFF2QngNEQb_C=wMDPQ@mail.gmail.com>
+ <YvtPEA/9GV7GthZJ@worktop.programming.kicks-ass.net>
+ <CAHk-=wjZ0oC0__-kLX51jRwo4XgAQ9xJ=OeT5_=fiLxmDexFZw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220809143743.742636-1-serrazimone@gmail.com>
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <CAHk-=wjZ0oC0__-kLX51jRwo4XgAQ9xJ=OeT5_=fiLxmDexFZw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,21 +65,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Simone,
+On Tue, Aug 16, 2022 at 10:57:45AM -0700, Linus Torvalds wrote:
 
-On Tue, Aug 09, 2022 at 04:37:43PM +0200, Simone Serra wrote:
-> This patch fixes compilation errors produced by the previous commit that resolved a number of checkpatch warnings and errors
+> > > +     if (insn_decode(&insn, (void *) regs->ip, len, INSN_MODE_KERN))
+> > > +             return false;
+> >
+> > We have insn_decode_kernel() for exactly this (very) common case.
 > 
+> I did that originally, and then I undid it in disgust, because that
+> interface is too simple.
+> 
+> In particular, it just uses MAX_INSN_SIZE blindly. Which I didn't want
+> to do when I actually had the instruction size.
+> 
+> Yes, yes, I also check the decode size after-the-fact, but I didn't
+> want the decoder to even look at the invalid bytes.
+> 
+> This exception case is about the data being at the end of the page, I
+> wanted the fixup to be aware of code being at the end of a page too.
 
-thanks for your patches. Try to focus on a single checkpatch error
-and send a patchset for that one. This makes review easier.
+I don't want to argue this point too much; but I will anyway :-)
 
-It is a good thing for a patch to fix one thing and to have a proper
-commit message describing what the patch is meant to fix. Don't be too
-generic.
+IMO if the decoder ends up out of bounds its a decoder bug either way
+around. That is, we *know* there is a full instruction at the given IP
+because we got into this exception path.
 
-Always compile test your patches, before submitting!
+( it would be possible to add further constraints on trapnr )
 
-Thank you,
+Irrespective of the length constraint given to the decoder, it should
+not decode/access things past this instruction (without being careful
+about it).
 
-fabio
+Anyway, I'm fine with the patch as you have it.

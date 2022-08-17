@@ -2,111 +2,391 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2141A596B31
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1011596B3A
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:17:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234834AbiHQIOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 04:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39274 "EHLO
+        id S234719AbiHQIOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 04:14:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234610AbiHQIOc (ORCPT
+        with ESMTP id S234531AbiHQIO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 04:14:32 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19267474DE
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:14:24 -0700 (PDT)
+        Wed, 17 Aug 2022 04:14:28 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4B25300F
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:14:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660724065; x=1692260065;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0tqerVnGokmDgpuMJWnHbJ0LwGABUHb9fOAuziZi1Js=;
-  b=m3Ll87Fd8lHxxeC/1232Gn4z3JroV3Vb+hYbGZUyodjEiJmnNBCYNfq0
-   TaArLtaQHtEngBWOxfYTjHT/JYspEvJodmtB/ElXXiDYJ8Ut+C7FQqxTC
-   jDikx5HyQd10y+Z4va8l6+i6SGczW4rSik9Yd78E11HNxq8KBj27485Am
-   /2+A/W0+4n/EKUSlMK682AmaVRHqn5BAbazQE2iCOuAK6RWQEngnGcWl7
-   uCMmGqhDDTSRSX1SH0rj9jV6IKyMXlBZslm+Mt+TLrONYg1bYEl+bZ/tB
-   fr9afyFuOHF99lSTqgkoK/GSuuEgOoN5VH6jr9XWFSoW8x7bPjKa3VMxH
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="293710752"
+  t=1660724061; x=1692260061;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YgX2oWE22h0TBxS39QPKndxaK0c4rvOlVqgEtY2CsnQ=;
+  b=HQ72BfIPh56rx7JMotpdG7migocT0TaHG22TScwVTihsGx/g7ClMZ6FZ
+   hVg9YPpANQu7ROZ3aLQSx/wH3E80vb0BrXenFD5D9FKee92zDwqy71EIb
+   3hwbpiB64OR2OEG28HJEevfIY+jYGhiQB8890NoQPKVLwNQH0oShMuGM6
+   j9prEkIPqRfHE3Mcq47/2qhdRTLXm4TNNFr1g60hvnJsvpEJQ8n/O1L8m
+   cxoOonBckupI0MTAiYh7/c0ZfcYX9NHEqHuO2ThnNPXc4I/BoNVCVub+C
+   EHe9f+RVlxfizrLpAvdzIetawuyO8wsqDoDxsOYtKgbJD+2aEKmpYqWwL
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="293228776"
 X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="293710752"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 01:14:16 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="293228776"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 01:14:21 -0700
 X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="675548890"
-Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Aug 2022 01:14:14 -0700
-Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oOEBq-0000iw-14;
-        Wed, 17 Aug 2022 08:14:14 +0000
-Date:   Wed, 17 Aug 2022 16:13:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     kbuild-all@lists.01.org, Atish Patra <Atish.Patra@wdc.com>,
-        linux-kernel@vger.kernel.org
-Subject: [atishp04:kvm_perf_rfc_buildtest 15/24]
- include/asm-generic/cmpxchg.h:76: undefined reference to
- `__generic_xchg_called_with_bad_pointer'
-Message-ID: <202208171554.YLAVtmnV-lkp@intel.com>
+   d="scan'208";a="583668065"
+Received: from yhuang6-mobl1.sh.intel.com ([10.238.6.172])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 01:14:18 -0700
+From:   Huang Ying <ying.huang@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "Huang, Ying" <ying.huang@intel.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>
+Subject: [PATCH -V3 0/8] migrate_pages(): fix several bugs in error path
+Date:   Wed, 17 Aug 2022 16:14:00 +0800
+Message-Id: <20220817081408.513338-1-ying.huang@intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/atishp04/linux kvm_perf_rfc_buildtest
-head:   ff2f56ec4ff4f67ae3da3936939b1dcf53099a6e
-commit: 5faed77192c5455fe17fb4e6aea87e5bcc48a13d [15/24] COVER
-config: microblaze-buildonly-randconfig-r006-20220717 (https://download.01.org/0day-ci/archive/20220817/202208171554.YLAVtmnV-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/atishp04/linux/commit/5faed77192c5455fe17fb4e6aea87e5bcc48a13d
-        git remote add atishp04 https://github.com/atishp04/linux
-        git fetch --no-tags atishp04 kvm_perf_rfc_buildtest
-        git checkout 5faed77192c5455fe17fb4e6aea87e5bcc48a13d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash
+From: "Huang, Ying" <ying.huang@intel.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+During review the code of migrate_pages() and build a test program for
+it.  Several bugs in error path are identified and fixed in this
+series.
 
-All errors (new ones prefixed by >>):
+Most patches are tested via
 
-   microblaze-linux-ld: kernel/rcu/rcutorture.o: in function `__generic_xchg':
->> include/asm-generic/cmpxchg.h:76: undefined reference to `__generic_xchg_called_with_bad_pointer'
-   microblaze-linux-ld: kernel/trace/ring_buffer.o: in function `__generic_cmpxchg_local':
->> include/asm-generic/cmpxchg-local.h:24: undefined reference to `wrong_size_cmpxchg'
->> microblaze-linux-ld: include/asm-generic/cmpxchg-local.h:45: undefined reference to `wrong_size_cmpxchg'
+- Apply error-inject.patch in Linux kernel
+- Compile test-migrate.c (with -lnuma)
+- Test with test-migrate.sh
 
+error-inject.patch, test-migrate.c, and test-migrate.sh are as below.
+It turns out that error injection is an important tool to fix bugs in
+error path.
 
-vim +76 include/asm-generic/cmpxchg.h
+Changes:
 
-b4816afa3986704 David Howells 2012-03-28  74  
-b4816afa3986704 David Howells 2012-03-28  75  	default:
-82b993e8249ae3c Mark Rutland  2021-05-25 @76  		__generic_xchg_called_with_bad_pointer();
-b4816afa3986704 David Howells 2012-03-28  77  		return x;
-b4816afa3986704 David Howells 2012-03-28  78  	}
-b4816afa3986704 David Howells 2012-03-28  79  }
-b4816afa3986704 David Howells 2012-03-28  80  
+v3:
 
-:::::: The code at line 76 was first introduced by commit
-:::::: 82b993e8249ae3cb29c1b6eb8f6548f5748508b7 locking/atomic: cmpxchg: support ARCH_ATOMIC
+- Rebased on mm-unstable (20220816)
 
-:::::: TO: Mark Rutland <mark.rutland@arm.com>
-:::::: CC: Peter Zijlstra <peterz@infradead.org>
+- Added Baolin's patch to avoid retry 10 times for fail to migrate THP subpages
 
+v2:
+
+- Rebased on v5.19-rc5
+
+- Addressed some comments from Baolin, Thanks!
+
+- Added reviewed-by tags
+
+Best Regards,
+Huang, Ying
+
+------------------------- error-inject.patch -------------------------
+From 295ea21204f3f025a041fe39c68a2eaec8313c68 Mon Sep 17 00:00:00 2001
+From: Huang Ying <ying.huang@intel.com>
+Date: Tue, 21 Jun 2022 11:08:30 +0800
+Subject: [PATCH] migrate_pages: error inject
+
+---
+ mm/migrate.c | 58 +++++++++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 55 insertions(+), 3 deletions(-)
+
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 399904015d23..87d47064ec6c 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -337,6 +337,42 @@ void pmd_migration_entry_wait(struct mm_struct *mm, pmd_t *pmd)
+ }
+ #endif
+ 
++#define EI_MP_ENOSYS		0x0001
++#define EI_MP_THP_ENOMEM	0x0002
++#define EI_MP_NP_ENOMEM		0x0004
++#define EI_MP_EAGAIN		0x0008
++#define EI_MP_EOTHER		0x0010
++#define EI_MP_NOSPLIT		0x0020
++#define EI_MP_SPLIT_FAIL	0x0040
++#define EI_MP_EAGAIN_PERM	0x0080
++#define EI_MP_EBUSY		0x0100
++
++static unsigned int ei_migrate_pages;
++
++module_param(ei_migrate_pages, uint, 0644);
++
++static bool ei_thp_migration_supported(void)
++{
++	if (ei_migrate_pages & EI_MP_ENOSYS)
++		return false;
++	else
++		return thp_migration_supported();
++}
++
++static int ei_trylock_page(struct page *page)
++{
++	if (ei_migrate_pages & EI_MP_EAGAIN)
++		return 0;
++	return trylock_page(page);
++}
++
++static int ei_split_huge_page_to_list(struct page *page, struct list_head *list)
++{
++	if (ei_migrate_pages & EI_MP_SPLIT_FAIL)
++		return -EBUSY;
++	return split_huge_page_to_list(page, list);
++}
++
+ static int expected_page_refs(struct address_space *mapping, struct page *page)
+ {
+ 	int expected_count = 1;
+@@ -368,6 +404,9 @@ int folio_migrate_mapping(struct address_space *mapping,
+ 		if (folio_ref_count(folio) != expected_count)
+ 			return -EAGAIN;
+ 
++		if (ei_migrate_pages & EI_MP_EAGAIN_PERM)
++			return -EAGAIN;
++
+ 		/* No turning back from here */
+ 		newfolio->index = folio->index;
+ 		newfolio->mapping = folio->mapping;
+@@ -929,7 +968,7 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
+ 	struct anon_vma *anon_vma = NULL;
+ 	bool is_lru = !__PageMovable(page);
+ 
+-	if (!trylock_page(page)) {
++	if (!ei_trylock_page(page)) {
+ 		if (!force || mode == MIGRATE_ASYNC)
+ 			goto out;
+ 
+@@ -952,6 +991,11 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
+ 		lock_page(page);
+ 	}
+ 
++	if (ei_migrate_pages & EI_MP_EBUSY) {
++		rc = -EBUSY;
++		goto out_unlock;
++	}
++
+ 	if (PageWriteback(page)) {
+ 		/*
+ 		 * Only in the case of a full synchronous migration is it
+@@ -1086,7 +1130,7 @@ static int unmap_and_move(new_page_t get_new_page,
+ 	int rc = MIGRATEPAGE_SUCCESS;
+ 	struct page *newpage = NULL;
+ 
+-	if (!thp_migration_supported() && PageTransHuge(page))
++	if (!ei_thp_migration_supported() && PageTransHuge(page))
+ 		return -ENOSYS;
+ 
+ 	if (page_count(page) == 1) {
+@@ -1102,6 +1146,11 @@ static int unmap_and_move(new_page_t get_new_page,
+ 		goto out;
+ 	}
+ 
++	if ((ei_migrate_pages & EI_MP_THP_ENOMEM) && PageTransHuge(page))
++		return -ENOMEM;
++	if ((ei_migrate_pages & EI_MP_NP_ENOMEM) && !PageTransHuge(page))
++		return -ENOMEM;
++
+ 	newpage = get_new_page(page, private);
+ 	if (!newpage)
+ 		return -ENOMEM;
+@@ -1305,7 +1354,7 @@ static inline int try_split_thp(struct page *page, struct list_head *split_pages
+ 	int rc;
+ 
+ 	lock_page(page);
+-	rc = split_huge_page_to_list(page, split_pages);
++	rc = ei_split_huge_page_to_list(page, split_pages);
+ 	unlock_page(page);
+ 
+ 	return rc;
+@@ -1358,6 +1407,9 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+ 	bool nosplit = (reason == MR_NUMA_MISPLACED);
+ 	bool no_subpage_counting = false;
+ 
++	if (ei_migrate_pages & EI_MP_NOSPLIT)
++		nosplit = true;
++
+ 	trace_mm_migrate_pages_start(mode, reason);
+ 
+ thp_subpage_migration:
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.2
+
+------------------------- test-migrate.c -------------------------------------
+ #define _GNU_SOURCE
+
+ #include <stdbool.h>
+ #include <stdio.h>
+ #include <string.h>
+ #include <stdlib.h>
+ #include <errno.h>
+
+ #include <fcntl.h>
+ #include <sys/uio.h>
+ #include <sys/mman.h>
+ #include <sys/types.h>
+ #include <unistd.h>
+ #include <numaif.h>
+ #include <numa.h>
+
+ #ifndef MADV_FREE
+ #define MADV_FREE	8		/* free pages only if memory pressure */
+ #endif
+
+ #define ONE_MB		(1024 * 1024)
+ #define MAP_SIZE	(16 * ONE_MB)
+ #define THP_SIZE	(2 * ONE_MB)
+ #define THP_MASK	(THP_SIZE - 1)
+
+ #define ERR_EXIT_ON(cond, msg)					\
+	 do {							\
+		 int __cond_in_macro = (cond);			\
+		 if (__cond_in_macro)				\
+			 error_exit(__cond_in_macro, (msg));	\
+	 } while (0)
+
+ void error_msg(int ret, int nr, int *status, const char *msg)
+ {
+	 int i;
+
+	 fprintf(stderr, "Error: %s, ret : %d, error: %s\n",
+		 msg, ret, strerror(errno));
+
+	 if (!nr)
+		 return;
+	 fprintf(stderr, "status: ");
+	 for (i = 0; i < nr; i++)
+		 fprintf(stderr, "%d ", status[i]);
+	 fprintf(stderr, "\n");
+ }
+
+ void error_exit(int ret, const char *msg)
+ {
+	 error_msg(ret, 0, NULL, msg);
+	 exit(1);
+ }
+
+ void *addr_thp;
+ void *addr;
+ char *pn;
+ char *pn1;
+ char *pn2;
+ char *pn3;
+ void *pages[4];
+ int status[4];
+
+ void create_map(bool thp)
+ {
+	 int ret;
+	 void *p;
+
+	 p = mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE,
+		  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+	 ERR_EXIT_ON(p == MAP_FAILED, "mmap");
+	 if (thp) {
+		 ret = madvise(p, MAP_SIZE, MADV_HUGEPAGE);
+		 ERR_EXIT_ON(ret, "advise hugepage");
+		 addr_thp = p;
+	 } else {
+		 addr = p;
+	 }
+ }
+
+ void prepare()
+ {
+	 int ret;
+	 struct iovec iov;
+
+	 if (addr) {
+		 munmap(addr_thp, MAP_SIZE);
+		 munmap(addr, MAP_SIZE);
+	 }
+
+	 create_map(true);
+	 create_map(false);
+
+	 pn = (char *)(((unsigned long)addr_thp + THP_SIZE) & ~THP_MASK);
+	 pn1 = pn + THP_SIZE;
+	 pages[0] = pn;
+	 pages[1] = pn1;
+	 *pn = 1;
+
+	 pn2 = (char *)(((unsigned long)addr + THP_SIZE) & ~THP_MASK);
+	 pn3 = pn2 + THP_SIZE;
+	 pages[2] = pn2;
+	 pages[3] = pn3;
+
+	 status[0] = status[1] = status[2] = status[3] = 1024;
+ }
+
+ void test_migrate()
+ {
+	 int ret;
+	 int nodes[4] = { 1, 1, 1, 1 };
+	 pid_t pid = getpid();
+
+	 prepare();
+	 *pn1 = 1;
+	 *pn2 = 1;
+	 *pn3 = 1;
+	 ret = move_pages(pid, 4, pages, nodes, status, MPOL_MF_MOVE_ALL);
+	 error_msg(ret, 4, status, "move 4 pages");
+ }
+
+ int main(int argc, char *argv[])
+ {
+	 numa_run_on_node(0);
+
+	 test_migrate();
+
+	 return 0;
+ }
+--------------------- test-migrate.sh ----------------------------
+ #!/bin/bash
+
+ PARAM=/sys/module/migrate/parameters/ei_migrate_pages
+
+ get_vmstat()
+ {
+	 echo ================= $* ================
+	 cat /proc/vmstat | grep -e '\(pgmigrate\|thp_migration\)'
+ }
+
+ simple_test()
+ {
+	 echo $1 > $PARAM
+	 shift
+	 get_vmstat before $*
+	 ./test-migrate
+	 get_vmstat after $*
+ }
+
+ #define EI_MP_ENOSYS		0x0001
+ #define EI_MP_THP_ENOMEM	0x0002
+ #define EI_MP_NP_ENOMEM		0x0004
+ #define EI_MP_EAGAIN		0x0008
+ #define EI_MP_EOTHER		0x0010
+ #define EI_MP_NOSPLIT		0x0020
+ #define EI_MP_SPLIT_FAIL	0x0040
+ #define EI_MP_EAGAIN_PERM	0x0080
+ #define EI_MP_EBUSY		0x0100
+
+ simple_test 0x26 ENOMEM
+ simple_test 0x81 retry THP subpages
+ simple_test 0xc1 ENOSYS
+ simple_test 0x101 ENOSYS

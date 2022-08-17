@@ -2,135 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5708A596E57
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 14:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27AF7596E53
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 14:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239338AbiHQMT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 08:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47116 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239393AbiHQMTS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S236698AbiHQMTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 17 Aug 2022 08:19:18 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A57B2640;
-        Wed, 17 Aug 2022 05:19:17 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id u14so1461404wrq.9;
-        Wed, 17 Aug 2022 05:19:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=PvQ1VTkR2TBqqjzA69gfrLsfT8nfazvXfsefYA9g+lo=;
-        b=e9akmKRpa6Fp06HHF72K5rqZcPAVV/QyCi2T6/klrrcHO9vbhKVl4f4DVektjn+DX3
-         EAgoLG+Iq4oBXugdtjHXjsU4WuQ9ZHgJOBS6ci+etwNviZgUiBdltXC4qVmsuokjAasa
-         hAvmF/oYjJ5/mzK6JUx/bBy5wXY4JS7qPOcN+PqZY36e+AWfE5qnkiU3R9o1WqhvWSMw
-         i09E3MLgPFMsv8FqnNHPut5SOXpDG9LQSZlG4Ff+39/oL6Vwr/Z6erfAbhzxhIpCHqFj
-         UvRPgQoiP4fXXM5DDd0aLp+f5+GnJ0VWeuSz95yiq7PpiIsYohvIW7QwyhBWy8dl0Zlq
-         uQKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=PvQ1VTkR2TBqqjzA69gfrLsfT8nfazvXfsefYA9g+lo=;
-        b=P6nWgBzD5DTxSE1Z7tU1wRWVAI5HfcXp6L9T92+6fSXnFI3Ygr8WuNy1PdlNCQp+Q2
-         Nj8/CVevlc43l1mgpW75xlhhYbjdlYjRjS+LVCiU/DI0UL4ckaCJUwuX+SScQgTcplpv
-         FpSlLihaXaKuFX0DhnRDco5aCcYY7DbCbMdzHmrggLA9hcC5t2Nch0efdn9f0rYG/3Vl
-         2PXxWGwrtuE7JR87v/3pW4JrnPdDIsZL/TVhxVTr8po7gts/XrTFXeNQE9qtr240y/JX
-         eR4jd9Zw+g9uaEM78bvKExAXa5qwiayHiVBpTGwGluCjusAcS33TVzGXIlKOoccwbrnb
-         P7mw==
-X-Gm-Message-State: ACgBeo1eBt7GFP4xbvmW0O2LwG0uo9+HpC4iHFyuiP1cFdYez1pd2EuZ
-        ki2zp2IMKnWuu8Z73QDRW/CkU+0wdRu8HSaTToDqQaerJOc=
-X-Google-Smtp-Source: AA6agR5jfO4+nCkMdTVyrGOUCAgwggu4V5bU/qF2pElWz5ImI7rYnV3KZ3PK+0/Gi3XULaiYdGBm7lxoAqTtg9lXeWc=
-X-Received: by 2002:a5d:404c:0:b0:225:1a39:d69f with SMTP id
- w12-20020a5d404c000000b002251a39d69fmr4042257wrp.576.1660738756137; Wed, 17
- Aug 2022 05:19:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAGi-RUKv-8zyku-3pjXdjxbyMP_X_YV5rd6y2wyaCOJJ9UOQAw@mail.gmail.com>
- <CABVgOSnxa=H5A-0U0QRCAv+OWCGb0zN_f7gP5FmhGjRy7NCUSw@mail.gmail.com>
-In-Reply-To: <CABVgOSnxa=H5A-0U0QRCAv+OWCGb0zN_f7gP5FmhGjRy7NCUSw@mail.gmail.com>
-From:   Ramon Fried <rfried.dev@gmail.com>
-Date:   Wed, 17 Aug 2022 15:19:03 +0300
-Message-ID: <CAGi-RUL46gA_0ah_TTJVpc9RRS8nvd7yoqt=OLXxvUjL6TAvyQ@mail.gmail.com>
-Subject: Re: Running kunit tests on platform devices
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46860 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238988AbiHQMTP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 17 Aug 2022 08:19:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E920369F7D;
+        Wed, 17 Aug 2022 05:19:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F67260B82;
+        Wed, 17 Aug 2022 12:19:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFD7FC433D6;
+        Wed, 17 Aug 2022 12:19:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660738752;
+        bh=BBTXORGlFEwLgbRuxkkzNMEk2vrtwEdIFHOCs3ywN/0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pR/Fqpc4qFciyFif+Rz7Y2QU1wPblmLNOUD0NN87Gmz8UpPn1g3rm0bAXA5dTfs33
+         AqfH02QQfopKJx5JzziZnxrQDP4xohcoSzhk5Hp8ItmrhQjEXbPV5gX2RDTRJuH1AY
+         b8Gu8UAdLP4Gj2DHWLrRICkNKd3q/C76ls5hom4lTX20h7Pt9rSFEG8gtl/3Qrb6kZ
+         xFcHDLZK/FNXRKWKYuBfTMETBatSkKQhZCjqR4g0xTQEoDWP2kRbg+uJ38bYhRWLzA
+         T/V2c978rL/8qyhb9ZGzLsBMGgNmzZhjUY9CFNjE3j2TD48GpL6XIbwc/TYAHYJcTB
+         5xvlEqfxQY6PA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oOI0s-003j3K-Hy;
+        Wed, 17 Aug 2022 13:19:10 +0100
+Date:   Wed, 17 Aug 2022 13:19:10 +0100
+Message-ID: <87r11fvz9d.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     joro@8bytes.org, will@kernel.org, catalin.marinas@arm.com,
+        jean-philippe@linaro.org, inki.dae@samsung.com,
+        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
+        tglx@linutronix.de, alex.williamson@redhat.com, cohuck@redhat.com,
+        iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-acpi@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH 2/3] iommu/dma: Move public interfaces to linux/iommu.h
+In-Reply-To: <9cd99738f52094e6bed44bfee03fa4f288d20695.1660668998.git.robin.murphy@arm.com>
+References: <cover.1660668998.git.robin.murphy@arm.com>
+        <9cd99738f52094e6bed44bfee03fa4f288d20695.1660668998.git.robin.murphy@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: robin.murphy@arm.com, joro@8bytes.org, will@kernel.org, catalin.marinas@arm.com, jean-philippe@linaro.org, inki.dae@samsung.com, sw0312.kim@samsung.com, kyungmin.park@samsung.com, tglx@linutronix.de, alex.williamson@redhat.com, cohuck@redhat.com, iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-acpi@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 7:43 AM David Gow <davidgow@google.com> wrote:
->
-> On Mon, Aug 15, 2022 at 5:16 PM Ramon Fried <rfried.dev@gmail.com> wrote:
-> >
-> > Hi.
-> > I implemented a test suite that checks a platform driver, that's the
-> > only way I can test interrupts behavior in the code.
-> > Because it's a platform, I can't use kunit_test_suite(), so I call
-> > __kunit_test_suites_init() as part of the platform driver probe
-> > function.
-> >
-> > This works fine but has the following problems.
-> > "TAP version 14" string is not printed and it's impossible to parse
-> > the results using the script.
-> > In addition, the suite is not displayed in /sys/kernel/debug/kunit.
-> >
-> > It would be my pleasure to provide a patch that fixes this, I just
-> > wanted to make sure that my testing strategy makes sense.
-> >
-> > Thanks,
-> > Ramon
-> >
-> Hi Ramon,
->
-> Thanks for reaching out. Calling __kunit_test_suites_init() directly
-> is not something we'd recommend (and are trying desperately to remove
-> existing uses), so several of the issues re: the "TAP version 14"
-> string et al are side effects of calling what is supposed to be an
-> internal KUnit function manually.
->
-> That being said, we definitely do want to make testing platform
-> drivers as convenient as possible. I'm not sure why kunit_test_suite()
-> doesn't work for you for platform drivers: are you just missing some
-> way of instantiating the device from within a test context?
->
-> I know Brendan has experimented with some hardware faking code, for
-> which there's some example use here:
-> https://kunit-review.googlesource.com/c/linux/+/5275
-> (Note that you'll need to look at the other patches in the 'relation
-> chain' for dependencies.)
->
-> Equally, I've experimented a bit with testing old soundcard drivers
-> (via a platform device) here, which may be an easier way to look
-> through:
-> https://github.com/sulix/linux/commit/4e1620c86553b9edde7f032318cf417dc13e4d26
->
-> Note that neither of those examples are anything other than
-> experiments, so may not work as-is, or be ideal.
->
-> Otherwise, we're always happy to accept patches, though again, if
-> there's any way of getting your tests working without a direct call to
-> __kunit_test_suites_init() --- even if that would require patches to
-> work --- that'd be preferable on our end.
->
-> Cheers,
-> -- David
-Hi David,
-Thanks for replying.
-I looked at the examples you shared, and they all fake the actual device.
-My intention is to actually interact with the real device. - get a
-real interrupt, etc.
-Is it wrong, was the intention that the platform device be mocked ?
-Thanks,
-Ramon.
+On Tue, 16 Aug 2022 18:28:04 +0100,
+Robin Murphy <robin.murphy@arm.com> wrote:
+> 
+> The iommu-dma layer is now mostly encapsulated by iommu_dma_ops, with
+> only a couple more public interfaces left pertaining to MSI integration.
+> Since these depend on the main IOMMU API header anyway, move their
+> declarations there, taking the opportunity to update the half-baked
+> comments to proper kerneldoc along the way.
+> 
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> ---
+> 
+> Note that iommu_setup_dma_ops() should also become internal in a future
+> phase of the great IOMMU API upheaval - for now as the last bit of true
+> arch code glue I consider it more "necessarily exposed" than "public".
+> 
+>  arch/arm64/mm/dma-mapping.c       |  2 +-
+>  drivers/iommu/dma-iommu.c         | 15 ++++++++++--
+>  drivers/irqchip/irq-gic-v2m.c     |  2 +-
+>  drivers/irqchip/irq-gic-v3-its.c  |  2 +-
+>  drivers/irqchip/irq-gic-v3-mbi.c  |  2 +-
+>  drivers/irqchip/irq-ls-scfg-msi.c |  2 +-
+>  drivers/vfio/vfio_iommu_type1.c   |  1 -
+>  include/linux/dma-iommu.h         | 40 -------------------------------
+>  include/linux/iommu.h             | 36 ++++++++++++++++++++++++++++
+>  9 files changed, 54 insertions(+), 48 deletions(-)
+
+For the irqchip side:
+
+Acked-by: Marc Zyngier <maz@kernel.org>
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

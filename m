@@ -2,129 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F9A59797F
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 00:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C3D597987
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 00:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241708AbiHQWIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 18:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41364 "EHLO
+        id S235981AbiHQWK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 18:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235467AbiHQWIS (ORCPT
+        with ESMTP id S242202AbiHQWKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 18:08:18 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7BE67473
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 15:08:16 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id z25so20720003lfr.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 15:08:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=MdXe9v7V/n49BLfPIm7mAPC3zaXea5taJTJFdb6i330=;
-        b=ad2R800fXpR9dwOXrfOT66zX7atkDbWCJuzExzeA9SOHu6hrhhW8FD8ZkdBXt3Kkvz
-         p5k4JJVQcAihCgjScizrSXVM3UdAV4Zh3VB8ZMz6m4XaheZD4gJUsX53gDk3DJh3phIv
-         Jh+RrCh9xONalatJVG1gRFh7dkx6m1j17YDDM4wqkLvpzWQyk9M1dQ89vS7yktQjlyrY
-         nSWyuVfMRdfAK0GBQKm0OiruU5DHNr7/F/jDfH9hXxUO1XQjUKfnoZCtLgIc6RPEobpj
-         rRMXGAl/y44i9E9X207ThzhY3fB/MJhKPsB6QDT9zugoQhc4vkvZf0dG80xd5hfJ+VrR
-         A5Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=MdXe9v7V/n49BLfPIm7mAPC3zaXea5taJTJFdb6i330=;
-        b=5aeDIVaIk3Ec6VsTFRdQYE+mt8kUuUi1QQPzSsvCouTOcZoQZry2sI9bCDu0S5xF8v
-         iruscSfSP09Vo8tjgtRFuiNXH3k8OCHnP+GAv2R5CR8VjyGJ9Dp9PtoLVvTgEHGdWcHR
-         V6DnasEKbyPzNIDePDpMlkRRwOup+jAEfPyT9CQfxpkB311zfGtjCsh1anC8CaTpE6zJ
-         QFcNS2GFkk8O0tBQ5hgnRlgOU0foWyaBjaKKTuSPGP/lVdtfzAQ7TTpr7RTJqp09vEoD
-         SK54m3vl2pELcY90qQfyUm5PT99iE1kaSKO+COcwxmOg/fF+sUw8Wrq7vJNwEGWGCK2G
-         4jyg==
-X-Gm-Message-State: ACgBeo0H+/5xlyGNmnZNWkf74MWkBFG9HUOe8RiG6YHbQSQwMcLyftH+
-        jknYiyC9oy7lu8w0pIMM0/Q05lJSRtTydN4R3X/ZKQ==
-X-Google-Smtp-Source: AA6agR6bbMV/+NnYEX/0CwW9iDlRuDXiyrW9k/uewNGpLosZ7a2gJKZGRauS38UPO+Ee/bRdMTB7b5oOC3RJt7neQAs=
-X-Received: by 2002:ac2:4f03:0:b0:48a:6061:bd8e with SMTP id
- k3-20020ac24f03000000b0048a6061bd8emr59229lfr.647.1660774094305; Wed, 17 Aug
- 2022 15:08:14 -0700 (PDT)
+        Wed, 17 Aug 2022 18:10:43 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A5E9F777;
+        Wed, 17 Aug 2022 15:10:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=S/5eXt6qxPOjrifOXrTAqDLvDo7S1RMnGh1w0oxBNRY=; b=LuyJGMy9jrbLt9nYppeNddgYWU
+        D/BfJy4BBV8fYYFviGZU4XVL/QzXZPDbrkVGEDaAqgWdY+l4F6rDBMTYMIxabfCBvNerOk1eEaDUZ
+        moCxBNac2IOqmQnsvQoD3HPI4Vw8tWBZg3rB1tJmJqzoYQYtr9dDZ4usgITC9y9+OZgvUlzUwb7yy
+        8X3q/mtluoXia0VGjRR9uSR4jN0UYUHw4VGCgA+HCrJytPNQkdeyITxLZSVcXH0WuO39MGZ+LjC8O
+        BHwntmREeJLccSE+kvCKiOqQaFNx1V1uuOKqDiUBOKSAJ67vcQCsz0udizEBpAhokvUi5fP0/9AVG
+        G3ZOi+3w==;
+Received: from [179.232.144.59] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oOREw-00Aycc-0j; Thu, 18 Aug 2022 00:10:18 +0200
+Message-ID: <2f21b91c-4fb0-42f8-0820-a6036405cb29@igalia.com>
+Date:   Wed, 17 Aug 2022 19:09:26 -0300
 MIME-Version: 1.0
-References: <20220817185410.1174782-1-nathan@kernel.org>
-In-Reply-To: <20220817185410.1174782-1-nathan@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 17 Aug 2022 15:08:01 -0700
-Message-ID: <CAKwvOd=0R76r6YqNiOhGNt_XrA_t_ZbuBbNNdNXV4CWpDy0+Bg@mail.gmail.com>
-Subject: Re: [PATCH] x86/build: Move '-mindirect-branch-cs-prefix' out of
- GCC-only block
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 10/13] EDAC/altera: Skip the panic notifier if kdump is
+ loaded
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     pmladek@suse.com, Dinh Nguyen <dinguyen@kernel.org>,
+        Tony Luck <tony.luck@intel.com>, akpm@linux-foundation.org,
+        bhe@redhat.com, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
+        kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, linux-edac@vger.kernel.org
+References: <20220719195325.402745-1-gpiccoli@igalia.com>
+ <20220719195325.402745-11-gpiccoli@igalia.com> <Yv0mCY04heUXsGiC@zn.tnic>
+ <46137c67-25b4-6657-33b7-cffdc7afc0d7@igalia.com> <Yv1C0Y25u2IB7PCs@zn.tnic>
+ <7f016d7f-a546-a45d-c65c-bc35269b4faa@igalia.com> <Yv1XVRmTXHLhOkER@zn.tnic>
+ <c0250075-ec87-189f-52c5-e0520325a015@igalia.com> <Yv1hn2ayPoyKBAj8@zn.tnic>
+ <1ee275b3-97e8-4c2b-be88-d50898d17e23@igalia.com> <Yv1lGpisQVFpUOGP@zn.tnic>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <Yv1lGpisQVFpUOGP@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 11:56 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> LLVM 16 will have support for this flag so move it out of the GCC-only
-> block to allow LLVM builds to take advantage of it.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1665
-> Link: https://github.com/llvm/llvm-project/commit/6f867f9102838ebe314c1f3661fdf95700386e5a
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On 17/08/2022 19:00, Borislav Petkov wrote:
+> On Wed, Aug 17, 2022 at 06:56:11PM -0300, Guilherme G. Piccoli wrote:
+>> But do you agree that currently, in case of a kdump, that information
+>> *is not collected*, with our without my patch?
+> 
+> If for some reason that panic notifier does not get run before kdump,
+> then that's a bug and that driver should not use a panic notifier to log
+> hw errors in the first place.
+> 
 
-Thanks for the patch, I also boot tested this (in virtual guests for
-both 64b and 32b).
+Indeed, the notifiers don't run before kdump by default, in a conscious
+decision of the kdump maintainers.
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+You might be right, in the sense that maybe the edac error handler
+shouldn't run as a panic notifier. Let's see if Tony / Dinh can chime in
+on that discussion - we could move it to run in the kexec event as well,
+so it'd always run before a kdump, but maybe the risk it offers during
+panic time is not worth.
 
-Peter, is there anything else special about these prefixes needed to
-make use of them?
+Again - a matter of a trade-off, a good compromise must be agreed by all
+parties (kdump maintainers are usually extremely afraid of taking risks
+to not break kdump).
 
-> ---
->
-> I was not sure if this information is relevant for the commit message
-> but I can boot without any issues on my test machines (two Intel and one
-> AMD).
->
->  arch/x86/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> index 7854685c5f25..987da87c7778 100644
-> --- a/arch/x86/Makefile
-> +++ b/arch/x86/Makefile
-> @@ -14,13 +14,13 @@ endif
->
->  ifdef CONFIG_CC_IS_GCC
->  RETPOLINE_CFLAGS       := $(call cc-option,-mindirect-branch=thunk-extern -mindirect-branch-register)
-> -RETPOLINE_CFLAGS       += $(call cc-option,-mindirect-branch-cs-prefix)
->  RETPOLINE_VDSO_CFLAGS  := $(call cc-option,-mindirect-branch=thunk-inline -mindirect-branch-register)
->  endif
->  ifdef CONFIG_CC_IS_CLANG
->  RETPOLINE_CFLAGS       := -mretpoline-external-thunk
->  RETPOLINE_VDSO_CFLAGS  := -mretpoline
->  endif
-> +RETPOLINE_CFLAGS       += $(call cc-option,-mindirect-branch-cs-prefix)
->
->  ifdef CONFIG_RETHUNK
->  RETHUNK_CFLAGS         := -mfunction-return=thunk-extern
->
-> base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-> --
-> 2.37.2
->
->
-
-
--- 
-Thanks,
-~Nick Desaulniers
+Cheers!

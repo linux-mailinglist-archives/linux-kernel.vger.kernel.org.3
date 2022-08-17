@@ -2,75 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3717F596CC1
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 12:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8539C596CC9
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 12:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238937AbiHQKYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 06:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
+        id S235814AbiHQK0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 06:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbiHQKYO (ORCPT
+        with ESMTP id S239060AbiHQKZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 06:24:14 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF3259240
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 03:24:13 -0700 (PDT)
-Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M73yk1QRBz67Pn6;
-        Wed, 17 Aug 2022 18:23:58 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Wed, 17 Aug 2022 12:24:11 +0200
-Received: from [10.48.158.152] (10.48.158.152) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 17 Aug 2022 11:24:11 +0100
-Message-ID: <11d9f054-fe7b-7646-a8f4-7d45a22e2a96@huawei.com>
-Date:   Wed, 17 Aug 2022 11:24:12 +0100
+        Wed, 17 Aug 2022 06:25:38 -0400
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669A35A3E9;
+        Wed, 17 Aug 2022 03:25:34 -0700 (PDT)
+Received: from debian-tgbt.home (unknown [IPv6:2a01:cb08:8f65:d300:4b96:ac4c:4229:8341])
+        (Authenticated sender: thierry.guibert@free.fr)
+        by smtp2-g21.free.fr (Postfix) with ESMTPSA id 812182003DD;
+        Wed, 17 Aug 2022 12:25:27 +0200 (CEST)
+From:   Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
+To:     oneukum@suse.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thierry.guibert@free.fr
+Cc:     Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
+Subject: [PATCH] CDC-ACM : Add Icom PMR F3400 support (0c26:0020)
+Date:   Wed, 17 Aug 2022 12:24:40 +0200
+Message-Id: <20220817102440.117640-1-thierry.guibert@croix-rouge.fr>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-From:   John Garry <john.garry@huawei.com>
-Subject: Re: [PATCH 0/3] iova: Some misc changes
-To:     <robin.murphy@arm.com>, <joro@8bytes.org>, <will@kernel.org>
-CC:     <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-References: <1660730984-30333-1-git-send-email-john.garry@huawei.com>
-In-Reply-To: <1660730984-30333-1-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.158.152]
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/08/2022 11:09, John Garry wrote:
-> This series includes:
-> - remove checks in the code which are not required
-> - the re-org, which I had originally posted separately
+Supports for ICOM F3400 and ICOM F4400 PMR radios in CDC-ACM driver
+enabling the AT serial port.
+The Vendor Id is 0x0C26
+The Product ID is 0x0020
 
-BTW, Can we drop the !IOMMU_IOVA stubs in iova.h? I could not find a 
-kernel config which actually exercises that code (so testing changes 
-there is difficult).
+Output of lsusb :
+Bus 001 Device 009: ID 0c26:0020 Prolific Technology Inc. ICOM Radio
+Couldn't open device, some information will be missing
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            2 Communications
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x0c26 Prolific Technology Inc.
+  idProduct          0x0020
+  bcdDevice            0.00
+  iManufacturer           1 ICOM Inc.
+  iProduct                2 ICOM Radio
+  iSerial                 3 *obfuscated*
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0030
+    bNumInterfaces          2
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xc0
+      Self Powered
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2 Communications
+      bInterfaceSubClass      2 Abstract (modem)
+      bInterfaceProtocol      1 AT-commands (v.25ter)
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval              12
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10 CDC Data
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
 
-> 
-> Based on v6.0-rc1
-> 
-> John Garry (3):
->    iova: Remove some magazine pointer NULL checks
->    iova: Remove magazine BUG_ON() checks
->    iova: Re-order code to remove forward declarations
-> 
->   drivers/iommu/iova.c | 1074 +++++++++++++++++++++---------------------
->   include/linux/iova.h |   60 +--
->   2 files changed, 559 insertions(+), 575 deletions(-)
-> 
+Signed-off-by: Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
+---
+ drivers/usb/class/cdc-acm.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 9b9aea24d58c..7735c6edce73 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -1813,6 +1813,9 @@ static const struct usb_device_id acm_ids[] = {
+ 	{ USB_DEVICE(0x0ca6, 0xa050), /* Castles VEGA3000 */
+ 	.driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
+ 	},
++	{ USB_DEVICE(0x0c26, 0x0020), /* Icom ICF3400 Serie */
++	.driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
++	},
+ 
+ 	{ USB_DEVICE(0x2912, 0x0001), /* ATOL FPrint */
+ 	.driver_info = CLEAR_HALT_CONDITIONS,
+-- 
+2.37.2
 

@@ -2,74 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2E3596772
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3DC596773
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237940AbiHQCbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 22:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37834 "EHLO
+        id S238178AbiHQCbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 22:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238139AbiHQCbo (ORCPT
+        with ESMTP id S231140AbiHQCbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 16 Aug 2022 22:31:44 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF46999B7B
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 19:31:43 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1660703502;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nlTzxQqE79Q9RIB87dn43uL+LcDuOAdW5kHAEE4gy6Y=;
-        b=nxffWsIkVsRMwm8+MLmB1eInSqSCenUn1OL2lHjSZ2nOUF1nvW860KUZQLwxLTWwbj/DqV
-        lZaWwAHxmI+ynG7yXWoI1ehTWxeklbr7T+FFjnrtyCx6hva+YLt/sBInMBR1ch30Hp3V56
-        uH3eVsEhviSym7raqyBosK2Guc5np70=
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D958A9A947;
+        Tue, 16 Aug 2022 19:31:42 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M6sRF4G77zmVpd;
+        Wed, 17 Aug 2022 10:29:29 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 17 Aug 2022 10:31:40 +0800
+Received: from [10.67.111.195] (10.67.111.195) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 17 Aug 2022 10:31:40 +0800
+Subject: Re: [PATCH] power: supply: ab8500: remove unused static local
+ variable
+From:   chenlifu <chenlifu@huawei.com>
+To:     Tom Rix <trix@redhat.com>, <linus.walleij@linaro.org>,
+        <sre@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220719022743.305189-1-trix@redhat.com>
+ <7b42a25a-806f-f3b2-b42f-ac3fdb6627b4@huawei.com>
+Message-ID: <a0822c1f-6652-a4ef-b482-f54944deb094@huawei.com>
+Date:   Wed, 17 Aug 2022 10:31:29 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-Subject: Re: [PATCH 2/6] mm/hugetlb: fix WARN_ON(!kobj) in
- sysfs_create_group()
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20220816130553.31406-3-linmiaohe@huawei.com>
-Date:   Wed, 17 Aug 2022 10:31:07 +0800
-Cc:     Andrew Morton <akpm@linux-foundation.org>, mike.kravetz@oracle.com,
-        Muchun Song <songmuchun@bytedance.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <AA374889-2C8B-4D8B-9542-A760267F00E4@linux.dev>
-References: <20220816130553.31406-1-linmiaohe@huawei.com>
- <20220816130553.31406-3-linmiaohe@huawei.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <7b42a25a-806f-f3b2-b42f-ac3fdb6627b4@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.195]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+在 2022/8/17 9:57, chenlifu 写道:
+> 在 2022/7/19 10:27, Tom Rix 写道:
+>> cpp_check reports
+>> [drivers/power/supply/ab8500_chargalg.c:493]: (style) Variable 
+>> 'ab8500_chargalg_ex_ac_enable_toggle' is assigned a value that is 
+>> never used.
+>>
+>>> From inspection, this variable is never used. So remove it.
+>>
+>> Fixes: 6c50a08d9dd3 ("power: supply: ab8500: Drop external charger 
+>> leftovers")
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+>> ---
+>>   drivers/power/supply/ab8500_chargalg.c | 2 --
+>>   1 file changed, 2 deletions(-)
+>>
+>> diff --git a/drivers/power/supply/ab8500_chargalg.c 
+>> b/drivers/power/supply/ab8500_chargalg.c
+>> index ae4be553f424..05146d436a6a 100644
+>> --- a/drivers/power/supply/ab8500_chargalg.c
+>> +++ b/drivers/power/supply/ab8500_chargalg.c
+>> @@ -490,8 +490,6 @@ static int ab8500_chargalg_kick_watchdog(struct 
+>> ab8500_chargalg *di)
+>>   static int ab8500_chargalg_ac_en(struct ab8500_chargalg *di, int 
+>> enable,
+>>       int vset_uv, int iset_ua)
+>>   {
+>> -    static int ab8500_chargalg_ex_ac_enable_toggle;
+>> -
+>>       if (!di->ac_chg || !di->ac_chg->ops.enable)
+>>           return -ENXIO;
+>>
+> 
+> Reviewed-by: Chen Lifu <chenlifu@huawei.com>
+> 
+> 
+> I can still observe this build error with ARCH=arm, 
+> defconfig=allyesconfig in linux-next next-200816:
+> 
+> drivers/power/supply/ab8500_chargalg.c: In function 
+> ‘ab8500_chargalg_ac_en’:
+> drivers/power/supply/ab8500_chargalg.c:493:13: error: unused variable 
+> ‘ab8500_chargalg_ex_ac_enable_toggle’ [-Werror=unused-variable]
+>   static int ab8500_chargalg_ex_ac_enable_toggle;
+>              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> .
 
+Reviewed-by: Chen Lifu <chenlifu@huawei.com>
 
-> On Aug 16, 2022, at 21:05, Miaohe Lin <linmiaohe@huawei.com> wrote:
->=20
-> If sysfs_create_group() fails with hstate_attr_group, hstate_kobjs[hi]
-> will be set to NULL. Then it will be passed to sysfs_create_group() if
-> h->demote_order !=3D 0 thus triggering WARN_ON(!kobj) check. Fix this =
-by
-> making sure hstate_kobjs[hi] !=3D NULL when calling =
-sysfs_create_group.
->=20
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+fixed the tag: next-200816 --> next-20220816
 
-It=E2=80=99s better to add a Fixes tag here.
+I can still observe this build error with ARCH=arm, 
+defconfig=allyesconfig in linux-next next-20220816:
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-
-Thanks.
-
+drivers/power/supply/ab8500_chargalg.c: In function ‘ab8500_chargalg_ac_en’:
+drivers/power/supply/ab8500_chargalg.c:493:13: error: unused variable 
+‘ab8500_chargalg_ex_ac_enable_toggle’ [-Werror=unused-variable]
+  static int ab8500_chargalg_ex_ac_enable_toggle;
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

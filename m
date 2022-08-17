@@ -2,95 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F484597376
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8603659737A
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239996AbiHQP6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 11:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
+        id S240091AbiHQP6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 11:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238035AbiHQP6m (ORCPT
+        with ESMTP id S239755AbiHQP6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 11:58:42 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535D95AC64
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:58:41 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id dc19so25285449ejb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:58:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=U5jw3QHa+iaIPk1CEpZnETysV2acYZOZO5IcpVoLmmM=;
-        b=DAPJSc/u2ev6bYXSBrTqwGZ4PaTl8WKl6DiAoyMnKBgA+8zqmrgKU4aVMESdOKZMZT
-         SYoGZEdZ4zKG6vHrMZHRGM9k/zEgGqHhynaxUWM7PoNiqiL3sqU34A1ORMMSy9lm01+p
-         xih4rucikfbN8PfPcI3ROoqXZHnqdlxXa7TQ8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=U5jw3QHa+iaIPk1CEpZnETysV2acYZOZO5IcpVoLmmM=;
-        b=UDiZ3aV/UWkYEWtLN4b73HG21kH72A3HvDwmPKXVg0NKpKsNSrjR5HCORSTbZnS2er
-         n09t/w63QkahT49K6Zbyfl0rc+y5/BLBCnQnRIeqUYZMWmG5xL8duZ65t1qk5tiIFqBf
-         659FQcpYuHiT/4Tymyqijx2BBwg6mvWLumZQuBmEFbr+9hDo2a7zKNA9K84DB4LOgqPg
-         tFWeMKMq1pfKCxUzIMlEDbmTStte77vKEnYkuTszRGGldrgFvarp/gbBl9n7OqALQ30l
-         AAXcpHHD499aAYw5XKK9oC0DZSmrt4dovl8RTlmwhLPOXHV7iraH6TtGNtWdhcC//uH+
-         JNPg==
-X-Gm-Message-State: ACgBeo3iVGP0DcUi+GpARTCG6blUTU0YwZBeSKZKEynthNYkO3zfm0Ca
-        nwJn03Gtl7Wb6s/GDDgvDRvgNYzstq/oVWIS8bo=
-X-Google-Smtp-Source: AA6agR6TqUbVYbiZsQwcFP9z+gJXbPX7h68heFZ7JUupeQ030vGHyJGFGMycUfniN1JVP5sJ1/x2RA==
-X-Received: by 2002:a17:906:cc48:b0:730:7545:bf51 with SMTP id mm8-20020a170906cc4800b007307545bf51mr16562850ejb.247.1660751919712;
-        Wed, 17 Aug 2022 08:58:39 -0700 (PDT)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
-        by smtp.gmail.com with ESMTPSA id o24-20020aa7dd58000000b0043d742104efsm10814789edw.19.2022.08.17.08.58.36
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 08:58:37 -0700 (PDT)
-Received: by mail-wm1-f53.google.com with SMTP id bd26-20020a05600c1f1a00b003a5e82a6474so1144841wmb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:58:36 -0700 (PDT)
-X-Received: by 2002:a05:600c:2195:b0:3a6:b3c:c100 with SMTP id
- e21-20020a05600c219500b003a60b3cc100mr2523659wme.8.1660751916369; Wed, 17 Aug
- 2022 08:58:36 -0700 (PDT)
+        Wed, 17 Aug 2022 11:58:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E265870E4E;
+        Wed, 17 Aug 2022 08:58:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 801AF6159B;
+        Wed, 17 Aug 2022 15:58:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92959C433D6;
+        Wed, 17 Aug 2022 15:58:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660751922;
+        bh=PZD+fbtKCdoJeCd+nMgozddq+hp252RrNCHwzpmto0c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CyUwpAc2WUAswrxXLt4JQzIdXVQ0z6AP0RBGETcaIzi8jGh4G/bAOTqenUrnBFQo3
+         IGY139W3m6qd7mL5qXuTrFb7CEd5ZyTDa3In5QZO15dFvqWFwXj99MH1w1lfw8pLCs
+         rpbzV2J1f7KV2ccFUFa/gag3HCqlhr7otUbC658LSeqTb5rz+XV1dQLKEnBZTnZhI+
+         PlAYF6z4bs7z0T9RzMxM+VkeUgao1KaHMlUan3DBfGUxKF6RNWjN8X7C/iwCEX8Yuk
+         chtza0hBcsMxYwdLNa2jkUhbUj84BnPVk7pSWnmKOgjpSPL/VxAhXoz40V6Erf4aoH
+         wIwl+hL7OlFog==
+Date:   Wed, 17 Aug 2022 08:58:41 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     <bpf@vger.kernel.org>, <daniel@iogearbox.net>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuni1840@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>
+Subject: Re: [PATCH v1 net 00/15] sysctl: Fix data-races around net.core.XXX
+ (Round 1)
+Message-ID: <20220817085841.60ef3b85@kernel.org>
+In-Reply-To: <20220816165848.97512-1-kuniyu@amazon.com>
+References: <20220816092703.7fe8cbb6@kernel.org>
+        <20220816165848.97512-1-kuniyu@amazon.com>
 MIME-Version: 1.0
-References: <20220815113729-mutt-send-email-mst@kernel.org>
- <20220815164503.jsoezxcm6q4u2b6j@awork3.anarazel.de> <20220815124748-mutt-send-email-mst@kernel.org>
- <20220815174617.z4chnftzcbv6frqr@awork3.anarazel.de> <20220815161423-mutt-send-email-mst@kernel.org>
- <20220815205330.m54g7vcs77r6owd6@awork3.anarazel.de> <20220815170444-mutt-send-email-mst@kernel.org>
- <20220817061359.200970-1-dvyukov@google.com> <1660718191.3631961-1-xuanzhuo@linux.alibaba.com>
-In-Reply-To: <1660718191.3631961-1-xuanzhuo@linux.alibaba.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 17 Aug 2022 08:58:20 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wghjyi5cyDY96m4LtQ_i8Rdgt9Rsmd028XoU6RU=bsy_w@mail.gmail.com>
-Message-ID: <CAHk-=wghjyi5cyDY96m4LtQ_i8Rdgt9Rsmd028XoU6RU=bsy_w@mail.gmail.com>
-Subject: Re: upstream kernel crashes
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        James.Bottomley@hansenpartnership.com, andres@anarazel.de,
-        axboe@kernel.dk, c@redhat.com, davem@davemloft.net,
-        edumazet@google.com, gregkh@linuxfoundation.org,
-        jasowang@redhat.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux@roeck-us.net, martin.petersen@oracle.com,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        kasan-dev@googlegroups.com, mst@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 11:47 PM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
->
-> +       BUG_ON(num != virtqueue_get_vring_size(vq));
-> +
+On Tue, 16 Aug 2022 09:58:48 -0700 Kuniyuki Iwashima wrote:
+> From:   Jakub Kicinski <kuba@kernel.org>
+> Date:   Tue, 16 Aug 2022 09:27:03 -0700
+> > On Mon, 15 Aug 2022 22:23:32 -0700 Kuniyuki Iwashima wrote:  
+> > >   bpf: Fix data-races around bpf_jit_enable.
+> > >   bpf: Fix data-races around bpf_jit_harden.
+> > >   bpf: Fix data-races around bpf_jit_kallsyms.
+> > >   bpf: Fix a data-race around bpf_jit_limit.  
+> > 
+> > The BPF stuff needs to go via the BPF tree, or get an ack from the BPF
+> > maintainers. I see Daniel is CCed on some of the patches but not all.  
+> 
+> Sorry, I just added the author in CC.
+> Thanks for CCing bpf mailing list, I'll wait an ACK from them.
 
-Please, no more BUG_ON.
-
-Add a WARN_ON_ONCE() and return an  error.
-
-           Linus
+So we got no reply from BPF folks and the patch got marked as Changes
+Requested overnight, so probably best if you split the series up 
+and send to appropriate trees.

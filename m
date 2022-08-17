@@ -2,106 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B32FB597928
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C50597934
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241642AbiHQVpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 17:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
+        id S242027AbiHQVqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 17:46:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232315AbiHQVpF (ORCPT
+        with ESMTP id S241722AbiHQVqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 17:45:05 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03392BE9;
-        Wed, 17 Aug 2022 14:45:05 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id b15so1543663ilq.10;
-        Wed, 17 Aug 2022 14:45:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=hqPY2bWNSe1h3tWbXlYngNPrG0p/kfGLsCdfVK78MFI=;
-        b=cGqW6rVasObtQsUV/c8llXl8xfXdgIHgRbk7MNRkRT8n9qvUBbsfy4TX9iSWzcLy1S
-         m405YSVexBQ1hZJokK9RFBTjm4PdSpGeeqgElviaVDL61mgH8XfgnQnhfS0y5YX887ER
-         xwLJ/2prnfwUOO7qCIXpmGM9DHhwYNr9b83/hfNiejVZuWrL/KZv0+Lm3tFBalqThEIx
-         x0+klab/reQmAgFujuTX7RE0wLeZl8aHRPNgHfBIQTshWakYBLl4o7CetX/dgWw69MlG
-         pIKRsqSIxOIx+/5/jTA/dN/TJBYU1FWYVCCOkWAJXjaV58c1RVGewpXTymCTK7rf3mBp
-         PjHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=hqPY2bWNSe1h3tWbXlYngNPrG0p/kfGLsCdfVK78MFI=;
-        b=pbw5NBmKxj6k1eOhS8DnSSUsjPQZoqtHEiNcHSkfazkarijdF6aNOZ14QYzSiceD54
-         ay71KV3fv5yJaFTke6hzRVmn66E2mkWwtoudJTs4F9MlXxre3AEtkm6f0HZZvJOSewi0
-         fDk+PTY+sfuIp99ZPfqAcBLwM4R7fGVZ2mHZkBZxFpRrnlCHt9iHpMPepbsBLqnlNiTO
-         rMd7oxp0Ib6EYgx10/oEa/1/8v3X0Z4yF1MF+nMazhNMnXqpzPkrsALhdplbtACjrW83
-         q5I0UtITARgV+DSUPezPS6lJ2LHVsVX7o13URXySwdgn7++lydDZ2k14BekRYjmzRG09
-         OP7w==
-X-Gm-Message-State: ACgBeo2rs8LHVpKl+MGedFLH2waLn2N7XCGNOPcggMIkb/tYDHpFvRKT
-        G7Q0z2p86I20ga6RNnqmU5bQ5PZI9dVQ9S5kNrI=
-X-Google-Smtp-Source: AA6agR4XEXjy1xaMB0ItJfvW2/aWI6G4ET12/EM3Wr/bjN5BL+UqmTKR50jgK9cAknp8bCs96oNZz1olMLXEHdRWNlU=
-X-Received: by 2002:a05:6e02:1c26:b0:2e0:d8eb:22d6 with SMTP id
- m6-20020a056e021c2600b002e0d8eb22d6mr56869ilh.151.1660772704425; Wed, 17 Aug
- 2022 14:45:04 -0700 (PDT)
+        Wed, 17 Aug 2022 17:46:17 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCEBA8CD1;
+        Wed, 17 Aug 2022 14:46:16 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b98b0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98b0:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4E56E1EC058B;
+        Wed, 17 Aug 2022 23:46:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1660772771;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=t2fxF578BtmxUg3x9OTOyiD8pEVJYcWl0c4xff75WMw=;
+        b=byLAhfAupeoCRhGwdiBwltXwycmk2gglMeDJEyPXcAFAsOEG7lmhxD53xgKvgwt1y3marN
+        JrFD35s9cj8KbZbzZN08JqQIJDT8ZkYjZI0xmrwP+D4bntN/E2LHya8pVEi5sVO1L1FE2s
+        9M58lEddvYzGD2l0SFRY2wwbHYjeYFY=
+Date:   Wed, 17 Aug 2022 23:46:07 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     pmladek@suse.com, Dinh Nguyen <dinguyen@kernel.org>,
+        Tony Luck <tony.luck@intel.com>, akpm@linux-foundation.org,
+        bhe@redhat.com, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
+        kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, linux-edac@vger.kernel.org
+Subject: Re: [PATCH v2 10/13] EDAC/altera: Skip the panic notifier if kdump
+ is loaded
+Message-ID: <Yv1hn2ayPoyKBAj8@zn.tnic>
+References: <20220719195325.402745-1-gpiccoli@igalia.com>
+ <20220719195325.402745-11-gpiccoli@igalia.com>
+ <Yv0mCY04heUXsGiC@zn.tnic>
+ <46137c67-25b4-6657-33b7-cffdc7afc0d7@igalia.com>
+ <Yv1C0Y25u2IB7PCs@zn.tnic>
+ <7f016d7f-a546-a45d-c65c-bc35269b4faa@igalia.com>
+ <Yv1XVRmTXHLhOkER@zn.tnic>
+ <c0250075-ec87-189f-52c5-e0520325a015@igalia.com>
 MIME-Version: 1.0
-References: <20220805154231.31257-1-ojeda@kernel.org> <20220805154231.31257-7-ojeda@kernel.org>
- <202208171240.8B10053B9D@keescook> <CANiq72nR2eAeKrY6v=hnjUjvwfecMsSC6eXTwaei6ecnHjia8g@mail.gmail.com>
- <202208171331.FAACB5AD8@keescook>
-In-Reply-To: <202208171331.FAACB5AD8@keescook>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 17 Aug 2022 23:44:53 +0200
-Message-ID: <CANiq72=6nzbMR1e=7HUAotPk-L00h0YO3-oYrtKy2BLcHVDTEw@mail.gmail.com>
-Subject: Re: [PATCH v9 06/27] rust: add C helpers
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>,
-        Maciej Falkowski <m.falkowski@samsung.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <c0250075-ec87-189f-52c5-e0520325a015@igalia.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 10:34 PM Kees Cook <keescook@chromium.org> wrote:
->
-> Gotcha -- it's for the implicit situations (e.g. -C overflow-checks=on),
+On Wed, Aug 17, 2022 at 06:39:07PM -0300, Guilherme G. Piccoli wrote:
+> Sorry for the confusion, let me try to be a bit more clear:
 
-Yeah, exactly.
+I think you're missing the point. Lemme try again:
 
-> nothing is expected to explicitly call the Rust panic handler?
+You *absolutely* must log those errors because they're important. It
+doesn't matter if this is done in a panic notifier and you're changing
+that whole shebang or through some other magic.
 
-If by explicitly you mean calling `panic!()`, then in the `kernel`
-crate in the v9 patches there is none.
+If you do, then this driver needs to *still* *log* those fatal errors -
+regardless through a panic notifier or some novel contraption it wants
+to use.
 
-Though we may want to call it in the future (we have 4 instances in
-the full code not submitted here, e.g. for mismatching an independent
-lock guard with its owner). They can be avoided depending on how we
-want the design to be and, I guess, what the "Rust panic" policy will
-finally be (i.e. `BUG()` or something softer).
+So if you want to change the panic notifiers, you *must* make sure those
+errors still do get logged.
 
-Outside the `kernel` crate, there are also instances in proc macros
-and Rust hostprogs/scripts (compilation-time in the host), in the
-`alloc` crate (compiled-out) and in the `compiler_builtins` crate (for
-e.g. `u128` support that eventually we would like to not see
-compiled-in).
+Better?
 
-Cheers,
-Miguel
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

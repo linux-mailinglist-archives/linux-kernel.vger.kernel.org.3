@@ -2,103 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C37F596774
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:35:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C78159677C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238161AbiHQCeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 22:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45046 "EHLO
+        id S238267AbiHQClV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 22:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238100AbiHQCeQ (ORCPT
+        with ESMTP id S238055AbiHQClS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 22:34:16 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1981550054
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 19:34:15 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M6sRs3dvMzXdNr;
-        Wed, 17 Aug 2022 10:30:01 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 17 Aug 2022 10:34:12 +0800
-Subject: Re: [PATCH v6 2/2] mm: fix the handling Non-LRU pages returned by
- follow_page
-To:     Haiyue Wang <haiyue.wang@intel.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <akpm@linux-foundation.org>, <david@redhat.com>,
-        <apopple@nvidia.com>, <ying.huang@intel.com>,
-        <songmuchun@bytedance.com>, <naoya.horiguchi@linux.dev>,
-        <alex.sierra@amd.com>, Felix Kuehling <Felix.Kuehling@amd.com>
-References: <20220812084921.409142-1-haiyue.wang@intel.com>
- <20220816022102.582865-1-haiyue.wang@intel.com>
- <20220816022102.582865-3-haiyue.wang@intel.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <f9bb1faf-3e09-2db4-5210-4cea09654452@huawei.com>
-Date:   Wed, 17 Aug 2022 10:34:12 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Tue, 16 Aug 2022 22:41:18 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1970093531;
+        Tue, 16 Aug 2022 19:41:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660704078; x=1692240078;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4n6G6Y+EHrQouzMLtdagC2MwEGhSMCP/0lx2rTV0IDs=;
+  b=XOCKOnp1cSDgPw4LJGuXoYgso40IrHQ7qwMXsnuY4ttFtLRhMlCExDLV
+   wCIGaA2UiRDan9TPayA0DmcRQ87jV4jUfYUU75RE1LG0r1zdE38c8uj8s
+   ShjrSgSOn9UzCltkrF6Hivy3Lh2qr+AQUcUebzX0ZkyfCGqs5njItWNuA
+   wMlqcqepE5Y0G3hTIivxXCtnHeqYRYa/+vVpHeyvclDlzuV60aRWZHJMM
+   k3HypYs/zXFulbGwG5Hy54bhTlxs+HQ4gxnLTmVV8O3FwzJZEihIzHAkZ
+   uxnatzfVvpJvAkKraX8JObmWOsa/hHo1512EEwUeuak/GjtwCbk2fw+rd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="275438998"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="275438998"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 19:41:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="603738830"
+Received: from allen-box.sh.intel.com ([10.239.159.48])
+  by orsmga007.jf.intel.com with ESMTP; 16 Aug 2022 19:41:14 -0700
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     iommu@lists.linux.dev
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        raghunathan.srinivasan@intel.com, yi.l.liu@intel.com,
+        linux-kernel@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>,
+        stable@vger.kernel.org
+Subject: [PATCH 1/1] iommu/vt-d: Correctly calculate sagaw value of IOMMU
+Date:   Wed, 17 Aug 2022 10:35:58 +0800
+Message-Id: <20220817023558.3253263-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20220816022102.582865-3-haiyue.wang@intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/16 10:21, Haiyue Wang wrote:
-> The handling Non-LRU pages returned by follow_page() jumps directly, it
-> doesn't call put_page() to handle the reference count, since 'FOLL_GET'
-> flag for follow_page() has get_page() called. Fix the zone device page
-> check by handling the page reference count correctly before returning.
-> 
-> And as David reviewed, "device pages are never PageKsm pages". Drop this
-> zone device page check for break_ksm().
-> 
-> Fixes: 3218f8712d6b ("mm: handling Non-LRU pages returned by vm_normal_pages")
-> Signed-off-by: Haiyue Wang <haiyue.wang@intel.com>
-> Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
-> Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+The Intel IOMMU driver possibly selects between the first-level and the
+second-level translation tables for DMA address translation. However,
+the levels of page-table walks for the 4KB base page size are calculated
+from the SAGAW field of the capability register, which is only valid for
+the second-level page table. This causes the IOMMU driver to stop working
+if the hardware (or the emulated IOMMU) advertises only first-level
+translation capability and reports the SAGAW field as 0.
 
-Thanks for your fixing. LGTM with one nit below. But I have no strong opinion on it.
-So with or without fixing below nit:
+This solves the above problem by considering both the first level and the
+second level when calculating the supported page table levels.
 
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+Fixes: b802d070a52a1 ("iommu/vt-d: Use iova over first level")
+Cc: stable@vger.kernel.org
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+---
+ drivers/iommu/intel/iommu.c | 28 +++++++++++++++++++++++++---
+ 1 file changed, 25 insertions(+), 3 deletions(-)
 
-> ---
->  mm/huge_memory.c |  4 ++--
->  mm/ksm.c         | 12 +++++++++---
->  mm/migrate.c     | 19 ++++++++++++-------
->  3 files changed, 23 insertions(+), 12 deletions(-)
-> 
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index 8a7c1b344abe..b2ba17c3dcd7 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -2963,10 +2963,10 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
->  		/* FOLL_DUMP to ignore special (like zero) pages */
->  		page = follow_page(vma, addr, FOLL_GET | FOLL_DUMP);
->  
-> -		if (IS_ERR_OR_NULL(page) || is_zone_device_page(page))
-> +		if (IS_ERR_OR_NULL(page))
->  			continue;
->  
-> -		if (!is_transparent_hugepage(page))
-> +		if (is_zone_device_page(page) || !is_transparent_hugepage(page))
-
-!is_transparent_hugepage should already do the work here? IIRC, zone_device_page can't be
-a transhuge page anyway. And only transparent_hugepage is cared here.
-
-Thanks,
-Miaohe Lin
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 889ad2c9a7b9..2d0d2ef820d2 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -370,14 +370,36 @@ static inline int domain_pfn_supported(struct dmar_domain *domain,
+ 	return !(addr_width < BITS_PER_LONG && pfn >> addr_width);
+ }
+ 
++/*
++ * Calculate the Supported Adjusted Guest Address Widths of an IOMMU.
++ * Refer to 11.4.2 of the VT-d spec for the encoding of each bit of
++ * the returned SAGAW.
++ */
++static unsigned long __iommu_calculate_sagaw(struct intel_iommu *iommu)
++{
++	unsigned long fl_sagaw, sl_sagaw;
++
++	fl_sagaw = 0x6 | (cap_fl1gp_support(iommu->cap) ? BIT(3) : 0);
++	sl_sagaw = cap_sagaw(iommu->cap);
++
++	/* Second level only. */
++	if (!sm_supported(iommu) || !ecap_flts(iommu->ecap))
++		return sl_sagaw;
++
++	/* First level only. */
++	if (!ecap_slts(iommu->ecap))
++		return fl_sagaw;
++
++	return fl_sagaw & sl_sagaw;
++}
++
+ static int __iommu_calculate_agaw(struct intel_iommu *iommu, int max_gaw)
+ {
+ 	unsigned long sagaw;
+ 	int agaw;
+ 
+-	sagaw = cap_sagaw(iommu->cap);
+-	for (agaw = width_to_agaw(max_gaw);
+-	     agaw >= 0; agaw--) {
++	sagaw = __iommu_calculate_sagaw(iommu);
++	for (agaw = width_to_agaw(max_gaw); agaw >= 0; agaw--) {
+ 		if (test_bit(agaw, &sagaw))
+ 			break;
+ 	}
+-- 
+2.25.1
 

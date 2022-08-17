@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48021597D5C
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 06:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F8D597CCA
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 06:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243285AbiHREWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 00:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47834 "EHLO
+        id S243051AbiHRERW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 00:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242858AbiHREWF (ORCPT
+        with ESMTP id S242956AbiHRERN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 00:22:05 -0400
+        Thu, 18 Aug 2022 00:17:13 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E1640BDD;
-        Wed, 17 Aug 2022 21:22:04 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27I3FgIK021789;
-        Thu, 18 Aug 2022 04:21:58 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CCC80513;
+        Wed, 17 Aug 2022 21:17:12 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27I1uh3l008456;
+        Thu, 18 Aug 2022 04:17:02 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=i7EdYDzd9i1nnMyZ4jCJuImaSrW1/iQ2Xiapn6bxCVQ=;
- b=mO09Q6LylPe5gtr4/BtuW/YZ0TX9z5orX68tgzuBhFOJuxhpU1zma0yXE3Xs37o7Oz0a
- fbFIKsGQzQ3dirkT5yL527hWFYbuS8uwMtKN7qMocIIeBvEMYD/Y5Es7P9mNOU8ldZYg
- 00vr44ewxjngGTSL+3/hdKXFGJVFB0FSM0kI1/gSxX213uMdxzXM4oAgYk+VigAOKy8r
- 4YZ1m+xoRkIK3Av4XiyEmljPQhs6KrRo/i84w5B34VebHeilm1dJEIlKh8P14M+wyDOW
- XkRhpovw8ImJXl2DBK701l6jgYCLWoU++8V21fAitri/yIqjIu7vKk12uVCTF6K4TBLo 2w== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j181xhd3s-1
+ bh=noabOEHneJxCBrb7N/ft+t1do/5udp+DULkSI6s3pC4=;
+ b=oi8/iXF7oj9nuMvzpHxsgOzueMej0yTyFProoqlPXNN7A/X6pUHvVcBBtWMeaFIipsdY
+ VIz91VE0XY8T4187eQ7X8HeEV//8hjHlstjyY2jLqkrczr3kqTJlk7wO32AaJ+egtbO3
+ gpuFwvm7Ejei7kEO9SMLqwOlhxqoQ8iibMVTPglb1Si/p7QUzctlcEkY6Ll1XFLRCKy0
+ TakX+fYfqNj8rgYv3ERB79TEM8K7OMc0HeJiWWuQg8wiicrdFMMsS9cCTByNIy5gUrMY
+ /8gqBtScY8HAet+nrq5JWBhpNH5TK/LLrFKTVkotCxum66pgGP3tfFR+XBZ25BT4mHPb Yw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j0w7hm3pn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 04:21:58 +0000
+        Thu, 18 Aug 2022 04:17:02 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27I4Gu0D012160
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27I4GxVQ017882
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 04:16:56 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+        Thu, 18 Aug 2022 04:17:01 GMT
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 17 Aug 2022 11:02:04 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@linux.ie>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
-CC:     <quic_aravindh@quicinc.com>, <quic_khsieh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/msm/dp: add atomic_check to bridge ops
-Date:   Wed, 17 Aug 2022 11:01:54 -0700
-Message-ID: <1660759314-28088-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+ 15.2.986.22; Wed, 17 Aug 2022 19:24:09 -0700
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 17 Aug 2022 11:24:10 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH v4 0/9] Fix controller halt and endxfer timeout issues
+Date:   Wed, 17 Aug 2022 11:23:50 -0700
+Message-ID: <20220817182359.13550-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: DYQgaW6mToBUODOIc3b2e0vuR3ZmL7aX
-X-Proofpoint-ORIG-GUID: DYQgaW6mToBUODOIc3b2e0vuR3ZmL7aX
+X-Proofpoint-ORIG-GUID: RGYTwiUgEyk_fZI-ikbjtKxPk0ULRQC4
+X-Proofpoint-GUID: RGYTwiUgEyk_fZI-ikbjtKxPk0ULRQC4
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-18_02,2022-08-16_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 clxscore=1015 impostorscore=0 mlxlogscore=999 spamscore=0
- lowpriorityscore=0 adultscore=0 phishscore=0 suspectscore=0 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
+ mlxlogscore=483 suspectscore=0 spamscore=0 impostorscore=0 adultscore=0
+ malwarescore=0 bulkscore=0 lowpriorityscore=0 priorityscore=1501
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2207270000 definitions=main-2208180014
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -78,161 +78,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DRM commit_tails() will disable downstream crtc/encoder/bridge if
-both disable crtc is required and crtc->active is set before pushing
-a new frame downstream.
+Changes in v4:
+- Split the increase timeout patch into separate patches. #1 for the
+gadget suspend/resume locking changes #2 for the increased timeout
+- Modified msleep to usleep_range w/ an interval of 1-2ms and a max
+timeout of 4s.
 
-There is a rare case that user space display manager issue an extra
-screen update immediately followed by close DRM device while down
-stream display interface is disabled. This extra screen update will
-timeout due to the downstream interface is disabled but will cause
-crtc->active be set. Hence the followed commit_tails() called by
-drm_release() will pass the disable downstream crtc/encoder/bridge
-conditions checking even downstream interface is disabled.
-This cause the crash to happen at dp_bridge_disable() due to it trying
-to access the main link register to push the idle pattern out while main
-link clocks is disabled.
+Changes in v3:
+- Modified the msleep() duration to ~2s versus ~10s due to the minimum
+mdelay() value.
+- Removed patch to modify DEP flags during dwc3_stop_active_transfer().
+This was not required after fixing the logic to allow EP xfercomplete
+events to be handled on EP0.
+- Added some changes to account for a cable disconnect scenario, where
+dwc3_gadget_pullup() would not be executed to stop active transfers.
+Needed to add some logic to the disconnect interrupt to ensure that we
+cleanup/restart any pending SETUP transaction, so that we can clear the
+EP0 delayed stop status. (if pending)
+- Added patch to ensure that we don't proceed with umapping buffers
+until the endxfer was actually sent.
 
-This patch adds atomic_check to prevent the extra frame will not
-be pushed down if display interface is down so that crtc->active
-will not be set neither. This will fail the conditions checking
-of disabling down stream crtc/encoder/bridge which prevent
-drm_release() from calling dp_bridge_disable() so that crash
-at dp_bridge_disable() prevented.
+Changes in v2:
+- Moved msleep() to before reading status register for halted state
+- Fixed kernel bot errors
+- Clearing DEP flags in __dwc3_stop_active_transfers()
+- Added Suggested-by tags and link references to previous discussions
 
-SError Interrupt on CPU7, code 0x00000000be000411 -- SError
-CPU: 7 PID: 3878 Comm: Xorg Not tainted 5.19.0-stb-cbq #19
-Hardware name: Google Lazor (rev3 - 8) (DT)
-pstate: a04000c9 (NzCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __cmpxchg_case_acq_32+0x14/0x2c
-lr : do_raw_spin_lock+0xa4/0xdc
-sp : ffffffc01092b6a0
-x29: ffffffc01092b6a0 x28: 0000000000000028 x27: 0000000000000038
-x26: 0000000000000004 x25: ffffffd2973dce48 x24: 0000000000000000
-x23: 00000000ffffffff x22: 00000000ffffffff x21: ffffffd2978d0008
-x20: ffffffd2978d0008 x19: ffffff80ff759fc0 x18: 0000000000000000
-x17: 004800a501260460 x16: 0441043b04600438 x15: 04380000089807d0
-x14: 07b0089807800780 x13: 0000000000000000 x12: 0000000000000000
-x11: 0000000000000438 x10: 00000000000007d0 x9 : ffffffd2973e09e4
-x8 : ffffff8092d53300 x7 : ffffff808902e8b8 x6 : 0000000000000001
-x5 : ffffff808902e880 x4 : 0000000000000000 x3 : ffffff80ff759fc0
-x2 : 0000000000000001 x1 : 0000000000000000 x0 : ffffff80ff759fc0
-Kernel panic - not syncing: Asynchronous SError Interrupt
-CPU: 7 PID: 3878 Comm: Xorg Not tainted 5.19.0-stb-cbq #19
-Hardware name: Google Lazor (rev3 - 8) (DT)
-Call trace:
- dump_backtrace.part.0+0xbc/0xe4
- show_stack+0x24/0x70
- dump_stack_lvl+0x68/0x84
- dump_stack+0x18/0x34
- panic+0x14c/0x32c
- nmi_panic+0x58/0x7c
- arm64_serror_panic+0x78/0x84
- do_serror+0x40/0x64
- el1h_64_error_handler+0x30/0x48
- el1h_64_error+0x68/0x6c
- __cmpxchg_case_acq_32+0x14/0x2c
- _raw_spin_lock_irqsave+0x38/0x4c
- lock_timer_base+0x40/0x78
- __mod_timer+0xf4/0x25c
- schedule_timeout+0xd4/0xfc
- __wait_for_common+0xac/0x140
- wait_for_completion_timeout+0x2c/0x54
- dp_ctrl_push_idle+0x40/0x88
- dp_bridge_disable+0x24/0x30
- drm_atomic_bridge_chain_disable+0x90/0xbc
- drm_atomic_helper_commit_modeset_disables+0x198/0x444
- msm_atomic_commit_tail+0x1d0/0x374
- commit_tail+0x80/0x108
- drm_atomic_helper_commit+0x118/0x11c
- drm_atomic_commit+0xb4/0xe0
- drm_client_modeset_commit_atomic+0x184/0x224
- drm_client_modeset_commit_locked+0x58/0x160
- drm_client_modeset_commit+0x3c/0x64
- __drm_fb_helper_restore_fbdev_mode_unlocked+0x98/0xac
- drm_fb_helper_set_par+0x74/0x80
- drm_fb_helper_hotplug_event+0xdc/0xe0
- __drm_fb_helper_restore_fbdev_mode_unlocked+0x7c/0xac
- drm_fb_helper_restore_fbdev_mode_unlocked+0x20/0x2c
- drm_fb_helper_lastclose+0x20/0x2c
- drm_lastclose+0x44/0x6c
- drm_release+0x88/0xd4
- __fput+0x104/0x220
- ____fput+0x1c/0x28
- task_work_run+0x8c/0x100
- do_exit+0x450/0x8d0
- do_group_exit+0x40/0xac
- __wake_up_parent+0x0/0x38
- invoke_syscall+0x84/0x11c
- el0_svc_common.constprop.0+0xb8/0xe4
- do_el0_svc+0x8c/0xb8
- el0_svc+0x2c/0x54
- el0t_64_sync_handler+0x120/0x1c0
- el0t_64_sync+0x190/0x194
-SMP: stopping secondary CPUs
-Kernel Offset: 0x128e800000 from 0xffffffc008000000
-PHYS_OFFSET: 0x80000000
-CPU features: 0x800,00c2a015,19801c82
-Memory Limit: none
+This patch series addresses some issues seen while testing with the latest
+soft disconnect implementation where EP events are allowed to process while
+the controller halt is occurring.
 
-Fixes: 8a3b4c17f863 ("drm/msm/dp: employ bridge mechanism for display enable and disable")
-Reported-by: Leonard Lausen <leonard@lausen.nl>
-Suggested-by: Rob Clark <robdclark@gmail.com>
-Closes: https://gitlab.freedesktop.org/drm/msm/-/issues/17
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_drm.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+#1
+Since routines can now interweave, we can see that the soft disconnect can
+occur while conndone is being serviced.  This leads to a controller halt
+timeout, as the soft disconnect clears the DEP flags, for which conndone
+interrupt handler will issue a __dwc3_ep_enable(ep0), that leads to
+re-issuing the set ep config command for every endpoint.
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
-index 6df25f7..c682588 100644
---- a/drivers/gpu/drm/msm/dp/dp_drm.c
-+++ b/drivers/gpu/drm/msm/dp/dp_drm.c
-@@ -31,6 +31,25 @@ static enum drm_connector_status dp_bridge_detect(struct drm_bridge *bridge)
- 					connector_status_disconnected;
- }
- 
-+static int dp_bridge_atomic_check(struct drm_bridge *bridge,
-+			    struct drm_bridge_state *bridge_state,
-+			    struct drm_crtc_state *crtc_state,
-+			    struct drm_connector_state *conn_state)
-+{
-+	struct msm_dp *dp;
-+
-+	dp = to_dp_bridge(bridge)->dp_display;
-+
-+	drm_dbg_dp(dp->drm_dev, "is_connected = %s\n",
-+		(dp->is_connected) ? "true" : "false");
-+
-+	if (bridge->ops & DRM_BRIDGE_OP_HPD)
-+		return (dp->is_connected) ? 0 : -ENOTCONN;
-+
-+	return 0;
-+}
-+
-+
- /**
-  * dp_bridge_get_modes - callback to add drm modes via drm_mode_probed_add()
-  * @bridge: Poiner to drm bridge
-@@ -61,6 +80,9 @@ static int dp_bridge_get_modes(struct drm_bridge *bridge, struct drm_connector *
- }
- 
- static const struct drm_bridge_funcs dp_bridge_ops = {
-+	.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
-+	.atomic_destroy_state   = drm_atomic_helper_bridge_destroy_state,
-+	.atomic_reset           = drm_atomic_helper_bridge_reset,
- 	.enable       = dp_bridge_enable,
- 	.disable      = dp_bridge_disable,
- 	.post_disable = dp_bridge_post_disable,
-@@ -68,6 +90,7 @@ static const struct drm_bridge_funcs dp_bridge_ops = {
- 	.mode_valid   = dp_bridge_mode_valid,
- 	.get_modes    = dp_bridge_get_modes,
- 	.detect       = dp_bridge_detect,
-+	.atomic_check = dp_bridge_atomic_check,
- };
- 
- struct drm_bridge *dp_bridge_init(struct msm_dp *dp_display, struct drm_device *dev,
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+#2
+Function drivers can ask for a delayed_status phase, while it processes the
+received SETUP packet.  This can lead to large delays when handling the
+soft disconnect routine.  To improve the timing, forcefully send the status
+phase, as we are going to disconnect from the host.
+
+#3
+Ensure that local interrupts are left enabled, so that EP0 events can be
+processed while the soft disconnect/dequeue is happening.
+
+#4
+Since EP0 events can occur during controller halt, it may increase the time
+needed for the controller to fully stop.
+
+#5
+Account for cable disconnect scenarios where nothing may cause the endxfer
+retry if DWC3_EP_DELAY_STOP is set.
+
+#6
+Avoid unmapping pending USB requests that were never stopped.  This would
+lead to a potential SMMU fault.
+
+
+Wesley Cheng (9):
+  usb: dwc3: Do not service EP0 and conndone events if soft disconnected
+  usb: dwc3: gadget: Force sending delayed status during soft disconnect
+  usb: dwc3: gadget: Synchronize IRQ between soft connect/disconnect
+  usb: dwc3: gadget: Continue handling EP0 xfercomplete events
+  usb: dwc3: Avoid unmapping USB requests if endxfer is not complete
+  usb: dwc3: Remove DWC3 locking during gadget suspend/resume
+  usb: dwc3: Increase DWC3 controller halt timeout
+  usb: dwc3: gadget: Skip waiting for CMDACT cleared during endxfer
+  usb: dwc3: gadget: Submit endxfer command if delayed during disconnect
+
+ drivers/usb/dwc3/core.c   |  4 ----
+ drivers/usb/dwc3/core.h   |  3 +++
+ drivers/usb/dwc3/ep0.c    | 11 ++++++---
+ drivers/usb/dwc3/gadget.c | 48 +++++++++++++++++++++++++++++++++------
+ 4 files changed, 52 insertions(+), 14 deletions(-)
 

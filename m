@@ -2,124 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3482D5976BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:41:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8C45976C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbiHQThe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 15:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
+        id S240834AbiHQThp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 15:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbiHQThc (ORCPT
+        with ESMTP id S232153AbiHQThn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 15:37:32 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6D71158
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:37:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BB74634C50;
-        Wed, 17 Aug 2022 19:37:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1660765048;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HzInlafGughYx/WhZTuSPcjBNmWIquvmAe69BRN1WGI=;
-        b=iOh4TMIkr49LYf4j5BJFwklypFIpJMg2PWgWngKx/W/78Nh4pMNoqc++mLoVsAi2mt7iRP
-        T9R9YBxCivOcgkrfg/SSVFbjb9STUqI2TJSLrSnkI3XVSAxULz2VvLtLsIJ3AzIGB9dfQu
-        mx2ZXsbmPZRm75yEHJ5HhLP+BavPOkI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1660765048;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HzInlafGughYx/WhZTuSPcjBNmWIquvmAe69BRN1WGI=;
-        b=RchA+RR9PPjJPelTucozm75vnXf6vYogUswf9x8tT08aqaZVv7VWHC6grxQiHSaOoAbuQb
-        HqeYDHeHEHuog5BA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7353A13428;
-        Wed, 17 Aug 2022 19:37:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id QjB6GnhD/WKIagAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Wed, 17 Aug 2022 19:37:28 +0000
-Date:   Wed, 17 Aug 2022 21:37:26 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        David Sterba <dsterba@suse.com>
-Subject: Re: [PATCH v2 1/1] drivers/base/cpu: Print kernel arch
-Message-ID: <Yv1DdvUglNYJHhO7@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20220729125141.12786-1-pvorel@suse.cz>
- <YuPYWLD7xxcNmuCx@pevik>
- <YuPlUOT1nFyT9Fm7@kroah.com>
- <Yvy7QlQtKcIo7whL@pevik>
- <YvzOJOPUwQ3T4nV0@kroah.com>
+        Wed, 17 Aug 2022 15:37:43 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CE71158
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:37:42 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 73so12803957pgb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:37:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=VkFb2gmnPJh2DD1NwRLdwKWVCBSGP9OxCe1ZkFaX8Fw=;
+        b=AUVwyR7T7c7LluQYD30dZSGSzo/Eycc90zAFFEuet1uMsbv5KnvP7VYTTe4PpcmjXu
+         N9VKziWiTK2yadkGsvq2WojWbC3dRJnmMUOJbIlpVOVCEYN/lF2xkwlzL/JBsjzFCzRK
+         /klZxgOKHQh/76lrnhKriLJ7ZfrxK28K1f0cg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=VkFb2gmnPJh2DD1NwRLdwKWVCBSGP9OxCe1ZkFaX8Fw=;
+        b=w0EaygSdzoTpESHkL15apnyoPReX7Gq2FASutCi83E2jUB+K1ybXhSmFHwf56ggBHU
+         Iw3D5UInRD3oUr9lKnWUTwbfV9FIasfUVMjFe0GFpBOgjw9ImzwixRMfPpcECE3zcVUw
+         XCqosB/sTbZRK4M/OpwvLN1MlQpNhqvlSUOCk3gNDwbP7Uf4NYLwKTmby/oGf/yoNwbF
+         e+jg40UIKzMrKrJDTjqQYh0pqLqgkNT1KAX+SurGOOZB2DZdq0tT3ErAeetMbj3QSdZO
+         8JX8Y4nKrFK+LKZ/mzheK+KlWYYaVOQ5k8C7wm+FYX8yoTbfGupLrIPVvSSsJrnR58dH
+         lv5g==
+X-Gm-Message-State: ACgBeo2bXUbqCFxGZNiEipx0MqwqpJPN1mkWemaM9MPqxaQry8e7vval
+        Q5A1zLxiOCElZX74BQQ3qZizPg==
+X-Google-Smtp-Source: AA6agR7V68uSa1wYB6yzkPNJOAf7DHUj6X4X5IvV1s+gIVOck89U0OwaFrfhP6SCIjgKS9MupRYLhg==
+X-Received: by 2002:a05:6a00:b82:b0:52f:518f:fe6c with SMTP id g2-20020a056a000b8200b0052f518ffe6cmr27121499pfj.80.1660765061670;
+        Wed, 17 Aug 2022 12:37:41 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id o11-20020a170902d4cb00b0016bd8fb1fafsm261758plg.307.2022.08.17.12.37.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 12:37:40 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 12:37:40 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH v9 02/27] kallsyms: avoid hardcoding buffer size
+Message-ID: <202208171236.9CA3B9D579@keescook>
+References: <20220805154231.31257-1-ojeda@kernel.org>
+ <20220805154231.31257-3-ojeda@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YvzOJOPUwQ3T4nV0@kroah.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220805154231.31257-3-ojeda@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Wed, Aug 17, 2022 at 11:56:18AM +0200, Petr Vorel wrote:
-> > > On Fri, Jul 29, 2022 at 02:53:44PM +0200, Petr Vorel wrote:
-> > > > Hi all,
+On Fri, Aug 05, 2022 at 05:41:47PM +0200, Miguel Ojeda wrote:
+> From: Boqun Feng <boqun.feng@gmail.com>
+> 
+> This introduces `KSYM_NAME_LEN_BUFFER` in place of the previously
+> hardcoded size of the input buffer.
+> 
+> It will also make it easier to update the size in a single place
+> in a later patch.
+> 
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-> > > > > Print the machine hardware name (UTS_MACHINE) in /proc/sys/kernel/arch.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-> > > > > This helps people who debug kernel with initramfs with minimal
-> > > > > environment (i.e. without coreutils or even busybox) or allow to open
-> > > > > sysfs file instead of run 'uname -m' in high level languages.
+Does someone want to commit to taking these "prereq" patches? These
+clean-ups are nice even without adding Rust.
 
-> > > > > Signed-off-by: Petr Vorel <pvorel@suse.cz>
-> > > > > ---
+-Kees
 
-> > > > Changes v1->v2:
-> > > > * Add file into /proc/sys/kernel/ (previously it was in
-> > > >   /sys/devices/system/cpu/). There are 
+> ---
+>  scripts/kallsyms.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index 52f5488c61bc..f3c5a2623f71 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -27,8 +27,14 @@
+>  
+>  #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
+>  
+> +#define _stringify_1(x)	#x
+> +#define _stringify(x)	_stringify_1(x)
+> +
+>  #define KSYM_NAME_LEN		128
+>  
+> +/* A substantially bigger size than the current maximum. */
+> +#define KSYM_NAME_LEN_BUFFER	499
+> +
+>  struct sym_entry {
+>  	unsigned long long addr;
+>  	unsigned int len;
+> @@ -198,13 +204,13 @@ static void check_symbol_range(const char *sym, unsigned long long addr,
+>  
+>  static struct sym_entry *read_symbol(FILE *in)
+>  {
+> -	char name[500], type;
+> +	char name[KSYM_NAME_LEN_BUFFER+1], type;
+>  	unsigned long long addr;
+>  	unsigned int len;
+>  	struct sym_entry *sym;
+>  	int rc;
+>  
+> -	rc = fscanf(in, "%llx %c %499s\n", &addr, &type, name);
+> +	rc = fscanf(in, "%llx %c %" _stringify(KSYM_NAME_LEN_BUFFER) "s\n", &addr, &type, name);
+>  	if (rc != 3) {
+>  		if (rc != EOF && fgets(name, sizeof(name), in) == NULL)
+>  			fprintf(stderr, "Read error or end of file.\n");
+> -- 
+> 2.37.1
+> 
 
-> > > Looks like this line ended too soon?
-
-> > > > * Update Documentation/ABI/ (Greg)
-
-> > > This looks good to me, I'll queue it up after the next -rc1 is out
-> > > unless someone objects.
-
-> > Hi Greg,
-
-> > gently ping just to make sure you didn't forget on it. I'm sorry if I overlooked
-> > it (search in next tree and your git trees) or if you remember and are too busy
-> > (fully understand).
-
-> It's only been 2 days since -rc1 is out, and here's my todo queue right
-> now:
-> 	❯ mdfrm -c ~/mail/todo/
-> 	1733 messages in /home/gregkh/mail/todo/
-
-> It's in good company :)
-
-Lol, thanks for info, I'm very sorry I was impatient.
-
-Petr
-
-> thanks,
-
-> greg k-h
+-- 
+Kees Cook

@@ -2,98 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F13B9596A9B
+	by mail.lfdr.de (Postfix) with ESMTP id 6064E596A99
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiHQHqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 03:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40014 "EHLO
+        id S232963AbiHQHrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 03:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233756AbiHQHqf (ORCPT
+        with ESMTP id S232952AbiHQHrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 03:46:35 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B7B7C1EC
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:46:33 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id l10so12782883lje.7
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:46:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=6BuNS9KqOjvtc7XbSSlIG6uXhAeWvKuL+ywpXemmpt4=;
-        b=NEIEFh84FTjEE3hoQnBHGsHnaml+UzRG01ulZUBdBSPLfmtu9cAh9yB3kLXEb7LJeE
-         yN0LDW4bsQPRBtJ3VdL5/mNd8P1D9WPPFwsiUq6PHZNEEBcc2cj2FMGm+AdQf6j/X0Pq
-         br/nZF42BY83RTe61zGApXTy8rFTrDP3Vq4N781RggEjZZIlKg2tV9LTlsMIYdgeyVXY
-         djq7euigLcDRRwW/Sze5J6+Ez4khEzp4dfQeDzZDK6eHwymbd83ILn/6dNQIsYxEv/Qv
-         LPwZ7gLsUWhcYjq+ljDrIRDVlJsEj8acd5WDj1tx024HECd3+5RmVRH935EPwTvT/jLe
-         9TVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=6BuNS9KqOjvtc7XbSSlIG6uXhAeWvKuL+ywpXemmpt4=;
-        b=PcUpf276H7iXqFt39rgGZ7CJ3JA5aJyorK1uEl0SetRx7OAJa5GN/Ym2Au3bvj0py3
-         68JAGufO3W8qZxjuLBtnDolYvQ7Xb2NqFm5Ib2oJolWjFdPE9EVZgWGaovLps869PtGe
-         DjM1yM3BZHShW04VTzF+zP46l0wi61dbhTu8+6G+awOCyUbyoosgP42LLOgYuLch718g
-         U8iSFU3yS6l9K64faSVUhcAaFPaHB33s6Hq++c+O7AGuRgGanA/qWOlgskRu+4sxEB8n
-         yWoBLkYLQQmeY7DRdPUM1PZg7boWoJqeCwF/v5dZbrmz4A6Ro/bQOGjqgi5B8fdLeYoj
-         PVFg==
-X-Gm-Message-State: ACgBeo1rSAVIuo+3kI3nPS7Cky6nKcapNoUCzipxm6wBJFu1VH6ZoIvM
-        9mdVwM8/8YYFC0QVVCpGKVtFMw==
-X-Google-Smtp-Source: AA6agR7+bPFR57iuqYAZKnMHO1NMowGeL+VPcAK4pDjgtRZ+eqZjZeD9JBI30m3jn8ov9firTW4gGA==
-X-Received: by 2002:a05:651c:4d1:b0:25e:5c72:43f0 with SMTP id e17-20020a05651c04d100b0025e5c7243f0mr7916432lji.164.1660722391873;
-        Wed, 17 Aug 2022 00:46:31 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:1b1c:14b7:109b:ed76? (d15l54h48cw7vbh-qr4-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1b1c:14b7:109b:ed76])
-        by smtp.gmail.com with ESMTPSA id b25-20020a05651c033900b0025e4ca99066sm2094142ljp.139.2022.08.17.00.46.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 00:46:31 -0700 (PDT)
-Message-ID: <ee117d95-615a-e63b-64c9-c11f89b51123@linaro.org>
-Date:   Wed, 17 Aug 2022 10:46:29 +0300
+        Wed, 17 Aug 2022 03:47:21 -0400
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A967A763
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:47:20 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.west.internal (Postfix) with ESMTP id 5BF862B0645B;
+        Wed, 17 Aug 2022 03:47:14 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 17 Aug 2022 03:47:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1660722433; x=1660729633; bh=c10x6DPPH/
+        zyhRLNi3d5jZ8ntKycPsFvNbbCBkCZ6Wg=; b=ZTdpXVPLY+Eom76PVAvHzJ9qgy
+        wdAtZOnJHHp/TWy2k7Ss/kPsJwaq3mPMIp6LgJ6qk/hK+igzaiYy3CnfkbP37Td1
+        SBGA0Hx3i+bo1jkW979K77o2HD6PGJRzo8fWxlNYTAgm7jflKHILXVkdAtFubj3V
+        UQY8jOqPgP4oVAcL9ocxkagUbMtw4Thzc6OdvRW/d2IOe9XladHFPu+FB3a9elZW
+        Q3A1TsclMmsVzWngkiTiwi05a4S/P26neuZg5ThqOTLepL4fh60tPRHNI6NzvIFX
+        sMMZVjY0zQQn5UEpfb0wbUtjfkl5CZotikTLvslaPKxWT09qjDFl7ztk5h+g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660722433; x=1660729633; bh=c10x6DPPH/zyhRLNi3d5jZ8ntKyc
+        PsFvNbbCBkCZ6Wg=; b=h6EBQs+anDCv314V5tPWR40hOWF/0dR5pskwb4J0Q4Ry
+        FOlXHuSuBPAsFJu+Hiu1Jh4OHWDvJO2MsmoOikLYzJDtPsABIDAfQgvAwbe5l+5F
+        CRwFv6NbKKviE5A/AsVyXr2rcINCTQlAA0TBcWQ+Xrpx0U+9lzopC2cFFDSTD9VJ
+        07hYP907H0CO78oPa/p7nunsH5KsGKUSt0U9Fx+zzyjPnjXqnYhA3Wl6DkYYL4kF
+        HmH+PfX1DMT45ZfQ0F/TJtOYAX/8eFzz/OTc9nzOOmJWV0gizOgcnMcF9gBx0mdt
+        z1x8Jj0da9F6x+ymAUp4f5G2IXlCCJHV400yJVKHog==
+X-ME-Sender: <xms:AJ38YiblzUP1RWksJLh4aZLuT0u2fEpF06LoPEGy4evFNwNRYRsFAg>
+    <xme:AJ38YlbRiFWHfKPgmzIDi-4ahTYrlOOKBj7xSixixrgXIgSxzqQGxqRJwxGw5tMXe
+    NupYaY7cfWJdh2ahlM>
+X-ME-Received: <xmr:AJ38Ys-9_N0PDd1te12W0rhoZwWWRoZrT6DYZd6VlIyMLsEZSwiW6cH_cA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehhedguddvhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheeh
+    fffhvedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:AJ38Yko33FgNJg2jsSaEZPwMB-XBjwWSRZnwZWGryB0dm-SA5qnpgg>
+    <xmx:AJ38YtrK6w-U1n8XcoqyT_gn3BYeAwO6UOINBRQRK-j9rDT7vkA2Fg>
+    <xmx:AJ38YiTXgy2fUErJVSR2T4zL-AOszZ_5-GfStWhXkDLH9d4ywIUKEA>
+    <xmx:AZ38YmaKyuzgAxnIT_vbv7qFyOAwgX10VclP6NGlisLXOje2OeSiSjcNenM>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 17 Aug 2022 03:47:12 -0400 (EDT)
+Date:   Wed, 17 Aug 2022 09:47:10 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>
+Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
+Message-ID: <20220817074710.w4c4xwj7edly2b5p@houat>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
+ <CAMuHMdWYo7M44uLNhTmJenGDreGALBZ9E48oyBDEeAuL=0h=dw@mail.gmail.com>
+ <20220816132040.uwirtjm5yr6rdd3q@houat>
+ <CAMuHMdWevP=3af=NneAJEDfOR+sz1thrQEhAQPNGrgitBtLjGA@mail.gmail.com>
+ <20220816141116.5nuszmilqv2exdb3@houat>
+ <CAMuHMdXq_xGPx46bdnUFGDiG4kcgdxtXaRGTucFd3TRq8353dg@mail.gmail.com>
+ <20220816154956.pkdpxmmw27mia5ix@houat>
+ <CAMuHMdX0L6cO_jYXKZTv0sm9V39Eiy_STiknSkdRQG4k-9GJeg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: arm: aspeed: document Ampere
- Mt.Mitchell BMC compatibles
-Content-Language: en-US
-To:     Quan Nguyen <quan@os.amperecomputing.com>,
-        openbmc@lists.ozlabs.org, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        Open Source Submission <patches@amperecomputing.com>
-Cc:     Phong Vo <phong@os.amperecomputing.com>,
-        thang@os.amperecomputing.com
-References: <20220817071539.176110-1-quan@os.amperecomputing.com>
- <20220817071539.176110-2-quan@os.amperecomputing.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220817071539.176110-2-quan@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="j4epzi7aeysknnpu"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdX0L6cO_jYXKZTv0sm9V39Eiy_STiknSkdRQG4k-9GJeg@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/08/2022 10:15, Quan Nguyen wrote:
-> Document Ampere Mt.Mitchell BMC board compatible.
-> 
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
 
+--j4epzi7aeysknnpu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Wed, Aug 17, 2022 at 09:31:18AM +0200, Geert Uytterhoeven wrote:
+> Hi Maxime,
+>=20
+> On Tue, Aug 16, 2022 at 5:50 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> > On Tue, Aug 16, 2022 at 04:43:44PM +0200, Geert Uytterhoeven wrote:
+> > > > > > > Either you have to add them here (e.g. "hd720p50" and "hd720p=
+60"), or
+> > > > > > > handle them through "@<refresh>".  The latter would impact "[=
+PATCH v1
+> > > > > > > 09/35] drm/modes: Move named modes parsing to a separate func=
+tion", as
+> > > > > > > currently a named mode and a refresh rate can't be specified =
+both.
+> > > > > >
+> > > > > > I think the former would make more sense. It simplifies a bit t=
+he
+> > > > > > parser, and we're going to use a named mode anyway.
+> > > > > >
+> > > > > > > As "[PATCH v1 34/35] drm/modes: Introduce the tv_mode propert=
+y as a
+> > > > > > > command-line option" uses a separate "tv_mode" option, and no=
+t the main
+> > > > > > > mode name, I think you want to add them here.
+> > > > > >
+> > > > > > It's a separate story I think, we could have a named mode hd720=
+p50,
+> > > > > > which would be equivalent to 1280x720,tv_mode=3Dhd720p
+> > > > >
+> > > > > So where's the field rate in "1280x720,tv_mode=3Dhd720p"?
+> > > >
+> > > > Yeah, sorry I meant 1280x720@50,tv_mode=3Dhd720p
+> > >
+> > > Above you said "I think the former would make more sense", so that
+> > > should be "1280x720,tv_mode=3Dhd720p50"?
+> >
+> > No, 720p at 50Hz would be either hd720p50 or 1280x720@50,tv_mode=3Dhd72=
+0p
+> > and 60Hz would be hd720p60 or 1280x720@60,tv_mode=3Dhd720p
+>=20
+> I disagree: hd720p50 and hd720p60 are different TV modes.
 
+I agree, and I don't see how that command-line doesn't express that?
 
-Best regards,
-Krzysztof
+Maxime
+
+--j4epzi7aeysknnpu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYvyc/gAKCRDj7w1vZxhR
+xbYJAP4lo6uMsFFPTrsZHvEPpQ07NeUAWTRQuIXy05w+861pgAD/caEkBK1BcdYO
+Ivf5+QCpwXLo3HITMUo8nRREVgKEiwc=
+=haso
+-----END PGP SIGNATURE-----
+
+--j4epzi7aeysknnpu--

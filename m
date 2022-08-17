@@ -2,196 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19DD6596A85
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF01C596A81
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232080AbiHQHj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 03:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58012 "EHLO
+        id S232642AbiHQHlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 03:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232259AbiHQHjw (ORCPT
+        with ESMTP id S232401AbiHQHln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 03:39:52 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DCD6612F
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:39:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660721991; x=1692257991;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=O2prMHo1uFUt8qVKG22DJhsF1BbKx+65kFhimQDXHM4=;
-  b=jGI+17WOVAO7sXD+UZVj1XVn3z8LK3TYr0oVCQaqiloK359iR+U1Oon9
-   VcLsxS3nJebFj1fGXFk2dRRVQ22JdpMVCBHBGSr5O5n+fpwBXSuixDWoq
-   IND26iHEOo2PUAw2e65XnIEVyszB8ireCv8hueD9zE9wHEpl10JD6m/Yt
-   oqu2NjIxlqszqUjJ7o8cZbymA0Cm3YLLb/NLu2R4luGWl/Sx5RtnlajLx
-   FO3EWsJTP3adVHqHX9fPM6HLbBTFxSG9/7SOS9OFAXtD68YckgT9odRXT
-   JCEe00q3/liPm6dIzBYnLIUhACDz8qaUe82TCcd+xtehwxbzwEWSVU9v8
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="289998971"
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="289998971"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 00:39:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="583657975"
-Received: from shbuild999.sh.intel.com ([10.239.147.181])
-  by orsmga006.jf.intel.com with ESMTP; 17 Aug 2022 00:39:46 -0700
-From:   Feng Tang <feng.tang@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     paulmck@kernel.org, rui.zhang@intel.com, len.brown@intel.com,
-        tim.c.chen@intel.com, Feng Tang <feng.tang@intel.com>
-Subject: [PATCH v4] x86/tsc: Add option to force frequency recalibration with HW timer
-Date:   Wed, 17 Aug 2022 15:40:18 +0800
-Message-Id: <20220817074018.10930-1-feng.tang@intel.com>
-X-Mailer: git-send-email 2.27.0
+        Wed, 17 Aug 2022 03:41:43 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B2C77E9C;
+        Wed, 17 Aug 2022 00:41:41 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27H7f9q8104499;
+        Wed, 17 Aug 2022 02:41:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1660722070;
+        bh=/zDSKKT1Pikh4+rD3KuCHFMZ7jEY6eOdH61BQhafa6k=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=yuJ+dXzatpY058ruSpt+KhHs4dLeEqBnhwZzeh68Zb9zZDULLof4oIoEOem7vlZ4Z
+         NlM5+pTe7p56Il1rK46hy8qEriO77mtM7y1m7lpfE67BK7lctVhqcHvqCy+xyUjOFy
+         a/VQluOUn4bXlW0I6Hvj/VqB7MxgmayiW19IitP8=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27H7f9KA011237
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 17 Aug 2022 02:41:09 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 17
+ Aug 2022 02:41:09 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Wed, 17 Aug 2022 02:41:09 -0500
+Received: from [10.24.69.241] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27H7f4Q9012503;
+        Wed, 17 Aug 2022 02:41:05 -0500
+Message-ID: <176ab999-e274-e22a-97d8-31f655b16800@ti.com>
+Date:   Wed, 17 Aug 2022 13:11:04 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>, <linux@armlinux.org.uk>,
+        <vladimir.oltean@nxp.com>, <grygorii.strashko@ti.com>,
+        <vigneshr@ti.com>, <nsekhar@ti.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kishon@ti.com>, <s-vadapalli@ti.com>
+Subject: Re: [PATCH v4 1/3] dt-bindings: net: ti: k3-am654-cpsw-nuss: Update
+ bindings for J7200 CPSW5G
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+References: <20220816060139.111934-1-s-vadapalli@ti.com>
+ <20220816060139.111934-2-s-vadapalli@ti.com>
+ <79e58157-f8f2-6ca8-1aa6-b5cf6c83d9e6@linaro.org>
+ <31c3a5b0-17cc-ad7b-6561-5834cac62d3e@ti.com>
+ <9c331cdc-e34a-1146-fb83-84c2107b2e2a@linaro.org>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <9c331cdc-e34a-1146-fb83-84c2107b2e2a@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kernel assumes that the TSC frequency which is provided by the
-hardware / firmware via MSRs or CPUID(0x15) is correct after applying
-a few basic consistency checks. This disables the TSC recalibration
-against HPET or PM timer.
+Hello Krzysztof,
 
-As a result there is no mechanism to validate that frequency in cases
-where a firmware or hardware defect is suspected. And there was case
-that some user used atomic clock to measure the TSC frequency and
-reported an inaccuracy issue, which was later fixed in firmware.
+On 17/08/22 11:20, Krzysztof Kozlowski wrote:
+> On 17/08/2022 08:14, Siddharth Vadapalli wrote:
+> 
+>>>> -      port@[1-2]:
+>>>> +      "^port@[1-4]$":
+>>>>          type: object
+>>>>          description: CPSWxG NUSS external ports
+>>>>  
+>>>> @@ -119,7 +120,7 @@ properties:
+>>>>          properties:
+>>>>            reg:
+>>>>              minimum: 1
+>>>> -            maximum: 2
+>>>> +            maximum: 4
+>>>>              description: CPSW port number
+>>>>  
+>>>>            phys:
+>>>> @@ -151,6 +152,18 @@ properties:
+>>>>  
+>>>>      additionalProperties: false
+>>>>  
+>>>> +if:
+>>>
+>>> This goes under allOf just before unevaluated/additionalProperties:false
+>>
+>> allOf was added by me in v3 series patch and it is not present in the
+>> file. I removed it in v4 after Rob Herring's suggestion. Please let me
+>> know if simply moving the if-then statements to the line above
+>> additionalProperties:false would be fine.
+> 
+> I think Rob's comment was focusing not on using or not-using allOf, but
+> on format of your entire if-then-else. Your v3 was huge and included
+> allOf in wrong place).
+> 
+> Now you add if-then in proper place, but it is still advisable to put it
+> with allOf, so if ever you grow the if-then by new entry, you do not
+> have to change the indentation.
+> 
+> Anyway the location is not correct. Regardless if this is if-then or
+> allOf-if-then, put it just like example schema is suggesting.
 
-Add an option 'recalibrate' for 'tsc' kernel parameter to force the
-tsc freq recalibration with HPET or PM timer, and warn if the deviation
-from previous value is more than about 500 PPM, which provides a way 
-to verify the data from hardware / firmware.
+I will move the if-then statements to the lines above the
+"additionalProperties: false" line. Also, I will add an allOf for this
+single if-then statement in the v5 series.
 
-There is no functional change to existing work flow.
-
-[Thanks tglx for helping improving the commit log] 
-
-Signed-off-by: Feng Tang <feng.tang@intel.com>
----
-Changelog:
-
-  since v3:
-    * add some real world case into commit log
-    * rebase against v6.0-rc1
-
-  since v2:
-    * revise the option description in kernel-parameters.txt
-    * rebase against v5.19-rc2
-
-  since v1:
-    * refine commit log to state clearly the problem and intention
-      of the patch by copying Thomas' words.
-
- .../admin-guide/kernel-parameters.txt         |  4 +++
- arch/x86/kernel/tsc.c                         | 34 ++++++++++++++++---
- 2 files changed, 34 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index d7f30902fda0..4924256592d9 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -6302,6 +6302,10 @@
- 			in situations with strict latency requirements (where
- 			interruptions from clocksource watchdog are not
- 			acceptable).
-+			[x86] recalibrate: force to do frequency recalibration
-+			with a HW timer (HPET or PM timer) for systems whose
-+			TSC frequency comes from HW or FW through MSR or CPUID(0x15),
-+			and warn if the difference is more than 500 ppm.
- 
- 	tsc_early_khz=  [X86] Skip early TSC calibration and use the given
- 			value instead. Useful when the early TSC frequency discovery
-diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-index cafacb2e58cc..5cf62a58754a 100644
---- a/arch/x86/kernel/tsc.c
-+++ b/arch/x86/kernel/tsc.c
-@@ -48,6 +48,8 @@ static DEFINE_STATIC_KEY_FALSE(__use_tsc);
- 
- int tsc_clocksource_reliable;
- 
-+static int __read_mostly tsc_force_recalibrate;
-+
- static u32 art_to_tsc_numerator;
- static u32 art_to_tsc_denominator;
- static u64 art_to_tsc_offset;
-@@ -303,6 +305,8 @@ static int __init tsc_setup(char *str)
- 		mark_tsc_unstable("boot parameter");
- 	if (!strcmp(str, "nowatchdog"))
- 		no_tsc_watchdog = 1;
-+	if (!strcmp(str, "recalibrate"))
-+		tsc_force_recalibrate = 1;
- 	return 1;
- }
- 
-@@ -1374,6 +1378,25 @@ static void tsc_refine_calibration_work(struct work_struct *work)
- 	else
- 		freq = calc_pmtimer_ref(delta, ref_start, ref_stop);
- 
-+	/* Will hit this only if tsc_force_recalibrate has been set */
-+	if (boot_cpu_has(X86_FEATURE_TSC_KNOWN_FREQ)) {
-+
-+		/* Warn if the deviation exceeds 500 ppm */
-+		if (abs(tsc_khz - freq) > (tsc_khz >> 11)) {
-+			pr_warn("Warning: TSC freq calibrated by CPUID/MSR differs from what is calibrated by HW timer, please check with vendor!!\n");
-+			pr_info("Previous calibrated TSC freq:\t %lu.%03lu MHz\n",
-+				(unsigned long)tsc_khz / 1000,
-+				(unsigned long)tsc_khz % 1000);
-+		}
-+
-+		pr_info("TSC freq recalibrated by [%s]:\t %lu.%03lu MHz\n",
-+			hpet ? "HPET" : "PM_TIMER",
-+			(unsigned long)freq / 1000,
-+			(unsigned long)freq % 1000);
-+
-+		return;
-+	}
-+
- 	/* Make sure we're within 1% */
- 	if (abs(tsc_khz - freq) > tsc_khz/100)
- 		goto out;
-@@ -1407,8 +1430,10 @@ static int __init init_tsc_clocksource(void)
- 	if (!boot_cpu_has(X86_FEATURE_TSC) || !tsc_khz)
- 		return 0;
- 
--	if (tsc_unstable)
--		goto unreg;
-+	if (tsc_unstable) {
-+		clocksource_unregister(&clocksource_tsc_early);
-+		return 0;
-+	}
- 
- 	if (boot_cpu_has(X86_FEATURE_NONSTOP_TSC_S3))
- 		clocksource_tsc.flags |= CLOCK_SOURCE_SUSPEND_NONSTOP;
-@@ -1421,9 +1446,10 @@ static int __init init_tsc_clocksource(void)
- 		if (boot_cpu_has(X86_FEATURE_ART))
- 			art_related_clocksource = &clocksource_tsc;
- 		clocksource_register_khz(&clocksource_tsc, tsc_khz);
--unreg:
- 		clocksource_unregister(&clocksource_tsc_early);
--		return 0;
-+
-+		if (!tsc_force_recalibrate)
-+			return 0;
- 	}
- 
- 	schedule_delayed_work(&tsc_irqwork, 0);
--- 
-2.27.0
-
+Regards,
+Siddharth.

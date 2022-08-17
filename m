@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44141597113
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCBD259711E
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239828AbiHQObE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 10:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55948 "EHLO
+        id S236290AbiHQObO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 10:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237327AbiHQObB (ORCPT
+        with ESMTP id S240131AbiHQObG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 10:31:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F68201A6
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:31:00 -0700 (PDT)
+        Wed, 17 Aug 2022 10:31:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5698FD7A;
+        Wed, 17 Aug 2022 07:31:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C726614B7
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 14:31:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79C42C433D6;
-        Wed, 17 Aug 2022 14:30:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54F89B81DED;
+        Wed, 17 Aug 2022 14:31:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BB46C433C1;
+        Wed, 17 Aug 2022 14:31:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660746659;
-        bh=9YvnrLoQeCqNttsLpVzUVSJciSTI41FyiN0F/VdqDIQ=;
+        s=k20201202; t=1660746662;
+        bh=/37xOLgFFyR9lC9/rK8t//Keov0kWYTvWZQazTYIghk=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=By8RnEImktZUjLmuk6im4iQqRrkQoDYIdt5dGDioSYKZoHCH2aNBSiUCeyCr/oBMJ
-         CxucQ5GsnungRHnUIFP9z4vhNCrFRh9nVGBqODwU4AGs0iRqELUU75s7oCyfo7iWTu
-         11kec0Lv88dPOEi8KL0FDsPYpdtwOSbr7RpXYb1XClnpaH5xpiCRHBRy6gHD3TG9GH
-         dcxF6GpqiZMJ22R+vzLr5L2r/edp2WFh7AiEGMUCYCOMF5uwe2h4E3zhbsxYz5D/X1
-         7CUu47VESvDw6q7z5lWbPefWVkGnc1mt9mVCiBHLP0WyLhQyTvU30wcpr/9WfHZm1T
-         JELnN8stiI/PA==
+        b=SCywGIC8zDAOdKBO+hN5TkQIZjWsSWZc6OBOtPg0Gsux+Gbh0y/zm4M53SQL1fY4F
+         xfjHnnENM4FHxgP5EaSibRL8FWiy1S0J0uLqigJ8WT/ar3hwf84ERxJfAjWWNgQa2O
+         VGqHqWD+YM6O/dRZnguVtcvn6F873fhk6s5QLmv4KI7FRtJ3tLUa1+dRK1H29BrleY
+         pZ5Uwpn2xDkOQ+NgUow6fgCvIhysWJnjeVBqL/S0WxKWBl3v2cIsce/10TmcwcqUVb
+         yY2Mv13uJ/mXs5WSHt6HmZocojQANek1bHbMPLKTsq4gg27ZeI9kYVOp/tPkCA29FY
+         GU8uMC0mXi6+w==
 From:   Mark Brown <broonie@kernel.org>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     lgirdwood@gmail.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, perex@perex.cz, tiwai@suse.com
-In-Reply-To: <20220816172129.6661-1-srinivas.kandagatla@linaro.org>
-References: <20220816172129.6661-1-srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH] ASoC: core: remove setting platform_max in kcontrol macros
-Message-Id: <166074665821.210979.14610893486592798976.b4-ty@kernel.org>
-Date:   Wed, 17 Aug 2022 15:30:58 +0100
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        perex@perex.cz, robh+dt@kernel.org, tiwai@suse.com,
+        pierre-louis.bossart@linux.intel.com,
+        linux-arm-msm@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org
+In-Reply-To: <20220816170118.13470-1-srinivas.kandagatla@linaro.org>
+References: <20220816170118.13470-1-srinivas.kandagatla@linaro.org>
+Subject: Re: [PATCH] ASoC: qcom: qdsp6: q6prm: add new clocks
+Message-Id: <166074665990.210979.17992957875043506685.b4-ty@kernel.org>
+Date:   Wed, 17 Aug 2022 15:30:59 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,16 +58,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 Aug 2022 18:21:29 +0100, Srinivas Kandagatla wrote:
-> platform_max should not be set by the driver, its intended for machine drivers
-> or DT to override the max value for platform specific reasons.
+On Tue, 16 Aug 2022 18:01:18 +0100, Srinivas Kandagatla wrote:
+> Add support to new clocks that are added in Q6DSP as part of newer version
+> of LPASS support on SM8450 and SC8280XP.
 > 
-> So remove setting this from Kcontrol macros.
 > 
-> Setting this to max in these macros would limit the range when min
-> value is less then zero.
-> 
-> [...]
 
 Applied to
 
@@ -72,8 +70,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: core: remove setting platform_max in kcontrol macros
-      commit: 26bdcc4ba12351642cd94339aa6996f96434dd47
+[1/1] ASoC: qcom: qdsp6: q6prm: add new clocks
+      commit: ea15d3bd3cd6e9483bb8aa664954c0a8cde253eb
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

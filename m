@@ -2,185 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C042959669B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 03:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D445966A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 03:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237025AbiHQBS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 21:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
+        id S237807AbiHQBZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 21:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiHQBSy (ORCPT
+        with ESMTP id S234362AbiHQBZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 21:18:54 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F1F30F6D
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 18:18:51 -0700 (PDT)
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com [209.85.210.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id F1A453F165
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:18:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1660699129;
-        bh=QB/N93Jt8jeRbC+nYshhBQqqf2b7gP/bAzKdLJW4IoY=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=NMYkjZeax++J7fEsyJYct1SlrQZpf6KPSGNea6DqyA128/x+zybH6clt9DX9s6Onp
-         E/P8WyQwxWBgCYWDQtzrBo1ANuhg8xp23bRltFMSkyKz5on8hfTCTnfM+3GUJdujdK
-         wUuVCU23fJO/SpB4gNCFQB/fojohdyEY+9KFuteuy9toUeNRC0So1/QROl9mfIKWeH
-         OcNkiji7ZvpqLmrFW9YtsK/lQfKGlFAHU0xs/Dsqs80kXIiZHO9LMxK01w1G8MMfe2
-         lXunxOCOlDBUluYwbHWP7sLap4FMLEZS8f27L/rFe0QWRaMh9YjAh9wPHPDvuVAuV5
-         qXNVPDUfyFgsg==
-Received: by mail-ot1-f71.google.com with SMTP id h4-20020a056830034400b00638c37d1349so1339520ote.10
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 18:18:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=QB/N93Jt8jeRbC+nYshhBQqqf2b7gP/bAzKdLJW4IoY=;
-        b=U/gbIKBXt3vM06tz+pFEiwmX7s10iFDYjHi6b8/e8K6Kqky7hulysLfr/ynSvNSZGh
-         0dCyBvV1KMITcxipoL23DtPYT3KDWJyNbOoHiYaRl+9SeBqQm808w6NrOjh6fj1jaXCi
-         Dgvm+rpfvL5HDKW2Q84F0mNvrZW2XT1KyQSzYh3cbDIRRMG5eJLFcnagGa21FJPojSu0
-         CQTrUKPwQbt4iWjttYDUeyHpxJcU7T9A+4WjiJn29796B1Pwwoxay7pMllVURRdH+tow
-         BQXxdeAx43soP7kjHd/kyJzk7AnUheTHt5ZgUA2rBEi2uw15a+KwaPS59GZL20uikgwf
-         6mjQ==
-X-Gm-Message-State: ACgBeo0dXaxzuJNS4D049nywqDd5PRx+7W9grk7DjvXz71yxIJLQU89E
-        puQIVkgrycqKw5NXHKdpvy/xZ9vrmlGQs0mLqbr4jxVbv3eEhNOft+6NBrJLBo6Smw18EaLH+Zm
-        iHOnpP0fh92+avCVBMALM68wH5uzFuxzNLttXwosSdZBy/jhTYBVRQpvpWQ==
-X-Received: by 2002:a05:6808:209f:b0:344:8f50:1f29 with SMTP id s31-20020a056808209f00b003448f501f29mr538902oiw.42.1660699128693;
-        Tue, 16 Aug 2022 18:18:48 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4z0ckBseo0DvhMsjK8u68wPgPVvhD5xGInUN9KS3WKNbIl+FGWT86akRupbmaylKkx03qn6le2zNiMt4kSPAI=
-X-Received: by 2002:a05:6808:209f:b0:344:8f50:1f29 with SMTP id
- s31-20020a056808209f00b003448f501f29mr538889oiw.42.1660699128446; Tue, 16 Aug
- 2022 18:18:48 -0700 (PDT)
+        Tue, 16 Aug 2022 21:25:51 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5FF7549B;
+        Tue, 16 Aug 2022 18:25:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660699549; x=1692235549;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vEIXVCXCOH8jRR5XjiAAeqFwnkSWL0SnDjLS9lcgWBU=;
+  b=lWTIBjEEZApdoJjhoORxAwkU2kLha5R8PPYcrP4U+IeaMxKDHztrm1YS
+   Mv9fQ20mWL6M3gV4PB+2mHWihja++P0spYGml64Qh6HdLzwAhMRrjibMy
+   wJnKcH6kAfIoIDTYwB3tDGRgZl0pr5hypawGPwM8g+jowXdISHdb/osYZ
+   8DKwNL7++RfU5afuiKDFXakbGNIJ7jE2RapaFnDRVpKYY7QWr4/gPU+8Y
+   vN+De9VdvlWS0kIPZaw4xmPXBKzOjQ4mLE6wVaKsOhXmVWVNmblhFVt5x
+   e3BC2cGz3vvNMaZ0rhc/dIt97SvZswoKXl+4n/f2BoLXE1Sls9kBxh33K
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="291126249"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="291126249"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 18:25:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="696587835"
+Received: from allen-box.sh.intel.com ([10.239.159.48])
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Aug 2022 18:25:45 -0700
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Eric Auger <eric.auger@redhat.com>, Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lu Baolu <baolu.lu@linux.intel.com>
+Subject: [PATCH v11 00/13] iommu: SVA and IOPF refactoring
+Date:   Wed, 17 Aug 2022 09:20:11 +0800
+Message-Id: <20220817012024.3251276-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220816025217.618181-1-kai.heng.feng@canonical.com> <CACO55tt=Op=0E94kK+1M8cDXNCk5Tkc=FMR8=OQFc5ohehjwaw@mail.gmail.com>
-In-Reply-To: <CACO55tt=Op=0E94kK+1M8cDXNCk5Tkc=FMR8=OQFc5ohehjwaw@mail.gmail.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Wed, 17 Aug 2022 09:18:36 +0800
-Message-ID: <CAAd53p49X95MKrTDUq92LuHw3y2i09fUA2HEPzM1EcO8xO97Eg@mail.gmail.com>
-Subject: Re: [PATCH] drm/i915: Switch TGL-H DP-IN to dGFX when it's supported
-To:     Karol Herbst <kherbst@redhat.com>
-Cc:     jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Zenghui Yu <yuzenghui@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 2:50 AM Karol Herbst <kherbst@redhat.com> wrote:
->
-> On Tue, Aug 16, 2022 at 4:53 AM Kai-Heng Feng
-> <kai.heng.feng@canonical.com> wrote:
-> >
-> > On mobile workstations like HP ZBook Fury G8, iGFX's DP-IN can switch to
-> > dGFX so external monitors are routed to dGFX, and more monitors can be
-> > supported as result.
-> >
-> > To switch the DP-IN to dGFX, the driver needs to invoke _DSM function 20
-> > on intel_dsm_guid2. This method is described in Intel document 632107.
-> >
->
-> Can we please not do things like this just because?
+Hi folks,
 
-I there's a very good reason to support more external monitors,
-especially when eDP is already 4K so iGPU don't have enough buffer for
-more displays.
+The former part of this series introduces the IOMMU interfaces to attach
+or detach an iommu domain to/from a pasid of a device, and refactors the
+exsiting IOMMU SVA implementation by assigning an SVA type of iommu
+domain to a shared virtual address and replacing sva_bind/unbind iommu
+ops with a set_dev_pasid domain ops.
 
->
-> It forces the discrete GPU to be on leading to higher thermal pressure
-> and power consumption of the system. Lower battery runtime or higher
-> fan noise is the result. Not everybody wants to use an AC simply just
-> because they attach an external display.
+The latter part changes the existing I/O page fault handling framework
+from only serving SVA to a generic one. Any driver or component could
+handle the I/O page faults for its domain in its own way by installing
+an I/O page fault handler.
 
-The system is designed in this way.
+This series has been functionally tested on an x86 machine and compile
+tested for all architectures.
 
-And many (if not all) gaming laptops and mobile workstations use
-discrete GPU for external monitors.
-We just recently found out we have to use a switch to make it work.
+This series is also available on github:
+[2] https://github.com/LuBaolu/intel-iommu/commits/iommu-sva-refactoring-v11
 
->
-> If the problem is "we run out of displays" then can we have something
-> more dynamic, where we are doing this only and only if we run out of
-> resources to drive as that many displays.
+Please review and suggest.
 
-This is a boot-time switch, so it's not possible to switch it dynamically.
+Best regards,
+baolu
 
->
-> Most users will be fine with ports being driven by the iGPU. Why hurt
-> most users, because of some weird special case with mostly only
-> drawbacks?
+Change log:
+v11:
+ - [PATCH 04/13] PCI: Allow PASID only when ACS enforced on upstreaming path
+   - new patch
+ - [PATCH 05/13] iommu: Add attach/detach_dev_pasid iommu interface
+   - Remove block_dev_pasid domain ops and use setting group blocking
+     domain instead.
+   - Remove iommu_group_immutable_singleton(). Move the PCI/ACS
+     requirement into the pci_enable_pasid(). All devices in an iommu
+     group share a same iommu domain for each pasid.
+ - [PATCH 06/13] iommu: Add IOMMU SVA domain support
+   - Add a refcount for SVA multiple bindings.
+ - [PATCH 07/13] iommu/vt-d: Add SVA domain support
+   - Use set_dev_pasid for both domain attaching and detaching.
+ - [PATCH 08/13] arm-smmu-v3/sva: Add SVA domain support
+   - Use set_dev_pasid for both domain attaching and detaching.
+ - [PATCH 09/13] iommu/sva: Refactoring iommu_sva_bind/unbind_device()
+   - Remove the refcount of iommu_sva::users.
+   - Add iommu_sva::domain.
+ - [PATCH 11/13] iommu: Prepare IOMMU domain for IOPF
+   - Remove unnecessary check of IS_ERR_OR_NULL(mm).
+ - [Overall]
+   - Rebase to v6.0-rc1.
+   - Remove previous Test-by's as some APIs are changed.
+   - Polishing of various codes and comments.
 
-This is a use case that hardware vendor never bother to test.
-And this is not a special case - the system is designed to use dGPU
-for external monitors.
+v10:
+ - https://lore.kernel.org/linux-iommu/20220705050710.2887204-1-baolu.lu@linux.intel.com/
+ - Rebase on next branch of iommu tree.
+ - Split attach/detach_device_pasid interfaces and SVA domain extensions
+   to different patches.
+ - Handle the return error of xa_cmpxchg() gracefully.
+ - Directly pass mm in as the SVA fault data.
+ - Rename iopf_handle_group() to iopf_handler().
+ - Some commit message and code comment refinement.
+ - Add Tested-by's from Zhangfei and Tony.
 
-Kai-Heng
+v9:
+ - https://lore.kernel.org/linux-iommu/20220621144353.17547-1-baolu.lu@linux.intel.com/
+ - Some minor changes on comments and function names.
+ - Simplify dev_iommu_get_max_pasids().
 
->
-> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > ---
-> >  drivers/gpu/drm/i915/display/intel_acpi.c | 18 +++++++++++++++++-
-> >  1 file changed, 17 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/i915/display/intel_acpi.c b/drivers/gpu/drm/i915/display/intel_acpi.c
-> > index e78430001f077..3bd5930e2769b 100644
-> > --- a/drivers/gpu/drm/i915/display/intel_acpi.c
-> > +++ b/drivers/gpu/drm/i915/display/intel_acpi.c
-> > @@ -20,6 +20,7 @@ static const guid_t intel_dsm_guid =
-> >                   0xa8, 0x54, 0x0f, 0x13, 0x17, 0xb0, 0x1c, 0x2c);
-> >
-> >  #define INTEL_DSM_FN_GET_BIOS_DATA_FUNCS_SUPPORTED 0 /* No args */
-> > +#define INTEL_DSM_FN_DP_IN_SWITCH_TO_DGFX 20 /* No args */
-> >
-> >  static const guid_t intel_dsm_guid2 =
-> >         GUID_INIT(0x3e5b41c6, 0xeb1d, 0x4260,
-> > @@ -187,6 +188,7 @@ void intel_dsm_get_bios_data_funcs_supported(struct drm_i915_private *i915)
-> >         struct pci_dev *pdev = to_pci_dev(i915->drm.dev);
-> >         acpi_handle dhandle;
-> >         union acpi_object *obj;
-> > +       int supported = 0;
-> >
-> >         dhandle = ACPI_HANDLE(&pdev->dev);
-> >         if (!dhandle)
-> > @@ -194,8 +196,22 @@ void intel_dsm_get_bios_data_funcs_supported(struct drm_i915_private *i915)
-> >
-> >         obj = acpi_evaluate_dsm(dhandle, &intel_dsm_guid2, INTEL_DSM_REVISION_ID,
-> >                                 INTEL_DSM_FN_GET_BIOS_DATA_FUNCS_SUPPORTED, NULL);
-> > -       if (obj)
-> > +       if (obj) {
-> > +               if (obj->type == ACPI_TYPE_INTEGER)
-> > +                       supported = obj->integer.value;
-> > +
-> >                 ACPI_FREE(obj);
-> > +       }
-> > +
-> > +       /* Tiger Lake H DP-IN Boot Time Switching from iGfx to dGfx */
-> > +       if (supported & BIT(20)) {
-> > +               obj = acpi_evaluate_dsm(dhandle, &intel_dsm_guid2,
-> > +                                       INTEL_DSM_REVISION_ID,
-> > +                                       INTEL_DSM_FN_DP_IN_SWITCH_TO_DGFX,
-> > +                                       NULL);
-> > +               if (obj)
-> > +                       ACPI_FREE(obj);
-> > +       }
-> >  }
-> >
-> >  /*
-> > --
-> > 2.36.1
-> >
->
+v8:
+ - https://lore.kernel.org/linux-iommu/20220607014942.3954894-1-baolu.lu@linux.intel.com/
+ - Add support for calculating the max pasids that a device could
+   consume.
+ - Replace container_of_safe() with container_of.
+ - Remove iommu_ops->sva_domain_ops and make sva support through the
+   generic domain_alloc/free() interfaces.
+ - [Robin] It would be logical to pass IOMMU_DOMAIN_SVA to the normal
+   domain_alloc call, so that driver-internal stuff like context
+   descriptors can be still be hung off the domain as usual (rather than
+   all drivers having to implement some extra internal lookup mechanism
+   to handle all the SVA domain ops).
+ - [Robin] I'd just stick the mm pointer in struct iommu_domain, in a
+   union with the fault handler stuff those are mutually exclusive with
+   SVA.
+ - https://lore.kernel.org/linux-iommu/f3170016-4d7f-e78e-db48-68305f683349@arm.com/
+
+v7:
+ - https://lore.kernel.org/linux-iommu/20220519072047.2996983-1-baolu.lu@linux.intel.com/
+ - Remove duplicate array for sva domain.
+ - Rename detach_dev_pasid to block_dev_pasid.
+ - Add raw device driver interfaces for iommufd.
+ - Other misc refinements and patch reorganization.
+ - Drop "dmaengine: idxd: Separate user and kernel pasid enabling" which
+   has been picked for dmaengine tree.
+
+v6:
+ - https://lore.kernel.org/linux-iommu/20220510061738.2761430-1-baolu.lu@linux.intel.com/
+ - Refine the SVA basic data structures.
+   Link: https://lore.kernel.org/linux-iommu/YnFv0ps0Ad8v+7uH@myrica/
+ - Refine arm smmuv3 sva domain allocation.
+ - Fix a possible lock issue.
+   Link: https://lore.kernel.org/linux-iommu/YnFydE8j8l7Q4m+b@myrica/
+
+v5:
+ - https://lore.kernel.org/linux-iommu/20220502014842.991097-1-baolu.lu@linux.intel.com/
+ - Address review comments from Jean-Philippe Brucker. Very appreciated!
+ - Remove redundant pci aliases check in
+   device_group_immutable_singleton().
+ - Treat all buses except PCI as static in immutable singleton check.
+ - As the sva_bind/unbind() have already guaranteed sva domain free only
+   after iopf_queue_flush_dev(), remove the unnecessary domain refcount.
+ - Move domain get() out of the list iteration in iopf_handle_group().
+
+v4:
+ - https://lore.kernel.org/linux-iommu/20220421052121.3464100-1-baolu.lu@linux.intel.com/
+ - Solve the overlap with another series and make this series
+   self-contained.
+ - No objection to the abstraction of data structure during v3 review.
+   Hence remove the RFC subject prefix.
+ - Refine the immutable singleton group code according to Kevin's
+   comments.
+
+v3:
+ - https://lore.kernel.org/linux-iommu/20220410102443.294128-1-baolu.lu@linux.intel.com/
+ - Rework iommu_group_singleton_lockdown() by adding a flag to the group
+   that positively indicates the group can never have more than one
+   member, even after hot plug.
+ - Abstract the data structs used for iommu sva in a separated patches to
+   make it easier for review.
+ - I still keep the RFC prefix in this series as above two significant
+   changes need at least another round review to be finalized.
+ - Several misc refinements.
+
+v2:
+ - https://lore.kernel.org/linux-iommu/20220329053800.3049561-1-baolu.lu@linux.intel.com/
+ - Add sva domain life cycle management to avoid race between unbind and
+   page fault handling.
+ - Use a single domain for each mm.
+ - Return a single sva handler for the same binding.
+ - Add a new helper to meet singleton group requirement.
+ - Rework the SVA domain allocation for arm smmu v3 driver and move the
+   pasid_bit initialization to device probe.
+ - Drop the patch "iommu: Handle IO page faults directly".
+ - Add mmget_not_zero(mm) in SVA page fault handler.
+
+v1:
+ - https://lore.kernel.org/linux-iommu/20220320064030.2936936-1-baolu.lu@linux.intel.com/
+ - Initial post.
+
+Lu Baolu (13):
+  iommu: Add max_pasids field in struct iommu_device
+  iommu: Add max_pasids field in struct dev_iommu
+  iommu: Remove SVM_FLAG_SUPERVISOR_MODE support
+  PCI: Allow PASID only when ACS enforced on upstreaming path
+  iommu: Add attach/detach_dev_pasid iommu interface
+  iommu: Add IOMMU SVA domain support
+  iommu/vt-d: Add SVA domain support
+  arm-smmu-v3/sva: Add SVA domain support
+  iommu/sva: Refactoring iommu_sva_bind/unbind_device()
+  iommu: Remove SVA related callbacks from iommu ops
+  iommu: Prepare IOMMU domain for IOPF
+  iommu: Per-domain I/O page fault handling
+  iommu: Rename iommu-sva-lib.{c,h}
+
+ include/linux/intel-svm.h                     |  13 -
+ include/linux/iommu.h                         | 110 +++++---
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h   |  19 +-
+ drivers/iommu/intel/iommu.h                   |  13 +-
+ .../iommu/{iommu-sva-lib.h => iommu-sva.h}    |  14 +-
+ drivers/dma/idxd/cdev.c                       |   3 +-
+ drivers/dma/idxd/init.c                       |  25 +-
+ .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   | 119 +++++---
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   |   9 +-
+ drivers/iommu/intel/dmar.c                    |   7 +
+ drivers/iommu/intel/iommu.c                   |   7 +-
+ drivers/iommu/intel/svm.c                     | 150 +++++-----
+ drivers/iommu/io-pgfault.c                    |  77 ++----
+ drivers/iommu/iommu-sva-lib.c                 |  71 -----
+ drivers/iommu/iommu-sva.c                     | 233 ++++++++++++++++
+ drivers/iommu/iommu.c                         | 259 +++++++++++-------
+ drivers/misc/uacce/uacce.c                    |   2 +-
+ drivers/pci/ats.c                             |   5 +
+ drivers/iommu/Makefile                        |   2 +-
+ 19 files changed, 680 insertions(+), 458 deletions(-)
+ rename drivers/iommu/{iommu-sva-lib.h => iommu-sva.h} (83%)
+ delete mode 100644 drivers/iommu/iommu-sva-lib.c
+ create mode 100644 drivers/iommu/iommu-sva.c
+
+-- 
+2.25.1
+

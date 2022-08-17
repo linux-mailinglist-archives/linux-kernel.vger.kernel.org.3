@@ -2,110 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678FF596A93
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B29E596A96
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232745AbiHQHnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 03:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
+        id S232881AbiHQHnn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 17 Aug 2022 03:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232808AbiHQHnS (ORCPT
+        with ESMTP id S232822AbiHQHnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 03:43:18 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF53614B
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:43:11 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id n4so15197409wrp.10
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:43:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=zLLlDxWY1ZbgrX8NpGBCB8sUZ5zGgiZGyIWtQwkp0OA=;
-        b=gqXUq1XPEIEhCRg07vPqzYAnTxDGM1px1zk2qHB4n49AzVZXVwNh0pdF7nlfwj8Txi
-         471iZyjttQf7q1pHISAmjK5xjeBndOEUtBAbNW+0yGpW06a/lBXR786W66lr4mVREPAG
-         IZuoprahf0K9LIhhWH3dwpF/QZmHZIb1V9YuTCyQh+XnoiYTVR5VYoxDuxAjSDsgqRXo
-         ucFGnczaQhw3A+C1f/PkYDaJh2dVz+16Tts7rySd4aVcesM5jXezaO17F19GBLQgT9Dy
-         OdRGlt5HRuhro42MfHxOUYdTKwUrfwJ9pxN51u+yeA5a7mqWSXquSI4p8lffToPoI4EF
-         14Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=zLLlDxWY1ZbgrX8NpGBCB8sUZ5zGgiZGyIWtQwkp0OA=;
-        b=yORhrk3dq2OGqGqQjRHQDAPiVtqNNnI+NqbFyp9H8YKpp2cPCuxYitHoRs6CmaAGno
-         ySKwe7Ql+Bw4BOg14E67OCYUpE7mMwormGhgigNP3ZO3I/coUbp3vaokI82/ARGCsvCG
-         tpPQ7MtYFuV9xHKfku9ucgTGoaLHc3+MNljJoQ+rrSOvpAlw9q3tS+BmOk1RDNU3U/s9
-         ZJXuLrNWI+qATESnqp54TazuGctJaCQ/naZHgKZ6M8Z/G38iYo5LfncyI03S9t5grTEX
-         N+8XWOjsgFDDKo+QuxM1U4iwb6vwqxxU+4EwvqInidxZ/x9m1OEW7QgnRRDjvq/UGmLu
-         2N1g==
-X-Gm-Message-State: ACgBeo15YnknjWVccVTa133bY4A3QvSPiRbsdQV4gdxWnWkKQ3eMgb9I
-        44U+umXTI7Fs9PiblvPfolE=
-X-Google-Smtp-Source: AA6agR7aELdcavrzLLOFMb60XRXEAyFKHKVTeRNYKqVTjPIhqtGHM7MgAJmrrnaeybg9c3zmLSyO0w==
-X-Received: by 2002:adf:dc01:0:b0:21e:28ea:5d41 with SMTP id t1-20020adfdc01000000b0021e28ea5d41mr13406980wri.440.1660722190049;
-        Wed, 17 Aug 2022 00:43:10 -0700 (PDT)
-Received: from gmail.com (195-38-113-151.pool.digikabel.hu. [195.38.113.151])
-        by smtp.gmail.com with ESMTPSA id bk13-20020a0560001d8d00b0022511d35d5bsm4576519wrb.12.2022.08.17.00.43.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 00:43:09 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Wed, 17 Aug 2022 09:43:07 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Ashok Raj <ashok.raj@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        LKML Mailing List <linux-kernel@vger.kernel.org>,
-        X86-kernel <x86@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Jacon Jun Pan <jacob.jun.pan@intel.com>
-Subject: Re: [PATCH v3 1/5] x86/microcode/intel: Check against CPU signature
- before saving microcode
-Message-ID: <YvycC5cwBKJFgefV@gmail.com>
-References: <20220817051127.3323755-1-ashok.raj@intel.com>
- <20220817051127.3323755-2-ashok.raj@intel.com>
+        Wed, 17 Aug 2022 03:43:39 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B73075CF6;
+        Wed, 17 Aug 2022 00:43:36 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M70L66wVTzcfh3;
+        Wed, 17 Aug 2022 15:40:30 +0800 (CST)
+Received: from dggpemm100006.china.huawei.com (7.185.36.196) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 17 Aug 2022 15:43:34 +0800
+Received: from canpemm500001.china.huawei.com (7.192.104.163) by
+ dggpemm100006.china.huawei.com (7.185.36.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 17 Aug 2022 15:43:34 +0800
+Received: from canpemm500001.china.huawei.com ([7.192.104.163]) by
+ canpemm500001.china.huawei.com ([7.192.104.163]) with mapi id 15.01.2375.024;
+ Wed, 17 Aug 2022 15:43:34 +0800
+From:   "Zhoujian (jay)" <jianjay.zhou@huawei.com>
+To:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bhelgaas@google.com" <bhelgaas@google.com>
+CC:     "Gonglei (Arei)" <arei.gonglei@huawei.com>,
+        zhuangshengen <zhuangshengen@huawei.com>
+Subject: [Question] Any plan to support enable PCI SRIOV concurrently in
+ kernel side?
+Thread-Topic: [Question] Any plan to support enable PCI SRIOV concurrently in
+ kernel side?
+Thread-Index: AdiyDNZvspPz1b9KT9CKr88dkJbU8g==
+Date:   Wed, 17 Aug 2022 07:43:34 +0000
+Message-ID: <0a8ce5714e2d4eed909cb096d4832036@huawei.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.151.254]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220817051127.3323755-2-ashok.raj@intel.com>
-X-Spam-Status: No, score=1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-* Ashok Raj <ashok.raj@intel.com> wrote:
+Enable SRIOV concurrently with many different PFs in userspace seems workable.
+I'm trying to do it with 8 PFs(each one with 240+ VFs), but get some warnings,
+here is the backtrace:
 
-> Cc: stable@vger.kernel.org
+Warning 1:
+---
+sysfs: cannot create duplicate filename '/devices/pci0000:30/0000:30:02.0/pci_bus/0000:32'
+Call Trace:
+ dump_stack+0x6f/0xab
+ sysfs_warn_dup+0x56/0x70
+ sysfs_create_dir_ns+0x80/0x90
+ kobject_add_internal+0xa0/0x2b0
+ kobject_add+0x71/0xd0
+ device_add+0x126/0x630
+ pci_add_new_bus+0x17c/0x4b0
+ pci_iov_add_virtfn+0x336/0x390
+ sriov_enable+0x26e/0x450
+ virtio_pci_sriov_configure+0x61/0xc0 [virtio_pci]
+---
+The reason is that different VFs may create the same pci bus number
+and try to add new bus concurrently in virtfn_add_bus.
 
-Not sure the series justifies stable - there's like a ton of things that 
-could go wrong with a series like this & we want to have some serious 
-testing first.
+Warning 2:
+---
+proc_dir_entry 'pci/33' already registered
+WARNING: CPU: 71 PID: 893 at fs/proc/generic.c:360 proc_register+0xf8/0x130
+Call Trace:
+ proc_mkdir_data+0x5d/0x80
+ pci_proc_attach_device+0xe9/0x120
+ pci_bus_add_device+0x33/0x90
+ pci_iov_add_virtfn+0x375/0x390
+ sriov_enable+0x26e/0x450
+ virtio_pci_sriov_configure+0x61/0xc0 [virtio_pci]
+---
+The reason is that different VFs may create '/proc/bus/pci/bus_number'
+directory using the same bus number in pci_proc_attach_device concurrently.
 
->  	list_for_each_entry_safe(iter, tmp, &microcode_cache, plist) {
->  		mc_saved_hdr = (struct microcode_header_intel *)iter->data;
-> -		sig	     = mc_saved_hdr->sig;
-> -		pf	     = mc_saved_hdr->pf;
->  
-> -		if (find_matching_signature(data, sig, pf)) {
-> +		sig = uci->cpu_sig.sig;
-> +		pf  = uci->cpu_sig.pf;
-> +
-> +		/*
-> +		 * Compare the current CPUs signature with the ones in the
+Mutex lock can avoid potential conflict. With the patch below the warnings above
+are no longer appear.
 
-s/CPUs
- /CPU's
+My question is that any plan to support enable PCI SRIOV concurrently in kernel side?
 
-Thanks,
+Thanks
 
-	Ingo
+---
+drivers/pci/iov.c | 29 +++++++++++++++++++++++++++--
+ 1 file changed, 27 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
+index 952217572113..6a8a849298c4 100644
+--- a/drivers/pci/iov.c
++++ b/drivers/pci/iov.c
+@@ -16,6 +16,12 @@
+ 
+ #define VIRTFN_ID_LEN    16
+ 
++static struct mutex add_bus_mutex;
++static int add_bus_mutex_initialized;
++
++static struct mutex add_device_mutex;
++static int add_device_mutex_initialized;
++
+ int pci_iov_virtfn_bus(struct pci_dev *dev, int vf_id)
+ {
+     if (!dev->is_physfn)
+@@ -127,13 +133,24 @@ static struct pci_bus *virtfn_add_bus(struct pci_bus *bus, int busnr)
+     if (bus->number == busnr)
+         return bus;
+ 
++    if (!add_bus_mutex_initialized) {
++        mutex_init(&add_bus_mutex);
++        add_bus_mutex_initialized = 1;
++    }
++    mutex_lock(&add_bus_mutex);
++
+     child = pci_find_bus(pci_domain_nr(bus), busnr);
+-    if (child)
++    if (child) {
++        mutex_unlock(&add_bus_mutex);
+         return child;
++    }
+ 
+     child = pci_add_new_bus(bus, NULL, busnr);
+-    if (!child)
++    if (!child) {
++        mutex_unlock(&add_bus_mutex);
+         return NULL;
++    }
++    mutex_unlock(&add_bus_mutex);
+ 
+     pci_bus_insert_busn_res(child, busnr, busnr);
+ 
+@@ -339,8 +356,16 @@ int pci_iov_add_virtfn(struct pci_dev *dev, int id)
+     if (rc)
+         goto failed1;
+ 
++    if (!add_device_mutex_initialized) {
++        mutex_init(&add_device_mutex);
++        add_device_mutex_initialized = 1;
++    }
++    mutex_lock(&add_device_mutex);
++
+     pci_bus_add_device(virtfn);
+ 
++    mutex_unlock(&add_device_mutex);
++
+     return 0;
+ 
+ failed1:
+---

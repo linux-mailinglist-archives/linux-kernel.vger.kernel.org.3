@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF79C597433
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92158597426
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240151AbiHQQ2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 12:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50706 "EHLO
+        id S241119AbiHQQ2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 12:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240985AbiHQQ1l (ORCPT
+        with ESMTP id S239344AbiHQQ1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 17 Aug 2022 12:27:41 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E0CA0326
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:27:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C72A031D;
+        Wed, 17 Aug 2022 09:27:40 -0700 (PDT)
 From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1660753657;
@@ -22,32 +22,37 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pKc+6HUSNpaxlBjXSX1XTp4QrP/t25TRKhHhhX/hF54=;
-        b=FpU5qd203NglSjouxtHxwHoFNL1T2ZLmljndcWC4FtmBFWjgUqwHAjv7zQvsovs6hCxhlX
-        JoHA0FMFOkBHqqoKdp7EjJdeRWc5Rn4pgzL62l1FMpBxxWCZ+0csVl9GHyvibFAee9cf9n
-        OSA1Tb0ugOTGnMu1nFM4VKdTkKVezo30Ta4GQ3squD4pDt0OHMXmNMcw+ygtvY66XPLoMK
-        vg5p1TnDFQA7yOOLOnrjP/QULpMws95kTgxqnbYqy2ioH17zW3J3ui+pCgV/JZX9xHJe5+
-        ZLk6Mz/fYw8wN5r5rvTm83XCKdbXLKNlarnAneLdFP+vrPc4BYaxzimqyBEPDA==
+        bh=icKYkzOEkU10wqYj/AO1hlieqfsCO6opQIYue93MICc=;
+        b=WUwxVW+uGIaO0szg7BxOu1wCzapAwDdXZYNPFf3kiI2xBtu8Es480fO/5T71TMYiQKTjL2
+        Y5lWxIQqJ7x7BoSnhKaFZCzRhG7+8yHeQ5/tmMMThFpP2L1agJ4szHQY5JVMPUakod0IbE
+        yIc6Gl3i758gJbuMjFnB7KmeyFMZ5xJ0mfQb/Ikck/iVjEeodnOdRlmZ/pr1p0eX5sgM4R
+        M4paCBlURfexAPIOmkPU+fjGxjbUG3Dnqp+YkiX1A4mHylwtylhelH9PtNbQGgVaw0NytL
+        acYvZri+GlxU9tb6ucjTkjxdrXJYjietaE0V6tqA4Eq9vmaflVkD4q9k8U95TQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1660753657;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pKc+6HUSNpaxlBjXSX1XTp4QrP/t25TRKhHhhX/hF54=;
-        b=VeiXr1hZu9YMVGXyrDrMs79lKviokSPPt/kOD1hYDXn1qxwRf9t8Nj70PwNgMW7CRyMxjK
-        iYibp+Y7KobngcAQ==
+        bh=icKYkzOEkU10wqYj/AO1hlieqfsCO6opQIYue93MICc=;
+        b=500tFezzQJcGWrboXp6CHY0SHvmE+zDVA//pAXoHOs0Jh0IxU+Aa1gSbSy/Lv6WZU3qbC3
+        94vz4DsO75E0UxCQ==
 To:     linux-kernel@vger.kernel.org
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH 5/9] mm/debug: Provide VM_WARN_ON_IRQS_ENABLED()
-Date:   Wed, 17 Aug 2022 18:26:59 +0200
-Message-Id: <20220817162703.728679-6-bigeasy@linutronix.de>
+Subject: [PATCH 6/9] mm/memcontrol: Replace the PREEMPT_RT conditionals
+Date:   Wed, 17 Aug 2022 18:27:00 +0200
+Message-Id: <20220817162703.728679-7-bigeasy@linutronix.de>
 In-Reply-To: <20220817162703.728679-1-bigeasy@linutronix.de>
 References: <20220817162703.728679-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
@@ -64,56 +69,76 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-Some places in the VM code expect interrupts disabled, which is a valid
-expectation on non-PREEMPT_RT kernels, but does not hold on RT kernels in
-some places because the RT spinlock substitution does not disable
-interrupts.
-
-To avoid sprinkling CONFIG_PREEMPT_RT conditionals into those places,
-provide VM_WARN_ON_IRQS_ENABLED() which is only enabled when VM_DEBUG=3Dy a=
-nd
-PREEMPT_RT=3Dn.
+Use VM_WARN_ON_IRQS_ENABLED() and preempt_disable/enable_nested() to
+replace the CONFIG_PREEMPT_RT #ifdeffery.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: Shakeel Butt <shakeelb@google.com>
+Cc: Muchun Song <songmuchun@bytedance.com>
+Cc: cgroups@vger.kernel.org
 Cc: linux-mm@kvack.org
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- include/linux/mmdebug.h | 6 ++++++
- lib/Kconfig.debug       | 3 +++
- 2 files changed, 9 insertions(+)
+ mm/memcontrol.c | 19 ++++++-------------
+ 1 file changed, 6 insertions(+), 13 deletions(-)
 
-diff --git a/include/linux/mmdebug.h b/include/linux/mmdebug.h
-index 15ae78cd28536..b8728d11c9490 100644
---- a/include/linux/mmdebug.h
-+++ b/include/linux/mmdebug.h
-@@ -94,6 +94,12 @@ void dump_mm(const struct mm_struct *mm);
- #define VM_WARN(cond, format...) BUILD_BUG_ON_INVALID(cond)
- #endif
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index b69979c9ced5c..d35b6fa560f0a 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -597,25 +597,18 @@ static u64 flush_next_time;
+  */
+ static void memcg_stats_lock(void)
+ {
+-#ifdef CONFIG_PREEMPT_RT
+-      preempt_disable();
+-#else
+-      VM_BUG_ON(!irqs_disabled());
+-#endif
++	preempt_disable_nested();
++	VM_WARN_ON_IRQS_ENABLED();
+ }
 =20
-+#ifdef CONFIG_DEBUG_VM_IRQSOFF
-+#define VM_WARN_ON_IRQS_ENABLED() WARN_ON_ONCE(!irqs_disabled())
-+#else
-+#define VM_WARN_ON_IRQS_ENABLED() do { } while (0)
-+#endif
-+
- #ifdef CONFIG_DEBUG_VIRTUAL
- #define VIRTUAL_BUG_ON(cond) BUG_ON(cond)
- #else
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 072e4b289c13e..c96fc6820544c 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -803,6 +803,9 @@ config ARCH_HAS_DEBUG_VM_PGTABLE
- 	  An architecture should select this when it can successfully
- 	  build and run DEBUG_VM_PGTABLE.
+ static void __memcg_stats_lock(void)
+ {
+-#ifdef CONFIG_PREEMPT_RT
+-      preempt_disable();
+-#endif
++	preempt_disable_nested();
+ }
 =20
-+config DEBUG_VM_IRQSOFF
-+	def_bool DEBUG_VM && !PREEMPT_RT
-+
- config DEBUG_VM
- 	bool "Debug VM"
- 	depends on DEBUG_KERNEL
+ static void memcg_stats_unlock(void)
+ {
+-#ifdef CONFIG_PREEMPT_RT
+-      preempt_enable();
+-#endif
++	preempt_enable_nested();
+ }
+=20
+ static inline void memcg_rstat_updated(struct mem_cgroup *memcg, int val)
+@@ -715,7 +708,7 @@ void __mod_memcg_lruvec_state(struct lruvec *lruvec, en=
+um node_stat_item idx,
+ 	 * interrupt context while other caller need to have disabled interrupt.
+ 	 */
+ 	__memcg_stats_lock();
+-	if (IS_ENABLED(CONFIG_DEBUG_VM) && !IS_ENABLED(CONFIG_PREEMPT_RT)) {
++	if (IS_ENABLED(CONFIG_DEBUG_VM)) {
+ 		switch (idx) {
+ 		case NR_ANON_MAPPED:
+ 		case NR_FILE_MAPPED:
+@@ -725,7 +718,7 @@ void __mod_memcg_lruvec_state(struct lruvec *lruvec, en=
+um node_stat_item idx,
+ 			WARN_ON_ONCE(!in_task());
+ 			break;
+ 		default:
+-			WARN_ON_ONCE(!irqs_disabled());
++			VM_WARN_ON_IRQS_ENABLED();
+ 		}
+ 	}
+=20
 --=20
 2.37.2
 

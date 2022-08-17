@@ -2,100 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FDA8596718
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5F959671B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238451AbiHQCAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 22:00:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34068 "EHLO
+        id S238245AbiHQCBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 22:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238077AbiHQCAB (ORCPT
+        with ESMTP id S232908AbiHQCBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 22:00:01 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1382D6CD27
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 19:00:00 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M6rjg0qlQzlW9P;
-        Wed, 17 Aug 2022 09:56:55 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 17 Aug 2022 09:59:58 +0800
-Subject: Re: [PATCH 3/6] mm/hugetlb: fix missing call to
- restore_reserve_on_error()
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-CC:     <akpm@linux-foundation.org>, <songmuchun@bytedance.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220816130553.31406-1-linmiaohe@huawei.com>
- <20220816130553.31406-4-linmiaohe@huawei.com> <YvwovBboCJBOJ1Wm@monkey>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <14198f4d-f9ff-8e36-d985-3719e365f913@huawei.com>
-Date:   Wed, 17 Aug 2022 09:59:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Tue, 16 Aug 2022 22:01:02 -0400
+Received: from gimli.rothwell.id.au (gimli.rothwell.id.au [103.230.158.156])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1637822A;
+        Tue, 16 Aug 2022 19:01:00 -0700 (PDT)
+Received: from authenticated.rothwell.id.au (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.rothwell.id.au (Postfix) with ESMTPSA id 4M6rpD6n0HzyZr;
+        Wed, 17 Aug 2022 12:00:52 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rothwell.id.au;
+        s=201702; t=1660701655;
+        bh=dtW8+2kRTTd1rXIAqfFHietP1JcPVL/dXFAV5Z7/924=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=B3gicvIbPhiksqYFbDzbrusCOR+IfJfi01CCVe2eHg+IpqhRZTc7FfsNrrGwzN+ny
+         zizJAeprJ2hMEi0W4b49akWqiUKlhYT3ySc8mUoZj+LEGuxbelkebrreTAtCljksnt
+         VKNSAhGz5ERwPWm5vbbAEUtoPW+CNhIlPZVr9MuBgtF5Rg7I1gIBa0C8Fxhh1279aA
+         vSsoUsAFbV+T9f3+3gZdtvMgQD/GFgfjV8iQ9Y9urIHBlkMEVZ/jnWgcZja+/aIo58
+         yEhxinFYBcoIxIWEAo6E4gEQUHhfx9vNRmwelGAJlyqnWD5QzbOOiwppYM/cypbtbM
+         GkpPulwQSjMTg==
+Date:   Wed, 17 Aug 2022 12:00:51 +1000
+From:   Stephen Rothwell <sfr@rothwell.id.au>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev,
+        lkft-triage@lists.linaro.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: Re: [next] arm64: kernel BUG at fs/inode.c:622 - Internal error:
+ Oops - BUG: 0 - pc : clear_inode
+Message-ID: <20220817120051.20a39b52@oak.ozlabs.ibm.com>
+In-Reply-To: <CA+G9fYuLvTmVbyEpU3vrw58QaWfN=Eg8VdrdRei_jmu2Y2OzOg@mail.gmail.com>
+References: <CA+G9fYv2Wof_Z4j8wGYapzngei_NjtnGUomb7y34h4VDjrQDBA@mail.gmail.com>
+        <CAHk-=wj=u9+0kitx6Z=efRDrGVu_OSUieenyK4ih=TFjZdyMYQ@mail.gmail.com>
+        <CA+G9fYuLvTmVbyEpU3vrw58QaWfN=Eg8VdrdRei_jmu2Y2OzOg@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <YvwovBboCJBOJ1Wm@monkey>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/p7uJ_iQfq=MtmPXdTyKBMw9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/17 7:31, Mike Kravetz wrote:
-> On 08/16/22 21:05, Miaohe Lin wrote:
->> When huge_add_to_page_cache() fails, the page is freed directly without
->> calling restore_reserve_on_error() to restore reserve for newly allocated
->> pages not in page cache. Fix this by calling restore_reserve_on_error()
->> when huge_add_to_page_cache fails.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  mm/hugetlb.c | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
->> index ff991e5bdf1f..b69d7808f457 100644
->> --- a/mm/hugetlb.c
->> +++ b/mm/hugetlb.c
->> @@ -5603,6 +5603,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
->>  		if (vma->vm_flags & VM_MAYSHARE) {
->>  			int err = huge_add_to_page_cache(page, mapping, idx);
->>  			if (err) {
->> +				restore_reserve_on_error(h, vma, haddr, page);
-> 
-> Hmmmm.  I was going to comment that restore_reserve_on_error would not handle
-> the situation where 'err == -EEXIST' below.  This is because it implies we
-> raced with someone else that added the page to the cache.  And, that other
+--Sig_/p7uJ_iQfq=MtmPXdTyKBMw9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for pointing this out.
+Hi Naresh,
 
-> allocation, not this one, consumed the reservation.  However, I am not sure
-> how that could be possible?  The hugetlb fault mutex (which we hold)
-> must be held to add a page to the page cache.
-> 
-> Searching git history I see that code was added (or at least existed) before
-> the hugetlb fault mutex was introduced.  So, I believe that check for -EEXIST
-> and retry can go.
+On Wed, 17 Aug 2022 01:09:40 +0530 Naresh Kamboju <naresh.kamboju@linaro.or=
+g> wrote:
+>
+> On Wed, 17 Aug 2022 at 00:40, Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > On Tue, Aug 16, 2022 at 12:00 PM Naresh Kamboju
+> > <naresh.kamboju@linaro.org> wrote: =20
+> > >
+> > > Following kernel BUG found while booting arm64 Qcom dragonboard 410c =
+with
+> > > Linux next-20220816 kernel Image. =20
+> >
+> > What kind of environment is this?
+> >
+> > Havign that inode list corruption makes it smell a *bit* like the
+> > crazy memory corruption that we saw with the google cloud instances,
+> > but that would only happen wif you actually use VIRTIO for your
+> > environment? =20
+>=20
+> This is a physical hardware db410c device.
+> Following VIRTIO configs enabled.
+>=20
+> CONFIG_BLK_MQ_VIRTIO=3Dy
+> CONFIG_NET_9P_VIRTIO=3Dy
+> CONFIG_VIRTIO_BLK=3Dy
+> CONFIG_SCSI_VIRTIO=3Dy
+> CONFIG_VIRTIO_NET=3Dy
+> CONFIG_VIRTIO_CONSOLE=3Dy
+> CONFIG_VIRTIO_ANCHOR=3Dy
+> CONFIG_VIRTIO=3Dy
+> CONFIG_VIRTIO_PCI_LIB=3Dy
+> CONFIG_VIRTIO_PCI_LIB_LEGACY=3Dy
+> CONFIG_VIRTIO_MENU=3Dy
+> CONFIG_VIRTIO_PCI=3Dy
+> CONFIG_VIRTIO_PCI_LEGACY=3Dy
+> CONFIG_VIRTIO_BALLOON=3Dy
+> CONFIG_VIRTIO_MMIO=3Dy
+> CONFIG_CRYPTO_DEV_VIRTIO=3Dy
+>=20
+>=20
+> >
+> > Do you see the same issue with plain v6.0-rc1? =20
+>=20
+> Nope. I do not notice reported BUG on v6.0-rc1.
 
-Agree with you. All call sites of huge_add_to_page_cache is protected by hugetlb fault mutex.
+Is it reliable enough that you could possibly do a bisection between
+v6.0-rc1 and next-20220816?
 
-> 
-> With that said, restore_reserve_on_error can be called here.  But, let's
-> look into removing that err == -EEXIST check to avoid confusion.
+--=20
+Cheers,
+Stephen Rothwell
 
-Will do it in next version. Many thanks for your review and comment.
+--Sig_/p7uJ_iQfq=MtmPXdTyKBMw9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Thanks,
-Miaohe Lin
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL8S9MACgkQAVBC80lX
+0GzZAQf7Bsp+3irXdvFTPbeYTsFim8hgA9o1L4+3TfIVF5sd1bGcCdpcN20fck2P
+7viuEA5w5CXL1S2W6wzMmgKu7TwkhXHvbAGgPIGACHtGaCRjZXdix+sxlO/qX+ly
+HdhuvbqFkRW2ed+fj09Ww4KJgGP8/l0zwFemnBOrqao+cwIuNfKsQdbGVyzM43hr
+5PttxYZwGZvHar5BjSCqUM2MJ93i5s6frfJkreYg20gWCGaDOx3eZ468gSGPNw4t
+e6G/sdlX8e2aB0hhOuF4Fjn09vp5paWMelkEjEPbBlsgRsV04PmvNjEg0nKn8haJ
+0Ymh4ddoHGM2pz1ODoXplzCO8ap7uQ==
+=q9S1
+-----END PGP SIGNATURE-----
+
+--Sig_/p7uJ_iQfq=MtmPXdTyKBMw9--

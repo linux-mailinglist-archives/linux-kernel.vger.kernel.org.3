@@ -2,246 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E72359762B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31012597628
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241248AbiHQTD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 15:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
+        id S238396AbiHQTDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 15:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237429AbiHQTDv (ORCPT
+        with ESMTP id S230457AbiHQTDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 15:03:51 -0400
+        Wed, 17 Aug 2022 15:03:49 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2F12ED55
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:03:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D142B61D
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:03:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660763029;
+        s=mimecast20190719; t=1660763027;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=gd3covl43eagT0xH9juakpHOWjtQjx5gc3TXfzwf7g8=;
-        b=byHuX2E2wLrvHXrPq/iJI5Ncl53sHsZ19V00KzJQeuaRY/X+QiuvmZP1/ByQfF25RVL5kr
-        CJDTjOdCdlOQM2pBmbYElo0YcC/8vtCXvM6CEUMb7JSU/Cot0WfGPY9ljzyCT9jS8sxa27
-        i2CKae1Qb4pAENBweCenwMOYRsbI0Z4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         references:references; bh=QjliH6Zbs7SxREI0yAVgUWAGnTR2b2eGLogi48MSCUs=;
+        b=PKypfuAENkJe0Hu/gk0Ouo3MAfOO8Y1wQjXHcms43+QFweImyXwtBE98IK0K8+SOs8UdfW
+        H71G+7XFQGeS6wsFreAv2M+xoPM+xHaggKnBASMx9LKCXzegVDVqUI7pMxdQcQ6jFtWevh
+        PVZMBYvPRnoo4lz+ynj6y3FldLfkcSo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-119-FkspZK1LNAaVCrFeEPRp4w-1; Wed, 17 Aug 2022 15:03:46 -0400
-X-MC-Unique: FkspZK1LNAaVCrFeEPRp4w-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+ us-mta-301-FKthpWl-NYCrKTMounRGtQ-1; Wed, 17 Aug 2022 15:03:46 -0400
+X-MC-Unique: FKthpWl-NYCrKTMounRGtQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ACFC585A588;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 800C93810793;
         Wed, 17 Aug 2022 19:03:45 +0000 (UTC)
 Received: from fuller.cnet (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id EACEF492C3B;
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id ED5751121319;
         Wed, 17 Aug 2022 19:03:44 +0000 (UTC)
 Received: by fuller.cnet (Postfix, from userid 1000)
-        id 7A492416D5DE; Wed, 17 Aug 2022 16:03:26 -0300 (-03)
-Message-ID: <20220817190136.096849758@redhat.com>
+        id 7DD32416D5E9; Wed, 17 Aug 2022 16:03:26 -0300 (-03)
+Message-ID: <20220817190221.486745251@redhat.com>
 User-Agent: quilt/0.66
-Date:   Wed, 17 Aug 2022 16:01:36 -0300
+Date:   Wed, 17 Aug 2022 16:01:37 -0300
 From:   Marcelo Tosatti <mtosatti@redhat.com>
 To:     atomlin@redhat.com, frederic@kernel.org
 Cc:     cl@linux.com, tglx@linutronix.de, mingo@kernel.org,
         peterz@infradead.org, pauld@redhat.com, neelx@redhat.com,
         oleksandr@natalenko.name, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [patch 0/3] tick/sched: Ensure quiet_vmstat() is called when the idle tick was stopped too
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+        linux-mm@kvack.org, Marcelo Tosatti <mtosatti@redhat.com>
+Subject: [patch 1/3] mm/vmstat: Use per cpu variable to track a vmstat discrepancy
+References: <20220817190136.096849758@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset contains enhancements on top of Aaron's -v6 of the series
-(see the changelog below).
+From: Aaron Tomlin <atomlin@redhat.com>
 
-It fixes the following problems two problems:
+Add CPU-specific variable namely vmstat_dirty to indicate if
+a vmstat imbalance is present for a given CPU. Therefore, at the
+appropriate time, we can fold all the remaining differentials.
 
-1) A customer provided some evidence which indicates that the idle tick was
-stopped; albeit, CPU-specific vmstat counters still remained populated.
-Thus one can only assume quiet_vmstat() was not invoked on return to the
-idle loop.
+This speeds up quiet_vmstat in case no per-CPU differentials exist.
 
-If I understand correctly, I suspect this divergence might erroneously
-prevent a reclaim attempt by kswapd. If the number of zone specific free
-pages are below their per-cpu drift value then
-zone_page_state_snapshot() is used to compute a more accurate view of
-the aforementioned statistic.  Thus any task blocked on the NUMA node
-specific pfmemalloc_wait queue will be unable to make significant
-progress via direct reclaim unless it is killed after being woken up by
-kswapd (see throttle_direct_reclaim()).
+Based on 
+https://lore.kernel.org/lkml/20220204173554.763888172@fedora.localdomain/
 
-2) With a SCHED_FIFO task that busy loops on a given CPU, 
-and kworker for that CPU at SCHED_OTHER priority, queuing
-work to sync per-vmstats will either cause that work
-to never execute, or stalld boosts kworker priority which 
-causes a latency violation.
+Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
 
+---
+ mm/vmstat.c |   54 ++++++++++++++++++++----------------------------------
+ 1 file changed, 20 insertions(+), 34 deletions(-)
 
-Follows the v6 cover letter, with updated changelog. The numbers, for
-the test program attached at the end of this cover letter, executed
-inside a KVM VM, are:
-
-                                Vanilla                 Patch
-
-cycles per idle loop            151858                  153258  (+1.0%)
-
-cycles per syscall              8461                    8690    (+2.6%)
-
---------
-
-
-I have incorporated an idea from Marcelo's patch [1] where a CPU-specific
-variable is used to indicate if a vmstat differential/or imbalance is
-present for a given CPU. So, at the appropriate time, vmstat processing can
-be initiated. The hope is that this particular approach is "cheaper" when
-compared to need_update() - used currently; in the context of nohz_full and
-the scheduling-clock tick being stopped, we would now with this patch,
-check if a CPU-specific vmstat imbalance is present before exiting
-user-mode (see tick_nohz_user_enter_prepare()).
-
-This trivial test program [2] was used to determine the somewhat impact
-under vanilla and with the proposed changes; mlock(2) and munlock(2) was
-used solely to modify vmstat item 'NR_MLOCK'. The following is an average
-count of CPU-cycles across the aforementioned system calls and the idle
-loop, respectively. I believe these results are negligible:
-
-	  Modified		   |  		Vanilla
-                                   |
-  cycles per syscall: 7399         | 	cycles per syscall: 4150
-  cycles per idle loop: 141048     |	cycles per idle loop: 144730
-                                   |
-
-
-Any feedback would be appreciated. Thanks.
-
-Changes since v6 [6]:
- - sync vmstats independently of whether vmstat_update work is queued or not
- - clean vmstat_dirty before differential sync loop
- - cancel pending work if tick stopped
- - do not queue work to remote CPU if tick stopped
-
-Changes since v5 [3]:
-
- - Introduced __tick_nohz_user_enter_prepare()
- - Switched to EXPORT_SYMBOL_GPL()
-
-Changes since v4 [4]:
-
- - Moved vmstat_dirty specific changes into a separate patch
-   (Marcelo Tosatti)
-
-Changes since v3 [5]:
-
- - Used EXPORT_SYMBOL() on tick_nohz_user_enter_prepare()
- - Replaced need_update()
- - Introduced CPU-specific variable namely vmstat_dirty
-   and mark_vmstat_dirty()
-
-[1]: https://lore.kernel.org/lkml/20220204173554.763888172@fedora.localdomain/
-[2]: https://pastebin.com/8AtzSAuK
-[3]: https://lore.kernel.org/lkml/20220801234258.134609-1-atomlin@redhat.com/
-[4]: https://lore.kernel.org/lkml/20220621172207.1501641-1-atomlin@redhat.com/
-[5]: https://lore.kernel.org/lkml/20220422193647.3808657-1-atomlin@redhat.com/
-[6]: https://lore.kernel.org/linux-mm/20220808194820.676246-1-atomlin@redhat.com/
-
- include/linux/tick.h     |    5 +++--
- kernel/time/tick-sched.c |   19 ++++++++++++++++++-
- mm/vmstat.c              |   74 ++++++++++++++++++++++++++++++++++++--------------------------------------
- 3 files changed, 57 insertions(+), 41 deletions(-)
-
---- test-vmstat-overhead.c ---
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/mman.h>
-#include <unistd.h>
-#include <string.h>
-
-typedef unsigned long long cycles_t;
-typedef unsigned long long usecs_t;
-typedef unsigned long long u64;
-
-#ifdef __x86_64__
-#define DECLARE_ARGS(val, low, high)    unsigned long low, high
-#define EAX_EDX_VAL(val, low, high)     ((low) | ((u64)(high) << 32))
-#define EAX_EDX_ARGS(val, low, high)    "a" (low), "d" (high)
-#define EAX_EDX_RET(val, low, high)     "=a" (low), "=d" (high)
-#else
-#define DECLARE_ARGS(val, low, high)    unsigned long long val
-#define EAX_EDX_VAL(val, low, high)     (val)
-#define EAX_EDX_ARGS(val, low, high)    "A" (val)
-#define EAX_EDX_RET(val, low, high)     "=A" (val)
-#endif
-
-static inline unsigned long long __rdtscll(void)
-{
-        DECLARE_ARGS(val, low, high);
-
-        asm volatile("cpuid; rdtsc" : EAX_EDX_RET(val, low, high));
-
-        return EAX_EDX_VAL(val, low, high);
-}
-
-#define rdtscll(val) do { (val) = __rdtscll(); } while (0)
-
-#define NRSYSCALLS 30000
-#define NRSLEEPS   100000
-
-void main(int argc, char *argv[])
-{
-	unsigned long a, b, cycles;
-	int i, syscall = 0;
-	void *page = malloc(4096);
-
-	if (mlock(page, 4096))
-		perror("mlock");
-	if (munlock(page, 4096))
-		perror("munlock");
-
-	if (argc != 2) {
-		printf("usage: %s {idle,syscall}\n", argv[0]);
-		exit(1);
-	}
-
-        rdtscll(a);
-
-	if (strncmp("idle", argv[1], 4) == 0)
-		syscall = 0;
-	else if (strncmp("syscall", argv[1], 7) == 0)
-		syscall = 1;
-	else {
-		printf("usage: %s {idle,syscall}\n", argv[0]);
-		exit(1);
-	}
-	
-	if (syscall == 1) {
-        	for (i = 0; i < NRSYSCALLS; i++) {
-			if (mlock(page, 4096))
-				perror("mlock");
-			if (munlock(page, 4096))
-				perror("munlock");
-		}
-	} else {
-        	for (i = 0; i < NRSLEEPS; i++)
-		 	usleep(10);
-	}
-
-        rdtscll(b);
-
-        cycles = b - a;
-
-	if (syscall == 1)
-        	printf("cycles per syscall: %d\n", (b-a)/(NRSYSCALLS*2));
-	else
-		printf("cycles per idle loop: %d\n", (b-a)/NRSLEEPS);
-}
-
+Index: linux-2.6/mm/vmstat.c
+===================================================================
+--- linux-2.6.orig/mm/vmstat.c
++++ linux-2.6/mm/vmstat.c
+@@ -195,6 +195,12 @@ void fold_vm_numa_events(void)
+ #endif
+ 
+ #ifdef CONFIG_SMP
++static DEFINE_PER_CPU_ALIGNED(bool, vmstat_dirty);
++
++static inline void mark_vmstat_dirty(void)
++{
++	this_cpu_write(vmstat_dirty, true);
++}
+ 
+ int calculate_pressure_threshold(struct zone *zone)
+ {
+@@ -367,6 +373,7 @@ void __mod_zone_page_state(struct zone *
+ 		x = 0;
+ 	}
+ 	__this_cpu_write(*p, x);
++	mark_vmstat_dirty();
+ 
+ 	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+ 		preempt_enable();
+@@ -405,6 +412,7 @@ void __mod_node_page_state(struct pglist
+ 		x = 0;
+ 	}
+ 	__this_cpu_write(*p, x);
++	mark_vmstat_dirty();
+ 
+ 	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+ 		preempt_enable();
+@@ -603,6 +611,7 @@ static inline void mod_zone_state(struct
+ 
+ 	if (z)
+ 		zone_page_state_add(z, zone, item);
++	mark_vmstat_dirty();
+ }
+ 
+ void mod_zone_page_state(struct zone *zone, enum zone_stat_item item,
+@@ -671,6 +680,7 @@ static inline void mod_node_state(struct
+ 
+ 	if (z)
+ 		node_page_state_add(z, pgdat, item);
++	mark_vmstat_dirty();
+ }
+ 
+ void mod_node_page_state(struct pglist_data *pgdat, enum node_stat_item item,
+@@ -825,6 +835,14 @@ static int refresh_cpu_vm_stats(bool do_
+ 	int global_node_diff[NR_VM_NODE_STAT_ITEMS] = { 0, };
+ 	int changes = 0;
+ 
++	/*
++	 * Clear vmstat_dirty before clearing the percpu vmstats.
++	 * If interrupts are enabled, it is possible that an interrupt
++	 * or another task modifies a percpu vmstat, which will
++	 * set vmstat_dirty to true.
++	 */
++	this_cpu_write(vmstat_dirty, false);
++
+ 	for_each_populated_zone(zone) {
+ 		struct per_cpu_zonestat __percpu *pzstats = zone->per_cpu_zonestats;
+ #ifdef CONFIG_NUMA
+@@ -1949,35 +1967,6 @@ static void vmstat_update(struct work_st
+ }
+ 
+ /*
+- * Check if the diffs for a certain cpu indicate that
+- * an update is needed.
+- */
+-static bool need_update(int cpu)
+-{
+-	pg_data_t *last_pgdat = NULL;
+-	struct zone *zone;
+-
+-	for_each_populated_zone(zone) {
+-		struct per_cpu_zonestat *pzstats = per_cpu_ptr(zone->per_cpu_zonestats, cpu);
+-		struct per_cpu_nodestat *n;
+-
+-		/*
+-		 * The fast way of checking if there are any vmstat diffs.
+-		 */
+-		if (memchr_inv(pzstats->vm_stat_diff, 0, sizeof(pzstats->vm_stat_diff)))
+-			return true;
+-
+-		if (last_pgdat == zone->zone_pgdat)
+-			continue;
+-		last_pgdat = zone->zone_pgdat;
+-		n = per_cpu_ptr(zone->zone_pgdat->per_cpu_nodestats, cpu);
+-		if (memchr_inv(n->vm_node_stat_diff, 0, sizeof(n->vm_node_stat_diff)))
+-			return true;
+-	}
+-	return false;
+-}
+-
+-/*
+  * Switch off vmstat processing and then fold all the remaining differentials
+  * until the diffs stay at zero. The function is used by NOHZ and can only be
+  * invoked when tick processing is not active.
+@@ -1987,10 +1976,7 @@ void quiet_vmstat(void)
+ 	if (system_state != SYSTEM_RUNNING)
+ 		return;
+ 
+-	if (!delayed_work_pending(this_cpu_ptr(&vmstat_work)))
+-		return;
+-
+-	if (!need_update(smp_processor_id()))
++	if (!__this_cpu_read(vmstat_dirty))
+ 		return;
+ 
+ 	/*
+@@ -2021,7 +2007,7 @@ static void vmstat_shepherd(struct work_
+ 	for_each_online_cpu(cpu) {
+ 		struct delayed_work *dw = &per_cpu(vmstat_work, cpu);
+ 
+-		if (!delayed_work_pending(dw) && need_update(cpu))
++		if (!delayed_work_pending(dw) && per_cpu(vmstat_dirty, cpu))
+ 			queue_delayed_work_on(cpu, mm_percpu_wq, dw, 0);
+ 
+ 		cond_resched();
 
 

@@ -2,102 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 413A8596788
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71718596786
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238311AbiHQCtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 22:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
+        id S238366AbiHQCuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 22:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238334AbiHQCsz (ORCPT
+        with ESMTP id S232515AbiHQCuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 22:48:55 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CD44506F;
-        Tue, 16 Aug 2022 19:48:51 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M6snh2s7qzkWQG;
-        Wed, 17 Aug 2022 10:45:28 +0800 (CST)
-Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 17 Aug 2022 10:48:49 +0800
-Received: from [10.174.178.31] (10.174.178.31) by
- kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 17 Aug 2022 10:48:48 +0800
-Subject: Re: [PATCH] erofs: fix error return code in
- erofs_fscache_meta_read_folio and erofs_fscache_read_folio
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-CC:     <xiang@kernel.org>, <chao@kernel.org>,
-        <linux-erofs@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>, <yinxin.x@bytedance.com>
-References: <20220815034829.3940803-1-sunke32@huawei.com>
- <YvsoIFzRlGpqNZKg@B-P7TQMD6M-0146.local>
- <d40a1e7e-d78c-1a99-0889-6fc4d2102e9d@huawei.com>
- <YvxVWP0njcgghe+r@B-P7TQMD6M-0146.local>
-From:   Sun Ke <sunke32@huawei.com>
-Message-ID: <e1369566-6459-2eae-35f4-818865a7df20@huawei.com>
-Date:   Wed, 17 Aug 2022 10:48:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Tue, 16 Aug 2022 22:50:12 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C30F8E9B6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 19:50:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660704611; x=1692240611;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=imY/mzr9ioQrXsr1sB25wvAl1kpV5ATxx69XCs57YUU=;
+  b=jE+8JFFFacAfX6YRqUQKlZFkoX2I5lAg+UusdGAYjrgsscr4AuI3xe58
+   H2WwGqHNKClF83jmbspu9pQ1dCSHQ7yCdBkS0oVfrY6lmRe2V6wkQBuF+
+   BQEGkC4BCDQQ6dwBRzavNOILvA0znCj/RsQnhdUpbgrUaasIQ8eVLVf1e
+   in57AV0uFXN59aFaRSOCYGzqdF+Nt8P7HuVk9pxgb7IgXlFw9X1yxKzd9
+   skGpEP+gGMmn2xxYMMG602b18lyZdQ7/vC4b/ygKDPbeBt4vYeIyJIRhk
+   udULx+SyPo5ZliTphNzV40A9VuvSzW9ss2LHms+xXaSghRUxBHh/hCw2v
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="318388395"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="318388395"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 19:50:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="583574712"
+Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 16 Aug 2022 19:50:09 -0700
+Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oO98C-0000Uh-1C;
+        Wed, 17 Aug 2022 02:50:08 +0000
+Date:   Wed, 17 Aug 2022 10:49:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Andi Kleen <ak@linux.intel.com>
+Subject: [intel-tdx:guest-filter 10/28] arch/x86/coco/core.c:35:23: error: a
+ function declaration without a prototype is deprecated in all versions of C
+Message-ID: <202208171051.GtZFxUcq-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <YvxVWP0njcgghe+r@B-P7TQMD6M-0146.local>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.31]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600010.china.huawei.com (7.193.23.86)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/intel/tdx.git guest-filter
+head:   c8ae661a124d107ccb71713b70010f1bf237b7a2
+commit: c664f263080aef1f09d2021e00428e648bc1c73f [10/28] x86/tdx: Add command line option to disable TDX guest filter support
+config: x86_64-randconfig-r012-20220815 (https://download.01.org/0day-ci/archive/20220817/202208171051.GtZFxUcq-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/c664f263080aef1f09d2021e00428e648bc1c73f
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-filter
+        git checkout c664f263080aef1f09d2021e00428e648bc1c73f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/x86/coco/core.c:35:23: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
+   bool cc_filter_enabled()
+                         ^
+                          void
+   1 error generated.
 
 
-在 2022/8/17 10:41, Gao Xiang 写道:
-> Hi Ke,
-> 
-> On Wed, Aug 17, 2022 at 09:44:46AM +0800, Sun Ke wrote:
->>
->>
->> 在 2022/8/16 13:16, Gao Xiang 写道:
->>> On Mon, Aug 15, 2022 at 11:48:29AM +0800, Sun Ke wrote:
->>>> If erofs_fscache_alloc_request fail and then goto out, it will return 0.
->>>> it should return a negative error code instead of 0.
->>>>
->>>> Fixes: d435d53228dd ("erofs: change to use asynchronous io for fscache readpage/readahead")
->>>> Signed-off-by: Sun Ke <sunke32@huawei.com>
->>>
->>> Minor, I tried to apply this patch by updating the patch title into
->>> "erofs: fix error return code in erofs_fscache_{meta_,}read_folio"
->>>
->>> since the original patch title is too long.
->>
->> Should I send a v2 patch to update the title?
-> 
-> I've already updated this by hand if you have no concern ;)
-> will push out to -next today...
-;)
+vim +35 arch/x86/coco/core.c
 
-Thanks,
-Sun Ke
-> 
-> Thanks,
-> Gao Xiang
-> 
->>
->> Thanks,
->> Sun Ke
->>>
->>> Thanks,
->>> Gao Xiang
->>> .
->>>
-> .
-> 
+    34	
+  > 35	bool cc_filter_enabled()
+    36	{
+    37		return cc_filter_status;
+    38	}
+    39	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

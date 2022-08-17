@@ -2,102 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA1959784A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 903AB59784D
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241357AbiHQUxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 16:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
+        id S238368AbiHQUxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 16:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240646AbiHQUxo (ORCPT
+        with ESMTP id S231736AbiHQUxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 16:53:44 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334107C1D9
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:53:43 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id f22so19014428edc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:53:43 -0700 (PDT)
+        Wed, 17 Aug 2022 16:53:40 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F7D7B1FE
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:53:40 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so3050879pjf.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:53:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=1+XpTLI/st3pL/UMVfxVdHTTNl/6n7HQUGF319MI0IU=;
-        b=LWeIFvQ972maQf3/948nGROrQ/uqLY39NILux/YX/yij//DDfJOUkG1nQJ6gmz+gTm
-         mt6Z7RHYlgh9kTtp86QGSAGzgewxTFuJcYWCfkzx6O30xI56V2DXKKKABUkTg/s+s5IO
-         K4V+NvtxkPE4rvxL0bRx0Z/HcIaJaqrN3Qad8=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=copKnaXkpj/PrdXoSUh50plMYt2cxJb8zNQUI1sfapA=;
+        b=dCyKrDnHffHMPE6zwy+Q7dZ4Ubotg1BDm/dOjNXU/xI1BiYUerO9CRhZwdkqtfaDm7
+         XuOuyklex7q/EQ97Mr53rpTjNcyZaxALRxHbZcvyVcZJyeUILr2vBugIjYSrPAcrQ3o1
+         6d97ejy4FAbxM5nlOxJ8ps6SvtF6vhR9EOXwpY3XG84CHpL+XhWhu8InRN4uq21dG3K8
+         X+sMP2EcHvZmKNr9B+RdIlOLpqnfoF7HH6WfoFJU3ObgkKBLPYng7+/Uh9qAtDk4MBzo
+         1NOo+3PS4V1QvalfN62tSNBgtWn3rvXRcZ22j/f9IGuH/Q09QcCFQBDZKkhlsx6fKPCt
+         lkoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=1+XpTLI/st3pL/UMVfxVdHTTNl/6n7HQUGF319MI0IU=;
-        b=dkLhnejYS28lSk8FiZqQcyvT+wce776Zn5v/37jHs6f5oTAFmeFzEBDn0M3EHi4ZzR
-         ktyaNu9q01BucEvg4TnVH63j0Wxu99i7U3UgpdJxWYhb9fraplb9VPrP6jw1/ksBLecN
-         tqUvjsaTZMqe6ZABrcn3nVrh9z4ZNOfVkjHCiF+NR3OKuJoleDtSRZMW9qpoyCjss/jY
-         KFIfRLgu/3gsNyPzUXHPHJu+9F26t2gX2oH2kO6KTUySY/Win3IpLGJMOnt4G2eXmAuz
-         M6IyhiZ2gpX3fkurY6Y4pFup2y74OP18dcPvXdm/Q4RTdJhnvauLTC930LAvJLMpZ873
-         DGoQ==
-X-Gm-Message-State: ACgBeo20BAfSsyB+PjFUXx9cq9MzRmZGRxIZ2FBUET+ztiVmapUCUEu7
-        MYqLpjil9VsrZ14AbK5YyYXTG9z+Cv/Wymlj
-X-Google-Smtp-Source: AA6agR5ATZF+6WaChOs+A01JtJMksVG35HaXQVcUY5PKUeCpEVY3VFXWvrcpcbJ7mJxIrm0oxbCX9A==
-X-Received: by 2002:a05:6402:1f02:b0:445:f674:eac0 with SMTP id b2-20020a0564021f0200b00445f674eac0mr1640021edb.370.1660769621496;
-        Wed, 17 Aug 2022 13:53:41 -0700 (PDT)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
-        by smtp.gmail.com with ESMTPSA id ca18-20020aa7cd72000000b00445e037345csm1939016edb.14.2022.08.17.13.53.37
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 13:53:37 -0700 (PDT)
-Received: by mail-wr1-f42.google.com with SMTP id k16so2323297wrx.11
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:53:37 -0700 (PDT)
-X-Received: by 2002:a05:6000:1541:b0:222:cf65:18d7 with SMTP id
- 1-20020a056000154100b00222cf6518d7mr14840607wry.659.1660769616735; Wed, 17
- Aug 2022 13:53:36 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=copKnaXkpj/PrdXoSUh50plMYt2cxJb8zNQUI1sfapA=;
+        b=uf0/SfEpFAzleiSyNs1/0Km91mTqjISYguus00xEOX5iC9HoqubMqiGE1UtwIJ1YZ9
+         QBcbibwTQA+ZGqwExlHpW4XU8v0/BKKSLJzzLwQ7AsMIONDvA726oMzzCS5kY+BUi9im
+         Ir7xNxYJunXcZoSsr6XXDCNvVjXi9/wlO76k01+lust4o1XmO+pde6G1JEufX1ouZCjv
+         X/qkrYrzkcZffoTMF6K67756gvKvJEyAoUQCujq0yhlXa9pR1CqpOlSDddevQKWG7vj8
+         HUQ55QskXhv3c+9KdS1m7qOXmwkaR6vFwRNNIkEfyi4MgMt/omyw1AXjE63dIRk4kzT1
+         hgTg==
+X-Gm-Message-State: ACgBeo3sZmaMlnsBkw/6Z8OHB95yyLthqqEex9baffuJN/tsKKHjO0p4
+        bK+oCRi2ZE5SPOhuuCP2Tit74w==
+X-Google-Smtp-Source: AA6agR7DXTKxmlIOqf0As2iSnVOles3hsHy0jPA3gsCK/wFyUdb62hdy8Gjnx++fqfYpJi/mCskauw==
+X-Received: by 2002:a17:90a:ab8d:b0:1fa:af75:e4ed with SMTP id n13-20020a17090aab8d00b001faaf75e4edmr5600179pjq.119.1660769619374;
+        Wed, 17 Aug 2022 13:53:39 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id b10-20020a170903228a00b0016be596c8afsm322533plh.282.2022.08.17.13.53.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 13:53:38 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 20:53:35 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     syzbot <syzbot+8d24abd02cd4eb911bbd@syzkaller.appspotmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Read in kvm_dev_ioctl
+Message-ID: <Yv1VT2SPrfTQhlrV@google.com>
+References: <bb50f7ae-0670-fe7d-c7d7-10036aba13f4@redhat.com>
+ <000000000000b4d88605e675a71c@google.com>
 MIME-Version: 1.0
-References: <20220816064231.60473-1-zhangzekun11@huawei.com>
-In-Reply-To: <20220816064231.60473-1-zhangzekun11@huawei.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 17 Aug 2022 13:53:24 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Xxp=YJcweeuzQqkzVoC-uuXgbTREqJTu0RphB4X6B4DQ@mail.gmail.com>
-Message-ID: <CAD=FV=Xxp=YJcweeuzQqkzVoC-uuXgbTREqJTu0RphB4X6B4DQ@mail.gmail.com>
-Subject: Re: [PATCH -next] drm/bridge: Add missing clk_disable_unprepare() in analogix_dp_resume()
-To:     Zhang Zekun <zhangzekun11@huawei.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Brian Norris <briannorris@chromium.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>, xuqiang36@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000b4d88605e675a71c@google.com>
+X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Aug 17, 2022, syzbot wrote:
+> > On 8/17/22 16:30, syzbot wrote:
+> > #syz dup: BUG: unable to handle kernel paging request in 
+> 
+> can't find the dup bug
 
-On Mon, Aug 15, 2022 at 11:45 PM Zhang Zekun <zhangzekun11@huawei.com> wrote:
->
-> Add the missing clk_disable_unprepare() before return from
-> analogix_dp_resume() in the error handling case.
->
-> Fixes: 211f276ed3d9 ("drm: bridge: analogix/dp: add panel prepare/unprepare in suspend/resume time")
-> Signed-off-by: Zhang Zekun <zhangzekun11@huawei.com>
-> ---
->  drivers/gpu/drm/bridge/analogix/analogix_dp_core.c | 1 +
->  1 file changed, 1 insertion(+)
+Heh, it's always some mundane detail.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-
-I'll snooze this and check back in approx 1 week. If someone else
-hasn't already applied it I'll plan to apply it to drm-misc-fixes.
-
--Doug
+#syz dup: BUG: unable to handle kernel paging request in kvm_arch_hardware_enable

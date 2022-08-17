@@ -2,121 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 212A95977FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A2C5977F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241926AbiHQUaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 16:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50306 "EHLO
+        id S241886AbiHQU2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 16:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241546AbiHQUaL (ORCPT
+        with ESMTP id S241902AbiHQU2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 16:30:11 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B158CA98D3;
-        Wed, 17 Aug 2022 13:30:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=gmQnAmGV0yJc75So19A4rCEM0sxOrtpi2lPtl/yZEKg=; b=JbxSHZNkdEfXBjQmNN5rGI/OwF
-        aDS9BIivkV6Mz0U7oNRPgqlNWDVZdLBMvEK4or9u9F8CpZ5/lmyGvOdyHUqzk4Kh84BZ1Ai2cRMRD
-        vRNg+I2f2MTS9wNKgf2+L1eylZSYzBG8FVmKwjEVZr3Abn8CZwSze+D2Mc3LB6zWfML8DYXrq/ZGT
-        1/olIIKBFpL2TAcYS/ecLPQiAHkbNzplNDHKUFna7C8OmeLHDWlIf+QXwfuHY4TWlgfiCPbeUINau
-        SS3JJRVVPRad1gggN43ntHtkqkkToLbF5W+SUlu4GnmHAFHo3SXxacXlIAjO3QLNNZ2MpkOMtU/L6
-        RAAUvXTA==;
-Received: from [179.232.144.59] (helo=[192.168.0.5])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oOPfe-00AvIf-BO; Wed, 17 Aug 2022 22:29:46 +0200
-Message-ID: <7f016d7f-a546-a45d-c65c-bc35269b4faa@igalia.com>
-Date:   Wed, 17 Aug 2022 17:28:34 -0300
+        Wed, 17 Aug 2022 16:28:45 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E38A61127
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:28:43 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id x19so1852565plc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:28:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=3IdwoVVH/KyYebc3thCK0QbO3+GbhpIydetmBLF9D/I=;
+        b=jSONM70T0iDAfNrUlJVTC0kSLGPrN42VzGrBfG+OQOHBUFYa/lexgC3zukZjRUN+RA
+         Va4f3Cff4Myv7LFdueNazPDJm59DfkyitTRPdIqTg8fi8YS5oUyYMGFak9DEw7n0i+dV
+         HBASyKpT4twWeav/khru+yHi/akhW25j65vzo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=3IdwoVVH/KyYebc3thCK0QbO3+GbhpIydetmBLF9D/I=;
+        b=idT35wPMVDw34B4hYRb3WuHO8KdfGeKcoOJRGuOTiZxvW1/y2arXHZ0NFyRX4u+enH
+         3hpxlAwXO1nuH+2H7fHJH6EqQssGMgccb1v3oofaHNKmxDdSUBPsC2P/3P7qs+41VCjT
+         j4YIhVTr5rz2BM+MsKdNluCc303nPHWdaS7K2th+Z1ldU8yooWxCvs4eB5AJBwDi+jAK
+         UEsl4PutG5cC85cwmtOQgsGxAC9Ujj2yXqYgCOeMxj1Ta1mU0oHq9NIeYm449btEfUZf
+         K2YzyuUkx2tJMxgdcvVuV+Cgum1xLt93B77GjnvIskT4IIue/RirYTjTWD5WaLdxt3ZT
+         Zzog==
+X-Gm-Message-State: ACgBeo3yzgOKpiLqVlk0zGzv0sWAfuCeVRk/G7YRCELyR/tO1JrhBBG8
+        0O34iPQT0k52BOzCCvVgYGKhPg==
+X-Google-Smtp-Source: AA6agR5Zika9lSedq4f7QwsRgecAXUOsKIBN3mGuVnYiMhmG7lPo2eB1oM4cCxRF+GeLrPsJUjEuKA==
+X-Received: by 2002:a17:90b:190b:b0:1fa:a374:f563 with SMTP id mp11-20020a17090b190b00b001faa374f563mr5431439pjb.52.1660768122915;
+        Wed, 17 Aug 2022 13:28:42 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f4-20020a170902ce8400b0016ee3d7220esm358508plg.24.2022.08.17.13.28.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 13:28:42 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 13:28:41 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Subject: Re: [PATCH v9 27/27] MAINTAINERS: Rust
+Message-ID: <202208171328.8C3541A@keescook>
+References: <20220805154231.31257-1-ojeda@kernel.org>
+ <20220805154231.31257-28-ojeda@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 10/13] EDAC/altera: Skip the panic notifier if kdump is
- loaded
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, linux-edac@vger.kernel.org,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Tony Luck <tony.luck@intel.com>
-References: <20220719195325.402745-1-gpiccoli@igalia.com>
- <20220719195325.402745-11-gpiccoli@igalia.com> <Yv0mCY04heUXsGiC@zn.tnic>
- <46137c67-25b4-6657-33b7-cffdc7afc0d7@igalia.com> <Yv1C0Y25u2IB7PCs@zn.tnic>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <Yv1C0Y25u2IB7PCs@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220805154231.31257-28-ojeda@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/08/2022 16:34, Borislav Petkov wrote:
-> [...]
+On Fri, Aug 05, 2022 at 05:42:12PM +0200, Miguel Ojeda wrote:
+> Miguel, Alex and Wedson will be maintaining the Rust support.
 > 
-> What is "the failure risk for kdump"?
+> Boqun, Gary and Björn will be reviewers.
 > 
-> Some of the notifiers which run before kdump might fail and thus prevent
-> the machine from kdumping?
->
+> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
 
-Exactly; some notifiers could break the machine and prevent a successful
-kdump. The EDAC one is consider medium risk, due to invasive operations
-(register readings on panic situation).
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-
-> [...] 
-> My question stands: if kdump is loaded and the s10_edac_dberr_handler()
-> does not read the the fatal errors and they don't get shown in dmesg
-> before the machine panics, how do you intend to show that information to
-> the user?
-> 
-> Because fatal errors are something you absolutely wanna show, at least,
-> in dmesg!
-> 
-> I don't think you can "read" the errors from vmcore - they need to be
-> read from the hw registers before the machine dies.
-> 
-
-My understanding is the same as yours, i.e., this is not possible to
-collect from vmcore, it requires register reading. But again: if you
-kdump your machine today, you won't collect this information, patch
-changed nothing in that regard.
-
-The one thing it changes is that you'd skip the altera register dump if
-kdump is set AND you managed to also set "crash_kexec_post_notifiers".
-
-In case you / Dinh / Tony disagrees with the patch, it's fine and we can
-discard it, but then this notifier couldn't run early in the refactor we
-are doing, it'd postponed to run later. This are is full of trade-offs,
-we just need to choose what compromise solution is preferred by the
-majority of developers =)
-
-Cheers,
-
-
-Guilherme
+-- 
+Kees Cook

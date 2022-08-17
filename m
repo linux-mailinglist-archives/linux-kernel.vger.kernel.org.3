@@ -2,191 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E58B597334
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95D285972DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240417AbiHQPlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 11:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39448 "EHLO
+        id S240145AbiHQPY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 11:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237920AbiHQPli (ORCPT
+        with ESMTP id S237833AbiHQPYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 11:41:38 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C9D93524;
-        Wed, 17 Aug 2022 08:41:36 -0700 (PDT)
-Received: from mail-ej1-f52.google.com ([209.85.218.52]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MF418-1o8z5i3rIW-00FQkz; Wed, 17 Aug 2022 17:41:34 +0200
-Received: by mail-ej1-f52.google.com with SMTP id qn6so25179890ejc.11;
-        Wed, 17 Aug 2022 08:41:34 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1Rgp6LovAz0JAkiWVLzs+8zSZO/OQDR9sB7wiFQaeCs/bqe8Mk
-        TwgH0h2L6YkNgkAE6nbMBOmI9f2tvbgX4INyi1k=
-X-Google-Smtp-Source: AA6agR6Zf7lY1qLm89sTihdpHsj0aQ4umr8ol/DRSTBvAYEQUmT2uPZZqvLUfFS8neOBi78/JbDKpYlk6svZGBrs0nY=
-X-Received: by 2002:a05:6402:520e:b0:43d:df14:fbed with SMTP id
- s14-20020a056402520e00b0043ddf14fbedmr23980070edd.16.1660749886667; Wed, 17
- Aug 2022 08:24:46 -0700 (PDT)
+        Wed, 17 Aug 2022 11:24:53 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04ADB5B7A8;
+        Wed, 17 Aug 2022 08:24:51 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id r14-20020a17090a4dce00b001faa76931beso2132720pjl.1;
+        Wed, 17 Aug 2022 08:24:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=cNb+wPFqXTTnrEsiIhlvkm/VTYFYCj1lwrBVxwMNlw4=;
+        b=g7JiuZ0QYzHlhR63PM427qbq83vL3iY1FyydWZTdX7t2rTDrisImuHcjYkAlFFyOi6
+         SGdJxZgsWGwEhrp4ov+egzakW1EigtK/EvafkvLPpMgoGnaxUx6QmX71qMKDGcQU1AKI
+         bGB9w7JGQur33yZjYUaVo2m6R/Ow9KjNFny5kLH3ntn9CC39OeqB9hb6GsmKF5TFzw2B
+         MAcn+oNcqypAzShKdeFXwc8RtaOR/nHNrv2djVN/o49MiyUPf6yn1rJ4rKFHOqvjI4IK
+         DQ2TsKlcFNtyjr0QonuMxFZm1sO2oxb7ceFolzuAnVZzfhPV9FGizh4+DVE8BK98BsuH
+         T+qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=cNb+wPFqXTTnrEsiIhlvkm/VTYFYCj1lwrBVxwMNlw4=;
+        b=a44p15AJLpTrnJmJ/fu5MpOLVmQ0vGqLYbuUAQ+YZVdxiA/ArE0XLHtL+I1tWfkWaa
+         /ibyQZ+HmQjOoAlOMzkuKZJPYHPR0ypXryikSkIKEKZ8qcnnuH35n1x+DCm8wH9iE9eT
+         BwUCU0Y1GZmXsd644tMtroRFG9NjemrXi/V6gm08v8+w71252p9TYnu76l8mGmQrgSTi
+         yBCveqr8UHguj+L35sG6/nx0nSFn+kt5houvWNsNiXbuAIDI/33mC9TbQPy/Z8cc+hjz
+         cgkPTfDVyt1S4adY4EsLJxfeC6dHJ6yy/zKOgwP1JIr/g7qzFoPtMONB/h4lMq6assPn
+         ZEeA==
+X-Gm-Message-State: ACgBeo3AXWVD1e5lvc1eQY3GUZFXgUhN1wTj/5SdVGfYriN3D5W0qJUQ
+        Uswv32SppFpjrndJmdEfMIM=
+X-Google-Smtp-Source: AA6agR6VSz5H7jgK9fm8v7D0017rD9IG0++yPEfFL63RpX/MelmrPDQlCF6+5CwHOs7r17eAOr89dA==
+X-Received: by 2002:a17:90b:17c5:b0:1f4:f55d:24f3 with SMTP id me5-20020a17090b17c500b001f4f55d24f3mr4284181pjb.109.1660749890494;
+        Wed, 17 Aug 2022 08:24:50 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o14-20020a62f90e000000b005353a676757sm3551135pfh.120.2022.08.17.08.24.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 08:24:48 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 17 Aug 2022 08:24:46 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.18 0000/1094] 5.18.18-rc2 review
+Message-ID: <20220817152446.GA1205420@roeck-us.net>
+References: <20220816124604.978842485@linuxfoundation.org>
+ <20220817042445.GC1880847@roeck-us.net>
+ <YvzuUdrBqGlW880H@kroah.com>
 MIME-Version: 1.0
-References: <20220802015052.10452-1-ojeda@kernel.org> <20220802015052.10452-28-ojeda@kernel.org>
- <CAK8P3a0jqhGY9E85VC9gNem5q6-dWeq0H6-7bhJopinMnLtOKQ@mail.gmail.com> <CANiq72nNucEhXAXkXSujnGkpQrkv3-Pcn7ua8N=2XB-suAjs9w@mail.gmail.com>
-In-Reply-To: <CANiq72nNucEhXAXkXSujnGkpQrkv3-Pcn7ua8N=2XB-suAjs9w@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 17 Aug 2022 17:24:30 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2YuGsSJY2-=npqXMHXEr+zaF36iDrM+kP=9nS85FLpbA@mail.gmail.com>
-Message-ID: <CAK8P3a2YuGsSJY2-=npqXMHXEr+zaF36iDrM+kP=9nS85FLpbA@mail.gmail.com>
-Subject: Re: [PATCH v8 27/31] Kbuild: add Rust support
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Miguel Cano <macanroj@gmail.com>,
-        Paul Mackerras <paulus@samba.org>, Gary Guo <gary@garyguo.net>,
-        Douglas Su <d0u9.su@outlook.com>,
-        Borislav Petkov <bp@alien8.de>,
-        linux-riscv@lists.infradead.org, Will Deacon <will@kernel.org>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Masahiro Yamada <masahiroy@kernel.org>, x86@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-um@lists.infradead.org,
-        =?UTF-8?Q?Bj=C3=83B_6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Daniel Xu <dxu@dxuuu.xyz>, David Gow <davidgow@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        linux-arm-kernel@lists.infradead.org,
-        Tiago Lam <tiagolam@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Richard Weinberger <richard@nod.at>,
-        Finn Behrens <me@kloenk.de>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linuxppc-dev@lists.ozlabs.org,
-        Philip Herron <philip.herron@embecosm.com>,
-        Arthur Cohen <arthur.cohen@embecosm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:eXbnbKGaDunZKIWkmyxhB8JjF42zkxbqO9DQpNxilCxkOdDGvEC
- IOo0sFmv3vXHvATdT3zHtfXTdV/h7zmvQF+I4NwGfJruHC6KiDLGiQWcNUIpvq9qE5z6DmF
- korprzDGE8fyt2ZHvPun+Ve8GdkWmpGMsU9WvvhRAafuOHH9LrO5SG0/G4sIvIb4gb/5guq
- I/XwgHni631gXBarQ/uMA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:qtiHavHKD3E=:4apZo3DZSgnojVIYSbgDqs
- vyy85KaU4l307fk54wn+6uT19liOexUQqBdAWVdiREIRYDR0Nrc/rCGFifrO8QsrhIpfYtdk/
- AMrQeFu0ulvjySd92fSwlLqWKVBa4qsMm3g3G6Vx+ALG/ckwLZY5y1fAV4G4jnDlApuTvBGu7
- STavyKQVvZbvJzlsFaOxLhBLKiqA36TWIptbZfmXQJ1nCHOWhQxPxoSbHFN1X35R3ZciDTC0U
- cQ+JAE0fnleqxcqdovcM/JocpFj0VsWRLv/FyXq0ewvIgrsSlMkuDobX6yaT1kAxaNZwwE9QC
- TqseZY8GTv8DmrD6JI2GIg753p6uqq1ipbiNXNJu7QmtCyaYEWtxnCyVZQ7wlE50kp20hNJ/y
- 4NM3kNVBxDQjhw389pV0C9e9xLCsKkzIJcNRBu3gvCkeRmKg5NooRMd5B9Si/tTIK15LIEgBQ
- 4dQlOKYF3sSp0hAm/k9JtfrF7pUj0Sv3zlUje/KJLN92GbQJgppCZilv76eIEfPxPSSbJb7Qd
- groZCl1ZIjOLhHwjJkBUc15Xhd2Uw0P96m5TXIbJVpCxNUjbItZPX0dqshI97lUwMO/HDcVWO
- iOStY+p5/vBThINDzoQ+LeePBaXWYbL0Mjc5cdyj69XIQFUNoGrP5FjnQg8s3p91S27FjatJD
- Ml4OqbTcaZYsiClrVKTCE2E2s6YN/aMnyqczYjxZGm8zocWlfEV86bF5SxmvvQfc6iaSMj52I
- auNnii8gA+Z43Rx9urIV5KPmqBAMnQ+NX7E3vwz+C5WR1hQLyD7fk3zZeREsF4CBAtUS52EaF
- yqxTrBgQXqvudjoupJp/jKI5gl5xQWOjK0IMDKp5u6vaLFpl7JkxBRj3oE6iOfs1gVBZsh7+o
- ccDLlDuz4FtF4GbQxoVA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvzuUdrBqGlW880H@kroah.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 5:13 PM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
-> On Wed, Aug 17, 2022 at 4:40 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > I tried enabling rust support in the gcc builds I provide at
-> > https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/arm64/12.1.0/
->
-> Thanks for giving it a go!
->
-> > to make this more accessible, but it appears that the command line
-> > options here are not portable:
-> >
-> >  /home/arnd/cross/x86_64/gcc-12.1.0+rust-nolibc/x86_64-linux/bin/x86_64-linux-gccrs
->
-> So you mean with GCC Rust, right? (i.e. we have "GCC builds" working,
-> via compiling the Rust side with LLVM and linking with the GCC C side,
-> but it is not intended for production or to be supported, even if we
-> cover it in our CI, test it boots and loads modules etc.).
+On Wed, Aug 17, 2022 at 03:34:09PM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Aug 16, 2022 at 09:24:45PM -0700, Guenter Roeck wrote:
+> > On Tue, Aug 16, 2022 at 02:59:27PM +0200, Greg Kroah-Hartman wrote:
+> > > This is the start of the stable review cycle for the 5.18.18 release.
+> > > There are 1094 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > > 
+> > > Responses should be made by Thu, 18 Aug 2022 12:43:14 +0000.
+> > > Anything received after that time might be too late.
+> > > 
+> > Build results:
+> > 	total: 154 pass: 154 fail: 0
+> > Qemu test results:
+> > 	total: 481 pass: 480 fail: 1
+> > Failed tests:
+> > 	arm:bletchley-bmc:aspeed_g5_defconfig:notests:usb0:net,nic:aspeed-bmc-facebook-bletchley:rootfs
+> > 
+> > The failing boot test is new and not a concern. I'll see if I can figure
+> > out why it fails. If it is too difficult to fix (for example because 5.18
+> > simply doesn't support usb on bletchley-bmc), I'll just skip it next time.
+> > 
+> > Tested-by: Guenter Roeck <linux@roeck-us.net>
+> 
+> 5.18 is only going to be alive for one more week at most, so I wouldn't
+> worry too much about this.
+> 
 
-Yes, I meant GCC rust, with the contents of
-https://gcc.gnu.org/git/?p=gcc.git;a=shortlog;h=refs/heads/devel/rust/master
-merged into the gcc-12.1.0 release tag.
+Ok, I'll just leave it alone.
 
-> > I guess nobody has tried this so far. Would you think that fixing this is only
-> > a matter for fixing the build system to pass the correct flags depending on the
-> > compiler, or is this broken in a more fundamental way?
->
-> If you meant GCC Rust, then it is a bit too early for the compiler. As
-> far as I now, they are working on compiling the `core` crate and
-> supporting more stable language features. They are also researching
-> the integration of the borrow checker, though we wouldn't need that
-> for "only" compiling the kernel.
->
-> Now, if they decided to focus on supporting Rust for Linux early on
-> (which would be great), they would still need to work on the delta
-> between what what they target now and what we use (which includes both
-> stable and some unstable features), plus I assume infrastructure bits
-> like the platform (target spec) support, the flags / `rustc` driver
-> (though I would be happy to do as much as possible on our side to
-> help), etc.
->
-> (We privately talked about possible timelines for all that if they
-> were to focus on Rust for Linux etc., but I let them comment or not on
-> that... Cc'ing them! :)
-
-Thanks for the explanation. My hope was that building the kernel
-would actually be easier here than building the more complicated
-rust user space.
-
-The gcc cross-compilers on kernel.org are similarly easy to build for
-all architectures the kernel supports because the complexity is
-usually in picking a working libc for the more obscure architectures,
-so I was naively thinking that this would work for building the
-rust support across all architectures in Linux.
-
-I tried one more step and just removed the unsupported command
-line flags to see what would happen, but that did not get me any
-further:
-
-/home/arnd/cross/x86_64/gcc-12.1.0+rust-nolibc/x86_64-linux/bin/x86_64-linux-gccrs
--frust-edition=2021 -Dunsafe_op_in_unsafe_fn -Drust_2018_idioms
--Dunreachable_pub -Dnon_ascii_idents
--Drustdoc::missing_crate_level_docs -Dclippy::correctness
--Dclippy::style -Dclippy::suspicious -Dclippy::complexity
--Dclippy::perf -Dclippy::let_unit_value -Dclippy::mut_mut
--Dclippy::needless_bitwise_bool -Dclippy::needless_continue  -O
-/git/arm-soc/scripts/generate_rust_target.rs; mv
-scripts/generate_rust_target.d scripts/.generate_rust_target.d; sed -i
-'/^#/d' scripts/.generate_rust_target.d
-rust1: internal compiler error: Segmentation fault
-0x7f37ee04b51f ???
-./signal/../sysdeps/unix/sysv/linux/x86_64/libc_sigaction.c:0
-0x7f37ee032fcf __libc_start_call_main
-../sysdeps/nptl/libc_start_call_main.h:58
-0x7f37ee03307c __libc_start_main_impl
-../csu/libc-start.c:409
-Please submit a full bug report, with preprocessed source (by using
--freport-bug).
-Please include the complete backtrace with any bug report.
-See <https://gcc.gnu.org/bugs/> for instructions.
-
-      Arnd
+Thanks,
+Guenter

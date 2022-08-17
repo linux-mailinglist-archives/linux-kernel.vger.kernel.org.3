@@ -2,54 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9609E596797
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 05:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62FC759679C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 05:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238419AbiHQDAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 23:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39246 "EHLO
+        id S238294AbiHQDDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 23:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238055AbiHQDAS (ORCPT
+        with ESMTP id S238447AbiHQDDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 23:00:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691EA97502;
-        Tue, 16 Aug 2022 20:00:17 -0700 (PDT)
+        Tue, 16 Aug 2022 23:03:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB3859242;
+        Tue, 16 Aug 2022 20:03:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F205961052;
-        Wed, 17 Aug 2022 03:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4C37EC433B5;
-        Wed, 17 Aug 2022 03:00:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20FF461472;
+        Wed, 17 Aug 2022 03:03:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEDA7C433C1;
+        Wed, 17 Aug 2022 03:03:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660705216;
-        bh=2VvHPIodg8nw507llDtxxCr8pEw1EcE5E0uRtB2pSvE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=EYUMzFT9mvxbYdPDFbLVmHqj/E+YJ34BCWtoEGOR531NnP5Mak1ZTvwWL8gQ4VZhp
-         vjenjvcWp1DKHi17Di6F8luxLeQHFXRaUpsN4FyqiImONIy/Ti8JOp/qfEBX0vasRc
-         u9YzK6ize+vwxv/08YVtxOpzIoVca2FduJK2VCBr+0xMZ226wHkmdjxnt6MtY7WdRU
-         7vWbZGS2totlKGTIwLBW6MT/9FtDBJr+RacTwOlu2jFPNq+yk0Qu84Fuj8+6qMrgs2
-         3iNe7YHWVDc8fiOYFFljNjB+Or7uDfoXS8uDmlxnk6dmGrQu9cEdLz5PmpMcWd+9Tv
-         eIjIDPIlZzQpw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 303D7E2A053;
-        Wed, 17 Aug 2022 03:00:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1660705419;
+        bh=j34Y0IvnP4PIUZa4lmiS/njGfPbOT1P5mPXfCn2SqXI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LJwB5PyM7KRn9sh6SHSyW+E4p9BqquodqZlA6nZ89lvX7aSi/Sg/NQC88ep/TYGS8
+         FkNFs6AROYzWcFi75c+xXZhemebqAQOtFp6thpwtwQxLfJhQWpowc9H9cE9ZBgdlvd
+         e/+zbDZrV9JnD4r8ytHLoLW9E63iUrD1o5AiOShEXjHLbOaSLDvVS47LIksKIrIn/I
+         tpc0b9inuJrj+IY7m8BdRbOWNudJ2YOMHQcer4NvQR7ci/yQjZTje4fXYY+tSNSYS0
+         odxGREHH1lYy46PDL9R9F4OtJDwPoxI+qkgNoEVdEjA+B+/bpHndj4+HuWUhUcnxRr
+         qWcFcyB3HY8fw==
+Date:   Tue, 16 Aug 2022 20:03:37 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Vee Khee Wong <veekhee@apple.com>
+Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, mcoquelin.stm32@gmail.com,
+        tee.min.tan@linux.intel.com, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [net-next 1/1] stmmac: intel: remove unused 'has_crossts' flag
+Message-ID: <20220816200337.35befaad@kernel.org>
+In-Reply-To: <4C6D4699-3BC3-4F31-86E2-B5CD7410CC0A@apple.com>
+References: <4C6D4699-3BC3-4F31-86E2-B5CD7410CC0A@apple.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: sched: delete unused input parameter in
- qdisc_create
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166070521619.25002.11604488986992513415.git-patchwork-notify@kernel.org>
-Date:   Wed, 17 Aug 2022 03:00:16 +0000
-References: <20220815061023.51318-1-shaozhengchao@huawei.com>
-In-Reply-To: <20220815061023.51318-1-shaozhengchao@huawei.com>
-To:     shaozhengchao <shaozhengchao@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, weiyongjun1@huawei.com, yuehaibing@huawei.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,26 +58,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon, 15 Aug 2022 14:10:23 +0800 you wrote:
-> The input parameter p is unused in qdisc_create. Delete it.
+On Tue, 16 Aug 2022 15:30:07 +0800 Vee Khee Wong wrote:
+> The 'has_crossts' flag was not used anywhere in the stmmac driver,
+> removing it from both header file and dwmac-intel driver.
 > 
-> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-> ---
->  net/sched/sch_api.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> Signed-off-by: Wong Vee Khee <veekhee@apple.com>
 
-Here is the summary with links:
-  - [net-next] net: sched: delete unused input parameter in qdisc_create
-    https://git.kernel.org/netdev/net-next/c/cfc111d5391d
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Your MUA corrupted the patch, it stripped the leading spaces.
+Can you resend with git send-email ?

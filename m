@@ -2,148 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C6E5972A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED7B597292
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240814AbiHQPIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 11:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
+        id S236218AbiHQPIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 11:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240632AbiHQPId (ORCPT
+        with ESMTP id S240479AbiHQPIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 11:08:33 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B203E9C8CE;
-        Wed, 17 Aug 2022 08:08:31 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:37894)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oOKei-006IBh-F4; Wed, 17 Aug 2022 09:08:28 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:57490 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oOKeg-004bdV-9U; Wed, 17 Aug 2022 09:08:28 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-team@cloudflare.com, cgzones@googlemail.com,
-        karl@bigbadwolfsecurity.com, tixxdz@gmail.com,
-        Paul Moore <paul@paul-moore.com>
-References: <20220815162028.926858-1-fred@cloudflare.com>
-        <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
-Date:   Wed, 17 Aug 2022 10:07:50 -0500
-In-Reply-To: <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
-        (Paul Moore's message of "Tue, 16 Aug 2022 17:51:12 -0400")
-Message-ID: <8735dux60p.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 17 Aug 2022 11:08:25 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AE59D65D
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:08:23 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-335624d1e26so39846457b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:08:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=RptizGALOcGDZUaMSejU1Y48xlCDOc6zbnU/3jqvVSU=;
+        b=i5vVDoAdUT1wNEh6TTFJmIvzcPK8JyoFGBTSTAjRCy6PmTl0oUfurtrjsgLVVZUUuC
+         HIqeMgKN+Zzrys4bzn50422vz1YipmDJwolIqatz5fa1flvlAFVrNlqM7imjNblbuw6/
+         LuqeQXemUTOKtKL1E91HyDlo3QnyDwCpnjxUnMI3U3uoeWMqDFjdE3ySYEMFgdMonj9j
+         gvCLTSTYW2RRHn77dDwiwEiAdbxRlV/yPKmQkgBLNn2fhGoI0IkC+eTOzt05jbfAtYfo
+         ZTGbWEq+Nbz/buQvtTDOIoTVhqnwM2fet/GWp4PW8b0RMktLI/ovXmmNfuuAL+c7m9Pv
+         4yFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=RptizGALOcGDZUaMSejU1Y48xlCDOc6zbnU/3jqvVSU=;
+        b=U+3rHSoAN/o99QD6uWqRwguG9lRYjTRuxKHVyAm7uqN60Jh9L8qupTbHccRdwavo/k
+         dZKy2VFp/61Vs4IjNwPc6OH2Dvxuu7xllAI2xPM4oRUGBmZBof9PJ3ehcX3oGYaNJDOH
+         X946Tv6rCyJtTStBa8ETqxY31pgRUac/DTHrpHrFqEeDy9ASBAfttdE3JywYSljx3MnG
+         9MZs4P6kuvJb9/XrWaiBL7o02HOBVmIl+8QyZk0YJzqOkr/TKc0TkSHGOWh9clnCYpa7
+         LYowoHXHcSTJ/tFhn64PQuLzJaamBBzvTUpkDGPlVpo77wxVBP6JRj53p1ff+oBxbaqX
+         DrMw==
+X-Gm-Message-State: ACgBeo0nd0RXMnhhzaie/ZPoxf1yKeXcdCW7xPq37LKhV0fAIpX8QW8d
+        PULWyGmBjNtN/uAWkpsfH/Nf66x3DKuwealI9PT3mA==
+X-Google-Smtp-Source: AA6agR4Kh7XKd42YFRE4fLJZ24Hk1ziFruRUTG9ZTc8GZG07Pj+S6jz8YvWE+qjBYTWcTREH6SFqAnVAy2AWF2tqUjk=
+X-Received: by 2002:a0d:cb02:0:b0:334:e16c:8d36 with SMTP id
+ n2-20020a0dcb02000000b00334e16c8d36mr3713665ywd.86.1660748901817; Wed, 17 Aug
+ 2022 08:08:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oOKeg-004bdV-9U;;;mid=<8735dux60p.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+M/EzBB2yHTS3inlqfrtzf1DGaD1mEXx4=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20220808125745.22566-1-zhouchengming@bytedance.com>
+ <20220808125745.22566-7-zhouchengming@bytedance.com> <CAKfTPtBbKoJ0r=tE+9E9KxHkCy1ucev_DxLRqeQrx39ZzizqGA@mail.gmail.com>
+ <fa2e11fc-5a49-b88a-1daa-ad6e5f5dea51@bytedance.com>
+In-Reply-To: <fa2e11fc-5a49-b88a-1daa-ad6e5f5dea51@bytedance.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 17 Aug 2022 17:08:10 +0200
+Message-ID: <CAKfTPtC=zfd6SekH--_jrZQg-YPkCD4-W0S2WgVTZ_RqY_NdGw@mail.gmail.com>
+Subject: Re: [PATCH v4 6/9] sched/fair: fix another detach on unattached task
+ corner case
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Linus Torvalds <torvalds@linux-foundation.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1527 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 4.5 (0.3%), b_tie_ro: 3.2 (0.2%), parse: 0.94
-        (0.1%), extract_message_metadata: 3.9 (0.3%), get_uri_detail_list:
-        1.97 (0.1%), tests_pri_-1000: 3.6 (0.2%), tests_pri_-950: 1.28 (0.1%),
-        tests_pri_-900: 0.99 (0.1%), tests_pri_-90: 125 (8.2%), check_bayes:
-        123 (8.0%), b_tokenize: 7 (0.4%), b_tok_get_all: 9 (0.6%),
-        b_comp_prob: 2.3 (0.2%), b_tok_touch_all: 102 (6.7%), b_finish: 0.82
-        (0.1%), tests_pri_0: 1368 (89.6%), check_dkim_signature: 0.40 (0.0%),
-        check_dkim_adsp: 1.90 (0.1%), poll_dns_idle: 0.55 (0.0%),
-        tests_pri_10: 2.9 (0.2%), tests_pri_500: 9 (0.6%), rewrite_mail: 0.00
-        (0.0%)
-Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 17 Aug 2022 at 17:04, Chengming Zhou
+<zhouchengming@bytedance.com> wrote:
 >
-> I just merged this into the lsm/next tree, thanks for seeing this
-> through Frederick, and thank you to everyone who took the time to
-> review the patches and add their tags.
+> On 2022/8/17 23:01, Vincent Guittot wrote:
+> > On Mon, 8 Aug 2022 at 14:58, Chengming Zhou <zhouchengming@bytedance.com> wrote:
+> >>
+> >> commit 7dc603c9028e ("sched/fair: Fix PELT integrity for new tasks")
+> >> fixed two load tracking problems for new task, including detach on
+> >> unattached new task problem.
+> >>
+> >> There still left another detach on unattached task problem for the task
+> >> which has been woken up by try_to_wake_up() and waiting for actually
+> >> being woken up by sched_ttwu_pending().
+> >>
+> >> try_to_wake_up(p)
+> >>   cpu = select_task_rq(p)
+> >>   if (task_cpu(p) != cpu)
+> >>     set_task_cpu(p, cpu)
+> >>       migrate_task_rq_fair()
+> >>         remove_entity_load_avg()       --> unattached
+> >>         se->avg.last_update_time = 0;
+> >>       __set_task_cpu()
+> >>   ttwu_queue(p, cpu)
+> >>     ttwu_queue_wakelist()
+> >>       __ttwu_queue_wakelist()
+> >>
+> >> task_change_group_fair()
+> >>   detach_task_cfs_rq()
+> >>     detach_entity_cfs_rq()
+> >>       detach_entity_load_avg()   --> detach on unattached task
+> >>   set_task_rq()
+> >>   attach_task_cfs_rq()
+> >>     attach_entity_cfs_rq()
+> >>       attach_entity_load_avg()
+> >>
+> >> The reason of this problem is similar, we should check in detach_entity_cfs_rq()
+> >> that se->avg.last_update_time != 0, before do detach_entity_load_avg().
+> >>
+> >> This patch move detach/attach_entity_cfs_rq() functions up to be together
+> >> with other load tracking functions to avoid to use another #ifdef CONFIG_SMP.
+> >>
+> >> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> >> ---
+> >>  kernel/sched/fair.c | 132 +++++++++++++++++++++++---------------------
+> >>  1 file changed, 68 insertions(+), 64 deletions(-)
+> >>
+> >> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> >> index f52e7dc7f22d..4bc76d95a99d 100644
+> >> --- a/kernel/sched/fair.c
+> >> +++ b/kernel/sched/fair.c
+> >> @@ -874,9 +874,6 @@ void init_entity_runnable_average(struct sched_entity *se)
+> >>  void post_init_entity_util_avg(struct task_struct *p)
+> >>  {
+> >>  }
+> >> -static void update_tg_load_avg(struct cfs_rq *cfs_rq)
+> >> -{
+> >> -}
+> >>  #endif /* CONFIG_SMP */
+> >>
+> >>  /*
+> >> @@ -3176,6 +3173,7 @@ void reweight_task(struct task_struct *p, int prio)
+> >>         load->inv_weight = sched_prio_to_wmult[prio];
+> >>  }
+> >>
+> >> +static inline int cfs_rq_throttled(struct cfs_rq *cfs_rq);
+> >>  static inline int throttled_hierarchy(struct cfs_rq *cfs_rq);
+> >>
+> >>  #ifdef CONFIG_FAIR_GROUP_SCHED
+> >> @@ -4086,6 +4084,71 @@ static void remove_entity_load_avg(struct sched_entity *se)
+> >>         raw_spin_unlock_irqrestore(&cfs_rq->removed.lock, flags);
+> >>  }
+> >>
+> >> +#ifdef CONFIG_FAIR_GROUP_SCHED
+> >> +/*
+> >> + * Propagate the changes of the sched_entity across the tg tree to make it
+> >> + * visible to the root
+> >> + */
+> >> +static void propagate_entity_cfs_rq(struct sched_entity *se)
+> >> +{
+> >> +       struct cfs_rq *cfs_rq = cfs_rq_of(se);
+> >> +
+> >> +       if (cfs_rq_throttled(cfs_rq))
+> >> +               return;
+> >> +
+> >> +       if (!throttled_hierarchy(cfs_rq))
+> >> +               list_add_leaf_cfs_rq(cfs_rq);
+> >> +
+> >> +       /* Start to propagate at parent */
+> >> +       se = se->parent;
+> >> +
+> >> +       for_each_sched_entity(se) {
+> >> +               cfs_rq = cfs_rq_of(se);
+> >> +
+> >> +               update_load_avg(cfs_rq, se, UPDATE_TG);
+> >> +
+> >> +               if (cfs_rq_throttled(cfs_rq))
+> >> +                       break;
+> >> +
+> >> +               if (!throttled_hierarchy(cfs_rq))
+> >> +                       list_add_leaf_cfs_rq(cfs_rq);
+> >> +       }
+> >> +}
+> >> +#else
+> >> +static void propagate_entity_cfs_rq(struct sched_entity *se) { }
+> >> +#endif
+> >> +
+> >> +static void detach_entity_cfs_rq(struct sched_entity *se)
+> >> +{
+> >> +       struct cfs_rq *cfs_rq = cfs_rq_of(se);
+> >> +
+> >> +       /*
+> >> +        * In case the task sched_avg hasn't been attached:
+> >> +        * - A forked task which hasn't been woken up by wake_up_new_task().
+> >> +        * - A task which has been woken up by try_to_wake_up() but is
+> >> +        *   waiting for actually being woken up by sched_ttwu_pending().
+> >> +        */
+> >> +       if (!se->avg.last_update_time)
+> >> +               return;
+> >
+> > The 2 lines above and the associated comment are the only relevant
+> > part of the patch, aren't they ?
+> > Is everything else just code moving from one place to another one
+> > without change ?
 >
->   git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git next
+> Yes, everything else is just code movement.
 
-Paul, Frederick
+Could you remove such code movement ? It doesn't add any value to the
+patch, does it ? But It makes the patch quite difficult to review and
+I wasted a lot of time looking for what really changed in the code
 
-I repeat my NACK, in part because I am being ignored and in part
-because the hook does not make technical sense.
+Thanks
 
-
-Linus I want you to know that this has been put in the lsm tree against
-my explicit and clear objections.
-
-My request to talk about the actual problems that are being address has
-been completely ignored.
-
-I have been a bit slow in dealing with this conversation because I am
-very much sick and not on top of my game, but that is no excuse to steam
-roll over me, instead of addressing my concerns.
-
-
-This is an irresponsible way of adding an access control to user
-namespace creation.  This is a linux-api and manpages level kind of
-change, as this is a semantic change visible to userspace.  Instead that
-concern has been brushed off as different return code to userspace.
-
-For observably this is a terrible LSM interface because there is no
-pair with user namespace destruction, nor is their any ability for the
-LSM to allocate any state to track the user namespace.  As there is no
-patch actually calling audit or anything else observably does not appear
-to be a driving factor of this new interface.
-
-
-
-
-The common scenarios I am aware of for using the user namespace are:
-- Creating a container.
-- Using the user namespace to sandbox your application like chrome does.
-- Running an exploit.
-
-Returning an error code in the first 2 scenarios will create a userspace
-regression as either userspace will run less securely or it won't work
-at all.
-
-Returning an error code in the third scenario when someone is trying to
-exploit your machine is equally foolish as you are giving the exploit
-the chance to continue running.  The application should be killed
-instead.
-
-
-Further adding a random failure mode to user namespace creation if it is
-used at all will just encourage userspace to use a setuid application to
-perform the namespace creation instead.  Creating a less secure system
-overall.
-
-If the concern is to reduce the attack surface everything this
-proposed hook can do is already possible with the security_capable
-security hook.
-
-So Paul, Frederick please drop this.  I can't see what this new hook is
-good for except creating regressions in existing userspace code.  I am
-not willing to support such a hook in code that I maintain.
-
-Eric
+>
+> Thanks!
+>
+> >
+> >> +
+> >> +       /* Catch up with the cfs_rq and remove our load when we leave */
+> >> +       update_load_avg(cfs_rq, se, 0);
+> >> +       detach_entity_load_avg(cfs_rq, se);
+> >> +       update_tg_load_avg(cfs_rq);
+> >> +       propagate_entity_cfs_rq(se);
+> >> +}
+> >> +
+> >> +static void attach_entity_cfs_rq(struct sched_entity *se)
+> >> +{
+> >> +       struct cfs_rq *cfs_rq = cfs_rq_of(se);
+> >> +
+> >> +       /* Synchronize entity with its cfs_rq */
+> >> +       update_load_avg(cfs_rq, se, sched_feat(ATTACH_AGE_LOAD) ? 0 : SKIP_AGE_LOAD);
+> >> +       attach_entity_load_avg(cfs_rq, se);
+> >> +       update_tg_load_avg(cfs_rq);
+> >> +       propagate_entity_cfs_rq(se);
+> >> +}
+> >> +
+> >>  static inline unsigned long cfs_rq_runnable_avg(struct cfs_rq *cfs_rq)
+> >>  {
+> >>         return cfs_rq->avg.runnable_avg;
+> >> @@ -4308,11 +4371,8 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+> >>  }
+> >>
+> >>  static inline void remove_entity_load_avg(struct sched_entity *se) {}
+> >> -
+> >> -static inline void
+> >> -attach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se) {}
+> >> -static inline void
+> >> -detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se) {}
+> >> +static inline void detach_entity_cfs_rq(struct sched_entity *se) {}
+> >> +static inline void attach_entity_cfs_rq(struct sched_entity *se) {}
+> >>
+> >>  static inline int newidle_balance(struct rq *rq, struct rq_flags *rf)
+> >>  {
+> >> @@ -11519,62 +11579,6 @@ static inline bool vruntime_normalized(struct task_struct *p)
+> >>         return false;
+> >>  }
+> >>
+> >> -#ifdef CONFIG_FAIR_GROUP_SCHED
+> >> -/*
+> >> - * Propagate the changes of the sched_entity across the tg tree to make it
+> >> - * visible to the root
+> >> - */
+> >> -static void propagate_entity_cfs_rq(struct sched_entity *se)
+> >> -{
+> >> -       struct cfs_rq *cfs_rq = cfs_rq_of(se);
+> >> -
+> >> -       if (cfs_rq_throttled(cfs_rq))
+> >> -               return;
+> >> -
+> >> -       if (!throttled_hierarchy(cfs_rq))
+> >> -               list_add_leaf_cfs_rq(cfs_rq);
+> >> -
+> >> -       /* Start to propagate at parent */
+> >> -       se = se->parent;
+> >> -
+> >> -       for_each_sched_entity(se) {
+> >> -               cfs_rq = cfs_rq_of(se);
+> >> -
+> >> -               update_load_avg(cfs_rq, se, UPDATE_TG);
+> >> -
+> >> -               if (cfs_rq_throttled(cfs_rq))
+> >> -                       break;
+> >> -
+> >> -               if (!throttled_hierarchy(cfs_rq))
+> >> -                       list_add_leaf_cfs_rq(cfs_rq);
+> >> -       }
+> >> -}
+> >> -#else
+> >> -static void propagate_entity_cfs_rq(struct sched_entity *se) { }
+> >> -#endif
+> >> -
+> >> -static void detach_entity_cfs_rq(struct sched_entity *se)
+> >> -{
+> >> -       struct cfs_rq *cfs_rq = cfs_rq_of(se);
+> >> -
+> >> -       /* Catch up with the cfs_rq and remove our load when we leave */
+> >> -       update_load_avg(cfs_rq, se, 0);
+> >> -       detach_entity_load_avg(cfs_rq, se);
+> >> -       update_tg_load_avg(cfs_rq);
+> >> -       propagate_entity_cfs_rq(se);
+> >> -}
+> >> -
+> >> -static void attach_entity_cfs_rq(struct sched_entity *se)
+> >> -{
+> >> -       struct cfs_rq *cfs_rq = cfs_rq_of(se);
+> >> -
+> >> -       /* Synchronize entity with its cfs_rq */
+> >> -       update_load_avg(cfs_rq, se, sched_feat(ATTACH_AGE_LOAD) ? 0 : SKIP_AGE_LOAD);
+> >> -       attach_entity_load_avg(cfs_rq, se);
+> >> -       update_tg_load_avg(cfs_rq);
+> >> -       propagate_entity_cfs_rq(se);
+> >> -}
+> >> -
+> >>  static void detach_task_cfs_rq(struct task_struct *p)
+> >>  {
+> >>         struct sched_entity *se = &p->se;
+> >> --
+> >> 2.36.1
+> >>

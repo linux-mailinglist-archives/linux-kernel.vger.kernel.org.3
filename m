@@ -2,70 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83738597530
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57AC559752C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239317AbiHQRew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:34:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58472 "EHLO
+        id S241246AbiHQRgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236240AbiHQRer (ORCPT
+        with ESMTP id S238051AbiHQRgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:34:47 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED419F0E5;
-        Wed, 17 Aug 2022 10:34:46 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id gp7so13087473pjb.4;
-        Wed, 17 Aug 2022 10:34:46 -0700 (PDT)
+        Wed, 17 Aug 2022 13:36:19 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CA29F1A0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:36:18 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id w11-20020a17090a380b00b001f73f75a1feso2476378pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:36:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=284A91xJpS6nwRvx67VF7YSoP83e6JuEnTUJYB3raPg=;
-        b=bYb4QUNP3jcTW6w5gDojVQgeXieFUswJifAM9vhjd5FVyK6aT/pZ1TVAJ5dVh0bdGC
-         aXbTIhrFz+1A2lDCIfmBaGWPy8SxJvhCvjNoezyYG4Mxudr+RR03FBD6SfcLo2zT+jxd
-         bOzysazjUG8D7hoyV8Wfb3h+0ZUi+pi/+pb3NqUns1qH2tYAbaoUi/xMg2KnOaV6HIwl
-         wF7ggN2pke5cdFaWc1/ty05TbtcDMG4kSYFLdAWr9uCNaZNKf3y65ww6hZPkZvMVi5Rx
-         2cuBoB1OrziAclyREuyqHWWBhEsrhutWB0p7R6xLN54BMQf6fnHp5yV3xuzvmyCEhqwh
-         0GRw==
+        d=yocom-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=3HfcrnzjmMXM57jltp/RhzB70UyLezNHId+YgX/9FXU=;
+        b=3bQNbELeSxmXY9KFCkfJh2Gp6ikFn+zammI63LGO3GzhVGA8L7qE7d+LFXl+cg2xg8
+         p/z9XP0RQKbDi3sNPmkvShEX7uoBWQ1l9Vw+XTSL74lc3s5mZfle/sD2+N+WSDDhIJmJ
+         OzPh/KF8Xz2zo+VaHoDA2uPhR/p27iV0thaeq6/RcqaQeYN5sP/rYlIp79w/exstG1QL
+         5MzkLLoLftPwW8fODgy7p+rnt2JSEUG2HVIx6CftEXIqb5tozLf6Qxu76ZSckq/s0gxP
+         tz8P8wvoCCEM9i9lttFKrQPBpa5h6thSk4NuYjI4mtOXs6pOHzoS1A90wMjBKTcM6XDo
+         e0wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=284A91xJpS6nwRvx67VF7YSoP83e6JuEnTUJYB3raPg=;
-        b=30oH6tvq8eCxVXJirTuaQYp7WLN0zMOtRadKL5F2ztr8Ye9fZjoxKQrfkxdFuvej+Y
-         FMlE5U0Zl5OX2/R6oOrghZItLLIhtBJ53D8jfUwPKONo/r5G4MIX4L0GOHa+s+RkK+Jk
-         zUBY3huinCGJjAO5KrwOAzQl+XTz8nJ6zXBlDANMk6I+nkaOnXNIGHV5LZ4FNn9t/mvg
-         HG1TzTB/BV1unCqwqDoSJfM5S3VPgNiUWuyQdYRUrsHrTqAGLAAQRQKmQEAjxkKGC4hA
-         SFjw7fst5O3Bt5GNXEv6a6F2V/BBuoyVoetGXhDNm6QeC/iyZX5yDL+x4sh609HcYnDZ
-         oi3A==
-X-Gm-Message-State: ACgBeo3xqpqLXsK2QOVMeiuMMV1KKI3KramEiO3A838AsNVWKo3R7pDL
-        oEZ4DedyvtYksNXM5Iz3rMohYxSQGZo=
-X-Google-Smtp-Source: AA6agR77E6Bi90PS6CwHLsHj14t+4aZgUalGnRDUpaOb2EZ4IhtQuUC4Pu11YPiVtnY2Q5XTCJifMg==
-X-Received: by 2002:a17:90a:5517:b0:1f8:a7ce:ac33 with SMTP id b23-20020a17090a551700b001f8a7ceac33mr4870074pji.83.1660757686216;
-        Wed, 17 Aug 2022 10:34:46 -0700 (PDT)
-Received: from biggie ([103.230.148.189])
-        by smtp.gmail.com with ESMTPSA id i190-20020a6254c7000000b0052d4f2e2f6asm10696208pfb.119.2022.08.17.10.34.43
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=3HfcrnzjmMXM57jltp/RhzB70UyLezNHId+YgX/9FXU=;
+        b=u4CBTsDh4WAuLAJ4/TiIYFHtMKZpqKeWh2lDg60a+S8M+bKYtxQL1QLxSvYNwUEORU
+         txVsUbRh9La3V5XCXHNxsTdw7unfvrw3L6Q4Zpn2CbUw3dgIXz4se/gPH1bMSc7U27xO
+         NcThnIZWm2qilnNEoDMcCJxbDPw584/CIDHxyEJk40E9axkO+6DqGA9fRnEcyV53Yivh
+         GjpqmTOHNlsz2Mn1MYxVRNl5tuZNMyaZ0mgqmjEr1iz0e91Lq4yMy2NG0DF1TFVEHv9d
+         Dl4Ok9/lHhaxOpFhz2ze+psyrLhvcZWSfwOJUQv2/kcTK6tRP++wOtfx2LoGeUX79VZK
+         4+8A==
+X-Gm-Message-State: ACgBeo1Jet2lVU60QJclTjIhTGLHI9bVMKuxAcfK580nSxqYLFeellOZ
+        tv55yNrmdlgTWOIn8sPqYjgGwJ0N/rALFw==
+X-Google-Smtp-Source: AA6agR68FOAvZ29SqXmxa+tvtnj0S4ASEtWoAFMKVZNs5TRbZtlmva7LS8lZz9x2KDsPAgMzZz7ahA==
+X-Received: by 2002:a17:902:ea0d:b0:170:cabd:b28 with SMTP id s13-20020a170902ea0d00b00170cabd0b28mr27442562plg.115.1660757778079;
+        Wed, 17 Aug 2022 10:36:18 -0700 (PDT)
+Received: from ghaven-kernel ([2601:600:8f80:973::5f])
+        by smtp.gmail.com with ESMTPSA id d17-20020a170902ced100b0016d1f474653sm198903plg.52.2022.08.17.10.36.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 10:34:45 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 23:04:39 +0530
-From:   Gautam Menghani <gautammenghani201@gmail.com>
-To:     chenxiang66@hisilicon.com, shuah@kernel.org, liaoyu15@huawei.com
-Cc:     song.bao.hua@hisilicon.com, tiantao6@hisilicon.com,
-        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH] selftests/dma: Add a .gitignore file containing name of
- executable
-Message-ID: <Yv0mr+vGANGYcxio@biggie>
-References: <20220724145931.32556-1-gautammenghani201@gmail.com>
+        Wed, 17 Aug 2022 10:36:17 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 10:36:15 -0700
+From:   Nate Yocom <nate@yocom.org>
+To:     Bastien Nocera <hadess@hadess.net>
+Cc:     dmitry.torokhov@gmail.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] Input: joystick: xpad: Add X-Box Adaptive
+ Controller support
+Message-ID: <Yv0nD36XqUvoGUHZ@ghaven-kernel>
+References: <20220813185343.2306-1-nate@yocom.org>
+ <20220813185343.2306-2-nate@yocom.org>
+ <c7c1373b84a297d2745c4fb98ad2ecf26e67f0d5.camel@hadess.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220724145931.32556-1-gautammenghani201@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c7c1373b84a297d2745c4fb98ad2ecf26e67f0d5.camel@hadess.net>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,30 +75,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 24, 2022 at 08:29:31PM +0530, Gautam Menghani wrote:
-> The dma tests in kselftests are missing a .gitignore file, which leads
-> to the dma_map_benchmark executable file showing up in "git status".
-> This patch adds a .gitignore file containing the executable name.
+On Wed, Aug 17, 2022 at 12:37:02PM +0200, Bastien Nocera wrote:
+> On Sat, 2022-08-13 at 11:53 -0700, Nate Yocom wrote:
+> > Adds correct VID/PID for this XTYPE_XBOXONE compatible controller to
+> > xpad_device[] table.
+> > 
+> > Signed-off-by: Nate Yocom <nate@yocom.org>
 > 
-> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
-> ---
->  tools/testing/selftests/dma/.gitignore | 1 +
->  1 file changed, 1 insertion(+)
->  create mode 100644 tools/testing/selftests/dma/.gitignore
-> 
-> diff --git a/tools/testing/selftests/dma/.gitignore b/tools/testing/selftests/dma/.gitignore
-> new file mode 100644
-> index 000000000000..668e2f8be2f7
-> --- /dev/null
-> +++ b/tools/testing/selftests/dma/.gitignore
-> @@ -0,0 +1 @@
-> +dma_map_benchmark
-> -- 
-> 2.34.1
-> 
-Hi,
+> Have you tested the device in Bluetooth mode? My controller's battery
+> is still charging.
 
-Please review the above patch and let me know if any changes are required.
+I have tried, but haven't been successful in getting it connected with,
+or without my changes (i.e. no change), so was focused on cabled support
+first.
 
-Thanks,
-Gautam
+> Tested-by: Bastien Nocera <hadess@hadess.net>
+
+Thanks!
+
+> 
+> > ---
+> >  drivers/input/joystick/xpad.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/input/joystick/xpad.c
+> > b/drivers/input/joystick/xpad.c
+> > index 18190b529bca..c8b38bb73d34 100644
+> > --- a/drivers/input/joystick/xpad.c
+> > +++ b/drivers/input/joystick/xpad.c
+> > @@ -131,6 +131,7 @@ static const struct xpad_device {
+> >         { 0x045e, 0x02e3, "Microsoft X-Box One Elite pad", 0,
+> > XTYPE_XBOXONE },
+> >         { 0x045e, 0x02ea, "Microsoft X-Box One S pad", 0,
+> > XTYPE_XBOXONE },
+> >         { 0x045e, 0x0719, "Xbox 360 Wireless Receiver",
+> > MAP_DPAD_TO_BUTTONS, XTYPE_XBOX360W },
+> > +       { 0x045e, 0x0b0a, "Microsoft X-Box Adaptive Controller", 0,
+> > XTYPE_XBOXONE },
+> >         { 0x045e, 0x0b12, "Microsoft Xbox Series S|X Controller",
+> > MAP_SELECT_BUTTON, XTYPE_XBOXONE },
+> >         { 0x046d, 0xc21d, "Logitech Gamepad F310", 0, XTYPE_XBOX360
+> > },
+> >         { 0x046d, 0xc21e, "Logitech Gamepad F510", 0, XTYPE_XBOX360
+> > },
+> 

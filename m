@@ -2,164 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D37A5972C7
+	by mail.lfdr.de (Postfix) with ESMTP id DDEBE5972CA
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235951AbiHQPNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 11:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
+        id S240317AbiHQPTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 11:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240822AbiHQPNi (ORCPT
+        with ESMTP id S232705AbiHQPTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 11:13:38 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711C111150;
-        Wed, 17 Aug 2022 08:13:37 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id l5so3358080iln.8;
-        Wed, 17 Aug 2022 08:13:37 -0700 (PDT)
+        Wed, 17 Aug 2022 11:19:32 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BC71274F
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:19:30 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id s36-20020a17090a69a700b001faad0a7a34so2087896pjj.4
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:19:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=1Aw1dSa3JPytcA6jepz8LxW98jZGIVvGrbA5oXW6cF4=;
-        b=QylPRZ7po85CmoykNUCyneM7mjy0jfxW6cm0tMG76VU+SEJs1TOHYjvUgCyJ5X34Ah
-         29R7oZJhhLUIaE/wB+fpvInm0t+Qtil2d7DsxFJO50ROSKqBTc4hrnQGXwMIq6mca6hs
-         54+kXi+r5dpmDFccUSfnuFBS3sWyt6leP9lY9G9/jXs02kwOe+87RXKykgBUvBdu+VxK
-         zgC40tcbIxY+/ARk2CL5sgZZPmfoBBvLljwObz/HD90zb/2wCmgAigALmX3sUAZMaM6/
-         yYvXO5L6d8RGEEhjCx/i99yVgYsx0VSd+Ea2XG0jsxBYGj9nUTR57UcZ9Som18Y15zyH
-         eUjg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=2Dzsz0z2prfhgcbdQayKeKRlLfrKQM5D6pSVBtZ7THM=;
+        b=GCmgVkz+4yjg/OIcr2ND13CCDmdSh+WHCUT6HE9iMQmhjE4cFo3stnG1YrZoN7u2jA
+         X50ubaDBe2N1zPHvWHi9l/NTCLsojyti+EbEBmECP0yxN9mvcFwnCZX6U5UqWeZGV4vd
+         UCp9Jj4DkuFnJ2uB+xOIyniJjwYfbdnuS0eTVMFLTlWm6kt96GEZeZSsspDqrubXzuck
+         DUXXm+Jxw/p/0xP9Atph6ZbCIOrc4E7iEKFavcTiP8r0rI29yFs4MdI82C1dJhvpqOGK
+         /2v7aN9fekT9Dl2kwXvNX5ouI+kmQ6XKxIBpmWB8XiS2dvIP6Annb8vwO7R2MwF9gMdK
+         ncag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=1Aw1dSa3JPytcA6jepz8LxW98jZGIVvGrbA5oXW6cF4=;
-        b=ufe1hEfqk05NHFKRKRlClYW9bZhuy/rHvu05/sxI9i0gxEnNjSKlFWo5Secw4+LyHX
-         WfRX2xT7xB0xx6vXSRwJlTFqNIj5YW4yVEKaDkEk7tOUYgfS/eCOYxWU0qxNWG76Gfe7
-         Tbn4d++qj9kme8FsrKTATPRFqNGjaAxVCYPWAYuji02dqEx64GqHx98rGoWY8kl4JLjX
-         7lzoI51iDWAT9y+79QI/MVX09cm6XqPDQavmUUyAOK366kKR9iheTgDa/mBBtwM5UTjF
-         dnzA9/VKeSGDcv5u2JscHE6aVb48ZiVjk2+I8va+aTGrcr3DgkuHIWu26o/brX33LuDJ
-         aINQ==
-X-Gm-Message-State: ACgBeo347fI7Io18tzujbJnuBHUxAV6hKepYQMfZa4Wanj3Vt2+8H6l9
-        zWByQrXt0F6AJyoXzM6uGR/29zvacGDNiL9txlU=
-X-Google-Smtp-Source: AA6agR76oTCoP2K9omiY3xisTcRhkl/VGb6FFCKu/kjjdtf4CwkBwADBK/ZOKLvdnvOPta40wh5R8EYE/TiRBIyFijg=
-X-Received: by 2002:a05:6e02:1522:b0:2e5:9e3c:a7c8 with SMTP id
- i2-20020a056e02152200b002e59e3ca7c8mr8021588ilu.237.1660749216849; Wed, 17
- Aug 2022 08:13:36 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=2Dzsz0z2prfhgcbdQayKeKRlLfrKQM5D6pSVBtZ7THM=;
+        b=xYkOE1WBNDiT0yD4vVhZ2rx8dGVwgxnTuMVaRsjwUH05eFet9gFFWXiG9Z+AWKhrq9
+         MZuaa5KbL3FyHtHOrgPZw4pSvks5wMhEjvGX6OcrJw3dIlIhxwwSGLp65ZfC6PUnDuYg
+         K/CPHzxj4tRI3G0r2EtrxlOX8vh7ViZhCUw1PjmSPyhiP7D3QUWSBaTBPAeha5p7iFR2
+         TGra6Z1KLoWaiLDV4SmlTgluBwCD66f18IeAtL/oBir5Lq6Xjc//g7LBckVq0q8J5Wap
+         dxi+dKjSL/C7HBWCXHxfYoGL2NUnxF4zzymwKuHsRCY/JVvXzNZ1GQjbG1qreVtzeydv
+         xrlg==
+X-Gm-Message-State: ACgBeo3EQg2F3YwSLL/aMxuPttKMsJI88YDhOwHUMDamYnGIeVguCo9s
+        OReIdeLB+3GQJsDI+wJpjPOqrA==
+X-Google-Smtp-Source: AA6agR6kokDwE6+pMf5BQdL0piGfoMv4TNps5u+H7z2eEXQEoh698ZXAEgsCRmvmL5MAXJWLFaNIWw==
+X-Received: by 2002:a17:903:2589:b0:16d:c26c:d641 with SMTP id jb9-20020a170903258900b0016dc26cd641mr26813781plb.8.1660749570010;
+        Wed, 17 Aug 2022 08:19:30 -0700 (PDT)
+Received: from ?IPV6:2409:8a28:e63:2e90:498e:2d75:1610:f371? ([2409:8a28:e63:2e90:498e:2d75:1610:f371])
+        by smtp.gmail.com with ESMTPSA id x185-20020a6263c2000000b0052dc3796cbfsm10562485pfb.75.2022.08.17.08.19.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Aug 2022 08:19:29 -0700 (PDT)
+Message-ID: <42c6d11d-d68a-e869-375e-550c495be5bb@bytedance.com>
+Date:   Wed, 17 Aug 2022 23:19:18 +0800
 MIME-Version: 1.0
-References: <20220802015052.10452-1-ojeda@kernel.org> <20220802015052.10452-28-ojeda@kernel.org>
- <CAK8P3a0jqhGY9E85VC9gNem5q6-dWeq0H6-7bhJopinMnLtOKQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a0jqhGY9E85VC9gNem5q6-dWeq0H6-7bhJopinMnLtOKQ@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 17 Aug 2022 17:13:25 +0200
-Message-ID: <CANiq72nNucEhXAXkXSujnGkpQrkv3-Pcn7ua8N=2XB-suAjs9w@mail.gmail.com>
-Subject: Re: [PATCH v8 27/31] Kbuild: add Rust support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Miguel Cano <macanroj@gmail.com>,
-        Paul Mackerras <paulus@samba.org>, Gary Guo <gary@garyguo.net>,
-        Douglas Su <d0u9.su@outlook.com>,
-        Borislav Petkov <bp@alien8.de>,
-        linux-riscv@lists.infradead.org, Will Deacon <will@kernel.org>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Masahiro Yamada <masahiroy@kernel.org>, x86@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-um@lists.infradead.org,
-        =?UTF-8?Q?Bj=C3=83B_6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Daniel Xu <dxu@dxuuu.xyz>, David Gow <davidgow@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        linux-arm-kernel@lists.infradead.org,
-        Tiago Lam <tiagolam@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Richard Weinberger <richard@nod.at>,
-        Finn Behrens <me@kloenk.de>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linuxppc-dev@lists.ozlabs.org,
-        Philip Herron <philip.herron@embecosm.com>,
-        Arthur Cohen <arthur.cohen@embecosm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.2
+Subject: Re: [PATCH v2 00/10] sched/psi: some optimization and extension
+Content-Language: en-US
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     hannes@cmpxchg.org, tj@kernel.org, corbet@lwn.net,
+        surenb@google.com, mingo@redhat.com, peterz@infradead.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        songmuchun@bytedance.com
+References: <20220808110341.15799-1-zhouchengming@bytedance.com>
+ <20220815132514.GB22640@blackbody.suse.cz>
+ <08ec9c4f-80b2-f731-aa8b-fb4e852ece25@bytedance.com>
+In-Reply-To: <08ec9c4f-80b2-f731-aa8b-fb4e852ece25@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On 2022/8/16 22:01, Chengming Zhou wrote:
+> On 2022/8/15 21:25, Michal Koutný wrote:
+>> On Mon, Aug 08, 2022 at 07:03:31PM +0800, Chengming Zhou <zhouchengming@bytedance.com> wrote:
+>>> This patch series are some optimization and extension for PSI,
+>>
+>> BTW do you have some numbers/example how much these modifications save
+>> when aggregated together?
+>>
 
-On Wed, Aug 17, 2022 at 4:40 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> Hi Miguel,
->
-> I tried enabling rust support in the gcc builds I provide at
-> https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/arm64/12.1.0/
+Sorry about delay...
 
-Thanks for giving it a go!
+Performance test using mmtests/config-scheduler-perfpipe in /user.slice/user-0.slice/session-4.scope
 
-> to make this more accessible, but it appears that the command line
-> options here are not portable:
->
->  /home/arnd/cross/x86_64/gcc-12.1.0+rust-nolibc/x86_64-linux/bin/x86_64-linux-gccrs
+                                 next                patched       patched/only-leaf
+Min       Time        8.82 (   0.00%)        8.49 (   3.74%)        8.00 (   9.32%)
+1st-qrtle Time        8.90 (   0.00%)        8.58 (   3.63%)        8.05 (   9.58%)
+2nd-qrtle Time        8.94 (   0.00%)        8.61 (   3.65%)        8.09 (   9.50%)
+3rd-qrtle Time        8.99 (   0.00%)        8.65 (   3.75%)        8.15 (   9.35%)
+Max-1     Time        8.82 (   0.00%)        8.49 (   3.74%)        8.00 (   9.32%)
+Max-5     Time        8.82 (   0.00%)        8.49 (   3.74%)        8.00 (   9.32%)
+Max-10    Time        8.84 (   0.00%)        8.55 (   3.20%)        8.04 (   9.05%)
+Max-90    Time        9.04 (   0.00%)        8.67 (   4.10%)        8.18 (   9.51%)
+Max-95    Time        9.04 (   0.00%)        8.68 (   4.03%)        8.20 (   9.26%)
+Max-99    Time        9.07 (   0.00%)        8.73 (   3.82%)        8.25 (   9.11%)
+Max       Time        9.12 (   0.00%)        8.89 (   2.54%)        8.27 (   9.29%)
+Amean     Time        8.95 (   0.00%)        8.62 *   3.67%*        8.11 *   9.43%*
 
-So you mean with GCC Rust, right? (i.e. we have "GCC builds" working,
-via compiling the Rust side with LLVM and linking with the GCC C side,
-but it is not intended for production or to be supported, even if we
-cover it in our CI, test it boots and loads modules etc.).
 
-Indeed, `gccrs` does not support `rustc` flags yet. I am not sure if
-the GCC Rust team will eventually provide a driver for those like
-clang does for e.g. `cl` -- I would hope they do, since many projects
-would benefit from it, but maybe they plan to start simply by
-modifying Cargo to call them as they need instead.
-
-If they don't support it, we will have to map the flags on our side --
-it should not be a big problem. However, see below...
-
-> I guess nobody has tried this so far. Would you think that fixing this is only
-> a matter for fixing the build system to pass the correct flags depending on the
-> compiler, or is this broken in a more fundamental way?
-
-If you meant GCC Rust, then it is a bit too early for the compiler. As
-far as I now, they are working on compiling the `core` crate and
-supporting more stable language features. They are also researching
-the integration of the borrow checker, though we wouldn't need that
-for "only" compiling the kernel.
-
-Now, if they decided to focus on supporting Rust for Linux early on
-(which would be great), they would still need to work on the delta
-between what what they target now and what we use (which includes both
-stable and some unstable features), plus I assume infrastructure bits
-like the platform (target spec) support, the flags / `rustc` driver
-(though I would be happy to do as much as possible on our side to
-help), etc.
-
-(We privately talked about possible timelines for all that if they
-were to focus on Rust for Linux etc., but I let them comment or not on
-that... Cc'ing them! :)
-
-Cheers,
-Miguel
+Thanks!

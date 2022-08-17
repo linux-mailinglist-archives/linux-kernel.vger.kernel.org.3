@@ -2,104 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 277E5596756
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB17596767
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238515AbiHQCUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 22:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50940 "EHLO
+        id S237934AbiHQCXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 22:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238331AbiHQCU1 (ORCPT
+        with ESMTP id S229911AbiHQCXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 22:20:27 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D5E98D3B;
-        Tue, 16 Aug 2022 19:20:26 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id z187so10910825pfb.12;
-        Tue, 16 Aug 2022 19:20:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=NqWldGNpwZSELo/NOljXxirvptqzExTo+96dH4lgN8I=;
-        b=G9iNeiHmCyay/m8KYcNdtNoZ3aISDNZOoVKuJWwpMFo9gKFVSinjhWKx4S4qNr7B0R
-         I11di3q39iSDwt4FC14bKIRTmMYKDLETRa3m3ZHksmU0FrnVn5ZbwGbpEeOEY+5Cu2TA
-         PPutfn0ix1lbLrGQjULhDNF6Ar4qG3t5fZ6s5OohPR9Pk26auvrtjU0gKquF/cYl8tNZ
-         3dMC2BOwxzEADt6rkVEx7J6Y6QzUXxeQ/IF4y3K21ITVH2VG8XymTz5ewHEYRD4RncfY
-         uDV6jQj0rzWwA5CKvbHjZGOf37hKzA9ix3zDSDdlPj3ykH1t9k3X1XcmRvRd90qSJ2Lv
-         QLIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=NqWldGNpwZSELo/NOljXxirvptqzExTo+96dH4lgN8I=;
-        b=1FPeKAhGvKQV15GO7+WgqAM6U2HyJwee9lz62bplYL/gHX1vsoVdZCIbuVA/4UH3bY
-         NtIqUlDAgpJqdx3WFbvALSdh3NTKQKVbeC+mvptgxWeCgCCmm20UCir3DEoYWEw8Xu2L
-         tAaONX3yp7xpzlKWf+nR/Yz/g6LrfAkw+6u7yK92y/njeudgZnEOlBZi+pQAHSek4L0g
-         jl1QA+86RTBWhI5HUprJEl1M6C4JH7pXwjDlaag18rnuo1mFHh0E6B5ZQsnPXF1S4qNo
-         FIq3rfSW1rJbkv5uO3H0pu2HNz0SNmKgCibDMpjI8A8goI6RbOluvXaC7lpao//fiVHS
-         7XZg==
-X-Gm-Message-State: ACgBeo0PvianJrh/1aHI8GTzRK+4JoibGcU6/zHMgx6DnJwuWlf7O6pF
-        WzeVkfrPO119qu6w0d7QPa/4YgTC7RXyMGTrJBU=
-X-Google-Smtp-Source: AA6agR76KtiC6o0Wf+hQUzMWDHcQcqNTf+4w5zlfHZX/GCsknGl5jJartyCJECQj8pW7lTTdUuILGKCJKDi0nZYQiQU=
-X-Received: by 2002:a65:6a0c:0:b0:429:7ade:490b with SMTP id
- m12-20020a656a0c000000b004297ade490bmr8187301pgu.621.1660702825995; Tue, 16
- Aug 2022 19:20:25 -0700 (PDT)
+        Tue, 16 Aug 2022 22:23:43 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4549A3E758;
+        Tue, 16 Aug 2022 19:23:41 -0700 (PDT)
+Received: from [192.168.100.8] (unknown [112.20.110.237])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxvmslUfxizwQDAA--.3916S3;
+        Wed, 17 Aug 2022 10:23:34 +0800 (CST)
+Message-ID: <325e126b-14e7-79fa-1348-53d71fd98728@loongson.cn>
+Date:   Wed, 17 Aug 2022 10:23:34 +0800
 MIME-Version: 1.0
-References: <20220816032846.2579217-1-imagedong@tencent.com> <CANiq72mQpZ-z1vVeOwdaOB3b=jjQHtPwz3-jaPRV330-yL_FqQ@mail.gmail.com>
-In-Reply-To: <CANiq72mQpZ-z1vVeOwdaOB3b=jjQHtPwz3-jaPRV330-yL_FqQ@mail.gmail.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Wed, 17 Aug 2022 10:20:14 +0800
-Message-ID: <CADxym3Y1ZoWrkGW3v4PbVMvbEYnoFgHmFXCD-QpY4Of9hrAxBg@mail.gmail.com>
-Subject: Re: [PATCH net-next v4] net: skb: prevent the split of
- kfree_skb_reason() by gcc
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     kuba@kernel.org, ojeda@kernel.org, ndesaulniers@google.com,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        asml.silence@gmail.com, imagedong@tencent.com,
-        luiz.von.dentz@intel.com, vasily.averin@linux.dev,
-        jk@codeconstruct.com.au, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] docs: scheduler: Update new path for the sysctl knobs
+To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Cc:     alexs@kernel.org, corbet@lwn.net, peterz@infradead.org,
+        Tang Yizhou <yizhou.tang@shopee.com>
+References: <20220816121907.841-1-lukasz.luba@arm.com>
+From:   YanTeng Si <siyanteng@loongson.cn>
+In-Reply-To: <20220816121907.841-1-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxvmslUfxizwQDAA--.3916S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxXr1fGr1kGrWDCw45JFykGrg_yoW5JFWDpa
+        4qgr4xA3ZrAr90kw18Cw1rGFWrWFW7C3y3Gr1qk3W8WFyvqaySyr1Ut3y3WF4qqry0yFW5
+        XFZag343Zw1jvaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvSb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
+        vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
+        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxv
+        r21lc2xSY4AK67AK6r4UMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI
+        8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
+        xVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI
+        8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280
+        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43
+        ZEXa7IU8xWrJUUUUU==
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-0.0 required=5.0 tests=BAYES_40,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 5:02 PM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Tue, Aug 16, 2022 at 5:29 AM <menglong8.dong@gmail.com> wrote:
-> >
-> > Reported-by: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
->
-> Hmm... Why did you add me as a reporter?
->
 
-Enn...because you pointed out my code's problem, just like what robot do.
-Shouldn't I?
-
-> > + * Optional: not supported by clang.
-> > + * Optional: not supported by icc.
+在 2022/8/16 20:19, Lukasz Luba 写道:
+> Add missing update for the documentation bit of some scheduler knob.
+> The knobs have been moved to /debug/sched/ location (with adjusted names).
 >
-> Much better, thank you! Please add the links to GCC's docs, like in
-> most attributes (some newer attributes may have been added without
-> them -- I will fix that).
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+
+Tested-by: Yanteng Si <siyanteng@loongson.cn>
+
+
+CC Yizhou
+
+
+Thanks,
+
+Yanteng
+
+> ---
+>   Documentation/scheduler/sched-design-CFS.rst                    | 2 +-
+>   Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 >
-> In any case, no need to send a new version just for this for the
-> moment, I would recommend waiting until others comment on whether they
-> want `__optimize__` used here as the workaround.
->
+> diff --git a/Documentation/scheduler/sched-design-CFS.rst b/Documentation/scheduler/sched-design-CFS.rst
+> index 59b2d1fb4dc4..03db55504515 100644
+> --- a/Documentation/scheduler/sched-design-CFS.rst
+> +++ b/Documentation/scheduler/sched-design-CFS.rst
+> @@ -94,7 +94,7 @@ other HZ detail.  Thus the CFS scheduler has no notion of "timeslices" in the
+>   way the previous scheduler had, and has no heuristics whatsoever.  There is
+>   only one central tunable (you have to switch on CONFIG_SCHED_DEBUG):
+>   
+> -   /proc/sys/kernel/sched_min_granularity_ns
+> +   /sys/kernel/debug/sched/min_granularity_ns
+>   
+>   which can be used to tune the scheduler from "desktop" (i.e., low latencies) to
+>   "server" (i.e., good batching) workloads.  It defaults to a setting suitable
+> diff --git a/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst b/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst
+> index 26b0f36f793d..3076402406c4 100644
+> --- a/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst
+> +++ b/Documentation/translations/zh_CN/scheduler/sched-design-CFS.rst
+> @@ -80,7 +80,7 @@ p->se.vruntime。一旦p->se.vruntime变得足够大，其它的任务将成为
+>   CFS使用纳秒粒度的计时，不依赖于任何jiffies或HZ的细节。因此CFS并不像之前的调度器那样
+>   有“时间片”的概念，也没有任何启发式的设计。唯一可调的参数（你需要打开CONFIG_SCHED_DEBUG）是：
+>   
+> -   /proc/sys/kernel/sched_min_granularity_ns
+> +   /sys/kernel/debug/sched/min_granularity_ns
+>   
+>   它可以用来将调度器从“桌面”模式（也就是低时延）调节为“服务器”（也就是高批处理）模式。
+>   它的默认设置是适合桌面的工作负载。SCHED_BATCH也被CFS调度器模块处理。
 
-Okay, I'll wait longer before the next version.
-
-Thanks!
-Menglong Dong
-
-> Cheers,
-> Miguel

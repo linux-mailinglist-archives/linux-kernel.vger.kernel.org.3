@@ -2,277 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EBDC596C3A
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC58596C38
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 11:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234488AbiHQJl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 05:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50842 "EHLO
+        id S235354AbiHQJmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 05:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbiHQJl0 (ORCPT
+        with ESMTP id S230371AbiHQJl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 05:41:26 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8882D78BE6;
-        Wed, 17 Aug 2022 02:41:23 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 24so11533447pgr.7;
-        Wed, 17 Aug 2022 02:41:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc;
-        bh=8wFsy8/iq1mV1VmQqVVpVmjFvPaMVz+u/8oZtkeEhNY=;
-        b=maJYnfWJosyTTf82+6p9ysiroNH9d0hwZiyl+CCMs/SB3wHFOsiCEM59gDyMBWQ/PP
-         uB/5yY33zGwkZ6PZgNkMFcQ+U5jhDLZbEveoMOTRPeD9YkenVTgIeCQZz7kUIdD9pVY4
-         ZIBIGw+dXnmB+Ooy9hZvM0cFXmi49GtuE9C7J8x308Ppcn1fazS/qAI7C91Arp9fociA
-         j3kvPpd85TrUtWPGS8khMb6P7opEEobomxOnz/HypmnlU2KfManQf5e2UX3j12Lo7IDf
-         wB/LV4NSnCbIscyQWUNWMAP/Q1hyy5bFIjYgNEJXgvV0wD4PSf/4dYdt4qHmak+iYtrV
-         sP7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc;
-        bh=8wFsy8/iq1mV1VmQqVVpVmjFvPaMVz+u/8oZtkeEhNY=;
-        b=X0hpZR46FUuCnCQhFtAsHSUs7rOabUX9j5AiO8O4IkeLw1A/4nz9/vrgXdSHYqBX1Y
-         NtXex2YXR+kYN8VUY8fSRsnap9ft75fNU+pc2gAtZFLooGvpoP5AeBffnb49W+oCFSGN
-         MqEoVVFshqYLDyuZab3DItRXRPNG07dG9w53gfYoNDXwPpqxg058b4FDX7SUW8Nj+32B
-         zMbZRGflCE8cGoE9yqv5r3zf2E9wl1o3IAcQUJd31tEMN+MDVrn9BSU2Wf1aFJei4YXT
-         vWNe0Z5RtFoq74xKknwjje2lQAzOfI5lcCRj3zRhGDHIg7v1afZfQNpsPTXZj1pkniiB
-         U4jQ==
-X-Gm-Message-State: ACgBeo2qUjvHXhGBc42AYxiNHK6xw96Q9FOWQ5tCc9rsxjQAddWCeQis
-        fNTRp0cNU3Rzo6MPdV1USVE=
-X-Google-Smtp-Source: AA6agR4fQe0JMAMZT9E6T+BOdyywOXefDPIuSNMqKMCTzfgoN6Gv3+3INclu6TwqgICD+J0uWGhJgg==
-X-Received: by 2002:aa7:88d3:0:b0:52e:ade6:6192 with SMTP id k19-20020aa788d3000000b0052eade66192mr24904496pff.41.1660729282369;
-        Wed, 17 Aug 2022 02:41:22 -0700 (PDT)
-Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
-        by smtp.gmail.com with ESMTPSA id u1-20020a1709026e0100b0016d62ba5665sm963653plk.254.2022.08.17.02.41.19
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 17 Aug 2022 02:41:21 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v2 1/2] mm/migrate_device.c: Copy pte dirty bit to page
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <87tu6bbaq7.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Date:   Wed, 17 Aug 2022 02:41:19 -0700
-Cc:     Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>,
-        huang ying <huang.ying.caritas@gmail.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
-        linuxppc-dev@lists.ozlabs.org, stable@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <1D2FB37E-831B-445E-ADDC-C1D3FF0425C1@gmail.com>
-References: <6e77914685ede036c419fa65b6adc27f25a6c3e9.1660635033.git-series.apopple@nvidia.com>
- <CAC=cRTPGiXWjk=CYnCrhJnLx3mdkGDXZpvApo6yTbeW7+ZGajA@mail.gmail.com>
- <Yvv/eGfi3LW8WxPZ@xz-m1.local> <871qtfvdlw.fsf@nvdebian.thelocal>
- <YvxWUY9eafFJ27ef@xz-m1.local> <87o7wjtn2g.fsf@nvdebian.thelocal>
- <87tu6bbaq7.fsf@yhuang6-desk2.ccr.corp.intel.com>
-To:     "Huang, Ying" <ying.huang@intel.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 17 Aug 2022 05:41:58 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5139D792D2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 02:41:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660729317; x=1692265317;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=xDqVFoUg8DcV6sTdrQMmHVyKeGjRSQOwXLNxAegHivU=;
+  b=RbvZHBqJsAPqxHiS1gvbVcb9hyGi7MJ/PAbPYIanPHAqM+OZ/rS0KUa6
+   Gzu99Y8GnbofTFQgjzIueWDywciOWzACR4mUI5IEgfbFjevgJwjgRYtuq
+   UJr+ZeEWAigM+Tjt6TD7f5wRNVgRAIotWDcHxJpnRaz4u4+NE1Xx1Jhqu
+   TuD3iEAd0BB8tj2u3HlBlKKR5CqnosN1qINX0iM2fJyPmbeh2vTBmTAWq
+   8rW5o93E8h9VT+fskwt8d3I44X1z46OQvNgPWdIJt0K6nW1lm5iZ4vJ24
+   lkjiXi15Sdt2t2sHcsocoNe7dUCSGY5tuOMpKOkJbOwMCrqdkVblp7Grp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="318457994"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="318457994"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 02:41:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="935292277"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga005.fm.intel.com with ESMTP; 17 Aug 2022 02:41:56 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Wed, 17 Aug 2022 02:41:56 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Wed, 17 Aug 2022 02:41:56 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28 via Frontend Transport; Wed, 17 Aug 2022 02:41:56 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.28; Wed, 17 Aug 2022 02:41:56 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Vjh+NRqsdY76MdwQJmVeZk5uJZy9Gq7NpVp4q9jSGjjw5TY0v/4xXCXQ8G4ujMR2ixkNYakGAwrcw1ZRgiFEOvM3dfakjTWkLgVB8KoCezeoWsIfIQpBc7aOVJrZl9JtaaO4c1Ly38mjq4OS8knR0thuOB35YtQtitHzkgGyNe+XJMMViTqDWu01XLovSd2I89w4YaNfcP0HK/Ty+XhXXB1Nq+sTw02ltZCCArspbK9ZFHL/LuNdqACZb1mMn9pp/LDOryqKcdtPNza3DScjYbuEN93/RTx+JGLs3MQvsRhsRVS8Bcd8RYZpSgH/gxOJ/TwgsvtP3FJtBOMD/pH9rQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tv4aNdAutodZi1q4S+SZEtzwOCL79BejGKawsi55WWU=;
+ b=e9sCvDNumLJRlMfZP5AckMyBUc6PQklBnavNvYOj5fcwqqjd0It3peXLw7BUKcixlzLqj0JGR4/52b6x3EpWHFDiwdIJKR2K4EIxobsk/qjan2JqTusCUw8Wpoed277xEtztbVHyiWtdPqyFGUlfnJJeVQwIAfpS3UvbonEAf0Je9PJeZBZYWnHDr0R7qVi7V6+Q9qxRjaZozikjKziHKvoIRg1o86MJDJNVBxPhCMUZtZbPDgmoLQddLziRb/GVBDA1Vlpjm2UlUHjNqZQFesYndkiI82bDvsdKUeRYFQ7UTK4sBjLYd4tROvb87ldqbQYzhmiyxdxF7KqS6xLN2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CO1PR11MB4820.namprd11.prod.outlook.com (2603:10b6:303:6f::8)
+ by BL0PR11MB3057.namprd11.prod.outlook.com (2603:10b6:208:76::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Wed, 17 Aug
+ 2022 09:41:49 +0000
+Received: from CO1PR11MB4820.namprd11.prod.outlook.com
+ ([fe80::fcda:4c77:5786:209c]) by CO1PR11MB4820.namprd11.prod.outlook.com
+ ([fe80::fcda:4c77:5786:209c%4]) with mapi id 15.20.5525.011; Wed, 17 Aug 2022
+ 09:41:48 +0000
+Message-ID: <b44ef13c-c9df-5d08-f92f-649fef9d74ee@intel.com>
+Date:   Wed, 17 Aug 2022 17:41:39 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.12.0
+Subject: Re: [PATCH 5/6] mm/hugetlb: fix sysfs group leak in
+ hugetlb_unregister_node()
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>, <akpm@linux-foundation.org>,
+        <mike.kravetz@oracle.com>, <songmuchun@bytedance.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220816130553.31406-1-linmiaohe@huawei.com>
+ <20220816130553.31406-6-linmiaohe@huawei.com>
+From:   "Yin, Fengwei" <fengwei.yin@intel.com>
+In-Reply-To: <20220816130553.31406-6-linmiaohe@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR03CA0107.apcprd03.prod.outlook.com
+ (2603:1096:4:7c::35) To CO1PR11MB4820.namprd11.prod.outlook.com
+ (2603:10b6:303:6f::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 98055f24-e8d6-4d5a-0613-08da8034b4c0
+X-MS-TrafficTypeDiagnostic: BL0PR11MB3057:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: r59J0Qb36y/5I85uvuhdATvMqc1G/5R+JP/vo/tZGfr8zCMVMN/UD92OVzkfZNQ7TUhVf5ygZTsjnMoCdV6lFZMksfhKm0KIJNGUktAyLGr4Sjgw+Z9c5BzgmIztj/gaJeebDt1Xq3mCIMlQ3C3nO/0+9lf4lYe61tFUez18osJeEKMsEq+pKTcMI9Xd1bhJEe+B5b++L5vR4p5CSLv/jnkpP0sa90eC+jl7GxfhvN6huK0+3YxG86mKRhPaoY//fnyTDs05O/irO3E18xllCwAWhPyQRgkeCDrH8LBJqqzUVwcd6R9HCjipBO2qoutNoTS8fYIb54slQVHEfLxfyuOcslqEeQIufLK1Km3IMCznbETL/xAnhD1ERa2fvDOXS1il/pPKYZ0iXJahWf8q36LH3fZxNChneHkHQi7wwUd2nUmx1jxTWiJ9xbDAYEqfIKw53fbo+h5uKMx4CEtwUv0o2Cbh7kpeDPCr0ja5FVy4/33JfrycCU8F/LEJN/a03xQLHUiEyS3m+iIBMjW5NRRzPuCEadBQx7fgomO58Bh4IVTdmUHZd+8P3o1sFurm/19osZsu3ArjmO6sv6suos09bKHoqTLmR0R6ulg6rU4a0JhycKRrh+SmHscE59a34SFSFfUkgK/Le42Y5KAmR/Xe4xAdsS0TtdrWyiaV6QTGtme6EqSWkanOM/cNjgpj4S2MwILEqhTJ1B90qLfNVkPCEPj1nun2rIbpch8fjJsKqijp0bfGjDY4f2hI2qWgf1mvtpOREjJl7WXBvz3W1h7kvQD/rOqgcXJHa6ol8tswNoQRlIozPuc+ex/KHvC0V0vRIzKl2nV0eIf1D5OrhQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4820.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(376002)(136003)(346002)(366004)(396003)(31686004)(8676002)(4326008)(66476007)(66556008)(66946007)(38100700002)(8936002)(5660300002)(4744005)(2906002)(316002)(82960400001)(186003)(36756003)(86362001)(31696002)(6666004)(6506007)(53546011)(478600001)(6486002)(41300700001)(83380400001)(26005)(2616005)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R2psQisvT1M5UG05dkxvZ2RFMGJnTklBZk9ud080UXlHSTNBYXkvSU42ZW1x?=
+ =?utf-8?B?S0pydjg5QVBwd05QUlVWRjZHNmUzQjVMQlFjRFZ6T0ZRa29BTHJJNW1sM2JP?=
+ =?utf-8?B?aEtDR2pBS1ZiM2RIeTIvZmkrTFZraXRXSmtNKzU1ODlOVVgzU2NEZmw5MUk2?=
+ =?utf-8?B?bUFXQ3BRSFBwYlFsWmU3Sk41THl1WHg2ajZIRmthWEQ3YzRXUjZ4TVZQY2ZI?=
+ =?utf-8?B?MU1PRU50RENpL3dJOHlCK1BjVWp5WXpibTdkRHV3dWVTaUVMRnR2OVJ5eUZI?=
+ =?utf-8?B?QjFFTnRYU2ZqcEc2cmpmM1RPUkFoRkRIOGEvWlhTMlFLNjhWc3RBbVE3dVFE?=
+ =?utf-8?B?VkZUdTI0YmRGdnVuSDlQSHdaTTRTYmpiV2xCVzBXRnFYZ3dOb2Z2YzI4QXgx?=
+ =?utf-8?B?MEhZaVRMYVF1SWZCYjQ2dVlwRHhTaXNndkVid3RTdHYxMUhGelBsczF4TVJS?=
+ =?utf-8?B?RlBtMUVqbVphL2d5bkRrNnhOWmZXcjFGb2haWVYySFJkdjdyOUlnam5jNjVv?=
+ =?utf-8?B?TUF1eHFQY1ZTenFRUVVpY3k2WE1DUWhNNGdLbHRzU05jckEvV3lnTVV2dDlW?=
+ =?utf-8?B?MGc4SEtTVHgrSllNTFM1NDJCMVo0NEpSekNNSEp5YUU0ajVkWWN1em9semdG?=
+ =?utf-8?B?SGhWMjQ2VmJIa0FFd0UyYlZqOHNoS2lrdFRaOTdEcklaanZ5eXhlUHgyMEFy?=
+ =?utf-8?B?UnBRRVozd2R5WkpsaDk1dFZXamRsbkpnRzMrU21BMUNDRUJLN2JDK3QzaEh3?=
+ =?utf-8?B?dUk1K0VJMk9FcitCUWthVmQyTk5QT2hKYkxNVXY0UHFCUkV1MGFNc3kyb21y?=
+ =?utf-8?B?TW1kSHpRb3lQQm82WHZHOXdLYTFjNjRST2NWNGRnUXI1Q0dUaksvNkZER1Jj?=
+ =?utf-8?B?UWZOZGF1NlVPSzZCTzZHN2tjRjZDcVh2by9qRU5oOHljdCtjZkNDMCtUd2dm?=
+ =?utf-8?B?S1NtTkJwSkJNS0M3NUJYQVZaUjdIQ2kzZVNoQXJTQ0wwMC81WTZlTkVPeDN0?=
+ =?utf-8?B?NlBCSmVWMzl2MXRpbk5OTnYzNmUzYU1MM3crVVMzN3JJQjVpeUkvRmxsejF1?=
+ =?utf-8?B?bC9JWjh1RzA5RDRCNzJGeDl0S1VPNmNnL3IxMkVPZTFjTmJVNi9BdzVjeWxM?=
+ =?utf-8?B?QjdVUU93VVpocURIc3NmbUFvZHdoc1JrREMrSktxVitCRktOdjNPbWxLaGNh?=
+ =?utf-8?B?RW8rL2RnNWF1aFpKajRjV1VYT0VNaS9QeTlNbzFWRUZnMmFLMkRKQjBPSnJJ?=
+ =?utf-8?B?d0dTL0dqd1VRQkgzeEtVTkpYQ2t1WWVOV3BuLzhuU3F1OXdCZTdDRW9HL0h2?=
+ =?utf-8?B?N2JLZXpacENFNFVFNzlydng3cmRlM2cxT1c3eFdRL1lnMWxRMzFISGdyb2J1?=
+ =?utf-8?B?RFhrc1kydGxJcjl5ZkF3bFdGWWRqWjJuWnJWSG9JbmJDV2g0MThyM2wwSXB5?=
+ =?utf-8?B?anljRW03RWs3SUFXRmI4WnNMODF3dms2clk1NWlWQ05MbHZqczVLVFp0QUlv?=
+ =?utf-8?B?VkdaQmdOMlgxdkFwajByWjJmQlBXRFRJQXRlT3dxSVoxSlNFeDVKN3FlQVE5?=
+ =?utf-8?B?WktEMUNJUDFaMzlvRHZsa01CdDFSdXo4YSszbXRROHFLZnUwVnhKL2hFZ3ZQ?=
+ =?utf-8?B?VmFPOGZES2piU2FxUldkOXJ6eHZUVE8wM0RkL1VRWk1RZ0Y4TmxqNUMxMnpC?=
+ =?utf-8?B?SlJOZENVSU5Nei9nSnBEWEdrazNiellTNENnd2tBODluZkU3SzRGbk9ZWVlQ?=
+ =?utf-8?B?MjZFcjFyWVJXRUJPRmdXYXE3OG1oek12aGRqQ2JQOXloUk81SUNkV1BGR1B0?=
+ =?utf-8?B?dkNGM2NoWXdWazVrZTVBZHlXRXV4Tzg0NWNNZm5FU0ZPeUVqRk0ycExmTTlP?=
+ =?utf-8?B?bUllcG0yNWlVaG45T0pxRXNRTHRKNE5OZThya01JbGZSY0pFMUR5QkdpalFP?=
+ =?utf-8?B?d0dSU0VRNm5OYXBaelc1QTVwZUJzaGFjN2dRM1ZIa3B6dDZObkhSb1llYUg4?=
+ =?utf-8?B?UFhLT3Jid0xLSy9GVXFWblMzcHV3T2w4L3ZQbldyNWo4WnF1QVdScHVCWUp6?=
+ =?utf-8?B?SlF3NkhyWkZQSTA0bkp6V1RHSWZSanErMFl4NVBSK3FRblZOeURqYWk2aWJW?=
+ =?utf-8?B?WldUaHdXbmZ1WEgvdDVQeTBaTG5QUnhMOTltZGtBbWwrTEZlNlMwcCs0WEgw?=
+ =?utf-8?B?Y3c9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 98055f24-e8d6-4d5a-0613-08da8034b4c0
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4820.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2022 09:41:48.8620
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: u1T80ZbQms+l13xbLLWL7i6tAF3Kiee5+ZVrhcOqFurAko3E7NWpxp70vNjnHHGzDeuGgGmLb6ikrzebQdqtjA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR11MB3057
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Aug 17, 2022, at 12:17 AM, Huang, Ying <ying.huang@intel.com> wrote:
+Hi Miaohe,
 
-> Alistair Popple <apopple@nvidia.com> writes:
->=20
->> Peter Xu <peterx@redhat.com> writes:
->>=20
->>> On Wed, Aug 17, 2022 at 11:49:03AM +1000, Alistair Popple wrote:
->>>> Peter Xu <peterx@redhat.com> writes:
->>>>=20
->>>>> On Tue, Aug 16, 2022 at 04:10:29PM +0800, huang ying wrote:
->>>>>>> @@ -193,11 +194,10 @@ static int migrate_vma_collect_pmd(pmd_t =
-*pmdp,
->>>>>>>                        bool anon_exclusive;
->>>>>>>                        pte_t swp_pte;
->>>>>>>=20
->>>>>>> +                       flush_cache_page(vma, addr, =
-pte_pfn(*ptep));
->>>>>>> +                       pte =3D ptep_clear_flush(vma, addr, =
-ptep);
->>>>>>=20
->>>>>> Although I think it's possible to batch the TLB flushing just =
-before
->>>>>> unlocking PTL.  The current code looks correct.
->>>>>=20
->>>>> If we're with unconditionally ptep_clear_flush(), does it mean we =
-should
->>>>> probably drop the "unmapped" and the last flush_tlb_range() =
-already since
->>>>> they'll be redundant?
->>>>=20
->>>> This patch does that, unless I missed something?
->>>=20
->>> Yes it does.  Somehow I didn't read into the real v2 patch, sorry!
->>>=20
->>>>> If that'll need to be dropped, it looks indeed better to still =
-keep the
->>>>> batch to me but just move it earlier (before unlock iiuc then =
-it'll be
->>>>> safe), then we can keep using ptep_get_and_clear() afaiu but keep =
-"pte"
->>>>> updated.
->>>>=20
->>>> I think we would also need to check should_defer_flush(). Looking =
-at
->>>> try_to_unmap_one() there is this comment:
->>>>=20
->>>> 			if (should_defer_flush(mm, flags) && =
-!anon_exclusive) {
->>>> 				/*
->>>> 				 * We clear the PTE but do not flush so =
-potentially
->>>> 				 * a remote CPU could still be writing =
-to the folio.
->>>> 				 * If the entry was previously clean =
-then the
->>>> 				 * architecture must guarantee that a =
-clear->dirty
->>>> 				 * transition on a cached TLB entry is =
-written through
->>>> 				 * and traps if the PTE is unmapped.
->>>> 				 */
->>>>=20
->>>> And as I understand it we'd need the same guarantee here. Given
->>>> try_to_migrate_one() doesn't do batched TLB flushes either I'd =
-rather
->>>> keep the code as consistent as possible between
->>>> migrate_vma_collect_pmd() and try_to_migrate_one(). I could look at
->>>> introducing TLB flushing for both in some future patch series.
->>>=20
->>> should_defer_flush() is TTU-specific code?
->>=20
->> I'm not sure, but I think we need the same guarantee here as =
-mentioned
->> in the comment otherwise we wouldn't see a subsequent CPU write that
->> could dirty the PTE after we have cleared it but before the TLB =
-flush.
->>=20
->> My assumption was should_defer_flush() would ensure we have that
->> guarantee from the architecture, but maybe there are alternate/better
->> ways of enforcing that?
->>> IIUC the caller sets TTU_BATCH_FLUSH showing that tlb can be omitted =
-since
->>> the caller will be responsible for doing it.  In =
-migrate_vma_collect_pmd()
->>> iiuc we don't need that hint because it'll be flushed within the =
-same
->>> function but just only after the loop of modifying the ptes.  Also =
-it'll be
->>> with the pgtable lock held.
->>=20
->> Right, but the pgtable lock doesn't protect against HW PTE changes =
-such
->> as setting the dirty bit so we need to ensure the HW does the right
->> thing here and I don't know if all HW does.
->=20
-> This sounds sensible.  But I take a look at zap_pte_range(), and find
-> that it appears that the implementation requires the PTE dirty bit to =
-be
-> write-through.  Do I miss something?
->=20
-> Hi, Nadav, Can you help?
+On 8/16/2022 9:05 PM, Miaohe Lin wrote:
+> }
+>  
+>  	if (h->demote_order) {
+> -		if (sysfs_create_group(hstate_kobjs[hi],
+> -					&hstate_demote_attr_group))
+> +		retval = sysfs_create_group(hstate_kobjs[hi],
+> +					    &hstate_demote_attr_group);
+What about add one more:
+   just return if hstate_attr_group creating failed:
 
-Sorry for joining the discussion late. I read most ofthis thread and I =
-hope
-I understand what you ask me. So at the risk of rehashing or repeating =
-what
-you already know - here are my 2 cents. Feel free to ask me again if I =
-did
-not understand your questions:
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 0aee2f3ae15c..a67ef4b4eb3f 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -3845,6 +3845,7 @@ static int hugetlb_sysfs_add_hstate(struct hstate *h, struct kobject *parent,
+        if (retval) {
+                kobject_put(hstate_kobjs[hi]);
+                hstate_kobjs[hi] = NULL;
++               return retval;
+        }
 
-1. ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH is currently x86 specific. There is =
-a
-recent patch that want to use it for arm64 as well [1]. The assumption =
-that
-Alistair cited from the code (regarding should_defer_flush()) might not =
-be
-applicable to certain architectures (although most likely it is). I =
-tried
-to encapsulate the logic on whether an unflushed RO entry can become =
-dirty
-in an arch specific function [2].
+Once hstate_kobjs[hi] is set to NULL, hstate_demote_attr_group creating will
+fail as well. Thanks.
 
-2. Having said all of that, using the logic of =E2=80=9Cflush if there =
-are pending
-TLB flushes for this mm=E2=80=9D as done by UNMAP_TLB_FLUSH makes sense =
-IMHO
-(although I would have considered doing it in finer granularity of
-VMA/page-table as I proposed before and got somewhat lukewarm response =
-[3]).
 
-3. There is no question that flushing after dropping the ptl is wrong. =
-But
-reading the thread, I think that you only focus on whether a dirty
-indication might get lost. The problem, I think, is bigger, as it might =
-also
-cause correction problems after concurrently removing mappings. What =
-happens
-if we get for a clean PTE something like:
+Regards
+Yin, Fengwei
 
-  CPU0					CPU1
-  ----					----
-
-  migrate_vma_collect_pmd()
-  [ defer flush, release ptl ]
-					madvise(MADV_DONTNEED)
-					-> zap_pte_range()
-					[ PTE not present; mmu_gather
-					  not updated ]
-				=09
-					[ no flush; stale PTE in TLB ]
-
-					[ page is still accessible ]
-
-[ might apply to munmap(); I usually regard MADV_DONTNEED since it does
-  not call mmap_write_lock() ]
-
-4. Having multiple TLB flushing infrastructures makes all of these
-discussions very complicated and unmaintainable. I need to convince =
-myself
-in every occasion (including this one) whether calls to
-flush_tlb_batched_pending() and tlb_flush_pending() are needed or not.
-
-What I would like to have [3] is a single infrastructure that gets a
-=E2=80=9Cticket=E2=80=9D (generation when the batching started), the old =
-PTE and the new PTE
-and checks whether a TLB flush is needed based on the arch behavior and =
-the
-current TLB generation. If needed, it would update the =E2=80=9Cticket=E2=80=
-=9D to the new
-generation. Andy wanted a ring for pending TLB flushes, but I think it =
-is an
-overkill with more overhead and complexity than needed.
-
-But the current situation in which every TLB flush is a basis for long
-discussions and prone to bugs is impossible.
-
-I hope it helps. Let me know if you want me to revive the patch-set or =
-other
-feedback.
-
-[1] =
-https://lore.kernel.org/all/20220711034615.482895-5-21cnbao@gmail.com/
-[2] https://lore.kernel.org/all/20220718120212.3180-13-namit@vmware.com/
-[3] =
-https://lore.kernel.org/all/20210131001132.3368247-16-namit@vmware.com/
-
+> +		if (retval) {
+>  			pr_warn("HugeTLB unable to create demote interfaces for %s\n", h->name);
+> +			sysfs_remove_group(hstate_kobjs[hi], hstate_attr_group);
+> +			kobject_put(hstate_kobjs[hi]);
+> +			hstate_kobjs[hi] = NULL;
+> +			return retval;
+> +		}
+>  	}

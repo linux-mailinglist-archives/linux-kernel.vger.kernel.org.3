@@ -2,192 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29DA0596D5D
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 13:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A18596D69
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 13:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238994AbiHQLPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 07:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33894 "EHLO
+        id S239142AbiHQLQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 07:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbiHQLPE (ORCPT
+        with ESMTP id S229533AbiHQLQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 07:15:04 -0400
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F57167173
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 04:15:03 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 5E94E580DA3;
-        Wed, 17 Aug 2022 07:15:00 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 17 Aug 2022 07:15:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1660734900; x=1660742100; bh=7/MyY+LBb7
-        xbVEmhuCyBhoCzY/9cxkCFf1VHHVrX6CY=; b=grrDb7phnJ8YS7DoYmClhDowva
-        mf0hyZG1cElbLmCByi9qZfwQST1mrUurzidSCbpXzLfvUzrbTrOQioCAKC7U2Fwp
-        jm+jENEKf8Vy1T/MorGsNClgSxDglsVgGyCX7UfoFeVFnLOETgr0/p9hs3QB88dR
-        sbSoRPnGd69728/P/mt+7Fh+vWebfjlS/I7UsqjhGtn17DbWdnP/EkpsYqbQNwVv
-        WQtJ4vAXXBVssg+IMz+GS+lG3ddEwQCPDgiFnLFA9ysgfKqwRZXwt8UFyXWB1BS0
-        kUzrjtDuamQLJjwF4qqcj5aFreTij0nTlG0h1GIxKPYZ2AhmjLEmwgoC2u/Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660734900; x=1660742100; bh=7/MyY+LBb7xbVEmhuCyBhoCzY/9c
-        xkCFf1VHHVrX6CY=; b=1EjiYV1IDT9sKd5r3mLzkdKwMFMlonp4bEctBDecRUya
-        ZlpnqtUdldGetHD37riEiUUvZGlMEqu124iAqLMJ5iN2ONf2abY5VWp06pRbQ+/6
-        6W4ZKgtun/ru5zgTMT/ePki4t9Z1FsEfCzHeI5zEz+PrbhaFCGLsggAXU5MVBu5U
-        +FwyikIohL0SBGOuk1IfHbASHFnJCiOCRnZThfHbBprg6joaAp7F8MNh+k1pj/jf
-        DyTXjPYwQFQehxwbJdfXESh1FquX9og/rEOuQMKCTlBFZrFevsqr6cgA4gaTkM4X
-        WlmugzAHmc7tzr6NIUDl6X9UGByCvf/IOiJ6IMjRHQ==
-X-ME-Sender: <xms:ss38Ymz6QIJVROnLxmIjqn_3TMnD9ZLFHefJCfGNyBCHaTEh0d9E8A>
-    <xme:ss38YiTELaLWGqYanHfSD6VWKyMUjfqc07lsrLPsN3Xf25xqqj0yBtjUnChpOnajr
-    92MoarTmCFXFjH7m0g>
-X-ME-Received: <xmr:ss38YoUzRSzcuNOADkP7kR5ntYkzbd9ylNolSoNBKiyDhA78E3ttDGbQ-g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehiedgfeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
-    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:ss38YsjZPx_G1Zc8tP9aygClJLiL_P6juc2jFveN0GQgc0P9nQkhuw>
-    <xmx:ss38YoAufRzR7_QR2U-zba1HO11VCExDDNMadtbPaaWeyOFbRlviRA>
-    <xmx:ss38YtJo-vfEDw0s84F9ypKZ1-0zVXkz8garCQi-_Nfg8XoGqLnY2A>
-    <xmx:tM38Yqy6P1AyJ75RZnKbU9oqLErBbDheLyu7DSvqoX3-T7Z68V_Beg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 17 Aug 2022 07:14:57 -0400 (EDT)
-Date:   Wed, 17 Aug 2022 13:14:54 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Dom Cobley <dom@raspberrypi.com>
-Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
-Message-ID: <20220817111454.pn2iltvyo2drebq7@houat>
-References: <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
- <CAMuHMdWYo7M44uLNhTmJenGDreGALBZ9E48oyBDEeAuL=0h=dw@mail.gmail.com>
- <20220816132040.uwirtjm5yr6rdd3q@houat>
- <CAMuHMdWevP=3af=NneAJEDfOR+sz1thrQEhAQPNGrgitBtLjGA@mail.gmail.com>
- <20220816141116.5nuszmilqv2exdb3@houat>
- <CAMuHMdXq_xGPx46bdnUFGDiG4kcgdxtXaRGTucFd3TRq8353dg@mail.gmail.com>
- <20220816154956.pkdpxmmw27mia5ix@houat>
- <CAMuHMdX0L6cO_jYXKZTv0sm9V39Eiy_STiknSkdRQG4k-9GJeg@mail.gmail.com>
- <20220817074710.w4c4xwj7edly2b5p@houat>
- <CAMuHMdXeBakWr6geOWGxnjQYaU9Pi4tRvVFFtubyMJZTT2nPnw@mail.gmail.com>
+        Wed, 17 Aug 2022 07:16:22 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2054.outbound.protection.outlook.com [40.107.92.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C717696F;
+        Wed, 17 Aug 2022 04:16:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XjHGTWcleOo4l5aql8JegaQUhCJ/Qt+KLMNAKRsGlZWD6cL8ae6oPEyOo+IJlgKmq427JMuKCoUH7BlFH0Yzdl6k/J9c9DWOjamGlldRKIHD43mj5mqapXA7UPlphIuVEDV1LYOvV67jpp+bsCLp3VunFHEnuipTfZYQB4aISAiKmpOhBCJPwmKYiCsi1pAVFRv/wPyNSPZLecw0jJJeh5vdxqVxwWY+aVAfo8EZED2XcyI/7iBs9M1W4c05UhXpvg9KVsRt2eagzlayv0G4Uaw5vPBRfgTfHeY3SFTZRmoNryWvEueIaXQd+ftSDLNwK008CfZm1twSoV1AI/+O5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+LbNgjYrkxLU+9JCGrcDWkx+CCupQL+IpohLSwv0hYo=;
+ b=dSRnA76IHRiJl8JgesF3z6r4Q9rkMXwF+H4PkMwbvEWivbb6ZIWcAs5fEmF8tEMKijE0XEiybFs29vGjpQGcJA3SDHXPxxlNWsmau8D7ZF+MVcj0RBmyJ8D6WvnhahOP7EDPt5vhkbgfhJtZ2iMK8AEw58Qrm3wWvSaWS8pE55YA73OQKqNjoq+9mfBRZeHL5H1TQKJc/mluc0ZwSWPVvDCl5dqxRrcOaFt3aOJa1k8pMXfOEY2XMN1QGCGkzRGSSEak+IDX06ZTMOXFh7XBx3nrTLTGFfqvec+tJkL80VtWRNAqmXc1sATQKHw5aOj+EZbFAz0mKhjZqqlVO/17XA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+LbNgjYrkxLU+9JCGrcDWkx+CCupQL+IpohLSwv0hYo=;
+ b=qK+C1t07u7YjrThNNWE1KuvEYZgsw6k3sb2LD3/B7grBsEkWPKgHApoVoEfWohMw8b55yQrOY6q8By8+DRK5VfdHbam4LMZMK0YR1sddr9m7kTpruIPvbzunxwU+W778RJ+OwbclhhqQzdZiTG7luuIIXcxfOBtjdZQ+eDnvH90=
+Received: from DM6PR12MB3993.namprd12.prod.outlook.com (2603:10b6:5:1c5::29)
+ by MW2PR12MB2473.namprd12.prod.outlook.com (2603:10b6:907:4::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Wed, 17 Aug
+ 2022 11:16:14 +0000
+Received: from DM6PR12MB3993.namprd12.prod.outlook.com
+ ([fe80::bd8d:b963:62ed:65c5]) by DM6PR12MB3993.namprd12.prod.outlook.com
+ ([fe80::bd8d:b963:62ed:65c5%7]) with mapi id 15.20.5525.011; Wed, 17 Aug 2022
+ 11:16:14 +0000
+From:   "Manne, Nava kishore" <nava.kishore.manne@amd.com>
+To:     Xu Yilun <yilun.xu@intel.com>,
+        Nava kishore Manne <nava.manne@xilinx.com>
+CC:     "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "hao.wu@intel.com" <hao.wu@intel.com>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "ronak.jain@xilinx.com" <ronak.jain@xilinx.com>,
+        "rajan.vaja@xilinx.com" <rajan.vaja@xilinx.com>,
+        "abhyuday.godhasara@xilinx.com" <abhyuday.godhasara@xilinx.com>,
+        "piyush.mehta@xilinx.com" <piyush.mehta@xilinx.com>,
+        "harsha.harsha@xilinx.com" <harsha.harsha@xilinx.com>,
+        "lakshmi.sai.krishna.potthuri@xilinx.com" 
+        <lakshmi.sai.krishna.potthuri@xilinx.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "git@xilinx.com" <git@xilinx.com>
+Subject: RE: [PATCH v2 1/3] fpga: manager: change status api prototype, don't
+ use older
+Thread-Topic: [PATCH v2 1/3] fpga: manager: change status api prototype, don't
+ use older
+Thread-Index: AQHYhVFh0nFKgVNbE0Gr+XpBPxtCy61kiGwAgE66L9A=
+Date:   Wed, 17 Aug 2022 11:16:14 +0000
+Message-ID: <DM6PR12MB39934EC6FB92A46CEA8645E5CD6A9@DM6PR12MB3993.namprd12.prod.outlook.com>
+References: <20220621092833.1057408-1-nava.manne@xilinx.com>
+ <20220621092833.1057408-2-nava.manne@xilinx.com>
+ <20220628083158.GA2442728@yilunxu-OptiPlex-7050>
+In-Reply-To: <20220628083158.GA2442728@yilunxu-OptiPlex-7050>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b04506c7-eba6-4024-cb80-08da8041e5ee
+x-ms-traffictypediagnostic: MW2PR12MB2473:EE_
+x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DkGLXnr/WN2Y68N+2+82fWyIjYemGv0QDOhtkjH/VjuVTiQaFSQyE0NWCvoKYOBu5jc/YiGwrwagyyljEhNQ02iaYDK0mrymLSmehi/0gA3HY7snK1/orbViV0iJ++RtVZaSln2ruRsd1USrqetZZL/1QJZoPnNaBYuxKXBSOUjJblYWoeIso2tPLT2lLaj2ECHn8wXthWvFqw1LMj0GqJ5OLxn5yfZBaBWHnXBEuTNzzJrwH3OocCRwLxWOWauoqVJ9D7Dsl0GeqSGPKfjzY2R6tEdxUQlm+oPbEtzNd6jfsbFJINUTNLDPmz8xuD37+depJybjeSuZxm24Vsua36NAf7T2cw9YvfrxHK9GyN8OLm6olvo7tBL6Qsctk2ipKP2jCQ7Frok+wnGCIL4qmfp6RXkiGYWyFOuxwVG7FXxuSCW8GiXpIgsxXXQ0L3tnNLtHXAWG7QELnHc9uLwDAj5v59h9mIn+QoimnIrRT7K3QZV5qm4Sc/va/EZybjxx3dPZCNDDU5NkBnr/aTbbwXI3cZ7zdp0agu8uhsHDpimmC8cBa8gKFOjDf6Qm5JjHCQ7pi/Cfl8ys2A9URbj4dicKScCzX8h2cF4g2kXh0wYxS8cL6PrUJ9vvYE+IeJkxx1PK5QBWNLTVaNqokJGCmJlYrWhCRCzxaXGEg1y/1o7q0NIM5SS7+J8iKwA/QPSfVzCS8Y++2L/r2L/uZkGnkSusl+JVFUHhqOY4RMJrvLPOL2WNuh3+pwW6qnlQkxwkHYG2T9fHEP8dTcAVT3l6+lxYnukKWrvYgntKf8rx4/k=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3993.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(346002)(39860400002)(366004)(376002)(122000001)(38070700005)(86362001)(38100700002)(8676002)(76116006)(64756008)(66476007)(66946007)(66556008)(66446008)(110136005)(54906003)(316002)(4326008)(2906002)(5660300002)(8936002)(52536014)(186003)(53546011)(9686003)(83380400001)(107886003)(7696005)(55016003)(478600001)(71200400001)(6506007)(26005)(41300700001)(33656002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?DwoyFhS5lvFrQ9XBxfd6o8kplCRqHmGUxmVsDvLn8FuudKe4DK5MM61R3Iea?=
+ =?us-ascii?Q?EIKuDEDoRfwmYFGmIfGzVA09CxOS5bGSjpUSHVGBxUuFWD6/jb0T6hE/YurC?=
+ =?us-ascii?Q?eIz6Zr4fd7oVLEjEsbuwe1z01aGnOxFFDUBxSyUaT8O7Pkxq12KUQ1+nOW8N?=
+ =?us-ascii?Q?duaFgVgcZDOefxrFypMNe23clDTcIegv8wfMx+Iwet1AKbx+B4ZazvW222lo?=
+ =?us-ascii?Q?tyKEOY4shJCs+be4O+AYtD8EjzjlqgWbpkqNFV7F7nhN5PEbLJcGYraBg90o?=
+ =?us-ascii?Q?a2KjTTb88d82XvB7dZ/x1UCAA1Hwss79JhAf2X9sxdG4kuFJpFqxLMsNO6YZ?=
+ =?us-ascii?Q?gms4n3nwUgYQ6Lh/D6U/zKO/BaPtprczs5bLr3X16DLR1qDbFRz3GbqZXDMX?=
+ =?us-ascii?Q?AStKmpUI+ZmxJ/0o/f64GlG3iL+fIpBM298y2fhNz2Pqui1R8LKM52qu5DkA?=
+ =?us-ascii?Q?C65s2KQpwOQUHvhNSpSIi6rlcHl7OnYBGkpkZqiGrMMZqq0AEh6MVPpxC3Rs?=
+ =?us-ascii?Q?akJPZipIXJYsBx4uzLHRKhvuabV59bIIT+5PsYITRSXq2LM8PM+LScM/HKNZ?=
+ =?us-ascii?Q?dOPBTY/DLoSNIdiTxxBNCpkttd4EFI615cZ98hz6oMjm29kxazQlzFGFnNZ1?=
+ =?us-ascii?Q?wtS++AgUaLrtIwK0lurW/AQ12nYorh20uywQ1/76vLz7HdRqW+bNTYMYJufl?=
+ =?us-ascii?Q?e41UhhKyqpkVvL+oFpr5AyYudRLeDjR1MSaWejRbGCycxhn//vmGMo/Jc81h?=
+ =?us-ascii?Q?hH3EKBFcYFwwPYnikm7MkSYG3/dD18O0FbOnHB6qd8n7InA+/d+OuFgOAiXN?=
+ =?us-ascii?Q?9a44TakJ7asfNVyoZS5iTpk/sg/01/fJ4sOSsbGwdLONszxMAGmRRhkEQXT3?=
+ =?us-ascii?Q?chaaiipdlnfiKkr3a8jcPHWIbD+fOEacxx7Mk5ZdRdD2NRDVlKn4WrMV3n1D?=
+ =?us-ascii?Q?RbQgeBOgVyMW6lGREkGqV2PZKyB8k+OSksTgaIPAawkeKo7pMahPRgd3OVIO?=
+ =?us-ascii?Q?90SPTPPRshMlL0YDAFolV4LAmlaRxRERQbnHWZw/LuLKIDGICFKK68/AooxW?=
+ =?us-ascii?Q?iK7CgTxd5zn6xYmjNTUzF2pP3C+YmtSuSrPjHPrF0zirqFNLFoBdMFPEtQ+P?=
+ =?us-ascii?Q?7Z5jziqLdFkwGANryqXwKQ2XZB6FUSS4NddVFtCGD2Aw2r29ZUk5Ut5Dufh1?=
+ =?us-ascii?Q?SZtqWcTxfcM4BEhshLYEsDJEQJfnMivwoiUAfVL+WvRWqzY4/u0gtGvSIztp?=
+ =?us-ascii?Q?7Y1CRoeHNFIwh+yzJ+02mXHFf6/lmMvXpX5Hgk6xnLSo6DgHX74G70hbCNYt?=
+ =?us-ascii?Q?mcsSbnk/QfNrdXfLep5jDsgRhfGM7FWPLoFFtvE/R3HY0d2NsxAOCffiFLl2?=
+ =?us-ascii?Q?IQUVSc3OhpqQIIMGkMu9ZB5jbyOVo+ptH23e4lPhbbM2XYAWH1Ct0zvwX15u?=
+ =?us-ascii?Q?EoTEcXfvkoUhqdO9z6bs9z2kgSUUsPEAzK+pqnaivj+mTEQZImmHLGAahvoS?=
+ =?us-ascii?Q?72c9V19llCGkjb+ny5KgXaBTjGBEgUftfuLXp3qYabr3nUhgvDQQdmCchJ59?=
+ =?us-ascii?Q?2KIEU1yDCVEhdoFXDYA=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gu5whptxg6eujuan"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdXeBakWr6geOWGxnjQYaU9Pi4tRvVFFtubyMJZTT2nPnw@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3993.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b04506c7-eba6-4024-cb80-08da8041e5ee
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Aug 2022 11:16:14.4583
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: AizRJqusJc/bnpHDFGmq5F1g4BcMhuWY3RykjyoQwwK1kgQTesferCLB3xxO04DS
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR12MB2473
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Yilun,
 
---gu5whptxg6eujuan
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+	Please find my response inline.
 
-On Wed, Aug 17, 2022 at 10:35:07AM +0200, Geert Uytterhoeven wrote:
-> Hi Maxime,
+> -----Original Message-----
+> From: Xu Yilun <yilun.xu@intel.com>
+> Sent: Tuesday, June 28, 2022 2:02 PM
+> To: Nava kishore Manne <nava.manne@xilinx.com>
+> Cc: michal.simek@xilinx.com; hao.wu@intel.com; trix@redhat.com;
+> mdf@kernel.org; gregkh@linuxfoundation.org; ronak.jain@xilinx.com;
+> rajan.vaja@xilinx.com; abhyuday.godhasara@xilinx.com;
+> piyush.mehta@xilinx.com; harsha.harsha@xilinx.com;
+> lakshmi.sai.krishna.potthuri@xilinx.com; linux-arm-
+> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; linux-
+> fpga@vger.kernel.org; git@xilinx.com
+> Subject: Re: [PATCH v2 1/3] fpga: manager: change status api prototype,
+> don't use older
 >=20
-> On Wed, Aug 17, 2022 at 9:47 AM Maxime Ripard <maxime@cerno.tech> wrote:
-> > On Wed, Aug 17, 2022 at 09:31:18AM +0200, Geert Uytterhoeven wrote:
-> > > On Tue, Aug 16, 2022 at 5:50 PM Maxime Ripard <maxime@cerno.tech> wro=
-te:
-> > > > On Tue, Aug 16, 2022 at 04:43:44PM +0200, Geert Uytterhoeven wrote:
-> > > > > > > > > Either you have to add them here (e.g. "hd720p50" and "hd=
-720p60"), or
-> > > > > > > > > handle them through "@<refresh>".  The latter would impac=
-t "[PATCH v1
-> > > > > > > > > 09/35] drm/modes: Move named modes parsing to a separate =
-function", as
-> > > > > > > > > currently a named mode and a refresh rate can't be specif=
-ied both.
-> > > > > > > >
-> > > > > > > > I think the former would make more sense. It simplifies a b=
-it the
-> > > > > > > > parser, and we're going to use a named mode anyway.
-> > > > > > > >
-> > > > > > > > > As "[PATCH v1 34/35] drm/modes: Introduce the tv_mode pro=
-perty as a
-> > > > > > > > > command-line option" uses a separate "tv_mode" option, an=
-d not the main
-> > > > > > > > > mode name, I think you want to add them here.
-> > > > > > > >
-> > > > > > > > It's a separate story I think, we could have a named mode h=
-d720p50,
-> > > > > > > > which would be equivalent to 1280x720,tv_mode=3Dhd720p
-> > > > > > >
-> > > > > > > So where's the field rate in "1280x720,tv_mode=3Dhd720p"?
-> > > > > >
-> > > > > > Yeah, sorry I meant 1280x720@50,tv_mode=3Dhd720p
-> > > > >
-> > > > > Above you said "I think the former would make more sense", so that
-> > > > > should be "1280x720,tv_mode=3Dhd720p50"?
-> > > >
-> > > > No, 720p at 50Hz would be either hd720p50 or 1280x720@50,tv_mode=3D=
-hd720p
-> > > > and 60Hz would be hd720p60 or 1280x720@60,tv_mode=3Dhd720p
-> > >
-> > > I disagree: hd720p50 and hd720p60 are different TV modes.
+> CAUTION: This message has originated from an External Source. Please use
+> proper judgment and caution when opening attachments, clicking links, or
+> responding to this email.
+>=20
+>=20
+> On Tue, Jun 21, 2022 at 02:58:31PM +0530, Nava kishore Manne wrote:
+> > Different vendors have different error sets defined by Hardware.
+> > If we always define the new bits when we cannot find an exact 1:1
+> > mapping in the core the 64 bits would soon be used out. Also, it's
+> > hard to understand the mixture of different error sets.
 > >
-> > I agree, and I don't see how that command-line doesn't express that?
+> > To address these issues updated the status interface to handle the
+> > vendor-specific messages in a generic way. With the updated status
+> > interface the vendor-specific driver files can independently handle
+> > the error messages.
 >=20
-> Oh, I see what you mean: yes, it expresses that.
-> But it is inconsistent with the NTSC/PAL/SECAM/hd{480,576}[ip] modes,
-> where the TV mode specifies both number of lines and frame rate.
+> I think we don't have to provide the vendor specific HW errors in a gener=
+ic
+> way, maybe the vendor specific drivers could handle them by its own devic=
+e
+> attributes.
+>=20
+> Since the output value set of the interface is specific to each driver, u=
+sers
+> should still interpret them in specific manners. So doesn't see much valu=
+e for
+> a class interface.
+>
 
-Only if we're using a named mode, and naming is hard :)
+Agree,  vendor specific drivers could handle them by its own device attribu=
+tes.
+If it is the case, can we remove the existing status interface relevant cha=
+nges from the core?
 
-Honestly, I'd be inclined to drop the hd* for now from this series. I
-don't have a hardware to test it with, for some we don't even have
-drivers that could implement these modes, we don't have a spec to work
-=66rom, it looks like a recipe for failure :)
-
-Maxime
-
---gu5whptxg6eujuan
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYvzNrgAKCRDj7w1vZxhR
-xZPiAP9cuj5zZR8NRJHbKfFO0mr9fc31dj4wR+Gpelf6U7ZzwQEAvGoAg1Oi6hb0
-Hui+aaNLN6Rq3Vi1HR7q65YsP3trIwM=
-=i1o+
------END PGP SIGNATURE-----
-
---gu5whptxg6eujuan--
+Regards,
+Navakishore

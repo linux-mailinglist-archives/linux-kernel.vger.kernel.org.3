@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41317596CB1
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 12:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71325596CB5
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 12:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234979AbiHQKSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 06:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
+        id S237422AbiHQKS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 06:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233114AbiHQKSu (ORCPT
+        with ESMTP id S234670AbiHQKSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 06:18:50 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED51152E70
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 03:18:49 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id w14so11619133plp.9
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 03:18:49 -0700 (PDT)
+        Wed, 17 Aug 2022 06:18:55 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB57B5FF52
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 03:18:53 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id s36-20020a17090a69a700b001faad0a7a34so1387331pjj.4
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 03:18:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=YF+ekAMEny9NvsTn9a4lw7RA5UzOw69huq16Y0TTu/E=;
-        b=UfKWZydc6cWoE65QiAxGGqIjSiAtD0FTW2ouaiH24BCMLqRxnKci1GLgS3gQ0c38ek
-         h0RdQwvcWm8nSdGolt0rJF9eWWHjgf55b7AQqnT8MrSz7KCgCBMK18+jtkbyltSBiYT7
-         GeQFS07ovAMivSBIlqQUviSC17HCZxz/u98IdnOkiuGW0dsKh6bqUINMIoYBWrTEU/FL
-         E8jRoYD9dG4GB74/3ZIBuyUptfi6z7J/NpbxwzIrwwqUmrRO4wLe8XtVhJ48Sxvv92XM
-         aYiFRioz4iekqq1KWjYcFnBXtIVDWLY53Ua9PQmCFRHAhGcsl5HcgVlOCk64KtGLNm1j
-         XqTQ==
+        bh=3U+8LTY1y1RiFgIZBWF6u26rllF04yVkQZAKSsbfV88=;
+        b=o+eLIVEt1kKstQYEPuqhNvCnf19Ci8D4sguN4nwyRDg+FIafrV/2wNuYCQ2hFw3zGm
+         S6N7ygUZ8Y3rRkuN6woRRJ+Quhna5GnJ2uHgH0Q9rBOQfQqNAV7WITAIQeyeoNrsvKml
+         Jpb+Vrz1P+0ZDV94y7bs9t7AvX0CKI1ML3eaeNBRxGzAeTOEKamIM5xHaBoRzs5/Ezfr
+         VwBcXDv+0j2RdEMV+SS/24NpVShba96jr/Gh84kADiL2bA2natEjWxx0V3htEPQJU204
+         MYfnMt26N2c4+oh7JQl/ePMkQ/TZMX9uSZxy7tqjfgkNazF5/K7U2pMO1gQc9rOg7+Yg
+         uK8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=YF+ekAMEny9NvsTn9a4lw7RA5UzOw69huq16Y0TTu/E=;
-        b=f7lHz4jraXKUUcSsMSd8FWvgjWOI19FpWLWw8yPmpC8thHCdLLUXPqsMeEdHaLecTn
-         NP2UkbLD4vBxIOuDMsQ/aoaG7GmF6LqBuJ5AQ2lD3CipzXUHDYuEk5RxgBhG0VVoIIT2
-         gJZ13iJvsvEsawodefinTUdfqEa/g5xKYaghqz4LAKu6NvPY9474tQZ7SVCVDVjUepTV
-         gS45HjaK3BZV1ZV9w11UYxcDOeNc3IH/khszzql/I/gQNX1kMcO5+gNA1M/3sj39+s8R
-         X3qOJNXd0g8gJfUcgaO/xz4w1YfnC7gjJ3kKe8CplGdU1HZZtppSDuOJm8lTuUzwRdzb
-         zYBg==
-X-Gm-Message-State: ACgBeo37+/j7XBVgD+kaAyopEbcaLAp7tI1lvUS/igOUPqMVcgzibZnP
-        +lItMASjzPi/tmWz2546SIc=
-X-Google-Smtp-Source: AA6agR54kAAuhdp73DFDVedKK36Zsc3Hl4XZr1ca5vnebvrjU6WllrJ9ITzm7kSiuXYJqzEV6/nhpQ==
-X-Received: by 2002:a17:902:bd41:b0:172:74c9:2a08 with SMTP id b1-20020a170902bd4100b0017274c92a08mr10779640plx.9.1660731529461;
-        Wed, 17 Aug 2022 03:18:49 -0700 (PDT)
+        bh=3U+8LTY1y1RiFgIZBWF6u26rllF04yVkQZAKSsbfV88=;
+        b=DU7O1G5UQKEk0U8bezNjIlPoN12+sa7ZI6C2uiajc20sBYsU62qr1GAvgLlO+iCyRV
+         n5Bs/PKh68qMMULd0FMwX4xAyeKMKk/bZlmyN0FMo+oRc64RYS3LNkSiVaQVUWljIhgT
+         bYGtkQ3GuqVczne/iLMIP0aD1UdDr0Lt8gIQVBQOGfd81b6/e/jA1gWsgbG+w9klY6zA
+         07NWzEhuBP2RrKAE4C03Hw58pkQucLBf/0zSnQXG5CUsGZAI+SkvsQII9o+cvXWRyzAA
+         a0ePSerNL21iSI4AvTRttb4jxr9kIqwtFxZ+aMYka1zaWDbdS/J2SWB8T2Zvfj/dLGP1
+         idjg==
+X-Gm-Message-State: ACgBeo1F576c91B6b/PI6DVcVcTfgkO/+7h8IoVUBbxF2cAeZV0ap5Aa
+        Ilefvml5KHzvjvhmHn3GI9g=
+X-Google-Smtp-Source: AA6agR5y8J8WikcfzF1i0kGroiRKnzVfSzPJ1UB2rSumOIO5ossoFYJ0lYdU+nkXvjiUEBedYMvovg==
+X-Received: by 2002:a17:902:d2c6:b0:16e:d285:c602 with SMTP id n6-20020a170902d2c600b0016ed285c602mr25604783plc.81.1660731533224;
+        Wed, 17 Aug 2022 03:18:53 -0700 (PDT)
 Received: from hyeyoo.. ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id d8-20020a170903230800b00172633fc236sm1071318plh.174.2022.08.17.03.18.45
+        by smtp.gmail.com with ESMTPSA id d8-20020a170903230800b00172633fc236sm1071318plh.174.2022.08.17.03.18.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 03:18:48 -0700 (PDT)
+        Wed, 17 Aug 2022 03:18:52 -0700 (PDT)
 From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
 To:     Christoph Lameter <cl@linux.com>,
         Pekka Enberg <penberg@kernel.org>,
@@ -58,9 +58,9 @@ To:     Christoph Lameter <cl@linux.com>,
         Roman Gushchin <roman.gushchin@linux.dev>
 Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 01/17] mm/slab: move NUMA-related code to __do_cache_alloc()
-Date:   Wed, 17 Aug 2022 19:18:10 +0900
-Message-Id: <20220817101826.236819-2-42.hyeyoo@gmail.com>
+Subject: [PATCH v4 02/17] mm/slab: cleanup slab_alloc() and slab_alloc_node()
+Date:   Wed, 17 Aug 2022 19:18:11 +0900
+Message-Id: <20220817101826.236819-3-42.hyeyoo@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220817101826.236819-1-42.hyeyoo@gmail.com>
 References: <20220817101826.236819-1-42.hyeyoo@gmail.com>
@@ -76,146 +76,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To implement slab_alloc_node() independent of NUMA configuration,
-move NUMA fallback/alternate allocation code into __do_cache_alloc().
+Make slab_alloc_node() available even when CONFIG_NUMA=n and
+make slab_alloc() wrapper of slab_alloc_node().
 
-One functional change here is not to check availability of node
-when allocating from local node.
+This is necessary for further cleanup.
 
 Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 ---
- mm/slab.c | 68 +++++++++++++++++++++++++------------------------------
- 1 file changed, 31 insertions(+), 37 deletions(-)
+ mm/slab.c | 49 +++++++++++++------------------------------------
+ 1 file changed, 13 insertions(+), 36 deletions(-)
 
 diff --git a/mm/slab.c b/mm/slab.c
-index 10e96137b44f..1656393f55cb 100644
+index 1656393f55cb..748dd085f38e 100644
 --- a/mm/slab.c
 +++ b/mm/slab.c
-@@ -3180,13 +3180,14 @@ static void *____cache_alloc_node(struct kmem_cache *cachep, gfp_t flags,
+@@ -3180,37 +3180,6 @@ static void *____cache_alloc_node(struct kmem_cache *cachep, gfp_t flags,
  	return obj ? obj : fallback_alloc(cachep, flags);
  }
  
-+static void *__do_cache_alloc(struct kmem_cache *cachep, gfp_t flags, int nodeid);
-+
+-static void *__do_cache_alloc(struct kmem_cache *cachep, gfp_t flags, int nodeid);
+-
+-static __always_inline void *
+-slab_alloc_node(struct kmem_cache *cachep, gfp_t flags, int nodeid, size_t orig_size,
+-		   unsigned long caller)
+-{
+-	unsigned long save_flags;
+-	void *ptr;
+-	struct obj_cgroup *objcg = NULL;
+-	bool init = false;
+-
+-	flags &= gfp_allowed_mask;
+-	cachep = slab_pre_alloc_hook(cachep, NULL, &objcg, 1, flags);
+-	if (unlikely(!cachep))
+-		return NULL;
+-
+-	ptr = kfence_alloc(cachep, orig_size, flags);
+-	if (unlikely(ptr))
+-		goto out_hooks;
+-
+-	local_irq_save(save_flags);
+-	ptr = __do_cache_alloc(cachep, flags, nodeid);
+-	local_irq_restore(save_flags);
+-	ptr = cache_alloc_debugcheck_after(cachep, flags, ptr, caller);
+-	init = slab_want_init_on_alloc(flags, cachep);
+-
+-out_hooks:
+-	slab_post_alloc_hook(cachep, objcg, flags, 1, &ptr, init);
+-	return ptr;
+-}
+-
  static __always_inline void *
- slab_alloc_node(struct kmem_cache *cachep, gfp_t flags, int nodeid, size_t orig_size,
- 		   unsigned long caller)
+ __do_cache_alloc(struct kmem_cache *cachep, gfp_t flags, int nodeid)
+ {
+@@ -3259,8 +3228,8 @@ __do_cache_alloc(struct kmem_cache *cachep, gfp_t flags, int nodeid __maybe_unus
+ #endif /* CONFIG_NUMA */
+ 
+ static __always_inline void *
+-slab_alloc(struct kmem_cache *cachep, struct list_lru *lru, gfp_t flags,
+-	   size_t orig_size, unsigned long caller)
++slab_alloc_node(struct kmem_cache *cachep, struct list_lru *lru, gfp_t flags,
++		int nodeid, size_t orig_size, unsigned long caller)
  {
  	unsigned long save_flags;
- 	void *ptr;
--	int slab_node = numa_mem_id();
- 	struct obj_cgroup *objcg = NULL;
- 	bool init = false;
- 
-@@ -3200,30 +3201,7 @@ slab_alloc_node(struct kmem_cache *cachep, gfp_t flags, int nodeid, size_t orig_
- 		goto out_hooks;
- 
- 	local_irq_save(save_flags);
--
--	if (nodeid == NUMA_NO_NODE)
--		nodeid = slab_node;
--
--	if (unlikely(!get_node(cachep, nodeid))) {
--		/* Node not bootstrapped yet */
--		ptr = fallback_alloc(cachep, flags);
--		goto out;
--	}
--
--	if (nodeid == slab_node) {
--		/*
--		 * Use the locally cached objects if possible.
--		 * However ____cache_alloc does not allow fallback
--		 * to other nodes. It may fail while we still have
--		 * objects on other nodes available.
--		 */
--		ptr = ____cache_alloc(cachep, flags);
--		if (ptr)
--			goto out;
--	}
--	/* ___cache_alloc_node can fall back to other nodes */
--	ptr = ____cache_alloc_node(cachep, flags, nodeid);
--out:
-+	ptr = __do_cache_alloc(cachep, flags, nodeid);
- 	local_irq_restore(save_flags);
- 	ptr = cache_alloc_debugcheck_after(cachep, flags, ptr, caller);
- 	init = slab_want_init_on_alloc(flags, cachep);
-@@ -3234,31 +3212,46 @@ slab_alloc_node(struct kmem_cache *cachep, gfp_t flags, int nodeid, size_t orig_
- }
- 
- static __always_inline void *
--__do_cache_alloc(struct kmem_cache *cache, gfp_t flags)
-+__do_cache_alloc(struct kmem_cache *cachep, gfp_t flags, int nodeid)
- {
--	void *objp;
-+	void *objp = NULL;
-+	int slab_node = numa_mem_id();
- 
--	if (current->mempolicy || cpuset_do_slab_mem_spread()) {
--		objp = alternate_node_alloc(cache, flags);
--		if (objp)
--			goto out;
-+	if (nodeid == NUMA_NO_NODE) {
-+		if (current->mempolicy || cpuset_do_slab_mem_spread()) {
-+			objp = alternate_node_alloc(cachep, flags);
-+			if (objp)
-+				goto out;
-+		}
-+		/*
-+		 * Use the locally cached objects if possible.
-+		 * However ____cache_alloc does not allow fallback
-+		 * to other nodes. It may fail while we still have
-+		 * objects on other nodes available.
-+		 */
-+		objp = ____cache_alloc(cachep, flags);
-+		nodeid = slab_node;
-+	} else if (nodeid == slab_node) {
-+		objp = ____cache_alloc(cachep, flags);
-+	} else if (!get_node(cachep, nodeid)) {
-+		/* Node not bootstrapped yet */
-+		objp = fallback_alloc(cachep, flags);
-+		goto out;
- 	}
--	objp = ____cache_alloc(cache, flags);
- 
- 	/*
- 	 * We may just have run out of memory on the local node.
- 	 * ____cache_alloc_node() knows how to locate memory on other nodes
- 	 */
- 	if (!objp)
--		objp = ____cache_alloc_node(cache, flags, numa_mem_id());
--
-+		objp = ____cache_alloc_node(cachep, flags, nodeid);
- out:
- 	return objp;
- }
- #else
- 
- static __always_inline void *
--__do_cache_alloc(struct kmem_cache *cachep, gfp_t flags)
-+__do_cache_alloc(struct kmem_cache *cachep, gfp_t flags, int nodeid __maybe_unused)
- {
- 	return ____cache_alloc(cachep, flags);
- }
-@@ -3284,7 +3277,7 @@ slab_alloc(struct kmem_cache *cachep, struct list_lru *lru, gfp_t flags,
+ 	void *objp;
+@@ -3277,7 +3246,7 @@ slab_alloc(struct kmem_cache *cachep, struct list_lru *lru, gfp_t flags,
  		goto out;
  
  	local_irq_save(save_flags);
--	objp = __do_cache_alloc(cachep, flags);
-+	objp = __do_cache_alloc(cachep, flags, NUMA_NO_NODE);
+-	objp = __do_cache_alloc(cachep, flags, NUMA_NO_NODE);
++	objp = __do_cache_alloc(cachep, flags, nodeid);
  	local_irq_restore(save_flags);
  	objp = cache_alloc_debugcheck_after(cachep, flags, objp, caller);
  	prefetchw(objp);
-@@ -3521,7 +3514,8 @@ int kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
+@@ -3288,6 +3257,14 @@ slab_alloc(struct kmem_cache *cachep, struct list_lru *lru, gfp_t flags,
+ 	return objp;
+ }
  
- 	local_irq_disable();
- 	for (i = 0; i < size; i++) {
--		void *objp = kfence_alloc(s, s->object_size, flags) ?: __do_cache_alloc(s, flags);
-+		void *objp = kfence_alloc(s, s->object_size, flags) ?:
-+			     __do_cache_alloc(s, flags, NUMA_NO_NODE);
++static __always_inline void *
++slab_alloc(struct kmem_cache *cachep, struct list_lru *lru, gfp_t flags,
++	   size_t orig_size, unsigned long caller)
++{
++	return slab_alloc_node(cachep, lru, flags, NUMA_NO_NODE, orig_size,
++			       caller);
++}
++
+ /*
+  * Caller needs to acquire correct kmem_cache_node's list_lock
+  * @list: List of detached free slabs should be freed by caller
+@@ -3574,7 +3551,7 @@ EXPORT_SYMBOL(kmem_cache_alloc_trace);
+  */
+ void *kmem_cache_alloc_node(struct kmem_cache *cachep, gfp_t flags, int nodeid)
+ {
+-	void *ret = slab_alloc_node(cachep, flags, nodeid, cachep->object_size, _RET_IP_);
++	void *ret = slab_alloc_node(cachep, NULL, flags, nodeid, cachep->object_size, _RET_IP_);
  
- 		if (unlikely(!objp))
- 			goto error;
+ 	trace_kmem_cache_alloc_node(_RET_IP_, ret, cachep,
+ 				    cachep->object_size, cachep->size,
+@@ -3592,7 +3569,7 @@ void *kmem_cache_alloc_node_trace(struct kmem_cache *cachep,
+ {
+ 	void *ret;
+ 
+-	ret = slab_alloc_node(cachep, flags, nodeid, size, _RET_IP_);
++	ret = slab_alloc_node(cachep, NULL, flags, nodeid, size, _RET_IP_);
+ 
+ 	ret = kasan_kmalloc(cachep, ret, size, flags);
+ 	trace_kmalloc_node(_RET_IP_, ret, cachep,
 -- 
 2.32.0
 

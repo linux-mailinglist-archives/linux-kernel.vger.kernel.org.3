@@ -2,102 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0965596BAB
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14278596BAC
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232939AbiHQIx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 04:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54376 "EHLO
+        id S231688AbiHQIxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 04:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiHQIxZ (ORCPT
+        with ESMTP id S229637AbiHQIxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 04:53:25 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018DA2EA
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:53:22 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id n4so15386989wrp.10
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:53:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=ThOupP1C3sWGkR8YTA9lIOcDCJaA8RWHs26nsOfcU2g=;
-        b=JHXefkT+BGmm6sSSaygBhM7NuFFxP2EbpYXo68EiWXmM7LMwfTekQ8r0JGA1ocIwN0
-         KI+cNgSEZwz0/jpc5MOHzKZqAquyv2fMcBIAvPTkNZMJzwNr+hQXb2akjs2t7l9Qmd8b
-         817DcpUeGHyc8Fz4ftYo8cMFCnChlTpq78cwiDyEejsHN74EmNhqaSCuiq3DkOLUgFo9
-         xzVwX4H+sf6Op5mtbp9U33vLu/JVulj8p8BmBd+AKo4JNSfiS2La0xAcf0i6WSW5HJxs
-         h/woRN8k/0pOj3oAFVKDV/UAXORKK90S2rwXjXaPNArvPNaiVU6XOcZ8vDsGRPN00wqE
-         Y6Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=ThOupP1C3sWGkR8YTA9lIOcDCJaA8RWHs26nsOfcU2g=;
-        b=yfMYtdlJjoyX6eofESKATnjZ+A6lluLOULpGXuX9UgXMsUlA7MiMpLJkDWf5rGiHmq
-         Vlk8taAKK9QiFYW3VdUH1wZ1tuwrM4Uxf+EGNZ2btu9I9rbMWdgDU4QwI0MwCMD9EGNN
-         fsWw3+eDsTs+0fJHXlGN7JC7MPYKWSjUSZL0a0vXoIuT74LUYmUjFrBL/xc32n17gvqC
-         QyqJ2EfU9WSx2bPFwjere5iKF6yM/ZzT6joe733Q36+6J9dPpzJucJtdRevW2PxSWMfD
-         +M83rMUCvrAuPdxCUH73PiUBLPUYWNTBZQWk5KW8wbVMY3QDPbVtFKkNQxv8EVjd8+HV
-         R7Tw==
-X-Gm-Message-State: ACgBeo2dL1hHX9k1GCZP5dGCUcT/J03FGdhzrGNHYia4SEIAONLLRv4M
-        PUt2nZqHaX9h3XvtB1eEUixv4nTEsI2C2Q==
-X-Google-Smtp-Source: AA6agR7ZUyqTDLj+hRyX83YDGqwJMo/Kj1arpLq2lqcF68tx28W0aATnHY/tcTTjBE3u15vv2fZXYQ==
-X-Received: by 2002:adf:ce0e:0:b0:220:7eed:3ce3 with SMTP id p14-20020adfce0e000000b002207eed3ce3mr13251664wrn.148.1660726401545;
-        Wed, 17 Aug 2022 01:53:21 -0700 (PDT)
-Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id h4-20020a05600c414400b003a60bc8ae8fsm1448823wmm.21.2022.08.17.01.53.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 01:53:21 -0700 (PDT)
-Message-ID: <c798c5fd-e877-9f70-8733-26d1d494a637@linaro.org>
-Date:   Wed, 17 Aug 2022 09:53:20 +0100
+        Wed, 17 Aug 2022 04:53:42 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C236745F;
+        Wed, 17 Aug 2022 01:53:39 -0700 (PDT)
+Received: from [192.168.1.103] (178.176.73.252) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Wed, 17 Aug
+ 2022 11:53:30 +0300
+Subject: Re: [PATCH v2 2/2] scsi: sd: Rework asynchronous resume support
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
+        John Garry <john.garry@huawei.com>, <ericspero@icloud.com>,
+        <jason600.groome@gmail.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <linux-ide@vger.kernel.org>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+References: <20220630195703.10155-1-bvanassche@acm.org>
+ <db19ed29-e7f9-e5b0-3a6c-f2812078a07d@acm.org>
+ <CAMuHMdVzsgSYtbJQnaigNax_JbxPsQfU+gHcteS-ojWbxUdMfw@mail.gmail.com>
+ <CAMuHMdWtxBj8ug7AHTqentF8UD4jpO2sgoWWcQCOvEKLJtdq8A@mail.gmail.com>
+ <506ca1a6-1122-5755-fc74-60f7c7bfbd0d@acm.org>
+ <CAMuHMdVQ2K2v8jpsFfOMk99DG_sBB4_ioiQRroC7K_Ov1wvp9w@mail.gmail.com>
+ <6f70e742-9d8a-f389-0482-0ba9696bf445@acm.org>
+ <CAMuHMdVc+ATGV-=R3uV6RyF0-mZiuKv7HpmogRBgqGVyO-MKWg@mail.gmail.com>
+ <54e20a27-a10b-b77a-e950-1d3398e2e907@acm.org>
+ <CAMuHMdURQpAEGgv4cY7v0rqzs12v2TT=Amt26Y0OoBSW7YAoaw@mail.gmail.com>
+ <084e7c5a-f98d-d61e-de81-83525851ecf9@acm.org>
+ <CAMuHMdW2vOC8ZsE_XF8TbSNoF9zCrwq7UkGZ5jXen1E1mTZe+g@mail.gmail.com>
+ <14ec47f3-f3b8-61c7-2c64-d96d00dd7076@acm.org>
+ <CAMuHMdW7nGxV_3Z2JV_TCM+WtTdYv5P+0cE6Tw=6krcseNCdAw@mail.gmail.com>
+ <40700595-8c83-1b61-ea93-ea9554bfb2db@acm.org>
+ <CAMuHMdV_hzvd2YkJfRqXm8SmKuibWiUy-c7XpGCnEr86HMx=_Q@mail.gmail.com>
+ <3c7e338e-332e-fe80-e419-b360535533c5@acm.org>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <56cf0251-159c-3f83-78d2-859048625633@omp.ru>
+Date:   Wed, 17 Aug 2022 11:53:30 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH -next 0/2] A few fixup patches for nvmem
+In-Reply-To: <3c7e338e-332e-fe80-e419-b360535533c5@acm.org>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Gaosheng Cui <cuigaosheng1@huawei.com>, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, wangweiyang2@huawei.com
-References: <20220816134935.263825-1-cuigaosheng1@huawei.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220816134935.263825-1-cuigaosheng1@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [178.176.73.252]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 08/17/2022 08:36:57
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 172266 [Aug 17 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 495 495 bb4e71e2e9e23696ab912b286436360a94c9b107
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.252 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.73.252
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 08/17/2022 08:39:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 8/17/2022 6:00:00 AM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello!
 
+On 8/16/22 11:21 PM, Bart Van Assche wrote:
 
-On 16/08/2022 14:49, Gaosheng Cui wrote:
-> This series contains a fixup patches to fix possible memleak,
-> and add error handling of dev_set_name to keep nvmem code
-> implementation consistent, in addition, it can also avoid
-> the possibility illegal address access. Thanks!
+>> On Mon, Aug 15, 2022 at 3:49 PM Bart Van Assche <bvanassche@acm.org> wrote:
+>>> Would it be possible to share the output of the command below? That
+>>> should reveal which ATA driver is active on the test setup.
+>>>
+>>> find /sys -name proc_name | xargs grep -aH .
+>>
+>> /sys/devices/platform/soc/ee300000.sata/ata1/host0/scsi_host/host0/proc_name:sata_rcar
 > 
-> Gaosheng Cui (2):
->    nvmem: core: Fix memleak in nvmem_register()
->    nvmem: core: add error handling for dev_set_name
+> Thanks Geert for the help. Although I already posted a revert, I'm still trying to
+> root-cause this issue. Do you perhaps know whether sata_rcar controllers support NCQ
+
+   They don't. :-)
+
+> and if so, what queue depth these controllers support? I think that information is available in sysfs. Here is an example for a VM:
 > 
-
-I have applied these patches for now but remember the subject line does 
-not reflect the patch version or the cover letter does not include any 
-changes done over the versions.
-
-Please take a look at 
-https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html
-
-
-thanks,
-Srini
-
->   drivers/nvmem/core.c | 27 +++++++++++++++------------
->   1 file changed, 15 insertions(+), 12 deletions(-)
+> # (cd /sys/class/scsi_device && for a in */device/*/*/ncq_prio_enable; do p=${a%/ncq_prio_enable}; grep -qi ata $p/inquiry || continue; grep -aH . $p/{queue_depth,ncq*}; done)
+> 2:0:0:0/device/driver/2:0:0:0/queue_depth:32
+> 2:0:0:0/device/driver/2:0:0:0/ncq_prio_enable:0
+> 2:0:0:0/device/driver/2:0:0:0/ncq_prio_supported:0
+> 2:0:0:0/device/generic/device/queue_depth:32
+> 2:0:0:0/device/generic/device/ncq_prio_enable:0
+> 2:0:0:0/device/generic/device/ncq_prio_supported:0
+> 6:0:0:1/device/driver/2:0:0:0/queue_depth:32
+> 6:0:0:1/device/driver/2:0:0:0/ncq_prio_enable:0
+> 6:0:0:1/device/driver/2:0:0:0/ncq_prio_supported:0
 > 
+> Thanks,
+> 
+> Bart.
+
+MBR, Sergey

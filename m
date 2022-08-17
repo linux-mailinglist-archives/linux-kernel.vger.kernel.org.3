@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F1B596A98
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD73596A92
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233489AbiHQHpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 03:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38294 "EHLO
+        id S233559AbiHQHps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 03:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233086AbiHQHpc (ORCPT
+        with ESMTP id S233272AbiHQHpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 03:45:32 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B54D79A55
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:45:31 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M70NK59XJzcffs;
-        Wed, 17 Aug 2022 15:42:25 +0800 (CST)
+        Wed, 17 Aug 2022 03:45:33 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303D079EE2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:45:32 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M70PL3qVHzhXWh;
+        Wed, 17 Aug 2022 15:43:18 +0800 (CST)
 Received: from CHINA (10.175.102.38) by canpemm500009.china.huawei.com
  (7.192.105.203) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 17 Aug
- 2022 15:45:28 +0800
+ 2022 15:45:29 +0800
 From:   Wei Yongjun <weiyongjun1@huawei.com>
 To:     Akinobu Mita <akinobu.mita@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -37,9 +37,9 @@ To:     Akinobu Mita <akinobu.mita@gmail.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>
 CC:     Wei Yongjun <weiyongjun1@huawei.com>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH 3/4 -next] fault-injection: make some stack filter attrs more readable
-Date:   Wed, 17 Aug 2022 08:03:31 +0000
-Message-ID: <20220817080332.1052710-4-weiyongjun1@huawei.com>
+Subject: [PATCH 4/4 -next] fault-injection: make stacktrace filter works as expected
+Date:   Wed, 17 Aug 2022 08:03:32 +0000
+Message-ID: <20220817080332.1052710-5-weiyongjun1@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220817080332.1052710-1-weiyongjun1@huawei.com>
 References: <20220817080332.1052710-1-weiyongjun1@huawei.com>
@@ -59,59 +59,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Attributes of stack filter are show as unsigned decimal, such
-as 'require-start', 'require-end'. This patch change to
-show them as unsigned hexadecimal for more readable.
+stacktrace filter is checked after others, such as fail-nth,
+interval and probability. This make it doesn't work well as
+expected.
 
-Before:
-  $ echo 0xffffffffc0257000 > /sys/kernel/debug/failslab/require-start
-  $ cat /sys/kernel/debug/failslab/require-start
-  18446744072638263296
-
-After:
-  $ echo 0xffffffffc0257000 > /sys/kernel/debug/failslab/require-start
-  $ cat /sys/kernel/debug/failslab/require-start
-  0xffffffffc0257000
+Fix to running stacktrace filter before other filters. It will
+speed up fault inject testing for driver modules.
 
 Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
 ---
- lib/fault-inject.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ lib/fault-inject.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
 diff --git a/lib/fault-inject.c b/lib/fault-inject.c
-index 515fc5aaf032..deca05e7c9b3 100644
+index deca05e7c9b3..9dd1dd1d2610 100644
 --- a/lib/fault-inject.c
 +++ b/lib/fault-inject.c
-@@ -179,6 +179,14 @@ static void debugfs_create_ul(const char *name, umode_t mode,
+@@ -105,10 +105,16 @@ static inline bool fail_stacktrace(struct fault_attr *attr)
  
- #ifdef CONFIG_FAULT_INJECTION_STACKTRACE_FILTER
- 
-+DEFINE_SIMPLE_ATTRIBUTE(fops_xl, debugfs_ul_get, debugfs_ul_set, "0x%llx\n");
-+
-+static void debugfs_create_xl(const char *name, umode_t mode,
-+			      struct dentry *parent, unsigned long *value)
-+{
-+	debugfs_create_file(name, mode, parent, value, &fops_xl);
-+}
-+
- static int debugfs_stacktrace_depth_set(void *data, u64 val)
+ bool should_fail(struct fault_attr *attr, ssize_t size)
  {
- 	*(unsigned long *)data =
-@@ -223,10 +231,10 @@ struct dentry *fault_create_debugfs_attr(const char *name,
- #ifdef CONFIG_FAULT_INJECTION_STACKTRACE_FILTER
- 	debugfs_create_stacktrace_depth("stacktrace-depth", mode, dir,
- 					&attr->stacktrace_depth);
--	debugfs_create_ul("require-start", mode, dir, &attr->require_start);
--	debugfs_create_ul("require-end", mode, dir, &attr->require_end);
--	debugfs_create_ul("reject-start", mode, dir, &attr->reject_start);
--	debugfs_create_ul("reject-end", mode, dir, &attr->reject_end);
-+	debugfs_create_xl("require-start", mode, dir, &attr->require_start);
-+	debugfs_create_xl("require-end", mode, dir, &attr->require_end);
-+	debugfs_create_xl("reject-start", mode, dir, &attr->reject_start);
-+	debugfs_create_xl("reject-end", mode, dir, &attr->reject_end);
- #endif /* CONFIG_FAULT_INJECTION_STACKTRACE_FILTER */
++	bool stack_checked = false;
++
+ 	if (in_task()) {
+ 		unsigned int fail_nth = READ_ONCE(current->fail_nth);
  
- 	attr->dname = dget(dir);
+ 		if (fail_nth) {
++			if (!fail_stacktrace(attr))
++				return false;
++
++			stack_checked = true;
+ 			fail_nth--;
+ 			WRITE_ONCE(current->fail_nth, fail_nth);
+ 			if (!fail_nth)
+@@ -128,6 +134,9 @@ bool should_fail(struct fault_attr *attr, ssize_t size)
+ 	if (atomic_read(&attr->times) == 0)
+ 		return false;
+ 
++	if (!stack_checked && !fail_stacktrace(attr))
++		return false;
++
+ 	if (atomic_read(&attr->space) > size) {
+ 		atomic_sub(size, &attr->space);
+ 		return false;
+@@ -142,9 +151,6 @@ bool should_fail(struct fault_attr *attr, ssize_t size)
+ 	if (attr->probability <= prandom_u32() % 100)
+ 		return false;
+ 
+-	if (!fail_stacktrace(attr))
+-		return false;
+-
+ fail:
+ 	fail_dump(attr);
+ 
 -- 
 2.34.1
 

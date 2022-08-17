@@ -2,106 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E9B596CD3
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 12:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E6A596D01
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 12:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbiHQKbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 06:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36440 "EHLO
+        id S239016AbiHQKul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 06:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238909AbiHQKa7 (ORCPT
+        with ESMTP id S238839AbiHQKuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 06:30:59 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B02785B5;
-        Wed, 17 Aug 2022 03:30:58 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M742t6Zk7zkWKh;
-        Wed, 17 Aug 2022 18:27:34 +0800 (CST)
-Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 17 Aug 2022 18:30:55 +0800
-Received: from huawei.com (10.175.113.133) by kwepemm600001.china.huawei.com
- (7.193.23.3) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 17 Aug
- 2022 18:30:54 +0800
-From:   Wang Hai <wanghai38@huawei.com>
-To:     <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <brouer@redhat.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH net] net/sched: fix netdevice reference leaks in attach_one_default_qdisc()
-Date:   Wed, 17 Aug 2022 18:46:46 +0800
-Message-ID: <20220817104646.22861-1-wanghai38@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 17 Aug 2022 06:50:35 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F036C13A;
+        Wed, 17 Aug 2022 03:50:34 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id c24so11652272pgg.11;
+        Wed, 17 Aug 2022 03:50:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=5RiZpgZDUuO6MV3ALtXTmbuVcbhlGB6egOopFvdYj90=;
+        b=fNzPi2WncFTKeH2XgHbHqO3yz1RWdVZcL/3a6wAebKjrIqoAkjVoPwk7v+t+NXa4Li
+         NOKo6/ZYV6Cbrg31/a/m+Ntxb/ppYHnmzgOMsPxUzvBuuCt5y0a2CDYI6wuCLYLM5bF9
+         Vkxksy10GEdcWIZZuPGUbpTiQdqy0wZDV8n+gGCKzIdldBWGmN994Pqih5/yevIoAuHk
+         tBie1d7q5KZoKi4SddL6HNREi6cvEEHVeom7NkIJvSecw43K2pe81qJyyOBvxwV/qfMk
+         gBDcjEqGJmrpmi+41Y6QYYPG0uuPXnVZ+n/TUHrjkUfZ0z6cLaWNIQ+wQJ+//AfJe/4b
+         Y5vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=5RiZpgZDUuO6MV3ALtXTmbuVcbhlGB6egOopFvdYj90=;
+        b=kb0/QK3XKUIHoGWKHra2R2NVajdJbv+VLe89QaCluIv8ctZnlAyxfyluSSU5IQlGSH
+         FeTxfnKVdOCwddRonGhtouWLiW7by9QdRCVSIUhlZxrUktERehf5yf2Nbeq7i3YKoY9E
+         yoTNF5ey2VudZr1N96zjFsdy1hY6bVMi5FhUdh59P+6Ofpb45EkSy3zhS1IB0UfQ2wY1
+         1jhKtVPGSA3sjodBpKb0DVRU8HB0afwkpziRLApcnGPhPxnDH3ZSPwK1sH4IsccyR15h
+         6JGw3e8BoU5I6wQ0yzj++CooqNvRerfy0ituCLYxS5GoOTtFqormajvrpTmol8bitwCs
+         VZsw==
+X-Gm-Message-State: ACgBeo2NWtD5sEqseWbrEVRJA+gNKifn8VbkOBVTDzUrciOShmSExGox
+        Q4A9HgoYUZyVwt7oaQPfhtZ7oGgxqYY=
+X-Google-Smtp-Source: AA6agR6v/qaKXALKSRCgB2FvuUcNiNmRImMFtCzuegTfY64K6w8+f2ca/C2oUByGIo4KEIPNsYUC8Q==
+X-Received: by 2002:a05:6a00:1a47:b0:52e:6a8c:5430 with SMTP id h7-20020a056a001a4700b0052e6a8c5430mr24537458pfv.48.1660733434041;
+        Wed, 17 Aug 2022 03:50:34 -0700 (PDT)
+Received: from fedora.. ([49.49.237.218])
+        by smtp.googlemail.com with ESMTPSA id n8-20020a170902d2c800b00172897952a0sm1152033plc.283.2022.08.17.03.50.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 03:50:33 -0700 (PDT)
+From:   Supasak Sutha <blur.3rd@gmail.com>
+Cc:     blur.3rd@gmail.com, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] HID: magicmouse: Add parameter to be able to adjust middle button position.
+Date:   Wed, 17 Aug 2022 17:50:13 +0700
+Message-Id: <20220817105013.28036-1-blur.3rd@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.113.133]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600001.china.huawei.com (7.193.23.3)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In attach_default_qdiscs(), when attach default qdisc (fq_codel) fails
-and fallback to noqueue, if the original attached qdisc is not released
-and a new one is directly attached, this will cause netdevice reference
-leaks.
+Apparently the driver fixed the offset of middle button to [-350, +350].
+Which separated the area to 3 equally space for 3 buttons.
+Lead to a lot of mis-clicking as the magicmouse has no real button.
+Users should be able to adjust the buttons to suite their fingers.
 
-The following is the bug log:
+This patch add parameters to adjust theses offsets,
+while keeping the default values to [-350, +350].
 
-veth0: default qdisc (fq_codel) fail, fallback to noqueue
-unregister_netdevice: waiting for veth0 to become free. Usage count = 32
-leaked reference.
- qdisc_alloc+0x12e/0x210
- qdisc_create_dflt+0x62/0x140
- attach_one_default_qdisc.constprop.41+0x44/0x70
- dev_activate+0x128/0x290
- __dev_open+0x12a/0x190
- __dev_change_flags+0x1a2/0x1f0
- dev_change_flags+0x23/0x60
- do_setlink+0x332/0x1150
- __rtnl_newlink+0x52f/0x8e0
- rtnl_newlink+0x43/0x70
- rtnetlink_rcv_msg+0x140/0x3b0
- netlink_rcv_skb+0x50/0x100
- netlink_unicast+0x1bb/0x290
- netlink_sendmsg+0x37c/0x4e0
- sock_sendmsg+0x5f/0x70
- ____sys_sendmsg+0x208/0x280
-
-In attach_one_default_qdisc(), release the old one before attaching
-a new qdisc to fix this bug.
-
-Fixes: bf6dba76d278 ("net: sched: fallback to qdisc noqueue if default qdisc setup fail")
-Signed-off-by: Wang Hai <wanghai38@huawei.com>
+Signed-off-by: Supasak Sutha <blur.3rd@gmail.com>
 ---
- net/sched/sch_generic.c | 5 +++++
+ drivers/hid/hid-magicmouse.c | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-index d47b9689eba6..87b61ef14497 100644
---- a/net/sched/sch_generic.c
-+++ b/net/sched/sch_generic.c
-@@ -1140,6 +1140,11 @@ static void attach_one_default_qdisc(struct net_device *dev,
+diff --git a/drivers/hid/hid-magicmouse.c b/drivers/hid/hid-magicmouse.c
+index 664a624a363d..9709085647fb 100644
+--- a/drivers/hid/hid-magicmouse.c
++++ b/drivers/hid/hid-magicmouse.c
+@@ -25,7 +25,12 @@ module_param(emulate_3button, bool, 0644);
+ MODULE_PARM_DESC(emulate_3button, "Emulate a middle button");
  
- 	if (!netif_is_multiqueue(dev))
- 		qdisc->flags |= TCQ_F_ONETXQUEUE | TCQ_F_NOPARENT;
+ static int middle_button_start = -350;
++module_param(middle_button_start, int, 0644);
++MODULE_PARM_DESC(middle_button_start, "Middle button beginning offset");
 +
-+	if (dev_queue->qdisc_sleeping &&
-+	    dev_queue->qdisc_sleeping != &noop_qdisc)
-+		qdisc_put(dev_queue->qdisc_sleeping);
-+
- 	dev_queue->qdisc_sleeping = qdisc;
- }
+ static int middle_button_stop = +350;
++module_param(middle_button_stop, int, 0644);
++MODULE_PARM_DESC(middle_button_stop, "Middle button end offset");
  
+ static bool emulate_scroll_wheel = true;
+ module_param(emulate_scroll_wheel, bool, 0644);
 -- 
-2.17.1
+2.37.1
 

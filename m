@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B4A759752F
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 575C2597526
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241241AbiHQRdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54812 "EHLO
+        id S241231AbiHQRdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241232AbiHQRdP (ORCPT
+        with ESMTP id S241187AbiHQRdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:33:15 -0400
+        Wed, 17 Aug 2022 13:33:43 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A23FDC6
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:33:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7775E13F0A
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:33:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660757593;
+        s=mimecast20190719; t=1660757616;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding;
-        bh=vqIWYsxr0L8X4TPhLFVMWagw5j3xvLwRpzXiF8hND4g=;
-        b=R+leZRP484OgNCIFV47RqkWKmE7LrRQz22EQ53Ejo7rLJM46plHH+BKrqq86FkbOVuAdCA
-        tP/dvtklvtlJAcFCTsWh+oqQj+0+9VF6mGSRlXgIYbCZg1x9yHdYeHUKhLgq0ToJeQaYlB
-        xPWkDPfGU+d/4V4J6MigunMOoaXc19s=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Rmwej3v878+xzOGk7t4M6m20uPBVhfID+7XwEFRh3lI=;
+        b=WMrrg5KepM7UkroljXb0b8P5zglBMxacVAp0+ChQ0Sbd7xdrfWJwCPP+Qm9HB5aUXeLnoI
+        J9WSMWma4GCkkFBMTq/1OxEWCRUDLQfOAt2fPuH1ajg7zmoaKGKqqGP+b8gef+YNkLr2Ay
+        mNWRaCKeyss43mZDrt6RYJFhmWI8lJw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-654-7ngCXykBPQSgA5fVt66_gw-1; Wed, 17 Aug 2022 13:33:10 -0400
-X-MC-Unique: 7ngCXykBPQSgA5fVt66_gw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+ us-mta-528-sKUEwOHkPKypKIjwWDhqmA-1; Wed, 17 Aug 2022 13:33:34 -0400
+X-MC-Unique: sKUEwOHkPKypKIjwWDhqmA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A97AE805AF5;
-        Wed, 17 Aug 2022 17:33:09 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 768A1380673E;
+        Wed, 17 Aug 2022 17:33:34 +0000 (UTC)
 Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B5EF11121315;
-        Wed, 17 Aug 2022 17:33:08 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E97BA2026D4C;
+        Wed, 17 Aug 2022 17:33:33 +0000 (UTC)
 Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
         Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
         Kingdom.
         Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH] locks: Fix dropped call to ->fl_release_private()
+Subject: [PATCH] afs: Return -EAGAIN, not -EREMOTEIO,
+ when a file already locked
 From:   David Howells <dhowells@redhat.com>
-To:     jlayton@kernel.org
-Cc:     Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        dhowells@redhat.com, linux-kernel@vger.kernel.org
-Date:   Wed, 17 Aug 2022 18:33:08 +0100
-Message-ID: <166075758809.3532462.13307935588777587536.stgit@warthog.procyon.org.uk>
+To:     marc.dionne@auristor.com
+Cc:     linux-afs@lists.infradead.org, dhowells@redhat.com,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 17 Aug 2022 18:33:33 +0100
+Message-ID: <166075761334.3533338.2591992675160918098.stgit@warthog.procyon.org.uk>
 User-Agent: StGit/1.4
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -66,58 +64,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prior to commit 4149be7bda7e, sys_flock() would allocate the file_lock
-struct it was going to use to pass parameters, call ->flock() and then call
-locks_free_lock() to get rid of it - which had the side effect of calling
-locks_release_private() and thus ->fl_release_private().
+When trying to get a file lock on an AFS file, the server may return
+UAEAGAIN to indicate that the lock is already held.  This is currently
+translated by the default path to -EREMOTEIO.  Translate it instead to
+-EAGAIN so that we know we can retry it.
 
-With commit 4149be7bda7e, however, this is no longer the case: the struct
-is now allocated on the stack, and locks_free_lock() is no longer called -
-and thus any remaining private data doesn't get cleaned up either.
-
-This causes afs flock to cause oops.  Kasan catches this as a UAF by the
-list_del_init() in afs_fl_release_private() for the file_lock record
-produced by afs_fl_copy_lock() as the original record didn't get delisted.
-It can be reproduced using the generic/504 xfstest.
-
-Fix this by reinstating the locks_release_private() call in sys_flock().
-I'm not sure if this would affect any other filesystems.  If not, then the
-release could be done in afs_flock() instead.
-
-Fixes: 4149be7bda7e ("fs/lock: Don't allocate file_lock in flock_make_lock().")
-cc: Kuniyuki Iwashima <kuniyu@amazon.com>
-cc: Chuck Lever <chuck.lever@oracle.com>
-cc: Jeff Layton <jlayton@kernel.org>
+Signed-off-by: David Howells <dhowells@redhat.com>
 cc: Marc Dionne <marc.dionne@auristor.com>
 cc: linux-afs@lists.infradead.org
-cc: linux-fsdevel@vger.kernel.org
 ---
 
- fs/locks.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ fs/afs/misc.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/locks.c b/fs/locks.c
-index c266cfdc3291..f2d5aca782c6 100644
---- a/fs/locks.c
-+++ b/fs/locks.c
-@@ -2116,7 +2116,7 @@ SYSCALL_DEFINE2(flock, unsigned int, fd, unsigned int, cmd)
- 
- 	error = security_file_lock(f.file, fl.fl_type);
- 	if (error)
--		goto out_putf;
-+		goto out_release;
- 
- 	can_sleep = !(cmd & LOCK_NB);
- 	if (can_sleep)
-@@ -2128,7 +2128,8 @@ SYSCALL_DEFINE2(flock, unsigned int, fd, unsigned int, cmd)
- 					    &fl);
- 	else
- 		error = locks_lock_file_wait(f.file, &fl);
--
-+out_release:
-+	locks_release_private(&fl);
-  out_putf:
- 	fdput(f);
- 
+diff --git a/fs/afs/misc.c b/fs/afs/misc.c
+index 933e67fcdab1..805328ca5428 100644
+--- a/fs/afs/misc.c
++++ b/fs/afs/misc.c
+@@ -69,6 +69,7 @@ int afs_abort_to_error(u32 abort_code)
+ 		/* Unified AFS error table */
+ 	case UAEPERM:			return -EPERM;
+ 	case UAENOENT:			return -ENOENT;
++	case UAEAGAIN:			return -EAGAIN;
+ 	case UAEACCES:			return -EACCES;
+ 	case UAEBUSY:			return -EBUSY;
+ 	case UAEEXIST:			return -EEXIST;
 
 

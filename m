@@ -2,95 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0865978E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D1DB5978E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241969AbiHQV2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 17:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
+        id S241470AbiHQV3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 17:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235796AbiHQV15 (ORCPT
+        with ESMTP id S231396AbiHQV3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 17:27:57 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF395AB070
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 14:27:56 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id v7-20020a1cac07000000b003a6062a4f81so1660421wme.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 14:27:56 -0700 (PDT)
+        Wed, 17 Aug 2022 17:29:30 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC6973926
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 14:29:28 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id a22so12529244pfg.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 14:29:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=xb6yvMg/5+ZmAzRi09/O29dbL3v5n6oRPgJ/b2a1u0g=;
-        b=i+CAGtVtpnRaafgVSaxm2x4tf3LLsFPScZIVdI/n+KFT7qH2g/kF/RVSZqcc+D2YxW
-         NtkbhtmYYmcDAEyKQZBsszQzkgjf4d2K4rPIS0jwsM59U9DJvJu8r13Ax6XMazoRysUd
-         TFrniDi9gvx4I32S7ofrCsZ5ERfMS2bR3rT2KPxmmTu25cbTRCSk/HawixAkAcNRmxes
-         Mtvr7dAiz0m6+8i5fMa80flmgjGPUILg5m7bTgELHa4DjJZwD6WZhRmHGPDGhEbI8TBw
-         1YdXjuRjuOUpYnziIACRhBwhtZpEIaG5rKRV22oBiAQi0hPf2SkjrjKck8fdN8+LP8mL
-         t5Qg==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=cPU4dRqFcGLGHlWaSnt+2sRfRDdQ3EovXHQZSZPWVsk=;
+        b=lmJuIYeaK5Jx8571q/wUIC5hX+p+4As4fmvOWOVmsq4MfgL1swQtC7EbMMp8btYH24
+         hd8FgWsq0cIMnn+V7GdJ9cAlX7f6pF/j/vXZlwHENel3eAfdGRpp3kJHIOwLPittUMr1
+         kanMMxPenC+jn/AHh9x+p7Tt3LTX3BmNVpIGgvi/Ys5NxV08CstJQ0CXWxj/cDdL2vRh
+         hr9Wsc39eDv/9kKoKPIBh14CfCGNvTM90vslJHkKL/pPLOtmLfQ550DceM5KdEWMipJw
+         sogyau/0k/e9jOu20IagaUltk58FUqGWd1Ba1Y/YWealYqqkCK3q1vGxR6Yh3sE5eV5o
+         FLow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=xb6yvMg/5+ZmAzRi09/O29dbL3v5n6oRPgJ/b2a1u0g=;
-        b=aOKN4tdAurZIMI9avlEtueJrhbbgyTYn2t0tK55Cy57gE0syV518TJnNNucmjIj2X1
-         DdVUZPfIWaDXWesTrO+PaKZLtuYQuHmIGtnPhCLOUzYkoas6TGyn4QQLb8jkYgqRbS0a
-         D4JJ8ws2t4xp9RaCRNDYm2ucZ9ezmYZr+i8/k5zixqCf3FlYXN2oH/mkyC++stI2WOhP
-         9e/X5cukcU7TBorpMr5a+5MsMd6jcipIkYg4JKNdCifJPoWSpgvoS82sDggKdSe9eved
-         ic8nXLq3skcLlPC2lJNqxyZpYrbP0ihBN4R0Md7Z5P50aV9l/PL/hXWQsygOLT0pzqJj
-         bMXw==
-X-Gm-Message-State: ACgBeo0Gu9DoPugWZKfA0ZOvng7YcsomcObFmXugiW6SYRCBvOWX8WaQ
-        jWwdjSrliZ9AkjdZgTtPgQZ/D/ZwJBk=
-X-Google-Smtp-Source: AA6agR4VR+hymEnj9PuROuCLqQEscn85Ox8moBLzjbU2gSO/4n/e32GFYDlh0t3+cCJQa8LxteF5/g==
-X-Received: by 2002:a05:600c:1449:b0:3a5:3973:55d6 with SMTP id h9-20020a05600c144900b003a5397355d6mr3349971wmi.89.1660771675181;
-        Wed, 17 Aug 2022 14:27:55 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id p6-20020a05600c05c600b003a604a29a34sm2861829wmd.35.2022.08.17.14.27.54
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=cPU4dRqFcGLGHlWaSnt+2sRfRDdQ3EovXHQZSZPWVsk=;
+        b=7fcrGNj9l7xpm2QU0lM9iCZ82bnkwAtoMek2OAgzc8xWYVBzAgFIF7zT2hzbvrc/iQ
+         k/d7STJZ+wPPon71wFC44ay/Yrwjx5g/P0eHQfxVL1XEgx9EKFsenhB7txXCi+aI3F8/
+         57B8o75269wkIP/E99AmG4RsYbJdjjKuWgvQQysh0Zr9R20WhQqPQSAaIIy7fkec7RmM
+         vF4NNhF4HWeMh1lSeIqWshT1xdCMpj2wg2JespRGmSlNiQ0bxSxno1vzyut4QOq8HCen
+         Jcc+ssXxU3LxDqREqzwAkEhE2/zSyyfN+cQ+nrUK8zxMinrcSjoOrdJeDqTTAYuRJNxj
+         kdMg==
+X-Gm-Message-State: ACgBeo3b+jGX04/rGT2G1mvU4zk7rhktoCy82AKQeHejlOvXM1KBrFrc
+        gam86EiG1/6WGryI6YDziiZu0aUfO520RA==
+X-Google-Smtp-Source: AA6agR7RQ30onTB55I37VwkITQAO/eEJNoS8djMIj8di7s7qwfh/vkq9GnOmlBJM6+d+MTpj1RjyPA==
+X-Received: by 2002:a63:6b02:0:b0:422:7cf8:4bf with SMTP id g2-20020a636b02000000b004227cf804bfmr141648pgc.92.1660771768366;
+        Wed, 17 Aug 2022 14:29:28 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id f196-20020a6238cd000000b00535c4dfc810sm39577pfa.82.2022.08.17.14.29.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 14:27:54 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] mailmap: update email address for Colin King
-Date:   Wed, 17 Aug 2022 22:27:53 +0100
-Message-Id: <20220817212753.101109-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Wed, 17 Aug 2022 14:29:27 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 21:29:23 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     dmatlack@google.com, pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: selftests: Run dirty_log_perf_test on specific cpus
+Message-ID: <Yv1ds4zVCt6hbxC4@google.com>
+References: <20220817152956.4056410-1-vipinsh@google.com>
+ <Yv0kRhSjSqz0i0lG@google.com>
+ <CAHVum0fT7zJ0qj39xG7OnAObBqeBiz_kAp+chsh9nFytosf9Yg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHVum0fT7zJ0qj39xG7OnAObBqeBiz_kAp+chsh9nFytosf9Yg@mail.gmail.com>
+X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Colin King is working on kernel janitorial fixes in his spare
-time and using his Intel email is confusing. Use his gmail account
-as the default email address.
+On Wed, Aug 17, 2022, Vipin Sharma wrote:
+> On Wed, Aug 17, 2022 at 10:25 AM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > > +static int parse_num(const char *num_str)
+> > > +{
+> > > +     int num;
+> > > +     char *end_ptr;
+> > > +
+> > > +     errno = 0;
+> > > +     num = (int)strtol(num_str, &end_ptr, 10);
+> > > +     TEST_ASSERT(num_str != end_ptr && *end_ptr == '\0',
+> > > +                 "Invalid number string.\n");
+> > > +     TEST_ASSERT(errno == 0, "Conversion error: %d\n", errno);
+> >
+> > Is the paranoia truly necessary?  What happens if parse_cpu_list() simply uses
+> > atoi() and is passed garbage?
+> 
+> On error atoi() returns 0, which is also a valid logical cpu number.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- .mailmap | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Lame.
 
-diff --git a/.mailmap b/.mailmap
-index 38255d412f0b..0e0cfe986f05 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -98,8 +98,7 @@ Christian Brauner <brauner@kernel.org> <christian.brauner@ubuntu.com>
- Christian Marangi <ansuelsmth@gmail.com>
- Christophe Ricard <christophe.ricard@gmail.com>
- Christoph Hellwig <hch@lst.de>
--Colin Ian King <colin.king@intel.com> <colin.king@canonical.com>
--Colin Ian King <colin.king@intel.com> <colin.i.king@gmail.com>
-+Colin Ian King <colin.i.king@gmail.com> <colin.king@canonical.com>
- Corey Minyard <minyard@acm.org>
- Damian Hobson-Garcia <dhobsong@igel.co.jp>
- Daniel Borkmann <daniel@iogearbox.net> <danborkmann@googlemail.com>
--- 
-2.36.1
+> We need error checking here to make sure that the user really wants
+> cpu 0 and it was not a mistake in typing.
+> I was thinking of using parse_num API for other places as well instead
+> of atoi() in dirty_log_perf_test.
 
+Yes, definitely.  And maybe give it a name like atoi_paranoid()?
+
+> Yeah, it was either my almost duplicate functions or have the one
+> function do two things via if-else.  I am not happy with both
+> approaches.
+> 
+> I think I will pass an integer array which this parsing function will
+> fill up and return an int denoting how many elements were filled. The
+> caller then can use the array as they wish, to copy it in
+> vcpu_to_lcpu_map or cpuset.
+
+Eh, I doubt that'll be a net improvement, e.g. the CPUSET case will then need to
+re-loop, which seems silly.  If the exclusive cpuset vs. array is undesirable, we
+could have the API require at least one instead of exactly one, i.e.
+
+	TEST_ASSERT(cpuset || vcpu_map);
+
+	...
+
+                cpu = atoi(cpustr);
+                TEST_ASSERT(cpu >= 0, "Invalid cpu number: %d\n", cpu);
+                if (vcpu_map)
+                        vcpu_map[i++] = cpu;
+                if (cpuset)
+                        CPU_SET(cpu, cpuset);
+ 
+If we somehow end up with a third type of destination, then we can revisit this,
+but that seems unlikely at this point.
+
+> > > @@ -383,6 +450,26 @@ static void help(char *name)
+> > >       backing_src_help("-s");
+> > >       printf(" -x: Split the memory region into this number of memslots.\n"
+> > >              "     (default: 1)\n");
+> > > +     printf(" -c: Comma separated values of the logical CPUs which will run\n"
+> > > +            "     the vCPUs. Number of values should be equal to the number\n"
+> > > +            "     of vCPUs.\n\n"
+> > > +            "     Example: ./dirty_log_perf_test -v 3 -c 22,43,1\n"
+> > > +            "     This means that the vcpu 0 will run on the logical cpu 22,\n"
+> > > +            "     vcpu 1 on the logical cpu 43 and vcpu 2 on the logical cpu 1.\n"
+> > > +            "     (default: No cpu mapping)\n\n");
+> > > +     printf(" -d: Comma separated values of the logical CPUs on which\n"
+> > > +            "     dirty_log_perf_test will run. Without -c option, all of\n"
+> > > +            "     the vcpus and main process will run on the cpus provided here.\n"
+> > > +            "     This option also accepts a single cpu. (default: No cpu mapping)\n\n"
+> > > +            "     Example 1: ./dirty_log_perf_test -v 3 -c 22,43,1 -d 101\n"
+> > > +            "     Main application thread will run on logical cpu 101 and\n"
+> > > +            "     vcpus will run on the logical cpus 22, 43 and 1\n\n"
+> > > +            "     Example 2: ./dirty_log_perf_test -v 3 -d 101\n"
+> > > +            "     Main application thread and vcpus will run on the logical\n"
+> > > +            "     cpu 101\n\n"
+> > > +            "     Example 3: ./dirty_log_perf_test -v 3 -d 101,23,53\n"
+> > > +            "     Main application thread and vcpus will run on logical cpus\n"
+> > > +            "     101, 23 and 53.\n");
+> > >       puts("");
+> > >       exit(0);
+> > >  }
+> >
+> > > @@ -455,6 +550,13 @@ int main(int argc, char *argv[])
+> > >               }
+> > >       }
+> > >
+> >
+> > I wonder if we should make -c and -d mutually exclusive.  Tweak -c to include the
+> > application thread, i.e. TEST_ASSERT(nr_lcpus == nr_vcpus+1) and require 1:1 pinning
+> > for all tasks.  E.g. allowing "-c ..., -d 0,1,22" seems unnecessary.
+> >
+> 
+> One downside I can think of will be if we add some worker threads
+> which are not vcpus then all of those threads will end up running on a
+> single cpu unless we edit this parsing logic again.
+
+But adding worker threads also requires a code change, i.e. it won't require a
+separate commit/churn.  And if we get to the point where we want multiple workers,
+it should be relatively straightforward to support pinning an arbitrary number of
+workers, e.g.
+
+	enum memtest_worker_type {
+		MAIN_WORKER,
+		MINION_1,
+		MINION_2,
+		NR_MEMTEST_WORKERS,
+	}
+
+
+	TEST_ASSERT(nr_lcpus == nr_vcpus + NR_MEMTEST_WORKERS);
+
+void spawn_worker(enum memtest_worker_type type, <function pointer>)
+{
+	cpu_set_t cpuset;
+
+	CPU_ZERO(&cpuset);
+	CPU_SET(task_map[nr_vcpus + type], &cpuset);
+
+	<set affinity and spawn>
+}
+
+> Current implementation gives vcpus special treatment via -c and for
+> the whole application via -d. This gives good separation of concerns
+> via flags.
+
+But they aren't separated, e.g. using -d without -c means vCPUs are thrown into
+the same pool as worker threads.  And if we ever do add more workers, -d doesn't
+allow the user to pin workers 1:1 with logical CPUs.
+
+Actually, if -c is extended to pin workers, then adding -d is unnecessary.  If the
+user wants to affine tasks to CPUs but not pin 1:1, it can do that with e.g. taskset.
+What the user can't do is pin 1:1.
+
+If we don't want to _require_ the caller to pin the main worker, then we could do
+
+	TEST_ASSERT(nr_lcpus >= nr_vcpus &&
+		    nr_lcpus <= nr_vcpus + NR_MEMTEST_WORKERS);
+
+to _require_ pinning all vCPUs, and allow but not require pinning non-vCPU tasks.

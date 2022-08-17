@@ -2,260 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0186E597568
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9466C59756E
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240612AbiHQR4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
+        id S240881AbiHQR52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238114AbiHQR4K (ORCPT
+        with ESMTP id S230075AbiHQR5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:56:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CE95E643
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:56:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660758968;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u6ujo7+tHLDKQ50eag3ScQLxtrPDDWzfQledOoCebFc=;
-        b=O23je8Le7zaveB5SlTJyrFOy1gLGa4mWs+xut0cswJQAsgCJvLO/tbWAqusksc0q2FyOwa
-        zhM0Uy3rdvk62KEqr+ejbC4LeKpPOGLvB3oaTU6vMmB0OJv/q22X80f894FlJkp15ex4nb
-        8T3SQZDBDws2dtJB4o+RQm7O2QRJTWE=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-94-_Lgm56dFN0a6BsOJvuT-Bw-1; Wed, 17 Aug 2022 13:56:07 -0400
-X-MC-Unique: _Lgm56dFN0a6BsOJvuT-Bw-1
-Received: by mail-qt1-f197.google.com with SMTP id bq11-20020a05622a1c0b00b003434f125b77so11134575qtb.20
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:56:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:organization
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=u6ujo7+tHLDKQ50eag3ScQLxtrPDDWzfQledOoCebFc=;
-        b=1wnkj+nP1KzBknWnqH3FzCcgt3ngNKo58+klYxd7/bHPzf0gzYFpeLBran1QZ4ep9T
-         3rvXX1Y5s1aD0eFJRWX/LKAvHYzUWFIDSPQhHFjNm0UTY6Hgc/FZ36k8bu/LOBk3MDKz
-         HQAbYJw2HBO4J8H/t0v8Hau/IamWkZAjcSbnb0vTVdaj9UwyqEjPxIXQ6t2CBto1v5bL
-         6ypMsudBqmWNrESUPBtC6JSjuw85mHPp8wFtbjnNS+Ns2sdqj0JUyBi+yUQF0OeuVDq5
-         2xOv5RmtqMyZkaboHLWsos7qzi5etL4rWlXB3X4mKe26/ZELRhGemOUh6Pf5ndg7yB+U
-         TvZQ==
-X-Gm-Message-State: ACgBeo1ssGGxsEL0bdNgFE+yHiWVp/L8rigFKgzJKQiWrY13qvGNbUui
-        A4qYLM9JnfwUSyfywjEeo+DqBTpn/CqOzUP0juUX00F5g4ZxUDqix9KWTW++DpK6ubZgfxH750e
-        bpnB6WKHgydtPQi+T4VKkVmHv
-X-Received: by 2002:a05:620a:269a:b0:6b5:b76c:11c9 with SMTP id c26-20020a05620a269a00b006b5b76c11c9mr19154889qkp.100.1660758966195;
-        Wed, 17 Aug 2022 10:56:06 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6WDYz+MTlIuAdoJuBIJyS4ztL+6UVgG9kZwAFd70kTJFn9IH7U9Me8NmcInCl8uccQk42Qyg==
-X-Received: by 2002:a05:620a:269a:b0:6b5:b76c:11c9 with SMTP id c26-20020a05620a269a00b006b5b76c11c9mr19154869qkp.100.1660758965899;
-        Wed, 17 Aug 2022 10:56:05 -0700 (PDT)
-Received: from [192.168.8.138] (pool-100-0-245-4.bstnma.fios.verizon.net. [100.0.245.4])
-        by smtp.gmail.com with ESMTPSA id 20-20020a370914000000b006b8d1914504sm13417807qkj.22.2022.08.17.10.56.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 10:56:05 -0700 (PDT)
-Message-ID: <35d4da2537d53ade88528dda5668f5b5d2b21e49.camel@redhat.com>
-Subject: Re: [PATCH] drm/i915: Switch TGL-H DP-IN to dGFX when it's supported
-From:   Lyude Paul <lyude@redhat.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Mark Pearson <markpearson@lenovo.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
-        tvrtko.ursulin@linux.intel.com, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Ville =?ISO-8859-1?Q?Syrj=E4l=E4?= 
-        <ville.syrjala@linux.intel.com>, Zenghui Yu <yuzenghui@huawei.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 17 Aug 2022 13:56:03 -0400
-In-Reply-To: <CAAd53p4GoU6_ExWB=0b3_X7STd2Fnq764QpmzgOEwn3jdCUBxQ@mail.gmail.com>
-References: <20220816025217.618181-1-kai.heng.feng@canonical.com>
-         <87leror4sl.fsf@intel.com>
-         <CAAd53p76ut7QRFdM4NjaRua=Hc4bu9_=7+Q_t8ExJysEAhJf=Q@mail.gmail.com>
-         <b8ebc447ea464371102df765882fc5010cc0c784.camel@redhat.com>
-         <CAAd53p4GoU6_ExWB=0b3_X7STd2Fnq764QpmzgOEwn3jdCUBxQ@mail.gmail.com>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 17 Aug 2022 13:57:25 -0400
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C928E47E;
+        Wed, 17 Aug 2022 10:57:24 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id DDBB7580D8B;
+        Wed, 17 Aug 2022 13:57:21 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute3.internal (MEProxy); Wed, 17 Aug 2022 13:57:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        colorremedies.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1660759041; x=
+        1660762641; bh=6KjITppIDlmj3qAAJAmkZAm9wDlh00j0GBP4rkiftaE=; b=B
+        +D3Uk/5wBHDunpIxtqE3nhhYM//NqC6r9EV3BARDWxhBVCVaTUzOVguxR0YElOVl
+        EuzZkmFIEc1pwXVH60ovuZbRXJwiUOoGbmx6zNc1UsC9oFZIG6CAfHRqkvVQWbbt
+        NCZhfz7erIoSDf2I9JfULsckh7a6bI49KV6+mLS/c12y4dgKN8oshTST2Q68oATE
+        lgu9dPGfavGX9SJ42MHNxGcS2TlN8jT/EmAKKuQU7aOBQwCMQd6JbYSqQ2Tqo1qN
+        dmtbxDuNxOtimxpu0fq7ipcLa0aI93dfxkXL8AkZ5qVcfNqT4KjPgtYX+7EEAvQG
+        oZnipc1QNzahkgJ3YdVVQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660759041; x=1660762641; bh=6KjITppIDlmj3qAAJAmkZAm9wDlh
+        00j0GBP4rkiftaE=; b=NCRY6jDAg6sxgBnaBeaBWxcX+bWFbW0bnnt+OkZ6nBAT
+        ESowbJCaMOQ5mb4F+dAb0NlEJJiVvGi9gMycAeNGa9i1iL6kk9y5P3z1vLrNvr55
+        IMfyEd+EsfI2Lm2AtyYlaBB5nx/PXNfioFJUFUhYZPqwLXPkhGuttkkP1bHg6QTJ
+        GPneq2pJHHDQJWHPC2aUfSSMXq8yNbRaYajQJyK3T0XGGArI9qYGh/CT69sD0KGU
+        T/p9vUacpbmlzsgYXIFYul2DRfPmtRKGVrORxaobKwQ3j4Gh7CnZqHOUY9MXw77I
+        MuiB7+jnqcBv6Xg/a8QLwfTNe+B9ar92X4+J5gUd7g==
+X-ME-Sender: <xms:ASz9YkIuc-q3RxBjCBqsxfNCkAshUBPqJE1mjq4mofv9JJ78dv0pSA>
+    <xme:ASz9YkIaaHfByyKOj-XFEYLWPvfuI5DbVF2UNbV_HYuOFaQjr0-LYWaj8MV7qSBqw
+    XoxMs0JSwDYgE10LJo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehiedguddulecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdev
+    hhhrihhsucfouhhrphhhhidfuceolhhishhtshestgholhhorhhrvghmvgguihgvshdrtg
+    homheqnecuggftrfgrthhtvghrnhepgfdvueektdefgfefgfdtleffvdeileetgfefuddt
+    ffelueeiveeiveekhedtheeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheplhhishhtshestgholhhorhhrvghmvgguihgvshdrtghomh
+X-ME-Proxy: <xmx:ASz9YkvSIsd4emdq2hdbiYrllRSsxSI-kIKQh-g0_AzrMLxtOYvTlw>
+    <xmx:ASz9YhZYyj5rMu6Ibrc0_4E4LGPmo-jTQs3UrxFSA65ANhpSSbD2NA>
+    <xmx:ASz9YrYJ1wuOZF5uOpbDfz8as0108VtsE2we72MI_BIr4WZqXAyixQ>
+    <xmx:ASz9YgOo8M5jUx_kSVtZaFZNerJw9ujo_1U5mB7m5EWFuzbWHmtBmg>
+Feedback-ID: i06494636:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 1A6C01700082; Wed, 17 Aug 2022 13:57:20 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
+Mime-Version: 1.0
+Message-Id: <51cd43f9-ab6b-4dd6-814f-e0c1ace3143c@www.fastmail.com>
+In-Reply-To: <f6f899a5-97e2-460f-ad73-73d4b5e38eb6@www.fastmail.com>
+References: <e36fe80f-a33b-4750-b593-3108ba169611@www.fastmail.com>
+ <CAEzrpqe3rRTvH=s+-aXTtupn-XaCxe0=KUe_iQfEyHWp-pXb5w@mail.gmail.com>
+ <d48c7e95-e21e-dcdc-a776-8ae7bed566cb@kernel.dk>
+ <61e5ccda-a527-4fea-9850-91095ffa91c4@www.fastmail.com>
+ <4995baed-c561-421d-ba3e-3a75d6a738a3@www.fastmail.com>
+ <dcd8beea-d2d9-e692-6e5d-c96b2d29dfd1@suse.com>
+ <2b8a38fa-f15f-45e8-8caa-61c5f8cd52de@www.fastmail.com>
+ <7c830487-95a6-b008-920b-8bc4a318f10a@applied-asynchrony.com>
+ <20220817114933.66c4g4xjsi4df2tg@quack3>
+ <85a141ae-56a7-4dcd-b75a-04be4b276b3a@www.fastmail.com>
+ <20220817163059.kigrvdfmxfswmhls@quack3>
+ <f6f899a5-97e2-460f-ad73-73d4b5e38eb6@www.fastmail.com>
+Date:   Wed, 17 Aug 2022 13:57:00 -0400
+From:   "Chris Murphy" <lists@colorremedies.com>
+To:     "Jan Kara" <jack@suse.cz>
+Cc:     =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        "Nikolay Borisov" <nborisov@suse.com>,
+        "Jens Axboe" <axboe@kernel.dk>,
+        "Paolo Valente" <paolo.valente@linaro.org>,
+        Linux-RAID <linux-raid@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "Josef Bacik" <josef@toxicpanda.com>
+Subject: Re: stalling IO regression since linux 5.12, through 5.18
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding Mark Pearson from Lenovo to this, Mark for reference the original patch
-is here:
 
-https://patchwork.freedesktop.org/patch/497807/?series=107312&rev=1
 
-Comments from me down below
+On Wed, Aug 17, 2022, at 12:47 PM, Chris Murphy wrote:
+Can you boot with
+>> "megaraid_sas.host_tagset_enable = 0" kernel option and see whether the
+>> issue reproduces?
 
-On Wed, 2022-08-17 at 09:02 +0800, Kai-Heng Feng wrote:
-> On Wed, Aug 17, 2022 at 2:24 AM Lyude Paul <lyude@redhat.com> wrote:
-> > 
-> > On Tue, 2022-08-16 at 19:29 +0800, Kai-Heng Feng wrote:
-> > > On Tue, Aug 16, 2022 at 4:06 PM Jani Nikula <jani.nikula@linux.intel.com> wrote:
-> > > > 
-> > > > On Tue, 16 Aug 2022, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
-> > > > > On mobile workstations like HP ZBook Fury G8, iGFX's DP-IN can switch to
-> > > > > dGFX so external monitors are routed to dGFX, and more monitors can be
-> > > > > supported as result.
-> > > > > 
-> > > > > To switch the DP-IN to dGFX, the driver needs to invoke _DSM function 20
-> > > > > on intel_dsm_guid2. This method is described in Intel document 632107.
-> > 
-> > Is this documentation released anywhere? We've been wondering about these
-> > interfaces for quite a long time, and it would be good to know if there's docs
-> > for this we haven't really been seeing.
-> > 
-> > > > 
-> > > > Is this the policy decision that we want to unconditionally make,
-> > > > though?
-> > > 
-> > > I believes so, so more external monitors can be supported at the same time.
-> > > 
-> > > Kai-Heng
-> > 
-> > Is this for systems with dual Intel GPUs? I ask because if this affects
-> > Intel/Nvidia hybrid systems then this is a huge no from me. Nouveau is able to
-> > support these systems, but at a limited capacity. This would imply that we are
-> > making external displays work for users of the nvidia proprietary driver, at
-> > the expense making external display support for mainline kernel users
-> > substantially worse for people who are using the mainline kernel. Which isn't
-> > a choice we should be making, because nvidia's OOT driver is not a mainline
-> > kernel driver.
-> 
-> Yes it's for Intel/NVIDIA hybrid systems.
-> 
-> The problem is that hardware vendor design the systems to use NVIDIA
-> for external displays, so using external displays on Intel are never
-> tested by the vendors.
-> I don't think that's any good either.
-> 
+This has been running an hour without symptoms. It's strongly suggestive, but needs to run overnight to be sure. Anecdotally, the max write IO is less than what I'm used to seeing.
 
-Sigh, the constant forcing of nvidia hardware into laptops from vendors is
-seriously something I wish they would knock it off with considering they're
-basically the most difficult hardware vendor to work with.
+[    0.583121] Kernel command line: BOOT_IMAGE=(md/0)/vmlinuz-5.12.5-300.fc34.x86_64 root=UUID=04f1fb7f-5cc4-4dfb-a7cf-b6b6925bf895 ro rootflags=subvol=root rd.md.uuid=e7782150:092e161a:68395862:31375bca biosdevname=1 net.ifnames=0 log_buf_len=8M plymouth.enable=0 megaraid_sas.host_tagset_enable=0
+...
+[    6.745964] megasas: 07.714.04.00-rc1
+[    6.758472] megaraid_sas 0000:02:00.0: BAR:0x1  BAR's base_addr(phys):0x0000000092000000  mapped virt_addr:0x00000000c54554ff
+[    6.758477] megaraid_sas 0000:02:00.0: FW now in Ready state
+[    6.770658] megaraid_sas 0000:02:00.0: 63 bit DMA mask and 32 bit consistent mask
+[    6.795060] megaraid_sas 0000:02:00.0: firmware supports msix	: (96)
+[    6.807537] megaraid_sas 0000:02:00.0: requested/available msix 49/49
+[    6.819259] megaraid_sas 0000:02:00.0: current msix/online cpus	: (49/48)
+[    6.830800] megaraid_sas 0000:02:00.0: RDPQ mode	: (disabled)
+[    6.842031] megaraid_sas 0000:02:00.0: Current firmware supports maximum commands: 928	 LDIO threshold: 0
+[    6.871246] megaraid_sas 0000:02:00.0: Performance mode :Latency (latency index = 1)
+[    6.882265] megaraid_sas 0000:02:00.0: FW supports sync cache	: No
+[    6.893034] megaraid_sas 0000:02:00.0: megasas_disable_intr_fusion is called outbound_intr_mask:0x40000009
+[    6.988550] megaraid_sas 0000:02:00.0: FW provided supportMaxExtLDs: 1	max_lds: 64
+[    6.988554] megaraid_sas 0000:02:00.0: controller type	: MR(2048MB)
+[    6.988555] megaraid_sas 0000:02:00.0: Online Controller Reset(OCR)	: Enabled
+[    6.988556] megaraid_sas 0000:02:00.0: Secure JBOD support	: No
+[    6.988557] megaraid_sas 0000:02:00.0: NVMe passthru support	: No
+[    6.988558] megaraid_sas 0000:02:00.0: FW provided TM TaskAbort/Reset timeout	: 0 secs/0 secs
+[    6.988559] megaraid_sas 0000:02:00.0: JBOD sequence map support	: No
+[    6.988560] megaraid_sas 0000:02:00.0: PCI Lane Margining support	: No
+[    7.025160] megaraid_sas 0000:02:00.0: megasas_enable_intr_fusion is called outbound_intr_mask:0x40000000
+[    7.025162] megaraid_sas 0000:02:00.0: INIT adapter done
+[    7.025164] megaraid_sas 0000:02:00.0: JBOD sequence map is disabled megasas_setup_jbod_map 5707
+[    7.029878] megaraid_sas 0000:02:00.0: pci id		: (0x1000)/(0x005d)/(0x1028)/(0x1f47)
+[    7.029881] megaraid_sas 0000:02:00.0: unevenspan support	: yes
+[    7.029882] megaraid_sas 0000:02:00.0: firmware crash dump	: no
+[    7.029883] megaraid_sas 0000:02:00.0: JBOD sequence map	: disabled
+[    7.029915] megaraid_sas 0000:02:00.0: Max firmware commands: 927 shared with nr_hw_queues = 1
+[    7.029918] scsi host11: Avago SAS based MegaRAID driver
 
-Anyway, if we -need- to route displays through the external GPU then we can.
-But I'd like to at least get convinced first that this is an actual necessity
-we should expect for multiple vendors, or the exception to the rule. Because
-if these laptops are capable of driving displays through Intel, at the moment
-not doing that is a huge downgrade in terms of functionality. -Especially- if
-these machines were already working in the field as-is. Probably worth noting
-I don't think I have yet to actually hear of any complaints about this being
-the case, and I'd like to also make sure this isn't a change being done for
-one or two vendors when most vendors aren't actually doing something like
-this.
 
-Note that for a lot of systems it won't -technically- be a big difference
-since the current situation in the market right now is that a lot of laptops
-will have all their external displays routed through the nvidia GPU and
-nowhere else. It's not great compared to just being able to use the well
-supported Intel GPU for everything though. And if we're controlling display
-routing through ACPI, that implies things aren't directly hooked up and
-someone went through the hassle of adding a display mux - which kind of seems
-like a waste of engineering effort and money if it can't actually be used for
-muxing between the two GPUs. Especially considering that up until very
-recently muxes had more or less been dropped from the majority of laptop
-vendors (I think Dell was an exception for this fwiw).
 
-Mark, since you're from Lenovo can you help to confirm this as well?
-
-Also re: external displays not even working: so then how exactly does the BIOS
-handle this? Is the BIOS changing the routing to the nvidia GPU then switching
-it back right before the OS load? I assume something must have been done to
-make it so that external displays aren't just suddenly broken there.
-
-And re: gsp work being done soon: it's going to be a while unfortunately,
-there's a lot for us to catch up on so it's hard for me to give a precise
-date.
-
-> Kai-Heng
-> 
-> > 
-> > If this is just for Intel/Intel systems though that's probably fine, and it
-> > might also be fine for AMD systems.
-> > 
-> > > 
-> > > > 
-> > > > BR,
-> > > > Jani.
-> > > > 
-> > > > > 
-> > > > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > > > > ---
-> > > > >  drivers/gpu/drm/i915/display/intel_acpi.c | 18 +++++++++++++++++-
-> > > > >  1 file changed, 17 insertions(+), 1 deletion(-)
-> > > > > 
-> > > > > diff --git a/drivers/gpu/drm/i915/display/intel_acpi.c b/drivers/gpu/drm/i915/display/intel_acpi.c
-> > > > > index e78430001f077..3bd5930e2769b 100644
-> > > > > --- a/drivers/gpu/drm/i915/display/intel_acpi.c
-> > > > > +++ b/drivers/gpu/drm/i915/display/intel_acpi.c
-> > > > > @@ -20,6 +20,7 @@ static const guid_t intel_dsm_guid =
-> > > > >                 0xa8, 0x54, 0x0f, 0x13, 0x17, 0xb0, 0x1c, 0x2c);
-> > > > > 
-> > > > >  #define INTEL_DSM_FN_GET_BIOS_DATA_FUNCS_SUPPORTED 0 /* No args */
-> > > > > +#define INTEL_DSM_FN_DP_IN_SWITCH_TO_DGFX 20 /* No args */
-> > > > > 
-> > > > >  static const guid_t intel_dsm_guid2 =
-> > > > >       GUID_INIT(0x3e5b41c6, 0xeb1d, 0x4260,
-> > > > > @@ -187,6 +188,7 @@ void intel_dsm_get_bios_data_funcs_supported(struct drm_i915_private *i915)
-> > > > >       struct pci_dev *pdev = to_pci_dev(i915->drm.dev);
-> > > > >       acpi_handle dhandle;
-> > > > >       union acpi_object *obj;
-> > > > > +     int supported = 0;
-> > > > > 
-> > > > >       dhandle = ACPI_HANDLE(&pdev->dev);
-> > > > >       if (!dhandle)
-> > > > > @@ -194,8 +196,22 @@ void intel_dsm_get_bios_data_funcs_supported(struct drm_i915_private *i915)
-> > > > > 
-> > > > >       obj = acpi_evaluate_dsm(dhandle, &intel_dsm_guid2, INTEL_DSM_REVISION_ID,
-> > > > >                               INTEL_DSM_FN_GET_BIOS_DATA_FUNCS_SUPPORTED, NULL);
-> > > > > -     if (obj)
-> > > > > +     if (obj) {
-> > > > > +             if (obj->type == ACPI_TYPE_INTEGER)
-> > > > > +                     supported = obj->integer.value;
-> > > > > +
-> > > > >               ACPI_FREE(obj);
-> > > > > +     }
-> > > > > +
-> > > > > +     /* Tiger Lake H DP-IN Boot Time Switching from iGfx to dGfx */
-> > > > > +     if (supported & BIT(20)) {
-> > > > > +             obj = acpi_evaluate_dsm(dhandle, &intel_dsm_guid2,
-> > > > > +                                     INTEL_DSM_REVISION_ID,
-> > > > > +                                     INTEL_DSM_FN_DP_IN_SWITCH_TO_DGFX,
-> > > > > +                                     NULL);
-> > > > > +             if (obj)
-> > > > > +                     ACPI_FREE(obj);
-> > > > > +     }
-> > > > >  }
-> > > > > 
-> > > > >  /*
-> > > > 
-> > > > --
-> > > > Jani Nikula, Intel Open Source Graphics Center
-> > > 
-> > 
-> > --
-> > Cheers,
-> >  Lyude Paul (she/her)
-> >  Software Engineer at Red Hat
-> > 
-> 
 
 -- 
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
-
+Chris Murphy

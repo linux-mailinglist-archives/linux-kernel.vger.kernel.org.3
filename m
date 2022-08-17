@@ -2,168 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6AB59744D
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F39BE597464
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240344AbiHQQlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 12:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51670 "EHLO
+        id S240359AbiHQQle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 12:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238112AbiHQQlI (ORCPT
+        with ESMTP id S237637AbiHQQl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 12:41:08 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E3D8287F
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:41:06 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so2489494pjl.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 09:41:06 -0700 (PDT)
+        Wed, 17 Aug 2022 12:41:29 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AF27CB74;
+        Wed, 17 Aug 2022 09:41:27 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id w19so25531284ejc.7;
+        Wed, 17 Aug 2022 09:41:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=+ikgV9j3l03eb081Wbda2p4MulJ7Ue+5+L1IC0y+zRw=;
-        b=Xm3zYn0XXhcqlUm6XwtiUXKvfhHNTJlwJ5rOGOdeIAENS+HTDHR8MoC+gv0BJ6FfGD
-         jW7eeUJEVwESibuvPt/A4l7PtNTXBTNMXGGO44s25K9ny7C8mmfzN9gPZN9CMoF95Lee
-         3by231uAWxez9zWEhzG+ANfWtvjh6CGyhTTZ3GZk7/jqwz4GsVpY6GSqdZAWLGaQozGv
-         M4RpuwhTP4UwCdNo+eMqiXcVD0ixxSJTKdcVqzX6rLjWQ5JV8+nlZ9fB8CMZZZ+TqazC
-         DUeJQabE9GlXzf+rwmAt43fAXtP5vatJCMn8wgXYiKZER8aE4lYobMMod8nyWa3oOnFY
-         qTcQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=rNsoClh34rx/3eWm5W2OOBZPW56iIjZI3iAQYDBsTWs=;
+        b=Fg3kShD9pR4kNxNRr0RRAEzvtaGoROTzXzWXbRQ/N91CLXomIxAXPrtyY9wuzmGqxt
+         PpAYP747oAMly9tDUBssvT0/SzL0sMfmiyUdREi922bQ+79YLQQh1pD6d84hz+NVO508
+         9eI6xz4JeRRTVVy2vTIOHEVSTX1twHcchbMm7OD4WsfQwMDDi2fNvWJoVX7QnbvLpdqi
+         K+ITvj0cIT6GIVMiK0Kn4nQarHEVisyChJxGc+GMvVWIpSF43p42fqPGKNKq/RrzjFF1
+         IWhRFrx/jpg6YSPFWsM7+q7EJDZoAGFAa+Or96qn+6wzCA1l1AM5xc21ELT8S9RRMv6K
+         xzKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=+ikgV9j3l03eb081Wbda2p4MulJ7Ue+5+L1IC0y+zRw=;
-        b=CsCezurmezfEovZ86mnr/hx6yiwxStfszsJrRjAbPNV62VMNYD1vJxo7tNrSXHdwqM
-         yaVjqXDJqsIc94Ocusz1Q3XLiMS3D6LCPUKQpoOwPs8vXxlVw6HY1R544nYHt+KUWS9+
-         ffy0uosyqjrzFbZVkOF5CeG2SdzKo37pBtIMP2ZJxY6cbeHwJBqByXkOnnXcLyir6x9J
-         nk1rwI3omwuudi4wqjdquntyQTcnEfke9gt9fE+c1G8eIVInSAsyh9LOcoxS+0UB+nEw
-         ljqEBe/goN5rE/h1nRiXOdZ5sSxsqaR+0EfnvL4P6l4qeb8DCHEwvOAXFq8bB9v2+ygo
-         9ZNQ==
-X-Gm-Message-State: ACgBeo2C4hf4CrJcqXLAtEJ7vTFrDp6AcKRuMEirIXtYRzvsb+1VjoJs
-        KhpJKDPZztlLjwslPJkqZnPLuA==
-X-Google-Smtp-Source: AA6agR5bKAhFJJYgDr81IUOVX+n51nW4MVPub70A4/x+j2SHk2CJkiB9rNZ00QaD5XiSVlzNhahDxw==
-X-Received: by 2002:a17:90b:4c8d:b0:1f5:29ef:4a36 with SMTP id my13-20020a17090b4c8d00b001f529ef4a36mr4688702pjb.127.1660754466127;
-        Wed, 17 Aug 2022 09:41:06 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id f8-20020a170902684800b001728ac8af94sm111593pln.248.2022.08.17.09.41.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 09:41:05 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 16:41:01 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        mlevitsk@redhat.com, vkuznets@redhat.com
-Subject: Re: [PATCH v2 2/9] KVM: x86: remove return value of kvm_vcpu_block
-Message-ID: <Yv0aHXcmuivyJDXw@google.com>
-References: <20220811210605.402337-1-pbonzini@redhat.com>
- <20220811210605.402337-3-pbonzini@redhat.com>
- <Yvwpb6ofD1S+Rqk1@google.com>
- <78616cf8-2693-72cc-c2cc-5a849116ffc7@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=rNsoClh34rx/3eWm5W2OOBZPW56iIjZI3iAQYDBsTWs=;
+        b=b2IuYNFZEhGoB8/fNjckgCq+tF45fSQg76Al8QWK3ScQTmuXNMjkT7R/3LSV96okcA
+         WjhUaJ83p2lYS8XxpWwTYpvOrC3Wi74nEHmpleZlFSsuNghzHZ8DT+QSbxeEW2+IBofX
+         gafVrkwo2j4UcrIDYA5IMvfpeUdzsXECcW0Qi8qYG6Cn5IP6L6FtCpJUIKNRcJ8ROzn+
+         PnUNgLvKTOEymcwBiWpLkWEGxcS/LeXyX3ASTbIL61Mw13XLwYuhr1ejZevq9ZcwVOto
+         B/FQG+tvar9V+SGuR33X/BHCLPNLNhMZseLVuTm6qFv3SBna3CMbxsQ/bhIK6mH6dVf3
+         TNpg==
+X-Gm-Message-State: ACgBeo2liMBzcOneKNdw+K3nyH5AIDr+NYJ6vPGhiSqr5dWTPgGNKckj
+        yS/UhH2tpt4t5clnpmA6LnatmFxWxQHFP1+y3fvka7W9
+X-Google-Smtp-Source: AA6agR43/EUtCmpuDIx6Cp4gPaEJ+4+mhJLvg5Xro6mu953BxwhuJ+tFEbrp3F4IZrN+k6uBxNoJnFPAv3V7yphTRTw=
+X-Received: by 2002:a17:907:e8d:b0:730:a4e8:27ed with SMTP id
+ ho13-20020a1709070e8d00b00730a4e827edmr16635182ejc.58.1660754485835; Wed, 17
+ Aug 2022 09:41:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <78616cf8-2693-72cc-c2cc-5a849116ffc7@redhat.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220817130807.68279-1-punit.agrawal@bytedance.com>
+In-Reply-To: <20220817130807.68279-1-punit.agrawal@bytedance.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 17 Aug 2022 09:41:14 -0700
+Message-ID: <CAADnVQJsDYhNmP6G7O8tVfHZ7rQLeJ4KpwAQweVidny0fgTbyw@mail.gmail.com>
+Subject: Re: [PATCH] bpf: Simplify code by using for_each_cpu_wrap()
+To:     Punit Agrawal <punit.agrawal@bytedance.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022, Paolo Bonzini wrote:
-> On 8/17/22 01:34, Sean Christopherson wrote:
-> > Isn't freeing up the return from kvm_vcpu_check_block() unnecessary?  Can't we
-> > just do:
-> > 
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index 9f11b505cbee..ccb9f8bdeb18 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -10633,7 +10633,7 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
-> >                  if (hv_timer)
-> >                          kvm_lapic_switch_to_hv_timer(vcpu);
-> > 
-> > -               if (!kvm_check_request(KVM_REQ_UNHALT, vcpu))
-> > +               if (!kvm_arch_vcpu_runnable(vcpu))
-> >                          return 1;
-> >          }
-> > 
-> > 
-> > which IMO is more intuitive and doesn't require reworking halt-polling (again).
-> 
-> This was my first idea indeed.  However I didn't like calling
-> kvm_arch_vcpu_runnable() again and "did it schedule()" seemed to be a less
-> interesting result from kvm_vcpu_block() (and in fact kvm_vcpu_halt() does
-> not bother passing it up the return chain).
+On Wed, Aug 17, 2022 at 6:08 AM Punit Agrawal
+<punit.agrawal@bytedance.com> wrote:
+>
+> No functional change intended.
 
-The flip side of calling kvm_arch_vcpu_runnable() again is that KVM will immediately
-wake the vCPU if it becomes runnable after kvm_vcpu_check_block().  The edge cases
-where the vCPU becomes runnable late are unlikely to truly matter in practice, but
-on the other hand manually re-checking kvm_arch_vcpu_runnable() means KVM gets both
-cases "right" (waited=true iff vCPU actually waited, vCPU awakened ASAP), whereas
-squishing the information into the return of kvm_vcpu_check_block() means KVM gets
-both cases "wrong" (waited=true even if schedule() was never called, vCPU left in
-a non-running state even though it's runnable).
+?
 
-My only hesitation with calling kvm_arch_vcpu_runnable() again is that it could be
-problematic if KVM somehow managed to consume the event that caused kvm_vcpu_has_events()
-to return true, but I don't see how that could happen without it being a KVM bug.
+> -       orig_cpu = cpu = raw_smp_processor_id();
+> -       while (1) {
+> +       for_each_cpu_wrap(cpu, cpu_possible_mask, raw_smp_processor_id()) {
+>                 struct pcpu_freelist_head *head;
+>
+>                 head = per_cpu_ptr(s->freelist, cpu);
+> @@ -68,15 +67,10 @@ static inline void ___pcpu_freelist_push_nmi(struct pcpu_freelist *s,
+>                         raw_spin_unlock(&head->lock);
+>                         return;
+>                 }
+> -               cpu = cpumask_next(cpu, cpu_possible_mask);
+> -               if (cpu >= nr_cpu_ids)
+> -                       cpu = 0;
+> -
+> -               /* cannot lock any per cpu lock, try extralist */
+> -               if (cpu == orig_cpu &&
+> -                   pcpu_freelist_try_push_extra(s, node))
+> -                       return;
+>         }
+> +
+> +       /* cannot lock any per cpu lock, try extralist */
+> +       pcpu_freelist_try_push_extra(s, node);
 
-Ah, and if we do go with the explicit check, it should come with a comment to call
-out that KVM needs to return up the stack, e.g.
-
-		/*
-		 * If KVM stopped blocking the vCPU but the vCPU is still not
-		 * runnable, then there is a pending host event of some kind,
-		 * e.g. a pending signal.  Return up the stack to service the
-		 * pending event without changing the vCPU's activity state.
-		 */
-		if (!kvm_arch_vcpu_runnable(vcpu))
-			return 1;
-
-so that we don't end combining the checks into:
-
-	while (!kvm_arch_vcpu_runnable(vcpu)) {
-		/*
-		 * Switch to the software timer before halt-polling/blocking as
-		 * the guest's timer may be a break event for the vCPU, and the
-		 * hypervisor timer runs only when the CPU is in guest mode.
-		 * Switch before halt-polling so that KVM recognizes an expired
-		 * timer before blocking.
-		 */
-		hv_timer = kvm_lapic_hv_timer_in_use(vcpu);
-		if (hv_timer)
-			kvm_lapic_switch_to_sw_timer(vcpu);
-
-		kvm_vcpu_srcu_read_unlock(vcpu);
-		if (vcpu->arch.mp_state == KVM_MP_STATE_HALTED)
-			kvm_vcpu_halt(vcpu);
-		else
-			kvm_vcpu_block(vcpu);
-		kvm_vcpu_srcu_read_lock(vcpu);
-
-		if (hv_timer)
-			kvm_lapic_switch_to_hv_timer(vcpu);
-	}
-
-which looks sane, but would mean KVM never bounces out to handle whatever event
-needs handling.
-
-Side topic, usage of kvm_apic_accept_events() appears to be broken (though nothing
-can trigger the bug).  If kvm_apic_accept_events() were to return an -errno, then
-kvm_arch_vcpu_ioctl_run() would return '0' to userspace without updating
-vcpu->run->exit_reason.  I think an easy fix is to drop the return value entirely
-and then WARN if kvm_check_nested_events() returns something other than -EBUSY.
-
-	if (is_guest_mode(vcpu)) {
-		r = kvm_check_nested_events(vcpu);
-		if (r < 0) {
-			WARN_ON_ONCE(r != -EBUSY);
-			return;
-		}
-
-
+This is obviously not equivalent!

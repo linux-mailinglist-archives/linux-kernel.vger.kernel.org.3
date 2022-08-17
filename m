@@ -2,161 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B239597164
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D68597159
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240196AbiHQOcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 10:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
+        id S236613AbiHQOc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 10:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240177AbiHQObt (ORCPT
+        with ESMTP id S237205AbiHQOcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 10:31:49 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD8B99278;
-        Wed, 17 Aug 2022 07:31:45 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 45AB71F388;
-        Wed, 17 Aug 2022 14:31:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1660746703; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dI8au4TC4OwrAtVxY+/Q1utvcrjiqiLbLdD/iRthRn0=;
-        b=hP4imqwJv2J/r4IeF81X6wXnVZVP61TEVNe4PFQHL2Diz4alE83ebVCiUn21bKw3KgHGDG
-        50wvI9If46JH0VXgsa6BNhCXsgYsLmYLXYcJErVwoXh4pdkVdx8h8aj0l0N3sQX+STVssl
-        LbjofBL/g1trwFe7PAHvtz9c49/4tTA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1660746703;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dI8au4TC4OwrAtVxY+/Q1utvcrjiqiLbLdD/iRthRn0=;
-        b=3NwqDGCjy5QY8cTxNV/SD2uLCNsKLuZUNd1z1V/nEVYN+xiIIDBDSd2mZP3UilVgKF8ZFu
-        MMUoh7EW/JwORSBw==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id AEF332C172;
-        Wed, 17 Aug 2022 14:31:41 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 39CACA066B; Wed, 17 Aug 2022 16:31:38 +0200 (CEST)
-Date:   Wed, 17 Aug 2022 16:31:38 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
-        lczerner@redhat.com, enwlinux@gmail.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yebin10@huawei.com, yukuai3@huawei.com
-Subject: Re: [PATCH 2/2] ext4: add inode table check in __ext4_get_inode_loc
- to aovid possible infinite loop
-Message-ID: <20220817143138.7krkxzoa3skruiyx@quack3>
-References: <20220817132701.3015912-1-libaokun1@huawei.com>
- <20220817132701.3015912-3-libaokun1@huawei.com>
+        Wed, 17 Aug 2022 10:32:15 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EF89676C
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:32:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Ci/l+oJ2hlAsRJOTtN5Ym+rTxP3jH6w4L9DWyAnNO5s=; b=kqvrMuMqEGhoSnMRwHTyieN5hi
+        oNJwGcdEvn2+JXgNxDvz9G8nqXYsxtOciMl6t1za+cI5jFHl6CDAhquxE+b752NZcO5NKfwHQDIcb
+        B9Z6x7LMD2ZCxIGNZcZsfZzA+d/Zyb2aNeqSL0/8MY0CxgIkEqa1toTz6ZdLaYv5rJJ2WUyQx15UB
+        ZPBjljHiSQ5Vjly+ZdCQkktTE7EvHzjO4gpR3x+/+WAHHv5biqeduAWAvzh7vim2Kz1vvo+B5mfjY
+        3TG1y+WvEB0QQ4/gl6GCUWHQqzqOUiTEkxI8OIqbdKklo+KUo5xFF/vE3E6TBZMZvftReFol6Glyp
+        GiV10RhQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oOK5T-005OCZ-5v;
+        Wed, 17 Aug 2022 14:32:03 +0000
+Date:   Wed, 17 Aug 2022 15:32:03 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        syzkaller <syzkaller@googlegroups.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] binderfs: rework superblock destruction
+Message-ID: <Yvz747fDzx8oO2Ym@ZenIV>
+References: <YvzUS/7bd1mm6c/V@kroah.com>
+ <20220817130306.96978-1-brauner@kernel.org>
+ <Yvz0JkdxXwY8uDyT@ZenIV>
+ <20220817140149.pfakskeyxkqcot54@wittgenstein>
+ <Yvz44WHBh94IvJt/@ZenIV>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220817132701.3015912-3-libaokun1@huawei.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yvz44WHBh94IvJt/@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 17-08-22 21:27:01, Baokun Li wrote:
-> In do_writepages, if the value returned by ext4_writepages is "-ENOMEM"
-> and "wbc->sync_mode == WB_SYNC_ALL", retry until the condition is not met.
+On Wed, Aug 17, 2022 at 03:19:13PM +0100, Al Viro wrote:
+> On Wed, Aug 17, 2022 at 04:01:49PM +0200, Christian Brauner wrote:
+> > On Wed, Aug 17, 2022 at 02:59:02PM +0100, Al Viro wrote:
+> > > On Wed, Aug 17, 2022 at 03:03:06PM +0200, Christian Brauner wrote:
+> > > 
+> > > > +static void binderfs_kill_super(struct super_block *sb)
+> > > > +{
+> > > > +	struct binderfs_info *info = sb->s_fs_info;
+> > > > +
+> > > > +	if (info && info->ipc_ns)
+> > > > +		put_ipc_ns(info->ipc_ns);
+> > > > +
+> > > > +	kfree(info);
+> > > > +	kill_litter_super(sb);
+> > > > +}
+> > > 
+> > > Other way round, please - shut the superblock down, *then*
+> > > free the objects it'd been using.  IOW,
+> > 
+> > I wondered about that but a lot of places do it the other way around.
+> > So maybe the expected order should be documented somewhere.
 > 
-> In __ext4_get_inode_loc, if the bh returned by sb_getblk is NULL,
-> the function returns -ENOMEM.
+> ???
 > 
-> In __getblk_slow, if the return value of grow_buffers is less than 0,
-> the function returns NULL.
+> "If you are holding internal references to dentries/inodes/etc., drop them
+> first; if you are going to free something that is used by filesystem
+> methods, don't do that before the filesystem is shut down"
 > 
-> When the three processes are connected in series like the following stack,
-> an infinite loop may occur:
-> 
-> do_writepages					<--- keep retrying
->  ext4_writepages
->   mpage_map_and_submit_extent
->    mpage_map_one_extent
->     ext4_map_blocks
->      ext4_ext_map_blocks
->       ext4_ext_handle_unwritten_extents
->        ext4_ext_convert_to_initialized
->         ext4_split_extent
->          ext4_split_extent_at
->           __ext4_ext_dirty
->            __ext4_mark_inode_dirty
->             ext4_reserve_inode_write
->              ext4_get_inode_loc
->               __ext4_get_inode_loc		<--- return -ENOMEM
->                sb_getblk
->                 __getblk_gfp
->                  __getblk_slow			<--- return NULL
->                   grow_buffers
->                    grow_dev_page		<--- return -ENXIO
->                     ret = (block < end_block) ? 1 : -ENXIO;
-> 
-> In this issue, bg_inode_table_hi is overwritten as an incorrect value.
-> As a result, `block < end_block` cannot be met in grow_dev_page.
-> Therefore, __ext4_get_inode_loc always returns '-ENOMEM' and do_writepages
-> keeps retrying. As a result, the writeback process is in the D state due
-> to an infinite loop.
-> 
-> Add a check on inode table block in the __ext4_get_inode_loc function by
-> referring to ext4_read_inode_bitmap to avoid this infinite loop.
-> 
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> That's just common sense...  Which filesystems are doing that "the other
+> way around"?
 
-Thanks for the fixes. Normally, we check that inode table is fine in
-ext4_check_descriptors() (and those checks are much stricter) so it seems
-unnecessary to check it again here. I understand that in your case it was
-resize that corrupted the group descriptor after the filesystem was mounted
-which is nasty but there's much more metadata that can be corrupted like
-this and it's infeasible to check each metadata block before we use it.
+Note that something like e.g. ramfs, where we have a dynamically allocated
+object ->s_fs_info is pointing to and gets freed early in their ->kill_sb()
+is somewhat misleading - it's used only for two things, one is the
+creation of root directory inode (obviously not going to happen at any
+point after mount) and another - ->show_options().  By the point we get
+around to killing a superblock, it would better *NOT* have mounts pointing
+to it that might show up in /proc/mounts and make us call ->show_options().
 
-IMHO a proper fix to this class of issues would be for sb_getblk() to
-return proper error so that we can distinguish ENOMEM from other errors.
-But that will be a larger undertaking...
-
-								Honza
-
-> ---
->  fs/ext4/inode.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-> index 601214453c3a..5e171879fa23 100644
-> --- a/fs/ext4/inode.c
-> +++ b/fs/ext4/inode.c
-> @@ -4466,9 +4466,17 @@ static int __ext4_get_inode_loc(struct super_block *sb, unsigned long ino,
->  	inodes_per_block = EXT4_SB(sb)->s_inodes_per_block;
->  	inode_offset = ((ino - 1) %
->  			EXT4_INODES_PER_GROUP(sb));
-> -	block = ext4_inode_table(sb, gdp) + (inode_offset / inodes_per_block);
->  	iloc->offset = (inode_offset % inodes_per_block) * EXT4_INODE_SIZE(sb);
->  
-> +	block = ext4_inode_table(sb, gdp);
-> +	if ((block <= le32_to_cpu(EXT4_SB(sb)->s_es->s_first_data_block)) ||
-> +	    (block >= ext4_blocks_count(EXT4_SB(sb)->s_es))) {
-> +		ext4_error(sb, "Invalid inode table block %llu in "
-> +			   "block_group %u", block, iloc->block_group);
-> +		return -EFSCORRUPTED;
-> +	}
-> +	block += (inode_offset / inodes_per_block);
-> +
->  	bh = sb_getblk(sb, block);
->  	if (unlikely(!bh))
->  		return -ENOMEM;
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+So there we really know that nothing during the shutdown will even look
+at that thing we'd just freed.  Not that there'd ever been a point allocating
+it - all that object contains is one unsigned short, so we might as well
+just have stored (void *)root_mode in ->s_fs_info.  Oh, well...

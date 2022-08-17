@@ -2,122 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25218596F32
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A69596F2E
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239602AbiHQNFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 09:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
+        id S236688AbiHQNEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 09:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239607AbiHQNEi (ORCPT
+        with ESMTP id S239532AbiHQND7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 09:04:38 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A2239BBD
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:04:03 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id v10so13479704ljh.9
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:04:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=DbSnvFkY9bvjJ+mlDkzyxC4/7mNnK/XqOObaGJH93/Q=;
-        b=DCXz4XYINVpHYEIMfmn91NIOhMiYQDX8amq9srJMdlyklU16yHc0GsXqp2R3vAsKJZ
-         eUB89uRwZgzbpTbLUfup3FuESytUkTEjOH2ayHi4YSEzShHbWCVJ4+X3PT+oafCwmYB/
-         w0tSfdgooKQUQ2gx3jPmG9jWPs6PKYP1ZARpXJFdmbFKEFcEYjBb6u9YAajQNjGLnSZA
-         mnQ7Tjl/jv0Ik6KktCuqWEmL+gsgPWIlw408Wgh3vOMdanfSEJwJkpvXmlgDMaYKQpcu
-         BQpqJN1KtIfU1armkcIxH0uN2kfHw3oNmSo0ZTTR5I2OCXpWsbnco54oomjKkiLzqYw1
-         c4tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=DbSnvFkY9bvjJ+mlDkzyxC4/7mNnK/XqOObaGJH93/Q=;
-        b=ktBXp+u1XJ7nOak8RdZOHuyGa62R/u6x1L+6ZShhg7GZCFwhuMXXqpJMaWPdkFwc5i
-         gROnwnH1cAlkZnqX6c14eKw8w0ZQ4qpkTMfncRxzFheJCXaxABcNHXFrocfMUCukXQzR
-         IQ+L/HmrOrqYBKwY/x37grJuyzAl3nT6jr5Cv8Hmr2plhixp1EriHylRcT2L1vPznpZS
-         wXHgMRUvE8RGI1dd7TDSF62GsRZ/8fDZqeQdMqAQZcSq7aubN+k10n+WZQqV4nKfFOao
-         llObF70YZH1Dt/EnwWo3aUUbMFPxCRLHGG757JYBotuaAuhnG495FJpp9SEm4+ve2Yq/
-         4j4A==
-X-Gm-Message-State: ACgBeo2foPCFtFmntb017Ldo/TCg2KiH8gidjO527zgTnCnUZKzJPGhr
-        RZPB7sbfnQhI8yk9fAQd9I4CuA==
-X-Google-Smtp-Source: AA6agR6LJukHMCtjGeJCKZ10+lfXnY0NJek6O2mC9zKYYS73f8w/yuUFVBQrcBJuS3faugWXHdjczA==
-X-Received: by 2002:a2e:bf11:0:b0:261:9343:fb2 with SMTP id c17-20020a2ebf11000000b0026193430fb2mr3084063ljr.47.1660741441473;
-        Wed, 17 Aug 2022 06:04:01 -0700 (PDT)
-Received: from krzk-bin.. (d15l54h48cw7vbh-qr4-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1b1c:14b7:109b:ed76])
-        by smtp.gmail.com with ESMTPSA id v1-20020ac25601000000b0048b3768d2ecsm1683243lfd.174.2022.08.17.06.04.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 06:04:01 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RFT PATCH v2 08/14] arm64: dts: qcom: sc7180: switch TCSR mutex to MMIO
-Date:   Wed, 17 Aug 2022 16:03:36 +0300
-Message-Id: <20220817130342.568396-9-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220817130342.568396-1-krzysztof.kozlowski@linaro.org>
-References: <20220817130342.568396-1-krzysztof.kozlowski@linaro.org>
+        Wed, 17 Aug 2022 09:03:59 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4050C32049;
+        Wed, 17 Aug 2022 06:03:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=8tSVbs/LntHCfdjrxtk7ceXw6TPtMo4nIYUkIIRtVa4=; b=TUYGDjo5Eb2C+vokB8lSzbnHTV
+        FxOXCuCCTso8IKA26Dds1MHiVap25aWsBqDfMrSAfdetz5F38Njwrq7LSinw80hTP1RQ8VwP8qy0v
+        7nRsJ9iJd9DpyBqYujIGvKYSJahc/HW6bsUkkcTOydv1t4XrhRac50TnUR6TepqFHAZfx1WHAPaz2
+        9T/QLjxx2nykjKy9HbBQ8OibboBOKmwBLlH4IsSqotH1UU7wt5BZ0CstHJkqDCeYkuT+Ac1jQq+vt
+        MlxLdvXedqGnarZIbn+D2o5PGLGOEVupFFTe7erGNcfxZ4C6okDm8ETszLbb9v3vt4+VyxJftLprh
+        59bIzbvQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oOIht-003I0R-UD; Wed, 17 Aug 2022 13:03:41 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 84568980256; Wed, 17 Aug 2022 15:03:37 +0200 (CEST)
+Date:   Wed, 17 Aug 2022 15:03:37 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marco Elver <elver@google.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
+        x86@kernel.org, linux-sh@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 11/14] perf/hw_breakpoint: Reduce contention with
+ large number of tasks
+Message-ID: <YvznKYgRKjDRSMkT@worktop.programming.kicks-ass.net>
+References: <20220704150514.48816-1-elver@google.com>
+ <20220704150514.48816-12-elver@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220704150514.48816-12-elver@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The TCSR mutex bindings allow device to be described only with address
-space (so it uses MMIO, not syscon regmap).  This seems reasonable as
-TCSR mutex is actually a dedicated IO address space and it also fixes DT
-schema checks:
+On Mon, Jul 04, 2022 at 05:05:11PM +0200, Marco Elver wrote:
+> +static bool bp_constraints_is_locked(struct perf_event *bp)
+> +{
+> +	struct mutex *tsk_mtx = get_task_bps_mutex(bp);
+> +
+> +	return percpu_is_write_locked(&bp_cpuinfo_sem) ||
+> +	       (tsk_mtx ? mutex_is_locked(tsk_mtx) :
+> +			  percpu_is_read_locked(&bp_cpuinfo_sem));
+> +}
 
-  qcom/sc7180-trogdor-wormdingler-rev1-inx.dtb: hwlock: 'reg' is a required property
-  qcom/sc7180-trogdor-wormdingler-rev1-inx.dtb: hwlock: 'syscon' does not match any of the regexes: 'pinctrl-[0-9]+'
+> @@ -426,18 +521,28 @@ static int modify_bp_slot(struct perf_event *bp, u64 old_type, u64 new_type)
+>   */
+>  int dbg_reserve_bp_slot(struct perf_event *bp)
+>  {
+> -	if (mutex_is_locked(&nr_bp_mutex))
+> +	int ret;
+> +
+> +	if (bp_constraints_is_locked(bp))
+>  		return -1;
+>  
+> -	return __reserve_bp_slot(bp, bp->attr.bp_type);
+> +	/* Locks aren't held; disable lockdep assert checking. */
+> +	lockdep_off();
+> +	ret = __reserve_bp_slot(bp, bp->attr.bp_type);
+> +	lockdep_on();
+> +
+> +	return ret;
+>  }
+>  
+>  int dbg_release_bp_slot(struct perf_event *bp)
+>  {
+> -	if (mutex_is_locked(&nr_bp_mutex))
+> +	if (bp_constraints_is_locked(bp))
+>  		return -1;
+>  
+> +	/* Locks aren't held; disable lockdep assert checking. */
+> +	lockdep_off();
+>  	__release_bp_slot(bp, bp->attr.bp_type);
+> +	lockdep_on();
+>  
+>  	return 0;
+>  }
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sc7180.dtsi | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 5d2dd21da79c..e8debb0da411 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -555,12 +555,6 @@ scm {
- 		};
- 	};
- 
--	tcsr_mutex: hwlock {
--		compatible = "qcom,tcsr-mutex";
--		syscon = <&tcsr_mutex_regs 0 0x1000>;
--		#hwlock-cells = <1>;
--	};
--
- 	smem {
- 		compatible = "qcom,smem";
- 		memory-region = <&smem_mem>;
-@@ -1462,9 +1456,10 @@ ipa: ipa@1e40000 {
- 			status = "disabled";
- 		};
- 
--		tcsr_mutex_regs: syscon@1f40000 {
--			compatible = "syscon";
-+		tcsr_mutex: hwlock@1f40000 {
-+			compatible = "qcom,tcsr-mutex";
- 			reg = <0 0x01f40000 0 0x20000>;
-+			#hwlock-cells = <1>;
- 		};
- 
- 		tcsr_regs_1: sycon@1f60000 {
--- 
-2.34.1
+Urggghhhh... this is horrible crap. That is, the current code is that
+and this makes it worse :/
 

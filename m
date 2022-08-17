@@ -2,61 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 747CC5979A2
+	by mail.lfdr.de (Postfix) with ESMTP id C34F55979A3
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 00:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238693AbiHQW1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 18:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35852 "EHLO
+        id S232902AbiHQW2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 18:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbiHQW1g (ORCPT
+        with ESMTP id S231685AbiHQW2j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 18:27:36 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7AB543CF
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 15:27:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660775255; x=1692311255;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HOOj5cgs232PG46tMHNfueq1jCXMN+cqDGIBat98Jgw=;
-  b=KGp+On6UtqUxxbROJfznZT+FWNA637SVFYoXOGSTN2P/TVMaxjmFcnxE
-   qLERP6POUdBtAsi/adPBBJRrvZwZCM0C+hakjshgV7qCQo2h4y+TkX17n
-   PIele1gllYXRM3Zan6ku7bAJ3+uGQWuusXuwGX4NWwO7chhQ7kH4MKpNm
-   xpfelHKB+depdAUQNGK5GIUeXUcoBfuufW0tVVnmA/BzT/oHFYtVxthKg
-   /Uwz40W6DiQl4J5elmkIMI8jhkBMbc1KNtv7txjQuUz4z0rNQ4Y5KnS+4
-   TNBkqSJMu667VYScVJyI7BWZUd0l4vPsPEsFyXG+DEciqqrqsBO36lagg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="293889960"
-X-IronPort-AV: E=Sophos;i="5.93,244,1654585200"; 
-   d="scan'208";a="293889960"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 15:26:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,244,1654585200"; 
-   d="scan'208";a="935545904"
-Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 17 Aug 2022 15:26:38 -0700
-Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oORUj-0001PG-1x;
-        Wed, 17 Aug 2022 22:26:37 +0000
-Date:   Thu, 18 Aug 2022 06:26:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Arend van Spriel <arend.vanspriel@broadcom.com>
-Subject: [asahilinux:bits/080-wifi 5/29]
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1849:25: warning:
- format '%ld' expects argument of type 'long int', but argument 4 has type
- 'size_t' {aka 'unsigned int'}
-Message-ID: <202208180605.2ZGfdKsv-lkp@intel.com>
+        Wed, 17 Aug 2022 18:28:39 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AF64BD32
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 15:28:36 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id n4so17675290wrp.10
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 15:28:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=o1hj40RfZIutgTtHY6Ei4iwhGh1778mLr0oxD454ZKw=;
+        b=dxQEBsrSOL6uneP8vspbdKN8cBHPLmh476RXn4nJLef2SC2AaP3hEaVfFfI+RNXVBC
+         vgzrUEQdxYMNrJ+jezUDoyob0kbiLE7ORKCdTBLFa2i3RQKy1foqJ61Gs3yaQS61PK99
+         hKCF/kgqBaIHTekyfAfoVByipKAm6EgVGHNqnfh0M6ZBcTluXibNNSDJkKCQJH9N0cWp
+         MaZ/MngfqLuXRrfljnJ/CdzaaBF5y3lB2jjOH9eC3r36yDFw56U7vu6Y6F/AWxpmWg4k
+         +gFmn3dYTFKgVYuqjbtEl0Io2egt9yfZOdljmrlRETUhbMaQg7UXCc4GMk8ygxXXKw4u
+         zrMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=o1hj40RfZIutgTtHY6Ei4iwhGh1778mLr0oxD454ZKw=;
+        b=pL9/ISlthLPEoC5d7J1/C+S31pRZ/SVstE/ELcK2Igv8KWMHUKbjJfv8bQYFEGWEnw
+         L0JohVOonhPrhWddCwtwfzTun/1HJ19OG8miuTXtdgn9iBrImBPvYScdC84pFcjceMUw
+         3gPmCmSUlzBknHBZKJstTj3N4Q8b6IkzQrJrObb9OqnK2asFoWaNx2u5w9hnnIQJL9NQ
+         y+hTa2cz5X6YcIhHxjEJ/rx7Av0rtRAeGftwV+ZG+I3zmfCYdJuA8VliysFeKUcQr8W3
+         b8M4ZZYYL/qKcZTmCydRar9xcWOwGHgIANfi+px8v8utlvYHkAHjZCZO2H4lPcRIG9aE
+         e+Wg==
+X-Gm-Message-State: ACgBeo0iswl0L7jUC9o3kXkdzrX3f4tOVuqymEBCDAZxQCghIdmuMRVV
+        atNaiLvY8KO5hEROmqH52yNX2UMgKwL1vFpKml+oyw==
+X-Google-Smtp-Source: AA6agR7tp4biFjNEHKNs+HqaDuNi3dJzl8FDIEl5tWodRn34g8QXrKQ82nA0862GDnxXcX0/CDLqX7FOZ/emHPTcrpA=
+X-Received: by 2002:a05:6000:11d0:b0:225:1c12:65f8 with SMTP id
+ i16-20020a05600011d000b002251c1265f8mr76041wrx.80.1660775315237; Wed, 17 Aug
+ 2022 15:28:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220628220938.3657876-1-yosryahmed@google.com>
+ <20220628220938.3657876-2-yosryahmed@google.com> <20220817102408.7b048f198a736f053ced2862@linux-foundation.org>
+In-Reply-To: <20220817102408.7b048f198a736f053ced2862@linux-foundation.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Wed, 17 Aug 2022 15:27:58 -0700
+Message-ID: <CAJD7tkZQ07dZtcTSirj0qLawaE3Ndyn-385m_kL09=gsfO9QwA@mail.gmail.com>
+Subject: Re: [PATCH v6 1/4] mm: add NR_SECONDARY_PAGETABLE to count secondary
+ page table uses.
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Oliver Upton <oupton@google.com>, Huang@google.com,
+        Shaoqin <shaoqin.huang@intel.com>,
+        Cgroups <cgroups@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,91 +88,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/080-wifi
-head:   7d81b0de135b5d5db04e0ebe68165f588b9d1e5a
-commit: 6a97116886de5d6fc930cdd761638bcd7c8a42ef [5/29] brcmfmac: pcie: Read Apple OTP information
-config: openrisc-allyesconfig (https://download.01.org/0day-ci/archive/20220818/202208180605.2ZGfdKsv-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/6a97116886de5d6fc930cdd761638bcd7c8a42ef
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/080-wifi
-        git checkout 6a97116886de5d6fc930cdd761638bcd7c8a42ef
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=openrisc SHELL=/bin/bash drivers/net/wireless/broadcom/brcm80211/brcmfmac/ kernel/rcu/
+On Wed, Aug 17, 2022 at 10:24 AM Andrew Morton
+<akpm@linux-foundation.org> wrote:
+>
+> On Tue, 28 Jun 2022 22:09:35 +0000 Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> > We keep track of several kernel memory stats (total kernel memory, page
+> > tables, stack, vmalloc, etc) on multiple levels (global, per-node,
+> > per-memcg, etc). These stats give insights to users to how much memory
+> > is used by the kernel and for what purposes.
+> >
+> > Currently, memory used by kvm mmu is not accounted in any of those
+> > kernel memory stats. This patch series accounts the memory pages
+> > used by KVM for page tables in those stats in a new
+> > NR_SECONDARY_PAGETABLE stat. This stat can be later extended to account
+> > for other types of secondary pages tables (e.g. iommu page tables).
+> >
+> > KVM has a decent number of large allocations that aren't for page
+> > tables, but for most of them, the number/size of those allocations
+> > scales linearly with either the number of vCPUs or the amount of memory
+> > assigned to the VM. KVM's secondary page table allocations do not scale
+> > linearly, especially when nested virtualization is in use.
+> >
+> > >From a KVM perspective, NR_SECONDARY_PAGETABLE will scale with KVM's
+> > per-VM pages_{4k,2m,1g} stats unless the guest is doing something
+> > bizarre (e.g. accessing only 4kb chunks of 2mb pages so that KVM is
+> > forced to allocate a large number of page tables even though the guest
+> > isn't accessing that much memory). However, someone would need to either
+> > understand how KVM works to make that connection, or know (or be told) to
+> > go look at KVM's stats if they're running VMs to better decipher the stats.
+> >
+> > Furthermore, having NR_PAGETABLE side-by-side with NR_SECONDARY_PAGETABLE
+> > is informative. For example, when backing a VM with THP vs. HugeTLB,
+> > NR_SECONDARY_PAGETABLE is roughly the same, but NR_PAGETABLE is an order
+> > of magnitude higher with THP. So having this stat will at the very least
+> > prove to be useful for understanding tradeoffs between VM backing types,
+> > and likely even steer folks towards potential optimizations.
+> >
+> > The original discussion with more details about the rationale:
+> > https://lore.kernel.org/all/87ilqoi77b.wl-maz@kernel.org
+> >
+> > This stat will be used by subsequent patches to count KVM mmu
+> > memory usage.
+>
+> Nits and triviata:
+>
+> > --- a/Documentation/filesystems/proc.rst
+> > +++ b/Documentation/filesystems/proc.rst
+> > @@ -977,6 +977,7 @@ Example output. You may not have all of these fields.
+> >      SUnreclaim:       142336 kB
+> >      KernelStack:       11168 kB
+> >      PageTables:        20540 kB
+> > +    SecPageTables:         0 kB
+> >      NFS_Unstable:          0 kB
+> >      Bounce:                0 kB
+> >      WritebackTmp:          0 kB
+> > @@ -1085,6 +1086,9 @@ KernelStack
+> >                Memory consumed by the kernel stacks of all tasks
+> >  PageTables
+> >                Memory consumed by userspace page tables
+> > +SecPageTables
+> > +              Memory consumed by secondary page tables, this currently
+> > +           currently includes KVM mmu allocations on x86 and arm64.
+>
+> Something happened to the whitespace there.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Yeah I have the fix for this queued for v7. Thanks!
 
-All warnings (new ones prefixed by >>):
+>
+> > +                          "Node %d SecPageTables:  %8lu kB\n"
+> > ...
+> > +                          nid, K(node_page_state(pgdat, NR_SECONDARY_PAGETABLE)),
+>
+> The use of "sec" in the user-facing changes and "secondary" in the
+> programmer-facing changes is irksome.  Can we be consistent?  I'd
+> prefer "secondary" throughout.
+>
 
-   In file included from drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:33:
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c: In function 'brcmf_pcie_parse_otp':
->> drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1849:25: warning: format '%ld' expects argument of type 'long int', but argument 4 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-    1849 |         brcmf_dbg(PCIE, "parse_otp size=%ld\n", size);
-         |                         ^~~~~~~~~~~~~~~~~~~~~~  ~~~~
-         |                                                 |
-         |                                                 size_t {aka unsigned int}
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/debug.h:77:21: note: in definition of macro 'brcmf_dbg'
-      77 |                     fmt, ##__VA_ARGS__);                        \
-         |                     ^~~
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1849:43: note: format string is defined here
-    1849 |         brcmf_dbg(PCIE, "parse_otp size=%ld\n", size);
-         |                                         ~~^
-         |                                           |
-         |                                           long int
-         |                                         %d
+SecondaryPageTables is too long (unfortunately), it messes up the
+formatting in node_read_meminfo() and meminfo_proc_show(). I would
+prefer "secondary" as well, but I don't know if breaking the format in
+this way is okay.
 
+This is what I mean by breaking the format btw (the numbers become misaligned):
 
-vim +1849 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+diff --git a/drivers/base/node.c b/drivers/base/node.c
+index 5ad56a0cd593..4f85750a0f8e 100644
+--- a/drivers/base/node.c
++++ b/drivers/base/node.c
+@@ -433,7 +433,7 @@ static ssize_t node_read_meminfo(struct device *dev,
+                             "Node %d ShadowCallStack:%8lu kB\n"
+ #endif
+                             "Node %d PageTables:     %8lu kB\n"
+-                            "Node %d SecPageTables:  %8lu kB\n"
++                            "Node %d SecondaryPageTables:  %8lu kB\n"
+                             "Node %d NFS_Unstable:   %8lu kB\n"
+                             "Node %d Bounce:         %8lu kB\n"
+                             "Node %d WritebackTmp:   %8lu kB\n"
+diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
+index 208efd4fa52c..b7166d09a38f 100644
+--- a/fs/proc/meminfo.c
++++ b/fs/proc/meminfo.c
+@@ -115,7 +115,7 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
+ #endif
+        show_val_kb(m, "PageTables:     ",
+                    global_node_page_state(NR_PAGETABLE));
+-       show_val_kb(m, "SecPageTables:  ",
++       show_val_kb(m, "SecondaryPageTables:    ",
+                    global_node_page_state(NR_SECONDARY_PAGETABLE));
 
-  1842	
-  1843	static int
-  1844	brcmf_pcie_parse_otp(struct brcmf_pciedev_info *devinfo, u8 *otp, size_t size)
-  1845	{
-  1846		int p = 0;
-  1847		int ret = -EINVAL;
-  1848	
-> 1849		brcmf_dbg(PCIE, "parse_otp size=%ld\n", size);
-  1850	
-  1851		while (p < (size - 1)) {
-  1852			u8 type = otp[p];
-  1853			u8 length = otp[p + 1];
-  1854	
-  1855			if (type == 0)
-  1856				break;
-  1857	
-  1858			if ((p + 2 + length) > size)
-  1859				break;
-  1860	
-  1861			switch (type) {
-  1862			case BRCMF_OTP_SYS_VENDOR:
-  1863				brcmf_dbg(PCIE, "OTP @ 0x%x (%d): SYS_VENDOR\n",
-  1864					  p, length);
-  1865				ret = brcmf_pcie_parse_otp_sys_vendor(devinfo,
-  1866								      &otp[p + 2],
-  1867								      length);
-  1868				break;
-  1869			case BRCMF_OTP_BRCM_CIS:
-  1870				brcmf_dbg(PCIE, "OTP @ 0x%x (%d): BRCM_CIS\n",
-  1871					  p, length);
-  1872				break;
-  1873			default:
-  1874				brcmf_dbg(PCIE, "OTP @ 0x%x (%d): Unknown type 0x%x\n",
-  1875					  p, length, type);
-  1876				break;
-  1877			}
-  1878	
-  1879			p += 2 + length;
-  1880		}
-  1881	
-  1882		return ret;
-  1883	}
-  1884	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+        show_val_kb(m, "NFS_Unstable:   ", 0);

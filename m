@@ -2,113 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E9C5978CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A2305978D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241875AbiHQVOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 17:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48618 "EHLO
+        id S241849AbiHQVPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 17:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241740AbiHQVOF (ORCPT
+        with ESMTP id S241421AbiHQVPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 17:14:05 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594A42A438
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 14:14:01 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3359a55dcb6so32637427b3.21
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 14:14:01 -0700 (PDT)
+        Wed, 17 Aug 2022 17:15:44 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5333657560
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 14:15:43 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id o7so413893pfb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 14:15:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=URg+UMQZgJAJZD19p4gwvvadtL6QiS5A6GMenmjwJgY=;
-        b=SRObGBGBG2sRxe2+tGmXszzXIzti/OIGxkLLhYH/K9EzOKWGAOSbFZcnNiSbSrfEH1
-         IS03Ciz5Y5XLkip4EtQzvRPLpihmjrh/kzWkFvimmx1y/IMQfU8uz8sSVeXI70UajTdv
-         VEPUBCb/EaS6GLIE9GpsLB+ouvqg5iovDF9cmXOrKm9tsHMfQ1Jfued6B9TLqONuxlcz
-         5jswcGo+LoYU8w3wK6e6vvrXw1U2Oher3+46zQDHkwPj5fzemLZ+5CSQF5b46ZC9+djo
-         UXjXOpcwSjExip49HwmqLqdjoPKWC+gXaUHyhunxTTeeKEN9pJGOodbr+X2YitB8bnA2
-         k7EQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=W68mRWKkzm4aDvuZ9fpamtsHCYcoX/l6oOU0+8H2cO4=;
+        b=ghlXe6amfyyPTIvD8h2OzBZpSNxzzwySTwBtK1UPSmnioTgnh6ix6wHqO5kkTg0id+
+         msSOuCmLyksrTHImHfmjouS47CtMFxITU5gi9f9dvldGB5A+XaCdOygO9Wk1kI2fG01k
+         mnkM6RBrYtjI5H9PhOLA9YFlbm3DdpnK9Iq/2bqLHlbzzTpDQvfbmoKgltQTn0/p6NAc
+         DCKybAFDCfMwKpL/UM2ZDY1iiUGT/jsB60Wt2vXKlXfCy4i8Axz5tjYLUI3gqKqx83+P
+         WiTAExMVQs73pP/z+J3YbTy8VXkGUNvfdnVY18SLK8UfHsWoced8Q2a6VlJc/8tg5gh3
+         g7ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=URg+UMQZgJAJZD19p4gwvvadtL6QiS5A6GMenmjwJgY=;
-        b=aX/iIy/oJbsw4FOz5bR83T8ndU1L9AYrbZaF1aixgqJPyJs6v0FF1aexZAul1yCE2o
-         xaXNELMZkhsRdrHav2hzBbBPuNBZ7wR/0t7DJZElBNkYgmedke6D2IzYjVg09kyBy398
-         EY5G+L3sI0CcHwKW7O1Wx88ORGoo4156uBa+SUISCpJOn/DoxsH+kGAzVuR3BSJDglVs
-         SgoacjUNvcqBS3M51PafMltFgAKy/H2mC9ZiCt3NUKzH7e9OzRqdoqf+ihtlJ/ln0XE+
-         0qe7kOM2W78qgDMOBxD7Sf9UGc43j61+JCIYJqlBTrNIMET3AyoeXVOszFt8cW1r0U9M
-         xAcg==
-X-Gm-Message-State: ACgBeo2itMkIvCCbtAAyRXoCPAzDBhFC7Sey5m/pgzAFUHtzLJotnbeq
-        yqayvnrLBoEWgI/PsBiie7D78fwe7/lAjNmiEwWL
-X-Google-Smtp-Source: AA6agR6WBtTNLco5wa8t9uk8XSJjuDXXNwRdbOpIyGssHp2EbU6D8jDQ4yBgt9G5ppX7ffVKK3xkGU+G4y+8VrFU7KYb
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2d4:203:2f41:f176:4bac:b729])
- (user=axelrasmussen job=sendgmr) by 2002:a81:ad58:0:b0:329:5b1:106e with SMTP
- id l24-20020a81ad58000000b0032905b1106emr10097ywk.371.1660770840476; Wed, 17
- Aug 2022 14:14:00 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 14:13:56 -0700
-Message-Id: <20220817211356.273019-1-axelrasmussen@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH] selftests/vm: fix inability to build any vm tests
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=W68mRWKkzm4aDvuZ9fpamtsHCYcoX/l6oOU0+8H2cO4=;
+        b=OfbsObQMgoEeNg3rCtC7xuZv0wZX5pZ58LlB8TW7PHiqgy4JFO11unugZlLUhKnco5
+         f/WQ4Jmsr4PWsGFx4RVWhuywzGIL7UIjaDN5H9nZwwABPxY3k51g2bgs6H2SNp4YvqrR
+         3Re/AsONZEuCbwzeyOIYhGRxl3PCQYjNV734Zg8SXfggXm0evFjSvjkQ4RSfGgruZYTC
+         TA/wHnSpPf50eyO12KDesrq4LzsFknfDjTQOyrukQK9VP4QZhzGdQSNQDnt7t6riBK73
+         uwhLe/8aiaFSlxmAlti5JtUAiekCPN7kOCAaoFf0eDcM+qFYE3gn6wjGde1fUWDsBUrs
+         CNfg==
+X-Gm-Message-State: ACgBeo3HEqnF6ht8LFI0TsBMaS98BXACc7Ihma0uUnFk/6adxE5MfMb/
+        tx2ThrmWmOuy8haQ0tlvFPX/7CIe+0VYfCjpRL0vNA==
+X-Google-Smtp-Source: AA6agR6xwfKf6D6wqNoQEEBkzrbPSMQzcv/mEr1zpbHYDP+XutaFQHfIfvT6kzRf52oEndp3Hrk4Z/xqu9kGSqZXvJM=
+X-Received: by 2002:a05:6a00:2392:b0:52e:b4fb:848 with SMTP id
+ f18-20020a056a00239200b0052eb4fb0848mr62888pfc.8.1660770942604; Wed, 17 Aug
+ 2022 14:15:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220816185801.651091-1-shy828301@gmail.com>
+In-Reply-To: <20220816185801.651091-1-shy828301@gmail.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Wed, 17 Aug 2022 14:15:31 -0700
+Message-ID: <CALvZod5kbOf+-jVWBhb1ior0oyWUKjMT57bip_eGGxWwSDVf=A@mail.gmail.com>
+Subject: Re: [PATCH] mm: memcg: export workingset refault stats for cgroup v1
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we stopped using KSFT_KHDR_INSTALL, a side effect is we also
-changed the value of `top_srcdir`. This can be seen by looking at the
-code removed by:
+On Tue, Aug 16, 2022 at 11:58 AM Yang Shi <shy828301@gmail.com> wrote:
+>
+> Workingset refault stats are important and usefule metrics to measure
 
-    49de12ba06ef ("selftests: drop KSFT_KHDR_INSTALL make target"):
+*useful
 
-(Note though that this commit didn't break this, technically the one
-before it did since that's the one that stopped KSFT_KHDR_INSTALL from
-being used, even though the code was still there.)
+> how well reclaimer and swapping work and how healthy the services are,
+> but they are just available for cgroup v2.  There are still plenty users
+> with cgroup v1, export the stats for cgroup v1.
+>
+> Signed-off-by: Yang Shi <shy828301@gmail.com>
 
-Previously lib.mk reconfigured `top_srcdir` when KSFT_KHDR_INSTALL was
-being used. Now, that's no longer the case.
-
-As a result, the path to gup_test.h in vm/Makefile was wrong, and
-since it's a dependency of all of the vm binaries none of them could
-be built. Instead, we'd get an "error" like:
-
-    make[1]: *** No rule to make target '/[...]/tools/testing/selftests/vm/compaction_test', needed by 'all'.  Stop.
-
-If we specify the path of gup_test.h relatively using selfdir instead,
-now it is found correctly, and things work again.
-
-Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- tools/testing/selftests/vm/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index d9fa6a9ea584..f2a12494f2d8 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- # Makefile for vm selftests
- 
--LOCAL_HDRS += $(selfdir)/vm/local_config.h $(top_srcdir)/mm/gup_test.h
-+LOCAL_HDRS += $(selfdir)/vm/local_config.h $(selfdir)/../../../mm/gup_test.h
- 
- include local_config.mk
- 
--- 
-2.37.1.595.g718a3a8f04-goog
-
+Acked-by: Shakeel Butt <shakeelb@google.com>

@@ -2,117 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A285959754C
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:50:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D94F2597561
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240705AbiHQRum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58044 "EHLO
+        id S239354AbiHQRvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240596AbiHQRuk (ORCPT
+        with ESMTP id S236230AbiHQRvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:50:40 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B757753AF;
-        Wed, 17 Aug 2022 10:50:39 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id x63-20020a17090a6c4500b001fabbf8debfso1749440pjj.4;
-        Wed, 17 Aug 2022 10:50:39 -0700 (PDT)
+        Wed, 17 Aug 2022 13:51:38 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52E67B786
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:51:37 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id p18so12601623plr.8
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:51:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=pY3XHrB+Wi3bKxfBpJp50GFS99FF73DUvD5Y05CzuoI=;
-        b=IHO0SHseMzeS46BS8DB8qYHNx/9K9Po2jDjannSsFW2u2SxIKIlUWdtLYliYqIwuAL
-         RSHh9vvEhqVGPqkSk96CH9Z26mDMkYksVRag3woPYyGSI+AWvc/XeeEFsznYNqhTWPjx
-         G01h0D/sR6Mz1fDC0eIZM4N4oID0PT/CS75Rg0jXj+Bjl8W8J6ymnhozLu9BdIVnZkKN
-         tBZzWaKRxMnu22tL6TNYFspubTCbaM1VaVMEqhw4pw6LNCKtq6x4kaL7MP3PTw72htYo
-         Y6XS0hjYg6M/LBS/V4fMQ56/tQdgJPS3WiGpXVgPZDFn4EAsjB0kXxKt8UAK0mQ5uxlk
-         12PQ==
+        d=yocom-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=kWck20S1B+F14QNxCoJfAR+/3TD94IN6T9hA3skKazc=;
+        b=GXH9jSMPPj0o5jJEYkmfhqF7ueKW2cVKn5uh7+RxeTQWuYByj4vGGyqPH6i0mhj5cz
+         mfGUvN8CWxJGdJ/ICESAHxubo2RBuu5lcCX2w7Iv8vNe3yrYCTjpUnfKkgON3lGRSzWC
+         9UUIvAtWE8REDTU+FFo46bIrT4szc86T8Cv73RVOcKZEM/Evy802fBjGSle4DQDdp7dL
+         XFq/gz/YEW35sSql3gwF0yQM6gg4s9LzTF48yBvdxXRdvWqM6iR+zJRWLCEWKTeExiwT
+         9wgbpLoBgMkA83yJ6KAwrMVBnKUjJTa4tlSsAAaL2lRs/k+bNAJfey1AYeUOWdyi36hG
+         n5+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=pY3XHrB+Wi3bKxfBpJp50GFS99FF73DUvD5Y05CzuoI=;
-        b=qdgtlgrunqtDZg6c5Q/vr2nkyJdn8A7AECNC/ZUxZ2RmAh0DiqKkZOWMxrLJqywtZG
-         E4ABNKpzcKmCUtORHBoTGCK5q3lVpM+Ph+knP5Bib/BmxCEtxpdWlXl4kjiZjTS4L5My
-         CRey2U4CfW50M35rrTxyRZ0nicwVwcKxik3rc4DIAYb28hyPV/7I7PTgYwxvQDP7rqbG
-         h/kPxBoO/VIWlnsY7tOFEXbgncWFs0LEkzjykip4BHBJGbwWL5t//4NzseIh6j/NE/uF
-         4F3vxOHeEflQj7rUOJHbSh4UHumbCo1yKqavkAOYBwTQEQMD11hs/+EYCVLiFIk/m3Ih
-         sqPw==
-X-Gm-Message-State: ACgBeo1Hsm/5qmEMFyaMxtDlOGBeTDaFzn1jgmHVvGA31Vgkl28m1d5I
-        0L8b/JzXlUw0YgEHi1dAfLs=
-X-Google-Smtp-Source: AA6agR4+whOY9at0+aQfc/dS0mvg9VzlKcW5nL0s0xJQQvrKjh4vVhnmhl+pG9saQRZ8IoUiJzuTJg==
-X-Received: by 2002:a17:903:41c6:b0:16f:3d1:f63 with SMTP id u6-20020a17090341c600b0016f03d10f63mr27029611ple.50.1660758638451;
-        Wed, 17 Aug 2022 10:50:38 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id c17-20020a170903235100b001729ca3306dsm184782plh.228.2022.08.17.10.50.37
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=kWck20S1B+F14QNxCoJfAR+/3TD94IN6T9hA3skKazc=;
+        b=lnRUZDXMDOJ6z6f2zGZ3mPJiv/N6Ie+/Wgnk637ilCckBHB+7tissO1ArKwBKEx4Im
+         x3zmUTHHIBIjj8aSljYQhpfw7rc10+hnlDV0sw2wxf39bNUT6p6NWWazPp4g5yjaEh8F
+         r8nbB8eGdpPpIZknKy+QoKX7fhQqB7gfANyOysGrrUSdwBwKAYUe8sq77TgZGR1aYLOw
+         JaWFDszSn/aVebW/eFy4Qc49oKH6JJjC2pxNofSL7mRQdEDzTwTFAh+rrGKWTL1v+X49
+         5R2jS91zzUSALUgJk793eyXp5xix8xrTJWveQJLQBxM2mG/BdujdpX/0LSSS0+94AvLU
+         BQCw==
+X-Gm-Message-State: ACgBeo1sqLfDVupiag4wKUYzlVoPZv3ARSfQz9AjHgZQx5h7wWWXJJvv
+        W4d6Mrzy/DqKALn28OhD7r7FLUYokBbrByoA
+X-Google-Smtp-Source: AA6agR5ZYLi82ql41LRFSL9bT86RXgUa8FyjSpMspI7A3p4dVht9dllCbmBkniKzTS6fRHwZiL+LiQ==
+X-Received: by 2002:a17:90b:278b:b0:1f7:66b6:a86d with SMTP id pw11-20020a17090b278b00b001f766b6a86dmr4940147pjb.115.1660758697173;
+        Wed, 17 Aug 2022 10:51:37 -0700 (PDT)
+Received: from localhost.localdomain ([2601:600:8f80:973::5f])
+        by smtp.gmail.com with ESMTPSA id z29-20020aa7991d000000b0052f0a616a87sm10734127pff.168.2022.08.17.10.51.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 10:50:38 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 17 Aug 2022 07:50:36 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     mkoutny@suse.com, axboe@kernel.dk, ming.lei@redhat.com,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-Subject: Re: [PATCH v7 1/9] blk-throttle: fix that io throttle can only work
- for single bio
-Message-ID: <Yv0qbDR+cxKeZ3nD@slm.duckdns.org>
-References: <20220802140415.2960284-1-yukuai1@huaweicloud.com>
- <20220802140415.2960284-2-yukuai1@huaweicloud.com>
- <Yvvx+/d2+OMROUOe@slm.duckdns.org>
- <712e0f29-94ba-d3d3-ce21-cba4d6092008@huaweicloud.com>
+        Wed, 17 Aug 2022 10:51:36 -0700 (PDT)
+From:   Nate Yocom <nate@yocom.org>
+To:     dmitry.torokhov@gmail.com
+Cc:     nate@yocom.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hadess@hadess.net
+Subject: [PATCH v4 0/3] Input: joystick: xpad: Add X-Box Adaptive Controller support
+Date:   Wed, 17 Aug 2022 10:51:31 -0700
+Message-Id: <20220817175134.15084-1-nate@yocom.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <712e0f29-94ba-d3d3-ce21-cba4d6092008@huaweicloud.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Adds support for the X-Box Adaptive Controller, which is protocol
+compatible with the XTYPE_XBOXONE support in the driver with two deltas:
 
-On Wed, Aug 17, 2022 at 09:13:38AM +0800, Yu Kuai wrote:
-> > So, as a fix for the immediate problem, I guess this might do but this feels
-> > really fragile. How can we be certain that re-entering only happens because
-> > of splitting? What if future core development changes that? It seems to be
-> > solving the problem in the wrong place. Shouldn't we flag the bio indicating
-> > that it's split when we're splitting the bio so that we only limit them for
-> > iops in the first place?
->
-> Splited bio is tracked in __bio_clone:
+ - The X-Box button sets 0x02 as its activation ID, where others set
+   0x01
+ - The controller has an additional Profile button with 4 active states,
+   which this change maps to an Axis control with 4 possible values
 
-As the word is used in commit messages and comments, the past perfect form
-of the verb "split" is "split". It looks like "splitted" is used in rare
-cases but dictionary says it's an archaic form.
+Patch series adds device to the supported table, adds support for the
+Profile button, and adds support for the X-Box button as distinct changes.
 
-> if (bio_flagged(bio_src, BIO_THROTTLED))
-> 	bio_set_flag(bio, BIO_THROTTLED);
-> 
-> And currenty, the iops limit and bps limit are treated differently,
-> however there are only one flag 'BIO_THROTTLED' and they can't be
-> distinguished.
-> 
-> Perhaps I can use two flags, for example BIO_IOPS_THROTTLED and
-> BIO_BPS_THROTTLED, this way only iops limit can be handled and bps
-> limit can be skipped for splited bio.
-> 
-> What do you think?
+Signed-off-by: Nate Yocom <nate@yocom.org>
 
-I think the code would be a lot more intuitive and less fragile if we used
-two flags but the bits in the bi_flags field are a scarce resource
-unfortunately. Even then, I think the right thing to do here is using two
-flags.
+Nate Yocom (3):
+  Input: joystick: xpad: Add X-Box Adaptive Controller support
+  Input: joystick: xpad: Add X-Box Adaptive Controller Profile button
+  Input: joystick: xpad: Add X-Box Adaptive Controller XBox button
 
-Thanks.
+ v2: Fix warning Reported-by: kernel test robot <lkp@intel.com>
+ v3: Break into multi-part and remove VID/PID check for XBox button
+ v4: Rename Layer -> Profile as suggested by Bastien Nocera <hadess@hadess.net>
 
+ drivers/input/joystick/xpad.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+
+
+base-commit: 15205c2829ca2cbb5ece5ceaafe1171a8470e62b
 -- 
-tejun
+2.30.2
+

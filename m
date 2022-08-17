@@ -2,94 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6604F597570
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E29859757A
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241273AbiHQR6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
+        id S241286AbiHQR64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241107AbiHQR6b (ORCPT
+        with ESMTP id S241138AbiHQR6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:58:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AC313E24
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:58:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660759108;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dgGyeroL7nQdNp4tnXnxYdnkM2nPtV/937q52s3gCa4=;
-        b=KY625oOtisuf+T7aUgO0phHJG9SdiI2+5G7Crj4TsU5WR1LAQxHBLs5I7Rnq6elhBFteuT
-        IHijvx0QtfEp5hhAeQtuZIQ6lcLnv6b0/w+8BwTlRhx7tGFiX/fm1sGaTyups6cA6YiHv4
-        SKVan8fz3H/5avWZNKR2pXh9WSA5jdc=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-449-Qv_DF0GpOSiLAtwvIOAVXA-1; Wed, 17 Aug 2022 13:58:27 -0400
-X-MC-Unique: Qv_DF0GpOSiLAtwvIOAVXA-1
-Received: by mail-wm1-f69.google.com with SMTP id b4-20020a05600c4e0400b003a5a96f1756so1413795wmq.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:58:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=dgGyeroL7nQdNp4tnXnxYdnkM2nPtV/937q52s3gCa4=;
-        b=x+FwLHEzedcggCmUvtT7NdQ8v2ek4QVt2t9hq3i41/0R3GKvamQV/isiFrw7osaFtq
-         g16aZjcequjofFHsOU4H3tzZxbjKQCjy2DyKNC+sVPCIKBVRlRwtaM2xoN58dOEotBp9
-         0Pb6BiXGIA1TLgU4HV3frxXzwumkCku9nhY8bxWlfome7aQb5jQ5hCvs1FoIRXmJxoV0
-         eLtEx1XFtmD3xOqhbIO742tmPvYsfoz4MCrL0fGOyln0WJOWRcnI7alMYqxVTaw2ztXM
-         I12SXHdN9jmfhUEZGAtKrA7EIwVYoectO4O5ehQfIJriB4xg6KqlfUORU0ehTg11lzqD
-         pdLA==
-X-Gm-Message-State: ACgBeo1DtFMZs87Y0cniIXHfkLgJcKa2ecFHCf6RifU78Hxn4nGE+1VD
-        UsU0/eKbFkRE+e8R4WkckN6tzY5gWtOVW64iIiOarShgLC8FNAg9ownSJDK21QrM0Jk8liUwNfD
-        2CfZLmRE5opHulgU4EaQ66uOf
-X-Received: by 2002:a1c:7c18:0:b0:3a5:aaae:d203 with SMTP id x24-20020a1c7c18000000b003a5aaaed203mr2944198wmc.2.1660759106078;
-        Wed, 17 Aug 2022 10:58:26 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6BuvGaPt3Y8Uq9xyqFkwCoOJ0UWHYzIzHfPTHj9ADsoXRbGLYtizHhA+vtJ3TFF0VSU9wZjQ==
-X-Received: by 2002:a1c:7c18:0:b0:3a5:aaae:d203 with SMTP id x24-20020a1c7c18000000b003a5aaaed203mr2944172wmc.2.1660759105855;
-        Wed, 17 Aug 2022 10:58:25 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id u8-20020a05600c19c800b003a541d893desm2809009wmq.38.2022.08.17.10.58.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 10:58:25 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Gal Pressman <gal@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>
-Subject: [PATCH v2 2/5] cpumask: Introduce for_each_cpu_andnot()
-Date:   Wed, 17 Aug 2022 18:58:09 +0100
-Message-Id: <20220817175812.671843-3-vschneid@redhat.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220817175812.671843-1-vschneid@redhat.com>
-References: <20220817175812.671843-1-vschneid@redhat.com>
+        Wed, 17 Aug 2022 13:58:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBC514031
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:58:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A9BEB81EB2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 17:58:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5B6DC433C1;
+        Wed, 17 Aug 2022 17:58:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660759111;
+        bh=UpT4SalvdR4WLHrTMa64BzqEXdI87jktLxsOmXVkBLY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=dizlNlSHnqSb77WBJl/5tPzb7TdvXznK+wgOnFVnPEKrHiWylmVO4lSL433VO4nso
+         31lXFICtbxogVBHaPRBJQ7kjKBJyqVFDsRFhPenJ9YpzaJ62WdCMv4YbEErsMiL2pS
+         76Z1z+Ts9HQzrt/9438UTadj65IkOxztvmt+RH8XxbRcqMDP1yhUiG4indE3SUp00N
+         KpF8luZd87cYiRAvj/F9XOLGyzZsi229+fhZVi7wkLG15FdgZQh5pD9O37fF90YKN8
+         6lNtOWQYa5HuqGx3m110yUG6MUEjzwWOFm4vobuX6nXN98py3CWOYoLGiejJxdtYme
+         digLIlTvqDGJw==
+From:   Mark Brown <broonie@kernel.org>
+To:     perex@perex.cz, shengjiu.wang@gmail.com, tiwai@suse.com,
+        lgirdwood@gmail.com, Shengjiu Wang <shengjiu.wang@nxp.com>,
+        festevam@gmail.com, Xiubo.Lee@gmail.com,
+        alsa-devel@alsa-project.org, nicoleotsuka@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+In-Reply-To: <1660713867-26921-1-git-send-email-shengjiu.wang@nxp.com>
+References: <1660713867-26921-1-git-send-email-shengjiu.wang@nxp.com>
+Subject: Re: [PATCH] ASoC: fsl_sai: Remove unnecessary FIFO reset in ISR
+Message-Id: <166075910858.598125.7538229649159844439.b4-ty@kernel.org>
+Date:   Wed, 17 Aug 2022 18:58:28 +0100
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Mailer: b4 0.10.0-dev-fe10a
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,75 +57,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-for_each_cpu_and() is very convenient as it saves having to allocate a
-temporary cpumask to store the result of cpumask_and(). The same issue
-applies to cpumask_andnot() which doesn't actually need temporary storage
-for iteration purposes.
+On Wed, 17 Aug 2022 13:24:27 +0800, Shengjiu Wang wrote:
+> The FIFO reset drops the words in the FIFO, which may cause
+> channel swap when SAI module is running, especially when the
+> DMA speed is low. So it is not good to do FIFO reset in ISR,
+> then remove the operation.
+> 
+> 
 
-Following what has been done for for_each_cpu_and(), introduce
-for_each_cpu_andnot().
+Applied to
 
-Signed-off-by: Valentin Schneider <vschneid@redhat.com>
----
- include/linux/cpumask.h | 38 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index 0d435d0edbcb..295b137717bb 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -237,6 +237,25 @@ unsigned int cpumask_next_and(int n, const struct cpumask *src1p,
- 		nr_cpumask_bits, n + 1);
- }
- 
-+/**
-+ * cpumask_next_andnot - get the next cpu in *src1p & ~*src2p
-+ * @n: the cpu prior to the place to search (ie. return will be > @n)
-+ * @src1p: the first cpumask pointer
-+ * @src2p: the second cpumask pointer
-+ *
-+ * Returns >= nr_cpu_ids if no further cpus set in *src1p & ~*src2p
-+ */
-+static inline
-+unsigned int cpumask_next_andnot(int n, const struct cpumask *src1p,
-+				 const struct cpumask *src2p)
-+{
-+	/* -1 is a legal arg here. */
-+	if (n != -1)
-+		cpumask_check(n);
-+	return find_next_andnot_bit(cpumask_bits(src1p), cpumask_bits(src2p),
-+		nr_cpumask_bits, n + 1);
-+}
-+
- /**
-  * for_each_cpu - iterate over every cpu in a mask
-  * @cpu: the (optionally unsigned) integer iterator
-@@ -297,6 +316,25 @@ unsigned int __pure cpumask_next_wrap(int n, const struct cpumask *mask, int sta
- 		(cpu) = cpumask_next_and((cpu), (mask1), (mask2)),	\
- 		(cpu) < nr_cpu_ids;)
- 
-+/**
-+ * for_each_cpu_andnot - iterate over every cpu in one mask but not in the other
-+ * @cpu: the (optionally unsigned) integer iterator
-+ * @mask1: the first cpumask pointer
-+ * @mask2: the second cpumask pointer
-+ *
-+ * This saves a temporary CPU mask in many places.  It is equivalent to:
-+ *	struct cpumask tmp;
-+ *	cpumask_andnot(&tmp, &mask1, &mask2);
-+ *	for_each_cpu(cpu, &tmp)
-+ *		...
-+ *
-+ * After the loop, cpu is >= nr_cpu_ids.
-+ */
-+#define for_each_cpu_andnot(cpu, mask1, mask2)				\
-+	for ((cpu) = -1;						\
-+		(cpu) = cpumask_next_andnot((cpu), (mask1), (mask2)),	\
-+		(cpu) < nr_cpu_ids;)
-+
- /**
-  * cpumask_any_but - return a "random" in a cpumask, but not this one.
-  * @mask: the cpumask to search
--- 
-2.31.1
+Thanks!
 
+[1/1] ASoC: fsl_sai: Remove unnecessary FIFO reset in ISR
+      commit: cb225ac125a9c82889f4796a6092dd0bed39720a
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

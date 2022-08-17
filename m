@@ -2,216 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1A4596F95
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:19:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5533A596F61
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239586AbiHQNMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 09:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
+        id S239769AbiHQNMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 09:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239771AbiHQNMP (ORCPT
+        with ESMTP id S239787AbiHQNMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 09:12:15 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B5C60F6
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:12:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=pDCos68B5fYwu0J1jHvoBMN3b2H9PzkwSjTTD6oc4Dw=; b=oVNxVfBIagqBVB/GeyTV+RhXYd
-        S8ASJh3xQZDwqE6gAnoLqjXC9bWw93kEfTEAefgEu81WQzDL2nznsNJ4qNahSV8kmR2RxpfQc+07l
-        1yRaxTwA5ko/aV0cNqLd/cz9NIrf9PAq0q7s7/1k3Yy+qS4zzo+9/rstZMPWMeehQ1U8tWBo/AqIS
-        DcjahO0y3Yl75jQVKAn1QEtCUqEn4zW9UDhNrfck3LAXPee8SdrmCoWlAJdM9mbdH2MZpUMyYz7/V
-        y1qCPpU0USakhogU+uY999Au6Tz/Y5yIF3GollJ6UicsaWsXbW1b+uwOptqGmYZmVDQ8up7XUhys6
-        wwHeH59A==;
-Received: from [2a01:799:961:d200:cca0:57ac:c55d:a485] (port=62332)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oOIq4-0007wI-6A; Wed, 17 Aug 2022 15:12:04 +0200
-Message-ID: <30f3005d-0acc-e5af-10ca-cf46f18b3478@tronnes.org>
-Date:   Wed, 17 Aug 2022 15:11:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        Dom Cobley <dom@raspberrypi.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
- <9fdecae2-80ad-6212-0522-7dccf9fb57be@tronnes.org>
- <20220816082612.grebxql5ynnfnvfd@houat>
- <ea6ebdda-f779-78af-1ffd-bd86d715077f@tronnes.org>
- <20220816094922.oqhrhefv327zo2ou@houat>
- <be9b6b71-fa2a-3290-2bce-901342e01981@tronnes.org>
- <20220817114605.jpb3tlnoseyvf65d@houat>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20220817114605.jpb3tlnoseyvf65d@houat>
-Content-Type: text/plain; charset=UTF-8
+        Wed, 17 Aug 2022 09:12:20 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2524B6A4AF
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 06:12:12 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 444C31F9A8;
+        Wed, 17 Aug 2022 13:12:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1660741931; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LSKR5hl3tgpKX0usEXDbDtvnkvqMP+IzysUnZiGsz5A=;
+        b=hRocf2YuSQcp4APeYj1SbWrJkHGfG4Txf7rwRF6Gtu1wEWhYDD7t8qdWCOhpgdsv1wwp7O
+        qj8YpM/bRqQV+3/mLQceLqp0gJx6/rtjqtcSndntK8wjzBBKk89XX4xvqjGvtAjyLrDyf4
+        BUrNSE70eoBPpGcVIGZVteQjdYtHH+U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1660741931;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LSKR5hl3tgpKX0usEXDbDtvnkvqMP+IzysUnZiGsz5A=;
+        b=rtw2K8tsLDvxKQbSYjfray2ttErKv1ZxMJM5RfdHpYt9eq9VeaoTdfKQu+42myKjMfDllS
+        xdu3rPu0JDYUDADg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2680813428;
+        Wed, 17 Aug 2022 13:12:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id itmrCCvp/GKfUgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 17 Aug 2022 13:12:11 +0000
+Date:   Wed, 17 Aug 2022 15:12:10 +0200
+Message-ID: <87ilmrauad.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Amadeusz =?ISO-8859-2?Q?S=B3awi=F1ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Cc:     Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        linux-kernel@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>
+Subject: Re: [RESEND][PATCH] ALSA: info: Fix llseek return value when using callback
+In-Reply-To: <7324df1d-0424-a589-f7c9-df089a6cbefe@linux.intel.com>
+References: <20220817124924.3974577-1-amadeuszx.slawinski@linux.intel.com>
+        <7324df1d-0424-a589-f7c9-df089a6cbefe@linux.intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-2
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 17 Aug 2022 14:56:05 +0200,
+Amadeusz S³awiñski wrote:
+> 
+> On 8/17/2022 2:49 PM, Amadeusz S³awiñski wrote:
+> > When using callback there was a flow of
+> > 
+> > 	ret = -EINVAL
+> > 	if (callback) {
+> > 		offset = callback();
+> > 		goto out;
+> > 	}
+> > 	...
+> > 	offset = some other value in case of no callback;
+> > 	ret = offset;
+> > out:
+> > 	return ret;
+> > 
+> > which causes the snd_info_entry_llseek() to return -EINVAL when there is
+> > callback handler. Fix this by setting "ret" directly to callback return
+> > value before jumping to "out".
+> > 
+> > 73029e0ff18d ("ALSA: info - Implement common llseek for binary mode")
+> > Signed-off-by: Amadeusz S³awiñski <amadeuszx.slawinski@linux.intel.com>
+> > ---
+> >   sound/core/info.c | 6 +++---
+> >   1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/sound/core/info.c b/sound/core/info.c
+> > index b8058b341178..0b2f04dcb589 100644
+> > --- a/sound/core/info.c
+> > +++ b/sound/core/info.c
+> > @@ -111,9 +111,9 @@ static loff_t snd_info_entry_llseek(struct file *file, loff_t offset, int orig)
+> >   	entry = data->entry;
+> >   	mutex_lock(&entry->access);
+> >   	if (entry->c.ops->llseek) {
+> > -		offset = entry->c.ops->llseek(entry,
+> > -					      data->file_private_data,
+> > -					      file, offset, orig);
+> > +		ret = entry->c.ops->llseek(entry,
+> > +					   data->file_private_data,
+> > +					   file, offset, orig);
+> >   		goto out;
+> >   	}
+> >   
+> 
+> Doing resend, because I did copy paste mistake when pasting Takashi
+> email to git command, additionally alsa-devel blocked my previous
+> mail.
+> I've seen that Cezary already discussed this issue, and it doesn't
+> seem to be fixed, can this be somehow investigated? I guess we can
+> provide response we get from server when email fails?
+
+It seems working now.  Jaroslav mentioned that it was some DNS
+problem.
 
 
-Den 17.08.2022 13.46, skrev Maxime Ripard:
-> On Tue, Aug 16, 2022 at 09:35:24PM +0200, Noralf TrÃ¸nnes wrote:
->> Den 16.08.2022 11.49, skrev Maxime Ripard:
->>> On Tue, Aug 16, 2022 at 11:42:20AM +0200, Noralf TrÃ¸nnes wrote:
->>>> Den 16.08.2022 10.26, skrev Maxime Ripard:
->>>>> Hi,
->>>>>
->>>>> On Mon, Aug 08, 2022 at 02:44:56PM +0200, Noralf TrÃ¸nnes wrote:
->>>>>> Den 29.07.2022 18.34, skrev Maxime Ripard:
->>>>>>> The TV mode property has been around for a while now to select and get the
->>>>>>> current TV mode output on an analog TV connector.
->>>>>>>
->>>>>>> Despite that property name being generic, its content isn't and has been
->>>>>>> driver-specific which makes it hard to build any generic behaviour on top
->>>>>>> of it, both in kernel and user-space.
->>>>>>>
->>>>>>> Let's create a new bitmask tv norm property, that can contain any of the
->>>>>>> analog TV standards currently supported by kernel drivers. Each driver can
->>>>>>> then pass in a bitmask of the modes it supports.
->>>>>>>
->>>>>>> We'll then be able to phase out the older tv mode property.
->>>>>>>
->>>>>>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
->>>>>>>
->>>>>>
->>>>>> Please also update Documentation/gpu/kms-properties.csv
->>>>>>
->>>>>> Requirements for adding a new property is found in
->>>>>> Documentation/gpu/drm-kms.rst
->>>>>
->>>>> I knew this was going to be raised at some point, so I'm glad it's that
->>>>> early :)
->>>>>
->>>>> I really don't know what to do there. If we stick by our usual rules,
->>>>> then we can't have any of that work merged.
->>>>>
->>>>> However, I think the status quo is not really satisfactory either.
->>>>> Indeed, we have a property, that doesn't follow those requirements
->>>>> either, with a driver-specific content, and that stands in the way of
->>>>> fixes and further improvements at both the core framework and driver
->>>>> levels.
->>>>>
->>>>> So having that new property still seems like a net improvement at the
->>>>> driver, framework and uAPI levels, even if it's not entirely following
->>>>> the requirements we have in place.
->>>>>
->>>>> Even more so since, realistically, those kind of interfaces will never
->>>>> get any new development on the user-space side of things, it's
->>>>> considered by everyone as legacy.
->>>>>
->>>>> This also is something we need to support at some point if we want to
->>>>> completely deprecate the fbdev drivers and provide decent alternatives
->>>>> in KMS.
->>>>>
->>>>> So yeah, strictly speaking, we would not qualify for our requirements
->>>>> there. I still think we have a strong case for an exception though.
->>>>
->>>> Which requirements would that be? The only one I can see is the
->>>> documentation and maybe an IGT test.
->>>
->>> This is the one I had in mind
->>> https://dri.freedesktop.org/docs/drm/gpu/drm-uapi.html#open-source-userspace-requirements
->>>
->>
->> Oh right, I had forgotten about that one.
->>
->> One benefit of having a userspace implementation is that it increases
->> the chance of widespread adoption having a working implementation to
->> look at. I don't think the reason tv.mode is not used anywhere (that I
->> know of) is because the driver picks the enum values resulting in no
->> standard names.
-> 
-> It probably doesn't help, but it's not what I was implying.
-> 
->> It's a niche thing and way down on the todo list. nouveau and ch7006
->> has a tv_norm module parameter which certainly doesn't help in moving
->> people/projects over to the DRM property (downstream rpi also has it
->> now).
-> 
-> Yeah, the RPi version is part of the reason I started working on this.
-> We should also consider the named modes used by vc4 and sun4i. All these
-> ad-hoc solutions are limited and (I think) come from the fact that we
-> don't have a solution easy enough to use for drivers (and to discover).
-> 
-> nouveau, ch7006, i915 and vc4 are using the tv.mode property for
-> example, but sun4i and meson don't.
-> 
-> sun4i relies on named modes to reimplement TV modes, but meson doesn't
-> at all.
-> 
-> And then nouveau has that extra command line parameter to set it up at
-> boot time.
-> 
-> It doesn't really make much sense to me, when all drivers have very
-> similar needs, that none of them behave in the same way. And I think the
-> non-standard property is partly to blame for this, since without some
-> generic content we can't share code.
-> 
-> This is what this series is about: every driver having similar
-> capabilities and as trivially as possible.
-> 
->> mpv[1] is a commandline media player that after a quick look might be a
->> candidate for implementing the property without too much effort.
-> 
-> Kodi might be another one. I can try to hack something around, but I'm
-> really skeptical about whether a PR would be merged or not.
-> 
-
-You can ask first before wasting time ofc.
-
-But this baffles me, if you don't think projects like Kodi which is TV
-centered want this, what kind of projects do you think want to use this
-property?
-
->> How do you test the property? I've used modetest but I can only change
->> to a tv.mode that matches the current display mode. I can't switch from
->> ntsc to pal for instance.
-> 
-> Yep, if you want to change from PAL to NTSC, it will require a new mode.
-> 
-
-So userspace has to check tv.mode first and then create a display mode
-the driver will accept if switching to a different display mode is
-necessary? In other words, userspace can't discover from the kernel
-which display modes a certain tv.mode/norm provides before it is
-selected? If so, maybe libdrm should have some function(s) to deal with
-switching between modes that require a different display mode since
-knowledge about which display modes a tv.mode supports is needed before
-hand.
-
-Noralf.
+Takashi

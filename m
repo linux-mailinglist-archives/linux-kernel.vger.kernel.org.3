@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 799C0596A91
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0147596A94
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233346AbiHQHpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 03:45:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38266 "EHLO
+        id S233417AbiHQHpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 03:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233218AbiHQHpa (ORCPT
+        with ESMTP id S233237AbiHQHpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 03:45:30 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31F779A55
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:45:29 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M70PJ2YSKzhZ28;
-        Wed, 17 Aug 2022 15:43:16 +0800 (CST)
+        Wed, 17 Aug 2022 03:45:31 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9144979EE2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:45:30 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M70M06Rz8zXdn9;
+        Wed, 17 Aug 2022 15:41:16 +0800 (CST)
 Received: from CHINA (10.175.102.38) by canpemm500009.china.huawei.com
  (7.192.105.203) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 17 Aug
- 2022 15:45:27 +0800
+ 2022 15:45:28 +0800
 From:   Wei Yongjun <weiyongjun1@huawei.com>
 To:     Akinobu Mita <akinobu.mita@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -37,9 +37,9 @@ To:     Akinobu Mita <akinobu.mita@gmail.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>
 CC:     Wei Yongjun <weiyongjun1@huawei.com>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/4 -next] fault-injection: allow stacktrace filter for x86-64
-Date:   Wed, 17 Aug 2022 08:03:29 +0000
-Message-ID: <20220817080332.1052710-2-weiyongjun1@huawei.com>
+Subject: [PATCH 2/4 -next] fault-injection: skip stacktrace filtering by default
+Date:   Wed, 17 Aug 2022 08:03:30 +0000
+Message-ID: <20220817080332.1052710-3-weiyongjun1@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220817080332.1052710-1-weiyongjun1@huawei.com>
 References: <20220817080332.1052710-1-weiyongjun1@huawei.com>
@@ -59,35 +59,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-FAULT_INJECTION_STACKTRACE_FILTER option was apparently disallowed on
-x86_64 because of problems with the stack unwinder:
+If FAULT_INJECTION_STACKTRACE_FILTER is enabled, the depth is default
+to 32. This means fail_stacktrace() will iter each entry's stacktrace,
+even if filter is not configured.
 
-    commit 6d690dcac92a84f98fd774862628ff871b713660
-    Author: Akinobu Mita <akinobu.mita@gmail.com>
-    Date:   Sat May 12 10:36:53 2007 -0700
-
-        fault injection: disable stacktrace filter for x86-64
-
-However, there is no problems whatsoever with this today. Let's allow
-it again.
+This patch change to quick return from fail_stacktrace() if stacktrace
+filter is not set.
 
 Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
 ---
- lib/Kconfig.debug | 1 -
- 1 file changed, 1 deletion(-)
+ lib/fault-inject.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 38d259b1d262..c6795f4656d7 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1944,7 +1944,6 @@ config FAIL_SUNRPC
- config FAULT_INJECTION_STACKTRACE_FILTER
- 	bool "stacktrace filter for fault-injection capabilities"
- 	depends on FAULT_INJECTION_DEBUG_FS && STACKTRACE_SUPPORT
--	depends on !X86_64
- 	select STACKTRACE
- 	depends on FRAME_POINTER || MIPS || PPC || S390 || MICROBLAZE || ARM || ARC || X86
- 	help
+diff --git a/lib/fault-inject.c b/lib/fault-inject.c
+index 423784d9c058..515fc5aaf032 100644
+--- a/lib/fault-inject.c
++++ b/lib/fault-inject.c
+@@ -74,7 +74,7 @@ static bool fail_stacktrace(struct fault_attr *attr)
+ 	int n, nr_entries;
+ 	bool found = (attr->require_start == 0 && attr->require_end == ULONG_MAX);
+ 
+-	if (depth == 0)
++	if (depth == 0 || (found && !attr->reject_start && !attr->reject_end))
+ 		return found;
+ 
+ 	nr_entries = stack_trace_save(entries, depth, 1);
 -- 
 2.34.1
 

@@ -2,115 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E308597749
+	by mail.lfdr.de (Postfix) with ESMTP id DF23159774B
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241711AbiHQUEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 16:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45472 "EHLO
+        id S241691AbiHQUEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 16:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241681AbiHQUD4 (ORCPT
+        with ESMTP id S241676AbiHQUDv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 16:03:56 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02F32A274;
-        Wed, 17 Aug 2022 13:03:53 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27HJa2kt007348;
-        Wed, 17 Aug 2022 20:03:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=hkP6vkzG1UzEeJ5qw6RixMD6hdOhHsYT208NFv3dvTM=;
- b=cmoLyAzv3lt2dgSxmyesxjcpkn3qOTR3b+zmNpxqYLYKmmSQnKtRPpfensDUPZs+H8Ti
- UsU7rm8YLoiCEa+JHoCgBJqfkDJ/lrd1B3wg9xLpiQRRYOyLaORi8Q+fF2gDURh/Y9JP
- NB11/ffh+tTIzLsmOjuIbtgDEaMq/shRIpj9v36t3/vqpnDPlXBBn7SsP+KNeMTwNiP/
- F4QKF2PycvQgh9shsmfGUsoVoVC00bpA7umE21Oyf6NHNS52uEigqLBWh7E9rgdORHF1
- kNAXR2KadA9eQ4eBaEGYOrPmx72ByduLqS2AzA9HvFnR7Wz6/OiIjmoAeMOunrSsupPH 5A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j15hkjspa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 Aug 2022 20:03:41 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27HK0AFN011324;
-        Wed, 17 Aug 2022 20:03:40 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j15hkjsnq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 Aug 2022 20:03:40 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27HJZul9022737;
-        Wed, 17 Aug 2022 20:03:39 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma02wdc.us.ibm.com with ESMTP id 3hx3ka2mhj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 Aug 2022 20:03:39 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27HK3cPk9306666
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 Aug 2022 20:03:38 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C4E896E054;
-        Wed, 17 Aug 2022 20:03:38 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CAE446E04E;
-        Wed, 17 Aug 2022 20:03:37 +0000 (GMT)
-Received: from slate16.aus.stglabs.ibm.com (unknown [9.160.23.1])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 17 Aug 2022 20:03:37 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Alexander.Steffen@infineon.com,
-        jgg@ziepe.ca, jarkko@kernel.org, peterhuewe@gmx.de, joel@jms.id.au,
-        Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH] tpm: tis_i2c: Fix sanity check interrupt enable mask
-Date:   Wed, 17 Aug 2022 15:03:33 -0500
-Message-Id: <20220817200333.305264-1-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 17 Aug 2022 16:03:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554BC24F37
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:03:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 954306151B
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 20:03:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87076C43143;
+        Wed, 17 Aug 2022 20:03:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660766629;
+        bh=Q+R9USyKy7p7mEYIj9z8Lowa0yqJDDTBygy/2GjV1T8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ppqaUYsbIJC8pN4ebTEfrBqnmX1EqQbKaLHcDoFsD0ave51ycO5RZ2ZJGwA0/hAOe
+         BiydbR8W48AoFyOB4jBNOL30/5ye16yXz/i5oSHGgVm6eNGOtQ410ytJYubDF2d5Ah
+         sTUPCNbtSdsND5LmM0x1oMl6Nsm+GLoS066hwdmfX8vFD1MqEuUgJR0xA52B0e0HH8
+         p4RLl4fDH/apj+Wgjy0AwMkP50+iHjbQZk9q7flVHwkfcfZoTUPB7OX2jXZdtDBJTF
+         Bndx3F+WEJiRViHZ6Bq9y8ugzbGSpZXIRMGnfGIwXVbUlX713u7fZO7+fdp2lsFlZS
+         Ppp5vxbyoqsPw==
+From:   =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linux Phy <linux-phy@lists.infradead.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, pali@kernel.org,
+        josef.schlehofer@nic.cz,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH linux-phy v2 3/4] phy: marvell: phy-mvebu-a3700-comphy: Support changing tx amplitude for ethernet
+Date:   Wed, 17 Aug 2022 22:03:34 +0200
+Message-Id: <20220817200335.911-4-kabel@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220817200335.911-1-kabel@kernel.org>
+References: <20220817200335.911-1-kabel@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 03ACpAjt4_Dw7t6To8DmMaTFR1wcpBWC
-X-Proofpoint-ORIG-GUID: ru2K3RYWGUsaCpUC9xEEwhTC9JXc9bdr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-17_13,2022-08-16_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- lowpriorityscore=0 malwarescore=0 clxscore=1011 mlxlogscore=910
- impostorscore=0 phishscore=0 priorityscore=1501 spamscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208170075
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sanity check mask for TPM_INT_ENABLE register was off by 8 bits,
-resulting in failure to probe if the TPM_INT_ENABLE register was a
-valid value.
+Add support to set SerDes transmit amplitude if specified via the
+'tx-p2p-microvolt' and 'tx-p2p-microvolt-names' device-tree properties.
 
-Fixes: bbc23a07b072 ("tpm: Add tpm_tis_i2c backend for tpm_tis_core")
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
+This support is currently only for ethernet mode.
+
+Signed-off-by: Marek Behún <kabel@kernel.org>
 ---
- drivers/char/tpm/tpm_tis_i2c.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/phy/marvell/phy-mvebu-a3700-comphy.c | 109 ++++++++++++++++++-
+ 1 file changed, 108 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
-index 0692510dfcab..635a69dfcbbd 100644
---- a/drivers/char/tpm/tpm_tis_i2c.c
-+++ b/drivers/char/tpm/tpm_tis_i2c.c
-@@ -49,7 +49,7 @@
+diff --git a/drivers/phy/marvell/phy-mvebu-a3700-comphy.c b/drivers/phy/marvell/phy-mvebu-a3700-comphy.c
+index a4d7d9bd100d..7fabd959ae0f 100644
+--- a/drivers/phy/marvell/phy-mvebu-a3700-comphy.c
++++ b/drivers/phy/marvell/phy-mvebu-a3700-comphy.c
+@@ -68,6 +68,16 @@
+ #define SPEED_PLL_MASK			GENMASK(7, 2)
+ #define SPEED_PLL_VALUE_16		FIELD_PREP(SPEED_PLL_MASK, 0x10)
  
- /* Masks with bits that must be read zero */
- #define TPM_ACCESS_READ_ZERO 0x48
--#define TPM_INT_ENABLE_ZERO 0x7FFFFF6
-+#define TPM_INT_ENABLE_ZERO 0x7FFFFF60
- #define TPM_STS_READ_ZERO 0x23
- #define TPM_INTF_CAPABILITY_ZERO 0x0FFFF000
- #define TPM_I2C_INTERFACE_CAPABILITY_ZERO 0x80000000
++#define COMPHY_GEN1_SET0		0x0d
++#define COMPHY_GEN2_SET0		0x0f
++#define COMPHY_GEN3_SET0		0x11
++#define COMPHY_GEN4_SET0		0x13
++#define COMPHY_GENx_SET0(x)		(0x0d + (((x) & 3) - 1) * 2)
++#define Gx_TX_AMP_MASK			GENMASK(5, 1)
++#define Gx_TX_AMP_VALUE(x)		FIELD_PREP(Gx_TX_AMP_MASK, x)
++#define Gx_TX_AMP_ADJ			BIT(6)
++#define Gx_TX_AMP_1025MV		(Gx_TX_AMP_VALUE(0x12) | Gx_TX_AMP_ADJ)
++
+ #define COMPHY_DIG_LOOPBACK_EN		0x23
+ #define SEL_DATA_WIDTH_MASK		GENMASK(11, 10)
+ #define DATA_WIDTH_10BIT		FIELD_PREP(SEL_DATA_WIDTH_MASK, 0x0)
+@@ -269,6 +279,7 @@ struct mvebu_a3700_comphy_priv {
+ struct mvebu_a3700_comphy_lane {
+ 	struct mvebu_a3700_comphy_priv *priv;
+ 	struct device *dev;
++	struct phy *phy;
+ 	unsigned int id;
+ 	enum phy_mode mode;
+ 	int submode;
+@@ -385,6 +396,15 @@ static inline void comphy_reg_set16(void __iomem *addr, u16 data, u16 mask)
+ }
+ 
+ /* Used for accessing lane 2 registers (SATA/USB3 PHY) */
++static u16 comphy_get_indirect(struct mvebu_a3700_comphy_priv *priv, u32 offset)
++{
++	writel(offset,
++	       priv->lane2_phy_indirect + COMPHY_LANE2_INDIR_ADDR);
++
++	/* We need to read the register with 32-bit read */
++	return readl(priv->lane2_phy_indirect + COMPHY_LANE2_INDIR_DATA);
++}
++
+ static void comphy_set_indirect(struct mvebu_a3700_comphy_priv *priv,
+ 				u32 offset, u16 data, u16 mask)
+ {
+@@ -394,6 +414,21 @@ static void comphy_set_indirect(struct mvebu_a3700_comphy_priv *priv,
+ 		       data, mask);
+ }
+ 
++static u16 comphy_lane_reg_get(struct mvebu_a3700_comphy_lane *lane, u16 reg)
++{
++	if (lane->id == 2) {
++		/* lane 2 PHY registers are accessed indirectly */
++		return comphy_get_indirect(lane->priv,
++					   reg + COMPHY_LANE2_REGS_BASE);
++	} else {
++		void __iomem *base = lane->id == 1 ?
++				     lane->priv->lane1_phy_regs :
++				     lane->priv->lane0_phy_regs;
++
++		return readw(base + COMPHY_LANE_REG_DIRECT(reg));
++	}
++}
++
+ static void comphy_lane_reg_set(struct mvebu_a3700_comphy_lane *lane,
+ 				u16 reg, u16 data, u16 mask)
+ {
+@@ -624,10 +659,53 @@ static void comphy_gbe_phy_init(struct mvebu_a3700_comphy_lane *lane,
+ 	}
+ }
+ 
++static u8 comphy_find_best_tx_amp(bool full_swing, u32 amp, u32 *true_amp)
++{
++	static const u32 half_swing_table[32] = {
++		250, 270, 290, 310, 330, 345, 365, 380,
++		400, 420, 435, 455, 470, 490, 505, 525,
++		485, 520, 555, 590, 625, 660, 695, 730,
++		765, 800, 830, 865, 900, 930, 965, 1000,
++	};
++	static const u32 full_swing_table[22] = {
++		470, 505, 540, 575, 610, 645, 680, 715,
++		750, 785, 820, 850, 885, 915, 950, 980,
++		900, 965, 1025, 1095, 1160, 1220,
++	};
++	u32 diff, min_diff;
++	const u32 *table;
++	size_t len;
++	u8 res;
++
++	if (full_swing) {
++		table = full_swing_table;
++		len = ARRAY_SIZE(full_swing_table);
++	} else {
++		table = half_swing_table;
++		len = ARRAY_SIZE(half_swing_table);
++	}
++
++	res = 0;
++	min_diff = abs(amp - table[0]);
++
++	for (size_t i = 1; i < len; ++i) {
++		diff = abs(amp - table[i]);
++		if (diff < min_diff) {
++			min_diff = diff;
++			res = i;
++		}
++	}
++
++	if (true_amp)
++		*true_amp = table[res];
++
++	return res;
++}
++
+ static int
+ mvebu_a3700_comphy_ethernet_power_on(struct mvebu_a3700_comphy_lane *lane)
+ {
+-	u32 mask, data, speed_sel;
++	u32 mask, data, speed_sel, tx_amp_uv;
+ 	int ret;
+ 
+ 	/* Set selector */
+@@ -746,6 +824,34 @@ mvebu_a3700_comphy_ethernet_power_on(struct mvebu_a3700_comphy_lane *lane)
+ 		comphy_gbe_phy_init(lane,
+ 				    lane->submode != PHY_INTERFACE_MODE_2500BASEX);
+ 
++	/*
++	 * Change transmit amplitude if specified in device-tree.
++	 */
++	if (!device_get_tx_p2p_amplitude(&lane->phy->dev,
++					 phy_modes(lane->submode),
++					 &tx_amp_uv)) {
++		u32 tx_amp_mv, true_tx_amp_mv;
++		bool full_swing;
++		u8 tx_amp;
++		u16 reg;
++
++		reg = COMPHY_GENx_SET0(speed_sel + 1);
++
++		data = comphy_lane_reg_get(lane, reg);
++		full_swing = data & Gx_TX_AMP_ADJ;
++		tx_amp_mv = DIV_ROUND_CLOSEST(tx_amp_uv, 1000);
++		tx_amp = comphy_find_best_tx_amp(full_swing, tx_amp_mv,
++						 &true_tx_amp_mv);
++
++		data = Gx_TX_AMP_VALUE(tx_amp);
++		mask = Gx_TX_AMP_MASK;
++		comphy_lane_reg_set(lane, reg, data, mask);
++
++		dev_dbg(lane->dev,
++			"changed tx amplitude to %u mV (requested %u mV) on lane %d\n",
++			true_tx_amp_mv, tx_amp_mv, lane->id);
++	}
++
+ 	/*
+ 	 * 14. Check the PHY Polarity invert bit
+ 	 */
+@@ -1382,6 +1488,7 @@ static int mvebu_a3700_comphy_probe(struct platform_device *pdev)
+ 
+ 		lane->priv = priv;
+ 		lane->dev = &pdev->dev;
++		lane->phy = phy;
+ 		lane->mode = PHY_MODE_INVALID;
+ 		lane->submode = PHY_INTERFACE_MODE_NA;
+ 		lane->id = lane_id;
 -- 
-2.31.1
+2.35.1
 

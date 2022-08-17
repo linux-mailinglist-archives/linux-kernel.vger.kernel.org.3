@@ -2,113 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A30596EBD
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 14:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A340596EC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 14:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239339AbiHQMtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 08:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
+        id S239217AbiHQMtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 08:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236875AbiHQMtD (ORCPT
+        with ESMTP id S236234AbiHQMtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 08:49:03 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC70A7331C;
-        Wed, 17 Aug 2022 05:48:58 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id x19so839609plc.5;
-        Wed, 17 Aug 2022 05:48:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=sDDQV3PgZqx2/9abOCF0VxB++9+m/C4n+txZ5R5CM3Y=;
-        b=l1SicTD3Sr9KN4ruqv+LLZmG8wRuU8ddgK7yNps2Uf7R1yLROjSOUGQdqj9vxI+ZiV
-         tM65n9j9Lhj/as55ucCu+jdlmHOn3AYY/qmMyM8BBXKNVtoGqkBZhBplMKXZnaruK0OD
-         ZoH/xq6XfWsOMevupbmejop+3cOz3eaRBuHTzSPat1+eY3rPDdYAJMXzydWHf5KL35mU
-         N/zUIZMRgQXWYLMFL8+2MPEbhs4ZXdIpCNoNlRDTUDTNcV1XPm84XHVuTfIBKWlyGqtY
-         pSOeTqbWQ8UYZJRbRNogkwfBIq/IVVbYlzg2Y0pWd90ecZM3PFc5OeDyU1252oiL9n3G
-         RFVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=sDDQV3PgZqx2/9abOCF0VxB++9+m/C4n+txZ5R5CM3Y=;
-        b=6FKH+SMU25yli4akxj688nyZ+jVsEX6xvL0HiZqQmPh/Ix1KgvhDF4GUUo10sX01g3
-         0xWEFw4kITKdAxq+mmeSxd60A3EQHnoX43P7EGBoIgDBcbqfam4+BzU6KCMqEqPIICkD
-         8g7Ge4qQJvkDXStbQG/k54S6FH1L7Zq5hpC/2f5lJ0qys8y251x1ZvXZI288MO/DSy4M
-         AWXd/ZgFPWI2YcIHy+XU2DWCEUWiYdPAKVHvRULsLdiQgqI19Ps5ABmcAWjP+6ik8CLr
-         415ovK7gzVFR++R6MOTebX+sOIQh0mU0XK0R/F1t0armSBHiroVtE1gTezph6d209cgY
-         opLg==
-X-Gm-Message-State: ACgBeo0Z2AaILXM3mhX9vHQib3jv6T6aceduF8whS7FOYL3Ltw44CZEq
-        BxC4aLuuGVdcE843RM+5354pIKA4fy4Clw==
-X-Google-Smtp-Source: AA6agR7FR3iL/j6v8XJIocqgdSQOAW87gCVU1em/6BeoDiRvo1J0p2clcTnEKG2Df8gbx4uvbL4B6w==
-X-Received: by 2002:a17:90a:f490:b0:1f7:6ecf:33d7 with SMTP id bx16-20020a17090af49000b001f76ecf33d7mr3663495pjb.210.1660740538330;
-        Wed, 17 Aug 2022 05:48:58 -0700 (PDT)
-Received: from debian.. (subs32-116-206-28-37.three.co.id. [116.206.28.37])
-        by smtp.gmail.com with ESMTPSA id q5-20020a170902a3c500b0016a4db13429sm1386962plb.192.2022.08.17.05.48.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 05:48:58 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v2 3/3] Documentation: kvm: enclose the final closing brace in code block
-Date:   Wed, 17 Aug 2022 19:48:37 +0700
-Message-Id: <20220817124837.422695-4-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220817124837.422695-1-bagasdotme@gmail.com>
-References: <20220817124837.422695-1-bagasdotme@gmail.com>
+        Wed, 17 Aug 2022 08:49:02 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD77E6170A
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 05:48:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660740536; x=1692276536;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kYOYATKAKktz41sDaZZq1GXiosh7ennmO+42v74MCX0=;
+  b=mSnfgGusfF4aiuSvXeEM5drfB5nslroX7X4xMgPYqH3H84dEA5iYzTkJ
+   VgKqgn1KAj628HCvq7Jl/PXulHgX8uaJoIp/fscjSfP4phMln9MRdFAYO
+   h96ifpcEJ0akdqRDT57wxTqqCT88aLmZKKNvC0zeBGYIKMDBmTgeLH82t
+   cmtOvBZs1Qs2Zpp+w9K+HyjmauF+FmxRo9fOOLCDQ76uKIXqDVzKNz2Sd
+   SmdjRfUfj35zlErXSWDAChS5nnaqvyj962tKbuZwIkVjn12b9Nw/DyVQN
+   xSQv5fYOS7WnA1kHX7pisIjS2Q/zGFa838SAhf7wv/fnEpn5rusVEynpZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="292478318"
+X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
+   d="scan'208";a="292478318"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 05:48:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
+   d="scan'208";a="583755219"
+Received: from dev2 (HELO DEV2.igk.intel.com) ([10.237.148.94])
+  by orsmga006.jf.intel.com with ESMTP; 17 Aug 2022 05:48:54 -0700
+From:   =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+To:     Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
+Cc:     linux-kernel@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Subject: [RESEND][PATCH] ALSA: info: Fix llseek return value when using callback
+Date:   Wed, 17 Aug 2022 14:49:24 +0200
+Message-Id: <20220817124924.3974577-1-amadeuszx.slawinski@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1175; i=bagasdotme@gmail.com; h=from:subject; bh=pZtYWIvpNrlcv7lJWS5yJDXQNN6EtLfOfO5biSvqfVc=; b=owGbwMvMwCH2bWenZ2ig32LG02pJDEl/Hi/Nvfpm360XZypkJVv7louyvnD/fKdp+Rz9hTP7vDRq P7tzdJSyMIhxMMiKKbJMSuRrOr3LSORC+1pHmDmsTCBDGLg4BWAiX+MY/ofulF6dvyvmiUZFcWWouH yu6r398nuOLFjoZ1z0Wm1xUgvDLybntW0fH2Zzas8KP7FZ5PAr78C1q6aveN4QWfFJ8bOmPDcA
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sphinx reported literal block warning:
+When using callback there was a flow of
 
-Documentation/virt/kvm/api.rst:1362: WARNING: Literal block ends without a blank line; unexpected unindent.
+	ret = -EINVAL
+	if (callback) {
+		offset = callback();
+		goto out;
+	}
+	...
+	offset = some other value in case of no callback;
+	ret = offset;
+out:
+	return ret;
 
-The warning is caused by the final closing brace in KVM_SET_USER_MEMORY_REGION
-struct definition is not indented as literal code block.
+which causes the snd_info_entry_llseek() to return -EINVAL when there is
+callback handler. Fix this by setting "ret" directly to callback return
+value before jumping to "out".
 
-Indent the closing brace to fix the warning.
-
-Link: https://lore.kernel.org/linux-doc/202208171109.lCfseeP6-lkp@intel.com/
-Fixes: bb90daae9d7551 ("KVM: Extend the memslot to support fd-based private memory")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+73029e0ff18d ("ALSA: info - Implement common llseek for binary mode")
+Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
 ---
- Documentation/virt/kvm/api.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/core/info.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index d9d43078080030..4acf4d1c95c099 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -1359,7 +1359,7 @@ yet and must be cleared on entry.
- 	__u32 private_fd;
- 	__u32 pad1;
- 	__u64 pad2[14];
--};
-+  };
+diff --git a/sound/core/info.c b/sound/core/info.c
+index b8058b341178..0b2f04dcb589 100644
+--- a/sound/core/info.c
++++ b/sound/core/info.c
+@@ -111,9 +111,9 @@ static loff_t snd_info_entry_llseek(struct file *file, loff_t offset, int orig)
+ 	entry = data->entry;
+ 	mutex_lock(&entry->access);
+ 	if (entry->c.ops->llseek) {
+-		offset = entry->c.ops->llseek(entry,
+-					      data->file_private_data,
+-					      file, offset, orig);
++		ret = entry->c.ops->llseek(entry,
++					   data->file_private_data,
++					   file, offset, orig);
+ 		goto out;
+ 	}
  
-   /\* for kvm_memory_region::flags \*/
-   #define KVM_MEM_LOG_DIRTY_PAGES	(1UL << 0)
 -- 
-An old man doll... just what I always wanted! - Clara
+2.25.1
 

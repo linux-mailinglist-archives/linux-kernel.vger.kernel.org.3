@@ -2,147 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC9A5970A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC79597079
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240033AbiHQODd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 10:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
+        id S240041AbiHQOEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 10:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239935AbiHQOCf (ORCPT
+        with ESMTP id S237149AbiHQOD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 10:02:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCD998C86
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:02:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660744927;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pt7BDtIMM3FtA0HcC2AXZKv8xyOB8ntdc2I9DoZlSjw=;
-        b=fTMT5nhyAg+CymIYZUtZ7Nzr+XK/PydCwlpLoIJpcS60+Q2YV5xXdOd9SyH+/Ty++xBCnH
-        2MH5qBBtJZDAGDT0IsWdQ+G6Ir119b2Vqnj4E+nNbuU+RqO2KYFv/gAhU2OP3E/qQfq0v4
-        IbRrcc/HsIgTMPxhDT4UlH5Sb47lGvg=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-214-l-Am4VmbPsOycEDqnZv7pQ-1; Wed, 17 Aug 2022 10:02:06 -0400
-X-MC-Unique: l-Am4VmbPsOycEDqnZv7pQ-1
-Received: by mail-io1-f70.google.com with SMTP id l18-20020a6bd112000000b0067cb64ad9b2so7889239iob.20
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:02:05 -0700 (PDT)
+        Wed, 17 Aug 2022 10:03:28 -0400
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3889751D;
+        Wed, 17 Aug 2022 07:02:49 -0700 (PDT)
+Received: by mail-qk1-f175.google.com with SMTP id w18so5409234qki.8;
+        Wed, 17 Aug 2022 07:02:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc;
-        bh=Pt7BDtIMM3FtA0HcC2AXZKv8xyOB8ntdc2I9DoZlSjw=;
-        b=BuZELLBrnS9609oRPhee6V/VZ4UDR1ksPIs7/C9bMMKcQd1t0xVAsyPeukBUQhicbY
-         dZpYC+x+QHTQDkwoK5zk+Ap0+Z652wYFOn/xcuP0x8Y8a27a8Xj3BSvaAQLFgCqrA70b
-         Rb9OR30d/PsNMLKnOmTi2pP4pMBYh7Hg+hVD+c45KhHJKACtVCmxL7DVQ2P4GS917BIM
-         BezSj0jltvm8JJscZqeWDBYNM2gIcfW5TX8Qsz2LsQ2rhOQxYXxGaXgPBtvsU3yCDpsZ
-         GCgY8CvwRkzp1rcHfpZh4RgRUWSsyCvr4wLf1DUVpeBsYxtjPUYhim+W+b8QCjrx+Fko
-         7o0A==
-X-Gm-Message-State: ACgBeo1SgpoM/UiW5BbX2NxjVMTf/T3VQp4l9ms5IPcUxJQ3uj4/RiTD
-        r9Qreb7LugbrJ/W1XoQyL8QDLJ71jzHZR7WhhneXhR9bH1qLpAE/oEyCJgv0iELdD5Hg5KFQoOq
-        5L80/G0DHSxp/VF0P47FCNUCO
-X-Received: by 2002:a05:6602:14c2:b0:67d:ae1:1c23 with SMTP id b2-20020a05660214c200b0067d0ae11c23mr10996739iow.212.1660744924866;
-        Wed, 17 Aug 2022 07:02:04 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4bGd0JIkKE6JDPsmRO7YZrbm3YU8lrNbz8b/j2FgnreXtiopIU1h0WEkWjStJNGqcDXUPU0Q==
-X-Received: by 2002:a05:6602:14c2:b0:67d:ae1:1c23 with SMTP id b2-20020a05660214c200b0067d0ae11c23mr10996720iow.212.1660744924533;
-        Wed, 17 Aug 2022 07:02:04 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id s10-20020a056602168a00b00684690536d7sm7676106iow.35.2022.08.17.07.02.03
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=xGvnP+cdj8d4VtMasuJ9qa53U1HW/oz4CJM0XoL8DpQ=;
+        b=lOiOaS6e7h4vD0B7jSJpY6ndyKSDzVyVSOtkgpMd0CNGivDrFSSdfGczY3l1ZgzTm0
+         98Cs3GeG5hLa/G2UaliDkSKvHSLqu7kVK1ROs9PvI9Dfe67jzWL/jB2BWeeESABNHMe3
+         xGdTm4w2YKYD5igykgi7PPEB2781qIULkJtNKhZhJHAKDiYrKDs1GI0SoBTTsf0PQY3r
+         Jtvdjzq1H/ws+vlAy63bbzsypDHdgypPwiJlbOihqZ1eQo/LuXWZLlaZ5twssfXwWwBE
+         7aTm8iU1xG6lwjBZ1NBuHHapxpo13js5gVeYYfonYZws2dnxVgxyYK4qWN0o2hIGAiV0
+         ROZg==
+X-Gm-Message-State: ACgBeo1ParTKyuC3BIUjBftuY0fBx84qOmibcgu4EDy6RzC0X4qatEK6
+        BxKXvoDITzmAmYCL1d0qzaY=
+X-Google-Smtp-Source: AA6agR74DS2PNIIKBQpO17xcS4vPE532nPqUfxppaZozIy/EOk3nhyCLshXcmNALm6l8AQDlTqQFDg==
+X-Received: by 2002:a37:bb05:0:b0:6b9:629e:f46b with SMTP id l5-20020a37bb05000000b006b9629ef46bmr8604510qkf.521.1660744967470;
+        Wed, 17 Aug 2022 07:02:47 -0700 (PDT)
+Received: from maniforge.DHCP.thefacebook.com ([2620:10d:c091:480::a5ed])
+        by smtp.gmail.com with ESMTPSA id bt14-20020ac8690e000000b00342f6c31da7sm12336226qtb.94.2022.08.17.07.02.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 07:02:04 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 08:02:02 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>
-Cc:     linux-pci@vger.kernel.org, bhelgaas@google.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] PCI: Expose resource resizing through sysfs
-Message-ID: <20220817080202.1a0c29cf.alex.williamson@redhat.com>
-In-Reply-To: <a15fe381-1f41-2c92-2ef1-0b4eb30a5142@amd.com>
-References: <166067824399.1885802.12557332818208187324.stgit@omen>
-        <a15fe381-1f41-2c92-2ef1-0b4eb30a5142@amd.com>
-Organization: Red Hat
+        Wed, 17 Aug 2022 07:02:47 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 09:02:14 -0500
+From:   David Vernet <void@manifault.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
+        joannelkoong@gmail.com, linux-kernel@vger.kernel.org,
+        Kernel-team@fb.com
+Subject: Re: [PATCH 4/5] bpf: Add libbpf logic for user-space ring buffer
+Message-ID: <Yvz05lW8tCJFKrUO@maniforge.DHCP.thefacebook.com>
+References: <20220808155341.2479054-1-void@manifault.com>
+ <20220808155341.2479054-4-void@manifault.com>
+ <CAEf4BzYVLgd=rHaxzZjyv0WJBzBpMqGSStgVhXG9XOHpB7qDRQ@mail.gmail.com>
+ <YvaNx8L076scJR4K@maniforge.dhcp.thefacebook.com>
+ <CAEf4BzbH-=hifMj9dnGoUkOR-JUkn+wuNMrM2w97FtbjnN=-CQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzbH-=hifMj9dnGoUkOR-JUkn+wuNMrM2w97FtbjnN=-CQ@mail.gmail.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 Aug 2022 12:10:44 +0200
-Christian K=C3=B6nig <christian.koenig@amd.com> wrote:
-
-> Am 16.08.22 um 21:39 schrieb Alex Williamson:
-> > We have a couple graphics drivers making use of PCIe Resizable BARs
-> > now, but I've been trying to figure out how we can make use of such
-> > features for devices assigned to a VM.  This is a proposal for a
-> > rather basic interface in sysfs such that we have the ability to
-> > pre-enable larger BARs before we bind devices to vfio-pci and
-> > attach them to a VM. =20
->=20
-> Ah, yes please.
->=20
-> I was considering doing this myself just for testing while adding the=20
-> rebar support for the GFX drivers, but then just implementing it on the=20
-> GFX side was simpler.
->=20
-> I would just add a warning that resizing BARs can easily crash the=20
-> system even when no driver directly claimed the resource or PCIe device.
->=20
-> It literally took me weeks to figure out that I need to kick out the EFI=
-=20
-> framebuffer driver before trying to resize the BAR or otherwise I just=20
-> get a hung system.
-
-Good point, I think maybe we can avoid crashing the system though if we
-use the new aperture support to remove conflicting drivers from all VGA
-class devices, similar to d17378062079 ("vfio/pci: Remove console
-drivers").  A note in the ABI documentation about removing console
-drivers from the device when resizing resources would definitely be in
-order.
-
-> > Along the way I found a double-free in the error path of creating
-> > resource attributes, that can certainly be pulled separately (1/).
+On Tue, Aug 16, 2022 at 12:09:53PM -0700, Andrii Nakryiko wrote:
+> > > > +void ring_buffer_user__submit(struct ring_buffer_user *rb, void *sample)
+> > > > +{
+> > > > +       __ring_buffer_user__commit(rb);
+> > > > +}
+> > >
+> > > this made me think that it's probably best to add kernel support for
+> > > busy bit anyways (just like for existing ringbuf), so that we can
+> > > eventually turn this into multi-producer on user-space side (all we
+> > > need is a lock, really). So let's anticipate that on kernel side from
+> > > the very beginning
 > >
-> > I'm using an RTX6000 for testing, which unexpectedly only supports
-> > REBAR with smaller than default sizes, which led me to question
-> > why we have such heavy requirements for shrinking resources (2/). =20
->=20
-> Oh, that's easy. You got tons of ARM boards with less than 512MiB of=20
-> address space per root PCIe complex.
->=20
-> If you want to get a GPU working on those you need to decrease the
-> BAR size or otherwise you won't be able to fit 256MiB VRAM BAR +
-> register BAR into the same hole for the PCIe root complex.
->=20
-> An alternative explanation is that at least AMD produced some boards=20
-> with a messed up resize configuration word. But on those you only got=20
-> 256MiB, 512MiB and 1GiB potential BAR sizes IIRC.
+> > Hmm, yeah, fair enough. We have the extra space in the sample header to OR the
+> > busy bit, and we already have a 2-stage reserve -> commit workflow, so we might
+> > as well. I'll go ahead and add this, and then hopefully someday we can just add
+> > a lock, as you mentioned.
+> 
+> Right. We can probably also just document that reserve() step is the
+> only one that needs serialization among multiple producers (and
+> currently is required to taken care of by user app), while commit
+> (submit/discard) operation is thread-safe and needs no
+> synchronization.
 
-An aspect of shrinking BARs that maybe I'm not giving enough
-consideration to is that we might be shrinking a BAR on one device in
-order to release MMIO space from a bridge aperture, that we might then
-use to expand a BAR elsewhere.  The RTX6000 case only frees a rather
-modest amount of MMIO space, but I could imagine more substantial
-configurations.  Maybe this justifies resizing the bridge aperture even
-in the shrinking case?
+Sounds good.
 
-> Anyway, with an appropriate warning added to the sysfs documentation
-> the patch #2 and #3 are Acked-by: Christian K=C3=B6nig
-> <christian.koenig@amd.com>
+> The only reason we don't add it to libbpf right now is because we are
+> unsure about taking explicit dependency on pthread library. But I also
+> just found [0], so I don't know, maybe we should use that? I wonder if
+> it's supported by musl and other less full-featured libc
+> implementations, though.
+> 
+>   [0] https://www.gnu.org/software/libc/manual/html_node/ISO-C-Mutexes.html
 
-Thanks!
+IMHO, and others may disagree, if it's in the C standard it seems like it
+should be fair game to add to libbpf? Also FWIW, it looks like musl does
+support it.  See mtx_*.c in [0].
 
-Alex
+[0] https://git.musl-libc.org/cgit/musl/tree/src/thread
 
+That being said, I would like to try and keep this decision outside the
+scope of user-ringbuf though, if possible. Would you be OK this landing
+as is (modulo further discussion, revisions, etc, of course), and then
+we can update this implementation to be multi-producer if and when we've
+added something like mtx_t support in a follow-on patch-set?
+
+[...]
+
+> > > > +/* Poll for available space in the ringbuffer, and reserve a record when it
+> > > > + * becomes available.
+> > > > + */
+> > > > +void *ring_buffer_user__poll(struct ring_buffer_user *rb, uint32_t size,
+> > > > +                            int timeout_ms)
+> > > > +{
+> > > > +       int cnt;
+> > > > +
+> > > > +       cnt = epoll_wait(rb->epoll_fd, &rb->event, 1, timeout_ms);
+> > > > +       if (cnt < 0)
+> > > > +               return NULL;
+> > > > +
+> > > > +       return ring_buffer_user__reserve(rb, size);
+> > >
+> > > it's not clear how just doing epoll_wait() guarantees that we have >=
+> > > size of space available?.. Seems like some tests are missing?
+> >
+> > Right now, the kernel only kicks the polling writer once it's drained all
+> > of the samples from the ring buffer. So at this point, if there's not
+> > enough size in the buffer, there would be nothing we could do regardless.
+> > This seemed like reasonable, simple behavior for the initial
+> > implementation. I can make it a bit more intelligent if you'd like, and
+> > return EPOLLRWNORM as soon as there is any space in the buffer, and have
+> > libbpf potentially make multiple calls to epoll_wait() until enough space
+> > has become available.
+> 
+> So this "drain all samples" notion is not great: you can end drain
+> prematurely and thus not really drain all the data in ringbuf.With
+> multiple producers there could also be always more data coming in in
+> parallel. Plus, when in the future we'll have BPF program associated
+> with such ringbuf on the kernel side, we won't have a notion of
+> draining queue, we'll be just submitting record and letting kernel
+> handle it eventually.
+
+I don't disagree with any of your points. I think what we'll have to
+decide-on is a trade-off between performance and usability. As you pointed
+out, if we only kick user-space once the ringbuffer is empty, that imposes
+the requirement on the kernel that it will always drain the ringbuffer.
+That might not even be possible though if we have multiple producers
+posting data in parallel.
+
+More on this below, but the TL;DR is that I agree with you, and I think
+having a model where we kick user-space whenever a sample is consumed from
+the buffer is a lot easier to reason about, and probably our only option if
+our plan is to make the ringbuffer MPMC. I'll make this change in v3.
+
+> So I think yeah, you'd have to send notification when at least one
+> sample gets consumed. The problem is that it's going to be a
+> performance hit, potentially, if you are going to do this notification
+> for each consumed sample. BPF ringbuf gets somewhat around that by
+> using heuristic to avoid notification if we see that consumer is still
+> behind kernel when kernel submits a new sample.
+
+Something perhaps worth pointing out here is that this heuristic works
+because the kernel-producer ringbuffer is MPSC. If it were MPMC, we'd
+potentially have the same problem you pointed out above where you'd never
+wake up an epoll-waiter because other consumers would drain the buffer, and
+by the time the kernel got around to posting another sample, could observe
+that consumer_pos == producer_pos, and either wouldn't wake up anyone on
+the waitq, or wouldn't return any events from ringbuf_map_poll(). If our
+intention is to make user-space ringbuffers MPMC, it becomes more difficult
+to use these nice heuristics.
+
+> I don't know if we can do anything clever here for waiting for some
+> space to be available...  Any thoughts?
+
+Hmmm, yeah, nothing clever is coming to mind. The problem is that we can't
+make assumptions about why user-space would be epoll-waiting on the
+ringbuffer because because it's a producer, and the user-space producer is
+free to post variably sized samples.
+
+For example, I was initially considering whether we could do a heuristic
+where we notify the producer only if the buffer was previously full /
+producer_pos was ringbuf size away from consumer_pos when we drained a
+sample, but that doesn't work at all because there could be space in the
+ringbuffer, but user-space is epoll-waiting for *more* space to become
+available for some large sample that it wants to publish.
+
+I think the only options we have are:
+
+1. Send a notification (i.e. schedule bpf_ringbuf_notify() using
+   irq_work_queue(), and then return EPOLLOUT | EPOLLWRNORM if
+   the ringbuffer is not full), every time a sample is drained.
+
+2. Keep the behavior in v1, wherein we have a contract that the kernel will
+   always eventually drain the ringbuffer, and will kick user-space when the
+   buffer is empty. I think a requirement here would also be that the
+   ringbuffer would be SPMC, or we decide that it's acceptable for some
+   producers to sleep indefinitely if other producers keep reading samples,
+   and that the caller just needs to be aware of this as a possibility.
+
+My two cents are that we go with (1), and then consider our options later
+if we need to optimize.
+
+> As for making libbpf loop until enough space is available... I guess
+> that would be the only reasonable implementation, right? I wonder if
+> calling it "user_ring_buffer__reserve_blocking()" would be a better
+> name than just "poll", though?
+
+I went with user_ring_buffer__poll() to match the complementary function
+for the user-space consumer function for kernel-producer ringbuffers:
+ring_buffer__poll(). I personally prefer
+user_ring_buffer__reserve_blocking() because the fact that it's doing an
+epoll-wait is entirely an implementation detail. I'll go ahead and make
+that change in v3.
+
+Thanks,
+David

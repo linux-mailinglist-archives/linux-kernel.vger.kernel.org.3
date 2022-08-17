@@ -2,219 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 687535975ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F0B59760C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241029AbiHQSpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 14:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
+        id S241202AbiHQSrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 14:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241003AbiHQSpa (ORCPT
+        with ESMTP id S241176AbiHQSrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 14:45:30 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845021C90C
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 11:45:28 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id x21so18662843edd.3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 11:45:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=xGU9QalusRdz0W9hKf9EB+6UjNuyQWtvR/GW+P/WHUw=;
-        b=UFDIuYFY1k8+fk1hDuKvDWb2fyjxcvEPEJdw2+VK5IwzA3fGcWVBtydYoCc9Jz0qgH
-         wf/Ivhl/hMejcR+6haJyBF+jAl6tORW7jX97VGmaOgVAAS9T8Q1WMNtwxVzlw+sqV0DM
-         3xs1FkAt6tB3/0gNIn+5Y/rLSHozCz0Jjrn7kVlnI41wP0s7ZI+TAj9upAr55PRrerCU
-         Qd3KGIL0mIv8uFQhhzwgSrp4W2hoUMt0H6QOm97b3yHxdWBxjYW14VTfKu1rgjUaLdYH
-         AuRMDRShgIkhuNClu8q2lvnHHvl/tRsM1uEadix1ZSdGMyW4l0zFipkNPbSXOVKajq4k
-         6ipA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=xGU9QalusRdz0W9hKf9EB+6UjNuyQWtvR/GW+P/WHUw=;
-        b=fWQQl9YkIQ64GP6oGciJnjs2i+Ya/65OYd6NwC1uD8FP8/DusCE9y8woYvg7XzrTXy
-         IfmvA/76r3xYb2E+sW/1X6958v3k2Yv87tEzK6FVkYJiFbkf7dG7nx9dxKV1p9/eTk5y
-         WURHuV+zJroQ9oZW45KtATDGYQ+2LjGy/LpORkwDOZejCsZoGNraL/QPgO4pxN0fXZFf
-         oSn4gtaMQIRYqGK3cjnXCjJ6YJtwY+C0rvPtaSDMR6RziUZ/LaU7W7ZCr/+4nVKW20+N
-         tWbVgh1msO7CKxCAkFx+JofQUsJEKJUtwc+LCLILIUbocvqKEwkX/m5IL0tMBQbXPl8w
-         6eCQ==
-X-Gm-Message-State: ACgBeo3JAe1AOEZcMF/LiZtAl+VvW6WP2RYV9nQ7lCyRadlstL0PiDm0
-        BwcPJJpnOQnBJ20DlgmYnXM=
-X-Google-Smtp-Source: AA6agR5zgDfueJg8rk7ZyXHB/d3TWt3aCmNp/ioebSxEicV6/TaYp4vTbgxI/8z/q1nGKBfvTKd5WQ==
-X-Received: by 2002:a05:6402:3881:b0:445:f8bf:5a1c with SMTP id fd1-20020a056402388100b00445f8bf5a1cmr1127787edb.13.1660761926704;
-        Wed, 17 Aug 2022 11:45:26 -0700 (PDT)
-Received: from localhost.localdomain (host-87-17-106-94.retail.telecomitalia.it. [87.17.106.94])
-        by smtp.gmail.com with ESMTPSA id fq15-20020a1709069d8f00b007306a4ecc9dsm7211975ejc.18.2022.08.17.11.45.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 11:45:24 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: [PATCH v2] nvmet-tcp: Don't kmap() pages which can't come from HIGHMEM
-Date:   Wed, 17 Aug 2022 20:45:19 +0200
-Message-Id: <20220817184519.25141-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Wed, 17 Aug 2022 14:47:40 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792A5A3452;
+        Wed, 17 Aug 2022 11:47:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=SkpJfRL2fEX0ZCrYY78UnGUy/KfqmdSThM2JF2kNt+A=; b=JMOw4iXvCN9lZfNf2OG/hB6Fo3
+        9NwE+OWODeKClqBL344u7qYRnOYGt54O3+aa26nsaE/f63tGSMQLJWKHqOmdEKGd9HT/CkTyz+dR6
+        r2dYvLK/Uaz3uD/r/hK40X6gA/3ZA85KA9wLfBiCi/F0U6bjBP/dRFr/WZ46adF+Qz28N/9b0nTQ5
+        o1EF5Xp228F+r4TdaX5Bz8dl4MpW12VOlh6PVN7GCys5HyvOALccfGYLcM5rg4DZet7XGUH/ymOWa
+        QGKvYg0ACpBZP/hJX1w8q8j6+HDvd4aLzmHbq+w1Z5n060anBDMvOsvu3LCP3w5qq/pwwsT7GDawh
+        Pq/3eSGA==;
+Received: from [179.232.144.59] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oOO3y-00AsZm-UT; Wed, 17 Aug 2022 20:46:47 +0200
+Message-ID: <46137c67-25b4-6657-33b7-cffdc7afc0d7@igalia.com>
+Date:   Wed, 17 Aug 2022 15:45:30 -0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 10/13] EDAC/altera: Skip the panic notifier if kdump is
+ loaded
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, linux-edac@vger.kernel.org,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Tony Luck <tony.luck@intel.com>
+References: <20220719195325.402745-1-gpiccoli@igalia.com>
+ <20220719195325.402745-11-gpiccoli@igalia.com> <Yv0mCY04heUXsGiC@zn.tnic>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <Yv0mCY04heUXsGiC@zn.tnic>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmap() is being deprecated in favor of kmap_local_page().[1]
+On 17/08/2022 14:31, Borislav Petkov wrote:
+> [...]
+> 
+> How does the fact that kdump is loaded, obviate the need to print
+> information about the errors?
+> 
+> Are you suggesting that people who have the whole vmcore would be able
+> to piece together the error information?
+> 
 
-There are two main problems with kmap(): (1) It comes with an overhead as
-mapping space is restricted and protected by a global lock for
-synchronization and (2) it also requires global TLB invalidation when the
-kmap’s pool wraps and it might block when the mapping space is fully
-utilized until a slot becomes available.
+Hi Boris, thanks for chiming in.
 
-The pages which will be mapped are allocated in nvmet_tcp_map_data(),
-using the GFP_KERNEL flag. This assures that they cannot come from
-HIGHMEM. This imply that a straight page_address() can replace the kmap()
-of sg_page(sg) in nvmet_tcp_map_pdu_iovec(). As a side effect, we might
-also delete the field "nr_mapped" from struct "nvmet_tcp_cmd" because,
-after removing the kmap() calls, there would be no longer any need of it.
+So, this is part of an effort to clean-up the panic path. Currently, if
+a kdump happens, *all* the panic notifiers are skipped by default,
+including this one. In this scenario, this patch seems like a no-op.
 
-Therefore, replace the kmap() of sg_page(sg) with a page_address() and
-delete the "nr_mapped" field from "nvmet_tcp_cmd" and instead pass a
-local variable to iov_iter_kvec() from the call site in
-nvmet_tcp_map_pdu_iovec().
+But happens that in the refactor we are proposing [0], some notifiers
+should run before the kdump. We are basically putting some ordering in
+the way notifiers are executed, while documenting this properly and with
+the goal of not increasing the failure risk for kdump.
 
-[1] "[PATCH] checkpatch: Add kmap and kmap_atomic to the deprecated
-list" https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com/
+This patch is useful so we can bring the altera EDAC notifier to run
+earlier while not increasing the risk on kdump - this operation is a bit
+"delicate" to happen in the panic scenario. The origin of this patch was
+a discussion with Tony/Peter [1], guess we can call it a "compromise
+solution".
 
-Cc: Chaitanya Kulkarni <chaitanyak@nvidia.com>
-Cc: Keith Busch <kbusch@kernel.org>
-Cc: Sagi Grimberg <sagi@grimberg.me>
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
+Let me know if you disagree or have more questions, and in case you'd
+like to check/participate in the whole panic notifiers refactor
+discussion, it would be great =)
+Cheers,
 
-v1->v2: Use a local variable as argument of iov_iter_kvec() instead of
-the removed "nr_mapped" field from struct "nvmet_tcp_cmd". Thanks to
-Sagi and Keith who noticed my mistake.
 
-Many thanks to Chaitanya, Keith, Sagi, for the answers and the comments on
-the RFC which led to this patch. The RFC is at:
-https://lore.kernel.org/all/20220816091808.23236-1-fmdefrancesco@gmail.com/
+Guilherme
 
- drivers/nvme/target/tcp.c | 28 ++++------------------------
- 1 file changed, 4 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/nvme/target/tcp.c b/drivers/nvme/target/tcp.c
-index dc3b4dc8fe08..5b839f842623 100644
---- a/drivers/nvme/target/tcp.c
-+++ b/drivers/nvme/target/tcp.c
-@@ -77,7 +77,6 @@ struct nvmet_tcp_cmd {
- 	u32				pdu_len;
- 	u32				pdu_recv;
- 	int				sg_idx;
--	int				nr_mapped;
- 	struct msghdr			recv_msg;
- 	struct kvec			*iov;
- 	u32				flags;
-@@ -167,7 +166,6 @@ static const struct nvmet_fabrics_ops nvmet_tcp_ops;
- static void nvmet_tcp_free_cmd(struct nvmet_tcp_cmd *c);
- static void nvmet_tcp_finish_cmd(struct nvmet_tcp_cmd *cmd);
- static void nvmet_tcp_free_cmd_buffers(struct nvmet_tcp_cmd *cmd);
--static void nvmet_tcp_unmap_pdu_iovec(struct nvmet_tcp_cmd *cmd);
- 
- static inline u16 nvmet_tcp_cmd_tag(struct nvmet_tcp_queue *queue,
- 		struct nvmet_tcp_cmd *cmd)
-@@ -301,35 +299,21 @@ static int nvmet_tcp_check_ddgst(struct nvmet_tcp_queue *queue, void *pdu)
- 
- static void nvmet_tcp_free_cmd_buffers(struct nvmet_tcp_cmd *cmd)
- {
--	WARN_ON(unlikely(cmd->nr_mapped > 0));
--
- 	kfree(cmd->iov);
- 	sgl_free(cmd->req.sg);
- 	cmd->iov = NULL;
- 	cmd->req.sg = NULL;
- }
- 
--static void nvmet_tcp_unmap_pdu_iovec(struct nvmet_tcp_cmd *cmd)
--{
--	struct scatterlist *sg;
--	int i;
--
--	sg = &cmd->req.sg[cmd->sg_idx];
--
--	for (i = 0; i < cmd->nr_mapped; i++)
--		kunmap(sg_page(&sg[i]));
--
--	cmd->nr_mapped = 0;
--}
--
- static void nvmet_tcp_map_pdu_iovec(struct nvmet_tcp_cmd *cmd)
- {
- 	struct kvec *iov = cmd->iov;
- 	struct scatterlist *sg;
- 	u32 length, offset, sg_offset;
-+	int nr_mapped;
- 
- 	length = cmd->pdu_len;
--	cmd->nr_mapped = DIV_ROUND_UP(length, PAGE_SIZE);
-+	nr_mapped = DIV_ROUND_UP(length, PAGE_SIZE);
- 	offset = cmd->rbytes_done;
- 	cmd->sg_idx = offset / PAGE_SIZE;
- 	sg_offset = offset % PAGE_SIZE;
-@@ -338,7 +322,7 @@ static void nvmet_tcp_map_pdu_iovec(struct nvmet_tcp_cmd *cmd)
- 	while (length) {
- 		u32 iov_len = min_t(u32, length, sg->length - sg_offset);
- 
--		iov->iov_base = kmap(sg_page(sg)) + sg->offset + sg_offset;
-+		iov->iov_base = page_address(sg_page(sg)) + sg->offset + sg_offset;
- 		iov->iov_len = iov_len;
- 
- 		length -= iov_len;
-@@ -347,8 +331,7 @@ static void nvmet_tcp_map_pdu_iovec(struct nvmet_tcp_cmd *cmd)
- 		sg_offset = 0;
- 	}
- 
--	iov_iter_kvec(&cmd->recv_msg.msg_iter, READ, cmd->iov,
--		cmd->nr_mapped, cmd->pdu_len);
-+	iov_iter_kvec(&cmd->recv_msg.msg_iter, READ, cmd->iov, nr_mapped, cmd->pdu_len);
- }
- 
- static void nvmet_tcp_fatal_error(struct nvmet_tcp_queue *queue)
-@@ -1141,7 +1124,6 @@ static int nvmet_tcp_try_recv_data(struct nvmet_tcp_queue *queue)
- 		cmd->rbytes_done += ret;
- 	}
- 
--	nvmet_tcp_unmap_pdu_iovec(cmd);
- 	if (queue->data_digest) {
- 		nvmet_tcp_prep_recv_ddgst(cmd);
- 		return 0;
-@@ -1411,7 +1393,6 @@ static void nvmet_tcp_restore_socket_callbacks(struct nvmet_tcp_queue *queue)
- static void nvmet_tcp_finish_cmd(struct nvmet_tcp_cmd *cmd)
- {
- 	nvmet_req_uninit(&cmd->req);
--	nvmet_tcp_unmap_pdu_iovec(cmd);
- 	nvmet_tcp_free_cmd_buffers(cmd);
- }
- 
-@@ -1424,7 +1405,6 @@ static void nvmet_tcp_uninit_data_in_cmds(struct nvmet_tcp_queue *queue)
- 		if (nvmet_tcp_need_data_in(cmd))
- 			nvmet_req_uninit(&cmd->req);
- 
--		nvmet_tcp_unmap_pdu_iovec(cmd);
- 		nvmet_tcp_free_cmd_buffers(cmd);
- 	}
- 
--- 
-2.37.1
+[0]
+https://lore.kernel.org/lkml/20220427224924.592546-1-gpiccoli@igalia.com/
 
+[1]
+https://lore.kernel.org/lkml/62a63fc2-346f-f375-043a-fa21385279df@igalia.com/

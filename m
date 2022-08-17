@@ -2,169 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC7F5977E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 892BB5977DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241970AbiHQU0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 16:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40002 "EHLO
+        id S241964AbiHQU0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 16:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241953AbiHQU0H (ORCPT
+        with ESMTP id S241907AbiHQU0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 16:26:07 -0400
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31EEA98E6;
-        Wed, 17 Aug 2022 13:25:59 -0700 (PDT)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E238420024C;
-        Wed, 17 Aug 2022 22:25:57 +0200 (CEST)
-Received: from smtp.na-rdc02.nxp.com (usphx01srsp001v.us-phx01.nxp.com [134.27.49.11])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 7BC37200240;
-        Wed, 17 Aug 2022 22:25:57 +0200 (CEST)
-Received: from right.am.freescale.net (right.am.freescale.net [10.81.116.134])
-        by usphx01srsp001v.us-phx01.nxp.com (Postfix) with ESMTP id 10B3F40AA2;
-        Wed, 17 Aug 2022 13:25:55 -0700 (MST)
-From:   Li Yang <leoyang.li@nxp.com>
-To:     shawnguo@kernel.org, devicetree@vger.kernel.org
-Cc:     robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Xiaowei Bao <xiaowei.bao@nxp.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
-Subject: [PATCH v4 2/2] arm64: dts: lx2160a: add pcie EP mode nodes
-Date:   Wed, 17 Aug 2022 15:25:38 -0500
-Message-Id: <20220817202538.21493-3-leoyang.li@nxp.com>
-X-Mailer: git-send-email 2.25.1.377.g2d2118b
-In-Reply-To: <20220817202538.21493-1-leoyang.li@nxp.com>
-References: <20220817202538.21493-1-leoyang.li@nxp.com>
+        Wed, 17 Aug 2022 16:26:21 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41EE0A98FF
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:26:14 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id s4-20020a17090a5d0400b001fabc6bb0baso1305032pji.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:26:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=voGEdX63KoW+ZibFVnZJzdsesBOjZP2It8KT+faXmbQ=;
+        b=Cl+T9KLC4EJmcz1MyKRqJ76dq4omiP8QcIYqcj9jXcpGW1Oj9XAbG0YqZGHvjN3feL
+         DEZk0TIvBJiJlgBQY/wa5KrN3ksWyFi6If4yOSjmSNPXnL+a2luAQmTKADLXOJC7Ssb2
+         owbs/RFNuCJUTsb6vTH7Fhkx4YGcwAZOVIpsw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=voGEdX63KoW+ZibFVnZJzdsesBOjZP2It8KT+faXmbQ=;
+        b=QI/lhgBIGJ5HxnEKE0hUQymeAkDeG1QYWlKu17Ibl5OdnPVLaoA2VPms+ZBfC2W5Xz
+         eNLIxhqnYA86UiFhYnqpwVDkwkQFZTWcBX1+fCxpuFc6yS6VueJa0oXoVzhrVRBB4jmQ
+         OkgQ6ZZTaoiHCexzyuu+k24uPX2kvH4s3qd/NgySHlIBe//P1w+aqtnj5kQ6SBf9lARj
+         26EApCO95Vqcscu2Hunzv3X1WhUy1ZoYF6vvB0SU0nqdD7HjgTk4EO7Tqi3H5ULzqv4r
+         LJbwJn8T/wtyoYykv8X8nS1HySXCzom/9wMZyJbgKy5/LTiDjDTgSMaUuKhE2pMAhCdw
+         z0NQ==
+X-Gm-Message-State: ACgBeo3wzGOkNsKpaVeZElVTghwUXsOBRlhId9pEiBTKDMkssOpQZv4L
+        sk+pYUebDnWTnzFEmrI4fNmtSQ==
+X-Google-Smtp-Source: AA6agR7DmWypmAe26bnZT4xLDkF12MzBgKNyqwHl8eKku2vWvA2CYPpAgoCIiRzzcwD8rH6xOts1Vg==
+X-Received: by 2002:a17:90b:4c4b:b0:1f7:11f:8e8e with SMTP id np11-20020a17090b4c4b00b001f7011f8e8emr5362650pjb.98.1660767973734;
+        Wed, 17 Aug 2022 13:26:13 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h8-20020a17090a2ec800b001f2fa09786asm1956585pjs.19.2022.08.17.13.26.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 13:26:13 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 13:26:12 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Finn Behrens <me@kloenk.de>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Douglas Su <d0u9.su@outlook.com>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        Daniel Xu <dxu@dxuuu.xyz>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v9 23/27] Kbuild: add Rust support
+Message-ID: <202208171324.FB04837@keescook>
+References: <20220805154231.31257-1-ojeda@kernel.org>
+ <20220805154231.31257-24-ojeda@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220805154231.31257-24-ojeda@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaowei Bao <xiaowei.bao@nxp.com>
+On Fri, Aug 05, 2022 at 05:42:08PM +0200, Miguel Ojeda wrote:
+> Having most of the new files in place, we now enable Rust support
+> in the build system, including `Kconfig` entries related to Rust,
+> the Rust configuration printer and a few other bits.
+> 
+> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Co-developed-by: Finn Behrens <me@kloenk.de>
+> Signed-off-by: Finn Behrens <me@kloenk.de>
+> Co-developed-by: Adam Bratschi-Kaye <ark.email@gmail.com>
+> Signed-off-by: Adam Bratschi-Kaye <ark.email@gmail.com>
+> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Co-developed-by: Michael Ellerman <mpe@ellerman.id.au>
+> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> Co-developed-by: Sven Van Asbroeck <thesven73@gmail.com>
+> Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
+> Co-developed-by: Gary Guo <gary@garyguo.net>
+> Signed-off-by: Gary Guo <gary@garyguo.net>
+> Co-developed-by: Boris-Chengbiao Zhou <bobo1239@web.de>
+> Signed-off-by: Boris-Chengbiao Zhou <bobo1239@web.de>
+> Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> Co-developed-by: Douglas Su <d0u9.su@outlook.com>
+> Signed-off-by: Douglas Su <d0u9.su@outlook.com>
+> Co-developed-by: Dariusz Sosnowski <dsosnowski@dsosnowski.pl>
+> Signed-off-by: Dariusz Sosnowski <dsosnowski@dsosnowski.pl>
+> Co-developed-by: Antonio Terceiro <antonio.terceiro@linaro.org>
+> Signed-off-by: Antonio Terceiro <antonio.terceiro@linaro.org>
+> Co-developed-by: Daniel Xu <dxu@dxuuu.xyz>
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> Co-developed-by: Björn Roy Baron <bjorn3_gh@protonmail.com>
+> Signed-off-by: Björn Roy Baron <bjorn3_gh@protonmail.com>
+> Co-developed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-The LX2160A PCIe EP mode nodes based on controller used on lx2160a rev2.
+It'd be nice to split this up into maybe per-target patches, but given
+how long this has been getting developed, I'd prefer to avoid blocking
+on that, and just get this series landed so we can move to incremental
+fixes/additions.
 
-Signed-off-by: Xiaowei Bao <xiaowei.bao@nxp.com>
-Signed-off-by: Li Yang <leoyang.li@nxp.com>
-Reviewed-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
----
- .../arm64/boot/dts/freescale/fsl-lx2160a.dtsi | 60 +++++++++++++++++++
- 1 file changed, 60 insertions(+)
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-index a7c549277dcc..97786b454ec7 100644
---- a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-@@ -1131,6 +1131,16 @@ pcie1: pcie@3400000 {
- 			status = "disabled";
- 		};
- 
-+		pcie_ep1: pcie-ep@3400000 {
-+			compatible = "fsl,lx2160ar2-pcie-ep", "fsl,ls-pcie-ep";
-+			reg = <0x00 0x03400000 0x0 0x00100000
-+			       0x80 0x00000000 0x8 0x00000000>;
-+			reg-names = "regs", "addr_space";
-+			num-ob-windows = <8>;
-+			num-ib-windows = <8>;
-+			status = "disabled";
-+		};
-+
- 		pcie2: pcie@3500000 {
- 			compatible = "fsl,lx2160ar2-pcie", "fsl,ls2088a-pcie";
- 			reg = <0x00 0x03500000 0x0 0x00100000   /* controller registers */
-@@ -1159,6 +1169,16 @@ pcie2: pcie@3500000 {
- 			status = "disabled";
- 		};
- 
-+		pcie_ep2: pcie-ep@3500000 {
-+			compatible = "fsl,lx2160ar2-pcie-ep", "fsl,ls-pcie-ep";
-+			reg = <0x00 0x03500000 0x0 0x00100000
-+			       0x88 0x00000000 0x8 0x00000000>;
-+			reg-names = "regs", "addr_space";
-+			num-ob-windows = <8>;
-+			num-ib-windows = <8>;
-+			status = "disabled";
-+		};
-+
- 		pcie3: pcie@3600000 {
- 			compatible = "fsl,lx2160ar2-pcie", "fsl,ls2088a-pcie";
- 			reg = <0x00 0x03600000 0x0 0x00100000   /* controller registers */
-@@ -1187,6 +1207,16 @@ pcie3: pcie@3600000 {
- 			status = "disabled";
- 		};
- 
-+		pcie_ep3: pcie-ep@3600000 {
-+			compatible = "fsl,lx2160ar2-pcie-ep", "fsl,ls-pcie-ep";
-+			reg = <0x00 0x03600000 0x0 0x00100000
-+			       0x90 0x00000000 0x8 0x00000000>;
-+			reg-names = "regs", "addr_space";
-+			num-ob-windows = <256>;
-+			num-ib-windows = <24>;
-+			status = "disabled";
-+		};
-+
- 		pcie4: pcie@3700000 {
- 			compatible = "fsl,lx2160ar2-pcie", "fsl,ls2088a-pcie";
- 			reg = <0x00 0x03700000 0x0 0x00100000   /* controller registers */
-@@ -1215,6 +1245,16 @@ pcie4: pcie@3700000 {
- 			status = "disabled";
- 		};
- 
-+		pcie_ep4: pcie-ep@3700000 {
-+			compatible = "fsl,lx2160ar2-pcie-ep", "fsl,ls-pcie-ep";
-+			reg = <0x00 0x03700000 0x0 0x00100000
-+			       0x98 0x00000000 0x8 0x00000000>;
-+			reg-names = "regs", "addr_space";
-+			num-ob-windows = <8>;
-+			num-ib-windows = <8>;
-+			status = "disabled";
-+		};
-+
- 		pcie5: pcie@3800000 {
- 			compatible = "fsl,lx2160ar2-pcie", "fsl,ls2088a-pcie";
- 			reg = <0x00 0x03800000 0x0 0x00100000   /* controller registers */
-@@ -1243,6 +1283,16 @@ pcie5: pcie@3800000 {
- 			status = "disabled";
- 		};
- 
-+		pcie_ep5: pcie-ep@3800000 {
-+			compatible = "fsl,lx2160ar2-pcie-ep", "fsl,ls-pcie-ep";
-+			reg = <0x00 0x03800000 0x0 0x00100000
-+			       0xa0 0x00000000 0x8 0x00000000>;
-+			reg-names = "regs", "addr_space";
-+			num-ob-windows = <256>;
-+			num-ib-windows = <24>;
-+			status = "disabled";
-+		};
-+
- 		pcie6: pcie@3900000 {
- 			compatible = "fsl,lx2160ar2-pcie", "fsl,ls2088a-pcie";
- 			reg = <0x00 0x03900000 0x0 0x00100000   /* controller registers */
-@@ -1271,6 +1321,16 @@ pcie6: pcie@3900000 {
- 			status = "disabled";
- 		};
- 
-+		pcie_ep6: pcie-ep@3900000 {
-+			compatible = "fsl,lx2160ar2-pcie-ep", "fsl,ls-pcie-ep";
-+			reg = <0x00 0x03900000 0x0 0x00100000
-+			       0xa8 0x00000000 0x8 0x00000000>;
-+			reg-names = "regs", "addr_space";
-+			num-ob-windows = <8>;
-+			num-ib-windows = <8>;
-+			status = "disabled";
-+		};
-+
- 		smmu: iommu@5000000 {
- 			compatible = "arm,mmu-500";
- 			reg = <0 0x5000000 0 0x800000>;
+-Kees
+
 -- 
-2.37.1
-
+Kees Cook

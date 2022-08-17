@@ -2,158 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1BFE5971A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F07EF597192
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240418AbiHQOlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 10:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
+        id S236886AbiHQOli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 10:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239736AbiHQOk7 (ORCPT
+        with ESMTP id S240343AbiHQOlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 10:40:59 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44139AF93;
-        Wed, 17 Aug 2022 07:40:58 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id i14so24879770ejg.6;
-        Wed, 17 Aug 2022 07:40:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=OYkBi6IJIzT1jwPLplqfUttZv3Vgq/u2jaSOjLFpJqA=;
-        b=fwDyeTpkUcetEWKRjH4bzYDwOaTQUwQp3IKoqtDHu9n1ny1MRYQ74w/yg+sIyc4FGA
-         aTjJX+U6lQsZQD0qLsMnbvQzn1lbTYAhKT1fGdR4CViBfodvfer1yIUmMW/yBZg0AyJi
-         R4UyIHsOqjrNUAHWjdQvdhoEOCEWDMaP4kDX7dVGDyI3pPOf2FlBE9AA5rPFEaAtmxLg
-         b4EEQqgdmQwAio8RJntfcOJ2SD9E32KDuriwmPpogKqTgEKY1a12pXtzuRwbXsDVRkJF
-         5HGUxLiAW7biRK/8fx9vlf+C2F8ZSH9k6b/iZEuKhGbf8hzV0i3l3uwHBauELv/IvU6Y
-         wDCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=OYkBi6IJIzT1jwPLplqfUttZv3Vgq/u2jaSOjLFpJqA=;
-        b=qrw4HcnDWmAT/QxHIfFzXagTyUSg8C77hCaMUKv60UcksYtu4flFL3qk/e4hcTWlNi
-         Jle1xh3UdgPGmVCZq+O0mrj4SGxDTXSVUWWu6A4CZ0PmQlJMDAh3GaUYMeXSHDL7iDCx
-         4HAd7896xucaix/BsZfvrOjffxIP+WXaaRsAuqADQaBPlg9+66MSz2ovXmOIzqLLXhMj
-         /x1I5jVdKrioPu0reqfqKjJ8DsL1Oc+LJY8xQGzAbDPY6fj2dJfs2HRlN4QmFrupi1rQ
-         nTXUFN/2dXhjGlVYc1eJnfp1OoMqN/hmd2nIAVVNR3WHcQVL5pNgN6VCBhhmjRffT3jb
-         /WyQ==
-X-Gm-Message-State: ACgBeo0D9Ovqj3xa2ee2ODcYGY4f1CAm3nhXmvCNGqibasTv3PSMEGH6
-        MveBrjgbhJEzO9LO5KKgjb5Pfd1GxJME5A==
-X-Google-Smtp-Source: AA6agR6efll/+5JYLS49lp5cCBPRwxMOs5NUeZQlmZF9pliBgu0d7BNxwtlXbM4emxEL8TSresvj9A==
-X-Received: by 2002:a17:907:2da6:b0:730:8b30:e517 with SMTP id gt38-20020a1709072da600b007308b30e517mr17074250ejc.291.1660747256817;
-        Wed, 17 Aug 2022 07:40:56 -0700 (PDT)
-Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id hr16-20020a1709073f9000b007317ad372c0sm6800199ejc.20.2022.08.17.07.40.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 07:40:56 -0700 (PDT)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: [PATCH] KVM/VMX: Do not declare vmread_error asmlinkage
-Date:   Wed, 17 Aug 2022 16:40:45 +0200
-Message-Id: <20220817144045.3206-1-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Wed, 17 Aug 2022 10:41:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564DD9AFB3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:41:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44AF7614E9
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 14:41:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F38DC433D6;
+        Wed, 17 Aug 2022 14:41:06 +0000 (UTC)
+Date:   Wed, 17 Aug 2022 10:41:15 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Yang Jihong <yangjihong1@huawei.com>
+Cc:     <mingo@redhat.com>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ftrace: Fix NULL pointer dereference in
+ is_ftrace_trampoline when ftrace is dead
+Message-ID: <20220817104115.0ec6b90b@gandalf.local.home>
+In-Reply-To: <20220804021610.209791-1-yangjihong1@huawei.com>
+References: <20220804021610.209791-1-yangjihong1@huawei.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to declare vmread_error asmlinkage, its arguments
-can be passed via registers for both, 32-bit and 64-bit targets.
-Function argument registers are considered call-clobbered registers,
-they are saved in the trampoline just before the function call and
-restored afterwards.
+On Thu, 4 Aug 2022 10:16:10 +0800
+Yang Jihong <yangjihong1@huawei.com> wrote:
 
-Note that asmlinkage and __attribute__((regparm(0))) have no effect
-on 64-bit targets. The trampoline is called from the assembler glue
-code that implements its own stack-passing function calling convention,
-so the attribute on the trampoline declaration does not change anything
-for 64-bit as well as 32-bit targets. We can declare it asmlinkage for
-documentation purposes.
+> @@ -2922,24 +2922,36 @@ int ftrace_startup(struct ftrace_ops *ops, int command)
+>  	ops->flags |= FTRACE_OPS_FL_ENABLED | FTRACE_OPS_FL_ADDING;
+>  
+>  	ret = ftrace_hash_ipmodify_enable(ops);
+> -	if (ret < 0) {
+> -		/* Rollback registration process */
+> -		__unregister_ftrace_function(ops);
+> -		ftrace_start_up--;
+> -		ops->flags &= ~FTRACE_OPS_FL_ENABLED;
+> -		if (ops->flags & FTRACE_OPS_FL_DYNAMIC)
+> -			ftrace_trampoline_free(ops);
+> -		return ret;
 
-The patch unifies trampoline function argument handling between 32-bit
-and 64-bit targets and improves generated code for 32-bit targets.
+This should stay as is.
 
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
----
- arch/x86/kvm/vmx/vmenter.S | 15 +++------------
- arch/x86/kvm/vmx/vmx.c     |  2 +-
- arch/x86/kvm/vmx/vmx_ops.h |  6 +++---
- 3 files changed, 7 insertions(+), 16 deletions(-)
+> -	}
+> +	if (ret < 0)
+> +		goto out_rollback_registration;
+>  
+>  	if (ftrace_hash_rec_enable(ops, 1))
+>  		command |= FTRACE_UPDATE_CALLS;
+>  
+>  	ftrace_startup_enable(command);
+>  
+> +	/*
+> +	 * If ftrace_startup_enable fails,
+> +	 * we need to rollback registration process.
+> +	 */
+> +	if (unlikely(ftrace_disabled)) {
+> +		ret = -ENODEV;
+> +		goto out_rollback_registration;
 
-diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
-index 6de96b943804..2b83bab6e371 100644
---- a/arch/x86/kvm/vmx/vmenter.S
-+++ b/arch/x86/kvm/vmx/vmenter.S
-@@ -293,22 +293,13 @@ SYM_FUNC_START(vmread_error_trampoline)
- 	push %r10
- 	push %r11
- #endif
--#ifdef CONFIG_X86_64
-+
- 	/* Load @field and @fault to arg1 and arg2 respectively. */
--	mov 3*WORD_SIZE(%rbp), %_ASM_ARG2
--	mov 2*WORD_SIZE(%rbp), %_ASM_ARG1
--#else
--	/* Parameters are passed on the stack for 32-bit (see asmlinkage). */
--	push 3*WORD_SIZE(%ebp)
--	push 2*WORD_SIZE(%ebp)
--#endif
-+	mov 3*WORD_SIZE(%_ASM_BP), %_ASM_ARG2
-+	mov 2*WORD_SIZE(%_ASM_BP), %_ASM_ARG1
- 
- 	call vmread_error
- 
--#ifndef CONFIG_X86_64
--	add $8, %esp
--#endif
--
- 	/* Zero out @fault, which will be popped into the result register. */
- 	_ASM_MOV $0, 3*WORD_SIZE(%_ASM_BP)
- 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index d7f8331d6f7e..c940688ceaa4 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -439,7 +439,7 @@ do {					\
- 	pr_warn_ratelimited(fmt);	\
- } while (0)
- 
--asmlinkage void vmread_error(unsigned long field, bool fault)
-+void vmread_error(unsigned long field, bool fault)
- {
- 	if (fault)
- 		kvm_spurious_fault();
-diff --git a/arch/x86/kvm/vmx/vmx_ops.h b/arch/x86/kvm/vmx/vmx_ops.h
-index 5cfc49ddb1b4..550a89394d9f 100644
---- a/arch/x86/kvm/vmx/vmx_ops.h
-+++ b/arch/x86/kvm/vmx/vmx_ops.h
-@@ -10,9 +10,9 @@
- #include "vmcs.h"
- #include "../x86.h"
- 
--asmlinkage void vmread_error(unsigned long field, bool fault);
--__attribute__((regparm(0))) void vmread_error_trampoline(unsigned long field,
--							 bool fault);
-+void vmread_error(unsigned long field, bool fault);
-+asmlinkage void vmread_error_trampoline(unsigned long field,
-+					bool fault);
- void vmwrite_error(unsigned long field, unsigned long value);
- void vmclear_error(struct vmcs *vmcs, u64 phys_addr);
- void vmptrld_error(struct vmcs *vmcs, u64 phys_addr);
--- 
-2.37.1
+The only thing to do here is the _unregister_ftrace_function(ops);
+And that may not even be safe.
 
+
+> +	}
+> +
+>  	ops->flags &= ~FTRACE_OPS_FL_ADDING;
+>  
+>  	return 0;
+> +
+> +out_rollback_registration:
+> +	/* Rollback registration process */
+> +	__unregister_ftrace_function(ops);
+> +	ftrace_start_up--;
+> +	ops->flags &= ~FTRACE_OPS_FL_ENABLED;
+> +	if (ops->flags & FTRACE_OPS_FL_DYNAMIC)
+> +		ftrace_trampoline_free(ops);
+> +
+
+When ftrace_disabled is set, ftrace is in an undefined state, and a reboot
+should be done ASAP. Because we have no idea what went wrong. It means
+something happened that ftrace was not designed for.
+
+That means, we do not know if the trampoline can still be called or not.
+Maybe it enabled some of the functions, but not all. And maybe those
+functions call the dynamic trampoline directly.
+
+Thus, on ftrace_disable being set, only do the bare minimum, as ftrace has
+now "shutdown" and will not do any more work.
+
+Basically, this patch is trying to mitigate a kernel that broke and needs
+a reboot immediately.
+
+-- Steve
+
+
+> +	return ret;
+>  }
+>  
+>  int ftrace_shutdown(struct ftrace_ops *ops, int command)
+> -- 

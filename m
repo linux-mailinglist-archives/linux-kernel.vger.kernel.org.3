@@ -2,514 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DDF359764A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3A2597653
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241407AbiHQTMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 15:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
+        id S241424AbiHQTRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 15:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238328AbiHQTMt (ORCPT
+        with ESMTP id S241417AbiHQTRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 15:12:49 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D98DA1D71;
-        Wed, 17 Aug 2022 12:12:48 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id l64so12774643pge.0;
-        Wed, 17 Aug 2022 12:12:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=zBDHYsRAaxa07S9kSx/YYTVeRWmL9DX/Uw3jxEbbslI=;
-        b=cj4sjIYSjkljJyFa5F2y8S1P91q9pU07rJWet218dbeydR88tC0ODAQegEJcTRosDa
-         h41JaoYSHaHfVlnKPWXX3g1wE82cvlzqgOnOg4Yt76Kjs0RT0EBKI/+kRZ+6DLdzzRvu
-         2yiiJw0USTu1vLKcZLcx6Gh82rmbRU3yOS0j16L6xRsnC4Wb4FBN9LfJ4T/K3yxLhR0V
-         dFwB9CA8GlmUvJWFn2+25fIzp2SMI5r4EQXNJVtkcIEMJTKKvoZdJ4vOd9Wl/pot/2QZ
-         s6KztOoX6Algi7PuT4PVtB4VEpb8waIgrqQF19qS9hpAnq5wyZSW8Fu/rVp5zfIrUJ9F
-         /gLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=zBDHYsRAaxa07S9kSx/YYTVeRWmL9DX/Uw3jxEbbslI=;
-        b=uWsdqGbj1IDFPd+Mg5B9CScxqEIm57LKakzQXQFispkRm87Rx8yTja18byPQ3qQA0F
-         hTwPM5dSWfvp4hzcQky8JQmeggIOpmlofjWjWByYsPpPmpQGdOuHEM492Bp5twGQWGMn
-         pYUcAn3gGduoErC4MderJk236WY0qHf+2UKxCZLIyGt6DuASyr6UqM6d3JBF4PRKiiqb
-         aOhvOXOxvy9UeO/Vh6IkwhU7S5LM3+jE9rjcJzTgMWK21xzzXuEKPZWEKfT06JCX8Sd9
-         XQJsWa8Xs/on6k4yJ0g0nQmDkpKFwSuZ7hAH1jYCqwBGiMa7Q2FvQkpH8DybFgWPAES8
-         amBw==
-X-Gm-Message-State: ACgBeo2OeYKPmuwueCyimytOKz7MR9T9L3EN5AjiWjR7AD7m0p3Ttlxp
-        YWNtIREwwDnlQwVsTu2xQZD4/h6lL54=
-X-Google-Smtp-Source: AA6agR7K79Drg/kyDMafULHZxNA/z/3EtM0jvrFwWqnkp7VmS/+TVuPLW2kuJkhbfoVDVFH39RbuLA==
-X-Received: by 2002:a65:6854:0:b0:41c:feab:e17c with SMTP id q20-20020a656854000000b0041cfeabe17cmr23078112pgt.256.1660763567387;
-        Wed, 17 Aug 2022 12:12:47 -0700 (PDT)
-Received: from [172.30.1.52] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id g10-20020a170902d1ca00b0016befc83c6bsm271092plb.165.2022.08.17.12.12.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 12:12:46 -0700 (PDT)
-Message-ID: <e08615e4-d08a-6c1c-88f2-739509ab5deb@gmail.com>
-Date:   Thu, 18 Aug 2022 04:12:39 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 5/9] clk: samsung: exynos850: Implement CMU_AUD domain
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-References: <20220809113323.29965-1-semen.protsenko@linaro.org>
- <20220809113323.29965-6-semen.protsenko@linaro.org>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20220809113323.29965-6-semen.protsenko@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no autolearn_force=no
-        version=3.4.6
+        Wed, 17 Aug 2022 15:17:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA4679601
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:17:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660763824;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=gd3covl43eagT0xH9juakpHOWjtQjx5gc3TXfzwf7g8=;
+        b=efPR6AGmt5GdDSV0PGX2VG1ZFmUuHgSdR/h6z8HL+OgHs0LKf6rzOJ5RpbhGOBv8X8ffhN
+        qvtwZos2/vDvB4IqeejAH8Tr09Py6ZCPyWuQeDgp7ABWsmXPyZRouwgG4+a5z6SSSh5Sv7
+        hR5yPKLcOa4fGxiG51Q5BJG3uSSZtu0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-321-KMGSa4NXMNaSg14xOG0Htw-1; Wed, 17 Aug 2022 15:17:01 -0400
+X-MC-Unique: KMGSa4NXMNaSg14xOG0Htw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BFBA73C10149;
+        Wed, 17 Aug 2022 19:17:00 +0000 (UTC)
+Received: from fuller.cnet (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6B1701121315;
+        Wed, 17 Aug 2022 19:17:00 +0000 (UTC)
+Received: by fuller.cnet (Postfix, from userid 1000)
+        id 522CB416D5DE; Wed, 17 Aug 2022 16:16:24 -0300 (-03)
+Message-ID: <20220817191346.287594886@redhat.com>
+User-Agent: quilt/0.66
+Date:   Wed, 17 Aug 2022 16:13:46 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     atomlin@redhat.com, frederic@kernel.org
+Cc:     cl@linux.com, tglx@linutronix.de, mingo@kernel.org,
+        peterz@infradead.org, pauld@redhat.com, neelx@redhat.com,
+        oleksandr@natalenko.name, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH v7 0/3] tick/sched: Ensure quiet_vmstat() is called when the idle tick was stopped too
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22. 8. 9. 20:33, Sam Protsenko wrote:
-> CMU_AUD clock domain provides clocks for ABOX IP-core (audio subsystem).
-> According to Exynos850 TRM, CMU_AUD generates Cortex-A32 clock, bus
-> clock and audio clocks for BLK_AUD.
-> 
-> This patch adds next clocks:
->   - bus clocks in CMU_TOP needed for CMU_AUD
->   - all internal CMU_AUD clocks
->   - leaf clocks for Cortex-A32, Speedy FM, UAIF0..UAIF6 (Unified Audio
->     Interface), CNT (counter), ABOX IP-core, ASB (Asynchronous Bridge),
->     DAP (Debug Access Port), I2S Codec MCLK, D_TZPC (TrustZone
->     Protection Controller), GPIO, PPMU (Platform Performance Monitoring
->     Unit), SysMMU, SysReg and WDT
-> 
-> ABOX clock was marked as CLK_IGNORE_UNUSED, as system hangs on boot
-> otherwise. Once ABOX driver is implemented, maybe it can be handled
-> there instead.
-> 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
-> Changes in v2:
->   - (none)
-> 
->  drivers/clk/samsung/clk-exynos850.c | 302 ++++++++++++++++++++++++++++
->  1 file changed, 302 insertions(+)
-> 
-> diff --git a/drivers/clk/samsung/clk-exynos850.c b/drivers/clk/samsung/clk-exynos850.c
-> index ef32546d3090..c91984f3f14f 100644
-> --- a/drivers/clk/samsung/clk-exynos850.c
-> +++ b/drivers/clk/samsung/clk-exynos850.c
-> @@ -30,6 +30,7 @@
->  #define PLL_CON0_PLL_SHARED1			0x0180
->  #define PLL_CON3_PLL_SHARED1			0x018c
->  #define CLK_CON_MUX_MUX_CLKCMU_APM_BUS		0x1000
-> +#define CLK_CON_MUX_MUX_CLKCMU_AUD		0x1004
->  #define CLK_CON_MUX_MUX_CLKCMU_CORE_BUS		0x1014
->  #define CLK_CON_MUX_MUX_CLKCMU_CORE_CCI		0x1018
->  #define CLK_CON_MUX_MUX_CLKCMU_CORE_MMC_EMBD	0x101c
-> @@ -42,6 +43,7 @@
->  #define CLK_CON_MUX_MUX_CLKCMU_PERI_IP		0x1074
->  #define CLK_CON_MUX_MUX_CLKCMU_PERI_UART	0x1078
->  #define CLK_CON_DIV_CLKCMU_APM_BUS		0x180c
-> +#define CLK_CON_DIV_CLKCMU_AUD			0x1810
->  #define CLK_CON_DIV_CLKCMU_CORE_BUS		0x1820
->  #define CLK_CON_DIV_CLKCMU_CORE_CCI		0x1824
->  #define CLK_CON_DIV_CLKCMU_CORE_MMC_EMBD	0x1828
-> @@ -60,6 +62,7 @@
->  #define CLK_CON_DIV_PLL_SHARED1_DIV3		0x189c
->  #define CLK_CON_DIV_PLL_SHARED1_DIV4		0x18a0
->  #define CLK_CON_GAT_GATE_CLKCMU_APM_BUS		0x2008
-> +#define CLK_CON_GAT_GATE_CLKCMU_AUD		0x200c
->  #define CLK_CON_GAT_GATE_CLKCMU_CORE_BUS	0x201c
->  #define CLK_CON_GAT_GATE_CLKCMU_CORE_CCI	0x2020
->  #define CLK_CON_GAT_GATE_CLKCMU_CORE_MMC_EMBD	0x2024
-> @@ -83,6 +86,7 @@ static const unsigned long top_clk_regs[] __initconst = {
->  	PLL_CON0_PLL_SHARED1,
->  	PLL_CON3_PLL_SHARED1,
->  	CLK_CON_MUX_MUX_CLKCMU_APM_BUS,
-> +	CLK_CON_MUX_MUX_CLKCMU_AUD,
->  	CLK_CON_MUX_MUX_CLKCMU_CORE_BUS,
->  	CLK_CON_MUX_MUX_CLKCMU_CORE_CCI,
->  	CLK_CON_MUX_MUX_CLKCMU_CORE_MMC_EMBD,
-> @@ -95,6 +99,7 @@ static const unsigned long top_clk_regs[] __initconst = {
->  	CLK_CON_MUX_MUX_CLKCMU_PERI_IP,
->  	CLK_CON_MUX_MUX_CLKCMU_PERI_UART,
->  	CLK_CON_DIV_CLKCMU_APM_BUS,
-> +	CLK_CON_DIV_CLKCMU_AUD,
->  	CLK_CON_DIV_CLKCMU_CORE_BUS,
->  	CLK_CON_DIV_CLKCMU_CORE_CCI,
->  	CLK_CON_DIV_CLKCMU_CORE_MMC_EMBD,
-> @@ -113,6 +118,7 @@ static const unsigned long top_clk_regs[] __initconst = {
->  	CLK_CON_DIV_PLL_SHARED1_DIV3,
->  	CLK_CON_DIV_PLL_SHARED1_DIV4,
->  	CLK_CON_GAT_GATE_CLKCMU_APM_BUS,
-> +	CLK_CON_GAT_GATE_CLKCMU_AUD,
->  	CLK_CON_GAT_GATE_CLKCMU_CORE_BUS,
->  	CLK_CON_GAT_GATE_CLKCMU_CORE_CCI,
->  	CLK_CON_GAT_GATE_CLKCMU_CORE_MMC_EMBD,
-> @@ -148,6 +154,9 @@ PNAME(mout_shared1_pll_p)	= { "oscclk", "fout_shared1_pll" };
->  PNAME(mout_mmc_pll_p)		= { "oscclk", "fout_mmc_pll" };
->  /* List of parent clocks for Muxes in CMU_TOP: for CMU_APM */
->  PNAME(mout_clkcmu_apm_bus_p)	= { "dout_shared0_div4", "pll_shared1_div4" };
-> +/* List of parent clocks for Muxes in CMU_TOP: for CMU_AUD */
-> +PNAME(mout_aud_p)		= { "fout_shared1_pll", "dout_shared0_div2",
-> +				    "dout_shared1_div2", "dout_shared0_div3" };
->  /* List of parent clocks for Muxes in CMU_TOP: for CMU_CORE */
->  PNAME(mout_core_bus_p)		= { "dout_shared1_div2", "dout_shared0_div3",
->  				    "dout_shared1_div3", "dout_shared0_div4" };
-> @@ -190,6 +199,10 @@ static const struct samsung_mux_clock top_mux_clks[] __initconst = {
->  	MUX(CLK_MOUT_CLKCMU_APM_BUS, "mout_clkcmu_apm_bus",
->  	    mout_clkcmu_apm_bus_p, CLK_CON_MUX_MUX_CLKCMU_APM_BUS, 0, 1),
->  
-> +	/* AUD */
-> +	MUX(CLK_MOUT_AUD, "mout_aud", mout_aud_p,
-> +	    CLK_CON_MUX_MUX_CLKCMU_AUD, 0, 2),
-> +
->  	/* CORE */
->  	MUX(CLK_MOUT_CORE_BUS, "mout_core_bus", mout_core_bus_p,
->  	    CLK_CON_MUX_MUX_CLKCMU_CORE_BUS, 0, 2),
-> @@ -240,6 +253,10 @@ static const struct samsung_div_clock top_div_clks[] __initconst = {
->  	DIV(CLK_DOUT_CLKCMU_APM_BUS, "dout_clkcmu_apm_bus",
->  	    "gout_clkcmu_apm_bus", CLK_CON_DIV_CLKCMU_APM_BUS, 0, 3),
->  
-> +	/* AUD */
-> +	DIV(CLK_DOUT_AUD, "dout_aud", "gout_aud",
-> +	    CLK_CON_DIV_CLKCMU_AUD, 0, 4),
-> +
->  	/* CORE */
->  	DIV(CLK_DOUT_CORE_BUS, "dout_core_bus", "gout_core_bus",
->  	    CLK_CON_DIV_CLKCMU_CORE_BUS, 0, 4),
-> @@ -286,6 +303,10 @@ static const struct samsung_gate_clock top_gate_clks[] __initconst = {
->  	GATE(CLK_GOUT_CLKCMU_APM_BUS, "gout_clkcmu_apm_bus",
->  	     "mout_clkcmu_apm_bus", CLK_CON_GAT_GATE_CLKCMU_APM_BUS, 21, 0, 0),
->  
-> +	/* AUD */
-> +	GATE(CLK_GOUT_AUD, "gout_aud", "mout_aud",
-> +	     CLK_CON_GAT_GATE_CLKCMU_AUD, 21, 0, 0),
-> +
->  	/* DPU */
->  	GATE(CLK_GOUT_DPU, "gout_dpu", "mout_dpu",
->  	     CLK_CON_GAT_GATE_CLKCMU_DPU, 21, 0, 0),
-> @@ -462,6 +483,284 @@ static const struct samsung_cmu_info apm_cmu_info __initconst = {
->  	.clk_name		= "dout_clkcmu_apm_bus",
->  };
->  
-> +/* ---- CMU_AUD ------------------------------------------------------------- */
-> +
-> +#define PLL_LOCKTIME_PLL_AUD			0x0000
-> +#define PLL_CON0_PLL_AUD			0x0100
-> +#define PLL_CON3_PLL_AUD			0x010c
-> +#define PLL_CON0_MUX_CLKCMU_AUD_CPU_USER	0x0600
-> +#define PLL_CON0_MUX_TICK_USB_USER		0x0610
-> +#define CLK_CON_MUX_MUX_CLK_AUD_CPU		0x1000
-> +#define CLK_CON_MUX_MUX_CLK_AUD_CPU_HCH		0x1004
-> +#define CLK_CON_MUX_MUX_CLK_AUD_FM		0x1008
-> +#define CLK_CON_MUX_MUX_CLK_AUD_UAIF0		0x100c
-> +#define CLK_CON_MUX_MUX_CLK_AUD_UAIF1		0x1010
-> +#define CLK_CON_MUX_MUX_CLK_AUD_UAIF2		0x1014
-> +#define CLK_CON_MUX_MUX_CLK_AUD_UAIF3		0x1018
-> +#define CLK_CON_MUX_MUX_CLK_AUD_UAIF4		0x101c
-> +#define CLK_CON_MUX_MUX_CLK_AUD_UAIF5		0x1020
-> +#define CLK_CON_MUX_MUX_CLK_AUD_UAIF6		0x1024
-> +#define CLK_CON_DIV_DIV_CLK_AUD_MCLK		0x1800
-> +#define CLK_CON_DIV_DIV_CLK_AUD_AUDIF		0x1804
-> +#define CLK_CON_DIV_DIV_CLK_AUD_BUSD		0x1808
-> +#define CLK_CON_DIV_DIV_CLK_AUD_BUSP		0x180c
-> +#define CLK_CON_DIV_DIV_CLK_AUD_CNT		0x1810
-> +#define CLK_CON_DIV_DIV_CLK_AUD_CPU		0x1814
-> +#define CLK_CON_DIV_DIV_CLK_AUD_CPU_ACLK	0x1818
-> +#define CLK_CON_DIV_DIV_CLK_AUD_CPU_PCLKDBG	0x181c
-> +#define CLK_CON_DIV_DIV_CLK_AUD_FM		0x1820
-> +#define CLK_CON_DIV_DIV_CLK_AUD_FM_SPDY		0x1824
-> +#define CLK_CON_DIV_DIV_CLK_AUD_UAIF0		0x1828
-> +#define CLK_CON_DIV_DIV_CLK_AUD_UAIF1		0x182c
-> +#define CLK_CON_DIV_DIV_CLK_AUD_UAIF2		0x1830
-> +#define CLK_CON_DIV_DIV_CLK_AUD_UAIF3		0x1834
-> +#define CLK_CON_DIV_DIV_CLK_AUD_UAIF4		0x1838
-> +#define CLK_CON_DIV_DIV_CLK_AUD_UAIF5		0x183c
-> +#define CLK_CON_DIV_DIV_CLK_AUD_UAIF6		0x1840
-> +#define CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_CNT	0x2000
-> +#define CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF0	0x2004
-> +#define CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF1	0x2008
-> +#define CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF2	0x200c
-> +#define CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF3	0x2010
-> +#define CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF4	0x2014
-> +#define CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF5	0x2018
-> +#define CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF6	0x201c
-> +#define CLK_CON_GAT_GOUT_AUD_ABOX_ACLK		0x2048
-> +#define CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_SPDY	0x204c
-> +#define CLK_CON_GAT_GOUT_AUD_ABOX_CCLK_ASB	0x2050
-> +#define CLK_CON_GAT_GOUT_AUD_ABOX_CCLK_CA32	0x2054
-> +#define CLK_CON_GAT_GOUT_AUD_ABOX_CCLK_DAP	0x2058
-> +#define CLK_CON_GAT_GOUT_AUD_CODEC_MCLK		0x206c
-> +#define CLK_CON_GAT_GOUT_AUD_TZPC_PCLK		0x2070
-> +#define CLK_CON_GAT_GOUT_AUD_GPIO_PCLK		0x2074
-> +#define CLK_CON_GAT_GOUT_AUD_PPMU_ACLK		0x2088
-> +#define CLK_CON_GAT_GOUT_AUD_PPMU_PCLK		0x208c
-> +#define CLK_CON_GAT_GOUT_AUD_SYSMMU_CLK_S1	0x20b4
-> +#define CLK_CON_GAT_GOUT_AUD_SYSREG_PCLK	0x20b8
-> +#define CLK_CON_GAT_GOUT_AUD_WDT_PCLK		0x20bc
-> +
-> +static const unsigned long aud_clk_regs[] __initconst = {
-> +	PLL_LOCKTIME_PLL_AUD,
-> +	PLL_CON0_PLL_AUD,
-> +	PLL_CON3_PLL_AUD,
-> +	PLL_CON0_MUX_CLKCMU_AUD_CPU_USER,
-> +	PLL_CON0_MUX_TICK_USB_USER,
-> +	CLK_CON_MUX_MUX_CLK_AUD_CPU,
-> +	CLK_CON_MUX_MUX_CLK_AUD_CPU_HCH,
-> +	CLK_CON_MUX_MUX_CLK_AUD_FM,
-> +	CLK_CON_MUX_MUX_CLK_AUD_UAIF0,
-> +	CLK_CON_MUX_MUX_CLK_AUD_UAIF1,
-> +	CLK_CON_MUX_MUX_CLK_AUD_UAIF2,
-> +	CLK_CON_MUX_MUX_CLK_AUD_UAIF3,
-> +	CLK_CON_MUX_MUX_CLK_AUD_UAIF4,
-> +	CLK_CON_MUX_MUX_CLK_AUD_UAIF5,
-> +	CLK_CON_MUX_MUX_CLK_AUD_UAIF6,
-> +	CLK_CON_DIV_DIV_CLK_AUD_MCLK,
-> +	CLK_CON_DIV_DIV_CLK_AUD_AUDIF,
-> +	CLK_CON_DIV_DIV_CLK_AUD_BUSD,
-> +	CLK_CON_DIV_DIV_CLK_AUD_BUSP,
-> +	CLK_CON_DIV_DIV_CLK_AUD_CNT,
-> +	CLK_CON_DIV_DIV_CLK_AUD_CPU,
-> +	CLK_CON_DIV_DIV_CLK_AUD_CPU_ACLK,
-> +	CLK_CON_DIV_DIV_CLK_AUD_CPU_PCLKDBG,
-> +	CLK_CON_DIV_DIV_CLK_AUD_FM,
-> +	CLK_CON_DIV_DIV_CLK_AUD_FM_SPDY,
-> +	CLK_CON_DIV_DIV_CLK_AUD_UAIF0,
-> +	CLK_CON_DIV_DIV_CLK_AUD_UAIF1,
-> +	CLK_CON_DIV_DIV_CLK_AUD_UAIF2,
-> +	CLK_CON_DIV_DIV_CLK_AUD_UAIF3,
-> +	CLK_CON_DIV_DIV_CLK_AUD_UAIF4,
-> +	CLK_CON_DIV_DIV_CLK_AUD_UAIF5,
-> +	CLK_CON_DIV_DIV_CLK_AUD_UAIF6,
-> +	CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_CNT,
-> +	CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF0,
-> +	CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF1,
-> +	CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF2,
-> +	CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF3,
-> +	CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF4,
-> +	CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF5,
-> +	CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF6,
-> +	CLK_CON_GAT_GOUT_AUD_ABOX_ACLK,
-> +	CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_SPDY,
-> +	CLK_CON_GAT_GOUT_AUD_ABOX_CCLK_ASB,
-> +	CLK_CON_GAT_GOUT_AUD_ABOX_CCLK_CA32,
-> +	CLK_CON_GAT_GOUT_AUD_ABOX_CCLK_DAP,
-> +	CLK_CON_GAT_GOUT_AUD_CODEC_MCLK,
-> +	CLK_CON_GAT_GOUT_AUD_TZPC_PCLK,
-> +	CLK_CON_GAT_GOUT_AUD_GPIO_PCLK,
-> +	CLK_CON_GAT_GOUT_AUD_PPMU_ACLK,
-> +	CLK_CON_GAT_GOUT_AUD_PPMU_PCLK,
-> +	CLK_CON_GAT_GOUT_AUD_SYSMMU_CLK_S1,
-> +	CLK_CON_GAT_GOUT_AUD_SYSREG_PCLK,
-> +	CLK_CON_GAT_GOUT_AUD_WDT_PCLK,
-> +};
-> +
-> +/* List of parent clocks for Muxes in CMU_AUD */
-> +PNAME(mout_aud_pll_p)		= { "oscclk", "fout_aud_pll" };
-> +PNAME(mout_aud_cpu_user_p)	= { "oscclk", "dout_aud" };
-> +PNAME(mout_aud_cpu_p)		= { "dout_aud_cpu", "mout_aud_cpu_user" };
-> +PNAME(mout_aud_cpu_hch_p)	= { "mout_aud_cpu", "oscclk" };
-> +PNAME(mout_aud_uaif0_p)		= { "dout_aud_uaif0", "ioclk_audiocdclk0" };
-> +PNAME(mout_aud_uaif1_p)		= { "dout_aud_uaif1", "ioclk_audiocdclk1" };
-> +PNAME(mout_aud_uaif2_p)		= { "dout_aud_uaif2", "ioclk_audiocdclk2" };
-> +PNAME(mout_aud_uaif3_p)		= { "dout_aud_uaif3", "ioclk_audiocdclk3" };
-> +PNAME(mout_aud_uaif4_p)		= { "dout_aud_uaif4", "ioclk_audiocdclk4" };
-> +PNAME(mout_aud_uaif5_p)		= { "dout_aud_uaif5", "ioclk_audiocdclk5" };
-> +PNAME(mout_aud_uaif6_p)		= { "dout_aud_uaif6", "ioclk_audiocdclk6" };
-> +PNAME(mout_aud_tick_usb_user_p)	= { "oscclk", "tick_usb" };
-> +PNAME(mout_aud_fm_p)		= { "oscclk", "dout_aud_fm_spdy" };
-> +
-> +/*
-> + * Do not provide PLL table to PLL_AUD, as MANUAL_PLL_CTRL bit is not set
-> + * for that PLL by default, so set_rate operation would fail.
-> + */
-> +static const struct samsung_pll_clock aud_pll_clks[] __initconst = {
-> +	PLL(pll_0831x, CLK_FOUT_AUD_PLL, "fout_aud_pll", "oscclk",
-> +	    PLL_LOCKTIME_PLL_AUD, PLL_CON3_PLL_AUD, NULL),
-> +};
-> +
-> +static const struct samsung_fixed_rate_clock aud_fixed_clks[] __initconst = {
-> +	FRATE(IOCLK_AUDIOCDCLK0, "ioclk_audiocdclk0", NULL, 0, 25000000),
-> +	FRATE(IOCLK_AUDIOCDCLK1, "ioclk_audiocdclk1", NULL, 0, 25000000),
-> +	FRATE(IOCLK_AUDIOCDCLK2, "ioclk_audiocdclk2", NULL, 0, 25000000),
-> +	FRATE(IOCLK_AUDIOCDCLK3, "ioclk_audiocdclk3", NULL, 0, 25000000),
-> +	FRATE(IOCLK_AUDIOCDCLK4, "ioclk_audiocdclk4", NULL, 0, 25000000),
-> +	FRATE(IOCLK_AUDIOCDCLK5, "ioclk_audiocdclk5", NULL, 0, 25000000),
-> +	FRATE(IOCLK_AUDIOCDCLK6, "ioclk_audiocdclk6", NULL, 0, 25000000),
-> +	FRATE(TICK_USB, "tick_usb", NULL, 0, 60000000),
-> +};
-> +
-> +static const struct samsung_mux_clock aud_mux_clks[] __initconst = {
-> +	MUX(CLK_MOUT_AUD_PLL, "mout_aud_pll", mout_aud_pll_p,
-> +	    PLL_CON0_PLL_AUD, 4, 1),
-> +	MUX(CLK_MOUT_AUD_CPU_USER, "mout_aud_cpu_user", mout_aud_cpu_user_p,
-> +	    PLL_CON0_MUX_CLKCMU_AUD_CPU_USER, 4, 1),
-> +	MUX(CLK_MOUT_AUD_TICK_USB_USER, "mout_aud_tick_usb_user",
-> +	    mout_aud_tick_usb_user_p,
-> +	    PLL_CON0_MUX_TICK_USB_USER, 4, 1),
-> +	MUX(CLK_MOUT_AUD_CPU, "mout_aud_cpu", mout_aud_cpu_p,
-> +	    CLK_CON_MUX_MUX_CLK_AUD_CPU, 0, 1),
-> +	MUX(CLK_MOUT_AUD_CPU_HCH, "mout_aud_cpu_hch", mout_aud_cpu_hch_p,
-> +	    CLK_CON_MUX_MUX_CLK_AUD_CPU_HCH, 0, 1),
-> +	MUX(CLK_MOUT_AUD_UAIF0, "mout_aud_uaif0", mout_aud_uaif0_p,
-> +	    CLK_CON_MUX_MUX_CLK_AUD_UAIF0, 0, 1),
-> +	MUX(CLK_MOUT_AUD_UAIF1, "mout_aud_uaif1", mout_aud_uaif1_p,
-> +	    CLK_CON_MUX_MUX_CLK_AUD_UAIF1, 0, 1),
-> +	MUX(CLK_MOUT_AUD_UAIF2, "mout_aud_uaif2", mout_aud_uaif2_p,
-> +	    CLK_CON_MUX_MUX_CLK_AUD_UAIF2, 0, 1),
-> +	MUX(CLK_MOUT_AUD_UAIF3, "mout_aud_uaif3", mout_aud_uaif3_p,
-> +	    CLK_CON_MUX_MUX_CLK_AUD_UAIF3, 0, 1),
-> +	MUX(CLK_MOUT_AUD_UAIF4, "mout_aud_uaif4", mout_aud_uaif4_p,
-> +	    CLK_CON_MUX_MUX_CLK_AUD_UAIF4, 0, 1),
-> +	MUX(CLK_MOUT_AUD_UAIF5, "mout_aud_uaif5", mout_aud_uaif5_p,
-> +	    CLK_CON_MUX_MUX_CLK_AUD_UAIF5, 0, 1),
-> +	MUX(CLK_MOUT_AUD_UAIF6, "mout_aud_uaif6", mout_aud_uaif6_p,
-> +	    CLK_CON_MUX_MUX_CLK_AUD_UAIF6, 0, 1),
-> +	MUX(CLK_MOUT_AUD_FM, "mout_aud_fm", mout_aud_fm_p,
-> +	    CLK_CON_MUX_MUX_CLK_AUD_FM, 0, 1),
-> +};
-> +
-> +static const struct samsung_div_clock aud_div_clks[] __initconst = {
-> +	DIV(CLK_DOUT_AUD_CPU, "dout_aud_cpu", "mout_aud_pll",
-> +	    CLK_CON_DIV_DIV_CLK_AUD_CPU, 0, 4),
-> +	DIV(CLK_DOUT_AUD_BUSD, "dout_aud_busd", "mout_aud_pll",
-> +	    CLK_CON_DIV_DIV_CLK_AUD_BUSD, 0, 4),
-> +	DIV(CLK_DOUT_AUD_BUSP, "dout_aud_busp", "mout_aud_pll",
-> +	    CLK_CON_DIV_DIV_CLK_AUD_BUSP, 0, 4),
-> +	DIV(CLK_DOUT_AUD_AUDIF, "dout_aud_audif", "mout_aud_pll",
-> +	    CLK_CON_DIV_DIV_CLK_AUD_AUDIF, 0, 9),
-> +	DIV(CLK_DOUT_AUD_CPU_ACLK, "dout_aud_cpu_aclk", "mout_aud_cpu_hch",
-> +	    CLK_CON_DIV_DIV_CLK_AUD_CPU_ACLK, 0, 3),
-> +	DIV(CLK_DOUT_AUD_CPU_PCLKDBG, "dout_aud_cpu_pclkdbg",
-> +	    "mout_aud_cpu_hch",
-> +	    CLK_CON_DIV_DIV_CLK_AUD_CPU_PCLKDBG, 0, 3),
-> +	DIV(CLK_DOUT_AUD_MCLK, "dout_aud_mclk", "dout_aud_audif",
-> +	    CLK_CON_DIV_DIV_CLK_AUD_MCLK, 0, 2),
-> +	DIV(CLK_DOUT_AUD_CNT, "dout_aud_cnt", "dout_aud_audif",
-> +	    CLK_CON_DIV_DIV_CLK_AUD_CNT, 0, 10),
-> +	DIV(CLK_DOUT_AUD_UAIF0, "dout_aud_uaif0", "dout_aud_audif",
-> +	    CLK_CON_DIV_DIV_CLK_AUD_UAIF0, 0, 10),
-> +	DIV(CLK_DOUT_AUD_UAIF1, "dout_aud_uaif1", "dout_aud_audif",
-> +	    CLK_CON_DIV_DIV_CLK_AUD_UAIF1, 0, 10),
-> +	DIV(CLK_DOUT_AUD_UAIF2, "dout_aud_uaif2", "dout_aud_audif",
-> +	    CLK_CON_DIV_DIV_CLK_AUD_UAIF2, 0, 10),
-> +	DIV(CLK_DOUT_AUD_UAIF3, "dout_aud_uaif3", "dout_aud_audif",
-> +	    CLK_CON_DIV_DIV_CLK_AUD_UAIF3, 0, 10),
-> +	DIV(CLK_DOUT_AUD_UAIF4, "dout_aud_uaif4", "dout_aud_audif",
-> +	    CLK_CON_DIV_DIV_CLK_AUD_UAIF4, 0, 10),
-> +	DIV(CLK_DOUT_AUD_UAIF5, "dout_aud_uaif5", "dout_aud_audif",
-> +	    CLK_CON_DIV_DIV_CLK_AUD_UAIF5, 0, 10),
-> +	DIV(CLK_DOUT_AUD_UAIF6, "dout_aud_uaif6", "dout_aud_audif",
-> +	    CLK_CON_DIV_DIV_CLK_AUD_UAIF6, 0, 10),
-> +	DIV(CLK_DOUT_AUD_FM_SPDY, "dout_aud_fm_spdy", "mout_aud_tick_usb_user",
-> +	    CLK_CON_DIV_DIV_CLK_AUD_FM_SPDY, 0, 1),
-> +	DIV(CLK_DOUT_AUD_FM, "dout_aud_fm", "mout_aud_fm",
-> +	    CLK_CON_DIV_DIV_CLK_AUD_FM, 0, 10),
-> +};
-> +
-> +static const struct samsung_gate_clock aud_gate_clks[] __initconst = {
-> +	GATE(CLK_GOUT_AUD_CA32_CCLK, "gout_aud_ca32_cclk", "mout_aud_cpu_hch",
-> +	     CLK_CON_GAT_GOUT_AUD_ABOX_CCLK_CA32, 21, 0, 0),
-> +	GATE(CLK_GOUT_AUD_ASB_CCLK, "gout_aud_asb_cclk", "dout_aud_cpu_aclk",
-> +	     CLK_CON_GAT_GOUT_AUD_ABOX_CCLK_ASB, 21, 0, 0),
-> +	GATE(CLK_GOUT_AUD_DAP_CCLK, "gout_aud_dap_cclk", "dout_aud_cpu_pclkdbg",
-> +	     CLK_CON_GAT_GOUT_AUD_ABOX_CCLK_DAP, 21, 0, 0),
-> +	/* TODO: Should be enabled in ABOX driver (or made CLK_IS_CRITICAL) */
-> +	GATE(CLK_GOUT_AUD_ABOX_ACLK, "gout_aud_abox_aclk", "dout_aud_busd",
-> +	     CLK_CON_GAT_GOUT_AUD_ABOX_ACLK, 21, CLK_IGNORE_UNUSED, 0),
-> +	GATE(CLK_GOUT_AUD_GPIO_PCLK, "gout_aud_gpio_pclk", "dout_aud_busd",
-> +	     CLK_CON_GAT_GOUT_AUD_GPIO_PCLK, 21, 0, 0),
-> +	GATE(CLK_GOUT_AUD_PPMU_ACLK, "gout_aud_ppmu_aclk", "dout_aud_busd",
-> +	     CLK_CON_GAT_GOUT_AUD_PPMU_ACLK, 21, 0, 0),
-> +	GATE(CLK_GOUT_AUD_PPMU_PCLK, "gout_aud_ppmu_pclk", "dout_aud_busd",
-> +	     CLK_CON_GAT_GOUT_AUD_PPMU_PCLK, 21, 0, 0),
-> +	GATE(CLK_GOUT_AUD_SYSMMU_CLK, "gout_aud_sysmmu_clk", "dout_aud_busd",
-> +	     CLK_CON_GAT_GOUT_AUD_SYSMMU_CLK_S1, 21, 0, 0),
-> +	GATE(CLK_GOUT_AUD_SYSREG_PCLK, "gout_aud_sysreg_pclk", "dout_aud_busd",
-> +	     CLK_CON_GAT_GOUT_AUD_SYSREG_PCLK, 21, 0, 0),
-> +	GATE(CLK_GOUT_AUD_WDT_PCLK, "gout_aud_wdt_pclk", "dout_aud_busd",
-> +	     CLK_CON_GAT_GOUT_AUD_WDT_PCLK, 21, 0, 0),
-> +	GATE(CLK_GOUT_AUD_TZPC_PCLK, "gout_aud_tzpc_pclk", "dout_aud_busp",
-> +	     CLK_CON_GAT_GOUT_AUD_TZPC_PCLK, 21, 0, 0),
-> +	GATE(CLK_GOUT_AUD_CODEC_MCLK, "gout_aud_codec_mclk", "dout_aud_mclk",
-> +	     CLK_CON_GAT_GOUT_AUD_CODEC_MCLK, 21, 0, 0),
-> +	GATE(CLK_GOUT_AUD_CNT_BCLK, "gout_aud_cnt_bclk", "dout_aud_cnt",
-> +	     CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_CNT, 21, 0, 0),
-> +	GATE(CLK_GOUT_AUD_UAIF0_BCLK, "gout_aud_uaif0_bclk", "mout_aud_uaif0",
-> +	     CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF0, 21, 0, 0),
-> +	GATE(CLK_GOUT_AUD_UAIF1_BCLK, "gout_aud_uaif1_bclk", "mout_aud_uaif1",
-> +	     CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF1, 21, 0, 0),
-> +	GATE(CLK_GOUT_AUD_UAIF2_BCLK, "gout_aud_uaif2_bclk", "mout_aud_uaif2",
-> +	     CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF2, 21, 0, 0),
-> +	GATE(CLK_GOUT_AUD_UAIF3_BCLK, "gout_aud_uaif3_bclk", "mout_aud_uaif3",
-> +	     CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF3, 21, 0, 0),
-> +	GATE(CLK_GOUT_AUD_UAIF4_BCLK, "gout_aud_uaif4_bclk", "mout_aud_uaif4",
-> +	     CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF4, 21, 0, 0),
-> +	GATE(CLK_GOUT_AUD_UAIF5_BCLK, "gout_aud_uaif5_bclk", "mout_aud_uaif5",
-> +	     CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF5, 21, 0, 0),
-> +	GATE(CLK_GOUT_AUD_UAIF6_BCLK, "gout_aud_uaif6_bclk", "mout_aud_uaif6",
-> +	     CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_UAIF6, 21, 0, 0),
-> +	GATE(CLK_GOUT_AUD_SPDY_BCLK, "gout_aud_spdy_bclk", "dout_aud_fm",
-> +	     CLK_CON_GAT_GOUT_AUD_ABOX_BCLK_SPDY, 21, 0, 0),
-> +};
-> +
-> +static const struct samsung_cmu_info aud_cmu_info __initconst = {
-> +	.pll_clks		= aud_pll_clks,
-> +	.nr_pll_clks		= ARRAY_SIZE(aud_pll_clks),
-> +	.mux_clks		= aud_mux_clks,
-> +	.nr_mux_clks		= ARRAY_SIZE(aud_mux_clks),
-> +	.div_clks		= aud_div_clks,
-> +	.nr_div_clks		= ARRAY_SIZE(aud_div_clks),
-> +	.gate_clks		= aud_gate_clks,
-> +	.nr_gate_clks		= ARRAY_SIZE(aud_gate_clks),
-> +	.fixed_clks		= aud_fixed_clks,
-> +	.nr_fixed_clks		= ARRAY_SIZE(aud_fixed_clks),
-> +	.nr_clk_ids		= AUD_NR_CLK,
-> +	.clk_regs		= aud_clk_regs,
-> +	.nr_clk_regs		= ARRAY_SIZE(aud_clk_regs),
-> +	.clk_name		= "dout_aud",
-> +};
-> +
->  /* ---- CMU_CMGP ------------------------------------------------------------ */
->  
->  /* Register Offset definitions for CMU_CMGP (0x11c00000) */
-> @@ -1026,6 +1325,9 @@ static const struct of_device_id exynos850_cmu_of_match[] = {
->  	{
->  		.compatible = "samsung,exynos850-cmu-apm",
->  		.data = &apm_cmu_info,
-> +	}, {
-> +		.compatible = "samsung,exynos850-cmu-aud",
-> +		.data = &aud_cmu_info,
->  	}, {
->  		.compatible = "samsung,exynos850-cmu-cmgp",
->  		.data = &cmgp_cmu_info,
+This patchset contains enhancements on top of Aaron's -v6 of the series
+(see the changelog below).
 
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+It fixes the following problems two problems:
 
--- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+1) A customer provided some evidence which indicates that the idle tick was
+stopped; albeit, CPU-specific vmstat counters still remained populated.
+Thus one can only assume quiet_vmstat() was not invoked on return to the
+idle loop.
+
+If I understand correctly, I suspect this divergence might erroneously
+prevent a reclaim attempt by kswapd. If the number of zone specific free
+pages are below their per-cpu drift value then
+zone_page_state_snapshot() is used to compute a more accurate view of
+the aforementioned statistic.  Thus any task blocked on the NUMA node
+specific pfmemalloc_wait queue will be unable to make significant
+progress via direct reclaim unless it is killed after being woken up by
+kswapd (see throttle_direct_reclaim()).
+
+2) With a SCHED_FIFO task that busy loops on a given CPU, 
+and kworker for that CPU at SCHED_OTHER priority, queuing
+work to sync per-vmstats will either cause that work
+to never execute, or stalld boosts kworker priority which 
+causes a latency violation.
+
+
+Follows the v6 cover letter, with updated changelog. The numbers, for
+the test program attached at the end of this cover letter, executed
+inside a KVM VM, are:
+
+                                Vanilla                 Patch
+
+cycles per idle loop            151858                  153258  (+1.0%)
+
+cycles per syscall              8461                    8690    (+2.6%)
+
+--------
+
+
+I have incorporated an idea from Marcelo's patch [1] where a CPU-specific
+variable is used to indicate if a vmstat differential/or imbalance is
+present for a given CPU. So, at the appropriate time, vmstat processing can
+be initiated. The hope is that this particular approach is "cheaper" when
+compared to need_update() - used currently; in the context of nohz_full and
+the scheduling-clock tick being stopped, we would now with this patch,
+check if a CPU-specific vmstat imbalance is present before exiting
+user-mode (see tick_nohz_user_enter_prepare()).
+
+This trivial test program [2] was used to determine the somewhat impact
+under vanilla and with the proposed changes; mlock(2) and munlock(2) was
+used solely to modify vmstat item 'NR_MLOCK'. The following is an average
+count of CPU-cycles across the aforementioned system calls and the idle
+loop, respectively. I believe these results are negligible:
+
+	  Modified		   |  		Vanilla
+                                   |
+  cycles per syscall: 7399         | 	cycles per syscall: 4150
+  cycles per idle loop: 141048     |	cycles per idle loop: 144730
+                                   |
+
+
+Any feedback would be appreciated. Thanks.
+
+Changes since v6 [6]:
+ - sync vmstats independently of whether vmstat_update work is queued or not
+ - clean vmstat_dirty before differential sync loop
+ - cancel pending work if tick stopped
+ - do not queue work to remote CPU if tick stopped
+
+Changes since v5 [3]:
+
+ - Introduced __tick_nohz_user_enter_prepare()
+ - Switched to EXPORT_SYMBOL_GPL()
+
+Changes since v4 [4]:
+
+ - Moved vmstat_dirty specific changes into a separate patch
+   (Marcelo Tosatti)
+
+Changes since v3 [5]:
+
+ - Used EXPORT_SYMBOL() on tick_nohz_user_enter_prepare()
+ - Replaced need_update()
+ - Introduced CPU-specific variable namely vmstat_dirty
+   and mark_vmstat_dirty()
+
+[1]: https://lore.kernel.org/lkml/20220204173554.763888172@fedora.localdomain/
+[2]: https://pastebin.com/8AtzSAuK
+[3]: https://lore.kernel.org/lkml/20220801234258.134609-1-atomlin@redhat.com/
+[4]: https://lore.kernel.org/lkml/20220621172207.1501641-1-atomlin@redhat.com/
+[5]: https://lore.kernel.org/lkml/20220422193647.3808657-1-atomlin@redhat.com/
+[6]: https://lore.kernel.org/linux-mm/20220808194820.676246-1-atomlin@redhat.com/
+
+ include/linux/tick.h     |    5 +++--
+ kernel/time/tick-sched.c |   19 ++++++++++++++++++-
+ mm/vmstat.c              |   74 ++++++++++++++++++++++++++++++++++++--------------------------------------
+ 3 files changed, 57 insertions(+), 41 deletions(-)
+
+--- test-vmstat-overhead.c ---
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/mman.h>
+#include <unistd.h>
+#include <string.h>
+
+typedef unsigned long long cycles_t;
+typedef unsigned long long usecs_t;
+typedef unsigned long long u64;
+
+#ifdef __x86_64__
+#define DECLARE_ARGS(val, low, high)    unsigned long low, high
+#define EAX_EDX_VAL(val, low, high)     ((low) | ((u64)(high) << 32))
+#define EAX_EDX_ARGS(val, low, high)    "a" (low), "d" (high)
+#define EAX_EDX_RET(val, low, high)     "=a" (low), "=d" (high)
+#else
+#define DECLARE_ARGS(val, low, high)    unsigned long long val
+#define EAX_EDX_VAL(val, low, high)     (val)
+#define EAX_EDX_ARGS(val, low, high)    "A" (val)
+#define EAX_EDX_RET(val, low, high)     "=A" (val)
+#endif
+
+static inline unsigned long long __rdtscll(void)
+{
+        DECLARE_ARGS(val, low, high);
+
+        asm volatile("cpuid; rdtsc" : EAX_EDX_RET(val, low, high));
+
+        return EAX_EDX_VAL(val, low, high);
+}
+
+#define rdtscll(val) do { (val) = __rdtscll(); } while (0)
+
+#define NRSYSCALLS 30000
+#define NRSLEEPS   100000
+
+void main(int argc, char *argv[])
+{
+	unsigned long a, b, cycles;
+	int i, syscall = 0;
+	void *page = malloc(4096);
+
+	if (mlock(page, 4096))
+		perror("mlock");
+	if (munlock(page, 4096))
+		perror("munlock");
+
+	if (argc != 2) {
+		printf("usage: %s {idle,syscall}\n", argv[0]);
+		exit(1);
+	}
+
+        rdtscll(a);
+
+	if (strncmp("idle", argv[1], 4) == 0)
+		syscall = 0;
+	else if (strncmp("syscall", argv[1], 7) == 0)
+		syscall = 1;
+	else {
+		printf("usage: %s {idle,syscall}\n", argv[0]);
+		exit(1);
+	}
+	
+	if (syscall == 1) {
+        	for (i = 0; i < NRSYSCALLS; i++) {
+			if (mlock(page, 4096))
+				perror("mlock");
+			if (munlock(page, 4096))
+				perror("munlock");
+		}
+	} else {
+        	for (i = 0; i < NRSLEEPS; i++)
+		 	usleep(10);
+	}
+
+        rdtscll(b);
+
+        cycles = b - a;
+
+	if (syscall == 1)
+        	printf("cycles per syscall: %d\n", (b-a)/(NRSYSCALLS*2));
+	else
+		printf("cycles per idle loop: %d\n", (b-a)/NRSLEEPS);
+}
+
+

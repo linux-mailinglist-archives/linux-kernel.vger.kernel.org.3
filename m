@@ -2,86 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 642AD596B6D
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D680596B85
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233450AbiHQIhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 04:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
+        id S233468AbiHQIjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 04:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiHQIhT (ORCPT
+        with ESMTP id S229794AbiHQIjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 04:37:19 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CA97A518;
-        Wed, 17 Aug 2022 01:37:18 -0700 (PDT)
-Received: from zn.tnic (p2e55d27b.dip0.t-ipconnect.de [46.85.210.123])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3907D1EC04F0;
-        Wed, 17 Aug 2022 10:37:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660725433;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=flMrwpLpNIbeVUWLCXG1+5u4wzSiDBK+MUv8SabEeFQ=;
-        b=ecDe3hxpUw4zMT/0CcSlrG3Un59lf77Rh5UgscVpLI+KL4qoxypnDgx5Xh4thaOCtIRXxq
-        D4DS4t7RhgmIoTavkFQwuovFuWvT18R4ew+oBpQuVLBFhVWJJNYoLaNhC2UkcnlFWuHP2d
-        RcaaBHcDODYtqdqeBMhri95GNveEFfk=
-Date:   Wed, 17 Aug 2022 10:36:56 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Justin He <Justin.He@arm.com>
-Cc:     "toshi.kani@hpe.com" <toshi.kani@hpe.com>,
-        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
-        James Morse <James.Morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "devel@acpica.org" <devel@acpica.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        nd <nd@arm.com>, "stable@kernel.org" <stable@kernel.org>
-Subject: Re: [PATCH 2/2] EDAC/ghes: Modularize ghes_edac driver to remove the
- dependency on ghes
-Message-ID: <YvynOu+Mjkspreva@zn.tnic>
-References: <20220811091713.10427-1-justin.he@arm.com>
- <20220811091713.10427-3-justin.he@arm.com>
- <YvZnrTrXhRn8FV3I@zn.tnic>
- <DBBPR08MB45385132F6FC09B4941B5706F7689@DBBPR08MB4538.eurprd08.prod.outlook.com>
+        Wed, 17 Aug 2022 04:39:07 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4F8F617A
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:39:05 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C64B5106F;
+        Wed, 17 Aug 2022 01:39:05 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 459F53F70D;
+        Wed, 17 Aug 2022 01:39:03 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 09:38:57 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        souvik.chakravarty@arm.com, wleavitt@marvell.com,
+        peter.hilber@opensynergy.com, nicola.mazzucato@arm.com,
+        tarek.el-sherbiny@arm.com
+Subject: Re: [RFC PATCH 5/6] firmware: arm_scmi: Add raw transmission support
+Message-ID: <YvypBAnzjKvHBEzi@e120937-lin>
+References: <20220816072450.3120959-1-cristian.marussi@arm.com>
+ <20220816072450.3120959-6-cristian.marussi@arm.com>
+ <Yvvb6Y+lzuABT1fy@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DBBPR08MB45385132F6FC09B4941B5706F7689@DBBPR08MB4538.eurprd08.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yvvb6Y+lzuABT1fy@sirena.org.uk>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 01:32:40AM +0000, Justin He wrote:
-> But is ghes_proc_in_irq() in the irq context which can invoke the notifier?
-> I described it in the commit log:
-> >To resolve the build dependency of ghes_edac_report_mem_error() for ghes,
-> >introduce a notifier which is registered by ghes_edac module. atomic
-> >notifier is used because ghes_proc_in_irq() is in the irq context.
+On Tue, Aug 16, 2022 at 07:03:21PM +0100, Mark Brown wrote:
+> On Tue, Aug 16, 2022 at 08:24:49AM +0100, Cristian Marussi wrote:
+> > Add SCMI Raw mode support which exposes a userspace interface rooted under
+> > /sys/kernel/debug/scmi_raw.
 
-Ah, yes, there's that aspect. atomic it is.
+Hi Mark,
 
-Thx.
+thanks for having a look.
 
--- 
-Regards/Gruss,
-    Boris.
+> 
+> > Raw mode can be enabled/disabled at runtime via ./scmi_raw/enable.
+> > Once enabled, all the regular SCMI drivers activity is inhibited and a
+> > userspace application can then inject and read back bare SCMI messages
+> > writing and reading to/from ./scmi_raw/message* entries.
+> 
+> Is there a strong reason to have the runtime enable/disable?  Given that
+> this is going to be used in special kernel builds rather than something
+> people have as standard it feels like the transition to/from raw mode is
+> opening up a set of extra use cases that wouldn't normally come up for
+> the SCMI drivers (especially if the testing ends up leaving the firmware
+> in a weird state).
 
-https://people.kernel.org/tglx/notes-about-netiquette
+The rationale for this dynamic runtime switch was to try to have a
+system that can be configured for SCMI FW testing BUT not necessarily
+specifically only for such SCMI tests...IOW a system that can be used in
+CI to run a number of other test suites (while in normal mode) and then
+switched to raw mode only when SCMI compliance tests are to be run.
+
+Indeed, the enable/disable thing is the main critical point of this RFC
+since especially the disable-and-back-to-normal transition proved to be
+potentially problematic...i.e. the system generally works in my setup but
+it cannot be guaranteed to really bring back the system in a fully
+functional state depending on how complex the driver stack is
+(..beside the potential FW final weird state issue as you rightly
+pointed out)
+
+...moreover at the end the whole disable and go-back-to-normal really
+makes little sense in a typical CI scenario where anyway the system
+under test is most probably rebooted between runs of different test
+suites, so we really do not care about any weird final state probably.
+
+I, nonetheless, posted this RFC with this such support, at first to have
+some general feedback, BUT also because I'm still anyway wondering if it
+would not be worth to keep at least the capability to only enable it at
+run-time (dropping the disable-back-to-normal feat), because this would
+enable to build an image which includes this SCMI Raw support, which is
+default disabled, and that can at will enabled at runtime only on selected
+runs, so that this same test-image could still be used in a number of
+different CI test-runs (keeping raw mode disabled and silent) but also then
+used for a specific SCMI testing run that would eventually enable it.
+
+If this is not worth really I can just drop the whole runtime switch thing
+and stick to the more conservative approach of having a dedicated image
+for this kind of SCMI FW testing: a system that once configured at compile
+time with this, it just cannot use at all the regular SCMI stack (...which
+does NOT necessarily prevent the system to boot and be used for other non
+SCMI testing indeed...it would just be probably slower...)
+
+Any thought ? 
+
+Thanks,
+Cristian

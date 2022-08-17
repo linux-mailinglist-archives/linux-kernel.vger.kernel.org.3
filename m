@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E76D59782A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E74F2597829
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242056AbiHQUoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 16:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
+        id S241751AbiHQUoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 16:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241571AbiHQUoN (ORCPT
+        with ESMTP id S242053AbiHQUoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 16:44:13 -0400
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E639A99ED;
-        Wed, 17 Aug 2022 13:44:12 -0700 (PDT)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 18C0C200280;
-        Wed, 17 Aug 2022 22:44:11 +0200 (CEST)
+        Wed, 17 Aug 2022 16:44:14 -0400
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14618A74F4;
+        Wed, 17 Aug 2022 13:44:14 -0700 (PDT)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id C0A441A026C;
+        Wed, 17 Aug 2022 22:44:12 +0200 (CEST)
 Received: from smtp.na-rdc02.nxp.com (usphx01srsp001v.us-phx01.nxp.com [134.27.49.11])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 50A4C200274;
-        Wed, 17 Aug 2022 22:44:10 +0200 (CEST)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 836B71A0228;
+        Wed, 17 Aug 2022 22:44:12 +0200 (CEST)
 Received: from right.am.freescale.net (right.am.freescale.net [10.81.116.134])
-        by usphx01srsp001v.us-phx01.nxp.com (Postfix) with ESMTP id BE07F40AA2;
-        Wed, 17 Aug 2022 13:44:05 -0700 (MST)
+        by usphx01srsp001v.us-phx01.nxp.com (Postfix) with ESMTP id 0B2E340A9F;
+        Wed, 17 Aug 2022 13:44:08 -0700 (MST)
 From:   Li Yang <leoyang.li@nxp.com>
 To:     shawnguo@kernel.org, devicetree@vger.kernel.org
 Cc:     robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>
-Subject: [PATCH v2 1/6] arm64: dts: ls2080a-qds: add mdio mux nodes from on-board FPGA
-Date:   Wed, 17 Aug 2022 15:43:52 -0500
-Message-Id: <20220817204357.21753-2-leoyang.li@nxp.com>
+Subject: [PATCH v2 2/6] arm64: dts: ls2088a-qds: add mdio mux nodes from on-board FPGA
+Date:   Wed, 17 Aug 2022 15:43:53 -0500
+Message-Id: <20220817204357.21753-3-leoyang.li@nxp.com>
 X-Mailer: git-send-email 2.25.1.377.g2d2118b
 In-Reply-To: <20220817204357.21753-1-leoyang.li@nxp.com>
 References: <20220817204357.21753-1-leoyang.li@nxp.com>
@@ -50,14 +50,14 @@ Add mmio mdio mux nodes from the on-board FPGA.
 
 Signed-off-by: Li Yang <leoyang.li@nxp.com>
 ---
- .../boot/dts/freescale/fsl-ls2080a-qds.dts    | 69 +++++++++++++++++++
- 1 file changed, 69 insertions(+)
+ .../boot/dts/freescale/fsl-ls2088a-qds.dts    | 68 +++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls2080a-qds.dts b/arch/arm64/boot/dts/freescale/fsl-ls2080a-qds.dts
-index f6c3ee78ace0..ef79c9a78f89 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls2080a-qds.dts
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls2080a-qds.dts
-@@ -23,3 +23,72 @@ chosen {
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls2088a-qds.dts b/arch/arm64/boot/dts/freescale/fsl-ls2088a-qds.dts
+index 7c17b1bd4529..02b10eb54fc7 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls2088a-qds.dts
++++ b/arch/arm64/boot/dts/freescale/fsl-ls2088a-qds.dts
+@@ -22,3 +22,71 @@ chosen {
  		stdout-path = "serial0:115200n8";
  	};
  };
@@ -129,7 +129,6 @@ index f6c3ee78ace0..ef79c9a78f89 100644
 +		};
 +	};
 +};
-+
 -- 
 2.37.1
 

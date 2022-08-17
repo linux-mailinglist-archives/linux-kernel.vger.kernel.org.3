@@ -2,94 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A22A596BFF
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 11:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15052596C00
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 11:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233877AbiHQJYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 05:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
+        id S233670AbiHQJ0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 05:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiHQJY3 (ORCPT
+        with ESMTP id S230107AbiHQJ0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 05:24:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489924F18B;
-        Wed, 17 Aug 2022 02:24:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EDF34B81C06;
-        Wed, 17 Aug 2022 09:24:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4F14C433D6;
-        Wed, 17 Aug 2022 09:24:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660728265;
-        bh=8+DNMt2OBUWg2pDi8QSy/mybuvQDeV4QyZVtGu+4vaI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=I0Ytks26Zwu/w6D1bo0xAWF2o88FDyyCJfyBFdHx+G9M+3+xwNnk2+dEZZOnXxQ6U
-         Y5TtHx9btoXxXVRk5jMtJTddt9FXIYIcb6HplUfChXFZXn8yyStclZOZTow1tDXd8h
-         71MSeHBwK95wUkbTyiwxb4c7hdTeiqPj+1LjWE+cnUbvQLtdN8ASlaudiNwInigMHG
-         8rI8P9DG3A4G039RDqmOEkO8jx5qTgrIHsHCJF+skVJYpOnyH3EBa1TCOPIckr1qFO
-         iVVDol7AhWF0ZxtaCN5xgKeYofnQEoPd0XJd27/vITq67e7qXJ4cMrAAy06E7UoTU/
-         JSUomrDo90zUg==
-Received: by mail-oi1-f172.google.com with SMTP id m6so2923662oib.4;
-        Wed, 17 Aug 2022 02:24:25 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0HLsYVdQFjReVbOtO+GC+kLI6TyFPCx/oSQQDtam5k/tXmZ7ac
-        9/dkX1CDQ2rZZJswxxhPNDf3GXx1qhwHvjpbFVU=
-X-Google-Smtp-Source: AA6agR6rWYZPOrOOZ45KKqJXHC5r8rQJzkHMzXqfvHkZ2MYf7nQqouU3i53gQDbyOdKrIyTBV6kDT+yyxfYE2zZSlrQ=
-X-Received: by 2002:a05:6808:1c06:b0:33a:9b3b:b3ce with SMTP id
- ch6-20020a0568081c0600b0033a9b3bb3cemr1059923oib.53.1660728264832; Wed, 17
- Aug 2022 02:24:24 -0700 (PDT)
+        Wed, 17 Aug 2022 05:26:21 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFDC58B5B;
+        Wed, 17 Aug 2022 02:26:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660728380; x=1692264380;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dOM8O8t6ku6zzPdaPxgxSQ/dRuiaSIT2cXeOOYu8U+4=;
+  b=jbe11Scjj1jE+C8ww9CuX3MhZ/kUaM5ThSq3i4lEEMq++O5Zsormv7Ip
+   xqE/jYlolEswC+r93rlm1FgoiY35Ks3vPmD1I2ItM0cvjvTH5W/l8kdR/
+   gjKMr3MykXdwqKaaEb/eq+9OChmLKY7yOrAx1ORigZz8H7ocUL8eWQWVd
+   JobvuMxUVrc+AR+OWPbDF3OgkLHBQZBhKSAh8W8kWMLsQiJPAEVKqTiTJ
+   +/7EmmNkAN49Du5FpczG0ijswL6RVRxbhqG3GrcUIhOC3TMuCBz4RKtLw
+   5DbUOKbkyAprViTBzLypktZZ2GjQxCH8/Zo4doKEOUXsQy/VLN2M21oAU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="354191863"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="354191863"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 02:26:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="675572048"
+Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 17 Aug 2022 02:26:16 -0700
+Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oOFJX-0000m4-17;
+        Wed, 17 Aug 2022 09:26:15 +0000
+Date:   Wed, 17 Aug 2022 17:25:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        linux-remoteproc@vger.kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org, quic_plai@quicinc.com,
+        bgoswami@quicinc.com, perex@perex.cz, tiwai@suse.com,
+        srinivas.kandagatla@linaro.org, quic_rohkumar@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        devicetree@vger.kernel.org
+Cc:     kbuild-all@lists.01.org,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: Re: [PATCH v5 6/7] remoteproc: qcom: Add support for memory sandbox
+Message-ID: <202208171740.ZRtOUAHf-lkp@intel.com>
+References: <1660649034-4303-7-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-References: <20220708124205.59564-1-andrejs.cainikovs@toradex.com> <20220729104938.GA93488@francesco-nb.int.toradex.com>
-In-Reply-To: <20220729104938.GA93488@francesco-nb.int.toradex.com>
-From:   Shawn Guo <shawnguo@kernel.org>
-Date:   Wed, 17 Aug 2022 17:24:14 +0800
-X-Gmail-Original-Message-ID: <CAJBJ56+8ZKwGSrZK=ia7qZ33Bfq+tjwzqHhwWsAGTx2DTwKOfA@mail.gmail.com>
-Message-ID: <CAJBJ56+8ZKwGSrZK=ia7qZ33Bfq+tjwzqHhwWsAGTx2DTwKOfA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] arm64: dts: imx8mm-verdin: update CAN clock and
- interrupt type
-To:     Francesco Dolcini <francesco.dolcini@toradex.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1660649034-4303-7-git-send-email-quic_srivasam@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 6:49 PM Francesco Dolcini
-<francesco.dolcini@toradex.com> wrote:
->
-> Hello Shawn,
-> just a gently ping.
->
-> On Fri, Jul 08, 2022 at 02:42:03PM +0200, Andrejs Cainikovs wrote:
-> > This patch set updates CAN controller clock and changes interrupt type.
-> >
-> > Andrejs Cainikovs (2):
-> >   arm64: dts: imx8mm-verdin: update CAN clock to 40MHz
-> >   arm64: dts: imx8mm-verdin: use level interrupt for mcp251xfd
-> >
-> >  arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> It's too late for the merge window? These 2 commits do not have a fixes
-> tag, but they are really fixes (we just did not bother having those
-> backported initially).
+Hi Srinivasa,
 
-Applied both as fixes, thanks!
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on remoteproc/rproc-next]
+[also build test WARNING on linus/master v6.0-rc1 next-20220817]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Srinivasa-Rao-Mandadapu/Update-ADSP-pil-loader-for-SC7280-platform/20220816-195318
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git rproc-next
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220817/202208171740.ZRtOUAHf-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/04dc00863cb7b62aa7e5356f81cad5e7720e17ad
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Srinivasa-Rao-Mandadapu/Update-ADSP-pil-loader-for-SC7280-platform/20220816-195318
+        git checkout 04dc00863cb7b62aa7e5356f81cad5e7720e17ad
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/remoteproc/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/kernel.h:29,
+                    from include/linux/clk.h:13,
+                    from drivers/remoteproc/qcom_q6v5_adsp.c:7:
+   drivers/remoteproc/qcom_q6v5_adsp.c: In function 'adsp_rproc_map_smmu':
+>> include/linux/kern_levels.h:5:25: warning: format '%p' expects argument of type 'void *', but argument 2 has type 'u32' {aka 'unsigned int'} [-Wformat=]
+       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
+         |                         ^~~~~~
+   include/linux/printk.h:447:25: note: in definition of macro 'printk_index_wrap'
+     447 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ^~~~
+   include/linux/printk.h:518:9: note: in expansion of macro 'printk'
+     518 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~
+   include/linux/kern_levels.h:11:25: note: in expansion of macro 'KERN_SOH'
+      11 | #define KERN_ERR        KERN_SOH "3"    /* error conditions */
+         |                         ^~~~~~~~
+   include/linux/printk.h:518:16: note: in expansion of macro 'KERN_ERR'
+     518 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+         |                ^~~~~~~~
+   drivers/remoteproc/qcom_q6v5_adsp.c:442:25: note: in expansion of macro 'pr_err'
+     442 |                         pr_err("failed to map addr = %p mem_size = %x\n", rsc_fw->pa, rsc_fw->len);
+         |                         ^~~~~~
+
+
+vim +5 include/linux/kern_levels.h
+
+314ba3520e513a Joe Perches 2012-07-30  4  
+04d2c8c83d0e3a Joe Perches 2012-07-30 @5  #define KERN_SOH	"\001"		/* ASCII Start Of Header */
+04d2c8c83d0e3a Joe Perches 2012-07-30  6  #define KERN_SOH_ASCII	'\001'
+04d2c8c83d0e3a Joe Perches 2012-07-30  7  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

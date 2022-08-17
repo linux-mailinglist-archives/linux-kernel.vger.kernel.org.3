@@ -2,247 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 935B9596AB5
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA89596AB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233551AbiHQH4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 03:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
+        id S233792AbiHQH6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 03:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233471AbiHQH4e (ORCPT
+        with ESMTP id S233539AbiHQH6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 03:56:34 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20C77A771
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:56:32 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id s23so6310935wmj.4
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:56:32 -0700 (PDT)
+        Wed, 17 Aug 2022 03:58:18 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F64B82
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:58:07 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id ay12so6328193wmb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:58:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=CcRETYtN4fhauMaZGbGwCRZe38WMqLheltJ1uKiMAEM=;
-        b=Tb6VTYbA/7axkgPLKP48Ab3RJm5sF55AwVA7gqX1Azxjc7zsVLnQmKILWa9/3Fnw5q
-         OT59iy6UEhNpD/in+jnRA1wKfkTFvepGUjGUzCULHNHiaxDZ/pjCaTFROuUQ8X/6a/Z9
-         c3AXpDq51d9kS0l1BDd2qR0lSbWXJ+pp8FHTkE+ugFabfu8+MGw1L8xe/xGbulfPBLnp
-         UIHPwSxLTUdcn+o3nALmchARxus1doIWYQs3tEECSTQ0alfoUXSAAFkQf7iTrQSmEtXn
-         05wl2RJusYrCzzbgosOGpu2hgDm5Pyoq1HIREqFWMNZq2acvTXfniHNbSb3QqTtDtADH
-         KvDQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=TE0ddFHD8LfA9CzLOTfOGrUsW93MtNgghHykEJcQeAU=;
+        b=UF89YNB5Ar+Cv8g2RRMKZXOxWN0RV3h0JNk+/fqlVOJ8jGUn8lkS8TAnVggtWV8+Ww
+         vh9irmA8T214aXUnBSDvyht4IQU9Wb/e3260kmgPCq2hr4BQ9tq03KuQpKMi/CMy7mVL
+         O4Bc2iYmEGSgWj95uLe1MUIGg1+vymK48Y29iFg7ahGZNsLYS+i4PLFeGrvW8HhIF6Hj
+         B1Jg/VJulwfImuC8otOrbKAC3ka76t3sPTiCEuTGBaC49iwMY1IQfTWLOQF082ssmMoq
+         wg5iWj0Zxes3vGnHVkdGV5jsynGeak+7NRkIALPe5p/O7vJ9PjNmd6Q1kHB5f+2j6G9F
+         fgSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=CcRETYtN4fhauMaZGbGwCRZe38WMqLheltJ1uKiMAEM=;
-        b=O95i9pG/esxM7XsK2uH17DnxmlpvMLZb/oZDUb1qf2UOfjP8VWObK+i5hU8v8ZpQis
-         4BUCKWh/zOz87N2TVo7PcwhC8avEkb85iVAokhR7oJZ5Plv5SMyXYj9ObTY2DmSP+wEL
-         Mu/+qfDL0MNQescjbTvvlgeC+2gyiGoK7mqxrYGmSmn8CMTIoMmloBOoZfDDQpHhVYPb
-         D90W8351Kibz+lf2Js1PTGNYQBddEoL9WVXZu8hep1+aqc8TByizQBHnCYdr2TAZjMjl
-         Gh8Wd/zporqtzEzeep5/+g2QlkI+bF7WivBWwVGVVpw29QjG9Tca7xqPQx7XaW7Qr/bf
-         urVw==
-X-Gm-Message-State: ACgBeo05jrj3gsK+n6rsBiaJzhQtSi7T3+ROLzaaB8vepIoJ8gY4hcjJ
-        xmdA696KGPHK5NCQncn7WlbARA==
-X-Google-Smtp-Source: AA6agR7cylNCBdJrLWk6b3MPoS6xKKceqNxmNadV5AstoXwgDEqMaxLlNUU/A1ScQUcMAQs6N8XLPg==
-X-Received: by 2002:a1c:2944:0:b0:3a5:ead6:3e48 with SMTP id p65-20020a1c2944000000b003a5ead63e48mr1241903wmp.100.1660722991407;
-        Wed, 17 Aug 2022 00:56:31 -0700 (PDT)
-Received: from [10.35.5.6] ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id n13-20020a05600c4f8d00b003a5f3f5883dsm1302212wmq.17.2022.08.17.00.56.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 00:56:31 -0700 (PDT)
-Message-ID: <a51c48a1-8d42-eb10-2350-6962bac8ffdd@sifive.com>
-Date:   Wed, 17 Aug 2022 08:56:29 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=TE0ddFHD8LfA9CzLOTfOGrUsW93MtNgghHykEJcQeAU=;
+        b=DTslX5NhElvMYpTxAJdrnSyL/q8GdLvy4y7wWUhYxCCzBxJwwhCSFeLWn7AhYqwYCb
+         Z+U8/edr5gicqdwihKJO+c6VtD9TxZXIsLrMujIYAjRsRIV/FWYnjnWK0mM6LRx9ZJQC
+         5Cb5/78lwoQiYz8K5PB3YeTRi8J+jbLap0x5jp0V7ZUQQe6vBemPl1T8ueh8M3GO3kOT
+         lQw2RBOU3fM10TPCK2JKI70fzMoCgAlC7/xAYST9stz3KBcd0tJMyZKdFMAdLpXvGM6p
+         nzQcrbVdF5L0rIs5SQqnu2ktbZc2iJJu60E7WepvanOLr2n51j1kfmpL56w4p7dnpw0i
+         h4PQ==
+X-Gm-Message-State: ACgBeo0DHhxdgb4b9bfrekgX5C+BCfMFlCpiSovJHPTwexR0GKxB2J16
+        KvHiaK5Q2qJMiXib41Lq0kc9zcCVmpw=
+X-Google-Smtp-Source: AA6agR7E7ug/296BAxhWlugRSAMAIHNivornn5qMdNgpgoK493MzgzZui1FRNDO3yeML19DHIePL9Q==
+X-Received: by 2002:a05:600c:a08:b0:3a1:9319:ab78 with SMTP id z8-20020a05600c0a0800b003a19319ab78mr1251613wmp.158.1660723085928;
+        Wed, 17 Aug 2022 00:58:05 -0700 (PDT)
+Received: from gmail.com (195-38-113-151.pool.digikabel.hu. [195.38.113.151])
+        by smtp.gmail.com with ESMTPSA id ay29-20020a05600c1e1d00b003a5fa79005csm1345809wmb.11.2022.08.17.00.58.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 00:58:05 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Wed, 17 Aug 2022 09:58:03 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Ashok Raj <ashok.raj@intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        LKML Mailing List <linux-kernel@vger.kernel.org>,
+        X86-kernel <x86@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Jacon Jun Pan <jacob.jun.pan@intel.com>
+Subject: Re: [PATCH v3 3/5] x86/microcode: Avoid any chance of MCE's during
+ microcode update
+Message-ID: <Yvyfi9XC8bu0cOG+@gmail.com>
+References: <20220817051127.3323755-1-ashok.raj@intel.com>
+ <20220817051127.3323755-4-ashok.raj@intel.com>
+ <Yvybq+hYT4tG/yAg@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.1
-Subject: Re: [PATCH 6/8] pwm: dwc: add timer clock
-Content-Language: en-GB
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        jarkko.nikula@linux.intel.com,
-        William Salmon <william.salmon@sifive.com>,
-        Jude Onyenegecha --subject-prefix=PATCH v3 
-        <jude.onyenegecha@sifive.com>
-References: <20220805165033.140958-1-ben.dooks@sifive.com>
- <20220805165033.140958-7-ben.dooks@sifive.com>
- <20220806100703.uxnf2i4pne2kwk63@pengutronix.de>
-From:   Ben Dooks <ben.dooks@sifive.com>
-In-Reply-To: <20220806100703.uxnf2i4pne2kwk63@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yvybq+hYT4tG/yAg@gmail.com>
+X-Spam-Status: No, score=1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/08/2022 11:07, Uwe Kleine-König wrote:
-> Hello Ben,
-> 
-> On Fri, Aug 05, 2022 at 05:50:31PM +0100, Ben Dooks wrote:
->> Add a configurable clock base rate for the pwm as when being built
->> for non-PCI the block may be sourced from an internal clock.
->>
->> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
->> ---
->> v2:
->>    - removed the ifdef and merged the other clock patch in here
->> ---
->>   drivers/pwm/pwm-dwc.c | 22 +++++++++++++++++-----
->>   1 file changed, 17 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/pwm/pwm-dwc.c b/drivers/pwm/pwm-dwc.c
->> index d5f2df6fee62..5c319d0e3d52 100644
->> --- a/drivers/pwm/pwm-dwc.c
->> +++ b/drivers/pwm/pwm-dwc.c
->> @@ -18,6 +18,7 @@
->>   #include <linux/kernel.h>
->>   #include <linux/module.h>
->>   #include <linux/pci.h>
->> +#include <linux/clk.h>
->>   #include <linux/platform_device.h>
->>   #include <linux/pm_runtime.h>
->>   #include <linux/pwm.h>
->> @@ -35,7 +36,6 @@
->>   #define DWC_TIMERS_COMP_VERSION	0xac
->>   
->>   #define DWC_TIMERS_TOTAL	8
->> -#define DWC_CLK_PERIOD_NS	10
->>   
->>   /* Timer Control Register */
->>   #define DWC_TIM_CTRL_EN		BIT(0)
->> @@ -54,6 +54,8 @@ struct dwc_pwm_ctx {
->>   struct dwc_pwm {
->>   	struct pwm_chip chip;
->>   	void __iomem *base;
->> +	struct clk *clk;
->> +	unsigned int clk_ns;
->>   	struct dwc_pwm_ctx ctx[DWC_TIMERS_TOTAL];
->>   };
->>   #define to_dwc_pwm(p)	(container_of((p), struct dwc_pwm, chip))
->> @@ -96,13 +98,13 @@ static int __dwc_pwm_configure_timer(struct dwc_pwm *dwc,
->>   	 * periods and check are the result within HW limits between 1 and
->>   	 * 2^32 periods.
->>   	 */
->> -	tmp = DIV_ROUND_CLOSEST_ULL(state->duty_cycle, DWC_CLK_PERIOD_NS);
->> +	tmp = DIV_ROUND_CLOSEST_ULL(state->duty_cycle, dwc->clk_ns);
->>   	if (tmp < 1 || tmp > (1ULL << 32))
->>   		return -ERANGE;
->>   	low = tmp - 1;
->>   
->>   	tmp = DIV_ROUND_CLOSEST_ULL(state->period - state->duty_cycle,
->> -				    DWC_CLK_PERIOD_NS);
->> +				    dwc->clk_ns);
-> 
-> You're loosing precision here as clk_ns is already the result of a
-> division. We're having
-> 
-> 	dwc->clk_ns = 1000000000 / clk_get_rate(dwc->clk);
-> 
-> from dwc_pwm_plat_probe() (in the platform case).
-> 
-> Consider clk_rate = 285714285 and state->period - state->duty_cycle =
-> 300000. Then you get tmp = 100000 while the exact result would be:
-> 
-> 	300000 * 285714285 / 1000000000 = 85714.2855
-> 
-> Note that even doing
-> 
-> 	dwc->clk_ns = DIV_ROUND_CLOSEST(1000000000, clk_get_rate(dwc->clk))
-> 
-> only somewhat weakens the problem, with the above numbers you then get
-> 75000.
-> 
-> Also note that rounding closest is also wrong in the calculation of tmp
-> because the driver is supposed to implement the biggest period not
-> bigger than the requested period and for that period implement the
-> biggest duty cycle not bigger than the requested duty cycle.
-> 
-> Can the hardware emit 0% relative duty cycle (e.g. by disabling)?
 
-Not sure, we do have an IP build option to look at for 0/100% but
-this is not enabled for the PCI case.
+* Ingo Molnar <mingo@kernel.org> wrote:
 
-Given everything else, I would rather fix the division and accuracy
-issues once we've got the changes under review sorted.
-
+> > +void mce_set_mcip(void)
+> > +{
+> > +	mce_wrmsrl(MSR_IA32_MCG_STATUS, 0x1);
+> > +}
+> > +
+> > +void mce_clear_mcip(void)
+> > +{
+> > +	mce_wrmsrl(MSR_IA32_MCG_STATUS, 0x0);
+> > +}
 > 
->>   	if (tmp < 1 || tmp > (1ULL << 32))
->>   		return -ERANGE;
->>   	high = tmp - 1;
->> @@ -177,12 +179,12 @@ static void dwc_pwm_get_state(struct pwm_chip *chip, struct pwm_device *pwm,
->>   
->>   	duty = dwc_pwm_readl(dwc, DWC_TIM_LD_CNT(pwm->hwpwm));
->>   	duty += 1;
->> -	duty *= DWC_CLK_PERIOD_NS;
->> +	duty *= dwc->clk_ns;
->>   	state->duty_cycle = duty;
->>   
->>   	period = dwc_pwm_readl(dwc, DWC_TIM_LD_CNT2(pwm->hwpwm));
->>   	period += 1;
->> -	period *= DWC_CLK_PERIOD_NS;
->> +	period *= dwc->clk_ns;
->>   	period += duty;
->>   	state->period = period;
->>   
->> @@ -205,6 +207,7 @@ static struct dwc_pwm *dwc_pwm_alloc(struct device *dev)
->>   	if (!dwc)
->>   		return NULL;
->>   
->> +	dwc->clk_ns = 10;
->>   	dwc->chip.dev = dev;
->>   	dwc->chip.ops = &dwc_pwm_ops;
->>   	dwc->chip.npwm = DWC_TIMERS_TOTAL;
->> @@ -336,6 +339,14 @@ static int dwc_pwm_plat_probe(struct platform_device *pdev)
->>   		return dev_err_probe(dev, PTR_ERR(dwc->base),
->>   				     "failed to map IO\n");
->>   
->> +	dwc->clk = devm_clk_get(dev, "timer");
->> +	if (IS_ERR(dwc->clk))
->> +		return dev_err_probe(dev, PTR_ERR(dwc->clk),
->> +				     "failed to get timer clock\n");
->> +
->> +	clk_prepare_enable(dwc->clk);
+> Instead of naming new APIs after how they are doing stuff, please name them 
+> after *what* they are doing at the highest level: they disable/enable MCEs.
 > 
-> If you used devm_clk_get_enabled() you wouldn't need to care separately
-> for enabling. (If you stick to separate calls, please add error checking
-> for clk_prepare_enable().)
-
-ok, will use.
-
->> +	dwc->clk_ns = 1000000000 / clk_get_rate(dwc->clk);
+> Ie. I'd suggest something like:
 > 
-> s/1000000000/NSEC_PER_SEC/
-
-ok, fixed.
-
->> +
->>   	ret = pwmchip_add(&dwc->chip);
->>   	if (ret)
->>   		return ret;
->> @@ -347,6 +358,7 @@ static int dwc_pwm_plat_remove(struct platform_device *pdev)
->>   {
->>   	struct dwc_pwm *dwc = platform_get_drvdata(pdev);
->>   
->> +	clk_disable_unprepare(dwc->clk);
->>   	pwmchip_remove(&dwc->chip);
+>      mce_disable()
+>      mce_enable()
 > 
-> This is wrong, you must not disable the clock before calling
-> pwmchip_remove() as the PWM is supposed to stay functional until
-> pwmchip_remove() returns.
+> I'd also suggest to at minimum add a WARN_ON_ONCE() if MSR_IA32_MCG_STATUS 
+> is already 1 when we disable it - because whoever wanted it disabled will 
+> now be surprised by us enabling them again.
 
-I've moved to devm_clk_get_enabled and devm_pwmchip_add()
+Also, Boris tells me that writing 0x0 to MSR_IA32_MCG_STATUS apparently 
+shuts the platform down - which is not ideal...
 
-> 
->>   	return 0;
->>   }
-> 
+Thanks,
 
+	Ingo

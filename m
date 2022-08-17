@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 807195971E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B35565971F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237059AbiHQOqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 10:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
+        id S240459AbiHQOqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 10:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237072AbiHQOqI (ORCPT
+        with ESMTP id S237072AbiHQOq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 10:46:08 -0400
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8239C2F4;
-        Wed, 17 Aug 2022 07:46:06 -0700 (PDT)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 27HEjW8S025958;
-        Wed, 17 Aug 2022 23:45:33 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 27HEjW8S025958
+        Wed, 17 Aug 2022 10:46:29 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483559C2E2;
+        Wed, 17 Aug 2022 07:46:27 -0700 (PDT)
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 27HEjpZC010379;
+        Wed, 17 Aug 2022 23:45:51 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 27HEjpZC010379
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1660747533;
-        bh=uSGHNJC19uOo+o4MTqX8ubojhADfhgOtyxA3oBtx0Vw=;
+        s=dec2015msa; t=1660747552;
+        bh=3WJO4cR8zWu7de+9R2yEwMTnYd8iRqwV298CuVLMsJ4=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=zzx5VAh46M/Lr1np/fAfFPD43U0C9d5eXTm8lncAWE8P07ixx8EjPNTnhuJJo+cil
-         Lxvm8EbZ3QMhrejTuQbTnBNa2keGhA/KfvBeRwp0RBsApOY5Z5tnakBpMS1UyS4s5X
-         6pUAc1ry0VNea/1F72cAuKaTNYWNh5RjD1nPhTxHJ2+QLecEQMRe8yAGJxmgwYY81c
-         mZ9HhU7XchekuVUmA/Eu7YsMGMceqG4BLPijWmQ1AanUoRkD3JBQUhor1D6SJ8Jixs
-         9wT02sOzE50xfMSyjBvDfdahD29o+4TIPnU56reoZP1yfFonJV3R4LjdMGakzzKoN+
-         jmYJ0j69bNu4w==
-X-Nifty-SrcIP: [209.85.221.43]
-Received: by mail-wr1-f43.google.com with SMTP id v3so16521862wrp.0;
-        Wed, 17 Aug 2022 07:45:33 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3ZEASHApfxFa/BrX9jIyykjjeGwyAQhKY4oVdFSsyr+ZDkJffd
-        5v0fESv3S6mqKFcj1QWT7+EDLrmfzei3cllnWd8=
-X-Google-Smtp-Source: AA6agR4611rLwhvJge2V5I5V2koJiMq8syWgMNxEIKfxnkhKZB+GtpMB6g0Pr+VpUQyacDmgDOMa9Ca/O/RLwbZ9EbQ=
-X-Received: by 2002:a5d:6248:0:b0:222:cd3b:94c8 with SMTP id
- m8-20020a5d6248000000b00222cd3b94c8mr14909860wrv.97.1660747531856; Wed, 17
- Aug 2022 07:45:31 -0700 (PDT)
+        b=LzTm5rHKtvbHYbKttxERKETRHHq06Bt31AiUn2xP5Z2iSdORER6sOImA0So4WBqE5
+         QPD14yyH7SJ9A9eaOJJ0ZO0sgW5AOpX0qtgzoYHnfceb2fF2jJ3zEHl0/G1REC0run
+         Tx3E5KqO+BP82G7+iBrGzOZM7F2GpbiL5ClBwiK9sfcDBvx/mudNfxdZSPm6p8XY1X
+         zfZVyeiHq+kush3SXJ7S+A6WyXb1ZaiCnRigiPiKlwfwGtnuNPfqKjqgDuCyssRqHv
+         7XTezqCcoZKBdmLAEqr8xjRsi1QkSgHSfvTRqp5zm9HejFMTU84Myhfqm8bFmMXfuE
+         Dbfi/IS/Wf62g==
+X-Nifty-SrcIP: [209.85.221.48]
+Received: by mail-wr1-f48.google.com with SMTP id n7so5279192wrv.4;
+        Wed, 17 Aug 2022 07:45:51 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2wHtfZEXd9TQHETGdVfyIKaTPGpMJ44WBudP20pksBwKKx2ne0
+        HArjYKC9IvBFMzEFtZZGELacYl9n+t0ONlhZMAI=
+X-Google-Smtp-Source: AA6agR7G0sWmJcRL1tSHnXrCXzFnkHuoAWUNoYDRb7CHW6cdB1Eaay5cdD1GK164Ed6MUMWxAqivMdvSPHkUIRf2U3A=
+X-Received: by 2002:a5d:6d89:0:b0:225:16c2:6816 with SMTP id
+ l9-20020a5d6d89000000b0022516c26816mr4915562wrs.380.1660747550323; Wed, 17
+ Aug 2022 07:45:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220810230133.1895778-1-nathan@kernel.org>
-In-Reply-To: <20220810230133.1895778-1-nathan@kernel.org>
+References: <20220810092603.20368-1-jslaby@suse.cz>
+In-Reply-To: <20220810092603.20368-1-jslaby@suse.cz>
 From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 17 Aug 2022 23:44:47 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATMpk2F1n489mNAV7cxi8Z_E_hNjhyvX5QcUqQXUXf_4A@mail.gmail.com>
-Message-ID: <CAK7LNATMpk2F1n489mNAV7cxi8Z_E_hNjhyvX5QcUqQXUXf_4A@mail.gmail.com>
-Subject: Re: [PATCH] scripts/Makefile.extrawarn: Do not disable clang's -Wformat-zero-length
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>
+Date:   Wed, 17 Aug 2022 23:45:06 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASMRwn+jmW2kuc9iejou9_mevAaQhb7DAuYK9KDzU2L1A@mail.gmail.com>
+Message-ID: <CAK7LNASMRwn+jmW2kuc9iejou9_mevAaQhb7DAuYK9KDzU2L1A@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: dummy-tools: pretend we understand __LONG_DOUBLE_128__
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
@@ -63,39 +62,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 8:01 AM Nathan Chancellor <nathan@kernel.org> wrote:
+On Wed, Aug 10, 2022 at 6:26 PM Jiri Slaby <jslaby@suse.cz> wrote:
 >
-> There are no instances of this warning in the tree across several
-> difference architectures and configurations. This was added by
-> commit 26ea6bb1fef0 ("kbuild, LLVMLinux: Supress warnings unless W=1-3")
-> back in 2014, where it might have been necessary, but there are no
-> instances of it now so stop disabling it to increase warning coverage
-> for clang.
+> There is a test in powerpc's Kconfig which checks __LONG_DOUBLE_128__
+> and sets CONFIG_PPC_LONG_DOUBLE_128 if it is understood by the compiler.
 >
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
+> We currently don't handle it, so this results in PPC_LONG_DOUBLE_128 not
+> being in super-config generated by dummy-tools. So take this into
+> account in the gcc script and preprocess __LONG_DOUBLE_128__ as "1".
+>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Michal Marek <michal.lkml@markovi.net>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: linux-kbuild@vger.kernel.org
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+
 
 Applied to linux-kbuild/fixes. Thanks.
 
-
-
->  scripts/Makefile.extrawarn | 1 -
->  1 file changed, 1 deletion(-)
+> ---
+>  scripts/dummy-tools/gcc | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-> index 9bbaf7112a9b..69cec45c4e71 100644
-> --- a/scripts/Makefile.extrawarn
-> +++ b/scripts/Makefile.extrawarn
-> @@ -48,7 +48,6 @@ else
->  ifdef CONFIG_CC_IS_CLANG
->  KBUILD_CFLAGS += -Wno-initializer-overrides
->  KBUILD_CFLAGS += -Wno-sign-compare
-> -KBUILD_CFLAGS += -Wno-format-zero-length
->  KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
->  KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
->  KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
->
-> base-commit: aeb6e6ac18c73ec287b3b1e2c913520699358c13
+> diff --git a/scripts/dummy-tools/gcc b/scripts/dummy-tools/gcc
+> index 7db825843435..1db1889f6d81 100755
+> --- a/scripts/dummy-tools/gcc
+> +++ b/scripts/dummy-tools/gcc
+> @@ -59,7 +59,7 @@ fi
+>  if arg_contain -E "$@"; then
+>         # For scripts/cc-version.sh; This emulates GCC 20.0.0
+>         if arg_contain - "$@"; then
+> -               sed -n '/^GCC/{s/__GNUC__/20/; s/__GNUC_MINOR__/0/; s/__GNUC_PATCHLEVEL__/0/; p;}'
+> +               sed -n '/^GCC/{s/__GNUC__/20/; s/__GNUC_MINOR__/0/; s/__GNUC_PATCHLEVEL__/0/; p;}; s/__LONG_DOUBLE_128__/1/ p'
+>                 exit 0
+>         else
+>                 echo "no input files" >&2
 > --
 > 2.37.1
 >

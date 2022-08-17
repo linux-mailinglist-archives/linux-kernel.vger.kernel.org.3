@@ -2,82 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F009E596AB1
+	by mail.lfdr.de (Postfix) with ESMTP id 57106596AAF
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233409AbiHQHym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 03:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46574 "EHLO
+        id S233525AbiHQHzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 03:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbiHQHyh (ORCPT
+        with ESMTP id S233471AbiHQHzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 03:54:37 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB076FA13;
-        Wed, 17 Aug 2022 00:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=YZL2udXtnu7kSf5BoGRC8CmiIz9CMCVJ89aCm+TG/5Y=; b=L3LmfID7hue/edze1z7PIN388E
-        E7FKX7AcKxTUNphdOSos96NgmPrzoTocC9DSen7qeNo1CJZTfCj36gttmcbnUovkcju9Ld1zJf2ZD
-        cVSaJJ1/64ko20P7ujwBYOCblqjQVvVMNTREmZJwJKR+bRpJBn4AL4YUnOdDodVL4V3EIU1jy1tnA
-        jRE6w+Vd23i3b7l+epsFD/PAXC57YdS6JcBLc3rZkjgzy35RYGlWl6zXhHxOr4JoIPYnhjbdltWsp
-        TG2diUWec2TK111lBwGZrwiDmh08U7R/G9VQyKbrj6gKfeMFdL9fTAneh5oORPrjJgTJ7z5UXCTFE
-        j3R5H5YA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oODs9-003Cne-Al; Wed, 17 Aug 2022 07:53:53 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5CCD298007A; Wed, 17 Aug 2022 09:53:52 +0200 (CEST)
-Date:   Wed, 17 Aug 2022 09:53:52 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Davidlohr Bueso <dave@stgolabs.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
-        bwidawsk@kernel.org, ira.weiny@intel.com, vishal.l.verma@intel.com,
-        alison.schofield@intel.com, a.manzanares@samsung.com,
-        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, bp@alien8.de, x86@kernel.org,
+        Wed, 17 Aug 2022 03:55:19 -0400
+Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56317B1C7
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:55:18 -0700 (PDT)
+Received: from gproxy1-pub.mail.unifiedlayer.com (gproxy1-pub.mail.unifiedlayer.com [69.89.25.95])
+        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id 73C5F8026B0F
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:55:07 +0000 (UTC)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway3.mail.pro1.eigbox.com (Postfix) with ESMTP id A8C081003F24C
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:54:36 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id ODsqoPvwOsbE6ODsqoSUtt; Wed, 17 Aug 2022 07:54:36 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=EegN/NqC c=1 sm=1 tr=0 ts=62fc9ebc
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=biHskzXt2R4A:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=IAkFCxurSS7jjyJAaRIA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=XvAJ6wK9cpRDCknKVsz42A3AaLEeFcDBb2RRbB3KMYo=; b=lNqjKtKzaE+qvnpn9SJM/DFLA/
+        CaDNQaOSxgVhBZkhSaw3HDGCRVrYExt7k54SA5T8L3556OdvUwPRWxLBV3ajOKIhSSZl8yYq7EZis
+        WFj6NLBXIm+6nPjzYBZIZg2MOXG59B56srP8xV1rPfDC7rcifnlCtO28oeqWv8CW87l3DpZCUq46c
+        uOrmgfNGV1TLlG6FdOOdYO5DGeK0Kmh9cI2sa9GTCOHilIsV2yWAnLBGrnia/pKRJFJuoqC2e1XWe
+        BqvqB/aCl9b6t6bwst9Phgxq9SPcKZS5/6MWxWqhjikUoIYXsaUPSEgn7+WRgMMw1pGUY51Xe5L1E
+        q2UD+SPA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:40432 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oODso-003ShS-VA;
+        Wed, 17 Aug 2022 01:54:35 -0600
+Subject: Re: [PATCH 5.15 000/778] 5.15.61-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arch/cacheflush: Introduce flush_all_caches()
-Message-ID: <YvyekFhBWQ6qlAP6@worktop.programming.kicks-ass.net>
-References: <9f3705e1-de21-0f3c-12af-fd011b6d613d@intel.com>
- <YvO8pP7NUOdH17MM@FVFF77S0Q05N>
- <62f40fba338af_3ce6829466@dwillia2-xfh.jf.intel.com.notmuch>
- <20220815160706.tqd42dv24tgb7x7y@offworld>
- <Yvtc2u1J/qip8za9@worktop.programming.kicks-ass.net>
- <62fbcae511ec1_dfbc129453@dwillia2-xfh.jf.intel.com.notmuch>
- <20220816165301.4m4w6zsse62z4hxz@offworld>
- <CAA9_cmfBubQe6EGk5+wjotvofZavfjFud-JMPW13Au0gpAcWog@mail.gmail.com>
- <20220816175259.o5h5wv23rs2bvcu6@offworld>
- <62fbe6d7b75ae_f2f5129482@dwillia2-xfh.jf.intel.com.notmuch>
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220816124544.577833376@linuxfoundation.org>
+In-Reply-To: <20220816124544.577833376@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <12c48cf8-cab0-10ef-1e38-f6fdf01e08b5@w6rz.net>
+Date:   Wed, 17 Aug 2022 00:54:33 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <62fbe6d7b75ae_f2f5129482@dwillia2-xfh.jf.intel.com.notmuch>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oODso-003ShS-VA
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:40432
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 11:49:59AM -0700, Dan Williams wrote:
+On 8/16/22 5:59 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.61 release.
+> There are 778 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 18 Aug 2022 12:43:40 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.61-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-> What would have helped is if the secure-erase and unlock definition in
-> the specification mandated that the device emit cache invalidations for
-> everything it has mapped when it is erased. However, that has some
-> holes, and it also makes me think there is a gap in the current region
-> provisioning code. If I have device-A mapped at physical-address-X and then
-> tear that down and instantiate device-B at that same physical address
-> there needs to be CPU cache invalidation between those 2 events.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Can we pretty please get those holes fixed ASAP such that future
-generations can avoid the WBINVD nonsense?
+Tested-by: Ron Economos <re@w6rz.net>
+

@@ -2,44 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19F1E597124
+	by mail.lfdr.de (Postfix) with ESMTP id 90088597125
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233846AbiHQObS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 10:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56354 "EHLO
+        id S240117AbiHQObX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 10:31:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240146AbiHQObL (ORCPT
+        with ESMTP id S240157AbiHQObM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 10:31:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804848F975
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:31:06 -0700 (PDT)
+        Wed, 17 Aug 2022 10:31:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64BE91088
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:31:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDE00B81DEE
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 14:31:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E690C433D7;
-        Wed, 17 Aug 2022 14:31:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7186D614B9
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 14:31:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02EB0C433D6;
+        Wed, 17 Aug 2022 14:31:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660746663;
-        bh=8Cxt79lJcoOCLhow0rXoihH+uKypSMqN8m02vofybPw=;
+        s=k20201202; t=1660746666;
+        bh=+fAp6q0oNEBcBmsZFkorVQv43BFESvY96V4smdRItO0=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=nrPQswX/hxhZzeSSdtpKOiaJLE74v/Ru9ACezTS7Sv+AdoG9XBHiz14KT2vX8Hwjv
-         muNzs6Y/l9aD9zrFoK2SI2uju8ng7unIBjgxs4Qqc9/jzUfdiyqi7ekft9ZQAYjm5B
-         j1yupZqONvw/FoCtHi1l2eg1JA8nvx/Hn1tBD104QQhGWJLp1aiImSpujPGzJvQj3W
-         sViVoevg8P8iDiMr5eO9+wwffjyy9n5puH7Vp8qDiLtDg5+im3iKUqoLXbqtw9Yqmw
-         Utj61PkQoLjPBoYceK5PA012LGmHy7OefNfWaWbqKMBChWOvogWH3GDMmx7ndegyTX
-         uP+JBliZx1rQw==
+        b=ZMztFhN/hAv57Vj9ldCdrInquS1yuzUY9MmCzygZ6Di2ZH3ApbYyfvhAbWZyJVTLN
+         kbZoOTGJObkZoMPNO/FwaZ4nrFTz7GWE7m028mHG1iOx+I9tXYnczhoNVyykA9IqEK
+         sKlLQTbmoPBoCvK4FWO04dLcjyogbccSEmlHoX7Nd/PrKwr+jsnlnR2S9Jlyw3g7Gi
+         0vVTkwNVZv6RDYL+8N4nzUSUgv8A10DwzXqIq2BH+c8AKnayYpxYjvhHB+oyToBfEN
+         Hm/9mT9WEFuPBs/SnmoMfjS6pMxRVtWJXKrrhwbeUuC28kxMW4LbA6Z8AnGx45zjrp
+         7xT3ILCxjXk+A==
 From:   Mark Brown <broonie@kernel.org>
-To:     Kevin Lu <luminlong@139.com>
-Cc:     shenghao-ding@ti.com, kevin-lu@ti.com, linux-kernel@vger.kernel.org
-In-Reply-To: <20220815112715.21617-1-luminlong@139.com>
-References: <20220815112715.21617-1-luminlong@139.com>
-Subject: Re: [PATCH v1 1/1] sound: Add a new kcontrol
-Message-Id: <166074666231.210979.6764076566414910636.b4-ty@kernel.org>
-Date:   Wed, 17 Aug 2022 15:31:02 +0100
+To:     alsa-devel@alsa-project.org,
+        Daniel Baluta <daniel.baluta@oss.nxp.com>
+Cc:     laurentiu.mihalcea@nxp.com, peter.ujfalusi@linux.intel.com,
+        lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
+        yung-chuan.liao@linux.intel.com, daniel.baluta@gmail.com,
+        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        pierre-louis.bossart@linux.intel.com
+In-Reply-To: <20220817080529.10864-1-daniel.baluta@oss.nxp.com>
+References: <20220817080529.10864-1-daniel.baluta@oss.nxp.com>
+Subject: Re: [PATCH 0/4] Enable timestamp support for SOF compress driver
+Message-Id: <166074666372.210979.8582498171681865301.b4-ty@kernel.org>
+Date:   Wed, 17 Aug 2022 15:31:03 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,10 +60,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 Aug 2022 19:27:15 +0800, Kevin Lu wrote:
-> Add a new kcontrol for phase calib
+On Wed, 17 Aug 2022 11:05:25 +0300, Daniel Baluta wrote:
+> From: Daniel Baluta <daniel.baluta@nxp.com>
 > 
+> This patchseries computes pcm_io_frames from the DAI position reported
+> by SOF firmware.
 > 
+> Using pcm_io_frames userspace applications can later compute timestamps
+> for compressed stream.
+> 
+> [...]
 
 Applied to
 
@@ -65,8 +77,14 @@ Applied to
 
 Thanks!
 
-[1/1] sound: Add a new kcontrol
-      commit: 4e82971f7b556cff3491c867e8840e7d788693b9
+[1/4] ASoC: SOF: compress: Remove byte offset computation
+      commit: bab10ec9fd9dc1537b705d0dd3862dd5982b921f
+[2/4] ASoC: SOF: compress: Introduce sof_compr_stream
+      commit: e3091f0a3f563ad1c9b60c290752e1190b67ea97
+[3/4] ASoC: SOF: compress: Save channel count and sample bytes
+      commit: 3ccbe6887747679d15e5c9524b23754281a24d9e
+[4/4] ASoC: SOF: compress: Add support for computing timestamps
+      commit: c1a731c71359407eae4fd0a5fd675ef25a582764
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

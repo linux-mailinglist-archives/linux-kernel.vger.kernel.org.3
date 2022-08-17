@@ -2,73 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 357565974EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 938CE5974F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240057AbiHQRTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
+        id S240293AbiHQRUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238406AbiHQRTV (ORCPT
+        with ESMTP id S236907AbiHQRUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:19:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5389C1D9;
-        Wed, 17 Aug 2022 10:19:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6BC97B81E7D;
-        Wed, 17 Aug 2022 17:19:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2961C433D6;
-        Wed, 17 Aug 2022 17:19:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660756757;
-        bh=qRzfysH3XWV3JWKS2lY8gaQtm+4fH/BNnQZ2uKVaPM8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tF6QnQ4VaE3A+ew8gQFAD1alxXAakzEZ7i0Ltl/wUNiSI2kcZgmOO++5PO0vsTR1E
-         5KvmWlit0MFCO4U35HEcuvE8rZ4aionYQJfrV7GtNmRGCwijr5D6h2WsIg89BzVSQ8
-         H7ytJvEg+axdGXVupU5h9aq1mya3zq2L13YzUN0iagekv3RLI5BJqzT50CqlhNbQXc
-         rPaPpM6ZoE56tkUaQPWMmOurCvGCNGyz534GMWGXN5x3ireYZyciqXSfLybe7XqS8F
-         JvEGKAo4GssOrEm2jJqPs0eYNyS+YhCB3a/8jLiIoCdInRrbCxmM0ph7TY6CzLBu2m
-         FKGXy5krJu+JA==
-Date:   Wed, 17 Aug 2022 10:19:16 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Beniamin Sandu <beniaminsandu@gmail.com>, andrew@lunn.ch,
-        hkallweit1@gmail.com, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: sfp: use simplified HWMON_CHANNEL_INFO macro
-Message-ID: <20220817101916.10dec387@kernel.org>
-In-Reply-To: <Yv0TaF+So0euV0DR@shell.armlinux.org.uk>
-References: <20220813204658.848372-1-beniaminsandu@gmail.com>
-        <20220817085429.4f7e4aac@kernel.org>
-        <Yv0TaF+So0euV0DR@shell.armlinux.org.uk>
+        Wed, 17 Aug 2022 13:20:01 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0816A9D123
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:20:00 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-11c59785966so2186951fac.11
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:20:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=J3VPAc5hc1beoFQlEY8UmpcylWVa8Cg5xRcsnWIJYsU=;
+        b=SCfTwXbWYFitH2mVeMfBTd8oUH/KXZXgT8BIHGPDHUz6Dh2NBNFER7vPRljNHOMTFo
+         KXtqFlvPL4lL17cgNJvrWIL+oBZBL3hfA/4TF/6agOW/b0NEbp1HDA65CyIc4aI0Hg4O
+         9QrN64jfHSs2gwNJ6GG6Moo1MesbpkxU5f5zMP9wBarJTL4boyoERBQqemFIZS8kZ7sq
+         fYCsSrGuWP1ZKJPDDW1ZXKSMmIYtQKUqVlrehGPAX1JkUdATUfmohOtCPObMo0gcVykX
+         EIK5RsltW8fLfHbazgsMlFWQRFdlFS9An0Zq+IChTVai5fJHiFS7XsnFqGx3Ls8l9FJ0
+         go0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=J3VPAc5hc1beoFQlEY8UmpcylWVa8Cg5xRcsnWIJYsU=;
+        b=llc4oLw2clqls74Pzxl/fYFZUJPIn508oSWKaJHWPKB1u0P3ZPMcC4dbLi/PrvEVr2
+         Ahyzqw/uiH1JX4ZazrRJCn3wcoaeRS3gIjp9pkcDfNGFpAI/TV+z7NLumLgFqbEC+hjd
+         s6yz46ipfUh/49i3p6St6FVdd0RrbhmkVRQcg/bUDwaslKhko0hWNqhm2NEptqjaDxgE
+         uqH0MVJ6Ax50iSR5jeIl79LBvIWoiMagj0caKznXs4UMraaGXScaquckv1yaBu+EF5Im
+         3PkM1OCxVhzA6laiyrsK7ulzsGNT21FBWzcP3lUCLAP7qgu0pvtUixu8yaEMo3B5s+2I
+         lf4Q==
+X-Gm-Message-State: ACgBeo3XELm4MPQQV8sCPa0icKgkjGMZ2ioK48qKS4ELfdQmDk6l/oOB
+        o9OpUiPoSxyvh6lD5UOVtPxzpWKn8NlrzdqDbjPd
+X-Google-Smtp-Source: AA6agR4mv9lGti64tQ+RWhXl/XpvBG3lv2fsN8uSnflhqV/wjKZTydMt1AJ/vsLoMQnvVJvZroCrD9DZ9AMStnXqZ4c=
+X-Received: by 2002:a05:6870:a78d:b0:11c:437b:ec70 with SMTP id
+ x13-20020a056870a78d00b0011c437bec70mr2325509oao.136.1660756799347; Wed, 17
+ Aug 2022 10:19:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220725124123.12975-1-flaniel@linux.microsoft.com>
+ <CAHC9VhTmgMfzc+QY8kr+BYQyd_5nEis0Y632w4S2_PGudTRT7g@mail.gmail.com>
+ <4420381.LvFx2qVVIh@pwmachine> <CAHC9VhSMeefG5W_uuTNQYmUUZ1xcuqArxYs5sL9KOzUO_skCZw@mail.gmail.com>
+ <ab1bbd48-c48d-5f5a-f090-428ffd54c07e@schaufler-ca.com> <CAHC9VhTxYaLXFbS6JnpskOkADNbL8BA5614VuK3sDTHW6DE3uQ@mail.gmail.com>
+ <664f29c3-77a6-2ed9-5c55-f181397b09a2@schaufler-ca.com>
+In-Reply-To: <664f29c3-77a6-2ed9-5c55-f181397b09a2@schaufler-ca.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 17 Aug 2022 13:19:48 -0400
+Message-ID: <CAHC9VhTkkhgmj8R6fmuoffLUU+UnYqxOi-kDWmJQ9F9jtwuLxg@mail.gmail.com>
+Subject: Re: [RFC PATCH v4 0/2] Add capabilities file to securityfs
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     Francis Laniel <flaniel@linux.microsoft.com>,
+        linux-security-module@vger.kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        James Morris <jmorris@namei.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:BPF [MISC]" <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 Aug 2022 17:12:24 +0100 Russell King (Oracle) wrote:
-> On Wed, Aug 17, 2022 at 08:54:29AM -0700, Jakub Kicinski wrote:
-> > On Sat, 13 Aug 2022 23:46:58 +0300 Beniamin Sandu wrote:  
-> > > This makes the code look cleaner and easier to read.  
-> > 
-> > Last call for reviews..  
-> 
-> I had a quick look and couldn't see anything obviously wrong, but then
-> I'm no expert with the hwmon code.
+On Wed, Aug 17, 2022 at 12:49 PM Casey Schaufler <casey@schaufler-ca.com> w=
+rote:
+> On 8/17/2022 9:10 AM, Paul Moore wrote:
+> > On Wed, Aug 17, 2022 at 11:50 AM Casey Schaufler <casey@schaufler-ca.co=
+m> wrote:
+> >> On 8/17/2022 7:52 AM, Paul Moore wrote:
+> >>> On Wed, Aug 17, 2022 at 7:53 AM Francis Laniel
+> >>> <flaniel@linux.microsoft.com> wrote:
+> >>>> Le mardi 16 ao=C3=BBt 2022, 23:59:41 CEST Paul Moore a =C3=A9crit :
+> >>>>> On Mon, Jul 25, 2022 at 8:42 AM Francis Laniel
+> >>>>>
+> >>>>> <flaniel@linux.microsoft.com> wrote:
+> >>>>>> Hi.
+> >>>>>>
+> >>>>>> First, I hope you are fine and the same for your relatives.
+> >>>>> Hi Francis :)
+> >>>>>
+> >>>>>> A solution to this problem could be to add a way for the userspace=
+ to ask
+> >>>>>> the kernel about the capabilities it offers.
+> >>>>>> So, in this series, I added a new file to securityfs:
+> >>>>>> /sys/kernel/security/capabilities.
+> >>>>>> The goal of this file is to be used by "container world" software =
+to know
+> >>>>>> kernel capabilities at run time instead of compile time.
+> >>>>> ...
+> >>>>>
+> >>>>>> The kernel already exposes the last capability number under:
+> >>>>>> /proc/sys/kernel/cap_last_cap
+> >>>>> I'm not clear on why this patchset is needed, why can't the
+> >>>>> application simply read from "cap_last_cap" to determine what
+> >>>>> capabilities the kernel supports?
+> >>>> When you capabilities with, for example, docker, you will fill capab=
+ilities
+> >>>> like this:
+> >>>> docker run --rm --cap-add SYS_ADMIN debian:latest echo foo
+> >>>> As a consequence, the "echo foo" will be run with CAP_SYS_ADMIN set.
+> >>>>
+> >>>> Sadly, each time a new capability is added to the kernel, it means "=
+container
+> >>>> stack" software should add a new string corresponding to the number =
+of the
+> >>>> capabilities [1].
+> >>> Thanks for clarifying things, I thought you were more concerned about
+> >>> detecting what capabilities the running kernel supported, I didn't
+> >>> realize it was getting a string literal for each supported capability=
+.
+> >>> Unless there is a significant show of support for this
+> >> I believe this could be a significant help in encouraging the use of
+> >> capabilities. An application that has to know the list of capabilities
+> >> at compile time but is expected to run unmodified for decades isn't
+> >> going to be satisfied with cap_last_cap. The best it can do with that
+> >> is abort, not being able to ask an admin what to do in the presence of
+> >> a capability that wasn't around before because the name isn't known.
+> > An application isn't going to be able to deduce the semantic value of
+> > a capability based solely on a string value,
+>
+> True, but it can ask someone what to do, and in that case a string is
+> much better than a number ...
 
-That makes two of us, good enough! :) Thanks for taking a look.
+If you are asking a user what to do, that user can just as easily look
+up the capability list to translate numbers to intent.  If your
+security approach requires a user knowing all of the subtle details
+around a capability based on 10~15 character string, I wish you the
+best of luck :)
 
-> I build-tested it, and I'm not likely to any time soon. I think
-> Andrew added the hwmon code for this PHY originally.
+--=20
+paul-moore.com

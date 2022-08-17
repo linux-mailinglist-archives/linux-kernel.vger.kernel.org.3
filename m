@@ -2,163 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 866FD597719
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2970959771B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241582AbiHQTvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 15:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52426 "EHLO
+        id S239342AbiHQTwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 15:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiHQTvN (ORCPT
+        with ESMTP id S238316AbiHQTwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 15:51:13 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD3A33372;
-        Wed, 17 Aug 2022 12:51:13 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id g16so8967116qkl.11;
-        Wed, 17 Aug 2022 12:51:13 -0700 (PDT)
+        Wed, 17 Aug 2022 15:52:22 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCF7A50D3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:52:21 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id t22so13409842pjy.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:52:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc;
-        bh=v60uqYnukgjgZARXe5JJGms8uUUgUv8wpc53hUaJ67A=;
-        b=JpefC9piThWn37ij83JUtU+fue08Tl6ykry7XnZ14DBKoDxePAQOK80AdrWAJ279px
-         kcgkEXwRKcLiaoyNzJ+EI8n/tRYjvAaM9OA7ppJ7pFSusEicOlrDJYE3QaNMH8MqGMvR
-         CWn5MzWzsDJ2Dxxk7lgkhTfQgInX9V3QLa6O79NTCAJjFXUFZQ0sMrsDc7E4fMJXjUDq
-         WlAoyYbgC0IwfQBba7Lm7EukhyIjpr69eObpAhLbBvLWU1D5n6EBBus9KJmVX+aUmzFc
-         +cP1U8QaRpaFqJEb4LRC7qIqK8SklFDGaEWG0AtZ2Jo3D7A18NK3Go4b1h7/xMs89cKr
-         o/tg==
+         :subject:cc:to:from:date:from:to:cc;
+        bh=qhDBBfRO8hshZLFsK/uN7QtbS7YCbu9/Q4DaGouyGb8=;
+        b=n6upwd6duwkOC0jSOXuwf5JBpXBb8ll7yr6SdtxFciplGgVA/yFbH0HAsgv5hDNd9S
+         cRFT24b7Mx5gINdTvNpUPA+RFB3zngQAqQK/JT0MP3w4/SlwLbB+Ty3exe0ErwiM79LW
+         jUKEmSJj0fX2h8bFZ0pyGQifuR556tlBlyYb2nPKKcYkf+6uw3aKhaCGBHHpuqDS+8Nm
+         trAsNl8VFt0PehDytRl4SnuxPJOUjVmp+9f+ITzCCA1Lpj23tWt+ZQe+S5vYQ5vSK0O9
+         MqL34ejozL0N9X8+Kh2J9GW3m9F5eMWwrPvayJWF6csphqnZf3nR+0uBAjv3MLk70etY
+         7YLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc;
-        bh=v60uqYnukgjgZARXe5JJGms8uUUgUv8wpc53hUaJ67A=;
-        b=ISpvETzHxxVIsLoeHRMBpoxAYlmNAJzmXZ5TrxrZBFGt9/ahtgbcb6nVjP9Jgfr2fn
-         9ed65MmJl8eiHnWOsc1h55uz5RN4+pL4vi8OffOTUxqKM68TsmL54do4m4L5E/CtiWJV
-         6ZZfQT2aIKfN2p7LbG1BFuWYoz/ooqbnyzDhiTrbqIQW69FZDxWLHqwHDa4S70cevP+M
-         9VKt48UDZVYkbKTQHXFdvGIlB9MhSVm8+WHnNEosgkFlGWAFf1ZuqnJ8uvo0KzCDmHKh
-         FkGRSPYY40A6Htk4R9gzPC5ZPE6uTJ61UckmmJGcu8in1JWyaZn9PrAgqdnzfdPmMjQV
-         YRFQ==
-X-Gm-Message-State: ACgBeo325+r1gvaKoCg7gN91V6mrtNc+77f9L17E/UEb0MvZRu2pAIaQ
-        j3SPzykYwesj0qSLCUIIFCo=
-X-Google-Smtp-Source: AA6agR4wb0hTyertW8x0U44XlUWC9UESZJzGxucrMzv60iW2eQI+SjAZa4eaPq87PCkVEUq6UypKmw==
-X-Received: by 2002:a05:620a:1a9a:b0:69c:4a99:ea50 with SMTP id bl26-20020a05620a1a9a00b0069c4a99ea50mr20031342qkb.632.1660765871901;
-        Wed, 17 Aug 2022 12:51:11 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id b8-20020ae9eb08000000b006b8f4ade2c9sm13759099qkg.19.2022.08.17.12.51.10
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=qhDBBfRO8hshZLFsK/uN7QtbS7YCbu9/Q4DaGouyGb8=;
+        b=PDqzJTkVBbB1u1jEvcE7Q4v4ONzL0WFkwwRB78eE0Blkm8mU8z3F7y2OyLCNIDloPK
+         rAzhZNHddQj6ennLXuhWeuvjan43syyRjceXYLWBcCtJlCYKkwDn9EbFjFVnOG1SOnHR
+         M1wL5JQ9f61tyOn9f8dMzCqEEfsfBXqlYyot6ZvqYAgi50fvi2TEupzNGKMWXTLm7n+n
+         M8NTEz8Sd5mvcX7vq6OO8A+3viA7w9wUjCPMK5+7mGghSVsHJhRjHFg/nuX7a/avgu5y
+         MUMhBO9ksMxlsZHijQCFH1LLrywQSS1muEK6gDvgXIN6fUcTvXuJ2qwwhg/wj9IUwFXh
+         SWYA==
+X-Gm-Message-State: ACgBeo0lT+8/UkOGPGLFiqqjLM8SyxP/1IIJKQPWKJWdDVgsz00MKihd
+        BDO/iA6gBMNCuyJ3AfXrrpBFf1gP2CsiBQ==
+X-Google-Smtp-Source: AA6agR5kUtRc0Yrbc6y6cu7vFg9kh+gXbtv0CS56ZJ50rd4TF93PlLmJdr8HaHa5hHD4VfE/qwyuAA==
+X-Received: by 2002:a17:902:da89:b0:170:a235:5993 with SMTP id j9-20020a170902da8900b00170a2355993mr27084691plx.94.1660765940791;
+        Wed, 17 Aug 2022 12:52:20 -0700 (PDT)
+Received: from google.com (201.215.168.34.bc.googleusercontent.com. [34.168.215.201])
+        by smtp.gmail.com with ESMTPSA id f6-20020aa79686000000b0052e23a5ab74sm10921123pfk.59.2022.08.17.12.52.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 12:51:11 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 9E9A927C0054;
-        Wed, 17 Aug 2022 15:51:10 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 17 Aug 2022 15:51:10 -0400
-X-ME-Sender: <xms:rUb9YsjrhBwDWi1UcrlAJOSkZoFWbWs6Wdyq53p-l3svLt4Dz3MJOg>
-    <xme:rUb9YlAwxKSMQtAbCkoqL17OQVtDsxn4hUE3TCkIIXBk51zOdJqH6vyLX7CB_i9bj
-    qs7DmA59stT6eK2IA>
-X-ME-Received: <xmr:rUb9YkHKEExDeF-dyv87VUyFyglJNclBfoaZqBtFoE7LzDhOVbXTkXzS7qRGgg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehiedgudegfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:rUb9YtTvq4_U7rRBDZGD4vov0GhVMjm2hdDkcfaE3JuV_ojE4i1hbw>
-    <xmx:rUb9YpxZYdET6Anm_xf7p8yk0S_-KxS3CQS2Ouu871PFBPYVw-csxw>
-    <xmx:rUb9Yr7rqwGEm3ttZTIYuBBl_eIwK6JjFF_lJ4X-FpeKbm1GWzwghw>
-    <xmx:rkb9YgnF-q5Xcc8LmyDfUczZkU66iqh3omlThgZCPB8wDNsRqegbzA>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 17 Aug 2022 15:51:09 -0400 (EDT)
-Date:   Wed, 17 Aug 2022 12:50:50 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Subject: Re: [PATCH v9 03/27] kallsyms: add static relationship between
- `KSYM_NAME_LEN{,_BUFFER}`
-Message-ID: <Yv1GmvZlpMopwZTi@boqun-archlinux>
-References: <20220805154231.31257-1-ojeda@kernel.org>
- <20220805154231.31257-4-ojeda@kernel.org>
- <202208171238.80053F8C@keescook>
+        Wed, 17 Aug 2022 12:52:20 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 19:52:16 +0000
+From:   William McVicker <willmcvicker@google.com>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
+        Sajid Dalvi <sdalvi@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] PCI/PM: Switch D3Hot delay to also use usleep_range
+Message-ID: <Yv1G8A5Ut9trpK/L@google.com>
+References: <20220817185202.1689955-1-willmcvicker@google.com>
+ <Yv1BSfkd6WUh2SFp@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202208171238.80053F8C@keescook>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yv1BSfkd6WUh2SFp@google.com>
+X-Spam-Status: No, score=-12.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 12:39:48PM -0700, Kees Cook wrote:
-> On Fri, Aug 05, 2022 at 05:41:48PM +0200, Miguel Ojeda wrote:
-> > This adds a static assert to ensure `KSYM_NAME_LEN_BUFFER`
-> > gets updated when `KSYM_NAME_LEN` changes.
+On 08/17/2022, Matthias Kaehlcke wrote:
+> Hi Will,
+> 
+> On Wed, Aug 17, 2022 at 06:52:02PM +0000, Will McVicker wrote:
+> > From: Sajid Dalvi <sdalvi@google.com>
 > > 
-> > The relationship used is one that keeps the new size (512+1)
-> > close to the original buffer size (500).
+> > Since the PCI spec requires a 10ms D3Hot delay (defined by
+> > PCI_PM_D3HOT_WAIT) and a few of the PCI quirks update the D3Hot delay up
+> > to 120ms, let's add support for both usleep_range and msleep based on
+> > the delay time to improve the delay accuracy.
 > > 
-> > Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
-> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> > This patch is based off of a commit from Sajid Dalvi <sdalvi@google.com>
+> > in the Pixel 6 kernel tree [1]. Testing on a Pixel 6, found that the
+> > 10ms delay for the Exynos PCIe device was on average delaying for 19ms
+> > when the spec requires 10ms. Switching from msleep to uslseep_range
+> > therefore decreases the resume time on a Pixel 6 on average by 9ms.
+> > 
+> > [1] https://android.googlesource.com/kernel/gs/+/18a8cad68d8e6d50f339a716a18295e6d987cee3
+> > 
+> > Signed-off-by: Sajid Dalvi <sdalvi@google.com>
+> > Signed-off-by: Will McVicker <willmcvicker@google.com>
 > > ---
-> >  scripts/kallsyms.c | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
+> >  drivers/pci/pci.c | 20 +++++++++++++++-----
+> >  1 file changed, 15 insertions(+), 5 deletions(-)
 > > 
-> > diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> > index f3c5a2623f71..f543b1c4f99f 100644
-> > --- a/scripts/kallsyms.c
-> > +++ b/scripts/kallsyms.c
-> > @@ -33,7 +33,11 @@
-> >  #define KSYM_NAME_LEN		128
+> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > index 95bc329e74c0..97a042ca9032 100644
+> > --- a/drivers/pci/pci.c
+> > +++ b/drivers/pci/pci.c
+> > @@ -63,16 +63,26 @@ struct pci_pme_device {
+> >  };
 > >  
-> >  /* A substantially bigger size than the current maximum. */
-> > -#define KSYM_NAME_LEN_BUFFER	499
-> > +#define KSYM_NAME_LEN_BUFFER	512
-> > +_Static_assert(
-> > +	KSYM_NAME_LEN_BUFFER == KSYM_NAME_LEN * 4,
-> > +	"Please keep KSYM_NAME_LEN_BUFFER in sync with KSYM_NAME_LEN"
-> > +);
+> >  #define PME_TIMEOUT 1000 /* How long between PME checks */
+> > +#define MAX(a, b) ((a) >= (b) ? (a) : (b))
 > 
-> Why not just make this define:
+> no need to define this macro, you can use max() from
+> include/linux/minmax.h instead.
 > 
-> #define KSYM_NAME_LEN_BUFFER (KSYM_NAME_LEN * 4)
+> >  
+> >  static void pci_dev_d3_sleep(struct pci_dev *dev)
+> >  {
+> > -	unsigned int delay = dev->d3hot_delay;
+> > +	unsigned int delay_ms = dev->d3hot_delay;
+> >  
+> > -	if (delay < pci_pm_d3hot_delay)
+> > -		delay = pci_pm_d3hot_delay;
+> > +	if (delay_ms < pci_pm_d3hot_delay)
+> > +		delay_ms = pci_pm_d3hot_delay;
 > 
-> ? If there's a good reason not it, please put it in the commit log.
+> nit: since you are already touching this code you could change it to:
 > 
-
-Because KSYM_NAME_LEN_BUFFER is used as a string by stringify() in
-fscanf(), defining it as (KSYM_NAME_LEN * 4) will produce a string
-
-	"128 * 4"
-
-after stringify() and that doesn't work with fscanf().
-
-Miguel, maybe we can add something below in the commit log?
-
-`KSYM_NAME_LEN_BUFFER` cannot be defined as an expression, because it
-gets stringified in the fscanf() format. Therefore a _Static_assert() is
-needed.
-
-Thoughts?
-
-Regards,
-Boqun
-
-> -Kees
+> 	unsigned int delay_ms = max(dev->d3hot_delay, pci_pm_d3hot_delay);
 > 
-> -- 
-> Kees Cook
+> >  
+> > -	if (delay)
+> > -		msleep(delay);
+> > +	if (delay_ms) {
+> > +		if (delay_ms <= 20) {
+> > +			/* Use a 20-25% upper bound with 1ms minimum */
+> > +			unsigned int upper = MAX((delay_ms >> 3) << 1, 1);
+> 
+> Not sure this optimization of using bit shifts instead of the clearer do_div()
+> is really needed here. pci_dev_d3_sleep() is not a super hot code path IIUC.
+> 
+> > +
+> > +			usleep_range(delay_ms * USEC_PER_MSEC,
+> > +				     (delay_ms + upper) * USEC_PER_MSEC);
+> > +		} else {
+> > +			msleep(delay_ms);
+> > +		}
+> > +	}
+> >  }
+> >  
+> >  bool pci_reset_supported(struct pci_dev *dev)
+> > 
+> > base-commit: 274a2eebf80c60246f9edd6ef8e9a095ad121264
+> > -- 
+> > 2.37.1.595.g718a3a8f04-goog
+> > 
+
+Thanks for the suggestions! I'll update those in the next patchset.
+
+--Will

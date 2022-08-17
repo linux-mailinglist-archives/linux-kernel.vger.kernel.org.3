@@ -2,122 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43FD3597554
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 992C7597563
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239616AbiHQRxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
+        id S240375AbiHQRyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237783AbiHQRxp (ORCPT
+        with ESMTP id S238002AbiHQRyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:53:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF1430F71
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:53:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660758822;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SQOVouI0K9iJWnYSVBtpjkA3WVldpQ/o4YTxV/vt74M=;
-        b=OjDxCM1eIEnL+4fTMGvGGB2oaS/l/orgtk9MpM/+In6BQ1QyhGwtFUBCtyFXc6tmrh/Sk6
-        dqoSJ9tArPjswYWHeU6edfzfqNp0TkFZyQYloTo3uUk3L2Z1/39fBi6p28yWB65qudvEqH
-        fQmm3kI5AVF6TrJjTW1uScVR/iJduF0=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-459-GWmNcG_zMEqQt5R0bdSn1g-1; Wed, 17 Aug 2022 13:53:41 -0400
-X-MC-Unique: GWmNcG_zMEqQt5R0bdSn1g-1
-Received: by mail-wm1-f72.google.com with SMTP id z11-20020a05600c0a0b00b003a043991610so497913wmp.8
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:53:41 -0700 (PDT)
+        Wed, 17 Aug 2022 13:54:19 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214C54B0E7;
+        Wed, 17 Aug 2022 10:54:18 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id 20so4011411plo.10;
+        Wed, 17 Aug 2022 10:54:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=M9F5QNFdEfK57sV2UQvJmFf03hDAwzaS3TgU89Piblw=;
+        b=LKm3raamiQttkOiXSxZhNzHXFXXkPDRQ+4So33YQ27Vizpu1Cu379NL61euS+MnNl3
+         uB4IGY1VmCTQlXPdq0AlITppYn2+v8d+5T7Ij6Itk5QWQBHeDxdAnDkH6Y6oOp2/ocN9
+         t40wnKzsqNYwfMf4PDSSN6XJHJf0tqOIPzrDSYRWQ0CqkO8+q5GW7afZmNxSwwNczKR0
+         0gTeSv3QwwleUSv2qWBT5NZ7jZmJGlgDhYolxttNqWjfwyBzonaxlXQSzVBa5yPmW8Pw
+         t65h/wtiBlWZ4GmzQebHBmX3XYeLm+gNygvcGB/uWweffCD6mNMKcOd2NmHQHf9s9zqb
+         0k8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=SQOVouI0K9iJWnYSVBtpjkA3WVldpQ/o4YTxV/vt74M=;
-        b=HRtVHoVUrZeeGD52IbpNc+coM4KzmG4YLldUUICxUmo/jgp8whhDGOk1n+Bp5rr0ii
-         uyXjWn/XcQoaXynLVVlzf9hrjnlxZLpzIuZPuWqCRPHt7ycw054qoWOQb3hbTjiwa26w
-         nxpfBn5stQpby7FV2R2uE1dXq5aoA9+RA93v9pfzgMX1dAOs1eCpUdZgu8nk9MKMf9q5
-         ZdcI32bVWMvtq2xAx/a6eUtT6PuoD+oOCVNuGNXee6qa5XsJCuzw0UAH9fitF83g0PqA
-         okqZ110a0tTlVBekvwglKoZg/I6qH3enPk3gNtGa4BUAqYkVGP//cfV1oR2wVIY/hGGF
-         +iQw==
-X-Gm-Message-State: ACgBeo3Ku7dp78KYAkxfyUI6v5LUYkL0uqgImgh67ztsvfGvXlKfaUwU
-        uo6aoIUME/SBbpx2SYlzoD1pKj+URb869rI+Nq76IO8peALpIYJyRg3G2diURGOPcsrOlnLLGJO
-        4rLwNNCAqd4MIl5yS2wk3qdbJ
-X-Received: by 2002:a05:6000:4083:b0:21f:fb6:9293 with SMTP id da3-20020a056000408300b0021f0fb69293mr14792303wrb.303.1660758820166;
-        Wed, 17 Aug 2022 10:53:40 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4ONxUsrUHKKEaZOO44Ixn5LdAH2Y94mokPuvnN34a8r6PY+eKWeMnaGAVNXB2YU7T+If8QUw==
-X-Received: by 2002:a05:6000:4083:b0:21f:fb6:9293 with SMTP id da3-20020a056000408300b0021f0fb69293mr14792286wrb.303.1660758819888;
-        Wed, 17 Aug 2022 10:53:39 -0700 (PDT)
-Received: from redhat.com ([2.55.43.215])
-        by smtp.gmail.com with ESMTPSA id y11-20020adfe6cb000000b00220592005edsm1060157wrm.85.2022.08.17.10.53.34
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=M9F5QNFdEfK57sV2UQvJmFf03hDAwzaS3TgU89Piblw=;
+        b=vFZVTuuDYJwfJHNY+jWd9MtiwEfxWy6bTFQkGzCtA4bVAg0RQwT8qO72jxDMBC9nBx
+         PknQSiwm+j+jqPYQJTJM/59Bxw0eBWfBMYQU/bqDHvx/6/k77ZgJ6DjjdMGcuGgJ8gk4
+         xHx9Yi8hDW23utECrZPa7/7mLLA0Jcqiq0E7ZMbEYQC5QUQkQhryzSTJpJXkNOda5A7l
+         MXqzjfrcAC2Uzwl6q8EwkbOWCxl9rTSJmH3SoQPcRxA+wyDohBBXrFdMrg4w9ihrt9sL
+         2kO78vc/pcBgdmw23Ee7K9D27UdnDpisOI4Hfpj8TyGQOhZ6qGJsrQ6F5sDiR2TyuLKz
+         O8iA==
+X-Gm-Message-State: ACgBeo2e+PuMVHoelldO4veCAxYbhvdCfOHJhB1M6e+GnpIBarzJ3qqk
+        0+mNVyQ7ORTxhsyTX7Zih70=
+X-Google-Smtp-Source: AA6agR5qMHofsSUL07MTl7OwYTG1h6IT6uARLAgbhonQ+t3XwizXEz/pr6vbk1I/6ma3K4CDKLi6QA==
+X-Received: by 2002:a17:902:f548:b0:16f:9649:be69 with SMTP id h8-20020a170902f54800b0016f9649be69mr27164472plf.134.1660758857451;
+        Wed, 17 Aug 2022 10:54:17 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id b8-20020a170903228800b001728eb339e2sm172415plh.286.2022.08.17.10.54.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 10:53:39 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 13:53:32 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc:     Bobby Eshleman <bobby.eshleman@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Jiang Wang <jiang.wang@bytedance.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org
-Subject: Re: [PATCH 0/6] virtio/vsock: introduce dgrams, sk_buff, and qdisc
-Message-ID: <20220817135311-mutt-send-email-mst@kernel.org>
-References: <cover.1660362668.git.bobby.eshleman@bytedance.com>
- <20220817025250-mutt-send-email-mst@kernel.org>
- <YvtmYpMieMFb80qR@bullseye>
- <20220817130044-mutt-send-email-mst@kernel.org>
- <Yvt6nxUYMfDrLd/A@bullseye>
+        Wed, 17 Aug 2022 10:54:16 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 17 Aug 2022 07:54:15 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     mkoutny@suse.com, axboe@kernel.dk, ming.lei@redhat.com,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: [PATCH v7 9/9] blk-throttle: clean up flag 'THROTL_TG_PENDING'
+Message-ID: <Yv0rR9gBL0qbYeXp@slm.duckdns.org>
+References: <20220802140415.2960284-1-yukuai1@huaweicloud.com>
+ <20220802140415.2960284-10-yukuai1@huaweicloud.com>
+ <Yvv6kk/RD5LT+3dk@slm.duckdns.org>
+ <65d93ec6-2465-35f1-314f-f092ce631100@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yvt6nxUYMfDrLd/A@bullseye>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <65d93ec6-2465-35f1-314f-f092ce631100@huaweicloud.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 11:08:26AM +0000, Bobby Eshleman wrote:
-> On Wed, Aug 17, 2022 at 01:02:52PM -0400, Michael S. Tsirkin wrote:
-> > On Tue, Aug 16, 2022 at 09:42:51AM +0000, Bobby Eshleman wrote:
-> > > > The basic question to answer then is this: with a net device qdisc
-> > > > etc in the picture, how is this different from virtio net then?
-> > > > Why do you still want to use vsock?
-> > > > 
-> > > 
-> > > When using virtio-net, users looking for inter-VM communication are
-> > > required to setup bridges, TAPs, allocate IP addresses or setup DNS,
-> > > etc... and then finally when you have a network, you can open a socket
-> > > on an IP address and port. This is the configuration that vsock avoids.
-> > > For vsock, we just need a CID and a port, but no network configuration.
-> > 
-> > Surely when you mention DNS you are going overboard? vsock doesn't
-> > remove the need for DNS as much as it does not support it.
-> > 
-> 
-> Oops, s/DNS/dhcp.
+Hello,
 
-That too.
+On Wed, Aug 17, 2022 at 09:45:13AM +0800, Yu Kuai wrote:
+> > I don't know whether this is better or not. It's minutely less lines of code
+> > but also makes the code a bit more fragile. I'm ambivalent. At any rate,
+> > please move these trivial patches to the head of the series or post them
+> > separately.
+> 
+> Can I ask why do you think this patch makes the code a bit more fragile?
+
+It's just one step further removed. Before, the flag was trivially in sync
+with the on queue status. After, the relationship is more indirect and
+easier to break accidentally. Not that it's a major problem. Just not sure
+what the benefit of the change is.
+
+> By the way, I'll post these trivial patches separately.
+
+Sounds great.
+
+Thanks.
 
 -- 
-MST
-
+tejun

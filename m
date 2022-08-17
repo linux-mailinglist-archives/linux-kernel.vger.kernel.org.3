@@ -2,160 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED03596A59
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 169B5596A5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbiHQHZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 03:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
+        id S232120AbiHQH0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 03:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiHQHZk (ORCPT
+        with ESMTP id S229565AbiHQH0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 03:25:40 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFED26BCD5;
-        Wed, 17 Aug 2022 00:25:39 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id D70873200A02;
-        Wed, 17 Aug 2022 03:25:37 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 17 Aug 2022 03:25:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1660721137; x=1660807537; bh=vJVx4WtDzf
-        lqfh/jerRWkx6erDZLmKZWLsZEwHAhgJU=; b=NScLqu1b8Cggis4Ov9NKv0oP17
-        Xb9SUCUeBrk/YEp96L1H31qDaZyxGJDMRO83Q/25VSUbAxNHIJaSBh6F/Zp2fpuH
-        eQfW8asOsp4kOriA0PDRm0Rewo1WbtuARkN5hFSeBxCyK1NKwmLC+puKvEWnIhJ+
-        4ZYH+URo49ynS6bVRyhh2H4JtLXVGi+xBRPjj3m7B+onz+nRhZbCoiQ/jAmOUEXO
-        vAKS8OXpnYYNeK07J49sypSjzmvgZsFOwXQJAqyebAQ6SZhIWQ+L9szEuPU/cDKe
-        5ASC3NtDJRfUDPhjIveg33tuksFpZh/0kSFJ7L5+xUCPysz8RN4vChikettA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660721137; x=1660807537; bh=vJVx4WtDzflqfh/jerRWkx6erDZL
-        mKZWLsZEwHAhgJU=; b=NeLWExoCwPDyyfCfpqM8YJ2Xy5kdzWOMgNvZoedkWDBL
-        ++yxxuj75HbAulWsmrcNuZ9NyYl1t6dYOJWv8zN2JQ+lKpgx9l33VeJSfJdB120K
-        xTQxWtNbvrKnfjIpZkIPsHJUFUoABG2efznUztq7BwNFLQLvhkdaNQyoiZKdy+o/
-        jamsJAgEXKn4kQnvn9GbeSznz0nAxikWXsjoZ5xzu1+wqWpxsKmtyHep08dRikJE
-        j1xnZU2bNdWxiwOyFydoFUwCMjVchy6BZlUxeUMXvHU4ksWBkaQHU5chpWo03ACY
-        N8I9tUuicqvdtCgb3uud1gOl4k+gFVTM74W8lzp1Qw==
-X-ME-Sender: <xms:8Jf8Ynsleye5XXe5dMGrfk5SmMfru_MwT67UUen3NDCqM6R1VLYqFA>
-    <xme:8Jf8YoeTdfLd0WZHsVW-hjCDWt7N5keCjmI6RNFG0GxwfTH4hBiaVsICNmOySWUwi
-    57rIcU2wu5CRgdyyQs>
-X-ME-Received: <xmr:8Jf8Yqxyb-g23OdIBSoVfEw0c73wEzI_3Z7pj_RD4I0xTq3Dsei_zLQO0g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehhedguddvudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepieeuvdeiffevteejhefhveejheevheelgfejtefhteejudeukeehtdek
-    uedufeffnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpfhhrvggvuggvshhkthhoph
-    drohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhm
-    pehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:8Jf8YmPH7TsgSYPiqR4OFH9RVZiFiv0Lw0OYRhBWtjr9penEHKJyxA>
-    <xmx:8Jf8Yn-b6ApkRaVkh0bLbxVYBXDvCsvQ-tp5lJuQjxQmVOxszbeW5g>
-    <xmx:8Jf8YmXruJwrIrmxAe1BNuVLSWHW5htxgNGcEj5wDR0Hy0pGrkc5eQ>
-    <xmx:8Zf8YrW6gYxVlVHBXKTI5fLXZRBFbQvwFTLe7Q9_ZBsjCXjGdfLRHg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 17 Aug 2022 03:25:35 -0400 (EDT)
-Date:   Wed, 17 Aug 2022 09:25:33 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: Re: [PATCH 5.18 0000/1094] 5.18.18-rc2 review
-Message-ID: <20220817072533.g52swuix3rdr33fk@houat>
-References: <20220816124604.978842485@linuxfoundation.org>
- <CA+G9fYuhJw5vW7A8Wsqe_+fNK4pWCGdQ+0zfkNyd3y7_X0=CBA@mail.gmail.com>
+        Wed, 17 Aug 2022 03:26:01 -0400
+X-Greylist: delayed 312 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 17 Aug 2022 00:26:00 PDT
+Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DE06B8F1;
+        Wed, 17 Aug 2022 00:26:00 -0700 (PDT)
+From:   Denis Arefev <arefev@swemel.ru>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
+        t=1660721158;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+8trc0HzuNdzJYDIdm9RSEE7rJ+rGGw4sPL4RMjtjlQ=;
+        b=iRtuNf9lzoeIhMzLHY2WYqbjs3nDA+X4xwdAg5v5y1/yECP3yusfpj96vylF8IVSgFfB7q
+        QOIIpvuYQY1HgX7lYgLIBCmwtNE+x2NxXwcE7zWwahTBbmZghTxHPi7A8xDETGkzZzBSH0
+        9DM68Ke+wIOPmnLFmRHyDyv4fzQ7xY0=
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org (open list:SCSI SUBSYSTEM),
+        linux-kernel@vger.kernel.org (open list),
+        ldv-project@linuxtesting.org, trufanov@swemel.ru, vfh@swemel.ru
+Subject: [PATCH] Add qlogicfas408_reset in qlogic_resume
+Date:   Wed, 17 Aug 2022 10:25:58 +0300
+Message-Id: <20220817072558.47163-1-arefev@swemel.ru>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="elypw663ujamzoz6"
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYuhJw5vW7A8Wsqe_+fNK4pWCGdQ+0zfkNyd3y7_X0=CBA@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Signed-off-by: Denis Arefev <arefev@swemel.ru>
+---
+ drivers/scsi/pcmcia/qlogic_stub.c |  2 +-
+ drivers/scsi/qlogicfas408.c       | 19 +++++++++++++++++++
+ drivers/scsi/qlogicfas408.h       |  1 +
+ 3 files changed, 21 insertions(+), 1 deletion(-)
 
---elypw663ujamzoz6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+diff --git a/drivers/scsi/pcmcia/qlogic_stub.c b/drivers/scsi/pcmcia/qlogic_stub.c
+index 828d53faf09a..710a0c35bf12 100644
+--- a/drivers/scsi/pcmcia/qlogic_stub.c
++++ b/drivers/scsi/pcmcia/qlogic_stub.c
+@@ -268,7 +268,7 @@ static int qlogic_resume(struct pcmcia_device *link)
+ 		outb(0x04, link->resource[0]->start + 0xd);
+ 	}
+ 	/* Ugggglllyyyy!!! */
+-	qlogicfas408_host_reset(NULL);
++	qlogicfas408_reset(info->host);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/scsi/qlogicfas408.c b/drivers/scsi/qlogicfas408.c
+index 136681ad18a5..c5f9efe044e0 100644
+--- a/drivers/scsi/qlogicfas408.c
++++ b/drivers/scsi/qlogicfas408.c
+@@ -516,6 +516,24 @@ int qlogicfas408_host_reset(struct scsi_cmnd *cmd)
+ 	return SUCCESS;
+ }
+ 
++/*
++ *	Reset SCSI bus
++ */
++
++int qlogicfas408_reset(struct  Scsi_Host *host)
++{
++	struct qlogicfas408_priv *priv = get_priv_by_host(host);
++	unsigned long flags;
++
++	priv->qabort = 2;
++
++	spin_lock_irqsave(host->host_lock, flags);
++	ql_zap(priv);
++	spin_unlock_irqrestore(host->host_lock, flags);
++
++	return SUCCESS;
++}
++
+ /*
+  *	Return info string
+  */
+@@ -608,6 +626,7 @@ EXPORT_SYMBOL(qlogicfas408_info);
+ EXPORT_SYMBOL(qlogicfas408_queuecommand);
+ EXPORT_SYMBOL(qlogicfas408_abort);
+ EXPORT_SYMBOL(qlogicfas408_host_reset);
++EXPORT_SYMBOL(qlogicfas408_reset);
+ EXPORT_SYMBOL(qlogicfas408_biosparam);
+ EXPORT_SYMBOL(qlogicfas408_ihandl);
+ EXPORT_SYMBOL(qlogicfas408_get_chip_type);
+diff --git a/drivers/scsi/qlogicfas408.h b/drivers/scsi/qlogicfas408.h
+index a971db11d293..593e59e1697e 100644
+--- a/drivers/scsi/qlogicfas408.h
++++ b/drivers/scsi/qlogicfas408.h
+@@ -110,6 +110,7 @@ int qlogicfas408_biosparam(struct scsi_device * disk,
+ 			   sector_t capacity, int ip[]);
+ int qlogicfas408_abort(struct scsi_cmnd * cmd);
+ extern int qlogicfas408_host_reset(struct scsi_cmnd *cmd);
++extern int qlogicfas408_reset(struct Scsi_Host *host);
+ const char *qlogicfas408_info(struct Scsi_Host *host);
+ int qlogicfas408_get_chip_type(int qbase, int int_type);
+ void qlogicfas408_setup(int qbase, int id, int int_type);
+-- 
+2.25.1
 
-On Wed, Aug 17, 2022 at 12:45:14AM +0530, Naresh Kamboju wrote:
-> On Tue, 16 Aug 2022 at 18:29, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 5.18.18 release.
-> > There are 1094 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Thu, 18 Aug 2022 12:43:14 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patc=
-h-5.18.18-rc2.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stab=
-le-rc.git linux-5.18.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
->=20
-> Results from Linaro's test farm.
-> No regressions on arm64, arm, x86_64, and i386.
->=20
-> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
->=20
-> NOTE:
-> Following warning found on both 5.19 and 5.18 on Rpi4 device
-> Which was already reported by on mainline kernel on June 30.
->=20
-> WARNING: CPU: 0 PID: 246 at drivers/gpu/drm/vc4/vc4_hdmi_regs.h:487
-> vc5_hdmi_reset+0x1f0/0x240 [vc4]
->=20
->  - https://lore.kernel.org/all/CA+G9fYve16J7=3D4f+WAVrTUspxkKA+3BonHzGyk8=
-VP=3DU+D9irOQ@mail.gmail.com/
->  - https://lists.freedesktop.org/archives/dri-devel/2022-June/362244.html
-
-It's fixed in drm-misc-next but missed the merge window cut,
-
-https://lore.kernel.org/all/20220629123510.1915022-38-maxime@cerno.tech/
-https://lore.kernel.org/all/20220629123510.1915022-39-maxime@cerno.tech/
-
-If it fixes it for you as well, I'll apply them to drm-misc-fixes
-
-Maxime
-
---elypw663ujamzoz6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYvyX7QAKCRDj7w1vZxhR
-xb44AP908OqrM0yDmjPv8loLAW4oRdkcTwh0TOI0gdoFucrEZgEAm6KizJY0OcP5
-BFaL9EP8cqeaIEcsU6owXK/pGtri3AA=
-=GOuM
------END PGP SIGNATURE-----
-
---elypw663ujamzoz6--

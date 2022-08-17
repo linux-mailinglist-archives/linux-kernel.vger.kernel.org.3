@@ -2,101 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992C7597563
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB8D597567
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240375AbiHQRyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35750 "EHLO
+        id S239625AbiHQR4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238002AbiHQRyT (ORCPT
+        with ESMTP id S238114AbiHQR4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:54:19 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214C54B0E7;
-        Wed, 17 Aug 2022 10:54:18 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id 20so4011411plo.10;
-        Wed, 17 Aug 2022 10:54:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=M9F5QNFdEfK57sV2UQvJmFf03hDAwzaS3TgU89Piblw=;
-        b=LKm3raamiQttkOiXSxZhNzHXFXXkPDRQ+4So33YQ27Vizpu1Cu379NL61euS+MnNl3
-         uB4IGY1VmCTQlXPdq0AlITppYn2+v8d+5T7Ij6Itk5QWQBHeDxdAnDkH6Y6oOp2/ocN9
-         t40wnKzsqNYwfMf4PDSSN6XJHJf0tqOIPzrDSYRWQ0CqkO8+q5GW7afZmNxSwwNczKR0
-         0gTeSv3QwwleUSv2qWBT5NZ7jZmJGlgDhYolxttNqWjfwyBzonaxlXQSzVBa5yPmW8Pw
-         t65h/wtiBlWZ4GmzQebHBmX3XYeLm+gNygvcGB/uWweffCD6mNMKcOd2NmHQHf9s9zqb
-         0k8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=M9F5QNFdEfK57sV2UQvJmFf03hDAwzaS3TgU89Piblw=;
-        b=vFZVTuuDYJwfJHNY+jWd9MtiwEfxWy6bTFQkGzCtA4bVAg0RQwT8qO72jxDMBC9nBx
-         PknQSiwm+j+jqPYQJTJM/59Bxw0eBWfBMYQU/bqDHvx/6/k77ZgJ6DjjdMGcuGgJ8gk4
-         xHx9Yi8hDW23utECrZPa7/7mLLA0Jcqiq0E7ZMbEYQC5QUQkQhryzSTJpJXkNOda5A7l
-         MXqzjfrcAC2Uzwl6q8EwkbOWCxl9rTSJmH3SoQPcRxA+wyDohBBXrFdMrg4w9ihrt9sL
-         2kO78vc/pcBgdmw23Ee7K9D27UdnDpisOI4Hfpj8TyGQOhZ6qGJsrQ6F5sDiR2TyuLKz
-         O8iA==
-X-Gm-Message-State: ACgBeo2e+PuMVHoelldO4veCAxYbhvdCfOHJhB1M6e+GnpIBarzJ3qqk
-        0+mNVyQ7ORTxhsyTX7Zih70=
-X-Google-Smtp-Source: AA6agR5qMHofsSUL07MTl7OwYTG1h6IT6uARLAgbhonQ+t3XwizXEz/pr6vbk1I/6ma3K4CDKLi6QA==
-X-Received: by 2002:a17:902:f548:b0:16f:9649:be69 with SMTP id h8-20020a170902f54800b0016f9649be69mr27164472plf.134.1660758857451;
-        Wed, 17 Aug 2022 10:54:17 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id b8-20020a170903228800b001728eb339e2sm172415plh.286.2022.08.17.10.54.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 10:54:16 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 17 Aug 2022 07:54:15 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     mkoutny@suse.com, axboe@kernel.dk, ming.lei@redhat.com,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-Subject: Re: [PATCH v7 9/9] blk-throttle: clean up flag 'THROTL_TG_PENDING'
-Message-ID: <Yv0rR9gBL0qbYeXp@slm.duckdns.org>
-References: <20220802140415.2960284-1-yukuai1@huaweicloud.com>
- <20220802140415.2960284-10-yukuai1@huaweicloud.com>
- <Yvv6kk/RD5LT+3dk@slm.duckdns.org>
- <65d93ec6-2465-35f1-314f-f092ce631100@huaweicloud.com>
+        Wed, 17 Aug 2022 13:56:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934AC8A6CF;
+        Wed, 17 Aug 2022 10:56:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27EEF6130C;
+        Wed, 17 Aug 2022 17:56:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D000C433C1;
+        Wed, 17 Aug 2022 17:56:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660758961;
+        bh=H0WN0SKSzHj/Y3yIn4ttq9resFGHFWrpR6BX7VF6nwE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mgO+rVa8N93OxE0V8iZUhqdR2/gjdD1sYo5xdeWad59Q2tJlj9OGuWPliJyd8ZOdc
+         Gv32LZEDb/ZWnQOLYQ5eZx6B6h8dp7ap/9GmAeujcs6mF2+OghiD4PpTiGrsvu82n6
+         5RDk904GtHWJUt2XR70q0UqCoB7gH7hxB2wLki2pkywqPUSsKk+SW2cxH0Uws0y0Yo
+         z9BYTyDPDG+BUY7kq/gaMQ3vQqC6n6R1zuo+sUST1EX23yIktyp9alfmfb9CrMWD7c
+         5qE3SixaJKzjwqC1DxDyHZb9IVG+OXIwsWijs0DaWCvvg1qBaKSSy2jikbqoER2Kv2
+         xzNrI/yqaQNcw==
+Date:   Wed, 17 Aug 2022 10:56:00 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next 0/2] net: dsa: bcm_sf2: Utilize PHYLINK for all
+ ports
+Message-ID: <20220817105600.2aa3612c@kernel.org>
+In-Reply-To: <20220817172704.ne3cwqcfzplt2pgp@skbuf>
+References: <20220815175009.2681932-1-f.fainelli@gmail.com>
+        <20220817085414.53eca40f@kernel.org>
+        <20220817172704.ne3cwqcfzplt2pgp@skbuf>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <65d93ec6-2465-35f1-314f-f092ce631100@huaweicloud.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Wed, Aug 17, 2022 at 09:45:13AM +0800, Yu Kuai wrote:
-> > I don't know whether this is better or not. It's minutely less lines of code
-> > but also makes the code a bit more fragile. I'm ambivalent. At any rate,
-> > please move these trivial patches to the head of the series or post them
-> > separately.
+On Wed, 17 Aug 2022 20:27:04 +0300 Vladimir Oltean wrote:
+> On Wed, Aug 17, 2022 at 08:54:14AM -0700, Jakub Kicinski wrote:
+> > On Mon, 15 Aug 2022 10:50:07 -0700 Florian Fainelli wrote:  
+> > > Hi all,
+> > > 
+> > > This patch series has the bcm_sf2 driver utilize PHYLINK to configure
+> > > the CPU port link parameters to unify the configuration and pave the way
+> > > for DSA to utilize PHYLINK for all ports in the future.
+> > > 
+> > > Tested on BCM7445 and BCM7278  
+> > 
+> > Last call for reviews..  
 > 
-> Can I ask why do you think this patch makes the code a bit more fragile?
+> My review is: let's see what breaks...
 
-It's just one step further removed. Before, the flag was trivially in sync
-with the on queue status. After, the relationship is more indirect and
-easier to break accidentally. Not that it's a major problem. Just not sure
-what the benefit of the change is.
-
-> By the way, I'll post these trivial patches separately.
-
-Sounds great.
-
-Thanks.
-
--- 
-tejun
+*nod*, thanks!

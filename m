@@ -2,88 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AEE1597191
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 807195971E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240298AbiHQOoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 10:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58162 "EHLO
+        id S237059AbiHQOqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 10:46:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237255AbiHQOof (ORCPT
+        with ESMTP id S237072AbiHQOqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 10:44:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8474C49B42;
-        Wed, 17 Aug 2022 07:44:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 31C64B81DFB;
-        Wed, 17 Aug 2022 14:44:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F0DDC433C1;
-        Wed, 17 Aug 2022 14:44:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660747471;
-        bh=5+hesGY57xQHtUlGuPxqV55DlNRITexFStZnpOUjosc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lwkPzrQv4yGKxWlawuNpbVntJN4LEfpnbd0DbhhcYa0Njc3wfN+lEwn97cL0QnFYT
-         NItsXu9JdTxMuD9S7eusL8VI/FJT20pmBc10Daec5Zw5VVUn9kGbxEGeWuO6LkEYeA
-         SzQNHyUkl03Ptn2kTbrS9EY/K8W5JfApm9xKwAZ78uaUbtEPZOj8nR+1L6metNylHX
-         mUlqaxIRjoonfvd+Npfwwei1amC4kvhWGCi4RRSdZX6itfCXTav1dXbKmMULYiTaVG
-         rVc10EPbb0vTf88hVHn1ai87xODmTFqXC0aCARKtxz8QE/ehS0J2ZLVBa/ISrL7Mg0
-         K2avT2zDGd4lw==
-Date:   Wed, 17 Aug 2022 17:44:27 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] selftests/sgx: Add SGX selftest
- augment_via_eaccept_long
-Message-ID: <Yvz+yxnxp8G6KzHi@kernel.org>
-References: <20220815233900.11225-1-jarkko@kernel.org>
- <20220815233900.11225-2-jarkko@kernel.org>
- <6b304bb4-01cc-c88a-7299-19217a7a692b@intel.com>
- <YvwpX7pYOW3Jv+vJ@kernel.org>
- <DM8PR11MB55913534E8CE66F63460E707F66A9@DM8PR11MB5591.namprd11.prod.outlook.com>
- <24bd8e42-ff4e-0090-d9e1-cd81e4807f21@intel.com>
+        Wed, 17 Aug 2022 10:46:08 -0400
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8239C2F4;
+        Wed, 17 Aug 2022 07:46:06 -0700 (PDT)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 27HEjW8S025958;
+        Wed, 17 Aug 2022 23:45:33 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 27HEjW8S025958
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1660747533;
+        bh=uSGHNJC19uOo+o4MTqX8ubojhADfhgOtyxA3oBtx0Vw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=zzx5VAh46M/Lr1np/fAfFPD43U0C9d5eXTm8lncAWE8P07ixx8EjPNTnhuJJo+cil
+         Lxvm8EbZ3QMhrejTuQbTnBNa2keGhA/KfvBeRwp0RBsApOY5Z5tnakBpMS1UyS4s5X
+         6pUAc1ry0VNea/1F72cAuKaTNYWNh5RjD1nPhTxHJ2+QLecEQMRe8yAGJxmgwYY81c
+         mZ9HhU7XchekuVUmA/Eu7YsMGMceqG4BLPijWmQ1AanUoRkD3JBQUhor1D6SJ8Jixs
+         9wT02sOzE50xfMSyjBvDfdahD29o+4TIPnU56reoZP1yfFonJV3R4LjdMGakzzKoN+
+         jmYJ0j69bNu4w==
+X-Nifty-SrcIP: [209.85.221.43]
+Received: by mail-wr1-f43.google.com with SMTP id v3so16521862wrp.0;
+        Wed, 17 Aug 2022 07:45:33 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3ZEASHApfxFa/BrX9jIyykjjeGwyAQhKY4oVdFSsyr+ZDkJffd
+        5v0fESv3S6mqKFcj1QWT7+EDLrmfzei3cllnWd8=
+X-Google-Smtp-Source: AA6agR4611rLwhvJge2V5I5V2koJiMq8syWgMNxEIKfxnkhKZB+GtpMB6g0Pr+VpUQyacDmgDOMa9Ca/O/RLwbZ9EbQ=
+X-Received: by 2002:a5d:6248:0:b0:222:cd3b:94c8 with SMTP id
+ m8-20020a5d6248000000b00222cd3b94c8mr14909860wrv.97.1660747531856; Wed, 17
+ Aug 2022 07:45:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <24bd8e42-ff4e-0090-d9e1-cd81e4807f21@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220810230133.1895778-1-nathan@kernel.org>
+In-Reply-To: <20220810230133.1895778-1-nathan@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 17 Aug 2022 23:44:47 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATMpk2F1n489mNAV7cxi8Z_E_hNjhyvX5QcUqQXUXf_4A@mail.gmail.com>
+Message-ID: <CAK7LNATMpk2F1n489mNAV7cxi8Z_E_hNjhyvX5QcUqQXUXf_4A@mail.gmail.com>
+Subject: Re: [PATCH] scripts/Makefile.extrawarn: Do not disable clang's -Wformat-zero-length
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 09:35:27PM -0700, Reinette Chatre wrote:
-> >>> This portion below was also copied from previous test and by only
-> >>> testing a write to the first page of the range the purpose is not
-> >>> clear. Could you please elaborate if the intention is to only test
-> >>> accessibility of the first page and why that is sufficient?
-> >>
-> >> It is sufficient because the test reproduces the bug. It would have to be
-> >> rather elaborated why you would possibly want to do more than that.
-> 
-> That is fair. An accurate comment (currently an inaccurate copy&paste) would
-> help to explain this part of the test.
+On Thu, Aug 11, 2022 at 8:01 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> There are no instances of this warning in the tree across several
+> difference architectures and configurations. This was added by
+> commit 26ea6bb1fef0 ("kbuild, LLVMLinux: Supress warnings unless W=1-3")
+> back in 2014, where it might have been necessary, but there are no
+> instances of it now so stop disabling it to increase warning coverage
+> for clang.
+>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
 
-I would simply add something like:
+Applied to linux-kbuild/fixes. Thanks.
 
-/* 
- * Define memory pool size big enough to trigger the reclaimer in the EAUG
- * path of the page reclaimer.
- */
 
-Suggestions/edits obviously welcome for the comment.
 
-BR, Jarkko
+>  scripts/Makefile.extrawarn | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> index 9bbaf7112a9b..69cec45c4e71 100644
+> --- a/scripts/Makefile.extrawarn
+> +++ b/scripts/Makefile.extrawarn
+> @@ -48,7 +48,6 @@ else
+>  ifdef CONFIG_CC_IS_CLANG
+>  KBUILD_CFLAGS += -Wno-initializer-overrides
+>  KBUILD_CFLAGS += -Wno-sign-compare
+> -KBUILD_CFLAGS += -Wno-format-zero-length
+>  KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
+>  KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
+>  KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
+>
+> base-commit: aeb6e6ac18c73ec287b3b1e2c913520699358c13
+> --
+> 2.37.1
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada

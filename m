@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C6B596B34
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:17:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA314596B21
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235047AbiHQIPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 04:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39268 "EHLO
+        id S234813AbiHQIPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 04:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234589AbiHQIOj (ORCPT
+        with ESMTP id S234709AbiHQIOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 17 Aug 2022 04:14:39 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9F74D4F5
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:14:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54ACF543CB
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:14:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660724068; x=1692260068;
+  t=1660724071; x=1692260071;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=DKaFW9nCQZCfgbnugNhK3BHbzcTIAzrfbLSevgdOECU=;
-  b=hOJLViGJDeG0qBsrnrzllQvV86KvQYgUKIdQaTeYo1JOKXpXCHlZgvBf
-   d1JpoC0HHwa/4cSm4shQEdMH3dyPHzhXp1XALW9uYHHfJWnLUNmwy3dOa
-   BX7urKtZJ6WEiCi/6UQcbHQBIKCNnaP+Wt83G+ao6ZirdmctS0BAOONR4
-   zq6tMZe2F2b73evJWWnCagyVQBQY84a9PQR81QSgNmn+sROXGqEC1J/k4
-   TT0jM0VXHDkNTqKJTEbb9I+nMDakm94eqQF7lnjRPC2L7X52Nmievp9fh
-   T77Nh/VKjup1uhrWxX+ssy6cSC3TPx1aMz9qn+3a1sUhpQAbDM2UZT4Zl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="293228809"
+  bh=yhmojqv78CNeejAgfGN/fV62nXwRC1Wfl6ID7EB6l2s=;
+  b=gl9DlfyrauDE25KEHLHtO2JpIBQIKRWO6xnABB0epK46bTuosluMr2dG
+   4Au/lJ29XGGLGO6PBagd3d1uTa2Emnz8g/gR//+sLQkt85ow9VuT0+Gvp
+   bxGX4Zd10p8+eN32t8poVS/vmq/Thmfew0B+30MMX78dvNdHY36i+glLS
+   HvI+tFYga/22hmLwus5SrCLvHEY4ss43OinYNErpItiZGGVWYt/yuFG1a
+   tCf9jafLoViiGkjuOr7/A6F7/5n7pcpPuZffmnZMrww/mhPR/2y7KfwQA
+   Vn1cH8lhho7UPpl0Ni9om7YQbSs7xOzkPEHWD4BO8EcBIwVOYaAXOmlHH
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="293228818"
 X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="293228809"
+   d="scan'208";a="293228818"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 01:14:27 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 01:14:30 -0700
 X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="583668098"
+   d="scan'208";a="583668113"
 Received: from yhuang6-mobl1.sh.intel.com ([10.238.6.172])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 01:14:25 -0700
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 01:14:28 -0700
 From:   Huang Ying <ying.huang@intel.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
@@ -44,9 +44,9 @@ Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Baolin Wang <baolin.wang@linux.alibaba.com>,
         Oscar Salvador <osalvador@suse.de>, Zi Yan <ziy@nvidia.com>,
         Yang Shi <shy828301@gmail.com>
-Subject: [PATCH -V3 3/8] migrate_pages(): fix THP failure counting for -ENOMEM
-Date:   Wed, 17 Aug 2022 16:14:03 +0800
-Message-Id: <20220817081408.513338-4-ying.huang@intel.com>
+Subject: [PATCH -V3 4/8] migrate_pages(): fix failure counting for THP subpages retrying
+Date:   Wed, 17 Aug 2022 16:14:04 +0800
+Message-Id: <20220817081408.513338-5-ying.huang@intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220817081408.513338-1-ying.huang@intel.com>
 References: <20220817081408.513338-1-ying.huang@intel.com>
@@ -63,14 +63,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In unmap_and_move(), if the new THP cannot be allocated, -ENOMEM will
-be returned, and migrate_pages() will try to split the THP unless
-"reason" is MR_NUMA_MISPLACED (that is, nosplit == true).  But when
-nosplit == true, the THP migration failure will not be counted.  This
-is incorrect.  So in this patch, the THP migration failure will be
-counted for -ENOMEM regardless of nosplit is true or false.  The
-nr_failed counting isn't fixed because it's not used.  Added some
-comments for it per Baolin's suggestion.
+If THP is failed to be migrated for -ENOSYS and -ENOMEM, the THP will
+be split into thp_split_pages, and after other pages are migrated,
+pages in thp_split_pages will be migrated with no_subpage_counting ==
+true, because its failure have been counted already.  If some pages in
+thp_split_pages are retried during migration, we should not count
+their failure if no_subpage_counting == true too.  This is done this
+patch to fix the failure counting for THP subpages retrying.
 
 Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
 Fixes: 5984fabb6e82 ("mm: move_pages: report the number of non-attempted pages")
@@ -79,36 +78,23 @@ Reviewed-by: Oscar Salvador <osalvador@suse.de>
 Cc: Zi Yan <ziy@nvidia.com>
 Cc: Yang Shi <shy828301@gmail.com>
 ---
- mm/migrate.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ mm/migrate.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/mm/migrate.c b/mm/migrate.c
-index 19a9b26af7e2..ae55f08e72ce 100644
+index ae55f08e72ce..0018b5191799 100644
 --- a/mm/migrate.c
 +++ b/mm/migrate.c
-@@ -1494,11 +1494,11 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
- 				/*
- 				 * When memory is low, don't bother to try to migrate
- 				 * other pages, just exit.
--				 * THP NUMA faulting doesn't split THP to retry.
- 				 */
--				if (is_thp && !nosplit) {
-+				if (is_thp) {
- 					nr_thp_failed++;
--					if (!try_split_thp(page, &thp_split_pages)) {
-+					/* THP NUMA faulting doesn't split THP to retry. */
-+					if (!nosplit && !try_split_thp(page, &thp_split_pages)) {
- 						nr_thp_split++;
- 						goto retry;
- 					}
-@@ -1514,6 +1514,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
- 				 * the caller otherwise the page refcnt will be leaked.
- 				 */
- 				list_splice_init(&thp_split_pages, from);
-+				/* nr_failed isn't updated for not used */
- 				nr_thp_failed += thp_retry;
- 				goto out;
- 			case -EAGAIN:
+@@ -1545,7 +1545,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+ 			}
+ 		}
+ 	}
+-	nr_failed += retry;
++	if (!no_subpage_counting)
++		nr_failed += retry;
+ 	nr_thp_failed += thp_retry;
+ 	/*
+ 	 * Try to migrate subpages of fail-to-migrate THPs, no nr_failed
 -- 
 2.30.2
 

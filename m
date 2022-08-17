@@ -2,54 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7352259676F
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2E3596772
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238136AbiHQC3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 22:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36960 "EHLO
+        id S237940AbiHQCbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 22:31:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238100AbiHQC3t (ORCPT
+        with ESMTP id S238139AbiHQCbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 22:29:49 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D3567445
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 19:29:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=noP0tGHCb/BAHE2fzmHsuvX65aJ7RDKVDN/j9ECF9JA=; b=RxffMpfS4/REndNgAi4E/YY0DK
-        RsKhisdEscCVNILJkWtcBFzbOna0BxL6XUCpZvsnhiy7IPZdnMBVZXwNEV084VG/SWVGyP5XqoDVy
-        ElQdD/6M/TErIrn39y4exs2Im9nEgaMnS51Biuw1ac3ws7sHspDFVMY2CvBbWfUmhMLvLnMhnNULm
-        k5mfB60ZUoIBDDsXTBfAU29hlOzcBkztPg4N1uuuN20JAw6RpDHpO8KTvAPH4CUcyfHFKTBNUL4kx
-        xu7J1gTtwFrKIn9GmRT2tEKLLVSFzFbhhRsj9r2AlJ89khUzternicU6LFW7F8NZVP7Ly0EXigIFx
-        wyD1QNtg==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oO8oH-00975V-5L; Wed, 17 Aug 2022 02:29:33 +0000
-Message-ID: <77d8e180-9931-55ef-631e-f3e0ecb9fd36@infradead.org>
-Date:   Tue, 16 Aug 2022 19:29:31 -0700
+        Tue, 16 Aug 2022 22:31:44 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF46999B7B
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 19:31:43 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1660703502;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nlTzxQqE79Q9RIB87dn43uL+LcDuOAdW5kHAEE4gy6Y=;
+        b=nxffWsIkVsRMwm8+MLmB1eInSqSCenUn1OL2lHjSZ2nOUF1nvW860KUZQLwxLTWwbj/DqV
+        lZaWwAHxmI+ynG7yXWoI1ehTWxeklbr7T+FFjnrtyCx6hva+YLt/sBInMBR1ch30Hp3V56
+        uH3eVsEhviSym7raqyBosK2Guc5np70=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] improve the kernel quality and reduce the amount of BS
- patches
-Content-Language: en-US
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Paul Lemmermann <thepaulodoom@thepaulodoom.com>
-Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
+Subject: Re: [PATCH 2/6] mm/hugetlb: fix WARN_ON(!kobj) in
+ sysfs_create_group()
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <20220816130553.31406-3-linmiaohe@huawei.com>
+Date:   Wed, 17 Aug 2022 10:31:07 +0800
+Cc:     Andrew Morton <akpm@linux-foundation.org>, mike.kravetz@oracle.com,
+        Muchun Song <songmuchun@bytedance.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-References: <YvxF0yn07ztg9r4A@gus-fring.localdomain> <YvxNvpF7n1VqNnbD@ZenIV>
- <YvxP3LrvHLhFClBd@ZenIV>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <YvxP3LrvHLhFClBd@ZenIV>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <AA374889-2C8B-4D8B-9542-A760267F00E4@linux.dev>
+References: <20220816130553.31406-1-linmiaohe@huawei.com>
+ <20220816130553.31406-3-linmiaohe@huawei.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,36 +56,20 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 8/16/22 19:18, Al Viro wrote:
-> On Wed, Aug 17, 2022 at 03:09:02AM +0100, Al Viro wrote:
->> this idiocy has gone too far    
->>
->> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-> 
-> 	Seriously, folks - the stream of patches with no better
-> explanations than "The Most Holy checkpatch.pl Says So, Must Appease
-> The Spirits" ought to stop.
-> 
-> 	If you are changing something, take care to explain _why_
-> is the change made.  Reference to a tool that has pointed you
-> towards the location you are changing does not replace that.
-> checkpatch.pl is a script.  A dumb one.  It's a bunch of heuristics
-> that correlate with code being potentially fishy and worth looking
-> into; those are occasionally useful, but it's not an oracle.
+> On Aug 16, 2022, at 21:05, Miaohe Lin <linmiaohe@huawei.com> wrote:
+>=20
+> If sysfs_create_group() fails with hstate_attr_group, hstate_kobjs[hi]
+> will be set to NULL. Then it will be passed to sysfs_create_group() if
+> h->demote_order !=3D 0 thus triggering WARN_ON(!kobj) check. Fix this =
+by
+> making sure hstate_kobjs[hi] !=3D NULL when calling =
+sysfs_create_group.
+>=20
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-Yes, just saying "found with checkpatch" is not sufficient.
+It=E2=80=99s better to add a Fixes tag here.
 
-It's even documented to be a dumb advisor:
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
-"""Checkpatch is not always right. Your judgement takes precedence over checkpatch
-messages.  If your code looks better with the violations, then its probably
-best left alone."""
+Thanks.
 
-and
-
-"""Note, though, that the style checker should be
-viewed as a guide, not as a replacement for human judgment."""
-
-
--- 
-~Randy

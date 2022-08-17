@@ -2,176 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB35596A03
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 071795969FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232789AbiHQHCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 03:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39652 "EHLO
+        id S229634AbiHQHCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 03:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiHQHCA (ORCPT
+        with ESMTP id S229502AbiHQHC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 03:02:00 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2065.outbound.protection.outlook.com [40.107.20.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0277548D;
-        Wed, 17 Aug 2022 00:01:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HHUtsNREPsS64XNgZcu+0fFnh/PxiYv8VqZuWjrYMUZoMUpt4CxV7P+BZb7w/Bvl7ad9Kgl609sfGfrg4+870Thh50//sUAu9VrTvoDBu/sB0J/Ab/HFdsjjpuSs0FQ+TLoDhmHuPHqeoDzZLA7+uNm6JW9gbJBF+qM52WvW944DD1/J/0S2VIr/QhZfegxmaVdSetkyBu7fCagHKmj7Z+2olC+ZUPYfEYxvMZm8ZrtiMiWZvVGZtHmsm78BpVUqebwaooaG1aglGVL70HOZRveDVdBRdtFsXl2cibg6MmrMyEl/8nCKfG8AX6rwyoz6QIh5hD5BF1LkNMwqZP94yQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1/u3CXFHL7imdmcvFKNLqTrOUFKtn1CnRLVbqV9bBwo=;
- b=F75pMH1j17f4XkLVAsdtT6p8/xaVserveWx0UBqFTodD9Bja4zinopRBu4dEZW3Bi1DDitYmY/oxFUi8mvfyxTDcxduWtwGIyxtKlLyTwwmcLKcZmhnMkaLv1ucmgWdz12F4WiNghDecVpnljQsZV0QnGXJBsKhJ5lMTsKV3V13gGD7LnzyVaC3I9ytERjjAu+sAEelGzWAvrxJs/iAdNWYetdSl8C3VceBO7TZgc5i5irD0djFHQnL/1BFNztq0eRCl5Vtwp8gqKnfrcsWdooVHrzYsTrVS9sDmnxmgjVN6skEXZ0KyHb9pVBnhFyNqi+3GOsEOsUbUz7FuDY4c4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1/u3CXFHL7imdmcvFKNLqTrOUFKtn1CnRLVbqV9bBwo=;
- b=OYckSNMpPFzIZqDoIx+YuGScX8S7NWok0+Hh++ix+DHtXgJPxHa4Oc9c3JuBlic2jthbuq0IjpTjSgMN6VM2Y/MkgkuE045lVK5q2nEJl2D/+rNi+QnbBUYrEjz8Zuq+U9Ou6aqocwIpN0L3YcL58zJjB2yotOHTlQYIPA0Uwy0=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AM6PR04MB4839.eurprd04.prod.outlook.com (2603:10a6:20b:10::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Wed, 17 Aug
- 2022 07:01:56 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::3c6c:b7e6:a93d:d442]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::3c6c:b7e6:a93d:d442%4]) with mapi id 15.20.5525.011; Wed, 17 Aug 2022
- 07:01:56 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 1/2] dt-bindings: interconnect: fsl,imx8m-noc: drop
- Leonard Crestez
-Thread-Topic: [PATCH 1/2] dt-bindings: interconnect: fsl,imx8m-noc: drop
- Leonard Crestez
-Thread-Index: AQHYsgbz7atbLAFhFUGtao4Oxb84CK2yqiig
-Date:   Wed, 17 Aug 2022 07:01:56 +0000
-Message-ID: <DU0PR04MB9417FC8A9879D5A5A388ADA2886A9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20220817065946.24303-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220817065946.24303-1-krzysztof.kozlowski@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 73a480f2-e4ea-45b0-8f10-08da801e5f40
-x-ms-traffictypediagnostic: AM6PR04MB4839:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: EOQJFceZA5mWXwCwGo2MirAqOfTRlMHXhTr8yH1uE4Wy4G1AWspbD6O5xbToBVqlCfROVuYz5a81c8ESlCq9x2fczy1DJQwfXNqyz2jNcK36Slm/QStFId5bCYfxQi1S/nU9POTl6LAZTmLAJBdP0tww83R3erEb1kGN47dLeLUhgBpWNU3jKALXdz5XPABat4trntV49uh2vz6nKGTpDmoZY8ni/o/EjTdI1jje3F3VNI6WbhLOCtmoLvn7ezbzMGCp3v0O/Icpzi2YQsy4PUlyqpfeAOLPa2uLEet+L+L4zHe/lyvpofMuL1WGz8cM7O0jDcN7ZP6iECM2/TSK/Dvp/jC6Z5psl9iVgOg0ZF6i+v6c/9QAiMSEMwUKgo1wWrRWYgyxj3q3hlmThf3idEdvWdhHuYhR0RB5F2R1yWvH+LuYDQueBeuxuXSGK+dQgfh1kCZp3yCNP6d3gJPkrYz2ZqpG0vszZBEi63pxomkrTuT9IG67+eprI7TPOFiSfj3VTBLiiMKnA5JKTtZpgu+osmBHjHaKbUxg7UgD6caQ9beqgTPFv1B/HYUyWjky0Fgx/9VWWxaRHbfm0lepvQsPHv4X6smoNuF4x1Z5BRbfpk4rTcNRTZD1C5nzFVduND8vqXNJISsY+8qJoikTdNWIQBm/4IXvkD7PQrICkbzxAXtdMKTZTxeK7nyQ6blJ+pANZiS7wbkl2i4iQcnDi0ce99qCXp8/0XgxkOy0CR+dNBs6JazQ8n6tNHG1ScRuXp8/Zrdx0sI6zh+OW3kXYsSnn0Dykc4PasLY8Uz44uuw5lPaZk1ugLe7ioX1/oMDUPF220xHDtkb7v5HSNbozTKK9Pn+zyBRukxRBvPBi3k=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(39860400002)(346002)(366004)(376002)(26005)(122000001)(71200400001)(316002)(38070700005)(41300700001)(7416002)(921005)(33656002)(44832011)(66446008)(2906002)(66476007)(9686003)(66946007)(7696005)(76116006)(8676002)(38100700002)(66556008)(186003)(5660300002)(64756008)(478600001)(966005)(83380400001)(8936002)(45080400002)(110136005)(86362001)(52536014)(6506007)(55016003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?bSBGS8iq629HTXc5v6XfBemC78oIRiy33VBRKC0NcHyWtvGSqmvreIlM7hGr?=
- =?us-ascii?Q?AzIyN/5Fs9DtX0viH+uXhAlRbOVANlkJJkQTfIQwmixzrXij6NfMGwOfG0Gx?=
- =?us-ascii?Q?H8tGKfv7tp8wmyKUtWi7c46RJsvQfzZYtyDn6sxtAzLY7Me+egroDS7PS9kt?=
- =?us-ascii?Q?bZ7iT3y4vzKN4sfGlml705841K8t2bBsvsOidulXlRq9boxOJG1re/xYDIcV?=
- =?us-ascii?Q?12WHTY8AkhC3GfO5hrowS2bcKFdG+Qh7Y5+Oy3DOdK4Ujx7HaKJGf5oZeWR8?=
- =?us-ascii?Q?O94XSSfzILCqXm9JNd5ilVQ+UdbyxqjKWsl7LnsdSDqj+zfuZzIWfKRhYtH4?=
- =?us-ascii?Q?EcIy4sCs5cR7P3bj9cHCevFKxIiwfMeHSJVrNbVYvPHU/xX3v5o82ga38WCm?=
- =?us-ascii?Q?9on7KTaumY1reh3lTL91QFsyiN9e94qR5Sogf1eR41YrQSczzJlr0/3ITFAa?=
- =?us-ascii?Q?i5TpEaDrEgsyKY74CQlxbXvShj7mpIskzScovUtzHozCYmSyv9ltVCi1U27l?=
- =?us-ascii?Q?4IxbnhQU6fOMhmlxq7DXb+dVOIYOstkMbHOQCi44uZGTN7/pUkcHXppyYmxf?=
- =?us-ascii?Q?I/eepg+ELIbhGfIfLX057Yno8QiEfq5TKJ/6jLnkqI6s6bXbYKfqs1a/30NB?=
- =?us-ascii?Q?UIWb5E+uLD6jYgzf8LGf7O0heFJWGzYK5E7ntDur0ejog7+dYNHlPWh712c2?=
- =?us-ascii?Q?kXnMoHocMDKBNLZeFDEz5Rl3V9nuE8T7MIMBJoM+vR1cu4Z6T7o225lZlM1a?=
- =?us-ascii?Q?+Vn0G21id9+W7MBgB69j7bXNKBBnK/ZuO+miNg3z35NrurYpXzJBdOvMZpj4?=
- =?us-ascii?Q?hMylUHW3hJmTGifMuj8Q500qqJNeMGPV35Pcj2377lhP1e4i8COp9n6+9qVa?=
- =?us-ascii?Q?8ffX5HBic+bmLaCVCbOS/eQeVNRkm78dBlj/iUUC1lW7uC1MtNJcnBA8bt/t?=
- =?us-ascii?Q?cE4boHjoI7FtGSOTdXvp2+zsWXYZqNDXKKIBonSlMBFU369ABWo6Voy/a1pw?=
- =?us-ascii?Q?as5kQb1oeazwEfq4wndAd9HuOdh5Jat1YOCg5Yb+0AfrLF+oEM+v6ZV3G/5s?=
- =?us-ascii?Q?gQM3NxoOwJ36Mj5LxK2eV+0rMqOGqEHZnTBFJbDOFz0r8INfne8cPKEifj7x?=
- =?us-ascii?Q?WJcYlHhZCPH/PdDsHty4zRWiCs4coLAVq36j8m6BeN/cWgFsZ6B4p+9qzvYy?=
- =?us-ascii?Q?oRGMc9Gefg8+TPDRy86oVvS0eFAIDnXOOZRXhL/UdqCA7x1WhGIrpZw3ML3k?=
- =?us-ascii?Q?qL7xp7hfOU+qA4v5CivPic6A0l16SRxDRMwa01AXBHcWIw0bN5pykXOuDZ60?=
- =?us-ascii?Q?75CT2u6I8nEnFk7mtyLYNhAdY6zSXou1tT6exVLAOSPEC4FYEtfass2N3VaW?=
- =?us-ascii?Q?VMOIjm3NWjmF+xZmBUT9X9bj5A5jO2MqW3uQrjiUJ8AhVilcyXZfEMnqC4MR?=
- =?us-ascii?Q?hsoaqq1ytblq1AViP+nCGIHqm3fe0EBS/RH5V98MLWYnEWtbFz5THVqhq1L1?=
- =?us-ascii?Q?oMLlRJyc+nXCUV0kdWR4eX6qcdgLEVN0qFY8mSAz98m+lkDAeu9DQOwyGsgP?=
- =?us-ascii?Q?EfXBW+j5LUIdDz3Vj5ULkX86sOKw8r93i7UTa2o4?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 17 Aug 2022 03:02:26 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A141379A48
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:02:22 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id i12-20020a056e021d0c00b002df2d676974so8458290ila.5
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:02:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=AVy8zYCWjiIYaAwAGw4xq9fAnoGnbLuxa0nQhh+cRCs=;
+        b=6EUIS7Z+4sR3g0mOy+vEillJWtHIAzoLvOdnrJkZQIAeeBeJMwCMSEMUm/e7fl3syL
+         B5EPt40sFvQvhopdWd/rQAvVhsS5LrTg4a7T9htznLM3LbzA5wLWazeIPmnn9R7ndaU9
+         WK+4MZIhxAtZ96Sf7UxqsZIJZWI4DOnXKDtXIoKK88M4yIlE6o0VmkatbHk0lD1IclFn
+         A+HMaZ4+pYIDGj8rlHRx4Ro858CT1xlNb6hC3EXnlSJUci3XEgBBJHyNT2QdE6BlQ42d
+         qaXrZTpZS2oNPW6s9VA9p2Tfozi+3n2qsQM4gnwV3Db15TUA3BJidBSdPJ5/3DEeCgRn
+         zIJg==
+X-Gm-Message-State: ACgBeo09tLULXzacZ05ox2hzUQG5ucP7prq7YgoY5PUo2QADn6UHHjob
+        tHA3fh9jWi/NsEx2G6Ke6EsNxLsEmdxJavLT/tWWQvU5AZ7Y
+X-Google-Smtp-Source: AA6agR6rN7dhNVaxttfrEsOm5NHuRq2p14qzf5syX0piTZG3OQJsWMw/voN29CUtiLfIvSTED5mjAUWS+WLDv+bhtyGbp7TgauI7
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 73a480f2-e4ea-45b0-8f10-08da801e5f40
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Aug 2022 07:01:56.1162
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 348ftFpJc11mHGn0zPqkez5xtuD2nDu8GNGMKqwieR66LqlXJ1xJ+xUh7YBnBmeRUic32xz9x1jAJzbG57FjAw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4839
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1c8b:b0:2de:ec44:e139 with SMTP id
+ w11-20020a056e021c8b00b002deec44e139mr10522256ill.215.1660719742003; Wed, 17
+ Aug 2022 00:02:22 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 00:02:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004b320405e66a72cf@google.com>
+Subject: [syzbot] possible deadlock in ext4_writepages
+From:   syzbot <syzbot+c8139688c30ecca75857@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: [PATCH 1/2] dt-bindings: interconnect: fsl,imx8m-noc: drop
-> Leonard Crestez
->=20
-> Emails to Leonard Crestez bounce ("550 5.4.1 Recipient address rejected:
-> Access denied:), so change maintainer to Peng Fan from NXP.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->=20
+Hello,
 
-Thanks. Acked-by: Peng Fan <peng.fan@nxp.com>
+syzbot found the following issue on:
 
-Thanks,
-Peng.
-> ---
->=20
-> Peng, please ack it if you agree.
-> ---
->  .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml         | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-
-> noc.yaml b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-
-> noc.yaml
-> index 7d8d0896e979..f7a5e31c506e 100644
-> --- a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-
-> noc.yaml
-> @@ -7,7 +7,7 @@ $schema:
-> https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fdevice
-> tree.org%2Fmeta-
-> schemas%2Fcore.yaml%23&amp;data=3D05%7C01%7Cpeng.fan%40nxp.com%
-> 7C5dd9d91ca3754840402f08da801e149f%7C686ea1d3bc2b4c6fa92cd99c5c3
-> 01635%7C0%7C0%7C637963163932351723%7CUnknown%7CTWFpbGZsb3d
-> 8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%
-> 3D%7C3000%7C%7C%7C&amp;sdata=3DyeDnKhOwb40KnNYnK1FTmkklp9EjYS
-> m4JCiEC9%2FVWVw%3D&amp;reserved=3D0
->  title: Generic i.MX bus frequency device
->=20
->  maintainers:
-> -  - Leonard Crestez <leonard.crestez@nxp.com>
-> +  - Peng Fan <peng.fan@nxp.com>
->=20
->  description: |
->    The i.MX SoC family has multiple buses for which clock frequency (and
-> --
-> 2.34.1
+HEAD commit:    7ebfc85e2cd7 Merge tag 'net-6.0-rc1' of git://git.kernel.o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16fdc2f3080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=20bc0b329895d963
+dashboard link: https://syzkaller.appspot.com/bug?extid=c8139688c30ecca75857
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c8139688c30ecca75857@syzkaller.appspotmail.com
+
+======================================================
+WARNING: possible circular locking dependency detected
+5.19.0-syzkaller-13930-g7ebfc85e2cd7 #0 Not tainted
+------------------------------------------------------
+syz-executor.1/6130 is trying to acquire lock:
+ffff88814b25cbd8 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: ext4_writepages+0x1e7/0x3be0 fs/ext4/inode.c:2687
+
+but task is already holding lock:
+ffff88803dd0ca38 (&sb->s_type->i_mutex_key#7){++++}-{3:3}, at: inode_lock_shared include/linux/fs.h:771 [inline]
+ffff88803dd0ca38 (&sb->s_type->i_mutex_key#7){++++}-{3:3}, at: ext4_dio_read_iter fs/ext4/file.c:63 [inline]
+ffff88803dd0ca38 (&sb->s_type->i_mutex_key#7){++++}-{3:3}, at: ext4_file_read_iter+0x26b/0x740 fs/ext4/file.c:130
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (&sb->s_type->i_mutex_key#7){++++}-{3:3}:
+       lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5666
+       down_read+0x39/0x50 kernel/locking/rwsem.c:1499
+       inode_lock_shared include/linux/fs.h:771 [inline]
+       ext4_bmap+0x55/0x410 fs/ext4/inode.c:3157
+       bmap+0xa1/0xd0 fs/inode.c:1799
+       jbd2_journal_bmap fs/jbd2/journal.c:971 [inline]
+       __jbd2_journal_erase fs/jbd2/journal.c:1784 [inline]
+       jbd2_journal_flush+0x5d0/0xca0 fs/jbd2/journal.c:2490
+       ext4_ioctl_checkpoint fs/ext4/ioctl.c:1082 [inline]
+       __ext4_ioctl fs/ext4/ioctl.c:1586 [inline]
+       ext4_ioctl+0x378a/0x55c0 fs/ext4/ioctl.c:1606
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #1 (&journal->j_checkpoint_mutex){+.+.}-{3:3}:
+       lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5666
+       __mutex_lock_common+0x1de/0x26c0 kernel/locking/mutex.c:603
+       mutex_lock_io_nested+0x43/0x60 kernel/locking/mutex.c:833
+       __jbd2_log_wait_for_space+0x22d/0x790 fs/jbd2/checkpoint.c:110
+       add_transaction_credits+0x936/0xbf0 fs/jbd2/transaction.c:298
+       start_this_handle+0x758/0x1660 fs/jbd2/transaction.c:422
+       jbd2__journal_start+0x2ca/0x5b0 fs/jbd2/transaction.c:520
+       __ext4_journal_start_sb+0x111/0x1d0 fs/ext4/ext4_jbd2.c:105
+       __ext4_journal_start fs/ext4/ext4_jbd2.h:326 [inline]
+       ext4_writepages+0x1181/0x3be0 fs/ext4/inode.c:2810
+       do_writepages+0x3c3/0x690 mm/page-writeback.c:2468
+       filemap_fdatawrite_wbc+0x11e/0x170 mm/filemap.c:388
+       __filemap_fdatawrite_range mm/filemap.c:421 [inline]
+       file_write_and_wait_range+0x1e7/0x2f0 mm/filemap.c:773
+       ext4_sync_file+0x1b0/0x850 fs/ext4/fsync.c:151
+       generic_write_sync include/linux/fs.h:2874 [inline]
+       ext4_buffered_write_iter+0x308/0x3a0 fs/ext4/file.c:277
+       ext4_file_write_iter+0xabb/0x1ae0
+       do_iter_write+0x6f0/0xc50 fs/read_write.c:855
+       iter_file_splice_write+0x830/0xff0 fs/splice.c:686
+       do_splice_from fs/splice.c:764 [inline]
+       direct_splice_actor+0xe6/0x1c0 fs/splice.c:931
+       splice_direct_to_actor+0x4e4/0xc00 fs/splice.c:886
+       do_splice_direct+0x2a0/0x3f0 fs/splice.c:974
+       do_sendfile+0x641/0xfd0 fs/read_write.c:1249
+       __do_sys_sendfile64 fs/read_write.c:1311 [inline]
+       __se_sys_sendfile64+0xfc/0x1e0 fs/read_write.c:1303
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&sbi->s_writepages_rwsem){.+.+}-{0:0}:
+       check_prev_add kernel/locking/lockdep.c:3095 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+       validate_chain+0x1872/0x6600 kernel/locking/lockdep.c:3829
+       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5053
+       lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5666
+       percpu_down_read+0x44/0x190 include/linux/percpu-rwsem.h:51
+       ext4_writepages+0x1e7/0x3be0 fs/ext4/inode.c:2687
+       do_writepages+0x3c3/0x690 mm/page-writeback.c:2468
+       filemap_fdatawrite_wbc+0x11e/0x170 mm/filemap.c:388
+       __filemap_fdatawrite_range mm/filemap.c:421 [inline]
+       filemap_write_and_wait_range+0x1c1/0x2c0 mm/filemap.c:673
+       __iomap_dio_rw+0xb25/0x20e0 fs/iomap/direct-io.c:573
+       iomap_dio_rw+0x42/0xa0 fs/iomap/direct-io.c:690
+       ext4_dio_read_iter fs/ext4/file.c:79 [inline]
+       ext4_file_read_iter+0x595/0x740 fs/ext4/file.c:130
+       call_read_iter include/linux/fs.h:2186 [inline]
+       generic_file_splice_read+0x24e/0x650 fs/splice.c:309
+       do_splice_to fs/splice.c:793 [inline]
+       splice_direct_to_actor+0x41b/0xc00 fs/splice.c:865
+       do_splice_direct+0x2a0/0x3f0 fs/splice.c:974
+       do_sendfile+0x641/0xfd0 fs/read_write.c:1249
+       __do_sys_sendfile64 fs/read_write.c:1317 [inline]
+       __se_sys_sendfile64+0x178/0x1e0 fs/read_write.c:1303
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+Chain exists of:
+  &sbi->s_writepages_rwsem --> &journal->j_checkpoint_mutex --> &sb->s_type->i_mutex_key#7
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&sb->s_type->i_mutex_key#7);
+                               lock(&journal->j_checkpoint_mutex);
+                               lock(&sb->s_type->i_mutex_key#7);
+  lock(&sbi->s_writepages_rwsem);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor.1/6130:
+ #0: ffff88814b25a460 (sb_writers#4){.+.+}-{0:0}, at: do_sendfile+0x61c/0xfd0 fs/read_write.c:1248
+ #1: ffff88803dd0ca38 (&sb->s_type->i_mutex_key#7){++++}-{3:3}, at: inode_lock_shared include/linux/fs.h:771 [inline]
+ #1: ffff88803dd0ca38 (&sb->s_type->i_mutex_key#7){++++}-{3:3}, at: ext4_dio_read_iter fs/ext4/file.c:63 [inline]
+ #1: ffff88803dd0ca38 (&sb->s_type->i_mutex_key#7){++++}-{3:3}, at: ext4_file_read_iter+0x26b/0x740 fs/ext4/file.c:130
+
+stack backtrace:
+CPU: 1 PID: 6130 Comm: syz-executor.1 Not tainted 5.19.0-syzkaller-13930-g7ebfc85e2cd7 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
+ check_noncircular+0x2f9/0x3b0 kernel/locking/lockdep.c:2175
+ check_prev_add kernel/locking/lockdep.c:3095 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+ validate_chain+0x1872/0x6600 kernel/locking/lockdep.c:3829
+ __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5053
+ lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5666
+ percpu_down_read+0x44/0x190 include/linux/percpu-rwsem.h:51
+ ext4_writepages+0x1e7/0x3be0 fs/ext4/inode.c:2687
+ do_writepages+0x3c3/0x690 mm/page-writeback.c:2468
+ filemap_fdatawrite_wbc+0x11e/0x170 mm/filemap.c:388
+ __filemap_fdatawrite_range mm/filemap.c:421 [inline]
+ filemap_write_and_wait_range+0x1c1/0x2c0 mm/filemap.c:673
+ __iomap_dio_rw+0xb25/0x20e0 fs/iomap/direct-io.c:573
+ iomap_dio_rw+0x42/0xa0 fs/iomap/direct-io.c:690
+ ext4_dio_read_iter fs/ext4/file.c:79 [inline]
+ ext4_file_read_iter+0x595/0x740 fs/ext4/file.c:130
+ call_read_iter include/linux/fs.h:2186 [inline]
+ generic_file_splice_read+0x24e/0x650 fs/splice.c:309
+ do_splice_to fs/splice.c:793 [inline]
+ splice_direct_to_actor+0x41b/0xc00 fs/splice.c:865
+ do_splice_direct+0x2a0/0x3f0 fs/splice.c:974
+ do_sendfile+0x641/0xfd0 fs/read_write.c:1249
+ __do_sys_sendfile64 fs/read_write.c:1317 [inline]
+ __se_sys_sendfile64+0x178/0x1e0 fs/read_write.c:1303
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fce42889279
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fce4395e168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 00007fce4299c1f0 RCX: 00007fce42889279
+RDX: 0000000000000000 RSI: 0000000000000008 RDI: 0000000000000003
+RBP: 00007fce428e3189 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000010000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fffdba263bf R14: 00007fce4395e300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

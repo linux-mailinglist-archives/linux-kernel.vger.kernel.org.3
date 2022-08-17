@@ -2,153 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 590855968B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 07:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0685968B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 07:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238547AbiHQFkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 01:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58796 "EHLO
+        id S238576AbiHQFlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 01:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238523AbiHQFkP (ORCPT
+        with ESMTP id S238574AbiHQFlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 01:40:15 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B144F191
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 22:40:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660714814; x=1692250814;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fr2ccTBrMAyNFRTXIjEexaycVessIvgURcYbkU8aAZk=;
-  b=PREgkAZS5Jcr0dEiGXbsTKo7YKsvPWwyzYF4qazbO7BK5Xc24eb9S6QR
-   2nGGzYgBDkYczQUS4MVuAt1anu6xTKbE900EQr0U95yzy2hUYHQIXRDrR
-   R4RSwhhPUeIYw12jbUe3LcKpklbEELPNoN1Tw0Euj/07afk558PUyRDhZ
-   W5DbzDc4Az26xt6jI3AnsUm7/5/evCcLmwR6T4444AZ0EKelDIo9qIC37
-   ZNjRdVgDRodybxZ4ipCHon54/kVWN85QD7iNOT0Lf1yJISdZo0Azm/+TV
-   pmtWaNkpAJdg0+nUqfogsaENOCwoFMACLOcuFWZnjkL/6kxhYA+ka+0RU
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="378697832"
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="378697832"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 22:40:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="557983828"
-Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 16 Aug 2022 22:40:12 -0700
-Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oOBml-0000cm-1w;
-        Wed, 17 Aug 2022 05:40:11 +0000
-Date:   Wed, 17 Aug 2022 13:39:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jgunthorpe:vfio_dma_buf 1/18]
- drivers/vfio/pci/vfio_pci_zdev.c:116:5: warning: no previous prototype for
- 'vfio_pci_info_zdev_add_caps'
-Message-ID: <202208171357.kX3EBdtG-lkp@intel.com>
+        Wed, 17 Aug 2022 01:41:09 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5E273912
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 22:41:07 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id p184so6562442iod.6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 22:41:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=solid-run-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=LtiOQ+mkHG3cwstCPu63k81uDm+Tw39gJQT7l7BfDLA=;
+        b=Ath3yvPoCbvg61Letpy3d0PqozWLwwe9AmUmHNCgOgQ+HJySqSJYFKiqdif9aAzbwC
+         /0Fvf2ynY2zf4g364t39yCZiiLQX+Phj0RXTS41kp9aWAtRs2vqSNGPh3LROO1A8e1SG
+         GIVawD3lxyeB+YewQwmkRQBwFKZafkYi0BkZS/MBkSs01TJqnGTc7q6o2FM9JQKCzy+6
+         as58x35inJKn+OzcxYhDGWcvUHnKQBuNzOof7OCnTatdp0aUq2IsTm+m5Fo/mYAZdiHc
+         mJND3g5enXtfobike48Sxz4zmTyGD4D4yyKankC8sW2T4cbIIyOpWONzuFh+aUZXvPHC
+         x+RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=LtiOQ+mkHG3cwstCPu63k81uDm+Tw39gJQT7l7BfDLA=;
+        b=Kd+QN9hzyTQvAHTzsS8O1bF9Pi4unVWt5REvzf87CIm2qZSZaf8JqYlbnW3Ce6IJKA
+         5WPWlUlCSvZCr+K05ifq5L5Vcs4D6i0j5hYMnkFlVRXrUdfe4wETuTea7N+s4LbpNOQg
+         D5ICEcbRrH469OZ7HPCExBqJA901zeqfCAuZ9Lg31WeHX/dUCChtAk8VXW/97JbQm5/8
+         KeZpgx6S7NoVwrQtVOs5uYdXZZugDMNCGgyYRDyUn/WQozZd6AR7VQt5jwTGv+VZqj57
+         GA47+GzQR6W3TYKEODQJGqcN9AsAw/ELslt7gu5fVS5GdStUe7PB1v4LYGN5kFGLK1V0
+         ZyEA==
+X-Gm-Message-State: ACgBeo0SHukgEZ7TLntp2XLDiG2MwobctNWaJbHfoaqZ38MrkXl3EusV
+        3ezj9y5XRhNWscxuZMPlEr9tw+y+hXvtjW9tyJlr4g==
+X-Google-Smtp-Source: AA6agR6AuZldJfYBgZvu76/kZ6GrmloyUKbLwieemg3QzOLxFXNzU9ClV/Ucl0lnavczFuLrZ/rBfRuoxtOlgv6iSPc=
+X-Received: by 2002:a05:6638:d45:b0:343:2ae6:e39a with SMTP id
+ d5-20020a0566380d4500b003432ae6e39amr11419090jak.139.1660714866198; Tue, 16
+ Aug 2022 22:41:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220816070311.89186-1-marcan@marcan.st> <20220816140423.GC11202@willie-the-truck>
+ <c545705f-ee7e-4442-ebfc-64a3baca2836@marcan.st> <20220816173654.GA11766@willie-the-truck>
+ <CABdtJHt_3TKJVLhLiYMcBtvyA_DwaNapv1xHVeDdQH7cAC6YWw@mail.gmail.com> <CAHk-=wh3dCn5a4fZuJ7cewJoG9Vrm9xSOShiwgC6MA9=yJvXPg@mail.gmail.com>
+In-Reply-To: <CAHk-=wh3dCn5a4fZuJ7cewJoG9Vrm9xSOShiwgC6MA9=yJvXPg@mail.gmail.com>
+From:   Jon Nettleton <jon@solid-run.com>
+Date:   Wed, 17 Aug 2022 07:40:29 +0200
+Message-ID: <CABdtJHuwGQ1Vj+HVfkhp=JN_hsFjJeK0-nfj+Ys1LXZrTKUaZg@mail.gmail.com>
+Subject: Re: [PATCH] locking/atomic: Make test_and_*_bit() ordered on failure
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Will Deacon <will@kernel.org>, Hector Martin <marcan@marcan.st>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>, Tejun Heo <tj@kernel.org>,
+        jirislaby@kernel.org, Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Asahi Linux <asahi@lists.linux.dev>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jgunthorpe/linux vfio_dma_buf
-head:   f5c3d9a2ccc263572e3fc0f87a338679af57184a
-commit: 25ad961c532a633fa112c551f8ec63cd17fda180 [1/18] vfio/pci: Split linux/vfio_pci_core.h
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20220817/202208171357.kX3EBdtG-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jgunthorpe/linux/commit/25ad961c532a633fa112c551f8ec63cd17fda180
-        git remote add jgunthorpe https://github.com/jgunthorpe/linux
-        git fetch --no-tags jgunthorpe vfio_dma_buf
-        git checkout 25ad961c532a633fa112c551f8ec63cd17fda180
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/vfio/pci/
+On Tue, Aug 16, 2022 at 8:02 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Tue, Aug 16, 2022 at 10:49 AM Jon Nettleton <jon@solid-run.com> wrote:
+> >
+> > It is moot if Linus has already taken the patch, but with a stock
+> > kernel config I am
+> > still seeing a slight performance dip but only ~1-2% in the specific
+> > tests I was running.
+>
+> It would be interesting to hear if you can pinpoint in the profiles
+> where the time is spent.
+>
+> It might be some random place that really doesn't care about ordering
+> at all, and then we could easily rewrite _that_ particular case to do
+> the unordered test explicitly, ie something like
+>
+> -        if (test_and_set_bit()) ...
+> +       if (test_bit() || test_and_set_bit()) ...
+>
+> or even introduce an explicitly unordered "test_and_set_bit_relaxed()" thing.
+>
+>                  Linus
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This is very interesting, the additional performance overhead doesn't seem
+to be coming from within the kernel but from userspace. Comparing patched
+and unpatched kernels I am seeing more cycles being taken up by glibc
+atomics like __aarch64_cas4_acq  and __aarch64_ldadd4_acq_rel.
 
-All warnings (new ones prefixed by >>):
+I need to test further to see if there is less effect on a system with
+less cores,
+This is a 16-core Cortex-A72, it is possible this is less of an issue on 4 core
+A72's and A53's.
 
->> drivers/vfio/pci/vfio_pci_zdev.c:116:5: warning: no previous prototype for 'vfio_pci_info_zdev_add_caps' [-Wmissing-prototypes]
-     116 | int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/vfio/pci/vfio_pci_zdev.c:144:5: warning: no previous prototype for 'vfio_pci_zdev_open_device' [-Wmissing-prototypes]
-     144 | int vfio_pci_zdev_open_device(struct vfio_pci_core_device *vdev)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/vfio/pci/vfio_pci_zdev.c:157:6: warning: no previous prototype for 'vfio_pci_zdev_close_device' [-Wmissing-prototypes]
-     157 | void vfio_pci_zdev_close_device(struct vfio_pci_core_device *vdev)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/vfio_pci_info_zdev_add_caps +116 drivers/vfio/pci/vfio_pci_zdev.c
-
-e6b817d4b8217a Matthew Rosato 2020-10-07  112  
-e6b817d4b8217a Matthew Rosato 2020-10-07  113  /*
-e6b817d4b8217a Matthew Rosato 2020-10-07  114   * Add all supported capabilities to the VFIO_DEVICE_GET_INFO capability chain.
-e6b817d4b8217a Matthew Rosato 2020-10-07  115   */
-536475109c8284 Max Gurtovoy   2021-08-26 @116  int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
-e6b817d4b8217a Matthew Rosato 2020-10-07  117  				struct vfio_info_cap *caps)
-e6b817d4b8217a Matthew Rosato 2020-10-07  118  {
-e6b817d4b8217a Matthew Rosato 2020-10-07  119  	struct zpci_dev *zdev = to_zpci(vdev->pdev);
-e6b817d4b8217a Matthew Rosato 2020-10-07  120  	int ret;
-e6b817d4b8217a Matthew Rosato 2020-10-07  121  
-e6b817d4b8217a Matthew Rosato 2020-10-07  122  	if (!zdev)
-e6b817d4b8217a Matthew Rosato 2020-10-07  123  		return -ENODEV;
-e6b817d4b8217a Matthew Rosato 2020-10-07  124  
-46c47466609444 Max Gurtovoy   2021-02-01  125  	ret = zpci_base_cap(zdev, caps);
-e6b817d4b8217a Matthew Rosato 2020-10-07  126  	if (ret)
-e6b817d4b8217a Matthew Rosato 2020-10-07  127  		return ret;
-e6b817d4b8217a Matthew Rosato 2020-10-07  128  
-46c47466609444 Max Gurtovoy   2021-02-01  129  	ret = zpci_group_cap(zdev, caps);
-e6b817d4b8217a Matthew Rosato 2020-10-07  130  	if (ret)
-e6b817d4b8217a Matthew Rosato 2020-10-07  131  		return ret;
-e6b817d4b8217a Matthew Rosato 2020-10-07  132  
-e6b817d4b8217a Matthew Rosato 2020-10-07  133  	if (zdev->util_str_avail) {
-46c47466609444 Max Gurtovoy   2021-02-01  134  		ret = zpci_util_cap(zdev, caps);
-e6b817d4b8217a Matthew Rosato 2020-10-07  135  		if (ret)
-e6b817d4b8217a Matthew Rosato 2020-10-07  136  			return ret;
-e6b817d4b8217a Matthew Rosato 2020-10-07  137  	}
-e6b817d4b8217a Matthew Rosato 2020-10-07  138  
-46c47466609444 Max Gurtovoy   2021-02-01  139  	ret = zpci_pfip_cap(zdev, caps);
-e6b817d4b8217a Matthew Rosato 2020-10-07  140  
-e6b817d4b8217a Matthew Rosato 2020-10-07  141  	return ret;
-e6b817d4b8217a Matthew Rosato 2020-10-07  142  }
-8061d1c31f1a01 Matthew Rosato 2022-06-06  143  
-8061d1c31f1a01 Matthew Rosato 2022-06-06 @144  int vfio_pci_zdev_open_device(struct vfio_pci_core_device *vdev)
-8061d1c31f1a01 Matthew Rosato 2022-06-06  145  {
-8061d1c31f1a01 Matthew Rosato 2022-06-06  146  	struct zpci_dev *zdev = to_zpci(vdev->pdev);
-8061d1c31f1a01 Matthew Rosato 2022-06-06  147  
-8061d1c31f1a01 Matthew Rosato 2022-06-06  148  	if (!zdev)
-8061d1c31f1a01 Matthew Rosato 2022-06-06  149  		return -ENODEV;
-8061d1c31f1a01 Matthew Rosato 2022-06-06  150  
-8061d1c31f1a01 Matthew Rosato 2022-06-06  151  	if (!vdev->vdev.kvm)
-8061d1c31f1a01 Matthew Rosato 2022-06-06  152  		return 0;
-8061d1c31f1a01 Matthew Rosato 2022-06-06  153  
-8061d1c31f1a01 Matthew Rosato 2022-06-06  154  	return kvm_s390_pci_register_kvm(zdev, vdev->vdev.kvm);
-8061d1c31f1a01 Matthew Rosato 2022-06-06  155  }
-8061d1c31f1a01 Matthew Rosato 2022-06-06  156  
-8061d1c31f1a01 Matthew Rosato 2022-06-06 @157  void vfio_pci_zdev_close_device(struct vfio_pci_core_device *vdev)
-
-:::::: The code at line 116 was first introduced by commit
-:::::: 536475109c82841126ca341ef0f138e7298880c1 vfio/pci: Rename vfio_pci_device to vfio_pci_core_device
-
-:::::: TO: Max Gurtovoy <mgurtovoy@nvidia.com>
-:::::: CC: Alex Williamson <alex.williamson@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+-Jon

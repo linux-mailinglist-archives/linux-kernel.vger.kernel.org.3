@@ -2,139 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1DC596793
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 05:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093805967A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 05:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237611AbiHQC7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 22:59:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38542 "EHLO
+        id S233476AbiHQDEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 23:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbiHQC7t (ORCPT
+        with ESMTP id S238447AbiHQDEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 22:59:49 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9B29675B
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 19:59:48 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id u133so10968822pfc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 19:59:48 -0700 (PDT)
+        Tue, 16 Aug 2022 23:04:45 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED176A4BF;
+        Tue, 16 Aug 2022 20:04:44 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id e8-20020a17090a280800b001f2fef7886eso651315pjd.3;
+        Tue, 16 Aug 2022 20:04:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc;
-        bh=/tO4DCm3u+0w3PVCkx0WyWuvz7PYFu5oe9lMYDeyNbw=;
-        b=NyIpz72DIbP7xVNP6HW4NhNaME+eghGBdleag4Y6re9LujRPjzRxwNUk8xAIsgzoYH
-         H7Z1iYadfvRv7oicq2E/hUUmXDm90hf6a/+PNjoZ+9BYHj5ZEuNK/LR4MkhUR8eaDCiQ
-         o66HO8YymT9y/X/PFc1bUL6mCk5HCB0xm/F/lxzv1XnLDGv59zzaMLtLQLT+EbNdLyER
-         y+ZvhtxWbevjSV/15sajJ6ixVlPNC46sfbAF9pBeBvURpxbTqTHztk0h9x7bsZL0/vQh
-         RW1T2cyRm9agwl+hbj9CI/WwLNG+UDrFPl/j26rA4/ui4bUMeaSp3fl/pD1ZqnksFmaH
-         WP3g==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=QiKcqQGvDQZ0wwxsKELSH16ee9cOyYGIbKKc/TC2lac=;
+        b=F19mXXKtLBf6iZVb6OJh9gOPy2/rtD0ZdnW872Bmp9Hgq+BfaOSiyncf8f8FFiLrbw
+         sLarg712oGU6m+2FqBAfeZBbnhGkSb3XeZQNewvHJLO5r478kLea8UGdpnvAMfNP4yJO
+         KMFnDg2SlEd8+kitF3MHDqBMUfQAENSy08qvPBIhRs04EljBxwF+MIK1XpCyVXjs60lB
+         Jf+TqXCq5KkMty7fn0ol9jgro0js6yw5zYaOfv7JSQdwCHRC/+AdarciIMbXvdbfc1rr
+         szGau58oFfpvcYt7HhTU5dtxXvr+yD2LAQVfFoBAm8M2Dkccy8NkyPtR0Ai9CmEteSSK
+         zZLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc;
-        bh=/tO4DCm3u+0w3PVCkx0WyWuvz7PYFu5oe9lMYDeyNbw=;
-        b=xyDNnnu5lmaF2xQMG0ZU/Hbz9evf4PlZgBDJRoMkfCkjEr3YHqvwiib2jajq4NgMFu
-         gsWK316zUQccsmFERrsR2xnrv042DkZQs/6VrlDRiCM1LyB4aGYxI3Qjlp7/zq8Wu2xW
-         zgxbmoy9OjCvDCDQVMe0P3PyKluTXbQMzFWfOr3cQOEgcZzTpbwsg0RY5U5atfUlEzkf
-         gw+eyMAHuoLwGMGfUXXg6r/hpTE+doCjoDiZrtJKcTlSgOgHsVr05yTvWv7zdqw510qw
-         wgPH6/f8C3LNZBxGN8EG1owkGBS3IVOMdmg/ORJCxPt3gx8+ADHDnmBZlwOXQg11fCXs
-         TkXA==
-X-Gm-Message-State: ACgBeo0iaS0OqajNXFHIGJ9TvFMqNVSc/ktoah7xsI/kjOJuOC0eLpHd
-        horK+DlqklS1OCe5MQ0B/3I=
-X-Google-Smtp-Source: AA6agR4nUscc8bnOCJT3ZxVy5m1K/hVbp4yo7ytPZPRRQp1Xt43/bBv312f9Q2ycjDJlssKfTNPwOg==
-X-Received: by 2002:a05:6a00:16cb:b0:52b:cc59:9468 with SMTP id l11-20020a056a0016cb00b0052bcc599468mr23397196pfc.46.1660705187829;
-        Tue, 16 Aug 2022 19:59:47 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id z7-20020aa79587000000b00528c22fbb45sm9472021pfj.141.2022.08.16.19.59.46
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=QiKcqQGvDQZ0wwxsKELSH16ee9cOyYGIbKKc/TC2lac=;
+        b=p2PggHG/YDBTCI/EYXDeJQlDj186NWEP7jE5N/w7M6e8lk4YD9i7B/+Qf5gmRYBYSz
+         9NrgEWCmTpOhxylU0Qa+POLTwB9g6loq/r7ocvgnfLD9OP+kTWzGlKPHxL4t2fsBIkPl
+         5kp2H8/AWjMYCXXlsSo6GKERNk86eai84Kr7IT96JVAAO5/kBnjSObfb6kzOVTYRcFQd
+         HAB0CSBwRoNfwXIB/bo8KjQWbszhG7689+UeheuxRVKkCuSpABYA/DsWcv1AYKgVhE0r
+         xKE/6IMh5E2inAhu0J2DbNOcw+Ozg6ELRz9xmU1pJkRQ2jLu8PMVE/blNUHMutm7XSom
+         DVzA==
+X-Gm-Message-State: ACgBeo2fZlz2pFFmkZnLD4qdvAzmO03vvWc01ZBBSRf21Q6n7WH+emcO
+        zh9KSZXcp+OClC6mTiL4shU=
+X-Google-Smtp-Source: AA6agR4d1E+ey3zbI4IF5ML3Se7af3AMcCPqfC/gvLIVoMIKs1/GntGKkkoyWx9ncFVYNz/6oOMyYg==
+X-Received: by 2002:a17:902:a3c7:b0:172:8db4:cc54 with SMTP id q7-20020a170902a3c700b001728db4cc54mr3998176plb.99.1660705484047;
+        Tue, 16 Aug 2022 20:04:44 -0700 (PDT)
+Received: from localhost ([36.112.86.8])
+        by smtp.gmail.com with ESMTPSA id r15-20020a17090a0acf00b001f559e00473sm279356pje.43.2022.08.16.20.04.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 19:59:47 -0700 (PDT)
-Message-ID: <62fc59a3.a70a0220.b9a52.01f3@mx.google.com>
-X-Google-Original-Message-ID: <20220817025945.GA84631@cgel.zte@gmail.com>
-Date:   Wed, 17 Aug 2022 02:59:45 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     akpm@linux-foundation.org, tj@kernel.org, axboe@kernel.dk,
-        vdavydov.dev@gmail.com, ran.xiaokai@zte.com.cn, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, cgel <cgel@zte.com.cn>,
-        Peter Zijlstra <peterz@infradead.org>, yang.yang29@zte.com.cn
-Subject: Re: [RFC PATCH 1/2] psi: introduce memory.pressure.stat
-References: <20220801004205.1593100-1-ran.xiaokai@zte.com.cn>
- <Yup+W/EFzkfSqRnW@cmpxchg.org>
+        Tue, 16 Aug 2022 20:04:43 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     kuba@kernel.org
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, dhowells@redhat.com,
+        edumazet@google.com, jakub@cloudflare.com,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, songliubraving@fb.com, yhs@fb.com,
+        yin31149@gmail.com
+Subject: Re: [PATCH] net: Fix suspicious RCU usage in bpf_sk_reuseport_detach()
+Date:   Wed, 17 Aug 2022 11:00:13 +0800
+Message-Id: <20220817030013.6574-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220816183930.2328d46d@kernel.org>
+References: <20220816183930.2328d46d@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yup+W/EFzkfSqRnW@cmpxchg.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022 at 09:55:39AM -0400, Johannes Weiner wrote:
-> On Mon, Aug 01, 2022 at 12:42:04AM +0000, cgel.zte@gmail.com wrote:
-> > From: cgel <cgel@zte.com.cn>
-> > 
-> > For now psi memory pressure account for all the mem stall in the
-> > system, And didnot provide a detailed information why the stall
-> > happens. This patch introduce a cgroupu knob memory.pressure.stat,
-> > it tells the detailed stall information of all memory events and it
-> > format and the corresponding proc interface.
-> > 
-> > for the cgroup, add memory.pressure.stat and it shows:
-> > kswapd: avg10=0.00 avg60=0.00 avg300=0.00 total=0
-> > direct reclaim: avg10=0.00 avg60=0.00 avg300=0.12 total=42356
-> > kcompacted: avg10=0.00 avg60=0.00 avg300=0.00 total=0
-> > direct compact: avg10=0.00 avg60=0.00 avg300=0.00 total=0
-> > cgroup reclaim: avg10=0.00 avg60=0.00 avg300=0.00 total=0
-> > workingset thrashing:   avg10=0.00 avg60=0.00 avg300=0.00 total=0
-> > 
-> > for the system wide, a proc file introduced as pressure/memory_stat
-> > and the format is the same as the cgroup interface.
-> > 
-> > With this detaled information, for example, if the system is stalled
-> > because of kcompacted, compaction_proactiveness can be promoted so
-> > pro-compaction can be involved earlier.
-> > 
-> > Signed-off-by: cgel <cgel@zte.com.cn>
-> 
-> > @@ -64,9 +91,11 @@ struct psi_group_cpu {
-> >  
-> >  	/* Aggregate pressure state derived from the tasks */
-> >  	u32 state_mask;
-> > +	u32 state_memstall;
-> >  
-> >  	/* Period time sampling buckets for each state of interest (ns) */
-> >  	u32 times[NR_PSI_STATES];
-> > +	u32 times_mem[PSI_MEM_STATES];
-> 
-> This doubles the psi cache footprint on every context switch, wakeup,
-> sleep, etc. in the scheduler. You're also adding more branches to
-> those same paths. It'll measurably affect everybody who is using psi.
-> 
-> Yet, in the years of using psi in production myself, I've never felt
-> the need for what this patch provides. There are event counters for
-> everything that contributes to pressure, and it's never been hard to
-> rootcause spikes. There are also things like bpftrace that let you
-> identify who is stalling for how long in order to do one-off tuning
-> and systems introspection.
-> 
-We think this patch is not for rootcause spikes, it's for automatic optimize
-memory besides oomd, especially for sysctl adjustment. For example if we see
-much pressure of direct reclaim the automatic optimize program might turn up
-watermark_scale_factor.
-The base idea is that this patch gives user a brief UI to know what kind of
-memory pressure the system is suffering, and to optimize the system in a fine
-grain. It could provide data for user to adjust watermark_boost_factor,
-extfrag_threshold, compaction_proactiveness,transparent_hugepage/defrag,
-swappiness, vfs_cache_pressure, madvise(), which may not easy for to do
-before.
+On Wed, 17 Aug 2022 at 07:44, Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Tue, 16 Aug 2022 22:16:46 +0100 David Howells wrote:
+> > So either __rcu_dereference_sk_user_data_with_flags_check() has to be a macro,
+> > or we need to go with something like the first version of my patch where I
+> > don't pass the condition through.  Do you have a preference?
+>
+> I like your version because it documents what the lock protecting this
+> field is.
+In my opinion, I still think we'd better refactor it to a more
+geniric function, to avoid adding new functions when meeting
+the same problem. However, if this is just a standalone problem,
+maybe David's version shoule be better.
 
-It's not easy for automatic optimize program to use tools likes bpftrace or
-ftrace to do this.
+So maybe apply the David's version, and refactor it later when
+meeting the same problem next time if needed.
 
-While we may use CONFIG_PSI_XX or bootparam to turn on/off this patch to avoid
-additional footprint for user who not need this.
+On Wed, 17 Aug 2022 at 08:43, Martin KaFai Lau <kafai@fb.com> wrote:
+>
+> On Tue, Aug 16, 2022 at 04:44:35PM -0700, Jakub Kicinski wrote:
+> >
+> > One the naming - maybe just drop the _with_flags() ? There's no version
+> > of locked helper which does not take the flags. And not underscores?
+> I am also good with a shorter name.
+I also agree, the name is really long.

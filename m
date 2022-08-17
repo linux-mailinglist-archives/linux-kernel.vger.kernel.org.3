@@ -2,392 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3410B597337
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB8E59734A
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240222AbiHQPio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 11:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57998 "EHLO
+        id S240365AbiHQPqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 11:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237915AbiHQPij (ORCPT
+        with ESMTP id S237973AbiHQPqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 11:38:39 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4A01A076;
-        Wed, 17 Aug 2022 08:38:37 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id c24so12269585pgg.11;
-        Wed, 17 Aug 2022 08:38:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=B33W6pEQTcDtzqOJO5sJQeM8fW70y5BLp4RAUIHz/o8=;
-        b=pkLDZt2A7O4CSwnfWOMHLnLdqoS2FosELfzrTib9hjLV7OsKTRDdRUwggu+jF6JoVz
-         KDrfBTgzjRJDUulhzDkZh2gjFnEbbcCP/BSZfv4MIyoPDuociPoW4rxPwKMs9Ne+xfpB
-         tjlpwdviQXimnJTOk4QVMikyPj1bU0lkR8lYnZmupAVVUjM2d25bdbidHdmGlsp9/y26
-         /1sTW0iBqPKD4EZZ6O7d9l+3wy8FyBTjoGDLPrn0WdL1cxDvIQHybJPm+sbUed+8qBbu
-         0NP5VUsbz7PyScM+XMw6jOAfBmnjho4VD6VxiLmREdANmtNAmnRAwg42k8Lo86erqaE/
-         jQqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=B33W6pEQTcDtzqOJO5sJQeM8fW70y5BLp4RAUIHz/o8=;
-        b=ZSetbYRoDCjG4aVBwOfHZ+EgiGeparYFyxifPaA/bXEOt7XqaBLjF16hqpFBaB3+mL
-         yRQ5y0swENPKiFbxvv/iIGB0DEThjWL+0KXGqDjp93rWA26HcJ///KAJiSyFB8kxeqgl
-         IVWtJgFpRsT4iA8Z8eKP2MVhiYd2ISbvawoSGKmXWt+yyoj3gAlEVWpfMJCsYp1ItOQ6
-         trtGOQw5DsDyXIOmqH+ylA3XfWW6cF24Bg/+gaUOsgvk2ldaBxOjB0tO4XgpeNt5zCce
-         GT7ODVY4QcJkTFhBpXvWBXLD+fI8Dir7otzg3sUg41VhlYYx8MCjlcaH3jPw/8f5GsKc
-         8BFA==
-X-Gm-Message-State: ACgBeo16C4OOYp/kZ8cgcmR3YjGa5Gcsfdi6uiXU5Yg6R6Y5GKNrziav
-        geIDfJSovd0DCrp0HLIJ3L47fYL9jTM=
-X-Google-Smtp-Source: AA6agR5OlRc9h4lpDaEqyQMT/jEZ41zkLjDd4MhSe5tTEwusvxRYxjHqJG09vNCt/fEkdvIUo0f9cA==
-X-Received: by 2002:a05:6a00:4147:b0:52e:2d56:17c8 with SMTP id bv7-20020a056a00414700b0052e2d5617c8mr26114120pfb.51.1660750716897;
-        Wed, 17 Aug 2022 08:38:36 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 73-20020a62194c000000b005326acf9fecsm10416169pfz.2.2022.08.17.08.38.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 08:38:35 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 17 Aug 2022 08:38:34 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Aleksa Savic <savicaleksa83@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, Jack Doan <me@jackdoan.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for reading
- virtual temp sensors
-Message-ID: <20220817153834.GA1408575@roeck-us.net>
-References: <20220817121441.112198-1-savicaleksa83@gmail.com>
+        Wed, 17 Aug 2022 11:46:38 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DD080EAA;
+        Wed, 17 Aug 2022 08:46:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660751198; x=1692287198;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=30DcTU5PqArP5ckW9SBmfio4pm/gt4cCf7vpx+qst0w=;
+  b=mJW8fvfqhozfpsBIfXSYww3FBQO2gi04W3lz1YIaUH8/pPUw41DM+TsQ
+   xnl+xDX1GNIcIqrdKXMJEd51iSjxlg+5xL1R/T7fzNbGZFTuUqJvYwXEK
+   zOI3F2zFYX73sSxMSWDJer6ffq5XUxeMEITKY6UNwcYfPebbb33iGkK12
+   YaqWTErEXQCDwCCs57TfOR1aa760r77yHIKDbibJYNrtLNaA56q7oPiYZ
+   FthzNmbkmE+WXp6qso/f87W9Epxt2zjtA0uYUjAF0zkz2jIalml6W7Ww3
+   j9Uo3iDCdO1Sa6WV8hknIvoMzKj+9N3gDCCBUgrY0ACCOl2PjQ/bvOAiY
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="293320881"
+X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
+   d="scan'208";a="293320881"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 08:39:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
+   d="scan'208";a="783454818"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga005.jf.intel.com with ESMTP; 17 Aug 2022 08:39:39 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Wed, 17 Aug 2022 08:39:38 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Wed, 17 Aug 2022 08:39:38 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28 via Frontend Transport; Wed, 17 Aug 2022 08:39:38 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.168)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.28; Wed, 17 Aug 2022 08:39:38 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ETL/Q4S28VWgh+buAB/CSBI7ewvVa//jsuw5u2IG9Hel6jfLAwG+NPPjpF86+4GleJ5DO28JDxIMipEx6jdX+VutVi7x7SPfdhNJC2d5VKCKRCMCmha7EGfdLrxwk8ZsVKoxstX4F2ldnlKLjyTAFGb80PwfOsOyOR1e+mlolweRv8/GTreYRY6kjeMNpgbeMPLuHZzmeFYuKhtuZ2stoVdfSsTkf4EmxPyo2hi1tny9y48ORvpuqC4C52G1Klbm/iiyGTN3+WE5wRotfMG9Vgyfv9BvRRdsWJleri9EqfVPTkLtCB0zODEx2a4x1OamP/YrHdJi67LLQmg4jeqkRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8a0+Ka4AWpfHRsQ8EgIxX26M5LQ06UlMd7FJlELPO3s=;
+ b=hn1pEbL5gWCoKA1WutwHqzkvW4CaGBr9EOHleaASA1ZsjvLjHRPewlc9bVawvPI6U0/p49V42X2neQ1DjwMvNpyutIYK/vM92j86UWt0yeBpDEfDrrVL+5qndHH8w1xai9/d6lTNdus0gGZvOnAAxaNn0euYtQCs5VwKrhro4UppbXxJSOUsMJbzN6Jxx6Ll4rq1y0fSdtzBaqq4uBB3VPJQbMmqqc23qTCA7sIHj3hlb21n2ebe/+6OoHFVpHK+azN29cNQptnoOHR+O+fVAAtw3qX1skaye6wZZY4Y13wmidLuw4xAC+FqVtwLZPycHBJCz3qYw1SvJgHBy106+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DM8PR11MB5591.namprd11.prod.outlook.com (2603:10b6:8:38::23) by
+ SJ1PR11MB6299.namprd11.prod.outlook.com (2603:10b6:a03:456::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.17; Wed, 17 Aug
+ 2022 15:39:36 +0000
+Received: from DM8PR11MB5591.namprd11.prod.outlook.com
+ ([fe80::21ea:5b3b:c98a:d2ee]) by DM8PR11MB5591.namprd11.prod.outlook.com
+ ([fe80::21ea:5b3b:c98a:d2ee%8]) with mapi id 15.20.5525.011; Wed, 17 Aug 2022
+ 15:39:36 +0000
+From:   "Dhanraj, Vijay" <vijay.dhanraj@intel.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+CC:     "Chatre, Reinette" <reinette.chatre@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 2/2] selftests/sgx: Add SGX selftest
+ augment_via_eaccept_long
+Thread-Topic: [PATCH 2/2] selftests/sgx: Add SGX selftest
+ augment_via_eaccept_long
+Thread-Index: AQHYsQBK2Ad8oao9B0eIzoi6SNarlK2xt+wAgAB3W4CAABDRIIAA7BOAgAAQJ2A=
+Date:   Wed, 17 Aug 2022 15:39:36 +0000
+Message-ID: <DM8PR11MB55915BB75E3A6D266FC8D51DF66A9@DM8PR11MB5591.namprd11.prod.outlook.com>
+References: <20220815233900.11225-1-jarkko@kernel.org>
+ <20220815233900.11225-2-jarkko@kernel.org>
+ <6b304bb4-01cc-c88a-7299-19217a7a692b@intel.com>
+ <YvwpX7pYOW3Jv+vJ@kernel.org>
+ <DM8PR11MB55913534E8CE66F63460E707F66A9@DM8PR11MB5591.namprd11.prod.outlook.com>
+ <Yvz9g1dx9qbbMXJf@kernel.org>
+In-Reply-To: <Yvz9g1dx9qbbMXJf@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.500.17
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5e09984f-72d7-4b85-2b27-08da8066b0e0
+x-ms-traffictypediagnostic: SJ1PR11MB6299:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: zKhdUXGY+DZfu+MbiAx/xYagb2yYHlYQQUKvp1f2kFsfpDRl9zke3rUby2WQzohcYTiiKGD9U1p7XWcz2rl8DyksdMmAY0ndbUPg40swCT/hzNELQXmEAS9kF3vsmCVNjibLgpRBkrspcwE43eTv0z/JW8EvMljpg9q4ZJO51PemqTcRvXYSAk3RHeexBpRHXidqfpCCUhJK6/7tPrBhGZanS59DzsFN90PIkFZWLHlp5YQetuSo5Kg6lBVWsPKO4keXPABZiw1sYv90X06Bqx3n+gi5ScvQ0kP3cUBewUj+Fq7fzjm31OyjsEot+eHZG0/UdtIyg2JZDb6g+YVjZmEaRxKWE+ezOrU5uYvAr6Z7d9izhz3Uws81prsIBApPcthgTRko5z5WOi0w8/+BTAXegHXQOHSrAzxDVlVMQQyNOHquWcYrzCZ7SisWyfGJ0oG+o6uGKk5s00NIB2N0JhK7stozk3Qk6D8cXc8rqkVm3ISakgVehl256tIsz0yg6smYD36NRZqE1J9jjwOtEjt3U2CElfISKVl1P5gZMMrffzEidYW/XjdLaveXdnuMy1rNLjMODu9CIvfTluS5lxvWYRU/d3RPY5LvA2xxIZBroh2axdQZDZlFajDjs8uxoCNfPatcGMOx3VVIXJgkVv2/c7RKh8nGDmYevNPQtoXFA1lo7VCmaxmAhlyqstkUFUK7lovLvMtTIzggFbDY0iQy99BSilgsD0xU7cRQooPKcHFgBYOxDFPixEdVql14YGzdJvujiOsUDENDcQApF0QIROY0AqF6NPwyGIVX9me7hSHNY7cFxGE+aWl561k4
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR11MB5591.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(376002)(346002)(136003)(39860400002)(396003)(66476007)(64756008)(66946007)(66556008)(4326008)(66446008)(316002)(8676002)(6916009)(55016003)(76116006)(54906003)(5660300002)(52536014)(4744005)(8936002)(38100700002)(2906002)(122000001)(82960400001)(86362001)(38070700005)(478600001)(33656002)(53546011)(9686003)(6506007)(7696005)(26005)(41300700001)(71200400001)(83380400001)(186003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?maEjiwh0qGY1cZ26AYNtAMaNXUlAswpMRAf0kyqN64s5G+/jPlfHGiy0IVq7?=
+ =?us-ascii?Q?N4RNTjihTsXTqPr8BvGjMDp8WW5ZyWimQqIpQx48eto+oZRA2oGV7wG9vZLq?=
+ =?us-ascii?Q?agcltUJxOazC5afEVtqjALldY18xkJf9vymstmlcNR3QJqz0gsZq+sO+rxxO?=
+ =?us-ascii?Q?sI7vZfPI2ntalm9xZasjJoMF2rWXvLS8OiBeib/nKFxB+XEDBWJX53x/PXst?=
+ =?us-ascii?Q?bQBu0WRv7kW5m6FdzeMqd5Gk5za3j0gil0m7nFr48mIm6vGKHWs1F0aGRSlc?=
+ =?us-ascii?Q?t65V+DNNX5boaVxn1cEYMwS6ZJiYPUdj16SJG+nFeB+UuDwyVAHsr1ZErhgd?=
+ =?us-ascii?Q?Ila+JhbIio8Ikt0y9EBrWx3APW/zLlj1ZyS3GG5ExVtSQJfzGh2e81el8iiz?=
+ =?us-ascii?Q?meZVIdkA0wSb8oqvY0ElAChp46O6YeP6soG9QqzLfehnhw8xq7St2Bo/cSbY?=
+ =?us-ascii?Q?bDFeC0hFx4pgpTrZ5mPn4v64S0D7PBKQkP21ko2sfgqGV/xGCuO8zVeYAF/t?=
+ =?us-ascii?Q?d6+YhoVi50P+z/qNJYQggcfOmtq4SM7esgAUnIy7BQ2BQTUkx0sRXtqgBVRL?=
+ =?us-ascii?Q?4SddFrxELAnfY3MCcepRgTeTC42bCpsHUijqjVdp3gZllEo7euJErjCFpR9t?=
+ =?us-ascii?Q?/xhQWwsDw3LMAhNcslILs97C9hCUdQe2+BpeKSiUXDYw7yNrkcuE3pt4sUJ2?=
+ =?us-ascii?Q?F/eU5rZURVDDUSIVo9OuwoCGyHFaNFrTnTrPyGQKj9CXDFO1kK/6ijzke0No?=
+ =?us-ascii?Q?v9eP1rWYrIYT6QK3PUcyPBqKN/nFjn4mK0NjoHtWy4ZbD0RHEHNUFHlp5UP/?=
+ =?us-ascii?Q?5QTu6pzY87m3S+CIu1azew/b2N+CICv5e1EFxW/HoJDzLgKLSkdjtfh/SSKc?=
+ =?us-ascii?Q?A2+VZWPOWY4T0GKFI2JKaQ+daQTGdhmJIw9iiqfFsWOodGV2mghe8x0nA9fN?=
+ =?us-ascii?Q?or0VrfalX26a0PYNNZHc+4pWl709aXjX7cRgmhv0GrBfWocVEoMdGSeWgL0S?=
+ =?us-ascii?Q?3ha7hxTIxUnykMZ+SUlEIBcguS2M62kNXLghDC008F0EIJGIaNyaXtZN4urc?=
+ =?us-ascii?Q?yWxyKVbrd1jwgMoTHrXMohn3pYQos0dQGQPqthA5PL+XCiGqSsHg11DfxJ1X?=
+ =?us-ascii?Q?g37f8L5TUTAaclo1ypqyJiF3deTFoayLhvsCURzEgUlP6elbMoojYizV0ALU?=
+ =?us-ascii?Q?MQUiYfPfIideoSwI9IQbcrNoGzhjb1LK1rRdepX0lEk6uTkmdW39RmAC2Emi?=
+ =?us-ascii?Q?a4fWAJRNRK6VeOMzqfJCvJUMWN6I0WOWA+ev8nFSMWvhQv3YrY6mHZ7U8979?=
+ =?us-ascii?Q?ci7UxGIMUtTPyHSyM1oGwheKBw4+z1pZyF3e9tIdCaaqqWN391Qc59gkHwVG?=
+ =?us-ascii?Q?/ZozxbqOeNCwv0HJH8BkD9LfMIkRXn2auZRXN7WgzY6iWqmkutBs69DJvt/Q?=
+ =?us-ascii?Q?TZN0Pz9i4Ji02Dqxb8XewuvJ/R1/DWLb7KNXbY2WVss1vPDYLWfs42uHZOeA?=
+ =?us-ascii?Q?9zzW8G1+QUDngGPw9siYRa+FbW3uQD8Dig7KWgEMTFxk6MbCo1wfSpRtVuxr?=
+ =?us-ascii?Q?1FG1jdcoVp48jDm/0yWYI1RyS8o9JDN1fQl3Ywz3?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220817121441.112198-1-savicaleksa83@gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR11MB5591.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5e09984f-72d7-4b85-2b27-08da8066b0e0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Aug 2022 15:39:36.8690
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: PBd7LlAfR5hVsp/Qa6V+yZ/mrSHyZYnTH8kUpRyNyEaZyY/Yr63ZwsmhRBAEiEV4sZUtUdgr5EVruPCaObNsIg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR11MB6299
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 02:14:41PM +0200, Aleksa Savic wrote:
-> Add support for reading virtual temperature sensors for the D5 Next, Octo,
-> Quadro and Farbwerk 360.
-> 
-> Virtual temperature sensors are written to the device by the user, pulling
-> from an arbitrary value source. Writing to them is not yet reverse
-> engineered, so the only way to set them for now is to use the official
-> software.
-> 
-> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
 
-Applied to hwmon-next.
 
-Thanks,
-Guenter
+> -----Original Message-----
+> From: Jarkko Sakkinen <jarkko@kernel.org>
+> Sent: Wednesday, August 17, 2022 7:39 AM
+> To: Dhanraj, Vijay <vijay.dhanraj@intel.com>
+> Cc: Chatre, Reinette <reinette.chatre@intel.com>; Dave Hansen
+> <dave.hansen@linux.intel.com>; linux-sgx@vger.kernel.org; Shuah Khan
+> <shuah@kernel.org>; open list:KERNEL SELFTEST FRAMEWORK <linux-
+> kselftest@vger.kernel.org>; open list <linux-kernel@vger.kernel.org>
+> Subject: Re: [PATCH 2/2] selftests/sgx: Add SGX selftest
+> augment_via_eaccept_long
+>=20
+> On Wed, Aug 17, 2022 at 01:27:38AM +0000, Dhanraj, Vijay wrote:
+> > I think changing it to "int i" will cause a buffer overflow with
+> > edmm_size being 8GB.
+>=20
+> Hmm.. 'i' iterates segments. Amd I missing something?
+>=20
+> BR, Jarkko
 
-> ---
->  Documentation/hwmon/aquacomputer_d5next.rst | 32 +++++---
->  drivers/hwmon/aquacomputer_d5next.c         | 88 +++++++++++++++++++--
->  2 files changed, 100 insertions(+), 20 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
-> index 33649a1e3a05..b63a78d47624 100644
-> --- a/Documentation/hwmon/aquacomputer_d5next.rst
-> +++ b/Documentation/hwmon/aquacomputer_d5next.rst
-> @@ -20,10 +20,11 @@ This driver exposes hardware sensors of listed Aquacomputer devices, which
->  communicate through proprietary USB HID protocols.
->  
->  For the D5 Next pump, available sensors are pump and fan speed, power, voltage
-> -and current, as well as coolant temperature. Also available through debugfs are
-> -the serial number, firmware version and power-on count. Attaching a fan to it is
-> -optional and allows it to be controlled using temperature curves directly from the
-> -pump. If it's not connected, the fan-related sensors will report zeroes.
-> +and current, as well as coolant temperature and eight virtual temp sensors. Also
-> +available through debugfs are the serial number, firmware version and power-on
-> +count. Attaching a fan to it is optional and allows it to be controlled using
-> +temperature curves directly from the pump. If it's not connected, the fan-related
-> +sensors will report zeroes.
->  
->  The pump can be configured either through software or via its physical
->  interface. Configuring the pump through this driver is not implemented, as it
-> @@ -31,14 +32,19 @@ seems to require sending it a complete configuration. That includes addressable
->  RGB LEDs, for which there is no standard sysfs interface. Thus, that task is
->  better suited for userspace tools.
->  
-> -The Octo exposes four temperature sensors and eight PWM controllable fans, along
-> -with their speed (in RPM), power, voltage and current.
-> +The Octo exposes four physical and sixteen virtual temperature sensors, as well as
-> +eight PWM controllable fans, along with their speed (in RPM), power, voltage and
-> +current.
->  
-> -The Quadro exposes four temperature sensors, a flow sensor and four PWM controllable
-> -fans, along with their speed (in RPM), power, voltage and current.
-> +The Quadro exposes four physical and sixteen virtual temperature sensors, a flow
-> +sensor and four PWM controllable fans, along with their speed (in RPM), power,
-> +voltage and current.
->  
-> -The Farbwerk and Farbwerk 360 expose four temperature sensors. Depending on the device,
-> -not all sysfs and debugfs entries will be available.
-> +The Farbwerk and Farbwerk 360 expose four temperature sensors. Additionally,
-> +sixteen virtual temperature sensors of the Farbwerk 360 are exposed.
-> +
-> +Depending on the device, not all sysfs and debugfs entries will be available.
-> +Writing to virtual temperature sensors is not currently supported.
->  
->  Usage notes
->  -----------
-> @@ -49,14 +55,14 @@ the kernel and supports hotswapping.
->  Sysfs entries
->  -------------
->  
-> -================ ==============================================
-> -temp[1-4]_input  Temperature sensors (in millidegrees Celsius)
-> +================ ==============================================================
-> +temp[1-20]_input Physical/virtual temperature sensors (in millidegrees Celsius)
->  fan[1-8]_input   Pump/fan speed (in RPM) / Flow speed (in dL/h)
->  power[1-8]_input Pump/fan power (in micro Watts)
->  in[0-7]_input    Pump/fan voltage (in milli Volts)
->  curr[1-8]_input  Pump/fan current (in milli Amperes)
->  pwm[1-8]         Fan PWM (0 - 255)
-> -================ ==============================================
-> +================ ==============================================================
->  
->  Debugfs entries
->  ---------------
-> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-> index 66430553cc45..b2b0c4fdfa84 100644
-> --- a/drivers/hwmon/aquacomputer_d5next.c
-> +++ b/drivers/hwmon/aquacomputer_d5next.c
-> @@ -71,6 +71,8 @@ static u8 secondary_ctrl_report[] = {
->  #define D5NEXT_COOLANT_TEMP		0x57
->  #define D5NEXT_NUM_FANS			2
->  #define D5NEXT_NUM_SENSORS		1
-> +#define D5NEXT_NUM_VIRTUAL_SENSORS	8
-> +#define D5NEXT_VIRTUAL_SENSORS_START	0x3f
->  #define D5NEXT_PUMP_OFFSET		0x6c
->  #define D5NEXT_FAN_OFFSET		0x5f
->  #define D5NEXT_5V_VOLTAGE		0x39
-> @@ -86,14 +88,18 @@ static u16 d5next_ctrl_fan_offsets[] = { 0x97, 0x42 };
->  #define FARBWERK_SENSOR_START		0x2f
->  
->  /* Register offsets for the Farbwerk 360 RGB controller */
-> -#define FARBWERK360_NUM_SENSORS		4
-> -#define FARBWERK360_SENSOR_START	0x32
-> +#define FARBWERK360_NUM_SENSORS			4
-> +#define FARBWERK360_SENSOR_START		0x32
-> +#define FARBWERK360_NUM_VIRTUAL_SENSORS		16
-> +#define FARBWERK360_VIRTUAL_SENSORS_START	0x3a
->  
->  /* Register offsets for the Octo fan controller */
->  #define OCTO_POWER_CYCLES		0x18
->  #define OCTO_NUM_FANS			8
->  #define OCTO_NUM_SENSORS		4
->  #define OCTO_SENSOR_START		0x3D
-> +#define OCTO_NUM_VIRTUAL_SENSORS	16
-> +#define OCTO_VIRTUAL_SENSORS_START	0x45
->  #define OCTO_CTRL_REPORT_SIZE		0x65F
->  static u8 octo_sensor_fan_offsets[] = { 0x7D, 0x8A, 0x97, 0xA4, 0xB1, 0xBE, 0xCB, 0xD8 };
->  
-> @@ -105,6 +111,8 @@ static u16 octo_ctrl_fan_offsets[] = { 0x5B, 0xB0, 0x105, 0x15A, 0x1AF, 0x204, 0
->  #define QUADRO_NUM_FANS			4
->  #define QUADRO_NUM_SENSORS		4
->  #define QUADRO_SENSOR_START		0x34
-> +#define QUADRO_NUM_VIRTUAL_SENSORS	16
-> +#define QUADRO_VIRTUAL_SENSORS_START	0x3c
->  #define QUADRO_CTRL_REPORT_SIZE		0x3c1
->  #define QUADRO_FLOW_SENSOR_OFFSET	0x6e
->  static u8 quadro_sensor_fan_offsets[] = { 0x70, 0x7D, 0x8A, 0x97 };
-> @@ -147,6 +155,25 @@ static const char *const label_temp_sensors[] = {
->  	"Sensor 4"
->  };
->  
-> +static const char *const label_virtual_temp_sensors[] = {
-> +	"Virtual sensor 1",
-> +	"Virtual sensor 2",
-> +	"Virtual sensor 3",
-> +	"Virtual sensor 4",
-> +	"Virtual sensor 5",
-> +	"Virtual sensor 6",
-> +	"Virtual sensor 7",
-> +	"Virtual sensor 8",
-> +	"Virtual sensor 9",
-> +	"Virtual sensor 10",
-> +	"Virtual sensor 11",
-> +	"Virtual sensor 12",
-> +	"Virtual sensor 13",
-> +	"Virtual sensor 14",
-> +	"Virtual sensor 15",
-> +	"Virtual sensor 16",
-> +};
-> +
->  /* Labels for Octo and Quadro (except speed) */
->  static const char *const label_fan_speed[] = {
->  	"Fan 1 speed",
-> @@ -220,6 +247,8 @@ struct aqc_data {
->  	u16 *fan_ctrl_offsets;
->  	int num_temp_sensors;
->  	int temp_sensor_start_offset;
-> +	int num_virtual_temp_sensors;
-> +	int virtual_temp_sensor_start_offset;
->  	u16 power_cycle_count_offset;
->  	u8 flow_sensor_offset;
->  
-> @@ -231,7 +260,7 @@ struct aqc_data {
->  	u32 power_cycles;
->  
->  	/* Sensor values */
-> -	s32 temp_input[4];
-> +	s32 temp_input[20];	/* Max 4 physical and 16 virtual */
->  	u16 speed_input[8];
->  	u32 power_input[8];
->  	u16 voltage_input[8];
-> @@ -239,6 +268,7 @@ struct aqc_data {
->  
->  	/* Label values */
->  	const char *const *temp_label;
-> +	const char *const *virtual_temp_label;
->  	const char *const *speed_label;
->  	const char *const *power_label;
->  	const char *const *voltage_label;
-> @@ -345,7 +375,7 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
->  
->  	switch (type) {
->  	case hwmon_temp:
-> -		if (channel < priv->num_temp_sensors)
-> +		if (channel < priv->num_temp_sensors + priv->num_virtual_temp_sensors)
->  			return 0444;
->  		break;
->  	case hwmon_pwm:
-> @@ -447,7 +477,10 @@ static int aqc_read_string(struct device *dev, enum hwmon_sensor_types type, u32
->  
->  	switch (type) {
->  	case hwmon_temp:
-> -		*str = priv->temp_label[channel];
-> +		if (channel < priv->num_temp_sensors)
-> +			*str = priv->temp_label[channel];
-> +		else
-> +			*str = priv->virtual_temp_label[channel - priv->num_temp_sensors];
->  		break;
->  	case hwmon_fan:
->  		*str = priv->speed_label[channel];
-> @@ -509,6 +542,22 @@ static const struct hwmon_ops aqc_hwmon_ops = {
->  
->  static const struct hwmon_channel_info *aqc_info[] = {
->  	HWMON_CHANNEL_INFO(temp,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
->  			   HWMON_T_INPUT | HWMON_T_LABEL,
->  			   HWMON_T_INPUT | HWMON_T_LABEL,
->  			   HWMON_T_INPUT | HWMON_T_LABEL,
-> @@ -568,7 +617,7 @@ static const struct hwmon_chip_info aqc_chip_info = {
->  
->  static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8 *data, int size)
->  {
-> -	int i, sensor_value;
-> +	int i, j, sensor_value;
->  	struct aqc_data *priv;
->  
->  	if (report->id != STATUS_REPORT_ID)
-> @@ -581,7 +630,7 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
->  	priv->serial_number[1] = get_unaligned_be16(data + SERIAL_SECOND_PART);
->  	priv->firmware_version = get_unaligned_be16(data + FIRMWARE_VERSION);
->  
-> -	/* Temperature sensor readings */
-> +	/* Physical temperature sensor readings */
->  	for (i = 0; i < priv->num_temp_sensors; i++) {
->  		sensor_value = get_unaligned_be16(data +
->  						  priv->temp_sensor_start_offset +
-> @@ -592,6 +641,18 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
->  			priv->temp_input[i] = sensor_value * 10;
->  	}
->  
-> +	/* Virtual temperature sensor readings */
-> +	for (j = 0; j < priv->num_virtual_temp_sensors; j++) {
-> +		sensor_value = get_unaligned_be16(data +
-> +						  priv->virtual_temp_sensor_start_offset +
-> +						  j * AQC_TEMP_SENSOR_SIZE);
-> +		if (sensor_value == AQC_TEMP_SENSOR_DISCONNECTED)
-> +			priv->temp_input[i] = -ENODATA;
-> +		else
-> +			priv->temp_input[i] = sensor_value * 10;
-> +		i++;
-> +	}
-> +
->  	/* Fan speed and related readings */
->  	for (i = 0; i < priv->num_fans; i++) {
->  		priv->speed_input[i] =
-> @@ -717,10 +778,13 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
->  		priv->fan_ctrl_offsets = d5next_ctrl_fan_offsets;
->  		priv->num_temp_sensors = D5NEXT_NUM_SENSORS;
->  		priv->temp_sensor_start_offset = D5NEXT_COOLANT_TEMP;
-> +		priv->num_virtual_temp_sensors = D5NEXT_NUM_VIRTUAL_SENSORS;
-> +		priv->virtual_temp_sensor_start_offset = D5NEXT_VIRTUAL_SENSORS_START;
->  		priv->power_cycle_count_offset = D5NEXT_POWER_CYCLES;
->  		priv->buffer_size = D5NEXT_CTRL_REPORT_SIZE;
->  
->  		priv->temp_label = label_d5next_temp;
-> +		priv->virtual_temp_label = label_virtual_temp_sensors;
->  		priv->speed_label = label_d5next_speeds;
->  		priv->power_label = label_d5next_power;
->  		priv->voltage_label = label_d5next_voltages;
-> @@ -740,7 +804,11 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
->  		priv->num_fans = 0;
->  		priv->num_temp_sensors = FARBWERK360_NUM_SENSORS;
->  		priv->temp_sensor_start_offset = FARBWERK360_SENSOR_START;
-> +		priv->num_virtual_temp_sensors = FARBWERK360_NUM_VIRTUAL_SENSORS;
-> +		priv->virtual_temp_sensor_start_offset = FARBWERK360_VIRTUAL_SENSORS_START;
-> +
->  		priv->temp_label = label_temp_sensors;
-> +		priv->virtual_temp_label = label_virtual_temp_sensors;
->  		break;
->  	case USB_PRODUCT_ID_OCTO:
->  		priv->kind = octo;
-> @@ -750,10 +818,13 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
->  		priv->fan_ctrl_offsets = octo_ctrl_fan_offsets;
->  		priv->num_temp_sensors = OCTO_NUM_SENSORS;
->  		priv->temp_sensor_start_offset = OCTO_SENSOR_START;
-> +		priv->num_virtual_temp_sensors = OCTO_NUM_VIRTUAL_SENSORS;
-> +		priv->virtual_temp_sensor_start_offset = OCTO_VIRTUAL_SENSORS_START;
->  		priv->power_cycle_count_offset = OCTO_POWER_CYCLES;
->  		priv->buffer_size = OCTO_CTRL_REPORT_SIZE;
->  
->  		priv->temp_label = label_temp_sensors;
-> +		priv->virtual_temp_label = label_virtual_temp_sensors;
->  		priv->speed_label = label_fan_speed;
->  		priv->power_label = label_fan_power;
->  		priv->voltage_label = label_fan_voltage;
-> @@ -767,11 +838,14 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
->  		priv->fan_ctrl_offsets = quadro_ctrl_fan_offsets;
->  		priv->num_temp_sensors = QUADRO_NUM_SENSORS;
->  		priv->temp_sensor_start_offset = QUADRO_SENSOR_START;
-> +		priv->num_virtual_temp_sensors = QUADRO_NUM_VIRTUAL_SENSORS;
-> +		priv->virtual_temp_sensor_start_offset = QUADRO_VIRTUAL_SENSORS_START;
->  		priv->power_cycle_count_offset = QUADRO_POWER_CYCLES;
->  		priv->buffer_size = QUADRO_CTRL_REPORT_SIZE;
->  		priv->flow_sensor_offset = QUADRO_FLOW_SENSOR_OFFSET;
->  
->  		priv->temp_label = label_temp_sensors;
-> +		priv->virtual_temp_label = label_virtual_temp_sensors;
->  		priv->speed_label = label_quadro_speeds;
->  		priv->power_label = label_fan_power;
->  		priv->voltage_label = label_fan_voltage;
+It is also used when iterating over pages to eaccept. This might cause an i=
+ssue.
+
+	for (i =3D 0; i < edmm_size; i +=3D 4096) {
+		eaccept_op.epc_addr =3D (uint64_t)(addr + i);
+
+Regards, Vijay

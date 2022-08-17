@@ -2,158 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F165597679
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2FA059767F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbiHQT1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 15:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47134 "EHLO
+        id S241460AbiHQT2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 15:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiHQT1k (ORCPT
+        with ESMTP id S229678AbiHQT2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 15:27:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5362E7E03B
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:27:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660764458;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dmDD/m9rVXOHRexADGf5nUOz3ccETHTRAhO5DzNVEqY=;
-        b=TEzVsHQ/L8n9jq1OtTOjqfUP+ZLcJe3dwgP9C4oyUyari4p2Vut2FZJ/Jx7SXchLEF746u
-        92oeADUogsO+p2MJWfesYKooAFZWegOTRd0ijKwJIwljCGoHia1cEGh5lnniQytY/hTgzr
-        pCntWNp/y8opSUVOchH5RpCkEpd+/94=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-42-5Qp130OeNY6iQxnwPGzn9g-1; Wed, 17 Aug 2022 15:27:35 -0400
-X-MC-Unique: 5Qp130OeNY6iQxnwPGzn9g-1
-Received: by mail-qt1-f200.google.com with SMTP id bq11-20020a05622a1c0b00b003434f125b77so11298249qtb.20
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:27:35 -0700 (PDT)
+        Wed, 17 Aug 2022 15:28:12 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AF52AFE
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:28:11 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id jm11so10590762plb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:28:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=umb965eWziPmmyD95lXKb60+lJ80uHNRMc3mpL9TRI0=;
+        b=jKmpKArYJ+nvOMrJfs5HHMevZ+pZK8rqvSw1ltcp8a/5tZyHrbQe9+KdVRN6t1F/da
+         XPPCaYB2WI7VAPf/53TihtloROd0KOeA8WtufQrjGJfwCX8nTNINFEcfdgs7WxF2lHDo
+         Ax6yB5iMZmJ/628gReyPJ7q87vN2BkKnWpalI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=dmDD/m9rVXOHRexADGf5nUOz3ccETHTRAhO5DzNVEqY=;
-        b=JBWbNtQPNoZlKtouzL5gOqw6yu870tfKlLBYqK69PJ0qAkWJ1HF1Sjx0TjG6tA5Ecp
-         nrLDrotz2Jzk+Q7bpUZQvWF2NOUqmDj4ikhi3nEdC/2C/8AMusRNW6W9my+EulD2hOVL
-         qiPQDoydtgT0Gv4a4vFKE+0AeN9n9ETNof7taSNRIYic4uDX9eytpCNIsjluMRsxab21
-         RiDku25BZe2ynJIcEXoFup/0msTtmVATCdz14cpWI/ItGskXYqWfLHt2w5mfkpcmotXb
-         GVLNAx/cg3rKuXbztNz5tH8jX0qXkUEwXNroFCkZxnUlQOpGmflMDuayrr51zOuqEsZg
-         CuLQ==
-X-Gm-Message-State: ACgBeo0UEi6cDdGMeVs2sfBW1dpsdUzEwW1mb5ktruKp+XI9VCTXOmHU
-        alOKAOmqDRjyC0ojcF64lQtrj5+nQaxwHYR4zIHTjBM0pRrbZfXrG5D00h3xlco/4AvK3sIL8b+
-        pseGkOZi78nC7aNwN1mMQeFdy
-X-Received: by 2002:a05:6214:b6c:b0:476:8321:db81 with SMTP id ey12-20020a0562140b6c00b004768321db81mr23492942qvb.100.1660764455099;
-        Wed, 17 Aug 2022 12:27:35 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6vqYZw2nSP0al2QOlYxSI+caDpn668z2wTq0sUdA1GVvZZhov4a4lSRj3rYF0hmqY4tBw2Ng==
-X-Received: by 2002:a05:6214:b6c:b0:476:8321:db81 with SMTP id ey12-20020a0562140b6c00b004768321db81mr23492907qvb.100.1660764454794;
-        Wed, 17 Aug 2022 12:27:34 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id bj38-20020a05620a192600b006bb5cdd4031sm5016365qkb.40.2022.08.17.12.27.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 12:27:34 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 15:27:32 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        huang ying <huang.ying.caritas@gmail.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
-        linuxppc-dev@lists.ozlabs.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mm/migrate_device.c: Copy pte dirty bit to page
-Message-ID: <Yv1BJKb5he3dOHdC@xz-m1.local>
-References: <6e77914685ede036c419fa65b6adc27f25a6c3e9.1660635033.git-series.apopple@nvidia.com>
- <CAC=cRTPGiXWjk=CYnCrhJnLx3mdkGDXZpvApo6yTbeW7+ZGajA@mail.gmail.com>
- <Yvv/eGfi3LW8WxPZ@xz-m1.local>
- <871qtfvdlw.fsf@nvdebian.thelocal>
- <YvxWUY9eafFJ27ef@xz-m1.local>
- <87o7wjtn2g.fsf@nvdebian.thelocal>
- <87tu6bbaq7.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <1D2FB37E-831B-445E-ADDC-C1D3FF0425C1@gmail.com>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=umb965eWziPmmyD95lXKb60+lJ80uHNRMc3mpL9TRI0=;
+        b=wwWWF2svFZuUqW4jrYMrmjTK51y6SXzcFaRQuBG4Kl+UWLpym7OZdPFMeU5KX5bYKZ
+         8MmbtHmSRXTWcn4kGruXn9Vm9bnt49wMUAST96r9Vyz5UhiahojDVz/XRoawHFbKcFvp
+         Mrjt29HpYyL1H+2WEenL05H1yC+S0FsGFgHpm0cg1VqvlrjhZ5EDxxvPV+i2jPNWwqWo
+         XPtRPxlNiw9LWQszEuPMxS0ypXxMNOjbjYktFclfcc84aG7PDeyCBZtZmyH3TZpJAmhS
+         0l7J1+EhXvarmo/s7Awyu95LdxkorAUPse38y+oB9+Hv4f+vSu2VUeeP5epXujEo9wrF
+         +noQ==
+X-Gm-Message-State: ACgBeo2fv4Fl7wk3GaEIu2H9Tr34qebtr6k+2JUlwt13Et5QNG5XWJy9
+        oV/ZyMo8c1UGwXt8A0OP8QnUaQ==
+X-Google-Smtp-Source: AA6agR5c06tNLRcOvix3lX25Pf+qxcyBsG1XTPzrP34qGcVPDg6kVbP6puqX3xCx4v0Qh2bIdYmIdA==
+X-Received: by 2002:a17:902:e848:b0:16f:8f:9027 with SMTP id t8-20020a170902e84800b0016f008f9027mr28032820plg.66.1660764491142;
+        Wed, 17 Aug 2022 12:28:11 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:536d:1358:1673:4c2d])
+        by smtp.gmail.com with UTF8SMTPSA id t6-20020a1709027fc600b0017294d80f11sm296838plb.91.2022.08.17.12.28.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Aug 2022 12:28:10 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 12:28:09 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Will McVicker <willmcvicker@google.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
+        Sajid Dalvi <sdalvi@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] PCI/PM: Switch D3Hot delay to also use usleep_range
+Message-ID: <Yv1BSfkd6WUh2SFp@google.com>
+References: <20220817185202.1689955-1-willmcvicker@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1D2FB37E-831B-445E-ADDC-C1D3FF0425C1@gmail.com>
+In-Reply-To: <20220817185202.1689955-1-willmcvicker@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 02:41:19AM -0700, Nadav Amit wrote:
-> 4. Having multiple TLB flushing infrastructures makes all of these
-> discussions very complicated and unmaintainable. I need to convince myself
-> in every occasion (including this one) whether calls to
-> flush_tlb_batched_pending() and tlb_flush_pending() are needed or not.
+Hi Will,
+
+On Wed, Aug 17, 2022 at 06:52:02PM +0000, Will McVicker wrote:
+> From: Sajid Dalvi <sdalvi@google.com>
 > 
-> What I would like to have [3] is a single infrastructure that gets a
-> “ticket” (generation when the batching started), the old PTE and the new PTE
-> and checks whether a TLB flush is needed based on the arch behavior and the
-> current TLB generation. If needed, it would update the “ticket” to the new
-> generation. Andy wanted a ring for pending TLB flushes, but I think it is an
-> overkill with more overhead and complexity than needed.
+> Since the PCI spec requires a 10ms D3Hot delay (defined by
+> PCI_PM_D3HOT_WAIT) and a few of the PCI quirks update the D3Hot delay up
+> to 120ms, let's add support for both usleep_range and msleep based on
+> the delay time to improve the delay accuracy.
 > 
-> But the current situation in which every TLB flush is a basis for long
-> discussions and prone to bugs is impossible.
+> This patch is based off of a commit from Sajid Dalvi <sdalvi@google.com>
+> in the Pixel 6 kernel tree [1]. Testing on a Pixel 6, found that the
+> 10ms delay for the Exynos PCIe device was on average delaying for 19ms
+> when the spec requires 10ms. Switching from msleep to uslseep_range
+> therefore decreases the resume time on a Pixel 6 on average by 9ms.
 > 
-> I hope it helps. Let me know if you want me to revive the patch-set or other
-> feedback.
+> [1] https://android.googlesource.com/kernel/gs/+/18a8cad68d8e6d50f339a716a18295e6d987cee3
 > 
-> [1] https://lore.kernel.org/all/20220711034615.482895-5-21cnbao@gmail.com/
-> [2] https://lore.kernel.org/all/20220718120212.3180-13-namit@vmware.com/
-> [3] https://lore.kernel.org/all/20210131001132.3368247-16-namit@vmware.com/
+> Signed-off-by: Sajid Dalvi <sdalvi@google.com>
+> Signed-off-by: Will McVicker <willmcvicker@google.com>
+> ---
+>  drivers/pci/pci.c | 20 +++++++++++++++-----
+>  1 file changed, 15 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 95bc329e74c0..97a042ca9032 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -63,16 +63,26 @@ struct pci_pme_device {
+>  };
+>  
+>  #define PME_TIMEOUT 1000 /* How long between PME checks */
+> +#define MAX(a, b) ((a) >= (b) ? (a) : (b))
 
-I need more reading on tlb code and also [3] which looks useful to me.
-It's definitely sad to make tlb flushing so complicated.  It'll be great if
-things can be sorted out someday.
+no need to define this macro, you can use max() from
+include/linux/minmax.h instead.
 
-In this specific case, the only way to do safe tlb batching in my mind is:
+>  
+>  static void pci_dev_d3_sleep(struct pci_dev *dev)
+>  {
+> -	unsigned int delay = dev->d3hot_delay;
+> +	unsigned int delay_ms = dev->d3hot_delay;
+>  
+> -	if (delay < pci_pm_d3hot_delay)
+> -		delay = pci_pm_d3hot_delay;
+> +	if (delay_ms < pci_pm_d3hot_delay)
+> +		delay_ms = pci_pm_d3hot_delay;
 
-	pte_offset_map_lock();
-	arch_enter_lazy_mmu_mode();
-        // If any pending tlb, do it now
-        if (mm_tlb_flush_pending())
-		flush_tlb_range(vma, start, end);
-        else
-                flush_tlb_batched_pending();
-        loop {
-                ...
-                pte = ptep_get_and_clear();
-                ...
-                if (pte_present())
-                        unmapped++;
-                ...
-        }
-	if (unmapped)
-		flush_tlb_range(walk->vma, start, end);
-	arch_leave_lazy_mmu_mode();
-	pte_unmap_unlock();
+nit: since you are already touching this code you could change it to:
 
-I may miss something, but even if not it already doesn't look pretty.
+	unsigned int delay_ms = max(dev->d3hot_delay, pci_pm_d3hot_delay);
 
-Thanks,
+>  
+> -	if (delay)
+> -		msleep(delay);
+> +	if (delay_ms) {
+> +		if (delay_ms <= 20) {
+> +			/* Use a 20-25% upper bound with 1ms minimum */
+> +			unsigned int upper = MAX((delay_ms >> 3) << 1, 1);
 
--- 
-Peter Xu
+Not sure this optimization of using bit shifts instead of the clearer do_div()
+is really needed here. pci_dev_d3_sleep() is not a super hot code path IIUC.
 
+> +
+> +			usleep_range(delay_ms * USEC_PER_MSEC,
+> +				     (delay_ms + upper) * USEC_PER_MSEC);
+> +		} else {
+> +			msleep(delay_ms);
+> +		}
+> +	}
+>  }
+>  
+>  bool pci_reset_supported(struct pci_dev *dev)
+> 
+> base-commit: 274a2eebf80c60246f9edd6ef8e9a095ad121264
+> -- 
+> 2.37.1.595.g718a3a8f04-goog
+> 

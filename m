@@ -2,361 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C29D596E71
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 14:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC95596E6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 14:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236062AbiHQM3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 08:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
+        id S239456AbiHQMbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 08:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235468AbiHQM3W (ORCPT
+        with ESMTP id S239449AbiHQMbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 08:29:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422B04D26C;
-        Wed, 17 Aug 2022 05:29:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6F3260EFA;
-        Wed, 17 Aug 2022 12:29:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60D14C433D6;
-        Wed, 17 Aug 2022 12:29:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660739360;
-        bh=0myKy//ZOH7CI7YHAQxN5AfgVgQSEUW5JZy5L4GGJjE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h1vEHDIENirfCK/NDQCzyZdKPJ4QeeT4pahqJyiKJ9fz4A3sDIvwTX5hbegzC2aeV
-         oRouL+EEAzQIWNuUJU1Yj/4y6P/zi+H2K4CSsULGtx8WjkAxEv+2RuyShJAPdusF1s
-         kbF1iU9CXB71txZhR5MxB9aJkRpYHp2DakfFfBbPSmHr6HNyAz/vBM9phqcPPT0cL6
-         OcHMXzwk0YGWL1NhxF18lEgaiW8Kb10aoTZxeeJruH9rvXpS9Lt8esnxBS4AbQgADq
-         OkQvFIsUJTRF4pe39oU+tUwQGg9IfHlDeHnUi8cB9cMj/vy7+90SWuPkoVp5BOWih6
-         2wmBaj98puyig==
-Date:   Wed, 17 Aug 2022 14:29:15 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     =?utf-8?B?5aSp6LWQ5byg?= <zhangtianci.1997@bytedance.com>
-Cc:     Amir Goldstein <amir73il@gmail.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        overlayfs <linux-unionfs@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Subject: Re: [External] Re: [PATCH] ovl: Do not override fsuid and fsgid in
- ovl_link()
-Message-ID: <20220817122915.k6aps55sjr4hnm5j@wittgenstein>
-References: <20220817034559.44936-1-zhangtianci.1997@bytedance.com>
- <CAOQ4uxgrkPYBkZG--70s4PnUiT0ht=GdWrrm+aY4ZHoZjZrWAw@mail.gmail.com>
- <CAP4dvsfqxEGJtQgSdfN+nxbyMAdm2rj_tmUeqXc8syPyK98MHA@mail.gmail.com>
- <CAOQ4uxhD0an61z5wArn=uRsXF7+_3soNgPB7ikp2HYX8nQGkCg@mail.gmail.com>
- <CAOQ4uxj_XhC51yS0QCoo8kYWmMxm1XQH4bhoSMZReUd7nc2UFA@mail.gmail.com>
- <20220817102722.wny7x5iwf62edpkd@wittgenstein>
- <20220817102951.xnvesg3a7rbv576x@wittgenstein>
- <CAP4dvscpm2FyuJ6gqZz=32ffrN9BORaa=Q0grPEgB+KUXbJniw@mail.gmail.com>
- <20220817115638.2etj6ruuutjurgjv@wittgenstein>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Wed, 17 Aug 2022 08:31:16 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B7E80E9C
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 05:31:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660739475; x=1692275475;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=OYgl32X7ea5e4myd6/S2ynhZUoGTr5hCt8E5wutO43w=;
+  b=dDspwAcHw0+Q43N3GYGyBU1fVmiZmjbOD19RmH03o6HxhtXn6WuJDWgK
+   yUURmVxN45UrRsKlT/QoFIiiLGseMrSIR5qFkLv/6KSfLSd0YsKFz1Tcq
+   Cniu9lDUmf8EILGQXYvI1EFmOu6XQCzN4d68p+QBdif8GHTx3HKJGJVap
+   Dsk89wjQ2RZtV4Oyz+fkID2diBiZaaJQVp4aq3VCvM2ZZavSiRb0t0l0D
+   Y/dfIqNv6ZMXzmU33fGUw4V4aiXhmzILrjWP44MBwxBtvHSDzUSgtD2yo
+   3KHEE9nG5lkKECwjx9AeFLbglDzLnnWz5kwCeW9zcUJxVGFRVlCSW+Spm
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="356475775"
+X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
+   d="scan'208";a="356475775"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 05:31:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
+   d="scan'208";a="935340801"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga005.fm.intel.com with ESMTP; 17 Aug 2022 05:31:12 -0700
+Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Wed, 17 Aug 2022 05:31:12 -0700
+Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
+ ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Wed, 17 Aug 2022 05:31:11 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28 via Frontend Transport; Wed, 17 Aug 2022 05:31:11 -0700
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.48) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.28; Wed, 17 Aug 2022 05:31:11 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QzR6b+0a1Lj76idqVSc+st3HdrHkTdpJMmgCGCL4wW+FSctpVLwyX0pRH72nzYE3pqNt2g4t+LW+p/vw4rv2FNyEdbf0rANPLZGXjdxMyNblfqvM5H2EPusrleaUnzLzfHr4fqtHC1rAuWwsZ3OkEWqqzW95VekI07hcBfraOiY/WWHHfgLNkKtrQ3OSOXZ3XSjq2JdMQckAQXWzQHjVINAjk2W3dsoaIxfq9MRb5fJ96xWqp0fU64YgKDKAHe/Ix91uSdiAMuNwpmgDvqGJyaQ6q2TsgBUzk7xv3y9UE6uM+2qwJBTqolgY0gM94oTDdm+72W/7xAXVvwFgyLpL4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vW6cutmlrPAlz6OzifFR9hdaHoHSFilGl1nhMofiksE=;
+ b=H+mCeuhAv41oOjXksjIuzz9/bwSTfwMQYN2+yf/sOUWvN4YrlB5cepkRjWJUr5F6P4sLnCrO9kYQI8vu8SWo0oDw4rscGBkjK23QSi23SklTgAWow5mev84kuzN5fr6uQtskm92Jp5VI2FrGqI9w19+Aiz5OtZBN8nd6NJ1AVkA3idNmUW/MZWm4tB4xBoGHQAarKStwj033WFnF1Q+TqMsNlZJibHrk7ssPONugFfBLK9FZg3DKXaZVpwqzErsRE1YY564IfUgV6E/yVA2DprTTirOQZFFBU/4XP4kzY7yB9bwvrlWowxRsZBMBtEGFV4FZh/eYjaxGvuAGX4kImQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ1PR11MB6201.namprd11.prod.outlook.com (2603:10b6:a03:45c::14)
+ by CO1PR11MB4883.namprd11.prod.outlook.com (2603:10b6:303:9b::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Wed, 17 Aug
+ 2022 12:31:08 +0000
+Received: from SJ1PR11MB6201.namprd11.prod.outlook.com
+ ([fe80::10da:929a:73eb:40ad]) by SJ1PR11MB6201.namprd11.prod.outlook.com
+ ([fe80::10da:929a:73eb:40ad%6]) with mapi id 15.20.5525.017; Wed, 17 Aug 2022
+ 12:31:08 +0000
+Date:   Wed, 17 Aug 2022 12:30:49 +0000
+From:   Ashok Raj <ashok.raj@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "LKML Mailing List" <linux-kernel@vger.kernel.org>,
+        X86-kernel <x86@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Jacon Jun Pan <jacob.jun.pan@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>
+Subject: Re: [PATCH v3 3/5] x86/microcode: Avoid any chance of MCE's during
+ microcode update
+Message-ID: <YvzfebgOWVKYLClJ@araj-dh-work>
+References: <20220817051127.3323755-1-ashok.raj@intel.com>
+ <20220817051127.3323755-4-ashok.raj@intel.com>
+ <Yvybq+hYT4tG/yAg@gmail.com>
+ <Yvyfi9XC8bu0cOG+@gmail.com>
+ <YvyiHGMbp2MtV0Vr@zn.tnic>
+ <YvzXsf0mGEcOlZC5@araj-dh-work>
+ <Yvzay5jOu5XBJpWa@zn.tnic>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220817115638.2etj6ruuutjurgjv@wittgenstein>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yvzay5jOu5XBJpWa@zn.tnic>
+X-ClientProxiedBy: BYAPR02CA0071.namprd02.prod.outlook.com
+ (2603:10b6:a03:54::48) To SJ1PR11MB6201.namprd11.prod.outlook.com
+ (2603:10b6:a03:45c::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ed0d9489-dae3-43df-fd5d-08da804c5c4b
+X-MS-TrafficTypeDiagnostic: CO1PR11MB4883:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bP+hxg+GxCJGCB8tgLb1cL+xTgSnZL7sFqct3UAiwL9gNcfeoRYS3dObsrLFN4oZgoPv9M918c5P1+hi9SKPx9ctYnSOMF6iMh17vW+wi1ET6NlnzvQX5wOiiPUXij4ugQVRgFzPMyxwC89lmRDiKHDdIjHrQMY3qHGTOt/e7La4C9bvwSLpRgPX0c0bgmHgqs+OhCIZrqrfauL8wdeSSDLIFlwm/D+Ej6du0B9E0sxEpZG8xdMWnR3uNbm6XRp0qcY2IPgitPBnFqXKWzGuo74ERefGh/NDPWYwMne5UN9hdUwjBPkAYodtb3VMrlObQ/tjIDjUHTJeEFpaOLwVVveJQY0dgRCNIsQ48uDyARgKl4sZU1QU5ZhYnqW33S2EjBtFl271dh2BOCJj/+NOVH55f4AOpaSuD3dRJjAeDIlaRX5sELGMgn/ce6ZalnE5jjX6yP8B2vsr31T0P+6KPD5/9Y68orwkcMhZldp2x0NOkmIfyinbq5UgSjslsCbzHdAKqcfjKkPee8b5If6D0Vnr8YB2tV6VSv9zL0qsy5oTrCuSOeGWHgvx2p4E4MDVablsd/BCtY2ybq3m2bcY6YnHNM40pf8DFjJQj5PPs82YPzMPGhHc78X8pigu3DNLrb2y7RUru7/32uuoG168KNczhL+Gm21M46QiuwN4+kmX+0CVPAkkIsTirjQFsd7jaLDvqvrKmgwVXbVeg4ghItIF+TqMR0ZOCALKNxpgcDoHM4K5DBCe9WbQlbe1lFDv
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6201.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(346002)(366004)(396003)(376002)(136003)(39860400002)(2906002)(41300700001)(6666004)(6512007)(26005)(6486002)(6506007)(9686003)(4326008)(15650500001)(82960400001)(66476007)(8676002)(33716001)(316002)(86362001)(6916009)(478600001)(66556008)(54906003)(38100700002)(83380400001)(186003)(107886003)(8936002)(44832011)(66946007)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qVuZTeiFX05GNSc9gBF1QW6nGYZDsI2ENPi7HCusZC7lMzwbz6WDJ19LSIeK?=
+ =?us-ascii?Q?TJ4vV/IRlsLzsxjLdpiBjBBj/UgED7wuR4M3jWBqqCQVRvFBq5w+ijYDv8Qj?=
+ =?us-ascii?Q?f5z6KNtHORJjxvFJU6Rmd060yP0hfLucrAz/cHbml7iwt7+CszGbjrG4ALyA?=
+ =?us-ascii?Q?nxfDYtPVUFG8qd8pRg5++oHhl0OfnDQp/bRBuRhp3VFuzmg6/LQ4onBeXn54?=
+ =?us-ascii?Q?8L0Q4yoNvzOUJxQRKz2vEH97E2LkucDfYSOsj75JaXB5BtnFpEqrXukJg84q?=
+ =?us-ascii?Q?zd5pp8tn0Ty0dtFYXq+w4NvluvAgEYcWUS0X40BfVjn/W7OTF3hQBDwmaJ4v?=
+ =?us-ascii?Q?OeIxO9poAl+X7y7DUONMEoQTv1GlmB7y7gBCIP5jGPL2QNSDYohXXHD/zJ0e?=
+ =?us-ascii?Q?FL99Zm7YQ7M1OoOPg0ZAe63IY/9TdcOmGe2EAspPNxt2F7jQwrJU4zhzgGTS?=
+ =?us-ascii?Q?C/V3Gc90E2ORfhoRfan3nepcS/TWv8STGcllbUbGeKA6KCnDVik0qYVv3ck4?=
+ =?us-ascii?Q?4DutP3W0ktVG24DonMBIXaSbN72YA8LnDcyk5aVH6KL6hUT8zYhZGx1P3/T0?=
+ =?us-ascii?Q?6sDJoaDV+Iy12Hm6tKf7RtSKUoL1fvYgV4TGLCoq5JJUWw4Vvx6Itsj0PHjB?=
+ =?us-ascii?Q?RF1+EuGRyNIFlBxlfuUi7SEjC0TWY9n24zGSp+wfMOUyX6odcfnvnubje5/1?=
+ =?us-ascii?Q?PqryyLLZlvn1Th2O8CDOCifAVUUMWUHlJN+uR+lcDxR2QcgqYTVFcgjZbaTS?=
+ =?us-ascii?Q?/KYFudCKztuww5WrkHsi8qn7nY1Z5wrW85ABFvCuawhlfxp/qI04mrhBjEg5?=
+ =?us-ascii?Q?JouiE/g0nIdRgDOQp1tHA6uiQiXfsrHLsCiaPf8sfcZINQcNC5+qAmHJsiSr?=
+ =?us-ascii?Q?R6J2vItPJEn7Zc13XtwcxpDJnHEtLY8VxxTA2w1gdN0BGXQ3iaIlhbXPWQQF?=
+ =?us-ascii?Q?E7ElDq4wV8MirnM7K7LeWkHq25BNyuHGbf6ASxNmaR9fugShXK6LPi+LNfAE?=
+ =?us-ascii?Q?TQOPrbi2sBVbvEE/mMQCzK+8HJPCGKrRVwlyhxeiDm/UMT7PYyaOGPAZAY4i?=
+ =?us-ascii?Q?nNkxPrYKnexxyXMidWDxZbjPHsWo5iQJVZaAvYaok9HItO9u9AjX5bIU31F3?=
+ =?us-ascii?Q?FnLz8Bj41Vq/uGLIgDSMYoG15fwX99DmBV9h6q6gSWO1lmlN3U4ZcGXz0tCx?=
+ =?us-ascii?Q?I86Cix2teg6Q2yPbHRWxG43Yzsc1Krs8LmLJIK5b3MtwQA9Rp5ZuUcmzzijI?=
+ =?us-ascii?Q?qyt31ljB8bbcAqnYtz5C4Lf37WXeJm2fxWYj/Hmngi5NK+sr8j/hnQ9+UFGT?=
+ =?us-ascii?Q?hrjCfH2YvLri6s5C5gOE15NydRcypc3FK4QE7X7LBrGPS1229G4NoPTWY3ix?=
+ =?us-ascii?Q?75qQ04MyfzQkfMaDqqdpLFlt2QbxUCdIR59WQA0nXOP9QFaOCMFng0EiZTnu?=
+ =?us-ascii?Q?PRbQN5HocrpgSb0s4wMau+zwv51kRUOJbAGEc88fHtnzJPgnrW6aREZesdMV?=
+ =?us-ascii?Q?RrbsQymw16Y4zrtZss6l9vQOV/XF/m0MN+Qf+0fZs4/1knaQO2myNA1XJqZq?=
+ =?us-ascii?Q?YhW8Tl3NVycLq0ivQpLjMUDJ/jcGNHpHVeOFvM3sOAQQ2/BAqvam+CeT9L+3?=
+ =?us-ascii?Q?Yw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ed0d9489-dae3-43df-fd5d-08da804c5c4b
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6201.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2022 12:31:08.2106
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: p68qcxehWXPCEy3YBWuLuJjt3X6MFGyFu+yaqYBdIFTqiP5sWKEN/fmJiLxAUZ0e48iMNa3IHf/XZ+jaJQtMqw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4883
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 01:56:43PM +0200, Christian Brauner wrote:
-> On Wed, Aug 17, 2022 at 07:36:44PM +0800, 天赐张 wrote:
-> > On Wed, Aug 17, 2022 at 6:29 PM Christian Brauner <brauner@kernel.org> wrote:
-> > >
-> > > On Wed, Aug 17, 2022 at 12:27:27PM +0200, Christian Brauner wrote:
-> > > > On Wed, Aug 17, 2022 at 12:55:22PM +0300, Amir Goldstein wrote:
-> > > > > On Wed, Aug 17, 2022 at 12:53 PM Amir Goldstein <amir73il@gmail.com> wrote:
-> > > > > >
-> > > > > > On Wed, Aug 17, 2022 at 12:11 PM 天赐张 <zhangtianci.1997@bytedance.com> wrote:
-> > > > > > >
-> > > > > > > On Wed, Aug 17, 2022 at 3:36 PM Amir Goldstein <amir73il@gmail.com> wrote:
-> > > > > > > >
-> > > > > > > > On Wed, Aug 17, 2022 at 6:49 AM Zhang Tianci
-> > > > > > > > <zhangtianci.1997@bytedance.com> wrote:
-> > > > > > > > >
-> > > > > > > > > ovl_link() did not create a new inode after commit
-> > > > > > > > > 51f7e52dc943 ("ovl: share inode for hard link"), so
-> > > > > > > > > in ovl_create_or_link() we should not override cred's
-> > > > > > > > > fsuid and fsgid when called by ovl_link().
-> > > > > > > > >
-> > > > > > > > > Signed-off-by: Zhang Tianci <zhangtianci.1997@bytedance.com>
-> > > > > > > > > Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-> > > > > > > > > ---
-> > > > > > > > >  fs/overlayfs/dir.c | 4 ++--
-> > > > > > > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > > > > > > >
-> > > > > > > > > diff --git a/fs/overlayfs/dir.c b/fs/overlayfs/dir.c
-> > > > > > > > > index 6b03457f72bb..568d338032db 100644
-> > > > > > > > > --- a/fs/overlayfs/dir.c
-> > > > > > > > > +++ b/fs/overlayfs/dir.c
-> > > > > > > > > @@ -595,9 +595,9 @@ static int ovl_create_or_link(struct dentry *dentry, struct inode *inode,
-> > > > > > > > >         err = -ENOMEM;
-> > > > > > > > >         override_cred = prepare_creds();
-> > > > > > > > >         if (override_cred) {
-> > > > > > > > > -               override_cred->fsuid = inode->i_uid;
-> > > > > > > > > -               override_cred->fsgid = inode->i_gid;
-> > > > > > > > >                 if (!attr->hardlink) {
-> > > > > > > > > +                       override_cred->fsuid = inode->i_uid;
-> > > > > > > > > +                       override_cred->fsgid = inode->i_gid;
-> > > > > > > > >                         err = security_dentry_create_files_as(dentry,
-> > > > > > > > >                                         attr->mode, &dentry->d_name, old_cred,
-> > > > > > > > >                                         override_cred);
-> > > > > > > > > --
-> > > > > > > >
-> > > > > > > > This change looks incorrect.
-> > > > > > > > Unless I am missing something, fsuid/fsgid still need to
-> > > > > > > > be overridden for calling link() on underlying fs.
-> > > > > > > > What made you do this change?
-> > > > > > > >
-> > > > > > > > Thanks,
-> > > > > > > > Amir.
-> > > > > > >
-> > > > > > > Hi Amir,
-> > > > > > >
-> > > > > > > I ran into an error when I tested overlay on fuse:
-> > > > > > >   $ mkdir /lower /fuse /merge
-> > > > > > >   $ mount -t fuse /fuse
-> > > > > > >   $ mkdir /fuse/upper /fuse/work
-> > > > > > >   $ mount -t overlay /merge -o lowerdir=/lower,upperdir=/fuse/upper,workdir=work
-> > > > > > >   $ touch /merge/file
-> > > > > > >   $ chown bin.bin /merge/file // the file's caller becomes "bin"
-> > > > > > >   $ ln /merge/file /merge/lnkfile
-> > > > > > >
-> > > > > > > Then I got an error(EACCES) because fuse daemon checks the link()'s
-> > > > > > > caller is "bin", it denied this request.
-> > > > > > > I browsed the changing history of ovl_link(). There are two key commits:
-> > > > > > > The first is commit bb0d2b8ad296 ("ovl: fix sgid on directory") which
-> > > > > > > overrides the cred's fsuid/fsgid using the new inode. The new inode's
-> > > > > > > owner is initialized by inode_init_owner(), and inode->fsuid is
-> > > > > > > assigned to the current user. So the override fsuid becomes the
-> > > > > > > current user. We know link() is actually modifying the directory, so
-> > > > > > > the caller must have the MAY_WRITE permission on the directory. The
-> > > > > > > current caller may should have this permission. I think this is
-> > > > > > > acceptable to use the caller's fsuid(But I still feel a little
-> > > > > > > conflicted with the overlay's design).
-> > > > > > > The second is commit 51f7e52dc943 ("ovl: share inode for hard link")
-> > > > > > > which removed the inode creation in ovl_link(). This commit move
-> > > > > > > inode_init_owner() into ovl_create_object(), so the ovl_link() just
-> > > > > > > give the old inode to ovl_create_or_link(). Then the override fsuid
-> > > > > > > becomes the old inode's fsuid, neither the caller nor the overlay's
-> > > > > > > creator! So I think this is incorrect.
-> > > > > > > I think the link() should be like unlink(), overlay fs should just use
-> > > > > > > the creator cred to do underlying fs's operations.
-> > > > > > >
-> > > > > >
-> > > > > > I see. The reproducer and explanation belong in the commit message.
-> > > > > >
-> > > > > > Your argument makes sense to me, but CC Christian to make
-> > > > > > sure I am not missing anything related to ACLs and what not.
-> > > > >
-> > > > > Once again with correct email address...
-> > > >
-> > > > So we have:
-> > > >
-> > > > ovl_create_object()
-> > > > -> ovl_override_creds(ovl_sb)
-> > > > -> ovl_new_inode()
-> > > >    -> inode_init_owner()
-> > > >       {
-> > > >               inode->i_uid = current_fsuid();
-> > > >               inode->i_gid = current_fsgid();
-> > 
-> > In inode_init_owner(), the inode->i_gid may inherit from parent dir.
-> > And this is the main purpose of the commit bb0d2b8ad296 ("ovl: fix
-> > sgid on directory").
-> > 
-> > > >       }
-> > > > -> ovl_create_or_link(inode, ...)
-> > > > -> prepare_creds() // Copy of caller's creds
-> > >
-> > > s/caller's/creator's/
-> > >
-> > > > {
-> > > >         override_creds->fsuid = inode->i_uid;
-> > > >         override_creds->fsgid = inode->i_gid;
-> > > > }
-> > > > -> revert_creds()
-> > > >
-> > > > which afaict means that the mounter's credentials are used apart from
-> > > > the fs{g,u}id which is taken from inode->i_{g,u}id which should
-> > > > correspond to current_fs{g,u}id().
-> > > >
-> > > > The commit that is pointed out in the patch
-> > > > 51f7e52dc943 ("ovl: share inode for hard link")
-> > > > seems to have broken that assumption.
-> > > >
-> > > > Given that the intention was to use the creator's creds _with the
-> > > > caller's fs{g,u}id_ wouldn't it make more sense to simply ensure that
-> > > > the caller's fs{g,u}id are always used instead of using the full
-> > > > creator's creds just for the link operation? So something like this
-> > > > (untested):
-> > > >
-> > > > diff --git a/fs/overlayfs/dir.c b/fs/overlayfs/dir.c
-> > > > index 6b03457f72bb..4a3ee16a6d70 100644
-> > > > --- a/fs/overlayfs/dir.c
-> > > > +++ b/fs/overlayfs/dir.c
-> > > > @@ -575,6 +575,9 @@ static int ovl_create_or_link(struct dentry *dentry, struct inode *inode,
-> > > >         const struct cred *old_cred;
-> > > >         struct cred *override_cred;
-> > > >         struct dentry *parent = dentry->d_parent;
-> > > > +       /* Retrieve caller's fs{g,u}id before we override creds below. */
-> > > > +       kuid_t caller_fsuid = current_fsuid();
-> > > > +       kgid_t caller_fsgid = current_fsgid();
-> > > >
-> > > >         err = ovl_copy_up(parent);
-> > > >         if (err)
-> > > > @@ -595,8 +598,8 @@ static int ovl_create_or_link(struct dentry *dentry, struct inode *inode,
-> > > >         err = -ENOMEM;
-> > > >         override_cred = prepare_creds();
-> > > >         if (override_cred) {
-> > > > -               override_cred->fsuid = inode->i_uid;
-> > > > -               override_cred->fsgid = inode->i_gid;
-> > > > +               override_cred->fsuid = caller_fsuid;
-> > > > +               override_cred->fsgid = caller_fsgid;
-> > 
-> > So the override_cred->fsgid should be inode->i_gid if the inode is a new inode.
-> > 
-> > > >                 if (!attr->hardlink) {
-> > > >                         err = security_dentry_create_files_as(dentry,
-> > > >                                         attr->mode, &dentry->d_name, old_cred,
-> > 
-> > So your meaning should be like this:
-> > 
-> > diff --git a/fs/overlayfs/dir.c b/fs/overlayfs/dir.c
-> > index 6b03457f72bb..9aead6ddc071 100644
-> > --- a/fs/overlayfs/dir.c
-> > +++ b/fs/overlayfs/dir.c
-> > @@ -575,6 +575,8 @@ static int ovl_create_or_link(struct dentry
-> > *dentry, struct inode *inode,
-> >         const struct cred *old_cred;
-> >         struct cred *override_cred;
-> >         struct dentry *parent = dentry->d_parent;
-> > +       kuid_t caller_fsuid = current_fsuid();
-> > +       kgid_t caller_fsgid = current_fsgid();
-> > 
-> >         err = ovl_copy_up(parent);
-> >         if (err)
-> > @@ -595,9 +597,9 @@ static int ovl_create_or_link(struct dentry
-> > *dentry, struct inode *inode,
-> >         err = -ENOMEM;
-> >         override_cred = prepare_creds();
-> >         if (override_cred) {
-> > -               override_cred->fsuid = inode->i_uid;
-> > -               override_cred->fsgid = inode->i_gid;
-> >                 if (!attr->hardlink) {
-> > +                       override_cred->fsuid = inode->i_uid;
-> > +                       override_cred->fsgid = inode->i_gid;
-> >                         err = security_dentry_create_files_as(dentry,
-> >                                         attr->mode, &dentry->d_name, old_cred,
-> >                                         override_cred);
-> > @@ -605,6 +607,9 @@ static int ovl_create_or_link(struct dentry
-> > *dentry, struct inode *inode,
-> >                                 put_cred(override_cred);
-> >                                 goto out_revert_creds;
-> >                         }
-> > +               } else {
-> > +                       override_cred->fsuid = caller_fsuid;
-> > +                       override_cred->fsgid = caller_fsgid;
-> >                 }
-> >                 put_cred(override_creds(override_cred));
-> >                 put_cred(override_cred);
+On Wed, Aug 17, 2022 at 02:10:51PM +0200, Borislav Petkov wrote:
+> On Wed, Aug 17, 2022 at 11:57:37AM +0000, Ashok Raj wrote:
+> > You have this reversed. if you get an MCE and MCIP=1 -> shutdown
 > 
-> Hah, wait. I had a pretty obvious braino when I did that. I forgot to
-> account for setgid handling in inode_init_owner(). Let me take another
-> close look...
+> Yeah yeah.
+> 
+> > When MCE's happen during the update they are always fatal errors.
+> 
+> How did you decide that?
+> 
+> Because all CPUs are executing the loop and thus no user process?
 
-Ok, so if we look at all the callchains:
+Correct. There can be a fatal IOMCA which is asynchronous and can fire
+anytime. We removed any CPU initiated async errors like patrol-scrub and
+cache errors observed during eviction (EWB) into CMCI's when we developed
+LMCE.
 
-(1) .create = ovl_create()
-    -> ovl_create_object()
-       -> ovl_create_or_link()
-   
-(2) .mkdir = ovl_mkdir()
-    -> ovl_create_object()
-       -> ovl_create_or_link()
-   
-(3) .mknod = ovl_mknod()
-    -> ovl_create_object()
-       -> ovl_create_or_link()
-   
-(4) .symlink = ovl_symlink()
-    -> ovl_create_object()
-       -> ovl_create_or_link()
+> 
+> > What we do here by setting MCIP=1, we promote to a more severe shutdown.
+> 
+> It probably should say somewhere that a shutdown is possible. Because if
+> the shutdown really happens, you get a black screen and no info as to
+> why...
 
-(5) .link = ovl_link()
-     -> ovl_create_or_link()
+You will find out when system returns after reboot and hopefully wasn't
+promoted to a cold-boot which will loose MCE banks.
 
-we see that (1) to (4) set the caller's fs{g,u}id to the
-inode->i_{g,u}id. That was instantiated by inode_init_owner(). This will
-be current_fs{g,u}id() of the caller unless the directory the file is
-created in was setgid in which case inode->i_gid can be different from
-current_fsgid().
+I can check with the HW team and get back.. 
 
-So iiuc, taking the inode->i_{g,u}id is done to get fsgid set to
-inode->i_gid when the parent directory is setgid.
+> 
+> > Ideally I would rather let the fallout happen since its observable vs a
+> > blind shutdown is what we are promoting to.
+> 
+> What fallout do you mean exactly?
 
-But for (5) the inode->i_{g,u}id should be irrelevant because it's a
-hardlink and so we should just use the caller's fs{g,u}id. So with all
-that in mind we should be doing:
+Meaning deal with the effect of a really rare MCE. Rather than trying to
+avoid it. Taking the MCE is more important than finishing the update,
+and loosing what the error signaled was trying to convey.
 
-diff --git a/fs/overlayfs/dir.c b/fs/overlayfs/dir.c
-index 6b03457f72bb..74b3813eda47 100644
---- a/fs/overlayfs/dir.c
-+++ b/fs/overlayfs/dir.c
-@@ -646,6 +646,8 @@ static int ovl_create_object(struct dentry *dentry, int mode, dev_t rdev,
-        inode_init_owner(&init_user_ns, inode, dentry->d_parent->d_inode, mode);
-        attr.mode = inode->i_mode;
+> 
+> > Shutdown, shutdown.. There is only 1 MCE no matter how many CPUs you have.
+> 
+> Because all CPUs are executing the loop? Or how do you decide this?
 
-+       attr.fsuid = inode->i_uid;
-+       attr.fsgid = inode->i_gid;
-        err = ovl_create_or_link(dentry, inode, &attr, false);
-        /* Did we end up using the preallocated inode? */
-        if (inode != d_inode(dentry))
-@@ -702,6 +704,7 @@ static int ovl_link(struct dentry *old, struct inode *newdir,
- {
-        int err;
-        struct inode *inode;
-+       struct ovl_cattr attr;
+Fatal errors signaled with PCC=1 in the MCAx.STATUS is *ALWAYS*
+broadcast[1] to all CPUs in the system. So MCIP is set at the source of
+the CPU and if any other CPU is also attempting they go down. You can't
+even collect data.
 
-        err = ovl_want_write(old);
-        if (err)
-@@ -728,9 +731,12 @@ static int ovl_link(struct dentry *old, struct inode *newdir,
-        inode = d_inode(old);
-        ihold(inode);
+[1] Broadcast is true for Intel CPUs, its legacy behavior
+LMCE is the only one that isn't broadcast and truly local to the logical
+thread.
 
--       err = ovl_create_or_link(new, inode,
--                       &(struct ovl_cattr) {.hardlink = ovl_dentry_upper(old)},
--                       ovl_type_origin(old));
-+       attr = (struct ovl_cattr){
-+               .hardlink = ovl_dentry_upper(old),
-+               .fsuid = current_fsuid(),
-+               .fsgid = current_fsgid(),
-+       };
-+       err = ovl_create_or_link(new, inode, &attr, ovl_type_origin(old));
-        if (err)
-                iput(inode);
 
-diff --git a/fs/overlayfs/overlayfs.h b/fs/overlayfs/overlayfs.h
-index 87759165d32b..85043123a103 100644
---- a/fs/overlayfs/overlayfs.h
-+++ b/fs/overlayfs/overlayfs.h
-@@ -655,6 +655,8 @@ struct ovl_cattr {
-        umode_t mode;
-        const char *link;
-        struct dentry *hardlink;
-+       kuid_t fsuid;
-+       kgid_t fsgid;
- };
+> 
+> > Exception is the Local MCE which is recoverable, but only to user space.
+> > 
+> > If you get an error in the atomic we are polling, its a fatal error since
+> > SW can't recover and we shutdown.
+> 
+> Aha, I think you mean that: the MCE is fatal because if it happens on
+> any CPU, it will be in kernel mode.
 
- #define OVL_CATTR(m) (&(struct ovl_cattr) { .mode = (m) })
+Yep!
 
-Using the full creator's credentials for just hardlinks seems odd to me
-when all creation requests use the caller's fs{g,u}id...
+> 
+> > Overthinking :-).. If there is concensus, if Boris feels comfortable
+> > enough, i would drop this patch.
+> 
+> This is what we're doing right now - thinking about the consensus. And
+> Boris will feel comfortable once we've arrived at a sensible decision.
+> 
+> :-)
+> 
+I'm waiting for the results. :-).  And if you feel we can merge the
+- Patch1 - bug fix 
+- Patch2 - min-rev id
+
+I do have the comments from Ingo captured, but I'll wait for other comments
+before i resend just those 2 and we can leave the NMI handling to get more
+testing and review before we consider.
+
+Cheers,
+Ashok

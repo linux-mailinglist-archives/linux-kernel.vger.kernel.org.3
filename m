@@ -2,51 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA5A59677A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D963659677F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238217AbiHQCjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 22:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55564 "EHLO
+        id S234234AbiHQCli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 22:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238055AbiHQCju (ORCPT
+        with ESMTP id S238272AbiHQClf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 22:39:50 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776DB92F4A
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 19:39:49 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M6sbH0kpzzkWM9;
-        Wed, 17 Aug 2022 10:36:27 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 17 Aug 2022 10:39:47 +0800
-Subject: Re: [PATCH 2/6] mm/hugetlb: fix WARN_ON(!kobj) in
- sysfs_create_group()
-To:     Muchun Song <muchun.song@linux.dev>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        <mike.kravetz@oracle.com>, Muchun Song <songmuchun@bytedance.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220816130553.31406-1-linmiaohe@huawei.com>
- <20220816130553.31406-3-linmiaohe@huawei.com>
- <AA374889-2C8B-4D8B-9542-A760267F00E4@linux.dev>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <a9dead65-0b68-e373-1785-7324b1378e24@huawei.com>
-Date:   Wed, 17 Aug 2022 10:39:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Tue, 16 Aug 2022 22:41:35 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FFA94EC1;
+        Tue, 16 Aug 2022 19:41:33 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R551e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VMTZlVN_1660704088;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VMTZlVN_1660704088)
+          by smtp.aliyun-inc.com;
+          Wed, 17 Aug 2022 10:41:30 +0800
+Date:   Wed, 17 Aug 2022 10:41:28 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Sun Ke <sunke32@huawei.com>
+Cc:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        yinxin.x@bytedance.com
+Subject: Re: [PATCH] erofs: fix error return code in
+ erofs_fscache_meta_read_folio and erofs_fscache_read_folio
+Message-ID: <YvxVWP0njcgghe+r@B-P7TQMD6M-0146.local>
+References: <20220815034829.3940803-1-sunke32@huawei.com>
+ <YvsoIFzRlGpqNZKg@B-P7TQMD6M-0146.local>
+ <d40a1e7e-d78c-1a99-0889-6fc4d2102e9d@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <AA374889-2C8B-4D8B-9542-A760267F00E4@linux.dev>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <d40a1e7e-d78c-1a99-0889-6fc4d2102e9d@huawei.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,30 +46,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/17 10:31, Muchun Song wrote:
-> 
-> 
->> On Aug 16, 2022, at 21:05, Miaohe Lin <linmiaohe@huawei.com> wrote:
->>
->> If sysfs_create_group() fails with hstate_attr_group, hstate_kobjs[hi]
->> will be set to NULL. Then it will be passed to sysfs_create_group() if
->> h->demote_order != 0 thus triggering WARN_ON(!kobj) check. Fix this by
->> making sure hstate_kobjs[hi] != NULL when calling sysfs_create_group.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> 
-> It’s better to add a Fixes tag here.
+Hi Ke,
 
-Will add it in next version. Thanks for your review and comment.
+On Wed, Aug 17, 2022 at 09:44:46AM +0800, Sun Ke wrote:
+> 
+> 
+> 在 2022/8/16 13:16, Gao Xiang 写道:
+> > On Mon, Aug 15, 2022 at 11:48:29AM +0800, Sun Ke wrote:
+> > > If erofs_fscache_alloc_request fail and then goto out, it will return 0.
+> > > it should return a negative error code instead of 0.
+> > > 
+> > > Fixes: d435d53228dd ("erofs: change to use asynchronous io for fscache readpage/readahead")
+> > > Signed-off-by: Sun Ke <sunke32@huawei.com>
+> > 
+> > Minor, I tried to apply this patch by updating the patch title into
+> > "erofs: fix error return code in erofs_fscache_{meta_,}read_folio"
+> > 
+> > since the original patch title is too long.
+> 
+> Should I send a v2 patch to update the title?
+
+I've already updated this by hand if you have no concern ;)
+will push out to -next today...
 
 Thanks,
-Miaohe Lin
+Gao Xiang
 
 > 
-> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-> 
-> Thanks.
-> 
-> .
-> 
-
+> Thanks,
+> Sun Ke
+> > 
+> > Thanks,
+> > Gao Xiang
+> > .
+> > 

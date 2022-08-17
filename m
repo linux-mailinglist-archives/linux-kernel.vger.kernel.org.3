@@ -2,99 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D02235966CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 03:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDFA75966CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 03:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237491AbiHQBcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 21:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37454 "EHLO
+        id S238059AbiHQBcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 21:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234234AbiHQBcK (ORCPT
+        with ESMTP id S237650AbiHQBcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 21:32:10 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE3C93505;
-        Tue, 16 Aug 2022 18:32:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660699929; x=1692235929;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/GuSDADkL//P5o9gnAx2aaAgwKPGm1Gd8VUSvZfA1HI=;
-  b=Y1ZUSZIMtriWQBPqG/BL3iCd3bZHDkpNBwUBVUrvbUm5DcJo49Nhhnvm
-   OD7DaoHHG8HaMn4UZG3XWi/vKuknFZXx+Op3gUZQ4Hvth1A3S9IFJsIHz
-   ZsX4Z4HZksM3/rFZrO3cYlvsoQ6IxoyY6LleL0v937utcDCFSVgHV4l9S
-   bQWnJWJrDj4ekhmvw2NluhiadURQxv8/sDaw+tTRpZN+6YcDiPVpFnNL+
-   BObXS3ATu7xs3Q9Yv4ZBgShnI6bYmkfMkpN3RX/FT48aYSGeEc+Cv2onk
-   WNhtGPwgtu2JQdjpDjnCqMtEqFl1kPvLHf5md5rY1AS6LqrBt6KRguDpy
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="354119399"
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="354119399"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 18:32:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="935150138"
-Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Aug 2022 18:32:06 -0700
-Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oO7ug-0000Qm-0V;
-        Wed, 17 Aug 2022 01:32:06 +0000
-Date:   Wed, 17 Aug 2022 09:31:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-renesas-soc@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH] dt-bindings: soc: renesas: Move renesas.yaml from arm to
- soc
-Message-ID: <202208170950.T1F2Y7HC-lkp@intel.com>
-References: <20220815111708.22302-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Tue, 16 Aug 2022 21:32:20 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850E894116;
+        Tue, 16 Aug 2022 18:32:19 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4M6r7Y3WSWz6TDlf;
+        Wed, 17 Aug 2022 09:30:49 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP2 (Coremail) with SMTP id Syh0CgAH8r0hRfxiTGfWAQ--.32718S3;
+        Wed, 17 Aug 2022 09:32:17 +0800 (CST)
+Subject: Re: [PATCH v7 3/9] blk-throttle: factor out code to calculate
+ ios/bytes_allowed
+To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     mkoutny@suse.com, axboe@kernel.dk, ming.lei@redhat.com,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20220802140415.2960284-1-yukuai1@huaweicloud.com>
+ <20220802140415.2960284-4-yukuai1@huaweicloud.com>
+ <Yvv0P5YXf2HdEC1d@slm.duckdns.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <886ebc8f-5b7e-e281-c985-030bc687bb7f@huaweicloud.com>
+Date:   Wed, 17 Aug 2022 09:32:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815111708.22302-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yvv0P5YXf2HdEC1d@slm.duckdns.org>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgAH8r0hRfxiTGfWAQ--.32718S3
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYg7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4II
+        rI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr4
+        1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK
+        67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI
+        8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAv
+        wI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267
+        AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU1a9aPUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lad,
+Hi, Tejun!
 
-I love your patch! Perhaps something to improve:
+ÔÚ 2022/08/17 3:47, Tejun Heo Ð´µÀ:
+> On Tue, Aug 02, 2022 at 10:04:09PM +0800, Yu Kuai wrote:
+>> +static bool tg_with_in_iops_limit(struct throtl_grp *tg, struct bio *bio,
+>> +				  u32 iops_limit, unsigned long *wait)
+> 
+> While at it, can you please rename these functions to tg_within_iops_limit?
+> "within" is a single word. Other than that,
 
-[auto build test WARNING on geert-renesas-devel/next]
-[also build test WARNING on linus/master v6.0-rc1 next-20220816]
-[cannot apply to robh/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Of course, I'll do that in next version.
+> 
+> Acked-by: Tejun Heo <tj@kernel.org>
+> 
+> Thanks.
+> 
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lad-Prabhakar/dt-bindings-soc-renesas-Move-renesas-yaml-from-arm-to-soc/20220815-191822
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git next
-reproduce: make htmldocs
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/arm/renesas.yaml
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

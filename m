@@ -2,139 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5F959671B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 761C959671E
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238245AbiHQCBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 22:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
+        id S238420AbiHQCBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 22:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232908AbiHQCBC (ORCPT
+        with ESMTP id S238408AbiHQCBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 22:01:02 -0400
-Received: from gimli.rothwell.id.au (gimli.rothwell.id.au [103.230.158.156])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1637822A;
-        Tue, 16 Aug 2022 19:01:00 -0700 (PDT)
-Received: from authenticated.rothwell.id.au (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.rothwell.id.au (Postfix) with ESMTPSA id 4M6rpD6n0HzyZr;
-        Wed, 17 Aug 2022 12:00:52 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rothwell.id.au;
-        s=201702; t=1660701655;
-        bh=dtW8+2kRTTd1rXIAqfFHietP1JcPVL/dXFAV5Z7/924=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=B3gicvIbPhiksqYFbDzbrusCOR+IfJfi01CCVe2eHg+IpqhRZTc7FfsNrrGwzN+ny
-         zizJAeprJ2hMEi0W4b49akWqiUKlhYT3ySc8mUoZj+LEGuxbelkebrreTAtCljksnt
-         VKNSAhGz5ERwPWm5vbbAEUtoPW+CNhIlPZVr9MuBgtF5Rg7I1gIBa0C8Fxhh1279aA
-         vSsoUsAFbV+T9f3+3gZdtvMgQD/GFgfjV8iQ9Y9urIHBlkMEVZ/jnWgcZja+/aIo58
-         yEhxinFYBcoIxIWEAo6E4gEQUHhfx9vNRmwelGAJlyqnWD5QzbOOiwppYM/cypbtbM
-         GkpPulwQSjMTg==
-Date:   Wed, 17 Aug 2022 12:00:51 +1000
-From:   Stephen Rothwell <sfr@rothwell.id.au>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev,
-        lkft-triage@lists.linaro.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: Re: [next] arm64: kernel BUG at fs/inode.c:622 - Internal error:
- Oops - BUG: 0 - pc : clear_inode
-Message-ID: <20220817120051.20a39b52@oak.ozlabs.ibm.com>
-In-Reply-To: <CA+G9fYuLvTmVbyEpU3vrw58QaWfN=Eg8VdrdRei_jmu2Y2OzOg@mail.gmail.com>
-References: <CA+G9fYv2Wof_Z4j8wGYapzngei_NjtnGUomb7y34h4VDjrQDBA@mail.gmail.com>
-        <CAHk-=wj=u9+0kitx6Z=efRDrGVu_OSUieenyK4ih=TFjZdyMYQ@mail.gmail.com>
-        <CA+G9fYuLvTmVbyEpU3vrw58QaWfN=Eg8VdrdRei_jmu2Y2OzOg@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; aarch64-unknown-linux-gnu)
+        Tue, 16 Aug 2022 22:01:25 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115747CB55;
+        Tue, 16 Aug 2022 19:01:25 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d10so10795763plr.6;
+        Tue, 16 Aug 2022 19:01:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=T2ryg0NvBsySTqlIKv0j1Rn9xWbe0EBoTZaBsyrpPQk=;
+        b=fkzQolUzAnY5hgZafY8CAOMAGcTJQnGvyMyLIFF1z3Xo2xxxUJuriGFc8UjEdg+BL2
+         AFcbfmvorQNxMfYo4o9tnxjUuTsOMdv7qr7e/cQ+wfDhTuMWn6MwHVmYVQ3hHda6zBlj
+         WDpfPmhDmD/yRJvHcrbNr+RWJH0W78oZ9Y6o5NqBIkCLcy8u7op/fAQxs1CkdlpkVNdc
+         Sr79Nb8kvT7YkFYBzO0fLT3gZ/YsfYvw9tKwRj+R+FuZUExgTdZ0bVWsEh9yqxmyzbqM
+         DXZvI3z2ajuIdycmi5DDSQDOA3kJRoPwYNIeTQJXExyYxtfR9r3fw3wQ605hgWmU7MpE
+         vatQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=T2ryg0NvBsySTqlIKv0j1Rn9xWbe0EBoTZaBsyrpPQk=;
+        b=4suV7b5Wd+badOCfUTBawPW6g7i+SOR9YRwS4BkyxRj+BB15sBHppYbLzx7Gxd1c1E
+         NgK0z3riovjCXX1UiE3Uu+VVrzj5KNLdtL85FtaJPV9nJntfelarDc0GAYBHgW8hht23
+         FW3ImHR1u5ur393zX8kJvU/H+sULit5hfNruQ4uLDzHVHi0ii93uZozZhof44tOdSRF9
+         xVZDYdSejx3RMt0lTQvGu7FZ48Ate8qAhX3QL6jKWimVztj8wLLXjY9EJKGYXHRb8mEG
+         lTb+LSPaFj673RIeK7tK8+KJJuL671fbqWb3hwo4yBiliFd25btJFdbDNwX90taHVIwv
+         +r/w==
+X-Gm-Message-State: ACgBeo0OSA/5hBPrx29qCw+Vyf/rTphe5ErCQfUrLUmIXj05L/V2FGiH
+        BeZer8fRBFQRL9Vo2lqHcrcD5PlHY8zscLMNxPQ=
+X-Google-Smtp-Source: AA6agR5t25H5wDg2upmmIB++dF11M8APhafDGzQfESqj4hDt5g67WIpGUgLl6JJdDd5YBUEAZk9bHawnNtWULZmJjGA=
+X-Received: by 2002:a17:90a:73cc:b0:1f5:353d:7374 with SMTP id
+ n12-20020a17090a73cc00b001f5353d7374mr1398826pjk.21.1660701684557; Tue, 16
+ Aug 2022 19:01:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/p7uJ_iQfq=MtmPXdTyKBMw9";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220816185801.651091-1-shy828301@gmail.com> <CALvZod5t7Qo1NQ040pRyWco+nJGn3hSrxZyuFQ0UBi31Ni6=_g@mail.gmail.com>
+In-Reply-To: <CALvZod5t7Qo1NQ040pRyWco+nJGn3hSrxZyuFQ0UBi31Ni6=_g@mail.gmail.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Tue, 16 Aug 2022 19:01:11 -0700
+Message-ID: <CAHbLzkrSU3ZHRiZAxy9Jju3-3ZFpDmE4uMx81c+yPWN28_j+tw@mail.gmail.com>
+Subject: Re: [PATCH] mm: memcg: export workingset refault stats for cgroup v1
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/p7uJ_iQfq=MtmPXdTyKBMw9
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Naresh,
-
-On Wed, 17 Aug 2022 01:09:40 +0530 Naresh Kamboju <naresh.kamboju@linaro.or=
-g> wrote:
+On Tue, Aug 16, 2022 at 3:06 PM Shakeel Butt <shakeelb@google.com> wrote:
 >
-> On Wed, 17 Aug 2022 at 00:40, Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
+> On Tue, Aug 16, 2022 at 11:58 AM Yang Shi <shy828301@gmail.com> wrote:
 > >
-> > On Tue, Aug 16, 2022 at 12:00 PM Naresh Kamboju
-> > <naresh.kamboju@linaro.org> wrote: =20
-> > >
-> > > Following kernel BUG found while booting arm64 Qcom dragonboard 410c =
-with
-> > > Linux next-20220816 kernel Image. =20
+> > Workingset refault stats are important and usefule metrics to measure
+> > how well reclaimer and swapping work and how healthy the services are,
+> > but they are just available for cgroup v2.  There are still plenty users
+> > with cgroup v1, export the stats for cgroup v1.
 > >
-> > What kind of environment is this?
+> > Signed-off-by: Yang Shi <shy828301@gmail.com>
+> > ---
+> > I do understand the development of cgroup v1 is actually stalled and
+> > the community is reluctant to accept new features for v1.  However
+> > the workingset refault stats are really quite useful and exporting
+> > two new stats, which have been supported by v2, seems ok IMHO.  So
+> > hopefully this patch could be considered.  Thanks.
 > >
-> > Havign that inode list corruption makes it smell a *bit* like the
-> > crazy memory corruption that we saw with the google cloud instances,
-> > but that would only happen wif you actually use VIRTIO for your
-> > environment? =20
->=20
-> This is a physical hardware db410c device.
-> Following VIRTIO configs enabled.
->=20
-> CONFIG_BLK_MQ_VIRTIO=3Dy
-> CONFIG_NET_9P_VIRTIO=3Dy
-> CONFIG_VIRTIO_BLK=3Dy
-> CONFIG_SCSI_VIRTIO=3Dy
-> CONFIG_VIRTIO_NET=3Dy
-> CONFIG_VIRTIO_CONSOLE=3Dy
-> CONFIG_VIRTIO_ANCHOR=3Dy
-> CONFIG_VIRTIO=3Dy
-> CONFIG_VIRTIO_PCI_LIB=3Dy
-> CONFIG_VIRTIO_PCI_LIB_LEGACY=3Dy
-> CONFIG_VIRTIO_MENU=3Dy
-> CONFIG_VIRTIO_PCI=3Dy
-> CONFIG_VIRTIO_PCI_LEGACY=3Dy
-> CONFIG_VIRTIO_BALLOON=3Dy
-> CONFIG_VIRTIO_MMIO=3Dy
-> CONFIG_CRYPTO_DEV_VIRTIO=3Dy
->=20
->=20
-> >
-> > Do you see the same issue with plain v6.0-rc1? =20
->=20
-> Nope. I do not notice reported BUG on v6.0-rc1.
+>
+> Is just workingset refault good enough for your use-case? What about
+> the other workingset stats? I don't have a strong opinion against
+> adding these to v1 and I think these specific stats should be fine.
 
-Is it reliable enough that you could possibly do a bisection between
-v6.0-rc1 and next-20220816?
+The workingset refault is good enough for our usercase, but I don't
+mind adding all the workingset_* stats if nobody has objection.
 
---=20
-Cheers,
-Stephen Rothwell
+> (There is subtlety in exposing objcg based stats (i.e. reparenting) in
+> v1 due to non-hierarchical stats in v1. I remember Yosry and Muchun
+> were looking into that.)
 
---Sig_/p7uJ_iQfq=MtmPXdTyKBMw9
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL8S9MACgkQAVBC80lX
-0GzZAQf7Bsp+3irXdvFTPbeYTsFim8hgA9o1L4+3TfIVF5sd1bGcCdpcN20fck2P
-7viuEA5w5CXL1S2W6wzMmgKu7TwkhXHvbAGgPIGACHtGaCRjZXdix+sxlO/qX+ly
-HdhuvbqFkRW2ed+fj09Ww4KJgGP8/l0zwFemnBOrqao+cwIuNfKsQdbGVyzM43hr
-5PttxYZwGZvHar5BjSCqUM2MJ93i5s6frfJkreYg20gWCGaDOx3eZ468gSGPNw4t
-e6G/sdlX8e2aB0hhOuF4Fjn09vp5paWMelkEjEPbBlsgRsV04PmvNjEg0nKn8haJ
-0Ymh4ddoHGM2pz1ODoXplzCO8ap7uQ==
-=q9S1
------END PGP SIGNATURE-----
-
---Sig_/p7uJ_iQfq=MtmPXdTyKBMw9--
+The workingset_* stats should have nothing to do with obj based stats IIUC.

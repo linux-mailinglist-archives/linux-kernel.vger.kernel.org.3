@@ -2,75 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696F3596A53
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED03596A59
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 09:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbiHQHZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 03:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55724 "EHLO
+        id S231927AbiHQHZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 03:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiHQHZL (ORCPT
+        with ESMTP id S229565AbiHQHZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 03:25:11 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468EB6B8F1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:25:10 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id l64so11315496pge.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:25:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc;
-        bh=64K04OIAsAM/hqlePyze1mYqqu+ttGsmCQGJcVaNhOw=;
-        b=h8J7r4LlIg1NdbOyQu+4uqKXnnVPaRRcxJ2IoLFOgyis0krpp7/so2YqMCwBcajM8A
-         nRg2k05ECFLf7bUNAfFJKeZOXEbv3AIVc6P9iWVqbC0ZDLhX98YjMIh1/bZkpjcA1i/P
-         oFvxJz4KUOj6O0zNcAhdXOEJeBidEAZ5f5mtKlC5AkFcQjuWN5WgQO2TWKSY2Gy8+yuo
-         NyVnF+UEC/x5H51PmdrerWn7uKfFb93TiWOCUqAZ7HYJe+eW3L479C/HnX8cxxLY0Faw
-         jwGBVwOZ0OfE6I1BsVX2cKIcTzq2YQ/vaecAXckZnbop7Dl0F6QZpXb/fRD+AnZJT3Kp
-         oNiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc;
-        bh=64K04OIAsAM/hqlePyze1mYqqu+ttGsmCQGJcVaNhOw=;
-        b=vxKFfZgrwW7+fbRNvuq7o6ylCqmfSHGeluiz5AeLQSjpC/6tL1O/SpNDpfrP0ZTtWl
-         r/8GxKwN6suTPgf12Cm4DgQ5e2oviUmGyaj21XlUAZKUWPtSE1NQsLC4uAIGxaW4duF1
-         AMTgjzrT9ozZ9NhJfd3L0BJQHx/uunAVgQXc0GBM35u/RbfUVHzGMUDyGxtPWsPDoRJk
-         kOffv2woRQMmZiAYAOc1r8onC5WMHrISj5vvX7vl3qcKvveRmaCK8xJXwEfdQGfZqYe2
-         Y8uOx4H4mcHjC9p8E9xfuYalOuWQfozV5jSlQuOqq4nPZdhmeWvG5uyUe6aGDQCG+FZE
-         eulw==
-X-Gm-Message-State: ACgBeo2X/fgv0Vc4pSXogKesHAvky/jZOpZtGeKatHVCTKAsdbOGUqfQ
-        zlIm1evRHd3OrCice08j+XIriAHWagY=
-X-Google-Smtp-Source: AA6agR6Oiwb8hLjkIeXhquUAGFHXE09FyiPgzxcxeXa06gNEgirQcwGSmkYu4JCZ4Wn9UfUllTS+eg==
-X-Received: by 2002:a65:6e49:0:b0:429:cae6:aac6 with SMTP id be9-20020a656e49000000b00429cae6aac6mr1889023pgb.268.1660721109715;
-        Wed, 17 Aug 2022 00:25:09 -0700 (PDT)
-Received: from [127.0.0.1] ([103.230.104.51])
-        by smtp.gmail.com with ESMTPSA id v4-20020a170902b7c400b0016dbdf7b97bsm638846plz.266.2022.08.17.00.25.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 00:25:09 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 13:25:02 +0600
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-CC:     Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>
-Subject: Re: [PATCH v2 linux-next] Remove Unnecessary TODO
-User-Agent: K-9 Mail for Android
-In-Reply-To: <a92f5041-9630-66ee-1757-4b58bdaabe90@linux.intel.com>
-References: <20220816175954.5259-1-khalid.masum.92@gmail.com> <a92f5041-9630-66ee-1757-4b58bdaabe90@linux.intel.com>
-Message-ID: <7B894BF2-45AD-44A1-91CA-5380B5DE4657@gmail.com>
+        Wed, 17 Aug 2022 03:25:40 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFED26BCD5;
+        Wed, 17 Aug 2022 00:25:39 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id D70873200A02;
+        Wed, 17 Aug 2022 03:25:37 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 17 Aug 2022 03:25:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1660721137; x=1660807537; bh=vJVx4WtDzf
+        lqfh/jerRWkx6erDZLmKZWLsZEwHAhgJU=; b=NScLqu1b8Cggis4Ov9NKv0oP17
+        Xb9SUCUeBrk/YEp96L1H31qDaZyxGJDMRO83Q/25VSUbAxNHIJaSBh6F/Zp2fpuH
+        eQfW8asOsp4kOriA0PDRm0Rewo1WbtuARkN5hFSeBxCyK1NKwmLC+puKvEWnIhJ+
+        4ZYH+URo49ynS6bVRyhh2H4JtLXVGi+xBRPjj3m7B+onz+nRhZbCoiQ/jAmOUEXO
+        vAKS8OXpnYYNeK07J49sypSjzmvgZsFOwXQJAqyebAQ6SZhIWQ+L9szEuPU/cDKe
+        5ASC3NtDJRfUDPhjIveg33tuksFpZh/0kSFJ7L5+xUCPysz8RN4vChikettA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660721137; x=1660807537; bh=vJVx4WtDzflqfh/jerRWkx6erDZL
+        mKZWLsZEwHAhgJU=; b=NeLWExoCwPDyyfCfpqM8YJ2Xy5kdzWOMgNvZoedkWDBL
+        ++yxxuj75HbAulWsmrcNuZ9NyYl1t6dYOJWv8zN2JQ+lKpgx9l33VeJSfJdB120K
+        xTQxWtNbvrKnfjIpZkIPsHJUFUoABG2efznUztq7BwNFLQLvhkdaNQyoiZKdy+o/
+        jamsJAgEXKn4kQnvn9GbeSznz0nAxikWXsjoZ5xzu1+wqWpxsKmtyHep08dRikJE
+        j1xnZU2bNdWxiwOyFydoFUwCMjVchy6BZlUxeUMXvHU4ksWBkaQHU5chpWo03ACY
+        N8I9tUuicqvdtCgb3uud1gOl4k+gFVTM74W8lzp1Qw==
+X-ME-Sender: <xms:8Jf8Ynsleye5XXe5dMGrfk5SmMfru_MwT67UUen3NDCqM6R1VLYqFA>
+    <xme:8Jf8YoeTdfLd0WZHsVW-hjCDWt7N5keCjmI6RNFG0GxwfTH4hBiaVsICNmOySWUwi
+    57rIcU2wu5CRgdyyQs>
+X-ME-Received: <xmr:8Jf8Yqxyb-g23OdIBSoVfEw0c73wEzI_3Z7pj_RD4I0xTq3Dsei_zLQO0g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehhedguddvudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepieeuvdeiffevteejhefhveejheevheelgfejtefhteejudeukeehtdek
+    uedufeffnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpfhhrvggvuggvshhkthhoph
+    drohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhm
+    pehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:8Jf8YmPH7TsgSYPiqR4OFH9RVZiFiv0Lw0OYRhBWtjr9penEHKJyxA>
+    <xmx:8Jf8Yn-b6ApkRaVkh0bLbxVYBXDvCsvQ-tp5lJuQjxQmVOxszbeW5g>
+    <xmx:8Jf8YmXruJwrIrmxAe1BNuVLSWHW5htxgNGcEj5wDR0Hy0pGrkc5eQ>
+    <xmx:8Zf8YrW6gYxVlVHBXKTI5fLXZRBFbQvwFTLe7Q9_ZBsjCXjGdfLRHg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 17 Aug 2022 03:25:35 -0400 (EDT)
+Date:   Wed, 17 Aug 2022 09:25:33 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+Subject: Re: [PATCH 5.18 0000/1094] 5.18.18-rc2 review
+Message-ID: <20220817072533.g52swuix3rdr33fk@houat>
+References: <20220816124604.978842485@linuxfoundation.org>
+ <CA+G9fYuhJw5vW7A8Wsqe_+fNK4pWCGdQ+0zfkNyd3y7_X0=CBA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="elypw663ujamzoz6"
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYuhJw5vW7A8Wsqe_+fNK4pWCGdQ+0zfkNyd3y7_X0=CBA@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,26 +93,69 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--elypw663ujamzoz6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On August 17, 2022 12:31:20 PM GMT+06:00, Pierre-Louis Bossart <pierre-lou=
-is=2Ebossart@linux=2Eintel=2Ecom> wrote:
->
->
->On 8/16/22 19:59, Khalid Masum wrote:
->> The capabilities enabled for multi-link are required as part of the
->> programming sequences, even when a stream uses a single link we still
->> use the syncArm/syncGo sequences=2E Therefore the TODO is no longer
->> necessary=2E
->>=20
->> Suggested-by: Pierre-Louis Bossart <pierre-louis=2Ebossart@linux=2Einte=
-l=2Ecom>
->> Signed-off-by: Khalid Masum <khalid=2Emasum=2E92@gmail=2Ecom>
->
->the title of your patch should be something like
->
->soundwire: intel: remove unnecessary TODO
->
+On Wed, Aug 17, 2022 at 12:45:14AM +0530, Naresh Kamboju wrote:
+> On Tue, 16 Aug 2022 at 18:29, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is the start of the stable review cycle for the 5.18.18 release.
+> > There are 1094 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Thu, 18 Aug 2022 12:43:14 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patc=
+h-5.18.18-rc2.gz
+> > or in the git tree and branch at:
+> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stab=
+le-rc.git linux-5.18.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
+>=20
+> Results from Linaro's test farm.
+> No regressions on arm64, arm, x86_64, and i386.
+>=20
+> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>=20
+> NOTE:
+> Following warning found on both 5.19 and 5.18 on Rpi4 device
+> Which was already reported by on mainline kernel on June 30.
+>=20
+> WARNING: CPU: 0 PID: 246 at drivers/gpu/drm/vc4/vc4_hdmi_regs.h:487
+> vc5_hdmi_reset+0x1f0/0x240 [vc4]
+>=20
+>  - https://lore.kernel.org/all/CA+G9fYve16J7=3D4f+WAVrTUspxkKA+3BonHzGyk8=
+VP=3DU+D9irOQ@mail.gmail.com/
+>  - https://lists.freedesktop.org/archives/dri-devel/2022-June/362244.html
 
-You are right=2E I shall send the patch with the title fixed soon=2E
+It's fixed in drm-misc-next but missed the merge window cut,
 
--- Khalid Masum=20
+https://lore.kernel.org/all/20220629123510.1915022-38-maxime@cerno.tech/
+https://lore.kernel.org/all/20220629123510.1915022-39-maxime@cerno.tech/
+
+If it fixes it for you as well, I'll apply them to drm-misc-fixes
+
+Maxime
+
+--elypw663ujamzoz6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYvyX7QAKCRDj7w1vZxhR
+xb44AP908OqrM0yDmjPv8loLAW4oRdkcTwh0TOI0gdoFucrEZgEAm6KizJY0OcP5
+BFaL9EP8cqeaIEcsU6owXK/pGtri3AA=
+=GOuM
+-----END PGP SIGNATURE-----
+
+--elypw663ujamzoz6--

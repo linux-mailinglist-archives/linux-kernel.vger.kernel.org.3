@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA0C597517
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 957EC597510
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 19:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241200AbiHQR2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 13:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47086 "EHLO
+        id S241206AbiHQR2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 13:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241051AbiHQR15 (ORCPT
+        with ESMTP id S241077AbiHQR17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 13:27:57 -0400
+        Wed, 17 Aug 2022 13:27:59 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D1A8A1D30
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:27:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0F6AA1D3D
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 10:27:57 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5DCC8113E;
-        Wed, 17 Aug 2022 10:27:57 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 44FFF1595;
+        Wed, 17 Aug 2022 10:27:58 -0700 (PDT)
 Received: from e120937-lin.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C2EC03F66F;
-        Wed, 17 Aug 2022 10:27:55 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AA02D3F66F;
+        Wed, 17 Aug 2022 10:27:56 -0700 (PDT)
 From:   Cristian Marussi <cristian.marussi@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Cc:     sudeep.holla@arm.com, cristian.marussi@arm.com
-Subject: [PATCH 4/6] firmware: arm_scmi: Harden accesses to Reset domains
-Date:   Wed, 17 Aug 2022 18:27:29 +0100
-Message-Id: <20220817172731.1185305-5-cristian.marussi@arm.com>
+Subject: [PATCH 5/6] firmware: arm_scmi: Fix asynchronous reset requests
+Date:   Wed, 17 Aug 2022 18:27:30 +0100
+Message-Id: <20220817172731.1185305-6-cristian.marussi@arm.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220817172731.1185305-1-cristian.marussi@arm.com>
 References: <20220817172731.1185305-1-cristian.marussi@arm.com>
@@ -41,37 +41,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Accessing Reset domains descriptors by index upon SCMI drivers requests
-through the SCMI reset operations interface can potentially lead to
-out-of-bound violations if the SCMI driver misbehave.
+SCMI Reset protocol specification allows for asynchronous reset request
+only when an Autonomous Reset action is specified: reset requests based on
+explicit assert/deassert of signals should not be served asynchronously.
 
-Add an internal consistency check in front of such domains descriptors
-accesses.
+Current implementation will instead issue an asynchronous request in any
+case, as long as the reset domain had advertised to support asynchronous
+resets.
 
-Fixes: 95a15d80aa0de ("firmware: arm_scmi: Add RESET protocol in SCMI v2.0")
+Avoid requesting asynchronous resets when the reset action is not of the
+Autonomous type, even if the target reset-domain does, in general, support
+asynchronous requests.
+
+Fixes: 95a15d80aa0d ("firmware: arm_scmi: Add RESET protocol in SCMI v2.0")
 Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 ---
- drivers/firmware/arm_scmi/reset.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/firmware/arm_scmi/reset.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/firmware/arm_scmi/reset.c b/drivers/firmware/arm_scmi/reset.c
-index 673f3eb498f4..b0494165b1cb 100644
+index b0494165b1cb..e9afa8cab730 100644
 --- a/drivers/firmware/arm_scmi/reset.c
 +++ b/drivers/firmware/arm_scmi/reset.c
-@@ -166,8 +166,12 @@ static int scmi_domain_reset(const struct scmi_protocol_handle *ph, u32 domain,
- 	struct scmi_xfer *t;
- 	struct scmi_msg_reset_domain_reset *dom;
- 	struct scmi_reset_info *pi = ph->get_priv(ph);
--	struct reset_dom_info *rdom = pi->dom_info + domain;
-+	struct reset_dom_info *rdom;
+@@ -172,7 +172,7 @@ static int scmi_domain_reset(const struct scmi_protocol_handle *ph, u32 domain,
+ 		return -EINVAL;
  
-+	if (domain >= pi->num_domains)
-+		return -EINVAL;
-+
-+	rdom = pi->dom_info + domain;
- 	if (rdom->async_reset)
+ 	rdom = pi->dom_info + domain;
+-	if (rdom->async_reset)
++	if (rdom->async_reset && flags & AUTONOMOUS_RESET)
  		flags |= ASYNCHRONOUS_RESET;
  
+ 	ret = ph->xops->xfer_get_init(ph, RESET, sizeof(*dom), 0, &t);
+@@ -184,7 +184,7 @@ static int scmi_domain_reset(const struct scmi_protocol_handle *ph, u32 domain,
+ 	dom->flags = cpu_to_le32(flags);
+ 	dom->reset_state = cpu_to_le32(state);
+ 
+-	if (rdom->async_reset)
++	if (flags & ASYNCHRONOUS_RESET)
+ 		ret = ph->xops->do_xfer_with_response(ph, t);
+ 	else
+ 		ret = ph->xops->do_xfer(ph, t);
 -- 
 2.32.0
 

@@ -2,77 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F359E596683
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 03:05:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA25A59667E
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 03:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238012AbiHQBFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 21:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
+        id S237724AbiHQBC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 21:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237509AbiHQBE6 (ORCPT
+        with ESMTP id S229453AbiHQBC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 21:04:58 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1DD7C1AE
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 18:04:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660698298; x=1692234298;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=mfUla04m6g9OuMl10lBVITDIZq8OhojlyKzQdm/DDNg=;
-  b=HgxK5ToIH3gbqf2GFZSTc2V2BwvZV9KFooBlyj1UL9DUwPKuivW9kgLP
-   8777qFF7WL88HIl/rZchxyNxnurPIhgY2kRP7sSnzEdvKggsVAK3LjRbC
-   ns5mGLDUXInkCmon9IXWAGzegiNOR6FkTZwSnx7HBjuDcVy3JQ+euvg/y
-   zw0MOgz7wmCblW/VKkVLu6NQtJY5GTjl7fQ4fxLfrjBiGdD7YwmYtOsc7
-   lbVpkRHnxbmRUEPx0FTefbCyVO6xzfqIoXLH2jJeiuCsZA0M1AkdrQoZF
-   mnEgWN/+tesclCmu/HeVamQ9H0Ix69tg53As2L9RQ+K6ChHRI/DLlm/OF
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="378660378"
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="378660378"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 18:02:18 -0700
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="696581283"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 18:02:14 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Bharata B Rao <bharata@amd.com>
-Cc:     huang ying <huang.ying.caritas@gmail.com>,
-        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        <linux-mm@kvack.org>, <akpm@linux-foundation.org>,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        "Dan Williams" <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, <jvgediya.oss@gmail.com>
-Subject: Re: [PATCH v14 04/10] mm/demotion/dax/kmem: Set node's abstract
- distance to MEMTIER_DEFAULT_DAX_ADISTANCE
-In-Reply-To: <57a091a5-a78f-7977-3413-11260501f8c0@amd.com> (Bharata B. Rao's
-        message of "Tue, 16 Aug 2022 20:15:55 +0530")
-References: <20220812055710.357820-1-aneesh.kumar@linux.ibm.com>
-        <20220812055710.357820-5-aneesh.kumar@linux.ibm.com>
-        <87wnbacjsh.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <cd1c13ee-6fc3-bde8-96f9-8c3c93441275@linux.ibm.com>
-        <CAC=cRTMZZ9bqyC7pnxD1zUWqfBiQ9U7im+8EYa_8GVK8iA7HXQ@mail.gmail.com>
-        <e5fbaf30-1f97-63de-a9a5-2ae5359120ff@amd.com>
-        <CAC=cRTO=+zdKGHRMLpzg2PfJ2rPSQL+xoqA5sAkafaaTYHPr+w@mail.gmail.com>
-        <57a091a5-a78f-7977-3413-11260501f8c0@amd.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Wed, 17 Aug 2022 09:02:04 +0800
-Message-ID: <877d37d6nn.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Tue, 16 Aug 2022 21:02:56 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D4F90805
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 18:02:54 -0700 (PDT)
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com [209.85.210.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A621140AFC
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:02:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1660698170;
+        bh=xGFP+iN6DfSG465LWXa4neySYOfhkSAdDwVqeXEIiOY=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=JXK2CPifH8Y5Xr992lM+IJCcIkUhqe57Ktl2IX7BA1JpAaNpRuLrcRZX6c5pyugiC
+         lR0Mffv3pGjYw/+k33tObXWWJPW8ImjID4ki1a8tjRQLEhki1w4OJ4Iw9yIVt8eVtA
+         bBc9o1L1WGYajztQrFJ6FINw1S+A+Y6N6/0Oy6fgAnHMzdJXOQ8WpzfxuRpVwFrzzO
+         1xxKTSm4qBggiXs0jjBnB7E9ArxLqZHQHTEgLUloG/iNR0/YKOxhXl1V2sIKo1LnRE
+         38mM0AkbJzf7/nfaXPHGMZgFvOSySRFh5rs6GTZYJXndG+lQFXl8C1PPTe/e/mEwAS
+         LvaLlkjXdF1pA==
+Received: by mail-ot1-f71.google.com with SMTP id h3-20020a9d6f83000000b00638d0574905so895218otq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 18:02:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=xGFP+iN6DfSG465LWXa4neySYOfhkSAdDwVqeXEIiOY=;
+        b=IVrgFW1C+dl8uRTwhME+1dPWMbtv8PZOiMHC7sBmFRATVK5rP+QI9Ph7i7UTyNuAG/
+         qt+BtZ/AnpEkwKXw0xCS0HW2cUBv2+hjPgLxaYxwGRpULrS8dVQCkbfk5fQMfP6TiX+E
+         ItaYodc/575t6rOefi5pPQU15E7SJGCmls0Nq/ZIqPBYJuFzNc5xkbMEWUkLTaisbZx0
+         6ey7iUvfxspQkHEMkAxKcmw4ULjY/4UIpdwcQ60etTOnlyktCWqV8Hdg2rCBSqyR0inE
+         WGMdTGsUrL77+Q7VCnZF/ZnwQsmFfiapRg318SPcHWVEgdZjJ1U5v1Z73V78Sn7tY70u
+         1LrQ==
+X-Gm-Message-State: ACgBeo0hJJx0BdiC68/mJIl5sTdKOhToQICkLMIeEnloRjzmQ50k1YYl
+        sFMaRcXIfWIwNoIaVukGcIb3IM07ijtB48rEoHj18fXKG/2NrqnCjLTaEZ1Kpw7/Py8nklXUAjl
+        4496TaD9b90mlXnKfBaFT5SdMclzcmkmDgSfCl2b1wl71ICdBR+Z7TQFxpw==
+X-Received: by 2002:a05:6830:6111:b0:61c:ffc8:7b31 with SMTP id ca17-20020a056830611100b0061cffc87b31mr8612076otb.161.1660698169055;
+        Tue, 16 Aug 2022 18:02:49 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR73z6anNFKLhpge00ukokz1TzGq6FFULc/+V5V189dILAoBmVpVY84xqlTJtPzP7HPsyjluhfUiB4Zd6VwfWJw=
+X-Received: by 2002:a05:6830:6111:b0:61c:ffc8:7b31 with SMTP id
+ ca17-20020a056830611100b0061cffc87b31mr8612065otb.161.1660698168681; Tue, 16
+ Aug 2022 18:02:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
+References: <20220816025217.618181-1-kai.heng.feng@canonical.com>
+ <87leror4sl.fsf@intel.com> <CAAd53p76ut7QRFdM4NjaRua=Hc4bu9_=7+Q_t8ExJysEAhJf=Q@mail.gmail.com>
+ <b8ebc447ea464371102df765882fc5010cc0c784.camel@redhat.com>
+In-Reply-To: <b8ebc447ea464371102df765882fc5010cc0c784.camel@redhat.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Wed, 17 Aug 2022 09:02:36 +0800
+Message-ID: <CAAd53p4GoU6_ExWB=0b3_X7STd2Fnq764QpmzgOEwn3jdCUBxQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/i915: Switch TGL-H DP-IN to dGFX when it's supported
+To:     Lyude Paul <lyude@redhat.com>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
+        tvrtko.ursulin@linux.intel.com, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,50 +85,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bharata B Rao <bharata@amd.com> writes:
-
-> On 8/16/2022 1:56 PM, huang ying wrote:
-> <snip>
->>>>
->>>> If my understanding were correct, you are suggesting to use a kind of
->>>> logarithmic mapping from latency to abstract distance?  That is,
->>>>
->>>>   abstract_distance = log2(latency)
->>>>
->>>> While I am suggesting to use a kind of linear mapping from latency to
->>>> abstract distance.  That is,
->>>>
->>>>   abstract_distance = C * latency
->>>>
->>>> I think that linear mapping is easy to understand.
->>>>
->>>> Are there some good reasons to use logarithmic mapping?
->>>
->>> Also, what is the recommendation for using bandwidth measure which
->>> may be available from HMAT for CXL memory? How is bandwidth going
->>> to influence the abstract distance?
->> 
->> This is a good question.
->> 
->> Per my understanding, latency stands for idle latency by default.  But
->> in practice, the latency under some reasonable memory accessing
->> throughput is the "real" latency.  So the memory with lower bandwidth
->> should have a larger abstract distance than the memory with higher
->> bandwidth even if the idle latency is the same.  But I don't have a
->> perfect formula to combine idle latency and bandwidth into abstract
->> distance.  One possibility is to increase abstract distance if the
->> bandwidth of the memory is much lower than that of DRAM.
+On Wed, Aug 17, 2022 at 2:24 AM Lyude Paul <lyude@redhat.com> wrote:
 >
-> So if the firmware/platforms differ in their definition of latency and
-> bandwidth (like idle vs real value etc) in the firmware tables
-> (like HMAT), then the low level drivers (like ACPI) would have to be
-> aware of these and handle the conversion from latency and bw to
-> abstract distance correctly?
+> On Tue, 2022-08-16 at 19:29 +0800, Kai-Heng Feng wrote:
+> > On Tue, Aug 16, 2022 at 4:06 PM Jani Nikula <jani.nikula@linux.intel.com> wrote:
+> > >
+> > > On Tue, 16 Aug 2022, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
+> > > > On mobile workstations like HP ZBook Fury G8, iGFX's DP-IN can switch to
+> > > > dGFX so external monitors are routed to dGFX, and more monitors can be
+> > > > supported as result.
+> > > >
+> > > > To switch the DP-IN to dGFX, the driver needs to invoke _DSM function 20
+> > > > on intel_dsm_guid2. This method is described in Intel document 632107.
+>
+> Is this documentation released anywhere? We've been wondering about these
+> interfaces for quite a long time, and it would be good to know if there's docs
+> for this we haven't really been seeing.
+>
+> > >
+> > > Is this the policy decision that we want to unconditionally make,
+> > > though?
+> >
+> > I believes so, so more external monitors can be supported at the same time.
+> >
+> > Kai-Heng
+>
+> Is this for systems with dual Intel GPUs? I ask because if this affects
+> Intel/Nvidia hybrid systems then this is a huge no from me. Nouveau is able to
+> support these systems, but at a limited capacity. This would imply that we are
+> making external displays work for users of the nvidia proprietary driver, at
+> the expense making external display support for mainline kernel users
+> substantially worse for people who are using the mainline kernel. Which isn't
+> a choice we should be making, because nvidia's OOT driver is not a mainline
+> kernel driver.
 
-One possible way to make this a little easier is that we plan to add a
-knob (as user space interface via sysfs) for each memory type, so that
-the default abstract distance can be offset.  If so, at least we have
-way to deal with difference in firmware/platforms.
+Yes it's for Intel/NVIDIA hybrid systems.
 
-Best Regards,
-Huang, Ying
+The problem is that hardware vendor design the systems to use NVIDIA
+for external displays, so using external displays on Intel are never
+tested by the vendors.
+I don't think that's any good either.
+
+Kai-Heng
+
+>
+> If this is just for Intel/Intel systems though that's probably fine, and it
+> might also be fine for AMD systems.
+>
+> >
+> > >
+> > > BR,
+> > > Jani.
+> > >
+> > > >
+> > > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > > > ---
+> > > >  drivers/gpu/drm/i915/display/intel_acpi.c | 18 +++++++++++++++++-
+> > > >  1 file changed, 17 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/gpu/drm/i915/display/intel_acpi.c b/drivers/gpu/drm/i915/display/intel_acpi.c
+> > > > index e78430001f077..3bd5930e2769b 100644
+> > > > --- a/drivers/gpu/drm/i915/display/intel_acpi.c
+> > > > +++ b/drivers/gpu/drm/i915/display/intel_acpi.c
+> > > > @@ -20,6 +20,7 @@ static const guid_t intel_dsm_guid =
+> > > >                 0xa8, 0x54, 0x0f, 0x13, 0x17, 0xb0, 0x1c, 0x2c);
+> > > >
+> > > >  #define INTEL_DSM_FN_GET_BIOS_DATA_FUNCS_SUPPORTED 0 /* No args */
+> > > > +#define INTEL_DSM_FN_DP_IN_SWITCH_TO_DGFX 20 /* No args */
+> > > >
+> > > >  static const guid_t intel_dsm_guid2 =
+> > > >       GUID_INIT(0x3e5b41c6, 0xeb1d, 0x4260,
+> > > > @@ -187,6 +188,7 @@ void intel_dsm_get_bios_data_funcs_supported(struct drm_i915_private *i915)
+> > > >       struct pci_dev *pdev = to_pci_dev(i915->drm.dev);
+> > > >       acpi_handle dhandle;
+> > > >       union acpi_object *obj;
+> > > > +     int supported = 0;
+> > > >
+> > > >       dhandle = ACPI_HANDLE(&pdev->dev);
+> > > >       if (!dhandle)
+> > > > @@ -194,8 +196,22 @@ void intel_dsm_get_bios_data_funcs_supported(struct drm_i915_private *i915)
+> > > >
+> > > >       obj = acpi_evaluate_dsm(dhandle, &intel_dsm_guid2, INTEL_DSM_REVISION_ID,
+> > > >                               INTEL_DSM_FN_GET_BIOS_DATA_FUNCS_SUPPORTED, NULL);
+> > > > -     if (obj)
+> > > > +     if (obj) {
+> > > > +             if (obj->type == ACPI_TYPE_INTEGER)
+> > > > +                     supported = obj->integer.value;
+> > > > +
+> > > >               ACPI_FREE(obj);
+> > > > +     }
+> > > > +
+> > > > +     /* Tiger Lake H DP-IN Boot Time Switching from iGfx to dGfx */
+> > > > +     if (supported & BIT(20)) {
+> > > > +             obj = acpi_evaluate_dsm(dhandle, &intel_dsm_guid2,
+> > > > +                                     INTEL_DSM_REVISION_ID,
+> > > > +                                     INTEL_DSM_FN_DP_IN_SWITCH_TO_DGFX,
+> > > > +                                     NULL);
+> > > > +             if (obj)
+> > > > +                     ACPI_FREE(obj);
+> > > > +     }
+> > > >  }
+> > > >
+> > > >  /*
+> > >
+> > > --
+> > > Jani Nikula, Intel Open Source Graphics Center
+> >
+>
+> --
+> Cheers,
+>  Lyude Paul (she/her)
+>  Software Engineer at Red Hat
+>

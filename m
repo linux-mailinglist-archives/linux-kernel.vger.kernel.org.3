@@ -2,83 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0255597892
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E1D59788C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:07:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242212AbiHQVCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 17:02:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        id S242230AbiHQVCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 17:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242159AbiHQVCO (ORCPT
+        with ESMTP id S242227AbiHQVCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 17:02:14 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4B6AB429;
-        Wed, 17 Aug 2022 14:02:13 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id h78so6365641iof.13;
-        Wed, 17 Aug 2022 14:02:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=p3kmNNco7c5N9PybUED/NbqPmlZIv5vlXMEqlV8OmdQ=;
-        b=C7kohQheIdzIJnlgySCXNEt6bVBDKy83LAC7rreH4sxDFVRECxS6/TsYYeNbWZtesr
-         mwXTw/MpURGTNBNibQcNIeJyuD68cTxvE7qcHjxbyLObfmmaeItob6P9/9/FIOVoJQFN
-         P4Xmsb/pw8PP7j025oQycBMxP8wqrLAGuBTi7HLJEDFz+RW2Y0c+PGZTH8Wn/t23R+BR
-         /PkxN4dHikGFN3Qo5Z5empcUB+7lzxnZuef9EG+LrMZlKRbeXP7RfZohANNfeGc3AUmX
-         0uGRcACxIsMT+N01dCQeUkL8driuuyuAngkQpo5sLK8AyzcDQr4IiWAZLqy1k7JCsszg
-         E4sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=p3kmNNco7c5N9PybUED/NbqPmlZIv5vlXMEqlV8OmdQ=;
-        b=ruX+iSCy+6+kr87qWSx4iKA06PnHs6NJrxGwmx0V5vQ5jdK3z1Ew+ETcjbVUrk3fBP
-         hPuStHYUgoqW3k1K5I7ZH8ct2oesBzh9CB3MQrIDiZ9OiG0xc7zo/qn6tFRu7jrN7bg7
-         0FJksgHUkSRadjnlNPoI0Fi8zpaxTdtAU0g5gOqK3nhaRw6wHqRnY49EZfQ8+E+28l3V
-         nipbomsODbEpLSG/39ges5IWtJDVVhhmTnihqAiz0absW6rohnzlGtDpa3uBqwmwohL3
-         HmhLBOGhFFpu+ekCaFTHk4zgkprwDhb+94/NUzXnBOWHtrZowHwYwFPxZBkJu7w3Dd3U
-         Rt8Q==
-X-Gm-Message-State: ACgBeo3fiZQfTopP++1OZdo1EbO/UIFaaxccOpME7JPA0AC1oG8QkXlb
-        WYoBHK8IEo3bT/tdMaWoxAYARk7PGXcdYxCilt8=
-X-Google-Smtp-Source: AA6agR65LjBBgIfnMKzM25ANX/JHE6PHDf9A7mmgpChiz+NhwUHhbZcTvCT1HrVeT3DfvlnuKEXI17eEpsbYn5AqYJA=
-X-Received: by 2002:a05:6638:4117:b0:346:b5e1:383a with SMTP id
- ay23-20020a056638411700b00346b5e1383amr33201jab.264.1660770132624; Wed, 17
- Aug 2022 14:02:12 -0700 (PDT)
+        Wed, 17 Aug 2022 17:02:21 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA53AB427;
+        Wed, 17 Aug 2022 14:02:19 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b98b0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98b0:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 751AA1EC050F;
+        Wed, 17 Aug 2022 23:02:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1660770133;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=uZECItNhJdPNjavGxubtrXL0+yXBikF6DOM/KqS2u80=;
+        b=b7hT+f/JsqrlDXJwGOmfuimkYKB0/oh33XvT0jx0BM2Bc4a4tijQHcHePAxE0BR9Fy9hu+
+        8Fy2/lMRzSkD3Pm0ODl6fqBgv8Ov0DWOXe2bQ/wNfgDKKHKkgY8Z7dpY0ES764epXpTN62
+        dh5wMxHfa75JuW2trzFMuEyQ3QGfiG4=
+Date:   Wed, 17 Aug 2022 23:02:13 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, linux-edac@vger.kernel.org,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Tony Luck <tony.luck@intel.com>
+Subject: Re: [PATCH v2 10/13] EDAC/altera: Skip the panic notifier if kdump
+ is loaded
+Message-ID: <Yv1XVRmTXHLhOkER@zn.tnic>
+References: <20220719195325.402745-1-gpiccoli@igalia.com>
+ <20220719195325.402745-11-gpiccoli@igalia.com>
+ <Yv0mCY04heUXsGiC@zn.tnic>
+ <46137c67-25b4-6657-33b7-cffdc7afc0d7@igalia.com>
+ <Yv1C0Y25u2IB7PCs@zn.tnic>
+ <7f016d7f-a546-a45d-c65c-bc35269b4faa@igalia.com>
 MIME-Version: 1.0
-References: <20220805154231.31257-27-ojeda@kernel.org> <Yu5pUp5mfngAU7da@yadro.com>
-In-Reply-To: <Yu5pUp5mfngAU7da@yadro.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 17 Aug 2022 23:02:01 +0200
-Message-ID: <CANiq72n029==Oc5wbG9pHGrRawRNzYxqZMBK6_S5gMjny5SoQg@mail.gmail.com>
-Subject: Re: [PATCH v9 26/27] samples: add first Rust examples
-To:     Konstantin Shelekhin <k.shelekhin@yadro.com>
-Cc:     ojeda@kernel.org, alex.gaynor@gmail.com, bjorn3_gh@protonmail.com,
-        boqun.feng@gmail.com, gary@garyguo.net, gregkh@linuxfoundation.org,
-        jarkko@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, me@kloenk.de, milan@mdaverde.com,
-        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
-        torvalds@linux-foundation.org, wedsonaf@google.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7f016d7f-a546-a45d-c65c-bc35269b4faa@igalia.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 6, 2022 at 3:15 PM Konstantin Shelekhin
-<k.shelekhin@yadro.com> wrote:
->
-> I wonder if it would make more sense to implement exit() in
-> kernel::Module, just for the sake of uniformity.
+On Wed, Aug 17, 2022 at 05:28:34PM -0300, Guilherme G. Piccoli wrote:
+> My understanding is the same as yours, i.e., this is not possible to
+> collect from vmcore, it requires register reading. But again: if you
+> kdump your machine today, you won't collect this information, patch
+> changed nothing in that regard.
 
-Do you mean uniformity with respect to the C side?
+Why won't you be able to collect it? You can certainly access dmesg in
+the vmcore and see those errors logged there.
 
-Thanks for taking a look!
+> The one thing it changes is that you'd skip the altera register dump if
+> kdump is set AND you managed to also set "crash_kexec_post_notifiers".
 
-Cheers,
-Miguel
+What your patch changes is, it prevents s10_edac_dberr_handler() from
+logging potentially important fatal hw errors when kdump is loaded.
+
+If Dinh is fine with that, I'll take the patch. But it looks like a bad
+idea to me.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

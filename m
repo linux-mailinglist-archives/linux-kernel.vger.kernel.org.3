@@ -2,177 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E627597A60
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 01:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 794BE597A5E
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 01:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242242AbiHQXwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 19:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
+        id S239302AbiHQXxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 19:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiHQXwe (ORCPT
+        with ESMTP id S236196AbiHQXxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 19:52:34 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0B490C41
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 16:52:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=4HQ4+ZOQvyiLzvnxSRlvKOtZIC2PHqV+nyF4RISozSQ=; b=oG4OY8SE4JEDrmtR/hSyS2pGkg
-        jpMdk6PpPEwoVjVgseZO7JNPPY75C7lo1i+1vySLAHJH0kmcvOMplrsfVLm/302TmCEC2183GnvTl
-        MO/pevEnK4RgvWYSEi/la4PZzJ0C1Ko3dsudbZcXu9xy9/XhqM9Iq3rP0/D3itaK0Rcb7aboNKtIM
-        Om74kw9FUT1vF6H34J6oxuStZKjou0TLmKwFFMZaen7FC0cngInNH7Wr5C7FBXcUnmyKBpYKmoaDv
-        08wNnVYOQrEdg4H6EMyiNbqQH739lexP+qrsZEfIC3fMWT3HNm74F8YeSyAzHXmeHcS6UFP4QGR7E
-        J+M94iKg==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oOSpk-008lXK-5r; Wed, 17 Aug 2022 23:52:24 +0000
-Message-ID: <7eacd1d9-42ba-fd61-7f37-0635cebcb33d@infradead.org>
-Date:   Wed, 17 Aug 2022 16:52:23 -0700
+        Wed, 17 Aug 2022 19:53:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0A231370;
+        Wed, 17 Aug 2022 16:53:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CEFB60BDB;
+        Wed, 17 Aug 2022 23:53:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C79D1C433C1;
+        Wed, 17 Aug 2022 23:53:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660780411;
+        bh=VoaM83Mj08hil6R3jdKE63+zf7uEg4CP7GNqpWatKOE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z3zfu99KoDYraZpsGrhDqkZGjIKFlYh0N89crknDTujmNHM8MQ4QjHWCoIb+4t3MQ
+         N3LfRoGyB3FoZpsgIjCxFgusiwozPp/JLg4bZCI7BMToTQUFzOY3FieNwW0QxNhC5Z
+         7Rhq58gHWTClbbofjDUbKiI+zt+a85rZ9I8caOqBhKPwNk9neLY01EWsv0kOkIfVps
+         Lqh3EddcQwR/xu96YvtRDzvL+UjyYvVuUus9IpWCfzXdun3BvjSlMe2pukMDv259Rd
+         iLqDKUqnYSVUQ/pYna1vVdL4VVFtyYa+JgwOvB4M4MDgnJjZPjpjoa7RT9SQVlT0D3
+         Eop+9wNIBJzXQ==
+Date:   Wed, 17 Aug 2022 16:53:31 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Brian Foster <bfoster@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        linux-mm@kvack.org
+Subject: Re: Multi-page folio issues in 5.19-rc4 (was [PATCH v3 25/25] xfs:
+ Support large folios)
+Message-ID: <Yv1/e87U/LDrfSVg@magnolia>
+References: <Yrm6YM2uS+qOoPcn@casper.infradead.org>
+ <YrosM1+yvMYliw2l@magnolia>
+ <20220628073120.GI227878@dread.disaster.area>
+ <YrrlrMK/7pyZwZj2@casper.infradead.org>
+ <Yrrmq4hmJPkf5V7s@casper.infradead.org>
+ <Yrr/oBlf1Eig8uKS@casper.infradead.org>
+ <20220628221757.GJ227878@dread.disaster.area>
+ <YruNE72sW4Aizq8U@magnolia>
+ <YrxMOgIvKVe6u/uR@bfoster>
+ <20220817093627.GZ3600936@dread.disaster.area>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] init/Kconfig: fix CC_HAS_ASM_GOTO_TIED_OUTPUT test with
- dash
-Content-Language: en-US
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        alexandre.belloni@bootlin.com,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org
-References: <20220804190320.262510-1-alexandre.belloni@bootlin.com>
- <CAKwvOd=3N8_Rx1P8J7pVnjM6sEzJA233BnwmD1VyMRqgujq2_Q@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAKwvOd=3N8_Rx1P8J7pVnjM6sEzJA233BnwmD1VyMRqgujq2_Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220817093627.GZ3600936@dread.disaster.area>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/17/22 16:46, Nick Desaulniers wrote:
-> On Thu, Aug 4, 2022 at 12:03 PM <alexandre.belloni@bootlin.com> wrote:
->>
->> From: Alexandre Belloni <alexandre.belloni@bootlin.com>
->>
->> When using dash as /bin/sh, the CC_HAS_ASM_GOTO_TIED_OUTPUT test fails
->> with a syntax error which is not the one we are looking for:
+On Wed, Aug 17, 2022 at 07:36:27PM +1000, Dave Chinner wrote:
+> On Wed, Jun 29, 2022 at 08:57:30AM -0400, Brian Foster wrote:
+> > On Tue, Jun 28, 2022 at 04:21:55PM -0700, Darrick J. Wong wrote:
+> > > On Wed, Jun 29, 2022 at 08:17:57AM +1000, Dave Chinner wrote:
+> > > > On Tue, Jun 28, 2022 at 02:18:24PM +0100, Matthew Wilcox wrote:
+> > > > > On Tue, Jun 28, 2022 at 12:31:55PM +0100, Matthew Wilcox wrote:
+> > > > > > On Tue, Jun 28, 2022 at 12:27:40PM +0100, Matthew Wilcox wrote:
+> > > > > > > On Tue, Jun 28, 2022 at 05:31:20PM +1000, Dave Chinner wrote:
+> > > > > > > > So using this technique, I've discovered that there's a dirty page
+> > > > > > > > accounting leak that eventually results in fsx hanging in
+> > > > > > > > balance_dirty_pages().
+> > > > > > > 
+> > > > > > > Alas, I think this is only an accounting error, and not related to
+> > > > > > > the problem(s) that Darrick & Zorro are seeing.  I think what you're
+> > > > > > > seeing is dirty pages being dropped at truncation without the
+> > > > > > > appropriate accounting.  ie this should be the fix:
+> > > > > > 
+> > > > > > Argh, try one that actually compiles.
+> > > > > 
+> > > > > ... that one's going to underflow the accounting.  Maybe I shouldn't
+> > > > > be writing code at 6am?
+> > > > > 
+> > > > > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> > > > > index f7248002dad9..4eec6ee83e44 100644
+> > > > > --- a/mm/huge_memory.c
+> > > > > +++ b/mm/huge_memory.c
+> > > > > @@ -18,6 +18,7 @@
+> > > > >  #include <linux/shrinker.h>
+> > > > >  #include <linux/mm_inline.h>
+> > > > >  #include <linux/swapops.h>
+> > > > > +#include <linux/backing-dev.h>
+> > > > >  #include <linux/dax.h>
+> > > > >  #include <linux/khugepaged.h>
+> > > > >  #include <linux/freezer.h>
+> > > > > @@ -2439,11 +2440,15 @@ static void __split_huge_page(struct page *page, struct list_head *list,
+> > > > >  		__split_huge_page_tail(head, i, lruvec, list);
+> > > > >  		/* Some pages can be beyond EOF: drop them from page cache */
+> > > > >  		if (head[i].index >= end) {
+> > > > > -			ClearPageDirty(head + i);
+> > > > > -			__delete_from_page_cache(head + i, NULL);
+> > > > > +			struct folio *tail = page_folio(head + i);
+> > > > > +
+> > > > >  			if (shmem_mapping(head->mapping))
+> > > > >  				shmem_uncharge(head->mapping->host, 1);
+> > > > > -			put_page(head + i);
+> > > > > +			else if (folio_test_clear_dirty(tail))
+> > > > > +				folio_account_cleaned(tail,
+> > > > > +					inode_to_wb(folio->mapping->host));
+> > > > > +			__filemap_remove_folio(tail, NULL);
+> > > > > +			folio_put(tail);
+> > > > >  		} else if (!PageAnon(page)) {
+> > > > >  			__xa_store(&head->mapping->i_pages, head[i].index,
+> > > > >  					head + i, 0);
+> > > > > 
+> > > > 
+> > > > Yup, that fixes the leak.
+> > > > 
+> > > > Tested-by: Dave Chinner <dchinner@redhat.com>
+> > > 
+> > > Four hours of generic/522 running is long enough to conclude that this
+> > > is likely the fix for my problem and migrate long soak testing to my
+> > > main g/522 rig and:
+> > > 
+> > > Tested-by: Darrick J. Wong <djwong@kernel.org>
+> > > 
+> > 
+> > Just based on Willy's earlier comment.. what I would probably be a
+> > little careful/curious about here is whether the accounting fix leads to
+> > an indirect behavior change that does impact reproducibility of the
+> > corruption problem. For example, does artificially escalated dirty page
+> > tracking lead to increased reclaim/writeback activity than might
+> > otherwise occur, and thus contend with the fs workload?
 > 
-> Thanks for the patch, though I think I'd rather see `/bin/bash`
-> hardcoded. Bash is a non-optional requirement as of
-> commit da4288b95baa ("scripts/check-local-export: avoid 'wait $!' for
-> process substitution")
-> scripts/ is kind of a mess...
+> Yeah, I think you're right, Brian. There is an underlying problem
+> here, and the writeback/memory pressure bugs exposed it for everyone
+> to see.  IOWs, we do indeed have a pre-existing problem with partial
+> writes, iomap, unwritten extents, writeback and memory reclaim.
 > 
-
-Well, once upon a time, we took patches to remove bash-isms (convert to
-standard shell)...
-No longer, AFAICT.
-
->>
->> <stdin>: In function ‘foo’:
->> <stdin>:1:29: warning: missing terminating " character
->> <stdin>:1:29: error: missing terminating " character
->> <stdin>:2:5: error: expected ‘:’ before ‘+’ token
->> <stdin>:2:7: warning: missing terminating " character
->> <stdin>:2:7: error: missing terminating " character
->> <stdin>:2:5: error: expected declaration or statement at end of input
->>
->> Move all the CC_HAS_ASM_GOTO tests to scripts/gcc-goto.sh to solve the
->> escaping issues.
->>
->> Fixes: 1aa0e8b144b6 ("Kconfig: Add option for asm goto w/ tied outputs to workaround clang-13 bug")
->> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
->> ---
->>  init/Kconfig        |  6 +++---
->>  scripts/gcc-goto.sh | 31 +++++++++++++++++++++++++++++++
->>  2 files changed, 34 insertions(+), 3 deletions(-)
->>
->> diff --git a/init/Kconfig b/init/Kconfig
->> index c984afc489de..9903a11cfe7d 100644
->> --- a/init/Kconfig
->> +++ b/init/Kconfig
->> @@ -71,16 +71,16 @@ config CC_CAN_LINK_STATIC
->>         default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag) -static)
->>
->>  config CC_HAS_ASM_GOTO
->> -       def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
->> +       def_bool $(success,$(srctree)/scripts/gcc-goto.sh goto $(CC))
->>
->>  config CC_HAS_ASM_GOTO_OUTPUT
->>         depends on CC_HAS_ASM_GOTO
->> -       def_bool $(success,echo 'int foo(int x) { asm goto ("": "=r"(x) ::: bar); return x; bar: return 0; }' | $(CC) -x c - -c -o /dev/null)
->> +       def_bool $(success,$(srctree)/scripts/gcc-goto.sh goto_output $(CC))
->>
->>  config CC_HAS_ASM_GOTO_TIED_OUTPUT
->>         depends on CC_HAS_ASM_GOTO_OUTPUT
->>         # Detect buggy gcc and clang, fixed in gcc-11 clang-14.
->> -       def_bool $(success,echo 'int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }' | $CC -x c - -c -o /dev/null)
->> +       def_bool $(success,$(srctree)/scripts/gcc-goto.sh goto_tied_output $(CC))
->>
->>  config TOOLS_SUPPORT_RELR
->>         def_bool $(success,env "CC=$(CC)" "LD=$(LD)" "NM=$(NM)" "OBJCOPY=$(OBJCOPY)" $(srctree)/scripts/tools-support-relr.sh)
->> diff --git a/scripts/gcc-goto.sh b/scripts/gcc-goto.sh
->> index 8b980fb2270a..aa9498b74df8 100755
->> --- a/scripts/gcc-goto.sh
->> +++ b/scripts/gcc-goto.sh
->> @@ -3,6 +3,11 @@
->>  # Test for gcc 'asm goto' support
->>  # Copyright (C) 2010, Jason Baron <jbaron@redhat.com>
->>
->> +TEST=$1
->> +shift
->> +
->> +case $TEST in
->> +    "goto")
->>  cat << "END" | $@ -x c - -fno-PIE -c -o /dev/null
->>  int main(void)
->>  {
->> @@ -20,3 +25,29 @@ entry:
->>         return 0;
->>  }
->>  END
->> +    ;;
->> +
->> +    "goto_output")
->> +cat << "END" | $@ -x c - -c -o /dev/null
->> +int foo(int x) {
->> +       asm goto ("": "=r"(x) ::: bar);
->> +       return x;
->> +       bar: return 0;
->> +}
->> +END
->> +    ;;
->> +
->> +    "goto_tied_output")
->> +cat << "END" | $@ -x c - -c -o /dev/null
->> +int foo(int *x) {
->> +       asm goto (".long (%l[bar]) - .\n": "+m"(*x) ::: bar);
->> +       return *x;
->> +       bar: return 0;
->> +}
->> +END
->> +    ;;
->> +
->> +    *)
->> +       exit -1
->> +    ;;
->> +esac
->> --
->> 2.37.1
->>
+> (Please s/page/folio/ rather than complain I'm calling things pages
+> and not folios, I'm juggling between RHEL-8 code and upstream
+> here and it's just easier to refer to everything as pages as I write
+> it.)
 > 
+> (I'm assuming people are familiar with the iomap buffered IO code
+> at this point.)
 > 
+> Let's do a partial write into a page. Let's say the second half of
+> the page. __iomap_begin_write() drops into iomap_adjust_read_range()
+> to determine the range that needs zeroing or reading from disk.  We
+> then call iomap_block_needs_zeroing() to determine if we zero -
+> which we do if it's a newly allocated or unwritten extent. Otherwise
+> we read it from disk.
+> 
+> Let's put this partial write over a large unwritten extent, which
+> means we zero the first part of the page, and that writing it back
+> runs unwritten extent conversion at IO completion. This changes the
+> extent backing this file offset from unwritten to written.
+> 
+> Then, add extreme memory pressure, so writeback is already running
+> and soon after the page has been dirtied it gets marked for
+> cleaning. Therefore, we have the possibility of background IO
+> submission and memory reclaim occurring at the same time as new
+> writes are occurring to the file.
+> 
+> To that end, let's add a large racing write that *ends* on this same
+> page that we have already partially filled with data - it will fill
+> the start of the page that currently contains zeros with real data.
+> 
+> Let's start that write() just before writeback of the already
+> uptodate partial page starts. iomap_apply will map the entire
+> write (and well beyond) as a single unwritten extent. This extent is
+> the same extent that the original page in the page cache already
+> covers, and this write would end by filling the remaining part of
+> that write.
+> 
+> While that second write is running around in the page cache
+> copy-in loop for the unwritten extent that backs that range, IO
+> submission runs and completes and converts the original partially
+> filled page to a written extent, then marks it clean.
 
--- 
-~Randy
+So if I understand this correctly --
+
+Thread 1 fallocates 1G of contiguous space and writes 38 bytes to the
+end of that gigabyte.  We instantiate a folio X for the region, zero the
+parts we're not going to write, and copy the bytes we did want to write
+into folio X.  The folio is now uptodate and dirty.  Thread 1 goes away.
+
+Thread 2 starts a (1G-38) write of that fallocated (and mostly
+unwritten) space.  It proceeds very slowly, one page at a time; it'll be
+a while before it gets to folio X.
+
+ramsnake.exe fires up and pushes the system hard into memory reclaim.
+Reclaim initiates dirty writeback of folio X, which writes it to disk
+and does the unwritten extent conversion.  Reclaim then removes X from
+the page cache, and frees X.
+
+Thread 2 finally gets to the end of its 1G write.  It is still using the
+cached 1G unwritten mapping from before, unaware that some of the
+mapping has changed to written state.  It grabs a folio for (1G - 38),
+but it gets folio Y instead of folio X.  Y is not uptodate, so thread 2
+copies bytes from userspace and zeroes the last 38 bytes.
+
+**WRONG**
+
+We now have folio Y with zeroes in the last 38 bytes, instead of
+whatever thread 1 wrote.  Writeback pushes Y to disk, clobbering those
+38 bytes forever.
+
+> [ Ayup, the extent map of the file just changed to be different
+> to the iomap that the current write() thinks the file layout has. ]
+> 
+> Further, because the partially written page is now clean,
+> memory reclaim can snaffle it up and it gets removed from the page
+> cache.
+> 
+> The second write finally gets to the last page of it's write and
+> doesn't find it in the page cache because memory reclaim removed it.
+> So it pulls a new page into the page cache in iomap_begin_write(),
+> and then in __iomap_begin_write we see that the we need to fill the
+> second half of the page with either zeros or data from disk.
+> 
+> We know that this data is on disk as the extent is now in written
+> state.  *However*, the cached iomap that we are currently using for
+> the write() says the range is -unwritten-, and so at that point
+> iomap_block_needs_zeroing() says "page needs zeroing". Hence
+> __iomap_begin_write zeroes the second half of the page instead of
+> reading it from disk, obliterating the data that the previous write
+> had already written there.
+
+Yup.
+
+> Ouchy, we have data corruption because the incoming write holds a
+> stale cached iomap......
+> 
+> At this point, I had a nasty feeling of deja vu.
+> 
+> Oh, yeah, we already infrastructure in place to avoid using stale
+> cached iomaps in ->writepages....
+> 
+> That is, iomap_writepage_map() calls ->map_block for every filesytem
+> block, even though the iomap_writepage_ctx has a cached iomap in it.
+> That's so the filesystem can check that the cached iomap is still
+> valid whilst the page we are writing back is held locked. This
+> protects writeback against races with truncate, hole punch, etc.
+> 
+> XFS does this via a call to xfs_imap_valid() - we keep a generation
+> number in the XFS extent trees that is bumped on every change so
+> that we can check whether a cached iomap is still valid. If the
+> generation numbers don't match, then we generate a new iomap for the
+> writepage context....
+> 
+> What is clear to me now is that we have the same stale cached iomap
+> problem with iomap_apply() because writeback can change the extent
+> map state in a way that influence incoming writes and those updates
+> are not in any way serialised against the incoming write IO path.
+> 
+> Hence we have to validate that the cached iomap is not stale before
+> we decide what to do with a new page in the page cache (zero or read
+> from disk), and we have to do this iomap validation when the newly
+> instantiated page is locked and ready for initialisation.
+> 
+> I have not thought past this point - I'm only *just* smart enough to
+> be able to dig out the root cause of this problem. No scratch that,
+> I'm not smart, just stubborn enough to ignore the fact I've got the
+> analysis wrong at least a dozen times already.
+> 
+> That said, this stale mapping problem existed long before we started
+> using unwritten extents for delayed allocation. The change to use
+> unwritten extents (to fix other data corruption issues) exposed us
+> to in-memory zeroing in this race condition case rather reading the
+> block of data from disk. We just hadn't armed the landmine....
+> 
+> I suspect we are going to need a new iomap validation operation, and
+> require the iomap actors to be able to handle iomap validation
+> failure.  What that looks like, I don't know as my brain
+> turned to goo and dribbled out my ears about 4 hours ago....
+
+Euughg.  I suppose this means that ->iomap_begin has to be able to stuff
+xfs_ifork.if_seq into a cookie value that we can set in struct iomap
+somewhere?  And then iomap has to be able to call back to XFS to
+revalidate iomap.cookie?  And if iomap.cookie != xfs_ifork.if_seq, then
+I guess iomap will just ... unlock and put the folio, and return EAGAIN
+(or something) so that its caller will return however many bytes have
+been dirtied to iomap_apply so that _apply will go get a fresh mapping?
+
+> BTW, all the credit for finding this goes to Frank Sorenson - he did
+> all the hard work of reproducing the issue and narrowing down the
+> scope of the problem to a handful of XFS commits combined with
+> writeback and memory reclaim interactions. Without his hard work,
+> we'd still have no idea what was going on.....
+
+Thanks a bunch to him!!!
+
+--D
+
+> Cheers,
+> 
+> Dave.
+> -- 
+> Dave Chinner
+> david@fromorbit.com

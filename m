@@ -2,91 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A9159765C
+	by mail.lfdr.de (Postfix) with ESMTP id ACB5259765D
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240900AbiHQTUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 15:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
+        id S241463AbiHQTVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 15:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236373AbiHQTUS (ORCPT
+        with ESMTP id S240878AbiHQTVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 15:20:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6A0A2620;
-        Wed, 17 Aug 2022 12:20:17 -0700 (PDT)
+        Wed, 17 Aug 2022 15:21:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D0DA3D7D;
+        Wed, 17 Aug 2022 12:21:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95636B81F47;
-        Wed, 17 Aug 2022 19:20:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4C29CC433D7;
-        Wed, 17 Aug 2022 19:20:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660764015;
-        bh=L5ndml8nd1uuvj+9Xi32ix/zxQYR/q5VszUkitr6U28=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rUbx/+qZN1Sg7ICEf2M/KOQKKME9g9nd5l5aMHangKxQgHKr3vcZfQQjvdrJAqayA
-         23FzcQgi8UaM6mRad5hrsEPwnhgMHXS7wmC0VVN9XOO363A9064McaEt9yfheydWQu
-         qiIs+lUZoFbU/8X1PuIjQKg7wf0j7ZkZl7jbZfIRFO0FTFgx0zIV/gHtvHAheQu781
-         S9G+gkhd9DkpLVa/62vILKjT+5FIg2MLmaCWjR4LD4X6Mbd3FjtxksfDArlaZrDtwY
-         ow3SX5588bZ6x16ZxOpr4zVj9lCK23Q4Gdx8snotOrnJy5TS/8bIJXWzuYC6kp+FXR
-         Wrkw0JnmIXNkg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2EC42E2A052;
-        Wed, 17 Aug 2022 19:20:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [patch net v3] net: dsa: microchip: ksz9477: fix fdb_dump last
- invalid entry
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166076401518.21609.10073950872734120316.git-patchwork-notify@kernel.org>
-Date:   Wed, 17 Aug 2022 19:20:15 +0000
-References: <20220816105516.18350-1-arun.ramadoss@microchip.com>
-In-Reply-To: <20220816105516.18350-1-arun.ramadoss@microchip.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
-        Tristram.Ha@microchip.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B26861449;
+        Wed, 17 Aug 2022 19:21:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EC12C433D6;
+        Wed, 17 Aug 2022 19:21:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1660764064;
+        bh=bfu/fdYyxsHWCrdmUTDnABii7LLjy3aRYRRlbMf8hWc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=U90ttsaKaUkHHdlnC1zVfXiCcM+BcJoiL2ov2ienR9q33S4p7J3q0KR1t1A3Pxlh+
+         tNWEX66hlEcZItzsNXWyuRfdNS6KDMYCOLT+m9YhuDEi0cKhw0R1NKFtMJ1yXkC3W0
+         dGXCRmrSrtLwy+NV6VQ1DhXEd762X1P4kVuKDkW4=
+Date:   Wed, 17 Aug 2022 12:21:03 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Sergei Trofimovich <slyich@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org
+Subject: Re: [PATCH] ia64: fix clock_getre(CLOCK_MONOTONIC) to report ITC
+ frequency
+Message-Id: <20220817122103.ecbd08bd545385e5bf8e0d72@linux-foundation.org>
+In-Reply-To: <20220815054944.4130786-1-slyich@gmail.com>
+References: <20220815054944.4130786-1-slyich@gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Mon, 15 Aug 2022 06:49:44 +0100 Sergei Trofimovich <slyich@gmail.com> wr=
+ote:
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+> clock_gettime(CLOCK_MONOTONIC, &tp) is very precise on ia64 as it uses
+> ITC (similar to rdtsc on x86). It's not quite a hrtimer as it is a few
+> times slower than 1ns. Usually 2-3ns.
+>=20
+> clock_getres(CLOCK_MONOTONIC, &res) never reflected that fact and
+> reported 0.04s precision (1/HZ value).
+>=20
+> In https://bugs.gentoo.org/596382 gstreamer's test suite failed loudly
+> when it noticed precision discrepancy.
+>=20
+> Before the change:
+>=20
+>     clock_getres(CLOCK_MONOTONIC, &res) reported 250Hz precision.
+>=20
+> After the change:
+>=20
+>     clock_getres(CLOCK_MONOTONIC, &res) reports ITC (400Mhz) precision.
+>=20
+> The patch is based on matoro's fix. It adds a bit of explanation why we
+> need to special-case arch-specific clock_getres().
+>=20
 
-On Tue, 16 Aug 2022 16:25:16 +0530 you wrote:
-> In the ksz9477_fdb_dump function it reads the ALU control register and
-> exit from the timeout loop if there is valid entry or search is
-> complete. After exiting the loop, it reads the alu entry and report to
-> the user space irrespective of entry is valid. It works till the valid
-> entry. If the loop exited when search is complete, it reads the alu
-> table. The table returns all ones and it is reported to user space. So
-> bridge fdb show gives ff:ff:ff:ff:ff:ff as last entry for every port.
-> To fix it, after exiting the loop the entry is reported only if it is
-> valid one.
-> 
-> [...]
+It would be best (and nice) to include the original developer's
+Signed-off-by: and to Cc =C9meric Maschino if possible?
 
-Here is the summary with links:
-  - [net,v3] net: dsa: microchip: ksz9477: fix fdb_dump last invalid entry
-    https://git.kernel.org/netdev/net/c/36c0d9350157
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Could you please take care of these paperwork issues?

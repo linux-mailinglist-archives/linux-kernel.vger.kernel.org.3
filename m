@@ -2,142 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0093F597347
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5265259735D
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236684AbiHQPu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 11:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
+        id S237321AbiHQPxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 11:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236992AbiHQPuQ (ORCPT
+        with ESMTP id S237040AbiHQPxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 11:50:16 -0400
-Received: from sonic308-15.consmr.mail.ne1.yahoo.com (sonic308-15.consmr.mail.ne1.yahoo.com [66.163.187.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9741760C9
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:50:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660751414; bh=IRd/YUZMbvM4XhlVg6o42f9hHAZIsjqYGMpOa3dXxVk=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=oF5zb10aaP1gzIjNOsbA2ZobrmhWRcVXR52jScEig/cazzm4MVOFs/vMukgGLaaVdcLbMo46uemCCSshG14QmeGF8wXbCwE1HY35emWOw+UTuzFOcutaiD8/4l3dGeiwtZ2hMz2Bhq+vC6rsWEtaE5NrvJa57jZmWoik+hoCGM/UDIPDXOOXftkl+Nxg9zURMoWzUid7yha7vtO3k4rJkF5yzOiuYVVjL3AftnxnC9OxtUhdvc2ZBi2YgLceuXdjUkOnWjcuC1sDo/ScuwAnmKSQKBil/Ze+YcPvPCErOYeusvLWoovy+j4iHjQAkk+gs0HuFBzfRJzzkoMcVwAuiw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660751414; bh=igRrhz0NWpxt+gQuvQt48Eltb/Lsb1etecmDShxEfHX=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=aviq2q+v7aqvEhATE/GtZSzv3IOUp9KYk9i3BaT4im6u4wfsM8AzyK4wkgxHZzsp1m0MUYitMC0yK84rC/K9gifzNPmOhslKxAtpd/yu6WfU1leo7V/p8mzgNkpOScH041UDpwAUhzCSBQi1jbcmHWiSqvB99H9ArxFV16kqYMoAwUiUMWvd9s3NFeW96BAEjBeoJhF+U7XWn4vIO5THyIkFhdZeugz6acvS2nlKeJhrEQ5fI5XaP3iMnwosJuQX8uh6gv2SJmlETjDZGOdotNAE92a8+UZbd+ifbBv7Sm0q7ET8vC/ouS9W+6/8gHV1d2bRFBamGzMIDPoF5SxQ8Q==
-X-YMail-OSG: gCz7YkkVM1n_AD5bbh.FxCfZoIfOVcr7DD.w80RsIMy3Otevr91fQDek.WDNwJM
- x9csdEFMSw7UjcJMBFaSufmsUH6atj6O1TnrB.xJsnRfwJ1wlUXkSciBNbxsuV0I3dxD0QihMtRQ
- m0_oTWWVB2YsETM0zDmUy.XOv8.LwcFi4cZ2zJi.zJpyBdVBRBiPS3hOgq6UFV1ibMKVlgxUK7e1
- a7U66WR4LRDUgdhEYNzlsd4lx2t8uF4cDQfzywTN..V10vH0H6gs5P3Sfq7DW9z9S_arACu7cEQ6
- VsPpuw7o5ifn43VK__7C0qPg6_QAuN9GhFYocQ8JChevrFVlkZghMGU8UNhflurQNKQ4IRcsxSE3
- 2cvB09qPAhVGX4ejKb5CnVOXDONc0TA5VzvU7Vc9auPlrp8e.52gKjdq.U5lUTFrf4TIgfvkoc3e
- udr4wK_6s4GIBtwG4Zmgw88dxw_0PE.4I2RHXTE1GIq1YP9KyH.yeeBZKmQqOlrawfdSvQ2aMvdt
- B_KZM_Q58bAE6x7TfEyoQCiLOfXHcbWLEFTadPnD_jvOKmOE72SWAUOM3cNFBqQtI22cqSiN3FSV
- cKUCAZhZiofwEnRGQ31Ca7b1qpR9Bm8iCmo77xCfdi6BuSeVHaXEyinJSgD0e5fE_YybUHRnt9_z
- qMA7jut8dHw_T7ELAbI08tZdoS22YEnlUktfxkHGRZ0qCxsSrSMp6ioHUv5vcyObTh9pj4yOdFkT
- DWGu8PEsQ2cOFx0PaYN8SbzerBcP2q9wQbZd5YBKAtyZ2lNFImYF_qL.HOPPPZ6mhONh5dGDbiWj
- IyuCRtsGBfMZf37r2QrBxnx3FVsjt3b_m_1GynU2HA8XfFoCWNaFfxN0jLq.kufy_Qa1BtXMko9r
- NNYc7pDyTb9q663QPjFEKdJQEK5TpgYQDDQQ8Yjc1kEmyZm.vXgdjzSAomXWTiNCQS4OqPVQuJob
- V7U3f61xoyN417ttvV8hhsxzNfTwinsWEw7X2DHc98Q8jrxn97EUNlpvfV648ODVrbbovbGORxZ3
- 3WGl5qASAiuvm4lfo6OA6gVhVSXXwsng5JoJA7qS.76mQLpxSOJesqPpasJ2TfEyYL0r3aX9t1o5
- xskFISh6vHo.mV9IlJCcb.C5qec7btIswEp4o4ou2dz68W7sb8M4TQ5EsPNQsQ16t9xC3ibEC9SV
- gBBEw.tqeZyFJ7ZEYiQKHgcIjCtnIOSMktq0dvVfph4NuM.d1Y16fGOlUgoU3UVju.jA3ZXsneQj
- XUUHNi6fGqW5BgGlzzbSzYK8.zaXb8x9FLkohcF.75uvkaSrpLsUXgeOskDKTc4sdqskbsjuLJAF
- vlOlKCJV7rhhjyuLapQnoF7qzyLZTiZsnzOSH8IHcOwyfIuZ7WFRW1_6dBR0zgp3a4w9J1EmCHPh
- BdUN3C6fb5Ds7lr7Y2nQoqeaq0mu6gYlEthSa858Nz7vmizGqB_DZ.F1vu9ennpjjkP2oDgd4j5n
- mLqi_HJYDBBzYxNhx8VgyY7qqjY8_5xi2mBrpXCjNGtx2Zdd07_pl1YEbdH127gAGd8aWt8J4nHG
- 45hH.U0KJg_Z9B0vuca7Xizr8HunWBnc.xrU93Kry9M5tssvALwziR0XGxRHpWOINI9cA9vMIbkM
- sPJ70VyIjO3qa7jgbPGE.PRQqdaJGc2bXByIFNS0tiS.y8zu5L6RzBMB.hS2tZ6.I8hSPMgkaY.O
- LB4NObiXTIgD4V5L0Lo4SB99CwDR2a6I4hkEm76f13LbpBxrXpysZJ6TbIDG.IBvqSbcdKoWJlkp
- pRJiGChPHRMVf.JO4cpb5Con1KBMavdrfALJ22g2wUfZfYuY02vFV9yokKA86UcJraW8vNZdvO3c
- X0Xg1Luk406pxqlgPGmyB0tpUKNbIarZG3NzdnK1xO6z6cRbeQPM3l22SkKK.yETtnOqjwscak15
- D11YufiykxTMbQ9HM1XwGNniCUam_QXolRqTqanFRqxUaKHdQvYEXETU1kmFnQ5_MLDkDHZIyhyC
- fqCIcTYMTVhalZX88hl2_xeB89PVXOfNvqDfIdmfZPifAk8EfAUtWUeYd3h9jES9nTm4NX3FLga1
- 5J9uzGB6PVFgPk6G0HY_HHxPZb1uaGL48zfqX_vamJFlHg8wBTVYnMLQ0RHpwJBTryVmv8gGJUgM
- Q.hyoT0k.EtYrXB1ejUPD4_yv1tCqlGYiF2N4tbQkTlOACxVmvOYEurkqLCsEAil8foD7GMZa6Bo
- QtYmJBedC_f11Ykso3Knwz7DRuayAIOrBmZANZZDpng06hghVWFev8Xefyn.68KzNwdjqZU12xl4
- 7y8QVU28NTNY.AOvEar6EjXpmhQ--
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Wed, 17 Aug 2022 15:50:14 +0000
-Received: by hermes--production-bf1-7586675c46-7c7p2 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 058d68e14750c70c30f0e5a1ea6d7644;
-          Wed, 17 Aug 2022 15:50:10 +0000 (UTC)
-Message-ID: <ab1bbd48-c48d-5f5a-f090-428ffd54c07e@schaufler-ca.com>
-Date:   Wed, 17 Aug 2022 08:49:56 -0700
+        Wed, 17 Aug 2022 11:53:03 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1CF9C1E0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:53:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1660751582; x=1692287582;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1GWE7vy/GU+GxOihGG1AQ+L7I/enLfcn/0bM+JDtR7s=;
+  b=mxzsLjoojTKz27up2g7V48gLVzsHh6+VyFBODXS8AwsHYSpoKOjVQDxG
+   MnRcw1usaK3dE3HQnkSc1gk1mqS1HiGfdG2zOA6F7FIGXC3zfcYfwUw/N
+   gAy57jp+vLRb+0Q2iNYpR1pFZJVercvsRgiDxfrTxt5fjxxlwmLvofOVD
+   GlaZQrW+zxGo7zg8DDF4eBZleCe9zH/3ftZ6wFleqxBaAKtr6o4l26+NI
+   +35w8Ke0W+okuTilhEzjKuHmKcCZBz/Wwyz28FmI0U2WVmWNqHZknMHi1
+   +OXEz8xLlIprHk9X/4rLF6G+f8L9Mdo7O2KDQo+E30xsdgRrWsQAxQb6g
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,243,1654531200"; 
+   d="scan'208";a="214053653"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 17 Aug 2022 23:52:59 +0800
+IronPort-SDR: hHBPqjAXMNEHxDoRGlNkdfEy6b/csoitZI/+76MMIg2zObCU1bXe2Z7Ya0w3jC/tWzLDFMpkHf
+ KM+7IASHjEZj3mgiNjGauPNGZI19KbAbKfalheqnLLlDRDRdd/5khkWmFR7phRJsUZAbUiDzjl
+ P6mibvI2XZ22w8pa4Q5Ap9UBP5rIbJA6xHV6BHe4CHoLm7FXEPdiiboQtFyPPSeam8osTgSY6N
+ OmfWSHbbArQVJECiK4vd3dbnDTiPMxsLx1aNoE3Ho3dh2HjxGuKi4yjCXMmtZSl4z1II+e2XHo
+ cQ5/HB7SOqI01rFy+Njfsupn
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Aug 2022 08:13:46 -0700
+IronPort-SDR: qTTcFYMGzdS4n5qOZV/WpMDKahV7NPX+MeBIIgqxemJQj9vpjJFSeA9y0srjVmJfJzNgtRSH2g
+ sfZEWw26gHpMufjtn3+0wLLplZOLEGRN6QIhZFPHShXkA5fQ56tuzaXcXpA8rd0w2TYf9fPURM
+ N0NaIydmaA5LsfeZyKZqVXoNdCIAgnBGK6apb1ieKstH+yh45Zno9oX8ljszsVn7iIeiRh2D2w
+ /NyQMXYVv/eYWJJ2hZfHv8dZ/HskShUXvN6n4jDhMZkvm42F2y8HmT+Izj5Cxk+ZIHXRe9WrCd
+ NQU=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Aug 2022 08:53:00 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4M7CGM2dvPz1Rwqy
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:52:59 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1660751578; x=1663343579; bh=1GWE7vy/GU+GxOihGG1AQ+L7I/enLfcn/0b
+        M+JDtR7s=; b=c48fjmOxUozA1ugSnw7GiZja0C/YyyKdjM/5pPIw/39aS+fCzwE
+        osgor6d5oGTx6gcshxg3MYNgHbnt7/G7dOulP1oBqq5duqFxXXDWsChQT8BfCEOR
+        Rd9ZWBKpJYpMOp9WY7v2QDhSOW2nxi9ohC8Yx6hJJtkat/2EKqlzyVPqRwmGCeQc
+        c1ZsTFfIqWwYIYpOrKAsYTONMGSf+APdIXU47+i8WjVi0i8y4/8hqA5S/7zULd2u
+        2i2tBlHLjLchzCfFzKBkHOqTR/piSX4/kFtgdCz7U8b79B0Gw5LyRR8wElWHm9NU
+        2veW5sSVxLsY/LJBCpYNxBtaU81wk6LJxZA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 2fnNhLu7xHyD for <linux-kernel@vger.kernel.org>;
+        Wed, 17 Aug 2022 08:52:58 -0700 (PDT)
+Received: from [10.11.46.122] (unknown [10.11.46.122])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4M7CGL05CWz1RtVk;
+        Wed, 17 Aug 2022 08:52:57 -0700 (PDT)
+Message-ID: <e1efeb1b-a876-a5c4-a8af-b30883c8457d@opensource.wdc.com>
+Date:   Wed, 17 Aug 2022 08:52:57 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFC PATCH v4 0/2] Add capabilities file to securityfs
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH v2 0/6] libsas and drivers: NCQ error handling
 Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>,
-        Francis Laniel <flaniel@linux.microsoft.com>
-Cc:     linux-security-module@vger.kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        James Morris <jmorris@namei.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:BPF [MISC]" <bpf@vger.kernel.org>,
-        casey@schaufler-ca.com
-References: <20220725124123.12975-1-flaniel@linux.microsoft.com>
- <CAHC9VhTmgMfzc+QY8kr+BYQyd_5nEis0Y632w4S2_PGudTRT7g@mail.gmail.com>
- <4420381.LvFx2qVVIh@pwmachine>
- <CAHC9VhSMeefG5W_uuTNQYmUUZ1xcuqArxYs5sL9KOzUO_skCZw@mail.gmail.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <CAHC9VhSMeefG5W_uuTNQYmUUZ1xcuqArxYs5sL9KOzUO_skCZw@mail.gmail.com>
+To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, jinpu.wang@cloud.ionos.com,
+        yangxingui@huawei.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com, hare@suse.de
+References: <1660747934-60059-1-git-send-email-john.garry@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <1660747934-60059-1-git-send-email-john.garry@huawei.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.20531 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/17/2022 7:52 AM, Paul Moore wrote:
-> On Wed, Aug 17, 2022 at 7:53 AM Francis Laniel
-> <flaniel@linux.microsoft.com> wrote:
->> Le mardi 16 août 2022, 23:59:41 CEST Paul Moore a écrit :
->>> On Mon, Jul 25, 2022 at 8:42 AM Francis Laniel
->>>
->>> <flaniel@linux.microsoft.com> wrote:
->>>> Hi.
->>>>
->>>> First, I hope you are fine and the same for your relatives.
->>> Hi Francis :)
->>>
->>>> A solution to this problem could be to add a way for the userspace to ask
->>>> the kernel about the capabilities it offers.
->>>> So, in this series, I added a new file to securityfs:
->>>> /sys/kernel/security/capabilities.
->>>> The goal of this file is to be used by "container world" software to know
->>>> kernel capabilities at run time instead of compile time.
->>> ...
->>>
->>>> The kernel already exposes the last capability number under:
->>>> /proc/sys/kernel/cap_last_cap
->>> I'm not clear on why this patchset is needed, why can't the
->>> application simply read from "cap_last_cap" to determine what
->>> capabilities the kernel supports?
->> When you capabilities with, for example, docker, you will fill capabilities
->> like this:
->> docker run --rm --cap-add SYS_ADMIN debian:latest echo foo
->> As a consequence, the "echo foo" will be run with CAP_SYS_ADMIN set.
->>
->> Sadly, each time a new capability is added to the kernel, it means "container
->> stack" software should add a new string corresponding to the number of the
->> capabilities [1].
-> Thanks for clarifying things, I thought you were more concerned about
-> detecting what capabilities the running kernel supported, I didn't
-> realize it was getting a string literal for each supported capability.
-> Unless there is a significant show of support for this
+On 2022/08/17 7:52, John Garry wrote:
+> As reported in [0], the pm8001 driver NCQ error handling more or less
+> duplicates what libata does in link error handling, as follows:
+> - abort all commands
+> - do autopsy with read log ext 10 command
+> - reset the target to recover
+> 
+> Indeed for the hisi_sas driver we want to add similar handling for NCQ
+> errors.
+> 
+> This series add a new libsas API - sas_ata_device_link_abort() - to handle
+> host NCQ errors, and fixes up pm8001 and hisi_sas drivers to use it. As
+> mentioned in the pm8001 changeover patch, I would prefer a better place to
+> locate the SATA ABORT command (rather that nexus reset callback).
+> 
+> Damien kindly tested the v1 series for pm8001, but any further pm8001
+> testing would be appreciated as I have since tweaked
+> sas_ata_device_link_abort(). This is because the pm8001 driver hangs on my
+> arm64 machine read log ext10 command.
 
-I believe this could be a significant help in encouraging the use of
-capabilities. An application that has to know the list of capabilities
-at compile time but is expected to run unmodified for decades isn't
-going to be satisfied with cap_last_cap. The best it can do with that
-is abort, not being able to ask an admin what to do in the presence of
-a capability that wasn't around before because the name isn't known.
+I will run more tests with this series.
 
-On the other hand, it's possible that capabilities are a failure,
-and that any effort to make them easier to use is pointless.
+> 
+> Finally with these changes we can make the libsas task alloc/free APIs
+> private, which they should always have been.
+> 
+> Based on v6.0-rc1
+> 
+> [0] https://lore.kernel.org/linux-scsi/8fb3b093-55f0-1fab-81f4-e8519810a978@huawei.com/
+> 
+> Changes since v1:
+> - Rename sas_ata_link_abort() -> sas_ata_device_link_abort()
+> - Set EH RESET flag in sas_ata_device_link_abort()
+> - Add Jack's Ack tags
+> - Rebase
+> 
+> John Garry (5):
+>   scsi: pm8001: Modify task abort handling for SATA task
+>   scsi: libsas: Add sas_ata_device_link_abort()
+>   scsi: pm8001: Use sas_ata_device_link_abort() to handle NCQ errors
+>   scsi: hisi_sas: Don't issue ATA softreset in hisi_sas_abort_task()
+>   scsi: libsas: Make sas_{alloc, alloc_slow, free}_task() private
+> 
+> Xingui Yang (1):
+>   scsi: hisi_sas: Add SATA_DISK_ERR bit handling for v3 hw
+> 
+>  drivers/scsi/hisi_sas/hisi_sas_main.c  |   5 +-
+>  drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  22 ++-
+>  drivers/scsi/libsas/sas_ata.c          |  11 ++
+>  drivers/scsi/libsas/sas_init.c         |   3 -
+>  drivers/scsi/libsas/sas_internal.h     |   4 +
+>  drivers/scsi/pm8001/pm8001_hwi.c       | 194 +++++++------------------
+>  drivers/scsi/pm8001/pm8001_sas.c       |  13 ++
+>  drivers/scsi/pm8001/pm8001_sas.h       |   8 +-
+>  drivers/scsi/pm8001/pm80xx_hwi.c       | 177 ++--------------------
+>  include/scsi/libsas.h                  |   4 -
+>  include/scsi/sas_ata.h                 |   5 +
+>  11 files changed, 133 insertions(+), 313 deletions(-)
+> 
 
->  - and I'm
-> guessing there isn't due to the lack of comments - I don't think this
-> is something we want to add to the kernel, especially since the kernel
-> doesn't really care about the capabilities' names, it's the number
-> that matters.
->
+
+-- 
+Damien Le Moal
+Western Digital Research

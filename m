@@ -2,127 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B7D5971F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E3F5971D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236535AbiHQOwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 10:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
+        id S240095AbiHQOxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 10:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiHQOwr (ORCPT
+        with ESMTP id S236390AbiHQOxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 10:52:47 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DC590C5E
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:52:45 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-11be650aaccso7983899fac.6
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:52:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=p6elRDyP8NYnM4v7agKH/wBfu4apiNL55+e+soKTTbc=;
-        b=5EuNmx6MxrW8SWGqqbCOqzQ+s8Te51T3R6xgbA89Sk211auzMweoYrkEzMxjTE222U
-         6ajGCVZpwYoATV1wudJViEWYzHdMWE8hUymF6A4XgcUut55VxyH8THN525b59Ojd7Ztx
-         YU+CVtzxve+a5I1GgsWNYnyT1oNDagT7mlXZ9R6nnZeAGKKjXnfRsVUK4PBaSC71+tNX
-         umoDlvWCN6b+g0o5fhq9JbSNm22rqjIfhohpDpUGJAdGySjc8SFqxKoevcEfRIkUrP3f
-         +D9Flane7vSbSlWpkP8LIEc1QAsQGoaS5RHdk8l+M97CO/LUjpNHZfVyR2Ej6JHu0Mxz
-         Ei3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=p6elRDyP8NYnM4v7agKH/wBfu4apiNL55+e+soKTTbc=;
-        b=1W4Sv2sl6q9JUthF5L2LTrycdNNwRcBSwZT+/piB8aH3R0ndhYjVr//7BVGr1MlOky
-         3+vf+qZd47jXKCI/6XhNo4gPqFE9DV9YjGx244mIpBZoZJy1YRxoBmRgHcdd+dlqe2pb
-         PgGKgEkg5cJVGcGkpsQK3IOMXWb8KgO/ePVmuFAard/3KIkgQKa2xI8ji8W9xdvLRY8J
-         NULrfwFPBCr97i42dXBW1qAODAkG+9NovNk5rNBdMROw8OQ71Lbyvj8cDeo7oWBQEULy
-         OZVctIiLUrpN9Z/DLhB93Bl7jGn4i0am60P0aSk0Up6YMQcFHNiRZV8jxwhcWYcpfe0+
-         sRvA==
-X-Gm-Message-State: ACgBeo2RfyQIKAM1W7jS9D1EwBZgd+FknRHqgzjVlL9uK61i9hgdQFcx
-        LA5vlt9Gun9LDZVpyt549+g4Ab1eUUTdvkpBeeFK
-X-Google-Smtp-Source: AA6agR6jYL1Jhtyl77hp193lRTLCWuiKZuNGi023Wb2umOc1iVGeV0Q1gFXBlEJPHu1RAENEGyZZMACGud4kfjvweVc=
-X-Received: by 2002:a05:6870:9588:b0:101:c003:bfe6 with SMTP id
- k8-20020a056870958800b00101c003bfe6mr1902929oao.41.1660747965093; Wed, 17 Aug
- 2022 07:52:45 -0700 (PDT)
+        Wed, 17 Aug 2022 10:53:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC3B402C8;
+        Wed, 17 Aug 2022 07:53:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E33486142E;
+        Wed, 17 Aug 2022 14:53:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF458C433C1;
+        Wed, 17 Aug 2022 14:53:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660748010;
+        bh=Pa5i8IC5TrT2DHQTMupGT4J67/zODUCPCOA2f64JMvQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t2h4leWkcnaYK4uW9V8k69ic9pVYJy6XNjyxbZb1AKoanqf9Q/4Yk4a7mBoVGN2Xj
+         ZB69fHM8iYGoZcwPtvZrScXkKDjiaKK023eo3b3f/JhsYCjXN8ErHuG++uoAQE+CiD
+         kyvKTgU0oO3lwxFFDz/C+JHs+7dryidAHuUQOSG5EoJ87eRwBpPRVRbEyGtosB00j4
+         AH1rWtDIqZ6MxquUu2fjcPHs3NJIEJGVQ0Ah3wfeouFrR88tOWrn6+ODGpiB37OwcR
+         G6tqhKiX1/Czb2fO6XEL+JzFYN1RIKSzglH9c88ic8OmyoASX7K5uz7uyara+e9iuN
+         cWciwXOAiojIw==
+Date:   Wed, 17 Aug 2022 17:53:26 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] selftests/sgx: Add SGX selftest
+ augment_via_eaccept_long
+Message-ID: <Yv0A5vjd0OIfxxfT@kernel.org>
+References: <20220815233900.11225-1-jarkko@kernel.org>
+ <20220815233900.11225-2-jarkko@kernel.org>
+ <6b304bb4-01cc-c88a-7299-19217a7a692b@intel.com>
+ <YvwpX7pYOW3Jv+vJ@kernel.org>
+ <DM8PR11MB55913534E8CE66F63460E707F66A9@DM8PR11MB5591.namprd11.prod.outlook.com>
+ <24bd8e42-ff4e-0090-d9e1-cd81e4807f21@intel.com>
+ <Yvz+yxnxp8G6KzHi@kernel.org>
 MIME-Version: 1.0
-References: <20220725124123.12975-1-flaniel@linux.microsoft.com>
- <CAHC9VhTmgMfzc+QY8kr+BYQyd_5nEis0Y632w4S2_PGudTRT7g@mail.gmail.com> <4420381.LvFx2qVVIh@pwmachine>
-In-Reply-To: <4420381.LvFx2qVVIh@pwmachine>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 17 Aug 2022 10:52:34 -0400
-Message-ID: <CAHC9VhSMeefG5W_uuTNQYmUUZ1xcuqArxYs5sL9KOzUO_skCZw@mail.gmail.com>
-Subject: Re: [RFC PATCH v4 0/2] Add capabilities file to securityfs
-To:     Francis Laniel <flaniel@linux.microsoft.com>
-Cc:     linux-security-module@vger.kernel.org,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        James Morris <jmorris@namei.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:BPF [MISC]" <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yvz+yxnxp8G6KzHi@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 7:53 AM Francis Laniel
-<flaniel@linux.microsoft.com> wrote:
-> Le mardi 16 ao=C3=BBt 2022, 23:59:41 CEST Paul Moore a =C3=A9crit :
-> > On Mon, Jul 25, 2022 at 8:42 AM Francis Laniel
-> >
-> > <flaniel@linux.microsoft.com> wrote:
-> > > Hi.
-> > >
-> > > First, I hope you are fine and the same for your relatives.
-> >
-> > Hi Francis :)
-> >
-> > > A solution to this problem could be to add a way for the userspace to=
- ask
-> > > the kernel about the capabilities it offers.
-> > > So, in this series, I added a new file to securityfs:
-> > > /sys/kernel/security/capabilities.
-> > > The goal of this file is to be used by "container world" software to =
-know
-> > > kernel capabilities at run time instead of compile time.
-> >
-> > ...
-> >
-> > > The kernel already exposes the last capability number under:
-> > > /proc/sys/kernel/cap_last_cap
-> >
-> > I'm not clear on why this patchset is needed, why can't the
-> > application simply read from "cap_last_cap" to determine what
-> > capabilities the kernel supports?
->
-> When you capabilities with, for example, docker, you will fill capabiliti=
-es
-> like this:
-> docker run --rm --cap-add SYS_ADMIN debian:latest echo foo
-> As a consequence, the "echo foo" will be run with CAP_SYS_ADMIN set.
->
-> Sadly, each time a new capability is added to the kernel, it means "conta=
-iner
-> stack" software should add a new string corresponding to the number of th=
-e
-> capabilities [1].
+On Wed, Aug 17, 2022 at 05:44:31PM +0300, Jarkko Sakkinen wrote:
+> On Tue, Aug 16, 2022 at 09:35:27PM -0700, Reinette Chatre wrote:
+> > >>> This portion below was also copied from previous test and by only
+> > >>> testing a write to the first page of the range the purpose is not
+> > >>> clear. Could you please elaborate if the intention is to only test
+> > >>> accessibility of the first page and why that is sufficient?
+> > >>
+> > >> It is sufficient because the test reproduces the bug. It would have to be
+> > >> rather elaborated why you would possibly want to do more than that.
+> > 
+> > That is fair. An accurate comment (currently an inaccurate copy&paste) would
+> > help to explain this part of the test.
+> 
+> I would simply add something like:
+> 
+> /* 
+>  * Define memory pool size big enough to trigger the reclaimer in the EAUG
+>  * path of the page reclaimer.
+>  */
+> 
+> Suggestions/edits obviously welcome for the comment.
 
-Thanks for clarifying things, I thought you were more concerned about
-detecting what capabilities the running kernel supported, I didn't
-realize it was getting a string literal for each supported capability.
-Unless there is a significant show of support for this - and I'm
-guessing there isn't due to the lack of comments - I don't think this
-is something we want to add to the kernel, especially since the kernel
-doesn't really care about the capabilities' names, it's the number
-that matters.
+I wonder if we could put .bt files somewhere to make them available. In
+root causing this bug bpftrace scripting was the key so it would nice to
+have them available along with kselftest.
 
---=20
-paul-moore.com
+I could imagine that we end up also in future to bugs allocation so
+it would have the script when you clone the kernel tree, and possibly
+more scripts in future.
+
+E.g. add bt/alloc-error.bt under tools/testing/selftests/sgx.
+
+BR, Jarkko

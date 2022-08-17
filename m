@@ -2,164 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A5259746F
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F691597466
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 18:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240132AbiHQQmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 12:42:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
+        id S240493AbiHQQoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 12:44:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237506AbiHQQmw (ORCPT
+        with ESMTP id S240422AbiHQQn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 12:42:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BBD88DFB;
-        Wed, 17 Aug 2022 09:42:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0F944B81E25;
-        Wed, 17 Aug 2022 16:42:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E9BBC433D6;
-        Wed, 17 Aug 2022 16:42:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660754568;
-        bh=+wEnZVI2aj40wim23BMsG+ci2KQg9to47RsgHXVHy10=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YpvpIKT4XzsirkSD5uvjCpB+/1pIK+WsuRzW1OyY4JFHJM/UPgkTU0Dyof3gdxlD+
-         N9UeWOT6DqR/F02nr8dTesCV9NATI2TGSUYB/R9tBGzxXPSg7QngOCs5ui5IBs+gJK
-         rLwzJXJaLD1zhLxBAV94ZgMrFc9tma23ROcaLTcjfUc11WtX2f8GtAX3UuppT+RZ9D
-         D/K4io2T2RJfGjy4B2YcPEiR8BzL+YTRRIVdYftQPQGNTKD9lAaaBVMtxJbptx87kx
-         xeTN8Ihpf1nOpMTw7H4aCfYwqI9wj9ciPuFbzK99E0x0QcrXw5JhOlTMGBiJ4wrrEc
-         osemWEeY22khw==
-Received: by pali.im (Postfix)
-        id AAA9C739; Wed, 17 Aug 2022 18:42:45 +0200 (CEST)
-Date:   Wed, 17 Aug 2022 18:42:45 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>,
-        Nick Child <nick.child@ibm.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] powerpc/pci: Add config option for using all 256 PCI
- buses
-Message-ID: <20220817164245.qanxklpavge3shcm@pali>
-References: <20220706104308.5390-1-pali@kernel.org>
- <20220706104308.5390-6-pali@kernel.org>
- <20220721222145.rzgthbwoselx2l43@pali>
- <875yjkb0ht.fsf@mpe.ellerman.id.au>
- <20220726111001.a2upqf5m5welcla6@pali>
+        Wed, 17 Aug 2022 12:43:58 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77CB630F6E;
+        Wed, 17 Aug 2022 09:43:53 -0700 (PDT)
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 7CEA92147;
+        Wed, 17 Aug 2022 16:42:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1660754534;
+        bh=EHA8PmNWIXmclwoQXYiUp1GSP3DqbAL/8zItVTO2gng=;
+        h=Date:To:CC:From:Subject;
+        b=eTPt7DTKPc4x3xuSpmh5lDYpIqjPaka20te2ilGPqiNd/POTi/XPcLQ1xqkRGc/Tv
+         ZR1VszXzN4s4kOIzhVK6GhAMcn57I2rKJ0j7DkHchTdn/Sekqi9IL1SOhQesdLQB7h
+         4uuyjC1fB596qJg52V3D3GryuP+Kt+4sA9JuDaG0=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Wed, 17 Aug 2022 19:43:51 +0300
+Message-ID: <db8cb5d9-56d6-a00a-9cf0-4deec9056433@paragon-software.com>
+Date:   Wed, 17 Aug 2022 19:43:51 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220726111001.a2upqf5m5welcla6@pali>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     <torvalds@linux-foundation.org>
+CC:     <ntfs3@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Subject: [GIT PULL] ntfs3: bugfixes for 6.0
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 26 July 2022 13:10:01 Pali Rohár wrote:
-> On Tuesday 26 July 2022 21:02:22 Michael Ellerman wrote:
-> > Pali Rohár <pali@kernel.org> writes:
-> > > On Wednesday 06 July 2022 12:43:08 Pali Rohár wrote:
-> > >> By default on PPC32 are PCI bus numbers unique across all PCI domains.
-> > >> So system could have only 256 PCI buses independently of available
-> > >> PCI domains.
-> > >>
-> > >> This is due to filling DT property pci-OF-bus-map which does not reflect
-> > >> multi-domain setup.
-> > >>
-> > >> On all powerpc platforms except chrp and powermac there is no DT property
-> > >> pci-OF-bus-map anymore and therefore it is possible on non-chrp/powermac
-> > >> platforms to avoid this limitation of maximal number of 256 PCI buses in
-> > >> system even on multi-domain setup.
-> > >>
-> > >> But avoiding this limitation would mean that all PCI and PCIe devices would
-> > >> be present on completely different BDF addresses as every PCI domain starts
-> > >> numbering PCI bueses from zero (instead of the last bus number of previous
-> > >> enumerated PCI domain). Such change could break existing software which
-> > >> expects fixed PCI bus numbers.
-> > >>
-> > >> So add a new config option CONFIG_PPC_PCI_BUS_NUM_DOMAIN_DEPENDENT which
-> > >> enables this change. By default it is disabled. It cause that initial value
-> > >> of hose->first_busno is zero.
-> > >>
-> > >> Signed-off-by: Pali Rohár <pali@kernel.org>
-> > >> ---
-> > >>  arch/powerpc/Kconfig         | 11 +++++++++++
-> > >>  arch/powerpc/kernel/pci_32.c |  6 ++++++
-> > >>  2 files changed, 17 insertions(+)
-> > >>
-> > >> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> > >> index be68c1f02b79..f66084bc1dfe 100644
-> > >> --- a/arch/powerpc/Kconfig
-> > >> +++ b/arch/powerpc/Kconfig
-> > >> @@ -370,6 +370,17 @@ config PPC_DCR
-> > >>  	depends on PPC_DCR_NATIVE || PPC_DCR_MMIO
-> > >>  	default y
-> > >>
-> > >> +config PPC_PCI_BUS_NUM_DOMAIN_DEPENDENT
-> > >> +	depends on PPC32
-> > >> +	depends on !PPC_PMAC && !PPC_CHRP
-> > >> +	bool "Assign PCI bus numbers from zero individually for each PCI domain"
-> > >> +	help
-> > >> +	  By default on PPC32 were PCI bus numbers unique across all PCI domains.
-> > >> +	  So system could have only 256 PCI buses independently of available
-> > >> +	  PCI domains. When this option is enabled then PCI bus numbers are
-> > >> +	  PCI domain dependent and each PCI controller on own domain can have
-> > >> +	  256 PCI buses, like it is on other Linux architectures.
-> > >> +
-> > >
-> > > What do you think, would it be possible to set default value of this
-> > > option to enabled?
-> > 
-> > My preference would be to not have the option at all, just make it the
-> > default behaviour. Every new CONFIG option adds more combinations that
-> > need testing, or more likely don't get well tested.
-> > 
-> > But I don't have a good feel for what could break if we turn it on, so
-> > honestly I don't really know.
-> > 
-> > Also I do most of my 32-bit testing on pmacs, which are not affected by
-> > the change.
-> 
-> It is because this change is incompatible with deprecated pci-OF-bus-map
-> which pmac uses. I do not have any pmac box for testing or development,
-> so I let this part as is.
-> 
-> If one day pci-OF-bus-map would be possible to disable on pmac then this
-> pci bus number change can be enabled also for pmac.
+Hi Linus,
 
-Hello! I have created this patch which allows to disable deprecated
-pci-OF-bus-map on powermac and allow to enable this new config option
-PPC_PCI_BUS_NUM_DOMAIN_DEPENDENT also on powermac.
+Please pull this branch containing ntfs3 code for 6.0.
 
-So you can test this option too on your powermac boxes.
+Fixed:
+- some logic errors;
+- fixed xfstests (tested on x86_64)
+generic/064 generic/213 generic/300 generic/361 generic/449 generic/485;
+- some dead code was removed or refactored.
 
-I'm really not sure if that pci-OF-bus-map is required and for which
-platforms or software...
+Most of the code was in linux-next branch for several weeks,
+but there are some patches, that were in linux-next branch only
+for a week.
 
-Patch for allowing to disable pci-OF-bus-map is here:
-https://patchwork.ozlabs.org/project/linuxppc-dev/patch/20220817163927.24453-1-pali@kernel.org/
+Regards,
 
-> > So I'll probably take the series as-is, and then we can do some more
-> > widespread testing and possibly flip the default to enabled, and then
-> > maybe remove the option entirely in future.
-> > 
-> > cheers
-> 
-> I have tested it on P2020 board with 3 PCIe devices, each on own bus
-> where each bus is connected to different PCIe controller / domain and it
-> works correctly. Every PCIe device is on bus 1 bus but on different
-> domains.
+Konstantin
+
+----------------------------------------------------------------
+
+The following changes since commit 724bbe49c5e427cb077357d72d240a649f2e4054:
+
+   fs/ntfs3: provide block_invalidate_folio to fix memory leak (Mon May 30 13:36:45 2022 +0200)
+
+are available in the Git repository at:
+
+   https://github.com/Paragon-Software-Group/linux-ntfs3.git ntfs3_for_6.0
+
+for you to fetch changes up to d4073595d0c61463ec3a87411b19e2a90f76d3f8:
+
+   fs/ntfs3: uninitialized variable in ntfs_set_acl_ex() (Mon Aug 8 11:34:41 2022 +0300)
+
+----------------------------------------------------------------
+
+Christophe JAILLET (1)
+  fs/ntfs3: Remove a useless test
+
+Colin Ian King (3)
+  fs/ntfs3: Remove duplicated assignment to variable r
+  fs/ntfs3: Remove redundant assignment to variable vcn
+  fs/ntfs3: Remove redundant assignment to variable frame
+
+Yan Lei (1)
+  fs/ntfs3: Fix using uninitialized value n when calling indx_read
+
+Yang Xu (1)
+  fs/ntfs3: Use the same order for acl pointer check in ntfs_init_acl
+
+Dan Carpenter (3)
+  fs/ntfs3: uninitialized variable in ntfs_set_acl_ex()
+  fs/ntfs3: Unlock on error in attr_insert_range()
+  fs/ntfs3: Don't clear upper bits accidentally in log_replay()
+
+Pavel Skripkin (2)
+  fs/ntfs3: Make ntfs_update_mftmirr return void
+  fs/ntfs3: Fix NULL deref in ntfs_update_mftmirr
+
+Li Kunyu (1)
+  fs/ntfs3: Remove unnecessary 'NULL' values from pointers
+
+Jiapeng Chong (1)
+  fs/ntfs3: Remove unused function wnd_bits
+
+Konstantin Komarov (26)
+  fs/ntfs3: Make ni_ins_new_attr return error
+  fs/ntfs3: Create MFT zone only if length is large enough
+  fs/ntfs3: Refactoring attr_insert_range to restore after errors
+  fs/ntfs3: Refactoring attr_punch_hole to restore after errors
+  fs/ntfs3: Refactoring attr_set_size to restore after errors
+  fs/ntfs3: New function ntfs_bad_inode
+  fs/ntfs3: Make MFT zone less fragmented
+  fs/ntfs3: Check possible errors in run_pack in advance
+  fs/ntfs3: Added comments to frecord functions
+  fs/ntfs3: Fill duplicate info in ni_add_name
+  fs/ntfs3: Make static function attr_load_runs
+  fs/ntfs3: Add new argument is_mft to ntfs_mark_rec_free
+  fs/ntfs3: Remove unused mi_mark_free
+  fs/ntfs3: Fix very fragmented case in attr_punch_hole
+  fs/ntfs3: Fix work with fragmented xattr
+  fs/ntfs3: Make ntfs_fallocate return -ENOSPC instead of -EFBIG
+  fs/ntfs3: extend ni_insert_nonresident to return inserted ATTR_LIST_ENTRY
+  fs/ntfs3: Check reserved size for maximum allowed
+  fs/ntfs3: Do not change mode if ntfs_set_ea failed
+  fs/ntfs3: Enable FALLOC_FL_INSERT_RANGE
+  fs/ntfs3: Fallocate (FALLOC_FL_INSERT_RANGE) implementation
+  fs/ntfs3: Add missing error check
+  fs/ntfs3: Fix missing i_op in ntfs_read_mft
+  fs/ntfs3: Refactor ni_try_remove_attr_list function
+  fs/ntfs3: Fix double free on remount
+  fs/ntfs3: Refactoring of indx_find function
+
+
+  fs/ntfs3/attrib.c  | 557 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++------------------------
+  fs/ntfs3/bitmap.c  |  12 +---
+  fs/ntfs3/file.c    | 110 +++++++++++++++++------------
+  fs/ntfs3/frecord.c | 128 +++++++++++++++++++++++----------
+  fs/ntfs3/fslog.c   |   4 +-
+  fs/ntfs3/fsntfs.c  |  92 +++++++++++++++---------
+  fs/ntfs3/index.c   |  33 ++++-----
+  fs/ntfs3/inode.c   |  19 ++---
+  fs/ntfs3/namei.c   |   6 +-
+  fs/ntfs3/ntfs_fs.h |  16 +++--
+  fs/ntfs3/record.c  |  27 +------
+  fs/ntfs3/run.c     | 108 +++++++++++++++++++++++-----
+  fs/ntfs3/super.c   |  17 +++--
+  fs/ntfs3/xattr.c   |  35 +++++----
+  14 files changed, 835 insertions(+), 329 deletions(-)

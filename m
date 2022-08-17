@@ -2,133 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB49597806
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2250F597810
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242020AbiHQUbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 16:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50994 "EHLO
+        id S242032AbiHQUbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 16:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242011AbiHQUbZ (ORCPT
+        with ESMTP id S242016AbiHQUbl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 16:31:25 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FBDA8CC3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:31:23 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 12so12919181pga.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:31:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=/ZIBwdh7AZy1tlqpLcM+wJiYIr87DkwAsg5KZRoqj68=;
-        b=Ruh/m0QpeWGCsAuDQ9vLgMeMnPwUDhrl9zrtFVQhUKHT651SheClw0ZDbbdAkAoW1i
-         AWWwQTcmm7HgmZLKUbhe1zerjeL6tQndwX0YQvzXZaPS3qkGhMCJQ5MVId2fX3yigKC0
-         EkEKImheXVwahv1KCIpsBcpCFuOAVPe3Csobg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=/ZIBwdh7AZy1tlqpLcM+wJiYIr87DkwAsg5KZRoqj68=;
-        b=N1uw810gQNpel6l8P4SDg+lTdp//mBIciOvtbsN6SJkd/+cd1/w9XTtP0vIe7/Yyw/
-         Mh7ErRZWY1VdQxqURlMr2EFBZD99GfU9nxCEQbr4w/vnZiUD2r0KPqRf0bDfcgAh5l9a
-         4qTGOBwPneo432IxP+/WqlIVWn0LHeu7pMJnICYz2FQXV7HdjSEtImKa8HgCxGnFOoax
-         1ZGIXrrshBky3wFclNJIiLh6e0M4lQuyrBrfL4cITIaELIHOJYdr4mCwJ5VAoPpP5ayE
-         xSrZ+wkKxbSxzUufRFMsF+WcN4uQstWRWAo4tNkPUj0YN920S/4j+ZksifLSKkz4Dzgq
-         wFUg==
-X-Gm-Message-State: ACgBeo0lUR9JVhJaafLhPixMrffVYRkojfcEa9rxrV40inXph9IfNwJj
-        8+EvwiXVSnIauoW4qdujAIP5jw==
-X-Google-Smtp-Source: AA6agR65FRhlhXg+iyS9uiPMyxhif0H2qZvkrI2JMX3wGGKR0i72/DbE/1rC0DSvM0UBXh9VWHpySQ==
-X-Received: by 2002:a63:4f24:0:b0:429:aee9:f59a with SMTP id d36-20020a634f24000000b00429aee9f59amr6255932pgb.180.1660768282990;
-        Wed, 17 Aug 2022 13:31:22 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id e6-20020a056a0000c600b00528c7f6f4dcsm10895421pfj.52.2022.08.17.13.31.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 13:31:22 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 13:31:21 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Subject: Re: [PATCH v9 03/27] kallsyms: add static relationship between
- `KSYM_NAME_LEN{,_BUFFER}`
-Message-ID: <202208171330.BB5B081D1@keescook>
-References: <20220805154231.31257-1-ojeda@kernel.org>
- <20220805154231.31257-4-ojeda@kernel.org>
- <202208171238.80053F8C@keescook>
- <Yv1GmvZlpMopwZTi@boqun-archlinux>
+        Wed, 17 Aug 2022 16:31:41 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67D39DB49;
+        Wed, 17 Aug 2022 13:31:39 -0700 (PDT)
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oOPhL-000F88-8X; Wed, 17 Aug 2022 22:31:31 +0200
+Received: from [85.1.206.226] (helo=linux-4.home)
+        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oOPhK-0009zo-Ty; Wed, 17 Aug 2022 22:31:30 +0200
+Subject: Re: [PATCH 1/2] bpf: Fix 32bit bounds update in ALU64
+To:     Youlin Li <liulin063@gmail.com>, haoluo@google.com
+Cc:     ast@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        kpsingh@kernel.org, sdf@google.com, jolsa@kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <9f954e67-67fc-e3b9-d810-22bfea95d2aa@iogearbox.net>
+ <20220810100849.25710-1-liulin063@gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <5d2addca-10e5-f7a6-9efd-43322eec8347@iogearbox.net>
+Date:   Wed, 17 Aug 2022 22:31:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yv1GmvZlpMopwZTi@boqun-archlinux>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220810100849.25710-1-liulin063@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26630/Wed Aug 17 09:53:39 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 12:50:50PM -0700, Boqun Feng wrote:
-> On Wed, Aug 17, 2022 at 12:39:48PM -0700, Kees Cook wrote:
-> > On Fri, Aug 05, 2022 at 05:41:48PM +0200, Miguel Ojeda wrote:
-> > > This adds a static assert to ensure `KSYM_NAME_LEN_BUFFER`
-> > > gets updated when `KSYM_NAME_LEN` changes.
-> > > 
-> > > The relationship used is one that keeps the new size (512+1)
-> > > close to the original buffer size (500).
-> > > 
-> > > Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
-> > > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> > > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> > > ---
-> > >  scripts/kallsyms.c | 6 +++++-
-> > >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> > > index f3c5a2623f71..f543b1c4f99f 100644
-> > > --- a/scripts/kallsyms.c
-> > > +++ b/scripts/kallsyms.c
-> > > @@ -33,7 +33,11 @@
-> > >  #define KSYM_NAME_LEN		128
-> > >  
-> > >  /* A substantially bigger size than the current maximum. */
-> > > -#define KSYM_NAME_LEN_BUFFER	499
-> > > +#define KSYM_NAME_LEN_BUFFER	512
-> > > +_Static_assert(
-> > > +	KSYM_NAME_LEN_BUFFER == KSYM_NAME_LEN * 4,
-> > > +	"Please keep KSYM_NAME_LEN_BUFFER in sync with KSYM_NAME_LEN"
-> > > +);
-> > 
-> > Why not just make this define:
-> > 
-> > #define KSYM_NAME_LEN_BUFFER (KSYM_NAME_LEN * 4)
-> > 
-> > ? If there's a good reason not it, please put it in the commit log.
-> > 
+On 8/10/22 12:08 PM, Youlin Li wrote:
+> The commit ("bpf: Do more tight ALU bounds tracking") introduces a bug
+> that fails some selftests.
 > 
-> Because KSYM_NAME_LEN_BUFFER is used as a string by stringify() in
-> fscanf(), defining it as (KSYM_NAME_LEN * 4) will produce a string
+> in previous versions of the code, when
+> __reg_combine_64_into_32() was called, the 32bit boundary was
+> completely deduced from the 64bit boundary, so there was a call to
+> __mark_reg32_unbounded() in __reg_combine_64_into_32(). But before
+> adjust_scalar_min_max_vals() calls
+> __reg_combine_64_into_32() , the 32bit bounds are already calculated
+> to some extent, and __mark_reg32_unbounded() will eliminate these
+> information.
 > 
-> 	"128 * 4"
+> Simply remove the call to __reg_combine_64_into_32() and copying a code
+> without __mark_reg32_unbounded() should work.
 > 
-> after stringify() and that doesn't work with fscanf().
-
-Ah yeah. Thanks!
-
-> Miguel, maybe we can add something below in the commit log?
+> Before:
+>      ./test_verifier 142
+>      #142/p bounds check after truncation of non-boundary-crossing range FAIL
+>      Failed to load prog 'Permission denied'!
+>      invalid access to map value, value_size=8 off=16777215 size=1
+>      R0 max value is outside of the allowed memory range
+>      verification time 149 usec
+>      stack depth 8
+>      processed 15 insns (limit 1000000) max_states_per_insn 0
+>      total_states 0 peak_states 0 mark_read 0
+>      Summary: 0 PASSED, 1 SKIPPED, 1 FAILED
 > 
-> `KSYM_NAME_LEN_BUFFER` cannot be defined as an expression, because it
-> gets stringified in the fscanf() format. Therefore a _Static_assert() is
-> needed.
+> After:
+>      ./test_verifier 142
+>      #142/p bounds check after truncation of non-boundary-crossing range OK
+>      Summary: 1 PASSED, 1 SKIPPED, 0 FAILED
+> 
+> Signed-off-by: Youlin Li <liulin063@gmail.com>
+> ---
+>   kernel/bpf/verifier.c | 12 +++++++++++-
+>   1 file changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 11d8bb54ba6b..7ea6e0372d62 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -9014,7 +9014,17 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
+>   		/* ALU32 ops are zero extended into 64bit register */
+>   		zext_32_to_64(dst_reg);
+>   	} else {
+> -		__reg_combine_64_into_32(dst_reg);
+> +		if (__reg64_bound_s32(dst_reg->smin_value) &&
+> +		    __reg64_bound_s32(dst_reg->smax_value)) {
+> +			dst_reg->s32_min_value = (s32)dst_reg->smin_value;
+> +			dst_reg->s32_max_value = (s32)dst_reg->smax_value;
+> +		}
+> +		if (__reg64_bound_u32(dst_reg->umin_value) &&
+> +		    __reg64_bound_u32(dst_reg->umax_value)) {
+> +			dst_reg->u32_min_value = (u32)dst_reg->umin_value;
+> +			dst_reg->u32_max_value = (u32)dst_reg->umax_value;
+> +		}
+> +		reg_bounds_sync(dst_reg);
 
-Yeah, please add a source comment for that. :)
+Hm, this doesn't apply to the bpf tree. Is this on top of your previous patch [0]?
+Please squash both together in that case and resubmit your previous one as a v2.
 
--- 
-Kees Cook
+   [0] https://lore.kernel.org/bpf/9f954e67-67fc-e3b9-d810-22bfea95d2aa@iogearbox.net/
+
+Thanks,
+Daniel

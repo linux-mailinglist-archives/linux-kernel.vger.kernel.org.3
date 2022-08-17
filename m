@@ -2,53 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69EA2597619
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3763A597621
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241326AbiHQS4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 14:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
+        id S241327AbiHQSzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 14:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238392AbiHQS41 (ORCPT
+        with ESMTP id S233617AbiHQSzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 14:56:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC4C5AA26
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 11:56:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFADA612D6
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 18:56:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 760D0C433C1;
-        Wed, 17 Aug 2022 18:56:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660762586;
-        bh=eXADiVpfHcg0p9ebNKYLyPPBKa0498jYFVcf8rw3DfU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=uNWnWrGa/iA9AbTblZpKPjGugAP02+5bUCO0KgE8GYJ+AbiTtX7Oj3AJO6Penfi4H
-         kCaRdNt4a4M1NjPJJJRO+uXXqbUL1LcC+rjJbbaTw4Bha+MjS6xlfCIIAGcnE+nOhm
-         7i0hNyv8kavo3JM1CgW+IV5/73keVGbmszNIPkdYvVMA4wHUvMXHh7U9gvSwl03Oh/
-         4Waosb7Zt9klX+ERpUpQorjzACE7TAk2RjVPiAeCCAIPpYrmu1MSvSmKR5GB30RlBO
-         K9do2XoSZ++RS3wyxcb8PA63VR9ofENLGDiFwpypjpF/Y415zsxdCscOqACtN1l8qb
-         grEMlSj3LnaRQ==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] x86/build: Move '-mindirect-branch-cs-prefix' out of GCC-only block
-Date:   Wed, 17 Aug 2022 11:54:11 -0700
-Message-Id: <20220817185410.1174782-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 17 Aug 2022 14:55:19 -0400
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA75C57209;
+        Wed, 17 Aug 2022 11:55:18 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 18AE9581153;
+        Wed, 17 Aug 2022 14:55:18 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute3.internal (MEProxy); Wed, 17 Aug 2022 14:55:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        colorremedies.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1660762518; x=
+        1660766118; bh=2MSzHf7ULCb3kZkQymVkXbgysig1iR5rZCCBOLTeyYk=; b=J
+        6RpGRAB8er5OtqTwFoSv99IibnkkxQSmPTHsH6PTM0ychl74tOyhxCDoq+N3oiL3
+        gWJCBrYbFwHTDFwxmKH4krAdtSjiQqYueFzQZCYcalHSYLPBijPbJ98BXAOFi03R
+        NlBHluWZUf3BedagU/MrlLIjP46hHscZOZGN86WS/jL4uh3buXTUmBPUrqteSuR8
+        9jpl2mkTibR15MdaUfLSs2LB1WkS8HbTjSETx46E676XnvUsGVM+qdRFRbWqAmZS
+        RJRx67cxEbOZ0GqftDKHkVXJO0qs5DSzZkfciknwL6pvlU6yjKmRxoBdxCgnszRt
+        h/Da8XLwjd5jj34g1C8MA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660762518; x=1660766118; bh=2MSzHf7ULCb3kZkQymVkXbgysig1
+        iR5rZCCBOLTeyYk=; b=fKlkXzeY3T1X6lDoHRmZyhzHI+rnwVk0dEzPZWk3EmEK
+        Tc5wYnCbVprGssXbQvp6Os4phdDd24CYfvN30BXcGwqvb9lbrdWLlpuL6XGDXCSZ
+        K+4qFdwKa+nbuWmHsn9Q1TtqI3bxPqNUci5aHQGngNT6uPgQCPb88VvyBLuEEffe
+        MI2fgQv6+Z+zinSNHzTPdePtaOSRBu+foKS7NQ+OUjCCjDq4z6j6s8hlBVWxWLD8
+        C8oKR62ZMHL7t1zlCSiEXUh2yz8VPz4P2x9BxC9E/4j12MRUDagueXcBCJ1944CW
+        i33KsosNmIF+M5VAFmowuPTvJIoxjvTvTOL5HU6HHw==
+X-ME-Sender: <xms:lTn9YswnFe3PqZnR5lGZ14X0fYhBRJremBOnsjJKW7qTnParAfHBCA>
+    <xme:lTn9YgRWydPQquTKc10FE8TEpLoHqLX11eyzr-cG2HAu9fyYw8AcrK5gf2eLQQuY_
+    _l2iIlyhEMrBwR3ygM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehiedgudefvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdev
+    hhhrihhsucfouhhrphhhhidfuceolhhishhtshestgholhhorhhrvghmvgguihgvshdrtg
+    homheqnecuggftrfgrthhtvghrnhepgfdvueektdefgfefgfdtleffvdeileetgfefuddt
+    ffelueeiveeiveekhedtheeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheplhhishhtshestgholhhorhhrvghmvgguihgvshdrtghomh
+X-ME-Proxy: <xmx:lTn9YuWPEcuaC_ECqX5WKJJ_wVzuSK4LAJABqgueMMAtNEUWqcPvjw>
+    <xmx:lTn9Yqhuwb9I6mQps7MD0IE2bwq5xCfalGbFh0S0b7lbvcDPIZx-IQ>
+    <xmx:lTn9YuDR6l3Mu8o6I56QT_2UeX67ecWclkWA6IrJ_PkFsi3iIW9CPg>
+    <xmx:ljn9Yg0YjJA_u65qyn4VKZFWV9dLfbWdsOZyjCrtXS2wP-D2dNF4Kg>
+Feedback-ID: i06494636:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 553831700082; Wed, 17 Aug 2022 14:55:17 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
+Mime-Version: 1.0
+Message-Id: <2f252399-0e30-4465-8c02-3f42c145174a@www.fastmail.com>
+In-Reply-To: <20220817183335.47a4ao26wjopavo2@quack3>
+References: <dcd8beea-d2d9-e692-6e5d-c96b2d29dfd1@suse.com>
+ <2b8a38fa-f15f-45e8-8caa-61c5f8cd52de@www.fastmail.com>
+ <7c830487-95a6-b008-920b-8bc4a318f10a@applied-asynchrony.com>
+ <20220817114933.66c4g4xjsi4df2tg@quack3>
+ <85a141ae-56a7-4dcd-b75a-04be4b276b3a@www.fastmail.com>
+ <20220817163059.kigrvdfmxfswmhls@quack3>
+ <f6f899a5-97e2-460f-ad73-73d4b5e38eb6@www.fastmail.com>
+ <51cd43f9-ab6b-4dd6-814f-e0c1ace3143c@www.fastmail.com>
+ <20220817181554.znqljc6mmci45ukd@quack3>
+ <e4c260da-2df7-49a3-a8dc-1d3fc7ca12a0@www.fastmail.com>
+ <20220817183335.47a4ao26wjopavo2@quack3>
+Date:   Wed, 17 Aug 2022 14:54:42 -0400
+From:   "Chris Murphy" <lists@colorremedies.com>
+To:     "Jan Kara" <jack@suse.cz>
+Cc:     =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        "Nikolay Borisov" <nborisov@suse.com>,
+        "Jens Axboe" <axboe@kernel.dk>,
+        "Paolo Valente" <paolo.valente@linaro.org>,
+        Linux-RAID <linux-raid@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "Josef Bacik" <josef@toxicpanda.com>
+Subject: Re: stalling IO regression since linux 5.12, through 5.18
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,42 +100,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LLVM 16 will have support for this flag so move it out of the GCC-only
-block to allow LLVM builds to take advantage of it.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1665
-Link: https://github.com/llvm/llvm-project/commit/6f867f9102838ebe314c1f3661fdf95700386e5a
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
 
-I was not sure if this information is relevant for the commit message
-but I can boot without any issues on my test machines (two Intel and one
-AMD).
+On Wed, Aug 17, 2022, at 2:33 PM, Jan Kara wrote:
+> On Wed 17-08-22 14:18:01, Chris Murphy wrote:
+>> 
+>> 
+>> On Wed, Aug 17, 2022, at 2:15 PM, Jan Kara wrote:
+>> 
+>> > OK, if this indeed passes then b6e68ee82585 ("blk-mq: Improve performance
+>> > of non-mq IO schedulers with multiple HW queues") might be what's causing
+>> > issues (although I don't know how yet...).
+>> 
+>> I can revert it from 5.12.0 and try. Let me know which next test is preferred :)
+>
+> Let's try to revert this first so that we have it narrowed down what
+> started causing the issues. 
 
- arch/x86/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+OK I've reverted b6e68ee82585, and removing megaraid_sas.host_tagset_enable=0, and will restart the workload...
 
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 7854685c5f25..987da87c7778 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -14,13 +14,13 @@ endif
- 
- ifdef CONFIG_CC_IS_GCC
- RETPOLINE_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-extern -mindirect-branch-register)
--RETPOLINE_CFLAGS	+= $(call cc-option,-mindirect-branch-cs-prefix)
- RETPOLINE_VDSO_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-inline -mindirect-branch-register)
- endif
- ifdef CONFIG_CC_IS_CLANG
- RETPOLINE_CFLAGS	:= -mretpoline-external-thunk
- RETPOLINE_VDSO_CFLAGS	:= -mretpoline
- endif
-+RETPOLINE_CFLAGS	+= $(call cc-option,-mindirect-branch-cs-prefix)
- 
- ifdef CONFIG_RETHUNK
- RETHUNK_CFLAGS		:= -mfunction-return=thunk-extern
+Usually it's within 10 minutes but the newer the kernel it seems the longer it takes, or the more things I have to throw at it. The problem doesn't reproduce at all with 5.19 series unless I also run a separate dnf install, and that only triggers maybe 1 in 3 times.
 
-base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
 -- 
-2.37.2
-
+Chris Murphy

@@ -2,164 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD74D597A29
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 01:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B555597A36
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 01:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242425AbiHQXYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 19:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48528 "EHLO
+        id S242356AbiHQXYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 19:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242473AbiHQXXp (ORCPT
+        with ESMTP id S234593AbiHQXYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 19:23:45 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DEE6CE08
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 16:23:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=vy8IjC4ytmVgtE4WiKJlzHK2KV7oXQXXOSGLLqZ9y04=; b=oTgogptRyiMoOmoHALGOlPZgMh
-        D1Ju0RvJe/0scBxdEqE+ZJQFmvMZC29tOJlBgtT0mVGlwBwWjc9U1T4VIFmP3Ov0G4jh7DYrtKkTu
-        cAnxMD+oOg5LMip4DwJHZB/zq6w90/1RCJ48FxhejAi1WbXiKQovN2I5q3pvjOYkR8sPvU+bIc08G
-        GSWDKzymJW9GmsKR2A+vKkCLUcl48w78CML+9Qc2xf1haES/zv288eUJyYpjJXq8WRU30mS0ttbuI
-        0z5ue40C7i4yXuiZuDIGa+fZ0X53YM4M2EIU10hdhMNVPVZ5qg1ZUjPRj3/HXzlOz8KOmMelCsB7u
-        nXSxIrfw==;
-Received: from [2a01:799:961:d200:cca0:57ac:c55d:a485] (port=52827)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oOSNZ-0004zx-So; Thu, 18 Aug 2022 01:23:17 +0200
-Message-ID: <133c2a1d-0b4c-cef9-11fe-9ce9985253d6@tronnes.org>
-Date:   Thu, 18 Aug 2022 01:23:12 +0200
+        Wed, 17 Aug 2022 19:24:36 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5392325CB
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 16:24:33 -0700 (PDT)
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 7952440AFD
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 23:24:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1660778671;
+        bh=0ITPAdonThQpOqsHuY/v+qY6IgwF7YWH4O5viBksCYM=;
+        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+         Content-Type:Date:Message-ID;
+        b=L3N84VP/9YJFOquqJj7PqzEHQsE2WJBuxiFzYZn21FP0aWxLGAR+YnxvuxmoC64Hr
+         o8B3uFtnyEZ/HfYDmel5/InBdpbEopVXOFwDnWP3ceEgny9Z6xo5hkCnwickQiTPKl
+         8HoxmY2PEiUcPHNpoGNfeB4FC9VXNicqZ+mQYtJTCSd6cFlus6D+Y3xoW4Qy7VWjG6
+         iCbd7Jc5u/cotOFsnkLEC1SZZPOt9xf4KL3EArTR/8/2mjYueZh7W2hiKWgxL4sjsE
+         JGe6ZhY056nqRyCwB1PPNeuCwDH7vg/oBNu9UaRU/s8iwE75U8Z/Q85c2ncuopm9xF
+         o8eNfYMZiQckg==
+Received: by mail-pl1-f199.google.com with SMTP id j11-20020a170902da8b00b0016f17813479so67840plx.5
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 16:24:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:content-transfer-encoding:mime-version:comments
+         :references:in-reply-to:subject:cc:to:from:x-gm-message-state:from
+         :to:cc;
+        bh=0ITPAdonThQpOqsHuY/v+qY6IgwF7YWH4O5viBksCYM=;
+        b=Nf/kte/J2BdEGIyyqe2T+97cgQPuVOTH2iBfAVSOJxpOsbUUeHPbQv09va2e+fY8d7
+         Np0GnXrb841Z93uxaF3KtSJZalvZCPDFQ0q9Z+FVC8KSsfUriQLnZYXNEDHwpcXVEsuq
+         zdzkBlcKzDnRqviSCY/DKq3voMKPgkoGT7cagqFVR4P1WUgbnHrGfwwZau8T4RZIlbZA
+         yHFE+oKe2XEX+XH5lyIAWwcPAQGXgHR9KSHywwECDokyCkt33vlnzmNekS2V7IxeU2M5
+         YpqOnZTZWWjtrFBSgcR4z5FOHw0L+ANyuCb34p+2mO6i+Q4AUkWHfGCusVChZlMVJ5GN
+         SnNQ==
+X-Gm-Message-State: ACgBeo2n7BJHCGkbZiXr/Gs3gWNO0r/BULWE6roDgEYF0DVstD+e5LFq
+        2i7E+javss6qIV8rJq9dI5smuyC6j0JUknnfv53ntFFH/BWXKa+Dr5CX9O7MFuBt/GTYFXKNjcu
+        2NVx15Ga3YXcF3AR+jIbTAzdSb8LEPcukZhJ7BLM8hw==
+X-Received: by 2002:a65:60d4:0:b0:419:9871:9cf with SMTP id r20-20020a6560d4000000b00419987109cfmr432326pgv.214.1660778668785;
+        Wed, 17 Aug 2022 16:24:28 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4hTiPVnAROAFPx2zsiqQIWUKIlMPRA9XYwYK+QRXA0+5W2GeHKnttWaDvaORUEIbOAiwgZdA==
+X-Received: by 2002:a65:60d4:0:b0:419:9871:9cf with SMTP id r20-20020a6560d4000000b00419987109cfmr432307pgv.214.1660778668308;
+        Wed, 17 Aug 2022 16:24:28 -0700 (PDT)
+Received: from famine.localdomain ([50.125.80.157])
+        by smtp.gmail.com with ESMTPSA id k5-20020a170902ce0500b0016d150c6c6dsm485329plg.45.2022.08.17.16.24.27
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 17 Aug 2022 16:24:27 -0700 (PDT)
+Received: by famine.localdomain (Postfix, from userid 1000)
+        id 646E861193; Wed, 17 Aug 2022 16:24:27 -0700 (PDT)
+Received: from famine (localhost [127.0.0.1])
+        by famine.localdomain (Postfix) with ESMTP id 5EEBC9FA79;
+        Wed, 17 Aug 2022 16:24:27 -0700 (PDT)
+From:   Jay Vosburgh <jay.vosburgh@canonical.com>
+To:     Jonathan Toppins <jtoppins@redhat.com>
+cc:     netdev@vger.kernel.org, liuhangbin@gmail.com,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v3 2/2] bonding: 802.3ad: fix no transmission of LACPDUs
+In-reply-to: <3d76f4c3-916a-9abe-745f-e2781fad1b24@redhat.com>
+References: <cover.1660572700.git.jtoppins@redhat.com> <0639f1e3d366c5098d561a947fd416fa5277e7f4.1660572700.git.jtoppins@redhat.com> <17000.1660655501@famine> <3d55690a-8932-4560-4267-ab28816fdb47@redhat.com> <3d76f4c3-916a-9abe-745f-e2781fad1b24@redhat.com>
+Comments: In-reply-to Jonathan Toppins <jtoppins@redhat.com>
+   message dated "Tue, 16 Aug 2022 13:47:07 -0400."
+X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        Dom Cobley <dom@raspberrypi.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
- <9fdecae2-80ad-6212-0522-7dccf9fb57be@tronnes.org>
- <20220816082612.grebxql5ynnfnvfd@houat>
- <ea6ebdda-f779-78af-1ffd-bd86d715077f@tronnes.org>
- <20220816094922.oqhrhefv327zo2ou@houat>
- <be9b6b71-fa2a-3290-2bce-901342e01981@tronnes.org>
- <20220817114605.jpb3tlnoseyvf65d@houat>
- <30f3005d-0acc-e5af-10ca-cf46f18b3478@tronnes.org>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <30f3005d-0acc-e5af-10ca-cf46f18b3478@tronnes.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 17 Aug 2022 16:24:27 -0700
+Message-ID: <7721.1660778667@famine>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Jonathan Toppins <jtoppins@redhat.com> wrote:
 
+>On 8/16/22 09:41, Jonathan Toppins wrote:
+>> On 8/16/22 09:11, Jay Vosburgh wrote:
+>>> Jonathan Toppins <jtoppins@redhat.com> wrote:
+>>>
+>>>> This is caused by the global variable ad_ticks_per_sec being zero as
+>>>> demonstrated by the reproducer script discussed below. This causes
+>>>> all timer values in __ad_timer_to_ticks to be zero, resulting
+>>>> in the periodic timer to never fire.
+>>>>
+>>>> To reproduce:
+>>>> Run the script in
+>>>> `tools/testing/selftests/drivers/net/bonding/bond-break-lacpdu-tx.sh`
+>>>> which
+>>>> puts bonding into a state where it never transmits LACPDUs.
+>>>>
+>>>> line 44: ip link add fbond type bond mode 4 miimon 200 \
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 xmi=
+t_hash_policy 1 ad_actor_sys_prio 65535 lacp_rate fast
+>>>> setting bond param: ad_actor_sys_prio
+>>>> given:
+>>>> =C2=A0=C2=A0=C2=A0 params.ad_actor_system =3D 0
+>>>> call stack:
+>>>> =C2=A0=C2=A0=C2=A0 bond_option_ad_actor_sys_prio()
+>>>> =C2=A0=C2=A0=C2=A0 -> bond_3ad_update_ad_actor_settings()
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -> set ad.system.sys_priority =3D=
+ bond->params.ad_actor_sys_prio
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -> ad.system.sys_mac_addr =3D bon=
+d->dev->dev_addr; because
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 par=
+ams.ad_actor_system =3D=3D 0
+>>>> results:
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 ad.system.sys_mac_addr =3D bond->dev->dev_addr
+>>>>
+>>>> line 48: ip link set fbond address 52:54:00:3B:7C:A6
+>>>> setting bond MAC addr
+>>>> call stack:
+>>>> =C2=A0=C2=A0=C2=A0 bond->dev->dev_addr =3D new_mac
+>>>>
+>>>> line 52: ip link set fbond type bond ad_actor_sys_prio 65535
+>>>> setting bond param: ad_actor_sys_prio
+>>>> given:
+>>>> =C2=A0=C2=A0=C2=A0 params.ad_actor_system =3D 0
+>>>> call stack:
+>>>> =C2=A0=C2=A0=C2=A0 bond_option_ad_actor_sys_prio()
+>>>> =C2=A0=C2=A0=C2=A0 -> bond_3ad_update_ad_actor_settings()
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -> set ad.system.sys_priority =3D=
+ bond->params.ad_actor_sys_prio
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -> ad.system.sys_mac_addr =3D bon=
+d->dev->dev_addr; because
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 par=
+ams.ad_actor_system =3D=3D 0
+>>>> results:
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 ad.system.sys_mac_addr =3D bond->dev->dev_addr
+>>>>
+>>>> line 60: ip link set veth1-bond down master fbond
+>>>> given:
+>>>> =C2=A0=C2=A0=C2=A0 params.ad_actor_system =3D 0
+>>>> =C2=A0=C2=A0=C2=A0 params.mode =3D BOND_MODE_8023AD
+>>>> =C2=A0=C2=A0=C2=A0 ad.system.sys_mac_addr =3D=3D bond->dev->dev_addr
+>>>> call stack:
+>>>> =C2=A0=C2=A0=C2=A0 bond_enslave
+>>>> =C2=A0=C2=A0=C2=A0 -> bond_3ad_initialize(); because first slave
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -> if ad.system.sys_mac_addr !=3D=
+ bond->dev->dev_addr
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return
+>>>> results:
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 Nothing is run in bond_3ad_initialize() becau=
+se dev_add equals
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 sys_mac_addr leaving the global ad_ticks_per_=
+sec zero as it is
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 never initialized anywhere else.
+>>>>
+>>>> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+>>>> Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+>>>> ---
+>>>>
+>>>> Notes:
+>>>> =C2=A0=C2=A0=C2=A0 v2:
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 * split this fix from the reproducer
+>>>> =C2=A0=C2=A0=C2=A0 v3:
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 * rebased to latest net/master
+>>>>
+>>>> drivers/net/bonding/bond_3ad.c | 3 ++-
+>>>> 1 file changed, 2 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/net/bonding/bond_3ad.c
+>>>> b/drivers/net/bonding/bond_3ad.c
+>>>> index d7fb33c078e8..957d30db6f95 100644
+>>>> --- a/drivers/net/bonding/bond_3ad.c
+>>>> +++ b/drivers/net/bonding/bond_3ad.c
+>>>> @@ -84,7 +84,8 @@ enum ad_link_speed_type {
+>>>> static const u8 null_mac_addr[ETH_ALEN + 2] __long_aligned =3D {
+>>>> =C2=A0=C2=A0=C2=A0=C2=A00, 0, 0, 0, 0, 0
+>>>> };
+>>>> -static u16 ad_ticks_per_sec;
+>>>> +
+>>>> +static u16 ad_ticks_per_sec =3D 1000 / AD_TIMER_INTERVAL;
+>>>> static const int ad_delta_in_ticks =3D (AD_TIMER_INTERVAL * HZ) / 1000;
+>>>
+>>> =C2=A0=C2=A0=C2=A0=C2=A0I still feel like this is kind of a hack, as it=
+'s not really
+>>> fixing bond_3ad_initialize to actually work (which is the real problem
+>>> as I understand it).=C2=A0 If it's ok to skip all that for this case, t=
+hen
+>>> why do we ever need to call bond_3ad_initialize?
+>>>
+>> The way it is currently written you still need to call
+>> bond_3ad_initialize() just not for setting the tick resolution. The
+>> issue here is ad_ticks_per_sec is used in several places to calculate
+>> timer periods, __ad_timer_to_ticks(), for various timers in the 802.3ad
+>> protocol. And if this variable, ad_ticks_per_sec, is left uninitialized
+>> all of these timer periods go to zero. Since the value passed in
+>> bond_3ad_initialize() is an immediate value I simply moved it off of the
+>> call stack and set the static global variable instead.
+>> To fix bond_3ad_initialize(), probably something like the below is
+>> needed, but I do not understand why the guard if check was placed in
+>> bond_3ad_initialize().
+>
+>I looked at the history of the if guard in bond_3ad_initialize and it has
+>existed since the creation of the git tree. It appears since commit
+>5ee14e6d336f ("bonding: 3ad: apply ad_actor settings changes immediately")
+>the if guard is no longer needed and removing the if guard would also fix
+>the problem, I have not tested yet.
 
-Den 17.08.2022 15.11, skrev Noralf Trønnes:
-> 
-> 
-> Den 17.08.2022 13.46, skrev Maxime Ripard:
->> On Tue, Aug 16, 2022 at 09:35:24PM +0200, Noralf Trønnes wrote:
->>> Den 16.08.2022 11.49, skrev Maxime Ripard:
->>>> On Tue, Aug 16, 2022 at 11:42:20AM +0200, Noralf Trønnes wrote:
->>>>> Den 16.08.2022 10.26, skrev Maxime Ripard:
->>>>>> Hi,
->>>>>>
->>>>>> On Mon, Aug 08, 2022 at 02:44:56PM +0200, Noralf Trønnes wrote:
->>>>>>> Den 29.07.2022 18.34, skrev Maxime Ripard:
->>>>>>>> The TV mode property has been around for a while now to select and get the
->>>>>>>> current TV mode output on an analog TV connector.
->>>>>>>>
->>>>>>>> Despite that property name being generic, its content isn't and has been
->>>>>>>> driver-specific which makes it hard to build any generic behaviour on top
->>>>>>>> of it, both in kernel and user-space.
->>>>>>>>
->>>>>>>> Let's create a new bitmask tv norm property, that can contain any of the
->>>>>>>> analog TV standards currently supported by kernel drivers. Each driver can
->>>>>>>> then pass in a bitmask of the modes it supports.
->>>>>>>>
->>>>>>>> We'll then be able to phase out the older tv mode property.
->>>>>>>>
->>>>>>>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
->>>>>>>>
+	The logic in bond_3ad_initialize probably came that way when the
+code was contributed sometime during 2.4.x.
 
->>> How do you test the property? I've used modetest but I can only change
->>> to a tv.mode that matches the current display mode. I can't switch from
->>> ntsc to pal for instance.
->>
->> Yep, if you want to change from PAL to NTSC, it will require a new mode.
->>
-> 
-> So userspace has to check tv.mode first and then create a display mode
-> the driver will accept if switching to a different display mode is
-> necessary? In other words, userspace can't discover from the kernel
-> which display modes a certain tv.mode/norm provides before it is
-> selected? If so, maybe libdrm should have some function(s) to deal with
-> switching between modes that require a different display mode since
-> knowledge about which display modes a tv.mode supports is needed before
-> hand.
-> 
+	Curiosity got the better of me, and I looked at the 2.4.35 code.
+I'm not sure what the point of the test was even then, since
+bond_3ad_initialize is only called when adding a first interface to the
+bond, and there wasn't a way to tweak the sys_mac_addr then.
 
-I haven't used vc4 on Pi4 in mainline before and have finally gotten it
-to work.
+	In the current code, I think the if test could fail if
+sys_mac_addr is set manually to be equal to the bond's MAC prior to
+adding the first interface to the bond.  As far as I can tell, the only
+result of failing the MAC test would be that the agg selection timer
+wouldn't be started, which is an optimization to reduce LACP aggregator
+flailing when multiple interfaces are added at the same time (IEEE
+802.1AX-2000 6.4.9 and 6.4.12.1.n).
 
-I see that the connector reports 2 modes that together fit all tv.norms
-so userspace doesn't have to contruct a display mode, but it does need
-to know which display mode belongs to a certain tv.norm.
+>I think this patch series can be accepted as-is because, it does fix the
+>issue as demonstrated by the kselftest accompanying the series and is the
+>smallest change to fix the issue.
+>
+>Further, I don't see why we want to set the file-scoped variable,
+>ad_ticks_per_sec, inside bond_3ad_initialize() as ad_ticks_per_sec is
+>utilized across all bonds. It seems like ad_ticks_per_sec should be
+>changed to a const and set at the top of the file. I see no value in
+>passing the value as an unnamed constant on the stack when
+>bond_3ad_initialize is called. These changes however could be done in the
+>net-next tree as follow-on cleanup patches.
+>
+>Jay, how would you like to proceed?
 
-When I try to use modetest I'm unable to set a mode:
+	I don't have issue with moving ad_ticks_per_sec to a file scope
+constant.  The minimal change here, though, is effectively making the
+tick_resolution parameter to bond_3ad_initialize be ignored, even though
+the compiler won't complain about it.
 
-pi@pi4t:~ $ modetest -M vc4 -s 45:720x480i
-setting mode 720x480i-29.97Hz on connectors 45, crtc 68
-failed to set mode: Function not implemented
+	Given that there is already mystery in how some of this works,
+I'd prefer the patches to make the code clearer, so my vote is for the
+"fix it right" method, i.e., make ad_ticks_per_sec a real constant,
+remove the tick_resolution parameter from bond_3ad_initialize and drop
+the "if MAC_ADDRESS_COMPARE" test therein.
 
-The errno is misleading, modetest does a drmModeDirtyFB before checking
-the error returned by drmModeSetCrtc.
+	-J
 
-Setting the property succeeds, but the modeset still fails:
-
-pi@pi4t:~ $ modetest -M vc4 -s 45:720x480i -w 45:"tv norm":2
-setting mode 720x480i-29.97Hz on connectors 45, crtc 68
-failed to set mode: Function not implemented
-
-pi@pi4t:~ $ modetest -M vc4 -c
-        37 tv norm:
-                flags: bitmask
-                values: NTSC-443=0x1 NTSC-J=0x2 NTSC-M=0x4 PAL-B=0x10
-PAL-M=0x200 PAL-N=0x400 SECAM-B=0x2000
-                value: 2
-
-Here's the log, can you see if there's anything obvious in there:
-https://gist.github.com/notro/a079498bf6b64327105752b2bafa8858
-
-Noralf.
+---
+	-Jay Vosburgh, jay.vosburgh@canonical.com

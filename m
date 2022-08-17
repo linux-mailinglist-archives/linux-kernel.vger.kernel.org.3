@@ -2,73 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F414B59682D
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 06:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E920A59682F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 06:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbiHQE2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 00:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
+        id S231355AbiHQE32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 00:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiHQE2w (ORCPT
+        with ESMTP id S229448AbiHQE30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 00:28:52 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47713ED49;
-        Tue, 16 Aug 2022 21:28:50 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-32a17d3bba2so202164647b3.9;
-        Tue, 16 Aug 2022 21:28:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Fd64ZTYpBZ+RIWsrdcx55o1cFYfsxNqJQSrJeLxKjSQ=;
-        b=Ad99UETspLmbHH9gsu+1FAFTvXlfJoLpaNP0OL9t4xxoVylZiSsMLzp4nPYGIA1UFH
-         IOKL84hR+P6bSU7poN6ScvoslZBqCCZJ+q/m/a3E+GfVFccj2tMmQaejOqlhVckdRP2K
-         5/9xgAqY2UHzw7qhAf13K6clzbiIjuZIaU9rLdrg2XKbT27K6Kn7nQXLXk6No6K9C0q0
-         3d/ppwe3m4L4fPgoXWluWqPvm1Y7d2cz6MIvl/hxiWZkTiTtseK7FvlK4sQobx0QkTNJ
-         3X89MouRVjqTxcepKwydY0yX7qth747/NNwCTIg0LL55+5UtSw6tC3MfVpOTZXRRo7al
-         TUyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Fd64ZTYpBZ+RIWsrdcx55o1cFYfsxNqJQSrJeLxKjSQ=;
-        b=wHzCIo/8XqRcHdoL2HaPXJwd1sG5qFOxcIAIF6aNctQURvqm653AfZqkms6XGbL0+1
-         4KBaHC4usPnpEAY5JvjEzwCbI5+LoSiCiwE2PSPZmy20B8qd1MkqImVhD5UG7XL//Mlq
-         JgAU6KJe6RQifr8Tuga8LWR0A5nCa8INbR3KcqTmkYy+6pkQlmLN7vyrYsOr8kHsQmoo
-         OspdT3QetlfRSGO/iBufPB6QhO/rLosnx/YVun4yD+ie3LGk9U4vWpcPV9Gu/nQ3/vW+
-         1ZNFKO8KHSQXLwAaHcijxVZEqG2IjQtxQ2ZJAgnCzC7yew4h2GcMVWrNL7eQGA5B4loO
-         vBbA==
-X-Gm-Message-State: ACgBeo1HhuVeoDyMwkgip+dvyeDwEuIDRLF66s3iaLOPQj7Thsgb5zZx
-        acDsmgJZc9Ld1E+PxCZViB4onvZVCeq3U4ajAwI=
-X-Google-Smtp-Source: AA6agR7r3Vz1IkV8JjjkI722lpR7xQMTMFPwTM97y2R48sSD8HSCg6dN1OoUe4zjtP1cNX3v/pKyZCb6n0V55d2IfQo=
-X-Received: by 2002:a25:6885:0:b0:68b:b381:facf with SMTP id
- d127-20020a256885000000b0068bb381facfmr7872999ybc.318.1660710529892; Tue, 16
- Aug 2022 21:28:49 -0700 (PDT)
+        Wed, 17 Aug 2022 00:29:26 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90D44A104
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 21:29:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660710565; x=1692246565;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cVdC4bjVi8/suUsEqf4xy7IKvNzHo3N9lIbSBBoch5Q=;
+  b=UFnvGzc1NfslzQrbF4TKDsDevbDGVmhXtwUHmG0v9kbAVrmoUjA2snQT
+   I+GxL4dfeqxqkWCJOwPE6HzYb+ll5R1ZDaJgNQBir6vqprz6oQlmdpwhV
+   rteC9wjLlkHgaMW+O7oBs1+LV4mw+oMOP5KzhtvSkpDv1mWJ6+5f40YPV
+   TC38rEJxPEZ8aqbd7G/7HwxXu1a8E9cm1pNOu8lTkyF0roNqTZz+0QZ6/
+   VseAnU1CdocVb1vgNrw0UfL8v7K9GjuuHS7IT7u9oGEIDuXrdfTTbRfCs
+   NIJ9R3PLiFVQLucwDxCDGYio6jfEm9G1aRCFIc5/LwHLyU9+vu71hifBv
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="292392599"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="292392599"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 21:29:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="636199232"
+Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 16 Aug 2022 21:29:10 -0700
+Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oOAg2-0000Zk-0u;
+        Wed, 17 Aug 2022 04:29:10 +0000
+Date:   Wed, 17 Aug 2022 12:28:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [intel-tdx:guest-unaccepted-memory 11/14] kexec.c:undefined
+ reference to `arch_kexec_load'
+Message-ID: <202208171215.jkRKSdKE-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220810050712.9539-1-lukas.bulwahn@gmail.com>
- <20220810050712.9539-2-lukas.bulwahn@gmail.com> <d8930edf-d138-6ef2-81c3-ff4d9003066b@suse.com>
-In-Reply-To: <d8930edf-d138-6ef2-81c3-ff4d9003066b@suse.com>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Wed, 17 Aug 2022 06:28:39 +0200
-Message-ID: <CAKXUXMx2HvR5SYxpvH3=LSzv_v6S65n-F4FyUSD=STpAgSYcOw@mail.gmail.com>
-Subject: Re: [PATCH 1/4] xen: x86: set the config XEN_512GB after config change
-To:     Jan Beulich <jbeulich@suse.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        xen-devel@lists.xenproject.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,23 +61,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 9:07 AM Jan Beulich <jbeulich@suse.com> wrote:
->
-> On 10.08.2022 07:07, Lukas Bulwahn wrote:
-> > --- a/arch/x86/configs/xen.config
-> > +++ b/arch/x86/configs/xen.config
-> > @@ -14,7 +14,7 @@ CONFIG_CPU_FREQ=y
-> >
-> >  # x86 xen specific config options
-> >  CONFIG_XEN_PVH=y
-> > -CONFIG_XEN_MAX_DOMAIN_MEMORY=500
-> > +CONFIG_XEN_512GB=y
->
-> Does this actually need setting here? The option's default is y, so
-> it ought to be turned on "automatically". Hence I think it's only
-> the stale line which wants deleting.
->
+tree:   https://github.com/intel/tdx.git guest-unaccepted-memory
+head:   86fb61d5824802e1b7c4c8eb1b34029024f52ee6
+commit: 820c5c338451079677510d4183ba5d5dc314c030 [11/14] x86: Disable kexec if system has unaccepted memory
+config: x86_64-randconfig-a004-20220815 (https://download.01.org/0day-ci/archive/20220817/202208171215.jkRKSdKE-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel/tdx/commit/820c5c338451079677510d4183ba5d5dc314c030
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-unaccepted-memory
+        git checkout 820c5c338451079677510d4183ba5d5dc314c030
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Jan, that makes sense. I will send a patch v2 to do so.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Lukas
+All errors (new ones prefixed by >>):
+
+   ld: kernel/kexec.o: in function `__x64_sys_kexec_load':
+>> kexec.c:(.text+0x1cf): undefined reference to `arch_kexec_load'
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

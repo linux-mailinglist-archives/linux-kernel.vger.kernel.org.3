@@ -2,149 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C42597319
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B525972F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236766AbiHQPe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 11:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
+        id S240456AbiHQPaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 11:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233350AbiHQPex (ORCPT
+        with ESMTP id S237258AbiHQPaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 11:34:53 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9747FC62
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:34:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660750492; x=1692286492;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=k7unP8JqfUATY8myPeuAfmP2uPdMOrj6Q32GSgvuRY0=;
-  b=gdOMTtOeMrjHeWmLyvxiJez2W55gCxfZznKQ8Ttk0tTKpO9yRw7b7w5O
-   PfiKQ1bitqZY4WfMHqYS8H0Qa7bomciNI47CN9yXOXFp18IrcpwkRPsUn
-   jW0dEBc/hHgyZBnmpnL8b/2LrUKV3VM/wtVwQa1tE7aGyIBRhEmkDACcX
-   HjgN6kwz6v+d0+D6At3Oll5bMerpczql9Xa01+Um9F8bTUSCjVTuDUOlU
-   NuHpJT2VXXIMWwYLLcFm5SqTmRnBx1uI5CouSZ3rNWOy22k5IRqrytOvU
-   ccMHayIU/+8HogbLGjYMqCYPJHqnvYTlG4begEEmnz3/WjJaDfpkzzcHH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="378814814"
-X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
-   d="scan'208";a="378814814"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 08:29:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
-   d="scan'208";a="607471433"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga002.jf.intel.com with ESMTP; 17 Aug 2022 08:29:25 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 17 Aug 2022 08:29:25 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28 via Frontend Transport; Wed, 17 Aug 2022 08:29:25 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.106)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.28; Wed, 17 Aug 2022 08:29:24 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IjMzd54BbXkK1p19qeiCVMy/cdNvmq3NzZPvEUWlxSpgB5TksF6p1A8HoDdohU5BaMvC5upTAExemFBjLJYhINLXhOqxQkHyI9YyOYQNU4jltj/pvMbV7M5ufdLIlbl9YTqlT7R73Jju9+eAPjHha7xb+QhbXkSP5fag+slf4XKj2q7jAHdnxLo55kZ6rBz7gikZ3DY+rzhs6eNMElOZ7JiUVDvErSrKDTRZXtlvR5xAVS10Vc5lHBLscwFCSZp0ZVGz0nl8NOaz6+YtffE+Gw9LZbE4P0UQbyXlk9CQQwfZZG7CpTRkQS4633YMPHEOCdlNqc3Me/L/othChgOZtw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Esle9MfhLaAdorcuH+c5mjdx7WIiCt3NDLFKqE5DhwA=;
- b=agzfxpEMW0ChnSG8AxWd7NysuXLghojlZc1YlTaKMTjVQqua7XB2a177u5kN7Ko3RoJpWsa1ZGRYro/i9MV1BHooWnKmNfK1dIou+zYNENQa8vQkw71gwo1sL0Bt35QLOpEhRZot0ooCTPG2Kb72ppV6ZUt2/XiS6a03mLs6Rr6+hqU1H4/QcE8XjdP2J4EOGJ3Un422S07QnmnXMQ0k9TJ02Twb3b4PsfvLLJ+JVd5PHjl7CW5wFZUEkVwkIlKWw5qN7lDHW77rivbHyr5nkGfMcf7XvrNR+hcZR0qr5dNnSrUhFKqDNIMCrAqZCs5czTLaaIDfzWlX3vKoQuZNLw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ1PR11MB6201.namprd11.prod.outlook.com (2603:10b6:a03:45c::14)
- by DM6PR11MB4740.namprd11.prod.outlook.com (2603:10b6:5:2ad::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Wed, 17 Aug
- 2022 15:29:23 +0000
-Received: from SJ1PR11MB6201.namprd11.prod.outlook.com
- ([fe80::10da:929a:73eb:40ad]) by SJ1PR11MB6201.namprd11.prod.outlook.com
- ([fe80::10da:929a:73eb:40ad%6]) with mapi id 15.20.5525.017; Wed, 17 Aug 2022
- 15:29:22 +0000
-Date:   Wed, 17 Aug 2022 15:29:04 +0000
-From:   Ashok Raj <ashok.raj@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Ashok Raj <ashok_raj@linux.intel.com>, X86 ML <x86@kernel.org>,
-        "Andrew Cooper" <amc96@srcf.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        =?utf-8?Q?=C8=98tefan?= Talpalaru <stefantalpalaru@yahoo.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: Re: [PATCH] x86/microcode/AMD: Attempt applying on every logical
- thread
-Message-ID: <Yv0JQGa/2BlbQChZ@araj-dh-work>
-References: <20220814120026.16118-1-bp@alien8.de>
- <YvtcGEHX8eSFpALX@araj-dh-work>
- <YvuQgx698T5cgF+C@zn.tnic>
- <YvzbFXnBjNjK+UJK@araj-dh-work>
- <Yvz53AAh+p5Db7CK@zn.tnic>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Yvz53AAh+p5Db7CK@zn.tnic>
-X-ClientProxiedBy: SJ0PR03CA0004.namprd03.prod.outlook.com
- (2603:10b6:a03:33a::9) To SJ1PR11MB6201.namprd11.prod.outlook.com
- (2603:10b6:a03:45c::14)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d1f35d69-0560-4864-7bd8-08da806542ce
-X-MS-TrafficTypeDiagnostic: DM6PR11MB4740:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lu7GupVOeQX/Iv5JOBWzuX01zoypGZ+1ZJQccjgCUloWtFCKlkKakiGwaPphW92qZJJckk+uClGDNZMv84TFy8Z+/QsdaKGMOfW3kStJgt4v4JRGdNk2XYJfa2RVkydViZhUaYzVPUVRpceush2CgJ3QiN3blvBmBGjYZ/58JxW7v/HsfJZjP3T/ZhIo88AGXs/d9yEoWVZCp7ObJ35yoBYPUvL8Nt1ZDJ8s1mSE2EJtawDu7I9XlX5mbMXmEcapNckKdJ4+0fCWIwzsBUcW7UHRIHpYMZal/VfDAjv6SVvrY/hUq7VaCK8XNpqZvqRhNVvQVPJwY/T4AJh5k4GliwByMA84F8Gvw4ZLm6VPxtE3KgKNF0JoGCjqfpewd0HRAA/okK/gpNI9iZSnhp8VU7K+DWgJ0BOp/aumUlHcH2cJADhqJzEyajup3O78uEHcHkeE+234dKWRgJUkHcPn5iDJX8NPNZdPOzOnjHf6Gg7xruXjO+CoWQ4gZOyL1DR2jsJpXk541tvS6Gw9vjzNXyInGxy2E6l2IIB3MhUYv0Vyz0lQcVAsRXpseOPDHxW8L+s4qIDU8AAR6x8Sl4KW3yUBrehoyquDK8LiQDMDEriwijkhrXAHdGoh1xpQLFY+TNIziBpaURC+W+ZsHWQ0wMRVrlwgNAH0FeOFmdIpJMkEI6Dpf1lCdJDKEeKp+l8rg/CmMRQJX0WS+xStb9hPsfrBLIVT0Ndn7fJpQMpQs04vvdHAiryaJXiagj9yDUtgATNQSrS/Df9IdXBTeNt5vg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6201.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(346002)(39860400002)(376002)(366004)(396003)(136003)(8676002)(316002)(4326008)(66476007)(54906003)(33716001)(66556008)(66946007)(2906002)(44832011)(8936002)(38100700002)(82960400001)(6916009)(5660300002)(86362001)(186003)(41300700001)(6486002)(6506007)(6666004)(966005)(26005)(6512007)(83380400001)(478600001)(9686003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sKjFuuMsWlHUPRKSlm/JR3109PkjixHnklYwj9Yw2rpXufQot//IOOZRjBGt?=
- =?us-ascii?Q?5xwBksTI/GLshGGKy9ha63F5qzWvFd7TLy2EpVZyF70bafUpscjOt6uw5E2t?=
- =?us-ascii?Q?eR3Ji6AUSbKagpeniAJlan78thKiITAZ07Uujxb4i45r4G41uaY4Pn0RQ6CA?=
- =?us-ascii?Q?VRAkkq7CEMzepnAN3GNJOg3CXTpXLOYHPElBOc2wISD/CeS7nEEbxup/KZ8X?=
- =?us-ascii?Q?G02myvtX0Yd3Mo6RbSdyvdewUT3ouLM9LCzql2y9Ad5HJsU5ZaPNpq2XWGdv?=
- =?us-ascii?Q?9rwq4wS4D6cT23VvbjpDYen3lm9SVFJEZcDpaW18PL3jEht1YwXjOtsRWz//?=
- =?us-ascii?Q?d7k1qlXNLZPtUJ4cYzlV5AaMPGL2N6W1C95I633o2GGMjHjpNfHH0pDwdes3?=
- =?us-ascii?Q?nvrlszOWXdiDtICQXOBXsDxNALH4bKoZVHI/50LZ/tMLEmxWZpq3l19x2Tmm?=
- =?us-ascii?Q?+OvY8CkS59A24eD6Ji12BjalUEz2esjr4uHBB9ia9JHC7kuTOxfrBXdjFRwU?=
- =?us-ascii?Q?bQylYGjoF4wOuQQZej36xjXlvl7NrH8wykQCoOlbS5Tv8YFf9Dt4wGPXA29s?=
- =?us-ascii?Q?gj9GlG0E71mS+K7hjcYfv4gViRSY+zlQIbF5Qlg6VcIgNJ9CdbJvPJWEadUN?=
- =?us-ascii?Q?TBb7pdAsS0Z8ilzJdd5PISy+DZKSk1ocHAI4uFjGNUsHgmCL0zL3htkWL0+V?=
- =?us-ascii?Q?LLVMpGdFYnzYfOxuWC2TMO1DkjQeoaEXwNpI+9ncvOW4HybXaNSzUkYmoQab?=
- =?us-ascii?Q?tOEwZsq0Aii0oCtzCkBJbPddrFwNTdJju6pzQ2uPAapCpR5+Vrf1lJBe/HgG?=
- =?us-ascii?Q?pkuNlpSe5mUx6CnCznZHmR+6IEMp0KpfRCB+VTkPdhQJ/h6zdxyLhJZV/zPt?=
- =?us-ascii?Q?Rfu4BkXSIH/DchqYk/6MsTSNCzbmQcq1F8wc32b2zJJLSGy/QSVZ/dg6fljB?=
- =?us-ascii?Q?2/PHltoxSPjWwInhco2DzZy16IFlWFlP9oWaT/oN9mCFJRoJoEBaOalZo7F9?=
- =?us-ascii?Q?4GymWSyZgC0XQVP8zZ7lRllhGZlAn4wQLhp0ElqrKYzJtOLauE4LaUKaKfSu?=
- =?us-ascii?Q?du8QdAhrwxujKFBxv8OrjMToM3UF9QhegFsfyfRjOOROXrlmy/srB3AvAT9H?=
- =?us-ascii?Q?hB2VTeDB3QuJjxLtUVGxq5lmuj2685ma+WVfTALWW7GDj0TssAzGC9bJZb++?=
- =?us-ascii?Q?j4FkWStoLjFcuv/zCSp8maojpI8J4HvCKgAnhSGW/X9orgwsSL2PXM0gRkOf?=
- =?us-ascii?Q?24mxAFOjJ4esK5gjnV/Qys0fEKHb7hkcdgQ8IxkpNZqD0DGnDk6INzaLp5JZ?=
- =?us-ascii?Q?Qg0Zv4G97Ykx+3nB4BBh5hySjweUMOsaE5r/ogb653w+LQhvbzxDTgtADITf?=
- =?us-ascii?Q?T5yNYnxvM13GR1d9PDGUzqYdDwcMpSCbuY52RKoj4oBnbqS7ARnNWOH4nUVe?=
- =?us-ascii?Q?WS06Yy36VCMMTzR51MD2KJvbvL2kQ4TuaGzN7zMOTMXgoGHLoklSGUsi9fPW?=
- =?us-ascii?Q?B8ZUY+iSy9PkMsI32+HdawYcbZvEuy180YrsdqYs4aHwjMHFGoDKfzqkkko+?=
- =?us-ascii?Q?trDLcK/uFjs/VEOOYff5e82DrD78LcxAGdwGImeHvMQLtlcgg3NPsDtYgL4Y?=
- =?us-ascii?Q?4g=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1f35d69-0560-4864-7bd8-08da806542ce
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6201.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2022 15:29:22.8789
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NuPKqEj/YOEvUTtU4cyt0f1Aemqk8GMIYiMh31hP+KDRaG+Gr7n+BivQvwRyKixzbnSEmlYhp8CWD64Pw/cDzg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4740
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Wed, 17 Aug 2022 11:30:08 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF778E0CB
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:30:07 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id m5-20020a170902f64500b0016d313f3ce7so8518326plg.23
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 08:30:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=Qkmccm/z1P8KkL3+STm3aMUEd1Pe32aPYrZdxb0HPrk=;
+        b=Pxvb+ZGChsqiwkr49DHWgMfeYtE2fVHPO36oj7Mj0yUC8eUwQdp7IjUqkfT1BNZ1UB
+         M4sIWk9NkTVEvEOiC0iKLTNnbm3rzh2hMATrXGt7PwnFFbsK8+8ZGq4jj/wi8I0KMbQD
+         sjncZTQ/G6xgxuv+qHsD++IiDXwEVPNHcCLy1VmWSZZHaBKO27XELIirIAl/V1Mq1L8L
+         b0fNNUJ2Jfb7bl6m13muowxadQcJh3BUKLCzYOgRFn93RajEKKsnSpX1t4MXm16EGfIf
+         2kg6bEX843eHdN+bkC5AXPBYt4l6iBCCtJ7Is/ZvSBgj+CijmVAqDgINAPFNNRSD5Bq3
+         cASg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=Qkmccm/z1P8KkL3+STm3aMUEd1Pe32aPYrZdxb0HPrk=;
+        b=uKGUlUYbfnLENWYH8VycQ31InGCMzXbKkHld6UHhLJvIt9TphhRTPtCqUMZTUrl9XU
+         XaoMhUx+8qj8DKRxsiEaFvTOTGgPcc13Gf8lO0+833R/kXlXlY6pG1865s4Fcm5HtC9X
+         NWjL65h1k8mTok1QKNGCLQwU0Cs0YrSvnZKm3t8tFr7lr3WvJo8/EUf4MeSOZIkTSFlm
+         J88s+uaweIRNlx8K3ejDSVpi+RnvptwICY8QaDGmN07u/b4ax7yKZU0ZvMK6GhaRVcBo
+         Fwi7CcCvThpWSAhSlsHyOOGE/cRDUJ2KQ0idlKZ+sA7ljPt0afDzicRrCUiodRZ9ZBeD
+         CeHA==
+X-Gm-Message-State: ACgBeo0eNU7LyXT0t3aKo94/kbr6IrxizMC3M2z88oqaEhmyN5dKnoki
+        SalV00oL9esg7YFVyJzYosyVbVqdVZDy
+X-Google-Smtp-Source: AA6agR4Vl9pQRf7lXoJiti0d08utPaH3IyHkVgCjs20FK59QowdbfkNojkBF45P/JBKh88yoYDfDR9Q2WAB9
+X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
+ (user=vipinsh job=sendgmr) by 2002:a17:902:788f:b0:170:8b18:8812 with SMTP id
+ q15-20020a170902788f00b001708b188812mr26741589pll.1.1660750206813; Wed, 17
+ Aug 2022 08:30:06 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 08:29:56 -0700
+Message-Id: <20220817152956.4056410-1-vipinsh@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+Subject: [PATCH] KVM: selftests: Run dirty_log_perf_test on specific cpus
+From:   Vipin Sharma <vipinsh@google.com>
+To:     seanjc@google.com, dmatlack@google.com, pbonzini@redhat.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vipin Sharma <vipinsh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -152,45 +65,339 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 04:23:24PM +0200, Borislav Petkov wrote:
-> On Wed, Aug 17, 2022 at 12:12:05PM +0000, Ashok Raj wrote:
-> > Instead of doing a complete hack,
-> 
-> What complete hack?!
+Add command line options to run the vcpus and the main process on the
+specific cpus on a host machine. This is useful as it provides
+options to analyze performance based on the vcpus and dirty log worker
+locations, like on the different numa nodes or on the same numa nodes.
 
-What I meant was the patch removed any and all revid checks *completely*
-Instead of even limiting to == checks.
+Signed-off-by: Vipin Sharma <vipinsh@google.com>
+Suggested-by: David Matlack <dmatlack@google.com>
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
+---
 
-Once you do that "in spirit" its the same end goal. Isn't it? Although it
-might be required for a completely different reason.
+This is based on the discussion at
+https://lore.kernel.org/lkml/20220801151928.270380-1-vipinsh@google.com/
 
-> 
-> > could we maybe revive what we attempted
-> > in 2019? At a minimum it will work for both architectures.
-> > 
-> > https://lore.kernel.org/lkml/1567056803-6640-1-git-send-email-ashok.raj@intel.com/
-> 
-> echo 2 >... - now that's a hack.
+ .../selftests/kvm/access_tracking_perf_test.c |   2 +-
+ .../selftests/kvm/demand_paging_test.c        |   2 +-
+ .../selftests/kvm/dirty_log_perf_test.c       | 108 +++++++++++++++++-
+ .../selftests/kvm/include/perf_test_util.h    |   3 +-
+ .../selftests/kvm/lib/perf_test_util.c        |  32 +++++-
+ .../kvm/memslot_modification_stress_test.c    |   2 +-
+ 6 files changed, 139 insertions(+), 10 deletions(-)
 
-Its all in the eye of the beholder :-)
+diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tools/testing/selftests/kvm/access_tracking_perf_test.c
+index 1c2749b1481ac..9659462f47478 100644
+--- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
++++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
+@@ -299,7 +299,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	vm = perf_test_create_vm(mode, nr_vcpus, params->vcpu_memory_bytes, 1,
+ 				 params->backing_src, !overlap_memory_access);
+ 
+-	perf_test_start_vcpu_threads(nr_vcpus, vcpu_thread_main);
++	perf_test_start_vcpu_threads(nr_vcpus, NULL, vcpu_thread_main);
+ 
+ 	pr_info("\n");
+ 	access_memory(vm, nr_vcpus, ACCESS_WRITE, "Populating memory");
+diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
+index 779ae54f89c40..b9848174d6e7c 100644
+--- a/tools/testing/selftests/kvm/demand_paging_test.c
++++ b/tools/testing/selftests/kvm/demand_paging_test.c
+@@ -336,7 +336,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	pr_info("Finished creating vCPUs and starting uffd threads\n");
+ 
+ 	clock_gettime(CLOCK_MONOTONIC, &start);
+-	perf_test_start_vcpu_threads(nr_vcpus, vcpu_worker);
++	perf_test_start_vcpu_threads(nr_vcpus, NULL, vcpu_worker);
+ 	pr_info("Started all vCPUs\n");
+ 
+ 	perf_test_join_vcpu_threads(nr_vcpus);
+diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+index f99e39a672d3f..68a1d7262f21b 100644
+--- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
++++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+@@ -8,10 +8,12 @@
+  * Copyright (C) 2020, Google, Inc.
+  */
+ 
++#define _GNU_SOURCE
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <time.h>
+ #include <pthread.h>
++#include <sched.h>
+ #include <linux/bitmap.h>
+ 
+ #include "kvm_util.h"
+@@ -66,6 +68,8 @@ static u64 dirty_log_manual_caps;
+ static bool host_quit;
+ static int iteration;
+ static int vcpu_last_completed_iteration[KVM_MAX_VCPUS];
++/* Map vcpus to logical cpus on host. */
++static int vcpu_to_lcpu_map[KVM_MAX_VCPUS];
+ 
+ static void vcpu_worker(struct perf_test_vcpu_args *vcpu_args)
+ {
+@@ -132,6 +136,7 @@ struct test_params {
+ 	bool partition_vcpu_memory_access;
+ 	enum vm_mem_backing_src_type backing_src;
+ 	int slots;
++	int *vcpu_to_lcpu;
+ };
+ 
+ static void toggle_dirty_logging(struct kvm_vm *vm, int slots, bool enable)
+@@ -248,7 +253,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	for (i = 0; i < nr_vcpus; i++)
+ 		vcpu_last_completed_iteration[i] = -1;
+ 
+-	perf_test_start_vcpu_threads(nr_vcpus, vcpu_worker);
++	perf_test_start_vcpu_threads(nr_vcpus, p->vcpu_to_lcpu, vcpu_worker);
+ 
+ 	/* Allow the vCPUs to populate memory */
+ 	pr_debug("Starting iteration %d - Populating\n", iteration);
+@@ -348,12 +353,74 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	perf_test_destroy_vm(vm);
+ }
+ 
++static int parse_num(const char *num_str)
++{
++	int num;
++	char *end_ptr;
++
++	errno = 0;
++	num = (int)strtol(num_str, &end_ptr, 10);
++	TEST_ASSERT(num_str != end_ptr && *end_ptr == '\0',
++		    "Invalid number string.\n");
++	TEST_ASSERT(errno == 0, "Conversion error: %d\n", errno);
++
++	return num;
++}
++
++static int parse_cpu_list(const char *arg)
++{
++	char delim[2] = ",";
++	char *cpu, *cpu_list;
++	int i = 0, cpu_num;
++
++	cpu_list = strdup(arg);
++	TEST_ASSERT(cpu_list, "Low memory\n");
++
++	cpu = strtok(cpu_list, delim);
++	while (cpu) {
++		cpu_num = parse_num(cpu);
++		TEST_ASSERT(cpu_num >= 0, "Invalid cpu number: %d\n", cpu_num);
++		vcpu_to_lcpu_map[i++] = cpu_num;
++		cpu = strtok(NULL, delim);
++	}
++
++	free(cpu_list);
++
++	return i;
++}
++
++static void assign_dirty_log_perf_test_cpu(const char *arg)
++{
++	char delim[2] = ",";
++	char *cpu, *cpu_list;
++	cpu_set_t cpuset;
++	int cpu_num, err;
++
++	cpu_list = strdup(arg);
++	TEST_ASSERT(cpu_list, "Low memory\n");
++
++	CPU_ZERO(&cpuset);
++	cpu = strtok(cpu_list, delim);
++	while (cpu) {
++		cpu_num = parse_num(cpu);
++		TEST_ASSERT(cpu_num >= 0, "Invalid cpu number: %d\n", cpu_num);
++		CPU_SET(cpu_num, &cpuset);
++		cpu = strtok(NULL, delim);
++	}
++
++	err = sched_setaffinity(0, sizeof(cpu_set_t), &cpuset);
++	TEST_ASSERT(err == 0, "Error in setting dirty log perf test cpu\n");
++
++	free(cpu_list);
++}
++
+ static void help(char *name)
+ {
+ 	puts("");
+ 	printf("usage: %s [-h] [-i iterations] [-p offset] [-g] "
+ 	       "[-m mode] [-n] [-b vcpu bytes] [-v vcpus] [-o] [-s mem type]"
+-	       "[-x memslots]\n", name);
++	       "[-x memslots] [-c logical cpus for vcpus]"
++	       "[-d cpus to run dirty_log_perf_test]\n", name);
+ 	puts("");
+ 	printf(" -i: specify iteration counts (default: %"PRIu64")\n",
+ 	       TEST_HOST_LOOP_N);
+@@ -383,6 +450,26 @@ static void help(char *name)
+ 	backing_src_help("-s");
+ 	printf(" -x: Split the memory region into this number of memslots.\n"
+ 	       "     (default: 1)\n");
++	printf(" -c: Comma separated values of the logical CPUs which will run\n"
++	       "     the vCPUs. Number of values should be equal to the number\n"
++	       "     of vCPUs.\n\n"
++	       "     Example: ./dirty_log_perf_test -v 3 -c 22,43,1\n"
++	       "     This means that the vcpu 0 will run on the logical cpu 22,\n"
++	       "     vcpu 1 on the logical cpu 43 and vcpu 2 on the logical cpu 1.\n"
++	       "     (default: No cpu mapping)\n\n");
++	printf(" -d: Comma separated values of the logical CPUs on which\n"
++	       "     dirty_log_perf_test will run. Without -c option, all of\n"
++	       "     the vcpus and main process will run on the cpus provided here.\n"
++	       "     This option also accepts a single cpu. (default: No cpu mapping)\n\n"
++	       "     Example 1: ./dirty_log_perf_test -v 3 -c 22,43,1 -d 101\n"
++	       "     Main application thread will run on logical cpu 101 and\n"
++	       "     vcpus will run on the logical cpus 22, 43 and 1\n\n"
++	       "     Example 2: ./dirty_log_perf_test -v 3 -d 101\n"
++	       "     Main application thread and vcpus will run on the logical\n"
++	       "     cpu 101\n\n"
++	       "     Example 3: ./dirty_log_perf_test -v 3 -d 101,23,53\n"
++	       "     Main application thread and vcpus will run on logical cpus\n"
++	       "     101, 23 and 53.\n");
+ 	puts("");
+ 	exit(0);
+ }
+@@ -396,8 +483,10 @@ int main(int argc, char *argv[])
+ 		.partition_vcpu_memory_access = true,
+ 		.backing_src = DEFAULT_VM_MEM_SRC,
+ 		.slots = 1,
++		.vcpu_to_lcpu = NULL,
+ 	};
+ 	int opt;
++	int nr_lcpus = -1;
+ 
+ 	dirty_log_manual_caps =
+ 		kvm_check_cap(KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2);
+@@ -406,8 +495,14 @@ int main(int argc, char *argv[])
+ 
+ 	guest_modes_append_default();
+ 
+-	while ((opt = getopt(argc, argv, "eghi:p:m:nb:f:v:os:x:")) != -1) {
++	while ((opt = getopt(argc, argv, "c:d:eghi:p:m:nb:f:v:os:x:")) != -1) {
+ 		switch (opt) {
++		case 'c':
++			nr_lcpus = parse_cpu_list(optarg);
++			break;
++		case 'd':
++			assign_dirty_log_perf_test_cpu(optarg);
++			break;
+ 		case 'e':
+ 			/* 'e' is for evil. */
+ 			run_vcpus_while_disabling_dirty_logging = true;
+@@ -455,6 +550,13 @@ int main(int argc, char *argv[])
+ 		}
+ 	}
+ 
++	if (nr_lcpus != -1) {
++		TEST_ASSERT(nr_lcpus == nr_vcpus,
++			    "Number of vCPUs (%d) are not equal to number of logical cpus provided (%d).",
++			    nr_vcpus, nr_lcpus);
++		p.vcpu_to_lcpu = vcpu_to_lcpu_map;
++	}
++
+ 	TEST_ASSERT(p.iterations >= 2, "The test should have at least two iterations");
+ 
+ 	pr_info("Test iterations: %"PRIu64"\n",	p.iterations);
+diff --git a/tools/testing/selftests/kvm/include/perf_test_util.h b/tools/testing/selftests/kvm/include/perf_test_util.h
+index eaa88df0555a8..bd6c566cfc92e 100644
+--- a/tools/testing/selftests/kvm/include/perf_test_util.h
++++ b/tools/testing/selftests/kvm/include/perf_test_util.h
+@@ -53,7 +53,8 @@ void perf_test_destroy_vm(struct kvm_vm *vm);
+ 
+ void perf_test_set_wr_fract(struct kvm_vm *vm, int wr_fract);
+ 
+-void perf_test_start_vcpu_threads(int vcpus, void (*vcpu_fn)(struct perf_test_vcpu_args *));
++void perf_test_start_vcpu_threads(int vcpus, int *vcpus_to_lcpu,
++				  void (*vcpu_fn)(struct perf_test_vcpu_args *));
+ void perf_test_join_vcpu_threads(int vcpus);
+ void perf_test_guest_code(uint32_t vcpu_id);
+ 
+diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/selftests/kvm/lib/perf_test_util.c
+index 9618b37c66f7e..771fbdf3d2c22 100644
+--- a/tools/testing/selftests/kvm/lib/perf_test_util.c
++++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
+@@ -2,11 +2,14 @@
+ /*
+  * Copyright (C) 2020, Google LLC.
+  */
++#define _GNU_SOURCE
+ #include <inttypes.h>
+ 
+ #include "kvm_util.h"
+ #include "perf_test_util.h"
+ #include "processor.h"
++#include <pthread.h>
++#include <sched.h>
+ 
+ struct perf_test_args perf_test_args;
+ 
+@@ -260,10 +263,15 @@ static void *vcpu_thread_main(void *data)
+ 	return NULL;
+ }
+ 
+-void perf_test_start_vcpu_threads(int nr_vcpus,
++void perf_test_start_vcpu_threads(int nr_vcpus, int *vcpu_to_lcpu,
+ 				  void (*vcpu_fn)(struct perf_test_vcpu_args *))
+ {
+-	int i;
++	int i, err = 0;
++	pthread_attr_t attr;
++	cpu_set_t cpuset;
++
++	pthread_attr_init(&attr);
++	CPU_ZERO(&cpuset);
+ 
+ 	vcpu_thread_fn = vcpu_fn;
+ 	WRITE_ONCE(all_vcpu_threads_running, false);
+@@ -274,7 +282,24 @@ void perf_test_start_vcpu_threads(int nr_vcpus,
+ 		vcpu->vcpu_idx = i;
+ 		WRITE_ONCE(vcpu->running, false);
+ 
+-		pthread_create(&vcpu->thread, NULL, vcpu_thread_main, vcpu);
++		if (vcpu_to_lcpu) {
++			CPU_SET(vcpu_to_lcpu[i], &cpuset);
++
++			err = pthread_attr_setaffinity_np(&attr,
++							  sizeof(cpu_set_t),
++							  &cpuset);
++			TEST_ASSERT(err == 0,
++				    "vCPU %d could not be mapped to logical cpu %d, error returned: %d\n",
++				    i, vcpu_to_lcpu[i], err);
++
++			CPU_CLR(vcpu_to_lcpu[i], &cpuset);
++		}
++
++		err = pthread_create(&vcpu->thread, &attr, vcpu_thread_main,
++				     vcpu);
++		TEST_ASSERT(err == 0,
++			    "error in creating vcpu %d thread, error returned: %d\n",
++			    i, err);
+ 	}
+ 
+ 	for (i = 0; i < nr_vcpus; i++) {
+@@ -283,6 +308,7 @@ void perf_test_start_vcpu_threads(int nr_vcpus,
+ 	}
+ 
+ 	WRITE_ONCE(all_vcpu_threads_running, true);
++	pthread_attr_destroy(&attr);
+ }
+ 
+ void perf_test_join_vcpu_threads(int nr_vcpus)
+diff --git a/tools/testing/selftests/kvm/memslot_modification_stress_test.c b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
+index 6ee7e1dde4043..246f8cc7bb2b1 100644
+--- a/tools/testing/selftests/kvm/memslot_modification_stress_test.c
++++ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
+@@ -103,7 +103,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 
+ 	pr_info("Finished creating vCPUs\n");
+ 
+-	perf_test_start_vcpu_threads(nr_vcpus, vcpu_worker);
++	perf_test_start_vcpu_threads(nr_vcpus, NULL, vcpu_worker);
+ 
+ 	pr_info("Started all vCPUs\n");
+ 
+-- 
+2.37.1.595.g718a3a8f04-goog
 
-I didn't mean in any way to bring back the echo 2. What ever you think is
-suitable to enable this is fine.
-
-> 
-> If you wanna use the kernel for testing your hw, use a local patch. Not
-> expose it to people and then have me debug all kind of strange lockups.
-
-So forget the hardware testing part. This is a complex flow for late-load
-and how can we get more people to test it today in the community?
-
-Do we have a more scalable way to support it today? 
-
-This is similar to XEN supporting, ucode=allow_same, there is precedence. 
-
-Doing that is just like having a built-in self-test for microcode loading. 
-
-I think there is value in enabling it for x86.
-
-Cheers,
-Ashok

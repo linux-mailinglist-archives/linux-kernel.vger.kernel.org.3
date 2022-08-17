@@ -2,110 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D692597762
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9FF59776F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbiHQUHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 16:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
+        id S230393AbiHQUIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 16:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241471AbiHQUH1 (ORCPT
+        with ESMTP id S241725AbiHQUIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 16:07:27 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497FCA6C31
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:07:22 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id l64so12885731pge.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:07:22 -0700 (PDT)
+        Wed, 17 Aug 2022 16:08:05 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D392A8302;
+        Wed, 17 Aug 2022 13:07:57 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id b142so8513264iof.10;
+        Wed, 17 Aug 2022 13:07:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=L1J+Db0VnmbiI3Iaaum15jtXnTuosKmaYb/Lkdrr5jE=;
-        b=U+gyR2Mo78uIYzbWklKeKt4ZYdel9+/phgy56njeKiM+XlSgX/waUrlrw5+SfCLNVY
-         xSEVXltiRRK6gqaK7QEC7WqHfljzsXVLHRQNE7H8NH0JwmVqwyV0Ejps/JAgMjbD423b
-         y183iG/Lv20mPJotIXHLSPFvBKTfSLLi7FqM4=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=RPBe8i5t9YkFakRKumgcWRqJOP8cLatXe+PCl+sDINk=;
+        b=Yqmtuq3oHwQ7GENInJRLA2NVz3QyU6Bi5/3j6LXsfNmoed7E0iRHgH9SXxVfAhP6Ja
+         8MEwJJK/bAsZHhZtaSVFCrPO1tzlESZj8Siq4vfOonWmLfkeDj7O+I/1a+mAX/PT5L0L
+         fT6WRnoI0B3cf72w5NqrGvas12QXiP2Zbf1u+WZ3mlGp6saj2D2UHQ8pudZDbk3hIiGm
+         SU+38mlFlYnU5DwaJPYYKP9L6SQEk6FrT1ivx+bB1b9/bCemqTxvYQsafuQLnjpvQqZw
+         mqahIx4ZuYCWO8OJPTJoKJgTljss0aYZV/11FtU4CnkqtTvmJ1ajtRW5393lcSZUs64u
+         XTpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=L1J+Db0VnmbiI3Iaaum15jtXnTuosKmaYb/Lkdrr5jE=;
-        b=NxJ9cWJMruO6vW8qpQHaw1ZrpxKO88P62yLKbeUxfj2phOhQIUGYMuXt9OUS538M7H
-         lmGcJp5kBlJM1lMtFraeYxYBmNj6Kfs1i8KqLc/LC/Vswmk8f0agEa9eKJVf/aox/ZkV
-         kkFFDJgu34sHHGJ7R4w55imTKpXVUfMhBLK9bWza5mR0UfIRkU2AmsmDQyDo1YqInfWb
-         PosPl+Sj4IPpC33fPPlqWA7FHUmKmWROCRbEmTEo1ehpUslfkWwAl1HZeZy1iGnJUnOi
-         ICnf4k1VO19G9hR681P3UI5ZXQULdte6GxZj25SUnIwZIp9ujW4ZmU0mpKgTveBNY/hV
-         GHLQ==
-X-Gm-Message-State: ACgBeo36pSfuFrTbw9mX83F2NWo71zFO9mlLiadgwdjSPfPiwlgeaMCT
-        mxXI0mbqYEBVH0cgIoeOQqBh3A==
-X-Google-Smtp-Source: AA6agR56B2zJ+PZNRuW9rvybbFIh2ikn6WdkK9CVsOAMnbryGSeDrgue8aGoJ4yGi3x0wgdFS9gvGA==
-X-Received: by 2002:a05:6a00:b8c:b0:52e:d6b4:d5a2 with SMTP id g12-20020a056a000b8c00b0052ed6b4d5a2mr26589037pfj.72.1660766841593;
-        Wed, 17 Aug 2022 13:07:21 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w1-20020a170902904100b0016be6a554b5sm302013plz.233.2022.08.17.13.07.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 13:07:20 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 13:07:19 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>
-Subject: Re: [PATCH v9 07/27] rust: import upstream `alloc` crate
-Message-ID: <202208171257.E256DAA@keescook>
-References: <20220805154231.31257-1-ojeda@kernel.org>
- <20220805154231.31257-8-ojeda@kernel.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=RPBe8i5t9YkFakRKumgcWRqJOP8cLatXe+PCl+sDINk=;
+        b=DqJ1VluIRT0gxMEXp8RoMRSpLo2fVMywHCaeTmwfb4K8JPzDQjeKOte54pKJfXlp8z
+         ZoaOQJn2YkMqN8SumbGi8Bkjc1PcvcMQ61VMgBhHbyXo1jcZ6Vc/Xwunj58sMQvyHl2L
+         r9Pz7T+fZwo948yhw6US3dLP0bjaBXalpA0VsRskxX5MIhi4o1mwjchGbatw6oljq4Q7
+         Jzhk+Ua3/NroyWUoNzji04RowywPYe8Rz8Fqp6BZaqIGy7qgb8bBAK9lV7+n/g1ihHY0
+         rUEscvqC103DaCuJQmB0u5Y8ldIA5Hzh8n1mZXT2QxBSaiCr4wq2CKFwlt7ChJJLg5Jm
+         PyEQ==
+X-Gm-Message-State: ACgBeo358BGrC0bzMYU/QX+5ywhh6m8XIiJtgkHuSu0CaQolGW6p7OyG
+        +0qf7/7hdphDj42PYqyOv+QFQxwc+OxNEYa5PL8=
+X-Google-Smtp-Source: AA6agR5D/kwF9stJjFFWI6o/HfMzkp9F9fpq74Lp1raW33ZdL3BcDbxG5oEwa8Av42aaTNMuMUQUPgMe516EGipkNKQ=
+X-Received: by 2002:a6b:2ac4:0:b0:688:3a14:2002 with SMTP id
+ q187-20020a6b2ac4000000b006883a142002mr7225597ioq.62.1660766876361; Wed, 17
+ Aug 2022 13:07:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220805154231.31257-8-ojeda@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <cover.1660761470.git.dxu@dxuuu.xyz> <3268db8bc504f4118e1baee5e49f917f0e2767fa.1660761470.git.dxu@dxuuu.xyz>
+In-Reply-To: <3268db8bc504f4118e1baee5e49f917f0e2767fa.1660761470.git.dxu@dxuuu.xyz>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Wed, 17 Aug 2022 22:07:20 +0200
+Message-ID: <CAP01T74Sgn354dXGiFWFryu4vg+o8b9s9La1d9zEbC4LGvH4qg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/4] bpf: Remove duplicate PTR_TO_BTF_ID RO check
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, pablo@netfilter.org, fw@strlen.de,
+        toke@kernel.org, netfilter-devel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 05:41:52PM +0200, Miguel Ojeda wrote:
-> This is a subset of the Rust standard library `alloc` crate,
-> version 1.62.0, licensed under "Apache-2.0 OR MIT", from:
-> 
->     https://github.com/rust-lang/rust/tree/1.62.0/library/alloc/src
-> 
-> The files are copied as-is, with no modifications whatsoever
-> (not even adding the SPDX identifiers).
-> 
-> For copyright details, please see:
-> 
->     https://github.com/rust-lang/rust/blob/1.62.0/COPYRIGHT
-> 
-> The next patch modifies these files as needed for use within
-> the kernel. This patch split allows reviewers to double-check
-> the import and to clearly see the differences introduced.
+On Wed, 17 Aug 2022 at 20:43, Daniel Xu <dxu@dxuuu.xyz> wrote:
+>
+> Since commit 27ae7997a661 ("bpf: Introduce BPF_PROG_TYPE_STRUCT_OPS")
+> there has existed bpf_verifier_ops:btf_struct_access. When
+> btf_struct_access is _unset_ for a prog type, the verifier runs the
+> default implementation, which is to enforce read only:
+>
+>         if (env->ops->btf_struct_access) {
+>                 [...]
+>         } else {
+>                 if (atype != BPF_READ) {
+>                         verbose(env, "only read is supported\n");
+>                         return -EACCES;
+>                 }
+>
+>                 [...]
+>         }
+>
+> When btf_struct_access is _set_, the expectation is that
+> btf_struct_access has full control over accesses, including if writes
+> are allowed.
+>
+> Rather than carve out an exception for each prog type that may write to
+> BTF ptrs, delete the redundant check and give full control to
+> btf_struct_access.
+>
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> ---
 
-Can you include an easy script (in the commit log) for this kind of
-verification?
-
-For this, I have done:
-
-$ git am 0001-rust-import-upstream-alloc-crate.patch
-$ for i in $(diffstat -lp3 0001-rust-import-upstream-alloc-crate.patch); do
-	wget --quiet -O check.rs \
-	 https://github.com/rust-lang/rust/raw/1.62.0/library/alloc/src/$i
-	diff -up rust/alloc/$i check.rs && echo $i: ok
-	rm -f check.rs
-done
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
--- 
-Kees Cook
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>

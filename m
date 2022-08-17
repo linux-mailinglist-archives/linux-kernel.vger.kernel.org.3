@@ -2,60 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1527C59664A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 02:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE10A59664D
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 02:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235157AbiHQA0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 20:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S237520AbiHQAbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 20:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiHQA0I (ORCPT
+        with ESMTP id S230264AbiHQAbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 20:26:08 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E68971BF3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 17:26:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660695967; x=1692231967;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=6hTTF9ijemf+87hhZjHSw5JfbxGHZNAPgxrR5T5e/NU=;
-  b=cv2PNSIuTTl+N8rS9WqRum3mHBCCBH2WzDagLK43FuRDu1qWgG/xl/yX
-   mCk0HLeKJmSGoO/f+gcBQ983HoTxlHxRcCyIJIA6RgyLARLd7t7pa/aeO
-   KWaszVtkyB51eX0qHjr5Sibe2aENUivnvcVEXqKgs+1EeF6JU3Ax1hnP3
-   CaEwpKVSTGEOT/WL5pTFZT7dqq9zey/mr8gMXUZxYQ4yOKjPS3iQtu1V9
-   CJjfXV80LqPkhLFYEYVNXcDsgu86cdgWf/klEtWpG2peb8bmDtZsXdy27
-   EtbCg80Sv7MycaPVXKuw98kakVucXmTi2Qe2rIKa++yf3XAbigHOMx1nm
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="292359005"
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="292359005"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 17:26:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="583536523"
-Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 16 Aug 2022 17:26:05 -0700
-Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oO6sm-0000NS-2R;
-        Wed, 17 Aug 2022 00:26:04 +0000
-Date:   Wed, 17 Aug 2022 08:25:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 53ea03e020f41b8a87cc2780cd7b66dde272a982
-Message-ID: <62fc358c.SkpP6tVGcBw8UOQZ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 16 Aug 2022 20:31:04 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDF27755A
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 17:31:02 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27H0Ux9I013350;
+        Tue, 16 Aug 2022 19:30:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1660696259;
+        bh=5UKcfJpDKgD2t102Bdy4CyVh50AWcZFgMufnolMLvIU=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=OCBi08HgxvApDFcws2hWkvY7aeNm1fIkDd6/OKeIrgMbg5k3Z4/h7gtxx5j8cmsrf
+         6U6Uu24UpCUHHnmaaBKvTgcGzzXgwe+mgoZlSKAyEovOrv43VHqXg8xYHu8gARhs61
+         1qqwRGrbS+gRDrqWZ9nS81bz+rU+ut4wY7nIh2YI=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27H0UxOm059275
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 16 Aug 2022 19:30:59 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 16
+ Aug 2022 19:30:58 -0500
+Received: from DFLE104.ent.ti.com ([fe80::44c:e883:6f6f:384d]) by
+ DFLE104.ent.ti.com ([fe80::44c:e883:6f6f:384d%17]) with mapi id
+ 15.01.2507.006; Tue, 16 Aug 2022 19:30:58 -0500
+From:   "Lu, Kevin" <kevin-lu@ti.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Ding, Shenghao" <shenghao-ding@ti.com>,
+        "Lu, Kevin" <kevin-lu@ti.com>,
+        "Navada Kanyana, Mukund" <navada@ti.com>
+Subject: RE: [EXTERNAL] Re: [PATCH v1 1/1] sound: Add a new kcontrol
+Thread-Topic: [EXTERNAL] Re: [PATCH v1 1/1] sound: Add a new kcontrol
+Thread-Index: AQHYsZhqy49mQakf3USYLiboHZi2Bq2yOTQQ
+Date:   Wed, 17 Aug 2022 00:30:58 +0000
+Message-ID: <37c2d0db2f4240fe80ff43504a31ebcd@ti.com>
+References: <20220815112715.21617-1-luminlong@139.com>
+ <YvvYbkDSodLBkD0R@sirena.org.uk>
+In-Reply-To: <YvvYbkDSodLBkD0R@sirena.org.uk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.250.160.36]
+x-exclaimer-md-config: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,135 +69,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 53ea03e020f41b8a87cc2780cd7b66dde272a982  Merge x86/urgent into tip/master
+Hi Mark,
 
-elapsed time: 720m
+Thanks for your patience to point out my mistakes, It will be helpful for t=
+he future patch submitting.
+I will take every code change carefully.
 
-configs tested: 113
-configs skipped: 2
+Best regards
+Kevin
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+-----Original Message-----
+From: Mark Brown <broonie@kernel.org>=20
+Sent: Wednesday, August 17, 2022 1:49 AM
+To: Kevin Lu <luminlong@139.com>
+Cc: linux-kernel@vger.kernel.org; Ding, Shenghao <shenghao-ding@ti.com>; Lu=
+, Kevin <kevin-lu@ti.com>
+Subject: [EXTERNAL] Re: [PATCH v1 1/1] sound: Add a new kcontrol
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-arc                  randconfig-r043-20220815
-sh                               allmodconfig
-i386                                defconfig
-arm                                 defconfig
-i386                             allyesconfig
-i386                 randconfig-a003-20220815
-i386                 randconfig-a002-20220815
-arm64                            allyesconfig
-i386                 randconfig-a001-20220815
-arm                              allyesconfig
-i386                 randconfig-a004-20220815
-i386                 randconfig-a005-20220815
-i386                 randconfig-a006-20220815
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-m68k                             allmodconfig
-alpha                            allyesconfig
-arc                              allyesconfig
-m68k                             allyesconfig
-x86_64               randconfig-a003-20220815
-powerpc                     redwood_defconfig
-powerpc                     sequoia_defconfig
-ia64                      gensparse_defconfig
-arm                           corgi_defconfig
-sh                        sh7785lcr_defconfig
-powerpc                     stx_gp3_defconfig
-loongarch                           defconfig
-loongarch                         allnoconfig
-arc                        nsimosci_defconfig
-m68k                          atari_defconfig
-sh                        dreamcast_defconfig
-sh                            migor_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-kvm
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-x86_64               randconfig-a006-20220815
-x86_64               randconfig-a005-20220815
-x86_64               randconfig-a004-20220815
-x86_64               randconfig-a001-20220815
-x86_64               randconfig-a002-20220815
-powerpc              randconfig-c003-20220815
-i386                 randconfig-c001-20220815
-sh                           se7343_defconfig
-m68k                                defconfig
-powerpc                 mpc837x_rdb_defconfig
-nios2                            allyesconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-arm                         lubbock_defconfig
-csky                                defconfig
-arm                         vf610m4_defconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-powerpc                      cm5200_defconfig
-ia64                            zx1_defconfig
-xtensa                  audio_kc705_defconfig
-um                                  defconfig
-xtensa                generic_kc705_defconfig
-mips                  maltasmvp_eva_defconfig
-sh                        sh7757lcr_defconfig
-mips                            gpr_defconfig
-m68k                        m5407c3_defconfig
-sparc                       sparc32_defconfig
-m68k                       m5275evb_defconfig
-sh                   sh7770_generic_defconfig
+On Mon, Aug 15, 2022 at 07:27:15PM +0800, Kevin Lu wrote:
+> Add a new kcontrol for phase calib
 
-clang tested configs:
-hexagon              randconfig-r045-20220815
-hexagon              randconfig-r041-20220815
-riscv                randconfig-r042-20220815
-s390                 randconfig-r044-20220815
-x86_64               randconfig-a013-20220815
-x86_64               randconfig-a012-20220815
-x86_64               randconfig-a011-20220815
-x86_64               randconfig-a015-20220815
-x86_64               randconfig-a014-20220815
-x86_64               randconfig-a016-20220815
-i386                 randconfig-a012-20220815
-i386                 randconfig-a011-20220815
-i386                 randconfig-a013-20220815
-i386                 randconfig-a014-20220815
-i386                 randconfig-a015-20220815
-i386                 randconfig-a016-20220815
-arm                       versatile_defconfig
-arm                        multi_v5_defconfig
-arm                       mainstone_defconfig
-arm                       aspeed_g4_defconfig
-powerpc                 mpc832x_rdb_defconfig
-powerpc                      ppc64e_defconfig
-powerpc                 mpc832x_mds_defconfig
-arm                       imx_v4_v5_defconfig
-mips                           mtx1_defconfig
-powerpc                     kilauea_defconfig
-s390                             alldefconfig
-mips                          ath79_defconfig
-arm                    vt8500_v6_v7_defconfig
-arm64                            allyesconfig
-powerpc                      pmac32_defconfig
+This looks mostly good now - one small issue below which I'll fix up myself=
+ and apply.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Please submit patches using subject lines reflecting the style for the subs=
+ystem, this makes it easier for people to identify relevant patches.
+Look at what existing commits in the area you're changing are doing and mak=
+e sure your subject lines visually resemble what they're doing.
+There's no need to resubmit to fix this alone.
+
+> +	ADCX140_PHASE_CALIB_SWITCH("Adcx140 Phase Calib Switch"),
+
+We wouldn't normally put the CODEC name in the control name, it's not reall=
+y relevant to users and if some disambiguation is needed it's usually bette=
+r to do it in a board specific way (eg, describing the output the CODEC is =
+connected to) using the support ASoC has for adding prefixes.  Better would=
+ be "Phase Callibration Switch".

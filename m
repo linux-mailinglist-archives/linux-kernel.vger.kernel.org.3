@@ -2,97 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B61E5978F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 771BD597905
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 23:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241385AbiHQVfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 17:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60446 "EHLO
+        id S234666AbiHQVi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 17:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241642AbiHQVfC (ORCPT
+        with ESMTP id S231510AbiHQVi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 17:35:02 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACC877E95;
-        Wed, 17 Aug 2022 14:35:01 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b98b0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98b0:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 61E331EC058B;
-        Wed, 17 Aug 2022 23:34:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660772095;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=ru/cgvADbJiW8w5IiV58rSJlrqdyDvFI3tr2tbrj/vk=;
-        b=Y+gh/Xt8pqyWjuRv7JYblZFKoRXX7/zOdUGBXwql0qeCTZ/QkNXwzyqNptcpiWSPnWPrdz
-        Rf4D5jf6rvjEJeZzhsMbVa4kcly9dyKf3qStJYPKewC8ZUTXmyNRUyY0jtit9chxIf2mHM
-        NfEriH4Z3NrRDGDubdKMUGpVPJxAqkI=
-Date:   Wed, 17 Aug 2022 23:34:48 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kani, Toshi" <toshi.kani@hpe.com>
-Cc:     Justin He <Justin.He@arm.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Len Brown <lenb@kernel.org>, James Morse <James.Morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "devel@acpica.org" <devel@acpica.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        nd <nd@arm.com>, "stable@kernel.org" <stable@kernel.org>
-Subject: Re: [PATCH 2/2] EDAC/ghes: Modularize ghes_edac driver to remove the
- dependency on ghes
-Message-ID: <Yv1e+Hez9ejaiHav@zn.tnic>
-References: <20220811091713.10427-1-justin.he@arm.com>
- <20220811091713.10427-3-justin.he@arm.com>
- <YvZnrTrXhRn8FV3I@zn.tnic>
- <DBBPR08MB45389A9DB098F1AC14C19074F76B9@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <PH7PR84MB1838203B478319EA45167BB4826A9@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
- <YvyruNX+BUi+O3Df@zn.tnic>
- <PH7PR84MB183888AC20B37A3D891C332D826A9@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
- <Yv1V+gWICIcuNXdE@zn.tnic>
- <PH7PR84MB1838B5AE91C939D3C9D872A2826A9@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
+        Wed, 17 Aug 2022 17:38:26 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32463326FE;
+        Wed, 17 Aug 2022 14:38:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660772305; x=1692308305;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+mzhpuJJwANU8+VmioTlZp7MgaQiVl0cGFTHv1TVDAc=;
+  b=oKw4j7DxauuYOSiOTOpZCDZ2s0Iao5jG0rhf+aJTTEzh2xkUFLnNZw87
+   9qBb+wnVEjbRS+Klq80cLxhZJbqhnKAKc/1e5+tPjHURQm8V2hwP8TbAl
+   puhDI/WtoIyLiaPIb5D3K2CuLC10I+5eqKHBiQ4L2pFdj83lHEgkQEmoE
+   AgSXCk2WLPjxmT6kFI9XCfcIPRdCSfJfR5Im+PnzLRvG6Lphwkrbmc9kE
+   4iDi1HVL5jV3IsFEB+yZ6O+t4dNjNww6XjFD0l7ea9lqo+z/xyDJDpRpm
+   CX4337hLmhC3ZMTJITsoFjysd5wfRmL38lXyaQ+dx7MAiNBFBYTaJEqqI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="275659822"
+X-IronPort-AV: E=Sophos;i="5.93,244,1654585200"; 
+   d="scan'208";a="275659822"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 14:38:24 -0700
+X-IronPort-AV: E=Sophos;i="5.93,244,1654585200"; 
+   d="scan'208";a="636545861"
+Received: from scc823097.zsc7.intel.com ([10.148.153.229])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 14:38:24 -0700
+From:   Peter Colberg <peter.colberg@intel.com>
+To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     russell.h.weight@intel.com, matthew.gerlach@linux.intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
+        marpagan@redhat.com, lgoncalv@redhat.com,
+        Peter Colberg <peter.colberg@intel.com>
+Subject: [PATCH v1] uio: dfl: add IOPLL user-clock feature id
+Date:   Wed, 17 Aug 2022 17:37:46 -0400
+Message-Id: <20220817213746.4986-1-peter.colberg@intel.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <PH7PR84MB1838B5AE91C939D3C9D872A2826A9@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 09:09:41PM +0000, Kani, Toshi wrote:
-> Since then, the change below enabled ghes_edac on Arm without this
-> known-good platforms check.
-> 
-> commit eaa3a1d46 ("EDAC, ghes: Make platform-based whitelisting x86-only")
+Add a Device Feature List (DFL) feature id for the configurable
+IOPLL user clock source, which can be used to configure the clock
+speeds that are used for RTL logic that is programmed into the
+Partial Reconfiguration (PR) region of an FPGA.
 
-Bah, I had forgotten about that one...
+The DFL feature id table can be found at:
+https://github.com/OPAE/dfl-feature-id
 
-In any case, edac_mc_add_mc* is too late in the init path - that check
-should happen as the very first thing in the driver init function.
+Signed-off-by: Peter Colberg <peter.colberg@intel.com>
+---
+ drivers/uio/uio_dfl.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-And looking at the ARM64 EDAC drivers, they're only a couple: thunderx,
-xgene, bluefield, dmc-520... And I'd still prefer if their maintainers
-explicitly ACK such a change to call ghes_get_devices() (for a lack of a
-better idea) and not enable ghes_edac on them blindly.
-
-Thx.
-
+diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c
+index 8f39cc8bb034..69e93f3e7faf 100644
+--- a/drivers/uio/uio_dfl.c
++++ b/drivers/uio/uio_dfl.c
+@@ -46,10 +46,12 @@ static int uio_dfl_probe(struct dfl_device *ddev)
+ 
+ #define FME_FEATURE_ID_ETH_GROUP	0x10
+ #define FME_FEATURE_ID_HSSI_SUBSYS	0x15
++#define PORT_FEATURE_ID_IOPLL_USRCLK	0x14
+ 
+ static const struct dfl_device_id uio_dfl_ids[] = {
+ 	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
+ 	{ FME_ID, FME_FEATURE_ID_HSSI_SUBSYS },
++	{ PORT_ID, PORT_FEATURE_ID_IOPLL_USRCLK },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(dfl, uio_dfl_ids);
 -- 
-Regards/Gruss,
-    Boris.
+2.28.0
 
-https://people.kernel.org/tglx/notes-about-netiquette

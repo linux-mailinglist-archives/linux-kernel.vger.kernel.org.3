@@ -2,89 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5DBB5969E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 08:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D664E5969DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 08:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiHQGys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 02:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34362 "EHLO
+        id S238695AbiHQGzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 02:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230442AbiHQGyp (ORCPT
+        with ESMTP id S238733AbiHQGz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 02:54:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06C25C948
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 23:54:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660719282;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zcPD4jBG73lQXOoH43Q6tPWaFdDfYRto/2dXXxDgwek=;
-        b=Zj2pAXsd4q69s+qQo6qi6ije2FgY75UDnmqKiMWMoFDh599/FBQeWmT/UAMK04B9pZnFxy
-        i1L0GSP25ua2Qtuua4vq6+hcurd146GFHJnq5NGsYuziLH5/uq32SEHy0kEYLG2hAclIBh
-        OaAXxEUqosw7AGgRjVQgSRllOBzaygo=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-7-9iPhOHP9PVGPfs7qZM5t0A-1; Wed, 17 Aug 2022 02:54:40 -0400
-X-MC-Unique: 9iPhOHP9PVGPfs7qZM5t0A-1
-Received: by mail-wr1-f71.google.com with SMTP id g11-20020adfa48b000000b002250d091f76so1466517wrb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 23:54:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=zcPD4jBG73lQXOoH43Q6tPWaFdDfYRto/2dXXxDgwek=;
-        b=vPSibVH9wYoFWTWTs202xkPsizc7bAGt2o3ths3P3rw6eZk2ED+5YMXL3RXQX3SxQ7
-         erCklMuKF4imlep4M4+o/RWy/f2MjEBWOVQABGFxAUaoxJugqwXDCkdeYWJwRSWjHOUs
-         RY2kHMxmHC9m1opRVo6l8pK2b9eQwmhtlJGhYpRd1M/Ts3Oet+jGmWSgTYyop1d/Bqt3
-         W3Oro6XXbVyxe/Ccu/zjSq53k5Nltl/Ny+532FAA/agywTmo/UZpaaeNgymH6NfhYZii
-         vNKYr6/JQjTD/myPwyt9FsaHbaEYhed7R79rJZ8JFBk5Jv3aCBVXLvA1RiD+lJsffPSX
-         Pokg==
-X-Gm-Message-State: ACgBeo2E3YIhxCS3WtCV6KZx4CiOI1wBoeweeqihSQVn/yLVqUN+9jzp
-        i3ZVv1V5hjFfe1Y42ONmQl0+MPy9haR9O8P+GpUlcuPFh3jo1QD1EZetUxAMDyKDfpoIZpYRZNo
-        WkhUg+CHXxXsk4qgWofX34wzg
-X-Received: by 2002:adf:d1c9:0:b0:225:f98:d602 with SMTP id b9-20020adfd1c9000000b002250f98d602mr5595057wrd.419.1660719279679;
-        Tue, 16 Aug 2022 23:54:39 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR71mbO/1JAgp957U1l5Y2ejH9W2IMsrKo6NRUtwq9BrlZgJpVzkNJv+ewui/k38InlrBVqC/w==
-X-Received: by 2002:adf:d1c9:0:b0:225:f98:d602 with SMTP id b9-20020adfd1c9000000b002250f98d602mr5595029wrd.419.1660719279393;
-        Tue, 16 Aug 2022 23:54:39 -0700 (PDT)
-Received: from redhat.com ([2.55.43.215])
-        by smtp.gmail.com with ESMTPSA id f14-20020a05600c154e00b003a32251c3f9sm1288244wmg.5.2022.08.16.23.54.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 23:54:38 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 02:54:33 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Bobby Eshleman <bobby.eshleman@gmail.com>
-Cc:     Bobby Eshleman <bobbyeshleman@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Jiang Wang <jiang.wang@bytedance.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org
-Subject: Re: [PATCH 0/6] virtio/vsock: introduce dgrams, sk_buff, and qdisc
-Message-ID: <20220817025250-mutt-send-email-mst@kernel.org>
-References: <cover.1660362668.git.bobby.eshleman@bytedance.com>
+        Wed, 17 Aug 2022 02:55:26 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAD45AC4D;
+        Tue, 16 Aug 2022 23:55:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jh2VN7EbEuHp495bhU0IKbapcwYQ6kWiZIPUqwKXuFY=; b=Z8qxUhi9EYdI0kDbkJFgMlejj9
+        c4VZitB2+3rDHJKVcz3YUxCT9tb5949gZKJ4QpVIf+pBRkHdkmUkHLigv/hsaBniXEjB1U0SJneNj
+        ioZbEkl89M91K/E20QmO15aNAX/tjYY7yWZRW0HUI0+3LjxfrYa1Oqau3sjHJVJS1Erb/E8VKrYMz
+        NUepYeO9cSAq1kx/5l9VXimY45qu5u27qZyiA6VaiAMtWdtIm7324711ibQtVaphODqmQ5mqTLvEN
+        tA03SKi82Gq7Jgch03O1oLMqtiEQHC7MEpqwmKjB652ceRY4/AUOwdh3VzhywiFxOt952FKFjmlX/
+        m2NLFIpQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oOCxK-007rJk-RU; Wed, 17 Aug 2022 06:55:10 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B8DE198007F; Wed, 17 Aug 2022 08:55:08 +0200 (CEST)
+Date:   Wed, 17 Aug 2022 08:55:08 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Daniel Sneddon <daniel.sneddon@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH] x86/nospec: Unwreck the RSB stuffing
+Message-ID: <YvyQzHzLJpalcvbZ@worktop.programming.kicks-ass.net>
+References: <20220809175513.345597655@linuxfoundation.org>
+ <20220809175513.979067723@linuxfoundation.org>
+ <YvuNdDWoUZSBjYcm@worktop.programming.kicks-ass.net>
+ <839e2877-bb16-dbb5-d4da-bc611733c7e1@linux.intel.com>
+ <84f4b1ea-d837-9a53-a21c-4ac602ff8e75@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1660362668.git.bobby.eshleman@bytedance.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <84f4b1ea-d837-9a53-a21c-4ac602ff8e75@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,89 +61,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 10:56:03AM -0700, Bobby Eshleman wrote:
-> Hey everybody,
+On Tue, Aug 16, 2022 at 11:04:36AM -0700, Daniel Sneddon wrote:
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> index 1a31ae6d758b..c5b55c9f2849 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -420,7 +420,7 @@
+>  #define X86_FEATURE_V_TSC_AUX          (19*32+ 9) /* "" Virtual TSC_AUX */
+>  #define X86_FEATURE_SME_COHERENT       (19*32+10) /* "" AMD hardware-enforced
+> cache coherency */
 > 
-> This series introduces datagrams, packet scheduling, and sk_buff usage
-> to virtio vsock.
-> 
-> The usage of struct sk_buff benefits users by a) preparing vsock to use
-> other related systems that require sk_buff, such as sockmap and qdisc,
-> b) supporting basic congestion control via sock_alloc_send_skb, and c)
-> reducing copying when delivering packets to TAP.
-> 
-> The socket layer no longer forces errors to be -ENOMEM, as typically
-> userspace expects -EAGAIN when the sk_sndbuf threshold is reached and
-> messages are being sent with option MSG_DONTWAIT.
-> 
-> The datagram work is based off previous patches by Jiang Wang[1].
-> 
-> The introduction of datagrams creates a transport layer fairness issue
-> where datagrams may freely starve streams of queue access. This happens
-> because, unlike streams, datagrams lack the transactions necessary for
-> calculating credits and throttling.
-> 
-> Previous proposals introduce changes to the spec to add an additional
-> virtqueue pair for datagrams[1]. Although this solution works, using
-> Linux's qdisc for packet scheduling leverages already existing systems,
-> avoids the need to change the virtio specification, and gives additional
-> capabilities. The usage of SFQ or fq_codel, for example, may solve the
-> transport layer starvation problem. It is easy to imagine other use
-> cases as well. For example, services of varying importance may be
-> assigned different priorities, and qdisc will apply appropriate
-> priority-based scheduling. By default, the system default pfifo qdisc is
-> used. The qdisc may be bypassed and legacy queuing is resumed by simply
-> setting the virtio-vsock%d network device to state DOWN. This technique
-> still allows vsock to work with zero-configuration.
+> -#define X86_FEATURE_NEVER              (-1) /* "" Logical complement of ALWAYS */
+> +#define X86_FEATURE_NEVER              (0x7FFF) /* "" Logical complement of
+> ALWAYS */
 
-The basic question to answer then is this: with a net device qdisc
-etc in the picture, how is this different from virtio net then?
-Why do you still want to use vsock?
 
-> In summary, this series introduces these major changes to vsock:
-> 
-> - virtio vsock supports datagrams
-> - virtio vsock uses struct sk_buff instead of virtio_vsock_pkt
->   - Because virtio vsock uses sk_buff, it also uses sock_alloc_send_skb,
->     which applies the throttling threshold sk_sndbuf.
-> - The vsock socket layer supports returning errors other than -ENOMEM.
->   - This is used to return -EAGAIN when the sk_sndbuf threshold is
->     reached.
-> - virtio vsock uses a net_device, through which qdisc may be used.
->  - qdisc allows scheduling policies to be applied to vsock flows.
->   - Some qdiscs, like SFQ, may allow vsock to avoid transport layer congestion. That is,
->     it may avoid datagrams from flooding out stream flows. The benefit
->     to this is that additional virtqueues are not needed for datagrams.
->   - The net_device and qdisc is bypassed by simply setting the
->     net_device state to DOWN.
-> 
-> [1]: https://lore.kernel.org/all/20210914055440.3121004-1-jiang.wang@bytedance.com/
-> 
-> Bobby Eshleman (5):
->   vsock: replace virtio_vsock_pkt with sk_buff
->   vsock: return errors other than -ENOMEM to socket
->   vsock: add netdev to vhost/virtio vsock
->   virtio/vsock: add VIRTIO_VSOCK_F_DGRAM feature bit
->   virtio/vsock: add support for dgram
-> 
-> Jiang Wang (1):
->   vsock_test: add tests for vsock dgram
-> 
->  drivers/vhost/vsock.c                   | 238 ++++----
->  include/linux/virtio_vsock.h            |  73 ++-
->  include/net/af_vsock.h                  |   2 +
->  include/uapi/linux/virtio_vsock.h       |   2 +
->  net/vmw_vsock/af_vsock.c                |  30 +-
->  net/vmw_vsock/hyperv_transport.c        |   2 +-
->  net/vmw_vsock/virtio_transport.c        | 237 +++++---
->  net/vmw_vsock/virtio_transport_common.c | 771 ++++++++++++++++--------
->  net/vmw_vsock/vmci_transport.c          |   9 +-
->  net/vmw_vsock/vsock_loopback.c          |  51 +-
->  tools/testing/vsock/util.c              | 105 ++++
->  tools/testing/vsock/util.h              |   4 +
->  tools/testing/vsock/vsock_test.c        | 195 ++++++
->  13 files changed, 1176 insertions(+), 543 deletions(-)
-> 
-> -- 
-> 2.35.1
-
+Bah, I initially spelled that: ALT_NOT(X86_FEATURE_ALWAYS), but Boris
+made me do the -1 thing there. Oh well, Boris can fix that :-)

@@ -2,112 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D680596B85
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E8A596B80
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 10:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233468AbiHQIjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 04:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
+        id S233889AbiHQIjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 04:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiHQIjH (ORCPT
+        with ESMTP id S233571AbiHQIj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 04:39:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4F8F617A
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 01:39:05 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C64B5106F;
-        Wed, 17 Aug 2022 01:39:05 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 459F53F70D;
-        Wed, 17 Aug 2022 01:39:03 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 09:38:57 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
-        souvik.chakravarty@arm.com, wleavitt@marvell.com,
-        peter.hilber@opensynergy.com, nicola.mazzucato@arm.com,
-        tarek.el-sherbiny@arm.com
-Subject: Re: [RFC PATCH 5/6] firmware: arm_scmi: Add raw transmission support
-Message-ID: <YvypBAnzjKvHBEzi@e120937-lin>
-References: <20220816072450.3120959-1-cristian.marussi@arm.com>
- <20220816072450.3120959-6-cristian.marussi@arm.com>
- <Yvvb6Y+lzuABT1fy@sirena.org.uk>
+        Wed, 17 Aug 2022 04:39:28 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91051474ED;
+        Wed, 17 Aug 2022 01:39:27 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id F40A85C015C;
+        Wed, 17 Aug 2022 04:39:26 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 17 Aug 2022 04:39:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1660725566; x=
+        1660811966; bh=1XgksyqqOpjmG5LRrLM6xA1+iwp2OMLWZWBQsySSgeI=; b=s
+        Xx2BlpjDk+EXCp1fpwwAcWPw0H6ob4T8XOP1COeMB7VEi4LH30S7gj6lxZn69oHo
+        p88YfKLxTYFU+S+bogQUDV0Ko/efYev4g1RnuDXwY0rdC1ubkgb0zTKihwnFMdw5
+        7prlhqwTbRooLsksUfZpXU44jjJdq63EhwSRE6psISFn2fIsJFlfe8cd51J9rO2G
+        NNHICZNlSwlAadCjOYDKz8nFLJIM3hnuWgiCcDCoIVxDIO+y2ATaHnmPXGL01Lv5
+        0D8pKJNzAdTAiHwpNkVuEbYA1q1ojf5qJqH5PdrLZU1yLJlN4B/m0vgNTcs2Zkhr
+        nvBnrIWIfi3YWujqwG2WA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660725566; x=
+        1660811966; bh=1XgksyqqOpjmG5LRrLM6xA1+iwp2OMLWZWBQsySSgeI=; b=b
+        ntu4LsVEXqMEwtw6BIeHooL5R5nY/EuiUxc5IUfzHyYkMq0S+mdvIUl4cvdadMqx
+        +YNdCx7eQOHidWKUdu1brtHqZSyjgbXmGm600L3qUXkrqORV0owMLYXgCgc4C9GY
+        v/WxZAQ0PUi657cS3ACtxO0McTKvPq4pB2u+qRV4FQ8+r/+51gq5/YvcUN4ynNkT
+        yoODzCvigK1yktb/6/OcvRwLRQm2ZeB0sH8+CzY7Nx1K7446ianxY7PQrsklCmlD
+        9oEdvnuewbN9qqp1Dr1X8TXZw4S4/Xrm7nsoaVqZMi7TFK+JGb8XOQC+jmIV5stw
+        w9ul19O4NQVfs2NnvfsQg==
+X-ME-Sender: <xms:Pqn8YjaP96pYv6lFuj9BxBI42QgQdoy8t1P3Ajsetz7I5FeG55jz4w>
+    <xme:Pqn8Yiaa0Feayn7fYyfbm44esgJv65Qt_bzqV6bDVAadu_6g2gNOKqXncnIflyXDx
+    cw2lG8TkUpzSMYHhA>
+X-ME-Received: <xmr:Pqn8Yl8euNQV8Mm6x3iNhB5bgtt6Hw7mfUNnvDRAPp6h2Cy_gS9gB4H3kagD1qCBuvfPaDiKsK7XRd0eW1NjS4a3iCMi8LF3FcceovT_U40Juvyrab4w_qyWcA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehiedgtdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
+    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:Pqn8Ypq0JaRWQt_ZEKVTpbp-vyoxI60yQ9r3sKWwF3ZhMrZk9bqu3w>
+    <xmx:Pqn8YuoFjAqb_Vtlr96lPWRIlxkjaA1ZISMN7kkWYdc4k2xoPht84w>
+    <xmx:Pqn8YvRcjSsA8TKNFHXSGLhLBJjqtanS7dAYy5Y39ppKBjW-a_c1Kw>
+    <xmx:Pqn8YrjmB8RTyj2eyz-VsORgR-Y3KH8x54IISIIt9Eh2T6OlkqTmKA>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 17 Aug 2022 04:39:25 -0400 (EDT)
+Subject: Re: [PATCH v3 1/4] regulator: dt-bindings: Add Allwinner D1 LDOs
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+References: <20220815043436.20170-1-samuel@sholland.org>
+ <20220815043436.20170-2-samuel@sholland.org>
+ <c4ec080a-b8b1-e3a9-c9d7-063e138c9bb8@linaro.org>
+ <03de0f7b-9251-a5c0-91a1-5f2b5d41d8a0@sholland.org>
+ <29e6a293-29c4-a9ab-0767-9adfa982226b@linaro.org>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <8f133166-dff8-e376-3ac4-a464724d5421@sholland.org>
+Date:   Wed, 17 Aug 2022 03:39:25 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yvvb6Y+lzuABT1fy@sirena.org.uk>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <29e6a293-29c4-a9ab-0767-9adfa982226b@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 07:03:21PM +0100, Mark Brown wrote:
-> On Tue, Aug 16, 2022 at 08:24:49AM +0100, Cristian Marussi wrote:
-> > Add SCMI Raw mode support which exposes a userspace interface rooted under
-> > /sys/kernel/debug/scmi_raw.
-
-Hi Mark,
-
-thanks for having a look.
-
+On 8/17/22 3:27 AM, Krzysztof Kozlowski wrote:
+> On 17/08/2022 11:15, Samuel Holland wrote:
+>>>> +examples:
+>>>> +  - |
+>>>> +    audio-codec@2030000 {
+>>>> +        compatible = "simple-mfd", "syscon";
+>>>
+>>> This cannot be on its own. Both require device specific compatible.
+>>
+>> Again, the device-specific compatible does not exist, because the binding for
+>> the audio codec has not been written (and it will be quite nontrivial).
+>>
+>> So I can:
+>>   1) Leave the example as-is until the audio codec binding gets written,
+>>      and fill in the specific compatible at that time.
+>>   2) Remove the example, with the reasoning that the example really
+>>      belongs with the MFD parent (like for the other regulator). Then
+>>      there will be no example until the audio codec binding is written.
+>>   3) Drop the analog LDOs from this series entirely, and some parts
+>>      of the SoC (like thermal monitoring) cannot be added to the DTSI
+>>      until the audio codec binding is written.
+>>
+>> What do you think?
 > 
-> > Raw mode can be enabled/disabled at runtime via ./scmi_raw/enable.
-> > Once enabled, all the regular SCMI drivers activity is inhibited and a
-> > userspace application can then inject and read back bare SCMI messages
-> > writing and reading to/from ./scmi_raw/message* entries.
+> How about just removing the audio-codec node? The schema is about
+> regulators, not audio-codec.
+
+That works for me. I put the extra node there to signify that this is a MFD
+child and requires some parent node to work, but I suppose it is not that
+helpful to have.
+
+> OTOH, if you have parent device schema, you could put the example only
+> there. But as I understand, you don't have, right?
+
+Right.
+
+>> The same question applies for the D1 SoC DTSI, where I use this same construct.
 > 
-> Is there a strong reason to have the runtime enable/disable?  Given that
-> this is going to be used in special kernel builds rather than something
-> people have as standard it feels like the transition to/from raw mode is
-> opening up a set of extra use cases that wouldn't normally come up for
-> the SCMI drivers (especially if the testing ends up leaving the firmware
-> in a weird state).
+> This is not correct and should be fixed. Either you add the schema with
+> compatible or please drop the device node from the DTSI.
 
-The rationale for this dynamic runtime switch was to try to have a
-system that can be configured for SCMI FW testing BUT not necessarily
-specifically only for such SCMI tests...IOW a system that can be used in
-CI to run a number of other test suites (while in normal mode) and then
-switched to raw mode only when SCMI compliance tests are to be run.
+That's what I was afraid of.
 
-Indeed, the enable/disable thing is the main critical point of this RFC
-since especially the disable-and-back-to-normal transition proved to be
-potentially problematic...i.e. the system generally works in my setup but
-it cannot be guaranteed to really bring back the system in a fully
-functional state depending on how complex the driver stack is
-(..beside the potential FW final weird state issue as you rightly
-pointed out)
+Regards,
+Samuel
 
-...moreover at the end the whole disable and go-back-to-normal really
-makes little sense in a typical CI scenario where anyway the system
-under test is most probably rebooted between runs of different test
-suites, so we really do not care about any weird final state probably.
-
-I, nonetheless, posted this RFC with this such support, at first to have
-some general feedback, BUT also because I'm still anyway wondering if it
-would not be worth to keep at least the capability to only enable it at
-run-time (dropping the disable-back-to-normal feat), because this would
-enable to build an image which includes this SCMI Raw support, which is
-default disabled, and that can at will enabled at runtime only on selected
-runs, so that this same test-image could still be used in a number of
-different CI test-runs (keeping raw mode disabled and silent) but also then
-used for a specific SCMI testing run that would eventually enable it.
-
-If this is not worth really I can just drop the whole runtime switch thing
-and stick to the more conservative approach of having a dedicated image
-for this kind of SCMI FW testing: a system that once configured at compile
-time with this, it just cannot use at all the regular SCMI stack (...which
-does NOT necessarily prevent the system to boot and be used for other non
-SCMI testing indeed...it would just be probably slower...)
-
-Any thought ? 
-
-Thanks,
-Cristian
+>> (And technically this does validate with the current schema.)

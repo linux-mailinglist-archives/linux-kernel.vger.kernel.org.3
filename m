@@ -2,113 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBFE596EE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD74D596EDA
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 15:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239505AbiHQM7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 08:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58986 "EHLO
+        id S239472AbiHQM6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 08:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239276AbiHQM7F (ORCPT
+        with ESMTP id S239503AbiHQM6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 08:59:05 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103D617057
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 05:59:02 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27HCYcdS007849;
-        Wed, 17 Aug 2022 14:58:24 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=KNZl0X08yaVQSxf6OQMI9RKfqIUKh/weq3c89Z5IdgY=;
- b=23XUq7dghBYzUh+of21349Uk3dkMDdnW6WZrdP1Dr639I2ADKo8lhZ0ZC3qLzTmscP2t
- UV0uIPPQwh10ZXtjtDhRG+WkuMaBr39UGSWVHNUTzTLPgVycOWLpOrKJfSrLcQv2WmB2
- ALhkAcLoZeYWMiFXOzLevPMK5vuPzissS9HBRHaYqLSP1gIMDNLLDR+tjTumNgCwCyKZ
- QY9BJkDpqqrSAqvqKyZgGJ2IkbHERK6HG7QG4rTYLK8vk9rp+QxYdxsAI/CKwSy92+sQ
- K5ZWBP03NwCA8jE+weti9dKMTie/kYMRiDPKKzH+RT7U2jX49rrF18HPzeFGB0tLxAYs AA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3hx2uhn37p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 Aug 2022 14:58:24 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0872E10002A;
-        Wed, 17 Aug 2022 14:58:23 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 02977231533;
-        Wed, 17 Aug 2022 14:58:23 +0200 (CEST)
-Received: from localhost (10.75.127.50) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 17 Aug
- 2022 14:58:22 +0200
-From:   Antonio Borneo <antonio.borneo@foss.st.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     Antonio Borneo <antonio.borneo@foss.st.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] irqchip/stm32-exti: Remove check on always false condition
-Date:   Wed, 17 Aug 2022 14:57:58 +0200
-Message-ID: <20220817125758.5975-1-antonio.borneo@foss.st.com>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <202208131739.gJvcs9ls-lkp@intel.com>
-References: <202208131739.gJvcs9ls-lkp@intel.com>
+        Wed, 17 Aug 2022 08:58:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4C7108C
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 05:58:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9603D6121D
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:58:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB0D3C433D6;
+        Wed, 17 Aug 2022 12:58:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660741108;
+        bh=KA0LJwCDv/yxojW8VK/ZAfUNP0t0xoJuytxNFbEZiR8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=BEAu7ogEtiN47eJmaowJL4LAKBhvhMKSCKVO7c40lRGJNF3xiRzChOyBHmJaXxKlV
+         D5T+3iza+H2Kw8se8O2TJIzxeXLGUBCQk5F9MeOOfmgYk0kuJDz7LMGHNiFYXwnuwQ
+         WPtjxBEjzGXneHml2S4MAUF9Nnb/S0FcihsK4swmej11q8ya9yclPaMvQmMsUeqJVO
+         0q+1BTVb+wCPjEiAYtv55yXR39GKTmWoIrj4KWDFxytiiMER6CmFlPi/EBovzfpKXF
+         0gsnGZmlDhcbHbaPlzOO1OUtpr+Xcjhsp/LdJaLwKL5OtIJDkA1DSEzQQgBCYGVk9t
+         q6exS/7I146Jg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id B41EF4035A; Wed, 17 Aug 2022 09:58:24 -0300 (-03)
+Date:   Wed, 17 Aug 2022 09:58:24 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nathan Huckleberry <nhuck@google.com>
+Subject: [PATCH FYI 1/1] tools headers UAPI: Sync linux/fscrypt.h with the
+ kernel sources
+Message-ID: <Yvzl8C7O1b+hf9GS@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-17_08,2022-08-16_02,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The field drv_data is assigned during driver's probe, where it's
-already checked to be not NULL.
+tldr; Just FYI, I'm carrying this on the perf tools tree.
 
-Remove the always false check '!host_data->drv_data'.
+- Arnaldo
 
-This fixes a warning "variable dereferenced before check" detected
-by '0-DAY CI Kernel Test Service'.
+Full explanation:
 
-Fixes: c297493336b7 ("irqchip/stm32-exti: Simplify irq description table")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/lkml/202208131739.gJvcs9ls-lkp@intel.com/
-Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+There used to be no copies, with tools/ code using kernel headers
+directly. From time to time tools/perf/ broke due to legitimate kernel
+hacking. At some point Linus complained about such direct usage. Then we
+adopted the current model.
+
+The way these headers are used in perf are not restricted to just
+including them to compile something.
+
+There are sometimes used in scripts that convert defines into string
+tables, etc, so some change may break one of these scripts, or new MSRs
+may use some different #define pattern, etc.
+
+E.g.:
+
+  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
+  tools/perf/trace/beauty/arch_errno_names.sh
+  tools/perf/trace/beauty/drm_ioctl.sh
+  tools/perf/trace/beauty/fadvise.sh
+  tools/perf/trace/beauty/fsconfig.sh
+  tools/perf/trace/beauty/fsmount.sh
+  $
+  $ tools/perf/trace/beauty/fadvise.sh
+  static const char *fadvise_advices[] = {
+  	[0] = "NORMAL",
+  	[1] = "RANDOM",
+  	[2] = "SEQUENTIAL",
+  	[3] = "WILLNEED",
+  	[4] = "DONTNEED",
+  	[5] = "NOREUSE",
+  };
+  $
+  $ tools/perf/trace/beauty/sync_file_range.sh
+  static const char *sync_file_range_flags[] = {
+	  [ilog2(1) + 1] = "WAIT_BEFORE",
+	  [ilog2(2) + 1] = "WRITE",
+	  [ilog2(4) + 1] = "WAIT_AFTER",
+  };
+
+The tools/perf/check-headers.sh script, part of the tools/ build
+process, points out changes in the original files.
+
+So its important not to touch the copies in tools/ when doing changes in
+the original kernel headers, that will be done later, when
+check-headers.sh inform about the change to the perf tools hackers.
+
 ---
- drivers/irqchip/irq-stm32-exti.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-stm32-exti.c b/drivers/irqchip/irq-stm32-exti.c
-index a73763d475f0..6a3f7498ea8e 100644
---- a/drivers/irqchip/irq-stm32-exti.c
-+++ b/drivers/irqchip/irq-stm32-exti.c
-@@ -716,7 +716,7 @@ static int stm32_exti_h_domain_alloc(struct irq_domain *dm,
- 
- 	irq_domain_set_hwirq_and_chip(dm, virq, hwirq, chip, chip_data);
- 
--	if (!host_data->drv_data || !host_data->drv_data->desc_irqs)
-+	if (!host_data->drv_data->desc_irqs)
- 		return -EINVAL;
- 
- 	desc_irq = host_data->drv_data->desc_irqs[hwirq];
+To pick the changes from:
 
-base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+  6b2a51ff03bf0c54 ("fscrypt: Add HCTR2 support for filename encryption")
+
+That don't result in any changes in tooling, just causes this to be
+rebuilt:
+
+  CC      /tmp/build/perf-urgent/trace/beauty/sync_file_range.o
+  LD      /tmp/build/perf-urgent/trace/beauty/perf-in.o
+
+addressing this perf build warning:
+
+  Warning: Kernel ABI header at 'tools/include/uapi/linux/fscrypt.h' differs from latest version at 'include/uapi/linux/fscrypt.h'
+  diff -u tools/include/uapi/linux/fscrypt.h include/uapi/linux/fscrypt.h
+
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Nathan Huckleberry <nhuck@google.com>
+Link: https://lore.kernel.org/lkml/
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/include/uapi/linux/fscrypt.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tools/include/uapi/linux/fscrypt.h b/tools/include/uapi/linux/fscrypt.h
+index 9f4428be3e362668..a756b29afcc23749 100644
+--- a/tools/include/uapi/linux/fscrypt.h
++++ b/tools/include/uapi/linux/fscrypt.h
+@@ -27,7 +27,8 @@
+ #define FSCRYPT_MODE_AES_128_CBC		5
+ #define FSCRYPT_MODE_AES_128_CTS		6
+ #define FSCRYPT_MODE_ADIANTUM			9
+-/* If adding a mode number > 9, update FSCRYPT_MODE_MAX in fscrypt_private.h */
++#define FSCRYPT_MODE_AES_256_HCTR2		10
++/* If adding a mode number > 10, update FSCRYPT_MODE_MAX in fscrypt_private.h */
+ 
+ /*
+  * Legacy policy version; ad-hoc KDF and no key verification.
 -- 
-2.25.1
+2.37.1
 

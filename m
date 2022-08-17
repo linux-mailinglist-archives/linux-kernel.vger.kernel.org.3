@@ -2,89 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8194659689E
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 07:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A86895968A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 07:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238300AbiHQF3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 01:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
+        id S233293AbiHQFeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 01:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231709AbiHQF3A (ORCPT
+        with ESMTP id S230427AbiHQFeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 01:29:00 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB54B4E62A;
-        Tue, 16 Aug 2022 22:28:58 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id D1CD55FD08;
-        Wed, 17 Aug 2022 08:28:56 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1660714136;
-        bh=E45LUo5dnBIoo1JgEmeJ3I8mH7kcX+2NFKB8RJnjTmI=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=HIiMwRjTZJulm7QTAB2KCUgr/I+QW9JZH371Fv0r3aNy1ADNAa6gGcRH+Szp1SfRO
-         I1vspcK2HS40x9nbJDNFdWEQqqrgumGXGesgA8LGtzrKuEgUsYOhkXuMOMhtHflgLG
-         swMnBHgOQ+RAck2Hpvj55saliGuVXPJYipxlwyPwX0M3ugol3wqGG9sniPkDnKAfr3
-         1NmbVuI2xEvGIy2Ca2uNEdxHGd7J0IbfDdix1D9YnjuMxZfWoki4ARBWrMD8iQBSPT
-         PvwLo1ftjqLWtX/nVTGe3xNi79NUIekPLSWjIsOV2p8DUfbSiIVhhJVNeizlJbWgSr
-         PXucFNQwP3CRw==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 17 Aug 2022 08:28:54 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Bobby Eshleman <bobbyeshleman@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@gmail.com>
-CC:     "virtio-dev@lists.oasis-open.org" <virtio-dev@lists.oasis-open.org>,
-        "Bobby Eshleman" <bobby.eshleman@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Jiang Wang <jiang.wang@bytedance.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "Stephen Hemminger" <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-Subject: Re: [virtio-dev] Re: [PATCH 2/6] vsock: return errors other than
- -ENOMEM to socket
-Thread-Topic: [virtio-dev] Re: [PATCH 2/6] vsock: return errors other than
- -ENOMEM to socket
-Thread-Index: AQHYsY0HA9PuVtzJ6EGz2Q3NauAiZq2yXxWA
-Date:   Wed, 17 Aug 2022 05:28:43 +0000
-Message-ID: <fa74606c-36d9-a4eb-b62a-54631c7fa41c@sberdevices.ru>
-References: <cover.1660362668.git.bobby.eshleman@bytedance.com>
- <d81818b868216c774613dd03641fcfe63cc55a45.1660362668.git.bobby.eshleman@bytedance.com>
- <YvsBYyPFnKRhvPfp@bullseye>
-In-Reply-To: <YvsBYyPFnKRhvPfp@bullseye>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6B57B3ABE02F19489494D8714B6D1A53@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Wed, 17 Aug 2022 01:34:14 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAECD58DE9;
+        Tue, 16 Aug 2022 22:34:12 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id c2so2735195plo.3;
+        Tue, 16 Aug 2022 22:34:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=cOr6gkZL5EYRbTmZIAth2irEiQu6fAMwiaRXpZKh5rw=;
+        b=d6qMzc8mqftce5m76e1pK7mB0MCyGXPy7gTEu287oGqdEOcQoQKb/dPrrrgSltxcoU
+         OVcivl/Ik9eUspsSBL3pC+vb/iZ4+6O4uVckzLKiulFIDMoszLdLb7XCezMm/geZmyl2
+         KCcn3ZazMVgEvznRXHkde5LhrkVCXguBFSg3Yb5q0m5hT0tSdpzgspkDyUcery+F7Kre
+         MX9UujLeAe0F6XEYTb6DKd55Q1ISb3TVZXbWIF8140LX7twXDvyYLKY6zF6O9+JeEGC6
+         cq1YB3H2KAHTtgHYjRNIjzPvas8t+HxhW6OZobZfef1kx7Rb5BUZgoPXsBEr/c2lsWLw
+         YlhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=cOr6gkZL5EYRbTmZIAth2irEiQu6fAMwiaRXpZKh5rw=;
+        b=1FUXy8ACsIW8pvEwJ4HfRVDU9guFE/sXB/eZSLD6ql53O2bCII3GGMHYMnYk9wqGk3
+         Eb5M/yz8fYKavu+mp5I4Jm89/MM/iVafUXI68lL8xEdgqgKCl/slOpjVbZAH4/zojb9V
+         3bb/sEPYgJ2u2l//YExhcn2N1o68yG+fuFfwbHzmHAIaKUgihvlnCayapjWwocxxo9ge
+         RtMvVe/3sW/R4SvTB/5qkf6AkioSoObuxdAkjv8sgBdSBS9bTfCuN4lsZnL+XnwF4vxH
+         wCir6635KJ2w+hDxxYPO4gRlWrepSNNyVHUfIF+vSUbQZ4zF/sjm9a9Nuc5o1CVWdb8W
+         WcVg==
+X-Gm-Message-State: ACgBeo2R5J29mOS8x3+thDH7QaErS0PoSzyuDuaH5fzanagRbcOGtPAu
+        cGsHh96AQmtGpp0nsAr30G64yLgGhPChGw==
+X-Google-Smtp-Source: AA6agR7My9qkAencCrBKg7lfU+OzJxocB+wOclLgiFUpMjkV4SnB61XS7/9Pj6SWfwCqrdfALo79TQ==
+X-Received: by 2002:a17:90b:3b8a:b0:1f5:56c3:54ac with SMTP id pc10-20020a17090b3b8a00b001f556c354acmr2169273pjb.2.1660714452461;
+        Tue, 16 Aug 2022 22:34:12 -0700 (PDT)
+Received: from dusj-System-Product-Name.dhcpserver.bu9bmc.local (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
+        by smtp.gmail.com with ESMTPSA id 189-20020a6204c6000000b0052ce4074fddsm9731231pfe.145.2022.08.16.22.34.10
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 16 Aug 2022 22:34:11 -0700 (PDT)
+From:   Duke Du <dukedu83@gmail.com>
+X-Google-Original-From: Duke Du <Duke.Du@quantatw.com>
+To:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     fran.hsu@quantatw.com, charles.hsu@quantatw.com,
+        george.hung@quantatw.com, duke.du@quantatw.com
+Subject: [PATCH v1] hwmon: Add the pmbus driver for the TEXAS TPS546D24 Buck Converter.
+Date:   Wed, 17 Aug 2022 13:32:08 +0800
+Message-Id: <1660714328-1461-1-git-send-email-Duke.Du@quantatw.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/17 01:22:00 #20132227
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -93,81 +73,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTYuMDguMjAyMiAwNTozMCwgQm9iYnkgRXNobGVtYW4gd3JvdGU6DQo+IENDJ2luZyB2aXJ0
-aW8tZGV2QGxpc3RzLm9hc2lzLW9wZW4ub3JnDQo+IA0KPiBPbiBNb24sIEF1ZyAxNSwgMjAyMiBh
-dCAxMDo1NjowNUFNIC0wNzAwLCBCb2JieSBFc2hsZW1hbiB3cm90ZToNCj4+IFRoaXMgY29tbWl0
-IGFsbG93cyB2c29jayBpbXBsZW1lbnRhdGlvbnMgdG8gcmV0dXJuIGVycm9ycw0KPj4gdG8gdGhl
-IHNvY2tldCBsYXllciBvdGhlciB0aGFuIC1FTk9NRU0uIE9uZSBpbW1lZGlhdGUgZWZmZWN0DQo+
-PiBvZiB0aGlzIGlzIHRoYXQgdXBvbiB0aGUgc2tfc25kYnVmIHRocmVzaG9sZCBiZWluZyByZWFj
-aGVkIC1FQUdBSU4NCj4+IHdpbGwgYmUgcmV0dXJuZWQgYW5kIHVzZXJzcGFjZSBtYXkgdGhyb3R0
-bGUgYXBwcm9wcmlhdGVseS4NCj4+DQo+PiBSZXN1bHRpbmdseSwgYSBrbm93biBpc3N1ZSB3aXRo
-IHVwZXJmIGlzIHJlc29sdmVkWzFdLg0KPj4NCj4+IEFkZGl0aW9uYWxseSwgdG8gcHJlc2VydmUg
-bGVnYWN5IGJlaGF2aW9yIGZvciBub24tdmlydGlvDQo+PiBpbXBsZW1lbnRhdGlvbnMsIGh5cGVy
-di92bWNpIGZvcmNlIGVycm9ycyB0byBiZSAtRU5PTUVNIHNvIHRoYXQgYmVoYXZpb3INCj4+IGlz
-IHVuY2hhbmdlZC4NCj4+DQo+PiBbMV06IGh0dHBzOi8vZ2l0bGFiLmNvbS92c29jay92c29jay8t
-L2lzc3Vlcy8xDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogQm9iYnkgRXNobGVtYW4gPGJvYmJ5LmVz
-aGxlbWFuQGJ5dGVkYW5jZS5jb20+DQo+PiAtLS0NCj4+ICBpbmNsdWRlL2xpbnV4L3ZpcnRpb192
-c29jay5oICAgICAgICAgICAgfCAzICsrKw0KPj4gIG5ldC92bXdfdnNvY2svYWZfdnNvY2suYyAg
-ICAgICAgICAgICAgICB8IDMgKystDQo+PiAgbmV0L3Ztd192c29jay9oeXBlcnZfdHJhbnNwb3J0
-LmMgICAgICAgIHwgMiArLQ0KPj4gIG5ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydF9jb21t
-b24uYyB8IDMgLS0tDQo+PiAgbmV0L3Ztd192c29jay92bWNpX3RyYW5zcG9ydC5jICAgICAgICAg
-IHwgOSArKysrKysrKy0NCj4+ICA1IGZpbGVzIGNoYW5nZWQsIDE0IGluc2VydGlvbnMoKyksIDYg
-ZGVsZXRpb25zKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvdmlydGlvX3Zz
-b2NrLmggYi9pbmNsdWRlL2xpbnV4L3ZpcnRpb192c29jay5oDQo+PiBpbmRleCAxN2VkMDE0NjY4
-NzUuLjlhMzdlZGRiYjg3YSAxMDA2NDQNCj4+IC0tLSBhL2luY2x1ZGUvbGludXgvdmlydGlvX3Zz
-b2NrLmgNCj4+ICsrKyBiL2luY2x1ZGUvbGludXgvdmlydGlvX3Zzb2NrLmgNCj4+IEBAIC04LDYg
-KzgsOSBAQA0KPj4gICNpbmNsdWRlIDxuZXQvc29jay5oPg0KPj4gICNpbmNsdWRlIDxuZXQvYWZf
-dnNvY2suaD4NCj4+ICANCj4+ICsvKiBUaHJlc2hvbGQgZm9yIGRldGVjdGluZyBzbWFsbCBwYWNr
-ZXRzIHRvIGNvcHkgKi8NCj4+ICsjZGVmaW5lIEdPT0RfQ09QWV9MRU4gIDEyOA0KPj4gKw0KPj4g
-IGVudW0gdmlydGlvX3Zzb2NrX21ldGFkYXRhX2ZsYWdzIHsNCj4+ICAJVklSVElPX1ZTT0NLX01F
-VEFEQVRBX0ZMQUdTX1JFUExZCQk9IEJJVCgwKSwNCj4+ICAJVklSVElPX1ZTT0NLX01FVEFEQVRB
-X0ZMQUdTX1RBUF9ERUxJVkVSRUQJPSBCSVQoMSksDQo+PiBkaWZmIC0tZ2l0IGEvbmV0L3Ztd192
-c29jay9hZl92c29jay5jIGIvbmV0L3Ztd192c29jay9hZl92c29jay5jDQo+PiBpbmRleCBlMzQ4
-YjJkMDllYWMuLjE4OTNmOGFhZmE0OCAxMDA2NDQNCj4+IC0tLSBhL25ldC92bXdfdnNvY2svYWZf
-dnNvY2suYw0KPj4gKysrIGIvbmV0L3Ztd192c29jay9hZl92c29jay5jDQo+PiBAQCAtMTg0NCw4
-ICsxODQ0LDkgQEAgc3RhdGljIGludCB2c29ja19jb25uZWN0aWJsZV9zZW5kbXNnKHN0cnVjdCBz
-b2NrZXQgKnNvY2ssIHN0cnVjdCBtc2doZHIgKm1zZywNCj4+ICAJCQl3cml0dGVuID0gdHJhbnNw
-b3J0LT5zdHJlYW1fZW5xdWV1ZSh2c2ssDQo+PiAgCQkJCQltc2csIGxlbiAtIHRvdGFsX3dyaXR0
-ZW4pOw0KPj4gIAkJfQ0KPj4gKw0KPj4gIAkJaWYgKHdyaXR0ZW4gPCAwKSB7DQo+PiAtCQkJZXJy
-ID0gLUVOT01FTTsNCj4+ICsJCQllcnIgPSB3cml0dGVuOw0KPj4gIAkJCWdvdG8gb3V0X2VycjsN
-Cj4+ICAJCX0NCklJVUMsIGZvciBzdHJlYW0sIHRoaXMgdGhpbmcgd2lsbCBoYXZlIGVmZmVjdCwg
-b25seSBvbmUgZmlyc3QgdHJhbnNwb3J0IGFjY2VzcyBmYWlscy4gSW4gdGhpcw0KY2FzZSAndG90
-YWxfd3JpdHRlbicgd2lsbCBiZSAwLCBzbyAnZXJyJyA9PSAnd3JpdHRlbicgd2lsbCBiZSByZXR1
-cm5lZC4gQnV0IHdoZW4gJ3RvdGFsX3dyaXR0ZW4gPiAwJywNCidlcnInIHdpbGwgYmUgb3Zlcndy
-aXR0ZW4gYnkgJ3RvdGFsX3dyaXR0ZW4nIGJlbG93LCBwcmVzZXJ2aW5nIGN1cnJlbnQgYmVoYXZp
-b3VyLiBJcyBpdCB3aGF0IFlvdQ0Kc3VwcG9zZWQ/DQoNClRoYW5rcw0KPj4gIA0KPj4gZGlmZiAt
-LWdpdCBhL25ldC92bXdfdnNvY2svaHlwZXJ2X3RyYW5zcG9ydC5jIGIvbmV0L3Ztd192c29jay9o
-eXBlcnZfdHJhbnNwb3J0LmMNCj4+IGluZGV4IGZkOTgyMjllM2RiMy4uZTk5YWVhNTcxZjZmIDEw
-MDY0NA0KPj4gLS0tIGEvbmV0L3Ztd192c29jay9oeXBlcnZfdHJhbnNwb3J0LmMNCj4+ICsrKyBi
-L25ldC92bXdfdnNvY2svaHlwZXJ2X3RyYW5zcG9ydC5jDQo+PiBAQCAtNjg3LDcgKzY4Nyw3IEBA
-IHN0YXRpYyBzc2l6ZV90IGh2c19zdHJlYW1fZW5xdWV1ZShzdHJ1Y3QgdnNvY2tfc29jayAqdnNr
-LCBzdHJ1Y3QgbXNnaGRyICptc2csDQo+PiAgCWlmIChieXRlc193cml0dGVuKQ0KPj4gIAkJcmV0
-ID0gYnl0ZXNfd3JpdHRlbjsNCj4+ICAJa2ZyZWUoc2VuZF9idWYpOw0KPj4gLQlyZXR1cm4gcmV0
-Ow0KPj4gKwlyZXR1cm4gcmV0IDwgMCA/IC1FTk9NRU0gOiByZXQ7DQo+PiAgfQ0KPj4gIA0KPj4g
-IHN0YXRpYyBzNjQgaHZzX3N0cmVhbV9oYXNfZGF0YShzdHJ1Y3QgdnNvY2tfc29jayAqdnNrKQ0K
-Pj4gZGlmZiAtLWdpdCBhL25ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydF9jb21tb24uYyBi
-L25ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydF9jb21tb24uYw0KPj4gaW5kZXggOTIwNTc4
-NTk3YmI5Li5kNTc4MDU5OWZlOTMgMTAwNjQ0DQo+PiAtLS0gYS9uZXQvdm13X3Zzb2NrL3ZpcnRp
-b190cmFuc3BvcnRfY29tbW9uLmMNCj4+ICsrKyBiL25ldC92bXdfdnNvY2svdmlydGlvX3RyYW5z
-cG9ydF9jb21tb24uYw0KPj4gQEAgLTIzLDkgKzIzLDYgQEANCj4+ICAvKiBIb3cgbG9uZyB0byB3
-YWl0IGZvciBncmFjZWZ1bCBzaHV0ZG93biBvZiBhIGNvbm5lY3Rpb24gKi8NCj4+ICAjZGVmaW5l
-IFZTT0NLX0NMT1NFX1RJTUVPVVQgKDggKiBIWikNCj4+ICANCj4+IC0vKiBUaHJlc2hvbGQgZm9y
-IGRldGVjdGluZyBzbWFsbCBwYWNrZXRzIHRvIGNvcHkgKi8NCj4+IC0jZGVmaW5lIEdPT0RfQ09Q
-WV9MRU4gIDEyOA0KPj4gLQ0KPj4gIHN0YXRpYyBjb25zdCBzdHJ1Y3QgdmlydGlvX3RyYW5zcG9y
-dCAqDQo+PiAgdmlydGlvX3RyYW5zcG9ydF9nZXRfb3BzKHN0cnVjdCB2c29ja19zb2NrICp2c2sp
-DQo+PiAgew0KPj4gZGlmZiAtLWdpdCBhL25ldC92bXdfdnNvY2svdm1jaV90cmFuc3BvcnQuYyBi
-L25ldC92bXdfdnNvY2svdm1jaV90cmFuc3BvcnQuYw0KPj4gaW5kZXggYjE0ZjBlZDc0MjdiLi5j
-OTI3YTkwZGM4NTkgMTAwNjQ0DQo+PiAtLS0gYS9uZXQvdm13X3Zzb2NrL3ZtY2lfdHJhbnNwb3J0
-LmMNCj4+ICsrKyBiL25ldC92bXdfdnNvY2svdm1jaV90cmFuc3BvcnQuYw0KPj4gQEAgLTE4Mzgs
-NyArMTgzOCwxNCBAQCBzdGF0aWMgc3NpemVfdCB2bWNpX3RyYW5zcG9ydF9zdHJlYW1fZW5xdWV1
-ZSgNCj4+ICAJc3RydWN0IG1zZ2hkciAqbXNnLA0KPj4gIAlzaXplX3QgbGVuKQ0KPj4gIHsNCj4+
-IC0JcmV0dXJuIHZtY2lfcXBhaXJfZW5xdWV2KHZtY2lfdHJhbnModnNrKS0+cXBhaXIsIG1zZywg
-bGVuLCAwKTsNCj4+ICsJaW50IGVycjsNCj4+ICsNCj4+ICsJZXJyID0gdm1jaV9xcGFpcl9lbnF1
-ZXYodm1jaV90cmFucyh2c2spLT5xcGFpciwgbXNnLCBsZW4sIDApOw0KPj4gKw0KPj4gKwlpZiAo
-ZXJyIDwgMCkNCj4+ICsJCWVyciA9IC1FTk9NRU07DQo+PiArDQo+PiArCXJldHVybiBlcnI7DQo+
-PiAgfQ0KPj4gIA0KPj4gIHN0YXRpYyBzNjQgdm1jaV90cmFuc3BvcnRfc3RyZWFtX2hhc19kYXRh
-KHN0cnVjdCB2c29ja19zb2NrICp2c2spDQo+PiAtLSANCj4+IDIuMzUuMQ0KPj4NCj4gDQo+IC0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLQ0KPiBUbyB1bnN1YnNjcmliZSwgZS1tYWlsOiB2aXJ0aW8tZGV2LXVuc3Vic2Ny
-aWJlQGxpc3RzLm9hc2lzLW9wZW4ub3JnDQo+IEZvciBhZGRpdGlvbmFsIGNvbW1hbmRzLCBlLW1h
-aWw6IHZpcnRpby1kZXYtaGVscEBsaXN0cy5vYXNpcy1vcGVuLm9yZw0KPiANCg0K
+make the PMBUS_VOUT_MODE return value 0x17,
+VOUT returned value is linear11.
+
+v1: Initial patchset.
+
+Signed-off-by: Duke Du <Duke.Du@quantatw.com>
+---
+ Documentation/hwmon/index.rst     |  1 +
+ Documentation/hwmon/tps546d24.rst | 35 +++++++++++++++++++
+ MAINTAINERS                       |  7 ++++
+ drivers/hwmon/pmbus/Kconfig       |  9 +++++
+ drivers/hwmon/pmbus/Makefile      |  1 +
+ drivers/hwmon/pmbus/tps546d24.c   | 73 +++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 126 insertions(+)
+ create mode 100644 Documentation/hwmon/tps546d24.rst
+ create mode 100644 drivers/hwmon/pmbus/tps546d24.c
+
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index f7113b0..d3eede4 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -205,6 +205,7 @@ Hardware Monitoring Kernel Drivers
+    tps23861
+    tps40422
+    tps53679
++   tps546d24
+    twl4030-madc-hwmon
+    ucd9000
+    ucd9200
+diff --git a/Documentation/hwmon/tps546d24.rst b/Documentation/hwmon/tps546d24.rst
+new file mode 100644
+index 0000000..1219013
+--- /dev/null
++++ b/Documentation/hwmon/tps546d24.rst
+@@ -0,0 +1,35 @@
++.. SPDX-License-Identifier: GPL-2.0-only
++
++Kernel driver tps546d24
++======================
++
++Supported chips:
++
++  * TI TPS546D24
++
++    Prefix: 'tps546d24'
++
++    Addresses scanned: -
++
++    Datasheet: https://www.ti.com/lit/gpn/tps546d24
++
++Author: Duke Du <dukedu83@gmail.com>
++
++
++Description
++-----------
++
++The TPS546D24A is a highly integrated, non-isolated DC/DC converter capable
++of high frequency operation and 40-A current output from a 7-mm × 5-mm
++package.
++
++Two, three, and four TPS546D24A devices can be interconnected
++to provide up to 160 A on a single output. The device has an option to
++overdrive the internal 5-V LDO with an external 5-V supply via the VDD5
++pin to improve efficiency and reduce power dissipation of the converter.
++
++
++Platform data support
++---------------------
++
++The driver supports standard PMBus driver platform data.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8a5012b..fa2d4fb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20583,6 +20583,13 @@ Q:	https://patchwork.kernel.org/project/linux-integrity/list/
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+ F:	drivers/char/tpm/
+ 
++TPS546D24 DRIVER
++M:	Duke Du <dukedu83@gmail.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/hwmon/tps546d24.rst
++F:	drivers/hwmon/pmbus/tps546d24.c
++
+ TRACING
+ M:	Steven Rostedt <rostedt@goodmis.org>
+ M:	Ingo Molnar <mingo@redhat.com>
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 951e4a9..89668af 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -397,6 +397,15 @@ config SENSORS_TPS53679
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called tps53679.
+ 
++config SENSORS_TPS546D24
++	tristate "TPS546D24"
++	help
++	  If you say yes here you get hardware monitoring support for TEXAS
++	  TPS546D24.
++
++	  This driver can also be built as a module. If so, the module will
++	  be called tps546d24
++
+ config SENSORS_UCD9000
+ 	tristate "TI UCD90120, UCD90124, UCD90160, UCD90320, UCD9090, UCD90910"
+ 	help
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index e2fe86f..0002dbe 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -41,6 +41,7 @@ obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
+ obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
+ obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
+ obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
++obj-$(CONFIG_SENSORS_TPS546D24)	+= tps546d24.o
+ obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
+ obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
+ obj-$(CONFIG_SENSORS_XDPE122)	+= xdpe12284.o
+diff --git a/drivers/hwmon/pmbus/tps546d24.c b/drivers/hwmon/pmbus/tps546d24.c
+new file mode 100644
+index 0000000..f6f79d3
+--- /dev/null
++++ b/drivers/hwmon/pmbus/tps546d24.c
+@@ -0,0 +1,73 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Hardware monitoring driver for TEXAS TPS546D24 buck converter
++ */
++
++#include <linux/err.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/pmbus.h>
++#include "pmbus.h"
++
++static int tps546d24_read_byte_data(struct i2c_client *client, int page, int reg)
++{
++	int ret;
++
++	switch (reg) {
++	case PMBUS_VOUT_MODE:
++		ret = 0x17;
++		break;
++	default:
++		ret = -ENODATA;
++		break;
++	}
++	return ret;
++}
++
++static struct pmbus_driver_info tps546d24_info = {
++	.pages = 1,
++	.format[PSC_VOLTAGE_IN] = linear,
++	.format[PSC_VOLTAGE_OUT] = linear,
++	.format[PSC_TEMPERATURE] = linear,
++	.format[PSC_CURRENT_OUT] = linear,
++	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |
++	    PMBUS_HAVE_IOUT | PMBUS_HAVE_VOUT |
++		PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT |
++		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
++	.read_byte_data = tps546d24_read_byte_data,
++};
++
++static int tps546d24_probe(struct i2c_client *client)
++{
++	return pmbus_do_probe(client, &tps546d24_info);
++}
++
++static const struct i2c_device_id tps546d24_id[] = {
++	{"tps546d24", 0},
++	{}
++};
++MODULE_DEVICE_TABLE(i2c, tps546d24_id);
++
++static const struct of_device_id __maybe_unused tps546d24_of_match[] = {
++	{.compatible = "tps546d24"},
++	{}
++};
++
++/* This is the driver that will be inserted */
++static struct i2c_driver tps546d24_driver = {
++	.driver = {
++		   .name = "tps546d24",
++		   .of_match_table = of_match_ptr(tps546d24_of_match),
++	   },
++	.probe_new = tps546d24_probe,
++	.id_table = tps546d24_id,
++};
++
++module_i2c_driver(tps546d24_driver);
++
++MODULE_AUTHOR("Duke Du <dukedu83@gmail.com>");
++MODULE_DESCRIPTION("PMBus driver for TI tps546d24");
++MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(PMBUS);
+-- 
+2.7.4
+

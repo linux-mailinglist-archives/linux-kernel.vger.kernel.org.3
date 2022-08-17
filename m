@@ -2,211 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F282E596728
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3811596741
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 04:08:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238299AbiHQCDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 22:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
+        id S238089AbiHQCFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 22:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238472AbiHQCDb (ORCPT
+        with ESMTP id S232903AbiHQCFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 22:03:31 -0400
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150081.outbound.protection.outlook.com [40.107.15.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F58A78599;
-        Tue, 16 Aug 2022 19:03:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oIc4VYYpGqWbZ6I+XYES+NeUbyRhw2DqzcPjZ4xizL4ER9jBRJbKRPvP1FQ4S8oRbHVzmgDIjRzeKz0AUb+cgNUKjN8I8OGiVQ4VZ1zXCL9auBVwTpPsQywsVT4O/GYB4M2jC4lfsU74+3JVJfn8SOL4+dD3SNALlSFdeaRl2eFfbyd8pX9cM3SDoeFMvnT2lIPtGLS4H2xI8/yMw4oyXafN3M2/nEyydQSdUr61IOBpXRaazCJXSbQPWGdpziWgVJ7hONLnb/+ErQiCyeIxV1ny4RTjdre386xvx09oSIFbLFhoXjnX1iez/+dGSujVqndBCAvv0Q96bipZ2ZQjmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9YZIuVkZGce465cXus7FRbaMECuNDtV4hEHy5h0mu+s=;
- b=RQmRlSLaJSVihmZv3L9a/Z3neANcYI3MnZaUWeVKHJc3S52Ta2P7ox3cdu/haQy+McegAzwiqpN10RDRaVps2z/7lUof1/5rpnr/JJH9TulItYXUQp6H6COsREiLoVUqO+mcV3kjy1FBrHG5aNHlda3ajiC4ReIx9l900buufIA3LXn9yPAhMwtPX50O4i9h8+3oIbGrxcriGpbC6W2gAd2CXtIueH1uMhVbAElXtlV0fBqrCMujdILiKQ5IIgjU7H0qrN4gqkv6gP1o3ZLJtkl3T136YCMMnaIK5CRoBmfS1EebCIwEiHZQM162lXUUGP/V3BjEtnzX8SDsqcd1VA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9YZIuVkZGce465cXus7FRbaMECuNDtV4hEHy5h0mu+s=;
- b=oILiBG4s/tXszG5KHnntGRA3P+3J+YI9hyewrUhFJC6TjmDaB6kNvdnDOl9bL5gR2J4fRqtkxk7mSFG8JRUAgDNdSvze/2FkmCQMq7f9/68yP95tmc2khxajWlviQ0qfps3sUyEg3RJpquGM/s6dwjdIWdZpbV3P49CKrp+Fl8E=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DB9PR04MB8106.eurprd04.prod.outlook.com (2603:10a6:10:24b::13)
- by VI1PR0401MB2350.eurprd04.prod.outlook.com (2603:10a6:800:2a::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.28; Wed, 17 Aug
- 2022 02:03:21 +0000
-Received: from DB9PR04MB8106.eurprd04.prod.outlook.com
- ([fe80::5598:eebf:2288:f279]) by DB9PR04MB8106.eurprd04.prod.outlook.com
- ([fe80::5598:eebf:2288:f279%9]) with mapi id 15.20.5525.010; Wed, 17 Aug 2022
- 02:03:20 +0000
-From:   wei.fang@nxp.com
-To:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, f.fainelli@gmail.com,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2 net 2/2] net: phy: at803x: add disable hibernation mode support
-Date:   Wed, 17 Aug 2022 10:03:22 +0800
-Message-Id: <20220817020322.454369-3-wei.fang@nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220817020322.454369-1-wei.fang@nxp.com>
-References: <20220817020322.454369-1-wei.fang@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR01CA0191.apcprd01.prod.exchangelabs.com
- (2603:1096:4:189::6) To DB9PR04MB8106.eurprd04.prod.outlook.com
- (2603:10a6:10:24b::13)
+        Tue, 16 Aug 2022 22:05:31 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4184F98A63
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 19:05:31 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id z187so10889368pfb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 19:05:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=WA+jfFTow3ngSQMp6SitIm7gT1uGuNt3l+SXB6a0Mv0=;
+        b=qiJV7zS6FtlxBFNHHOkR8rlWIt+MbyJaSUZ7NpnTAZEKk3nHle4ttU2ZB4kgF22Tkp
+         S1dh0KV3aWiLTKjDLvp5WF4/n0wi7ubOMxjq3Jua8IxmsMwkY+MitL+3+BdnFXiyM6Z9
+         Vj0T8hQE/4mpvokMpNmQdkh7SXA9IajLZo+MwUAmTuIcVI4nVJ8pUpEAjS6jnjtKDzg2
+         KfpsFh/V5P1mzOUHQI1ya/3FWfExr2vTue9RXcqP853PYMeaZBfWhIJRrZFivOEYTm1X
+         51iS/vf6KroL/sTdqrHBgH4syYwukIfaJeH0Pju9b2qL7My1FFECbC+OzdyGnK9xCcJd
+         ZDew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=WA+jfFTow3ngSQMp6SitIm7gT1uGuNt3l+SXB6a0Mv0=;
+        b=j7rSdGYq2oTZqxVazqQXwmr0Pad2y7lw6zxWxfudbOvsRSogbdSZhNE3IpOmGR0bR8
+         qNyRj1EelxcECIepRPiGf7+z94zzynn1tdzrqsVTFD4fcU23IGS/bpGKYoDtlfPEH583
+         7+Cktk/XcNzK1Wh3EmGyexN3cvaRholaMExjVvLIWV3Zq7m2rpEMyg9l18jcr1ih2bNv
+         A/4X/Pi2WPLYC6Sxyu0MMEnL+idj2zJcHFOjTz077IRB04ISgV3j3kKJ0fxhkUWxS9kq
+         kjgLXZAD1xkmwsWSyDElTu6A3xwzVlCtbbabH20/DUYEFIryARrs7/3lvkucNkqkysQl
+         XNaQ==
+X-Gm-Message-State: ACgBeo0oU/V4SZjjyIlQmyHVeFj64XCv3/Nrgwk8q04pid+uiGvXvIJm
+        kxULNUy2ubHctQfccBtyEll9/fiLfqjXmA5c4xAV+A==
+X-Google-Smtp-Source: AA6agR56SZJVAe0VONCRXNBcbWnXoQC8KCMiqHyj8VVu1s+GNGs6+PkgKQ+syZgne8UIErFvB+6OwwRit1zFZgqBtow=
+X-Received: by 2002:a63:5f8e:0:b0:429:c286:4ef7 with SMTP id
+ t136-20020a635f8e000000b00429c2864ef7mr1984263pgb.166.1660701930442; Tue, 16
+ Aug 2022 19:05:30 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 89f6274b-a9ca-4424-69e0-08da7ff4a8ca
-X-MS-TrafficTypeDiagnostic: VI1PR0401MB2350:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bh9kEhQ8G8P+zQ233oqT8C1pDhYuoU60kOT8CkAs5LA4cWGAg3gZRAJFrD/xNHqeuHZncHdcy3zJw859JGpjvNyk1YdQG+5n/hSLeyUOWKd0lZFaTG2fqWU7zeabbJS+q2CGviftlxLhJnTsLb5UsvZaSZuAHgIsWCwPb41WyqVBao+5Cw6mVh3HUxWq5sXgUhlPtYv+sDfTLbvUxmniQnoVL2RznYQTC+E5zEoA9wVo7HImiKtDM+V02h83cLG56orTQZB9TxNv0uaglRMF4dEig334rsdwohQECWd6PeZBkalfpb55elF5/aCbgmj+G7lqo4mSURZdzaPTd2N1Zzt1QEqBD0GcPOENiB57O8Sm+XbBlOgqg8xS2Zm/WaV+0tIFg2uIm+j1u3CnkquSWs/iDy57X4HJndsNNFDsRnna7th34IMEOFNjxgSGhiUo+NrZV6nF+aBpdWtnP7+LYulJVuRUFIvACsB/oRZOHx86DuLCgyGuGHVol4J+hU914NA4o/eFJlBmH5Yo1FBWfrK8jbrNyrgbQ7STvsg7rkxGfuBqNULsuTnksg+dqVPjS4fEhhZY0jNlahbL/hu5AqOVUvXJbnqK6r7qvecxzFPAmL6eGPGdjtN8MH1DUvZXmIsCPQLrThwIph3BSG+MsOoCD9sbRiC+GKIqlWa2oq5GD/evzqL/rcLlgWImFspTdgvcmeiU9/Ek/AlqVauuszhJRs6fi5dLK4lBzHqIjIv5FtlE8BN5ao6l6zLbaOPerreyRTDnT98D/TajBGFaGNvEHr+Wqy2zy5c4GoS6vD3mEDqalS2KATQCMa620ATL
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB8106.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(366004)(346002)(396003)(136003)(376002)(316002)(83380400001)(6506007)(186003)(5660300002)(2616005)(41300700001)(7416002)(921005)(1076003)(38350700002)(52116002)(38100700002)(9686003)(6512007)(26005)(2906002)(36756003)(478600001)(8936002)(86362001)(8676002)(66556008)(66476007)(66946007)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kXtZuUuIkT4iVdxCNAJ71WxPiwm8tyAHMHqQWKMQ8WRknxmmt47OvaQV402f?=
- =?us-ascii?Q?VXBs6mi1k2PetZ2S5SIBVQzNh1KhtZ9UWSh2S1UnhYcWJAnuhKnaOSxZ0qiv?=
- =?us-ascii?Q?UwHR4kstim4p8shrqV+qV53kye8l6/AvH2RM8v8aIu9nte73okLs/M2JEK9L?=
- =?us-ascii?Q?9v8QWzgL8qRTgftSBpBnoqrgH3ZZRxHRI0fMSzW+EjHnN9NGzylDQNN5gGs0?=
- =?us-ascii?Q?aMUrHMPtzRyK8V+KbnRslGGdL2y+5dM90eBZkwTAXXcAnE10T5GLMG8QBoTJ?=
- =?us-ascii?Q?IokI0228z8OkX6Eg2QEcPBwZr4RYJksJe4yHcJwkvcRNeuz6LUfVTElVzzp1?=
- =?us-ascii?Q?OtYx7WSOYab4y32eeyW9yVEQszL4xZESTEsFT3zzxwYJnmX4FiI1v+RFz01g?=
- =?us-ascii?Q?/rVh8en5l0MDh7aTFhn3qJGukaKisxitbr8902P9onI4LWz4IBVXHuT3W53B?=
- =?us-ascii?Q?nOtPhTb9tohCVUTISvoD7UMlgQMb0HBIYOLCczpRXBHUGOSDDQfXxsrgqr2p?=
- =?us-ascii?Q?Q9QcYsXJMcUDUJMX9k/DzVmE/vLZXEs5QyrUTXQizEbJjDvKhNlgHA+8gdac?=
- =?us-ascii?Q?cdOM9XYPAcIQt8y6lXqmXKN+5cIY3TFJ7/xkmIlFMUK5eCFJU1PMlzhU2sCu?=
- =?us-ascii?Q?KwjY4Bx8FlMvk3XO7CcBBCvfbM8V1OgMjkM4u0Dg9PsVnxfrSLfaSeJpto6T?=
- =?us-ascii?Q?Hqf8ia0UF72ggb5tTHKHf/68HbeNle75rle+S9yJZs0AUNBqsaHH4FDSwUzw?=
- =?us-ascii?Q?L7dgfIhuUYoKlJsq277JvBHzumJyi5LVq6DCaMGv0xnruIm6Y6rpanTMwQI3?=
- =?us-ascii?Q?w/3tw8BDegZJTyqr9SjF7HNeO6qPYSXW8lIFbElPy6VdJmkEztGY+9A50kx1?=
- =?us-ascii?Q?hLY5Y3JiDiaBolICeX8DyqbS5Wkyg/tfyLXUAcrYJjhxQudiMl+lsquALAq7?=
- =?us-ascii?Q?cK/t5cIS1dU/m1wgckYVSQA0AD7CPjA70P+gF+JEzZpYGoqlMWqOyoUr75fG?=
- =?us-ascii?Q?4juJ6iX9dkHfQAm1OPyLpBmeQX+Fnhnw0ER3QRq23pGyRI5H/QM3PKLxs3mX?=
- =?us-ascii?Q?+Vtef3KhbbeMb8YM7vF5pD6yLlOiUKgHu2ujhDiL0en+UBsRX3lC7JRWxhLQ?=
- =?us-ascii?Q?sOxOeawp4PuNGwLIh21T6tpL9KURx4eatcGKJIOVp7WxiSfsIEpn7vJ7opDc?=
- =?us-ascii?Q?qkGz/vknV4vj3KR4lpYL7Al0t8SzGcbOOGHnIf3SSbwKfR78I3vCqBwo6qX0?=
- =?us-ascii?Q?+3N23GGlhl3plBgQBC0E3imalRKq7ZES7s/QIyTaSJR0XFrM6wr3tNKcC2xR?=
- =?us-ascii?Q?3ONlZ4FP+ylRfvkkJ1HMYlD7JjeCnfiETUUtjBi4E5IUqSUORrQZbbL+hg5l?=
- =?us-ascii?Q?/lLvZApfF3uURdozbK39DQ9AAn36LkOR1UOLAzdukZ0ZyNGsN6WOFqziqYzB?=
- =?us-ascii?Q?ZZ/3Jc8qgy/KxJLdXGe04jHz2UauarUKTs/a2E3GVLmLozcsonrkP4t44F1u?=
- =?us-ascii?Q?h4CWH2nUUIf7NduRuIqS3+7zAaS17jINrAzBrsm8eE+oMTv3x3F9uhRAn/RK?=
- =?us-ascii?Q?mDBE3a+nKshefC8sSkTW7Pd55eQY+AzjDWlQbTDO?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 89f6274b-a9ca-4424-69e0-08da7ff4a8ca
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB8106.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2022 02:03:20.8806
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bf7/GD2Y6R5WrSptU1HJ3bUID1qYPmaLTHq8fu9LEGoesD6fRVQTyKUDwVTqYMUKy0B5OHYiLixZHHzYtatEoQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0401MB2350
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20220816185801.651091-1-shy828301@gmail.com> <CALvZod5t7Qo1NQ040pRyWco+nJGn3hSrxZyuFQ0UBi31Ni6=_g@mail.gmail.com>
+ <CAHbLzkrSU3ZHRiZAxy9Jju3-3ZFpDmE4uMx81c+yPWN28_j+tw@mail.gmail.com>
+In-Reply-To: <CAHbLzkrSU3ZHRiZAxy9Jju3-3ZFpDmE4uMx81c+yPWN28_j+tw@mail.gmail.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Tue, 16 Aug 2022 19:05:19 -0700
+Message-ID: <CALvZod6558Ub52uvyGq02474noskMGf-jqeCEyoLqY0s4brQQw@mail.gmail.com>
+Subject: Re: [PATCH] mm: memcg: export workingset refault stats for cgroup v1
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wei Fang <wei.fang@nxp.com>
+On Tue, Aug 16, 2022 at 7:01 PM Yang Shi <shy828301@gmail.com> wrote:
+>
+> On Tue, Aug 16, 2022 at 3:06 PM Shakeel Butt <shakeelb@google.com> wrote:
+> >
+> > On Tue, Aug 16, 2022 at 11:58 AM Yang Shi <shy828301@gmail.com> wrote:
+> > >
+> > > Workingset refault stats are important and usefule metrics to measure
+> > > how well reclaimer and swapping work and how healthy the services are,
+> > > but they are just available for cgroup v2.  There are still plenty users
+> > > with cgroup v1, export the stats for cgroup v1.
+> > >
+> > > Signed-off-by: Yang Shi <shy828301@gmail.com>
+> > > ---
+> > > I do understand the development of cgroup v1 is actually stalled and
+> > > the community is reluctant to accept new features for v1.  However
+> > > the workingset refault stats are really quite useful and exporting
+> > > two new stats, which have been supported by v2, seems ok IMHO.  So
+> > > hopefully this patch could be considered.  Thanks.
+> > >
+> >
+> > Is just workingset refault good enough for your use-case? What about
+> > the other workingset stats? I don't have a strong opinion against
+> > adding these to v1 and I think these specific stats should be fine.
+>
+> The workingset refault is good enough for our usercase, but I don't
+> mind adding all the workingset_* stats if nobody has objection.
 
-When the cable is unplugged, the Atheros AR803x PHYs will enter
-hibernation mode after about 10 seconds if the hibernation mode
-is enabled and will not provide any clock to the MAC. But for
-some MACs, this feature might cause unexpected issues due to the
-logic of MACs.
-Taking SYNP MAC (stmmac) as an example, if the cable is unplugged
-and the "eth0" interface is down, the AR803x PHY will enter
-hibernation mode. Then perform the "ifconfig eth0 up" operation,
-the stmmac can't be able to complete the software reset operation
-and fail to init it's own DMA. Therefore, the "eth0" interface is
-failed to ifconfig up. Why does it cause this issue? The truth is
-that the software reset operation of the stmmac is designed to
-depend on the RX_CLK of PHY.
-So, this patch offers an option for the user to determine whether
-to disable the hibernation mode of AR803x PHYs.
+For now let's just start with what your use-case needs. If in future
+there is a need we can add other workingset_* stats as well.
 
-Signed-off-by: Wei Fang <wei.fang@nxp.com>
----
-V2 change:
-Modify the property name and the function name to make them
-more clear.
----
- drivers/net/phy/at803x.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+>
+> > (There is subtlety in exposing objcg based stats (i.e. reparenting) in
+> > v1 due to non-hierarchical stats in v1. I remember Yosry and Muchun
+> > were looking into that.)
+>
+> The workingset_* stats should have nothing to do with obj based stats IIUC.
 
-diff --git a/drivers/net/phy/at803x.c b/drivers/net/phy/at803x.c
-index 59fe356942b5..11ebd59bf2eb 100644
---- a/drivers/net/phy/at803x.c
-+++ b/drivers/net/phy/at803x.c
-@@ -115,6 +115,7 @@
- #define AT803X_DEBUG_REG_HIB_CTRL		0x0b
- #define   AT803X_DEBUG_HIB_CTRL_SEL_RST_80U	BIT(10)
- #define   AT803X_DEBUG_HIB_CTRL_EN_ANY_CHANGE	BIT(13)
-+#define   AT803X_DEBUG_HIB_CTRL_PS_HIB_EN	BIT(15)
- 
- #define AT803X_DEBUG_REG_3C			0x3C
- 
-@@ -192,6 +193,9 @@
- #define AT803X_KEEP_PLL_ENABLED			BIT(0)
- #define AT803X_DISABLE_SMARTEEE			BIT(1)
- 
-+/* disable hibernation mode */
-+#define AT803X_DISABLE_HIBERNATION_MODE		BIT(2)
-+
- /* ADC threshold */
- #define QCA808X_PHY_DEBUG_ADC_THRESHOLD		0x2c80
- #define QCA808X_ADC_THRESHOLD_MASK		GENMASK(7, 0)
-@@ -730,6 +734,9 @@ static int at803x_parse_dt(struct phy_device *phydev)
- 	if (of_property_read_bool(node, "qca,disable-smarteee"))
- 		priv->flags |= AT803X_DISABLE_SMARTEEE;
- 
-+	if (of_property_read_bool(node, "qca,disable-hibernation-mode"))
-+		priv->flags |= AT803X_DISABLE_HIBERNATION_MODE;
-+
- 	if (!of_property_read_u32(node, "qca,smarteee-tw-us-1g", &tw)) {
- 		if (!tw || tw > 255) {
- 			phydev_err(phydev, "invalid qca,smarteee-tw-us-1g\n");
-@@ -999,6 +1006,20 @@ static int at8031_pll_config(struct phy_device *phydev)
- 					     AT803X_DEBUG_PLL_ON, 0);
- }
- 
-+static int at803x_hibernation_mode_config(struct phy_device *phydev)
-+{
-+	struct at803x_priv *priv = phydev->priv;
-+
-+	/* The default after hardware reset is hibernation mode enabled. After
-+	 * software reset, the value is retained.
-+	 */
-+	if (!(priv->flags & AT803X_DISABLE_HIBERNATION_MODE))
-+		return 0;
-+
-+	return at803x_debug_reg_mask(phydev, AT803X_DEBUG_REG_HIB_CTRL,
-+					 AT803X_DEBUG_HIB_CTRL_PS_HIB_EN, 0);
-+}
-+
- static int at803x_config_init(struct phy_device *phydev)
- {
- 	struct at803x_priv *priv = phydev->priv;
-@@ -1051,6 +1072,10 @@ static int at803x_config_init(struct phy_device *phydev)
- 	if (ret < 0)
- 		return ret;
- 
-+	ret = at803x_hibernation_mode_config(phydev);
-+	if (ret < 0)
-+		return ret;
-+
- 	/* Ar803x extended next page bit is enabled by default. Cisco
- 	 * multigig switches read this bit and attempt to negotiate 10Gbps
- 	 * rates even if the next page bit is disabled. This is incorrect
--- 
-2.25.1
-
+Yeah, that was just FYI for anyone in future who wants to export such
+stat in v1.

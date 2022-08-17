@@ -2,117 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CC159667C
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 03:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F359E596683
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 03:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237942AbiHQA7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 20:59:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
+        id S238012AbiHQBFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 21:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiHQA7b (ORCPT
+        with ESMTP id S237509AbiHQBE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 20:59:31 -0400
-Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505B28A7C4
-        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 17:59:30 -0700 (PDT)
-Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
-        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id AC7AE1003ED1B
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 00:59:19 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id O7Oxou1l0CokGO7OxouuWx; Wed, 17 Aug 2022 00:59:19 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=c8Nu/Txl c=1 sm=1 tr=0 ts=62fc3d67
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=biHskzXt2R4A:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=Gt2NV6OgVI9NVibrqNAA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=PU3RNHSg6eYArFqcI4VIhC4m3cfUF75i2dszWuA3lWA=; b=pwHisq3xp2UR04Vt1gtswF6z8d
-        SBBNu15RdercLbQMx9Jl4HDKixjz1Rdqd9IXKzfnFid3KsPtAcg/T1VJWXn6felgvU7SedhKIOdb4
-        xN5Q9Czlwz4QXp5UI1IDExiWiVYWAbCkA93BVkv5tuqopkge17uLAJ3W7pXODZRqt/+gsPGMLFyFS
-        pByVndQXrxFS+04CB5Y5I08uXO0drDYSUYP4prwq67jZcdOG+7sz3emT0ywuO7ni2eh9bt+jk7ll+
-        ZwzbK2ou6JevgzpshNdbyjO9CbTvgBksPW+1V7KUrVKa1hv4y2snqr2tSJNHviTHhTiHowyOxmROv
-        vFFGRMMQ==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:40388 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1oO7Ow-001B6U-4L;
-        Tue, 16 Aug 2022 18:59:18 -0600
-Subject: Re: [PATCH 5.18 0000/1094] 5.18.18-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220816124604.978842485@linuxfoundation.org>
-In-Reply-To: <20220816124604.978842485@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <d0dcbb2f-80fc-3eca-5b85-086eaefdd1e9@w6rz.net>
-Date:   Tue, 16 Aug 2022 17:59:15 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 16 Aug 2022 21:04:58 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1DD7C1AE
+        for <linux-kernel@vger.kernel.org>; Tue, 16 Aug 2022 18:04:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660698298; x=1692234298;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=mfUla04m6g9OuMl10lBVITDIZq8OhojlyKzQdm/DDNg=;
+  b=HgxK5ToIH3gbqf2GFZSTc2V2BwvZV9KFooBlyj1UL9DUwPKuivW9kgLP
+   8777qFF7WL88HIl/rZchxyNxnurPIhgY2kRP7sSnzEdvKggsVAK3LjRbC
+   ns5mGLDUXInkCmon9IXWAGzegiNOR6FkTZwSnx7HBjuDcVy3JQ+euvg/y
+   zw0MOgz7wmCblW/VKkVLu6NQtJY5GTjl7fQ4fxLfrjBiGdD7YwmYtOsc7
+   lbVpkRHnxbmRUEPx0FTefbCyVO6xzfqIoXLH2jJeiuCsZA0M1AkdrQoZF
+   mnEgWN/+tesclCmu/HeVamQ9H0Ix69tg53As2L9RQ+K6ChHRI/DLlm/OF
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="378660378"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="378660378"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 18:02:18 -0700
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="696581283"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 18:02:14 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Bharata B Rao <bharata@amd.com>
+Cc:     huang ying <huang.ying.caritas@gmail.com>,
+        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
+        <linux-mm@kvack.org>, <akpm@linux-foundation.org>,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        "Dan Williams" <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, <jvgediya.oss@gmail.com>
+Subject: Re: [PATCH v14 04/10] mm/demotion/dax/kmem: Set node's abstract
+ distance to MEMTIER_DEFAULT_DAX_ADISTANCE
+In-Reply-To: <57a091a5-a78f-7977-3413-11260501f8c0@amd.com> (Bharata B. Rao's
+        message of "Tue, 16 Aug 2022 20:15:55 +0530")
+References: <20220812055710.357820-1-aneesh.kumar@linux.ibm.com>
+        <20220812055710.357820-5-aneesh.kumar@linux.ibm.com>
+        <87wnbacjsh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <cd1c13ee-6fc3-bde8-96f9-8c3c93441275@linux.ibm.com>
+        <CAC=cRTMZZ9bqyC7pnxD1zUWqfBiQ9U7im+8EYa_8GVK8iA7HXQ@mail.gmail.com>
+        <e5fbaf30-1f97-63de-a9a5-2ae5359120ff@amd.com>
+        <CAC=cRTO=+zdKGHRMLpzg2PfJ2rPSQL+xoqA5sAkafaaTYHPr+w@mail.gmail.com>
+        <57a091a5-a78f-7977-3413-11260501f8c0@amd.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date:   Wed, 17 Aug 2022 09:02:04 +0800
+Message-ID: <877d37d6nn.fsf@yhuang6-desk2.ccr.corp.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1oO7Ow-001B6U-4L
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:40388
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/16/22 5:59 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.18 release.
-> There are 1094 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 18 Aug 2022 12:43:14 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.18-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Bharata B Rao <bharata@amd.com> writes:
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+> On 8/16/2022 1:56 PM, huang ying wrote:
+> <snip>
+>>>>
+>>>> If my understanding were correct, you are suggesting to use a kind of
+>>>> logarithmic mapping from latency to abstract distance?  That is,
+>>>>
+>>>>   abstract_distance = log2(latency)
+>>>>
+>>>> While I am suggesting to use a kind of linear mapping from latency to
+>>>> abstract distance.  That is,
+>>>>
+>>>>   abstract_distance = C * latency
+>>>>
+>>>> I think that linear mapping is easy to understand.
+>>>>
+>>>> Are there some good reasons to use logarithmic mapping?
+>>>
+>>> Also, what is the recommendation for using bandwidth measure which
+>>> may be available from HMAT for CXL memory? How is bandwidth going
+>>> to influence the abstract distance?
+>> 
+>> This is a good question.
+>> 
+>> Per my understanding, latency stands for idle latency by default.  But
+>> in practice, the latency under some reasonable memory accessing
+>> throughput is the "real" latency.  So the memory with lower bandwidth
+>> should have a larger abstract distance than the memory with higher
+>> bandwidth even if the idle latency is the same.  But I don't have a
+>> perfect formula to combine idle latency and bandwidth into abstract
+>> distance.  One possibility is to increase abstract distance if the
+>> bandwidth of the memory is much lower than that of DRAM.
+>
+> So if the firmware/platforms differ in their definition of latency and
+> bandwidth (like idle vs real value etc) in the firmware tables
+> (like HMAT), then the low level drivers (like ACPI) would have to be
+> aware of these and handle the conversion from latency and bw to
+> abstract distance correctly?
 
-Tested-by: Ron Economos <re@w6rz.net>
+One possible way to make this a little easier is that we plan to add a
+knob (as user space interface via sysfs) for each memory type, so that
+the default abstract distance can be offset.  If so, at least we have
+way to deal with difference in firmware/platforms.
 
+Best Regards,
+Huang, Ying

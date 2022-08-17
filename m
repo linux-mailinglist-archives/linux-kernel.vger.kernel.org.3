@@ -2,143 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7325597A09
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 01:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6C8597A06
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 01:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239088AbiHQXOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 19:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
+        id S242236AbiHQXNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 19:13:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233622AbiHQXNz (ORCPT
+        with ESMTP id S233622AbiHQXNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 19:13:55 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2779483BDD;
-        Wed, 17 Aug 2022 16:13:55 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id o184so16912925oif.13;
-        Wed, 17 Aug 2022 16:13:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=uAFZhRG94yqKesKWZYz5Nx3zn74jTlFRVSrtAcB7opM=;
-        b=k1YA1pS6Eajn7sFpOI3x8NusjBtYGTLlphQCfOr2iifQhQYUaZT4rFqmLD/dnKP9b0
-         utTJIDqQJUQkYqpDPJEQSpJJyYNfgsMs6oM0rq19CKnK4L95D5GfF+cXJl8IGJgwp3zi
-         l8/2VaIIRMi4bLQ4ldVdetEpn6sUd8H3RC0bDOEMLSdFLYf/pm6WA4p9f3FBAmB/9mNO
-         Ya+2NapCpC+1bkSFyYgo9K7XUiXikWQMDF89oUPh4N7c7kSVCLVYfHFf4RX2YmQD/BJ+
-         RHahVZppC8tmZH9/nDlRSCFUHQ2Jjbnzz15ck+oNRgTfBuH2OYcBdWAaAK8ktADD0UsG
-         Sepw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=uAFZhRG94yqKesKWZYz5Nx3zn74jTlFRVSrtAcB7opM=;
-        b=RiyLLm276x/7CZRCX8/2ftpny0ADxc0vq9W889vlBURYq1yJzPlH+zPtMGiI0oT1Vn
-         3e8C/BKlr8MO9YT8Sec/e+QOjnX0rU8Re/EFwMuRZBEp2UrsYSX6tQI/MURYYS6ieD/Y
-         wuoDRjHXFC1kGiW9XsdT6sX9+qxy4ilNLJHAHlHpEn2Lfyl712TxZL3T2GAd5OJXSVT+
-         DUKh+Y22iq+kx0ajfmoXVZjyq7cej9vIbbObBWlFQp20yqyMmH8ELUnB21GbnEl2oPzY
-         BKX7Wf7Y3KDOvLOVf2aVEzktdstPjB2/mS5kJV7OeNyW/No75WhUmCDCleU8/s7A9rVO
-         HxAg==
-X-Gm-Message-State: ACgBeo0KIftU54vWa5ZfjM7BIs4wzM/f/mAExkpFnNEEpSs3+LUwICcA
-        +zPiXpbCf7dylLxWsWdesq4QsZYoSoSDmg7ZIE8=
-X-Google-Smtp-Source: AA6agR5Gpv9Ub/ZSzw8wXnuwWJOg7P877U0UYF+ZIWdllhEPLwf7oW+lHlQM1was0sDQQVbiYoikM6dK3ZGBH+jke3Q=
-X-Received: by 2002:a05:6808:4d2:b0:343:dc3:fa31 with SMTP id
- a18-20020a05680804d200b003430dc3fa31mr176406oie.120.1660778034487; Wed, 17
- Aug 2022 16:13:54 -0700 (PDT)
+        Wed, 17 Aug 2022 19:13:51 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C862B5E562;
+        Wed, 17 Aug 2022 16:13:50 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru [109.252.119.13])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 98E346601AC9;
+        Thu, 18 Aug 2022 00:13:48 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1660778029;
+        bh=BTERDkMplbg6+afpyAvBteIliO13LfIHxpLWBRSHwRc=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=nYKg/VedkcteBe0aJJPlonz2U7BYSYy26WkKiGh+Cu1+NWCgtCj8F71fdd0gBrBVa
+         FsrVhXk2Var8kVuo8ehUOQ5+kIyHLcRLBNznHdUsXfEUjCv6Gs8oAxvfU4SszIwhBJ
+         JTJ5XudTOYzq9FrEm5AvYcpKZPsWiGIzkLWdLCRWfcE/eOgTa3Rl9LfiEqasV7ISRO
+         jugSGlJMQniqbCNUikXXkKHzzuiWmk2ZRDiMeu3uInKYWiBWwXCHOisOJ+gwaOYT50
+         PtCZvT0yZwgzRj7bbVccXwn2aVoGWzFTPEWdrpH0f73y3L+cl7ngcGLi9N/1OiuXsl
+         QU8kSr3kFDhjQ==
+Message-ID: <48b5dd12-b0df-3cc6-a72d-f35156679844@collabora.com>
+Date:   Thu, 18 Aug 2022 02:13:45 +0300
 MIME-Version: 1.0
-References: <20220802015052.10452-1-ojeda@kernel.org> <20220802015052.10452-28-ojeda@kernel.org>
- <CAK8P3a0jqhGY9E85VC9gNem5q6-dWeq0H6-7bhJopinMnLtOKQ@mail.gmail.com>
- <CANiq72nNucEhXAXkXSujnGkpQrkv3-Pcn7ua8N=2XB-suAjs9w@mail.gmail.com> <CAK8P3a2YuGsSJY2-=npqXMHXEr+zaF36iDrM+kP=9nS85FLpbA@mail.gmail.com>
-In-Reply-To: <CAK8P3a2YuGsSJY2-=npqXMHXEr+zaF36iDrM+kP=9nS85FLpbA@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 18 Aug 2022 01:13:42 +0200
-Message-ID: <CANiq72mW456PbD1WTkh0f=fhgO0FVdpjpXaT5cogXGT4BmKDjw@mail.gmail.com>
-Subject: Re: [PATCH v8 27/31] Kbuild: add Rust support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Miguel Cano <macanroj@gmail.com>,
-        Paul Mackerras <paulus@samba.org>, Gary Guo <gary@garyguo.net>,
-        Douglas Su <d0u9.su@outlook.com>,
-        Borislav Petkov <bp@alien8.de>,
-        linux-riscv@lists.infradead.org, Will Deacon <will@kernel.org>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Masahiro Yamada <masahiroy@kernel.org>, x86@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-um@lists.infradead.org,
-        =?UTF-8?Q?Bj=C3=83B_6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Daniel Xu <dxu@dxuuu.xyz>, David Gow <davidgow@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        linux-arm-kernel@lists.infradead.org,
-        Tiago Lam <tiagolam@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Richard Weinberger <richard@nod.at>,
-        Finn Behrens <me@kloenk.de>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linuxppc-dev@lists.ozlabs.org,
-        Philip Herron <philip.herron@embecosm.com>,
-        Arthur Cohen <arthur.cohen@embecosm.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v1] drm/ttm: Refcount allocated tail pages
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        David Airlie <airlied@linux.ie>, Huang Rui <ray.huang@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Trigger Huang <Trigger.Huang@gmail.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Antonio Caggiano <antonio.caggiano@collabora.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>, kvm@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org
+References: <20220815095423.11131-1-dmitry.osipenko@collabora.com>
+ <8230a356-be38-f228-4a8e-95124e8e8db6@amd.com>
+ <134bce02-58d6-8553-bb73-42dfda18a595@collabora.com>
+ <8caf3008-dcf3-985a-631e-e019b277c6f0@amd.com>
+ <4fcc4739-2da9-1b89-209c-876129604d7d@amd.com>
+ <14be3b22-1d60-732b-c695-ddacc6b21055@collabora.com>
+ <2df57a30-2afb-23dc-c7f5-f61c113dd5b4@collabora.com>
+ <57562db8-bacf-e82d-8417-ab6343c1d2fa@amd.com>
+ <86a87de8-24a9-3c53-3ac7-612ca97e41df@collabora.com>
+ <8f749cd0-9a04-7c72-6a4f-a42d501e1489@amd.com>
+ <5340d876-62b8-8a64-aa6d-7736c2c8710f@collabora.com>
+ <594f1013-b925-3c75-be61-2d649f5ca54e@amd.com>
+ <6893d5e9-4b60-0efb-2a87-698b1bcda63e@collabora.com>
+ <73e5ed8d-0d25-7d44-8fa2-e1d61b1f5a04@amd.com>
+ <c9d89644-409e-0363-69f0-a3b8f2ef0ae4@collabora.com>
+ <6effcd33-8cc3-a4e0-3608-b9cef7a76da7@collabora.com>
+ <ff28e1b4-cda2-14b8-b9bf-10706ae52cac@collabora.com>
+In-Reply-To: <ff28e1b4-cda2-14b8-b9bf-10706ae52cac@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 5:51 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> Thanks for the explanation. My hope was that building the kernel
+On 8/18/22 01:57, Dmitry Osipenko wrote:
+> On 8/15/22 18:54, Dmitry Osipenko wrote:
+>> On 8/15/22 17:57, Dmitry Osipenko wrote:
+>>> On 8/15/22 16:53, Christian König wrote:
+>>>> Am 15.08.22 um 15:45 schrieb Dmitry Osipenko:
+>>>>> [SNIP]
+>>>>>> Well that comment sounds like KVM is doing the right thing, so I'm
+>>>>>> wondering what exactly is going on here.
+>>>>> KVM actually doesn't hold the page reference, it takes the temporal
+>>>>> reference during page fault and then drops the reference once page is
+>>>>> mapped, IIUC. Is it still illegal for TTM? Or there is a possibility for
+>>>>> a race condition here?
+>>>>>
+>>>>
+>>>> Well the question is why does KVM grab the page reference in the first
+>>>> place?
+>>>>
+>>>> If that is to prevent the mapping from changing then yes that's illegal
+>>>> and won't work. It can always happen that you grab the address, solve
+>>>> the fault and then immediately fault again because the address you just
+>>>> grabbed is invalidated.
+>>>>
+>>>> If it's for some other reason than we should probably investigate if we
+>>>> shouldn't stop doing this.
+>>>
+>>> CC: +Paolo Bonzini who introduced this code
+>>>
+>>> commit add6a0cd1c5ba51b201e1361b05a5df817083618
+>>> Author: Paolo Bonzini <pbonzini@redhat.com>
+>>> Date:   Tue Jun 7 17:51:18 2016 +0200
+>>>
+>>>     KVM: MMU: try to fix up page faults before giving up
+>>>
+>>>     The vGPU folks would like to trap the first access to a BAR by setting
+>>>     vm_ops on the VMAs produced by mmap-ing a VFIO device.  The fault
+>>> handler
+>>>     then can use remap_pfn_range to place some non-reserved pages in the
+>>> VMA.
+>>>
+>>>     This kind of VM_PFNMAP mapping is not handled by KVM, but follow_pfn
+>>>     and fixup_user_fault together help supporting it.  The patch also
+>>> supports
+>>>     VM_MIXEDMAP vmas where the pfns are not reserved and thus subject to
+>>>     reference counting.
+>>>
+>>> @Paolo,
+>>> https://lore.kernel.org/dri-devel/73e5ed8d-0d25-7d44-8fa2-e1d61b1f5a04@amd.com/T/#m7647ce5f8c4749599d2c6bc15a2b45f8d8cf8154
+>>>
+>>
+>> If we need to bump the refcount only for VM_MIXEDMAP and not for
+>> VM_PFNMAP, then perhaps we could add a flag for that to the kvm_main
+>> code that will denote to kvm_release_page_clean whether it needs to put
+>> the page?
+> 
+> The other variant that kind of works is to mark TTM pages reserved using
+> SetPageReserved/ClearPageReserved, telling KVM not to mess with the page
+> struct. But the potential consequences of doing this are unclear to me.
+> 
+> Christian, do you think we can do it?
 
-Don't mention it!
+Although, no. It also doesn't work with KVM without additional changes
+to KVM.
 
-> would actually be easier here than building the more complicated
-> rust user space.
-
-Yeah, the kernel is complicated for them in different ways, so I
-assume they will decide which bits to tackle first... Hopefully I will
-succeed in my attempts to convince them to focus a bit on the kernel
-at least ;)
-
-> I tried one more step and just removed the unsupported command
-> line flags to see what would happen, but that did not get me any
-> further:
-
-Thanks!
-
-It looks like it failed when compiling the target spec generator,
-which is a Rust host program. If they were to attempt the GCC Rust
-support early on, we could make things easier for them by not
-compiling host programs with gccrs.
-
-By the way, feel free to remove all the `-D` flags ("denying") when
-playing with it since they are related to diagnostics (making lints
-errors that can still be bypassed if needed), in case the crash is
-about handling those.
-
-Cheers,
-Miguel
+-- 
+Best regards,
+Dmitry

@@ -2,162 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 381355979C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 00:51:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 341875979D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 00:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237352AbiHQWuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 18:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
+        id S229583AbiHQWwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 18:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241662AbiHQWuL (ORCPT
+        with ESMTP id S231496AbiHQWwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 18:50:11 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2068.outbound.protection.outlook.com [40.107.220.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C64A220E
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 15:50:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GBdCtqjU4NJ9me+DilKEgGSsMLICcqXb9lwMV0BrRER+Z5aZZvhr1XAXwlOfz1dWH/3WN0ywlOgkGFBjBRWzLi/r8qt4xnm9SNI19wVDOX85/9z6cZ64zayAplJ9V3/vN+3D2qetF5SCpH1Y6eV79VOrKk3soHlBS/UXGPPFPBHDOxfLNEr4Y/1IR/TKj9f+O5ADczokqbB6DI6FgIThskaqXn+to7qkMjdGWT1P1NKDRsw6VcsGCVgHRZX48R0RoSshfLqI5vAIxSRn2nMK/4+mV65r/o/MnySYMyS88wdDeKQZh9sFS8RhcSuKg/Awnvq9qVbTw3ZHV+g6jPP+eg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C/CtIoNig97YsR4/teW4tjCmi6HIEPwB5xYMshscy6c=;
- b=ALk3vUmPErhiVwKJLyTBogH+n1IQuVxFshW0S8Po2OEkLbFe4I1BGqmE+UsecmfAFODToGCCAS3pgjY7OVlnNFu/FxJxy6S/q3n3rxny1UJD93PDwQDHWhHQUrUynmhz7juE0Mjgh1vqjoYJcqtdMAg1j0Jci3T7D3/mb6H9lpBTUBEbWm7vDxGHIU4feSAZmRMEQeIIGEVk7Rj3rxppQyA53+tmCfhXU0HChXiWp2l4MmtGzJTAxIH4FzhoIIJwxGzslrUYtfTSWyxzNj2fG37/2Mct4wCgbRNYxLTrV1qYuzFGd6SjwhvtdvIqPIMPPayhOXwnECfdhS5Nws+cDA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C/CtIoNig97YsR4/teW4tjCmi6HIEPwB5xYMshscy6c=;
- b=nuGoviNF5wUkTaQdFgYxpfR0bCkftGxUaSZ6x9yJhWNjNqlU9NJIi9EcEz82rU/kKQCz1Q0UI3mP28psfXnxuYUpqc7qlLv77CiTAurbsbKXQz8TEPkbtAjkKxSQiRDpMx4GSg/dMOEqA4pvvVAcOn0UWD4Ips4WRFudbBLk4BOjthzN0vLe7ZGALjmwid9z7eUR1yHnpNAPBR5AjfK3zPq4Q4Nvyfhe6T3ugBWUBJ0VwFwqHhzQJheNbmx3c1jlKneCkby+KJVprEy7K/v1GgOtt/ECnu25On/J7PdCULWvVAyKgwo37HTz9wBGmhUxE5WcTfl5fCIrqjYj3TsS0Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by BN8PR12MB3041.namprd12.prod.outlook.com (2603:10b6:408:46::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Wed, 17 Aug
- 2022 22:50:07 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5%6]) with mapi id 15.20.5525.019; Wed, 17 Aug 2022
- 22:50:07 +0000
-Date:   Wed, 17 Aug 2022 19:50:06 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH v4 2/2] mm/gup.c: Refactor
- check_and_migrate_movable_pages()
-Message-ID: <Yv1wntznpzSXuTYh@nvidia.com>
-References: <487960bf67c7273ff5606c76f73bb51271bc7b90.1660269441.git-series.apopple@nvidia.com>
- <6b61e9bf7c65f78524db32ba3e65a7eb6b8a76a0.1660269441.git-series.apopple@nvidia.com>
- <YvpxOyrDBUHagpC6@nvidia.com>
- <87edxgvixy.fsf@nvdebian.thelocal>
- <Yvt/hZYfSvlCbU02@nvidia.com>
- <87wnb7tycb.fsf@nvdebian.thelocal>
- <YvzaXeRox/9fqfdW@nvidia.com>
- <de9a3db9-6130-fe07-88ec-7e728ff5701c@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de9a3db9-6130-fe07-88ec-7e728ff5701c@nvidia.com>
-X-ClientProxiedBy: BLAPR03CA0128.namprd03.prod.outlook.com
- (2603:10b6:208:32e::13) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Wed, 17 Aug 2022 18:52:51 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92CCA0250;
+        Wed, 17 Aug 2022 15:52:49 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27HMkSSQ014913;
+        Wed, 17 Aug 2022 22:52:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=3CkJreVjrSgeZEk74TyQB/PsrVK9ZT+3QKeZw0DEaI8=;
+ b=CXGvHrQmco/KnJmSTMO8TckNSJCM0/ytWq2gvqFE5tR3UZitYpDYLmfMFw6iUh3ze/P8
+ KbWQMBhb24qgP2S7Ai926sGSYxIM7reeIF9HqMfRBN/UC1z5wL8zIdf3LXLQizn6/SLZ
+ ZdW1Q1+iDrQpLQCLgBbqVzOd2TvbAWoAb9NgYNAn6qdCQoVkZfLBkWUmlnUm8Aj/YRIW
+ LQTnKq4DD8hHubWxyF4IACU3ieTMypXYK6JqUx+4jeUq8LZDUW6NW5+tlFhGBYixw4Op
+ K9AjZdXq6EhQONEOVUyQOnlIfSFvECGXKW8rqk5BgLCushH1O3I/mmNRbvonktYgvTAJ Hg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j19dpg3gn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 Aug 2022 22:52:47 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27HMnloK026173;
+        Wed, 17 Aug 2022 22:52:47 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j19dpg3g6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 Aug 2022 22:52:47 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27HMoiUt016850;
+        Wed, 17 Aug 2022 22:52:45 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma04wdc.us.ibm.com with ESMTP id 3hx3k9udac-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 Aug 2022 22:52:45 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27HMqifi49742326
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 17 Aug 2022 22:52:45 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DDF9B6A04D;
+        Wed, 17 Aug 2022 22:52:44 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D989D6A054;
+        Wed, 17 Aug 2022 22:52:43 +0000 (GMT)
+Received: from li-2c1e724c-2c76-11b2-a85c-ae42eaf3cb3d.ibm.com.com (unknown [9.160.118.205])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 17 Aug 2022 22:52:43 +0000 (GMT)
+From:   Tony Krowiak <akrowiak@linux.ibm.com>
+To:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     jjherne@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
+        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com
+Subject: [PATCH 0/2] s390/vfio-ap: fix two problems discovered in the vfio_ap driver
+Date:   Wed, 17 Aug 2022 18:52:40 -0400
+Message-Id: <20220817225242.188805-1-akrowiak@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 11b9fca3-a9d6-45a7-1951-08da80a2d4c0
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3041:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sy/V/dEosrNeMG7cLfO6oXiEcJenDtXUoQMwElMMDwkQ16RjJ8oz3e2ctuOUrhgNyZiyFqrkKPuS/7566jRb14Mi9Be4IeeTWwZF1Ax8y+oLmfiFOg0s5P/akdEsMn3OpUN2Wdvjlg0H5CxE1TJfclg3djbBIkEhLK7mzBompOHp8xmhRStq1XfHMguMk6TuVTYZrkpAvyF7dm5snhMJYTDJKMlGFGJE44R96QKRRbC8zXFCVgwG+6kDvPNww9GJ2gNcca8Ko56wH/a4FK5YyEnTZqHHw2J5EiWLa/5yPu8QlGDpOYte/EjXFwbJwqqCeJ7jVpVrCvDT4SVnEAMxOpibwfB5XgxkHmmkpSB2BOZ7/8sQ7gm9ntAc5fxEWryMRMzzstubre24z/xWKT26f1qVNs1g8ZIz/HAKBR0QFekpzx3MiPGGBMPP1vSdSxsAt/I6nKaXTALbEXlt1pT3NaXh8i2HL09AWvoRHkSzqiHhdCsaeilcRW8dIqoo6pLm27GIObo8rP8dRXqHYUlZMDBNvUYT9za/hAket83K+fxPxLJKdg3t2W/24gl3B2HCJfV3mz9xOPDg/tYYWvxP4wMa3oRGzULlGbz7jm96xYjFN4IAMSuaAgb4alkG2Vvo01MJ0CQN0O4RDAPVgnm5eR9sczXUVmIpKAbDZDVhEKdbCo2qh83iNbfmIZmtmA8lrWWobxl/w9A4QygG9yZhqA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(396003)(346002)(366004)(136003)(39860400002)(36756003)(6512007)(26005)(6506007)(38100700002)(41300700001)(7416002)(6862004)(5660300002)(4744005)(2906002)(8936002)(66476007)(4326008)(6486002)(186003)(66556008)(66946007)(478600001)(86362001)(8676002)(2616005)(6636002)(316002)(54906003)(37006003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?E9S1Rky5MLTgQiBaXC23FKNjPxTsPLEcNsqqqmBNSonP36NFsIBG79rXX8d1?=
- =?us-ascii?Q?uPeb0ljy4VF294wsXZh9vLOeCUD1Yw+HnJbv+mZ7B7Ny6F+vvGySXFKXZ4lo?=
- =?us-ascii?Q?DKukLLNxdOeqDmQNdGPcLBDXBO3NhB71BhjCppBnMs9yQ4GvEov4WQROmmj9?=
- =?us-ascii?Q?2q91cA3wW3p9trOEaAWCEdjlkJsNHhxaCE3Md1fUx4V8lDlukSTe6OcslUcv?=
- =?us-ascii?Q?BJJP+sohU7mp+y2FYJaCJ5SMyMjLeoAQv5sPXdhqgOLZoUxI8DttIxVseGVY?=
- =?us-ascii?Q?lTikUwa7bD1f2jlrkanegKZZ1kFsb/LbjoIDOub338B4H17/m8gmnoGqtE5s?=
- =?us-ascii?Q?jSojck2ouujNBMjAw5BISZd5rWP2Pb1xITrZ9zwEwBBmBEvwKTyOzM+pZ6C1?=
- =?us-ascii?Q?f8R3jqDPxT7rIanzFX21Rmg49fmctpgqtmZNO+y5sbZ4QNrq4zJGjppmAf0m?=
- =?us-ascii?Q?m6xB3XOHEs9PLo95WVWp4p2q6OuqfASIbhNnxgan31n3dQgbMcErl91Zd9SU?=
- =?us-ascii?Q?+Lt7L729Cx+E54oXPNdkdXXrKOSPVg9AlkozKk3gIMtFHSqLPVQ/Vk+B3Hdy?=
- =?us-ascii?Q?3cXWk3tcGpSZMtoU6ZKFuwHfZayAHfC6nal/9jiMLPwMyugd0UW5mFMXAyd/?=
- =?us-ascii?Q?XziL7HnB4smnsPV9oxAZ6fku48DpY2iJnJK7xaqTC9GieXer0x0LtKIA15Ww?=
- =?us-ascii?Q?shHolI22LeiFOcilLfGKuLFr7efF8lXXvenugwAMNthObYK1UscWSyRxOZSS?=
- =?us-ascii?Q?wSp1UF3xCHdLy0Rbq2JN46zhWVDVWreT1zIpZEXExh8HTWfdyZaNe/B2rfvQ?=
- =?us-ascii?Q?9AUIAhx31N+LbbqrdzB/+R30RUGKwFLOKZ1PiDD39ASwaeVwcOdprMhEWedf?=
- =?us-ascii?Q?Qg4k+1Zg2XVF6SQCwkOm/jIpoxrtx5R6iMktw2wlrWxG7USQivQUU+MJvnPe?=
- =?us-ascii?Q?UYRDl22vS87/Pma5DqfUnaafjrzBkqyUQokFWfQ7VeiahyThI8kcZLCI++I+?=
- =?us-ascii?Q?1gh4bE8m6cQSr3WfCfF1pzCNFoUYiypnvxKkUe1ZBoPYs4/yLxEsFylYBK/4?=
- =?us-ascii?Q?+zzgyqY0Q3zIC0GZfwmyzkoxZbapJcCRG7BEOwjDMbjmQ1RZFHEY1aeP0JnR?=
- =?us-ascii?Q?1FRlOOan3YXBtwegtlSKZdwZSwWdpCeXW24GPpn2Dk7w2CTrkDSve2eseJvk?=
- =?us-ascii?Q?tavxmPLkHwBrrSTwKAq3whoZXHokyOqzlnwW1fbzae7GIc552V5fJs9JYMxR?=
- =?us-ascii?Q?lZ1MOa4O1mr5iHK6uUNAtedIOBVx9A3xtfYZy8oppnQ/ujTYM6r8gYY/dD/w?=
- =?us-ascii?Q?IFZzVzb7scXJGNut6fcaEbPQAP7Ka2XSG021dU+djj55KSrzEvrDD/auiyyv?=
- =?us-ascii?Q?7yW2z0cxkTHP1ZsNx00ElAtbKVfZwq9jZsssVyI5K/iQd69q0d8ICxH91irH?=
- =?us-ascii?Q?1XYWhf9jdvXec62INJOyW6uxsqSQBZCInQbvpD61pUdZcAaEBSr3YmRSeJqo?=
- =?us-ascii?Q?CHULB0oqmsHl03dhSZXOmh1JH0IA57PCY0g0SSKEOELtZo/WUVXxSJ8Tb/zT?=
- =?us-ascii?Q?PhI0PFR7RsB0ZzyBBsutTohidpeUY9LYtuWQqeC/?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11b9fca3-a9d6-45a7-1951-08da80a2d4c0
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2022 22:50:07.0337
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mvxzPLGjxVk5GEVNFy8SspjuSfxtL2Kq5h6rdc0mPRC8tdZq50PZqQ4Pxo7RxQrL
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3041
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: QgoTigFlPqRoTzluZDWZCrW6C58VFvmG
+X-Proofpoint-ORIG-GUID: OawyeiUl_RsGTzP2pdN7E5wi07IVWXe6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-17_15,2022-08-16_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 mlxlogscore=999 suspectscore=0 adultscore=0
+ impostorscore=0 bulkscore=0 spamscore=0 clxscore=1011 priorityscore=1501
+ mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208170084
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 01:35:12PM -0700, John Hubbard wrote:
-> How's this look to you:
-> 
-> 	collected = collect_longterm_unpinnable_pages(&movable_page_list,
-> 						      nr_pages, pages);
-> 	if (collected == 0)
-> 		return 0;
-> 
-> 	ret = migrate_longterm_unpinnable_pages(&movable_page_list, nr_pages,
-> 						pages);
-> 
-> 	/* If we got here, we have some unpinnable pages... */
-> 
-> 	if (ret == 0) {
-> 		/*
-> 		 * ...and we successfully migrated those pages. Which means that
-> 		 * the caller should retry the operation now.
-> 		 */
-> 		ret = -EAGAIN;
+Two problems have been discovered with the vfio_ap device driver since the
+hot plug support was recently introduced:
 
-return -EAGAIN
+1. Attempting to remove a matrix mdev after assigning a duplicate adapter
+   or duplicate domain results in a hang.
 
-> 	}
-> 
-> 	return ret;
+2. The queues associated with an adapter or domain being unassigned from
+   the matrix mdev do not get unlinked from it.
 
-But why return 0 from the helper function in the first place?
+Two patches are provided to resolve these problems.
 
-Jason
+Tony Krowiak (2):
+  s390/vfio-ap: fix hang during removal of mdev after duplicate
+    assignment
+  s390/vfio-ap: fix unlinking of queues from the mdev
+
+ drivers/s390/crypto/vfio_ap_ops.c | 36 +++++++++++++++++++++++++++----
+ 1 file changed, 32 insertions(+), 4 deletions(-)
+
+-- 
+2.31.1
+

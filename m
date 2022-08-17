@@ -2,88 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B31596D18
+	by mail.lfdr.de (Postfix) with ESMTP id 010E1596D16
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 12:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235852AbiHQKyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 06:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
+        id S238772AbiHQKyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 06:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234506AbiHQKyE (ORCPT
+        with ESMTP id S234506AbiHQKyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 06:54:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD844A83F
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 03:54:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660733642;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gWHtHY6d40uY0Ij4s58yaxGtL5XuSJS0/N+jf5H/pmM=;
-        b=S8+n9d3Kax4NRRwTfe9hCHnS0x43t5BvUwNfVbbp8VBEi6ndhK9Y15mKdOCFx+MSZ5+Uwi
-        sF3WUmXKrMhtgWLak5q6Pj8lyU8htzgmXEgXfkOBL7qUbaLV4VT5sQoGeQSXzVBTo21pD1
-        6iP3wN9tU5lGa6efxaZd/aVjhomF5bc=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-556-PvU81CrMMaibchX8botS0g-1; Wed, 17 Aug 2022 06:54:01 -0400
-X-MC-Unique: PvU81CrMMaibchX8botS0g-1
-Received: by mail-wm1-f72.google.com with SMTP id r10-20020a1c440a000000b003a538a648a9so6174832wma.5
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 03:54:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=gWHtHY6d40uY0Ij4s58yaxGtL5XuSJS0/N+jf5H/pmM=;
-        b=3xf4eAbdTfMPTPlbdDGuGJX9AMlt6UVHaEQE0Da+UG+92x+37djnrBdiy1IVGiOQhz
-         hTiVrndCOWwf8EA+uJ6YK88vb0J0waqecx8ZwvX7mtXJNarc8d7MEbeTtLuObuODGHQa
-         jXWBZXEpxbIJdo7eeLhePB7H557R92RHicO9Qtl/XR9dVEzlhvzyTNc+HOuNJLLcBwQQ
-         GKu5oudQyxrWePyPHXdxTn6aDL0/Kqf4rwJbMsfIxVbtlsWrtxwz5VV2/QVPFvdc+bdE
-         a6o294Gw7L4ZJ6Og3+M6CE9KYSR0Q13XiR1WjjiiXIAKyjYA3K91oOyP5adHt6OjDtSW
-         w9/Q==
-X-Gm-Message-State: ACgBeo23ZXtoWoUCz9yQapmbI3HYNKbKaiVJasT+sX/CNyEn46LHZeDo
-        qOoosSHY2N5TO4MvJJt8koDyEpQeM200ETuNrZZh9V0DGFdYO3Qo6eQZPk4UUNiLV1fR9dnMOmd
-        2PPFd5SQ6oycD0tAgwT0FeXSS
-X-Received: by 2002:a05:600c:4e11:b0:3a5:bfd3:a899 with SMTP id b17-20020a05600c4e1100b003a5bfd3a899mr1743689wmq.185.1660733639794;
-        Wed, 17 Aug 2022 03:53:59 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7d/IR607lJwmB2S6Sw1FJB/dSOGJPbcoQRDZgxOs2ObvWS+6e3HgFTFDQjrws5pZac+mb1Cw==
-X-Received: by 2002:a05:600c:4e11:b0:3a5:bfd3:a899 with SMTP id b17-20020a05600c4e1100b003a5bfd3a899mr1743679wmq.185.1660733639576;
-        Wed, 17 Aug 2022 03:53:59 -0700 (PDT)
-Received: from redhat.com ([2.55.4.37])
-        by smtp.gmail.com with ESMTPSA id p27-20020a05600c1d9b00b003a35ec4bf4fsm1905896wms.20.2022.08.17.03.53.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 03:53:59 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 06:53:53 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        James.Bottomley@hansenpartnership.com, andres@anarazel.de,
-        axboe@kernel.dk, c@redhat.com, davem@davemloft.net,
-        edumazet@google.com, gregkh@linuxfoundation.org,
-        jasowang@redhat.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux@roeck-us.net, martin.petersen@oracle.com,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        torvalds@linux-foundation.org,
-        virtualization@lists.linux-foundation.org,
-        kasan-dev@googlegroups.com
-Subject: Re: upstream kernel crashes
-Message-ID: <20220817065207-mutt-send-email-mst@kernel.org>
-References: <20220815113729-mutt-send-email-mst@kernel.org>
- <20220815164503.jsoezxcm6q4u2b6j@awork3.anarazel.de>
- <20220815124748-mutt-send-email-mst@kernel.org>
- <20220815174617.z4chnftzcbv6frqr@awork3.anarazel.de>
- <20220815161423-mutt-send-email-mst@kernel.org>
- <20220815205330.m54g7vcs77r6owd6@awork3.anarazel.de>
- <20220815170444-mutt-send-email-mst@kernel.org>
- <20220817061359.200970-1-dvyukov@google.com>
- <1660718191.3631961-1-xuanzhuo@linux.alibaba.com>
+        Wed, 17 Aug 2022 06:54:43 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8120B5D124;
+        Wed, 17 Aug 2022 03:54:42 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0FBCC113E;
+        Wed, 17 Aug 2022 03:54:43 -0700 (PDT)
+Received: from e120937-lin.home (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 26A1E3F67D;
+        Wed, 17 Aug 2022 03:54:40 -0700 (PDT)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        daniel.lezcano@linaro.org, tarek.el-sherbiny@arm.com,
+        adrian.slatineanu@arm.com, souvik.chakravarty@arm.com,
+        wleavitt@marvell.com, wbartczak@marvell.com,
+        dan.carpenter@oracle.com,
+        Cristian Marussi <cristian.marussi@arm.com>
+Subject: [PATCH 0/3] Add ARM SCMI Powercap driver
+Date:   Wed, 17 Aug 2022 11:54:21 +0100
+Message-Id: <20220817105424.3124006-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1660718191.3631961-1-xuanzhuo@linux.alibaba.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,56 +47,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 02:36:31PM +0800, Xuan Zhuo wrote:
-> On Wed, 17 Aug 2022 08:13:59 +0200, Dmitry Vyukov <dvyukov@google.com> wrote:
-> > On Mon, 15 Aug 2022 17:32:06 -0400, Michael wrote:
-> > > So if you pass the size parameter for a legacy device it will
-> > > try to make the ring smaller and that is not legal with
-> > > legacy at all. But the driver treats legacy and modern
-> > > the same, it allocates a smaller queue anyway.
-> > >
-> > > Lo and behold, I pass disable-modern=on to qemu and it happily
-> > > corrupts memory exactly the same as GCP does.
-> >
-> > Ouch!
-> >
-> > I understand that the host does the actual corruption,
-> > but could you think of any additional debug checking in the guest
-> > that would caught this in future? Potentially only when KASAN
-> > is enabled which can verify validity of memory ranges.
-> > Some kind of additional layer of sanity checking.
-> >
-> > This caused a bit of a havoc for syzbot with almost 100 unique
-> > crash signatures, so would be useful to catch such issues more
-> > reliably in future.
-> 
-> We can add a check to vring size before calling vp_legacy_set_queue_address().
-> Checking the memory range directly is a bit cumbersome.
-> 
-> Thanks.
+Hi all,
 
-With a comment along the lines of
+this short series builts on top of recently introduced SCMI v3.1 Powercap
+protocol to implement an ARM SCMI Powercap driver which takes care to
+expose via the Powercap framework all the SCMI Powercap zones that have
+been discovered asking the SCMI platform firmware.
 
-/* Legacy virtio pci has no way to communicate a change in vq size to
- * the hypervisor. If ring sizes don't match hypervisor will happily
- * corrupt memory.
- */
+Basic testing has been performed against an emulated SCMI platform
+supporting SCMIv3.1 Powercap protocol using powercap-utils.
 
+A couple of fixes spotted with Smatch by Dan are queued on top of the
+driver itself; these may have to be squashed finally into the driver itself
+(with the Fixes tags removed) but for now I have just added them here as
+patches on top, for clarity and to preserve authorship.
 
-> diff --git a/drivers/virtio/virtio_pci_legacy.c b/drivers/virtio/virtio_pci_legacy.c
-> index 2257f1b3d8ae..0673831f45b6 100644
-> --- a/drivers/virtio/virtio_pci_legacy.c
-> +++ b/drivers/virtio/virtio_pci_legacy.c
-> @@ -146,6 +146,8 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
->                 goto out_del_vq;
->         }
-> 
-> +       BUG_ON(num != virtqueue_get_vring_size(vq));
-> +
->         /* activate the queue */
->         vp_legacy_set_queue_address(&vp_dev->ldev, index, q_pfn);
-> 
-> 
-> >
-> > Thanks
+The series is based on v6.0-rc1:
+
+Thanks,
+Cristian
+
+Cristian Marussi (1):
+  powercap: arm_scmi: Add SCMI Powercap based driver
+
+Dan Carpenter (2):
+  powercap: arm_scmi: Fix signedness bug in probe
+  powercap: arm_scmi: Fix a NULL vs IS_ERR() bug
+
+ drivers/powercap/Kconfig             |  13 +
+ drivers/powercap/Makefile            |   1 +
+ drivers/powercap/arm_scmi_powercap.c | 545 +++++++++++++++++++++++++++
+ 3 files changed, 559 insertions(+)
+ create mode 100644 drivers/powercap/arm_scmi_powercap.c
+
+-- 
+2.32.0
 

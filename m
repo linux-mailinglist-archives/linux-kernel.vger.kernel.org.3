@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8725977A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D38A5977B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 22:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241538AbiHQUMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 16:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
+        id S241781AbiHQUM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 16:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241467AbiHQUMl (ORCPT
+        with ESMTP id S241519AbiHQUMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 16:12:41 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE6666A4B
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:12:40 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id s23so7153266wmj.4
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:12:40 -0700 (PDT)
+        Wed, 17 Aug 2022 16:12:47 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE49A6C2C
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:12:45 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id c187-20020a1c35c4000000b003a30d88fe8eso1569346wma.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 13:12:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=conchuod.ie; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=vuO3cD7vHfOoM26qaFlIa3/qXvWH4JaTB3axSBEJPBw=;
-        b=QNqHEQCbHfRVGS+tAMiAeZUZwHbBaHSl0+l3elr57UhAo9n9y5kVxNnKfpGR3/bFaK
-         +0au1CDmSpQEpc+SU4gk9DT+bLflPHiKU7I8q8oQr7K+iXIJMVRPppzrl+EdG1CICueI
-         mETGyBRKdR/0jUMOQefFZwBRXS0F6IVfTdGwBMcn+/W4tOLw5o3k++yjoq0kYu6PUOu8
-         zPeHvkIN/+xOD7MPCo5mJihWLZw9Ayb2dZz9D3SYCFb7mSsm+ctbY/v+37Sk2BkryeRN
-         +keBV6AYTGq3C5eSUKwO2Ih+l7MLpNlzPwmWLNs+G4q0F/Ce1V4BLVEMj+kApmgnT9U8
-         jwKw==
+        bh=De0s+s/D2rq5b1W85sP7P0sadpD1tyl+4KZh5xfCdFc=;
+        b=VoUCelW9ATsck56Z8Vshz+e5skJfqAaLWP0HlwFo7La/BTrmJH5e8zjyqLvEREwsny
+         wivfEbQBCbsuAwXFwnaTCReVWo48k1o/9NHZ6uWUyyb1QcRZaacS8eYKfW160GvNgdRl
+         tERNO6oWhTlIwX2AAbAEDn9M5mRMpl16CQcmPD1jWSFcupCT4CmqBFX72IKxsy5HNvI6
+         1ofx3JTRa4Gz5oJXqe8j7aHCHkdofi+lsc4O68CTHYD7rM2Dd+IYZB4Y1c4bvN760fwl
+         mqGvxbSv/gH2QOynns+PpVsW5V8qUj2oLo3HbjL3PbdYC6gjSc78t0dyQeNKj8aE5M8n
+         wMLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=vuO3cD7vHfOoM26qaFlIa3/qXvWH4JaTB3axSBEJPBw=;
-        b=7XhQVlrMXqnpPFvl60lfO/k9H4JW3Ak16q5XCjsMlkPUgBuIdoSS8dPPdxLMnqhuWJ
-         BSARKZz2RpBfEtgHh7fjbTkY8yFrE/6e+S1wqyJvQXtdADzU+H5l+zGtw4en/SgA+w34
-         jlVy0tu2CLjD905Qo5+69QsSaff6WrtEe+6jaq5+klpmE9nJcMH6t7c9f6j5tzI9rsDE
-         7a5+25JZP4wCN6gZ/D/S8qXA50yH7GvsVKm4VyJtsdg4eWjVULvzSnx1jac7NtuMuGg2
-         z11Rd07f55RtqsCP42W5dIkOdnm/TGJ9qXoIuM6bfS25sMglQUEzKXiuS33SZHuHSlZu
-         bFiw==
-X-Gm-Message-State: ACgBeo2JVSitQNgTqWcIpamjK0HayL+9FrNpVmrTk/bpv5QVSAHoq03l
-        hSsTIKBgurIhQ1xehQ6v3HWNMg==
-X-Google-Smtp-Source: AA6agR4uxolucIHZMbESqZVNmKY0bzNzoYEESejDuTjDSWvejaLJaV19DGDusJCVom1LcN9XAiM6Ow==
-X-Received: by 2002:a1c:7407:0:b0:3a5:b81b:c5c5 with SMTP id p7-20020a1c7407000000b003a5b81bc5c5mr3038616wmc.144.1660767160200;
-        Wed, 17 Aug 2022 13:12:40 -0700 (PDT)
+        bh=De0s+s/D2rq5b1W85sP7P0sadpD1tyl+4KZh5xfCdFc=;
+        b=hKa4vXMuq76OzDdwuGp0TB9c2OK/gnZSzpFaJH0lf6JGkAq8s8jHiYwgHuE2shvpnm
+         alZJyqVsna8GmOyTfMOP1UGgsN8GFLeS+L2SUOPx8ntJw6HRyR5R96tdjbUyRrRFhbaa
+         BjemcYs6o3TCHWOLXZNdbUzHlBqDeAOJT8+CEe1cTXlEevNRWB/miBJ5XN9ie7tfKKWu
+         IsvtCpaiackQWB/mcBqldbP15Jfr73jjIKylI87nZeZe0JGti7SnUgF6N4TJo4ON0kAT
+         g5grC9j5t0kC28MVjlTE0j6rKBWzDG6d1cf+Pg7Ru0pJJ3rDM61uSZPIPIDoH/zsQwpr
+         9SQA==
+X-Gm-Message-State: ACgBeo0H81763rpStZ/IpV+wdc9J60oZ1D4k1VPvSGY1rMyuqt6iL1UY
+        ZBh4j8rEK98k8xQWP8c3golmSg==
+X-Google-Smtp-Source: AA6agR5fECZky51OLxj7IyiHwCUh5pSaXNngYTDHiSH2lpDG7XCOjdR0BjCA3TzdeYNFfoayKbBkfg==
+X-Received: by 2002:a05:600c:4f05:b0:3a5:ffec:b6b with SMTP id l5-20020a05600c4f0500b003a5ffec0b6bmr3007577wmq.199.1660767164394;
+        Wed, 17 Aug 2022 13:12:44 -0700 (PDT)
 Received: from henark71.. ([109.76.58.63])
-        by smtp.gmail.com with ESMTPSA id i15-20020a05600c354f00b003a5dfd7e9eesm3029371wmq.44.2022.08.17.13.12.38
+        by smtp.gmail.com with ESMTPSA id i15-20020a05600c354f00b003a5dfd7e9eesm3029371wmq.44.2022.08.17.13.12.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 13:12:39 -0700 (PDT)
+        Wed, 17 Aug 2022 13:12:43 -0700 (PDT)
 From:   Conor Dooley <mail@conchuod.ie>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
@@ -66,9 +66,9 @@ Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-riscv@lists.infradead.org, qemu-riscv@nongnu.org,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v3 2/4] dt-bindings: interrupt-controller: sifive,plic: add legacy riscv compatible
-Date:   Wed, 17 Aug 2022 21:12:11 +0100
-Message-Id: <20220817201212.990712-3-mail@conchuod.ie>
+Subject: [PATCH v3 3/4] dt-bindings: riscv: add new riscv,isa strings for emulators
+Date:   Wed, 17 Aug 2022 21:12:12 +0100
+Message-Id: <20220817201212.990712-4-mail@conchuod.ie>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220817201212.990712-1-mail@conchuod.ie>
 References: <20220817201212.990712-1-mail@conchuod.ie>
@@ -86,41 +86,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-While "real" hardware might not use the compatible string "riscv,plic0"
-it is present in the driver & QEMU uses it for automatically generated
-virt machine dtbs. To avoid dt-validate problems with QEMU produced
-dtbs, such as the following, add it to the binding.
+The QEMU virt and spike machines currently export a riscv,isa string of
+"rv64imafdcsuh",
 
-riscv-virt.dtb: plic@c000000: compatible: 'oneOf' conditional failed, one must be fixed:
-        'sifive,plic-1.0.0' is not one of ['sifive,fu540-c000-plic', 'starfive,jh7100-plic', 'canaan,k210-plic']
-        'sifive,plic-1.0.0' is not one of ['allwinner,sun20i-d1-plic']
-        'sifive,plic-1.0.0' was expected
-        'thead,c900-plic' was expected
-riscv-virt.dtb: plic@c000000: '#address-cells' is a required property
+While the RISC-V foundation has been ratifying a bunch of extenstions
+etc, the kernel has remained relatively static with what hardware is
+supported - but the same is not true of QEMU. Using the virt machine
+and running dt-validate on the dumped dtb fails, partly due to the
+unexpected isa string.
+
+Rather than enumerate the many many possbilities, change the pattern
+to a regex, with the following assumptions:
+- the single letter order is fixed & we don't care about things that
+  can't even do "ima"
+- the standard multi letter extensions are all in a "_z<foo>" format
+  where the first letter of <foo> is a valid single letter extension
+- _s & _h are used for supervisor and hyper visor extensions.
+- after the first two chars, a standard multi letter extension name
+  could be an english   word (ifencei anyone?) so it's not worth
+  restricting the charset
+- vendor ISA extensions begind with _x and have no charset restrictions
+- we don't care about an e extension from an OS pov
+- that attempting to validate the contents of the multiletter extensions
+  with dt-validate beyond the formatting is a futile, massively verbose
+  or unwieldy exercise at best.
+- ima are required
+
+The following limitations also apply:
+- multi letter extension ordering is not enforced. dt-schema does not
+  appear to allow for named match groups, so the resulting regex would
+  be even more of a headache.
+- ditto for the numbered extensions.
+
+Finally, add me as a maintainer of the binding so that when it breaks
+in the future, I can be held responsible!
 
 Reported-by: Rob Herring <robh@kernel.org>
 Link: https://lore.kernel.org/linux-riscv/20220803170552.GA2250266-robh@kernel.org/
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- .../bindings/interrupt-controller/sifive,plic-1.0.0.yaml     | 5 +++++
- 1 file changed, 5 insertions(+)
+Palmer, feel free to drop the maintainer addition. I just mostly want
+to clean up my own mess on this when they decide to ratify more
+extensions & this comes back up again.
+---
+ Documentation/devicetree/bindings/riscv/cpus.yaml | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-index 92e0f8c3eff2..99e01f4d0a69 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-@@ -66,6 +66,11 @@ properties:
-           - enum:
-               - allwinner,sun20i-d1-plic
-           - const: thead,c900-plic
-+      - items:
-+          - const: sifive,plic-1.0.0
-+          - const: riscv,plic0
-+        deprecated: true
-+        description: For the QEMU virt machine only
+diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
+index 873dd12f6e89..c0e0bc5dce04 100644
+--- a/Documentation/devicetree/bindings/riscv/cpus.yaml
++++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+@@ -9,6 +9,7 @@ title: RISC-V bindings for 'cpus' DT nodes
+ maintainers:
+   - Paul Walmsley <paul.walmsley@sifive.com>
+   - Palmer Dabbelt <palmer@sifive.com>
++  - Conor Dooley <conor@kernel.org>
  
-   reg:
-     maxItems: 1
+ description: |
+   This document uses some terminology common to the RISC-V community
+@@ -79,9 +80,7 @@ properties:
+       insensitive, letters in the riscv,isa string must be all
+       lowercase to simplify parsing.
+     $ref: "/schemas/types.yaml#/definitions/string"
+-    enum:
+-      - rv64imac
+-      - rv64imafdc
++    pattern: ^rv(?:64|32)imaf?d?q?c?b?v?k?h?(?:(?:_[zsh][imafdqcbvksh]|_x)(?:[a-z])+)*$
+ 
+   # RISC-V requires 'timebase-frequency' in /cpus, so disallow it here
+   timebase-frequency: false
 -- 
 2.37.1
 

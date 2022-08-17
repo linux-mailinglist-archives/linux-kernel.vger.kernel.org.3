@@ -2,126 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A683559724E
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 17:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B7D5971F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 16:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240477AbiHQO7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 10:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
+        id S236535AbiHQOwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 10:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240411AbiHQO6x (ORCPT
+        with ESMTP id S229503AbiHQOwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 10:58:53 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E184BA7A;
-        Wed, 17 Aug 2022 07:58:52 -0700 (PDT)
-Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M7B0K3C0sz67M1h;
-        Wed, 17 Aug 2022 22:55:45 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 17 Aug 2022 16:58:50 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 17 Aug 2022 15:58:47 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <jinpu.wang@cloud.ionos.com>, <damien.lemoal@opensource.wdc.com>,
-        <yangxingui@huawei.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <hare@suse.de>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH v2 6/6] scsi: libsas: Make sas_{alloc, alloc_slow, free}_task() private
-Date:   Wed, 17 Aug 2022 22:52:14 +0800
-Message-ID: <1660747934-60059-7-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1660747934-60059-1-git-send-email-john.garry@huawei.com>
-References: <1660747934-60059-1-git-send-email-john.garry@huawei.com>
+        Wed, 17 Aug 2022 10:52:47 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DC590C5E
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:52:45 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-11be650aaccso7983899fac.6
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 07:52:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=p6elRDyP8NYnM4v7agKH/wBfu4apiNL55+e+soKTTbc=;
+        b=5EuNmx6MxrW8SWGqqbCOqzQ+s8Te51T3R6xgbA89Sk211auzMweoYrkEzMxjTE222U
+         6ajGCVZpwYoATV1wudJViEWYzHdMWE8hUymF6A4XgcUut55VxyH8THN525b59Ojd7Ztx
+         YU+CVtzxve+a5I1GgsWNYnyT1oNDagT7mlXZ9R6nnZeAGKKjXnfRsVUK4PBaSC71+tNX
+         umoDlvWCN6b+g0o5fhq9JbSNm22rqjIfhohpDpUGJAdGySjc8SFqxKoevcEfRIkUrP3f
+         +D9Flane7vSbSlWpkP8LIEc1QAsQGoaS5RHdk8l+M97CO/LUjpNHZfVyR2Ej6JHu0Mxz
+         Ei3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=p6elRDyP8NYnM4v7agKH/wBfu4apiNL55+e+soKTTbc=;
+        b=1W4Sv2sl6q9JUthF5L2LTrycdNNwRcBSwZT+/piB8aH3R0ndhYjVr//7BVGr1MlOky
+         3+vf+qZd47jXKCI/6XhNo4gPqFE9DV9YjGx244mIpBZoZJy1YRxoBmRgHcdd+dlqe2pb
+         PgGKgEkg5cJVGcGkpsQK3IOMXWb8KgO/ePVmuFAard/3KIkgQKa2xI8ji8W9xdvLRY8J
+         NULrfwFPBCr97i42dXBW1qAODAkG+9NovNk5rNBdMROw8OQ71Lbyvj8cDeo7oWBQEULy
+         OZVctIiLUrpN9Z/DLhB93Bl7jGn4i0am60P0aSk0Up6YMQcFHNiRZV8jxwhcWYcpfe0+
+         sRvA==
+X-Gm-Message-State: ACgBeo2RfyQIKAM1W7jS9D1EwBZgd+FknRHqgzjVlL9uK61i9hgdQFcx
+        LA5vlt9Gun9LDZVpyt549+g4Ab1eUUTdvkpBeeFK
+X-Google-Smtp-Source: AA6agR6jYL1Jhtyl77hp193lRTLCWuiKZuNGi023Wb2umOc1iVGeV0Q1gFXBlEJPHu1RAENEGyZZMACGud4kfjvweVc=
+X-Received: by 2002:a05:6870:9588:b0:101:c003:bfe6 with SMTP id
+ k8-20020a056870958800b00101c003bfe6mr1902929oao.41.1660747965093; Wed, 17 Aug
+ 2022 07:52:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220725124123.12975-1-flaniel@linux.microsoft.com>
+ <CAHC9VhTmgMfzc+QY8kr+BYQyd_5nEis0Y632w4S2_PGudTRT7g@mail.gmail.com> <4420381.LvFx2qVVIh@pwmachine>
+In-Reply-To: <4420381.LvFx2qVVIh@pwmachine>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 17 Aug 2022 10:52:34 -0400
+Message-ID: <CAHC9VhSMeefG5W_uuTNQYmUUZ1xcuqArxYs5sL9KOzUO_skCZw@mail.gmail.com>
+Subject: Re: [RFC PATCH v4 0/2] Add capabilities file to securityfs
+To:     Francis Laniel <flaniel@linux.microsoft.com>
+Cc:     linux-security-module@vger.kernel.org,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        James Morris <jmorris@namei.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:BPF [MISC]" <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have no users outside libsas any longer, so make sas_alloc_task(),
-sas_alloc_slow_task(), and sas_free_task() private.
+On Wed, Aug 17, 2022 at 7:53 AM Francis Laniel
+<flaniel@linux.microsoft.com> wrote:
+> Le mardi 16 ao=C3=BBt 2022, 23:59:41 CEST Paul Moore a =C3=A9crit :
+> > On Mon, Jul 25, 2022 at 8:42 AM Francis Laniel
+> >
+> > <flaniel@linux.microsoft.com> wrote:
+> > > Hi.
+> > >
+> > > First, I hope you are fine and the same for your relatives.
+> >
+> > Hi Francis :)
+> >
+> > > A solution to this problem could be to add a way for the userspace to=
+ ask
+> > > the kernel about the capabilities it offers.
+> > > So, in this series, I added a new file to securityfs:
+> > > /sys/kernel/security/capabilities.
+> > > The goal of this file is to be used by "container world" software to =
+know
+> > > kernel capabilities at run time instead of compile time.
+> >
+> > ...
+> >
+> > > The kernel already exposes the last capability number under:
+> > > /proc/sys/kernel/cap_last_cap
+> >
+> > I'm not clear on why this patchset is needed, why can't the
+> > application simply read from "cap_last_cap" to determine what
+> > capabilities the kernel supports?
+>
+> When you capabilities with, for example, docker, you will fill capabiliti=
+es
+> like this:
+> docker run --rm --cap-add SYS_ADMIN debian:latest echo foo
+> As a consequence, the "echo foo" will be run with CAP_SYS_ADMIN set.
+>
+> Sadly, each time a new capability is added to the kernel, it means "conta=
+iner
+> stack" software should add a new string corresponding to the number of th=
+e
+> capabilities [1].
 
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/scsi/libsas/sas_init.c     | 3 ---
- drivers/scsi/libsas/sas_internal.h | 4 ++++
- include/scsi/libsas.h              | 4 ----
- 3 files changed, 4 insertions(+), 7 deletions(-)
+Thanks for clarifying things, I thought you were more concerned about
+detecting what capabilities the running kernel supported, I didn't
+realize it was getting a string literal for each supported capability.
+Unless there is a significant show of support for this - and I'm
+guessing there isn't due to the lack of comments - I don't think this
+is something we want to add to the kernel, especially since the kernel
+doesn't really care about the capabilities' names, it's the number
+that matters.
 
-diff --git a/drivers/scsi/libsas/sas_init.c b/drivers/scsi/libsas/sas_init.c
-index e4f77072a58d..f2c05ebeb72f 100644
---- a/drivers/scsi/libsas/sas_init.c
-+++ b/drivers/scsi/libsas/sas_init.c
-@@ -35,7 +35,6 @@ struct sas_task *sas_alloc_task(gfp_t flags)
- 
- 	return task;
- }
--EXPORT_SYMBOL_GPL(sas_alloc_task);
- 
- struct sas_task *sas_alloc_slow_task(gfp_t flags)
- {
-@@ -56,7 +55,6 @@ struct sas_task *sas_alloc_slow_task(gfp_t flags)
- 
- 	return task;
- }
--EXPORT_SYMBOL_GPL(sas_alloc_slow_task);
- 
- void sas_free_task(struct sas_task *task)
- {
-@@ -65,7 +63,6 @@ void sas_free_task(struct sas_task *task)
- 		kmem_cache_free(sas_task_cache, task);
- 	}
- }
--EXPORT_SYMBOL_GPL(sas_free_task);
- 
- /*------------ SAS addr hash -----------*/
- void sas_hash_addr(u8 *hashed, const u8 *sas_addr)
-diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
-index 8d0ad3abc7b5..b54bcf3c9a9d 100644
---- a/drivers/scsi/libsas/sas_internal.h
-+++ b/drivers/scsi/libsas/sas_internal.h
-@@ -52,6 +52,10 @@ void sas_unregister_phys(struct sas_ha_struct *sas_ha);
- struct asd_sas_event *sas_alloc_event(struct asd_sas_phy *phy, gfp_t gfp_flags);
- void sas_free_event(struct asd_sas_event *event);
- 
-+struct sas_task *sas_alloc_task(gfp_t flags);
-+struct sas_task *sas_alloc_slow_task(gfp_t flags);
-+void sas_free_task(struct sas_task *task);
-+
- int  sas_register_ports(struct sas_ha_struct *sas_ha);
- void sas_unregister_ports(struct sas_ha_struct *sas_ha);
- 
-diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-index 2dbead74a2af..f86b56bf7833 100644
---- a/include/scsi/libsas.h
-+++ b/include/scsi/libsas.h
-@@ -639,10 +639,6 @@ struct sas_task_slow {
- #define SAS_TASK_STATE_ABORTED      4
- #define SAS_TASK_NEED_DEV_RESET     8
- 
--extern struct sas_task *sas_alloc_task(gfp_t flags);
--extern struct sas_task *sas_alloc_slow_task(gfp_t flags);
--extern void sas_free_task(struct sas_task *task);
--
- static inline bool sas_is_internal_abort(struct sas_task *task)
- {
- 	return task->task_proto == SAS_PROTOCOL_INTERNAL_ABORT;
--- 
-2.35.3
-
+--=20
+paul-moore.com

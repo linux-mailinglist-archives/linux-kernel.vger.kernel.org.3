@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31012597628
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF31597646
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 21:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238396AbiHQTDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 15:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59118 "EHLO
+        id S241373AbiHQTJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 15:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbiHQTDt (ORCPT
+        with ESMTP id S241308AbiHQTJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 15:03:49 -0400
+        Wed, 17 Aug 2022 15:09:14 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D142B61D
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:03:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6793932ED7
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 12:09:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660763027;
+        s=mimecast20190719; t=1660763352;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          references:references; bh=QjliH6Zbs7SxREI0yAVgUWAGnTR2b2eGLogi48MSCUs=;
-        b=PKypfuAENkJe0Hu/gk0Ouo3MAfOO8Y1wQjXHcms43+QFweImyXwtBE98IK0K8+SOs8UdfW
-        H71G+7XFQGeS6wsFreAv2M+xoPM+xHaggKnBASMx9LKCXzegVDVqUI7pMxdQcQ6jFtWevh
-        PVZMBYvPRnoo4lz+ynj6y3FldLfkcSo=
+        b=WsK0wkOatdbuTT7NXAkOqsGK/g96Qo+FTlOj810C+x52S5mdIHARubDGpH4Vs0JCHGWA+R
+        DNstANuhPG8yxn/P0qaDKw1fbOuqF+dqwmsIMcHAhqkIlggKVZ+AJ4gEqFnPyhnasug8aJ
+        z4Ka5fbxyl28ynkGreyU+Miv71bq1n0=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-301-FKthpWl-NYCrKTMounRGtQ-1; Wed, 17 Aug 2022 15:03:46 -0400
-X-MC-Unique: FKthpWl-NYCrKTMounRGtQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+ us-mta-501-fTXZom6eMEu2rTTjmBq4cA-1; Wed, 17 Aug 2022 15:09:11 -0400
+X-MC-Unique: fTXZom6eMEu2rTTjmBq4cA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 800C93810793;
-        Wed, 17 Aug 2022 19:03:45 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B865E296A609;
+        Wed, 17 Aug 2022 19:09:10 +0000 (UTC)
 Received: from fuller.cnet (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id ED5751121319;
-        Wed, 17 Aug 2022 19:03:44 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 889C4400E122;
+        Wed, 17 Aug 2022 19:09:10 +0000 (UTC)
 Received: by fuller.cnet (Postfix, from userid 1000)
-        id 7DD32416D5E9; Wed, 17 Aug 2022 16:03:26 -0300 (-03)
+        id A417E416D5E9; Wed, 17 Aug 2022 16:08:54 -0300 (-03)
 Message-ID: <20220817190221.486745251@redhat.com>
 User-Agent: quilt/0.66
 Date:   Wed, 17 Aug 2022 16:01:37 -0300
@@ -47,14 +47,14 @@ Cc:     cl@linux.com, tglx@linutronix.de, mingo@kernel.org,
         peterz@infradead.org, pauld@redhat.com, neelx@redhat.com,
         oleksandr@natalenko.name, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, Marcelo Tosatti <mtosatti@redhat.com>
-Subject: [patch 1/3] mm/vmstat: Use per cpu variable to track a vmstat discrepancy
+Subject: [PATCH v7 1/3] mm/vmstat: Use per cpu variable to track a vmstat discrepancy
 References: <20220817190136.096849758@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net

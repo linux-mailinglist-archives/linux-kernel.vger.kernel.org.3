@@ -2,91 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C519F59761D
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69EA2597619
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 Aug 2022 20:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241331AbiHQSwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 14:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37464 "EHLO
+        id S241326AbiHQS4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 14:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241300AbiHQSwb (ORCPT
+        with ESMTP id S238392AbiHQS41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 14:52:31 -0400
+        Wed, 17 Aug 2022 14:56:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E328A3D6A;
-        Wed, 17 Aug 2022 11:52:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC4C5AA26
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 11:56:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AAB2961446;
-        Wed, 17 Aug 2022 18:52:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 02EE6C433D7;
-        Wed, 17 Aug 2022 18:52:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFADA612D6
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 18:56:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 760D0C433C1;
+        Wed, 17 Aug 2022 18:56:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660762349;
-        bh=RR33wIOlyo9eMIkzmh0mFx+gISQrdv7F4Oqj1rsVrls=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ewjRLEHvK5mf5HNdt8uN0i2auiMMJL/abHSO0tZhFBtZCdqUL2gHWoMC3BCOSaiFV
-         fHNf4HtQwTuT18iTJ0rXY0BZCJQSScNGeS9o8lXeNWhSHmn066mmdPMoNdfz6qcX17
-         z9rsxGTKL04zbP9sThuO9coCE4FwO0FGMn70Y3PytUltFoSM6inbpAQsW92AqWmJA+
-         TgEFbr3E7FeQ8hEmfOgF8ceNVbabViy+40W8bSG36mleCOFhCHrwji6QQZy8rt/JQ8
-         Q2juUM7SxEdX+qeiLIRXz2S7t7ctqgyS+/xx9Z4WoljBk6wRYGo4HrK7fH2qaZCKjv
-         6zfZQ1Md/OZ2w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CED06E2A04C;
-        Wed, 17 Aug 2022 18:52:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1660762586;
+        bh=eXADiVpfHcg0p9ebNKYLyPPBKa0498jYFVcf8rw3DfU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uNWnWrGa/iA9AbTblZpKPjGugAP02+5bUCO0KgE8GYJ+AbiTtX7Oj3AJO6Penfi4H
+         kCaRdNt4a4M1NjPJJJRO+uXXqbUL1LcC+rjJbbaTw4Bha+MjS6xlfCIIAGcnE+nOhm
+         7i0hNyv8kavo3JM1CgW+IV5/73keVGbmszNIPkdYvVMA4wHUvMXHh7U9gvSwl03Oh/
+         4Waosb7Zt9klX+ERpUpQorjzACE7TAk2RjVPiAeCCAIPpYrmu1MSvSmKR5GB30RlBO
+         K9do2XoSZ++RS3wyxcb8PA63VR9ofENLGDiFwpypjpF/Y415zsxdCscOqACtN1l8qb
+         grEMlSj3LnaRQ==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] x86/build: Move '-mindirect-branch-cs-prefix' out of GCC-only block
+Date:   Wed, 17 Aug 2022 11:54:11 -0700
+Message-Id: <20220817185410.1174782-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] Bluetooth: hci_sync: fix double mgmt_pending_free() in
- remove_adv_monitor()
-From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <166076234884.20898.8598584910836798147.git-patchwork-notify@kernel.org>
-Date:   Wed, 17 Aug 2022 18:52:28 +0000
-References: <ea64b27e-6cbf-fdd5-1f23-aecc3a308e47@I-love.SAKURA.ne.jp>
-In-Reply-To: <ea64b27e-6cbf-fdd5-1f23-aecc3a308e47@I-love.SAKURA.ne.jp>
-To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Cc:     syzbot+915a8416bf15895b8e07@syzkaller.appspotmail.com,
-        davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
-        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
-        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+LLVM 16 will have support for this flag so move it out of the GCC-only
+block to allow LLVM builds to take advantage of it.
 
-This patch was applied to bluetooth/bluetooth-next.git (master)
-by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
+Link: https://github.com/ClangBuiltLinux/linux/issues/1665
+Link: https://github.com/llvm/llvm-project/commit/6f867f9102838ebe314c1f3661fdf95700386e5a
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
 
-On Wed, 17 Aug 2022 20:14:36 +0900 you wrote:
-> syzbot is reporting double kfree() at remove_adv_monitor() [1], for
-> commit 7cf5c2978f23fdbb ("Bluetooth: hci_sync: Refactor remove Adv
-> Monitor") forgot to remove duplicated mgmt_pending_remove() when
-> merging "if (err) {" path and "if (!pending) {" path.
-> 
-> Link: https://syzkaller.appspot.com/bug?extid=915a8416bf15895b8e07 [1]
-> Reported-by: syzbot <syzbot+915a8416bf15895b8e07@syzkaller.appspotmail.com>
-> Fixes: 7cf5c2978f23fdbb ("Bluetooth: hci_sync: Refactor remove Adv Monitor")
-> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> 
-> [...]
+I was not sure if this information is relevant for the commit message
+but I can boot without any issues on my test machines (two Intel and one
+AMD).
 
-Here is the summary with links:
-  - Bluetooth: hci_sync: fix double mgmt_pending_free() in remove_adv_monitor()
-    https://git.kernel.org/bluetooth/bluetooth-next/c/ae2b5c97cd40
+ arch/x86/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You are awesome, thank you!
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 7854685c5f25..987da87c7778 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -14,13 +14,13 @@ endif
+ 
+ ifdef CONFIG_CC_IS_GCC
+ RETPOLINE_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-extern -mindirect-branch-register)
+-RETPOLINE_CFLAGS	+= $(call cc-option,-mindirect-branch-cs-prefix)
+ RETPOLINE_VDSO_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-inline -mindirect-branch-register)
+ endif
+ ifdef CONFIG_CC_IS_CLANG
+ RETPOLINE_CFLAGS	:= -mretpoline-external-thunk
+ RETPOLINE_VDSO_CFLAGS	:= -mretpoline
+ endif
++RETPOLINE_CFLAGS	+= $(call cc-option,-mindirect-branch-cs-prefix)
+ 
+ ifdef CONFIG_RETHUNK
+ RETHUNK_CFLAGS		:= -mfunction-return=thunk-extern
+
+base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.37.2
 

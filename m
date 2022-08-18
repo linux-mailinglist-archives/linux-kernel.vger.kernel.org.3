@@ -2,250 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F41598C46
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC428598C4D
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345569AbiHRTBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 15:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58320 "EHLO
+        id S1345402AbiHRTDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 15:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243653AbiHRTBH (ORCPT
+        with ESMTP id S233465AbiHRTDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 15:01:07 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F69E60519;
-        Thu, 18 Aug 2022 12:01:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660849266; x=1692385266;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UT56lC7QOp4MxlyojoBS7ZXz7FiD5TK+NpgYdHE5Hws=;
-  b=mseMCnBDmoUe/eWq3UdJJS+7jjqoq4P1XWGZas+itOs7uezXwlQVyzc0
-   qFDR0BtPiJsGYFDf+u2Vy0x+DvH8RCXFIis2B+VkJ+l0EZzkh6sEuVRmB
-   im6eN5PO8ISiyFOWAhEKZRrTeiLtXwqsmcoH32FDSWiPg/cT3gDVU99hC
-   jKy77z7q0LE9T+WGoN8kdNby3pK0Qxz92udx0nEFJV8ZvOClTPT/rf96a
-   cMg6oxZylml+2wf3uG/alOkec/BDJNJa1g7iT23tFLU8o6o8wqSP70SYH
-   cjH+tqxZP6E049V5Bm4+ebR4KqEPs1sng34oXOAEfOZWGOvIQMysKxn3T
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="292844776"
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="292844776"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 12:01:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="676174804"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 18 Aug 2022 12:01:03 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oOklK-0000Qh-26;
-        Thu, 18 Aug 2022 19:01:02 +0000
-Date:   Fri, 19 Aug 2022 03:00:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sean Anderson <sean.anderson@seco.com>, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     kbuild-all@lists.01.org, "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexandru Marginean <alexandru.marginean@nxp.com>,
-        Sean Anderson <sean.anderson@seco.com>
-Subject: Re: [PATCH net-next v4 08/10] net: phylink: Adjust advertisement
- based on rate adaptation
-Message-ID: <202208190223.zfo3KG9D-lkp@intel.com>
-References: <20220818164616.2064242-9-sean.anderson@seco.com>
+        Thu, 18 Aug 2022 15:03:00 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472FAC00EE;
+        Thu, 18 Aug 2022 12:02:59 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27IIxZot013238;
+        Thu, 18 Aug 2022 19:02:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=tKMju3sjzSo3xIdBg1oTDtDo+ZlGlwx9HD+6llrIQ/o=;
+ b=TvtzL7V2+td6MH5PmXRHo0LgZYSpez4ZH+VgnVV7AAGfGONfbNwYw5WARUdF0PqSq8b4
+ rCiTQNyN+raRb7+FfrdZ7Cy5ZlIfxoOqR1W6KoQi/ecbKclEVu1ZwuOs+eYSBEppeeb8
+ ZfGY4BA14zzXPN0O06QX+sL3X9k94tqjzucGoIiccdkE8g41CL0gjTI5Ri1MMRZYTpX6
+ Nj/BQ+L0fyqDnyVHl8FOVEDOYTQWsnkqc9uqDy5LceSfFlxPV9l1yctH9RDqu6upTuu4
+ JlNWbhAESPfcV9duPiVJLfC7aebOOsZKniB+KH03N7hR6OLixswwsx1Mhn+DNa6NuMS1 Tg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1u6ng27n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 19:02:56 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27IJ0wm3021328;
+        Thu, 18 Aug 2022 19:02:56 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1u6ng27d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 19:02:56 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27IIor0l007012;
+        Thu, 18 Aug 2022 19:02:55 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma04wdc.us.ibm.com with ESMTP id 3hx3ka0ka5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 19:02:55 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27IJ2sME35324620
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 18 Aug 2022 19:02:54 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 34774BE054;
+        Thu, 18 Aug 2022 19:02:54 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3CE94BE04F;
+        Thu, 18 Aug 2022 19:02:53 +0000 (GMT)
+Received: from [9.160.64.167] (unknown [9.160.64.167])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu, 18 Aug 2022 19:02:52 +0000 (GMT)
+Message-ID: <1ff0ff82-f0e6-96d7-7e9a-f46a4957813c@linux.ibm.com>
+Date:   Thu, 18 Aug 2022 15:02:52 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818164616.2064242-9-sean.anderson@seco.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/2] s390/vfio-ap: fix hang during removal of mdev
+ after duplicate assignment
+Content-Language: en-US
+To:     Halil Pasic <pasic@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, jjherne@linux.ibm.com, borntraeger@de.ibm.com,
+        cohuck@redhat.com, mjrosato@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com, stable@vger.kernel.org
+References: <20220818132606.13321-1-akrowiak@linux.ibm.com>
+ <20220818132606.13321-2-akrowiak@linux.ibm.com>
+ <20220818161255.2fe5a542.pasic@linux.ibm.com>
+From:   Anthony Krowiak <akrowiak@linux.ibm.com>
+In-Reply-To: <20220818161255.2fe5a542.pasic@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: PSZdRyd5im51UYa6Rc2cUOEsr88_M5g7
+X-Proofpoint-GUID: 8RPhnrfQ4IwVpbRYDqKJQdkY6Xz2IRoY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-18_14,2022-08-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ priorityscore=1501 lowpriorityscore=0 spamscore=0 bulkscore=0
+ impostorscore=0 mlxlogscore=999 clxscore=1015 adultscore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208180069
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
 
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sean-Anderson/net-phy-Add-support-for-rate-adaptation/20220819-005121
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git e34cfee65ec891a319ce79797dda18083af33a76
-config: i386-randconfig-a005 (https://download.01.org/0day-ci/archive/20220819/202208190223.zfo3KG9D-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/f4857d8d4f852b1cc3ae278785c209a7a0da0f67
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sean-Anderson/net-phy-Add-support-for-rate-adaptation/20220819-005121
-        git checkout f4857d8d4f852b1cc3ae278785c209a7a0da0f67
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/phy/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/net/phy/phylink.c: In function 'phylink_get_capabilities':
->> drivers/net/phy/phylink.c:543:21: error: implicit declaration of function 'phylink_cap_from_speed_duplex' [-Werror=implicit-function-declaration]
-     543 |                     phylink_cap_from_speed_duplex(max_speed, DUPLEX_FULL)) {
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+On 8/18/22 10:12 AM, Halil Pasic wrote:
+> On Thu, 18 Aug 2022 09:26:05 -0400
+> Tony Krowiak <akrowiak@linux.ibm.com> wrote:
+>
+> Subject: s390/vfio-ap: fix hang during removal of mdev after duplicate
+> assignment
+>
+> It would have made sense to do it this way in the first place, even
+> if the link code were to take care of the duplicates. It did not really
+> make sense to do the whole filtering biz and everything else.
 
 
-vim +/phylink_cap_from_speed_duplex +543 drivers/net/phy/phylink.c
+No, it did not; however, nobody caught it in review either. In fact, 
+this probably should have been done prior to hot plug.
 
-   431	
-   432	/**
-   433	 * phylink_get_capabilities() - get capabilities for a given MAC
-   434	 * @interface: phy interface mode defined by &typedef phy_interface_t
-   435	 * @mac_capabilities: bitmask of MAC capabilities
-   436	 * @rate_adaptation: type of rate adaptation being performed
-   437	 *
-   438	 * Get the MAC capabilities that are supported by the @interface mode and
-   439	 * @mac_capabilities.
-   440	 */
-   441	unsigned long phylink_get_capabilities(phy_interface_t interface,
-   442					       unsigned long mac_capabilities,
-   443					       int rate_adaptation)
-   444	{
-   445		int max_speed = phylink_interface_max_speed(interface);
-   446		unsigned long caps = MAC_SYM_PAUSE | MAC_ASYM_PAUSE;
-   447		unsigned long adapted_caps = 0;
-   448	
-   449		switch (interface) {
-   450		case PHY_INTERFACE_MODE_USXGMII:
-   451			caps |= MAC_10000FD | MAC_5000FD | MAC_2500FD;
-   452			fallthrough;
-   453	
-   454		case PHY_INTERFACE_MODE_RGMII_TXID:
-   455		case PHY_INTERFACE_MODE_RGMII_RXID:
-   456		case PHY_INTERFACE_MODE_RGMII_ID:
-   457		case PHY_INTERFACE_MODE_RGMII:
-   458		case PHY_INTERFACE_MODE_QSGMII:
-   459		case PHY_INTERFACE_MODE_SGMII:
-   460		case PHY_INTERFACE_MODE_GMII:
-   461			caps |= MAC_1000HD | MAC_1000FD;
-   462			fallthrough;
-   463	
-   464		case PHY_INTERFACE_MODE_REVRMII:
-   465		case PHY_INTERFACE_MODE_RMII:
-   466		case PHY_INTERFACE_MODE_SMII:
-   467		case PHY_INTERFACE_MODE_REVMII:
-   468		case PHY_INTERFACE_MODE_MII:
-   469			caps |= MAC_10HD | MAC_10FD;
-   470			fallthrough;
-   471	
-   472		case PHY_INTERFACE_MODE_100BASEX:
-   473			caps |= MAC_100HD | MAC_100FD;
-   474			break;
-   475	
-   476		case PHY_INTERFACE_MODE_TBI:
-   477		case PHY_INTERFACE_MODE_MOCA:
-   478		case PHY_INTERFACE_MODE_RTBI:
-   479		case PHY_INTERFACE_MODE_1000BASEX:
-   480			caps |= MAC_1000HD;
-   481			fallthrough;
-   482		case PHY_INTERFACE_MODE_1000BASEKX:
-   483		case PHY_INTERFACE_MODE_TRGMII:
-   484			caps |= MAC_1000FD;
-   485			break;
-   486	
-   487		case PHY_INTERFACE_MODE_2500BASEX:
-   488			caps |= MAC_2500FD;
-   489			break;
-   490	
-   491		case PHY_INTERFACE_MODE_5GBASER:
-   492			caps |= MAC_5000FD;
-   493			break;
-   494	
-   495		case PHY_INTERFACE_MODE_XGMII:
-   496		case PHY_INTERFACE_MODE_RXAUI:
-   497		case PHY_INTERFACE_MODE_XAUI:
-   498		case PHY_INTERFACE_MODE_10GBASER:
-   499		case PHY_INTERFACE_MODE_10GKR:
-   500			caps |= MAC_10000FD;
-   501			break;
-   502	
-   503		case PHY_INTERFACE_MODE_25GBASER:
-   504			caps |= MAC_25000FD;
-   505			break;
-   506	
-   507		case PHY_INTERFACE_MODE_XLGMII:
-   508			caps |= MAC_40000FD;
-   509			break;
-   510	
-   511		case PHY_INTERFACE_MODE_INTERNAL:
-   512			caps |= ~0;
-   513			break;
-   514	
-   515		case PHY_INTERFACE_MODE_NA:
-   516		case PHY_INTERFACE_MODE_MAX:
-   517			break;
-   518		}
-   519	
-   520		switch (rate_adaptation) {
-   521		case RATE_ADAPT_OPEN_LOOP:
-   522			/* TODO */
-   523			fallthrough;
-   524		case RATE_ADAPT_NONE:
-   525			adapted_caps = 0;
-   526			break;
-   527		case RATE_ADAPT_PAUSE: {
-   528			/* The MAC must support asymmetric pause towards the local
-   529			 * device for this. We could allow just symmetric pause, but
-   530			 * then we might have to renegotiate if the link partner
-   531			 * doesn't support pause. This is because there's no way to
-   532			 * accept pause frames without transmitting them if we only
-   533			 * support symmetric pause.
-   534			 */
-   535			if (!(mac_capabilities & MAC_SYM_PAUSE) ||
-   536			    !(mac_capabilities & MAC_ASYM_PAUSE))
-   537				break;
-   538	
-   539			/* We can't adapt if the MAC doesn't support the interface's
-   540			 * max speed at full duplex.
-   541			 */
-   542			if (mac_capabilities &
- > 543			    phylink_cap_from_speed_duplex(max_speed, DUPLEX_FULL)) {
-   544				/* Although a duplex-adapting phy might exist, we
-   545				 * conservatively remove these modes because the MAC
-   546				 * will not be aware of the half-duplex nature of the
-   547				 * link.
-   548				 */
-   549				adapted_caps = GENMASK(__fls(caps), __fls(MAC_10HD));
-   550				adapted_caps &= ~(MAC_1000HD | MAC_100HD | MAC_10HD);
-   551			}
-   552			break;
-   553		}
-   554		case RATE_ADAPT_CRS:
-   555			/* The MAC must support half duplex at the interface's max
-   556			 * speed.
-   557			 */
-   558			if (mac_capabilities &
-   559			    phylink_cap_from_speed_duplex(max_speed, DUPLEX_HALF)) {
-   560				adapted_caps = GENMASK(__fls(caps), __fls(MAC_10HD));
-   561				adapted_caps &= mac_capabilities;
-   562			}
-   563			break;
-   564		}
-   565	
-   566		return (caps & mac_capabilities) | adapted_caps;
-   567	}
-   568	EXPORT_SYMBOL_GPL(phylink_get_capabilities);
-   569	
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>   Maybe we
+> should spin the short description and the rest of the commit message so
+> it reflects the code more.
+
+
+I'm not sure what you mean here, are you suggesting the first two 
+paragraphs should be eliminated?
+
+
+>   
+>
+>> When the same adapter or domain is assigned more than one time prior to
+>> removing the matrix mdev to which it is assigned, the remove operation
+>> will hang. The reason is because the same vfio_ap_queue objects with an
+>> APQN containing the APID of the adapter or APQI of the domain being
+>> assigned will get added to the hashtable that holds them multiple times.
+>> This results in the pprev and next pointers of the hlist_node (mdev_qnode
+>> field in the vfio_ap_queue object) pointing to the queue object itself.
+>> This causes an interminable loop when the mdev is removed and the queue
+>> table is iterated to reset the queues.
+>>
+>> To fix this problem, the assignment operation is bypassed when assigning
+>> an adapter or domain if it is already assigned to the matrix mdev.
+>>
+>> Since it is not necessary to assign a resource already assigned or to
+>> unassign a resource that has not been assigned, this patch will bypass
+>> all assignment/unassignment operations for an adapter, domain or
+>> control domain under these circumstances.
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: 771e387d5e79 ("s390/vfio-ap: manage link between queue struct and matrix mdev")
+> Not 11cb2419fafe ("s390/vfio-ap: manage link between queue struct and
+> matrix mdev")
+>
+> Is my repo borked?
+>
+>
+>> Reported-by: Matthew Rosato <mjrosato@linux.ibm.com>
+>> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
+>> ---
+>>   drivers/s390/crypto/vfio_ap_ops.c | 30 ++++++++++++++++++++++++++++++
+>>   1 file changed, 30 insertions(+)
+>>
+>> diff --git a/drivers/s390/crypto/vfio_ap_ops.c b/drivers/s390/crypto/vfio_ap_ops.c
+>> index 6c8c41fac4e1..ee82207b4e60 100644
+>> --- a/drivers/s390/crypto/vfio_ap_ops.c
+>> +++ b/drivers/s390/crypto/vfio_ap_ops.c
+>> @@ -984,6 +984,11 @@ static ssize_t assign_adapter_store(struct device *dev,
+>>   		goto done;
+>>   	}
+>>   
+>> +	if (test_bit_inv(apid, matrix_mdev->matrix.apm)) {
+>> +		ret = count;
+>> +		goto done;
+>> +	}
+>> +
+>>   	set_bit_inv(apid, matrix_mdev->matrix.apm);
+>>   
+>>   	ret = vfio_ap_mdev_validate_masks(matrix_mdev);
+>> @@ -1109,6 +1114,11 @@ static ssize_t unassign_adapter_store(struct device *dev,
+>>   		goto done;
+>>   	}
+>>   
+>> +	if (!test_bit_inv(apid, matrix_mdev->matrix.apm)) {
+>> +		ret = count;
+>> +		goto done;
+>> +	}
+>> +
+>>   	clear_bit_inv((unsigned long)apid, matrix_mdev->matrix.apm);
+>>   	vfio_ap_mdev_hot_unplug_adapter(matrix_mdev, apid);
+>>   	ret = count;
+>> @@ -1183,6 +1193,11 @@ static ssize_t assign_domain_store(struct device *dev,
+>>   		goto done;
+>>   	}
+>>   
+>> +	if (test_bit_inv(apqi, matrix_mdev->matrix.aqm)) {
+>> +		ret = count;
+>> +		goto done;
+>> +	}
+>> +
+>>   	set_bit_inv(apqi, matrix_mdev->matrix.aqm);
+>>   
+>>   	ret = vfio_ap_mdev_validate_masks(matrix_mdev);
+>> @@ -1286,6 +1301,11 @@ static ssize_t unassign_domain_store(struct device *dev,
+>>   		goto done;
+>>   	}
+>>   
+>> +	if (!test_bit_inv(apqi, matrix_mdev->matrix.aqm)) {
+>> +		ret = count;
+>> +		goto done;
+>> +	}
+>> +
+>>   	clear_bit_inv((unsigned long)apqi, matrix_mdev->matrix.aqm);
+>>   	vfio_ap_mdev_hot_unplug_domain(matrix_mdev, apqi);
+>>   	ret = count;
+>> @@ -1329,6 +1349,11 @@ static ssize_t assign_control_domain_store(struct device *dev,
+>>   		goto done;
+>>   	}
+>>   
+>> +	if (test_bit_inv(id, matrix_mdev->matrix.adm)) {
+>> +		ret = count;
+>> +		goto done;
+>> +	}
+>> +
+>>   	/* Set the bit in the ADM (bitmask) corresponding to the AP control
+>>   	 * domain number (id). The bits in the mask, from most significant to
+>>   	 * least significant, correspond to IDs 0 up to the one less than the
+>> @@ -1378,6 +1403,11 @@ static ssize_t unassign_control_domain_store(struct device *dev,
+>>   		goto done;
+>>   	}
+>>   
+>> +	if (!test_bit_inv(domid, matrix_mdev->matrix.adm)) {
+>> +		ret = count;
+>> +		goto done;
+>> +	}
+>> +
+>>   	clear_bit_inv(domid, matrix_mdev->matrix.adm);
+>>   
+>>   	if (test_bit_inv(domid, matrix_mdev->shadow_apcb.adm)) {

@@ -2,59 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E86A597E0B
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 07:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA51597E21
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 07:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243236AbiHRF0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 01:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
+        id S243180AbiHRFkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 01:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237986AbiHRF0e (ORCPT
+        with ESMTP id S242483AbiHRFkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 01:26:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D3DAEDAD;
-        Wed, 17 Aug 2022 22:26:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D41AB820C3;
-        Thu, 18 Aug 2022 05:26:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45060C433C1;
-        Thu, 18 Aug 2022 05:26:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660800390;
-        bh=WJTjzdS6c1W3uyDTb0gdRx+bN6X9MbeQshppyhTvGgs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YtEdMwqRdfW1F8NSGcloyZidFvh7UnCnYo45q9D5kuC2errLeBuIrV6DHjQMiwGRx
-         pa7UpDvXSHQ9IY1xP7p/YlLfIE0M94Q2+kZzuJzvm9vw9Qb9yf0hn/u+IiSW5x9H8r
-         lNd4TerPr2lR5UdzIN1In8vxeDccib3DyudA1Ed4=
-Date:   Thu, 18 Aug 2022 07:26:28 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Pu Lehui <pulehui@huawei.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH bpf] bpf: Fix kernel BUG in purge_effective_progs
-Message-ID: <Yv3NhNspJ0hdf55G@kroah.com>
-References: <20220813134030.1972696-1-pulehui@huawei.com>
- <CAEf4BzaciJNVP1YsuJTiS9v7wBvTpShj+kMtwkzk8ijnpL_yzw@mail.gmail.com>
- <7cbb4aa6-c576-8671-ea5e-d845a8310394@huawei.com>
+        Thu, 18 Aug 2022 01:40:35 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D17272B77
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 22:40:34 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id cr9so412848qtb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 22:40:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc;
+        bh=c4YN6O08AaYBNToE2Um1itfC+MNp00Kd+ydM+T0W7ko=;
+        b=IZg9hsqi4ssQ7fuSUIn7+iozROcN5MvemR4pWibTfFN+hfgd52YevwqpQv+32PXVtk
+         tMKwa30Shd3IsjRcMLHYaAnJfl/UHy6ihTpMO5jxCGTVmCK8t9Q/fI2uh+GiuGiPBmQT
+         hK2VF/OtxMLDbC/ytFlCkss/tfpwYlp5+ZwaMpzIEC+P6HlTmxeljMnHhkBQPeC4di9d
+         T2u0GkCtVLOLm6jsVJ/3uxGfDAAj5JLx6gR6GsoWNUhw61Zp1rHlGIeQeHfYiVPTdajB
+         O6i+/DSqdHmANKvtofbV85bdjkpgDV6mKg5DiLTieyv2rXLbetaIRb7kxG6T1BLHQnBp
+         SkEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc;
+        bh=c4YN6O08AaYBNToE2Um1itfC+MNp00Kd+ydM+T0W7ko=;
+        b=g+VU7QBMTO//1xV+JqE+5n0LsJFOS/c8YEaXgPtiVlc90kK/78cxzBJ5YwYq/7mAMV
+         N4bFgB+q+HparonlWG4YIgi9rLHVo/M7UmbG8zN3Y8ajG32Z2ZFq/o1nmvADNiSggOxb
+         qzdHay8qkeWbRTNM1H73h0Ms6vHQhlk78o20koCc2kwerozCN6VyLb59rvM0Dc8AzN5T
+         DGwWA5RuwBzqWwXN20EEVWKnnptDCCyru9OHBBj19sUdI6u68FJEYWXZkVdupQ3xeomJ
+         dOuk1kln6TWSc+opyQWz4/1F8D3FeKARMtrOKNmZI2H+Xaghf1jzHrz2UyKjVXaSMcyb
+         nNuw==
+X-Gm-Message-State: ACgBeo13k83l6Owj8dBBlkXyV2vUi+queJUOW1yw7UXuCXMryD0Trfhy
+        UA8rYP9uxj6YasrTXVP7uTIFEA==
+X-Google-Smtp-Source: AA6agR4Fw98jiMqwiSkyP6cz6JD/D6jUG7NFWUxowXwEedXtNOOsMzX1sD0rCuxeyRSGmm1fcXkVkw==
+X-Received: by 2002:a05:622a:1745:b0:343:5e40:47b1 with SMTP id l5-20020a05622a174500b003435e4047b1mr1310585qtk.120.1660801233516;
+        Wed, 17 Aug 2022 22:40:33 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id m1-20020a05620a290100b006b95f832aebsm787055qkp.96.2022.08.17.22.40.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 22:40:33 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 22:40:12 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+In-Reply-To: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+Message-ID: <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7cbb4aa6-c576-8671-ea5e-d845a8310394@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,115 +102,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 10:46:33AM +0800, Pu Lehui wrote:
-> 
-> 
-> On 2022/8/17 4:39, Andrii Nakryiko wrote:
-> > On Sat, Aug 13, 2022 at 6:11 AM Pu Lehui <pulehui@huawei.com> wrote:
-> > > 
-> > > Syzkaller reported kernel BUG as follows:
-> > > 
-> > > ------------[ cut here ]------------
-> > > kernel BUG at kernel/bpf/cgroup.c:925!
-> > > invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-> > > CPU: 1 PID: 194 Comm: detach Not tainted 5.19.0-14184-g69dac8e431af #8
-> > > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> > > rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-> > > RIP: 0010:__cgroup_bpf_detach+0x1f2/0x2a0
-> > > Code: 00 e8 92 60 30 00 84 c0 75 d8 4c 89 e0 31 f6 85 f6 74 19 42 f6 84
-> > > 28 48 05 00 00 02 75 0e 48 8b 80 c0 00 00 00 48 85 c0 75 e5 <0f> 0b 48
-> > > 8b 0c5
-> > > RSP: 0018:ffffc9000055bdb0 EFLAGS: 00000246
-> > > RAX: 0000000000000000 RBX: ffff888100ec0800 RCX: ffffc900000f1000
-> > > RDX: 0000000000000000 RSI: 0000000000000001 RDI: ffff888100ec4578
-> > > RBP: 0000000000000000 R08: ffff888100ec0800 R09: 0000000000000040
-> > > R10: 0000000000000000 R11: 0000000000000000 R12: ffff888100ec4000
-> > > R13: 000000000000000d R14: ffffc90000199000 R15: ffff888100effb00
-> > > FS:  00007f68213d2b80(0000) GS:ffff88813bc80000(0000)
-> > > knlGS:0000000000000000
-> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > CR2: 000055f74a0e5850 CR3: 0000000102836000 CR4: 00000000000006e0
-> > > Call Trace:
-> > >   <TASK>
-> > >   cgroup_bpf_prog_detach+0xcc/0x100
-> > >   __sys_bpf+0x2273/0x2a00
-> > >   __x64_sys_bpf+0x17/0x20
-> > >   do_syscall_64+0x3b/0x90
-> > >   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > > RIP: 0033:0x7f68214dbcb9
-> > > Code: 08 44 89 e0 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 48 89 f8 48 89
-> > > f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01
-> > > f0 ff8
-> > > RSP: 002b:00007ffeb487db68 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-> > > RAX: ffffffffffffffda RBX: 000000000000000b RCX: 00007f68214dbcb9
-> > > RDX: 0000000000000090 RSI: 00007ffeb487db70 RDI: 0000000000000009
-> > > RBP: 0000000000000003 R08: 0000000000000012 R09: 0000000b00000003
-> > > R10: 00007ffeb487db70 R11: 0000000000000246 R12: 00007ffeb487dc20
-> > > R13: 0000000000000004 R14: 0000000000000001 R15: 000055f74a1011b0
-> > >   </TASK>
-> > > Modules linked in:
-> > > ---[ end trace 0000000000000000 ]---
-> > > 
-> > > Repetition steps:
-> > > For the following cgroup tree,
-> > > 
-> > > root
-> > >   |
-> > > cg1
-> > >   |
-> > > cg2
-> > > 
-> > > 1. attach prog2 to cg2, and then attach prog1 to cg1, both bpf progs
-> > > attach type is NONE or OVERRIDE.
-> > > 2. write 1 to /proc/thread-self/fail-nth for failslab.
-> > > 3. detach prog1 for cg1, and then kernel BUG occur.
-> > > 
-> > > Failslab injection will cause kmalloc fail and fall back to
-> > > purge_effective_progs. The problem is that cg2 have attached another prog,
-> > > so when go through cg2 layer, iteration will add pos to 1, and subsequent
-> > > operations will be skipped by the following condition, and cg will meet
-> > > NULL in the end.
-> > > 
-> > > `if (pos && !(cg->bpf.flags[atype] & BPF_F_ALLOW_MULTI))`
-> > > 
-> > > The NULL cg means no link or prog match, this is as expected, and it's not
-> > > a bug. So here just skip the no match situation.
-> > > 
-> > > Fixes: 4c46091ee985 ("bpf: Fix KASAN use-after-free Read in compute_effective_progs")
-> > > Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> > > ---
-> > >   kernel/bpf/cgroup.c | 4 +++-
-> > >   1 file changed, 3 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> > > index 59b7eb60d5b4..4a400cd63731 100644
-> > > --- a/kernel/bpf/cgroup.c
-> > > +++ b/kernel/bpf/cgroup.c
-> > > @@ -921,8 +921,10 @@ static void purge_effective_progs(struct cgroup *cgrp, struct bpf_prog *prog,
-> > >                                  pos++;
-> > >                          }
-> > >                  }
-> > > +
-> > > +               /* no link or prog match, skip the cgroup of this layer */
-> > > +               continue;
-> > >   found:
-> > > -               BUG_ON(!cg);
-> > 
-> > I don't think it's necessary to remove this BUG_ON(), but it also
-> > feels unnecessary for purge_effective_progs, so I don't mind it.
-> > 
-> > Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> > 
-> 
-> Hi,
-> 
-> Will this patch be accepted? I think we should CC stable.
+On Wed, 6 Jul 2022, Chao Peng wrote:
+> This is the v7 of this series which tries to implement the fd-based KVM
+> guest private memory.
 
-<formletter>
+Here at last are my reluctant thoughts on this patchset.
 
-This is not the correct way to submit patches for inclusion in the
-stable kernel tree.  Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
+fd-based approach for supporting KVM guest private memory: fine.
 
-</formletter>
+Use or abuse of memfd and shmem.c: mistaken.
+
+memfd_create() was an excellent way to put together the initial prototype.
+
+But since then, TDX in particular has forced an effort into preventing
+(by flags, seals, notifiers) almost everything that makes it shmem/tmpfs.
+
+Are any of the shmem.c mods useful to existing users of shmem.c? No.
+Is MFD_INACCESSIBLE useful or comprehensible to memfd_create() users? No.
+
+What use do you have for a filesystem here?  Almost none.
+IIUC, what you want is an fd through which QEMU can allocate kernel
+memory, selectively free that memory, and communicate fd+offset+length
+to KVM.  And perhaps an interface to initialize a little of that memory
+from a template (presumably copied from a real file on disk somewhere).
+
+You don't need shmem.c or a filesystem for that!
+
+If your memory could be swapped, that would be enough of a good reason
+to make use of shmem.c: but it cannot be swapped; and although there
+are some references in the mailthreads to it perhaps being swappable
+in future, I get the impression that will not happen soon if ever.
+
+If your memory could be migrated, that would be some reason to use
+filesystem page cache (because page migration happens to understand
+that type of memory): but it cannot be migrated.
+
+Some of these impressions may come from earlier iterations of the
+patchset (v7 looks better in several ways than v5).  I am probably
+underestimating the extent to which you have taken on board other
+usages beyond TDX and SEV private memory, and rightly want to serve
+them all with similar interfaces: perhaps there is enough justification
+for shmem there, but I don't see it.  There was mention of userfaultfd
+in one link: does that provide the justification for using shmem?
+
+I'm afraid of the special demands you may make of memory allocation
+later on - surprised that huge pages are not mentioned already;
+gigantic contiguous extents? secretmem removed from direct map?
+
+Here's what I would prefer, and imagine much easier for you to maintain;
+but I'm no system designer, and may be misunderstanding throughout.
+
+QEMU gets fd from opening /dev/kvm_something, uses ioctls (or perhaps
+the fallocate syscall interface itself) to allocate and free the memory,
+ioctl for initializing some of it too.  KVM in control of whether that
+fd can be read or written or mmap'ed or whatever, no need to prevent it
+in shmem.c, no need for flags, seals, notifications to and fro because
+KVM is already in control and knows the history.  If shmem actually has
+value, call into it underneath - somewhat like SysV SHM, and /dev/zero
+mmap, and i915/gem make use of it underneath.  If shmem has nothing to
+add, just allocate and free kernel memory directly, recorded in your
+own xarray.
+
+With that /dev/kvm_something subject to access controls and LSMs -
+which I cannot find for memfd_create().  Full marks for including the
+MFD_INACCESSIBLE manpage update, and for Cc'ing linux-api: but I'd
+have expected some doubts from that direction already.
+
+Hugh

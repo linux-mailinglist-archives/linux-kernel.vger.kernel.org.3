@@ -2,59 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E5B597FD1
+	by mail.lfdr.de (Postfix) with ESMTP id BDE1E597FD2
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 10:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236033AbiHRIKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 04:10:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45094 "EHLO
+        id S234280AbiHRIJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 04:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233455AbiHRIKM (ORCPT
+        with ESMTP id S229802AbiHRIJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 04:10:12 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA1182864
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 01:10:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660810211; x=1692346211;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UYCEeNzGzCw/D2zg9WoiBkJE/KYCqvcExvYG19ZIXSc=;
-  b=OVgODjheLdD7+f3zipdJgHKIpdw4Bv8E1KP5Yta2MF/TAfxBL685Qr4e
-   MYcWY0OPjFptINBsk/Qg29yjNN9lOg+HoOjRAR5c3qbfnlvuqS4rWZ0SS
-   Hs/9on2poCRV6Jy0haRw4vq4UpZ8QPliAgmkDxk1e+jeqwNbLJBsn7+Py
-   G7cmGsjwFpUIAwrKA3a8iNdKFTiGz6hs37gjGAu/5iFFendFVII4NGaWa
-   vtaRc9q/9ci1wymxCZO7yEmqrwH3yHqAk8SW5rdIOnuVJ+kQw8jWgn6G0
-   m4T22FcdYo7K0j671vMRyGkuCDeMDroTTyTHaBdaz83x/o7mOBy5qmWD3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="290263462"
-X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
-   d="scan'208";a="290263462"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 01:09:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
-   d="scan'208";a="935711314"
-Received: from lkp-server01.sh.intel.com (HELO 6cc724e23301) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 18 Aug 2022 01:09:35 -0700
-Received: from kbuild by 6cc724e23301 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oOaat-0000Eb-0a;
-        Thu, 18 Aug 2022 08:09:35 +0000
-Date:   Thu, 18 Aug 2022 16:08:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [asahilinux:bits/130-cpufreq 3/4]
- drivers/cpufreq/apple-soc-cpufreq.c:67:19: error: implicit declaration of
- function 'readq_relaxed'; did you mean 'readl_relaxed'?
-Message-ID: <202208181649.iKMgImPW-lkp@intel.com>
+        Thu, 18 Aug 2022 04:09:57 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9249779EDB
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 01:09:56 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id s9so983040ljs.6
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 01:09:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=EVo1JzzO+AXs1TK3RqIAy/YrxBDBkv9rEHre/pP8Dec=;
+        b=iDsTMsdTlN0fSKLMyb8USiEFCQe0NG9k6CcT9HwE5WmrhuNT4G4y5TxqDO4LrAY01m
+         GXKY5NfAe+tOCFRgb4GHyJuIf8Vz8mcsCmLXXze/Jwae+MWVVT8xs7ey4/lfRtPmJgjy
+         fWzrjmG51Nc/OYruHWKXiR7Zopsr/OzObK92jZFIX7wmg1OzGVyLY0OaTq000c3hepxh
+         39ji9J4eM28CgBleZnmaUiEDgbc34cS+LKfVm1DYf9z3+XkxcxLSQeCGMVvWPkZbMOWC
+         obzR5VpRcpvPev0rkt+W+7JzWp2mA7C5PEqATzRwgO7rBCIvafceVsZw/GqN7l6ZdnL3
+         gdeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=EVo1JzzO+AXs1TK3RqIAy/YrxBDBkv9rEHre/pP8Dec=;
+        b=aX23y3QtqtEA3BHBUBk1Wnzvs6wyl3zFNEdjMpqa01GUb5AZctOwHUcgTugWPqEZUy
+         LCj6LgPHVi6eGl0JrhMdR5LCLsDp//8uv7OQInkLgjhKNDLaidUocr6DnVxZAHBxu78k
+         5IWG4nCeNCKwwUSjt1L6sp+PL9RWHFC9ubZK/LalWyfpiOXFxu7XHYyNmUWFxgq4Zg8k
+         l00TQ1RC6VctJn3isGemOVnpHkdPju1RAGqSiQ/6N6sjNCVqYfnXwkvf9E023Z0tM36m
+         voC8GI2rb3e0urHPz6YpB8b7d8ZG0L0Mi+W6dSYgVxN/UthUNFq2JVSE6KT/mpl3kyNA
+         8COw==
+X-Gm-Message-State: ACgBeo3Iy8xOZv6VPVhn7axuLtTQfmElZVIY9zAHkqaWTf/hBWsfDxNB
+        bhdeaF4H0s4EK3gNjeBDyG59jA==
+X-Google-Smtp-Source: AA6agR5oWxJHUE1I2LfnQ5MXv3En7vtZMVUEcP09vZv5xbcLbvExxZ05uPN1/J4xNYLcEhqstH39gw==
+X-Received: by 2002:a2e:8e8b:0:b0:261:b3fa:1818 with SMTP id z11-20020a2e8e8b000000b00261b3fa1818mr305679ljk.444.1660810194964;
+        Thu, 18 Aug 2022 01:09:54 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:53ab:2635:d4f2:d6d5? (d15l54z9nf469l8226z-4.rev.dnainternet.fi. [2001:14bb:ae:539c:53ab:2635:d4f2:d6d5])
+        by smtp.gmail.com with ESMTPSA id g28-20020a0565123b9c00b0048a9356cd63sm133113lfv.11.2022.08.18.01.09.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 01:09:54 -0700 (PDT)
+Message-ID: <85193de5-244c-2cda-e442-656769b97b14@linaro.org>
+Date:   Thu, 18 Aug 2022 11:09:53 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 2/2] power: supply: rt9471: Add Richtek RT9471 charger
+ driver
+Content-Language: en-US
+To:     cy_huang <u0084500@gmail.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sre@kernel.org
+Cc:     mazziesaccount@gmail.com, alina_yu@richtek.com,
+        cy_huang@richtek.com, alinayu829@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1660785696-9010-1-git-send-email-u0084500@gmail.com>
+ <1660785696-9010-3-git-send-email-u0084500@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1660785696-9010-3-git-send-email-u0084500@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,102 +80,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/130-cpufreq
-head:   15652b46c23d23d9cddae0f85071af0cd492436d
-commit: 42927fc2e2bc9096a31f4a7c5ef7073765ecde43 [3/4] cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220818/202208181649.iKMgImPW-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/42927fc2e2bc9096a31f4a7c5ef7073765ecde43
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/130-cpufreq
-        git checkout 42927fc2e2bc9096a31f4a7c5ef7073765ecde43
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
+On 18/08/2022 04:21, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> Add support for the RT9471 3A 1-Cell Li+ battery charger.
+> 
+> The RT9471 is a highly-integrated 3A switch mode battery charger with
+> low impedance power path to better optimize the charging efficiency.
+> 
+> Co-developed-by: Alina Yu <alina_yu@richtek.com>
+> Signed-off-by: Alina Yu <alina_yu@richtek.com>
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+> Since v2:
+> - Fix checkpatch error about 'foo * bar' to 'foo *bar' in psy_device_to_chip function.
+> - Specify the member name directly for the use of linear range.
+> 
+> ---
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+(...)
 
-All errors (new ones prefixed by >>):
+> +
+> +static DEVICE_ATTR_RW(sysoff_enable);
+> +static DEVICE_ATTR_RW(charge_term_enable);
+> +static DEVICE_ATTR_RW(port_detect_enable);
+> +
+> +static struct attribute *rt9471_sysfs_entries[] = {
+> +	&dev_attr_sysoff_enable.attr,
+> +	&dev_attr_charge_term_enable.attr,
+> +	&dev_attr_port_detect_enable.attr,
+> +	NULL
 
-   drivers/cpufreq/apple-soc-cpufreq.c: In function 'apple_soc_cpufreq_get_rate':
->> drivers/cpufreq/apple-soc-cpufreq.c:67:19: error: implicit declaration of function 'readq_relaxed'; did you mean 'readl_relaxed'? [-Werror=implicit-function-declaration]
-      67 |         u64 reg = readq_relaxed(priv->reg_base + APPLE_DVFS_STATUS);
-         |                   ^~~~~~~~~~~~~
-         |                   readl_relaxed
-   In file included from drivers/cpufreq/apple-soc-cpufreq.c:18:
-   drivers/cpufreq/apple-soc-cpufreq.c: In function 'apple_soc_cpufreq_set_target':
->> include/linux/iopoll.h:165:35: error: implicit declaration of function 'readq'; did you mean 'readl'? [-Werror=implicit-function-declaration]
-     165 |         readx_poll_timeout_atomic(readq, addr, val, cond, delay_us, timeout_us)
-         |                                   ^~~~~
-   include/linux/iopoll.h:88:25: note: in definition of macro 'read_poll_timeout_atomic'
-      88 |                 (val) = op(args); \
-         |                         ^~
-   include/linux/iopoll.h:165:9: note: in expansion of macro 'readx_poll_timeout_atomic'
-     165 |         readx_poll_timeout_atomic(readq, addr, val, cond, delay_us, timeout_us)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/cpufreq/apple-soc-cpufreq.c:87:13: note: in expansion of macro 'readq_poll_timeout_atomic'
-      87 |         if (readq_poll_timeout_atomic(priv->reg_base + APPLE_DVFS_CMD, reg,
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/cpufreq/apple-soc-cpufreq.c:98:9: error: implicit declaration of function 'writeq_relaxed'; did you mean 'writeb_relaxed'? [-Werror=implicit-function-declaration]
-      98 |         writeq_relaxed(reg, priv->reg_base + APPLE_DVFS_CMD);
-         |         ^~~~~~~~~~~~~~
-         |         writeb_relaxed
-   drivers/cpufreq/apple-soc-cpufreq.c: At top level:
-   drivers/cpufreq/apple-soc-cpufreq.c:291:27: warning: initialized field overwritten [-Woverride-init]
-     291 |         .attr           = apple_soc_cpufreq_hw_attr,
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/cpufreq/apple-soc-cpufreq.c:291:27: note: (near initialization for 'apple_soc_cpufreq_driver.attr')
-   cc1: some warnings being treated as errors
+You need to document the sysfs ABI in Documentation.
+
+> +};
+> +
+> +static const struct attribute_group rt9471_attr_group = {
+> +	.attrs	= rt9471_sysfs_entries,
+> +};
+> +
+> +static const struct attribute_group *rt9471_attr_groups[] = {
+> +	&rt9471_attr_group,
+> +	NULL
+> +};
+
+(...)
+
+> +
+> +static const struct of_device_id rt9471_of_device_id[] = {
+> +	{ .compatible = "richtek,rt9471" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, rt9471_of_device_id);
+> +
+> +static struct i2c_driver rt9471_driver = {
+> +	.driver = {
+> +		.name = "rt9471",
+> +		.owner = THIS_MODULE,
+
+You should not need this. Run coccinelle/coccicheck on your driver.
 
 
-vim +67 drivers/cpufreq/apple-soc-cpufreq.c
-
-    62	
-    63	static unsigned int apple_soc_cpufreq_get_rate(unsigned int cpu)
-    64	{
-    65		struct cpufreq_policy *policy = cpufreq_cpu_get_raw(cpu);
-    66		struct apple_cpu_priv *priv = policy->driver_data;
-  > 67		u64 reg = readq_relaxed(priv->reg_base + APPLE_DVFS_STATUS);
-    68		unsigned int pstate = FIELD_GET(APPLE_DVFS_STATUS_CUR_PS, reg);
-    69		unsigned int i;
-    70	
-    71		for (i = 0; policy->freq_table[i].frequency != CPUFREQ_TABLE_END; i++)
-    72			if (policy->freq_table[i].driver_data == pstate)
-    73				return policy->freq_table[i].frequency;
-    74	
-    75		dev_err(priv->cpu_dev, "could not find frequency for pstate %d\n",
-    76			pstate);
-    77		return 0;
-    78	}
-    79	
-    80	static int apple_soc_cpufreq_set_target(struct cpufreq_policy *policy,
-    81						unsigned int index)
-    82	{
-    83		struct apple_cpu_priv *priv = policy->driver_data;
-    84		unsigned int pstate = policy->freq_table[index].driver_data;
-    85		u64 reg;
-    86	
-    87		if (readq_poll_timeout_atomic(priv->reg_base + APPLE_DVFS_CMD, reg,
-    88					      !(reg & APPLE_DVFS_CMD_BUSY), 2,
-    89					      APPLE_DVFS_TRANSITION_TIMEOUT)) {
-    90			return -EIO;
-    91		}
-    92	
-    93		reg &= ~(APPLE_DVFS_CMD_PS1 | APPLE_DVFS_CMD_PS2);
-    94		reg |= FIELD_PREP(APPLE_DVFS_CMD_PS1, pstate);
-    95		reg |= FIELD_PREP(APPLE_DVFS_CMD_PS2, pstate);
-    96		reg |= APPLE_DVFS_CMD_SET;
-    97	
-  > 98		writeq_relaxed(reg, priv->reg_base + APPLE_DVFS_CMD);
-    99	
-   100		return 0;
-   101	}
-   102	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof

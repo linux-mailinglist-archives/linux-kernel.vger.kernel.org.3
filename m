@@ -2,158 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17092598431
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B69598434
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244808AbiHRN27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 09:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
+        id S245122AbiHRNa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 09:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245138AbiHRN2R (ORCPT
+        with ESMTP id S244638AbiHRNay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 09:28:17 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C93261D
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:28:12 -0700 (PDT)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4M7m0q5Dl9zDrld;
-        Thu, 18 Aug 2022 13:28:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1660829292; bh=zaUGBMbIeblCA6LFLVRPpXMwvonXUCHOihqI8qvG8vY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=BSBw4cAtqDK2BT5dBjNPVPXWnuHWNwok2RUjVSqg5SdiJUXdSt6QgLoTDmf8BheEm
-         XPrdJ114rJ0cUt1x9GjEH8sWT/q5zyaerUfYIEeJy/OAA0KO3F+ZOLOuQTqML2GLHE
-         sgORapu82b7qyTQdnNYYZ+J5HGFC6n1g4u4ZYVt4=
-X-Riseup-User-ID: 453481205A61EBE5699C24A1AB7E334277963DE2B8DC79F4735518125DEB5B2E
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4M7m0j108Dz20cW;
-        Thu, 18 Aug 2022 13:28:04 +0000 (UTC)
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     mwen@igalia.com, andrealmeid@riseup.net, isabbasso@riseup.net,
-        tales.aparecida@gmail.com, Magali Lemes <magalilemes00@gmail.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] drm/amd/display: Include missing header
-Date:   Thu, 18 Aug 2022 10:27:30 -0300
-Message-Id: <20220818132730.399334-1-mairacanal@riseup.net>
+        Thu, 18 Aug 2022 09:30:54 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FFA5A2C5
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:30:53 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-333a4a5d495so40741037b3.10
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:30:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=ijwCkfPW2UYMQmBDOFjxhcjsIxF5f4vvRDNvHTdaPyI=;
+        b=oIuVX4WiaBGggwX+X0EkGDfWfkiZ9e9n86gChg8gyDIkceUBK6EzG0IJW0BEaeLYxM
+         Xn5THdb+0jvfaAZW70qFAmVPDIU6Wtg4JRXttjMMlNg/0vQPhRwLpS5NqmmRPyvyLhFO
+         GNBWZV/vghE/7sA63lvc1rELyazKd6nQxrB0N9s2NSmBCRr0l0LGFh0CbQ1QYQ3d5WGW
+         CeQYYlC2FZ45IyzEvhF+cdI980gClDQpqaq+lyJbl/oe8XbUH/+3hKTShnA5B7J5CaNJ
+         555k/W4Uy372sCT2HbVLTAQVMUz0bvsOFqzcJRF9/xWxuOTuc7e5HN1QZZXY3FI+GpIj
+         S/4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ijwCkfPW2UYMQmBDOFjxhcjsIxF5f4vvRDNvHTdaPyI=;
+        b=RPlGzFDaO+fh8b50ElS0XInJOOrWJccda2ZS7TtiBRJ9UYaDKmWZutkrVMTDWSOh8F
+         FLJlG4ZoHF5NUko3eU3JZfUwFTsi2t0c4RiykjB3IqYf15+5G6Tx9j+e9YM2kFYX3CB9
+         LDc9jphaFF5LTo2D6ziPbErNIf5MzyLnJY3fMLwUg+OkXbywLHK2nQqC/m/Je73ZdR63
+         +AgBmdj6feAVw1/o44zJS2wlhzrIIx91iDLv8vpI7E9CSmo3EPj/+8Manrt/ASMtAGl5
+         W52KxEyrWFPxiVNVoI2C0d1lmKOotIZpqwwmfTPnizW7c+KIAhSPQgNPl3IXEJ6l938o
+         016Q==
+X-Gm-Message-State: ACgBeo2o7i7ma6l/ONoN6h42bmT/vzFDyPxrfoqbabwtpTNxxRxi5J1l
+        lH1lDa+WQrMvpAVptKtGrjS7JX5gl8M2MrR+FHwsNg==
+X-Google-Smtp-Source: AA6agR65oOzD5YJqAouKNl30cT4/Yf1oUCRs9F7cxO3Qn+h2PXGv5YDbZ9MurCN8ek4unJTHEhkvCvt2/nnAPadjcOw=
+X-Received: by 2002:a05:6902:124b:b0:67b:5d4e:c98d with SMTP id
+ t11-20020a056902124b00b0067b5d4ec98dmr3043084ybu.475.1660829452051; Thu, 18
+ Aug 2022 06:30:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220818110859.1918035-1-jens.wiklander@linaro.org>
+ <CAFA6WYO9ZoVNt+Npj7R+2=5rJ-Gxwy+QGEMziP7Z=eFupjjECQ@mail.gmail.com> <CAHUa44HoS4QgDzVgcsZkgAhK81wGXKQyqLWbLe9tqqrQELx=MA@mail.gmail.com>
+In-Reply-To: <CAHUa44HoS4QgDzVgcsZkgAhK81wGXKQyqLWbLe9tqqrQELx=MA@mail.gmail.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Thu, 18 Aug 2022 19:00:41 +0530
+Message-ID: <CAFA6WYOwXZU6-BUGPg59AcH4QB6oS=Z=Cq9ZwZdfkDa+X5nB-w@mail.gmail.com>
+Subject: Re: [PATCH v2] tee: add overflow check in register_shm_helper()
+To:     Jens Wiklander <jens.wiklander@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        stable@vger.kernel.org, Nimish Mishra <neelam.nimish@gmail.com>,
+        Anirban Chakraborty <ch.anirban00727@gmail.com>,
+        Debdeep Mukhopadhyay <debdeep.mukhopadhyay@gmail.com>,
+        Jerome Forissier <jerome.forissier@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The file amdgpu_dm_plane.c missed the header amdgpu_dm_plane.h, which
-resulted on the following warning:
+On Thu, 18 Aug 2022 at 18:32, Jens Wiklander <jens.wiklander@linaro.org> wrote:
+>
+> Hi Sumit,
+>
+> On Thu, Aug 18, 2022 at 2:41 PM Sumit Garg <sumit.garg@linaro.org> wrote:
+> >
+> > Hi Jens,
+> >
+> > On Thu, 18 Aug 2022 at 16:39, Jens Wiklander <jens.wiklander@linaro.org> wrote:
+> > >
+> > > With special lengths supplied by user space, register_shm_helper() has
+> > > an integer overflow when calculating the number of pages covered by a
+> > > supplied user space memory region. This causes
+> > > internal_get_user_pages_fast() a helper function of
+> > > pin_user_pages_fast() to do a NULL pointer dereference.
+> > >
+> > > [   14.141620] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+> > > [   14.142556] Mem abort info:
+> > > [   14.142829]   ESR = 0x0000000096000044
+> > > [   14.143237]   EC = 0x25: DABT (current EL), IL = 32 bits
+> > > [   14.143742]   SET = 0, FnV = 0
+> > > [   14.144052]   EA = 0, S1PTW = 0
+> > > [   14.144348]   FSC = 0x04: level 0 translation fault
+> > > [   14.144767] Data abort info:
+> > > [   14.145053]   ISV = 0, ISS = 0x00000044
+> > > [   14.145394]   CM = 0, WnR = 1
+> > > [   14.145766] user pgtable: 4k pages, 48-bit VAs, pgdp=000000004278e000
+> > > [   14.146279] [0000000000000010] pgd=0000000000000000, p4d=0000000000000000
+> > > [   14.147435] Internal error: Oops: 96000044 [#1] PREEMPT SMP
+> > > [   14.148026] Modules linked in:
+> > > [   14.148595] CPU: 1 PID: 173 Comm: optee_example_a Not tainted 5.19.0 #11
+> > > [   14.149204] Hardware name: QEMU QEMU Virtual Machine, BIOS 0.0.0 02/06/2015
+> > > [   14.149832] pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > > [   14.150481] pc : internal_get_user_pages_fast+0x474/0xa80
+> > > [   14.151640] lr : internal_get_user_pages_fast+0x404/0xa80
+> > > [   14.152408] sp : ffff80000a88bb30
+> > > [   14.152711] x29: ffff80000a88bb30 x28: 0000fffff836d000 x27: 0000fffff836e000
+> > > [   14.153580] x26: fffffc0000000000 x25: fffffc0000f4a1c0 x24: ffff00000289fb70
+> > > [   14.154634] x23: ffff000002702e08 x22: 0000000000040001 x21: ffff8000097eec60
+> > > [   14.155378] x20: 0000000000f4a1c0 x19: 00e800007d287f43 x18: 0000000000000000
+> > > [   14.156215] x17: 0000000000000000 x16: 0000000000000000 x15: 0000fffff836cfb0
+> > > [   14.157068] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+> > > [   14.157747] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
+> > > [   14.158576] x8 : ffff00000276ec80 x7 : 0000000000000000 x6 : 000000000000003f
+> > > [   14.159243] x5 : 0000000000000000 x4 : ffff000041ec4eac x3 : ffff000002774cb8
+> > > [   14.159977] x2 : 0000000000000004 x1 : 0000000000000010 x0 : 0000000000000000
+> > > [   14.160883] Call trace:
+> > > [   14.161166]  internal_get_user_pages_fast+0x474/0xa80
+> > > [   14.161763]  pin_user_pages_fast+0x24/0x4c
+> > > [   14.162227]  register_shm_helper+0x194/0x330
+> > > [   14.162734]  tee_shm_register_user_buf+0x78/0x120
+> > > [   14.163290]  tee_ioctl+0xd0/0x11a0
+> > > [   14.163739]  __arm64_sys_ioctl+0xa8/0xec
+> > > [   14.164227]  invoke_syscall+0x48/0x114
+> > > [   14.164653]  el0_svc_common.constprop.0+0x44/0xec
+> > > [   14.165130]  do_el0_svc+0x2c/0xc0
+> > > [   14.165498]  el0_svc+0x2c/0x84
+> > > [   14.165847]  el0t_64_sync_handler+0x1ac/0x1b0
+> > > [   14.166258]  el0t_64_sync+0x18c/0x190
+> > > [   14.166878] Code: 91002318 11000401 b900f7e1 f9403be1 (f820d839)
+> > > [   14.167666] ---[ end trace 0000000000000000 ]---
+> > >
+> > > Fix this by adding an overflow check when calculating the end of the
+> > > memory range. Also add an explicit call to access_ok() in
+> > > tee_shm_register_user_buf() to catch an invalid user space address
+> > > early.
+> > >
+> > > Fixes: 033ddf12bcf5 ("tee: add register user memory")
+> > > Cc: stable@vger.kernel.org
+> > > Reported-by: Nimish Mishra <neelam.nimish@gmail.com>
+> > > Reported-by: Anirban Chakraborty <ch.anirban00727@gmail.com>
+> > > Reported-by: Debdeep Mukhopadhyay <debdeep.mukhopadhyay@gmail.com>
+> > > Suggested-by: Jerome Forissier <jerome.forissier@linaro.org>
+> > > Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+> > > ---
+> > >  drivers/tee/tee_shm.c | 23 +++++++++++++++++++----
+> > >  1 file changed, 19 insertions(+), 4 deletions(-)
+> > >
+> >
+> > I can't see the v1 and neither a changelog for v2, so my comments
+> > below may be duplicate.
+>
+> Fair point. The original patch wasn't posted publicly, but in order to
+> avoid confusion with that patch I chose to publish this as V2.
+>
+> >
+> > > diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
+> > > index f2b1bcefcadd..f71651021c8d 100644
+> > > --- a/drivers/tee/tee_shm.c
+> > > +++ b/drivers/tee/tee_shm.c
+> > > @@ -231,15 +231,30 @@ EXPORT_SYMBOL_GPL(tee_shm_alloc_priv_buf);
+> > >
+> > >  static struct tee_shm *
+> > >  register_shm_helper(struct tee_context *ctx, unsigned long addr,
+> > > -                   size_t length, u32 flags, int id)
+> > > +                   unsigned long length, u32 flags, int id)
+> > >  {
+> > >         struct tee_device *teedev = ctx->teedev;
+> > > +       unsigned long end_addr;
+> > >         struct tee_shm *shm;
+> > >         unsigned long start;
+> > >         size_t num_pages;
+> > >         void *ret;
+> > >         int rc;
+> > >
+> > > +       /* Check for overflows, this may be input from user space */
+> >
+> > IMO, this bound checking should be part of the parent function (like
+> > tee_shm_register_user_buf() in this case).
+>
+> I don't see any harm in checking it here even if it will then check
+> input from tee_shm_register_kernel_buf() too. Then I'm also reusing
+> the result in the roundup() and that should be done in this function.
+>
+> >
+> > > +       addr = untagged_addr(addr);
+> > > +       start = rounddown(addr, PAGE_SIZE);
+> > > +       if (check_add_overflow(addr, length, &end_addr))
+> > > +               return ERR_PTR(-EINVAL);
+> >
+> > Isn't this check redundant after access_ok()? AFAICS, access_ok()
+> > should limit the upper bound to TASK_SIZE_MAX which should detect any
+> > overflows.
+>
+> It may be redundant, depending on the configuration. It's likely
+> redundant on all platforms we care about at the moment, but who knows
+> where this will be used in the future.
+>
 
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_plane.c:1046:5:
-warning: no previous prototype for 'fill_dc_scaling_info'
-[-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_plane.c:1222:6:
-warning: no previous prototype for 'handle_cursor_update'
-[-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_plane.c:152:6:
-warning: no previous prototype for 'modifier_has_dcc'
-[-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_plane.c:1576:5:
-warning: no previous prototype for 'amdgpu_dm_plane_init'
-[-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_plane.c:157:10:
-warning: no previous prototype for 'modifier_gfx9_swizzle_mode'
-[-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_plane.c:752:5:
-warning: no previous prototype for 'fill_plane_buffer_attributes'
-[-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_plane.c:83:31:
-warning: no previous prototype for 'amd_get_format_info'
-[-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_plane.c:88:6:
-warning: no previous prototype for 'fill_blending_from_plane_state'
-[-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_plane.c:992:5:
-warning: no previous prototype for 'dm_plane_helper_check_state'
-[-Wmissing-prototypes]
+Firstly, access_ok() is the common kernel way to check for valid
+user-space access as per quote below from
+include/asm-generic/access_ok.h:
 
-Therefore, include the missing header on the file and turn global functions
-that are not used outside of the file into static functions.
+  /*
+   * 'size' is a compile-time constant for most callers, so optimize for
+   * this case to turn the check into a single comparison against a constant
+   * limit and catch all possible overflows.
+   * On architectures with separate user address space (m68k, s390, parisc,
+   * sparc64) or those without an MMU, this should always return true.
+   *
+   * This version was originally contributed by Jonas Bonn for the
+   * OpenRISC architecture, and was found to be the most efficient
+   * for constant 'size' and 'limit' values.
+   */
 
-Fixes: 5d945cbcd4b1 ("drm/amd/display: Create a file dedicated to planes")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Maíra Canal <mairacanal@riseup.net>
----
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c | 5 +++--
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.h | 8 --------
- 2 files changed, 3 insertions(+), 10 deletions(-)
+So we shouldn't invent a redundant method to check if there is a buggy
+arch override for access_ok(). Also, results from check_add_overflow()
+are still inaccurate as it can allow addresses greater than
+TASK_SIZE_MAX.
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
-index b841b8b0a9d8..e022be4df290 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
-@@ -34,6 +34,7 @@
- #include "dal_asic_id.h"
- #include "amdgpu_display.h"
- #include "amdgpu_dm_trace.h"
-+#include "amdgpu_dm_plane.h"
- #include "gc/gc_11_0_0_offset.h"
- #include "gc/gc_11_0_0_sh_mask.h"
- 
-@@ -149,12 +150,12 @@ static void add_modifier(uint64_t **mods, uint64_t *size, uint64_t *cap, uint64_
- 	*size += 1;
- }
- 
--bool modifier_has_dcc(uint64_t modifier)
-+static bool modifier_has_dcc(uint64_t modifier)
- {
- 	return IS_AMD_FMT_MOD(modifier) && AMD_FMT_MOD_GET(DCC, modifier);
- }
- 
--unsigned modifier_gfx9_swizzle_mode(uint64_t modifier)
-+static unsigned modifier_gfx9_swizzle_mode(uint64_t modifier)
- {
- 	if (modifier == DRM_FORMAT_MOD_LINEAR)
- 		return 0;
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.h b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.h
-index 95168c2cfa6f..286981a2dd40 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.h
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.h
-@@ -36,17 +36,9 @@ int fill_dc_scaling_info(struct amdgpu_device *adev,
- 			 const struct drm_plane_state *state,
- 			 struct dc_scaling_info *scaling_info);
- 
--void get_min_max_dc_plane_scaling(struct drm_device *dev,
--				  struct drm_framebuffer *fb,
--				  int *min_downscale, int *max_upscale);
--
- int dm_plane_helper_check_state(struct drm_plane_state *state,
- 				struct drm_crtc_state *new_crtc_state);
- 
--bool modifier_has_dcc(uint64_t modifier);
--
--unsigned int modifier_gfx9_swizzle_mode(uint64_t modifier);
--
- int fill_plane_buffer_attributes(struct amdgpu_device *adev,
- 				 const struct amdgpu_framebuffer *afb,
- 				 const enum surface_pixel_format format,
--- 
-2.37.2
+Secondly, a redundant check which is anticipated to fix a future arch
+bug doesn't qualify for a fix patch.
 
+-Sumit
+
+> >
+> > > +       end_addr = roundup(end_addr, PAGE_SIZE);
+> > > +       if (end_addr < start)
+> > > +               return ERR_PTR(-EINVAL);
+> >
+> > Ditto?
+>
+> Yeah, same argument.
+>
+> Thanks,
+> Jens
+>
+> >
+> > -Sumit
+> >
+> > > +       num_pages = (end_addr - start) / PAGE_SIZE;
+> > > +
+> > > +       /* Error out early if no pages are to be registered */
+> > > +       if (!num_pages)
+> > > +               return ERR_PTR(-EINVAL);
+> > > +
+> > >         if (!tee_device_get(teedev))
+> > >                 return ERR_PTR(-EINVAL);
+> > >
+> > > @@ -261,11 +276,8 @@ register_shm_helper(struct tee_context *ctx, unsigned long addr,
+> > >         shm->flags = flags;
+> > >         shm->ctx = ctx;
+> > >         shm->id = id;
+> > > -       addr = untagged_addr(addr);
+> > > -       start = rounddown(addr, PAGE_SIZE);
+> > >         shm->offset = addr - start;
+> > >         shm->size = length;
+> > > -       num_pages = (roundup(addr + length, PAGE_SIZE) - start) / PAGE_SIZE;
+> > >         shm->pages = kcalloc(num_pages, sizeof(*shm->pages), GFP_KERNEL);
+> > >         if (!shm->pages) {
+> > >                 ret = ERR_PTR(-ENOMEM);
+> > > @@ -326,6 +338,9 @@ struct tee_shm *tee_shm_register_user_buf(struct tee_context *ctx,
+> > >         void *ret;
+> > >         int id;
+> > >
+> > > +       if (!access_ok((void __user *)addr, length))
+> > > +               return ERR_PTR(-EFAULT);
+> > > +
+> > >         mutex_lock(&teedev->mutex);
+> > >         id = idr_alloc(&teedev->idr, NULL, 1, 0, GFP_KERNEL);
+> > >         mutex_unlock(&teedev->mutex);
+> > > --
+> > > 2.31.1
+> > >

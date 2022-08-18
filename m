@@ -2,150 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DACBE59810B
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 11:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BABA598112
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 11:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243663AbiHRJqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 05:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
+        id S239365AbiHRJsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 05:48:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243538AbiHRJqj (ORCPT
+        with ESMTP id S243699AbiHRJsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 05:46:39 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9879BB0B25
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 02:46:37 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id z6so1421186lfu.9
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 02:46:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=MFmEDhXxgZF7KULdzona+7TtwCBEXCBX6WNuKW7to/k=;
-        b=o/H8DL4GCtp0fpBXwBnHt5oN/hZyiyzj799GcdO01ig5EyiRWN0swEVeq6HE/3v0nH
-         xzXSB9nR2VfYvc6KaZYdR6389lhlOoS/gh6+l68vRvVpDQJWKQM/tk7vFHaxIRG7dsTU
-         lEp85ri6wwQeqsB0pZFS2IHrFOyQxHC2C5iNQ82EsU+V2luHYnOBve933fbYDmfZew3r
-         96seiWYyn285tf6agIdAA4MUXu5DoL4JXguuYJ89sf7JNCYSfzM4GkW90nJZIplLoU9Q
-         u+UmSgJnmbxyYBCgdKWHlJwcWvMsMNzqRMnVwFJAawBrjGV9vS0BJ0VLJLjfjeV4XtiV
-         E7pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=MFmEDhXxgZF7KULdzona+7TtwCBEXCBX6WNuKW7to/k=;
-        b=O+Ru/CzjInMVvCMnejXdIRNu+w6B10BSHQnyE+T9L8MHeX7cqEtPr4s+CHxs+VF8wr
-         YleF0jdDLTK1uBrMhmitP+andiFtoW1mPm/nsEHU7KEI2WLNV+n0K6z/F9x670C5Dkni
-         CzePSZ75HGbiwoVFyTYCYS2MnVF2A92e8F1b0D0pAlFOFsXgpUBdRICfIxJiGQaKyhTL
-         q2jGWKDG8F2XJNKuYf1zovzW6yAVlmEReSIr1UEJnaIebrBM17L9NFCCbu8wQhgEACl3
-         SjHs5wuW8ilz7NlIgVRU+4IQFuyp/NmqjOJwoakZ2QUSUaWJygr5aVfh9/VMfYQw4CMO
-         YsDA==
-X-Gm-Message-State: ACgBeo0GVoiEuACb4bKE3yVEgKy7IrLql87MbghzdugSrVYa+IcpXDll
-        O+g8HNKBSDru4QYWu7YJrBU09w==
-X-Google-Smtp-Source: AA6agR4zbj03HwNiKvNCAMqjbPAZBOEZ5IFS9rP9aP7B53I/HuQKSj52sakcI3/ZRNQcW0rIS0Ap1w==
-X-Received: by 2002:a05:6512:39ce:b0:48c:f4d8:d418 with SMTP id k14-20020a05651239ce00b0048cf4d8d418mr724314lfu.635.1660815995938;
-        Thu, 18 Aug 2022 02:46:35 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:53ab:2635:d4f2:d6d5? (d15l54z9nf469l8226z-4.rev.dnainternet.fi. [2001:14bb:ae:539c:53ab:2635:d4f2:d6d5])
-        by smtp.gmail.com with ESMTPSA id p4-20020a056512234400b00492adcfefc1sm155757lfu.198.2022.08.18.02.46.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 02:46:35 -0700 (PDT)
-Message-ID: <a08b230c-d655-75ee-0f0c-8281b13b477b@linaro.org>
-Date:   Thu, 18 Aug 2022 12:46:33 +0300
+        Thu, 18 Aug 2022 05:48:15 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A45F65C6;
+        Thu, 18 Aug 2022 02:48:13 -0700 (PDT)
+Received: from mail-ej1-f48.google.com ([209.85.218.48]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MKsSj-1o43VZ0ZRt-00LFLV; Thu, 18 Aug 2022 11:48:12 +0200
+Received: by mail-ej1-f48.google.com with SMTP id kb8so2256226ejc.4;
+        Thu, 18 Aug 2022 02:48:12 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3Y6LIhLufd6ui+RCDqzYDSpHbbfr09PKsC9WYrCdvpR02KjaS3
+        2vsRxUW4YhXjwtr/mo7odY8hb52K/1AhiXsA1CI=
+X-Google-Smtp-Source: AA6agR645rETuEE4VMhXAaKswHY7L5Q1Tk6UWcY1L316KwAlAp6lbpoTrasC+3YhaQ3U6q37ocvWef/Jh+4AqnpxUdA=
+X-Received: by 2002:a17:907:28d6:b0:731:5d0:4401 with SMTP id
+ en22-20020a17090728d600b0073105d04401mr1389787ejc.765.1660816091708; Thu, 18
+ Aug 2022 02:48:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/3] dt-bings: net: fsl,fec: update compatible item
-Content-Language: en-US
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Wei Fang <wei.fang@nxp.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        s.hauer@pengutronix.de, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        peng.fan@nxp.com, ping.bai@nxp.com, sudeep.holla@arm.com,
-        linux-arm-kernel@lists.infradead.org, aisheng.dong@nxp.com
-References: <20220704101056.24821-1-wei.fang@nxp.com>
- <20220704101056.24821-2-wei.fang@nxp.com>
- <ef7e501a-b351-77f9-c4f7-74ab10283ed6@linaro.org>
- <20220818013344.GE149610@dragon>
- <fd41a409-d0e0-0026-4644-9058d1177c45@linaro.org>
- <20220818092257.GF149610@dragon>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220818092257.GF149610@dragon>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
+ <CACRpkdY53c0qXx24Am1TMivXr-MV+fQ8B0CDjtGi6=+2tn4-7A@mail.gmail.com>
+In-Reply-To: <CACRpkdY53c0qXx24Am1TMivXr-MV+fQ8B0CDjtGi6=+2tn4-7A@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 18 Aug 2022 11:47:55 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1Vh1Uehuin-u5QrTO5qh+t0aK_hA-QZwqc00Db_+MKcw@mail.gmail.com>
+Message-ID: <CAK8P3a1Vh1Uehuin-u5QrTO5qh+t0aK_hA-QZwqc00Db_+MKcw@mail.gmail.com>
+Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:Qu+gtjF6iRfgG51X3I8WKus/80sjc+ma+ip40I5uAgSgDb0BTGO
+ TmFn0AU3ikFHSV4I9Ec3FQ9dAV0Z88se1kzFaPV08lpOg1XP5++JC1HfdsoScPzy7KITPvy
+ NmPvyZ9GZGz5qgXyk8l4vyLeLBcGJIm80XSBI43QjAhGoBz0DfqSeGZG/tUnSxP+jsii0qp
+ QG5mTzs0HgzuaGdF4ZLwg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:VpH2Lv+xf5w=:aM/CNwGcX5Slxtx5waR3G4
+ 7Tpne+m8lwx2GQRxSnQiezYPR9OWTcCIW7FrDJoWRPYoyNRxBy1WaCywmApG+jHhFK+z+000s
+ Se3f8j5GO70OjLQs6j2qFrB8jQ/MwvTpXKiHyNjfhX9PEBu3uYfzd7Djl1t/nQrQz2DpqwayM
+ KBcEiiDysR5auhNB/3De0UbANOyeJhbNkaiyBPjKFc8y3J2zIAcFN8rwI0wcbf/nezOj6GBIo
+ gLPjN3U3rcFqarARQHBKBFduwUJC47zl9aEGsFiZm0CUUtJxSvVsbw1mJwIPe7sUUuAJOn1Nk
+ GEnFwRZ116/LKkToyI9XfyA8V9yQ4ODKGsjOyZ00oSQiprd11VwGT69JkMu7buwb8GTyqKW9+
+ 4K9SOUHpw1PEvCgiddEgfyH9oDouXKwFVxpXHl5xLLttjz8kf6gJSKiVunmlZ7Z5e1WO4hLvI
+ 7R7shfvl6CFaXcHF7yxQs0rmHR8aqprXugEc1iDWXqc/Tu36U+xh/txCpEEfU7CF8aM9nX3gA
+ I/+L04K4h/Sj8U+smwSsOv2B54CVQLg1H1cTqgcYfr74qESpb3vWCB8YW2QuETz4JdfxSnn6m
+ ncYQMrJB0zyeUviYI7GxVgS+I6khh8XfSxpINLcF7BDQgwWi2HrHFnMRR9cn6Xdiop/x6rzzv
+ 8RUQD/4SzoCuC8T81Q6G3dkum0mtZiq8wLqJMGTsVScIZOVuy/xOiF0Mq4v+62rXfwv90iq5i
+ MYvvQRSdH8x9lZ5uI61N0xQZxZUyDdjpGpsUXTCK1ah4zZRBq/4qumNvbkbmMc3BKOzbksO2i
+ l0RZfY6UdayMF2sg2w6kYiIHglc2osO6WF6GQVZD+DiAuzlTA0fnk5f2ptyy2qNEzZOkeOvkT
+ Ttyhsg4PyEVe/OMd6Kig==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/08/2022 12:22, Shawn Guo wrote:
-> On Thu, Aug 18, 2022 at 10:51:02AM +0300, Krzysztof Kozlowski wrote:
->> On 18/08/2022 04:33, Shawn Guo wrote:
->>> On Mon, Jul 04, 2022 at 11:12:09AM +0200, Krzysztof Kozlowski wrote:
->>>>> diff --git a/Documentation/devicetree/bindings/net/fsl,fec.yaml b/Documentation/devicetree/bindings/net/fsl,fec.yaml
->>>>> index daa2f79a294f..6642c246951b 100644
->>>>> --- a/Documentation/devicetree/bindings/net/fsl,fec.yaml
->>>>> +++ b/Documentation/devicetree/bindings/net/fsl,fec.yaml
->>>>> @@ -40,6 +40,10 @@ properties:
->>>>>            - enum:
->>>>>                - fsl,imx7d-fec
->>>>>            - const: fsl,imx6sx-fec
->>>>> +      - items:
->>>>> +          - enum:
->>>>> +              - fsl,imx8ulp-fec
->>>>> +          - const: fsl,imx6ul-fec
->>>>
->>>> This is wrong.  fsl,imx6ul-fec has to be followed by fsl,imx6q-fec. I
->>>> think someone made similar mistakes earlier so this is a mess.
->>>
->>> Hmm, not sure I follow this.  Supposing we want to have the following
->>> compatible for i.MX8ULP FEC, why do we have to have "fsl,imx6q-fec"
->>> here?
->>>
->>> 	fec: ethernet@29950000 {
->>> 		compatible = "fsl,imx8ulp-fec", "fsl,imx6ul-fec";
->>> 		...
->>> 	};
->>
->> Because a bit earlier this bindings is saying that fsl,imx6ul-fec must
->> be followed by fsl,imx6q-fec.
-> 
-> The FEC driver OF match table suggests that fsl,imx6ul-fec and fsl,imx6q-fec
-> are not really compatible.
-> 
-> static const struct of_device_id fec_dt_ids[] = {
->         { .compatible = "fsl,imx25-fec", .data = &fec_devtype[IMX25_FEC], },
->         { .compatible = "fsl,imx27-fec", .data = &fec_devtype[IMX27_FEC], },
->         { .compatible = "fsl,imx28-fec", .data = &fec_devtype[IMX28_FEC], },
->         { .compatible = "fsl,imx6q-fec", .data = &fec_devtype[IMX6Q_FEC], },
->         { .compatible = "fsl,mvf600-fec", .data = &fec_devtype[MVF600_FEC], },
->         { .compatible = "fsl,imx6sx-fec", .data = &fec_devtype[IMX6SX_FEC], },
->         { .compatible = "fsl,imx6ul-fec", .data = &fec_devtype[IMX6UL_FEC], },
+On Thu, Aug 18, 2022 at 11:33 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> The per-arch GPIO number only exist for one reason: embedded
+> GPIOs (think SoC:s) that refer to fixed numbers in numberspace in
+> the board support code. This makes it necessary to allocate
+> descriptors up front in some compiled-in GPIO chips.
 
-I don't see here any incompatibility. Binding driver with different
-driver data is not a proof of incompatible devices. Additionally, the
-binding describes the hardware, not the driver.
+As I understood, the problem that Christophe ran into is that the
+dynamic registration of additional gpio chips is broken because
+it unregisters the chip if the number space is exhausted:
 
->         { .compatible = "fsl,imx8mq-fec", .data = &fec_devtype[IMX8MQ_FEC], },
->         { .compatible = "fsl,imx8qm-fec", .data = &fec_devtype[IMX8QM_FEC], },
->         { /* sentinel */ }
-> };
-> MODULE_DEVICE_TABLE(of, fec_dt_ids);
-> 
-> Should we fix the binding doc?
+                base = gpiochip_find_base(gc->ngpio);
+                if (base < 0) {
+                        ret = base;
+                        spin_unlock_irqrestore(&gpio_lock, flags);
+                        goto err_free_label;
+                }
 
-Maybe, I don't know. The binding describes the hardware, so based on it
-the devices are compatible. Changing this, except ABI impact, would be
-possible with proper reason, but not based on Linux driver code.
+From the git history, it looks like this error was never handled gracefully
+even if the intention was to keep going without a number assignment,
+so there are probably other bugs one runs into after changing this.
 
-
-Best regards,
-Krzysztof
+        Arnd

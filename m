@@ -2,240 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F9A598786
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D690D598784
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245075AbiHRPbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 11:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54864 "EHLO
+        id S1343619AbiHRPbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 11:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239670AbiHRPbJ (ORCPT
+        with ESMTP id S243702AbiHRPbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 11:31:09 -0400
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7349AF80
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:31:08 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.west.internal (Postfix) with ESMTP id 9B5D92B05ADE;
-        Thu, 18 Aug 2022 11:31:05 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 18 Aug 2022 11:31:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1660836665; x=1660843865; bh=zsZN0+/dvw
-        oQ1eBJsmGkPBClTq6+A6mbZvTtkF8HBEY=; b=BMiP2oaAOwbNtZZLLkDUVMmYY0
-        RONK7KgiEuxuKSpy29xDAffJAjJ//MxoOfyJ7z1PgFPhtU5yaFfSLExBbFZiRSkT
-        mFwEIaB1C70toP9zCEJxKi7iIa6CeTw4nAkxOArZHavQLc1XsxBPgkX3+UvUbc6z
-        pZcYemBlWY12iE/uGW2O1DGwdPviDTDgDOTWMSCRpiLxI9g8s8LtUaGARWberwba
-        ZyOzY3rpaPkIC6ToN01G4p/005OMe0YIjBsGQ+/Fsq9Re5oygKLYA9y0E8tyuyOD
-        CNjL2nBgcT2neTJNUsh+g6VZK2mjTxPvcCI9Lukvqvxr+xJxM9q1gtu9BZGQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660836665; x=1660843865; bh=zsZN0+/dvwoQ1eBJsmGkPBClTq6+
-        A6mbZvTtkF8HBEY=; b=wxtGJPeahDRmQybRntrvlGpL29icAnQ2KJUUR/750Dbj
-        RTpbASl5qveK0yvvFsPZ6PUdrQT9NVmCBI1Ez1yAHJXi/rjEDHiuCj+xcCNVg9On
-        arMZo1tw0FEhao2iyb2gWvlBB0QTtVYIaL69vHSsgEZ5ZNF/y8roJHvhAu09PBlP
-        lmAhz8WdhPVN9pjbb18dsGLY1UDq6O4nPa29UNltwcRXaTHEM8FAYy/1KsQmt4c7
-        NuLFwnfHAB7OoPm/W+r12dqzYe/UhergwWfAvZktZ/9KrJ2OfqLvMkLvhdeyij+w
-        Ts1fbl49nMfed+UFlxccB7JIToXT+R49JTtl28PaRg==
-X-ME-Sender: <xms:OFv-Yu62dxrUPmg8XCcF5vkBdZLfkKWRTWRMceuh4Vl3jYCNG5H6Pw>
-    <xme:OFv-Yn7TsCJLt_qf9gSXzBLKVG64_WoSf7DCT2ulkn9PQaxuUCdwXHYznUN4Jbcjf
-    o-IKO199x9giG7346k>
-X-ME-Received: <xmr:OFv-YteY1dY6O4ATQ96hfBGrkJ2o8UBdWlnoxhHjzH7PUUPiBgRkGDSQvA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehledgieegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeevuddthffgfeeiffejgfeghfeludegkedtgefgffejtdegtddvleduvdfh
-    teehveenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:OFv-YrKpWv2QM74J0-xWujbdUgcE3V56GmPDsPu8q3osVUebdxqsPw>
-    <xmx:OFv-YiLxa1wCF6AU95HNuaOQYlymPhHHcDpNseqE1P8hRDE5kqKS_g>
-    <xmx:OFv-YszT2JwRE0EKsOdHk8fGMEyVZQ1Ox2NB1FXHDNfzzewjIGhnFA>
-    <xmx:OVv-Yi7g6GJ7u7ml1Q6EnLVRN5lnPYqOwokiIL5aN8jHgi551F2z4v7DD8o>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 18 Aug 2022 11:31:03 -0400 (EDT)
-Date:   Thu, 18 Aug 2022 17:31:01 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        Dom Cobley <dom@raspberrypi.com>
-Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
-Message-ID: <20220818153101.c25x33vkl6qboswe@houat>
-References: <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
- <9fdecae2-80ad-6212-0522-7dccf9fb57be@tronnes.org>
- <20220816082612.grebxql5ynnfnvfd@houat>
- <ea6ebdda-f779-78af-1ffd-bd86d715077f@tronnes.org>
- <20220816094922.oqhrhefv327zo2ou@houat>
- <be9b6b71-fa2a-3290-2bce-901342e01981@tronnes.org>
- <20220817114605.jpb3tlnoseyvf65d@houat>
- <30f3005d-0acc-e5af-10ca-cf46f18b3478@tronnes.org>
- <133c2a1d-0b4c-cef9-11fe-9ce9985253d6@tronnes.org>
- <9daca9bf-838e-c3eb-51de-1cf5188a9341@tronnes.org>
+        Thu, 18 Aug 2022 11:31:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B3A9F0E1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:31:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660836702;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eTTQvzeO8NbT9iEosZSAoBf5nEuQJaIJbAqJp7WZFCk=;
+        b=NpsWZm1Kmfu4yey6P3UXOxN19DlKzdvFKtVal361vZulW30i3P6nTbgj1xHHARzsljid2t
+        gdLiCblqRrUIVk+SYAvNtBdQdSADpXpWAcohB+9MGtgoMdcirtvgDTElSRTMLRM35FW7id
+        CXznb7195JFVJAa+X5QOHjD+nFHEHbs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-237-wUlIOUvQN0C_769kI5zOOw-1; Thu, 18 Aug 2022 11:31:39 -0400
+X-MC-Unique: wUlIOUvQN0C_769kI5zOOw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3B5B12932485;
+        Thu, 18 Aug 2022 15:31:38 +0000 (UTC)
+Received: from [10.22.32.4] (unknown [10.22.32.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0FA922166B26;
+        Thu, 18 Aug 2022 15:31:24 +0000 (UTC)
+Message-ID: <81f06470-ad5b-2b92-86d6-dc2ca5d21d53@redhat.com>
+Date:   Thu, 18 Aug 2022 08:31:24 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="neorrh2qu6ghuw3r"
-Content-Disposition: inline
-In-Reply-To: <9daca9bf-838e-c3eb-51de-1cf5188a9341@tronnes.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 1/3] sched: Use user_cpus_ptr for saving user provided
+ cpumask in sched_setaffinity()
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Will Deacon <will@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20220816192734.67115-1-longman@redhat.com>
+ <20220816192734.67115-2-longman@redhat.com>
+ <Yvyp02LLIQQPs5d6@worktop.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Yvyp02LLIQQPs5d6@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 8/17/22 04:41, Peter Zijlstra wrote:
+> On Tue, Aug 16, 2022 at 03:27:32PM -0400, Waiman Long wrote:
+>> @@ -2981,25 +2969,21 @@ static int restrict_cpus_allowed_ptr(struct task_struct *p,
+>>   		goto err_unlock;
+>>   	}
+>>   
+>> -	if (!cpumask_and(new_mask, &p->cpus_mask, subset_mask)) {
+>> +
+>> +	if (p->user_cpus_ptr)
+>> +		not_empty = cpumask_and(new_mask, p->user_cpus_ptr, subset_mask);
+>> +	else
+>> +		not_empty = cpumask_and(new_mask, cpu_online_mask, subset_mask);
+>> +
+>> +	if (!not_empty) {
+>>   		err = -EINVAL;
+>>   		goto err_unlock;
+>>   	}
+>>   
+>> -	/*
+>> -	 * We're about to butcher the task affinity, so keep track of what
+>> -	 * the user asked for in case we're able to restore it later on.
+>> -	 */
+>> -	if (user_mask) {
+>> -		cpumask_copy(user_mask, p->cpus_ptr);
+>> -		p->user_cpus_ptr = user_mask;
+>> -	}
+>> -
+>>   	return __set_cpus_allowed_ptr_locked(p, new_mask, 0, rq, &rf);
+>>   
+>>   err_unlock:
+>>   	task_rq_unlock(rq, p, &rf);
+>> -	kfree(user_mask);
+>>   	return err;
+>>   }
+>>   
+>> @@ -3049,34 +3033,27 @@ void force_compatible_cpus_allowed_ptr(struct task_struct *p)
+>>   }
+>>   
+>>   static int
+>> -__sched_setaffinity(struct task_struct *p, const struct cpumask *mask);
+>> +__sched_setaffinity(struct task_struct *p, const struct cpumask *mask, bool save_mask);
+>>   
+>>   /*
+>>    * Restore the affinity of a task @p which was previously restricted by a
+>> - * call to force_compatible_cpus_allowed_ptr(). This will clear (and free)
+>> - * @p->user_cpus_ptr.
+>> + * call to force_compatible_cpus_allowed_ptr().
+>>    *
+>>    * It is the caller's responsibility to serialise this with any calls to
+>>    * force_compatible_cpus_allowed_ptr(@p).
+>>    */
+>>   void relax_compatible_cpus_allowed_ptr(struct task_struct *p)
+>>   {
+>> -	struct cpumask *user_mask = p->user_cpus_ptr;
+>> -	unsigned long flags;
+>> +	const struct cpumask *user_mask = p->user_cpus_ptr;
+>> +
+>> +	if (!user_mask)
+>> +		user_mask = cpu_online_mask;
+>>   
+>>   	/*
+>> -	 * Try to restore the old affinity mask. If this fails, then
+>> -	 * we free the mask explicitly to avoid it being inherited across
+>> -	 * a subsequent fork().
+>> +	 * Try to restore the old affinity mask with __sched_setaffinity().
+>> +	 * Cpuset masking will be done there too.
+>>   	 */
+>> -	if (!user_mask || !__sched_setaffinity(p, user_mask))
+>> -		return;
+>> -
+>> -	raw_spin_lock_irqsave(&p->pi_lock, flags);
+>> -	user_mask = clear_user_cpus_ptr(p);
+>> -	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
+>> -
+>> -	kfree(user_mask);
+>> +	__sched_setaffinity(p, user_mask, false);
+>>   }
+>>   
+>>   void set_task_cpu(struct task_struct *p, unsigned int new_cpu)
+>
+> Would it not be simpler to write it something like so?
+>
+> ---
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 03053eebb22e..cdae4d50a588 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -2955,7 +2955,6 @@ static int restrict_cpus_allowed_ptr(struct task_struct *p,
+>   	struct rq_flags rf;
+>   	struct rq *rq;
+>   	int err;
+> -	bool not_empty;
+>   
+>   	rq = task_rq_lock(p, &rf);
+>   
+> @@ -2969,13 +2968,7 @@ static int restrict_cpus_allowed_ptr(struct task_struct *p,
+>   		goto err_unlock;
+>   	}
+>   
+> -
+> -	if (p->user_cpus_ptr)
+> -		not_empty = cpumask_and(new_mask, p->user_cpus_ptr, subset_mask);
+> -	else
+> -		not_empty = cpumask_and(new_mask, cpu_online_mask, subset_mask);
+> -
+> -	if (!not_empty) {
+> +	if (!cpumask_and(new_mask, task_user_cpus(p), subset_mask)) {
+>   		err = -EINVAL;
+>   		goto err_unlock;
+>   	}
+> @@ -3044,16 +3037,11 @@ __sched_setaffinity(struct task_struct *p, const struct cpumask *mask, bool save
+>    */
+>   void relax_compatible_cpus_allowed_ptr(struct task_struct *p)
+>   {
+> -	const struct cpumask *user_mask = p->user_cpus_ptr;
+> -
+> -	if (!user_mask)
+> -		user_mask = cpu_online_mask;
+> -
+>   	/*
+>   	 * Try to restore the old affinity mask with __sched_setaffinity().
+>   	 * Cpuset masking will be done there too.
+>   	 */
+> -	__sched_setaffinity(p, user_mask, false);
+> +	__sched_setaffinity(p, task_user_cpus(p), false);
+>   }
+>   
+>   void set_task_cpu(struct task_struct *p, unsigned int new_cpu)
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index 15eefcd65faa..426e9b64b587 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -1881,6 +1881,13 @@ static inline void dirty_sched_domain_sysctl(int cpu)
+>   #endif
+>   
+>   extern int sched_update_scaling(void);
+> +
+> +static inline const struct cpumask *task_user_cpus(struct task_struct *p)
+> +{
+> +	if (!p->user_cpus_ptr)
+> +		return cpus_possible_mask; /* &init_task.cpus_mask */
+> +	return p->user_cpus_ptr;
+> +}
+>   #endif /* CONFIG_SMP */
+>   
+>   #include "stats.h"
+>
+Thanks for the good suggestions, will make the changes.
 
---neorrh2qu6ghuw3r
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Cheers,
+Longman
 
-On Thu, Aug 18, 2022 at 05:01:38PM +0200, Noralf Tr=F8nnes wrote:
->=20
->=20
-> Den 18.08.2022 01.23, skrev Noralf Tr=F8nnes:
-> >=20
-> >=20
-> > Den 17.08.2022 15.11, skrev Noralf Tr=F8nnes:
-> >>
-> >>
-> >> Den 17.08.2022 13.46, skrev Maxime Ripard:
-> >>> On Tue, Aug 16, 2022 at 09:35:24PM +0200, Noralf Tr=F8nnes wrote:
-> >>>> Den 16.08.2022 11.49, skrev Maxime Ripard:
-> >>>>> On Tue, Aug 16, 2022 at 11:42:20AM +0200, Noralf Tr=F8nnes wrote:
-> >>>>>> Den 16.08.2022 10.26, skrev Maxime Ripard:
-> >>>>>>> Hi,
-> >>>>>>>
-> >>>>>>> On Mon, Aug 08, 2022 at 02:44:56PM +0200, Noralf Tr=F8nnes wrote:
-> >>>>>>>> Den 29.07.2022 18.34, skrev Maxime Ripard:
-> >>>>>>>>> The TV mode property has been around for a while now to select =
-and get the
-> >>>>>>>>> current TV mode output on an analog TV connector.
-> >>>>>>>>>
-> >>>>>>>>> Despite that property name being generic, its content isn't and=
- has been
-> >>>>>>>>> driver-specific which makes it hard to build any generic behavi=
-our on top
-> >>>>>>>>> of it, both in kernel and user-space.
-> >>>>>>>>>
-> >>>>>>>>> Let's create a new bitmask tv norm property, that can contain a=
-ny of the
-> >>>>>>>>> analog TV standards currently supported by kernel drivers. Each=
- driver can
-> >>>>>>>>> then pass in a bitmask of the modes it supports.
-> >>>>>>>>>
-> >>>>>>>>> We'll then be able to phase out the older tv mode property.
-> >>>>>>>>>
-> >>>>>>>>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> >>>>>>>>>
-> >=20
-> >>>> How do you test the property? I've used modetest but I can only chan=
-ge
-> >>>> to a tv.mode that matches the current display mode. I can't switch f=
-rom
-> >>>> ntsc to pal for instance.
-> >>>
-> >>> Yep, if you want to change from PAL to NTSC, it will require a new mo=
-de.
-> >>>
-> >>
-> >> So userspace has to check tv.mode first and then create a display mode
-> >> the driver will accept if switching to a different display mode is
-> >> necessary? In other words, userspace can't discover from the kernel
-> >> which display modes a certain tv.mode/norm provides before it is
-> >> selected? If so, maybe libdrm should have some function(s) to deal with
-> >> switching between modes that require a different display mode since
-> >> knowledge about which display modes a tv.mode supports is needed before
-> >> hand.
-> >>
-> >=20
-> > I haven't used vc4 on Pi4 in mainline before and have finally gotten it
-> > to work.
-> >=20
-> > I see that the connector reports 2 modes that together fit all tv.norms
-> > so userspace doesn't have to contruct a display mode, but it does need
-> > to know which display mode belongs to a certain tv.norm.
-> >=20
-> > When I try to use modetest I'm unable to set a mode:
-> >=20
-> > pi@pi4t:~ $ modetest -M vc4 -s 45:720x480i
-> > setting mode 720x480i-29.97Hz on connectors 45, crtc 68
-> > failed to set mode: Function not implemented
-> >=20
-> > The errno is misleading, modetest does a drmModeDirtyFB before checking
-> > the error returned by drmModeSetCrtc.
-> >=20
-> > Setting the property succeeds, but the modeset still fails:
-> >=20
-> > pi@pi4t:~ $ modetest -M vc4 -s 45:720x480i -w 45:"tv norm":2
-> > setting mode 720x480i-29.97Hz on connectors 45, crtc 68
-> > failed to set mode: Function not implemented
-> >=20
-> > pi@pi4t:~ $ modetest -M vc4 -c
-> >         37 tv norm:
-> >                 flags: bitmask
-> >                 values: NTSC-443=3D0x1 NTSC-J=3D0x2 NTSC-M=3D0x4 PAL-B=
-=3D0x10
-> > PAL-M=3D0x200 PAL-N=3D0x400 SECAM-B=3D0x2000
-> >                 value: 2
-> >=20
-> > Here's the log, can you see if there's anything obvious in there:
-> > https://gist.github.com/notro/a079498bf6b64327105752b2bafa8858
-> >=20
->=20
-> I'm one step closer as I now have fbcon working, I had forgotten to add
-> enable_tvout=3D1 and I had disable_fw_kms_setup=3D1 which disables the
-> video=3D mode on the kernel commandline.
->=20
-> modetest still fails though, after alot of printk sprinkling, I've
-> tracked it down to the drm_mode_equal test in
-> drm_atomic_helper_connector_tv_check(). The aspect ratios differ:
->=20
-> [   61.336295] drm_atomic_helper_connector_tv_check:
-> mode->picture_aspect_ratio=3D1
-> [   61.336301] drm_atomic_helper_connector_tv_check:
-> &crtc_state->mode->picture_aspect_ratio=3D0
-
-I haven't seen this when testing, but I'll have a look, thanks!
-Maxime
-
---neorrh2qu6ghuw3r
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYv5bNQAKCRDj7w1vZxhR
-xdaLAQDfZ8rnYBDZfyN3qNMxZCR7YqMUNw8GId3H6w/a4n0wnwD9GeUKIJz3PUw0
-hmv+huFdsLIyqvj6T79wwzxtYJk+3gY=
-=PX5K
------END PGP SIGNATURE-----
-
---neorrh2qu6ghuw3r--

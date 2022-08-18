@@ -2,167 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5C2598007
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF2A598005
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 10:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241399AbiHRIXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 04:23:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
+        id S233628AbiHRIYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 04:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239485AbiHRIXc (ORCPT
+        with ESMTP id S230051AbiHRIYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 04:23:32 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7A35AA12
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 01:23:31 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id s11-20020a1cf20b000000b003a52a0945e8so537085wmc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 01:23:31 -0700 (PDT)
+        Thu, 18 Aug 2022 04:24:47 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2015D868B7
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 01:24:46 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id x25so1015752ljm.5
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 01:24:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=FAp+0S/t7YU8InMU47zEYoFV6slTO7PsovSrf3VShbY=;
-        b=UQEOdCXast/aVv2yzUyT3f163CbbsbfK40Fhq89SICeLrnHvr8BQPZACV829x46meB
-         gsdIHoVasi+2HlCR6KEbwFc3TecNtZdVow7X9iiBT7CVqLv8wzxvH5Fl+mxpfQUdBd9o
-         CAL/u+nPhAJcQjYPc6ImtxKm9dJceW8e62YTqr5pXW71SbxpOdxfAe3KhzMlgwrtthht
-         6V+RyQdZSvfETC1BGn6d0CCdzsHueK2juQPpYacViJBBlV0Zpkybyx3jYgLdDBoph54X
-         X5qZUlVJ0Vpqtg5CTloy4ChxYE2v2qm/5bSLHP0+6s0PGcNSrGSg+cOCda5w82Vc5W76
-         RpyQ==
+        d=ventanamicro.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Eh2ca1k897f/fpjj6GZcTMr0pxfwU8M3TTyUS5TvUjQ=;
+        b=RFAr/7oW0zPoFkfRwvLBYI6LDgLSLVUN5klD12foZ9OmtfSkRvsOrWZEritkdGO1xL
+         iJ3j3xORTEcKizlPkv86BZq2eENXcAAnZcM+ikePNVq43yw1OTAe+YIdHgFPjYvO9CJo
+         ch0Kjfj8slEewPzXVdNSjziu7L/AWXRKfyfQSpHE4PMqBdkZYUAdH5zh+/LU8L5ROd40
+         qCxAEYkwYGGFfuaQzIth8EdRpRgDLxw8RJuUFmtXNyr7g2Bmx8gGkrEnhSqv5Cta9EAN
+         Mztj/sIcEGbcD050FLuHwxxsw+iGEvceb0c6CymKRtJZNmms48/Iqf1S6QAxNFlpp2Az
+         IdZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=FAp+0S/t7YU8InMU47zEYoFV6slTO7PsovSrf3VShbY=;
-        b=qT2o1umU0vHAYiK5klzIsyOaKL9d6sYoAlf8DjjecRtJZ/VN1HZiQm/ehkOfSzD8jY
-         VwG9dCzkRV4nrE6ZfzDGLJqu49tZUUZb483y3F8IbUEBR2co8V0xnMPSbgT0oEWiNYy5
-         GAzot6awdapcevM5tLes+uo6+ZepMx1xZtG3mV7LRgDQKvlNAepneYsRUmIDqy1eWoBk
-         i4Faww/zH8use1no7aNEATYNhBwV0lKswCOAoiXCd3b915E8fDXZCuWjJQTnmNKbOs02
-         au83q7TXUM8wP0H2r5rZULXTXGwL/7yP8H7GqHFATiCYzjzYnsCghFvvC8pcrt+m5jeq
-         XDsQ==
-X-Gm-Message-State: ACgBeo0BuveYiUvzTBzCNt4UBZ9sBvE5l27hr+t394JuhLK55RKirE0D
-        BEXH2jRL6g+hg5rqWV9cE2xOKw==
-X-Google-Smtp-Source: AA6agR7zY1nXRjjOmclKfrXCmqTPJxgMWrGP9Pw8tJA2JaDaDUWT2uqYEwmhD2A7jnfXF6/dnWTSAw==
-X-Received: by 2002:a1c:7703:0:b0:3a5:aefa:68e3 with SMTP id t3-20020a1c7703000000b003a5aefa68e3mr1179966wmi.158.1660811009863;
-        Thu, 18 Aug 2022 01:23:29 -0700 (PDT)
-Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id p30-20020a1c545e000000b003a500b612fcsm4634005wmi.12.2022.08.18.01.23.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 01:23:29 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH v2 2/2] thermal/of: Remove the thermal_zone_of_get_sensor_id() function
-Date:   Thu, 18 Aug 2022 10:23:16 +0200
-Message-Id: <20220818082316.2717095-2-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220818082316.2717095-1-daniel.lezcano@linaro.org>
-References: <20220818082316.2717095-1-daniel.lezcano@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Eh2ca1k897f/fpjj6GZcTMr0pxfwU8M3TTyUS5TvUjQ=;
+        b=2KFTJDdLOCv1BHQq7HXh50h0AfDHPl16NnqvC6hYhIT/COPg+WUgkGxEozO6BXeebj
+         7XSKy5Tu4M8XJPY5dCB3GgjzdFmUx76nbRQcnSe5/CXdcaIUSiK5oMbvpWcTVSic7QNZ
+         KV8Mz0sG7fPLkWzq9q8Oe8HTjZ+O2roRW4pAecgITJ5Pi6qoOF5/fMwU8lP5upyDQ1w5
+         eYy5Wg9GR86r3xjeNzeyxobRSZzxXxvCIHqifUow4AO42KuKb++YjuOzBbb82Rvc+Pvx
+         oonA/O3oytwMay2N/YIuxj1oCZW9QmcOFNIp6R5b5VxbupUfwNBUqAT7ME04Rs+1xIrB
+         eGjQ==
+X-Gm-Message-State: ACgBeo0vz5qlPoUaB6tpQyz+s7RJlcsvagFS0BB2LIHaW0w+S/0hkzrM
+        cw8IogPp5ouNpofObQukBlaxkQReh93S8xv5Tsfwdg==
+X-Google-Smtp-Source: AA6agR4kT1zW8SyEa7wWTUQD8xI3ALBqcvbJWB9om1QxAwEqviJpffov94G4tr/ClkhNvS6S7KPFKkPZgnDHkV01QSA=
+X-Received: by 2002:a2e:a987:0:b0:25f:d70a:c63c with SMTP id
+ x7-20020a2ea987000000b0025fd70ac63cmr589061ljq.34.1660811084327; Thu, 18 Aug
+ 2022 01:24:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220817111348.745527-1-heiko@sntech.de> <CAOnJCUJu1fr2qxOkX4Sz-kLhB64xkcjAbBAeTkp214ZHAa0btA@mail.gmail.com>
+In-Reply-To: <CAOnJCUJu1fr2qxOkX4Sz-kLhB64xkcjAbBAeTkp214ZHAa0btA@mail.gmail.com>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Thu, 18 Aug 2022 13:54:33 +0530
+Message-ID: <CAK9=C2U3OvUZmYTJ-C0wkSp8ViPA1+Nj2L6pd4CHTCuzaVtDJg@mail.gmail.com>
+Subject: Re: [PATCH] drivers/perf: riscv_pmu_sbi: add support for PMU variant
+ on T-Head C9xx cores
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>, anup@brainfault.org,
+        will@kernel.org, mark.rutland@arm.com, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        philipp.tomsich@vrull.eu, cmuellner@linux.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function thermal_zone_of_get_sensor_id() is no longer used
-anywhere, remove it.
+On Thu, Aug 18, 2022 at 1:03 AM Atish Patra <atishp@atishpatra.org> wrote:
+>
+> On Wed, Aug 17, 2022 at 4:13 AM Heiko Stuebner <heiko@sntech.de> wrote:
+> >
+> > With the T-HEAD C9XX cores being designed before or during the ratification
+> > to the SSCOFPMF extension, they implement functionality very similar but
+> > not equal to it. So add some adaptions to allow the C9XX to still handle
+> > its PMU through the regular SBI PMU interface instead of defining new
+> > interfaces or drivers.
+> >
+>
+> IMO, vendor specific workarounds in the generic implementation is not
+> a good idea.
+> If we have to support it, I think we should just put the IRQ number in
+> the DT and parse from the DT.
+> The initial sscofpmf series was based on the DT. It was removed later
+> as there was no need for it at that time.
+> We can always revive it.
+>
+> Regarding the CSR number difference and static key enablement, can we
+> use code patching techniques here as well ?
+> At least all the T-HEAD C9XX core erratas are in one place.
+>
+> The alternate would be just to say T-HEAD C9XX support SSCOFPMF but
+> with erratas. I don't prefer this approach
+> but it keeps the vendor specific checks out of the generic code.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/thermal_of.c | 44 ------------------------------------
- include/linux/thermal.h      | 10 --------
- 2 files changed, 54 deletions(-)
+Whether to have a DT node (or not) was already discussed and concluded
+in the past.
 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index fd2fb84bf246..d4b6335ace15 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -130,50 +130,6 @@ static int of_thermal_get_crit_temp(struct thermal_zone_device *tz,
- 	return -EINVAL;
- }
- 
--/**
-- * thermal_zone_of_get_sensor_id - get sensor ID from a DT thermal zone
-- * @tz_np: a valid thermal zone device node.
-- * @sensor_np: a sensor node of a valid sensor device.
-- * @id: the sensor ID returned if success.
-- *
-- * This function will get sensor ID from a given thermal zone node and
-- * the sensor node must match the temperature provider @sensor_np.
-- *
-- * Return: 0 on success, proper error code otherwise.
-- */
--
--int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
--				  struct device_node *sensor_np,
--				  u32 *id)
--{
--	struct of_phandle_args sensor_specs;
--	int ret;
--
--	ret = of_parse_phandle_with_args(tz_np,
--					 "thermal-sensors",
--					 "#thermal-sensor-cells",
--					 0,
--					 &sensor_specs);
--	if (ret)
--		return ret;
--
--	if (sensor_specs.np != sensor_np) {
--		of_node_put(sensor_specs.np);
--		return -ENODEV;
--	}
--
--	if (sensor_specs.args_count > 1)
--		pr_warn("%pOFn: too many cells in sensor specifier %d\n",
--		     sensor_specs.np, sensor_specs.args_count);
--
--	*id = sensor_specs.args_count ? sensor_specs.args[0] : 0;
--
--	of_node_put(sensor_specs.np);
--
--	return 0;
--}
--EXPORT_SYMBOL_GPL(thermal_zone_of_get_sensor_id);
--
- /***   functions parsing device tree nodes   ***/
- 
- static int of_find_trip_id(struct device_node *np, struct device_node *trip)
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 86c24ddd5985..a5a18351a898 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -310,9 +310,6 @@ void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_dev
- 
- void thermal_of_zone_unregister(struct thermal_zone_device *tz);
- 
--int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
--				  struct device_node *sensor_np,
--				  u32 *id);
- #else
- static inline
- struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor, int id, void *data,
-@@ -336,13 +333,6 @@ static inline void devm_thermal_of_zone_unregister(struct device *dev,
- 						   struct thermal_zone_device *tz)
- {
- }
--
--static inline int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
--						struct device_node *sensor_np,
--						u32 *id)
--{
--	return -ENOENT;
--}
- #endif
- 
- #ifdef CONFIG_THERMAL
--- 
-2.34.1
+We don't need a DT node just to get the IRQ number. The T-HEAD custom
+IRQ number can be derived based on mvendorid.
 
+Also, all these T-HEAD specific changes in SBI PMU driver should be
+implemented as erratas using ALTERNATIVE() macros.
+
+Regards,
+Anup
+
+
+
+>
+> > To work properly, this requires a matching change in SBI, though the actual
+> > interface between kernel and SBI does not change.
+> >
+>
+> Do you have a working OpenSBI implementation for this ?
+>
+> > The main differences are a the overflow CSR and irq number.
+> >
+> > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> > ---
+> >  drivers/perf/riscv_pmu_sbi.c | 27 +++++++++++++++++++--------
+> >  1 file changed, 19 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
+> > index 6f6681bbfd36..4589166e0de4 100644
+> > --- a/drivers/perf/riscv_pmu_sbi.c
+> > +++ b/drivers/perf/riscv_pmu_sbi.c
+> > @@ -41,12 +41,17 @@ static const struct attribute_group *riscv_pmu_attr_groups[] = {
+> >         NULL,
+> >  };
+> >
+> > +#define THEAD_C9XX_RV_IRQ_PMU                  17
+> > +#define THEAD_C9XX_CSR_SCOUNTEROF              0x5c5
+> > +
+> >  /*
+> >   * RISC-V doesn't have hetergenous harts yet. This need to be part of
+> >   * per_cpu in case of harts with different pmu counters
+> >   */
+> >  static union sbi_pmu_ctr_info *pmu_ctr_list;
+> > +static unsigned int riscv_pmu_irq_num;
+> >  static unsigned int riscv_pmu_irq;
+> > +static bool is_thead_c9xx;
+> >
+> >  struct sbi_pmu_event_data {
+> >         union {
+> > @@ -575,7 +580,7 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
+> >         fidx = find_first_bit(cpu_hw_evt->used_hw_ctrs, RISCV_MAX_COUNTERS);
+> >         event = cpu_hw_evt->events[fidx];
+> >         if (!event) {
+> > -               csr_clear(CSR_SIP, SIP_LCOFIP);
+> > +               csr_clear(CSR_SIP, BIT(riscv_pmu_irq_num));
+> >                 return IRQ_NONE;
+> >         }
+> >
+> > @@ -583,13 +588,14 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
+> >         pmu_sbi_stop_hw_ctrs(pmu);
+> >
+> >         /* Overflow status register should only be read after counter are stopped */
+> > -       overflow = csr_read(CSR_SSCOUNTOVF);
+> > +       overflow = !is_thead_c9xx ? csr_read(CSR_SSCOUNTOVF)
+> > +                                 : csr_read(THEAD_C9XX_CSR_SCOUNTEROF);
+> >
+> >         /*
+> >          * Overflow interrupt pending bit should only be cleared after stopping
+> >          * all the counters to avoid any race condition.
+> >          */
+> > -       csr_clear(CSR_SIP, SIP_LCOFIP);
+> > +       csr_clear(CSR_SIP, BIT(riscv_pmu_irq_num));
+> >
+> >         /* No overflow bit is set */
+> >         if (!overflow)
+> > @@ -653,8 +659,8 @@ static int pmu_sbi_starting_cpu(unsigned int cpu, struct hlist_node *node)
+> >
+> >         if (riscv_isa_extension_available(NULL, SSCOFPMF)) {
+> >                 cpu_hw_evt->irq = riscv_pmu_irq;
+> > -               csr_clear(CSR_IP, BIT(RV_IRQ_PMU));
+> > -               csr_set(CSR_IE, BIT(RV_IRQ_PMU));
+> > +               csr_clear(CSR_IP, BIT(riscv_pmu_irq_num));
+> > +               csr_set(CSR_IE, BIT(riscv_pmu_irq_num));
+> >                 enable_percpu_irq(riscv_pmu_irq, IRQ_TYPE_NONE);
+> >         }
+> >
+> > @@ -665,7 +671,7 @@ static int pmu_sbi_dying_cpu(unsigned int cpu, struct hlist_node *node)
+> >  {
+> >         if (riscv_isa_extension_available(NULL, SSCOFPMF)) {
+> >                 disable_percpu_irq(riscv_pmu_irq);
+> > -               csr_clear(CSR_IE, BIT(RV_IRQ_PMU));
+> > +               csr_clear(CSR_IE, BIT(riscv_pmu_irq_num));
+> >         }
+> >
+> >         /* Disable all counters access for user mode now */
+> > @@ -681,7 +687,11 @@ static int pmu_sbi_setup_irqs(struct riscv_pmu *pmu, struct platform_device *pde
+> >         struct device_node *cpu, *child;
+> >         struct irq_domain *domain = NULL;
+> >
+> > -       if (!riscv_isa_extension_available(NULL, SSCOFPMF))
+> > +       is_thead_c9xx = (sbi_get_mvendorid() == THEAD_VENDOR_ID &&
+> > +                        sbi_get_marchid() == 0 &&
+> > +                        sbi_get_mimpid() == 0);
+> > +
+> > +       if (!riscv_isa_extension_available(NULL, SSCOFPMF) && !is_thead_c9xx)
+> >                 return -EOPNOTSUPP;
+> >
+> >         for_each_of_cpu_node(cpu) {
+> > @@ -703,7 +713,8 @@ static int pmu_sbi_setup_irqs(struct riscv_pmu *pmu, struct platform_device *pde
+> >                 return -ENODEV;
+> >         }
+> >
+> > -       riscv_pmu_irq = irq_create_mapping(domain, RV_IRQ_PMU);
+> > +       riscv_pmu_irq_num = !is_thead_c9xx ? RV_IRQ_PMU : THEAD_C9XX_RV_IRQ_PMU;
+> > +       riscv_pmu_irq = irq_create_mapping(domain, riscv_pmu_irq_num);
+> >         if (!riscv_pmu_irq) {
+> >                 pr_err("Failed to map PMU interrupt for node\n");
+> >                 return -ENODEV;
+> > --
+> > 2.35.1
+> >
+>
+>
+> --
+> Regards,
+> Atish
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv

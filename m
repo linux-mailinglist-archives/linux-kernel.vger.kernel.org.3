@@ -2,138 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4987B597EE1
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 09:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40940597EEC
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 09:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237115AbiHRHEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 03:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46332 "EHLO
+        id S243768AbiHRHFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 03:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243755AbiHRHEW (ORCPT
+        with ESMTP id S243762AbiHRHFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 03:04:22 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B2285F84
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 00:04:20 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id z25so1004031lfr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 00:04:20 -0700 (PDT)
+        Thu, 18 Aug 2022 03:05:11 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3F586FFB;
+        Thu, 18 Aug 2022 00:05:09 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id s129so621091vsb.11;
+        Thu, 18 Aug 2022 00:05:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=JIhqnGFxqlWQT6HH4YHYR+CEvA6ZgGkLEwhbs6gjVNs=;
-        b=UUBPeBvh9P4fC4LIsBACFCj8EcocoO1lfi9Myu5LoHIUmC3lNTgkVaDbp3fIl2j+uB
-         F8VhDacewf2PyFD5FWP51bIjbd3i10tzjSYmH68d3o9Jhr8VLJps+uidbXPD25i9lVtI
-         csVu6kYWk6/yyIln8g2TJFgDfnW8KJ9/QJRh+dMzp96izrrrDa2CDMKXhy9sVaiaPM5A
-         fKo3456HiZgXTH2rUU1rKOP14HkZ8vzcSqqEBsKSNKoA2K4NwnpViC7nKqltBrYoAhI8
-         qi3lIER0jOHP3Pr1a512FiZhB6makQvYx5WBMU18wNNl9U+jiFgZueE+fwm3XTftum1/
-         vcMQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=AjriiNks9RHRoCBN7ZUJ6jtj7TS2aTJuQAkCqUAkW5Y=;
+        b=OveoAobst4dQgzVcV+b2hUYKC6v8Bu1nEkiCbdf5FW37KCqyv7XSu0oLbibqxi+P2I
+         JSVBCOQ3WWAceNJsnm/Zhwd/xIVJAd+M9IrJ48Cb52rDvVi0eb52FvtUIj4/+Xld+MPr
+         qBgTd99HbHfHUA9Hrg6Bh0CZOOEy1ozS3724GEhA0ki99vdSYKASgLbgNpxYHBKne+LL
+         aRs/q4iSpgR72FZYFsqU5vun7DfI3ru4dlg3Fw7EVEbdIxWzq0yPgfmP/e4HSx8qgOT7
+         gug5se3NsFe2RVzQU5JzrnQoTlZYnNemIwDMFA1gss78x4jizikMd+gDBllm0l6pEV0E
+         CGEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=JIhqnGFxqlWQT6HH4YHYR+CEvA6ZgGkLEwhbs6gjVNs=;
-        b=RYrkaJYBC55sOU7oFfxg1BsNpB/kz51nNpFvDs8v8TaeGj1aTBoNh2TMXVJJxLdo66
-         vkLA146To4T3aWUGMTbZOJrFCFBstmf/cTSxZO+APxiJTS255ALPGFTYhJfX4QeOjuml
-         g0258nVZIfxqLZhgzub2uxSHvAwNbZILI3VAh/x4Z/7sUyTW067fb7gUgLeJ+Y2LpY+C
-         iYT3/iukWc/RQ8lssoO03PIl953rIhxfxHljd39KO6GwtDUd0cYP5aDnniTMNPffaGox
-         bzSaEGDy/frsDeBnF8uCqE7NyFzmdE4cMMMWBTqkrK5SKRw5m7aGVpBXyEWxzoWmqRvV
-         aT1A==
-X-Gm-Message-State: ACgBeo1tfSULSNjFIYq5uEOMLJGVUU9Sx2MAmelp5Fx7L7l/6hgHxOhf
-        /cUNjO/2UOqJkYzjOwQ2HfAEIg==
-X-Google-Smtp-Source: AA6agR4Oc8syUDVbDFu8aECZoYEKFU7OJbEOvOx68plORXAqXVUa1yzPSH8X875MRPp/TKNNYJlHWg==
-X-Received: by 2002:a05:6512:c25:b0:48b:1241:fb9f with SMTP id z37-20020a0565120c2500b0048b1241fb9fmr561581lfu.74.1660806258450;
-        Thu, 18 Aug 2022 00:04:18 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:53ab:2635:d4f2:d6d5? (d15l54z9nf469l8226z-4.rev.dnainternet.fi. [2001:14bb:ae:539c:53ab:2635:d4f2:d6d5])
-        by smtp.gmail.com with ESMTPSA id z20-20020a056512371400b0048b3768d2ecsm107282lfr.174.2022.08.18.00.04.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 00:04:17 -0700 (PDT)
-Message-ID: <4aea569f-38c1-953c-8293-25d6fb5e4477@linaro.org>
-Date:   Thu, 18 Aug 2022 10:04:15 +0300
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=AjriiNks9RHRoCBN7ZUJ6jtj7TS2aTJuQAkCqUAkW5Y=;
+        b=oTUW4mMcGfDZ5mSL+Fb6MhtyJaPQJzlKy21vdC/V1dyTiDNJPXv9W1A73hibRlzdbY
+         sFZUehRT94Z6VAn09oQxKCBAHjEO104i39W3Cv+b7eFxzHEhl7sFDVI0JUNYIVaTDrEq
+         JA4b04eM7vG+FMgvmPiYUABBKVYUMjiDzyRhIlYywLVlSPWKxhflcfu9Fl4Y0gc90Fb4
+         bJrrh8jAoFAyswWEm2u4bK47/LnL2+TQTCdLsAz00Qz3irM7qu5u3+dNpRtgAT/TCrD6
+         majlsIv9uyK4OCUVwXsi3gQE9ay5yR6QrBARdme01YfgTIThkTrabdFFOdoqf4+/L9Ox
+         nmgw==
+X-Gm-Message-State: ACgBeo2v0L0hI9O7g/AxXyMIMuG9PW8Z+SG/xW5pFSGJVdPzjCLFV+gU
+        OXqCohr2WCmxADUTCe9cJD0rqRBR+LGqAxBSnV8=
+X-Google-Smtp-Source: AA6agR4SXRtluW797qZbkdraB+aWdq4UMbY/7gnYhTK9K3tJvmg7YIGhYwFKeNd/Azfqw6j+kBLhK3/iwIRasxLKc3A=
+X-Received: by 2002:a05:6102:2139:b0:38d:1e1f:7230 with SMTP id
+ f25-20020a056102213900b0038d1e1f7230mr510987vsg.47.1660806309000; Thu, 18 Aug
+ 2022 00:05:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFT PATCH v2 14/14] arm64: dts: qcom: sm8150: switch TCSR mutex
- to MMIO
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220817130342.568396-1-krzysztof.kozlowski@linaro.org>
- <20220817130342.568396-15-krzysztof.kozlowski@linaro.org>
- <15fb94b1-e901-c139-3f83-21922ae28c35@somainline.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <15fb94b1-e901-c139-3f83-21922ae28c35@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <1660787634-28550-1-git-send-email-shengjiu.wang@nxp.com> <1660787634-28550-2-git-send-email-shengjiu.wang@nxp.com>
+In-Reply-To: <1660787634-28550-2-git-send-email-shengjiu.wang@nxp.com>
+From:   Daniel Baluta <daniel.baluta@gmail.com>
+Date:   Thu, 18 Aug 2022 10:04:55 +0300
+Message-ID: <CAEnQRZB19WxVYxabOdN3ee+pp9cbwgY7p=k+6P1BqONCEJjjnQ@mail.gmail.com>
+Subject: Re: [Sound-open-firmware] [RESEND PATCH v2 2/2] ASoC: SOF: imx: Add
+ i.MX8ULP HW support
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc:     pierre-louis.bossart@linux.intel.com, lgirdwood@gmail.com,
+        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
+        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
+        daniel.baluta@nxp.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        shengjiu.wang@gmail.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        sound-open-firmware@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/08/2022 00:07, Konrad Dybcio wrote:
-> 
-> 
-> On 17.08.2022 15:03, Krzysztof Kozlowski wrote:
->> The TCSR mutex bindings allow device to be described only with address
->> space (so it uses MMIO, not syscon regmap).  This seems reasonable as
->> TCSR mutex is actually a dedicated IO address space and it also fixes DT
->> schema checks:
->>
->>   qcom/sm8150-mtp.dtb: hwlock: 'reg' is a required property
->>   qcom/sm8150-mtp.dtb: hwlock: 'syscon' does not match any of the regexes: 'pinctrl-[0-9]+'
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  arch/arm64/boot/dts/qcom/sm8150.dtsi | 13 ++++---------
->>  1 file changed, 4 insertions(+), 9 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
->> index 7d509ecd44da..dc6770391813 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
->> @@ -585,12 +585,6 @@ scm: scm {
->>  		};
->>  	};
->>  
->> -	tcsr_mutex: hwlock {
->> -		compatible = "qcom,tcsr-mutex";
->> -		syscon = <&tcsr_mutex_regs 0 0x1000>;
->> -		#hwlock-cells = <1>;
->> -	};
->> -
->>  	memory@80000000 {
->>  		device_type = "memory";
->>  		/* We expect the bootloader to fill in the size */
->> @@ -2054,9 +2048,10 @@ ipa_virt: interconnect@1e00000 {
->>  			qcom,bcm-voters = <&apps_bcm_voter>;
->>  		};
->>  
->> -		tcsr_mutex_regs: syscon@1f40000 {
->> -			compatible = "syscon";
->> -			reg = <0x0 0x01f40000 0x0 0x40000>;
->> +		tcsr_mutex: hwlock@1f40000 {
->> +			compatible = "qcom,tcsr-mutex";
->> +			reg = <0 0x01f40000 0 0x20000>;
->> +			#hwlock-cells = <1>;
->>  		};
-> No replacement for the trailing 0x20000?
-> 
+On Thu, Aug 18, 2022 at 5:12 AM Shengjiu Wang <shengjiu.wang@nxp.com> wrote:
+>
+> From: Zhang Peng <peng.zhang_8@nxp.com>
+>
+> This adds skeleton support for the audio DSP hardware found on
+> NXP i.MX8ULP platform.
+>
+> On i.MX8ULP resources (clocks, power, etc) are managed by the
+> System Integration Module in LPAV domain and XRDC which is handled
+> by arm trusted firmware.
+>
+> Signed-off-by: Zhang Peng <peng.zhang_8@nxp.com>
+> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
 
-There is no user of it, so I did not add. I could add remaining block
-just for completeness.
-
-
-Best regards,
-Krzysztof
+Reviewed-by: Daniel Baluta <daniel.baluta@nxp.com>

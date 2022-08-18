@@ -2,96 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81FC85983AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B27EC5983A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244897AbiHRNBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 09:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
+        id S244471AbiHRNA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 09:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244886AbiHRNBH (ORCPT
+        with ESMTP id S244407AbiHRNAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 09:01:07 -0400
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0511975CC8;
-        Thu, 18 Aug 2022 06:01:07 -0700 (PDT)
-Received: by mail-qt1-f171.google.com with SMTP id c20so1003335qtw.8;
-        Thu, 18 Aug 2022 06:01:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=G6NRVtnuSqWqwGqpWt9DLp5hNULRC9LvfIAkNgdvtjM=;
-        b=kJlGbGfmxfBqf+bVVh1QtEbfOKf4xTrV9NX0JzY8WP2LZQ5OM1y9CAD0vWzGEG4Vbc
-         y0cTvjr7k8yiqbGarpUAFzx+Y6c/N9E98NxDQPJxD2wAkyiKgL+PnhGsU5umWk0qnyiZ
-         ctEv0IQVLBpH4hBb0o6W5aheZcorfIsj6QjuoRcdY9S05iDuGO0/e9+FOiCYw1/IV3cx
-         6lpZu8eCgnSve26GBIPYxqA00xxopWjum8UPHglF3rXQpjhmPNl5ZpIEyKsqL7TLzMn4
-         6RzK/ht5jG9siNtp97ntMTc77gHdBBoR2VqOXS7zwfVuBA+hw0cqcHxhpNVH5BLV9ant
-         4c8w==
-X-Gm-Message-State: ACgBeo0KOUzAV1rn9SNnpToWhrZtnAfC5Otg6a2UAf7QqWqCg9ayZA7k
-        LfT9VJCT6DObk5I8Twh5A4ee/qaww3znXg==
-X-Google-Smtp-Source: AA6agR75szNWxxDWZq4k1aFKjLruPb048asQ5OckjyQNTnlEAHYjLNCu5y8pFD5TXmxu7gn1BzFIYg==
-X-Received: by 2002:ac8:58c6:0:b0:343:6ea4:c5d with SMTP id u6-20020ac858c6000000b003436ea40c5dmr2339896qta.371.1660827665177;
-        Thu, 18 Aug 2022 06:01:05 -0700 (PDT)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id 19-20020ac84e93000000b0033e51aea00esm1025051qtp.25.2022.08.18.06.01.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 06:01:05 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-31f445bd486so38260767b3.13;
-        Thu, 18 Aug 2022 06:01:04 -0700 (PDT)
-X-Received: by 2002:a05:6902:100a:b0:676:ed53:25b0 with SMTP id
- w10-20020a056902100a00b00676ed5325b0mr2514289ybt.365.1660827625358; Thu, 18
- Aug 2022 06:00:25 -0700 (PDT)
+        Thu, 18 Aug 2022 09:00:45 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B3461DA7
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:00:44 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4M7lKD4xMjz1N7Mc;
+        Thu, 18 Aug 2022 20:57:20 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 18 Aug
+ 2022 21:00:42 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>
+Subject: [PATCH 4/6] mm, hwpoison: fix possible use-after-free in mf_dax_kill_procs()
+Date:   Thu, 18 Aug 2022 21:00:14 +0800
+Message-ID: <20220818130016.45313-5-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20220818130016.45313-1-linmiaohe@huawei.com>
+References: <20220818130016.45313-1-linmiaohe@huawei.com>
 MIME-Version: 1.0
-References: <20220815151451.23293-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220815151451.23293-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220815151451.23293-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 18 Aug 2022 15:00:13 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWWv0MUsxJgy1XLNm3CENoAkRgZ2dwcYDgPdAkApA4=fQ@mail.gmail.com>
-Message-ID: <CAMuHMdWWv0MUsxJgy1XLNm3CENoAkRgZ2dwcYDgPdAkApA4=fQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/8] dt-bindings: riscv: Sort the CPU core list alphabetically
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <Conor.Dooley@microchip.com>,
-        Anup Patel <anup@brainfault.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 5:16 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Sort the CPU cores list alphabetically for maintenance.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+After kill_procs(), tk will be freed without being removed from the to_kill
+list. In the next iteration, the freed list entry in the to_kill list will
+be accessed, thus leading to use-after-free issue. Fix it by reinitializing
+the to_kill list after unmap_and_kill().
 
+Fixes: c36e20249571 ("mm: introduce mf_dax_kill_procs() for fsdax case")
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+---
+ mm/memory-failure.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 7023c3d81273..a2f4e8b00a26 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -1658,6 +1658,8 @@ int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
+ 		collect_procs_fsdax(page, mapping, index, &to_kill);
+ 		unmap_and_kill(&to_kill, page_to_pfn(page), mapping,
+ 				index, mf_flags);
++		/* Reinitialize to_kill list for later resuing. */
++		INIT_LIST_HEAD(&to_kill);
+ unlock:
+ 		dax_unlock_mapping_entry(mapping, index, cookie);
+ 	}
+-- 
+2.23.0
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

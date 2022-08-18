@@ -2,108 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C4B598189
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 12:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D960C598190
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 12:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244092AbiHRKjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 06:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
+        id S244111AbiHRKoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 06:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240270AbiHRKjo (ORCPT
+        with ESMTP id S238978AbiHRKoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 06:39:44 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F1D6CF54
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 03:39:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=oRd8OBFVOwR2oaya9oS2Iqc7HGFuNofE+CGd0nDbieM=; b=MVoHl9n5UcYgHBrquBH3WV2omM
-        PbFJ42ZpoS9z/x/z4pccI+KXTh2hMOAlmz3ppYEsUK4o5z5qD9mwrDrXfDJQYe9cu/I2TQtb1CLUw
-        gDCYPelms0/JQVGdN82V7HreKEqDk/jyd8OAUiQsbKzqbaLLKSSaM70/rhKJcKG7WseQpD8eQwDsd
-        JNS5JCfcr0CQuSBw9++SMDIh2InKIJwrbFQ/WR6oNyGuBbdgltci3dFaepaQf3CNSt4Z3Pfx9KH7r
-        Z0TQ5YyQc1RjNVXwKOdSqLfWvW4UmudGVVewVR+u/zUcjml87/TJCfNF6gkjcmMX/dm8rYA1gwtGi
-        29BLURRQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oOcw2-003Yjl-TS; Thu, 18 Aug 2022 10:39:35 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7D90C980135; Thu, 18 Aug 2022 12:39:34 +0200 (CEST)
-Date:   Thu, 18 Aug 2022 12:39:34 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        mingo@redhat.com, rostedt@goodmis.org, bsegall@google.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org, tj@kernel.org
-Subject: Re: [PATCH v5 8/9] sched/fair: defer task sched_avg attach to
- enqueue_entity()
-Message-ID: <Yv4W5u4+CXir3bjZ@worktop.programming.kicks-ass.net>
-References: <20220818034343.87625-1-zhouchengming@bytedance.com>
- <20220818034343.87625-9-zhouchengming@bytedance.com>
+        Thu, 18 Aug 2022 06:44:11 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A035D7FE5B;
+        Thu, 18 Aug 2022 03:44:10 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-32a17d3bba2so29821987b3.9;
+        Thu, 18 Aug 2022 03:44:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=/Vg0MiE5047HvBd7kU3Dl8WG5Dtp7QWU7yaZmVgWvE0=;
+        b=XBdxOIbpmad8maPo4XhdSMrnSkrWvg5nakK+efBLeJ5Dhda5817DMJDouZlliduGpJ
+         cMI0PnJAxqFOOFm7rAFqrsLpEcmH508OQg92oOL0rAFnK/+n2gjeWpXrOogkawkZVQG5
+         VP0N7xNN08DQPQ9SY53iFIHOhZ9JvL+U+KSRV4vFswq4WP11k7Zv9KelLOBoU8if2XHk
+         kPiHeI2X96L2Hru8Eyz00HNQHoJG8ymiUmOE1Fe7MKZK3YDF79kwsWd7IhOxIKkwOS8/
+         Jsv2X3wJnmvW8b+JIM6eTV/3XUOoVpybgNG3k4M2OVFKpCCOmcyDe03UYYN7UTmqNTHB
+         pWFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=/Vg0MiE5047HvBd7kU3Dl8WG5Dtp7QWU7yaZmVgWvE0=;
+        b=KGGqybTPs2xmjlYT/tSgiyR7MUQtVjRsaUeXwJmyEjofkHbhw5E6cIihptVTm6/uBZ
+         GfLUOSiIonPOpONc6Fac8FwYh48/bjcD0aZY2pxtWtL9DPTzu0B2TI1sF07MB4TX5Qn+
+         1V0TiqY5c02NH0R23BrbVRjIE0h2GS9fnZK9dAcbG9R2w5Lh8CmlXIUDOZa20PI6FpJq
+         D3c6FRQXSqTnlEXdGcpf8tch0DdcrLqZRG1ZKY5Z1pZpLORzH/nqEfPNt0AL94J9qJrL
+         e9MAhRbmohmdYAJUUk16pkspmtLF+7SwA17QYM7dm86EYyMZDe2zElE3df88A+SITC6p
+         9kzA==
+X-Gm-Message-State: ACgBeo0e3ilBMXvjxXkJet1Xpkx2BHotVnF6w/JCo1RRLH65EY0Q++5m
+        fjIvvDVNJzuotCimnV+5h2QzUJ2YfpJAEWVBrBH9as5W8p0=
+X-Google-Smtp-Source: AA6agR6bpMkfOdg/XRd/QTB2hcWngbdEhqg0DhxaakFttwjPtxVRnCyU9KJocZLjpI5nP8q5uNUBHgiRbNIJ29vaWxM=
+X-Received: by 2002:a5b:845:0:b0:683:6ed7:b3b6 with SMTP id
+ v5-20020a5b0845000000b006836ed7b3b6mr2221253ybq.183.1660819449894; Thu, 18
+ Aug 2022 03:44:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818034343.87625-9-zhouchengming@bytedance.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <Yv1lepjhg/6QKyQl@debian> <CADnq5_Od9W1iuzYpsmODOB=Xem97ogeH_t0JrjWC-S8h0XM9fA@mail.gmail.com>
+ <5638aaf1-b808-bdc6-d84a-820f24facea6@infradead.org>
+In-Reply-To: <5638aaf1-b808-bdc6-d84a-820f24facea6@infradead.org>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Thu, 18 Aug 2022 11:43:34 +0100
+Message-ID: <CADVatmNA6-qCJEHNn-gRO6Nx88SsTrPsJn_F5J0NiFhyvijNxA@mail.gmail.com>
+Subject: Re: build failure of next-20220817 for amdgpu
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-next <linux-next@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 11:43:42AM +0800, Chengming Zhou wrote:
-> When wake_up_new_task(), we would use post_init_entity_util_avg()
-> to init util_avg/runnable_avg based on cpu's util_avg at that time,
-> then attach task sched_avg to cfs_rq.
-> 
-> Since enqueue_entity() would always attach any unattached task entity,
-> so we can defer this work to enqueue_entity().
-> 
-> post_init_entity_util_avg(p)
->   attach_entity_cfs_rq()  --> (1)
-> activate_task(rq, p)
->   enqueue_task() := enqueue_task_fair()
->   enqueue_entity()
->     update_load_avg(cfs_rq, se, UPDATE_TG | DO_ATTACH)
->       if (!se->avg.last_update_time && (flags & DO_ATTACH))
->         attach_entity_load_avg()  --> (2)
-> 
-> This patch defer attach from (1) to (2)
-> 
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> ---
->  kernel/sched/fair.c | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index e0d34ecdabae..aacf38a72714 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -799,8 +799,6 @@ void init_entity_runnable_average(struct sched_entity *se)
->  	/* when this task enqueue'ed, it will contribute to its cfs_rq's load_avg */
->  }
->  
-> -static void attach_entity_cfs_rq(struct sched_entity *se);
-> -
->  /*
->   * With new tasks being created, their initial util_avgs are extrapolated
->   * based on the cfs_rq's current util_avg:
-> @@ -863,8 +861,6 @@ void post_init_entity_util_avg(struct task_struct *p)
->  		se->avg.last_update_time = cfs_rq_clock_pelt(cfs_rq);
->  		return;
->  	}
-> -
-> -	attach_entity_cfs_rq(se);
->  }
+On Thu, Aug 18, 2022 at 3:09 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+>
+>
+> On 8/17/22 19:01, Alex Deucher wrote:
+> > On Wed, Aug 17, 2022 at 6:03 PM Sudip Mukherjee (Codethink)
+> > <sudipm.mukherjee@gmail.com> wrote:
+> >>
+> >> Hi All,
+> >>
+> >> Not sure if it has been reported, build of next-20220817 fails with the
+> >> error:
+> >>
+> >> ERROR: modpost: "cpu_smallcore_map" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+> >>
+> >> Trying to do a git bisect to find out the offending commit.
+> >>
+> >
+> > Thanks.  I don't see that symbol in the driver at all.  Not sure where
+> > it is coming from.
+> >
+>
+> It's powerpc only.
+>
+> Sudip, is it non-CONFIG_SMP by any chance?
 
-There are comments with update_cfs_rq_load_avg() and
-remove_entity_load_avg() that seem to rely on post_init_entity_util()
-doing this attach.
+Ohhh.. really sorry for the incomplete report. I should not try to
+mail while travelling.
 
-If that is no longer true; at the very least those comments need to be
-updated, but also, I don't immediately see why that's no longer the
-case, so please explain.
+The error is seen with powerpc allmodconfig and it has CONFIG_SMP=y.
+
+-- 
+Regards
+Sudip

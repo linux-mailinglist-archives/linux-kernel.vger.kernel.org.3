@@ -2,309 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7D9599113
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 01:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 688A7599115
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 01:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245246AbiHRXPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 19:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
+        id S1343761AbiHRXQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 19:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234827AbiHRXPs (ORCPT
+        with ESMTP id S234827AbiHRXQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 19:15:48 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31D5B8A62;
-        Thu, 18 Aug 2022 16:15:47 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id s4-20020a17090a5d0400b001fabc6bb0baso3531270pji.1;
-        Thu, 18 Aug 2022 16:15:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=VvhgNqX5Mdn1tHVxJkr2KvPRETCTKzzNX5LE3/TWawU=;
-        b=AYfqKEXEKClt/OA8bf0hVY7uqf9kES5ZVEFyWXVA620W/KmKwspFtqKBA01wC6Sf4k
-         OuEAWtAPjUS6sQFXoTPj1xJMEcoKhAXGe2uT6getsnX+pTIuAgUOOuoU0Es7S3jEcMsK
-         CboqSHP4MGipXBfjifWgbCBWDVRcScc8KuNBea/pFxxT4hYv04uv9tppVnnAMcd/w1L+
-         b59eVyLm9kZBbmlCB+EYPJEgZGgbHdDdpqKdh3MddC7xw5HGf10yroCLY4V/TWhM6gGu
-         aUHieh+tAMvfHSUx/G4R9pRnaCgm0mJ0blg2oZpm0DHqNHnL60naXpJhYiR3efdZ1BIW
-         YbBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=VvhgNqX5Mdn1tHVxJkr2KvPRETCTKzzNX5LE3/TWawU=;
-        b=f+Cc+M6fFGbP59a4FOKgPFdNpo8sDrnhQun9BeJ/3miwGR8pNkA79aZ/mFVBKuPygT
-         PNZarzOr7/H1vkbqDpbLZxZvXadByGnm5AuwUE6DUd5MUWezP/MTtUhkLbmNkZ2xU0zR
-         +UDpbp6MenXrKagCZSfKBNw2cn4qHvarSP9k+SZlfjX5YqsSuPlrhuOWL2MANBMQllQK
-         OP27tINtslMRkQcnzbE60yI/WMOCmmfgqqPhbfOCkQesr51Ig49580zLjGC5XEh/REll
-         fAjTgb8GiwlA5LAVyxGRnnT38HVlRhE/aoaoG1ZFo80UjIzFm/kQR1ZZ/njxagZgkCg5
-         CSDg==
-X-Gm-Message-State: ACgBeo1x1AzFUkGeAP+WdcYPiwDYNiDl3yBcOmlj/fgQGEIArMc1Xx3z
-        H9qEMwMprEcNqawn6al53RY=
-X-Google-Smtp-Source: AA6agR6PMtSfjuDQlAbXfSKNA4Dhx3byRfzJpzTW7sU5EVVAdtpm/vypsvB3/YVxfc8oxlEeGK1RCw==
-X-Received: by 2002:a17:903:32c5:b0:172:b0dc:ba44 with SMTP id i5-20020a17090332c500b00172b0dcba44mr4500469plr.92.1660864547055;
-        Thu, 18 Aug 2022 16:15:47 -0700 (PDT)
-Received: from localhost ([2406:7400:63:e947:599c:6cd1:507f:801e])
-        by smtp.gmail.com with ESMTPSA id x11-20020aa7956b000000b00535da15a252sm1859074pfq.165.2022.08.18.16.15.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 16:15:46 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 04:45:41 +0530
-From:   "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Baokun Li <libaokun1@huawei.com>, linux-ext4@vger.kernel.org,
-        tytso@mit.edu, adilger.kernel@dilger.ca, lczerner@redhat.com,
-        enwlinux@gmail.com, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yebin10@huawei.com, yukuai3@huawei.com
-Subject: Re: [PATCH 2/2] ext4: add inode table check in __ext4_get_inode_loc
- to aovid possible infinite loop
-Message-ID: <20220818231541.bgxdistuf7hnepto@riteshh-domain>
-References: <20220817132701.3015912-1-libaokun1@huawei.com>
- <20220817132701.3015912-3-libaokun1@huawei.com>
- <20220817143138.7krkxzoa3skruiyx@quack3>
- <20220818144353.q6cq3b7huwkopk5b@riteshh-domain>
- <20220818172316.jfsjb3efohml3yt3@quack3>
+        Thu, 18 Aug 2022 19:16:40 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252E9D5726;
+        Thu, 18 Aug 2022 16:16:39 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id F17438B;
+        Fri, 19 Aug 2022 01:16:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1660864597;
+        bh=Az3BnJ+PPPqBPWaDNtlR2DNr4/sewjOqORMeUQxRMyA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Jmv4cDPN5u3bSOSa/sIjxxhbLNCjHsdjC1bTsM5bpNyA3E9xXJYwb2/Js1d7M7lbw
+         9ZxGFKGcVh0xz2UifJwnj/vulBw3oA4ngUMuakd73ipXB75jdmdR9Hm1/XGQBd5YMd
+         MBb/C5dH2LnP9kdGupSF00E+uNc5Jfp2KaIglap4=
+Date:   Fri, 19 Aug 2022 02:16:34 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Hsia-Jun Li <randy.li@synaptics.com>
+Cc:     dri-devel@lists.freedesktop.org, maarten.lankhorst@linux.intel.com,
+        mripard@kernel.org, tzimmermann@suse.de, airlied@linux.ie,
+        daniel@ffwll.ch, mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, sakari.ailus@linux.intel.com,
+        ribalda@chromium.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tfiga@chromium.org,
+        sebastian.hesselbarth@gmail.com, jszhang@kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/2] drm/fourcc: Add Synaptics VideoSmart tiled modifiers
+Message-ID: <Yv7IUrhTYWevMk60@pendragon.ideasonboard.com>
+References: <20220808162750.828001-1-randy.li@synaptics.com>
+ <20220808162750.828001-2-randy.li@synaptics.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220818172316.jfsjb3efohml3yt3@quack3>
+In-Reply-To: <20220808162750.828001-2-randy.li@synaptics.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/08/18 07:23PM, Jan Kara wrote:
-> On Thu 18-08-22 20:13:53, Ritesh Harjani (IBM) wrote:
-> > On 22/08/17 04:31PM, Jan Kara wrote:
-> > > On Wed 17-08-22 21:27:01, Baokun Li wrote:
-> > > > In do_writepages, if the value returned by ext4_writepages is "-ENOMEM"
-> > > > and "wbc->sync_mode == WB_SYNC_ALL", retry until the condition is not met.
-> > > >
-> > > > In __ext4_get_inode_loc, if the bh returned by sb_getblk is NULL,
-> > > > the function returns -ENOMEM.
-> > > >
-> > > > In __getblk_slow, if the return value of grow_buffers is less than 0,
-> > > > the function returns NULL.
-> > > >
-> > > > When the three processes are connected in series like the following stack,
-> > > > an infinite loop may occur:
-> > > >
-> > > > do_writepages					<--- keep retrying
-> > > >  ext4_writepages
-> > > >   mpage_map_and_submit_extent
-> > > >    mpage_map_one_extent
-> > > >     ext4_map_blocks
-> > > >      ext4_ext_map_blocks
-> > > >       ext4_ext_handle_unwritten_extents
-> > > >        ext4_ext_convert_to_initialized
-> > > >         ext4_split_extent
-> > > >          ext4_split_extent_at
-> > > >           __ext4_ext_dirty
-> > > >            __ext4_mark_inode_dirty
-> > > >             ext4_reserve_inode_write
-> > > >              ext4_get_inode_loc
-> > > >               __ext4_get_inode_loc		<--- return -ENOMEM
-> > > >                sb_getblk
-> > > >                 __getblk_gfp
-> > > >                  __getblk_slow			<--- return NULL
-> > > >                   grow_buffers
-> > > >                    grow_dev_page		<--- return -ENXIO
-> > > >                     ret = (block < end_block) ? 1 : -ENXIO;
-> > > >
-> > > > In this issue, bg_inode_table_hi is overwritten as an incorrect value.
-> > > > As a result, `block < end_block` cannot be met in grow_dev_page.
-> > > > Therefore, __ext4_get_inode_loc always returns '-ENOMEM' and do_writepages
-> > > > keeps retrying. As a result, the writeback process is in the D state due
-> > > > to an infinite loop.
-> > > >
-> > > > Add a check on inode table block in the __ext4_get_inode_loc function by
-> > > > referring to ext4_read_inode_bitmap to avoid this infinite loop.
-> > > >
-> > > > Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> > >
-> > > Thanks for the fixes. Normally, we check that inode table is fine in
-> > > ext4_check_descriptors() (and those checks are much stricter) so it seems
-> > > unnecessary to check it again here. I understand that in your case it was
-> > > resize that corrupted the group descriptor after the filesystem was mounted
-> > > which is nasty but there's much more metadata that can be corrupted like
-> > > this and it's infeasible to check each metadata block before we use it.
-> > >
-> > > IMHO a proper fix to this class of issues would be for sb_getblk() to
-> > > return proper error so that we can distinguish ENOMEM from other errors.
-> > > But that will be a larger undertaking...
-> > >
-> >
-> > Hi Jan,
-> >
-> > How about adding a wrapper around sb_getblk() which will do the basic block
-> > bound checks for ext4. Then we can carefully convert all the callers of
-> > sb_getblk() in ext4 to call ext4_sb_getblk().
-> >
-> > ext4_sb_getblk() will then return either of below -
-> > 1. ERR_PTR(-EFSCORRUPTED)
-> > 2. NULL
-> > 3. struct buffer_head*
-> >
-> > It's caller can then implement the proper error handling.
-> >
-> > Folding a small patch to implement the simple bound check. Is this the right
-> > approach?
->
-> Yep, looks sensible to me. Maybe I'd just make ext4_sb_getblk() return bh
-> or ERR_PTR so something like ERR_PTR(-EFSCORRUPTED), ERR_PTR(-ENXIO), or bh
-> pointer.
+Hi Hsia-Jun,
 
-Sure, Thanks Jan. Will do that once I clear some confusion w.r.t
-	"start_blk <= le32_to_cpu(sbi->s_es->s_first_data_block)"
+Thank you for the patch.
 
-At some places this is checked with "<= s_first_data_block"
-	e.g. fs/ext4/ialloc.c, ext4_sb_block_valid()
+On Tue, Aug 09, 2022 at 12:27:49AM +0800, Hsia-Jun Li wrote:
+> From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
+> 
+> Memory Traffic Reduction(MTR) is a module in Synaptics
+> VideoSmart platform could process lossless compression image
+> and cache the tile memory line.
+> 
+> Those modifiers only record the parameters would effort pixel
+> layout or memory layout. Whether physical memory page mapping
+> is used is not a part of format.
+> 
+> We would allocate the same size of memory for uncompressed
+> and compressed luma and chroma data, while the compressed buffer
+> would request two extra planes holding the metadata for
+> the decompression.
+> 
+> The reason why we need to allocate the same size of memory for
+> the compressed frame:
+> 1. The compression ratio is not fixed and differnt platforms could
+> use a different compression protocol. These protocols are complete
+> vendor proprietaries, the other device won't be able to use them.
+> It is not necessary to define the version of them here.
+> 
+> 2. Video codec could discard the compression attribute when the
+> intra block copy applied to this frame. It would waste lots of
+> time on re-allocation.
+> 
+> I am wondering if it is better to add an addtional plane property to
+> describe whether the current framebuffer is compressed?
+> While the compression flag is still a part of format modifier,
+> because it would have two extra meta data planes in the compression
+> version.
 
-while at some places I see it to be "< s_first_data_block"
-	e.g. fs/ext4/mballoc.c, fs/ext4/mmp.c
+Would it possible to show an example of how these modifiers apply to a
+particular format (such as NV12 for instance) ? Otherwise I'm having
+trouble understanding how they actually work.
 
-Will spend sometime to understand why the difference and if there is anything
-I might miss here for off-by-one check.
+> Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
+> ---
+>  include/uapi/drm/drm_fourcc.h | 49 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+> 
+> diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
+> index 0206f812c569..b67884e8bc69 100644
+> --- a/include/uapi/drm/drm_fourcc.h
+> +++ b/include/uapi/drm/drm_fourcc.h
+> @@ -381,6 +381,7 @@ extern "C" {
+>  #define DRM_FORMAT_MOD_VENDOR_ARM     0x08
+>  #define DRM_FORMAT_MOD_VENDOR_ALLWINNER 0x09
+>  #define DRM_FORMAT_MOD_VENDOR_AMLOGIC 0x0a
+> +#define DRM_FORMAT_MOD_VENDOR_SYNAPTICS 0x0b
+>  
+>  /* add more to the end as needed */
+>  
+> @@ -1452,6 +1453,54 @@ drm_fourcc_canonicalize_nvidia_format_mod(__u64 modifier)
+>  #define AMD_FMT_MOD_CLEAR(field) \
+>  	(~((__u64)AMD_FMT_MOD_##field##_MASK << AMD_FMT_MOD_##field##_SHIFT))
+>  
+> +/*
+> + * Synaptics VideoSmart modifiers
+> + *
+> + *       Macro
+> + * Bits  Param Description
+> + * ----  ----- -----------------------------------------------------------------
+> + *
+> + *  7:0  f     Scan direction description.
+> + *
+> + *               0 = Invalid
+> + *               1 = V4, the scan would always start from vertical for 4 pixel
+> + *                   then move back to the start pixel of the next horizontal
+> + *                   direction.
+> + *               2 = Reserved for future use.
+> + *
+> + * 15:8  m     The times of pattern repeat in the right angle direction from
+> + *             the first scan direction.
+> + *
+> + * 19:16 p     The padding bits after the whole scan, could be zero.
+> + *
+> + * 35:20 -     Reserved for future use.  Must be zero.
+> + *
+> + * 36:36 c     Compression flag.
+> + *
+> + * 55:37 -     Reserved for future use.  Must be zero.
+> + *
+> + */
+> +
+> +#define DRM_FORMAT_MOD_SYNA_V4_TILED		fourcc_mod_code(SYNAPTICS, 1)
+> +
+> +#define DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(f, m, p, c) \
+> +	fourcc_mod_code(SYNAPTICS, (((f) & 0xff) | \
+> +				 (((m) & 0xff) << 8) | \
+> +				 (((p) & 0xf) << 16) | \
+> +				 (((c) & 0x1) << 36)))
+> +
+> +#define DRM_FORMAT_MOD_SYNA_V4H1 \
+> +	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 1, 0, 0)
+> +
+> +#define DRM_FORMAT_MOD_SYNA_V4H3P8 \
+> +	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 3, 8, 0)
+> +
+> +#define DRM_FORMAT_MOD_SYNA_V4H1_COMPRESSED \
+> +	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 1, 0, 1)
+> +
+> +#define DRM_FORMAT_MOD_SYNA_V4H3P8_COMPRESSED \
+> +	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 3, 8, 1)
+> +
+>  #if defined(__cplusplus)
+>  }
+>  #endif
 
-Adding more to the confusion would be difference w.r.t blocksize = 1024 v/s
-other blocksizes. Based on the blocksize value I guess, s_first_data_block can
-be different (0/1??). Or can bigalloc can change this...
-...Will look more into this.
+-- 
+Regards,
 
--ritesh
-
->
-> 								Honza
->
-> >
-> > From: "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
-> > Date: Thu, 18 Aug 2022 07:53:58 -0500
-> > Subject: [RFC] ext4: Add ext4_sb_getblk() wrapper for block bounds checking
-> >
-> > We might need more bounds checking on the block before calling sb_getblk().
-> > This helper does that and if it is not valid then returns ERR_PTR(-EFSCORRUPTED)
-> > Later we will need to carefully convert the callers to use ext4_sb_getblk()
-> > instead of sb_getblk().
-> > For e.g. __ext4_get_inode_loc()
-> >
-> > Signed-off-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-> > ---
-> >  fs/ext4/block_validity.c |  4 +---
-> >  fs/ext4/ext4.h           | 12 ++++++++++++
-> >  fs/ext4/super.c          |  9 +++++++++
-> >  3 files changed, 22 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/fs/ext4/block_validity.c b/fs/ext4/block_validity.c
-> > index 5504f72bbbbe..69347fab7c38 100644
-> > --- a/fs/ext4/block_validity.c
-> > +++ b/fs/ext4/block_validity.c
-> > @@ -301,9 +301,7 @@ int ext4_sb_block_valid(struct super_block *sb, struct inode *inode,
-> >  	struct rb_node *n;
-> >  	int ret = 1;
-> >
-> > -	if ((start_blk <= le32_to_cpu(sbi->s_es->s_first_data_block)) ||
-> > -	    (start_blk + count < start_blk) ||
-> > -	    (start_blk + count > ext4_blocks_count(sbi->s_es)))
-> > +	if (!ext4_sb_block_valid_fastcheck(sbi->s_es, start_blk, count))
-> >  		return 0;
-> >
-> >  	/*
-> > diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-> > index 9bca5565547b..79d0e45185d3 100644
-> > --- a/fs/ext4/ext4.h
-> > +++ b/fs/ext4/ext4.h
-> > @@ -3072,6 +3072,8 @@ extern struct buffer_head *ext4_sb_bread(struct super_block *sb,
-> >  					 sector_t block, blk_opf_t op_flags);
-> >  extern struct buffer_head *ext4_sb_bread_unmovable(struct super_block *sb,
-> >  						   sector_t block);
-> > +extern struct buffer_head *ext4_sb_getblk(struct super_block *sb,
-> > +					  sector_t block);
-> >  extern void ext4_read_bh_nowait(struct buffer_head *bh, blk_opf_t op_flags,
-> >  				bh_end_io_t *end_io);
-> >  extern int ext4_read_bh(struct buffer_head *bh, blk_opf_t op_flags,
-> > @@ -3358,6 +3360,16 @@ static inline unsigned int ext4_flex_bg_size(struct ext4_sb_info *sbi)
-> >  	return 1 << sbi->s_log_groups_per_flex;
-> >  }
-> >
-> > +static inline bool ext4_sb_block_valid_fastcheck(struct ext4_super_block *es,
-> > +					sector_t start_blk, unsigned int count)
-> > +{
-> > +	if ((start_blk <= le32_to_cpu(es->s_first_data_block)) ||
-> > +	    (start_blk + count < start_blk) ||
-> > +	    (start_blk + count > ext4_blocks_count(es)))
-> > +		return false;
-> > +	return true;
-> > +}
-> > +
-> >  #define ext4_std_error(sb, errno)				\
-> >  do {								\
-> >  	if ((errno))						\
-> > diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> > index 9a66abcca1a8..5b29272ad9a9 100644
-> > --- a/fs/ext4/super.c
-> > +++ b/fs/ext4/super.c
-> > @@ -269,6 +269,15 @@ void ext4_sb_breadahead_unmovable(struct super_block *sb, sector_t block)
-> >  	}
-> >  }
-> >
-> > +struct buffer_head *ext4_sb_getblk(struct super_block *sb, sector_t block)
-> > +{
-> > +	struct ext4_super_block *es = EXT4_SB(sb)->s_es;
-> > +
-> > +	if (!ext4_sb_block_valid_fastcheck(es, block, 1))
-> > +		return ERR_PTR(-EFSCORRUPTED);
-> > +	return sb_getblk(sb, block);
-> > +}
-> > +
-> >  static int ext4_verify_csum_type(struct super_block *sb,
-> >  				 struct ext4_super_block *es)
-> >  {
-> > --
-> > 2.25.1
-> >
-> > -ritesh
-> >
-> >
-> >
-> > > 								Honza
-> > >
-> > > > ---
-> > > >  fs/ext4/inode.c | 10 +++++++++-
-> > > >  1 file changed, 9 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-> > > > index 601214453c3a..5e171879fa23 100644
-> > > > --- a/fs/ext4/inode.c
-> > > > +++ b/fs/ext4/inode.c
-> > > > @@ -4466,9 +4466,17 @@ static int __ext4_get_inode_loc(struct super_block *sb, unsigned long ino,
-> > > >  	inodes_per_block = EXT4_SB(sb)->s_inodes_per_block;
-> > > >  	inode_offset = ((ino - 1) %
-> > > >  			EXT4_INODES_PER_GROUP(sb));
-> > > > -	block = ext4_inode_table(sb, gdp) + (inode_offset / inodes_per_block);
-> > > >  	iloc->offset = (inode_offset % inodes_per_block) * EXT4_INODE_SIZE(sb);
-> > > >
-> > > > +	block = ext4_inode_table(sb, gdp);
-> > > > +	if ((block <= le32_to_cpu(EXT4_SB(sb)->s_es->s_first_data_block)) ||
-> > > > +	    (block >= ext4_blocks_count(EXT4_SB(sb)->s_es))) {
-> > > > +		ext4_error(sb, "Invalid inode table block %llu in "
-> > > > +			   "block_group %u", block, iloc->block_group);
-> > > > +		return -EFSCORRUPTED;
-> > > > +	}
-> > > > +	block += (inode_offset / inodes_per_block);
-> > > > +
-> > > >  	bh = sb_getblk(sb, block);
-> > > >  	if (unlikely(!bh))
-> > > >  		return -ENOMEM;
-> > > > --
-> > > > 2.31.1
-> > > >
-> > > --
-> > > Jan Kara <jack@suse.com>
-> > > SUSE Labs, CR
-> --
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
+Laurent Pinchart

@@ -2,111 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 648B7598C5A
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D295598C60
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345544AbiHRTJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 15:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39570 "EHLO
+        id S244647AbiHRTLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 15:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239990AbiHRTJK (ORCPT
+        with ESMTP id S240608AbiHRTLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 15:09:10 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB94BC00E7
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:09:08 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id k9-20020a056e021a8900b002e5bd940e96so1703688ilv.13
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:09:08 -0700 (PDT)
+        Thu, 18 Aug 2022 15:11:36 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC66C57A8
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:11:35 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id p4so1883110qvr.5
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:11:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=vQ+wMNUUyM62PQcZ3cfsQhJSizHDV14WzncaejOXp/k=;
+        b=iaATwjGuxNwb8WbMrrIWp+6tVJK8LPlvDTL1a19hjbpXAw+QyforsjimHjwpdTgbwu
+         Iu81lywD9hDn65obB/PjUMeU9ImsiCE5kBLEAmgYodgc5wqRqX3RS1Nci/indqo4Rgxs
+         S4BNcjL0peWMtgeLmglQjyaaZI/hi7eKJFUxqKh56fZHLReI8D3UH3M7LmUwBLTQ2xxE
+         ejtymN1qc+Yfyq8mxR9hx6EGS2kjgRU5fe3MFRMjDmY0lebYCvJNRUJbTMGxJDryscpp
+         Ybv2rAC5Qu4fc8EW37a+a5fCHBfIfssj+bu5qrPXdPoHq7qdJNWWoteAVPi6kjhA2WZ8
+         DayA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=QUXH+lX3oULeMPlpniIOe/Q0nv+D1dRLUrR/j75zlr0=;
-        b=yFE25pv4zClibjhfj3NHd4TrzIazY4qNN6Qam+l7i0WWlloZ4QFmlJCJ0VACwwGitn
-         R+QMFdYSV7T5cxrUVlxtE/OlTVM8ekD1m84h6L6zu/7kVMKbJdfp0u9WL/YkDmpDIORb
-         WEGe/WZF/kaxCb5zcHxIFwem8uFh7QJ9Rt1mP7XYXzojkYDDLOX8u/tB23qHqK2TPwmj
-         hkbsBIibQGWCr4+KHW7ih3X/zcrQ7aBBC2O3uOGFm03hgS18MgUAhCFaChsUTpJEcFsD
-         OLTHyrO0dRsNTbPNT3rDHClJGz82lhmiHbbGrZlXzxbsel2mjo6dO0FNALW0D+D/g/a4
-         S+ug==
-X-Gm-Message-State: ACgBeo0sfxbmLKzDcCcsg6OQ+IItcmKe6DRMJD3kgFXjW56UHAhcL+1A
-        lmhZ1jHrZuyfSrCUWLuSn8VJZeguI3LWOJXG0rWXu3gOvEr2
-X-Google-Smtp-Source: AA6agR4hMKwNK0pL6It4a5YyUKx1x4WqiZ9bx8NxTz4LJ0szJel9fneotzoL5nhB0WbZSCxk5N6zlIv8dT3pDiXpeJaforTVk0N8
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=vQ+wMNUUyM62PQcZ3cfsQhJSizHDV14WzncaejOXp/k=;
+        b=oByKdAHp9DWs4L0tVmjCccH2BNYI/oRYxZre4wfk+5BrQJKVAoGJh7FEAPKveBMP/G
+         mVpuWgtquHdvN511WL7rTv7t7K/JVRk6cRYDA6SFZ1Ojp7ELB4kJAnzh3sb0ZISkgbcy
+         Vk/ElcwVtK6nwr3k6VjB6t7Z6GrAhU1fCTOb3w0/UPjBlchcZSWauyrIC+naUuaCDkYu
+         ISOqluD0XsSKEP9T5QZ9/rFOIM1RDrMk9thueF00ZKlZRJY1WaiKnRG0CuUfuxnwkt/c
+         yq0P5rIXMnDpl/5VvdLvheIpzt9AZA8KfUL3NgoOuMSj0napeEvQZ1ofL1wImzgc4ZY6
+         +PWw==
+X-Gm-Message-State: ACgBeo3rCbuyWiQXeUOlHPAKXp8PRw/KtWQmjV8ux5VJ4mpEkXbDypZb
+        W2Rll1ZViaeMfl2KrNBoWN+xQTwTA6B7P+W8miI=
+X-Google-Smtp-Source: AA6agR6DgHQppr2QHoAw1TkFyFvxTa4iDpvfxYu+a264DfSMj+psNtafEvdIeaYlC7SUlmrZ7r4Qprpb/IftYJ9ady8=
+X-Received: by 2002:a05:6214:e69:b0:476:b991:586f with SMTP id
+ jz9-20020a0562140e6900b00476b991586fmr3697817qvb.48.1660849894713; Thu, 18
+ Aug 2022 12:11:34 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:14ce:b0:2e5:3548:aaaf with SMTP id
- o14-20020a056e0214ce00b002e53548aaafmr1965344ilk.192.1660849748264; Thu, 18
- Aug 2022 12:09:08 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 12:09:08 -0700
-In-Reply-To: <20220818110031.89467-1-code@siddh.me>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000045503f05e688b7b0@google.com>
-Subject: Re: [syzbot] WARNING in iomap_iter
-From:   syzbot <syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com>
-To:     code@siddh.me, david@fromorbit.com, djwong@kernel.org,
-        fgheet255t@gmail.com, hch@infradead.org,
-        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        riteshh@linux.ibm.com, syzkaller-bugs@googlegroups.com
+References: <20220817200335.911-1-kabel@kernel.org> <20220817200335.911-2-kabel@kernel.org>
+In-Reply-To: <20220817200335.911-2-kabel@kernel.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 18 Aug 2022 22:10:58 +0300
+Message-ID: <CAHp75VecURpGCBY3WVKqhd64Ngobjvi-w=PuHQBH2V-MqCzkuw@mail.gmail.com>
+Subject: Re: [PATCH linux-phy v2 1/4] string.h: Add str_has_proper_prefix()
+To:     =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linux Phy <linux-phy@lists.infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        josef.schlehofer@nic.cz
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Aug 17, 2022 at 11:06 PM Marek Beh=C3=BAn <kabel@kernel.org> wrote:
+>
+> Add str_has_proper_prefix(), similar to str_has_prefix(), but requires
+> that the prefix is proper: the string itself must be longer than the
+> prefix.
+>
+> Signed-off-by: Marek Beh=C3=BAn <kabel@kernel.org>
+> ---
+> Andy, Kees, could you ack this if it is ok?
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-WARNING in iomap_iter
+Seems to me there are too many strlen():s. One is hidden in strncmp().
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 11 at fs/iomap/iter.c:33 iomap_iter_done fs/iomap/iter.c:33 [inline]
-WARNING: CPU: 1 PID: 11 at fs/iomap/iter.c:33 iomap_iter+0xd8c/0x1100 fs/iomap/iter.c:78
-Modules linked in:
-CPU: 1 PID: 11 Comm: kworker/u4:1 Not tainted 6.0.0-rc1-syzkaller-00067-g573ae4f13f63-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Workqueue: loop3 loop_workfn
-RIP: 0010:iomap_iter_done fs/iomap/iter.c:33 [inline]
-RIP: 0010:iomap_iter+0xd8c/0x1100 fs/iomap/iter.c:78
-Code: ff e8 28 60 87 ff 0f 0b e9 f1 f9 ff ff e8 1c 60 87 ff 0f 0b e9 86 f7 ff ff e8 10 60 87 ff 0f 0b e9 5e f7 ff ff e8 04 60 87 ff <0f> 0b e9 1a f7 ff ff e8 f8 5f 87 ff e8 73 b4 8a 07 31 ff 89 c5 89
-RSP: 0018:ffffc90000107668 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffffc90000107800 RCX: 0000000000000000
-RDX: ffff888011a9bb00 RSI: ffffffff81f4ab4c RDI: 0000000000000006
-RBP: 0000000000000000 R08: 0000000000000006 R09: 0000000000000000
-R10: d70e000000000000 R11: 0000000000000004 R12: 0000000000000000
-R13: d70e000000000000 R14: ffffc90000107828 R15: ffffc90000107870
-FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fae015980a0 CR3: 000000007f2cd000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- __iomap_dio_rw+0x6c6/0x1c20 fs/iomap/direct-io.c:601
- iomap_dio_rw+0x3c/0xa0 fs/iomap/direct-io.c:690
- ext4_dio_read_iter fs/ext4/file.c:79 [inline]
- ext4_file_read_iter+0x434/0x600 fs/ext4/file.c:130
- call_read_iter include/linux/fs.h:2181 [inline]
- lo_rw_aio.isra.0+0xa54/0xc50 drivers/block/loop.c:454
- do_req_filebacked drivers/block/loop.c:498 [inline]
- loop_handle_cmd drivers/block/loop.c:1859 [inline]
- loop_process_work+0x969/0x2050 drivers/block/loop.c:1894
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
+Besides not the good naming (what 'proper' means), the entire function
+is not needed. You may simply call
 
+  str_has_prefix() && p[len] !=3D '\0';
 
-Tested on:
+Correct?
 
-commit:         573ae4f1 tee: add overflow check in register_shm_helpe..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=11c4af0d080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d9d854f607a68b32
-dashboard link: https://syzkaller.appspot.com/bug?extid=a8e049cd3abd342936b6
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=13ba8e5b080000
-
+--=20
+With Best Regards,
+Andy Shevchenko

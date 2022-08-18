@@ -2,112 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC610598CDE
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27A5B598CE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345631AbiHRTst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 15:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
+        id S244523AbiHRTvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 15:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345624AbiHRTsj (ORCPT
+        with ESMTP id S234438AbiHRTvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 15:48:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869FE5A813
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:48:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36149B82415
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 19:48:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07503C433C1;
-        Thu, 18 Aug 2022 19:48:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660852114;
-        bh=LbfCHFjKk6kzGgxEEUBJgU/bUqUM3IB8CCxE0P4a6bY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OzoOBygBfdk21arMXR12/gapkYCLUl5DIZIjGoyLdNfq6LLBUnayGq4VlmnHl323L
-         iZx3xye5Bssk3Ez9gQME9SMvSAdHMUaNueGBEKGwyKqLyF/Z3A/8vDgmzU7vzj+YNw
-         /dPIV2coNRspoY2u0ns/Kb+OTFDInFA9saWHLRn66nOcXEeVl1eXzOTBvbcjbhI3GX
-         ueICF1IHxevnJkimJ5YUZ3bj14htoUYrdSQTyrUFmGovJVl1rh8VQd6p2LnCzKJO0C
-         M1R/9YezXiYJoWBw/nhVmU/GAhwePb02Ze6VKUNtoKK31e03j8DEFjuqjYdhHvrBBJ
-         bFRPejkcm5irw==
-Date:   Thu, 18 Aug 2022 21:48:28 +0200
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linux Phy <linux-phy@lists.infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
+        Thu, 18 Aug 2022 15:51:31 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18CD8B980;
+        Thu, 18 Aug 2022 12:51:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=WoNpxThHsB/AIg/LI6tXaaPBhVhciQC5vd6xYrqwv5Q=; b=xASG6ipwpLLNcj5P+2kBITSNI0
+        EPfy7+9c0YpmfEOCxpwwhyu/FleN0yW2i3Eed0JD4n0NiEJHpJZoMfJ19M9DrSD7da4YCoxWkU5rM
+        Uy9jE/WaoHnIlqC9oLHSd1GMAJ6Rd0rjRGPwJwnn06CEg7omvHjA7BzGZxcizEGbIpy0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oOlY1-00Dpra-DR; Thu, 18 Aug 2022 21:51:21 +0200
+Date:   Thu, 18 Aug 2022 21:51:21 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
         Gregory Clement <gregory.clement@bootlin.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        josef.schlehofer@nic.cz
-Subject: Re: [PATCH linux-phy v2 1/4] string.h: Add str_has_proper_prefix()
-Message-ID: <20220818214828.22023dc7@thinkpad>
-In-Reply-To: <CAHp75VecURpGCBY3WVKqhd64Ngobjvi-w=PuHQBH2V-MqCzkuw@mail.gmail.com>
-References: <20220817200335.911-1-kabel@kernel.org>
-        <20220817200335.911-2-kabel@kernel.org>
-        <CAHp75VecURpGCBY3WVKqhd64Ngobjvi-w=PuHQBH2V-MqCzkuw@mail.gmail.com>
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/4] PCI: mvebu: Implement support for interrupts on
+ emulated bridge
+Message-ID: <Yv6YOZ2FuTn8D5qS@lunn.ch>
+References: <20220817230036.817-1-pali@kernel.org>
+ <20220817230036.817-3-pali@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220817230036.817-3-pali@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 Aug 2022 22:10:58 +0300
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> -static irqreturn_t mvebu_pcie_irq_handler(int irq, void *arg)
+> +static irqreturn_t mvebu_pcie_error_irq_handler(int irq, void *arg)
+> +{
+> +	struct mvebu_pcie_port *port = arg;
+> +	struct device *dev = &port->pcie->pdev->dev;
+> +	u32 cause, unmask, status;
+> +
+> +	cause = mvebu_readl(port, PCIE_INT_CAUSE_OFF);
+> +	unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
+> +	status = cause & unmask;
+> +
+> +	/* "error" interrupt handler does not process INTX interrupts */
+> +	status &= ~(PCIE_INT_INTX(0) | PCIE_INT_INTX(1) |
+> +		    PCIE_INT_INTX(2) | PCIE_INT_INTX(3));
 
-> On Wed, Aug 17, 2022 at 11:06 PM Marek Beh=C3=BAn <kabel@kernel.org> wrot=
-e:
-> >
-> > Add str_has_proper_prefix(), similar to str_has_prefix(), but requires
-> > that the prefix is proper: the string itself must be longer than the
-> > prefix.
-> >
-> > Signed-off-by: Marek Beh=C3=BAn <kabel@kernel.org>
-> > ---
-> > Andy, Kees, could you ack this if it is ok? =20
->=20
-> Seems to me there are too many strlen():s. One is hidden in strncmp().
+Just for my understanding...
 
-I thought this was ok cause gcc has optimizations for this in
-https://github.com/gcc-mirror/gcc/blob/master/gcc/tree-ssa-strlen.cc
+There are two interrupts, but the status information what those
+interrupts actually mean are all packed into one register? I assume
+reading the clause register does not clear set bits? Otherwise there
+would be a race condition. Are these actually level interrupts, and in
+order to clear them you need to poke some other register?
 
-But now I see that kernel does not declare these functions as inline
-that call __builtin_strlen()... so probably the optimizations are not
-used.
+> +	/*
+> +	 * Old DT bindings do not contain "error" interrupt
+> +	 * so do not fail probing driver when interrupt does not exist.
+> +	 */
+> +	port->error_irq = of_irq_get_byname(child, "error");
+> +	if (port->error_irq == -EPROBE_DEFER) {
+> +		ret = port->error_irq;
+> +		goto err;
+> +	}
+> +	if (port->error_irq <= 0) {
+> +		dev_warn(dev, "%s: interrupts on Root Port are unsupported, "
 
-> Besides not the good naming (what 'proper' means),
+Maybe that should be "Error interrupts on Root..." ?
 
-The naming comes from similar naming in math: proper subset is as
-subset that is not equal to the superset. See
-https://en.wikipedia.org/wiki/Substring :
-  "A proper prefix of a string is not equal to the string itself"
-
-> the entire function is not needed. You may simply call
->=20
->   str_has_prefix() && p[len] !=3D '\0';
->=20
-> Correct?
-
-Do you mean that I should implement this function to simply return
-  str_has_prefix() && p[len] !=3D '\0'
-or that this function should not exist at all and I should do that in
-the code where I would have used the function?
-
-Thanks.
-
-Marek
+      Andrew

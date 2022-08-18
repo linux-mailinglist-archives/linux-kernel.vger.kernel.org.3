@@ -2,142 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3D0597E6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 08:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F77597E6F
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 08:16:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243572AbiHRGLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 02:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57958 "EHLO
+        id S240811AbiHRGP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 02:15:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243561AbiHRGLS (ORCPT
+        with ESMTP id S243585AbiHRGPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 02:11:18 -0400
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2E58FD5D;
-        Wed, 17 Aug 2022 23:11:17 -0700 (PDT)
-Received: by mail-oi1-f173.google.com with SMTP id j5so603951oih.6;
-        Wed, 17 Aug 2022 23:11:17 -0700 (PDT)
+        Thu, 18 Aug 2022 02:15:54 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38D89352F
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 23:15:53 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id o2so889248lfb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 23:15:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc;
+        bh=lHFbiCnPlh8rFbDy4RC1CMtmGsk/EvGiejplMwBZ6t4=;
+        b=aHM2W+eNDfg5HYRawTx7fay0ZrwX3j9AkmFQO/80A/Tr/2yxQpHmxy9OfQc+Xby3NA
+         lLEcvCysvGFofPt5dGWbtt7itYRDh4QDHFvqaq0P7U2AZDXXnw485xzwy7CNfAlWZeCz
+         zRSbXVz3KKL6NxrZqq2MhRs/n4QXLoBLnqQ1UXwLKj7ZvNcIGzu67TZ3QoETkdmbZCVf
+         ISD4An6W+p7+C6GhYAeKNB80PtRiI0qGjKTROhFFhOtIMQTfCinIQFQ5F2tE/tOhPp4q
+         r2iXoYtKkOKZKv5EbgLpjiF/Mi8nMkfbOT2P0VSRXRWPe/4WcZ5V7EdmDsUgVjTvMp2q
+         Y1Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=7wi5Dq09PF7tBJQH6bXSrTc2e9ldESvsPGRPC2plYto=;
-        b=08eoDGAZ4ma5mLjnmUhg1kTXYwdKly5CbDncWVWiwiiCkJPiKC+7GFhNeKoGyIb01P
-         F8hUezEpAA8jzFQKdtW1E0nvU+UmcaXOTFUZBm7gEEY2SyKBSDkYKgVuDKwSyakyNOKo
-         68GQ9DTCtvrqToGK7AJqQn82sISiXeVRwVYhxMcGF91K0ocR9vercT1AklU+CLrwzqYG
-         b4ByGecZe88QuqQXsDdPIqJIMw1YahK7GO3S2MuEbJ9Rp7c+0Gg8R6oVhzIE7/UysMRT
-         FcXgfLKDEImnXkxCGAOwij5XAFHbHn1qo8BBV9gYHO9UCub7xcl+ErcjhlEEplVMXgHO
-         d6qw==
-X-Gm-Message-State: ACgBeo1yqGW3NAz/CCj90LMzfSaD/NRvIRYKy9qmmohT1K1A5TabKAh6
-        uxutmA2nAsEZKiSfIyglx2lqt5d9Po17hHiUpFo=
-X-Google-Smtp-Source: AA6agR4/sPvTIzjHQaJmNk55ffpb1MSMI0f8hww9p7bOSxJWVEuIYeW5MYOhK0zcxE+zpqSo2p6nc7U+NyhPVjAcmJM=
-X-Received: by 2002:aca:6088:0:b0:343:75a6:d6a3 with SMTP id
- u130-20020aca6088000000b0034375a6d6a3mr694163oib.92.1660803076558; Wed, 17
- Aug 2022 23:11:16 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc;
+        bh=lHFbiCnPlh8rFbDy4RC1CMtmGsk/EvGiejplMwBZ6t4=;
+        b=Ep7NjfqSBZtqMThimC70lz8yDXthw3suA+C2InmsMlpKDoYhjydHTCBYTxLYcDCa4t
+         3LaxdTdNB+zv8Fv+E0NRX9dGI/1M3SuJVJOUG6ER8oO3Xlsd/Kzt7EziOm7RtQWpN5ew
+         Sc2QzkkwrbEo8gI6SdCnmrhEcurZqoOICfME0pWmjj58OrpRpIfK28/Te+vEdEIeBGCb
+         cSdR1JPeQvx0YnmBXfRJkzl7DBK6F6kzb6ss6sVDb3LSAvbEl20pf1RkIpZVxlvDgKpE
+         ZTZQKn00MQgijMiqlDTMhRfzxGgi4nOePyVSMd3EnvO37neCXpJ5zIrhDbIu6n1Yh0hF
+         5IkQ==
+X-Gm-Message-State: ACgBeo3CuXezKRKZ7XU9lQy+8d3E1HSU+JRlwZzijw9nymd8iqBrBP8s
+        yKePRExSsxhWa2RF3j7UE+UGNQ==
+X-Google-Smtp-Source: AA6agR7yYaou2ubazzmZUOD+5aj3xw0+OQjhUPj3PNj9tTz5EJjh/9ycqQUd8T/g75pkmydzS2VNYw==
+X-Received: by 2002:a05:6512:1681:b0:48d:adaa:446a with SMTP id bu1-20020a056512168100b0048dadaa446amr510571lfb.355.1660803352231;
+        Wed, 17 Aug 2022 23:15:52 -0700 (PDT)
+Received: from krzk-bin.. (d15l54bxv1k5c31plwt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:671:aa32:2bd5:8994])
+        by smtp.gmail.com with ESMTPSA id x25-20020a056512131900b0048aec70f7e6sm92132lfu.194.2022.08.17.23.15.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 23:15:51 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3] dt-bindings: memory-controllers: fsl,imx8m-ddrc: restrict opp-table to objects
+Date:   Thu, 18 Aug 2022 09:15:49 +0300
+Message-Id: <20220818061549.9087-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220817053930.769840-1-irogers@google.com> <20220817053930.769840-7-irogers@google.com>
-In-Reply-To: <20220817053930.769840-7-irogers@google.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 17 Aug 2022 23:11:04 -0700
-Message-ID: <CAM9d7cgd-KsqJNxh_MbX9h4tr8rOtAqKe-t7Qfck0m9pTxWK7w@mail.gmail.com>
-Subject: Re: [PATCH v1 6/6] perf build: Enable -Wthread-safety with clang
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Weiguo Li <liwg06@foxmail.com>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Dario Petrillo <dario.pk1@gmail.com>,
-        Wenyu Liu <liuwenyu7@huawei.com>,
-        Hewenliang <hewenliang4@huawei.com>,
-        yaowenbin <yaowenbin1@huawei.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        William Cohen <wcohen@redhat.com>,
-        Andres Freund <andres@anarazel.de>,
-        Song Liu <songliubraving@fb.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
-        Colin Ian King <colin.king@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Fangrui Song <maskray@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zechuan Chen <chenzechuan1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        Lexi Shao <shaolexi@huawei.com>,
-        Remi Bernon <rbernon@codeweavers.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian,
+Simple 'opp-table:true' accepts a boolean property as opp-table, so
+restrict it to object to properly enferce real OPP table nodes.
 
-On Tue, Aug 16, 2022 at 10:39 PM Ian Rogers <irogers@google.com> wrote:
->
-> If building with clang then enable -Wthread-safety warnings.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Peng Fan <peng.fan@nxp.com>
 
-Do you know the minimal supported version for the option?
-I'm not sure we have a check for that kind of thing.
+---
 
-Thanks,
-Namhyung
+Changes since v2:
+1. Correct typo in msg (Peng).
+2. Add Ack.
 
+Changes since v1:
+1. Correct typo in subject.
+---
+ .../devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/Makefile.config | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> index 0661a1cf9855..0ef6f572485d 100644
-> --- a/tools/perf/Makefile.config
-> +++ b/tools/perf/Makefile.config
-> @@ -19,6 +19,11 @@ detected_var = $(shell echo "$(1)=$($(1))" >> $(OUTPUT).config-detected)
->  CFLAGS := $(EXTRA_CFLAGS) $(filter-out -Wnested-externs,$(EXTRA_WARNINGS))
->  HOSTCFLAGS := $(filter-out -Wnested-externs,$(EXTRA_WARNINGS))
->
-> +# Enabled Wthread-safety analysis for clang builds.
-> +ifeq ($(CC_NO_CLANG), 0)
-> +  CFLAGS += -Wthread-safety
-> +endif
-> +
->  include $(srctree)/tools/scripts/Makefile.arch
->
->  $(call detected_var,SRCARCH)
-> --
-> 2.37.1.595.g718a3a8f04-goog
->
+diff --git a/Documentation/devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml b/Documentation/devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml
+index 2b39fce5f650..519b123116dc 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml
+@@ -47,7 +47,8 @@ properties:
+       - const: apb
+ 
+   operating-points-v2: true
+-  opp-table: true
++  opp-table:
++    type: object
+ 
+ required:
+   - reg
+-- 
+2.34.1
+

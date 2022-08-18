@@ -2,308 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9577C59877A
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B85D59877D
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344356AbiHRP2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 11:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
+        id S245551AbiHRP30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 11:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344351AbiHRP2I (ORCPT
+        with ESMTP id S1344357AbiHRP3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 11:28:08 -0400
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36420C0B4D
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:28:06 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.west.internal (Postfix) with ESMTP id 4FB842B05FCF;
-        Thu, 18 Aug 2022 11:28:04 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 18 Aug 2022 11:28:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1660836483; x=1660843683; bh=6FsHnpNj1X
-        NQs1LkYJCx5q4rNXikQWdbYINV1/aUmLY=; b=teh/hGnEGl/O9Ux1hSaQrY5XYD
-        RLxjNNO0ibtQfJiyJME/aslzZC+NHAJuT9quEayUXnPr7Jznb/tFoojn1AEJlKol
-        vVVkL+9ZshpmkIAxarjDnW1trHUgWaBrckM2x6/dNqf1wUa1aHkQ2JBMxv03mg7o
-        cm0pLuSDpMuIO0re3rLiU5TEo/L48NmDZBKNQEGILfuiQC9K463/uV3Cs6t9eRsC
-        Vcmz7/bhyyQfPbteXgzCzjdkJMUN0QsRaNivjJjz4Oya3Fkbwv9BmB+bZO5bboS+
-        qNHnNh5xLgfY5rro0PvTy++JOT5RPdRp7qHgAfhnFzHNyZLYcL7pS5u5kOPQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660836483; x=1660843683; bh=6FsHnpNj1XNQs1LkYJCx5q4rNXik
-        QWdbYINV1/aUmLY=; b=brg1NAx9g1kR7w1SveWnb1vZrTF56k+eCed14soKTT4F
-        n/S8cpoOuNh2oMjb8LH1exCpr7lsWFf8uj4nm6L3XHHqXDMAmsSIdpJWFOYwxlQF
-        Jed/1yacS/KE2hfb04+0pci+QHFoLMqV/D+y47ALqiVGot7s/d86HsaYEy8PGdVi
-        jHV4w348sNGCR6b1+2h4W9GiAq0OIUfbeXGZ8pENwa2J0QfSh/rBzHIHXKtbdQm9
-        XyS5fX49mtQMiM8w/O2Sf58E8XB1jNCt0nYnRA2WvPyaXvZlDDndjs1v0FCeXlK3
-        u5MKhIJc08ro0skWj0VRbq+4ZlcFw+JP6DWLGMIvog==
-X-ME-Sender: <xms:glr-YsmlISVGs-4xd5eOSVvsJUjg1v7lBEULjHv_jcDQLT20JQ1JjA>
-    <xme:glr-Yr1IiHXr1qJqc6JB1kJagV0nZnI9OKCrPaHlHasU466s8_czs7idU_gGtZQwO
-    bvwn9LXot5gdRQSIHs>
-X-ME-Received: <xmr:glr-Yqoe_Wd6Q6uuNgpZ01fY_n3V_Kj4LkmnZODYpxIc0t0EVb32CqFI_w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehledgieegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpedukeevvdehheeuhefhhfefteeiffefgeffuefgkeetffevgeevgeejteei
-    gffghfenucffohhmrghinhepfhhrvggvuggvshhkthhophdrohhrghenucevlhhushhtvg
-    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhn
-    ohdrthgvtghh
-X-ME-Proxy: <xmx:g1r-Yok27qWAiWQ9c0Yh_x4o4smBHW3HFNXrCNbWovn6MoWGAHpy1A>
-    <xmx:g1r-Yq0S_PsWMpOhQCZtHjeJvzM-BAubJ-b1A7fKWQchPMp6SaflrQ>
-    <xmx:g1r-Yvv9fYFHKPAnPKACRVUEzj64s9YrJNkMo1nCERpRJfNIXRdT0w>
-    <xmx:g1r-YolY8veEi1pY0esB-TPcxS2Z8cqaYW7IR2oz2HCPOoCdAWaK3F4_u-g>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 18 Aug 2022 11:28:02 -0400 (EDT)
-Date:   Thu, 18 Aug 2022 17:27:59 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        Dom Cobley <dom@raspberrypi.com>
-Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
-Message-ID: <20220818152759.yyi3myfdlkbzuior@houat>
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
- <9fdecae2-80ad-6212-0522-7dccf9fb57be@tronnes.org>
- <20220816082612.grebxql5ynnfnvfd@houat>
- <ea6ebdda-f779-78af-1ffd-bd86d715077f@tronnes.org>
- <20220816094922.oqhrhefv327zo2ou@houat>
- <be9b6b71-fa2a-3290-2bce-901342e01981@tronnes.org>
- <20220817114605.jpb3tlnoseyvf65d@houat>
- <30f3005d-0acc-e5af-10ca-cf46f18b3478@tronnes.org>
+        Thu, 18 Aug 2022 11:29:21 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DAA2DEC
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:29:20 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id pm17so2019429pjb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:29:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=1Eoyvkcq9AAxY99icUW84Rt92U/5ub05QuVo7keBPxs=;
+        b=n1W6kKUu2A7eMT68Y4o3rn50CZAJjXpLXiQrDalqIBg62jFCqTsoCA2LDMNlxznuvY
+         7Yv1lwg1Pg5C2O1nBr/rjNEJ3pp08M9sZvhKQHRuPgOg32a9wcHym1XDI1P2CxUo5oRv
+         ox+r8P85wAvmxDVTRmE69blQCOJpI6U5LKo2c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=1Eoyvkcq9AAxY99icUW84Rt92U/5ub05QuVo7keBPxs=;
+        b=DB8zq9ZcHyTNzv/hF17gia4ldvfx/c+hqXMsjZmZNa62O1P5lOjHvFT9d6EXaZCJtF
+         ZF11kGZXY3d7youlIWUQPwBnVCpjn8wf/XaxmY5jNQE08gTuHtw1iNpL3J5B3INrBdqg
+         WK65aSKHrrK0Lsztj1OH/8nTREnz5jkam0NxPNiZNE9YlLcuFyfibvnaaX93sM9FZNI6
+         VoplVVaBjIymMlI4F1DryUKD7aCD9+lFCv8IQwsWosrcUFO952pzRyydNDidPqza5w+m
+         Kn3WZ7ubbKuFapR1ZmKJhS18H7nr4w+VsmKYMJDgynm3Ha5Ovm4ZsKp7UZ5IkQ7G1WB0
+         VPzA==
+X-Gm-Message-State: ACgBeo26K3rcsL4jZKMv7cN2ssq8So/c0KQDdZv8z+neH21LknORVSTH
+        7mE6nk2gGC4QDgUiFGn6HKOwow==
+X-Google-Smtp-Source: AA6agR51XZUuKM9rBU7FLOtPuOpvhlht6MYLcClHV+ieYV7gldBty9sNBZUdTiVtZPHV1c5AvLZwwA==
+X-Received: by 2002:a17:902:e947:b0:170:d739:8cbe with SMTP id b7-20020a170902e94700b00170d7398cbemr3097176pll.141.1660836559944;
+        Thu, 18 Aug 2022 08:29:19 -0700 (PDT)
+Received: from evgreen-glaptop.lan ([98.45.66.167])
+        by smtp.gmail.com with ESMTPSA id m11-20020a17090a7f8b00b001f89383d587sm1613494pjl.56.2022.08.18.08.29.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 08:29:19 -0700 (PDT)
+From:   Evan Green <evgreen@chromium.org>
+To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Rajat Jain <rajatja@chromium.org>,
+        Evan Green <evgreen@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] platform/chrome: cros_ec: Expose suspend_timeout_ms in debugfs
+Date:   Thu, 18 Aug 2022 08:29:09 -0700
+Message-Id: <20220818082827.v2.1.Idd188ff3f9caddebc17ac357a13005f93333c21f@changeid>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yeug4snx335h3u7q"
-Content-Disposition: inline
-In-Reply-To: <30f3005d-0acc-e5af-10ca-cf46f18b3478@tronnes.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In modern Chromebooks, the embedded controller has a mechanism where
+it will watch a hardware-controlled line that toggles in suspend, and
+wake the system up if an expected sleep transition didn't occur. This
+can be very useful for detecting power management issues where the
+system appears to suspend, but doesn't actually reach its lowest
+expected power states.
 
---yeug4snx335h3u7q
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sometimes it's useful in debug and test scenarios to be able to control
+the duration of that timeout, or even disable the EC timeout mechanism
+altogether. Add a debugfs control to set the timeout to values other
+than the EC-defined default, for more convenient debug and
+development iteration.
 
-On Wed, Aug 17, 2022 at 03:11:56PM +0200, Noralf Tr=F8nnes wrote:
-> Den 17.08.2022 13.46, skrev Maxime Ripard:
-> > On Tue, Aug 16, 2022 at 09:35:24PM +0200, Noralf Tr=F8nnes wrote:
-> >> Den 16.08.2022 11.49, skrev Maxime Ripard:
-> >>> On Tue, Aug 16, 2022 at 11:42:20AM +0200, Noralf Tr=F8nnes wrote:
-> >>>> Den 16.08.2022 10.26, skrev Maxime Ripard:
-> >>>>> Hi,
-> >>>>>
-> >>>>> On Mon, Aug 08, 2022 at 02:44:56PM +0200, Noralf Tr=F8nnes wrote:
-> >>>>>> Den 29.07.2022 18.34, skrev Maxime Ripard:
-> >>>>>>> The TV mode property has been around for a while now to select an=
-d get the
-> >>>>>>> current TV mode output on an analog TV connector.
-> >>>>>>>
-> >>>>>>> Despite that property name being generic, its content isn't and h=
-as been
-> >>>>>>> driver-specific which makes it hard to build any generic behaviou=
-r on top
-> >>>>>>> of it, both in kernel and user-space.
-> >>>>>>>
-> >>>>>>> Let's create a new bitmask tv norm property, that can contain any=
- of the
-> >>>>>>> analog TV standards currently supported by kernel drivers. Each d=
-river can
-> >>>>>>> then pass in a bitmask of the modes it supports.
-> >>>>>>>
-> >>>>>>> We'll then be able to phase out the older tv mode property.
-> >>>>>>>
-> >>>>>>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> >>>>>>>
-> >>>>>>
-> >>>>>> Please also update Documentation/gpu/kms-properties.csv
-> >>>>>>
-> >>>>>> Requirements for adding a new property is found in
-> >>>>>> Documentation/gpu/drm-kms.rst
-> >>>>>
-> >>>>> I knew this was going to be raised at some point, so I'm glad it's =
-that
-> >>>>> early :)
-> >>>>>
-> >>>>> I really don't know what to do there. If we stick by our usual rule=
-s,
-> >>>>> then we can't have any of that work merged.
-> >>>>>
-> >>>>> However, I think the status quo is not really satisfactory either.
-> >>>>> Indeed, we have a property, that doesn't follow those requirements
-> >>>>> either, with a driver-specific content, and that stands in the way =
-of
-> >>>>> fixes and further improvements at both the core framework and driver
-> >>>>> levels.
-> >>>>>
-> >>>>> So having that new property still seems like a net improvement at t=
-he
-> >>>>> driver, framework and uAPI levels, even if it's not entirely follow=
-ing
-> >>>>> the requirements we have in place.
-> >>>>>
-> >>>>> Even more so since, realistically, those kind of interfaces will ne=
-ver
-> >>>>> get any new development on the user-space side of things, it's
-> >>>>> considered by everyone as legacy.
-> >>>>>
-> >>>>> This also is something we need to support at some point if we want =
-to
-> >>>>> completely deprecate the fbdev drivers and provide decent alternati=
-ves
-> >>>>> in KMS.
-> >>>>>
-> >>>>> So yeah, strictly speaking, we would not qualify for our requiremen=
-ts
-> >>>>> there. I still think we have a strong case for an exception though.
-> >>>>
-> >>>> Which requirements would that be? The only one I can see is the
-> >>>> documentation and maybe an IGT test.
-> >>>
-> >>> This is the one I had in mind
-> >>> https://dri.freedesktop.org/docs/drm/gpu/drm-uapi.html#open-source-us=
-erspace-requirements
-> >>>
-> >>
-> >> Oh right, I had forgotten about that one.
-> >>
-> >> One benefit of having a userspace implementation is that it increases
-> >> the chance of widespread adoption having a working implementation to
-> >> look at. I don't think the reason tv.mode is not used anywhere (that I
-> >> know of) is because the driver picks the enum values resulting in no
-> >> standard names.
-> >=20
-> > It probably doesn't help, but it's not what I was implying.
-> >=20
-> >> It's a niche thing and way down on the todo list. nouveau and ch7006
-> >> has a tv_norm module parameter which certainly doesn't help in moving
-> >> people/projects over to the DRM property (downstream rpi also has it
-> >> now).
-> >=20
-> > Yeah, the RPi version is part of the reason I started working on this.
-> > We should also consider the named modes used by vc4 and sun4i. All these
-> > ad-hoc solutions are limited and (I think) come from the fact that we
-> > don't have a solution easy enough to use for drivers (and to discover).
-> >=20
-> > nouveau, ch7006, i915 and vc4 are using the tv.mode property for
-> > example, but sun4i and meson don't.
-> >=20
-> > sun4i relies on named modes to reimplement TV modes, but meson doesn't
-> > at all.
-> >=20
-> > And then nouveau has that extra command line parameter to set it up at
-> > boot time.
-> >=20
-> > It doesn't really make much sense to me, when all drivers have very
-> > similar needs, that none of them behave in the same way. And I think the
-> > non-standard property is partly to blame for this, since without some
-> > generic content we can't share code.
-> >=20
-> > This is what this series is about: every driver having similar
-> > capabilities and as trivially as possible.
-> >=20
-> >> mpv[1] is a commandline media player that after a quick look might be a
-> >> candidate for implementing the property without too much effort.
-> >=20
-> > Kodi might be another one. I can try to hack something around, but I'm
-> > really skeptical about whether a PR would be merged or not.
-> >=20
->=20
-> You can ask first before wasting time ofc.
+Signed-off-by: Evan Green <evgreen@chromium.org>
+---
 
-Yep, will do.
+Changes in v2:
+ - Update release version to 6.1 (Tzung-Bi)
+ - Reference EC_HOST_SLEEP_TIMEOUT_INFINITE (Tzung-Bi)
+ - Name the debugfs file suspend_timeout_ms (Prashant)
 
-> But this baffles me, if you don't think projects like Kodi which is TV
-> centered want this, what kind of projects do you think want to use this
-> property?
+ Documentation/ABI/testing/debugfs-cros-ec   | 22 +++++++++++++++++++++
+ drivers/platform/chrome/cros_ec.c           |  3 ++-
+ drivers/platform/chrome/cros_ec_debugfs.c   |  3 +++
+ include/linux/platform_data/cros_ec_proto.h |  1 +
+ 4 files changed, 28 insertions(+), 1 deletion(-)
 
-I mean, at this point it's really a consolidation of stuff we have
-scattered around the kernel tree, in order to clean up that mess, and
-not add more hacks.
+diff --git a/Documentation/ABI/testing/debugfs-cros-ec b/Documentation/ABI/testing/debugfs-cros-ec
+index 1fe0add99a2a99..9f79c641b2d09f 100644
+--- a/Documentation/ABI/testing/debugfs-cros-ec
++++ b/Documentation/ABI/testing/debugfs-cros-ec
+@@ -54,3 +54,25 @@ Description:
+ 		this feature.
+ 
+ 		Output will be in the format: "0x%08x\n".
++
++What:		/sys/kernel/debug/<cros-ec-device>/suspend_timeout_ms
++Date:		August 2022
++KernelVersion:	6.1
++Description:
++		Some ECs have a feature where they will track transitions to the
++		a hardware-controlled sleep line, such as Intel's SLP_S0 line,
++		in order to detect cases where a system failed to go into deep
++		sleep states. The suspend_timeout file controls the amount of
++		time in milliseconds the EC will wait before declaring a sleep
++		timeout event and attempting to wake the system.
++
++		Supply 0 to use the default value coded into EC firmware. Supply
++		65535 (EC_HOST_SLEEP_TIMEOUT_INFINITE) to disable the EC sleep
++		failure detection mechanism. Values in between 0 and 65535
++		indicate the number of milliseconds the EC should wait after a
++		sleep transition before declaring a timeout. This includes both
++		the duration after a sleep command was received but before the
++		hardware line changed, as well as the duration between when the
++		hardware line changed and the kernel sent an EC resume command.
++
++		Output will be in the format: "%u\n".
+diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
+index 8aace50d446d65..e8d3e2a29a58f5 100644
+--- a/drivers/platform/chrome/cros_ec.c
++++ b/drivers/platform/chrome/cros_ec.c
+@@ -115,7 +115,7 @@ static int cros_ec_sleep_event(struct cros_ec_device *ec_dev, u8 sleep_event)
+ 	if (ec_dev->host_sleep_v1) {
+ 		buf.u.req1.sleep_event = sleep_event;
+ 		buf.u.req1.suspend_params.sleep_timeout_ms =
+-				EC_HOST_SLEEP_TIMEOUT_DEFAULT;
++				ec_dev->suspend_timeout;
+ 
+ 		buf.msg.outsize = sizeof(buf.u.req1);
+ 		if ((sleep_event == HOST_SLEEP_EVENT_S3_RESUME) ||
+@@ -188,6 +188,7 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
+ 	ec_dev->max_passthru = 0;
+ 	ec_dev->ec = NULL;
+ 	ec_dev->pd = NULL;
++	ec_dev->suspend_timeout = EC_HOST_SLEEP_TIMEOUT_DEFAULT;
+ 
+ 	ec_dev->din = devm_kzalloc(dev, ec_dev->din_size, GFP_KERNEL);
+ 	if (!ec_dev->din)
+diff --git a/drivers/platform/chrome/cros_ec_debugfs.c b/drivers/platform/chrome/cros_ec_debugfs.c
+index 0dbceee87a4b1a..d7f5338c1ab1cf 100644
+--- a/drivers/platform/chrome/cros_ec_debugfs.c
++++ b/drivers/platform/chrome/cros_ec_debugfs.c
+@@ -470,6 +470,9 @@ static int cros_ec_debugfs_probe(struct platform_device *pd)
+ 	debugfs_create_x32("last_resume_result", 0444, debug_info->dir,
+ 			   &ec->ec_dev->last_resume_result);
+ 
++	debugfs_create_u16("suspend_timeout_ms", 0664, debug_info->dir,
++			   &ec->ec_dev->suspend_timeout);
++
+ 	ec->debug_info = debug_info;
+ 
+ 	dev_set_drvdata(&pd->dev, ec);
+diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
+index 408b29ca4004be..60132444f7daa6 100644
+--- a/include/linux/platform_data/cros_ec_proto.h
++++ b/include/linux/platform_data/cros_ec_proto.h
+@@ -169,6 +169,7 @@ struct cros_ec_device {
+ 	int event_size;
+ 	u32 host_event_wake_mask;
+ 	u32 last_resume_result;
++	u16 suspend_timeout;
+ 	ktime_t last_event_time;
+ 	struct notifier_block notifier_ready;
+ 
+-- 
+2.31.0
 
-And it allows the current effort to move the remaining fbdev drivers
-into KMS.
-
-As far as userspace is concerned, I don't know who is still using it
-or cares today.
-
-I still believe that refactoring is beneficial though, if only to make
-one more nail in fbdev's coffin.
-
-> >> How do you test the property? I've used modetest but I can only change
-> >> to a tv.mode that matches the current display mode. I can't switch from
-> >> ntsc to pal for instance.
-> >=20
-> > Yep, if you want to change from PAL to NTSC, it will require a new mode.
->
-> So userspace has to check tv.mode first and then create a display mode
-> the driver will accept if switching to a different display mode is
-> necessary?
-
-I'd expect drivers to expose both 576i and 480i (that's what vc4 and
-sun4i are doing), so the userspace can pick them up.
-
-> In other words, userspace can't discover from the kernel which display
-> modes a certain tv.mode/norm provides before it is selected?
-
-It's kind of the other way around in my mind, but the userspace would
-have to figure out what display mode can use what tv mode, yes.
-
-Even more so since Geert and I are discussing to allow continuous modes,
-so we would allow to have modes with the same (active) resolution but a
-different tv mode.
-
-> If so, maybe libdrm should have some function(s) to deal with
-> switching between modes that require a different display mode since
-> knowledge about which display modes a tv.mode supports is needed
-> before hand.
-
-I'm not sure what you mean here, sorry. It's fairly easy to update a
-property and the mode with atomic?
-
-Maxime
-
---yeug4snx335h3u7q
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYv5afwAKCRDj7w1vZxhR
-xfRuAQDN++D+9b1a3nolmTxB1Bd4MnC3JLhRlcGAL1g8twwg8gD/YvzSUYyic04P
-8R3j1Ao9EK0juKoA/cGb8nOc1XajUAU=
-=cmxn
------END PGP SIGNATURE-----
-
---yeug4snx335h3u7q--

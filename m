@@ -2,220 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6184A59908F
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 00:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC01F59909B
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 00:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343818AbiHRWbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 18:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
+        id S1344851AbiHRWgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 18:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234758AbiHRWbm (ORCPT
+        with ESMTP id S231636AbiHRWge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 18:31:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D13D4BCD;
-        Thu, 18 Aug 2022 15:31:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 007F8B8236E;
-        Thu, 18 Aug 2022 22:31:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 818A8C433D6;
-        Thu, 18 Aug 2022 22:31:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660861898;
-        bh=vnXYmIV//aOPnh+FlIiKR4PfpuFEU++/UgDkLARL5zg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=O0FWvaMRCf2hpL5+fX8rRmrSH7Nr3gtUhvSNrh24XYAODS+1ZCbwbxunQVwI3pNOA
-         9LYlZMG5EWUSJJRvb1nfnu/MP5Yo7qwUkHKbTmMtShiE53B5gGHPUM/3xz+Cl6Hd53
-         Iu1jvKo1kpcYTMLm7Ul+B2s+4Q63HetSTAA9PU6DlzekD8V6OStF3GAIlKwJC+A6Ul
-         CcRTxz5SY6/IL+c9wg9TqUvSUaJop/iHEkZJhklzcaVUbmkV/IgdstyIhdX2sY9lGm
-         s2dP+yCYNookV//rzrqhanHJ8hXhHvHy2EmiotbkEOm+Xexcz9DVinUsFN/yP60HTj
-         cvCtRjFM+WsPg==
-Date:   Thu, 18 Aug 2022 17:31:36 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: pci-bridge-emul: Set position of PCI capabilities
- to real HW value
-Message-ID: <20220818223136.GA2401009@bhelgaas>
+        Thu, 18 Aug 2022 18:36:34 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6EED743A;
+        Thu, 18 Aug 2022 15:36:33 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id q19so2781653pfg.8;
+        Thu, 18 Aug 2022 15:36:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=ZlZOnC/qYxA1pMjp6WtByZBS31wEhSXXjVgZuTf1udc=;
+        b=M4+z6xgFbpWAO7nkNC5INGi4D2Oky49sDoMjdZ1xKGEjafCJY2RR3LQNjqAYijmZsv
+         iHZ94TIECUpuUg26iV7nHvqe4JMYPbNEnLqQfpQKQwV4KCDDrPs6tnO/ghLOBPhPVexc
+         pYu02a1t+52zhnEGRjqqu62+RrP8hqgOyOXm0C/M2FlJbuk5ek9R4NrZrTV6vActW/6S
+         P0cWdvJl/N8AMpaFGs0WYNISVLyt9DIpadoSUInHTZNCNVhW9+jOow6Vmd841bGX9ogm
+         +/Sn/Hq33S7MjGJuYsn0zKvAnAQ7jxPfvlp7yVwDeX1fZr/DcX89fjINDNxMFU11r2Zx
+         kIFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=ZlZOnC/qYxA1pMjp6WtByZBS31wEhSXXjVgZuTf1udc=;
+        b=Rp+q74QXBD9rBwbXd0n1Teh8yWgjM6jok7+Y3XJPF5lUVSr72zccvp7bWHhwGLlhOl
+         WFN2cRaBdDbYf8TZErAcmTuTejn38eAGisxUIgAxj/yQIQ1FeWx038MwLIwf8rPSrZjk
+         D288xvZErvXV9ijATBwBmVt1OPb0mCLbTqI606PO1YcW3VQIDxvzIwBmHWZWfHms7ESV
+         SNRlgAT0OHX9ikvT3CBfzcJ7IyXNISz/aBAVWMcul+OE+RFqKzqzJ5cIRsT8DisIzcsu
+         4XMCVhsO60Ze4bDa+Oc2Vgrla11QSlEOp2cV1YFDrrYjhFM0rDYncMRxAy1UNzKXhZcR
+         pq0w==
+X-Gm-Message-State: ACgBeo2uggYm3Ro3U7fPVwBZ7P7li+bcvyYh4WfviawCOHS8Liasi4tc
+        H0OJ78axhiaISjVdYP8P8mo=
+X-Google-Smtp-Source: AA6agR72l8PkNgjUQYyXf5WJq3MwwTkbLkb7lQt3y+OHz5cG+wy/poYDbmK8CovdxDcnaWYZq8NzQQ==
+X-Received: by 2002:a63:e157:0:b0:429:c287:2b9 with SMTP id h23-20020a63e157000000b00429c28702b9mr4064652pgk.258.1660862192817;
+        Thu, 18 Aug 2022 15:36:32 -0700 (PDT)
+Received: from localhost.localdomain (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id d14-20020a170902aa8e00b00170a6722c79sm1829842plr.247.2022.08.18.15.36.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 15:36:31 -0700 (PDT)
+From:   Akira Yokosawa <akiyks@gmail.com>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tsugikazu Shibata <shibata@linuxfoundation.org>
+Subject: [PATCH RESEND] docs/ja_JP/SubmittingPatches: Remove reference to submitting-drivers.rst
+Date:   Fri, 19 Aug 2022 07:34:40 +0900
+Message-Id: <20220818223440.13530-1-akiyks@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <acaf13cd-52f0-c7c2-add0-0644cb1e77e4@gmail.com>
+References: <acaf13cd-52f0-c7c2-add0-0644cb1e77e4@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220818135054.3wozx6klcbycknfa@pali>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 03:50:54PM +0200, Pali Roh�r wrote:
-> PING?
+Reflect changes made in commit 9db370de2780 ("docs: process: remove
+outdated submitting-drivers.rst")
 
-No need to shout :)
+Reported-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Fixes: 9db370de2780 ("docs: process: remove outdated submitting-drivers.rst")
+Cc: Tsugikazu Shibata <shibata@linuxfoundation.org>
+---
+Hi,
 
-> On Sunday 03 July 2022 12:46:27 Pali Roh�r wrote:
-> > mvebu and aardvark HW have PCIe capabilities on different offset in PCI
-> > config space. Extend pci-bridge-emul.c code to allow setting custom driver
-> > custom value where PCIe capabilities starts.
-> > 
-> > With this change PCIe capabilities of both drivers are reported at the same
-> > location as where they are reported by U-Boot - in their real HW offset.
+This is a band-aide patch removing a sentence with reference to
+submitting-drivers.rst (removed during the v6.0 merge window).
 
-Just curious since I haven't read the patch, and Lorenzo will take
-care of this anyway, but does this fix a bug, i.e., does something
-work when it didn't work before?  Or does everything *work* without
-this patch, but lspci reports capabilities at different offsets than
-U-Boot?
+As the translation around here is outdated, the end result does
+not match the corresponding text in the English doc.
 
-> > Signed-off-by: Pali Roh�r <pali@kernel.org>
-> > ---
-> >  drivers/pci/controller/pci-aardvark.c |  1 +
-> >  drivers/pci/controller/pci-mvebu.c    |  1 +
-> >  drivers/pci/pci-bridge-emul.c         | 46 +++++++++++++++++----------
-> >  drivers/pci/pci-bridge-emul.h         |  2 ++
-> >  4 files changed, 33 insertions(+), 17 deletions(-)
-> > 
-> > diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
-> > index ffec82c8a523..32f97e71e0ca 100644
-> > --- a/drivers/pci/controller/pci-aardvark.c
-> > +++ b/drivers/pci/controller/pci-aardvark.c
-> > @@ -984,6 +984,7 @@ static int advk_sw_pci_bridge_init(struct advk_pcie *pcie)
-> >  	bridge->pcie_conf.rootcap = cpu_to_le16(PCI_EXP_RTCAP_CRSVIS);
-> >  
-> >  	bridge->has_pcie = true;
-> > +	bridge->pcie_start = PCIE_CORE_PCIEXP_CAP;
-> >  	bridge->data = pcie;
-> >  	bridge->ops = &advk_pci_bridge_emul_ops;
-> >  
-> > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-> > index c1ffdb06c971..cb7cf3f4802f 100644
-> > --- a/drivers/pci/controller/pci-mvebu.c
-> > +++ b/drivers/pci/controller/pci-mvebu.c
-> > @@ -946,6 +946,7 @@ static int mvebu_pci_bridge_emul_init(struct mvebu_pcie_port *port)
-> >  	bridge->subsystem_vendor_id = ssdev_id & 0xffff;
-> >  	bridge->subsystem_id = ssdev_id >> 16;
-> >  	bridge->has_pcie = true;
-> > +	bridge->pcie_start = PCIE_CAP_PCIEXP_OFF;
-> >  	bridge->data = port;
-> >  	bridge->ops = &mvebu_pci_bridge_emul_ops;
-> >  
-> > diff --git a/drivers/pci/pci-bridge-emul.c b/drivers/pci/pci-bridge-emul.c
-> > index 9c2ca28e3ecf..dfbbe43ef518 100644
-> > --- a/drivers/pci/pci-bridge-emul.c
-> > +++ b/drivers/pci/pci-bridge-emul.c
-> > @@ -22,11 +22,7 @@
-> >  
-> >  #define PCI_BRIDGE_CONF_END	PCI_STD_HEADER_SIZEOF
-> >  #define PCI_CAP_SSID_SIZEOF	(PCI_SSVID_DEVICE_ID + 2)
-> > -#define PCI_CAP_SSID_START	PCI_BRIDGE_CONF_END
-> > -#define PCI_CAP_SSID_END	(PCI_CAP_SSID_START + PCI_CAP_SSID_SIZEOF)
-> >  #define PCI_CAP_PCIE_SIZEOF	(PCI_EXP_SLTSTA2 + 2)
-> > -#define PCI_CAP_PCIE_START	PCI_CAP_SSID_END
-> > -#define PCI_CAP_PCIE_END	(PCI_CAP_PCIE_START + PCI_CAP_PCIE_SIZEOF)
-> >  
-> >  /**
-> >   * struct pci_bridge_reg_behavior - register bits behaviors
-> > @@ -324,7 +320,7 @@ pci_bridge_emul_read_ssid(struct pci_bridge_emul *bridge, int reg, u32 *value)
-> >  	switch (reg) {
-> >  	case PCI_CAP_LIST_ID:
-> >  		*value = PCI_CAP_ID_SSVID |
-> > -			(bridge->has_pcie ? (PCI_CAP_PCIE_START << 8) : 0);
-> > +			((bridge->pcie_start > bridge->ssid_start) ? (bridge->pcie_start << 8) : 0);
-> >  		return PCI_BRIDGE_EMUL_HANDLED;
-> >  
-> >  	case PCI_SSVID_VENDOR_ID:
-> > @@ -365,12 +361,25 @@ int pci_bridge_emul_init(struct pci_bridge_emul *bridge,
-> >  	if (!bridge->pci_regs_behavior)
-> >  		return -ENOMEM;
-> >  
-> > -	if (bridge->subsystem_vendor_id)
-> > -		bridge->conf.capabilities_pointer = PCI_CAP_SSID_START;
-> > -	else if (bridge->has_pcie)
-> > -		bridge->conf.capabilities_pointer = PCI_CAP_PCIE_START;
-> > -	else
-> > -		bridge->conf.capabilities_pointer = 0;
-> > +	/* If ssid_start and pcie_start were not specified then choose the lowest possible value. */
-> > +	if (!bridge->ssid_start && !bridge->pcie_start) {
-> > +		if (bridge->subsystem_vendor_id)
-> > +			bridge->ssid_start = PCI_BRIDGE_CONF_END;
-> > +		if (bridge->has_pcie)
-> > +			bridge->pcie_start = bridge->ssid_start + PCI_CAP_SSID_SIZEOF;
-> > +	} else if (!bridge->ssid_start && bridge->subsystem_vendor_id) {
-> > +		if (bridge->pcie_start - PCI_BRIDGE_CONF_END >= PCI_CAP_SSID_SIZEOF)
-> > +			bridge->ssid_start = PCI_BRIDGE_CONF_END;
-> > +		else
-> > +			bridge->ssid_start = bridge->pcie_start + PCI_CAP_PCIE_SIZEOF;
-> > +	} else if (!bridge->pcie_start && bridge->has_pcie) {
-> > +		if (bridge->ssid_start - PCI_BRIDGE_CONF_END >= PCI_CAP_PCIE_SIZEOF)
-> > +			bridge->pcie_start = PCI_BRIDGE_CONF_END;
-> > +		else
-> > +			bridge->pcie_start = bridge->ssid_start + PCI_CAP_SSID_SIZEOF;
-> > +	}
-> > +
-> > +	bridge->conf.capabilities_pointer = min(bridge->ssid_start, bridge->pcie_start);
-> >  
-> >  	if (bridge->conf.capabilities_pointer)
-> >  		bridge->conf.status |= cpu_to_le16(PCI_STATUS_CAP_LIST);
-> > @@ -459,15 +468,17 @@ int pci_bridge_emul_conf_read(struct pci_bridge_emul *bridge, int where,
-> >  		read_op = bridge->ops->read_base;
-> >  		cfgspace = (__le32 *) &bridge->conf;
-> >  		behavior = bridge->pci_regs_behavior;
-> > -	} else if (reg >= PCI_CAP_SSID_START && reg < PCI_CAP_SSID_END && bridge->subsystem_vendor_id) {
-> > +	} else if (reg >= bridge->ssid_start && reg < bridge->ssid_start + PCI_CAP_SSID_SIZEOF &&
-> > +		   bridge->subsystem_vendor_id) {
-> >  		/* Emulated PCI Bridge Subsystem Vendor ID capability */
-> > -		reg -= PCI_CAP_SSID_START;
-> > +		reg -= bridge->ssid_start;
-> >  		read_op = pci_bridge_emul_read_ssid;
-> >  		cfgspace = NULL;
-> >  		behavior = NULL;
-> > -	} else if (reg >= PCI_CAP_PCIE_START && reg < PCI_CAP_PCIE_END && bridge->has_pcie) {
-> > +	} else if (reg >= bridge->pcie_start && reg < bridge->pcie_start + PCI_CAP_PCIE_SIZEOF &&
-> > +		   bridge->has_pcie) {
-> >  		/* Our emulated PCIe capability */
-> > -		reg -= PCI_CAP_PCIE_START;
-> > +		reg -= bridge->pcie_start;
-> >  		read_op = bridge->ops->read_pcie;
-> >  		cfgspace = (__le32 *) &bridge->pcie_conf;
-> >  		behavior = bridge->pcie_cap_regs_behavior;
-> > @@ -538,9 +549,10 @@ int pci_bridge_emul_conf_write(struct pci_bridge_emul *bridge, int where,
-> >  		write_op = bridge->ops->write_base;
-> >  		cfgspace = (__le32 *) &bridge->conf;
-> >  		behavior = bridge->pci_regs_behavior;
-> > -	} else if (reg >= PCI_CAP_PCIE_START && reg < PCI_CAP_PCIE_END && bridge->has_pcie) {
-> > +	} else if (reg >= bridge->pcie_start && reg < bridge->pcie_start + PCI_CAP_PCIE_SIZEOF &&
-> > +		   bridge->has_pcie) {
-> >  		/* Our emulated PCIe capability */
-> > -		reg -= PCI_CAP_PCIE_START;
-> > +		reg -= bridge->pcie_start;
-> >  		write_op = bridge->ops->write_pcie;
-> >  		cfgspace = (__le32 *) &bridge->pcie_conf;
-> >  		behavior = bridge->pcie_cap_regs_behavior;
-> > diff --git a/drivers/pci/pci-bridge-emul.h b/drivers/pci/pci-bridge-emul.h
-> > index 71392b67471d..2a0e59c7f0d9 100644
-> > --- a/drivers/pci/pci-bridge-emul.h
-> > +++ b/drivers/pci/pci-bridge-emul.h
-> > @@ -131,6 +131,8 @@ struct pci_bridge_emul {
-> >  	struct pci_bridge_reg_behavior *pci_regs_behavior;
-> >  	struct pci_bridge_reg_behavior *pcie_cap_regs_behavior;
-> >  	void *data;
-> > +	u8 pcie_start;
-> > +	u8 ssid_start;
-> >  	bool has_pcie;
-> >  	u16 subsystem_vendor_id;
-> >  	u16 subsystem_id;
-> > -- 
-> > 2.20.1
-> > 
+Remaining discrepancies will be taken care of while catching
+up the other changes of the original doc.
+
+        Thanks, Akira
+--
+Documentation/translations/ja_JP/SubmittingPatches | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/Documentation/translations/ja_JP/SubmittingPatches b/Documentation/translations/ja_JP/SubmittingPatches
+index 66ce0d8b0526..04deb77b20c6 100644
+--- a/Documentation/translations/ja_JP/SubmittingPatches
++++ b/Documentation/translations/ja_JP/SubmittingPatches
+@@ -35,8 +35,7 @@ Linux カーネルに変更を加えたいと思っている個人又は会社
+ てもらえやすくする提案を集めたものです。
+ 
+ コードを投稿する前に、Documentation/process/submit-checklist.rst の項目リストに目
+-を通してチェックしてください。もしあなたがドライバーを投稿しようとし
+-ているなら、Documentation/process/submitting-drivers.rst にも目を通してください。
++を通してチェックしてください。
+ 
+ --------------------------------------------
+ セクション1 パッチの作り方と送り方
+
+base-commit: d22903e33a284d2de574ff0d89b9871bf0443b66
+-- 
+2.25.1
+

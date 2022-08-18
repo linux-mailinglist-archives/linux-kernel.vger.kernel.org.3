@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D9B0598378
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 14:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9360598373
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 14:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244758AbiHRMst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 08:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
+        id S244774AbiHRMs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 08:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244576AbiHRMsh (ORCPT
+        with ESMTP id S244736AbiHRMsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 08:48:37 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49ACA63A5
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:48:35 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id c2so1423191plo.3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:48:35 -0700 (PDT)
+        Thu, 18 Aug 2022 08:48:41 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060D545061
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:48:40 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id k14so1470128pfh.0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:48:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=a8l9uZA41LqnoJJEYr1pG3p/xrUXauS4MtvHWBuecMk=;
-        b=eTDbST1JqSm99p6VH4K/Iby0I/ZOLZew1SwMDRfAdmipXKZMCGDHoLk2jCEw7isnrK
-         UybLt5xBRbIN3wqumbRsMCM5HeSkJu++G7di0Y1z1M7bLbdFJbUs5NAqpSGOWuhy7kd6
-         kcc38uh2jCwGQYxZgP7hBJRK2iViuwnogQjy2bRIgkNSMpb9wC5pbsSiwzIVJZwL0Otl
-         CIE43bRxXcIdyqSMiR53grc1btEgbtcWD5b8K1OYMjr/QG7tDu0/Pkk5+27gIkwKAVcp
-         bK2/DNiF5q4neZNIEf/JfKjqTjRyPiU/fm7UrlGI4wkZfr8MyHDn915gTim7pqil6gXz
-         wnXw==
+        bh=3GAWkeAWlGlQB12EQDsOtb30kGIL9nEjgqc5w218gmE=;
+        b=O7YDg2VmxasAb1DQCpuyjpEk6JSlTzJsb19hs4ahJpS7uTTDV6ggic5GgKY2idsj4v
+         OSdsUFMyu1JpDHkmJIjvy9khPOIdvqB/cz0PdqKK9i4k1OVEIJJ+gqe7rEH0y5V77gDw
+         AKNwJRp5ROCRMNqGQZ9VXpCwZk2/f1L9vLWXCRYGAEhCWrnI1//SA+LzEaTO0X+XIHjs
+         ajq872F0J2y+lH8w7EUZffQgkL4dq6ZQ4zmHDHFk4Ul5oPGC+hPYGPaRX6QO+CziJiB4
+         d9/O13ogHhBg5LlXurBVFz8MUfGM1Z9exv23YwO6nT1UPswxsC+F1DXZe3U4YIXCx1Xr
+         8CAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=a8l9uZA41LqnoJJEYr1pG3p/xrUXauS4MtvHWBuecMk=;
-        b=lCBuP/qiSgTxAzZ5uK0H0EPLtmh5a78ut5YLbVv4JCB3/dPmZhKJ70nWJ23oIKQCCO
-         WXsJ0Yac/Fy/+5ke2xV6+Sx6FWQf5Xt80edyH5lTp50z0qa8kWe/2PPxgiFYDfGYte8v
-         u8qlhPqQmSKTFIHCGFDdKtMw2LKQOj29d/1UM4JrtlYzZCIem/JK99wxE5KJp13F7x4O
-         7FyglJw2z3i9niH4iL3PoOEiPHak2cnWR/in0vNXlJYhqGdL7AABO3wzd4sKjikkB62Y
-         wZRFQ9UOwV2xaznDq+VGoB0iiCZlJt9zQrkFftrmJcbtOHE106XtIv0e2cCsO2Zae4eR
-         QgCw==
-X-Gm-Message-State: ACgBeo2BbdXt8vVucOAAXByeGXY1ZlYFw9HDthLR980MDETtiDp5egK4
-        lsP19LmyZ8us0tNeErV2sspPww==
-X-Google-Smtp-Source: AA6agR6xVZK5fZ++aBXzIRlMdJ/sSEash7UXwSx9BSDc3ZIGIvj3Nt9SW4AdbGfSMTI7uxzX+v8kdg==
-X-Received: by 2002:a17:902:6b07:b0:172:a76d:7cc5 with SMTP id o7-20020a1709026b0700b00172a76d7cc5mr2475710plk.128.1660826914807;
-        Thu, 18 Aug 2022 05:48:34 -0700 (PDT)
+        bh=3GAWkeAWlGlQB12EQDsOtb30kGIL9nEjgqc5w218gmE=;
+        b=JOa1kW6ZJd6iosUUPL1OqNHa3dFrOjEjSvI92UU7PSV7Nq+EW/GFlqi6lx1TO0hI43
+         QQs6wzsg+20rrHdOBWlQ3BElH4i+9azNoLLXjhnXqVIPGLq/JqI4+VxUN3mErvVtQuhP
+         zQHWzcYIO4TT2ahOiIP88YCddd68VCbvzcnYklO2oEA5JFNK1rXnOozu3Ju4+6Eusvx5
+         NmMPK8kixxmag8U+ZfW2bz+syU1r/m+78d+WASD2v3GO5MapEyM2b6pBmcYy6o8Vpg9j
+         zH1B0TnMs8WSni2ZCrmu4eDes+MHjlPfjIW5RyvhNfc33Ph0PMtc2tewjzuy1sRhJzJV
+         2xDw==
+X-Gm-Message-State: ACgBeo3LHRIiCRfrQt5ZmNzWqv2gTAhM9x0UVENyjT53hmdfGUY06vKk
+        sro47HxwiKmx+82t2ZPpl/ww4Q==
+X-Google-Smtp-Source: AA6agR48J0rChbWVkjzEfrbmteqn64dE6NHwacBHrdrrnUfTBobL318LrBVkYwTDcHelm+2f4q/zYg==
+X-Received: by 2002:a63:d70b:0:b0:415:f5f1:dd19 with SMTP id d11-20020a63d70b000000b00415f5f1dd19mr2310305pgg.273.1660826919498;
+        Thu, 18 Aug 2022 05:48:39 -0700 (PDT)
 Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.230])
-        by smtp.gmail.com with ESMTPSA id c16-20020a621c10000000b0052f3a7bc29fsm1477449pfc.202.2022.08.18.05.48.30
+        by smtp.gmail.com with ESMTPSA id c16-20020a621c10000000b0052f3a7bc29fsm1477449pfc.202.2022.08.18.05.48.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 05:48:34 -0700 (PDT)
+        Thu, 18 Aug 2022 05:48:39 -0700 (PDT)
 From:   Chengming Zhou <zhouchengming@bytedance.com>
 To:     vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
         mingo@redhat.com, peterz@infradead.org, rostedt@goodmis.org,
         bsegall@google.com, vschneid@redhat.com
 Cc:     linux-kernel@vger.kernel.org, tj@kernel.org,
         Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH v6 4/9] sched/fair: update comments in enqueue/dequeue_entity()
-Date:   Thu, 18 Aug 2022 20:48:00 +0800
-Message-Id: <20220818124805.601-5-zhouchengming@bytedance.com>
+Subject: [PATCH v6 5/9] sched/fair: combine detach into dequeue when migrating task
+Date:   Thu, 18 Aug 2022 20:48:01 +0800
+Message-Id: <20220818124805.601-6-zhouchengming@bytedance.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220818124805.601-1-zhouchengming@bytedance.com>
 References: <20220818124805.601-1-zhouchengming@bytedance.com>
@@ -71,44 +71,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When reading the sched_avg related code, I found the comments in
-enqueue/dequeue_entity() are not updated with the current code.
+When we are migrating task out of the CPU, we can combine detach and
+propagation into dequeue_entity() to save the detach_entity_cfs_rq()
+in migrate_task_rq_fair().
 
-We don't add/subtract entity's runnable_avg from cfs_rq->runnable_avg
-during enqueue/dequeue_entity(), those are done only for attach/detach.
+This optimization is like combining DO_ATTACH in the enqueue_entity()
+when migrating task to the CPU. So we don't have to traverse the CFS tree
+extra time to do the detach_entity_cfs_rq() -> propagate_entity_cfs_rq(),
+which wouldn't be called anymore with this patch's change.
 
-This patch updates the comments to reflect the current code working.
+detach_task()
+  deactivate_task()
+    dequeue_task_fair()
+      for_each_sched_entity(se)
+        dequeue_entity()
+          update_load_avg() /* (1) */
+            detach_entity_load_avg()
+
+  set_task_cpu()
+    migrate_task_rq_fair()
+      detach_entity_cfs_rq() /* (2) */
+        update_load_avg();
+        detach_entity_load_avg();
+        propagate_entity_cfs_rq();
+          for_each_sched_entity()
+            update_load_avg()
+
+This patch save the detach_entity_cfs_rq() called in (2) by doing
+the detach_entity_load_avg() for a CPU migrating task inside (1)
+(the task being the first se in the loop)
 
 Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-Acked-by: Vincent Guittot <vincent.guittot@linaro.org>
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
 ---
- kernel/sched/fair.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ kernel/sched/fair.c | 28 ++++++++++++++++------------
+ 1 file changed, 16 insertions(+), 12 deletions(-)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 5a704109472a..372e5f4a49a3 100644
+index 372e5f4a49a3..1eb3fb3d95c3 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -4598,7 +4598,8 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+@@ -4167,6 +4167,7 @@ static void detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+ #define UPDATE_TG	0x1
+ #define SKIP_AGE_LOAD	0x2
+ #define DO_ATTACH	0x4
++#define DO_DETACH	0x8
+ 
+ /* Update task and its cfs_rq load average */
+ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+@@ -4196,6 +4197,13 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+ 		attach_entity_load_avg(cfs_rq, se);
+ 		update_tg_load_avg(cfs_rq);
+ 
++	} else if (flags & DO_DETACH) {
++		/*
++		 * DO_DETACH means we're here from dequeue_entity()
++		 * and we are migrating task out of the CPU.
++		 */
++		detach_entity_load_avg(cfs_rq, se);
++		update_tg_load_avg(cfs_rq);
+ 	} else if (decayed) {
+ 		cfs_rq_util_change(cfs_rq, 0);
+ 
+@@ -4456,6 +4464,7 @@ static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
+ #define UPDATE_TG	0x0
+ #define SKIP_AGE_LOAD	0x0
+ #define DO_ATTACH	0x0
++#define DO_DETACH	0x0
+ 
+ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int not_used1)
+ {
+@@ -4676,6 +4685,11 @@ static __always_inline void return_cfs_rq_runtime(struct cfs_rq *cfs_rq);
+ static void
+ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+ {
++	int action = UPDATE_TG;
++
++	if (entity_is_task(se) && task_on_rq_migrating(task_of(se)))
++		action |= DO_DETACH;
++
  	/*
- 	 * When enqueuing a sched_entity, we must:
- 	 *   - Update loads to have both entity and cfs_rq synced with now.
--	 *   - Add its load to cfs_rq->runnable_avg
-+	 *   - For group_entity, update its runnable_weight to reflect the new
-+	 *     h_nr_running of its group cfs_rq.
- 	 *   - For group_entity, update its weight to reflect the new share of
- 	 *     its group cfs_rq
- 	 *   - Add its new weight to cfs_rq->load.weight
-@@ -4683,7 +4684,8 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
- 	/*
- 	 * When dequeuing a sched_entity, we must:
- 	 *   - Update loads to have both entity and cfs_rq synced with now.
--	 *   - Subtract its load from the cfs_rq->runnable_avg.
-+	 *   - For group_entity, update its runnable_weight to reflect the new
-+	 *     h_nr_running of its group cfs_rq.
- 	 *   - Subtract its previous weight from cfs_rq->load.weight.
+ 	 * Update run-time statistics of the 'current'.
+ 	 */
+@@ -4690,7 +4704,7 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
  	 *   - For group entity, update its weight to reflect the new share
  	 *     of its group cfs_rq.
+ 	 */
+-	update_load_avg(cfs_rq, se, UPDATE_TG);
++	update_load_avg(cfs_rq, se, action);
+ 	se_update_runnable(se);
+ 
+ 	update_stats_dequeue_fair(cfs_rq, se, flags);
+@@ -7242,8 +7256,6 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
+ 	return new_cpu;
+ }
+ 
+-static void detach_entity_cfs_rq(struct sched_entity *se);
+-
+ /*
+  * Called immediately before a task is migrated to a new CPU; task_cpu(p) and
+  * cfs_rq_of(p) references at time of call are still valid and identify the
+@@ -7265,15 +7277,7 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+ 		se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
+ 	}
+ 
+-	if (p->on_rq == TASK_ON_RQ_MIGRATING) {
+-		/*
+-		 * In case of TASK_ON_RQ_MIGRATING we in fact hold the 'old'
+-		 * rq->lock and can modify state directly.
+-		 */
+-		lockdep_assert_rq_held(task_rq(p));
+-		detach_entity_cfs_rq(se);
+-
+-	} else {
++	if (!task_on_rq_migrating(p)) {
+ 		remove_entity_load_avg(se);
+ 
+ 		/*
 -- 
 2.37.2
 
